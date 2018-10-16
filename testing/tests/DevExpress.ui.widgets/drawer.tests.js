@@ -831,7 +831,7 @@ QUnit.test("panel should be rendered correctly after openedStateMode changing, v
     fx.off = false;
 });
 
-QUnit.test("panel and content should be rendered correctly after revealMode changing", assert => {
+QUnit.test("panel and content should be rendered correctly after revealMode changing, horizontal direction", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -868,6 +868,48 @@ QUnit.test("panel and content should be rendered correctly after revealMode chan
     assert.equal($panelContent.width(), 300, "panel content has correct size");
     assert.equal($panel.position().left, 0, "panel has correct position");
     assert.equal($panelContent.position().left, 0, "panel content has correct position");
+
+    fx.off = false;
+});
+
+QUnit.test("panel and content should be rendered correctly after revealMode changing, vertical direction", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        minSize: 50,
+        opened: true,
+        position: "top",
+        revealMode: "slide",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 200);
+            $div.css("width", 2000);
+
+            return $div;
+        }
+    });
+
+    const instance = $element.dxDrawer("instance");
+    instance.option("opened", false);
+    instance.option("revealMode", "expand");
+
+    let $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    let $panelContent = $panel.find(".dx-overlay-content").eq(0);
+
+    assert.equal($panelContent.height(), 50, "panel content has correct size");
+    assert.equal($panel.position().top, 0, "panel has correct position");
+    assert.equal($panelContent.position().top, 0, "panel content has correct position");
+
+    instance.option("opened", true);
+    instance.option("revealMode", "slide");
+
+    $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+    $panelContent = $panel.find(".dx-overlay-content").eq(0);
+
+    assert.equal($panelContent.height(), 200, "panel content has correct size");
+    assert.equal($panel.position().top, 0, "panel has correct position");
+    assert.equal($panelContent.position().top, 0, "panel content has correct position");
 
     fx.off = false;
 });
