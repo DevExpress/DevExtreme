@@ -643,22 +643,16 @@ var ListBase = CollectionWidget.inherit({
         }, ["key"], this.option("integrationOptions.watchMethod"));
     },
 
-    _renderIconContainer: function(data) {
-        var $iconContainer = $("<div>").addClass(LIST_ITEM_ICON_CONTAINER_CLASS),
-            $icon = iconUtils.getImageContainer(data.icon);
-
-        $icon
-            .addClass(LIST_ITEM_ICON_CLASS)
-            .appendTo($iconContainer);
-
-        return $iconContainer;
-    },
-
     _prepareDefaultItemTemplate: function(data, $container) {
         this.callBase(data, $container);
 
         if(data.icon) {
-            $container.prepend(this._renderIconContainer(data));
+            var $icon = iconUtils.getImageContainer(data.icon).addClass(LIST_ITEM_ICON_CLASS),
+                $iconContainer = $("<div>").addClass(LIST_ITEM_ICON_CONTAINER_CLASS);
+
+            $iconContainer.append($icon);
+
+            $container.prepend($iconContainer);
         }
     },
 
