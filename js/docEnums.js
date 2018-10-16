@@ -15,6 +15,11 @@
  */
 
 /**
+ * @typedef {string} Enums.EventKeyModifier
+ * @enum {'alt'|'ctrl'|'meta'|'shift'}
+ */
+
+/**
  * @typedef {number} Enums.FirstDayOfWeek
  * @enum {0|1|2|3|4|5|6}
  */
