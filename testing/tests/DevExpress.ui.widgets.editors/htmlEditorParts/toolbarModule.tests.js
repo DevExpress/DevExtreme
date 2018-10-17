@@ -305,7 +305,7 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
             .trigger("dxclick");
 
-        assert.ok(redoStub.calledOnce, "redo undo");
+        assert.ok(redoStub.calledOnce, "call redo");
     });
 });
 
