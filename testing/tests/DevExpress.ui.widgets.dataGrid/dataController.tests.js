@@ -6550,7 +6550,7 @@ QUnit.module("Summary", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options) {
-            setupDataGridModules(this, ['data', 'columns', 'filterRow', 'grouping', 'summary'], options);
+            setupDataGridModules(this, ['data', 'columns', 'filterRow', 'headerFilter', 'grouping', 'summary'], options);
         };
     },
     afterEach: function() {
@@ -8364,6 +8364,46 @@ QUnit.test("group sorting by first summary", function(assert) {
     assert.deepEqual(this.dataController.items()[1].summaryCells[0][0].value, 2);
     assert.deepEqual(this.dataController.items()[2].data.key, 'Sam');
     assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 3);
+});
+
+// T678072
+QUnit.test("headerFilter items if sortByGroupSummaryInfo is defined", function(assert) {
+    this.options = {
+        columns: ['name', 'age'],
+        dataSource: {
+            group: 'name',
+            store: [
+                { name: 'Dan', age: 19 },
+                { name: 'Sam', age: 18 },
+                { name: 'Sam', age: 19 },
+                { name: 'Sam', age: 20 },
+                { name: 'Alex', age: 15 },
+                { name: 'Alex', age: 25 }
+            ]
+        },
+        sortByGroupSummaryInfo: [{
+            summaryItem: 'count'
+        }],
+        summary: {
+            groupItems: [{
+                summaryType: 'count'
+            }]
+        }
+    };
+
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    var headerFilterDataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[1])),
+        headerFilterItems;
+
+    headerFilterDataSource.load().done(function(data) {
+        headerFilterItems = data;
+    });
+
+    // assert
+    assert.deepEqual(headerFilterItems.map(function(item) { return item.value; }), [15, 18, 19, 20, 25], "items are sorted");
 });
 
 QUnit.test("findSummaryItem by custom name", function(assert) {

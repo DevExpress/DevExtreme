@@ -930,7 +930,7 @@ module.exports = {
                             var options = {
                                 data: data,
                                 isCustomLoading: true,
-                                storeLoadOptions: {},
+                                storeLoadOptions: { isLoadingAll: true },
                                 loadOptions: {
                                     filter: that.getCombinedFilter(),
                                     group: dataSource.group(),
