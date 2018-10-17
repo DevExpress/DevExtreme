@@ -12,7 +12,7 @@ QUnit.testStart(function() {
     var markup =
         '<div id="qunit-fixture" class="qunit-fixture-visible">\
             <div id="dropDownBox"></div>\
-            <div id="dropDownBoxAnonymous">Test</div>\
+            <div id="dropDownBoxAnonymous"><div id="inner">Test</div></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -188,9 +188,11 @@ QUnit.test("content template should work", function(assert) {
 });
 
 QUnit.test("anonymous content template should work", function(assert) {
-    var instance = new DropDownBox($("#dropDownBoxAnonymous"), { opened: true });
+    var $inner = $("#dropDownBoxAnonymous #inner"),
+        instance = new DropDownBox($("#dropDownBoxAnonymous"), { opened: true });
 
     assert.equal($(instance.content()).text(), "Test", "Anonymous template works");
+    assert.equal($(instance.content()).find("#inner")[0], $inner[0], "Markup is equal by the link");
 });
 
 QUnit.test("popup and editor width should be equal", function(assert) {
