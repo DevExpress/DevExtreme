@@ -17,6 +17,18 @@ const xlsxCellAlignmentHelper = {
         return result;
     },
 
+    copy: function(source) {
+        let result = source;
+        if(isDefined(source)) {
+            result = {
+                vertical: source.vertical,
+                wrapText: source.wrapText,
+                horizontal: source.horizontal,
+            };
+        }
+        return result;
+    },
+
     areEqual: function(leftTag, rightTag) {
         return xlsxCellAlignmentHelper.isEmpty(leftTag) && xlsxCellAlignmentHelper.isEmpty(rightTag) ||
             (

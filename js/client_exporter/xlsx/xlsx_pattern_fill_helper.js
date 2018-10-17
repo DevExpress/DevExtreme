@@ -18,6 +18,18 @@ const xlsxPatternFillHelper = {
         return result;
     },
 
+    copy: function(source) {
+        let result = source;
+        if(isDefined(source)) {
+            result = {
+                patternType: source.patternType,
+                backgroundColor: xlsxColorHelper.copy(source.backgroundColor),
+                foregroundColor: xlsxColorHelper.copy(source.foregroundColor),
+            };
+        }
+        return result;
+    },
+
     areEqual: function(leftTag, rightTag) {
         return xlsxPatternFillHelper.isEmpty(leftTag) && xlsxPatternFillHelper.isEmpty(rightTag) ||
             (

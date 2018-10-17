@@ -83,9 +83,9 @@ QUnit.test("Change horizontal alignment by a property value of source object", f
                 enabled: true,
             },
             onXlsxCellPrepared: e => {
-                if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.row.data.data1 === 1) {
+                if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.data.data1 === 1) {
                     e.xlsxCell.style.alignment = {
-                        horizontal: e.gridCell.row.data.alignment
+                        horizontal: e.gridCell.data.alignment
                     };
                 }
             },
@@ -223,12 +223,12 @@ QUnit.test("Change fill by a property value of source object", function(assert) 
                 enabled: true,
             },
             onXlsxCellPrepared: e => {
-                if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.row.data.data1 === 1) {
+                if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.data.data1 === 1) {
                     e.xlsxCell.style.fill = {
                         patternFill: {
-                            patternType: e.gridCell.row.data.fillPattern,
+                            patternType: e.gridCell.data.fillPattern,
                             foregroundColor: {
-                                rgb: e.gridCell.row.data.fillColor
+                                rgb: e.gridCell.data.fillColor
                             }
                         }
                     };
@@ -531,13 +531,13 @@ QUnit.test("Change number format for Date column cell when column.format is func
 
 QUnit.test("Check event arguments for data row cell with various data types", function(assert) {
     const configurations = [
-        { dataType: "number", values: [undefined, null, 0, 1], expectedTexts: ['', '', '0', '1' ] },
-        { dataType: "string", values: [undefined, null, '', 's'], expectedTexts: ['', '', '', 's' ] },
-        { dataType: "date", values: [undefined, null, new Date(2018, 11, 1)], expectedTexts: ['', '', '12/1/2018' ] },
-        { dataType: "datetime", values: [undefined, null, new Date(2018, 11, 1, 16, 10)], expectedTexts: ['', '', '12/1/2018, 4:10 PM' ] },
-        { dataType: "boolean", values: [undefined, null, false, true], expectedTexts: ['', '', 'false', 'true' ] },
+        { dataType: "number", values: [undefined, null, 0, 1] },
+        { dataType: "string", values: [undefined, null, '', 's'] },
+        { dataType: "date", values: [undefined, null, new Date(2018, 11, 1)] },
+        { dataType: "datetime", values: [undefined, null, new Date(2018, 11, 1, 16, 10)] },
+        { dataType: "boolean", values: [undefined, null, false, true] },
         {
-            dataType: "lookup", values: [undefined, null, 1], expectedDisplayValues: [undefined, undefined, 'name1' ], expectedTexts: ['', '', 'name1' ],
+            dataType: "lookup", values: [undefined, null, 1],
             lookup: {
                 dataSource: {
                     store: { type: 'array', data: [{ id: 1, name: 'name1' }] },
@@ -563,12 +563,10 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
                 for(let i = 0; i < config.values.length; i++) {
                     result.push({
                         rowType: 'data',
-                        row: { data: ds[i], rowType: 'data' },
+                        data: ds[i],
                         column: grid.columnOption(0),
-                        value: config.values[i],
-                        displayValue: config.expectedDisplayValues ? config.expectedDisplayValues[i] : config.values[i],
-                        text: config.expectedTexts ? config.expectedTexts[i] : config.values[i] }
-                    );
+                        value: config.values[i]
+                    });
                 }
                 return result;
             }
@@ -585,7 +583,7 @@ QUnit.test("Check event arguments for data row cell with formatting", function(a
             showColumnHeaders: false,
         },
         (grid) => [
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: '$1' },
+            { data: ds[0], column: grid.columnOption(0), rowType: 'data', value: ds[0].f1 },
         ]
     );
 });
@@ -625,9 +623,9 @@ QUnit.test("Check event arguments for bands", function(assert) {
             { rowType: 'header', column: grid.columnOption(0) },
             { rowType: 'header', column: grid.columnOption(2) },
             { rowType: 'header', column: grid.columnOption(3) },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: 'f1' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: 'f2' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
+            { rowType: 'data', column: grid.columnOption(0), data: ds[0], value: ds[0].f1 },
+            { rowType: 'data', column: grid.columnOption(2), data: ds[0], value: ds[0].f2 },
+            { rowType: 'data', column: grid.columnOption(3), data: ds[0], value: ds[0].f3 },
         ]
     );
 });
@@ -645,7 +643,7 @@ QUnit.test("Check event arguments for groupping 1 level", function(assert) {
         (grid) => [
             { rowType: 'header', column: grid.columnOption(1) },
             { rowType: 'group', column: grid.columnOption(0) },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: 'f2' },
+            { rowType: 'data', column: grid.columnOption(1), data: ds[0], value: ds[0].f2 },
         ]
     );
 });
@@ -665,7 +663,7 @@ QUnit.test("Check event arguments for groupping 2 levels", function(assert) {
             { rowType: 'header', column: grid.columnOption(2) },
             { rowType: 'group', column: grid.columnOption(0) },
             { rowType: 'group', column: grid.columnOption(1) },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
+            { rowType: 'data', column: grid.columnOption(2), data: ds[0], value: ds[0].f3 },
         ]
     );
 });
@@ -684,9 +682,9 @@ QUnit.test("Check event arguments for group summary", function(assert) {
             },
         },
         (grid) => [
-            { column: grid.columnOption(1), rowType: 'header' },
-            { column: grid.columnOption(0), rowType: 'group' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: '1' },
+            { rowType: 'header', column: grid.columnOption(1) },
+            { rowType: 'group', column: grid.columnOption(0) },
+            { rowType: 'data', column: grid.columnOption(1), data: ds[0], value: ds[0].f2 },
         ]
     );
 });
@@ -713,8 +711,8 @@ QUnit.test("Check event arguments for group summary with alignByColumn", functio
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(1), rowType: 'group' },
             { column: grid.columnOption(1), rowType: 'group' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f4, displayValue: ds[0].f4, text: 'f4' },
+            { column: grid.columnOption(2), rowType: 'data', data: ds[0], value: ds[0].f3 },
+            { column: grid.columnOption(3), rowType: 'data', data: ds[0], value: ds[0].f4 },
 
         ]
     );
@@ -745,18 +743,18 @@ QUnit.test("Check event arguments for group summary with showInGroupFooter", fun
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(0), rowType: 'group' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: '1_f2' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: '1_f3' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f4, displayValue: ds[0].f4, text: '1_f4' },
+            { column: grid.columnOption(1), rowType: 'data', data: ds[0], value: ds[0].f2 },
+            { column: grid.columnOption(2), rowType: 'data', data: ds[0], value: ds[0].f3 },
+            { column: grid.columnOption(3), rowType: 'data', data: ds[0], value: ds[0].f4 },
             { column: grid.columnOption(1), rowType: 'groupfooter' },
             { column: grid.columnOption(2), rowType: 'groupfooter' },
             { column: grid.columnOption(3), rowType: 'groupfooter' },
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(0), rowType: 'group' },
-            { row: { data: ds[1], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[1].f2, displayValue: ds[1].f2, text: '2_f2' },
-            { row: { data: ds[1], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[1].f3, displayValue: ds[1].f3, text: '2_f3' },
-            { row: { data: ds[1], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[1].f4, displayValue: ds[1].f4, text: '2_f4' },
+            { column: grid.columnOption(1), rowType: 'data', data: ds[1], value: ds[1].f2 },
+            { column: grid.columnOption(2), rowType: 'data', data: ds[1], value: ds[1].f3 },
+            { column: grid.columnOption(3), rowType: 'data', data: ds[1], value: ds[1].f4 },
             { column: grid.columnOption(1), rowType: 'groupfooter' },
             { column: grid.columnOption(2), rowType: 'groupfooter' },
             { column: grid.columnOption(3), rowType: 'groupfooter' },
@@ -776,7 +774,7 @@ QUnit.test("Check event arguments for total summary", function(assert) {
             showColumnHeaders: false,
         },
         (grid) => [
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: '1' },
+            { column: grid.columnOption(0), rowType: 'data', data: ds[0], value: ds[0].f1 },
             { column: grid.columnOption(0), rowType: 'totalFooter' },
         ]
     );
@@ -794,7 +792,7 @@ QUnit.test("Check event arguments for changes from customizeExportData", functio
             showColumnHeaders: false,
         },
         (grid) => [
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: 'f1+', displayValue: 'f1+', text: 'f1+' },
+            { column: grid.columnOption(0), rowType: 'data', data: ds[0], value: 'f1+' },
         ]
     );
 });

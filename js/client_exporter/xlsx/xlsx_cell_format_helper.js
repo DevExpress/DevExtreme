@@ -2,6 +2,7 @@ import { isDefined } from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 import xlsxCellAlignmentHelper from './xlsx_cell_alignment_helper';
 import xlsxFillHelper from './xlsx_fill_helper';
+import xlsxFontHelper from './xlsx_font_helper';
 
 const xlsxCellFormatHelper = {
     tryCreateTag: function(sourceObj, sharedItemsContainer) {
@@ -28,6 +29,25 @@ const xlsxCellFormatHelper = {
             if(xlsxCellFormatHelper.isEmpty(result)) {
                 result = null;
             }
+        }
+        return result;
+    },
+
+    copy: function(source) {
+        let result = source;
+        if(isDefined(source)) {
+            result = {
+                numberFormat: source.numberFormat,
+            };
+
+            if(isDefined(source.fill)) {
+                result.fill = xlsxFillHelper.copy(source.fill);
+            } else {
+                xlsxFillHelper.copySimpleFormat(source, result);
+            }
+
+            result.alignment = xlsxCellAlignmentHelper.copy(source.alignment);
+            result.font = xlsxFontHelper.copy(source.font);
         }
         return result;
     },

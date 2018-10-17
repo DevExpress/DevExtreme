@@ -42,6 +42,10 @@ export default class XlsxFile {
         return result;
     }
 
+    copyCellFormat(source) {
+        return xlsxCellFormatHelper.copy(source);
+    }
+
     generateCellFormatsXml() {
         // §18.8.10 cellXfs (Cell Formats), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
         const cellFormatTagsAsXmlStringsArray = this._cellFormatTags.map(tag => xlsxCellFormatHelper.toXml(tag));

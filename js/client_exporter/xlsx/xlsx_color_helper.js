@@ -16,6 +16,17 @@ const xlsxColorHelper = {
         return result;
     },
 
+    copy: function(source) {
+        let result = source;
+        if(isDefined(source)) {
+            result = {
+                rgb: source.rgb,
+                theme: source.theme,
+            };
+        }
+        return result;
+    },
+
     isEmpty: function(tag) {
         return !isDefined(tag) ||
             !isDefined(tag.rgb) &&

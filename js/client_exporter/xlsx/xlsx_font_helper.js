@@ -24,6 +24,23 @@ const xlsxFontHelper = {
         return result;
     },
 
+    copy: function(source) {
+        let result = source;
+        if(isDefined(source)) {
+            result = {
+                size: source.size,
+                name: source.name,
+                family: source.family,
+                scheme: source.scheme,
+                bold: source.bold,
+                italic: source.italic,
+                underline: source.underline,
+                color: xlsxColorHelper.copy(source.color),
+            };
+        }
+        return result;
+    },
+
     areEqual: function(leftTag, rightTag) {
         return xlsxFontHelper.isEmpty(leftTag) && xlsxFontHelper.isEmpty(rightTag) ||
             (
