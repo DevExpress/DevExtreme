@@ -31,7 +31,7 @@ var ACCORDION_CLASS = "dx-accordion",
 
 /**
 * @name dxAccordion
-* @inherits CollectionWidget
+* @inherits LiveCollectionWidget
 * @module ui/accordion
 * @export default
 */

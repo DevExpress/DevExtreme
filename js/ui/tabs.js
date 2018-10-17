@@ -47,7 +47,7 @@ var TABS_CLASS = "dx-tabs",
 
 /**
 * @name dxTabs
-* @inherits CollectionWidget
+* @inherits LiveCollectionWidget
 * @module ui/tabs
 * @export default
 */
