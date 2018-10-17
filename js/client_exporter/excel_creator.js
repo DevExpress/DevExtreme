@@ -173,7 +173,7 @@ var ExcelCreator = Class.inherit({
         };
     },
 
-    _raiseXlsxCellPrepared: function({ dataProvider, value, dataType, style, sourceData }) {
+    _callCustomizeXlsxCell: function({ dataProvider, value, dataType, style, sourceData }) {
         const style_args = XlsxFile.copyCellFormat(style);
         const numberFormat = style_args.numberFormat;
         delete style_args.numberFormat;
@@ -188,7 +188,7 @@ var ExcelCreator = Class.inherit({
             cellSourceData: sourceData
         };
 
-        dataProvider.onXlsxCellPrepared(args);
+        dataProvider.customizeXlsxCell(args);
 
         const newStyle = args.xlsxCell.style || {};
         newStyle.numberFormat = args.xlsxCell.numberFormat;
@@ -219,9 +219,9 @@ var ExcelCreator = Class.inherit({
             for(cellIndex = 0; cellIndex !== cellsLength; cellIndex++) {
                 cellData = that._prepareValue(rowIndex, cellIndex);
                 let cellStyleId = this._styleArrayIndexes[dataProvider.getStyleId(rowIndex, cellIndex)];
-                if(dataProvider.hasXlsxCellPreparedSubscription && dataProvider.hasXlsxCellPreparedSubscription()) {
+                if(dataProvider.hasCustomizeXlsxCell && dataProvider.hasCustomizeXlsxCell()) {
                     const value = cellData.sourceValue || cellData.value;
-                    const modifiedXlsxCell = this._raiseXlsxCellPrepared({
+                    const modifiedXlsxCell = this._callCustomizeXlsxCell({
                         dataProvider: dataProvider,
                         value: value,
                         dataType: cellData.type,

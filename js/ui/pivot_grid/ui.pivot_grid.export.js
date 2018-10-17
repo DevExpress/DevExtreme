@@ -95,7 +95,7 @@ exports.ExportMixin = extend({}, exportMixin, {
             items: items,
             rtlEnabled: this.option("rtlEnabled"),
             dataFields: this.getDataSource().getAreaFields("data"),
-            onXlsxCellPrepared: this.option("onXlsxCellPrepared"),
+            customizeXlsxCell: this.option("customizeXlsxCell"),
         });
     }
 });
@@ -229,13 +229,13 @@ exports.DataProvider = Class.inherit({
         return DATA_STYLE_OFFSET + (item.dataIndex || 0);
     },
 
-    hasXlsxCellPreparedSubscription: function() {
-        return isDefined(this._options.onXlsxCellPrepared);
+    hasCustomizeXlsxCell: function() {
+        return isDefined(this._options.customizeXlsxCell);
     },
 
-    onXlsxCellPrepared: function({ xlsxCell }) {
-        if(this._options.onXlsxCellPrepared) {
-            this._options.onXlsxCellPrepared({ xlsxCell });
+    customizeXlsxCell: function({ xlsxCell }) {
+        if(this._options.customizeXlsxCell) {
+            this._options.customizeXlsxCell({ xlsxCell });
         }
     },
 });

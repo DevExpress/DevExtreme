@@ -78,11 +78,11 @@ const dataGridExportTestsHelper = {
         dataGrid.exportToExcel();
     },
 
-    runXlsxCellPreparedTest: function(assert, gridOptions, getExpectedGridCellsCallback) {
+    runCustomizeXlsxCellTest: function(assert, gridOptions, getExpectedGridCellsCallback) {
         const done = assert.async();
         const actualGridCells = [];
 
-        gridOptions.onXlsxCellPrepared = e => {
+        gridOptions.customizeXlsxCell = e => {
             actualGridCells.push(e.gridCell);
         };
         gridOptions.loadingTimeout = undefined;

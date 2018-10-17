@@ -63,17 +63,17 @@ exports.DataProvider = Class.inherit({
             customizeExportData: exportController.option("customizeExportData"),
             rtlEnabled: exportController.option("rtlEnabled"),
             wrapTextEnabled: isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option("wordWrapEnabled"),
-            onXlsxCellPrepared: exportController.option("onXlsxCellPrepared"),
+            customizeXlsxCell: exportController.option("customizeXlsxCell"),
         };
     },
 
-    hasXlsxCellPreparedSubscription: function() {
-        return isDefined(this._options.onXlsxCellPrepared);
+    hasCustomizeXlsxCell: function() {
+        return isDefined(this._options.customizeXlsxCell);
     },
 
-    onXlsxCellPrepared: function(e) {
-        if(this._options.onXlsxCellPrepared) {
-            this._options.onXlsxCellPrepared({
+    customizeXlsxCell: function(e) {
+        if(this._options.customizeXlsxCell) {
+            this._options.customizeXlsxCell({
                 xlsxCell: e.xlsxCell,
                 gridCell: e.cellSourceData
             });
@@ -692,7 +692,7 @@ dataGridCore.registerModule("export", {
              * @type_function_param2 rows:Array<dxDataGridRowObject>
              */
             /**
-             * @name dxDataGridOptions.onXlsxCellPrepared
+             * @name dxDataGridOptions.customizeXlsxCell
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 xlsxCell:XlsxCell
