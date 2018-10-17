@@ -893,12 +893,12 @@ QUnit.test("Timeline should find cell coordinates by date, groupByDate = true", 
 
     assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(17).position().top, "Top cell coordinates are right");
     assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(17).position().left, "Left cell coordinates are right");
-    assert.equal(coords.hMax, 16800, "Left cell coordinates are right");
+    assert.equal(coords.hMax, 16800, "hMax is right");
 
     coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 2, false);
 
     assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(30).position().top, "Top cell coordinates are right");
     assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(30).position().left, "Left cell coordinates are right");
-    assert.equal(coords.hMax, 16800, "Left cell coordinates are right");
+    assert.equal(coords.hMax, 16800, "hMax is right");
 });
 
