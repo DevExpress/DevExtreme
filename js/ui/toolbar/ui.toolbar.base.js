@@ -6,8 +6,7 @@ var $ = require("../../core/renderer"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
-    AsyncTemplateMixin = require("../shared/async_template_mixin"),
-    CollectionWidget = require("../collection/ui.collection_widget.edit"),
+    AsyncCollectionWidget = require("../collection/ui.collection_widget.async"),
     BindableTemplate = require("../widget/bindable_template");
 
 var TOOLBAR_CLASS = "dx-toolbar",
@@ -28,7 +27,7 @@ var TOOLBAR_CLASS = "dx-toolbar",
 
     TOOLBAR_ITEM_DATA_KEY = "dxToolbarItemDataKey";
 
-var ToolbarBase = CollectionWidget.inherit({
+var ToolbarBase = AsyncCollectionWidget.inherit({
     compactMode: false,
     /**
     * @name dxToolbarItemTemplate
@@ -142,10 +141,10 @@ var ToolbarBase = CollectionWidget.inherit({
 
     _render: function() {
         this.callBase();
-        this._waitAsyncTemplates(this._renderAsync);
+        this._renderItemsAsync();
     },
 
-    _renderAsync: function() {
+    _postProcessRenderItems: function() {
         this._arrangeItems();
     },
 
@@ -307,7 +306,7 @@ var ToolbarBase = CollectionWidget.inherit({
     _renderItem: function(index, item, itemContainer, $after) {
         var location = item.location || "center",
             container = itemContainer || this._$toolbarItemsContainer.find(".dx-toolbar-" + location),
-            itemHasText = Boolean(item.text) || Boolean(item.html),
+            itemHasText = !!(item.text || item.html),
             itemElement = this.callBase(index, item, container, $after);
 
         itemElement
@@ -363,7 +362,6 @@ var ToolbarBase = CollectionWidget.inherit({
     _renderEmptyMessage: commonUtils.noop,
 
     _clean: function() {
-        this._cleanAsyncTemplatesTimer();
         this._$toolbarItemsContainer.children().empty();
         this.$element().empty();
     },
@@ -423,7 +421,7 @@ var ToolbarBase = CollectionWidget.inherit({
     * @hidden
     * @inheritdoc
     */
-}).include(AsyncTemplateMixin);
+});
 
 registerComponent("dxToolbarBase", ToolbarBase);
 

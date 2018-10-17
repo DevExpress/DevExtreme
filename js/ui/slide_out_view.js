@@ -185,7 +185,7 @@ var SlideOutView = Widget.inherit({
         this._whenMenuRendered = new Deferred();
 
         const menuTemplate = this._getTemplate(this.option("menuTemplate"));
-        this._renderAsyncTemplate(menuTemplate, {
+        menuTemplate && menuTemplate.render({
             container: this.menuContent(),
             onRendered: () => {
                 this._whenMenuRendered.resolve();
