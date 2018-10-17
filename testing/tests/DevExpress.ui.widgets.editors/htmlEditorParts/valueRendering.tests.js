@@ -119,7 +119,14 @@ QUnit.module("Value as Markdown markup", () => {
     });
 });
 
-QUnit.module("Custom blots rendering", () => {
+QUnit.module("Custom blots rendering", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: () => {
+        this.clock.restore();
+    }
+}, () => {
     test("render image", (assert) => {
         const expected = "<p><img src='http://test.com/test.jpg' width='100px' height='100px' alt='altering'></p>";
         const instance = $("#htmlEditor")
@@ -131,6 +138,7 @@ QUnit.module("Custom blots rendering", () => {
         .dxHtmlEditor("instance");
 
         instance.insertEmbed(0, "extendedImage", { src: "http://test.com/test.jpg", width: 100, height: 100, alt: "altering" });
+        this.clock.tick();
     });
 
     test("render link", (assert) => {
