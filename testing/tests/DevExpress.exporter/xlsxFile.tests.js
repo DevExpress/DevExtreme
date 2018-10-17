@@ -16,7 +16,8 @@ function getFullXml(xlsxFile) {
     return xlsxFile.generateCellFormatsXml() + xlsxFile.generateFillsXml() + xlsxFile.generateFontsXml() + xlsxFile.generateNumberFormatsXml();
 }
 
-QUnit.test("Copy performance (100 ms in Chrome)", function(assert) {
+QUnit.test("XlsxFile.copyCellFormat performance", function(assert) {
+    // Chrome - 100 ms
     const format = {
         numberFormat: 'asfdsf',
         backgroundColor: 'sadfsdf',
