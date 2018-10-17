@@ -207,6 +207,22 @@ QUnit.testStart(function() {
         }
     });
 
+    QUnit.test("Appointment should be rendered correctly after expression changing", function(assert) {
+        this.instance.option({
+            dataSource: [{
+                text: "a",
+                StartDate: new Date(2015, 6, 8, 8, 0),
+                endDate: new Date(2015, 6, 8, 17, 0),
+                allDay: true
+            }],
+            currentDate: new Date(2015, 6, 8)
+        });
+
+        this.instance.option("startDateExpr", "StartDate");
+        this.clock.tick();
+        assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 1, "Appointment is rendered");
+    });
+
     QUnit.test("Sheduler should be repainted after data expression option changing", function(assert) {
         var repaintStub = sinon.stub(this.instance, "repaint");
 
