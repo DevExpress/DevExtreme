@@ -10,7 +10,7 @@ import { each } from "../../../core/utils/iterator";
 import { isString, isObject, isDefined, isEmptyObject } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
 import { format } from "../../../localization/message";
-import { capitalize } from "../../../core/utils/string";
+import { titleize } from "../../../core/utils/inflector";
 
 const BaseModule = getQuill().import("core/module");
 
@@ -73,13 +73,13 @@ class ToolbarModule extends BaseModule {
             background: this._prepareColorClickHandler("background"),
             orderedList: () => {
                 const formats = this.quill.getFormat();
-                const value = formats.list === "ordered" ? false : "ordered";
+                const value = formats.list === "ordered" && "ordered";
 
                 this.quill.format("list", value, USER_ACTION);
             },
             bulletList: () => {
                 const formats = this.quill.getFormat();
-                const value = formats.list === "bullet" ? false : "bullet";
+                const value = formats.list === "bullet" && "bullet";
 
                 this.quill.format("list", value, USER_ACTION);
             },
@@ -333,7 +333,7 @@ class ToolbarModule extends BaseModule {
         let widgetName;
         switch(formatName) {
             case "align":
-                widgetName = formatName + capitalize(formats[formatName]);
+                widgetName = formatName + titleize(formats[formatName]);
                 break;
             case "code-block":
                 widgetName = "codeBlock";

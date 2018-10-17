@@ -94,14 +94,9 @@ var isEmpty = (function() {
     };
 })();
 
-var capitalize = function(text) {
-    return text.charAt(0).toUpperCase() + text.substr(1);
-};
-
 exports.encodeHtml = encodeHtml;
 exports.pairToObject = pairToObject;
 exports.quadToObject = quadToObject;
 exports.format = stringFormat;
 exports.replaceAll = replaceAll;
 exports.isEmpty = isEmpty;
-exports.capitalize = capitalize;

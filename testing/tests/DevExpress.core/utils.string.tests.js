@@ -31,7 +31,3 @@ QUnit.test("isEmpty", function(assert) {
     assert.ok(!stringUtils.isEmpty(" 1"));
     assert.ok(!stringUtils.isEmpty("text"));
 });
-
-QUnit.test("capitalize", function(assert) {
-    assert.equal(stringUtils.capitalize("test"), "Test");
-});
