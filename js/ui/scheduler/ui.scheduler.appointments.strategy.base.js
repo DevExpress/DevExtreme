@@ -76,7 +76,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getDeltaWidth: function(args, initialSize) {
-        var intervalWidth = this.instance.fire("getResizableStep"),
+        var intervalWidth = this.instance.fire("getResizableStep") || this.getAppointmentMinSize(),
             initialWidth = initialSize.width;
 
         return Math.round((args.width - initialWidth) / intervalWidth);

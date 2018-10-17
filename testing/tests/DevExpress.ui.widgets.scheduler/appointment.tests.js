@@ -20,6 +20,12 @@ var moduleOptions = {
             if(command === "getCellWidth") {
                 return this.cellWidth;
             }
+            if(command === "getResizableStep") {
+                return this.cellWidth;
+            }
+            if(command === "isGroupedByDate") {
+                return false;
+            }
         }, this);
     },
     afterEach: function() {
