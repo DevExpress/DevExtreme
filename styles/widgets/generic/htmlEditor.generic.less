@@ -1,11 +1,11 @@
 .dx-htmleditor {
-    .dx-htmleditor-toolbar-container:first-child {
+    .dx-htmleditor-toolbar-wrapper:first-child {
         border-bottom: 1px solid @htmleditor-toolbar-border-color;
     }
 }
 
 .dx-htmleditor-toolbar {
-    .dx-format-active {
+    .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
         background-color: @htmleditor-normal-format-active-bg;
 
         &.dx-button-success {

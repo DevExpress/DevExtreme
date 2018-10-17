@@ -14,10 +14,12 @@ import { titleize } from "../../../core/utils/inflector";
 
 const BaseModule = getQuill().import("core/module");
 
-const TOOLBAR_CONTAINER_CLASS = "dx-htmleditor-toolbar-container";
+const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
+
+const ICON_CLASS = "dx-icon";
 
 const DIALOG_COLOR_CAPTION = "dxHtmlEditor-dialogColorCaption";
 const DIALOG_BACKGROUND_CAPTION = "dxHtmlEditor-dialogBackgroundCaption";
@@ -193,7 +195,7 @@ class ToolbarModule extends BaseModule {
             .addClass(TOOLBAR_CLASS)
             .appendTo(container);
 
-        $(container).addClass(TOOLBAR_CONTAINER_CLASS);
+        $(container).addClass(TOOLBAR_WRAPPER_CLASS);
 
         this.toolbarInstance = this._editorInstance._createComponent($toolbar, Toolbar, { dataSource: toolbarItems });
     }
@@ -322,6 +324,10 @@ class ToolbarModule extends BaseModule {
                 continue;
             }
 
+            if(this._isColorFormat(format)) {
+                this._updateColorWidget(format, formats[format]);
+            }
+
             if(formatWidget.option("value") === undefined) {
                 formatWidget.$element().addClass(ACTIVE_FORMAT_CLASS);
             } else {
@@ -332,6 +338,22 @@ class ToolbarModule extends BaseModule {
         if(this._formats.clear && !isEmptyObject(formats)) {
             this._formats.clear.$element().addClass(ACTIVE_FORMAT_CLASS);
         }
+    }
+
+    _isColorFormat(formatName) {
+        return formatName === "color" || formatName === "background";
+    }
+
+    _updateColorWidget(formatName, color) {
+        const formatWidget = this._formats[formatName];
+        if(!formatWidget) {
+            return;
+        }
+
+        formatWidget
+            .$element()
+            .find(`.${ICON_CLASS}`)
+            .css(formatName, color || "inherit");
     }
 
     _getFormatWidgetName(formatName, formats) {
@@ -359,9 +381,12 @@ class ToolbarModule extends BaseModule {
     _resetFormatWidgets() {
         each(this._formats, (name, widget) => {
             widget.$element().removeClass(ACTIVE_FORMAT_CLASS);
+
+            if(this._isColorFormat(name)) {
+                this._updateColorWidget(name);
+            }
             if(widget.NAME === "dxSelectBox") {
                 this._setValueSilent(widget, null);
-
             }
         });
     }

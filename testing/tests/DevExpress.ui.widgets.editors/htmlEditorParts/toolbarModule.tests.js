@@ -8,6 +8,7 @@ import { noop } from "core/utils/common";
 import keyboardMock from "../../../helpers/keyboardMock.js";
 
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
+const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
 const FORM_CLASS = "dx-formdialog-form";
@@ -19,11 +20,14 @@ const COLOR_VIEW_HEX_FIELD_CLASS = "dx-colorview-label-hex";
 const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 const DIALOG_CLASS = "dx-formdialog";
 const BUTTON_WITH_TEXT_CLASS = "dx-button-has-text";
+const ICON_CLASS = "dx-icon";
 
 const BOLD_FORMAT_CLASS = "dx-bold-format";
 const ITALIC_FORMAT_CLASS = "dx-italic-format";
 const ALIGNCENTER_FORMAT_CLASS = "dx-aligncenter-format";
 const CODEBLOCK_FORMAT_CLASS = "dx-codeblock-format";
+const COLOR_FORMAT_CLASS = "dx-color-format";
+const BACKGROUND_FORMAT_CLASS = "dx-background-format";
 
 
 const simpleModuleConfig = {
@@ -102,8 +106,8 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
     test("Render toolbar without any options", (assert) => {
         new Toolbar(this.quillMock, this.options);
 
-        assert.notOk(this.$element.hasClass(TOOLBAR_CLASS), "Toolbar rendered not on the root element");
-        assert.notOk(this.$element.children().hasClass(TOOLBAR_CLASS), "Toolbar isn't render inside the root element (no items)");
+        assert.notOk(this.$element.hasClass(TOOLBAR_WRAPPER_CLASS), "Toolbar rendered not on the root element");
+        assert.notOk(this.$element.children().hasClass(TOOLBAR_WRAPPER_CLASS), "Toolbar isn't render inside the root element (no items)");
         assert.equal(this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`).length, 0, "There are no format widgets");
     });
 
@@ -111,10 +115,13 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         this.options.items = ["bold"];
         new Toolbar(this.quillMock, this.options);
 
+        const $toolbarWrapper = this.$element.children();
+        const $toolbar = $toolbarWrapper.children();
         const $formatWidget = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
-        assert.notOk(this.$element.hasClass(TOOLBAR_CLASS), "Toolbar rendered not on the root element");
-        assert.ok(this.$element.children().hasClass(TOOLBAR_CLASS), "Toolbar render inside the root element");
+        assert.notOk(this.$element.hasClass(TOOLBAR_WRAPPER_CLASS), "Toolbar rendered not on the root element");
+        assert.ok($toolbarWrapper.hasClass(TOOLBAR_WRAPPER_CLASS), "Toolbar wrapper render inside the root element");
+        assert.ok($toolbar.hasClass(TOOLBAR_CLASS), "Toolbar render inside the wrapper element");
         assert.equal($formatWidget.length, 1, "There is one format widget");
         assert.ok($formatWidget.hasClass("dx-bold-format"), "It's the bold format");
         assert.equal($formatWidget.find(".dx-icon-bold").length, 1, "It has a bold icon");
@@ -125,7 +132,10 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         this.options.container = this.$element;
         new Toolbar(this.quillMock, this.options);
 
-        assert.ok(this.$element.hasClass(TOOLBAR_CLASS), "Toolbar rendered on the custom element");
+        const $toolbar = this.$element.children();
+
+        assert.ok(this.$element.hasClass(TOOLBAR_WRAPPER_CLASS), "Toolbar rendered on the custom element");
+        assert.ok($toolbar.hasClass(TOOLBAR_CLASS), "Toolbar rendered on the custom element");
     });
 
     test("Render toolbar with simple formats", (assert) => {
@@ -341,6 +351,42 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
 
         assert.equal($activeFormats.length, 1, "single button is active");
         assert.ok($activeFormats.hasClass(ALIGNCENTER_FORMAT_CLASS), "it's an align center button");
+    });
+
+    test("color format", (assert) => {
+        this.quillMock.getFormat = () => { return { color: "#fafafa" }; };
+        this.options.items = ["color", "background", "bold"];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateFormatWidgets();
+        const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+        const $icon = $activeFormats.find(`.${ICON_CLASS}`);
+
+        assert.equal($activeFormats.length, 1, "single button is active");
+        assert.ok($activeFormats.hasClass(COLOR_FORMAT_CLASS), "it's a color button");
+        assert.equal($icon.get(0).style.color, "rgb(250, 250, 250)", "icon has correct color");
+
+        this.quillMock.getFormat = () => { return {}; };
+        toolbar.updateFormatWidgets();
+        assert.equal($icon.get(0).style.color, "inherit", "icon has correct color after reset format");
+    });
+
+    test("background format", (assert) => {
+        this.quillMock.getFormat = () => { return { background: "#fafafa" }; };
+        this.options.items = ["color", "background", "bold"];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateFormatWidgets();
+        const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+        const $icon = $activeFormats.find(`.${ICON_CLASS}`);
+
+        assert.equal($activeFormats.length, 1, "single button is active");
+        assert.ok($activeFormats.hasClass(BACKGROUND_FORMAT_CLASS), "it's a background button");
+        assert.equal($icon.get(0).style.background, "rgb(250, 250, 250)", "icon has correct background");
+
+        this.quillMock.getFormat = () => { return {}; };
+        toolbar.updateFormatWidgets();
+        assert.equal($icon.get(0).style.background, "inherit", "icon has correct background after reset format");
     });
 });
 
