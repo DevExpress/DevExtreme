@@ -314,19 +314,21 @@ var SummaryDataSourceAdapterClientExtender = (function() {
                 summary = that.summaryGetter()(remoteOperations),
                 totalAggregates;
 
-            if(remoteOperations.summary) {
-                if(!remoteOperations.paging && groups.length && summary) {
-                    if(!remoteOperations.grouping) {
-                        calculateAggregates(that, { groupAggregates: summary.groupAggregates }, options.data, groups.length);
+            if(!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
+                if(remoteOperations.summary) {
+                    if(!remoteOperations.paging && groups.length && summary) {
+                        if(!remoteOperations.grouping) {
+                            calculateAggregates(that, { groupAggregates: summary.groupAggregates }, options.data, groups.length);
+                        }
+                        options.data = sortGroupsBySummary(options.data, groups, summary);
                     }
-                    options.data = sortGroupsBySummary(options.data, groups, summary);
-                }
-            } else if(!remoteOperations.paging) {
-                totalAggregates = calculateAggregates(that, summary, options.data, groups.length);
+                } else if(!remoteOperations.paging) {
+                    totalAggregates = calculateAggregates(that, summary, options.data, groups.length);
 
-                options.data = sortGroupsBySummary(options.data, groups, summary);
-                options.extra = typeUtils.isPlainObject(options.extra) ? options.extra : {};
-                options.extra.summary = totalAggregates;
+                    options.data = sortGroupsBySummary(options.data, groups, summary);
+                    options.extra = typeUtils.isPlainObject(options.extra) ? options.extra : {};
+                    options.extra.summary = totalAggregates;
+                }
             }
 
             if(!options.isCustomLoading) {
