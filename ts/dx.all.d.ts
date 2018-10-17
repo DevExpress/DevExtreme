@@ -1725,6 +1725,7 @@ declare module DevExpress.ui {
         multiple?: boolean;
         /** A function that is executed when an accordion item's title is clicked or tapped. */
         onItemTitleClick?: ((e: { component?: dxAccordion, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any) | string;
+        repaintChangesOnly?: boolean;
         /** The index number of the currently selected item. */
         selectedIndex?: number;
     }
@@ -1870,6 +1871,7 @@ declare module DevExpress.ui {
         selectedItemKeys?: Array<any>;
         selectedItems?: Array<any>;
         selectionMode?: 'multiple' | 'single';
+        stylingMode?: 'text' | 'outlined' | 'contained';
     }
     /** The base class for widgets. */
     export class dxButtonGroup extends Widget {
@@ -2346,11 +2348,11 @@ declare module DevExpress.ui {
         /** Allows you to build a master-detail interface in the grid. */
         masterDetail?: { enabled?: boolean, autoExpandAll?: boolean, template?: template | ((detailElement: DevExpress.core.dxElement, detailInfo: { key?: any, data?: any, watch?: Function }) => any) };
         /** A function that is executed when a cell is clicked or tapped. Executed before onRowClick. */
-        onCellClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any) | string;
+        onCellClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any) | string;
         /** A function that is executed after the pointer enters or leaves a cell. */
-        onCellHoverChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: string, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
+        onCellHoverChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
         /** A function that is executed after a cell is created. */
-        onCellPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function }) => any);
+        onCellPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function }) => any);
         /** A function that is executed before the context menu is rendered. */
         onContextMenuPreparing?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, row?: dxDataGridRowObject }) => any);
         /** A function that is executed before a cell or row switches to the editing state. */
@@ -2544,7 +2546,7 @@ declare module DevExpress.ui {
         /** Specifies how the drawer interacts with the view in the opened state. */
         openedStateMode?: 'overlap' | 'shrink' | 'push';
         /** Specifies the drawer's position in relation to the view. */
-        position?: 'left' | 'right';
+        position?: 'left' | 'right' | 'top' | 'bottom';
         /** Specifies the drawer's reveal mode. */
         revealMode?: 'slide' | 'expand';
         /** Specifies whether to shade the view when the drawer is opened. */
@@ -2840,10 +2842,14 @@ declare module DevExpress.ui {
         imageSrc?: string;
     }
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
-        variables?: dxHtmlEditorVariables;
+        /** Specifies whether the widget can be focused using keyboard navigation. */
+        focusStateEnabled?: boolean;
+        onFocusIn?: ((e: { component?: dxHtmlEditor, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
+        onFocusOut?: ((e: { component?: dxHtmlEditor, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
         placeholder?: string;
         toolbar?: dxHtmlEditorToolbar;
         valueType?: 'html' | 'markdown';
+        variables?: dxHtmlEditorVariables;
     }
     /** A base class for editors. */
     export class dxHtmlEditor extends Editor {
@@ -2851,7 +2857,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxHtmlEditorOptions)
         clearHistory(): void;
         delete(index: number, length: number): void;
-        format(name: string, value: any): void;
+        format(formatName: string, formatValue: any): void;
         formatLine(index: number, length: number, formatName: string, formatValue: any): void;
         formatLine(index: number, length: number, formats: any): void;
         formatText(index: number, length: number, formatName: string, formatValue: any): void;
@@ -2934,6 +2940,7 @@ declare module DevExpress.ui {
         pullRefreshEnabled?: boolean;
         /** Specifies the text displayed in the pullDown panel while the list is being refreshed. */
         refreshingText?: string;
+        repaintChangesOnly?: boolean;
         /** A Boolean value specifying if the list is scrolled by content. */
         scrollByContent?: boolean;
         /** A Boolean value specifying if the list is scrolled using the scrollbar. */
@@ -4017,6 +4024,7 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** Specifies whether the widget changes its state when a user pauses on it. */
         hoverStateEnabled?: boolean;
+        repaintChangesOnly?: boolean;
         /** Specifies whether or not an end-user can scroll tabs by swiping. */
         scrollByContent?: boolean;
         /** Specifies whether or not an end-user can scroll tabs. */
@@ -4283,11 +4291,11 @@ declare module DevExpress.ui {
         /** Specifies which data field provides keys for nodes. */
         keyExpr?: string | Function;
         /** A function that is executed when a cell is clicked or tapped. Executed before onRowClick. */
-        onCellClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any) | string;
+        onCellClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any) | string;
         /** A function that is executed after the pointer enters or leaves a cell. */
-        onCellHoverChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
+        onCellHoverChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
         /** A function that is executed after a grid cell is created. */
-        onCellPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function }) => any);
+        onCellPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function }) => any);
         /** A function that is executed before the context menu is rendered. */
         onContextMenuPreparing?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /** A function that is executed before a cell or row switches to the editing state. */
@@ -4671,8 +4679,6 @@ declare module DevExpress.ui {
         onItemRendered?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any);
         /** A function that is executed when a collection item is selected or the selection is canceled. */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
-        /** Specifies whether to repaint only those elements whose data changed. */
-        repaintChangesOnly?: boolean;
         /** The index of the currently selected widget item. */
         selectedIndex?: number;
         /** The selected item object. */
@@ -5271,12 +5277,12 @@ declare module DevExpress.ui {
     }
     export interface dxHtmlEditorToolbar {
         container?: string | Element | JQuery;
-        items?: Array<dxHtmlEditorToolbarItem>;
+        items?: Array<dxHtmlEditorToolbarItem | string>;
     }
     /** This section lists the data source fields that are used in a default template for toolbar items. */
     export interface dxHtmlEditorToolbarItem extends dxToolbarItemTemplate {
-        format?: string;
-        values?: Array<string | number | boolean>;
+        formatName?: string;
+        formatValues?: Array<string | number | boolean>;
     }
     export interface dxHtmlEditorVariables {
         dataSource?: string | Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
@@ -5927,7 +5933,7 @@ declare module DevExpress.viz {
         useAggregation?: boolean;
         /** Configures the value axis. */
         valueAxis?: dxChartValueAxis | Array<dxChartValueAxis>;
-        zoomAndPan?: { valueAxis?: 'both' | 'none' | 'pan' | 'zoom', argumentAxis?: 'both' | 'none' | 'pan' | 'zoom', dragToZoom?: boolean, dragBoxStyle?: { color?: string, opacity?: number }, panKey?: string, allowMouseWheel?: boolean, allowGestures?: boolean };
+        zoomAndPan?: { valueAxis?: 'both' | 'none' | 'pan' | 'zoom', argumentAxis?: 'both' | 'none' | 'pan' | 'zoom', dragToZoom?: boolean, dragBoxStyle?: { color?: string, opacity?: number }, panKey?: 'alt' | 'ctrl' | 'meta' | 'shift', allowMouseWheel?: boolean, allowGestures?: boolean };
         /** @deprecated Use the zoomAndPan option instead. */
         zoomingMode?: 'all' | 'mouse' | 'none' | 'touch';
     }
