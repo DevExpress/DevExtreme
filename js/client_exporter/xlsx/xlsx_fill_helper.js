@@ -55,17 +55,9 @@ const xlsxFillHelper = {
         let result = source;
         if(isDefined(source)) {
             result = {};
-            let isEmpty = true;
             if(source.patternFill !== undefined) {
-                const patternFill = xlsxPatternFillHelper.copy(source.patternFill);
-                if(patternFill !== undefined) {
-                    result.patternFill = patternFill;
-                    isEmpty = false;
-                }
+                result.patternFill = xlsxPatternFillHelper.copy(source.patternFill);
             };
-            if(isEmpty) {
-                result = undefined;
-            }
         }
         return result;
     },

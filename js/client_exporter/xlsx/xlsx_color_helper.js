@@ -20,17 +20,11 @@ const xlsxColorHelper = {
         let result = source;
         if(isDefined(source)) {
             result = {};
-            let isEmpty = true;
             if(source.rgb !== undefined) {
                 result.rgb = source.rgb;
-                isEmpty = false;
             }
             if(source.theme !== undefined) {
                 result.theme = source.theme;
-                isEmpty = false;
-            }
-            if(isEmpty) {
-                result = undefined;
             }
         }
         return result;

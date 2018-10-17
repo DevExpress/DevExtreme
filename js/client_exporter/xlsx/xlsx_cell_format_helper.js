@@ -43,25 +43,16 @@ const xlsxCellFormatHelper = {
             }
 
             if(source.fill !== undefined) {
-                const fill = xlsxFillHelper.copy(source.fill);
-                if(fill !== undefined) {
-                    result.fill = fill;
-                }
+                result.fill = xlsxFillHelper.copy(source.fill);
             } else {
                 xlsxFillHelper.copySimpleFormat(source, result);
             }
 
             if(source.alignment !== undefined) {
-                const alignment = xlsxCellAlignmentHelper.copy(source.alignment);
-                if(alignment !== undefined) {
-                    result.alignment = alignment;
-                }
+                result.alignment = xlsxCellAlignmentHelper.copy(source.alignment);
             }
             if(source.font !== undefined) {
-                const font = xlsxFontHelper.copy(source.font);
-                if(font !== undefined) {
-                    result.font = font;
-                }
+                result.font = xlsxFontHelper.copy(source.font);
             }
         }
         return result;

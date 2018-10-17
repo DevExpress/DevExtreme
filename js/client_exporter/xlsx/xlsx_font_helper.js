@@ -28,44 +28,29 @@ const xlsxFontHelper = {
         let result = source;
         if(isDefined(source)) {
             result = {};
-            let isEmpty = true;
             if(source.size !== undefined) {
                 result.size = source.size;
-                isEmpty = false;
             }
             if(source.name !== undefined) {
                 result.name = source.name;
-                isEmpty = false;
             }
             if(source.family !== undefined) {
                 result.family = source.family;
-                isEmpty = false;
             }
             if(source.scheme !== undefined) {
                 result.scheme = source.scheme;
-                isEmpty = false;
             }
             if(source.bold !== undefined) {
                 result.bold = source.bold;
-                isEmpty = false;
             }
             if(source.italic !== undefined) {
                 result.italic = source.italic;
-                isEmpty = false;
             }
             if(source.underline !== undefined) {
                 result.underline = source.underline;
-                isEmpty = false;
             }
             if(source.color !== undefined) {
-                const color = xlsxColorHelper.copy(source.color);
-                if(color !== undefined) {
-                    result.color = color;
-                    isEmpty = false;
-                }
-            }
-            if(isEmpty) {
-                result = undefined;
+                result.color = xlsxColorHelper.copy(source.color);
             }
         }
         return result;

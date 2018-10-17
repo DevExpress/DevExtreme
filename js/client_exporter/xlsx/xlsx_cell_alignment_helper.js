@@ -21,21 +21,14 @@ const xlsxCellAlignmentHelper = {
         let result = source;
         if(isDefined(source)) {
             result = {};
-            let isEmpty = true;
             if(source.horizontal !== undefined) {
                 result.horizontal = source.horizontal;
-                isEmpty = false;
             }
             if(source.vertical !== undefined) {
                 result.vertical = source.vertical;
-                isEmpty = false;
             }
             if(source.wrapText !== undefined) {
                 result.wrapText = source.wrapText;
-                isEmpty = false;
-            }
-            if(isEmpty) {
-                result = undefined;
             }
         }
         return result;

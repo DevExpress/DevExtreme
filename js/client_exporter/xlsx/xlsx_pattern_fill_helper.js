@@ -22,27 +22,14 @@ const xlsxPatternFillHelper = {
         let result = source;
         if(isDefined(source)) {
             result = {};
-            let isEmpty = true;
             if(source.patternType !== undefined) {
                 result.patternType = source.patternType;
-                isEmpty = false;
             }
             if(source.backgroundColor !== undefined) {
-                const color = xlsxColorHelper.copy(source.backgroundColor);
-                if(color !== undefined) {
-                    result.backgroundColor = color;
-                    isEmpty = false;
-                }
+                result.backgroundColor = xlsxColorHelper.copy(source.backgroundColor);
             }
             if(source.foregroundColor !== undefined) {
-                const color = xlsxColorHelper.copy(source.foregroundColor);
-                if(color !== undefined) {
-                    result.foregroundColor = color;
-                    isEmpty = false;
-                }
-            }
-            if(isEmpty) {
-                result = undefined;
+                result.foregroundColor = xlsxColorHelper.copy(source.foregroundColor);
             }
         }
         return result;
