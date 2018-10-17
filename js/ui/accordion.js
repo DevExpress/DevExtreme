@@ -299,7 +299,7 @@ var Accordion = CollectionWidget.inherit({
             titleContainers = this._itemContainer().find(" > ." + ACCORDION_ITEM_CLASS + " > ." + ACCORDION_ITEM_TITLE_CLASS);
 
         eventsEngine.off(titleContainers, eventName);
-        eventsEngine.on(titleContainers, eventName, undefined, this._itemTitleClickHandler.bind(this));
+        eventsEngine.on(titleContainers, eventName, this._itemTitleClickHandler.bind(this));
     },
 
     _itemTitleClickHandler: function(e) {
