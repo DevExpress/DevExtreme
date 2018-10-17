@@ -286,6 +286,7 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         this.options.items = ["bold", "italic", "clear"];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
+
         toolbar.updateFormatWidgets();
         const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
 
