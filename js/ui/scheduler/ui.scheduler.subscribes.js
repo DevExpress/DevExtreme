@@ -295,6 +295,16 @@ var subscribes = {
         return this._cellHeight;
     },
 
+    getResizableStep: function() {
+        var cellWidth = this._cellWidth,
+            workSpace = this.getWorkSpace();
+
+        if(workSpace.isGroupedByDate()) {
+            return workSpace._getGroupCount() * cellWidth;
+        }
+
+        return cellWidth;
+    },
     getEndDate: function(appointmentData) {
         return this._getEndDate(appointmentData);
     },
@@ -427,9 +437,8 @@ var subscribes = {
         return this._workSpace._supportCompactDropDownAppointments();
     },
 
-    getGroupCount: function(options) {
-        var groupCount = this._workSpace._getGroupCount();
-        options.callback(groupCount);
+    getGroupCount: function() {
+        return this._workSpace._getGroupCount();
     },
 
     mapAppointmentFields: function(config) {
