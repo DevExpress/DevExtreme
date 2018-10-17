@@ -296,7 +296,7 @@ var Accordion = CollectionWidget.inherit({
 
     _attachItemTitleClickAction: function() {
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            titleContainers = this._itemContainer().children("." + ACCORDION_ITEM_CLASS).children("." + ACCORDION_ITEM_TITLE_CLASS);
+            titleContainers = this._itemContainer().find(" > ." + ACCORDION_ITEM_CLASS + " > ." + ACCORDION_ITEM_TITLE_CLASS);
 
         eventsEngine.off(titleContainers, eventName);
         eventsEngine.on(titleContainers, eventName, undefined, this._itemTitleClickHandler.bind(this));
