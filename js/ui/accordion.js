@@ -43,6 +43,12 @@ var Accordion = CollectionWidget.inherit({
         return extend(this.callBase(), {
 
             /**
+            * @name dxAccordionOptions.repaintChangesOnly
+            * @type boolean
+            * @default false
+            */
+
+            /**
              * @name dxAccordionOptions.hoverStateEnabled
              * @type boolean
              * @default true

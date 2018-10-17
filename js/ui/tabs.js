@@ -58,6 +58,13 @@ var Tabs = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+
+            /**
+            * @name dxTabsOptions.repaintChangesOnly
+            * @type boolean
+            * @default false
+            */
+
             /**
              * @name dxTabsOptions.hoverStateEnabled
              * @type boolean

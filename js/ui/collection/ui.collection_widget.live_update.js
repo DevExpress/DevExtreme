@@ -11,11 +11,6 @@ import { insertElement } from "../../core/dom_adapter";
 export default CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name CollectionWidgetOptions.repaintChangesOnly
-            * @type boolean
-            * @default false
-            */
             repaintChangesOnly: false
         });
     },
