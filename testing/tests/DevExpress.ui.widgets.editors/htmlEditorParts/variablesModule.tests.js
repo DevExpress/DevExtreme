@@ -130,7 +130,7 @@ QUnit.module("Variables module", moduleConfig, () => {
         this.options.escapeChar = "#";
         const variables = new Variables(this.quillMock, this.options);
 
-        variables.showPopover();
+        variables.showPopup();
         $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().trigger("dxclick");
 
         this.clock.tick();

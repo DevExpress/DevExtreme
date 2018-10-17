@@ -1,14 +1,18 @@
 import { getQuill } from "../quill_importer";
 
-import PopoverModule from "./popover";
+import $ from "../../../core/renderer";
+import PopupModule from "./popup";
 import Variable from "../formats/variable";
 
 import { extend } from "../../../core/utils/extend";
 
+const VARIABLE_FORMAT_CLASS = "dx-variable-format";
+const ACTIVE_FORMAT_CLASS = "dx-format-active";
+
 getQuill()
     .register({ "formats/variable": Variable }, true);
 
-class VariableModule extends PopoverModule {
+class VariableModule extends PopupModule {
     _getDefaultOptions() {
         let baseConfig = super._getDefaultOptions();
 
@@ -22,28 +26,35 @@ class VariableModule extends PopoverModule {
 
         const toolbar = quill.getModule('toolbar');
         if(toolbar) {
-            toolbar.addClickHandler('variable', this.showPopover.bind(this));
+            toolbar.addClickHandler('variable', this.showPopup.bind(this));
         }
 
         quill.keyboard.addBinding({
             key: 'P',
             altKey: true
-        }, this.showPopover.bind(this));
+        }, this.showPopup.bind(this));
+
+        this._popup.on("shown", (e) => {
+            const $ofElement = $(e.component.option("position").of);
+            if($ofElement.hasClass(VARIABLE_FORMAT_CLASS)) {
+                $ofElement.addClass(ACTIVE_FORMAT_CLASS);
+            }
+        });
     }
 
-    showPopover(event) {
+    showPopup(event) {
         const selection = this.quill.getSelection();
         const position = selection ? selection.index : this.quill.getLength();
 
         this.savePosition(position);
 
-        this._resetPopoverPosition(event, position);
-        super.showPopover();
+        this._resetPopupPosition(event, position);
+        super.showPopup();
     }
 
-    _resetPopoverPosition(event, position) {
+    _resetPopupPosition(event, position) {
         if(event && event.element) {
-            this._popover.option("position", {
+            this._popup.option("position", {
                 of: event.element,
                 offset: {
                     h: 0,
@@ -57,7 +68,7 @@ class VariableModule extends PopoverModule {
             const mentionBounds = this.quill.getBounds(position);
             const rootRect = this.quill.root.getBoundingClientRect();
 
-            this._popover.option("position", {
+            this._popup.option("position", {
                 of: this.quill.root,
                 offset: {
                     h: mentionBounds.left,

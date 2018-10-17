@@ -1,0 +1,44 @@
+.dx-htmleditor {
+    .dx-htmleditor-toolbar-wrapper:first-child {
+        border-bottom: 1px solid @htmleditor-toolbar-border-color;
+    }
+}
+
+.dx-htmleditor-content {
+    pre {
+        color: fade(@base-text-color, 80%);
+    }
+
+    blockquote {
+        color: fade(@base-text-color, 80%);
+        border-left-color: @htmleditor-toolbar-border-color;
+
+        .dx-rtl & {
+            border-right-color: @htmleditor-toolbar-border-color;
+        }
+    }
+
+    .dx-variable {
+        & > span {
+            background: @htmleditor-variable-bg;
+        }
+    }
+}
+
+.dx-htmleditor-toolbar {
+    .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
+        background-color: @htmleditor-normal-format-active-bg;
+
+        &.dx-button-success {
+            background-color: @htmleditor-success-format-active-bg;
+        }
+
+        &.dx-button-default {
+            background-color: @htmleditor-default-format-active-bg;
+        }
+
+        &.dx-button-danger {
+            background-color: @htmleditor-danger-format-active-bg;
+        }
+    }    
+}

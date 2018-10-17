@@ -2,13 +2,13 @@ import { getQuill } from "../quill_importer";
 import $ from "../../../core/renderer";
 import { extend } from "../../../core/utils/extend";
 
-import Popover from "../../popover";
+import Popup from "../../popup";
 import List from "../../list";
 
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 const BaseModule = getQuill().import("core/module");
 
-class ListPopoverModule extends BaseModule {
+class ListPopupModule extends BaseModule {
 
     _getDefaultOptions() {
         return {
@@ -20,7 +20,7 @@ class ListPopoverModule extends BaseModule {
         super(quill, options);
 
         this.options = extend({}, this._getDefaultOptions(), options);
-        this._popover = this.renderPopover();
+        this._popup = this.renderPopup();
     }
 
     renderList($container, options) {
@@ -28,15 +28,15 @@ class ListPopoverModule extends BaseModule {
         this._list = this.options.editorInstance._createComponent($container, List, options);
     }
 
-    renderPopover() {
+    renderPopup() {
         let editorInstance = this.options.editorInstance,
             $container = $("<div>").appendTo(editorInstance.$element()),
-            popoverConfig = this._getPopoverConfig();
+            popupConfig = this._getPopupConfig();
 
-        return editorInstance._createComponent($container, Popover, popoverConfig);
+        return editorInstance._createComponent($container, Popup, popupConfig);
     }
 
-    _getPopoverConfig() {
+    _getPopupConfig() {
         return {
             contentTemplate: (contentElem) => {
                 const listConfig = this._getListConfig(this.options);
@@ -49,7 +49,18 @@ class ListPopoverModule extends BaseModule {
             onHidden: () => {
                 this._list.unselectAll();
                 this._list.option("focusedElement", null);
-            }
+            },
+            showTitle: false,
+            width: "auto",
+            height: "auto",
+            shading: false,
+            closeOnTargetScroll: true,
+            closeOnOutsideClick: true,
+            animation: {
+                show: { type: "fade", duration: 0, from: 0, to: 1 },
+                hide: { type: "fade", duration: 400, from: 1, to: 0 }
+            },
+            fullScreen: false
         };
     }
 
@@ -62,8 +73,8 @@ class ListPopoverModule extends BaseModule {
     }
 
     selectionChangedHandler(e) {
-        if(this._popover.option("visible")) {
-            this._popover.hide();
+        if(this._popup.option("visible")) {
+            this._popup.hide();
 
             this.insertEmbedContent(e);
         }
@@ -71,8 +82,8 @@ class ListPopoverModule extends BaseModule {
 
     insertEmbedContent(selectionChangedEvent) { }
 
-    showPopover() {
-        this._popover && this._popover.show();
+    showPopup() {
+        this._popup && this._popup.show();
     }
 
     savePosition(position) {
@@ -84,4 +95,4 @@ class ListPopoverModule extends BaseModule {
     }
 }
 
-export default ListPopoverModule;
+export default ListPopupModule;
