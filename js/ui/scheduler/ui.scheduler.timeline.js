@@ -107,6 +107,12 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return resultDate;
     },
 
+    _getHorizontalMax: function(groupIndex) {
+        groupIndex = this.option("groupByDate") ? this._getGroupCount() - 1 : groupIndex;
+
+        return this._groupedStrategy.getHorizontalMax(groupIndex);
+    },
+
     _getFormat: function() {
         return "shorttime";
     },
