@@ -295,11 +295,11 @@ var Accordion = CollectionWidget.inherit({
     },
 
     _attachItemTitleClickAction: function() {
-        var itemSelector = "." + ACCORDION_ITEM_TITLE_CLASS,
-            eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
+            titleContainers = this._itemContainer().find(" > ." + ACCORDION_ITEM_CLASS + " > ." + ACCORDION_ITEM_TITLE_CLASS);
 
-        eventsEngine.off(this._itemContainer(), eventName, itemSelector);
-        eventsEngine.on(this._itemContainer(), eventName, itemSelector, this._itemTitleClickHandler.bind(this));
+        eventsEngine.off(titleContainers, eventName);
+        eventsEngine.on(titleContainers, eventName, this._itemTitleClickHandler.bind(this));
     },
 
     _itemTitleClickHandler: function(e) {
