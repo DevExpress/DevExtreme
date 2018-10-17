@@ -818,7 +818,6 @@ QUnit.test("title should be centered considering different before/after block wi
     assert.equal($center.width(), 230);
 });
 
-
 QUnit.test("title should be centered considering different before/after block widths (big after case)", function(assert) {
     var title = "LongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongText";
 
@@ -857,6 +856,38 @@ QUnit.test("title should be centered considering different before/after block wi
 
     var $center = $element.find(".dx-toolbar-center").eq(0);
     assert.equal(parseInt($center.css("margin-left")), 60);
+});
+
+QUnit.test("items should be arranged after rendering in the dxToolbarBase used in the dxPopup", function(assert) {
+    var title = "LongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongLongText";
+
+    var $element = $("#widget").dxToolbarBase({
+        onItemRendered: function(args) {
+            if($(args.itemElement).text() === title) {
+                $(args.itemElement).css("maxWidth", 200);
+            }
+        },
+        items: [
+            {
+                location: "before", template: function() {
+                    return $("<div>").width(100);
+                }
+            },
+            { location: "center", text: title },
+            {
+                location: "after", template: function() {
+                    return $("<div>").width(50);
+                }
+            }
+        ],
+        width: 400
+    });
+
+    var $center = $element.find(".dx-toolbar-center").eq(0);
+    assert.equal(parseInt($center.css("margin-left")), 110);
+    assert.equal(parseInt($center.css("margin-right")), 60);
+    assert.equal($center.css("float"), "none");
+    assert.equal($center.width(), 230);
 });
 
 

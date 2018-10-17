@@ -12,6 +12,7 @@ var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
     DOMComponent = require("../../core/dom_component"),
     Template = require("./jquery.template"),
+    TemplateBase = require("./ui.template_base"),
     FunctionTemplate = require("./function_template"),
     EmptyTemplate = require("./empty_template"),
     ChildDefaultTemplate = require("./child_default_template"),
@@ -358,25 +359,32 @@ var Widget = DOMComponent.inherit({
         }
 
         if(templateSource.nodeType || typeUtils.isRenderer(templateSource)) {
-            templateSource = $(templateSource);
-
-            return createTemplate(templateSource);
+            return createTemplate($(templateSource));
         }
 
         if(typeof templateSource === "string") {
-            var userTemplate = this.option("integrationOptions.templates")[templateSource];
-            if(userTemplate) {
-                return userTemplate;
-            }
-
-            var dynamicTemplate = this._defaultTemplates[templateSource];
-            if(dynamicTemplate) {
-                return dynamicTemplate;
-            }
-            return createTemplate(templateSource);
+            return this._renderIntegrationTemplate(templateSource)
+                || this._defaultTemplates[templateSource]
+                || createTemplate(templateSource);
         }
 
         return this._acquireTemplate(templateSource.toString(), createTemplate);
+    },
+
+    _renderIntegrationTemplate: function(templateSource) {
+        var integrationTemplate = this.option("integrationOptions.templates")[templateSource],
+            isAsyncTemplate = this.option("templatesRenderAsynchronously");
+
+        if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
+            var render = integrationTemplate.render;
+            integrationTemplate.render = function(options) {
+                var templateResult = render(options);
+                options.onRendered && !isAsyncTemplate && options.onRendered();
+                return templateResult;
+            };
+        }
+
+        return integrationTemplate;
     },
 
     _createTemplateIfNeeded: function(templateSource) {

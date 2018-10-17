@@ -1,12 +1,4 @@
 module.exports = {
-    _renderAsyncTemplate(template, args) {
-        const result = template && template.render(args);
-        if(!this._options.templatesRenderAsynchronously) {
-            args.onRendered.call(this);
-        }
-        return result;
-    },
-
     _waitAsyncTemplates(callback) {
         if(this._options.templatesRenderAsynchronously) {
             this._asyncTemplatesTimers = this._asyncTemplatesTimers || [];

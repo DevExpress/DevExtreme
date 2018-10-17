@@ -356,7 +356,7 @@ var DropDownEditor = TextBox.inherit({
         this._$dropDownButton = null;
         this._$clearButton = null;
 
-        this._renderAsyncTemplate(fieldTemplate, {
+        fieldTemplate.render({
             model: data,
             container: domUtils.getPublicElement($container),
             onRendered: () => {
