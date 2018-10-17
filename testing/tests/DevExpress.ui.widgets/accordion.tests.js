@@ -236,12 +236,8 @@ QUnit.test("nested widget rendering", function(assert) {
 
 QUnit.test("nested widget with onItemTitleClick", function(assert) {
     var that = this,
-        isFired = false,
-        nested;
-
-    var handleFire = function() {
-        isFired = true;
-    };
+        nested,
+        handleFire = sinon.stub();
 
     var parent = this.$element.dxAccordion({
         items: this.items,
@@ -256,22 +252,19 @@ QUnit.test("nested widget with onItemTitleClick", function(assert) {
     }).dxAccordion("instance");
 
     $(nested.$element().find("." + ACCORDION_ITEM_TITLE_CLASS)).eq(1).trigger("dxclick");
-    assert.notOk(isFired, "parent item title click action has not been fired after click on nested widget title");
+    assert.ok(handleFire.notCalled, "parent item title click action has not been fired after click on nested widget title");
 
-    isFired = false;
     $(parent.$element().find("." + ACCORDION_ITEM_TITLE_CLASS)).eq(4).trigger("dxclick");
-    assert.ok(isFired, "parent item title click action has been fired after click");
+    assert.ok(handleFire.calledOnce, "parent item title click action has been fired after click");
 
     parent.option("onItemTitleClick", noop);
     nested.option("onItemTitleClick", handleFire);
 
-    isFired = false;
     $(parent.$element().find("." + ACCORDION_ITEM_TITLE_CLASS)).eq(4).trigger("dxclick");
-    assert.notOk(isFired, "nested item title click action has not been fired after click on parent widget title");
+    assert.ok(handleFire.calledOnce, "nested item title click action has not been fired after click on parent widget title");
 
-    isFired = false;
     $(nested.$element().find("." + ACCORDION_ITEM_TITLE_CLASS)).eq(0).trigger("dxclick");
-    assert.ok(isFired, "nested item title click action has been fired after click");
+    assert.equal(handleFire.callCount, 2, "nested item title click action has been fired after click");
 });
 
 
