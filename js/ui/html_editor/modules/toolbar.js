@@ -14,6 +14,7 @@ import { titleize } from "../../../core/utils/inflector";
 
 const BaseModule = getQuill().import("core/module");
 
+const TOOLBAR_CONTAINER_CLASS = "dx-htmleditor-toolbar-container";
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
@@ -188,10 +189,13 @@ class ToolbarModule extends BaseModule {
     _renderToolbar() {
         const container = this.options.container || this._getContainer();
         const toolbarItems = this._prepareToolbarItems();
+        const $toolbar = $("<div>")
+            .addClass(TOOLBAR_CLASS)
+            .appendTo(container);
 
-        $(container).addClass(TOOLBAR_CLASS);
+        $(container).addClass(TOOLBAR_CONTAINER_CLASS);
 
-        this.toolbarInstance = this._editorInstance._createComponent(container, Toolbar, { dataSource: toolbarItems });
+        this.toolbarInstance = this._editorInstance._createComponent($toolbar, Toolbar, { dataSource: toolbarItems });
     }
 
     _getContainer() {
@@ -233,7 +237,8 @@ class ToolbarModule extends BaseModule {
             formatName: formatName,
             options: {
                 icon: iconName.toLowerCase(),
-                onClick: this._formatHandlers[formatName] || this._getDefaultClickHandler(formatName)
+                onClick: this._formatHandlers[formatName] || this._getDefaultClickHandler(formatName),
+                stylingMode: "text"
             }
         };
     }
