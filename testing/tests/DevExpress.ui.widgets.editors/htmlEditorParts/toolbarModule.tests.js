@@ -279,6 +279,34 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
 
         assert.ok($formatWidget.hasClass(SELECTBOX_CLASS), "Change enum format via SelectBox");
     });
+
+    test("undo operation", (assert) => {
+        const undoStub = sinon.stub();
+        this.quillMock.history = { undo: undoStub };
+        this.options.items = ["undo"];
+
+        new Toolbar(this.quillMock, this.options);
+
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+
+        assert.ok(undoStub.calledOnce, "call undo");
+    });
+
+    test("redo operation", (assert) => {
+        const redoStub = sinon.stub();
+        this.quillMock.history = { redo: redoStub };
+        this.options.items = ["redo"];
+
+        new Toolbar(this.quillMock, this.options);
+
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+
+        assert.ok(redoStub.calledOnce, "redo undo");
+    });
 });
 
 QUnit.module("Active formats", simpleModuleConfig, () => {

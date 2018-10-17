@@ -98,7 +98,13 @@ class ToolbarModule extends BaseModule {
             alignJustify: () => {
                 this.quill.format("align", "justify", USER_ACTION);
             },
-            codeBlock: this._getDefaultClickHandler("code-block")
+            codeBlock: this._getDefaultClickHandler("code-block"),
+            undo: () => {
+                this.quill.history.undo();
+            },
+            redo: () => {
+                this.quill.history.redo();
+            }
         };
     }
 
