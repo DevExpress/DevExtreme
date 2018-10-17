@@ -9,6 +9,7 @@ import keyboardMock from "../../../helpers/keyboardMock.js";
 
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
+const ACTIVE_FORMAT_CLASS = "dx-format-active";
 const FORM_CLASS = "dx-formdialog-form";
 const FIELD_ITEM_CLASS = "dx-field-item";
 const FIELD_ITEM_LABEL_CLASS = "dx-field-item-label-text";
@@ -18,6 +19,12 @@ const COLOR_VIEW_HEX_FIELD_CLASS = "dx-colorview-label-hex";
 const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 const DIALOG_CLASS = "dx-formdialog";
 const BUTTON_WITH_TEXT_CLASS = "dx-button-has-text";
+
+const BOLD_FORMAT_CLASS = "dx-bold-format";
+const ITALIC_FORMAT_CLASS = "dx-italic-format";
+const ALIGNCENTER_FORMAT_CLASS = "dx-aligncenter-format";
+const CODEBLOCK_FORMAT_CLASS = "dx-codeblock-format";
+
 
 const simpleModuleConfig = {
     beforeEach: () => {
@@ -29,8 +36,8 @@ const simpleModuleConfig = {
             },
             on: noop,
             off: noop,
-            getSelection: noop,
-            getFormat: () => {}
+            getSelection: () => { return { index: 0, length: 0 }; },
+            getFormat: () => { return {}; }
         };
 
         this.options = {
@@ -185,6 +192,75 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             }]);
     });
 
+    test("handle codeBlock formatting", (assert) => {
+        this.options.items = ["codeBlock"];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+        $formatButton.trigger("dxclick");
+
+        this.quillMock.getFormat = () => { return { "code-block": true }; };
+
+        $formatButton.trigger("dxclick");
+
+        assert.deepEqual(
+            this.log,
+            [{
+                format: "code-block",
+                value: true
+            }, {
+                format: "code-block",
+                value: false
+            }]);
+    });
+
+    test("handle orderedList formatting", (assert) => {
+        this.options.items = ["orderedList"];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+        $formatButton.trigger("dxclick");
+
+        this.quillMock.getFormat = () => { return { list: "ordered" }; };
+
+        $formatButton.trigger("dxclick");
+
+        assert.deepEqual(
+            this.log,
+            [{
+                format: "list",
+                value: "ordered"
+            }, {
+                format: "list",
+                value: false
+            }]);
+    });
+
+    test("handle bulletList formatting", (assert) => {
+        this.options.items = ["bulletList"];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+        $formatButton.trigger("dxclick");
+
+        this.quillMock.getFormat = () => { return { list: "bullet" }; };
+
+        $formatButton.trigger("dxclick");
+
+        assert.deepEqual(
+            this.log,
+            [{
+                format: "list",
+                value: "bullet"
+            }, {
+                format: "list",
+                value: false
+            }]);
+    });
+
     test("Render toolbar with enum format", (assert) => {
         this.options.items = [{ formatName: "header", formatValues: [1, 2, 3, false] }];
 
@@ -192,6 +268,79 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         const $formatWidget = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
         assert.ok($formatWidget.hasClass(SELECTBOX_CLASS), "Change enum format via SelectBox");
+    });
+});
+
+QUnit.module("Active formats", simpleModuleConfig, () => {
+    test("without active formats", (assert) => {
+        this.options.items = ["bold", "italic", "clear"];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateFormatWidgets();
+        const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+
+        assert.equal($activeFormats.length, 0, "There is no active formats");
+    });
+
+    test("clear formatting", (assert) => {
+        this.quillMock.getFormat = () => { return { bold: true }; };
+        this.options.items = ["clear"];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateFormatWidgets();
+        const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+
+        assert.equal($activeFormats.length, 1, "Clear formats button is active because there is active format");
+    });
+
+    test("simple format", (assert) => {
+        this.quillMock.getFormat = () => { return { bold: true }; };
+        this.options.items = ["bold", "italic", "strike"];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateFormatWidgets();
+        const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+
+        assert.equal($activeFormats.length, 1, "Bold format button is active");
+        assert.ok($activeFormats.hasClass(BOLD_FORMAT_CLASS), "it's a bold button");
+    });
+
+    test("several simple format", (assert) => {
+        this.quillMock.getFormat = () => { return { bold: true, italic: true }; };
+        this.options.items = ["bold", "italic", "strike"];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateFormatWidgets();
+        const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+
+        assert.equal($activeFormats.length, 2, "Two format buttons are active");
+        assert.ok($activeFormats.eq(0).hasClass(BOLD_FORMAT_CLASS), "it's a bold button");
+        assert.ok($activeFormats.eq(1).hasClass(ITALIC_FORMAT_CLASS), "it's an italic block button");
+
+    });
+
+    test("alias format", (assert) => {
+        this.quillMock.getFormat = () => { return { "code-block": true }; };
+        this.options.items = ["codeBlock"];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateFormatWidgets();
+        const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+
+        assert.equal($activeFormats.length, 1, "Single format button is active");
+        assert.ok($activeFormats.hasClass(CODEBLOCK_FORMAT_CLASS), "it's a code block button");
+    });
+
+    test("composite format", (assert) => {
+        this.quillMock.getFormat = () => { return { align: "center" }; };
+        this.options.items = ["alignLeft", "alignCenter", "alignRight", "alignJustify"];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateFormatWidgets();
+        const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+
+        assert.equal($activeFormats.length, 1, "single button is active");
+        assert.ok($activeFormats.hasClass(ALIGNCENTER_FORMAT_CLASS), "it's an align center button");
     });
 });
 
