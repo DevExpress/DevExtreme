@@ -174,7 +174,7 @@ var ExcelCreator = Class.inherit({
     },
 
     _raiseXlsxCellPrepared: function({ dataProvider, value, dataType, style, sourceData }) {
-        const style_args = this._xlsxFile.copyCellFormat(style);
+        const style_args = XlsxFile.copyCellFormat(style);
         const numberFormat = style_args.numberFormat;
         delete style_args.numberFormat;
 

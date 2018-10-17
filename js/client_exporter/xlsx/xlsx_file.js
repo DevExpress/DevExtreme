@@ -42,7 +42,7 @@ export default class XlsxFile {
         return result;
     }
 
-    copyCellFormat(source) {
+    static copyCellFormat(source) {
         return xlsxCellFormatHelper.copy(source);
     }
 

@@ -36,18 +36,33 @@ const xlsxCellFormatHelper = {
     copy: function(source) {
         let result = source;
         if(isDefined(source)) {
-            result = {
-                numberFormat: source.numberFormat,
-            };
+            result = {};
 
-            if(isDefined(source.fill)) {
-                result.fill = xlsxFillHelper.copy(source.fill);
+            if(source.numberFormat !== undefined) {
+                result.numberFormat = source.numberFormat;
+            }
+
+            if(source.fill !== undefined) {
+                const fill = xlsxFillHelper.copy(source.fill);
+                if(fill !== undefined) {
+                    result.fill = fill;
+                }
             } else {
                 xlsxFillHelper.copySimpleFormat(source, result);
             }
 
-            result.alignment = xlsxCellAlignmentHelper.copy(source.alignment);
-            result.font = xlsxFontHelper.copy(source.font);
+            if(source.alignment !== undefined) {
+                const alignment = xlsxCellAlignmentHelper.copy(source.alignment);
+                if(alignment !== undefined) {
+                    result.alignment = alignment;
+                }
+            }
+            if(source.font !== undefined) {
+                const font = xlsxFontHelper.copy(source.font);
+                if(font !== undefined) {
+                    result.font = font;
+                }
+            }
         }
         return result;
     },

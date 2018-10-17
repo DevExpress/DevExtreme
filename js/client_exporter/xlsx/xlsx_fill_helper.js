@@ -40,17 +40,32 @@ const xlsxFillHelper = {
     },
 
     copySimpleFormat: function(source, target) {
-        target.backgroundColor = source.backgroundColor;
-        target.patternStyle = source.patternStyle;
-        target.patternColor = source.patternColor;
+        if(source.backgroundColor !== undefined) {
+            target.backgroundColor = source.backgroundColor;
+        }
+        if(source.patternStyle !== undefined) {
+            target.patternStyle = source.patternStyle;
+        }
+        if(source.patternColor !== undefined) {
+            target.patternColor = source.patternColor;
+        }
     },
 
     copy: function(source) {
         let result = source;
         if(isDefined(source)) {
-            result = {
-                patternFill: xlsxPatternFillHelper.copy(source.patternFill)
+            result = {};
+            let isEmpty = true;
+            if(source.patternFill !== undefined) {
+                const patternFill = xlsxPatternFillHelper.copy(source.patternFill);
+                if(patternFill !== undefined) {
+                    result.patternFill = patternFill;
+                    isEmpty = false;
+                }
             };
+            if(isEmpty) {
+                result = undefined;
+            }
         }
         return result;
     },

@@ -20,11 +20,23 @@ const xlsxCellAlignmentHelper = {
     copy: function(source) {
         let result = source;
         if(isDefined(source)) {
-            result = {
-                vertical: source.vertical,
-                wrapText: source.wrapText,
-                horizontal: source.horizontal,
-            };
+            result = {};
+            let isEmpty = true;
+            if(source.horizontal !== undefined) {
+                result.horizontal = source.horizontal;
+                isEmpty = false;
+            }
+            if(source.vertical !== undefined) {
+                result.vertical = source.vertical;
+                isEmpty = false;
+            }
+            if(source.wrapText !== undefined) {
+                result.wrapText = source.wrapText;
+                isEmpty = false;
+            }
+            if(isEmpty) {
+                result = undefined;
+            }
         }
         return result;
     },
