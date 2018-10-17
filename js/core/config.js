@@ -48,6 +48,7 @@ var config = {
     */
     forceIsoDateParsing: true,
     wrapActionsBeforeExecute: true,
+    useLegacyStoreResult: false,
     /**
     * @name globalConfig.useJQuery
     * @type boolean

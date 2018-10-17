@@ -3335,7 +3335,7 @@ QUnit.test("onRowInserted - Check key after insert row when custom store", funct
         },
         insert: function(values) {
             var d = $.Deferred();
-            return d.resolve("testKey").promise();
+            return d.resolve({ fieldTest: "testKey" }).promise();
         }
     };
 
@@ -7116,6 +7116,48 @@ QUnit.test("Editing with refresh mode repaint", function(assert) {
 
     assert.equal(this.array[this.array.length - 1].name, "Mike", "data is inserted to end");
     assert.equal(this.getVisibleRows()[0].data.name, "Mike", "row is inserted to begin and not reshaped");
+});
+
+QUnit.test("Editing with refresh mode repaint if store returns data", function(assert) {
+    // arrange
+    this.options.editing.refreshMode = "repaint";
+    var array = this.array;
+    this.options.dataSource = {
+        key: "id",
+        load: function() {
+            return array;
+        },
+        insert: function(values) {
+            return $.extend({ id: 999 }, values, { fromServer: true });
+        },
+        update: function(key, values) {
+            var data = array.filter(function(data) { return data.id === key; })[0];
+            return $.extend({}, data, values, { fromServer: true });
+        },
+        remove: function() {
+        }
+    };
+
+    this.setupModules();
+
+    // act
+    this.addRow();
+    this.cellValue(0, "name", "Mike");
+    this.cellValue(2, "age", 30);
+    this.deleteRow(3);
+    this.saveEditData();
+
+    // assert
+    assert.equal(this.loadingArgs.length, 0, "loading is not occured after editing");
+    assert.equal(this.changedArgs.length, 0, "changed is not occured after editing");
+
+    assert.deepEqual(this.getVisibleRows()[2].data, { id: 2, name: "Dan", age: 30, fromServer: true }, "row data is updated");
+    assert.equal(this.getVisibleRows()[2].values[1], 30, "row values are updated");
+
+    assert.equal(this.getVisibleRows()[3].data.id, 4, "row data is removed");
+
+    assert.deepEqual(this.getVisibleRows()[0].data, { id: 999, name: "Mike", fromServer: true }, "row is inserted to begin and not reshaped");
+    assert.deepEqual(this.getVisibleRows()[0].key, 999, "row key for inserted item");
 });
 
 QUnit.test("Load after editing with refresh mode repaint and remoteOperations", function(assert) {

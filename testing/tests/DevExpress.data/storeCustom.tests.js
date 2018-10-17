@@ -1,6 +1,7 @@
 var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     processRequestResultLock = require("data/utils").processRequestResultLock,
+    config = require("core/config"),
     ERRORS = {
         INVALID_RETURN: "E4012",
         MISSING_USER_FUNC: "E4011",
@@ -399,6 +400,42 @@ QUnit.test("insert, promise result", function(assert) {
     var done = assert.async();
 
     var store = new CustomStore({
+        key: "id",
+        insert: function(values) {
+            return $.Deferred().resolve({ id: 123, a: 1 });
+        }
+    });
+
+    store.insert({ a: 1 }).done(function(values, key) {
+        assert.deepEqual(values, { a: 1, id: 123 });
+        assert.equal(key, 123);
+        done();
+    });
+});
+
+QUnit.test("insert, non-promise result", function(assert) {
+    var done = assert.async();
+
+    var store = new CustomStore({
+        key: "id",
+        insert: function(values) {
+            return { id: 123, a: 1 };
+        }
+    });
+
+    store.insert({ a: 1 }).done(function(values, key) {
+        assert.deepEqual(values, { id: 123, a: 1 });
+        assert.equal(key, 123);
+        done();
+    });
+});
+
+QUnit.test("insert with useLegacyStoreResult, promise result", function(assert) {
+    var done = assert.async();
+
+    config({ useLegacyStoreResult: true });
+
+    var store = new CustomStore({
         insert: function(values) {
             return $.Deferred().resolve(123);
         }
@@ -407,12 +444,15 @@ QUnit.test("insert, promise result", function(assert) {
     store.insert({ a: 1 }).done(function(values, key) {
         assert.deepEqual(values, { a: 1 });
         assert.equal(key, 123);
+        config({ useLegacyStoreResult: false });
         done();
     });
 });
 
-QUnit.test("insert, non-promise result", function(assert) {
+QUnit.test("insert with useLegacyStoreResult, non-promise result", function(assert) {
     var done = assert.async();
+
+    config({ useLegacyStoreResult: true });
 
     var store = new CustomStore({
         insert: function(values) {
@@ -423,6 +463,7 @@ QUnit.test("insert, non-promise result", function(assert) {
     store.insert({ a: 1 }).done(function(values, key) {
         assert.deepEqual(values, { a: 1 });
         assert.equal(key, 123);
+        config({ useLegacyStoreResult: false });
         done();
     });
 });
@@ -444,8 +485,10 @@ QUnit.test("insert, error handling", function(assert) {
     }, done, assert);
 });
 
-QUnit.test("update, promise result", function(assert) {
+QUnit.test("update with useLegacyStoreResult, promise result", function(assert) {
     var done = assert.async();
+
+    config({ useLegacyStoreResult: true });
 
     var store = new CustomStore({
         update: function(key, values) {
@@ -458,6 +501,67 @@ QUnit.test("update, promise result", function(assert) {
     store.update(123, { a: 1 }).done(function(key, values) {
         assert.strictEqual(key, 123);
         assert.deepEqual(values, { a: 1 });
+        config({ useLegacyStoreResult: false });
+        done();
+    });
+});
+
+QUnit.test("update with useLegacyStoreResult, non-promise result", function(assert) {
+    var done = assert.async(),
+        updateCalled;
+
+    config({ useLegacyStoreResult: true });
+
+    var store = new CustomStore({
+        update: function(key, values) {
+            assert.strictEqual(key, 123);
+            assert.deepEqual(values, { a: 1 });
+            updateCalled = true;
+        }
+    });
+
+    store.update(123, { a: 1 }).done(function(key, values) {
+        assert.strictEqual(key, 123);
+        assert.deepEqual(values, { a: 1 });
+        assert.ok(updateCalled);
+        config({ useLegacyStoreResult: false });
+        done();
+    });
+});
+
+QUnit.test("update, promise result", function(assert) {
+    var done = assert.async();
+
+    var store = new CustomStore({
+        key: "id",
+        update: function(key, values) {
+            assert.strictEqual(key, 123);
+            assert.deepEqual(values, { a: 1 });
+            return $.Deferred().resolve();
+        }
+    });
+
+    store.update(123, { a: 1 }).done(function(values, key) {
+        assert.strictEqual(key, 123);
+        assert.deepEqual(values, { a: 1 });
+        done();
+    });
+});
+
+QUnit.test("update, promise result as data", function(assert) {
+    var done = assert.async();
+
+    var store = new CustomStore({
+        update: function(key, values) {
+            assert.strictEqual(key, 123);
+            assert.deepEqual(values, { a: 1 });
+            return $.Deferred().resolve({ a: 1, b: 2 });
+        }
+    });
+
+    store.update(123, { a: 1 }).done(function(values, key) {
+        assert.strictEqual(key, 123);
+        assert.deepEqual(values, { a: 1, b: 2 });
         done();
     });
 });
@@ -474,9 +578,30 @@ QUnit.test("update, non-promise result", function(assert) {
         }
     });
 
-    store.update(123, { a: 1 }).done(function(key, values) {
+    store.update(123, { a: 1 }).done(function(values, key) {
         assert.strictEqual(key, 123);
         assert.deepEqual(values, { a: 1 });
+        assert.ok(updateCalled);
+        done();
+    });
+});
+
+QUnit.test("update, non-promise result as data", function(assert) {
+    var done = assert.async(),
+        updateCalled;
+
+    var store = new CustomStore({
+        update: function(key, values) {
+            assert.strictEqual(key, 123);
+            assert.deepEqual(values, { a: 1 });
+            updateCalled = true;
+            return { a: 1, b: 2 };
+        }
+    });
+
+    store.update(123, { a: 1 }).done(function(values, key) {
+        assert.strictEqual(key, 123);
+        assert.deepEqual(values, { a: 1, b: 2 });
         assert.ok(updateCalled);
         done();
     });

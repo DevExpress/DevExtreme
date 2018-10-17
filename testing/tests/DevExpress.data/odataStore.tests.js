@@ -3,6 +3,7 @@ import { EdmLiteral } from "data/odata/utils";
 import ODataStore from "data/odata/store";
 import ODataContext from "data/odata/context";
 import Guid from "core/guid";
+import config from "core/config";
 import ErrorHandlingHelper from "../../helpers/data.errorHandlingHelper.js";
 import ajaxMock from "../../helpers/ajaxMock.js";
 
@@ -980,6 +981,58 @@ QUnit.test("works", function(assert) {
         .always(done);
 });
 
+QUnit.test("works with useLegacyStoreResult", function(assert) {
+    var done = assert.async();
+
+    ajaxMock.setup({
+        url: "odata.org",
+        // NOTE:
+        // A request returns 204 No Content if the requested resource has the null value, or if the service applies a return=minimal preference.
+        // In this case, the response body MUST be empty.
+        responseText: { id: 1, foo: "bar" }
+    });
+
+    var oldUseLegacyStoreResult = config().useLegacyStoreResult;
+
+    config({ useLegacyStoreResult: true });
+
+    var logger = [];
+    var store = new ODataStore({
+        key: "id",
+        url: "odata.org",
+
+        beforeSend: function(request) {
+            assert.equal(request.url, "odata.org");
+            assert.equal(request.method.toLowerCase(), "post");
+        },
+
+        onInserting: function(data) { logger.push(["onInserting", data]); },
+        onInserted: function(data, key) { logger.push(["onInserted", data, key]); }
+    });
+
+    store.on("inserting", function(data) { logger.push(["inserting", data]); });
+    store.on("inserted", function(data, key) { logger.push(["inserted", data, key]); });
+
+    store.insert({ id: 1, foo: "bar" })
+        .fail(function() { assert.fail(false, MUST_NOT_REACH_MESSAGE); })
+        .done(function(data, key) { logger.push(["done", data, key]); })
+        .done(function() {
+            assert.deepEqual(logger, [
+                ["onInserting", { id: 1, foo: "bar" }],
+                ["inserting", { id: 1, foo: "bar" }],
+
+                ["onInserted", { id: 1, foo: "bar" }, 1],
+                ["inserted", { id: 1, foo: "bar" }, 1],
+
+                ["done", { id: 1, foo: "bar" }, 1]
+            ]);
+        })
+        .always(function() {
+            config({ useLegacyStoreResult: oldUseLegacyStoreResult });
+        })
+        .always(done);
+});
+
 QUnit.test("insert with compound key", function(assert) {
     var done = assert.async();
 
@@ -1030,6 +1083,148 @@ QUnit.test("with 201 status", function(assert) {
 QUnit.module("update", moduleConfig);
 
 QUnit.test("works", function(assert) {
+    assert.expect(17);
+
+    var done = assert.async();
+
+    var log = [];
+    var compileLoggerFor = function(eventName) {
+        return function(key, values) {
+            log.push([eventName, key, values]);
+        };
+    };
+
+    ajaxMock.setup({
+        url: "odata.org/DataSet*",
+        status: 204,
+        responseText: { foo: "bar" }
+    });
+
+    ajaxMock.setup({
+        url: "odata2.org/DataSet*",
+        status: 204,
+        responseText: "OK"
+    });
+
+    var promises = [
+        new ODataStore({
+            url: "odata.org/DataSet",
+
+            beforeSend: function(request) {
+                assert.equal(request.url, "odata.org/DataSet(1)");
+                assert.equal(request.method.toLowerCase(), "merge");
+
+                assert.deepEqual(request.params, {});
+                assert.deepEqual(request.payload, { foo: "bar" });
+            },
+
+            onUpdating: compileLoggerFor("onUpdating"),
+            onUpdated: compileLoggerFor("onUpdated")
+
+        }).on("updating", compileLoggerFor("updating"))
+            .on("updated", compileLoggerFor("updated"))
+            .update(1, { foo: "bar" })
+            .done(compileLoggerFor("done")),
+
+        new ODataStore({
+            version: 3,
+            url: "odata.org/DataSet",
+
+            beforeSend: function(request) {
+                assert.equal(request.url, "odata.org/DataSet(1)");
+                assert.equal(request.method.toLowerCase(), "patch");
+
+                assert.deepEqual(request.params, {});
+                assert.deepEqual(request.payload, { foo: "bar" });
+            },
+
+            onUpdating: compileLoggerFor("onUpdating"),
+            onUpdated: compileLoggerFor("onUpdated")
+
+        }).on("updating", compileLoggerFor("updating"))
+            .on("updated", compileLoggerFor("updated"))
+            .update(1, { foo: "bar" })
+            .done(compileLoggerFor("done")),
+
+        new ODataStore({
+            version: 4,
+            url: "odata.org/DataSet",
+
+            beforeSend: function(request) {
+                assert.equal(request.url, "odata.org/DataSet(1)");
+                assert.equal(request.method.toLowerCase(), "patch");
+
+                assert.deepEqual(request.params, {});
+                assert.deepEqual(request.payload, { foo: "bar" });
+            },
+
+            onUpdating: compileLoggerFor("onUpdating"),
+            onUpdated: compileLoggerFor("onUpdated")
+
+        }).on("updating", compileLoggerFor("updating"))
+            .on("updated", compileLoggerFor("updated"))
+            .update(1, { foo: "bar" })
+            .done(compileLoggerFor("done")),
+
+        new ODataStore({
+            version: 4,
+            url: "odata2.org/DataSet",
+
+            beforeSend: function(request) {
+                assert.equal(request.url, "odata2.org/DataSet(1)");
+                assert.equal(request.method.toLowerCase(), "patch");
+
+                assert.deepEqual(request.params, {});
+                assert.deepEqual(request.payload, { foo: "bar" });
+            },
+
+            onUpdating: compileLoggerFor("onUpdating"),
+            onUpdated: compileLoggerFor("onUpdated")
+
+        }).on("updating", compileLoggerFor("updating"))
+            .on("updated", compileLoggerFor("updated"))
+            .update(1, { foo: "bar" })
+            .done(compileLoggerFor("done"))
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); })
+        .done(function() {
+            assert.deepEqual(log, [
+                ["onUpdating", 1, { foo: "bar" }],
+                ["updating", 1, { foo: "bar" }],
+
+                ["onUpdating", 1, { foo: "bar" }],
+                ["updating", 1, { foo: "bar" }],
+
+                ["onUpdating", 1, { foo: "bar" }],
+                ["updating", 1, { foo: "bar" }],
+
+                ["onUpdating", 1, { foo: "bar" }],
+                ["updating", 1, { foo: "bar" }],
+
+                ["onUpdated", 1, { foo: "bar" }],
+                ["updated", 1, { foo: "bar" }],
+                ["done", { foo: "bar" }, 1],
+
+                ["onUpdated", 1, { foo: "bar" }],
+                ["updated", 1, { foo: "bar" }],
+                ["done", { foo: "bar" }, 1],
+
+                ["onUpdated", 1, { foo: "bar" }],
+                ["updated", 1, { foo: "bar" }],
+                ["done", { foo: "bar" }, 1],
+
+                ["onUpdated", 1, "OK"],
+                ["updated", 1, "OK"],
+                ["done", "OK", 1]
+
+            ]);
+        })
+        .always(done);
+});
+
+QUnit.test("works with useLegacyStoreResult", function(assert) {
     assert.expect(13);
 
     var done = assert.async();
@@ -1044,8 +1239,12 @@ QUnit.test("works", function(assert) {
     ajaxMock.setup({
         url: "odata.org/DataSet*",
         status: 204,
-        responseText: {}
+        responseText: "OK"
     });
+
+    var oldUseLegacyStoreResult = config().useLegacyStoreResult;
+
+    config({ useLegacyStoreResult: true });
 
     var promises = [
         new ODataStore({
@@ -1133,6 +1332,9 @@ QUnit.test("works", function(assert) {
                 ["updated", 1, { foo: "bar" }],
                 ["done", 1, { foo: "bar" }]
             ]);
+        })
+        .always(function() {
+            config({ useLegacyStoreResult: oldUseLegacyStoreResult });
         })
         .always(done);
 });

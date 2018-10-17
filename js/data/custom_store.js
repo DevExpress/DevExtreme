@@ -2,6 +2,7 @@ var $ = require("../core/renderer"),
     dataUtils = require("./utils"),
     arrayUtils = require("./array_utils"),
     isFunction = require("../core/utils/type").isFunction,
+    config = require("../core/config"),
     errors = require("./errors").errors,
     Store = require("./abstract_store"),
     arrayQuery = require("./array_query"),
@@ -434,19 +435,26 @@ var CustomStore = Store.inherit({
     },
 
     _insertImpl: function(values) {
-        var userFunc = this._insertFunc,
+        var that = this,
+            userFunc = that._insertFunc,
             userResult,
             d = new Deferred();
 
         ensureRequiredFuncOption(INSERT, userFunc);
-        userResult = userFunc.apply(this, [values]); // should return key only
+        userResult = userFunc.apply(that, [values]); // should return key or data
 
         if(!isPromise(userResult)) {
             userResult = trivialPromise(userResult);
         }
 
         fromPromise(userResult)
-            .done(function(newKey) { d.resolve(values, newKey); })
+            .done(function(serverResponse) {
+                if(config().useLegacyStoreResult) {
+                    d.resolve(values, serverResponse);
+                } else {
+                    d.resolve(serverResponse || values, that.keyOf(serverResponse));
+                }
+            })
             .fail(createUserFuncFailureHandler(d));
 
         return d.promise();
@@ -461,11 +469,17 @@ var CustomStore = Store.inherit({
         userResult = userFunc.apply(this, [key, values]);
 
         if(!isPromise(userResult)) {
-            userResult = trivialPromise();
+            userResult = trivialPromise(userResult);
         }
 
         fromPromise(userResult)
-            .done(function() { d.resolve(key, values); })
+            .done(function(serverResponse) {
+                if(config().useLegacyStoreResult) {
+                    d.resolve(key, values);
+                } else {
+                    d.resolve(serverResponse || values, key);
+                }
+            })
             .fail(createUserFuncFailureHandler(d));
 
         return d.promise();
