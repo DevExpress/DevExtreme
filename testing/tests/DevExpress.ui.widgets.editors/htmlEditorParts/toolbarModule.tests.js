@@ -383,11 +383,11 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
 
         assert.equal($activeFormats.length, 1, "single button is active");
         assert.ok($activeFormats.hasClass(BACKGROUND_FORMAT_CLASS), "it's a background button");
-        assert.equal($icon.get(0).style.background, "rgb(250, 250, 250)", "icon has correct background");
+        assert.equal($icon.get(0).style.backgroundColor, "rgb(250, 250, 250)", "icon has correct background");
 
         this.quillMock.getFormat = () => { return {}; };
         toolbar.updateFormatWidgets();
-        assert.equal($icon.get(0).style.background, "inherit", "icon has correct background after reset format");
+        assert.equal($icon.get(0).style.backgroundColor, "inherit", "icon has correct background after reset format");
     });
 });
 
