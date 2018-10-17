@@ -47,7 +47,7 @@ var TABS_CLASS = "dx-tabs",
 
 /**
 * @name dxTabs
-* @inherits LiveCollectionWidget
+* @inherits CollectionWidget
 * @module ui/tabs
 * @export default
 */
@@ -58,6 +58,13 @@ var Tabs = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+
+            /**
+            * @name dxTabsOptions.repaintChangesOnly
+            * @type boolean
+            * @default false
+            */
+
             /**
              * @name dxTabsOptions.hoverStateEnabled
              * @type boolean

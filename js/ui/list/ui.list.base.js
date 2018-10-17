@@ -119,6 +119,12 @@ var ListBase = CollectionWidget.inherit({
         return extend(this.callBase(), {
 
             /**
+            * @name dxListOptions.repaintChangesOnly
+            * @type boolean
+            * @default false
+            */
+
+            /**
              * @name dxListOptions.hoverStateEnabled
              * @type boolean
              * @default true

@@ -31,7 +31,7 @@ var ACCORDION_CLASS = "dx-accordion",
 
 /**
 * @name dxAccordion
-* @inherits LiveCollectionWidget
+* @inherits CollectionWidget
 * @module ui/accordion
 * @export default
 */
@@ -41,6 +41,12 @@ var Accordion = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+
+            /**
+            * @name dxAccordionOptions.repaintChangesOnly
+            * @type boolean
+            * @default false
+            */
 
             /**
              * @name dxAccordionOptions.hoverStateEnabled

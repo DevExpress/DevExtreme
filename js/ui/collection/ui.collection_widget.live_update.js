@@ -8,21 +8,9 @@ import { when } from "../../core/utils/deferred";
 import { findChanges } from "../../core/utils/array_compare";
 import { insertElement } from "../../core/dom_adapter";
 
-/**
-* @name LiveCollectionWidget
-* @inherits CollectionWidget
-* @module ui/collection/ui.collection_widget.live_update
-* @export default
-* @hidden
-*/
 export default CollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-            * @name LiveCollectionWidgetOptions.repaintChangesOnly
-            * @type boolean
-            * @default false
-            */
             repaintChangesOnly: false
         });
     },
