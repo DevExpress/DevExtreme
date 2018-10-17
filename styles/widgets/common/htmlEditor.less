@@ -206,6 +206,19 @@
 
     pre {
         white-space: pre-wrap;
+        background-color: rgba(191, 191, 191, 0.15);
+    }
+
+    blockquote {
+        padding-left: 12px;
+        border-left: 4px solid;
+
+        .dx-rtl & {
+            padding-left: 0;
+            padding-right: 12px;
+            border-left: none;
+            border-right: 4px solid;
+        }
     }
 }
 

@@ -2,6 +2,21 @@
     .dx-htmleditor-toolbar-wrapper:first-child {
         border-bottom: 1px solid @htmleditor-toolbar-border-color;
     }
+}
+
+.dx-htmleditor-content {
+    pre {
+        color: fade(@base-text-color, 80%);
+    }
+
+    blockquote {
+        color: fade(@base-text-color, 80%);
+        border-left-color: @htmleditor-toolbar-border-color;
+
+        .dx-rtl & {
+            border-right-color: @htmleditor-toolbar-border-color;
+        }
+    }
 
     .dx-variable {
         & > span {
