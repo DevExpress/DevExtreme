@@ -396,11 +396,11 @@ const HtmlEditor = Editor.inherit({
 
     /**
     * @name dxHtmlEditorMethods.format
-    * @publicName format(name, value)
-    * @param1 name:string
-    * @param2 value:any
+    * @publicName format(formatName, formatValue)
+    * @param1 formatName:string
+    * @param2 formatValue:any
     */
-    format: function(name, value) {
+    format: function(formatName, formatValue) {
         this._applyQuillMethod("format", arguments);
     },
 
