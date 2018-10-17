@@ -849,7 +849,7 @@ require("common.css!");
                         "testTemplate": {
                             name: "TestTemplate",
                             render: function() {
-                                return "test markup";
+                                return this.name;
                             }
                         }
                     }
@@ -858,9 +858,10 @@ require("common.css!");
             }),
             template = testContainer._getTemplateByOption("template");
 
-        template.render({ onRendered: onRenderedHandler });
+        var renderResult = template.render({ onRendered: onRenderedHandler });
 
         assert.equal(template.name, "TestTemplate", "template is correct");
+        assert.equal(renderResult, "TestTemplate", "render method should have correct context");
         assert.equal(onRenderedHandler.callCount, 1, "onRendered has been called");
     });
 
