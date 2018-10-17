@@ -376,7 +376,7 @@ var Widget = DOMComponent.inherit({
             isAsyncTemplate = this.option("templatesRenderAsynchronously");
 
         if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
-            var render = integrationTemplate.render;
+            var render = integrationTemplate.render.bind(integrationTemplate);
             integrationTemplate.render = function(options) {
                 var templateResult = render(options);
                 options.onRendered && !isAsyncTemplate && options.onRendered();
