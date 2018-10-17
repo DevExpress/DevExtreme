@@ -73,13 +73,13 @@ class ToolbarModule extends BaseModule {
             background: this._prepareColorClickHandler("background"),
             orderedList: () => {
                 const formats = this.quill.getFormat();
-                const value = formats.list === "ordered" && "ordered";
+                const value = formats.list === "ordered" ? false : "ordered";
 
                 this.quill.format("list", value, USER_ACTION);
             },
             bulletList: () => {
                 const formats = this.quill.getFormat();
-                const value = formats.list === "bullet" && "bullet";
+                const value = formats.list === "bullet" ? false : "bullet";
 
                 this.quill.format("list", value, USER_ACTION);
             },
