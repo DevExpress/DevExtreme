@@ -1,9 +1,13 @@
 import { getQuill } from "../quill_importer";
 
+import $ from "../../../core/renderer";
 import PopupModule from "./popup";
 import Variable from "../formats/variable";
 
 import { extend } from "../../../core/utils/extend";
+
+const VARIABLE_FORMAT_CLASS = "dx-variable-format";
+const ACTIVE_FORMAT_CLASS = "dx-format-active";
 
 getQuill()
     .register({ "formats/variable": Variable }, true);
@@ -29,6 +33,13 @@ class VariableModule extends PopupModule {
             key: 'P',
             altKey: true
         }, this.showPopup.bind(this));
+
+        this._popup.on("shown", (e) => {
+            const $ofElement = $(e.component.option("position").of);
+            if($ofElement.hasClass(VARIABLE_FORMAT_CLASS)) {
+                $ofElement.addClass(ACTIVE_FORMAT_CLASS);
+            }
+        });
     }
 
     showPopup(event) {
