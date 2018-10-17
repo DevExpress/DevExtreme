@@ -23,6 +23,7 @@ require("ui/list");
 require("common.css!");
 
 var LIST_ITEM_CLASS = "dx-list-item",
+    LIST_ITEM_ICON_CONTAINER_CLASS = "dx-list-item-icon-container",
     LIST_ITEM_CONTENT_CLASS = "dx-list-item-content",
     LIST_ITEM_BEFORE_BAG_CLASS = "dx-list-item-before-bag";
 
@@ -518,6 +519,17 @@ QUnit.test("list item markup", function(assert) {
             .children(toSelector(SLIDE_MENU_BUTTON_CLASS));
     };
     assert.equal(deleteButtonContent().length, 0, "button is not generated");
+});
+
+QUnit.test("icon should not be rendered when custom item template is used", function(assert) {
+    var $list = $($("#templated-list").dxList({
+        items: [{ icon: "box", text: "Item 1" }],
+        itemTemplate: function(data) {
+            return $("<div>").text("$: " + data.text);
+        }
+    }));
+
+    assert.equal($list.find("." + LIST_ITEM_ICON_CONTAINER_CLASS).length, 0, "item content has not been rendered");
 });
 
 QUnit.test("swipe should prepare item for delete", function(assert) {

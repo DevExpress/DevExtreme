@@ -2,6 +2,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    iconUtils = require("../../core/utils/icon"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     each = require("../../core/utils/iterator").each,
     compileGetter = require("../../core/utils/data").compileGetter,
@@ -27,6 +28,8 @@ var $ = require("../../core/renderer"),
 var LIST_CLASS = "dx-list",
     LIST_ITEM_CLASS = "dx-list-item",
     LIST_ITEM_SELECTOR = "." + LIST_ITEM_CLASS,
+    LIST_ITEM_ICON_CONTAINER_CLASS = "dx-list-item-icon-container",
+    LIST_ITEM_ICON_CLASS = "dx-list-item-icon",
     LIST_GROUP_CLASS = "dx-list-group",
     LIST_GROUP_HEADER_CLASS = "dx-list-group-header",
     LIST_GROUP_BODY_CLASS = "dx-list-group-body",
@@ -638,6 +641,23 @@ var ListBase = CollectionWidget.inherit({
                 $container.text(String(data));
             }
         }, ["key"], this.option("integrationOptions.watchMethod"));
+    },
+
+    _prepareDefaultItemTemplate: function(data, $container) {
+        this.callBase(data, $container);
+
+        if(data.icon) {
+            var $icon = iconUtils.getImageContainer(data.icon).addClass(LIST_ITEM_ICON_CLASS),
+                $iconContainer = $("<div>").addClass(LIST_ITEM_ICON_CONTAINER_CLASS);
+
+            $iconContainer.append($icon);
+
+            $container.prepend($iconContainer);
+        }
+    },
+
+    _getBindableFields: function() {
+        return ["text", "html", "icon"];
     },
 
     _updateLoadingState: function(tryLoadMore) {
