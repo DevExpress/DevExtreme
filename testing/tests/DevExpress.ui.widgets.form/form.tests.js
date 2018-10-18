@@ -1386,7 +1386,7 @@ QUnit.test("Get button instance", function(assert) {
 
     assert.strictEqual(form.getButton("button1").option("text"), "button1");
     assert.strictEqual(form.getButton("button2").option("text"), "button2");
-    assert.strictEqual(form.getButton("button3"), void 0);
+    assert.strictEqual(form.getButton("button3"), undefined);
 
     form.option("items[1].items[0].buttonOptions.text", "changed_button_text");
 

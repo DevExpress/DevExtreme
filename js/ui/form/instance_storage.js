@@ -1,5 +1,5 @@
-var Guid = require("../../core/guid"),
-    each = require("../../core/utils/iterator").each;
+import Guid from "../../core/guid";
+import { each } from "../../core/utils/iterator";
 
 class InstanceStorage {
     constructor() {
@@ -7,7 +7,7 @@ class InstanceStorage {
     }
 
     _find(condition) {
-        var resultInstance = void 0;
+        var resultInstance;
 
         each(this._storage, function(guid, { instance, item }) {
             if(condition(item)) {
