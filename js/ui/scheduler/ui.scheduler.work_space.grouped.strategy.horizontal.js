@@ -127,7 +127,11 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getGroupBoundsOffset: function(cellCount, $cells, cellWidth, coordinates) {
-        var groupIndex = this._workSpace.isGroupedByDate() ? this._workSpace._getGroupCount() - 1 : coordinates.groupIndex || Math.floor(cellIndex / cellCount);
+        var groupIndex = this._workSpace.isGroupedByDate() ? this._workSpace._getGroupCount() - 1 : coordinates.groupIndex;
+
+        if(isNaN(groupIndex)) {
+            groupIndex = Math.floor(cellIndex / cellCount);
+        }
 
         var cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates),
             startCellIndex = groupIndex * cellCount,
