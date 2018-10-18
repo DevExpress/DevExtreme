@@ -64,7 +64,7 @@ exports.GroupingHelper = Class.inherit((function() {
     var findGroupInfoByKey = function(groupsInfo, key) {
         var hash = groupsInfo.hash;
 
-        return hash && hash[key];
+        return hash && hash[JSON.stringify(key)];
     };
 
     var getGroupInfoIndexByOffset = function(groupsInfo, offset) {
@@ -253,7 +253,7 @@ exports.GroupingHelper = Class.inherit((function() {
                     index = getGroupInfoIndexByOffset(groupsInfo, groupInfoData.offset);
                     groupsInfo.splice(index, 0, groupInfo);
                     groupsInfo.hash = groupsInfo.hash || {};
-                    groupsInfo.hash[groupInfo.key] = groupInfo;
+                    groupsInfo.hash[JSON.stringify(groupInfo.key)] = groupInfo;
                 }
                 if(pathIndex === path.length - 1) {
                     groupInfo.data = groupInfoData;
