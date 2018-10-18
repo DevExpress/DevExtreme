@@ -9,6 +9,7 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
     DX_ITEM_SELECTED_CLASS = "dx-item-selected",
     BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
     BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item",
+    BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-last-item",
     BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + "-has-width";
 
 QUnit.testStart(() => {
@@ -177,6 +178,15 @@ QUnit.module("default", {
 
         assert.equal(buttons[0].option("stylingMode"), "text", "first button");
         assert.equal(buttons[1].option("stylingMode"), "text", "first button");
+    });
+
+    QUnit.test("add css class for a last item", function(assert) {
+        const $buttonGroup = $("#widget").dxButtonGroup({
+            items: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }]
+        });
+
+        const $lastButton = $buttonGroup.find(`.${BUTTON_CLASS}`).last();
+        assert.ok($lastButton.hasClass(BUTTON_GROUP_LAST_ITEM_CLASS));
     });
 });
 

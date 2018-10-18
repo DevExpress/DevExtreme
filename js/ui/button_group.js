@@ -11,6 +11,7 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_WRAPPER_CLASS = BUTTON_GROUP_CLASS + "-wrapper",
     BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
     BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item",
+    BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-last-item",
     BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + "-has-width";
 
 const ButtonCollection = CollectionWidget.inherit({
@@ -129,6 +130,9 @@ const ButtonGroup = Widget.inherit({
     _prepareItemStyles($item) {
         const itemIndex = $item.data("dxItemIndex");
         itemIndex === 0 && $item.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
+
+        const items = this.option("items");
+        items && itemIndex === items.length - 1 && $item.addClass(BUTTON_GROUP_LAST_ITEM_CLASS);
 
         const width = this.option("width");
         isDefined(width) && $item.addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
