@@ -53,7 +53,7 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         /**
-         * @name GridBaseOptions.navigateToRow
+         * @name GridBaseMethods.navigateToRow
          * @publicName navigateToRow(key)
          * @param1 key:any
          */
