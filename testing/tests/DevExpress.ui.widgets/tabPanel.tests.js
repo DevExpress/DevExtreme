@@ -1,14 +1,14 @@
-var $ = require("jquery"),
-    fx = require("animation/fx"),
-    support = require("core/utils/support"),
-    domUtils = require("core/utils/dom"),
-    TabPanel = require("ui/tab_panel"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config");
+import $ from "jquery";
+import fx from "animation/fx";
+import support from "core/utils/support";
+import domUtils from "core/utils/dom";
+import TabPanel from "ui/tab_panel";
+import pointerMock from "../../helpers/pointerMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
 
-require("common.css!css");
+import "common.css!css";
 
 QUnit.testStart(function() {
     var markup =
