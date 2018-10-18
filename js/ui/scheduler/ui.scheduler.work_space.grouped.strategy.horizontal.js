@@ -4,7 +4,7 @@ var HORIZONTAL_GROUPED_ATTR = "dx-group-row-count";
 
 var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     prepareCellIndexes: function(cellCoordinates, groupIndex, inAllDay) {
-        var groupByDay = this._workSpace.option("groupByDate");
+        var groupByDay = this._workSpace.isGroupedByDate();
 
         if(!groupByDay) {
             return {
@@ -26,7 +26,7 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getGroupIndex: function(rowIndex, cellIndex) {
-        var groupByDay = this._workSpace.option("groupByDate"),
+        var groupByDay = this._workSpace.isGroupedByDate(),
             groupCount = this._workSpace._getGroupCount();
 
         if(groupByDay) {
@@ -127,8 +127,9 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getGroupBoundsOffset: function(cellCount, $cells, cellWidth, coordinates) {
+        var groupIndex = this._workSpace.isGroupedByDate() ? this._workSpace._getGroupCount() - 1 : coordinates.groupIndex || Math.floor(cellIndex / cellCount);
+
         var cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates),
-            groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount),
             startCellIndex = groupIndex * cellCount,
             startOffset = $cells.eq(startCellIndex).offset().left - cellWidth / 2,
             endOffset = $cells.eq(startCellIndex + cellCount - 1).offset().left + cellWidth + cellWidth / 2;
