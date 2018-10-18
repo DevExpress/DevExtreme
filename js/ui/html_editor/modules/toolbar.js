@@ -295,7 +295,7 @@ class ToolbarModule extends BaseModule {
             }
         };
 
-        return extend(true, { location: "before" }, this._getDefaultConfig(item.formatName), item, baseItem);
+        return extend(true, { location: "before", locateInMenu: "auto" }, this._getDefaultConfig(item.formatName), item, baseItem);
     }
 
     _getDefaultItemsConfig() {
