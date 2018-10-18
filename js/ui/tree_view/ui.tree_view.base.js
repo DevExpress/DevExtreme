@@ -201,8 +201,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field7 node:dxTreeViewNode
-             * @type_function_param1_field8 itemElement:dxElement
+            * @type_function_param1_field4 node:dxTreeViewNode
+            * @type_function_param1_field5 itemElement:dxElement
             * @action
             */
             onItemSelectionChanged: null,
@@ -212,7 +212,12 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field7 node:dxTreeViewNode
+            * @type_function_param1_field4 itemData:object
+            * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field6 itemIndex:number | object
+            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
+            * @type_function_param1_field8 event:event
+            * @type_function_param1_field9 node:dxTreeViewNode
             * @action
             * @inheritdoc
             */
@@ -222,7 +227,12 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field8 node:dxTreeViewNode
+            * @type_function_param1_field4 itemData:object
+            * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field6 itemIndex:number | object
+            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
+            * @type_function_param1_field8 event:event
+            * @type_function_param1_field9 node:dxTreeViewNode
             * @action
             * @inheritdoc
             */
@@ -232,7 +242,10 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field8 node:dxTreeViewNode
+            * @type_function_param1_field4 itemData:object
+            * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field6 itemIndex:number
+            * @type_function_param1_field7 node:dxTreeViewNode
             * @action
             * @inheritdoc
             */
@@ -242,6 +255,10 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
+            * @type_function_param1_field4 itemData:object
+            * @type_function_param1_field5 itemElement:dxElement
+            * @type_function_param1_field6 itemIndex:number
+            * @type_function_param1_field7 event:event
             * @type_function_param1_field8 node:dxTreeViewNode
             * @action
             * @inheritdoc

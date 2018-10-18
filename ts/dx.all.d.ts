@@ -1725,7 +1725,6 @@ declare module DevExpress.ui {
         multiple?: boolean;
         /** A function that is executed when an accordion item's title is clicked or tapped. */
         onItemTitleClick?: ((e: { component?: dxAccordion, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any) | string;
-        /** Specifies whether to repaint only those elements whose data changed. */
         repaintChangesOnly?: boolean;
         /** The index number of the currently selected item. */
         selectedIndex?: number;
@@ -2053,7 +2052,6 @@ declare module DevExpress.ui {
         highlightChanges?: boolean;
         /** Configures the load panel. */
         loadPanel?: { enabled?: boolean | 'auto', text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean };
-        navigateToRow?: ((key: any) => any);
         /** Specifies text shown when the widget does not display any data. */
         noDataText?: string;
         /** A function that is executed before an adaptive detail row is rendered. */
@@ -2292,6 +2290,7 @@ declare module DevExpress.ui {
         isRowSelected(key: any): boolean;
         /** Gets a data object's key. */
         keyOf(obj: any): any;
+        navigateToRow(key: any): void;
         /** Gets the total page count. */
         pageCount(): number;
         /** Gets the current page index. */
@@ -2579,7 +2578,6 @@ declare module DevExpress.ui {
         dropDownOptions?: dxPopupOptions;
         /** Specifies a custom template for the text field. Must contain the TextBox widget. */
         fieldTemplate?: template | ((value: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** Specifies whether a user can open the drop-down list by clicking a text field. */
         openOnFieldClick?: boolean;
         /** Specifies the DOM events after which the widget's value should be updated. */
         valueChangeEvent?: string;
@@ -2658,7 +2656,7 @@ declare module DevExpress.ui {
         /** A function that is executed when a file segment is uploaded. */
         onProgress?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, segmentSize?: number, bytesLoaded?: number, bytesTotal?: number, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
         /** A function that is executed when the file upload is aborted. */
-        onUploadAborted?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: any, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
+        onUploadAborted?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
         /** A function that is executed when a file is successfully uploaded. */
         onUploaded?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
         /** A function that is executed when an error occurs during the file upload. */
@@ -2909,15 +2907,15 @@ declare module DevExpress.ui {
         /** A function that is executed when a group element is rendered. */
         onGroupRendered?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, groupData?: any, groupElement?: DevExpress.core.dxElement, groupIndex?: number }) => any);
         /** A function that is executed when a collection item is clicked or tapped. */
-        onItemClick?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemIndex?: number | any }) => any) | string;
+        onItemClick?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
         /** A function that is executed when a collection item is right-clicked or pressed. */
-        onItemContextMenu?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemIndex?: number | any }) => any);
+        onItemContextMenu?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** A function that is executed after a list item is deleted from the data source. */
         onItemDeleted?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any }) => any);
         /** A function that is executed before a collection item is deleted from the data source. */
         onItemDeleting?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /** A function that is executed when a collection item has been held for a specified period. */
-        onItemHold?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemIndex?: number | any }) => any);
+        onItemHold?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** A function that is executed after a list item is moved to another position. */
         onItemReordered?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number }) => any);
         /** A function that is executed when a list item is swiped. */
@@ -2942,7 +2940,6 @@ declare module DevExpress.ui {
         pullRefreshEnabled?: boolean;
         /** Specifies the text displayed in the pullDown panel while the list is being refreshed. */
         refreshingText?: string;
-        /** Specifies whether to repaint only those elements whose data changed. */
         repaintChangesOnly?: boolean;
         /** A Boolean value specifying if the list is scrolled by content. */
         scrollByContent?: boolean;
@@ -3910,7 +3907,6 @@ declare module DevExpress.ui {
         fieldTemplate?: template | ((selectedItem: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** A function that is executed when a user adds a custom item. Requires acceptCustomValue to be set to true. */
         onCustomItemCreating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, text?: string, customItem?: string | any | Promise<any> | JQueryPromise<any> }) => any);
-        /** Specifies whether a user can open the drop-down list by clicking a text field. */
         openOnFieldClick?: boolean;
         /** The text that is provided as a hint in the select box editor. */
         placeholder?: string;
@@ -4028,7 +4024,6 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** Specifies whether the widget changes its state when a user pauses on it. */
         hoverStateEnabled?: boolean;
-        /** Specifies whether to repaint only those elements whose data changed. */
         repaintChangesOnly?: boolean;
         /** Specifies whether or not an end-user can scroll tabs by swiping. */
         scrollByContent?: boolean;
@@ -4431,17 +4426,17 @@ declare module DevExpress.ui {
         /** An array of items displayed by the widget. */
         items?: Array<dxTreeViewItemTemplate>;
         /** A function that is executed when a collection item is clicked or tapped. */
-        onItemClick?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
+        onItemClick?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeViewNode }) => any);
         /** A function that is executed when a tree view item is collapsed. */
         onItemCollapsed?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeViewNode }) => any);
         /** A function that is executed when a collection item is right-clicked or pressed. */
-        onItemContextMenu?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
+        onItemContextMenu?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeViewNode }) => any);
         /** A function that is executed when a tree view item is expanded. */
         onItemExpanded?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeViewNode }) => any);
         /** A function that is executed when a collection item has been held for a specified period. */
-        onItemHold?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
+        onItemHold?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event, node?: dxTreeViewNode }) => any);
         /** A function that is executed after a collection item is rendered. */
-        onItemRendered?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
+        onItemRendered?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, node?: dxTreeViewNode }) => any);
         /** A function that is executed when a tree view item is selected or the selection is canceled. */
         onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement }) => any);
         /** A function that is executed when the "Select All" check box value is changed. Applies only if showCheckBoxesMode is "selectAll" and selectionMode is "multiple". */
@@ -4802,7 +4797,6 @@ declare module DevExpress.ui {
         onOpened?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies whether or not the drop-down editor is displayed. */
         opened?: boolean;
-        /** Specifies whether a user can open the drop-down list by clicking a text field. */
         openOnFieldClick?: boolean;
         /** Specifies whether the drop-down button is visible. */
         showDropDownButton?: boolean;

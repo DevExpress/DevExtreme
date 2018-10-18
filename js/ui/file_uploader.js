@@ -276,7 +276,7 @@ var FileUploader = Editor.inherit({
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 file:object
+            * @type_function_param1_field4 file:File
             * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field6 event:event
             * @type_function_param1_field7 request:XMLHttpRequest
