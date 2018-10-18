@@ -220,10 +220,7 @@ var Appointment = DOMComponent.inherit({
 
         var config = this._resizingRules[this.option("direction")].apply(this);
 
-        // if(!this.invoke("isGroupedByDate")) {
-        //     config.stepPrecision = "strict";
-        // }
-
+        config.stepPrecision = "strict";
         this._createComponent(this.$element(), Resizable, extend(config, this.option("resizableConfig")));
     }
 
