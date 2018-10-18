@@ -173,7 +173,7 @@ var ExcelCreator = Class.inherit({
         };
     },
 
-    _callCustomizeXlsxCell: function({ dataProvider, value, dataType, style, sourceData }) {
+    _callCustomizeExcelCell: function({ dataProvider, value, dataType, style, sourceData }) {
         const style_args = XlsxFile.copyCellFormat(style);
         const numberFormat = style_args.numberFormat;
         delete style_args.numberFormat;
@@ -188,7 +188,7 @@ var ExcelCreator = Class.inherit({
             cellSourceData: sourceData
         };
 
-        dataProvider.customizeXlsxCell(args);
+        dataProvider.customizeExcelCell(args);
 
         const newStyle = args.xlsxCell.style || {};
         newStyle.numberFormat = args.xlsxCell.numberFormat;
@@ -219,9 +219,9 @@ var ExcelCreator = Class.inherit({
             for(cellIndex = 0; cellIndex !== cellsLength; cellIndex++) {
                 cellData = that._prepareValue(rowIndex, cellIndex);
                 let cellStyleId = this._styleIdToRegisteredStyleIdMap[dataProvider.getStyleId(rowIndex, cellIndex)];
-                if(dataProvider.hasCustomizeXlsxCell && dataProvider.hasCustomizeXlsxCell()) {
+                if(dataProvider.hasCustomizeExcelCell && dataProvider.hasCustomizeExcelCell()) {
                     const value = cellData.sourceValue || cellData.value;
-                    const modifiedXlsxCell = this._callCustomizeXlsxCell({
+                    const modifiedXlsxCell = this._callCustomizeExcelCell({
                         dataProvider: dataProvider,
                         value: value,
                         dataType: cellData.type,
@@ -241,9 +241,9 @@ var ExcelCreator = Class.inherit({
                                 break;
                             case 'n':
                                 let newValue = modifiedXlsxCell.value;
-                                const xlsxDataValue = this._tryGetExcelDateValue(newValue);
-                                if(typeUtils.isDefined(xlsxDataValue)) {
-                                    newValue = xlsxDataValue;
+                                const excelDateValue = this._tryGetExcelDateValue(newValue);
+                                if(typeUtils.isDefined(excelDateValue)) {
+                                    newValue = excelDateValue;
                                 }
                                 cellData.value = newValue;
                                 break;

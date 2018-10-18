@@ -63,17 +63,17 @@ exports.DataProvider = Class.inherit({
             customizeExportData: exportController.option("customizeExportData"),
             rtlEnabled: exportController.option("rtlEnabled"),
             wrapTextEnabled: isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option("wordWrapEnabled"),
-            customizeXlsxCell: exportController.option("export.customizeXlsxCell"),
+            customizeExcelCell: exportController.option("export.customizeExcelCell"),
         };
     },
 
-    hasCustomizeXlsxCell: function() {
-        return isDefined(this._options.customizeXlsxCell);
+    hasCustomizeExcelCell: function() {
+        return isDefined(this._options.customizeExcelCell);
     },
 
-    customizeXlsxCell: function(e) {
-        if(this._options.customizeXlsxCell) {
-            this._options.customizeXlsxCell({
+    customizeExcelCell: function(e) {
+        if(this._options.customizeExcelCell) {
+            this._options.customizeExcelCell({
                 xlsxCell: e.xlsxCell,
                 gridCell: e.cellSourceData
             });
