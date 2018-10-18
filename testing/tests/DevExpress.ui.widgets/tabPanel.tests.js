@@ -563,3 +563,92 @@ QUnit.test("dataSource loading should be fired once", function(assert) {
 
     assert.equal(dataSourceLoadCalled, 1, "dataSource load called once");
 });
+
+QUnit.module("Live Update", {
+    beforeEach: function() {
+        this.itemRenderedSpy = sinon.spy();
+        this.titleRenderedSpy = sinon.spy();
+        this.itemDeletedSpy = sinon.spy();
+        this.data = [{
+            id: 0,
+            text: "0",
+            content: "0 content"
+        },
+        {
+            id: 1,
+            text: "1",
+            content: "1 content"
+        }];
+        this.createTabPanel = () => {
+            var tabPanel = $("#tabPanel").dxTabPanel({
+                items: this.data,
+                repaintChangesOnly: true,
+                onItemRendered: this.itemRenderedSpy,
+                onTitleRendered: this.titleRenderedSpy,
+                onItemDeleted: this.itemDeletedSpy
+            }).dxTabPanel("instance");
+
+            this.itemRenderedSpy.reset();
+            this.titleRenderedSpy.reset();
+            this.itemDeletedSpy.reset();
+
+            return tabPanel;
+        };
+    }
+}, function() {
+    QUnit.test("remove item", function(assert) {
+        var tabPanel = this.createTabPanel();
+
+        this.data.pop();
+        tabPanel.option("items", this.data);
+
+        assert.equal(this.itemRenderedSpy.callCount, 0, "items are not refreshed after remove");
+        assert.equal(this.itemDeletedSpy.callCount, 1, "removed items count");
+        assert.deepEqual(this.itemDeletedSpy.firstCall.args[0].itemData.text, "1", "check removed item");
+    });
+
+    QUnit.test("repaintChangesOnly, update item instance", function(assert) {
+        var tabPanel = this.createTabPanel();
+
+        this.data[0] = {
+            id: 0,
+            text: "0 Updated",
+            content: "0 content"
+        };
+        tabPanel.option("items", this.data);
+
+        assert.equal(this.titleRenderedSpy.callCount, 1, "only one item is updated after reload");
+        assert.deepEqual(this.titleRenderedSpy.firstCall.args[0].itemData.text, "0 Updated", "check updated item");
+    });
+
+    QUnit.test("repaintChangesOnly, add item", function(assert) {
+        var tabPanel = this.createTabPanel();
+
+        this.data.push({
+            id: 2,
+            text: "2 Inserted",
+            content: "2 content"
+        });
+        tabPanel.option("items", this.data);
+
+        assert.equal(this.titleRenderedSpy.callCount, 1, "only one item is updated after push");
+        assert.deepEqual(this.titleRenderedSpy.firstCall.args[0].itemData.text, "2 Inserted", "check added item");
+        assert.ok($(this.titleRenderedSpy.firstCall.args[0].itemElement).parent().hasClass("dx-tabs-wrapper"), "check item container");
+    });
+
+    QUnit.test("repaintChangesOnly, add item and render its content", function(assert) {
+        var tabPanel = this.createTabPanel();
+
+        this.data.push({
+            id: 2,
+            text: "2 Inserted",
+            content: "2 content"
+        });
+        tabPanel.option("items", this.data);
+        tabPanel.option("selectedIndex", 2);
+
+        assert.equal(this.titleRenderedSpy.callCount, 1, "only one title is updated after push");
+        assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, "2 Inserted", "check added item");
+    });
+});

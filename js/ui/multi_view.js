@@ -9,7 +9,7 @@ var $ = require("../core/renderer"),
     devices = require("../core/devices"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     registerComponent = require("../core/component_registrator"),
-    CollectionWidget = require("./collection/ui.collection_widget.edit"),
+    CollectionWidget = require("./collection/ui.collection_widget.live_update").default,
     Swipeable = require("../events/gesture/swipeable"),
     Deferred = require("../core/utils/deferred").Deferred;
 

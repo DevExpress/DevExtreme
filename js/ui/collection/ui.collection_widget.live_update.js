@@ -39,9 +39,11 @@ export default CollectionWidget.inherit({
 
     _findItemElementByKey: function(key) {
         let result = $();
+        var keyExpr = this.key();
         this.itemElements().each((_, item) => {
-            let $item = $(item);
-            if(keysEqual(this.key(), this.keyOf(this._getItemData($item)), key)) {
+            let $item = $(item),
+                itemData = this._getItemData($item);
+            if(keyExpr ? keysEqual(keyExpr, this.keyOf(itemData), key) : this._isItemEquals(itemData, key)) {
                 result = $item;
                 return false;
             }
@@ -53,10 +55,13 @@ export default CollectionWidget.inherit({
         e && e.changes ? this._modifyByChanges(e.changes) : this.callBase(newItems, e);
     },
 
+    _isItemEquals: function(item1, item2) {
+        return JSON.stringify(item1) === JSON.stringify(item2);
+    },
+
     _partialRefresh: function() {
         if(this.option("repaintChangesOnly")) {
-            let isItemEquals = (item1, item2) => JSON.stringify(item1) === JSON.stringify(item2),
-                result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), this.keyOf.bind(this), isItemEquals);
+            let result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), this.keyOf.bind(this), this._isItemEquals);
             if(result) {
                 this._modifyByChanges(result, true);
                 return true;
