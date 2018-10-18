@@ -303,6 +303,7 @@ var BaseGauge = {
     * @type number
     * @default undefined
     * @notUsedInTheme
+    * @fires BaseWidgetOptions.onOptionChanged
     */
     value: undefined,
     /**
@@ -310,6 +311,7 @@ var BaseGauge = {
     * @type Array<number>
     * @default undefined
     * @notUsedInTheme
+    * @fires BaseWidgetOptions.onOptionChanged
     */
     subvalues: undefined,
     /**
@@ -717,6 +719,7 @@ var dxBarGauge = {
     * @type Array<number>
     * @default []
     * @notUsedInTheme
+    * @fires BaseWidgetOptions.onOptionChanged
     */
     values: [],
     /**

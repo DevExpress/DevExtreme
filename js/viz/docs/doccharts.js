@@ -1458,6 +1458,7 @@ var dxChart = {
         /**
         * @name dxChartOptions.argumentAxis.visualRange
         * @type VizRange | Array<number,string,Date>
+        * @fires BaseWidgetOptions.onOptionChanged
         * @notUsedInTheme
         */
         visualRange: undefined,
@@ -1754,6 +1755,7 @@ var dxChart = {
         /**
         * @name dxChartOptions.valueAxis.visualRange
         * @type VizRange | Array<number,string,Date>
+        * @fires BaseWidgetOptions.onOptionChanged
         * @notUsedInTheme
         */
         visualRange: undefined,
