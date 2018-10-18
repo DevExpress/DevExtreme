@@ -1797,3 +1797,52 @@ QUnit.test("'getResizableAppointmentArea' should return correct area when groupB
         }
     });
 });
+
+QUnit.test("'getResizableStep' should return correct step, groupByDate = true, Month view", function(assert) {
+    var priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        },
+        {
+            text: "Middle Priority",
+            id: 3,
+            color: "#ff9747"
+        }
+    ];
+    this.createInstance({
+        currentView: "month",
+        dataSource: [{
+            startDate: new Date(2018, 4, 21, 9, 0),
+            endDate: new Date(2018, 4, 21, 9, 30),
+            priorityId: 1
+        }],
+        views: [{
+            type: "month",
+            name: "month",
+            groupOrientation: "horizontal"
+        }],
+        width: 800,
+        currentDate: new Date(2018, 4, 21, 9, 0),
+        groupByDate: true,
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: priorityData,
+                label: "Priority"
+            }
+        ],
+    });
+
+    var $cell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0),
+        cellWidth = $cell.get(0).getBoundingClientRect().width;
+
+    assert.roughEqual(this.instance.fire("getResizableStep"), cellWidth * 3, 3, "Step is OK");
+});
