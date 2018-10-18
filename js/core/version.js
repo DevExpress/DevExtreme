@@ -1,1 +1,1 @@
-module.exports = "18.2.0"; /* DevExpress.VERSION */
+module.exports = "18.2.2"; /* DevExpress.VERSION */
