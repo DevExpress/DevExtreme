@@ -286,14 +286,16 @@ class ToolbarModule extends BaseModule {
         const baseItem = {
             options: {
                 onInitialized: (e) => {
-                    e.component.$element().addClass(TOOLBAR_FORMAT_WIDGET_CLASS);
-                    e.component.$element().toggleClass(`dx-${item.formatName.toLowerCase()}-format`, !!item.formatName);
-                    this._formats[item.formatName] = e.component;
+                    if(item.formatName) {
+                        e.component.$element().addClass(TOOLBAR_FORMAT_WIDGET_CLASS);
+                        e.component.$element().toggleClass(`dx-${item.formatName.toLowerCase()}-format`, !!item.formatName);
+                        this._formats[item.formatName] = e.component;
+                    }
                 }
             }
         };
 
-        return extend(true, { location: "before" }, this._getDefaultConfig(item.formatName), item, baseItem);
+        return extend(true, { location: "before", locateInMenu: "auto" }, this._getDefaultConfig(item.formatName), item, baseItem);
     }
 
     _getDefaultItemsConfig() {

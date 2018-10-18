@@ -14,6 +14,7 @@ const ACTIVE_FORMAT_CLASS = "dx-format-active";
 const FORM_CLASS = "dx-formdialog-form";
 const FIELD_ITEM_CLASS = "dx-field-item";
 const FIELD_ITEM_LABEL_CLASS = "dx-field-item-label-text";
+const BUTTON_CLASS = "dx-button";
 const SELECTBOX_CLASS = "dx-selectbox";
 const COLORVIEW_CLASS = "dx-colorview";
 const COLOR_VIEW_HEX_FIELD_CLASS = "dx-colorview-label-hex";
@@ -306,6 +307,17 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             .trigger("dxclick");
 
         assert.ok(redoStub.calledOnce, "call redo");
+    });
+
+    test("custom item without formatName shouldn't have format class", (assert) => {
+        this.options.items = ["bold", { widget: "dxButton", options: { text: "test" } }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $buttons = this.$element.find(`.${BUTTON_CLASS}`);
+
+        assert.ok($buttons.eq(0).hasClass(TOOLBAR_FORMAT_WIDGET_CLASS), "Bold");
+        assert.notOk($buttons.eq(1).hasClass(TOOLBAR_FORMAT_WIDGET_CLASS), "Custom button");
     });
 });
 
