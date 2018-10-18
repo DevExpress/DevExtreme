@@ -2714,6 +2714,34 @@ QUnit.test("Load collapsed group and expand group item that contain items with w
     assert.strictEqual(loadStub.getCall(2).args[0].take, 2, "load 2 skip");
 });
 
+QUnit.test("Expand group if group key is object", function(assert) {
+    var dataSource = this.createDataSource({
+        load: function() {
+            return $.Deferred().resolve({ data: [
+                { key: { groupId: 1, groupName: "test 1" }, items: [{ id: 1 }] },
+                { key: { groupId: 2, groupName: "test 2" }, items: [{ id: 2 }] }
+            ], totalCount: 2, groupCount: 2 });
+        },
+        group: "group"
+    });
+
+    dataSource.load();
+
+    // act
+    dataSource.changeRowExpand([{ groupId: 1, groupName: "test 1" }]);
+    dataSource.load();
+
+    // assert
+    assert.equal(dataSource.totalItemsCount(), 3, "total items count");
+    assert.deepEqual(dataSource.items(), [{
+        key: { groupId: 1, groupName: "test 1" },
+        items: [{ id: 1 }]
+    }, {
+        key: { groupId: 2, groupName: "test 2" },
+        items: null
+    }], "items");
+});
+
 QUnit.test("Load collapsed group and expand first item when native promise is used", function(assert) {
     var dataSource = this.createDataSource({
             group: "field2",
