@@ -25,7 +25,7 @@ const xlsxFontHelper = {
     },
 
     copy: function(source) {
-        let result = source;
+        let result = null;
         if(isDefined(source)) {
             result = {};
             if(source.size !== undefined) {

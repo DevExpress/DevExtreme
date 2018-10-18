@@ -52,7 +52,7 @@ const xlsxFillHelper = {
     },
 
     copy: function(source) {
-        let result = source;
+        let result = null;
         if(isDefined(source)) {
             result = {};
             if(source.patternFill !== undefined) {

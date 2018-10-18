@@ -18,7 +18,7 @@ const xlsxCellAlignmentHelper = {
     },
 
     copy: function(source) {
-        let result = source;
+        let result = null;
         if(isDefined(source)) {
             result = {};
             if(source.horizontal !== undefined) {

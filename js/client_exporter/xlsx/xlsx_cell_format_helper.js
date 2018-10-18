@@ -34,7 +34,7 @@ const xlsxCellFormatHelper = {
     },
 
     copy: function(source) {
-        let result = source;
+        let result = null;
         if(isDefined(source)) {
             result = {};
 
