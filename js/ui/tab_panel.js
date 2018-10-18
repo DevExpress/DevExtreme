@@ -27,6 +27,12 @@ var TabPanel = MultiView.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
+            * @name dxTabPanelOptions.repaintChangesOnly
+            * @type boolean
+            * @default false
+            */
+
+            /**
             * @name dxTabPanelOptions.itemTitleTemplate
             * @type template|function
             * @default "title"
@@ -287,6 +293,7 @@ var TabPanel = MultiView.inherit({
             selectOnFocus: true,
             focusStateEnabled: this.option("focusStateEnabled"),
             hoverStateEnabled: this.option("hoverStateEnabled"),
+            repaintChangesOnly: this.option("repaintChangesOnly"),
             tabIndex: this.option("tabIndex"),
             selectedIndex: this.option("selectedIndex"),
 
@@ -362,7 +369,9 @@ var TabPanel = MultiView.inherit({
             case "items":
                 this._setTabsOption(fullName, value);
                 this._updateLayout();
-                this._tabs.repaint();
+                if(!this.option("repaintChangesOnly")) {
+                    this._tabs.repaint();
+                }
                 this.callBase(args);
                 break;
             case "selectedIndex":
