@@ -1363,6 +1363,37 @@ QUnit.test("UpdateData, update with object", function(assert) {
     assert.ok(!form.getEditor("test3.Specialization.good").option("value"), "editor's value of 'test3.Specialization.good' data field");
 });
 
+QUnit.test("Get button instance", function(assert) {
+    var form = $("#form").dxForm({
+        items: [{
+            itemType: "button",
+            name: "button1",
+            buttonOptions: { text: "button1" }
+        }, {
+            itemType: "group",
+            items: [{
+                itemType: "button",
+                name: "button2",
+                buttonOptions: { text: "button2" }
+            }]
+        }, {
+            itemType: "button",
+            buttonOptions: { text: "button3" }
+        }]
+    }).dxForm("instance");
+
+    var formInvalidateSpy = sinon.spy(form, "_invalidate");
+
+    assert.strictEqual(form.getButton("button1").option("text"), "button1");
+    assert.strictEqual(form.getButton("button2").option("text"), "button2");
+    assert.strictEqual(form.getButton("button3"), void 0);
+
+    form.option("items[1].items[0].buttonOptions.text", "changed_button_text");
+
+    assert.strictEqual(form.getButton("button2").option("text"), "changed_button_text");
+    assert.strictEqual(formInvalidateSpy.callCount, 0, "Invalidate does not called");
+});
+
 QUnit.test("Get editor instance", function(assert) {
     // arrange
     var $testContainer = $("#form");
@@ -2047,7 +2078,26 @@ QUnit.test("Reset validation summary when values are reset in form", function(as
     assert.equal($("." + VALIDATION_SUMMARY_ITEM_CLASS).length, 0, "validation summary items");
 });
 
-QUnit.test("Changing an editor options of an any item does not invalidate whole form (T311892)", function(assert) {
+QUnit.test("Changing an validationRules options of an any item does not invalidate whole form (T673188)", function(assert) {
+    // arrange
+    var form = $("#form").dxForm({
+            formData: {
+                lastName: "Kyle",
+                count: 1
+            },
+            items: [
+                { dataField: "firstName", editorType: "dxTextBox" },
+                { dataField: "count", editorType: "dxTextBox", validationRules: [{ type: "range", max: 10 }] }
+            ]
+        }).dxForm("instance"),
+        formInvalidateSpy = sinon.spy(form, "_invalidate");
+
+    form.option("items[1].validationRules[0].max", 11);
+    assert.strictEqual(form.option("items[1].validationRules[0].max"), 11, "correct validationRule option");
+    assert.strictEqual(formInvalidateSpy.callCount, 0, "Invalidate does not called");
+});
+
+QUnit.test("Changing an editor/button options of an any item does not invalidate whole form (T311892, T681241)", function(assert) {
     // arrange
     var form = $("#form").dxForm({
             formData: {
@@ -2056,22 +2106,29 @@ QUnit.test("Changing an editor options of an any item does not invalidate whole 
             },
             items: [
                 { dataField: "firstName", editorType: "dxTextBox", editorOption: { width: 100, height: 20 } },
-                { dataField: "lastName", editorType: "dxTextBox", editorOption: { width: 100, height: 20 } }
+                { dataField: "lastName", editorType: "dxTextBox", editorOption: { width: 100, height: 20 } },
+                { itemType: "button", buttonOptions: { width: 100, height: 20 } }
             ]
         }).dxForm("instance"),
         formInvalidateSpy = sinon.spy(form, "_invalidate");
 
     // act
     form.option("items[1].editorOptions", { width: 80, height: 40 });
+    form.option("items[2].buttonOptions", { width: 10, height: 20 });
 
     // assert
-    var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+    var editor = $("#form .dx-textbox").last().dxTextBox("instance"),
+        button = $("#form .dx-button").last().dxButton("instance");
 
     assert.deepEqual(form.option("items[1].editorOptions"), { width: 80, height: 40 }, "correct editor options");
+    assert.deepEqual(form.option("items[2].buttonOptions"), { width: 10, height: 20 }, "correct button options");
+
     assert.equal(formInvalidateSpy.callCount, 0, "Invalidate does not called");
 
-    assert.equal(secondEditor.option("width"), 80, "Correct width");
-    assert.equal(secondEditor.option("height"), 40, "Correct height");
+    assert.equal(editor.option("width"), 80, "Correct editor width");
+    assert.equal(editor.option("height"), 40, "Correct editor height");
+    assert.equal(button.option("width"), 10, "Correct button width");
+    assert.equal(button.option("height"), 20, "Correct button height");
 });
 
 QUnit.test("Changing editorOptions of subitem change editor options (T316522)", function(assert) {
@@ -2133,32 +2190,6 @@ QUnit.test("editorOptions correctly updates in case when only item name is defin
     assert.equal(invalidateSpy.callCount, 0, "dxForm wasn't invalidated");
     assert.equal(secondEditor.option("width"), 80, "Correct width");
     assert.equal(secondEditor.option("height"), 40, "Correct height");
-});
-
-QUnit.test("widget invalidates in case we cannot change an editor options", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
-        items: [
-            {
-                itemType: "group", items: [
-                    {
-                        itemType: "group", items: [
-                                { editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
-                                { editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
-                        ]
-                    }
-                ]
-            }
-        ]
-    }).dxForm("instance");
-
-    var invalidateSpy = sinon.spy(form, "_invalidate");
-
-    // act
-    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
-
-    // assert
-    assert.equal(invalidateSpy.callCount, 1, "dxForm invalidated");
 });
 
 QUnit.test("Reset editor's value", function(assert) {
