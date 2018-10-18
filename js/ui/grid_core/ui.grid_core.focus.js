@@ -52,6 +52,11 @@ exports.FocusController = core.ViewController.inherit((function() {
             return ["navigateToRow"];
         },
 
+        /**
+         * @name GridBaseOptions.navigateToRow
+         * @publicName navigateToRow(key)
+         * @param1 key:any
+         */
         navigateToRow: function(key) {
             var that = this,
                 dataController = this.getController("data"),
@@ -219,7 +224,6 @@ exports.FocusController = core.ViewController.inherit((function() {
 module.exports = {
     defaultOptions: function() {
         return {
-
              /**
              * @name GridBaseOptions.focusedRowEnabled
              * @type boolean
@@ -229,7 +233,7 @@ module.exports = {
 
             /**
              * @name GridBaseOptions.focusedRowKey
-             * @type object
+             * @type any
              * @default undefined
              * @fires GridBaseOptions.onFocusedRowChanged
              */
@@ -250,12 +254,6 @@ module.exports = {
              * @fires GridBaseOptions.onFocusedCellChanged
              */
             focusedColumnIndex: -1
-
-            /**
-             * @name GridBaseMethods.navigateToRow
-             * @publicName navigateToRow(key)
-             * @param1 key:any
-             */
         };
     },
 
