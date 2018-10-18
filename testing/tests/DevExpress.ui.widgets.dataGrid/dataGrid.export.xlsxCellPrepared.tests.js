@@ -950,8 +950,6 @@ QUnit.test("Change boolean value", function(assert) {
                     if(e.gridCell.value) {
                         assert.strictEqual(e.xlsxCell.value, 'true');
                         e.xlsxCell.value = 'false';
-                        // assert.strictEqual(e.xlsxCell.value, true); - DataProvider.getCellData(rowIndex, cellIndex) returns string
-                        // e.xlsxCell.value = false; - DataProvider doesn't provide a way to convert true/false to 'true'/'false'
                     } else {
                         assert.strictEqual(e.xlsxCell.value, 'false');
                         e.xlsxCell.value = true;
