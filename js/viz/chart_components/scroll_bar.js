@@ -1,17 +1,16 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    eventUtils = require("../../events/utils"),
-    extend = require("../../core/utils/extend").extend,
-    MIN_SCROLL_BAR_SIZE = 2,
-    translator2DModule = require("../translators/translator2d"),
-    pointerEvents = require("../../events/pointer"),
-    isDefined = require("../../core/utils/type").isDefined,
-    _min = Math.min,
-    _max = Math.max,
-    noop = require("../../core/utils/common").noop;
+import eventsEngine from "../../events/core/events_engine";
+import eventUtils from "../../events/utils";
+import { extend } from "../../core/utils/extend";
+import translator2DModule from "../translators/translator2d";
+import { isDefined } from "../../core/utils/type";
+import { noop } from "../../core/utils/common";
+import dragEvents from "../../events/drag";
 
-var ScrollBar = function(renderer, group) {
+const _min = Math.min;
+const _max = Math.max;
+const MIN_SCROLL_BAR_SIZE = 2;
+
+const ScrollBar = function(renderer, group) {
     this._translator = new translator2DModule.Translator2D({}, {}, {});
     this._scroll = renderer.rect().append(group);
     this._addEvents();
@@ -44,61 +43,44 @@ function _getYCoord(canvas, pos, offset, width) {
 ScrollBar.prototype = {
 
     _addEvents: function() {
-        var document = domAdapter.getDocument(),
-            that = this,
-            $scroll = $(that._scroll.element),
-            startPosX = 0,
-            startPosY = 0,
-            scrollChangeHandler = function(e) {
-                var dX = (startPosX - e.pageX) * that._scale,
-                    dY = (startPosY - e.pageY) * that._scale,
-                    lx = that._offset - (that._layoutOptions.vertical ? dY : dX) / that._scale;
-                that._applyPosition(lx, lx + that._translator.canvasLength / that._scale);
+        const scrollElement = this._scroll.element;
 
-                eventUtils.fireEvent({
-                    type: "dxc-scroll-move",
-                    originalEvent: e,
-                    target: $scroll.get(0),
-                    offset: {
-                        x: dX,
-                        y: dY
-                    }
-                });
-            },
-            scrollEndHandler = function(e) {
-                var dX = (startPosX - e.pageX) * that._scale,
-                    dY = (startPosY - e.pageY) * that._scale;
-
-                eventUtils.fireEvent({
-                    type: "dxc-scroll-end",
-                    originalEvent: e,
-                    target: $scroll.get(0),
-                    offset: {
-                        x: dX,
-                        y: dY
-                    }
-                });
-            };
-        eventsEngine.on($scroll, pointerEvents.down, function(e) {
-            startPosX = e.pageX;
-            startPosY = e.pageY;
-
+        eventsEngine.on(scrollElement, dragEvents.start, e => {
             eventUtils.fireEvent({
                 type: "dxc-scroll-start",
                 originalEvent: e,
-                target: $scroll.get(0)
+                target: scrollElement
             });
-
-            eventsEngine.on(document, pointerEvents.move, scrollChangeHandler);
-            eventsEngine.on(document, pointerEvents.up, scrollEndHandler);
         });
 
-        that._removeHandlers = function() {
-            eventsEngine.off(document, pointerEvents.up, scrollEndHandler);
-            eventsEngine.off(document, pointerEvents.move, scrollChangeHandler);
-        };
+        eventsEngine.on(scrollElement, dragEvents.move, e => {
+            const dX = -e.offset.x * this._scale;
+            const dY = -e.offset.y * this._scale;
+            const lx = this._offset - (this._layoutOptions.vertical ? dY : dX) / this._scale;
+            this._applyPosition(lx, lx + this._translator.canvasLength / this._scale);
 
-        eventsEngine.on(document, pointerEvents.up, that._removeHandlers);
+            eventUtils.fireEvent({
+                type: "dxc-scroll-move",
+                originalEvent: e,
+                target: scrollElement,
+                offset: {
+                    x: dX,
+                    y: dY
+                }
+            });
+        });
+
+        eventsEngine.on(scrollElement, dragEvents.end, e => {
+            eventUtils.fireEvent({
+                type: "dxc-scroll-end",
+                originalEvent: e,
+                target: scrollElement,
+                offset: {
+                    x: -e.offset.x * this._scale,
+                    y: -e.offset.y * this._scale
+                }
+            });
+        });
     },
 
     update: function(options) {
@@ -214,7 +196,6 @@ ScrollBar.prototype = {
     },
 
     dispose: function() {
-        this._removeHandlers();
         this._scroll.dispose();
         this._scroll = this._translator = null;
     },
