@@ -1287,9 +1287,9 @@ module.exports = {
              * @name GridBaseOptions.onKeyDown
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field3 jQueryEvent:jQuery.Event:deprecated(event)
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 handled:boolean
+             * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
+             * @type_function_param1_field5 event:event
+             * @type_function_param1_field6 handled:boolean
              * @extends Action
              * @action
              */
@@ -1298,15 +1298,15 @@ module.exports = {
              * @name dxDataGridOptions.onFocusedCellChanging
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field1 cellElement:dxElement
-             * @type_function_param1_field2 prevColumnIndex:number
-             * @type_function_param1_field3 prevRowIndex:number
-             * @type_function_param1_field4 newColumnIndex:number
-             * @type_function_param1_field5 newRowIndex:number
-             * @type_function_param1_field7 event:event
-             * @type_function_param1_field8 rows:Array<dxDataGridRowObject>
-             * @type_function_param1_field9 columns:Array<dxDataGridColumn>
-             * @type_function_param1_field10 cancel:boolean
+             * @type_function_param1_field4 cellElement:dxElement
+             * @type_function_param1_field5 prevColumnIndex:number
+             * @type_function_param1_field6 prevRowIndex:number
+             * @type_function_param1_field7 newColumnIndex:number
+             * @type_function_param1_field8 newRowIndex:number
+             * @type_function_param1_field9 event:event
+             * @type_function_param1_field10 rows:Array<dxDataGridRowObject>
+             * @type_function_param1_field11 columns:Array<dxDataGridColumn>
+             * @type_function_param1_field12 cancel:boolean
              * @extends Action
              * @action
              */
@@ -1314,15 +1314,15 @@ module.exports = {
              * @name dxTreeListOptions.onFocusedCellChanging
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field1 cellElement:dxElement
-             * @type_function_param1_field2 prevColumnIndex:number
-             * @type_function_param1_field3 prevRowIndex:number
-             * @type_function_param1_field4 newColumnIndex:number
-             * @type_function_param1_field5 newRowIndex:number
-             * @type_function_param1_field7 event:event
-             * @type_function_param1_field8 rows:Array<dxTreeListRowObject>
-             * @type_function_param1_field9 columns:Array<dxTreeListColumn>
-             * @type_function_param1_field10 cancel:boolean
+             * @type_function_param1_field4 cellElement:dxElement
+             * @type_function_param1_field5 prevColumnIndex:number
+             * @type_function_param1_field6 prevRowIndex:number
+             * @type_function_param1_field7 newColumnIndex:number
+             * @type_function_param1_field8 newRowIndex:number
+             * @type_function_param1_field9 event:event
+             * @type_function_param1_field10 rows:Array<dxTreeListRowObject>
+             * @type_function_param1_field11 columns:Array<dxTreeListColumn>
+             * @type_function_param1_field12 cancel:boolean
              * @extends Action
              * @action
              */
@@ -1331,11 +1331,11 @@ module.exports = {
              * @name dxDataGridOptions.onFocusedCellChanged
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field1 cellElement:dxElement
-             * @type_function_param1_field2 columnIndex:number
-             * @type_function_param1_field3 rowIndex:number
-             * @type_function_param1_field4 row:dxDataGridRowObject
-             * @type_function_param1_field5 column:dxDataGridColumn
+             * @type_function_param1_field4 cellElement:dxElement
+             * @type_function_param1_field5 columnIndex:number
+             * @type_function_param1_field6 rowIndex:number
+             * @type_function_param1_field7 row:dxDataGridRowObject
+             * @type_function_param1_field8 column:dxDataGridColumn
              * @extends Action
              * @action
              */
@@ -1343,11 +1343,11 @@ module.exports = {
              * @name dxTreeListOptions.onFocusedCellChanged
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field1 cellElement:dxElement
-             * @type_function_param1_field2 columnIndex:number
-             * @type_function_param1_field3 rowIndex:number
-             * @type_function_param1_field4 row:dxTreeListRowObject
-             * @type_function_param1_field5 column:dxTreeListColumn
+             * @type_function_param1_field4 cellElement:dxElement
+             * @type_function_param1_field5 columnIndex:number
+             * @type_function_param1_field6 rowIndex:number
+             * @type_function_param1_field7 row:dxTreeListRowObject
+             * @type_function_param1_field8 column:dxTreeListColumn
              * @extends Action
              * @action
              */
@@ -1356,12 +1356,12 @@ module.exports = {
              * @name dxDataGridOptions.onFocusedRowChanging
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field1 rowElement:dxElement
-             * @type_function_param1_field2 prevRowIndex:number
-             * @type_function_param1_field3 newRowIndex:number
-             * @type_function_param1_field5 event:event
-             * @type_function_param1_field6 rows:Array<dxDataGridRowObject>
-             * @type_function_param1_field7 cancel:boolean
+             * @type_function_param1_field4 rowElement:dxElement
+             * @type_function_param1_field5 prevRowIndex:number
+             * @type_function_param1_field6 newRowIndex:number
+             * @type_function_param1_field7 event:event
+             * @type_function_param1_field8 rows:Array<dxDataGridRowObject>
+             * @type_function_param1_field9 cancel:boolean
              * @extends Action
              * @action
              */
@@ -1369,12 +1369,12 @@ module.exports = {
              * @name dxTreeListOptions.onFocusedRowChanging
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field1 rowElement:dxElement
-             * @type_function_param1_field2 prevRowIndex:number
-             * @type_function_param1_field3 newRowIndex:number
-             * @type_function_param1_field5 event:event
-             * @type_function_param1_field6 rows:Array<dxTreeListRowObject>
-             * @type_function_param1_field7 cancel:boolean
+             * @type_function_param1_field4 rowElement:dxElement
+             * @type_function_param1_field5 prevRowIndex:number
+             * @type_function_param1_field6 newRowIndex:number
+             * @type_function_param1_field7 event:event
+             * @type_function_param1_field8 rows:Array<dxTreeListRowObject>
+             * @type_function_param1_field9 cancel:boolean
              * @extends Action
              * @action
              */
@@ -1383,9 +1383,9 @@ module.exports = {
              * @name dxDataGridOptions.onFocusedRowChanged
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field1 rowElement:dxElement
-             * @type_function_param1_field2 rowIndex:number
-             * @type_function_param1_field4 row:dxDataGridRowObject
+             * @type_function_param1_field4 rowElement:dxElement
+             * @type_function_param1_field5 rowIndex:number
+             * @type_function_param1_field6 row:dxDataGridRowObject
              * @extends Action
              * @action
              */
@@ -1393,9 +1393,9 @@ module.exports = {
              * @name dxTreeListOptions.onFocusedRowChanged
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field1 rowElement:dxElement
-             * @type_function_param1_field2 rowIndex:number
-             * @type_function_param1_field4 row:dxTreeListRowObject
+             * @type_function_param1_field4 rowElement:dxElement
+             * @type_function_param1_field5 rowIndex:number
+             * @type_function_param1_field6 row:dxTreeListRowObject
              * @extends Action
              * @action
              */
