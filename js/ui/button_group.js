@@ -50,6 +50,7 @@ const ButtonGroup = Widget.inherit({
              * @name dxButtonGroupOptions.hoverStateEnabled
              * @type boolean
              * @default true
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
