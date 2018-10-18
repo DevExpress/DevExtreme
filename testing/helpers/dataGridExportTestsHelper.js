@@ -82,7 +82,8 @@ const dataGridExportTestsHelper = {
         const done = assert.async();
         const actualGridCells = [];
 
-        gridOptions.customizeXlsxCell = e => {
+        gridOptions.export = gridOptions.export || {};
+        gridOptions.export.customizeXlsxCell = e => {
             actualGridCells.push(e.gridCell);
         };
         gridOptions.loadingTimeout = undefined;

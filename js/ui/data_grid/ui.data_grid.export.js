@@ -63,7 +63,7 @@ exports.DataProvider = Class.inherit({
             customizeExportData: exportController.option("customizeExportData"),
             rtlEnabled: exportController.option("rtlEnabled"),
             wrapTextEnabled: isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option("wordWrapEnabled"),
-            customizeXlsxCell: exportController.option("customizeXlsxCell"),
+            customizeXlsxCell: exportController.option("export.customizeXlsxCell"),
         };
     },
 
@@ -690,16 +690,6 @@ dataGridCore.registerModule("export", {
              * @type function(columns, rows)
              * @type_function_param1 columns:Array<dxDataGridColumn>
              * @type_function_param2 rows:Array<dxDataGridRowObject>
-             */
-            /**
-             * @name dxDataGridOptions.customizeXlsxCell
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 xlsxCell:XlsxCell
-             * @type_function_param1_field5 gridCell:XlsxGridCell
-             * @extends Action
-             * @action
-             * @hidden
              */
         };
     },
