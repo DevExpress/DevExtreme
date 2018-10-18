@@ -769,7 +769,9 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         _removeEditDataItem: function(index) {
-            this._editData.splice(index, 1);
+            if(index >= 0) {
+                this._editData.splice(index, 1);
+            }
         },
 
         /**
@@ -1123,12 +1125,11 @@ var EditingController = modules.ViewController.inherit((function() {
                     $popupContent = that.getPopupContent();
                     dataController.dataErrorOccurred.fire(arg, $popupContent);
                     if(editMode !== EDIT_MODE_BATCH) {
+                        that._removeEditDataItem(editIndex);
                         break;
                     }
                 } else if(!cancel || !editData || editMode !== EDIT_MODE_BATCH && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
-                    if(editIndex >= 0) {
-                        that._removeEditDataItem(editIndex);
-                    }
+                    that._removeEditDataItem(editIndex);
                     hasSavedData = !cancel;
                 }
             }
