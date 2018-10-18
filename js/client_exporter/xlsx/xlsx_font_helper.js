@@ -24,6 +24,38 @@ const xlsxFontHelper = {
         return result;
     },
 
+    copy: function(source) {
+        let result = null;
+        if(isDefined(source)) {
+            result = {};
+            if(source.size !== undefined) {
+                result.size = source.size;
+            }
+            if(source.name !== undefined) {
+                result.name = source.name;
+            }
+            if(source.family !== undefined) {
+                result.family = source.family;
+            }
+            if(source.scheme !== undefined) {
+                result.scheme = source.scheme;
+            }
+            if(source.bold !== undefined) {
+                result.bold = source.bold;
+            }
+            if(source.italic !== undefined) {
+                result.italic = source.italic;
+            }
+            if(source.underline !== undefined) {
+                result.underline = source.underline;
+            }
+            if(source.color !== undefined) {
+                result.color = xlsxColorHelper.copy(source.color);
+            }
+        }
+        return result;
+    },
+
     areEqual: function(leftTag, rightTag) {
         return xlsxFontHelper.isEmpty(leftTag) && xlsxFontHelper.isEmpty(rightTag) ||
             (

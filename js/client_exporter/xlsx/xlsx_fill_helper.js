@@ -13,6 +13,7 @@ const xlsxFillHelper = {
         }
         return result;
     },
+
     tryCreateFillFromSimpleFormat: function({ backgroundColor, patternStyle, patternColor } = {}) {
         if(isDefined(backgroundColor) && !(isDefined(patternStyle) && isDefined(patternColor))) {
             return {
@@ -36,6 +37,29 @@ const xlsxFillHelper = {
                 }
             };
         }
+    },
+
+    copySimpleFormat: function(source, target) {
+        if(source.backgroundColor !== undefined) {
+            target.backgroundColor = source.backgroundColor;
+        }
+        if(source.patternStyle !== undefined) {
+            target.patternStyle = source.patternStyle;
+        }
+        if(source.patternColor !== undefined) {
+            target.patternColor = source.patternColor;
+        }
+    },
+
+    copy: function(source) {
+        let result = null;
+        if(isDefined(source)) {
+            result = {};
+            if(source.patternFill !== undefined) {
+                result.patternFill = xlsxPatternFillHelper.copy(source.patternFill);
+            };
+        }
+        return result;
     },
 
     areEqual: function(leftTag, rightTag) {

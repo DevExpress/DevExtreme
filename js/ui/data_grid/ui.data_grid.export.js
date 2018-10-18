@@ -5,7 +5,6 @@ var $ = require("../../core/renderer"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     arrayUtils = require("../../core/utils/array"),
     dataGridCore = require("./ui.data_grid.core"),
-    gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
     exportMixin = require("../grid_core/ui.grid_core.export_mixin"),
     clientExporter = require("../../client_exporter"),
     messageLocalization = require("../../localization/message"),
@@ -64,13 +63,17 @@ exports.DataProvider = Class.inherit({
             customizeExportData: exportController.option("customizeExportData"),
             rtlEnabled: exportController.option("rtlEnabled"),
             wrapTextEnabled: isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option("wordWrapEnabled"),
-            onXlsxCellPrepared: exportController.getAction("onXlsxCellPrepared"),
+            customizeXlsxCell: exportController.option("export.customizeXlsxCell"),
         };
     },
 
-    onXlsxCellPrepared: function(e) {
-        if(this._options.onXlsxCellPrepared) {
-            this._options.onXlsxCellPrepared({
+    hasCustomizeXlsxCell: function() {
+        return isDefined(this._options.customizeXlsxCell);
+    },
+
+    customizeXlsxCell: function(e) {
+        if(this._options.customizeXlsxCell) {
+            this._options.customizeXlsxCell({
                 xlsxCell: e.xlsxCell,
                 gridCell: e.cellSourceData
             });
@@ -251,18 +254,13 @@ exports.DataProvider = Class.inherit({
                     default:
                         column = columns[cellIndex];
                         if(column) {
-                            value = dataGridCore.getDisplayValue(column, itemValues[correctedCellIndex], item.data, item.rowType); // from 'ui.grid_core.rows.js: _getCellOptions'
-                            result.value = !isFinite(value) || column.customizeText ? dataGridCore.formatValue(value, column) : value; // similar to 'ui.grid_core.rows.js: _getCellOptions'
+                            let value = itemValues[correctedCellIndex];
+                            let displayValue = dataGridCore.getDisplayValue(column, value, item.data, item.rowType); // from 'ui.grid_core.rows.js: _getCellOptions'
+                            result.value = !isFinite(displayValue) || column.customizeText ? dataGridCore.formatValue(displayValue, column) : displayValue; // similar to 'ui.grid_core.rows.js: _getCellOptions'
+                            result.cellSourceData.value = value;
                         }
-                        result.cellSourceData.row = {
-                            data: item.data,
-                            key: item.data,
-                            // rowIndex: rowIndex,
-                            rowType: item.rowType,
-                        };
-                        result.cellSourceData.value = itemValues[correctedCellIndex];
-                        result.cellSourceData.displayValue = value;
-                        result.cellSourceData.text = column && gridCoreUtils.formatValue(value, column); // from 'ui.grid_core.rows.js: _getCellOptions'
+                        result.cellSourceData.data = item.data;
+                        result.cellSourceData.rowType = item.rowType;
                 }
             }
         }
@@ -539,8 +537,6 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
         this.createAction("onExporting", { excludeValidators: ["disabled", "readOnly"] });
         this.createAction("onExported", { excludeValidators: ["disabled", "readOnly"] });
         this.createAction("onFileSaving", { excludeValidators: ["disabled", "readOnly"] });
-
-        this.createAction("onXlsxCellPrepared", { excludeValidators: ["disabled", "readOnly"] });
     },
 
     callbackNames: function() {
@@ -694,16 +690,6 @@ dataGridCore.registerModule("export", {
              * @type function(columns, rows)
              * @type_function_param1 columns:Array<dxDataGridColumn>
              * @type_function_param2 rows:Array<dxDataGridRowObject>
-             */
-            /**
-             * @name dxDataGridOptions.onXlsxCellPrepared
-             * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 xlsxCell:XlsxCell
-             * @type_function_param1_field5 gridCell:XlsxGridCell
-             * @extends Action
-             * @action
-             * @hidden
              */
         };
     },

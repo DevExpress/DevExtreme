@@ -78,11 +78,12 @@ const dataGridExportTestsHelper = {
         dataGrid.exportToExcel();
     },
 
-    runXlsxCellPreparedTest: function(assert, gridOptions, getExpectedGridCellsCallback) {
+    runCustomizeXlsxCellTest: function(assert, gridOptions, getExpectedGridCellsCallback) {
         const done = assert.async();
         const actualGridCells = [];
 
-        gridOptions.onXlsxCellPrepared = e => {
+        gridOptions.export = gridOptions.export || {};
+        gridOptions.export.customizeXlsxCell = e => {
             actualGridCells.push(e.gridCell);
         };
         gridOptions.loadingTimeout = undefined;
@@ -102,7 +103,7 @@ const dataGridExportTestsHelper = {
                 }
                 for(const actualPropertyName in actualGridCell) {
                     if(skipProperties.indexOf(actualPropertyName) === -1) {
-                        assert.strictEqual(toComparable(actualGridCell[actualPropertyName]), toComparable(expectedGridCell[actualPropertyName]), `gridCell[${actualPropertyName}], ${i}`);
+                        assert.strictEqual(toComparable(actualGridCell[actualPropertyName]), toComparable(expectedGridCell[actualPropertyName]), `actual gridCell[${actualPropertyName}], ${i}`);
                     }
                 }
 

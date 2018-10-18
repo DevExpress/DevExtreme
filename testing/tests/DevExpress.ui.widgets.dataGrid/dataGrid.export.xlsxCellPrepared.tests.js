@@ -6,7 +6,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-QUnit.module("DataGrid onXlsxCellPrepared tests", {
+QUnit.module("DataGrid customizeXlsxCell tests", {
     beforeEach: helper.beforeEachTest,
     afterEach: helper.afterEachTest,
 });
@@ -44,8 +44,8 @@ QUnit.test("Change horizontal alignment", function(assert) {
             dataSource: [{ field1: 'str1_1' }],
             export: {
                 enabled: true,
+                customizeXlsxCell: e => e.xlsxCell.style.alignment = null,
             },
-            onXlsxCellPrepared: e => e.xlsxCell.style.alignment = null,
         },
         { styles, worksheet, sharedStrings }
     );
@@ -81,13 +81,13 @@ QUnit.test("Change horizontal alignment by a property value of source object", f
             showColumnHeaders: false,
             export: {
                 enabled: true,
-            },
-            onXlsxCellPrepared: e => {
-                if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.row.data.data1 === 1) {
-                    e.xlsxCell.style.alignment = {
-                        horizontal: e.gridCell.row.data.alignment
-                    };
-                }
+                customizeXlsxCell: e => {
+                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.data.data1 === 1) {
+                        e.xlsxCell.style.alignment = {
+                            horizontal: e.gridCell.data.alignment
+                        };
+                    }
+                },
             },
         },
         { styles, worksheet, sharedStrings }
@@ -126,11 +126,11 @@ QUnit.test("Change fill (simple format)", function(assert) {
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-            },
-            onXlsxCellPrepared: e => {
-                e.xlsxCell.style.backgroundColor = 'FFFFFF00';
-                e.xlsxCell.style.patternColor = 'FF00FF00';
-                e.xlsxCell.style.patternStyle = 'lightGrid';
+                customizeXlsxCell: e => {
+                    e.xlsxCell.style.backgroundColor = 'FFFFFF00';
+                    e.xlsxCell.style.patternColor = 'FF00FF00';
+                    e.xlsxCell.style.patternStyle = 'lightGrid';
+                },
             },
         },
         { styles, worksheet, sharedStrings }
@@ -169,16 +169,16 @@ QUnit.test("Change fill (OOXML format)", function(assert) {
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-            },
-            onXlsxCellPrepared: e => {
-                e.xlsxCell.style.fill = {
-                    patternFill: {
-                        patternType: 'darkVertical',
-                        foregroundColor: {
-                            rgb: 'FF20FF60'
+                customizeXlsxCell: e => {
+                    e.xlsxCell.style.fill = {
+                        patternFill: {
+                            patternType: 'darkVertical',
+                            foregroundColor: {
+                                rgb: 'FF20FF60'
+                            }
                         }
-                    }
-                };
+                    };
+                },
             },
         },
         { styles, worksheet, sharedStrings }
@@ -221,18 +221,18 @@ QUnit.test("Change fill by a property value of source object", function(assert) 
             showColumnHeaders: false,
             export: {
                 enabled: true,
-            },
-            onXlsxCellPrepared: e => {
-                if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.row.data.data1 === 1) {
-                    e.xlsxCell.style.fill = {
-                        patternFill: {
-                            patternType: e.gridCell.row.data.fillPattern,
-                            foregroundColor: {
-                                rgb: e.gridCell.row.data.fillColor
+                customizeXlsxCell: e => {
+                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.data.data1 === 1) {
+                        e.xlsxCell.style.fill = {
+                            patternFill: {
+                                patternType: e.gridCell.data.fillPattern,
+                                foregroundColor: {
+                                    rgb: e.gridCell.data.fillColor
+                                }
                             }
-                        }
-                    };
-                }
+                        };
+                    }
+                },
             },
         },
         { styles, worksheet, sharedStrings }
@@ -275,8 +275,8 @@ QUnit.test("Change font", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                customizeXlsxCell: e => e.xlsxCell.style.font.size = 22,
             },
-            onXlsxCellPrepared: e => e.xlsxCell.style.font.size = 22,
         },
         { styles, worksheet, sharedStrings }
     );
@@ -344,9 +344,9 @@ QUnit.test("Change number format", function(assert) {
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-            },
-            onXlsxCellPrepared: e => {
-                e.xlsxCell.numberFormat = formats.shift();
+                customizeXlsxCell: e => {
+                    e.xlsxCell.numberFormat = formats.shift();
+                },
             },
         },
         { styles, worksheet, sharedStrings }
@@ -395,9 +395,9 @@ QUnit.test("Change number format for Number column to '0000', '0.00', '0.00E+00'
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-            },
-            onXlsxCellPrepared: e => {
-                e.xlsxCell.numberFormat = columnFormats[e.gridCell.column.dataField];
+                customizeXlsxCell: e => {
+                    e.xlsxCell.numberFormat = columnFormats[e.gridCell.column.dataField];
+                },
             },
         },
         { styles, worksheet, sharedStrings }
@@ -437,9 +437,9 @@ QUnit.test("Change number format for Number column when column.format is functio
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-            },
-            onXlsxCellPrepared: e => {
-                e.xlsxCell.numberFormat = '0000';
+                customizeXlsxCell: e => {
+                    e.xlsxCell.numberFormat = '0000';
+                },
             },
         },
         { styles, worksheet, sharedStrings }
@@ -478,9 +478,9 @@ QUnit.test("Change number format for Number column cell", function(assert) {
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-            },
-            onXlsxCellPrepared: e => {
-                e.xlsxCell.numberFormat = '0000';
+                customizeXlsxCell: e => {
+                    e.xlsxCell.numberFormat = '0000';
+                },
             },
         },
         { styles, worksheet, sharedStrings }
@@ -520,9 +520,9 @@ QUnit.test("Change number format for Date column cell when column.format is func
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-            },
-            onXlsxCellPrepared: e => {
-                e.xlsxCell.numberFormat = 'dd/mmm/yyyy hh:mm';
+                customizeXlsxCell: e => {
+                    e.xlsxCell.numberFormat = 'dd/mmm/yyyy hh:mm';
+                },
             },
         },
         { styles, worksheet, sharedStrings }
@@ -531,13 +531,13 @@ QUnit.test("Change number format for Date column cell when column.format is func
 
 QUnit.test("Check event arguments for data row cell with various data types", function(assert) {
     const configurations = [
-        { dataType: "number", values: [undefined, null, 0, 1], expectedTexts: ['', '', '0', '1' ] },
-        { dataType: "string", values: [undefined, null, '', 's'], expectedTexts: ['', '', '', 's' ] },
-        { dataType: "date", values: [undefined, null, new Date(2018, 11, 1)], expectedTexts: ['', '', '12/1/2018' ] },
-        { dataType: "datetime", values: [undefined, null, new Date(2018, 11, 1, 16, 10)], expectedTexts: ['', '', '12/1/2018, 4:10 PM' ] },
-        { dataType: "boolean", values: [undefined, null, false, true], expectedTexts: ['', '', 'false', 'true' ] },
+        { dataType: "number", values: [undefined, null, 0, 1] },
+        { dataType: "string", values: [undefined, null, '', 's'] },
+        { dataType: "date", values: [undefined, null, new Date(2018, 11, 1)] },
+        { dataType: "datetime", values: [undefined, null, new Date(2018, 11, 1, 16, 10)] },
+        { dataType: "boolean", values: [undefined, null, false, true] },
         {
-            dataType: "lookup", values: [undefined, null, 1], expectedDisplayValues: [undefined, undefined, 'name1' ], expectedTexts: ['', '', 'name1' ],
+            dataType: "lookup", values: [undefined, null, 1],
             lookup: {
                 dataSource: {
                     store: { type: 'array', data: [{ id: 1, name: 'name1' }] },
@@ -552,7 +552,7 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
         const column = { dataField: 'f1', dataType: config.dataType, lookup: config.lookup },
             ds = config.values.map(item => { return { f1: item }; });
 
-        helper.runXlsxCellPreparedTest(assert,
+        helper.runCustomizeXlsxCellTest(assert,
             {
                 columns: [column],
                 dataSource: ds,
@@ -563,12 +563,10 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
                 for(let i = 0; i < config.values.length; i++) {
                     result.push({
                         rowType: 'data',
-                        row: { data: ds[i], rowType: 'data' },
+                        data: ds[i],
                         column: grid.columnOption(0),
-                        value: config.values[i],
-                        displayValue: config.expectedDisplayValues ? config.expectedDisplayValues[i] : config.values[i],
-                        text: config.expectedTexts ? config.expectedTexts[i] : config.values[i] }
-                    );
+                        value: config.values[i]
+                    });
                 }
                 return result;
             }
@@ -578,20 +576,20 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
 
 QUnit.test("Check event arguments for data row cell with formatting", function(assert) {
     const ds = [{ f1: 1 }];
-    helper.runXlsxCellPreparedTest(assert,
+    helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [{ dataField: "f1", dataType: "number", format: "currency" }],
             dataSource: ds,
             showColumnHeaders: false,
         },
         (grid) => [
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: '$1' },
+            { data: ds[0], column: grid.columnOption(0), rowType: 'data', value: ds[0].f1 },
         ]
     );
 });
 
 QUnit.test("Check event arguments for header", function(assert) {
-    helper.runXlsxCellPreparedTest(assert,
+    helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [{ dataField: "f1" }],
             dataSource: [],
@@ -604,7 +602,7 @@ QUnit.test("Check event arguments for header", function(assert) {
 
 QUnit.test("Check event arguments for bands", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
-    helper.runXlsxCellPreparedTest(assert,
+    helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
                 { dataField: "f1" },
@@ -625,16 +623,16 @@ QUnit.test("Check event arguments for bands", function(assert) {
             { rowType: 'header', column: grid.columnOption(0) },
             { rowType: 'header', column: grid.columnOption(2) },
             { rowType: 'header', column: grid.columnOption(3) },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: 'f1' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: 'f2' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
+            { rowType: 'data', column: grid.columnOption(0), data: ds[0], value: ds[0].f1 },
+            { rowType: 'data', column: grid.columnOption(2), data: ds[0], value: ds[0].f2 },
+            { rowType: 'data', column: grid.columnOption(3), data: ds[0], value: ds[0].f3 },
         ]
     );
 });
 
 QUnit.test("Check event arguments for groupping 1 level", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2' }];
-    helper.runXlsxCellPreparedTest(assert,
+    helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -645,14 +643,14 @@ QUnit.test("Check event arguments for groupping 1 level", function(assert) {
         (grid) => [
             { rowType: 'header', column: grid.columnOption(1) },
             { rowType: 'group', column: grid.columnOption(0) },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: 'f2' },
+            { rowType: 'data', column: grid.columnOption(1), data: ds[0], value: ds[0].f2 },
         ]
     );
 });
 
 QUnit.test("Check event arguments for groupping 2 levels", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
-    helper.runXlsxCellPreparedTest(assert,
+    helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -665,14 +663,14 @@ QUnit.test("Check event arguments for groupping 2 levels", function(assert) {
             { rowType: 'header', column: grid.columnOption(2) },
             { rowType: 'group', column: grid.columnOption(0) },
             { rowType: 'group', column: grid.columnOption(1) },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
+            { rowType: 'data', column: grid.columnOption(2), data: ds[0], value: ds[0].f3 },
         ]
     );
 });
 
 QUnit.test("Check event arguments for group summary", function(assert) {
     const ds = [{ f1: 'str1', f2: 1 }];
-    helper.runXlsxCellPreparedTest(assert,
+    helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -684,16 +682,16 @@ QUnit.test("Check event arguments for group summary", function(assert) {
             },
         },
         (grid) => [
-            { column: grid.columnOption(1), rowType: 'header' },
-            { column: grid.columnOption(0), rowType: 'group' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: '1' },
+            { rowType: 'header', column: grid.columnOption(1) },
+            { rowType: 'group', column: grid.columnOption(0) },
+            { rowType: 'data', column: grid.columnOption(1), data: ds[0], value: ds[0].f2 },
         ]
     );
 });
 
 QUnit.test("Check event arguments for group summary with alignByColumn", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }];
-    helper.runXlsxCellPreparedTest(assert,
+    helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -713,8 +711,8 @@ QUnit.test("Check event arguments for group summary with alignByColumn", functio
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(1), rowType: 'group' },
             { column: grid.columnOption(1), rowType: 'group' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: 'f3' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f4, displayValue: ds[0].f4, text: 'f4' },
+            { column: grid.columnOption(2), rowType: 'data', data: ds[0], value: ds[0].f3 },
+            { column: grid.columnOption(3), rowType: 'data', data: ds[0], value: ds[0].f4 },
 
         ]
     );
@@ -725,7 +723,7 @@ QUnit.test("Check event arguments for group summary with showInGroupFooter", fun
         { f1: '1_f1', f2: '1_f2', f3: '1_f3', f4: '1_f4' },
         { f1: '2_f1', f2: '2_f2', f3: '2_f3', f4: '2_f4' }
     ];
-    helper.runXlsxCellPreparedTest(assert,
+    helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -745,18 +743,18 @@ QUnit.test("Check event arguments for group summary with showInGroupFooter", fun
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(0), rowType: 'group' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[0].f2, displayValue: ds[0].f2, text: '1_f2' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[0].f3, displayValue: ds[0].f3, text: '1_f3' },
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[0].f4, displayValue: ds[0].f4, text: '1_f4' },
+            { column: grid.columnOption(1), rowType: 'data', data: ds[0], value: ds[0].f2 },
+            { column: grid.columnOption(2), rowType: 'data', data: ds[0], value: ds[0].f3 },
+            { column: grid.columnOption(3), rowType: 'data', data: ds[0], value: ds[0].f4 },
             { column: grid.columnOption(1), rowType: 'groupfooter' },
             { column: grid.columnOption(2), rowType: 'groupfooter' },
             { column: grid.columnOption(3), rowType: 'groupfooter' },
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(0), rowType: 'group' },
             { column: grid.columnOption(0), rowType: 'group' },
-            { row: { data: ds[1], rowType: 'data' }, column: grid.columnOption(1), rowType: 'data', value: ds[1].f2, displayValue: ds[1].f2, text: '2_f2' },
-            { row: { data: ds[1], rowType: 'data' }, column: grid.columnOption(2), rowType: 'data', value: ds[1].f3, displayValue: ds[1].f3, text: '2_f3' },
-            { row: { data: ds[1], rowType: 'data' }, column: grid.columnOption(3), rowType: 'data', value: ds[1].f4, displayValue: ds[1].f4, text: '2_f4' },
+            { column: grid.columnOption(1), rowType: 'data', data: ds[1], value: ds[1].f2 },
+            { column: grid.columnOption(2), rowType: 'data', data: ds[1], value: ds[1].f3 },
+            { column: grid.columnOption(3), rowType: 'data', data: ds[1], value: ds[1].f4 },
             { column: grid.columnOption(1), rowType: 'groupfooter' },
             { column: grid.columnOption(2), rowType: 'groupfooter' },
             { column: grid.columnOption(3), rowType: 'groupfooter' },
@@ -766,7 +764,7 @@ QUnit.test("Check event arguments for group summary with showInGroupFooter", fun
 
 QUnit.test("Check event arguments for total summary", function(assert) {
     const ds = [{ f1: 1 }];
-    helper.runXlsxCellPreparedTest(assert,
+    helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [{ dataField: "f1", dataType: "number" }],
             dataSource: ds,
@@ -776,7 +774,7 @@ QUnit.test("Check event arguments for total summary", function(assert) {
             showColumnHeaders: false,
         },
         (grid) => [
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: ds[0].f1, displayValue: ds[0].f1, text: '1' },
+            { column: grid.columnOption(0), rowType: 'data', data: ds[0], value: ds[0].f1 },
             { column: grid.columnOption(0), rowType: 'totalFooter' },
         ]
     );
@@ -784,7 +782,7 @@ QUnit.test("Check event arguments for total summary", function(assert) {
 
 QUnit.test("Check event arguments for changes from customizeExportData", function(assert) {
     const ds = [{ f1: 'f1' }];
-    helper.runXlsxCellPreparedTest(assert,
+    helper.runCustomizeXlsxCellTest(assert,
         {
             columns: [{ dataField: "f1", dataType: "string" }],
             dataSource: ds,
@@ -794,7 +792,7 @@ QUnit.test("Check event arguments for changes from customizeExportData", functio
             showColumnHeaders: false,
         },
         (grid) => [
-            { row: { data: ds[0], rowType: 'data' }, column: grid.columnOption(0), rowType: 'data', value: 'f1+', displayValue: 'f1+', text: 'f1+' },
+            { column: grid.columnOption(0), rowType: 'data', data: ds[0], value: 'f1+' },
         ]
     );
 });
@@ -807,9 +805,11 @@ QUnit.test("Changes in 'e.xlsxCell.style' shouldn't modify a shared style object
         dataSource: [{ f1: 1 }, { f1: 2 }, { f1: 3 }],
         showColumnHeaders: false,
         loadingTimeout: undefined,
-        onXlsxCellPrepared: e => {
-            assert.step(e.xlsxCell.style.alignment.horizontal);
-            e.xlsxCell.style.alignment.horizontal = counter++;
+        export: {
+            customizeXlsxCell: e => {
+                assert.step(e.xlsxCell.style.alignment.horizontal);
+                e.xlsxCell.style.alignment.horizontal = counter++;
+            },
         },
         onFileSaving: e => {
             assert.verifySteps(['right', 'right', 'right']);
@@ -843,10 +843,10 @@ QUnit.test("Change string value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-            },
-            onXlsxCellPrepared: e => {
-                assert.strictEqual(e.xlsxCell.value, 'a');
-                e.xlsxCell.value = 'b';
+                customizeXlsxCell: e => {
+                    assert.strictEqual(e.xlsxCell.value, 'a');
+                    e.xlsxCell.value = 'b';
+                },
             },
         },
         { worksheet, sharedStrings }
@@ -872,10 +872,10 @@ QUnit.test("Change number value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-            },
-            onXlsxCellPrepared: e => {
-                assert.strictEqual(e.xlsxCell.value, 42);
-                e.xlsxCell.value = 43;
+                customizeXlsxCell: e => {
+                    assert.strictEqual(e.xlsxCell.value, 42);
+                    e.xlsxCell.value = 43;
+                },
             },
         },
         { worksheet, sharedStrings }
@@ -907,15 +907,15 @@ QUnit.test("Change date value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-            },
-            onXlsxCellPrepared: e => {
-                if(e.xlsxCell.value.getTime() === new Date(2018, 0, 21, 16, 55).getTime()) {
-                    assert.deepEqual(e.xlsxCell.value, new Date(2018, 0, 21, 16, 55));
-                    e.xlsxCell.value = new Date(2018, 0, 22, 16, 55);
-                } else {
-                    assert.deepEqual(e.xlsxCell.value, new Date(2019, 0, 21, 16, 55));
-                    e.xlsxCell.value = 43487.70486111111; // new Date(2019, 0, 22, 16, 55)
-                }
+                customizeXlsxCell: e => {
+                    if(e.xlsxCell.value.getTime() === new Date(2018, 0, 21, 16, 55).getTime()) {
+                        assert.deepEqual(e.xlsxCell.value, new Date(2018, 0, 21, 16, 55));
+                        e.xlsxCell.value = new Date(2018, 0, 22, 16, 55);
+                    } else {
+                        assert.deepEqual(e.xlsxCell.value, new Date(2019, 0, 21, 16, 55));
+                        e.xlsxCell.value = 43487.70486111111; // new Date(2019, 0, 22, 16, 55)
+                    }
+                },
             },
         },
         { worksheet, sharedStrings }
@@ -946,17 +946,15 @@ QUnit.test("Change boolean value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-            },
-            onXlsxCellPrepared: e => {
-                if(e.gridCell.value) {
-                    assert.strictEqual(e.xlsxCell.value, 'true');
-                    e.xlsxCell.value = 'false';
-                    // assert.strictEqual(e.xlsxCell.value, true); - DataProvider.getCellData(rowIndex, cellIndex) returns string
-                    // e.xlsxCell.value = false; - DataProvider doesn't provide a way to convert true/false to 'true'/'false'
-                } else {
-                    assert.strictEqual(e.xlsxCell.value, 'false');
-                    e.xlsxCell.value = true;
-                }
+                customizeXlsxCell: e => {
+                    if(e.gridCell.value) {
+                        assert.strictEqual(e.xlsxCell.value, 'true');
+                        e.xlsxCell.value = 'false';
+                    } else {
+                        assert.strictEqual(e.xlsxCell.value, 'false');
+                        e.xlsxCell.value = true;
+                    }
+                },
             },
         },
         { worksheet, sharedStrings }
@@ -992,29 +990,29 @@ QUnit.test("Change cell value data type", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-            },
-            onXlsxCellPrepared: e => {
-                if(e.gridCell.column.dataField === 'stringToNumber') {
-                    e.xlsxCell.value = 1;
-                    e.xlsxCell.dataType = 'n';
-                    e.xlsxCell.style = null;
-                    e.xlsxCell.numberFormat = null;
-                } else if(e.gridCell.column.dataField === 'numberToString') {
-                    e.xlsxCell.value = 'one';
-                    e.xlsxCell.dataType = 's';
-                    e.xlsxCell.style = null;
-                    e.xlsxCell.numberFormat = null;
-                } else if(e.gridCell.column.dataField === 'dateToString') {
-                    e.xlsxCell.value = 'my date';
-                    e.xlsxCell.dataType = 's';
-                    e.xlsxCell.style = null;
-                    e.xlsxCell.numberFormat = null;
-                } else if(e.gridCell.column.dataField === 'boolToNumber') {
-                    e.xlsxCell.value = 1;
-                    e.xlsxCell.dataType = 'n';
-                    e.xlsxCell.style = null;
-                    e.xlsxCell.numberFormat = null;
-                }
+                customizeXlsxCell: e => {
+                    if(e.gridCell.column.dataField === 'stringToNumber') {
+                        e.xlsxCell.value = 1;
+                        e.xlsxCell.dataType = 'n';
+                        e.xlsxCell.style = null;
+                        e.xlsxCell.numberFormat = null;
+                    } else if(e.gridCell.column.dataField === 'numberToString') {
+                        e.xlsxCell.value = 'one';
+                        e.xlsxCell.dataType = 's';
+                        e.xlsxCell.style = null;
+                        e.xlsxCell.numberFormat = null;
+                    } else if(e.gridCell.column.dataField === 'dateToString') {
+                        e.xlsxCell.value = 'my date';
+                        e.xlsxCell.dataType = 's';
+                        e.xlsxCell.style = null;
+                        e.xlsxCell.numberFormat = null;
+                    } else if(e.gridCell.column.dataField === 'boolToNumber') {
+                        e.xlsxCell.value = 1;
+                        e.xlsxCell.dataType = 'n';
+                        e.xlsxCell.style = null;
+                        e.xlsxCell.numberFormat = null;
+                    }
+                },
             },
         },
         { worksheet, sharedStrings }
@@ -1049,10 +1047,10 @@ QUnit.test("Clear reference to xlsx style record for header cell", function(asse
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-            },
-            onXlsxCellPrepared: e => {
-                e.xlsxCell.style = null;
-                e.xlsxCell.numberFormat = null;
+                customizeXlsxCell: e => {
+                    e.xlsxCell.style = null;
+                    e.xlsxCell.numberFormat = null;
+                },
             },
         },
         { styles, worksheet, sharedStrings }
@@ -1086,10 +1084,10 @@ QUnit.test("Clear reference to xlsx style record for number value cell", functio
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-            },
-            onXlsxCellPrepared: e => {
-                e.xlsxCell.style = null;
-                e.xlsxCell.numberFormat = null;
+                customizeXlsxCell: e => {
+                    e.xlsxCell.style = null;
+                    e.xlsxCell.numberFormat = null;
+                },
             },
         },
         { styles, worksheet, sharedStrings }
@@ -1127,10 +1125,10 @@ QUnit.test("Clear reference to xlsx style record and change number format for Nu
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-            },
-            onXlsxCellPrepared: e => {
-                e.xlsxCell.style = null;
-                e.xlsxCell.numberFormat = '0000';
+                customizeXlsxCell: e => {
+                    e.xlsxCell.style = null;
+                    e.xlsxCell.numberFormat = '0000';
+                },
             },
         },
         { styles, worksheet, sharedStrings }

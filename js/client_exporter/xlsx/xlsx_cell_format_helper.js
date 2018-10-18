@@ -2,6 +2,7 @@ import { isDefined } from "../../core/utils/type";
 import xlsxTagHelper from './xlsx_tag_helper';
 import xlsxCellAlignmentHelper from './xlsx_cell_alignment_helper';
 import xlsxFillHelper from './xlsx_fill_helper';
+import xlsxFontHelper from './xlsx_font_helper';
 
 const xlsxCellFormatHelper = {
     tryCreateTag: function(sourceObj, sharedItemsContainer) {
@@ -27,6 +28,33 @@ const xlsxCellFormatHelper = {
             };
             if(xlsxCellFormatHelper.isEmpty(result)) {
                 result = null;
+            }
+        }
+        return result;
+    },
+
+    copy: function(source) {
+        let result;
+        if(source === null) {
+            result = null;
+        } else if(isDefined(source)) {
+            result = {};
+
+            if(source.numberFormat !== undefined) {
+                result.numberFormat = source.numberFormat;
+            }
+
+            if(source.fill !== undefined) {
+                result.fill = xlsxFillHelper.copy(source.fill);
+            } else {
+                xlsxFillHelper.copySimpleFormat(source, result);
+            }
+
+            if(source.alignment !== undefined) {
+                result.alignment = xlsxCellAlignmentHelper.copy(source.alignment);
+            }
+            if(source.font !== undefined) {
+                result.font = xlsxFontHelper.copy(source.font);
             }
         }
         return result;

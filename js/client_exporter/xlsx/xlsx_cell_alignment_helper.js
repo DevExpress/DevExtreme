@@ -17,6 +17,23 @@ const xlsxCellAlignmentHelper = {
         return result;
     },
 
+    copy: function(source) {
+        let result = null;
+        if(isDefined(source)) {
+            result = {};
+            if(source.horizontal !== undefined) {
+                result.horizontal = source.horizontal;
+            }
+            if(source.vertical !== undefined) {
+                result.vertical = source.vertical;
+            }
+            if(source.wrapText !== undefined) {
+                result.wrapText = source.wrapText;
+            }
+        }
+        return result;
+    },
+
     areEqual: function(leftTag, rightTag) {
         return xlsxCellAlignmentHelper.isEmpty(leftTag) && xlsxCellAlignmentHelper.isEmpty(rightTag) ||
             (

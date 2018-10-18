@@ -18,6 +18,23 @@ const xlsxPatternFillHelper = {
         return result;
     },
 
+    copy: function(source) {
+        let result = null;
+        if(isDefined(source)) {
+            result = {};
+            if(source.patternType !== undefined) {
+                result.patternType = source.patternType;
+            }
+            if(source.backgroundColor !== undefined) {
+                result.backgroundColor = xlsxColorHelper.copy(source.backgroundColor);
+            }
+            if(source.foregroundColor !== undefined) {
+                result.foregroundColor = xlsxColorHelper.copy(source.foregroundColor);
+            }
+        }
+        return result;
+    },
+
     areEqual: function(leftTag, rightTag) {
         return xlsxPatternFillHelper.isEmpty(leftTag) && xlsxPatternFillHelper.isEmpty(rightTag) ||
             (

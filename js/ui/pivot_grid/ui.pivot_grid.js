@@ -877,7 +877,6 @@ var PivotGrid = Widget.inherit({
             onExported: that._createActionByOption("onExported"),
             onFileSaving: that._createActionByOption("onFileSaving"),
             onCellPrepared: that._createActionByOption("onCellPrepared"),
-            onXlsxCellPrepared: that._createActionByOption("onXlsxCellPrepared"),
         };
     },
 
@@ -941,7 +940,6 @@ var PivotGrid = Widget.inherit({
             case "onExported":
             case "onFileSaving":
             case "onCellPrepared":
-            case "onXlsxCellPrepared":
                 that._actions[args.name] = that._createActionByOption(args.name);
                 break;
             case "fieldChooser":

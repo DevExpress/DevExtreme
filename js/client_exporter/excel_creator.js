@@ -173,8 +173,8 @@ var ExcelCreator = Class.inherit({
         };
     },
 
-    _raiseXlsxCellPrepared: function({ dataProvider, value, dataType, style, sourceData }) {
-        const style_args = extend(true, {}, style);
+    _callCustomizeXlsxCell: function({ dataProvider, value, dataType, style, sourceData }) {
+        const style_args = XlsxFile.copyCellFormat(style);
         const numberFormat = style_args.numberFormat;
         delete style_args.numberFormat;
 
@@ -188,7 +188,7 @@ var ExcelCreator = Class.inherit({
             cellSourceData: sourceData
         };
 
-        dataProvider.onXlsxCellPrepared(args);
+        dataProvider.customizeXlsxCell(args);
 
         const newStyle = args.xlsxCell.style || {};
         newStyle.numberFormat = args.xlsxCell.numberFormat;
@@ -218,10 +218,10 @@ var ExcelCreator = Class.inherit({
 
             for(cellIndex = 0; cellIndex !== cellsLength; cellIndex++) {
                 cellData = that._prepareValue(rowIndex, cellIndex);
-                let cellStyleId = dataProvider.getStyleId(rowIndex, cellIndex);
-                if(dataProvider.onXlsxCellPrepared) {
+                let cellStyleId = this._styleIdToRegisteredStyleIdMap[dataProvider.getStyleId(rowIndex, cellIndex)];
+                if(dataProvider.hasCustomizeXlsxCell && dataProvider.hasCustomizeXlsxCell()) {
                     const value = cellData.sourceValue || cellData.value;
-                    const modifiedXlsxCell = this._raiseXlsxCellPrepared({
+                    const modifiedXlsxCell = this._callCustomizeXlsxCell({
                         dataProvider: dataProvider,
                         value: value,
                         dataType: cellData.type,
@@ -306,7 +306,7 @@ var ExcelCreator = Class.inherit({
                 }
             });
         });
-        that._styleArray.forEach(item => this._xlsxFile.registerCellFormat(item));
+        that._styleIdToRegisteredStyleIdMap = that._styleArray.map(item => this._xlsxFile.registerCellFormat(item));
     },
 
     _prepareCellData: function() {
