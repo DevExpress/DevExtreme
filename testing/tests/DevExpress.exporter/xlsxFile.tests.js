@@ -16,54 +16,6 @@ function getFullXml(xlsxFile) {
     return xlsxFile.generateCellFormatsXml() + xlsxFile.generateFillsXml() + xlsxFile.generateFontsXml() + xlsxFile.generateNumberFormatsXml();
 }
 
-QUnit.test("XlsxFile.copyCellFormat performance", function(assert) {
-    // Chrome - 100 ms
-    const format = {
-        numberFormat: 'asfdsf',
-        backgroundColor: 'sadfsdf',
-        patternStyle: 'sdfsdf',
-        patternColor: 'adfsdf1',
-        alignment: {
-            vertical: 'center',
-            wrapText: true,
-            horizontal: 'center',
-        },
-        font: {
-            size: 16,
-            name: 'asdf',
-            family: 'qerweqr',
-            scheme: '2134',
-            bold: true,
-            italic: false,
-            underline: 'ljkm',
-            color: {
-                rgb: 'asdfsadf',
-                theme: 'ee',
-            },
-        },
-    };
-    for(let i = 0; i < 1000000; i++) {
-        XlsxFile.copyCellFormat(format);
-    }
-    const format_ = XlsxFile.copyCellFormat(format);
-    assert.equal(format_.numberFormat, 'asfdsf');
-    assert.equal(format_.backgroundColor, 'sadfsdf');
-    assert.equal(format_.patternStyle, 'sdfsdf');
-    assert.equal(format_.patternColor, 'adfsdf1');
-    assert.equal(format_.alignment.vertical, 'center');
-    assert.equal(format_.alignment.wrapText, true);
-    assert.equal(format_.alignment.horizontal, 'center');
-    assert.equal(format_.font.size, 16);
-    assert.equal(format_.font.name, 'asdf');
-    assert.equal(format_.font.family, 'qerweqr');
-    assert.equal(format_.font.scheme, '2134');
-    assert.equal(format_.font.bold, true);
-    assert.equal(format_.font.italic, false);
-    assert.equal(format_.font.underline, 'ljkm');
-    assert.equal(format_.font.color.rgb, 'asdfsadf');
-    assert.equal(format_.font.color.theme, 'ee');
-});
-
 QUnit.test("Empty 1", function(assert) {
     const file = new XlsxFile();
     assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
