@@ -218,7 +218,7 @@ var ExcelCreator = Class.inherit({
 
             for(cellIndex = 0; cellIndex !== cellsLength; cellIndex++) {
                 cellData = that._prepareValue(rowIndex, cellIndex);
-                let cellStyleId = this._styleArrayIndexes[dataProvider.getStyleId(rowIndex, cellIndex)];
+                let cellStyleId = this._styleIdToRegisteredStyleIdMap[dataProvider.getStyleId(rowIndex, cellIndex)];
                 if(dataProvider.hasCustomizeXlsxCell && dataProvider.hasCustomizeXlsxCell()) {
                     const value = cellData.sourceValue || cellData.value;
                     const modifiedXlsxCell = this._callCustomizeXlsxCell({
@@ -306,7 +306,7 @@ var ExcelCreator = Class.inherit({
                 }
             });
         });
-        that._styleArrayIndexes = that._styleArray.map(item => this._xlsxFile.registerCellFormat(item));
+        that._styleIdToRegisteredStyleIdMap = that._styleArray.map(item => this._xlsxFile.registerCellFormat(item));
     },
 
     _prepareCellData: function() {
