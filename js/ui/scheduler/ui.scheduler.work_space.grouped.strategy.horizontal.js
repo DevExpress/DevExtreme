@@ -1,3 +1,5 @@
+var isDefined = require("../../core/utils/type").isDefined;
+
 var GroupedStrategy = require("./ui.scheduler.work_space.grouped.strategy");
 
 var HORIZONTAL_GROUPED_ATTR = "dx-group-row-count";
@@ -127,14 +129,14 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
     },
 
     getGroupBoundsOffset: function(cellCount, $cells, cellWidth, coordinates) {
-        var groupIndex = this._workSpace.isGroupedByDate() ? this._workSpace._getGroupCount() - 1 : coordinates.groupIndex;
+        var groupIndex = this._workSpace.isGroupedByDate() ? this._workSpace._getGroupCount() - 1 : coordinates.groupIndex,
+            cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
 
-        if(isNaN(groupIndex)) {
+        if(isNaN(groupIndex) || !isDefined(groupIndex)) {
             groupIndex = Math.floor(cellIndex / cellCount);
         }
 
-        var cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates),
-            startCellIndex = groupIndex * cellCount,
+        var startCellIndex = groupIndex * cellCount,
             startOffset = $cells.eq(startCellIndex).offset().left - cellWidth / 2,
             endOffset = $cells.eq(startCellIndex + cellCount - 1).offset().left + cellWidth + cellWidth / 2;
 
