@@ -807,6 +807,45 @@ QUnit.test("panel should be rendered correctly after openedStateMode changing, h
     fx.off = false;
 });
 
+QUnit.test("panel should be rendered correctly after openedStateMode changing, horizontal direction, right + slide", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        maxSize: 300,
+        opened: true,
+        revealMode: "slide",
+        position: "right",
+        openedStateMode: "shrink"
+    });
+
+    const instance = $element.dxDrawer("instance");
+    instance.option("openedStateMode", "push");
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.css("right"), "0px", "panel has correct right");
+    assert.equal($panel.css("left"), "700px", "panel has correct left");
+    fx.off = false;
+});
+
+QUnit.test("panel should be rendered correctly after openedStateMode changing, horizontal direction, right + expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        maxSize: 300,
+        opened: true,
+        revealMode: "expand",
+        position: "right",
+        openedStateMode: "shrink"
+    });
+
+    const instance = $element.dxDrawer("instance");
+    instance.option("openedStateMode", "overlap");
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.css("marginRight"), "0px", "panel has correct right");
+    fx.off = false;
+});
+
 QUnit.test("panel should be rendered correctly after openedStateMode changing, vertical direction", assert => {
     fx.off = true;
 
