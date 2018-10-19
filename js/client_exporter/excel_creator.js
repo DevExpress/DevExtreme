@@ -8,6 +8,7 @@ var Class = require("../core/class"),
     fileSaver = require("./file_saver"),
     excelFormatConverter = require("./excel_format_converter"),
     XlsxFile = require("./xlsx/xlsx_file"),
+    isDefined = typeUtils.isDefined,
     XML_TAG = "<?xml version=\"1.0\" encoding=\"utf-8\"?>",
     GROUP_SHEET_PR_XML = "<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr>",
     SINGLE_SHEET_PR_XML = "<sheetPr/>",
@@ -174,28 +175,65 @@ var ExcelCreator = Class.inherit({
     },
 
     _callCustomizeExcelCell: function({ dataProvider, value, dataType, style, sourceData }) {
-        const style_args = XlsxFile.copyCellFormat(style);
-        const numberFormat = style_args.numberFormat;
-        delete style_args.numberFormat;
+        const styleCopy = XlsxFile.copyCellFormat(style);
 
         const args = {
-            xlsxCell: {
-                style: style_args,
-                value: value,
-                dataType: dataType,
-                numberFormat: numberFormat,
-            },
-            cellSourceData: sourceData
+            value: value,
+            dataType: dataType,
+            numberFormat: styleCopy.numberFormat,
+            clearStyle: function() {
+                this.horizontalAlignment = null;
+                this.verticalAlignment = null;
+                this.wrapTextEnabled = null;
+                this.font = null;
+                this.numberFormat = null;
+            }
         };
 
-        dataProvider.customizeExcelCell(args);
+        if(isDefined(styleCopy)) {
+            if(isDefined(styleCopy.alignment)) {
+                args.horizontalAlignment = styleCopy.alignment.horizontal;
+                args.verticalAlignment = styleCopy.alignment.vertical;
+                args.wrapTextEnabled = styleCopy.alignment.wrapText;
+            }
+            args.backgroundColor = styleCopy.backgroundColor;
+            args.patternStyle = styleCopy.patternStyle;
+            args.patternColor = styleCopy.patternColor;
+            args.font = styleCopy.font;
+        }
 
-        const newStyle = args.xlsxCell.style || {};
-        newStyle.numberFormat = args.xlsxCell.numberFormat;
+        dataProvider.customizeExcelCell(args, sourceData);
+
+        let newStyle;
+
+        if(args.style !== undefined) {
+            newStyle = args.style;
+            // newStyle = {
+            //     alignment: args.style.alignment,
+            //     font: args.style.font,
+            //     fill: args.style.fill,
+            //     numberFormat: args.style.numberFormat,
+            // };
+        } else {
+            newStyle = styleCopy || {};
+
+            newStyle.font = args.font;
+
+            newStyle.alignment = newStyle.alignment || {};
+            newStyle.alignment.horizontal = args.horizontalAlignment;
+            newStyle.alignment.vertical = args.verticalAlignment;
+            newStyle.alignment.wrapText = args.wrapTextEnabled;
+
+            newStyle.backgroundColor = args.backgroundColor;
+            newStyle.patternStyle = args.patternStyle;
+            newStyle.patternColor = args.patternColor;
+
+            newStyle.numberFormat = args.numberFormat;
+        }
 
         return {
-            value: args.xlsxCell.value,
-            dataType: args.xlsxCell.dataType,
+            value: args.value,
+            dataType: args.dataType,
             style: newStyle,
         };
     },

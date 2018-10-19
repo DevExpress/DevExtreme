@@ -324,7 +324,11 @@ QUnit.test("customizeExcelCell - set alignment: null for all xlsx cells", functi
         assert,
         {
             export: {
-                customizeExcelCell: e => e.xlsxCell.style.alignment = null,
+                customizeExcelCell: e => {
+                    e.horizontalAlignment = null;
+                    e.verticalAlignment = null;
+                    e.wrapTextEnabled = null;
+                },
             },
         },
         { styles, worksheet, sharedStrings }
