@@ -17,7 +17,7 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     ValidationEngine = require("../validation_engine"),
     LayoutManager = require("./ui.form.layout_manager"),
-    InstanceStorage = require("./instance_storage"),
+    InstanceStorage = require("./instance_storage").default,
     TabPanel = require("../tab_panel"),
     Scrollable = require("../scroll_view/ui.scrollable"),
     Deferred = require("../../core/utils/deferred").Deferred,
@@ -1548,7 +1548,7 @@ var Form = Widget.inherit({
             validationGroupConfig = ValidationEngine.getGroupConfig(validationGroup);
 
         validationGroupConfig && validationGroupConfig.reset();
-        this._instanceStorage.each((instance, item) => {
+        this._instanceStorage.each(function(instance, item) {
             var isButton = item.itemType === "button";
 
             if(!isButton) {
@@ -1573,7 +1573,9 @@ var Form = Widget.inherit({
 
     registerKeyHandler: function(key, handler) {
         this.callBase(key, handler);
-        this._instanceStorage.each(instance => instance.registerKeyHandler(key, handler));
+        this._instanceStorage.each(function(instance) {
+            instance.registerKeyHandler(key, handler);
+        });
     },
 
     _focusTarget: function() {

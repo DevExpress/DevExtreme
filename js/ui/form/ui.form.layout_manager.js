@@ -1,7 +1,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
-    InstanceStorage = require("./instance_storage"),
+    InstanceStorage = require("./instance_storage").default,
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
     domUtils = require("../../core/utils/dom"),
@@ -1067,7 +1067,7 @@ var LayoutManager = Widget.inherit({
             case "layoutData":
                 if(this.option("items")) {
                     if(!typeUtils.isEmptyObject(args.value)) {
-                        this._instanceStorage.each((instance, item) => {
+                        this._instanceStorage.each(function(instance, item) {
                             var name = that._getName(item);
 
                             if(name) {

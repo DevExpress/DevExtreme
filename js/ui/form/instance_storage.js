@@ -1,7 +1,7 @@
 import Guid from "../../core/guid";
 import { each } from "../../core/utils/iterator";
 
-class InstanceStorage {
+export default class InstanceStorage {
     constructor() {
         this._storage = {};
     }
@@ -61,5 +61,3 @@ class InstanceStorage {
         });
     };
 }
-
-module.exports = InstanceStorage;
