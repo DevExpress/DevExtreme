@@ -1,6 +1,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
+    InstanceStorage = require("./instance_storage").default,
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
     domUtils = require("../../core/utils/dom"),
@@ -105,6 +106,7 @@ var LayoutManager = Widget.inherit({
     _init: function() {
         this.callBase();
         this._itemWatchers = [];
+        this._instanceStorage = new InstanceStorage();
         this._initDataAndItems(this.option("layoutData"));
     },
 
@@ -299,15 +301,11 @@ var LayoutManager = Widget.inherit({
     },
 
     _initMarkup: function() {
-        this._clearEditorInstances();
+        this._instanceStorage.clear();
         this.$element().addClass(FORM_LAYOUT_MANAGER_CLASS);
 
         this.callBase();
         this._renderResponsiveBox();
-    },
-
-    _clearEditorInstances: function() {
-        this._editorInstancesByField = {};
     },
 
     _hasBrowserFlex: function() {
@@ -576,7 +574,9 @@ var LayoutManager = Widget.inherit({
 
         $container.parent().css("justifyContent", this._getButtonVerticalAlignment(item));
 
-        this._createComponent($button, "dxButton", extend(defaultOptions, item.buttonOptions));
+        var instance = this._createComponent($button, "dxButton", extend(defaultOptions, item.buttonOptions));
+
+        this._instanceStorage.add(item, instance, item.guid);
         this._addItemClasses($container, item.col);
 
         return $button;
@@ -621,7 +621,7 @@ var LayoutManager = Widget.inherit({
             labelOptions: labelOptions
         });
 
-        that._renderEditor({
+        var instance = that._renderEditor({
             $container: $editor,
             dataField: item.dataField,
             name: name,
@@ -633,6 +633,8 @@ var LayoutManager = Widget.inherit({
             id: id,
             validationBoundary: that.option("validationBoundary")
         });
+
+        this._instanceStorage.add(item, instance, item.guid);
 
         var $validationTarget = $editor.children().first();
 
@@ -780,7 +782,7 @@ var LayoutManager = Widget.inherit({
             isRequired: options.isRequired
         };
 
-        this._createEditor(options.$container, renderOptions, editorOptions);
+        return this._createEditor(options.$container, renderOptions, editorOptions);
     },
 
     _replaceDataOptions: function(originalOptions, resultOptions) {
@@ -871,7 +873,6 @@ var LayoutManager = Widget.inherit({
                 editorInstance = that._createComponent($editor, renderOptions.editorType, editorOptions);
                 editorInstance.setAria("describedby", renderOptions.helpID);
                 editorInstance.setAria("required", renderOptions.isRequired);
-                that._registerEditorInstance(editorInstance, renderOptions);
 
                 if(themes.isMaterial()) {
                     that._addWrapperInvalidClass(editorInstance);
@@ -884,6 +885,8 @@ var LayoutManager = Widget.inherit({
                 errors.log("E1035", e.message);
             }
         }
+
+        return editorInstance;
     },
 
     _getComponentOwner: function() {
@@ -949,14 +952,6 @@ var LayoutManager = Widget.inherit({
             };
 
         return FIELD_ITEM_CONTENT_LOCATION_CLASS + oppositeClasses[labelLocation];
-    },
-
-    _registerEditorInstance: function(instance, options) {
-        var name = this._getName(options);
-
-        if(name) {
-            this._editorInstancesByField[name] = instance;
-        }
     },
 
     _createComponent: function($editor, type, editorOptions) {
@@ -1055,6 +1050,8 @@ var LayoutManager = Widget.inherit({
     },
 
     _optionChanged: function(args) {
+        var that = this;
+
         if(args.fullName.search("layoutData.") === 0) {
             return;
         }
@@ -1070,15 +1067,19 @@ var LayoutManager = Widget.inherit({
             case "layoutData":
                 if(this.option("items")) {
                     if(!typeUtils.isEmptyObject(args.value)) {
-                        each(this._editorInstancesByField, function(name, editor) {
-                            var valueGetter = dataUtils.compileGetter(name),
-                                dataValue = valueGetter(args.value);
+                        this._instanceStorage.each(function(instance, item) {
+                            var name = that._getName(item);
 
-                            if(dataValue === undefined) {
-                                editor.reset();
-                                editor.option("isValid", true);
-                            } else {
-                                editor.option("value", dataValue);
+                            if(name) {
+                                var valueGetter = dataUtils.compileGetter(name),
+                                    dataValue = valueGetter(args.value);
+
+                                if(dataValue === undefined) {
+                                    instance.reset();
+                                    instance.option("isValid", true);
+                                } else {
+                                    instance.option("value", dataValue);
+                                }
                             }
                         });
                     }
@@ -1203,7 +1204,7 @@ var LayoutManager = Widget.inherit({
     },
 
     getEditor: function(field) {
-        return this._editorInstancesByField[field];
+        return this._instanceStorage.findByDataField(field) || this._instanceStorage.findByName(field);
     },
 
     isSingleColumnMode: function(component) {
