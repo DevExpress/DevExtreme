@@ -120,6 +120,28 @@ QUnit.test("text option should be changed after format option change", function(
     assert.equal(this.instance.option("text"), "1", "text has been changed");
 });
 
+QUnit.test("should not update value if the formated text has not been changed", function(assert) {
+    var done = assert.async();
+
+    this.instance.option({
+        value: 1.129,
+        format: "0.009",
+        onFocusIn: function(e) {
+            assert.equal(e.component.option("value"), "1.129", "value is correct");
+            e.component.option("format", "0.00");
+        },
+        onFocusOut: function(e) {
+            assert.equal(e.component.option("value"), "1.129", "value is correct");
+            e.component.option("format", "0.009");
+            done();
+        }
+    });
+
+    this.keyboard
+        .caret({ start: 0, end: 6 })
+        .blur();
+});
+
 
 QUnit.module("format: sign and minus button", moduleConfig);
 
