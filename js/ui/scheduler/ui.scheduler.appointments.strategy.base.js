@@ -658,7 +658,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     needSeparateAppointment: function(allDay) {
-        return allDay;
+        return this.instance.fire("isGroupedByDate") && allDay;
     },
 
     _getMaxAppointmentCountPerCell: function() {
