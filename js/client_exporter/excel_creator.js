@@ -179,7 +179,6 @@ var ExcelCreator = Class.inherit({
 
         const args = {
             value: value,
-            dataType: dataType,
             numberFormat: styleCopy.numberFormat,
             clearStyle: function() {
                 this.horizontalAlignment = null;
@@ -204,36 +203,24 @@ var ExcelCreator = Class.inherit({
 
         dataProvider.customizeExcelCell(args, sourceData);
 
-        let newStyle;
+        let newStyle = styleCopy || {};
 
-        if(args.style !== undefined) {
-            newStyle = args.style;
-            // newStyle = {
-            //     alignment: args.style.alignment,
-            //     font: args.style.font,
-            //     fill: args.style.fill,
-            //     numberFormat: args.style.numberFormat,
-            // };
-        } else {
-            newStyle = styleCopy || {};
+        newStyle.font = args.font;
 
-            newStyle.font = args.font;
+        newStyle.alignment = newStyle.alignment || {};
+        newStyle.alignment.horizontal = args.horizontalAlignment;
+        newStyle.alignment.vertical = args.verticalAlignment;
+        newStyle.alignment.wrapText = args.wrapTextEnabled;
 
-            newStyle.alignment = newStyle.alignment || {};
-            newStyle.alignment.horizontal = args.horizontalAlignment;
-            newStyle.alignment.vertical = args.verticalAlignment;
-            newStyle.alignment.wrapText = args.wrapTextEnabled;
+        newStyle.backgroundColor = args.backgroundColor;
+        newStyle.patternStyle = args.patternStyle;
+        newStyle.patternColor = args.patternColor;
 
-            newStyle.backgroundColor = args.backgroundColor;
-            newStyle.patternStyle = args.patternStyle;
-            newStyle.patternColor = args.patternColor;
-
-            newStyle.numberFormat = args.numberFormat;
-        }
+        newStyle.numberFormat = args.numberFormat;
 
         return {
             value: args.value,
-            dataType: args.dataType,
+            dataType: dataType,
             style: newStyle,
         };
     },
@@ -339,7 +326,7 @@ var ExcelCreator = Class.inherit({
                 numberFormat,
                 alignment: {
                     vertical: "top",
-                    wrapText: Number(!!style.wrapText),
+                    wrapText: !!style.wrapText,
                     horizontal: style.alignment || "left"
                 }
             });

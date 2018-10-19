@@ -18,7 +18,7 @@ QUnit.test("Change alignment", function(assert) {
         helper.STYLESHEET_STANDARDSTYLES +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="bottom" wrapText="1" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1"><alignment vertical="distributed" wrapText="1" horizontal="centerContinuous" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML +
@@ -28,89 +28,6 @@ QUnit.test("Change alignment", function(assert) {
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [{ dataField: "field1", alignment: 'right' }],
-            dataSource: [{ field1: 42 }],
-            showColumnHeaders: false,
-            export: {
-                ignoreExcelErrors: false,
-                enabled: true,
-                customizeExcelCell: e => {
-                    e.horizontalAlignment = 'left';
-                    e.verticalAlignment = 'bottom';
-                    e.wrapTextEnabled = true;
-                },
-            },
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Change alignment (OOXML)", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="6">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1"><alignment vertical="bottom" wrapText="1" horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [{ dataField: "field1", alignment: 'right' }],
-            dataSource: [{ field1: 42 }],
-            showColumnHeaders: false,
-            export: {
-                ignoreExcelErrors: false,
-                enabled: true,
-                customizeExcelCell: e => {
-                    e.style = {
-                        alignment: {
-                            horizontal: 'left',
-                            vertical: 'bottom',
-                            wrapText: true,
-                        }
-                    };
-                },
-            },
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Change alignment: set null (OOXML)", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="5">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="n"><v>42</v></c></row>' +
         '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
@@ -123,214 +40,106 @@ QUnit.test("Change alignment: set null (OOXML)", function(assert) {
             export: {
                 ignoreExcelErrors: false,
                 enabled: true,
-                customizeExcelCell: e => e.style = { alignment: null },
+                customizeExcelCell: e => {
+                    e.clearStyle();
+                    e.horizontalAlignment = 'centerContinuous';
+                    e.verticalAlignment = 'distributed';
+                    e.wrapTextEnabled = true;
+                },
             },
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Check horizontal alignment value", function(assert) {
+QUnit.test("Set alignment to null", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" fontId="0" applyNumberFormat="0" numFmtId="0" />' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", alignment: 'right' }],
+            columns: [{ dataField: "field1" }],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: false,
             export: {
                 ignoreExcelErrors: false,
                 enabled: true,
-                customizeExcelCell: e => assert.strictEqual(e.horizontalAlignment, 'right'),
+                customizeExcelCell: e => {
+                    e.horizontalAlignment = null;
+                    e.verticalAlignment = null;
+                    e.wrapTextEnabled = null;
+                }
+            },
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Check default alignment by column.alignment", function(assert) {
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: "field1", alignment: 'center' }],
+            dataSource: [{ field1: 42 }],
+            showColumnHeaders: true,
+            export: {
+                customizeExcelCell: e => {
+                    assert.strictEqual(e.horizontalAlignment, 'center');
+                    assert.strictEqual(e.verticalAlignment, 'top');
+                }
             },
         }
     );
 });
 
-QUnit.test("Change horizontal alignment 1", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="6">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
-
+QUnit.test("Check default alignment by wordWrapEnabled", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", alignment: 'right' }],
+            columns: [{ dataField: "field1", alignment: 'center' }],
             dataSource: [{ field1: 42 }],
-            showColumnHeaders: false,
+            showColumnHeaders: true,
+            wordWrapEnabled: true,
             export: {
-                ignoreExcelErrors: false,
-                enabled: true,
-                customizeExcelCell: e => e.horizontalAlignment = 'left',
-            },
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Change horizontal alignment 1 (OOXML)", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="6">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1"><alignment horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [{ dataField: "field1", alignment: 'right' }],
-            dataSource: [{ field1: 42 }],
-            showColumnHeaders: false,
-            export: {
-                ignoreExcelErrors: false,
-                enabled: true,
-                customizeExcelCell: e => e.style = { alignment: { horizontal: 'left' } },
-            },
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Change horizontal alignment 2", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="6">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [{ dataField: "field1", alignment: 'right' }],
-            dataSource: [{ field1: 42 }],
-            showColumnHeaders: false,
-            export: {
-                ignoreExcelErrors: false,
-                enabled: true,
-                customizeExcelCell: e => e.horizontalAlignment = null,
-            },
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Change horizontal alignment 2 (OOXML)", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="5">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="n"><v>42</v></c></row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [{ dataField: "field1", alignment: 'right' }],
-            dataSource: [{ field1: 42 }],
-            showColumnHeaders: false,
-            export: {
-                ignoreExcelErrors: false,
-                enabled: true,
-                customizeExcelCell: e => e.style = { alignment: { horizontal: null } },
-            },
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Change horizontal alignment by a property value of source object (OOXML)", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="6">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1"><alignment horizontal="center" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>1</v></c><c r="B1" s="3" t="n"><v>1</v></c></row>' +
-        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: ['data1', 'data2'],
-            dataSource: [
-                { data1: 1, data2: 1, alignment: 'center' },
-                { data1: 2, data2: 2, alignment: 'right' },
-            ],
-            showColumnHeaders: false,
-            export: {
-                enabled: true,
                 customizeExcelCell: e => {
-                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.data.data1 === 1) {
-                        e.style = {
-                            alignment: {
-                                horizontal: e.gridCell.data.alignment
-                            }
-                        };
-                    }
-                },
+                    assert.strictEqual(e.wrapTextEnabled, true);
+                }
             },
-        },
-        { styles, worksheet, sharedStrings }
+        }
+    );
+});
+
+QUnit.test("Check default alignment by export.excelWrapTextEnabled", function(assert) {
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: "field1", alignment: 'center' }],
+            dataSource: [{ field1: 42 }],
+            showColumnHeaders: true,
+            export: {
+                excelWrapTextEnabled: true,
+                customizeExcelCell: e => {
+                    assert.strictEqual(e.wrapTextEnabled, true);
+                }
+            },
+        }
     );
 });
 
@@ -347,7 +156,7 @@ QUnit.test("Change fill", function(assert) {
         helper.STYLESHEET_STANDARDSTYLES +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" fillId="2" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" fillId="2" />' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
@@ -367,6 +176,7 @@ QUnit.test("Change fill", function(assert) {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
+                    e.clearStyle();
                     e.backgroundColor = 'FFFFFF00';
                     e.patternColor = 'FF00FF00';
                     e.patternStyle = 'lightGrid';
@@ -377,49 +187,35 @@ QUnit.test("Change fill", function(assert) {
     );
 });
 
-QUnit.test("Change fill (OOXML)", function(assert) {
+QUnit.test("Set fill to null", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML1 +
-        '<fills count="3">' +
-        '<fill><patternFill patternType="none" /></fill>' +
-        '<fill><patternFill patternType="Gray125" /></fill>' +
-        '<fill><patternFill patternType="darkVertical"><fgColor rgb="FF20FF60" /></patternFill></fill>' +
-        '</fills>' +
-        helper.BASE_STYLE_XML2 +
-        '<cellXfs count="6">' +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" fillId="2" />' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>42</v></c></row>' +
         '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1" }],
+            columns: ['field1'],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: false,
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    e.style = {
-                        fill: {
-                            patternFill: {
-                                patternType: 'darkVertical',
-                                foregroundColor: {
-                                    rgb: 'FF20FF60'
-                                }
-                            }
-                        }
-                    };
+                    e.backgroundColor = null;
+                    e.patternColor = null;
+                    e.patternStyle = null;
                 },
             },
         },
@@ -427,59 +223,21 @@ QUnit.test("Change fill (OOXML)", function(assert) {
     );
 });
 
-QUnit.test("Change fill by a property value of source object (OOXML)", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML1 +
-        '<fills count="3">' +
-        '<fill><patternFill patternType="none" /></fill>' +
-        '<fill><patternFill patternType="Gray125" /></fill>' +
-        '<fill><patternFill patternType="darkVertical"><fgColor rgb="FF00FF00" /></patternFill></fill>' +
-        '</fills>' +
-        helper.BASE_STYLE_XML2 +
-        '<cellXfs count="6">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" fillId="2" />' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>1</v></c><c r="B1" s="3" t="n"><v>1</v></c></row>' +
-        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
-
+QUnit.test("Check default fill", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: ['data1', 'data2'],
-            dataSource: [
-                { data1: 1, data2: 1, fillPattern: 'darkVertical', fillColor: 'FF00FF00' },
-                { data1: 2, data2: 2, fillPattern: 'darkHorizontal', fillColor: 'FF0000FF' },
-            ],
-            showColumnHeaders: false,
+            columns: ['field1'],
+            dataSource: [{ field1: 42 }],
+            showColumnHeaders: true,
             export: {
-                enabled: true,
                 customizeExcelCell: e => {
-                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.data.data1 === 1) {
-                        e.style = {
-                            fill: {
-                                patternFill: {
-                                    patternType: e.gridCell.data.fillPattern,
-                                    foregroundColor: {
-                                        rgb: e.gridCell.data.fillColor
-                                    }
-                                }
-                            }
-                        };
-                    }
+                    assert.strictEqual(e.backgroundColor, undefined);
+                    assert.strictEqual(e.patternColor, undefined);
+                    assert.strictEqual(e.patternStyle, undefined);
                 },
             },
-        },
-        { styles, worksheet, sharedStrings }
+        }
     );
 });
 
@@ -494,42 +252,52 @@ QUnit.test("Change font", function(assert) {
         '<fill><patternFill patternType="none" /></fill>' +
         '</fills>' +
         helper.BASE_STYLE_XML2 +
-        '<cellXfs count="6">' +
+        '<cellXfs count="7">' +
         helper.STYLESHEET_STANDARDSTYLES +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="2" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" fontId="2" />' +
+        '<xf xfId="0" fontId="0" />' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>42</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="6" t="n"><v>43</v></c></row>' +
         '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1" }],
-            dataSource: [{ field1: 42 }],
+            columns: [{ dataField: "f1" }],
+            dataSource: [{ f1: 42 }, { f1: 43 }],
             showColumnHeaders: false,
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-                customizeExcelCell: e => e.font.size = 22,
+                customizeExcelCell: e => {
+                    e.horizontalAlignment = null;
+                    e.verticalAlignment = null;
+                    e.wrapTextEnabled = null;
+                    e.numberFormat = null;
+                    if(e.gridCell.data && e.gridCell.data.f1 === 42) {
+                        e.font.size = 22;
+                    }
+                }
             },
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Change font (OOXML)", function(assert) {
+QUnit.test("Change font: create new font", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<fonts count="3">' +
         '<font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
         '<font><b /><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
-        '<font><sz val="22" /><name val="Calibri" /></font>' +
+        '<font><b /><sz val="22" /><name val="name 1" /><family val="3" /><scheme val="scheme 1" /><i /><u val="underline 1" /></font>' +
         '</fonts>' +
         '<fills count="1">' +
         '<fill><patternFill patternType="none" /></fill>' +
@@ -558,14 +326,26 @@ QUnit.test("Change font (OOXML)", function(assert) {
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-                customizeExcelCell: e => e.style = { font: { name: 'Calibri', size: 22 } },
+                customizeExcelCell: e => {
+                    e.clearStyle();
+                    e.font = {
+                        bold: true,
+                        color: 'FF00FF00',
+                        family: 3,
+                        italic: true,
+                        name: 'name 1',
+                        scheme: 'scheme 1',
+                        size: 22,
+                        underline: 'underline 1',
+                    };
+                }
             },
         },
         { styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Change font: set null", function(assert) {
+QUnit.test("Set font to null", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<fonts count="2">' +
         '<font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
@@ -605,29 +385,7 @@ QUnit.test("Change font: set null", function(assert) {
     );
 });
 
-QUnit.test("Change font: set null (OOXML)", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        '<fonts count="2">' +
-        '<font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
-        '<font><b /><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
-        '</fonts>' +
-        '<fills count="1">' +
-        '<fill><patternFill patternType="none" /></fill>' +
-        '</fills>' +
-        helper.BASE_STYLE_XML2 +
-        '<cellXfs count="5">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" t="n"><v>42</v></c></row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
-
+QUnit.test("Check default font", function(assert) {
     helper.runGeneralTest(
         assert,
         {
@@ -635,87 +393,45 @@ QUnit.test("Change font: set null (OOXML)", function(assert) {
             dataSource: [{ field1: 42 }],
             showColumnHeaders: false,
             export: {
-                enabled: true,
-                ignoreExcelErrors: false,
-                customizeExcelCell: e => e.style = { font: null },
+                customizeExcelCell: e => {
+                    assert.strictEqual(e.font.bold, false);
+                    assert.strictEqual(e.font.color.theme, 1);
+                    assert.strictEqual(e.font.family, 2);
+                    assert.strictEqual(e.font.italic, undefined);
+                    assert.strictEqual(e.font.name, 'Calibri');
+                    assert.strictEqual(e.font.scheme, 'minor');
+                    assert.strictEqual(e.font.size, 11);
+                    assert.strictEqual(e.font.underline, undefined);
+                }
             },
-        },
-        { styles, worksheet, sharedStrings }
+        }
+    );
+});
+
+QUnit.test("Check default header font", function(assert) {
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: "field1" }],
+            dataSource: [],
+            showColumnHeaders: true,
+            export: {
+                customizeExcelCell: e => {
+                    assert.strictEqual(e.font.bold, true);
+                    assert.strictEqual(e.font.color.theme, 1);
+                    assert.strictEqual(e.font.family, 2);
+                    assert.strictEqual(e.font.italic, undefined);
+                    assert.strictEqual(e.font.name, 'Calibri');
+                    assert.strictEqual(e.font.scheme, 'minor');
+                    assert.strictEqual(e.font.size, 11);
+                    assert.strictEqual(e.font.underline, undefined);
+                }
+            },
+        }
     );
 });
 
 QUnit.test("Change number format", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="3">' +
-        '<numFmt numFmtId="165" formatCode="[$-9]M\\/d\\/yyyy" />' +
-        '<numFmt numFmtId="166" formatCode="dd/mmm/yyyy hh:mm" />' +
-        '<numFmt numFmtId="167" formatCode="#,##0.0000" />' +
-        '</numFmts>' +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="11">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="4"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="22"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="166"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="167"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /><col width="13.57" min="6" max="6" /><col width="13.57" min="7" max="7" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:7" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="5" t="n"><v>43483.6875</v></c>' +
-        '<c r="B1" s="6" t="n"><v>43484.6875</v></c>' +
-        '<c r="C1" s="7" t="n"><v>43485.6875</v></c>' +
-        '<c r="D1" s="8" t="n"><v>43486.6875</v></c>' +
-        '<c r="E1" s="9" t="n"><v>43487.6875</v></c>' +
-        '<c r="F1" s="10" t="n"><v>43488.6875</v></c>' +
-        '<c r="G1" s="5" t="n"><v>43488.6875</v></c>' +
-        '</row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
-    const formats = [
-        null, // General
-        0, // General
-        4, // #,##0.00
-        22, // m/d/yy h:mm
-        'dd/mmm/yyyy hh:mm',
-        '#,##0.0000',
-        { formatCode: 'not supported, assign string instead of object' }
-    ];
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7'],
-            dataSource: [{
-                f1: new Date(2019, 0, 18, 16, 30), // serialized as '43483.6875'
-                f2: new Date(2019, 0, 19, 16, 30),
-                f3: new Date(2019, 0, 20, 16, 30),
-                f4: new Date(2019, 0, 21, 16, 30),
-                f5: new Date(2019, 0, 22, 16, 30),
-                f6: new Date(2019, 0, 23, 16, 30),
-                f7: new Date(2019, 0, 23, 16, 30),
-            }],
-            showColumnHeaders: false,
-            export: {
-                enabled: true,
-                ignoreExcelErrors: false,
-                customizeExcelCell: e => {
-                    e.numberFormat = formats.shift();
-                },
-            },
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Change number format (OOXML)", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="3">' +
         '<numFmt numFmtId="165" formatCode="[$-9]M\\/d\\/yyyy" />' +
@@ -777,7 +493,8 @@ QUnit.test("Change number format (OOXML)", function(assert) {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    e.style = { numberFormat: formats.shift() };
+                    e.clearStyle();
+                    e.numberFormat = formats.shift();
                 },
             },
         },
@@ -785,7 +502,44 @@ QUnit.test("Change number format (OOXML)", function(assert) {
     );
 });
 
-QUnit.test("Change number format for Number column to '0000', '0.00', '0.00E+00'", function(assert) {
+QUnit.test("Set number format to null", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="5" t="n"><v>1</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 1 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.numberFormat = null;
+                },
+            },
+        },
+        { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Set number format for Number column to '0000', '0.00', '0.00E+00'", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="3">' +
         '<numFmt numFmtId="165" formatCode="0000" />' +
@@ -836,10 +590,10 @@ QUnit.test("Change number format for Number column to '0000', '0.00', '0.00E+00'
     );
 });
 
-QUnit.test("Change number format for Number column when column.format is function", function(assert) {
+QUnit.test("Set number format for Number column when column.format is function", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="1">' +
-        '<numFmt numFmtId="165" formatCode="0000" />' +
+        '<numFmt numFmtId="165" formatCode="#,##0" />' +
         '</numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="6">' +
@@ -870,7 +624,7 @@ QUnit.test("Change number format for Number column when column.format is functio
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    e.numberFormat = '0000';
+                    e.numberFormat = '#,##0';
                 },
             },
         },
@@ -878,11 +632,11 @@ QUnit.test("Change number format for Number column when column.format is functio
     );
 });
 
-QUnit.test("Change number format for Number column cell", function(assert) {
+QUnit.test("Set number format for Number column when column.format is 'decimal'", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="2">' +
         '<numFmt numFmtId="165" formatCode="#" />' +
-        '<numFmt numFmtId="166" formatCode="0000" />' +
+        '<numFmt numFmtId="166" formatCode="#,##0" />' +
         '</numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="6">' +
@@ -911,7 +665,7 @@ QUnit.test("Change number format for Number column cell", function(assert) {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    e.numberFormat = '0000';
+                    e.numberFormat = '#,##0';
                 },
             },
         },
@@ -919,7 +673,7 @@ QUnit.test("Change number format for Number column cell", function(assert) {
     );
 });
 
-QUnit.test("Change number format for Date column cell when column.format is function", function(assert) {
+QUnit.test("Set number format for Date column cell when column.format is function", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         '<numFmts count="1">' +
         '<numFmt numFmtId="165" formatCode="dd/mmm/yyyy hh:mm" />' +
@@ -961,7 +715,55 @@ QUnit.test("Change number format for Date column cell when column.format is func
     );
 });
 
-QUnit.test("Check event arguments for data row cell with various data types", function(assert) {
+QUnit.test("Check default number format for String column", function(assert) {
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: "field1", dataType: 'string' }],
+            dataSource: [{ field1: 'str1' }],
+            showColumnHeaders: false,
+            export: {
+                customizeExcelCell: e => {
+                    assert.strictEqual(e.numberFormat, 0);
+                }
+            },
+        }
+    );
+});
+
+QUnit.test("Check default number format for Number column", function(assert) {
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: "field1", dataType: 'number' }],
+            dataSource: [{ field1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                customizeExcelCell: e => {
+                    assert.strictEqual(e.numberFormat, 0);
+                }
+            },
+        }
+    );
+});
+
+QUnit.test("Check default number format for Date column", function(assert) {
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: "field1", dataType: 'date' }],
+            dataSource: [{ field1: new Date(2019, 0, 18) }],
+            showColumnHeaders: false,
+            export: {
+                customizeExcelCell: e => {
+                    assert.strictEqual(e.numberFormat, '[$-9]M\\/d\\/yyyy');
+                }
+            },
+        }
+    );
+});
+
+QUnit.test("Check e.gridCell for data cells", function(assert) {
     const configurations = [
         { dataType: "number", values: [undefined, null, 0, 1] },
         { dataType: "string", values: [undefined, null, '', 's'] },
@@ -1006,21 +808,7 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
     });
 });
 
-QUnit.test("Check event arguments for data row cell with formatting", function(assert) {
-    const ds = [{ f1: 1 }];
-    helper.runCustomizeExcelCellTest(assert,
-        {
-            columns: [{ dataField: "f1", dataType: "number", format: "currency" }],
-            dataSource: ds,
-            showColumnHeaders: false,
-        },
-        (grid) => [
-            { data: ds[0], column: grid.columnOption(0), rowType: 'data', value: ds[0].f1 },
-        ]
-    );
-});
-
-QUnit.test("Check event arguments for header", function(assert) {
+QUnit.test("Check e.gridCell for header", function(assert) {
     helper.runCustomizeExcelCellTest(assert,
         {
             columns: [{ dataField: "f1" }],
@@ -1032,7 +820,7 @@ QUnit.test("Check event arguments for header", function(assert) {
     );
 });
 
-QUnit.test("Check event arguments for bands", function(assert) {
+QUnit.test("Check e.gridCell for bands", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
     helper.runCustomizeExcelCellTest(assert,
         {
@@ -1062,7 +850,7 @@ QUnit.test("Check event arguments for bands", function(assert) {
     );
 });
 
-QUnit.test("Check event arguments for groupping 1 level", function(assert) {
+QUnit.test("Check e.gridCell for groupping 1 level", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2' }];
     helper.runCustomizeExcelCellTest(assert,
         {
@@ -1080,7 +868,7 @@ QUnit.test("Check event arguments for groupping 1 level", function(assert) {
     );
 });
 
-QUnit.test("Check event arguments for groupping 2 levels", function(assert) {
+QUnit.test("Check e.gridCell for groupping 2 levels", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
     helper.runCustomizeExcelCellTest(assert,
         {
@@ -1100,7 +888,7 @@ QUnit.test("Check event arguments for groupping 2 levels", function(assert) {
     );
 });
 
-QUnit.test("Check event arguments for group summary", function(assert) {
+QUnit.test("Check e.gridCell for group summary", function(assert) {
     const ds = [{ f1: 'str1', f2: 1 }];
     helper.runCustomizeExcelCellTest(assert,
         {
@@ -1121,7 +909,7 @@ QUnit.test("Check event arguments for group summary", function(assert) {
     );
 });
 
-QUnit.test("Check event arguments for group summary with alignByColumn", function(assert) {
+QUnit.test("Check e.gridCell for group summary with alignByColumn", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }];
     helper.runCustomizeExcelCellTest(assert,
         {
@@ -1150,7 +938,7 @@ QUnit.test("Check event arguments for group summary with alignByColumn", functio
     );
 });
 
-QUnit.test("Check event arguments for group summary with showInGroupFooter", function(assert) {
+QUnit.test("Check e.gridCell for group summary with showInGroupFooter", function(assert) {
     const ds = [
         { f1: '1_f1', f2: '1_f2', f3: '1_f3', f4: '1_f4' },
         { f1: '2_f1', f2: '2_f2', f3: '2_f3', f4: '2_f4' }
@@ -1194,7 +982,7 @@ QUnit.test("Check event arguments for group summary with showInGroupFooter", fun
     );
 });
 
-QUnit.test("Check event arguments for total summary", function(assert) {
+QUnit.test("Check e.gridCell for total summary", function(assert) {
     const ds = [{ f1: 1 }];
     helper.runCustomizeExcelCellTest(assert,
         {
@@ -1212,14 +1000,14 @@ QUnit.test("Check event arguments for total summary", function(assert) {
     );
 });
 
-QUnit.test("Check event arguments for changes from customizeExportData", function(assert) {
+QUnit.test("Check e.gridCell for changes from customizeExportData", function(assert) {
     const ds = [{ f1: 'f1' }];
     helper.runCustomizeExcelCellTest(assert,
         {
             columns: [{ dataField: "f1", dataType: "string" }],
             dataSource: ds,
             customizeExportData: (columns, rows) => {
-                rows.forEach(row => row.values.forEach((value, valueIndex) => row.values[valueIndex] += '+'));
+                rows[0].values[0] += '+';
             },
             showColumnHeaders: false,
         },
@@ -1229,28 +1017,46 @@ QUnit.test("Check event arguments for changes from customizeExportData", functio
     );
 });
 
-QUnit.test("Changes in 'e.font' shouldn't modify a shared font object", function(assert) {
-    const done = assert.async();
-    let counter = 1;
-    const gridOptions = {
-        columns: [{ dataField: "f1" }],
-        dataSource: [{ f1: 1 }, { f1: 2 }, { f1: 3 }],
-        showColumnHeaders: false,
-        loadingTimeout: undefined,
-        export: {
-            customizeExcelCell: e => {
-                assert.step(e.font.size);
-                e.font.size = counter++;
+QUnit.test("Check e.gridCell: change horizontalAlignment depending on data row values", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="6">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1"><alignment horizontal="centerContinuous" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>1</v></c><c r="B1" s="3" t="n"><v>1</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
+        '</sheetData>' +
+        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: ['data1', 'data2'],
+            dataSource: [
+                { data1: 1, data2: 1, alignment: 'center' },
+                { data1: 2, data2: 2, alignment: 'right' },
+            ],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                customizeExcelCell: e => {
+                    if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.data.data1 === 1) {
+                        e.clearStyle();
+                        e.horizontalAlignment = 'centerContinuous';
+                    }
+                },
             },
         },
-        onFileSaving: e => {
-            assert.verifySteps([11, 11, 11]);
-            done();
-            e.cancel = true;
-        },
-    };
-    const dataGrid = $("#dataGrid").dxDataGrid(gridOptions).dxDataGrid("instance");
-    dataGrid.exportToExcel();
+        { styles, worksheet, sharedStrings }
+    );
 });
 
 QUnit.test("Change string value", function(assert) {
@@ -1390,254 +1196,5 @@ QUnit.test("Change boolean value", function(assert) {
             },
         },
         { worksheet, sharedStrings }
-    );
-});
-
-// QUnit.test("Change cell value to value of another type", function(assert) {
-//     const worksheet = helper.WORKSHEET_HEADER_XML1 +
-//         '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /></cols>' +
-//         '<sheetData>' +
-//         '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
-//         '<c r="A1" t="n"><v>1</v></c><c r="B1" t="s"><v>1</v></c><c r="C1" t="s"><v>2</v></c><c r="D1" t="n"><v>1</v></c>' +
-//         '</row>' +
-//         '</sheetData>' +
-//         '<ignoredErrors><ignoredError sqref="A1:D1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-//     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
-//         '<si><t>a</t></si>' +
-//         '<si><t>one</t></si>' +
-//         '<si><t>my date</t></si>' +
-//         '<si><t>true</t></si>' +
-//         '</sst>';
-
-//     helper.runGeneralTest(
-//         assert,
-//         {
-//             columns: [
-//                 { dataField: 'stringToNumber', dataType: 'string' },
-//                 { dataField: 'numberToString', dataType: 'number' },
-//                 { dataField: 'dateToString', dataType: 'date' },
-//                 { dataField: 'boolToNumber', dataType: 'boolean' }
-//             ],
-//             dataSource: [{ stringToNumber: 'a', numberToString: 1, dateToString: new Date(2018, 0, 20), boolToNumber: true }],
-//             showColumnHeaders: false,
-//             export: {
-//                 enabled: true,
-//                 customizeExcelCell: e => {
-//                     if(e.gridCell.column.dataField === 'stringToNumber') {
-//                         e.value = 1;
-//                     } else if(e.gridCell.column.dataField === 'numberToString') {
-//                         e.value = 'one';
-//                     } else if(e.gridCell.column.dataField === 'dateToString') {
-//                         e.value = 'my date';
-//                     } else if(e.gridCell.column.dataField === 'boolToNumber') {
-//                         e.value = 1;
-//                     }
-//                     e.clearStyle();
-//                 },
-//             },
-//         },
-//         { worksheet, sharedStrings }
-//     );
-// });
-
-QUnit.test("Change cell value to value of another type (OOXML)", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" t="n"><v>1</v></c><c r="B1" t="s"><v>1</v></c><c r="C1" t="s"><v>2</v></c><c r="D1" t="n"><v>1</v></c>' +
-        '</row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:D1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
-        '<si><t>a</t></si>' +
-        '<si><t>one</t></si>' +
-        '<si><t>my date</t></si>' +
-        '<si><t>true</t></si>' +
-        '</sst>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: 'stringToNumber', dataType: 'string' },
-                { dataField: 'numberToString', dataType: 'number' },
-                { dataField: 'dateToString', dataType: 'date' },
-                { dataField: 'boolToNumber', dataType: 'boolean' }
-            ],
-            dataSource: [{ stringToNumber: 'a', numberToString: 1, dateToString: new Date(2018, 0, 20), boolToNumber: true }],
-            showColumnHeaders: false,
-            export: {
-                enabled: true,
-                customizeExcelCell: e => {
-                    if(e.gridCell.column.dataField === 'stringToNumber') {
-                        e.value = 1;
-                        e.dataType = 'n';
-                    } else if(e.gridCell.column.dataField === 'numberToString') {
-                        e.value = 'one';
-                        e.dataType = 's';
-                    } else if(e.gridCell.column.dataField === 'dateToString') {
-                        e.value = 'my date';
-                        e.dataType = 's';
-                    } else if(e.gridCell.column.dataField === 'boolToNumber') {
-                        e.value = 1;
-                        e.dataType = 'n';
-                    }
-                    e.style = null;
-                },
-            },
-        },
-        { worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Clear style for header cell", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML + helper.BASE_STYLE_XML +
-        '<cellXfs count="5">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" t="s"><v>0</v></c>' +
-        '</row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1"><si><t>F1</t></si></sst>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: ['f1'],
-            showColumnHeaders: true,
-            export: {
-                enabled: true,
-                ignoreExcelErrors: false,
-                customizeExcelCell: e => {
-                    e.clearStyle();
-                },
-            },
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Clear style for header cell (OOXML)", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML + helper.BASE_STYLE_XML +
-        '<cellXfs count="5">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" t="s"><v>0</v></c>' +
-        '</row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1"><si><t>F1</t></si></sst>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: ['f1'],
-            showColumnHeaders: true,
-            export: {
-                enabled: true,
-                ignoreExcelErrors: false,
-                customizeExcelCell: e => {
-                    e.style = null;
-                },
-            },
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Clear style for number cell", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="5">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" t="n"><v>42</v></c>' +
-        '</row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: ['f1'],
-            dataSource: [{ f1: 42 }],
-            showColumnHeaders: false,
-            export: {
-                enabled: true,
-                ignoreExcelErrors: false,
-                customizeExcelCell: e => {
-                    e.clearStyle();
-                },
-            },
-        },
-        { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Clear style and change number format for number cell", function(assert) {
-    const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="1">' +
-        '<numFmt numFmtId="165" formatCode="0000" />' +
-        '</numFmts>' +
-        helper.BASE_STYLE_XML +
-        '<cellXfs count="6">' +
-        helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyNumberFormat="1" numFmtId="165" />' +
-        '</cellXfs>' +
-        helper.STYLESHEET_FOOTER_XML;
-    const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="13.57" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="5" t="n"><v>42</v></c>' +
-        '</row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [{ dataField: 'f1', dataType: 'number' }],
-            dataSource: [{ f1: 42 }],
-            showColumnHeaders: false,
-            export: {
-                enabled: true,
-                ignoreExcelErrors: false,
-                customizeExcelCell: e => {
-                    e.clearStyle();
-                    e.numberFormat = '0000';
-                },
-            },
-        },
-        { styles, worksheet, sharedStrings }
     );
 });
