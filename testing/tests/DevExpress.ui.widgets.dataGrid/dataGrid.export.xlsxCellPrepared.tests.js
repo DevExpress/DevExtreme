@@ -297,7 +297,7 @@ QUnit.test("Change font: create new font", function(assert) {
         '<fonts count="3">' +
         '<font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
         '<font><b /><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' +
-        '<font><b /><sz val="22" /><name val="name 1" /><family val="3" /><scheme val="scheme 1" /><i /><u val="underline 1" /></font>' +
+        '<font><b /><sz val="22" /><color rgb="FF00FF00" /><name val="name 1" /><family val="3" /><scheme val="scheme 1" /><i /><u val="underline 1" /></font>' +
         '</fonts>' +
         '<fills count="1">' +
         '<fill><patternFill patternType="none" /></fill>' +
