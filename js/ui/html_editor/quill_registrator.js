@@ -39,6 +39,7 @@ class QuillRegistrator {
             true
         );
 
+        this._customModules = [];
         QuillRegistrator._initialized = true;
     }
 
@@ -49,9 +50,23 @@ class QuillRegistrator {
     }
 
     registerModules(modulesConfig) {
+        const isModule = RegExp("modules/*");
         const quill = this.getQuill();
+        const isRegisteredModule = (modulePath) => {
+            return !!quill.imports[modulePath];
+        };
+
+        for(const modulePath in modulesConfig) {
+            if(isModule.test(modulePath) && !isRegisteredModule(modulePath)) {
+                this._customModules.push(modulePath.slice(8));
+            }
+        }
 
         quill.register(modulesConfig, true);
+    }
+
+    getRegisteredModuleNames() {
+        return this._customModules;
     }
 
     getQuill() {
