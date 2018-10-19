@@ -580,6 +580,7 @@ module.exports = {
                     }
                     return values;
                 },
+                _beforeChangeUpdate: function() {},
                 _updateItemsCore: function(change) {
                     var that = this,
                         items,
@@ -603,6 +604,8 @@ module.exports = {
                                 that._items.push.apply(that._items, items);
                                 break;
                             case "update":
+                                that._beforeChangeUpdate(change);
+
                                 var prevIndex = -1,
                                     rowIndices = change.rowIndices.slice(0),
                                     rowIndexCorrection = 0;
