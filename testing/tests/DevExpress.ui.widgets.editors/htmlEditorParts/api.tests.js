@@ -139,4 +139,23 @@ QUnit.module("API", moduleConfig, () => {
 
         assert.equal(this.instance.option("value"), "<p>cbaTest 1<br/>Test 2<br/>Test 3</p>", "history is empty");
     });
+
+    test("registerModule", (assert) => {
+        class Test {
+            constructor(quillInstance, options) {
+                this._editorInstance = options.editorInstance;
+            }
+
+            getEditor() {
+                return this._editorInstance;
+            }
+        }
+
+        this.instance.registerModules({ "modules/test": Test });
+
+        const testModule = this.instance.getQuillInstance().getModule("test");
+
+        assert.ok(testModule);
+        assert.equal(testModule.getEditor(), this.instance);
+    });
 });

@@ -212,7 +212,7 @@ const HtmlEditor = Editor.inherit({
 
     _getModulesConfig: function() {
         const wordListMatcher = getWordMatcher(this._quillRegistrator.getQuill());
-        let modulesConfig = {
+        let modulesConfig = extend({
             toolbar: this._getModuleConfigByOption("toolbar"),
             variables: this._getModuleConfigByOption("variables"),
             dropImage: this._getBaseModuleConfig(),
@@ -223,7 +223,7 @@ const HtmlEditor = Editor.inherit({
                     ['p.MsoListParagraphCxSpLast', wordListMatcher]
                 ]
             }
-        };
+        }, this._getCustomModules());
 
         return modulesConfig;
     },
@@ -240,6 +240,17 @@ const HtmlEditor = Editor.inherit({
 
     _getBaseModuleConfig: function() {
         return { editorInstance: this };
+    },
+
+    _getCustomModules: function() {
+        const modules = {};
+        const moduleNames = this._quillRegistrator.getRegisteredModuleNames();
+
+        moduleNames.forEach(modulePath => {
+            modules[modulePath] = this._getBaseModuleConfig();
+        });
+
+        return modules;
     },
 
     _textChangeHandler: function(newDelta, oldDelta, source) {
@@ -353,7 +364,9 @@ const HtmlEditor = Editor.inherit({
     * @param1 modules:Object
     */
     registerModules: function(modules) {
-        QuillRegistrator.registerModules(modules);
+        this._quillRegistrator.registerModules(modules);
+
+        this.repaint();
     },
 
     /**

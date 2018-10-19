@@ -56,7 +56,7 @@ class ToolbarModule extends BaseModule {
 
     _getDefaultClickHandler(formatName) {
         return (e) => {
-            const format = this.quill.getFormat(this.quill.getSelection());
+            const format = this.quill.getFormat();
             const value = !format[formatName];
 
             this.quill.format(formatName, value, USER_ACTION);
@@ -67,8 +67,11 @@ class ToolbarModule extends BaseModule {
     _getFormatHandlers() {
         return {
             clear: (e) => {
-                this.quill.removeFormat(this.quill.getSelection());
-                this.updateFormatWidgets();
+                const range = this.quill.getSelection();
+                if(range) {
+                    this.quill.removeFormat(range);
+                    this.updateFormatWidgets();
+                }
             },
             link: this._prepareLinkHandler(),
             image: this._prepareImageHandler(),

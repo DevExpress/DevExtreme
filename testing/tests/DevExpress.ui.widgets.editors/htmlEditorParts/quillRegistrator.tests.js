@@ -55,5 +55,18 @@ QUnit.module("Quill registrator", () => {
 
         assert.equal(element.className, "ql-container");
     });
+
+    test("add a customModule", (assert) => {
+        const quillRegistrator = new QuillRegistrator();
+
+        quillRegistrator.registerModules({
+            "modules/fakeModule": () => {},
+            "modules/toolbar": () => {} // replace existing module
+        });
+
+        const customModuleNames = quillRegistrator.getRegisteredModuleNames();
+
+        assert.deepEqual(customModuleNames, ["fakeModule"], "Should return only custom modules");
+    });
 });
 
