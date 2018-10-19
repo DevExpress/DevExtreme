@@ -265,6 +265,8 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         var durationInHours = (endDate.getTime() - startDate.getTime()) / 3600000;
 
         var width = Math.ceil(durationInHours / 24) * cellWidth;
+
+        width = this.cropAppointmentWidth(width, cellWidth);
         return width;
     },
 

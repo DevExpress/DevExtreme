@@ -235,6 +235,14 @@ var BaseRenderingStrategy = Class.inherit({
         return false;
     },
 
+    cropAppointmentWidth: function(width, cellWidth) {
+        if(this.instance.fire("isGroupedByDate")) {
+            width = cellWidth;
+        }
+
+        return width;
+    },
+
     _getSortedPositions: function(arr) {
         var result = [],
             // unstable sorting fix
@@ -649,8 +657,8 @@ var BaseRenderingStrategy = Class.inherit({
         return false;
     },
 
-    needSeparateAppointment: function() {
-        return false;
+    needSeparateAppointment: function(allDay) {
+        return allDay;
     },
 
     _getMaxAppointmentCountPerCell: function() {

@@ -39,14 +39,6 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return width;
     },
 
-    cropAppointmentWidth: function(width, cellWidth) {
-        if(this.instance.fire("isGroupedByDate")) {
-            width = cellWidth;
-        }
-
-        return width;
-    },
-
     _adjustDurationByDaylightDiff: function(duration, startDate, endDate) {
         var daylightDiff = this.instance.fire("getDaylightOffset", startDate, endDate);
 

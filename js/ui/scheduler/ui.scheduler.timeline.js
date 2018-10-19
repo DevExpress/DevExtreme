@@ -537,6 +537,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return isUpdateNeeded;
     },
 
+    getIntervalDuration: function(allDay) {
+        return this.getCellDuration();
+    },
+
     _dateWithinBounds: function(bounds, date) {
         var trimmedDate = dateUtils.trimTime(new Date(date)),
             isUpdateNeeded = false;
