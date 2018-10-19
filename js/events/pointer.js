@@ -7,7 +7,6 @@ var support = require("../core/utils/support"),
     TouchStrategy = require("./pointer/touch"),
     MsPointerStrategy = require("./pointer/mspointer"),
     MouseStrategy = require("./pointer/mouse"),
-    eventsEngine = require("../events/core/events_engine"),
     MouseAndTouchStrategy = require("./pointer/mouse_and_touch");
 
 /**
@@ -93,17 +92,7 @@ var EventStrategy = (function() {
 })();
 
 each(EventStrategy.map, function(pointerEvent, originalEvents) {
-    var eventStrategy = new EventStrategy(pointerEvent, originalEvents);
-
-    if(pointerEvent === eventsEngine.passiveListenerEvents.eventName) {
-        eventStrategy.setup = function(element, data, namespaces, handler) {
-            element.addEventListener(eventsEngine.passiveListenerEvents.nativeEventName, handler, { passive: false });
-
-            return true;
-        };
-    }
-
-    registerEvent(pointerEvent, eventStrategy);
+    registerEvent(pointerEvent, new EventStrategy(pointerEvent, originalEvents));
 });
 
 module.exports = {
