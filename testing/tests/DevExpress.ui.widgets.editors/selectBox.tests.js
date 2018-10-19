@@ -1030,6 +1030,32 @@ QUnit.test("the 'fieldTemplate' function should be called only once on init and 
     assert.equal(callCount, 1, "the 'fieldTemplate; called only one on value change");
 });
 
+QUnit.test("popup should not prevent closing when fieldTemplate is used", function(assert) {
+    var $selectBox = $("#selectBoxFieldTemplate").dxSelectBox({
+            items: [1, 2],
+            fieldTemplate: function() {
+                return $("<div>").dxTextBox();
+            },
+            showDropDownButton: true,
+            openOnFieldClick: true,
+            opened: true
+        }),
+        instance = $selectBox.dxSelectBox("instance"),
+        $dropDownButton = $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON)),
+        $inputWrapper = $selectBox.find(".dx-dropdowneditor-input-wrapper");
+
+    $dropDownButton.trigger("dxpointerdown");
+    $dropDownButton.trigger("dxclick");
+    assert.notOk(instance.option("opened"), "popup had been closed");
+
+    instance.open();
+    assert.ok(instance.option("opened"), "popup had been opened");
+
+    $inputWrapper.trigger("dxpointerdown");
+    $inputWrapper.trigger("dxclick");
+    assert.notOk(instance.option("opened"), "popup had been closed");
+});
+
 QUnit.test("Field should be updated if fieldTemplate is used", function(assert) {
     var $element = $("#selectBoxFieldTemplate").dxSelectBox({
         dataSource: [

@@ -326,11 +326,6 @@ var SelectBox = DropDownList.inherit({
         }
     },
 
-    _closeOutsideDropDownHandler: function(e) {
-        this._cancelEditing();
-        return this.callBase(e);
-    },
-
     _renderOpenedState: function() {
         this.callBase();
 
@@ -585,6 +580,11 @@ var SelectBox = DropDownList.inherit({
     _renderDimensions: function() {
         this.callBase();
         this._setPopupOption("width");
+    },
+
+    _popupHidingHandler: function() {
+        this._cancelEditing();
+        this.callBase();
     },
 
     _restoreInputText: function() {
