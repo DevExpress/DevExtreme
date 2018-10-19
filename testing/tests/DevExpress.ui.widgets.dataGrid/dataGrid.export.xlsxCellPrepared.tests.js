@@ -6,7 +6,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-QUnit.module("DataGrid customizeXlsxCell tests", {
+QUnit.module("DataGrid customizeExcelCell tests", {
     beforeEach: helper.beforeEachTest,
     afterEach: helper.afterEachTest,
 });
@@ -44,7 +44,7 @@ QUnit.test("Change horizontal alignment", function(assert) {
             dataSource: [{ field1: 'str1_1' }],
             export: {
                 enabled: true,
-                customizeXlsxCell: e => e.xlsxCell.style.alignment = null,
+                customizeExcelCell: e => e.xlsxCell.style.alignment = null,
             },
         },
         { styles, worksheet, sharedStrings }
@@ -81,7 +81,7 @@ QUnit.test("Change horizontal alignment by a property value of source object", f
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.data.data1 === 1) {
                         e.xlsxCell.style.alignment = {
                             horizontal: e.gridCell.data.alignment
@@ -126,7 +126,7 @@ QUnit.test("Change fill (simple format)", function(assert) {
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     e.xlsxCell.style.backgroundColor = 'FFFFFF00';
                     e.xlsxCell.style.patternColor = 'FF00FF00';
                     e.xlsxCell.style.patternStyle = 'lightGrid';
@@ -169,7 +169,7 @@ QUnit.test("Change fill (OOXML format)", function(assert) {
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     e.xlsxCell.style.fill = {
                         patternFill: {
                             patternType: 'darkVertical',
@@ -221,7 +221,7 @@ QUnit.test("Change fill by a property value of source object", function(assert) 
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.data.data1 === 1) {
                         e.xlsxCell.style.fill = {
                             patternFill: {
@@ -275,7 +275,7 @@ QUnit.test("Change font", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                customizeXlsxCell: e => e.xlsxCell.style.font.size = 22,
+                customizeExcelCell: e => e.xlsxCell.style.font.size = 22,
             },
         },
         { styles, worksheet, sharedStrings }
@@ -344,7 +344,7 @@ QUnit.test("Change number format", function(assert) {
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     e.xlsxCell.numberFormat = formats.shift();
                 },
             },
@@ -395,7 +395,7 @@ QUnit.test("Change number format for Number column to '0000', '0.00', '0.00E+00'
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     e.xlsxCell.numberFormat = columnFormats[e.gridCell.column.dataField];
                 },
             },
@@ -437,7 +437,7 @@ QUnit.test("Change number format for Number column when column.format is functio
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     e.xlsxCell.numberFormat = '0000';
                 },
             },
@@ -478,7 +478,7 @@ QUnit.test("Change number format for Number column cell", function(assert) {
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     e.xlsxCell.numberFormat = '0000';
                 },
             },
@@ -520,7 +520,7 @@ QUnit.test("Change number format for Date column cell when column.format is func
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     e.xlsxCell.numberFormat = 'dd/mmm/yyyy hh:mm';
                 },
             },
@@ -552,7 +552,7 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
         const column = { dataField: 'f1', dataType: config.dataType, lookup: config.lookup },
             ds = config.values.map(item => { return { f1: item }; });
 
-        helper.runCustomizeXlsxCellTest(assert,
+        helper.runCustomizeExcelCellTest(assert,
             {
                 columns: [column],
                 dataSource: ds,
@@ -576,7 +576,7 @@ QUnit.test("Check event arguments for data row cell with various data types", fu
 
 QUnit.test("Check event arguments for data row cell with formatting", function(assert) {
     const ds = [{ f1: 1 }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runCustomizeExcelCellTest(assert,
         {
             columns: [{ dataField: "f1", dataType: "number", format: "currency" }],
             dataSource: ds,
@@ -589,7 +589,7 @@ QUnit.test("Check event arguments for data row cell with formatting", function(a
 });
 
 QUnit.test("Check event arguments for header", function(assert) {
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runCustomizeExcelCellTest(assert,
         {
             columns: [{ dataField: "f1" }],
             dataSource: [],
@@ -602,7 +602,7 @@ QUnit.test("Check event arguments for header", function(assert) {
 
 QUnit.test("Check event arguments for bands", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runCustomizeExcelCellTest(assert,
         {
             columns: [
                 { dataField: "f1" },
@@ -632,7 +632,7 @@ QUnit.test("Check event arguments for bands", function(assert) {
 
 QUnit.test("Check event arguments for groupping 1 level", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2' }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runCustomizeExcelCellTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -650,7 +650,7 @@ QUnit.test("Check event arguments for groupping 1 level", function(assert) {
 
 QUnit.test("Check event arguments for groupping 2 levels", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runCustomizeExcelCellTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -670,7 +670,7 @@ QUnit.test("Check event arguments for groupping 2 levels", function(assert) {
 
 QUnit.test("Check event arguments for group summary", function(assert) {
     const ds = [{ f1: 'str1', f2: 1 }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runCustomizeExcelCellTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -691,7 +691,7 @@ QUnit.test("Check event arguments for group summary", function(assert) {
 
 QUnit.test("Check event arguments for group summary with alignByColumn", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runCustomizeExcelCellTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -723,7 +723,7 @@ QUnit.test("Check event arguments for group summary with showInGroupFooter", fun
         { f1: '1_f1', f2: '1_f2', f3: '1_f3', f4: '1_f4' },
         { f1: '2_f1', f2: '2_f2', f3: '2_f3', f4: '2_f4' }
     ];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runCustomizeExcelCellTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -764,7 +764,7 @@ QUnit.test("Check event arguments for group summary with showInGroupFooter", fun
 
 QUnit.test("Check event arguments for total summary", function(assert) {
     const ds = [{ f1: 1 }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runCustomizeExcelCellTest(assert,
         {
             columns: [{ dataField: "f1", dataType: "number" }],
             dataSource: ds,
@@ -782,7 +782,7 @@ QUnit.test("Check event arguments for total summary", function(assert) {
 
 QUnit.test("Check event arguments for changes from customizeExportData", function(assert) {
     const ds = [{ f1: 'f1' }];
-    helper.runCustomizeXlsxCellTest(assert,
+    helper.runCustomizeExcelCellTest(assert,
         {
             columns: [{ dataField: "f1", dataType: "string" }],
             dataSource: ds,
@@ -806,7 +806,7 @@ QUnit.test("Changes in 'e.xlsxCell.style' shouldn't modify a shared style object
         showColumnHeaders: false,
         loadingTimeout: undefined,
         export: {
-            customizeXlsxCell: e => {
+            customizeExcelCell: e => {
                 assert.step(e.xlsxCell.style.alignment.horizontal);
                 e.xlsxCell.style.alignment.horizontal = counter++;
             },
@@ -843,7 +843,7 @@ QUnit.test("Change string value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     assert.strictEqual(e.xlsxCell.value, 'a');
                     e.xlsxCell.value = 'b';
                 },
@@ -872,7 +872,7 @@ QUnit.test("Change number value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     assert.strictEqual(e.xlsxCell.value, 42);
                     e.xlsxCell.value = 43;
                 },
@@ -907,7 +907,7 @@ QUnit.test("Change date value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     if(e.xlsxCell.value.getTime() === new Date(2018, 0, 21, 16, 55).getTime()) {
                         assert.deepEqual(e.xlsxCell.value, new Date(2018, 0, 21, 16, 55));
                         e.xlsxCell.value = new Date(2018, 0, 22, 16, 55);
@@ -946,7 +946,7 @@ QUnit.test("Change boolean value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     if(e.gridCell.value) {
                         assert.strictEqual(e.xlsxCell.value, 'true');
                         e.xlsxCell.value = 'false';
@@ -990,7 +990,7 @@ QUnit.test("Change cell value data type", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     if(e.gridCell.column.dataField === 'stringToNumber') {
                         e.xlsxCell.value = 1;
                         e.xlsxCell.dataType = 'n';
@@ -1047,7 +1047,7 @@ QUnit.test("Clear reference to xlsx style record for header cell", function(asse
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     e.xlsxCell.style = null;
                     e.xlsxCell.numberFormat = null;
                 },
@@ -1084,7 +1084,7 @@ QUnit.test("Clear reference to xlsx style record for number value cell", functio
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     e.xlsxCell.style = null;
                     e.xlsxCell.numberFormat = null;
                 },
@@ -1125,7 +1125,7 @@ QUnit.test("Clear reference to xlsx style record and change number format for Nu
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-                customizeXlsxCell: e => {
+                customizeExcelCell: e => {
                     e.xlsxCell.style = null;
                     e.xlsxCell.numberFormat = '0000';
                 },
