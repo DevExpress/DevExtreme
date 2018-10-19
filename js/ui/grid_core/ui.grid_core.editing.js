@@ -2030,7 +2030,7 @@ module.exports = {
                     this.callBase(change);
                     this._updateEditRow(this.items());
                 },
-                _applyChangeUpdate: function(change) {
+                _beforeChangeUpdate: function(change) {
                     this._updateEditRow(change.items);
                     this.callBase(change);
                 },
