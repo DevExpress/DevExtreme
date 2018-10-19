@@ -367,10 +367,11 @@ module.exports = {
                         }
 
                         const coords = calcCenterForDrag(e);
-                        if(e.shiftKey && options.valueAxis.zoom) {
+                        if(options.valueAxis.zoom) {
                             const targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), coords));
                             zoomAxes(targetAxes, rotated ? coords.x : coords.y, e.delta);
-                        } else if(options.argumentAxis.zoom) {
+                        }
+                        if(options.argumentAxis.zoom) {
                             zoomAxes(chart._argumentAxes, rotated ? coords.y : coords.x, e.delta, chart.getArgumentAxis());
                         }
 
