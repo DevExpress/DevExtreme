@@ -44,7 +44,7 @@ const dataGridExportTestsHelper = {
         excel_creator.ExcelCreator.JSZip = this.oldJSZip;
     },
 
-    runGeneralTest: function(assert, gridOptions, { styles = undefined, worksheet = "", sharedStrings = undefined } = {}) {
+    runGeneralTest: function(assert, gridOptions, { styles = undefined, worksheet = undefined, sharedStrings = undefined } = {}) {
         const done = assert.async();
         gridOptions.loadingTimeout = undefined;
         gridOptions.onFileSaving = e => {
@@ -53,7 +53,9 @@ const dataGridExportTestsHelper = {
             if(styles !== undefined) {
                 assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.STYLE_FILE_NAME).content, styles, "styles");
             }
-            assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).folder(excelCreator.__internals.WORKSHEETS_FOLDER).file(excelCreator.__internals.WORKSHEET_FILE_NAME).content, worksheet, "worksheet");
+            if(worksheet !== undefined) {
+                assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).folder(excelCreator.__internals.WORKSHEETS_FOLDER).file(excelCreator.__internals.WORKSHEET_FILE_NAME).content, worksheet, "worksheet");
+            }
             if(sharedStrings !== undefined) {
                 assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, "sharedStrings");
             }

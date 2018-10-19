@@ -5,10 +5,16 @@ const xlsxColorHelper = {
     tryCreateTag: function(sourceObj) {
         let result = null;
         if(isDefined(sourceObj)) {
-            result = {
-                rgb: sourceObj.rgb,
-                theme: sourceObj.theme,
-            };
+            if(typeof sourceObj === 'string') {
+                result = {
+                    rgb: sourceObj
+                };
+            } else {
+                result = {
+                    rgb: sourceObj.rgb,
+                    theme: sourceObj.theme,
+                };
+            }
             if(xlsxColorHelper.isEmpty(result)) {
                 result = null;
             }
@@ -19,12 +25,16 @@ const xlsxColorHelper = {
     copy: function(source) {
         let result = null;
         if(isDefined(source)) {
-            result = {};
-            if(source.rgb !== undefined) {
-                result.rgb = source.rgb;
-            }
-            if(source.theme !== undefined) {
-                result.theme = source.theme;
+            if(typeof source === 'string') {
+                result = source;
+            } else {
+                result = {};
+                if(source.rgb !== undefined) {
+                    result.rgb = source.rgb;
+                }
+                if(source.theme !== undefined) {
+                    result.theme = source.theme;
+                }
             }
         }
         return result;

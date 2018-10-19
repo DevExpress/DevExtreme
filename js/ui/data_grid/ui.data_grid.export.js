@@ -71,12 +71,10 @@ exports.DataProvider = Class.inherit({
         return isDefined(this._options.customizeExcelCell);
     },
 
-    customizeExcelCell: function(e) {
+    customizeExcelCell: function(e, cellSourceData) {
         if(this._options.customizeExcelCell) {
-            this._options.customizeExcelCell({
-                xlsxCell: e.xlsxCell,
-                gridCell: e.cellSourceData
-            });
+            e.gridCell = cellSourceData;
+            this._options.customizeExcelCell(e);
         }
     },
 

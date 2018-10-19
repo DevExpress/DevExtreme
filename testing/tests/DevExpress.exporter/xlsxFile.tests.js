@@ -423,20 +423,22 @@ QUnit.test("Various fonts", function(assert) {
     assert.equal(file.registerCellFormat({ font: { underline: 'double' } }), 11);
     assert.equal(file.registerCellFormat({ font: { color: { rgb: 'rgb1' } } }), 12);
     assert.equal(file.registerCellFormat({ font: { color: { rgb: 'rgb1' } } }), 12);
+    assert.equal(file.registerCellFormat({ font: { color: 'rgb1' } }), 12);
     assert.equal(file.registerCellFormat({ font: { color: { rgb: 'rgb2' } } }), 13);
     assert.equal(file.registerCellFormat({ font: { color: { theme: 't1' } } }), 14);
     assert.equal(file.registerCellFormat({ font: { color: { theme: 't1' } } }), 14);
     assert.equal(file.registerCellFormat({ font: { color: { theme: 't2' } } }), 15);
+    assert.equal(file.registerCellFormat({ font: { color: 'rgb3' } }), 16);
 
     assert.equal(getFullXml(file),
-        '<cellXfs count="16">' +
+        '<cellXfs count="17">' +
         '<xf xfId="0" fontId="0" /><xf xfId="0" fontId="1" /><xf xfId="0" fontId="2" /><xf xfId="0" fontId="3" /><xf xfId="0" fontId="4" />' +
         '<xf xfId="0" fontId="5" /><xf xfId="0" fontId="6" /><xf xfId="0" fontId="7" /><xf xfId="0" fontId="8" /><xf xfId="0" fontId="9" />' +
         '<xf xfId="0" fontId="10" /><xf xfId="0" fontId="11" /><xf xfId="0" fontId="12" /><xf xfId="0" fontId="13" /><xf xfId="0" fontId="14" />' +
-        '<xf xfId="0" fontId="15" />' +
+        '<xf xfId="0" fontId="15" /><xf xfId="0" fontId="16" />' +
         '</cellXfs>' +
         getExpectedFillsXml() +
-        '<fonts count="16">' +
+        '<fonts count="17">' +
         '<font><b /></font>' +
         '<font><sz val="10" /></font>' +
         '<font><sz val="11" /></font>' +
@@ -453,6 +455,7 @@ QUnit.test("Various fonts", function(assert) {
         '<font><color rgb="rgb2" /></font>' +
         '<font><color theme="t1" /></font>' +
         '<font><color theme="t2" /></font>' +
+        '<font><color rgb="rgb3" /></font>' +
         '</fonts>');
 });
 
@@ -463,6 +466,7 @@ QUnit.test("Copy fonts", function(assert) {
     assert.propEqual(XlsxFile.copyCellFormat({ font: { bold: undefined, italic: undefined, color: { rgb: undefined } } }), { font: { color: {} } });
 
     assert.propEqual(XlsxFile.copyCellFormat({ font: { bold: '1', italic: '2', color: { rgb: '3', theme: '4' } } }), { font: { bold: '1', italic: '2', color: { rgb: '3', theme: '4' } } });
+    assert.propEqual(XlsxFile.copyCellFormat({ font: { bold: '1', italic: '2', color: '1' } }), { font: { bold: '1', italic: '2', color: '1' } });
 
     const format = { font: { bold: '1', italic: '2', color: { rgb: '3', theme: '4' } } };
     const format_ = XlsxFile.copyCellFormat(format);
