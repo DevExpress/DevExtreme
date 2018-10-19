@@ -549,10 +549,6 @@ module.exports = {
              * @type Object
              */
             /**
-             * @name GridBaseColumnButton.name
-             * @type string
-             */
-            /**
              * @name GridBaseColumnButton.text
              * @type string
              */
@@ -569,13 +565,6 @@ module.exports = {
              * @type string
              */
             /**
-             * @name GridBaseColumnButton.template
-             * @type template|function
-             * @type_function_param1 cellElement:dxElement
-             * @type_function_param2 cellInfo:object
-             * @type_function_return string|Node|jQuery
-             */
-            /**
              * @name dxDataGridColumnButton
              * @inherits GridBaseColumnButton
              * @type Object
@@ -584,6 +573,14 @@ module.exports = {
              * @name dxTreeListColumnButton
              * @inherits GridBaseColumnButton
              * @type Object
+             */
+            /**
+             * @name dxDataGridColumnButton.name
+             * @type Enums.GridColumnButtonName|string
+             */
+            /**
+             * @name dxTreeListColumnButton.name
+             * @type Enums.TreeListColumnButtonName|string
              */
             /**
              * @name dxDataGridColumnButton.onClick
@@ -626,6 +623,36 @@ module.exports = {
              * @type_function_param1_field2 row:dxTreeListRowObject
              * @type_function_param1_field3 column:dxTreeListColumn
              * @type_function_return Boolean
+             */
+            /**
+             * @name dxDataGridColumnButton.template
+             * @type template|function
+             * @type_function_param1 cellElement:dxElement
+             * @type_function_param2 cellInfo:object
+             * @type_function_param2_field1 component:dxDataGrid
+             * @type_function_param2_field2 data:object
+             * @type_function_param2_field3 key:any
+             * @type_function_param2_field4 columnIndex:number
+             * @type_function_param2_field5 column:dxDataGridColumn
+             * @type_function_param2_field6 rowIndex:number
+             * @type_function_param2_field7 rowType:string
+             * @type_function_param2_field8 row:dxDataGridRowObject
+             * @type_function_return string|Node|jQuery
+             */
+            /**
+             * @name dxTreeListColumnButton.template
+             * @type template|function
+             * @type_function_param1 cellElement:dxElement
+             * @type_function_param2 cellInfo:object
+             * @type_function_param2_field1 component:dxTreeList
+             * @type_function_param2_field2 data:object
+             * @type_function_param2_field3 key:any
+             * @type_function_param2_field4 columnIndex:number
+             * @type_function_param2_field5 column:dxTreeListColumn
+             * @type_function_param2_field6 rowIndex:number
+             * @type_function_param2_field7 rowType:string
+             * @type_function_param2_field8 row:dxTreeListRowObject
+             * @type_function_return string|Node|jQuery
              */
             regenerateColumnsByVisibleItems: false,
             /**
