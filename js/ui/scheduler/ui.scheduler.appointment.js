@@ -76,6 +76,7 @@ var Appointment = DOMComponent.inherit({
     _resizingRules: {
         horizontal: function() {
             var width = this.invoke("getCellWidth"),
+                step = this.invoke("getResizableStep"),
                 isRTL = this.option("rtlEnabled"),
                 reducedHandles = {
                     head: isRTL ? "right" : "left",
@@ -93,7 +94,7 @@ var Appointment = DOMComponent.inherit({
                 handles: handles,
                 minHeight: 0,
                 minWidth: width,
-                step: width
+                step: step
             };
         },
         vertical: function() {
@@ -218,7 +219,10 @@ var Appointment = DOMComponent.inherit({
         }
 
         var config = this._resizingRules[this.option("direction")].apply(this);
-        config.stepPrecision = "strict";
+
+        if(!this.invoke("isGroupedByDate")) {
+            config.stepPrecision = "strict";
+        }
         this._createComponent(this.$element(), Resizable, extend(config, this.option("resizableConfig")));
     }
 

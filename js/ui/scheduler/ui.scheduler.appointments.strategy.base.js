@@ -76,10 +76,10 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getDeltaWidth: function(args, initialSize) {
-        var cellWidth = this._defaultWidth || this.getAppointmentMinSize(),
+        var intervalWidth = this.instance.fire("getResizableStep") || this.getAppointmentMinSize(),
             initialWidth = initialSize.width;
 
-        return Math.round((args.width - initialWidth) / cellWidth);
+        return Math.round((args.width - initialWidth) / intervalWidth);
     },
 
     _correctRtlCoordinates: function(coordinates) {

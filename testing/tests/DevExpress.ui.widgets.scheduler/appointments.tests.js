@@ -786,7 +786,8 @@ QUnit.test("Draggable clone should be correct", function(assert) {
 QUnit.test("Delta time for resizable appointment should be 0 if appointment isn't resized", function(assert) {
     var strategy = new HorizontalMonthAppointmentsStrategy({
             notifyObserver: commonUtils.noop,
-            option: commonUtils.noop
+            option: commonUtils.noop,
+            fire: commonUtils.noop
         }),
         deltaTime = strategy.getDeltaTime({ width: 100 }, { width: 100 });
 
