@@ -10,6 +10,13 @@ if(useJQuery) {
         jQuery.event.special[name] = eventObject;
     });
 
+    var passiveListenerEventName = eventsEngine.passiveListenerEvents.nativeEventName;
+    jQuery.event.special[passiveListenerEventName] = {
+        setup: function(data, namespaces, handler) {
+            this.addEventListener(passiveListenerEventName, handler, { passive: false });
+        }
+    };
+
     eventsEngine.set({
         on: function(element) {
             jQuery(element).on.apply(jQuery(element), Array.prototype.slice.call(arguments, 1));
