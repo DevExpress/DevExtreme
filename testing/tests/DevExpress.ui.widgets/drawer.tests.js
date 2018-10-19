@@ -823,7 +823,7 @@ QUnit.test("panel should be rendered correctly after openedStateMode changing, h
     const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($panel.css("right"), "0px", "panel has correct right");
-    assert.equal($panel.css("left"), "700px", "panel has correct left");
+    assert.equal($panel.position().left, 700, "panel has correct left");
     fx.off = false;
 });
 
