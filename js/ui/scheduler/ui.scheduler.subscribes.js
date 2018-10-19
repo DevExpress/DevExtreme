@@ -34,6 +34,7 @@ var subscribes = {
             recurrenceRule = this.fire("getField", "recurrenceRule", appointmentData),
             recurrenceException = this._getRecurrenceException(appointmentData),
             dateRange = this._workSpace.getDateRange(),
+            allDay = this.appointmentTakesAllDay(appointmentData),
             startViewDate = this.appointmentTakesAllDay(appointmentData) ? dateUtils.trimTime(new Date(dateRange[0])) : dateRange[0],
             originalStartDate = options.originalStartDate || startDate,
             renderingStrategy = this.getLayoutManager().getRenderingStrategyInstance();
@@ -53,7 +54,7 @@ var subscribes = {
             dates.push(startDate);
         }
 
-        if(renderingStrategy.needSeparateAppointment()) {
+        if(renderingStrategy.needSeparateAppointment(allDay)) {
             var datesLength = dates.length,
                 longParts = [],
                 resultDates = [];
@@ -64,7 +65,7 @@ var subscribes = {
                 }, !!recurrenceRule);
 
                 longParts = dateUtils.getDatesOfInterval(dates[i], endDateOfPart, {
-                    milliseconds: this.getWorkSpace().getIntervalDuration()
+                    milliseconds: this.getWorkSpace().getIntervalDuration(allDay)
                 });
 
                 resultDates = resultDates.concat(longParts);

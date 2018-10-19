@@ -590,6 +590,46 @@ QUnit.test("AllDay appointment width should be decreased if it greater than work
     assert.roughEqual($appointment2.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
 });
 
+QUnit.test("Long AllDay appointment should be separated (grouped mode, week view, groupByDate = true)", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 4, 10),
+        views: ["week"],
+        currentView: "week",
+        groupByDate: true,
+        dataSource: [{
+            startDate: new Date(2015, 4, 10),
+            endDate: new Date(2015, 4, 12),
+            ownerId: [2],
+            allDay: true
+        }],
+        groups: ["ownerId"],
+        resources: [
+            {
+                field: "ownerId",
+                label: "o",
+                allowMultiple: true,
+                dataSource: [
+                    {
+                        text: "a",
+                        id: 1
+                    },
+                    {
+                        text: "b",
+                        id: 2
+                    }
+                ]
+            }
+        ]
+    });
+
+    var $appointment1 = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0),
+        $appointment2 = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1),
+        $cell = $(this.instance.$element()).find(".dx-scheduler-date-table-cell");
+
+    assert.roughEqual($appointment1.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
+    assert.roughEqual($appointment2.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
+});
+
 QUnit.test("All-day appointment inside grouped view should have a right resizable area", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 6, 10),

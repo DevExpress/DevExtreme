@@ -2324,8 +2324,8 @@ var SchedulerWorkSpace = Widget.inherit({
         return 3600000 * this.option("hoursInterval");
     },
 
-    getIntervalDuration: function() {
-        return this.getCellDuration();
+    getIntervalDuration: function(allDay) {
+        return allDay ? toMs("day") : this.getCellDuration();
     },
 
     getVisibleDayDuration: function() {
