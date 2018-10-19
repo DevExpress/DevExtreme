@@ -276,7 +276,7 @@
         "dxHtmlEditor-dialogLinkCaption": "Add Link",
         "dxHtmlEditor-dialogLinkUrlField": "URL",
         "dxHtmlEditor-dialogLinkTextField": "Text",
-        "dxHtmlEditor-dialogLinkTargetField": "Open text in new window",
+        "dxHtmlEditor-dialogLinkTargetField": "Open link in new window",
         "dxHtmlEditor-dialogImageCaption": "Add Image",
         "dxHtmlEditor-dialogImageUrlField": "URL",
         "dxHtmlEditor-dialogImageAltField": "Alternate text",
