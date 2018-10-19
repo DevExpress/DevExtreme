@@ -4649,6 +4649,32 @@ QUnit.test("Remove row when set onRowRemoving", function(assert) {
     assert.equal(testElement.find('.dx-data-row').length, 6, "count rows");
 });
 
+// T677915
+QUnit.test("Edit data should be reseted after remove error", function(assert) {
+    var that = this,
+        testElement = $('#container');
+
+    that.options.editing = {
+        mode: "cell",
+        allowDeleting: true,
+        texts: {
+            confirmDeleteMessage: null
+        }
+    };
+
+    that.getDataSource().store().remove = function() {
+        return $.Deferred().reject("Test Error");
+    };
+
+    that.rowsView.render(testElement);
+
+    // act
+    that.deleteRow(0);
+
+    // assert
+    assert.notOk(that.hasEditData(), "no edit data");
+});
+
 QUnit.test("Remove row when set onRowRemoved", function(assert) {
     // arrange
     var that = this,
