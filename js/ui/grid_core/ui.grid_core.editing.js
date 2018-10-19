@@ -1292,7 +1292,9 @@ var EditingController = modules.ViewController.inherit((function() {
                     $popupContent = that.getPopupContent();
                     dataController.dataErrorOccurred.fire(arg, $popupContent);
                     if(editMode !== EDIT_MODE_BATCH) {
-                        that._removeEditDataItem(editIndex);
+                        if(editData && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
+                            that._removeEditDataItem(editIndex);
+                        }
                         break;
                     }
                 } else if(!cancel || !editData || editMode !== EDIT_MODE_BATCH && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
