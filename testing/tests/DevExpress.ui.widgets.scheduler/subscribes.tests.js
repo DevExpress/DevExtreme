@@ -1477,6 +1477,65 @@ QUnit.test("'needCoordinates' should work correct when groupByDate = true, Day v
     });
 });
 
+QUnit.test("'needCoordinates' should work correct for allDay appointment when groupByDate = true, Week view", function(assert) {
+    var priorityData = [
+        {
+            text: "Low Priority",
+            id: 1,
+            color: "#1e90ff"
+        }, {
+            text: "High Priority",
+            id: 2,
+            color: "#ff9747"
+        }
+    ];
+    this.createInstance({
+        currentView: "week",
+        views: [{
+            type: "week",
+            name: "week",
+            intervalCount: 2
+        }],
+        currentDate: new Date(2018, 4, 21, 9, 0),
+        groupByDate: true,
+        startDayHour: 9,
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: priorityData,
+                label: "Priority"
+            }
+        ],
+    });
+
+    this.instance.fire("needCoordinates", {
+        appointmentData: {
+            startDate: new Date(2018, 4, 21, 9, 0),
+            endDate: new Date(2018, 4, 23, 9, 0),
+            priorityId: 2,
+            allDay: true
+        },
+        startDate: new Date(2018, 4, 21, 9, 0),
+        callback: function(results) {
+            assert.equal(results.length, 2, "Result length is OK");
+
+            var result = results[0];
+            assert.equal(result.cellIndex, 1, "Coordinates are OK");
+            assert.equal(result.rowIndex, 0, "Coordinates are OK");
+            assert.equal(result.top, 0, "Coordinates are OK");
+            assert.roughEqual(result.left, 196, 1.1, "Coordinates are OK");
+
+            result = results[1];
+            assert.equal(result.cellIndex, 2, "Coordinates are OK");
+            assert.equal(result.rowIndex, 0, "Coordinates are OK");
+            assert.equal(result.top, 0, "Coordinates are OK");
+            assert.roughEqual(result.left, 260, 1.1, "Coordinates are OK");
+        }
+    });
+});
+
 QUnit.test("'needCoordinates' should work correct when groupByDate = true, Week view", function(assert) {
     var priorityData = [
         {
