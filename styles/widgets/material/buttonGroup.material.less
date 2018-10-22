@@ -1,16 +1,34 @@
-.dx-buttongroup-wrapper {
-    .dx-button-mode-outlined {
-        &.dx-buttongroup-item {
-            border-left-width: 0;
-        }
+.dx-button-mode-contained {
+    &.dx-buttongroup-item {
+        padding-right: 1px;
+    }
 
-        &.dx-buttongroup-first-item {
-            border-left-width: 1px;
-        }
+    &.dx-buttongroup-last-item {
+        padding-right: 0;
     }
 }
 
-.dx-buttongroup-item {
+.dx-button-mode-outlined {
+    &.dx-buttongroup-item {
+        border-left-width: 0;
+    }
+
+    &.dx-buttongroup-first-item {
+        border-left-width: 1px;
+    }
+}
+
+.dx-button-mode-text {
+    &.dx-buttongroup-item {
+        .border-radius(@button-border-radius);
+    }
+
+    &.dx-buttongroup-first-item {
+        margin-left: 0;
+    }
+}
+
+.dx-button-mode-outlined, .dx-button-mode-contained {
     &.dx-buttongroup-first-item {
         .border-radius-top-left(@button-border-radius);
         .border-radius-bottom-left(@button-border-radius);
@@ -19,16 +37,6 @@
     &.dx-buttongroup-last-item {
         .border-radius-top-right(@button-border-radius);
         .border-radius-bottom-right(@button-border-radius);
-    }
-
-    &.dx-buttongroup-first-item {
-        border-left-width: 1px;
-    }
-
-    &.dx-button-mode-text {
-        .border-radius(@button-border-radius);
-
-        border-left-width: 1px;
     }
 }
 
@@ -50,3 +58,34 @@
     }
 }
 
+.dx-rtl {
+    &.dx-button-mode-outlined, &.dx-button-mode-contained {
+        &.dx-buttongroup-first-item {
+            .border-radius-custom(0, @button-border-radius, @button-border-radius, 0);
+        }
+
+        &.dx-buttongroup-last-item {
+            .border-radius-custom(@button-border-radius, 0, 0, @button-border-radius);
+        }
+    }
+
+    &.dx-button-mode-text {
+        &.dx-buttongroup-first-item {
+            margin-left: 1px;
+        }
+
+        &.dx-buttongroup-last-item {
+            margin-left: 0;
+        }
+    }
+
+    &.dx-button-mode-outlined {
+        &.dx-buttongroup-first-item {
+            border-left-width: 0;
+        }
+
+        &.dx-buttongroup-last-item {
+            border-left-width: 1px;
+        }
+    }
+}
