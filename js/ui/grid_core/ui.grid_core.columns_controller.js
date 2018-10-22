@@ -1619,7 +1619,7 @@ module.exports = {
 
                 },
                 getFilteringColumns: function() {
-                    return this.getColumns().filter(item => (item.dataField || item.name) && item.allowFiltering).map(item => {
+                    return this.getColumns().filter(item => (item.dataField || item.name) && (item.allowFiltering || item.allowHeaderFiltering)).map(item => {
                         let field = extend(true, {}, item);
                         if(!isDefined(field.dataField)) {
                             field.dataField = field.name;
