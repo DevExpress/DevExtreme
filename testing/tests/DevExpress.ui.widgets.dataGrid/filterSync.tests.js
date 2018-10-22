@@ -361,6 +361,19 @@ QUnit.module("getCombinedFilter", {
         assert.deepEqual(this.getCombinedFilter(true), ["test", "=", 1], "combined filter");
     });
 
+    // T681595
+    QUnit.test("allowFiltering = false, allowHeaderFiltering = true", function(assert) {
+        // act
+        this.setupDataGrid({
+            dataSource: [],
+            columns: [{ name: "test", allowFiltering: false, allowHeaderFiltering: true }],
+            filterValue: ["test", "=", 1]
+        });
+
+        // assert
+        assert.deepEqual(this.getCombinedFilter(true), ["test", "=", 1], "combined filter");
+    });
+
     QUnit.test("between", function(assert) {
         // act
         this.setupDataGrid({
