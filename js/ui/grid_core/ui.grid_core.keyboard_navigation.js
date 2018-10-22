@@ -1221,14 +1221,18 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _fireFocusedCellChanged: function($cellElement, prevCellIndex, prevRowIndex) {
         var that = this,
             columnIndex = that.option("focusedColumnIndex"),
+            dataController,
+            row,
             focusedRowIndex = that.option("focusedRowIndex");
 
         if(prevCellIndex !== columnIndex || prevRowIndex !== focusedRowIndex) {
+            dataController = that.getController("data");
+            row = dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
             that.executeAction("onFocusedCellChanged", {
                 cellElement: $cellElement,
                 columnIndex: columnIndex,
                 rowIndex: focusedRowIndex,
-                row: that.getController("data").getVisibleRows()[focusedRowIndex],
+                row: row,
                 column: that.getController("columns").getVisibleColumns()[columnIndex]
             });
         }
@@ -1259,14 +1263,18 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _fireFocusedRowChanged: function($rowElement) {
         var that = this,
+            row,
+            dataController,
             focusedRowKey = that.option("focusedRowKey"),
             focusedRowIndex = that.option("focusedRowIndex");
 
         if(focusedRowKey && that.option("focusedRowEnabled")) {
+            dataController = that.getController("data");
+            row = dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
             that.executeAction("onFocusedRowChanged", {
                 rowElement: $rowElement,
                 rowIndex: focusedRowIndex,
-                row: that.getController("data").getVisibleRows()[focusedRowIndex]
+                row: row
             });
         }
     }
