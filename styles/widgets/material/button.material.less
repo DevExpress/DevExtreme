@@ -78,8 +78,11 @@
     .dx-button-text-and-icon-sizing();
 }
 
-.dx-button-has-icon:not(.dx-button-has-text) {
-    .dx-button-flat-styling(@button-flat-color);
+.dx-button {
+    &.dx-button-has-icon:not(.dx-button-has-text) {
+        .border-radius(50%);
+        .dx-button-flat-color-styling(@button-flat-color);
+    }
 }
 
 // NOTE: Button styles
@@ -185,14 +188,6 @@
     border: 1px solid @border-color;
 }
 
-.dx-button-flat-styling(@button-color) {
-    &.dx-button-has-icon:not(.dx-button-has-text) {
-        .border-radius(50%);
-    }
-
-    .dx-button-flat-color-styling(@button-color);
-}
-
 .dx-button-styling-clear() {
     .box-shadow(none);
     background: transparent;
@@ -254,7 +249,7 @@
     }
 
     &.dx-button-back {
-        .dx-button-flat-styling(@button-flat-color);
+        .dx-button-flat-color-styling(@button-flat-color);
         .border-radius(50%);
         .dx-button-onlyicon-sizing();
         .dx-button-text {
@@ -265,18 +260,18 @@
 
 
 .dx-button-mode-text {
-    .dx-button-flat-styling(@button-flat-color);
+    .dx-button-flat-color-styling(@button-flat-color);
 
     &.dx-button-default {
-        .dx-button-flat-styling(@button-default-bg);
+        .dx-button-flat-color-styling(@button-default-bg);
     }
 
     &.dx-button-danger {
-        .dx-button-flat-styling(@button-danger-bg);
+        .dx-button-flat-color-styling(@button-danger-bg);
     }
 
     &.dx-button-success {
-        .dx-button-flat-styling(@button-success-bg);
+        .dx-button-flat-color-styling(@button-success-bg);
     }
 }
 
