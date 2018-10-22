@@ -442,8 +442,10 @@ function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEnd
         }
         cur = correctTickValue(cur);
 
-        while(cur < max || generateExtraTick && cur <= max) {
+        let prev;
+        while(cur < max && cur !== prev || generateExtraTick && cur <= max) {
             ticks.push(cur);
+            prev = cur;
             cur = correctTickValue(addInterval(cur, tickInterval));
         }
         if(endOnTick || (cur - max === 0) || (!typeUtils.isDefined(endOnTick) && resolveEndOnTick(max, cur, tickInterval, businessViewInfo))) {
@@ -514,8 +516,10 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
         // last tick to max
         minorTickInterval = updateTickInterval(minorTickInterval, ceil(max, tickInterval, min), factor);
         cur = correctTickValue(lastMajor, minorTickInterval);
-        while(cur < max) {
+        let prev;
+        while(cur < max && cur !== prev) {
             ticks.push(cur);
+            prev = cur;
             cur = addInterval(cur, minorTickInterval);
         }
 
