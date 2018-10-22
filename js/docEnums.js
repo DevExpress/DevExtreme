@@ -901,11 +901,6 @@
  */
 
 /**
- * @typedef {string} Enums.XlsxCellDataType
- * @enum {'n'|'s'}
- */
-
-/**
  * @typedef {string} Enums.XlsxHorizontalAlignment
  * @enum {'center'|'centerContinuous'|'distributed'|'fill'|'general'|'justify'|'left'|'right'}
  */
