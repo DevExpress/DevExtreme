@@ -14,12 +14,14 @@ var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     extend = require("../core/utils/extend").extend,
     registerComponent = require("../core/component_registrator");
 
-var DROP_DOWN_BOX_CLASS = "dx-dropdownbox";
+var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
+    ANONYMOUS_TEMPLATE_NAME = "content";
 
 /**
  * @name dxDropDownBox
  * @isEditor
  * @inherits DataExpressionMixin, dxDropDownEditor
+ * @hasTranscludedContent
  * @module ui/drop_down_box
  * @export default
  */
@@ -46,6 +48,10 @@ var DropDownBox = DropDownEditor.inherit({
 
     _getElements: function() {
         return $(this.content()).find("*");
+    },
+
+    _getAnonymousTemplateName: function() {
+        return ANONYMOUS_TEMPLATE_NAME;
     },
 
     _getDefaultOptions: function() {
