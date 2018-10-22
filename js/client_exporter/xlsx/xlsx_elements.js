@@ -1,7 +1,6 @@
 /**
 * @name XlsxFont
 * @type object
-* @hidden
 */
 /**
 * @name XlsxFont.size
@@ -31,7 +30,6 @@
 /**
 * @name XlsxGridCell
 * @type object
-* @hidden
 */
 /**
 * @name XlsxGridCell.rowType
