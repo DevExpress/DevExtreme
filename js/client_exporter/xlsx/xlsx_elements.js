@@ -1,53 +1,53 @@
 /**
-* @name XlsxFont
+* @name ExcelFont
 * @type object
 */
 /**
-* @name XlsxFont.size
+* @name ExcelFont.size
 * @type number
 */
 /**
-* @name XlsxFont.name
+* @name ExcelFont.name
 * @type string
 */
 /**
-* @name XlsxFont.bold
+* @name ExcelFont.bold
 * @type boolean
 */
 /**
-* @name XlsxFont.italic
+* @name ExcelFont.italic
 * @type boolean
 */
 /**
-* @name XlsxFont.underline
-* @type Enums.XlsxUnderlineType
+* @name ExcelFont.underline
+* @type Enums.ExcelFontUnderlineType
 */
 /**
-* @name XlsxFont.color
+* @name ExcelFont.color
 * @type string
 */
 
 /**
-* @name XlsxGridCell
+* @name ExcelGridCell
 * @type object
 */
 /**
-* @name XlsxGridCell.rowType
+* @name ExcelGridCell.rowType
 * @type string
 */
 /**
-* @name XlsxGridCell.data
+* @name ExcelGridCell.data
 * @type object
 */
 /**
-* @name XlsxGridCell.key
+* @name ExcelGridCell.key
 * @type any
 */
 /**
-* @name XlsxGridCell.column
+* @name ExcelGridCell.column
 * @type dxDataGridColumn
 */
 /**
-* @name XlsxGridCell.value
+* @name ExcelGridCell.value
 * @type any
 */

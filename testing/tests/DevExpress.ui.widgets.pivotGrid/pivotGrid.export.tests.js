@@ -296,7 +296,7 @@ QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)
     );
 });
 
-QUnit.test("customizeExcelCell - set alignment: null for all xlsx cells", function(assert) {
+QUnit.test("customizeExcelCell - set alignment: null for all excel cells", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         BASE_STYLE_XML +
         '<cellXfs count="4">' +

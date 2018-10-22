@@ -661,16 +661,16 @@ dataGridCore.registerModule("export", {
                  * @name dxDataGridOptions.export.customizeExcelCell
                  * @type function(options)
                  * @type_function_param1 options:object
-                 * @type_function_param1_field1 alignmentHorizontal:Enums.XlsxHorizontalAlignment
-                 * @type_function_param1_field2 alignmentVertical:Enums.XlsxVerticalAlignment
+                 * @type_function_param1_field1 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
+                 * @type_function_param1_field2 verticalAlignment:Enums.ExcelCellVerticalAlignment
                  * @type_function_param1_field3 wrapTextEnabled:boolean
                  * @type_function_param1_field4 backgroundColor:string
-                 * @type_function_param1_field5 patternStyle:Enums.XlsxPatternStyle
-                 * @type_function_param1_field6 patternColor:string
-                 * @type_function_param1_field7 font:XlsxFont
+                 * @type_function_param1_field5 fillPatternStyle:Enums.ExcelCellPatternStyle
+                 * @type_function_param1_field6 fillPatternColor:string
+                 * @type_function_param1_field7 font:ExcelFont
                  * @type_function_param1_field8 value:string|number|date
                  * @type_function_param1_field9 numberFormat:string
-                 * @type_function_param1_field10 gridCell:XlsxGridCell
+                 * @type_function_param1_field10 gridCell:ExcelGridCell
                  */
             }
             /**
