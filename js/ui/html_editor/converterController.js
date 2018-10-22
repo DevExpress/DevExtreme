@@ -15,4 +15,4 @@ class ConverterController {
 
 const controller = new ConverterController();
 
-export { controller as default };
+export default controller;

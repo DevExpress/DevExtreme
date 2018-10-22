@@ -10,4 +10,4 @@ class BaseTheme extends Theme {
     }
 }
 
-module.exports = BaseTheme;
+export default BaseTheme;

@@ -8,18 +8,17 @@ class QuillRegistrator {
 
         const quill = this.getQuill();
 
-        const BaseTheme = require("./themes/base");
-        const Image = require("./formats/image");
-        const Link = require("./formats/link");
-        const Toolbar = require("./modules/toolbar");
-        const DropImage = require("./modules/dropImage");
-        const Variables = require("./modules/variables");
+        const BaseTheme = require("./themes/base").default;
+        const Image = require("./formats/image").default;
+        const Link = require("./formats/link").default;
+        const FontStyle = require("./formats/font").default;
+        const SizeStyle = require("./formats/size").default;
+        const Toolbar = require("./modules/toolbar").default;
+        const DropImage = require("./modules/dropImage").default;
+        const Variables = require("./modules/variables").default;
 
         const DirectionStyle = quill.import("attributors/style/direction");
         const AlignStyle = quill.import("attributors/style/align");
-        const FontStyle = quill.import("attributors/style/font");
-
-        let SizeStyle = quill.import("attributors/style/size");
 
         quill.register({
             "formats/align": AlignStyle,
@@ -74,4 +73,4 @@ class QuillRegistrator {
     }
 };
 
-export { QuillRegistrator as default };
+export default QuillRegistrator;

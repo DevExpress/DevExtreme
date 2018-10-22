@@ -67,6 +67,26 @@ QUnit.module("Value as HTML markup", () => {
 
         instance.option("valueType", "html");
     });
+
+    test("render markup with a font-size style", (assert) => {
+        const instance = $("#htmlEditor").dxHtmlEditor({
+            value: '<span style="font-size: 20px">Test</span>'
+        }).dxHtmlEditor("instance");
+        const $element = instance.$element();
+        const markup = $element.find(getSelector(CONTENT_CLASS)).html();
+
+        assert.equal(markup, '<p><span style="font-size: 20px;">Test</span></p>');
+    });
+
+    test("render markup with a font-family style", (assert) => {
+        const instance = $("#htmlEditor").dxHtmlEditor({
+            value: '<span style="font-family: Terminal;">Test</span>'
+        }).dxHtmlEditor("instance");
+        const $element = instance.$element();
+        const markup = $element.find(getSelector(CONTENT_CLASS)).html();
+
+        assert.equal(markup, '<p><span style="font-family: Terminal;">Test</span></p>');
+    });
 });
 
 

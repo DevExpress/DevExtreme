@@ -411,4 +411,4 @@ class ToolbarModule extends BaseModule {
     }
 }
 
-module.exports = ToolbarModule;
+export default ToolbarModule;

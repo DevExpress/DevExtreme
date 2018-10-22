@@ -55,4 +55,4 @@ class ExtLink extends Link {
     }
 }
 
-module.exports = ExtLink;
+export default ExtLink;
