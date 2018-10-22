@@ -122,15 +122,18 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
         },
 
-        isRowFocused: function(key, index) {
-            var focusedRowKey = this.option("focusedRowKey"),
-                focusedRowIndex;
+        /**
+         * @name GridBaseMethods.isRowFocused
+         * @publicName isRowFocused(key)
+         * @param1 key:any
+         */
+        isRowFocused: function(key) {
+            var focusedRowKey = this.option("focusedRowKey");
 
             if(focusedRowKey !== undefined) {
                 return equalByValue(key, this.option("focusedRowKey"));
             }
-            focusedRowIndex = this.getController("keyboardNavigation").getVisibleRowIndex();
-            return focusedRowIndex === index;
+            return false;
         },
 
         _resetFocusedRowKey: function() {
@@ -507,7 +510,7 @@ module.exports = {
                     var $row = this.callBase(row);
 
                     if(this.option("focusedRowEnabled") && row) {
-                        if(this.getController("focus").isRowFocused(row.key, row.rowIndex)) {
+                        if(this.getController("focus").isRowFocused(row.key)) {
                             $row.addClass(ROW_FOCUSED_CLASS);
                         }
                     }
