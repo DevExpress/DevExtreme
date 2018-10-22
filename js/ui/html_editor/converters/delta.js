@@ -74,4 +74,4 @@ class DeltaConverter {
 
 ConverterController.addConverter("delta", DeltaConverter);
 
-export { DeltaConverter as default };
+export default DeltaConverter;

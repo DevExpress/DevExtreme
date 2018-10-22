@@ -57,4 +57,4 @@ class ExtImage extends Image {
 
 ExtImage.blotName = "extendedImage";
 
-module.exports = ExtImage;
+export default ExtImage;

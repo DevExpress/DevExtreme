@@ -1,5 +1,7 @@
 import QuillRegistrator from "ui/html_editor/quill_registrator";
 import Image from "ui/html_editor/formats/image";
+import Font from "ui/html_editor/formats/font";
+import Size from "ui/html_editor/formats/size";
 
 const { test } = QUnit;
 
@@ -15,8 +17,6 @@ QUnit.module("Quill registrator", () => {
 
         const AlignStyle = quill.import("attributors/style/align");
         const DirectionStyle = quill.import("attributors/style/direction");
-        const FontStyle = quill.import("attributors/style/font");
-        const SizeStyle = quill.import("attributors/style/size");
 
         const imageFormat = quill.import("formats/extendedImage");
 
@@ -24,8 +24,8 @@ QUnit.module("Quill registrator", () => {
 
         assert.deepEqual(alignFormat, AlignStyle, "Style attributor");
         assert.deepEqual(directionFormat, DirectionStyle, "Style attributor");
-        assert.deepEqual(fontFormat, FontStyle, "Style attributor");
-        assert.deepEqual(sizeFormat, SizeStyle, "Style attributor");
+        assert.deepEqual(fontFormat, Font, "Style attributor");
+        assert.deepEqual(sizeFormat, Size, "Style attributor");
 
         assert.deepEqual(imageFormat, Image, "Custom format");
 
@@ -69,4 +69,3 @@ QUnit.module("Quill registrator", () => {
         assert.deepEqual(customModuleNames, ["fakeModule"], "Should return only custom modules");
     });
 });
-

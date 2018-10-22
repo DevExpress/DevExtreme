@@ -39,4 +39,4 @@ class MarkdownConverter {
 
 converterController.addConverter("markdown", MarkdownConverter);
 
-export { MarkdownConverter as default };
+export default MarkdownConverter;

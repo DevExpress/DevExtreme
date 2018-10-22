@@ -83,4 +83,4 @@ class DropImageModule extends BaseModule {
     }
 }
 
-module.exports = DropImageModule;
+export default DropImageModule;

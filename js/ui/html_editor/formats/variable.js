@@ -44,4 +44,4 @@ Variable.blotName = "variable";
 Variable.tagName = "span";
 Variable.className = VARIABLE_CLASS;
 
-module.exports = Variable;
+export default Variable;

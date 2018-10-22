@@ -97,4 +97,4 @@ class VariableModule extends PopupModule {
     }
 }
 
-module.exports = VariableModule;
+export default VariableModule;

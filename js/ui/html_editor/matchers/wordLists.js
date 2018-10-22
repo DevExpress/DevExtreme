@@ -39,4 +39,4 @@ const getMatcher = (quill) => {
     };
 };
 
-module.exports = getMatcher;
+export default getMatcher;
