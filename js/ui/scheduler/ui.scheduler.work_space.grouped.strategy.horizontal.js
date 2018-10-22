@@ -134,12 +134,10 @@ var HorizontalGroupedStrategy = GroupedStrategy.inherit({
             endOffset;
 
         if(this._workSpace.isGroupedByDate()) {
-
-            groupIndex = 0;
             startCellIndex = 0;
 
             startOffset = $cells.eq(startCellIndex).offset().left - cellWidth / 2;
-            endOffset = $cells.eq(startCellIndex + cellCount * this._workSpace._getGroupCount() - 1).offset().left + cellWidth + cellWidth / 2;
+            endOffset = $cells.eq(cellCount * this._workSpace._getGroupCount() - 1).offset().left + cellWidth + cellWidth / 2;
         } else {
             cellIndex = this._workSpace.getCellIndexByCoordinates(coordinates);
             groupIndex = coordinates.groupIndex || Math.floor(cellIndex / cellCount);
