@@ -658,9 +658,9 @@ dataGridCore.registerModule("export", {
                     exportSelectedRows: messageLocalization.format("dxDataGrid-exportSelectedRows")
                 }
                 /**
-                 * @name dxDataGridOptions.export.customizeXlsxCell
-                 * @type function(e)
-                 * @type_function_param1 e:object
+                 * @name dxDataGridOptions.export.customizeExcelCell
+                 * @type function(options)
+                 * @type_function_param1 options:object
                  * @type_function_param1_field1 alignmentHorizontal:Enums.XlsxHorizontalAlignment
                  * @type_function_param1_field2 alignmentVertical:Enums.XlsxVerticalAlignment
                  * @type_function_param1_field3 wrapTextEnabled:boolean
