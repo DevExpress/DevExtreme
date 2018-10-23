@@ -22,6 +22,7 @@ const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 const DIALOG_CLASS = "dx-formdialog";
 const BUTTON_WITH_TEXT_CLASS = "dx-button-has-text";
 const ICON_CLASS = "dx-icon";
+const DISABLED_STATE_CLASS = "dx-state-disabled";
 
 const BOLD_FORMAT_CLASS = "dx-bold-format";
 const ITALIC_FORMAT_CLASS = "dx-italic-format";
@@ -29,6 +30,9 @@ const ALIGNCENTER_FORMAT_CLASS = "dx-aligncenter-format";
 const CODEBLOCK_FORMAT_CLASS = "dx-codeblock-format";
 const COLOR_FORMAT_CLASS = "dx-color-format";
 const BACKGROUND_FORMAT_CLASS = "dx-background-format";
+const ORDEREDLIST_FORMAT_CLASS = "dx-orderedlist-format";
+const BULLETLIST_FORMAT_CLASS = "dx-bulletlist-format";
+const CLEAR_FORMAT_CLASS = "dx-clear-format";
 
 
 const simpleModuleConfig = {
@@ -283,10 +287,14 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
 
     test("undo operation", (assert) => {
         const undoStub = sinon.stub();
-        this.quillMock.history = { undo: undoStub };
+        this.quillMock.history = {
+            undo: undoStub,
+            stack: { undo: ["test"], redo: [] }
+        };
         this.options.items = ["undo"];
 
-        new Toolbar(this.quillMock, this.options);
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateHistoryWidgets();
 
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
@@ -297,10 +305,14 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
 
     test("redo operation", (assert) => {
         const redoStub = sinon.stub();
-        this.quillMock.history = { redo: redoStub };
+        this.quillMock.history = {
+            redo: redoStub,
+            stack: { undo: [], redo: ["test"] }
+        };
         this.options.items = ["redo"];
 
-        new Toolbar(this.quillMock, this.options);
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateHistoryWidgets();
 
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
@@ -338,10 +350,13 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         this.options.items = ["clear"];
 
         const toolbar = new Toolbar(this.quillMock, this.options);
-        toolbar.updateFormatWidgets();
-        const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+        const $clearFormat = this.$element.find(`.${CLEAR_FORMAT_CLASS}`);
 
-        assert.equal($activeFormats.length, 1, "Clear formats button is active because there is active format");
+        assert.ok($clearFormat.hasClass(DISABLED_STATE_CLASS), "Clear formats button is disabled by default");
+
+        toolbar.updateFormatWidgets();
+
+        assert.notOk($clearFormat.hasClass(DISABLED_STATE_CLASS), "Clear formats button is active because there is active format");
     });
 
     test("simple format", (assert) => {
@@ -428,6 +443,49 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         this.quillMock.getFormat = () => { return {}; };
         toolbar.updateFormatWidgets();
         assert.equal($icon.get(0).style.backgroundColor, "inherit", "icon has correct background after reset format");
+    });
+
+    test("list format", (assert) => {
+        this.quillMock.getFormat = () => { return { list: "ordered" }; };
+        this.options.items = ["orderedList", "bulletList", "bold"];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateFormatWidgets();
+        let $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+
+        assert.equal($activeFormats.length, 1, "single button is active");
+        assert.ok($activeFormats.hasClass(ORDEREDLIST_FORMAT_CLASS), "it's an ordered list button");
+
+        this.quillMock.getFormat = () => { return { list: "bullet" }; };
+        toolbar.updateFormatWidgets(true);
+
+        $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+
+        assert.equal($activeFormats.length, 1, "single button is active");
+        assert.ok($activeFormats.hasClass(BULLETLIST_FORMAT_CLASS), "it's a bullet list button");
+    });
+
+    test("undo/redo", (assert) => {
+        this.quillMock.history = { stack: { undo: [], redo: [] } };
+        this.options.items = ["undo", "redo"];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateHistoryWidgets();
+        const $historyWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+
+        assert.equal($historyWidgets.length, 2, "Undo and redo buttons");
+        assert.ok($historyWidgets.eq(0).hasClass(DISABLED_STATE_CLASS), "Undo is disabled");
+        assert.ok($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), "Redo is disabled");
+
+        this.quillMock.history.stack.undo.push("test");
+        toolbar.updateHistoryWidgets();
+        assert.notOk($historyWidgets.eq(0).hasClass(DISABLED_STATE_CLASS), "Undo is enabled");
+        assert.ok($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), "Redo is disabled");
+
+        this.quillMock.history.stack.redo.push("test");
+        toolbar.updateHistoryWidgets();
+        assert.notOk($historyWidgets.eq(0).hasClass(DISABLED_STATE_CLASS), "Undo is enabled");
+        assert.notOk($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), "Redo is enabled");
     });
 });
 

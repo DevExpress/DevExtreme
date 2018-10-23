@@ -21,6 +21,8 @@ const ACTIVE_FORMAT_CLASS = "dx-format-active";
 
 const ICON_CLASS = "dx-icon";
 
+const SELECTION_CHANGE_EVENT = "selection-change";
+
 const DIALOG_COLOR_CAPTION = "dxHtmlEditor-dialogColorCaption";
 const DIALOG_BACKGROUND_CAPTION = "dxHtmlEditor-dialogBackgroundCaption";
 const DIALOG_LINK_CAPTION = "dxHtmlEditor-dialogLinkCaption";
@@ -47,21 +49,41 @@ class ToolbarModule extends BaseModule {
         if(isDefined(options.items)) {
             this._renderToolbar();
 
-            this._editorInstance.on("focusOut", this._resetFormatWidgets.bind(this));
             this.quill.on('editor-change', (eventName) => {
-                this.updateFormatWidgets();
+                const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
+
+                this.updateFormatWidgets(isSelectionChanged);
+                this.updateHistoryWidgets();
             });
         }
     }
 
     _getDefaultClickHandler(formatName) {
         return (e) => {
-            const format = this.quill.getFormat();
-            const value = !format[formatName];
+            const formats = this.quill.getFormat();
+            const value = !formats[formatName];
 
             this.quill.format(formatName, value, USER_ACTION);
-            this.updateFormatWidgets();
+
+            this._updateFormatWidget(formatName, value, formats);
         };
+    }
+
+    _updateFormatWidget(formatName, isApplied, formats) {
+        const widget = this._formats[formatName];
+
+        if(!widget) {
+            return;
+        }
+
+        if(isApplied) {
+            this._markActiveFormatWidget(formatName, widget, formats);
+        } else {
+            this._resetFormatWidget(formatName, widget);
+            formats.hasOwnProperty(formatName) && delete formats[formatName];
+        }
+
+        this._toggleClearFormatting(isApplied || !isEmptyObject(formats));
     }
 
     _getFormatHandlers() {
@@ -82,24 +104,30 @@ class ToolbarModule extends BaseModule {
                 const value = formats.list === "ordered" ? false : "ordered";
 
                 this.quill.format("list", value, USER_ACTION);
+                this.updateFormatWidgets(true);
             },
             bulletList: () => {
                 const formats = this.quill.getFormat();
                 const value = formats.list === "bullet" ? false : "bullet";
 
                 this.quill.format("list", value, USER_ACTION);
+                this.updateFormatWidgets(true);
             },
             alignLeft: () => {
                 this.quill.format("align", false, USER_ACTION);
+                this.updateFormatWidgets(true);
             },
             alignCenter: () => {
                 this.quill.format("align", "center", USER_ACTION);
+                this.updateFormatWidgets(true);
             },
             alignRight: () => {
                 this.quill.format("align", "right", USER_ACTION);
+                this.updateFormatWidgets(true);
             },
             alignJustify: () => {
                 this.quill.format("align", "justify", USER_ACTION);
+                this.updateFormatWidgets(true);
             },
             codeBlock: this._getDefaultClickHandler("code-block"),
             undo: () => {
@@ -247,6 +275,7 @@ class ToolbarModule extends BaseModule {
             widget: "dxButton",
             formatName: formatName,
             options: {
+                hint: titleize(formatName),
                 icon: iconName.toLowerCase(),
                 onClick: this._formatHandlers[formatName] || this._getDefaultClickHandler(formatName),
                 stylingMode: "text"
@@ -259,6 +288,7 @@ class ToolbarModule extends BaseModule {
             widget: "dxSelectBox",
             formatName: item.formatName,
             options: {
+                stylingMode: "filled",
                 dataSource: item.formatValues,
                 onValueChanged: (e) => {
                     if(!this._isReset) {
@@ -310,6 +340,21 @@ class ToolbarModule extends BaseModule {
                         return isHeaderValue ? "H" + item : "Normal";
                     }
                 }
+            },
+            clear: {
+                options: {
+                    disabled: true
+                }
+            },
+            undo: {
+                options: {
+                    disabled: true
+                }
+            },
+            redo: {
+                options: {
+                    disabled: true
+                }
             }
         };
     }
@@ -318,36 +363,70 @@ class ToolbarModule extends BaseModule {
         return this._getDefaultItemsConfig()[formatName];
     }
 
-    updateFormatWidgets() {
+    updateHistoryWidgets() {
+        const historyModule = this.quill.history;
+
+        if(!historyModule) {
+            return;
+        }
+
+        const undoOps = historyModule.stack.undo;
+        const redoOps = historyModule.stack.redo;
+
+        this._updateHistoryWidget(this._formats["undo"], undoOps);
+        this._updateHistoryWidget(this._formats["redo"], redoOps);
+    }
+
+    _updateHistoryWidget(widget, operations) {
+        if(!widget) {
+            return;
+        }
+
+        widget.option("disabled", !operations.length);
+    }
+
+    updateFormatWidgets(isResetRequired) {
         const selection = this.quill.getSelection();
         if(!selection) {
             return;
         }
 
-        this._resetFormatWidgets();
-
         const formats = this.quill.getFormat(selection);
-        for(const format in formats) {
-            const widgetName = this._getFormatWidgetName(format, formats);
-            const formatWidget = this._formats[widgetName] || this._formats[format];
+        const hasFormats = !isEmptyObject(formats);
+
+        if(!hasFormats || isResetRequired) {
+            this._resetFormatWidgets();
+        }
+
+        for(const formatName in formats) {
+            const widgetName = this._getFormatWidgetName(formatName, formats);
+            const formatWidget = this._formats[widgetName] || this._formats[formatName];
 
             if(!formatWidget) {
                 continue;
             }
 
-            if(this._isColorFormat(format)) {
-                this._updateColorWidget(format, formats[format]);
-            }
-
-            if(formatWidget.option("value") === undefined) {
-                formatWidget.$element().addClass(ACTIVE_FORMAT_CLASS);
-            } else {
-                this._setValueSilent(formatWidget, formats[format]);
-            }
+            this._markActiveFormatWidget(formatName, formatWidget, formats);
         }
 
-        if(this._formats.clear && !isEmptyObject(formats)) {
-            this._formats.clear.$element().addClass(ACTIVE_FORMAT_CLASS);
+        this._toggleClearFormatting(hasFormats);
+    }
+
+    _markActiveFormatWidget(name, widget, formats) {
+        if(this._isColorFormat(name)) {
+            this._updateColorWidget(name, formats[name]);
+        }
+
+        if(widget.option("value") === undefined) {
+            widget.$element().addClass(ACTIVE_FORMAT_CLASS);
+        } else {
+            this._setValueSilent(widget, formats[name]);
+        }
+    }
+
+    _toggleClearFormatting(hasFormats) {
+        if(this._formats.clear) {
+            this._formats.clear.option("disabled", !hasFormats);
         }
     }
 
@@ -373,6 +452,9 @@ class ToolbarModule extends BaseModule {
             case "align":
                 widgetName = formatName + titleize(formats[formatName]);
                 break;
+            case "list":
+                widgetName = formats[formatName] + titleize(formatName);
+                break;
             case "code-block":
                 widgetName = "codeBlock";
                 break;
@@ -391,15 +473,22 @@ class ToolbarModule extends BaseModule {
 
     _resetFormatWidgets() {
         each(this._formats, (name, widget) => {
-            widget.$element().removeClass(ACTIVE_FORMAT_CLASS);
-
-            if(this._isColorFormat(name)) {
-                this._updateColorWidget(name);
-            }
-            if(widget.NAME === "dxSelectBox") {
-                this._setValueSilent(widget, null);
-            }
+            this._resetFormatWidget(name, widget);
         });
+    }
+
+    _resetFormatWidget(name, widget) {
+        widget.$element().removeClass(ACTIVE_FORMAT_CLASS);
+
+        if(this._isColorFormat(name)) {
+            this._updateColorWidget(name);
+        }
+        if(name === "clear") {
+            widget.option("disabled", true);
+        }
+        if(widget.NAME === "dxSelectBox") {
+            this._setValueSilent(widget, null);
+        }
     }
 
     addClickHandler(formatName, handler) {
