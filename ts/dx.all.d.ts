@@ -1431,22 +1431,20 @@ declare module DevExpress.data {
         wordWrapEnabled?: boolean;
     }
 }
-declare module DevExpress.client_exporter {
-    export interface XlsxCell {
-        dataType?: 'n' | 's';
-        numberFormat?: string;
-        style?: { alignment?: { horizontal?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right', vertical?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top', wrapText?: boolean }, backgroundColor?: string, patternStyle?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid', patternColor?: string, font?: { size?: number, name?: string, bold?: boolean, italic?: boolean, underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting', color?: XlsxColor } };
-        value?: string | number | Date | boolean;
+declare module DevExpress.exporter {
+    export interface ExcelFont {
+        bold?: boolean;
+        color?: string;
+        italic?: boolean;
+        name?: string;
+        size?: number;
+        underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
     }
-    export interface XlsxColor {
-        rgb?: string;
-    }
-    export interface XlsxGridCell {
+    export interface ExcelDataGridCell {
         column?: DevExpress.ui.dxDataGridColumn;
-        displayValue?: string;
-        row?: { data?: any, key?: any, rowType?: string };
+        data?: any;
+        key?: any;
         rowType?: string;
-        text?: string;
         value?: any;
     }
 }
@@ -1725,6 +1723,7 @@ declare module DevExpress.ui {
         multiple?: boolean;
         /** A function that is executed when an accordion item's title is clicked or tapped. */
         onItemTitleClick?: ((e: { component?: dxAccordion, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any) | string;
+        /** Specifies whether to repaint only those elements whose data changed. */
         repaintChangesOnly?: boolean;
         /** The index number of the currently selected item. */
         selectedIndex?: number;
@@ -1742,7 +1741,7 @@ declare module DevExpress.ui {
     }
     /** This section lists the data source fields that are used in a default template for Accordion items. */
     export interface dxAccordionItemTemplate extends CollectionWidgetItemTemplate {
-        /** Specifies the name of the icon displayed by the widget item title. */
+        /** Specifies the icon to be displayed in the panel's title. */
         icon?: string;
         /** Specifies text displayed for the widget item title. */
         title?: string;
@@ -1778,7 +1777,7 @@ declare module DevExpress.ui {
     }
     /** This section lists the data source fields that are used in a default template for action sheet items. */
     export interface dxActionSheetItemTemplate extends CollectionWidgetItemTemplate {
-        /** Specifies the icon to be displayed on an action sheet button. */
+        /** Specifies the icon to be displayed on the action sheet button. */
         icon?: string;
         /** A handler for the click event raised for the button representing the given action sheet button. */
         onClick?: ((e: { component?: dxActionSheet, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
@@ -2338,7 +2337,7 @@ declare module DevExpress.ui {
         /** Configures editing. */
         editing?: dxDataGridEditing;
         /** Configures client-side exporting. */
-        export?: { enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean, ignoreExcelErrors?: boolean, texts?: { exportTo?: string, exportAll?: string, exportSelectedRows?: string } };
+        export?: { enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean, ignoreExcelErrors?: boolean, texts?: { exportTo?: string, exportAll?: string, exportSelectedRows?: string }, customizeExcelCell?: ((options: { horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right', verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top', wrapTextEnabled?: boolean, backgroundColor?: string, fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid', fillPatternColor?: string, font?: DevExpress.exporter.ExcelFont, value?: string | number | Date, numberFormat?: string, gridCell?: DevExpress.exporter.ExcelDataGridCell }) => any) };
         /** Configures grouping. */
         grouping?: { autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, expandMode?: 'buttonClick' | 'rowClick', texts?: { groupContinuesMessage?: string, groupContinuedMessage?: string, groupByThisColumn?: string, ungroup?: string, ungroupAll?: string } };
         /** Configures the group panel. */
@@ -2578,6 +2577,7 @@ declare module DevExpress.ui {
         dropDownOptions?: dxPopupOptions;
         /** Specifies a custom template for the text field. Must contain the TextBox widget. */
         fieldTemplate?: template | ((value: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** Specifies whether a user can open the drop-down list by clicking a text field. */
         openOnFieldClick?: boolean;
         /** Specifies the DOM events after which the widget's value should be updated. */
         valueChangeEvent?: string;
@@ -2940,6 +2940,7 @@ declare module DevExpress.ui {
         pullRefreshEnabled?: boolean;
         /** Specifies the text displayed in the pullDown panel while the list is being refreshed. */
         refreshingText?: string;
+        /** Specifies whether to repaint only those elements whose data changed. */
         repaintChangesOnly?: boolean;
         /** A Boolean value specifying if the list is scrolled by content. */
         scrollByContent?: boolean;
@@ -3907,6 +3908,7 @@ declare module DevExpress.ui {
         fieldTemplate?: template | ((selectedItem: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** A function that is executed when a user adds a custom item. Requires acceptCustomValue to be set to true. */
         onCustomItemCreating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, text?: string, customItem?: string | any | Promise<any> | JQueryPromise<any> }) => any);
+        /** Specifies whether a user can open the drop-down list by clicking a text field. */
         openOnFieldClick?: boolean;
         /** The text that is provided as a hint in the select box editor. */
         placeholder?: string;
@@ -4024,6 +4026,7 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** Specifies whether the widget changes its state when a user pauses on it. */
         hoverStateEnabled?: boolean;
+        /** Specifies whether to repaint only those elements whose data changed. */
         repaintChangesOnly?: boolean;
         /** Specifies whether or not an end-user can scroll tabs by swiping. */
         scrollByContent?: boolean;
@@ -4045,7 +4048,7 @@ declare module DevExpress.ui {
     export interface dxTabsItemTemplate extends CollectionWidgetItemTemplate {
         /** Specifies a badge text for the tab. */
         badge?: string;
-        /** Specifies the name of the icon displayed by the widget item. */
+        /** Specifies the icon to be displayed on the tab. */
         icon?: string;
     }
     export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
@@ -4063,6 +4066,7 @@ declare module DevExpress.ui {
         onTitleHold?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, event?: event }) => any);
         /** A function that is executed after a tab is rendered. */
         onTitleRendered?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any);
+        /** Specifies whether to repaint only those elements whose data changed. */
         repaintChangesOnly?: boolean;
         /** A Boolean value specifying if tabs in the title are scrolled by content. */
         scrollByContent?: boolean;
@@ -4082,7 +4086,7 @@ declare module DevExpress.ui {
     export interface dxTabPanelItemTemplate extends dxMultiViewItemTemplate {
         /** Specifies a badge text for the tab. */
         badge?: string;
-        /** Specifies the name of the icon displayed by the widget item title. */
+        /** Specifies the icon to be displayed in the tab's title. */
         icon?: string;
         /** Specifies a template that should be used to render the tab for this item only. */
         tabTemplate?: template | (() => string | Element | JQuery);
@@ -4747,7 +4751,7 @@ declare module DevExpress.ui {
         closeMenuOnClick?: boolean;
         /** Specifies whether or not the menu item is disabled. */
         disabled?: boolean;
-        /** The name of an icon to be displayed on the menu item. */
+        /** Specifies the menu item's icon. */
         icon?: string;
         /** Holds an array of menu items. */
         items?: Array<dxMenuBaseItemTemplate>;
@@ -4797,6 +4801,7 @@ declare module DevExpress.ui {
         onOpened?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies whether or not the drop-down editor is displayed. */
         opened?: boolean;
+        /** Specifies whether a user can open the drop-down list by clicking a text field. */
         openOnFieldClick?: boolean;
         /** Specifies whether the drop-down button is visible. */
         showDropDownButton?: boolean;
@@ -4952,7 +4957,7 @@ declare module DevExpress.ui {
         editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, field?: dxFilterBuilderField, setValue?: Function }, container: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies whether the operation can have a value. If it can, the editor is displayed. */
         hasValue?: boolean;
-        /** Specifies an icon that represents the operation. Accepts the name of an icon from the built-in icon library, a path to an image, or the CSS class of an icon stored in an external icon library. */
+        /** Specifies the icon that should represent the filter operation. */
         icon?: string;
         /** Specifies the operation's identifier. */
         name?: string;
@@ -5293,7 +5298,7 @@ declare module DevExpress.ui {
     export interface dxListItemTemplate extends CollectionWidgetItemTemplate {
         /** Specifies the text of a badge displayed for the list item. */
         badge?: string;
-        /** Specifies the item's icon. Accepts an icon name from the built-in icon library, the URL of an image, a CSS class from an external icon library, or a Base64 image. */
+        /** Specifies the list item's icon. */
         icon?: string;
         /** Specifies the name of the list items group in a grouped list. */
         key?: string;
@@ -5578,7 +5583,7 @@ declare module DevExpress.ui {
         expanded?: boolean;
         /** Specifies whether or not the tree view item has children. */
         hasItems?: boolean;
-        /** The name of an icon to be displayed on the tree view item. */
+        /** Specifies the tree view item's icon. */
         icon?: string;
         /** Holds an array of tree view items. */
         items?: Array<dxTreeViewItemTemplate>;
@@ -5999,6 +6004,7 @@ declare module DevExpress.viz {
     }
     /** Declares a collection of constant lines belonging to the argument axis. */
     export interface dxChartArgumentAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
+        /** Specifies whether to extend the axis's default visual range to display the constant line. */
         extendAxis?: boolean;
         /** Configures the constant line label. */
         label?: dxChartArgumentAxisConstantLinesLabel;
@@ -6309,6 +6315,7 @@ declare module DevExpress.viz {
     }
     /** Declares a collection of constant lines belonging to the value axis. */
     export interface dxChartValueAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
+        /** Specifies whether to extend the axis's default visual range to display the constant line. */
         extendAxis?: boolean;
         /** Configures the constant line label. */
         label?: dxChartValueAxisConstantLinesLabel;
@@ -6525,6 +6532,7 @@ declare module DevExpress.viz {
     }
     /** Defines an array of the argument axis constant lines. */
     export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
+        /** Specifies whether to extend the axis to display the constant line. */
         extendAxis?: boolean;
         /** An object defining constant line label options. */
         label?: dxPolarChartArgumentAxisConstantLinesLabel;
@@ -6714,6 +6722,7 @@ declare module DevExpress.viz {
     }
     /** Defines an array of the value axis constant lines. */
     export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
+        /** Specifies whether to extend the axis to display the constant line. */
         extendAxis?: boolean;
         /** An object defining constant line label options. */
         label?: dxPolarChartValueAxisConstantLinesLabel;
