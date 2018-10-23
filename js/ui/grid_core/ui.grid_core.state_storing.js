@@ -42,12 +42,16 @@ var processLoadState = function(that) {
     if(dataController) {
         that._initialPageSize = that.option("paging.pageSize");
         dataController.changed.add(function() {
-            var userState = dataController.getUserState();
+            var userState = dataController.getUserState(),
+                focusedRowEnabled = that.option("focusedRowEnabled");
 
             extend(that._state, userState, {
                 allowedPageSizes: pagerView ? pagerView.getPageSizes() : undefined,
                 filterPanel: { filterEnabled: that.option("filterPanel.filterEnabled") },
-                filterValue: that.option("filterValue")
+                filterValue: that.option("filterValue"),
+                focusedRowKey: focusedRowEnabled ? that.option("focusedRowKey") : undefined,
+                focusedRowIndex: focusedRowEnabled ? that.option("focusedRowIndex") : undefined,
+                focusedColumnIndex: focusedRowEnabled ? that.option("focusedColumnIndex") : undefined
             });
             that.isEnabled() && that.save();
         });
@@ -190,6 +194,12 @@ module.exports = {
 
                     if(allowedPageSizes && that.option("pager.allowedPageSizes") === "auto") {
                         that.option("pager").allowedPageSizes = allowedPageSizes;
+                    }
+
+                    if(that.option("focusedRowEnabled")) {
+                        that.option("focusedRowKey", state.focusedRowKey);
+                        that.option("focusedRowIndex", state.focusedRowIndex);
+                        that.option("focusedColumnIndex", state.focusedColumnIndex);
                     }
 
                     that.component.endUpdate();
