@@ -896,27 +896,22 @@
  */
 
 /**
- * @typedef {string} Enums.XlsxUnderlineType
+ * @typedef {string} Enums.ExcelFontUnderlineType
  * @enum {'double'|'doubleAccounting'|'none'|'single'|'singleAccounting'}
  */
 
 /**
- * @typedef {string} Enums.XlsxCellDataType
- * @enum {'n'|'s'}
- */
-
-/**
- * @typedef {string} Enums.XlsxHorizontalAlignment
+ * @typedef {string} Enums.ExcelCellHorizontalAlignment
  * @enum {'center'|'centerContinuous'|'distributed'|'fill'|'general'|'justify'|'left'|'right'}
  */
 
 /**
- * @typedef {string} Enums.XlsxVerticalAlignment
+ * @typedef {string} Enums.ExcelCellVerticalAlignment
  * @enum {'bottom'|'center'|'distributed'|'justify'|'top'}
  */
 
 /**
- * @typedef {string} Enums.XlsxPatternStyle
+ * @typedef {string} Enums.ExcelCellPatternType
  * @enum {'darkDown'|'darkGray'|'darkGrid'|'darkHorizontal'|'darkTrellis'|'darkUp'|'darkVertical'|'gray0625'|'gray125'|'lightDown'|'lightGray'|'lightGrid'|'lightHorizontal'|'lightTrellis'|'lightUp'|'lightVertical'|'mediumGray'|'none'|'solid'}
  */
 

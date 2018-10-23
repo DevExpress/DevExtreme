@@ -1,135 +1,53 @@
 /**
-* @name XlsxCell
-* @type object
-* @hidden
-*/
-/**
-* @name XlsxCell.value
-* @type string|number|date|boolean
-*/
-/**
-* @name XlsxCell.dataType
-* @type Enums.XlsxCellDataType
-*/
-
-/**
-* @name XlsxCell.numberFormat
-* @type string
-*/
-
-/**
-* @name XlsxCell.style
-* @type object
-*/
-
-/**
-* @name XlsxCell.style.alignment
+* @name ExcelFont
 * @type object
 */
 /**
-* @name XlsxCell.style.alignment.horizontal
-* @type Enums.XlsxHorizontalAlignment
-*/
-/**
-* @name XlsxCell.style.alignment.vertical
-* @type Enums.XlsxVerticalAlignment
-*/
-/**
-* @name XlsxCell.style.alignment.wrapText
-* @type boolean
-*/
-
-/**
-* @name XlsxCell.style.backgroundColor
-* @type string
-*/
-/**
-* @name XlsxCell.style.patternStyle
-* @type Enums.XlsxPatternStyle
-*/
-/**
-* @name XlsxCell.style.patternColor
-* @type string
-*/
-
-/**
-* @name XlsxCell.style.font
-* @type object
-*/
-/**
-* @name XlsxCell.style.font.size
+* @name ExcelFont.size
 * @type number
 */
 /**
-* @name XlsxCell.style.font.name
+* @name ExcelFont.name
 * @type string
 */
 /**
-* @name XlsxCell.style.font.bold
+* @name ExcelFont.bold
 * @type boolean
 */
 /**
-* @name XlsxCell.style.font.italic
+* @name ExcelFont.italic
 * @type boolean
 */
 /**
-* @name XlsxCell.style.font.underline
-* @type Enums.XlsxUnderlineType
+* @name ExcelFont.underline
+* @type Enums.ExcelFontUnderlineType
 */
 /**
-* @name XlsxCell.style.font.color
-* @type XlsxColor
-*/
-
-/**
-* @name XlsxColor
-* @type object
-* @hidden
-*/
-/**
-* @name XlsxColor.rgb
+* @name ExcelFont.color
 * @type string
 */
 
 /**
-* @name XlsxGridCell
+* @name ExcelDataGridCell
 * @type object
-* @hidden
 */
 /**
-* @name XlsxGridCell.rowType
+* @name ExcelDataGridCell.rowType
 * @type string
 */
 /**
-* @name XlsxGridCell.column
+* @name ExcelDataGridCell.data
+* @type object
+*/
+/**
+* @name ExcelDataGridCell.key
+* @type any
+*/
+/**
+* @name ExcelDataGridCell.column
 * @type dxDataGridColumn
 */
 /**
-* @name XlsxGridCell.value
+* @name ExcelDataGridCell.value
 * @type any
-*/
-/**
-* @name XlsxGridCell.displayValue
-* @type string
-*/
-/**
-* @name XlsxGridCell.text
-* @type string
-*/
-
-/**
-* @name XlsxGridCell.row
-* @type object
-*/
-/**
-* @name XlsxGridCell.row.data
-* @type object
-*/
-/**
-* @name XlsxGridCell.row.key
-* @type any
-*/
-/**
-* @name XlsxGridCell.row.rowType
-* @type string
 */

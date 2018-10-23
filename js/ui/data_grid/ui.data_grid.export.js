@@ -657,6 +657,21 @@ dataGridCore.registerModule("export", {
                      */
                     exportSelectedRows: messageLocalization.format("dxDataGrid-exportSelectedRows")
                 }
+                /**
+                 * @name dxDataGridOptions.export.customizeExcelCell
+                 * @type function(options)
+                 * @type_function_param1 options:object
+                 * @type_function_param1_field1 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
+                 * @type_function_param1_field2 verticalAlignment:Enums.ExcelCellVerticalAlignment
+                 * @type_function_param1_field3 wrapTextEnabled:boolean
+                 * @type_function_param1_field4 backgroundColor:string
+                 * @type_function_param1_field5 fillPatternType:Enums.ExcelCellPatternType
+                 * @type_function_param1_field6 fillPatternColor:string
+                 * @type_function_param1_field7 font:ExcelFont
+                 * @type_function_param1_field8 value:string|number|date
+                 * @type_function_param1_field9 numberFormat:string
+                 * @type_function_param1_field10 gridCell:ExcelDataGridCell
+                 */
             }
             /**
              * @name dxDataGridOptions.onExporting

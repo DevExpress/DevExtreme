@@ -14,8 +14,8 @@ const xlsxFillHelper = {
         return result;
     },
 
-    tryCreateFillFromSimpleFormat: function({ backgroundColor, patternStyle, patternColor } = {}) {
-        if(isDefined(backgroundColor) && !(isDefined(patternStyle) && isDefined(patternColor))) {
+    tryCreateFillFromSimpleFormat: function({ backgroundColor, fillPatternType, fillPatternColor } = {}) {
+        if(isDefined(backgroundColor) && !(isDefined(fillPatternType) && isDefined(fillPatternColor))) {
             return {
                 patternFill: {
                     patternType: 'solid',
@@ -24,12 +24,12 @@ const xlsxFillHelper = {
                     }
                 }
             };
-        } else if(isDefined(patternStyle) && isDefined(patternColor)) {
+        } else if(isDefined(fillPatternType) && isDefined(fillPatternColor)) {
             return {
                 patternFill: {
-                    patternType: patternStyle,
+                    patternType: fillPatternType,
                     foregroundColor: {
-                        rgb: patternColor
+                        rgb: fillPatternColor
                     },
                     backgroundColor: {
                         rgb: backgroundColor
@@ -43,11 +43,11 @@ const xlsxFillHelper = {
         if(source.backgroundColor !== undefined) {
             target.backgroundColor = source.backgroundColor;
         }
-        if(source.patternStyle !== undefined) {
-            target.patternStyle = source.patternStyle;
+        if(source.fillPatternType !== undefined) {
+            target.fillPatternType = source.fillPatternType;
         }
-        if(source.patternColor !== undefined) {
-            target.patternColor = source.patternColor;
+        if(source.fillPatternColor !== undefined) {
+            target.fillPatternColor = source.fillPatternColor;
         }
     },
 
