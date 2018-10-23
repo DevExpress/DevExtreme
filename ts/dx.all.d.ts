@@ -707,6 +707,7 @@ declare module DevExpress {
         decimalSeparator?: string;
         /** The default currency. Accepts a 3-letter ISO 4217 code. */
         defaultCurrency?: string;
+        /** Specifies how editors' text fields are styled in your application. */
         editorStylingMode?: 'outlined' | 'underlined' | 'filled';
         /** Specifies whether dates are parsed and serialized according to the ISO 8601 standard in all browsers. */
         forceIsoDateParsing?: boolean;
@@ -1834,6 +1835,7 @@ declare module DevExpress.ui {
         icon?: string;
         /** A function that is executed when the Button is clicked or tapped. */
         onClick?: ((e: { component?: dxButton, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, validationGroup?: any }) => any) | string;
+        /** Specifies how the button is styled. */
         stylingMode?: 'text' | 'outlined' | 'contained';
         /** Specifies a custom template for the Button widget. */
         template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
@@ -1863,24 +1865,34 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** Specifies whether the widget changes its state when a user pauses on it. */
         hoverStateEnabled?: boolean;
+        /** Configures buttons in the group. */
         items?: Array<dxButtonGroupItem>;
+        /** Specifies a custom button template. */
         itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** Specifies which data field provides keys used to distinguish between the selected buttons. */
         keyExpr?: string | Function;
+        /** A function that is executed when a button is selected or selection is canceled. */
         onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
+        /** Contains the keys of the selected buttons and allows selecting buttons initially. */
         selectedItemKeys?: Array<any>;
+        /** Contains the data objects that correspond to the selected buttons. The data objects are taken from the items array. */
         selectedItems?: Array<any>;
+        /** Specifies whether a single or multiple buttons can be in the selected state simultaneously. */
         selectionMode?: 'multiple' | 'single';
         stylingMode?: 'text' | 'outlined' | 'contained';
     }
-    /** The base class for widgets. */
+    /** The ButtonGroup is a widget that contains a set of toggle buttons, and can be used as a mode switcher. */
     export class dxButtonGroup extends Widget {
         constructor(element: Element, options?: dxButtonGroupOptions)
         constructor(element: JQuery, options?: dxButtonGroupOptions)
     }
-    /** This section lists the data source fields that are used in a default item template. */
+    /** This section describes object fields that can be used in the default item template. */
     export interface dxButtonGroupItem extends CollectionWidgetItemTemplate {
+        /** Specifies a text for the hint that appears when the button is hovered over or long-pressed. */
         hint?: string;
+        /** Specifies the icon to be displayed on the button. */
         icon?: string;
+        /** Specifies the button type. */
         type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
     }
     export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
@@ -2042,9 +2054,13 @@ declare module DevExpress.ui {
         filterSyncEnabled?: boolean | 'auto';
         /** Specifies a filter expression. */
         filterValue?: string | Array<any> | Function;
+        /** Specifies the initially or currently focused column's index. This column is focused when the data row area is focused. */
         focusedColumnIndex?: number;
+        /** Specifies whether the focused row feature is enabled. */
         focusedRowEnabled?: boolean;
+        /** Specifies the initially or currently focused grid row's index. Use it when focusedRowEnabled is true. */
         focusedRowIndex?: number;
+        /** Specifies initially or currently focused grid row's key. Use it when focusedRowEnabled is true. */
         focusedRowKey?: any;
         /** Configures the header filter feature. */
         headerFilter?: { height?: number, visible?: boolean, width?: number, allowSearch?: boolean, searchTimeout?: number, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
@@ -2289,6 +2305,7 @@ declare module DevExpress.ui {
         isRowSelected(key: any): boolean;
         /** Gets a data object's key. */
         keyOf(obj: any): any;
+        /** Scrolls the grid to the row with the specified key. Requires the widget's keyExpr or the Store's key option to be specified. */
         navigateToRow(key: any): void;
         /** Gets the total page count. */
         pageCount(): number;
@@ -2366,9 +2383,13 @@ declare module DevExpress.ui {
         onExporting?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
         /** A function that is executed before a file with exported data is saved to the user's local storage. */
         onFileSaving?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+        /** A function that is executed after the focused cell changes. */
         onFocusedCellChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any);
+        /** A function that is executed before the focused cell changes. */
         onFocusedCellChanging?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxDataGridRowObject>, columns?: Array<dxDataGridColumn>, cancel?: boolean }) => any);
+        /** A function that is executed after the focused row changes. Applies only when focusedRowEnabled is true. */
         onFocusedRowChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, rowElement?: DevExpress.core.dxElement, rowIndex?: number, row?: dxDataGridRowObject }) => any);
+        /** A function that is executed before the focused row changes. Applies only when focusedRowEnabled is true. */
         onFocusedRowChanging?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, rowElement?: DevExpress.core.dxElement, prevRowIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxDataGridRowObject>, cancel?: boolean }) => any);
         /** A function that is executed when a row is clicked or tapped. */
         onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
@@ -4106,7 +4127,7 @@ declare module DevExpress.ui {
         onMultiTagPreparing?: ((e: { component?: dxTagBox, element?: DevExpress.core.dxElement, model?: any, multiTagElement?: DevExpress.core.dxElement, selectedItems?: Array<string | number | any>, text?: string, cancel?: boolean }) => any);
         /** A function that is executed when the "Select All" check box value is changed. Applies only if showSelectionControls is true. */
         onSelectAllValueChanged?: ((e: { component?: dxTagBox, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
-        /** A function that is executed when a list item is selected or the selection is canceled. */
+        /** A function that is executed when a list item is selected or selection is canceled. */
         onSelectionChanged?: ((e: { component?: dxTagBox, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<string | number | any>, removedItems?: Array<string | number | any> }) => any);
         /** Specifies the mode in which all items are selected. */
         selectAllMode?: 'allPages' | 'page';
@@ -4309,9 +4330,13 @@ declare module DevExpress.ui {
         onEditorPrepared?: ((options: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, dataField?: string, row?: dxTreeListRowObject }) => any);
         /** A function that is executed before an editor is created. */
         onEditorPreparing?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxTreeListRowObject }) => any);
+        /** A function that is executed after the focused cell changes. */
         onFocusedCellChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any);
+        /** A function that is executed before the focused cell changes. */
         onFocusedCellChanging?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxTreeListRowObject>, columns?: Array<dxTreeListColumn>, cancel?: boolean }) => any);
+        /** A function that executed when the focused row changes. Applies only when focusedRowEnabled is true. */
         onFocusedRowChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, rowElement?: DevExpress.core.dxElement, rowIndex?: number, row?: dxTreeListRowObject }) => any);
+        /** A function that is executed before the focused row changes. Applies only when focusedRowEnabled is true. */
         onFocusedRowChanging?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, rowElement?: DevExpress.core.dxElement, prevRowIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxTreeListRowObject>, cancel?: boolean }) => any);
         /** A function that is executed after the loaded nodes are initialized. */
         onNodesInitialized?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, root?: dxTreeListNode }) => any);
@@ -4441,11 +4466,11 @@ declare module DevExpress.ui {
         onItemHold?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event, node?: dxTreeViewNode }) => any);
         /** A function that is executed after a collection item is rendered. */
         onItemRendered?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, node?: dxTreeViewNode }) => any);
-        /** A function that is executed when a tree view item is selected or the selection is canceled. */
+        /** A function that is executed when a tree view item is selected or selection is canceled. */
         onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement }) => any);
         /** A function that is executed when the "Select All" check box value is changed. Applies only if showCheckBoxesMode is "selectAll" and selectionMode is "multiple". */
         onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
-        /** A function that is executed when a tree view item is selected or the selection is canceled. */
+        /** A function that is executed when a tree view item is selected or selection is canceled. */
         onSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the name of the data source item field for holding the parent key of the corresponding node. */
         parentIdExpr?: string | Function;
@@ -4682,7 +4707,7 @@ declare module DevExpress.ui {
         onItemHold?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: event }) => any);
         /** A function that is executed after a collection item is rendered. */
         onItemRendered?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any);
-        /** A function that is executed when a collection item is selected or the selection is canceled. */
+        /** A function that is executed when a collection item is selected or selection is canceled. */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
         /** The index of the currently selected widget item. */
         selectedIndex?: number;
@@ -4836,7 +4861,7 @@ declare module DevExpress.ui {
         noDataText?: string;
         /** A function that is executed when a list item is clicked or tapped. */
         onItemClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any, event?: event }) => any);
-        /** A function that is executed when a list item is selected or the selection is canceled. */
+        /** A function that is executed when a list item is selected or selection is canceled. */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, selectedItem?: any }) => any);
         /** A function that is executed after the widget's value is changed. */
         onValueChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
@@ -5541,6 +5566,7 @@ declare module DevExpress.ui {
         showMaskMode?: 'always' | 'onFocus';
         /** Specifies whether or not the widget checks the inner text for spelling mistakes. */
         spellcheck?: boolean;
+        /** Specifies how the widget's text field is styled. */
         stylingMode?: 'outlined' | 'underlined' | 'filled';
         /** The read-only option that holds the text displayed by the widget input element. */
         text?: string;
@@ -5867,7 +5893,7 @@ declare module DevExpress.viz {
         weight?: number;
     }
     export interface dxChartOptions extends BaseChartOptions<dxChart> {
-        /** Specifies whether to adjust the value axis's visualRange when the argument axis is being zoomed or scrolled. */
+        /** Specifies whether to adjust the value axis's visualRange when the argument axis is being zoomed or panned. */
         adjustOnZoom?: boolean;
         /** Configures the argument axis. */
         argumentAxis?: dxChartArgumentAxis;
@@ -5909,11 +5935,11 @@ declare module DevExpress.viz {
         onSeriesClick?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: chartSeriesObject }) => any) | string;
         /** A function that is executed after the pointer enters or leaves a series. */
         onSeriesHoverChanged?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, target?: chartSeriesObject }) => any);
-        /** A function that is executed when a series is selected or the selection is canceled. */
+        /** A function that is executed when a series is selected or selection is canceled. */
         onSeriesSelectionChanged?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, target?: chartSeriesObject }) => any);
-        /** A function that is executed when zooming or scrolling ends. */
+        /** A function that is executed when zooming or panning ends. */
         onZoomEnd?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean }) => any);
-        /** A function that is executed when zooming or scrolling begins. */
+        /** A function that is executed when zooming or panning begins. */
         onZoomStart?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, axis?: chartAxisObject, range?: VizRange, cancel?: boolean }) => any);
         /** Declares a collection of panes. */
         panes?: dxChartPanes | Array<dxChartPanes>;
@@ -5939,7 +5965,8 @@ declare module DevExpress.viz {
         useAggregation?: boolean;
         /** Configures the value axis. */
         valueAxis?: dxChartValueAxis | Array<dxChartValueAxis>;
-        zoomAndPan?: { valueAxis?: 'both' | 'none' | 'pan' | 'zoom', argumentAxis?: 'both' | 'none' | 'pan' | 'zoom', dragToZoom?: boolean, dragBoxStyle?: { color?: string, opacity?: number }, panKey?: 'alt' | 'ctrl' | 'meta' | 'shift', allowMouseWheel?: boolean, allowGestures?: boolean };
+        /** Configures zooming and panning. */
+        zoomAndPan?: { valueAxis?: 'both' | 'none' | 'pan' | 'zoom', argumentAxis?: 'both' | 'none' | 'pan' | 'zoom', dragToZoom?: boolean, dragBoxStyle?: { color?: string, opacity?: number }, panKey?: 'alt' | 'ctrl' | 'meta' | 'shift', allowMouseWheel?: boolean, allowTouchGestures?: boolean };
         /** @deprecated Use the zoomAndPan option instead. */
         zoomingMode?: 'all' | 'mouse' | 'none' | 'touch';
     }
@@ -5995,7 +6022,7 @@ declare module DevExpress.viz {
         visualRange?: VizRange | Array<number | string | Date>;
         /** Specifies how the axis's visual range should behave when chart data is updated. */
         visualRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
-        /** Defines the range where the axis can be zoomed and scrolled. Equals the data range when unspecified. */
+        /** Defines the range where the axis can be zoomed and panned. Equals the data range when unspecified. */
         wholeRange?: VizRange | Array<number | string | Date>;
         /** Leaves only workdays on the axis: the work week days plus single workdays minus holidays. Applies only if the axis' argumentType is "datetime". */
         workdaysOnly?: boolean;
@@ -6310,7 +6337,7 @@ declare module DevExpress.viz {
         valueType?: 'datetime' | 'numeric' | 'string';
         /** Defines the axis's displayed range. Cannot be wider than the wholeRange. */
         visualRange?: VizRange | Array<number | string | Date>;
-        /** Defines the range where the axis can be zoomed and scrolled. Equals the data range when not set. */
+        /** Defines the range where the axis can be zoomed and panned. Equals the data range when not set. */
         wholeRange?: VizRange | Array<number | string | Date>;
     }
     /** Declares a collection of constant lines belonging to the value axis. */
@@ -6471,7 +6498,7 @@ declare module DevExpress.viz {
         onSeriesClick?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: polarChartSeriesObject }) => any) | string;
         /** A function that is executed after the pointer enters or leaves a series. */
         onSeriesHoverChanged?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, target?: polarChartSeriesObject }) => any);
-        /** A function that is executed when a series is selected or the selection is canceled. */
+        /** A function that is executed when a series is selected or selection is canceled. */
         onSeriesSelectionChanged?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, target?: polarChartSeriesObject }) => any);
         /** Specifies how the chart must behave when series point labels overlap. */
         resolveLabelOverlapping?: 'hide' | 'none';
@@ -6788,7 +6815,7 @@ declare module DevExpress.viz {
         onPointClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: basePointObject }) => any) | string;
         /** A function that is executed after the pointer enters or leaves a series point. */
         onPointHoverChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => any);
-        /** A function that is executed when a series point is selected or the selection is canceled. */
+        /** A function that is executed when a series point is selected or selection is canceled. */
         onPointSelectionChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => any);
         /** A function that is executed when a tooltip becomes hidden. */
         onTooltipHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: basePointObject }) => any);
@@ -7787,7 +7814,7 @@ declare module DevExpress.viz {
         onItemClick?: ((e: { component?: dxFunnel, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, item?: dxFunnelItem }) => any) | string;
         /** A function that is executed when a legend item is clicked or tapped. */
         onLegendClick?: ((e: { component?: dxFunnel, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, item?: dxFunnelItem }) => any) | string;
-        /** A function that is executed when a funnel item is selected or the selection is canceled. */
+        /** A function that is executed when a funnel item is selected or selection is canceled. */
         onSelectionChanged?: ((e: { component?: dxFunnel, element?: DevExpress.core.dxElement, model?: any, item?: dxFunnelItem }) => any);
         /** Sets the palette to be used to colorize funnel items. */
         palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
@@ -8861,7 +8888,7 @@ declare module DevExpress.viz {
         onNodesInitialized?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, root?: dxTreeMapNode }) => any);
         /** A function that is executed before the nodes are displayed and each time the collection of active nodes is changed. */
         onNodesRendering?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
-        /** A function that is executed when a node is selected or the selection is canceled. */
+        /** A function that is executed when a node is selected or selection is canceled. */
         onSelectionChanged?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
         /** Specifies the name of the data source field that provides parent IDs for items. Applies to plain data sources only. */
         parentField?: string;
@@ -8919,7 +8946,7 @@ declare module DevExpress.viz {
         onCenterChanged?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, center?: Array<number> }) => any);
         /** A function that is executed when any location on the map is clicked or tapped. */
         onClick?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: MapLayerElement }) => any) | string;
-        /** A function that is executed when a layer element is selected or the selection is canceled. */
+        /** A function that is executed when a layer element is selected or selection is canceled. */
         onSelectionChanged?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement }) => any);
         /** A function that is executed when a tooltip becomes hidden. */
         onTooltipHidden?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement }) => any);
