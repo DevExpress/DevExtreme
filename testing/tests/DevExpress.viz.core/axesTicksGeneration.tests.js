@@ -902,6 +902,24 @@ QUnit.test("Add extra tick (logarithmic, numeric) for the bar point is equal to 
     assert.deepEqual(this.axis._tickInterval, 1);
 });
 
+QUnit.test("Do not hang browser if small numbers", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        minorTick: {
+            visible: true
+        }
+    });
+
+    this.axis.setBusinessRange({ min: 22.099999999999998, max: 22.100000000000005 });
+
+    // act
+    this.axis.createTicks(canvas(1000));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [22.1]);
+});
+
 QUnit.module("Get aggregation info", environment);
 
 QUnit.test("getAggregationInfo with tickInterval", function(assert) {
