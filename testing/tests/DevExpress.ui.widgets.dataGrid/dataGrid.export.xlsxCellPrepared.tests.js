@@ -169,7 +169,7 @@ QUnit.test("Change fill", function(assert) {
         '<fills count="3">' +
         '<fill><patternFill patternType="none" /></fill>' +
         '<fill><patternFill patternType="Gray125" /></fill>' +
-        '<fill><patternFill patternType="lightGrid"><fgColor rgb="FF00FF00" /><bgColor rgb="FFFFFF00" /></patternFill></fill>' +
+        '<fill><patternFill patternType="lightGrid"><fgColor rgb="AAFF00FF" /><bgColor rgb="FFFFFF00" /></patternFill></fill>' +
         '</fills>' +
         helper.BASE_STYLE_XML2 +
         '<cellXfs count="6">' +
@@ -197,8 +197,8 @@ QUnit.test("Change fill", function(assert) {
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
                     e.clearStyle();
-                    e.backgroundColor = 'FFFFFF00';
-                    e.fillPatternColor = 'FF00FF00';
+                    e.backgroundColor = '#FFFF00';
+                    e.fillPatternColor = '#FF00FFAA';
                     e.fillPatternType = 'lightGrid';
                 },
             },
@@ -350,7 +350,7 @@ QUnit.test("Change font: create new font", function(assert) {
                     e.clearStyle();
                     e.font = {
                         bold: true,
-                        color: 'FF00FF00',
+                        color: '#00FF00',
                         family: 3,
                         italic: true,
                         name: 'name 1',
