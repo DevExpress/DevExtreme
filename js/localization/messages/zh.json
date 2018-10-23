@@ -281,6 +281,8 @@
     "dxHtmlEditor-dialogImageUrlField": "!TODO!",
     "dxHtmlEditor-dialogImageAltField": "!TODO!",
     "dxHtmlEditor-dialogImageWidthField": "!TODO!",
-    "dxHtmlEditor-dialogImageHeightField": "!TODO!"
+    "dxHtmlEditor-dialogImageHeightField": "!TODO!",
+    "dxHtmlEditor-heading": "!TODO!",
+    "dxHtmlEditor-normalText": "!TODO!"
   }
 }
