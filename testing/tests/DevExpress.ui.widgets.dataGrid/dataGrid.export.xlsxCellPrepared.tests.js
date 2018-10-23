@@ -11,6 +11,24 @@ QUnit.module("DataGrid customizeExcelCell tests", {
     afterEach: helper.afterEachTest,
 });
 
+QUnit.test("Check e.component", function(assert) {
+    let onCellPreparedComponent;
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: "field1", dataType: 'string' }],
+            dataSource: [{ field1: 'str1' }],
+            showColumnHeaders: false,
+            onCellPrepared: e => onCellPreparedComponent = e.component,
+            export: {
+                customizeExcelCell: e => {
+                    assert.ok(e.component === onCellPreparedComponent);
+                }
+            },
+        }
+    );
+});
+
 QUnit.test("Change alignment", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +

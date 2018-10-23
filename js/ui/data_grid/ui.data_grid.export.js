@@ -113,6 +113,10 @@ exports.DataProvider = Class.inherit({
         return styles;
     },
 
+    getComponent: function() {
+        return isDefined(this._exportController) ? this._exportController.component : null;
+    },
+
     _getTotalCellStyleId: function(cellIndex) {
         var alignment = this.getColumns()[cellIndex] && this.getColumns()[cellIndex].alignment || "right";
         return ["center", "left", "right"].indexOf(alignment);
