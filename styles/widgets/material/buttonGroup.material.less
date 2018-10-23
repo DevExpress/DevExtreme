@@ -41,6 +41,16 @@
 }
 
 .dx-buttongroup-item {
+    &.dx-button-mode-outlined {
+        &.dx-state-disabled {
+            opacity: 1;
+
+            .dx-button-content {
+                opacity: @button-disabled-icon-opacity;
+            }
+        }
+    }
+
     &.dx-item-selected {
         background-color: @button-group-normal-selected-bg;
 
