@@ -180,7 +180,6 @@ var ExcelCreator = Class.inherit({
         const args = {
             value: value,
             numberFormat: styleCopy.numberFormat,
-            component: typeUtils.isDefined(dataProvider.getComponent) ? dataProvider.getComponent() : null,
             clearStyle: function() {
                 this.horizontalAlignment = null;
                 this.verticalAlignment = null;

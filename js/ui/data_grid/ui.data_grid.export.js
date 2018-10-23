@@ -74,6 +74,7 @@ exports.DataProvider = Class.inherit({
     customizeExcelCell: function(e, cellSourceData) {
         if(this._options.customizeExcelCell) {
             e.gridCell = cellSourceData;
+            e.component = isDefined(this._exportController) ? this._exportController.component : null,
             this._options.customizeExcelCell(e);
         }
     },
@@ -111,10 +112,6 @@ exports.DataProvider = Class.inherit({
         });
 
         return styles;
-    },
-
-    getComponent: function() {
-        return isDefined(this._exportController) ? this._exportController.component : null;
     },
 
     _getTotalCellStyleId: function(cellIndex) {
