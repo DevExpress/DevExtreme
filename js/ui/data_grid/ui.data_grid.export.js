@@ -670,7 +670,7 @@ dataGridCore.registerModule("export", {
                  * @type_function_param1_field7 font:ExcelFont
                  * @type_function_param1_field8 value:string|number|date
                  * @type_function_param1_field9 numberFormat:string
-                 * @type_function_param1_field10 gridCell:ExcelGridCell
+                 * @type_function_param1_field10 gridCell:ExcelDataGridCell
                  */
             }
             /**
