@@ -28,26 +28,26 @@
 */
 
 /**
-* @name ExcelGridCell
+* @name ExcelDataGridCell
 * @type object
 */
 /**
-* @name ExcelGridCell.rowType
+* @name ExcelDataGridCell.rowType
 * @type string
 */
 /**
-* @name ExcelGridCell.data
+* @name ExcelDataGridCell.data
 * @type object
 */
 /**
-* @name ExcelGridCell.key
+* @name ExcelDataGridCell.key
 * @type any
 */
 /**
-* @name ExcelGridCell.column
+* @name ExcelDataGridCell.column
 * @type dxDataGridColumn
 */
 /**
-* @name ExcelGridCell.value
+* @name ExcelDataGridCell.value
 * @type any
 */
