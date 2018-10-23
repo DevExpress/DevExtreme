@@ -1,5 +1,6 @@
 import $ from "jquery";
 import helper from '../../helpers/dataGridExportTestsHelper.js';
+import { isDefined } from "../../../js/core/utils/type.js";
 
 QUnit.testStart(function() {
     var markup = '<div id="dataGrid"></div>';
@@ -22,6 +23,7 @@ QUnit.test("Check e.component", function(assert) {
             onCellPrepared: e => onCellPreparedComponent = e.component,
             export: {
                 customizeExcelCell: e => {
+                    assert.ok(isDefined(onCellPreparedComponent));
                     assert.ok(e.component === onCellPreparedComponent);
                 }
             },
