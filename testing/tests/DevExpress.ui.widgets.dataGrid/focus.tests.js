@@ -711,6 +711,58 @@ QUnit.testInActiveWindow("DataGrid should focus the corresponding group row if g
     assert.equal(rowsView.getRow(3).hasClass("dx-row-focused"), true, "group row was focused");
 });
 
+QUnit.testInActiveWindow("DataGrid should focus the corresponding group row if group collapsed and inner data row was focused if calculateGroupValue is used", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowKey: "Dan",
+        columns: [
+            { calculateGroupValue: "team", groupIndex: 0, autoExpandGroup: true, name: "test" },
+            "name",
+            "age"
+        ]
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    // assert
+    assert.equal(this.getVisibleRows()[3].rowType, "group", "group row");
+
+    // act
+    this.collapseRow(["internal0"]);
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.getVisibleRows().length, 7, "visible rows count");
+    assert.equal(this.getVisibleRows()[3].rowType, "group", "group row");
+    assert.equal(this.getVisibleRows()[4].rowType, "group", "group row");
+    assert.equal(this.getVisibleRows()[3].isExpanded, false, "group collapsed");
+    assert.equal(rowsView.getRow(3).hasClass("dx-row-focused"), true, "group row was focused");
+});
+
 QUnit.testInActiveWindow("Tab index should not exist for the previous focused row", function(assert) {
     var rowsView;
 

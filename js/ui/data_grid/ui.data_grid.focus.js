@@ -4,6 +4,7 @@ var gridCore = require("./ui.data_grid.core"),
     isDefined = require("../../core/utils/type").isDefined,
     equalByValue = require("../../core/utils/common").equalByValue,
     createGroupFilter = require("./ui.data_grid.utils").createGroupFilter,
+    compileGetter = require("../../core/utils/data").compileGetter,
     extend = require("../../core/utils/extend").extend;
 
 var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
@@ -11,41 +12,35 @@ var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
 gridCore.registerModule("focus", extend(true, {}, focusModule, {
     extenders: {
         controllers: {
-            focus: {
-                isFocusedRowInsideGroup: function(groupRow) {
-                    var dataController = this.getController("data"),
-                        focusedRowKey = this.option("focusedRowKey"),
-                        rowIndex = dataController.getRowIndexByKey(focusedRowKey),
-                        group = dataController.getDataSource().group(),
-                        row = rowIndex >= 0 && dataController.getVisibleRows()[rowIndex],
-                        groupSelector;
-
-                    if(row) {
-                        for(var i = 0; i < group.length; ++i) {
-                            groupSelector = group[i].selector;
-                            if(row.data[groupSelector] !== groupRow.key[i]) {
-                                return false;
-                            }
-                        }
-                    }
-                    return true;
-                }
-            },
             data: {
                 changeRowExpand: function(path) {
-                    if(this.option("focusedRowEnabled") && this.isRowExpanded(path)) {
-                        var dataController = this.getController("data"),
-                            groupRowIndex = dataController.getRowIndexByKey(path),
-                            groupRow = dataController.getVisibleRows()[groupRowIndex],
-                            focusController = this.getController("focus"),
-                            needFocusGroupRow = focusController.isFocusedRowInsideGroup(groupRow);
-
-                        if(needFocusGroupRow) {
-                            this.option("focusedRowIndex", this.getRowIndexByKey(path));
+                    if(this.option("focusedRowEnabled") && Array.isArray(path) && this.isRowExpanded(path)) {
+                        if(this._isFocusedRowInsideGroup(path)) {
+                            this.option("focusedRowKey", path);
                         }
                     }
 
                     return this.callBase.apply(this, arguments);
+                },
+                _isFocusedRowInsideGroup: function(path) {
+                    var columnsController = this.getController("columns"),
+                        focusedRowKey = this.option("focusedRowKey"),
+                        rowIndex = this.getRowIndexByKey(focusedRowKey),
+                        focusedRow = rowIndex >= 0 && this.getVisibleRows()[rowIndex],
+                        groups = columnsController.getGroupDataSourceParameters(true),
+                        getter;
+
+                    if(focusedRow) {
+                        for(var i = 0; i < path.length; ++i) {
+                            getter = compileGetter(groups[i] && groups[i].selector);
+
+                            if(getter(focusedRow.data) !== path[i]) {
+                                return false;
+                            }
+
+                        }
+                    }
+                    return true;
                 },
                 _getGroupPath: function(group) {
                     var groupPath = [group.key],
