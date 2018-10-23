@@ -17,7 +17,8 @@ var createSeries = function(options, renderSettings, widgetType) {
     renderSettings = renderSettings || {};
     renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
     renderSettings.argumentAxis = renderSettings.argumentAxis || {
-        visualRange: function() {},
+        getViewport: function() { return {}; },
+        visualRange: function() { },
         calculateInterval: function(a, b) { return Math.abs(a - b); },
         getAggregationInfo: function() {
             return {
@@ -2886,13 +2887,13 @@ QUnit.test("Calculate interval in range data when aggregation is enabled", funct
     assert.strictEqual(rangeData.arg.interval, 3, "Min interval arg should be correct");
 });
 
-QUnit.test("Calculate range data when aggregation enabled. Add data range if visual range less then data range ", function(assert) {
+QUnit.test("Calculate range data when aggregation enabled. Add data range if axis viewport is set ", function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
     const series = createSeries({ type: "scatter", argumentAxisType: "continuous", aggregation: { enabled: true } });
 
     const argumentAxis = series.getArgumentAxis();
 
-    argumentAxis.visualRange = () => {
+    argumentAxis.getViewport = () => {
         return { startValue: 3, endValue: 18 };
     };
 
@@ -2915,14 +2916,10 @@ QUnit.test("Calculate range data when aggregation enabled. Add data range if vis
     assert.strictEqual(rangeData.arg.interval, 5, "Min interval arg should be correct");
 });
 
-QUnit.test("Calculate range data when aggregation enabled. Do not inculde data range if argument vieport is equal to data range", function(assert) {
+QUnit.test("Calculate range data when aggregation enabled. Do not inculde data range if argument viewport is not set", function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
     const series = createSeries({ type: "scatter", argumentAxisType: "continuous", aggregation: { enabled: true } });
     const argumentAxis = series.getArgumentAxis();
-
-    argumentAxis.visualRange = () => {
-        return { startValue: 2, endValue: 20 };
-    };
 
     argumentAxis.getAggregationInfo = function() {
         return {
@@ -2943,12 +2940,14 @@ QUnit.test("Calculate range data when aggregation enabled. Do not inculde data r
     assert.strictEqual(rangeData.arg.interval, 5, "Min interval arg should be correct");
 });
 
-QUnit.test("Calculate range data when aggregation enabled. Do not inculde data range if argument vieport is undefined", function(assert) {
+QUnit.test("Calculate range data when aggregation enabled. Do not inculde data min value if argument viewport is set using length", function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
     const series = createSeries({ type: "scatter", argumentAxisType: "continuous", aggregation: { enabled: true } });
     const argumentAxis = series.getArgumentAxis();
 
-    argumentAxis.visualRange = () => undefined;
+    argumentAxis.getViewport = function() {
+        return { length: 10 };
+    };
     argumentAxis.getAggregationInfo = function() {
         return {
             interval: 1,
@@ -2963,7 +2962,34 @@ QUnit.test("Calculate range data when aggregation enabled. Do not inculde data r
     const rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 5, "Min arg should be correct");
+    assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
     assert.strictEqual(rangeData.arg.max, 10, "Max arg should be correct");
+    assert.strictEqual(rangeData.arg.interval, 5, "Min interval arg should be correct");
+});
+
+QUnit.test("Calculate range data when aggregation enabled. Do not inculde data range if argument viewport is set using length and startValue", function(assert) {
+    const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
+    const series = createSeries({ type: "scatter", argumentAxisType: "continuous", aggregation: { enabled: true } });
+    const argumentAxis = series.getArgumentAxis();
+
+    argumentAxis.getViewport = function() {
+        return { length: 10, startValue: 0 };
+    };
+    argumentAxis.getAggregationInfo = function() {
+        return {
+            interval: 1,
+            ticks: [5, 10, 15]
+        };
+    };
+
+    series.updateData(data);
+
+    series.createPoints();
+
+    const rangeData = series.getRangeData();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
+    assert.strictEqual(rangeData.arg.max, 20, "Max arg should be correct");
     assert.strictEqual(rangeData.arg.interval, 5, "Min interval arg should be correct");
 });
