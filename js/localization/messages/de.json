@@ -249,6 +249,8 @@
         "dxHtmlEditor-dialogImageUrlField": "URL",
         "dxHtmlEditor-dialogImageAltField": "Alternativer Text",
         "dxHtmlEditor-dialogImageWidthField": "Breite (px)",
-        "dxHtmlEditor-dialogImageHeightField": "Bildhöhe (px)"
+        "dxHtmlEditor-dialogImageHeightField": "Bildhöhe (px)",
+        "dxHtmlEditor-heading": "Überschrift",
+        "dxHtmlEditor-normalText": "Normaler Text"
     }
 }

@@ -38,6 +38,9 @@ const DIALOG_IMAGE_FIELD_HEIGHT = "dxHtmlEditor-dialogImageHeightField";
 
 const USER_ACTION = "user";
 
+const HEADING_TEXT = format("dxHtmlEditor-heading");
+const NORMAL_TEXT = format("dxHtmlEditor-normalText");
+
 class ToolbarModule extends BaseModule {
     constructor(quill, options) {
         super(quill, options);
@@ -135,6 +138,12 @@ class ToolbarModule extends BaseModule {
             },
             redo: () => {
                 this.quill.history.redo();
+            },
+            increaseIndent: () => {
+                this.quill.format("indent", "+1", USER_ACTION);
+            },
+            decreaseIndent: () => {
+                this.quill.format("indent", "-1", USER_ACTION);
             }
         };
     }
@@ -146,7 +155,7 @@ class ToolbarModule extends BaseModule {
             const formData = {
                 href: formats.link || "",
                 text: selection ? this.quill.getText(selection) : "",
-                target: true
+                target: formats.hasOwnProperty("target") ? !!formats.target : true
             };
             this._editorInstance.formDialogOption("title", format(DIALOG_LINK_CAPTION));
 
@@ -183,8 +192,11 @@ class ToolbarModule extends BaseModule {
             {
                 dataField: "target",
                 editorType: "dxCheckBox",
+                editorOptions: {
+                    text: format(DIALOG_LINK_FIELD_TARGET)
+                },
                 cssClass: DIALOG_LINK_FIELD_TARGET_CLASS,
-                label: { text: format(DIALOG_LINK_FIELD_TARGET) }
+                label: { visible: false }
             }
         ];
     }
@@ -337,7 +349,7 @@ class ToolbarModule extends BaseModule {
                 options: {
                     displayExpr: (item) => {
                         const isHeaderValue = isDefined(item) && item !== false;
-                        return isHeaderValue ? "H" + item : "Normal";
+                        return isHeaderValue ? `${HEADING_TEXT} ${item}` : NORMAL_TEXT;
                     }
                 }
             },
