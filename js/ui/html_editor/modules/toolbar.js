@@ -116,22 +116,10 @@ class ToolbarModule extends BaseModule {
                 this.quill.format("list", value, USER_ACTION);
                 this.updateFormatWidgets(true);
             },
-            alignLeft: () => {
-                this.quill.format("align", false, USER_ACTION);
-                this.updateFormatWidgets(true);
-            },
-            alignCenter: () => {
-                this.quill.format("align", "center", USER_ACTION);
-                this.updateFormatWidgets(true);
-            },
-            alignRight: () => {
-                this.quill.format("align", "right", USER_ACTION);
-                this.updateFormatWidgets(true);
-            },
-            alignJustify: () => {
-                this.quill.format("align", "justify", USER_ACTION);
-                this.updateFormatWidgets(true);
-            },
+            alignLeft: this._prepareAlignHandler("left"),
+            alignCenter: this._prepareAlignHandler("center"),
+            alignRight: this._prepareAlignHandler("right"),
+            alignJustify: this._prepareAlignHandler("justify"),
             codeBlock: this._getDefaultClickHandler("code-block"),
             undo: () => {
                 this.quill.history.undo();
@@ -145,6 +133,16 @@ class ToolbarModule extends BaseModule {
             decreaseIndent: () => {
                 this.quill.format("indent", "-1", USER_ACTION);
             }
+        };
+    }
+
+    _prepareAlignHandler(align) {
+        return () => {
+            const formats = this.quill.getFormat();
+            const value = formats.align === align ? false : align;
+
+            this.quill.format("align", value, USER_ACTION);
+            this.updateFormatWidgets(true);
         };
     }
 
