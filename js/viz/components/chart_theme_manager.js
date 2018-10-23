@@ -203,7 +203,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 userOptions = {
                     argumentAxis: (allowZoom && allowScroll) ? "both" : (allowZoom ? "zoom" : (allowScroll ? "pan" : "none")),
                     allowMouseWheel: zoomingMode === "all" || zoomingMode === "mouse",
-                    allowGestures: zoomingMode === "all" || zoomingMode === "touch" || scrollingMode === "all" || scrollingMode === "touch"
+                    allowTouchGestures: zoomingMode === "all" || zoomingMode === "touch" || scrollingMode === "all" || scrollingMode === "touch"
                 };
             }
 
@@ -220,7 +220,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 },
                 panKey: options.panKey,
                 allowMouseWheel: !!options.allowMouseWheel,
-                allowGestures: !!options.allowGestures
+                allowTouchGestures: !!options.allowTouchGestures
             };
         }
     };

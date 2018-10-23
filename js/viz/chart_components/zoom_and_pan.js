@@ -212,7 +212,7 @@ module.exports = {
                 let action;
 
                 if(isTouch) {
-                    if(options.allowGestures && wantPan) {
+                    if(options.allowTouchGestures && wantPan) {
                         action = "pan";
                     }
                 } else {
@@ -378,7 +378,7 @@ module.exports = {
                         chart._requestChange(["VISUAL_RANGE"]);
                     });
                 }
-                if(options.allowGestures) {
+                if(options.allowTouchGestures) {
                     if(options.argumentAxis.zoom || options.valueAxis.zoom) {
                         renderer.root
                             .on(PINCH_START_EVENT_NAME, { immediate: true }, zoomAndPan.pinchStartHandler)
