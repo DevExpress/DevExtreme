@@ -1951,7 +1951,7 @@ QUnit.test("drawer should have only one panel after mode changing", assert => {
     fx.off = false;
 });
 
-QUnit.test("drawer panel should be repositioned after dimension changed", assert => {
+QUnit.test("drawer panel should be repositioned correctly after dimension changed,left position", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -1971,6 +1971,32 @@ QUnit.test("drawer panel should be repositioned after dimension changed", assert
     resizeCallbacks.fire();
 
     assert.equal($panelOverlayContent.position().left, 0, "panel overlay content position is OK");
+
+    fx.off = false;
+});
+
+QUnit.test("drawer panel should be repositioned correctly after dimension changed, right position", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        opened: false,
+        position: "right",
+        revealMode: "slide",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+    const instance = $element.dxDrawer("instance");
+    const $panelOverlayContent = $element.find(".dx-overlay-content");
+
+    resizeCallbacks.fire();
+    instance.option("revealMode", "expand");
+    assert.equal($panelOverlayContent.css("left"), "auto", "panel overlay content position is OK");
 
     fx.off = false;
 });
