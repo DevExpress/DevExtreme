@@ -183,9 +183,9 @@ QUnit.test("Empty fills (OOXML format)", function(assert) {
 
 QUnit.test("Empty fills (simple format)", function(assert) {
     const file = new XlsxFile();
-    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternStyle: null }), undefined);
-    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: 'fcolor_1', fillPatternStyle: null }), undefined);
-    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternStyle: 'type_1' }), undefined);
+    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternType: null }), undefined);
+    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: 'fcolor_1', fillPatternType: null }), undefined);
+    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternType: 'type_1' }), undefined);
 });
 
 QUnit.test("Various fills (OOXML format)", function(assert) {
@@ -250,16 +250,16 @@ QUnit.test("Various fills (simple format)", function(assert) {
     const file = new XlsxFile();
     assert.equal(file.registerCellFormat({ backgroundColor: 'b1' }), 0, 'b1');
     assert.equal(file.registerCellFormat({ backgroundColor: 'b1' }), 0, 'b1_');
-    assert.equal(file.registerCellFormat({ backgroundColor: 'b1', fillPatternColor: null, fillPatternStyle: 's1' }), 0, 'b1 null s1');
+    assert.equal(file.registerCellFormat({ backgroundColor: 'b1', fillPatternColor: null, fillPatternType: 's1' }), 0, 'b1 null s1');
     assert.equal(file.registerCellFormat({ backgroundColor: 'b2' }), 1, 'b2');
-    assert.equal(file.registerCellFormat({ backgroundColor: 'b3', fillPatternColor: null, fillPatternStyle: 's1' }), 2, 'b3 null s1');
+    assert.equal(file.registerCellFormat({ backgroundColor: 'b3', fillPatternColor: null, fillPatternType: 's1' }), 2, 'b3 null s1');
 
-    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: 'p3', fillPatternStyle: 's1' }), 3);
-    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: 'p3', fillPatternStyle: 's1' }), 3);
-    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: 'p4', fillPatternStyle: 's1' }), 4);
-    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: 'p4', fillPatternStyle: 's2' }), 5);
+    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: 'p3', fillPatternType: 's1' }), 3);
+    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: 'p3', fillPatternType: 's1' }), 3);
+    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: 'p4', fillPatternType: 's1' }), 4);
+    assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: 'p4', fillPatternType: 's2' }), 5);
 
-    assert.equal(file.registerCellFormat({ backgroundColor: 'b5', fillPatternColor: 'p6', fillPatternStyle: 's1' }), 6);
+    assert.equal(file.registerCellFormat({ backgroundColor: 'b5', fillPatternColor: 'p6', fillPatternType: 's1' }), 6);
 
     assert.equal(getFullXml(file),
         '<cellXfs count="7">' +
@@ -323,16 +323,16 @@ QUnit.test("Copy fills (OOXML format)", function(assert) {
 });
 
 QUnit.test("Copy fills (simple format)", function(assert) {
-    assert.propEqual(XlsxFile.copyCellFormat({ backgroundColor: undefined, fillPatternColor: undefined, fillPatternStyle: undefined }), {});
-    assert.propEqual(XlsxFile.copyCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternStyle: null }), { backgroundColor: null, fillPatternColor: null, fillPatternStyle: null });
-    assert.propEqual(XlsxFile.copyCellFormat({ backgroundColor: '1', fillPatternColor: '2', fillPatternStyle: '3' }), { backgroundColor: '1', fillPatternColor: '2', fillPatternStyle: '3' });
+    assert.propEqual(XlsxFile.copyCellFormat({ backgroundColor: undefined, fillPatternColor: undefined, fillPatternType: undefined }), {});
+    assert.propEqual(XlsxFile.copyCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternType: null }), { backgroundColor: null, fillPatternColor: null, fillPatternType: null });
+    assert.propEqual(XlsxFile.copyCellFormat({ backgroundColor: '1', fillPatternColor: '2', fillPatternType: '3' }), { backgroundColor: '1', fillPatternColor: '2', fillPatternType: '3' });
 
-    const format = { backgroundColor: '1', fillPatternColor: '2', fillPatternStyle: '3' };
+    const format = { backgroundColor: '1', fillPatternColor: '2', fillPatternType: '3' };
     const format_ = XlsxFile.copyCellFormat(format);
     format_.backgroundColor = '1_';
     format_.fillPatternColor = '2_';
-    format_.fillPatternStyle = '3_';
-    assert.propEqual(format, { backgroundColor: '1', fillPatternColor: '2', fillPatternStyle: '3' });
+    format_.fillPatternType = '3_';
+    assert.propEqual(format, { backgroundColor: '1', fillPatternColor: '2', fillPatternType: '3' });
 });
 
 QUnit.test("Fills with empty subitems", function(assert) {

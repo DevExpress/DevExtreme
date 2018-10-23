@@ -196,7 +196,7 @@ var ExcelCreator = Class.inherit({
                 args.wrapTextEnabled = styleCopy.alignment.wrapText;
             }
             args.backgroundColor = styleCopy.backgroundColor;
-            args.fillPatternStyle = styleCopy.fillPatternStyle;
+            args.fillPatternType = styleCopy.fillPatternType;
             args.fillPatternColor = styleCopy.fillPatternColor;
             args.font = styleCopy.font;
         }
@@ -213,7 +213,7 @@ var ExcelCreator = Class.inherit({
         newStyle.alignment.wrapText = args.wrapTextEnabled;
 
         newStyle.backgroundColor = args.backgroundColor;
-        newStyle.fillPatternStyle = args.fillPatternStyle;
+        newStyle.fillPatternType = args.fillPatternType;
         newStyle.fillPatternColor = args.fillPatternColor;
 
         newStyle.numberFormat = args.numberFormat;

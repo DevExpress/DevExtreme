@@ -911,7 +911,7 @@
  */
 
 /**
- * @typedef {string} Enums.ExcelCellPatternStyle
+ * @typedef {string} Enums.ExcelCellPatternType
  * @enum {'darkDown'|'darkGray'|'darkGrid'|'darkHorizontal'|'darkTrellis'|'darkUp'|'darkVertical'|'gray0625'|'gray125'|'lightDown'|'lightGray'|'lightGrid'|'lightHorizontal'|'lightTrellis'|'lightUp'|'lightVertical'|'mediumGray'|'none'|'solid'}
  */
 

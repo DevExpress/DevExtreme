@@ -179,7 +179,7 @@ QUnit.test("Change fill", function(assert) {
                     e.clearStyle();
                     e.backgroundColor = 'FFFFFF00';
                     e.fillPatternColor = 'FF00FF00';
-                    e.fillPatternStyle = 'lightGrid';
+                    e.fillPatternType = 'lightGrid';
                 },
             },
         },
@@ -215,7 +215,7 @@ QUnit.test("Set fill to null", function(assert) {
                 customizeExcelCell: e => {
                     e.backgroundColor = null;
                     e.fillPatternColor = null;
-                    e.fillPatternStyle = null;
+                    e.fillPatternType = null;
                 },
             },
         },
@@ -234,7 +234,7 @@ QUnit.test("Check default fill", function(assert) {
                 customizeExcelCell: e => {
                     assert.strictEqual(e.backgroundColor, undefined);
                     assert.strictEqual(e.fillPatternColor, undefined);
-                    assert.strictEqual(e.fillPatternStyle, undefined);
+                    assert.strictEqual(e.fillPatternType, undefined);
                 },
             },
         }
