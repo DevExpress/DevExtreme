@@ -10,7 +10,8 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
     BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item",
     BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-last-item",
-    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + "-has-width";
+    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + "-has-width",
+    SHAPE_STANDARD_CLASS = "dx-shape-standard";
 
 QUnit.testStart(() => {
     const markup = `
@@ -63,6 +64,8 @@ QUnit.module("default", {
 
         const $buttons = $(`.${BUTTON_GROUP_WRAPPER_CLASS} .${BUTTON_GROUP_ITEM_CLASS}.${BUTTON_CLASS}`);
         assert.ok($buttons.eq(0).hasClass(BUTTON_GROUP_FIRST_ITEM_CLASS), "first item has css class when item is first");
+        assert.ok($buttons.eq(0).hasClass(SHAPE_STANDARD_CLASS), "first item has the shape standard CSS class");
+        assert.ok($buttons.eq(1).hasClass(SHAPE_STANDARD_CLASS), "second item has the shape standard CSS class");
         assert.notOk($buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "first item has no css class when width of ButtonGroup is undefined");
         assert.notOk($buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "second item has no css class when width of ButtonGroup is undefined");
         assert.equal($buttons.length, 2, "buttons count");

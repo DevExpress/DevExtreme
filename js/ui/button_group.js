@@ -12,7 +12,8 @@ const BUTTON_GROUP_CLASS = "dx-buttongroup",
     BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
     BUTTON_GROUP_FIRST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-first-item",
     BUTTON_GROUP_LAST_ITEM_CLASS = BUTTON_GROUP_CLASS + "-last-item",
-    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + "-has-width";
+    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_ITEM_CLASS + "-has-width",
+    SHAPE_STANDARD_CLASS = "dx-shape-standard";
 
 const ButtonCollection = CollectionWidget.inherit({
     _renderItemContent(options) {
@@ -137,6 +138,8 @@ const ButtonGroup = Widget.inherit({
 
         const width = this.option("width");
         isDefined(width) && $item.addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
+
+        $item.addClass(SHAPE_STANDARD_CLASS);
     },
 
     _initTemplates() {
