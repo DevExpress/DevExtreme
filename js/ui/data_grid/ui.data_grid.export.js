@@ -74,6 +74,9 @@ exports.DataProvider = Class.inherit({
     customizeExcelCell: function(e, cellSourceData) {
         if(this._options.customizeExcelCell) {
             e.gridCell = cellSourceData;
+            if(isDefined(this._exportController) && isDefined(this._exportController.component)) {
+                e.component = this._exportController.component;
+            }
             this._options.customizeExcelCell(e);
         }
     },
