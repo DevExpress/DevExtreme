@@ -104,7 +104,7 @@ const dialogModuleConfig = {
             }
         };
 
-        this.formDialog = new FormDialog(this.options.editorInstance, { container: this.$element });
+        this.formDialog = new FormDialog(this.options.editorInstance, { container: this.$element, position: null });
     }
 };
 
@@ -193,11 +193,14 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             $(element).trigger("dxclick");
         });
 
+        this.quillMock.getFormat = () => { return { align: "justify" }; };
+        $formatWidgets.last().trigger("dxclick");
+
         assert.deepEqual(
             this.log,
             [{
                 format: "align",
-                value: false
+                value: "left"
             }, {
                 format: "align",
                 value: "center"
@@ -207,7 +210,11 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             }, {
                 format: "align",
                 value: "justify"
-            }]);
+            }, {
+                format: "align",
+                value: false
+            }]
+        );
     });
 
     test("handle codeBlock formatting", (assert) => {

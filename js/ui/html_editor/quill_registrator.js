@@ -13,12 +13,12 @@ class QuillRegistrator {
         const Link = require("./formats/link").default;
         const FontStyle = require("./formats/font").default;
         const SizeStyle = require("./formats/size").default;
+        const AlignStyle = require("./formats/align").default;
         const Toolbar = require("./modules/toolbar").default;
         const DropImage = require("./modules/dropImage").default;
         const Variables = require("./modules/variables").default;
 
         const DirectionStyle = quill.import("attributors/style/direction");
-        const AlignStyle = quill.import("attributors/style/align");
 
         quill.register({
             "formats/align": AlignStyle,
