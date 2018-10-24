@@ -510,11 +510,11 @@ module.exports = {
                     if(!arg.data || arg.rowType !== "data" || arg.inserted || !this.option("twoWayBindingEnabled") || !watch) return;
 
                     var dispose = watch(
-                        function() {
+                        () => {
                             return dataController.generateDataValues(arg.data, arg.columns);
                         },
-                        function() {
-                            dataController.repaintRows([arg.rowIndex]);
+                        () => {
+                            dataController.repaintRows([arg.rowIndex], this.option("repaintChangesOnly"));
                         },
                         {
                             deep: true,

@@ -1323,11 +1323,11 @@ module.exports = {
                 * @publicName repaintRows(rowIndexes)
                 * @param1 rowIndexes:Array<number>
                 */
-                repaintRows: function(rowIndexes) {
+                repaintRows: function(rowIndexes, changesOnly) {
                     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
                     if(rowIndexes.length > 1 || typeUtils.isDefined(rowIndexes[0])) {
-                        this.updateItems({ changeType: "update", rowIndices: rowIndexes, isFullUpdate: true });
+                        this.updateItems({ changeType: "update", rowIndices: rowIndexes, isFullUpdate: !changesOnly });
                     }
                 },
 
