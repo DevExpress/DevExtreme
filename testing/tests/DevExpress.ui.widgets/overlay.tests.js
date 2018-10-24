@@ -12,6 +12,7 @@ var $ = require("jquery"),
     Template = require("ui/widget/jquery.template"),
     Overlay = require("ui/overlay"),
     pointerMock = require("../../helpers/pointerMock.js"),
+    eventsEngine = require("events/core/events_engine"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     selectors = require("ui/widget/selectors");
 
@@ -2922,6 +2923,27 @@ QUnit.test("tabbable selectors should check only bounds", function(assert) {
     assert.ok(tabbableSpy.withArgs(0, $elements.get(0)).called, "first element has been checked");
     assert.ok(tabbableSpy.withArgs(0, $elements.last().get(0)).called, "last element has been checked");
     assert.notOk(tabbableSpy.withArgs(0, middleElement).called, "middle element hasn't been checked");
+});
+
+QUnit.test("tab target inside of wrapper but outside of content should not be outside", function(assert) {
+    var overlay = new Overlay($("<div>").appendTo("#qunit-fixture"), {
+            visible: true,
+            shading: true,
+            contentTemplate: $("#focusableTemplate")
+        }),
+        $content = $(overlay.content()),
+        $wrapper = $content.closest("." + OVERLAY_WRAPPER_CLASS);
+
+    var contentFocusHandler = sinon.spy(),
+        $tabbableDiv = $("<div>")
+            .attr("tabindex", 0)
+            .html("Tabbable div")
+            .prependTo($wrapper);
+
+    eventsEngine.on($tabbableDiv, "focus", contentFocusHandler);
+    keyboardMock($tabbableDiv).press("tab");
+
+    assert.equal(contentFocusHandler.callCount, 1, "focus has been triggered once from keyboardMock");
 });
 
 QUnit.test("focusin event should not be propagated (T342292)", function(assert) {
