@@ -537,7 +537,11 @@ module.exports = {
                         columnIndex = that.option("focusedColumnIndex"),
                         focusedRowKey = that.option("focusedRowKey"),
                         rowIndex = that._dataController.getRowIndexByKey(focusedRowKey),
-                        tabIndex = that.option("tabIndex");
+                        tabIndex = that.option("tabIndex"),
+                        scrollToFocusedRow = function() {
+                            that.getController("focus")._scrollToFocusedRow($row);
+                            that.resizeCompleted.remove(scrollToFocusedRow);
+                        };
 
                     if(that.option("focusedRowEnabled")) {
                         $cellElements = that.getCellElements(rowIndex >= 0 ? rowIndex : 0);
@@ -548,7 +552,10 @@ module.exports = {
                                 if(columnIndex < 0) {
                                     columnIndex = 0;
                                 }
+                                rowIndex += this.getController("data").getRowIndexOffset();
                                 this.getController("keyboardNavigation").setFocusedCellPosition(rowIndex, columnIndex);
+
+                                that.resizeCompleted.add(scrollToFocusedRow);
                             }
                         }
                     } else {
