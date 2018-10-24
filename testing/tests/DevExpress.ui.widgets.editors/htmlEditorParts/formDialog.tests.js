@@ -133,4 +133,18 @@ QUnit.module("FormDialog", moduleConfig, () => {
 
         formDialog._popup.hide();
     });
+
+    test("decline dialog by escape key press", (assert) => {
+        assert.expect(1);
+
+        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+        const promise = formDialog.show({ items: ["name"] });
+        const $input = $(`.${FORM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+
+        promise.fail((formData) => {
+            assert.notOk(formData, "There is no data");
+        });
+
+        keyboardMock($input).type("Test").change().keyDown("esc");
+    });
 });

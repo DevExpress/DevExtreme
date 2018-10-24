@@ -28,6 +28,14 @@ class FormDialog {
         return editorInstance._createComponent($container, Popup, popupConfig);
     }
 
+    _escKeyHandler() {
+        this._popup.hide();
+    }
+
+    _addEscapeHandler(e) {
+        e.component.registerKeyHandler("escape", this._escKeyHandler.bind(this));
+    }
+
     _getPopupConfig() {
         return extend({
             onInitialized: (e) => {
@@ -36,10 +44,24 @@ class FormDialog {
                 this._popup.on("shown", () => { this._form.focus(); });
             },
             deferRendering: false,
+            focusStateEnabled: false,
+            showCloseButton: false,
             contentTemplate: (contentElem) => {
-                this._renderForm($(contentElem), {
+                const $formContainer = $("<div>").appendTo(contentElem);
+
+                this._renderForm($formContainer, {
                     onEditorEnterKey: (e) => {
                         this.hide(e.component.option("formData"));
+                    },
+                    customizeItem: (item) => {
+                        if(item.itemType === "simple") {
+                            item.editorOptions = extend(
+                                true,
+                                {},
+                                item.editorOptions,
+                                { onInitialized: this._addEscapeHandler.bind(this) }
+                            );
+                        }
                     }
                 });
             },
@@ -49,6 +71,7 @@ class FormDialog {
                     location: "after",
                     widget: "dxButton",
                     options: {
+                        onInitialized: this._addEscapeHandler.bind(this),
                         text: format("OK"),
                         onClick: () => {
                             this.hide(this._form.option("formData"));
@@ -59,6 +82,7 @@ class FormDialog {
                     location: "after",
                     widget: "dxButton",
                     options: {
+                        onInitialized: this._addEscapeHandler.bind(this),
                         text: format("Cancel"),
                         onClick: () => {
                             this._popup.hide();
@@ -73,7 +97,6 @@ class FormDialog {
         $container.addClass(FORM_CLASS);
         this._form = this._editorInstance._createComponent($container, Form, options);
     }
-
 
     show(formUserConfig) {
         if(this._popup.option("visible")) {
