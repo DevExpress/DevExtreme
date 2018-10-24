@@ -421,24 +421,35 @@ QUnit.test("Various fonts", function(assert) {
     assert.equal(file.registerCellFormat({ font: { underline: 'single' } }), 10);
     assert.equal(file.registerCellFormat({ font: { underline: 'single' } }), 10);
     assert.equal(file.registerCellFormat({ font: { underline: 'double' } }), 11);
-    assert.equal(file.registerCellFormat({ font: { color: { rgb: 'rgb1' } } }), 12);
-    assert.equal(file.registerCellFormat({ font: { color: { rgb: 'rgb1' } } }), 12);
-    assert.equal(file.registerCellFormat({ font: { color: 'rgb1' } }), 12);
-    assert.equal(file.registerCellFormat({ font: { color: { rgb: 'rgb2' } } }), 13);
-    assert.equal(file.registerCellFormat({ font: { color: { theme: 't1' } } }), 14);
-    assert.equal(file.registerCellFormat({ font: { color: { theme: 't1' } } }), 14);
-    assert.equal(file.registerCellFormat({ font: { color: { theme: 't2' } } }), 15);
-    assert.equal(file.registerCellFormat({ font: { color: 'rgb3' } }), 16);
+    assert.equal(file.registerCellFormat({ font: { color: { rgb: 'FF001100' } } }), 12, "color: { rgb: 'FF001100' }");
+    assert.equal(file.registerCellFormat({ font: { color: { rgb: 'FF001100' } } }), 12, "color: { rgb: 'FF001100' }");
+    assert.equal(file.registerCellFormat({ font: { color: { rgb: '#001100' } } }), 12, "{ rgb: '#001100' }");
+    assert.equal(file.registerCellFormat({ font: { color: { rgb: '#001100FF' } } }), 12, "color: { rgb: '#001100FF' }");
+    assert.equal(file.registerCellFormat({ font: { color: 'FF001100' } }), 12, "color: 'FF001100'");
+    assert.equal(file.registerCellFormat({ font: { color: '#001100' } }), 12, "color: '#001100'");
+    assert.equal(file.registerCellFormat({ font: { color: '#001100FF' } }), 12, "color: '#001100FF' }");
+    assert.equal(file.registerCellFormat({ font: { color: { rgb: 'AA001100' } } }), 13, "color: { rgb: 'AA001100' }");
+    assert.equal(file.registerCellFormat({ font: { color: { rgb: '#001100AA' } } }), 13, "color: { rgb: '#001100AA' }");
+    assert.equal(file.registerCellFormat({ font: { color: 'AA001100' } }), 13, "color: 'AA001100'");
+    assert.equal(file.registerCellFormat({ font: { color: '#001100AA' } }), 13, "color: '#001100AA'");
+    assert.equal(file.registerCellFormat({ font: { color: { theme: 't1' } } }), 14, "color: { theme: 't1' }");
+    assert.equal(file.registerCellFormat({ font: { color: { theme: 't1' } } }), 14, "color: { theme: 't1' }");
+    assert.equal(file.registerCellFormat({ font: { color: { theme: 't2' } } }), 15, "color: { theme: 't2' }");
+    assert.equal(file.registerCellFormat({ font: { color: '11223' } }), 16, "color: '11223'");
+    assert.equal(file.registerCellFormat({ font: { color: '#11223' } }), 16, "color: '#11223'");
+    assert.equal(file.registerCellFormat({ font: { color: '#anycha' } }), 17, "color: '#anycha'");
+    assert.equal(file.registerCellFormat({ font: { color: '#anychaFF' } }), 17, "color: '#anychaFF'");
+    assert.equal(file.registerCellFormat({ font: { color: '#1234567' } }), 18, "color: '#1234567'");
 
     assert.equal(getFullXml(file),
-        '<cellXfs count="17">' +
+        '<cellXfs count="19">' +
         '<xf xfId="0" fontId="0" /><xf xfId="0" fontId="1" /><xf xfId="0" fontId="2" /><xf xfId="0" fontId="3" /><xf xfId="0" fontId="4" />' +
         '<xf xfId="0" fontId="5" /><xf xfId="0" fontId="6" /><xf xfId="0" fontId="7" /><xf xfId="0" fontId="8" /><xf xfId="0" fontId="9" />' +
         '<xf xfId="0" fontId="10" /><xf xfId="0" fontId="11" /><xf xfId="0" fontId="12" /><xf xfId="0" fontId="13" /><xf xfId="0" fontId="14" />' +
-        '<xf xfId="0" fontId="15" /><xf xfId="0" fontId="16" />' +
+        '<xf xfId="0" fontId="15" /><xf xfId="0" fontId="16" /><xf xfId="0" fontId="17" /><xf xfId="0" fontId="18" />' +
         '</cellXfs>' +
         getExpectedFillsXml() +
-        '<fonts count="17">' +
+        '<fonts count="19">' +
         '<font><b /></font>' +
         '<font><sz val="10" /></font>' +
         '<font><sz val="11" /></font>' +
@@ -451,15 +462,17 @@ QUnit.test("Various fonts", function(assert) {
         '<font><i /></font>' +
         '<font><u val="single" /></font>' +
         '<font><u val="double" /></font>' +
-        '<font><color rgb="rgb1" /></font>' +
-        '<font><color rgb="rgb2" /></font>' +
+        '<font><color rgb="FF001100" /></font>' +
+        '<font><color rgb="AA001100" /></font>' +
         '<font><color theme="t1" /></font>' +
         '<font><color theme="t2" /></font>' +
-        '<font><color rgb="rgb3" /></font>' +
+        '<font><color rgb="11223" /></font>' +
+        '<font><color rgb="FFanycha" /></font>' +
+        '<font><color rgb="1234567" /></font>' +
         '</fonts>');
 });
 
-QUnit.test("Copy fonts", function(assert) {
+QUnit.test("Copy fonts (ARGB color)", function(assert) {
     assert.propEqual(XlsxFile.copyCellFormat({ font: undefined }), {});
     assert.propEqual(XlsxFile.copyCellFormat({ font: null }), { font: null });
     assert.propEqual(XlsxFile.copyCellFormat({ font: {} }), { font: {} });
