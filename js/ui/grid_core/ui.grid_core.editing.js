@@ -1860,7 +1860,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._rowsView.renderTemplate($container, button.template, options, true);
             } else {
                 if(useIcons && icon || button.icon) {
-                    icon = icon || button.icon;
+                    icon = button.icon || icon;
                     iconType = iconUtils.getImageSourceType(icon);
 
                     if(iconType === "image") {
