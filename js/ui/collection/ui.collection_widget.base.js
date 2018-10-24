@@ -694,7 +694,9 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemElements: function() {
-        return this._itemContainer().find(this._itemSelector());
+        var selector = this._itemSelector();
+        var result = this._itemContainer().find(selector);
+        return result.not(result.find(selector));
     },
 
     _initMarkup: function() {

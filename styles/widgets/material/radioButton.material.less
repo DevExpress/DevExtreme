@@ -48,7 +48,7 @@
     }
 }
 
-.dx-radiobutton-checked  {
+.dx-radiobutton-checked > .dx-radio-value-container  {
     .dx-radiobutton-icon:before {
         border-color: @radiogroup-checked-bg;
     }
@@ -76,7 +76,7 @@
         }
     }
 
-    &.dx-radiobutton-checked {
+    &.dx-radiobutton-checked > .dx-radio-value-container {
         &.dx-state-active,
         &.dx-state-focused {
             .dx-radiobutton-icon:after {
@@ -140,7 +140,7 @@
 
 .dx-rtl .dx-radiobutton,
 .dx-rtl.dx-radiobutton {
-    &.dx-radiobutton-checked .dx-radiobutton-icon-dot {
+    &.dx-radiobutton-checked > .dx-radio-value-container .dx-radiobutton-icon-dot {
         margin-right: @MATERIAL_RADIOBUTTON_SIZE / 2 - @MATERIAL_RADIOBUTTON_DOT_SIZE / 2;
         margin-left: 0;
     }
