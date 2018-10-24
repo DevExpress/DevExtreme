@@ -15,7 +15,6 @@ exports.FocusController = core.ViewController.inherit((function() {
         init: function() {
             this._dataController = this.getController("data");
             this._keyboardController = this.getController("keyboardNavigation");
-            this._needRestoreFocus = false;
         },
 
         optionChanged: function(args) {
@@ -60,8 +59,10 @@ exports.FocusController = core.ViewController.inherit((function() {
         navigateToRow: function(key) {
             var that = this,
                 dataController = this.getController("data"),
-                rowsView = this.getView("rowsView"),
-                rowIndex = this.option("focusedRowIndex");
+                rowIndex = this.option("focusedRowIndex"),
+                endUpdate = function() {
+                    // dataController.endUpdate();
+                };
 
             if(key === undefined) {
                 return;
@@ -72,18 +73,26 @@ exports.FocusController = core.ViewController.inherit((function() {
             if(rowIndex >= 0 && rowIndex === rowIndexByKey) {
                 that._triggerUpdateFocusedRow(key);
             } else {
+
+                // dataController.beginUpdate();
+
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
-                    that._needRestoreFocus = $(rowsView._getRowElement(that.option("focusedRowIndex"))).is(":focus");
                     if(pageIndex === dataController.pageIndex()) {
                         dataController.reload().done(function() {
+
+                            endUpdate();
+
                             that._triggerUpdateFocusedRow(key);
-                        });
+                        }).fail(endUpdate);
                     } else {
                         dataController.pageIndex(pageIndex).done(function() {
+
+                            endUpdate();
+
                             that._triggerUpdateFocusedRow(key);
-                        });
+                        }).fail(endUpdate);
                     }
-                });
+                }).fail(endUpdate);
             }
         },
 
@@ -122,19 +131,18 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
         },
 
-        isRowFocused: function(key, index) {
-            var focusedRowKey = this.option("focusedRowKey"),
-                focusedRowIndex;
+        /**
+         * @name GridBaseMethods.isRowFocused
+         * @publicName isRowFocused(key)
+         * @param1 key:any
+         */
+        isRowFocused: function(key) {
+            var focusedRowKey = this.option("focusedRowKey");
 
             if(focusedRowKey !== undefined) {
                 return equalByValue(key, this.option("focusedRowKey"));
             }
-            focusedRowIndex = this.getController("keyboardNavigation").getVisibleRowIndex();
-            return focusedRowIndex === index;
-        },
-
-        _resetFocusedRowKey: function() {
-            this.option("focusedRowKey", undefined);
+            return false;
         },
 
         updateFocusedRow: function(change) {
@@ -417,8 +425,24 @@ module.exports = {
 
                 getPageIndexByKey: function(key) {
                     var that = this,
+                        d = new Deferred();
+
+                    that.getGlobalRowIndexByKey(key, d).done(function(globalIndex) {
+                        d.resolve(Math.floor(globalIndex / that.pageSize()));
+                    });
+
+                    return d.promise();
+                },
+                getGlobalRowIndexByKey: function(key) {
+                    if(this._dataSource.group()) {
+                        return this._calculateGlobalRowIndexByGroupedData(key);
+                    }
+                    return this._calculateGlobalRowIndexByFlatData(key);
+                },
+                _calculateGlobalRowIndexByFlatData: function(key, groupFilter, useGroup) {
+                    var that = this,
+                        deferred = new Deferred(),
                         dataSource = that._dataSource,
-                        d = new Deferred(),
                         filter = that._generateFilterByKey(key);
 
                     dataSource.load({
@@ -427,30 +451,36 @@ module.exports = {
                         take: 1
                     }).done(function(data) {
                         if(data.length > 0) {
-                            filter = that._generateOperationFilterByKey(key, data[0]);
+                            filter = that._generateOperationFilterByKey(key, data[0], useGroup);
                             dataSource.load({
-                                filter: that._concatWithCombinedFilter(filter),
+                                filter: that._concatWithCombinedFilter(filter, groupFilter),
                                 skip: 0,
                                 take: 1,
                                 requireTotalCount: true
                             }).done(function(_, extra) {
-                                var pageIndex = Math.floor(extra.totalCount / that.pageSize());
-                                d.resolve(pageIndex);
+                                deferred.resolve(extra.totalCount);
                             });
                         }
                     });
 
-                    return d.promise();
+                    return deferred.promise();
                 },
-                _concatWithCombinedFilter: function(filter) {
+                _concatWithCombinedFilter: function(filter, groupFilter) {
                     var combinedFilter = this.getCombinedFilter();
-                    return gridCoreUtils.combineFilters([filter, combinedFilter]);
+                    return gridCoreUtils.combineFilters([filter, combinedFilter, groupFilter]);
                 },
-                _generateOperationFilterByKey: function(key, rowData) {
+                _generateOperationFilterByKey: function(key, rowData, useGroup) {
                     var that = this,
                         dataSource = that._dataSource,
                         filter = that._generateFilterByKey(key, "<"),
                         sort = that._columnsController.getSortDataSourceParameters(!dataSource.remoteOperations().filtering);
+
+                    if(useGroup) {
+                        var group = that._columnsController.getGroupDataSourceParameters(!dataSource.remoteOperations().filtering);
+                        if(group) {
+                            sort = sort ? group.concat(sort) : group;
+                        }
+                    }
 
                     if(sort) {
                         sort.slice().reverse().forEach(function(sortInfo) {
@@ -507,7 +537,7 @@ module.exports = {
                     var $row = this.callBase(row);
 
                     if(this.option("focusedRowEnabled") && row) {
-                        if(this.getController("focus").isRowFocused(row.key, row.rowIndex)) {
+                        if(this.getController("focus").isRowFocused(row.key)) {
                             $row.addClass(ROW_FOCUSED_CLASS);
                         }
                     }
