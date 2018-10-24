@@ -275,6 +275,7 @@ var RadioGroup = Editor.inherit({
     },
 
     _itemClickHandler: function(e) {
+        e.event.stopPropagation();
         this._saveValueChangeEvent(e.event);
         this.option("value", this._getItemValue(e.itemData));
     },
