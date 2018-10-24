@@ -1464,14 +1464,14 @@ QUnit.test("ScrollTop should be correct after loading pageIndex from state", fun
     });
 });
 
-QUnit.test('Load focusedRowKey, focusedColumnIndex state', function(assert) {
+QUnit.test('Load focusedRowKey state', function(assert) {
     // arrange, act
     this.setupDataGridModules({
         stateStoring: {
             enabled: true,
             type: 'custom',
             customLoad: function() {
-                return { focusedRowKey: 2, focusedColumnIndex: 2 };
+                return { focusedRowKey: 2 };
             },
             customSave: function() {
             }
@@ -1489,37 +1489,6 @@ QUnit.test('Load focusedRowKey, focusedColumnIndex state', function(assert) {
 
     // assert
     assert.strictEqual(this.option("focusedRowKey"), 2);
-    assert.strictEqual(this.option("focusedRowIndex"), 1);
-    assert.strictEqual(this.option("focusedColumnIndex"), 2);
-});
-
-QUnit.test('Load focusedRowIndex, focusedColumnIndex state', function(assert) {
-    // arrange, act
-    this.setupDataGridModules({
-        stateStoring: {
-            enabled: true,
-            type: 'custom',
-            customLoad: function() {
-                return { focusedRowIndex: 1, focusedColumnIndex: 1 };
-            },
-            customSave: function() {
-            }
-        },
-        focusedRowEnabled: true,
-        loadingTimeout: null,
-        dataSource: {
-            store: {
-                type: "array",
-                data: [{ id: 1 }, { id: 2 }, { id: 3 }],
-                key: "id"
-            }
-        }
-    });
-
-    // assert
-    assert.strictEqual(this.option("focusedRowKey"), 2);
-    assert.strictEqual(this.option("focusedRowIndex"), 1);
-    assert.strictEqual(this.option("focusedColumnIndex"), 1);
 });
 
 QUnit.test('Save focused row state when data changed', function(assert) {
@@ -1560,7 +1529,6 @@ QUnit.test('Save focused row state when data changed', function(assert) {
         pageSize: 20,
         allowedPageSizes: [10, 20, 40],
         focusedRowKey: 1,
-        focusedRowIndex: 0,
         searchText: '',
         filterPanel: {},
         filterValue: null

@@ -49,9 +49,7 @@ var processLoadState = function(that) {
                 allowedPageSizes: pagerView ? pagerView.getPageSizes() : undefined,
                 filterPanel: { filterEnabled: that.option("filterPanel.filterEnabled") },
                 filterValue: that.option("filterValue"),
-                focusedRowKey: focusedRowEnabled ? that.option("focusedRowKey") : undefined,
-                focusedRowIndex: focusedRowEnabled ? that.option("focusedRowIndex") : undefined,
-                focusedColumnIndex: focusedRowEnabled ? that.option("focusedColumnIndex") : undefined
+                focusedRowKey: focusedRowEnabled ? that.option("focusedRowKey") : undefined
             });
             that.isEnabled() && that.save();
         });
@@ -198,8 +196,6 @@ module.exports = {
 
                     if(that.option("focusedRowEnabled")) {
                         that.option("focusedRowKey", state.focusedRowKey);
-                        that.option("focusedRowIndex", state.focusedRowIndex);
-                        that.option("focusedColumnIndex", state.focusedColumnIndex);
                     }
 
                     that.component.endUpdate();
