@@ -2943,7 +2943,7 @@ QUnit.test("tab target inside of wrapper but outside of content should not be ou
     eventsEngine.on($tabbableDiv, "focus", contentFocusHandler);
     keyboardMock($tabbableDiv).press("tab");
 
-    assert.equal(contentFocusHandler.callCount, 1, "focus has been triggered once from keyboardMock");
+    assert.equal(contentFocusHandler.callCount, 0, "focus has not been triggered");
 });
 
 QUnit.test("focusin event should not be propagated (T342292)", function(assert) {
