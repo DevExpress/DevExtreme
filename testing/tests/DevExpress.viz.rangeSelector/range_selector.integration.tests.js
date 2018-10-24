@@ -410,3 +410,28 @@ QUnit.module("Begin/end update functionality", function() {
         assert.strictEqual(count, 2, "one because of 'scale' and one because of 'theme'");
     });
 });
+
+QUnit.module("Misc");
+
+QUnit.test("Range selector with aggregation", function(assert) {
+    var rangeSelector = $("#container").dxRangeSelector({
+        dataSource: [{
+            arg: 0.5,
+            val: 1
+        }, {
+            arg: 2.5,
+            val: 2
+        }],
+
+        chart: {
+            series: [{
+                aggregation: {
+                    enabled: true
+                }
+            }]
+        }
+    }).dxRangeSelector("instance");
+
+    assert.deepEqual(rangeSelector.getValue(), [0, 2]);
+});
+
