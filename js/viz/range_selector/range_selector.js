@@ -1045,7 +1045,11 @@ AxisWrapper.prototype = {
         axis.drawScaleBreaks({ start: canvas.top, end: canvas.top + canvas.height });
     },
 
-    visualRange: function() {}
+    visualRange: function() { },
+
+    getViewport: function() {
+        return {};
+    }
 };
 
 ["setMarginOptions", "getFullTicks", "updateCanvas", "updateOptions", "getAggregationInfo", "getTranslator"].forEach(methodName => {
