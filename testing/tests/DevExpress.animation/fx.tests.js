@@ -139,6 +139,77 @@ QUnit.test("basic animation when window was scrolled", function(assert) {
     }
 });
 
+QUnit.test("animation when window was scrolled", function(assert) {
+    assert.expect(3);
+
+    var $wrapper = $("<div>").appendTo("body"),
+        $target = $("<div>").appendTo($wrapper),
+        $element = $("<div>").appendTo("body");
+
+    try {
+        $wrapper.css({ height: "150%", width: "150%", position: "absolute", top: "0", left: "0" });
+        $target.css({ height: 50, width: 50, position: "absolute", top: "320px", left: "120px", background: 'green' });
+        $element.css({ height: 50, width: 50, top: "200px", background: 'blue', position: "absolute" });
+
+        var done = assert.async();
+        window.scrollBy(100, 200);
+
+        this.animate($element, {
+            type: 'slide',
+            from: {
+                position: {
+                    my: 'top',
+                    at: 'bottom',
+                    of: window
+                }
+            },
+            to: {
+                position: {
+                    my: 'bottom',
+                    at: 'bottom',
+                    of: window
+                }
+            },
+            duration: 100,
+            complete: function() {
+                assert.roughEqual($element.get(0).getBoundingClientRect().top, $(window).height() - $element.height(), 1, "position after animation is correct");
+            }
+        });
+        this.clock.tick(150);
+
+        this.animate($element, {
+            type: 'slide',
+            from: {
+                position: {
+                    my: 'top left',
+                    at: 'top left',
+                    of: $target
+                }
+            },
+            to: {
+                position: {
+                    my: 'top left',
+                    at: 'bottom right',
+                    of: $target
+                }
+            },
+            duration: 100,
+            complete: function() {
+                var offset = $element.offset();
+                assert.roughEqual(offset.top, 370, 1.5, "top position after animation to the target element is correct");
+                assert.roughEqual(offset.left, 170, 1.5, "left position after animation to the target element is correct");
+                done();
+            }
+        });
+        this.clock.tick(150);
+    } finally {
+        window.scroll(0, 0);
+        $wrapper.remove();
+        $target.remove();
+        $element.remove();
+    }
+});
+
 QUnit.test("draw callback", function(assert) {
     var $element = $("#test"),
         done = assert.async();
