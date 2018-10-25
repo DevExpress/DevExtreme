@@ -1,5 +1,6 @@
 var $ = require("jquery"),
     config = require("core/config"),
+    devices = require("core/devices"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
     numberLocalization = require("localization/number"),
     browser = require("core/utils/browser");
@@ -32,18 +33,42 @@ var moduleConfig = {
 
 QUnit.module("format: api value changing", moduleConfig);
 
-QUnit.test("number type of input is not supported with masks", function(assert) {
-    var $element = $("#numberbox").dxNumberBox({
-            useMaskBehavior: true,
-            format: "#",
-            mode: "number"
-        }),
-        instance = $element.dxNumberBox("instance");
+QUnit.test("number type of input should be converted to tel on mobile device", function(assert) {
+    var realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "mobile" });
+    try {
+        var $element = $("#numberbox").dxNumberBox({
+                useMaskBehavior: true,
+                format: "#",
+                mode: "number"
+            }),
+            instance = $element.dxNumberBox("instance");
 
-    assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "input has tel type");
+        assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "input has tel type on mobile device");
 
-    instance.option("mode", "number");
-    assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "user can not set number type with mask");
+        instance.option("mode", "number");
+        assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "user can not set number type with mask");
+    } finally {
+        realDeviceMock.restore();
+    }
+});
+
+QUnit.test("number type of input should be converted to text on desktop device", function(assert) {
+    var realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "desktop" });
+    try {
+        var $element = $("#numberbox").dxNumberBox({
+                useMaskBehavior: true,
+                format: "#",
+                mode: "number"
+            }),
+            instance = $element.dxNumberBox("instance");
+
+        assert.equal($element.find("." + INPUT_CLASS).prop("type"), "text", "input has text type on desktop device");
+
+        instance.option("mode", "number");
+        assert.equal($element.find("." + INPUT_CLASS).prop("type"), "text", "user can not set number type with mask");
+    } finally {
+        realDeviceMock.restore();
+    }
 });
 
 QUnit.test("empty value should not be formatted", function(assert) {
