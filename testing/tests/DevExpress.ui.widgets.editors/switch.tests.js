@@ -109,18 +109,18 @@ QUnit.test("onContentReady fired after the widget is fully ready", function(asse
     });
 });
 
-QUnit.test("onText/offText options changing", function(assert) {
+QUnit.test("switchedOnText/switchedOffText options changing", function(assert) {
     var $element = $("#switch").dxSwitch({}),
         instance = $element.dxSwitch("instance");
 
-    instance.option("onText", "1");
+    instance.option("switchedOnText", "1");
     assert.equal($element.find("." + LABEL_ON_CLASS).text(), "1");
-    instance.option("onText", "11");
+    instance.option("switchedOnText", "11");
     assert.equal($element.find("." + LABEL_ON_CLASS).text(), "11");
 
-    instance.option("offText", "0");
+    instance.option("switchedOffText", "0");
     assert.equal($element.find("." + LABEL_OFF_CLASS).text(), "0");
-    instance.option("offText", "00");
+    instance.option("switchedOffText", "00");
     assert.equal($element.find("." + LABEL_OFF_CLASS).text(), "00");
 });
 
@@ -149,8 +149,8 @@ QUnit.test("onValueChanged option", function(assert) {
 
 QUnit.test("value option changing", function(assert) {
     var element = $("#switch").dxSwitch({
-        onText: "customOn",
-        offText: "customOff",
+        switchedOnText: "customOn",
+        switchedOffText: "customOff",
         value: false
     });
 

@@ -68,9 +68,8 @@
 
         "dxRangeSlider-ariaFrom": "From",
         "dxRangeSlider-ariaTill": "Till",
-
-        "dxSwitch-onText": "ON",
-        "dxSwitch-offText": "OFF",
+        "dxSwitch-switchedOnText": "ON",
+        "dxSwitch-switchedOffText": "OFF",
 
         "dxForm-optionalMark": "optional",
         "dxForm-requiredMessage": "{0} is required",
