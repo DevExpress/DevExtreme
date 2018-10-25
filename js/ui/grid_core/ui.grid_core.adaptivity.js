@@ -42,8 +42,8 @@ var $ = require("../../core/renderer"),
     EDIT_MODE_POPUP = "popup",
     REVERT_TOOLTIP_CLASS = "revert-tooltip";
 
-function getColumnId(column) {
-    return column.command ? "command:" + column.command : column.index;
+function getColumnId(that, column) {
+    return that._columnsController.getColumnId(column);
 }
 
 function getDataCellElements($row) {
@@ -232,7 +232,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _calculateColumnWidth: function(column, containerWidth, contentColumns, columnsCanFit) {
-        var columnId = getColumnId(column),
+        var columnId = getColumnId(this, column),
             widthOption = this._columnsController.columnOption(columnId, "width"),
             bestFitWidth = this._columnsController.columnOption(columnId, "bestFitWidth"),
             columnsCount = contentColumns.length,
@@ -268,7 +268,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _getNotTruncatedColumnWidth: function(column, containerWidth, contentColumns, columnsCanFit) {
-        var columnId = getColumnId(column),
+        var columnId = getColumnId(this, column),
             widthOption = this._columnsController.columnOption(columnId, "width"),
             bestFitWidth = this._columnsController.columnOption(columnId, "bestFitWidth"),
             colWidth;
@@ -299,7 +299,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         each(columns, function(index, column) {
             if(column.index < 0 || column.command) {
-                colWidth += that._columnsController.columnOption(getColumnId(column), "bestFitWidth") || 0;
+                colWidth += that._columnsController.columnOption(getColumnId(that, column), "bestFitWidth") || 0;
             }
         });
 
@@ -451,7 +451,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                     visibleColumn = visibleColumns[i];
 
                     var columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, visibleContentColumns, columnsCanFit),
-                        columnId = getColumnId(visibleColumn),
+                        columnId = getColumnId(that, visibleColumn),
                         widthOption = that._columnsController.columnOption(columnId, "width"),
                         columnBestFitWidth = that._columnsController.columnOption(columnId, "bestFitWidth");
 

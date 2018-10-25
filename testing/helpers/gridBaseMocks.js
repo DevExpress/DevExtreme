@@ -581,6 +581,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             isAllDataTypesDefined: function() {
+            },
+
+            getColumnId: function(column) {
+                return column.command ? "command:" + column.command : column.index;
             }
         };
     };

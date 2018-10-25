@@ -46,7 +46,7 @@ function createGridView(options, userOptions) {
         showColumnHeaders: true
     }, userOptions);
 
-    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editorFactory', 'columnChooser', 'summary', 'columnFixing'],
+    setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'pager', 'sorting', 'gridView', 'filterRow', 'headerFilter', 'search', 'columnsResizingReordering', 'editing', 'editorFactory', 'columnChooser', 'summary', 'columnFixing', 'masterDetail'],
         {
             initViews: true,
             controllers: {
@@ -1905,6 +1905,68 @@ function createGridView(options, userOptions) {
 
         // assert
         assert.strictEqual($colElements[1].style.width, "130px", "column width");
+    });
+
+    QUnit.test("The command column widths must be correct", function(assert) {
+        // arrange
+        var $colElements,
+            $testElement = $('<div />').appendTo($('#container')),
+            gridView = this.createGridView({}, {
+                editing: {
+                    mode: "row",
+                    allowUpdating: true
+                },
+                columnAutoWidth: true,
+                dataSource: [{ field1: "test1", field2: "test2", field3: "test3" }],
+                columns: [
+                    { dataField: "field1" },
+                    { type: "buttons" },
+                    { type: "buttons", buttons: [{ text: "test" }], width: 250 },
+                    { dataField: "field2" },
+                    { dataField: "field3" }
+                ]
+            });
+
+        // act
+        gridView.render($testElement);
+        gridView.update();
+
+        // assert
+        $colElements = $testElement.find(".dx-datagrid-headers").find("col");
+        assert.strictEqual($colElements.length, 5, "column count");
+        assert.strictEqual($colElements.get(1).style.width, "100px", "width of a first command column");
+        assert.strictEqual($colElements.get(2).style.width, "250px", "width of a second command column");
+    });
+
+    QUnit.test("Group and detail column widths must be correct", function(assert) {
+        // arrange
+        var $colElements,
+            $testElement = $('<div />').appendTo($('#container')),
+            gridView = this.createGridView({}, {
+                masterDetail: {
+                    enabled: true
+                },
+                columnAutoWidth: true,
+                dataSource: [{ field1: "test1", field2: "test2", field3: "test3" }],
+                columns: [
+                    { dataField: "field1" },
+                    { type: "detailExpand" },
+                    { type: "groupExpand", width: 100 },
+                    { dataField: "field2", groupIndex: 0 },
+                    { dataField: "field3", groupIndex: 1 }
+                ]
+            });
+
+        // act
+        gridView.render($testElement);
+        gridView.update();
+
+        // assert
+        $colElements = $testElement.find(".dx-datagrid-headers").find("col");
+        assert.strictEqual($colElements.length, 4, "column count");
+        assert.strictEqual($colElements.get(1).style.width, "30px", "width of the detail column");
+        assert.strictEqual($colElements.get(2).style.width, "100px", "width of the group column");
+        assert.strictEqual($colElements.get(3).style.width, "100px", "width of the group column");
     });
 }());
 
