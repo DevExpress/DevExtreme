@@ -1356,6 +1356,20 @@ QUnit.test("change event should be fired after extra digits have been entered (I
     assert.equal(this.instance.option("value"), 123.45, "value is correct");
 });
 
+QUnit.test("change event should not be rised when value has not been changed", function(assert) {
+    var changeHandler = sinon.spy();
+
+    this.instance.option("value", null);
+    this.instance.on("change", changeHandler);
+    this.input.trigger("focusout");
+
+    assert.equal(changeHandler.callCount, 0, "change event has not been rised");
+
+    this.instance.option("value", 1);
+    this.input.trigger("focusout");
+    assert.equal(changeHandler.callCount, 0, "change event has not been rised second time");
+});
+
 
 QUnit.module("format: caret boundaries", moduleConfig);
 
