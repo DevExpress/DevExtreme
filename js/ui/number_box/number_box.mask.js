@@ -378,7 +378,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var newCaret = maskCaret.getCaretAfterFormat(this._getInputVal(), text, this._caret(), this._getFormatPattern()),
             newValue = number.convertDigits(text);
 
-        if(this._formattedValue !== newValue) {
+        if(this._formattedValue && this._formattedValue !== newValue) {
             this._isDirty = true;
         }
 
