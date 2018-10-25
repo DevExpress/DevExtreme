@@ -249,6 +249,8 @@
         "dxHtmlEditor-dialogImageUrlField": "URL",
         "dxHtmlEditor-dialogImageAltField": "代替テキスト",
         "dxHtmlEditor-dialogImageWidthField": "幅 (px)",
-        "dxHtmlEditor-dialogImageHeightField": "高さ (px)"
+        "dxHtmlEditor-dialogImageHeightField": "高さ (px)",
+        "dxHtmlEditor-heading": "見出し",
+        "dxHtmlEditor-normalText": "標準テキスト"
     }
 }

@@ -465,11 +465,11 @@ var dxChart = {
         */
         allowMouseWheel: true,
         /**
-        * @name dxChartOptions.zoomAndPan.allowGestures
+        * @name dxChartOptions.zoomAndPan.allowTouchGestures
         * @type boolean
         * @default true
         */
-        allowGestures: true
+       allowTouchGestures: true
     },
     /**
     * @name dxChartOptions.zoomingMode

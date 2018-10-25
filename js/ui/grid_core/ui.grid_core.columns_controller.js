@@ -2988,6 +2988,17 @@ module.exports = {
                     });
 
                     return result;
+                },
+                getColumnId: function(column) {
+                    if(column.command && column.type === GROUP_COMMAND_COLUMN_NAME) {
+                        if(isCustomCommandColumn(this, column)) {
+                            return "type:" + column.type;
+                        }
+
+                        return "command:" + column.command;
+                    }
+
+                    return column.index;
                 }
             };
         })())

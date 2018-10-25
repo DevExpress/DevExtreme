@@ -187,11 +187,11 @@ module.exports = {
             if(series.argumentAxisType === DISCRETE) {
                 range.arg = argumentRange;
             } else {
-                const viewport = series.getArgumentAxis().visualRange() || {};
-                const viewportLength = (viewport.endValue - viewport.startValue) || 0;
-                const dataRangeLength = argumentRange.max - argumentRange.min;
-                if(viewportLength && viewportLength < dataRangeLength) {
+                const viewport = series.getArgumentAxis().getViewport();
+                if(_isDefined(viewport.startValue) || _isDefined(viewport.length)) {
                     argumentCalculator(range.arg, argumentRange.min, argumentRange.min);
+                }
+                if(_isDefined(viewport.endValue) || _isDefined(viewport.length) && _isDefined(viewport.startValue)) {
                     argumentCalculator(range.arg, argumentRange.max, argumentRange.max);
                 }
             }

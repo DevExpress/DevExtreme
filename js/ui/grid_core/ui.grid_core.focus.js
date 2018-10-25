@@ -62,7 +62,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 dataController = this.getController("data"),
                 rowIndex = this.option("focusedRowIndex");
 
-            if(key === undefined) {
+            if(key === undefined || !dataController.dataSource()) {
                 return;
             }
 
@@ -557,7 +557,11 @@ module.exports = {
                         columnIndex = that.option("focusedColumnIndex"),
                         focusedRowKey = that.option("focusedRowKey"),
                         rowIndex = that._dataController.getRowIndexByKey(focusedRowKey),
-                        tabIndex = that.option("tabIndex");
+                        tabIndex = that.option("tabIndex"),
+                        scrollToFocusedRow = function() {
+                            that.getController("focus")._scrollToFocusedRow($row);
+                            that.resizeCompleted.remove(scrollToFocusedRow);
+                        };
 
                     if(that.option("focusedRowEnabled") && that.element().find(FOCUSED_ROW_SELECTOR).length === 0) {
                         $cellElements = that.getCellElements(rowIndex >= 0 ? rowIndex : 0);
@@ -568,7 +572,10 @@ module.exports = {
                                 if(columnIndex < 0) {
                                     columnIndex = 0;
                                 }
-                                that.getController("keyboardNavigation").setFocusedCellPosition(rowIndex, columnIndex);
+                                rowIndex += this.getController("data").getRowIndexOffset();
+                                this.getController("keyboardNavigation").setFocusedCellPosition(rowIndex, columnIndex);
+
+                                that.resizeCompleted.add(scrollToFocusedRow);
                             }
                         }
                     } else {

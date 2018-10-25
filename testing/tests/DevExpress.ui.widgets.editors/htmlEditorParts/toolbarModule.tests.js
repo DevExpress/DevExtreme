@@ -23,6 +23,9 @@ const DIALOG_CLASS = "dx-formdialog";
 const BUTTON_WITH_TEXT_CLASS = "dx-button-has-text";
 const ICON_CLASS = "dx-icon";
 const DISABLED_STATE_CLASS = "dx-state-disabled";
+const CHECKBOX_CHECKED_CLASS = "dx-checkbox-checked";
+const CHECKBOX_TEXT_CLASS = "dx-checkbox-text";
+const DIALOG_TARGET_ITEM_CLASS = "dx-formdialog-field-target";
 
 const BOLD_FORMAT_CLASS = "dx-bold-format";
 const ITALIC_FORMAT_CLASS = "dx-italic-format";
@@ -101,7 +104,7 @@ const dialogModuleConfig = {
             }
         };
 
-        this.formDialog = new FormDialog(this.options.editorInstance, { container: this.$element });
+        this.formDialog = new FormDialog(this.options.editorInstance, { container: this.$element, position: null });
     }
 };
 
@@ -190,11 +193,14 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             $(element).trigger("dxclick");
         });
 
+        this.quillMock.getFormat = () => { return { align: "justify" }; };
+        $formatWidgets.last().trigger("dxclick");
+
         assert.deepEqual(
             this.log,
             [{
                 format: "align",
-                value: false
+                value: "left"
             }, {
                 format: "align",
                 value: "center"
@@ -204,7 +210,11 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             }, {
                 format: "align",
                 value: "justify"
-            }]);
+            }, {
+                format: "align",
+                value: false
+            }]
+        );
     });
 
     test("handle codeBlock formatting", (assert) => {
@@ -330,6 +340,58 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
 
         assert.ok($buttons.eq(0).hasClass(TOOLBAR_FORMAT_WIDGET_CLASS), "Bold");
         assert.notOk($buttons.eq(1).hasClass(TOOLBAR_FORMAT_WIDGET_CLASS), "Custom button");
+    });
+
+    test("handle indent formatting", (assert) => {
+        this.options.items = ["decreaseIndent", "increaseIndent"];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+        $formatButton.eq(0).trigger("dxclick");
+        $formatButton.eq(1).trigger("dxclick");
+
+        assert.deepEqual(
+            this.log,
+            [{
+                format: "indent",
+                value: "-1"
+            }, {
+                format: "indent",
+                value: "+1"
+            }]);
+    });
+
+    test("handle script formatting", (assert) => {
+        this.options.items = ["superscript", "subscript"];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+        $formatButton.eq(0).trigger("dxclick");
+        $formatButton.eq(1).trigger("dxclick");
+
+        this.quillMock.getFormat = () => { return { script: "super" }; };
+        $formatButton.eq(0).trigger("dxclick");
+
+        this.quillMock.getFormat = () => { return { script: "sub" }; };
+        $formatButton.eq(1).trigger("dxclick");
+
+        assert.deepEqual(
+            this.log,
+            [{
+                format: "script",
+                value: "super"
+            }, {
+                format: "script",
+                value: "sub"
+            }, {
+                format: "script",
+                value: false
+            }, {
+                format: "script",
+                value: false
+            }]);
     });
 });
 
@@ -682,10 +744,10 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
 
         const $form = $(`.${FORM_CLASS}`);
         const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
-        const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}`).text();
+        const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}, .${CHECKBOX_TEXT_CLASS}`).text();
 
         assert.equal($fields.length, 3, "Form with 4 fields shown");
-        assert.equal(fieldsText, "URL:Text:Open link in new window:", "Check labels");
+        assert.equal(fieldsText, "URL:Text:Open link in new window", "Check labels");
     });
 
     test("show link dialog when a link selected", (assert) => {
@@ -706,9 +768,38 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
             .trigger("dxclick");
 
         const $fieldInputs = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+        const $targetField = $(`.${DIALOG_TARGET_ITEM_CLASS}`);
 
         assert.equal($fieldInputs.eq(0).val(), "http://test.com", "URL");
         assert.equal($fieldInputs.eq(1).val(), "Test", "Text");
+        assert.equal($targetField.length, 1, "There is target field");
+        assert.equal($targetField.find(`.${CHECKBOX_CHECKED_CLASS}`).length, 1, "It is contains a checked CheckBox");
+    });
+
+    test("show link dialog when a link selected and didn't contain a target attribute", (assert) => {
+        this.quillMock.getFormat = () => {
+            return {
+                link: "http://test.com",
+                target: undefined,
+                text: "Test"
+            };
+        };
+        this.quillMock.getSelection = () => true;
+        this.quillMock.getText = () => "Test";
+
+        this.options.items = ["link"];
+        new Toolbar(this.quillMock, this.options);
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+
+        const $fieldInputs = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+        const $targetField = $(`.${DIALOG_TARGET_ITEM_CLASS}`);
+
+        assert.equal($fieldInputs.eq(0).val(), "http://test.com", "URL");
+        assert.equal($fieldInputs.eq(1).val(), "Test", "Text");
+        assert.equal($targetField.length, 1, "There is target field");
+        assert.equal($targetField.find(`.${CHECKBOX_CHECKED_CLASS}`).length, 0, "It isn't contains an checked CheckBox");
     });
 
     test("change an link formatting", (assert) => {

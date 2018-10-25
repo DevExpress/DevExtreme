@@ -144,7 +144,7 @@ var ResizingController = modules.ViewController.inherit({
         var columnsController = this._columnsController;
         columnsController.beginUpdate();
         each(visibleColumns, function(index, column) {
-            var columnId = column.command ? "command:" + column.command : column.index;
+            var columnId = columnsController.getColumnId(column);
             columnsController.columnOption(columnId, "visibleWidth", widths[index]);
         });
         columnsController.endUpdate();
@@ -212,13 +212,13 @@ var ResizingController = modules.ViewController.inherit({
                 var expandColumnWidth;
 
                 each(visibleColumns, function(index, column) {
-                    if(column.command === "expand") {
+                    if(column.type === "groupExpand") {
                         expandColumnWidth = resultWidths[index];
                     }
                 });
 
                 each(visibleColumns, function(index, column) {
-                    if(column.command === "expand" && expandColumnWidth) {
+                    if(column.type === "groupExpand" && expandColumnWidth) {
                         resultWidths[index] = expandColumnWidth;
                     }
                 });
@@ -252,7 +252,7 @@ var ResizingController = modules.ViewController.inherit({
                 resultWidths = that._getBestFitWidths();
 
                 each(visibleColumns, function(index, column) {
-                    var columnId = column.command ? "command:" + column.command : column.index;
+                    var columnId = columnsController.getColumnId(column);
                     columnsController.columnOption(columnId, "bestFitWidth", resultWidths[index], true);
                 });
             } else if(hasMinWidth) {

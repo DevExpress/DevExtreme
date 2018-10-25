@@ -715,7 +715,7 @@ registerTheme({
             },
             panKey: "shift",
             allowMouseWheel: true,
-            allowGestures: true
+            allowTouchGestures: true
         }
     },
     pie: {

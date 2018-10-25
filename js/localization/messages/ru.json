@@ -248,6 +248,8 @@
         "dxHtmlEditor-dialogImageUrlField": "URL",
         "dxHtmlEditor-dialogImageAltField": "Альтернативный текст",
         "dxHtmlEditor-dialogImageWidthField": "Ширина (px)",
-        "dxHtmlEditor-dialogImageHeightField": "Высота (px)"
+        "dxHtmlEditor-dialogImageHeightField": "Высота (px)",
+        "dxHtmlEditor-heading": "Заголовок",
+        "dxHtmlEditor-normalText": "Обычный текст"
     }
 }

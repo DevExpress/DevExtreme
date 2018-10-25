@@ -70,7 +70,9 @@ var $ = require("jquery"),
     themes = require("ui/themes"),
 
     DX_STATE_HOVER_CLASS = "dx-state-hover",
-    TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
+    TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
+    CELL_UPDATED_CLASS = "dx-datagrid-cell-updated-animation",
+    ROW_INSERTED_CLASS = "dx-datagrid-row-inserted-animation";
 
 if("chrome" in window && devices.real().deviceType !== "desktop") {
     // Chrome DevTools device emulation
@@ -10724,9 +10726,7 @@ QUnit.test("Refresh with highlighting and check oldValue", function(assert) {
             }]
         });
 
-    var CELL_UPDATED_CLASS = "dx-datagrid-cell-updated-animation",
-        ROW_INSERTED_CLASS = "dx-datagrid-row-inserted-animation",
-        store = dataSource.store();
+    var store = dataSource.store();
 
     this.clock.tick();
 
@@ -10761,6 +10761,59 @@ QUnit.test("Refresh with highlighting and check oldValue", function(assert) {
     assert.ok($(dataGrid.getCellElement(0, 2)).hasClass(CELL_UPDATED_CLASS));
     assert.ok($(dataGrid.getRowElement(5)).hasClass(ROW_INSERTED_CLASS));
     assert.strictEqual($(dataGrid.getCellElement(0, 2)).text(), "test111 old:test11", "cell value is updated");
+});
+
+QUnit.test("highlighting works, if twoWayBinding is enabled and watchMethod is set", function(assert) {
+    // arrange
+    var callbacks = [];
+    var dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [
+                    { id: 1, field1: "test1" },
+                    { id: 2, field1: "test2" },
+                    { id: 3, field1: "test3" },
+                    { id: 4, field1: "test4" }
+                ]
+            }
+        }),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: dataSource,
+            highlightChanges: true,
+            repaintChangesOnly: true,
+            integrationOptions: {
+                watchMethod: function(fn, callback, options) {
+                    callbacks.push(callback);
+                    return function() {
+                    };
+                },
+            },
+            columns: ["id", {
+                dataField: "field1",
+                name: "field1"
+            }, {
+                dataField: "field1",
+                name: "field1WithTemplate",
+                cellTemplate: function(container, options) {
+                    $(container).text(options.text);
+                }
+            }]
+        });
+
+    var store = dataSource.store();
+
+    this.clock.tick();
+
+    // act
+    store.update(1, { field1: "test111" });
+
+    callbacks.forEach(function(c) { c(); });
+
+    // assert
+    assert.ok($(dataGrid.getCellElement(0, 1)).hasClass(CELL_UPDATED_CLASS));
+    assert.ok($(dataGrid.getCellElement(0, 2)).hasClass(CELL_UPDATED_CLASS));
 });
 
 QUnit.test("Refresh with changesOnly and cellTemplate", function(assert) {

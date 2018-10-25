@@ -1691,6 +1691,39 @@ QUnit.test("Custom command column should not be hidden", function(assert) {
     assert.strictEqual(hiddenColumns[0].dataField, "lastName", "dataField of the hidden column");
 });
 
+QUnit.test("The last data column should be hidden when the command column has width and columnAutoWidth is enabled", function(assert) {
+    // arrange
+    var hiddenColumns;
+
+    $(".dx-datagrid").width(200);
+
+    this.columns = [
+        { dataField: 'firstName', index: 0, width: 50 },
+        { dataField: 'lastName', index: 1, width: 100 },
+        { type: "buttons", width: 100 }
+    ];
+
+    this.options = {
+        editing: {
+            mode: "row",
+            allowUpdating: true
+        },
+        columnAutoWidth: true
+    };
+
+    setupDataGrid(this);
+
+    // act
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    // assert
+    hiddenColumns = this.adaptiveColumnsController.getHiddenColumns();
+    assert.strictEqual(hiddenColumns.length, 1, "hidden column count");
+    assert.strictEqual(hiddenColumns[0].dataField, "lastName", "dataField of the hidden column");
+});
+
 QUnit.test("The adaptive cell should be empty in a grouped row with a summary", function(assert) {
     // arrange
     var $testElement = $("#container");

@@ -1830,10 +1830,7 @@ QUnit.testInActiveWindow("Focused row should be visible if page size has height 
     this.options = {
         keyExpr: "name",
         height: 100,
-        focusedRowEnabled: true,
-        editing: {
-            allowEditing: false
-        }
+        focusedRowEnabled: true
     };
 
     this.setupModule();
@@ -1899,6 +1896,49 @@ QUnit.testInActiveWindow("Focused row should be visible in virtual scrolling mod
     var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
     assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
     assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+});
+
+QUnit.testInActiveWindow("Focused row should be visible if set focusedRowKey", function(assert) {
+    // arrange
+    var rowsView,
+        counter = 0;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        height: 100,
+        focusedRowKey: "Smith",
+        focusedRowEnabled: true
+    };
+
+    this.setupModule();
+
+    this.getController("focus")._scrollToFocusedRow = function($row) {
+        ++counter;
+        assert.ok($row.find("td").eq(0).text(), "Smith", "Row");
+    };
+
+    this.gridView.render($("#container"));
+    rowsView = this.gridView.getView("rowsView");
+    rowsView.height(100);
+    this.gridView.component.updateDimensions();
+    this.clock.tick();
+
+    // assert
+    assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
+    assert.ok(counter > 0, "_scrollToFocusedRow invoked");
 });
 
 QUnit.testInActiveWindow("Focused row should be visible in infinite scrolling mode", function(assert) {

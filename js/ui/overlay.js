@@ -868,7 +868,7 @@ var Overlay = Widget.inherit({
             isTabOnLast = !e.shiftKey && e.target === $lastTabbable.get(0),
             isShiftTabOnFirst = e.shiftKey && e.target === $firstTabbable.get(0),
             isEmptyTabList = tabbableElements.length === 0,
-            isOutsideTarget = !domUtils.contains(this.$content().get(0), e.target);
+            isOutsideTarget = !domUtils.contains(this._$wrapper.get(0), e.target);
 
         if(isTabOnLast || isShiftTabOnFirst ||
             isEmptyTabList || isOutsideTarget) {

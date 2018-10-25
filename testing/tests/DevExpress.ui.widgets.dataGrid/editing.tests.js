@@ -6896,6 +6896,35 @@ QUnit.test("Add a custom command column", function(assert) {
     assert.strictEqual($customCommandCell.children(".mybutton").text(), "My button", "text of the custom button");
 });
 
+QUnit.test("Changing edit icon in the 'buttons' command column", function(assert) {
+    // arrange
+    var that = this,
+        $linkElements,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "row",
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    that.options.columns.push({
+        type: "buttons",
+        buttons: [{ name: "edit", icon: "doc" }, "delete"]
+    });
+    that.columnsController.reset();
+
+    // act
+    rowsView.render($testElement);
+
+    // assert
+    $linkElements = $testElement.find(".dx-command-edit").first().find(".dx-link");
+    assert.ok($testElement.find(".dx-command-edit").first().hasClass("dx-command-edit-with-icons"), "command edit cell has icons");
+    assert.strictEqual($linkElements.length, 2, "link count");
+    assert.ok($linkElements.eq(0).hasClass("dx-link-edit"), "the edit link");
+    assert.ok($linkElements.eq(0).hasClass("dx-icon-doc"), "the edit link");
+});
+
 QUnit.test("The custom link of the 'buttons' command column should only be visible when the row is not editable", function(assert) {
     // arrange
     var that = this,
