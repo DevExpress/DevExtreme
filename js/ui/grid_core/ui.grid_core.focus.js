@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
 var ROW_FOCUSED_CLASS = "dx-row-focused",
+    FOCUSED_ROW_SELECTOR = ".dx-row" + "." + ROW_FOCUSED_CLASS,
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     UPDATE_FOCUSED_ROW_CHANGE_TYPE = "updateFocusedRow";
 
@@ -59,10 +60,7 @@ exports.FocusController = core.ViewController.inherit((function() {
         navigateToRow: function(key) {
             var that = this,
                 dataController = this.getController("data"),
-                rowIndex = this.option("focusedRowIndex"),
-                endUpdate = function() {
-                    // dataController.endUpdate();
-                };
+                rowIndex = this.option("focusedRowIndex");
 
             if(key === undefined) {
                 return;
@@ -73,26 +71,17 @@ exports.FocusController = core.ViewController.inherit((function() {
             if(rowIndex >= 0 && rowIndex === rowIndexByKey) {
                 that._triggerUpdateFocusedRow(key);
             } else {
-
-                // dataController.beginUpdate();
-
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
                     if(pageIndex === dataController.pageIndex()) {
                         dataController.reload().done(function() {
-
-                            endUpdate();
-
                             that._triggerUpdateFocusedRow(key);
-                        }).fail(endUpdate);
+                        });
                     } else {
                         dataController.pageIndex(pageIndex).done(function() {
-
-                            endUpdate();
-
                             that._triggerUpdateFocusedRow(key);
-                        }).fail(endUpdate);
+                        });
                     }
-                }).fail(endUpdate);
+                });
             }
         },
 
@@ -162,7 +151,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             });
         },
         _clearPreviousFocusedRow: function($tableElement, focusedRowIndex) {
-            var $prevRowFocusedElement = $tableElement.find(".dx-row" + "." + ROW_FOCUSED_CLASS),
+            var $prevRowFocusedElement = $tableElement.find(FOCUSED_ROW_SELECTOR),
                 $firstRow;
             $prevRowFocusedElement
                 .removeClass(ROW_FOCUSED_CLASS)
@@ -208,7 +197,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 return;
             }
 
-            $focusedRow = $row || $rowsViewElement.find("." + ROW_FOCUSED_CLASS);
+            $focusedRow = $row || $rowsViewElement.find(FOCUSED_ROW_SELECTOR);
 
             if($focusedRow.length > 0) {
                 var focusedRowRect = $focusedRow[0].getBoundingClientRect(),
@@ -570,7 +559,7 @@ module.exports = {
                         rowIndex = that._dataController.getRowIndexByKey(focusedRowKey),
                         tabIndex = that.option("tabIndex");
 
-                    if(that.option("focusedRowEnabled")) {
+                    if(that.option("focusedRowEnabled") && that.element().find(FOCUSED_ROW_SELECTOR).length === 0) {
                         $cellElements = that.getCellElements(rowIndex >= 0 ? rowIndex : 0);
                         $row = $cellElements.eq(0).parent();
                         if($row.length) {
@@ -579,7 +568,7 @@ module.exports = {
                                 if(columnIndex < 0) {
                                     columnIndex = 0;
                                 }
-                                this.getController("keyboardNavigation").setFocusedCellPosition(rowIndex, columnIndex);
+                                that.getController("keyboardNavigation").setFocusedCellPosition(rowIndex, columnIndex);
                             }
                         }
                     } else {

@@ -3,8 +3,7 @@ var gridCore = require("./ui.data_grid.core"),
     Deferred = require("../../core/utils/deferred").Deferred,
     isDefined = require("../../core/utils/type").isDefined,
     equalByValue = require("../../core/utils/common").equalByValue,
-    groupingCore = require("./ui.data_grid.grouping.core"),
-    createGroupFilter = groupingCore.createGroupFilter,
+    createGroupFilter = require("./ui.data_grid.utils").createGroupFilter,
     extend = require("../../core/utils/extend").extend;
 
 var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
@@ -52,10 +51,14 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
                         pageSize = dataSource.pageSize(),
                         deferred = new Deferred(),
                         groupPath,
-                        group = dataSource.group();
+                        group = dataSource.group(),
+                        scrollingMode = this.option("scrolling.mode"),
+                        isVirtualScrolling = scrollingMode === "virtual" || scrollingMode === "infinite";
 
                     if(!dataSource._grouping._updatePagingOptions) {
-                        that._calculateGlobalRowIndexByFlatData(key, null, true).done(deferred.resolve).fail(deferred.reject);
+                        that._calculateGlobalRowIndexByFlatData(key, null, true)
+                            .done(deferred.resolve)
+                            .fail(deferred.reject);
                         return deferred;
                     }
 
@@ -79,13 +82,24 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
 
                             groupFilter = createGroupFilter(groupPath, { group: group });
                             that._calculateGlobalRowIndexByFlatData(key, groupFilter).done(function(dataOffset) {
-                                var currentPageOffset = (groupOffset % pageSize) || pageSize;
+                                var count,
+                                    currentPageOffset,
+                                    groupContinuationCount;
 
-                                var count = currentPageOffset + dataOffset - groupPath.length;
+                                currentPageOffset = (groupOffset % pageSize) || pageSize;
 
-                                var groupContinuationCount = Math.floor(count / (pageSize - groupPath.length)) * groupPath.length;
+                                count = currentPageOffset + dataOffset - groupPath.length;
 
-                                deferred.resolve(groupOffset + dataOffset + groupContinuationCount);
+                                if(isVirtualScrolling) {
+                                    groupContinuationCount = 0;
+                                } else {
+                                    groupContinuationCount = Math.floor(count / (pageSize - groupPath.length)) * groupPath.length;
+                                }
+
+                                count = groupOffset + dataOffset + groupContinuationCount;
+
+                                deferred.resolve(count);
+
                             }).fail(deferred.reject);
                         }).fail(deferred.reject);
                     }).fail(deferred.reject);
@@ -96,4 +110,3 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
         }
     }
 }));
-
