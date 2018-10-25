@@ -68,8 +68,8 @@
 
         "dxRangeSlider-ariaFrom": "Van",
         "dxRangeSlider-ariaTill": "Tot",
-      "dxSwitch-textOn": "AAN",
-      "dxSwitch-textOff": "UIT",
+        "dxSwitch-textOn": "AAN",
+        "dxSwitch-textOff": "UIT",
 
         "dxForm-optionalMark": "optioneel",
         "dxForm-requiredMessage": "{0} is verplicht",
