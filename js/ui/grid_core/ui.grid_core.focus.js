@@ -63,7 +63,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 rowsView = this.getView("rowsView"),
                 rowIndex = this.option("focusedRowIndex");
 
-            if(key === undefined) {
+            if(key === undefined || !dataController.dataSource()) {
                 return;
             }
 
