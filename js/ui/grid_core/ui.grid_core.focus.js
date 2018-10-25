@@ -563,7 +563,7 @@ module.exports = {
                             that.resizeCompleted.remove(scrollToFocusedRow);
                         };
 
-                    if(that.option("focusedRowEnabled") && that.element().find(FOCUSED_ROW_SELECTOR).length === 0) {
+                    if(that.option("focusedRowEnabled")) {
                         $cellElements = that.getCellElements(rowIndex >= 0 ? rowIndex : 0);
                         $row = $cellElements.eq(0).parent();
                         if($row.length) {
