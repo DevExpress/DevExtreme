@@ -68,9 +68,8 @@
 
         "dxRangeSlider-ariaFrom": "Från",
         "dxRangeSlider-ariaTill": "Till",
-
-        "dxSwitch-onText": "PÅ",
-        "dxSwitch-offText": "AV",
+      "dxSwitch-textOn": "PÅ",
+      "dxSwitch-textOff": "AV",
 
         "dxForm-optionalMark": "valfri",
         "dxForm-requiredMessage": "{0} är nödvändigt",

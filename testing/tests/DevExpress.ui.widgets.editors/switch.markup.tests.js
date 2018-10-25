@@ -93,10 +93,10 @@ QUnit.test("default labels", function(assert) {
     assert.equal($.trim(labelOffEl.text()), "OFF");
 });
 
-QUnit.test("onText/offText on init", function(assert) {
+QUnit.test("textOn/textOff on init", function(assert) {
     var element = $("#switch").dxSwitch({
-        onText: "customOn",
-        offText: "customOff"
+        textOn: "customOn",
+        textOff: "customOff"
     });
 
     var inner = element.find(INNER_SELECTOR);
@@ -119,8 +119,8 @@ QUnit.test("default ui state", function(assert) {
 
 QUnit.test("ui state with options", function(assert) {
     var element = $("#switch").dxSwitch({
-        onText: "customOn",
-        offText: "customOff",
+        textOn: "customOn",
+        textOff: "customOff",
         value: true
     });
 
@@ -167,8 +167,8 @@ QUnit.test("aria role", function(assert) {
 
 QUnit.test("aria properties", function(assert) {
     var $element = $("#switch").dxSwitch({
-            onText: 'on test',
-            offText: 'off test',
+            textOn: 'on test',
+            textOff: 'off test',
             value: true
         }),
         instance = $element.dxSwitch("instance");

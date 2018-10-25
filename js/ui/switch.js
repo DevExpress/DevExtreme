@@ -72,18 +72,18 @@ var Switch = Editor.inherit({
             activeStateEnabled: true,
 
             /**
-            * @name dxSwitchOptions.onText
+             * @name dxSwitchOptions.textOn
             * @type string
             * @default "ON"
             */
-            onText: messageLocalization.format("dxSwitch-onText"),
+            textOn: messageLocalization.format("dxSwitch-textOn"),
 
             /**
-            * @name dxSwitchOptions.offText
+             * @name dxSwitchOptions.textOff
             * @type string
             * @default "OFF"
             */
-            offText: messageLocalization.format("dxSwitch-offText"),
+            textOff: messageLocalization.format("dxSwitch-textOff"),
 
             /**
             * @name dxSwitchOptions.value
@@ -139,6 +139,24 @@ var Switch = Editor.inherit({
                 }
             },
         ]);
+    },
+
+    _setDeprecatedOptions: function() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            /**
+             * @name dxSwitchOptions.onText
+             * @deprecated dxSwitchOptions.textOn
+             */
+            onText: { since: "18.2", alias: "textOn" },
+
+            /**
+             * @name dxSwitchOptions.offText
+             * @deprecated dxSwitchOptions.textOff
+             */
+            offText: { since: "18.2", alias: "textOff" }
+        });
     },
 
     _feedbackHideTimeout: 0,
@@ -426,13 +444,13 @@ var Switch = Editor.inherit({
         this._$submitElement.val(val);
         this.setAria({
             "pressed": val,
-            "label": val ? this.option("onText") : this.option("offText")
+            "label": val ? this.option("textOn") : this.option("textOff")
         });
     },
 
     _setLabelsText: function() {
-        this._$labelOn && this._$labelOn.text(this.option("onText"));
-        this._$labelOff && this._$labelOff.text(this.option("offText"));
+        this._$labelOn && this._$labelOn.text(this.option("textOn"));
+        this._$labelOff && this._$labelOff.text(this.option("textOff"));
     },
 
     _visibilityChanged: function(visible) {
@@ -450,8 +468,8 @@ var Switch = Editor.inherit({
                 delete this._marginBound;
                 this._refresh();
                 break;
-            case "onText":
-            case "offText":
+            case "textOn":
+            case "textOff":
                 this._setLabelsText();
                 break;
             case "value":
