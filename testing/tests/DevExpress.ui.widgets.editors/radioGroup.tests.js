@@ -63,7 +63,7 @@ QUnit.module("nested radio group", moduleConfig, function() {
         nestedItemElement.trigger("dxclick");
         assert.ok(nestedItemElement.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of nested radio group is checked");
 
-        assert.ok(parentItemElement.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of parent radio group din't change checked state");
+        assert.ok(parentItemElement.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of parent radio group is not changed");
     });
     QUnit.test("T680199 - click on one nested radio group doesn't change another nested group", function(assert) {
         var $nestedRadioGroup1,
