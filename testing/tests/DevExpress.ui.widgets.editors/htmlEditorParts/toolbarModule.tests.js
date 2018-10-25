@@ -361,6 +361,38 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
                 value: "+1"
             }]);
     });
+
+    test("handle script formatting", (assert) => {
+        this.options.items = ["superscript", "subscript"];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+        $formatButton.eq(0).trigger("dxclick");
+        $formatButton.eq(1).trigger("dxclick");
+
+        this.quillMock.getFormat = () => { return { script: "super" }; };
+        $formatButton.eq(0).trigger("dxclick");
+
+        this.quillMock.getFormat = () => { return { script: "sub" }; };
+        $formatButton.eq(1).trigger("dxclick");
+
+        assert.deepEqual(
+            this.log,
+            [{
+                format: "script",
+                value: "super"
+            }, {
+                format: "script",
+                value: "sub"
+            }, {
+                format: "script",
+                value: false
+            }, {
+                format: "script",
+                value: false
+            }]);
+    });
 });
 
 QUnit.module("Active formats", simpleModuleConfig, () => {

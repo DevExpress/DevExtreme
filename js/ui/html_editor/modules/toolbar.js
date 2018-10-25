@@ -102,24 +102,12 @@ class ToolbarModule extends BaseModule {
             image: this._prepareImageHandler(),
             color: this._prepareColorClickHandler("color"),
             background: this._prepareColorClickHandler("background"),
-            orderedList: () => {
-                const formats = this.quill.getFormat();
-                const value = formats.list === "ordered" ? false : "ordered";
-
-                this.quill.format("list", value, USER_ACTION);
-                this.updateFormatWidgets(true);
-            },
-            bulletList: () => {
-                const formats = this.quill.getFormat();
-                const value = formats.list === "bullet" ? false : "bullet";
-
-                this.quill.format("list", value, USER_ACTION);
-                this.updateFormatWidgets(true);
-            },
-            alignLeft: this._prepareAlignHandler("left"),
-            alignCenter: this._prepareAlignHandler("center"),
-            alignRight: this._prepareAlignHandler("right"),
-            alignJustify: this._prepareAlignHandler("justify"),
+            orderedList: this._prepareShortcutHandler("list", "ordered"),
+            bulletList: this._prepareShortcutHandler("list", "bullet"),
+            alignLeft: this._prepareShortcutHandler("align", "left"),
+            alignCenter: this._prepareShortcutHandler("align", "center"),
+            alignRight: this._prepareShortcutHandler("align", "right"),
+            alignJustify: this._prepareShortcutHandler("align", "justify"),
             codeBlock: this._getDefaultClickHandler("code-block"),
             undo: () => {
                 this.quill.history.undo();
@@ -132,16 +120,18 @@ class ToolbarModule extends BaseModule {
             },
             decreaseIndent: () => {
                 this.quill.format("indent", "-1", USER_ACTION);
-            }
+            },
+            superscript: this._prepareShortcutHandler("script", "super"),
+            subscript: this._prepareShortcutHandler("script", "sub")
         };
     }
 
-    _prepareAlignHandler(align) {
+    _prepareShortcutHandler(formatName, shortcutValue) {
         return () => {
             const formats = this.quill.getFormat();
-            const value = formats.align === align ? false : align;
+            const value = formats[formatName] === shortcutValue ? false : shortcutValue;
 
-            this.quill.format("align", value, USER_ACTION);
+            this.quill.format(formatName, value, USER_ACTION);
             this.updateFormatWidgets(true);
         };
     }
@@ -281,15 +271,19 @@ class ToolbarModule extends BaseModule {
 
     _prepareButtonItemConfig(formatName) {
         const iconName = formatName === "clear" ? "clearformat" : formatName;
+        const buttonText = titleize(formatName);
+
         return {
             widget: "dxButton",
             formatName: formatName,
             options: {
-                hint: titleize(formatName),
+                hint: buttonText,
+                text: buttonText,
                 icon: iconName.toLowerCase(),
                 onClick: this._formatHandlers[formatName] || this._getDefaultClickHandler(formatName),
                 stylingMode: "text"
-            }
+            },
+            showText: "inMenu"
         };
     }
 
@@ -316,7 +310,14 @@ class ToolbarModule extends BaseModule {
             this._editorInstance.formDialogOption("title", format(caption));
             const promise = this._editorInstance.showFormDialog({
                 formData: formData,
-                items: [{ dataField: formatName, editorType: "dxColorView", label: { visible: false } }]
+                items: [{
+                    dataField: formatName,
+                    editorType: "dxColorView",
+                    editorOptions: {
+                        focusStateEnabled: false
+                    },
+                    label: { visible: false }
+                }]
             });
 
             promise.done((formData) => {
@@ -467,6 +468,9 @@ class ToolbarModule extends BaseModule {
                 break;
             case "code-block":
                 widgetName = "codeBlock";
+                break;
+            case "script":
+                widgetName = formats[formatName] + formatName;
                 break;
             default:
                 widgetName = formatName;
