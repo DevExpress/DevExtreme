@@ -76,14 +76,14 @@ var Switch = Editor.inherit({
             * @type string
             * @default "ON"
             */
-            textOn: messageLocalization.format("dxSwitch-textOn"),
+            textOn: this._getLocalizationMessage("On"),
 
             /**
              * @name dxSwitchOptions.textOff
             * @type string
             * @default "OFF"
             */
-            textOff: messageLocalization.format("dxSwitch-textOff"),
+            textOff: this._getLocalizationMessage("Off"),
 
             /**
             * @name dxSwitchOptions.value
@@ -157,6 +157,14 @@ var Switch = Editor.inherit({
              */
             offText: { since: "18.2", alias: "textOff" }
         });
+    },
+
+    _getLocalizationMessage: function(state) {
+        // todo: remove this method when deprecated dxSwitchOptions.textOn/textOff will be removed
+        var newMessage = messageLocalization.format("dxSwitch-text" + state),
+            oldMessage = messageLocalization.format("dxSwitch-" + state.toLowerCase() + "Text");
+
+        return newMessage || oldMessage;
     },
 
     _feedbackHideTimeout: 0,
