@@ -68,8 +68,8 @@
 
         "dxRangeSlider-ariaFrom": "Alkaen",
         "dxRangeSlider-ariaTill": "Asti",
-        "dxSwitch-textOn": "PÄÄLLE",
-        "dxSwitch-textOff": "POIS",
+        "dxSwitch-switchedOnText": "PÄÄLLE",
+        "dxSwitch-switchedOffText": "POIS",
 
         "dxForm-optionalMark": "valinnainen",
         "dxForm-requiredMessage": "{0} on valinnainen",

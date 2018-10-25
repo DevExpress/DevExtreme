@@ -72,18 +72,18 @@ var Switch = Editor.inherit({
             activeStateEnabled: true,
 
             /**
-             * @name dxSwitchOptions.textOn
+             * @name dxSwitchOptions.switchedOnText
             * @type string
             * @default "ON"
             */
-            textOn: this._getLocalizationMessage("On"),
+            switchedOnText: this._getLocalizationMessage("On"),
 
             /**
-             * @name dxSwitchOptions.textOff
+             * @name dxSwitchOptions.switchedOffText
             * @type string
             * @default "OFF"
             */
-            textOff: this._getLocalizationMessage("Off"),
+            switchedOffText: this._getLocalizationMessage("Off"),
 
             /**
             * @name dxSwitchOptions.value
@@ -147,21 +147,21 @@ var Switch = Editor.inherit({
         extend(this._deprecatedOptions, {
             /**
              * @name dxSwitchOptions.onText
-             * @deprecated dxSwitchOptions.textOn
+             * @deprecated dxSwitchOptions.switchedOnText
              */
-            onText: { since: "18.2", alias: "textOn" },
+            onText: { since: "18.2", alias: "switchedOnText" },
 
             /**
              * @name dxSwitchOptions.offText
-             * @deprecated dxSwitchOptions.textOff
+             * @deprecated dxSwitchOptions.switchedOffText
              */
-            offText: { since: "18.2", alias: "textOff" }
+            offText: { since: "18.2", alias: "switchedOffText" }
         });
     },
 
     _getLocalizationMessage: function(state) {
-        // todo: remove this method when deprecated dxSwitchOptions.textOn/textOff will be removed
-        var newMessage = messageLocalization.format("dxSwitch-text" + state),
+        // todo: remove this method when deprecated dxSwitchOptions.switchedOnText/switchedOffText will be removed
+        var newMessage = messageLocalization.format("dxSwitch-switched" + state + "Text"),
             oldMessage = messageLocalization.format("dxSwitch-" + state.toLowerCase() + "Text");
 
         return newMessage || oldMessage;
@@ -452,13 +452,13 @@ var Switch = Editor.inherit({
         this._$submitElement.val(val);
         this.setAria({
             "pressed": val,
-            "label": val ? this.option("textOn") : this.option("textOff")
+            "label": val ? this.option("switchedOnText") : this.option("switchedOffText")
         });
     },
 
     _setLabelsText: function() {
-        this._$labelOn && this._$labelOn.text(this.option("textOn"));
-        this._$labelOff && this._$labelOff.text(this.option("textOff"));
+        this._$labelOn && this._$labelOn.text(this.option("switchedOnText"));
+        this._$labelOff && this._$labelOff.text(this.option("switchedOffText"));
     },
 
     _visibilityChanged: function(visible) {
@@ -476,8 +476,8 @@ var Switch = Editor.inherit({
                 delete this._marginBound;
                 this._refresh();
                 break;
-            case "textOn":
-            case "textOff":
+            case "switchedOnText":
+            case "switchedOffText":
                 this._setLabelsText();
                 break;
             case "value":

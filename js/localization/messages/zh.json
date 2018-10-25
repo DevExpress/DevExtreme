@@ -68,8 +68,8 @@
 
     "dxRangeSlider-ariaFrom": "从",
     "dxRangeSlider-ariaTill": "至",
-    "dxSwitch-textOn": "开",
-    "dxSwitch-textOff": "关",
+    "dxSwitch-switchedOnText": "开",
+    "dxSwitch-switchedOffText": "关",
 
     "dxForm-optionalMark": "可选",
     "dxForm-requiredMessage": "{0} 是必须的",
