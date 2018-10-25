@@ -35,6 +35,68 @@ var moduleConfig = {
     }
 };
 
+QUnit.module("nested radio group", moduleConfig, function() {
+    QUnit.test("T680199 - click on nested radio group in template should not affect on contaier parent radio group", function(assert) {
+        var $nestedRadioGroup;
+
+        var $radioGroup = $("#radioGroup").dxRadioGroup({
+            items: [{
+                template: function(itemData, itemIndex, element) {
+                    $nestedRadioGroup = $("<div/>").dxRadioGroup({
+                        items: [1, 2]
+                    }).appendTo(element);
+
+                    $("<div/>").dxRadioGroup({
+                        items: [1, 2]
+                    }).appendTo(element);
+                }
+            }]
+        });
+
+        var parentRadioGroup = $radioGroup.dxRadioGroup("instance");
+        var parentItemElement = $(parentRadioGroup.itemElements()).first();
+        parentItemElement.trigger("dxclick");
+        assert.ok(parentItemElement.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of parent radio group is checked");
+
+        var nestedRadioGroup = $nestedRadioGroup.dxRadioGroup("instance");
+        var nestedItemElement = $(nestedRadioGroup.itemElements()).first();
+        nestedItemElement.trigger("dxclick");
+        assert.ok(nestedItemElement.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of nested radio group is checked");
+
+        assert.ok(parentItemElement.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of parent radio group din't change checked state");
+    });
+    QUnit.test("T680199 - click on one nested radio group doesn't change another nested group", function(assert) {
+        var $nestedRadioGroup1,
+            $nestedRadioGroup2;
+
+        $("#radioGroup").dxRadioGroup({
+            items: [{
+                template: function(itemData, itemIndex, element) {
+                    $nestedRadioGroup1 = $("<div/>").dxRadioGroup({
+                        items: [1, 2]
+                    }).appendTo(element);
+
+                    $nestedRadioGroup2 = $("<div/>").dxRadioGroup({
+                        items: [1, 2]
+                    }).appendTo(element);
+                }
+            }]
+        });
+
+        var nestedRadioGroup1 = $nestedRadioGroup1.dxRadioGroup("instance");
+        var nestedRadioGroup2 = $nestedRadioGroup2.dxRadioGroup("instance");
+
+        var firstNestedItemElement1 = $(nestedRadioGroup1.itemElements()).first();
+        firstNestedItemElement1.trigger("dxclick");
+        assert.ok(firstNestedItemElement1.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of first nested radio group is checked");
+
+        var firstNestedItemElement2 = $(nestedRadioGroup2.itemElements()).first();
+        assert.notOk(firstNestedItemElement2.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of second nested radio group is not changed");
+    });
+});
+
+
+QUnit.module("buttons group rendering");
 
 QUnit.module("buttons group rendering");
 
