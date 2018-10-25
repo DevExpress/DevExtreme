@@ -209,6 +209,40 @@ QUnit.test("Remove error row after save edit data", function(assert) {
     assert.ok($testElement.find('tbody > tr').first().hasClass("dx-header-row"), "has header row");
 });
 
+// T679666
+QUnit.test("Remove error row in rows view after cancel edit data", function(assert) {
+    // arrange
+    var that = this,
+        $testElement = $("#container"),
+        $errorRow;
+
+    that.columnHeadersView.render($testElement);
+    that.rowsView.render($testElement);
+
+    // assert
+    assert.equal($testElement.find('tbody > tr').length, 5, "count rows");
+    assert.ok($testElement.find('tbody > tr.dx-data-row').length, "has data row");
+
+    // act
+    that.errorHandlingController.renderErrorRow("Test", 1);
+
+    // assert
+    assert.equal($testElement.find('tbody > tr').length, 6, "count rows");
+    var $errorRow = $testElement.find('.dx-datagrid-rowsview .dx-error-row');
+    assert.equal($errorRow.length, 1, "has error row");
+    assert.strictEqual($errorRow.find("td").first().text(), "Test", "error message");
+
+    // act
+    that.editingController.hasChanges = function() {
+        return false;
+    };
+    that.dataController.changed.fire({});
+
+    // assert
+    assert.strictEqual($testElement.find('tbody > tr').length, 5, "count rows");
+    assert.strictEqual($testElement.find('.dx-error-row').length, 0, "no error row");
+});
+
 // T432507
 QUnit.test("Repaint error row in rows view", function(assert) {
     // arrange
