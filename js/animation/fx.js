@@ -831,17 +831,24 @@ var executeAnimation = function(animation) {
 };
 
 var setupPosition = function($element, config) {
-    var win = $(window),
-        left = win.scrollLeft(),
-        top = win.scrollTop();
-
     if(!config || !config.position) {
         return;
     }
 
-    var position = positionUtils.calculate($element, config.position),
+    var win = $(window),
+        left = 0,
+        top = 0,
+        position = positionUtils.calculate($element, config.position),
         offset = $element.offset(),
         currentPosition = $element.position();
+
+    if(currentPosition.top > offset.top) {
+        top = win.scrollTop();
+    }
+
+    if(currentPosition.left > offset.left) {
+        left = win.scrollLeft();
+    }
 
     extend(config, {
         left: position.h.location - offset.left + currentPosition.left - left,
