@@ -285,7 +285,9 @@ var RadioGroup = Editor.inherit({
     },
 
     itemElements: function() {
-        return this._radios.itemElements();
+        var result = this._radios.itemElements();
+        var selector = this._radios._itemSelector();
+        return result.not(result.find(selector));
     },
 
     _renderLayout: function() {
