@@ -43,6 +43,14 @@
     }
 }
 
-.dx-htmleditor-toolbar-format.dx-dropdowneditor.dx-editor-filled {
-    background-color: @toolbar-bg;
+.dx-htmleditor-toolbar-format {
+    &.dx-dropdowneditor.dx-editor-filled{
+        background-color: @toolbar-bg;
+    }
+
+    &.dx-color-format, &.dx-background-format {
+        .dx-icon-color, .dx-icon-background {
+            .dx-icon-sizing(@MATERIAL_BUTTON_ICON_SIZE - 3px, @MATERIAL_BUTTON_ICON_SIZE, 3px);
+        }
+    }
 }

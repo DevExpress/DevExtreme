@@ -454,7 +454,7 @@ class ToolbarModule extends BaseModule {
         formatWidget
             .$element()
             .find(`.${ICON_CLASS}`)
-            .css(formatName, color || "inherit");
+            .css("borderBottomColor", color || "transparent");
     }
 
     _getFormatWidgetName(formatName, formats) {

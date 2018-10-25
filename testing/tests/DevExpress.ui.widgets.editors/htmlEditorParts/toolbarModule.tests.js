@@ -482,11 +482,11 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
 
         assert.equal($activeFormats.length, 1, "single button is active");
         assert.ok($activeFormats.hasClass(COLOR_FORMAT_CLASS), "it's a color button");
-        assert.equal($icon.get(0).style.color, "rgb(250, 250, 250)", "icon has correct color");
+        assert.equal($icon.get(0).style.borderBottomColor, "rgb(250, 250, 250)", "icon has correct color");
 
         this.quillMock.getFormat = () => { return {}; };
         toolbar.updateFormatWidgets();
-        assert.equal($icon.get(0).style.color, "inherit", "icon has correct color after reset format");
+        assert.equal($icon.get(0).style.borderBottomColor, "transparent", "icon has correct color after reset format");
     });
 
     test("background format", (assert) => {
@@ -500,11 +500,11 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
 
         assert.equal($activeFormats.length, 1, "single button is active");
         assert.ok($activeFormats.hasClass(BACKGROUND_FORMAT_CLASS), "it's a background button");
-        assert.equal($icon.get(0).style.backgroundColor, "rgb(250, 250, 250)", "icon has correct background");
+        assert.equal($icon.get(0).style.borderBottomColor, "rgb(250, 250, 250)", "icon has correct background");
 
         this.quillMock.getFormat = () => { return {}; };
         toolbar.updateFormatWidgets();
-        assert.equal($icon.get(0).style.backgroundColor, "inherit", "icon has correct background after reset format");
+        assert.equal($icon.get(0).style.borderBottomColor, "transparent", "icon has correct background after reset format");
     });
 
     test("list format", (assert) => {
