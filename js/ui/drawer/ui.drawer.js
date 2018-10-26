@@ -13,6 +13,7 @@ import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
 import { animation } from "./ui.drawer.rendering.strategy";
 import clickEvent from "../../events/click";
 import fx from "../../animation/fx";
+import { Deferred } from "../../core/utils/deferred";
 
 const DRAWER_CLASS = "dx-drawer";
 const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
@@ -163,6 +164,8 @@ const Drawer = Widget.inherit({
 
         this._animations = [];
         this._animationPromise = undefined;
+        this._whenPanelRendered = undefined;
+        this._whenPanelRefreshed = undefined;
 
         this._initHideTopOverlayHandler();
     },
@@ -232,7 +235,8 @@ const Drawer = Widget.inherit({
         this._refreshModeClass();
         this._refreshRevealModeClass();
 
-        this._strategy.renderPanel(this._getTemplate(this.option("template")));
+        this._whenPanelRendered = new Deferred();
+        this._strategy.renderPanel(this._getTemplate(this.option("template")), this._whenPanelRendered);
 
         const contentTemplateOption = this.option("contentTemplate"),
             contentTemplate = this._getTemplate(contentTemplateOption),
@@ -254,8 +258,10 @@ const Drawer = Widget.inherit({
 
         this.callBase();
 
-        this._dimensionChanged();
-        this._renderPosition(this.option("opened"), false);
+        this._whenPanelRendered.always(() => {
+            this._dimensionChanged();
+            this._renderPosition(this.option("opened"), false);
+        });
     },
 
     _renderMarkup() {
@@ -457,11 +463,13 @@ const Drawer = Widget.inherit({
         this._renderPanelElement();
         this._orderContent(this.option("position"));
 
-        this._strategy.renderPanel(this._getTemplate(this.option("template")));
+        this._whenPanelRefreshed = new Deferred();
+        this._strategy.renderPanel(this._getTemplate(this.option("template")), this._whenPanelRefreshed);
 
-        this._strategy.setPanelSize(this.option("revealMode") === "slide");
-
-        this._renderPosition(this.option("opened"), false, true);
+        this._whenPanelRefreshed.always(() => {
+            this._strategy.setPanelSize(this.option("revealMode") === "slide");
+            this._renderPosition(this.option("opened"), false, true);
+        });
     },
 
     _setInitialViewContentPosition() {
