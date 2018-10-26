@@ -36,38 +36,42 @@ QUnit.module("format: api value changing", moduleConfig);
 QUnit.test("number type of input should be converted to tel on mobile device", function(assert) {
     var realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "mobile" });
     try {
-        var $element = $("#numberbox").dxNumberBox({
+        var $element = $("<div>").appendTo("body"),
+            $numberBox = $element.dxNumberBox({
                 useMaskBehavior: true,
                 format: "#",
                 mode: "number"
             }),
             instance = $element.dxNumberBox("instance");
 
-        assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "input has tel type on mobile device");
+        assert.equal($numberBox.find("." + INPUT_CLASS).prop("type"), "tel", "input has tel type on mobile device");
 
         instance.option("mode", "number");
-        assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "user can not set number type with mask");
+        assert.equal($numberBox.find("." + INPUT_CLASS).prop("type"), "tel", "user can not set number type with mask");
     } finally {
         realDeviceMock.restore();
+        $element.remove();
     }
 });
 
 QUnit.test("number type of input should be converted to text on desktop device", function(assert) {
     var realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "desktop" });
     try {
-        var $element = $("#numberbox").dxNumberBox({
+        var $element = $("<div>").appendTo("body"),
+            $numberBox = $element.dxNumberBox({
                 useMaskBehavior: true,
                 format: "#",
                 mode: "number"
             }),
-            instance = $element.dxNumberBox("instance");
+            instance = $numberBox.dxNumberBox("instance");
 
-        assert.equal($element.find("." + INPUT_CLASS).prop("type"), "text", "input has text type on desktop device");
+        assert.equal($numberBox.find("." + INPUT_CLASS).prop("type"), "text", "input has text type on desktop device");
 
         instance.option("mode", "number");
-        assert.equal($element.find("." + INPUT_CLASS).prop("type"), "text", "user can not set number type with mask");
+        assert.equal($numberBox.find("." + INPUT_CLASS).prop("type"), "text", "user can not set number type with mask");
     } finally {
         realDeviceMock.restore();
+        $element.remove();
     }
 });
 
