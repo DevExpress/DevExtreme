@@ -1165,7 +1165,7 @@ QUnit.module("Overlap mode", {
                 contentTemplate: 'contentTemplate',
                 width: 800,
                 template: function($content) {
-                    var $div = $("<div/>");
+                    let $div = $("<div/>");
                     $div.css("height", 200);
                     $div.css("width", 300);
 
