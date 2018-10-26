@@ -1160,7 +1160,7 @@ QUnit.module("Shrink mode", {
 QUnit.module("Overlap mode", {
     beforeEach: () => {
         this.createInstance = function(options) {
-            this.instance = $("#drawer").dxDrawer($.extend(options, {
+            this.instance = $("#drawer").dxDrawer($.extend({
                 openedStateMode: "overlap",
                 contentTemplate: 'contentTemplate',
                 width: 800,
@@ -1171,7 +1171,7 @@ QUnit.module("Overlap mode", {
 
                     return $div;
                 }
-            })).dxDrawer("instance");
+            }, options)).dxDrawer("instance");
         };
 
         fx.off = true;
@@ -1188,11 +1188,23 @@ QUnit.module("Overlap mode", {
     });
 
     QUnit.test("drawer panel overlay should have right config depending on position option", assert => {
-        this.createInstance({});
+        this.createInstance({
+            template: function($content) {
+                let $wrapper = $("<div/>");
+                let $div = $("<div/>");
+
+                $div.css("height", 200);
+                $div.css("width", 300);
+
+                $wrapper.append($div);
+                return $wrapper;
+            }
+        });
         let overlay = this.instance.getOverlay();
 
         assert.equal(overlay.option("shading"), false, "Overlay has no shading");
         assert.ok(overlay.option("container").hasClass("dx-drawer-wrapper"));
+        assert.equal(overlay.option("width"), 300);
 
         assert.equal(overlay.option("position").my, "top left");
         assert.equal(overlay.option("position").at, "top left");
