@@ -147,12 +147,14 @@ var Switch = Editor.inherit({
         extend(this._deprecatedOptions, {
             /**
              * @name dxSwitchOptions.onText
+             * @type string
              * @deprecated dxSwitchOptions.switchedOnText
              */
             onText: { since: "18.2", alias: "switchedOnText" },
 
             /**
              * @name dxSwitchOptions.offText
+             * @type string
              * @deprecated dxSwitchOptions.switchedOffText
              */
             offText: { since: "18.2", alias: "switchedOffText" }
