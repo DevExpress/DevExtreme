@@ -13,6 +13,7 @@ import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
 import { animation } from "./ui.drawer.rendering.strategy";
 import clickEvent from "../../events/click";
 import fx from "../../animation/fx";
+import { Deferred } from "../../core/utils/deferred";
 
 const DRAWER_CLASS = "dx-drawer";
 const DRAWER_WRAPPER_CLASS = "dx-drawer-wrapper";
@@ -163,6 +164,8 @@ const Drawer = Widget.inherit({
 
         this._animations = [];
         this._animationPromise = undefined;
+        this._whenPanelRendered = undefined;
+        this._whenPanelRefreshed = undefined;
 
         this._initHideTopOverlayHandler();
     },
@@ -232,7 +235,8 @@ const Drawer = Widget.inherit({
         this._refreshModeClass();
         this._refreshRevealModeClass();
 
-        this._strategy.renderPanel(this._getTemplate(this.option("template")));
+        this._whenPanelRendered = new Deferred();
+        this._strategy.renderPanel(this._getTemplate(this.option("template")), this._whenPanelRendered);
 
         const contentTemplateOption = this.option("contentTemplate"),
             contentTemplate = this._getTemplate(contentTemplateOption),
@@ -254,18 +258,24 @@ const Drawer = Widget.inherit({
 
         this.callBase();
 
-        this._dimensionChanged();
-        this._renderPosition(this.option("opened"), false);
+        this._whenPanelRendered.always(() => {
+            this._dimensionChanged();
+            this._renderPosition(this.option("opened"), false);
+        });
     },
 
     _renderMarkup() {
         this._$wrapper = $("<div>").addClass(DRAWER_WRAPPER_CLASS);
-        this._$panel = $("<div>").addClass(DRAWER_PANEL_CONTENT_CLASS);
-        this._$contentWrapper = $("<div>").addClass(DRAWER_CONTENT_CLASS);
+        this._renderPanelElement();
 
-        this._$wrapper.append(this._$panel);
+        this._$contentWrapper = $("<div>").addClass(DRAWER_CONTENT_CLASS);
         this._$wrapper.append(this._$contentWrapper);
         this.$element().append(this._$wrapper);
+    },
+
+    _renderPanelElement() {
+        this._$panel = $("<div>").addClass(DRAWER_PANEL_CONTENT_CLASS);
+        this._$wrapper.append(this._$panel);
     },
 
     _refreshModeClass(prevClass) {
@@ -447,30 +457,35 @@ const Drawer = Widget.inherit({
     },
 
     _refreshPanel() {
-        if(this._overlay) {
-            this._overlay._dispose();
-            this._$panel.remove();
+        this._setInitialViewContentPosition();
+        this._cleanPanel();
 
-            delete this._overlay;
-            delete this._$panel;
-            this._$panel = $("<div>").addClass(DRAWER_PANEL_CONTENT_CLASS);
-            this._$wrapper.prepend(this._$panel);
-        }
-
-        this._$panel.empty();
+        this._renderPanelElement();
         this._orderContent(this.option("position"));
-        this._strategy.renderPanel(this._getTemplate(this.option("template")));
+
+        this._whenPanelRefreshed = new Deferred();
+        this._strategy.renderPanel(this._getTemplate(this.option("template")), this._whenPanelRefreshed);
+
+        this._whenPanelRefreshed.always(() => {
+            this._strategy.setPanelSize(this.option("revealMode") === "slide");
+            this._renderPosition(this.option("opened"), false, true);
+        });
     },
 
-    _setInitialPosition() {
-        $(this.content()).css(this.option("position"), 0);
-        $(this.content()).css("width", 0);
-        $(this.content()).css("marginLeft", 0);
-        $(this.content()).css("marginRight", 0);
-
+    _setInitialViewContentPosition() {
         $(this.viewContent()).css("paddingLeft", 0);
         $(this.viewContent()).css("left", 0);
         $(this.viewContent()).css("transform", "translate(0px, 0px)");
+    },
+
+    _cleanPanel() {
+        this._$panel.remove();
+
+        if(this._overlay) {
+            this._overlay.dispose();
+            delete this._overlay;
+            delete this._$panel;
+        }
     },
 
     _optionChanged(args) {
@@ -495,7 +510,7 @@ const Drawer = Widget.inherit({
                 this._initStrategy();
                 this._refreshModeClass(args.previousValue);
 
-                this._cleanPanel();
+                this._refreshPanel();
                 break;
             case "minSize":
             case "maxSize":
@@ -505,7 +520,7 @@ const Drawer = Widget.inherit({
             case "revealMode":
                 this._refreshRevealModeClass(args.previousValue);
 
-                this._cleanPanel();
+                this._refreshPanel();
                 break;
             case "shading":
                 this._toggleShaderVisibility(this.option("opened"));
@@ -519,17 +534,6 @@ const Drawer = Widget.inherit({
         }
     },
 
-    _cleanPanel() {
-        if(this.isHorizontalDirection()) {
-            this._setInitialPosition();
-            this._refreshPanel();
-            this._strategy.setPanelSize(this.option("revealMode") === "slide");
-
-            this._renderPosition(this.option("opened"), false, true);
-        } else {
-            this._invalidate();
-        }
-    },
 
     /**
     * @name dxDrawerMethods.content

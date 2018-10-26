@@ -8,7 +8,7 @@ import typeUtils from "../../core/utils/type";
 
 class OverlapStrategy extends DrawerStrategy {
 
-    renderPanel(template) {
+    renderPanel(template, whenPanelRendered) {
         delete this._initialPosition;
 
         const position = this.getOverlayPosition();
@@ -35,6 +35,9 @@ class OverlapStrategy extends DrawerStrategy {
                 }
             }).bind(this),
             contentTemplate: template,
+            onContentReady: () => {
+                whenPanelRendered.resolve();
+            },
             visible: true,
             propagateOutsideClick: true
         });
