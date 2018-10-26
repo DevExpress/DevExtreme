@@ -447,27 +447,22 @@ const Drawer = Widget.inherit({
     },
 
     _refreshPanel() {
-        if(this._overlay) {
-            this._overlay._dispose();
-            this._$panel.remove();
+        this._$panel.remove();
 
+        if(this._overlay) {
+            this._overlay.dispose();
             delete this._overlay;
             delete this._$panel;
-            this._$panel = $("<div>").addClass(DRAWER_PANEL_CONTENT_CLASS);
-            this._$wrapper.prepend(this._$panel);
         }
+        this._$panel = $("<div>").addClass(DRAWER_PANEL_CONTENT_CLASS);
 
-        this._$panel.empty();
+        this._$wrapper.append(this._$panel);
         this._orderContent(this.option("position"));
+
         this._strategy.renderPanel(this._getTemplate(this.option("template")));
     },
 
     _setInitialPosition() {
-        $(this.content()).css(this.option("position"), 0);
-        $(this.content()).css("width", 0);
-        $(this.content()).css("marginLeft", 0);
-        $(this.content()).css("marginRight", 0);
-
         $(this.viewContent()).css("paddingLeft", 0);
         $(this.viewContent()).css("left", 0);
         $(this.viewContent()).css("transform", "translate(0px, 0px)");
