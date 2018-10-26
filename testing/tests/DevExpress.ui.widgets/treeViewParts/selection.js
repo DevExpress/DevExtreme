@@ -298,46 +298,6 @@ QUnit.test("last item should not be deselected when selectionRequired is used wi
     assert.deepEqual(treeview.getSelectedNodesKeys(), [2], "node was not removed from selected nodes array");
 });
 
-QUnit.test("last item should not be deselected when selectionRequired is used with recursive selection", function(assert) {
-    var $treeview = initTree({
-            items: [{ id: 1, text: "item 1", selected: true, expanded: true, items: [{ id: 11, text: "Item 11" }] }],
-            showCheckBoxesMode: "none",
-            selectionMode: "multiple",
-            selectNodesRecursive: true,
-            selectionRequired: true
-        }),
-        $node = $treeview.find(".dx-treeview-node"),
-        treeview = $treeview.dxTreeView("instance");
-
-    treeview.unselectItem(1);
-    assert.ok($node.eq(0).hasClass("dx-state-selected"), "root node is selected");
-    assert.ok($node.eq(1).hasClass("dx-state-selected"), "leaf node is selected");
-    assert.deepEqual(treeview.getSelectedNodesKeys(), [1, 11], "all nodes are still in the selected array");
-});
-
-QUnit.test("last item should not be deselected when selectionRequired is used with select all", function(assert) {
-    var $treeview = initTree({
-            items: [{
-                id: 1,
-                text: "item 1",
-                selected: true,
-                expanded: true,
-                items: [{ id: 11, text: "Item 11" }]
-            }, { id: 2, text: "Item 2", selected: true }],
-            selectionMode: "multiple",
-            selectNodesRecursive: true,
-            selectionRequired: true
-        }),
-        $node = $treeview.find(".dx-treeview-node"),
-        treeview = $treeview.dxTreeView("instance");
-
-    treeview.unselectAll();
-    assert.ok($node.eq(0).hasClass("dx-state-selected"), "root node is selected");
-    assert.ok($node.eq(1).hasClass("dx-state-selected"), "leaf node is selected");
-    assert.notOk($node.eq(2).hasClass("dx-state-selected"), "second node is not selected");
-    assert.deepEqual(treeview.getSelectedNodesKeys(), [1, 11], "all nodes are still in the selected array");
-});
-
 QUnit.test("selectByClick option should select item  by single click", function(assert) {
     var items = [{ text: "item 1" }, { text: "item 2" }],
         $treeview = initTree({
