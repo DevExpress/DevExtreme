@@ -2,6 +2,7 @@ var eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
     isNumeric = require("../../core/utils/type").isNumeric,
     browser = require("../../core/utils/browser"),
+    devices = require("../../core/devices"),
     fitIntoRange = require("../../core/utils/math").fitIntoRange,
     inRange = require("../../core/utils/math").inRange,
     escapeRegExp = require("../../core/utils/common").escapeRegExp,
@@ -378,7 +379,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var newCaret = maskCaret.getCaretAfterFormat(this._getInputVal(), text, this._caret(), this._getFormatPattern()),
             newValue = number.convertDigits(text);
 
-        if(this._formattedValue !== newValue) {
+        if(this._formattedValue && this._formattedValue !== newValue) {
             this._isDirty = true;
         }
 
@@ -396,10 +397,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _renderInputType: function() {
-        var isNumberType = this.option("mode") === "number";
+        var isNumberType = this.option("mode") === "number",
+            isMobileDevice = devices.real().deviceType !== "desktop";
 
         if(this._useMaskBehavior() && isNumberType) {
-            this._setInputType("tel");
+            this._setInputType(isMobileDevice ? "tel" : "text");
         } else {
             this.callBase();
         }
