@@ -150,14 +150,18 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
+    _allowRowUpdating: function() {
+        var rowIndex = this.getVisibleRowIndex(),
+            row = this._dataController.items()[rowIndex];
+
+        return this._editingController.allowUpdating({ row: row });
+    },
+
     _clickTargetCellHandler: function(event, $cell) {
         var columnIndex = this.getView("rowsView").getCellIndex($cell),
             column = this._columnsController.getVisibleColumns()[columnIndex],
             isCellEditMode = this._isCellEditMode(),
-            args,
-            row,
-            rowIndex,
-            allowUpdating;
+            args;
 
         args = this._fireFocusedRowChanging(event, $cell.parent());
         if(!args.cancel) {
@@ -167,11 +171,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
             this._updateFocusedCellPosition($cell);
 
-            rowIndex = this.getVisibleRowIndex();
-            row = this._dataController.items()[rowIndex];
-            allowUpdating = this._editingController.allowUpdating({ row: row });
-
-            if(allowUpdating && isCellEditMode && column && column.allowEditing) {
+            if(this._allowRowUpdating() && isCellEditMode && column && column.allowEditing) {
                 this._isHiddenFocus = false;
             } else {
                 var isInteractiveTarget = $(event.target).not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR);
