@@ -1333,8 +1333,20 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
+        var selectedNodesKeys = that.getSelectedNodesKeys(),
+            lastRequiredDeselect = this.option("selectionRequired") && !value && selectedNodesKeys.length === 1;
+
+        if(lastRequiredDeselect) {
+            if(this._showCheckboxes()) {
+                var $node = this._getNodeElement(node),
+                    checkbox = this._getCheckBoxInstance($node);
+
+                checkbox && checkbox.option("value", true);
+            }
+            return;
+        }
+
         if(that._isSingleSelection() && value) {
-            var selectedNodesKeys = that.getSelectedNodesKeys();
             each(selectedNodesKeys, function(index, nodeKey) {
                 that.unselectItem(nodeKey);
             });

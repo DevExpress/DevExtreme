@@ -230,6 +230,114 @@ QUnit.test("only one node should be selected on selection change", function(asse
     assert.ok($nodes.eq(1).hasClass("dx-state-selected"), "node should be selected");
 });
 
+QUnit.test("last item should not be deselected when selectionRequired is used with checkboxes", function(assert) {
+    var $treeview = initTree({
+            items: [{ id: 1, text: "item 1", selected: true }],
+            showCheckBoxesMode: "normal",
+            selectionMode: "single",
+            selectionRequired: true
+        }),
+        $node = $treeview.find(".dx-treeview-node"),
+        checkbox = $node.find(".dx-checkbox").dxCheckBox("instance"),
+        treeview = $treeview.dxTreeView("instance");
+
+    $(checkbox.element()).trigger("dxclick");
+    assert.ok($node.hasClass("dx-state-selected"), "node is selected");
+    assert.deepEqual(treeview.getSelectedNodesKeys(), [1], "node was not removed from selected nodes array");
+    assert.ok(checkbox.option("value"), "node's checkbox is still checked");
+});
+
+QUnit.test("last item should not be deselected when selectionRequired is used without checkboxes", function(assert) {
+    var $treeview = initTree({
+            items: [{ id: 1, text: "item 1", selected: true }],
+            showCheckBoxesMode: "none",
+            selectionMode: "single",
+            selectByClick: true,
+            selectionRequired: true
+        }),
+        $node = $treeview.find(".dx-treeview-node"),
+        $item = $node.children(".dx-treeview-item"),
+        treeview = $treeview.dxTreeView("instance");
+
+    $item.trigger("dxclick");
+    assert.ok($node.hasClass("dx-state-selected"), "node is selected");
+    assert.deepEqual(treeview.getSelectedNodesKeys(), [1], "node was not removed from selected nodes array");
+});
+
+QUnit.test("last item should not be deselected when selectionRequired is used with api", function(assert) {
+    var $treeview = initTree({
+            items: [{ id: 1, text: "item 1", selected: true }],
+            showCheckBoxesMode: "none",
+            selectionMode: "single",
+            selectionRequired: true
+        }),
+        $node = $treeview.find(".dx-treeview-node"),
+        treeview = $treeview.dxTreeView("instance");
+
+    treeview.unselectItem(1);
+    assert.ok($node.hasClass("dx-state-selected"), "node is selected");
+    assert.deepEqual(treeview.getSelectedNodesKeys(), [1], "node was not removed from selected nodes array");
+});
+
+QUnit.test("last item should not be deselected when selectionRequired is used with multiple selection", function(assert) {
+    var $treeview = initTree({
+            items: [{ id: 1, text: "item 1", selected: true }, { id: 2, text: "item 2", selected: true }],
+            showCheckBoxesMode: "none",
+            selectionMode: "multiple",
+            selectionRequired: true
+        }),
+        $node = $treeview.find(".dx-treeview-node"),
+        treeview = $treeview.dxTreeView("instance");
+
+    treeview.unselectItem(1);
+    assert.notOk($node.eq(0).hasClass("dx-state-selected"), "node is not selected");
+    assert.deepEqual(treeview.getSelectedNodesKeys(), [2], "node was removed from selected nodes array");
+
+    treeview.unselectItem(2);
+    assert.ok($node.eq(1).hasClass("dx-state-selected"), "node is selected");
+    assert.deepEqual(treeview.getSelectedNodesKeys(), [2], "node was not removed from selected nodes array");
+});
+
+QUnit.test("last item should not be deselected when selectionRequired is used with recursive selection", function(assert) {
+    var $treeview = initTree({
+            items: [{ id: 1, text: "item 1", selected: true, expanded: true, items: [{ id: 11, text: "Item 11" }] }],
+            showCheckBoxesMode: "none",
+            selectionMode: "multiple",
+            selectNodesRecursive: true,
+            selectionRequired: true
+        }),
+        $node = $treeview.find(".dx-treeview-node"),
+        treeview = $treeview.dxTreeView("instance");
+
+    treeview.unselectItem(1);
+    assert.ok($node.eq(0).hasClass("dx-state-selected"), "root node is selected");
+    assert.ok($node.eq(1).hasClass("dx-state-selected"), "leaf node is selected");
+    assert.deepEqual(treeview.getSelectedNodesKeys(), [1, 11], "all nodes are still in the selected array");
+});
+
+QUnit.test("last item should not be deselected when selectionRequired is used with select all", function(assert) {
+    var $treeview = initTree({
+            items: [{
+                id: 1,
+                text: "item 1",
+                selected: true,
+                expanded: true,
+                items: [{ id: 11, text: "Item 11" }]
+            }, { id: 2, text: "Item 2", selected: true }],
+            selectionMode: "multiple",
+            selectNodesRecursive: true,
+            selectionRequired: true
+        }),
+        $node = $treeview.find(".dx-treeview-node"),
+        treeview = $treeview.dxTreeView("instance");
+
+    treeview.unselectAll();
+    assert.ok($node.eq(0).hasClass("dx-state-selected"), "root node is selected");
+    assert.ok($node.eq(1).hasClass("dx-state-selected"), "leaf node is selected");
+    assert.notOk($node.eq(2).hasClass("dx-state-selected"), "second node is not selected");
+    assert.deepEqual(treeview.getSelectedNodesKeys(), [1, 11], "all nodes are still in the selected array");
+});
+
 QUnit.test("selectByClick option should select item  by single click", function(assert) {
     var items = [{ text: "item 1" }, { text: "item 2" }],
         $treeview = initTree({
