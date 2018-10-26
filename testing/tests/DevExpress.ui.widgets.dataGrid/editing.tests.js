@@ -2733,6 +2733,33 @@ QUnit.test("The text of the colorBox should not be overlaps in a grid cell", fun
     assert.strictEqual($(this.getCellElement(0, 0)).find(".dx-colorbox-input").css("paddingLeft"), DEFAULT_COLORBOX_INPUT_PADDING_LEFT, "padding left");
 });
 
+// T682033
+QUnit.testInActiveWindow("Focus overlay should not be shown in batch editing mode when editing is disabled", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        mode: "batch",
+        allowUpdating: false,
+    };
+    that.options.tabIndex = 0;
+    rowsView.render($testElement);
+    that.$element = function() {
+        return $(".dx-datagrid").parent();
+    };
+
+    // act
+    var $firstCell = $testElement.find("tbody > tr > td").first();
+    $firstCell.focus();
+    $firstCell.trigger("dxpointerdown");
+    that.clock.tick();
+
+    // assert
+    assert.notOk($testElement.find(".dx-datagrid-focus-overlay").is(":visible"), "not visible focus overlay");
+});
+
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
