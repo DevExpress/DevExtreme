@@ -154,7 +154,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var columnIndex = this.getView("rowsView").getCellIndex($cell),
             column = this._columnsController.getVisibleColumns()[columnIndex],
             isCellEditMode = this._isCellEditMode(),
-            args;
+            args,
+            row,
+            rowIndex,
+            allowUpdating;
 
         args = this._fireFocusedRowChanging(event, $cell.parent());
         if(!args.cancel) {
@@ -164,7 +167,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
             this._updateFocusedCellPosition($cell);
 
-            if(isCellEditMode && column && column.allowEditing) {
+            rowIndex = this.getVisibleRowIndex();
+            row = this._dataController.items()[rowIndex];
+            allowUpdating = this._editingController.allowUpdating({ row: row });
+
+            if(allowUpdating && isCellEditMode && column && column.allowEditing) {
                 this._isHiddenFocus = false;
             } else {
                 var isInteractiveTarget = $(event.target).not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR);
