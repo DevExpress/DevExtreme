@@ -318,7 +318,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
                 items = expandedInfo.take ? items.slice(0, expandedInfo.take) : items;
             }
             each(expandedInfo.items, function(index, item) {
-                var itemCount = item.count - (index === 0 && loadOptions.skip || 0),
+                var itemCount = item.count - (index === 0 && expandedInfo.skip || 0),
                     expandedItems = items.splice(0, itemCount);
 
                 applyContinuationToGroupItem(options, expandedInfo, groups.length - 1, index);

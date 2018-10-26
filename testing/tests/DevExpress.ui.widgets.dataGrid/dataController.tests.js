@@ -7302,6 +7302,68 @@ QUnit.test("CustomStore load options when remote operations enabled and grouping
     assert.equal(items[3].key, 0, "item 3");
 });
 
+// T682960
+QUnit.test("Check second page when remote operations, paging, grouping with sort by summary info are defined", function(assert) {
+    this.options = {
+        dataSource: {
+            group: "group",
+            key: "id",
+            load: function(options) {
+                if(options.group) {
+                    return $.Deferred().resolve([
+                        { key: 'Group0', items: null, count: 6, summary: [6] },
+                        { key: 'Group1', items: null, count: 4, summary: [4] }
+                    ], {
+                        totalCount: 6
+                    });
+                } else {
+                    return $.Deferred().resolve([
+                        { id: 0, group: "Group0" },
+                        { id: 1, group: "Group0" },
+                        { id: 2, group: "Group0" },
+                        { id: 3, group: "Group0" },
+                        { id: 4, group: "Group0" },
+                        { id: 5, group: "Group0" },
+                        { id: 6, group: "Group1" },
+                        { id: 8, group: "Group1" },
+                        { id: 9, group: "Group1" },
+                        { id: 10, group: "Group1" }
+                    ]);
+                }
+            },
+            pageSize: 4
+        },
+        paging: {
+            enabled: true
+        },
+        grouping: {
+            autoExpandAll: true
+        },
+        columns: [ "id", "group" ],
+        sortByGroupSummaryInfo: [{
+            summaryItem: "count"
+        }],
+        summary: {
+            groupItems: [{
+                summaryType: "count"
+            }]
+        },
+        remoteOperations: true
+    };
+
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+    this.dataController.pageIndex(1);
+
+    var items = this.dataController.items();
+    assert.equal(items.length, 4, "item count");
+    assert.deepEqual(items[0].key, ["Group1"]);
+    assert.equal(items[1].key, 10, "last item of Group1");
+    assert.deepEqual(items[2].key, ["Group0"]);
+    assert.equal(items[3].key, 0, "first item of Group0");
+});
+
 QUnit.test("CustomStore load options when remote operations enabled and multi-grouping with sort by summary info is defined", function(assert) {
     var storeLoadOptions;
     this.options = {
