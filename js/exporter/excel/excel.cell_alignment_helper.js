@@ -1,5 +1,5 @@
 import { isDefined } from "../../core/utils/type";
-import xlsxTagHelper from './xlsx_tag_helper';
+import xlsxTagHelper from './excel.tag_helper';
 
 const xlsxCellAlignmentHelper = {
     tryCreateTag: function(sourceObj) {

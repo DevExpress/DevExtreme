@@ -1,9 +1,9 @@
 import { isDefined } from "../../core/utils/type";
-import xlsxTagHelper from './xlsx_tag_helper';
-import xlsxCellFormatHelper from './xlsx_cell_format_helper';
-import xlsxFillHelper from "./xlsx_fill_helper";
-import xlsxFontHelper from "./xlsx_font_helper";
-import xlsxNumberFormatHelper from "./xlsx_number_format_helper";
+import xlsxTagHelper from './excel.tag_helper';
+import xlsxCellFormatHelper from './excel.cell_format_helper';
+import xlsxFillHelper from "./excel.fill_helper";
+import xlsxFontHelper from "./excel.font_helper";
+import xlsxNumberFormatHelper from "./excel.number_format_helper";
 
 export default class XlsxFile {
 

@@ -1,5 +1,5 @@
 import typeUtils from "core/utils/type";
-import XlsxFile from 'client_exporter/xlsx/xlsx_file';
+import XlsxFile from 'exporter/excel/excel.file';
 
 function getExpectedFillsXml(expectedFillXmlArray) {
     if(!typeUtils.isDefined(expectedFillXmlArray)) {

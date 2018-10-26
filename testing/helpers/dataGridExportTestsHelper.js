@@ -6,7 +6,7 @@ import $ from "jquery";
 import typeUtils from "core/utils/type";
 import { toComparable } from "core/utils/data";
 import { excel as excelCreator } from "client_exporter";
-import excel_creator from "client_exporter/excel_creator";
+import excel_creator from "exporter/excel_creator";
 import JSZipMock from "./jszipMock.js";
 
 const INTERNAL_BASE_STYLE_XML1 = "<fonts count=\"2\"><font><sz val=\"11\" /><color theme=\"1\" /><name val=\"Calibri\" /><family val=\"2\" />" +

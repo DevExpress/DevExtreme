@@ -1,6 +1,6 @@
 import { isDefined } from "../../core/utils/type";
-import xlsxTagHelper from './xlsx_tag_helper';
-import xlsxColorHelper from './xlsx_color_helper';
+import xlsxTagHelper from './excel.tag_helper';
+import xlsxColorHelper from './excel.color_helper';
 
 const xlsxPatternFillHelper = {
     tryCreateTag: function(sourceObj) {

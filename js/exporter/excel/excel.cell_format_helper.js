@@ -1,8 +1,8 @@
 import { isDefined } from "../../core/utils/type";
-import xlsxTagHelper from './xlsx_tag_helper';
-import xlsxCellAlignmentHelper from './xlsx_cell_alignment_helper';
-import xlsxFillHelper from './xlsx_fill_helper';
-import xlsxFontHelper from './xlsx_font_helper';
+import xlsxTagHelper from './excel.tag_helper';
+import xlsxCellAlignmentHelper from './excel.cell_alignment_helper';
+import xlsxFillHelper from './excel.fill_helper';
+import xlsxFontHelper from './excel.font_helper';
 
 const xlsxCellFormatHelper = {
     tryCreateTag: function(sourceObj, sharedItemsContainer) {
