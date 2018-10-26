@@ -260,12 +260,16 @@ const Drawer = Widget.inherit({
 
     _renderMarkup() {
         this._$wrapper = $("<div>").addClass(DRAWER_WRAPPER_CLASS);
-        this._$panel = $("<div>").addClass(DRAWER_PANEL_CONTENT_CLASS);
-        this._$contentWrapper = $("<div>").addClass(DRAWER_CONTENT_CLASS);
+        this._renderPanelElement();
 
-        this._$wrapper.append(this._$panel);
+        this._$contentWrapper = $("<div>").addClass(DRAWER_CONTENT_CLASS);
         this._$wrapper.append(this._$contentWrapper);
         this.$element().append(this._$wrapper);
+    },
+
+    _renderPanelElement() {
+        this._$panel = $("<div>").addClass(DRAWER_PANEL_CONTENT_CLASS);
+        this._$wrapper.append(this._$panel);
     },
 
     _refreshModeClass(prevClass) {
@@ -447,6 +451,26 @@ const Drawer = Widget.inherit({
     },
 
     _refreshPanel() {
+        this._setInitialViewContentPosition();
+        this._cleanPanel();
+
+        this._renderPanelElement();
+        this._orderContent(this.option("position"));
+
+        this._strategy.renderPanel(this._getTemplate(this.option("template")));
+
+        this._strategy.setPanelSize(this.option("revealMode") === "slide");
+
+        this._renderPosition(this.option("opened"), false, true);
+    },
+
+    _setInitialViewContentPosition() {
+        $(this.viewContent()).css("paddingLeft", 0);
+        $(this.viewContent()).css("left", 0);
+        $(this.viewContent()).css("transform", "translate(0px, 0px)");
+    },
+
+    _cleanPanel() {
         this._$panel.remove();
 
         if(this._overlay) {
@@ -454,18 +478,6 @@ const Drawer = Widget.inherit({
             delete this._overlay;
             delete this._$panel;
         }
-        this._$panel = $("<div>").addClass(DRAWER_PANEL_CONTENT_CLASS);
-
-        this._$wrapper.append(this._$panel);
-        this._orderContent(this.option("position"));
-
-        this._strategy.renderPanel(this._getTemplate(this.option("template")));
-    },
-
-    _setInitialPosition() {
-        $(this.viewContent()).css("paddingLeft", 0);
-        $(this.viewContent()).css("left", 0);
-        $(this.viewContent()).css("transform", "translate(0px, 0px)");
     },
 
     _optionChanged(args) {
@@ -490,7 +502,7 @@ const Drawer = Widget.inherit({
                 this._initStrategy();
                 this._refreshModeClass(args.previousValue);
 
-                this._cleanPanel();
+                this._refreshPanel();
                 break;
             case "minSize":
             case "maxSize":
@@ -500,7 +512,7 @@ const Drawer = Widget.inherit({
             case "revealMode":
                 this._refreshRevealModeClass(args.previousValue);
 
-                this._cleanPanel();
+                this._refreshPanel();
                 break;
             case "shading":
                 this._toggleShaderVisibility(this.option("opened"));
@@ -514,17 +526,6 @@ const Drawer = Widget.inherit({
         }
     },
 
-    _cleanPanel() {
-        if(this.isHorizontalDirection()) {
-            this._setInitialPosition();
-            this._refreshPanel();
-            this._strategy.setPanelSize(this.option("revealMode") === "slide");
-
-            this._renderPosition(this.option("opened"), false, true);
-        } else {
-            this._invalidate();
-        }
-    },
 
     /**
     * @name dxDrawerMethods.content
