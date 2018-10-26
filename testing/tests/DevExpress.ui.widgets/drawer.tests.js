@@ -6,7 +6,6 @@ import config from "core/config";
 import typeUtils from "core/utils/type";
 import { animation } from "ui/drawer/ui.drawer.rendering.strategy";
 import Overlay from "ui/overlay";
-import "ui/tabs";
 
 import "common.css!";
 import "ui/drawer";
@@ -103,28 +102,6 @@ QUnit.test("drawer should preserve content", assert => {
         $element = $("#drawer").dxDrawer({});
 
     assert.equal($content[0], $element.find("#content")[0]);
-});
-
-QUnit.test("drawer panel should have correct width when async template is used", assert => {
-    const $element = $("#drawer").dxDrawer({
-        openedStateMode: "shrink",
-        templatesRenderAsynchronously: true,
-        template: function() {
-            var $tabs = $("<div/>");
-
-            $tabs.dxTabs({
-                dataSource: ["1", "2"],
-                width: 200,
-                height: 200
-            });
-
-            return $tabs;
-        }
-    });
-
-    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
-
-    assert.equal($panel.width(), 200, "Panel size is correct");
 });
 
 QUnit.test("subscribe on toggle function should fired at the end of animation", assert => {
@@ -532,6 +509,36 @@ QUnit.test("content container should have correct position if it is rendered in 
     $element.trigger("dxshown");
 
     assert.equal(position($content), 50, "container rendered at correct position");
+});
+
+QUnit.test("drawer panel should have correct width when async template is used", assert => {
+    var clock = sinon.useFakeTimers();
+
+    $("#drawer").dxDrawer({
+        openedStateMode: "shrink",
+        templatesRenderAsynchronously: true,
+        integrationOptions: {
+            templates: {
+                "panel": {
+                    render: function(args) {
+                        var $div = $("<div/>");
+                        setTimeout(() => {
+                            $div.css("height", 600);
+                            $div.css("width", 200);
+                            args.onRendered();
+                        }, 100);
+
+                        args.container.append($div.get(0));
+                    }
+                }
+            }
+        }
+    }).dxDrawer("instance");
+
+    clock.tick(100);
+    const $panel = $("#drawer").find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.width(), 200, "panel has correct size");
 });
 
 QUnit.module("Animation", {
