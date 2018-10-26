@@ -58,12 +58,10 @@ QUnit.test("numberbox should have correct markup with masks", function(assert) {
     var $element = this.$element.dxNumberBox({
             useMaskBehavior: true,
             format: "$ #0.00",
-            value: 1,
-            mode: "number"
+            value: 1
         }),
         $input = $element.find("." + INPUT_CLASS);
 
-    assert.equal($input.prop("type"), "tel", "input has tel type");
     assert.equal($input.val(), "$ 1.00", "value is correct");
 });
 
