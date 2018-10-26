@@ -36,12 +36,12 @@ QUnit.module("format: api value changing", moduleConfig);
 QUnit.test("number type of input should be converted to tel on mobile device", function(assert) {
     var realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "mobile" });
     try {
-        var $element = $("#numberbox").dxNumberBox({
+        var $element = $("<div>").appendTo("body"),
+            instance = $element.dxNumberBox({
                 useMaskBehavior: true,
                 format: "#",
                 mode: "number"
-            }),
-            instance = $element.dxNumberBox("instance");
+            }).dxNumberBox("instance");
 
         assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "input has tel type on mobile device");
 
@@ -49,18 +49,19 @@ QUnit.test("number type of input should be converted to tel on mobile device", f
         assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "user can not set number type with mask");
     } finally {
         realDeviceMock.restore();
+        $element.remove();
     }
 });
 
 QUnit.test("number type of input should be converted to text on desktop device", function(assert) {
     var realDeviceMock = sinon.stub(devices, "real").returns({ deviceType: "desktop" });
     try {
-        var $element = $("#numberbox").dxNumberBox({
+        var $element = $("<div>").appendTo("body"),
+            instance = $element.dxNumberBox({
                 useMaskBehavior: true,
                 format: "#",
                 mode: "number"
-            }),
-            instance = $element.dxNumberBox("instance");
+            }).dxNumberBox("instance");
 
         assert.equal($element.find("." + INPUT_CLASS).prop("type"), "text", "input has text type on desktop device");
 
@@ -68,6 +69,7 @@ QUnit.test("number type of input should be converted to text on desktop device",
         assert.equal($element.find("." + INPUT_CLASS).prop("type"), "text", "user can not set number type with mask");
     } finally {
         realDeviceMock.restore();
+        $element.remove();
     }
 });
 
