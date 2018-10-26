@@ -72,14 +72,14 @@ var Switch = Editor.inherit({
             activeStateEnabled: true,
 
             /**
-             * @name dxSwitchOptions.switchedOnText
+            * @name dxSwitchOptions.switchedOnText
             * @type string
             * @default "ON"
             */
             switchedOnText: this._getLocalizationMessage("On"),
 
             /**
-             * @name dxSwitchOptions.switchedOffText
+            * @name dxSwitchOptions.switchedOffText
             * @type string
             * @default "OFF"
             */
