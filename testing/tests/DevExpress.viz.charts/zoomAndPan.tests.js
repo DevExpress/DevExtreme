@@ -363,7 +363,7 @@ QUnit.test("Zoom-in argument axis", function(assert) {
             },
             zoomAndPan: {
                 argumentAxis: "zoom",
-                valueAxis: "zoom",
+                valueAxis: "none",
                 allowMouseWheel: true
             },
             onZoomStart: onZoomStart,
@@ -397,7 +397,7 @@ QUnit.test("Zoom-out argument axis", function(assert) {
             },
             zoomAndPan: {
                 argumentAxis: "zoom",
-                valueAxis: "zoom",
+                valueAxis: "none",
                 allowMouseWheel: true
             },
             onZoomStart: onZoomStart,
@@ -419,7 +419,41 @@ QUnit.test("Zoom-out argument axis", function(assert) {
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
 });
 
-QUnit.test("With shift pressed - zoom value axis", function(assert) {
+QUnit.test("zoom value axis", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            valueAxis: {
+                visualRange: {
+                    startValue: 0.9,
+                    endValue: 4.2
+                }
+            },
+            zoomAndPan: {
+                argumentAxis: "none",
+                valueAxis: "zoom",
+                allowMouseWheel: true
+            },
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    const valueAxis = chart.getValueAxis();
+
+    // act
+    this.pointer.start({ x: 200, y: 400 }).wheel(10);
+
+    assert.equal(onZoomStart.callCount, 1);
+    assert.equal(onZoomStart.getCall(0).args[0].axis, valueAxis);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 0.9, endValue: 4.2 });
+
+    assert.equal(onZoomEnd.callCount, 1);
+    assert.equal(onZoomEnd.getCall(0).args[0].axis, valueAxis);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 0.9, endValue: 4.2 });
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 1, endValue: 4 });
+});
+
+QUnit.test("zoom both axis", function(assert) {
     const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
@@ -441,16 +475,11 @@ QUnit.test("With shift pressed - zoom value axis", function(assert) {
     const valueAxis = chart.getValueAxis();
 
     // act
-    this.pointer.start({ x: 200, y: 400 }).wheel(10, true);
+    this.pointer.start({ x: 200, y: 400 }).wheel(10);
 
-    assert.equal(onZoomStart.callCount, 1);
-    assert.equal(onZoomStart.getCall(0).args[0].axis, valueAxis);
-    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 0.9, endValue: 4.2 });
-
-    assert.equal(onZoomEnd.callCount, 1);
+    assert.equal(onZoomEnd.callCount, 2);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, valueAxis);
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 0.9, endValue: 4.2 });
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 1, endValue: 4 });
+    assert.equal(onZoomEnd.getCall(1).args[0].axis, chart.getArgumentAxis());
 });
 
 QUnit.module("Wheel zooming. Multiple panes", environment);
@@ -463,7 +492,7 @@ QUnit.test("Multiaxes, zoom axes only in one pane", function(assert) {
                 height: 610
             },
             zoomAndPan: {
-                argumentAxis: "zoom",
+                argumentAxis: "none",
                 valueAxis: "zoom",
                 allowMouseWheel: true
             },
@@ -489,7 +518,7 @@ QUnit.test("Multiaxes, zoom axes only in one pane", function(assert) {
     const valueAxis2 = chart.getValueAxis("v2");
 
     // act
-    this.pointer.start({ x: 300, y: 200 }).wheel(10, true);
+    this.pointer.start({ x: 300, y: 200 }).wheel(10);
 
     assert.equal(onZoomStart.callCount, 2);
     assert.equal(onZoomStart.getCall(0).args[0].axis, valueAxis1);
@@ -517,7 +546,7 @@ QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
                 width: 810
             },
             zoomAndPan: {
-                argumentAxis: "zoom",
+                argumentAxis: "none",
                 valueAxis: "zoom",
                 allowMouseWheel: true
             },
@@ -543,7 +572,7 @@ QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
     const valueAxis3 = chart.getValueAxis("v3");
 
     // act
-    this.pointer.start({ x: 100, y: 200 }).wheel(10, true);
+    this.pointer.start({ x: 100, y: 200 }).wheel(10);
 
     assert.equal(onZoomStart.callCount, 1);
     assert.equal(onZoomStart.getCall(0).args[0].axis, valueAxis3);
@@ -1016,7 +1045,7 @@ QUnit.test("Drag by touch pans chart, even if dragToZoom = true", function(asser
             zoomAndPan: {
                 valueAxis: "both",
                 argumentAxis: "both",
-                allowGestures: true,
+                allowTouchGestures: true,
                 dragToZoom: true
             },
             onZoomStart: onZoomStart,
@@ -1053,7 +1082,7 @@ QUnit.test("Pinch zoom-in both axes", function(assert) {
             zoomAndPan: {
                 argumentAxis: "zoom",
                 valueAxis: "zoom",
-                allowGestures: true
+                allowTouchGestures: true
             },
             onZoomStart: onZoomStart,
             onZoomEnd: onZoomEnd
@@ -1098,7 +1127,7 @@ QUnit.test("Pinch zoom-out both axes", function(assert) {
             zoomAndPan: {
                 argumentAxis: "zoom",
                 valueAxis: "zoom",
-                allowGestures: true
+                allowTouchGestures: true
             },
             onZoomStart: onZoomStart,
             onZoomEnd: onZoomEnd
@@ -1140,7 +1169,7 @@ QUnit.test("Pinch zoom-in argument axis from some point", function(assert) {
             zoomAndPan: {
                 argumentAxis: "zoom",
                 valueAxis: "none",
-                allowGestures: true
+                allowTouchGestures: true
             },
             onZoomStart: onZoomStart,
             onZoomEnd: onZoomEnd
@@ -1496,7 +1525,7 @@ QUnit.test("Pinch zoom. Small chart rendering time on start and big time in the 
             zoomAndPan: {
                 valueAxis: "zoom",
                 argumentAxis: "zoom",
-                allowGestures: true
+                allowTouchGestures: true
             },
             onZoomStart: onZoomStart,
             onZoomEnd: onZoomEnd
@@ -1612,7 +1641,7 @@ QUnit.test("Pinch zoom. Big chart rendering time on start and small time in the 
             zoomAndPan: {
                 valueAxis: "zoom",
                 argumentAxis: "zoom",
-                allowGestures: true
+                allowTouchGestures: true
             },
             onZoomStart: onZoomStart,
             onZoomEnd: onZoomEnd
@@ -1751,7 +1780,7 @@ QUnit.test("Do nothing if no actions allowed", function(assert) {
             zoomAndPan: {
                 argumentAxis: "none",
                 valueAxis: "none",
-                allowGestures: true,
+                allowTouchGestures: true,
                 allowMouseWheel: true
             },
             onZoomStart: onZoomStart,
@@ -1778,7 +1807,7 @@ QUnit.test("Do nothing if no actions allowed", function(assert) {
     assert.equal(onZoomEnd.callCount, 0);
 });
 
-QUnit.test("allowGestures = false, do nothing on touch drag and pinch zoom", function(assert) {
+QUnit.test("allowTouchGestures = false, do nothing on touch drag and pinch zoom", function(assert) {
     const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy();
     this.createChart({
@@ -1790,7 +1819,7 @@ QUnit.test("allowGestures = false, do nothing on touch drag and pinch zoom", fun
         },
         zoomAndPan: {
             argumentAxis: "both",
-            allowGestures: false
+            allowTouchGestures: false
         },
         onZoomStart: onZoomStart,
         onZoomEnd: onZoomEnd
@@ -1803,7 +1832,7 @@ QUnit.test("allowGestures = false, do nothing on touch drag and pinch zoom", fun
     assert.equal(onZoomEnd.callCount, 0);
 });
 
-QUnit.test("allowGestures = true, only zoom allowed, touch drag - do nothing", function(assert) {
+QUnit.test("allowTouchGestures = true, only zoom allowed, touch drag - do nothing", function(assert) {
     const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy();
     this.createChart({
@@ -1815,7 +1844,7 @@ QUnit.test("allowGestures = true, only zoom allowed, touch drag - do nothing", f
         },
         zoomAndPan: {
             argumentAxis: "zoom",
-            allowGestures: true
+            allowTouchGestures: true
         },
         onZoomStart: onZoomStart,
         onZoomEnd: onZoomEnd
@@ -1896,7 +1925,7 @@ QUnit.test("On pinch zoom", function(assert) {
             zoomAndPan: {
                 argumentAxis: "zoom",
                 valueAxis: "zoom",
-                allowGestures: true
+                allowTouchGestures: true
             }
         });
 
@@ -1951,7 +1980,7 @@ QUnit.test("Do not prevent and stop if no actions allowed", function(assert) {
             zoomAndPan: {
                 argumentAxis: "none",
                 valueAxis: "none",
-                allowGestures: true,
+                allowTouchGestures: true,
                 allowMouseWheel: true
             }
         });

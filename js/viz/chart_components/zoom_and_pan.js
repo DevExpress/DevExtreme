@@ -212,7 +212,7 @@ module.exports = {
                 let action;
 
                 if(isTouch) {
-                    if(options.allowGestures && wantPan) {
+                    if(options.allowTouchGestures && wantPan) {
                         action = "pan";
                     }
                 } else {
@@ -367,17 +367,18 @@ module.exports = {
                         }
 
                         const coords = calcCenterForDrag(e);
-                        if(e.shiftKey && options.valueAxis.zoom) {
+                        if(options.valueAxis.zoom) {
                             const targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), coords));
                             zoomAxes(targetAxes, rotated ? coords.x : coords.y, e.delta);
-                        } else if(options.argumentAxis.zoom) {
+                        }
+                        if(options.argumentAxis.zoom) {
                             zoomAxes(chart._argumentAxes, rotated ? coords.y : coords.x, e.delta, chart.getArgumentAxis());
                         }
 
                         chart._requestChange(["VISUAL_RANGE"]);
                     });
                 }
-                if(options.allowGestures) {
+                if(options.allowTouchGestures) {
                     if(options.argumentAxis.zoom || options.valueAxis.zoom) {
                         renderer.root
                             .on(PINCH_START_EVENT_NAME, { immediate: true }, zoomAndPan.pinchStartHandler)

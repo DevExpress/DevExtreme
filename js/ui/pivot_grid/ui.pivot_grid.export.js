@@ -233,9 +233,9 @@ exports.DataProvider = Class.inherit({
         return isDefined(this._options.customizeExcelCell);
     },
 
-    customizeExcelCell: function({ xlsxCell }) {
+    customizeExcelCell: function(e) {
         if(this._options.customizeExcelCell) {
-            this._options.customizeExcelCell({ xlsxCell });
+            this._options.customizeExcelCell(e);
         }
     },
 });

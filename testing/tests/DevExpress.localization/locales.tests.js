@@ -43,7 +43,8 @@ var compareLocales = function(first, second, assert) {
             "dxFilterBuilder-notAnd",
             "dxFilterBuilder-notOr",
             "dxHtmlEditor-dialogImageUrlField",
-            "dxHtmlEditor-dialogLinkUrlField"
+            "dxHtmlEditor-dialogLinkUrlField",
+            "dxHtmlEditor-dialogLinkTextField"
         ];
 
     $.each(firstLocaleMessages, function(name, value) {

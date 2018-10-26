@@ -8,6 +8,7 @@ var Class = require("../core/class"),
     fileSaver = require("./file_saver"),
     excelFormatConverter = require("./excel_format_converter"),
     XlsxFile = require("./xlsx/xlsx_file"),
+    isDefined = typeUtils.isDefined,
     XML_TAG = "<?xml version=\"1.0\" encoding=\"utf-8\"?>",
     GROUP_SHEET_PR_XML = "<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr>",
     SINGLE_SHEET_PR_XML = "<sheetPr/>",
@@ -174,28 +175,52 @@ var ExcelCreator = Class.inherit({
     },
 
     _callCustomizeExcelCell: function({ dataProvider, value, dataType, style, sourceData }) {
-        const style_args = XlsxFile.copyCellFormat(style);
-        const numberFormat = style_args.numberFormat;
-        delete style_args.numberFormat;
+        const styleCopy = XlsxFile.copyCellFormat(style);
 
         const args = {
-            xlsxCell: {
-                style: style_args,
-                value: value,
-                dataType: dataType,
-                numberFormat: numberFormat,
-            },
-            cellSourceData: sourceData
+            value: value,
+            numberFormat: styleCopy.numberFormat,
+            clearStyle: function() {
+                this.horizontalAlignment = null;
+                this.verticalAlignment = null;
+                this.wrapTextEnabled = null;
+                this.font = null;
+                this.numberFormat = null;
+            }
         };
 
-        dataProvider.customizeExcelCell(args);
+        if(isDefined(styleCopy)) {
+            if(isDefined(styleCopy.alignment)) {
+                args.horizontalAlignment = styleCopy.alignment.horizontal;
+                args.verticalAlignment = styleCopy.alignment.vertical;
+                args.wrapTextEnabled = styleCopy.alignment.wrapText;
+            }
+            args.backgroundColor = styleCopy.backgroundColor;
+            args.fillPatternType = styleCopy.fillPatternType;
+            args.fillPatternColor = styleCopy.fillPatternColor;
+            args.font = styleCopy.font;
+        }
 
-        const newStyle = args.xlsxCell.style || {};
-        newStyle.numberFormat = args.xlsxCell.numberFormat;
+        dataProvider.customizeExcelCell(args, sourceData);
+
+        let newStyle = styleCopy || {};
+
+        newStyle.font = args.font;
+
+        newStyle.alignment = newStyle.alignment || {};
+        newStyle.alignment.horizontal = args.horizontalAlignment;
+        newStyle.alignment.vertical = args.verticalAlignment;
+        newStyle.alignment.wrapText = args.wrapTextEnabled;
+
+        newStyle.backgroundColor = args.backgroundColor;
+        newStyle.fillPatternType = args.fillPatternType;
+        newStyle.fillPatternColor = args.fillPatternColor;
+
+        newStyle.numberFormat = args.numberFormat;
 
         return {
-            value: args.xlsxCell.value,
-            dataType: args.xlsxCell.dataType,
+            value: args.value,
+            dataType: dataType,
             style: newStyle,
         };
     },
@@ -221,7 +246,7 @@ var ExcelCreator = Class.inherit({
                 let cellStyleId = this._styleIdToRegisteredStyleIdMap[dataProvider.getStyleId(rowIndex, cellIndex)];
                 if(dataProvider.hasCustomizeExcelCell && dataProvider.hasCustomizeExcelCell()) {
                     const value = cellData.sourceValue || cellData.value;
-                    const modifiedXlsxCell = this._callCustomizeExcelCell({
+                    const modifiedExcelCell = this._callCustomizeExcelCell({
                         dataProvider: dataProvider,
                         value: value,
                         dataType: cellData.type,
@@ -229,18 +254,18 @@ var ExcelCreator = Class.inherit({
                         sourceData: cellData.cellSourceData,
                     });
 
-                    cellData.type = modifiedXlsxCell.dataType;
-                    if(modifiedXlsxCell.value !== value) {
+                    cellData.type = modifiedExcelCell.dataType;
+                    if(modifiedExcelCell.value !== value) {
                         // 18.18.11 ST_CellType (Cell Type)
                         switch(cellData.type) {
                             case 's':
-                                cellData.value = this._appendString(modifiedXlsxCell.value);
+                                cellData.value = this._appendString(modifiedExcelCell.value);
                                 break;
                             case 'd':
-                                cellData.value = modifiedXlsxCell.value;
+                                cellData.value = modifiedExcelCell.value;
                                 break;
                             case 'n':
-                                let newValue = modifiedXlsxCell.value;
+                                let newValue = modifiedExcelCell.value;
                                 const excelDateValue = this._tryGetExcelDateValue(newValue);
                                 if(typeUtils.isDefined(excelDateValue)) {
                                     newValue = excelDateValue;
@@ -248,10 +273,10 @@ var ExcelCreator = Class.inherit({
                                 cellData.value = newValue;
                                 break;
                             default:
-                                cellData.value = modifiedXlsxCell.value;
+                                cellData.value = modifiedExcelCell.value;
                         }
                     }
-                    cellStyleId = this._xlsxFile.registerCellFormat(modifiedXlsxCell.style);
+                    cellStyleId = this._xlsxFile.registerCellFormat(modifiedExcelCell.style);
                 }
                 cellsArray.push({
                     style: cellStyleId,
@@ -301,7 +326,7 @@ var ExcelCreator = Class.inherit({
                 numberFormat,
                 alignment: {
                     vertical: "top",
-                    wrapText: Number(!!style.wrapText),
+                    wrapText: !!style.wrapText,
                     horizontal: style.alignment || "left"
                 }
             });

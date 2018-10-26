@@ -807,6 +807,45 @@ QUnit.test("panel should be rendered correctly after openedStateMode changing, h
     fx.off = false;
 });
 
+QUnit.test("panel should be rendered correctly after openedStateMode changing, horizontal direction, right + slide", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        maxSize: 300,
+        opened: true,
+        revealMode: "slide",
+        position: "right",
+        openedStateMode: "shrink"
+    });
+
+    const instance = $element.dxDrawer("instance");
+    instance.option("openedStateMode", "push");
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.css("right"), "0px", "panel has correct right");
+    assert.equal($panel.position().left, 700, "panel has correct left");
+    fx.off = false;
+});
+
+QUnit.test("panel should be rendered correctly after openedStateMode changing, horizontal direction, right + expand", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        maxSize: 300,
+        opened: true,
+        revealMode: "expand",
+        position: "right",
+        openedStateMode: "shrink"
+    });
+
+    const instance = $element.dxDrawer("instance");
+    instance.option("openedStateMode", "overlap");
+    const $panel = $element.find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.css("marginRight"), "0px", "panel has correct right");
+    fx.off = false;
+});
+
 QUnit.test("panel should be rendered correctly after openedStateMode changing, vertical direction", assert => {
     fx.off = true;
 
@@ -1912,7 +1951,7 @@ QUnit.test("drawer should have only one panel after mode changing", assert => {
     fx.off = false;
 });
 
-QUnit.test("drawer panel should be repositioned after dimension changed", assert => {
+QUnit.test("drawer panel should be repositioned correctly after dimension changed,left position", assert => {
     fx.off = true;
 
     const $element = $("#drawer").dxDrawer({
@@ -1932,6 +1971,32 @@ QUnit.test("drawer panel should be repositioned after dimension changed", assert
     resizeCallbacks.fire();
 
     assert.equal($panelOverlayContent.position().left, 0, "panel overlay content position is OK");
+
+    fx.off = false;
+});
+
+QUnit.test("drawer panel should be repositioned correctly after dimension changed, right position", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        opened: false,
+        position: "right",
+        revealMode: "slide",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+    const instance = $element.dxDrawer("instance");
+    const $panelOverlayContent = $element.find(".dx-overlay-content");
+
+    resizeCallbacks.fire();
+    instance.option("revealMode", "expand");
+    assert.equal($panelOverlayContent.css("left"), "auto", "panel overlay content position is OK");
 
     fx.off = false;
 });

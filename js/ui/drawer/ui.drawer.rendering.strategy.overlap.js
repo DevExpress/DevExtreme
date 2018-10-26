@@ -13,6 +13,7 @@ class OverlapStrategy extends DrawerStrategy {
 
         const position = this.getOverlayPosition();
         const drawer = this.getDrawerInstance();
+        delete this._initialPosition;
 
         drawer._overlay = drawer._createComponent(drawer.content(), Overlay, {
             shading: false,
@@ -25,8 +26,12 @@ class OverlapStrategy extends DrawerStrategy {
                 }
             },
             onPositioned: (function(e) {
+                // NOTE: overlay should be positioned in extended wrapper
                 if(typeUtils.isDefined(this._initialPosition)) {
                     translator.move(e.component.$content(), { left: this._initialPosition.left });
+                }
+                if(this.getDrawerInstance().getDrawerPosition() === "right") {
+                    e.component.$content().css("left", "auto");
                 }
             }).bind(this),
             contentTemplate: template,
@@ -127,6 +132,8 @@ class OverlapStrategy extends DrawerStrategy {
             const $panelOverlayContent = drawer.getOverlay().$content();
             const size = this._getPanelSize(offset);
             const marginTop = drawer.getRealPanelHeight() - size;
+
+            translator.move($panelOverlayContent, { left: 0 });
 
             let animationConfig = {
                 $element: $panelOverlayContent,

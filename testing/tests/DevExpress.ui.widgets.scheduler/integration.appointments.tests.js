@@ -6322,3 +6322,40 @@ QUnit.test("New added appointment should be rendered correctly in specified time
         tzOffsetStub.restore();
     }
 });
+
+QUnit.test("Tail of long appointment should have a right position, groupByDate = true", function(assert) {
+    this.createInstance({
+        dataSource: [
+            { text: "Task 1", startDate: new Date(2015, 8, 22, 22, 0), endDate: new Date(2015, 8, 23, 21, 0), ownerId: 2 }
+        ],
+        groupByDate: true,
+        groups: ["ownerId"],
+        resources: [
+            {
+                field: "ownerId",
+                label: "o",
+                allowMultiple: true,
+                dataSource: [
+                    {
+                        text: "a",
+                        id: 1
+                    },
+                    {
+                        text: "b",
+                        id: 2
+                    }
+                ]
+            }
+        ],
+        currentDate: new Date(2015, 8, 22),
+        views: ["week"],
+        startDayHour: 20,
+        currentView: "week",
+        firstDayOfWeek: 1
+    });
+
+    var $appointmentTail = $(this.instance.$element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(1),
+        $cell = $(this.instance.$element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(5);
+
+    assert.roughEqual($appointmentTail.position().left, $cell.position().left, 1.001, "Tail has a right position");
+});

@@ -1840,7 +1840,9 @@ QUnit.test("'getResizableAppointmentArea' should return correct area when groupB
         ],
     });
 
-    var $lastCell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(14),
+    var $firstCell = this.instance.$element().find(".dx-scheduler-date-table-cell").first(),
+        $lastCell = this.instance.$element().find(".dx-scheduler-date-table-cell").last(),
+        firstCellPosition = $firstCell.offset(),
         lastCellPosition = $lastCell.offset(),
         cellWidth = $lastCell.get(0).getBoundingClientRect().width;
 
@@ -1852,7 +1854,8 @@ QUnit.test("'getResizableAppointmentArea' should return correct area when groupB
             top: 0
         },
         callback: function(result) {
-            assert.roughEqual(result.left, lastCellPosition.left - cellWidth / 2, 3, "Area left is OK");
+            assert.roughEqual(result.left, firstCellPosition.left - cellWidth / 2, 3, "Area left is OK");
+            assert.roughEqual(result.right, lastCellPosition.left + 1.5 * cellWidth, 3, "Area right is OK");
         }
     });
 });

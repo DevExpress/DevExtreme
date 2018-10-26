@@ -2202,7 +2202,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme({
             zoomAndPan: {
                 dragToZoom: "dragToZoomValue",
-                allowGestures: "allowGesturesValue",
+                allowTouchGestures: "allowTouchGesturesValue",
                 allowMouseWheel: "allowMouseWheelValue",
                 dragBoxStyle: {
                     color: "dragBoxColor",
@@ -2227,7 +2227,7 @@ function createThemeManager(options, themeGroupName) {
             },
             panKey: "panKeyValue",
             allowMouseWheel: true,
-            allowGestures: true
+            allowTouchGestures: true
         });
     });
 
@@ -2237,7 +2237,7 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({
             zoomAndPan: {
-                allowGestures: "allowGesturesValue",
+                allowTouchGestures: "allowTouchGesturesValue",
                 allowMouseWheel: "allowMouseWheelValue",
                 dragBoxStyle: {
                     color: "dragBoxColor",
@@ -2262,7 +2262,7 @@ function createThemeManager(options, themeGroupName) {
             },
             panKey: "panKeyValue",
             allowMouseWheel: false,
-            allowGestures: true
+            allowTouchGestures: true
         });
     });
 
@@ -2272,7 +2272,7 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({
             zoomAndPan: {
-                allowGestures: "allowGesturesValue",
+                allowTouchGestures: "allowTouchGesturesValue",
                 allowMouseWheel: "allowMouseWheelValue",
                 dragBoxStyle: {
                     color: "dragBoxColor",
@@ -2297,7 +2297,7 @@ function createThemeManager(options, themeGroupName) {
             },
             panKey: "panKeyValue",
             allowMouseWheel: false,
-            allowGestures: false
+            allowTouchGestures: false
         });
     });
 
@@ -2307,7 +2307,7 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({
             zoomAndPan: {
-                allowGestures: "allowGesturesValue",
+                allowTouchGestures: "allowTouchGesturesValue",
                 allowMouseWheel: "allowMouseWheelValue",
                 dragBoxStyle: {
                     color: "dragBoxColor",
@@ -2332,7 +2332,7 @@ function createThemeManager(options, themeGroupName) {
             },
             panKey: "panKeyValue",
             allowMouseWheel: false,
-            allowGestures: true
+            allowTouchGestures: true
         });
     });
 
@@ -2342,7 +2342,7 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({
             zoomAndPan: {
-                allowGestures: "allowGesturesValue",
+                allowTouchGestures: "allowTouchGesturesValue",
                 allowMouseWheel: "allowMouseWheelValue",
                 dragBoxStyle: {
                     color: "dragBoxColor",
@@ -2367,7 +2367,7 @@ function createThemeManager(options, themeGroupName) {
             },
             panKey: "panKeyValue",
             allowMouseWheel: true,
-            allowGestures: true
+            allowTouchGestures: true
         });
     });
 
@@ -2377,7 +2377,7 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({
             zoomAndPan: {
-                allowGestures: "allowGesturesValue",
+                allowTouchGestures: "allowTouchGesturesValue",
                 allowMouseWheel: "allowMouseWheelValue",
                 dragBoxStyle: {
                     color: "dragBoxColor",
@@ -2402,7 +2402,7 @@ function createThemeManager(options, themeGroupName) {
             },
             panKey: "panKeyValue",
             allowMouseWheel: true,
-            allowGestures: false
+            allowTouchGestures: false
         });
     });
 
@@ -2412,7 +2412,7 @@ function createThemeManager(options, themeGroupName) {
         });
         themeManager.setTheme({
             zoomAndPan: {
-                allowGestures: "allowGesturesValue",
+                allowTouchGestures: "allowTouchGesturesValue",
                 allowMouseWheel: "allowMouseWheelValue",
                 dragBoxStyle: {
                     color: "dragBoxColor",
@@ -2437,7 +2437,7 @@ function createThemeManager(options, themeGroupName) {
             },
             panKey: "panKeyValue",
             allowMouseWheel: false,
-            allowGestures: true
+            allowTouchGestures: true
         });
     });
 })();

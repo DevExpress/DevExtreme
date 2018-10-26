@@ -627,7 +627,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}`).text();
 
         assert.equal($fields.length, 3, "Form with 4 fields shown");
-        assert.equal(fieldsText, "URL:Text:Open text in new window:", "Check labels");
+        assert.equal(fieldsText, "URL:Text:Open link in new window:", "Check labels");
     });
 
     test("show link dialog when a link selected", (assert) => {
