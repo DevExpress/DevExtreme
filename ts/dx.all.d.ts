@@ -1363,7 +1363,7 @@ declare module DevExpress.data {
         /** Specifies whether a user can sort the pivot grid by summary values instead of field values. */
         allowSortingBySummary?: boolean;
         /** Specifies the field's area. */
-        area?: undefined | 'column' | 'data' | 'filter' | 'row';
+        area?: 'column' | 'data' | 'filter' | 'row' | undefined;
         /** Specifies the field's order among the other fields in the same area. Corresponds to the field's order in the fields array by default. */
         areaIndex?: number;
         /** Specifies a custom aggregate function. Applies only if the summaryType is "custom" and the remoteOperations is false. Cannot be used with an XmlaStore. */
@@ -1433,19 +1433,32 @@ declare module DevExpress.data {
     }
 }
 declare module DevExpress.exporter {
+    /** An object that configures the font in an Excel cell. */
     export interface ExcelFont {
+        /** Specifies whether the text should be in bold. */
         bold?: boolean;
+        /** The text's color in hexadecimal characters. */
         color?: string;
+        /** Specifies whether the text should be in italic. */
         italic?: boolean;
+        /** The name of the typeface that should be applied to the text. */
         name?: string;
+        /** The font size specified in points (1/72 of an inch). */
         size?: number;
+        /** The underline formatting style. */
         underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
     }
+    /** A DataGrid cell to be exported to Excel. */
     export interface ExcelDataGridCell {
+        /** The configuration of the cell's column. */
         column?: DevExpress.ui.dxDataGridColumn;
+        /** The data object of the cell's row. */
         data?: any;
+        /** The key of the cell's row. */
         key?: any;
+        /** The type of the cell's row. */
         rowType?: string;
+        /** The cell's value. */
         value?: any;
     }
 }
@@ -1879,6 +1892,7 @@ declare module DevExpress.ui {
         selectedItems?: Array<any>;
         /** Specifies whether a single or multiple buttons can be in the selected state simultaneously. */
         selectionMode?: 'multiple' | 'single';
+        /** Specifies how buttons in the group are styled. */
         stylingMode?: 'text' | 'outlined' | 'contained';
     }
     /** The ButtonGroup is a widget that contains a set of toggle buttons, and can be used as a mode switcher. */
@@ -2054,7 +2068,7 @@ declare module DevExpress.ui {
         filterSyncEnabled?: boolean | 'auto';
         /** Specifies a filter expression. */
         filterValue?: string | Array<any> | Function;
-        /** Specifies the initially or currently focused column's index. This column is focused when the data row area is focused. */
+        /** Specifies the index of the column focused initially or currently in the data row area. */
         focusedColumnIndex?: number;
         /** Specifies whether the focused row feature is enabled. */
         focusedRowEnabled?: boolean;
@@ -2064,6 +2078,7 @@ declare module DevExpress.ui {
         focusedRowKey?: any;
         /** Configures the header filter feature. */
         headerFilter?: { height?: number, visible?: boolean, width?: number, allowSearch?: boolean, searchTimeout?: number, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
+        /** Specifies whether to highlight rows and cells whose data changed. */
         highlightChanges?: boolean;
         /** Configures the load panel. */
         loadPanel?: { enabled?: boolean | 'auto', text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean };
@@ -2278,9 +2293,9 @@ declare module DevExpress.ui {
         /** Sets focus on a specific cell. */
         focus(element: Element | JQuery): void;
         /** Gets a cell with a specific row index and a data field, column caption or name. */
-        getCellElement(rowIndex: number, dataField: string): DevExpress.core.dxElement & undefined;
+        getCellElement(rowIndex: number, dataField: string): DevExpress.core.dxElement | undefined;
         /** Gets a cell with specific row and column indexes. */
-        getCellElement(rowIndex: number, visibleColumnIndex: number): DevExpress.core.dxElement & undefined;
+        getCellElement(rowIndex: number, visibleColumnIndex: number): DevExpress.core.dxElement | undefined;
         /** Gets the total filter that combines all the filters applied. */
         getCombinedFilter(): any;
         /** Gets the total filter that combines all the filters applied. */
@@ -2290,7 +2305,7 @@ declare module DevExpress.ui {
         /** Gets the key of a row with a specific index. */
         getKeyByRowIndex(rowIndex: number): any;
         /** Gets the container of a row with a specific index. */
-        getRowElement(rowIndex: number): Array<Element> & JQuery & undefined;
+        getRowElement(rowIndex: number): Array<Element> & JQuery | undefined;
         /** Gets the index of a row with a specific key. */
         getRowIndexByKey(key: any | string | number): number;
         /** Gets the instance of the widget's scrollable part. */
@@ -2301,6 +2316,7 @@ declare module DevExpress.ui {
         hideColumnChooser(): void;
         /** Checks whether an adaptive detail row is expanded or collapsed. */
         isAdaptiveDetailRowExpanded(key: any): void;
+        isRowFocused(key: any): void;
         /** Checks whether a row with a specific key is selected. */
         isRowSelected(key: any): boolean;
         /** Gets a data object's key. */
@@ -2797,6 +2813,8 @@ declare module DevExpress.ui {
     export class dxForm extends Widget {
         constructor(element: Element, options?: dxFormOptions)
         constructor(element: JQuery, options?: dxFormOptions)
+        /** Gets a button's instance. */
+        getButton(name: string): any;
         /** Gets an editor instance. Takes effect only if the form item is visible. */
         getEditor(dataField: string): any;
         /** Gets a form item's configuration. */
@@ -2872,7 +2890,7 @@ declare module DevExpress.ui {
         valueType?: 'html' | 'markdown';
         variables?: dxHtmlEditorVariables;
     }
-    /** A base class for editors. */
+    /** HtmlEditor is a WYSIWYG text editor build on top of Quill, designed to support HTML and Markdown output formats. HtmlEditor is at the Community Technology Preview (CTP) development stage. That means that the widget is available for testing, but its concept, design and behavior can be reconsidered and changed without notice. */
     export class dxHtmlEditor extends Editor {
         constructor(element: Element, options?: dxHtmlEditorOptions)
         constructor(element: JQuery, options?: dxHtmlEditorOptions)
@@ -3793,7 +3811,7 @@ declare module DevExpress.ui {
         firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
-        /** Specifies whether to group appointments by date first. */
+        /** Specifies whether to group appointments by date first. Applies to all view types except "agenda". */
         groupByDate?: boolean;
         /** Specifies the resource kinds by which the scheduler's appointments are grouped in a timetable. */
         groups?: Array<string>;
@@ -4030,10 +4048,12 @@ declare module DevExpress.ui {
         hoverStateEnabled?: boolean;
         /** The value to be assigned to the `name` attribute of the underlying HTML element. */
         name?: string;
-        /** Text displayed when the widget is in a disabled state. */
-        offText?: string;
-        /** Text displayed when the widget is in an enabled state. */
-        onText?: string;
+        /** @deprecated Use the switchedOffText option instead. */
+        offText?: any;
+        /** @deprecated Use the switchedOnText option instead. */
+        onText?: any;
+        switchedOffText?: string;
+        switchedOnText?: string;
         /** A Boolean value specifying whether the current switch state is "On" or "Off". */
         value?: boolean;
     }
@@ -4796,6 +4816,7 @@ declare module DevExpress.ui {
         allowGrouping?: boolean;
         /** Specifies whether groups appear expanded or not when records are grouped by a specific column. Setting this option makes sense only when grouping is allowed for this column. */
         autoExpandGroup?: boolean;
+        /** Allows you to customize buttons in the editing column or create a custom command column. Applies only if the column's type is "buttons". */
         buttons?: Array<'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxDataGridColumnButton>;
         /** Specifies a field name or a function that returns a field name or a value to be used for grouping column cells. */
         calculateGroupValue?: string | ((rowData: any) => any);
@@ -4807,6 +4828,7 @@ declare module DevExpress.ui {
         groupIndex?: number;
         /** Specifies whether or not to display the column when grid records are grouped by it. */
         showWhenGrouped?: boolean;
+        /** Specifies the command column that this object customizes. */
         type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
     }
     export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
@@ -5115,7 +5137,7 @@ declare module DevExpress.ui {
     }
     export interface GridBaseColumn {
         /** Aligns the content of the column. */
-        alignment?: undefined | 'center' | 'left' | 'right';
+        alignment?: 'center' | 'left' | 'right' | undefined;
         /** Specifies whether a user can edit values in the column at runtime. By default, inherits the value of the editing.allowUpdating option. */
         allowEditing?: boolean;
         /** Specifies whether data can be filtered by this column. Applies only if filterRow.visible is true. */
@@ -5209,7 +5231,7 @@ declare module DevExpress.ui {
         /** Specifies a custom comparison function for sorting. Applies only when sorting is performed on the client. */
         sortingMethod?: ((value1: any, value2: any) => number);
         /** Specifies the sort order of column values. */
-        sortOrder?: undefined | 'asc' | 'desc';
+        sortOrder?: 'asc' | 'desc' | undefined;
         /** In a boolean column, replaces all true items with a specified text. Applies only if showEditorAlways option is false. */
         trueText?: string;
         /** Specifies validation rules to be checked on updating cell values. */
@@ -5222,25 +5244,44 @@ declare module DevExpress.ui {
         width?: number | string;
     }
     export interface dxTreeListColumn extends GridBaseColumn {
+        /** Allows you to customize buttons in the editing column or create a custom command column. Applies only if the column's type is "buttons". */
         buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxTreeListColumnButton>;
         /** Configures columns. */
         columns?: Array<dxTreeListColumn>;
+        /** Specifies the command column that this object customizes. */
         type?: 'adaptive' | 'buttons';
     }
+    /** Allows you to customize buttons in the editing column or create a custom command column. Applies only if the column's type is "buttons". */
     export interface GridBaseColumnButton {
+        /** Specifies a CSS class to be applied to the button. */
         cssClass?: string;
+        /** Specifies the text for the hint that appears when the button is hovered over or long-pressed. */
         hint?: string;
+        /** Specifies the button's icon. */
         icon?: string;
-        name?: string;
-        template?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => string | Element | JQuery);
+        /** Specifies the button's text. Applies only if the button's icon is not specified. */
         text?: string;
     }
+    /** Allows you to customize buttons in the editing column or create a custom command column. Applies only if the column's type is "buttons". */
     export interface dxDataGridColumnButton extends GridBaseColumnButton {
+        /** The name used to identify a built-in button. */
+        name?: 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+        /** A function that is executed when the button is clicked or tapped. */
         onClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: event, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any) | string;
+        /** Specifies a custom button template. */
+        template?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: { component?: dxDataGrid, data?: any, key?: any, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject }) => string | Element | JQuery);
+        /** Specifies the button's visibility. */
         visible?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => boolean);
     }
+    /** Allows you to customize buttons in the editing column or create a custom command column. Applies only if the column's type is "buttons". */
     export interface dxTreeListColumnButton extends GridBaseColumnButton {
+        /** The name used to identify a built-in button. */
+        name?: 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+        /** A function that is executed when the button is clicked or tapped. */
         onClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: event, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any) | string;
+        /** Specifies a custom button template. */
+        template?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: { component?: dxTreeList, data?: any, key?: any, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject }) => string | Element | JQuery);
+        /** Specifies the button's visibility. */
         visible?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => boolean);
     }
     /** This section describes the properties of a grid row. An object containing these properties comes to certain event-handling functions. */
@@ -6410,6 +6451,7 @@ declare module DevExpress.viz {
         getValueAxis(): chartAxisObject;
         /** Gets a value axis with the specified name. */
         getValueAxis(name: string): chartAxisObject;
+        /** Resets the visual ranges of both axes to the data range or to the whole range if it is within the data range. */
         resetVisualRange(): void;
         /** Sets the argument axis' start and end values. */
         zoomArgument(startValue: number | Date | string, endValue: number | Date | string): void;
