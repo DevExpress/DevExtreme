@@ -1,9 +1,8 @@
 import { isDefined } from "../../core/utils/type";
-import xlsxTagHelper from './excel.tag_helper';
-import xlsxColorHelper from './excel.color_helper';
+import tagHelper from './excel.tag_helper';
+import colorHelper from './excel.color_helper';
 
-
-const xlsxFontHelper = {
+const fontHelper = {
     tryCreateTag: function(sourceObj) {
         let result = null;
         if(isDefined(sourceObj)) {
@@ -15,9 +14,9 @@ const xlsxFontHelper = {
                 bold: sourceObj.bold,
                 italic: sourceObj.italic,
                 underline: sourceObj.underline,
-                color: xlsxColorHelper.tryCreateTag(sourceObj.color),
+                color: colorHelper.tryCreateTag(sourceObj.color),
             };
-            if(xlsxFontHelper.isEmpty(result)) {
+            if(fontHelper.isEmpty(result)) {
                 result = null;
             }
         }
@@ -50,14 +49,14 @@ const xlsxFontHelper = {
                 result.underline = source.underline;
             }
             if(source.color !== undefined) {
-                result.color = xlsxColorHelper.copy(source.color);
+                result.color = colorHelper.copy(source.color);
             }
         }
         return result;
     },
 
     areEqual: function(leftTag, rightTag) {
-        return xlsxFontHelper.isEmpty(leftTag) && xlsxFontHelper.isEmpty(rightTag) ||
+        return fontHelper.isEmpty(leftTag) && fontHelper.isEmpty(rightTag) ||
             (
                 isDefined(leftTag) && isDefined(rightTag) &&
                 leftTag.size === rightTag.size &&
@@ -67,7 +66,7 @@ const xlsxFontHelper = {
                 (leftTag.bold === rightTag.bold || !leftTag.bold === !rightTag.bold) &&
                 (leftTag.italic === rightTag.italic || !leftTag.italic === !rightTag.italic) &&
                 leftTag.underline === rightTag.underline &&
-                xlsxColorHelper.areEqual(leftTag.color, rightTag.color)
+                colorHelper.areEqual(leftTag.color, rightTag.color)
             );
     },
 
@@ -80,23 +79,23 @@ const xlsxFontHelper = {
             (!isDefined(tag.bold) || !tag.bold) &&
             (!isDefined(tag.italic) || !tag.italic) &&
             !isDefined(tag.underline) &&
-            xlsxColorHelper.isEmpty(tag.color);
+            colorHelper.isEmpty(tag.color);
     },
 
     toXml: function(tag) {
         const content = [
-            isDefined(tag.bold) && tag.bold ? xlsxTagHelper.toXml('b', {}) : '', // 18.8.2 b (Bold)
-            isDefined(tag.size) ? xlsxTagHelper.toXml('sz', { 'val': tag.size }) : '', // 18.4.11 sz (Font Size)
-            isDefined(tag.color) ? xlsxColorHelper.toXml('color', tag.color) : '',
-            isDefined(tag.name) ? xlsxTagHelper.toXml('name', { 'val': tag.name }) : '', // 18.8.29 name (Font Name)
-            isDefined(tag.family) ? xlsxTagHelper.toXml('family', { 'val': tag.family }) : '', // 18.8.18 family (Font Family)
-            isDefined(tag.scheme) ? xlsxTagHelper.toXml('scheme', { 'val': tag.scheme }) : '', // 18.8.35 scheme (Scheme)
-            isDefined(tag.italic) && tag.italic ? xlsxTagHelper.toXml('i', {}) : '', // 18.8.26 i (Italic)
-            isDefined(tag.underline) ? xlsxTagHelper.toXml('u', { 'val': tag.underline }) : '', // 18.4.13 u (Underline)
+            isDefined(tag.bold) && tag.bold ? tagHelper.toXml('b', {}) : '', // 18.8.2 b (Bold)
+            isDefined(tag.size) ? tagHelper.toXml('sz', { 'val': tag.size }) : '', // 18.4.11 sz (Font Size)
+            isDefined(tag.color) ? colorHelper.toXml('color', tag.color) : '',
+            isDefined(tag.name) ? tagHelper.toXml('name', { 'val': tag.name }) : '', // 18.8.29 name (Font Name)
+            isDefined(tag.family) ? tagHelper.toXml('family', { 'val': tag.family }) : '', // 18.8.18 family (Font Family)
+            isDefined(tag.scheme) ? tagHelper.toXml('scheme', { 'val': tag.scheme }) : '', // 18.8.35 scheme (Scheme)
+            isDefined(tag.italic) && tag.italic ? tagHelper.toXml('i', {}) : '', // 18.8.26 i (Italic)
+            isDefined(tag.underline) ? tagHelper.toXml('u', { 'val': tag.underline }) : '', // 18.4.13 u (Underline)
         ].join('');
 
         // §18.8.22, 'font (Font)', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        return xlsxTagHelper.toXml(
+        return tagHelper.toXml(
             "font",
             {},
             content
@@ -104,4 +103,4 @@ const xlsxFontHelper = {
     }
 };
 
-export default xlsxFontHelper;
+export default fontHelper;

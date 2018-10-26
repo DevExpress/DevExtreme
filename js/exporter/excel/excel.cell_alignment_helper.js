@@ -1,7 +1,7 @@
 import { isDefined } from "../../core/utils/type";
-import xlsxTagHelper from './excel.tag_helper';
+import tagHelper from './excel.tag_helper';
 
-const xlsxCellAlignmentHelper = {
+const cellAlignmentHelper = {
     tryCreateTag: function(sourceObj) {
         let result = null;
         if(isDefined(sourceObj)) {
@@ -10,7 +10,7 @@ const xlsxCellAlignmentHelper = {
                 wrapText: sourceObj.wrapText,
                 horizontal: sourceObj.horizontal,
             };
-            if(xlsxCellAlignmentHelper.isEmpty(result)) {
+            if(cellAlignmentHelper.isEmpty(result)) {
                 result = null;
             }
         }
@@ -35,7 +35,7 @@ const xlsxCellAlignmentHelper = {
     },
 
     areEqual: function(leftTag, rightTag) {
-        return xlsxCellAlignmentHelper.isEmpty(leftTag) && xlsxCellAlignmentHelper.isEmpty(rightTag) ||
+        return cellAlignmentHelper.isEmpty(leftTag) && cellAlignmentHelper.isEmpty(rightTag) ||
             (
                 isDefined(leftTag) && isDefined(rightTag) &&
                 leftTag.vertical === rightTag.vertical &&
@@ -51,7 +51,7 @@ const xlsxCellAlignmentHelper = {
 
     toXml: function(tag) {
         // §18.8.1 alignment (Alignment), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        return xlsxTagHelper.toXml(
+        return tagHelper.toXml(
             "alignment",
             {
                 vertical: tag.vertical, // 18.18.88 ST_VerticalAlignment (Vertical Alignment Types)
@@ -62,4 +62,4 @@ const xlsxCellAlignmentHelper = {
     }
 };
 
-export default xlsxCellAlignmentHelper;
+export default cellAlignmentHelper;

@@ -1,10 +1,10 @@
 import { isDefined } from "../../core/utils/type";
-import xlsxTagHelper from './excel.tag_helper';
-import xlsxCellAlignmentHelper from './excel.cell_alignment_helper';
-import xlsxFillHelper from './excel.fill_helper';
-import xlsxFontHelper from './excel.font_helper';
+import tagHelper from './excel.tag_helper';
+import cellAlignmentHelper from './excel.cell_alignment_helper';
+import fillHelper from './excel.fill_helper';
+import fontHelper from './excel.font_helper';
 
-const xlsxCellFormatHelper = {
+const cellFormatHelper = {
     tryCreateTag: function(sourceObj, sharedItemsContainer) {
         let result = null;
         if(isDefined(sourceObj)) {
@@ -17,16 +17,16 @@ const xlsxCellFormatHelper = {
 
             let fill = sourceObj.fill;
             if(!isDefined(fill)) {
-                fill = xlsxFillHelper.tryCreateFillFromSimpleFormat(sourceObj);
+                fill = fillHelper.tryCreateFillFromSimpleFormat(sourceObj);
             }
 
             result = {
                 numberFormatId,
-                alignment: xlsxCellAlignmentHelper.tryCreateTag(sourceObj.alignment),
+                alignment: cellAlignmentHelper.tryCreateTag(sourceObj.alignment),
                 fontId: sharedItemsContainer.registerFont(sourceObj.font),
                 fillId: sharedItemsContainer.registerFill(fill),
             };
-            if(xlsxCellFormatHelper.isEmpty(result)) {
+            if(cellFormatHelper.isEmpty(result)) {
                 result = null;
             }
         }
@@ -45,29 +45,29 @@ const xlsxCellFormatHelper = {
             }
 
             if(source.fill !== undefined) {
-                result.fill = xlsxFillHelper.copy(source.fill);
+                result.fill = fillHelper.copy(source.fill);
             } else {
-                xlsxFillHelper.copySimpleFormat(source, result);
+                fillHelper.copySimpleFormat(source, result);
             }
 
             if(source.alignment !== undefined) {
-                result.alignment = xlsxCellAlignmentHelper.copy(source.alignment);
+                result.alignment = cellAlignmentHelper.copy(source.alignment);
             }
             if(source.font !== undefined) {
-                result.font = xlsxFontHelper.copy(source.font);
+                result.font = fontHelper.copy(source.font);
             }
         }
         return result;
     },
 
     areEqual: function(leftTag, rightTag) {
-        return xlsxCellFormatHelper.isEmpty(leftTag) && xlsxCellFormatHelper.isEmpty(rightTag) ||
+        return cellFormatHelper.isEmpty(leftTag) && cellFormatHelper.isEmpty(rightTag) ||
             (
                 isDefined(leftTag) && isDefined(rightTag) &&
                 leftTag.fontId === rightTag.fontId &&
                 leftTag.numberFormatId === rightTag.numberFormatId &&
                 leftTag.fillId === rightTag.fillId &&
-                xlsxCellAlignmentHelper.areEqual(leftTag.alignment, rightTag.alignment)
+                cellAlignmentHelper.areEqual(leftTag.alignment, rightTag.alignment)
             );
     },
 
@@ -76,18 +76,18 @@ const xlsxCellFormatHelper = {
             !isDefined(tag.fontId) &&
             !isDefined(tag.numberFormatId) &&
             !isDefined(tag.fillId) &&
-            xlsxCellAlignmentHelper.isEmpty(tag.alignment);
+            cellAlignmentHelper.isEmpty(tag.alignment);
     },
 
     toXml: function(tag) {
-        const isAlignmentEmpty = xlsxCellAlignmentHelper.isEmpty(tag.alignment);
+        const isAlignmentEmpty = cellAlignmentHelper.isEmpty(tag.alignment);
         let applyNumberFormat;
         if(isDefined(tag.numberFormatId)) {
             applyNumberFormat = tag.numberFormatId > 0 ? 1 : 0;
         }
 
         // §18.8.45 xf (Format), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        return xlsxTagHelper.toXml(
+        return tagHelper.toXml(
             "xf",
             {
                 'xfId': 0,
@@ -97,9 +97,9 @@ const xlsxCellFormatHelper = {
                 fillId: tag.fillId,
                 'numFmtId': tag.numberFormatId,
             },
-            isAlignmentEmpty ? null : xlsxCellAlignmentHelper.toXml(tag.alignment)
+            isAlignmentEmpty ? null : cellAlignmentHelper.toXml(tag.alignment)
         );
     }
 };
 
-export default xlsxCellFormatHelper;
+export default cellFormatHelper;

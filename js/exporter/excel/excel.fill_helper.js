@@ -1,13 +1,13 @@
 import { isDefined } from "../../core/utils/type";
-import xlsxTagHelper from './excel.tag_helper';
-import xlsxPatternFillHelper from './excel.pattern_fill_helper';
+import tagHelper from './excel.tag_helper';
+import patternFillHelper from './excel.pattern_fill_helper';
 
-const xlsxFillHelper = {
+const fillHelper = {
     tryCreateTag: function(sourceObj) {
         let result = null;
         if(isDefined(sourceObj)) {
-            result = { patternFill: xlsxPatternFillHelper.tryCreateTag(sourceObj.patternFill) };
-            if(xlsxFillHelper.isEmpty(result)) {
+            result = { patternFill: patternFillHelper.tryCreateTag(sourceObj.patternFill) };
+            if(fillHelper.isEmpty(result)) {
                 result = null;
             }
         }
@@ -56,32 +56,32 @@ const xlsxFillHelper = {
         if(isDefined(source)) {
             result = {};
             if(source.patternFill !== undefined) {
-                result.patternFill = xlsxPatternFillHelper.copy(source.patternFill);
+                result.patternFill = patternFillHelper.copy(source.patternFill);
             };
         }
         return result;
     },
 
     areEqual: function(leftTag, rightTag) {
-        return xlsxFillHelper.isEmpty(leftTag) && xlsxFillHelper.isEmpty(rightTag) ||
+        return fillHelper.isEmpty(leftTag) && fillHelper.isEmpty(rightTag) ||
             (
                 isDefined(leftTag) && isDefined(rightTag) &&
-                xlsxPatternFillHelper.areEqual(leftTag.patternFill, rightTag.patternFill)
+                patternFillHelper.areEqual(leftTag.patternFill, rightTag.patternFill)
             );
     },
 
     isEmpty: function(tag) {
-        return !isDefined(tag) || xlsxPatternFillHelper.isEmpty(tag.patternFill);
+        return !isDefined(tag) || patternFillHelper.isEmpty(tag.patternFill);
     },
 
     toXml: function(tag) {
         // §18.8.20 fill (Fill), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        return xlsxTagHelper.toXml(
+        return tagHelper.toXml(
             "fill",
             {},
-            xlsxPatternFillHelper.toXml(tag.patternFill)
+            patternFillHelper.toXml(tag.patternFill)
         );
     }
 };
 
-export default xlsxFillHelper;
+export default fillHelper;
