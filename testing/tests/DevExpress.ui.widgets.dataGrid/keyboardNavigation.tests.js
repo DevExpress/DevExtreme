@@ -4880,7 +4880,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
 
         this.options = {
             useKeyboard: true,
-            editing: { mode: 'cell' }
+            editing: { mode: 'cell', allowUpdating: true }
         };
 
         this.setupModule();
@@ -4944,7 +4944,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
 
         this.options = {
             useKeyboard: true,
-            editing: { mode: 'batch' }
+            editing: { mode: 'batch', allowUpdating: true }
         };
 
         this.setupModule();

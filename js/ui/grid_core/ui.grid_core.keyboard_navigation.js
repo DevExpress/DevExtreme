@@ -124,7 +124,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             data = event.data,
             isCellEditMode = this._isCellEditMode(),
             columnIndex,
-            column;
+            column,
+            allowUpdating;
 
         if($grid.is(this.component.$element()) && this._isCellValid($target)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
@@ -137,7 +138,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
             } else if(!this._editingController.isEditing() && !this._isMasterDetailCell($target)) {
                 columnIndex = this.getView("rowsView").getCellIndex($target);
                 column = this._columnsController.getVisibleColumns()[columnIndex];
-                if(isCellEditMode && column && column.allowEditing) {
+                allowUpdating = this.option("editing.allowUpdating");
+
+                if(allowUpdating && isCellEditMode && column && column.allowEditing) {
                     this._isHiddenFocus = false;
                 } else {
                     var isInteractiveTarget = $(event.target).not($target).is(INTERACTIVE_ELEMENTS_SELECTOR);
