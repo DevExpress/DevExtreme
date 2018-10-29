@@ -2,7 +2,7 @@ var extend = require("../../core/utils/extend").extend,
     windowUtils = require("../../core/utils/window"),
     patchFontOptions = require("./utils").patchFontOptions,
 
-    clientExporter = require("../../client_exporter"),
+    clientExporter = require("../../exporter"),
     messageLocalization = require("../../localization/message"),
     imageExporter = clientExporter.image,
     svgExporter = clientExporter.svg,

@@ -1,6 +1,6 @@
 var $ = require("jquery"),
     isFunction = require("core/utils/type").isFunction,
-    svgCreator = require("client_exporter").svg.creator;
+    svgCreator = require("exporter").svg.creator;
 
 function setupCanvasStub() {
     // Blob
