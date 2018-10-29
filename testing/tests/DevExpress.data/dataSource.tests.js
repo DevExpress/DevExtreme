@@ -1752,6 +1752,33 @@ QUnit.module("live update", {
         assert.equal(this.loadSpy.callCount, 2);
     });
 
+    QUnit.test("automatic throttle depends on changed time when reshapeOnPush is disabled", function(assert) {
+        var dataSource = this.createDataSource({
+            reshapeOnPush: false
+        });
+
+        dataSource.load();
+
+        var changedSpy = sinon.spy();
+        dataSource.on("changed", (function() {
+            this.clock.tick(10);
+            changedSpy();
+        }).bind(this));
+
+        assert.equal(changedSpy.callCount, 0);
+
+        dataSource.store().push(this.changes);
+        this.clock.tick();
+        dataSource.store().push(this.changes);
+        assert.equal(changedSpy.callCount, 1);
+
+        this.clock.tick(49);
+        assert.equal(changedSpy.callCount, 1);
+
+        this.clock.tick(1);
+        assert.equal(changedSpy.callCount, 2);
+    });
+
     QUnit.test("load isn't called when reshapeOnPush is disabled", function(assert) {
         var dataSource = this.createDataSource();
         dataSource.store().push(this.changes);
