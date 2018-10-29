@@ -664,6 +664,53 @@ QUnit.test("Set the visualRange option by the different ways", function(assert) 
     assert.deepEqual(chart._options.valueAxis._customVisualRange, [2, 7]);
 });
 
+QUnit.test("Reload dataSource - visualRange option should be changed", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+    var visualRangeChanged = sinon.spy();
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: 1,
+            val: 4
+        }, {
+            arg: 2,
+            val: 5
+        }, {
+            arg: 5,
+            val: 7
+        }],
+        series: { type: "line" },
+        onOptionChanged: visualRangeChanged,
+        valueAxis: [{ valueMarginsEnabled: false }],
+        argumentAxis: { valueMarginsEnabled: false }
+    });
+
+    visualRangeChanged.reset();
+
+    // act
+    var ds = chart.getDataSource();
+    ds.store().push([
+        { type: "insert", data: { arg: 8, val: 3 } },
+        { type: "insert", data: { arg: 11, val: 8 } }
+    ]);
+    ds.load();
+
+    // assert
+    // argumentAxis
+    assert.deepEqual(visualRangeChanged.getCall(0).args[0].previousValue, { startValue: 1, endValue: 5 });
+    assert.deepEqual(visualRangeChanged.getCall(0).args[0].value, { startValue: 1, endValue: 11 });
+    assert.deepEqual(chart.option("argumentAxis.visualRange"), { startValue: 1, endValue: 11 });
+
+    // valueAxis
+    assert.deepEqual(visualRangeChanged.getCall(1).args[0].previousValue, { startValue: 4, endValue: 7 });
+    assert.deepEqual(visualRangeChanged.getCall(1).args[0].value, { startValue: 3, endValue: 8 });
+    assert.deepEqual(chart.option("valueAxis[0].visualRange"), { startValue: 3, endValue: 8 });
+});
+
 QUnit.test("Set zoom in the onDone callback", function(assert) {
     this.$container.css({ width: "1000px", height: "600px" });
     var dataSource = [{
