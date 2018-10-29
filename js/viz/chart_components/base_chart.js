@@ -1063,7 +1063,11 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _dataSourceChangedHandler: function() {
-        this._dataInit();
+        if(this._applyingChanges) {
+            this._dataInit();
+        } else {
+            this._requestChange(["DATA_INIT"]);
+        }
     },
 
     _dataInit: function() {
