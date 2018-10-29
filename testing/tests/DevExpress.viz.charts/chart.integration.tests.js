@@ -596,6 +596,30 @@ QUnit.test("Using the single section of axis options for some panes (check custo
     assert.deepEqual(chart._valueAxes[1].visualRange(), { startValue: 16, endValue: 26 });
 });
 
+// T681674
+QUnit.test("actual visualRange after dataSource updating", function(assert) {
+    var chart = this.createChart({
+        dataSource: [{
+            arg: 1,
+            val1: -10
+        }, {
+            arg: 60,
+            val1: 20
+        }],
+        valueAxis: {
+            visualRange: {
+                endValue: 100
+            }
+        },
+        series: [{ type: "line", valueField: "val1" }]
+    });
+
+    chart.option("valueAxis.visualRange", { startValue: 0, endValue: 80 });
+    chart.option("dataSource", [{ arg: 2, val1: 5 }, { arg: 2, val1: 10 }]);
+
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 0, endValue: 80 });
+});
+
 QUnit.test("Set the visualRange option by the different ways", function(assert) {
     this.$container.css({ width: "1000px", height: "600px" });
     var dataSource = [{

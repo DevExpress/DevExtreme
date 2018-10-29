@@ -1811,6 +1811,10 @@ Axis.prototype = {
         };
     },
 
+    setCustomVisualRange(value) {
+        this._options._customVisualRange = value;
+    },
+
      // API
     visualRange() {
         const that = this;
