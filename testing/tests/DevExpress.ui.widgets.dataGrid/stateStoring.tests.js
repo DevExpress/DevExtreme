@@ -457,7 +457,7 @@ QUnit.module('State Storing with real controllers', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options, ignoreClockTick) {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'filterRow', 'headerFilter', 'search', 'pager', 'selection', 'virtualScrolling'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'filterRow', 'headerFilter', 'search', 'pager', 'selection', 'virtualScrolling', 'focus', 'keyboardNavigation'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: options
@@ -1461,5 +1461,76 @@ QUnit.test("ScrollTop should be correct after loading pageIndex from state", fun
         assert.ok(scrollTop > 0, "scrollTop");
         assert.ok($testElement.find(".dx-virtual-row").first().height() <= scrollTop, "scrollTop should be less than or equal to virtual row height");
         done();
+    });
+});
+
+QUnit.test('Load focusedRowKey state', function(assert) {
+    // arrange, act
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return { focusedRowKey: 2 };
+            },
+            customSave: function() {
+            }
+        },
+        focusedRowEnabled: true,
+        loadingTimeout: null,
+        dataSource: {
+            store: {
+                type: "array",
+                data: [{ id: 1 }, { id: 2 }, { id: 3 }],
+                key: "id"
+            }
+        }
+    });
+
+    // assert
+    assert.strictEqual(this.option("focusedRowKey"), 2);
+});
+
+QUnit.test('Save focused row state when data changed', function(assert) {
+    // arrange, act
+    var userState;
+
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return {};
+            },
+            customSave: function(state) {
+                userState = state;
+            }
+        },
+        focusedRowEnabled: true,
+        loadingTimeout: null,
+        dataSource: {
+            store: {
+                type: "array",
+                data: [{ id: 1 }, { id: 2 }, { id: 3 }],
+                key: "id"
+            }
+        }
+    });
+
+    // act
+    this.options.focusedRowKey = 1;
+    this.focusController.optionChanged({ name: "focusedRowKey", value: 1 });
+    this.clock.tick(2000);
+
+    // assert
+    assert.deepEqual(userState, {
+        columns: [{ visibleIndex: 0, dataField: 'id', visible: true, dataType: 'number' }],
+        pageIndex: 0,
+        pageSize: 20,
+        allowedPageSizes: [10, 20, 40],
+        focusedRowKey: 1,
+        searchText: '',
+        filterPanel: {},
+        filterValue: null
     });
 });

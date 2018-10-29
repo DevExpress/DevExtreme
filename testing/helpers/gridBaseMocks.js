@@ -250,7 +250,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             isEditing: function() {
                 return this._isEditing;
             },
-            getEditMode: commonUtils.noop
+            getEditMode: commonUtils.noop,
+            allowUpdating: commonUtils.noop
         };
     };
 

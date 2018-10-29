@@ -7,7 +7,7 @@ var Class = require("../core/class"),
     JSZip = require("jszip"),
     fileSaver = require("./file_saver"),
     excelFormatConverter = require("./excel_format_converter"),
-    XlsxFile = require("./xlsx/xlsx_file"),
+    ExcelFile = require("./excel/excel.file"),
     isDefined = typeUtils.isDefined,
     XML_TAG = "<?xml version=\"1.0\" encoding=\"utf-8\"?>",
     GROUP_SHEET_PR_XML = "<sheetPr><outlinePr summaryBelow=\"0\"/></sheetPr>",
@@ -103,7 +103,7 @@ var ExcelCreator = Class.inherit({
 
         return result;
     },
-    _tryConvertToXlsxNumberFormat: function(format, dataType) {
+    _tryConvertToExcelNumberFormat: function(format, dataType) {
         var currency,
             newFormat = this._formatObjectConverter(format, dataType);
 
@@ -175,7 +175,7 @@ var ExcelCreator = Class.inherit({
     },
 
     _callCustomizeExcelCell: function({ dataProvider, value, dataType, style, sourceData }) {
-        const styleCopy = XlsxFile.copyCellFormat(style);
+        const styleCopy = ExcelFile.copyCellFormat(style);
 
         const args = {
             value: value,
@@ -276,7 +276,7 @@ var ExcelCreator = Class.inherit({
                                 cellData.value = modifiedExcelCell.value;
                         }
                     }
-                    cellStyleId = this._xlsxFile.registerCellFormat(modifiedExcelCell.style);
+                    cellStyleId = this._excelFile.registerCellFormat(modifiedExcelCell.style);
                 }
                 cellsArray.push({
                     style: cellStyleId,
@@ -313,11 +313,11 @@ var ExcelCreator = Class.inherit({
             { size: 11, color: { theme: 1 }, name: 'Calibri', family: 2, scheme: 'minor', bold: false },
             { size: 11, color: { theme: 1 }, name: 'Calibri', family: 2, scheme: 'minor', bold: true }
         ];
-        this._xlsxFile.registerFont(fonts[0]);
-        this._xlsxFile.registerFont(fonts[1]);
+        this._excelFile.registerFont(fonts[0]);
+        this._excelFile.registerFont(fonts[1]);
 
         styles.forEach(function(style) {
-            let numberFormat = that._tryConvertToXlsxNumberFormat(style.format, style.dataType);
+            let numberFormat = that._tryConvertToExcelNumberFormat(style.format, style.dataType);
             if(!typeUtils.isDefined(numberFormat)) {
                 numberFormat = 0;
             }
@@ -331,7 +331,7 @@ var ExcelCreator = Class.inherit({
                 }
             });
         });
-        that._styleIdToRegisteredStyleIdMap = that._styleArray.map(item => this._xlsxFile.registerCellFormat(item));
+        that._styleIdToRegisteredStyleIdMap = that._styleArray.map(item => this._excelFile.registerCellFormat(item));
     },
 
     _prepareCellData: function() {
@@ -382,12 +382,12 @@ var ExcelCreator = Class.inherit({
             folder = that._zip.folder(XL_FOLDER_NAME),
             XML = "";
 
-        XML = XML + this._xlsxFile.generateNumberFormatsXml();
-        XML = XML + this._xlsxFile.generateFontsXml();
-        XML = XML + this._xlsxFile.generateFillsXml();
+        XML = XML + this._excelFile.generateNumberFormatsXml();
+        XML = XML + this._excelFile.generateFontsXml();
+        XML = XML + this._excelFile.generateFillsXml();
         XML = XML + BASE_STYLE_XML2;
 
-        XML = XML + this._xlsxFile.generateCellFormatsXml();
+        XML = XML + this._excelFile.generateCellFormatsXml();
 
         XML = XML + that._getXMLTag("cellStyles", [{ name: "count", value: 1 }], that._getXMLTag("cellStyle", [
             { name: "name", value: "Normal" },
@@ -612,7 +612,7 @@ var ExcelCreator = Class.inherit({
         this._cellsArray = [];
         this._needSheetPr = false;
         this._dataProvider = dataProvider;
-        this._xlsxFile = new XlsxFile();
+        this._excelFile = new ExcelFile();
 
         if(typeUtils.isDefined(ExcelCreator.JSZip)) {
             this._zip = new ExcelCreator.JSZip();

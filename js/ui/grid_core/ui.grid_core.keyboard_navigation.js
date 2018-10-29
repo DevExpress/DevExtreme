@@ -50,7 +50,7 @@ function isDataRow($row) {
 }
 
 function isNotFocusedRow($row) {
-    return $row && ($row.hasClass(FREESPACE_ROW_CLASS) || $row.hasClass(VIRTUAL_ROW_CLASS));
+    return !$row || ($row.hasClass(FREESPACE_ROW_CLASS) || $row.hasClass(VIRTUAL_ROW_CLASS));
 }
 
 function isCellElement($element) {
@@ -150,6 +150,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
+    _allowRowUpdating: function() {
+        var rowIndex = this.getVisibleRowIndex(),
+            row = this._dataController.items()[rowIndex];
+
+        return this._editingController.allowUpdating({ row: row });
+    },
+
     _clickTargetCellHandler: function(event, $cell) {
         var columnIndex = this.getView("rowsView").getCellIndex($cell),
             column = this._columnsController.getVisibleColumns()[columnIndex],
@@ -164,7 +171,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
             this._updateFocusedCellPosition($cell);
 
-            if(isCellEditMode && column && column.allowEditing) {
+            if(this._allowRowUpdating() && isCellEditMode && column && column.allowEditing) {
                 this._isHiddenFocus = false;
             } else {
                 var isInteractiveTarget = $(event.target).not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR);
@@ -369,9 +376,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _focus: function($cell, disableFocus, isInteractiveElement) {
-        var $row = $cell.parent();
+        var $row = $cell && $cell.parent();
 
-        if(isNotFocusedRow($row)) {
+        if($row && isNotFocusedRow($row)) {
             return;
         }
 
@@ -1240,6 +1247,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _fireFocusedRowChanging: function(eventArgs, $newFocusedRow) {
         var newRowIndex = this._getRowIndex($newFocusedRow),
+            dataController = this.getController("data"),
             prevFocusedRowIndex = this.getVisibleRowIndex(),
             args = {
                 rowElement: $newFocusedRow,
@@ -1250,6 +1258,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 cancel: false
             };
 
+        if(!dataController || dataController.isLoading()) {
+            args.cancel = true;
+            return args;
+        }
         if(this.option("focusedRowEnabled")) {
             this.executeAction("onFocusedRowChanging", args);
             if(!args.cancel && args.newRowIndex !== newRowIndex) {
@@ -1262,16 +1274,15 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _fireFocusedRowChanged: function($rowElement) {
-        var that = this,
-            row,
+        var row,
             dataController,
-            focusedRowKey = that.option("focusedRowKey"),
-            focusedRowIndex = that.option("focusedRowIndex");
+            focusedRowKey = this.option("focusedRowKey"),
+            focusedRowIndex = this.option("focusedRowIndex");
 
-        if(focusedRowKey && that.option("focusedRowEnabled")) {
-            dataController = that.getController("data");
+        if(focusedRowKey && this.option("focusedRowEnabled")) {
+            dataController = this.getController("data");
             row = dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
-            that.executeAction("onFocusedRowChanged", {
+            this.executeAction("onFocusedRowChanged", {
                 rowElement: $rowElement,
                 rowIndex: focusedRowIndex,
                 row: row

@@ -1,5 +1,5 @@
 var $ = require("jquery"),
-    imageCreator = require("client_exporter").image.creator,
+    imageCreator = require("exporter").image.creator,
     typeUtils = require("core/utils/type"),
     testingMarkupStart = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>",
     testingMarkupEnd = "</svg>",

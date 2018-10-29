@@ -6,9 +6,9 @@ import "generic_light.css!";
 import "ui/pivot_grid/ui.pivot_grid";
 
 import $ from "jquery";
-import { excel as excelCreator } from "client_exporter";
-import { __internals as internals } from "client_exporter/excel_creator";
-import excel_creator from "client_exporter/excel_creator";
+import { excel as excelCreator } from "exporter";
+import { __internals as internals } from "exporter/excel_creator";
+import excel_creator from "exporter/excel_creator";
 import JSZipMock from "../../helpers/jszipMock.js";
 
 const BASE_STYLE_XML1 = "<fonts count=\"2\"><font><sz val=\"11\" /><color theme=\"1\" /><name val=\"Calibri\" /><family val=\"2\" />" +

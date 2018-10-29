@@ -1,9 +1,9 @@
 var $ = require("jquery"),
     version = require("core/version"),
-    getData = require("client_exporter").pdf.getData,
-    pdfCreator = require("client_exporter/pdf_creator").__tests,
+    getData = require("exporter").pdf.getData,
+    pdfCreator = require("exporter/pdf_creator").__tests,
     isFunction = require("core/utils/type").isFunction,
-    imageCreator = require("client_exporter/image_creator").imageCreator;
+    imageCreator = require("exporter/image_creator").imageCreator;
 
 QUnit.module("PDF content test", {
     beforeEach: function() {

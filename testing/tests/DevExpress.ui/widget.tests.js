@@ -841,16 +841,17 @@ require("common.css!");
     });
 
     QUnit.test("external custom template should call onRendered method without templatesRenderAsynchronously", function(assert) {
-        var onRenderedHandler = sinon.spy(),
+        var templateRenderer = function() {
+                return this.name;
+            },
+            onRenderedHandler = sinon.spy(),
             testContainer = new TestContainer("#container", {
                 templatesRenderAsynchronously: false,
                 integrationOptions: {
                     templates: {
                         "testTemplate": {
                             name: "TestTemplate",
-                            render: function() {
-                                return this.name;
-                            }
+                            render: templateRenderer
                         }
                     }
                 },
@@ -863,6 +864,8 @@ require("common.css!");
         assert.equal(template.name, "TestTemplate", "template is correct");
         assert.equal(renderResult, "TestTemplate", "render method should have correct context");
         assert.equal(onRenderedHandler.callCount, 1, "onRendered has been called");
+
+        assert.equal(testContainer.option("integrationOptions.templates").testTemplate.render, templateRenderer, "template renderer is preserved");
     });
 
     QUnit.test("shared external template as script element", function(assert) {

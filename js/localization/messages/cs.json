@@ -68,9 +68,8 @@
 
         "dxRangeSlider-ariaFrom": "Od",
         "dxRangeSlider-ariaTill": "Do",
-
-        "dxSwitch-onText": "ZAP",
-        "dxSwitch-offText": "VYP",
+        "dxSwitch-switchedOnText": "ZAP",
+        "dxSwitch-switchedOffText": "VYP",
 
         "dxForm-optionalMark": "volitelný",
         "dxForm-requiredMessage": "{0} je vyžadováno",

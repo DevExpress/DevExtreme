@@ -1,6 +1,6 @@
 var $ = require("jquery"),
-    excelCreator = require("client_exporter").excel,
-    excelCreator = require("client_exporter").excel,
+    excelCreator = require("exporter").excel,
+    excelCreator = require("exporter").excel,
     coreLocalization = require("localization/core"),
     ExcelCreator = excelCreator.creator,
     internals = excelCreator.__internals,
@@ -263,7 +263,7 @@ QUnit.test("Cell formats generating by the 'getStyles' function result", functio
     ]);
     this.excelCreator._prepareStyleData();
 
-    const cellFormatsXml = this.excelCreator._xlsxFile.generateCellFormatsXml();
+    const cellFormatsXml = this.excelCreator._excelFile.generateCellFormatsXml();
     assert.equal(cellFormatsXml, expectedCellFormatsXml);
 });
 

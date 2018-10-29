@@ -733,13 +733,15 @@ var DataSource = Class.inherit({
         });
     },
 
-    _scheduleChangedCallbacks: function(deferred) {
-        var that = this;
+    _fireChanged: function(args) {
+        var date = new Date();
+        this.fireEvent("changed", args);
+        this._changedTime = new Date() - date;
+    },
 
-        deferred.done(function() {
-            var date = new Date();
-            that.fireEvent("changed");
-            that._changedTime = new Date() - date;
+    _scheduleChangedCallbacks: function(deferred) {
+        deferred.done(() => {
+            this._fireChanged();
         });
     },
 
@@ -855,7 +857,7 @@ var DataSource = Class.inherit({
             }
 
             arrayUtils.applyBatch(this.store(), items, dataSourceChanges, groupLevel, true);
-            this.fireEvent("changed", [{ changes: changes }]);
+            this._fireChanged([{ changes: changes }]);
         }
     },
 

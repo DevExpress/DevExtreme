@@ -1,7 +1,7 @@
-var fileSaver = require("./client_exporter/file_saver").fileSaver,
-    excelCreator = require("./client_exporter/excel_creator"),
-    imageCreator = require("./client_exporter/image_creator"),
-    svgCreator = require("./client_exporter/svg_creator"),
+var fileSaver = require("./exporter/file_saver").fileSaver,
+    excelCreator = require("./exporter/excel_creator"),
+    imageCreator = require("./exporter/image_creator"),
+    svgCreator = require("./exporter/svg_creator"),
     _isFunction = require("./core/utils/type").isFunction;
 
 exports.export = function(data, options, getData) {
@@ -41,7 +41,7 @@ exports.fileSaver = fileSaver;
 exports.excel = {
     creator: excelCreator.ExcelCreator,
     getData: excelCreator.getData,
-    formatConverter: require("./client_exporter/excel_format_converter")
+    formatConverter: require("./exporter/excel_format_converter")
 };
 ///#DEBUG
 exports.excel.__internals = excelCreator.__internals;
@@ -52,7 +52,7 @@ exports.image = {
     testFormats: imageCreator.testFormats
 };
 exports.pdf = {
-    getData: require("./client_exporter/pdf_creator").getData
+    getData: require("./exporter/pdf_creator").getData
 };
 exports.svg = {
     creator: svgCreator.svgCreator,

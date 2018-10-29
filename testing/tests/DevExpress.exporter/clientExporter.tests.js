@@ -1,4 +1,4 @@
-var clientExporter = require("client_exporter"),
+var clientExporter = require("exporter"),
     fileSaver = clientExporter.fileSaver;
 
 QUnit.module("Client exporter", {

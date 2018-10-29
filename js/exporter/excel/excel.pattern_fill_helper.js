@@ -1,17 +1,17 @@
 import { isDefined } from "../../core/utils/type";
-import xlsxTagHelper from './xlsx_tag_helper';
-import xlsxColorHelper from './xlsx_color_helper';
+import tagHelper from './excel.tag_helper';
+import colorHelper from './excel.color_helper';
 
-const xlsxPatternFillHelper = {
+const patternFillHelper = {
     tryCreateTag: function(sourceObj) {
         let result = null;
         if(isDefined(sourceObj)) {
             result = {
                 patternType: sourceObj.patternType,
-                backgroundColor: xlsxColorHelper.tryCreateTag(sourceObj.backgroundColor),
-                foregroundColor: xlsxColorHelper.tryCreateTag(sourceObj.foregroundColor),
+                backgroundColor: colorHelper.tryCreateTag(sourceObj.backgroundColor),
+                foregroundColor: colorHelper.tryCreateTag(sourceObj.foregroundColor),
             };
-            if(xlsxPatternFillHelper.isEmpty(result)) {
+            if(patternFillHelper.isEmpty(result)) {
                 result = null;
             }
         }
@@ -26,22 +26,22 @@ const xlsxPatternFillHelper = {
                 result.patternType = source.patternType;
             }
             if(source.backgroundColor !== undefined) {
-                result.backgroundColor = xlsxColorHelper.copy(source.backgroundColor);
+                result.backgroundColor = colorHelper.copy(source.backgroundColor);
             }
             if(source.foregroundColor !== undefined) {
-                result.foregroundColor = xlsxColorHelper.copy(source.foregroundColor);
+                result.foregroundColor = colorHelper.copy(source.foregroundColor);
             }
         }
         return result;
     },
 
     areEqual: function(leftTag, rightTag) {
-        return xlsxPatternFillHelper.isEmpty(leftTag) && xlsxPatternFillHelper.isEmpty(rightTag) ||
+        return patternFillHelper.isEmpty(leftTag) && patternFillHelper.isEmpty(rightTag) ||
             (
                 isDefined(leftTag) && isDefined(rightTag) &&
                 leftTag.patternType === rightTag.patternType &&
-                xlsxColorHelper.areEqual(leftTag.backgroundColor, rightTag.backgroundColor) &&
-                xlsxColorHelper.areEqual(leftTag.foregroundColor, rightTag.foregroundColor)
+                colorHelper.areEqual(leftTag.backgroundColor, rightTag.backgroundColor) &&
+                colorHelper.areEqual(leftTag.foregroundColor, rightTag.foregroundColor)
             );
     },
 
@@ -52,12 +52,12 @@ const xlsxPatternFillHelper = {
     toXml: function(tag) {
         const content =
             [
-                isDefined(tag.foregroundColor) ? xlsxColorHelper.toXml("fgColor", tag.foregroundColor) : '', // 18.8.19 fgColor (Foreground Color)
-                isDefined(tag.backgroundColor) ? xlsxColorHelper.toXml("bgColor", tag.backgroundColor) : '', // 18.8.3 bgColor (Background Color)
+                isDefined(tag.foregroundColor) ? colorHelper.toXml("fgColor", tag.foregroundColor) : '', // 18.8.19 fgColor (Foreground Color)
+                isDefined(tag.backgroundColor) ? colorHelper.toXml("bgColor", tag.backgroundColor) : '', // 18.8.3 bgColor (Background Color)
             ].join("");
 
         // §18.8.32 patternFill (Pattern), 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        return xlsxTagHelper.toXml(
+        return tagHelper.toXml(
             "patternFill",
             { patternType: tag.patternType }, // 18.18.55 ST_PatternType (Pattern Type)
             content
@@ -65,4 +65,4 @@ const xlsxPatternFillHelper = {
     }
 };
 
-export default xlsxPatternFillHelper;
+export default patternFillHelper;

@@ -1217,6 +1217,81 @@ QUnit.testInActiveWindow("Setting cancel in onFocusedRowChanging event args shou
     assert.equal(this.getController("keyboardNavigation").getVisibleRowIndex(), 4, "Focused row index is 5");
 });
 
+QUnit.testInActiveWindow("Focused row events should not fire if dataGrid is in loading phase", function(assert) {
+    var focusedRowChangingCount = 0,
+        focusedRowChangedCount = 0,
+        dataController,
+        keyboardController,
+        items = [
+            { name: "Alex", phone: "111111", room: 6 },
+            { name: "Dan", phone: "2222222", room: 5 },
+            { name: "Ben", phone: "333333", room: 4 },
+            { name: "Sean", phone: "4545454", room: 3 },
+            { name: "Smith", phone: "555555", room: 2 },
+            { name: "Zeb", phone: "6666666", room: 1 }
+        ];
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = {
+        load: function(options) {
+            var d = $.Deferred();
+            setTimeout(function() {
+                d.resolve({
+                    data: items.slice(options.skip, options.skip + options.take),
+                    totalCount: items.length
+                });
+            }, 10);
+            return d;
+        }
+    };
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        remoteOperations: true,
+        paging: {
+            pageSize: 2
+        },
+        onFocusedRowChanging: function(e) {
+            focusedRowChangingCount++;
+            if(!e.event && e.newRowIndex === e.prevRowIndex) {
+                dataController.pageIndex(dataController.pageIndex() + 1);
+            }
+        },
+        onFocusedRowChanged: function(e) {
+            ++focusedRowChangedCount;
+        }
+    };
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    dataController = this.getController("data");
+
+    this.clock.tick(10);
+
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = this.gridView.getView("rowsView");
+
+    // act
+    $(this.gridView.getView("rowsView").getRow(1).find("td").eq(0)).trigger("dxpointerdown").click();
+    keyboardController._upDownKeysHandler({ key: "downArrow" });
+    keyboardController._upDownKeysHandler({ key: "downArrow" });
+    keyboardController._upDownKeysHandler({ key: "downArrow" });
+    keyboardController._upDownKeysHandler({ key: "downArrow" });
+
+    // assert
+    assert.equal(focusedRowChangingCount, 2, "focusedRowChanging does not fired during loading");
+    assert.equal(focusedRowChangedCount, 1, "focusedRowChanged does not fired during loading");
+});
+
 QUnit.testInActiveWindow("onFocusedRowChanged event", function(assert) {
     // arrange
     var focusedRowChangedCount = 0;

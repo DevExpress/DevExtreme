@@ -1,7 +1,7 @@
 import { isDefined } from "../../core/utils/type";
-import xlsxTagHelper from './xlsx_tag_helper';
+import tagHelper from './excel.tag_helper';
 
-const xlsxNumberFormatHelper = {
+const numberFormatHelper = {
     ID_PROPERTY_NAME: 'id',
 
     tryCreateTag: function(sourceObj) {
@@ -9,7 +9,7 @@ const xlsxNumberFormatHelper = {
         if(typeof sourceObj === 'string') {
             result = { formatCode: sourceObj };
 
-            if(xlsxNumberFormatHelper.isEmpty(result)) {
+            if(numberFormatHelper.isEmpty(result)) {
                 result = null;
             }
         }
@@ -17,7 +17,7 @@ const xlsxNumberFormatHelper = {
     },
 
     areEqual: function(leftTag, rightTag) {
-        return xlsxNumberFormatHelper.isEmpty(leftTag) && xlsxNumberFormatHelper.isEmpty(rightTag) ||
+        return numberFormatHelper.isEmpty(leftTag) && numberFormatHelper.isEmpty(rightTag) ||
             (
                 isDefined(leftTag) && isDefined(rightTag) &&
                 leftTag.formatCode === rightTag.formatCode
@@ -30,14 +30,14 @@ const xlsxNumberFormatHelper = {
 
     toXml: function(tag) {
         // §18.8.30 numFmt (Number Format)
-        return xlsxTagHelper.toXml(
+        return tagHelper.toXml(
             "numFmt",
             {
-                'numFmtId': tag[xlsxNumberFormatHelper.ID_PROPERTY_NAME],
+                'numFmtId': tag[numberFormatHelper.ID_PROPERTY_NAME],
                 formatCode: tag.formatCode // §21.2.2.71 formatCode (Format Code), §18.8.31 numFmts (Number Formats)
             }
         );
     }
 };
 
-export default xlsxNumberFormatHelper;
+export default numberFormatHelper;
