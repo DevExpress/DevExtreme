@@ -155,6 +155,36 @@ QUnit.test("searchValue from value to empty - update selection", function(assert
     assert.equal($items.length, 6, "6 items were rendered after filtration");
 });
 
+QUnit.test("Should recalculate selection after 'searchValue' changing", function(assert) {
+    var treeView = initTree({
+            searchValue: "b",
+            showCheckBoxesMode: "normal",
+            items: [{
+                id: "all",
+                text: "all",
+                items: [
+                    { id: "b", text: "b" },
+                    { id: "c", text: "c" }
+                ]
+            }]
+        }).dxTreeView("instance"),
+        $treeView = $(treeView.$element());
+
+    var checkSelection = function(isFirstItemSelected, isSecondItemSelected) {
+        var $items = $treeView.find(".dx-treeview-item"),
+            $checkboxes = $treeView.find(".dx-checkbox");
+
+        assert.strictEqual($items.length, 2, "2 items were rendered");
+        assert.strictEqual($checkboxes.eq(0).dxCheckBox("instance").option("value"), isFirstItemSelected);
+        assert.strictEqual($checkboxes.eq(1).dxCheckBox("instance").option("value"), isSecondItemSelected);
+    };
+
+    $treeView.find(".dx-checkbox").eq(1).trigger("dxclick");
+    checkSelection(true, true);
+    treeView.option("searchValue", "c");
+    checkSelection(false, false);
+});
+
 QUnit.test("searchValue - cut value - update selection", function(assert) {
     var data = $.extend(true, [], DATA[6]);
 
