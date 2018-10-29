@@ -372,16 +372,18 @@ var Widget = DOMComponent.inherit({
     },
 
     _renderIntegrationTemplate: function(templateSource) {
-        var integrationTemplate = this.option("integrationOptions.templates")[templateSource],
-            isAsyncTemplate = this.option("templatesRenderAsynchronously");
+        let integrationTemplate = this.option("integrationOptions.templates")[templateSource];
 
         if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
-            var render = integrationTemplate.render.bind(integrationTemplate);
-            integrationTemplate.render = function(options) {
-                var templateResult = render(options);
-                options.onRendered && !isAsyncTemplate && options.onRendered();
-                return templateResult;
-            };
+            const isAsyncTemplate = this.option("templatesRenderAsynchronously");
+            const render = integrationTemplate.render.bind(integrationTemplate);
+            integrationTemplate = extend({}, integrationTemplate, {
+                render(options) {
+                    const templateResult = render(options);
+                    options.onRendered && !isAsyncTemplate && options.onRendered();
+                    return templateResult;
+                }
+            });
         }
 
         return integrationTemplate;
