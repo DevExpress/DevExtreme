@@ -243,14 +243,15 @@ var ExcelCreator = Class.inherit({
 
             for(cellIndex = 0; cellIndex !== cellsLength; cellIndex++) {
                 cellData = that._prepareValue(rowIndex, cellIndex);
-                let cellStyleId = this._styleIdToRegisteredStyleIdMap[dataProvider.getStyleId(rowIndex, cellIndex)];
+                const styleArrayIndex = dataProvider.getStyleId(rowIndex, cellIndex);
+                let cellStyleId = this._styleArrayIndexToStyleIdMap[styleArrayIndex];
                 if(dataProvider.hasCustomizeExcelCell && dataProvider.hasCustomizeExcelCell()) {
                     const value = cellData.sourceValue || cellData.value;
                     const modifiedExcelCell = this._callCustomizeExcelCell({
                         dataProvider: dataProvider,
                         value: value,
                         dataType: cellData.type,
-                        style: that._styleArray[cellStyleId],
+                        style: that._styleArray[styleArrayIndex],
                         sourceData: cellData.cellSourceData,
                     });
 
@@ -331,7 +332,7 @@ var ExcelCreator = Class.inherit({
                 }
             });
         });
-        that._styleIdToRegisteredStyleIdMap = that._styleArray.map(item => this._excelFile.registerCellFormat(item));
+        that._styleArrayIndexToStyleIdMap = that._styleArray.map(item => this._excelFile.registerCellFormat(item));
     },
 
     _prepareCellData: function() {

@@ -783,6 +783,30 @@ QUnit.test("Check default number format for Date column", function(assert) {
     );
 });
 
+QUnit.test("Check default number format for [Number|Number|Date] columns", function(assert) {
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: 'f1', dataType: 'number' },
+                { dataField: 'f2', dataType: 'number' },
+                { dataField: 'f3', dataType: 'date' },
+            ],
+            dataSource: [{ f1: 41, f2: 42, f3: new Date(2019, 0, 1) }],
+            showColumnHeaders: false,
+            export: {
+                customizeExcelCell: e => {
+                    if(e.gridCell.column.dataField === 'f1' || e.gridCell.column.dataField === 'f2') {
+                        assert.strictEqual(e.numberFormat, 0);
+                    } else {
+                        assert.strictEqual(e.numberFormat, '[$-9]M\\/d\\/yyyy');
+                    }
+                }
+            },
+        }
+    );
+});
+
 QUnit.test("Check e.gridCell for data cells", function(assert) {
     const configurations = [
         { dataType: "number", values: [undefined, null, 0, 1] },
