@@ -1432,6 +1432,20 @@ declare module DevExpress.data {
         wordWrapEnabled?: boolean;
     }
 }
+declare module DevExpress.core {
+    /** A mixin that provides a capability to fire and subscribe to events. */
+    export class EventsMixin {
+        /** Detaches all event handlers from a single event. */
+        off(eventName: string): this;
+        /** Detaches a particular event handler from a single event. */
+        off(eventName: string, eventHandler: Function): this;
+        /** Subscribes to an event. */
+        on(eventName: string, eventHandler: Function): this;
+        /** Subscribes to events. */
+        on(events: any): this;
+    }
+    export type dxElement = Element & JQuery;
+}
 declare module DevExpress.exporter {
     /** An object that configures the font in an Excel cell. */
     export interface ExcelFont {
@@ -1461,20 +1475,6 @@ declare module DevExpress.exporter {
         /** The cell's value. */
         value?: any;
     }
-}
-declare module DevExpress.core {
-    /** A mixin that provides a capability to fire and subscribe to events. */
-    export class EventsMixin {
-        /** Detaches all event handlers from a single event. */
-        off(eventName: string): this;
-        /** Detaches a particular event handler from a single event. */
-        off(eventName: string, eventHandler: Function): this;
-        /** Subscribes to an event. */
-        on(eventName: string, eventHandler: Function): this;
-        /** Subscribes to events. */
-        on(events: any): this;
-    }
-    export type dxElement = Element & JQuery;
 }
 declare module DevExpress.framework {
     /** @deprecated #include spa-deprecated-note */
@@ -4049,10 +4049,12 @@ declare module DevExpress.ui {
         /** The value to be assigned to the `name` attribute of the underlying HTML element. */
         name?: string;
         /** @deprecated Use the switchedOffText option instead. */
-        offText?: any;
+        offText?: string;
         /** @deprecated Use the switchedOnText option instead. */
-        onText?: any;
+        onText?: string;
+        /** Specifies the text displayed when the widget is switched off. */
         switchedOffText?: string;
+        /** Specifies the text displayed when the widget is switched on. */
         switchedOnText?: string;
         /** A Boolean value specifying whether the current switch state is "On" or "Off". */
         value?: boolean;
