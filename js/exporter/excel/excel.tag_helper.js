@@ -1,6 +1,6 @@
 import { isDefined } from '../../core/utils/type';
 
-const xlsxTagHelper = {
+const tagHelper = {
     toXml: function(tagName, attributes, content) {
         var result = ['<', tagName];
 
@@ -21,4 +21,4 @@ const xlsxTagHelper = {
     }
 };
 
-export default xlsxTagHelper;
+export default tagHelper;

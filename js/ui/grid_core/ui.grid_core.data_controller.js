@@ -740,9 +740,14 @@ module.exports = {
                                 columnIndices.push(columnIndex);
                             } else {
                                 var cell = oldItem.cells && oldItem.cells[columnIndex];
-                                cell && cell.update && cell.update();
+                                if(cell && cell.update) {
+                                    cell.update(newItem);
+                                }
                             }
                         }
+
+                        oldItem.update && oldItem.update(newItem);
+
                         return columnIndices;
                     }
                 },
@@ -757,7 +762,8 @@ module.exports = {
                         if(row) {
                             return row.rowType + "," + JSON.stringify(row.key);
                         }
-                    };
+                    }
+
                     function isItemEquals(item1, item2) {
                         if(JSON.stringify(item1.values) !== JSON.stringify(item2.values)) {
                             return false;
@@ -773,19 +779,23 @@ module.exports = {
                             }
                         }
 
-                        if(item1 && item1.cells) {
+                        if(item1.cells) {
+                            item1.update && item1.update(item2);
                             item1.cells.forEach(function(cell) {
-                                cell && cell.update && cell.update();
+                                if(cell && cell.update) {
+                                    cell.update(item2);
+                                }
                             });
                         }
 
                         return true;
-                    };
+                    }
 
                     var oldItems = this._items.slice();
                     change.items.forEach(function(item, index) {
                         var key = getRowKey(item);
                         newIndexByKey[key] = index;
+                        item.rowIndex = index;
                     });
 
                     var result = findChanges(oldItems, change.items, getRowKey, isItemEquals);
@@ -800,14 +810,16 @@ module.exports = {
                             case "update":
                                 let index = change.index,
                                     newItem = change.data,
-                                    oldItem = change.oldItem;
+                                    oldItem = change.oldItem,
+                                    currentColumnIndices = this._getChangedColumnIndices(oldItem, newItem, index, true);
+
                                 rowIndices.push(index);
                                 changeTypes.push("update");
                                 items.push(newItem);
                                 this._items[index] = newItem;
                                 newItem.cells = oldItem.cells;
                                 newItem.oldValues = oldItem.values;
-                                columnIndices.push(this._getChangedColumnIndices(oldItem, newItem, index, true));
+                                columnIndices.push(currentColumnIndices);
                                 break;
                             case "insert":
                                 rowIndices.push(change.index);

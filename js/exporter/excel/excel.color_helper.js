@@ -1,7 +1,7 @@
 import { isDefined } from "../../core/utils/type";
-import xlsxTagHelper from './xlsx_tag_helper';
+import tagHelper from './excel.tag_helper';
 
-const xlsxColorHelper = {
+const colorHelper = {
     _tryConvertColor: function(source) {
         if(typeof source !== 'string') {
             return source;
@@ -36,7 +36,7 @@ const xlsxColorHelper = {
                     theme: sourceObj.theme,
                 };
             }
-            if(xlsxColorHelper.isEmpty(result)) {
+            if(colorHelper.isEmpty(result)) {
                 result = null;
             }
         }
@@ -68,7 +68,7 @@ const xlsxColorHelper = {
     },
 
     areEqual: function(leftTag, rightTag) {
-        return xlsxColorHelper.isEmpty(leftTag) && xlsxColorHelper.isEmpty(rightTag) ||
+        return colorHelper.isEmpty(leftTag) && colorHelper.isEmpty(rightTag) ||
             (
                 isDefined(leftTag) && isDefined(rightTag) &&
                 leftTag.rgb === rightTag.rgb &&
@@ -78,7 +78,7 @@ const xlsxColorHelper = {
 
     toXml: function(tagName, tag) {
         // 'CT_Color', 'ECMA-376 5th edition Part 1' (http://www.ecma-international.org/publications/standards/Ecma-376.htm)
-        return xlsxTagHelper.toXml(tagName,
+        return tagHelper.toXml(tagName,
             {
                 rgb: tag.rgb,
                 theme: tag.theme
@@ -86,4 +86,4 @@ const xlsxColorHelper = {
     },
 };
 
-export default xlsxColorHelper;
+export default colorHelper;

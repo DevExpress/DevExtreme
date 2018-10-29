@@ -52,6 +52,8 @@ var Form = Widget.inherit({
         this._cachedColCountOptions = [];
         this._instanceStorage = new InstanceStorage();
         this._groupsColCount = [];
+
+        this._attachSyncSubscriptions();
     },
 
     _initOptions: function(options) {
@@ -827,7 +829,6 @@ var Form = Widget.inherit({
         this._renderLayout();
         this._renderValidationSummary();
 
-        this._attachSyncSubscriptions();
         this._cachedScreenFactor = this._getCurrentScreenFactor();
     },
 
@@ -1148,32 +1149,32 @@ var Form = Widget.inherit({
 
     _attachSyncSubscriptions: function() {
         var that = this;
-        that.off("optionChanged")
-            .on("optionChanged", function(args) {
-                var optionFullName = args.fullName;
 
-                if(optionFullName === "formData") {
-                    if(!typeUtils.isDefined(args.value)) {
-                        that._options.formData = args.value = {};
+        that.on("optionChanged", function(args) {
+            var optionFullName = args.fullName;
+
+            if(optionFullName === "formData") {
+                if(!typeUtils.isDefined(args.value)) {
+                    that._options.formData = args.value = {};
+                }
+
+                that._triggerOnFieldDataChangedByDataSet(args.value);
+            }
+
+            if(that._cachedLayoutManagers.length) {
+                each(that._cachedLayoutManagers, function(index, layoutManager) {
+                    if(optionFullName === "formData") {
+                        that._isDataUpdating = true;
+                        layoutManager.option("layoutData", args.value);
+                        that._isDataUpdating = false;
                     }
 
-                    that._triggerOnFieldDataChangedByDataSet(args.value);
-                }
-
-                if(that._cachedLayoutManagers.length) {
-                    each(that._cachedLayoutManagers, function(index, layoutManager) {
-                        if(optionFullName === "formData") {
-                            that._isDataUpdating = true;
-                            layoutManager.option("layoutData", args.value);
-                            that._isDataUpdating = false;
-                        }
-
-                        if(args.name === "readOnly" || args.name === "disabled") {
-                            layoutManager.option(optionFullName, args.value);
-                        }
-                    });
-                }
-            });
+                    if(args.name === "readOnly" || args.name === "disabled") {
+                        layoutManager.option(optionFullName, args.value);
+                    }
+                });
+            }
+        });
     },
 
     _optionChanged: function(args) {

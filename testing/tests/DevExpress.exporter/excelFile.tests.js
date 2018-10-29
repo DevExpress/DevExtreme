@@ -1,5 +1,5 @@
 import typeUtils from "core/utils/type";
-import XlsxFile from 'client_exporter/xlsx/xlsx_file';
+import ExcelFile from 'exporter/excel/excel.file';
 
 function getExpectedFillsXml(expectedFillXmlArray) {
     if(!typeUtils.isDefined(expectedFillXmlArray)) {
@@ -12,17 +12,17 @@ function getExpectedFillsXml(expectedFillXmlArray) {
     }
 }
 
-function getFullXml(xlsxFile) {
-    return xlsxFile.generateCellFormatsXml() + xlsxFile.generateFillsXml() + xlsxFile.generateFontsXml() + xlsxFile.generateNumberFormatsXml();
+function getFullXml(excelFile) {
+    return excelFile.generateCellFormatsXml() + excelFile.generateFillsXml() + excelFile.generateFontsXml() + excelFile.generateNumberFormatsXml();
 }
 
 QUnit.test("Empty 1", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(getFullXml(file), '<cellXfs count="0" />' + getExpectedFillsXml() + '<fonts count="0" />');
 });
 
 QUnit.test("Empty 2", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat(), undefined);
     assert.equal(file.registerCellFormat(null), undefined);
     assert.equal(file.registerCellFormat(undefined), undefined);
@@ -32,14 +32,14 @@ QUnit.test("Empty 2", function(assert) {
 });
 
 QUnit.test("Copy empty", function(assert) {
-    assert.strictEqual(XlsxFile.copyCellFormat(null), null);
-    assert.strictEqual(XlsxFile.copyCellFormat(undefined), undefined);
+    assert.strictEqual(ExcelFile.copyCellFormat(null), null);
+    assert.strictEqual(ExcelFile.copyCellFormat(undefined), undefined);
 
-    assert.propEqual(XlsxFile.copyCellFormat({}), {});
+    assert.propEqual(ExcelFile.copyCellFormat({}), {});
 });
 
 QUnit.test("Empty numberFormat", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ numberFormat: undefined }), undefined);
     assert.equal(file.registerCellFormat({ numberFormat: null }), undefined);
     assert.equal(file.registerCellFormat({ numberFormat: { objectIsNotSupported: 'a' } }), undefined);
@@ -48,7 +48,7 @@ QUnit.test("Empty numberFormat", function(assert) {
 });
 
 QUnit.test("Various numberFormat as identifiers of predefined formats", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ numberFormat: 0 }), 0);
     assert.equal(file.registerCellFormat({ numberFormat: 0 }), 0);
     assert.equal(file.registerCellFormat({ numberFormat: 1 }), 1);
@@ -65,7 +65,7 @@ QUnit.test("Various numberFormat as identifiers of predefined formats", function
 });
 
 QUnit.test("Various numberFormat as custom format", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ numberFormat: 0 }), 0);
     assert.equal(file.registerCellFormat({ numberFormat: 0 }), 0);
     assert.equal(file.registerCellFormat({ numberFormat: 81 }), 1);
@@ -85,20 +85,20 @@ QUnit.test("Various numberFormat as custom format", function(assert) {
 });
 
 QUnit.test("Copy numberFormat", function(assert) {
-    assert.propEqual(XlsxFile.copyCellFormat({ numberFormat: undefined }), {});
-    assert.propEqual(XlsxFile.copyCellFormat({ numberFormat: null }), { numberFormat: null });
-    assert.propEqual(XlsxFile.copyCellFormat({ numberFormat: 0 }), { numberFormat: 0 });
-    assert.propEqual(XlsxFile.copyCellFormat({ numberFormat: '0' }), { numberFormat: '0' });
+    assert.propEqual(ExcelFile.copyCellFormat({ numberFormat: undefined }), {});
+    assert.propEqual(ExcelFile.copyCellFormat({ numberFormat: null }), { numberFormat: null });
+    assert.propEqual(ExcelFile.copyCellFormat({ numberFormat: 0 }), { numberFormat: 0 });
+    assert.propEqual(ExcelFile.copyCellFormat({ numberFormat: '0' }), { numberFormat: '0' });
 
     const format = { numberFormat: '0' };
-    const format_ = XlsxFile.copyCellFormat(format);
+    const format_ = ExcelFile.copyCellFormat(format);
     format_.numberFormat = '1';
     assert.propEqual(format, { numberFormat: '0' });
     assert.propEqual(format_, { numberFormat: '1' });
 });
 
 QUnit.test("Empty alignments", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ alignment: undefined }), undefined);
     assert.equal(file.registerCellFormat({ alignment: null }), undefined);
     assert.equal(file.registerCellFormat({ alignment: { vertical: undefined, wrapText: undefined, horizontal: undefined } }), undefined);
@@ -108,7 +108,7 @@ QUnit.test("Empty alignments", function(assert) {
 });
 
 QUnit.test("Various alignments", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ alignment: { vertical: 'top' } }), 0);
     assert.equal(file.registerCellFormat({ alignment: { vertical: 'top' } }), 0);
     assert.equal(file.registerCellFormat({ alignment: { vertical: 'bottom' } }), 1);
@@ -132,23 +132,23 @@ QUnit.test("Various alignments", function(assert) {
 });
 
 QUnit.test("Copy alignment", function(assert) {
-    assert.propEqual(XlsxFile.copyCellFormat({ alignment: undefined }), {});
-    assert.propEqual(XlsxFile.copyCellFormat({ alignment: null }), { alignment: null });
+    assert.propEqual(ExcelFile.copyCellFormat({ alignment: undefined }), {});
+    assert.propEqual(ExcelFile.copyCellFormat({ alignment: null }), { alignment: null });
 
-    assert.propEqual(XlsxFile.copyCellFormat({ alignment: { vertical: undefined } }), { alignment: {} });
-    assert.propEqual(XlsxFile.copyCellFormat({ alignment: { vertical: null } }), { alignment: { vertical: null } });
-    assert.propEqual(XlsxFile.copyCellFormat({ alignment: { vertical: 'bottom' } }), { alignment: { vertical: 'bottom' } });
+    assert.propEqual(ExcelFile.copyCellFormat({ alignment: { vertical: undefined } }), { alignment: {} });
+    assert.propEqual(ExcelFile.copyCellFormat({ alignment: { vertical: null } }), { alignment: { vertical: null } });
+    assert.propEqual(ExcelFile.copyCellFormat({ alignment: { vertical: 'bottom' } }), { alignment: { vertical: 'bottom' } });
 
-    assert.propEqual(XlsxFile.copyCellFormat({ alignment: { wrapText: undefined } }), { alignment: {} });
-    assert.propEqual(XlsxFile.copyCellFormat({ alignment: { wrapText: null } }), { alignment: { wrapText: null } });
-    assert.propEqual(XlsxFile.copyCellFormat({ alignment: { wrapText: true } }), { alignment: { wrapText: true } });
+    assert.propEqual(ExcelFile.copyCellFormat({ alignment: { wrapText: undefined } }), { alignment: {} });
+    assert.propEqual(ExcelFile.copyCellFormat({ alignment: { wrapText: null } }), { alignment: { wrapText: null } });
+    assert.propEqual(ExcelFile.copyCellFormat({ alignment: { wrapText: true } }), { alignment: { wrapText: true } });
 
-    assert.propEqual(XlsxFile.copyCellFormat({ alignment: { horizontal: undefined } }), { alignment: {} });
-    assert.propEqual(XlsxFile.copyCellFormat({ alignment: { horizontal: null } }), { alignment: { horizontal: null } });
-    assert.propEqual(XlsxFile.copyCellFormat({ alignment: { horizontal: 'bottom' } }), { alignment: { horizontal: 'bottom' } });
+    assert.propEqual(ExcelFile.copyCellFormat({ alignment: { horizontal: undefined } }), { alignment: {} });
+    assert.propEqual(ExcelFile.copyCellFormat({ alignment: { horizontal: null } }), { alignment: { horizontal: null } });
+    assert.propEqual(ExcelFile.copyCellFormat({ alignment: { horizontal: 'bottom' } }), { alignment: { horizontal: 'bottom' } });
 
     const format = { alignment: { horizontal: '1', vertical: '2', wrapText: '3' } };
-    const format_ = XlsxFile.copyCellFormat(format);
+    const format_ = ExcelFile.copyCellFormat(format);
     format_.alignment.horizontal = '1_';
     format_.alignment.vertical = '2_';
     format_.alignment.wrapText = '3_';
@@ -157,7 +157,7 @@ QUnit.test("Copy alignment", function(assert) {
 });
 
 QUnit.test("Empty fills (OOXML format)", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ fill: undefined }), undefined);
     assert.equal(file.registerCellFormat({ fill: null }), undefined);
     assert.equal(file.registerCellFormat({ fill: { notSupported: 0 } }), undefined);
@@ -182,14 +182,14 @@ QUnit.test("Empty fills (OOXML format)", function(assert) {
 });
 
 QUnit.test("Empty fills (simple format)", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternType: null }), undefined);
     assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: 'fcolor_1', fillPatternType: null }), undefined);
     assert.equal(file.registerCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternType: 'type_1' }), undefined);
 });
 
 QUnit.test("Various fills (OOXML format)", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1' } } }), 0);
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1' } } }), 0);
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: undefined } } }), 0);
@@ -247,7 +247,7 @@ QUnit.test("Various fills (OOXML format)", function(assert) {
 });
 
 QUnit.test("Various fills (simple format)", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ backgroundColor: 'b1' }), 0, 'b1');
     assert.equal(file.registerCellFormat({ backgroundColor: 'b1' }), 0, 'b1_');
     assert.equal(file.registerCellFormat({ backgroundColor: 'b1', fillPatternColor: null, fillPatternType: 's1' }), 0, 'b1 null s1');
@@ -285,34 +285,34 @@ QUnit.test("Various fills (simple format)", function(assert) {
 });
 
 QUnit.test("Copy fills (OOXML format)", function(assert) {
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: undefined }), {});
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: null }), { fill: null });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: {} }), { fill: {} });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: undefined } }), { fill: {} });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: null } }), { fill: { patternFill: null } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { patternType: undefined } } }), { fill: { patternFill: {} } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { patternType: null } } }), { fill: { patternFill: { patternType: null } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { backgroundColor: undefined } } }), { fill: { patternFill: {} } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { backgroundColor: null } } }), { fill: { patternFill: { backgroundColor: null } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { backgroundColor: { rgb: undefined } } } }), { fill: { patternFill: { backgroundColor: {} } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { backgroundColor: { rgb: null } } } }), { fill: { patternFill: { backgroundColor: { rgb: null } } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { backgroundColor: { theme: undefined } } } }), { fill: { patternFill: { backgroundColor: {} } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { backgroundColor: { theme: null } } } }), { fill: { patternFill: { backgroundColor: { theme: null } } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: undefined }), {});
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: null }), { fill: null });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: {} }), { fill: {} });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: undefined } }), { fill: {} });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: null } }), { fill: { patternFill: null } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { patternType: undefined } } }), { fill: { patternFill: {} } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { patternType: null } } }), { fill: { patternFill: { patternType: null } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { backgroundColor: undefined } } }), { fill: { patternFill: {} } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { backgroundColor: null } } }), { fill: { patternFill: { backgroundColor: null } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { backgroundColor: { rgb: undefined } } } }), { fill: { patternFill: { backgroundColor: {} } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { backgroundColor: { rgb: null } } } }), { fill: { patternFill: { backgroundColor: { rgb: null } } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { backgroundColor: { theme: undefined } } } }), { fill: { patternFill: { backgroundColor: {} } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { backgroundColor: { theme: null } } } }), { fill: { patternFill: { backgroundColor: { theme: null } } } });
 
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { foregroundColor: undefined } } }), { fill: { patternFill: {} } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { foregroundColor: null } } }), { fill: { patternFill: { foregroundColor: null } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { foregroundColor: { rgb: undefined } } } }), { fill: { patternFill: { foregroundColor: {} } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { foregroundColor: { rgb: null } } } }), { fill: { patternFill: { foregroundColor: { rgb: null } } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { foregroundColor: { theme: undefined } } } }), { fill: { patternFill: { foregroundColor: {} } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { foregroundColor: { theme: null } } } }), { fill: { patternFill: { foregroundColor: { theme: null } } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { foregroundColor: undefined } } }), { fill: { patternFill: {} } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { foregroundColor: null } } }), { fill: { patternFill: { foregroundColor: null } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { foregroundColor: { rgb: undefined } } } }), { fill: { patternFill: { foregroundColor: {} } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { foregroundColor: { rgb: null } } } }), { fill: { patternFill: { foregroundColor: { rgb: null } } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { foregroundColor: { theme: undefined } } } }), { fill: { patternFill: { foregroundColor: {} } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { foregroundColor: { theme: null } } } }), { fill: { patternFill: { foregroundColor: { theme: null } } } });
 
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { patternType: '1' } } }), { fill: { patternFill: { patternType: '1' } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: { rgb: undefined } } } }), { fill: { patternFill: { patternType: '1', backgroundColor: {} } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: { rgb: '1' } } } }), { fill: { patternFill: { patternType: '1', backgroundColor: { rgb: '1' } } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ fill: { patternFill: { patternType: '1', foregroundColor: { rgb: '1', theme: '2' } } } }), { fill: { patternFill: { patternType: '1', foregroundColor: { rgb: '1', theme: '2' } } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { patternType: '1' } } }), { fill: { patternFill: { patternType: '1' } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: { rgb: undefined } } } }), { fill: { patternFill: { patternType: '1', backgroundColor: {} } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: { rgb: '1' } } } }), { fill: { patternFill: { patternType: '1', backgroundColor: { rgb: '1' } } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ fill: { patternFill: { patternType: '1', foregroundColor: { rgb: '1', theme: '2' } } } }), { fill: { patternFill: { patternType: '1', foregroundColor: { rgb: '1', theme: '2' } } } });
 
     const format = { fill: { patternFill: { patternType: '1', foregroundColor: { rgb: '1', theme: '1' } } } };
-    const format_ = XlsxFile.copyCellFormat(format);
+    const format_ = ExcelFile.copyCellFormat(format);
     format_.fill.patternFill.foregroundColor.rgb = '1_';
     format_.fill.patternFill.foregroundColor.theme = '1_';
     format_.fill.patternFill.foregroundColor = null;
@@ -323,12 +323,12 @@ QUnit.test("Copy fills (OOXML format)", function(assert) {
 });
 
 QUnit.test("Copy fills (simple format)", function(assert) {
-    assert.propEqual(XlsxFile.copyCellFormat({ backgroundColor: undefined, fillPatternColor: undefined, fillPatternType: undefined }), {});
-    assert.propEqual(XlsxFile.copyCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternType: null }), { backgroundColor: null, fillPatternColor: null, fillPatternType: null });
-    assert.propEqual(XlsxFile.copyCellFormat({ backgroundColor: '1', fillPatternColor: '2', fillPatternType: '3' }), { backgroundColor: '1', fillPatternColor: '2', fillPatternType: '3' });
+    assert.propEqual(ExcelFile.copyCellFormat({ backgroundColor: undefined, fillPatternColor: undefined, fillPatternType: undefined }), {});
+    assert.propEqual(ExcelFile.copyCellFormat({ backgroundColor: null, fillPatternColor: null, fillPatternType: null }), { backgroundColor: null, fillPatternColor: null, fillPatternType: null });
+    assert.propEqual(ExcelFile.copyCellFormat({ backgroundColor: '1', fillPatternColor: '2', fillPatternType: '3' }), { backgroundColor: '1', fillPatternColor: '2', fillPatternType: '3' });
 
     const format = { backgroundColor: '1', fillPatternColor: '2', fillPatternType: '3' };
-    const format_ = XlsxFile.copyCellFormat(format);
+    const format_ = ExcelFile.copyCellFormat(format);
     format_.backgroundColor = '1_';
     format_.fillPatternColor = '2_';
     format_.fillPatternType = '3_';
@@ -336,7 +336,7 @@ QUnit.test("Copy fills (simple format)", function(assert) {
 });
 
 QUnit.test("Fills with empty subitems", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: {}, foregroundColor: {} } } }), 0);
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: { rgb: '1' }, foregroundColor: {} } } }), 1);
     assert.equal(file.registerCellFormat({ fill: { patternFill: { patternType: '1', backgroundColor: {}, foregroundColor: { rgb: '1' } } } }), 2);
@@ -356,7 +356,7 @@ QUnit.test("Fills with empty subitems", function(assert) {
 });
 
 QUnit.test("Passed fills should be copied", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     const format1 = { fill: { patternFill: { patternType: '1', backgroundColor: { rgb: '1', theme: '1' }, foregroundColor: { rgb: '1', theme: '1' } } } };
     file.registerCellFormat(format1);
     format1.fill.patternFill.backgroundColor.rgb = '2';
@@ -381,7 +381,7 @@ QUnit.test("Passed fills should be copied", function(assert) {
 });
 
 QUnit.test("Empty fonts", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ font: undefined }), undefined);
     assert.equal(file.registerCellFormat({ font: null }), undefined);
     assert.equal(file.registerCellFormat({ font: { notSupported: 'a' } }), undefined);
@@ -398,7 +398,7 @@ QUnit.test("Empty fonts", function(assert) {
 });
 
 QUnit.test("Various fonts", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ font: { bold: true } }), 0);
     assert.equal(file.registerCellFormat({ font: { bold: true } }), 0);
     assert.equal(file.registerCellFormat({ font: { size: 10 } }), 1);
@@ -473,16 +473,16 @@ QUnit.test("Various fonts", function(assert) {
 });
 
 QUnit.test("Copy fonts (ARGB color)", function(assert) {
-    assert.propEqual(XlsxFile.copyCellFormat({ font: undefined }), {});
-    assert.propEqual(XlsxFile.copyCellFormat({ font: null }), { font: null });
-    assert.propEqual(XlsxFile.copyCellFormat({ font: {} }), { font: {} });
-    assert.propEqual(XlsxFile.copyCellFormat({ font: { bold: undefined, italic: undefined, color: { rgb: undefined } } }), { font: { color: {} } });
+    assert.propEqual(ExcelFile.copyCellFormat({ font: undefined }), {});
+    assert.propEqual(ExcelFile.copyCellFormat({ font: null }), { font: null });
+    assert.propEqual(ExcelFile.copyCellFormat({ font: {} }), { font: {} });
+    assert.propEqual(ExcelFile.copyCellFormat({ font: { bold: undefined, italic: undefined, color: { rgb: undefined } } }), { font: { color: {} } });
 
-    assert.propEqual(XlsxFile.copyCellFormat({ font: { bold: '1', italic: '2', color: { rgb: '3', theme: '4' } } }), { font: { bold: '1', italic: '2', color: { rgb: '3', theme: '4' } } });
-    assert.propEqual(XlsxFile.copyCellFormat({ font: { bold: '1', italic: '2', color: '1' } }), { font: { bold: '1', italic: '2', color: '1' } });
+    assert.propEqual(ExcelFile.copyCellFormat({ font: { bold: '1', italic: '2', color: { rgb: '3', theme: '4' } } }), { font: { bold: '1', italic: '2', color: { rgb: '3', theme: '4' } } });
+    assert.propEqual(ExcelFile.copyCellFormat({ font: { bold: '1', italic: '2', color: '1' } }), { font: { bold: '1', italic: '2', color: '1' } });
 
     const format = { font: { bold: '1', italic: '2', color: { rgb: '3', theme: '4' } } };
-    const format_ = XlsxFile.copyCellFormat(format);
+    const format_ = ExcelFile.copyCellFormat(format);
     format_.font.bold = '1_';
     format_.font.italic = '2_';
     format_.font.color.rgb = '3_';
@@ -493,7 +493,7 @@ QUnit.test("Copy fonts (ARGB color)", function(assert) {
 });
 
 QUnit.test("Fonts with empty subitems", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     assert.equal(file.registerCellFormat({ font: { size: 10, color: { } } }), 0);
 
     assert.equal(getFullXml(file),
@@ -507,7 +507,7 @@ QUnit.test("Fonts with empty subitems", function(assert) {
 });
 
 QUnit.test("Passed fonts should be copied", function(assert) {
-    const file = new XlsxFile();
+    const file = new ExcelFile();
     const format1 = { font: { size: 1, color: { rgb: '1' } } };
     file.registerCellFormat(format1);
     format1.font.color.rgb = '2';

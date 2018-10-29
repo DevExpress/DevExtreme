@@ -2602,3 +2602,35 @@ QUnit.test("Form redraw layout when colCount is 'auto' and an calculated colCoun
     // assert
     assert.equal(refreshSpy.callCount, 1, "form has been redraw layout");
 });
+
+
+QUnit.module("Events");
+
+QUnit.test("Should not skip `optionChanged` event handler that has been added on the `onInitialized` event handler", function(assert) {
+    var eventCalls = [];
+
+    var form = $("#form").dxForm({
+        formData: { firstName: "John" },
+        onOptionChanged: function() {
+            eventCalls.push("onOptionChanged");
+        },
+        onContentReady: function(e) {
+            e.component.on("optionChanged", function() {
+                eventCalls.push("optionChanged from `onContentReady`");
+            });
+        },
+        onInitialized: function(e) {
+            e.component.on('optionChanged', function() {
+                eventCalls.push("optionChanged from `onInitialized`");
+            });
+        }
+    }).dxForm("instance");
+
+    form.option("formData", { lastName: "John" });
+
+    assert.deepEqual(eventCalls, [
+        "optionChanged from `onInitialized`",
+        "optionChanged from `onContentReady`",
+        "onOptionChanged"
+    ]);
+});
