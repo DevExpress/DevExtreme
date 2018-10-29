@@ -15,7 +15,8 @@ var $ = require("../../core/renderer"),
     Validator = require("../validator"),
     Tooltip = require("../tooltip"),
     Overlay = require("../overlay"),
-    themes = require("../themes");
+    themes = require("../themes"),
+    errors = require("../widget/ui.errors");
 
 var INVALIDATE_CLASS = "invalid",
     REVERT_TOOLTIP_CLASS = "revert-tooltip",
@@ -202,6 +203,11 @@ var ValidatingController = modules.Controller.inherit((function() {
             }
 
             if(editIndex >= 0) {
+                if($container && !$container.length) {
+                    errors.log("E1050");
+                    return;
+                }
+
                 editData = editingController._editData[editIndex];
 
                 var useDefaultValidator = $container && $container.hasClass("dx-widget");

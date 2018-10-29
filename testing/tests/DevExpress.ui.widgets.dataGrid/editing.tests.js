@@ -44,7 +44,8 @@ var fx = require("animation/fx"),
     domUtils = require("core/utils/dom"),
     browser = require("core/utils/browser"),
     typeUtils = require("core/utils/type"),
-    config = require("core/config");
+    config = require("core/config"),
+    errors = require("ui/widget/ui.errors");
 
 function getInputElements($container) {
     return $container.find("input:not([type='hidden'])");
@@ -12851,4 +12852,32 @@ QUnit.test("Popup should have scrollbar", function(assert) {
     $scrollableContent = scrollable.$content();
     assert.ok($scrollableContent.children().first().hasClass("dx-error-message"), "error message inside the scrollable component");
     assert.ok($scrollableContent.children().last().hasClass("dx-form"), "form inside the scrollable component");
+});
+
+// T680925
+QUnit.test("No exceptions on editing data when validationRules and editCellTemplate are specified in column", function(assert) {
+    // arrange
+    this.columns[0].editCellTemplate = function(container) {
+        $(container).append($("<input type='text' />"));
+    };
+
+    this.setupModules(this);
+    this.renderRowsView();
+    fx.off = true;
+    sinon.spy(errors, "log");
+
+    try {
+        // act
+        this.editRow(0);
+
+        // assert
+        assert.equal(errors.log.callCount, 1, "one error is occured");
+        assert.equal(errors.log.lastCall.args[0], "E1050", "Error code");
+    } catch(e) {
+        // assert
+        assert.ok(false, "exception");
+    } finally {
+        fx.off = false;
+        errors.log.restore();
+    }
 });
