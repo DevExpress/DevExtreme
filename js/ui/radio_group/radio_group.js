@@ -275,9 +275,10 @@ var RadioGroup = Editor.inherit({
     },
 
     _itemClickHandler: function(e) {
-        e.event.stopPropagation();
-        this._saveValueChangeEvent(e.event);
-        this.option("value", this._getItemValue(e.itemData));
+        if(this.itemElements().is(e.itemElement)) {
+            this._saveValueChangeEvent(e.event);
+            this.option("value", this._getItemValue(e.itemData));
+        }
     },
 
     _getItemValue: function(item) {
@@ -286,8 +287,7 @@ var RadioGroup = Editor.inherit({
 
     itemElements: function() {
         var result = this._radios.itemElements();
-        var selector = this._radios._itemSelector();
-        return result.not(result.find(selector));
+        return result.not(result.find(this._radios._itemSelector()));
     },
 
     _renderLayout: function() {
