@@ -521,12 +521,14 @@ QUnit.test("drawer panel should have correct width when async template is used",
             templates: {
                 "panel": {
                     render: function(args) {
-                        var $div = $("<div/>").appendTo(args.container);
+                        var $div = $("<div/>");
                         setTimeout(() => {
                             $div.css("height", 600);
                             $div.css("width", 200);
                             args.onRendered();
                         }, 100);
+
+                        args.container.append($div.get(0));
                     }
                 }
             }
