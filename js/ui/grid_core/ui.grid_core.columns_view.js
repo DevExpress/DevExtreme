@@ -95,6 +95,26 @@ var setCellWidth = function(cell, column, width) {
     }
 };
 
+var copyAttributes = function(element, newElement) {
+    if(!element || !newElement) return;
+
+    var oldAttributes = element.attributes,
+        newAttributes = newElement.attributes,
+        name,
+        i;
+
+    for(i = 0; i < oldAttributes.length; i++) {
+        name = oldAttributes[i].nodeName;
+        if(!newElement.hasAttribute(name)) {
+            element.removeAttribute(name);
+        }
+    }
+
+    for(i = 0; i < newAttributes.length; i++) {
+        element.setAttribute(newAttributes[i].nodeName, newAttributes[i].nodeValue);
+    }
+};
+
 exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _createScrollableOptions: function() {
         var that = this,
@@ -485,7 +505,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         that._renderCells($row, options);
         that._appendRow($table, $row);
-        that._rowPrepared($row, extend({ columns: options.columns }, options.row));
+        var rowOptions = extend({ columns: options.columns }, options.row);
+
+        that._addWatchMethod(rowOptions, options.row);
+
+        that._rowPrepared($row, rowOptions);
     },
 
     _renderCells: function($row, options) {
@@ -527,14 +551,15 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 $cell.contents().remove();
                 $cell.append($newContent);
 
-                $cell.get(0).className = $newCell.get(0).className;
-                $cell.get(0).style.cssText = $newCell.get(0).style.cssText;
+                copyAttributes($cell.get(0), $newCell.get(0));
             } else {
                 $cell.replaceWith($newCell);
                 $cell = $newCell;
             }
             highlightChanges && highlightedCells.push($cell);
         });
+
+        copyAttributes($rowElement.get(0), $newRowElement.get(0));
 
         needToRefreshAnimation && $rowElement.width();
         highlightedCells.forEach(cell => {
@@ -595,21 +620,23 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             rowType: options.row.rowType
         };
 
-        if(this.option("repaintChangesOnly")) {
-            this._addWatchMethod(cellOptions);
-        }
+        this._addWatchMethod(cellOptions);
 
         return cellOptions;
     },
 
-    _addWatchMethod: function(cellOptions) {
+    _addWatchMethod: function(options, source) {
+        if(!this.option("repaintChangesOnly")) return;
+
         var watchers = [];
 
-        cellOptions.watch = function(getter, updateFunc) {
-            var oldValue = getter(cellOptions.data);
+        source = source || options;
+
+        source.watch = source.watch || function(getter, updateFunc) {
+            var oldValue = getter(source.data);
 
             var watcher = function() {
-                var newValue = getter(cellOptions.data);
+                var newValue = getter(source.data);
 
                 if(JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
                     updateFunc(newValue, oldValue);
@@ -629,13 +656,21 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             return stopWatch;
         };
 
-        cellOptions.update = function() {
+        source.update = source.update || function(row) {
+            this.data = options.data = row.data;
+            this.rowIndex = options.rowIndex = row.rowIndex;
+            this.dataIndex = options.dataIndex = row.dataIndex;
+
             watchers.forEach(function(watcher) {
                 watcher();
             });
-
-            return watchers.length > 0;
         };
+
+        if(source !== options) {
+            options.watch = source.watch.bind(source);
+        }
+
+        return options;
     },
 
     _cellPrepared: function(cell, options) {

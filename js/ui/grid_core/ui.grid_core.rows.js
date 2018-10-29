@@ -468,7 +468,6 @@ module.exports = {
                         isDataRow = row.rowType === "data";
 
                         isDataRow && $row.addClass(DATA_ROW_CLASS);
-                        isDataRow && row.dataIndex % 2 === 1 && this.option("rowAlternationEnabled") && $row.addClass(ROW_ALTERNATION_CLASS);
                         isDataRow && this.option("showRowLines") && $row.addClass(ROW_LINES_CLASS);
 
                         this.option("showColumnLines") && $row.addClass(COLUMN_LINES_CLASS);
@@ -483,10 +482,28 @@ module.exports = {
                             this.setAria("role", "row", $row);
                             this.setAria("expanded", isDefined(isRowExpanded) && isRowExpanded.toString(), $row);
                         }
-                        this._setAriaRowIndex(row, $row);
                     }
 
                     return $row;
+                },
+
+                _rowPrepared: function($row, row) {
+                    if(row.rowType === "data") {
+                        if(this.option("rowAlternationEnabled")) {
+                            var getRowAlt = () => {
+                                return row.dataIndex % 2 === 1;
+                            };
+                            getRowAlt() && $row.addClass(ROW_ALTERNATION_CLASS);
+                            row.watch && row.watch(getRowAlt, value => {
+                                $row.toggleClass(ROW_ALTERNATION_CLASS, value);
+                            });
+                        }
+
+                        this._setAriaRowIndex(row, $row);
+                        row.watch && row.watch(() => row.rowIndex, () => this._setAriaRowIndex(row, $row));
+                    }
+
+                    this.callBase.apply(this, arguments);
                 },
 
                 _setAriaRowIndex: function(row, $row) {
