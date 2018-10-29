@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     utils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    dataUtils = require("../../core/element_data"),
     each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
@@ -16,6 +17,7 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     ValidationEngine = require("../validation_engine"),
     LayoutManager = require("./ui.form.layout_manager"),
+    InstanceStorage = require("./instance_storage").default,
     TabPanel = require("../tab_panel"),
     Scrollable = require("../scroll_view/ui.scrollable"),
     Deferred = require("../../core/utils/deferred").Deferred,
@@ -48,6 +50,7 @@ var Form = Widget.inherit({
         this.callBase();
 
         this._cachedColCountOptions = [];
+        this._instanceStorage = new InstanceStorage();
         this._groupsColCount = [];
     },
 
@@ -833,7 +836,7 @@ var Form = Widget.inherit({
     },
 
     _clearCachedInstances: function() {
-        this._editorInstancesByField = {};
+        this._instanceStorage.clear();
         this._cachedLayoutManagers = [];
     },
 
@@ -894,6 +897,12 @@ var Form = Widget.inherit({
             for(i = 0; i < items.length; i++) {
                 item = items[i];
                 clonedItem = typeUtils.isObject(item) ? extend({}, item) : item;
+
+                var guid = this._instanceStorage.add(item);
+
+                if(typeUtils.isObject(clonedItem)) {
+                    clonedItem.guid = guid;
+                }
 
                 that._prepareGroupItem(clonedItem);
                 that._prepareTabbedItem(clonedItem);
@@ -1114,7 +1123,7 @@ var Form = Widget.inherit({
         return extend(baseConfig, {
             items: items,
             onContentReady: function(args) {
-                that._updateEditorInstancesFromLayoutManager(args.component._editorInstancesByField);
+                that._instanceStorage.extend(args.component._instanceStorage);
                 options.onContentReady && options.onContentReady(args);
             },
             colCount: options.colCount,
@@ -1124,10 +1133,6 @@ var Form = Widget.inherit({
             onLayoutChanged: options.onLayoutChanged,
             width: options.width
         });
-    },
-
-    _updateEditorInstancesFromLayoutManager: function(instancesByDataFields) {
-        extend(this._editorInstancesByField, instancesByDataFields);
     },
 
     _createComponent: function($element, type, config) {
@@ -1259,15 +1264,26 @@ var Form = Widget.inherit({
         switch(rootOptionName) {
             case "items":
                 var itemPath = this._getItemPath(nameParts),
-                    instance,
-                    item = this.option(itemPath);
+                    item = this.option(itemPath),
+                    instance = this._instanceStorage.findByItem(item),
+                    fullName = args.fullName;
 
-                if(args.fullName.search("editorOptions") !== -1) {
-                    instance = this.getEditor(item.dataField) || this.getEditor(item.name);
-                    instance && instance.option(item.editorOptions);
+                if(instance) {
+                    if(fullName.search("buttonOptions") !== -1) {
+                        instance.option(item.buttonOptions);
+                        break;
+                    } else if(fullName.search("editorOptions") !== -1) {
+                        instance.option(item.editorOptions);
+                        break;
+                    } else if(fullName.search("validationRules") !== -1) {
+                        var validator = dataUtils.data(instance.$element()[0], "dxValidator");
+
+                        validator && validator.option("validationRules", item.validationRules);
+                        break;
+                    }
                 }
 
-                if(!instance && item) {
+                if(item) {
                     var name = args.fullName.replace(itemPath + ".", ""),
                         items;
                     this._changeItemOption(item, name, args.value);
@@ -1532,9 +1548,13 @@ var Form = Widget.inherit({
             validationGroupConfig = ValidationEngine.getGroupConfig(validationGroup);
 
         validationGroupConfig && validationGroupConfig.reset();
-        each(this._editorInstancesByField, function(dataField, editor) {
-            editor.reset();
-            editor.option("isValid", true);
+        this._instanceStorage.each(function(instance, item) {
+            var isButton = item.itemType === "button";
+
+            if(!isButton) {
+                instance.reset();
+                instance.option("isValid", true);
+            }
         });
     },
 
@@ -1553,9 +1573,8 @@ var Form = Widget.inherit({
 
     registerKeyHandler: function(key, handler) {
         this.callBase(key, handler);
-
-        each(this._editorInstancesByField, function(dataField, editor) {
-            editor.registerKeyHandler(key, handler);
+        this._instanceStorage.each(function(instance) {
+            instance.registerKeyHandler(key, handler);
         });
     },
 
@@ -1599,7 +1618,17 @@ var Form = Widget.inherit({
      * @return any
      */
     getEditor: function(dataField) {
-        return this._editorInstancesByField[dataField];
+        return this._instanceStorage.findByDataField(dataField) || this._instanceStorage.findByName(dataField);
+    },
+
+    /**
+     * @name dxFormMethods.getButton
+     * @publicName getButton(name)
+     * @param1 name:string
+     * @return any
+     */
+    getButton: function(name) {
+        return this._instanceStorage.findByName(name);
     },
 
     /**
