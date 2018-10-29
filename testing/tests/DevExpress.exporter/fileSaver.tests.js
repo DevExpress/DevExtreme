@@ -1,7 +1,7 @@
 var $ = require("jquery"),
     eventsEngine = require("events/core/events_engine"),
     browser = require("core/utils/browser"),
-    fileSaver = require("client_exporter").fileSaver,
+    fileSaver = require("exporter").fileSaver,
     errors = require("ui/widget/ui.errors"),
     typeUtils = require("core/utils/type");
 

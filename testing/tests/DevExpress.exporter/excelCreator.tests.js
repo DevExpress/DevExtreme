@@ -1,6 +1,6 @@
 var $ = require("jquery"),
-    excelCreator = require("client_exporter").excel,
-    excelCreator = require("client_exporter").excel,
+    excelCreator = require("exporter").excel,
+    excelCreator = require("exporter").excel,
     coreLocalization = require("localization/core"),
     ExcelCreator = excelCreator.creator,
     internals = excelCreator.__internals,

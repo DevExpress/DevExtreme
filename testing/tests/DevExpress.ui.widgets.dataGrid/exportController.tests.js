@@ -20,7 +20,7 @@ require("ui/data_grid/ui.data_grid");
 var dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     ArrayStore = require("data/array_store"),
-    clientExporter = require("client_exporter");
+    clientExporter = require("exporter");
 
 QUnit.module("ExportController", {
     beforeEach: function() {

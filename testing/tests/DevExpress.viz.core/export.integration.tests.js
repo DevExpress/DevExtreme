@@ -3,7 +3,7 @@ require("viz/tree_map/tree_map");
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     rendererModule = require("viz/core/renderers/renderer"),
-    clientExporter = require("client_exporter"),
+    clientExporter = require("exporter"),
     exportModule = require("viz/core/export");
 
 $("#qunit-fixture").append('<div id="test-container" style="width: 200px; height: 150px;"></div>');

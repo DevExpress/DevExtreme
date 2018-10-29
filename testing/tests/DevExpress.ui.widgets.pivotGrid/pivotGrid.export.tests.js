@@ -6,7 +6,7 @@ import "generic_light.css!";
 import "ui/pivot_grid/ui.pivot_grid";
 
 import $ from "jquery";
-import { excel as excelCreator } from "client_exporter";
+import { excel as excelCreator } from "exporter";
 import { __internals as internals } from "exporter/excel_creator";
 import excel_creator from "exporter/excel_creator";
 import JSZipMock from "../../helpers/jszipMock.js";
