@@ -161,6 +161,18 @@ module.exports = {
                 * @default true
                 */
                 showPane: true
+
+                /**
+                * @name GridBaseOptions.loadPanel.shading
+                * @type boolean
+                * @default true
+                */
+
+                /**
+                * @name GridBaseOptions.loadPanel.shadingColor
+                * @type string
+                * @default ''
+                */
             },
             /**
             * @name dxDataGridOptions.onRowClick
