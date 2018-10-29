@@ -1272,7 +1272,7 @@ var Form = Widget.inherit({
                     if(fullName.search("buttonOptions") !== -1) {
                         instance.option(item.buttonOptions);
                         break;
-                    } else if(instance && fullName.search("editorOptions") !== -1) {
+                    } else if(fullName.search("editorOptions") !== -1) {
                         instance.option(item.editorOptions);
                         break;
                     } else if(fullName.search("validationRules") !== -1) {
