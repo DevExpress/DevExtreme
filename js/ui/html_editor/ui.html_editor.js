@@ -18,7 +18,7 @@ const QUILL_CONTAINER_CLASS = "dx-quill-container";
 
 const MARKDOWN_VALUE_TYPE = "markdown";
 
-const ANONYMOUS_TEMPLATE_NAME = "content";
+const ANONYMOUS_TEMPLATE_NAME = "htmlContent";
 
 const HtmlEditor = Editor.inherit({
 
@@ -155,11 +155,11 @@ const HtmlEditor = Editor.inherit({
     _initTemplates: function() {
         this.callBase();
 
-        this._defaultTemplates["content"] = new EmptyTemplate(this);
+        this._defaultTemplates[ANONYMOUS_TEMPLATE_NAME] = new EmptyTemplate(this);
     },
 
     _initMarkup: function() {
-        let template = this._getTemplate("content");
+        const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
         this._$htmlContainer = $("<div>").addClass(QUILL_CONTAINER_CLASS);
 
         this.$element()
