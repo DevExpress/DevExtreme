@@ -244,7 +244,7 @@ var ExcelCreator = Class.inherit({
             for(cellIndex = 0; cellIndex !== cellsLength; cellIndex++) {
                 cellData = that._prepareValue(rowIndex, cellIndex);
                 const styleArrayIndex = dataProvider.getStyleId(rowIndex, cellIndex);
-                let cellStyleId = this._styleArrayIndexToStyleIdMap[styleArrayIndex];
+                let cellStyleId = this._styleArrayIndexToCellStyleIdMap[styleArrayIndex];
                 if(dataProvider.hasCustomizeExcelCell && dataProvider.hasCustomizeExcelCell()) {
                     const value = cellData.sourceValue || cellData.value;
                     const modifiedExcelCell = this._callCustomizeExcelCell({
@@ -332,7 +332,7 @@ var ExcelCreator = Class.inherit({
                 }
             });
         });
-        that._styleArrayIndexToStyleIdMap = that._styleArray.map(item => this._excelFile.registerCellFormat(item));
+        that._styleArrayIndexToCellStyleIdMap = that._styleArray.map(item => this._excelFile.registerCellFormat(item));
     },
 
     _prepareCellData: function() {
