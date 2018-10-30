@@ -1072,6 +1072,25 @@ QUnit.test("popup should be configured with templatesRenderAsynchronously=false 
     assert.strictEqual(popup.option("templatesRenderAsynchronously"), false, "templatesRenderAsynchronously should have false value");
 });
 
+QUnit.test("popup is closed after click on the clear button if searchEnabled = true", function(assert) {
+    var data = ["item-1", "item-2", "item-3"];
+
+    var $dropDownList = $("#dropDownList").dxDropDownList({
+        dataSource: new DataSource(data),
+        value: data[0],
+        searchEnabled: true,
+        showClearButton: true,
+        searchTimeout: 0
+    });
+
+    var $clearIcon = $dropDownList.find(".dx-clear-button-area"),
+        dropDownList = $dropDownList.dxDropDownList("instance");
+
+    $($clearIcon).trigger("dxclick");
+
+    assert.notOk(dropDownList.option("opened"), "popup is closed");
+});
+
 
 QUnit.module("dataSource integration", moduleConfig);
 

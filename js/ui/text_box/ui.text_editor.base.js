@@ -546,7 +546,7 @@ var TextEditorBase = Editor.inherit({
         return $clearButton;
     },
 
-    _clearValueHandler: function(e) {
+    _clearValueHandler: function(e, options) {
         var $input = this._input();
         e.stopPropagation();
 
@@ -554,7 +554,13 @@ var TextEditorBase = Editor.inherit({
         this.reset();
 
         !focused($input) && eventsEngine.trigger($input, "focus");
-        eventsEngine.trigger($input, "input");
+        if(!options || !options.preventInput) {
+            eventsEngine.trigger($input, "input");
+        }
+    },
+
+    _clearText: function() {
+        this.option("text", "");
     },
 
     _renderEvents: function() {
@@ -785,7 +791,7 @@ var TextEditorBase = Editor.inherit({
     reset: function() {
         var defaultOptions = this._getDefaultOptions();
         if(this.option("value") === defaultOptions.value) {
-            this.option("text", "");
+            this._clearText();
             this._renderValue();
         } else {
             this.option("value", defaultOptions.value);

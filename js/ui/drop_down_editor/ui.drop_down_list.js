@@ -453,6 +453,10 @@ var DropDownList = DropDownEditor.inherit({
         this.option("selectedItem", null);
     },
 
+    _clearValueHandler: function(e, options) {
+        this.callBase(e, { preventInput: true });
+    },
+
     _processDataSourceChanging: function() {
         this._setListDataSource();
 
@@ -471,6 +475,7 @@ var DropDownList = DropDownEditor.inherit({
     reset: function() {
         this.callBase();
 
+        this._clearText();
         this._clearFilter();
         this._clearSelectedItem();
     },
