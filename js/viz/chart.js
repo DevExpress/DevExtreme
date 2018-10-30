@@ -1085,23 +1085,23 @@ var dxChart = AdvancedChart.inherit({
         return this._getOption("crosshair");
     },
 
-    _parseVisualRangeOption(fullName, value, axis) {
+    _parseVisualRangeOption(fullName, value) {
         const that = this;
         const name = fullName.split(/[.\[]/)[0];
         const index = fullName.match(/\d+/g);
 
         if(fullName.indexOf("visualRange") > 0) {
-            that._setCustomVisualRange(name === "argumentAxis", _isDefined(index) ? parseInt(index[0]) : index, value, axis);
+            that._setCustomVisualRange(name === "argumentAxis", _isDefined(index) ? parseInt(index[0]) : index, value);
         } else if((typeUtils.type(value) === "object" || typeUtils.type(value) === "array") && name.indexOf("Axis") > 0 && JSON.stringify(value).indexOf("visualRange") > 0) {
             if(_isDefined(value.visualRange)) {
-                that._setCustomVisualRange(name === "argumentAxis", _isDefined(index) ? parseInt(index[0]) : index, value.visualRange, axis);
+                that._setCustomVisualRange(name === "argumentAxis", _isDefined(index) ? parseInt(index[0]) : index, value.visualRange);
             } else if(_isArray(value)) {
-                value.forEach((a, i) => that._setCustomVisualRange(name === "argumentAxis", i, a.visualRange, axis));
+                value.forEach((a, i) => that._setCustomVisualRange(name === "argumentAxis", i, a.visualRange));
             }
         }
     },
 
-    _setCustomVisualRange(isArgumentAxis, index, value, axis) {
+    _setCustomVisualRange(isArgumentAxis, index, value) {
         const that = this;
         const axesName = isArgumentAxis ? "argumentAxis" : "valueAxis";
         const options = that._options[axesName];
@@ -1115,8 +1115,6 @@ var dxChart = AdvancedChart.inherit({
         } else {
             options[index]._customVisualRange = value;
         }
-
-        axis && axis.setCustomVisualRange(value);
     },
 
     // API
@@ -1144,7 +1142,8 @@ var dxChart = AdvancedChart.inherit({
         const chart = this;
         return function(axis, visualRange) {
             if(axis.getOptions().optionPath) {
-                chart._parseVisualRangeOption(axis.getOptions().optionPath + ".visualRange", visualRange, axis);
+                chart._parseVisualRangeOption(axis.getOptions().optionPath + ".visualRange", visualRange);
+                axis.setCustomVisualRange(visualRange);
             }
 
             if(axis.isArgumentAxis) {
