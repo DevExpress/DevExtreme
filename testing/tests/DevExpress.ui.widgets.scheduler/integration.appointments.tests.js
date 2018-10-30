@@ -3774,9 +3774,10 @@ QUnit.test("Many dropDown appts should be grouped correctly with one multi day t
     this.createInstance({
         views: ['month'],
         currentView: 'month',
+        maxAppointmentsPerCell: 1,
         currentDate: new Date(2017, 5, 25),
         width: 800,
-        height: 600
+        height: 950
     });
 
     this.instance.option("dataSource", [
