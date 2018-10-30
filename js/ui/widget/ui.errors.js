@@ -209,6 +209,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1050: "The \"{0}\" converter is not found in the ConverterController",
 
     /**
+    * @name ErrorsUIWidgets.E1050
+    */
+    E1050: "The validationRules option does not apply to third-party editors defined in the editCellTemplate",
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: "The \"key\" option cannot be modified after initialization",
