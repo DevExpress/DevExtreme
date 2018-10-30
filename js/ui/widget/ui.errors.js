@@ -204,6 +204,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1049: `Сolumn '{0}': filtering is allowed but the 'dataField' or 'name' option is not specified`,
 
     /**
+    * @name ErrorsUIWidgets.E1050
+    */
+    E1050: "The validationRules option does not apply to third-party editors defined in the editCellTemplate",
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: "The \"key\" option cannot be modified after initialization",
