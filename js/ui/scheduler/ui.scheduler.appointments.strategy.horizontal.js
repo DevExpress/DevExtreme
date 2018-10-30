@@ -16,7 +16,6 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     calculateAppointmentWidth: function(appointment, position) {
         var cellWidth = this._defaultWidth || this.getAppointmentMinSize(),
             allDay = this.instance.fire("getField", "allDay", appointment),
-            minWidth = this.getAppointmentMinSize(),
             width;
 
         var startDate = this._startDate(appointment, false, position),
@@ -29,10 +28,6 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             durationInCells = appointmentDuration / cellDuration;
 
         width = durationInCells * cellWidth;
-
-        if(width < minWidth) {
-            width = minWidth;
-        }
 
         return width;
     },

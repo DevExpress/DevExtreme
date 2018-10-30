@@ -199,7 +199,27 @@ QUnit.test("Appointment should have a correct min height", function(assert) {
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
 
-    assert.equal($appointment.outerHeight(), 2, "Appointment has a right height");
+    assert.equal($appointment.outerHeight(), 4, "Appointment has a right height");
+});
+
+QUnit.test("Appointment should have a correct min width", function(assert) {
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 1, 9, 8),
+            views: ["timelineWeek"],
+            currentView: "timelineWeek",
+            dataSource: [
+                {
+                    startDate: new Date(2015, 1, 9, 8, 1, 1),
+                    endDate: new Date(2015, 1, 9, 8, 1, 2)
+                }
+            ]
+        }
+    );
+
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
+
+    assert.equal($appointment.outerWidth(), 5, "Appointment has a right width");
 });
 
 QUnit.test("Long appointment tail should have a correct min height", function(assert) {
@@ -219,7 +239,7 @@ QUnit.test("Long appointment tail should have a correct min height", function(as
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(1);
 
-    assert.equal($appointment.outerHeight(), 2, "Appointment-tail has a right height");
+    assert.equal($appointment.outerHeight(), 4, "Appointment-tail has a right height");
 });
 
 QUnit.test("Appointment has right sortedIndex", function(assert) {
