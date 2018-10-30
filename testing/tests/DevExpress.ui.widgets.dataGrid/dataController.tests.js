@@ -11242,6 +11242,91 @@ QUnit.test("update one cell using push", function(assert) {
     assert.deepEqual(changedArgs.items, [items[0]]);
 });
 
+QUnit.test("insert one row with index using push", function(assert) {
+    this.setupModules({ pushAggregationTimeout: 0 });
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    this.options.repaintChangesOnly = true;
+
+    // act
+    this.dataSource.store().push([{ type: "insert", index: 0, data: { id: 999, name: "Test", age: 99 } }]);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items.length, 4);
+    assert.deepEqual(items[0].values, [999, 'Test', 99]);
+    assert.deepEqual(changedArgs.changeType, 'update');
+    assert.deepEqual(changedArgs.changeTypes, ['insert']);
+    assert.deepEqual(changedArgs.rowIndices, [0]);
+    assert.deepEqual(changedArgs.items, [items[0]]);
+});
+
+QUnit.test("insert one row with index using push if previous row is expanded", function(assert) {
+    this.setupModules({ pushAggregationTimeout: 0 });
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    this.options.repaintChangesOnly = true;
+
+    this.expandRow(1);
+
+    // act
+    this.dataSource.store().push([{ type: "insert", index: 2, data: { id: 999, name: "Test", age: 99 } }]);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items.length, 5);
+    assert.deepEqual(items[2].values, [999, 'Test', 99]);
+    assert.deepEqual(changedArgs.changeType, 'update');
+    assert.deepEqual(changedArgs.changeTypes, ['insert']);
+    assert.deepEqual(changedArgs.rowIndices, [2]);
+    assert.deepEqual(changedArgs.items, [items[2]]);
+});
+
+QUnit.test("insert one row without index using push", function(assert) {
+    this.setupModules({ pushAggregationTimeout: 0 });
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    this.options.repaintChangesOnly = true;
+
+    // act
+    this.dataSource.store().push([{ type: "insert", data: { id: 999, name: "Test", age: 99 } }]);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items.length, 3);
+    assert.deepEqual(changedArgs.changeType, 'update');
+    assert.deepEqual(changedArgs.changeTypes, []);
+    assert.deepEqual(changedArgs.rowIndices, []);
+});
+
+QUnit.test("remove one row using push", function(assert) {
+    this.setupModules({ pushAggregationTimeout: 0 });
+
+    this.options.repaintChangesOnly = true;
+
+    // act
+    this.dataSource.store().push([{ type: "remove", key: 1 }]);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items.length, 2);
+});
+
 QUnit.test("update one cell using push with reshapeOnPush", function(assert) {
     this.setupModules({ reshapeOnPush: true, pushAggregationTimeout: 0, filter: ["age", ">=", 18] });
 

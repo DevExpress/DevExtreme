@@ -847,6 +847,8 @@ var DataSource = Class.inherit({
         if(this._reshapeOnPush) {
             this.load();
         } else {
+            this.fireEvent("changing", [{ changes: changes }]);
+
             let group = this.group(),
                 items = this.items(),
                 groupLevel = 0,
