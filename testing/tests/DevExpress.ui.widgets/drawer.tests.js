@@ -750,6 +750,7 @@ QUnit.test("minSize and maxSize should be rendered correctly in overlap mode rtl
         minSize: 50,
         maxSize: 300,
         opened: false,
+        width: 500,
         revealMode: "slide",
         rtlEnabled: true,
         template: function($content) {
@@ -764,11 +765,11 @@ QUnit.test("minSize and maxSize should be rendered correctly in overlap mode rtl
     const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
     const $panelContent = $(".dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content").eq(0);
 
-    assert.equal($panel.position().left, 1150, "panel has correct left when minSize and max size are set");
+    assert.equal($panel.position().left, 150, "panel has correct left when minSize and max size are set");
     assert.equal($panelContent.position().left, -200, "panel has correct left when minSize and max size are set");
     drawer.toggle();
 
-    assert.equal($panel.position().left, 900, "panel has correct left when minSize and max size are set");
+    assert.equal($panel.position().left, -100, "panel has correct left when minSize and max size are set");
     assert.equal($panelContent.position().left, -200, "panel has correct left when minSize and max size are set");
 
     fx.off = false;
