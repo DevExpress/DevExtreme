@@ -46,14 +46,9 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
                     var that = this,
                         dataSource = that._dataSource,
                         filter = that._generateFilterByKey(key),
-                        groupOffset,
-                        groupFilter,
-                        pageSize = dataSource.pageSize(),
                         deferred = new Deferred(),
                         groupPath,
-                        group = dataSource.group(),
-                        scrollingMode = this.option("scrolling.mode"),
-                        isVirtualScrolling = scrollingMode === "virtual" || scrollingMode === "infinite";
+                        group = dataSource.group();
 
                     if(!dataSource._grouping._updatePagingOptions) {
                         that._calculateGlobalRowIndexByFlatData(key, null, true)
@@ -74,37 +69,48 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
                         groupPath = that._getGroupPath(data[0]);
 
                         that._expandGroupByPath(that, groupPath, 0).done(function() {
-                            dataSource._grouping._updatePagingOptions({ skip: 0, take: MAX_SAFE_INTEGER }, function(groupInfo, totalOffset) {
-                                if(equalByValue(groupInfo.path, groupPath)) {
-                                    groupOffset = totalOffset;
-                                }
-                            });
 
-                            groupFilter = createGroupFilter(groupPath, { group: group });
-                            that._calculateGlobalRowIndexByFlatData(key, groupFilter).done(function(dataOffset) {
-                                var count,
-                                    currentPageOffset,
-                                    groupContinuationCount;
+                            that._calculateExpandedRowGlobalIndex(deferred, key, groupPath, group);
 
-                                currentPageOffset = (groupOffset % pageSize) || pageSize;
-
-                                count = currentPageOffset + dataOffset - groupPath.length;
-
-                                if(isVirtualScrolling) {
-                                    groupContinuationCount = 0;
-                                } else {
-                                    groupContinuationCount = Math.floor(count / (pageSize - groupPath.length)) * groupPath.length;
-                                }
-
-                                count = groupOffset + dataOffset + groupContinuationCount;
-
-                                deferred.resolve(count);
-
-                            }).fail(deferred.reject);
                         }).fail(deferred.reject);
                     }).fail(deferred.reject);
 
                     return deferred.promise();
+                },
+                _calculateExpandedRowGlobalIndex: function(deferred, key, groupPath, group) {
+                    var groupFilter = createGroupFilter(groupPath, { group: group }),
+                        dataSource = this._dataSource,
+                        scrollingMode = this.option("scrolling.mode"),
+                        isVirtualScrolling = scrollingMode === "virtual" || scrollingMode === "infinite",
+                        pageSize = dataSource.pageSize(),
+                        groupOffset;
+
+                    dataSource._grouping._updatePagingOptions({ skip: 0, take: MAX_SAFE_INTEGER }, function(groupInfo, totalOffset) {
+                        if(equalByValue(groupInfo.path, groupPath)) {
+                            groupOffset = totalOffset;
+                        }
+                    });
+
+                    this._calculateGlobalRowIndexByFlatData(key, groupFilter).done(function(dataOffset) {
+                        var count,
+                            currentPageOffset,
+                            groupContinuationCount;
+
+                        currentPageOffset = (groupOffset % pageSize) || pageSize;
+
+                        count = currentPageOffset + dataOffset - groupPath.length;
+
+                        if(isVirtualScrolling) {
+                            groupContinuationCount = 0;
+                        } else {
+                            groupContinuationCount = Math.floor(count / (pageSize - groupPath.length)) * groupPath.length;
+                        }
+
+                        count = groupOffset + dataOffset + groupContinuationCount;
+
+                        deferred.resolve(count);
+
+                    }).fail(deferred.reject);
                 }
             }
         }
