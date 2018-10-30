@@ -3,6 +3,8 @@ import $ from "jquery";
 import "ui/html_editor";
 
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
+const DROPDOWNMENU_CLASS = "dx-dropdownmenu-button";
+const BUTTON_CONTENT_CLASS = "dx-button-content";
 
 const { test } = QUnit;
 
@@ -34,8 +36,7 @@ QUnit.module("Toolbar integration", {
     test("Apply simple format with selection", (assert) => {
         const done = assert.async();
         const expected = "<p><strong>te</strong>st</p>";
-        const instance = $("#htmlEditor")
-        .dxHtmlEditor({
+        const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["bold"] },
             onValueChanged: (e) => {
@@ -49,5 +50,18 @@ QUnit.module("Toolbar integration", {
         $("#htmlEditor")
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
             .trigger("dxclick");
+    });
+
+    test("Overflow menu button should have a correct content", (assert) => {
+        $("#htmlEditor").html("<p>test</p>").dxHtmlEditor({
+            toolbar: { items: ["bold", { text: "test", showInMenu: "always" }] }
+        });
+
+        const buttonContent = $("#htmlEditor")
+            .find(`.${DROPDOWNMENU_CLASS} .${BUTTON_CONTENT_CLASS}`)
+            .html();
+        const expectedContent = '<i class="dx-icon dx-icon-overflow"></i>';
+
+        assert.equal(buttonContent, expectedContent);
     });
 });

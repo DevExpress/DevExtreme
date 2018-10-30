@@ -1,6 +1,6 @@
 var $ = require("jquery"),
     DataProvider = require("ui/pivot_grid/ui.pivot_grid.export").DataProvider,
-    clientExporter = require("client_exporter"),
+    clientExporter = require("exporter"),
     dateLocalization = require("localization/date"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js");
 

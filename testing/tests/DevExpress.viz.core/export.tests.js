@@ -1,6 +1,6 @@
 var vizMocks = require("../../helpers/vizMocks.js"),
     exportModule = require("viz/core/export"),
-    clientExporter = require("client_exporter");
+    clientExporter = require("exporter");
 
 QUnit.module("Creation", {
     beforeEach: function() {

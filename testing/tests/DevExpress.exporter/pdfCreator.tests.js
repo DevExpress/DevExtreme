@@ -1,6 +1,6 @@
 var $ = require("jquery"),
     version = require("core/version"),
-    getData = require("client_exporter").pdf.getData,
+    getData = require("exporter").pdf.getData,
     pdfCreator = require("exporter/pdf_creator").__tests,
     isFunction = require("core/utils/type").isFunction,
     imageCreator = require("exporter/image_creator").imageCreator;

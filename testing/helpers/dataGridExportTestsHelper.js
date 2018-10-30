@@ -5,7 +5,7 @@ import "ui/data_grid/ui.data_grid";
 import $ from "jquery";
 import typeUtils from "core/utils/type";
 import { toComparable } from "core/utils/data";
-import { excel as excelCreator } from "client_exporter";
+import { excel as excelCreator } from "exporter";
 import excel_creator from "exporter/excel_creator";
 import JSZipMock from "./jszipMock.js";
 
