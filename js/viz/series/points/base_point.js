@@ -175,20 +175,6 @@ Point.prototype = {
         return that;
     },
 
-    applyStyle: function(style, callback) {
-        var that = this;
-        that._currentStyle = style;
-        if(that.graphic) {
-            if(style === "normal") {
-                that.clearMarker();
-            } else {
-                that.graphic.toForeground();
-            }
-            that._updateMarker(true, that._styles[style], undefined, callback);
-        }
-        return that;
-    },
-
     _getViewStyle: function() {
         var state = NORMAL_STATE,
             fullState = this.fullState,
@@ -217,7 +203,16 @@ Point.prototype = {
 
     applyView: function(legendCallback) {
         var style = this._getViewStyle();
-        this.applyStyle(style, legendCallback);
+        var that = this;
+        that._currentStyle = style;
+        if(that.graphic) {
+            if(style === "normal") {
+                that.clearMarker();
+            } else {
+                that.graphic.toForeground();
+            }
+            that._updateMarker(true, that._styles[style], undefined, legendCallback);
+        }
     },
 
     setView: function(style) {

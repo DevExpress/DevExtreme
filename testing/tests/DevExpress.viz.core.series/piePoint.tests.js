@@ -801,7 +801,8 @@ QUnit.test("Apply style", function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    point.applyStyle("selection");
+    point.fullState = 2;
+    point.applyView();
 
     assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], { style: "selection" });
 });
@@ -813,7 +814,8 @@ QUnit.test("Apply style with legend callback", function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    point.applyStyle("selection", callback);
+    point.fullState = 2;
+    point.applyView(callback);
 
     assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], { style: "selection" });
     assert.strictEqual(callback.callCount, 1);

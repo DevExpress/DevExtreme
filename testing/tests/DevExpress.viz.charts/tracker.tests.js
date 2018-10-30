@@ -908,13 +908,25 @@ QUnit.test("touch without series over", function(assert) {
 QUnit.test("touch over point", function(assert) {
     // arrange
     // act
-    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 100, pageY: 50, target: this.pointElement.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 100, pageY: 50, target: this.pointElement.element, pointerType: "touch" }));
     this.clock.tick(this.tracker.__trackerDelay);
 
     // assert
     assert.ok(!this.series.hover.called, "series was not hoveres");
     assert.ok(this.point.hover.calledOnce, "point hovered");
     assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip show");
+});
+
+QUnit.test("dxpointerdown on point not on touch - do not hover point", function(assert) {
+    // arrange
+    // act
+    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 100, pageY: 50, target: this.pointElement.element }));
+    this.clock.tick(this.tracker.__trackerDelay);
+
+    // assert
+    assert.ok(!this.series.hover.called);
+    assert.ok(!this.point.hover.called);
+    assert.ok(!this.options.tooltip.stub("show").called);
 });
 
 QUnit.test("click on canvas", function(assert) {
