@@ -29,11 +29,8 @@
     .transition(~"transform .14s");
 }
 
-.dx-radiobutton-checked > .dx-radio-value-container {
-    .dx-radiobutton-icon {
-        border-color: @ANDROID5_RADIOBUTTON_CHECKED_BACKGROUND;
-    }
-
+.dx-radiobutton-icon-checked {
+    border-color: @ANDROID5_RADIOBUTTON_CHECKED_BACKGROUND;
     .dx-radiobutton-icon-dot {
         .scale(1);
     }
@@ -44,10 +41,8 @@
         border-color: @ANDROID5_RADIOBUTTON_DISABLED_BACKGROUND;
     }
 
-    .dx-radiobutton-checked > .dx-radio-value-container {
-        .dx-radiobutton-icon:after {
-            background-color: @ANDROID5_RADIOBUTTON_DISABLED_BACKGROUND;
-        }
+    .dx-radiobutton-icon-checked:after {
+        background-color: @ANDROID5_RADIOBUTTON_DISABLED_BACKGROUND;
     }
 }
 

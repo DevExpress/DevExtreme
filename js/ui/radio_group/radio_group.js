@@ -18,6 +18,7 @@ var RADIO_GROUP_CLASS = "dx-radiogroup",
     RADIO_BUTTON_ICON_DOT_CLASS = "dx-radiobutton-icon-dot",
     RADIO_VALUE_CONTAINER_CLASS = "dx-radio-value-container",
     RADIO_BUTTON_CHECKED_CLASS = "dx-radiobutton-checked",
+    RADIO_BUTTON_ICON_CHECKED_CLASS = "dx-radiobutton-icon-checked",
     ITEM_DATA_KEY = "dxItemData",
     RADIO_FEEDBACK_HIDE_TIMEOUT = 100;
 
@@ -302,7 +303,9 @@ var RadioGroup = Editor.inherit({
         this.itemElements().each((function(_, item) {
             var $item = $(item);
             var itemValue = this._valueGetter($item.data(ITEM_DATA_KEY));
-            $item.toggleClass(RADIO_BUTTON_CHECKED_CLASS, this._isValueEquals(itemValue, selectedValue));
+            var isValueEquals = this._isValueEquals(itemValue, selectedValue);
+            $item.toggleClass(RADIO_BUTTON_CHECKED_CLASS, isValueEquals);
+            $item.find("." + RADIO_BUTTON_ICON_CLASS).first().toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, isValueEquals);
 
             this.setAria("checked", this._isValueEquals(itemValue, selectedValue), $item);
         }).bind(this));
