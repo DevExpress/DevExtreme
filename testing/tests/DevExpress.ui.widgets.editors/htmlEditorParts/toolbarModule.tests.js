@@ -6,6 +6,7 @@ import Toolbar from "ui/html_editor/modules/toolbar";
 import FormDialog from "ui/html_editor/ui/formDialog";
 import { noop } from "core/utils/common";
 import keyboardMock from "../../../helpers/keyboardMock.js";
+import fx from "animation/fx";
 
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
@@ -47,6 +48,8 @@ const CLEAR_FORMAT_CLASS = "dx-clear-format";
 
 const simpleModuleConfig = {
     beforeEach: () => {
+        fx.off = true;
+
         this.$element = $("#htmlEditor");
         this.log = [];
         this.quillMock = {
@@ -70,11 +73,16 @@ const simpleModuleConfig = {
                 on: noop
             }
         };
+    },
+    afterEach: () => {
+        fx.off = false;
     }
 };
 
 const dialogModuleConfig = {
     beforeEach: () => {
+        fx.off = true;
+
         this.$element = $("#htmlEditor");
         this.log = [];
         this.quillMock = {
@@ -112,6 +120,9 @@ const dialogModuleConfig = {
         };
 
         this.formDialog = new FormDialog(this.options.editorInstance, { container: this.$element, position: null });
+    },
+    afterEach: () => {
+        fx.off = false;
     }
 };
 
