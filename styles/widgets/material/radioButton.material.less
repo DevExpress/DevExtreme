@@ -48,8 +48,8 @@
     }
 }
 
-.dx-radiobutton-checked  {
-    .dx-radiobutton-icon:before {
+.dx-radiobutton-icon-checked  {
+    &:before {
         border-color: @radiogroup-checked-bg;
     }
 
@@ -79,7 +79,7 @@
     &.dx-radiobutton-checked {
         &.dx-state-active,
         &.dx-state-focused {
-            .dx-radiobutton-icon:after {
+            .dx-radiobutton-icon-checked:after {
                 background-color: fade(@radiogroup-checked-bg, 10%);
                 .scale(1);
             }
