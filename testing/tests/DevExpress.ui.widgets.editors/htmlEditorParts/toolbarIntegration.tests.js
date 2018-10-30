@@ -2,6 +2,8 @@ import $ from "jquery";
 
 import "ui/html_editor";
 
+const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
+const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 const DROPDOWNMENU_CLASS = "dx-dropdownmenu-button";
 const BUTTON_CONTENT_CLASS = "dx-button-content";
@@ -63,5 +65,25 @@ QUnit.module("Toolbar integration", {
         const expectedContent = '<i class="dx-icon dx-icon-overflow"></i>';
 
         assert.equal(buttonContent, expectedContent);
+    });
+
+    test("Editor disposing should dispose external toolbar", (assert) => {
+        const $toolbarContainer = $("<div>").addClass("external-container");
+        $("#qunit-fixture").append($toolbarContainer);
+
+        const editor = $("#htmlEditor").dxHtmlEditor({
+            toolbar: {
+                container: $toolbarContainer,
+                items: ["bold"]
+            }
+        }).dxHtmlEditor("instance");
+
+        assert.ok($toolbarContainer.hasClass(TOOLBAR_WRAPPER_CLASS), "Container has wrapper class");
+        assert.equal($toolbarContainer.find(`.${TOOLBAR_CLASS}`).length, 1, "Toolbar container contains the htmlEditor's toolbar");
+
+        editor.dispose();
+
+        assert.equal($toolbarContainer.html(), "", "Container's inner html is empty");
+        assert.notOk($toolbarContainer.hasClass(TOOLBAR_WRAPPER_CLASS), "Container hasn't wrapper class");
     });
 });

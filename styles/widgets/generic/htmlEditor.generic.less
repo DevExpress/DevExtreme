@@ -26,6 +26,8 @@
 }
 
 .dx-htmleditor-toolbar {
+    background-color: transparent;
+    
     .dx-format-active:not(.dx-color-format):not(.dx-background-format) {
         background-color: @htmleditor-normal-format-active-bg;
 
@@ -41,19 +43,24 @@
             background-color: @htmleditor-danger-format-active-bg;
         }
     }
-
-    
 }
 
 .dx-htmleditor-toolbar-format {
     &.dx-dropdowneditor.dx-editor-filled{
-        background-color: @toolbar-bg;
+        background-color: transparent;
     }
 
     &.dx-color-format, &.dx-background-format {
-        .dx-icon-color, .dx-icon-background {
-            .dx-icon-sizing(@GENERIC_BUTTON_ICON_SIZE - 3px, @GENERIC_BUTTON_ICON_SIZE, 3px);
+        .dx-button-content {
+            padding-bottom: @GENERIC_BUTTON_ICON_HORIZONTAL_PADDING - 3px;
         }
     }
 }
 
+.dx-htmleditor-toolbar-separator {
+    border-left-color: @htmleditor-toolbar-border-color;
+}
+
+.dx-htmleditor-toolbar-menu-separator {
+    border-top-color: @htmleditor-toolbar-border-color;
+}

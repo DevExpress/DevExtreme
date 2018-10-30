@@ -17,6 +17,8 @@ const BaseModule = getQuill().import("core/module");
 const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
+const TOOLBAR_SEPARATOR_CLASS = "dx-htmleditor-toolbar-separator";
+const TOOLBAR_MENU_SEPARATOR_CLASS = "dx-htmleditor-toolbar-menu-separator";
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
 
 const ICON_CLASS = "dx-icon";
@@ -227,14 +229,20 @@ class ToolbarModule extends BaseModule {
 
     _renderToolbar() {
         const container = this.options.container || this._getContainer();
+        const $container = $(container);
         const toolbarItems = this._prepareToolbarItems();
         const $toolbar = $("<div>")
             .addClass(TOOLBAR_CLASS)
             .appendTo(container);
 
-        $(container).addClass(TOOLBAR_WRAPPER_CLASS);
-
+        $container.addClass(TOOLBAR_WRAPPER_CLASS);
         this.toolbarInstance = this._editorInstance._createComponent($toolbar, Toolbar, { dataSource: toolbarItems });
+
+        this._editorInstance.on("disposing", () => {
+            $container
+                .empty()
+                .removeClass(TOOLBAR_WRAPPER_CLASS);
+        });
     }
 
     _getContainer() {
@@ -251,12 +259,7 @@ class ToolbarModule extends BaseModule {
         each(this.options.items, (index, item) => {
             let newItem;
             if(isObject(item)) {
-                if(item.formatValues && !item.widget) {
-                    const selectItemConfig = this._prepareSelectItemConfig(item);
-                    newItem = this._getToolbarItem(selectItemConfig);
-                } else {
-                    newItem = this._getToolbarItem(item);
-                }
+                newItem = this._handleObjectItem(item);
             } else if(isString(item)) {
                 const buttonItemConfig = this._prepareButtonItemConfig(item);
                 newItem = this._getToolbarItem(buttonItemConfig);
@@ -267,6 +270,25 @@ class ToolbarModule extends BaseModule {
         });
 
         return resultItems;
+    }
+
+    _handleObjectItem(item) {
+        if(item.formatName && item.formatValues && this._isAcceptableItem("dxSelectBox")) {
+            const selectItemConfig = this._prepareSelectItemConfig(item);
+
+            return this._getToolbarItem(selectItemConfig);
+        } else if(item.formatName && this._isAcceptableItem("dxButton")) {
+            const defaultButtonItemConfig = this._prepareButtonItemConfig(item.formatName);
+            const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
+
+            return this._getToolbarItem(buttonItemConfig);
+        } else {
+            return this._getToolbarItem(item);
+        }
+    }
+
+    _isAcceptableItem(item, acceptableWidgetName) {
+        return !item.widget || item.widget === acceptableWidgetName;
     }
 
     _prepareButtonItemConfig(formatName) {
@@ -288,19 +310,20 @@ class ToolbarModule extends BaseModule {
     }
 
     _prepareSelectItemConfig(item) {
-        return {
+        return extend(true, {
             widget: "dxSelectBox",
             formatName: item.formatName,
             options: {
                 stylingMode: "filled",
                 dataSource: item.formatValues,
+                placeholder: titleize(item.formatName),
                 onValueChanged: (e) => {
                     if(!this._isReset) {
                         this.quill.format(item.formatName, e.value, USER_ACTION);
                     }
                 }
             }
-        };
+        }, item);
     }
 
     _prepareColorClickHandler(formatName) {
@@ -365,6 +388,14 @@ class ToolbarModule extends BaseModule {
             redo: {
                 options: {
                     disabled: true
+                }
+            },
+            separator: {
+                template: (data, index, element) => {
+                    $(element).addClass(TOOLBAR_SEPARATOR_CLASS);
+                },
+                menuItemTemplate: (data, index, element) => {
+                    $(element).addClass(TOOLBAR_MENU_SEPARATOR_CLASS);
                 }
             }
         };

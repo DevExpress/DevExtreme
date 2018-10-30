@@ -12,20 +12,27 @@ const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
 const FORM_CLASS = "dx-formdialog-form";
-const FIELD_ITEM_CLASS = "dx-field-item";
-const FIELD_ITEM_LABEL_CLASS = "dx-field-item-label-text";
+const DIALOG_CLASS = "dx-formdialog";
+const DIALOG_TARGET_ITEM_CLASS = "dx-formdialog-field-target";
+const SEPARATOR_CLASS = "dx-htmleditor-toolbar-separator";
+const MENU_SEPARATOR_CLASS = "dx-htmleditor-toolbar-menu-separator";
+
 const BUTTON_CLASS = "dx-button";
 const SELECTBOX_CLASS = "dx-selectbox";
 const COLORVIEW_CLASS = "dx-colorview";
-const COLOR_VIEW_HEX_FIELD_CLASS = "dx-colorview-label-hex";
-const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
-const DIALOG_CLASS = "dx-formdialog";
+const DROPDOWNMENU_BUTTON_CLASS = "dx-dropdownmenu-button";
 const BUTTON_WITH_TEXT_CLASS = "dx-button-has-text";
 const ICON_CLASS = "dx-icon";
+const HOME_ICON_CLASS = "dx-icon-home";
 const DISABLED_STATE_CLASS = "dx-state-disabled";
 const CHECKBOX_CHECKED_CLASS = "dx-checkbox-checked";
 const CHECKBOX_TEXT_CLASS = "dx-checkbox-text";
-const DIALOG_TARGET_ITEM_CLASS = "dx-formdialog-field-target";
+const FIELD_ITEM_CLASS = "dx-field-item";
+const FIELD_ITEM_LABEL_CLASS = "dx-field-item-label-text";
+const COLOR_VIEW_HEX_FIELD_CLASS = "dx-colorview-label-hex";
+const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
+const DROPDOWNEDITOR_ICON_CLASS = "dx-dropdowneditor-icon";
+const LIST_ITEM_CLASS = "dx-list-item";
 
 const BOLD_FORMAT_CLASS = "dx-bold-format";
 const ITALIC_FORMAT_CLASS = "dx-italic-format";
@@ -169,17 +176,102 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
                     isHandlerTriggered = true;
                 }
             }
+        }, {
+            formatName: "underline"
+        }, {
+            formatName: "italic",
+            widget: "dxCheckBox"
+        }, {
+            formatName: "superscript",
+            options: {
+                icon: "home"
+            }
         }];
 
         new Toolbar(this.quillMock, this.options);
 
         const $formatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
-        $formatWidgets.eq(0).trigger("dxclick");
-        $formatWidgets.eq(1).trigger("dxclick");
+        $formatWidgets.each((index, element) => {
+            $(element).trigger("dxclick");
+        });
 
-        assert.deepEqual(this.log[0], { format: "bold", value: true });
+        const $homeIcon = $formatWidgets.last().find(`.${HOME_ICON_CLASS}`);
+
+        assert.deepEqual(
+            this.log,
+            [{
+                format: "bold",
+                value: true
+            }, {
+                format: "underline",
+                value: true
+            }, {
+                format: "script",
+                value: "super"
+            }]
+        );
         assert.ok(isHandlerTriggered, "Custom handler triggered");
+        assert.equal($homeIcon.length, 1, "last button has a custom icon");
+    });
+
+    test("Enum format handling", (assert) => {
+        this.quillMock.getFormat = () => {
+            return {};
+        };
+        this.options.items = [
+            { formatName: "size", formatValues: ["10px", "2em"] }
+        ];
+
+        new Toolbar(this.quillMock, this.options);
+
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${DROPDOWNEDITOR_ICON_CLASS}`)
+            .trigger("dxclick");
+
+        $(`.${LIST_ITEM_CLASS}`)
+            .first()
+            .trigger("dxclick");
+
+        assert.deepEqual(
+            this.log,
+            [{
+                format: "size",
+                value: "10px"
+            }]
+        );
+    });
+
+    test("Enum with custom options format handling", (assert) => {
+        this.quillMock.getFormat = () => {
+            return {};
+        };
+        this.options.items = [
+            { formatName: "script", formatValues: [false, "super", "sub"], options: { placeholder: "Test" } }
+        ];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $formatWidget = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+
+        $formatWidget
+            .find(`.${DROPDOWNEDITOR_ICON_CLASS}`)
+            .trigger("dxclick");
+
+        $(`.${LIST_ITEM_CLASS}`)
+            .last()
+            .trigger("dxclick");
+
+        const placeholder = $formatWidget.dxSelectBox("option", "placeholder");
+
+        assert.deepEqual(
+            this.log,
+            [{
+                format: "script",
+                value: "sub"
+            }]
+        );
+        assert.equal(placeholder, "Test", "widget has a custom placeholder");
     });
 
     test("handle align formatting", (assert) => {
@@ -392,6 +484,22 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
                 format: "script",
                 value: false
             }]);
+    });
+
+    test("separator item", (assert) => {
+        this.options.items = ["separator", { formatName: "separator", locateInMenu: "always" }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        $(`.${TOOLBAR_CLASS} .${DROPDOWNMENU_BUTTON_CLASS}`)
+            .trigger("dxclick")
+            .trigger("dxclick");
+
+        const $separator = $(`.${TOOLBAR_CLASS} .${SEPARATOR_CLASS}`);
+        const $menuSeparator = $(`.${TOOLBAR_CLASS} .${MENU_SEPARATOR_CLASS}`);
+
+        assert.equal($separator.length, 1, "Toolbar has a separator item");
+        assert.equal($menuSeparator.length, 1, "Toolbar has a menu separator item");
     });
 });
 
