@@ -13,7 +13,6 @@ class OverlapStrategy extends DrawerStrategy {
 
         const position = this.getOverlayPosition();
         const drawer = this.getDrawerInstance();
-        delete this._initialPosition;
 
         drawer._overlay = drawer._createComponent(drawer.content(), Overlay, {
             shading: false,
@@ -31,7 +30,7 @@ class OverlapStrategy extends DrawerStrategy {
                 if(typeUtils.isDefined(this._initialPosition)) {
                     translator.move(e.component.$content(), { left: this._initialPosition.left });
                 }
-                if(this.getDrawerInstance().option("position") === "right") {
+                if(this.getDrawerInstance().getDrawerPosition() === "right") {
                     e.component.$content().css("left", "auto");
                 }
             }).bind(this),
@@ -57,8 +56,10 @@ class OverlapStrategy extends DrawerStrategy {
             };
         }
         if(panelPosition === "right") {
+            let my = drawer.option("rtlEnabled") ? "top left" : "top right";
+
             result = {
-                my: "top right",
+                my: my,
                 at: "top right",
             };
         }
