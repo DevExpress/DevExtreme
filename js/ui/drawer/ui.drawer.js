@@ -293,12 +293,10 @@ const Drawer = Widget.inherit({
 
         this.$element().addClass(DRAWER_CLASS + "-" + position);
 
-        this._orderContent();
+        this._orderContent(position);
     },
 
-    _orderContent() {
-        const position = this.getDrawerPosition();
-
+    _orderContent(position) {
         if(this._needOrderContent() && (position === "right" || position === "bottom")) {
             this._$wrapper.prepend(this._$contentWrapper);
         } else {
