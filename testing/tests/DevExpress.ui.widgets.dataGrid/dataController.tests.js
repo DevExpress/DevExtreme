@@ -657,16 +657,14 @@ QUnit.test("Using focusedRowEnabled should set sorting for the not sorted compos
 
 QUnit.test("Get page index by simple key", function(assert) {
     // arrange
-    var dataSource = createDataSource([
+    var count = 0,
+        dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
         { team: 'internal', name: 'Dan', age: 25 },
         { team: 'internal', name: 'Bob', age: 20 },
         { team: 'public', name: 'Alice', age: 19 }],
         { key: "name" },
-        {
-            pageSize: 1,
-            asyncLoadEnabled: false
-        });
+        { pageSize: 1, asyncLoadEnabled: false });
 
     this.applyOptions({
         dataSource: dataSource
@@ -675,8 +673,10 @@ QUnit.test("Get page index by simple key", function(assert) {
     // act
     this.dataController._refreshDataSource();
     this.dataController.getPageIndexByKey("Alice").done(function(pageIndex) {
+        ++count;
         assert.equal(pageIndex, 1);
     });
+    assert.equal(count, 1, "Count");
 });
 
 QUnit.test("Get page index by composite key", function(assert) {
@@ -900,6 +900,685 @@ QUnit.test("Get page index by composite key if combined filter present", functio
         assert.equal(dataController.pageCount(), 5);
         assert.equal(pageIndex, 3);
     });
+});
+
+QUnit.test("Get row index if group by one column and simple key (group sizes are similar and equals to the pageSize)", function(assert) {
+    // arrange
+    var dataController,
+        foundRowCount = 0,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal0', name: 'Mark', age: 25 },
+            { team: 'internal0', name: 'Den', age: 24 },
+            { team: 'internal1', name: 'Dan', age: 23 },
+            { team: 'internal1', name: 'Clark', age: 22 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }],
+            { key: 'name' },
+            { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        );
+
+    this.applyOptions({
+        commonColumnSettings: { autoExpandGroup: true },
+        dataSource: dataSource
+    });
+
+    // act
+    dataController = this.dataController;
+    dataController._refreshDataSource();
+    // assert
+    dataController.getGlobalRowIndexByKey("Mark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(dataController.pageCount(), 4, "Page count");
+        assert.equal(globalRowIndex, 5, "Mark");
+    });
+    dataController.getGlobalRowIndexByKey("Alex").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 1, "Alex");
+    });
+    dataController.getGlobalRowIndexByKey("Den").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 4, "Den");
+    });
+    dataController.getGlobalRowIndexByKey("Bob").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 2, "Bob");
+    });
+    dataController.getGlobalRowIndexByKey("Dan").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 8, "Dan");
+    });
+    dataController.getGlobalRowIndexByKey("Zeb").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 11, "Zeb");
+    });
+    dataController.getGlobalRowIndexByKey("Clark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 7, "Clark");
+    });
+    dataController.getGlobalRowIndexByKey("Alice").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 10, "Alice");
+    });
+
+    assert.equal(foundRowCount, 8, "Found row count");
+});
+
+QUnit.test("Get row index if group by one column and simple key", function(assert) {
+    // arrange
+    var dataController,
+        foundRowCount = 0,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal', name: 'Sad', age: 28 },
+            { team: 'internal0', name: 'Mark', age: 25 },
+            { team: 'internal0', name: 'Den', age: 24 },
+            { team: 'internal1', name: 'Dan', age: 23 },
+            { team: 'internal1', name: 'Clark', age: 22 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }],
+            { key: 'name' },
+            { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        );
+
+    this.applyOptions({
+        commonColumnSettings: { autoExpandGroup: true },
+        dataSource: dataSource
+    });
+
+    // act
+    dataController = this.dataController;
+    dataController._refreshDataSource();
+    // assert
+    dataController.getGlobalRowIndexByKey("Sad").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(dataController.pageCount(), 5, "Page count");
+        assert.equal(globalRowIndex, 4, "Sad");
+    });
+    dataController.getGlobalRowIndexByKey("Alex").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 1, "Alex");
+    });
+    dataController.getGlobalRowIndexByKey("Den").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 7, "Den");
+    });
+    dataController.getGlobalRowIndexByKey("Bob").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 2, "Bob");
+    });
+    dataController.getGlobalRowIndexByKey("Dan").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 11, "Dan");
+    });
+    dataController.getGlobalRowIndexByKey("Mark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 8, "Mark");
+    });
+    dataController.getGlobalRowIndexByKey("Zeb").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 14, "Zeb");
+    });
+    dataController.getGlobalRowIndexByKey("Clark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 10, "Clark");
+    });
+    dataController.getGlobalRowIndexByKey("Alice").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 13, "Alice");
+    });
+
+    assert.equal(foundRowCount, 9, "Found row count");
+});
+
+QUnit.test("Get row index if group by one column and simple key and remote operations", function(assert) {
+    // arrange
+    var dataController,
+        foundRowCount = 0,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal', name: 'Sad', age: 28 },
+            { team: 'internal0', name: 'Mark', age: 25 },
+            { team: 'internal0', name: 'Den', age: 24 },
+            { team: 'internal1', name: 'Dan', age: 23 },
+            { team: 'internal1', name: 'Clark', age: 22 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }],
+            { key: 'name' },
+            { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        );
+
+    this.applyOptions({
+        remoteOperations: true,
+        commonColumnSettings: { autoExpandGroup: true },
+        dataSource: dataSource
+    });
+
+    // act
+    dataController = this.dataController;
+    dataController._refreshDataSource();
+    // assert
+    dataController.getGlobalRowIndexByKey("Sad").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(dataController.pageCount(), 5, "Page count");
+        assert.equal(globalRowIndex, 4, "Sad");
+    });
+    dataController.getGlobalRowIndexByKey("Alex").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 1, "Alex");
+    });
+    dataController.getGlobalRowIndexByKey("Den").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 7, "Den");
+    });
+    dataController.getGlobalRowIndexByKey("Bob").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 2, "Bob");
+    });
+    dataController.getGlobalRowIndexByKey("Dan").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 11, "Dan");
+    });
+    dataController.getGlobalRowIndexByKey("Mark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 8, "Mark");
+    });
+    dataController.getGlobalRowIndexByKey("Zeb").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 14, "Zeb");
+    });
+    dataController.getGlobalRowIndexByKey("Clark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 10, "Clark");
+    });
+    dataController.getGlobalRowIndexByKey("Alice").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 13, "Alice");
+    });
+
+    assert.equal(foundRowCount, 9, "Found row count");
+});
+
+QUnit.test("Get row index if group by one column and simple key and OData", function(assert) {
+    // arrange
+    var dataController,
+        foundRowCount = 0,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal', name: 'Sad', age: 28 },
+            { team: 'internal0', name: 'Mark', age: 25 },
+            { team: 'internal0', name: 'Den', age: 24 },
+            { team: 'internal1', name: 'Dan', age: 23 },
+            { team: 'internal1', name: 'Clark', age: 22 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }],
+            { key: 'name' },
+            { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        );
+
+    this.applyOptions({
+        remoteOperations: { sorting: true, paging: true, filtering: true },
+        commonColumnSettings: { autoExpandGroup: true },
+        dataSource: dataSource
+    });
+
+    // act
+    dataController = this.dataController;
+    dataController._refreshDataSource();
+    // assert
+    dataController.getGlobalRowIndexByKey("Sad").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(dataController.pageCount(), 3, "Page count");
+        assert.equal(globalRowIndex, 2, "Sad");
+    });
+    dataController.getGlobalRowIndexByKey("Alex").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 0, "Alex");
+    });
+    dataController.getGlobalRowIndexByKey("Den").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 3, "Den");
+    });
+    dataController.getGlobalRowIndexByKey("Bob").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 1, "Bob");
+    });
+    dataController.getGlobalRowIndexByKey("Dan").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 6, "Dan");
+    });
+    dataController.getGlobalRowIndexByKey("Mark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 4, "Mark");
+    });
+    dataController.getGlobalRowIndexByKey("Zeb").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 8, "Zeb");
+    });
+    dataController.getGlobalRowIndexByKey("Clark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 5, "Clark");
+    });
+    dataController.getGlobalRowIndexByKey("Alice").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 7, "Alice");
+    });
+
+    assert.equal(foundRowCount, 9, "Found row count");
+});
+
+QUnit.test("Get row index if group by two columns and simple key", function(assert) {
+    // arrange
+    var dataController,
+        foundRowCount = 0,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
+            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
+            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
+            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
+            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
+            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
+            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
+            { team: 'public', name: 'Alice', age: 19, g0: 3 },
+            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
+            { key: 'name' },
+            { group: ["team", "g0"], pageSize: 5, asyncLoadEnabled: false, paginate: true }
+        );
+
+    this.applyOptions({
+        commonColumnSettings: { autoExpandGroup: true },
+        dataSource: dataSource
+    });
+
+    // act
+    dataController = this.dataController;
+    dataController._refreshDataSource();
+    // assert
+    dataController.getGlobalRowIndexByKey("Alex").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(dataController.pageCount(), 5, "Page count");
+        assert.equal(globalRowIndex, 2, "Alex");
+    });
+    dataController.getGlobalRowIndexByKey("Bob").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 4, "Bob");
+    });
+    dataController.getGlobalRowIndexByKey("Mark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 7, "Mark");
+    });
+    dataController.getGlobalRowIndexByKey("Sad").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 8, "Sad");
+    });
+    dataController.getGlobalRowIndexByKey("Dan").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 12, "Dan");
+    });
+    dataController.getGlobalRowIndexByKey("Den").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 13, "Den");
+    });
+    dataController.getGlobalRowIndexByKey("Clark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 17, "Clark");
+    });
+    dataController.getGlobalRowIndexByKey("Zeb").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 22, "Zeb");
+    });
+    dataController.getGlobalRowIndexByKey("Alice").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 24, "Alice");
+    });
+
+    assert.equal(foundRowCount, 9, "Found row count");
+});
+
+QUnit.test("Get row index if group by two columns and simple key and remote operations", function(assert) {
+    // arrange
+    var dataController,
+        foundRowCount = 0,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
+            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
+            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
+            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
+            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
+            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
+            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
+            { team: 'public', name: 'Alice', age: 19, g0: 3 },
+            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
+            { key: 'name' },
+            { group: ["team", "g0"], pageSize: 5, asyncLoadEnabled: false, paginate: true }
+        );
+
+    this.applyOptions({
+        remoteOperations: true,
+        commonColumnSettings: { autoExpandGroup: true },
+        dataSource: dataSource
+    });
+
+    // act
+    dataController = this.dataController;
+    dataController._refreshDataSource();
+    // assert
+    dataController.getGlobalRowIndexByKey("Alex").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(dataController.pageCount(), 5, "Page count");
+        assert.equal(globalRowIndex, 2, "Alex");
+    });
+    dataController.getGlobalRowIndexByKey("Bob").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 4, "Bob");
+    });
+    dataController.getGlobalRowIndexByKey("Mark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 7, "Mark");
+    });
+    dataController.getGlobalRowIndexByKey("Sad").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 8, "Sad");
+    });
+    dataController.getGlobalRowIndexByKey("Dan").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 12, "Dan");
+    });
+    dataController.getGlobalRowIndexByKey("Den").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 13, "Den");
+    });
+    dataController.getGlobalRowIndexByKey("Clark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 17, "Clark");
+    });
+    dataController.getGlobalRowIndexByKey("Zeb").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 22, "Zeb");
+    });
+    dataController.getGlobalRowIndexByKey("Alice").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 24, "Alice");
+    });
+
+    assert.equal(foundRowCount, 9, "Found row count");
+});
+
+QUnit.test("Get row index if group by two columns and simple key and OData", function(assert) {
+    // arrange
+    var dataController,
+        foundRowCount = 0,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
+            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
+            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
+            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
+            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
+            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
+            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
+            { team: 'public', name: 'Alice', age: 19, g0: 3 },
+            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
+            { key: 'name' },
+            { group: ["team", "g0"], pageSize: 5, asyncLoadEnabled: false, paginate: true }
+        );
+
+    this.applyOptions({
+        remoteOperations: { sorting: true, paging: true, filtering: true },
+        commonColumnSettings: { autoExpandGroup: true },
+        dataSource: dataSource
+    });
+
+    // act
+    dataController = this.dataController;
+    dataController._refreshDataSource();
+    // assert
+    dataController.getGlobalRowIndexByKey("Alex").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(dataController.pageCount(), 2, "Page count");
+        assert.equal(globalRowIndex, 0, "Alex");
+    });
+    dataController.getGlobalRowIndexByKey("Bob").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 1, "Bob");
+    });
+    dataController.getGlobalRowIndexByKey("Mark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 2, "Mark");
+    });
+    dataController.getGlobalRowIndexByKey("Sad").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 3, "Sad");
+    });
+    dataController.getGlobalRowIndexByKey("Dan").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 4, "Dan");
+    });
+    dataController.getGlobalRowIndexByKey("Den").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 5, "Den");
+    });
+    dataController.getGlobalRowIndexByKey("Clark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 6, "Clark");
+    });
+    dataController.getGlobalRowIndexByKey("Zeb").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 7, "Zeb");
+    });
+    dataController.getGlobalRowIndexByKey("Alice").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 8, "Alice");
+    });
+
+    assert.equal(foundRowCount, 9, "Found row count");
+});
+
+QUnit.test("Get row index if group by one column, simple key and virtual scrolling", function(assert) {
+    // arrange
+    var dataController,
+        foundRowCount = 0,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal', name: 'Sad', age: 28 },
+            { team: 'internal', name: 'Mark', age: 25 },
+            { team: 'internal0', name: 'Den', age: 24 },
+            { team: 'internal0', name: 'Dan', age: 23 },
+            { team: 'internal1', name: 'Clark', age: 22 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }],
+            { key: 'name' },
+            { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        );
+
+    this.applyOptions({
+        commonColumnSettings: { autoExpandGroup: true },
+        scrolling: { mode: "virtual" },
+        dataSource: dataSource
+    });
+
+    // act
+    dataController = this.dataController;
+    dataController._refreshDataSource();
+    // assert
+    dataController.getGlobalRowIndexByKey("Alex").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 1, "Alex");
+    });
+    dataController.getGlobalRowIndexByKey("Bob").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 2, "Bob");
+    });
+    dataController.getGlobalRowIndexByKey("Mark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 3, "Mark");
+    });
+    dataController.getGlobalRowIndexByKey("Sad").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 4, "Sad");
+    });
+    dataController.getGlobalRowIndexByKey("Dan").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 6, "Dan");
+    });
+    dataController.getGlobalRowIndexByKey("Den").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 7, "Den");
+    });
+    dataController.getGlobalRowIndexByKey("Clark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 9, "Clark");
+    });
+    dataController.getGlobalRowIndexByKey("Alice").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 11, "Alice");
+    });
+    dataController.getGlobalRowIndexByKey("Zeb").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 12, "Zeb");
+    });
+
+    assert.equal(foundRowCount, 9, "Found row count");
+});
+
+QUnit.test("Get row index if group by two columns, simple key and virtual scrolling", function(assert) {
+    // arrange
+    var dataController,
+        foundRowCount = 0,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
+            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
+            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
+            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
+            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
+            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
+            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
+            { team: 'public', name: 'Alice', age: 19, g0: 3 },
+            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
+            { key: 'name' },
+            { group: ["team", "g0"], pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        );
+
+    this.applyOptions({
+        commonColumnSettings: { autoExpandGroup: true },
+        scrolling: { mode: "virtual" },
+        dataSource: dataSource
+    });
+
+    // act
+    dataController = this.dataController;
+    dataController._refreshDataSource();
+    // assert
+    dataController.getGlobalRowIndexByKey("Alex").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 2, "Alex");
+    });
+    dataController.getGlobalRowIndexByKey("Bob").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 4, "Bob");
+    });
+    dataController.getGlobalRowIndexByKey("Mark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 5, "Mark");
+    });
+    dataController.getGlobalRowIndexByKey("Sad").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 6, "Sad");
+    });
+    dataController.getGlobalRowIndexByKey("Dan").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 9, "Dan");
+    });
+    dataController.getGlobalRowIndexByKey("Den").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 10, "Den");
+    });
+    dataController.getGlobalRowIndexByKey("Clark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 13, "Clark");
+    });
+    dataController.getGlobalRowIndexByKey("Alice").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 18, "Alice");
+    });
+    dataController.getGlobalRowIndexByKey("Zeb").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 16, "Zeb");
+    });
+
+    assert.equal(foundRowCount, 9, "Found row count");
+});
+
+QUnit.test("Get row index if group by two columns, simple key and virtual scrolling", function(assert) {
+    // arrange
+    var dataController,
+        foundRowCount = 0,
+        dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30, g0: 0 },
+            { team: 'internal', name: 'Bob', age: 29, g0: 1 },
+            { team: 'internal', name: 'Sad', age: 28, g0: 1 },
+            { team: 'internal', name: 'Mark', age: 25, g0: 1 },
+            { team: 'internal0', name: 'Den', age: 24, g0: 2 },
+            { team: 'internal0', name: 'Dan', age: 23, g0: 2 },
+            { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
+            { team: 'public', name: 'Alice', age: 19, g0: 3 },
+            { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
+            { key: 'name' },
+            { group: ["team", "g0"], pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        );
+
+    this.applyOptions({
+        commonColumnSettings: { autoExpandGroup: true },
+        scrolling: { mode: "virtual" },
+        dataSource: dataSource
+    });
+
+    // act
+    dataController = this.dataController;
+    dataController._refreshDataSource();
+    // assert
+    dataController.getGlobalRowIndexByKey("Alex").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 2, "Alex");
+    });
+    dataController.getGlobalRowIndexByKey("Bob").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 4, "Bob");
+    });
+    dataController.getGlobalRowIndexByKey("Mark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 5, "Mark");
+    });
+    dataController.getGlobalRowIndexByKey("Sad").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 6, "Sad");
+    });
+    dataController.getGlobalRowIndexByKey("Dan").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 9, "Dan");
+    });
+    dataController.getGlobalRowIndexByKey("Den").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 10, "Den");
+    });
+    dataController.getGlobalRowIndexByKey("Clark").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 13, "Clark");
+    });
+    dataController.getGlobalRowIndexByKey("Alice").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 18, "Alice");
+    });
+    dataController.getGlobalRowIndexByKey("Zeb").done(function(globalRowIndex) {
+        ++foundRowCount;
+        assert.equal(globalRowIndex, 16, "Zeb");
+    });
+
+    assert.equal(foundRowCount, 9, "Found row count");
 });
 
 // B254274

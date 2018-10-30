@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
 var ROW_FOCUSED_CLASS = "dx-row-focused",
+    FOCUSED_ROW_SELECTOR = ".dx-row" + "." + ROW_FOCUSED_CLASS,
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     UPDATE_FOCUSED_ROW_CHANGE_TYPE = "updateFocusedRow";
 
@@ -15,7 +16,6 @@ exports.FocusController = core.ViewController.inherit((function() {
         init: function() {
             this._dataController = this.getController("data");
             this._keyboardController = this.getController("keyboardNavigation");
-            this._needRestoreFocus = false;
         },
 
         optionChanged: function(args) {
@@ -60,7 +60,6 @@ exports.FocusController = core.ViewController.inherit((function() {
         navigateToRow: function(key) {
             var that = this,
                 dataController = this.getController("data"),
-                rowsView = this.getView("rowsView"),
                 rowIndex = this.option("focusedRowIndex");
 
             if(key === undefined || !dataController.dataSource()) {
@@ -73,7 +72,6 @@ exports.FocusController = core.ViewController.inherit((function() {
                 that._triggerUpdateFocusedRow(key);
             } else {
                 dataController.getPageIndexByKey(key).done(function(pageIndex) {
-                    that._needRestoreFocus = $(rowsView._getRowElement(that.option("focusedRowIndex"))).is(":focus");
                     if(pageIndex === dataController.pageIndex()) {
                         dataController.reload().done(function() {
                             that._triggerUpdateFocusedRow(key);
@@ -153,7 +151,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             });
         },
         _clearPreviousFocusedRow: function($tableElement, focusedRowIndex) {
-            var $prevRowFocusedElement = $tableElement.find(".dx-row" + "." + ROW_FOCUSED_CLASS),
+            var $prevRowFocusedElement = $tableElement.find(FOCUSED_ROW_SELECTOR),
                 $firstRow;
             $prevRowFocusedElement
                 .removeClass(ROW_FOCUSED_CLASS)
@@ -199,7 +197,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 return;
             }
 
-            $focusedRow = $row || $rowsViewElement.find("." + ROW_FOCUSED_CLASS);
+            $focusedRow = $row || $rowsViewElement.find(FOCUSED_ROW_SELECTOR);
 
             if($focusedRow.length > 0) {
                 var focusedRowRect = $focusedRow[0].getBoundingClientRect(),
@@ -416,8 +414,24 @@ module.exports = {
 
                 getPageIndexByKey: function(key) {
                     var that = this,
+                        d = new Deferred();
+
+                    that.getGlobalRowIndexByKey(key, d).done(function(globalIndex) {
+                        d.resolve(Math.floor(globalIndex / that.pageSize()));
+                    });
+
+                    return d.promise();
+                },
+                getGlobalRowIndexByKey: function(key) {
+                    if(this._dataSource.group()) {
+                        return this._calculateGlobalRowIndexByGroupedData(key);
+                    }
+                    return this._calculateGlobalRowIndexByFlatData(key);
+                },
+                _calculateGlobalRowIndexByFlatData: function(key, groupFilter, useGroup) {
+                    var that = this,
+                        deferred = new Deferred(),
                         dataSource = that._dataSource,
-                        d = new Deferred(),
                         filter = that._generateFilterByKey(key);
 
                     dataSource.load({
@@ -426,30 +440,36 @@ module.exports = {
                         take: 1
                     }).done(function(data) {
                         if(data.length > 0) {
-                            filter = that._generateOperationFilterByKey(key, data[0]);
+                            filter = that._generateOperationFilterByKey(key, data[0], useGroup);
                             dataSource.load({
-                                filter: that._concatWithCombinedFilter(filter),
+                                filter: that._concatWithCombinedFilter(filter, groupFilter),
                                 skip: 0,
                                 take: 1,
                                 requireTotalCount: true
                             }).done(function(_, extra) {
-                                var pageIndex = Math.floor(extra.totalCount / that.pageSize());
-                                d.resolve(pageIndex);
+                                deferred.resolve(extra.totalCount);
                             });
                         }
                     });
 
-                    return d.promise();
+                    return deferred.promise();
                 },
-                _concatWithCombinedFilter: function(filter) {
+                _concatWithCombinedFilter: function(filter, groupFilter) {
                     var combinedFilter = this.getCombinedFilter();
-                    return gridCoreUtils.combineFilters([filter, combinedFilter]);
+                    return gridCoreUtils.combineFilters([filter, combinedFilter, groupFilter]);
                 },
-                _generateOperationFilterByKey: function(key, rowData) {
+                _generateOperationFilterByKey: function(key, rowData, useGroup) {
                     var that = this,
                         dataSource = that._dataSource,
                         filter = that._generateFilterByKey(key, "<"),
                         sort = that._columnsController.getSortDataSourceParameters(!dataSource.remoteOperations().filtering);
+
+                    if(useGroup) {
+                        var group = that._columnsController.getGroupDataSourceParameters(!dataSource.remoteOperations().filtering);
+                        if(group) {
+                            sort = sort ? group.concat(sort) : group;
+                        }
+                    }
 
                     if(sort) {
                         sort.slice().reverse().forEach(function(sortInfo) {

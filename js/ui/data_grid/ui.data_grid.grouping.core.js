@@ -4,22 +4,6 @@ var $ = require("../../core/renderer"),
     normalizeSortingInfo = require("../../data/utils").normalizeSortingInfo,
     when = require("../../core/utils/deferred").when;
 
-exports.createGroupFilter = function(path, storeLoadOptions) {
-    var groups = normalizeSortingInfo(storeLoadOptions.group),
-        i,
-        filter = [];
-
-    for(i = 0; i < path.length; i++) {
-        filter.push([groups[i].selector, "=", path[i]]);
-    }
-
-    if(storeLoadOptions.filter) {
-        filter.push(storeLoadOptions.filter);
-    }
-    return gridCore.combineFilters(filter);
-};
-
-
 exports.createOffsetFilter = function(path, storeLoadOptions) {
     var groups = normalizeSortingInfo(storeLoadOptions.group),
         i,

@@ -546,6 +546,119 @@ QUnit.testInActiveWindow("Focus row if virtual scrolling mode", function(assert)
     assert.equal($(rowsView.getRow(2)).find("td").eq(0).text(), "Test", "Focused row ");
 });
 
+QUnit.testInActiveWindow("Focus row if grouping and virtual scrolling mode", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        keyExpr: "name",
+        height: 140,
+        focusedRowEnabled: true,
+        focusedRowKey: "Clark",
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 3
+        },
+        columns: [
+            { dataField: "team", groupIndex: 0, autoExpandGroup: true },
+            "name",
+            "age"
+        ]
+    };
+
+    this.data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal', name: 'Sad', age: 28 },
+        { team: 'internal', name: 'Mark', age: 25 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'internal1', name: 'Clark', age: 22 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }
+    ];
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 9, "FocusedRowIndex");
+    assert.equal(this.pageIndex(), 3, "PageIndex");
+    assert.equal($(rowsView.getRow(0)).find("td").eq(1).text(), "Clark", "Clark");
+});
+
+QUnit.testInActiveWindow("Focus next row if grouping and virtual scrolling mode", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        keyExpr: "name",
+        height: 140,
+        focusedRowEnabled: true,
+        focusedRowKey: "Den",
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 3
+        },
+        columns: [
+            { dataField: "team", groupIndex: 0, autoExpandGroup: true },
+            "name",
+            "age"
+        ]
+    };
+
+    this.data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal', name: 'Sad', age: 28 },
+        { team: 'internal', name: 'Mark', age: 25 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'internal1', name: 'Clark', age: 22 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }
+    ];
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    // act
+    this.navigateToRow("Alice");
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 11, "FocusedRowIndex");
+    assert.equal(this.pageIndex(), 3, "PageIndex");
+    assert.equal($(rowsView.getRow(11)).find("td").eq(1).text(), "Alice", "Alice");
+});
+
 QUnit.testInActiveWindow("Tab index should not exist for the previous focused row", function(assert) {
     var rowsView;
 
