@@ -304,8 +304,11 @@ var RadioGroup = Editor.inherit({
             var $item = $(item);
             var itemValue = this._valueGetter($item.data(ITEM_DATA_KEY));
             var isValueEquals = this._isValueEquals(itemValue, selectedValue);
-            $item.toggleClass(RADIO_BUTTON_CHECKED_CLASS, isValueEquals);
-            $item.find("." + RADIO_BUTTON_ICON_CLASS).first().toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, isValueEquals);
+            $item
+                .toggleClass(RADIO_BUTTON_CHECKED_CLASS, isValueEquals)
+                .find("." + RADIO_BUTTON_ICON_CLASS)
+                .first()
+                .toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, isValueEquals);
 
             this.setAria("checked", this._isValueEquals(itemValue, selectedValue), $item);
         }).bind(this));
