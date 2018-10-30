@@ -197,7 +197,6 @@ var environmentWithSinonStubPoint = {
             stub.visibleTopMarker = true;
             stub.visibleBottomMarker = true;
             stub.hide.reset();
-            stub.applyStyle.reset();
             stub.isHovered.returns(false);
             stub.isSelected.returns(false);
             stub.coordsIn.returns(false);
@@ -2710,8 +2709,8 @@ QUnit.test("select hovered series - selectionMode is excludePoints", function(as
 
 
     $.each(series.getPoints(), function(i, p) {
-        if(p.applyStyle.called) {
-            assert.strictEqual(p.applyStyle.lastCall.args[0], "normal");
+        if(p.resetView.called) {
+            assert.strictEqual(p.resetView.lastCall.args[0], "hover");
         }
     });
 });
@@ -2740,8 +2739,8 @@ QUnit.test("select hovered series - selectionMode is includePoints", function(as
 
 
     $.each(series.getPoints(), function(i, p) {
-        if(p.applyStyle.called) {
-            assert.strictEqual(p.applyStyle.lastCall.args[0], "selection");
+        if(p.setView.called) {
+            assert.strictEqual(p.setView.lastCall.args[0], "selection");
         }
     });
 });
@@ -2772,8 +2771,8 @@ QUnit.test("select hovered series - release selected series, update hover", func
     assert.strictEqual(series.stylesHistory[2], "hover");
 
     $.each(series.getPoints(), function(i, p) {
-        if(p.applyStyle.called) {
-            assert.strictEqual(p.applyStyle.lastCall.args[0], "hover");
+        if(p.setView.called) {
+            assert.strictEqual(p.setView.lastCall.args[0], "hover");
         }
     });
 });
@@ -3700,16 +3699,6 @@ QUnit.test("Set Hover point with series.selected. ", function(assert) {
 
     assert.equal(series.getAllPoints()[0].fullState, 1, "fullState");
     assert.equal(series.getAllPoints()[0].applyView.callCount, 1);
-});
-
-QUnit.test("Set Hover point with point.selected. ", function(assert) {
-    this.series.selectPoint(this.point);
-    this.point.isSelected.returns(true);
-    // act
-    this.series.hoverPoint(this.point);
-
-    assert.equal(this.point.fullState, 2 | 1, "fullState");
-    assert.ok(this.point.applyView.callCount, 2, "Point style");
 });
 
 QUnit.test("Set Hover point with point.selected. ", function(assert) {
@@ -4792,7 +4781,7 @@ QUnit.test("point hover. allSeriesPoints. apply hover style only points target s
         target: series2.getAllPoints()[0]
     });
     // assert
-    assert.equal(series1.getAllPoints()[0].applyStyle.callCount, 0);
+    assert.equal(series1.getAllPoints()[0].setView.callCount, 0);
 });
 
 QUnit.test("point clear hover. allArgumentPoints", function(assert) {

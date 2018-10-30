@@ -407,6 +407,9 @@ var baseTrackerPrototype = {
                 return;
             }
         } else if(point) {
+            if(e.type !== pointerEvents.move && e.pointerType !== "touch") {
+                return;
+            }
             if(that.hoveredSeries) {
                 that._setTimeout(function() {
                     that._pointerOnPoint(point, x, y, e);

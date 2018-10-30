@@ -1842,7 +1842,8 @@ QUnit.test("Update marker group", function(assert) {
     point.draw(this.renderer, this.groups);
     point.graphic.stub("append").reset();
 
-    point.applyStyle("hover");
+    point.fullState = 1;
+    point.applyView();
 
     assert.ok(!point.graphic.stub("append").called);
 });
