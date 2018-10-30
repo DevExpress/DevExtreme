@@ -31,7 +31,7 @@ class OverlapStrategy extends DrawerStrategy {
                 if(typeUtils.isDefined(this._initialPosition)) {
                     translator.move(e.component.$content(), { left: this._initialPosition.left });
                 }
-                if(this.getDrawerInstance().getDrawerPosition() === "right") {
+                if(this.getDrawerInstance().option("position") === "right") {
                     e.component.$content().css("left", "auto");
                 }
             }).bind(this),

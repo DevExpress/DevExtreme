@@ -743,6 +743,37 @@ QUnit.test("drawer panel overlay should have right position config", assert => {
     assert.equal(overlay.option("position").at, "top left");
 });
 
+QUnit.test("minSize and maxSize should be rendered correctly in overlap mode rtl, slide", assert => {
+    fx.off = true;
+    let drawer = $("#drawer").dxDrawer({
+        openedStateMode: "overlap",
+        minSize: 50,
+        maxSize: 300,
+        opened: false,
+        revealMode: "slide",
+        rtlEnabled: true,
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    }).dxDrawer("instance");
+
+    const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
+    const $panelContent = $(".dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content").eq(0);
+
+    assert.equal($panel.position().left, 150, "panel has correct left when minSize and max size are set");
+    assert.equal($panelContent.position().left, -200, "panel has correct left when minSize and max size are set");
+    drawer.toggle();
+
+    assert.equal($panel.position().left, -100, "panel has correct left when minSize and max size are set");
+    assert.equal($panelContent.position().left, -200, "panel has correct left when minSize and max size are set");
+
+    fx.off = false;
+});
+
 QUnit.module("CloseOnOutsideClick");
 
 QUnit.test("drawer should be hidden after click on content", (assert) => {
