@@ -280,12 +280,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         var fullDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay),
             durationInMinutes = this._adjustDurationByDaylightDiff(fullDuration, startDate, endDate) / 60000;
 
-        var minHeight = this.getAppointmentMinSize(),
-            height = Math.round(durationInMinutes * this._getMinuteHeight());
-
-        if(height < minHeight) {
-            height = minHeight;
-        }
+        var height = durationInMinutes * this._getMinuteHeight();
 
         return height;
     },
