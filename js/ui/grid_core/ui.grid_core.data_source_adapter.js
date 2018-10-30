@@ -84,6 +84,7 @@ module.exports = gridCore.Controller.inherit((function() {
             that.loadingChanged = Callbacks();
             that.loadError = Callbacks();
             that.customizeStoreLoadOptions = Callbacks();
+            that.changing = Callbacks();
 
             that._dataChangedHandler = that._handleDataChanged.bind(that);
             that._dataLoadingHandler = that._handleDataLoading.bind(that);
@@ -91,12 +92,14 @@ module.exports = gridCore.Controller.inherit((function() {
             that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
             that._loadErrorHandler = that._handleLoadError.bind(that);
             that._pushHandler = that._handlePush.bind(that);
+            that._changingHandler = that._handleChanging.bind(that);
 
             dataSource.on("changed", that._dataChangedHandler);
             dataSource.on("customizeStoreLoadOptions", that._dataLoadingHandler);
             dataSource.on("customizeLoadResult", that._dataLoadedHandler);
             dataSource.on("loadingChanged", that._loadingChangedHandler);
             dataSource.on("loadError", that._loadErrorHandler);
+            dataSource.on("changing", that._changingHandler);
             dataSource.store().on("push", that._pushHandler);
 
             each(dataSource, function(memberName, member) {
@@ -119,6 +122,7 @@ module.exports = gridCore.Controller.inherit((function() {
             dataSource.off("customizeLoadResult", that._dataLoadedHandler);
             dataSource.off("loadingChanged", that._loadingChangedHandler);
             dataSource.off("loadError", that._loadErrorHandler);
+            dataSource.off("changing", that._changingHandler);
             dataSource.store().off("push", that._pushHandler);
             if(!isSharedDataSource) {
                 dataSource.dispose();
@@ -159,12 +163,27 @@ module.exports = gridCore.Controller.inherit((function() {
             }
 
             if(!fromStore) {
-                var groupCount = gridCore.normalizeSortingInfo(this.group()).length;
-                arrayUtils.applyBatch(store, this._items, changes, groupCount, true);
+                this._applyBatch(changes);
             }
+        },
+        _applyBatch: function(changes) {
+            var store = this.store(),
+                groupCount = gridCore.normalizeSortingInfo(this.group()).length;
+
+            changes = changes.filter(function(change) {
+                return change.type !== "insert" || change.index !== undefined;
+            });
+
+            arrayUtils.applyBatch(store, this._items, changes, groupCount, true);
+            arrayUtils.applyBatch(store, this._dataSource.items(), changes, groupCount, true);
+            changes.splice(0, changes.length);
         },
         _handlePush: function(changes) {
             this.push(changes, true);
+        },
+        _handleChanging: function(e) {
+            this.changing.fire(e);
+            this._applyBatch(e.changes);
         },
         _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var that = this,

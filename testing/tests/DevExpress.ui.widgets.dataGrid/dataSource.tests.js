@@ -5944,6 +5944,23 @@ QUnit.test("update cache on push", function(assert) {
     assert.deepEqual(this.loadingCount, 1, "one loading");
 });
 
+QUnit.test("update cache on push without reshapeOnPush", function(assert) {
+    var dataSource = this.createDataSource({
+        pushAggregationTimeout: 0
+    });
+    dataSource.load();
+    this.clock.tick();
+
+    // act
+    dataSource.store().push([{ type: "remove", key: 1 }]);
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(dataSource.items()[0], 2, "first item on page");
+    assert.deepEqual(dataSource.totalCount(), 10, "totalCount is not refreshed");
+    assert.deepEqual(this.loadingCount, 1, "one loading");
+});
+
 QUnit.module("Custom Load", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

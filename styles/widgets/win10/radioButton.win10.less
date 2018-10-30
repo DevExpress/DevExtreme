@@ -6,10 +6,8 @@
     background-color: @WIN10_RADIOBUTTON_BACKGROUND_COLOR;
 }
 
-.dx-radiobutton-checked {
-    .dx-radiobutton-icon {
-        border-color: @WIN10_RADIOBUTTON_CHECKED_BORDER_COLOR;
-    }
+.dx-radiobutton-icon-checked {
+    border-color: @WIN10_RADIOBUTTON_CHECKED_BORDER_COLOR;
 
     .dx-radiobutton-icon-dot {
         height: 10px;
@@ -27,10 +25,8 @@
 }
 
 .dx-state-hover, .dx-state-focused {
-    &.dx-radiobutton-checked {
-        .dx-radiobutton-icon {
-            border-color: @WIN10_RADIOBUTTON_CHECKED_BORDER_COLOR;
-        }
+    .dx-radiobutton-icon-checked {
+        border-color: @WIN10_RADIOBUTTON_CHECKED_BORDER_COLOR;
 
         .dx-radiobutton-icon-dot {
             background-color: @WIN10_RADIOBUTTON_HOVER_STATE_COLOR;
@@ -43,7 +39,7 @@
     background-color: @WIN10_RADIOBUTTON_ACTIVE_BACKGROUND_COLOR;
 }
 
-.dx-state-active.dx-radiobutton-checked .dx-radiobutton-icon-dot {
+.dx-state-active.dx-radiobutton .dx-radiobutton-icon-checked .dx-radiobutton-icon-dot {
     background-color: @WIN10_RADIOBUTTON_ACTIVE_COLOR;
 }
 

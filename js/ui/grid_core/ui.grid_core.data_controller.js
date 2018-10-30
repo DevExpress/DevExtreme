@@ -207,6 +207,7 @@ module.exports = {
                     that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
                     that._loadErrorHandler = that._handleLoadError.bind(that);
                     that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
+                    that._changingHandler = that._handleChanging.bind(that);
 
                     that._columnsController.columnsChanged.add(that._columnsChangedHandler);
 
@@ -687,6 +688,7 @@ module.exports = {
                         strict = equalItems(oldItem, oldNextItem) || equalItems(newItem, newNextItem);
 
                         if(newItem) {
+                            newItem.rowIndex = rowIndex;
                             change.items.push(newItem);
                         }
 
@@ -881,6 +883,29 @@ module.exports = {
                         that._items = [];
                     }
                 },
+                _handleChanging: function(e) {
+                    var that = this,
+                        rows = that.getVisibleRows(),
+                        dataSource = that.dataSource();
+
+                    if(dataSource) {
+                        e.changes.forEach(function(change) {
+                            if(change.type === "insert" && change.index >= 0) {
+                                var dataIndex = 0,
+                                    row;
+
+                                for(var i = 0; i < change.index; i++) {
+                                    row = rows[i];
+                                    if(row && (row.rowType === "data" || row.rowType === "group")) {
+                                        dataIndex++;
+                                    }
+                                }
+
+                                change.index = dataIndex;
+                            }
+                        });
+                    }
+                },
                 updateItems: function(change, isDataChanged) {
                     change = change || {};
                     var that = this;
@@ -1063,6 +1088,7 @@ module.exports = {
                         oldDataSource.loadingChanged.remove(that._loadingChangedHandler);
                         oldDataSource.loadError.remove(that._loadErrorHandler);
                         oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
+                        oldDataSource.changing.remove(that._changingHandler);
                         oldDataSource.dispose(that._isSharedDataSource);
                     }
 
@@ -1081,6 +1107,7 @@ module.exports = {
                         dataSource.loadingChanged.add(that._loadingChangedHandler);
                         dataSource.loadError.add(that._loadErrorHandler);
                         dataSource.customizeStoreLoadOptions.add(that._customizeStoreLoadOptionsHandler);
+                        dataSource.changing.add(that._changingHandler);
                     }
                 },
                 items: function() {
