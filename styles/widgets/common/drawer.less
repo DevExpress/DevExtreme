@@ -74,9 +74,20 @@
 }
 
 .dx-drawer-overlap {
-    .dx-drawer-wrapper {
-        overflow: visible;
+    &.dx-drawer-left,
+    &.dx-drawer-right {
+        .dx-drawer-wrapper {
+            overflow-y: visible;
+        }
     }
+
+    &.dx-drawer-top,
+    &.dx-drawer-bottom {
+        .dx-drawer-wrapper {
+            overflow-x: visible;
+        }
+    }
+
     .dx-drawer-panel-content {
         z-index: 1;
     }

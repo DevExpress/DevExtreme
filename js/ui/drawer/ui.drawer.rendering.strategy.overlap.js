@@ -13,7 +13,6 @@ class OverlapStrategy extends DrawerStrategy {
 
         const position = this.getOverlayPosition();
         const drawer = this.getDrawerInstance();
-        delete this._initialPosition;
 
         drawer._overlay = drawer._createComponent(drawer.content(), Overlay, {
             shading: false,
@@ -57,8 +56,10 @@ class OverlapStrategy extends DrawerStrategy {
             };
         }
         if(panelPosition === "right") {
+            let my = drawer.option("rtlEnabled") ? "top left" : "top right";
+
             result = {
-                my: "top right",
+                my: my,
                 at: "top right",
             };
         }
