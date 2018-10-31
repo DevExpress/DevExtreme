@@ -1350,6 +1350,22 @@ QUnit.test("Calculate tickInterval, when user's ticksInterval and axisDivisionFa
     assert.deepEqual(chart._argumentAxes[0]._tickInterval, 20, "calculated tickinterval");
 });
 
+// T682989
+QUnit.test("two series with equal names", function(assert) {
+    var chart = this.createChart({
+        series: [{ name: "s1", axis: "a1" }, { name: "s2", axis: "a2" }, { name: "s1", axis: "a2" }]
+    });
+
+    chart.option({
+        series: [{ name: "s1", axis: "a1" }, { name: "s2", axis: "a2" }, { name: "s1", axis: "a2" }]
+    });
+
+    var updatedSeries = chart.getAllSeries();
+    assert.strictEqual(updatedSeries[0].axis, "a1");
+    assert.strictEqual(updatedSeries[1].axis, "a2");
+    assert.strictEqual(updatedSeries[2].axis, "a2");
+});
+
 QUnit.module("B237847. Groups and classes", moduleSetup);
 
 QUnit.test("dxChart groups and classes", function(assert) {
