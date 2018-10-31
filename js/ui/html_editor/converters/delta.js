@@ -1,74 +1,134 @@
-import * as QuillDeltaConverter from "quill-delta-to-html";
-
-import Errors from "../../widget/ui.errors";
 import ConverterController from "../converterController";
-import { ensureDefined } from "../../../core/utils/common";
+import { getQuill } from "../quill_importer";
+import { isFunction } from "../../../core/utils/type";
 
+const ESCAPING_MAP = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+};
+
+const LIST_BLOT_NAME = "list";
+const LIST_ITEM_BLOT_NAME = "list-item";
 
 class DeltaConverter {
-    constructor() {
-        const converter = QuillDeltaConverter && (QuillDeltaConverter.QuillDeltaToHtmlConverter || QuillDeltaConverter.default);
+    setQuillInstance(quillInstance) {
+        this.quillInstance = quillInstance;
+    }
 
-        if(!converter) {
-            throw Errors.Error("E1041", "QuillDeltaToHtmlConverter");
+    toHtml(index = 0, length = this.quillInstance.getLength() - index) {
+        if(!this.quillInstance) {
+            return;
         }
 
-        this._delta2Html = new converter();
-        this._delta2Html.renderCustomWith(this._renderCustomFormat.bind(this));
-    }
+        const [line, lineOffset] = this.quillInstance.scroll.line(index);
 
-    _renderCustomFormat(operations, contextOperations) {
-        switch(operations.insert.type) {
-            case "variable":
-                return this._parseVariable(operations.insert.value);
-                break;
-            case "extendedImage":
-                return this._parseImage(operations.insert.value);
-                break;
-        }
-    }
-
-    _parseVariable(data) {
-        let startEscapeChar, endEscapeChar;
-
-        if(Array.isArray(data.escapeChar)) {
-            startEscapeChar = ensureDefined(data.escapeChar[0], "");
-            endEscapeChar = ensureDefined(data.escapeChar[1], "");
-        } else {
-            startEscapeChar = endEscapeChar = data.escapeChar;
+        if(line.length() >= lineOffset + length) {
+            return this._convertHTML(line, lineOffset, length, true);
         }
 
-        const dataString = [
-            this._addDataParam("start-esc-char", startEscapeChar),
-            this._addDataParam("end-esc-char", endEscapeChar),
-            this._addDataParam("value", data.value)
-        ].join("");
-
-        return `<span class='dx-variable'${dataString}><span>${startEscapeChar + data.value + endEscapeChar}</span></span>`;
+        return this._convertHTML(this.quillInstance.scroll, index, length, true);
     }
 
-    _parseImage(data) {
-        const attributes = [
-            this._prepareAttribute("src", data.src),
-            data.width ? `width='${data.width}px'` : "",
-            data.height ? `height='${data.height}px'` : "",
-            this._prepareAttribute("alt", data.alt)
-        ].join(" ");
+    _convertHTML(blot, index, length, isRoot = false) {
+        const TextBlot = getQuill().import("blots/text");
 
-        return `<img ${attributes}>`;
+        if(isFunction(blot.html)) {
+            return blot.html(index, length);
+        }
+
+        if(blot instanceof TextBlot) {
+            return this._escapeText(blot.value().slice(index, index + length));
+        }
+
+        if(blot.children) {
+            if(blot.statics.blotName === LIST_BLOT_NAME) {
+                return this._convertList(blot, index, length);
+            }
+
+            const parts = [];
+            blot.children.forEachAt(index, length, (child, offset, childLength) => {
+                parts.push(this._convertHTML(child, offset, childLength));
+            });
+
+            if(isRoot || blot.statics.blotName === LIST_ITEM_BLOT_NAME) {
+                return parts.join("");
+            }
+
+            const { outerHTML, innerHTML } = blot.domNode;
+            const [start, end] = outerHTML.split(`>${innerHTML}<`);
+
+            return `${start}>${parts.join("")}<${end}`;
+        }
+
+        return blot.domNode.outerHTML;
     }
 
-    _prepareAttribute(attr, value) {
-        return value ? `${attr}='${value}'` : "";
+    _convertList(blot, index, length) {
+        const items = [];
+        const parentFormats = blot.formats();
+
+        blot.children.forEachAt(index, length, (child, offset, childLength) => {
+            const childFormats = child.formats();
+
+            items.push({
+                child,
+                offset,
+                length: childLength,
+                indent: childFormats.indent || 0,
+                type: parentFormats.list
+            });
+        });
+
+        return this._getListMarkup(items, -1, []);
     }
 
-    _addDataParam(paramName, value) {
-        return value ? ` data-var-${paramName}=${value}` : "";
+    _getListMarkup(items, lastIndent, listTypes) {
+        if(items.length === 0) {
+            const endTag = this._getListType(listTypes.pop());
+
+            if(lastIndent <= 0) {
+                return `</li></${endTag}>`;
+            }
+            return this._processListMarkup([[], lastIndent - 1, listTypes], endTag);
+        }
+
+        const [{ child, offset, length, indent, type }, ...rest] = items;
+        const tag = this._getListType(type);
+        const childItemArgs = [child, offset, length];
+        const restItemsArgs = [rest, indent, listTypes];
+
+        if(indent > lastIndent) {
+            listTypes.push(type);
+            return this._processIndentListMarkup(childItemArgs, restItemsArgs, tag);
+        }
+
+        if(indent === lastIndent) {
+            return this._processIndentListMarkup(childItemArgs, restItemsArgs);
+        }
+
+        const endTag = this._getListType(listTypes.pop());
+        return this._processListMarkup([items, lastIndent - 1, listTypes], endTag);
     }
 
-    toHtml(deltaOps) {
-        this._delta2Html.rawDeltaOps = deltaOps;
-        return this._delta2Html.convert();
+    _processListMarkup(childItemArgs, tag) {
+        return `</li></${tag}>${this._getListMarkup(...childItemArgs)}`;
+    }
+
+    _processIndentListMarkup(childItemArgs, restItemsArgs, tag = "/li") {
+        return `<${tag}><li>${this._convertHTML(...childItemArgs)}${this._getListMarkup(...restItemsArgs)}`;
+    }
+
+    _getListType(type) {
+        return type === "ordered" ? "ol" : "ul";
+    }
+
+    _escapeText(text) {
+        return text.replace(/[&<>"']/g, char => {
+            return ESCAPING_MAP[char];
+        });
     }
 }
 

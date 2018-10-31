@@ -132,8 +132,6 @@ const HtmlEditor = Editor.inherit({
 
             if(DeltaConverter) {
                 this._deltaConverter = new DeltaConverter();
-            } else {
-                throw Errors.Error("E1051", "delta");
             }
         }
 
@@ -205,6 +203,7 @@ const HtmlEditor = Editor.inherit({
             theme: "basic"
         });
 
+        this._deltaConverter.setQuillInstance(this._quillInstance);
         this._textChangeHandlerWithContext = this._textChangeHandler.bind(this);
 
         this._quillInstance.on("text-change", this._textChangeHandlerWithContext);
@@ -254,8 +253,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _textChangeHandler: function(newDelta, oldDelta, source) {
-        let delta = this._quillInstance.getContents(),
-            htmlMarkup = this._deltaConverter.toHtml(delta.ops);
+        const htmlMarkup = this._deltaConverter.toHtml();
 
         this._isEditorUpdating = true;
 
