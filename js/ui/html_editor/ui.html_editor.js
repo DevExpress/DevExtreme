@@ -133,7 +133,7 @@ const HtmlEditor = Editor.inherit({
             if(DeltaConverter) {
                 this._deltaConverter = new DeltaConverter();
             } else {
-                throw Errors.Error("E1050", "delta");
+                throw Errors.Error("E1051", "delta");
             }
         }
 
@@ -143,7 +143,7 @@ const HtmlEditor = Editor.inherit({
             if(MarkdownConverter) {
                 this._markdownConverter = new MarkdownConverter();
             } else {
-                throw Errors.Error("E1050", "markdown");
+                throw Errors.Error("E1051", "markdown");
             }
         }
     },
