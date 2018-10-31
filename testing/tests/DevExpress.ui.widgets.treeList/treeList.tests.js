@@ -972,6 +972,28 @@ QUnit.test("TreeList with remoteOperations and focusedRowKey", function(assert) 
     assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass("dx-row-focused"), "focused row is visible");
 });
 
+QUnit.testInActiveWindow("DataGrid should focus the corresponding group row if group collapsed and inner data row was focused", function(assert) {
+    // arrange
+    var treeList = createTreeList({
+        keyExpr: "id",
+        dataSource: generateData(10),
+        focusedRowEnabled: true,
+        expandedRowKeys: [3],
+        focusedRowKey: 4
+    });
+
+    this.clock.tick();
+
+    // act
+    treeList.collapseRow(3);
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(treeList.isRowExpanded(3), false, "parent node collapsed");
+    assert.equal(treeList.option("focusedRowKey"), 3, "parent node focused");
+});
+
 QUnit.test("TreeList navigateTo", function(assert) {
     // arrange, act
     var treeList = createTreeList({
