@@ -527,7 +527,7 @@ QUnit.test("Draw fixed table for rowsView with master detail", function(assert) 
 
     assert.equal($table.find("tbody > tr").first().find("td").length, 6, "count column");
     assert.equal($table.find("tbody > tr").eq(1).find("td").length, 2, "count column in master detail row");
-    assert.strictEqual($table.find("tbody > tr").eq(1).find("td").first().html(), "", "text column");
+    assert.strictEqual($table.find("tbody > tr").eq(1).find("td").first().html(), "&nbsp;", "text column");
     assert.strictEqual($table.find("tbody > tr").eq(1).find("td").last().html(), "&nbsp;", "text column");
     assert.equal($fixTable.find("tbody > tr").first().find("td").length, 4, "count column");
     assert.equal($fixTable.find("tbody > tr").eq(1).find("td").length, 2, "count column in master detail row");
