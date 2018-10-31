@@ -3776,12 +3776,14 @@ QUnit.test("Many dropDown appts should be grouped correctly with one multi day t
     this.createInstance({
         views: ['month'],
         currentView: 'month',
+        maxAppointmentsPerCell: 1,
         currentDate: new Date(2017, 5, 25),
         width: 800,
-        height: 600
+        height: 950
     });
 
     this.instance.option("dataSource", [
+        { text: 'long appt', startDate: new Date(2017, 5, 8, 9, 0), endDate: new Date(2017, 5, 20, 9, 15) },
         { text: '1', startDate: new Date(2017, 5, 11, 9, 30), endDate: new Date(2017, 5, 11, 11, 30) },
         { text: '2', startDate: new Date(2017, 5, 11, 12, 0), endDate: new Date(2017, 5, 11, 13, 0) },
         { text: '3', startDate: new Date(2017, 5, 11, 12, 0), endDate: new Date(2017, 5, 11, 13, 0) },
@@ -3794,8 +3796,7 @@ QUnit.test("Many dropDown appts should be grouped correctly with one multi day t
         { text: '10', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
         { text: '11', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
         { text: '12', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
-        { text: '13', startDate: new Date(2017, 5, 11, 14, 30), endDate: new Date(2017, 5, 11, 16, 0) },
-        { text: 'long appt', startDate: new Date(2017, 5, 1, 9, 0), endDate: new Date(2017, 5, 20, 9, 15) }
+        { text: '13', startDate: new Date(2017, 5, 11, 14, 30), endDate: new Date(2017, 5, 11, 16, 0) }
     ]);
 
     var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
@@ -3803,7 +3804,7 @@ QUnit.test("Many dropDown appts should be grouped correctly with one multi day t
     dropDown.open();
     var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
 
-    assert.equal(ddAppointments.length, 12, "There are 12 drop down appts");
+    assert.equal(ddAppointments.length, 13, "There are 13 drop down appts");
 });
 
 QUnit.test("DropDown appointment button should have correct coordinates: rtl mode", function(assert) {

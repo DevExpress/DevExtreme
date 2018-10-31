@@ -306,7 +306,8 @@ var BaseRenderingStrategy = Class.inherit({
     _normalizeCondition: function(first, second) {
         // NOTE: ie & ff pixels
         var result = first - second;
-        return Math.abs(result) > 0.001 ? result : 0;
+
+        return Math.abs(result) > 0.1 ? result : 0;
     },
 
     _getResultPositions: function(sortedArray) {
