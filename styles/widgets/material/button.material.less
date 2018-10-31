@@ -83,10 +83,7 @@
         &:not(.dx-shape-standard) {
             .border-radius(50%);
             .box-shadow(none);
-        }
-
-        &.dx-shape-standard.dx-button-normal {
-            .dx-icon {
+            &.dx-button-normal .dx-icon {
                 color: @button-flat-color;
             }
         }
@@ -262,6 +259,9 @@
         .dx-button-onlyicon-sizing();
         .dx-button-text {
             display: none;
+        }
+        .dx-icon {
+            color: @button-flat-color;
         }
     }
 }
