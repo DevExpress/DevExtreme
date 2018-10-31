@@ -58,7 +58,6 @@ exports.DataArea = areaItem.AreaItem.inherit({
                 useNative: !!useNativeScrolling,
                 useSimulatedScrollbar: !useNativeScrolling,
                 direction,
-                pushBackValue: 0,
                 bounceEnabled: false,
                 updateManually: true
             });
