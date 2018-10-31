@@ -275,7 +275,7 @@ QUnit.test("Draw fixed table for rowsView", function(assert) {
         scrollableInstance = $testElement.find(".dx-datagrid-rowsview").dxScrollable("instance");
         assert.ok(scrollableInstance, "has dxScrollable");
         assert.equal(scrollableInstance.scrollTop(), -1, "scroll top of the main table");
-        assert.equal($fixTable.position().top, 0, "scroll top of the fixed table");
+        assert.equal($fixTable.position().top, 1, "scroll top of the fixed table");
     }
 });
 
