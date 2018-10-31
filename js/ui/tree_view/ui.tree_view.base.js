@@ -1067,17 +1067,15 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    _updateExpandedItemsUI: function(node, state, e, $currentNode) {
-        var $node = $currentNode || this._getNodeElement(node);
+    _updateExpandedItemsUI: function(node, state, e) {
+        var $node = this._getNodeElement(node),
+            isHiddenNode = !$node.length || state && $node.is(':hidden');
 
-        if(this.option("expandNodesRecursive")) {
+        if(this.option("expandNodesRecursive") && isHiddenNode) {
             var parentNode = this._getNode(node.internalFields.parentKey);
 
             if(parentNode) {
-                var $parentNode = this._getNodeElement(parentNode);
-                if(!$node.length || (state && $node.is(':hidden'))) {
-                    this._updateExpandedItemsUI(parentNode, state, e, $parentNode);
-                }
+                this._updateExpandedItemsUI(parentNode, state, e);
             }
         }
 
