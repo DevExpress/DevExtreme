@@ -179,7 +179,9 @@ QUnit.test("Should recalculate selection after 'searchValue' changing", function
         assert.strictEqual($checkboxes.eq(1).dxCheckBox("instance").option("value"), isSecondItemSelected);
     };
 
-    $treeView.find(".dx-checkbox").eq(1).trigger("dxclick");
+    var $firstChildItem = $treeView.find(".dx-checkbox").eq(1);
+
+    $firstChildItem.trigger("dxclick");
     checkSelection(true, true);
     treeView.option("searchValue", "c");
     checkSelection(false, false);
