@@ -124,6 +124,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var options = extend({}, scrollingOptions, {
             direction: "both",
             bounceEnabled: false,
+            pushBackValue: 0,
             useKeyboard: false
         });
 
