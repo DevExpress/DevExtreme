@@ -40,10 +40,6 @@
 * @type object
 */
 /**
-* @name ExcelDataGridCell.key
-* @type any
-*/
-/**
 * @name ExcelDataGridCell.column
 * @type dxDataGridColumn
 */
