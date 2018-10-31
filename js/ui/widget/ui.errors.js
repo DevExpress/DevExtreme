@@ -204,14 +204,14 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1049: `Column '{0}': filtering is allowed but the 'dataField' or 'name' option is not specified`,
 
     /**
-     * @name ErrorsUIWidgets.E1050
-     */
-    E1050: "The \"{0}\" converter is not found in the ConverterController",
-
-    /**
     * @name ErrorsUIWidgets.E1050
     */
     E1050: "The validationRules option does not apply to third-party editors defined in the editCellTemplate",
+
+    /**
+     * @name ErrorsUIWidgets.E1051
+     */
+    E1051: "The \"{0}\" converter is not found in the ConverterController",
 
     /**
     * @name ErrorsUIWidgets.W1001
