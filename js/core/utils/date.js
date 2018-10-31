@@ -521,6 +521,16 @@ var dateInRange = function(date, min, max, format) {
     return normalizeDate(date, min, max) === date;
 };
 
+var dateTimeFromDecimal = function(number) {
+    var hours = Math.floor(number),
+        minutes = (number % 1) * 60;
+
+    return {
+        hours: hours,
+        minutes: minutes
+    };
+};
+
 var normalizeDate = function(date, min, max) {
     var normalizedDate = date;
 
@@ -602,6 +612,7 @@ var dateUtils = {
     getDatesDifferences: getDatesDifferences,
     correctDateWithUnitBeginning: correctDateWithUnitBeginning,
     trimTime: trimTime,
+    dateTimeFromDecimal: dateTimeFromDecimal,
 
     addDateInterval: addDateInterval,
     addInterval: addInterval,
