@@ -4260,6 +4260,30 @@ QUnit.test("Appointment should be rendered correctly with recurrenceRule express
     assert.equal($recAppointment.find(".dx-scheduler-appointment-recurrence-icon").length, 1, "Recurrence icon is rendered");
 });
 
+QUnit.test("Appointment should have correct height, when startDayHour is decimal", function(assert) {
+    var appointments = [{
+        startDate: new Date(2015, 1, 4, 5, 35).toString(),
+        endDate: new Date(2015, 1, 4, 5, 45).toString(),
+        text: "abc"
+    }];
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 4),
+        cellDuration: 5,
+        views: ["day"],
+        currentView: "day",
+        firstDayOfWeek: 1,
+        dataSource: appointments,
+        startDayHour: 5.5
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+        cellHeight = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
+
+    assert.roughEqual($appointment.position().top, cellHeight, 2.001, "Appointment top is correct");
+    assert.roughEqual($appointment.outerHeight(), 2 * cellHeight, 2.001, "Appointment height is correct");
+});
+
 QUnit.test("Appointment should be rendered correctly when custom timezone was set", function(assert) {
     var startDate = new Date(2015, 1, 4, 5),
         endDate = new Date(2015, 1, 4, 6);
