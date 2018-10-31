@@ -2210,7 +2210,8 @@ QUnit.test("Apply style for visible point (in visible area)", function(assert) {
     point.draw(this.renderer, this.groups);
     point.graphic.stub("attr").reset();
 
-    point.applyStyle("normal");
+    point.fullState = 0;
+    point.applyView();
 
     assert.ok(point.graphic);
 
@@ -2226,7 +2227,8 @@ QUnit.test("Apply style for invisible point (out of visible area)", function(ass
     point.draw(this.renderer, this.groups);
     point.graphic.stub("attr").reset();
 
-    point.applyStyle("normal");
+    point.fullState = 0;
+    point.applyView();
 
     assert.ok(point.graphic);
 
@@ -2242,7 +2244,8 @@ QUnit.test("Apply style for visible image point (in visible area)", function(ass
     point.draw(this.renderer, this.groups);
     point.graphic.stub("attr").reset();
 
-    point.applyStyle("normal");
+    point.fullState = 0;
+    point.applyView();
 
     assert.ok(point.graphic);
 
@@ -2259,7 +2262,8 @@ QUnit.test("Apply style for invisible image point (out of visible area)", functi
     point.draw(this.renderer, this.groups);
     point.graphic.stub("attr").reset();
 
-    point.applyStyle("normal");
+    point.fullState = 0;
+    point.applyView();
 
     assert.ok(point.graphic);
 
@@ -2267,10 +2271,11 @@ QUnit.test("Apply style for invisible image point (out of visible area)", functi
 });
 
 QUnit.test("keep style after redraw", function(assert) {
-    createPoint(this.series, this.data, this.options)
-        .draw(this.renderer, this.groups)
-        .applyStyle("selection")
-        .draw(this.renderer, this.groups);
+    var point = createPoint(this.series, this.data, this.options);
+    point.draw(this.renderer, this.groups);
+    point.fullState = 2;
+    point.applyView();
+    point.draw(this.renderer, this.groups);
 
     assert.deepEqual(
         this.renderer.circle.getCall(0).returnValue.attr.lastCall.args[0].r,
@@ -3320,7 +3325,8 @@ QUnit.test("get point radius. hover style", function(assert) {
     var point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
     point.draw(this.renderer, this.groups);
 
-    point.applyStyle("hover");
+    point.fullState = 1;
+    point.applyView();
 
     assert.equal(point.getPointRadius(), 11);
 });

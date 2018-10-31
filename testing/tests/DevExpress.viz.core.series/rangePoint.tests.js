@@ -1834,7 +1834,7 @@ QUnit.test("Apply style when top marker is invisible", function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    point.applyStyle();
+    point.applyView();
 
     assert.ok(point.graphic);
     assert.ok(!point.graphic.topMarker);
@@ -1849,7 +1849,7 @@ QUnit.test("Apply style when bottom marker is invisible", function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    point.applyStyle();
+    point.applyView();
 
     assert.ok(point.graphic);
     assert.ok(point.graphic.topMarker);
