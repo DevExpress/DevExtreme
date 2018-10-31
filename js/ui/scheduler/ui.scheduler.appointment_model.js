@@ -201,10 +201,6 @@ var AppointmentModel = Class.inherit({
                 endDate = new Date(dataAccessors.getter.endDate(appointment)),
                 appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, startDayHour, endDayHour),
                 isAllDay = dataAccessors.getter.allDay(appointment),
-                apptStartHour = startDate.getHours(),
-                hiddenInterval = (24 - endDayHour + startDayHour) * 3600000,
-                apptDuration = endDate.getTime() - startDate.getTime(),
-                delta = (hiddenInterval - apptDuration) / (1000 * 60 * 60),
                 useRecurrence = typeUtils.isDefined(dataAccessors.getter.recurrenceRule),
                 recurrenceRule;
 
@@ -241,13 +237,7 @@ var AppointmentModel = Class.inherit({
             }
 
             if(result && endDayHour !== undefined) {
-                result = comparableStartDate.getHours() < endDayHour || appointmentTakesAllDay && comparableStartDate <= max;
-
-                if(apptDuration < hiddenInterval) {
-                    if(apptStartHour > endDayHour && (delta <= apptStartHour - endDayHour)) {
-                        result = false;
-                    }
-                }
+                result = that._compareEndDateWithEndDayHour(comparableStartDate, comparableEndDate, startDayHour, endDayHour, appointmentTakesAllDay, max);
             }
 
             if(result && useRecurrence && !recurrenceRule) {
@@ -266,6 +256,28 @@ var AppointmentModel = Class.inherit({
         var result = (startDate.getHours() >= startDayHours && startDate.getMinutes() >= startDayMinutes) ||
                     (endDate.getHours() >= startDayHour && endDate.getMinutes() >= startDayMinutes) ||
                     allDay;
+
+        return result;
+    },
+
+    _compareEndDateWithEndDayHour: function(startDate, endDate, startDayHour, endDayHour, allDay, max) {
+        var hiddenInterval = (24 - endDayHour + startDayHour) * 3600000,
+            apptDuration = endDate.getTime() - startDate.getTime(),
+            delta = (hiddenInterval - apptDuration) / (1000 * 60 * 60),
+            apptStartHour = startDate.getHours(),
+            apptStartMinutes = startDate.getMinutes(),
+            result;
+
+        var endDayHours = Math.floor(endDayHour),
+            endDayMinutes = (endDayHour % 1) * 60;
+
+        result = (apptStartHour < endDayHours) || (apptStartHour === endDayHours && apptStartMinutes < endDayMinutes) || allDay && startDate <= max;
+
+        if(apptDuration < hiddenInterval) {
+            if((apptStartHour > endDayHours && apptStartMinutes > endDayMinutes) && (delta <= apptStartHour - endDayHour)) {
+                result = false;
+            }
+        }
 
         return result;
     },
