@@ -1247,7 +1247,9 @@ var BaseChart = BaseWidget.inherit({
         that.needToPopulateSeries = false;
 
         _each(seriesThemes, (_, theme) => {
-            const curSeries = that.series && that.series.filter(s => s.name === theme.name)[0];
+            const curSeries = that.series && that.series.filter(s =>
+                s.name === theme.name && seriesBasis.map(sb => sb.series).indexOf(s) === -1
+            )[0];
             if(curSeries && curSeries.type === theme.type) {
                 seriesBasis.push({ series: curSeries, options: theme });
             } else {
