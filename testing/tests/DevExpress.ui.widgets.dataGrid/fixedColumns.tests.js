@@ -803,7 +803,7 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed (on left side) a
     $cellElements = $groupRow.children();
     assert.equal($cellElements.length, 4, "count cell in group row");
     assert.ok($cellElements.eq(0).hasClass("dx-datagrid-expand"), "first cell in group row");
-    assert.strictEqual($cellElements.eq(1).html(), "Column 4: test4", "text second cell in group row");
+    assert.strictEqual($cellElements.eq(1).html(), "&nbsp;", "text second cell in group row"); // T680701
     assert.equal($cellElements.eq(1).attr("colspan"), 2, "colspan a second cell in group row");
     assert.strictEqual($cellElements.eq(2).text(), "Column5 Max: 4", "summary value");
 
@@ -875,7 +875,7 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed (on right side) 
     assert.strictEqual($table.find("tbody > .dx-group-row").find("td").eq(1).text(), "Column 4: test4", "text second cell in group row");
     assert.equal($table.find("tbody > .dx-group-row").find("td").eq(1).attr("colspan"), 2, "colspan a second cell in group row");
     assert.strictEqual($table.find("tbody > .dx-group-row").find("td").eq(2).text(), "Column1 Max: 4", "summary value");
-    assert.strictEqual($table.find("tbody > .dx-group-row").find("td").last().text(), "Column2 Count: 2", "text third cell in group row");
+    assert.strictEqual($table.find("tbody > .dx-group-row").find("td").last().html(), "&nbsp;", "text third cell in group row"); // T680701
 
     $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
     // group row
