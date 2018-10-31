@@ -193,7 +193,7 @@ var baseFixedColumns = {
             }
 
             if(isEmptyCell) {
-                if((that.option("legacyRendering") || column.command === "detail")) {
+                if(that.option("legacyRendering") || (column.command || options.rowType === "group")) {
                     $cell
                         .html("&nbsp;")
                         .addClass(column.cssClass);
