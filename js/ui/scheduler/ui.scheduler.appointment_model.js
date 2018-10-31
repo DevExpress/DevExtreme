@@ -237,7 +237,7 @@ var AppointmentModel = Class.inherit({
                 comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
 
             if(result && startDayHour !== undefined) {
-                result = comparableStartDate.getHours() >= startDayHour || comparableEndDate.getHours() >= startDayHour || appointmentTakesAllDay;
+                result = that._compareStareDateWithStartDayHour(comparableStartDate, comparableEndDate, startDayHour, appointmentTakesAllDay);
             }
 
             if(result && endDayHour !== undefined) {
@@ -257,6 +257,17 @@ var AppointmentModel = Class.inherit({
             }
             return result;
         }]];
+    },
+
+    _compareStareDateWithStartDayHour: function(startDate, endDate, startDayHour, allDay) {
+        var startDayHours = Math.floor(startDayHour),
+            startDayMinutes = (startDayHour % 1) * 60;
+
+        var result = (startDate.getHours() >= startDayHours && startDate.getMinutes() >= startDayMinutes) ||
+                    (endDate.getHours() >= startDayHour && endDate.getMinutes() >= startDayMinutes) ||
+                    allDay;
+
+        return result;
     },
 
     ctor: function(dataSource, dataAccessors) {
