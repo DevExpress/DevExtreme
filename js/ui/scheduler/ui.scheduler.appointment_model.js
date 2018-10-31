@@ -79,6 +79,37 @@ var FilterMaker = Class.inherit({
     }
 });
 
+var compareDateWithStartDayHour = function(startDate, endDate, startDayHour, allDay) {
+    var startTime = dateUtils.dateTimeFromDecimal(startDayHour);
+
+    var result = (startDate.getHours() >= startTime.hours && startDate.getMinutes() >= startTime.minutes) ||
+                (endDate.getHours() >= startTime.hours && endDate.getMinutes() >= startTime.minutes) ||
+                allDay;
+
+    return result;
+};
+
+var compareDateWithEndDayHour = function(startDate, endDate, startDayHour, endDayHour, allDay, max) {
+    var hiddenInterval = (24 - endDayHour + startDayHour) * 3600000,
+        apptDuration = endDate.getTime() - startDate.getTime(),
+        delta = (hiddenInterval - apptDuration) / (1000 * 60 * 60),
+        apptStartHour = startDate.getHours(),
+        apptStartMinutes = startDate.getMinutes(),
+        result;
+
+    var endTime = dateUtils.dateTimeFromDecimal(endDayHour);
+
+    result = (apptStartHour < endTime.hours) || (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes) || allDay && startDate <= max;
+
+    if(apptDuration < hiddenInterval) {
+        if((apptStartHour > endTime.hours && apptStartMinutes > endTime.minutes) && (delta <= apptStartHour - endDayHour)) {
+            result = false;
+        }
+    }
+
+    return result;
+};
+
 var AppointmentModel = Class.inherit({
 
     _createFilter: function(min, max, remoteFiltering, dateSerializationFormat) {
@@ -201,10 +232,6 @@ var AppointmentModel = Class.inherit({
                 endDate = new Date(dataAccessors.getter.endDate(appointment)),
                 appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, startDayHour, endDayHour),
                 isAllDay = dataAccessors.getter.allDay(appointment),
-                apptStartHour = startDate.getHours(),
-                hiddenInterval = (24 - endDayHour + startDayHour) * 3600000,
-                apptDuration = endDate.getTime() - startDate.getTime(),
-                delta = (hiddenInterval - apptDuration) / (1000 * 60 * 60),
                 useRecurrence = typeUtils.isDefined(dataAccessors.getter.recurrenceRule),
                 recurrenceRule;
 
@@ -237,17 +264,11 @@ var AppointmentModel = Class.inherit({
                 comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
 
             if(result && startDayHour !== undefined) {
-                result = comparableStartDate.getHours() >= startDayHour || comparableEndDate.getHours() >= startDayHour || appointmentTakesAllDay;
+                result = compareDateWithStartDayHour(comparableStartDate, comparableEndDate, startDayHour, appointmentTakesAllDay);
             }
 
             if(result && endDayHour !== undefined) {
-                result = comparableStartDate.getHours() < endDayHour || appointmentTakesAllDay && comparableStartDate <= max;
-
-                if(apptDuration < hiddenInterval) {
-                    if(apptStartHour > endDayHour && (delta <= apptStartHour - endDayHour)) {
-                        result = false;
-                    }
-                }
+                result = compareDateWithEndDayHour(comparableStartDate, comparableEndDate, startDayHour, endDayHour, appointmentTakesAllDay, max);
             }
 
             if(result && useRecurrence && !recurrenceRule) {

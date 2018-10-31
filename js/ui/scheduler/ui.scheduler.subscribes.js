@@ -412,8 +412,10 @@ var subscribes = {
             updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));
         }
 
-        if(updatedStartDate.getHours() < startDayHour) {
-            updatedStartDate.setHours(startDayHour, 0, 0, 0);
+        var startTime = dateUtils.dateTimeFromDecimal(startDayHour);
+
+        if(updatedStartDate.getHours() <= startTime.hours && updatedStartDate.getMinutes() <= startTime.minutes) {
+            updatedStartDate.setHours(startTime.hours, startTime.minutes, 0, 0);
         }
 
         options.callback(updatedStartDate);
