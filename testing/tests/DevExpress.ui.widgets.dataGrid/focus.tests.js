@@ -2461,10 +2461,7 @@ QUnit.testInActiveWindow("DataGrid should focus the row bellow by arrowDown key 
             "name",
             "phone",
             "room"
-        ],
-        onContentReady: function(e) {
-            e.component.focus();
-        }
+        ]
     };
 
     this.setupModule();
@@ -2485,6 +2482,56 @@ QUnit.testInActiveWindow("DataGrid should focus the row bellow by arrowDown key 
     keyboardController._upDownKeysHandler({ key: "downArrow" });
     // assert
     assert.ok(rowsView.getRow(1).hasClass("dx-row-focused"), "Row 1 is focused");
+});
+
+QUnit.testInActiveWindow("DataGrid should focus the row bellow by arrowDown key if grid focused and grouping enabled", function(assert) {
+    var rowsView,
+        keyboardController,
+        $cell;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 6 },
+        { name: "Ben", phone: "333333", room: 6 },
+        { name: "Sean", phone: "4545454", room: 5 },
+        { name: "Smith", phone: "555555", room: 5 },
+        { name: "Zeb", phone: "6666666", room: 5 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        columns: [
+            "name",
+            "phone",
+            { dataField: "room", groupIndex: 0, autoExpandGroup: true }
+        ]
+    };
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+
+    // act
+    keyboardController.setFocusedColumnIndex(0);
+    keyboardController.focus(rowsView.getRow(1).find("td").eq(0));
+    $cell = keyboardController._getNextCell("downArrow");
+
+    // assert
+    assert.ok(keyboardController._isCellValid($cell), "Cell is valid");
 });
 
 QUnit.testInActiveWindow("If editing in row edit mode and focusedRowEnabled - focusOverlay should render for the editing row", function(assert) {
