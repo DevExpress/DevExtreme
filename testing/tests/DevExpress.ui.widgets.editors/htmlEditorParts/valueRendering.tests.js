@@ -45,6 +45,20 @@ QUnit.module("Value as HTML markup", () => {
         assert.equal(markup, "<h1>Hi!</h1><p>Test</p>");
     });
 
+    test("render transclude content and predefined value", (assert) => {
+        const instance = $("#htmlEditor")
+            .html("<h1>Hi!</h1><p>Test</p>")
+            .dxHtmlEditor({
+                value: "<p>Test1</p><p>Test2</p>"
+            })
+            .dxHtmlEditor("instance"),
+            $element = instance.$element(),
+            markup = $element.find(getSelector(CONTENT_CLASS)).html();
+
+        assert.equal(instance.option("value"), "<p>Test1</p><p>Test2</p>");
+        assert.equal(markup, "<p>Test1</p><p>Test2</p>");
+    });
+
     test("change value by user", (assert) => {
         const done = assert.async();
         const instance = $("#htmlEditor")
