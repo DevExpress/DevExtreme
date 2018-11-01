@@ -42,9 +42,6 @@ const VENDORS = [
         path: '/quill/dist/quill.js'
     },
     {
-        path: '/quill-delta-to-html/dist/browser/QuillDeltaToHtmlConverter.bundle.js'
-    },
-    {
         path: '/showdown/dist/showdown.js'
     },
     {
