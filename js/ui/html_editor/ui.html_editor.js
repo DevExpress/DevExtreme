@@ -157,16 +157,19 @@ const HtmlEditor = Editor.inherit({
     },
 
     _initMarkup: function() {
-        const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
         this._$htmlContainer = $("<div>").addClass(QUILL_CONTAINER_CLASS);
 
         this.$element()
             .addClass(HTML_EDITOR_CLASS)
             .wrapInner(this._$htmlContainer);
 
+        const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
+        const transclude = true;
+
         template && template.render({
             container: getPublicElement(this._$htmlContainer),
-            noModel: true
+            noModel: true,
+            transclude
         });
 
         this.callBase();
@@ -321,7 +324,7 @@ const HtmlEditor = Editor.inherit({
                 this._prepareConverters();
                 const newValue = this._updateValueByType(args.value);
 
-                if(args.value === "html") {
+                if(args.value === "html" && this._quillInstance) {
                     this._updateHtmlContent(newValue);
                 } else {
                     this.option("value", newValue);
