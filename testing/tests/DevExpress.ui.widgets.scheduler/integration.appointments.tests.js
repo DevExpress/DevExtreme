@@ -4284,7 +4284,7 @@ QUnit.test("Appointment should have correct height, when startDayHour is decimal
 
 QUnit.test("Appointment should be rendered correctly when custom timezone was set", function(assert) {
     var startDate = new Date(2015, 1, 4, 5),
-        endDate = new Date(2015, 1, 4, 6);
+        endDate = new Date(2015, 1, 4, 7);
 
     var appointments = [{
         startDate: startDate.toString(),
@@ -4316,7 +4316,7 @@ QUnit.test("Appointment should be rendered correctly when custom timezone was se
 
 QUnit.test("Appointment should be rendered correctly when custom timezone was set as string", function(assert) {
     var startDate = new Date(2015, 1, 4, 5),
-        endDate = new Date(2015, 1, 4, 6);
+        endDate = new Date(2015, 1, 4, 7);
 
     var appointments = [{
         startDate: startDate.toString(),
