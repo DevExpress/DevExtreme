@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     equalByValue = require("../../core/utils/common").equalByValue,
     isDefined = require("../../core/utils/type").isDefined,
+    errors = require("../../data/errors").errors,
     Deferred = require("../../core/utils/deferred").Deferred;
 
 var ROW_FOCUSED_CLASS = "dx-row-focused",
@@ -532,6 +533,17 @@ module.exports = {
                     }
 
                     return $row;
+                },
+
+                _checkRowKeys: function(options) {
+                    this.callBase.apply(this, arguments);
+
+                    if(this.option("focusedRowEnabled") && this.option("dataSource")) {
+                        var keyExpr = this._dataController.store() && this._dataController.store().key();
+                        if(!keyExpr) {
+                            this._dataController.dataErrorOccurred.fire(errors.Error("E4024"));
+                        }
+                    }
                 },
 
                 _update: function(change) {
