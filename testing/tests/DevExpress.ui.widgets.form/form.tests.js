@@ -815,41 +815,6 @@ QUnit.test("Update editorOptions of an editor inside the tab", function(assert) 
     assert.equal(form.getEditor("firstName").option("disabled"), false, "'disabled' option was successfully changed");
 });
 
-QUnit.test("The form's height is changed when the scrollView is contained inside the tabbed item", function(assert) {
-    var formHeight = 300;
-    var $form = $("#form").dxForm({
-        height: formHeight,
-        items: [{
-            itemType: "group",
-            caption: "Contact Information",
-            items: [{
-                itemType: "group",
-                items: [{
-                    itemType: "tabbed",
-                    cssClass: "test",
-                    tabs: [{
-                        title: "Phone",
-                        items: [{
-                            template: function(data, container) {
-                                var scrollView = $("<div>").css({
-                                        "height": "100%",
-                                        "width": "100%"
-                                    }),
-                                    content = $("<div style=\"height: 900px; width: 100%;\" />");
-
-                                content.appendTo(scrollView);
-                                scrollView.appendTo(container);
-                            }
-                        }]
-                    }]
-                }]
-            }]
-        }]
-    });
-
-    assert.ok($form.find(".test").height() <= formHeight, "height of tabbed item");
-});
-
 
 QUnit.module("Align labels", {
     beforeEach: function() {
