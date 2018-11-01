@@ -354,7 +354,9 @@ const Drawer = Widget.inherit({
     },
 
     getElementWidth($element) {
-        return $element.get(0).hasChildNodes() ? $element.get(0).childNodes[0].getBoundingClientRect().width : $element.get(0).getBoundingClientRect().width;
+        var $children = $element.children();
+
+        return $children.length ? $children.eq(0).get(0).getBoundingClientRect().width : $element.get(0).getBoundingClientRect().width;
     },
 
     getRealPanelHeight() {
@@ -366,7 +368,9 @@ const Drawer = Widget.inherit({
     },
 
     getElementHeight($element) {
-        return $element.get(0).hasChildNodes() ? $element.get(0).childNodes[0].getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
+        var $children = $element.children();
+
+        return $children.length ? $children.eq(0).get(0).getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
     },
 
     getDrawerPosition() {
