@@ -47,7 +47,7 @@ QUnit.module("DropImage module", moduleConfig, () => {
 
         assert.ok(event.isDefaultPrevented(), "Prevent default behavior");
         assert.equal(this.insertEmbedStub.callCount, 1, "File inserted");
-        assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, "image", IMAGE, "user"], "insert base64 image by user");
+        assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, "extendedImage", IMAGE, "user"], "insert base64 image by user");
     });
 
     test("check file type", (assert) => {
@@ -73,7 +73,7 @@ QUnit.module("DropImage module", moduleConfig, () => {
             assert.ok(true, "FF handle this out-the-box");
         } else {
             assert.equal(this.insertEmbedStub.callCount, 1, "File inserted");
-            assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, "image", IMAGE, "user"], "insert base64 image by user");
+            assert.deepEqual(this.insertEmbedStub.lastCall.args, [1, "extendedImage", IMAGE, "user"], "insert base64 image by user");
         }
 
         clock.restore();
