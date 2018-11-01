@@ -851,7 +851,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _selectAllEnabled: function() {
-        return this.option("showCheckBoxesMode") === "selectAll";
+        return this.option("showCheckBoxesMode") === "selectAll" && !this._isSingleSelection();
     },
 
     _renderItems: function($nodeContainer, nodes) {
