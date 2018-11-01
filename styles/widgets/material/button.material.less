@@ -83,10 +83,13 @@
         &:not(.dx-shape-standard) {
             .border-radius(50%);
             .box-shadow(none);
-            &.dx-button-normal .dx-icon {
-                color: @button-flat-color;
-            }
         }
+    }
+}
+
+&.dx-button-has-icon:not(.dx-button-has-text) {
+    .dx-icon {
+        color: @button-flat-color;
     }
 }
 
