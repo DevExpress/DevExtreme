@@ -453,10 +453,6 @@ var DropDownList = DropDownEditor.inherit({
         this.option("selectedItem", null);
     },
 
-    _clearValueHandler: function(e, options) {
-        this.callBase(e, { preventInput: true });
-    },
-
     _processDataSourceChanging: function() {
         this._setListDataSource();
 
@@ -475,7 +471,6 @@ var DropDownList = DropDownEditor.inherit({
     reset: function() {
         this.callBase();
 
-        this._clearText();
         this._clearFilter();
         this._clearSelectedItem();
     },
@@ -735,12 +730,16 @@ var DropDownList = DropDownEditor.inherit({
         this._refreshPopupVisibility();
     },
 
+    _needToOpenPopup: function() {
+        return this._hasItemsToShow();
+    },
+
     _refreshPopupVisibility: function() {
         if(this.option("readOnly")) {
             return;
         }
 
-        this.option("opened", this._hasItemsToShow());
+        this.option("opened", this._needToOpenPopup());
         if(this.option("opened")) {
             this._dimensionChanged();
         }
