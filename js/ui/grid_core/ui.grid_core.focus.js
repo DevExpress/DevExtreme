@@ -482,9 +482,9 @@ module.exports = {
                             } else {
                                 getter = that._columnsController.columnOption(selector, "selector");
                             }
-                            if(getter) {
-                                value = getter(rowData);
-                            }
+
+                            value = getter ? getter(rowData) : rowData[selector];
+
                             filter = [[selector, "=", value], "and", filter];
                             filter = [[selector, sortInfo.desc ? ">" : "<", value], "or", filter];
                         });
