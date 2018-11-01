@@ -132,8 +132,6 @@ const HtmlEditor = Editor.inherit({
 
             if(DeltaConverter) {
                 this._deltaConverter = new DeltaConverter();
-            } else {
-                throw Errors.Error("E1051", "delta");
             }
         }
 
@@ -159,21 +157,28 @@ const HtmlEditor = Editor.inherit({
     },
 
     _initMarkup: function() {
-        const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
         this._$htmlContainer = $("<div>").addClass(QUILL_CONTAINER_CLASS);
 
         this.$element()
             .addClass(HTML_EDITOR_CLASS)
             .wrapInner(this._$htmlContainer);
 
-        template && template.render({
+        const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
+        const transclude = true;
+
+        this._$templateResult = template && template.render({
             container: getPublicElement(this._$htmlContainer),
-            noModel: true
+            noModel: true,
+            transclude
         });
 
         this.callBase();
 
         this._updateContainerMarkup();
+    },
+
+    _hasTranscludeContent: function() {
+        return this._$templateResult && this._$templateResult.length;
     },
 
     _updateContainerMarkup: function() {
@@ -205,9 +210,14 @@ const HtmlEditor = Editor.inherit({
             theme: "basic"
         });
 
+        this._deltaConverter.setQuillInstance(this._quillInstance);
         this._textChangeHandlerWithContext = this._textChangeHandler.bind(this);
 
         this._quillInstance.on("text-change", this._textChangeHandlerWithContext);
+
+        if(this._hasTranscludeContent()) {
+            this._updateHtmlContent(this._deltaConverter.toHtml());
+        }
     },
 
     _getModulesConfig: function() {
@@ -254,8 +264,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _textChangeHandler: function(newDelta, oldDelta, source) {
-        let delta = this._quillInstance.getContents(),
-            htmlMarkup = this._deltaConverter.toHtml(delta.ops);
+        const htmlMarkup = this._deltaConverter.toHtml();
 
         this._isEditorUpdating = true;
 
@@ -310,9 +319,7 @@ const HtmlEditor = Editor.inherit({
                     delete this._isEditorUpdating;
                 } else {
                     const updatedValue = this._isMarkdownValue() ? this._updateValueByType("HTML", args.value) : args.value;
-                    const newDelta = this._quillInstance.clipboard.convert(updatedValue);
-
-                    this._quillInstance.setContents(newDelta);
+                    this._updateHtmlContent(updatedValue);
                 }
                 this.callBase(args);
                 break;
@@ -323,7 +330,13 @@ const HtmlEditor = Editor.inherit({
                 break;
             case "valueType":
                 this._prepareConverters();
-                this.option("value", this._updateValueByType(args.value));
+                const newValue = this._updateValueByType(args.value);
+
+                if(args.value === "html" && this._quillInstance) {
+                    this._updateHtmlContent(newValue);
+                } else {
+                    this.option("value", newValue);
+                }
                 break;
             case "readOnly":
             case "disabled":
@@ -336,6 +349,11 @@ const HtmlEditor = Editor.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+    _updateHtmlContent: function(newMarkup) {
+        const newDelta = this._quillInstance.clipboard.convert(newMarkup);
+        this._quillInstance.setContents(newDelta);
     },
 
     _clean: function() {
