@@ -166,7 +166,7 @@ const HtmlEditor = Editor.inherit({
         const template = this._getTemplate(ANONYMOUS_TEMPLATE_NAME);
         const transclude = true;
 
-        template && template.render({
+        this._$templateResult = template && template.render({
             container: getPublicElement(this._$htmlContainer),
             noModel: true,
             transclude
@@ -175,6 +175,10 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
 
         this._updateContainerMarkup();
+    },
+
+    _hasTranscludeContent: function() {
+        return this._$templateResult && this._$templateResult.length;
     },
 
     _updateContainerMarkup: function() {
@@ -210,6 +214,10 @@ const HtmlEditor = Editor.inherit({
         this._textChangeHandlerWithContext = this._textChangeHandler.bind(this);
 
         this._quillInstance.on("text-change", this._textChangeHandlerWithContext);
+
+        if(this._hasTranscludeContent()) {
+            this._updateHtmlContent(this._deltaConverter.toHtml());
+        }
     },
 
     _getModulesConfig: function() {
