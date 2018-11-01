@@ -4,6 +4,9 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     fx = require("animation/fx");
 
+var TREEVIEW_NODE_CONTAINER_CLASS = "dx-treeview-node-container",
+    TREEVIEW_NODE_CONTAINER_OPENED_CLASS = "dx-treeview-node-container-opened";
+
 QUnit.module("Expanded items", {
     beforeEach: function() {
         this.checkFunctionArguments = function(assert, actualArgs, expectedArgs) {
@@ -376,9 +379,6 @@ QUnit.test("expand parent items in recursive case", function(assert) {
     assert.ok(nodes[0].expanded, "root node is expanded");
     assert.ok(nodes[0].children[0].expanded, "child node is expanded");
 });
-
-var TREEVIEW_NODE_CONTAINER_CLASS = "dx-treeview-node-container",
-    TREEVIEW_NODE_CONTAINER_OPENED_CLASS = "dx-treeview-node-container-opened";
 
 QUnit.test("Expand parent items in markup after expand of rendered nested child (T671960)", function(assert) {
     var items = [{
