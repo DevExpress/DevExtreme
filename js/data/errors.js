@@ -131,7 +131,7 @@ var errors = errorUtils(coreErrors.ERROR_MESSAGES, {
     /**
     * @name ErrorsData.E4024
     */
-    E4024: "Focused row feature requires a key expression",
+    E4024: "Row focusing requires a key expression",
 
     /**
     * @name ErrorsData.W4000

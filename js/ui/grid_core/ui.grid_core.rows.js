@@ -709,6 +709,7 @@ module.exports = {
                     keyExpr && rows.some(function(row) {
                         if(row.rowType === "data" && row.key === undefined) {
                             that._dataController.dataErrorOccurred.fire(errors.Error("E1046", keyExpr));
+                            return true;
                         }
                     });
                 },
