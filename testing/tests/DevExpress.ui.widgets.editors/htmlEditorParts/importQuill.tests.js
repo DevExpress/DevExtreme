@@ -1,14 +1,12 @@
 
 SystemJS.config({
     map: {
-        'quill': '/testing/helpers/quillDependencies/noQuill.js',
-        'quill-delta-to-html': '/testing/helpers/quillDependencies/noQuillDeltaToHtml.js',
+        'quill': '/testing/helpers/quillDependencies/noQuill.js'
     }
 });
 
 define(function(require) {
-    var getQuill = require("ui/html_editor/quill_importer").getQuill,
-        DeltaConverter = require("ui/html_editor/converters/delta").default;
+    const getQuill = require("ui/html_editor/quill_importer").getQuill;
 
     QUnit.module("Import 3rd party", function() {
         QUnit.test("it throw an error if the quill script isn't referenced", function(assert) {
@@ -18,16 +16,6 @@ define(function(require) {
                     return /(E1041)[\s\S]*(Quill)/.test(e.message);
                 },
                 "The Quill script isn't referenced"
-            );
-        });
-
-        QUnit.test("it throw an error if the delta to html converter script isn't referenced", function(assert) {
-            assert.throws(
-                function() { new DeltaConverter(); },
-                function(e) {
-                    return /(E1041)[\s\S]*(QuillDeltaToHtmlConverter)/.test(e.message);
-                },
-                "The Quill delta converter script isn't referenced"
             );
         });
     });

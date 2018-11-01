@@ -38,7 +38,7 @@ QUnit.module("Value as HTML markup", () => {
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
                 onValueChanged: (e) => {
-                    assert.equal(e.value, "<p>Hi! <strong>Test.</strong></p>");
+                    assert.equal(e.value, "<p>Hi! <strong>Test.</strong></p><p>New line</p>");
                     done();
                 }
             })
@@ -47,7 +47,7 @@ QUnit.module("Value as HTML markup", () => {
         instance
             .$element()
             .find(getSelector(CONTENT_CLASS))
-            .html("<p>Hi! <strong>Test.</strong></p>");
+            .html("<p>Hi! <strong>Test.</strong></p><p>New line</p>");
     });
 
     test("value after change valueType", (assert) => {
@@ -55,10 +55,10 @@ QUnit.module("Value as HTML markup", () => {
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
                 valueType: "markdown",
-                value: "Hi! **Test.**",
+                value: "Hi! **Test. 123**\nNew line",
                 onValueChanged: (e) => {
                     if(e.component.option("valueType") === "html") {
-                        assert.equal(e.value, "<p>Hi! <strong>Test.</strong></p>");
+                        assert.equal(e.value, "<p>Hi! <strong>Test. 123</strong></p><p>New line</p>", "value is OK");
                         done();
                     }
                 }
@@ -148,7 +148,7 @@ QUnit.module("Custom blots rendering", {
     }
 }, () => {
     test("render image", (assert) => {
-        const expected = "<p><img src='http://test.com/test.jpg' width='100px' height='100px' alt='altering'></p>";
+        const expected = '<img src="http://test.com/test.jpg" alt="altering" width="100px" height="100px">';
         const instance = $("#htmlEditor")
         .dxHtmlEditor({
             onValueChanged: (e) => {
@@ -166,7 +166,7 @@ QUnit.module("Custom blots rendering", {
         .dxHtmlEditor({
             value: "test",
             onValueChanged: (e) => {
-                assert.equal(e.value, '<p><a href="http://test.com" target="_blank">test</a>test</p>', "markup contains an image");
+                assert.equal(e.value, '<a href="http://test.com" target="_blank">test</a>test', "markup contains an image");
             }
         })
         .dxHtmlEditor("instance");
@@ -176,11 +176,11 @@ QUnit.module("Custom blots rendering", {
     });
 
     test("render variable", (assert) => {
-        const expected = "<p><span class='dx-variable' data-var-start-esc-char=# data-var-end-esc-char=# data-var-value=Test><span>#Test#</span></span></p>";
+        const expected = '<span class="dx-variable" data-var-start-esc-char="#" data-var-end-esc-char="#" data-var-value="Test"><span contenteditable="false">#Test#</span></span>';
         const instance = $("#htmlEditor")
         .dxHtmlEditor({
             onValueChanged: (e) => {
-                assert.equal(e.value, expected, "markup contains a variable");
+                assert.equal(e.value.replace(/\uFEFF/g, ""), expected, "markup contains a variable");
             }
         })
         .dxHtmlEditor("instance");

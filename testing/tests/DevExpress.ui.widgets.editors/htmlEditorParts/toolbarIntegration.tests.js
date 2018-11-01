@@ -37,7 +37,7 @@ QUnit.module("Toolbar integration", {
 
     test("Apply simple format with selection", (assert) => {
         const done = assert.async();
-        const expected = "<p><strong>te</strong>st</p>";
+        const expected = "<strong>te</strong>st";
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["bold"] },

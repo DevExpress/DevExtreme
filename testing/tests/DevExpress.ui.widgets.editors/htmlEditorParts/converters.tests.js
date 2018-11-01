@@ -1,10 +1,11 @@
 import DeltaConverter from "ui/html_editor/converters/delta";
 import MarkdownConverter from "ui/html_editor/converters/markdown";
+import { getQuill } from "ui/html_editor/quill_importer";
 
 const { test } = QUnit;
 
 QUnit.module("Delta converter", () => {
-    test("it convert an delta operations to HTML markup", (assert) => {
+    test("it convert an editor content to semantic HTML markup", (assert) => {
         const deltaConverter = new DeltaConverter();
         const deltaOps = [{
             insert: 'test',
@@ -12,8 +13,13 @@ QUnit.module("Delta converter", () => {
                 bold: true
             }
         }];
+        const Quill = getQuill();
+        const quillInstance = new Quill(document.getElementById("htmlEditor"), {});
 
-        assert.equal(deltaConverter.toHtml(deltaOps), "<p><strong>test</strong></p>", "It converts delta operations");
+        deltaConverter.setQuillInstance(quillInstance);
+        quillInstance.setContents(deltaOps);
+
+        assert.equal(deltaConverter.toHtml(), "<strong>test</strong>", "It converts delta operations");
     });
 });
 

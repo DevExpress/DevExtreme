@@ -308,9 +308,7 @@ const HtmlEditor = Editor.inherit({
                     delete this._isEditorUpdating;
                 } else {
                     const updatedValue = this._isMarkdownValue() ? this._updateValueByType("HTML", args.value) : args.value;
-                    const newDelta = this._quillInstance.clipboard.convert(updatedValue);
-
-                    this._quillInstance.setContents(newDelta);
+                    this._updateHtmlContent(updatedValue);
                 }
                 this.callBase(args);
                 break;
@@ -321,7 +319,13 @@ const HtmlEditor = Editor.inherit({
                 break;
             case "valueType":
                 this._prepareConverters();
-                this.option("value", this._updateValueByType(args.value));
+                const newValue = this._updateValueByType(args.value);
+
+                if(args.value === "html") {
+                    this._updateHtmlContent(newValue);
+                } else {
+                    this.option("value", newValue);
+                }
                 break;
             case "readOnly":
             case "disabled":
@@ -334,6 +338,11 @@ const HtmlEditor = Editor.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+    _updateHtmlContent: function(newMarkup) {
+        const newDelta = this._quillInstance.clipboard.convert(newMarkup);
+        this._quillInstance.setContents(newDelta);
     },
 
     _clean: function() {
