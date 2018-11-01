@@ -222,6 +222,15 @@ QUnit.test('addInterval day overflow', function(assert) {
     // assert
     assert.deepEqual(newDate, new Date(2012, 1, 1));
 });
+
+QUnit.test('addInterval date with numeric interval', function(assert) {
+    // arrange, act
+    var newDate = dateUtils.addInterval(new Date(2012, 2, 2), 24 * 60 * 60 * 1000);
+
+    // assert
+    assert.deepEqual(newDate, new Date(2012, 2, 3));
+});
+
 QUnit.test('getDateUnitInterval with millisecond tickInterval', function(assert) {
     // arrange
     var getDateUnitInterval = dateUtils.getDateUnitInterval,
