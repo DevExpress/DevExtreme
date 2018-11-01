@@ -1325,6 +1325,43 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this.option("selectNodesRecursive") && this.option("selectionMode") !== "single";
     },
 
+    _isLastSelectedBranch: function(publicNode, selectedNodesKeys, deep) {
+        var keyIndex = selectedNodesKeys.indexOf(publicNode.key);
+
+        if(keyIndex >= 0) {
+            selectedNodesKeys.splice(keyIndex, 1);
+        }
+
+        if(deep) {
+            each(publicNode.children, function(_, childNode) {
+                this._isLastSelectedBranch(childNode, selectedNodesKeys, true);
+            }.bind(this));
+        }
+
+        if(publicNode.parent) {
+            this._isLastSelectedBranch(publicNode.parent, selectedNodesKeys);
+        }
+
+        return selectedNodesKeys.length === 0;
+    },
+
+    _isLastRequired: function(node) {
+        var selectionRequired = this.option("selectionRequired"),
+            isSingleMode = this._isSingleSelection(),
+            selectedNodesKeys = this.getSelectedNodesKeys();
+
+        if(!selectionRequired) {
+            return;
+        }
+
+        if(isSingleMode) {
+            return selectedNodesKeys.length === 1;
+        } else {
+            return this._isLastSelectedBranch(node.internalFields.publicNode, selectedNodesKeys.slice(), true);
+        }
+
+    },
+
     _updateItemSelection: function(value, itemElement, dxEvent) {
         var that = this,
             node = that._getNode(itemElement);
@@ -1333,10 +1370,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        var selectedNodesKeys = that.getSelectedNodesKeys(),
-            lastRequiredDeselect = this.option("selectionRequired") && !value && selectedNodesKeys.length === 1;
-
-        if(lastRequiredDeselect) {
+        if(!value && this._isLastRequired(node)) {
             if(this._showCheckboxes()) {
                 var $node = this._getNodeElement(node),
                     checkbox = this._getCheckBoxInstance($node);
@@ -1346,6 +1380,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
+        var selectedNodesKeys = that.getSelectedNodesKeys();
         if(that._isSingleSelection() && value) {
             each(selectedNodesKeys, function(index, nodeKey) {
                 that.unselectItem(nodeKey);
