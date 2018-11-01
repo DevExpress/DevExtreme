@@ -557,10 +557,6 @@ var TextEditorBase = Editor.inherit({
         eventsEngine.trigger($input, "input");
     },
 
-    _clearText: function() {
-        this.option("text", "");
-    },
-
     _renderEvents: function() {
         var that = this,
             $input = that._input();
@@ -789,7 +785,7 @@ var TextEditorBase = Editor.inherit({
     reset: function() {
         var defaultOptions = this._getDefaultOptions();
         if(this.option("value") === defaultOptions.value) {
-            this._clearText();
+            this.option("text", "");
             this._renderValue();
         } else {
             this.option("value", defaultOptions.value);
