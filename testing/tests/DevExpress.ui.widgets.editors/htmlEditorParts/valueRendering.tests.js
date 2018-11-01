@@ -174,11 +174,20 @@ QUnit.module("Custom blots rendering", {
     }
 }, () => {
     test("render image", (assert) => {
-        const expected = '<img src="http://test.com/test.jpg" alt="altering" width="100px" height="100px">';
+        const testTag = /<img([\w\W]+?)/;
+        const testSrc = /src="http:\/\/test.com\/test.jpg"/g;
+        const testAlt = /alt="altering"/g;
+        const testWidth = /width="100"/g;
+        const testHeight = /height="100"/g;
+
         const instance = $("#htmlEditor")
         .dxHtmlEditor({
             onValueChanged: (e) => {
-                assert.equal(e.value, expected, "markup contains an image");
+                assert.ok(testTag.test(e.value));
+                assert.ok(testSrc.test(e.value));
+                assert.ok(testAlt.test(e.value));
+                assert.ok(testWidth.test(e.value));
+                assert.ok(testHeight.test(e.value));
             }
         })
         .dxHtmlEditor("instance");

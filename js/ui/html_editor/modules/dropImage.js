@@ -79,7 +79,7 @@ class DropImageModule extends BaseModule {
         const selection = this.quill.getSelection();
         const pasteIndex = selection ? selection.index : this.quill.getLength();
 
-        this.quill.insertEmbed(pasteIndex, "image", data, "user");
+        this.quill.insertEmbed(pasteIndex, "extendedImage", data, "user");
     }
 }
 
