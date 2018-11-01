@@ -1076,10 +1076,15 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _updateExpandedItemsUI: function(node, state, e) {
-        var $node = this._getNodeElement(node);
+        var $node = this._getNodeElement(node),
+            isHiddenNode = !$node.length || state && $node.is(':hidden');
 
-        if(!$node.length && this.option("expandNodesRecursive")) {
-            this._updateExpandedItemsUI(this._getNode(node.internalFields.parentKey), state, e);
+        if(this.option("expandNodesRecursive") && isHiddenNode) {
+            var parentNode = this._getNode(node.internalFields.parentKey);
+
+            if(parentNode) {
+                this._updateExpandedItemsUI(parentNode, state, e);
+            }
         }
 
         var $icon = $node.children("." + TOGGLE_ITEM_VISIBILITY_CLASS);
