@@ -733,6 +733,9 @@
         }
 
         .dx-row-focused {
+            &:focus {
+                outline: none;
+            }
             &.dx-data-row:not(.dx-edit-row) {
                 & > td:not(.dx-focused),
                 & > tr > td:not(.dx-focused),
