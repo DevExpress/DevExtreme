@@ -835,7 +835,7 @@ QUnit.module("Workspace Week markup", weekModuleConfig, () => {
 
         assert.equal(secondRowCells.length, 42, "The second group row contains 42 group headers");
 
-        assert.strictEqual(secondRowCells.attr("colspan"), 1, "Cells of the second group row do not have colspan attr");
+        assert.strictEqual(secondRowCells.attr("colspan"), "1", "Cells of the second group row do not have colspan attr");
 
         assert.equal(secondRowCells.eq(0).text(), "c", "Cell has a right text");
         assert.equal(secondRowCells.eq(1).text(), "d", "Cell has a right text");
