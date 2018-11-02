@@ -4717,6 +4717,47 @@ QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded p
     }, 500);
 });
 
+// T680076
+QUnit.testInActiveWindow("The page must be correct after several the 'Page Down' key presses", function(assert) {
+    // arrange
+    var scrollable,
+        $scrollContainer;
+
+    this.options = {
+        dataSource: generateItems(10),
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 2
+        }
+    };
+
+    setupModules(this, { initViews: true });
+
+    this.gridView.render($("#container"));
+    this.rowsView.height(70);
+    this.rowsView.resize();
+    scrollable = this.rowsView.getScrollable();
+    $scrollContainer = $(scrollable._container());
+
+    this.focusFirstCell();
+    this.clock.tick();
+
+    // act
+    this.triggerKeyDown("pageDown");
+    $scrollContainer.trigger("scroll");
+    this.clock.tick();
+
+    this.triggerKeyDown("pageDown");
+    $scrollContainer.trigger("scroll");
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(this.pageIndex(), 2, "pageIndex");
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 4 }, "focused position");
+});
+
 
 QUnit.module("Rows view", {
     beforeEach: function() {
