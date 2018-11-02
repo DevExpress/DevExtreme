@@ -504,7 +504,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $row = this._focusedView && this._focusedView.getRow(rowIndex),
             $event = eventArgs.originalEvent,
             args,
-            $cell;
+            $cell,
+            rowHeight,
+            isUpArrow = eventArgs.key === "upArrow",
+            dataSource = this._dataController.dataSource();
 
         if(!isEditing && $row && !isDetailRow($row)) {
             $cell = this._getNextCell(eventArgs.key);
@@ -516,7 +519,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     }
                     this._focus($cell);
                 }
+            } else if(this._isVirtualScrolling() && isUpArrow && dataSource && !dataSource.isLoading()) {
+                rowHeight = $row.outerHeight();
+                rowIndex = this._focusedCellPosition.rowIndex - 1;
+                this._scrollBy(-rowHeight, rowIndex, $event);
             }
+
             if($event) {
                 $event.preventDefault();
             }
@@ -528,34 +536,47 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return scrollingMode === "virtual" || scrollingMode === "infinite";
     },
 
-    _scrollBy: function(top) {
+    _scrollBy: function(top, rowIndex, $event) {
         var that = this,
             scrollable = this.getView("rowsView").getScrollable();
 
         if(that._focusedCellPosition) {
             var scrollHandler = function() {
                 scrollable.off("scroll", scrollHandler);
-                setTimeout(function() {
-                    that.restoreFocusableElement();
-                });
+                setTimeout(that.restoreFocusableElement.bind(that, rowIndex, $event));
             };
             scrollable.on("scroll", scrollHandler);
         }
         scrollable.scrollBy({ left: 0, top: top });
     },
 
-    restoreFocusableElement: function() {
+    restoreFocusableElement: function(rowIndex, $event) {
         var that = this,
+            args,
+            $rowElement,
+            isUpArrow = isDefined(rowIndex),
             rowsView = that.getView("rowsView"),
             $rowsViewElement = rowsView.element(),
             columnIndex = that._focusedCellPosition.columnIndex,
-            firstRowIndex = that.getView("rowsView").getTopVisibleItemIndex() + that._dataController.getRowIndexOffset();
+            rowIndexOffset = that._dataController.getRowIndexOffset(),
+            rowIndex = isUpArrow ? rowIndex : rowsView.getTopVisibleItemIndex() + rowIndexOffset;
 
-        that.getController("editorFactory").loseFocus();
-        that._applyTabIndexToElement($rowsViewElement);
-        eventsEngine.trigger($rowsViewElement, "focus");
+        if(!isUpArrow) {
+            that.getController("editorFactory").loseFocus();
+            that._applyTabIndexToElement($rowsViewElement);
+            eventsEngine.trigger($rowsViewElement, "focus");
+        } else {
+            $rowElement = rowsView.getRow(rowIndex - rowIndexOffset);
+            args = that._fireFocusedRowChanging($event, $rowElement);
 
-        that.setFocusedCellPosition(firstRowIndex, columnIndex);
+            if(!args.cancel && args.rowIndexChanged) {
+                rowIndex = args.newRowIndex;
+            }
+        }
+
+        if(!isUpArrow || !args.cancel) {
+            that.setFocusedCellPosition(rowIndex, columnIndex);
+        }
     },
 
     _pageUpDownKeyHandler: function(eventArgs) {
