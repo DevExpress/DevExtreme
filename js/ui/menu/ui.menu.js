@@ -517,6 +517,10 @@ var Menu = MenuBase.inherit({
         }
     },
 
+    _keyboardHandler: function(e) {
+        return this._visibleSubmenu ? true : this.callBase(e);
+    },
+
     _renderContainer: function() {
         var $wrapper = $("<div>");
 
@@ -539,8 +543,10 @@ var Menu = MenuBase.inherit({
         var $submenuContainer = $("<div>").addClass(DX_CONTEXT_MENU_CLASS)
             .appendTo($rootItem);
 
-        var items = this._getChildNodes(node),
+        var childKeyboardProcessor = this._keyboardProcessor.attachChildProcessor(),
+            items = this._getChildNodes(node),
             result = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
+                _keyboardProcessor: childKeyboardProcessor,
                 _dataAdapter: this._dataAdapter,
                 _parentKey: node.internalFields.key,
                 items: items,
@@ -594,6 +600,8 @@ var Menu = MenuBase.inherit({
     },
 
     _moveMainMenuFocus: function(direction) {
+        this._hideSubmenu(this._visibleSubmenu);
+
         var $items = this._getAvailableItems(),
             itemCount = $items.length,
             $currentItem = $items.filter("." + DX_MENU_ITEM_EXPANDED_CLASS).eq(0),
@@ -609,7 +617,6 @@ var Menu = MenuBase.inherit({
 
         var $newItem = $items.eq(itemIndex);
 
-        this._hideSubmenu(this._visibleSubmenu);
         this.focus();
         this.option("focusedElement", getPublicElement($newItem));
     },

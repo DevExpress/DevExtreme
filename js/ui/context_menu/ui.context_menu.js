@@ -604,6 +604,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _overlayHiddenActionHandler: function(arg) {
+            this.option("focusedElement", null);
             this._actions.onHidden(arg);
         },
 
