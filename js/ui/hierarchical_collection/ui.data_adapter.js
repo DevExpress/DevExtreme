@@ -400,15 +400,22 @@ var DataAdapter = Class.inherit({
         }
 
         var that = this,
+            lastSelectedKey = that._selectedNodesKeys[that._selectedNodesKeys.length - 1],
             dataStructure = that._isSingleModeUnselect(state) ? this._initialDataStructure : this._dataStructure;
-        each(dataStructure, function(_, node) {
+
+        each(dataStructure, function(index, node) {
             if(!that._isNodeVisible(node)) {
                 return;
             }
 
             that._setFieldState(node, SELECTED, state);
         });
+
         that._selectedNodesKeys = that._updateNodesKeysArray(SELECTED);
+
+        if(!state && that.options.selectionRequired) {
+            that.toggleSelection(lastSelectedKey, true);
+        }
     },
 
     isAllSelected: function() {
