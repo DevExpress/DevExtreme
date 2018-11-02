@@ -12,7 +12,8 @@ var $ = require("../../core/renderer"),
 var RADIO_BUTTON_CLASS = "dx-radiobutton",
     RADIO_BUTTON_ICON_CLASS = "dx-radiobutton-icon",
     RADIO_BUTTON_ICON_DOT_CLASS = "dx-radiobutton-icon-dot",
-    RADIO_BUTTON_CHECKED_CLASS = "dx-radiobutton-checked";
+    RADIO_BUTTON_CHECKED_CLASS = "dx-radiobutton-checked",
+    RADIO_BUTTON_ICON_CHECKED_CLASS = "dx-radiobutton-icon-checked";
 
 /**
 * @name dxRadioButton
@@ -122,7 +123,10 @@ var RadioButton = Editor.inherit({
     },
 
     _renderCheckedState: function(checked) {
-        this.$element().toggleClass(RADIO_BUTTON_CHECKED_CLASS, checked);
+        this.$element()
+            .toggleClass(RADIO_BUTTON_CHECKED_CLASS, checked)
+            .find("." + RADIO_BUTTON_ICON_CLASS)
+            .toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, checked);
         this.setAria("checked", checked);
     },
 
