@@ -617,7 +617,6 @@ var Menu = MenuBase.inherit({
 
         var $newItem = $items.eq(itemIndex);
 
-        this.focus();
         this.option("focusedElement", getPublicElement($newItem));
     },
 
@@ -889,7 +888,11 @@ var Menu = MenuBase.inherit({
             this._hideVisibleSubmenu();
         }
 
-        submenu && submenu.show();
+        if(submenu) {
+            submenu.show();
+            this.option("focusedElement", submenu.option("focusedElement"));
+        }
+
         this._visibleSubmenu = submenu;
         this._hoveredRootItem = $itemElement;
     },
