@@ -359,7 +359,7 @@ var Tabs = CollectionWidget.inherit({
             return false;
         }
 
-        var tabItemsWidth = this._getSummaryItemsWidth(this._getAvailableItems(), true);
+        var tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
 
         // NOTE: "-1" is a hack fix for IE (T190044)
         return tabItemsWidth - 1 > this.$element().width();
