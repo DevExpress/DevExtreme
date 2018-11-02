@@ -651,4 +651,21 @@ QUnit.module("Live Update", {
         assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, "2 Inserted", "check added item");
     });
+
+    QUnit.test("should not rerender items if the badge/disabled/visible changed", function(assert) {
+        var tabPanel = $("#tabPanel").dxTabPanel({
+                items: [{ title: "title" }],
+                itemTemplate: function() { return $("<div id='itemContent'>"); }
+            }).dxTabPanel("instance"),
+            contentElement = $('#itemContent').get(0);
+
+        tabPanel.option("items[0].badge", 'badge text');
+        tabPanel.option("items[0].disabled", true);
+        tabPanel.option("items[0].visible", false);
+
+        assert.strictEqual(tabPanel.option('items[0].badge'), 'badge text');
+        assert.strictEqual(tabPanel.option('items[0].disabled'), true);
+        assert.strictEqual(tabPanel.option('items[0].visible'), false);
+        assert.strictEqual(contentElement, $('#itemContent').get(0));
+    });
 });
