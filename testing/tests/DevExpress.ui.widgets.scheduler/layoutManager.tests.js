@@ -2337,8 +2337,8 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
-    assert.equal(groupedAppointments.length, 2, "DropDown menu has correct items");
-    assert.equal(dropDownMenuText, "2", "DropDown menu has correct text");
+    assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
+    assert.equal(dropDownMenuText, "1", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'numeric' mode", function(assert) {

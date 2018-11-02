@@ -301,17 +301,10 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getDynamicAppointmentCountPerCell: function() {
-        if(this.instance._groupOrientation === "vertical") {
-            return {
-                allDay: this.callBase(),
-                simple: this._calculateDynamicAppointmentCountPerCell()
-            };
-        } else {
-            return {
-                allDay: this.instance.option("_appointmentCountPerCell"),
-                simple: this._calculateDynamicAppointmentCountPerCell()
-            };
-        }
+        return {
+            allDay: this.instance._groupOrientation === "vertical" ? this.callBase() : this.instance.option("_appointmentCountPerCell"),
+            simple: this._calculateDynamicAppointmentCountPerCell() || 1
+        };
     },
 
     _calculateDynamicAppointmentCountPerCell: function() {
