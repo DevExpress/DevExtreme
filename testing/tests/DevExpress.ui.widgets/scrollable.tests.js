@@ -91,10 +91,10 @@ QUnit.testStart(function() {
             </div>\
             <div style="height: 100px;"></div>\
         </div>\
-        <div id="scaledContainer" style="transform:scale(0.5)">\
-            <div style="height: 500px; width: 50px;">\
+        <div id="scaledContainer" style="transform:scale(0.2, 0.5)">\
+            <div style="height: 500px; width: 500px;">\
                 <div id="scaledScrollable">\
-                    <div id="scaledContent" style="height: 1000px; width: 100px;"></div>\
+                    <div id="scaledContent" style="height: 1000px; width: 1000px;"></div>\
                 </div>\
             </div>\
         </div>';
@@ -1426,27 +1426,33 @@ QUnit.test("scrollbar position calculated correctly when content much greater th
 });
 
 QUnit.test("scrollbar position calculated correctly with scaled content", function(assert) {
-    var $scrollable = $("#scaledScrollable");
-
-    $scrollable.dxScrollable({
-        useSimulatedScrollbar: true,
-        useNative: false,
-        showScrollbar: "always",
-        direction: "vertical"
-    });
-
-    var instance = $scrollable.dxScrollable("instance"),
-        $scrollbar = $scrollable.find("." + SCROLLABLE_SCROLL_CLASS);
-
-    instance.scrollTo({ top: 100 });
-
-    var scrollBarPosition = translator.locate($scrollbar),
+    var $scrollable = $("#scaledScrollable"),
+        instance = $scrollable.dxScrollable({
+            useSimulatedScrollbar: true,
+            useNative: false,
+            showScrollbar: "always",
+            direction: "both"
+        }).dxScrollable("instance"),
+        $scrollbars = $scrollable.find("." + SCROLLABLE_SCROLL_CLASS),
         $container = $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS),
-        scrollbarRect = $scrollbar.get(0).getBoundingClientRect();
+        $hScrollBar = $scrollbars.eq(0),
+        $vScrollBar = $scrollbars.eq(1);
 
-    assert.equal(scrollBarPosition.top, 50, "Correct scrollbar position");
-    assert.equal(scrollbarRect.height, 125, "Correct scrollbar size");
-    assert.equal($container.scrollTop(), 100, "Content position isn't zoomed");
+    instance.scrollTo({ left: 200, top: 200 });
+    assert.strictEqual(translator.locate($hScrollBar).left, 100, "Correct scrollbar position");
+    assert.strictEqual(translator.locate($vScrollBar).top, 100, "Correct scrollbar position");
+
+    instance.scrollTo({ left: 100, top: 100 });
+    assert.strictEqual(translator.locate($hScrollBar).left, 50, "Correct scrollbar position");
+    assert.strictEqual(translator.locate($vScrollBar).top, 50, "Correct scrollbar position");
+
+    var hScrollbarRect = $hScrollBar.get(0).getBoundingClientRect(),
+        vScrollbarRect = $vScrollBar.get(0).getBoundingClientRect();
+
+    assert.strictEqual(vScrollbarRect.height, 125, "Correct vertical scrollbar size");
+    assert.strictEqual(hScrollbarRect.width, 50, "Correct horizontal scrollbar size");
+    assert.strictEqual($container.scrollTop(), 100, "Content position isn't zoomed");
+    assert.strictEqual($container.scrollLeft(), 100, "Content position isn't zoomed");
 });
 
 QUnit.test("scrollbar in scaled container has correct position after update", function(assert) {
