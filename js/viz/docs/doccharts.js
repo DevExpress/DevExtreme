@@ -3345,6 +3345,11 @@ var BaseChart = {
     */
     render: function(renderOptions) { },
     /**
+    * @name BaseChartMethods.refresh
+    * @publicName refresh()
+    */
+    refresh: function() { },
+    /**
     * @name BaseChartMethods.getAllSeries
     * @publicName getAllSeries()
     * @return Array<baseSeriesObject>

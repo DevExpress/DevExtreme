@@ -826,6 +826,80 @@ var environment = {
         assert.strictEqual(validateData.callCount, 1, "validation");
     });
 
+    QUnit.test("Refresh - reload data, recreate series, draw even container size not changed", function(assert) {
+        // arrange
+        var chart = this.createChart({
+                tooltip: { enabled: true },
+                legend: { position: "outside" },
+                dataSource: [{ arg: 1, val: 1 }],
+                series: { type: "line" },
+                title: {
+                    text: "test title",
+                    subtitle: {},
+                    verticalAlignment: "bottom"
+                },
+                "export": {
+                    enabled: true
+                }
+            }),
+            paneClipRect,
+            stubSeries = new MockSeries({
+                points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
+            });
+        chartMocks.seriesMockData.series.push(stubSeries);
+        paneClipRect = chart._panesClipRects.base[0];
+        resetMocksInChart(chart);
+        $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
+        $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
+        $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
+        $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
+
+        // act
+        chart.refresh();
+        // assert
+        testEverythingWasDrawn(assert, chart, { firstDraw: true, withNewData: true, clipsCreated: 5 });
+        assert.equal(chart._renderer.stub("resize").callCount, 0);
+        assert.ok(paneClipRect.stub("dispose").called, "Pane clip rect should be removed");
+        assert.ok(getTrackerStub().stub("update").calledTwice, "Tracker should be initialized");
+        assert.ok(chart.seriesDisposed, "Series should not be disposed");
+        assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
+        assert.ok(chart.seriesFamilies[0].adjustedValues, "SeriesFamilies should not adjust series values");
+        assert.ok(!getTrackerStub().stub("_clean").called, "Tracker should not be cleaned");
+        assert.ok(chart.horizontalAxesDisposed, "Horizontal axes should not be disposed");
+        assert.ok(chart.verticalAxesDisposed, "Vertical axes should not be disposed");
+        assert.strictEqual(validateData.callCount, 1, "validation");
+    });
+
+    QUnit.test("Refresh - use new container size if it's changed", function(assert) {
+        // arrange
+        var chart = this.createChart({
+                tooltip: { enabled: true },
+                legend: { position: "outside" },
+                dataSource: [{ arg: 1, val: 1 }],
+                series: { type: "line" },
+                title: {
+                    text: "test title",
+                    subtitle: {},
+                    verticalAlignment: "bottom"
+                },
+                "export": {
+                    enabled: true
+                }
+            }),
+            stubSeries = new MockSeries({
+                points: getPoints(DEFAULT_ANIMATION_LIMIT - 1)
+            });
+        chartMocks.seriesMockData.series.push(stubSeries);
+        resetMocksInChart(chart);
+
+        this.$container.height(200);
+        // act
+        chart.refresh();
+        // assert
+        assert.equal(chart._renderer.stub("resize").callCount, 1);
+        assert.deepEqual(chart._renderer.stub("resize").getCall(0).args, [300, 200]);
+    });
+
     QUnit.test("draw chart when scrollBar is visible", function(assert) {
         // arrange
         sinon.stub(scrollBarModule, "ScrollBar", function() {
@@ -1178,7 +1252,7 @@ var environment = {
         assert.ok(!chart._renderer.stub("clear").called, "Renderer should be cleared");
 
         assert.ok(chart._canvasClipRect.attr.called, "Canvas clip rectangle should be updated");
-        assert.strictEqual(chart._renderer.clipRect.callCount, 3, "Clip rectangles count");
+        assert.strictEqual(chart._renderer.clipRect.callCount, options.clipsCreated || 3, "Clip rectangles count");
 
         !firstDraw && assert.ok(chart._panesClipRects.base[0].attr.calledOnce, "Pane clip rectangle should be updated");
         firstDraw && assert.ok(!chart._panesClipRects.base[0].attr.calledOnce, "Pane clip rectangle should not be updated");
