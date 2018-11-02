@@ -421,9 +421,13 @@ var CollectionWidget = Widget.inherit({
         }
     },
 
-    _getAvailableItems: function($itemElements) {
+    _getVisibleItems: function($itemElements) {
         $itemElements = $itemElements || this._itemElements();
-        return $itemElements.filter(":visible").not(".dx-state-disabled");
+        return $itemElements.filter(":visible");
+    },
+
+    _getAvailableItems: function($itemElements) {
+        return this._getVisibleItems($itemElements).not(".dx-state-disabled");
     },
 
     _prevItem: function($items) {
