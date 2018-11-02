@@ -27,40 +27,6 @@ var addOptionChangedHandlers = function(that) {
     });
 };
 
-var teardownModule = function() {
-    this.dispose();
-    this.clock.restore();
-};
-
-QUnit.module("Focus", {
-    beforeEach: function() {
-        this.setupDataGrid = function(options) {
-            options = options || { };
-            options.initViews = true,
-            options.dataSource = options.dataSource || this.data;
-            setupDataGridModules(this, ['data', 'gridView', 'columns', 'selection', 'stateStoring', 'grouping', 'filterRow', 'focus'], { initDefaultOptions: true, options: options });
-        };
-
-        this.data = [
-            { name: 'Alex', age: 15 },
-            { name: 'Dan', age: 16 },
-            { name: 'Vadim', age: 17 },
-            { name: 'Dmitry', age: 18 },
-            { name: 'Sergey', age: 18 },
-            { name: 'Kate', age: 20 },
-            { name: 'Dan', age: 21 }
-        ];
-
-        this.clock = sinon.useFakeTimers();
-    },
-
-    afterEach: function() {
-        this.clock.restore();
-
-        teardownModule.apply(this);
-    }
-});
-
 var KEYS = {
     "tab": "9",
     "enter": "13",
@@ -1191,6 +1157,67 @@ QUnit.testInActiveWindow("Fire onFocusedRowChanging by UpArrow key", function(as
     keyboardController._upDownKeysHandler({ key: "upArrow" });
     // assert
     assert.equal(this.getController("keyboardNavigation").getVisibleRowIndex(), 3, "Focused row index is 3");
+    assert.equal(focusedRowChangingCount, 1, "onFocusedRowChanging fires count");
+});
+
+QUnit.testInActiveWindow("Fire onFocusedRowChanging by UpArrow key when virtual scrolling is enabled", function(assert) {
+    // arrange
+    var rowsView,
+        scrollable,
+        $scrollContainer,
+        focusedRowChangingCount = 0,
+        keyboardController;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = dataGridMocks.generateItems(100);
+
+    this.options = {
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        focusedRowKey: 41,
+        editing: {
+            allowEditing: false
+        },
+        onFocusedRowChanging: function(e) {
+            ++focusedRowChangingCount;
+
+            // assert
+            assert.equal(e.cancel, false);
+            assert.equal(e.newRowIndex, 39);
+            assert.equal(e.prevRowIndex, 20); // TODO replace with 40
+        },
+        paging: {
+            pageIndex: 2
+        },
+        scrolling: {
+            mode: "virtual"
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    rowsView = this.gridView.getView("rowsView");
+    rowsView.height(400);
+    rowsView.resize();
+    scrollable = rowsView.getScrollable();
+    $scrollContainer = $(scrollable._container());
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 40, "FocusedRowIndex is 40");
+
+    // act
+    keyboardController._upDownKeysHandler({ key: "upArrow" });
+    $scrollContainer.trigger("scroll");
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.getController("keyboardNavigation").getVisibleRowIndex(), 19, "Focused row index is 19");
     assert.equal(focusedRowChangingCount, 1, "onFocusedRowChanging fires count");
 });
 

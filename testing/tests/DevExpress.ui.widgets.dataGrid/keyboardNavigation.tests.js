@@ -9,6 +9,7 @@ QUnit.testStart(function() {
 
 
 require("common.css!");
+require("generic_light.css!");
 
 require("ui/data_grid/ui.data_grid");
 
@@ -1028,7 +1029,7 @@ function setupModules(that, modulesOptions) {
         ]
     };
 
-    setupDataGridModules(that, ['data', 'columns', "editorFactory", 'gridView', 'columnHeaders', 'rows', "grouping", "headerPanel", "search", "editing", "keyboardNavigation", "summary", "masterDetail"], modulesOptions || {
+    setupDataGridModules(that, ['data', 'columns', "editorFactory", 'gridView', 'columnHeaders', 'rows', "grouping", "headerPanel", "search", "editing", "keyboardNavigation", "summary", "masterDetail", "virtualScrolling"], modulesOptions || {
         initViews: true,
         controllers: {
             selection: new MockSelectionController(that.selectionOptions),
@@ -1036,6 +1037,16 @@ function setupModules(that, modulesOptions) {
             data: new MockDataController(that.dataControllerOptions)
         }
     });
+}
+
+function generateItems(itemCount) {
+    var items = [];
+
+    for(var i = 1; i <= itemCount; i++) {
+        items.push({ id: i, field1: "test1" + i, field2: "test2" + i, field3: "test3" + i, field4: "test4" + i });
+    }
+
+    return items;
 }
 
 QUnit.module("Keyboard keys", {
@@ -4643,6 +4654,140 @@ QUnit.testInActiveWindow("Edit row after enter key when alloUpdating as function
 
     // assert
     assert.equal(this.editingController._editRowIndex, -1, "edit row index");
+});
+
+// T680076
+QUnit.testInActiveWindow("Down arrow key should work correctly after page down key press", function(assert) {
+    // arrange
+    var scrollable,
+        $scrollContainer;
+
+    this.dataControllerOptions = {
+        pageCount: 4,
+        pageIndex: 0,
+        pageSize: 2,
+        items: [
+            { values: ["test11", "test21", "test31", "test41"], rowType: "data", key: 0 },
+            { values: ["test12", "test22", "test32", "test42"], rowType: "data", key: 1 },
+            { values: ["test13", "test23", "test33", "test43"], rowType: "data", key: 2 },
+            { values: ["test14", "test24", "test34", "test44"], rowType: "data", key: 3 },
+            { values: ["test15", "test25", "test35", "test45"], rowType: "data", key: 4 },
+            { values: ["test16", "test26", "test36", "test46"], rowType: "data", key: 5 },
+            { values: ["test17", "test27", "test37", "test47"], rowType: "data", key: 6 },
+            { values: ["test18", "test28", "test38", "test48"], rowType: "data", key: 7 },
+            { values: ["test19", "test29", "test39", "test49"], rowType: "data", key: 8 }
+        ]
+    };
+
+    setupModules(this);
+    this.options.scrolling = { mode: "virtual" };
+
+    this.gridView.render($("#container"));
+    this.rowsView.height(70);
+    this.rowsView.resize();
+    scrollable = this.rowsView.getScrollable();
+    $scrollContainer = $(scrollable._container());
+
+    this.focusFirstCell();
+
+    // act
+    this.triggerKeyDown("pageDown");
+    $scrollContainer.trigger("scroll");
+    this.clock.tick();
+
+    this.triggerKeyDown("downArrow"); // navigation to the visible row
+    this.triggerKeyDown("downArrow"); // navigation to the invisible row
+    $scrollContainer.trigger("scroll");
+    this.clock.tick();
+
+    // assert
+    assert.ok($(".dx-datagrid-focus-overlay").is(":visible"), "focus overlay is visible");
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 4 }, "focused position");
+});
+
+// T680076
+QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded page when virtual scrolling is enabled", function(assert) {
+    // arrange
+    var that = this,
+        done = assert.async();
+
+    that.options = {
+        dataSource: generateItems(500),
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageIndex: 20
+        }
+    };
+
+    setupModules(that, { initViews: true });
+
+    that.gridView.render($("#container"));
+    that.rowsView.height(400);
+    that.rowsView.resize();
+
+    that.focusCell(0, 1); // focus the first cell of the first data row
+    that.clock.tick();
+
+    // act
+    $(that.rowsView.element()).trigger($.Event("keydown", { which: KEYS.upArrow }));
+    that.clock.tick();
+    that.clock.restore();
+
+    setTimeout(function() {
+        that.clock = sinon.useFakeTimers();
+
+        // act
+        $(that.rowsView.element()).trigger($.Event("keydown", { which: KEYS.upArrow }));
+        that.clock.tick();
+
+        // assert
+        assert.ok($(".dx-datagrid-focus-overlay").is(":visible"), "focus overlay is visible");
+        assert.deepEqual(that.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 398 }, "focused position");
+        done();
+    }, 500);
+});
+
+// T680076
+QUnit.testInActiveWindow("The page must be correct after several the 'Page Down' key presses", function(assert) {
+    // arrange
+    var scrollable,
+        $scrollContainer;
+
+    this.options = {
+        dataSource: generateItems(10),
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 2
+        }
+    };
+
+    setupModules(this, { initViews: true });
+
+    this.gridView.render($("#container"));
+    this.rowsView.height(70);
+    this.rowsView.resize();
+    scrollable = this.rowsView.getScrollable();
+    $scrollContainer = $(scrollable._container());
+
+    this.focusFirstCell();
+    this.clock.tick();
+
+    // act
+    this.triggerKeyDown("pageDown");
+    $scrollContainer.trigger("scroll");
+    this.clock.tick();
+
+    this.triggerKeyDown("pageDown");
+    $scrollContainer.trigger("scroll");
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(this.pageIndex(), 2, "pageIndex");
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 4 }, "focused position");
 });
 
 
