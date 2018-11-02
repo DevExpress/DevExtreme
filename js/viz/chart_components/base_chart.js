@@ -1271,8 +1271,6 @@ var BaseChart = BaseWidget.inherit({
     },
 
     refresh: function() {
-        this._disposeSeries();
-        this._disposeSeriesFamilies();
         this._change(["CONTAINER_SIZE"]);
         this._requestChange(["REFRESH_SERIES_REINIT"]);
     }

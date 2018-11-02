@@ -1541,38 +1541,6 @@ var environment = {
         assert.ok(!chart.seriesDisposed, "Series should not be disposed");
     });
 
-    QUnit.test("Refresh", function(assert) {
-        // arrange
-        var chart = this.createPieChart({
-            dataSource: [{ arg: 1, val: 1 }],
-            series: {},
-            title: {
-                text: "test title"
-            }
-        });
-        chartMocks.seriesMockData.series.push(new MockSeries({}));
-        $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
-        this.validateData.reset();
-        // act
-        chart.refresh();
-        // assert
-        assert.ok(chart._renderer.resize.called, "Canvas should be resized");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [commons.getTitleStub(), commons.getLegendStub()], "legend and title layouted");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
-        assert.strictEqual(chart.layoutManager.applyPieChartSeriesLayout.callCount, 2, "layout count");
-        assert.strictEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.callCount, 2, "check free space - call count");
-        assert.deepEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.getCall(0).args, [[{ canvas: chart.DEBUG_canvas }], undefined], "check free space - 1");
-        assert.deepEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.getCall(1).args, [[{ canvas: chart.DEBUG_canvas }], undefined], "check free space - 2");
-        assert.ok(chart._legendGroup.linkAppend.called, "Legend group should be added to root");
-        assert.ok(chart.series[0].wasDrawn, "Series was drawn");
-        assert.ok(!chart._seriesGroup.stub("linkRemove").called, "Series group should be detached");
-        assert.ok(!chart._seriesGroup.stub("clear").called, "Series group should be cleared");
-        assert.ok(chart._seriesGroup.linkAppend.called, "Series group should be added to root");
-
-        assert.ok(chart.seriesDisposed, "Series should not be disposed");
-        assert.strictEqual(this.validateData.callCount, 1, "validation");
-    });
-
     QUnit.test("Hide labels if container too small", function(assert) {
         chartMocks.seriesMockData.series.push(new MockSeries({}));
         var chart = this.createPieChart({

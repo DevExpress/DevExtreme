@@ -513,12 +513,7 @@ var AdvancedChart = BaseChart.inherit({
 
     _adjustSeriesLabels: _noop,
 
-    _correctValueAxes: _noop,
-
-    refresh: function() {
-        this._disposeAxes();
-        this.callBase();
-    }
+    _correctValueAxes: _noop
 });
 
 exports.AdvancedChart = AdvancedChart;
