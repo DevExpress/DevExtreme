@@ -558,8 +558,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
             rowsView = that.getView("rowsView"),
             $rowsViewElement = rowsView.element(),
             columnIndex = that._focusedCellPosition.columnIndex,
-            rowIndexOffset = that._dataController.getRowIndexOffset(),
-            rowIndex = isUpArrow ? rowIndex : rowsView.getTopVisibleItemIndex() + rowIndexOffset;
+            rowIndexOffset = that._dataController.getRowIndexOffset();
+
+        rowIndex = isUpArrow ? rowIndex : rowsView.getTopVisibleItemIndex() + rowIndexOffset;
 
         if(!isUpArrow) {
             that.getController("editorFactory").loseFocus();
