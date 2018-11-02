@@ -1029,7 +1029,7 @@ function setupModules(that, modulesOptions) {
         ]
     };
 
-    setupDataGridModules(that, ['data', 'columns', "editorFactory", 'gridView', 'columnHeaders', 'rows', "grouping", "headerPanel", "search", "editing", "keyboardNavigation", "summary", "masterDetail"], modulesOptions || {
+    setupDataGridModules(that, ['data', 'columns', "editorFactory", 'gridView', 'columnHeaders', 'rows', "grouping", "headerPanel", "search", "editing", "keyboardNavigation", "summary", "masterDetail", "virtualScrolling"], modulesOptions || {
         initViews: true,
         controllers: {
             selection: new MockSelectionController(that.selectionOptions),
@@ -1037,6 +1037,16 @@ function setupModules(that, modulesOptions) {
             data: new MockDataController(that.dataControllerOptions)
         }
     });
+}
+
+function generateItems(itemCount) {
+    var items = [];
+
+    for(var i = 1; i <= itemCount; i++) {
+        items.push({ id: i, field1: "test1" + i, field2: "test2" + i, field3: "test3" + i, field4: "test4" + i });
+    }
+
+    return items;
 }
 
 QUnit.module("Keyboard keys", {
@@ -4662,6 +4672,51 @@ QUnit.testInActiveWindow("Down arrow key should work correctly after page down k
     assert.ok($(".dx-datagrid-focus-overlay").is(":visible"), "focus overlay is visible");
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 4 }, "focused position");
 });
+
+// T680076
+QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded page when virtual scrolling is enabled", function(assert) {
+    // arrange
+    var that = this,
+        done = assert.async();
+
+    that.options = {
+        dataSource: generateItems(500),
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageIndex: 20
+        }
+    };
+
+    setupModules(that, { initViews: true });
+
+    that.gridView.render($("#container"));
+    that.rowsView.height(400);
+    that.rowsView.resize();
+
+    that.focusCell(0, 1); // focus the first cell of the first data row
+    that.clock.tick();
+
+    // act
+    $(that.rowsView.element()).trigger($.Event("keydown", { which: KEYS.upArrow }));
+    that.clock.tick();
+    that.clock.restore();
+
+    setTimeout(function() {
+        that.clock = sinon.useFakeTimers();
+
+        // act
+        $(that.rowsView.element()).trigger($.Event("keydown", { which: KEYS.upArrow }));
+        that.clock.tick();
+
+        // assert
+        assert.ok($(".dx-datagrid-focus-overlay").is(":visible"), "focus overlay is visible");
+        assert.deepEqual(that.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 398 }, "focused position");
+        done();
+    }, 500);
+});
+
 
 QUnit.module("Rows view", {
     beforeEach: function() {

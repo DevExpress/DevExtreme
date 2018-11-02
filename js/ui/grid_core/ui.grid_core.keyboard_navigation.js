@@ -85,16 +85,17 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _updateFocus: function() {
-        var that = this,
-            $cell = that._getFocusedCell(),
-            $cellEditingCell = that._isCellEditMode() ? $cell : undefined;
+        var that = this;
 
-        if($cell && !(that._isMasterDetailCell($cell) && !that._isRowEditMode())) {
-            if(that._hasSkipRow($cell.parent())) {
-                $cell = that._getNextCell(this._focusedCellPosition && this._focusedCellPosition.rowIndex > 0 ? "upArrow" : "downArrow");
-            }
-            if($cell && $cell.length > 0) {
-                setTimeout(function() {
+        setTimeout(function() {
+            var $cell = that._getFocusedCell(),
+                $cellEditingCell = that._isCellEditMode() ? $cell : undefined;
+
+            if($cell && !(that._isMasterDetailCell($cell) && !that._isRowEditMode())) {
+                if(that._hasSkipRow($cell.parent())) {
+                    $cell = that._getNextCell(that._focusedCellPosition && that._focusedCellPosition.rowIndex > 0 ? "upArrow" : "downArrow");
+                }
+                if($cell && $cell.length > 0) {
                     if($cell.is("td") || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         if(that.getController("editorFactory").focus($cellEditingCell) || $cellEditingCell) {
                             that._focus($cell);
@@ -107,9 +108,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     } else {
                         eventsEngine.trigger($cell, "focus");
                     }
-                });
+                }
             }
-        }
+        });
     },
 
     _applyTabIndexToElement: function($element) {
@@ -421,12 +422,20 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _upDownKeysHandler: function(eventArgs, isEditing) {
         var rowIndex = this._getFocusedRowIndex(),
             $row = this._focusedView && this._focusedView.getRow(rowIndex),
-            $cell;
+            $cell,
+            rowHeight,
+            isUpArrow = eventArgs.key === "upArrow",
+            dataSource = this._dataController.dataSource();
 
         if(!isEditing && $row && !isDetailRow($row)) {
             $cell = this._getNextCell(eventArgs.key);
+
             if($cell && this._isCellValid($cell)) {
                 this._focus($cell);
+            } else if(this._isVirtualScrolling() && isUpArrow && dataSource && !dataSource.isLoading()) {
+                rowHeight = $row.outerHeight();
+                rowIndex = this._focusedCellPosition.rowIndex - 1;
+                this._scrollBy(-rowHeight, rowIndex);
             }
             eventArgs.originalEvent.preventDefault();
         }
@@ -437,29 +446,35 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return scrollingMode === "virtual" || scrollingMode === "infinite";
     },
 
-    _scrollBy: function(top) {
+    _scrollBy: function(top, rowIndex) {
         var that = this,
             scrollable = this.getView("rowsView").getScrollable();
 
         if(that._focusedCellPosition) {
             var scrollHandler = function() {
                 scrollable.off("scroll", scrollHandler);
-                setTimeout(function() {
-                    var columnIndex = that._focusedCellPosition.columnIndex;
-                    var rowIndex = that.getView("rowsView").getTopVisibleItemIndex() + that._dataController.getRowIndexOffset();
-                    that.getController("editorFactory").loseFocus();
-
-                    var $rowsView = that.getView("rowsView").element();
-                    that._applyTabIndexToElement($rowsView);
-                    eventsEngine.trigger($rowsView, "focus");
-
-                    that._focusedCellPosition.rowIndex = rowIndex;
-                    that._focusedCellPosition.columnIndex = columnIndex;
-                });
+                setTimeout(that.restoreFocusableElement.bind(that, rowIndex));
             };
             scrollable.on("scroll", scrollHandler);
         }
         scrollable.scrollBy({ left: 0, top: top });
+    },
+
+    restoreFocusableElement: function(rowIndex) {
+        var $rowsView,
+            isUpArrow = isDefined(rowIndex),
+            columnIndex = this._focusedCellPosition.columnIndex,
+            rowIndex = isUpArrow ? rowIndex : this.getView("rowsView").getTopVisibleItemIndex() + this._dataController.getRowIndexOffset();
+
+        if(!isUpArrow) {
+            $rowsView = this.getView("rowsView").element();
+            this.getController("editorFactory").loseFocus();
+            this._applyTabIndexToElement($rowsView);
+            eventsEngine.trigger($rowsView, "focus");
+        }
+
+        this._focusedCellPosition.rowIndex = rowIndex;
+        this._focusedCellPosition.columnIndex = columnIndex;
     },
 
     _pageUpDownKeyHandler: function(eventArgs) {
