@@ -332,10 +332,10 @@ QUnit.test("last item should not be deselected when selectionRequired is used wi
         treeview = $treeview.dxTreeView("instance");
 
     treeview.unselectAll();
-    assert.ok($node.eq(0).hasClass("dx-state-selected"), "root node is selected");
-    assert.ok($node.eq(1).hasClass("dx-state-selected"), "leaf node is selected");
-    assert.notOk($node.eq(2).hasClass("dx-state-selected"), "second node is not selected");
-    assert.deepEqual(treeview.getSelectedNodesKeys(), [1, 11], "all nodes are still in the selected array");
+    assert.notOk($node.eq(0).hasClass("dx-state-selected"), "first node is not selected");
+    assert.notOk($node.eq(1).hasClass("dx-state-selected"), "child node is not selected");
+    assert.ok($node.eq(2).hasClass("dx-state-selected"), "last node is selected");
+    assert.deepEqual(treeview.getSelectedNodesKeys(), [2], "last noder is still in the selected array");
 });
 
 QUnit.test("selectByClick option should select item  by single click", function(assert) {
