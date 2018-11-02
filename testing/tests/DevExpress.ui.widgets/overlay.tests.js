@@ -2994,7 +2994,7 @@ QUnit.test("tab target inside of wrapper but outside of content should not be ou
             .html("Tabbable div")
             .prependTo($wrapper);
 
-    eventsEngine.on($tabbableDiv, "focus", contentFocusHandler);
+    eventsEngine.on($tabbableDiv, "focusin", contentFocusHandler);
     keyboardMock($tabbableDiv).press("tab");
 
     assert.equal(contentFocusHandler.callCount, 1, "focus has been triggered once from keyboardMock");
