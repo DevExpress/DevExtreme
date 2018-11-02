@@ -453,18 +453,19 @@ var KeyboardNavigationController = core.ViewController.inherit({
         if(that._focusedCellPosition) {
             var scrollHandler = function() {
                 scrollable.off("scroll", scrollHandler);
-                setTimeout(that.restoreFocusableElement.bind(that, rowIndex));
+                setTimeout(that._restoreFocusableElement.bind(that, rowIndex));
             };
             scrollable.on("scroll", scrollHandler);
         }
         scrollable.scrollBy({ left: 0, top: top });
     },
 
-    restoreFocusableElement: function(rowIndex) {
+    _restoreFocusableElement: function(rowIndex) {
         var $rowsView,
             isUpArrow = isDefined(rowIndex),
-            columnIndex = this._focusedCellPosition.columnIndex,
-            rowIndex = isUpArrow ? rowIndex : this.getView("rowsView").getTopVisibleItemIndex() + this._dataController.getRowIndexOffset();
+            columnIndex = this._focusedCellPosition.columnIndex;
+
+        rowIndex = isUpArrow ? rowIndex : this.getView("rowsView").getTopVisibleItemIndex() + this._dataController.getRowIndexOffset();
 
         if(!isUpArrow) {
             $rowsView = this.getView("rowsView").element();
