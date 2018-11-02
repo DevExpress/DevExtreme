@@ -443,7 +443,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         if(that._focusedCellPosition) {
             var scrollHandler = function() {
-                scrollable.off(scrollHandler);
+                scrollable.off("scroll", scrollHandler);
                 setTimeout(function() {
                     var columnIndex = that._focusedCellPosition.columnIndex;
                     var rowIndex = that.getView("rowsView").getTopVisibleItemIndex() + that._dataController.getRowIndexOffset();
