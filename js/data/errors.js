@@ -129,6 +129,11 @@ var errors = errorUtils(coreErrors.ERROR_MESSAGES, {
     E4023: "Could not parse the following XML: {0}",
 
     /**
+    * @name ErrorsData.E4024
+    */
+    E4024: "Row focusing requires a key expression",
+
+    /**
     * @name ErrorsData.W4000
     */
     W4000: "Data returned from the server has an incorrect structure",

@@ -352,6 +352,7 @@ QUnit.testInActiveWindow("LeftArrow key should focus the cell", function(assert)
         return $("#container");
     };
     this.options = {
+        keyExpr: "name",
         focusedRowEnabled: true,
         editing: {
             allowEditing: false
@@ -390,6 +391,7 @@ QUnit.testInActiveWindow("RightArrow key should focus the cell", function(assert
         return $("#container");
     };
     this.options = {
+        keyExpr: "name",
         focusedRowEnabled: true,
         editing: {
             allowEditing: false
@@ -510,6 +512,131 @@ QUnit.testInActiveWindow("Focus row if virtual scrolling mode", function(assert)
     // assert
     assert.equal(this.option("focusedRowIndex"), 4, "FocusedRowIndex = 4");
     assert.equal($(rowsView.getRow(2)).find("td").eq(0).text(), "Test", "Focused row ");
+});
+
+QUnit.testInActiveWindow("DataGrid should show error E4024 if keyExpr is absent and focusedRowEnabled when focusedRowKey is set", function(assert) {
+    var dataErrors = [];
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowEnabled: true,
+        focusedRowKey: "Den",
+    };
+
+    this.data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }
+    ];
+
+    this.setupModule();
+
+    this.getController("data").dataErrorOccurred.add(function(e) {
+        dataErrors.push(e);
+    });
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataErrors.length, 1, "One error");
+    assert.ok(dataErrors[0].message.indexOf("E4024") !== -1, "E4024");
+});
+
+QUnit.testInActiveWindow("DataGrid should show error E4024 if keyExpr is absent and focusedRowEnabled", function(assert) {
+    var dataErrors = [];
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowEnabled: true
+    };
+
+    this.data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }
+    ];
+
+    this.setupModule();
+
+    this.getController("data").dataErrorOccurred.add(function(e) {
+        dataErrors.push(e);
+    });
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    // act
+    this.option("focusedRowKey", "Dan");
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataErrors.length, 1, "One error");
+    assert.ok(dataErrors[0].message.indexOf("E4024") !== -1, "E4024");
+});
+
+QUnit.testInActiveWindow("DataGrid should not show error E4024 if keyExpr is absent and focusedRowEnabled is false", function(assert) {
+    var dataErrors = [];
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowEnabled: false
+    };
+
+    this.data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }
+    ];
+
+    this.setupModule();
+
+    this.getController("data").dataErrorOccurred.add(function(e) {
+        dataErrors.push(e);
+    });
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    // act
+    this.option("focusedRowKey", "Dan");
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataErrors.length, 0, "No error");
 });
 
 QUnit.testInActiveWindow("Focus row if grouping and virtual scrolling mode", function(assert) {
