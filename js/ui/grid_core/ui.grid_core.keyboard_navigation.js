@@ -931,7 +931,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _getNextCell: function(keyCode, elementType, cellPosition) {
         var focusedCellPosition = cellPosition || this._focusedCellPosition,
-            includeCommandCells = inArray(keyCode, ["next", "previous"]) > -1,
+            isRowFocusType = this.isRowFocusType(),
+            includeCommandCells = isRowFocusType || inArray(keyCode, ["next", "previous"]) > -1,
             rowIndex,
             newFocusedCellPosition,
             isLastCellOnDirection = keyCode === "previous" ? this._isFirstValidCell(focusedCellPosition) : this._isLastValidCell(focusedCellPosition),
@@ -943,7 +944,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $cell = this._getCell(newFocusedCellPosition);
 
             if($cell && !this._isCellValid($cell) && this._isCellInRow(newFocusedCellPosition, includeCommandCells) && !isLastCellOnDirection) {
-                if(this.isRowFocusType()) {
+                if(isRowFocusType) {
                     $cell = this.getFirstValidCellInRow($cell.parent(), newFocusedCellPosition.columnIndex);
                 } else {
                     $cell = this._getNextCell(keyCode, "cell", newFocusedCellPosition);
