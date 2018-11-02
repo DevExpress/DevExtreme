@@ -281,7 +281,8 @@ var Tabs = CollectionWidget.inherit({
 
             this.$element()
                 .removeClass(TABS_NAV_BUTTONS_CLASS)
-                .addClass(TABS_EXPANDED_CLASS);
+                .addClass(TABS_EXPANDED_CLASS)
+                .addClass(OVERFLOW_HIDDEN_CLASS);
         }
     },
 
