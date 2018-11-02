@@ -633,13 +633,14 @@ var Scrollable = DOMComponent.inherit({
     scrollTo: function(targetLocation) {
         targetLocation = this._normalizeLocation(targetLocation);
 
-        if(!this.option("useNative")) {
-            targetLocation = this._strategy._applyScaleRatio(targetLocation);
-        }
-
         this._updateIfNeed();
 
         var location = this._location();
+
+        if(!this.option("useNative")) {
+            targetLocation = this._strategy._applyScaleRatio(targetLocation);
+            location = this._strategy._applyScaleRatio(location);
+        }
 
         var distance = this._normalizeLocation({
             left: location.left - commonUtils.ensureDefined(targetLocation.left, location.left),
