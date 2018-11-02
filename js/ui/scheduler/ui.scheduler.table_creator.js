@@ -321,9 +321,12 @@ var SchedulerTableCreator = {
 
         for(var j = 0; j < groupCount; j++) {
             var $cell = rows[j].find("th"),
-                colspan = maxCellCount / $cell.length * cellCount;
+                colspan = maxCellCount / $cell.length;
 
-            if(colspan > 1 && repeatByDate === 1) {
+            if(!groupByDate) {
+                colspan = colspan * cellCount;
+            }
+            if((colspan > 1 && repeatByDate === 1) || (groupByDate && groupCount > 1)) {
                 $cell.attr("colSpan", colspan);
             }
         }
