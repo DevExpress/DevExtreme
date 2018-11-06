@@ -55,6 +55,30 @@ exports.ExportMixin = extend({}, exportMixin, {
             rowsLength = this._getLength(rowsInfoItems),
             headerRowsCount = columnsInfo.length;
 
+        for(let i = 0; i < columnsInfo.length; i++) {
+            for(let j = 0; j < columnsInfo[i].length; j++) {
+                columnsInfo[i][j].area = 'column';
+                columnsInfo[i][j].columnIndex = j;
+                columnsInfo[i][j].rowIndex = i;
+            }
+        }
+
+        for(let i = 0; i < cellsInfo.length; i++) {
+            for(let j = 0; j < cellsInfo[i].length; j++) {
+                cellsInfo[i][j].area = 'data';
+                cellsInfo[i][j].columnIndex = j;
+                cellsInfo[i][j].rowIndex = i;
+            }
+        }
+
+        for(let i = 0; i < rowsInfoItems.length; i++) {
+            for(let j = 0; j < rowsInfoItems[i].length; j++) {
+                rowsInfoItems[i][j].area = 'row';
+                rowsInfoItems[i][j].columnIndex = j;
+                rowsInfoItems[i][j].rowIndex = i;
+            }
+        }
+
         for(rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex++) {
             for(cellIndex = rowsInfoItems[rowIndex].length - 1; cellIndex >= 0; cellIndex--) {
                 if(!isDefined(sourceItems[rowIndex + headerRowsCount])) {
@@ -198,12 +222,19 @@ exports.DataProvider = Class.inherit({
     getCellData: function(rowIndex, cellIndex) {
         const result = {};
         var items = this._options.items,
-            item = items[rowIndex] && items[rowIndex][cellIndex] || {};
+            item = items[rowIndex] && items[rowIndex][cellIndex];
 
-        if(this.getCellType(rowIndex, cellIndex) === "string") {
-            result.value = item.text;
-        } else {
-            result.value = item.value;
+        if(isDefined(item)) {
+            result.cellSourceData = {
+                area: item.area,
+                columnIndex: item.columnIndex,
+                rowIndex: item.rowIndex
+            };
+            if(this.getCellType(rowIndex, cellIndex) === "string") {
+                result.value = item.text;
+            } else {
+                result.value = item.value;
+            }
         }
         return result;
     },
@@ -233,8 +264,9 @@ exports.DataProvider = Class.inherit({
         return isDefined(this._options.customizeExcelCell);
     },
 
-    customizeExcelCell: function(e) {
+    customizeExcelCell: function(e, cellSourceData) {
         if(this._options.customizeExcelCell) {
+            e.pivotGridCell = cellSourceData;
             this._options.customizeExcelCell(e);
         }
     },

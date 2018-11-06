@@ -10,6 +10,7 @@ import { excel as excelCreator } from "exporter";
 import { __internals as internals } from "exporter/excel_creator";
 import excel_creator from "exporter/excel_creator";
 import JSZipMock from "../../helpers/jszipMock.js";
+import { toComparable } from "core/utils/data";
 
 const BASE_STYLE_XML1 = "<fonts count=\"2\"><font><sz val=\"11\" /><color theme=\"1\" /><name val=\"Calibri\" /><family val=\"2\" />" +
     "<scheme val=\"minor\" /></font><font><b /><sz val=\"11\" /><color theme=\"1\" /><name val=\"Calibri\" />" +
@@ -34,7 +35,7 @@ QUnit.module("Pivot export tests", {
     }
 });
 
-function runTest(assert, options, { styles = "", worksheet = "", sharedStrings = "" } = {}) {
+function runTest(assert, options, { styles = "", worksheet = "", sharedStrings } = {}) {
     const done = assert.async();
     options.loadingTimeout = undefined;
     options.onFileSaving = e => {
@@ -42,7 +43,9 @@ function runTest(assert, options, { styles = "", worksheet = "", sharedStrings =
 
         assert.strictEqual(zipMock.folder(internals.XL_FOLDER_NAME).file(internals.STYLE_FILE_NAME).content, styles, "styles");
         assert.strictEqual(zipMock.folder(internals.XL_FOLDER_NAME).folder(internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).content, worksheet, "worksheet");
-        assert.strictEqual(zipMock.folder(internals.XL_FOLDER_NAME).file(internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, "sharedStrings");
+        if(sharedStrings !== undefined) {
+            assert.strictEqual(zipMock.folder(internals.XL_FOLDER_NAME).file(internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, "sharedStrings");
+        }
 
         done();
         e.cancel = true;
@@ -50,6 +53,45 @@ function runTest(assert, options, { styles = "", worksheet = "", sharedStrings =
     const pivot = $("#pivotGrid").dxPivotGrid(options).dxPivotGrid('instance');
     pivot.exportToExcel();
 };
+
+function runCustomizeExcelCellArgumentsTest(assert, options, getExpectedCellsCallback) {
+    const done = assert.async();
+    const actualCells = [];
+
+    options.export = options.export || {};
+    options.export.customizeExcelCell = e => {
+        e.pivotGridCell._excelCellValue = e.value;
+        actualCells.push(e.pivotGridCell);
+    };
+    options.loadingTimeout = undefined;
+    options.onFileSaving = e => {
+        const expectedCells = getExpectedCellsCallback(e.component);
+        assert.strictEqual(actualCells.length, expectedCells.length, 'actualCells.length');
+        for(let i = 0; i < actualCells.length; i++) {
+            const actualCell = actualCells[i];
+            const expectedCell = expectedCells[i];
+            const skipProperties = [ '_excelCellValue' ];
+
+            for(const propertyName in expectedCell) {
+                if(skipProperties.indexOf(propertyName) === -1) {
+                    assert.strictEqual(toComparable(actualCell[propertyName]), toComparable(expectedCell[propertyName]), `cell[${propertyName}], ${i}`);
+                    skipProperties.push(propertyName);
+                }
+            }
+            for(const actualPropertyName in actualCell) {
+                if(skipProperties.indexOf(actualPropertyName) === -1) {
+                    assert.strictEqual(toComparable(actualCell[actualPropertyName]), toComparable(expectedCell[actualPropertyName]), `actual cell[${actualPropertyName}], ${i}`);
+                }
+            }
+            assert.strictEqual(actualCell._excelCellValue, expectedCell._excelCellValue, `_excelCellValue, ${i}`);
+        }
+
+        done();
+        e.cancel = true;
+    };
+    const pivot = $("#pivotGrid").dxPivotGrid(options).dxPivotGrid('instance');
+    pivot.exportToExcel();
+}
 
 QUnit.test("Empty pivot", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
@@ -296,14 +338,13 @@ QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)
     );
 });
 
-QUnit.test("customizeExcelCell - set alignment: null for all excel cells", function(assert) {
+QUnit.test("PivotGrid.wordWrapEnabled: true is not exported into Excel file", function(assert) {
     const styles = STYLESHEET_HEADER_XML +
         BASE_STYLE_XML +
-        '<cellXfs count="4">' +
+        '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" fontId="0" applyNumberFormat="0" numFmtId="0" />' +
         '</cellXfs>' +
         STYLESHEET_FOOTER_XML;
     const worksheet = internals.WORKSHEET_HEADER_XML +
@@ -312,25 +353,329 @@ QUnit.test("customizeExcelCell - set alignment: null for all excel cells", funct
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s" /><c r="B1" s="3" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>0</v></c><c r="B2" s="3" t="s" /></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
-        '<si><t>Grand Total</t></si>' +
-        '</sst>';
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="0" t="s" />' +
+        '<c r="B1" s="0" t="s"><v>0</v></c>' +
+        '</row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A2" s="1" t="s"><v>1</v></c>' +
+        '<c r="B2" s="2" t="s"><v>2</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
 
     runTest(
         assert,
         {
+            wordWrapEnabled: true,
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1' },
+                    { area: 'column', dataField: 'col1' },
+                    { area: 'data', summaryType: 'count' }
+                ],
+                store: [
+                    { row1: 'row1', col1: 'col1' }
+                ]
+            },
             export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+            },
+        },
+        { styles, worksheet }
+    );
+});
+
+QUnit.test("customizeExcelCell - check (e) properties for [1x1] pivot", function(assert) {
+    runCustomizeExcelCellArgumentsTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1' },
+                    { area: 'column', dataField: 'col1' },
+                    { area: 'data', summaryType: 'count' }
+                ],
+                store: [
+                    { row1: 'A', col1: 'a' },
+                ]
+            },
+        },
+        (grid) => {
+            return [
+                { },
+                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
+            ];
+        }
+    );
+});
+
+QUnit.test("customizeExcelCell - check (e) properties for [1x2] pivot", function(assert) {
+    runCustomizeExcelCellArgumentsTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1' },
+                    { area: 'column', dataField: 'col1', expanded: true, showTotals: false },
+                    { area: 'column', dataField: 'col2' },
+                    { area: 'data', summaryType: 'count' }
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', col2: 'a1' },
+                    { row1: 'A', col1: 'a', col2: 'a2' },
+                    { row1: 'A', col1: 'a', col2: 'a2' },
+                ]
+            },
+        },
+        (grid) => {
+            return [
+                { },
+                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
+                { },
+                { area: 'column', columnIndex: 0, rowIndex: 1, _excelCellValue: 'a1' },
+                { area: 'column', columnIndex: 1, rowIndex: 1, _excelCellValue: 'a2' },
+                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
+                { area: 'data', columnIndex: 1, rowIndex: 0, _excelCellValue: '2' },
+            ];
+        }
+    );
+});
+
+QUnit.test("customizeExcelCell - check (e) properties for [2x1] pivot", function(assert) {
+    runCustomizeExcelCellArgumentsTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1', expanded: true, showTotals: false },
+                    { area: 'row', dataField: 'row2' },
+                    { area: 'column', dataField: 'col1' },
+                    { area: 'data', summaryType: 'count' }
+                ],
+                store: [
+                    { row1: 'A', row2: 'A1', col1: 'a' },
+                    { row1: 'A', row2: 'A2', col1: 'a' },
+                    { row1: 'A', row2: 'A2', col1: 'a' },
+                ]
+            },
+        },
+        (grid) => {
+            return [
+                { },
+                { },
+                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+                { area: 'row', columnIndex: 1, rowIndex: 0, _excelCellValue: 'A1' },
+                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
+                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
+                { area: 'row', columnIndex: 0, rowIndex: 1, _excelCellValue: 'A2' },
+                { area: 'data', columnIndex: 0, rowIndex: 1, _excelCellValue: '2' },
+            ];
+        }
+    );
+});
+
+QUnit.test("customizeExcelCell - check (e) properties for column grand totals", function(assert) {
+    runCustomizeExcelCellArgumentsTest(
+        assert,
+        {
+            showColumnGrandTotals: true,
+            showRowGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1' },
+                    { area: 'data', summaryType: 'count' }
+                ],
+                store: [
+                    { row1: 'A', col1: 'a' },
+                ]
+            },
+        },
+        (grid) => {
+            return [
+                { },
+                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'Grand Total' },
+                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
+            ];
+        }
+    );
+});
+
+QUnit.test("customizeExcelCell - check (e) properties for column totals", function(assert) {
+    runCustomizeExcelCellArgumentsTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1' },
+                    { area: 'column', dataField: 'col1', expanded: true, showTotals: true },
+                    { area: 'column', dataField: 'col2' },
+                    { area: 'data', summaryType: 'count' }
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', col2: 'a1' },
+                    { row1: 'A', col1: 'a', col2: 'a2' },
+                    { row1: 'A', col1: 'a', col2: 'a2' },
+                ]
+            },
+        },
+        (grid) => {
+            return [
+                { },
+                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
+                { area: 'column', columnIndex: 1, rowIndex: 0, _excelCellValue: 'a Total' },
+                { },
+                { area: 'column', columnIndex: 0, rowIndex: 1, _excelCellValue: 'a1' },
+                { area: 'column', columnIndex: 1, rowIndex: 1, _excelCellValue: 'a2' },
+                { area: 'column', columnIndex: 1, rowIndex: 0, _excelCellValue: undefined },
+                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
+                { area: 'data', columnIndex: 1, rowIndex: 0, _excelCellValue: '2' },
+                { area: 'data', columnIndex: 2, rowIndex: 0, _excelCellValue: '3' },
+            ];
+        }
+    );
+});
+
+QUnit.test("customizeExcelCell - check (e) properties for row grand totals", function(assert) {
+    runCustomizeExcelCellArgumentsTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: true,
+            dataSource: {
+                fields: [
+                    { area: 'column', dataField: 'col1' },
+                    { area: 'data', summaryType: 'count' }
+                ],
+                store: [
+                    { row1: 'A', col1: 'a' },
+                ]
+            },
+        },
+        (grid) => {
+            return [
+                { },
+                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'Grand Total' },
+                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
+            ];
+        }
+    );
+});
+
+QUnit.test("customizeExcelCell - check (e) properties for row totals", function(assert) {
+    runCustomizeExcelCellArgumentsTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1', expanded: true, showTotals: true },
+                    { area: 'row', dataField: 'row2' },
+                    { area: 'column', dataField: 'col1' },
+                    { area: 'data', summaryType: 'count' }
+                ],
+                store: [
+                    { row1: 'A', row2: 'A1', col1: 'a' },
+                    { row1: 'A', row2: 'A2', col1: 'a' },
+                    { row1: 'A', row2: 'A2', col1: 'a' },
+                ]
+            },
+        },
+        (grid) => {
+            return [
+                { },
+                { },
+                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+                { area: 'row', columnIndex: 1, rowIndex: 0, _excelCellValue: 'A1' },
+                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
+                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
+                { area: 'row', columnIndex: 0, rowIndex: 1, _excelCellValue: 'A2' },
+                { area: 'data', columnIndex: 0, rowIndex: 1, _excelCellValue: '2' },
+                { area: 'row', columnIndex: 0, rowIndex: 2, _excelCellValue: 'A Total' },
+                { area: 'row', columnIndex: 0, rowIndex: 2, _excelCellValue: undefined },
+                { area: 'data', columnIndex: 0, rowIndex: 2, _excelCellValue: '3' },
+            ];
+        }
+    );
+});
+
+QUnit.test("customizeExcelCell - set wrapTextEnabled: true for column area cells", function(assert) {
+    const styles = STYLESHEET_HEADER_XML +
+        BASE_STYLE_XML +
+        '<cellXfs count="4">' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '</cellXfs>' +
+        STYLESHEET_FOOTER_XML;
+    const worksheet = internals.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="0" t="s" />' +
+        '<c r="B1" s="3" t="s"><v>0</v></c>' +
+        '<c r="C1" s="3" t="s"><v>1</v></c>' +
+        '</row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A2" s="1" t="s"><v>2</v></c>' +
+        '<c r="B2" s="2" t="s"><v>3</v></c>' +
+        '<c r="C2" s="2" t="s"><v>3</v></c>' +
+        '</row>' +
+        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A3" s="1" t="s"><v>1</v></c>' +
+        '<c r="B3" s="2" t="s"><v>3</v></c>' +
+        '<c r="C3" s="2" t="s"><v>3</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+
+    runTest(
+        assert,
+        {
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1' },
+                    { area: 'column', dataField: 'col1' },
+                    { area: 'data', summaryType: 'count' }
+                ],
+                store: [
+                    { row1: 'row1', col1: 'col1' }
+                ]
+            },
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    e.horizontalAlignment = null;
-                    e.verticalAlignment = null;
-                    e.wrapTextEnabled = null;
+                    if(e.pivotGridCell.area === 'column') {
+                        e.wrapTextEnabled = true;
+                    }
                 },
             },
         },
-        { styles, worksheet, sharedStrings }
+        { styles, worksheet }
     );
 });
