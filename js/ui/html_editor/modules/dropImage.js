@@ -1,7 +1,7 @@
 import { getQuill } from "../quill_importer";
 
 import eventsEngine from "../../../events/core/events_engine";
-import eventUtils from "../../../events/utils";
+import { addNamespace } from "../../../events/utils";
 import { each } from "../../../core/utils/iterator";
 import browser from "../../../core/utils/browser";
 
@@ -14,9 +14,9 @@ class DropImageModule extends BaseModule {
         this.editorInstance = options.editorInstance;
         const widgetName = this.editorInstance.NAME;
 
-        eventsEngine.on(this.quill.root, eventUtils.addNamespace("dragover", widgetName), this._dragOverHandler.bind(this));
-        eventsEngine.on(this.quill.root, eventUtils.addNamespace("drop", widgetName), this._dropHandler.bind(this));
-        eventsEngine.on(this.quill.root, eventUtils.addNamespace("paste", widgetName), this._pasteHandler.bind(this));
+        eventsEngine.on(this.quill.root, addNamespace("dragover", widgetName), this._dragOverHandler.bind(this));
+        eventsEngine.on(this.quill.root, addNamespace("drop", widgetName), this._dropHandler.bind(this));
+        eventsEngine.on(this.quill.root, addNamespace("paste", widgetName), this._pasteHandler.bind(this));
     }
 
     _dragOverHandler(e) {

@@ -12,6 +12,9 @@ import { extend } from "../../../core/utils/extend";
 import { format } from "../../../localization/message";
 import { titleize } from "../../../core/utils/inflector";
 
+import eventsEngine from "../../../events/core/events_engine";
+import { addNamespace } from "../../../events/utils";
+
 const BaseModule = getQuill().import("core/module");
 
 const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
@@ -172,6 +175,10 @@ class ToolbarModule extends BaseModule {
                     this.quill.format("link", formData, USER_ACTION);
                 }
             });
+
+            promise.fail(() => {
+                this.quill.focus();
+            });
         };
     }
 
@@ -229,13 +236,16 @@ class ToolbarModule extends BaseModule {
 
     _renderToolbar() {
         const container = this.options.container || this._getContainer();
-        const $container = $(container);
+        const $container = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
         const toolbarItems = this._prepareToolbarItems();
         const $toolbar = $("<div>")
             .addClass(TOOLBAR_CLASS)
             .appendTo(container);
 
-        $container.addClass(TOOLBAR_WRAPPER_CLASS);
+        eventsEngine.on($toolbar, addNamespace("mousedown", this._editorInstance.NAME), (e) => {
+            e.preventDefault();
+        });
+
         this.toolbarInstance = this._editorInstance._createComponent($toolbar, Toolbar, { dataSource: toolbarItems });
 
         this._editorInstance.on("disposing", () => {
@@ -345,6 +355,9 @@ class ToolbarModule extends BaseModule {
 
             promise.done((formData) => {
                 this.quill.format(formatName, formData[formatName], USER_ACTION);
+            });
+            promise.fail(() => {
+                this.quill.focus();
             });
         };
     }
