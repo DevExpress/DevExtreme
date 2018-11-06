@@ -240,6 +240,11 @@ registerTheme({
             breakStyle: {
                 color: BREAK_STYLE_COLOR
             }
+        },
+        zoomAndPan: {
+            dragBoxStyle: {
+                color: WHITE
+            }
         }
     },
     gauge: {
