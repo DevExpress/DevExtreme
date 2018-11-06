@@ -873,7 +873,7 @@ require("common.css!");
             testContainer = new TestContainer("#container", {
                 templatesRenderAsynchronously: false,
                 template: {
-                    render: () => { return 'template result'; }
+                    render: function() { return 'template result'; }
                 }
             }),
             template = testContainer._getTemplateByOption("template");
