@@ -25,6 +25,16 @@ function initFixture(items) {
 
 QUnit.module("SelectAll mode");
 
+QUnit.test("select all item should not be rendered when single selection mode is used", function(assert) {
+    var $treeView = initTree({
+        items: [{ id: 1, text: "Item 1" }],
+        showCheckBoxesMode: "selectAll",
+        selectionMode: "single"
+    });
+
+    assert.equal($treeView.find(".dx-treeview-select-all-item").length, 0, "item is not rendered");
+});
+
 QUnit.test("Select all items", function(assert) {
     var data = [{ id: 1, text: "Item 1" }, { id: 2, text: "Item 2" }, { id: 3, text: "Item 3" }],
         that = this;
