@@ -83,27 +83,53 @@ module.exports = {
 
         function axesViewportChanging(zoomAndPan, actionField, e, offsetCalc, centerCalc) {
             function zoomAxes(axes, criteria, coordField, e, actionData) {
+                let zoom = { zoomed: false };
                 criteria && axes.forEach(axis => {
                     const viewport = axis.visualRange();
-                    const scale = e.deltaScale || 1;
-                    const zoom = axis.getTranslator().zoom(-offsetCalc(e, actionData, coordField, scale), scale, axis.getZoomBounds());
+                    const scale = axis.getTranslator().getEventScale(e);
+                    const translate = -offsetCalc(e, actionData, coordField, scale);
+                    zoom = axis.getTranslator().zoom(translate, scale, axis.getZoomBounds());
                     if(!isDefined(viewport) || viewport.startValue.valueOf() !== zoom.min.valueOf() || viewport.endValue.valueOf() !== zoom.max.valueOf()) {
                         axis.handleZooming([zoom.min, zoom.max], { start: true, end: true });
+                        zoom.zoomed = true;
+                        zoom.deltaTranslate = translate - zoom.translate;
                     }
                 });
+                return zoom;
+            }
+
+            function storeOffset(e, actionData, zoom, coordField) {
+                if(zoom.zoomed) {
+                    actionData.offset[coordField] = (e.offset ? e.offset[coordField] : actionData.offset[coordField]) + zoom.deltaTranslate;
+                }
+            }
+
+            function storeCenter(center, actionData, zoom, coordField) {
+                if(zoom.zoomed) {
+                    actionData.center[coordField] = center[coordField] + zoom.deltaTranslate;
+                }
             }
 
             const rotated = chart.option("rotated");
             const actionData = zoomAndPan.actionData;
             const options = zoomAndPan.options;
+            let argZoom = {};
+            let valZoom = {};
 
             if(!actionData.fallback) {
-                zoomAxes(chart._argumentAxes, options.argumentAxis[actionField], rotated ? "y" : "x", e, actionData);
-                zoomAxes(actionData.valueAxes, options.valueAxis[actionField], rotated ? "x" : "y", e, actionData);
+                argZoom = zoomAxes(chart._argumentAxes, options.argumentAxis[actionField], rotated ? "y" : "x", e, actionData);
+                valZoom = zoomAxes(actionData.valueAxes, options.valueAxis[actionField], rotated ? "x" : "y", e, actionData);
                 chart._requestChange(["VISUAL_RANGE"]);
-                actionData.offset = e.offset;
+                storeOffset(e, actionData, argZoom, rotated ? "y" : "x");
+                storeOffset(e, actionData, valZoom, rotated ? "x" : "y");
             }
-            actionData.center = centerCalc(e);
+
+            const center = centerCalc(e);
+            storeCenter(center, actionData, argZoom, rotated ? "y" : "x");
+            storeCenter(center, actionData, valZoom, rotated ? "x" : "y");
+            if(!argZoom.zoomed && !valZoom.zoomed) {
+                actionData.center = center;
+            }
         }
 
         function finishAxesViewportChanging(zoomAndPan, actionField, e, offsetCalc) {
