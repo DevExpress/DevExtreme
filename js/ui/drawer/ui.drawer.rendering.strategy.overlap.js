@@ -43,6 +43,8 @@ class OverlapStrategy extends DrawerStrategy {
             visible: true,
             propagateOutsideClick: true
         });
+
+        this._processOverlayZIndex();
     }
 
     getOverlayPosition() {
@@ -174,9 +176,11 @@ class OverlapStrategy extends DrawerStrategy {
         return $(this.getDrawerInstance().getOverlay().content());
     }
 
-    // _processOverlayZIndex() {
+    _processOverlayZIndex() {
+        const zIndex = this.getPanelContent().css("zIndex");
 
-    // }
+        this.getDrawerInstance().setShaderZIndex(zIndex - 1);
+    }
 };
 
 module.exports = OverlapStrategy;

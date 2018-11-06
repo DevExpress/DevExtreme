@@ -234,6 +234,7 @@ const Drawer = Widget.inherit({
 
         this._refreshModeClass();
         this._refreshRevealModeClass();
+        this._renderShader();
 
         this._whenPanelRendered = new Deferred();
         this._strategy.renderPanel(this._getTemplate(this.option("template")), this._whenPanelRendered);
@@ -248,7 +249,6 @@ const Drawer = Widget.inherit({
             transclude
         });
 
-        this._renderShader();
         this._initCloseOnOutsideClickHandler();
         this._refreshPositionClass();
     },
@@ -395,6 +395,10 @@ const Drawer = Widget.inherit({
 
         const overlay = this.getOverlay();
         overlay && fx.stop($(overlay.$content()), jumpToEnd);
+    },
+
+    setShaderZIndex(zIndex) {
+        this._$shader.css("zIndex", zIndex);
     },
 
     _isInvertedPosition() {

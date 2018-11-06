@@ -710,6 +710,18 @@ QUnit.test("shader should have correct position after widget resize", assert => 
     assert.equal($shader.offset().left, $content.offset().left, "shader has correct position");
 });
 
+QUnit.test("shader should have correct zIndex in overlap mode", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        openedStateMode: "overlap",
+        shading: true
+    });
+
+    const $shader = $element.find("." + DRAWER_SHADER_CLASS);
+
+    assert.equal($shader.css("zIndex"), 1500, "shader has correct zIndex");
+});
+
 QUnit.module("Rtl");
 
 QUnit.test("content should have correct position if panel is visible in rtl mode", assert => {
