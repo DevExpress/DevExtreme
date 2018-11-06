@@ -573,7 +573,7 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
 
         this._applyQuillMethod("focus");
-    },
+    }
 });
 
 registerComponent("dxHtmlEditor", HtmlEditor);
