@@ -868,6 +868,22 @@ require("common.css!");
         assert.equal(testContainer.option("integrationOptions.templates").testTemplate.render, templateRenderer, "template renderer is preserved");
     });
 
+    QUnit.test("external custom template should call onRendered method without templatesRenderAsynchronously (template.render exists)", function(assert) {
+        var onRenderedHandler = sinon.spy(),
+            testContainer = new TestContainer("#container", {
+                templatesRenderAsynchronously: false,
+                template: {
+                    render: () => { return 'template result'; }
+                }
+            }),
+            template = testContainer._getTemplateByOption("template");
+
+        var renderResult = template.render({ onRendered: onRenderedHandler });
+
+        assert.equal(renderResult, "template result", "render method should have correct context");
+        assert.equal(onRenderedHandler.callCount, 1, "onRendered has been called");
+    });
+
     QUnit.test("shared external template as script element", function(assert) {
         var testContainer1 = new TestContainer("#container", {
                 template: $("#scriptTemplate")
@@ -917,8 +933,9 @@ require("common.css!");
     });
 
     QUnit.test("shared template as Template interface", function(assert) {
+        var renderHandler = sinon.spy();
         var template = {
-                render: function() { }
+                render: renderHandler
             },
             fakeTemplate = {
                 fakeRender: function() { }
@@ -926,7 +943,8 @@ require("common.css!");
             testContainer;
 
         testContainer = new TestContainer("#container", { myTemplate: template });
-        assert.deepEqual(testContainer._getTemplateByOption("myTemplate"), template, "object with render function acquired as template");
+        testContainer._getTemplateByOption("myTemplate").render();
+        assert.deepEqual(renderHandler.callCount, 1, "object with render function acquired as template");
 
         testContainer = new TestContainer("#container", { myTemplate: fakeTemplate });
         assert.notDeepEqual(testContainer._getTemplateByOption("myTemplate"), fakeTemplate);
