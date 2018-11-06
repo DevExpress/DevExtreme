@@ -517,6 +517,10 @@ var Menu = MenuBase.inherit({
         }
     },
 
+    _keyboardHandler: function(e) {
+        return this._visibleSubmenu ? true : this.callBase(e);
+    },
+
     _renderContainer: function() {
         var $wrapper = $("<div>");
 
@@ -539,8 +543,10 @@ var Menu = MenuBase.inherit({
         var $submenuContainer = $("<div>").addClass(DX_CONTEXT_MENU_CLASS)
             .appendTo($rootItem);
 
-        var items = this._getChildNodes(node),
+        var childKeyboardProcessor = this._keyboardProcessor && this._keyboardProcessor.attachChildProcessor(),
+            items = this._getChildNodes(node),
             result = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
+                _keyboardProcessor: childKeyboardProcessor,
                 _dataAdapter: this._dataAdapter,
                 _parentKey: node.internalFields.key,
                 items: items,
@@ -573,6 +579,12 @@ var Menu = MenuBase.inherit({
             disabledExpr: this.option("disabledExpr"),
             selectedExpr: this.option("selectedExpr"),
             itemsExpr: this.option("itemsExpr"),
+            onFocusedItemChanged: function(e) {
+                if(!e.component.option("visible")) {
+                    return;
+                }
+                this.option("focusedElement", e.component.option("focusedElement"));
+            }.bind(this),
             onSelectionChanged: this._nestedItemOnSelectionChangedHandler.bind(this),
             onItemClick: this._nestedItemOnItemClickHandler.bind(this),
             onItemRendered: this.option("onItemRendered"),
@@ -599,6 +611,8 @@ var Menu = MenuBase.inherit({
             $currentItem = $items.filter("." + DX_MENU_ITEM_EXPANDED_CLASS).eq(0),
             itemIndex = $items.index($currentItem);
 
+        this._hideSubmenu(this._visibleSubmenu);
+
         itemIndex += direction === PREVITEM_OPERATION ? -1 : 1;
 
         if(itemIndex >= itemCount) {
@@ -609,8 +623,6 @@ var Menu = MenuBase.inherit({
 
         var $newItem = $items.eq(itemIndex);
 
-        this._hideSubmenu(this._visibleSubmenu);
-        this.focus();
         this.option("focusedElement", getPublicElement($newItem));
     },
 
@@ -882,7 +894,11 @@ var Menu = MenuBase.inherit({
             this._hideVisibleSubmenu();
         }
 
-        submenu && submenu.show();
+        if(submenu) {
+            submenu.show();
+            this.option("focusedElement", submenu.option("focusedElement"));
+        }
+
         this._visibleSubmenu = submenu;
         this._hoveredRootItem = $itemElement;
     },
