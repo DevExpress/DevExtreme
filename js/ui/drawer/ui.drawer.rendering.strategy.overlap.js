@@ -27,10 +27,12 @@ class OverlapStrategy extends DrawerStrategy {
             },
             onPositioned: (function(e) {
                 // NOTE: overlay should be positioned in extended wrapper
-                if(typeUtils.isDefined(this._initialPosition)) {
+                const drawer = this.getDrawerInstance();
+
+                if(typeUtils.isDefined(this._initialPosition) && !drawer.option("rtlEnabled")) {
                     translator.move(e.component.$content(), { left: this._initialPosition.left });
                 }
-                if(this.getDrawerInstance().getDrawerPosition() === "right") {
+                if(drawer.getDrawerPosition() === "right") {
                     e.component.$content().css("left", "auto");
                 }
             }).bind(this),
@@ -41,6 +43,8 @@ class OverlapStrategy extends DrawerStrategy {
             visible: true,
             propagateOutsideClick: true
         });
+
+        this._processOverlayZIndex();
     }
 
     getOverlayPosition() {
@@ -170,6 +174,13 @@ class OverlapStrategy extends DrawerStrategy {
 
     getPanelContent() {
         return $(this.getDrawerInstance().getOverlay().content());
+    }
+
+    _processOverlayZIndex() {
+        const styles = window.getComputedStyle(this.getPanelContent().get(0));
+        const zIndex = styles.zIndex || 1;
+
+        this.getDrawerInstance().setZIndex(zIndex);
     }
 };
 
