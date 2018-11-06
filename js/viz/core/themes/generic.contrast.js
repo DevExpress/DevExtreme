@@ -96,6 +96,9 @@ registerTheme({
     chart: {
         commonSeriesSettings: {
         },
+        crosshair: {
+            color: "#cf00d7"
+        },
         commonPaneSettings: {
             backgroundColor: BLACK,
             border: {
@@ -108,6 +111,12 @@ registerTheme({
         commonAxisSettings: {
             breakStyle: {
                 color: "#cf00d7"
+            }
+        },
+        zoomAndPan: {
+            dragBoxStyle: {
+                color: WHITE,
+                opacity: 0.7
             }
         }
     },

@@ -89,7 +89,7 @@ registerTheme({
         },
         zoomAndPan: {
             dragBoxStyle: {
-                color: "white"
+                color: WHITE
             }
         }
     },
