@@ -180,7 +180,7 @@ class OverlapStrategy extends DrawerStrategy {
         const styles = window.getComputedStyle(this.getPanelContent().get(0));
         const zIndex = styles.zIndex || 1;
 
-        this.getDrawerInstance().setShaderZIndex(zIndex - 1);
+        this.getDrawerInstance().setZIndex(zIndex);
     }
 };
 

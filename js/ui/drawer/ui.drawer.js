@@ -397,8 +397,9 @@ const Drawer = Widget.inherit({
         overlay && fx.stop($(overlay.$content()), jumpToEnd);
     },
 
-    setShaderZIndex(zIndex) {
-        this._$shader.css("zIndex", zIndex);
+    setZIndex(zIndex) {
+        this._$shader.css("zIndex", zIndex - 1);
+        this._$panel.css("zIndex", zIndex);
     },
 
     _isInvertedPosition() {
