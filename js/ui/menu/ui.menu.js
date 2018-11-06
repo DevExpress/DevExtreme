@@ -579,6 +579,12 @@ var Menu = MenuBase.inherit({
             disabledExpr: this.option("disabledExpr"),
             selectedExpr: this.option("selectedExpr"),
             itemsExpr: this.option("itemsExpr"),
+            onFocusedItemChanged: function(e) {
+                if(!e.component.option("visible")) {
+                    return;
+                }
+                this.option("focusedElement", e.component.option("focusedElement"));
+            }.bind(this),
             onSelectionChanged: this._nestedItemOnSelectionChangedHandler.bind(this),
             onItemClick: this._nestedItemOnItemClickHandler.bind(this),
             onItemRendered: this.option("onItemRendered"),
@@ -600,12 +606,12 @@ var Menu = MenuBase.inherit({
     },
 
     _moveMainMenuFocus: function(direction) {
-        this._hideSubmenu(this._visibleSubmenu);
-
         var $items = this._getAvailableItems(),
             itemCount = $items.length,
             $currentItem = $items.filter("." + DX_MENU_ITEM_EXPANDED_CLASS).eq(0),
             itemIndex = $items.index($currentItem);
+
+        this._hideSubmenu(this._visibleSubmenu);
 
         itemIndex += direction === PREVITEM_OPERATION ? -1 : 1;
 
