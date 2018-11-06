@@ -85,6 +85,40 @@ QUnit.test("Argument pan right by 1", function(assert) {
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 6 });
 });
 
+QUnit.test("Argument pan right by 2 (discrete axis)", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            argumentAxis: {
+                type: "discrete",
+                visualRange: {
+                    startValue: 3,
+                    endValue: 7
+                }
+            },
+            zoomAndPan: {
+                argumentAxis: "pan"
+            },
+            series: [{ type: "bar" }],
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    const argumentAxis = chart.getArgumentAxis();
+
+    // act
+    this.pointer.start({ x: 100, y: 250 }).dragStart().drag(30).drag(30).drag(30).drag(30).drag(30).dragEnd();
+
+    assert.equal(onZoomStart.callCount, 1);
+    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7, categories: [3, 4, 5, 6, 7] });
+
+    assert.equal(onZoomEnd.callCount, 1);
+    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7, categories: [3, 4, 5, 6, 7] });
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 1, endValue: 5, categories: [1, 2, 3, 4, 5] });
+});
+
 QUnit.test("Argument pan right out of the data", function(assert) {
     const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
@@ -1193,6 +1227,49 @@ QUnit.test("Pinch zoom-in argument axis from some point", function(assert) {
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2.5, endValue: 6.5 });
 });
 
+QUnit.test("Pinch zoom-in/zoom-out argument axis from some point (discrete axis)", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            argumentAxis: {
+                type: "discrete",
+                visualRange: { startValue: 1, endValue: 9 }
+            },
+            zoomAndPan: {
+                argumentAxis: "zoom",
+                valueAxis: "none",
+                allowTouchGestures: true
+            },
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    const argumentAxis = chart.getArgumentAxis();
+
+    // act
+    const $root = $(chart._renderer.root.element);
+    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 150, pageY: 200 }, { pointerId: 2, pageX: 400, pageY: 200 }] }));
+    $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 100, pageY: 200 }, { pointerId: 2, pageX: 500, pageY: 200 }] }));
+    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
+
+    assert.equal(onZoomStart.callCount, 1);
+    assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 1, endValue: 9, categories: [1, 2, 3, 4, 5, 6, 7, 8, 9] });
+
+    assert.equal(onZoomEnd.callCount, 1);
+    assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 1, endValue: 9, categories: [1, 2, 3, 4, 5, 6, 7, 8, 9] });
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 7, categories: [2, 3, 4, 5, 6, 7] });
+
+    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 100, pageY: 200 }, { pointerId: 2, pageX: 500, pageY: 200 }] }));
+    $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 200, pageY: 200 }, { pointerId: 2, pageX: 400, pageY: 200 }] }));
+    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
+
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 2, endValue: 7, categories: [2, 3, 4, 5, 6, 7] });
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 1, endValue: 9, categories: [1, 2, 3, 4, 5, 6, 7, 8, 9] });
+
+});
+
 QUnit.module("ScrollBar", environment);
 
 QUnit.test("Scrollbar pans only argument axis", function(assert) {
@@ -1200,6 +1277,7 @@ QUnit.test("Scrollbar pans only argument axis", function(assert) {
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
             argumentAxis: {
+                type: "discrete",
                 visualRange: {
                     startValue: 3,
                     endValue: 7
@@ -1223,12 +1301,12 @@ QUnit.test("Scrollbar pans only argument axis", function(assert) {
 
     assert.equal(onZoomStart.callCount, 1);
     assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7, categories: [3, 4, 5, 6, 7] });
 
     assert.equal(onZoomEnd.callCount, 1);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 });
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 6 });
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7, categories: [3, 4, 5, 6, 7] });
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 6, categories: [2, 3, 4, 5, 6] });
 });
 
 QUnit.test("Scrollbar does not pan argument axis if it can not be panned", function(assert) {
