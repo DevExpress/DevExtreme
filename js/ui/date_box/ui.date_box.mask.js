@@ -159,6 +159,8 @@ let DateBoxMask = DateBoxBase.inherit({
 
             this._setActivePartValue(actual);
             this._selectNextPart(direction, e);
+        } else if(!isAllSelected) {
+            this._selectNextPart(direction, e);
         }
     },
 
