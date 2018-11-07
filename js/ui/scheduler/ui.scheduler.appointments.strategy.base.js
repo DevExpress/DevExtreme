@@ -490,12 +490,15 @@ var BaseRenderingStrategy = Class.inherit({
 
     _adjustDurationByDaylightDiff: function(duration, startDate, endDate) {
         var daylightDiff = this.instance.fire("getDaylightOffset", startDate, endDate);
+        return this._needAdjustDuration(daylightDiff) ? this._calculateDurationByDaylightDiff(duration, daylightDiff) : duration;
+    },
 
-        if(daylightDiff !== 0) {
-            duration += daylightDiff * toMs("minute");
-        }
+    _needAdjustDuration: function(diff) {
+        return diff !== 0;
+    },
 
-        return duration;
+    _calculateDurationByDaylightDiff: function(duration, diff) {
+        return duration + diff * toMs("minute");
     },
 
     _checkWrongEndDate: function(appointment, startDate, endDate) {
