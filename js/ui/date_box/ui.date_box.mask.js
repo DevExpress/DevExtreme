@@ -154,12 +154,12 @@ let DateBoxMask = DateBoxBase.inherit({
         const caret = this._caret();
         const isAllSelected = caret.end - caret.start === this.option("text").length;
 
-        if(value && !isAllSelected) {
-            const actual = this._getActivePartValue(value);
+        if(!isAllSelected) {
+            if(value) {
+                const actual = this._getActivePartValue(value);
+                this._setActivePartValue(actual);
+            }
 
-            this._setActivePartValue(actual);
-            this._selectNextPart(direction, e);
-        } else if(!isAllSelected) {
             this._selectNextPart(direction, e);
         }
     },
