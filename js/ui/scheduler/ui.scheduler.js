@@ -1291,6 +1291,8 @@ var Scheduler = Widget.inherit({
                 break;
             case "maxAppointmentsPerCell":
                 break;
+            case "occurenceExpr":
+                break;
             case "startDateExpr":
             case "endDateExpr":
             case "startDateTimeZoneExpr":
