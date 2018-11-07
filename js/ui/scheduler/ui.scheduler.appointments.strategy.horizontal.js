@@ -34,14 +34,8 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return width;
     },
 
-    _adjustDurationByDaylightDiff: function(duration, startDate, endDate) {
-        var daylightDiff = this.instance.fire("getDaylightOffset", startDate, endDate);
-
-        if(daylightDiff < 0) {
-            duration += daylightDiff * toMs("minute");
-        }
-
-        return duration;
+    _needAdjustDuration: function(diff) {
+        return diff < 0;
     },
 
     getAppointmentGeometry: function(coordinates) {
