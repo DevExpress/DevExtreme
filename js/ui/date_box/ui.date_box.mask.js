@@ -18,7 +18,7 @@ const MASK_EVENT_NAMESPACE = "dateBoxMask",
 let DateBoxMask = DateBoxBase.inherit({
 
     _supportedKeys(e) {
-        if(!this._useMaskBehavior() || this.option("opened") || e.altKey) {
+        if(!this._useMaskBehavior() || this.option("opened") || (e && e.altKey)) {
             return this.callBase(e);
         }
 

@@ -277,6 +277,14 @@ if(devices.real().deviceType === "desktop") {
     });
 
     QUnit.module("Keyboard navigation", setupModule, () => {
+        QUnit.test("RegisterKeyHandler should work", (assert) => {
+            const handler = sinon.spy();
+            this.instance.registerKeyHandler("del", handler);
+
+            this.keyboard.press("del");
+            assert.equal(handler.callCount, 1, "registerKeyHandler works");
+        });
+
         QUnit.test("Right and left arrows should move the selection", (assert) => {
             this.keyboard.press("right");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group is selected");
