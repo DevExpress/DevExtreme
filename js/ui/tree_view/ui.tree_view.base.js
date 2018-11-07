@@ -55,6 +55,13 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             e.target = $itemElement;
             e.currentTarget = $itemElement;
             this._itemClickHandler(e, $itemElement.children("." + ITEM_CLASS));
+
+            var expandEventName = this._getEventNameByOption(this.option("expandEvent")),
+                expandByClick = expandEventName === eventUtils.addNamespace(clickEvent.name, EXPAND_EVENT_NAMESPACE);
+
+            if(expandByClick) {
+                this._expandEventHandler(e);
+            }
         };
 
         var select = function(e) {
@@ -960,20 +967,21 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         $node.addClass(IS_LEAF);
     },
 
+    _expandEventHandler: function(e) {
+        var $nodeElement = $(e.currentTarget.parentNode);
+
+        if(!$nodeElement.hasClass(IS_LEAF)) {
+            this._toggleExpandedState(e.currentTarget, undefined, e);
+        }
+    },
+
     _initExpandEvent: function() {
-        var that = this,
-            expandedEventName = this._getEventNameByOption(this.option("expandEvent")),
+        var expandedEventName = this._getEventNameByOption(this.option("expandEvent")),
             $itemsContainer = this._itemContainer(),
             itemSelector = this._itemSelector();
 
         eventsEngine.off($itemsContainer, "." + EXPAND_EVENT_NAMESPACE, itemSelector);
-        eventsEngine.on($itemsContainer, expandedEventName, itemSelector, function(e) {
-            var $nodeElement = $(e.currentTarget.parentNode);
-
-            if(!$nodeElement.hasClass(IS_LEAF)) {
-                that._toggleExpandedState(e.currentTarget, undefined, e);
-            }
-        });
+        eventsEngine.on($itemsContainer, expandedEventName, itemSelector, this._expandEventHandler.bind(this));
     },
 
     _getEventNameByOption: function(name) {
