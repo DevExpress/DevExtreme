@@ -382,6 +382,7 @@ if(devices.real().deviceType === "desktop") {
 
             this.keyboard.press("del");
             assert.equal(this.instance.option("text"), "February 1 1970", "text has not been changed");
+            assert.deepEqual(this.keyboard.caret(), { start: 9, end: 10 }, "next group is selected");
         });
 
         QUnit.test("backspace should revert group to initial value and go to the previous one", (assert) => {
