@@ -482,10 +482,14 @@ var SchedulerAppointments = CollectionWidget.inherit({
             $container = this._getAppointmentContainer(allDay),
             coordinateCount = item.settings.length;
 
+        var itemData = item.itemData;
+
         for(var i = 0; i < coordinateCount; i++) {
             this._currentAppointmentSettings = item.settings[i];
+            var singleAppointmentData = this.invoke("getTargetedAppointmentData", itemData, undefined, index, this._currentAppointmentSettings.startDate);
 
-            var $item = this.callBase(index, item.itemData, $container);
+            itemData = this.invoke("appendSingleAppointmentData", itemData, singleAppointmentData);
+            var $item = this.callBase(index, itemData, $container);
             $item.data("dxAppointmentSettings", item.settings[i]);
         }
     },

@@ -841,13 +841,18 @@ var Scheduler = Widget.inherit({
             endDateTimeZoneExpr: "endDateTimeZone",
 
             /**
+                * @name dxSchedulerOptions.occurrenceExpr
+                * @type string
+                * @default null
+                */
+            occurrenceExpr: null,
+
+            /**
                 * @name dxSchedulerOptions.noDataText
                 * @type string
                 * @default "No data to display"
                 */
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
-
-            groupByDate: false,
 
             allowMultipleCellSelection: true,
             _appointmentTooltipOffset: { x: 0, y: 0 },
@@ -2522,7 +2527,7 @@ var Scheduler = Widget.inherit({
                 }
 
                 if(isRecurrence) {
-                    appointmentStartDate = $appointment.data("dxAppointmentSettings") && $appointment.data("dxAppointmentSettings").startDate;
+                    appointmentStartDate = ($appointment.data("dxAppointmentSettings") && $appointment.data("dxAppointmentSettings").startDate);
                     if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
                     }
@@ -2532,6 +2537,10 @@ var Scheduler = Widget.inherit({
                     updatedStartDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
                 }
             }
+        }
+
+        if(!updatedStartDate && options.startDate) {
+            updatedStartDate = options.startDate;
         }
 
         if(updatedStartDate) {

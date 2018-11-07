@@ -541,6 +541,22 @@ var subscribes = {
         }, this._subscribes["convertDateByTimezone"].bind(this));
     },
 
+    appendSingleAppointmentData: function(appointmentData, singleAppointmentData) {
+        var field = this.option("occurrenceExpr");
+
+        if(field) {
+            appointmentData[field] = singleAppointmentData;
+        }
+
+        return appointmentData;
+    },
+
+    getSingleAppointmentData: function(appointmentData) {
+        var field = this.option("occurrenceExpr");
+
+        return appointmentData[field];
+    },
+
     dayHasAppointment: function(day, appointment, trimTime) {
         return this.dayHasAppointment(day, appointment, trimTime);
     },
@@ -725,11 +741,12 @@ var subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, appointmentIndex) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement, appointmentIndex, startDate) {
         var recurringData = this._getSingleAppointmentData(appointmentData, {
                 skipDateCalculation: true,
                 $appointment: $(appointmentElement),
-                skipHoursProcessing: true
+                skipHoursProcessing: true,
+                startDate: startDate
             }),
             result = {};
 
@@ -738,7 +755,7 @@ var subscribes = {
         this._convertDatesByTimezoneBack(false, result);
 
         // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
-        this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
+        appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
 
         return result;
     },

@@ -33,6 +33,8 @@ var appointmentTooltip = {
 
         this._$tooltip = $("<div>").appendTo(instance.$element()).addClass(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
 
+        appointmentData = this.instance.fire("appendSingleAppointmentData", appointmentData, singleAppointmentData);
+
         this._tooltip = instance._createComponent(this._$tooltip, Tooltip, {
             visible: true,
             target: $appointment,
