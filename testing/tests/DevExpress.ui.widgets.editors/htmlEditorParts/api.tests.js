@@ -158,4 +158,12 @@ QUnit.module("API", moduleConfig, () => {
         assert.ok(testModule);
         assert.equal(testModule.getEditor(), this.instance);
     });
+
+    test("'focus' method should call the quill's focus", (assert) => {
+        const focusSpy = sinon.spy(this.instance.getQuillInstance(), "focus");
+
+        this.instance.focus();
+
+        assert.ok(focusSpy.calledOnce, "Quill focus() should triggered on the editor's focus()");
+    });
 });
