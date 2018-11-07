@@ -4297,7 +4297,7 @@ declare module DevExpress.ui {
         /** Specifies when to display the text for the widget item. */
         showText?: 'always' | 'inMenu';
         /** A widget that presents a toolbar item. */
-        widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox';
+        widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup';
     }
     export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
     }
