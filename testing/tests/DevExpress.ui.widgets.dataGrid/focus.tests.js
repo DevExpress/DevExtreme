@@ -2765,3 +2765,30 @@ QUnit.testInActiveWindow("If editing in cell edit mode and focusedRowEnabled - f
     assert.ok(rowsView.getRow(1).find("td").eq(1).hasClass("dx-focused"), "Cell 1 is focused");
     assert.ok(rowsView.element().find(".dx-datagrid-focus-overlay").is(":visible"), "Focus overlay present");
 });
+
+QUnit.testInActiveWindow("Focused row public API should be accessible", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowIndex: 1
+    };
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    // assert
+    assert.notOk(this.isRowFocused("Alex"), "isRowFocused true");
+    assert.ok(this.isRowFocused("Dan"), "isRowFocused false");
+    assert.notOk(this.navigateToRow("Alex"), "navigateToRow");
+    assert.ok(this.isRowFocused("Alex"), "isRowFocused true");
+});

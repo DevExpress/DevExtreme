@@ -50,7 +50,7 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         publicMethods: function() {
-            return ["navigateToRow"];
+            return ["navigateToRow", "isRowFocused"];
         },
 
         /**
