@@ -36,7 +36,7 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         var daylightDiff = this.instance.fire("getDaylightOffset", startDate, endDate);
 
         if(daylightDiff < 0) {
-            duration += daylightDiff;
+            duration += daylightDiff * toMs("minute");
         }
 
         return duration;
