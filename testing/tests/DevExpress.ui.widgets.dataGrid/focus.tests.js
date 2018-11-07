@@ -1920,6 +1920,63 @@ QUnit.testInActiveWindow("Setting cancel in onFocusedCellChanging event should p
     assert.equal(focusedColumnChangingCount, 1, "onFocusedCellChanging fires count");
 });
 
+QUnit.testInActiveWindow("DataGrid should fire onFocusedCellChanging event if next focused cell is not valid", function(assert) {
+    var rowsView,
+        keyboardController,
+        onFocusedCellCount = 0;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowKey: "Bob",
+        focusedColumnIndex: 1,
+        columns: [
+            { dataField: "team", groupIndex: 0, autoExpandGroup: true },
+            "name",
+            "age"
+        ],
+        onFocusedCellChanging: function(e) {
+            ++onFocusedCellCount;
+        }
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 2, "FocusedRowIndex");
+    assert.equal(this.option("focusedColumnIndex"), 1, "FocusedColumnIndex");
+
+    // act
+    keyboardController._leftRightKeysHandler({ key: "leftArrow" });
+
+    // assert
+    assert.equal(onFocusedCellCount, 1, "onFocusedCellCount");
+});
+
 QUnit.testInActiveWindow("Fire onFocusedCellChanging by LeftArrow key", function(assert) {
     var rowsView,
         keyboardController,
@@ -2034,6 +2091,189 @@ QUnit.testInActiveWindow("Fire onFocusedCellChanging by RightArrow key", functio
     assert.equal(focusedColumnChangingCount, 1, "onFocusedCellChanging fires count");
 });
 
+QUnit.testInActiveWindow("Fire onFocusedCellChanging by UpArrow key", function(assert) {
+    var rowsView,
+        keyboardController,
+        focusedColumnChangingCount = 0;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowKey: "Ben",
+        focusedColumnIndex: 0,
+        editing: {
+            allowEditing: false
+        },
+        onFocusedCellChanging: function(e) {
+            ++focusedColumnChangingCount;
+            if(focusedColumnChangingCount === 2) {
+                assert.equal(e.cancel, false, "Not canceled");
+                assert.equal(e.cellElement.text(), $(rowsView.getRow(0).find("td").eq(1)).text(), "Cell element");
+                assert.equal(e.newColumnIndex, 1);
+                assert.equal(e.prevColumnIndex, 1);
+                assert.equal(e.newRowIndex, 0);
+                assert.equal(e.prevRowIndex, 1);
+            }
+        }
+    };
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex");
+    assert.equal(this.option("focusedColumnIndex"), 0, "FocusedColumnIndex");
+    // act
+    keyboardController._leftRightKeysHandler({ key: "rightArrow" });
+    keyboardController._upDownKeysHandler({ key: "upArrow" });
+    // assert
+    assert.equal(this.option("focusedColumnIndex"), 1, "Focused column index");
+    assert.equal(this.option("focusedRowIndex"), 0, "Focused row index");
+    assert.equal(focusedColumnChangingCount, 2, "onFocusedCellChanging fires count");
+});
+
+QUnit.testInActiveWindow("Fire onFocusedCellChanging by DownArrow key", function(assert) {
+    var rowsView,
+        keyboardController,
+        focusedColumnChangingCount = 0;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowKey: "Ben",
+        focusedColumnIndex: 0,
+        editing: {
+            allowEditing: false
+        },
+        onFocusedCellChanging: function(e) {
+            ++focusedColumnChangingCount;
+            if(focusedColumnChangingCount === 2) {
+                assert.equal(e.cancel, false, "Not canceled");
+                assert.equal(e.cellElement.text(), $(rowsView.getRow(2).find("td").eq(1)).text(), "Cell element");
+                assert.equal(e.newColumnIndex, 1);
+                assert.equal(e.prevColumnIndex, 1);
+                assert.equal(e.newRowIndex, 2);
+                assert.equal(e.prevRowIndex, 1);
+            }
+        }
+    };
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 1, "FocusedRowIndex");
+    assert.equal(this.option("focusedColumnIndex"), 0, "FocusedColumnIndex");
+    // act
+    keyboardController._leftRightKeysHandler({ key: "rightArrow" });
+    keyboardController._upDownKeysHandler({ key: "downArrow" });
+    // assert
+    assert.equal(this.option("focusedColumnIndex"), 1, "Focused column index");
+    assert.equal(this.option("focusedRowIndex"), 2, "Focused row index");
+    assert.equal(focusedColumnChangingCount, 2, "onFocusedCellChanging fires count");
+});
+
+QUnit.testInActiveWindow("Fire onFocusedCellChanging by UpDownArrow keys may prevent change focused row", function(assert) {
+    var keyboardController,
+        focusedColumnChangingCount = 0,
+        focusedRowChangingCount = 0;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowKey: "Ben",
+        focusedColumnIndex: 0,
+        editing: {
+            allowEditing: false
+        },
+        onFocusedCellChanging: function(e) {
+            ++focusedColumnChangingCount;
+            if(focusedColumnChangingCount === 2) {
+                e.cancel = true;
+            }
+        },
+        onFocusedRowChanging: function(e) {
+            focusedRowChangingCount++;
+        }
+    };
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = this.gridView.getView("rowsView");
+
+    // act
+    keyboardController._leftRightKeysHandler({ key: "rightArrow" });
+    keyboardController._upDownKeysHandler({ key: "downArrow" });
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 1, "Focused row index");
+    assert.equal(focusedColumnChangingCount, 2, "focusedColumnChangingCount");
+    assert.equal(focusedRowChangingCount, 0, "focusedRowChangingCount");
+});
+
 QUnit.testInActiveWindow("Fire onFocusedCellChanging by Tab key", function(assert) {
     var rowsView,
         keyboardController,
@@ -2090,12 +2330,12 @@ QUnit.testInActiveWindow("Fire onFocusedCellChanging by Tab key", function(asser
     assert.ok(keyboardController.isCellFocusType(), "Cell focus type");
     assert.equal(keyboardController.getVisibleRowIndex(), 1, "Focused row index");
     assert.equal(keyboardController.getFocusedColumnIndex(), 1, "FocusedColumnIndex");
-    assert.equal(focusedCellChangingCounter, 1, "focusedCelChanging count");
+    assert.equal(focusedCellChangingCounter, 1, "focusedCellChanging count");
     // assert, act
     this.triggerKeyDown("tab", false, false, rowsView.getRow(1).find("td:focus"));
     assert.ok(keyboardController.isCellFocusType(), "Cell focus type");
     assert.equal(keyboardController.getFocusedColumnIndex(), 2, "FocusedColumnIndex");
-    assert.equal(focusedCellChangingCounter, 2, "focusedCelChanging count");
+    assert.equal(focusedCellChangingCounter, 2, "focusedCellChanging count");
     assert.equal(keyboardController.getVisibleRowIndex(), 1, "Focused row index");
 });
 
@@ -2156,12 +2396,12 @@ QUnit.testInActiveWindow("Fire onFocusedCellChanging by Tab key in back order (s
     assert.ok(keyboardController.isCellFocusType(), "Cell focus type");
     assert.equal(keyboardController.getVisibleRowIndex(), 1, "Focused row index");
     assert.equal(keyboardController.getFocusedColumnIndex(), 1, "FocusedColumnIndex");
-    assert.equal(focusedCellChangingCounter, 1, "focusedCelChanging count");
+    assert.equal(focusedCellChangingCounter, 1, "focusedCellChanging count");
     // assert, act
     this.triggerKeyDown("tab", false, true, rowsView.getRow(1).find("td:focus"));
     assert.ok(keyboardController.isCellFocusType(), "Cell focus type");
     assert.equal(keyboardController.getFocusedColumnIndex(), 0, "FocusedColumnIndex");
-    assert.equal(focusedCellChangingCounter, 2, "focusedCelChanging count");
+    assert.equal(focusedCellChangingCounter, 2, "focusedCellChanging count");
     assert.equal(keyboardController.getVisibleRowIndex(), 1, "Focused row index");
 });
 
