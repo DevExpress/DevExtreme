@@ -133,31 +133,30 @@ QUnit.test("Second recurring appointment wich started in STD and ended in DST ti
     assert.equal($appointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), dateLocalization.format(endDateByTz, "shorttime"), "End Date is correct on init");
 });
 
-QUnit.test("Appointment wich started in STD and ended in DST time should have right width, timeline view", function(assert) {
-    var startDate = new Date(2018, 2, 11, 1),
-        endDate = new Date(2018, 2, 11, 3),
-        currentDate = new Date(2018, 2, 11);
+QUnit.test("Appointment which started in DST and ended in STD time should have right width, timeline view", function(assert) {
+    var startDate = new Date(2018, 10, 4, 1),
+        endDate = new Date(2018, 10, 4, 3),
+        currentDate = new Date(2018, 10, 4);
 
     this.createInstance({
-        views: ["timelineDay"],
-        currentView: "timelineDay",
+        views: ["timelineWeek"],
+        currentView: "timelineWeek",
         cellDuration: 60,
+        currentDate: currentDate,
         maxAppointmentsPerCell: null,
         dataSource: [{
             text: "DST",
             startDate: startDate,
             endDate: endDate
-        }],
-        timeZone: "America/New_York"
+        }]
     });
-
-    this.instance.option("currentDate", this.instance.fire("convertDateByTimezone", currentDate, -5));
 
     var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).first(),
         cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).first().outerWidth(),
-        duration = (endDate - startDate) / 3600000;
+        duration = (endDate - startDate) / 3600000,
+        tzDiff = (startDate.getTimezoneOffset() - endDate.getTimezoneOffset()) / 60;
 
-    assert.roughEqual($appointment.outerWidth(), cellWidth * duration, 2.001, "Appt width is correct on the day of the time ajusting");
+    assert.roughEqual($appointment.outerWidth(), cellWidth * (duration + tzDiff), 2.001, "Appt width is correct on the day of the time ajusting");
 });
 
 QUnit.test("Second recurring appointment should have right width if previous appt started in STD and ended in DST, timeline view", function(assert) {
