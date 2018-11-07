@@ -141,6 +141,10 @@ var DataGrid = Widget.inherit({
                 },
                 options: {
                     grouping: {
+                        /**
+                         * @name dxDataGridOptions.grouping.expandMode
+                         * @default 'rowClick' @for mobile_devices
+                         */
                         expandMode: "rowClick"
                     }
                 }
