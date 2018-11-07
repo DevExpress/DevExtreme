@@ -125,6 +125,7 @@ exports.FocusController = core.ViewController.inherit((function() {
          * @name GridBaseMethods.isRowFocused
          * @publicName isRowFocused(key)
          * @param1 key:any
+         * @return boolean
          */
         isRowFocused: function(key) {
             var focusedRowKey = this.option("focusedRowKey");
