@@ -2529,7 +2529,7 @@ var Scheduler = Widget.inherit({
                 }
 
                 if(isRecurrence) {
-                    appointmentStartDate = ($appointment.data("dxAppointmentSettings") && $appointment.data("dxAppointmentSettings").startDate);
+                    appointmentStartDate = $appointment.data("dxAppointmentSettings") && $appointment.data("dxAppointmentSettings").startDate;
                     if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
                     }
