@@ -655,6 +655,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
      * @name GridBaseMethods.isAdaptiveDetailRowExpanded
      * @publicName isAdaptiveDetailRowExpanded(key)
      * @param1 key:any
+     * @return boolean
      */
     isAdaptiveDetailRowExpanded: function(key) {
         return this._dataController.adaptiveExpandedKey() && commonUtils.equalByValue(this._dataController.adaptiveExpandedKey(), key);
