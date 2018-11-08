@@ -678,6 +678,26 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(commons.getTrackerStub().repairTooltip.calledOnce, "repairTooltip called once");
     });
 
+    QUnit.test("tracker repaired tooltip. after data updating", function(assert) {
+        // arrange
+        var stubSeries = new MockSeries({});
+        chartMocks.seriesMockData.series.push(stubSeries);
+
+        // act
+        var chart = this.createChart({
+            dataSource: [{ arg: "First", val: 1 }, { arg: "2", val: 2 }],
+            series: [{
+                type: "line"
+            }]
+        });
+
+        commons.getTrackerStub().repairTooltip.reset();
+        chart.getDataSource().store().insert({ arg: "3", val: 3 });
+        chart.getDataSource().reload();
+
+        assert.ok(commons.getTrackerStub().repairTooltip.calledOnce, "repairTooltip called after data updating");
+    });
+
     QUnit.module("dxChart seriesTemplates creation", $.extend({}, commons.environment, {
         beforeEach: function() {
             executeAsyncMock.setup();

@@ -102,10 +102,8 @@ var baseTrackerPrototype = {
         if(noHoveredSeries) {
             that._clean();
             that._renderer.initHatching();
-        } else {
-            that._hideTooltip(that.pointAtShownTooltip);
-            that._clearHover();
         }
+
         that.clearSelection();
     },
 
@@ -116,7 +114,7 @@ var baseTrackerPrototype = {
 
     repairTooltip: function() {
         var point = this.pointAtShownTooltip;
-        if(point && !point.isVisible()) {
+        if(!point || !point.series || !point.isVisible()) {
             this._hideTooltip(point, true);
         } else {
             this._showTooltip(point);
