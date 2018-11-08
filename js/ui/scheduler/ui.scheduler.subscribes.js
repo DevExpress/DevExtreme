@@ -660,11 +660,8 @@ var subscribes = {
     convertDateByTimezone: function(date, appointmentTimezone) {
         var msInHour = 3600000;
         date = new Date(date);
-
         var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"](date) / msInHour);
-
         var commonTimezoneOffset = this._getTimezoneOffsetByOption(date);
-
         var appointmentTimezoneOffset = this._calculateTimezoneByValue(appointmentTimezone, date);
 
         if(typeof appointmentTimezoneOffset !== "number") {
@@ -672,14 +669,11 @@ var subscribes = {
         }
 
         var dateInUTC = date.getTime() - clientTzOffset * msInHour;
-
         date = new Date(dateInUTC + appointmentTimezoneOffset * msInHour);
 
         if(typeof commonTimezoneOffset === "number") {
-            var hoursInDecimalFormat = date.getHours() + (commonTimezoneOffset - appointmentTimezoneOffset);
-            date = new Date(date.setHours(Math.floor(hoursInDecimalFormat), hoursInDecimalFormat % 1 * 60));
+            date = new Date(date.getTime() + ((commonTimezoneOffset - appointmentTimezoneOffset) * msInHour));
         }
-
         return date;
     },
 
