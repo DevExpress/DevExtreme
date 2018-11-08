@@ -545,7 +545,7 @@ var subscribes = {
         var appointmentData = config.appointmentData,
             singleAppointmentData = config.singleAppointmentData;
 
-        var field = this.option("occurrenceExpr"),
+        var field = this.option("displayedAppointmentDataField"),
             result = extend({}, appointmentData);
 
         if(this._isAppointmentRecurrence(appointmentData) && typeUtils.isDefined(field)) {

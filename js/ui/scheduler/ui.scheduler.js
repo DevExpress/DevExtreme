@@ -841,13 +841,6 @@ var Scheduler = Widget.inherit({
             endDateTimeZoneExpr: "endDateTimeZone",
 
             /**
-                * @name dxSchedulerOptions.occurrenceExpr
-                * @type string
-                * @default null
-                */
-            occurrenceExpr: null,
-
-            /**
                 * @name dxSchedulerOptions.noDataText
                 * @type string
                 * @default "No data to display"
@@ -855,6 +848,8 @@ var Scheduler = Widget.inherit({
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
             allowMultipleCellSelection: true,
+            displayedAppointmentDataField: null,
+
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: "bottom",
             _appointmentTooltipCloseButton: false,
@@ -1291,7 +1286,7 @@ var Scheduler = Widget.inherit({
                 break;
             case "maxAppointmentsPerCell":
                 break;
-            case "occurrenceExpr":
+            case "displayedAppointmentDataField":
                 break;
             case "startDateExpr":
             case "endDateExpr":

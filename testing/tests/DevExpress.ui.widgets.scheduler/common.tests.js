@@ -280,7 +280,7 @@ QUnit.testStart(function() {
         assert.strictEqual(dataAccessors.setter.recurrenceRule, undefined, "setter for recurrenceRule is OK");
     });
 
-    QUnit.test("appointmentTemplate rendering args should be correct if occurrenceExpr is specified", function(assert) {
+    QUnit.test("appointmentTemplate rendering args should be correct if displayedAppointmentDataField is specified", function(assert) {
         var counter = 0;
 
         this.instance.option({
@@ -293,7 +293,7 @@ QUnit.testStart(function() {
             }],
             height: 600,
             currentDate: new Date(2015, 4, 24),
-            occurrenceExpr: "Field",
+            displayedAppointmentDataField: "Field",
             currentView: "month",
             views: ["month"],
             appointmentTemplate: function(data) {
@@ -321,7 +321,7 @@ QUnit.testStart(function() {
             }],
             height: 600,
             currentDate: new Date(2015, 4, 24),
-            occurrenceExpr: "Field",
+            displayedAppointmentDataField: "Field",
             currentView: "month",
             views: ["month"],
             appointmentTemplate: function(data) {
@@ -330,7 +330,7 @@ QUnit.testStart(function() {
         });
     });
 
-    QUnit.test("additional field should be applied in appointmentTemplate only when occurrenceExpr is set", function(assert) {
+    QUnit.test("additional field should be applied in appointmentTemplate only when displayedAppointmentDataField is set", function(assert) {
         this.instance.option({
             dataSource: [{
                 startDate: new Date(2015, 4, 24, 9, 10),
@@ -341,7 +341,7 @@ QUnit.testStart(function() {
             }],
             height: 600,
             currentDate: new Date(2015, 4, 24),
-            occurrenceExpr: null,
+            displayedAppointmentDataField: null,
             currentView: "month",
             views: ["month"],
             appointmentTemplate: function(data) {
@@ -350,7 +350,7 @@ QUnit.testStart(function() {
         });
     });
 
-    QUnit.test("appointmentTooltipTemplate rendering args should be correct if occurrenceExpr is specified", function(assert) {
+    QUnit.test("appointmentTooltipTemplate rendering args should be correct if displayedAppointmentDataField is specified", function(assert) {
         this.instance.option({
             dataSource: [{
                 startDate: new Date(2015, 4, 24, 9, 10),
@@ -361,7 +361,7 @@ QUnit.testStart(function() {
             }],
             height: 600,
             currentDate: new Date(2015, 4, 24),
-            occurrenceExpr: "Field",
+            displayedAppointmentDataField: "Field",
             currentView: "month",
             views: ["month"],
             appointmentTooltipTemplate: function(data) {
@@ -379,7 +379,7 @@ QUnit.testStart(function() {
         this.clock.tick(300);
     });
 
-    QUnit.test("dropDownAppointmentTemplate rendering args should be correct if occurrenceExpr is specified", function(assert) {
+    QUnit.test("dropDownAppointmentTemplate rendering args should be correct if displayedAppointmentDataField is specified", function(assert) {
         this.instance.option({
             dataSource: [{
                 startDate: new Date(2015, 4, 24, 9, 10),
@@ -396,7 +396,7 @@ QUnit.testStart(function() {
             }],
             maxAppointmentsPerCell: 1,
             currentDate: new Date(2015, 4, 24),
-            occurrenceExpr: "Field",
+            displayedAppointmentDataField: "Field",
             views: ["month"],
             dropDownAppointmentTemplate: function(data) {
                 assert.deepEqual(data.Field.startDate, new Date(2015, 4, 25, 9, 10), "Start date of part is ok");
