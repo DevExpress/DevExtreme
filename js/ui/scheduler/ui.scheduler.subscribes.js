@@ -674,44 +674,45 @@ var subscribes = {
     },
 
     convertDateByTimezone: function(date, appointmentTimezone) {
-        var msInHour = 3600000;
         date = new Date(date);
-        var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"](date) / msInHour);
-        var commonTimezoneOffset = this._getTimezoneOffsetByOption(date);
-        var appointmentTimezoneOffset = this._calculateTimezoneByValue(appointmentTimezone, date);
+        var tzOffsets = this.getTimeZoneOffsets(date, appointmentTimezone);
 
-        if(typeof appointmentTimezoneOffset !== "number") {
-            appointmentTimezoneOffset = clientTzOffset;
-        }
-
-        var dateInUTC = date.getTime() - clientTzOffset * msInHour;
-        date = new Date(dateInUTC + appointmentTimezoneOffset * msInHour);
+        var dateInUTC = date.getTime() - tzOffsets.client * toMs("hour");
+        date = new Date(dateInUTC + tzOffsets.appointment * toMs("hour"));
 
         if(typeof commonTimezoneOffset === "number") {
-            date = new Date(date.getTime() + ((commonTimezoneOffset - appointmentTimezoneOffset) * msInHour));
+            date = new Date(date.getTime() + ((tzOffsets.common - tzOffsets.appointment) * toMs("hour")));
         }
         return date;
     },
 
     convertDateByTimezoneBack: function(date, appointmentTimezone) {
-        var msInHour = 3600000;
         date = new Date(date);
-        var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"](date) / msInHour);
+        var tzOffsets = this.getTimeZoneOffsets(date, appointmentTimezone);
+
+        var dateInUTC = date.getTime() + tzOffsets.client * toMs("hour");
+        date = new Date(dateInUTC - tzOffsets.appointment * toMs("hour"));
+
+        if(typeof commonTimezoneOffset === "number") {
+            date = new Date(date.getTime() - ((tzOffsets.common - tzOffsets.appointment) * toMs("hour")));
+        }
+
+        return date;
+    },
+    getTimeZoneOffsets: function(date, appointmentTimezone) {
+        var clientTimezoneOffset = -(this._subscribes["getClientTimezoneOffset"](date) / toMs("hour"));
         var commonTimezoneOffset = this._getTimezoneOffsetByOption(date);
         var appointmentTimezoneOffset = this._calculateTimezoneByValue(appointmentTimezone, date);
 
         if(typeof appointmentTimezoneOffset !== "number") {
-            appointmentTimezoneOffset = clientTzOffset;
+            appointmentTimezoneOffset = clientTimezoneOffset;
         }
 
-        var dateInUTC = date.getTime() + clientTzOffset * msInHour;
-        date = new Date(dateInUTC - appointmentTimezoneOffset * msInHour);
-
-        if(typeof commonTimezoneOffset === "number") {
-            date = new Date(date.getTime() - ((commonTimezoneOffset - appointmentTimezoneOffset) * msInHour));
-        }
-
-        return date;
+        return {
+            client: clientTimezoneOffset,
+            common: commonTimezoneOffset,
+            appointment: appointmentTimezoneOffset
+        };
     },
 
     getDaylightOffset: function(startDate, endDate) {
