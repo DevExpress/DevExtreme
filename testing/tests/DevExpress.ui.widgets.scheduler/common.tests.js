@@ -311,6 +311,45 @@ QUnit.testStart(function() {
         });
     });
 
+    QUnit.test("additional field should be applied in appointmentTemplate only for recurrence appointment", function(assert) {
+        this.instance.option({
+            dataSource: [{
+                startDate: new Date(2015, 4, 10, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 2"
+            }],
+            height: 600,
+            currentDate: new Date(2015, 4, 24),
+            occurrenceExpr: "Field",
+            currentView: "month",
+            views: ["month"],
+            appointmentTemplate: function(data) {
+                assert.strictEqual(data.Field, undefined);
+            }
+        });
+    });
+
+    QUnit.test("additional field should be applied in appointmentTemplate only when occurrenceExpr is set", function(assert) {
+        this.instance.option({
+            dataSource: [{
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                recurrenceRule: "FREQ=DAILY;COUNT=2",
+                allDay: true,
+                text: "Task 2"
+            }],
+            height: 600,
+            currentDate: new Date(2015, 4, 24),
+            occurrenceExpr: null,
+            currentView: "month",
+            views: ["month"],
+            appointmentTemplate: function(data) {
+                assert.strictEqual(data.Field, undefined);
+            }
+        });
+    });
+
     QUnit.test("appointmentTooltipTemplate rendering args should be correct if occurrenceExpr is specified", function(assert) {
         this.instance.option({
             dataSource: [{

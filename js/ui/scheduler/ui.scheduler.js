@@ -2496,6 +2496,12 @@ var Scheduler = Widget.inherit({
         return result;
     },
 
+    _isAppointmentRecurrence: function(appointmentData) {
+        var recurrenceRule = this.fire("getField", "recurrenceRule", appointmentData);
+
+        return recurrenceRule && recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid;
+    },
+
     _getSingleAppointmentData: function(appointmentData, options) {
         options = options || {};
 
@@ -2507,8 +2513,6 @@ var Scheduler = Widget.inherit({
             startDate = new Date(this.fire("getField", "startDate", resultAppointmentData)),
             endDate = new Date(this.fire("getField", "endDate", resultAppointmentData)),
             appointmentDuration = endDate.getTime() - startDate.getTime(),
-            recurrenceRule = this.fire("getField", "recurrenceRule", appointmentData),
-            isRecurrence = recurrenceRule && recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid,
             updatedStartDate,
             appointmentStartDate;
 
@@ -2528,7 +2532,7 @@ var Scheduler = Widget.inherit({
                     }
                 }
 
-                if(isRecurrence) {
+                if(this._isAppointmentRecurrence(appointmentData)) {
                     appointmentStartDate = $appointment.data("dxAppointmentSettings") && $appointment.data("dxAppointmentSettings").startDate;
                     if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
