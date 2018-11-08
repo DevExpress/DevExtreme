@@ -557,7 +557,7 @@
 
 /**
  * @typedef {string} Enums.ToolbarItemWidget
- * @enum {'dxAutocomplete'|'dxButton'|'dxCheckBox'|'dxDateBox'|'dxMenu'|'dxSelectBox'|'dxTabs'|'dxTextBox'}
+ * @enum {'dxAutocomplete'|'dxButton'|'dxCheckBox'|'dxDateBox'|'dxMenu'|'dxSelectBox'|'dxTabs'|'dxTextBox'|'dxButtonGroup'}
  */
 
 /**
