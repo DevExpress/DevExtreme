@@ -589,7 +589,7 @@ Series.prototype = {
 
     _resetNearestPoint: function() {
         var that = this;
-        that._nearestPoint && that._nearestPoint.resetView(HOVER);
+        that._nearestPoint && that._nearestPoint.series !== null && that._nearestPoint.resetView(HOVER);
         that._nearestPoint = null;
     },
 
