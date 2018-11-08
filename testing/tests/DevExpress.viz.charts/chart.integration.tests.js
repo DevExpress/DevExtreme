@@ -2098,6 +2098,23 @@ QUnit.test("select point after dataSource updating", function(assert) {
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[1].isSelected(), true);
 });
 
+QUnit.test("keep selected point after dataSource updating", function(assert) {
+    // arrange
+    var dataSource = [{ arg: "arg1", val: 1 }],
+        chart = this.createPieChart({
+            series: [{}],
+            dataSource: dataSource
+        });
+
+    chart.getAllSeries()[0].getAllPoints()[0].select();
+    dataSource.push({ arg: "arg2", val: 1 });
+    chart.option("dataSource", dataSource);
+    chart.getDataSource().store().insert({ arg: "arg3", val: 3 });
+    chart.getDataSource().reload();
+
+    assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[0].isSelected(), true);
+});
+
 QUnit.test("Pie chart. Show point in order in dataSource", function(assert) {
     var pie = this.createPieChart({
         series: {},

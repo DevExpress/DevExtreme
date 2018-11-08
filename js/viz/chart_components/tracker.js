@@ -103,8 +103,6 @@ var baseTrackerPrototype = {
             that._clean();
             that._renderer.initHatching();
         }
-
-        that.clearSelection();
     },
 
     setCanvases: function(mainCanvas, paneCanvases) {
