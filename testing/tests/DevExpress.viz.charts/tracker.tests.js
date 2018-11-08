@@ -1711,8 +1711,6 @@ QUnit.test("update with old series", function(assert) {
     // assert
     assert.notOk(this.series.clearHover.callCount);
     assert.strictEqual(this.options.tooltip.stub("hide").callCount, 0);
-    assert.strictEqual(this.series.clearSelection.callCount, 3);
-    assert.strictEqual(point.clearSelection.callCount, 2);
 });
 
 QUnit.test("update with old series when point is hovered", function(assert) {
@@ -1732,10 +1730,8 @@ QUnit.test("update with old series when point is hovered", function(assert) {
     this.tracker.updateSeries(series);
 
     // assert
-    assert.strictEqual(this.series.clearSelection.callCount, 3);
     assert.notOk(point.clearHover.callCount);
     assert.strictEqual(this.options.tooltip.stub("hide").callCount, 0);
-    assert.strictEqual(point.clearSelection.callCount, 2);
 });
 
 QUnit.test("update with old series when point is hovered. point was disposed", function(assert) {
@@ -1754,7 +1750,6 @@ QUnit.test("update with old series when point is hovered. point was disposed", f
     this.tracker.updateSeries(series);
 
     // assert
-    assert.strictEqual(this.series.clearSelection.callCount, 3);
     assert.strictEqual(point.stub("clearHover").callCount, 0);
 });
 
