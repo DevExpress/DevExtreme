@@ -552,6 +552,12 @@ var subscribes = {
         return result;
     },
 
+    needAppendSingleAppointmentData: function() {
+        var field = this.option("occurrenceExpr");
+
+        return typeUtils.isDefined(field) && field !== null;
+    },
+
     getSingleAppointmentData: function(appointmentData) {
         var field = this.option("occurrenceExpr");
 
