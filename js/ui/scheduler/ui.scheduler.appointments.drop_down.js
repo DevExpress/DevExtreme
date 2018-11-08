@@ -159,13 +159,14 @@ var dropDownAppointments = Class.inherit({
                 activeStateEnabled: false,
                 focusStateEnabled: this.instance.option("focusStateEnabled"),
                 itemTemplate: new FunctionTemplate(function(options) {
-                    var itemData = options.model;
+                    var itemData = options.model,
+                        startDate = itemData.settings ? itemData.settings[0].startDate : itemData.startDate;
 
-                    if(that.instance.fire("needAppendSingleAppointmentData")) {
-                        var singleAppointmentData = that.instance.fire("getTargetedAppointmentData", itemData, undefined, options.index, itemData.settings[0].startDate);
-
-                        itemData = that.instance.fire("appendSingleAppointmentData", itemData, singleAppointmentData);
-                    }
+                    itemData = that.instance.fire("appendSingleAppointmentData", {
+                        appointmentData: itemData,
+                        index: options.index,
+                        startDate: startDate
+                    });
 
                     return template.render({
                         model: itemData,

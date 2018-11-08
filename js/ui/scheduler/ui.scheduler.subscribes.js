@@ -541,21 +541,20 @@ var subscribes = {
         }, this._subscribes["convertDateByTimezone"].bind(this));
     },
 
-    appendSingleAppointmentData: function(appointmentData, singleAppointmentData) {
-        var result = extend({}, appointmentData),
-            field = this.option("occurrenceExpr");
+    appendSingleAppointmentData: function(config) {
+        var appointmentData = config.appointmentData,
+            singleAppointmentData = config.singleAppointmentData;
 
-        if(field) {
+        var field = this.option("occurrenceExpr"),
+            result = extend({}, appointmentData);
+
+        if(typeUtils.isDefined(field) && field !== null) {
+            singleAppointmentData = singleAppointmentData || this._subscribes["getTargetedAppointmentData"].call(this, appointmentData, undefined, config.index, config.startDate);
+
             result[field] = singleAppointmentData;
         }
 
         return result;
-    },
-
-    needAppendSingleAppointmentData: function() {
-        var field = this.option("occurrenceExpr");
-
-        return typeUtils.isDefined(field) && field !== null;
     },
 
     getSingleAppointmentData: function(appointmentData) {
