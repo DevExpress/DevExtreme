@@ -1,108 +1,28 @@
 import "spa.css!";
-
-import "common.css!";
-import "generic_light.css!";
-
-import "ui/pivot_grid/ui.pivot_grid";
-
 import $ from "jquery";
-import { excel as excelCreator } from "exporter";
-import { __internals as internals } from "exporter/excel_creator";
-import excel_creator from "exporter/excel_creator";
-import JSZipMock from "../../helpers/jszipMock.js";
-import { toComparable } from "core/utils/data";
-
-const BASE_STYLE_XML1 = "<fonts count=\"2\"><font><sz val=\"11\" /><color theme=\"1\" /><name val=\"Calibri\" /><family val=\"2\" />" +
-    "<scheme val=\"minor\" /></font><font><b /><sz val=\"11\" /><color theme=\"1\" /><name val=\"Calibri\" />" +
-    "<family val=\"2\" /><scheme val=\"minor\" /></font></fonts>";
-const BASE_STYLE_XML = BASE_STYLE_XML1 + "<fills count=\"1\"><fill><patternFill patternType=\"none\" /></fill></fills>" + excelCreator.__internals.BASE_STYLE_XML2;
-const SHARED_STRINGS_HEADER_XML = internals.XML_TAG + '<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
-const STYLESHEET_HEADER_XML = internals.XML_TAG + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">';
-const STYLESHEET_FOOTER_XML = '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0" /></cellStyles></styleSheet>';
+import { isDefined } from "../../../js/core/utils/type.js";
+import helper from '../../helpers/pivotGridExportTestsHelper.js';
 
 QUnit.testStart(function() {
     var markup = '<div id="pivotGrid" style="width: 700px"></div>';
     $("#qunit-fixture").html(markup);
 });
 
-QUnit.module("Pivot export tests", {
-    beforeEach: function() {
-        this.oldJSZip = excel_creator.ExcelCreator.JSZip;
-        excel_creator.ExcelCreator.JSZip = JSZipMock;
-    },
-    afterEach: function() {
-        excel_creator.ExcelCreator.JSZip = this.oldJSZip;
-    }
+QUnit.module("PivotGrid export tests", {
+    beforeEach: helper.beforeEachTest,
+    afterEach: helper.afterEachTest,
 });
 
-function runTest(assert, options, { styles = "", worksheet = "", sharedStrings } = {}) {
-    const done = assert.async();
-    options.loadingTimeout = undefined;
-    options.onFileSaving = e => {
-        const zipMock = JSZipMock.lastCreatedInstance;
-
-        assert.strictEqual(zipMock.folder(internals.XL_FOLDER_NAME).file(internals.STYLE_FILE_NAME).content, styles, "styles");
-        assert.strictEqual(zipMock.folder(internals.XL_FOLDER_NAME).folder(internals.WORKSHEETS_FOLDER).file(internals.WORKSHEET_FILE_NAME).content, worksheet, "worksheet");
-        if(sharedStrings !== undefined) {
-            assert.strictEqual(zipMock.folder(internals.XL_FOLDER_NAME).file(internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, "sharedStrings");
-        }
-
-        done();
-        e.cancel = true;
-    };
-    const pivot = $("#pivotGrid").dxPivotGrid(options).dxPivotGrid('instance');
-    pivot.exportToExcel();
-};
-
-function runCustomizeExcelCellArgumentsTest(assert, options, getExpectedCellsCallback) {
-    const done = assert.async();
-    const actualCells = [];
-
-    options.export = options.export || {};
-    options.export.customizeExcelCell = e => {
-        e.pivotGridCell._excelCellValue = e.value;
-        actualCells.push(e.pivotGridCell);
-    };
-    options.loadingTimeout = undefined;
-    options.onFileSaving = e => {
-        const expectedCells = getExpectedCellsCallback(e.component);
-        assert.strictEqual(actualCells.length, expectedCells.length, 'actualCells.length');
-        for(let i = 0; i < actualCells.length; i++) {
-            const actualCell = actualCells[i];
-            const expectedCell = expectedCells[i];
-            const skipProperties = [ '_excelCellValue' ];
-
-            for(const propertyName in expectedCell) {
-                if(skipProperties.indexOf(propertyName) === -1) {
-                    assert.strictEqual(toComparable(actualCell[propertyName]), toComparable(expectedCell[propertyName]), `cell[${propertyName}], ${i}`);
-                    skipProperties.push(propertyName);
-                }
-            }
-            for(const actualPropertyName in actualCell) {
-                if(skipProperties.indexOf(actualPropertyName) === -1) {
-                    assert.strictEqual(toComparable(actualCell[actualPropertyName]), toComparable(expectedCell[actualPropertyName]), `actual cell[${actualPropertyName}], ${i}`);
-                }
-            }
-            assert.strictEqual(actualCell._excelCellValue, expectedCell._excelCellValue, `_excelCellValue, ${i}`);
-        }
-
-        done();
-        e.cancel = true;
-    };
-    const pivot = $("#pivotGrid").dxPivotGrid(options).dxPivotGrid('instance');
-    pivot.exportToExcel();
-}
-
-QUnit.test("Empty pivot", function(assert) {
-    const styles = STYLESHEET_HEADER_XML +
-        BASE_STYLE_XML +
+QUnit.test("Export empty pivot", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '</cellXfs>' +
-        STYLESHEET_FOOTER_XML;
-    const worksheet = internals.WORKSHEET_HEADER_XML +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
@@ -110,244 +30,684 @@ QUnit.test("Empty pivot", function(assert) {
         '<sheetData>' +
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>0</v></c><c r="B2" s="2" t="s" /></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
         '<si><t>Grand Total</t></si>' +
         '</sst>';
+    const getExpectedCells = () => {
+        return [
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'Grand Total' },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'Grand Total' },
+            undefined,
+        ];
+    };
 
-    runTest(assert, {}, { styles, worksheet, sharedStrings });
+    helper.runTest(assert, {}, { getExpectedCells, styles, worksheet, sharedStrings });
 });
 
-QUnit.test("dataFieldArea: column", function(assert) {
-    const styles = STYLESHEET_HEADER_XML +
-        BASE_STYLE_XML +
+QUnit.test("Export [string x string x number]", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '</cellXfs>' +
-        STYLESHEET_FOOTER_XML;
-    const worksheet = internals.WORKSHEET_HEADER_XML +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="2" topLeftCell="B3" /></sheetView></sheetViews>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols>' +
-        '<col width="13.57" min="1" max="1" />' +
-        '<col width="13.57" min="2" max="2" />' +
-        '<col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" />' +
-        '<col width="13.57" min="5" max="5" />' +
-        '</cols>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c><c r="C1" s="0" t="s" /><c r="D1" s="0" t="s"><v>1</v></c><c r="E1" s="0" t="s" /></row>' +
-        '<row r="2" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="2" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c><c r="D2" s="0" t="s"><v>2</v></c><c r="E2" s="0" t="s"><v>3</v></c></row>' +
-        '<row r="3" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="1" t="s"><v>4</v></c><c r="B3" s="2" t="s"><v>5</v></c><c r="C3" s="2" t="s"><v>6</v></c><c r="D3" s="2" t="s"><v>5</v></c><c r="E3" s="2" t="s"><v>6</v></c></row>' +
-        '<row r="4" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="1" t="s"><v>1</v></c><c r="B4" s="2" t="s"><v>5</v></c><c r="C4" s="2" t="s"><v>6</v></c><c r="D4" s="2" t="s"><v>5</v></c><c r="E4" s="2" t="s"><v>6</v></c></row>' +
-        '</sheetData>' +
-        '<mergeCells count="3"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /><mergeCell ref="D1:E1" /></mergeCells>' +
-        '<ignoredErrors><ignoredError sqref="A1:E4" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="7" uniqueCount="7">' +
-        '<si><t>str2</t></si>' +
-        '<si><t>Grand Total</t></si>' +
-        '<si><t>Field3 (Sum)</t></si>' +
-        '<si><t>Count</t></si>' +
-        '<si><t>str1</t></si>' +
-        '<si><t>42</t></si>' +
-        '<si><t>1</t></si>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>1</v></c><c r="B2" s="2" t="n"><v>1</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>a</t></si>' +
+        '<si><t>A</t></si>' +
         '</sst>';
+    const getExpectedCells = () => {
+        return [
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+        ];
+    };
 
-    runTest(
+    helper.runTest(
         assert,
         {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { dataField: 'field1', area: 'row' },
-                    { dataField: 'field2', area: 'column' },
-                    { dataField: 'field3', area: 'data', summaryType: 'sum' },
-                    { area: 'data', summaryType: 'count' }
+                    { area: 'row', dataField: 'row1', dataType: "string" },
+                    { area: 'column', dataField: 'col1', dataType: "string" },
+                    { area: 'data', summaryType: 'count', dataType: "number" }
                 ],
-                store: [{ field1: 'str1', field2: 'str2', field3: 42 }]
+                store: [
+                    { row1: 'A', col1: 'a' },
+                ]
             },
-            dataFieldArea: 'column'
         },
-        { styles, worksheet, sharedStrings }
+        { getExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("dataFieldArea: row", function(assert) {
-    const styles = STYLESHEET_HEADER_XML +
-        BASE_STYLE_XML +
+QUnit.test("Export [string x string x number] with column grand totals", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '</cellXfs>' +
-        STYLESHEET_FOOTER_XML;
-    const worksheet = internals.WORKSHEET_HEADER_XML +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="1" topLeftCell="C2" /></sheetView></sheetViews>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols>' +
-        '<col width="13.57" min="1" max="1" />' +
-        '<col width="13.57" min="2" max="2" />' +
-        '<col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" />' +
-        '</cols>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="2" t="s" /><c r="C1" s="0" t="s"><v>0</v></c><c r="D1" s="0" t="s"><v>1</v></c></row>' +
-        '<row r="2" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>2</v></c><c r="B2" s="1" t="s"><v>3</v></c><c r="C2" s="2" t="s"><v>4</v></c><c r="D2" s="2" t="s"><v>4</v></c></row>' +
-        '<row r="3" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="1" t="s" /><c r="B3" s="1" t="s"><v>5</v></c><c r="C3" s="2" t="s"><v>6</v></c><c r="D3" s="2" t="s"><v>6</v></c></row>' +
-        '<row r="4" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="1" t="s"><v>1</v></c><c r="B4" s="1" t="s"><v>3</v></c><c r="C4" s="2" t="s"><v>4</v></c><c r="D4" s="2" t="s"><v>4</v></c></row>' +
-        '<row r="5" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="1" t="s" /><c r="B5" s="1" t="s"><v>5</v></c><c r="C5" s="2" t="s"><v>6</v></c><c r="D5" s="2" t="s"><v>6</v></c></row>' +
-        '</sheetData>' +
-        '<mergeCells count="3"><mergeCell ref="A1:B1" /><mergeCell ref="A2:A3" /><mergeCell ref="A4:A5" /></mergeCells>' +
-        '<ignoredErrors><ignoredError sqref="A1:D5" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="7" uniqueCount="7">' +
-        '<si><t>str2</t></si>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>1</v></c><c r="B2" s="2" t="n"><v>1</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
         '<si><t>Grand Total</t></si>' +
-        '<si><t>str1</t></si>' +
-        '<si><t>Field3 (Sum)</t></si>' +
-        '<si><t>42</t></si>' +
-        '<si><t>Count</t></si>' +
-        '<si><t>1</t></si>' +
+        '<si><t>A</t></si>' +
         '</sst>';
+    const getExpectedCells = () => {
+        return [
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'Grand Total' },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+        ];
+    };
 
-    runTest(
+    helper.runTest(
         assert,
         {
+            showColumnGrandTotals: true,
+            showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { dataField: 'field1', area: 'row' },
-                    { dataField: 'field2', area: 'column' },
-                    { dataField: 'field3', area: 'data', summaryType: 'sum' },
-                    { area: 'data', summaryType: 'count' }
+                    { area: 'row', dataField: 'row1', dataType: "string" },
+                    { area: 'data', summaryType: 'count', dataType: "number" }
                 ],
-                store: [{ field1: 'str1', field2: 'str2', field3: 42 }]
+                store: [
+                    { row1: 'A', col1: 'a' },
+                ]
             },
-            dataFieldArea: 'row'
         },
-        { styles, worksheet, sharedStrings }
+        { getExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Rows: string, Columns: string, Data: sum(number format as currency)", function(assert) {
-    const styles = STYLESHEET_HEADER_XML +
-        '<numFmts count="1"><numFmt numFmtId="165" formatCode="$#,##0_);\\($#,##0\\)" /></numFmts>' +
-        BASE_STYLE_XML +
+QUnit.test("Export [string x string x number] with row grand totals", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="3">' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>1</v></c><c r="B2" s="2" t="n"><v>1</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>a</t></si>' +
+        '<si><t>Grand Total</t></si>' +
+        '</sst>';
+    const getExpectedCells = () => {
+        return [
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'Grand Total' },
+            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+        ];
+    };
+
+    helper.runTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: true,
+            dataSource: {
+                fields: [
+                    { area: 'column', dataField: 'col1', dataType: "string" },
+                    { area: 'data', summaryType: 'count', dataType: "number" }
+                ],
+                store: [
+                    { row1: 'A', col1: 'a' },
+                ]
+            },
+        },
+        { getExpectedCells, styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Export [string x string x number] with 'format: currency'", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        '<numFmts count=\"1\"><numFmt numFmtId=\"165\" formatCode=\"$#,##0_);\\($#,##0\\)\" /></numFmts>' +
+        helper.BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="1" numFmtId="165"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '</cellXfs>' +
-        STYLESHEET_FOOTER_XML;
-    const worksheet = internals.WORKSHEET_HEADER_XML +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols>' +
-        '<col width="13.57" min="1" max="1" />' +
-        '<col width="13.57" min="2" max="2" />' +
-        '<col width="13.57" min="3" max="3" />' +
-        '</cols>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c><c r="C1" s="0" t="s"><v>1</v></c></row>' +
-        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>2</v></c><c r="B2" s="2" t="n"><v>42</v></c><c r="C2" s="2" t="n"><v>42</v></c></row>' +
-        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="1" t="s"><v>1</v></c><c r="B3" s="2" t="n"><v>42</v></c><c r="C3" s="2" t="n"><v>42</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C3" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
-        '<si><t>str2</t></si>' +
-        '<si><t>Grand Total</t></si>' +
-        '<si><t>str1</t></si>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>1</v></c><c r="B2" s="2" t="n"><v>1</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>a</t></si>' +
+        '<si><t>A</t></si>' +
         '</sst>';
+    const getExpectedCells = () => {
+        return [
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+        ];
+    };
 
-    runTest(
+    helper.runTest(
         assert,
         {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { dataField: 'field1', area: 'row' },
-                    { dataField: 'field2', area: 'column' },
-                    { dataField: 'field3', area: 'data', summaryType: 'sum', format: 'currency' }
+                    { area: 'row', dataField: 'row1', dataType: "string" },
+                    { area: 'column', dataField: 'col1', dataType: "string" },
+                    { area: 'data', summaryType: 'count', dataType: "number", format: 'currency' }
                 ],
-                store: [{ field1: 'str1', field2: 'str2', field3: 42 }]
-            }
+                store: [
+                    { row1: 'A', col1: 'a' },
+                ]
+            },
         },
-        { styles, worksheet, sharedStrings }
+        { getExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
-QUnit.test("Rows: [string, string], Columns: [string, string], Data: sum(number)", function(assert) {
-    const styles = STYLESHEET_HEADER_XML +
-        BASE_STYLE_XML +
+QUnit.test("Export [string x string/string x number]", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '</cellXfs>' +
-        STYLESHEET_FOOTER_XML;
-    const worksheet = internals.WORKSHEET_HEADER_XML +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="2" topLeftCell="C3" /></sheetView></sheetViews>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="2" topLeftCell="B3" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols>' +
-        '<col width="13.57" min="1" max="1" />' +
-        '<col width="13.57" min="2" max="2" />' +
-        '<col width="13.57" min="3" max="3" />' +
-        '<col width="13.57" min="4" max="4" />' +
-        '<col width="13.57" min="5" max="5" />' +
-        '</cols>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="2" t="s" /><c r="C1" s="0" t="s"><v>0</v></c><c r="D1" s="0" t="s"><v>1</v></c><c r="E1" s="0" t="s"><v>2</v></c></row>' +
-        '<row r="2" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="2" t="s" /><c r="B2" s="2" t="s" /><c r="C2" s="0" t="s"><v>3</v></c><c r="D2" s="0" t="s" /><c r="E2" s="0" t="s" /></row>' +
-        '<row r="3" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="1" t="s"><v>4</v></c><c r="B3" s="1" t="s"><v>5</v></c><c r="C3" s="2" t="s"><v>6</v></c><c r="D3" s="2" t="s"><v>6</v></c><c r="E3" s="2" t="s"><v>6</v></c></row>' +
-        '<row r="4" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="1" t="s"><v>7</v></c><c r="B4" s="1" t="s" /><c r="C4" s="2" t="s"><v>6</v></c><c r="D4" s="2" t="s"><v>6</v></c><c r="E4" s="2" t="s"><v>6</v></c></row>' +
-        '<row r="5" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A5" s="1" t="s"><v>2</v></c><c r="B5" s="1" t="s" /><c r="C5" s="2" t="s"><v>6</v></c><c r="D5" s="2" t="s"><v>6</v></c><c r="E5" s="2" t="s"><v>6</v></c></row>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c><c r="C1" s="0" t="s" /></row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="2" t="n" /><c r="B2" s="0" t="s"><v>1</v></c><c r="C2" s="0" t="s"><v>2</v></c></row>' +
+        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="1" t="s"><v>3</v></c><c r="B3" s="2" t="n"><v>1</v></c><c r="C3" s="2" t="n"><v>2</v></c></row>' +
         '</sheetData>' +
-        '<mergeCells count="5"><mergeCell ref="A1:B2" /><mergeCell ref="D1:D2" /><mergeCell ref="E1:E2" /><mergeCell ref="A4:B4" /><mergeCell ref="A5:B5" /></mergeCells>' +
-        '<ignoredErrors><ignoredError sqref="A1:E5" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = SHARED_STRINGS_HEADER_XML + ' count="8" uniqueCount="8">' +
-        '<si><t>col1</t></si>' +
-        '<si><t>col1 Total</t></si>' +
-        '<si><t>Grand Total</t></si>' +
-        '<si><t>col2</t></si>' +
-        '<si><t>row1</t></si>' +
-        '<si><t>row2</t></si>' +
-        '<si><t>42</t></si>' +
-        '<si><t>row1 Total</t></si>' +
+        '<mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /></mergeCells>' +
+        '</worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
+        '<si><t>a</t></si>' +
+        '<si><t>a1</t></si>' +
+        '<si><t>a2</t></si>' +
+        '<si><t>A</t></si>' +
         '</sst>';
+    const getExpectedCells = () => {
+        return [
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 1, _excelCellValue: 'a1' },
+            { area: 'column', columnIndex: 1, rowIndex: 1, _excelCellValue: 'a2' },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+            { area: 'data', columnIndex: 1, rowIndex: 0, _excelCellValue: 2 },
+        ];
+    };
 
-    runTest(
+    helper.runTest(
         assert,
         {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
             dataSource: {
                 fields: [
-                    { dataField: 'row1', area: 'row', expanded: true },
-                    { dataField: 'row2', area: 'row' },
-                    { dataField: 'col1', area: 'column', expanded: true },
-                    { dataField: 'col2', area: 'column' },
-                    { summaryType: 'sum', dataField: 'data1', area: 'data' }
+                    { area: 'row', dataField: 'row1', dataType: "string" },
+                    { area: 'column', dataField: 'col1', dataType: "string", expanded: true, showTotals: false },
+                    { area: 'column', dataField: 'col2', dataType: "string" },
+                    { area: 'data', summaryType: 'count', dataType: "number" }
                 ],
                 store: [
-                    { row1: 'row1', row2: 'row2', col1: 'col1', col2: 'col2', data1: 42 }
+                    { row1: 'A', col1: 'a', col2: 'a1' },
+                    { row1: 'A', col1: 'a', col2: 'a2' },
+                    { row1: 'A', col1: 'a', col2: 'a2' },
                 ]
-            }
+            },
         },
-        { styles, worksheet, sharedStrings }
+        { getExpectedCells, styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Export [string x string/string x number] with column totals", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="3">' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="2" topLeftCell="B3" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /><col width="13.57" min="4" max="4" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c><c r="C1" s="0" t="s" /><c r="D1" s="0" t="s"><v>1</v></c></row>' +
+        '<row r="2" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="2" t="n" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c><c r="D2" s="0" t="s" /></row>' +
+        '<row r="3" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="1" t="s"><v>4</v></c><c r="B3" s="2" t="n"><v>1</v></c><c r="C3" s="2" t="n"><v>2</v></c><c r="D3" s="2" t="n"><v>3</v></c></row>' +
+        '</sheetData>' +
+        '<mergeCells count="3"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /><mergeCell ref="D1:D2" /></mergeCells>' +
+        '</worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="5" uniqueCount="5">' +
+        '<si><t>a</t></si>' +
+        '<si><t>a Total</t></si>' +
+        '<si><t>a1</t></si>' +
+        '<si><t>a2</t></si>' +
+        '<si><t>A</t></si>' +
+        '</sst>';
+    const getExpectedCells = () => {
+        return [
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
+            { area: 'column', columnIndex: 1, rowIndex: 0, _excelCellValue: 'a Total' },
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 1, _excelCellValue: 'a1' },
+            { area: 'column', columnIndex: 1, rowIndex: 1, _excelCellValue: 'a2' },
+            { area: 'column', columnIndex: 1, rowIndex: 0, _excelCellValue: undefined },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+            { area: 'data', columnIndex: 1, rowIndex: 0, _excelCellValue: 2 },
+            { area: 'data', columnIndex: 2, rowIndex: 0, _excelCellValue: 3 },
+        ];
+    };
+
+    helper.runTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: "string" },
+                    { area: 'column', dataField: 'col1', dataType: "string", expanded: true, showTotals: true },
+                    { area: 'column', dataField: 'col2', dataType: "string" },
+                    { area: 'data', summaryType: 'count', dataType: "number" }
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', col2: 'a1' },
+                    { row1: 'A', col1: 'a', col2: 'a2' },
+                    { row1: 'A', col1: 'a', col2: 'a2' },
+                ]
+            },
+        },
+        { getExpectedCells, styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Export [string/string x string x number]", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="3">' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="1" topLeftCell="C2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="2" t="n" /><c r="C1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>1</v></c><c r="B2" s="1" t="s"><v>2</v></c><c r="C2" s="2" t="n"><v>1</v></c></row>' +
+        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="1" t="s" /><c r="B3" s="1" t="s"><v>3</v></c><c r="C3" s="2" t="n"><v>2</v></c></row>' +
+        '</sheetData>' +
+        '<mergeCells count="2"><mergeCell ref="A1:B1" /><mergeCell ref="A2:A3" /></mergeCells>' +
+        '</worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
+        '<si><t>a</t></si>' +
+        '<si><t>A</t></si>' +
+        '<si><t>A1</t></si>' +
+        '<si><t>A2</t></si>' +
+        '</sst>';
+    const getExpectedCells = () => {
+        return [
+            { },
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+            { area: 'row', columnIndex: 1, rowIndex: 0, _excelCellValue: 'A1' },
+            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
+            { area: 'row', columnIndex: 0, rowIndex: 1, _excelCellValue: 'A2' },
+            { area: 'data', columnIndex: 0, rowIndex: 1, _excelCellValue: 2 },
+        ];
+    };
+
+    helper.runTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: "string", expanded: true, showTotals: false },
+                    { area: 'row', dataField: 'row2' },
+                    { area: 'column', dataField: 'col1', dataType: "string" },
+                    { area: 'data', summaryType: 'count', dataType: "number" }
+                ],
+                store: [
+                    { row1: 'A', row2: 'A1', col1: 'a' },
+                    { row1: 'A', row2: 'A2', col1: 'a' },
+                    { row1: 'A', row2: 'A2', col1: 'a' },
+                ]
+            },
+        },
+        { getExpectedCells, styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Export [string/string x string x number] with row totals", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="3">' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="1" topLeftCell="C2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="2" t="n" /><c r="C1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>1</v></c><c r="B2" s="1" t="s"><v>2</v></c><c r="C2" s="2" t="n"><v>1</v></c></row>' +
+        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="1" t="s" /><c r="B3" s="1" t="s"><v>3</v></c><c r="C3" s="2" t="n"><v>2</v></c></row>' +
+        '<row r="4" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A4" s="1" t="s"><v>4</v></c><c r="B4" s="1" t="s" /><c r="C4" s="2" t="n"><v>3</v></c></row>' +
+        '</sheetData>' +
+        '<mergeCells count="3"><mergeCell ref="A1:B1" /><mergeCell ref="A2:A3" /><mergeCell ref="A4:B4" /></mergeCells>' +
+        '</worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="5" uniqueCount="5">' +
+        '<si><t>a</t></si>' +
+        '<si><t>A</t></si>' +
+        '<si><t>A1</t></si>' +
+        '<si><t>A2</t></si>' +
+        '<si><t>A Total</t></si>' +
+        '</sst>';
+    const getExpectedCells = () => {
+        return [
+            { },
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+            { area: 'row', columnIndex: 1, rowIndex: 0, _excelCellValue: 'A1' },
+            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
+            { area: 'row', columnIndex: 0, rowIndex: 1, _excelCellValue: 'A2' },
+            { area: 'data', columnIndex: 0, rowIndex: 1, _excelCellValue: 2 },
+            { area: 'row', columnIndex: 0, rowIndex: 2, _excelCellValue: 'A Total' },
+            { area: 'row', columnIndex: 0, rowIndex: 2, _excelCellValue: undefined },
+            { area: 'data', columnIndex: 0, rowIndex: 2, _excelCellValue: 3 },
+        ];
+    };
+
+    helper.runTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: "string", expanded: true, showTotals: true },
+                    { area: 'row', dataField: 'row2' },
+                    { area: 'column', dataField: 'col1', dataType: "string" },
+                    { area: 'data', summaryType: 'count', dataType: "number" }
+                ],
+                store: [
+                    { row1: 'A', row2: 'A1', col1: 'a' },
+                    { row1: 'A', row2: 'A2', col1: 'a' },
+                    { row1: 'A', row2: 'A2', col1: 'a' },
+                ]
+            },
+        },
+        { getExpectedCells, styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Export [string x string x number,number] with 'dataFieldArea:column'", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="3">' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="2" topLeftCell="B3" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c><c r="C1" s="0" t="s" /></row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="2" t="n" /><c r="B2" s="0" t="s"><v>1</v></c><c r="C2" s="0" t="s"><v>2</v></c></row>' +
+        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="1" t="s"><v>3</v></c><c r="B3" s="2" t="n"><v>1</v></c><c r="C3" s="2" t="n"><v>42</v></c></row>' +
+        '</sheetData><mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /></mergeCells></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
+        '<si><t>a</t></si>' +
+        '<si><t>Count</t></si>' +
+        '<si><t>Data1 (Sum)</t></si>' +
+        '<si><t>A</t></si>' +
+        '</sst>';
+    const getExpectedCells = () => {
+        return [
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+        ];
+    };
+
+    helper.runTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataFieldArea: 'column',
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: "string" },
+                    { area: 'column', dataField: 'col1', dataType: "string" },
+                    { area: 'data', summaryType: 'count', dataType: "number" },
+                    { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: "number" }
+                ],
+                store: [
+                    { row1: 'A', col1: 'a', data1: 42 },
+                ]
+            },
+        },
+        { getExpectedCells, styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Export [string x string x number,number] with 'dataFieldArea:row'", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="3">' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>1</v></c><c r="B2" s="2" t="n"><v>1</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>a</t></si>' +
+        '<si><t>A</t></si>' +
+        '</sst>';
+    const getExpectedCells = () => {
+        return [
+            { },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
+            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+        ];
+    };
+
+    helper.runTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataFieldArea: 'row',
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: "string" },
+                    { area: 'column', dataField: 'col1', dataType: "string" },
+                    { area: 'data', summaryType: 'count', dataType: "number", caption: 'count1' },
+                    { area: 'data', summaryType: 'count', dataType: "number", caption: 'count2' }
+                ],
+                store: [
+                    { row1: 'A', col1: 'a' },
+                ]
+            },
+        },
+        { getExpectedCells, styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Check customizeExcelCell(e.component)", function(assert) {
+    let customizeExcelCellComponent;
+    helper.runTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            export: {
+                customizeExcelCell: e => {
+                    customizeExcelCellComponent = e.component;
+                }
+            },
+            onFileSaving: (e) => {
+                assert.ok(isDefined(e.component), 'isDefined(e.component)');
+                assert.ok(e.component === customizeExcelCellComponent, 'e.component === customizeExcelCellComponent');
+            }
+        }
+    );
+});
+
+QUnit.test("Set customizeExcelCell(e.wrapTextEnabled: true) for column area cells", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="4">' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="0" t="s" />' +
+        '<c r="B1" s="3" t="s"><v>0</v></c>' +
+        '</row>' +
+        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A2" s="1" t="s"><v>1</v></c>' +
+        '<c r="B2" s="2" t="n"><v>1</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+
+    helper.runTest(
+        assert,
+        {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            dataSource: {
+                fields: [
+                    { area: 'row', dataField: 'row1', dataType: "string" },
+                    { area: 'column', dataField: 'col1', dataType: "string" },
+                    { area: 'data', summaryType: 'count', dataType: "number" }
+                ],
+                store: [
+                    { row1: 'row1', col1: 'col1' }
+                ]
+            },
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    if(e.gridCell.area === 'column') {
+                        e.wrapTextEnabled = true;
+                    }
+                },
+            },
+        },
+        { styles, worksheet }
     );
 });
 
 QUnit.test("PivotGrid.wordWrapEnabled: true is not exported into Excel file", function(assert) {
-    const styles = STYLESHEET_HEADER_XML +
-        BASE_STYLE_XML +
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '</cellXfs>' +
-        STYLESHEET_FOOTER_XML;
-    const worksheet = internals.WORKSHEET_HEADER_XML +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
@@ -363,7 +723,7 @@ QUnit.test("PivotGrid.wordWrapEnabled: true is not exported into Excel file", fu
         '</row>' +
         '</sheetData></worksheet>';
 
-    runTest(
+    helper.runTest(
         assert,
         {
             wordWrapEnabled: true,
@@ -382,298 +742,6 @@ QUnit.test("PivotGrid.wordWrapEnabled: true is not exported into Excel file", fu
             export: {
                 enabled: true,
                 ignoreExcelErrors: false,
-            },
-        },
-        { styles, worksheet }
-    );
-});
-
-QUnit.test("customizeExcelCell - check (e) properties for [1x1] pivot", function(assert) {
-    runCustomizeExcelCellArgumentsTest(
-        assert,
-        {
-            showColumnGrandTotals: false,
-            showRowGrandTotals: false,
-            dataSource: {
-                fields: [
-                    { area: 'row', dataField: 'row1' },
-                    { area: 'column', dataField: 'col1' },
-                    { area: 'data', summaryType: 'count' }
-                ],
-                store: [
-                    { row1: 'A', col1: 'a' },
-                ]
-            },
-        },
-        (grid) => {
-            return [
-                { },
-                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
-            ];
-        }
-    );
-});
-
-QUnit.test("customizeExcelCell - check (e) properties for [1x2] pivot", function(assert) {
-    runCustomizeExcelCellArgumentsTest(
-        assert,
-        {
-            showColumnGrandTotals: false,
-            showRowGrandTotals: false,
-            dataSource: {
-                fields: [
-                    { area: 'row', dataField: 'row1' },
-                    { area: 'column', dataField: 'col1', expanded: true, showTotals: false },
-                    { area: 'column', dataField: 'col2' },
-                    { area: 'data', summaryType: 'count' }
-                ],
-                store: [
-                    { row1: 'A', col1: 'a', col2: 'a1' },
-                    { row1: 'A', col1: 'a', col2: 'a2' },
-                    { row1: 'A', col1: 'a', col2: 'a2' },
-                ]
-            },
-        },
-        (grid) => {
-            return [
-                { },
-                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
-                { },
-                { area: 'column', columnIndex: 0, rowIndex: 1, _excelCellValue: 'a1' },
-                { area: 'column', columnIndex: 1, rowIndex: 1, _excelCellValue: 'a2' },
-                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
-                { area: 'data', columnIndex: 1, rowIndex: 0, _excelCellValue: '2' },
-            ];
-        }
-    );
-});
-
-QUnit.test("customizeExcelCell - check (e) properties for [2x1] pivot", function(assert) {
-    runCustomizeExcelCellArgumentsTest(
-        assert,
-        {
-            showColumnGrandTotals: false,
-            showRowGrandTotals: false,
-            dataSource: {
-                fields: [
-                    { area: 'row', dataField: 'row1', expanded: true, showTotals: false },
-                    { area: 'row', dataField: 'row2' },
-                    { area: 'column', dataField: 'col1' },
-                    { area: 'data', summaryType: 'count' }
-                ],
-                store: [
-                    { row1: 'A', row2: 'A1', col1: 'a' },
-                    { row1: 'A', row2: 'A2', col1: 'a' },
-                    { row1: 'A', row2: 'A2', col1: 'a' },
-                ]
-            },
-        },
-        (grid) => {
-            return [
-                { },
-                { },
-                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-                { area: 'row', columnIndex: 1, rowIndex: 0, _excelCellValue: 'A1' },
-                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
-                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
-                { area: 'row', columnIndex: 0, rowIndex: 1, _excelCellValue: 'A2' },
-                { area: 'data', columnIndex: 0, rowIndex: 1, _excelCellValue: '2' },
-            ];
-        }
-    );
-});
-
-QUnit.test("customizeExcelCell - check (e) properties for column grand totals", function(assert) {
-    runCustomizeExcelCellArgumentsTest(
-        assert,
-        {
-            showColumnGrandTotals: true,
-            showRowGrandTotals: false,
-            dataSource: {
-                fields: [
-                    { area: 'row', dataField: 'row1' },
-                    { area: 'data', summaryType: 'count' }
-                ],
-                store: [
-                    { row1: 'A', col1: 'a' },
-                ]
-            },
-        },
-        (grid) => {
-            return [
-                { },
-                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'Grand Total' },
-                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
-            ];
-        }
-    );
-});
-
-QUnit.test("customizeExcelCell - check (e) properties for column totals", function(assert) {
-    runCustomizeExcelCellArgumentsTest(
-        assert,
-        {
-            showColumnGrandTotals: false,
-            showRowGrandTotals: false,
-            dataSource: {
-                fields: [
-                    { area: 'row', dataField: 'row1' },
-                    { area: 'column', dataField: 'col1', expanded: true, showTotals: true },
-                    { area: 'column', dataField: 'col2' },
-                    { area: 'data', summaryType: 'count' }
-                ],
-                store: [
-                    { row1: 'A', col1: 'a', col2: 'a1' },
-                    { row1: 'A', col1: 'a', col2: 'a2' },
-                    { row1: 'A', col1: 'a', col2: 'a2' },
-                ]
-            },
-        },
-        (grid) => {
-            return [
-                { },
-                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
-                { area: 'column', columnIndex: 1, rowIndex: 0, _excelCellValue: 'a Total' },
-                { },
-                { area: 'column', columnIndex: 0, rowIndex: 1, _excelCellValue: 'a1' },
-                { area: 'column', columnIndex: 1, rowIndex: 1, _excelCellValue: 'a2' },
-                { area: 'column', columnIndex: 1, rowIndex: 0, _excelCellValue: undefined },
-                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
-                { area: 'data', columnIndex: 1, rowIndex: 0, _excelCellValue: '2' },
-                { area: 'data', columnIndex: 2, rowIndex: 0, _excelCellValue: '3' },
-            ];
-        }
-    );
-});
-
-QUnit.test("customizeExcelCell - check (e) properties for row grand totals", function(assert) {
-    runCustomizeExcelCellArgumentsTest(
-        assert,
-        {
-            showColumnGrandTotals: false,
-            showRowGrandTotals: true,
-            dataSource: {
-                fields: [
-                    { area: 'column', dataField: 'col1' },
-                    { area: 'data', summaryType: 'count' }
-                ],
-                store: [
-                    { row1: 'A', col1: 'a' },
-                ]
-            },
-        },
-        (grid) => {
-            return [
-                { },
-                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'Grand Total' },
-                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
-            ];
-        }
-    );
-});
-
-QUnit.test("customizeExcelCell - check (e) properties for row totals", function(assert) {
-    runCustomizeExcelCellArgumentsTest(
-        assert,
-        {
-            showColumnGrandTotals: false,
-            showRowGrandTotals: false,
-            dataSource: {
-                fields: [
-                    { area: 'row', dataField: 'row1', expanded: true, showTotals: true },
-                    { area: 'row', dataField: 'row2' },
-                    { area: 'column', dataField: 'col1' },
-                    { area: 'data', summaryType: 'count' }
-                ],
-                store: [
-                    { row1: 'A', row2: 'A1', col1: 'a' },
-                    { row1: 'A', row2: 'A2', col1: 'a' },
-                    { row1: 'A', row2: 'A2', col1: 'a' },
-                ]
-            },
-        },
-        (grid) => {
-            return [
-                { },
-                { },
-                { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-                { area: 'row', columnIndex: 1, rowIndex: 0, _excelCellValue: 'A1' },
-                { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: '1' },
-                { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
-                { area: 'row', columnIndex: 0, rowIndex: 1, _excelCellValue: 'A2' },
-                { area: 'data', columnIndex: 0, rowIndex: 1, _excelCellValue: '2' },
-                { area: 'row', columnIndex: 0, rowIndex: 2, _excelCellValue: 'A Total' },
-                { area: 'row', columnIndex: 0, rowIndex: 2, _excelCellValue: undefined },
-                { area: 'data', columnIndex: 0, rowIndex: 2, _excelCellValue: '3' },
-            ];
-        }
-    );
-});
-
-QUnit.test("customizeExcelCell - set wrapTextEnabled: true for column area cells", function(assert) {
-    const styles = STYLESHEET_HEADER_XML +
-        BASE_STYLE_XML +
-        '<cellXfs count="4">' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="1" horizontal="center" /></xf>' +
-        '</cellXfs>' +
-        STYLESHEET_FOOTER_XML;
-    const worksheet = internals.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="0" t="s" />' +
-        '<c r="B1" s="3" t="s"><v>0</v></c>' +
-        '<c r="C1" s="3" t="s"><v>1</v></c>' +
-        '</row>' +
-        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A2" s="1" t="s"><v>2</v></c>' +
-        '<c r="B2" s="2" t="s"><v>3</v></c>' +
-        '<c r="C2" s="2" t="s"><v>3</v></c>' +
-        '</row>' +
-        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A3" s="1" t="s"><v>1</v></c>' +
-        '<c r="B3" s="2" t="s"><v>3</v></c>' +
-        '<c r="C3" s="2" t="s"><v>3</v></c>' +
-        '</row>' +
-        '</sheetData></worksheet>';
-
-    runTest(
-        assert,
-        {
-            dataSource: {
-                fields: [
-                    { area: 'row', dataField: 'row1' },
-                    { area: 'column', dataField: 'col1' },
-                    { area: 'data', summaryType: 'count' }
-                ],
-                store: [
-                    { row1: 'row1', col1: 'col1' }
-                ]
-            },
-            export: {
-                enabled: true,
-                ignoreExcelErrors: false,
-                customizeExcelCell: e => {
-                    if(e.pivotGridCell.area === 'column') {
-                        e.wrapTextEnabled = true;
-                    }
-                },
             },
         },
         { styles, worksheet }

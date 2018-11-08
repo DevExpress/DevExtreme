@@ -120,6 +120,7 @@ exports.ExportMixin = extend({}, exportMixin, {
             rtlEnabled: this.option("rtlEnabled"),
             dataFields: this.getDataSource().getAreaFields("data"),
             customizeExcelCell: this.option("export.customizeExcelCell"),
+            component: this
         });
     }
 });
@@ -266,7 +267,10 @@ exports.DataProvider = Class.inherit({
 
     customizeExcelCell: function(e, cellSourceData) {
         if(this._options.customizeExcelCell) {
-            e.pivotGridCell = cellSourceData;
+            if(isDefined(this._options) && isDefined(this._options.component)) {
+                e.component = this._options.component;
+            }
+            e.gridCell = cellSourceData;
             this._options.customizeExcelCell(e);
         }
     },
