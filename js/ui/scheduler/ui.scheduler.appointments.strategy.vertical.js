@@ -248,9 +248,10 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getAppointmentMaxWidth: function() {
-        var offset = devices.current().deviceType === "desktop" ? WEEK_APPOINTMENT_DEFAULT_OFFSET : WEEK_APPOINTMENT_MOBILE_OFFSET;
+        var offset = devices.current().deviceType === "desktop" ? WEEK_APPOINTMENT_DEFAULT_OFFSET : WEEK_APPOINTMENT_MOBILE_OFFSET,
+            width = this._defaultWidth - offset;
 
-        return (this._defaultWidth - offset) || this.getAppointmentMinSize();
+        return width > 0 ? width : this.getAppointmentMinSize();
     },
 
     calculateAppointmentWidth: function(appointment, position, isRecurring) {

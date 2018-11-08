@@ -710,6 +710,18 @@ QUnit.test("shader should have correct position after widget resize", assert => 
     assert.equal($shader.offset().left, $content.offset().left, "shader has correct position");
 });
 
+QUnit.test("shader should have correct zIndex in overlap mode", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        openedStateMode: "overlap",
+        shading: true
+    });
+
+    const $shader = $element.find("." + DRAWER_SHADER_CLASS);
+
+    assert.equal($shader.css("zIndex"), 1500, "shader has correct zIndex");
+});
+
 QUnit.module("Rtl");
 
 QUnit.test("content should have correct position if panel is visible in rtl mode", assert => {
@@ -771,6 +783,31 @@ QUnit.test("minSize and maxSize should be rendered correctly in overlap mode rtl
 
     assert.equal($panel.position().left, -100, "panel has correct left when minSize and max size are set");
     assert.equal($panelContent.position().left, -200, "panel has correct left when minSize and max size are set");
+
+    fx.off = false;
+});
+
+QUnit.test("drawer panel should be repositioned correctly after dimension changed in overlap mode rtl, slide", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        rtlEnabled: true,
+        revealMode: "slide",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+    const $panelOverlayContent = $element.find(".dx-overlay-content");
+
+    resizeCallbacks.fire();
+
+    assert.equal($panelOverlayContent.css("transform"), "matrix(1, 0, 0, 1, 0, 0)", "panel overlay content position is OK");
 
     fx.off = false;
 });
