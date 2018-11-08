@@ -371,7 +371,7 @@ var subscribes = {
             "DATE": function() {
                 var dateTimeFormat = "monthAndDay",
                     startDateString = dateLocalization.format(startDate, dateTimeFormat),
-                    isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > 24 * 3600000;
+                    isDurationMoreThanDay = (endDate.getTime() - startDate.getTime()) > 24 * toMs("hour");
 
                 var endDateString = (isDurationMoreThanDay || endDate.getDate() !== startDate.getDate()) ?
                     " - " + dateLocalization.format(endDate, dateTimeFormat) :
