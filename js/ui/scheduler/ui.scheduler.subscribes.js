@@ -678,24 +678,21 @@ var subscribes = {
     },
 
     convertDateByTimezoneBack: function(date, appointmentTimezone) {
+        var msInHour = 3600000;
         date = new Date(date);
-
-        var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"](date) / 3600000);
-
+        var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"](date) / msInHour);
         var commonTimezoneOffset = this._getTimezoneOffsetByOption(date);
-
         var appointmentTimezoneOffset = this._calculateTimezoneByValue(appointmentTimezone, date);
 
         if(typeof appointmentTimezoneOffset !== "number") {
             appointmentTimezoneOffset = clientTzOffset;
         }
 
-        var dateInUTC = date.getTime() + clientTzOffset * 3600000;
-
-        date = new Date(dateInUTC - appointmentTimezoneOffset * 3600000);
+        var dateInUTC = date.getTime() + clientTzOffset * msInHour;
+        date = new Date(dateInUTC - appointmentTimezoneOffset * msInHour);
 
         if(typeof commonTimezoneOffset === "number") {
-            date = new Date(date.setHours(date.getHours() - (commonTimezoneOffset - appointmentTimezoneOffset)));
+            date = new Date(date.getTime() - ((commonTimezoneOffset - appointmentTimezoneOffset) * msInHour));
         }
 
         return date;
