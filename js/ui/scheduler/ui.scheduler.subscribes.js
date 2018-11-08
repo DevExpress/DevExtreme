@@ -542,13 +542,14 @@ var subscribes = {
     },
 
     appendSingleAppointmentData: function(appointmentData, singleAppointmentData) {
-        var field = this.option("occurrenceExpr");
+        var result = extend({}, appointmentData),
+            field = this.option("occurrenceExpr");
 
         if(field) {
-            appointmentData[field] = singleAppointmentData;
+            result[field] = singleAppointmentData;
         }
 
-        return appointmentData;
+        return result;
     },
 
     getSingleAppointmentData: function(appointmentData) {
