@@ -557,12 +557,6 @@ var subscribes = {
         return result;
     },
 
-    getSingleAppointmentData: function(appointmentData) {
-        var field = this.option("occurrenceExpr");
-
-        return appointmentData[field];
-    },
-
     dayHasAppointment: function(day, appointment, trimTime) {
         return this.dayHasAppointment(day, appointment, trimTime);
     },
