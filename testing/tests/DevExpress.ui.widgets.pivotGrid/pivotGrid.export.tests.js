@@ -543,8 +543,13 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:column'
         return [
             { },
             { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
+            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
+            { area: undefined, columnIndex: undefined, rowIndex: undefined, _excelCellValue: undefined },
+            { area: 'column', columnIndex: 0, rowIndex: 1, _excelCellValue: 'Count' },
+            { area: 'column', columnIndex: 1, rowIndex: 1, _excelCellValue: 'Data1 (Sum)' },
             { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
             { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+            { area: 'data', columnIndex: 1, rowIndex: 0, _excelCellValue: 42 }
         ];
     };
 
