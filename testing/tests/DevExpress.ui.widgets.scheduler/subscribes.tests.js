@@ -816,8 +816,23 @@ QUnit.test("'convertDateByTimezone' should return date according to the custom t
 });
 
 QUnit.test("'convertDateByTimezone' should return date according to the custom timeZone as string", function(assert) {
-
     var timezone = { id: "Asia/Ashkhabad", value: 5 };
+    this.createInstance();
+
+    this.instance.option({
+        timeZone: timezone.id
+    });
+
+    var date = new Date(2015, 6, 3, 3),
+        timezoneDifference = date.getTimezoneOffset() * 60000 + timezone.value * 3600000;
+
+    var convertedDate = this.instance.fire("convertDateByTimezone", date);
+
+    assert.deepEqual(convertedDate, new Date(date.getTime() + timezoneDifference), "'convertDateByTimezone' works fine");
+});
+
+QUnit.test("'convertDateByTimezone' should return date according to the custom timeZone with non-integer number", function(assert) {
+    var timezone = { id: "Australia/Broken_Hill", value: 9.5 };
     this.createInstance();
 
     this.instance.option({
