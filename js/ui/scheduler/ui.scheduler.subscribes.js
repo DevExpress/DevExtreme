@@ -548,7 +548,7 @@ var subscribes = {
         var field = this.option("occurrenceExpr"),
             result = extend({}, appointmentData);
 
-        if(this._isAppointmentRecurrence(appointmentData) && typeUtils.isDefined(field) && field !== null) {
+        if(this._isAppointmentRecurrence(appointmentData) && typeUtils.isDefined(field)) {
             singleAppointmentData = singleAppointmentData || this._subscribes["getTargetedAppointmentData"].call(this, appointmentData, undefined, config.index, config.startDate);
 
             result[field] = singleAppointmentData;
