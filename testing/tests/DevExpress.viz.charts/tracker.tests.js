@@ -1727,11 +1727,13 @@ QUnit.test("update with old series when point is hovered", function(assert) {
     this.clock.tick(this.tracker.__trackerDelay);
 
     // act
-    this.tracker.updateSeries(series);
+    this.tracker.updateSeries(series, true);
 
     // assert
-    assert.notOk(point.clearHover.callCount);
-    assert.strictEqual(this.options.tooltip.stub("hide").callCount, 0);
+    assert.strictEqual(point.clearHover.callCount, 1);
+    assert.strictEqual(this.options.tooltip.stub("hide").callCount, 2);
+    assert.strictEqual(this.series.clearSelection.callCount, 1);
+    assert.strictEqual(point.clearSelection.callCount, 1);
 });
 
 QUnit.test("update with old series when point is hovered. point was disposed", function(assert) {

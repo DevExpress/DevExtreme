@@ -91,7 +91,7 @@ var baseTrackerPrototype = {
         this._prepare();
     },
 
-    updateSeries(series) {
+    updateSeries(series, resetDecorations) {
         const that = this;
         const noHoveredSeries = !(series && series.some(s => s === that.hoveredSeries) || that._hoveredPoint && that._hoveredPoint.series);
 
@@ -102,6 +102,14 @@ var baseTrackerPrototype = {
         if(noHoveredSeries) {
             that._clean();
             that._renderer.initHatching();
+        }
+
+        if(resetDecorations) {
+            that.clearSelection();
+            if(!noHoveredSeries) {
+                that._hideTooltip(that.pointAtShownTooltip);
+                that._clearHover();
+            }
         }
     },
 

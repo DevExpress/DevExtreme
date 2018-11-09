@@ -1094,7 +1094,7 @@ var BaseChart = BaseWidget.inherit({
         that._repopulateSeries();
         that._seriesPopulatedHandlerCore();
         that._populateBusinessRange();
-        that._tracker.updateSeries(that.series);
+        that._tracker.updateSeries(that.series, that._skipRender);
         that._updateLegend();
         needRedraw && that._forceRender();
     },
