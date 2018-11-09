@@ -6,8 +6,12 @@ function getMarkup(element) {
     return temp.innerHTML;
 }
 
-function fixIENamespaces(markup) {
+function fixNamespaces(markup) {
     var first = true;
+
+    if(markup.indexOf("xmlns:xlink") === -1) {
+        markup = markup.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+    }
 
     markup = markup.replace(/xmlns="[\s\S]*?"/gi, function(match) {
         if(!first) return "";
@@ -32,5 +36,5 @@ function decodeHtmlEntities(markup) {
 }
 
 exports.getSvgMarkup = function(element) {
-    return fixIENamespaces(decodeHtmlEntities(getMarkup(element)));
+    return fixNamespaces(decodeHtmlEntities(getMarkup(element)));
 };
