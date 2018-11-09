@@ -18,7 +18,8 @@ var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     dragEvents = require("events/drag"),
     DataSource = require("data/data_source/data_source").DataSource,
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
+    dateSerialization = require("core/utils/date_serialization");
 
 require("ui/scheduler/ui.scheduler");
 
@@ -248,14 +249,15 @@ QUnit.test("Recurrent Task dragging with 'occurrence' recurrenceEditMode", funct
     $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
 
     var updatedSingleItem = this.instance.option("dataSource").items()[1],
-        updatedRecurringItem = this.instance.option("dataSource").items()[0];
+        updatedRecurringItem = this.instance.option("dataSource").items()[0],
+        exceptionDate = new Date(2015, 1, 9, 1, 0, 0, 0);
 
     delete updatedSingleItem.initialCoordinates;
     delete updatedSingleItem.initialSize;
 
     assert.deepEqual(updatedSingleItem, updatedItem, "New data is correct");
 
-    assert.equal(updatedRecurringItem.recurrenceException, "20150209T010000", "Exception for recurrence appointment is correct");
+    assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ"), "Exception for recurrence appointment is correct");
 });
 
 QUnit.test("Updated single item should not have recurrenceException ", function(assert) {
