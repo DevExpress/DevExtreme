@@ -53,6 +53,8 @@ class DeltaConverter {
                 parts.push(this._convertHTML(child, offset, childLength));
             });
 
+            this._handleBreakLine(blot.children, parts);
+
             if(isRoot || blot.statics.blotName === LIST_ITEM_BLOT_NAME) {
                 return parts.join("");
             }
@@ -64,6 +66,14 @@ class DeltaConverter {
         }
 
         return blot.domNode.outerHTML;
+    }
+
+    _handleBreakLine(linkedList, parts) {
+        const BreakBlot = getQuill().import("blots/break");
+
+        if(linkedList.length === 1 && linkedList.head instanceof BreakBlot) {
+            parts.push("<br>");
+        }
     }
 
     _convertList(blot, index, length) {
