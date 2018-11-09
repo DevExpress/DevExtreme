@@ -112,7 +112,7 @@ module.exports = {
                         column = options.column,
                         renderingTemplate = that.callBase(template);
 
-                    if(renderingTemplate && column.headerCellTemplate && !column.command) {
+                    if(options.rowType === "header" && renderingTemplate && column.headerCellTemplate && !column.command) {
                         resultTemplate = {
                             render: function(options) {
                                 var $content = createCellContent(that, options.container, options.model);

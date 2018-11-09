@@ -1347,6 +1347,23 @@ QUnit.testInActiveWindow("Title is not appended for menu item of filter row", fu
     assert.equal($filterMenu.attr("title"), undefined, "title of menu item");
 });
 
+// T688843
+QUnit.test("The filter menu should be rendered correctly when specified headerCellTemplate", function(assert) {
+    // arrange
+    var $firstCell,
+        $testElement = $("#container");
+
+    $.extend(this.columns, [{ caption: "Column 1", allowFiltering: true, filterOperations: ['=', '<>'], headerCellTemplate: function() {} }]);
+
+    // act
+    this.columnHeadersView.render($testElement);
+
+    // assert
+    $firstCell = $(this.columnHeadersView.element()).find(".dx-datagrid-filter-row").children().first();
+    assert.ok($firstCell.children().first().hasClass("dx-editor-with-menu"), "editor with menu");
+});
+
+
 QUnit.module('Filter Row with real dataController and columnsController', {
     beforeEach: function() {
         this.items = [
