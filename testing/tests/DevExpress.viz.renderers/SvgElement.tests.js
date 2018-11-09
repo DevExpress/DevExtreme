@@ -495,7 +495,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         markupString = svg.markup();
 
         // assert
-        assert.strictEqual(markupString.replace(/\s*/g, ''), '<svg xmlns="http://www.w3.org/2000/svg">Some content</svg>'.replace(/\s*/g, ''));
+        assert.strictEqual(markupString.replace(/\s*/g, ''), '<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">Some content</svg>'.replace(/\s*/g, ''));
     });
 
     QUnit.test("HTML entities presented as numeric code", function(assert) {
