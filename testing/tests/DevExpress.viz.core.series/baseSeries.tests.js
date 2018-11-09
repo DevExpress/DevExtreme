@@ -570,7 +570,7 @@ QUnit.test("Update series data when points are not empty. Old points length > ne
 });
 
 QUnit.test("Create points for dataItems with coresponding series (series template)", function(assert) {
-    var options = { type: "mockType", argumentField: "arg", valueField: "val", nameField: "series", name: "1", label: { visible: false } },
+    var options = { type: "mockType", argumentField: "arg", valueField: "val", nameField: "series", name: "1", nameFieldValue: "1", label: { visible: false } },
         series = createSeries(options),
         data = [{ arg: 1, val: 10, series: "1" }, { arg: 2, val: 20, series: "2" }];
 
@@ -582,6 +582,17 @@ QUnit.test("Create points for dataItems with coresponding series (series templat
     assert.equal(series.getAllPoints()[0].mockOptions.argument, 1, "Arg");
     assert.equal(series.getAllPoints()[0].mockOptions.value, 10, "Val");
     assert.ok(series.canRenderCompleteHandle());
+});
+
+// T688232
+QUnit.test("Create points when series' name and value of value nameField are different", function(assert) {
+    var options = { type: "mockType", argumentField: "arg", valueField: "val", nameField: "series", name: "customName", nameFieldValue: "1", label: { visible: false } },
+        series = createSeries(options);
+
+    series.updateData([{ arg: 1, val: 10, series: "1" }]);
+    series.createPoints();
+
+    assert.equal(series.getAllPoints().length, 1, "Series should have 1 point");
 });
 
 QUnit.test("Update series data when points are not empty. Old points length < new points length", function(assert) {
