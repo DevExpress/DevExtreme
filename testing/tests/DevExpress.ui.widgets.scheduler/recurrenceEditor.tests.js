@@ -357,8 +357,12 @@ QUnit.test("Recurrence repeat-end editor should be rendered with right inner edi
         $repeatUntilDate = $repeat.find("." + REPEAT_DATE_EDITOR);
 
     assert.equal($repeatType.length, 1, "repeatType editor was rendered");
+
     assert.equal($repeatCount.length, 1, "repeatCount editor was rendered");
+    assert.equal($repeatCount.parent().hasClass("dx-recurrence-repeat-end-wrapper"), 1, "repeatCount editor is wrapped correctly");
+
     assert.equal($repeatUntilDate.length, 1, "repeatUntilDate editor was rendered");
+    assert.equal($repeatUntilDate.parent().hasClass("dx-recurrence-repeat-end-wrapper"), 1, "repeatUntil editor is wrapped correctly");
 });
 
 QUnit.test("Recurrence editor parts should be disabled if needed", function(assert) {
