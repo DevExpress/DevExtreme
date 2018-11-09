@@ -1185,3 +1185,19 @@ QUnit.test("Overlapping of the labels should be taken into account canvas with l
 
     assert.ok(baseChartModule.overlapping.resolveLabelOverlappingInOneDirection.lastCall.args[1].top > 0);
 });
+
+// T688232
+QUnit.module("seriesTemplate", moduleSetup);
+
+QUnit.test("change series name on customizeSeries", function(assert) {
+    var chart = this.createChart({
+        dataSource: [{ series1: "s1", arg: 1, val: 1 }, { series1: "s2", arg: 2, val: 2 }],
+        seriesTemplate: {
+            nameField: "series1",
+            customizeSeries: function(sName) { return sName === "s2" ? { name: "customName" } : {}; }
+        },
+        series: [{}, {}]
+    });
+
+    assert.strictEqual(chart.series[1].getAllPoints().length, 1);
+});

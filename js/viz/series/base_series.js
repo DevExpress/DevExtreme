@@ -353,8 +353,9 @@ Series.prototype = {
     },
 
     updateData: function(data) {
-        var that = this,
-            options = that._options;
+        const that = this;
+        const options = that._options;
+        const nameField = options.nameField;
 
         data = data || [];
 
@@ -368,7 +369,7 @@ Series.prototype = {
         that._data = data.reduce((data, dataItem, index) => {
             const pointDataItem = dataSelector(dataItem);
             if(_isDefined(pointDataItem.argument)) {
-                if((!options.nameField || dataItem[options.nameField] === this.name)) {
+                if((!nameField || dataItem[nameField] === options.nameFieldValue)) {
                     pointDataItem.index = index;
                     data.push(pointDataItem);
                 }
