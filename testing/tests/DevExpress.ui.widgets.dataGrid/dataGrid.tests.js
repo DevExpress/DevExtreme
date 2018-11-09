@@ -8004,6 +8004,30 @@ QUnit.test("change editing.allowAdding with onCellPrepared and dataSource option
     assert.strictEqual($addRowButton.length, 1, "add row button is rendered");
 });
 
+// T689294
+QUnit.test("onContentReady when there is no dataSource and stateStoring is enabled", function(assert) {
+    // arrange
+    var contentReadyCallCount = 0;
+
+    // act
+    createDataGrid({
+        stateStoring: {
+            enabled: true,
+            type: "custom",
+            customLoad: function() {
+                return {};
+            }
+        },
+        onContentReady: function() {
+            contentReadyCallCount++;
+        }
+    });
+    this.clock.tick();
+
+    // assert
+    assert.equal(contentReadyCallCount, 1);
+});
+
 QUnit.module("API methods", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

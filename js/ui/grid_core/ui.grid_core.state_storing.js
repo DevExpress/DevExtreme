@@ -133,6 +133,7 @@ module.exports = {
                             that.renderNoDataText();
                             var columnHeadersView = that.component.getView("columnHeadersView");
                             columnHeadersView && columnHeadersView.render();
+                            that.component._fireContentReadyAction();
                         }
                     });
                 }
