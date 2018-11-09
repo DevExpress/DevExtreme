@@ -847,9 +847,9 @@ var Scheduler = Widget.inherit({
                 */
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
-            groupByDate: false,
-
             allowMultipleCellSelection: true,
+            displayedAppointmentDataField: null,
+
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: "bottom",
             _appointmentTooltipCloseButton: false,
@@ -1285,6 +1285,8 @@ var Scheduler = Widget.inherit({
             case "dateSerializationFormat":
                 break;
             case "maxAppointmentsPerCell":
+                break;
+            case "displayedAppointmentDataField":
                 break;
             case "startDateExpr":
             case "endDateExpr":
@@ -2489,6 +2491,12 @@ var Scheduler = Widget.inherit({
         return result;
     },
 
+    _isAppointmentRecurrence: function(appointmentData) {
+        var recurrenceRule = this.fire("getField", "recurrenceRule", appointmentData);
+
+        return recurrenceRule && recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid;
+    },
+
     _getSingleAppointmentData: function(appointmentData, options) {
         options = options || {};
 
@@ -2500,8 +2508,6 @@ var Scheduler = Widget.inherit({
             startDate = new Date(this.fire("getField", "startDate", resultAppointmentData)),
             endDate = new Date(this.fire("getField", "endDate", resultAppointmentData)),
             appointmentDuration = endDate.getTime() - startDate.getTime(),
-            recurrenceRule = this.fire("getField", "recurrenceRule", appointmentData),
-            isRecurrence = recurrenceRule && recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid,
             updatedStartDate,
             appointmentStartDate;
 
@@ -2521,7 +2527,7 @@ var Scheduler = Widget.inherit({
                     }
                 }
 
-                if(isRecurrence) {
+                if(this._isAppointmentRecurrence(appointmentData)) {
                     appointmentStartDate = $appointment.data("dxAppointmentSettings") && $appointment.data("dxAppointmentSettings").startDate;
                     if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
@@ -2532,6 +2538,10 @@ var Scheduler = Widget.inherit({
                     updatedStartDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
                 }
             }
+        }
+
+        if(!updatedStartDate && options.startDate) {
+            updatedStartDate = options.startDate;
         }
 
         if(updatedStartDate) {

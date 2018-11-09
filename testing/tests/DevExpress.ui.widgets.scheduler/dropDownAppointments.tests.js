@@ -34,6 +34,9 @@ QUnit.module("Common", {
             showEditAppointmentPopup: function(args) {
                 this.showAppointmentPopup(args);
             },
+            appendSingleAppointmentData: function(args) {
+                return args.appointmentData;
+            }
         };
 
         this.widgetMock = new (Widget.inherit({
