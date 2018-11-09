@@ -39,7 +39,6 @@ var TABS_ITEM_CLASS = "dx-tab",
     TABS_NAV_BUTTONS_CLASS = "dx-tabs-nav-buttons",
     TABS_LEFT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-left",
     TABS_RIGHT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-right",
-    OVERFLOW_HIDDEN_CLASS = "dx-overflow-hidden",
     BUTTON_NEXT_ICON = "chevronnext",
     BUTTON_PREV_ICON = "chevronprev",
     TAB_OFFSET = 30;
@@ -335,7 +334,6 @@ QUnit.test("tabs should be wrapped into scrollable if scrollingEnabled=true", fu
     assert.ok($scrollable.length, "scroll created");
     assert.ok($scrollable.hasClass(TABS_SCROLLABLE_CLASS), "wrapper class added");
     assert.ok($scrollable.find("." + TABS_ITEM_CLASS).length, "items wrapped into scrollable");
-    assert.notOk($element.hasClass(OVERFLOW_HIDDEN_CLASS), "tabs have not overflow hidden class");
 });
 
 QUnit.test("tabs should be wrapped into scrollable for some disabled items", function(assert) {
@@ -357,7 +355,6 @@ QUnit.test("tabs should not be wrapped into scrollable for some invisible items"
     });
 
     assert.notOk(!!$element.children("." + SCROLLABLE_CLASS).length, "no scroll for invisible items");
-    assert.ok($element.hasClass(OVERFLOW_HIDDEN_CLASS), "tabs have overflow hidden class");
 });
 
 QUnit.test("scrollable should have correct option scrollByContent", function(assert) {
