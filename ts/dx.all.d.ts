@@ -924,7 +924,7 @@ declare module DevExpress.data {
         on(eventName: string, eventHandler: Function): this;
         /** Subscribes to events. */
         on(events: any): this;
-        /** Pushes changes to the store and then to the DataSource. */
+        /** Pushes data changes to the store and notifies the DataSource. */
         push(changes: Array<any>): void;
         /** Removes a data item with a specific key from the store. */
         remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
@@ -1033,7 +1033,7 @@ declare module DevExpress.data {
         pushAggregationTimeout?: number;
         /** Specifies whether the DataSource requests the total count of data items in the storage. */
         requireTotalCount?: boolean;
-        /** Specifies whether to reload data after receiving a push update. */
+        /** Specifies whether to reapply sorting, filtering, grouping, and other data processing operations after receiving a push. */
         reshapeOnPush?: boolean;
         /** Specifies the fields to search. */
         searchExpr?: string | Function | Array<string | Function>;
@@ -1468,8 +1468,6 @@ declare module DevExpress.exporter {
         column?: DevExpress.ui.dxDataGridColumn;
         /** The data object of the cell's row. */
         data?: any;
-        /** The key of the cell's row. */
-        key?: any;
         /** The type of the cell's row. */
         rowType?: string;
         /** The cell's value. */
@@ -2081,7 +2079,7 @@ declare module DevExpress.ui {
         /** Specifies whether to highlight rows and cells whose data changed. */
         highlightChanges?: boolean;
         /** Configures the load panel. */
-        loadPanel?: { enabled?: boolean | 'auto', text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean };
+        loadPanel?: { enabled?: boolean | 'auto', text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean, shading?: boolean, shadingColor?: string };
         /** Specifies text shown when the widget does not display any data. */
         noDataText?: string;
         /** A function that is executed before an adaptive detail row is rendered. */
@@ -2315,13 +2313,14 @@ declare module DevExpress.ui {
         /** Hides the column chooser. */
         hideColumnChooser(): void;
         /** Checks whether an adaptive detail row is expanded or collapsed. */
-        isAdaptiveDetailRowExpanded(key: any): void;
-        isRowFocused(key: any): void;
+        isAdaptiveDetailRowExpanded(key: any): boolean;
+        /** Checks whether a row with a specific key is focused. */
+        isRowFocused(key: any): boolean;
         /** Checks whether a row with a specific key is selected. */
         isRowSelected(key: any): boolean;
         /** Gets a data object's key. */
         keyOf(obj: any): any;
-        /** Scrolls the grid to the row with the specified key. Requires the widget's keyExpr or the Store's key option to be specified. */
+        /** Scrolls the grid to the row with the specified key. */
         navigateToRow(key: any): void;
         /** Gets the total page count. */
         pageCount(): number;
@@ -2365,14 +2364,14 @@ declare module DevExpress.ui {
         columns?: Array<dxDataGridColumn>;
         /** Specifies a function that customizes grid columns after they are created. */
         customizeColumns?: ((columns: Array<dxDataGridColumn>) => any);
-        /** Customizes data before exporting. */
+        /** Customizes data before export. You can use the exporting.customizeExcelCell function instead. */
         customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => any);
         /** Configures editing. */
         editing?: dxDataGridEditing;
         /** Configures client-side exporting. */
-        export?: { enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean, ignoreExcelErrors?: boolean, texts?: { exportTo?: string, exportAll?: string, exportSelectedRows?: string }, customizeExcelCell?: ((options: { horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right', verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top', wrapTextEnabled?: boolean, backgroundColor?: string, fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid', fillPatternColor?: string, font?: DevExpress.exporter.ExcelFont, value?: string | number | Date, numberFormat?: string, gridCell?: DevExpress.exporter.ExcelDataGridCell }) => any) };
+        export?: { enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean, ignoreExcelErrors?: boolean, texts?: { exportTo?: string, exportAll?: string, exportSelectedRows?: string }, customizeExcelCell?: ((options: { component?: dxDataGrid, horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right', verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top', wrapTextEnabled?: boolean, backgroundColor?: string, fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid', fillPatternColor?: string, font?: DevExpress.exporter.ExcelFont, value?: string | number | Date, numberFormat?: string, gridCell?: DevExpress.exporter.ExcelDataGridCell }) => any) };
         /** Configures grouping. */
-        grouping?: { autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, expandMode?: 'buttonClick' | 'rowClick', texts?: { groupContinuesMessage?: string, groupContinuedMessage?: string, groupByThisColumn?: string, ungroup?: string, ungroupAll?: string } };
+        grouping?: { expandMode?: 'buttonClick' | 'rowClick', autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, texts?: { groupContinuesMessage?: string, groupContinuedMessage?: string, groupByThisColumn?: string, ungroup?: string, ungroupAll?: string } };
         /** Configures the group panel. */
         groupPanel?: { visible?: boolean | 'auto', emptyPanelText?: string, allowColumnDragging?: boolean };
         /** Specifies which data field provides keys for data items. Applies only if data is a simple array. */
@@ -2429,7 +2428,7 @@ declare module DevExpress.ui {
     /** Configures editing. */
     export interface dxDataGridEditing extends GridBaseEditing {
         /** Specifies whether a user can add new rows. */
-        allowAdding?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject }) => boolean);
+        allowAdding?: boolean;
         /** Specifies whether a user can delete rows. It is called for each data row when defined as a function. */
         allowDeleting?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject }) => boolean);
         /** Specifies whether a user can update rows. It is called for each data row when defined as a function. */
@@ -2533,7 +2532,7 @@ declare module DevExpress.ui {
         showAnalogClock?: boolean;
         /** A format used to display date/time information. */
         type?: 'date' | 'datetime' | 'time';
-        /** Specifies whether to use an input mask converted from the displayFormat. */
+        /** Specifies whether to control user input using a mask created based on the displayFormat. */
         useMaskBehavior?: boolean;
         /** An object or a value specifying the date and time currently selected using the date box. */
         value?: Date | number | string;
@@ -2883,35 +2882,58 @@ declare module DevExpress.ui {
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
+        /** A function that is executed when the widget gets focus. */
         onFocusIn?: ((e: { component?: dxHtmlEditor, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
+        /** A function that is executed when the widget loses focus. */
         onFocusOut?: ((e: { component?: dxHtmlEditor, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
+        /** Specifies the text displayed when the input field is empty. */
         placeholder?: string;
+        /** Configures the widget's toolbar. */
         toolbar?: dxHtmlEditorToolbar;
+        /** Specifies in which markup language the value is stored. */
         valueType?: 'html' | 'markdown';
+        /** Configures variables, which are placeholders to be replaced with actual values when processing text. */
         variables?: dxHtmlEditorVariables;
     }
-    /** HtmlEditor is a WYSIWYG text editor build on top of Quill, designed to support HTML and Markdown output formats. HtmlEditor is at the Community Technology Preview (CTP) development stage. That means that the widget is available for testing, but its concept, design and behavior can be reconsidered and changed without notice. */
+    /** [tags] ctp HtmlEditor is a WYSIWYG text editor build on top of Quill, designed to support HTML and Markdown output formats. HtmlEditor is at the Community Technology Preview (CTP) development stage. That means that the widget is available for testing, but its concept, design and behavior can be reconsidered and changed without notice. */
     export class dxHtmlEditor extends Editor {
         constructor(element: Element, options?: dxHtmlEditorOptions)
         constructor(element: JQuery, options?: dxHtmlEditorOptions)
+        /** Clears the history of changes. */
         clearHistory(): void;
+        /** Deletes content from the given range. */
         delete(index: number, length: number): void;
+        /** Applies a format to the selected content. Cannot be used with embedded formats. */
         format(formatName: string, formatValue: any): void;
+        /** Applies a single block format to all lines in the given range. */
         formatLine(index: number, length: number, formatName: string, formatValue: any): void;
+        /** Applies several block formats to all lines in the given range. */
         formatLine(index: number, length: number, formats: any): void;
+        /** Applies a single text format to all characters in the given range. */
         formatText(index: number, length: number, formatName: string, formatValue: any): void;
+        /** Applies several text formats to all characters in the given range. */
         formatText(index: number, length: number, formats: any): void;
+        /** Gets formats applied to the content in the specified range. */
         getFormat(index: number, length: number): any;
+        /** Gets the entire content's length. */
         getLength(): number;
         getModule(modulePath: string): any;
+        /** Gets Quill's instance. */
         getQuillInstance(): any;
+        /** Gets the selected content's position and length. */
         getSelection(): any;
+        /** Inserts an embedded content at the specified position. */
         insertEmbed(index: number, type: string, config: any): void;
+        /** Inserts formatted text at the specified position. Used with all formats except embedded. */
         insertText(index: number, text: string, formats: any): void;
+        /** Reapplies the most recent undone change. Repeated calls reapply preceding undone changes. */
         redo(): void;
         registerModules(modules: any): void;
+        /** Removes all formatting and embedded content from the specified range. */
         removeFormat(index: number, length: number): void;
+        /** Selects and highlights content in the specified range. */
         setSelection(index: number, length: number): void;
+        /** Reverses the most recent change. Repeated calls reverse preceding changes. */
         undo(): void;
     }
     export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
@@ -3648,7 +3670,7 @@ declare module DevExpress.ui {
         /** Specifies whether or not a widget item must be displayed. */
         visible?: boolean;
         /** A widget that presents a toolbar item. */
-        widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox';
+        widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup';
     }
     /** The Popup widget is a pop-up window overlaying the current view. */
     export class dxPopup extends dxOverlay {
@@ -3681,7 +3703,7 @@ declare module DevExpress.ui {
         layout?: 'horizontal' | 'vertical';
         /** The value to be assigned to the `name` attribute of the underlying HTML element. */
         name?: string;
-        /** Specifies the currently selected value. */
+        /** Specifies the widget's value. */
         value?: any;
     }
     /** The RadioGroup is a widget that contains a set of radio buttons and allows an end user to make a single selection from the set. */
@@ -3702,7 +3724,7 @@ declare module DevExpress.ui {
         start?: number;
         /** The value to be assigned to the name attribute of the underlying `` element. */
         startName?: string;
-        /** Specifies the currently selected value. */
+        /** Specifies the widget's value. */
         value?: Array<number>;
     }
     /** The RangeSlider is a widget that allows an end user to choose a range of numeric values. */
@@ -3713,7 +3735,7 @@ declare module DevExpress.ui {
         reset(): void;
     }
     export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {
-        /** Specifies the currently selected value. */
+        /** Specifies the widget's value. */
         value?: string;
     }
     /** A base class for editors. */
@@ -4812,7 +4834,7 @@ declare module DevExpress.ui {
         visible?: boolean;
     }
     export interface dxDataGridColumn extends GridBaseColumn {
-        /** Specifies whether data from this column should be exported. */
+        /** Specifies whether data from this column should be exported. Applies only if the column is visible. */
         allowExporting?: boolean;
         /** Specifies whether the user can group data by values of this column. Applies only when grouping is enabled. */
         allowGrouping?: boolean;
@@ -4924,7 +4946,7 @@ declare module DevExpress.ui {
         validationError?: any;
         /** Specifies how the message about the validation rules that are not satisfied by this editor's value is displayed. */
         validationMessageMode?: 'always' | 'auto';
-        /** Specifies the currently selected value. */
+        /** Specifies the widget's value. */
         value?: any;
     }
     /** A base class for editors. */
@@ -5350,16 +5372,21 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: HierarchicalCollectionWidgetOptions)
     }
     export interface dxHtmlEditorToolbar {
+        /** Specifies the container in which to place the toolbar. */
         container?: string | Element | JQuery;
         items?: Array<dxHtmlEditorToolbarItem | string>;
     }
-    /** This section lists the data source fields that are used in a default template for toolbar items. */
+    /** Configures toolbar controls which allow users to format text and execute commands. */
     export interface dxHtmlEditorToolbarItem extends dxToolbarItemTemplate {
+        /** Specifies the built-in control that this object customizes or a format with multiple choices. */
         formatName?: string;
+        /** Specifies values for a format with multiple choices. Should be used with the formatName. */
         formatValues?: Array<string | number | boolean>;
     }
     export interface dxHtmlEditorVariables {
+        /** Specifies a collection of variables available for a user. */
         dataSource?: string | Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** Specifies the special character(s) that should surround the variables. */
         escapeChar?: string | Array<string>;
     }
     /** This section lists the data source fields that are used in a default template for list items. */
@@ -6061,7 +6088,7 @@ declare module DevExpress.viz {
         title?: dxChartArgumentAxisTitle;
         /** Specifies the type of the argument axis. */
         type?: 'continuous' | 'discrete' | 'logarithmic';
-        /** Defines the axis's displayed range. Cannot be wider than the wholeRange. */
+        /** Defines the axis' displayed range. Cannot be wider than the wholeRange. */
         visualRange?: VizRange | Array<number | string | Date>;
         /** Specifies how the axis's visual range should behave when chart data is updated. */
         visualRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
@@ -6378,7 +6405,7 @@ declare module DevExpress.viz {
         type?: 'continuous' | 'discrete' | 'logarithmic';
         /** Casts values to a specified data type. */
         valueType?: 'datetime' | 'numeric' | 'string';
-        /** Defines the axis's displayed range. Cannot be wider than the wholeRange. */
+        /** Defines the axis' displayed range. Cannot be wider than the wholeRange. */
         visualRange?: VizRange | Array<number | string | Date>;
         /** Defines the range where the axis can be zoomed and panned. Equals the data range when not set. */
         wholeRange?: VizRange | Array<number | string | Date>;
@@ -8315,7 +8342,7 @@ declare module DevExpress.viz {
     }
     /** This section describes the Axis object. This object represents a chart axis. */
     export class chartAxisObject {
-        /** Gets the axis's displayed range. */
+        /** Gets the axis' displayed range. */
         visualRange(): VizRange;
         /** Sets the axis's displayed range. */
         visualRange(visualRange: Array<number | string | Date> | VizRange): void;
