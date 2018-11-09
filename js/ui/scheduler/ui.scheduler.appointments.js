@@ -334,14 +334,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
         this._preventSingleAppointmentClick = false;
     },
 
-    _createItemByTemplate: function(itemTemplate, renderArgs) {
-        return itemTemplate.render({
-            model: renderArgs.itemData,
-            container: renderArgs.container,
-            index: renderArgs.index
-        });
-    },
-
     _renderAppointmentTemplate: function($container, data, model) {
         var startDate = model.settings ? new Date(this.invoke("getField", "startDate", model.settings)) : data.startDate,
             endDate = model.settings ? new Date(this.invoke("getField", "endDate", model.settings)) : data.endDate;
@@ -482,12 +474,27 @@ var SchedulerAppointments = CollectionWidget.inherit({
             $container = this._getAppointmentContainer(allDay),
             coordinateCount = item.settings.length;
 
+        var itemData = item.itemData;
+
         for(var i = 0; i < coordinateCount; i++) {
             this._currentAppointmentSettings = item.settings[i];
 
-            var $item = this.callBase(index, item.itemData, $container);
+            var $item = this.callBase(index, itemData, $container);
             $item.data("dxAppointmentSettings", item.settings[i]);
         }
+    },
+
+    _createItemByTemplate: function(itemTemplate, renderArgs) {
+        var itemData = this.invoke("appendSingleAppointmentData", {
+            appointmentData: renderArgs.itemData,
+            index: renderArgs.index,
+            startDate: this._currentAppointmentSettings.startDate
+        });
+        return itemTemplate.render({
+            model: itemData,
+            container: renderArgs.container,
+            index: renderArgs.index
+        });
     },
 
     _getAppointmentContainer: function(allDay) {

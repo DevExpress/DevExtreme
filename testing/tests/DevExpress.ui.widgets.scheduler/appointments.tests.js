@@ -153,7 +153,10 @@ var moduleOptions = {
                 };
 
                 return result;
-            }
+            },
+            appendSingleAppointmentData: function(data) {
+                return data;
+            },
         };
 
         var observer = {
