@@ -1760,12 +1760,10 @@ QUnit.test("onAppointmentAdding event args should be consistent with adding appo
 
         this.instance.addAppointment({
             startDate: new Date(Date.UTC(2016, 4, 7, 5)),
-            startDateTimeZone: "Asia/Qyzylorda", // +6:00
-            endDateTimeZone: "Asia/Qyzylorda",
             endDate: new Date(Date.UTC(2016, 4, 7, 5, 30)),
             text: 'new Date sample'
         });
-
+        this.clock.tick();
         var $appt = this.instance.$element().find("." + APPOINTMENT_CLASS),
             $contentDates = $appt.find(".dx-scheduler-appointment-content-date");
 
