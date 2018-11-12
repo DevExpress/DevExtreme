@@ -1741,7 +1741,7 @@ QUnit.test("Appointment should have a correct template with custom timezone", fu
 });
 
 QUnit.test("onAppointmentAdding event args should be consistent with adding appointment when custom timezone (T686572)", function(assert) {
-    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
 
     try {
         this.createInstance({
@@ -1761,6 +1761,8 @@ QUnit.test("onAppointmentAdding event args should be consistent with adding appo
         this.instance.addAppointment({
             startDate: new Date(Date.UTC(2016, 4, 7, 5)),
             endDate: new Date(Date.UTC(2016, 4, 7, 5, 30)),
+            startDateTimeZone: "Asia/Qyzylorda", // +6:00
+            endDateTimeZone: "Asia/Qyzylorda",
             text: 'new Date sample'
         });
         this.clock.tick();
