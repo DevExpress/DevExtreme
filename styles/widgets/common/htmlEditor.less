@@ -51,9 +51,16 @@
     .if-less-then-max-indent(@counter);
 }
 
+.dx-htmleditor {
+    display: flex;
+    flex-direction: column;
+}
+
 .dx-quill-container {
     box-sizing: border-box;
-    height: 100%;
+    display: flex;
+    flex: 1;
+    min-height: 0;
     margin: 0px;
     position: relative;
 }
@@ -75,7 +82,7 @@
     box-sizing: border-box;
     counter-reset: list-0;
     line-height: 1.42;
-    height: 100%;
+    width: 100%;
     outline: none;
     overflow-y: auto;
     padding: 12px 15px;
