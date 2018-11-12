@@ -227,6 +227,7 @@ const HtmlEditor = Editor.inherit({
             variables: this._getModuleConfigByOption("variables"),
             dropImage: this._getBaseModuleConfig(),
             clipboard: {
+                matchVisual: false,
                 matchers: [
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],

@@ -113,6 +113,32 @@ QUnit.module("Value as HTML markup", () => {
 
         assert.equal(markup, '<p><span style="font-family: Terminal;">Test</span></p>');
     });
+
+    test("editor should preserve break lines", (assert) => {
+        const expectedMarkup = "<p><br></p><p><br></p><h1>Hi!</h1><p>Te</p><p>st</p>";
+        const instance = $("#htmlEditor")
+            .html("<br><br><h1>Hi!</h1><p>Te<br>st</p>")
+            .dxHtmlEditor()
+            .dxHtmlEditor("instance");
+        const $element = instance.$element();
+        const markup = $element.find(getSelector(CONTENT_CLASS)).html();
+
+        assert.equal(instance.option("value"), expectedMarkup);
+        assert.equal(markup, expectedMarkup);
+    });
+
+    test("editor shouldn't create unexpected break lines", (assert) => {
+        const expectedMarkup = "<p>hi</p><ul><li>test</li></ul>";
+        const instance = $("#htmlEditor")
+            .html("<p>hi</p><ul><li>test</li></ul>")
+            .dxHtmlEditor()
+            .dxHtmlEditor("instance");
+        const $element = instance.$element();
+        const markup = $element.find(getSelector(CONTENT_CLASS)).html();
+
+        assert.equal(instance.option("value"), expectedMarkup);
+        assert.equal(markup, expectedMarkup);
+    });
 });
 
 
