@@ -1751,6 +1751,7 @@ QUnit.test("onAppointmentAdding event args should be consistent with adding appo
             views: ["day"],
             currentView: "day",
             dataSource: [],
+            height: 800,
             onAppointmentAdding: function(e) {
                 assert.equal(e.appointmentData.startDate, "2016-05-07T08:00:00Z", "Start date is ok");
                 assert.equal(e.appointmentData.endDate, "2016-05-07T08:30:00Z", "End date is ok");
@@ -1764,13 +1765,6 @@ QUnit.test("onAppointmentAdding event args should be consistent with adding appo
             endDateTimeZone: "Asia/Qyzylorda",
             text: 'new Date sample'
         });
-        this.clock.tick();
-        var $appt = this.instance.$element().find("." + APPOINTMENT_CLASS),
-            $contentDates = $appt.find(".dx-scheduler-appointment-content-date");
-
-        assert.equal($contentDates.first().text(), "8:00 AM", "Start date is correct");
-        assert.equal($contentDates.last().text(), "8:30 AM", "End date is correct");
-
     } finally {
         tzOffsetStub.restore();
     }
