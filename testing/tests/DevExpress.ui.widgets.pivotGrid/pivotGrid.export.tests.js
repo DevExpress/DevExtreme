@@ -34,7 +34,7 @@ QUnit.test("Export empty pivot", function(assert) {
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
         '<si><t>Grand Total</t></si>' +
         '</sst>';
-    const getExpectedCells = () => {
+    const customizeExcelCellExpectedCells = () => {
         return [
             { },
             { area: 'column', _excelCellValue: 'Grand Total' },
@@ -43,7 +43,7 @@ QUnit.test("Export empty pivot", function(assert) {
         ];
     };
 
-    helper.runTest(assert, {}, { getExpectedCells, styles, worksheet, sharedStrings });
+    helper.runGeneralTest(assert, {}, { customizeExcelCellExpectedCells, styles, worksheet, sharedStrings });
 });
 
 QUnit.test("Export [string x string x number]", function(assert) {
@@ -68,7 +68,7 @@ QUnit.test("Export [string x string x number]", function(assert) {
         '<si><t>a</t></si>' +
         '<si><t>A</t></si>' +
         '</sst>';
-    const getExpectedCells = () => {
+    const customizeExcelCellExpectedCells = () => {
         return [
             { },
             { area: 'column', _excelCellValue: 'a' },
@@ -77,7 +77,7 @@ QUnit.test("Export [string x string x number]", function(assert) {
         ];
     };
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             showColumnGrandTotals: false,
@@ -93,7 +93,7 @@ QUnit.test("Export [string x string x number]", function(assert) {
                 ]
             },
         },
-        { getExpectedCells, styles, worksheet, sharedStrings }
+        { customizeExcelCellExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
@@ -119,7 +119,7 @@ QUnit.test("Export [string x string x number] with column grand totals", functio
         '<si><t>Grand Total</t></si>' +
         '<si><t>A</t></si>' +
         '</sst>';
-    const getExpectedCells = () => {
+    const customizeExcelCellExpectedCells = () => {
         return [
             { },
             { area: 'column', _excelCellValue: 'Grand Total' },
@@ -128,7 +128,7 @@ QUnit.test("Export [string x string x number] with column grand totals", functio
         ];
     };
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             showColumnGrandTotals: true,
@@ -143,7 +143,7 @@ QUnit.test("Export [string x string x number] with column grand totals", functio
                 ]
             },
         },
-        { getExpectedCells, styles, worksheet, sharedStrings }
+        { customizeExcelCellExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
@@ -169,7 +169,7 @@ QUnit.test("Export [string x string x number] with row grand totals", function(a
         '<si><t>a</t></si>' +
         '<si><t>Grand Total</t></si>' +
         '</sst>';
-    const getExpectedCells = () => {
+    const customizeExcelCellExpectedCells = () => {
         return [
             { },
             { area: 'column', _excelCellValue: 'a' },
@@ -178,7 +178,7 @@ QUnit.test("Export [string x string x number] with row grand totals", function(a
         ];
     };
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             showColumnGrandTotals: false,
@@ -193,7 +193,7 @@ QUnit.test("Export [string x string x number] with row grand totals", function(a
                 ]
             },
         },
-        { getExpectedCells, styles, worksheet, sharedStrings }
+        { customizeExcelCellExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
@@ -220,7 +220,7 @@ QUnit.test("Export [string x string x number] with 'format: currency'", function
         '<si><t>a</t></si>' +
         '<si><t>A</t></si>' +
         '</sst>';
-    const getExpectedCells = () => {
+    const customizeExcelCellExpectedCells = () => {
         return [
             { },
             { area: 'column', _excelCellValue: 'a' },
@@ -229,7 +229,7 @@ QUnit.test("Export [string x string x number] with 'format: currency'", function
         ];
     };
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             showColumnGrandTotals: false,
@@ -245,7 +245,7 @@ QUnit.test("Export [string x string x number] with 'format: currency'", function
                 ]
             },
         },
-        { getExpectedCells, styles, worksheet, sharedStrings }
+        { customizeExcelCellExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
@@ -276,7 +276,7 @@ QUnit.test("Export [string x string/string x number]", function(assert) {
         '<si><t>a2</t></si>' +
         '<si><t>A</t></si>' +
         '</sst>';
-    const getExpectedCells = () => {
+    const customizeExcelCellExpectedCells = () => {
         return [
             { },
             { area: 'column', _excelCellValue: 'a' },
@@ -290,7 +290,7 @@ QUnit.test("Export [string x string/string x number]", function(assert) {
         ];
     };
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             showColumnGrandTotals: false,
@@ -309,7 +309,7 @@ QUnit.test("Export [string x string/string x number]", function(assert) {
                 ]
             },
         },
-        { getExpectedCells, styles, worksheet, sharedStrings }
+        { customizeExcelCellExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
@@ -341,7 +341,7 @@ QUnit.test("Export [string x string/string x number] with column totals", functi
         '<si><t>a2</t></si>' +
         '<si><t>A</t></si>' +
         '</sst>';
-    const getExpectedCells = () => {
+    const customizeExcelCellExpectedCells = () => {
         return [
             { },
             { area: 'column', _excelCellValue: 'a' },
@@ -358,7 +358,7 @@ QUnit.test("Export [string x string/string x number] with column totals", functi
         ];
     };
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             showColumnGrandTotals: false,
@@ -377,7 +377,7 @@ QUnit.test("Export [string x string/string x number] with column totals", functi
                 ]
             },
         },
-        { getExpectedCells, styles, worksheet, sharedStrings }
+        { customizeExcelCellExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
@@ -408,7 +408,7 @@ QUnit.test("Export [string/string x string x number]", function(assert) {
         '<si><t>A1</t></si>' +
         '<si><t>A2</t></si>' +
         '</sst>';
-    const getExpectedCells = () => {
+    const customizeExcelCellExpectedCells = () => {
         return [
             { },
             { },
@@ -422,7 +422,7 @@ QUnit.test("Export [string/string x string x number]", function(assert) {
         ];
     };
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             showColumnGrandTotals: false,
@@ -441,7 +441,7 @@ QUnit.test("Export [string/string x string x number]", function(assert) {
                 ]
             },
         },
-        { getExpectedCells, styles, worksheet, sharedStrings }
+        { customizeExcelCellExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
@@ -474,7 +474,7 @@ QUnit.test("Export [string/string x string x number] with row totals", function(
         '<si><t>A2</t></si>' +
         '<si><t>A Total</t></si>' +
         '</sst>';
-    const getExpectedCells = () => {
+    const customizeExcelCellExpectedCells = () => {
         return [
             { },
             { },
@@ -491,7 +491,7 @@ QUnit.test("Export [string/string x string x number] with row totals", function(
         ];
     };
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             showColumnGrandTotals: false,
@@ -510,7 +510,7 @@ QUnit.test("Export [string/string x string x number] with row totals", function(
                 ]
             },
         },
-        { getExpectedCells, styles, worksheet, sharedStrings }
+        { customizeExcelCellExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
@@ -539,7 +539,7 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:column'
         '<si><t>Data1 (Sum)</t></si>' +
         '<si><t>A</t></si>' +
         '</sst>';
-    const getExpectedCells = () => {
+    const customizeExcelCellExpectedCells = () => {
         return [
             { },
             { area: 'column', _excelCellValue: 'a' },
@@ -553,7 +553,7 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:column'
         ];
     };
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             showColumnGrandTotals: false,
@@ -571,7 +571,7 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:column'
                 ]
             },
         },
-        { getExpectedCells, styles, worksheet, sharedStrings }
+        { customizeExcelCellExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
@@ -600,7 +600,7 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:row'", 
         '<si><t>Count</t></si>' +
         '<si><t>Data1 (Sum)</t></si>' +
         '</sst>';
-    const getExpectedCells = () => {
+    const customizeExcelCellExpectedCells = () => {
         return [
             { },
             { },
@@ -614,7 +614,7 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:row'", 
         ];
     };
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             showColumnGrandTotals: false,
@@ -632,13 +632,13 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:row'", 
                 ]
             },
         },
-        { getExpectedCells, styles, worksheet, sharedStrings }
+        { customizeExcelCellExpectedCells, styles, worksheet, sharedStrings }
     );
 });
 
 QUnit.test("Check customizeExcelCell(e.component)", function(assert) {
     let customizeExcelCellComponent;
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             showColumnGrandTotals: false,
@@ -682,7 +682,7 @@ QUnit.test("Set customizeExcelCell(e.wrapTextEnabled: true) for column area cell
         '</row>' +
         '</sheetData></worksheet>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             showColumnGrandTotals: false,
@@ -736,7 +736,7 @@ QUnit.test("PivotGrid.wordWrapEnabled: true is not exported into Excel file", fu
         '</row>' +
         '</sheetData></worksheet>';
 
-    helper.runTest(
+    helper.runGeneralTest(
         assert,
         {
             wordWrapEnabled: true,
