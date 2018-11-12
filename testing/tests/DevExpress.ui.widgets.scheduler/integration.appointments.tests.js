@@ -1740,6 +1740,43 @@ QUnit.test("Appointment should have a correct template with custom timezone", fu
     }
 });
 
+QUnit.test("onAppointmentAdding event args should be consistent with adding appointment when custom timezone (T686572)", function(assert) {
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
+
+    try {
+        this.createInstance({
+            currentDate: new Date(2016, 4, 7),
+            dateSerializationFormat: "yyyy-MM-ddTHH:mm:ssZ",
+            timeZone: 'Etc/UTC',
+            startDayHour: 7,
+            views: ["day"],
+            currentView: "day",
+            dataSource: [],
+            onAppointmentAdding: function(e) {
+                assert.equal(e.appointmentData.startDate, "2016-05-07T08:00:00Z", "Start date is ok");
+                assert.equal(e.appointmentData.endDate, "2016-05-07T08:30:00Z", "End date is ok");
+            }
+        });
+
+        this.instance.addAppointment({
+            startDate: new Date(Date.UTC(2016, 4, 7, 5)),
+            startDateTimeZone: "Asia/Qyzylorda", // +6:00
+            endDateTimeZone: "Asia/Qyzylorda",
+            endDate: new Date(Date.UTC(2016, 4, 7, 5, 30)),
+            text: 'new Date sample'
+        });
+
+        var $appt = this.instance.$element().find("." + APPOINTMENT_CLASS),
+            $contentDates = $appt.find(".dx-scheduler-appointment-content-date");
+
+        assert.equal($contentDates.first().text(), "8:00 AM", "Start date is correct");
+        assert.equal($contentDates.last().text(), "8:30 AM", "End date is correct");
+
+    } finally {
+        tzOffsetStub.restore();
+    }
+});
+
 QUnit.test("Appointment should have a correct template with custom timezone(T387040)", function(assert) {
     this.clock.restore();
     var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
