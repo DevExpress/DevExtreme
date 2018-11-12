@@ -10,6 +10,11 @@ var $ = require("jquery"),
     dateUtils = require("core/utils/date"),
     config = require("core/config");
 
+
+function getTimezoneDifference(date, timeZone) {
+    return date.getTimezoneOffset() * dateUtils.dateToMilliseconds("minute") + timeZone * dateUtils.dateToMilliseconds("hour");
+}
+
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler"></div>');
 });
@@ -808,7 +813,7 @@ QUnit.test("'convertDateByTimezone' should return date according to the custom t
     });
 
     var date = new Date(2015, 6, 3, 3),
-        timezoneDifference = date.getTimezoneOffset() * 60000 + timezoneValue * 3600000;
+        timezoneDifference = getTimezoneDifference(date, timezoneValue);
 
     var convertedDate = this.instance.fire("convertDateByTimezone", date);
 
@@ -824,7 +829,7 @@ QUnit.test("'convertDateByTimezone' should return date according to the custom t
     });
 
     var date = new Date(2015, 6, 3, 3),
-        timezoneDifference = date.getTimezoneOffset() * 60000 + timezone.value * 3600000;
+        timezoneDifference = getTimezoneDifference(date, timezone.value);
 
     var convertedDate = this.instance.fire("convertDateByTimezone", date);
 
@@ -840,7 +845,7 @@ QUnit.test("'convertDateByTimezone' should return date according to the custom t
     });
 
     var date = new Date(2015, 6, 3, 3),
-        timezoneDifference = date.getTimezoneOffset() * 60000 + timezone.value * 3600000;
+        timezoneDifference = getTimezoneDifference(date, timezone.value);
 
     var convertedDate = this.instance.fire("convertDateByTimezone", date);
 
