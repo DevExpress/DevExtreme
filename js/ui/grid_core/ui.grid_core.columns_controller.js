@@ -695,6 +695,10 @@ module.exports = {
                 GROUP_LOCATION = "group",
                 COLUMN_CHOOSER_LOCATION = "columnChooser";
 
+            var setFilterOperationsAsDefaultValues = function(column) {
+                column.filterOperations = column.defaultFilterOperations;
+            };
+
             var createColumn = function(that, columnOptions, userStateColumnOptions, bandColumn) {
                 var commonColumnOptions = {},
                     calculatedColumnOptions;
@@ -706,8 +710,9 @@ module.exports = {
                         };
                     }
 
+                    let result;
                     if(columnOptions.command) {
-                        return extend(true, {}, columnOptions);
+                        result = extend(true, commonColumnOptions, columnOptions);
                     } else {
                         commonColumnOptions = that.getCommonSettings(columnOptions);
                         if(userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
@@ -715,8 +720,12 @@ module.exports = {
                         }
                         calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
 
-                        return extend(true, { id: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS, commonColumnOptions, calculatedColumnOptions, columnOptions, { selector: null });
+                        result = extend(true, { id: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS, commonColumnOptions, calculatedColumnOptions, columnOptions, { selector: null });
                     }
+                    if(columnOptions.filterOperations === columnOptions.defaultFilterOperations) {
+                        setFilterOperationsAsDefaultValues(result);
+                    }
+                    return result;
                 }
             };
 
@@ -2292,7 +2301,7 @@ module.exports = {
                         column.customizeText = column.customizeText || getCustomizeTextByDataType(dataType);
                         column.defaultFilterOperations = column.defaultFilterOperations || !lookup && DATATYPE_OPERATIONS[dataType] || [];
                         if(!isDefined(column.filterOperations)) {
-                            column.filterOperations = column.defaultFilterOperations;
+                            setFilterOperationsAsDefaultValues(column);
                         }
                         column.defaultFilterOperation = column.filterOperations && column.filterOperations[0] || "=";
                         column.showEditorAlways = isDefined(column.showEditorAlways) ? column.showEditorAlways : (dataType === "boolean" && !column.cellTemplate);
