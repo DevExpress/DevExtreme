@@ -460,22 +460,6 @@ var AppointmentModel = Class.inherit({
         return startDateCopy.getTime() !== endDateCopy.getTime();
     },
 
-    _mapDateFieldsDependOnTZ: function(appointment, tz) {
-        function convert(date) {
-            date = dateUtils.makeDate(date);
-
-            var tzDiff = tz.value * 3600000 + tz.clientOffset;
-
-            return new Date(date.getTime() - tzDiff);
-        }
-
-        var startDate = this._dataAccessors.getter.startDate(appointment),
-            endDate = this._dataAccessors.getter.endDate(appointment);
-
-        this._dataAccessors.setter.startDate(appointment, convert(startDate));
-        this._dataAccessors.setter.endDate(appointment, convert(endDate));
-    },
-
     customizeDateFilter: function(dateFilter, timeZoneProcessor) {
         var currentFilter = extend(true, [], dateFilter);
 
@@ -498,10 +482,6 @@ var AppointmentModel = Class.inherit({
     },
 
     add: function(data, tz) {
-        if(tz && tz.value !== undefined) {
-            this._mapDateFieldsDependOnTZ(data, tz);
-        }
-
         return this._dataSource.store().insert(data).done((function() {
             this._dataSource.load();
         }).bind(this));
