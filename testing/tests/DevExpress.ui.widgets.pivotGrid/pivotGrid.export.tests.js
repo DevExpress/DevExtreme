@@ -37,8 +37,8 @@ QUnit.test("Export empty pivot", function(assert) {
     const getExpectedCells = () => {
         return [
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'Grand Total' },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'Grand Total' },
+            { area: 'column', _excelCellValue: 'Grand Total' },
+            { area: 'row', _excelCellValue: 'Grand Total' },
             undefined,
         ];
     };
@@ -71,9 +71,9 @@ QUnit.test("Export [string x string x number]", function(assert) {
     const getExpectedCells = () => {
         return [
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+            { area: 'column', _excelCellValue: 'a' },
+            { area: 'row', _excelCellValue: 'A' },
+            { area: 'data', _excelCellValue: 1 },
         ];
     };
 
@@ -122,9 +122,9 @@ QUnit.test("Export [string x string x number] with column grand totals", functio
     const getExpectedCells = () => {
         return [
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'Grand Total' },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+            { area: 'column', _excelCellValue: 'Grand Total' },
+            { area: 'row', _excelCellValue: 'A' },
+            { area: 'data', _excelCellValue: 1 },
         ];
     };
 
@@ -172,9 +172,9 @@ QUnit.test("Export [string x string x number] with row grand totals", function(a
     const getExpectedCells = () => {
         return [
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'Grand Total' },
-            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+            { area: 'column', _excelCellValue: 'a' },
+            { area: 'row', _excelCellValue: 'Grand Total' },
+            { area: 'data', _excelCellValue: 1 },
         ];
     };
 
@@ -223,9 +223,9 @@ QUnit.test("Export [string x string x number] with 'format: currency'", function
     const getExpectedCells = () => {
         return [
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+            { area: 'column', _excelCellValue: 'a' },
+            { area: 'row', _excelCellValue: 'A' },
+            { area: 'data', _excelCellValue: 1 },
         ];
     };
 
@@ -279,14 +279,14 @@ QUnit.test("Export [string x string/string x number]", function(assert) {
     const getExpectedCells = () => {
         return [
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
+            { area: 'column', _excelCellValue: 'a' },
+            { area: 'column', _excelCellValue: undefined },
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 1, _excelCellValue: 'a1' },
-            { area: 'column', columnIndex: 1, rowIndex: 1, _excelCellValue: 'a2' },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
-            { area: 'data', columnIndex: 1, rowIndex: 0, _excelCellValue: 2 },
+            { area: 'column', _excelCellValue: 'a1' },
+            { area: 'column', _excelCellValue: 'a2' },
+            { area: 'row', _excelCellValue: 'A' },
+            { area: 'data', _excelCellValue: 1 },
+            { area: 'data', _excelCellValue: 2 },
         ];
     };
 
@@ -344,17 +344,17 @@ QUnit.test("Export [string x string/string x number] with column totals", functi
     const getExpectedCells = () => {
         return [
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
-            { area: 'column', columnIndex: 1, rowIndex: 0, _excelCellValue: 'a Total' },
+            { area: 'column', _excelCellValue: 'a' },
+            { area: 'column', _excelCellValue: undefined },
+            { area: 'column', _excelCellValue: 'a Total' },
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 1, _excelCellValue: 'a1' },
-            { area: 'column', columnIndex: 1, rowIndex: 1, _excelCellValue: 'a2' },
-            { area: 'column', columnIndex: 1, rowIndex: 0, _excelCellValue: undefined },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
-            { area: 'data', columnIndex: 1, rowIndex: 0, _excelCellValue: 2 },
-            { area: 'data', columnIndex: 2, rowIndex: 0, _excelCellValue: 3 },
+            { area: 'column', _excelCellValue: 'a1' },
+            { area: 'column', _excelCellValue: 'a2' },
+            { area: 'column', _excelCellValue: undefined },
+            { area: 'row', _excelCellValue: 'A' },
+            { area: 'data', _excelCellValue: 1 },
+            { area: 'data', _excelCellValue: 2 },
+            { area: 'data', _excelCellValue: 3 },
         ];
     };
 
@@ -412,13 +412,13 @@ QUnit.test("Export [string/string x string x number]", function(assert) {
         return [
             { },
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-            { area: 'row', columnIndex: 1, rowIndex: 0, _excelCellValue: 'A1' },
-            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
-            { area: 'row', columnIndex: 0, rowIndex: 1, _excelCellValue: 'A2' },
-            { area: 'data', columnIndex: 0, rowIndex: 1, _excelCellValue: 2 },
+            { area: 'column', _excelCellValue: 'a' },
+            { area: 'row', _excelCellValue: 'A' },
+            { area: 'row', _excelCellValue: 'A1' },
+            { area: 'data', _excelCellValue: 1 },
+            { area: 'row', _excelCellValue: undefined },
+            { area: 'row', _excelCellValue: 'A2' },
+            { area: 'data', _excelCellValue: 2 },
         ];
     };
 
@@ -478,16 +478,16 @@ QUnit.test("Export [string/string x string x number] with row totals", function(
         return [
             { },
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-            { area: 'row', columnIndex: 1, rowIndex: 0, _excelCellValue: 'A1' },
-            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
-            { area: 'row', columnIndex: 0, rowIndex: 1, _excelCellValue: 'A2' },
-            { area: 'data', columnIndex: 0, rowIndex: 1, _excelCellValue: 2 },
-            { area: 'row', columnIndex: 0, rowIndex: 2, _excelCellValue: 'A Total' },
-            { area: 'row', columnIndex: 0, rowIndex: 2, _excelCellValue: undefined },
-            { area: 'data', columnIndex: 0, rowIndex: 2, _excelCellValue: 3 },
+            { area: 'column', _excelCellValue: 'a' },
+            { area: 'row', _excelCellValue: 'A' },
+            { area: 'row', _excelCellValue: 'A1' },
+            { area: 'data', _excelCellValue: 1 },
+            { area: 'row', _excelCellValue: undefined },
+            { area: 'row', _excelCellValue: 'A2' },
+            { area: 'data', _excelCellValue: 2 },
+            { area: 'row', _excelCellValue: 'A Total' },
+            { area: 'row', _excelCellValue: undefined },
+            { area: 'data', _excelCellValue: 3 },
         ];
     };
 
@@ -542,14 +542,14 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:column'
     const getExpectedCells = () => {
         return [
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: undefined },
-            { area: undefined, columnIndex: undefined, rowIndex: undefined, _excelCellValue: undefined },
-            { area: 'column', columnIndex: 0, rowIndex: 1, _excelCellValue: 'Count' },
-            { area: 'column', columnIndex: 1, rowIndex: 1, _excelCellValue: 'Data1 (Sum)' },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
-            { area: 'data', columnIndex: 1, rowIndex: 0, _excelCellValue: 42 }
+            { area: 'column', _excelCellValue: 'a' },
+            { area: 'column', _excelCellValue: undefined },
+            { },
+            { area: 'column', _excelCellValue: 'Count' },
+            { area: 'column', _excelCellValue: 'Data1 (Sum)' },
+            { area: 'row', _excelCellValue: 'A' },
+            { area: 'data', _excelCellValue: 1 },
+            { area: 'data', _excelCellValue: 42 }
         ];
     };
 
@@ -586,23 +586,31 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:row'", 
         helper.STYLESHEET_FOOTER_XML;
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="1" ySplit="1" topLeftCell="B2" /></sheetView></sheetViews>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" xSplit="2" ySplit="1" topLeftCell="C2" /></sheetView></sheetViews>' +
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /></cols>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="0" t="s"><v>0</v></c></row>' +
-        '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>1</v></c><c r="B2" s="2" t="n"><v>1</v></c></row>' +
-        '</sheetData></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="2" t="n" /><c r="C1" s="0" t="s"><v>0</v></c></row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>1</v></c><c r="B2" s="1" t="s"><v>2</v></c><c r="C2" s="2" t="n"><v>1</v></c></row>' +
+        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="1" t="s" /><c r="B3" s="1" t="s"><v>3</v></c><c r="C3" s="2" t="n"><v>42</v></c></row>' +
+        '</sheetData><mergeCells count="2"><mergeCell ref="A1:B1" /><mergeCell ref="A2:A3" /></mergeCells></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
         '<si><t>a</t></si>' +
         '<si><t>A</t></si>' +
+        '<si><t>Count</t></si>' +
+        '<si><t>Data1 (Sum)</t></si>' +
         '</sst>';
     const getExpectedCells = () => {
         return [
             { },
-            { area: 'column', columnIndex: 0, rowIndex: 0, _excelCellValue: 'a' },
-            { area: 'row', columnIndex: 0, rowIndex: 0, _excelCellValue: 'A' },
-            { area: 'data', columnIndex: 0, rowIndex: 0, _excelCellValue: 1 },
+            { },
+            { area: 'column', _excelCellValue: 'a' },
+            { area: 'row', _excelCellValue: 'A' },
+            { area: 'row', _excelCellValue: 'Count' },
+            { area: 'data', _excelCellValue: 1 },
+            { area: 'row', _excelCellValue: undefined },
+            { area: 'row', _excelCellValue: 'Data1 (Sum)' },
+            { area: 'data', _excelCellValue: 42 },
         ];
     };
 
@@ -616,11 +624,11 @@ QUnit.test("Export [string x string x number,number] with 'dataFieldArea:row'", 
                 fields: [
                     { area: 'row', dataField: 'row1', dataType: "string" },
                     { area: 'column', dataField: 'col1', dataType: "string" },
-                    { area: 'data', summaryType: 'count', dataType: "number", caption: 'count1' },
-                    { area: 'data', summaryType: 'count', dataType: "number", caption: 'count2' }
+                    { area: 'data', summaryType: 'count', dataType: "number" },
+                    { area: 'data', dataField: 'data1', summaryType: 'sum', dataType: "number" }
                 ],
                 store: [
-                    { row1: 'A', col1: 'a' },
+                    { row1: 'A', col1: 'a', data1: 42 },
                 ]
             },
         },

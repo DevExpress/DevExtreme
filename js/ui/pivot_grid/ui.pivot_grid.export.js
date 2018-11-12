@@ -58,24 +58,18 @@ exports.ExportMixin = extend({}, exportMixin, {
         for(let i = 0; i < columnsInfo.length; i++) {
             for(let j = 0; j < columnsInfo[i].length; j++) {
                 columnsInfo[i][j].area = 'column';
-                columnsInfo[i][j].columnIndex = j;
-                columnsInfo[i][j].rowIndex = i;
             }
         }
 
         for(let i = 0; i < cellsInfo.length; i++) {
             for(let j = 0; j < cellsInfo[i].length; j++) {
                 cellsInfo[i][j].area = 'data';
-                cellsInfo[i][j].columnIndex = j;
-                cellsInfo[i][j].rowIndex = i;
             }
         }
 
         for(let i = 0; i < rowsInfoItems.length; i++) {
             for(let j = 0; j < rowsInfoItems[i].length; j++) {
                 rowsInfoItems[i][j].area = 'row';
-                rowsInfoItems[i][j].columnIndex = j;
-                rowsInfoItems[i][j].rowIndex = i;
             }
         }
 
@@ -227,9 +221,7 @@ exports.DataProvider = Class.inherit({
 
         if(isDefined(item)) {
             result.cellSourceData = {
-                area: item.area,
-                columnIndex: item.columnIndex,
-                rowIndex: item.rowIndex
+                area: item.area
             };
             if(this.getCellType(rowIndex, cellIndex) === "string") {
                 result.value = item.text;
