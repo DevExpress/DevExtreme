@@ -1581,7 +1581,7 @@ var Scheduler = Widget.inherit({
                 if(this._filteredItems.length && this._isVisible()) {
                     this._appointments.option("items", this._getAppointmentsToRepaint());
 
-                    this._appointmentModel.removeUpdatedAppointment();
+                    this._appointmentModel.cleanModelState();
                 } else {
                     this._appointments.option("items", []);
                 }
