@@ -675,7 +675,7 @@ var subscribes = {
 
     convertDateByTimezone: function(date, appointmentTimezone) {
         date = new Date(date);
-        var tzOffsets = this.getComplexOffsets(date, appointmentTimezone);
+        var tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
 
         var dateInUTC = date.getTime() - tzOffsets.client * toMs("hour");
         date = new Date(dateInUTC + tzOffsets.appointment * toMs("hour"));
@@ -688,7 +688,7 @@ var subscribes = {
 
     convertDateByTimezoneBack: function(date, appointmentTimezone) {
         date = new Date(date);
-        var tzOffsets = this.getComplexOffsets(date, appointmentTimezone);
+        var tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
 
         var dateInUTC = date.getTime() + tzOffsets.client * toMs("hour");
         date = new Date(dateInUTC - tzOffsets.appointment * toMs("hour"));
@@ -699,10 +699,10 @@ var subscribes = {
 
         return date;
     },
-    getComplexOffsets: function(date, appointmentTimezone) {
-        var clientTimezoneOffset = -(this._subscribes["getClientTimezoneOffset"](date) / toMs("hour"));
-        var commonTimezoneOffset = this._getTimezoneOffsetByOption(date);
-        var appointmentTimezoneOffset = this._calculateTimezoneByValue(appointmentTimezone, date);
+    getComplexOffsets: function(scheduler, date, appointmentTimezone) {
+        var clientTimezoneOffset = -this.getClientTimezoneOffset(date) / toMs("hour");
+        var commonTimezoneOffset = scheduler._getTimezoneOffsetByOption(date);
+        var appointmentTimezoneOffset = scheduler._calculateTimezoneByValue(appointmentTimezone, date);
 
         if(typeof appointmentTimezoneOffset !== "number") {
             appointmentTimezoneOffset = clientTimezoneOffset;
