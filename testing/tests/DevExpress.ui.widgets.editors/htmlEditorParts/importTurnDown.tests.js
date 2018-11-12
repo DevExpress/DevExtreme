@@ -1,4 +1,3 @@
-
 SystemJS.config({
     map: {
         'turndown': '/testing/helpers/quillDependencies/noTurndown.js'
@@ -20,15 +19,13 @@ define(function(require) {
         });
 
         QUnit.test("initialize turndown from window", function(assert) {
-            const prevWinTurndown = window.TurndownService;
+            var prevWinTurndown = window.TurndownService;
 
-            window.TurndownService = class fakeClass {
-                constructor() {
-                    this.initialized = true;
-                }
+            window.TurndownService = function() {
+                this.initialized = true;
             };
 
-            const converter = new MarkdownConverter();
+            var converter = new MarkdownConverter();
 
             assert.ok(converter._html2Markdown.initialized);
 
