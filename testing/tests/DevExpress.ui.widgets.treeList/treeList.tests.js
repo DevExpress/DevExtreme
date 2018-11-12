@@ -831,7 +831,7 @@ QUnit.module("Expand/Collapse rows");
 // T627926
 QUnit.test("Nodes should not be shifted after expanding node on last page", function(assert) {
     // arrange
-    var done = assert.async(),
+    var clock = sinon.useFakeTimers(),
         topVisibleRowData,
         treeList = createTreeList({
             height: 120,
@@ -860,9 +860,10 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
             ]
         });
 
-    treeList.getScrollable().scrollTo({ y: 300 }); // scroll to the last page
+    try {
+        treeList.getScrollable().scrollTo({ y: 300 }); // scroll to the last page
+        clock.tick();
 
-    setTimeout(function() {
         topVisibleRowData = treeList.getTopVisibleRowData();
 
         // assert
@@ -877,8 +878,9 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
         assert.strictEqual(treeList.pageIndex(), 3, "page index");
         assert.strictEqual(treeList.pageCount(), 6, "page count");
         assert.deepEqual(treeList.getTopVisibleRowData(), topVisibleRowData, "top visible row data has not changed");
-        done();
-    }, 100);
+    } finally {
+        clock.restore();
+    }
 });
 
 // T648005
