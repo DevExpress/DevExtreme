@@ -680,7 +680,7 @@ var subscribes = {
         var dateInUTC = date.getTime() - tzOffsets.client * toMs("hour");
         date = new Date(dateInUTC + tzOffsets.appointment * toMs("hour"));
 
-        if(typeof commonTimezoneOffset === "number") {
+        if(typeof tzOffsets.common === "number") {
             date = new Date(date.getTime() + ((tzOffsets.common - tzOffsets.appointment) * toMs("hour")));
         }
         return date;
@@ -693,7 +693,7 @@ var subscribes = {
         var dateInUTC = date.getTime() + tzOffsets.client * toMs("hour");
         date = new Date(dateInUTC - tzOffsets.appointment * toMs("hour"));
 
-        if(typeof commonTimezoneOffset === "number") {
+        if(typeof tzOffsets.common === "number") {
             date = new Date(date.getTime() - ((tzOffsets.common - tzOffsets.appointment) * toMs("hour")));
         }
 
