@@ -373,4 +373,26 @@ QUnit.module("Real dataGrid", {
         assert.equal($valueText.children().length, 3, "three children items");
     });
 
+    // T687835
+    QUnit.test("the 'any of' doesn't throw exception when customizeColumns is used and column.dataType is defined", function(assert) {
+        // arrange, act
+        this.initDataGrid({
+            dataSource: [{ field: 1 }, { field: 2 }, { field: 3 }],
+            customizeColumns: function(columns) {
+            },
+            columns: [{
+                dataField: "field",
+                dataType: "number"
+            }],
+            filterValue: ["field", "anyof", [1, 2]],
+            loadingTimeout: null
+        });
+
+        // act
+        this.dataGrid.option("filterBuilderPopup.visible", true);
+
+        // assert
+        assert.equal($(".dx-popup-content .dx-filterbuilder").length, 1);
+    });
+
 });
