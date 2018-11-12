@@ -9,17 +9,17 @@ var HorizontalMonthLineRenderingStrategy = HorizontalAppointmentsStrategy.inheri
             endDate = new Date(this.endDate(appointment, position, isRecurring)),
             cellWidth = this._defaultWidth || this.getAppointmentMinSize();
 
-
         startDate = dateUtils.trimTime(startDate);
-        var fullDuration = endDate.getTime() - startDate.getTime();
-        fullDuration = this._adjustDurationByDaylightDiff(fullDuration, startDate, endDate);
 
-        var durationInHours = (fullDuration) / 3600000;
-        var width = Math.ceil(durationInHours / 24) * cellWidth;
-
+        var width = Math.ceil(this.getDurationInHour(startDate, endDate) / 24) * cellWidth;
         width = this.cropAppointmentWidth(width, cellWidth);
 
         return width;
+    },
+
+    getDurationInHour: function(startDate, endDate) {
+        var adjustedDuration = this._adjustDurationByDaylightDiff(endDate.getTime() - startDate.getTime(), startDate, endDate);
+        return adjustedDuration / dateUtils.dateToMilliseconds("hour");
     },
 
     getDeltaTime: function(args, initialSize) {
