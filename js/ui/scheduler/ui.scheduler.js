@@ -2943,6 +2943,8 @@ var Scheduler = Widget.inherit({
             this.fire("setField", "text", appointment, "");
         }
 
+        this._convertDatesByTimezoneBack(true, appointment);
+
         var addingOptions = {
             appointmentData: appointment,
             cancel: false
