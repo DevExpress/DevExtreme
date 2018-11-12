@@ -4715,7 +4715,7 @@ QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded p
         assert.ok($(".dx-datagrid-focus-overlay").is(":visible"), "focus overlay is visible");
         assert.deepEqual(that.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 398 }, "focused position");
         done();
-    }, 500);
+    }, 600);
 });
 
 // T680076
