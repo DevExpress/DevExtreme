@@ -9,7 +9,7 @@ import exportTestsHelper from "./exportTestsHelper.js";
 
 const pivotGridExportTestsHelper = Object.create(exportTestsHelper);
 
-pivotGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, customizeExcelCellExpectedCells = undefined } = {}) {
+pivotGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, getCustomizeExcelCellExpectedCells = undefined } = {}) {
     const that = this;
     const done = assert.async();
     const actualCells = [];
@@ -18,7 +18,7 @@ pivotGridExportTestsHelper.runGeneralTest = function(assert, options, { styles =
     options.export = options.export || {};
     options.export.ignoreExcelErrors = false;
 
-    if(customizeExcelCellExpectedCells) {
+    if(getCustomizeExcelCellExpectedCells) {
         const oldCustomizeExcelCell = options.export.customizeExcelCell;
         options.export.customizeExcelCell = e => {
             if(oldCustomizeExcelCell) {
@@ -48,8 +48,8 @@ pivotGridExportTestsHelper.runGeneralTest = function(assert, options, { styles =
             assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, "sharedStrings");
         }
 
-        if(customizeExcelCellExpectedCells) {
-            const expectedCells = customizeExcelCellExpectedCells(e.component);
+        if(getCustomizeExcelCellExpectedCells) {
+            const expectedCells = getCustomizeExcelCellExpectedCells(e.component);
             assert.strictEqual(actualCells.length, expectedCells.length, 'actualCells.length === expectedCells.length');
             for(let i = 0; i < actualCells.length; i++) {
                 const actualCell = actualCells[i];

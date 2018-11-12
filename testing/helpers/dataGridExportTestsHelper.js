@@ -10,7 +10,7 @@ import exportTestsHelper from "./exportTestsHelper.js";
 
 const dataGridExportTestsHelper = Object.create(exportTestsHelper);
 
-dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, getExpectedCells = undefined } = {}) {
+dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, getCustomizeExcelCellExpectedCells = undefined } = {}) {
     const that = this;
     const done = assert.async();
     const actualGridCells = [];
@@ -18,7 +18,7 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
     options.loadingTimeout = undefined;
     options.export = options.export || {};
 
-    if(getExpectedCells) {
+    if(getCustomizeExcelCellExpectedCells) {
         const oldCustomizeExcelCell = options.export.customizeExcelCell;
         options.export.customizeExcelCell = e => {
             if(oldCustomizeExcelCell) {
@@ -45,8 +45,8 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
             assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, "sharedStrings");
         }
 
-        if(getExpectedCells) {
-            const expectedGridCells = getExpectedCells(e.component);
+        if(getCustomizeExcelCellExpectedCells) {
+            const expectedGridCells = getCustomizeExcelCellExpectedCells(e.component);
             assert.strictEqual(actualGridCells.length, expectedGridCells.length, 'actualGridCells.length');
             for(let i = 0; i < actualGridCells.length; i++) {
                 const actualGridCell = actualGridCells[i];
@@ -105,8 +105,8 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
     dataGrid.exportToExcel();
 };
 
-dataGridExportTestsHelper.runCustomizeExcelCellTest = function(assert, gridOptions, getExpectedCells) {
-    dataGridExportTestsHelper.runGeneralTest(assert, gridOptions, { getExpectedCells });
+dataGridExportTestsHelper.runCustomizeExcelCellTest = function(assert, gridOptions, getCustomizeExcelCellExpectedCells) {
+    dataGridExportTestsHelper.runGeneralTest(assert, gridOptions, { getCustomizeExcelCellExpectedCells });
 };
 
 export default dataGridExportTestsHelper;
