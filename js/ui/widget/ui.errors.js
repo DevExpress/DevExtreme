@@ -211,7 +211,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
      * @name ErrorsUIWidgets.E1051
      */
-    E1051: "The \"{0}\" converter is not found in the ConverterController",
+    E1051: "HtmlEditor's valueType is \"{0}\", but the {0} converter is not imported.",
 
     /**
     * @name ErrorsUIWidgets.W1001
