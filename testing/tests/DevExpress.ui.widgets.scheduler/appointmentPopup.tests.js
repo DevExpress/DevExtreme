@@ -333,6 +333,23 @@ QUnit.test("Recurrence editor container should be visible after turn on switch",
     assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
 });
 
+QUnit.test("Recurrence editor container should be visible after turn on switch, if recurrenceRule expr is set", function(assert) {
+    this.instance.option("recurrenceRuleExpr", "RRule");
+
+    this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: "a" });
+    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
+
+    var form = this.instance.getAppointmentDetailsForm(),
+        recurrenceEditor = form.getEditor("RRule");
+
+    assert.equal(recurrenceEditor._$container.css("display"), "none", "Container is not visible");
+
+    var repeatOnEditor = form.getEditor("repeatOnOff");
+    repeatOnEditor.option("value", true);
+
+    assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
+});
+
 QUnit.test("Recurrence editor container should be visible after value option changing", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: "a" });
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
