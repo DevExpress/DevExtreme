@@ -18,5 +18,23 @@ define(function(require) {
                 "The showdown script isn't referenced"
              );
         });
+
+        QUnit.test("initialize showdown from window", function(assert) {
+            const prevWinShowdown = window.showdown;
+
+            window.showdown = {
+                Converter: class fakeClass {
+                    constructor() {
+                        this.initialized = true;
+                    }
+                }
+            };
+
+            const converter = new MarkdownConverter();
+
+            assert.ok(converter._markdown2Html.initialized);
+
+            window.showdown = prevWinShowdown;
+        });
     });
 });

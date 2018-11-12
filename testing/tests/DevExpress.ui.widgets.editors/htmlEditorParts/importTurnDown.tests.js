@@ -18,5 +18,21 @@ define(function(require) {
                 "The Turndown script isn't referenced"
             );
         });
+
+        QUnit.test("initialize turndown from window", function(assert) {
+            const prevWinTurndown = window.TurndownService;
+
+            window.TurndownService = class fakeClass {
+                constructor() {
+                    this.initialized = true;
+                }
+            };
+
+            const converter = new MarkdownConverter();
+
+            assert.ok(converter._html2Markdown.initialized);
+
+            window.TurndownService = prevWinTurndown;
+        });
     });
 });
