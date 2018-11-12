@@ -1,4 +1,3 @@
-
 SystemJS.config({
     map: {
         'showdown': '/testing/helpers/quillDependencies/noShowdown.js'
@@ -20,17 +19,15 @@ define(function(require) {
         });
 
         QUnit.test("initialize showdown from window", function(assert) {
-            const prevWinShowdown = window.showdown;
+            var prevWinShowdown = window.showdown;
 
             window.showdown = {
-                Converter: class fakeClass {
-                    constructor() {
-                        this.initialized = true;
-                    }
+                Converter: function() {
+                    this.initialized = true;
                 }
             };
 
-            const converter = new MarkdownConverter();
+            var converter = new MarkdownConverter();
 
             assert.ok(converter._markdown2Html.initialized);
 
