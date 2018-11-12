@@ -858,10 +858,12 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
                     { name: 'SubCategory4', id: 10, parentId: 8 },
                 { name: 'Category6', id: 11 }
             ]
-        });
+        }),
+        scrollable = treeList.getScrollable();
 
     try {
-        treeList.getScrollable().scrollTo({ y: 300 }); // scroll to the last page
+        scrollable.scrollTo({ y: 300 }); // scroll to the last page
+        $(scrollable._container()).trigger("scroll");
         clock.tick();
 
         topVisibleRowData = treeList.getTopVisibleRowData();
