@@ -290,6 +290,7 @@ var AppointmentModel = Class.inherit({
     setDataSource: function(dataSource) {
         this._dataSource = dataSource;
 
+        this.removeUpdatedAppointment();
         this._initStoreChangeHandlers();
         this._filterMaker && this._filterMaker.clearRegistry();
     },
