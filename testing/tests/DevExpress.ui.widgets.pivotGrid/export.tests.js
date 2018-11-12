@@ -216,6 +216,7 @@ QUnit.test("getAllItems", function(assert) {
     assert.strictEqual(this.items.length, 10, "All rows are collected");
     assert.strictEqual(this.items[1].length, 16, "All columns are collected");
     assert.deepEqual(this.items[3][3], {
+        area: "data",
         columnPath: ["2010", "1"],
         columnType: "D",
         dataIndex: 1,
@@ -235,6 +236,7 @@ QUnit.test("getAllItems", function(assert) {
         text: ""
     }, "First Item object has correct content");
     assert.deepEqual(this.items[5][1], {
+        area: "row",
         colspan: 1,
         dataSourceIndex: 2,
         isLast: true,
@@ -244,6 +246,7 @@ QUnit.test("getAllItems", function(assert) {
         type: "T"
     }, "Row info clone empty cell object has correct content");
     assert.deepEqual(this.items[0][6], {
+        area: "column",
         dataSourceIndex: 2,
         colspan: 2,
         rowspan: 2,
@@ -252,6 +255,7 @@ QUnit.test("getAllItems", function(assert) {
         text: "2010 Total"
     }, "Column info cell width text object has correct content");
     assert.deepEqual(this.items[0][7], {
+        area: "column",
         colspan: 1,
         rowspan: 1,
         text: "",
