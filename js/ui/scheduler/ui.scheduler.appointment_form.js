@@ -200,8 +200,7 @@ var SchedulerAppointmentForm = {
                 editorOptions: {
                     observer: schedulerInst,
                     onInitialized: function(args) {
-                        var value = !typeUtils.isEmptyObject(that._appointmentForm) ? !!that._appointmentForm.option("formData.recurrenceRule") : false;
-
+                        var value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
                         args.component.option("value", value);
                     },
                     onValueChanged: function(args) {
@@ -221,7 +220,7 @@ var SchedulerAppointmentForm = {
                     observer: schedulerInst,
                     firstDayOfWeek: schedulerInst.option("firstDayOfWeek"),
                     onValueChanged: function(args) {
-                        var value = !typeUtils.isEmptyObject(that._appointmentForm) ? !!that._appointmentForm.option("formData.recurrenceRule") : false;
+                        var value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
                         args.component.option("visible", value);
                     },
                     onContentReady: function(args) {
@@ -246,6 +245,10 @@ var SchedulerAppointmentForm = {
         }
 
         return this._editors;
+    },
+
+    _getRecurrenceRule: function(schedulerInstance, appointmentForm) {
+        return !typeUtils.isEmptyObject(appointmentForm) ? !!schedulerInstance.fire("getField", "recurrenceRule", appointmentForm.option("formData")) : false;
     },
 
     concatResources: function(resources) {
