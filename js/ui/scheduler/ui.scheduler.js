@@ -2373,7 +2373,7 @@ var Scheduler = Widget.inherit({
 
         if(!isDeleted && !isPopupEditing) {
 
-            processAppointmentDates.call(this, singleAppointment, this._getTimezoneOffsetByOption());
+            // processAppointmentDates.call(this, singleAppointment, this._getTimezoneOffsetByOption());
 
             this.addAppointment(singleAppointment);
         }
