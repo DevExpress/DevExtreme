@@ -129,11 +129,11 @@ QUnit.test("Check default alignment by column.alignment", function(assert) {
     );
 });
 
-QUnit.test("Check default alignment by wordWrapEnabled", function(assert) {
+QUnit.test("Check default wrapTextEnabled by DataGrid.wordWrapEnabled if there is no export.excelWrapTextEnabled value", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", alignment: 'center' }],
+            columns: [ "field1" ],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: true,
             wordWrapEnabled: true,
@@ -146,13 +146,14 @@ QUnit.test("Check default alignment by wordWrapEnabled", function(assert) {
     );
 });
 
-QUnit.test("Check default alignment by export.excelWrapTextEnabled", function(assert) {
+QUnit.test("Check default wrapTextEnabled from export.excelWrapTextEnabled value (it overrides wordWrapEnabled value)", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: "field1", alignment: 'center' }],
+            columns: [ "field1" ],
             dataSource: [{ field1: 42 }],
             showColumnHeaders: true,
+            wordWrapEnabled: false,
             export: {
                 excelWrapTextEnabled: true,
                 customizeExcelCell: e => {

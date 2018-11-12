@@ -47,7 +47,7 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, gridOptions, { style
     dataGrid.exportToExcel();
 };
 
-dataGridExportTestsHelper.runCustomizeExcelCellTest = function(assert, gridOptions, getExpectedGridCellsCallback) {
+dataGridExportTestsHelper.runCustomizeExcelCellTest = function(assert, gridOptions, getExpectedCells) {
     const done = assert.async();
     const actualGridCells = [];
 
@@ -57,7 +57,7 @@ dataGridExportTestsHelper.runCustomizeExcelCellTest = function(assert, gridOptio
     };
     gridOptions.loadingTimeout = undefined;
     gridOptions.onFileSaving = e => {
-        const expectedGridCells = getExpectedGridCellsCallback(e.component);
+        const expectedGridCells = getExpectedCells(e.component);
         assert.strictEqual(actualGridCells.length, expectedGridCells.length, 'actualGridCells.length');
         for(let i = 0; i < actualGridCells.length; i++) {
             const actualGridCell = actualGridCells[i];

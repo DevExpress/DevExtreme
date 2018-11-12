@@ -19,11 +19,10 @@ pivotGridExportTestsHelper.runTest = function(assert, options, { styles, workshe
     options.export.ignoreExcelErrors = false;
 
     if(getExpectedCells) {
-        options.export = options.export || {};
-        const customizeExcelCell = options.export.customizeExcelCell;
+        const oldCustomizeExcelCell = options.export.customizeExcelCell;
         options.export.customizeExcelCell = e => {
-            if(customizeExcelCell) {
-                customizeExcelCell(e);
+            if(oldCustomizeExcelCell) {
+                oldCustomizeExcelCell(e);
             }
             if(e.gridCell) {
                 e.gridCell._excelCellValue = e.value;
@@ -31,10 +30,10 @@ pivotGridExportTestsHelper.runTest = function(assert, options, { styles, workshe
             actualCells.push(e.gridCell);
         };
     }
-    const onFileSaving = options.onFileSaving;
+    const oldOnFileSaving = options.onFileSaving;
     options.onFileSaving = e => {
-        if(onFileSaving) {
-            onFileSaving(e);
+        if(oldOnFileSaving) {
+            oldOnFileSaving(e);
         }
 
         const zipMock = that.getLastCreatedJSZipInstance();
@@ -51,7 +50,7 @@ pivotGridExportTestsHelper.runTest = function(assert, options, { styles, workshe
 
         if(getExpectedCells) {
             const expectedCells = getExpectedCells(e.component);
-            assert.strictEqual(actualCells.length, expectedCells.length, 'actualCells.length');
+            assert.strictEqual(actualCells.length, expectedCells.length, 'actualCells.length === expectedCells.length');
             for(let i = 0; i < actualCells.length; i++) {
                 const actualCell = actualCells[i];
                 const expectedCell = expectedCells[i];
