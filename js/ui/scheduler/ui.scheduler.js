@@ -1588,7 +1588,7 @@ var Scheduler = Widget.inherit({
                 if(this._filteredItems.length && this._isVisible()) {
                     this._appointments.option("items", this._getAppointmentsToRepaint());
 
-                    delete this.instance._updatedAppointment;
+                    this._appointmentModel.removeUpdatedAppointment();
                 } else {
                     this._appointments.option("items", []);
                 }
@@ -2599,7 +2599,6 @@ var Scheduler = Widget.inherit({
                 this._expandAllDayPanel(appointment);
 
                 try {
-                    this._updatedAppointment = appointment;
                     this._appointmentModel
                         .update(target, appointment)
                         .always((function(e) {
@@ -2673,7 +2672,7 @@ var Scheduler = Widget.inherit({
     },
 
     getUpdatedAppointment: function() {
-        return this._updatedAppointment;
+        return this._appointmentModel.getUpdatedAppointment();
     },
 
     getAppointmentsInstance: function() {
