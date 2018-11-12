@@ -755,6 +755,25 @@ QUnit.testStart(function() {
         assert.deepEqual(this.instance.option("dataSource").items()[0], newTask, "item is updated");
     });
 
+    QUnit.test("Updated directly from store item should be rerendered correctly", function(assert) {
+        var data = [{
+            text: "abc", startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 11)
+        }];
+
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data
+        });
+
+        var dataSource = this.instance.getDataSource();
+        dataSource.store().update(data[0], {
+            text: "def", startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 11)
+        });
+        dataSource.load();
+
+        assert.equal(this.instance.$element().find(".dx-scheduler-appointment-title").eq(0).text(), "def", "Appointment is rerendered");
+    });
+
     QUnit.test("the 'update' method of store should have key as arg is store has the 'key' field", function(assert) {
         var data = [{
             id: 1, text: "abc", startDate: new Date(2015, 1, 9, 10)
