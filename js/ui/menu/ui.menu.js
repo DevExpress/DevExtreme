@@ -539,8 +539,10 @@ var Menu = MenuBase.inherit({
         var $submenuContainer = $("<div>").addClass(DX_CONTEXT_MENU_CLASS)
             .appendTo($rootItem);
 
-        var items = this._getChildNodes(node),
+        var childKeyboardProcessor = this._keyboardProcessor && this._keyboardProcessor.attachChildProcessor(),
+            items = this._getChildNodes(node),
             result = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
+                _keyboardProcessor: childKeyboardProcessor,
                 _dataAdapter: this._dataAdapter,
                 _parentKey: node.internalFields.key,
                 items: items,
