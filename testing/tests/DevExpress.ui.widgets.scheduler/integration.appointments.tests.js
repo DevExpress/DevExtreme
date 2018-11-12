@@ -1748,7 +1748,6 @@ QUnit.test("onAppointmentAdding event args should be consistent with adding appo
             currentDate: new Date(2016, 4, 7),
             dateSerializationFormat: "yyyy-MM-ddTHH:mm:ssZ",
             timeZone: 'Etc/UTC',
-            startDayHour: 7,
             views: ["day"],
             currentView: "day",
             dataSource: [],
