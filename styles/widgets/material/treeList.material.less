@@ -11,13 +11,16 @@
         position: relative;
         top: -2px;
         display: inline-block;
-        color: @treelist-chevron-icon-color;
         .dx-icon-chevronup;
         width: @TREELIST_EMPTY_SPACE_WIDTH;
 
         &:before {
             visibility: hidden;
         }
+    }
+
+    & :not(".dx-row-focused") .dx-treelist-empty-space {
+        color: @treelist-chevron-icon-color;
     }
 
     .dx-treelist-expanded span {

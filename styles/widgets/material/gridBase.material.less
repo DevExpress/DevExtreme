@@ -897,8 +897,7 @@
                 }
             }
 
-            &:not(.dx-row-lines) > td,
-            &:not(.dx-row-focused) > td {
+            &:not(.dx-row-lines):not(.dx-row-focused) > td {
                 border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                 border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
             }
