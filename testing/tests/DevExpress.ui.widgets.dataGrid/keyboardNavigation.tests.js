@@ -4709,8 +4709,7 @@ QUnit.testInActiveWindow("Down arrow key should work correctly after page down k
 // T680076
 QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded page when virtual scrolling is enabled", function(assert) {
     // arrange
-    var that = this,
-        done = assert.async();
+    var that = this;
 
     that.options = {
         dataSource: generateItems(500),
@@ -4733,21 +4732,16 @@ QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded p
 
     // act
     $(that.rowsView.element()).trigger($.Event("keydown", { which: KEYS.upArrow }));
+    $(that.rowsView.getScrollable()._container()).trigger("scroll");
     that.clock.tick();
-    that.clock.restore();
 
-    setTimeout(function() {
-        that.clock = sinon.useFakeTimers();
+    // act
+    $(that.rowsView.element()).trigger($.Event("keydown", { which: KEYS.upArrow }));
+    that.clock.tick();
 
-        // act
-        $(that.rowsView.element()).trigger($.Event("keydown", { which: KEYS.upArrow }));
-        that.clock.tick();
-
-        // assert
-        assert.ok($(".dx-datagrid-focus-overlay").is(":visible"), "focus overlay is visible");
-        assert.deepEqual(that.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 398 }, "focused position");
-        done();
-    }, 600);
+    // assert
+    assert.ok($(".dx-datagrid-focus-overlay").is(":visible"), "focus overlay is visible");
+    assert.deepEqual(that.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 398 }, "focused position");
 });
 
 // T680076
