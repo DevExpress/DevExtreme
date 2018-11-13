@@ -55,24 +55,6 @@ exports.ExportMixin = extend({}, exportMixin, {
             rowsLength = this._getLength(rowsInfoItems),
             headerRowsCount = columnsInfo.length;
 
-        for(let i = 0; i < columnsInfo.length; i++) {
-            for(let j = 0; j < columnsInfo[i].length; j++) {
-                columnsInfo[i][j].area = 'column';
-            }
-        }
-
-        for(let i = 0; i < cellsInfo.length; i++) {
-            for(let j = 0; j < cellsInfo[i].length; j++) {
-                cellsInfo[i][j].area = 'data';
-            }
-        }
-
-        for(let i = 0; i < rowsInfoItems.length; i++) {
-            for(let j = 0; j < rowsInfoItems[i].length; j++) {
-                rowsInfoItems[i][j].area = 'row';
-            }
-        }
-
         for(rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex++) {
             for(cellIndex = rowsInfoItems[rowIndex].length - 1; cellIndex >= 0; cellIndex--) {
                 if(!isDefined(sourceItems[rowIndex + headerRowsCount])) {
@@ -217,17 +199,12 @@ exports.DataProvider = Class.inherit({
     getCellData: function(rowIndex, cellIndex) {
         const result = {};
         var items = this._options.items,
-            item = items[rowIndex] && items[rowIndex][cellIndex];
+            item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
-        if(isDefined(item)) {
-            result.cellSourceData = {
-                area: item.area
-            };
-            if(this.getCellType(rowIndex, cellIndex) === "string") {
-                result.value = item.text;
-            } else {
-                result.value = item.value;
-            }
+        if(this.getCellType(rowIndex, cellIndex) === "string") {
+            result.value = item.text;
+        } else {
+            result.value = item.value;
         }
         return result;
     },
@@ -257,12 +234,8 @@ exports.DataProvider = Class.inherit({
         return isDefined(this._options.customizeExcelCell);
     },
 
-    customizeExcelCell: function(e, cellSourceData) {
+    customizeExcelCell: function(e) {
         if(this._options.customizeExcelCell) {
-            if(isDefined(this._options) && isDefined(this._options.component)) {
-                e.component = this._options.component;
-            }
-            e.gridCell = cellSourceData;
             this._options.customizeExcelCell(e);
         }
     },
