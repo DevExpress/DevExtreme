@@ -37,7 +37,6 @@ var DX_MENU_CLASS = "dx-menu",
     DX_MENU_ITEM_CLASS = DX_MENU_CLASS + "-item",
     DX_MENU_ITEM_SELECTED_CLASS = "dx-menu-item-selected",
     DX_MENU_ITEM_EXPANDED_CLASS = "dx-menu-item-expanded",
-    DX_MENU_ITEM_CONTENT_CLASS = "dx-menu-item-content",
     DX_MENU_ITEM_TEXT_CLASS = "dx-menu-item-text",
     DX_CONTEXT_MENU_CLASS = "dx-context-menu",
     DX_CONTEXT_MENU_DELIMETER_CLASS = "dx-context-menu-content-delimiter",
@@ -815,7 +814,7 @@ QUnit.test("Menu was not shown on some browsers with not synchronized mouse even
         menu = createMenu(options),
         rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
-        $itemContainer = menu.instance._itemContainer(),
+        $itemContainer = menu.instance.itemsContainer(),
         e = $.Event("dxhoverstart", { target: rootMenuItem.get(0) });
     e.which = 1;
     e.buttons = 0; // https://bugzilla.mozilla.org/show_bug.cgi?id=1048294
@@ -834,7 +833,7 @@ QUnit.test("Show submenu onHover", function(assert) {
     var menu = createMenuForHoverStay({ showFirstSubmenuMode: "onHover", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] }),
         rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
-        $itemContainer = menu.instance._itemContainer();
+        $itemContainer = menu.instance.itemsContainer();
 
     if(isDeviceDesktop(assert)) {
         $($itemContainer).trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
@@ -851,7 +850,7 @@ QUnit.test("Show submenu onHover with custom timeout set as an object", function
     var menu = createMenuForHoverStay({ showFirstSubmenuMode: { name: "onHover", delay: { show: 300, hide: 700 } }, items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] }),
         rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
-        $itemContainer = menu.instance._itemContainer();
+        $itemContainer = menu.instance.itemsContainer();
 
     if(isDeviceDesktop(assert)) {
         $($itemContainer).trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
@@ -868,7 +867,7 @@ QUnit.test("Show submenu onHover with custom timeout set as a number", function(
     var menu = createMenuForHoverStay({ showFirstSubmenuMode: { name: "onHover", delay: 500 }, items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] }),
         rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
-        $itemContainer = menu.instance._itemContainer();
+        $itemContainer = menu.instance.itemsContainer();
 
     if(isDeviceDesktop(assert)) {
         $($itemContainer).trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
@@ -933,7 +932,7 @@ QUnit.test("Show submenu and sub-submenu on hover", function(assert) {
         submenu,
         $menuItem,
         $submenu,
-        $itemContainer = menu.instance._itemContainer();
+        $itemContainer = menu.instance.itemsContainer();
 
     if(isDeviceDesktop(assert)) {
         $($itemContainer).trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
@@ -944,7 +943,7 @@ QUnit.test("Show submenu and sub-submenu on hover", function(assert) {
 
         $menuItem = $($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).first());
         assert.equal($menuItem.text(), "itemA-A");
-        $(submenu._itemContainer()).trigger($.Event("dxhoverstart", { target: $menuItem.get(0) }));
+        $(submenu.itemsContainer()).trigger($.Event("dxhoverstart", { target: $menuItem.get(0) }));
         $($menuItem).trigger("dxpointermove");
         this.clock.tick(ANIMATION_TIMEOUT);
         $submenu = $($(submenu._overlay.content()).find("." + DX_SUBMENU_CLASS).eq(1));
@@ -964,7 +963,7 @@ QUnit.test("Do not show submenu on hover if item is disabled", function(assert) 
         ],
         menu = createMenu({ showFirstSubmenuMode: "onHover", items: items }),
         rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
-        $itemContainer = menu.instance._itemContainer(),
+        $itemContainer = menu.instance.itemsContainer(),
         submenu;
 
     if(isDeviceDesktop(assert)) {
@@ -994,7 +993,7 @@ QUnit.test("Show submenu on hover and sub-submenu onClick", function(assert) {
         submenu,
         $menuItem,
         $submenu,
-        $itemContainer = menu.instance._itemContainer();
+        $itemContainer = menu.instance.itemsContainer();
 
     if(isDeviceDesktop(assert)) {
         assert.ok(menu);
@@ -1377,7 +1376,10 @@ QUnit.module("keyboard navigation", {
 
         fx.off = true;
 
-        this.menu = createMenu(options);
+        this.$element = $("#menu").dxMenu(options);
+        this.instance = this.$element.dxMenu("instance");
+        this.$itemsContainer = this.instance.itemsContainer();
+        this.keyboard = keyboardMock(this.$itemsContainer);
     },
     afterEach: function() {
         fx.off = false;
@@ -1385,418 +1387,264 @@ QUnit.module("keyboard navigation", {
     }
 });
 
-QUnit.testInActiveWindow("onItemClick fires when enter pressed", function(assert) {
-    // arrange
-    var itemClicked = 0;
-    this.menu.instance.option("onItemClick", function() { itemClicked++; });
+QUnit.testInActiveWindow("rise onItemClick when enter pressed", function(assert) {
+    var itemClickHandler = sinon.spy();
 
-    // act
-    this.menu.instance.focus();
-    keyboardMock(this.menu.instance._itemContainer())
-        .keyDown("enter");
+    this.instance.option("onItemClick", itemClickHandler);
+    this.keyboard.press("enter");
 
-    // assert
-    assert.equal(itemClicked, 1, "press enter on item call item click action");
+    assert.equal(itemClickHandler.callCount, 1, "press enter on item call item click action");
 });
 
 QUnit.test("select item when space pressed", function(assert) {
-    // act
-    this.menu.instance.focus();
-    keyboardMock(this.menu.instance.$element())
-        .keyDown("left")
-        .keyDown("space");
+    this.keyboard
+        .press("left")
+        .press("space");
 
-    // assert
-    assert.equal(isRenderer(this.menu.instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
-    assert.equal(this.menu.instance.option("selectedItem").text, "item3", "correct item is selected");
+    assert.equal(isRenderer(this.instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
+    assert.equal(this.instance.option("selectedItem").text, "item3", "correct item is selected");
 });
 
-QUnit.test("when selectionMode is none, not select item when space pressed", function(assert) {
-    // arrange
-    var instance = this.menu.instance;
+QUnit.test("don't select an item when space pressed and selectionMode is none", function(assert) {
+    this.instance.option("selectionMode", "none");
 
-    instance.option("selectionMode", "none");
+    this.keyboard
+        .press("right")
+        .press("space");
 
-    // act
-    this.menu.instance.focus();
-    keyboardMock(instance._itemContainer())
-        .keyDown("right")
-        .keyDown("space");
-
-    // assert
-    assert.equal(instance.option("selectedItem"), null, "no item is selected");
+    assert.equal(this.instance.option("selectedItem"), null, "no item is selected");
 });
 
-QUnit.test("select item when space pressed on inner level", function(assert) {
-    // arrange
-    var instance = this.menu.instance;
+QUnit.test("select an item when space pressed on an inner level", function(assert) {
+    this.keyboard
+        .press("right")
+        .press("down")
+        .press("down")
+        .press("down")
+        .press("down")
+        .press("space");
 
-    // act
-    this.menu.instance.focus();
-    keyboardMock(instance._itemContainer())
-        .keyDown("right")
-        .keyDown("down");
-    this.clock.tick(600);
-    keyboardMock(Submenu.getInstance(instance._visibleSubmenu.$element())._itemContainer())
-        .keyDown("down")
-        .keyDown("down")
-        .keyDown("down")
-        .keyDown("space");
-
-    // assert
-    assert.equal(isRenderer(this.menu.instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
-    assert.equal(this.menu.instance.option("selectedItem").text, "item2-3", "correct item is selected");
+    assert.equal(isRenderer(this.instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
+    assert.equal(this.instance.option("selectedItem").text, "item2-3", "correct item is selected");
 });
 
-QUnit.testInActiveWindow("When press down arrow key we only show submenu if exist", function(assert) {
-    // arrange
-    var instance = this.menu.instance,
-        getFocusedItemText = function() {
-            return $("#qunit-fixture")
-                .find("." + DX_STATE_FOCUSED_CLASS + "." + DX_MENU_ITEM_CLASS + ":visible")
-                .first()
-                .children("." + DX_MENU_ITEM_CONTENT_CLASS)
-                .text();
-        },
-        submenuKeyboard;
+QUnit.testInActiveWindow("show submenu if exists when down key pressed", function(assert) {
+    this.keyboard
+        .press("right")
+        .press("down")
+        .press("down");
 
-    // act
-    this.menu.instance.focus();
+    assert.equal($(this.instance.option("focusedElement")).text(), "item2-1", "focus on first item of second submenu");
 
-    keyboardMock(instance._itemContainer())
-        .keyDown("right")
-        .keyDown("down");
+    this.keyboard
+        .press("right");
 
-
-    submenuKeyboard = keyboardMock(Submenu.getInstance(instance._visibleSubmenu.$element())._itemContainer());
-
-    submenuKeyboard
-        .keyDown("down");
-
-    assert.equal(getFocusedItemText(), "item2-1", "focus on first item of second submenu");
-
-    submenuKeyboard
-        .keyDown("right");
-
-    assert.equal(getFocusedItemText(), "item3", "after second right arrow key press we focus second item in main menu");
+    assert.equal($(this.instance.option("focusedElement")).text(), "item3", "after second right arrow key press we focus second item in main menu");
 });
 
-QUnit.testInActiveWindow("When press right arrow key we only show submenu if exist (vertical menu)", function(assert) {
-    // arrange
-    var instance = this.menu.instance,
-        getFocusedItemText = function() {
-            return $("#qunit-fixture")
-                .find("." + DX_STATE_FOCUSED_CLASS + "." + DX_MENU_ITEM_CLASS)
-                .first()
-                .children("." + DX_MENU_ITEM_CONTENT_CLASS)
-                .text();
-        },
-        submenuKeyboard;
+QUnit.testInActiveWindow("show submenu if exists when right key pressed in vertical menu", function(assert) {
+    this.instance.option("orientation", "vertical");
+    this.keyboard
+        .press("down")
+        .press("right");
 
-    instance.option("orientation", "vertical");
+    this.keyboard
+        .press("down");
 
-    // act
-    this.menu.instance.focus();
+    assert.equal($(this.instance.option("focusedElement")).text(), "item2-1", "focus on first item of second submenu");
 
-    keyboardMock(instance._itemContainer())
-        .keyDown("down")
-        .keyDown("right");
+    this.keyboard
+        .press("right");
 
-
-    submenuKeyboard = keyboardMock(Submenu.getInstance(instance._visibleSubmenu.$element())._itemContainer());
-    submenuKeyboard
-        .keyDown("down");
-
-    assert.equal(getFocusedItemText(), "item2-1", "focus on first item of second submenu");
-
-    submenuKeyboard
-        .keyDown("right");
-
-    assert.equal(getFocusedItemText(), "item2-1", "after second right arrow key press we do nothing because item2-1 has not submenu");
+    assert.equal($(this.instance.option("focusedElement")).text(), "item2-1", "after second right arrow key press we do nothing because item2-1 has not submenu");
 });
 
-QUnit.test("Correct work of navigation after click", function(assert) {
-    // arrange
-    var instance = this.menu.instance,
-        getFocusedItemText = function() {
-            return $("#qunit-fixture")
-                .find("." + DX_STATE_FOCUSED_CLASS + "." + DX_MENU_ITEM_CLASS)
-                .first()
-                .children("." + DX_MENU_ITEM_CONTENT_CLASS)
-                .text();
-        };
-
+QUnit.test("keyboard navigation should work after a click", function(assert) {
     if(isDeviceDesktop(assert)) {
-        instance.option("showFirstSubmenuMode", "onHover");
+        this.instance.option("showFirstSubmenuMode", "onHover");
 
-        // act
-
-        $(instance._itemContainer())
+        $(this.instance.itemsContainer())
             .find("." + DX_MENU_ITEM_CLASS)
             .eq(1)
             .trigger("mouseenter")
             .trigger("dxclick");
 
-        keyboardMock(Submenu.getInstance(instance._visibleSubmenu.$element())._itemContainer())
-            .keyDown("down")
-            .keyDown("down");
+        this.keyboard
+            .press("down")
+            .press("down");
 
-        assert.equal(getFocusedItemText(), "item2-2", "after mouseenter and dxclick we can continue navigation");
+        assert.equal($(this.instance.option("focusedElement")).text(), "item2-2", "after mouseenter and dxclick we can continue navigation");
     }
 });
 
-QUnit.test("up key show submenu (horizontal menu)", function(assert) {
-    // arrange
-    var instance = this.menu.instance;
+QUnit.test("up key should show submenu in horizontal menu", function(assert) {
+    this.keyboard
+        .press("right")
+        .press("up");
 
-    // act
-    this.menu.instance.focus();
-
-    keyboardMock(instance._itemContainer())
-        .keyDown("right")
-        .keyDown("up");
-
-    // assert
-    assert.ok(instance._visibleSubmenu);
+    assert.ok(this.instance._visibleSubmenu);
 });
 
-QUnit.test("down key show submenu (horizontal menu)", function(assert) {
-    // arrange
-    var instance = this.menu.instance;
+QUnit.test("down key show submenu in horizontal menu", function(assert) {
+    this.keyboard
+        .press("right")
+        .press("down");
 
-    // act
-    this.menu.instance.focus();
-
-    keyboardMock(instance._itemContainer())
-        .keyDown("right")
-        .keyDown("down");
-
-    // assert
-    assert.ok(instance._visibleSubmenu);
+    assert.ok(this.instance._visibleSubmenu);
 });
 
-QUnit.test("up and down keys use for focus moving (vertical menu)", function(assert) {
-    // arrange
-    var instance = this.menu.instance;
+QUnit.test("up and down keys should move the focus in vertical menu", function(assert) {
+    this.instance.option("orientation", "vertical");
 
-    instance.option("orientation", "vertical");
+    this.keyboard
+        .press("up")
+        .press("up")
+        .press("down");
 
-    // act
-    this.menu.instance.focus();
-
-    keyboardMock(instance._itemContainer())
-        .keyDown("up")
-        .keyDown("up")
-        .keyDown("down");
-
-    // assert
-    assert.equal(instance._getActiveItem(true).text(), "item3");
+    assert.equal($(this.instance.option("focusedElement")).text(), "item3");
 });
 
-QUnit.test("down key in submenu can move focus to next item of main menu (vertical menu)", function(assert) {
-    // arrange
-    var instance = this.menu.instance,
-        visibleSubmenu;
-    instance.option("orientation", "vertical");
+QUnit.test("down key in submenu should move the focus to the next item of the main menu (vertical mode)", function(assert) {
+    this.instance.option("orientation", "vertical");
 
-    // act
-    this.menu.instance.focus();
+    this.keyboard
+        .press("down")
+        .press("right");
 
-    keyboardMock(instance._itemContainer())
-        .keyDown("down")
-        .keyDown("right");
+    var visibleSubmenu = Submenu.getInstance(this.instance._visibleSubmenu.$element());
 
-    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.$element());
+    this.keyboard
+        .press("down")
+        .press("down")
+        .press("down")
+        .press("down")
+        .press("down");
 
-    keyboardMock(visibleSubmenu._itemContainer())
-        .keyDown("down")
-        .keyDown("down")
-        .keyDown("down")
-        .keyDown("down")
-        .keyDown("down");
-
-    // assert
     assert.ok(!visibleSubmenu.option("visible"), "submenu is hidden");
-    assert.equal(instance._getActiveItem(true).text(), "item3");
+    assert.equal($(this.instance.option("focusedElement")).text(), "item3");
 });
 
-QUnit.test("up key in submenu can move focus to previous item of main menu (vertical menu)", function(assert) {
-    // arrange
-    var instance = this.menu.instance,
-        visibleSubmenu;
+QUnit.test("up key in submenu should move the focus to the next item of the main menu (vertical mode)", function(assert) {
+    this.instance.option("orientation", "vertical");
 
-    instance.option("orientation", "vertical");
+    this.keyboard
+        .press("down")
+        .press("right");
 
-    // act
-    this.menu.instance.focus();
+    var visibleSubmenu = Submenu.getInstance(this.instance._visibleSubmenu.$element());
 
-    keyboardMock(instance._itemContainer())
-        .keyDown("down")
-        .keyDown("right");
+    this.keyboard
+        .press("down")
+        .press("up");
 
-    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.$element());
-
-    keyboardMock(visibleSubmenu._itemContainer())
-        .keyDown("down")
-        .keyDown("up");
-
-    // assert
     assert.ok(!visibleSubmenu.option("visible"), "submenu is hidden");
-    assert.equal(instance._getActiveItem(true).text(), "item1");
+    assert.equal($(this.instance.option("focusedElement")).text(), "item1");
 });
 
-QUnit.test("right key in submenu can move focus to next item of main menu (horizontal menu)", function(assert) {
-    // arrange
-    var instance = this.menu.instance,
-        rightKeyKeydown = $.Event("keydown"),
-        visibleSubmenu;
+QUnit.test("right key in submenu should move the focus to the next item of the main menu (horizontal mode)", function(assert) {
+    this.keyboard
+        .press("right")
+        .press("down");
 
-    rightKeyKeydown.which = 39;
-    // act
-    this.menu.instance.focus();
+    var visibleSubmenu = Submenu.getInstance(this.instance._visibleSubmenu.$element());
 
-    keyboardMock(instance._itemContainer())
-        .keyDown("right")
-        .keyDown("down");
+    this.keyboard
+        .press("right");
 
-    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.$element());
-
-    $(visibleSubmenu._itemContainer()).trigger(rightKeyKeydown);
-
-    // assert
     assert.ok(!visibleSubmenu.option("visible"), "submenu is hidden");
-    assert.equal(instance._getActiveItem(true).text(), "item3");
+    assert.equal($(this.instance.option("focusedElement")).text(), "item3");
 });
 
-QUnit.test("left key in submenu can move focus to previous item of main menu (horizontal menu)", function(assert) {
-    // arrange
-    var instance = this.menu.instance,
-        visibleSubmenu;
+QUnit.test("left key in submenu should move the focus to the next item of the main menu (horizontal mode)", function(assert) {
+    this.keyboard
+        .press("right")
+        .press("down");
 
-    // act
-    this.menu.instance.focus();
+    var visibleSubmenu = Submenu.getInstance(this.instance._visibleSubmenu.$element());
 
-    keyboardMock(instance._itemContainer())
-        .keyDown("right")
-        .keyDown("down");
+    this.keyboard
+        .press("left");
 
-    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.$element());
-
-    keyboardMock(visibleSubmenu._itemContainer())
-        .keyDown("left");
-
-    // assert
     assert.ok(!visibleSubmenu.option("visible"), "submenu is hidden");
-    assert.equal(instance._getActiveItem(true).text(), "item1");
+    assert.equal($(this.instance.option("focusedElement")).text(), "item1");
 });
 
+QUnit.test("RTL: left key in submenu should move the focus to the next item of the main menu (horizontal mode)", function(assert) {
+    this.instance.option("rtlEnabled", true);
 
-QUnit.test("RTL: left key in submenu can move focus to next item of main menu (horizontal menu)", function(assert) {
-    // arrange
-    var instance = this.menu.instance,
-        leftKeyKeydown = $.Event("keydown"),
-        visibleSubmenu;
+    this.keyboard
+        .press("left")
+        .press("down");
 
-    leftKeyKeydown.which = 37;
+    var visibleSubmenu = Submenu.getInstance(this.instance._visibleSubmenu.$element());
 
-    instance.option("rtlEnabled", true);
+    this.keyboard
+        .press("left");
 
-    // act
-    this.menu.instance.focus();
-
-    keyboardMock(instance._itemContainer())
-        .keyDown("left")
-        .keyDown("down");
-
-    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.$element());
-
-    $(visibleSubmenu._itemContainer())
-        .trigger(leftKeyKeydown);
-
-    // assert
     assert.ok(!visibleSubmenu.option("visible"), "submenu is hidden");
-    assert.equal(instance._getActiveItem(true).text(), "item3");
+    assert.equal($(this.instance.option("focusedElement")).text(), "item3");
 });
 
-QUnit.test("RTL: right key in submenu can move focus to previous item of main menu (horizontal menu)", function(assert) {
-    // arrange
-    var instance = this.menu.instance,
-        visibleSubmenu;
+QUnit.test("RTL: right key in submenu should move the focus to the next item of the main menu (horizontal mode)", function(assert) {
+    this.instance.option("rtlEnabled", true);
 
-    instance.option("rtlEnabled", true);
+    this.keyboard
+        .press("left")
+        .press("down");
 
-    // act
-    this.menu.instance.focus();
+    var visibleSubmenu = Submenu.getInstance(this.instance._visibleSubmenu.$element());
 
-    keyboardMock(instance._itemContainer())
-        .keyDown("left")
-        .keyDown("down");
+    this.keyboard
+        .press("right");
 
-    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.$element());
-
-    keyboardMock(visibleSubmenu._itemContainer())
-        .keyDown("right");
-
-    // assert
     assert.ok(!visibleSubmenu.option("visible"), "submenu is hidden");
-    assert.equal(instance._getActiveItem(true).text(), "item1");
+    assert.equal($(this.instance.option("focusedElement")).text(), "item1");
 });
 
-QUnit.test("Disabled item should be skipped when keyboard navigation", function(assert) {
-    // arrange
-    var instance = this.menu.instance;
-    instance.option("items", [{ text: "Item 1", disabled: true }, { text: "Item 2" }]);
+QUnit.test("disabled item should be skipped when keyboard navigation is used", function(assert) {
+    this.instance.option("items", [{ text: "Item 1", disabled: true }, { text: "Item 2" }]);
 
-    // act
-    instance.focus();
+    this.keyboard
+        .press("right");
 
-    keyboardMock(instance.itemsContainer())
-        .keyDown("right");
-
-    // assert
-    assert.ok(instance.itemElements().eq(1).hasClass(DX_STATE_FOCUSED_CLASS), "disabled item was skipped");
+    assert.ok(this.instance.itemElements().eq(1).hasClass(DX_STATE_FOCUSED_CLASS), "disabled item was skipped");
 });
 
-QUnit.test("Submenu should close in vertical direction after press left button (T321290)", function(assert) {
+QUnit.test("submenu should be closed after left button pressed (T321290, vertical mode)", function(assert) {
     var items = [{ text: "Item 1", items: [{ text: "Item 11" }] }, { text: "Item 2" }];
 
-    this.menu.instance.option({ "items": items, orientation: "vertical" });
-    this.menu.instance.focus();
+    this.instance.option({ "items": items, orientation: "vertical" });
 
-    keyboardMock(this.menu.element).keyDown("right");
+    this.keyboard
+        .press("right");
 
-    var $item1 = $(this.menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
+    var $item1 = $(this.$element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu = getSubMenuInstance($item1);
 
     assert.ok(submenu.option("visible"), "submenu is visible");
 
-    keyboardMock(submenu.getOverlayContent()).keyDown("left");
+    this.keyboard
+        .press("left");
+
     assert.notOk(submenu.option("visible"), "submenu is invisible");
 });
 
-QUnit.testInActiveWindow("Root item should not get focus on pointerdown when it has submenu", function(assert) {
-    var clock;
+QUnit.testInActiveWindow("root item should not get focus on pointerdown when it has submenu", function(assert) {
+    this.instance.option({
+        "items": [{ text: "Item 1" }, { text: "Item 2", items: [{ text: "Item 21" }] }],
+        focusStateEnabled: true
+    });
 
-    try {
-        clock = sinon.useFakeTimers();
-        this.menu.instance.option({
-            "items": [{ text: "Item 1" }, { text: "Item 2", items: [{ text: "Item 21" }] }],
-            focusStateEnabled: true
-        });
+    var $items = this.instance.itemElements();
 
-        var $items = this.menu.instance.itemElements();
+    this.instance.focus();
+    assert.ok($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), "first item was focused");
 
-        this.menu.instance.focus();
-        assert.ok($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), "first item was focused");
+    $($items.eq(1)).trigger("dxpointerdown");
+    this.clock.tick(0);
 
-        $($items.eq(1)).trigger("dxpointerdown");
-        clock.tick(0);
-
-        assert.notOk($items.eq(1).hasClass(DX_STATE_FOCUSED_CLASS), "item was not focused");
-        assert.notOk($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), "first item lose focus");
-    } finally {
-        clock.restore();
-    }
+    assert.notOk($items.eq(1).hasClass(DX_STATE_FOCUSED_CLASS), "item was not focused");
+    assert.notOk($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), "first item lose focus");
 });
 
 

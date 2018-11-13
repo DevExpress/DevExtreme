@@ -13,6 +13,7 @@ var Submenu = ContextMenu.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             orientation: "horizontal",
+            tabIndex: null,
             onHoverStart: noop
         });
     },
@@ -41,6 +42,7 @@ var Submenu = ContextMenu.inherit({
 
     _getOverlayOptions: function() {
         return extend(this.callBase(), {
+            closeOnTargetScroll: false,
             onPositioned: this._overlayPositionedActionHandler.bind(this)
         });
     },
