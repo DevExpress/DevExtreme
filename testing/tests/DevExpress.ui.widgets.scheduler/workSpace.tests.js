@@ -996,6 +996,23 @@ QUnit.testStart(function() {
         assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().top, "Top cell coordinates are right");
         assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().left, "Left cell coordinates are right");
     });
+
+    QUnit.test("Work space should find cell coordinates by date in allDay row, groupByDate = true", function(assert) {
+        var $element = this.instance.$element();
+
+        this.instance.option("currentDate", new Date(2015, 2, 4));
+        var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 2, 2, 0), 1, true);
+
+        assert.equal(coords.top, 0, "Top cell coordinates are right");
+        assert.equal(coords.hMax, 998, "hMax cell coordinates are right");
+        assert.equal(coords.left, $element.find(".dx-scheduler-all-day-table tbody td").eq(3).position().left, "Left cell coordinates are right");
+
+        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 0, true);
+
+        assert.equal(coords.top, 0, "Top cell coordinates are right");
+        assert.equal(coords.hMax, 998, "hMax cell coordinates are right");
+        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(8).position().left, "Left cell coordinates are right");
+    });
 })("Work Space Week with grouping by date");
 
 (function() {
