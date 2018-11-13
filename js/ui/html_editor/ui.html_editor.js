@@ -119,33 +119,6 @@ const HtmlEditor = Editor.inherit({
         });
     },
 
-    _init: function() {
-        this.callBase();
-
-        this._quillRegistrator = new QuillRegistrator();
-        this._prepareConverters();
-    },
-
-    _prepareConverters: function() {
-        if(!this._deltaConverter) {
-            const DeltaConverter = ConverterController.getConverter("delta");
-
-            if(DeltaConverter) {
-                this._deltaConverter = new DeltaConverter();
-            }
-        }
-
-        if(this.option("valueType") === MARKDOWN_VALUE_TYPE && !this._markdownConverter) {
-            const MarkdownConverter = ConverterController.getConverter("markdown");
-
-            if(MarkdownConverter) {
-                this._markdownConverter = new MarkdownConverter();
-            } else {
-                throw Errors.Error("E1051", "markdown");
-            }
-        }
-    },
-
     _getAnonymousTemplateName: function() {
         return ANONYMOUS_TEMPLATE_NAME;
     },
@@ -185,6 +158,7 @@ const HtmlEditor = Editor.inherit({
         let markup = this.option("value");
 
         if(this._isMarkdownValue()) {
+            this._prepareMarkdownConverter();
             markup = this._markdownConverter.toHtml(markup);
         }
 
@@ -193,11 +167,40 @@ const HtmlEditor = Editor.inherit({
         }
     },
 
+    _prepareMarkdownConverter: function() {
+        const MarkdownConverter = ConverterController.getConverter("markdown");
+
+        if(MarkdownConverter) {
+            this._markdownConverter = new MarkdownConverter();
+        } else {
+            throw Errors.Error("E1051", "markdown");
+        }
+    },
+
     _render: function() {
+        if(!this._quillRegistrator) {
+            this._quillRegistrator = new QuillRegistrator();
+        }
+
+        this._prepareConverters();
         this._renderHtmlEditor();
         this._renderFormDialog();
 
         this.callBase();
+    },
+
+    _prepareConverters: function() {
+        if(!this._deltaConverter) {
+            const DeltaConverter = ConverterController.getConverter("delta");
+
+            if(DeltaConverter) {
+                this._deltaConverter = new DeltaConverter();
+            }
+        }
+
+        if(this.option("valueType") === MARKDOWN_VALUE_TYPE && !this._markdownConverter) {
+            this._prepareMarkdownConverter();
+        }
     },
 
     _renderHtmlEditor: function() {
