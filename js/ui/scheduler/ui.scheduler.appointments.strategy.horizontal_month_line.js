@@ -2,6 +2,10 @@ var HorizontalAppointmentsStrategy = require("./ui.scheduler.appointments.strate
     dateUtils = require("../../core/utils/date"),
     query = require("../../data/query");
 
+var HOURS_IN_DAY = 24,
+    MINUTES_IN_HOUR = 60,
+    MILLISECONDS_IN_MINUTE = 60000;
+
 var HorizontalMonthLineRenderingStrategy = HorizontalAppointmentsStrategy.inherit({
 
     calculateAppointmentWidth: function(appointment, position, isRecurring) {
@@ -11,18 +15,19 @@ var HorizontalMonthLineRenderingStrategy = HorizontalAppointmentsStrategy.inheri
 
         startDate = dateUtils.trimTime(startDate);
 
-        var durationInHours = (endDate.getTime() - startDate.getTime()) / 3600000,
-            width = Math.ceil(durationInHours / 24) * cellWidth;
-
+        var width = Math.ceil(this._getDurationInHour(startDate, endDate) / HOURS_IN_DAY) * cellWidth;
         width = this.cropAppointmentWidth(width, cellWidth);
 
         return width;
     },
 
-    getDeltaTime: function(args, initialSize) {
-        var deltaWidth = this._getDeltaWidth(args, initialSize);
+    _getDurationInHour: function(startDate, endDate) {
+        var adjustedDuration = this._adjustDurationByDaylightDiff(endDate.getTime() - startDate.getTime(), startDate, endDate);
+        return adjustedDuration / dateUtils.dateToMilliseconds("hour");
+    },
 
-        return 24 * 60 * 60000 * deltaWidth;
+    getDeltaTime: function(args, initialSize) {
+        return HOURS_IN_DAY * MINUTES_IN_HOUR * MILLISECONDS_IN_MINUTE * this._getDeltaWidth(args, initialSize);
     },
 
     isAllDay: function() {
