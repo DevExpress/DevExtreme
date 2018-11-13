@@ -2051,11 +2051,18 @@ var SchedulerWorkSpace = Widget.inherit({
         return extend(true, {}, data);
     },
 
-    _getHorizontalMax: function(groupIndex, date) {
-        var intervalIndex = this.option("groupByDate") ? this.getDateIntervalIndex(date) : 0;
+    _getHorizontalMax: function(groupIndex) {
+        groupIndex = this.option("groupByDate") ? this._getGroupCount() - 1 : groupIndex;
 
-        return this._groupedStrategy.getHorizontalMax(groupIndex + intervalIndex);
+        return this._groupedStrategy.getHorizontalMax(groupIndex);
     },
+
+    // _getHorizontalMax: function(groupIndex, date) {
+    //     debugger;
+    //     var intervalIndex = this.option("groupByDate") ? this.getDateIntervalIndex(date) : 0;
+
+    //     return this._groupedStrategy.getHorizontalMax(groupIndex + intervalIndex);
+    // },
 
     getCoordinatesByDate: function(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
