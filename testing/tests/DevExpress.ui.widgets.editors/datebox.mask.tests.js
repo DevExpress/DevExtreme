@@ -554,7 +554,7 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard
                 .type("99991");
 
-            assert.equal(this.$input.val(), "9901", "year should be limited");
+            assert.equal(this.$input.val(), "9991", "year should be limited");
         });
 
         QUnit.test("Short Year", (assert) => {

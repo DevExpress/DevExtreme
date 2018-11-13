@@ -47,13 +47,11 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
         date.setDate(date.getDate() - date.getDay() + value);
     },
     y: (date, value) => {
-        let currentYear = date.getFullYear();
+        let currentYear = date.getFullYear(),
+            valueLength = ("" + value).length,
+            newValue = currentYear - currentYear % (Math.pow(10, valueLength)) + value;
 
-        if(value < 100) {
-            date.setFullYear(currentYear - currentYear % 100 + value);
-        } else {
-            date.setFullYear(value);
-        }
+        date.setFullYear(newValue);
     }
 });
 
