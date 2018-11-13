@@ -110,6 +110,7 @@ var Map = Widget.inherit({
             /**
             * @name dxMapOptions.center
             * @extends MapLocationType
+            * @fires dxMapOptions.onOptionChanged
             * @inherits MapLocation
             */
             center: {
@@ -121,6 +122,7 @@ var Map = Widget.inherit({
             * @name dxMapOptions.zoom
             * @type number
             * @default 1
+            * @fires dxMapOptions.onOptionChanged
             */
             zoom: 1,
 
@@ -162,6 +164,8 @@ var Map = Widget.inherit({
             /**
             * @name dxMapOptions.markers
             * @type Array<Object>
+            * @fires dxMapOptions.onMarkerAdded
+            * @fires dxMapOptions.onMarkerRemoved
             */
             /**
             * @name dxMapOptions.markers.location
@@ -221,6 +225,8 @@ var Map = Widget.inherit({
             /**
             * @name dxMapOptions.routes
             * @type Array<Object>
+            * @fires dxMapOptions.onRouteAdded
+            * @fires dxMapOptions.onRouteRemoved
             */
             /**
             * @name dxMapOptions.routes.locations
