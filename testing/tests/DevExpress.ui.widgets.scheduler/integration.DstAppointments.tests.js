@@ -217,3 +217,24 @@ QUnit.test("Recurrence exception should not be rendered if exception goes after 
         tzOffsetStub.restore();
     }
 });
+
+QUnit.test("Appointment should rendered correctly if end date appointment coincided translation oт STD", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "November 4",
+            startDate: new Date(2018, 10, 4, 18, 0),
+            endDate: new Date(2018, 10, 5, 0, 0),
+        }],
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2018, 10, 1),
+        firstDayOfWeek: 0,
+        cellDuration: 60,
+        height: 800
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).first(),
+        cellWidth = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).first().outerWidth();
+
+    assert.equal($appointment.outerWidth(), cellWidth, 'Appointment width is correct after translation oт STD');
+});
