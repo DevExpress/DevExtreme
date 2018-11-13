@@ -2717,22 +2717,6 @@ QUnit.testStart(function() {
         }
     });
 
-    QUnit.test("getDateIntervalIndex should return correct interval index", function(assert) {
-        this.createInstance({
-            intervalCount: 3,
-            currentDate: new Date(2017, 5, 2)
-        });
-
-        var index = this.instance.getDateIntervalIndex(new Date(2017, 5, 2));
-        assert.equal(index, 0);
-
-        index = this.instance.getDateIntervalIndex(new Date(2017, 5, 3));
-        assert.equal(index, 1);
-
-        index = this.instance.getDateIntervalIndex(new Date(2017, 5, 4));
-        assert.equal(index, 2);
-    });
-
     QUnit.test("WorkSpace Day view cells have right cellData with view option intervalCount=2", function(assert) {
         this.createInstance({
             intervalCount: 2,
