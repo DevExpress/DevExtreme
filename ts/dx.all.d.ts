@@ -1316,7 +1316,7 @@ declare module DevExpress.data {
         /** Specifies whether a user can sort the pivot grid by summary values instead of field values. */
         allowSortingBySummary?: boolean;
         /** Specifies the field's area. */
-        area?: undefined | 'column' | 'data' | 'filter' | 'row';
+        area?: 'column' | 'data' | 'filter' | 'row' | undefined;
         /** Specifies the field's order among the other fields in the same area. Corresponds to the field's order in the fields array by default. */
         areaIndex?: number;
         /** Specifies a custom aggregate function. Applies only if the summaryType is "custom" and the remoteOperations is false. Cannot be used with an XmlaStore. */
@@ -1956,7 +1956,7 @@ declare module DevExpress.ui {
         /** Configures the header filter feature. */
         headerFilter?: { height?: number, visible?: boolean, width?: number, allowSearch?: boolean, searchTimeout?: number, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Configures the load panel. */
-        loadPanel?: { enabled?: boolean | 'auto', text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean };
+        loadPanel?: { enabled?: boolean | 'auto', text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean, shading?: boolean, shadingColor?: string };
         /** Specifies text shown when the widget does not display any data. */
         noDataText?: string;
         /** A function that is executed before an adaptive detail row is rendered. */
@@ -2170,9 +2170,9 @@ declare module DevExpress.ui {
         /** Sets focus on a specific cell. */
         focus(element: Element | JQuery): void;
         /** Gets a cell with a specific row index and a data field, column caption or name. */
-        getCellElement(rowIndex: number, dataField: string): DevExpress.core.dxElement & undefined;
+        getCellElement(rowIndex: number, dataField: string): DevExpress.core.dxElement | undefined;
         /** Gets a cell with specific row and column indexes. */
-        getCellElement(rowIndex: number, visibleColumnIndex: number): DevExpress.core.dxElement & undefined;
+        getCellElement(rowIndex: number, visibleColumnIndex: number): DevExpress.core.dxElement | undefined;
         /** Gets the total filter that combines all the filters applied. */
         getCombinedFilter(): any;
         /** Gets the total filter that combines all the filters applied. */
@@ -2182,7 +2182,7 @@ declare module DevExpress.ui {
         /** Gets the key of a row with a specific index. */
         getKeyByRowIndex(rowIndex: number): any;
         /** Gets the container of a row with a specific index. */
-        getRowElement(rowIndex: number): Array<Element> & JQuery & undefined;
+        getRowElement(rowIndex: number): Array<Element> & JQuery | undefined;
         /** Gets the index of a row with a specific key. */
         getRowIndexByKey(key: any | string | number): number;
         /** Gets the instance of the widget's scrollable part. */
@@ -2244,7 +2244,7 @@ declare module DevExpress.ui {
         /** Configures client-side exporting. */
         export?: { enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean, ignoreExcelErrors?: boolean, texts?: { exportTo?: string, exportAll?: string, exportSelectedRows?: string } };
         /** Configures grouping. */
-        grouping?: { autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, expandMode?: 'buttonClick' | 'rowClick', texts?: { groupContinuesMessage?: string, groupContinuedMessage?: string, groupByThisColumn?: string, ungroup?: string, ungroupAll?: string } };
+        grouping?: { expandMode?: 'buttonClick' | 'rowClick', autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, texts?: { groupContinuesMessage?: string, groupContinuedMessage?: string, groupByThisColumn?: string, ungroup?: string, ungroupAll?: string } };
         /** Configures the group panel. */
         groupPanel?: { visible?: boolean | 'auto', emptyPanelText?: string, allowColumnDragging?: boolean };
         /** Specifies which data field provides keys for data items. Applies only if data is a simple array. */
@@ -2610,6 +2610,8 @@ declare module DevExpress.ui {
     export class dxForm extends Widget {
         constructor(element: Element, options?: dxFormOptions)
         constructor(element: JQuery, options?: dxFormOptions)
+        /** Gets a button's instance. */
+        getButton(name: string): any;
         /** Gets an editor instance. Takes effect only if the form item is visible. */
         getEditor(dataField: string): any;
         /** Gets a form item's configuration. */
@@ -4857,7 +4859,7 @@ declare module DevExpress.ui {
     }
     export interface GridBaseColumn {
         /** Aligns the content of the column. */
-        alignment?: undefined | 'center' | 'left' | 'right';
+        alignment?: 'center' | 'left' | 'right' | undefined;
         /** Specifies whether a user can edit values in the column at runtime. By default, inherits the value of the editing.allowUpdating option. */
         allowEditing?: boolean;
         /** Specifies whether data can be filtered by this column. Applies only if filterRow.visible is true. */
@@ -4951,7 +4953,7 @@ declare module DevExpress.ui {
         /** Specifies a custom comparison function for sorting. Applies only when sorting is performed on the client. */
         sortingMethod?: ((value1: any, value2: any) => number);
         /** Specifies the sort order of column values. */
-        sortOrder?: undefined | 'asc' | 'desc';
+        sortOrder?: 'asc' | 'desc' | undefined;
         /** In a boolean column, replaces all true items with a specified text. Applies only if showEditorAlways option is false. */
         trueText?: string;
         /** Specifies validation rules to be checked on updating cell values. */
@@ -5094,9 +5096,9 @@ declare module DevExpress.ui {
         /** Gets the value of the current cell. */
         value(): any;
         /** Gets the value of any field linked with the current cell. */
-        value(field: DevExpress.data.PivotGridDataSourceField): any;
+        value(field: DevExpress.data.PivotGridDataSourceField | string): any;
         /** Gets the value of any field linked with the current cell. */
-        value(field: DevExpress.data.PivotGridDataSourceField, isCalculatedValue: boolean): any;
+        value(field: DevExpress.data.PivotGridDataSourceField | string, isCalculatedValue: boolean): any;
         /** Gets the value of the current cell. */
         value(isCalculatedValue: boolean): any;
     }
@@ -5632,6 +5634,7 @@ declare module DevExpress.viz {
         getSeriesByPos(seriesIndex: number): chartSeriesObject;
         /** Hides all widget tooltips. */
         hideTooltip(): void;
+        refresh(): void;
         /** Redraws the widget. */
         render(): void;
         /** Redraws the widget. */
@@ -6755,7 +6758,7 @@ declare module DevExpress.viz {
         pane: string;
     }
     export interface chartPointAggregationInfoObject {
-        /** Contains the length of the aggregation interval in axis units. If the interval is set in pixels, it will be converted to axis units. */
+        /** Contains the length of the aggregation interval in axis units (numbers or dates). If the interval is set in pixels (using the aggregationGroupWidth option), it will be converted to axis units. */
         aggregationInterval?: any;
         /** Contains data objects that were aggregated into this point. */
         data?: Array<any>;
