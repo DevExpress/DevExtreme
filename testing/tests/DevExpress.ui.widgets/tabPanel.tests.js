@@ -563,3 +563,20 @@ QUnit.test("dataSource loading should be fired once", function(assert) {
 
     assert.equal(dataSourceLoadCalled, 1, "dataSource load called once");
 });
+
+QUnit.test("should not rerender items if the badge/disabled/visible changed", function(assert) {
+    var tabPanel = $("#tabPanel").dxTabPanel({
+            items: [{ title: "title" }],
+            itemTemplate: function() { return $("<div id='itemContent'>"); }
+        }).dxTabPanel("instance"),
+        contentElement = $('#itemContent').get(0);
+
+    tabPanel.option("items[0].badge", 'badge text');
+    tabPanel.option("items[0].disabled", true);
+    tabPanel.option("items[0].visible", false);
+
+    assert.strictEqual(tabPanel.option('items[0].badge'), 'badge text');
+    assert.strictEqual(tabPanel.option('items[0].disabled'), true);
+    assert.strictEqual(tabPanel.option('items[0].visible'), false);
+    assert.strictEqual(contentElement, $('#itemContent').get(0));
+});
