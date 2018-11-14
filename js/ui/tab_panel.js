@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     MultiView = require("./multi_view"),
     Tabs = require("./tabs"),
+    TabPanelItem = require("./tab_panel/item").default,
     iconUtils = require("../core/utils/icon"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     BindableTemplate = require("./widget/bindable_template"),
@@ -105,7 +106,9 @@ var TabPanel = MultiView.inherit({
             * @type_function_param1_field5 itemElement:dxElement
             * @action
             */
-            onTitleRendered: null
+            onTitleRendered: null,
+
+            badgeExpr: function(data) { return data ? data.badge : undefined; }
 
             /**
             * @name dxTabPanelItemTemplate
@@ -209,7 +212,7 @@ var TabPanel = MultiView.inherit({
 
             $container.wrapInner($("<span>").addClass(TABS_ITEM_TEXT_CLASS));
             $iconElement && $iconElement.prependTo($container);
-        }, ["title", "html", "icon"], this.option("integrationOptions.watchMethod"));
+        }, ["title", "icon"], this.option("integrationOptions.watchMethod"));
     },
 
     _createTitleActions: function() {
@@ -296,7 +299,7 @@ var TabPanel = MultiView.inherit({
             repaintChangesOnly: this.option("repaintChangesOnly"),
             tabIndex: this.option("tabIndex"),
             selectedIndex: this.option("selectedIndex"),
-
+            badgeExpr: this.option("badgeExpr"),
             onItemClick: this._titleClickAction.bind(this),
             onItemHold: this._titleHoldAction.bind(this),
             itemHoldTimeout: this.option("itemHoldTimeout"),
@@ -411,6 +414,9 @@ var TabPanel = MultiView.inherit({
             case "loop":
                 this._setTabsOption("loopItemFocus", value);
                 break;
+            case "badgeExpr":
+                this._invalidate();
+                break;
             default:
                 this.callBase(args);
         }
@@ -422,6 +428,8 @@ var TabPanel = MultiView.inherit({
     }
 
 });
+
+TabPanel.ItemClass = TabPanelItem;
 
 registerComponent("dxTabPanel", TabPanel);
 
