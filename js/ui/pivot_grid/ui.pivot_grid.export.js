@@ -96,7 +96,6 @@ exports.ExportMixin = extend({}, exportMixin, {
             rtlEnabled: this.option("rtlEnabled"),
             dataFields: this.getDataSource().getAreaFields("data"),
             customizeExcelCell: this.option("export.customizeExcelCell"),
-            component: this
         });
     }
 });
