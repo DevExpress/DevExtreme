@@ -365,10 +365,12 @@ var BingProvider = DynamicProvider.inherit({
                     direction.addWaypoint(waypoint);
                 });
 
-                var directionsErrorHandler;
-                var directionsUpdatedHandler = Microsoft.Maps.Events.addHandler(direction, 'directionsUpdated', function(args) {
-                    Microsoft.Maps.Events.removeHandler(directionsUpdatedHandler);
-                    Microsoft.Maps.Events.removeHandler(directionsErrorHandler);
+                var directionHandlers = [];
+
+                directionHandlers.push(Microsoft.Maps.Events.addHandler(direction, 'directionsUpdated', function(args) {
+                    while(directionHandlers.length) {
+                        Microsoft.Maps.Events.removeHandler(directionHandlers.pop());
+                    }
 
                     var routeSummary = args.routeSummary[0];
 
@@ -377,11 +379,12 @@ var BingProvider = DynamicProvider.inherit({
                         northEast: routeSummary.northEast,
                         southWest: routeSummary.southWest
                     });
-                });
+                }));
 
-                directionsErrorHandler = Microsoft.Maps.Events.addHandler(direction, 'directionsError', function(args) {
-                    Microsoft.Maps.Events.removeHandler(directionsUpdatedHandler);
-                    Microsoft.Maps.Events.removeHandler(directionsErrorHandler);
+                directionHandlers.push(Microsoft.Maps.Events.addHandler(direction, 'directionsError', function(args) {
+                    while(directionHandlers.length) {
+                        Microsoft.Maps.Events.removeHandler(directionHandlers.pop());
+                    }
 
                     var status = "RouteResponseCode: " + args.responseCode + " - " + args.message;
                     errors.log("W1006", status);
@@ -389,7 +392,7 @@ var BingProvider = DynamicProvider.inherit({
                     resolve({
                         instance: direction
                     });
-                });
+                }));
 
                 direction.calculateDirections();
             }.bind(this));
