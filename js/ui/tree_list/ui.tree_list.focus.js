@@ -69,11 +69,14 @@ core.registerModule("focus", extend(true, {}, focusModule, {
                 },
                 expandAscendants: function(key) {
                     var that = this,
+                        dataSource = that._dataSource,
                         d = new Deferred();
 
                     that.getParentKey(key).done(function(parentKey) {
-                        if(parentKey !== undefined && parentKey !== that.option("rootValue")) {
+                        if(dataSource && parentKey !== undefined && parentKey !== that.option("rootValue")) {
+                            dataSource._isNodesInitializing = true;
                             that.expandRow(parentKey);
+                            dataSource._isNodesInitializing = false;
                             that.expandAscendants(parentKey).done(d.resolve).fail(d.reject);
                         } else {
                             d.resolve();
