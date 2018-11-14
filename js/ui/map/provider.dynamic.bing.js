@@ -2,6 +2,7 @@ var noop = require("../../core/utils/common").noop,
     window = require("../../core/utils/window").getWindow(),
     Promise = require("../../core/polyfills/promise"),
     extend = require("../../core/utils/extend").extend,
+    errors = require("../widget/ui.errors"),
     iteratorUtils = require("../../core/utils/iterator"),
     DynamicProvider = require("./provider.dynamic"),
     Color = require("../../color"),
@@ -364,8 +365,10 @@ var BingProvider = DynamicProvider.inherit({
                     direction.addWaypoint(waypoint);
                 });
 
-                var handler = Microsoft.Maps.Events.addHandler(direction, 'directionsUpdated', function(args) {
-                    Microsoft.Maps.Events.removeHandler(handler);
+                var directionsErrorHandler;
+                var directionsUpdatedHandler = Microsoft.Maps.Events.addHandler(direction, 'directionsUpdated', function(args) {
+                    Microsoft.Maps.Events.removeHandler(directionsUpdatedHandler);
+                    Microsoft.Maps.Events.removeHandler(directionsErrorHandler);
 
                     var routeSummary = args.routeSummary[0];
 
@@ -375,6 +378,19 @@ var BingProvider = DynamicProvider.inherit({
                         southWest: routeSummary.southWest
                     });
                 });
+
+                directionsErrorHandler = Microsoft.Maps.Events.addHandler(direction, 'directionsError', function(args) {
+                    Microsoft.Maps.Events.removeHandler(directionsUpdatedHandler);
+                    Microsoft.Maps.Events.removeHandler(directionsErrorHandler);
+
+                    var status = "RouteResponseCode: " + args.responseCode + " - " + args.message;
+                    errors.log("W1006", status);
+
+                    resolve({
+                        instance: direction
+                    });
+                });
+
                 direction.calculateDirections();
             }.bind(this));
         }.bind(this));
