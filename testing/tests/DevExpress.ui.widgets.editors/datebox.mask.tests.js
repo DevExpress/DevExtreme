@@ -277,6 +277,14 @@ if(devices.real().deviceType === "desktop") {
     });
 
     QUnit.module("Keyboard navigation", setupModule, () => {
+        QUnit.test("RegisterKeyHandler should work", (assert) => {
+            const handler = sinon.spy();
+            this.instance.registerKeyHandler("del", handler);
+
+            this.keyboard.press("del");
+            assert.equal(handler.callCount, 1, "registerKeyHandler works");
+        });
+
         QUnit.test("Right and left arrows should move the selection", (assert) => {
             this.keyboard.press("right");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group is selected");
@@ -373,6 +381,16 @@ if(devices.real().deviceType === "desktop") {
 
             assert.equal(this.instance.option("text"), "October 10 2012", "text is correct");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "caret is good");
+        });
+
+        QUnit.test("delete should not revert a part when the value is null", (assert) => {
+            this.instance.option("value", null);
+            this.keyboard.press("up");
+            assert.equal(this.instance.option("text"), "February 1 1970", "text has been changed");
+
+            this.keyboard.press("del");
+            assert.equal(this.instance.option("text"), "February 1 1970", "text has not been changed");
+            assert.deepEqual(this.keyboard.caret(), { start: 9, end: 10 }, "next group is selected");
         });
 
         QUnit.test("backspace should revert group to initial value and go to the previous one", (assert) => {

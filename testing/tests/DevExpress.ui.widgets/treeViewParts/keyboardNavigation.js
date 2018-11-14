@@ -630,6 +630,23 @@ QUnit.test("'enter' key pressing fire onItemClick", function(assert) {
     assert.equal(clickFired, 1);
 });
 
+QUnit.test("item should be expanded by enter when expandEvent is click", function(assert) {
+    var items = [{ text: "Item 1", items: [{ text: "Item 11" }] }],
+        $treeView = initTree({
+            focusStateEnabled: true,
+            items: items,
+            expandEvent: "click"
+        }),
+        $item = $treeView.find(".dx-treeview-item").eq(0),
+        keyboard = keyboardMock($treeView);
+
+    $item.trigger("dxpointerdown");
+    keyboard.keyDown("enter");
+
+    assert.ok(items[0].expanded, "item should be expanded");
+});
+
+
 QUnit.test("'enter' key pressing select/unselect nodes if checkboxes are visible", function(assert) {
     var $treeView = initTree({
             focusStateEnabled: true,

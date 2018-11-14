@@ -831,7 +831,7 @@ QUnit.module("Expand/Collapse rows");
 // T627926
 QUnit.test("Nodes should not be shifted after expanding node on last page", function(assert) {
     // arrange
-    var done = assert.async(),
+    var clock = sinon.useFakeTimers(),
         topVisibleRowData,
         treeList = createTreeList({
             height: 120,
@@ -858,11 +858,14 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
                     { name: 'SubCategory4', id: 10, parentId: 8 },
                 { name: 'Category6', id: 11 }
             ]
-        });
+        }),
+        scrollable = treeList.getScrollable();
 
-    treeList.getScrollable().scrollTo({ y: 300 }); // scroll to the last page
+    try {
+        scrollable.scrollTo({ y: 300 }); // scroll to the last page
+        $(scrollable._container()).trigger("scroll");
+        clock.tick();
 
-    setTimeout(function() {
         topVisibleRowData = treeList.getTopVisibleRowData();
 
         // assert
@@ -877,8 +880,9 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
         assert.strictEqual(treeList.pageIndex(), 3, "page index");
         assert.strictEqual(treeList.pageCount(), 6, "page count");
         assert.deepEqual(treeList.getTopVisibleRowData(), topVisibleRowData, "top visible row data has not changed");
-        done();
-    }, 100);
+    } finally {
+        clock.restore();
+    }
 });
 
 // T648005
@@ -970,6 +974,37 @@ QUnit.test("TreeList with remoteOperations and focusedRowKey", function(assert) 
     assert.equal(treeList.pageIndex(), 1, "page is changed");
     assert.deepEqual(treeList.option("expandedRowKeys"), [11], "focus parent is expanded");
     assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass("dx-row-focused"), "focused row is visible");
+});
+
+QUnit.test("TreeList with remoteOperations(filtering, sorting, grouping) and focusedRowKey should not generate repeated node", function(assert) {
+    // arrange, act
+    var childrenNodes,
+        treeList = createTreeList({
+            dataSource: [
+                { "Task_ID": 1, "Task_Parent_ID": 0 },
+                { "Task_ID": 3, "Task_Parent_ID": 1 },
+                { "Task_ID": 4, "Task_Parent_ID": 2 },
+                { "Task_ID": 5, "Task_Parent_ID": 3 }
+            ],
+            keyExpr: "Task_ID",
+            parentIdExpr: "Task_Parent_ID",
+            remoteOperations: {
+                filtering: true,
+                sorting: true,
+                grouping: true
+            },
+            focusedRowEnabled: true,
+            focusedRowKey: 5
+        });
+
+    this.clock.tick();
+
+    // arrange
+    childrenNodes = treeList.getNodeByKey(1).children;
+
+    // assert
+    assert.equal(childrenNodes.length, 1, "children nodes count");
+    assert.equal(childrenNodes[0].key, 3, "children node key");
 });
 
 QUnit.testInActiveWindow("DataGrid should focus the corresponding group row if group collapsed and inner data row was focused", function(assert) {

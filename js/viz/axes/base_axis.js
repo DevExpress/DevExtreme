@@ -1046,8 +1046,6 @@ Axis.prototype = {
             return;
         }
         const that = this;
-        const options = that._options;
-
         const visualRangeUpdateMode = this._getVisualRangeUpdateMode(currentBusinessRange, seriesData);
 
         if(visualRangeUpdateMode === KEEP) {
@@ -1057,18 +1055,23 @@ Axis.prototype = {
             that._setVisualRange([null, null]);
         }
         if(visualRangeUpdateMode === SHIFT) {
-            const currentBusinessRange = this._translator.getBusinessRange();
-            let length;
-            if(options.type === constants.logarithmic) {
-                length = adjust(vizUtils.getLog(currentBusinessRange.maxVisible / currentBusinessRange.minVisible, options.logarithmBase));
-            } else if(options.type === constants.discrete) {
-                const categoriesInfo = vizUtils.getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
-                length = categoriesInfo.categories.length;
-            } else {
-                length = currentBusinessRange.maxVisible - currentBusinessRange.minVisible;
-            }
-            that._setVisualRange({ length });
+            that._setVisualRange({ length: that.getVisualRangeLength() });
         }
+    },
+
+    getVisualRangeLength(range) {
+        const currentBusinessRange = range || this._translator.getBusinessRange();
+        const { type, logarithmBase } = this._options;
+        let length;
+        if(type === constants.logarithmic) {
+            length = adjust(vizUtils.getLog(currentBusinessRange.maxVisible / currentBusinessRange.minVisible, logarithmBase));
+        } else if(type === constants.discrete) {
+            const categoriesInfo = vizUtils.getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
+            length = categoriesInfo.categories.length;
+        } else {
+            length = currentBusinessRange.maxVisible - currentBusinessRange.minVisible;
+        }
+        return length;
     },
 
     setBusinessRange(range, categoriesOrder) {

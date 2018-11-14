@@ -32,22 +32,28 @@ module.exports = {
         return this._canvasOptions.interval;
     },
 
+    getEventScale: function(zoomEvent) {
+        const scale = zoomEvent.deltaScale || 1;
+        return 1 - (1 - scale) / (0.75 + this.visibleCategories.length / this._categories.length);
+    },
+
     zoom: function(translate, scale) {
         var that = this,
+            categories = that._categories,
             canvasOptions = that._canvasOptions,
             stick = that._options.stick,
             invert = canvasOptions.invert,
             interval = canvasOptions.interval * scale,
             translateCategories = translate / interval,
+            visibleCount = (that.visibleCategories || []).length,
             startCategoryIndex = parseInt((canvasOptions.startPointIndex || 0) + translateCategories + 0.5),
             categoriesLength = parseInt(adjust(canvasOptions.canvasLength / interval) + (stick ? 1 : 0)) || 1,
             endCategoryIndex,
             newVisibleCategories,
-            categories = that._categories,
             newInterval;
 
         if(invert) {
-            startCategoryIndex = parseInt((canvasOptions.startPointIndex || 0) + (that.visibleCategories || []).length - translateCategories + 0.5) - categoriesLength;
+            startCategoryIndex = parseInt((canvasOptions.startPointIndex || 0) + visibleCount - translateCategories + 0.5) - categoriesLength;
         }
 
         if(startCategoryIndex < 0) {

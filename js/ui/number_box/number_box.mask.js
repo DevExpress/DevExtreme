@@ -89,21 +89,29 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this._focusOutOccurs = false;
     },
 
-    _updateFormattedValue: function() {
-        this._parsedValue = this._tryParse(this._getInputVal(), this._caret());
-        this._adjustParsedValue();
-        this._setTextByParsedValue();
+    _hasValueBeenChanged(inputValue) {
+        var format = this._getFormatPattern(),
+            value = this.option("value"),
+            formatted = this._format(value, format) || "";
 
-        if(this._isValueDirty()) {
-            this._isDirty = false;
-            eventsEngine.trigger(this._input(), "change");
-        }
+        return formatted !== inputValue;
     },
 
-    _isValueDirty: function() {
-        // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
-        // https://bugreport.apple.com/web/?problemID=38133794 but this bug tracker is private
-        return this._isDirty || this._parsedValue !== this.option("value");
+    _updateFormattedValue: function() {
+        var inputValue = this._getInputVal();
+
+        if(this._hasValueBeenChanged(inputValue)) {
+            this._parsedValue = this._tryParse(inputValue, this._caret());
+
+            this._adjustParsedValue();
+            this._setTextByParsedValue();
+
+            if(this._parsedValue !== this.option("value")) {
+                // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
+                // https://bugreport.apple.com/web/?problemID=38133794 but this bug tracker is private
+                eventsEngine.trigger(this._input(), "change");
+            }
+        }
     },
 
     _arrowHandler: function(step, e) {
@@ -367,10 +375,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var newCaret = maskCaret.getCaretAfterFormat(this._getInputVal(), text, this._caret(), this._getFormatPattern()),
             newValue = number.convertDigits(text);
 
-        if(this._formattedValue && this._formattedValue !== newValue) {
-            this._isDirty = true;
-        }
-
         this._input().val(newValue);
         this._toggleEmptinessEventHandler();
         this._formattedValue = text;
@@ -558,7 +562,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
             textWithoutMinus = this._removeMinusFromText(text, caret),
             wasMinusRemoved = textWithoutMinus !== text;
 
-        this._isDirty = false;
         text = textWithoutMinus;
 
         if(this._isValueIncomplete(textWithoutMinus)) {
@@ -654,7 +657,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._formattedValue;
         delete this._lastKey;
         delete this._parsedValue;
-        delete this._isDirty;
         delete this._focusOutOccurs;
         clearTimeout(this._ieCaretTimeout);
         delete this._ieCaretTimeout;

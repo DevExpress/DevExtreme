@@ -2051,10 +2051,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return extend(true, {}, data);
     },
 
-    _getHorizontalMax: function(groupIndex, date) {
-        var intervalIndex = this.option("groupByDate") ? this.getDateIntervalIndex(date) : 0;
+    _getHorizontalMax: function(groupIndex) {
+        groupIndex = this.option("groupByDate") ? this._getGroupCount() - 1 : groupIndex;
 
-        return this._groupedStrategy.getHorizontalMax(groupIndex + intervalIndex);
+        return this._groupedStrategy.getHorizontalMax(groupIndex);
     },
 
     getCoordinatesByDate: function(date, groupIndex, inAllDayRow) {
@@ -2304,20 +2304,6 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         return this._getDateByCellIndexes(rowIndex, cellIndex, true);
-    },
-
-    getDateIntervalIndex: function(date) {
-        if(this.option("intervalCount") === 1) {
-            return 0;
-        }
-
-        var firstViewDate = this.getStartViewDate(),
-            diff = date.getTime() - firstViewDate.getTime(),
-            intervalDuration = this._getCellCount() / this.option("intervalCount");
-
-        var index = Math.floor(diff / (intervalDuration * toMs("day")));
-
-        return index;
     },
 
     getCellDuration: function() {

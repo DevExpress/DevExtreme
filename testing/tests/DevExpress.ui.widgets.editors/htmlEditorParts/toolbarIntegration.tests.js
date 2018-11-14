@@ -7,6 +7,7 @@ const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 const DROPDOWNMENU_CLASS = "dx-dropdownmenu-button";
 const BUTTON_CONTENT_CLASS = "dx-button-content";
+const QUILL_CONTAINER_CLASS = "dx-quill-container";
 
 const { test } = QUnit;
 
@@ -86,4 +87,23 @@ QUnit.module("Toolbar integration", {
         assert.equal($toolbarContainer.html(), "", "Container's inner html is empty");
         assert.notOk($toolbarContainer.hasClass(TOOLBAR_WRAPPER_CLASS), "Container hasn't wrapper class");
     });
+
+    test("Editor should consider toolbar height", (assert => {
+        const height = 100;
+        let markup = "";
+
+        for(let i = 1; i < 50; i++) {
+            markup += `<p>test ${i}</p>`;
+        }
+
+        $("#htmlEditor").html(markup).dxHtmlEditor({
+            height: height,
+            toolbar: { items: ["bold"] }
+        });
+
+        const quillContainerHeight = $(`#htmlEditor .${QUILL_CONTAINER_CLASS}`).outerHeight();
+        const toolbarHeight = $(`#htmlEditor .${TOOLBAR_WRAPPER_CLASS}`).outerHeight();
+
+        assert.roughEqual(quillContainerHeight + toolbarHeight, height, 1, "Toolbar + editor equals to the predefined height");
+    }));
 });

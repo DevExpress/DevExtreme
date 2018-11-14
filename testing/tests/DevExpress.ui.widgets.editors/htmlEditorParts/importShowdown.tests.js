@@ -1,4 +1,3 @@
-
 SystemJS.config({
     map: {
         'showdown': '/testing/helpers/quillDependencies/noShowdown.js'
@@ -17,6 +16,22 @@ define(function(require) {
                 },
                 "The showdown script isn't referenced"
              );
+        });
+
+        QUnit.test("initialize showdown from window", function(assert) {
+            var prevWinShowdown = window.showdown;
+
+            window.showdown = {
+                Converter: function() {
+                    this.initialized = true;
+                }
+            };
+
+            var converter = new MarkdownConverter();
+
+            assert.ok(converter._markdown2Html.initialized);
+
+            window.showdown = prevWinShowdown;
         });
     });
 });

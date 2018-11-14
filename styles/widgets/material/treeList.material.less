@@ -11,13 +11,16 @@
         position: relative;
         top: -2px;
         display: inline-block;
-        color: @treelist-chevron-icon-color;
         .dx-icon-chevronup;
         width: @TREELIST_EMPTY_SPACE_WIDTH;
 
         &:before {
             visibility: hidden;
         }
+    }
+
+    :not(.dx-row-focused) .dx-treelist-empty-space {
+        color: @treelist-chevron-icon-color;
     }
 
     .dx-treelist-expanded span {
@@ -43,11 +46,11 @@
             margin-top: -@TREELIST_ICON_MARGIN_TOP;
         }
     }
-	
+
 	.dx-sort-up, .dx-sort-down, .dx-header-filter {
 		vertical-align: middle;
 	}
-    
+
     .dx-selection {
         .dx-treelist-empty-space  {
             color: @treelist-selection-chevron-icon-color;

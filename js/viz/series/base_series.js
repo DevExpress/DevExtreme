@@ -357,8 +357,9 @@ Series.prototype = {
     },
 
     updateData: function(data) {
-        var that = this,
-            options = that._options;
+        const that = this;
+        const options = that._options;
+        const nameField = options.nameField;
 
         data = data || [];
 
@@ -372,7 +373,7 @@ Series.prototype = {
         that._data = data.reduce((data, dataItem, index) => {
             const pointDataItem = dataSelector(dataItem);
             if(_isDefined(pointDataItem.argument)) {
-                if((!options.nameField || dataItem[options.nameField] === this.name)) {
+                if((!nameField || dataItem[nameField] === options.nameFieldValue)) {
                     pointDataItem.index = index;
                     data.push(pointDataItem);
                 }
@@ -589,7 +590,7 @@ Series.prototype = {
 
     _resetNearestPoint: function() {
         var that = this;
-        that._nearestPoint && that._nearestPoint.resetView(HOVER);
+        that._nearestPoint && that._nearestPoint.series !== null && that._nearestPoint.resetView(HOVER);
         that._nearestPoint = null;
     },
 

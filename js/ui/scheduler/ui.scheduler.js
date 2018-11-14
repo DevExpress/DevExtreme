@@ -847,9 +847,9 @@ var Scheduler = Widget.inherit({
                 */
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
-            groupByDate: false,
-
             allowMultipleCellSelection: true,
+            displayedAppointmentDataField: null,
+
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: "bottom",
             _appointmentTooltipCloseButton: false,
@@ -1286,6 +1286,8 @@ var Scheduler = Widget.inherit({
                 break;
             case "maxAppointmentsPerCell":
                 break;
+            case "displayedAppointmentDataField":
+                break;
             case "startDateExpr":
             case "endDateExpr":
             case "startDateTimeZoneExpr":
@@ -1586,7 +1588,7 @@ var Scheduler = Widget.inherit({
                 if(this._filteredItems.length && this._isVisible()) {
                     this._appointments.option("items", this._getAppointmentsToRepaint());
 
-                    delete this.instance._updatedAppointment;
+                    this._appointmentModel.cleanModelState();
                 } else {
                     this._appointments.option("items", []);
                 }
@@ -2411,9 +2413,10 @@ var Scheduler = Widget.inherit({
 
     _getRecurrenceExceptionDate: function(exceptionDate, targetStartDate, startDateTimeZone) {
         var startDate = this.fire("convertDateByTimezoneBack", targetStartDate, startDateTimeZone);
+
         exceptionDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
 
-        return dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmss");
+        return dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ");
     },
 
     _showRecurrenceChangeConfirm: function(isDeleted) {
@@ -2489,6 +2492,12 @@ var Scheduler = Widget.inherit({
         return result;
     },
 
+    _isAppointmentRecurrence: function(appointmentData) {
+        var recurrenceRule = this.fire("getField", "recurrenceRule", appointmentData);
+
+        return recurrenceRule && recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid;
+    },
+
     _getSingleAppointmentData: function(appointmentData, options) {
         options = options || {};
 
@@ -2500,8 +2509,6 @@ var Scheduler = Widget.inherit({
             startDate = new Date(this.fire("getField", "startDate", resultAppointmentData)),
             endDate = new Date(this.fire("getField", "endDate", resultAppointmentData)),
             appointmentDuration = endDate.getTime() - startDate.getTime(),
-            recurrenceRule = this.fire("getField", "recurrenceRule", appointmentData),
-            isRecurrence = recurrenceRule && recurrenceUtils.getRecurrenceRule(recurrenceRule).isValid,
             updatedStartDate,
             appointmentStartDate;
 
@@ -2521,7 +2528,7 @@ var Scheduler = Widget.inherit({
                     }
                 }
 
-                if(isRecurrence) {
+                if(this._isAppointmentRecurrence(appointmentData)) {
                     appointmentStartDate = $appointment.data("dxAppointmentSettings") && $appointment.data("dxAppointmentSettings").startDate;
                     if(appointmentStartDate) {
                         updatedStartDate = appointmentStartDate;
@@ -2532,6 +2539,10 @@ var Scheduler = Widget.inherit({
                     updatedStartDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
                 }
             }
+        }
+
+        if(!updatedStartDate && options.startDate) {
+            updatedStartDate = options.startDate;
         }
 
         if(updatedStartDate) {
@@ -2589,7 +2600,6 @@ var Scheduler = Widget.inherit({
                 this._expandAllDayPanel(appointment);
 
                 try {
-                    this._updatedAppointment = appointment;
                     this._appointmentModel
                         .update(target, appointment)
                         .always((function(e) {
@@ -2663,7 +2673,7 @@ var Scheduler = Widget.inherit({
     },
 
     getUpdatedAppointment: function() {
-        return this._updatedAppointment;
+        return this._appointmentModel.getUpdatedAppointment();
     },
 
     getAppointmentsInstance: function() {
@@ -2939,6 +2949,8 @@ var Scheduler = Widget.inherit({
         if(!text) {
             this.fire("setField", "text", appointment, "");
         }
+
+        this._convertDatesByTimezoneBack(true, appointment);
 
         var addingOptions = {
             appointmentData: appointment,

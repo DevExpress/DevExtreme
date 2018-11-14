@@ -43,6 +43,9 @@ var registerComponent = require("../../core/component_registrator"),
     SLIDER_MARKER = "sliderMarker",
     OPTION_BACKGROUND = "background",
     LOGARITHMIC = "logarithmic",
+    KEEP = "keep",
+    SHIFT = "shift",
+    RESET = "reset",
     INVISIBLE_POS = -1000,
     SEMIDISCRETE_GRID_SPACING_FACTOR = 50,
     DEFAULT_AXIS_DIVISION_FACTOR = 30,
@@ -660,9 +663,48 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         this._change(["MOSTLY_TOTAL"]);
     },
 
+    _setValueByDataSource() {
+        const that = this;
+        const options = that._options;
+        const axis = that._axis;
+
+        if(options.dataSource) {
+            let selectedRangeUpdateMode = that.option("selectedRangeUpdateMode");
+            if(_isDefined(selectedRangeUpdateMode)) {
+                selectedRangeUpdateMode = _normalizeEnum(selectedRangeUpdateMode);
+                that.__skipAnimation = true;
+            } else {
+                selectedRangeUpdateMode = RESET;
+            }
+            const value = that.getValue();
+            const valueIsReady = _isDefined(value[0]) && _isDefined(value[1]);
+
+            if(selectedRangeUpdateMode === "auto" && valueIsReady) {
+                var rangesInfo = axis.allScaleSelected(value);
+
+                if(rangesInfo.startValue && rangesInfo.endValue) {
+                    selectedRangeUpdateMode = RESET;
+                } else if(rangesInfo.endValue) {
+                    selectedRangeUpdateMode = SHIFT;
+                } else {
+                    selectedRangeUpdateMode = KEEP;
+                }
+            }
+
+            if(selectedRangeUpdateMode === RESET) {
+                options[VALUE] = null;
+            } else if(selectedRangeUpdateMode === SHIFT && valueIsReady) {
+                const value = that.getValue();
+                that.__skipAnimation = true;
+                options[VALUE] = { length: axis.getVisualRangeLength({ minVisible: value[0], maxVisible: value[1] }) };
+            } else if(selectedRangeUpdateMode === KEEP) {
+                that.__skipAnimation = true;
+            }
+        }
+    },
+
     _change_DATA_SOURCE: function() {
         if(this._options.dataSource) {
-            this._options[VALUE] = null;
             this._updateDataSource();
         }
     },
@@ -707,7 +749,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         }
         that.callBase.apply(that, arguments);
         that._rangeOption = null;
-        that.__isResizing = false;
+        that.__isResizing = that.__skipAnimation = false;
     },
 
     _applyMostlyTotalChange: function() {
@@ -719,7 +761,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
                 left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
             };
 
-        if(that.__isResizing) {
+        if(that.__isResizing || that.__skipAnimation) {
             currentAnimationEnabled = renderer.animationEnabled();
             renderer.updateAnimationOptions({
                 enabled: false
@@ -736,7 +778,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
         });
 
-        if(that.__isResizing) {
+        if(that.__isResizing || that.__skipAnimation) {
             renderer.updateAnimationOptions({
                 enabled: currentAnimationEnabled
             });
@@ -746,6 +788,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     },
 
     _dataSourceChangedHandler: function() {
+        this._setValueByDataSource();
         this._requestChange(["MOSTLY_TOTAL"]);
     },
 
@@ -1049,10 +1092,19 @@ AxisWrapper.prototype = {
 
     getViewport: function() {
         return {};
+    },
+
+    allScaleSelected(value) {
+        const { startValue, endValue } = this._axis.visualRange();
+
+        return {
+            startValue: value[0].valueOf() === startValue.valueOf(),
+            endValue: value[1].valueOf() === endValue.valueOf()
+        };
     }
 };
 
-["setMarginOptions", "getFullTicks", "updateCanvas", "updateOptions", "getAggregationInfo", "getTranslator"].forEach(methodName => {
+["setMarginOptions", "getFullTicks", "updateCanvas", "updateOptions", "getAggregationInfo", "getTranslator", "getVisualRangeLength"].forEach(methodName => {
     AxisWrapper.prototype[methodName] = function() {
         const axis = this._axis;
 

@@ -58,7 +58,7 @@
 
 <script>
     $(function() {
-                var ROOT_URL = "@Url.Content("~/")";
+        var ROOT_URL = "@Url.Content("~/")";
 
         var TEST_TIMEOUT_SECONDS = 30,
             TEST_TIMEOUT = TEST_TIMEOUT_SECONDS * 1000,
@@ -135,7 +135,7 @@
             rootStartTime = new Date();
 
         var titleElement  = document.getElementById("title");
-        if (suitesDescription.constellation) {
+        if(suitesDescription.constellation) {
             titleElement.innerText = suitesDescription.constellation;
             titleElement.style.color = "yellow";
         } else {

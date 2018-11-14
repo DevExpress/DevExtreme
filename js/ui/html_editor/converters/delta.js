@@ -14,6 +14,12 @@ const LIST_BLOT_NAME = "list";
 const LIST_ITEM_BLOT_NAME = "list-item";
 
 class DeltaConverter {
+
+    constructor() {
+        this.TextBlot = getQuill().import("blots/text");
+        this.BreakBlot = getQuill().import("blots/break");
+    }
+
     setQuillInstance(quillInstance) {
         this.quillInstance = quillInstance;
     }
@@ -33,13 +39,11 @@ class DeltaConverter {
     }
 
     _convertHTML(blot, index, length, isRoot = false) {
-        const TextBlot = getQuill().import("blots/text");
-
         if(isFunction(blot.html)) {
             return blot.html(index, length);
         }
 
-        if(blot instanceof TextBlot) {
+        if(blot instanceof this.TextBlot) {
             return this._escapeText(blot.value().slice(index, index + length));
         }
 
@@ -53,6 +57,8 @@ class DeltaConverter {
                 parts.push(this._convertHTML(child, offset, childLength));
             });
 
+            this._handleBreakLine(blot.children, parts);
+
             if(isRoot || blot.statics.blotName === LIST_ITEM_BLOT_NAME) {
                 return parts.join("");
             }
@@ -64,6 +70,12 @@ class DeltaConverter {
         }
 
         return blot.domNode.outerHTML;
+    }
+
+    _handleBreakLine(linkedList, parts) {
+        if(linkedList.length === 1 && linkedList.head instanceof this.BreakBlot) {
+            parts.push("<br>");
+        }
     }
 
     _convertList(blot, index, length) {

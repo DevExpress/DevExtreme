@@ -1701,6 +1701,7 @@ QUnit.test("update with old series", function(assert) {
     series2.stub("getPoints").returns([]);
 
     this.updateTracker(series);
+    this.options.tooltip.stub("hide").reset();
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
@@ -1708,9 +1709,8 @@ QUnit.test("update with old series", function(assert) {
     this.tracker.updateSeries(series);
 
     // assert
-    assert.strictEqual(this.series.clearHover.callCount, 1);
-    assert.strictEqual(this.series.clearSelection.callCount, 3);
-    assert.strictEqual(point.clearSelection.callCount, 2);
+    assert.notOk(this.series.clearHover.callCount);
+    assert.strictEqual(this.options.tooltip.stub("hide").callCount, 0);
 });
 
 QUnit.test("update with old series when point is hovered", function(assert) {
@@ -1722,16 +1722,18 @@ QUnit.test("update with old series when point is hovered", function(assert) {
     this.series.stub("getPoints").returns([point]);
 
     this.updateTracker(series);
+    this.options.tooltip.stub("hide").reset();
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
     // act
-    this.tracker.updateSeries(series);
+    this.tracker.updateSeries(series, true);
 
     // assert
-    assert.strictEqual(this.series.clearSelection.callCount, 3);
     assert.strictEqual(point.clearHover.callCount, 1);
-    assert.strictEqual(point.clearSelection.callCount, 2);
+    assert.strictEqual(this.options.tooltip.stub("hide").callCount, 2);
+    assert.strictEqual(this.series.clearSelection.callCount, 1);
+    assert.strictEqual(point.clearSelection.callCount, 1);
 });
 
 QUnit.test("update with old series when point is hovered. point was disposed", function(assert) {
@@ -1750,7 +1752,6 @@ QUnit.test("update with old series when point is hovered. point was disposed", f
     this.tracker.updateSeries(series);
 
     // assert
-    assert.strictEqual(this.series.clearSelection.callCount, 3);
     assert.strictEqual(point.stub("clearHover").callCount, 0);
 });
 
@@ -1780,7 +1781,7 @@ QUnit.test("Work after update with old series", function(assert) {
 
     assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip showing");
     assert.deepEqual(this.options.tooltip.stub("show").lastCall.args, [point.getTooltipFormatObject(), { x: 200 + 3, y: 100 + 5 }, { target: point }], "tooltip showing args");
-    assert.equal(this.options.tooltip.stub("hide").callCount, 1, "tooltip hiding");
+    assert.equal(this.options.tooltip.stub("hide").callCount, 0, "tooltip hiding");
 });
 
 QUnit.test("Emulate rendering chart in hidden container. Call UpdateSeries twice, but update only once during last updateTracker session", function(assert) {

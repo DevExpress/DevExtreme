@@ -64,6 +64,7 @@ const simpleModuleConfig = {
 
         this.options = {
             editorInstance: {
+                NAME: "dxHtmlEditor",
                 $element: () => {
                     return this.$element;
                 },
@@ -85,6 +86,8 @@ const dialogModuleConfig = {
 
         this.$element = $("#htmlEditor");
         this.log = [];
+        this.focusStub = sinon.stub();
+
         this.quillMock = {
             format: (format, value) => {
                 this.log.push({ format: format, value: value });
@@ -97,6 +100,7 @@ const dialogModuleConfig = {
             },
             on: noop,
             off: noop,
+            focus: this.focusStub,
             getSelection: noop,
             getFormat: () => { return {}; },
             getLength: () => { return 1; }
@@ -105,6 +109,7 @@ const dialogModuleConfig = {
 
         this.options = {
             editorInstance: {
+                NAME: "dxHtmlEditor",
                 $element: () => {
                     return this.$element;
                 },
@@ -512,6 +517,20 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
         assert.equal($separator.length, 1, "Toolbar has a separator item");
         assert.equal($menuSeparator.length, 1, "Toolbar has a menu separator item");
     });
+
+    test("toolbar should prevent default mousedown event", (assert) => {
+        this.options.items = ["bold"];
+
+        new Toolbar(this.quillMock, this.options);
+
+        this.$element.on("mousedown", (e) => {
+            assert.ok(e.isDefaultPrevented(), "Default prevented");
+        });
+
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("mousedown");
+    });
 });
 
 QUnit.module("Active formats", simpleModuleConfig, () => {
@@ -725,6 +744,22 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.deepEqual(this.log, [{ format: "color", value: "#fafafa" }], "format method with the right arguments");
     });
 
+    test("decline change color dialog", (assert) => {
+        this.options.items = ["color"];
+
+        new Toolbar(this.quillMock, this.options);
+
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+
+        $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
+            .last()
+            .trigger("dxclick");
+
+        assert.ok(this.focusStub.calledOnce, "focus method was called after closing the dialog");
+    });
+
     test("show background dialog", (assert) => {
         this.options.items = ["background"];
         new Toolbar(this.quillMock, this.options);
@@ -814,6 +849,22 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         assert.equal($fieldInputs.eq(0).val(), "http://test.com/test.jpg", "URL");
         assert.equal($fieldInputs.eq(1).val(), "100", "Width");
         assert.equal($fieldInputs.eq(2).val(), "100", "Height");
+    });
+
+    test("decline link dialog", (assert) => {
+        this.options.items = ["link"];
+
+        new Toolbar(this.quillMock, this.options);
+
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+
+        $(`.${DIALOG_CLASS} .${BUTTON_WITH_TEXT_CLASS}`)
+            .last()
+            .trigger("dxclick");
+
+        assert.ok(this.focusStub.calledOnce, "focus method was called after closing the dialog");
     });
 
     test("change an image formatting", (assert) => {

@@ -280,6 +280,134 @@ QUnit.testStart(function() {
         assert.strictEqual(dataAccessors.setter.recurrenceRule, undefined, "setter for recurrenceRule is OK");
     });
 
+    QUnit.test("appointmentTemplate rendering args should be correct if displayedAppointmentDataField is specified", function(assert) {
+        var counter = 0;
+
+        this.instance.option({
+            dataSource: [{
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                recurrenceRule: "FREQ=DAILY;COUNT=2",
+                text: "Task 2"
+            }],
+            height: 600,
+            currentDate: new Date(2015, 4, 24),
+            displayedAppointmentDataField: "Field",
+            currentView: "month",
+            views: ["month"],
+            appointmentTemplate: function(data) {
+                if(counter === 1) {
+                    assert.deepEqual(data.Field, {
+                        startDate: new Date(2015, 4, 25, 9, 10),
+                        endDate: new Date(2015, 4, 25, 11, 1),
+                        allDay: true,
+                        recurrenceRule: "FREQ=DAILY;COUNT=2",
+                        text: "Task 2"
+                    }, "occurence args is correct");
+                }
+                counter++;
+            }
+        });
+    });
+
+    QUnit.test("additional field should be applied in appointmentTemplate only for recurrence appointment", function(assert) {
+        this.instance.option({
+            dataSource: [{
+                startDate: new Date(2015, 4, 10, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 2"
+            }],
+            height: 600,
+            currentDate: new Date(2015, 4, 24),
+            displayedAppointmentDataField: "Field",
+            currentView: "month",
+            views: ["month"],
+            appointmentTemplate: function(data) {
+                assert.strictEqual(data.Field, undefined);
+            }
+        });
+    });
+
+    QUnit.test("additional field should be applied in appointmentTemplate only when displayedAppointmentDataField is set", function(assert) {
+        this.instance.option({
+            dataSource: [{
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                recurrenceRule: "FREQ=DAILY;COUNT=2",
+                allDay: true,
+                text: "Task 2"
+            }],
+            height: 600,
+            currentDate: new Date(2015, 4, 24),
+            displayedAppointmentDataField: null,
+            currentView: "month",
+            views: ["month"],
+            appointmentTemplate: function(data) {
+                assert.strictEqual(data.Field, undefined);
+            }
+        });
+    });
+
+    QUnit.test("appointmentTooltipTemplate rendering args should be correct if displayedAppointmentDataField is specified", function(assert) {
+        this.instance.option({
+            dataSource: [{
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                recurrenceRule: "FREQ=DAILY;COUNT=2",
+                text: "Task 2"
+            }],
+            height: 600,
+            currentDate: new Date(2015, 4, 24),
+            displayedAppointmentDataField: "Field",
+            currentView: "month",
+            views: ["month"],
+            appointmentTooltipTemplate: function(data) {
+                assert.deepEqual(data.Field, {
+                    startDate: new Date(2015, 4, 25, 9, 10),
+                    endDate: new Date(2015, 4, 25, 11, 1),
+                    allDay: true,
+                    recurrenceRule: "FREQ=DAILY;COUNT=2",
+                    text: "Task 2"
+                }, "occurence args is correct");
+            }
+        });
+
+        $(this.instance.$element().find(".dx-scheduler-appointment").eq(1)).trigger("dxclick");
+        this.clock.tick(300);
+    });
+
+    QUnit.test("dropDownAppointmentTemplate rendering args should be correct if displayedAppointmentDataField is specified", function(assert) {
+        this.instance.option({
+            dataSource: [{
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                recurrenceRule: "FREQ=DAILY;COUNT=2",
+                allDay: true,
+                text: "Task 1"
+            }, {
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                recurrenceRule: "FREQ=DAILY;COUNT=2",
+                text: "Task 2"
+            }],
+            maxAppointmentsPerCell: 1,
+            currentDate: new Date(2015, 4, 24),
+            displayedAppointmentDataField: "Field",
+            views: ["month"],
+            dropDownAppointmentTemplate: function(data) {
+                assert.deepEqual(data.Field.startDate, new Date(2015, 4, 25, 9, 10), "Start date of part is ok");
+                assert.deepEqual(data.Field.endDate, new Date(2015, 4, 25, 11, 1), "End date of part is ok");
+            },
+            currentView: "month"
+        });
+
+        $(".dx-scheduler-dropdown-appointments").eq(1).dxDropDownMenu("instance").open();
+    });
+
 })("Initialization");
 
 (function() {
@@ -625,6 +753,25 @@ QUnit.testStart(function() {
         this.clock.tick();
 
         assert.deepEqual(this.instance.option("dataSource").items()[0], newTask, "item is updated");
+    });
+
+    QUnit.test("Updated directly from store item should be rerendered correctly", function(assert) {
+        var data = [{
+            text: "abc", startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 11)
+        }];
+
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data
+        });
+
+        var dataSource = this.instance.getDataSource();
+        dataSource.store().update(data[0], {
+            text: "def", startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 11)
+        });
+        dataSource.load();
+
+        assert.equal(this.instance.$element().find(".dx-scheduler-appointment-title").eq(0).text(), "def", "Appointment is rerendered");
     });
 
     QUnit.test("the 'update' method of store should have key as arg is store has the 'key' field", function(assert) {

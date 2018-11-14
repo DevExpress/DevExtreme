@@ -18,7 +18,7 @@ const MASK_EVENT_NAMESPACE = "dateBoxMask",
 let DateBoxMask = DateBoxBase.inherit({
 
     _supportedKeys(e) {
-        if(!this._useMaskBehavior() || this.option("opened") || e.altKey) {
+        if(!this._useMaskBehavior() || this.option("opened") || (e && e.altKey)) {
             return this.callBase(e);
         }
 
@@ -154,10 +154,12 @@ let DateBoxMask = DateBoxBase.inherit({
         const caret = this._caret();
         const isAllSelected = caret.end - caret.start === this.option("text").length;
 
-        if(value && !isAllSelected) {
-            const actual = this._getActivePartValue(value);
+        if(!isAllSelected) {
+            if(value) {
+                const actual = this._getActivePartValue(value);
+                this._setActivePartValue(actual);
+            }
 
-            this._setActivePartValue(actual);
             this._selectNextPart(direction, e);
         }
     },

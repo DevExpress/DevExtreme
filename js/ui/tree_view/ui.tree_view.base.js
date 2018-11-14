@@ -55,6 +55,13 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             e.target = $itemElement;
             e.currentTarget = $itemElement;
             this._itemClickHandler(e, $itemElement.children("." + ITEM_CLASS));
+
+            var expandEventName = this._getEventNameByOption(this.option("expandEvent")),
+                expandByClick = expandEventName === eventUtils.addNamespace(clickEvent.name, EXPAND_EVENT_NAMESPACE);
+
+            if(expandByClick) {
+                this._expandEventHandler(e);
+            }
         };
 
         var select = function(e) {
@@ -755,6 +762,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             multipleSelection: !this._isSingleSelection(),
             recursiveSelection: this._isRecursiveSelection(),
             recursiveExpansion: this.option("expandNodesRecursive"),
+            selectionRequired: this.option("selectionRequired"),
             dataType: this.option("dataStructure"),
             sort: this._dataSource && this._dataSource.sort()
         };
@@ -851,7 +859,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _selectAllEnabled: function() {
-        return this.option("showCheckBoxesMode") === "selectAll";
+        return this.option("showCheckBoxesMode") === "selectAll" && !this._isSingleSelection();
     },
 
     _renderItems: function($nodeContainer, nodes) {
@@ -960,20 +968,21 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         $node.addClass(IS_LEAF);
     },
 
+    _expandEventHandler: function(e) {
+        var $nodeElement = $(e.currentTarget.parentNode);
+
+        if(!$nodeElement.hasClass(IS_LEAF)) {
+            this._toggleExpandedState(e.currentTarget, undefined, e);
+        }
+    },
+
     _initExpandEvent: function() {
-        var that = this,
-            expandedEventName = this._getEventNameByOption(this.option("expandEvent")),
+        var expandedEventName = this._getEventNameByOption(this.option("expandEvent")),
             $itemsContainer = this._itemContainer(),
             itemSelector = this._itemSelector();
 
         eventsEngine.off($itemsContainer, "." + EXPAND_EVENT_NAMESPACE, itemSelector);
-        eventsEngine.on($itemsContainer, expandedEventName, itemSelector, function(e) {
-            var $nodeElement = $(e.currentTarget.parentNode);
-
-            if(!$nodeElement.hasClass(IS_LEAF)) {
-                that._toggleExpandedState(e.currentTarget, undefined, e);
-            }
-        });
+        eventsEngine.on($itemsContainer, expandedEventName, itemSelector, this._expandEventHandler.bind(this));
     },
 
     _getEventNameByOption: function(name) {
@@ -1330,6 +1339,43 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this.option("selectNodesRecursive") && this.option("selectionMode") !== "single";
     },
 
+    _isLastSelectedBranch: function(publicNode, selectedNodesKeys, deep) {
+        var keyIndex = selectedNodesKeys.indexOf(publicNode.key);
+
+        if(keyIndex >= 0) {
+            selectedNodesKeys.splice(keyIndex, 1);
+        }
+
+        if(deep) {
+            each(publicNode.children, function(_, childNode) {
+                this._isLastSelectedBranch(childNode, selectedNodesKeys, true);
+            }.bind(this));
+        }
+
+        if(publicNode.parent) {
+            this._isLastSelectedBranch(publicNode.parent, selectedNodesKeys);
+        }
+
+        return selectedNodesKeys.length === 0;
+    },
+
+    _isLastRequired: function(node) {
+        var selectionRequired = this.option("selectionRequired"),
+            isSingleMode = this._isSingleSelection(),
+            selectedNodesKeys = this.getSelectedNodesKeys();
+
+        if(!selectionRequired) {
+            return;
+        }
+
+        if(isSingleMode) {
+            return selectedNodesKeys.length === 1;
+        } else {
+            return this._isLastSelectedBranch(node.internalFields.publicNode, selectedNodesKeys.slice(), true);
+        }
+
+    },
+
     _updateItemSelection: function(value, itemElement, dxEvent) {
         var that = this,
             node = that._getNode(itemElement);
@@ -1338,8 +1384,18 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
+        if(!value && this._isLastRequired(node)) {
+            if(this._showCheckboxes()) {
+                var $node = this._getNodeElement(node),
+                    checkbox = this._getCheckBoxInstance($node);
+
+                checkbox && checkbox.option("value", true);
+            }
+            return;
+        }
+
+        var selectedNodesKeys = that.getSelectedNodesKeys();
         if(that._isSingleSelection() && value) {
-            var selectedNodesKeys = that.getSelectedNodesKeys();
             each(selectedNodesKeys, function(index, nodeKey) {
                 that.unselectItem(nodeKey);
             });

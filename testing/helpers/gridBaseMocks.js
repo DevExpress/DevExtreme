@@ -1036,5 +1036,15 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         }
     };
 
+    exports.generateItems = function(itemCount) {
+        var items = [];
+
+        for(var i = 1; i <= itemCount; i++) {
+            items.push({ id: i, field1: "test1" + i, field2: "test2" + i, field3: "test3" + i, field4: "test4" + i });
+        }
+
+        return items;
+    };
+
     return exports;
 };

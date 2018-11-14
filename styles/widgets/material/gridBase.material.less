@@ -534,7 +534,7 @@
     }
 
     .dx-data-row.dx-state-hover {
-        &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
+        &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
             background-color: ~"@{@{widgetName}-hover-bg}";
             > td {
                 color: ~"@{@{widgetName}-row-hovered-color}";
@@ -778,10 +778,6 @@
             }
         }
 
-        .dx-@{widgetName}-table .dx-freespace-row {
-            border-bottom: ~"@{@{widgetName}-border}";
-        }
-
         .dx-master-detail-row {
             > .dx-@{widgetName}-group-space, .dx-master-detail-cell {
                 border-top: ~"@{@{widgetName}-border}";
@@ -856,6 +852,35 @@
             background-color: ~"@{@{widgetName}-cell-modified-border-color}";
         }
 
+        .dx-row-focused {
+            &:focus {
+                outline: none;
+            }
+            &.dx-data-row:not(.dx-edit-row) {
+                & > td:not(.dx-focused),
+                & > tr > td:not(.dx-focused),
+                & .dx-command-edit .dx-link {
+                    background-color: ~"@{@{widgetName}-row-focused-bg}";
+                    color: ~"@{@{widgetName}-row-focused-color}";
+
+                    & .dx-@{widgetName}-group-opened,
+                    & .dx-@{widgetName}-group-closed {
+                        color: ~"@{@{widgetName}-row-focused-color}";
+                    }
+                }
+            }
+
+            &.dx-group-row {
+                background-color: ~"@{@{widgetName}-row-focused-bg}";
+                color: ~"@{@{widgetName}-row-focused-color}";
+
+                & .dx-@{widgetName}-group-opened,
+                & .dx-@{widgetName}-group-closed {
+                    color: ~"@{@{widgetName}-row-focused-color}";
+                }
+            }
+        }
+
         .dx-selection.dx-row,
         .dx-selection.dx-row:hover {
             & > td, & > tr > td {
@@ -872,7 +897,7 @@
                 }
             }
 
-            &:not(.dx-row-lines) > td {
+            &:not(.dx-row-lines):not(.dx-row-focused) > td {
                 border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                 border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
             }
@@ -946,7 +971,7 @@
 
     .dx-rtl {
         .dx-data-row.dx-state-hover {
-            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
+            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
                 & > td:not(.dx-focused) {
                     &.dx-@{widgetName}-group-space {
                         border-left-color: ~"@{@{widgetName}-hover-bg}";

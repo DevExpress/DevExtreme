@@ -1366,6 +1366,51 @@ QUnit.test("two series with equal names", function(assert) {
     assert.strictEqual(updatedSeries[2].axis, "a2");
 });
 
+QUnit.test("keep selected point after dataSource updating", function(assert) {
+    var dataSource = [{ arg: "arg1", val: 1 }],
+        chart = this.createChart({
+            series: [{}],
+            dataSource: dataSource
+        });
+
+    chart.getAllSeries()[0].getAllPoints()[0].select();
+    dataSource.push({ arg: "arg2", val: 1 });
+    chart.option("dataSource", dataSource);
+    chart.getDataSource().store().insert({ arg: "arg3", val: 3 });
+    chart.getDataSource().reload();
+
+    assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[0].isSelected(), true);
+});
+
+QUnit.test("keep selected point after panning", function(assert) {
+    var dataSource = [{ arg: 100, val: 1 }, { arg: 200, val: 1 }, { arg: 300, val: 3 }],
+        chart = this.createChart({
+            series: [{}],
+            dataSource: dataSource,
+            zoomAndPan: {
+                argumentAxis: "both"
+            }
+        });
+
+    chart.getAllSeries()[0].getAllPoints()[0].select();
+    chart.getArgumentAxis().visualRange({ startValue: 150, endValue: 250 });
+
+    assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[0].isSelected(), true);
+});
+
+QUnit.test("reject selection after options updating", function(assert) {
+    var dataSource = [{ arg: "arg1", val: 1 }],
+        chart = this.createChart({
+            series: [{}],
+            dataSource: dataSource
+        });
+
+    chart.getAllSeries()[0].getAllPoints()[0].select();
+    chart.option("rotated", true);
+
+    assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[0].isSelected(), false);
+});
+
 QUnit.module("B237847. Groups and classes", moduleSetup);
 
 QUnit.test("dxChart groups and classes", function(assert) {
@@ -2275,4 +2320,20 @@ QUnit.test("Recalculate argument range data from all visible series", function(a
     assert.equal(argRange.min, 2);
     assert.equal(argRange.max, 3);
     assert.ok(!argRange.stubData);
+});
+
+// T688232
+QUnit.module("seriesTemplate", moduleSetup);
+
+QUnit.test("change series name on customizeSeries", function(assert) {
+    var chart = this.createChart({
+        dataSource: [{ series1: "s1", arg: 1, val: 1 }, { series1: "s2", arg: 2, val: 2 }],
+        seriesTemplate: {
+            nameField: "series1",
+            customizeSeries: function(sName) { return sName === "s2" ? { name: "customName" } : {}; }
+        },
+        series: [{}, {}]
+    });
+
+    assert.strictEqual(chart.series[1].getAllPoints().length, 1);
 });

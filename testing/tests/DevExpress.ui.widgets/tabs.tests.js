@@ -337,6 +337,27 @@ QUnit.test("tabs should be wrapped into scrollable if scrollingEnabled=true", fu
     assert.ok($scrollable.find("." + TABS_ITEM_CLASS).length, "items wrapped into scrollable");
 });
 
+QUnit.test("tabs should be wrapped into scrollable for some disabled items", function(assert) {
+    var $element = $("#scrollableTabs").dxTabs({
+            items: [{ text: "item 1" }, { text: "item 2", disabled: true }, { text: "item 3", disabled: true }, { text: "item 4", disabled: true }],
+            width: 200
+        }),
+        $scrollable = $element.children("." + SCROLLABLE_CLASS);
+
+    assert.ok($scrollable.length, "scroll created");
+    assert.ok($scrollable.hasClass(TABS_SCROLLABLE_CLASS), "wrapper class added");
+    assert.ok($scrollable.find("." + TABS_ITEM_CLASS).length, "items wrapped into scrollable");
+});
+
+QUnit.test("tabs should not be wrapped into scrollable for some invisible items", function(assert) {
+    var $element = $("#scrollableTabs").dxTabs({
+        items: [{ text: "item 1" }, { text: "item 2", visible: false }, { text: "item 3", visible: false }, { text: "item 4", visible: false }],
+        width: 200
+    });
+
+    assert.notOk(!!$element.children("." + SCROLLABLE_CLASS).length, "no scroll for invisible items");
+});
+
 QUnit.test("scrollable should have correct option scrollByContent", function(assert) {
     var $element = $("#scrollableTabs").dxTabs({
             items: [{ text: "item 1" }, { text: "item 1" }, { text: "item 1" }, { text: "item 1" }],

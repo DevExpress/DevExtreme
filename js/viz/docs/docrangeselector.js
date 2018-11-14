@@ -6,6 +6,12 @@
 */
 var dxRangeSelector = {
     /**
+    * @name dxRangeSelectorOptions.selectedRangeUpdateMode
+    * @type Enums.VisualRangeUpdateMode
+    * @default "reset"
+    */
+    selectedRangeUpdateMode: "reset",
+    /**
     * @name dxRangeSelectorOptions.scale
     * @type object
     */

@@ -91,7 +91,7 @@ var baseTrackerPrototype = {
         this._prepare();
     },
 
-    updateSeries(series) {
+    updateSeries(series, resetDecorations) {
         const that = this;
         const noHoveredSeries = !(series && series.some(s => s === that.hoveredSeries) || that._hoveredPoint && that._hoveredPoint.series);
 
@@ -102,11 +102,15 @@ var baseTrackerPrototype = {
         if(noHoveredSeries) {
             that._clean();
             that._renderer.initHatching();
-        } else {
-            that._hideTooltip(that.pointAtShownTooltip);
-            that._clearHover();
         }
-        that.clearSelection();
+
+        if(resetDecorations) {
+            that.clearSelection();
+            if(!noHoveredSeries) {
+                that._hideTooltip(that.pointAtShownTooltip);
+                that._clearHover();
+            }
+        }
     },
 
     setCanvases: function(mainCanvas, paneCanvases) {
@@ -116,7 +120,7 @@ var baseTrackerPrototype = {
 
     repairTooltip: function() {
         var point = this.pointAtShownTooltip;
-        if(point && !point.isVisible()) {
+        if(!point || !point.series || !point.isVisible()) {
             this._hideTooltip(point, true);
         } else {
             this._showTooltip(point);

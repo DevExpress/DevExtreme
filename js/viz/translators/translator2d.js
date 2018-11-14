@@ -298,6 +298,10 @@ _Translator2d.prototype = {
         return this._businessRange;
     },
 
+    getEventScale: function(zoomEvent) {
+        return zoomEvent.deltaScale || 1;
+    },
+
     getCanvasVisibleArea: function() {
         return {
             min: this._canvasOptions.startPoint,
