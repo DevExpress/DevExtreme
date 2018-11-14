@@ -48,7 +48,7 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
     },
     y: (date, value) => {
         let currentYear = date.getFullYear(),
-            valueLength = ("" + value).length,
+            valueLength = String(value).length,
             newValue = currentYear - currentYear % (Math.pow(10, valueLength)) + value;
 
         date.setFullYear(newValue);

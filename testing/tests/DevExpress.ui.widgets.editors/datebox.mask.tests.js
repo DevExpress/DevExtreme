@@ -384,13 +384,18 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("delete should not revert a part when the value is null", (assert) => {
-            this.instance.option("value", null);
+            this.instance.option({
+                displayFormat: "MMM yyyy",
+                value: null
+            });
             this.keyboard.press("up");
-            assert.equal(this.instance.option("text"), "February 1 1970", "text has been changed");
+
+            let text = this.instance.option("text");
+            assert.ok(this.instance.option("text"), "text has been rendered");
 
             this.keyboard.press("del");
-            assert.equal(this.instance.option("text"), "February 1 1970", "text has not been changed");
-            assert.deepEqual(this.keyboard.caret(), { start: 9, end: 10 }, "next group is selected");
+            assert.equal(this.instance.option("text"), text, "text has not been changed");
+            assert.deepEqual(this.keyboard.caret(), { start: 4, end: 8 }, "next group is selected");
         });
 
         QUnit.test("backspace should revert group to initial value and go to the previous one", (assert) => {
