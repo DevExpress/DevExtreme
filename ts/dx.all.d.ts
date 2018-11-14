@@ -717,6 +717,8 @@ declare module DevExpress {
         serverDecimalSeparator?: string;
         /** A group separator. Applies only if you do not use the Globalize or Intl library. */
         thousandsSeparator?: string;
+        useLegacyStoreResult?: boolean;
+        useLegacyVisibleIndex?: boolean;
     }
     /** Gets the current global configuration. */
     export function config(): globalConfig;
@@ -5455,9 +5457,9 @@ declare module DevExpress.ui {
         /** Gets the value of the current cell. */
         value(): any;
         /** Gets the value of any field linked with the current cell. */
-        value(field: DevExpress.data.PivotGridDataSourceField): any;
+        value(field: DevExpress.data.PivotGridDataSourceField | string): any;
         /** Gets the value of any field linked with the current cell. */
-        value(field: DevExpress.data.PivotGridDataSourceField, isCalculatedValue: boolean): any;
+        value(field: DevExpress.data.PivotGridDataSourceField | string, isCalculatedValue: boolean): any;
         /** Gets the value of the current cell. */
         value(isCalculatedValue: boolean): any;
     }
@@ -8313,7 +8315,7 @@ declare module DevExpress.viz {
         getValueAxis(): chartAxisObject;
     }
     export interface chartPointAggregationInfoObject {
-        /** Contains the length of the aggregation interval in axis units. If the interval is set in pixels, it will be converted to axis units. */
+        /** Contains the length of the aggregation interval in axis units (numbers or dates). If the interval is set in pixels (using the aggregationGroupWidth option), it will be converted to axis units. */
         aggregationInterval?: any;
         /** Contains data objects that were aggregated into this point. */
         data?: Array<any>;
@@ -8743,6 +8745,7 @@ declare module DevExpress.viz {
         scale?: { valueType?: 'datetime' | 'numeric' | 'string', type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', logarithmBase?: number, minorTickCount?: number, showCustomBoundaryTicks?: boolean, startValue?: number | Date | string, endValue?: number | Date | string, minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', breaks?: Array<ScaleBreak>, workdaysOnly?: boolean, workWeek?: Array<number>, holidays?: Array<Date | string> | Array<number>, singleWorkdays?: Array<Date | string> | Array<number>, breakStyle?: { width?: number, color?: string, line?: 'straight' | 'waved' }, tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', placeholderHeight?: number, minRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', maxRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', label?: { visible?: boolean, format?: DevExpress.ui.format, customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), topIndent?: number, font?: Font, overlappingBehavior?: 'hide' | 'none' }, tick?: { width?: number, color?: string, opacity?: number }, minorTick?: { width?: number, color?: string, opacity?: number, visible?: boolean }, marker?: { visible?: boolean, separatorHeight?: number, topIndent?: number, textLeftIndent?: number, textTopIndent?: number, label?: { format?: DevExpress.ui.format, customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string) } }, categories?: Array<number | string | Date>, allowDecimals?: boolean, endOnTick?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year' };
         /** Specifies the color of the selected range. */
         selectedRangeColor?: string;
+        /** Specifies how the selected range should behave when data is updated. Applies only when the RangeSelector is bound to a data source. */
         selectedRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
         /** Specifies range selector shutter options. */
         shutter?: { color?: string, opacity?: number };
