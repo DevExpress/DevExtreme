@@ -676,42 +676,34 @@ var subscribes = {
 
     convertDateByTimezone: function(date, appointmentTimezone) {
         date = new Date(date);
-
         var tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
-        date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets);
-        date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets);
 
+        var dateInUTC = date.getTime() - tzOffsets.client * toMs("hour");
+        date = new Date(dateInUTC + tzOffsets.appointment * toMs("hour"));
+
+        if(typeof tzOffsets.common === "number") {
+            var offset = tzOffsets.common - tzOffsets.appointment;
+            date.setHours(date.getHours() + Math.floor(offset));
+            date.setMinutes(date.getMinutes() + (offset % 1) * MINUTES_IN_HOUR);
+        }
         return date;
     },
 
     convertDateByTimezoneBack: function(date, appointmentTimezone) {
         date = new Date(date);
-
         var tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
-        date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
-        date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
 
-        return date;
-    },
+        var dateInUTC = date.getTime() + tzOffsets.client * toMs("hour");
+        date = new Date(dateInUTC - tzOffsets.appointment * toMs("hour"));
 
-    translateDateToAppointmentTimeZone: function(date, offsets, back) {
-        var operation = back ? -1 : 1;
-        var dateInUTC = date.getTime() - operation * offsets.client * toMs("hour");
-        return new Date(dateInUTC + operation * offsets.appointment * toMs("hour"));
-    },
-
-    translateDateToCommonTimeZone: function(date, offsets, back) {
-        var operation = back ? -1 : 1;
-        if(typeof offsets.common === "number") {
-            var offset = offsets.common - offsets.appointment,
-                hoursOffset = Math.floor(offset),
-                minutesOffset = offset % 1;
-            date.setHours(date.getHours() + operation * hoursOffset);
-            date.setMinutes(date.getMinutes() + operation * minutesOffset * MINUTES_IN_HOUR);
+        if(typeof tzOffsets.common === "number") {
+            var offset = tzOffsets.common - tzOffsets.appointment;
+            date.setHours(date.getHours() - Math.floor(offset));
+            date.setMinutes(date.getMinutes() - (offset % 1) * MINUTES_IN_HOUR);
         }
+
         return date;
     },
-
     getComplexOffsets: function(scheduler, date, appointmentTimezone) {
         var clientTimezoneOffset = -this.getClientTimezoneOffset(date) / toMs("hour");
         var commonTimezoneOffset = scheduler._getTimezoneOffsetByOption(date);
