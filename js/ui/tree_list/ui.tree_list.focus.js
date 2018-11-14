@@ -49,7 +49,7 @@ core.registerModule("focus", extend(true, {}, focusModule, {
                         node = that.getNodeByKey(key),
                         d = new Deferred();
 
-                    if(node && node.level !== undefined) {
+                    if(node) {
                         d.resolve(node.parent ? node.parent.key : undefined);
                     } else {
                         dataSource.load({
@@ -71,17 +71,10 @@ core.registerModule("focus", extend(true, {}, focusModule, {
                     var that = this,
                         d = new Deferred();
 
-                    if(key === undefined) {
-                        return d.resolve().promise();
-                    }
-
                     that.getParentKey(key).done(function(parentKey) {
                         if(parentKey !== undefined && parentKey !== that.option("rootValue")) {
-                            that.expandRow(parentKey).done(function() {
-                                that.expandAscendants(parentKey)
-                                    .done(d.resolve)
-                                    .fail(d.reject);
-                            });
+                            that.expandRow(parentKey);
+                            that.expandAscendants(parentKey).done(d.resolve).fail(d.reject);
                         } else {
                             d.resolve();
                         }
