@@ -12,6 +12,7 @@ var $ = require("../../core/renderer"),
     SchedulerTimezones = require("./ui.scheduler.timezones"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
+var MINUTES_IN_HOUR = 60;
 var toMs = dateUtils.dateToMilliseconds;
 
 var subscribes = {
@@ -681,7 +682,9 @@ var subscribes = {
         date = new Date(dateInUTC + tzOffsets.appointment * toMs("hour"));
 
         if(typeof tzOffsets.common === "number") {
-            date = new Date(date.getTime() + ((tzOffsets.common - tzOffsets.appointment) * toMs("hour")));
+            var offset = tzOffsets.common - tzOffsets.appointment;
+            date.setHours(date.getHours() + Math.floor(offset));
+            date.setMinutes(date.getMinutes() + (offset % 1) * MINUTES_IN_HOUR);
         }
         return date;
     },
@@ -694,7 +697,9 @@ var subscribes = {
         date = new Date(dateInUTC - tzOffsets.appointment * toMs("hour"));
 
         if(typeof tzOffsets.common === "number") {
-            date = new Date(date.getTime() - ((tzOffsets.common - tzOffsets.appointment) * toMs("hour")));
+            var offset = tzOffsets.common - tzOffsets.appointment;
+            date.setHours(date.getHours() - Math.floor(offset));
+            date.setMinutes(date.getMinutes() - (offset % 1) * MINUTES_IN_HOUR);
         }
 
         return date;
