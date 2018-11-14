@@ -48,6 +48,11 @@ var config = {
     */
     forceIsoDateParsing: true,
     wrapActionsBeforeExecute: true,
+    /**
+    * @name globalConfig.useLegacyStoreResult
+    * @type boolean
+    * @default false
+    */
     useLegacyStoreResult: false,
     /**
     * @name globalConfig.useJQuery
@@ -61,6 +66,11 @@ var config = {
     * @default undefined
     */
     editorStylingMode: undefined,
+    /**
+    * @name globalConfig.useLegacyVisibleIndex
+    * @type boolean
+    * @default false
+    */
     useLegacyVisibleIndex: false
 };
 
