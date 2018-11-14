@@ -443,13 +443,13 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     /**
    * @name dxPivotGridSummaryCell.value
    * @publicName value(field)
-   * @param1 field:PivotGridDataSourceOptions.fields
+   * @param1 field:PivotGridDataSourceOptions.fields|string
    * @return any
    */
     /**
   * @name dxPivotGridSummaryCell.value
   * @publicName value(field, isCalculatedValue)
-  * @param1 field:PivotGridDataSourceOptions.fields
+  * @param1 field:PivotGridDataSourceOptions.fields|string
   * @param2 isCalculatedValue:boolean
   * @return any
   */
