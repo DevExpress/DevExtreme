@@ -1180,7 +1180,7 @@ var dxChart = AdvancedChart.inherit({
             force: true,
             drawTitle: false,
             drawLegend: false,
-            adjustAxes: false,
+            adjustAxes: this.option("adjustAxesOnZoom") || false, // T690411
             animate: false
         });
     },
