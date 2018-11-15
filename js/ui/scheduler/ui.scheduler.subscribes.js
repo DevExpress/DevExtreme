@@ -703,7 +703,6 @@ var subscribes = {
     translateDateToCommonTimeZoneIfRequired: function(date, offsets, back) {
         var operation = back ? -1 : 1;
         if(typeof offsets.common === "number") {
-            date = new Date(date);
             var offset = offsets.common - offsets.appointment,
                 hoursOffset = Math.floor(offset),
                 minutesOffset = offset % 1;
