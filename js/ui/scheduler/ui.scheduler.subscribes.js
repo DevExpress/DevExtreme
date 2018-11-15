@@ -678,8 +678,8 @@ var subscribes = {
         date = new Date(date);
 
         var tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
-        this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets);
-        this._subscribes.translateDateToCommonTimeZoneIfRequired(date, tzOffsets);
+        date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets);
+        date = this._subscribes.translateDateToCommonTimeZoneIfRequired(date, tzOffsets);
 
         return date;
     },
@@ -688,8 +688,8 @@ var subscribes = {
         date = new Date(date);
 
         var tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
-        this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
-        this._subscribes.translateDateToCommonTimeZoneIfRequired(date, tzOffsets, true);
+        date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
+        date = this._subscribes.translateDateToCommonTimeZoneIfRequired(date, tzOffsets, true);
 
         return date;
     },
@@ -697,18 +697,20 @@ var subscribes = {
     translateDateToAppointmentTimeZone: function(date, offsets, back) {
         var operation = back ? -1 : 1;
         var dateInUTC = date.getTime() - operation * offsets.client * toMs("hour");
-        date = new Date(dateInUTC + operation * offsets.appointment * toMs("hour"));
+        return new Date(dateInUTC + operation * offsets.appointment * toMs("hour"));
     },
 
     translateDateToCommonTimeZoneIfRequired: function(date, offsets, back) {
         var operation = back ? -1 : 1;
         if(typeof offsets.common === "number") {
+            date = new Date(date);
             var offset = offsets.common - offsets.appointment,
                 hoursOffset = Math.floor(offset),
                 minutesOffset = offset % 1;
             date.setHours(date.getHours() + operation * hoursOffset);
             date.setMinutes(date.getMinutes() + operation * minutesOffset * MINUTES_IN_HOUR);
         }
+        return date;
     },
 
     getComplexOffsets: function(scheduler, date, appointmentTimezone) {
