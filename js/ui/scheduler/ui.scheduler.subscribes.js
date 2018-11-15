@@ -12,6 +12,7 @@ var $ = require("../../core/renderer"),
     SchedulerTimezones = require("./ui.scheduler.timezones"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
+var MINUTES_IN_HOUR = 60;
 var toMs = dateUtils.dateToMilliseconds;
 
 var subscribes = {
@@ -675,30 +676,42 @@ var subscribes = {
 
     convertDateByTimezone: function(date, appointmentTimezone) {
         date = new Date(date);
+
         var tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
+        date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets);
+        date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets);
 
-        var dateInUTC = date.getTime() - tzOffsets.client * toMs("hour");
-        date = new Date(dateInUTC + tzOffsets.appointment * toMs("hour"));
-
-        if(typeof tzOffsets.common === "number") {
-            date = new Date(date.getTime() + ((tzOffsets.common - tzOffsets.appointment) * toMs("hour")));
-        }
         return date;
     },
 
     convertDateByTimezoneBack: function(date, appointmentTimezone) {
         date = new Date(date);
+
         var tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
-
-        var dateInUTC = date.getTime() + tzOffsets.client * toMs("hour");
-        date = new Date(dateInUTC - tzOffsets.appointment * toMs("hour"));
-
-        if(typeof tzOffsets.common === "number") {
-            date = new Date(date.getTime() - ((tzOffsets.common - tzOffsets.appointment) * toMs("hour")));
-        }
+        date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
+        date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
 
         return date;
     },
+
+    translateDateToAppointmentTimeZone: function(date, offsets, back) {
+        var operation = back ? -1 : 1;
+        var dateInUTC = date.getTime() - operation * offsets.client * toMs("hour");
+        return new Date(dateInUTC + operation * offsets.appointment * toMs("hour"));
+    },
+
+    translateDateToCommonTimeZone: function(date, offsets, back) {
+        var operation = back ? -1 : 1;
+        if(typeof offsets.common === "number") {
+            var offset = offsets.common - offsets.appointment,
+                hoursOffset = Math.floor(offset),
+                minutesOffset = offset % 1;
+            date.setHours(date.getHours() + operation * hoursOffset);
+            date.setMinutes(date.getMinutes() + operation * minutesOffset * MINUTES_IN_HOUR);
+        }
+        return date;
+    },
+
     getComplexOffsets: function(scheduler, date, appointmentTimezone) {
         var clientTimezoneOffset = -this.getClientTimezoneOffset(date) / toMs("hour");
         var commonTimezoneOffset = scheduler._getTimezoneOffsetByOption(date);
