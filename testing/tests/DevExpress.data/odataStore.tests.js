@@ -1217,7 +1217,7 @@ QUnit.test("works", function(assert) {
 
                 ["onUpdated", 1, { foo: "bar" }],
                 ["updated", 1, { foo: "bar" }],
-                ["done", { foo: "bar" }, 1]
+                ["done", "OK", 1]
 
             ]);
         })
