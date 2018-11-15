@@ -135,6 +135,7 @@
                     "ipad",
                     "iphone",
                     "linejoin",   // SVG "stroke-linejoin"
+                    "linux",
                     "ltr",        // Left-to-Right
                     "mdx",        // OLAP Multi-dimensional expressions
                     "mercator",   // Map term
