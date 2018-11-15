@@ -1,6 +1,10 @@
 import $ from "jquery";
 import helper from '../../helpers/dataGridExportTestsHelper.js';
 
+const excelColumnWidthFrom_50 = '6.43';
+const excelColumnWidthFrom_100 = '13.57';
+const excelColumnWidthFrom_200 = '27.86';
+
 QUnit.testStart(function() {
     var markup = '<div id="dataGrid"></div>';
     $("#qunit-fixture").html(markup);
@@ -815,7 +819,7 @@ QUnit.test("Columns - [string, number, date, boolean, lookup, datetime]", functi
     );
 });
 
-QUnit.test("Columns - remove the command columns from exporting document", function(assert) {
+QUnit.test("Columns - command columns are not exported", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
@@ -850,12 +854,201 @@ QUnit.test("Columns - remove the command columns from exporting document", funct
     );
 });
 
+QUnit.test("Columns - set width in %", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="6.43" min="1" max="1" /><col width="27.86" min="2" max="2" /></cols>' +
+        '<sheetData><row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>42</v></c><c r="B1" s="3" t="n"><v>43</v></c>' +
+        '</row></sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            width: 250,
+            columns: [
+                { dataField: 'f1', width: '20%' },
+                { dataField: 'f2', width: '80%' }
+            ],
+            dataSource: [ { f1: 42, f2: 43 } ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Columns - show column headers", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
+        '</sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: 'f1', width: 100 },
+                { dataField: 'f2', width: 200 }
+            ],
+            dataSource: [],
+            showColumnHeaders: true,
+            export: { ignoreExcelErrors: false },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Columns - show column headers & 'column.visible: false' in onExporting/Exported", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '</sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: 'f1', width: 100 },
+                { dataField: 'f2', width: 200 }
+            ],
+            dataSource: [],
+            showColumnHeaders: true,
+            export: { ignoreExcelErrors: false },
+            onExporting: (e) => {
+                e.component.beginUpdate();
+                e.component.columnOption('f1', 'visible', false);
+            },
+            onExported: e => {
+                e.component.columnOption('f1', 'visible', true);
+                e.component.endUpdate();
+            },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Columns - show column headers & 'column.allowExporting: false'", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
+        '</sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: 'f1', width: 100, allowExporting: false },
+                { dataField: 'f2', width: 200 }
+            ],
+            dataSource: [],
+            showColumnHeaders: true,
+            export: { ignoreExcelErrors: false },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Columns - hide column headers", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /><col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>42</v></c><c r="B1" s="3" t="n"><v>43</v></c></row>' +
+        '</sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: 'f1', width: 100 },
+                { dataField: 'f2', width: 200 }
+            ],
+            dataSource: [ { f1: 42, f2: 43 } ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Columns - hide column headers & 'column.visible: false' in onExporting/Exported", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>2</v></c></row>' +
+        '</sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: 'f1', width: 100 },
+                { dataField: 'f2', width: 200 }
+            ],
+            dataSource: [ { f1: 1, f2: 2 } ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+            onExporting: (e) => {
+                e.component.beginUpdate();
+                e.component.columnOption('f1', 'visible', false);
+            },
+            onExported: e => {
+                e.component.columnOption('f1', 'visible', true);
+                e.component.endUpdate();
+            },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Columns - hide column headers & 'column.allowExporting: false'", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>2</v></c></row>' +
+        '</sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: 'f1', width: 100, allowExporting: false },
+                { dataField: 'f2', width: 200 }
+            ],
+            dataSource: [ { f1: 1, f2: 2 } ],
+            showColumnHeaders: false,
+            export: { ignoreExcelErrors: false },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
 QUnit.test("Bands", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +
-        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
         '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
         '</cellXfs>' +
         helper.STYLESHEET_FOOTER_XML;
@@ -867,36 +1060,386 @@ QUnit.test("Bands", function(assert) {
         '<sheetData>' +
         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /></row>' +
         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c></row>' +
-        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="s"><v>4</v></c><c r="B3" s="3" t="s"><v>5</v></c><c r="C3" s="3" t="s"><v>6</v></c></row>' +
+        '<row r="3" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="3" t="n"><v>42</v></c><c r="B3" s="3" t="n"><v>43</v></c><c r="C3" s="3" t="n"><v>44</v></c></row>' +
         '</sheetData>' +
         '<mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /></mergeCells>' +
         '<ignoredErrors><ignoredError sqref="A1:C3" numberStoredAsText="1" /></ignoredErrors></worksheet>';
-    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="7" uniqueCount="7">' +
-        '<si><t>Field 1</t></si>' +
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
+        '<si><t>F1</t></si>' +
         '<si><t>Band1</t></si>' +
-        '<si><t>Field 2</t></si>' +
-        '<si><t>Field 3</t></si>' +
-        '<si><t>str1</t></si>' +
-        '<si><t>str2</t></si>' +
-        '<si><t>str3</t></si>' +
+        '<si><t>F2</t></si>' +
+        '<si><t>F3</t></si>' +
         '</sst>';
 
     helper.runGeneralTest(
         assert,
         {
             columns: [
-                { dataField: "field1", dataType: "string" },
+                'f1',
                 {
                     caption: 'Band1',
                     columns: [
-                        { dataField: "field2", dataType: "string" },
-                        { dataField: "field3", dataType: "string" },
+                        'f2',
+                        'f3',
                     ]
                 }
             ],
-            dataSource: [{ field1: 'str1', field2: 'str2', field3: 'str3' } ],
+            dataSource: [{ f1: 42, f2: 43, f3: 44 } ],
         },
         { styles, worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Bands - show column headers", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols>' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="4" max="4" />' +
+        '</cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /><c r="D1" s="0" t="s" /></row>' +
+        '<row r="2" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c><c r="D2" s="0" t="s"><v>4</v></c></row>' +
+        '</sheetData>' +
+        '<mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:D1" /></mergeCells>' +
+        '</worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: "f2", width: 50 },
+                        { dataField: "f3", width: 200 },
+                        { dataField: "f4", width: 200 },
+                    ]
+                }
+            ],
+            showColumnHeaders: true,
+            dataSource: [],
+            export: { enabled: true, ignoreExcelErrors: false },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Bands - show column headers & 'column.visible: false' in onExporting/Exported", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols>' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
+        '</cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /></row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c></row>' +
+        '</sheetData>' +
+        '<mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /></mergeCells>' +
+        '</worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: "f2", width: 50 },
+                        { dataField: "f3", width: 200 },
+                        { dataField: "f4", width: 200 },
+                    ]
+                }
+            ],
+            showColumnHeaders: true,
+            dataSource: [],
+            export: { enabled: true, ignoreExcelErrors: false },
+            onExporting: (e) => {
+                e.component.beginUpdate();
+                e.component.columnOption('f2', 'visible', false);
+            },
+            onExported: e => {
+                e.component.columnOption('f2', 'visible', true);
+                e.component.endUpdate();
+            },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Bands - show column headers & 'column.allowExporting: false'", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols>' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
+        '</cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /></row>' +
+        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c></row>' +
+        '</sheetData>' +
+        '<mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /></mergeCells>' +
+        '</worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: "f2", width: 50, allowExporting: false },
+                        { dataField: "f3", width: 200 },
+                        { dataField: "f4", width: 200 },
+                    ]
+                }
+            ],
+            showColumnHeaders: true,
+            dataSource: [],
+            export: { enabled: true, ignoreExcelErrors: false },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Bands - hide column headers", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols>' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="4" max="4" />' +
+        '</cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>42</v></c><c r="B1" s="3" t="n"><v>43</v></c><c r="C1" s="3" t="n"><v>44</v></c><c r="D1" s="3" t="n"><v>45</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: "f2", width: 50 },
+                        { dataField: "f3", width: 200 },
+                        { dataField: "f4", width: 200 },
+                    ]
+                }
+            ],
+            dataSource: [{ f1: 42, f2: 43, f3: 44, f4: 45 } ],
+            showColumnHeaders: false,
+            export: { enabled: true, ignoreExcelErrors: false },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Bands - hide column headers & 'column.visible: false' in onExporting/Exported", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols>' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
+        '</cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>42</v></c><c r="B1" s="3" t="n"><v>44</v></c><c r="C1" s="3" t="n"><v>45</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: "f2", width: 50 },
+                        { dataField: "f3", width: 200 },
+                        { dataField: "f4", width: 200 },
+                    ]
+                }
+            ],
+            dataSource: [{ f1: 42, f2: 43, f3: 44, f4: 45 } ],
+            showColumnHeaders: false,
+            export: { enabled: true, ignoreExcelErrors: false },
+            onExporting: (e) => {
+                e.component.beginUpdate();
+                e.component.columnOption('f2', 'visible', false);
+            },
+            onExported: e => {
+                e.component.columnOption('f2', 'visible', true);
+                e.component.endUpdate();
+            },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Bands - hide column headers & 'column.allowExporting: false'", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols>' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
+        '</cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>42</v></c><c r="B1" s="3" t="n"><v>44</v></c><c r="C1" s="3" t="n"><v>45</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: "f2", width: 50, allowExporting: false },
+                        { dataField: "f3", width: 200 },
+                        { dataField: "f4", width: 200 },
+                    ]
+                }
+            ],
+            dataSource: [{ f1: 42, f2: 43, f3: 44, f4: 45 } ],
+            showColumnHeaders: false,
+            export: { enabled: true, ignoreExcelErrors: false },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Bands - config_2", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols>' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="4" max="4" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="5" max="5" />' +
+        '</cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /><c r="D1" s="0" t="s"><v>2</v></c><c r="E1" s="0" t="s" />' +
+        '</row>' +
+        '<row r="2" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>3</v></c><c r="C2" s="0" t="s"><v>4</v></c><c r="D2" s="0" t="s"><v>5</v></c><c r="E2" s="0" t="s"><v>6</v></c>' +
+        '</row>' +
+        '</sheetData>' +
+        '<mergeCells count="3"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /><mergeCell ref="D1:E1" /></mergeCells>' +
+        '</worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: "f2", width: 50 },
+                        { dataField: "f3", width: 200 },
+                    ]
+                },
+                {
+                    caption: 'Band2',
+                    columns: [
+                        { dataField: "f4", width: 100 },
+                        { dataField: "f5", width: 50 },
+                    ]
+                }
+            ],
+            showColumnHeaders: true,
+            dataSource: [],
+            export: { enabled: true, ignoreExcelErrors: false },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Bands - config_2 & 'column.allowExporting: false'", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols>' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="3" max="3" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="4" max="4" />' +
+        '<col width="' + excelColumnWidthFrom_200 + '" min="5" max="5" />' +
+        '</cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /><c r="D1" s="0" t="s"><v>2</v></c><c r="E1" s="0" t="s" />' +
+        '</row>' +
+        '<row r="2" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>3</v></c><c r="C2" s="0" t="s"><v>4</v></c><c r="D2" s="0" t="s"><v>5</v></c><c r="E2" s="0" t="s"><v>6</v></c>' +
+        '</row>' +
+        '</sheetData>' +
+        '<mergeCells count="3"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /><mergeCell ref="D1:E1" /></mergeCells>' +
+        '</worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: "f1", width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: "f2", width: 50 },
+                        { dataField: "f3", width: 200, allowExporting: false },
+                        { dataField: "f4", width: 100 },
+                    ]
+                },
+                {
+                    caption: 'Band2',
+                    columns: [
+                        { dataField: "f5", width: 100, allowExporting: false },
+                        { dataField: "f6", width: 50 },
+                        { dataField: "f7", width: 200 },
+                    ]
+                }
+            ],
+            showColumnHeaders: true,
+            dataSource: [],
+            export: { enabled: true, ignoreExcelErrors: false },
+        },
+        { worksheet, fixedColumnWidth_100: false }
     );
 });
 
@@ -1313,447 +1856,5 @@ QUnit.test("Update cell values in 'customizeExportData'", function(assert) {
             }
         },
         { styles, worksheet, sharedStrings }
-    );
-});
-
-QUnit.test("Columns - width in %", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML1 +
-        '<cols><col width="6.43" min="1" max="1" /><col width="27.86" min="2" max="2" /></cols>' +
-        '<sheetData><row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="3" t="n"><v>42</v></c><c r="B1" s="3" t="n"><v>43</v></c>' +
-        '</row></sheetData></worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            width: 250,
-            columns: [
-                { dataField: 'f1', width: '20%' },
-                { dataField: 'f2', width: '80%' }
-            ],
-            dataSource: [ { f1: 42, f2: 43 } ],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
-        },
-        { worksheet, fixedColumnWidth_100: false }
-    );
-});
-
-const excelColumnWidthFrom_50 = '6.43';
-const excelColumnWidthFrom_100 = '13.57';
-const excelColumnWidthFrom_200 = '27.86';
-
-QUnit.test("Columns - width & show column headers", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c></row>' +
-        '</sheetData></worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: 'f1', width: 100 },
-                { dataField: 'f2', width: 200 }
-            ],
-            dataSource: [],
-            showColumnHeaders: true,
-            export: { ignoreExcelErrors: false },
-        },
-        { worksheet, fixedColumnWidth_100: false }
-    );
-});
-
-QUnit.test("Columns - width & show column headers & 'column.visible: false' in onExporting/Exported", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
-        '</sheetData></worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: 'f1', width: 100 },
-                { dataField: 'f2', width: 200 }
-            ],
-            dataSource: [],
-            showColumnHeaders: true,
-            export: { ignoreExcelErrors: false },
-            onExporting: (e) => {
-                e.component.beginUpdate();
-                e.component.columnOption('f1', 'visible', false);
-            },
-            onExported: e => {
-                e.component.columnOption('f1', 'visible', true);
-                e.component.endUpdate();
-            },
-        },
-        { worksheet, fixedColumnWidth_100: false }
-    );
-});
-
-QUnit.test("Columns - width & show column headers & 'column.allowExporting: false'", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c></row>' +
-        '</sheetData></worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: 'f1', width: 100, allowExporting: false },
-                { dataField: 'f2', width: 200 }
-            ],
-            dataSource: [],
-            showColumnHeaders: true,
-            export: { ignoreExcelErrors: false },
-        },
-        { worksheet, fixedColumnWidth_100: false }
-    );
-});
-
-QUnit.test("Columns - width & hide column headers", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="13.57" min="1" max="1" /><col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>42</v></c><c r="B1" s="3" t="n"><v>43</v></c></row>' +
-        '</sheetData></worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: 'f1', width: 100 },
-                { dataField: 'f2', width: 200 }
-            ],
-            dataSource: [ { f1: 42, f2: 43 } ],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
-        },
-        { worksheet, fixedColumnWidth_100: false }
-    );
-});
-
-QUnit.test("Columns - width & hide column headers & 'column.visible: false' in onExporting/Exported", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>2</v></c></row>' +
-        '</sheetData></worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: 'f1', width: 100 },
-                { dataField: 'f2', width: 200 }
-            ],
-            dataSource: [ { f1: 1, f2: 2 } ],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
-            onExporting: (e) => {
-                e.component.beginUpdate();
-                e.component.columnOption('f1', 'visible', false);
-            },
-            onExported: e => {
-                e.component.columnOption('f1', 'visible', true);
-                e.component.endUpdate();
-            },
-        },
-        { worksheet, fixedColumnWidth_100: false }
-    );
-});
-
-QUnit.test("Columns - width & hide column headers & 'column.allowExporting: false'", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" /></cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>2</v></c></row>' +
-        '</sheetData></worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: 'f1', width: 100, allowExporting: false },
-                { dataField: 'f2', width: 200 }
-            ],
-            dataSource: [ { f1: 1, f2: 2 } ],
-            showColumnHeaders: false,
-            export: { ignoreExcelErrors: false },
-        },
-        { worksheet, fixedColumnWidth_100: false }
-    );
-});
-
-QUnit.test("Columns - width & bands & show column headers", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="4" max="4" />' +
-        '</cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /><c r="D1" s="0" t="s" /></row>' +
-        '<row r="2" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c><c r="D2" s="0" t="s"><v>4</v></c></row>' +
-        '</sheetData>' +
-        '<mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:D1" /></mergeCells>' +
-        '</worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: "f1", width: 100 },
-                {
-                    caption: 'Band1',
-                    columns: [
-                        { dataField: "f2", width: 50 },
-                        { dataField: "f3", width: 200 },
-                        { dataField: "f4", width: 200 },
-                    ]
-                }
-            ],
-            showColumnHeaders: true,
-            dataSource: [],
-            export: { enabled: true, ignoreExcelErrors: false },
-        },
-        { worksheet, fixedColumnWidth_100: false }
-    );
-});
-
-QUnit.test("Columns - width & bands & show column headers & 'column.visible: false' in onExporting/Exported", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
-        '</cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /></row>' +
-        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c></row>' +
-        '</sheetData>' +
-        '<mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /></mergeCells>' +
-        '</worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: "f1", width: 100 },
-                {
-                    caption: 'Band1',
-                    columns: [
-                        { dataField: "f2", width: 50 },
-                        { dataField: "f3", width: 200 },
-                        { dataField: "f4", width: 200 },
-                    ]
-                }
-            ],
-            showColumnHeaders: true,
-            dataSource: [],
-            export: { enabled: true, ignoreExcelErrors: false },
-            onExporting: (e) => {
-                e.component.beginUpdate();
-                e.component.columnOption('f2', 'visible', false);
-            },
-            onExported: e => {
-                e.component.columnOption('f2', 'visible', true);
-                e.component.endUpdate();
-            },
-        },
-        { worksheet, fixedColumnWidth_100: false }
-    );
-});
-
-QUnit.test("Columns - width & bands & show column headers & 'column.allowExporting: false'", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
-        '</cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /></row>' +
-        '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c></row>' +
-        '</sheetData>' +
-        '<mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /></mergeCells>' +
-        '</worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: "f1", width: 100 },
-                {
-                    caption: 'Band1',
-                    columns: [
-                        { dataField: "f2", width: 50, allowExporting: false },
-                        { dataField: "f3", width: 200 },
-                        { dataField: "f4", width: 200 },
-                    ]
-                }
-            ],
-            showColumnHeaders: true,
-            dataSource: [],
-            export: { enabled: true, ignoreExcelErrors: false },
-        },
-        { worksheet, fixedColumnWidth_100: false }
-    );
-});
-
-QUnit.test("Columns - width & bands & hide column headers", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="4" max="4" />' +
-        '</cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:4" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="3" t="n"><v>42</v></c><c r="B1" s="3" t="n"><v>43</v></c><c r="C1" s="3" t="n"><v>44</v></c><c r="D1" s="3" t="n"><v>45</v></c>' +
-        '</row>' +
-        '</sheetData></worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: "f1", width: 100 },
-                {
-                    caption: 'Band1',
-                    columns: [
-                        { dataField: "f2", width: 50 },
-                        { dataField: "f3", width: 200 },
-                        { dataField: "f4", width: 200 },
-                    ]
-                }
-            ],
-            dataSource: [{ f1: 42, f2: 43, f3: 44, f4: 45 } ],
-            showColumnHeaders: false,
-            export: { enabled: true, ignoreExcelErrors: false },
-        },
-        { worksheet, fixedColumnWidth_100: false }
-    );
-});
-
-QUnit.test("Columns - width & bands & hide column headers & 'column.visible: false' in onExporting/Exported", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
-        '</cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="3" t="n"><v>42</v></c><c r="B1" s="3" t="n"><v>44</v></c><c r="C1" s="3" t="n"><v>45</v></c>' +
-        '</row>' +
-        '</sheetData></worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: "f1", width: 100 },
-                {
-                    caption: 'Band1',
-                    columns: [
-                        { dataField: "f2", width: 50 },
-                        { dataField: "f3", width: 200 },
-                        { dataField: "f4", width: 200 },
-                    ]
-                }
-            ],
-            dataSource: [{ f1: 42, f2: 43, f3: 44, f4: 45 } ],
-            showColumnHeaders: false,
-            export: { enabled: true, ignoreExcelErrors: false },
-            onExporting: (e) => {
-                e.component.beginUpdate();
-                e.component.columnOption('f2', 'visible', false);
-            },
-            onExported: e => {
-                e.component.columnOption('f2', 'visible', true);
-                e.component.endUpdate();
-            },
-        },
-        { worksheet, fixedColumnWidth_100: false }
-    );
-});
-
-QUnit.test("Columns - width & bands & hide column headers & 'column.allowExporting: false'", function(assert) {
-    const worksheet = helper.WORKSHEET_HEADER_XML +
-        '<sheetPr/><dimension ref="A1:C1"/>' +
-        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
-        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-        '<cols>' +
-        '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
-        '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
-        '</cols>' +
-        '<sheetData>' +
-        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25">' +
-        '<c r="A1" s="3" t="n"><v>42</v></c><c r="B1" s="3" t="n"><v>44</v></c><c r="C1" s="3" t="n"><v>45</v></c>' +
-        '</row>' +
-        '</sheetData></worksheet>';
-
-    helper.runGeneralTest(
-        assert,
-        {
-            columns: [
-                { dataField: "f1", width: 100 },
-                {
-                    caption: 'Band1',
-                    columns: [
-                        { dataField: "f2", width: 50, allowExporting: false },
-                        { dataField: "f3", width: 200 },
-                        { dataField: "f4", width: 200 },
-                    ]
-                }
-            ],
-            dataSource: [{ f1: 42, f2: 43, f3: 44, f4: 45 } ],
-            showColumnHeaders: false,
-            export: { enabled: true, ignoreExcelErrors: false },
-        },
-        { worksheet, fixedColumnWidth_100: false }
     );
 });
