@@ -44,6 +44,16 @@ RUN unlink ./chrome.deb
 RUN rm -rf /opt/google/chrome/swiftshader
 RUN find /opt/google/chrome/locales -type f ! -name 'en-US.pak' -delete
 
+# Firefox
+RUN apt-get install -y firefox
+RUN mkdir /firefox-profile
+RUN for p in \
+    '"browser.shell.checkDefaultBrowser", false' \
+    '"toolkit.telemetry.reportingpolicy.firstRun", false' \
+    '"font.name-list.monospace.x-western", "Liberation Mono"' \
+    '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
+    '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /firefox-profile/prefs.js; done
+
 # Utils for docker-ci.sh
 RUN apt-get install -y dbus-x11 httping x11vnc xvfb
 
