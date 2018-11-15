@@ -679,7 +679,7 @@ var subscribes = {
 
         var tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets);
-        date = this._subscribes.translateDateToCommonTimeZoneIfRequired(date, tzOffsets);
+        date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets);
 
         return date;
     },
@@ -689,7 +689,7 @@ var subscribes = {
 
         var tzOffsets = this._subscribes.getComplexOffsets(this, date, appointmentTimezone);
         date = this._subscribes.translateDateToAppointmentTimeZone(date, tzOffsets, true);
-        date = this._subscribes.translateDateToCommonTimeZoneIfRequired(date, tzOffsets, true);
+        date = this._subscribes.translateDateToCommonTimeZone(date, tzOffsets, true);
 
         return date;
     },
@@ -700,7 +700,7 @@ var subscribes = {
         return new Date(dateInUTC + operation * offsets.appointment * toMs("hour"));
     },
 
-    translateDateToCommonTimeZoneIfRequired: function(date, offsets, back) {
+    translateDateToCommonTimeZone: function(date, offsets, back) {
         var operation = back ? -1 : 1;
         if(typeof offsets.common === "number") {
             var offset = offsets.common - offsets.appointment,
