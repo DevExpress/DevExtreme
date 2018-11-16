@@ -250,6 +250,9 @@ var ListStrategy = DateBoxStrategy.inherit({
         date.setHours(e.itemData.getHours());
         date.setMinutes(e.itemData.getMinutes());
         date.setSeconds(e.itemData.getSeconds());
+        date.setFullYear(e.itemData.getFullYear());
+        date.setMonth(e.itemData.getMonth());
+        date.setDate(e.itemData.getDate());
 
         this.dateBoxValue(date);
     },
