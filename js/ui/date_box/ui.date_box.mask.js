@@ -30,7 +30,7 @@ let DateBoxMask = DateBoxBase.inherit({
             home: that._selectFirstPart.bind(that),
             end: that._selectLastPart.bind(that),
             escape: that._revertChanges.bind(that),
-            enter: that._fireChangeEvent.bind(that),
+            enter: that._enterHandler.bind(that),
             leftArrow: that._selectNextPart.bind(that, BACKWARD),
             rightArrow: that._selectNextPart.bind(that, FORWARD),
             upArrow: that._partIncrease.bind(that, FORWARD),
@@ -347,17 +347,22 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _fireChangeEvent() {
         this._clearSearchValue();
-        this._selectNextPart(FORWARD);
 
         if(this._isValueDirty()) {
             eventsEngine.trigger(this._input(), "change");
         }
     },
 
+    _enterHandler(e) {
+        this._fireChangeEvent();
+        this._selectNextPart(FORWARD, e);
+    },
+
     _focusOutHandler(e) {
         this.callBase(e);
         if(this._useMaskBehavior()) {
             this._fireChangeEvent();
+            this._selectFirstPart(e);
         }
     },
 
