@@ -936,20 +936,17 @@ QUnit.test("B233277 dxNumberbox/dxTextbox - cursor jump over the right digit, im
     assert.equal(this.instance.option("value"), "123");
 });
 
-QUnit.test("T200828. TextEditor, nested in another widget", function(assert) {
-    var propagationStopped = 0;
-    this.element.on("keydown", function(e) {
-        if(e.isPropagationStopped()) {
-            propagationStopped++;
-        }
-    });
+QUnit.test("Text editor should propagate keyboard events to the document", function(assert) {
+    var keydownHandler = sinon.spy();
+    eventsEngine.on(document, "keydown", keydownHandler);
 
     keyboardMock(this.input)
         .keyDown("enter")
         .keyDown("space")
         .keyDown("left")
         .keyDown("right");
-    assert.equal(propagationStopped, 4, "propagation is stopped");
+
+    assert.equal(keydownHandler.callCount, 4, "keydown was handled 4 times");
 });
 
 QUnit.test("Enter key event raising (B238135)", function(assert) {
