@@ -1766,6 +1766,12 @@ var dxChart = {
         */
         wholeRange: undefined,
         /**
+        * @name dxChartOptions.valueAxis.visualRangeUpdateMode
+        * @type Enums.VisualRangeUpdateMode
+        * @default 'auto'
+        */
+        visualRangeUpdateMode: "auto",
+        /**
         * @name dxChartOptions.valueAxis.axisDivisionFactor
         * @type number
         * @default 40

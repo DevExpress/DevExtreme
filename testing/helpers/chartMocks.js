@@ -1004,8 +1004,7 @@ export const MockAxis = function(renderOptions) {
         visualRange: sinon.spy(),
         _getAdjustedBusinessRange: sinon.spy(),
         refreshVisualRangeOption: sinon.spy(),
-        prepareAnimation: sinon.spy(),
-        setCustomVisualRange: sinon.spy()
+        prepareAnimation: sinon.spy()
     };
 };
 

@@ -1011,43 +1011,67 @@ Axis.prototype = {
         return range;
     },
 
-    _getVisualRangeUpdateMode(range, newRange) {
+    _getVisualRangeUpdateMode(range, newRange, oppositeValue) {
         let value = this._options.visualRangeUpdateMode;
-        if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
-            if(range.axisType === constants.discrete) {
-                if(range.categories && newRange.categories && newRange.categories.every((c, i) => c === range.categories[i])) {
-                    value = KEEP;
+
+        if(this.isArgumentAxis) {
+            if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
+                if(range.axisType === constants.discrete) {
+                    if(range.categories && newRange.categories && newRange.categories.every((c, i) => c === range.categories[i])) {
+                        value = KEEP;
+                    } else {
+                        value = RESET;
+                    }
                 } else {
-                    value = RESET;
+                    const translator = this._translator;
+                    const minPoint = translator.translate(range.min);
+                    const minVisiblePoint = translator.translate(range.minVisible);
+
+                    const maxPoint = translator.translate(range.max);
+                    const maxVisiblePoint = translator.translate(range.maxVisible);
+
+                    if(minPoint === minVisiblePoint && maxPoint === maxVisiblePoint) {
+                        value = RESET;
+                    } else if(minPoint !== minVisiblePoint && maxPoint === maxVisiblePoint) {
+                        value = SHIFT;
+                    } else {
+                        value = KEEP;
+                    }
                 }
-            } else {
-                const translator = this._translator;
-                const minPoint = translator.translate(range.min);
-                const minVisiblePoint = translator.translate(range.minVisible);
+            }
+        } else {
+            if([KEEP, RESET].indexOf(value) === -1) {
 
-                const maxPoint = translator.translate(range.max);
-                const maxVisiblePoint = translator.translate(range.maxVisible);
-
-                if(minPoint === minVisiblePoint && maxPoint === maxVisiblePoint) {
-                    value = RESET;
-                } else if(minPoint !== minVisiblePoint && maxPoint === maxVisiblePoint) {
-                    value = SHIFT;
-                } else {
+                if(oppositeValue === KEEP) {
                     value = KEEP;
+                } else {
+                    value = RESET;
                 }
             }
         }
+
         return value;
     },
 
-    _handleBusinessRangeChanged(seriesData) {
-        const currentBusinessRange = new rangeModule.Range(this._translator.getBusinessRange());
-        if(!currentBusinessRange.isDefined() || currentBusinessRange.stubData || !this.isArgumentAxis || currentBusinessRange.isEstimatedRange) {
+    _handleBusinessRangeChanged(seriesData, oppositeVisualRangeUpdateMode) {
+        const that = this;
+        const currentBusinessRange = new rangeModule.Range(that._translator.getBusinessRange());
+        if(!currentBusinessRange.isDefined() || currentBusinessRange.stubData || currentBusinessRange.isEstimatedRange) {
             return;
         }
-        const that = this;
-        const visualRangeUpdateMode = this._getVisualRangeUpdateMode(currentBusinessRange, seriesData);
 
+        if(!that.isArgumentAxis) {
+            const viewport = that.getViewport();
+
+            if(isDefined(viewport.startValue) ||
+                isDefined(viewport.endValue) ||
+                isDefined(viewport.length)) {
+                that._resetVisualRangeOption();
+                return;
+            }
+        }
+
+        const visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(currentBusinessRange, seriesData, oppositeVisualRangeUpdateMode);
         if(visualRangeUpdateMode === KEEP) {
             that._setVisualRange([currentBusinessRange.minVisible, currentBusinessRange.maxVisible]);
         }
@@ -1074,14 +1098,14 @@ Axis.prototype = {
         return length;
     },
 
-    setBusinessRange(range, categoriesOrder) {
+    setBusinessRange(range, categoriesOrder, oppositeVisualRangeUpdateMode) {
         const that = this;
         const options = that._options;
         const isDiscrete = options.type === constants.discrete;
 
         that._seriesData = new rangeModule.Range(range);
 
-        that._handleBusinessRangeChanged(that._seriesData);
+        that._handleBusinessRangeChanged(that._seriesData, oppositeVisualRangeUpdateMode);
 
         that._seriesData.addRange({
             categories: options.categories,
@@ -1771,6 +1795,7 @@ Axis.prototype = {
 
     _applyZooming(visualRange) {
         const that = this;
+        that._resetVisualRangeOption();
         that._setVisualRange(visualRange);
 
         const viewPort = that.getViewport();
@@ -1814,8 +1839,8 @@ Axis.prototype = {
         };
     },
 
-    setCustomVisualRange(value) {
-        this._options._customVisualRange = value;
+    _resetVisualRangeOption() {
+        this._options._customVisualRange = {};
     },
 
      // API
