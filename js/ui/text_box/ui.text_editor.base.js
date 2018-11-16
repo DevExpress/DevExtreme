@@ -63,18 +63,6 @@ var CONTROL_KEYS = [
 */
 var TextEditorBase = Editor.inherit({
 
-    _supportedKeys: function() {
-        var stop = function(e) {
-            e.stopPropagation();
-        };
-        return {
-            space: stop,
-            enter: stop,
-            leftArrow: stop,
-            rightArrow: stop
-        };
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
