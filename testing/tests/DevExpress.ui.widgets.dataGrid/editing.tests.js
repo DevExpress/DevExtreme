@@ -7106,7 +7106,7 @@ QUnit.module('Refresh modes', {
         this.setupModules = function() {
             var that = this;
 
-            setupDataGridModules(that, ['data', 'columns', 'rows', 'gridView', 'editing', 'selection', 'grouping', 'editorFactory'], {
+            setupDataGridModules(that, ['data', 'columns', 'rows', 'gridView', 'editing', 'selection', 'grouping', 'editorFactory', 'columnFixing'], {
                 initViews: true
             });
 
@@ -7329,6 +7329,72 @@ QUnit.test("Editing with refresh mode repaint and with grouping", function(asser
     assert.equal(this.array[this.array.length - 1].name, "Mike", "data is inserted to end");
     assert.equal(this.getVisibleRows()[0].data.name, "Mike", "row is inserted to begin and not reshaped");
 });
+
+// T689906
+QUnit.test("The cell should be editable when there is a fixed column and repaintChangesOnly is true", function(assert) {
+    // arrange
+    var $cellElement;
+
+    this.options.editing = {
+        mode: "cell",
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    this.options.columnFixing = { enabled: true };
+    this.options.columns = [{ dataField: "id", allowEditing: false }, "name", "age"];
+    this.options.repaintChangesOnly = true;
+    this.setupModules();
+
+    // act
+    this.editCell(0, 1);
+
+    // assert
+    $cellElement = $(this.rowsView.getCellElement(0, 1));
+    assert.ok($cellElement.hasClass("dx-editor-cell"), "has editor cell");
+    assert.strictEqual($cellElement.find(".dx-textbox").length, 1, "has textbox");
+
+    // act
+    this.editCell(0, 2);
+
+    // assert
+    $cellElement = $(this.rowsView.getCellElement(0, 2));
+    assert.ok($cellElement.hasClass("dx-editor-cell"), "has editor cell");
+    assert.strictEqual($cellElement.find(".dx-numberbox").length, 1, "has numberbox");
+});
+
+QUnit.test("The cell should be editable after selecting the row when repaintChangesOnly is true", function(assert) {
+    // arrange
+    var $cellElement,
+        cells;
+
+    this.options.editing = {
+        mode: "cell",
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    this.options.selection = {
+        mode: "multiple",
+        showCheckBoxesMode: "always"
+    };
+    this.options.repaintChangesOnly = true;
+    this.setupModules();
+
+    // act
+    this.selectRows(this.array[0]);
+
+    // assert
+    cells = this.getVisibleRows()[0].cells;
+    assert.strictEqual(cells.length, 4, "count cell of row");
+
+    // act
+    this.editCell(0, 1);
+
+    // assert
+    $cellElement = $(this.rowsView.getCellElement(0, 1));
+    assert.ok($cellElement.hasClass("dx-editor-cell"), "has editor cell");
+    assert.strictEqual($cellElement.find(".dx-textbox").length, 1, "has textbox");
+});
+
 
 QUnit.module('Editing with validation', {
     beforeEach: function() {
