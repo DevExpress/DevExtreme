@@ -17,13 +17,14 @@ var CONTENT_CLASS = "content",
     FIXED_COLUMNS_CLASS = "dx-fixed-columns",
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
     POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
+    COMMAND_TRANSPARENT = "transparent",
     GROUP_ROW_CLASS = "dx-group-row",
 
     getTransparentColumnIndex = function(fixedColumns) {
         var transparentColumnIndex = -1;
 
         each(fixedColumns, function(index, column) {
-            if(column.command === "transparent") {
+            if(column.command === COMMAND_TRANSPARENT) {
                 transparentColumnIndex = index;
                 return false;
             }
@@ -38,7 +39,7 @@ var CONTENT_CLASS = "content",
 
         if(fixedColumns && widths && fixedWidths) {
             for(i = 0; i < fixedColumns.length; i++) {
-                if(fixedColumns[i].command === "transparent") {
+                if(fixedColumns[i].command === COMMAND_TRANSPARENT) {
                     fixedColumnIndex += fixedColumns[i].colspan;
                 } else {
                     if(widths[fixedColumnIndex] < fixedWidths[i]) {
@@ -60,7 +61,7 @@ var baseFixedColumns = {
     },
 
     _createCol: function(column) {
-        return this.callBase(column).toggleClass(FIXED_COL_CLASS, !!(this._isFixedTableRendering && (column.fixed || column.command && column.command !== "transparent")));
+        return this.callBase(column).toggleClass(FIXED_COL_CLASS, !!(this._isFixedTableRendering && (column.fixed || column.command && column.command !== COMMAND_TRANSPARENT)));
     },
 
     _correctColumnIndicesForFixedColumns: function(fixedColumns, change) {
@@ -99,6 +100,7 @@ var baseFixedColumns = {
             that._isFixedTableRendering = true;
 
             var change = options && options.change,
+                // cells = options.cells,
                 columnIndices = change && change.columnIndices;
 
             that._correctColumnIndicesForFixedColumns(fixedColumns, change);
@@ -120,6 +122,29 @@ var baseFixedColumns = {
         return $table;
     },
 
+    _renderRow: function($table, options) {
+        var fixedCells,
+            fixedCorrection,
+            cells = options.row.cells;
+
+        this.callBase.apply(this, arguments);
+
+        if(this._isFixedTableRendering && cells && cells.length) {
+            fixedCorrection = 0;
+            fixedCells = options.row.cells || [];
+            cells = cells.slice();
+            options.row.cells = cells;
+
+            for(var i = 0; i < fixedCells.length; i++) {
+                if(fixedCells[i].column && fixedCells[i].column.command === COMMAND_TRANSPARENT) {
+                    fixedCorrection = (fixedCells[i].column.colspan || 1) - 1;
+                    continue;
+                }
+                cells[i + fixedCorrection] = fixedCells[i];
+            }
+        }
+    },
+
     _createCell: function(options) {
         var that = this,
             column = options.column,
@@ -137,7 +162,7 @@ var baseFixedColumns = {
         }
 
         if(that._isFixedTableRendering) {
-            if(columnCommand === "transparent") {
+            if(columnCommand === COMMAND_TRANSPARENT) {
                 $cell
                     .addClass(POINTER_EVENTS_NONE_CLASS)
                     .toggleClass(FIRST_CELL_CLASS, transparentColumnIndex === 0 || prevFixedColumn && prevFixedColumn.command === "expand")
@@ -204,7 +229,7 @@ var baseFixedColumns = {
             }
         }
 
-        if(column.command !== "transparent") {
+        if(column.command !== COMMAND_TRANSPARENT) {
             that.callBase($cell, options);
         }
     },
@@ -232,7 +257,7 @@ var baseFixedColumns = {
                     fixedColumn = fixedColumns[columnIndex];
 
                     if(fixedColumn) {
-                        if(fixedColumn.command === "transparent") {
+                        if(fixedColumn.command === COMMAND_TRANSPARENT) {
                             if(fixedCellElements.eq(columnIndex).hasClass(MASTER_DETAIL_CELL_CLASS)) {
                                 cellElements[columnIndex] = cell || cellElements[columnIndex];
                             }
@@ -937,7 +962,7 @@ module.exports = {
 
                             if(currentColumn.fixed || nextColumn.fixed) {
                                 point.columnIndex -= 1;
-                                return !((currentColumn.allowResizing || currentColumn.command === "transparent") && (isWidgetResizingMode || nextColumn.allowResizing || nextColumn.command === "transparent"));
+                                return !((currentColumn.allowResizing || currentColumn.command === COMMAND_TRANSPARENT) && (isWidgetResizingMode || nextColumn.allowResizing || nextColumn.command === COMMAND_TRANSPARENT));
                             }
                         }
 

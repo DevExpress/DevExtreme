@@ -32,7 +32,8 @@ var $ = require("jquery"),
     MockDataController = dataGridMocks.MockDataController,
     MockColumnsController = dataGridMocks.MockColumnsController,
     gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
-    expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
+    expandCellTemplate = gridCoreUtils.getExpandCellTemplate(),
+    dataUtils = require("core/element_data");
 
 var generateData = function(countItems) {
     var j = 1,
@@ -3016,4 +3017,56 @@ QUnit.test("Fixed column widths should be correct when the group cell position i
     assert.strictEqual($colElements[1].style.width, "30px", "width of the second col");
     assert.strictEqual($colElements[2].style.width, "auto", "width of the third col");
     assert.strictEqual($colElements[3].style.width, "auto", "width of the fourth col");
+});
+
+QUnit.test("The cells option of row should be correct when there are fixed columns", function(assert) {
+    // arrange
+    var cells,
+        rowElement,
+        cellElements,
+        fixedRowElement,
+        $testElement = $("#container");
+
+    this.setupDataGrid();
+
+    // act
+    this.rowsView.render($testElement);
+
+    // assert
+
+    // Combined cells (fixed + not fixed)
+    cells = this.getVisibleRows()[0].cells;
+    cellElements = this.rowsView.getCellElements(0);
+    assert.strictEqual(cells.length, 4, "cell count");
+    assert.strictEqual(cells[0].column.dataField, "field1", "first cell");
+    assert.deepEqual($(cells[0].cellElement)[0], cellElements[0], "first cell element");
+    assert.strictEqual(cells[1].column.dataField, "field2", "second cell");
+    assert.deepEqual($(cells[1].cellElement)[0], cellElements[1], "second cell element");
+    assert.strictEqual(cells[2].column.dataField, "field3", "third cell");
+    assert.deepEqual($(cells[2].cellElement)[0], cellElements[2], "third cell element");
+    assert.strictEqual(cells[3].column.dataField, "field4", "fourth cell");
+    assert.deepEqual($(cells[3].cellElement)[0], cellElements[3], "fourth cell element");
+
+    // Not fixed cells
+    rowElement = this.getRowElement(0)[0];
+    cells = dataUtils.data(rowElement, "options").cells;
+    cellElements = $(rowElement).children();
+    assert.strictEqual(cells.length, 4, "cell count");
+    assert.strictEqual(cells[0].column.dataField, "field1", "first cell");
+    assert.deepEqual($(cells[0].cellElement)[0], cellElements[0], "first cell element");
+    assert.strictEqual(cells[1].column.dataField, "field2", "second cell");
+    assert.deepEqual($(cells[1].cellElement)[0], cellElements[1], "second cell element");
+    assert.strictEqual(cells[2].column.dataField, "field3", "third cell");
+    assert.deepEqual($(cells[2].cellElement)[0], cellElements[2], "third cell element");
+    assert.strictEqual(cells[3].column.dataField, "field4", "fourth cell");
+    assert.deepEqual($(cells[3].cellElement)[0], cellElements[3], "fourth cell element");
+
+    // Fixed cells
+    fixedRowElement = this.getRowElement(0)[1];
+    cells = dataUtils.data(fixedRowElement, "options").cells;
+    cellElements = $(fixedRowElement).children();
+    assert.strictEqual(cells.length, 2, "cell count");
+    assert.strictEqual(cells[0].column.dataField, "field1", "first cell");
+    assert.deepEqual($(cells[0].cellElement)[0], cellElements[0], "first cell element");
+    assert.strictEqual(cells[1].column.command, "transparent", "transparent cell");
 });

@@ -862,6 +862,7 @@ module.exports = {
                 _updateItemsCore: function(change) {
                     var that = this,
                         items,
+                        oldItems,
                         dataSource = that._dataSource,
                         changeType = change.changeType || "refresh";
 
@@ -873,11 +874,15 @@ module.exports = {
                         items = that._processItems(items, changeType);
 
                         change.items = items;
+                        oldItems = that._items.length === items.length && that._items;
 
                         that._applyChange(change);
 
                         each(that._items, function(index, item) {
                             item.rowIndex = index;
+                            if(oldItems) {
+                                item.cells = oldItems[index].cells;
+                            }
                         });
                     } else {
                         that._items = [];
