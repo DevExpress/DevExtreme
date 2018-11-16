@@ -109,7 +109,7 @@
 
             var ua = navigator.userAgent;
 
-            if(window.ActiveXObject !== undefined || /firefox/i.test(ua) || isWinPhone)
+            if(window.ActiveXObject !== undefined || isWinPhone)
                 return 1;
 
             return 2;
