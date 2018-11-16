@@ -353,8 +353,10 @@ var DOMComponent = Component.inherit({
                 this._renderDimensions();
                 break;
             case "rtlEnabled":
-            case "elementAttr":
                 this._invalidate();
+                break;
+            case "elementAttr":
+                this._renderElementAttributes();
                 break;
             case "disabled":
             case "integrationOptions":
