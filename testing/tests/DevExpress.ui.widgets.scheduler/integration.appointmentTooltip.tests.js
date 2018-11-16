@@ -1,6 +1,5 @@
 var $ = require("jquery"),
-    themes = require("ui/themes"),
-    dateSerialization = require("core/utils/date_serialization");
+    themes = require("ui/themes");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -464,7 +463,7 @@ QUnit.test("Click on tooltip-remove button should call scheduler.updateAppointme
             startDate: new Date(2018, 6, 30, 10, 0),
             endDate: new Date(2018, 6, 30, 11, 0),
             SC_RecurrenceRule: "FREQ=DAILY;COUNT=3",
-            SC_RecurrenceException: "20170626T100000Z"
+            SC_RecurrenceException: "20170626T100000"
         }
         ]
     });
@@ -476,16 +475,13 @@ QUnit.test("Click on tooltip-remove button should call scheduler.updateAppointme
     var $tooltip = $(".dx-scheduler-appointment-tooltip");
     $tooltip.find(".dx-scheduler-appointment-tooltip-buttons").find(".dx-button").eq(0).trigger("dxclick");
 
-    var exceptionDate = new Date(2018, 6, 31, 10, 0, 0, 0),
-        exceptionString = dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ");
-
     assert.deepEqual(stub.getCall(0).args[1],
         {
             startDate: new Date(2018, 6, 30, 10, 0),
             endDate: new Date(2018, 6, 30, 11, 0),
             text: "Meeting of Instructors",
             SC_RecurrenceRule: "FREQ=DAILY;COUNT=3",
-            SC_RecurrenceException: "20170626T100000Z," + exceptionString
+            SC_RecurrenceException: "20170626T100000,20180731T100000"
         },
         "updateAppointment has a right arguments");
 
