@@ -2,6 +2,7 @@ import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { isDefined } from "../../core/utils/type";
 import { getPublicElement } from "../../core/utils/dom";
+import { executeAsync } from "../../core/utils/common";
 import registerComponent from "../../core/component_registrator";
 import EmptyTemplate from "../widget/empty_template";
 import Editor from "../editor/editor";
@@ -150,7 +151,7 @@ const HtmlEditor = Editor.inherit({
         this._updateContainerMarkup();
     },
 
-    _hasTranscludeContent: function() {
+    _hasTranscludedContent: function() {
         return this._$templateResult && this._$templateResult.length;
     },
 
@@ -183,8 +184,6 @@ const HtmlEditor = Editor.inherit({
         }
 
         this._prepareConverters();
-        this._renderHtmlEditor();
-        this._renderFormDialog();
 
         this.callBase();
     },
@@ -203,6 +202,12 @@ const HtmlEditor = Editor.inherit({
         }
     },
 
+    _renderContentImpl: function() {
+        this.callBase();
+        this._renderHtmlEditor();
+        this._renderFormDialog();
+    },
+
     _renderHtmlEditor: function() {
         const modulesConfig = this._getModulesConfig();
 
@@ -215,11 +220,12 @@ const HtmlEditor = Editor.inherit({
 
         this._deltaConverter.setQuillInstance(this._quillInstance);
         this._textChangeHandlerWithContext = this._textChangeHandler.bind(this);
-
         this._quillInstance.on("text-change", this._textChangeHandlerWithContext);
 
-        if(this._hasTranscludeContent()) {
-            this._updateHtmlContent(this._deltaConverter.toHtml());
+        if(this._hasTranscludedContent()) {
+            this._updateContentTask = executeAsync(() => {
+                this._updateHtmlContent(this._deltaConverter.toHtml());
+            });
         }
     },
 
@@ -365,7 +371,15 @@ const HtmlEditor = Editor.inherit({
             this._quillInstance.off("text-change", this._textChangeHandlerWithContext);
         }
 
+        this._abortUpdateContentTask();
         this.callBase();
+    },
+
+    _abortUpdateContentTask: function() {
+        if(this._updateContentTask) {
+            this._updateContentTask.abort();
+            this._updateContentTask = undefined;
+        }
     },
 
     _applyQuillMethod(methodName, args) {
