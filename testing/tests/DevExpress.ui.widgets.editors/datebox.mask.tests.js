@@ -425,8 +425,8 @@ if(devices.real().deviceType === "desktop") {
 
             this.$input.trigger("focusout");
             this.keyboard.type("2");
-            assert.equal(this.instance.option("text"), "January 2 2012", "search value was cleared");
-            assert.deepEqual(this.keyboard.caret(), { start: 8, end: 9 }, "next group has been selected");
+            assert.equal(this.instance.option("text"), "February 10 2012", "search value and position was cleared");
+            assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, "first group has been filled again");
         });
 
         QUnit.test("enter should clear search value", (assert) => {
