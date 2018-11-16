@@ -22,6 +22,7 @@ RUN npm set progress=false
 RUN npm set loglevel=error
 RUN npm set unsafe-perm=true
 RUN npm set fetch-retries 5
+RUN npm set audit false
 
 # .NET Core
 RUN curl -L https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
@@ -41,7 +42,7 @@ RUN find /usr/share/dotnet -type f -wholename '**/runtimes/win*/**' -delete
 RUN curl -L http://www.slimjetbrowser.com/chrome/files/70.0.3538.77/google-chrome-stable_current_amd64.deb > chrome.deb
 RUN gdebi -n ./chrome.deb
 RUN unlink ./chrome.deb
-RUN rm -rf /opt/google/chrome/swiftshader
+RUN rm -rf /opt/google/chrome/swiftshader /opt/google/chrome/libwidevinecdm.so
 RUN find /opt/google/chrome/locales -type f ! -name 'en-US.pak' -delete
 
 # Firefox
@@ -49,7 +50,7 @@ RUN apt-get install -y firefox
 RUN mkdir /firefox-profile
 RUN for p in \
     '"browser.shell.checkDefaultBrowser", false' \
-    '"toolkit.telemetry.reportingpolicy.firstRun", false' \
+    '"datareporting.policy.dataSubmissionEnabled", false' \
     '"font.name-list.monospace.x-western", "Liberation Mono"' \
     '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
     '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /firefox-profile/prefs.js; done
@@ -78,7 +79,7 @@ RUN apt-get purge -y apt-transport-https gdebi-core gnupg localepurge
 # Clean APT
 RUN apt-get autoremove -y --purge
 RUN apt-get clean
-RUN rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
+RUN rm -rf /etc/apt/sources.list.d/* /tmp/* /usr/share/doc/* /var/cache/* /var/lib/apt/lists/* /var/log/* 
 
 #############################################################
 
