@@ -80,6 +80,10 @@ Microsoft.Maps = {
                     Microsoft.clickActionCallback = callback;
                     return "clickHandler";
                 case "directionsUpdated":
+                    if(Microsoft.abortDirectionsUpdate) {
+                        return;
+                    }
+
                     var lastDirectionPoints = Microsoft.lastDirectionPoints;
                     setTimeout(function() {
                         callback({
@@ -90,6 +94,17 @@ Microsoft.Maps = {
                         });
                     });
                     return "directionsUpdatedHandler";
+                case "directionsError":
+                    if(!Microsoft.abortDirectionsUpdate) {
+                        return;
+                    }
+
+                    setTimeout(function() {
+                        callback({
+                            responseCode: 1, message: "Directions error"
+                        });
+                    });
+                    return "directionsErrorHandler";
                 case "viewchange":
                     Microsoft.viewChangeCallback = callback;
                     return "viewchangeHandler";
@@ -116,7 +131,9 @@ Microsoft.Maps = {
                     Microsoft.clickHandlerRemoved = true;
                     break;
                 case "directionsUpdatedHandler":
+                case "directionsErrorHandler":
                     Microsoft.directionsUpdatedHandlerRemoved = true;
+                    Microsoft.directionsErrorHandlerRemoved = true;
                     break;
                 case "viewchangeHandler":
                     Microsoft["viewchangeHandlerRemoved"] = true;
