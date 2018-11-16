@@ -236,7 +236,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1006
     */
-    W1006: "The map service returned the '{0}' error",
+    W1006: "The map service returned the following error: '{0}'",
 
     /**
      * @name ErrorsUIWidgets.W1007
