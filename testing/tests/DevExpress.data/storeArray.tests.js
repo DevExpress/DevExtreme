@@ -743,13 +743,13 @@ QUnit.test("update with key", function(assert) {
 
             onUpdating_option: [123, expectedValues],
 
-            onUpdated_option: [123, expectedData],
+            onUpdated_option: [123, expectedValues],
 
             on_updating_callback: [123, expectedValues],
 
             on_modified_callback: true,
 
-            on_updated_callback: [123, expectedData]
+            on_updated_callback: [123, expectedValues]
         });
 
         store.load().done(data => {

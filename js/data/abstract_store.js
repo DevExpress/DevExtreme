@@ -9,7 +9,6 @@ var Class = require("../core/class"),
     queryByOptions = storeHelper.queryByOptions,
     Deferred = require("../core/utils/deferred").Deferred,
     noop = require("../core/utils/common").noop,
-    config = require("../core/config"),
 
     storeImpl = {};
 
@@ -281,8 +280,8 @@ var Store = Class.inherit({
         that.fireEvent("modifying");
         that.fireEvent("updating", [key, values]);
 
-        return that._addFailHandlers(that._updateImpl(key, values).done(function(callbackValues, callbackKey) {
-            that.fireEvent("updated", [key, config().useLegacyStoreResult ? callbackKey : callbackValues]);
+        return that._addFailHandlers(that._updateImpl(key, values).done(function() {
+            that.fireEvent("updated", [key, values]);
             that.fireEvent("modified");
         }));
     },
