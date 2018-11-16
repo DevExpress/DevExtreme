@@ -669,8 +669,9 @@ var subscribes = {
         var operation = back ? -1 : 1;
         if(typeof offsets.common === "number") {
             var offset = offsets.common - offsets.appointment,
-                hoursOffset = Math.floor(offset),
+                hoursOffset = (offset < 0 ? -1 : 1) * Math.floor(Math.abs(offset)),
                 minutesOffset = offset % 1;
+
             date.setHours(date.getHours() + operation * hoursOffset);
             date.setMinutes(date.getMinutes() + operation * minutesOffset * MINUTES_IN_HOUR);
         }
