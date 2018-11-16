@@ -2,6 +2,8 @@ var $ = require("jquery");
 
 require("ui/date_box/ui.time_view");
 
+var dateLocalization = require("localization/date");
+
 QUnit.testStart(function() {
     var markup =
         '<div id="timeView"></div>';
@@ -338,6 +340,23 @@ QUnit.test("format field should be rendered when use24HourFormat option is enabl
 
     instance.option("use24HourFormat", true);
     assert.equal($element.find("." + TIMEVIEW_FORMAT12_CLASS).length, 0, "input was removed");
+});
+
+QUnit.test("timeView should use localized message for the 24hour format selectBox", function(assert) {
+    var getPeriodNames = sinon.stub(dateLocalization, "getPeriodNames").returns(["A", "P"]);
+
+    try {
+        var $element = $("#timeView").dxTimeView({
+                use24HourFormat: false
+            }),
+            formatField = $element.find("." + TIMEVIEW_FORMAT12_CLASS).dxSelectBox("instance"),
+            items = formatField.option("items");
+
+        assert.equal(items[0].text, "A", "AM item is correct");
+        assert.equal(items[1].text, "P", "PM item is correct");
+    } finally {
+        getPeriodNames.restore();
+    }
 });
 
 QUnit.test("day time should be changed after setting a new value", function(assert) {
