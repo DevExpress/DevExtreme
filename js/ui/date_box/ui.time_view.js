@@ -211,8 +211,12 @@ var TimeView = Editor.inherit({
     },
 
     _createFormat12Box: function() {
+        var periodNames = dateLocalization.getPeriodNames();
         this._format12 = this._createComponent($("<div>").addClass(TIMEVIEW_FORMAT12_CLASS), SelectBox, extend({
-            items: [{ value: TIMEVIEW_FORMAT12_AM, text: "AM" }, { value: TIMEVIEW_FORMAT12_PM, text: "PM" }],
+            items: [{ value: TIMEVIEW_FORMAT12_AM, text: periodNames[0] }, {
+                value: TIMEVIEW_FORMAT12_PM,
+                text: periodNames[1]
+            }],
             valueExpr: "value",
             displayExpr: "text",
             onValueChanged: (function(args) {
