@@ -3217,7 +3217,7 @@ QUnit.test('dxPivotGrid with vertical scroll and minimum width without horizonta
 
     var columnsWidth = sumArray(columnsArea.getColumnsWidth());
 
-    assert.roughEqual(columnsArea.groupWidth(), columnsWidth, 0.01, "stretched");
+    assert.roughEqual(columnsArea.groupWidth(), columnsWidth, 0.2, "stretched");
 
     var table = pivotGrid.$element().find("table").first();
 
@@ -3293,7 +3293,7 @@ QUnit.test('Stretch columns when scrolling has size', function(assert) {
 
     var columnsWidth = sumArray(columnsArea.getColumnsWidth());
 
-    assert.roughEqual(columnsArea.groupWidth(), columnsWidth, 0.01, "stretched");
+    assert.roughEqual(columnsArea.groupWidth(), columnsWidth, 0.2, "stretched");
 
     var table = pivotGrid.$element().find("table").first();
 
@@ -3345,7 +3345,7 @@ QUnit.test('Stretch columns when scrolling has size and horizontal scrollbar may
     var columnsArea = pivotGrid._columnsArea;
     assert.ok(!pivotGrid._rowsArea.hasScroll());
     assert.ok(columnsArea.hasScroll());
-    assert.roughEqual($(columnsArea._getScrollable().content()).parent().get(0).clientWidth, $(pivotGrid._dataArea._getScrollable().content()).parent().get(0).clientWidth, 0.01, "stretched");
+    assert.roughEqual($(columnsArea._getScrollable().content()).parent().get(0).clientWidth, $(pivotGrid._dataArea._getScrollable().content()).parent().get(0).clientWidth, 0.2, "stretched");
 });
 
 QUnit.test('Stretch columns when scrolling has size. Virtual scrolling', function(assert) {
@@ -3486,7 +3486,7 @@ QUnit.test('No size reservation for scrolling when changed size to no scroll', f
 
     var columnsWidth = sumArray(columnsArea.getColumnsWidth());
 
-    assert.roughEqual(columnsArea.groupWidth(), columnsWidth, 0.01, "stretched");
+    assert.roughEqual(columnsArea.groupWidth(), columnsWidth, 0.2, "stretched");
 
     var table = pivotGrid.$element().find("table").first();
 
