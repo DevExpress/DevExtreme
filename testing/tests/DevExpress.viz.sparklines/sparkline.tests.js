@@ -308,7 +308,7 @@ QUnit.begin(function() {
     });
 
     QUnit.test('Create range when datasource has one point. Area/bar', function(assert) {
-        this.createSparkline({ type: "area", dataSource: ["1"] }, null, { arg: { }, val: { min: 0, max: 4 } });
+        this.createSparkline({ type: "area", dataSource: ["1"] }, null, { arg: {}, val: { min: 0, max: 4 } });
 
         var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
             valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
@@ -1117,42 +1117,6 @@ QUnit.begin(function() {
         assert.equal(data[3].val, -1, 'Fourth data source item should be correct');
     });
 
-    QUnit.test('B239983. Datasource is array with string', function(assert) {
-        var sparkline = this.createSparkline({
-                dataSource: ['10', '3', '7']
-            }),
-            data = this.getData();
-
-        assert.equal(data.length, 3, 'Data source should have three items');
-        assert.equal(data[0].arg, '0', 'First data source item should be correct');
-        assert.equal(data[0].val, 10, 'First data source item should be correct');
-        assert.equal(data[1].arg, '1', 'Second data source item should be correct');
-        assert.equal(data[1].val, 3, 'Second data source item should be correct');
-        assert.equal(data[2].arg, '2', 'Third data source item should be correct');
-        assert.equal(data[2].val, 7, 'Third data source item should be correct');
-
-        assert.equal(sparkline._minMaxIndexes.minIndex, 1, 'Min index should be 1');
-        assert.equal(sparkline._minMaxIndexes.maxIndex, 0, 'Max index should be 0');
-    });
-
-    QUnit.test('B239983. Datasource is array with object and string', function(assert) {
-        var sparkline = this.createSparkline({
-                dataSource: [{ arg: '0', val: '10' }, { arg: '1', val: '3' }, { arg: '2', val: '13' }]
-            }),
-            data = this.getData();
-
-        assert.equal(data.length, 3, 'Data source should have three items');
-        assert.equal(data[0].arg, '0', 'First data source item should be correct');
-        assert.equal(data[0].val, 10, 'First data source item should be correct');
-        assert.equal(data[1].arg, '1', 'Second data source item should be correct');
-        assert.equal(data[1].val, 3, 'Second data source item should be correct');
-        assert.equal(data[2].arg, '2', 'Third data source item should be correct');
-        assert.equal(data[2].val, 13, 'Third data source item should be correct');
-
-        assert.equal(sparkline._minMaxIndexes.minIndex, 1, 'Min index should be 1');
-        assert.equal(sparkline._minMaxIndexes.maxIndex, 2, 'Max index should be 2');
-    });
-
     QUnit.test('null value in dataSource', function(assert) {
         this.createSparkline({
             dataSource: [1, 2, null, 4]
@@ -1205,19 +1169,55 @@ QUnit.begin(function() {
         assert.equal(dataValidatorModule.validateData.firstCall.args[1].argumentOptions.type, undefined);
     });
 
-    QUnit.module('Customize points', environment);
+    QUnit.module('Customize points',
+        $.extend({
+            checkCustomizePoint: function(assert, expectedData) {
+                var customizeFunction = this.getSeriesOptions().customizePoint;
+
+                this.series.updateData.lastCall.args[0].forEach(function(dataItem, i) {
+                    assert.deepEqual(customizeFunction.call({ index: i, value: dataItem.val }), expectedData[i]);
+                });
+            },
+        }, environment
+        ));
+
+    QUnit.test('B239983. Datasource is array with string', function(assert) {
+        this.createSparkline({
+            dataSource: ['10', '3', '7'],
+            showMinMax: true,
+            minColor: "green",
+            maxColor: "red"
+        });
+
+        this.checkCustomizePoint(assert, [{ border: { color: "red" }, visible: true },
+        { border: { color: "green" }, visible: true },
+        { border: { color: "#666666" }, visible: true }]);
+    });
+
+    QUnit.test('B239983. Datasource is array with object and string', function(assert) {
+        this.createSparkline({
+            dataSource: [{ arg: '0', val: '10' }, { arg: '1', val: '3' }, { arg: '2', val: '13' }],
+            showMinMax: true,
+            minColor: "green",
+            maxColor: "red"
+        });
+
+        this.checkCustomizePoint(assert, [{ border: { color: "#666666" }, visible: true },
+        { border: { color: "green" }, visible: true },
+        { border: { color: "red" }, visible: true }]);
+    });
 
     QUnit.test('Get extremum points indexes when datasource is not ordered - B239987', function(assert) {
         this.createSparkline({
             dataSource: [{ arg: 9, val: 10 }, { arg: 5, val: 1 }, { arg: 4, val: 1 }],
-            showMinMax: true
+            showMinMax: true,
+            minColor: "green",
+            maxColor: "red"
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 10 }), { border: { color: "#e55253" }, visible: true });
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 1 }), { border: { color: "#e8c267" }, visible: true });
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 1 }), { border: { color: "#666666" }, visible: true });
+        this.checkCustomizePoint(assert, [{ border: { color: "green" }, visible: true },
+        { border: { color: "green" }, visible: true },
+        { border: { color: "red" }, visible: true }]);
     });
 
     QUnit.test('Get extremum points indexes when mode is first last', function(assert) {
@@ -1225,12 +1225,13 @@ QUnit.begin(function() {
             dataSource: [1, 8, 6, 9, 5]
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), { border: { color: "#666666" }, visible: true }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 9 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 6 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 9 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 5 }), { border: { color: "#666666" }, visible: true }, "last point");
+        this.checkCustomizePoint(assert, [
+            { border: { color: "#666666" }, visible: true },
+            {},
+            {},
+            {},
+            { border: { color: "#666666" }, visible: true }
+        ]);
     });
 
     QUnit.test('Get extremum points indexes when mode is min max', function(assert) {
@@ -1240,12 +1241,13 @@ QUnit.begin(function() {
             showMinMax: true
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), { border: { color: "#e8c267" }, visible: true }, "min point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 8 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 6 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 9 }), { border: { color: "#e55253" }, visible: true }, "max point");
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 5 }), {});
+        this.checkCustomizePoint(assert, [
+            { border: { color: "#e8c267" }, visible: true },
+            {},
+            {},
+            { border: { color: "#e55253" }, visible: true },
+            {}
+        ]);
     });
 
     QUnit.test('Get extremum points indexes when mode is extremum', function(assert) {
@@ -1255,12 +1257,13 @@ QUnit.begin(function() {
             showMinMax: true
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), { border: { color: "#e8c267" }, visible: true }, "min point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 8 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 6 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 9 }), { border: { color: "#e55253" }, visible: true }, "max point");
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 5 }), { border: { color: "#666666" }, visible: true }, "last point");
+        this.checkCustomizePoint(assert, [
+            { border: { color: "#e8c267" }, visible: true },
+            {},
+            {},
+            { border: { color: "#e55253" }, visible: true },
+            { border: { color: "#666666" }, visible: true }
+        ]);
     });
 
     QUnit.test('Get extremum points indexes when mode is none', function(assert) {
@@ -1270,12 +1273,7 @@ QUnit.begin(function() {
             showMinMax: false
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 8 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 6 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 9 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 5 }), {});
+        this.checkCustomizePoint(assert, [{}, {}, {}, {}, {}]);
     });
 
     QUnit.test('Extremum points when mode is firstLast. Default options. Line, spline, stepline, area, splinearea, steparea', function(assert) {
@@ -1283,11 +1281,12 @@ QUnit.begin(function() {
             dataSource: [4, 9, 8, 6]
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 4 }), { border: { color: "#666666" }, visible: true }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 9 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 8 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 6 }), { border: { color: "#666666" }, visible: true }, "last point");
+        this.checkCustomizePoint(assert, [
+            { border: { color: "#666666" }, visible: true },
+            {},
+            {},
+            { border: { color: "#666666" }, visible: true }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is firstLast. Custom options. Line, spline, stepline, area, splinearea, steparea', function(assert) {
@@ -1296,11 +1295,12 @@ QUnit.begin(function() {
             firstLastColor: 'blue'
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 4 }), { border: { color: "blue" }, visible: true }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 9 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 8 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 6 }), { border: { color: "blue" }, visible: true }, "last point");
+        this.checkCustomizePoint(assert, [
+            { border: { color: "blue" }, visible: true },
+            {},
+            {},
+            { border: { color: "blue" }, visible: true }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is firstLast. Default options. Bar, winloss', function(assert) {
@@ -1309,11 +1309,12 @@ QUnit.begin(function() {
             type: 'bar'
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 4 }), { color: "#666666" }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 9 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 2, value: -8 }), { color: "#d7d7d7" });
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 6 }), { color: "#666666" }, "last point");
+        this.checkCustomizePoint(assert, [
+            { color: "#666666" },
+            { color: "#a9a9a9" },
+            { color: "#d7d7d7" },
+            { color: "#666666" }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is firstLast. Custom options. Bar, winloss', function(assert) {
@@ -1323,11 +1324,12 @@ QUnit.begin(function() {
             firstLastColor: 'yellow'
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 4 }), { color: "yellow" }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 9 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 2, value: -8 }), { color: "#d7d7d7" });
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 6 }), { color: "yellow" }, "last point");
+        this.checkCustomizePoint(assert, [
+            { color: "yellow" },
+            { color: "#a9a9a9" },
+            { color: "#d7d7d7" },
+            { color: "yellow" }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is minMax. Line, spline, stepline, area, splinearea, steparea', function(assert) {
@@ -1337,11 +1339,12 @@ QUnit.begin(function() {
             showMinMax: true
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 4 }), { border: { color: "#e8c267" }, visible: true }, "min point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 9 }), { border: { color: "#e55253" }, visible: true }, "max point");
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 8 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 6 }), {});
+        this.checkCustomizePoint(assert, [
+            { border: { color: "#e8c267" }, visible: true },
+            { border: { color: "#e55253" }, visible: true },
+            {},
+            {}
+        ]);
     });
 
 
@@ -1353,11 +1356,12 @@ QUnit.begin(function() {
             showMinMax: true
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 4 }), { color: "#e8c267" }, "min point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 9 }), { color: "#e55253" }, "max point");
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 8 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 6 }), { color: "#a9a9a9" });
+        this.checkCustomizePoint(assert, [
+            { color: "#e8c267" },
+            { color: "#e55253" },
+            { color: "#a9a9a9" },
+            { color: "#a9a9a9" }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is extremum. Line, spline, stepline, area, splinearea, steparea. FirstLast and minMax points are different', function(assert) {
@@ -1367,13 +1371,14 @@ QUnit.begin(function() {
             showMinMax: true
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), { border: { color: "#666666" }, visible: true }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 5 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 2, value: -8 }), { border: { color: "#e8c267" }, visible: true }, "min point");
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 4 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 8 }), { border: { color: "#e55253" }, visible: true }, "max point");
-        assert.deepEqual(customizeFunction.call({ index: 5, value: 6 }), { border: { color: "#666666" }, visible: true }, "last point");
+        this.checkCustomizePoint(assert, [
+            { border: { color: "#666666" }, visible: true },
+            {},
+            { border: { color: "#e8c267" }, visible: true },
+            {},
+            { border: { color: "#e55253" }, visible: true },
+            { border: { color: "#666666" }, visible: true }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is extremum. Line, spline, stepline, area, splinearea, steparea. Three points, min or max point is first or last', function(assert) {
@@ -1383,13 +1388,14 @@ QUnit.begin(function() {
             showMinMax: true
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), { border: { color: "#666666" }, visible: true }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 5 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 2, value: -8 }), { border: { color: "#e8c267" }, visible: true }, "min point");
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 4 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 8 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 5, value: 16 }), { border: { color: "#e55253" }, visible: true }, "last and max point");
+        this.checkCustomizePoint(assert, [
+            { border: { color: "#666666" }, visible: true },
+            {},
+            { border: { color: "#e8c267" }, visible: true },
+            {},
+            {},
+            { border: { color: "#e55253" }, visible: true }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is extremum. Line, spline, stepline, area, splinearea, steparea. Two points, minMax points are firstLast', function(assert) {
@@ -1399,30 +1405,34 @@ QUnit.begin(function() {
             showMinMax: true
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), { border: { color: "#e8c267" }, visible: true }, "first and min point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 5 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 8 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 4 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 8 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 5, value: 16 }), { border: { color: "#e55253" }, visible: true }, "last and max point");
+        this.checkCustomizePoint(assert, [
+            { border: { color: "#e8c267" }, visible: true },
+            {},
+            {},
+            {},
+            {},
+            { border: { color: "#e55253" }, visible: true }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is extremum. Line, spline, stepline, area, splinearea, steparea. Two min and max points', function(assert) {
         this.createSparkline({
             dataSource: [1, 5, -8, -8, 16, 16, 14],
             showFirstLast: true,
-            showMinMax: true
+            showMinMax: true,
+            minColor: "red",
+            maxColor: "green"
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), { border: { color: "#666666" }, visible: true }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 5 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 2, value: -8 }), { border: { color: "#e8c267" }, visible: true }, "min point");
-        assert.deepEqual(customizeFunction.call({ index: 3, value: -8 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 16 }), { border: { color: "#e55253" }, visible: true }, "max point");
-        assert.deepEqual(customizeFunction.call({ index: 5, value: 16 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 6, value: 14 }), { border: { color: "#666666" }, visible: true }, "last point");
+        this.checkCustomizePoint(assert, [
+            { border: { color: "#666666" }, visible: true },
+            {},
+            { border: { color: "red" }, visible: true },
+            { border: { color: "red" }, visible: true },
+            { border: { color: "green" }, visible: true },
+            { border: { color: "green" }, visible: true },
+            { border: { color: "#666666" }, visible: true }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is extremum. Bar, winloss. FirstLast and minMax points are different', function(assert) {
@@ -1434,13 +1444,14 @@ QUnit.begin(function() {
             firstLastColor: 'yellow'
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), { color: "yellow" }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 5 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 2, value: -8 }), { color: "#e8c267" }, "min point");
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 4 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 8 }), { color: "#e55253" }, "max point");
-        assert.deepEqual(customizeFunction.call({ index: 5, value: 6 }), { color: "yellow" }, "last point");
+        this.checkCustomizePoint(assert, [
+            { color: "yellow" },
+            { color: "#a9a9a9" },
+            { color: "#e8c267" },
+            { color: "#a9a9a9" },
+            { color: "#e55253" },
+            { color: "yellow" }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is extremum. Bar, winloss. Three points, min or max point is first or last', function(assert) {
@@ -1452,13 +1463,14 @@ QUnit.begin(function() {
             firstLastColor: 'yellow'
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), { color: "yellow" }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 5 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 2, value: -8 }), { color: "#e8c267" }, "min point");
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 4 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 8 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 5, value: 16 }), { color: "#e55253" }, "last and max point");
+        this.checkCustomizePoint(assert, [
+            { color: "yellow" },
+            { color: "#a9a9a9" },
+            { color: "#e8c267" },
+            { color: "#a9a9a9" },
+            { color: "#a9a9a9" },
+            { color: "#e55253" }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is extremum. Bar, winloss. Two points, minMax points are firstLast', function(assert) {
@@ -1470,14 +1482,14 @@ QUnit.begin(function() {
             firstLastColor: 'yellow'
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), { color: "#e8c267" }, "first and min point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 5 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 8 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 4 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 8 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 5, value: 16 }), { color: "#e55253" }, "last and max point");
+        this.checkCustomizePoint(assert, [
+            { color: "#e8c267" },
+            { color: "#a9a9a9" },
+            { color: "#a9a9a9" },
+            { color: "#a9a9a9" },
+            { color: "#a9a9a9" },
+            { color: "#e55253" }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is extremum. Bar. Two min and max points', function(assert) {
@@ -1489,15 +1501,15 @@ QUnit.begin(function() {
             firstLastColor: 'yellow'
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), { color: "yellow" }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 5 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 2, value: -8 }), { color: "#e8c267" }, "min point");
-        assert.deepEqual(customizeFunction.call({ index: 3, value: -8 }), { color: "#d7d7d7" });
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 16 }), { color: "#e55253" }, "max point");
-        assert.deepEqual(customizeFunction.call({ index: 5, value: 16 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 6, value: 14 }), { color: "yellow" }, "last point");
+        this.checkCustomizePoint(assert, [
+            { color: "yellow" },
+            { color: "#a9a9a9" },
+            { color: "#e8c267" },
+            { color: "#e8c267" },
+            { color: "#e55253" },
+            { color: "#e55253" },
+            { color: "yellow" }
+        ]);
     });
 
     QUnit.test('Extremum points when mode is none. Line, spline, stepline, area, splinearea, steparea', function(assert) {
@@ -1507,14 +1519,7 @@ QUnit.begin(function() {
             showMinMax: false
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 5 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 2, value: -8 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 3, value: -8 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 4, value: 16 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 5, value: 16 }), {});
-        assert.deepEqual(customizeFunction.call({ index: 6, value: 14 }), {});
+        this.checkCustomizePoint(assert, [{}, {}, {}, {}, {}, {}, {}]);
     });
 
     QUnit.test('Extremum points when mode is none. Bar, winloss', function(assert) {
@@ -1525,12 +1530,12 @@ QUnit.begin(function() {
             showMinMax: false
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 1 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 5 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 2, value: -8 }), { color: "#d7d7d7" });
-        assert.deepEqual(customizeFunction.call({ index: 3, value: 14 }), { color: "#a9a9a9" });
+        this.checkCustomizePoint(assert, [
+            { color: "#a9a9a9" },
+            { color: "#a9a9a9" },
+            { color: "#d7d7d7" },
+            { color: "#a9a9a9" }
+        ]);
     });
 
     QUnit.test('Bar points. Default', function(assert) {
@@ -1539,11 +1544,12 @@ QUnit.begin(function() {
             dataSource: [0, 3, 6, -8]
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 0 }), { color: "#666666" }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 3 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 6 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 3, value: -8 }), { color: "#666666" }, "last point");
+        this.checkCustomizePoint(assert, [
+            { color: "#666666" },
+            { color: "#a9a9a9" },
+            { color: "#a9a9a9" },
+            { color: "#666666" }
+        ]);
     });
 
     QUnit.test('Bar points. Custom', function(assert) {
@@ -1555,11 +1561,12 @@ QUnit.begin(function() {
             dataSource: [0, 3, 6, -8]
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 0 }), { color: "pink" }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 3 }), { color: "yellow" });
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 6 }), { color: "yellow" });
-        assert.deepEqual(customizeFunction.call({ index: 3, value: -8 }), { color: "pink" }, "last point");
+        this.checkCustomizePoint(assert, [
+            { color: "pink" },
+            { color: "yellow" },
+            { color: "yellow" },
+            { color: "pink" }
+        ]);
     });
 
     QUnit.test('Winloss points. Default', function(assert) {
@@ -1568,11 +1575,12 @@ QUnit.begin(function() {
             dataSource: [0, 3, 6, -8]
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 0 }), { color: "#666666" }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 3 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 6 }), { color: "#a9a9a9" });
-        assert.deepEqual(customizeFunction.call({ index: 3, value: -8 }), { color: "#666666" }, "last point");
+        this.checkCustomizePoint(assert, [
+            { color: "#666666" },
+            { color: "#a9a9a9" },
+            { color: "#a9a9a9" },
+            { color: "#666666" }
+        ]);
     });
 
     QUnit.test('Winloss points. Custom', function(assert) {
@@ -1585,11 +1593,44 @@ QUnit.begin(function() {
             dataSource: [0, 3, 6, -8]
         });
 
-        var customizeFunction = this.getSeriesOptions().customizePoint;
-        assert.deepEqual(customizeFunction.call({ index: 0, value: 0 }), { color: "pink" }, "first point");
-        assert.deepEqual(customizeFunction.call({ index: 1, value: 3 }), { color: "blue" });
-        assert.deepEqual(customizeFunction.call({ index: 2, value: 6 }), { color: "yellow" });
-        assert.deepEqual(customizeFunction.call({ index: 3, value: -8 }), { color: "pink" }, "last point");
+        this.checkCustomizePoint(assert, [
+            { color: "pink" },
+            { color: "blue" },
+            { color: "yellow" },
+            { color: "pink" }
+        ]);
+    });
+
+    QUnit.test("Several min/max in dataSource", function(assert) {
+        this.createSparkline({
+            dataSource: [1, 5, 5, -1, -1],
+            maxColor: 'red',
+            minColor: "green",
+            showMinMax: true
+        });
+
+        this.checkCustomizePoint(assert, [
+            { visible: true, border: { color: "#666666" } },
+            { visible: true, border: { color: "red" } },
+            { visible: true, border: { color: "red" } },
+            { visible: true, border: { color: "green" } },
+            { visible: true, border: { color: "green" } },
+        ]);
+    });
+
+    QUnit.test("DataSource contains only equal values", function(assert) {
+        this.createSparkline({
+            dataSource: [1, 1, 1],
+            maxColor: 'red',
+            minColor: "green",
+            showMinMax: true
+        });
+
+        this.checkCustomizePoint(assert, [
+            { visible: true, border: { color: "#666666" } },
+            {},
+            { visible: true, border: { color: "#666666" } }
+        ]);
     });
 
     QUnit.module('Creating', environment);
