@@ -11,7 +11,16 @@ function getSelector(className) {
 
 const { test } = QUnit;
 
-QUnit.module("Value as HTML markup", () => {
+const moduleConfig = {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: () => {
+        this.clock.restore();
+    }
+};
+
+QUnit.module("Value as HTML markup", moduleConfig, () => {
     test("show placeholder is value undefined", (assert) => {
         const instance = $("#htmlEditor").dxHtmlEditor({
                 placeholder: "test placeholder"
@@ -34,12 +43,26 @@ QUnit.module("Value as HTML markup", () => {
     });
 
     test("render transclude content", (assert) => {
+        assert.expect(4);
         const instance = $("#htmlEditor")
             .html("<h1>Hi!</h1><p>Test</p>")
             .dxHtmlEditor()
-            .dxHtmlEditor("instance"),
-            $element = instance.$element(),
-            markup = $element.find(getSelector(CONTENT_CLASS)).html();
+            .dxHtmlEditor("instance");
+        const $element = instance.$element();
+        const markup = $element.find(getSelector(CONTENT_CLASS)).html();
+        const updateContentTask = instance._updateContentTask;
+
+        if(updateContentTask) {
+            const taskPromise = updateContentTask && updateContentTask.promise;
+
+            assert.ok(true, "There is a task that update the value with a transcluded content");
+
+            taskPromise.then(() => {
+                assert.ok(true, "Update value task finished");
+            });
+        }
+
+        this.clock.tick();
 
         assert.equal(instance.option("value"), "<h1>Hi!</h1><p>Test</p>");
         assert.equal(markup, "<h1>Hi!</h1><p>Test</p>");
@@ -54,6 +77,8 @@ QUnit.module("Value as HTML markup", () => {
             .dxHtmlEditor("instance"),
             $element = instance.$element(),
             markup = $element.find(getSelector(CONTENT_CLASS)).html();
+
+        this.clock.tick();
 
         assert.equal(instance.option("value"), "<p>Test1</p><p>Test2</p>");
         assert.equal(markup, "<p>Test1</p><p>Test2</p>");
@@ -120,6 +145,9 @@ QUnit.module("Value as HTML markup", () => {
             .html("<br><br><h1>Hi!</h1><p>Te<br>st</p>")
             .dxHtmlEditor()
             .dxHtmlEditor("instance");
+
+        this.clock.tick();
+
         const $element = instance.$element();
         const markup = $element.find(getSelector(CONTENT_CLASS)).html();
 
@@ -133,6 +161,9 @@ QUnit.module("Value as HTML markup", () => {
             .html("<p>hi</p><ul><li>test</li></ul>")
             .dxHtmlEditor()
             .dxHtmlEditor("instance");
+
+        this.clock.tick();
+
         const $element = instance.$element();
         const markup = $element.find(getSelector(CONTENT_CLASS)).html();
 
