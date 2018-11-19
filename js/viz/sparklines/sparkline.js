@@ -35,6 +35,111 @@ var BaseSparkline = require("./base_sparkline"),
     _Number = Number,
     _String = String;
 
+function findMinMax(data, valField) {
+    var firstItem = data[0] || {},
+        firstValue = firstItem[valField] || 0,
+        min = firstValue,
+        max = firstValue,
+        minIndexes = [0],
+        maxIndexes = [0],
+        dataLength = data.length,
+        value,
+        i;
+
+    for(i = 1; i < dataLength; i++) {
+        value = data[i][valField];
+        if(value < min) {
+            min = value;
+            minIndexes = [i];
+        } else if(value === min) {
+            minIndexes.push(i);
+        }
+        if(value > max) {
+            max = value;
+            maxIndexes = [i];
+        } else if(value === max) {
+            maxIndexes.push(i);
+        }
+    }
+
+    if(max === min) {
+        minIndexes = maxIndexes = [];
+    }
+    return { minIndexes, maxIndexes };
+}
+
+function parseNumericDataSource(data, argField, valField, ignoreEmptyPoints) {
+    return _map(data, function(dataItem, index) {
+        var item = null,
+            isDataNumber,
+            value;
+
+        if(dataItem !== undefined) {
+            item = {};
+            isDataNumber = _isFinite(dataItem);
+            item[argField] = isDataNumber ? _String(index) : dataItem[argField];
+            value = isDataNumber ? dataItem : dataItem[valField];
+            item[valField] = value === null ? ignoreEmptyPoints ? undefined : value : _Number(value);
+            item = (item[argField] !== undefined && item[valField] !== undefined) ? item : null;
+        }
+        return item;
+    });
+}
+
+function parseWinlossDataSource(data, argField, valField, target) {
+    var lowBarValue = -1,
+        zeroBarValue = 0,
+        highBarValue = 1,
+        delta = 0.0001;
+
+    return _map(data, function(dataItem) {
+        var item = {};
+        item[argField] = dataItem[argField];
+        if(_abs(dataItem[valField] - target) < delta) {
+            item[valField] = zeroBarValue;
+        } else if(dataItem[valField] > target) {
+            item[valField] = highBarValue;
+        } else {
+            item[valField] = lowBarValue;
+        }
+        return item;
+    });
+}
+
+function selectPointColor(color, options, index, pointIndexes) {
+    if((index === pointIndexes.first) || (index === pointIndexes.last)) {
+        color = options.firstLastColor;
+    }
+    if((pointIndexes.min || []).indexOf(index) >= 0) {
+        color = options.minColor;
+    }
+    if((pointIndexes.max || []).indexOf(index) >= 0) {
+        color = options.maxColor;
+    }
+    return color;
+}
+
+function createLineCustomizeFunction(pointIndexes, options) {
+    return function() {
+        var color = selectPointColor(undefined, options, this.index, pointIndexes);
+
+        return color ? { visible: true, border: { color: color } } : {};
+    };
+}
+
+function createBarCustomizeFunction(pointIndexes, options, winlossData) {
+    return function() {
+        var index = this.index,
+            isWinloss = options.type === "winloss",
+            target = isWinloss ? options.winlossThreshold : 0,
+            value = isWinloss ? winlossData[index][options.valueField] : this.value,
+            positiveColor = isWinloss ? options.winColor : options.barPositiveColor,
+            negativeColor = isWinloss ? options.lossColor : options.barNegativeColor;
+
+        return { color: selectPointColor((value >= target) ? positiveColor : negativeColor, options, index, pointIndexes) };
+    };
+}
+
 var dxSparkline = BaseSparkline.inherit({
     _rootClassPrefix: "dxsl",
 
@@ -159,6 +264,7 @@ var dxSparkline = BaseSparkline.inherit({
             sortingMethod: true
         })[singleSeries.getArgumentField()];
 
+        seriesOptions.customizePoint = that._getCustomizeFunction();
         singleSeries.updateData(that._simpleDataSource);
         singleSeries.createPoints();
 
@@ -175,58 +281,17 @@ var dxSparkline = BaseSparkline.inherit({
         this._updateDataSource();
     },
 
-    _parseNumericDataSource: function(data, argField, valField) {
-        var ignoreEmptyPoints = this.option("ignoreEmptyPoints");
-
-        return _map(data, function(dataItem, index) {
-            var item = null,
-                isDataNumber,
-                value;
-
-            if(dataItem !== undefined) {
-                item = {};
-                isDataNumber = _isFinite(dataItem);
-                item[argField] = isDataNumber ? _String(index) : dataItem[argField];
-                value = isDataNumber ? dataItem : dataItem[valField];
-                item[valField] = value === null ? ignoreEmptyPoints ? undefined : value : _Number(value);
-                item = (item[argField] !== undefined && item[valField] !== undefined) ? item : null;
-            }
-            return item;
-        });
-    },
-
-    _parseWinlossDataSource: function(data, argField, valField) {
-        var lowBarValue = -1,
-            zeroBarValue = 0,
-            highBarValue = 1,
-            delta = 0.0001,
-            target = this._allOptions.winlossThreshold;
-
-        return _map(data, function(dataItem) {
-            var item = {};
-            item[argField] = dataItem[argField];
-            if(_abs(dataItem[valField] - target) < delta) {
-                item[valField] = zeroBarValue;
-            } else if(dataItem[valField] > target) {
-                item[valField] = highBarValue;
-            } else {
-                item[valField] = lowBarValue;
-            }
-            return item;
-        });
-    },
-
     _prepareDataSource: function() {
         var that = this,
             options = that._allOptions,
             argField = options.argumentField,
             valField = options.valueField,
             dataSource = that._dataSourceItems() || [],
-            data = that._parseNumericDataSource(dataSource, argField, valField);
+            data = parseNumericDataSource(dataSource, argField, valField, that.option("ignoreEmptyPoints"));
 
         if(options.type === "winloss") {
             that._winlossDataSource = data;
-            that._simpleDataSource = that._parseWinlossDataSource(data, argField, valField);
+            that._simpleDataSource = parseWinlossDataSource(data, argField, valField, options.winlossThreshold);
         } else {
             that._simpleDataSource = data;
         }
@@ -246,7 +311,6 @@ var dxSparkline = BaseSparkline.inherit({
             widgetType: "chart",
             type: type,
             opacity: type.indexOf("area") !== -1 ? that._allOptions.areaOpacity : undefined,
-            customizePoint: that._getCustomizeFunction(),
             point: {
                 size: options.pointSize,
                 symbol: options.pointSymbol,
@@ -271,61 +335,6 @@ var dxSparkline = BaseSparkline.inherit({
         };
     },
 
-    _createBarCustomizeFunction: function(pointIndexes) {
-        var that = this,
-            options = that._allOptions,
-            winlossData = that._winlossDataSource;
-
-        return function() {
-            var index = this.index,
-                isWinloss = options.type === "winloss",
-                target = isWinloss ? options.winlossThreshold : 0,
-                value = isWinloss ? winlossData[index][options.valueField] : this.value,
-                positiveColor = isWinloss ? options.winColor : options.barPositiveColor,
-                negativeColor = isWinloss ? options.lossColor : options.barNegativeColor,
-                color;
-
-            if(value >= target) {
-                color = positiveColor;
-            } else {
-                color = negativeColor;
-            }
-            if((index === pointIndexes.first) || (index === pointIndexes.last)) {
-                color = options.firstLastColor;
-            }
-            if(index === pointIndexes.min) {
-                color = options.minColor;
-            }
-            if(index === pointIndexes.max) {
-                color = options.maxColor;
-            }
-
-            return { color: color };
-        };
-    },
-
-    _createLineCustomizeFunction: function(pointIndexes) {
-        var that = this,
-            options = that._allOptions;
-
-        return function() {
-            var color,
-                index = this.index;
-
-            if((index === pointIndexes.first) || (index === pointIndexes.last)) {
-                color = options.firstLastColor;
-            }
-            if(index === pointIndexes.min) {
-                color = options.minColor;
-            }
-            if(index === pointIndexes.max) {
-                color = options.maxColor;
-            }
-
-            return color ? { visible: true, border: { color: color } } : {};
-        };
-    },
-
     _getCustomizeFunction: function() {
         var that = this,
             options = that._allOptions,
@@ -334,9 +343,9 @@ var dxSparkline = BaseSparkline.inherit({
             customizeFunction;
 
         if((options.type === "winloss") || (options.type === "bar")) {
-            customizeFunction = that._createBarCustomizeFunction(drawnPointIndexes);
+            customizeFunction = createBarCustomizeFunction(drawnPointIndexes, options, that._winlossDataSource);
         } else {
-            customizeFunction = that._createLineCustomizeFunction(drawnPointIndexes);
+            customizeFunction = createLineCustomizeFunction(drawnPointIndexes, options);
         }
         return customizeFunction;
     },
@@ -347,46 +356,18 @@ var dxSparkline = BaseSparkline.inherit({
             lastIndex = data.length - 1,
             indexes = {};
 
-        that._minMaxIndexes = that._findMinMax(data);
+        that._minMaxIndexes = findMinMax(data, options.valueField);
 
         if(options.showFirstLast) {
             indexes.first = 0;
             indexes.last = lastIndex;
         }
         if(options.showMinMax) {
-            indexes.min = that._minMaxIndexes.minIndex;
-            indexes.max = that._minMaxIndexes.maxIndex;
+            indexes.min = that._minMaxIndexes.minIndexes;
+            indexes.max = that._minMaxIndexes.maxIndexes;
         }
 
         return indexes;
-    },
-
-    _findMinMax: function(data) {
-        var that = this,
-            valField = that._allOptions.valueField,
-            firstItem = data[0] || {},
-            firstValue = firstItem[valField] || 0,
-            min = firstValue,
-            max = firstValue,
-            minIndex = 0,
-            maxIndex = 0,
-            dataLength = data.length,
-            value,
-            i;
-
-        for(i = 1; i < dataLength; i++) {
-            value = data[i][valField];
-            if(value < min) {
-                min = value;
-                minIndex = i;
-            }
-            if(value > max) {
-                max = value;
-                maxIndex = i;
-            }
-        }
-
-        return { minIndex: minIndex, maxIndex: maxIndex };
     },
 
     _getStick: function() {
@@ -515,8 +496,8 @@ var dxSparkline = BaseSparkline.inherit({
             valueField = options.valueField,
             first = dataSource[0][valueField],
             last = dataSource[dataSource.length - 1][valueField],
-            min = dataSource[minMax.minIndex][valueField],
-            max = dataSource[minMax.maxIndex][valueField],
+            min = dataSource[minMax.minIndexes[0]][valueField],
+            max = dataSource[minMax.maxIndexes[0]][valueField],
             formattedFirst = tooltip.formatValue(first),
             formattedLast = tooltip.formatValue(last),
             formattedMin = tooltip.formatValue(min),
