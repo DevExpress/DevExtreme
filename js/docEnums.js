@@ -235,6 +235,11 @@
  * @enum {'auto'|'keep'|'reset'|'shift'}
  */
 
+ /**
+ * @typedef {string} Enums.ChartZoomPanActionType
+ * @enum {'zoom'|'pan'}
+ */
+
 /**
  * @typedef {string} Enums.AxisScaleType
  * @enum {'continuous'|'discrete'|'logarithmic'}
