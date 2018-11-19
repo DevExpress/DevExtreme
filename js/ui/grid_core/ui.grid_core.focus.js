@@ -38,14 +38,24 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         _focusRowByIndex: function(index) {
+            var that = this,
+                dataController = this.getController("data"),
+                isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
+                focusedRowKey,
+                isLocalIndex,
+                pageIndex;
+
             index = index !== undefined ? index : this.option("focusedRowIndex");
 
-            var dataController = this.getController("data"),
-                localIndex = index >= 0 ? index - dataController.getRowIndexOffset() : -1,
-                rowKey = dataController.getKeyByRowIndex(localIndex);
-
-            if(isDefined(rowKey) && !this.isRowFocused(rowKey)) {
-                this.option("focusedRowKey", rowKey);
+            if(index >= 0) {
+                pageIndex = Math.floor(index / dataController.pageSize());
+                isLocalIndex = !isVirtualScrolling || dataController.pageIndex() === pageIndex;
+                (!isLocalIndex ? dataController.pageIndex(pageIndex) : new Deferred().resolve()).done(function(items) {
+                    focusedRowKey = dataController.getKeyByRowIndex(index - dataController.getRowIndexOffset());
+                    if(isDefined(focusedRowKey) && !that.isRowFocused(focusedRowKey)) {
+                        that.option("focusedRowKey", focusedRowKey);
+                    }
+                });
             }
         },
 
@@ -116,8 +126,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                     this.navigateToRow(focusedRowKey);
                 }
             } else {
-                focusedRowKey = dataController.getKeyByRowIndex(focusedRowIndex);
-                this.option("focusedRowKey", focusedRowKey);
+                this.getController("focus")._focusRowByIndex(focusedRowIndex);
             }
         },
 
