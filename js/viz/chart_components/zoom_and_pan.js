@@ -19,11 +19,6 @@ const SCROLL_BAR_START_EVENT_NAME = "dxc-scroll-start" + EVENTS_NS;
 const SCROLL_BAR_MOVE_EVENT_NAME = "dxc-scroll-move" + EVENTS_NS;
 const SCROLL_BAR_END_EVENT_NAME = "dxc-scroll-end" + EVENTS_NS;
 
-const DEFAULT_ARG_AXIS_NAME = "_arg_axis_internal_name_";
-
-const ZOOM_START = "zoomStart";
-const ZOOM_END = "zoomEnd";
-
 const GESTURE_TIMEOUT = 300;
 
 const _min = Math.min;
@@ -74,10 +69,7 @@ module.exports = {
             }
 
             e.cancel = axes.some(axis => {
-                const eventArg = axis.getZoomStartEventArg();
-                chart._eventTrigger(ZOOM_START, eventArg);
-                actionData.startRanges[axis.name || DEFAULT_ARG_AXIS_NAME] = eventArg.range;
-                return eventArg.cancel;
+                return axis.handleZooming(null, { end: true }, e, actionField).isPrevented;
             });
         }
 
@@ -90,7 +82,7 @@ module.exports = {
                     const translate = -offsetCalc(e, actionData, coordField, scale);
                     zoom = axis.getTranslator().zoom(translate, scale, axis.getZoomBounds());
                     if(!isDefined(viewport) || viewport.startValue.valueOf() !== zoom.min.valueOf() || viewport.endValue.valueOf() !== zoom.max.valueOf()) {
-                        axis.handleZooming([zoom.min, zoom.max], { start: true, end: true });
+                        axis.handleZooming([zoom.min, zoom.max], { start: true, end: true }, e, actionField);
                         zoom.zoomed = true;
                         zoom.deltaTranslate = translate - zoom.translate;
                     }
@@ -138,7 +130,7 @@ module.exports = {
                     const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
                     const scale = e.scale || 1;
                     const zoom = axis.getTranslator().zoom(-offsetCalc(e, actionData, coordField, scale), scale, axis.getZoomBounds());
-                    axis.handleZooming([zoom.min, zoom.max], { start: true, end: silent, startRange: actionData.startRanges[axis.name || DEFAULT_ARG_AXIS_NAME] });
+                    axis.handleZooming([zoom.min, zoom.max], { start: true, end: silent }, e, actionField);
                 });
             }
 
@@ -159,14 +151,7 @@ module.exports = {
                 }
 
                 axes.forEach(axis => {
-                    const currentRange = actionData.startRanges[axis.name || DEFAULT_ARG_AXIS_NAME];
-                    const zoomEndEvent = axis.getZoomEndEventArg(currentRange);
-
-                    chart._eventTrigger(ZOOM_END, zoomEndEvent);
-
-                    if(zoomEndEvent.cancel) {
-                        axis._applyZooming(currentRange);
-                    }
+                    axis.handleZooming(null, { start: true }, e, actionField);
                 });
             }
             chart._requestChange(["VISUAL_RANGE"]);
@@ -183,8 +168,7 @@ module.exports = {
                 valueAxes: axes.length && chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), coords)),
                 offset: { x: 0, y: 0 },
                 center: coords,
-                startCenter: coords,
-                startRanges: {}
+                startCenter: coords
             };
         }
 
@@ -323,7 +307,7 @@ module.exports = {
                             const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify),
                                 tr = axis.getTranslator();
 
-                            axis.handleZooming([tr.from(startCoords[coordField]), tr.from(curCoords[coordField])], { start: !!silent, end: !!silent });
+                            axis.handleZooming([tr.from(startCoords[coordField]), tr.from(curCoords[coordField])], { start: !!silent, end: !!silent }, e, actionData.action);
                         });
                     }
 
@@ -388,7 +372,7 @@ module.exports = {
                                     scale = translator.getMinScale(delta > 0),
                                     zoom = translator.zoom(-(coord - coord * scale), scale, axis.getZoomBounds());
 
-                                axis.handleZooming([zoom.min, zoom.max], { start: !!silent, end: !!silent });
+                                axis.handleZooming([zoom.min, zoom.max], { start: !!silent, end: !!silent }, e, "zoom");
                             });
                         }
 
@@ -434,12 +418,12 @@ module.exports = {
                         .on(SCROLL_BAR_START_EVENT_NAME, function(e) {
                             zoomAndPan.actionData = {
                                 valueAxes: [],
-                                startRanges: {},
                                 offset: { x: 0, y: 0 },
                                 center: { x: 0, y: 0 }
                             };
                             preventDefaults(e);
                             startAxesViewportChanging(zoomAndPan, "pan", e);
+                            e.originalEvent && (e.originalEvent.cancel = e.cancel);
                         })
                         .on(SCROLL_BAR_MOVE_EVENT_NAME, function(e) {
                             preventDefaults(e);

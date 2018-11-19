@@ -1175,14 +1175,18 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _change_VISUAL_RANGE: function() {
-        this._recreateSizeDependentObjects(false);
-        this._doRender({
+        const that = this;
+
+        that._recreateSizeDependentObjects(false);
+        that._doRender({
             force: true,
             drawTitle: false,
             drawLegend: false,
             adjustAxes: this.option("adjustAxesOnZoom") || false, // T690411
             animate: false
         });
+        that._argumentAxes.forEach(axis => axis.handleZoomEnd());
+        that._valueAxes.forEach(axis => axis.handleZoomEnd());
     },
 
     _notifyOptionChanged(option, value, previousValue) {

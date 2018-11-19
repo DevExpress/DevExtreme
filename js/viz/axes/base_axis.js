@@ -1074,6 +1074,28 @@ Axis.prototype = {
         return length;
     },
 
+    getVisualRangeCenter(range) {
+        const businessRange = this._translator.getBusinessRange();
+        const currentBusinessRange = range || businessRange;
+        const { type, logarithmBase } = this._options;
+        let center;
+
+        if(!isDefined(currentBusinessRange.minVisible) || !isDefined(currentBusinessRange.maxVisible)) {
+            return;
+        }
+
+        if(type === constants.logarithmic) {
+            center = vizUtils.raiseTo(adjust(vizUtils.getLog(currentBusinessRange.maxVisible * currentBusinessRange.minVisible, logarithmBase)) / 2, logarithmBase);
+        } else if(type === constants.discrete) {
+            const categoriesInfo = vizUtils.getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
+            const index = Math.ceil(categoriesInfo.categories.length / 2) - 1;
+            center = businessRange.categories.indexOf(categoriesInfo.categories[index]);
+        } else {
+            center = (currentBusinessRange.maxVisible.valueOf() + currentBusinessRange.minVisible.valueOf()) / 2;
+        }
+        return center;
+    },
+
     setBusinessRange(range, categoriesOrder) {
         const that = this;
         const options = that._options;
@@ -1783,21 +1805,27 @@ Axis.prototype = {
         that._translator.updateBusinessRange(that._getViewportRange());
     },
 
-    getZoomStartEventArg() {
+    getZoomStartEventArg(event, actionType) {
         return {
             axis: this,
             range: this.visualRange(),
-            cancel: false
+            cancel: false,
+            event,
+            actionType
         };
     },
 
-    getZoomEndEventArg(currentRange) {
+    getZoomEndEventArg(previousRange, event, actionType, zoomFactor, shift) {
         const newRange = this.visualRange();
         return {
             axis: this,
-            previousRange: currentRange,
+            previousRange,
             range: newRange,
             cancel: false,
+            event,
+            actionType,
+            zoomFactor,
+            shift,
             // backwards
             rangeStart: newRange.startValue,
             rangeEnd: newRange.endValue
@@ -1853,31 +1881,62 @@ Axis.prototype = {
         }
     },
 
-    handleZooming(visualRange, preventEvents) {
+    handleZooming(visualRange, preventEvents, domEvent, action) {
         const that = this;
         preventEvents = preventEvents || {};
 
-        visualRange = that._validateVisualRange(visualRange);
+        if(isDefined(visualRange)) {
+            visualRange = that._validateVisualRange(visualRange);
+        }
 
-        const zoomStartEvent = that.getZoomStartEventArg();
-        const currentRange = preventEvents.startRange && that._validateVisualRange(preventEvents.startRange) || zoomStartEvent.range;
+        const zoomStartEvent = that.getZoomStartEventArg(domEvent, action);
+        const previousRange = zoomStartEvent.range;
 
         !preventEvents.start && that._eventTrigger("zoomStart", zoomStartEvent);
-        const zoomResults = { isPrevented: zoomStartEvent.cancel, range: visualRange };
+        const zoomResults = {
+            isPrevented: zoomStartEvent.cancel,
+            range: visualRange || zoomStartEvent.range
+        };
 
         if(!zoomStartEvent.cancel) {
-            that._applyZooming(visualRange);
-            const zoomEndEvent = that.getZoomEndEventArg(currentRange);
-
-            !preventEvents.end && that._eventTrigger("zoomEnd", zoomEndEvent);
-
-            if(zoomEndEvent.cancel) {
-                that._applyZooming(currentRange);
-                zoomResults.range = currentRange;
+            isDefined(visualRange) && that._applyZooming(visualRange);
+            if(!isDefined(that._storedZoomEndParams)) {
+                that._storedZoomEndParams = {
+                    startRange: previousRange,
+                };
             }
+            that._storedZoomEndParams.event = domEvent;
+            that._storedZoomEndParams.action = action;
+            that._storedZoomEndParams.prevent = !!preventEvents.end;
         }
 
         return zoomResults;
+    },
+
+    handleZoomEnd() {
+        const that = this;
+        if(isDefined(that._storedZoomEndParams) && !that._storedZoomEndParams.prevent) {
+            const previousRange = that._storedZoomEndParams.startRange;
+            const domEvent = that._storedZoomEndParams.event;
+            const action = that._storedZoomEndParams.action;
+            const previousBusinessRange = {
+                minVisible: previousRange.startValue,
+                maxVisible: previousRange.endValue,
+                categories: previousRange.categories
+            };
+            const shift = adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange));
+            const zoomFactor = +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2");
+            const zoomEndEvent = that.getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
+
+            that._eventTrigger("zoomEnd", zoomEndEvent);
+
+            if(zoomEndEvent.cancel) {
+                that._storedZoomEndParams = null;
+                that._applyZooming(previousRange);
+                that._visualRange(that, previousRange);
+            }
+            that._storedZoomEndParams = null;
+        }
     },
 
     dataVisualRangeIsReduced() {
