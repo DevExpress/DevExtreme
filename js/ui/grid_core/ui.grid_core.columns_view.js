@@ -349,7 +349,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _renderDelayedTemplatesCoreAsync: function(templates) {
         var that = this;
         if(templates.length) {
-            (window.requestIdleCallback || window.setTimeout)(function() {
+            window.setTimeout(function() {
                 that._renderDelayedTemplatesCore(templates, true);
             });
         }
