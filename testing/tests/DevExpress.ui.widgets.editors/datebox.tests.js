@@ -2988,6 +2988,22 @@ QUnit.test("T351678 - the date is reset after item click", function(assert) {
     assert.deepEqual(this.dateBox.option("value"), new Date(2020, 4, 13, 1, 30), "date is correct");
 });
 
+QUnit.test("the date should be in range after the selection", function(assert) {
+    this.dateBox.option({
+        type: "time",
+        pickerType: "list",
+        min: new Date(2016, 10, 5, 12, 0, 0),
+        max: new Date(2016, 10, 5, 14, 0, 0),
+        opened: true
+    });
+
+    var $item = $(this.dateBox.content()).find(".dx-list-item").eq(0);
+
+    $item.trigger("dxclick");
+
+    assert.deepEqual(this.dateBox.option("value"), new Date(2016, 10, 5, 12, 0, 0), "date is correct");
+});
+
 QUnit.test("list should have items if the 'min' option is specified (T395529)", function(assert) {
     this.dateBox.option({
         min: new Date(2016, 5, 20),
