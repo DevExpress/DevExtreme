@@ -708,7 +708,7 @@ QUnit.test("Trigger zoom events", function(assert) {
 
     this.axis.visualRange(10, 20);
 
-    assert.equal(this.eventTrigger.callCount, 2);
+    assert.equal(this.eventTrigger.callCount, 1);
     assert.equal(this.eventTrigger.firstCall.args[0], "zoomStart");
     assert.equal(this.eventTrigger.firstCall.args[1].axis, this.axis);
     assert.deepEqual(this.eventTrigger.firstCall.args[1].range, {
@@ -717,20 +717,15 @@ QUnit.test("Trigger zoom events", function(assert) {
     });
     assert.strictEqual(this.eventTrigger.firstCall.args[1].cancel, false);
 
-    assert.equal(this.eventTrigger.secondCall.args[0], "zoomEnd");
-    assert.equal(this.eventTrigger.secondCall.args[1].axis, this.axis);
-    assert.deepEqual(this.eventTrigger.secondCall.args[1].previousRange, {
-        startValue: 0,
-        endValue: 50
+    assert.deepEqual(this.axis._storedZoomEndParams, {
+        prevent: false,
+        action: undefined,
+        event: undefined,
+        startRange: {
+            startValue: 0,
+            endValue: 50
+        }
     });
-    assert.deepEqual(this.eventTrigger.secondCall.args[1].range, {
-        startValue: 10,
-        endValue: 20
-    });
-    assert.strictEqual(this.eventTrigger.secondCall.args[1].cancel, false);
-
-    assert.strictEqual(this.eventTrigger.secondCall.args[1].rangeStart, 10);
-    assert.strictEqual(this.eventTrigger.secondCall.args[1].rangeEnd, 20);
 });
 
 QUnit.test("Can cancel zooming on zoom start", function(assert) {
@@ -780,6 +775,7 @@ QUnit.test("Can cancel zooming on zoom end", function(assert) {
     sinon.spy(this.axis, "_visualRange");
 
     this.axis.visualRange(10, 20);
+    this.axis.handleZoomEnd();
 
     assert.equal(this.eventTrigger.callCount, 2);
     assert.equal(this.eventTrigger.secondCall.args[0], "zoomEnd");
@@ -800,8 +796,16 @@ QUnit.test("Can prevent zoomStart", function(assert) {
 
     this.axis.visualRange([10, 20], { start: true });
 
-    assert.equal(this.eventTrigger.callCount, 1);
-    assert.equal(this.eventTrigger.firstCall.args[0], "zoomEnd");
+    assert.equal(this.eventTrigger.callCount, 0);
+    assert.deepEqual(this.axis._storedZoomEndParams, {
+        prevent: false,
+        action: undefined,
+        event: undefined,
+        startRange: {
+            startValue: 0,
+            endValue: 50
+        }
+    });
 });
 
 QUnit.test("Can prevent zoomEnd", function(assert) {
@@ -816,6 +820,15 @@ QUnit.test("Can prevent zoomEnd", function(assert) {
 
     assert.equal(this.eventTrigger.callCount, 1);
     assert.equal(this.eventTrigger.firstCall.args[0], "zoomStart");
+    assert.deepEqual(this.axis._storedZoomEndParams, {
+        prevent: true,
+        action: undefined,
+        event: undefined,
+        startRange: {
+            startValue: 0,
+            endValue: 50
+        }
+    });
 });
 
 QUnit.test("Set visual range using array", function(assert) {

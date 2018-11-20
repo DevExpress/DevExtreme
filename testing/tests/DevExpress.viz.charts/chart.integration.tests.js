@@ -532,6 +532,57 @@ QUnit.test("Set visualRange for discrete axis (check adjustOnZoom)", function(as
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 3, endValue: 9 });
 });
 
+QUnit.test("Cancel visualRange setting for logarithm axis", function(assert) {
+    this.$container.css({ width: "1000px", height: "600px" });
+    var zoomEnd = sinon.spy(function(e) {
+        e.cancel = true;
+    });
+
+    var chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: [{
+            arg: 1,
+            val: -10
+        }, {
+            arg: 200,
+            val: 5
+        }, {
+            arg: 5000,
+            val: 7
+        }, {
+            arg: 80000,
+            val: 3
+        }, {
+            arg: 500000,
+            val: 9
+        }, {
+            arg: 1000000,
+            val: 20
+        }],
+        argumentAxis: { type: "logarithmic" },
+        valueAxis: { valueMarginsEnabled: false },
+        series: [{ }],
+        onZoomEnd: zoomEnd
+    });
+
+    const prevRange = chart.getArgumentAxis().visualRange();
+    chart.getArgumentAxis().visualRange([10, 1000]);
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), prevRange);
+    assert.equal(zoomEnd.callCount, 1);
+    assert.deepEqual(zoomEnd.firstCall.args[0].previousRange, prevRange);
+    assert.deepEqual(zoomEnd.firstCall.args[0].range, { startValue: 10, endValue: 1000 });
+    assert.deepEqual(zoomEnd.firstCall.args[0].axis, chart.getArgumentAxis());
+    assert.ok(zoomEnd.firstCall.args[0].cancel);
+    assert.strictEqual(zoomEnd.firstCall.args[0].actionType, undefined);
+    assert.strictEqual(zoomEnd.firstCall.args[0].event, undefined);
+    assert.roughEqual(zoomEnd.firstCall.args[0].zoomFactor, 3, 0.1);
+    assert.roughEqual(zoomEnd.firstCall.args[0].shift, -900, 10);
+});
+
 QUnit.test("Set argument visual range using option", function(assert) {
     var chart = this.createChart({
         dataSource: [{
@@ -897,6 +948,7 @@ QUnit.test("Reset axis viewport", function(assert) {
     assert.equal(zoomEnd.callCount, 1);
     assert.deepEqual(zoomStart.firstCall.args[0].range, { startValue: 2, endValue: 5 });
     assert.deepEqual(zoomEnd.firstCall.args[0].range, { startValue: 1, endValue: 11 });
+    assert.deepEqual(zoomEnd.firstCall.args[0].axis, chart.getArgumentAxis());
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 1, endValue: 11 });
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 3, endValue: 8 });
 
@@ -1037,10 +1089,10 @@ QUnit.test("Reset chart viewport", function(assert) {
     assert.roughEqual(zoomStart.secondCall.args[0].range.startValue, 199.5, 0.5);
     assert.equal(zoomStart.secondCall.args[0].range.endValue, 250);
     assert.equal(zoomEnd.secondCall.args[0].range.startValue, 0);
-    assert.roughEqual(zoomEnd.secondCall.args[0].range.endValue, 273.1, 0.5);
+    assert.roughEqual(zoomEnd.secondCall.args[0].range.endValue, 300, 0.5);
     assert.deepEqual(zoomStart.thirdCall.args[0].range, { startValue: -20, endValue: 40 });
     assert.equal(zoomEnd.thirdCall.args[0].range.startValue, 0);
-    assert.roughEqual(zoomEnd.thirdCall.args[0].range.endValue, 735.3, 0.5);
+    assert.roughEqual(zoomEnd.thirdCall.args[0].range.endValue, 800, 0.5);
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: new Date(2000, 6, 1), endValue: new Date(2016, 0, 1) });
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 0, endValue: 800 });
     assert.deepEqual(chart.getValueAxis("ax1").visualRange(), { startValue: 0, endValue: 300 });
