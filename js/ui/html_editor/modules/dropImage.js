@@ -4,9 +4,7 @@ import eventsEngine from "../../../events/core/events_engine";
 import { addNamespace } from "../../../events/utils";
 import { each } from "../../../core/utils/iterator";
 import browser from "../../../core/utils/browser";
-import getWindow from "../../../core/utils/window";
-
-const window = getWindow();
+import { getWindow } from "../../../core/utils/window";
 
 const BaseModule = getQuill().import("core/module");
 
@@ -61,6 +59,7 @@ class DropImageModule extends BaseModule {
     }
 
     _getImage(files, callback) {
+        const window = getWindow();
         each(files, (index, file) => {
             if(!this._isImage(file)) {
                 return;

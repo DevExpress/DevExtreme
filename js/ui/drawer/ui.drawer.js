@@ -6,7 +6,7 @@ import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import Widget from "../widget/ui.widget";
 import EmptyTemplate from "../widget/empty_template";
-import windowUtils from "../../core/utils/window";
+import { hasWindow } from "../../core/utils/window";
 import PushStrategy from "./ui.drawer.rendering.strategy.push";
 import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
 import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
@@ -346,7 +346,7 @@ const Drawer = Widget.inherit({
     },
 
     getRealPanelWidth() {
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             return this.getElementWidth(this._strategy.getPanelContent());
         } else {
             return 0;
@@ -360,7 +360,7 @@ const Drawer = Widget.inherit({
     },
 
     getRealPanelHeight() {
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             return this.getElementHeight(this._strategy.getPanelContent());
         } else {
             return 0;
@@ -415,7 +415,7 @@ const Drawer = Widget.inherit({
 
         animate = typeUtils.isDefined(animate) ? animate && this.option("animationEnabled") : this.option("animationEnabled");
 
-        if(!windowUtils.hasWindow()) return;
+        if(!hasWindow()) return;
 
         const duration = this.option("animationDuration");
 
