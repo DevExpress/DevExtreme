@@ -50,6 +50,9 @@ var GroupingDataSourceAdapterExtender = (function() {
         allowCollapseAll: function() {
             return this._grouping.allowCollapseAll();
         },
+        isGroupItemCountable: function(item) {
+            return this._grouping.isGroupItemCountable(item);
+        },
         isRowExpanded: function(key) {
             var groupInfo = this._grouping.findGroupInfo(key);
             return groupInfo ? groupInfo.isExpanded : !this._grouping.allowCollapseAll();
