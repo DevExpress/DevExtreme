@@ -1596,6 +1596,11 @@ Axis.prototype = {
         drawGrids(that._minorTicks, drawGridLine);
 
         callAction(that._majorTicks, "drawLabel", that._getViewportRange());
+        that._majorTicks.forEach(function(tick) {
+            tick.labelRotationAngle = 0;
+            tick.labelAlignment = undefined;
+            tick.labelOffset = 0;
+        });
 
         callAction(that._outsideConstantLines.concat(that._insideConstantLines), "draw");
 
