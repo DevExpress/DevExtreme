@@ -2575,6 +2575,24 @@ QUnit.test("overlay should be dragged correctly when position.of and shading (T5
     assert.roughEqual(startEvent.maxBottomOffset, viewHeight - $overlayContent.outerHeight() - containerPosition.top - overlayPosition.top - 200, 1, "overlay should be dragged bottom");
 });
 
+QUnit.test("change position after dragging", function(assert) {
+    var $overlay = $("#overlay").dxOverlay({
+        visible: true,
+        dragEnabled: true,
+        position: { my: 'top', at: 'top', of: viewport(), offset: '0 0' }
+    });
+    var overlay = $overlay.dxOverlay("instance");
+    var $content = $(overlay.content());
+    var pointer = pointerMock($content);
+
+    pointer.start().dragStart().drag(50, 50).dragEnd();
+    assert.equal($content.position().top, 50, "overlay positioned correctly after dragging");
+
+    overlay.option("position.offset", '0 20');
+
+    assert.equal($content.position().top, 20, "overlay positioned correctly after change the 'position' option");
+});
+
 QUnit.module("resize", moduleConfig);
 
 QUnit.test("overlay should have resizable component on content", function(assert) {
