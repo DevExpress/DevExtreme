@@ -4126,6 +4126,38 @@ QUnit.test("not update pageSize on viewportSize", function(assert) {
     assert.ok(dataController.isLoaded());
 });
 
+// T681470
+QUnit.test("remove invisible items if repaintChangesOnly and expanded grouping are enabled", function(assert) {
+    var array = [];
+    for(var i = 0; i < 100; i++) {
+        array.push({ id: i, name: "text " + i });
+    }
+
+    this.options.scrolling.removeInvisiblePages = true;
+
+    this.setupDataSource({
+        data: array
+    });
+
+    this.dataController.viewportSize(10);
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    this.columnOption("id", "groupIndex", 0);
+
+    // act
+    this.dataController.setViewportItemIndex(40);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items[0].key, [20]);
+    assert.deepEqual(changedArgs.changeType, 'append');
+    assert.deepEqual(changedArgs.removeCount, 40, "removeCount is correct");
+});
 
 QUnit.module("Infinite scrolling", {
     beforeEach: function() {

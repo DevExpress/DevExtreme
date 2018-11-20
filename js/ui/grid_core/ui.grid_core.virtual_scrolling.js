@@ -918,8 +918,10 @@ module.exports = {
                         if(removeCount) {
                             for(var i = 0; i < removeCount + 1; i++) {
                                 var item = that._items[changeType === "prepend" ? that._items.length - 1 - i : i];
-                                if(item && item.rowType !== "data" && item.rowType !== "group") {
-                                    removeCount++;
+                                if(item && item.rowType !== "data") {
+                                    if(item.rowType !== "group" || (!this._dataSource.isGroupItemCountable(item.data) && (changeType === "prepend" || i < removeCount))) {
+                                        removeCount++;
+                                    }
                                 }
                             }
                             change.removeCount = removeCount;
