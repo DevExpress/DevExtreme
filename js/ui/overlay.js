@@ -1403,8 +1403,11 @@ var Overlay = Widget.inherit({
             case "maxWidth":
             case "minHeight":
             case "maxHeight":
-            case "position":
             case "boundaryOffset":
+                this._renderGeometry();
+                break;
+            case "position":
+                this._positionChangeHandled = false;
                 this._renderGeometry();
                 break;
             case "visible":
