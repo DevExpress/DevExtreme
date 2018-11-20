@@ -8340,6 +8340,32 @@ QUnit.test("LoadPanel show when grid rendering in detail row", function(assert) 
     clock.restore();
 });
 
+// T691043
+QUnit.test("List with vertical scroll in detail row", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        height: 300,
+        loadingTimeout: undefined,
+        dataSource: [{ id: 1 }],
+        keyExpr: "id",
+        masterDetail: {
+            enabled: true,
+            template: function($container) {
+                $("<div>").addClass("detail-list").appendTo($container).dxList({
+                    height: 200,
+                    useNativeScrolling: true
+                });
+            }
+        }
+    });
+
+    // act
+    dataGrid.expandRow(1);
+
+    // assert
+    assert.equal($(dataGrid.element()).find(".detail-list .dx-scrollable-container").height(), 200, "scrollable container height is correct");
+});
+
 QUnit.test("add column", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
