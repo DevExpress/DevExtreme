@@ -158,7 +158,7 @@ describe("LessTemplateLoader", () => {
             metadata,
             [{ key: "@base-bg", value: "green" }]).then(data => {
                 assert.equal(data.compiledMetadata["@base-bg"], "green");
-                assert.equal(data.css, ".dx-swatch-my-custom div {\n  color: green;\n}\n\n");
+                assert.equal(data.css, ".dx-swatch-my-custom div {\n  color: green;\n}\n");
             });
     });
 
@@ -199,7 +199,6 @@ describe("LessTemplateLoader", () => {
 .dx-swatch-my-custom {
   color: #fff;
 }
-
 `);
             });
     });
@@ -285,7 +284,6 @@ describe("LessTemplateLoader", () => {
 .dx-swatch-my-custom {
   color: #fff;
 }
-
 `);
         });
     });
@@ -377,7 +375,6 @@ describe("LessTemplateLoader", () => {
 .dx-swatch-my-custom {
   color: #fff;
 }
-
 `);
             });
     });
@@ -420,5 +417,37 @@ describe("LessTemplateLoader", () => {
 }
 `);
         });
+    });
+
+    it("load - do not change the order of cascade's classes by swatch class in case of less parent selector (T692470)", () => {
+        let config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            outColorScheme: "my-custom",
+            makeSwatch: true,
+            reader: () => {
+                // data/less/theme-builder-generic-light.less
+                return new Promise(resolve => {
+                    resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+                    .dx-checkbox-icon {
+                        .dx-checkbox-checked & {
+                            background-color: #fff;
+                        }
+                    }`);
+                });
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata).then(data => {
+                assert.equal(data.css, `.dx-swatch-my-custom .dx-checkbox-checked .dx-checkbox-icon {
+  background-color: #fff;
+}
+`);
+            });
     });
 });

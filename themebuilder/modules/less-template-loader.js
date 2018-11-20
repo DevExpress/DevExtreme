@@ -3,19 +3,8 @@ const THEMEBUILDER_LESS_PATH = "devextreme-themebuilder/data/less/";
 
 const SWATCH_SELECTOR_PREFIX = ".dx-swatch-";
 
-const createModifyVars = modifyVars => {
-    let result = "";
-    for(let key in modifyVars) {
-        if(modifyVars.hasOwnProperty(key)) {
-            result += `@${key}: ${modifyVars[key]};`;
-        }
-    }
-    return result;
-};
-
-const addSwatchClass = (less, swatchSelector, modifyVars) => {
-    if(!swatchSelector) return less;
-    return swatchSelector + "{" + less + createModifyVars(modifyVars) + "}";
+const wrapBySwatch = (less, swatchSelector) => {
+    return `${swatchSelector} { ${less} }`;
 };
 
 class LessFontPlugin {
@@ -25,10 +14,8 @@ class LessFontPlugin {
 }
 
 class LessMetadataPreCompilerPlugin {
-    constructor(metadata, swatchSelector, modifyVars) {
+    constructor(metadata) {
         this._metadata = metadata;
-        this.swatchSelector = swatchSelector;
-        this.modifyVars = modifyVars;
     }
 
     process(less) {
@@ -40,19 +27,17 @@ class LessMetadataPreCompilerPlugin {
             }
         }
         less += "}";
-        return addSwatchClass(less, this.swatchSelector, this.modifyVars);
+        return less;
     }
 }
 
 class LessMetadataPostCompilerPlugin {
-    constructor(compiledMetadata, swatchSelector, colorScheme) {
+    constructor(compiledMetadata) {
         this._metadata = compiledMetadata;
-        this.swatchSelector = swatchSelector;
-        this.colorScheme = colorScheme;
     }
 
     process(css) {
-        let metadataRegex = new RegExp("(?:" + this.swatchSelector + "\\s*)?\\s*#devexpress-metadata-compiler\\s*\\{((.|\\n|\\r)*?)\\}");
+        let metadataRegex = new RegExp("\\s*#devexpress-metadata-compiler\\s*\\{((.|\\n|\\r)*?)\\}");
         metadataRegex.exec(css)[1].split(";").forEach(item => {
             let rule = getCompiledRule(item);
             for(let key in rule) {
@@ -61,17 +46,6 @@ class LessMetadataPostCompilerPlugin {
                 }
             }
         });
-
-        if(this.swatchSelector) {
-            const escapedSelector = this.swatchSelector.replace(".", "\\.");
-            const customStylesDuplicateRegex = new RegExp("\\s+" + escapedSelector + "\\s+\.dx-theme-.*?-typography\\s+\.dx-theme-.*?{[\\s\\S]*?}[\\r\\n]*?", "g");
-            const themeMarkerRegex = /(\.dx-theme-marker\s*{\s*font-family:\s*['"]dx\..*?\.)(.*)(['"])/g;
-            css = css
-                .replace(customStylesDuplicateRegex, "")
-                .replace(/\s\.dx-theme-.*?-typography/g, "")
-                .replace(themeMarkerRegex, "$1" + this.colorScheme + "$3");
-
-        }
 
         return css.replace(metadataRegex, "");
     }
@@ -121,21 +95,37 @@ class LessTemplateLoader {
         });
     };
 
+    compileWithSwatch(css) {
+        const wrappedCss = wrapBySwatch(css, this.swatchSelector);
+        return this.lessCompiler.render(wrappedCss, {}).then(swatchOutput => {
+            const escapedSelector = this.swatchSelector.replace(".", "\\.");
+            const customStylesDuplicateRegex = new RegExp("\\s+" + escapedSelector + "\\s+\.dx-theme-.*?-typography\\s+\.dx-theme-.*?{[\\s\\S]*?}[\\r\\n]*?", "g");
+            const themeMarkerRegex = /(\.dx-theme-marker\s*{\s*font-family:\s*['"]dx\..*?\.)(.*)(['"])/g;
+            const cssWithSwatch = swatchOutput.css
+                .replace(customStylesDuplicateRegex, "")
+                .replace(/\s\.dx-theme-.*?-typography/g, "")
+                .replace(themeMarkerRegex, "$1" + this.outColorScheme + "$3");
+
+            return this._makeInfoHeader() + cssWithSwatch;
+        });
+    }
+
     compileLess(less, modifyVars, metadata) {
         return new Promise((resolve, reject) => {
             let compiledMetadata = {};
             let options = {
-                modifyVars: modifyVars, plugins: [{
+                modifyVars: modifyVars,
+                plugins: [{
                     install: (_, pluginManager) => {
                         pluginManager.addPostProcessor(new LessFontPlugin(this.options));
                     }
                 }, {
                     install: (_, pluginManager) => {
-                        pluginManager.addPreProcessor(new LessMetadataPreCompilerPlugin(metadata, this.swatchSelector, modifyVars));
+                        pluginManager.addPreProcessor(new LessMetadataPreCompilerPlugin(metadata));
                     }
                 }, {
                     install: (_, pluginManager) => {
-                        pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(compiledMetadata, this.swatchSelector, this.outColorScheme));
+                        pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(compiledMetadata));
                     }
                 }]
             };
@@ -146,11 +136,22 @@ class LessTemplateLoader {
             }
 
             this.lessCompiler.render(less, options).then(output => {
-                resolve({
-                    compiledMetadata: compiledMetadata,
-                    css: this._makeInfoHeader() + output.css,
-                    swatchSelector: this.swatchSelector
-                });
+                const resolveResult = css => {
+                    resolve(Object.assign({
+                        compiledMetadata: compiledMetadata,
+                        swatchSelector: this.swatchSelector
+                    }, {
+                        css: this._makeInfoHeader() + css
+                    }));
+                };
+
+                if(this.swatchSelector) {
+                    this.compileWithSwatch(output.css).then(cssWithSwatch => {
+                        resolveResult(cssWithSwatch);
+                    });
+                } else {
+                    resolveResult(output.css);
+                }
             }, error => {
                 reject(error);
             });
