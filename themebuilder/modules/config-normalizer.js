@@ -1,3 +1,4 @@
+/* global console */
 /* eslint no-console: 0 */
 
 const commands = require("./commands");

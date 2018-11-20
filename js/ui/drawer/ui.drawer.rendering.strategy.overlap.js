@@ -4,7 +4,9 @@ import $ from "../../core/renderer";
 import translator from "../../animation/translator";
 import Overlay from "../overlay";
 import typeUtils from "../../core/utils/type";
+import getWindow from "../../core/utils/window";
 
+const window = getWindow();
 
 class OverlapStrategy extends DrawerStrategy {
 
