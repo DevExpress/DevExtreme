@@ -547,7 +547,7 @@ QUnit.test("data-like string values", function(assert) {
         max: new Date("01/13/2010"),
         dataType: "datetime"
     },
-        { left: 1000, width: 3000 }, { isHorizontal: true });
+    { left: 1000, width: 3000 }, { isHorizontal: true });
     this.update();
 
     this.setRange("01/02/2010", "01/05/2010");

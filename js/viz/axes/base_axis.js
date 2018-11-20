@@ -1846,7 +1846,7 @@ Axis.prototype = {
         this._options._customVisualRange = value;
     },
 
-     // API
+    // API
     visualRange() {
         const that = this;
         const args = arguments;

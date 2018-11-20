@@ -35,7 +35,7 @@ class QuillRegistrator {
 
             "themes/basic": BaseTheme
         },
-            true
+        true
         );
 
         this._customModules = [];

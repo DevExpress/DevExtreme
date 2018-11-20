@@ -6,7 +6,7 @@ var $ = require("jquery"),
     keyboardMock = require("../../../helpers/keyboardMock.js");
 
 require("ui/number_box"),
-    require("ui/validator");
+require("ui/validator");
 
 var NUMBERBOX_CLASS = "dx-numberbox",
     INVALID_CLASS = "dx-invalid",

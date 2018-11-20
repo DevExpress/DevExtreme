@@ -41,8 +41,8 @@ QUnit.module("Integration: Recurring Appointments", {
 
 QUnit.test("Tasks should be duplicated according to recurrence rule", function(assert) {
     var tasks = [
-            { text: "One", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 2), recurrenceRule: "FREQ=DAILY;INTERVAL=4" },
-            { text: "Two", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
+        { text: "One", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 2), recurrenceRule: "FREQ=DAILY;INTERVAL=4" },
+        { text: "Two", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -59,7 +59,7 @@ QUnit.test("Tasks should be duplicated according to recurrence rule", function(a
 
 QUnit.test("Tasks should be duplicated according to recurrence rule, if firstDayOfWeek was set", function(assert) {
     var tasks = [
-            { text: "One", startDate: new Date(2015, 2, 12), endDate: new Date(2015, 2, 12, 2), recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TH,SA" }
+        { text: "One", startDate: new Date(2015, 2, 12), endDate: new Date(2015, 2, 12, 2), recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TH,SA" }
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -76,7 +76,7 @@ QUnit.test("Tasks should be duplicated according to recurrence rule, if firstDay
 
 QUnit.test("Tasks should be duplicated according to recurrence rule and recurrence exception", function(assert) {
     var tasks = [
-            { text: "One", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 2), recurrenceRule: "FREQ=DAILY", recurrenceException: "20150317" }
+        { text: "One", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 2), recurrenceRule: "FREQ=DAILY", recurrenceException: "20150317" }
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -865,7 +865,7 @@ QUnit.test("Recurrence editor should work correctly after switch off the recurre
 
 QUnit.test("AllDay recurrence appointments should be rendered correctly after changing currentDate", function(assert) {
     var tasks = [
-            { text: "One", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 17), allDay: true, recurrenceRule: "FREQ=DAILY" }
+        { text: "One", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 17), allDay: true, recurrenceRule: "FREQ=DAILY" }
     ];
     var dataSource = new DataSource({
         store: tasks

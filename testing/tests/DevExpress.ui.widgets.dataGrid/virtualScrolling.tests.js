@@ -107,7 +107,7 @@ QUnit.test("Load", function(assert) {
 
 
     assert.strictEqual(mockDataSource.load.callCount, 2);
-    assert.equal(this.externalDataChangedHandler.callCount, 2);  // TODO 1
+    assert.equal(this.externalDataChangedHandler.callCount, 2); // TODO 1
     // assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
 
     assert.strictEqual(this.scrollController.beginPageIndex(), 0);
@@ -127,7 +127,7 @@ QUnit.test("Load with removeInvisiblePages is true", function(assert) {
 
 
     assert.strictEqual(mockDataSource.load.callCount, 2);
-    assert.equal(this.externalDataChangedHandler.callCount, 1);  // TODO 1
+    assert.equal(this.externalDataChangedHandler.callCount, 1); // TODO 1
     // assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
 
     assert.strictEqual(this.scrollController.beginPageIndex(), 0);

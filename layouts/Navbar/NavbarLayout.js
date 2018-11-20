@@ -14,7 +14,7 @@
         root.DevExpress.layouts.NavbarLayout = factory(
             DevExpress.framework.html.layoutSets,
             DevExpress.framework.html.DefaultLayoutController
-         );
+        );
         root.DevExpress.framework.html.NavBarController = root.DevExpress.layouts.NavbarLayout.NavBarController;
     }
 }(window, function(layoutSets, DefaultLayoutController) {

@@ -21,7 +21,7 @@
             DevExpress.fx,
             DevExpress.layouts.SlideOutLayout.SlideOutController,
             DevExpress.testHelpers
-         );
+        );
     }
 }(this, function($, dxCommand, fx, SlideOutController, layoutHelper) {
 

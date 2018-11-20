@@ -559,10 +559,10 @@ QUnit.test("Take only 20 first items for discover", function(assert) {
 
 QUnit.test("getFields", function(assert) {
     var dataSource = [
-            { "OrderID": 10248, Customer: { name: null }, "EmployeeID": undefined, "OrderDate": null, "Freight": "32.3800", "ShipName": "Vins et alcools Chevalier", "ShipRegion": null, "ShipPostalCode": null },
-            { "OrderID": 10249, Customer: {}, "EmployeeID": 6, "OrderDate": new Date("1996/07/05"), "Freight": "11.6100", "ShipName": "Toms Spezialitaten", "ShipRegion": null, "ShipPostalCode": null },
-            { "OrderID": 10249, "EmployeeID": 6, "OrderDate": new Date("1996/07/05"), "Freight": "11.6100", "ShipName": "Toms Spezialitaten", "ShipRegion": null, "ShipPostalCode": null },
-            { "OrderID": 10250, Customer: { name: "Name" }, "EmployeeID": 4, "OrderDate": new Date("1996/07/08"), "Freight": "65.8300", "ShipName": "Hanari Carnes", "ShipRegion": "RJ", "ShipPostalCode": null }];
+        { "OrderID": 10248, Customer: { name: null }, "EmployeeID": undefined, "OrderDate": null, "Freight": "32.3800", "ShipName": "Vins et alcools Chevalier", "ShipRegion": null, "ShipPostalCode": null },
+        { "OrderID": 10249, Customer: {}, "EmployeeID": 6, "OrderDate": new Date("1996/07/05"), "Freight": "11.6100", "ShipName": "Toms Spezialitaten", "ShipRegion": null, "ShipPostalCode": null },
+        { "OrderID": 10249, "EmployeeID": 6, "OrderDate": new Date("1996/07/05"), "Freight": "11.6100", "ShipName": "Toms Spezialitaten", "ShipRegion": null, "ShipPostalCode": null },
+        { "OrderID": 10250, Customer: { name: "Name" }, "EmployeeID": 4, "OrderDate": new Date("1996/07/08"), "Freight": "65.8300", "ShipName": "Hanari Carnes", "ShipRegion": "RJ", "ShipPostalCode": null }];
 
     new RemoteStore(getCustomArrayStore(dataSource)).getFields().done(function(data) {
 
@@ -654,8 +654,8 @@ QUnit.test("getFields", function(assert) {
 
 QUnit.test("getFields. Generate levels for user dataType", function(assert) {
     var dataSource = [
-            { OrderDate: "1996/07/05" },
-            { OrderDate: "1999/07/05" }
+        { OrderDate: "1996/07/05" },
+        { OrderDate: "1999/07/05" }
     ];
 
     new RemoteStore(getCustomArrayStore(dataSource)).getFields([{
@@ -753,10 +753,10 @@ QUnit.test("Date intervals formatting", function(assert) {
 QUnit.test("Set default formatter for group fields with groupInterval", function(assert) {
     var store = new RemoteStore(getCustomArrayStore([])),
         fields = [
-        { dataField: "OrderDate", dataType: "date", groupInterval: "quarter" },
-        { dataField: "OrderDate", dataType: "date", groupInterval: "month" },
-        { dataField: "OrderDate", dataType: "date", groupInterval: "dayOfWeek" },
-        { dataField: "OrderDate", dataType: "date", groupInterval: "day" }
+            { dataField: "OrderDate", dataType: "date", groupInterval: "quarter" },
+            { dataField: "OrderDate", dataType: "date", groupInterval: "month" },
+            { dataField: "OrderDate", dataType: "date", groupInterval: "dayOfWeek" },
+            { dataField: "OrderDate", dataType: "date", groupInterval: "day" }
         ];
 
     store.load({
@@ -840,7 +840,7 @@ QUnit.test("Columns and rows with filter values", function(assert) {
             { dataField: "ShipCountry", filterValues: ["USA", "Canada"] }
         ],
         columns: [
-                { dataField: "ShipVia", filterValues: ["1", "3"] }
+            { dataField: "ShipVia", filterValues: ["1", "3"] }
         ],
         values: [{ summaryType: "count" }]
     }).done(function(data) {
@@ -972,9 +972,9 @@ QUnit.test("Filter group field. Include Type", function(assert) {
             {
                 groupName: "Ship", filterValues: [[1], [2, "Argentina"]],
                 levels: [
-                        { dataField: "ShipVia", groupName: "Ship", groupIndex: 0 },
-                        { dataField: "ShipCountry", groupName: "Ship", groupIndex: 1 },
-                        { dataField: "ShipCity", groupName: "Ship", groupIndex: 2 }
+                    { dataField: "ShipVia", groupName: "Ship", groupIndex: 0 },
+                    { dataField: "ShipCountry", groupName: "Ship", groupIndex: 1 },
+                    { dataField: "ShipCity", groupName: "Ship", groupIndex: 2 }
                 ]
             }
         ]

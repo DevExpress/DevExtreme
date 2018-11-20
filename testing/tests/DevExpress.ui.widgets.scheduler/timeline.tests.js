@@ -202,7 +202,7 @@ QUnit.test("the 'getCoordinatesByDate' method should return right coordinates", 
 
     var coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
     var $expectedCell = this.instance.$element()
-        .find(".dx-scheduler-date-table-cell").eq(1),
+            .find(".dx-scheduler-date-table-cell").eq(1),
         expectedPositionLeft = $expectedCell.position().left + 0.5 * $expectedCell.outerWidth();
 
     assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, "left coordinate is OK");

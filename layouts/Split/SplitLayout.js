@@ -28,7 +28,7 @@
             DevExpress.layouts.EmptyLayout,
             DevExpress.layouts.SimpleLayout,
             DevExpress.fx
-         );
+        );
 
         root.DevExpress.framework.html.MultipaneLayoutController = root.DevExpress.layouts.SplitLayout.MultipaneLayoutController;
         root.DevExpress.framework.html.IOSSplitLayoutController = root.DevExpress.layouts.SplitLayout.IOSSplitLayoutController;

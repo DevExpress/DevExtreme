@@ -880,10 +880,10 @@ QUnit.test("Parsed data should have all fields from source data", function(asser
         { arg: 1, val: 11, extra: "1" },
         { arg: 2, val: 22, extra: "2" }
     ],
-        createGroupsData({
-            argumentType: "numeric",
-            valueType: "numeric"
-        }));
+    createGroupsData({
+        argumentType: "numeric",
+        valueType: "numeric"
+    }));
 
     checkParsedData(parsedData, {
         "arg": {
@@ -1024,7 +1024,7 @@ QUnit.test("Can not parse Datetime arguments", function(assert) {
         }),
 
         parsedData = testValidateData(
-        [{ arg: (new Date(1000)).toString(), val: 1 }, { arg: 2000, val: 2 }, { arg: "3000", val: 3 }, { arg: new Date(4) + "ff", val: 4 }, { arg: "Thu Jan 01 1970 00:00:05 GMT+0000", val: 5 }, { arg: "400sdf", val: 5 }],
+            [{ arg: (new Date(1000)).toString(), val: 1 }, { arg: 2000, val: 2 }, { arg: "3000", val: 3 }, { arg: new Date(4) + "ff", val: 4 }, { arg: "Thu Jan 01 1970 00:00:05 GMT+0000", val: 5 }, { arg: "400sdf", val: 5 }],
             groups);
 
     checkParsedData(parsedData, {
@@ -1085,11 +1085,11 @@ QUnit.test("Can not parse Numeric values", function(assert) {
             valueCategories: ["1", "df", "3", (new Date()).toString(), "5"]
         }),
         parsedData = testValidateData([
-        { val: "1", arg: 1 },
-        { val: "df", arg: 2 },
-        { val: "3", arg: 3 },
-        { val: (new Date()).toString(), arg: 4 },
-        { val: "5", arg: 5 }
+            { val: "1", arg: 1 },
+            { val: "df", arg: 2 },
+            { val: "3", arg: 3 },
+            { val: (new Date()).toString(), arg: 4 },
+            { val: "5", arg: 5 }
         ], groupsData);
 
     checkParsedData(parsedData, {
@@ -1107,12 +1107,12 @@ QUnit.test("Can not parse Datetime values", function(assert) {
             valueCategories: [(new Date(1000)).toString(), 2000, "3000", new Date(4) + "ff", "Thu Jan 01 1970 00:00:05 GMT+0000", "400sdf"]
         }),
         parsedData = testValidateData([
-        { val: (new Date(1000)).toString(), arg: 1 },
-        { val: 2000, arg: 2 },
-        { val: "3000", arg: 3 },
-        { val: new Date(4) + "ff", arg: 4 },
-        { val: "Thu Jan 01 1970 00:00:05 GMT+0000", arg: 5 },
-        { val: "400sdf", arg: 5 }
+            { val: (new Date(1000)).toString(), arg: 1 },
+            { val: 2000, arg: 2 },
+            { val: "3000", arg: 3 },
+            { val: new Date(4) + "ff", arg: 4 },
+            { val: "Thu Jan 01 1970 00:00:05 GMT+0000", arg: 5 },
+            { val: "400sdf", arg: 5 }
         ], groupsData);
 
     checkParsedData(parsedData, {
@@ -1129,11 +1129,11 @@ QUnit.test("Can not parse sizes", function(assert) {
             sizeField: "size"
         }),
         parsedData = testValidateData([
-        { size: "1", val: 1, arg: 1 },
-        { size: "df", val: 1, arg: 2 },
-        { size: "3", val: 1, arg: 3 },
-        { size: (new Date()).toString(), val: 1, arg: 4 },
-        { size: "5", val: 1, arg: 5 }
+            { size: "1", val: 1, arg: 1 },
+            { size: "df", val: 1, arg: 2 },
+            { size: "3", val: 1, arg: 3 },
+            { size: (new Date()).toString(), val: 1, arg: 4 },
+            { size: "5", val: 1, arg: 5 }
         ], groupsData);
 
     checkParsedData(parsedData, {
@@ -1211,11 +1211,11 @@ QUnit.module("Check data sorting. Continuous argument axis");
 
 QUnit.test("Numeric, series with same field, sortingMethod true - sort data by argument", function(assert) {
     var data = [
-        { arg: 2, val: 11, val1: 333 },
-        { arg: 1, val: 55, val1: 444 },
-        { arg: 5, val: 33, val1: 111 },
-        { arg: 4, val: 22, val1: 222 },
-        { arg: 3, val: 44, val1: 555 }
+            { arg: 2, val: 11, val1: 333 },
+            { arg: 1, val: 55, val1: 444 },
+            { arg: 5, val: 33, val1: 111 },
+            { arg: 4, val: 22, val1: 222 },
+            { arg: 3, val: 44, val1: 555 }
         ],
         group1 = createGroupsData({
             argumentAxisType: "continuous",
@@ -1252,12 +1252,12 @@ QUnit.test("Numeric, series with same field, sortingMethod true - sort data by a
 
 QUnit.test("Numeric, series with different fields, sortingMethod true - sort data by argument", function(assert) {
     var data = [
-        { arg: 2, val: 11, arg1: 4, val1: 333 },
-        { arg: 1, val: 55, arg1: 3, val1: 444 },
-        { arg: 5, val: 33, arg1: 1, val1: 111 },
-        { arg: 4, val: 22, arg1: 5, val1: 222 },
-        { arg: 3, val: 44, arg1: 2, val1: 555 },
-        { arg: 6, val: 66 }
+            { arg: 2, val: 11, arg1: 4, val1: 333 },
+            { arg: 1, val: 55, arg1: 3, val1: 444 },
+            { arg: 5, val: 33, arg1: 1, val1: 111 },
+            { arg: 4, val: 22, arg1: 5, val1: 222 },
+            { arg: 3, val: 44, arg1: 2, val1: 555 },
+            { arg: 6, val: 66 }
         ],
         group1 = createGroupsData({
             argumentAxisType: "continuous",
@@ -1341,11 +1341,11 @@ QUnit.test("DateTime, sortingMethod true - sort data by argument", function(asse
 
 QUnit.test("Numeric, series with same field, sortingMethod callback - sort data by callback", function(assert) {
     var data = [
-        { arg: 2, val: 11, val1: 333 },
-        { arg: 1, val: 55, val1: 444 },
-        { arg: 5, val: 33, val1: 111 },
-        { arg: 4, val: 22, val1: 222 },
-        { arg: 3, val: 44, val1: 555 }
+            { arg: 2, val: 11, val1: 333 },
+            { arg: 1, val: 55, val1: 444 },
+            { arg: 5, val: 33, val1: 111 },
+            { arg: 4, val: 22, val1: 222 },
+            { arg: 3, val: 44, val1: 555 }
         ],
         group1 = createGroupsData({
             argumentAxisType: "continuous",
@@ -1384,18 +1384,18 @@ QUnit.test("Numeric, series with same field, sortingMethod callback - sort data 
 
 QUnit.test("T532528. Different argumentFields, each dataSource item is only for one series, first arguemnt is 0", function(assert) {
     var data = [
-        { arg: 1, val: 11 },
-        { arg: 0, val: 55 },
-        { arg: 4, val: 33 },
-        { arg: 3, val: 22 },
-        { arg: 2, val: 44 },
-        { arg: 5, val: 66 },
-        { arg1: 3, val1: 333 },
-        { arg1: 2, val1: 444 },
-        { arg1: 0, val1: 111 },
-        { arg1: 4, val1: 222 },
-        { arg1: 1, val1: 555 },
-        { arg1: 5, val1: 666 }
+            { arg: 1, val: 11 },
+            { arg: 0, val: 55 },
+            { arg: 4, val: 33 },
+            { arg: 3, val: 22 },
+            { arg: 2, val: 44 },
+            { arg: 5, val: 66 },
+            { arg1: 3, val1: 333 },
+            { arg1: 2, val1: 444 },
+            { arg1: 0, val1: 111 },
+            { arg1: 4, val1: 222 },
+            { arg1: 1, val1: 555 },
+            { arg1: 5, val1: 666 }
         ],
         group1 = createGroupsData({
             argumentAxisType: "continuous",
@@ -1437,12 +1437,12 @@ QUnit.module("Check data sorting. Discrete argument axis");
 
 QUnit.test("Numeric, series with different fields (skipped items), sortingMethod true - sort data by argument", function(assert) {
     var data = [
-        { arg: 2, val: 11, arg1: 4, val1: 333 },
-        { arg: undefined, val: undefined, arg1: 3, val1: 444 },
-        { arg: 5, val: 33, arg1: 1, val1: 111 },
-        { arg: 4, val: 22, arg1: 5, val1: 222 },
-        { arg: 3, val: 44, arg1: 2, val1: 555 },
-        { arg: 6, val: 66 }
+            { arg: 2, val: 11, arg1: 4, val1: 333 },
+            { arg: undefined, val: undefined, arg1: 3, val1: 444 },
+            { arg: 5, val: 33, arg1: 1, val1: 111 },
+            { arg: 4, val: 22, arg1: 5, val1: 222 },
+            { arg: 3, val: 44, arg1: 2, val1: 555 },
+            { arg: 6, val: 66 }
         ],
         group1 = createGroupsData({
             argumentAxisType: "discrete",
@@ -1556,11 +1556,11 @@ QUnit.test("String, sortingMethod true (not a callback) - do not sort data", fun
 
 QUnit.test("String, series with same field, sortingMethod callback - sort data by callback", function(assert) {
     var data = [
-        { arg: "b", val: 11, val1: 333 },
-        { arg: "a", val: 55, val1: 444 },
-        { arg: "e", val: 33, val1: 111 },
-        { arg: "d", val: 22, val1: 222 },
-        { arg: "c", val: 44, val1: 555 }
+            { arg: "b", val: 11, val1: 333 },
+            { arg: "a", val: 55, val1: 444 },
+            { arg: "e", val: 33, val1: 111 },
+            { arg: "d", val: 22, val1: 222 },
+            { arg: "c", val: 44, val1: 555 }
         ],
         group1 = createGroupsData({
             argumentAxisType: "discrete",
@@ -1601,11 +1601,11 @@ QUnit.test("String, series with same field, sortingMethod callback - sort data b
 
 QUnit.test("String, user categories, sortingMethod true - sort data by categories", function(assert) {
     var data = [
-        { arg: "b", val: 11, val1: 333 },
-        { arg: "a", val: 55, val1: 444 },
-        { arg: "e", val: 33, val1: 111 },
-        { arg: "d", val: 22, val1: 222 },
-        { arg: "c", val: 44, val1: 555 }
+            { arg: "b", val: 11, val1: 333 },
+            { arg: "a", val: 55, val1: 444 },
+            { arg: "e", val: 33, val1: 111 },
+            { arg: "d", val: 22, val1: 222 },
+            { arg: "c", val: 44, val1: 555 }
         ],
         groups = createGroupsData({
             argumentAxisType: "discrete",
@@ -1630,11 +1630,11 @@ QUnit.test("String, user categories, sortingMethod true - sort data by categorie
 
 QUnit.test("Numeric, user categories, sortingMethod true - sort data by categories, ignore sortingMethod", function(assert) {
     var data = [
-        { arg: 2, val: 11, val1: 333 },
-        { arg: 1, val: 55, val1: 444 },
-        { arg: 5, val: 33, val1: 111 },
-        { arg: 4, val: 22, val1: 222 },
-        { arg: 3, val: 44, val1: 555 }
+            { arg: 2, val: 11, val1: 333 },
+            { arg: 1, val: 55, val1: 444 },
+            { arg: 5, val: 33, val1: 111 },
+            { arg: 4, val: 22, val1: 222 },
+            { arg: 3, val: 44, val1: 555 }
         ],
         groups = createGroupsData({
             argumentAxisType: "discrete",
@@ -1661,11 +1661,11 @@ QUnit.test("Numeric, user categories, sortingMethod true - sort data by categori
 
 QUnit.test("Numeric, user categories, sortingMethod callback - sort data by categories, ignore sortingMethod", function(assert) {
     var data = [
-        { arg: 2, val: 11, val1: 333 },
-        { arg: 1, val: 55, val1: 444 },
-        { arg: 5, val: 33, val1: 111 },
-        { arg: 4, val: 22, val1: 222 },
-        { arg: 3, val: 44, val1: 555 }
+            { arg: 2, val: 11, val1: 333 },
+            { arg: 1, val: 55, val1: 444 },
+            { arg: 5, val: 33, val1: 111 },
+            { arg: 4, val: 22, val1: 222 },
+            { arg: 3, val: 44, val1: 555 }
         ],
         groups = createGroupsData({
             argumentAxisType: "discrete",
@@ -1694,13 +1694,13 @@ QUnit.test("Numeric, user categories, sortingMethod callback - sort data by cate
 
 QUnit.test("Collect only unique categories", function(assert) {
     var data = [
-        { arg: 2, val: 11 },
-        { arg: 1, val: 22 },
-        { arg: 2, val: 66 },
-        { arg: 5, val: 44 },
-        { arg: 4, val: 33 },
-        { arg: 1, val: 77 },
-        { arg: 3, val: 55 }
+            { arg: 2, val: 11 },
+            { arg: 1, val: 22 },
+            { arg: 2, val: 66 },
+            { arg: 5, val: 44 },
+            { arg: 4, val: 33 },
+            { arg: 1, val: 77 },
+            { arg: 3, val: 55 }
         ],
         groups = createGroupsData({
             argumentAxisType: "discrete",
@@ -1795,9 +1795,9 @@ QUnit.test("merge. series has two groups", function(assert) {
         }),
         groupsData = { groups: groupData1.groups.concat(groupData2.groups) },
         parsedData = testValidateData([
-        { arg1: "oranges", arg2: "potatoes", val1: 11, val2: 111 }, { arg1: "apples", arg2: "cucumbers", val1: 22, val2: 222 },
-        { arg1: "oranges", arg2: "tomatoes", val1: 33, val2: 333 }, { arg1: "kiwi", arg2: "potatoes", val1: 44, val2: 444 },
-        { arg1: "bananas", arg2: "tomatoes", val1: 55, val2: 555 }, { arg1: "kiwi", arg2: "garlic", val1: 66, val2: 666 }
+            { arg1: "oranges", arg2: "potatoes", val1: 11, val2: 111 }, { arg1: "apples", arg2: "cucumbers", val1: 22, val2: 222 },
+            { arg1: "oranges", arg2: "tomatoes", val1: 33, val2: 333 }, { arg1: "kiwi", arg2: "potatoes", val1: 44, val2: 444 },
+            { arg1: "bananas", arg2: "tomatoes", val1: 55, val2: 555 }, { arg1: "kiwi", arg2: "garlic", val1: 66, val2: 666 }
         ], groupsData, null, { sortingMethod: false });
 
     checkParsedData(parsedData, {
@@ -2033,8 +2033,8 @@ QUnit.test("mode - topN, some objects has same name", function(assert) {
         }),
         groupsData = { groups: groupData1.groups.concat(groupData2.groups) },
         parsedData = testValidateData([
-        { arg: "apples", val1: 22, val2: 77 }, { arg: "oranges", val1: 33, val2: 11 }, { arg: "apples", val1: 11, val2: 5 },
-        { arg: "oranges", val1: 7, val2: 5 }, { arg: "kiwi", val1: 44, val2: 65 }, { arg: "bananas", val1: 55, val2: 45 }
+            { arg: "apples", val1: 22, val2: 77 }, { arg: "oranges", val1: 33, val2: 11 }, { arg: "apples", val1: 11, val2: 5 },
+            { arg: "oranges", val1: 7, val2: 5 }, { arg: "kiwi", val1: 44, val2: 65 }, { arg: "bananas", val1: 55, val2: 45 }
         ], groupsData, null, { sortingMethod: false });
 
     checkParsedData(parsedData, {

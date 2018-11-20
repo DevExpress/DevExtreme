@@ -17,7 +17,7 @@
             jQuery,
             DevExpress.framework.html.layoutSets,
             DevExpress.framework.html.DefaultLayoutController
-         );
+        );
         root.DevExpress.framework.html.PivotLayoutController = root.DevExpress.layouts.PivotLayout.PivotLayoutController;
     }
 }(window, function($, layoutSets, DefaultLayoutController) {

@@ -97,12 +97,12 @@ QUnit.test("Process values from dataSource with custom sourceField, targetField,
 
 QUnit.test("Trigger error on invalid source data", function(assert) {
     var invalidDataSets = [
-        [{ source: 'A', target: 'B', weight: 1 }, { source: 'A', target: 'C' }],
-        [{ source: 'A', target: 'B', weight: 0 }, { source: 'A', target: 'C', weight: 1 }],
-        [{ source: 'A', target: 1, weight: 1 }, { source: 'A', target: 'C', weight: 1 }],
-        [{ source: 'A', target: 'B', weight: 1 }, { source: 1, target: 'C', weight: 1 }],
-        [{ source: 'A', target: 'B', weight: 1 }, { source: 'A', target: 'C', weight: -5 }],
-        ['ABCD', { source: 'A', target: 'C', weight: 1 }]
+            [{ source: 'A', target: 'B', weight: 1 }, { source: 'A', target: 'C' }],
+            [{ source: 'A', target: 'B', weight: 0 }, { source: 'A', target: 'C', weight: 1 }],
+            [{ source: 'A', target: 1, weight: 1 }, { source: 'A', target: 'C', weight: 1 }],
+            [{ source: 'A', target: 'B', weight: 1 }, { source: 1, target: 'C', weight: 1 }],
+            [{ source: 'A', target: 'B', weight: 1 }, { source: 'A', target: 'C', weight: -5 }],
+            ['ABCD', { source: 'A', target: 'C', weight: 1 }]
         ],
         expectedErrorCodes = [
             'E2007', 'E2009', 'E2008', 'E2008', 'E2009', 'E2007'
@@ -125,8 +125,8 @@ QUnit.test("Trigger error on invalid source data", function(assert) {
 
 QUnit.test("Trigger \"cycle detected\" error on invalid source data", function(assert) {
     var invalidDataSets = [
-        [{ source: 'A', target: 'B', weight: 1 }, { source: 'B', target: 'A', weight: 1 }],
-        [{ source: 'A', target: 'B', weight: 1 }, { source: 'B', target: 'C', weight: 1 }, { source: 'C', target: 'D', weight: 1 }, { source: 'D', target: 'A', weight: 1 }]
+            [{ source: 'A', target: 'B', weight: 1 }, { source: 'B', target: 'A', weight: 1 }],
+            [{ source: 'A', target: 'B', weight: 1 }, { source: 'B', target: 'C', weight: 1 }, { source: 'C', target: 'D', weight: 1 }, { source: 'D', target: 'A', weight: 1 }]
         ],
         spy = sinon.spy();
 

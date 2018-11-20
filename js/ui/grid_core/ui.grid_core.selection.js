@@ -516,11 +516,11 @@ module.exports = {
          * @name GridBaseOptions.selection
          * @type object
          */
-        /**
+            /**
          * @name dxDataGridOptions.selection
          * @type object
          */
-        /**
+            /**
          * @name dxTreeListOptions.selection
          * @type object
          */

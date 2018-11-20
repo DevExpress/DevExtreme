@@ -167,7 +167,7 @@ QUnit.module("Default prevention", $.extend({}, environment, {
         trackerModule._DEBUG_forceEventMode(eventMode);
         this.eventMode = eventMode;
         this.tracker.dispose();
-        this.createTracker();    // To attach with correct event names
+        this.createTracker(); // To attach with correct event names
 
         var preventDefault = sinon.spy(),
             stopPropagation = sinon.spy();
@@ -208,7 +208,7 @@ $.each(["mouse", "touch", "MSPointer", "pointer"], function(_, mode) {
 });
 
 QUnit.test("mouse - wheel", function(assert) {
-    this.check(assert, "mouse", "wheel", true, 1, 2);   // second "stopPropagation" is called by the dxmousewheel system
+    this.check(assert, "mouse", "wheel", true, 1, 2); // second "stopPropagation" is called by the dxmousewheel system
 });
 
 QUnit.test("mouse - wheel / no data", function(assert) {

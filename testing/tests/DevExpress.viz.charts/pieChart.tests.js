@@ -1947,7 +1947,7 @@ var environment = {
 
     QUnit.test("hide label", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
+                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
             points = pie.getAllSeries()[0].getVisiblePoints();
 
         assert.strictEqual(points[0].getLabels()[0].draw.callCount, 0);
@@ -1956,7 +1956,7 @@ var environment = {
 
     QUnit.test("Adjust labels only before overlapping resolve, without moving from center (T586419)", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
+                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
             series = pie.getAllSeries()[0],
             points = series.getVisiblePoints();
 
@@ -1980,7 +1980,7 @@ var environment = {
 
     QUnit.test("two overlapped labels", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
+                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
             points = pie.getAllSeries()[0].getVisiblePoints();
 
         this.checkLabelPosition(assert, points[0].getLabels()[0], [5, 10]);
@@ -1989,8 +1989,8 @@ var environment = {
 
     QUnit.test("two overlapped labels + single label", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
-            { x: 5, y: 40, width: 10, height: 10, pointPosition: { y: 3, angle: 3 } }
+                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+                { x: 5, y: 40, width: 10, height: 10, pointPosition: { y: 3, angle: 3 } }
             ]),
             points = pie.getAllSeries()[0].getVisiblePoints();
 
@@ -2001,8 +2001,8 @@ var environment = {
 
     QUnit.test("two different sides", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 2 } },
-            { x: 100, y: 10, width: 10, height: 10, pointPosition: { y: 3, angle: 181 } }
+                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 2 } },
+                { x: 100, y: 10, width: 10, height: 10, pointPosition: { y: 3, angle: 181 } }
             ]),
             points = pie.getAllSeries()[0].getVisiblePoints();
 
@@ -2013,10 +2013,10 @@ var environment = {
 
     QUnit.test("overlapping labels, position inside", function(assert) {
         var pie = this.createPieChartWithLabels([
-            { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 165, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } },
-            { x: 155, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
+                { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+                { x: 165, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } },
+                { x: 155, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+                { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
             ], "inside"),
             points = pie.getAllSeries()[0].getVisiblePoints();
 
@@ -2028,10 +2028,10 @@ var environment = {
 
     QUnit.test("position inside, two labels on same row, but do not overlapp, one label horizontally overlap them - do not shift labels, there is no real overlapping", function(assert) {
         var pie = this.createPieChartWithLabels([
-            { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 140, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } },
-            { x: 160, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
+                { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+                { x: 140, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } },
+                { x: 160, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+                { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
             ], "inside"),
             points = pie.getAllSeries()[0].getVisiblePoints();
 
@@ -2043,11 +2043,11 @@ var environment = {
 
     QUnit.test("T578429. Save initial labels' order after resolve overlapping, anticlockwise", function(assert) {
         var pie = this.createPieChartWithLabels([
-            { y: 10, x: 294, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
-            { y: 0, x: 285, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
-            { y: 0, x: 287, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
-            { y: 0, x: 288, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
-            { y: 0, x: 289, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
+                { y: 10, x: 294, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+                { y: 0, x: 285, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+                { y: 0, x: 287, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+                { y: 0, x: 288, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+                { y: 0, x: 289, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
             ], "columns", "anticlockwise"),
             points = pie.getAllSeries()[0].getVisiblePoints();
 
@@ -2060,7 +2060,7 @@ var environment = {
 
     QUnit.test("Adjust labels before and after resolve overlapping with moving from center (T586419)", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
+                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
             series = pie.getAllSeries()[0],
             points = series.getVisiblePoints();
 
@@ -2076,7 +2076,7 @@ var environment = {
 
     QUnit.test("Do not Adjust labels after resolve overlapping in columns position", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], "columns"),
+                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], "columns"),
             series = pie.getAllSeries()[0],
             points = series.getVisiblePoints();
 
@@ -2086,7 +2086,7 @@ var environment = {
 
     QUnit.test("Do not Adjust labels after resolve overlapping in inside position", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], "inside"),
+                { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], "inside"),
             series = pie.getAllSeries()[0],
             points = series.getVisiblePoints();
 
@@ -2109,11 +2109,11 @@ var environment = {
 
     QUnit.test("two series - all labels are resolved together (in two directions)", function(assert) {
         var pie = this.createPieChartWithLabels([
-            { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
+                { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+                { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
             ], [
-            { x: 150, y: 45, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 150, y: 55, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
+                { x: 150, y: 45, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+                { x: 150, y: 55, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
             ]),
             points1 = pie.getAllSeries()[0].getVisiblePoints(),
             points2 = pie.getAllSeries()[1].getVisiblePoints();
@@ -2126,11 +2126,11 @@ var environment = {
 
     QUnit.test("two series, columns - labels are resolved by series (vertically only)", function(assert) {
         var pie = this.createPieChartWithLabels([
-            { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
+                { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+                { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
             ], [
-            { x: 155, y: 49, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 155, y: 51, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
+                { x: 155, y: 49, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+                { x: 155, y: 51, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
             ], "columns"),
             points1 = pie.getAllSeries()[0].getVisiblePoints(),
             points2 = pie.getAllSeries()[1].getVisiblePoints();
@@ -2143,11 +2143,11 @@ var environment = {
 
     QUnit.test("two series, inside - all labels are resolved together", function(assert) {
         var pie = this.createPieChartWithLabels([
-            { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 165, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
+                { x: 150, y: 50, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+                { x: 165, y: 65, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
             ], [
-            { x: 155, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
+                { x: 155, y: 65, width: 20, height: 10, pointPosition: { y: 1, angle: 1 } },
+                { x: 150, y: 80, width: 20, height: 10, pointPosition: { y: 2, angle: 2 } }
             ], "inside"),
             points1 = pie.getAllSeries()[0].getVisiblePoints(),
             points2 = pie.getAllSeries()[1].getVisiblePoints();

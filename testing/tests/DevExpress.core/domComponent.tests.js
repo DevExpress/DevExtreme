@@ -222,7 +222,7 @@ QUnit.test("component lifecycle, changing a couple of options", function(assert)
         optionChangedArgs = instance._getTraceLogByMethod("_optionChanged");
 
     assert.deepEqual(methodCallStack, [
-        "beginUpdate",     // ctor
+        "beginUpdate", // ctor
         "beginUpdate",
         "endUpdate",
 

@@ -236,7 +236,7 @@ QUnit.test("TooltipViewer", function(assert) {
 QUnit.test("Disposing", function(assert) {
     this.createMap();
 
-    this.$container.remove();    // Force disposing
+    this.$container.remove(); // Force disposing
     assert.ok(this.renderer.dispose.called, "renderer is disposed");
 
     assert.deepEqual(this.themeManager.dispose.lastCall.args, [], "theme manager is disposed");
@@ -255,7 +255,7 @@ QUnit.test("Disposing", function(assert) {
 QUnit.test('Disposing - elements cleaning order', function(assert) {
     this.createMap();
 
-    this.$container.remove();    // Force disposing
+    this.$container.remove(); // Force disposing
 
     var methods = $.map([this.tracker, this.layerCollection, this.controlBar, this.legendsControl], function(obj) {
         return obj.stub('clean');
@@ -272,7 +272,7 @@ QUnit.test('Disposing - elements cleaning order', function(assert) {
 QUnit.test('Disposing - elements disposing order', function(assert) {
     this.createMap();
 
-    this.$container.remove();    // Force disposing
+    this.$container.remove(); // Force disposing
 
     var methods = $.map([this.controlBar, this.gestureHandler, this.tracker, this.legendsControl, this.layerCollection, this.layoutControl, this.tooltipViewer, this.dataExchanger, this.projection], function(obj) {
         return obj.stub('dispose');

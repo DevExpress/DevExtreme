@@ -235,7 +235,7 @@
  * @enum {'auto'|'keep'|'reset'|'shift'}
  */
 
- /**
+/**
  * @typedef {string} Enums.ChartZoomPanActionType
  * @enum {'zoom'|'pan'}
  */
@@ -920,12 +920,12 @@
  * @enum {'darkDown'|'darkGray'|'darkGrid'|'darkHorizontal'|'darkTrellis'|'darkUp'|'darkVertical'|'gray0625'|'gray125'|'lightDown'|'lightGray'|'lightGrid'|'lightHorizontal'|'lightTrellis'|'lightUp'|'lightVertical'|'mediumGray'|'none'|'solid'}
  */
 
- /**
+/**
  * @typedef {string} Enums.HtmlEditorValueType
  * @enum {'html'|'markdown'}
  */
 
- /**
+/**
  * @typedef {string} Enums.EditorStylingMode
  * @enum {'outlined'|'underlined'|'filled'}
  */

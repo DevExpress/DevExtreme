@@ -1255,10 +1255,10 @@ QUnit.module("Focus", {
             return $("#container");
         };
         that.columns = [
-                    { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1" },
-                    { caption: 'Column 2', visible: true, allowEditing: true, dataField: "Column2" },
-                    { caption: 'Column 3', visible: true, allowEditing: true, dataField: "Column3" },
-                    { caption: 'Column 4', visible: true, allowEditing: true, dataField: "Column4", dataType: "boolean", showEditorAlways: true }
+            { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1" },
+            { caption: 'Column 2', visible: true, allowEditing: true, dataField: "Column2" },
+            { caption: 'Column 3', visible: true, allowEditing: true, dataField: "Column3" },
+            { caption: 'Column 4', visible: true, allowEditing: true, dataField: "Column4", dataType: "boolean", showEditorAlways: true }
         ];
 
         that.setupDataGrid = function() {

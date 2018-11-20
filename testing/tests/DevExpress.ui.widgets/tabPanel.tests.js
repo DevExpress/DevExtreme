@@ -114,7 +114,7 @@ QUnit.module("options", {
         fx.off = true;
 
         this.items = [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
-                        { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
+            { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
 
         this.$tabPanel = $("#tabPanel").dxTabPanel({
             items: this.items
@@ -223,7 +223,7 @@ QUnit.module("action handlers", {
 
         this.$tabPanel = $("#tabPanel").dxTabPanel({
             dataSource: [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
-                        { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }],
+                { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }],
 
             onItemClick: function(e) {
                 QUnit.assert.ok(true, "option 'onItemClick' successfully passed to nested multiview widget and raised on click");
@@ -356,7 +356,7 @@ QUnit.module("events handlers", {
 
             that.$tabPanel = $("#tabPanel").dxTabPanel({
                 dataSource: [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
-                            { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }],
+                    { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }],
                 onInitialized: function(e) {
                     spies.titleClick && e.component.on("titleClick", that.titleClickSpy);
                     spies.titleHold && e.component.on("titleHold", that.titleHoldSpy);
@@ -452,7 +452,7 @@ QUnit.test("click on dxTabPanel should not scroll page to the tabs", function(as
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
         var items = [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
-                        { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
+            { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
 
         fx.off = true;
         this.$element = $("#tabPanel").dxTabPanel({
