@@ -6187,16 +6187,9 @@ QUnit.testInActiveWindow("Edit cell on onContentReady", function(assert) {
 QUnit.module("Async render", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        if(window.requestIdleCallback) {
-            this.originalRequestIdleCallback = window.requestIdleCallback;
-            window.requestIdleCallback = window.setTimeout;
-        }
     },
     afterEach: function() {
         this.clock.restore();
-        if(this.originalRequestIdleCallback) {
-            window.requestIdleCallback = this.originalRequestIdleCallback;
-        }
     }
 });
 
