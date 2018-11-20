@@ -78,11 +78,17 @@ QUnit.test("Argument pan right by 1", function(assert) {
     assert.equal(onZoomStart.callCount, 1);
     assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
+    assert.equal(onZoomStart.getCall(0).args[0].actionType, "pan");
+    assert.equal(onZoomStart.getCall(0).args[0].event.type, "dxdragstart");
 
     assert.equal(onZoomEnd.callCount, 1);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 6 });
+    assert.equal(onZoomEnd.getCall(0).args[0].actionType, "pan");
+    assert.equal(onZoomEnd.getCall(0).args[0].event.type, "dxdragend");
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, -1);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1);
 });
 
 QUnit.test("Argument pan right by 2 (discrete axis)", function(assert) {
@@ -117,6 +123,7 @@ QUnit.test("Argument pan right by 2 (discrete axis)", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7, categories: [3, 4, 5, 6, 7] });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 1, endValue: 5, categories: [1, 2, 3, 4, 5] });
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, -2);
 });
 
 QUnit.test("Argument pan right out of the data", function(assert) {
@@ -149,6 +156,7 @@ QUnit.test("Argument pan right out of the data", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 0, endValue: 4 });
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, -3);
 });
 
 QUnit.test("Value pan bottom by 1", function(assert) {
@@ -181,6 +189,7 @@ QUnit.test("Value pan bottom by 1", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].axis, valueAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 2, endValue: 4 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 3, endValue: 5 });
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, 1);
 });
 
 QUnit.test("Argument and value", function(assert) {
@@ -224,10 +233,14 @@ QUnit.test("Argument and value", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 6 });
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, -1);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1);
 
     assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis);
     assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 2, endValue: 4 });
     assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 3, endValue: 5 });
+    assert.equal(onZoomEnd.getCall(1).args[0].shift, 1);
+    assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 1);
 });
 
 QUnit.test("Argument and value. Rotated", function(assert) {
@@ -272,10 +285,12 @@ QUnit.test("Argument and value. Rotated", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 2, endValue: 4 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 3, endValue: 5 });
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, 1);
 
     assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis);
     assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 3, endValue: 7 });
     assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 2, endValue: 6 });
+    assert.equal(onZoomEnd.getCall(1).args[0].shift, -1);
 });
 
 QUnit.test("Argument and value. Multiple panes", function(assert) {
@@ -334,14 +349,17 @@ QUnit.test("Argument and value. Multiple panes", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 6 });
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, -1);
 
     assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis1);
     assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 2, endValue: 4 });
     assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 3, endValue: 5 });
+    assert.equal(onZoomEnd.getCall(1).args[0].shift, 1);
 
     assert.equal(onZoomEnd.getCall(2).args[0].axis, valueAxis2);
     assert.deepEqual(onZoomEnd.getCall(2).args[0].previousRange, { startValue: 1, endValue: 3 });
     assert.deepEqual(onZoomEnd.getCall(2).args[0].range, { startValue: 2, endValue: 4 });
+    assert.equal(onZoomEnd.getCall(2).args[0].shift, 1);
 });
 
 QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert) {
@@ -412,11 +430,17 @@ QUnit.test("Zoom-in argument axis", function(assert) {
     assert.equal(onZoomStart.callCount, 1);
     assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 2.9, endValue: 7.3 });
+    assert.equal(onZoomStart.getCall(0).args[0].actionType, "zoom");
+    assert.equal(onZoomStart.getCall(0).args[0].event.type, "dxmousewheel");
 
     assert.equal(onZoomEnd.callCount, 1);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 2.9, endValue: 7.3 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
+    assert.equal(onZoomEnd.getCall(0).args[0].actionType, "zoom");
+    assert.equal(onZoomEnd.getCall(0).args[0].event.type, "dxmousewheel");
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, -0.1);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1.1);
 });
 
 QUnit.test("Zoom-out argument axis", function(assert) {
@@ -451,6 +475,8 @@ QUnit.test("Zoom-out argument axis", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3.1, endValue: 6.7 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, 0.1);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 0.9);
 });
 
 QUnit.test("zoom value axis", function(assert) {
@@ -485,35 +511,39 @@ QUnit.test("zoom value axis", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].axis, valueAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 0.9, endValue: 4.2 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 1, endValue: 4 });
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, -0.05);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1.1);
 });
 
 QUnit.test("zoom both axis", function(assert) {
     const onZoomStart = sinon.spy(),
-        onZoomEnd = sinon.spy(),
-        chart = this.createChart({
-            valueAxis: {
-                visualRange: {
-                    startValue: 0.9,
-                    endValue: 4.2
-                }
-            },
-            zoomAndPan: {
-                argumentAxis: "zoom",
-                valueAxis: "zoom",
-                allowMouseWheel: true
-            },
-            onZoomStart: onZoomStart,
-            onZoomEnd: onZoomEnd
-        });
+        onZoomEnd = sinon.spy();
 
-    const valueAxis = chart.getValueAxis();
+    this.createChart({
+        valueAxis: {
+            visualRange: {
+                startValue: 0.9,
+                endValue: 4.2
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: "zoom",
+            valueAxis: "zoom",
+            allowMouseWheel: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
 
     // act
     this.pointer.start({ x: 200, y: 400 }).wheel(10);
 
     assert.equal(onZoomEnd.callCount, 2);
-    assert.equal(onZoomEnd.getCall(0).args[0].axis, valueAxis);
-    assert.equal(onZoomEnd.getCall(1).args[0].axis, chart.getArgumentAxis());
+
+    assert.roughEqual(onZoomEnd.getCall(0).args[0].shift, -0.23, 0.05);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1.1);
+    assert.roughEqual(onZoomEnd.getCall(1).args[0].shift, -0.05, 0.05);
+    assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 1.1);
 });
 
 QUnit.module("Wheel zooming. Multiple panes", environment);
@@ -683,11 +713,17 @@ QUnit.test("Zoom argument axis", function(assert) {
     assert.equal(onZoomStart.callCount, 1);
     assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 2, endValue: 10 });
+    assert.equal(onZoomStart.getCall(0).args[0].actionType, "zoom");
+    assert.equal(onZoomStart.getCall(0).args[0].event.type, "dxdragend");
 
     assert.equal(onZoomEnd.callCount, 1);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 2, endValue: 10 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 4, endValue: 8 });
+    assert.equal(onZoomEnd.getCall(0).args[0].actionType, "zoom");
+    assert.equal(onZoomEnd.getCall(0).args[0].event.type, "dxdragend");
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, 0);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 2);
 });
 
 QUnit.test("Zoom value axis", function(assert) {
@@ -721,6 +757,8 @@ QUnit.test("Zoom value axis", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].axis, valueAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 0, endValue: 5 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 4 });
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, 0.5);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 2.5);
 });
 
 QUnit.test("Zoom argument and value axis", function(assert) {
@@ -1017,11 +1055,17 @@ QUnit.test("Without panKey pressed drag action zooms chart", function(assert) {
     assert.equal(onZoomStart.callCount, 1);
     assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 2, endValue: 10 });
+    assert.equal(onZoomStart.getCall(0).args[0].actionType, "zoom");
+    assert.equal(onZoomStart.getCall(0).args[0].event.type, "dxdragend");
 
     assert.equal(onZoomEnd.callCount, 1);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 2, endValue: 10 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 4, endValue: 8 });
+    assert.equal(onZoomEnd.getCall(0).args[0].actionType, "zoom");
+    assert.equal(onZoomEnd.getCall(0).args[0].event.type, "dxdragend");
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, 0);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 2);
 });
 
 QUnit.test("With panKey pressed drag action zooms chart", function(assert) {
@@ -1051,11 +1095,17 @@ QUnit.test("With panKey pressed drag action zooms chart", function(assert) {
     assert.equal(onZoomStart.callCount, 1);
     assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 2, endValue: 10 });
+    assert.equal(onZoomStart.getCall(0).args[0].actionType, "pan");
+    assert.equal(onZoomStart.getCall(0).args[0].event.type, "dxdragstart");
 
     assert.equal(onZoomEnd.callCount, 1);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 2, endValue: 10 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 0, endValue: 8 });
+    assert.equal(onZoomEnd.getCall(0).args[0].actionType, "pan");
+    assert.equal(onZoomEnd.getCall(0).args[0].event.type, "dxdragend");
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, -2);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1);
 });
 
 QUnit.module("Touch devices", environment);
@@ -1095,6 +1145,7 @@ QUnit.test("Drag by touch pans chart, even if dragToZoom = true", function(asser
     assert.equal(onZoomStart.callCount, 2);
     assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7 });
+    assert.equal(onZoomStart.getCall(0).args[0].actionType, "pan");
 
     assert.equal(onZoomStart.getCall(1).args[0].axis, valueAxis);
     assert.deepEqual(onZoomStart.getCall(1).args[0].range, { startValue: 2, endValue: 4 });
@@ -1134,6 +1185,8 @@ QUnit.test("Pinch zoom-in both axes", function(assert) {
     assert.equal(onZoomStart.callCount, 2);
     assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 0, endValue: 10 });
+    assert.equal(onZoomStart.getCall(0).args[0].actionType, "zoom");
+    assert.equal(onZoomStart.getCall(0).args[0].event.type, "dxpinchstart");
 
     assert.equal(onZoomStart.getCall(1).args[0].axis, valueAxis);
     assert.deepEqual(onZoomStart.getCall(1).args[0].range, { startValue: 0, endValue: 5 });
@@ -1142,10 +1195,14 @@ QUnit.test("Pinch zoom-in both axes", function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 0, endValue: 10 });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 0, endValue: 5 });
+    assert.equal(onZoomEnd.getCall(0).args[0].actionType, "zoom");
+    assert.equal(onZoomEnd.getCall(0).args[0].event.type, "dxpinchend");
 
     assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis);
     assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 0, endValue: 5 });
     assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 2.5, endValue: 5 });
+    assert.equal(onZoomEnd.getCall(1).args[0].shift, 1.25);
+    assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 2);
 });
 
 QUnit.test("Pinch zoom-out both axes", function(assert) {
@@ -1191,6 +1248,8 @@ QUnit.test("Pinch zoom-out both axes", function(assert) {
     assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis);
     assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 2.5, endValue: 5 });
     assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 0, endValue: 5 });
+    assert.equal(onZoomEnd.getCall(1).args[0].shift, -1.25);
+    assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 0.5);
 });
 
 QUnit.test("Pinch zoom-in argument axis from some point", function(assert) {
@@ -1260,6 +1319,8 @@ QUnit.test("Pinch zoom-in/zoom-out argument axis from some point (discrete axis)
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 1, endValue: 9, categories: [1, 2, 3, 4, 5, 6, 7, 8, 9] });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 7, categories: [2, 3, 4, 5, 6, 7] });
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, -1);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1.5);
 
     $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 100, pageY: 200 }, { pointerId: 2, pageX: 500, pageY: 200 }] }));
     $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 200, pageY: 200 }, { pointerId: 2, pageX: 400, pageY: 200 }] }));
@@ -1267,7 +1328,8 @@ QUnit.test("Pinch zoom-in/zoom-out argument axis from some point (discrete axis)
 
     assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 2, endValue: 7, categories: [2, 3, 4, 5, 6, 7] });
     assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 1, endValue: 9, categories: [1, 2, 3, 4, 5, 6, 7, 8, 9] });
-
+    assert.equal(onZoomEnd.getCall(1).args[0].shift, 1);
+    assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 0.67);
 });
 
 QUnit.module("ScrollBar", environment);
@@ -1302,11 +1364,17 @@ QUnit.test("Scrollbar pans only argument axis", function(assert) {
     assert.equal(onZoomStart.callCount, 1);
     assert.equal(onZoomStart.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 3, endValue: 7, categories: [3, 4, 5, 6, 7] });
+    assert.equal(onZoomStart.getCall(0).args[0].actionType, "pan");
+    assert.equal(onZoomStart.getCall(0).args[0].event.type, "dxc-scroll-start");
 
     assert.equal(onZoomEnd.callCount, 1);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 3, endValue: 7, categories: [3, 4, 5, 6, 7] });
     assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 2, endValue: 6, categories: [2, 3, 4, 5, 6] });
+    assert.equal(onZoomEnd.getCall(0).args[0].actionType, "pan");
+    assert.equal(onZoomEnd.getCall(0).args[0].event.type, "dxc-scroll-end");
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, -1);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1);
 });
 
 QUnit.test("Scrollbar does not pan argument axis if it can not be panned", function(assert) {

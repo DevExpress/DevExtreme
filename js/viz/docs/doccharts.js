@@ -1859,9 +1859,11 @@ var dxChart = {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 axis:chartAxisObject
-     * @type_function_param1_field5 range:VizRange
-     * @type_function_param1_field6 cancel:boolean
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 axis:chartAxisObject
+     * @type_function_param1_field6 range:VizRange
+     * @type_function_param1_field7 cancel:boolean
+     * @type_function_param1_field8 actionType:Enums.ChartZoomPanActionType
      * @notUsedInTheme
      * @action
      */
@@ -1871,12 +1873,16 @@ var dxChart = {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 rangeStart:Date|Number:deprecated(range)
-     * @type_function_param1_field5 rangeEnd:Date|Number:deprecated(range)
-     * @type_function_param1_field6 axis:chartAxisObject
-     * @type_function_param1_field7 range:VizRange
-     * @type_function_param1_field8 previousRange:VizRange
-     * @type_function_param1_field9 cancel:boolean
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 rangeStart:Date|Number:deprecated(range)
+     * @type_function_param1_field6 rangeEnd:Date|Number:deprecated(range)
+     * @type_function_param1_field7 axis:chartAxisObject
+     * @type_function_param1_field8 range:VizRange
+     * @type_function_param1_field9 previousRange:VizRange
+     * @type_function_param1_field10 cancel:boolean
+     * @type_function_param1_field11 actionType:Enums.ChartZoomPanActionType
+     * @type_function_param1_field12 zoomFactor:Number
+     * @type_function_param1_field13 shift:Number
      * @notUsedInTheme
      * @action
      */
