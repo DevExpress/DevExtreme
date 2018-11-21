@@ -702,3 +702,36 @@ QUnit.test("Add row when 'keyExpr' and 'parentIdExpr' options are specified as f
     assert.ok($rowElements.first().hasClass("dx-row-inserted"), "insert row");
     assert.strictEqual(this.getVisibleRows()[0].data.parentId, 0, "parentId of an inserted row");
 });
+
+// T690119
+QUnit.test("Edit cell - The editable cell should be closed after click on expand button", function(assert) {
+    // arrange
+    var $testElement = $('#treeList');
+
+    this.options.editing = {
+        mode: "cell",
+        allowUpdating: true
+    };
+    this.options.loadingTimeout = 0;
+    this.options.dataSource = [
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2003, 2, 3) }
+    ];
+    this.setupTreeList();
+    this.clock.tick();
+    this.rowsView.render($testElement);
+
+    this.editCell(0, 0);
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual($(this.getCellElement(0, 0)).find(".dx-texteditor").length, 1, "has editor");
+
+    // act
+    $(this.getCellElement(1, 0)).find(".dx-treelist-collapsed").trigger("dxclick");
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual($(this.getCellElement(0, 0)).find(".dx-texteditor").length, 0, "hasn't editor");
+});

@@ -118,6 +118,10 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
             parentIdSetter(options.data, parentKey);
 
             this.callBase.apply(this, arguments);
+        },
+
+        _needToCloseEditableCell: function($targetElement) {
+            return this.callBase.apply(this, arguments) || $targetElement.closest("." + TREELIST_EXPAND_ICON_CONTAINER_CLASS).length && this.isEditing();
         }
     };
 })());
