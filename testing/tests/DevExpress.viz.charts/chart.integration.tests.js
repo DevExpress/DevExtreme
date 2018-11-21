@@ -108,11 +108,11 @@ QUnit.test("MultiAxis with title and inverted axis", function(assert) {
             },
         },
         dataSource: [
-                { arg: "first", val: 400, val1: 5, val2: 1 },
-                { arg: "second", val: 200, val1: 4, val2: 2 },
-                { arg: "third", val: 900, val1: 3, val2: 3 },
-                { arg: "fourth", val: 100, val1: 2, val2: 2 },
-                { arg: "fifth", val: 340, val1: 0, val2: 0 }],
+            { arg: "first", val: 400, val1: 5, val2: 1 },
+            { arg: "second", val: 200, val1: 4, val2: 2 },
+            { arg: "third", val: 900, val1: 3, val2: 3 },
+            { arg: "fourth", val: 100, val1: 2, val2: 2 },
+            { arg: "fifth", val: 340, val1: 0, val2: 0 }],
         series: [{
             axis: "axis2"
         }, {
@@ -2212,14 +2212,14 @@ QUnit.module("dxPieChart", moduleSetup);
 
 QUnit.test("Checking border hover when pie chart palette changed. B237181", function(assert) {
     var dataSource = [
-        { country: "Russia", area: 12, area1: 10 },
-        { country: "Canada", area: 7, area1: 10 },
-        { country: "USA", area: 7, area1: 10 },
-        { country: "China", area: 7, area1: 10 },
-        { country: "Brazil", area: 6, area1: 10 },
-        { country: "Australia", area: 5, area1: 10 },
-        { country: "India", area: 2, area1: 10 },
-        { country: "Others", area: 55, area1: 10 }
+            { country: "Russia", area: 12, area1: 10 },
+            { country: "Canada", area: 7, area1: 10 },
+            { country: "USA", area: 7, area1: 10 },
+            { country: "China", area: 7, area1: 10 },
+            { country: "Brazil", area: 6, area1: 10 },
+            { country: "Australia", area: 5, area1: 10 },
+            { country: "India", area: 2, area1: 10 },
+            { country: "Others", area: 55, area1: 10 }
         ],
         chart = this.createPieChart({
             dataSource: dataSource,

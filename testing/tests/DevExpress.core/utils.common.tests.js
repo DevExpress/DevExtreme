@@ -89,15 +89,15 @@ QUnit.module("findBestMatches");
 
 QUnit.test("basic", function(assert) {
     var items = [
-        {
-            a: 1,
-            b: 2
-        },
-        {
-            a: 1,
-            b: 2,
-            c: 3
-        }
+            {
+                a: 1,
+                b: 2
+            },
+            {
+                a: 1,
+                b: 2,
+                c: 3
+            }
         ],
         filter = {
             b: 2,
@@ -157,22 +157,22 @@ QUnit.test("only filter fields should be considered for calculating a specificit
 
 QUnit.test("filtering items by array fields", function(assert) {
     var items = [
-        {
-            a: 1
-        },
-        {
-            a: [1]
-        },
-        {
-            a: [1, 2]
-        },
-        {
-            a: [1, 0, 2]
-        },
-        {
-            a: [1, 2, 3],
-            b: 1
-        }
+            {
+                a: 1
+            },
+            {
+                a: [1]
+            },
+            {
+                a: [1, 2]
+            },
+            {
+                a: [1, 0, 2]
+            },
+            {
+                a: [1, 2, 3],
+                b: 1
+            }
         ],
         filter,
         filteredItems;

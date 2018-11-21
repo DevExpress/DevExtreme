@@ -415,16 +415,16 @@ module.exports = function(themeName, options) {
             }
 
             var cloneTextArea = $("<div>").css("display", "inline-block")
-                    .css("vertical-align", "top")
-                    .css("padding-top", $valueInput.css("padding-top"))
-                    .css("paddingBottom", $valueInput.css("paddingBottom"))
-                    .css("margin-top", $valueInput.css("margin-top"))
-                    .css("marginBottom", $valueInput.css("marginBottom"))
-                    .css("borderTopWidth", $valueInput.css("borderTopWidth"))
-                    .css("borderBottomWidth", $valueInput.css("borderBottomWidth"))
-                    .css("border-top-style", $valueInput.css("border-top-style"))
-                    .css("border-bottom-style", $valueInput.css("border-bottom-style"))
-                    .prependTo($valueInput.parent());
+                .css("vertical-align", "top")
+                .css("padding-top", $valueInput.css("padding-top"))
+                .css("paddingBottom", $valueInput.css("paddingBottom"))
+                .css("margin-top", $valueInput.css("margin-top"))
+                .css("marginBottom", $valueInput.css("marginBottom"))
+                .css("borderTopWidth", $valueInput.css("borderTopWidth"))
+                .css("borderBottomWidth", $valueInput.css("borderBottomWidth"))
+                .css("border-top-style", $valueInput.css("border-top-style"))
+                .css("border-bottom-style", $valueInput.css("border-bottom-style"))
+                .prependTo($valueInput.parent());
             testBaselineOffset($label, cloneTextArea);
         });
 
@@ -438,16 +438,16 @@ module.exports = function(themeName, options) {
             }
 
             var cloneTextArea = $("<div>").css("display", "inline-block")
-                    .css("vertical-align", "top")
-                    .css("padding-top", $valueInput.css("padding-top"))
-                    .css("paddingBottom", $valueInput.css("paddingBottom"))
-                    .css("margin-top", $valueInput.css("margin-top"))
-                    .css("marginBottom", $valueInput.css("marginBottom"))
-                    .css("borderTopWidth", $valueInput.css("borderTopWidth"))
-                    .css("borderBottomWidth", $valueInput.css("borderBottomWidth"))
-                    .css("border-top-style", $valueInput.css("border-top-style"))
-                    .css("border-bottom-style", $valueInput.css("border-bottom-style"))
-                    .prependTo($valueInput.parent());
+                .css("vertical-align", "top")
+                .css("padding-top", $valueInput.css("padding-top"))
+                .css("paddingBottom", $valueInput.css("paddingBottom"))
+                .css("margin-top", $valueInput.css("margin-top"))
+                .css("marginBottom", $valueInput.css("marginBottom"))
+                .css("borderTopWidth", $valueInput.css("borderTopWidth"))
+                .css("borderBottomWidth", $valueInput.css("borderBottomWidth"))
+                .css("border-top-style", $valueInput.css("border-top-style"))
+                .css("border-bottom-style", $valueInput.css("border-bottom-style"))
+                .prependTo($valueInput.parent());
             testBaselineOffset($label, cloneTextArea);
         });
     };

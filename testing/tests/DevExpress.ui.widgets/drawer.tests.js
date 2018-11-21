@@ -820,7 +820,7 @@ QUnit.test("drawer should be hidden after click on content", (assert) => {
             opened: true,
             shading: true
         })
-        .dxDrawer("instance"),
+            .dxDrawer("instance"),
         $content = drawer.viewContent();
 
     $($content).trigger("dxclick");
@@ -841,7 +841,7 @@ QUnit.test("closeOnOutsideClick as function should be processed correctly", (ass
             },
             opened: true
         })
-        .dxDrawer("instance"),
+            .dxDrawer("instance"),
         $content = drawer.viewContent();
 
     $($content).trigger("dxclick");

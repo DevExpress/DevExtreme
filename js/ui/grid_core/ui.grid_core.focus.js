@@ -225,7 +225,7 @@ exports.FocusController = core.ViewController.inherit((function() {
 module.exports = {
     defaultOptions: function() {
         return {
-             /**
+            /**
              * @name GridBaseOptions.focusedRowEnabled
              * @type boolean
              * @default false

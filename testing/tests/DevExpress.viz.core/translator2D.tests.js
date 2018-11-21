@@ -672,16 +672,16 @@ QUnit.test('Translate. Negative values. Invert = true', function(assert) {
 
 QUnit.test('Translate. not round values', function(assert) {
     var translator = this._createTranslator($.extend({ axisType: 'continuous', dataType: 'numeric', interval: 1, invert: false }, { min: 200, max: 700 }),
-            { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 },
-            { isHorizontal: true, breaksSize: 0, conversionValue: function(value) { return value; } });
+        { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 },
+        { isHorizontal: true, breaksSize: 0, conversionValue: function(value) { return value; } });
 
     assert.equal(translator.translate(322.33), 744.66, 'value should not be rounded');
 });
 
 QUnit.test("translate. conversion is not a function", function(assert) {
     var translator = this._createTranslator($.extend({ axisType: 'continuous', dataType: 'numeric', interval: 1, invert: false }, { min: 200, max: 700 }),
-            { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 },
-            { isHorizontal: true, breaksSize: 0, conversionValue: "" });
+        { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 },
+        { isHorizontal: true, breaksSize: 0, conversionValue: "" });
 
     assert.equal(translator.translate(322.33), 745, 'value should rounded');
 });

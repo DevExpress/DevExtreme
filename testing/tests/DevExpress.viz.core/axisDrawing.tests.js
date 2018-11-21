@@ -5093,7 +5093,7 @@ QUnit.test("Horizontal bottom. With date markers, last marker without label", fu
         var idx = 0;
         return function() {
             return [
-                { x: 0, y: 0, width: 10, height: 10 },  // title
+                { x: 0, y: 0, width: 10, height: 10 }, // title
                 { x: 0, y: 0, width: 10, height: 10 }, // tick label
                 { x: 0, y: 0, width: 10, height: 11 }, // tick label
                 { x: 0, y: 0, width: 10, height: 12 }, // tick label
@@ -5221,7 +5221,7 @@ QUnit.test("Horizontal top", function(assert) {
         var idx = 0;
         return function() {
             return [
-                { x: 0, y: 0, width: 10, height: 10 },  // title
+                { x: 0, y: 0, width: 10, height: 10 }, // title
                 { x: 0, y: 0, width: 10, height: 10 }, // tick label
                 { x: 0, y: 0, width: 10, height: 11 }, // tick label
                 { x: 0, y: 0, width: 10, height: 12 }, // tick label
@@ -5335,7 +5335,7 @@ QUnit.test("Vertical left", function(assert) {
         var idx = 0;
         return function() {
             return [
-                { x: 0, y: 0, width: 14, height: 10 },  // title
+                { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 11, height: 10 }, // tick label
                 { x: 0, y: 0, width: 12, height: 10 }, // tick label
                 { x: 0, y: 0, width: 13, height: 10 }, // tick label
@@ -5449,7 +5449,7 @@ QUnit.test("Vertical right", function(assert) {
         var idx = 0;
         return function() {
             return [
-                { x: 0, y: 0, width: 14, height: 10 },  // title
+                { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 11, height: 10 }, // tick label
                 { x: 0, y: 0, width: 12, height: 10 }, // tick label
                 { x: 0, y: 0, width: 13, height: 10 }, // tick label

@@ -36,7 +36,7 @@ QUnit.test("Some item has'expanded' field", function(assert) {
 
 QUnit.test("expansion by itemData", function(assert) {
     var data = [
-        { id: 1, text: "Item 1", expanded: false, items: [{ id: 11, text: "Item 11" }] }, { id: 12, text: "Item 12" }
+            { id: 1, text: "Item 1", expanded: false, items: [{ id: 11, text: "Item 11" }] }, { id: 12, text: "Item 12" }
         ],
         treeView = initTree({ items: data }).dxTreeView("instance");
 

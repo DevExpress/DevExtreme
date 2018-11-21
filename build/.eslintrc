@@ -4,5 +4,8 @@
     },
     "rules": {
         "no-console": "off"
+    },
+    "globals": {
+        "console": true
     }
 }

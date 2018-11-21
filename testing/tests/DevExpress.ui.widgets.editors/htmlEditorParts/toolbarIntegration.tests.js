@@ -47,7 +47,7 @@ QUnit.module("Toolbar integration", {
                 done();
             }
         })
-        .dxHtmlEditor("instance");
+            .dxHtmlEditor("instance");
 
         instance.setSelection(0, 2);
         $("#htmlEditor")

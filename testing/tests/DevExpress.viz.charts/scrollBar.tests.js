@@ -95,7 +95,7 @@ QUnit.test("init scrollBar", function(assert) {
         minVisible: null,
         visibleCategories: null
     },
-        canvas,
+    canvas,
     {
         isHorizontal: true,
         stick: false
@@ -125,7 +125,7 @@ QUnit.test("init scrollBar. Rotated", function(assert) {
         minVisible: null,
         visibleCategories: null
     },
-        canvas,
+    canvas,
     {
         isHorizontal: false,
         stick: false

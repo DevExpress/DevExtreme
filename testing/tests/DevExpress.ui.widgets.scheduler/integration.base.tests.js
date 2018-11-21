@@ -145,8 +145,8 @@ QUnit.test("Scheduler should be able to invoke unit methods", function(assert) {
 
 QUnit.test("Filter options should be passed to the load method", function(assert) {
     var resources = [
-            { field: "r1", dataSource: [{ id: 1, text: "a" }] },
-            { field: "r2", dataSource: [{ id: 1, text: "b" }] }
+        { field: "r1", dataSource: [{ id: 1, text: "a" }] },
+        { field: "r2", dataSource: [{ id: 1, text: "b" }] }
     ];
     this.createInstance({
         currentDate: new Date(2015, 5, 29),

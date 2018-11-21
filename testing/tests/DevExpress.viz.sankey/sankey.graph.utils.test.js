@@ -95,7 +95,7 @@ QUnit.test("maxOfArray, callback", function(assert) {
     assert.deepEqual(logicModule.routines.maxOfArray(
         [{ val: 5 }, { val: 7 }, { val: 1 }, { val: 9 }, { val: 8 }, { val: 2 }, { val: 3 }],
         function(item) { return item.val; }),
-        9
+    9
     );
 });
 

@@ -120,17 +120,17 @@ QUnit.test("Click on appointment should not call scheduler.showAppointmentToolti
 
 QUnit.test("Shown tooltip should have right boundary", function(assert) {
     var tasks = [
-        {
-            text: "Task 1",
-            startDate: new Date(2015, 1, 9, 1, 0),
-            endDate: new Date(2015, 1, 9, 2, 0)
-        },
-        {
-            text: "Task 2",
-            startDate: new Date(2015, 1, 9, 11, 0),
-            endDate: new Date(2015, 1, 9, 11, 0, 30),
-            allDay: true
-        }
+            {
+                text: "Task 1",
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: "Task 2",
+                startDate: new Date(2015, 1, 9, 11, 0),
+                endDate: new Date(2015, 1, 9, 11, 0, 30),
+                allDay: true
+            }
         ],
         data = new DataSource({
             store: tasks
@@ -418,7 +418,7 @@ QUnit.test("Click on tooltip-edit button should call scheduler.showAppointmentPo
         endDate: new Date(2015, 1, 9, 12, 0),
         text: "Task 2"
     },
-        "showAppointmentPopup has a right appointment data arg");
+    "showAppointmentPopup has a right appointment data arg");
 
     assert.equal(args[1], false, "showAppointmentPopup has a right 'createNewAppointment' arg");
 

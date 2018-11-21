@@ -744,9 +744,9 @@ var runTests = function() {
 
     QUnit.test("using keyExpr as primitive", function(assert) {
         var items = [
-            { key: "key1", text: "Item 1" },
-            { key: "key2", text: "Item 2" },
-            { key: "key3", text: "Item 3" }
+                { key: "key1", text: "Item 1" },
+                { key: "key2", text: "Item 2" },
+                { key: "key3", text: "Item 3" }
             ],
             instance = new TestComponent(this.$element, {
                 items: items,

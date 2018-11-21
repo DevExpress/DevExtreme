@@ -561,7 +561,7 @@ QUnit.test("onOptionChanged should not be fired after click on item", function(a
         rows: [{}],
         cols: [{}],
         items: [
-                { location: { row: 0, col: 0 }, text: "item(0,0)" }
+            { location: { row: 0, col: 0 }, text: "item(0,0)" }
         ],
         onOptionChanged: onOptionChangedStub
     });

@@ -719,7 +719,7 @@ QUnit.test("reset()", function(assert) {
 
 QUnit.test("displayExpr change at runtime", function(assert) {
     var items = [{ name: "one", value: 1 },
-                    { name: "two", value: 2 }];
+        { name: "two", value: 2 }];
 
     var $element = $("#tagBox")
             .dxTagBox({
@@ -3336,18 +3336,18 @@ function createCustomStore(data, key) {
 
 QUnit.test("the 'onSelectionChanged' action should contain correct 'addedItems' when a remote store is used", function(assert) {
     var data = [
-        {
-            "id": 1,
-            "title": "item 1"
-        },
-        {
-            "id": 2,
-            "title": "item 2"
-        },
-        {
-            "id": 3,
-            "title": "item 3"
-        }],
+            {
+                "id": 1,
+                "title": "item 1"
+            },
+            {
+                "id": 2,
+                "title": "item 2"
+            },
+            {
+                "id": 3,
+                "title": "item 3"
+            }],
         spy = sinon.spy(),
         tagBox = $("#tagBox").dxTagBox({
             dataSource: createCustomStore(data, "id"),
@@ -3370,18 +3370,18 @@ QUnit.test("the 'onSelectionChanged' action should contain correct 'addedItems' 
 
 QUnit.test("the 'onSelectionChanged' action should contain correct 'removedItems' when a remote store is used", function(assert) {
     var data = [
-        {
-            "id": 1,
-            "title": "item 1"
-        },
-        {
-            "id": 2,
-            "title": "item 2"
-        },
-        {
-            "id": 3,
-            "title": "item 3"
-        }],
+            {
+                "id": 1,
+                "title": "item 1"
+            },
+            {
+                "id": 2,
+                "title": "item 2"
+            },
+            {
+                "id": 3,
+                "title": "item 3"
+            }],
         spy = sinon.spy(),
         tagBox = $("#tagBox").dxTagBox({
             dataSource: createCustomStore(data, "id"),
@@ -4912,9 +4912,9 @@ QUnit.test("tagBox should not render duplicated tags after searching", function(
 
 QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first time as removing the item", function(assert) {
     var items = [
-        { id: 1, text: "Item 1" },
-        { id: 2, text: "Item 2" },
-        { id: 3, text: "Item 3" }
+            { id: 1, text: "Item 1" },
+            { id: 2, text: "Item 2" },
+            { id: 3, text: "Item 3" }
         ],
         tagBox = $("#tagBox").dxTagBox({
             displayExpr: "name",

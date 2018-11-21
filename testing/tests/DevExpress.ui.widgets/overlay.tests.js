@@ -1049,27 +1049,27 @@ QUnit.test("animation complete callback arguments should be correct", function(a
 
 QUnit.test("no merging for animation option should be present", function(assert) {
     var overlay = $("#overlay")
-        .dxOverlay({
-            animation: {
-                type: "pop",
-                show: {
-                    from: {
-                        opacity: 0
+            .dxOverlay({
+                animation: {
+                    type: "pop",
+                    show: {
+                        from: {
+                            opacity: 0
+                        },
+                        to: {
+                            opacity: 1
+                        }
                     },
-                    to: {
-                        opacity: 1
-                    }
-                },
-                hide: {
-                    from: {
-                        opacity: 1
-                    },
-                    to: {
-                        opacity: 0
+                    hide: {
+                        from: {
+                            opacity: 1
+                        },
+                        to: {
+                            opacity: 0
+                        }
                     }
                 }
-            }
-        }).dxOverlay("instance"),
+            }).dxOverlay("instance"),
         animation;
 
     overlay.option("animation", {
@@ -1399,11 +1399,11 @@ QUnit.test("behavior if option set to true", function(assert) {
 QUnit.test("behavior if option set to false", function(assert) {
     var onContentReadyFired = false,
         instance = $("#overlay")
-        .dxOverlay({
-            deferRendering: false,
-            onContentReady: function() { onContentReadyFired = true; }
-        })
-        .dxOverlay("instance");
+            .dxOverlay({
+                deferRendering: false,
+                onContentReady: function() { onContentReadyFired = true; }
+            })
+            .dxOverlay("instance");
 
     assert.ok(onContentReadyFired, "after overlay render, content is render too");
 
@@ -1420,7 +1420,7 @@ QUnit.test("overlay should be hidden after click outside was present", function(
             closeOnOutsideClick: true,
             visible: true
         })
-        .dxOverlay("instance"),
+            .dxOverlay("instance"),
         $content = overlay.$content();
 
     $($content).trigger("dxpointerdown");
@@ -1452,7 +1452,7 @@ QUnit.test("overlay should not be hidden after click in detached element", funct
         closeOnOutsideClick: true,
         visible: true
     })
-    .dxOverlay("instance");
+        .dxOverlay("instance");
 
     $("#content").on("dxpointerdown", function(e) {
         $("#content").replaceWith($("<div>").attr("id", "content"));

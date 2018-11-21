@@ -209,7 +209,7 @@ QUnit.test("Render items with custom model", function(assert) {
                 child: [{
                     name: "item 11",
                     child: [
-                    { name: "item 111" }
+                        { name: "item 111" }
                     ]
                 }]
             }],
@@ -418,18 +418,18 @@ QUnit.test("Menu should not crash when items changed (T310030)", function(assert
 
 QUnit.test("Try to set selected state of several items via item.selected option 2", function(assert) {
     var items = [
-        { text: "item1", selected: true },
-        {
-            text: "item2",
-            items: [
-                { text: "item2-1", selected: true },
-                {
-                    text: "item2-2",
-                    items: [{ text: "item2-2-1", selected: true }]
-                }
-            ]
-        },
-        { text: "item3", selected: true }],
+            { text: "item1", selected: true },
+            {
+                text: "item2",
+                items: [
+                    { text: "item2-1", selected: true },
+                    {
+                        text: "item2-2",
+                        items: [{ text: "item2-2-1", selected: true }]
+                    }
+                ]
+            },
+            { text: "item3", selected: true }],
         menu, $items;
 
     menu = createMenu({
@@ -486,9 +486,9 @@ QUnit.test("Selection in different submenus", function(assert) {
 
 QUnit.test("Change selection in submenu (T310158)", function(assert) {
     var items = [
-        { text: "root1", items: [{ text: "item1-1", selected: true }] },
-        { text: "root2", items: [{ text: "item2-1" }] },
-        { text: "root3", items: [{ text: "item3-1" }] }
+            { text: "root1", items: [{ text: "item1-1", selected: true }] },
+            { text: "root2", items: [{ text: "item2-1" }] },
+            { text: "root3", items: [{ text: "item3-1" }] }
         ],
         menu = createMenu({
             items: items,
@@ -882,17 +882,17 @@ QUnit.test("Show submenu onHover with custom timeout set as a number", function(
 
 QUnit.test("Show submenu and sub-submenu by default", function(assert) {
     var items = [
-        {
-            text: "itemA",
-            items: [
-                {
-                    text: "itemA-A",
-                    items: [
+            {
+                text: "itemA",
+                items: [
+                    {
+                        text: "itemA-A",
+                        items: [
                             { text: "itemA-A-A" }
-                    ]
-                }
-            ]
-        }],
+                        ]
+                    }
+                ]
+            }],
         options = { items: items },
         menu = createMenu(options),
         rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
@@ -915,17 +915,17 @@ QUnit.test("Show submenu and sub-submenu by default", function(assert) {
 
 QUnit.test("Show submenu and sub-submenu on hover", function(assert) {
     var items = [
-        {
-            text: "itemA",
-            items: [
-                {
-                    text: "itemA-A",
-                    items: [
+            {
+                text: "itemA",
+                items: [
+                    {
+                        text: "itemA-A",
+                        items: [
                             { text: "itemA-A-A" }
-                    ]
-                }
-            ]
-        }],
+                        ]
+                    }
+                ]
+            }],
         options = { showFirstSubmenuMode: "onHover", items: items },
         menu = createMenu(options),
         rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
@@ -953,13 +953,13 @@ QUnit.test("Show submenu and sub-submenu on hover", function(assert) {
 
 QUnit.test("Do not show submenu on hover if item is disabled", function(assert) {
     var items = [
-        {
-            text: "itemB",
-            disabled: true,
-            items: [
+            {
+                text: "itemB",
+                disabled: true,
+                items: [
                     { text: "itemB-A" }
-            ]
-        }
+                ]
+            }
         ],
         menu = createMenu({ showFirstSubmenuMode: "onHover", items: items }),
         rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
@@ -976,17 +976,17 @@ QUnit.test("Do not show submenu on hover if item is disabled", function(assert) 
 
 QUnit.test("Show submenu on hover and sub-submenu onClick", function(assert) {
     var items = [
-        {
-            text: "itemA",
-            items: [
-                {
-                    text: "itemA-A",
-                    items: [
+            {
+                text: "itemA",
+                items: [
+                    {
+                        text: "itemA-A",
+                        items: [
                             { text: "itemA-A-A" }
-                    ]
-                }
-            ]
-        }],
+                        ]
+                    }
+                ]
+            }],
         options = { showFirstSubmenuMode: "onHover", showSubmenuMode: "onClick", items: items },
         menu = createMenu(options),
         $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),

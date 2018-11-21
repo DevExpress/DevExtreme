@@ -40,7 +40,7 @@
                     pointerType: _pointerType,
                     pointers: []
                 },
-                    args));
+                args));
 
             $(event.delegatedTarget || event.target).trigger(event);
 

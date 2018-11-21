@@ -23,10 +23,10 @@ QUnit.module('API methods', {
         that.widths = [100, 200, 50, 50, 200];
 
         that.columns = [{ caption: 'Column 1', width: that.widths[0] },
-                        { caption: 'Column 2', width: that.widths[1] },
-                        { caption: 'Column 3', width: that.widths[2] },
-                        { caption: 'Column 4', width: that.widths[3] },
-                        { caption: 'Column 5', width: that.widths[4] }];
+            { caption: 'Column 2', width: that.widths[1] },
+            { caption: 'Column 3', width: that.widths[2] },
+            { caption: 'Column 4', width: that.widths[3] },
+            { caption: 'Column 5', width: that.widths[4] }];
 
         setupDataGridModules(that, [], {
             initViews: true,

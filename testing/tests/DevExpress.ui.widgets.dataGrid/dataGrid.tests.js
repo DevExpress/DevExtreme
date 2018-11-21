@@ -463,9 +463,9 @@ QUnit.test("selectedRowKeys option", function(assert) {
         loadingTimeout: undefined,
         dataSource: {
             store: { type: "array", key: "id", data: [
-                    { id: 1, value: "value 1" },
-                    { id: 2, value: "value 2" },
-                    { id: 3, value: "value 3" }
+                { id: 1, value: "value 1" },
+                { id: 2, value: "value 2" },
+                { id: 3, value: "value 3" }
             ]
             }
         },
@@ -765,7 +765,7 @@ QUnit.test("Check grouping context menu operability", function(assert) {
         .eq(1)
         .trigger("dxcontextmenu");
 
-    $(".dx-datagrid .dx-menu-item")  // click on "group by this"
+    $(".dx-datagrid .dx-menu-item") // click on "group by this"
         .eq(3)
         .trigger("dxclick");
 
@@ -779,7 +779,7 @@ QUnit.test("Check grouping context menu operability", function(assert) {
         .eq(1)
         .trigger("dxcontextmenu");
 
-    $(".dx-datagrid .dx-menu-item")  // click on "clear grouping"
+    $(".dx-datagrid .dx-menu-item") // click on "clear grouping"
         .eq(4)
         .trigger("dxclick");
 
@@ -1067,7 +1067,7 @@ QUnit.test("Check grouping context menu operability (ungroup one column)", funct
         .eq(3)
         .trigger("dxcontextmenu");
 
-    $(".dx-datagrid .dx-menu-item")  // click on "Ungroup this"
+    $(".dx-datagrid .dx-menu-item") // click on "Ungroup this"
         .eq(1)
         .trigger("dxclick");
 
@@ -1103,7 +1103,7 @@ QUnit.test("Ungroup one column via group row context menu", function(assert) {
         .first()
         .trigger("dxcontextmenu");
 
-    $(".dx-datagrid .dx-menu-item")  // click on "Ungroup this"
+    $(".dx-datagrid .dx-menu-item") // click on "Ungroup this"
         .eq(0)
         .trigger("dxclick");
 
@@ -1134,7 +1134,7 @@ QUnit.test("Ungroup all columns via group row context menu", function(assert) {
         .eq(1)
         .trigger("dxcontextmenu");
 
-    $(".dx-datagrid .dx-menu-item")  // click on "clear groupings"
+    $(".dx-datagrid .dx-menu-item") // click on "clear groupings"
         .eq(1)
         .trigger("dxclick");
 
@@ -2886,10 +2886,10 @@ QUnit.test("Horizontal scrollbar is not displayed when columns width has float v
             selection: { mode: "multiple", showCheckBoxesMode: "always" },
             dataSource: [],
             columns: [
-            { dataField: "firstName" },
-            { dataField: "lastName" },
-            { dataField: "room" },
-            { dataField: "birthDay" }
+                { dataField: "firstName" },
+                { dataField: "lastName" },
+                { dataField: "room" },
+                { dataField: "birthDay" }
             ]
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
@@ -2982,10 +2982,10 @@ QUnit.test("Enable rows hover via option method", function(assert) {
     var $dataGrid = $("#dataGrid").dxDataGrid({
             dataSource: [],
             columns: [
-            { dataField: "firstName" },
-            { dataField: "lastName" },
-            { dataField: "room" },
-            { dataField: "birthDay" }
+                { dataField: "firstName" },
+                { dataField: "lastName" },
+                { dataField: "room" },
+                { dataField: "birthDay" }
             ]
         }),
         instance = $dataGrid.dxDataGrid("instance"),
@@ -3029,10 +3029,10 @@ QUnit.test("resize on change width", function(assert) {
             loadingTimeout: undefined,
             dataSource: [],
             columns: [
-            { dataField: "field1" },
-            { dataField: "field2" },
-            { dataField: "field3" },
-            { dataField: "field4" }
+                { dataField: "field1" },
+                { dataField: "field2" },
+                { dataField: "field3" },
+                { dataField: "field4" }
             ]
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
@@ -3052,10 +3052,10 @@ QUnit.test("resize on change height from fixed to auto", function(assert) {
             loadingTimeout: undefined,
             dataSource: [{}],
             columns: [
-            { dataField: "field1" },
-            { dataField: "field2" },
-            { dataField: "field3" },
-            { dataField: "field4" }
+                { dataField: "field1" },
+                { dataField: "field2" },
+                { dataField: "field3" },
+                { dataField: "field4" }
             ]
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
@@ -3074,10 +3074,10 @@ QUnit.test("resize on change height from auto to fixed", function(assert) {
             loadingTimeout: undefined,
             dataSource: [{}],
             columns: [
-            { dataField: "field1" },
-            { dataField: "field2" },
-            { dataField: "field3" },
-            { dataField: "field4" }
+                { dataField: "field1" },
+                { dataField: "field2" },
+                { dataField: "field3" },
+                { dataField: "field4" }
             ]
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
@@ -3723,10 +3723,10 @@ QUnit.test("max-height from styles", function(assert) {
             loadingTimeout: undefined,
             dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
             columns: [
-            { dataField: "field1" },
-            { dataField: "field2" },
-            { dataField: "field3" },
-            { dataField: "field4" }
+                { dataField: "field1" },
+                { dataField: "field2" },
+                { dataField: "field3" },
+                { dataField: "field4" }
             ]
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
@@ -3758,8 +3758,8 @@ QUnit.test("scrollTop position must be kept after updateDimensions when scrollin
             },
             dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
             columns: [
-            { dataField: "field1" },
-            { dataField: "field2" }
+                { dataField: "field1" },
+                { dataField: "field2" }
             ]
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
@@ -3808,8 +3808,8 @@ QUnit.test("min-height from styles when showBorders true", function(assert) {
                 visible: true
             },
             columns: [
-            { dataField: "field1" },
-            { dataField: "field2" }
+                { dataField: "field1" },
+                { dataField: "field2" }
             ]
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
@@ -4392,8 +4392,8 @@ QUnit.test("column width does not changed after changing grid's width when colum
             columnAutoWidth: true,
             dataSource: [{ field1: "", field2: "Big big big big big big big big big big big text" }],
             columns: [
-            { dataField: "field1", caption: "Big_big_big_big_big_big_big_big_big_big_big caption" },
-            { dataField: "field2", caption: "" }
+                { dataField: "field1", caption: "Big_big_big_big_big_big_big_big_big_big_big caption" },
+                { dataField: "field2", caption: "" }
             ]
         }),
         dataGrid = $dataGrid.dxDataGrid("instance");
@@ -4419,8 +4419,8 @@ QUnit.test("Correct calculate height of the grid when wordWrapEnabled is true (T
         columnAutoWidth: true,
         dataSource: [{ field1: "", field2: "Big big big big big big big text" }],
         columns: [
-                { dataField: "field1", caption: "Big big big big big big big big big big big caption", width: 300 },
-                { dataField: "field2", caption: "" }
+            { dataField: "field1", caption: "Big big big big big big big big big big big caption", width: 300 },
+            { dataField: "field2", caption: "" }
         ]
     });
 
@@ -4483,8 +4483,8 @@ QUnit.test("Check sum of views height in grid", function(assert) {
             loadingTimeout: null,
             summary: {
                 totalItems: [
-                { column: "firstName", summaryType: "count" },
-                { column: "cash", summaryType: "sum" }
+                    { column: "firstName", summaryType: "count" },
+                    { column: "cash", summaryType: "sum" }
                 ]
             },
             columns: [{ dataField: "firstName" }, { dataField: "lastName" }, { dataField: "room" }, { dataField: "cash" }]
@@ -7999,8 +7999,8 @@ QUnit.test("Hide group panel and search panel when calculateDisplayValue is defi
         dataGrid = createDataGrid({
             loadingTimeout: undefined,
             dataSource: [
-            { field1: 1, field2: "test1", field3: "test2" },
-            { field1: 2, field2: "test3", field3: "test4" }
+                { field1: 1, field2: "test1", field3: "test2" },
+                { field1: 2, field2: "test3", field3: "test4" }
             ],
             columns: [{ dataField: "field1", calculateDisplayValue: commonUtils.noop, groupIndex: 0 }, { dataField: "field2", groupIndex: 1 }],
             groupPanel: { visible: true }
@@ -9565,8 +9565,8 @@ QUnit.test("Focused cell position has correct value when focus grouping row cell
             columns: ["field1", { dataField: "field2", groupIndex: 0 }, { dataField: "field3", groupIndex: 1 }, { dataField: "fixedField", fixed: true, fixedPosition: "right" }],
             dataSource: {
                 store: [
-                { field1: 1, field2: 2, field3: 3, fixedField: 4 },
-                { field1: 4, field2: 5, field3: 3, fixedField: 6 }
+                    { field1: 1, field2: 2, field3: 3, fixedField: 4 },
+                    { field1: 4, field2: 5, field3: 3, fixedField: 6 }
                 ]
             }
         }),
@@ -9628,13 +9628,13 @@ QUnit.test("Focused cell position has correct value when focus grouping row with
             columns: ["field1", { dataField: "field2", groupIndex: 0 }, { dataField: "field3" }, { dataField: "field4" }, { dataField: "fixedField", fixed: true, fixedPosition: "right" }],
             dataSource: {
                 store: [
-                { field1: 1, field2: 2, field3: 3, field4: 3, fixedField: 4 },
-                { field1: 4, field2: 5, field3: 3, field4: 3, fixedField: 6 }
+                    { field1: 1, field2: 2, field3: 3, field4: 3, fixedField: 4 },
+                    { field1: 4, field2: 5, field3: 3, field4: 3, fixedField: 6 }
                 ]
             },
             summary: {
                 groupItems: [
-                { column: "field3", alignByColumn: true, summaryType: "sum" }
+                    { column: "field3", alignByColumn: true, summaryType: "sum" }
                 ]
             }
         }),
@@ -9963,8 +9963,8 @@ QUnit.testInActiveWindow("Scroll positioned correct with fixed columns and editi
             columns: [{ dataField: "field1", width: 200 }, { dataField: "field2", width: 200 }, { dataField: "field3", width: 200 }, { dataField: "fixedField", width: "200px", fixed: true, fixedPosition: "right" }],
             dataSource: {
                 store: [
-                { field1: 1, field2: 2, field3: 3, fixedField: 4 },
-                { field1: 4, field2: 5, field3: 3, fixedField: 6 }
+                    { field1: 1, field2: 2, field3: 3, fixedField: 4 },
+                    { field1: 4, field2: 5, field3: 3, fixedField: 6 }
                 ]
             },
             editing: {
@@ -10106,8 +10106,8 @@ QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed '
             },
             dataSource: {
                 store: [
-                { field1: 1, field2: 2, field3: 3 },
-                { field1: 7, field2: 8, field3: 9 }
+                    { field1: 1, field2: 2, field3: 3 },
+                    { field1: 7, field2: 8, field3: 9 }
                 ]
             }
         }),
@@ -10123,9 +10123,9 @@ QUnit.test("resize when all columns have width", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
         columns: [
-                { dataField: "field1", width: 50 },
-                { dataField: "field2", width: 50 },
-                { dataField: "field3", width: 50 }
+            { dataField: "field1", width: 50 },
+            { dataField: "field2", width: 50 },
+            { dataField: "field3", width: 50 }
         ],
         loadingTimeout: undefined,
         dataSource: [{ field1: 1, field2: 2, field3: 3 }]
@@ -10146,9 +10146,9 @@ QUnit.test("skip columns synchronization on window resize when grid size is not 
     // arrange, act
     var dataGrid = createDataGrid({
         columns: [
-                { dataField: "field1", width: 50 },
-                { dataField: "field2", width: 50 },
-                { dataField: "field3", width: 50 }
+            { dataField: "field1", width: 50 },
+            { dataField: "field2", width: 50 },
+            { dataField: "field3", width: 50 }
         ],
         loadingTimeout: undefined,
         dataSource: [{ field1: 1, field2: 2, field3: 3 }]
@@ -10178,9 +10178,9 @@ QUnit.test("rowsView height is not changed on window resize when grid container 
     var dataGrid = createDataGrid({
         height: 500,
         columns: [
-                { dataField: "field1", width: 50 },
-                { dataField: "field2", width: 50 },
-                { dataField: "field3", width: 50 }
+            { dataField: "field1", width: 50 },
+            { dataField: "field2", width: 50 },
+            { dataField: "field3", width: 50 }
         ],
         loadingTimeout: undefined,
         dataSource: [{ field1: 1, field2: 2, field3: 3 }]
@@ -10209,9 +10209,9 @@ QUnit.test("change pageIndex when all columns have width", function(assert) {
         },
         loadPanel: false,
         columns: [
-                { dataField: "field1", width: 100, groupIndex: 0 },
-                { dataField: "field2", width: 100, groupIndex: 1 },
-                { dataField: "field3", width: 100 }
+            { dataField: "field1", width: 100, groupIndex: 0 },
+            { dataField: "field2", width: 100, groupIndex: 1 },
+            { dataField: "field3", width: 100 }
         ],
         loadingTimeout: undefined,
         dataSource: [{ field1: "test", field2: 2, field3: 3 }, { field1: "test test test test test test test test test test test", field2: 3, field3: 4 }]
@@ -10234,9 +10234,9 @@ QUnit.test("update focus border on resize", function(assert) {
         width: 150,
         filterRow: { visible: true },
         columns: [
-                { dataField: "field1" },
-                { dataField: "field2" },
-                { dataField: "field3" }
+            { dataField: "field1" },
+            { dataField: "field2" },
+            { dataField: "field3" }
         ],
         loadingTimeout: undefined,
         dataSource: [{ field1: 1, field2: 2, field3: 3 }]
@@ -11932,7 +11932,7 @@ QUnit.test("Check table params without columnWidth auto", function(assert) {
 QUnit.test("Check table params with columnWidth auto", function(assert) {
     var dataSource = {
         store: [{ firstField: "Alex_", lastField: "Ziborov_", room: 903 },
-        { firstField: "Alex_", lastField: "Ziborov_", room: 903 }]
+            { firstField: "Alex_", lastField: "Ziborov_", room: 903 }]
     };
 
     $("#dataGrid").dxDataGrid({
@@ -12046,7 +12046,7 @@ QUnit.test("Group space cells should have correct width if data rows are not vis
 QUnit.test("Check table params with set width", function(assert) {
     var dataSource = {
         store: [{ firstField: "Alex_", lastField: "Ziborov_", room: 903 },
-        { firstField: "Alex_", lastField: "Ziborov_", room: 903 }]
+            { firstField: "Alex_", lastField: "Ziborov_", room: 903 }]
     };
 
     $("#dataGrid").dxDataGrid({
