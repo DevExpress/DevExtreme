@@ -20,27 +20,27 @@ QUnit.module("Layout manager");
 QUnit.test("Layout strategy when flex is not supported", function(assert) {
     // arrange, act
     var items = [
-        {
-            dataField: "test1",
-            editorType: "dxTextBox"
-        },
-        {
-            dataField: "test2",
-            editorType: "dxTextBox",
-            helpText: "help"
-        },
-        {
-            dataField: "test3",
-            editorType: "dxRadioGroup"
-        },
-        {
-            dataField: "test4",
-            editorType: "dxCalendar"
-        },
-        {
-            dataField: "test5",
-            editorType: "dxTextArea"
-        }
+            {
+                dataField: "test1",
+                editorType: "dxTextBox"
+            },
+            {
+                dataField: "test2",
+                editorType: "dxTextBox",
+                helpText: "help"
+            },
+            {
+                dataField: "test3",
+                editorType: "dxRadioGroup"
+            },
+            {
+                dataField: "test4",
+                editorType: "dxCalendar"
+            },
+            {
+                dataField: "test5",
+                editorType: "dxTextArea"
+            }
         ],
         $testContainer = $("#container").dxLayoutManager(),
         layoutManager = $testContainer.dxLayoutManager("instance");
@@ -59,27 +59,27 @@ QUnit.test("Layout strategy when flex is not supported", function(assert) {
 QUnit.test("Layout strategy when flex is supported", function(assert) {
     // arrange, act
     var items = [
-        {
-            dataField: "test1",
-            editorType: "dxTextBox"
-        },
-        {
-            dataField: "test2",
-            editorType: "dxTextBox",
-            helpText: "help"
-        },
-        {
-            dataField: "test3",
-            editorType: "dxRadioGroup"
-        },
-        {
-            dataField: "test4",
-            editorType: "dxCalendar"
-        },
-        {
-            dataField: "test5",
-            editorType: "dxTextArea"
-        }
+            {
+                dataField: "test1",
+                editorType: "dxTextBox"
+            },
+            {
+                dataField: "test2",
+                editorType: "dxTextBox",
+                helpText: "help"
+            },
+            {
+                dataField: "test3",
+                editorType: "dxRadioGroup"
+            },
+            {
+                dataField: "test4",
+                editorType: "dxCalendar"
+            },
+            {
+                dataField: "test5",
+                editorType: "dxTextArea"
+            }
         ],
         $testContainer = $("#container").dxLayoutManager(),
         layoutManager = $testContainer.dxLayoutManager("instance");
@@ -98,27 +98,27 @@ QUnit.test("Layout strategy when flex is supported", function(assert) {
 QUnit.test("Check label alignment classes when browser is not supported flex", function(assert) {
     // arrange, act
     var items = [
-        {
-            dataField: "test1",
-            editorType: "dxTextBox"
-        },
-        {
-            dataField: "test2",
-            editorType: "dxTextBox",
-            helpText: "help"
-        },
-        {
-            dataField: "test3",
-            editorType: "dxRadioGroup"
-        },
-        {
-            dataField: "test4",
-            editorType: "dxCalendar"
-        },
-        {
-            dataField: "test5",
-            editorType: "dxTextArea"
-        }
+            {
+                dataField: "test1",
+                editorType: "dxTextBox"
+            },
+            {
+                dataField: "test2",
+                editorType: "dxTextBox",
+                helpText: "help"
+            },
+            {
+                dataField: "test3",
+                editorType: "dxRadioGroup"
+            },
+            {
+                dataField: "test4",
+                editorType: "dxCalendar"
+            },
+            {
+                dataField: "test5",
+                editorType: "dxTextArea"
+            }
         ],
         $testContainer = $("#container").dxLayoutManager(),
         layoutManager = $testContainer.dxLayoutManager("instance"),

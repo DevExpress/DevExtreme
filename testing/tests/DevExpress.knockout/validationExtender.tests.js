@@ -132,8 +132,8 @@ QUnit.test("changing observable value should cause validation", function(assert)
 QUnit.test("Model should be found as a validation group", function(assert) {
     var vm = {},
         $buttonContainer = $("<div></div>")
-                .attr("data-bind", "dxButton: { }")
-                .appendTo(FIXTURE_ELEMENT);
+            .attr("data-bind", "dxButton: { }")
+            .appendTo(FIXTURE_ELEMENT);
 
     ko.applyBindings(vm, $buttonContainer[0]);
     // act
@@ -145,11 +145,11 @@ QUnit.test("Model should be found as a validation group", function(assert) {
 QUnit.test("dxValidationGroup should win Model", function(assert) {
     var vm = {},
         $groupContainer = $("<div></div>")
-                .attr("data-bind", "dxValidationGroup: { }")
-                .appendTo(FIXTURE_ELEMENT),
+            .attr("data-bind", "dxValidationGroup: { }")
+            .appendTo(FIXTURE_ELEMENT),
         $buttonContainer = $("<div></div>")
-                .attr("data-bind", "dxButton: { }")
-                .appendTo($groupContainer);
+            .attr("data-bind", "dxButton: { }")
+            .appendTo($groupContainer);
 
 
     ko.applyBindings(vm, $groupContainer[0]);
@@ -163,8 +163,8 @@ QUnit.test("dxValidationGroup should win Model", function(assert) {
 QUnit.test("validationGroup string key should win Model", function(assert) {
     var vm = {},
         $buttonContainer = $("<div></div>")
-                .attr("data-bind", "dxButton: { validationGroup: 'uniqueGroupKey' }")
-                .appendTo(FIXTURE_ELEMENT);
+            .attr("data-bind", "dxButton: { validationGroup: 'uniqueGroupKey' }")
+            .appendTo(FIXTURE_ELEMENT);
 
 
     ko.applyBindings(vm, $buttonContainer[0]);

@@ -204,8 +204,8 @@ QUnit.test("submenus in the same level should have same horizontal offset", func
     var instance = new ContextMenu(this.$element, {
             target: "#menuTarget",
             items: [
-            { text: "item1", items: [{ text: "subItem1" }] },
-            { text: "item2WithVeryVeryLongCaption", items: [{ text: "subItem2" }] }
+                { text: "item1", items: [{ text: "subItem1" }] },
+                { text: "item2WithVeryVeryLongCaption", items: [{ text: "subItem2" }] }
             ],
             visible: true
         }),
@@ -1113,13 +1113,13 @@ QUnit.test("Separator should not be shown if last rendered item was in other lev
             items: [
                 {
                     text: 'Item 1', items: [
-                { text: 'Item 11' },
-                { text: 'Item 12', beginGroup: true, visible: false }
+                        { text: 'Item 11' },
+                        { text: 'Item 12', beginGroup: true, visible: false }
                     ]
                 },
                 {
                     text: 'Item 2', items: [
-                { text: 'Item 21' }
+                        { text: 'Item 21' }
                     ]
                 }
             ],
@@ -1284,9 +1284,9 @@ QUnit.test("submenu shouldn't be hidden after click on item with children (T6407
             items: [
                 { text: 'item1',
                     items: [
-                    { text: 'item1.1' },
-                    { text: 'item1.2' }] },
-                    { text: 'item1.3' }]
+                        { text: 'item1.1' },
+                        { text: 'item1.2' }] },
+                { text: 'item1.3' }]
         }
     ];
 
@@ -1412,8 +1412,8 @@ QUnit.test("incomplete show animation should be stopped when new submenu item st
         stopCalls = 0,
         instance = new ContextMenu(this.$element, {
             items: [
-            { text: "Item 1", items: [{ text: "Item 11" }] },
-            { text: "Item 2", items: [{ text: "Item 21" }] }
+                { text: "Item 1", items: [{ text: "Item 11" }] },
+                { text: "Item 2", items: [{ text: "Item 21" }] }
             ],
             visible: true
         }),
@@ -1945,9 +1945,9 @@ QUnit.test("Moving focus should starts from the hovered item in nested level", f
         items: [
             {
                 text: "Item 1", items: [
-                { text: "Item 11" },
-                { text: "Item 12" },
-                { text: "Item 13" }
+                    { text: "Item 11" },
+                    { text: "Item 12" },
+                    { text: "Item 13" }
                 ]
             },
             { text: "Item 2" }

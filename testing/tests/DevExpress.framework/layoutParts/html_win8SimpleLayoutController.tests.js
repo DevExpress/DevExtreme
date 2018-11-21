@@ -19,7 +19,7 @@
             DevExpress.devices,
             DevExpress.layouts.SimpleLayout.SimpleLayoutController,
             DevExpress.testHelpers
-         );
+        );
     }
 }(this, function($, devices, SimpleLayoutController, layoutHelper) {
 

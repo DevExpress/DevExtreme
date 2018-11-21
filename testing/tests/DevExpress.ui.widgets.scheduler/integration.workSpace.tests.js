@@ -1317,7 +1317,7 @@ QUnit.test("WorkSpace recalculation works fine after render dateCellTemplate if 
 });
 
 QUnit.test("Timepanel text should be calculated correctly if DST makes sense (T442904)", function(assert) {
-        // can be reproduced in PST timezone
+    // can be reproduced in PST timezone
     this.createInstance({
         dataSource: [],
         views: ["week"],

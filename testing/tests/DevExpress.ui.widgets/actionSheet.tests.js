@@ -302,13 +302,13 @@ QUnit.test("regression: B233733 dxActionSheet: popup hides on render", function(
 
 QUnit.test("regression: B233570 Menu isn't hidden after click on action", function(assert) {
     var items = [
-        {
-            text: "Action 1"
-        },
-        {
-            text: "Action 2",
-            disabled: true
-        }
+            {
+                text: "Action 1"
+            },
+            {
+                text: "Action 2",
+                disabled: true
+            }
         ],
         itemElements,
         first,
@@ -505,7 +505,7 @@ QUnit.module();
 QUnit.test("Forward templates to popup", function(assert) {
     var $actionSheet = $("#actionSheet")
         .append($("<div />")
-        .attr("data-options", "dxTemplate : { name: 'title' }"));
+            .attr("data-options", "dxTemplate : { name: 'title' }"));
 
     $actionSheet.dxActionSheet();
 
@@ -534,12 +534,12 @@ QUnit.module("regressions", {
 
 QUnit.test("Q463379 - dxActionSheet adds duplicated items when they are added at runtime (13.2 Beta)", function(assert) {
     var items = [
-        {
-            text: "Action 1"
-        },
-        {
-            text: "Action 2"
-        }
+            {
+                text: "Action 1"
+            },
+            {
+                text: "Action 2"
+            }
         ],
         $actionSheet = $("#actionSheet"),
         $itemElements;

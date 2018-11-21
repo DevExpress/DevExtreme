@@ -1660,16 +1660,16 @@ QUnit.test("deprecated 'ignore' mode", function(assert) {
 // T497323
 QUnit.test("frequent tisks", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 2, width: 20, height: 10 },
-        { x: 25, y: 2, width: 20, height: 8 },
-        { x: 50, y: 2, width: 20, height: 14 },
-        { x: 75, y: 2, width: 20, height: 15 },
-        { x: 0, y: 2, width: 20, height: 10 },
-        { x: 0, y: 2, width: 20, height: 10 },
-        { x: 0, y: 2, width: 20, height: 10 },
-        { x: 0, y: 2, width: 20, height: 10 },
-        { x: 0, y: 2, width: 20, height: 10 },
-        { x: 0, y: 2, width: 20, height: 10 }
+            { x: 0, y: 2, width: 20, height: 10 },
+            { x: 25, y: 2, width: 20, height: 8 },
+            { x: 50, y: 2, width: 20, height: 14 },
+            { x: 75, y: 2, width: 20, height: 15 },
+            { x: 0, y: 2, width: 20, height: 10 },
+            { x: 0, y: 2, width: 20, height: 10 },
+            { x: 0, y: 2, width: 20, height: 10 },
+            { x: 0, y: 2, width: 20, height: 10 },
+            { x: 0, y: 2, width: 20, height: 10 },
+            { x: 0, y: 2, width: 20, height: 10 }
         ],
         text;
 

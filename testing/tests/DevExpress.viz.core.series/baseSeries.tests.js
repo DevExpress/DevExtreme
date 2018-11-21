@@ -4441,7 +4441,7 @@ QUnit.test("notification of series. allSeriesPoints. multiply mode", function(as
     target2 = series.getAllPoints()[1];
     target1.getOptions.returns({ selectionMode: "allSeriesPoints" });
     target2.getOptions.returns({ selectionMode: "allSeriesPoints" });
-    target1.isSelected.returns(true);   // emulation multiple mode
+    target1.isSelected.returns(true); // emulation multiple mode
     series.notify({
         action: "pointSelect",
         target: target1

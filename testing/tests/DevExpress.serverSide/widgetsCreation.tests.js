@@ -96,7 +96,7 @@ Object.keys(widgets).forEach(function(widget) {
             var prevValue = options[optionName],
                 newValue = prevValue;
 
-             // NOTE: some widgets doesn't support dataSource === null
+            // NOTE: some widgets doesn't support dataSource === null
             if(optionName === "dataSource") {
                 // NOTE: dxResponsiveBox supports only plain object in items
                 var item = widget === "ResponsiveBox" ? { text: 1 } : 1;

@@ -45,7 +45,7 @@ QUnit.begin(function() {
         _clean: vizMocks.environmentMethodInvoker('onClean'),
         _render: vizMocks.environmentMethodInvoker('onRender'),
         _createThemeManager: vizMocks.environmentMethodInvoker("onCreateThemeManager"),
-        //_handleThemeOptionsCore: vizMocks.environmentMethodInvoker("onHandleThemeOptionsCore")
+        // _handleThemeOptionsCore: vizMocks.environmentMethodInvoker("onHandleThemeOptionsCore")
     });
 
     registerComponent('dxBaseWidgetTester', dxBaseWidgetTester);
@@ -978,7 +978,7 @@ QUnit.module("Incident occurred", $.extend({}, environment, {
         environment.beforeEach.apply(this, arguments);
         this.ORIGINAL_MESSAGES = errors.ERROR_MESSAGES;
         errors.ERROR_MESSAGES = {
-            W0001: '',  // To prevent failure on reading "incidentOccurred" option in tests
+            W0001: '', // To prevent failure on reading "incidentOccurred" option in tests
             E100: 'Templated text 1: {0}, Templated text 2: {1}',
             W100: 'Warning: Templated text 1: {0}, Templated text 2: {1}'
         };

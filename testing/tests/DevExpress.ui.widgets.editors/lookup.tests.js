@@ -448,8 +448,8 @@ QUnit.test("valueExpr calculating", function(assert) {
     var store = new ArrayStore({
             key: "k",
             data: [
-            { k: 1, v: "a" },
-            { k: 2, v: "b" }
+                { k: 1, v: "a" },
+                { k: 2, v: "b" }
             ]
         }),
 
@@ -527,11 +527,11 @@ QUnit.test("external dataSource filter applied during search value", function(as
 
 QUnit.test("option value returns object when valueExpr is 'this'", function(assert) {
     var dataArray = [
-            { id: '1', value: 'one' },
-            { id: '2', value: 'two' },
-            { id: '3', value: 'three' },
-            { id: '4', value: 'four' },
-            { id: '5', value: 'five' }
+        { id: '1', value: 'one' },
+        { id: '2', value: 'two' },
+        { id: '3', value: 'three' },
+        { id: '4', value: 'four' },
+        { id: '5', value: 'five' }
     ];
     var store = new CustomStore({
         key: 'id',
@@ -673,9 +673,9 @@ QUnit.test("multiple field search with dataSource (Q521604)", function(assert) {
 
 QUnit.test("Empty dataSource searchExpr (B253811)", function(assert) {
     var items = [
-                    { id: 1, name: "red_toy", desc: "A giant toy replicating real vehicle" },
-                    { id: 2, name: "green_bike", desc: "Stuff for a young dabbler" },
-                    { id: 3, name: "yellow_monster", desc: "A bike of premium quality" }];
+        { id: 1, name: "red_toy", desc: "A giant toy replicating real vehicle" },
+        { id: 2, name: "green_bike", desc: "Stuff for a young dabbler" },
+        { id: 3, name: "yellow_monster", desc: "A bike of premium quality" }];
 
     var dataSource = new DataSource({
         store: items
@@ -837,21 +837,21 @@ QUnit.test("allow dataSource with map function", function(assert) {
 
 QUnit.test("UserDateSource with map, minSearchLength > 0", function(assert) {
     var items = [
-        {
-            id: 1,
-            name: "Tom",
-            lastName: "Smith"
-        },
-        {
-            id: 2,
-            name: "James",
-            lastName: "Adams"
-        },
-        {
-            id: 3,
-            name: "Joe",
-            lastName: "Doe"
-        }
+            {
+                id: 1,
+                name: "Tom",
+                lastName: "Smith"
+            },
+            {
+                id: 2,
+                name: "James",
+                lastName: "Adams"
+            },
+            {
+                id: 3,
+                name: "Joe",
+                lastName: "Doe"
+            }
         ],
         dataSource = new DataSource({
             store: items,
@@ -893,14 +893,14 @@ QUnit.test("UserDateSource with map, minSearchLength > 0", function(assert) {
 
 QUnit.test("value onValueChanged callback", function(assert) {
     var items = [
-        {
-            id: 1,
-            name: "Tom"
-        },
-        {
-            id: 2,
-            name: "James"
-        }
+            {
+                id: 1,
+                name: "Tom"
+            },
+            {
+                id: 2,
+                name: "James"
+            }
         ],
         lookup = this.element
             .dxLookup({
@@ -1384,8 +1384,8 @@ QUnit.test("Check popup position for Material theme when fullScreen option is tr
 
     try {
         var lookup = $lookup
-                        .dxLookup({ dataSource: ["blue", "orange", "lime", "purple"], value: "orange", fullScreen: true })
-                        .dxLookup("instance");
+            .dxLookup({ dataSource: ["blue", "orange", "lime", "purple"], value: "orange", fullScreen: true })
+            .dxLookup("instance");
 
         $(lookup.field()).trigger("dxclick");
         assert.equal($(lookup._popup.option("position").of)[0], window, "popup position of the window");
@@ -1758,8 +1758,8 @@ QUnit.test("value with dataSource", function(assert) {
 QUnit.test("value with dataSource and complex items", function(assert) {
     var dataSource = new DataSource({
             store: [
-            { value: 1 },
-            { value: 2 }
+                { value: 1 },
+                { value: 2 }
             ],
             pageSize: 1,
             paginate: false
@@ -2286,7 +2286,7 @@ QUnit.test("list option bouncing", function(assert) {
 
 QUnit.test("group options bouncing", function(assert) {
     var dataSource = [{ key: "header", items: ["1", "2"] },
-        { key: "header", items: ["1", "2"] }],
+            { key: "header", items: ["1", "2"] }],
         $lookup = $("#lookupOptions").dxLookup({
             dataSource: dataSource,
             grouped: true,

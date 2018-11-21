@@ -749,7 +749,7 @@ QUnit.module("Begin/end update functionality", function() {
     QUnit.test("Update is began during processing option change and ended some time after it", function(assert) {
         var widget = $("#container").dxRangeSelector().dxRangeSelector("instance");
         widget.option("onDrawn", function() {
-            widget.option("onDrawn", null);     // Only event after "dataSource" update is required for test scenario.
+            widget.option("onDrawn", null); // Only event after "dataSource" update is required for test scenario.
             widget.beginUpdate();
         });
         widget.option("dataSource", [{ arg: 10, val: 1 }, { arg: 20, val: 2 }]);

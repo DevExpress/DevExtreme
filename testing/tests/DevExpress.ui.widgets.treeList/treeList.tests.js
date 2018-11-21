@@ -846,16 +846,16 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
             expandedRowKeys: [1],
             dataSource: [
                 { name: 'Category1', id: 1 },
-                    { name: 'SubCategory1', id: 2, parentId: 1 },
-                    { name: 'SubCategory2', id: 3, parentId: 1 },
+                { name: 'SubCategory1', id: 2, parentId: 1 },
+                { name: 'SubCategory2', id: 3, parentId: 1 },
                 { name: 'Category2', id: 4 },
                 { name: 'Category3', id: 5 },
                 { name: 'Category4', id: 6 },
                 { name: 'Category7', id: 7 },
                 { name: 'Category5', id: 8 },
-                    { name: 'SubCategory3', id: 9, parentId: 8 },
-                        { name: 'SubCategory5', id: 12, parentId: 9 },
-                    { name: 'SubCategory4', id: 10, parentId: 8 },
+                { name: 'SubCategory3', id: 9, parentId: 8 },
+                { name: 'SubCategory5', id: 12, parentId: 9 },
+                { name: 'SubCategory4', id: 10, parentId: 8 },
                 { name: 'Category6', id: 11 }
             ]
         }),

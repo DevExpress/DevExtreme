@@ -1402,7 +1402,7 @@ QUnit.test("Selected filter operation should be reset to the default state after
         this.clock.tick();
 
         filterMenu = this.$element().find('.dx-menu .dx-menu-item').first();
-        $(filterMenu).trigger("dxclick");  // open filter menu
+        $(filterMenu).trigger("dxclick"); // open filter menu
         filterMenuItem = $("body").find('.dx-overlay-content').first().find('.dx-menu-item').last();
 
         // act

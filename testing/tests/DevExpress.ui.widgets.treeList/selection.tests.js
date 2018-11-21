@@ -54,7 +54,7 @@ var teardownModule = function() {
 QUnit.module("Selection", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Select row", function(assert) {
-   // arrange
+    // arrange
     var data = { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
         $testElement = $('#treeList');
 
@@ -94,7 +94,7 @@ QUnit.test("Select row when store hasn't key", function(assert) {
 });
 
 QUnit.test("Select all rows", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.setupTreeList();
@@ -116,7 +116,7 @@ QUnit.test("Select all rows", function(assert) {
 });
 
 QUnit.test("Deselect all rows", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.selectedRowKeys = [1, 2];
@@ -134,7 +134,7 @@ QUnit.test("Deselect all rows", function(assert) {
 });
 
 QUnit.test("Select all rows if autoExpandAll is true", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.autoExpandAll = true;
@@ -151,7 +151,7 @@ QUnit.test("Select all rows if autoExpandAll is true", function(assert) {
 });
 
 QUnit.test("Select all rows if filter is applied", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.dataSource.push({ id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) });
@@ -172,15 +172,15 @@ QUnit.test("Select all rows if filter is applied", function(assert) {
 });
 
 QUnit.test("getSelectedRowKeys with non-recursive selection", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-            { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
     ];
     this.options.expandedRowKeys = [1, 4];
     this.options.selectedRowKeys = [1, 2, 4];
@@ -195,7 +195,7 @@ QUnit.test("getSelectedRowKeys with non-recursive selection", function(assert) {
 });
 
 QUnit.test("Checkboxes should be rendered in right place", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.selection = { mode: "multiple", showCheckBoxesMode: "always" };
@@ -211,7 +211,7 @@ QUnit.test("Checkboxes should be rendered in right place", function(assert) {
 });
 
 QUnit.test("Checkboxes should not be rendered if selection is not multiple", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.selection = { mode: "single", showCheckBoxesMode: "always" };
@@ -245,7 +245,7 @@ QUnit.test("Click on select checkbox should works correctly", function(assert) {
 });
 
 QUnit.test("Click on selectAll checkbox should works correctly", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.showColumnHeaders = true;
@@ -264,7 +264,7 @@ QUnit.test("Click on selectAll checkbox should works correctly", function(assert
 });
 
 QUnit.test("Click on selectAll checkbox should works correctly when sorting is enabled", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList'),
         clock = sinon.useFakeTimers();
 
@@ -290,7 +290,7 @@ QUnit.test("Click on selectAll checkbox should works correctly when sorting is e
 });
 
 QUnit.test("Click on selectAll checkbox should check row checkboxes", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.showColumnHeaders = true;
@@ -329,7 +329,7 @@ QUnit.test("Reordering column, selection", function(assert) {
 });
 
 QUnit.test("Checking state selectAll checkbox - deselect row after select All", function(assert) {
-   // arrange
+    // arrange
     var $selectAllCheckBox,
         $testElement = $('#treeList');
 
@@ -365,7 +365,7 @@ QUnit.test("Checking state selectAll checkbox - deselect row after select All", 
 });
 
 QUnit.test("Checking state selectAll checkbox - select all when there is filter", function(assert) {
-   // arrange
+    // arrange
     var $selectAllCheckBox,
         $testElement = $("#treeList");
 
@@ -396,7 +396,7 @@ QUnit.test("Checking state selectAll checkbox - select all when there is filter"
 });
 
 QUnit.test("Not select row when click by expanding icon", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.setupTreeList();
@@ -448,7 +448,7 @@ QUnit.module("Recursive selection", {
 });
 
 QUnit.test("Selecting row", function(assert) {
-   // arrange
+    // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -467,15 +467,15 @@ QUnit.test("Selecting row", function(assert) {
 });
 
 QUnit.test("Deselecting row", function(assert) {
-   // arrange
+    // arrange
     var items,
         $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
     ];
 
     this.options.expandedRowKeys = [1];
@@ -496,15 +496,15 @@ QUnit.test("Deselecting row", function(assert) {
 });
 
 QUnit.test("Selecting a row when several of his children are selected", function(assert) {
-   // arrange
+    // arrange
     var items,
         $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
     ];
     this.options.expandedRowKeys = [1];
     this.options.selectedRowKeys = [3, 4];
@@ -524,14 +524,14 @@ QUnit.test("Selecting a row when several of his children are selected", function
 });
 
 QUnit.test("Deselecting the row when all children are selected", function(assert) {
-   // arrange
+    // arrange
     var items,
         $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) }
     ];
     this.options.expandedRowKeys = [1];
     this.options.selectedRowKeys = [2, 3];
@@ -550,16 +550,16 @@ QUnit.test("Deselecting the row when all children are selected", function(assert
 });
 
 QUnit.test("Select All", function(assert) {
-   // arrange
+    // arrange
     var items,
         $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-            { id: 5, field1: 'test5', field2: 5, field3: new Date(2001, 0, 5) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, field1: 'test5', field2: 5, field3: new Date(2001, 0, 5) }
     ];
     this.options.expandedRowKeys = [1];
     this.setupTreeList();
@@ -579,16 +579,16 @@ QUnit.test("Select All", function(assert) {
 });
 
 QUnit.test("Select All when several rows are selected", function(assert) {
-   // arrange
+    // arrange
     var items,
         $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-            { id: 5, field1: 'test5', field2: 5, field3: new Date(2001, 0, 5) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, field1: 'test5', field2: 5, field3: new Date(2001, 0, 5) }
     ];
     this.options.expandedRowKeys = [1];
     this.options.selectedRowKeys = [2, 3];
@@ -609,15 +609,15 @@ QUnit.test("Select All when several rows are selected", function(assert) {
 });
 
 QUnit.test("Deselect All", function(assert) {
-   // arrange
+    // arrange
     var items,
         $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
     ];
     this.options.expandedRowKeys = [1];
     this.options.selectedRowKeys = [2, 3, 4];
@@ -637,7 +637,7 @@ QUnit.test("Deselect All", function(assert) {
 });
 
 QUnit.test("Checking arguments of the 'onSelectionChanged' event when select row", function(assert) {
-   // arrange
+    // arrange
     var selectionChangedArgs = [],
         $testElement = $('#treeList'),
         items = [
@@ -670,7 +670,7 @@ QUnit.test("Checking arguments of the 'onSelectionChanged' event when select row
 });
 
 QUnit.test("Checking arguments of the 'onSelectionChanged' event when deselect row", function(assert) {
-   // arrange
+    // arrange
     var selectionChangedArgs = [],
         $testElement = $('#treeList'),
         items = [
@@ -703,7 +703,7 @@ QUnit.test("Checking arguments of the 'onSelectionChanged' event when deselect r
 });
 
 QUnit.test("Checking arguments of the 'onSelectionChanged' event when select/deselect all rows", function(assert) {
-   // arrange
+    // arrange
     var selectionChangedArgs = [],
         $testElement = $('#treeList'),
         items = [
@@ -743,15 +743,15 @@ QUnit.test("Checking arguments of the 'onSelectionChanged' event when select/des
 });
 
 QUnit.test("getSelectedRowKeys with default parameter", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-            { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
     ];
     this.options.expandedRowKeys = [1];
     this.options.selectedRowKeys = [2, 4];
@@ -763,16 +763,16 @@ QUnit.test("getSelectedRowKeys with default parameter", function(assert) {
 });
 
 QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {
-   // arrange
+    // arrange
     sinon.spy(errors, "log");
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-            { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
     ];
     this.options.expandedRowKeys = [1];
     this.options.selectedRowKeys = [2, 4];
@@ -790,15 +790,15 @@ QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {
 });
 
 QUnit.test("getSelectedRowKeys with 'all' parameter", function(assert) {
-   // arrange
+    // arrange
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-            { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
     ];
     this.options.expandedRowKeys = [1, 4];
     this.options.selectedRowKeys = [2, 3, 4];
@@ -814,20 +814,20 @@ QUnit.test("getSelectedRowKeys with 'excludeRecursive' parameter", function(asse
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
-             { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-             { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-             { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-             { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-             { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) },
-             { id: 6, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-             { id: 7, parentId: 6, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) },
+        { id: 6, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 7, parentId: 6, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
     ];
     this.options.expandedRowKeys = [1, 4];
     this.options.selectedRowKeys = [2, 5, 7];
     this.setupTreeList();
     this.rowsView.render($testElement);
 
-     // act, assert
+    // act, assert
     assert.deepEqual(this.getSelectedRowKeys("excludeRecursive"), [2, 4, 6], "all selected items");
 });
 
@@ -897,15 +897,15 @@ QUnit.test("getSelectedRowsData with mode parameter when key has no data", funct
 
 
 QUnit.test("Selection state of rows should be updated on loadDescendants", function(assert) {
-   // arrange
+    // arrange
     var clock = sinon.useFakeTimers(),
         $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
     ];
     this.options.remoteOperations = true;
     this.options.loadingTimeout = 0;
@@ -928,16 +928,16 @@ QUnit.test("Selection state of rows should be updated on loadDescendants", funct
 });
 
 QUnit.test("Checkbox of the parent node should be in an indeterminate state when deselecting child node", function(assert) {
-   // arrange
+    // arrange
     var items,
         $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-            { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
     ];
     this.options.expandedRowKeys = [1];
     this.options.selectedRowKeys = [1];
@@ -954,7 +954,7 @@ QUnit.test("Checkbox of the parent node should be in an indeterminate state when
 });
 
 QUnit.test("Update selection after expanding node when 'remoteOperations' is true", function(assert) {
-   // arrange
+    // arrange
     var items,
         $testElement = $('#treeList');
 
@@ -985,10 +985,10 @@ QUnit.test("Changing recursive option at runtime - Deselecting row when all rows
 
     this.options.selection.recursive = false;
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2001, 0, 2) },
-            { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 2, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2001, 0, 2) },
+        { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 2, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
     ];
     this.options.expandedRowKeys = [1, 2];
     this.setupTreeList();
@@ -1011,12 +1011,12 @@ QUnit.test("Deselecting child node when all nodes are selected", function(assert
         $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-            { id: 5, parentId: 3, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) },
-            { id: 6, parentId: 3, field1: 'test6', field2: 6, field3: new Date(2002, 1, 6) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, parentId: 3, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) },
+        { id: 6, parentId: 3, field1: 'test6', field2: 6, field3: new Date(2002, 1, 6) }
     ];
 
     this.options.expandedRowKeys = [3];
@@ -1044,11 +1044,11 @@ QUnit.test("Select all when end nodes are selected", function(assert) {
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-            { id: 5, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
     ];
 
     this.options.selectedRowKeys = [2, 3, 4];
@@ -1068,11 +1068,11 @@ QUnit.test("Deselect all after deselecting  -> selecting a nested node", functio
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-            { id: 5, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
     ];
 
     this.options.selectedRowKeys = [1, 5];
@@ -1158,11 +1158,11 @@ QUnit.test("Select all after filtering data", function(assert) {
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-            { id: 5, field1: 'test5', field2: 5, field3: new Date(2001, 0, 5) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, field1: 'test5', field2: 5, field3: new Date(2001, 0, 5) }
     ];
     this.options.searchPanel = {
         text: "test2"
@@ -1217,12 +1217,12 @@ QUnit.test("Check selectedRowKeys after deselecting nested node", function(asser
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
-            { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
-            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
-            { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
-            { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
-            { id: 5, parentId: 2, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) },
-            { id: 6, parentId: 1, field1: 'test6', field2: 6, field3: new Date(2002, 1, 6) }
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+        { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+        { id: 5, parentId: 2, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) },
+        { id: 6, parentId: 1, field1: 'test6', field2: 6, field3: new Date(2002, 1, 6) }
     ];
 
     this.options.selectedRowKeys = [2];

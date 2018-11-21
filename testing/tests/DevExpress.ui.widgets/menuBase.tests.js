@@ -424,8 +424,8 @@ QUnit.test('showSubmenuMode - onHover - set as string without delay', function(a
 QUnit.test('previous submenu should not appear if other submenu shown timeout is started', function(assert) {
     var menuBase = createMenu({
             items: [
-            { text: 'item1', items: [{ text: 'item1-1' }] },
-            { text: 'item2', items: [{ text: 'item2-1' }] }
+                { text: 'item1', items: [{ text: 'item1-1' }] },
+                { text: 'item2', items: [{ text: 'item2-1' }] }
             ],
             showSubmenuMode: { name: 'onHover', delay: 300 }
         }),
@@ -512,9 +512,9 @@ QUnit.test('Set selected item via item.selected option', function(assert) {
 
 QUnit.test('Priority of selection', function(assert) {
     var items = [
-        { text: 'item1' },
-        { text: 'item2', selected: true },
-        { text: 'item3' }],
+            { text: 'item1' },
+            { text: 'item2', selected: true },
+            { text: 'item3' }],
         menuBase = createMenu({
             items: items,
             selectedItem: items[2],
@@ -543,9 +543,9 @@ QUnit.test('Try to set selected state of several items via item.selected option'
 
 QUnit.test('Set selected item via selectedItem option', function(assert) {
     var items = [
-        { text: 'item1' },
-        { text: 'item2' },
-        { text: 'item3' }],
+            { text: 'item1' },
+            { text: 'item2' },
+            { text: 'item3' }],
         menuBase = createMenu({
             items: items,
             selectedItem: items[1],
@@ -741,14 +741,14 @@ QUnit.test("onSelectionChanged should have correct API (T311914)", function(asse
 QUnit.test('Prevent selection item on click', function(assert) {
     var items = [
             { text: 'item1' },
-        {
-            text: 'item2',
-            selected: true,
-            items: [
+            {
+                text: 'item2',
+                selected: true,
+                items: [
                     { text: 'item2-1' },
                     { text: 'item2-2' }
-            ]
-        }
+                ]
+            }
         ],
         menuBase = createMenu({
             items: items,
@@ -908,8 +908,8 @@ QUnit.test("menu item should not have aria-selected attribute", function(assert)
 QUnit.test("aria-haspopup attribute for items having child", function(assert) {
     var menuBase = createMenu({
             items: [
-            { text: "1", items: [{ text: "11" }] },
-            { text: "2" }
+                { text: "1", items: [{ text: "11" }] },
+                { text: "2" }
             ]
         }),
         $itemFirst = menuBase.element.find("." + DX_MENU_ITEM_CLASS).first(),

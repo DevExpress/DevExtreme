@@ -545,8 +545,8 @@ QUnit.test("Form items order is equal to the grid columns order", function(asser
     $(".dx-datagrid").width(100);
 
     this.items = [
-            { firstName: "Alex", lastName: "Dow", city: "Washington" },
-            { firstName: "John", lastName: "Pierce", city: "Oakwille" }
+        { firstName: "Alex", lastName: "Dow", city: "Washington" },
+        { firstName: "John", lastName: "Pierce", city: "Oakwille" }
     ];
 
     this.options = {
@@ -580,8 +580,8 @@ QUnit.test("Form items were created readOnly if columns were readOnly", function
     $(".dx-datagrid").width(100);
 
     this.items = [
-            { firstName: "Alex", lastName: "Dow", city: "Washington", state: true },
-            { firstName: "John", lastName: "Pierce", city: "Oakwille", state: false }
+        { firstName: "Alex", lastName: "Dow", city: "Washington", state: true },
+        { firstName: "John", lastName: "Pierce", city: "Oakwille", state: false }
     ];
 
     this.options = {
@@ -589,9 +589,9 @@ QUnit.test("Form items were created readOnly if columns were readOnly", function
     };
 
     this.columns = [
-                { dataField: 'firstName', index: 0, allowEditing: true },
-                { dataField: 'lastName', index: 1, allowEditing: true },
-                { dataField: 'state', index: 2, allowEditing: true },
+        { dataField: 'firstName', index: 0, allowEditing: true },
+        { dataField: 'lastName', index: 1, allowEditing: true },
+        { dataField: 'state', index: 2, allowEditing: true },
     ];
 
     setupDataGrid(this);

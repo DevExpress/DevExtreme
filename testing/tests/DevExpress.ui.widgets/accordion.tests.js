@@ -499,10 +499,10 @@ QUnit.test("height option in 'auto' mode when widget is multiple", function(asse
     var $element = $("#html-template-accordion"),
         instance = $element.dxAccordion({
             items: [
-            { title: "", html: "<div style=\"height: 50px\">" },
-            { title: "", html: "<div style=\"height: 100px\">" },
-            { title: "", html: "<div style=\"height: 50px\">" },
-            { title: "", html: "<div style=\"height: 100px\">" }
+                { title: "", html: "<div style=\"height: 50px\">" },
+                { title: "", html: "<div style=\"height: 100px\">" },
+                { title: "", html: "<div style=\"height: 50px\">" },
+                { title: "", html: "<div style=\"height: 100px\">" }
             ],
             height: "auto",
             selectedIndex: 0,

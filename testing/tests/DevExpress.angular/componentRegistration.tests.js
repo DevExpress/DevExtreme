@@ -72,8 +72,8 @@ QUnit.test("simple component init", function(assert) {
 
 QUnit.test("component options from scope", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "options")
-            .appendTo(this.$controller);
+        .attr("dx-test", "options")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.options = {
@@ -103,8 +103,8 @@ QUnit.test("component options from scope", function(assert) {
 
 QUnit.test("component option fields from scope", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ text: vm.text }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ text: vm.text }")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.vm = {
@@ -134,8 +134,8 @@ QUnit.test("component option fields from scope", function(assert) {
 
 QUnit.test("component with bindingOptions", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: { text: 'vm.text' } }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: { text: 'vm.text' } }")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.vm = {
@@ -168,8 +168,8 @@ QUnit.test("component with bindingOptions", function(assert) {
 
 QUnit.test("component with bindingOptions and computed binding", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: { text: 'vm[field]' } }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: { text: 'vm[field]' } }")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.vm = {
@@ -196,8 +196,8 @@ QUnit.test("component with bindingOptions and computed binding", function(assert
 
 QUnit.test("component with bindingOptions for nested option", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ obj: { }, bindingOptions: { 'obj.text': 'vm.caption' } }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ obj: { }, bindingOptions: { 'obj.text': 'vm.caption' } }")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.vm = {
@@ -223,8 +223,8 @@ QUnit.test("component with bindingOptions for nested option", function(assert) {
 
 QUnit.test("component with bindingOptions from scope", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: defs }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: defs }")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.vm = {
@@ -261,8 +261,8 @@ QUnit.test("component with bindingOptions from scope", function(assert) {
 
 QUnit.test("component with bindingOptions from scope inside sync action (T302197)", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ onInitialized: inited, bindingOptions: defs }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ onInitialized: inited, bindingOptions: defs }")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.vm = {
@@ -297,8 +297,8 @@ QUnit.test("component with bindingOptions from scope when invalid value for widg
     registerComponent("dxTestWithValidatedOption", TestComponent);
 
     const $markup = $("<div></div>")
-            .attr("dx-test-with-validated-option", "{ bindingOptions: { width: 'width' }}")
-            .appendTo(this.$controller);
+        .attr("dx-test-with-validated-option", "{ bindingOptions: { width: 'width' }}")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.width = 10;
@@ -322,8 +322,8 @@ QUnit.test("component with bindingOptions from scope when invalid value for widg
 
 QUnit.test("bindingOptions can be inherited inside options object (T426046)", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "config")
-            .appendTo(this.$controller);
+        .attr("dx-test", "config")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         function baseOption() { }
@@ -349,8 +349,8 @@ QUnit.test("bindingOptions can be inherited inside options object (T426046)", fu
 
 QUnit.test("bindingOptions fields can be inherited", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "config")
-            .appendTo(this.$controller);
+        .attr("dx-test", "config")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         function baseOption() { }
@@ -450,8 +450,8 @@ QUnit.test("DOMComponent does not control descendant bindings", function(assert)
 
 QUnit.test("changing a field of bound object changes component option", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: { obj: 'obj' } }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: { obj: 'obj' } }")
+        .appendTo(this.$controller);
 
     let optionChanged = false;
 
@@ -480,8 +480,8 @@ QUnit.test("changing a field of bound object changes component option", function
 
 QUnit.test("binding options with deep=true for array option", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: { items: { deep: true, dataPath: 'dataItems' } } }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: { items: { deep: true, dataPath: 'dataItems' } } }")
+        .appendTo(this.$controller);
 
     let optionChanged = false;
 
@@ -514,8 +514,8 @@ QUnit.test("binding options with deep=true for array option", function(assert) {
 
 QUnit.test("binding options with deep=false for array option", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: { items: { deep: false, dataPath: 'dataItems' } } }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: { items: { deep: false, dataPath: 'dataItems' } } }")
+        .appendTo(this.$controller);
 
     let optionChanged = false;
 
@@ -548,8 +548,8 @@ QUnit.test("binding options with deep=false for array option", function(assert) 
 
 QUnit.test("binding options with deep=true for not array option", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: { option: { deep: true, dataPath: 'dataValue' } } }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: { option: { deep: true, dataPath: 'dataValue' } } }")
+        .appendTo(this.$controller);
 
     let optionChanged = false;
 
@@ -578,8 +578,8 @@ QUnit.test("binding options with deep=true for not array option", function(asser
 
 QUnit.test("binding options with deep=false for not array option", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: { text: { deep: false, dataPath: 'dataValue' } } }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: { text: { deep: false, dataPath: 'dataValue' } } }")
+        .appendTo(this.$controller);
 
     let optionChanged = false;
 
@@ -610,8 +610,8 @@ QUnit.test("binding should fired once when option is a plain object", function(a
     }
 
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: { testOption: 'dataValue' }, onOptionChanged: optionChangedHandler }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: { testOption: 'dataValue' }, onOptionChanged: optionChangedHandler }")
+        .appendTo(this.$controller);
 
     const spy = sinon.spy();
 
@@ -637,8 +637,8 @@ QUnit.test("dependence options changed when option is a plain object", function(
     }
 
     const $widget = $("<div>")
-            .attr("dx-test", "{testOption: testOption, bindingOptions: {'testOption.value': 'testOption.value', 'testOption.dependenceValue': 'testOption.dependenceValue' }}")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{testOption: testOption, bindingOptions: {'testOption.value': 'testOption.value', 'testOption.dependenceValue': 'testOption.dependenceValue' }}")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.testOption = {
@@ -666,8 +666,8 @@ QUnit.test("option changed fired after value was set in the same value(plain obj
     }
 
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: { testOption: 'dataValue' }, onOptionChanged: optionChangedHandler }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: { testOption: 'dataValue' }, onOptionChanged: optionChangedHandler }")
+        .appendTo(this.$controller);
     const spy = sinon.spy();
     const value = { value: 1 };
     this.testApp.controller("my-controller", $scope => {
@@ -692,8 +692,8 @@ QUnit.test("option changed fired after value was set in the same value(plain obj
 
 QUnit.test("Variable from scope not re-assign after change the corresponding widget options (T373260)", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: { option1_widget: 'option1_scope', option2_widget: 'option2_scope' } }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: { option1_widget: 'option1_scope', option2_widget: 'option2_scope' } }")
+        .appendTo(this.$controller);
 
     this.testApp.controller('my-controller', $scope => {
 
@@ -747,8 +747,8 @@ QUnit.test("Lockers works correctly when widget options changed using action (T3
     registerComponent("dxMyComponent", MyComponent);
 
     const $markup = $("<div></div>")
-            .attr("dx-my-component", "{ bindingOptions: { testOption: 'testOption' } }")
-            .appendTo(this.$controller);
+        .attr("dx-my-component", "{ bindingOptions: { testOption: 'testOption' } }")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.testOption = true;
@@ -802,8 +802,8 @@ QUnit.test("The component should not be rendered more times than it needed", fun
     registerComponent("dxMyComponent", MyComponent);
 
     const $markup = $("<div></div>")
-            .attr("dx-my-component", "{ bindingOptions: { testOption: 'testOption' } }")
-            .appendTo(this.$controller);
+        .attr("dx-my-component", "{ bindingOptions: { testOption: 'testOption' } }")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.testOption = [ 1, 2, 3 ];
@@ -836,8 +836,8 @@ QUnit.test("WrappedAction should return function result (T388034)", function(ass
     registerComponent("dxMyComponent", MyComponent);
 
     const $markup = $("<div></div>")
-            .attr("dx-my-component", "{ }")
-            .appendTo(this.$controller);
+        .attr("dx-my-component", "{ }")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", () => { });
 
@@ -857,8 +857,8 @@ QUnit.test("Empty action doesn't call scope.$apply if config.wrapActionsBeforeEx
     registerComponent("dxMyComponent", TestDOMComponent);
 
     const $markup = $("<div></div>")
-            .attr("dx-my-component", "{ }")
-            .appendTo(this.$controller);
+        .attr("dx-my-component", "{ }")
+        .appendTo(this.$controller);
 
     let applyCount = 0;
 
@@ -889,8 +889,8 @@ QUnit.test("Empty action doesn't call scope.$apply if config.wrapActionsBeforeEx
 
 QUnit.test("The option should be changed if changes occur before scope.$apply calling", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: { text: 'text' } }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: { text: 'text' } }")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.text = "initial text";
@@ -947,8 +947,8 @@ QUnit.test("The 'release' method shouldn't be called for an unlocked Lock object
     registerComponent("dxMyComponentWithWrappedAction", MyComponent);
 
     const $markup = $("<div></div>")
-            .attr("dx-my-component-with-wrapped-action", "{ bindingOptions: { text: 'text', obj: 'obj' } }")
-            .appendTo(this.$controller);
+        .attr("dx-my-component-with-wrapped-action", "{ bindingOptions: { text: 'text', obj: 'obj' } }")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.text = "first";
@@ -998,8 +998,8 @@ QUnit.test("Lockers works correctly when method _optionChangedCallbacks occur in
 
 QUnit.test("Lockers works correctly for composite option (T382985)", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ testOption: testOption, bindingOptions: { 'testOption.text': 'testOption.text' } }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ testOption: testOption, bindingOptions: { 'testOption.text': 'testOption.text' } }")
+        .appendTo(this.$controller);
 
     this.testApp.controller('my-controller', $scope => {
         $scope.testOption = {};
@@ -1025,8 +1025,8 @@ QUnit.test("Lockers works correctly for composite option (T382985)", function(as
 
 QUnit.test("Lockers works correctly for defineProperty (T396622)", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "{ bindingOptions: { text: 'publicText' } }")
-            .appendTo(this.$controller);
+        .attr("dx-test", "{ bindingOptions: { text: 'publicText' } }")
+        .appendTo(this.$controller);
 
     this.testApp.controller('my-controller', $scope => {
         $scope.privateText = "test";
@@ -1084,8 +1084,8 @@ QUnit.test("Binding works if options config object added to $scope after bootstr
 
 QUnit.test("changing several options causes single render", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "testSettings")
-            .appendTo(this.$controller);
+        .attr("dx-test", "testSettings")
+        .appendTo(this.$controller);
 
     let renderedCount = 0;
 
@@ -1196,8 +1196,8 @@ QUnit.test("beginUpdate and endUpdate shouldn't fire only once for each apply", 
 
 QUnit.test("Angular component should have 'templatesRenderAsynchronously' option (T351071)", function(assert) {
     const $markup = $("<div></div>")
-            .attr("dx-test", "options")
-            .appendTo(this.$controller);
+        .attr("dx-test", "options")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.options = {};
@@ -1216,8 +1216,8 @@ QUnit.test("Angular component should not fire 'triggerResizeEvent' on 'contentRe
     const resizeEventSpy = sinon.spy(domUtils, "triggerResizeEvent");
 
     const $markup = $("<div></div>")
-            .attr("dx-test", "options")
-            .appendTo(this.$controller);
+        .attr("dx-test", "options")
+        .appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.options = {};
@@ -1334,8 +1334,8 @@ QUnit.module("nested Widget with templates enabled", {
 
             _render() {
                 const content = $("<div />")
-                        .addClass("dx-content")
-                        .appendTo(this.$element());
+                    .addClass("dx-content")
+                    .appendTo(this.$element());
 
                 this.option("integrationOptions.templates")["template"].render({
                     container: content
@@ -1386,8 +1386,8 @@ QUnit.module("nested Widget with templates enabled", {
 
         this.$container = $("<div/>").appendTo(FIXTURE_ELEMENT());
         this.$controller = $("<div></div>")
-                .attr("ng-controller", "my-controller")
-                .appendTo(this.$container);
+            .attr("ng-controller", "my-controller")
+            .appendTo(this.$container);
 
         registerComponent("dxTestContainer", TestContainer);
         registerComponent("dxTestWidget", TestWidget);
@@ -1443,7 +1443,7 @@ QUnit.test("Dispose nested containers", function(assert) {
                     "</div>" +
                 "</div>" +
             "</div>"
-        ).appendTo(this.$controller);
+    ).appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => { });
 
@@ -1475,7 +1475,7 @@ QUnit.test("widget inside two nested containers", function(assert) {
             "       <div class='inner' dx-test-widget='{ bindingOptions: { text: \"vm.innerText\" } }'></div>" +
             "   </div>" +
             "</div>"
-        ).appendTo(this.$controller);
+    ).appendTo(this.$controller);
 
     this.testApp.controller("my-controller", $scope => {
         $scope.vm = {
@@ -1989,7 +1989,7 @@ const initMarkup = ($markup, controller) => {
 QUnit.test("collection container item value escalates to scope", assert => {
     const controller = $scope => {
         $scope.collection = [
-        { widgetText: "my text" }
+            { widgetText: "my text" }
         ];
     };
 
@@ -2276,8 +2276,8 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for som
 QUnit.test("$index is available in markup (T542335)", assert => {
     const controller = $scope => {
         $scope.items = [
-                { text: "text1" },
-                { text: "text2" }
+            { text: "text1" },
+            { text: "text2" }
         ];
     };
 
@@ -2298,7 +2298,7 @@ QUnit.test("$index is available in markup (T542335)", assert => {
 QUnit.test("$id in item model not caused exception", assert => {
     const controller = $scope => {
         $scope.collection = [
-                { text: "my text", $id: 1 }
+            { text: "my text", $id: 1 }
         ];
     };
 
@@ -2339,8 +2339,8 @@ QUnit.test("template.render() - data parameter is Scope", assert => {
 
         _render() {
             const content = $("<div />")
-                    .addClass("dx-content")
-                    .appendTo(this.$element());
+                .addClass("dx-content")
+                .appendTo(this.$element());
 
             this.option("integrationOptions.templates")["template"].render({
                 model: this.scope,
@@ -2400,13 +2400,13 @@ QUnit.test("binding for item of array option", function(assert) {
     const $container = $("<div/>").appendTo(FIXTURE_ELEMENT());
 
     const $controller = $("<div/>")
-                .attr("ng-controller", "my-controller")
-                .appendTo($container);
+        .attr("ng-controller", "my-controller")
+        .appendTo($container);
 
     const $markup = $(
         "<div dx-test-collection-container=\"{ items: [ { text: 'value 1'}, { }, { } ], bindingOptions: { 'items[1].text': 'item2', 'items[2].text': 'vm.item3' } }\">" +
                 "</div>"
-        ).appendTo($controller);
+    ).appendTo($controller);
 
     let scope;
 
@@ -2443,8 +2443,8 @@ QUnit.test("all values should be correct displayed in collection widget (T425426
     const $container = $("<div/>").appendTo(FIXTURE_ELEMENT());
 
     const $controller = $("<div/>")
-            .attr("ng-controller", "my-controller")
-            .appendTo($container);
+        .attr("ng-controller", "my-controller")
+        .appendTo($container);
 
     const $markup = $("<div dx-test-collection=\"{ items: [ 0, 1, null, '', undefined, {} ] }\"></div>").appendTo($controller);
 
@@ -2697,7 +2697,7 @@ QUnit.module("component action context", {
 
 QUnit.test("component action created by option calls scope.$apply", function(assert) {
     const $markup = $("<div dx-action-test='{ onHandler: vm.handler }'></div>")
-            .appendTo(this.$controller);
+        .appendTo(this.$controller);
 
     let valueChanged = false;
 
@@ -2725,7 +2725,7 @@ QUnit.test("component action created by option calls scope.$apply", function(ass
 
 QUnit.test("component internal action does not calls scope.$apply", function(assert) {
     const $markup = $("<div dx-action-test='{ onHandler: vm.handler }'></div>")
-            .appendTo(this.$controller);
+        .appendTo(this.$controller);
 
     let valueChanged = false;
 
@@ -2753,7 +2753,7 @@ QUnit.test("component internal action does not calls scope.$apply", function(ass
 
 QUnit.test("component created by option with category 'rendering' does not calls scope.$apply", function(assert) {
     const $markup = $("<div dx-action-test='{ onHandler: vm.handler }'></div>")
-            .appendTo(this.$controller);
+        .appendTo(this.$controller);
 
     let valueChanged = false;
 
@@ -2782,7 +2782,7 @@ QUnit.test("component created by option with category 'rendering' does not calls
 // related with Q566857
 QUnit.test("change option in component action handler (phase $apply) ", function(assert) {
     const $markup = $("<div dx-action-test=\"{ onHandler: vm.handler,  bindingOptions: { value: 'vm.value' }}\"></div>")
-            .appendTo(this.$controller);
+        .appendTo(this.$controller);
 
     let scope;
 
@@ -2821,8 +2821,8 @@ QUnit.test("component action context is component", function(assert) {
 
 QUnit.test("Using ng-expressions in dx syntax", function(assert) {
     const $markup = $("<div/>")
-            .attr("dx-action-test", "{ onHandler: 'vm.value = \"new value\"' }")
-            .appendTo(this.$controller);
+        .attr("dx-action-test", "{ onHandler: 'vm.value = \"new value\"' }")
+        .appendTo(this.$controller);
 
     let scope;
 
@@ -2937,8 +2937,8 @@ QUnit.test("Component shouldn't watch digest callback after dispose", function(a
     registerComponent("dxTestWidget", TestComponent);
 
     const $markup = $("<div></div>")
-            .attr("dx-test-widget", "{}")
-            .appendTo(this.$container);
+        .attr("dx-test-widget", "{}")
+        .appendTo(this.$container);
 
     angular.bootstrap(this.$container, ["testApp"]);
 

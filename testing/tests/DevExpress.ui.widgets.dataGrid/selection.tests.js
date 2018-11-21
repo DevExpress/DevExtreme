@@ -437,7 +437,7 @@ QUnit.test("set selectedRows for single selection. Selecting empty object", func
 QUnit.test("set selectedRows for single selection. Selecting object with a different number of properties", function(assert) {
     // arrange
     var array = [{ name: 'Alex', address: { country: 'USA', city: 'New York' } },
-                { name: 'Dan', address: { country: 'USA', city: 'Chicago' } }];
+        { name: 'Dan', address: { country: 'USA', city: 'Chicago' } }];
 
     this.dataSource = createDataSource(array);
     this.dataController.setDataSource(this.dataSource);
@@ -2666,9 +2666,9 @@ QUnit.test("get isSelected rows after Select All when dataSource has filter", fu
     var selectedRows = this.selectionController.getSelectedRowsData();
     // assert
     assert.deepEqual(selectedRows, [
-            { id: 1, value: 'value1' },
-            { id: 4, value: 'value4' },
-            { id: 5, value: 'value5' }
+        { id: 1, value: 'value1' },
+        { id: 4, value: 'value4' },
+        { id: 5, value: 'value5' }
     ]);
 });
 
@@ -2694,10 +2694,10 @@ QUnit.test("selected rows after Select All when filter row defined", function(as
     assert.equal(selectedRows.length, 4, 'selected rows count');
     assert.ok(this.selectionController.isSelectAll(), 'isSelectAll');
     assert.deepEqual(selectedRows, [
-            { id: 5, value: 'value5' }, // selected row is not reset after selectAll
-            { id: 1, value: 'value1' },
-            { id: 2, value: 'value2' },
-            { id: 3, value: 'value3' }
+        { id: 5, value: 'value5' }, // selected row is not reset after selectAll
+        { id: 1, value: 'value1' },
+        { id: 2, value: 'value2' },
+        { id: 3, value: 'value3' }
     ]);
 
     // act
@@ -3108,13 +3108,13 @@ QUnit.test("selectRows with several values", function(assert) {
 QUnit.module("Selection with views", {
     beforeEach: function() {
         this.array = [
-                    { name: 'Alex', age: 15 },
-                    { name: 'Dan', age: 16 },
-                    { name: 'Vadim', age: 17 },
-                    { name: 'Dmitry', age: 18 },
-                    { name: 'Sergey', age: 18 },
-                    { name: 'Kate', age: 20 },
-                    { name: 'Dan', age: 21 }
+            { name: 'Alex', age: 15 },
+            { name: 'Dan', age: 16 },
+            { name: 'Vadim', age: 17 },
+            { name: 'Dmitry', age: 18 },
+            { name: 'Sergey', age: 18 },
+            { name: 'Kate', age: 20 },
+            { name: 'Dan', age: 21 }
         ];
         this.options = {
             showColumnHeaders: true,

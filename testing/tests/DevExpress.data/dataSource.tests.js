@@ -873,8 +873,8 @@ QUnit.test("search API, default impl, no selector", function(assert) {
 
 QUnit.test("search API, default impl, single selector", function(assert) {
     var store = new ArrayStore([
-            { text: "abc" },
-            { text: "xyz" }
+        { text: "abc" },
+        { text: "xyz" }
     ]);
 
     var source = new DataSource(store);
@@ -889,9 +889,9 @@ QUnit.test("search API, default impl, single selector", function(assert) {
 
 QUnit.test("search API, default impl, multi selectors, custom op", function(assert) {
     var store = new ArrayStore([
-            { text: "abc", description: "xyz" },
-            { text: "xyz", description: "abc" },
-            { text: "xyz", description: "xyz" }
+        { text: "abc", description: "xyz" },
+        { text: "xyz", description: "abc" },
+        { text: "xyz", description: "xyz" }
     ]);
 
     var source = new DataSource(store);
@@ -906,7 +906,7 @@ QUnit.test("search API, default impl, multi selectors, custom op", function(asse
 
 QUnit.test("search API, default impl, complex selector", function(assert) {
     var store = new ArrayStore([
-            { date: new Date(1984, 5, 14) }
+        { date: new Date(1984, 5, 14) }
     ]);
 
     var source = new DataSource(store);

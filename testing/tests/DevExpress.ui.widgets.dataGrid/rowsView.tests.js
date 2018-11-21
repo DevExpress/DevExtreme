@@ -138,7 +138,7 @@ QUnit.test('Create col elements by columns collection', function(assert) {
     // arrange, act
     // arrange
     var rowsView = this.createRowsView([{ values: [1, 2, 3, 4, 5] }], null, [{ caption: 'Column 1', width: 30 }, { caption: 'Column 2', width: 50 }, { caption: 'Column 3', width: 73 },
-        { caption: 'Column 4' }, { caption: 'Column 5', width: 91 }]),
+            { caption: 'Column 4' }, { caption: 'Column 5', width: 91 }]),
         testElement = $('#container');
 
     // act
@@ -376,9 +376,9 @@ QUnit.test('Resized event on resize after second render', function(assert) {
     // arrange
 
     var columns = [
-            { dataField: 'test1', width: 100, resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test1'); resizedColumnWidths.push(width); }) },
-            { dataField: 'test2', resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test2'); resizedColumnWidths.push(width); }) },
-            { dataField: 'test3', resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test3'); resizedColumnWidths.push(width); }) }
+        { dataField: 'test1', width: 100, resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test1'); resizedColumnWidths.push(width); }) },
+        { dataField: 'test2', resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test2'); resizedColumnWidths.push(width); }) },
+        { dataField: 'test3', resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test3'); resizedColumnWidths.push(width); }) }
     ];
 
     var rowsView = this.createRowsView(this.items, null, columns),
@@ -448,9 +448,9 @@ QUnit.test('Resized event on update width of column', function(assert) {
     // arrange
 
     var columns = [
-            { dataField: 'test1', visibleWidth: 100, resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test1'); widths.push(width); }) },
-            { dataField: 'test2', visibleWidth: 100, resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test2'); widths.push(width); }) },
-            { dataField: 'test3', resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test3'); widths.push(width); }) }
+        { dataField: 'test1', visibleWidth: 100, resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test1'); widths.push(width); }) },
+        { dataField: 'test2', visibleWidth: 100, resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test2'); widths.push(width); }) },
+        { dataField: 'test3', resizedCallbacks: $.Callbacks().add(function(width) { resizedColumns.push('test3'); widths.push(width); }) }
     ];
 
     var rowsView = this.createRowsView(this.items, null, columns),
@@ -593,13 +593,13 @@ QUnit.test('Highlight searchText for different data types (T636268)', function(a
         { data: { name: 'test3', id: 31, date: new Date(2003, 2, 3) }, values: ['test3', 31, '3/03/2003'], rowType: 'data', dataIndex: 2 }];
 
     var columns = [
-        { allowFiltering: true, dataType: "string",
-            cellTemplate: function(container, options) {
-                $("<span>test</span>").appendTo(container);
-            }
-        },
-        { allowFiltering: true, dataType: "number" },
-        { allowFiltering: true, dataType: "date" }],
+            { allowFiltering: true, dataType: "string",
+                cellTemplate: function(container, options) {
+                    $("<span>test</span>").appendTo(container);
+                }
+            },
+            { allowFiltering: true, dataType: "number" },
+            { allowFiltering: true, dataType: "date" }],
         dataController = new MockDataController({ items: this.items }),
         rowsView = this.createRowsView(this.items, dataController, columns),
         $testElement = $('#container'),
@@ -640,16 +640,16 @@ QUnit.test('Highlight searchText for a cell template (T656969)', function(assert
         { data: { name: 'test3', id: 31, date: new Date(2003, 2, 3) }, values: ['test3', 31, '3/03/2003'], rowType: 'data', dataIndex: 2 }];
 
     var columns = [
-        { allowFiltering: true, dataType: "string",
-            cellTemplate: function(container) {
-                $("<div>")
-                    .addClass("dx-template-wrapper")
-                    .append($("<span>test</span>"))
-                    .appendTo(container);
-            }
-        },
-        { allowFiltering: true, dataType: "number" },
-        { allowFiltering: true, dataType: "date" }],
+            { allowFiltering: true, dataType: "string",
+                cellTemplate: function(container) {
+                    $("<div>")
+                        .addClass("dx-template-wrapper")
+                        .append($("<span>test</span>"))
+                        .appendTo(container);
+                }
+            },
+            { allowFiltering: true, dataType: "number" },
+            { allowFiltering: true, dataType: "date" }],
         dataController = new MockDataController({ items: this.items }),
         rowsView = this.createRowsView(this.items, dataController, columns),
         $testElement = $('#container'),
@@ -2337,7 +2337,7 @@ QUnit.test("Remove css class for a last row when freeSpaceRow is shown", functio
             showRowLines: true,
             showBorders: true
         }
-            ),
+        ),
         testElement = $('#container');
 
     // act
@@ -2652,9 +2652,9 @@ QUnit.test('Show grouped columns with column command is empty', function(assert)
 QUnit.test("groupContinuesMessage parameter for group template", function(assert) {
     // arrange
     var rows = [
-        { rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], data: { isContinuationOnNextPage: true, items: [{}, {}] } },
-        { rowType: 'group', groupIndex: 1, isExpanded: false, values: [1, 2], data: { items: [{}, {}, {}] } },
-        { values: ['', '', 3] }
+            { rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], data: { isContinuationOnNextPage: true, items: [{}, {}] } },
+            { rowType: 'group', groupIndex: 1, isExpanded: false, values: [1, 2], data: { items: [{}, {}, {}] } },
+            { values: ['', '', 3] }
         ],
         groupContinuesMessage,
         dataController = new MockDataController({ items: rows }),
@@ -2984,7 +2984,7 @@ QUnit.test("Show rowlines for master detail", function(assert) {
 QUnit.test('Add class nowrap when wordWrapEnabled false', function(assert) {
     // arrange
     var rowsView = this.createRowsView([{ values: [1, 2, 3, 4, 5] }], null, [{ caption: 'Column 1', width: 30 }, { caption: 'Column 2', width: 50 }, { caption: 'Column 3', width: 73 },
-        { caption: 'Column 4' }, { caption: 'Column 5', width: 91 }]),
+            { caption: 'Column 4' }, { caption: 'Column 5', width: 91 }]),
         testElement = $('#container');
 
     this.options.wordWrapEnabled = false;
@@ -2998,7 +2998,7 @@ QUnit.test('Add class nowrap when wordWrapEnabled false', function(assert) {
 QUnit.test('Remove class nowrap when wordWrapEnabled true', function(assert) {
     // arrange
     var rowsView = this.createRowsView([{ values: [1, 2, 3, 4, 5] }], null, [{ caption: 'Column 1', width: 30 }, { caption: 'Column 2', width: 50 }, { caption: 'Column 3', width: 73 },
-        { caption: 'Column 4' }, { caption: 'Column 5', width: 91 }]),
+            { caption: 'Column 4' }, { caption: 'Column 5', width: 91 }]),
         testElement = $('#container');
 
     this.options.wordWrapEnabled = true;
@@ -3173,12 +3173,12 @@ QUnit.test('Rows with option rowAlternationEnabled true when grouping', function
                 items: [{ name: 'test', id: 2, date: new Date(2002, 1, 2) }, { name: 'test', id: 3, date: new Date(2003, 2, 3) }], key: "test"
             }, values: ["test"]
         },
-    {
-        data: { isContinuation: true, name: 'test', id: 2, date: new Date(2002, 1, 2) }, values: ['test', 2, '2/02/2002'], rowType: 'data', dataIndex: 0
-    },
-    {
-        data: { isContinuation: true, name: 'test', id: 3, date: new Date(2003, 2, 3) }, values: ['test', 3, '3/03/2003'], rowType: 'data', dataIndex: 1
-    }],
+        {
+            data: { isContinuation: true, name: 'test', id: 2, date: new Date(2002, 1, 2) }, values: ['test', 2, '2/02/2002'], rowType: 'data', dataIndex: 0
+        },
+        {
+            data: { isContinuation: true, name: 'test', id: 3, date: new Date(2003, 2, 3) }, values: ['test', 3, '3/03/2003'], rowType: 'data', dataIndex: 1
+        }],
         rowsView = this.createRowsView(items, null, [{ dataField: "name", caption: "Name", groupIndex: 0 }, "id", "date"]),
         rows,
         testElement = $('#container');
@@ -3538,22 +3538,22 @@ QUnit.test("EncodeHtml is false for column with grouping", function(assert) {
 QUnit.test("Show summary items in a group row", function(assert) {
     // arrange
     var items = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [
-        [{
-            column: "Column1",
-            summaryType: "sum",
-            value: 1,
-            valueFormat: "currency"
-        }, {
-            column: "Column2",
-            summaryType: "count",
-            value: 1,
-            displayFormat: "{0}-Count"
-        }, {
-            column: "Column2",
-            columnCaption: "Column 2",
-            summaryType: "count",
-            value: 1
-        }]
+            [{
+                column: "Column1",
+                summaryType: "sum",
+                value: 1,
+                valueFormat: "currency"
+            }, {
+                column: "Column2",
+                summaryType: "count",
+                value: 1,
+                displayFormat: "{0}-Count"
+            }, {
+                column: "Column2",
+                columnCaption: "Column 2",
+                summaryType: "count",
+                value: 1
+            }]
         ] }, { values: ["text", "text2"] }],
         rowsView = this.createRowsView(items, null, [{ caption: 'Column 1', groupIndex: 0 }, { caption: 'Column 2' }], true),
         testElement = $("#container"),
@@ -3569,14 +3569,14 @@ QUnit.test("Show summary items in a group row", function(assert) {
 QUnit.test("Show only one summary item in a group row", function(assert) {
     // arrange
     var items = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [
-        [{
-            column: "Column1",
-            summaryType: "sum",
-            value: 1,
-            customizeText: function(itemInfo) {
-                return "Column1 " + itemInfo.valueText;
-            }
-        }]
+            [{
+                column: "Column1",
+                summaryType: "sum",
+                value: 1,
+                customizeText: function(itemInfo) {
+                    return "Column1 " + itemInfo.valueText;
+                }
+            }]
         ] }, { values: ["text", "text2"] }],
         rowsView = this.createRowsView(items, null, [{ caption: 'Column 1', groupIndex: 0 }, { caption: 'Column 2' }], true),
         testElement = $("#container"),
@@ -3705,7 +3705,7 @@ QUnit.test("Show summary in a group row when two alignByColumn summary items and
 QUnit.test("Summary items are not displayed in a group row", function(assert) {
     // arrange
     var items = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [] },
-                { values: ["text", "text2"] }],
+            { values: ["text", "text2"] }],
         rowsView = this.createRowsView(items, null, [{ caption: 'Column 1', groupIndex: 0 }, { caption: 'Column 2' }], true),
         testElement = $("#container"),
         $groupRow;
@@ -3868,7 +3868,7 @@ QUnit.test("Rows view (with wordWrapEnabled is true) in container with 'nowrap' 
     // arrange
     var $rowsViewElement,
         rowsView = this.createRowsView([{ values: [1, 2, 3, 4, 5] }], null, [{ caption: 'Column 1', width: 30 }, { caption: 'Column 2', width: 50 }, { caption: 'Column 3', width: 73 },
-        { caption: 'Column 4' }, { caption: 'Column 5', width: 91 }]),
+            { caption: 'Column 4' }, { caption: 'Column 5', width: 91 }]),
         $testElement = $('#container');
 
     this.options.wordWrapEnabled = true;
@@ -3961,13 +3961,13 @@ QUnit.test("loadPanel position correction if rowsView.height > window.height", f
 QUnit.module('Rows view with real dataController and columnController', {
     beforeEach: function() {
         this.items = [
-                    { name: 'Alex', age: 15 },
-                    { name: 'Dan', age: 16 },
-                    { name: 'Vadim', age: 17 },
-                    { name: 'Dmitry', age: 18 },
-                    { name: 'Sergey', age: 18 },
-                    { name: 'Kate', age: 20 },
-                    { name: 'Dan', age: 21 }
+            { name: 'Alex', age: 15 },
+            { name: 'Dan', age: 16 },
+            { name: 'Vadim', age: 17 },
+            { name: 'Dmitry', age: 18 },
+            { name: 'Sergey', age: 18 },
+            { name: 'Kate', age: 20 },
+            { name: 'Dan', age: 21 }
         ];
 
         this.options = {
@@ -5990,9 +5990,9 @@ QUnit.test('rowHeight/viewportSize calculation during Render rows with viewport'
     // arrange
     var options = {
             items: [
-            { values: [1] },
-            { values: [2] },
-            { values: [3] }
+                { values: [1] },
+                { values: [2] },
+                { values: [3] }
             ],
             virtualItemsCount: {
                 begin: 10,
@@ -6020,9 +6020,9 @@ QUnit.test('Update rowsView on changed', function(assert) {
     // arrange
     var options = {
             items: [
-            { values: [1] },
-            { values: [2] },
-            { values: [3] }
+                { values: [1] },
+                { values: [2] },
+                { values: [3] }
             ],
             virtualItemsCount: {
                 begin: 10,
@@ -6045,8 +6045,8 @@ QUnit.test('Update rowsView on changed', function(assert) {
     // act
 
     options.items = [
-            { values: [4] }, { values: [5] }, { values: [6] },
-            { values: [7] }, { values: [8] }, { values: [9] }
+        { values: [4] }, { values: [5] }, { values: [6] },
+        { values: [7] }, { values: [8] }, { values: [9] }
     ];
 
     options.virtualItemsCount = {
@@ -6121,15 +6121,15 @@ QUnit.test("Add group space class for master detail", function(assert) {
 QUnit.test("Change column visibility_T194439", function(assert) {
     // arrange
     var rows = [
-                { values: [1, 2, "test"] },
-                { values: [2, 3, "test"] },
-                { values: [3, 4, "test"] },
-                { values: [1, 5, "test"] },
-                { values: [2, 5, "test"] },
-                { values: [3, 6, "test"] },
-                { values: [1, 8, "test"] },
-                { values: [2, 1, "test"] },
-                { values: [3, 4, "test"] }
+            { values: [1, 2, "test"] },
+            { values: [2, 3, "test"] },
+            { values: [3, 4, "test"] },
+            { values: [1, 5, "test"] },
+            { values: [2, 5, "test"] },
+            { values: [3, 6, "test"] },
+            { values: [1, 8, "test"] },
+            { values: [2, 1, "test"] },
+            { values: [3, 4, "test"] }
         ],
         dataController = new MockDataController({
             items: rows,
@@ -6170,15 +6170,15 @@ QUnit.test("Change column visibility_T194439", function(assert) {
 QUnit.test("Change column lines visibility_T194439", function(assert) {
     // arrange
     var rows = [
-                { values: [1, 2, "test"] },
-                { values: [2, 3, "test"] },
-                { values: [3, 4, "test"] },
-                { values: [1, 5, "test"] },
-                { values: [2, 5, "test"] },
-                { values: [3, 6, "test"] },
-                { values: [1, 8, "test"] },
-                { values: [2, 1, "test"] },
-                { values: [3, 4, "test"] }
+            { values: [1, 2, "test"] },
+            { values: [2, 3, "test"] },
+            { values: [3, 4, "test"] },
+            { values: [1, 5, "test"] },
+            { values: [2, 5, "test"] },
+            { values: [3, 6, "test"] },
+            { values: [1, 8, "test"] },
+            { values: [2, 1, "test"] },
+            { values: [3, 4, "test"] }
         ],
         dataController = new MockDataController({
             items: rows,
@@ -6250,7 +6250,7 @@ QUnit.test("Set column widths for virtual table", function(assert) {
 
 // T472955
 QUnit.test("Last data row of the last tbody should not have border bottom width", function(assert) {
-   // arrange
+    // arrange
     var $tbodyElements,
         options = {
             isLoaded: true,
@@ -6494,9 +6494,9 @@ QUnit.test('getTopVisibleRowData with scrolling', function(assert) {
     // arrange
     var done = assert.async();
     var rows = [
-                { values: [1], data: { field: 1 } },
-                { values: [2], data: { field: 2 } },
-                { values: [3], data: { field: 3 } }
+            { values: [1], data: { field: 1 } },
+            { values: [2], data: { field: 2 } },
+            { values: [3], data: { field: 3 } }
         ],
         dataController = new MockDataController({
             items: rows
@@ -6522,9 +6522,9 @@ QUnit.test('getTopVisibleRowData when virtual scrolling enabled after append nex
     var done = assert.async();
     var options = {
             items: [
-            { values: [1], data: { field: 1 } },
-            { values: [2], data: { field: 2 } },
-            { values: [3], data: { field: 3 } }
+                { values: [1], data: { field: 1 } },
+                { values: [2], data: { field: 2 } },
+                { values: [3], data: { field: 3 } }
             ],
             virtualItemsCount: {
                 begin: 0,
@@ -6540,9 +6540,9 @@ QUnit.test('getTopVisibleRowData when virtual scrolling enabled after append nex
     rowsView.resize();
 
     var appendRows = [
-            { values: [4], data: { field: 4 } },
-            { values: [5], data: { field: 5 } },
-            { values: [6], data: { field: 6 } }
+        { values: [4], data: { field: 4 } },
+        { values: [5], data: { field: 5 } },
+        { values: [6], data: { field: 6 } }
     ];
     options.virtualItemsCount.end = 1;
     options.items = options.items.concat(appendRows);
