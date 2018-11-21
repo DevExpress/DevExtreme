@@ -726,3 +726,36 @@ QUnit.test("Set add button for a specific row", function(assert) {
     assert.strictEqual($rowElements.eq(0).find(".dx-link-add").length, 1, "first row has the add link");
     assert.strictEqual($rowElements.eq(1).find(".dx-link-add").length, 0, "second row hasn't the add link");
 });
+
+// T690119
+QUnit.test("Edit cell - The editable cell should be closed after click on expand button", function(assert) {
+    // arrange
+    var $testElement = $('#treeList');
+
+    this.options.editing = {
+        mode: "cell",
+        allowUpdating: true
+    };
+    this.options.loadingTimeout = 0;
+    this.options.dataSource = [
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2003, 2, 3) }
+    ];
+    this.setupTreeList();
+    this.clock.tick();
+    this.rowsView.render($testElement);
+
+    this.editCell(0, 0);
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual($(this.getCellElement(0, 0)).find(".dx-texteditor").length, 1, "has editor");
+
+    // act
+    $(this.getCellElement(1, 0)).find(".dx-treelist-collapsed").trigger("dxclick");
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual($(this.getCellElement(0, 0)).find(".dx-texteditor").length, 0, "hasn't editor");
+});
