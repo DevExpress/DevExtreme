@@ -175,11 +175,11 @@ var normalizeInterval = function(rule) {
     return intervalObject;
 };
 
-var getDatesByRecurrenceException = function(ruleValues) {
+var getDatesByRecurrenceException = function(ruleValues, date) {
     var result = [];
 
     for(var i = 0, len = ruleValues.length; i < len; i++) {
-        result[i] = getDateByAsciiString(ruleValues[i]);
+        result[i] = getDateByAsciiString(ruleValues[i], date);
     }
 
     return result;
@@ -193,7 +193,7 @@ var dateIsRecurrenceException = function(date, recurrenceException) {
     }
 
     var splitDates = recurrenceException.split(","),
-        exceptDates = getDatesByRecurrenceException(splitDates),
+        exceptDates = getDatesByRecurrenceException(splitDates, date),
         shortFormat = /\d{8}$/;
 
     for(var i = 0, len = exceptDates.length; i < len; i++) {
@@ -555,7 +555,7 @@ var parseRecurrenceRule = function(recurrence) {
     return ruleObject;
 };
 
-var getDateByAsciiString = function(string) {
+var getDateByAsciiString = function(string, initialDate) {
     if(typeof string !== "string") {
         return string;
     }
@@ -567,8 +567,10 @@ var getDateByAsciiString = function(string) {
     }
 
     var isUTC = arrayDate[8] !== undefined,
-        currentOffset = resultUtils.getTimeZoneOffset() * 60000,
+        currentOffset = initialDate ? initialDate.getTimezoneOffset() : resultUtils.getTimeZoneOffset(),
         date = new (Function.prototype.bind.apply(Date, prepareDateArrayToParse(arrayDate)))();
+
+    currentOffset = currentOffset * 60000;
 
     if(isUTC) {
         date = new Date(date.getTime() - currentOffset);
