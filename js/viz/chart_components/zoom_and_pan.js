@@ -57,6 +57,11 @@ module.exports = {
         const chart = this,
             renderer = this._renderer;
 
+        function cancelEvent(e) {
+            e.cancel = true;
+            e.originalEvent && (e.originalEvent.cancel = true);
+        }
+
         function startAxesViewportChanging(zoomAndPan, actionField, e) {
             const options = zoomAndPan.options;
             const actionData = zoomAndPan.actionData;
@@ -68,9 +73,9 @@ module.exports = {
                 axes = axes.concat(actionData.valueAxes);
             }
 
-            e.cancel = axes.some(axis => {
+            axes.some(axis => {
                 return axis.handleZooming(null, { end: true }, e, actionField).isPrevented;
-            });
+            }) && cancelEvent(e);
         }
 
         function axesViewportChanging(zoomAndPan, actionField, e, offsetCalc, centerCalc) {
@@ -328,7 +333,7 @@ module.exports = {
 
                 const actionData = prepareActionData(calcCenterForPinch(e), "zoom");
                 if(actionData.cancel) {
-                    e.cancel = true;
+                    cancelEvent(e);
                     return;
                 }
                 zoomAndPan.actionData = actionData;
@@ -354,6 +359,9 @@ module.exports = {
             },
             setup: function(options) {
                 zoomAndPan.cleanup();
+                if(!options.argumentAxis.pan) {
+                    renderer.root.on(SCROLL_BAR_START_EVENT_NAME, cancelEvent);
+                }
                 if(options.argumentAxis.none && options.valueAxis.none) {
                     return;
                 }
@@ -423,7 +431,6 @@ module.exports = {
                             };
                             preventDefaults(e);
                             startAxesViewportChanging(zoomAndPan, "pan", e);
-                            e.originalEvent && (e.originalEvent.cancel = e.cancel);
                         })
                         .on(SCROLL_BAR_MOVE_EVENT_NAME, function(e) {
                             preventDefaults(e);

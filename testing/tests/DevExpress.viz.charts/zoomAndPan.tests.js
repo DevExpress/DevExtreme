@@ -1381,6 +1381,9 @@ QUnit.test("Scrollbar does not pan argument axis if it can not be panned", funct
     const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
         chart = this.createChart({
+            scrollBar: {
+                visible: true
+            },
             argumentAxis: {
                 visualRange: {
                     startValue: 3,
@@ -1395,6 +1398,9 @@ QUnit.test("Scrollbar does not pan argument axis if it can not be panned", funct
             onZoomEnd: onZoomEnd
         });
 
+    const scrollBarElement = $(chart._scrollBar._scroll.element);
+    const scrollBarOffset = scrollBarElement.offset();
+
     // act
     const $root = $(chart._renderer.root.element);
     $root.trigger(new $.Event("dxc-scroll-start", { pageX: 100, pointers: [{ pageX: 100, pageY: 250 }] }));
@@ -1403,6 +1409,7 @@ QUnit.test("Scrollbar does not pan argument axis if it can not be panned", funct
 
     assert.equal(onZoomStart.callCount, 0);
     assert.equal(onZoomEnd.callCount, 0);
+    assert.deepEqual(scrollBarElement.offset(), scrollBarOffset);
 });
 
 QUnit.module("Check visualRange changing strategy choosing", environment);
