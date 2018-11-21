@@ -3683,7 +3683,7 @@ QUnit.test("Value axis ignores visual range on update option", function(assert) 
     assert.equal(businessRange.maxVisible, 118);
 });
 
-QUnit.module("Visual range on update", {
+QUnit.module("Visual range on update. Argument axis", {
     beforeEach: function() {
         environment.beforeEach.call(this);
         sinon.spy(translator2DModule, "Translator2D");
@@ -4047,6 +4047,203 @@ QUnit.test("Do not reset initial viewport if current bussiness range has isEstim
     assert.equal(businessRange.max, 100);
     assert.equal(businessRange.minVisible, 10);
     assert.equal(businessRange.maxVisible, 20);
+});
+
+QUnit.module("Visual range on update. Value axis", {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        sinon.spy(translator2DModule, "Translator2D");
+
+        this.axis = new Axis({
+            renderer: this.renderer,
+            axisType: "xyAxes",
+            drawingType: "linear",
+            isArgumentAxis: false,
+            eventTrigger: () => { }
+        });
+
+        this.canvas = {
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: 0,
+            width: 100,
+            height: 100
+        };
+
+        this.axis.updateCanvas(this.canvas);
+
+        this.updateOptions({});
+        this.translator = translator2DModule.Translator2D.lastCall.returnValue;
+        sinon.spy(this.translator, "updateBusinessRange");
+    },
+    afterEach: function() {
+        environment.afterEach.call(this);
+        translator2DModule.Translator2D.restore();
+    },
+    updateOptions: environment.updateOptions
+});
+
+QUnit.test("Auto mode. argument axis mode is shift - reset", function(assert) {
+    this.updateOptions({
+        visualRangeUpdateMode: "auto"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.visualRange(115, 118);
+    this.axis.createTicks(this.canvas);
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    }, undefined, "shift");
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 300);
+});
+
+QUnit.test("Auto mode. argument axis mode is reset - reset", function(assert) {
+    this.updateOptions({
+        visualRangeUpdateMode: "auto"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.visualRange(115, 118);
+    this.axis.createTicks(this.canvas);
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    }, undefined, "reset");
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 300);
+});
+
+QUnit.test("Auto mode. argument axis mode is keep - keep", function(assert) {
+    this.updateOptions({
+        visualRangeUpdateMode: "auto"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.visualRange(115, 118);
+    this.axis.createTicks(this.canvas);
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    }, undefined, "keep");
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 115);
+    assert.equal(businessRange.maxVisible, 118);
+});
+
+QUnit.test("Auto. no argument axis mode - reset", function(assert) {
+    this.updateOptions({
+        visualRangeUpdateMode: "auto"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.visualRange(115, 118);
+    this.axis.createTicks(this.canvas);
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    }, undefined, undefined);
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 300);
+});
+
+QUnit.test("Own mode keep, argument axis mode reset - own mode wins", function(assert) {
+    this.updateOptions({
+        visualRangeUpdateMode: "keep"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.visualRange(115, 118);
+    this.axis.createTicks(this.canvas);
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    }, undefined, "reset");
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 115);
+    assert.equal(businessRange.maxVisible, 118);
+});
+
+QUnit.test("Own mode is reset, argument axis mode keep - own mode wins", function(assert) {
+    this.updateOptions({
+        visualRangeUpdateMode: "reset"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.visualRange(115, 118);
+    this.axis.createTicks(this.canvas);
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    }, undefined, "keep");
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 300);
 });
 
 QUnit.module("Get scroll bounds", {

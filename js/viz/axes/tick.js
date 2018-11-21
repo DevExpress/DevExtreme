@@ -117,7 +117,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 const text = axis.formatLabel(value, labelOptions, range);
 
                 if(this.label) {
-                    this.label.attr({ text }).append(elementsGroup);
+                    this.label.attr({ text, rotate: 0 }).append(elementsGroup);
                     this.updateLabelPosition();
                     return;
                 }

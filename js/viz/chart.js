@@ -1143,7 +1143,6 @@ var dxChart = AdvancedChart.inherit({
         return function(axis, visualRange) {
             if(axis.getOptions().optionPath) {
                 chart._parseVisualRangeOption(axis.getOptions().optionPath + ".visualRange", visualRange);
-                axis.setCustomVisualRange(visualRange);
             }
 
             if(axis.isArgumentAxis) {

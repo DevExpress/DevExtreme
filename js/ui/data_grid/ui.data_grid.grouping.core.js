@@ -120,7 +120,7 @@ exports.GroupingHelper = Class.inherit((function() {
                 result = items.length;
             } else {
                 for(i = 0; i < items.length; i++) {
-                    if(that._isGroupItemCountable(items[i])) {
+                    if(that.isGroupItemCountable(items[i])) {
                         result++;
                     }
                     result += calculateItemsCount(that, items[i].items, groupsCount - 1);
@@ -145,7 +145,7 @@ exports.GroupingHelper = Class.inherit((function() {
         updateTotalItemsCount: function(totalCountCorrection) {
             this._totalCountCorrection = totalCountCorrection || 0;
         },
-        _isGroupItemCountable: function(item) {
+        isGroupItemCountable: function(item) {
             return !this._isVirtualPaging() || !item.isContinuation;
         },
         _isVirtualPaging: function() {

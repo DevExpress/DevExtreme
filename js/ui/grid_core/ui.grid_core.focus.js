@@ -23,7 +23,9 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this;
 
             if(args.name === "focusedRowIndex") {
-                that._focusRowByIndex(args.value);
+                if(this.option("focusedRowEnabled")) {
+                    that._focusRowByIndex(args.value);
+                }
                 args.handled = true;
             } else if(args.name === "focusedRowKey") {
                 that.navigateToRow(args.value);
@@ -540,8 +542,8 @@ module.exports = {
                     this.callBase.apply(this, arguments);
 
                     if(this.option("focusedRowEnabled") && this.option("dataSource")) {
-                        var keyExpr = this._dataController.store() && this._dataController.store().key();
-                        if(!keyExpr) {
+                        var store = this._dataController.store();
+                        if(store && !store.key()) {
                             this._dataController.dataErrorOccurred.fire(errors.Error("E4024"));
                         }
                     }

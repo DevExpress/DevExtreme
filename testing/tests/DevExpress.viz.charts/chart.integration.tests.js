@@ -617,14 +617,14 @@ QUnit.test("Using the single section of axis options for some panes (check custo
         }, {
             arg: 2,
             val1: 5,
-            val2: 3
+            val2: 4
         }, {
             arg: 5,
             val1: 7,
             val2: 25
         }, {
             arg: 8,
-            val1: 3,
+            val1: 4,
             val2: 5
         }, {
             arg: 11,
@@ -634,21 +634,55 @@ QUnit.test("Using the single section of axis options for some panes (check custo
         panes: panes,
         series: [{ type: "line", valueField: "val1", pane: "p1", axis: "ax1" }, { type: "line", valueField: "val2", pane: "p2", axis: "ax1" }],
         onOptionChanged: visualRangeChanged,
-        valueAxis: { name: "ax1" }
+        valueAxis: {
+            name: "ax1",
+            valueMarginsEnabled: false,
+            endOnTick: false
+        }
     });
 
     chart.getArgumentAxis().visualRange([4, 6]);
     panes.push({ name: "p2" });
+    visualRangeChanged.reset();
     chart.option("panes", panes);
 
     assert.deepEqual(chart.option("valueAxis.visualRange"), chart.getValueAxis().visualRange());
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 4, endValue: 6 }, "argument visual range");
-    assert.deepEqual(chart._valueAxes[0].visualRange(), { startValue: 5.6, endValue: 7.2 });
-    assert.deepEqual(chart._valueAxes[1].visualRange(), { startValue: 16, endValue: 26 });
+    assert.deepEqual(chart._valueAxes[0].visualRange(), { startValue: 6, endValue: 7 });
+    assert.deepEqual(chart._valueAxes[1].visualRange(), { startValue: 18, endValue: 25 });
+
+    assert.deepEqual(visualRangeChanged.callCount, 3);
+    assert.deepEqual(visualRangeChanged.getCall(1).args[0].value, { startValue: 4, endValue: 6 });
+    assert.deepEqual(visualRangeChanged.getCall(2).args[0].value, { startValue: 18, endValue: 25 });
 });
 
 // T681674
-QUnit.test("actual visualRange after dataSource updating", function(assert) {
+QUnit.test("actual visualRange after dataSource updating (argument axis without visual range)", function(assert) {
+    var chart = this.createChart({
+        dataSource: [{
+            arg: 1,
+            val1: -10
+        }, {
+            arg: 60,
+            val1: 20
+        }],
+        valueAxis: {
+            valueMarginsEnabled: false,
+            visualRange: {
+                endValue: 100
+            }
+        },
+        series: [{ type: "line", valueField: "val1" }]
+    });
+
+    chart.option("valueAxis.visualRange", { startValue: 0, endValue: 80 });
+    chart.option("dataSource", [{ arg: 2, val1: 5 }, { arg: 2, val1: 10 }]);
+
+    assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 5, endValue: 10 });
+});
+
+// T681674
+QUnit.test("actual visualRange after dataSource updating (argument axis with visual range)", function(assert) {
     var chart = this.createChart({
         dataSource: [{
             arg: 1,
@@ -660,6 +694,12 @@ QUnit.test("actual visualRange after dataSource updating", function(assert) {
         valueAxis: {
             visualRange: {
                 endValue: 100
+            }
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 1,
+                endValue: 3
             }
         },
         series: [{ type: "line", valueField: "val1" }]
@@ -697,7 +737,7 @@ QUnit.test("Set the visualRange option by the different ways", function(assert) 
             height: 600
         },
         dataSource: dataSource,
-        series: { type: "line" },
+        series: { type: "line", point: { visible: false } },
         onOptionChanged: visualRangeChanged,
         argumentAxis: { visualRange: [3, 10] },
         valueAxis: { visualRange: { startValue: 4, endValue: 7 } }
@@ -737,6 +777,27 @@ QUnit.test("Set the visualRange option by the different ways", function(assert) 
     assert.deepEqual(visualRangeChanged.getCall(3).args[0].value, { visualRange: [2, 7] });
     assert.deepEqual(chart.option("valueAxis.visualRange"), [2, 7]);
     assert.deepEqual(chart._options.valueAxis._customVisualRange, [2, 7]);
+
+    visualRangeChanged.reset();
+    chart.option("valueAxis", { visualRange: { startValue: 3 } });
+
+    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { startValue: 3 } });
+    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 3, endValue: 7 });
+    assert.deepEqual(chart._options.valueAxis._customVisualRange, { startValue: 3 });
+
+    visualRangeChanged.reset();
+    chart.option("valueAxis", { visualRange: { endValue: 10 } });
+
+    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { endValue: 10 } });
+    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 3, endValue: 10 });
+    assert.deepEqual(chart._options.valueAxis._customVisualRange, { endValue: 10 });
+
+    visualRangeChanged.reset();
+    chart.option("valueAxis", { visualRange: { length: 2 } });
+
+    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { length: 2 } });
+    assert.deepEqual(chart.option("valueAxis.visualRange"), { startValue: 5, endValue: 7 });
+    assert.deepEqual(chart._options.valueAxis._customVisualRange, { length: 2 });
 });
 
 QUnit.test("Reload dataSource - visualRange option should be changed", function(assert) {
@@ -1236,6 +1297,34 @@ QUnit.test("dxChart reinitialization - dataSource - correct axes min max", funct
     assert.equal(argAxis.setBusinessRange.lastCall.args[0].max, 445);
     assert.equal(valAxis.setBusinessRange.lastCall.args[0].min, 1);
     assert.equal(valAxis.setBusinessRange.lastCall.args[0].max, 4);
+});
+
+QUnit.test("dxChart dataSource update - pass current argument axis' visualRangeUpdateMode to valueAxis", function(assert) {
+    // arrange
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val1: 1 },
+            { arg: 2, val1: 2 }],
+        series: [{
+            name: "First",
+            valueField: "val1"
+        }],
+        argumentAxis: { visualRangeUpdateMode: "reset" },
+        title: "original"
+    });
+
+    var valAxis = chart._valueAxes[0],
+        valFunction = valAxis.setBusinessRange;
+
+    valAxis.setBusinessRange = sinon.spy(function() { return valFunction.apply(valAxis, arguments); });
+
+    // act
+    this.$container.dxChart({
+        dataSource: [{ arg: 223, val1: 1 },
+            { arg: 445, val1: 4 }]
+    });
+
+    // assert
+    assert.equal(valAxis.setBusinessRange.lastCall.args[2], "reset");
 });
 
 QUnit.test("dxChart with vertical axis with title", function(assert) {

@@ -187,6 +187,8 @@ var Overlay = Widget.inherit({
             /**
             * @name dxOverlayOptions.position
             * @default { my: 'center', at: 'center', of: window }
+            * @fires dxOverlayOptions.onPositioning
+            * @fires dxOverlayOptions.onPositioned
             */
             position: {
                 my: "center",
@@ -1419,8 +1421,11 @@ var Overlay = Widget.inherit({
             case "maxWidth":
             case "minHeight":
             case "maxHeight":
-            case "position":
             case "boundaryOffset":
+                this._renderGeometry();
+                break;
+            case "position":
+                this._positionChangeHandled = false;
                 this._renderGeometry();
                 break;
             case "visible":
