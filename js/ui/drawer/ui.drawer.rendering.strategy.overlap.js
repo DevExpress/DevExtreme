@@ -4,7 +4,7 @@ import $ from "../../core/renderer";
 import translator from "../../animation/translator";
 import Overlay from "../overlay";
 import typeUtils from "../../core/utils/type";
-import { getWindow } from "../../core/utils/window";
+import { getWindow, hasWindow } from "../../core/utils/window";
 
 class OverlapStrategy extends DrawerStrategy {
 
@@ -177,6 +177,10 @@ class OverlapStrategy extends DrawerStrategy {
     }
 
     _processOverlayZIndex() {
+        if(!hasWindow()) {
+            return;
+        }
+
         const window = getWindow();
         const styles = window.getComputedStyle(this.getPanelContent().get(0));
         const zIndex = styles.zIndex || 1;
