@@ -1508,14 +1508,6 @@ var Scheduler = Widget.inherit({
 
         var combinedDataAccessors = this._combineDataAccessors();
 
-        this._appointmentModel = new SchedulerAppointmentModel(this._dataSource, {
-            startDateExpr: this._dataAccessors.expr.startDateExpr,
-            endDateExpr: this._dataAccessors.expr.endDateExpr,
-            allDayExpr: this._dataAccessors.expr.allDayExpr,
-            recurrenceRuleExpr: this._dataAccessors.expr.recurrenceRuleExpr,
-            recurrenceExceptionExpr: this._dataAccessors.expr.recurrenceExceptionExpr
-        }, combinedDataAccessors);
-
         this._appointmentModel = new SchedulerAppointmentModel(this._dataSource, combinedDataAccessors);
 
         this._initActions();
