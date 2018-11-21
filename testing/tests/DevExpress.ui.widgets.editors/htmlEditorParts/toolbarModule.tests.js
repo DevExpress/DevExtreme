@@ -531,6 +531,23 @@ QUnit.module("Toolbar module", simpleModuleConfig, () => {
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
             .trigger("mousedown");
     });
+
+    test("default click handler should correctly revert defined format", (assert) => {
+        this.options.items = ["bold"];
+        this.quillMock.getFormat = () => { return { bold: "" }; };
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $formatButton = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+        $formatButton.trigger("dxclick");
+
+        assert.deepEqual(
+            this.log,
+            [{
+                format: "bold",
+                value: false
+            }]);
+    });
 });
 
 QUnit.module("Active formats", simpleModuleConfig, () => {
