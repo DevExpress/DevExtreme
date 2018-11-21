@@ -1,5 +1,5 @@
 (function(root, factory) {
-    /* global define, DevExpress, jQuery */
+    /* global window, define, DevExpress, jQuery */
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             module.exports = factory(

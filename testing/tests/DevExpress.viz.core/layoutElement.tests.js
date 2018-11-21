@@ -12,7 +12,7 @@ environmentLE = {
         options = $.extend({
             x: 0, y: 0, width: 10, height: 10
         },
-            options);
+        options);
 
         var layoutElement = new LayoutElement(options);
         layoutElement.shift = sinon.spy();

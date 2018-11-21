@@ -22,7 +22,7 @@
             DevExpress.layouts.NavbarLayout.NavBarController,
             DevExpress.ui.themes,
             DevExpress.viewPort
-         );
+        );
     }
 }(this, function($, dxCommand, layoutHelper, NavbarLayoutController, themes, viewPort) {
 

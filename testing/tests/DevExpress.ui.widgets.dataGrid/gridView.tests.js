@@ -430,18 +430,18 @@ function createGridView(options, userOptions) {
     QUnit.test('Hide filterRow by filterRow visible', function(assert) {
         // arrange
         var gridView = this.createGridView(this.defaultOptions,
-            {
-                showColumnHeaders: false,
-                filterRow: {
-                    visible: false
-                },
-                groupPanel: {
-                    visible: false
-                },
-                searchPanel: {
-                    visible: false
-                }
-            }),
+                {
+                    showColumnHeaders: false,
+                    filterRow: {
+                        visible: false
+                    },
+                    groupPanel: {
+                        visible: false
+                    },
+                    searchPanel: {
+                        visible: false
+                    }
+                }),
             testElement = $('#container'),
             headers;
 
@@ -459,8 +459,8 @@ function createGridView(options, userOptions) {
         var done = assert.async(),
             defaultOptions = {
                 columnsController: new MockColumnsController([
-                { caption: 'Column 1', width: 500, allowResizing: true },
-                { caption: 'Column 2', width: 500, allowResizing: true }
+                    { caption: 'Column 1', width: 500, allowResizing: true },
+                    { caption: 'Column 2', width: 500, allowResizing: true }
                 ], this.commonColumnSettings),
                 dataController: new MockDataController({
                     items: [{ values: ['', ''] }]
@@ -495,8 +495,8 @@ function createGridView(options, userOptions) {
             columnsController: new MockColumnsController([{ caption: 'Column 1', visible: true }]),
             dataController: new MockDataController({
                 items: [
-                            { values: [1] },
-                            { values: [2] }
+                    { values: [1] },
+                    { values: [2] }
                 ]
             })
         });
@@ -524,17 +524,17 @@ function createGridView(options, userOptions) {
                 columnsController: new MockColumnsController([{ caption: 'Column 1', visible: true }]),
                 dataController: new MockDataController({
                     items: [
-                            { values: [1] },
-                            { values: [2] },
-                            { values: [3] },
-                            { values: [4] },
-                            { values: [5] }
+                        { values: [1] },
+                        { values: [2] },
+                        { values: [3] },
+                        { values: [4] },
+                        { values: [5] }
                     ],
                     totalItem: {
                         summaryCells: [
-                        { summaryType: "count", value: 100 },
-                        { summaryType: "min", value: 0 },
-                        { summaryType: "max", value: 120001 }
+                            { summaryType: "count", value: 100 },
+                            { summaryType: "min", value: 0 },
+                            { summaryType: "max", value: 120001 }
                         ]
                     }
                 })
@@ -581,11 +581,11 @@ function createGridView(options, userOptions) {
             columnsController: new MockColumnsController([{ caption: 'Column 1', visible: true }]),
             dataController: new MockDataController({
                 items: [
-                            { values: [1] },
-                            { values: [2] },
-                            { values: [3] },
-                            { values: [4] },
-                            { values: [5] }
+                    { values: [1] },
+                    { values: [2] },
+                    { values: [3] },
+                    { values: [4] },
+                    { values: [5] }
                 ]
             })
         });
@@ -732,8 +732,8 @@ function createGridView(options, userOptions) {
         // arrange, act
         var dataController = new MockDataController({
                 items: [
-                { values: [1] },
-                { values: [2] }
+                    { values: [1] },
+                    { values: [2] }
                 ]
             }),
             columnsController = new MockColumnsController([{ caption: 'Column 1', visible: true }]),
@@ -1418,7 +1418,7 @@ function createGridView(options, userOptions) {
         // arrange
         var defaultOptions = {
                 columnsController: new MockColumnsController([
-                { caption: 'Column 1', width: '120px' },
+                    { caption: 'Column 1', width: '120px' },
                     {
                         caption: 'Column 2', width: '130px', cellTemplate: function(container, options) {
                             $(container).append('<div style="width: 130px" />');
@@ -1616,9 +1616,9 @@ function createGridView(options, userOptions) {
                     items: [{ values: [''] }],
                     totalItem: {
                         summaryCells: [
-                        { summaryType: "count", value: 100 },
-                        { summaryType: "min", value: 0 },
-                        { summaryType: "max", value: 120001 }
+                            { summaryType: "count", value: 100 },
+                            { summaryType: "min", value: 0 },
+                            { summaryType: "max", value: 120001 }
                         ]
                     }
                 })
@@ -1934,12 +1934,12 @@ function createGridView(options, userOptions) {
                 { caption: 'Column 4', width: 100, fixed: true }]);
             this.defaultOptions.dataController.items = function() {
                 return [{ values: [1, 2, 'test 1', 15], rowType: "data" },
-                        { values: [3, 4, 'test 2', 16], rowType: "data" },
-                        { values: [5, 6, 'test 3', 17], rowType: "data" },
-                        { values: [7, 8, 'test 4', 18], rowType: "data" },
-                        { values: [9, 10, 'test 5', 19], rowType: "data" },
-                        { values: [11, 12, 'test 6', 20], rowType: "data" },
-                        { values: [13, 14, 'test 7', 21], rowType: "data" }];
+                    { values: [3, 4, 'test 2', 16], rowType: "data" },
+                    { values: [5, 6, 'test 3', 17], rowType: "data" },
+                    { values: [7, 8, 'test 4', 18], rowType: "data" },
+                    { values: [9, 10, 'test 5', 19], rowType: "data" },
+                    { values: [11, 12, 'test 6', 20], rowType: "data" },
+                    { values: [13, 14, 'test 7', 21], rowType: "data" }];
             };
 
             var gridView = this.createGridView(this.defaultOptions, {

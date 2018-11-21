@@ -497,10 +497,10 @@ QUnit.test("create correct seriesFamily", function(assert) {
 
 QUnit.test("adjust series dimension in seriesFamily", function(assert) {
     var chart = this.createSimplePolarChart(); // ,
-        // translators = {
-        //     arg: chart.translator,
-        //     val: chart.translator
-        // };
+    // translators = {
+    //     arg: chart.translator,
+    //     val: chart.translator
+    // };
 
     assert.ok(chart.seriesFamilies);
     assert.equal(chart.seriesFamilies.length, 1);

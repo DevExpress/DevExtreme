@@ -1737,8 +1737,8 @@ QUnit.test("release", function(assert) {
         topPocketHeight = $topPocket.height();
 
     var pointer = pointerMock($container)
-            .start()
-            .down();
+        .start()
+        .down();
     $container.scrollTop(-topPocketHeight);
     $($wrapper).trigger("scroll");
     pointer.up();

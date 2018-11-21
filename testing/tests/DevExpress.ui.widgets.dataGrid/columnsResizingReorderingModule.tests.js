@@ -710,8 +710,8 @@ function getEvent(options) {
 
             that.options = {
                 columns: [
-                        { caption: 'Column 1', visible: true, width: 150, index: 0 },
-                        { caption: 'Column 2', visible: true, width: 150, index: 1 }
+                    { caption: 'Column 1', visible: true, width: 150, index: 0 },
+                    { caption: 'Column 2', visible: true, width: 150, index: 1 }
                 ],
                 showColumnHeaders: true,
                 pager: {
@@ -862,10 +862,10 @@ function getEvent(options) {
     QUnit.test('Get points by columns', function(assert) {
         // arrange
         var resizeController = this.createColumnsResizerViewController([
-                    { caption: 'Column 1', width: '125px' },
-                    { caption: 'Column 2', width: '125px' },
-                    { caption: 'Column 3', width: '125px' },
-                    { caption: 'Column 4', width: '125px' }
+                { caption: 'Column 1', width: '125px' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' },
+                { caption: 'Column 4', width: '125px' }
             ]),
             $container = $("#container");
 
@@ -893,10 +893,10 @@ function getEvent(options) {
         // arrange
         this.options.columnResizingMode = "widget";
         var resizeController = this.createColumnsResizerViewController([
-                    { caption: 'Column 1', width: '125px' },
-                    { caption: 'Column 2', width: '125px' },
-                    { caption: 'Column 3', width: '125px' },
-                    { caption: 'Column 4', width: '125px' }
+                { caption: 'Column 1', width: '125px' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' },
+                { caption: 'Column 4', width: '125px' }
             ]),
             $container = $("#container");
 
@@ -920,10 +920,10 @@ function getEvent(options) {
         this.options.rtlEnabled = true;
         $("#container").css('direction', 'rtl');
         var resizeController = this.createColumnsResizerViewController([
-                    { caption: 'Column 1', width: '125px' },
-                    { caption: 'Column 2', width: '125px' },
-                    { caption: 'Column 3', width: '125px' },
-                    { caption: 'Column 4', width: '125px' }
+                { caption: 'Column 1', width: '125px' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' },
+                { caption: 'Column 4', width: '125px' }
             ]),
             $container = $("#container");
 
@@ -944,21 +944,21 @@ function getEvent(options) {
     QUnit.test('Get points by band columns', function(assert) {
         // arrange
         var resizeController = this.createColumnsResizerViewController([
-            [
-                        { caption: 'Column 1', width: '125px', rowspan: 2, index: 0, allowResizing: true },
-                        { caption: "Band Column 1", isBand: true, colspan: 2, index: 1, allowResizing: true },
-                        { caption: 'Column 4', width: '125px', rowspan: 2, index: 4, allowResizing: true }
-            ],
-            [
-                        { caption: 'Column 2', width: '125px', ownerBand: "Band Column 1", index: 2, allowResizing: true },
-                        { caption: 'Column 3', width: '125px', ownerBand: "Band Column 1", index: 3, allowResizing: true }
-            ],
-            [
-                        { caption: 'Column 1', width: '125px', rowspan: 2, rowIndex: 0, index: 0, allowResizing: true },
-                        { caption: 'Column 2', width: '125px', ownerBand: "Band Column 1", rowIndex: 1, index: 2, allowResizing: true },
-                        { caption: 'Column 3', width: '125px', ownerBand: "Band Column 1", rowIndex: 1, index: 3, allowResizing: true },
-                        { caption: 'Column 4', width: '125px', rowspan: 2, rowIndex: 0, index: 4, allowResizing: true }
-            ]
+                [
+                    { caption: 'Column 1', width: '125px', rowspan: 2, index: 0, allowResizing: true },
+                    { caption: "Band Column 1", isBand: true, colspan: 2, index: 1, allowResizing: true },
+                    { caption: 'Column 4', width: '125px', rowspan: 2, index: 4, allowResizing: true }
+                ],
+                [
+                    { caption: 'Column 2', width: '125px', ownerBand: "Band Column 1", index: 2, allowResizing: true },
+                    { caption: 'Column 3', width: '125px', ownerBand: "Band Column 1", index: 3, allowResizing: true }
+                ],
+                [
+                    { caption: 'Column 1', width: '125px', rowspan: 2, rowIndex: 0, index: 0, allowResizing: true },
+                    { caption: 'Column 2', width: '125px', ownerBand: "Band Column 1", rowIndex: 1, index: 2, allowResizing: true },
+                    { caption: 'Column 3', width: '125px', ownerBand: "Band Column 1", rowIndex: 1, index: 3, allowResizing: true },
+                    { caption: 'Column 4', width: '125px', rowspan: 2, rowIndex: 0, index: 4, allowResizing: true }
+                ]
             ]),
             $container = $("#container");
 
@@ -988,10 +988,10 @@ function getEvent(options) {
     QUnit.test('Get points by columns when column contains column is not allowResizing', function(assert) {
         // arrange
         var testColumns = [
-                    { caption: 'Column 1', width: '125px' },
-                    { caption: 'Column 2', width: '125px', allowResizing: false },
-                    { caption: 'Column 3', width: '125px' },
-                    { caption: 'Column 4', width: '125px' }
+                { caption: 'Column 1', width: '125px' },
+                { caption: 'Column 2', width: '125px', allowResizing: false },
+                { caption: 'Column 3', width: '125px' },
+                { caption: 'Column 4', width: '125px' }
             ],
             resizeController = this.createColumnsResizerViewController(testColumns),
             $container = $("#container");
@@ -1582,21 +1582,21 @@ function getEvent(options) {
 
         this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
         var resizeController = this.createColumnsResizerViewController([
-            [
-                        { caption: 'Column 1', width: '125px', rowspan: 2, index: 0, allowResizing: true },
-                        { caption: "Band Column 1", isBand: true, colspan: 2, index: 1, allowResizing: true },
-                        { caption: 'Column 4', width: '125px', rowspan: 2, index: 4, allowResizing: true }
-            ],
-            [
-                        { caption: 'Column 2', width: '125px', ownerBand: "Band Column 1", index: 2, allowResizing: true },
-                        { caption: 'Column 3', width: '125px', ownerBand: "Band Column 1", index: 3, allowResizing: true }
-            ],
-            [
-                        { caption: 'Column 1', width: '125px', rowspan: 2, rowIndex: 0, index: 0, allowResizing: true },
-                        { caption: 'Column 2', width: '125px', ownerBand: "Band Column 1", rowIndex: 1, index: 2, allowResizing: true },
-                        { caption: 'Column 3', width: '125px', ownerBand: "Band Column 1", rowIndex: 1, index: 3, allowResizing: true },
-                        { caption: 'Column 4', width: '125px', rowspan: 2, rowIndex: 0, index: 4, allowResizing: true }
-            ]
+                [
+                    { caption: 'Column 1', width: '125px', rowspan: 2, index: 0, allowResizing: true },
+                    { caption: "Band Column 1", isBand: true, colspan: 2, index: 1, allowResizing: true },
+                    { caption: 'Column 4', width: '125px', rowspan: 2, index: 4, allowResizing: true }
+                ],
+                [
+                    { caption: 'Column 2', width: '125px', ownerBand: "Band Column 1", index: 2, allowResizing: true },
+                    { caption: 'Column 3', width: '125px', ownerBand: "Band Column 1", index: 3, allowResizing: true }
+                ],
+                [
+                    { caption: 'Column 1', width: '125px', rowspan: 2, rowIndex: 0, index: 0, allowResizing: true },
+                    { caption: 'Column 2', width: '125px', ownerBand: "Band Column 1", rowIndex: 1, index: 2, allowResizing: true },
+                    { caption: 'Column 3', width: '125px', ownerBand: "Band Column 1", rowIndex: 1, index: 3, allowResizing: true },
+                    { caption: 'Column 4', width: '125px', rowspan: 2, rowIndex: 0, index: 4, allowResizing: true }
+                ]
             ]),
             $container = $("#container").height(500);
 
@@ -2454,10 +2454,10 @@ function getEvent(options) {
 
         // arrange
         this.component._controllers.columns = new MockColumnsController([
-                { caption: 'Column 1', visible: true, width: '150px' },
-                { caption: 'Column 2', visible: true, width: '150px' },
-                { caption: 'Column 3', visible: true, width: '150px' },
-                { caption: 'Column 4', visible: true, width: '150px' }], this.commonColumnSettings);
+            { caption: 'Column 1', visible: true, width: '150px' },
+            { caption: 'Column 2', visible: true, width: '150px' },
+            { caption: 'Column 3', visible: true, width: '150px' },
+            { caption: 'Column 4', visible: true, width: '150px' }], this.commonColumnSettings);
 
         var tablePositionController = new columnResizingReordering.TablePositionViewController(this.component),
             resizeController;
@@ -2626,9 +2626,9 @@ function getEvent(options) {
         // arrange
         this.component._views.trackerView = new columnResizingReordering.TrackerView(this.component);
         var controller = this.createColumnsResizerViewController([
-            { caption: 'Column 1' },
-            { caption: 'Column 2', width: '125px' },
-            { caption: 'Column 3', width: '125px' }
+                { caption: 'Column 1' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' }
             ]),
             testElement = $("#container");
 
@@ -2685,9 +2685,9 @@ function getEvent(options) {
         this.component._views.trackerView = new columnResizingReordering.TrackerView(this.component);
 
         var controller = this.createColumnsResizerViewController([
-            { caption: 'Column 1' },
-            { caption: 'Column 2', width: '125px' },
-            { caption: 'Column 3', width: '125px' }
+                { caption: 'Column 1' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' }
             ]),
             resultHeight,
             testElement = $("#container").height(102);
@@ -2980,7 +2980,7 @@ function getEvent(options) {
 
         // assert
         assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td')),
-                [{ x: -10000, y: -10000, columnIndex: 0, index: 0 }, { x: -9500, y: -10000, columnIndex: 1, index: 1 }, { x: -9000, y: -10000, columnIndex: 2, index: 2 }], 'dragging points');
+            [{ x: -10000, y: -10000, columnIndex: 0, index: 0 }, { x: -9500, y: -10000, columnIndex: 1, index: 1 }, { x: -9000, y: -10000, columnIndex: 2, index: 2 }], 'dragging points');
     });
 
     QUnit.test('Get points by columns with startColumnIndex', function(assert) {
@@ -2992,7 +2992,7 @@ function getEvent(options) {
 
         // assert
         assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'), null, null, 5),
-                [{ x: -10000, y: -10000, columnIndex: 5, index: 5 }, { x: -9500, y: -10000, columnIndex: 6, index: 6 }, { x: -9000, y: -10000, columnIndex: 7, index: 7 }], 'dragging points');
+            [{ x: -10000, y: -10000, columnIndex: 5, index: 5 }, { x: -9500, y: -10000, columnIndex: 6, index: 6 }, { x: -9000, y: -10000, columnIndex: 7, index: 7 }], 'dragging points');
     });
 
     QUnit.test('Get points by columns RTL', function(assert) {
@@ -3006,15 +3006,15 @@ function getEvent(options) {
 
         // assert
         assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td')),
-                [{ x: -9000, y: -10000, columnIndex: 0, index: 0 }, { x: -9500, y: -10000, columnIndex: 1, index: 1 }, { x: -10000, y: -10000, columnIndex: 2, index: 2 }], 'dragging points for RTL');
+            [{ x: -9000, y: -10000, columnIndex: 0, index: 0 }, { x: -9500, y: -10000, columnIndex: 1, index: 1 }, { x: -10000, y: -10000, columnIndex: 2, index: 2 }], 'dragging points for RTL');
     });
 
     QUnit.test('Get points by columns with checkbox cell', function(assert) {
         // arrange
         var testColumns = [
-            { caption: 'Column 1', allowReordering: false, allowGrouping: false, width: 70 },
-            { caption: 'Column 2', width: '125px' },
-            { caption: 'Column 3', width: '125px' }
+                { caption: 'Column 1', allowReordering: false, allowGrouping: false, width: 70 },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' }
             ],
             controller = this.createDraggingHeaderViewController(testColumns),
             $cells;
@@ -3036,8 +3036,8 @@ function getEvent(options) {
     QUnit.test('Get points by columns when allowReordering false, allowGrouping true', function(assert) {
         // arrange
         var testColumns = [
-            { caption: 'Column 1', allowReordering: false, allowGrouping: true, width: 125 },
-            { caption: 'Column 2', allowReordering: false, allowGrouping: true, width: 125 }
+                { caption: 'Column 1', allowReordering: false, allowGrouping: true, width: 125 },
+                { caption: 'Column 2', allowReordering: false, allowGrouping: true, width: 125 }
             ],
             controller = this.createDraggingHeaderViewController(testColumns),
             $cells;
@@ -3060,8 +3060,8 @@ function getEvent(options) {
     QUnit.test('Not get points by columns when allowReordering false, allowGrouping true and location is headers', function(assert) {
         // arrange
         var testColumns = [
-            { caption: 'Column 1', allowReordering: false, allowGrouping: true, width: 125 },
-            { caption: 'Column 2', allowReordering: false, allowGrouping: true, width: 125 }
+                { caption: 'Column 1', allowReordering: false, allowGrouping: true, width: 125 },
+                { caption: 'Column 2', allowReordering: false, allowGrouping: true, width: 125 }
             ],
             controller = this.createDraggingHeaderViewController(testColumns),
             $cells;
@@ -3081,9 +3081,9 @@ function getEvent(options) {
         // arrange
         var testElement = $("#container"),
             controller = this.createDraggingHeaderViewController([
-            { caption: 'Column 1' },
-            { caption: 'Column 2', width: '125px' },
-            { caption: 'Column 3', width: '125px' }
+                { caption: 'Column 1' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' }
             ]),
             $draggingHeader;
 
@@ -3104,9 +3104,9 @@ function getEvent(options) {
         // arrange
         this.commonColumnSettings.allowReordering = false;
         var controller = this.createDraggingHeaderViewController([
-                    { caption: 'Column 1' },
-                    { caption: 'Column 2', width: '125px' },
-                    { caption: 'Column 3', width: '125px' }
+                { caption: 'Column 1' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' }
             ]),
             testElement = $('#container'),
             $draggingHeader;
@@ -3127,9 +3127,9 @@ function getEvent(options) {
         // arrange
         this.commonColumnSettings.allowGrouping = false;
         var controller = this.createDraggingHeaderViewController([
-                    { caption: 'Column 1' },
-                    { caption: 'Column 2', width: '125px' },
-                    { caption: 'Column 3', width: '125px' }
+                { caption: 'Column 1' },
+                { caption: 'Column 2', width: '125px' },
+                { caption: 'Column 3', width: '125px' }
             ]),
             testElement = $('#container'),
             $draggingHeader;
@@ -3152,7 +3152,7 @@ function getEvent(options) {
         this.options.allowColumnReordering = true;
 
         this.createDraggingHeaderViewController([
-                    { caption: 'Column 1' }
+            { caption: 'Column 1' }
         ]);
 
         var testElement = $('#container'),
@@ -4346,16 +4346,16 @@ function getEvent(options) {
                 },
                 location: 'headers'
             }),
-                new MockDraggingPanel({
-                    $element: $('<div/>'),
-                    columnElements: $("#itemsContainer").children(),
-                    columns: [{ allowReordering: true }, { allowReordering: true }],
-                    offset: {
-                        top: 0,
-                        bottom: 30
-                    },
-                    location: 'group'
-                })];
+            new MockDraggingPanel({
+                $element: $('<div/>'),
+                columnElements: $("#itemsContainer").children(),
+                columns: [{ allowReordering: true }, { allowReordering: true }],
+                offset: {
+                    top: 0,
+                    bottom: 30
+                },
+                location: 'group'
+            })];
 
             setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'gridView', 'columnsResizingReordering', 'columnChooser'], {
                 initViews: true,
@@ -5313,29 +5313,29 @@ function getEvent(options) {
                 },
                 location: 'headers'
             }),
-                new MockDraggingPanel({
-                    $element: $('<div/>'),
-                    columnElements: $("#itemsContainer").children(),
-                    columns: [{ allowHiding: true, allowReordering: true }, { allowHiding: true, allowReordering: true }],
-                    offset: {
-                        top: 0,
-                        bottom: 30
-                    },
-                    location: 'group'
-                }),
-                new MockDraggingPanel({
-                    $element: $('<div/>'),
-                    columnElements: $("#itemsContainerVertical").children(),
-                    columns: [{ dataField: "Test1", allowHiding: true, allowReordering: true }, { dataField: "Test2", allowHiding: true, allowReordering: true }],
-                    offset: {
-                        left: -9900,
-                        right: -9700,
-                        top: -9500,
-                        bottom: -9300
-                    },
-                    location: 'columnChooser',
-                    scrollTop: 0
-                })];
+            new MockDraggingPanel({
+                $element: $('<div/>'),
+                columnElements: $("#itemsContainer").children(),
+                columns: [{ allowHiding: true, allowReordering: true }, { allowHiding: true, allowReordering: true }],
+                offset: {
+                    top: 0,
+                    bottom: 30
+                },
+                location: 'group'
+            }),
+            new MockDraggingPanel({
+                $element: $('<div/>'),
+                columnElements: $("#itemsContainerVertical").children(),
+                columns: [{ dataField: "Test1", allowHiding: true, allowReordering: true }, { dataField: "Test2", allowHiding: true, allowReordering: true }],
+                offset: {
+                    left: -9900,
+                    right: -9700,
+                    top: -9500,
+                    bottom: -9300
+                },
+                location: 'columnChooser',
+                scrollTop: 0
+            })];
 
             setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'headerPanel', 'grouping', 'gridView', 'columnsResizingReordering', 'columnChooser'], {
                 initViews: true,

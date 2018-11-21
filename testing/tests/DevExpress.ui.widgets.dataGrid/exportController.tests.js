@@ -907,10 +907,10 @@ QUnit.test("Get total summary value", function(assert) {
 QUnit.test("Get total summary value when selected items are defined", function(assert) {
     // arrange
     var dataSource = [
-            { Name: 1, Price: 1, Sale: 0.03 },
-            { Name: 2, Price: 12, Sale: 0.14 },
-            { Name: 3, Price: 12, Sale: 0.63 },
-            { Name: 4, Price: 1, Sale: 0.93 }
+        { Name: 1, Price: 1, Sale: 0.03 },
+        { Name: 2, Price: 12, Sale: 0.14 },
+        { Name: 3, Price: 12, Sale: 0.63 },
+        { Name: 4, Price: 1, Sale: 0.93 }
     ];
 
     this.setupModules({
@@ -978,7 +978,7 @@ QUnit.test("Get total summary value when selected items are defined. Deferred se
                 { id: 3, Name: 3, Price: 12, Sale: 0.63 },
                 { id: 4, Name: 4, Price: 1, Sale: 0.93 }
             ],
-                key: "id"
+            key: "id"
             })
         },
         selectionFilter: [["id", "=", 2], "or", ["id", "=", 3]],
@@ -1043,7 +1043,7 @@ QUnit.test("Get total summary value when selected items are defined. Deferred se
                 { id: 3, Name: 3, Price: 12, Sale: 0.63 },
                 { id: 4, Name: 4, Price: 1, Sale: 0.93 }
             ],
-                key: "id"
+            key: "id"
             })
         },
         selectionFilter: [["id", "=", 2], "or", ["id", "=", 3]],
@@ -1527,10 +1527,10 @@ QUnit.test("Summary group footers are contained in the options", function(assert
         columns: [{ dataField: "Name", groupIndex: 0, showWhenGrouped: true }, "Price", "Sale"]
     });
 
-        // act
+    // act
     this.exportController.getDataProvider().ready();
 
-        // assert
+    // assert
     assert.ok(this.exportController._hasSummaryGroupFooters());
     assert.equal(summaryRowTypes.length, 2, "group footers count");
 });
@@ -2007,7 +2007,7 @@ QUnit.test("Default options", function(assert) {
 });
 
 QUnit.test("get header row count when headers is visible", function(assert) {
-        // arrange
+    // arrange
     this.setupModules({
         showColumnHeaders: true,
         columns: [{
@@ -2040,7 +2040,7 @@ QUnit.test("get header row count when headers is visible", function(assert) {
 });
 
 QUnit.test("get header row count when headers is hidden", function(assert) {
-        // arrange
+    // arrange
     this.setupModules({
         showColumnHeaders: false,
         columns: [{
@@ -2073,7 +2073,7 @@ QUnit.test("get header row count when headers is hidden", function(assert) {
 });
 
 QUnit.test("get cell merging", function(assert) {
-        // arrange
+    // arrange
     this.setupModules({
         showColumnHeaders: true,
         columns: [{
@@ -2107,7 +2107,7 @@ QUnit.test("get cell merging", function(assert) {
 });
 
 QUnit.test("get frozen area", function(assert) {
-        // arrange
+    // arrange
     this.setupModules({
         showColumnHeaders: true,
         columns: [{
@@ -2946,10 +2946,10 @@ QUnit.test("Get columns with width from rowsView after grouping", function(asser
             groupPanel: { visible: true },
             grouping: { autoExpandAll: false },
             dataSource: [
-            { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 },
-            { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 },
-            { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 },
-            { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 }
+                { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 },
+                { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 },
+                { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 },
+                { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 }
             ],
             columns: [{
                 dataField: 'TestField1', dataType: "string", groupIndex: 1
@@ -2984,10 +2984,10 @@ QUnit.test("Get columns with width when headers is hidden", function(assert) {
             width: 300,
             loadingTimeout: 0,
             dataSource: [
-            { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 },
-            { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 },
-            { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 },
-            { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 }
+                { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 },
+                { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 },
+                { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 },
+                { "TestField1": 1, "TestField2": 2, "TestField3": 3, "TestField4": 4 }
             ],
             showColumnHeaders: false,
             columns: [{

@@ -472,7 +472,7 @@ QUnit.test("Validator without adapter should throw exception", function(assert) 
             return /E0120/.test(e.message);
         },
         "Exception messages should be readable"
-        );
+    );
 });
 
 QUnit.test("Attempt to set null adapter should throw exception", function(assert) {
@@ -494,7 +494,7 @@ QUnit.test("Attempt to set null adapter should throw exception", function(assert
             return /E0120/.test(e.message);
         },
         "Exception messages should be readable"
-        );
+    );
 });
 
 

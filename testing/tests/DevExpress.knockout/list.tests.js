@@ -169,14 +169,14 @@ QUnit.module("selecting MVVM support");
 
 QUnit.test("grouped list should respond on outside selectedItems changes", function(assert) {
     var items = [
-        {
-            key: 'first',
-            items: [{ a: 0 }, { a: 1 }]
-        },
-        {
-            key: 'second',
-            items: [{ a: 3 }, { a: 4 }]
-        }
+            {
+                key: 'first',
+                items: [{ a: 0 }, { a: 1 }]
+            },
+            {
+                key: 'second',
+                items: [{ a: 3 }, { a: 4 }]
+            }
         ],
         $list = $("#koSelectingList");
     var vm = {

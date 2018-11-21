@@ -16,7 +16,7 @@
             jQuery,
             DevExpress.layouts.PopupLayout,
             DevExpress.testHelpers
-         );
+        );
     }
 }(this, function($, popupLayoutControllerModule, layoutHelper) {
 

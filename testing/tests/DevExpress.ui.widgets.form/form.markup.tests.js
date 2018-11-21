@@ -1209,7 +1209,7 @@ QUnit.module("Grouping", () => {
     });
 
     test("Hide nested group item", (assert) => {
-            // arrange
+        // arrange
         let $formContainer = $("#form").dxForm({
                 formData: {
                     photo: "image.png",
@@ -1236,18 +1236,18 @@ QUnit.module("Grouping", () => {
             }),
             form = $formContainer.dxForm("instance");
 
-            // act
+        // act
         let $formGroups = $formContainer.find("." + internals.FORM_GROUP_CLASS);
 
-            // assert
+        // assert
         assert.equal($formGroups.length, 3, "3 groups were rendered");
 
-            // act
+        // act
         let changeItemOptionSpy = sinon.spy(form, "_changeItemOption");
         form.option("items[0].items[1].visible", false);
         $formGroups = $formContainer.find("." + internals.FORM_GROUP_CLASS);
 
-            // assert
+        // assert
         assert.equal($formGroups.length, 2, "Two groups were rendered");
         assert.equal(changeItemOptionSpy.args[0][1], "visible", "option's name is correct");
         assert.equal(changeItemOptionSpy.args[0][2], false, "option's value is correct");

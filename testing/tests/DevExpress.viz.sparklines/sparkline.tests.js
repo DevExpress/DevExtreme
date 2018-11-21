@@ -1190,8 +1190,8 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [{ border: { color: "red" }, visible: true },
-        { border: { color: "green" }, visible: true },
-        { border: { color: "#666666" }, visible: true }]);
+            { border: { color: "green" }, visible: true },
+            { border: { color: "#666666" }, visible: true }]);
     });
 
     QUnit.test('B239983. Datasource is array with object and string', function(assert) {
@@ -1203,8 +1203,8 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [{ border: { color: "#666666" }, visible: true },
-        { border: { color: "green" }, visible: true },
-        { border: { color: "red" }, visible: true }]);
+            { border: { color: "green" }, visible: true },
+            { border: { color: "red" }, visible: true }]);
     });
 
     QUnit.test('Get extremum points indexes when datasource is not ordered - B239987', function(assert) {
@@ -1216,8 +1216,8 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [{ border: { color: "green" }, visible: true },
-        { border: { color: "green" }, visible: true },
-        { border: { color: "red" }, visible: true }]);
+            { border: { color: "green" }, visible: true },
+            { border: { color: "red" }, visible: true }]);
     });
 
     QUnit.test('Get extremum points indexes when mode is first last', function(assert) {

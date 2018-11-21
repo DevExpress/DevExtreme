@@ -1,5 +1,5 @@
 (function(root, factory) {
-    /* global define, DevExpress, jQuery */
+    /* global window, define, DevExpress, jQuery */
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             module.exports = factory(
@@ -17,7 +17,7 @@
             jQuery,
             DevExpress.framework.html.layoutSets,
             DevExpress.framework.html.DefaultLayoutController
-         );
+        );
         root.DevExpress.framework.html.PivotLayoutController = root.DevExpress.layouts.PivotLayout.PivotLayoutController;
     }
 }(window, function($, layoutSets, DefaultLayoutController) {

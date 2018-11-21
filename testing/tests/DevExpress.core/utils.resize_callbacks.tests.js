@@ -36,7 +36,7 @@ QUnit.module('resizeCallbacks', {
             });
         };
         this.callbacks.add(function() { });
-        this.triggerResize();   //  to reset size cache
+        this.triggerResize(); //  to reset size cache
     },
     afterEach: function() {
         domAdapter.getDocumentElement = this.__originalDocumentElementGetter;
@@ -46,7 +46,7 @@ QUnit.module('resizeCallbacks', {
         delete this.width;
         delete this.height;
         delete this.callbacks;
-        this.triggerResize();   //  to reset size cache
+        this.triggerResize(); //  to reset size cache
         delete this.triggerResize;
     }
 });

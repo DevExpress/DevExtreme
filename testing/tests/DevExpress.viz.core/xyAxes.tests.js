@@ -965,11 +965,11 @@ QUnit.module("Label overlapping, 'rotate' mode", overlappingEnvironment);
 
 QUnit.test("horizontal axis, labels overlap, rotationAngle is 90", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts, i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -989,11 +989,11 @@ QUnit.test("alignment of labels after rotate", function(assert) {
     this.translator.translate.withArgs(7).returns(45);
     this.translator.translate.withArgs(9).returns(60);
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1013,11 +1013,11 @@ QUnit.test("alignment of labels after rotate, angle less than 0", function(asser
     this.translator.translate.withArgs(9).returns(60);
 
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1035,11 +1035,11 @@ QUnit.test("custom alignment for labels", function(assert) { // TODO: remove use
     this.translator.translate.withArgs(7).returns(45);
     this.translator.translate.withArgs(9).returns(60);
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1086,11 +1086,11 @@ QUnit.test("Check title offset after olerlap resolving", function(assert) {
     this.translator.translate.withArgs(7).returns(45);
     this.translator.translate.withArgs(9).returns(60);
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1115,11 +1115,11 @@ QUnit.test("Check title offset after olerlap resolving", function(assert) {
 
 QUnit.test("labels overlap after rotation", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 20 },
-        { x: 15, y: 0, width: 10, height: 20 },
-        { x: 20, y: 0, width: 20, height: 20 },
-        { x: 45, y: 0, width: 10, height: 20 },
-        { x: 60, y: 0, width: 10, height: 20 }
+            { x: 0, y: 0, width: 10, height: 20 },
+            { x: 15, y: 0, width: 10, height: 20 },
+            { x: 20, y: 0, width: 20, height: 20 },
+            { x: 45, y: 0, width: 10, height: 20 },
+            { x: 60, y: 0, width: 10, height: 20 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1137,11 +1137,11 @@ QUnit.test("labels overlap after rotation", function(assert) {
 
 QUnit.test("labels overlap, rotationAngle is zero", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1159,11 +1159,11 @@ QUnit.test("labels overlap, rotationAngle is zero", function(assert) {
 
 QUnit.test("labels overlap, rotationAngle less then zero", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 8 },
-        { x: 15, y: 0, width: 10, height: 8 },
-        { x: 20, y: 0, width: 20, height: 8 },
-        { x: 45, y: 0, width: 10, height: 8 },
-        { x: 60, y: 0, width: 10, height: 8 }
+            { x: 0, y: 0, width: 10, height: 8 },
+            { x: 15, y: 0, width: 10, height: 8 },
+            { x: 20, y: 0, width: 20, height: 8 },
+            { x: 45, y: 0, width: 10, height: 8 },
+            { x: 60, y: 0, width: 10, height: 8 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1181,11 +1181,11 @@ QUnit.test("labels overlap, rotationAngle less then zero", function(assert) {
 
 QUnit.test("labels overlap, rotationAngle is 180", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1203,11 +1203,11 @@ QUnit.test("labels overlap, rotationAngle is 180", function(assert) {
 
 QUnit.test("labels overlap, rotationAngle less then 90", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1225,11 +1225,11 @@ QUnit.test("labels overlap, rotationAngle less then 90", function(assert) {
 
 QUnit.test("labels overlap, rotationAngle more then 90", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1247,11 +1247,11 @@ QUnit.test("labels overlap, rotationAngle more then 90", function(assert) {
 
 QUnit.test("Alignment of labels after their rotation and updating width of canvas", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts, i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1275,11 +1275,11 @@ QUnit.test("Alignment of labels after their rotation and updating width of canva
 // DEPRECATED 17_1 start
 QUnit.test("User rotationAngle in overlappingBehavior options, rotationAngle = 45", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts, i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1294,11 +1294,11 @@ QUnit.test("User rotationAngle in overlappingBehavior options, rotationAngle = 4
 
 QUnit.test("User rotationAngle in overlappingBehavior options, rotationAngle = 0", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts, i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1320,11 +1320,11 @@ QUnit.module("Label overlapping, 'stagger' mode", overlappingEnvironment);
 
 QUnit.test("Labels overlap", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 20, y: 0, width: 10, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 20, y: 0, width: 10, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1351,12 +1351,12 @@ QUnit.test("Labels overlap", function(assert) {
 
 QUnit.test("Check title offset after olerlap resolving", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 20, y: 0, width: 10, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 20, y: 0, width: 10, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1383,14 +1383,14 @@ QUnit.test("Check title offset after olerlap resolving", function(assert) {
 
 QUnit.test("Labels overlap, some of them hide", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 20, height: 5 },
-        { x: 15, y: 0, width: 20, height: 6 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 15, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 },
-        { x: 85, y: 0, width: 10, height: 5 },
-        { x: 100, y: 0, width: 10, height: 5 },
-        { x: 115, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 20, height: 5 },
+            { x: 15, y: 0, width: 20, height: 6 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 15, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 },
+            { x: 85, y: 0, width: 10, height: 5 },
+            { x: 100, y: 0, width: 10, height: 5 },
+            { x: 115, y: 0, width: 10, height: 5 }
         ],
         texts;
 
@@ -1426,11 +1426,11 @@ QUnit.test("Labels overlap, some of them hide", function(assert) {
 
 QUnit.test("Axis position is top", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 20, y: 0, width: 10, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 20, y: 0, width: 10, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1457,11 +1457,11 @@ QUnit.test("Axis position is top", function(assert) {
 
 QUnit.test("staggeringSpacing more than zero", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 20, y: 0, width: 10, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 20, y: 0, width: 10, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1488,11 +1488,11 @@ QUnit.test("staggeringSpacing more than zero", function(assert) {
 // DEPRECATED 17_1 start
 QUnit.test("User staggeringSpacing in overlappingBehavior options, staggeringSpacing = 3", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 20, y: 0, width: 10, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 20, y: 0, width: 10, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1518,11 +1518,11 @@ QUnit.test("User staggeringSpacing in overlappingBehavior options, staggeringSpa
 
 QUnit.test("User staggeringSpacing in overlappingBehavior options, staggeringSpacing = 0", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 20, y: 0, width: 10, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 20, y: 0, width: 10, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1551,11 +1551,11 @@ QUnit.module("Label overlapping, 'auto' mode", overlappingEnvironment);
 
 QUnit.test("Labels overlap and apply stagger mode", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 30, y: 0, width: 15, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 30, y: 0, width: 15, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1581,11 +1581,11 @@ QUnit.test("Labels overlap and apply stagger mode", function(assert) {
 
 QUnit.test("Labels overlap and rotate -45 degrees", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 30, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 30, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 5 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts, i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1600,11 +1600,11 @@ QUnit.test("Labels overlap and rotate -45 degrees", function(assert) {
 
 QUnit.test("Labels overlap and rotate -90 degrees", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 10, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 30, y: 0, width: 10, height: 5 },
-        { x: 40, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 10, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 30, y: 0, width: 10, height: 5 },
+            { x: 40, y: 0, width: 10, height: 5 }
         ],
         texts, i;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1619,11 +1619,11 @@ QUnit.test("Labels overlap and rotate -90 degrees", function(assert) {
 
 QUnit.test("Labels overlap, rotate -90 degrees and hide", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 10 },
-        { x: 10, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 20 },
-        { x: 30, y: 0, width: 10, height: 5 },
-        { x: 40, y: 0, width: 10, height: 10 }
+            { x: 0, y: 0, width: 10, height: 10 },
+            { x: 10, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 20 },
+            { x: 30, y: 0, width: 10, height: 5 },
+            { x: 40, y: 0, width: 10, height: 10 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1643,11 +1643,11 @@ QUnit.module("Display mode for label", overlappingEnvironment);
 
 QUnit.test("Custom rotation angle, overlapping mode is none", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 10 },
-        { x: 10, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 20 },
-        { x: 30, y: 0, width: 10, height: 5 },
-        { x: 40, y: 0, width: 10, height: 10 }
+            { x: 0, y: 0, width: 10, height: 10 },
+            { x: 10, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 20 },
+            { x: 30, y: 0, width: 10, height: 5 },
+            { x: 40, y: 0, width: 10, height: 10 }
         ],
         texts,
         i;
@@ -1664,11 +1664,11 @@ QUnit.test("Custom rotation angle, overlapping mode is none", function(assert) {
 
 QUnit.test("Custom rotation angle, overlapping mode is ignore", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 10 },
-        { x: 10, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 20 },
-        { x: 30, y: 0, width: 10, height: 5 },
-        { x: 40, y: 0, width: 10, height: 10 }
+            { x: 0, y: 0, width: 10, height: 10 },
+            { x: 10, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 20 },
+            { x: 30, y: 0, width: 10, height: 5 },
+            { x: 40, y: 0, width: 10, height: 10 }
         ],
         texts,
         i;
@@ -1685,11 +1685,11 @@ QUnit.test("Custom rotation angle, overlapping mode is ignore", function(assert)
 
 QUnit.test("Custom rotation angle, overlapping mode is hide, labels are not overlap", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 10, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 10, height: 5 },
-        { x: 30, y: 0, width: 10, height: 5 },
-        { x: 40, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 10, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 10, height: 5 },
+            { x: 30, y: 0, width: 10, height: 5 },
+            { x: 40, y: 0, width: 10, height: 5 }
         ],
         texts,
         i;
@@ -1706,11 +1706,11 @@ QUnit.test("Custom rotation angle, overlapping mode is hide, labels are not over
 
 QUnit.test("Custom rotation angle, overlapping mode is hide, labels are overlap", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 10 },
-        { x: 10, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 10 },
-        { x: 30, y: 0, width: 10, height: 5 },
-        { x: 40, y: 0, width: 10, height: 10 }
+            { x: 0, y: 0, width: 10, height: 10 },
+            { x: 10, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 10 },
+            { x: 30, y: 0, width: 10, height: 5 },
+            { x: 40, y: 0, width: 10, height: 10 }
         ],
         texts,
         i;
@@ -1738,11 +1738,11 @@ QUnit.test("Custom rotation angle, overlapping mode is hide, one tick", function
 
 QUnit.test("Custom rotation angle, overlapping mode besides hide, none or ignor shouldn't apply", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 10 },
-        { x: 10, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 10 },
-        { x: 30, y: 0, width: 10, height: 5 },
-        { x: 40, y: 0, width: 10, height: 10 }
+            { x: 0, y: 0, width: 10, height: 10 },
+            { x: 10, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 10 },
+            { x: 30, y: 0, width: 10, height: 5 },
+            { x: 40, y: 0, width: 10, height: 10 }
         ],
         texts,
         i;
@@ -1761,11 +1761,11 @@ QUnit.test("Custom rotation angle, overlapping mode besides hide, none or ignor 
 
 QUnit.test("Custom staggering spacing, overlapping mode is hide, labels are not overlap", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 20, y: 0, width: 10, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 20, y: 0, width: 10, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1792,11 +1792,11 @@ QUnit.test("Custom staggering spacing, overlapping mode is hide, labels are not 
 
 QUnit.test("Custom staggering spacing, overlapping mode is hide, labels are overlap", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 20, height: 6 },
-        { x: 20, y: 0, width: 10, height: 5 },
-        { x: 45, y: 0, width: 20, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 20, height: 6 },
+            { x: 20, y: 0, width: 10, height: 5 },
+            { x: 45, y: 0, width: 20, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1823,11 +1823,11 @@ QUnit.test("Custom staggering spacing, overlapping mode is hide, labels are over
 
 QUnit.test("Custom staggering spacing, overlapping mode is none, labels are not overlap", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 20, y: 0, width: 10, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 20, y: 0, width: 10, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1854,11 +1854,11 @@ QUnit.test("Custom staggering spacing, overlapping mode is none, labels are not 
 
 QUnit.test("Custom staggering spacing, overlapping mode is ignore, labels are not overlap", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 20, y: 0, width: 10, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 20, y: 0, width: 10, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1885,11 +1885,11 @@ QUnit.test("Custom staggering spacing, overlapping mode is ignore, labels are no
 
 QUnit.test("Custom staggering spacing, overlapping mode is none, labels are overlap", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 20, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 20, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1916,11 +1916,11 @@ QUnit.test("Custom staggering spacing, overlapping mode is none, labels are over
 
 QUnit.test("Custom staggering spacing, overlapping mode is ignore, labels are overlap", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 20, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 20, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -1952,11 +1952,11 @@ QUnit.test("For value axis shouldn't apply display mode", function(assert) {
     this.translator.translate.withArgs(7).returns(20);
     this.translator.translate.withArgs(9).returns(10);
     var markersBBoxes = [
-        { x: 0, y: 60, height: 10, width: 4 },
-        { x: 0, y: 45, height: 10, width: 4 },
-        { x: 0, y: 20, height: 30, width: 4 },
-        { x: 0, y: 15, height: 10, width: 4 },
-        { x: 0, y: 0, height: 10, width: 4 }
+            { x: 0, y: 60, height: 10, width: 4 },
+            { x: 0, y: 45, height: 10, width: 4 },
+            { x: 0, y: 20, height: 30, width: 4 },
+            { x: 0, y: 15, height: 10, width: 4 },
+            { x: 0, y: 0, height: 10, width: 4 }
         ],
         i,
         texts;
@@ -1975,11 +1975,11 @@ QUnit.test("For value axis shouldn't apply display mode", function(assert) {
 
 QUnit.test("Invalid display mode", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 20, height: 5 },
-        { x: 15, y: 0, width: 10, height: 5 },
-        { x: 20, y: 0, width: 20, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 20, height: 5 },
+            { x: 15, y: 0, width: 10, height: 5 },
+            { x: 20, y: 0, width: 20, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts,
         i;
@@ -2018,11 +2018,11 @@ QUnit.test("Labels are empty", function(assert) {
 
 QUnit.test("Temporary _auto mode support", function(assert) {
     var markersBBoxes = [
-        { x: 0, y: 0, width: 10, height: 5 },
-        { x: 15, y: 0, width: 10, height: 6 },
-        { x: 30, y: 0, width: 15, height: 5 },
-        { x: 45, y: 0, width: 10, height: 7 },
-        { x: 60, y: 0, width: 10, height: 5 }
+            { x: 0, y: 0, width: 10, height: 5 },
+            { x: 15, y: 0, width: 10, height: 6 },
+            { x: 30, y: 0, width: 15, height: 5 },
+            { x: 45, y: 0, width: 10, height: 7 },
+            { x: 60, y: 0, width: 10, height: 5 }
         ],
         texts;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -2049,11 +2049,11 @@ QUnit.module("Label overlapping, 'none' mode", overlappingEnvironment);
 
 QUnit.test("horizontal axis", function(assert) {
     var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 4 },
-            { x: 15, y: 0, width: 10, height: 4 },
-            { x: 20, y: 0, width: 20, height: 4 },
-            { x: 45, y: 0, width: 10, height: 4 },
-            { x: 60, y: 0, width: 10, height: 4 }
+        { x: 0, y: 0, width: 10, height: 4 },
+        { x: 15, y: 0, width: 10, height: 4 },
+        { x: 20, y: 0, width: 20, height: 4 },
+        { x: 45, y: 0, width: 10, height: 4 },
+        { x: 60, y: 0, width: 10, height: 4 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: { mode: "none" } } });
@@ -2064,11 +2064,11 @@ QUnit.test("horizontal axis", function(assert) {
 
 QUnit.test("horizontal axis. deprecated ignore mode", function(assert) {
     var markersBBoxes = [
-            { x: 0, y: 0, width: 10, height: 4 },
-            { x: 15, y: 0, width: 10, height: 4 },
-            { x: 20, y: 0, width: 20, height: 4 },
-            { x: 45, y: 0, width: 10, height: 4 },
-            { x: 60, y: 0, width: 10, height: 4 }
+        { x: 0, y: 0, width: 10, height: 4 },
+        { x: 15, y: 0, width: 10, height: 4 },
+        { x: 20, y: 0, width: 20, height: 4 },
+        { x: 45, y: 0, width: 10, height: 4 },
+        { x: 60, y: 0, width: 10, height: 4 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: { mode: "ignore" } } });
@@ -2084,11 +2084,11 @@ QUnit.test("vertical axis", function(assert) {
     this.translator.translate.withArgs(7).returns(20);
     this.translator.translate.withArgs(9).returns(10);
     var markersBBoxes = [
-            { x: 0, y: 60, height: 10, width: 4 },
-            { x: 0, y: 45, height: 10, width: 4 },
-            { x: 0, y: 20, height: 30, width: 4 },
-            { x: 0, y: 15, height: 10, width: 4 },
-            { x: 0, y: 0, height: 10, width: 4 }
+        { x: 0, y: 60, height: 10, width: 4 },
+        { x: 0, y: 45, height: 10, width: 4 },
+        { x: 0, y: 20, height: 30, width: 4 },
+        { x: 0, y: 15, height: 10, width: 4 },
+        { x: 0, y: 0, height: 10, width: 4 }
     ];
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
@@ -2105,11 +2105,11 @@ QUnit.test("vertical axis. deprecated ignore mode", function(assert) {
     this.translator.translate.withArgs(7).returns(20);
     this.translator.translate.withArgs(9).returns(10);
     var markersBBoxes = [
-            { x: 0, y: 60, height: 10, width: 4 },
-            { x: 0, y: 45, height: 10, width: 4 },
-            { x: 0, y: 20, height: 30, width: 4 },
-            { x: 0, y: 15, height: 10, width: 4 },
-            { x: 0, y: 0, height: 10, width: 4 }
+        { x: 0, y: 60, height: 10, width: 4 },
+        { x: 0, y: 45, height: 10, width: 4 },
+        { x: 0, y: 20, height: 30, width: 4 },
+        { x: 0, y: 15, height: 10, width: 4 },
+        { x: 0, y: 0, height: 10, width: 4 }
     ];
     this.options.isHorizontal = false;
     this.renderer.text = spyRendererText.call(this, markersBBoxes);

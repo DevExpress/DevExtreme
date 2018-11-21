@@ -596,10 +596,10 @@
             // NOTE: All parameters are optional.
             options = $.extend({
                 // values: window
-                view: window,             // The window in which the touch occurred
+                view: window, // The window in which the touch occurred
 
                 // values: DOMNode || document || window || etc.
-                target: null,           // The EventTarget for the touch
+                target: null, // The EventTarget for the touch
 
                 // Returns a value uniquely identifying this point of contact
                 // with the touch surface. This value remains consistent for every
@@ -607,31 +607,31 @@
                 // on the surface until it is lifted off the surface.
                 //
                 // values: unique ID of the Touch object
-                identifier: $.now(),       // The value for Touch.identifier
+                identifier: $.now(), // The value for Touch.identifier
 
                 // Coordinates of the touch point relative to the viewport,
                 // including any scroll offset.
-                pageX: null,            // The value for Touch.pageX
-                pageY: null,            // The value for Touch.pageY
+                pageX: null, // The value for Touch.pageX
+                pageY: null, // The value for Touch.pageY
 
                 // Coordinates coordinate of the touch point relative to the screen,
                 // not including any scroll offset.
-                screenX: null,          // The value for Touch.screenX
-                screenY: null,          // The value for Touch.screenY
+                screenX: null, // The value for Touch.screenX
+                screenY: null, // The value for Touch.screenY
 
                 // Coordinates of the touch point relative to the viewport,
                 // not including any scroll offset.
-                clientX: null,          // The value for Touch.clientX
-                clientY: null,          // The value for Touch.clientY
+                clientX: null, // The value for Touch.clientX
+                clientY: null, // The value for Touch.clientY
 
                 // Radiuses of the ellipse that most closely circumscribes the area
                 // of contact with the screen. The value is in pixels of the same scale as screenX/screenY.
-                radiusX: null,          // The value for Touch.radiusX.
-                radiusY: null,          // The value for Touch.radiusY.
+                radiusX: null, // The value for Touch.radiusX.
+                radiusY: null, // The value for Touch.radiusY.
 
                 // The rotation angle, in degrees, of the contact area ellipse defined by Touch.radiusX and Touch.radiusY.
                 // values: [ 0 .. 90 ]
-                rotationAngle: null,    // The value for Touch.rotationAngle.
+                rotationAngle: null, // The value for Touch.rotationAngle.
 
                 // The amount of pressure the user is applying to the touch surface for this
                 // values: [ 0.0 .. 1.0 ] - no pressure and the maximum amount of pressure respectively.
@@ -646,10 +646,10 @@
                 type: "",
 
                 // values: window
-                view: window,             // The window in which the touch occurred
+                view: window, // The window in which the touch occurred
 
                 // values: DOMNode || document || window || etc.
-                target: null,           // The EventTarget for the touch
+                target: null, // The EventTarget for the touch
 
                 // Returns a value uniquely identifying this point of contact
                 // with the touch surface. This value remains consistent for every
@@ -657,37 +657,37 @@
                 // on the surface until it is lifted off the surface.
                 //
                 // values: unique ID of the Touch object
-                identifier: null,       // The value for Touch.identifier
+                identifier: null, // The value for Touch.identifier
 
                 // Coordinates of the touch point relative to the viewport,
                 // including any scroll offset.
-                pageX: null,            // The value for Touch.pageX
-                pageY: null,            // The value for Touch.pageY
+                pageX: null, // The value for Touch.pageX
+                pageY: null, // The value for Touch.pageY
 
                 // Coordinates coordinate of the touch point relative to the screen,
                 // not including any scroll offset.
-                screenX: null,          // The value for Touch.screenX
-                screenY: null,          // The value for Touch.screenY
+                screenX: null, // The value for Touch.screenX
+                screenY: null, // The value for Touch.screenY
 
                 // Coordinates of the touch point relative to the viewport,
                 // not including any scroll offset.
-                clientX: null,          // The value for Touch.clientX
-                clientY: null,          // The value for Touch.clientY
+                clientX: null, // The value for Touch.clientX
+                clientY: null, // The value for Touch.clientY
 
                 // Radiuses of the ellipse that most closely circumscribes the area
                 // of contact with the screen. The value is in pixels of the same scale as screenX/screenY.
-                radiusX: null,          // The value for Touch.radiusX.
-                radiusY: null,          // The value for Touch.radiusY.
+                radiusX: null, // The value for Touch.radiusX.
+                radiusY: null, // The value for Touch.radiusY.
 
                 // The rotation angle, in degrees, of the contact area ellipse defined by Touch.radiusX and Touch.radiusY.
                 // values: [ 0 .. 90 ]
-                rotationAngle: null,    // The value for Touch.rotationAngle.
+                rotationAngle: null, // The value for Touch.rotationAngle.
 
                 // The amount of pressure the user is applying to the touch surface for this
                 // values: [ 0.0 .. 1.0 ] - no pressure and the maximum amount of pressure respectively.
                 force: null,
 
-                cancelable: true,  // whether or not the event's default action can be prevented. Sets the value of event.cancelable.
+                cancelable: true, // whether or not the event's default action can be prevented. Sets the value of event.cancelable.
 
                 touches: [],
                 targetTouches: [],
@@ -709,27 +709,27 @@
 
         var createMouseEventMock = function(options) {
             options = $.extend({
-                type: null,         // click, mousedown, mouseup, mouseover, mousemove, mouseout.
+                type: null, // click, mousedown, mouseup, mouseover, mousemove, mouseout.
 
-                canBubble: true,    // whether or not the event can bubble. Sets the value of
-                cancelable: true,   // whether or not the event's default action can be prevented. Sets the value of event.cancelable.
+                canBubble: true, // whether or not the event can bubble. Sets the value of
+                cancelable: true, // whether or not the event's default action can be prevented. Sets the value of event.cancelable.
 
-                view: window,         // the Event's AbstractView. You should pass the window object here. Sets the value of event.view.
-                detail: 0,       // the Event's mouse click count. Sets the value of event.detail
+                view: window, // the Event's AbstractView. You should pass the window object here. Sets the value of event.view.
+                detail: 0, // the Event's mouse click count. Sets the value of event.detail
 
-                screenX: 0,          // the Event's screen x coordinate. Sets the value of event.screenX.
-                screenY: 0,          // the Event's screen y coordinate. Sets the value of event.screenY.
+                screenX: 0, // the Event's screen x coordinate. Sets the value of event.screenX.
+                screenY: 0, // the Event's screen y coordinate. Sets the value of event.screenY.
 
-                clientX: 0,          // the Event's client x coordinate. Sets the value of event.clientX.
-                clientY: 0,          // whether or not control key was depressed during the Event. Sets the value of event.ctrlKey.
+                clientX: 0, // the Event's client x coordinate. Sets the value of event.clientX.
+                clientY: 0, // whether or not control key was depressed during the Event. Sets the value of event.ctrlKey.
 
-                ctrlKey: false,          // whether or not alt key was depressed during the Event. Sets the value of event.altKey.
-                altKey: false,           // whether or not shift key was depressed during the Event. Sets the value of event.shiftKey.
-                shiftKey: false,         // whether or not meta key was depressed during the Event. Sets the value of event.metaKey.
-                metaKey: false,          // the Event's mouse event.button.
-                button: 0,              // Indicates which mouse button caused the event: 0 || 1 || 2
+                ctrlKey: false, // whether or not alt key was depressed during the Event. Sets the value of event.altKey.
+                altKey: false, // whether or not shift key was depressed during the Event. Sets the value of event.shiftKey.
+                shiftKey: false, // whether or not meta key was depressed during the Event. Sets the value of event.metaKey.
+                metaKey: false, // the Event's mouse event.button.
+                button: 0, // Indicates which mouse button caused the event: 0 || 1 || 2
 
-                relatedTarget: null    // the Event's related EventTarget. Only used with some event types (e.g. mouseover and mouseout). In other cases, pass null.
+                relatedTarget: null // the Event's related EventTarget. Only used with some event types (e.g. mouseover and mouseout). In other cases, pass null.
             }, options);
 
             return options;

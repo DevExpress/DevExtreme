@@ -523,8 +523,8 @@ QUnit.module("swipe", {
 QUnit.test("container swipe", function(assert) {
     this.$element.dxToolbar({
         items: [
-                { text: 'a' },
-                { location: 'menu', text: 'b' }
+            { text: 'a' },
+            { location: 'menu', text: 'b' }
         ],
         submenuType: "listBottom",
         renderAs: "bottomToolbar"
@@ -710,8 +710,8 @@ QUnit.test("default", function(assert) {
     var $element = $("#widget").dxToolbar({
         items: [
             { location: 'before', text: 'before' },
-                    { location: 'after', text: 'after' },
-                    { location: 'center', text: 'center' }
+            { location: 'after', text: 'after' },
+            { location: 'center', text: 'center' }
         ]
     });
 
@@ -747,8 +747,8 @@ QUnit.test("change width", function(assert) {
 QUnit.test("text should crop in the label inside the toolbar on toolbar's width changing", function(assert) {
     var $element = $("#widget").dxToolbar({
             items: [
-            { location: 'before', text: 'Before long text label' },
-            { location: 'after', text: 'after' }
+                { location: 'before', text: 'Before long text label' },
+                { location: 'after', text: 'after' }
             ],
             width: 300
         }),
@@ -905,9 +905,9 @@ QUnit.module("adaptivity", {
 QUnit.test("center section should be at correct position for huge after section", function(assert) {
     var $element = $("#widget").dxToolbar({
             items: [
-            { location: "before", template: function() { return $("<div>").width(50); } },
-            { location: "center", template: function() { return $("<div>").width(50); } },
-            { location: "after", template: function() { return $("<div>").width(200); } },
+                { location: "before", template: function() { return $("<div>").width(50); } },
+                { location: "center", template: function() { return $("<div>").width(50); } },
+                { location: "after", template: function() { return $("<div>").width(200); } },
             ],
             width: 400
         }),
@@ -939,9 +939,9 @@ QUnit.test("items in center section should be at correct position after resize",
 QUnit.test("center section should be at correct position for huge before section", function(assert) {
     var $element = $("#widget").dxToolbar({
             items: [
-            { location: "before", template: function() { return $("<div>").width(200); } },
-            { location: "center", template: function() { return $("<div>").width(50); } },
-            { location: "after", template: function() { return $("<div>").width(50); } },
+                { location: "before", template: function() { return $("<div>").width(200); } },
+                { location: "center", template: function() { return $("<div>").width(50); } },
+                { location: "after", template: function() { return $("<div>").width(50); } },
             ],
             width: 400
         }),
@@ -956,9 +956,9 @@ QUnit.test("center section should be at correct position for huge after section 
     var $item = $("<div>").width(200);
     var $element = $("#widget").dxToolbar({
             items: [
-            { location: "before", template: function() { return $("<div>").width(50); } },
-            { location: "center", template: function() { return $("<div>").width(50); } },
-            { location: "after", template: function() { return $item; } },
+                { location: "before", template: function() { return $("<div>").width(50); } },
+                { location: "center", template: function() { return $("<div>").width(50); } },
+                { location: "after", template: function() { return $item; } },
             ],
             width: 400
         }),
@@ -975,9 +975,9 @@ QUnit.test("center section should be at correct position for huge before section
     var $item = $("<div>").width(200);
     var $element = $("#widget").dxToolbar({
             items: [
-            { location: "before", template: function() { return $item; } },
-            { location: "center", template: function() { return $("<div>").width(50); } },
-            { location: "after", template: function() { return $("<div>").width(50); } },
+                { location: "before", template: function() { return $item; } },
+                { location: "center", template: function() { return $("<div>").width(50); } },
+                { location: "after", template: function() { return $("<div>").width(50); } },
             ],
             width: 400
         }),
@@ -1188,11 +1188,11 @@ QUnit.test("dropdown menu strategy should be used if there is overflow widget", 
 QUnit.test("visibility of dropdown menu should be changed if overflow items was hidden/shown after resize", function(assert) {
     var $element = $("#widget").dxToolbar({
             items: [
-            { location: "before", template: function() { return $("<div>").width(100); } },
-            { location: "center", template: function() { return $("<div>").width(150); } },
-            { location: "center", locateInMenu: "auto", template: function() { return $("<div>").width(100); } },
-            { location: "center", template: function() { return $("<div>").width(100); } },
-            { location: "after", template: function() { return $("<div>").width(100); } },
+                { location: "before", template: function() { return $("<div>").width(100); } },
+                { location: "center", template: function() { return $("<div>").width(150); } },
+                { location: "center", locateInMenu: "auto", template: function() { return $("<div>").width(100); } },
+                { location: "center", template: function() { return $("<div>").width(100); } },
+                { location: "after", template: function() { return $("<div>").width(100); } },
             ],
             width: 400
         }),
@@ -1515,8 +1515,8 @@ QUnit.testInActiveWindow("items should not be rearranged if width is not changed
 
     var $element = $("#widget").dxToolbar({
             items: [
-            { location: "before", template: function() { return $("<div>").width(300); } },
-            { location: "before", locateInMenu: "auto", template: function() { return $input; } }
+                { location: "before", template: function() { return $("<div>").width(300); } },
+                { location: "before", locateInMenu: "auto", template: function() { return $input; } }
             ],
             width: 300
         }),

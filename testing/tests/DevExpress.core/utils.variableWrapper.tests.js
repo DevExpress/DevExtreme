@@ -17,7 +17,7 @@ QUnit.test("Custom wrapper methods", function(assert) {
         },
         isWritableWrapped: function(value) {
             log.method = "isWritableWrapped",
-                log.args = arguments;
+            log.args = arguments;
         },
         wrap: function(value) {
             log.method = "wrap",

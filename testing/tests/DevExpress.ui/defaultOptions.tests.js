@@ -1433,8 +1433,8 @@ testComponentDefaults(Tabs,
 );
 
 testComponentDefaults(NumberBox,
-        { platform: devices.current().platform },
-        { mode: "number" },
+    { platform: devices.current().platform },
+    { mode: "number" },
     function() {
         this.originalRealDevice = devices.real();
         devices.real({

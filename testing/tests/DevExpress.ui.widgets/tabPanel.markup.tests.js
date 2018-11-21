@@ -52,7 +52,7 @@ QUnit.module("TabPanel markup", () => {
         assert.expect(1);
 
         const items = [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
-                        { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
+            { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
 
         const $tabPanel = $("#tabPanel").dxTabPanel({
             dataSource: items
@@ -87,7 +87,7 @@ QUnit.module("TabPanel items", () => {
         assert.expect(2);
 
         const items = [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
-                        { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
+            { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
 
         const $tabPanel = $("#tabPanel").dxTabPanel({
             items: items,

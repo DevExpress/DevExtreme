@@ -581,7 +581,7 @@ QUnit.test("localizeString doesn't affect unknown keys", function(assert) {
 
 QUnit.test("localizeNode", function(assert) {
     var $node = $(
-        "<div data='@Loading'>" +
+            "<div data='@Loading'>" +
             "   @Loading" +
             "   <div data='@Loading' class='inner'>" +
             "       @Loading" +

@@ -91,7 +91,7 @@ exports.environment = {
     },
 
     afterEach: function() {
-        this.$container.remove();   //  To invoke Component disposing mechanism
+        this.$container.remove(); //  To invoke Component disposing mechanism
         renderer.fn.width = this._$fn_width;
         renderer.fn.height = this._$fn_height;
     },

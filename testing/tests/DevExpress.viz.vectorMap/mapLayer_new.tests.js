@@ -169,8 +169,8 @@ QUnit.test("Areas (simple data source)", function(assert) {
             },
             {
                 coordinates: [
-                        [[200, 100], [400, 0], [400, 300]],
-                        [[0, 0], [0, 300], [400, 300], [400, 0]]
+                    [[200, 100], [400, 0], [400, 300]],
+                    [[0, 0], [0, 300], [400, 300], [400, 0]]
                 ]
             },
             { coordinates: [] }
@@ -207,7 +207,7 @@ QUnit.test("Lines (LineString)", function(assert) {
         points: [[400, 200, 800, 0, 1000, 600]]
     }], "line 1 (common)");
     assert.deepEqual(this.getLine(1).attr.getCall(0).args, [{
-        points: [[]]    // TODO: Investigate
+        points: [[]] // TODO: Investigate
     }], "line 2 (degenerate)");
 });
 
@@ -224,7 +224,7 @@ QUnit.test("Lines (MultiPoint)", function(assert) {
         points: [[400, 200, 800, 0, 1000, 600]]
     }], "line 1 (common)");
     assert.deepEqual(this.getLine(1).attr.getCall(0).args, [{
-        points: [[]]    // TODO: Investigate
+        points: [[]] // TODO: Investigate
     }], "line 2 (degenerate)");
 });
 
@@ -275,7 +275,7 @@ QUnit.test("Lines (simple data source)", function(assert) {
     }], "line 1 (common)");
     assert.deepEqual(this.getLine(1).attr.getCall(0).args, [{
         points: [
-            []  // TODO: Investigate (should be points: [])
+            [] // TODO: Investigate (should be points: [])
         ]
     }], "line 2 (degenerate)");
 });
@@ -316,25 +316,25 @@ QUnit.test("Area labels", function(assert) {
         dataSource: createData("Polygon", [
             {
                 coordinates: [
-                        [[200, 100], [400, 100], [400, 150], [300, 200]]
+                    [[200, 100], [400, 100], [400, 150], [300, 200]]
                 ],
                 properties: { text: "Item 1" }
             },
             {
                 coordinates: [
-                        [[100, 50], [100, 150], [200, 150], [200, 50], [100, 50]],
-                        [[200, 200], [200, 220], [240, 220], [240, 200]]
+                    [[100, 50], [100, 150], [200, 150], [200, 50], [100, 50]],
+                    [[200, 200], [200, 220], [240, 220], [240, 200]]
                 ],
                 properties: { text: "Item 2" }
             },
             {
                 coordinates: [
-                    [[100, 100], [300, 100], [100, 100]]    // T344899
+                    [[100, 100], [300, 100], [100, 100]] // T344899
                 ],
                 properties: { text: "Item 3" }
             },
             {
-                coordinates: [],    // T344899
+                coordinates: [], // T344899
                 properties: { text: "Item 4" }
             }
         ]),
@@ -363,7 +363,7 @@ QUnit.test("Line labels", function(assert) {
                 properties: { text: "Item 1" }
             },
             {
-                coordinates: [],    // T344899
+                coordinates: [], // T344899
                 properties: { text: "Item 2" }
             }
         ]),
@@ -570,13 +570,13 @@ QUnit.test("getDataSource method", function(assert) {
     var map = this.createLayers({
         dataSource: createData("Polygon", [
             [
-                    [[100, 50], [200, 50], [200, 200], [100, 200]]
+                [[100, 50], [200, 50], [200, 200], [100, 200]]
             ],
             [
-                    [[200, 100], [400, 0], [400, 300]],
-                    [[0, 0], [0, 300], [400, 300], [400, 0]]
+                [[200, 100], [400, 0], [400, 300]],
+                [[0, 0], [0, 300], [400, 300], [400, 0]]
             ],
-                []
+            []
         ])
     });
 

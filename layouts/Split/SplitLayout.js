@@ -1,5 +1,5 @@
 (function(root, factory) {
-    /* global define, DevExpress, jQuery */
+    /* global window, document, define, DevExpress, jQuery */
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             module.exports = factory(
@@ -28,7 +28,7 @@
             DevExpress.layouts.EmptyLayout,
             DevExpress.layouts.SimpleLayout,
             DevExpress.fx
-         );
+        );
 
         root.DevExpress.framework.html.MultipaneLayoutController = root.DevExpress.layouts.SplitLayout.MultipaneLayoutController;
         root.DevExpress.framework.html.IOSSplitLayoutController = root.DevExpress.layouts.SplitLayout.IOSSplitLayoutController;

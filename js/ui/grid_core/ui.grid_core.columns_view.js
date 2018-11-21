@@ -1,5 +1,7 @@
 var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     clickEvent = require("../../events/click"),
@@ -342,9 +344,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             templateParameters = templates.shift();
 
             var options = templateParameters.options,
-                model = options.model;
+                model = options.model,
+                doc = domAdapter.getDocument();
 
-            if(!isAsync || $(options.container).closest(document).length) {
+            if(!isAsync || $(options.container).closest(doc).length) {
                 templateParameters.template.render(options);
 
                 if(model && model.column) {

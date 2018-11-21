@@ -42,7 +42,7 @@
             DevExpress.layouts.EmptyLayout,
             DevExpress.layouts.SimpleLayout,
             DevExpress.layouts.SplitLayout
-         );
+        );
     }
 }(this, function($, ko, Router, domUtils, HtmlApplication, ViewEngine, CommandManager, dxCommand, fx, MemoryKeyValueStorage,
     frameworkMocks, htmlFrameworkMocks, createLayoutController, emptyLayoutControllerModule, SimpleLayoutControllerModule, splitLayoutControllerModule) {
