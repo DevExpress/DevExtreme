@@ -639,6 +639,39 @@ QUnit.testInActiveWindow("DataGrid should not show error E4024 if keyExpr is abs
     assert.equal(dataErrors.length, 0, "No error");
 });
 
+QUnit.testInActiveWindow("DataGrid should not show error E4024 if keyExpr and store are absent", function(assert) {
+    var dataErrors = [];
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowEnabled: true,
+        focusedRowKey: "Key"
+    };
+
+    this.setupModule();
+
+    this.getController("data").store = function() {
+    };
+
+    this.getController("data").dataErrorOccurred.add(function(e) {
+        dataErrors.push(e);
+    });
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    // act
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataErrors.length, 0, "No error");
+});
+
 QUnit.testInActiveWindow("Focus row if grouping and virtual scrolling mode", function(assert) {
     var rowsView;
 

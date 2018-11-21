@@ -540,8 +540,8 @@ module.exports = {
                     this.callBase.apply(this, arguments);
 
                     if(this.option("focusedRowEnabled") && this.option("dataSource")) {
-                        var keyExpr = this._dataController.store() && this._dataController.store().key();
-                        if(!keyExpr) {
+                        var store = this._dataController.store();
+                        if(store && !store.key()) {
                             this._dataController.dataErrorOccurred.fire(errors.Error("E4024"));
                         }
                     }
