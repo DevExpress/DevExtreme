@@ -995,18 +995,25 @@ var Overlay = Widget.inherit({
         const $element = this.$element();
         this._$content.appendTo($element);
 
+        const whenContentRendered = new Deferred();
+
         const contentTemplateOption = this.option("contentTemplate"),
             contentTemplate = this._getTemplate(contentTemplateOption),
             transclude = this._getAnonymousTemplateName() === contentTemplateOption;
         contentTemplate && contentTemplate.render({
             container: getPublicElement(this.$content()),
             noModel: true,
-            transclude
+            transclude,
+            onRendered: () => {
+                whenContentRendered.resolve();
+            }
         });
 
         this._renderDrag();
         this._renderResize();
         this._renderScrollTerminator();
+
+        return whenContentRendered.promise();
     },
 
     _renderDrag: function() {

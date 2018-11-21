@@ -8,6 +8,8 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     domUtils = require("../../core/utils/dom"),
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
     domAdapter = require("../../core/dom_adapter"),
     devices = require("../../core/devices"),
     DOMComponent = require("../../core/dom_component"),
@@ -476,13 +478,11 @@ var Widget = DOMComponent.inherit({
     },
 
     _renderContent: function() {
-        var that = this;
-
-        commonUtils.deferRender(function() {
-            that._renderContentImpl();
+        commonUtils.deferRender(() => {
+            when(this._renderContentImpl()).done(() => {
+                this._fireContentReadyAction();
+            });
         });
-
-        that._fireContentReadyAction();
     },
 
     _renderContentImpl: commonUtils.noop,

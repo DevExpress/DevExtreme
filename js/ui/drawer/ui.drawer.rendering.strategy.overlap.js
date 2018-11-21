@@ -20,6 +20,7 @@ class OverlapStrategy extends DrawerStrategy {
             position: position,
             width: "auto",
             height: "100%",
+            templatesRenderAsynchronously: drawer.option("templatesRenderAsynchronously"),
             animation: {
                 show: {
                     duration: 0
@@ -36,7 +37,7 @@ class OverlapStrategy extends DrawerStrategy {
                     e.component.$content().css("left", "auto");
                 }
             }).bind(this),
-            contentTemplate: template,
+            contentTemplate: drawer.option("template"),
             onContentReady: () => {
                 whenPanelRendered.resolve();
             },
