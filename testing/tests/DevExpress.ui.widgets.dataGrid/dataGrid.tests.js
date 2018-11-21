@@ -5134,6 +5134,55 @@ QUnit.test("contentReady event must be raised once when scrolling mode is virtua
     assert.equal(contentReadyCallCount, 1, "one contentReady on start");
 });
 
+QUnit.test("contentReady should not be raised on row click", function(assert) {
+    var contentReadyCallCount = 0,
+        dataGrid = createDataGrid({
+            onContentReady: function() {
+                contentReadyCallCount++;
+            },
+            loadingTimeout: undefined,
+            keyExpr: "id",
+            dataSource: [{ id: 1 }]
+        });
+
+    assert.equal(contentReadyCallCount, 1, "one contentReady on start");
+
+    // act
+    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+
+    // assert
+    assert.ok(dataGrid);
+    assert.equal(contentReadyCallCount, 1, "contentReady is not raised on row click");
+    assert.strictEqual(dataGrid.option("focusedRowIndex"), 0, "focusedRowIndex is assigned");
+    assert.strictEqual(dataGrid.option("focusedColumnIndex"), 0, "focusedColumnIndex is assigned");
+    assert.strictEqual(dataGrid.option("focusedRowKey"), undefined, "focusedRowKey is not assigned");
+});
+
+QUnit.test("contentReady should not be raised on row click if focusedRowEnabled", function(assert) {
+    var contentReadyCallCount = 0,
+        dataGrid = createDataGrid({
+            onContentReady: function() {
+                contentReadyCallCount++;
+            },
+            focusedRowEnabled: true,
+            loadingTimeout: undefined,
+            keyExpr: "id",
+            dataSource: [{ id: 1 }]
+        });
+
+    assert.equal(contentReadyCallCount, 1, "one contentReady on start");
+
+    // act
+    $(dataGrid.getCellElement(0, 0)).trigger("dxpointerdown");
+
+    // assert
+    assert.ok(dataGrid);
+    assert.equal(contentReadyCallCount, 1, "contentReady is not raised on row click");
+    assert.strictEqual(dataGrid.option("focusedRowIndex"), 0, "focusedRowIndex is assigned");
+    assert.strictEqual(dataGrid.option("focusedColumnIndex"), 0, "focusedColumnIndex is assigned");
+    assert.strictEqual(dataGrid.option("focusedRowKey"), 1, "focusedRowKey is assigned");
+});
+
 QUnit.test("row alternation should be correct if virtual scrolling is enabled and grouping is used", function(assert) {
     var dataSource = [
         { id: 1, group: 1 },

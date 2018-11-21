@@ -23,7 +23,9 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this;
 
             if(args.name === "focusedRowIndex") {
-                that._focusRowByIndex(args.value);
+                if(this.option("focusedRowEnabled")) {
+                    that._focusRowByIndex(args.value);
+                }
                 args.handled = true;
             } else if(args.name === "focusedRowKey") {
                 that.navigateToRow(args.value);
