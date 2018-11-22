@@ -380,23 +380,33 @@ var EditingController = modules.ViewController.inherit((function() {
             });
         },
 
-        _getEditCommandCellTemplate: function() {
-            var that = this;
+        _createEditingButtonsIfVisible: function($container, buttons, options) {
+            buttons.forEach((button) => {
+                if(this._isButtonVisible(button, options)) {
+                    this._createButton($container, button, options);
+                }
+            });
+        },
 
-            return function(container, options) {
+        _getEditCommandCellTemplate: function() {
+            return (container, options) => {
                 var $container = $(container),
                     buttons;
 
                 if(options.rowType === "data") {
                     $container.css("textAlign", "center");
-                    options.rtlEnabled = that.option("rtlEnabled");
-                    buttons = that._getEditingButtons(options);
+                    options.rtlEnabled = this.option("rtlEnabled");
+                    buttons = this._getEditingButtons(options);
 
-                    buttons.forEach((button) => {
-                        if(that._isButtonVisible(button, options)) {
-                            that._createButton($container, button, options);
+                    this._createEditingButtonsIfVisible($container, buttons, options);
+
+                    options.watch && options.watch(
+                        () => buttons.map(button => this._isButtonVisible(button, options)),
+                        () => {
+                            $container.empty();
+                            this._createEditingButtonsIfVisible($container, buttons, options);
                         }
-                    });
+                    );
                 } else {
                     gridCoreUtils.setEmptyText($container);
                 }
