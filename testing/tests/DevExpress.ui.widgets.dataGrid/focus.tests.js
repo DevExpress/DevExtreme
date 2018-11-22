@@ -787,7 +787,8 @@ QUnit.testInActiveWindow("Focus next row if grouping and virtual scrolling mode"
 
 QUnit.testInActiveWindow("DataGrid should focus row by focusedRowIndex if data was filtered", function(assert) {
     var rowsView,
-        visibleRows;
+        visibleRows,
+        keyboardController;
 
     // arrange
     this.$element = function() {
@@ -816,8 +817,6 @@ QUnit.testInActiveWindow("DataGrid should focus row by focusedRowIndex if data w
 
     this.clock.tick();
 
-    $(this.getCellElement(0, 0)).trigger("dxpointerdown").focus();
-
     // act
     this.dataController.filter("team", "=", "public");
     this.dataController.load();
@@ -825,6 +824,9 @@ QUnit.testInActiveWindow("DataGrid should focus row by focusedRowIndex if data w
 
     rowsView = this.gridView.getView("rowsView");
     visibleRows = this.dataController.getVisibleRows();
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+    keyboardController.focus(rowsView.getRow(0).children("td").eq(0));
 
     // assert
     assert.equal(this.option("focusedRowIndex"), 0, "focusedRowIndex");
