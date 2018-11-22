@@ -539,35 +539,20 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var $cells = $rowElement.children(),
             $newCells = $newRowElement.children(),
             highlightChanges = this.option("highlightChanges"),
-            cellUpdatedClass = this.addWidgetPrefix(CELL_UPDATED_ANIMATION_CLASS),
-            highlightedCells = [],
-            needToRefreshAnimation = false;
+            cellUpdatedClass = this.addWidgetPrefix(CELL_UPDATED_ANIMATION_CLASS);
 
         columnIndices.forEach(function(columnIndex, index) {
             var $cell = $cells.eq(columnIndex),
-                $newCell = $newCells.eq(index),
-                $newContent = $newCell.contents();
+                $newCell = $newCells.eq(index);
 
-            if($newContent.length) {
-                needToRefreshAnimation = needToRefreshAnimation || $cell.hasClass(cellUpdatedClass);
+            $cell.replaceWith($newCell);
 
-                $cell.contents().remove();
-                $cell.append($newContent);
-
-                copyAttributes($cell.get(0), $newCell.get(0));
-            } else {
-                $cell.replaceWith($newCell);
-                $cell = $newCell;
+            if(highlightChanges) {
+                $newCell.addClass(cellUpdatedClass);
             }
-            highlightChanges && highlightedCells.push($cell);
         });
 
         copyAttributes($rowElement.get(0), $newRowElement.get(0));
-
-        needToRefreshAnimation && $rowElement.width();
-        highlightedCells.forEach(cell => {
-            cell.addClass(cellUpdatedClass);
-        });
     },
 
     _setCellAriaAttributes: function($cell, cellOptions) {
