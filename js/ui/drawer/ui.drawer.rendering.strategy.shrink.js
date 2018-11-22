@@ -7,7 +7,7 @@ class ShrinkStrategy extends DrawerStrategy {
         super.renderPosition(offset, animate);
 
         const drawer = this.getDrawerInstance();
-        const direction = drawer.getDrawerPosition();
+        const direction = drawer.option("position");
         const $panel = $(drawer.content());
 
         if(drawer.option("revealMode") === "slide") {
