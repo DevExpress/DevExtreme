@@ -2153,6 +2153,54 @@ QUnit.testInActiveWindow("DataGrid should fire onFocusedCellChanging event if ne
     assert.equal(onFocusedCellCount, 1, "onFocusedCellCount");
 });
 
+QUnit.testInActiveWindow("Fire onFocusedCellChanging by click", function(assert) {
+    var rowsView,
+        keyboardController,
+        focusedColumnChangingCount = 0;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { name: "Alex", phone: "111111", room: 6 },
+        { name: "Dan", phone: "2222222", room: 5 },
+        { name: "Ben", phone: "333333", room: 4 },
+        { name: "Sean", phone: "4545454", room: 3 },
+        { name: "Smith", phone: "555555", room: 2 },
+        { name: "Zeb", phone: "6666666", room: 1 }
+    ];
+
+    this.options = {
+        onFocusedCellChanging: function(e) {
+            ++focusedColumnChangingCount;
+            assert.equal(e.cancel, false, "Not canceled");
+            assert.equal(e.cellElement.text(), $(rowsView.getRow(4).find("td").eq(0)).text(), "Cell element");
+            assert.equal(e.newColumnIndex, 0);
+            assert.equal(e.prevColumnIndex, 1);
+            assert.equal(e.newRowIndex, 4);
+            assert.equal(e.prevRowIndex, 4);
+        }
+    };
+
+    this.setupModule();
+
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+
+    // act
+    $(this.gridView.getView("rowsView").getRow(4).find("td").eq(1)).trigger("dxpointerdown").click();
+    this.clock.tick();
+    // assert
+    assert.equal(this.getController("keyboardNavigation").getVisibleColumnIndex(), 0, "Focused column index");
+    assert.equal(focusedColumnChangingCount, 1, "onFocusedCellChanging fires count");
+});
+
 QUnit.testInActiveWindow("Fire onFocusedCellChanging by LeftArrow key", function(assert) {
     var rowsView,
         keyboardController,
