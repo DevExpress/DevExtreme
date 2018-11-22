@@ -10736,7 +10736,7 @@ QUnit.test("Refresh with changesOnly", function(assert) {
     $updatedCellElements = $(dataGrid.$element()).find(".dx-data-row").first().children();
     assert.equal($updatedCellElements.length, 2, "count cell");
     assert.ok($updatedCellElements.eq(0).is($cellElements.eq(0)), "first cell isn't updated");
-    assert.ok($updatedCellElements.eq(1).is($cellElements.eq(1)), "second cell isn't updated");
+    assert.notOk($updatedCellElements.eq(1).is($cellElements.eq(1)), "second cell is updated");
     assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), "test5", "cell value is updated");
 });
 
@@ -10950,7 +10950,7 @@ QUnit.test("Refresh with changesOnly and cellPrepared/rowPrepared", function(ass
 
     // assert
     $updatedCellElements = $(dataGrid.$element()).find(".dx-data-row").first().children();
-    assert.ok($updatedCellElements.eq(1).is($cellElements.eq(1)), "second cell is not changed");
+    assert.notOk($updatedCellElements.eq(1).is($cellElements.eq(1)), "second cell is changed");
     assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), "test5", "cell value is updated");
     assert.ok($(dataGrid.getCellElement(0, 1)).hasClass("cell-test5"), "cell class is added");
     assert.ok($(dataGrid.getRowElement(0)).hasClass("row-test5"), "row class is added");
@@ -11095,6 +11095,98 @@ QUnit.test("Using watch in cellPrepared event for editor if repaintChangesOnly",
     assert.ok($(dataGrid.getCellElement(0, 1)).is($cell), "first cell isn't updated");
     assert.ok($cell.hasClass("changed"), "class changed is added");
     assert.equal($(dataGrid.element()).find(".changed").length, 1, "class changed is added to one cell only");
+});
+
+QUnit.test("watch in cellPrepared should works after cell editing", function(assert) {
+    // arrange
+    var activeRowKey,
+        dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, field1: "test1" },
+                { id: 2, field1: "test2" }
+            ],
+            keyExpr: "id",
+            loadingTimeout: undefined,
+            repaintChangesOnly: true,
+            editing: {
+                mode: "cell"
+            },
+            onCellPrepared: function(e) {
+                if(e.rowType === "data") {
+                    e.watch(function() {
+                        return e.key === activeRowKey;
+                    }, function(isActive) {
+                        $(e.cellElement).toggleClass("active", isActive);
+                    });
+                }
+            },
+            columns: ["id", "field1"]
+        });
+
+    this.clock.tick();
+
+    dataGrid.editCell(0, 1);
+    dataGrid.closeEditCell();
+
+    this.clock.tick();
+
+    // act
+    activeRowKey = 1;
+    dataGrid.refresh(true);
+
+    // assert
+    assert.ok($(dataGrid.getCellElement(0, 0)).hasClass("active"), "active class is added to first cell");
+    assert.ok($(dataGrid.getCellElement(0, 1)).hasClass("active"), "active class is added to second cell");
+    assert.notOk($(dataGrid.getCellElement(1, 0)).hasClass("active"), "active class is not added to second row");
+});
+
+QUnit.test("watch in cellPrepared should works after push", function(assert) {
+    // arrange
+    var activeRowKey,
+        dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: "array",
+                    key: "id",
+                    data: [
+                        { id: 1, field1: "test1" },
+                        { id: 2, field1: "test2" }
+                    ]
+                },
+                pushAggregationTimeout: 0
+            },
+            loadingTimeout: undefined,
+            repaintChangesOnly: true,
+            editing: {
+                mode: "cell"
+            },
+            onCellPrepared: function(e) {
+                if(e.rowType === "data") {
+                    e.watch(function() {
+                        return e.key === activeRowKey;
+                    }, function(isActive) {
+                        $(e.cellElement).toggleClass("active", isActive);
+                    });
+                }
+            },
+            columns: ["id", "field1"]
+        });
+
+    this.clock.tick();
+
+    dataGrid.getDataSource().store().push([{ type: "update", key: 1, data: { field1: "updated" } }]);
+
+    this.clock.tick();
+
+    // act
+    activeRowKey = 1;
+    dataGrid.refresh(true);
+
+    // assert
+    assert.ok($(dataGrid.getCellElement(0, 0)).hasClass("active"), "active class is added to first cell");
+    assert.ok($(dataGrid.getCellElement(0, 1)).hasClass("active"), "active class is added to second cell");
+    assert.equal($(dataGrid.getCellElement(0, 1)).text(), "updated", "second cell text is updated");
+    assert.notOk($(dataGrid.getCellElement(1, 0)).hasClass("active"), "active class is not added to second row");
 });
 
 QUnit.test("Column widths should be updated after expand group row if repaintChangesOnly is true", function(assert) {
@@ -11305,7 +11397,7 @@ QUnit.test("Refresh with changesOnly and summary", function(assert) {
     $updatedCellElements = $(dataGrid.$element()).find(".dx-datagrid-total-footer .dx-row").first().children();
     assert.equal($updatedCellElements.length, 2, "count cell");
     assert.ok($updatedCellElements.eq(0).is($cellElements.eq(0)), "first cell isn't changed");
-    assert.ok($updatedCellElements.eq(1).is($cellElements.eq(1)), "second cell isn't changed");
+    assert.notOk($updatedCellElements.eq(1).is($cellElements.eq(1)), "second cell is changed");
     assert.strictEqual($updatedCellElements.eq(1).text(), "Sum: 500", "cell value is updated");
 });
 
@@ -11332,6 +11424,7 @@ QUnit.test("Refresh with changesOnly for fixed columns", function(assert) {
         });
 
     var $firstCell = $(dataGrid.getCellElement(0, 0));
+    var $secondCell = $(dataGrid.getCellElement(0, 1));
     var $lastCell = $(dataGrid.getCellElement(0, 3));
 
     dataSource.store().update(1, { field1: 8, field4: 9 });
@@ -11340,10 +11433,11 @@ QUnit.test("Refresh with changesOnly for fixed columns", function(assert) {
     dataGrid.refresh(true);
 
     // assert
-    assert.ok($(dataGrid.getCellElement(0, 0)).is($firstCell), "first cell isn't changed");
-    assert.ok($(dataGrid.getCellElement(0, 3)).is($lastCell), "last cell isn't changed");
-    assert.strictEqual($firstCell.text(), "8", "first cell value is updated");
-    assert.strictEqual($lastCell.text(), "9", "last cell value is updated");
+    assert.notOk($(dataGrid.getCellElement(0, 0)).is($firstCell), "first cell is changed");
+    assert.ok($(dataGrid.getCellElement(0, 1)).is($secondCell), "second cell is not changed");
+    assert.notOk($(dataGrid.getCellElement(0, 3)).is($lastCell), "last cell is changed");
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "8", "first cell value is updated");
+    assert.strictEqual($(dataGrid.getCellElement(0, 3)).text(), "9", "last cell value is updated");
 });
 
 QUnit.test("Push with reshape and repaintChangesOnly if scrolling mode is virtual", function(assert) {
@@ -11380,7 +11474,8 @@ QUnit.test("Push with reshape and repaintChangesOnly if scrolling mode is virtua
             columns: ["id", "name"]
         });
 
-    var $cell = $(dataGrid.getCellElement(1, 1));
+    var $firstCell = $(dataGrid.getCellElement(1, 0));
+    var $secondCell = $(dataGrid.getCellElement(1, 1));
 
 
     // act
@@ -11388,8 +11483,9 @@ QUnit.test("Push with reshape and repaintChangesOnly if scrolling mode is virtua
 
     // assert
     assert.strictEqual(dataGrid.getVisibleRows().length, 4, "visible rows");
-    assert.ok($(dataGrid.getCellElement(1, 1)).is($cell), "cell is not recreated");
-    assert.strictEqual($cell.text(), "updated", "cell value is updated");
+    assert.ok($(dataGrid.getCellElement(1, 0)).is($firstCell), "first cell is not recreated");
+    assert.notOk($(dataGrid.getCellElement(1, 1)).is($secondCell), "second cell is recreated");
+    assert.strictEqual($(dataGrid.getCellElement(1, 1)).text(), "updated", "second cell value is updated");
 });
 
 // T443177
