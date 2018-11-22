@@ -380,7 +380,7 @@ var EditingController = modules.ViewController.inherit((function() {
             });
         },
 
-        _createEditingButtonsIfVisible: function($container, buttons, options) {
+        _renderEditingButtons: function($container, buttons, options) {
             buttons.forEach((button) => {
                 if(this._isButtonVisible(button, options)) {
                     this._createButton($container, button, options);
@@ -398,13 +398,13 @@ var EditingController = modules.ViewController.inherit((function() {
                     options.rtlEnabled = this.option("rtlEnabled");
                     buttons = this._getEditingButtons(options);
 
-                    this._createEditingButtonsIfVisible($container, buttons, options);
+                    this._renderEditingButtons($container, buttons, options);
 
                     options.watch && options.watch(
                         () => buttons.map(button => this._isButtonVisible(button, options)),
                         () => {
                             $container.empty();
-                            this._createEditingButtonsIfVisible($container, buttons, options);
+                            this._renderEditingButtons($container, buttons, options);
                         }
                     );
                 } else {
