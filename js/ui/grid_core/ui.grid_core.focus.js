@@ -23,9 +23,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             var that = this;
 
             if(args.name === "focusedRowIndex") {
-                if(this.option("focusedRowEnabled")) {
-                    that._focusRowByIndex(args.value);
-                }
+                that._focusRowByIndex(args.value);
                 args.handled = true;
             } else if(args.name === "focusedRowKey") {
                 that.navigateToRow(args.value);
@@ -40,14 +38,16 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         _focusRowByIndex: function(index) {
-            index = index !== undefined ? index : this.option("focusedRowIndex");
+            if(this.option("focusedRowEnabled")) {
+                index = index !== undefined ? index : this.option("focusedRowIndex");
 
-            var dataController = this.getController("data"),
-                localIndex = index >= 0 ? index - dataController.getRowIndexOffset() : -1,
-                rowKey = dataController.getKeyByRowIndex(localIndex);
+                var dataController = this.getController("data"),
+                    localIndex = index >= 0 ? index - dataController.getRowIndexOffset() : -1,
+                    rowKey = dataController.getKeyByRowIndex(localIndex);
 
-            if(isDefined(rowKey) && !this.isRowFocused(rowKey)) {
-                this.option("focusedRowKey", rowKey);
+                if(isDefined(rowKey) && !this.isRowFocused(rowKey)) {
+                    this.option("focusedRowKey", rowKey);
+                }
             }
         },
 
@@ -292,7 +292,12 @@ module.exports = {
 
                 setFocusedRowIndex: function(rowIndex) {
                     this.callBase(rowIndex);
-                    this.option("focusedRowIndex", rowIndex);
+
+                    if(this.option("focusedRowIndex") === rowIndex) {
+                        this.getController("focus")._focusRowByIndex(rowIndex);
+                    } else {
+                        this.option("focusedRowIndex", rowIndex);
+                    }
                 },
 
                 setFocusedColumnIndex: function(columnIndex) {
