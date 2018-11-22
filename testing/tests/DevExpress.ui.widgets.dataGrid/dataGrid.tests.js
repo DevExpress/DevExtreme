@@ -11238,6 +11238,43 @@ QUnit.test("watch in cellPrepared should works after push", function(assert) {
     assert.notOk($(dataGrid.getCellElement(1, 0)).hasClass("active"), "active class is not added to second row");
 });
 
+QUnit.test("oldValue argument should exists in cellPrepared after push", function(assert) {
+    // arrange
+    var cellPreparedArgs = [],
+        dataGrid = createDataGrid({
+            dataSource: {
+                store: {
+                    type: "array",
+                    key: "id",
+                    data: [
+                        { id: 1, field1: "test1" },
+                        { id: 2, field1: "test2" }
+                    ]
+                },
+                pushAggregationTimeout: 0
+            },
+            loadingTimeout: undefined,
+            repaintChangesOnly: true,
+            onCellPrepared: function(e) {
+                cellPreparedArgs.push(e);
+            },
+            columns: ["id", "field1"]
+        });
+
+    this.clock.tick();
+
+    cellPreparedArgs = [];
+    // act
+    dataGrid.getDataSource().store().push([{ type: "update", key: 1, data: { field1: "updated" } }]);
+
+    // assert
+    assert.equal(cellPreparedArgs.length, 1, "cell prepared are called for modified cell only");
+    assert.equal(cellPreparedArgs[0].key, 1, "cell prepared key");
+    assert.equal(cellPreparedArgs[0].columnIndex, 1, "cell prepared columnIndex");
+    assert.equal(cellPreparedArgs[0].value, "updated", "cell prepared value");
+    assert.equal(cellPreparedArgs[0].oldValue, "test1", "cell prepared oldValue");
+});
+
 QUnit.test("Column widths should be updated after expand group row if repaintChangesOnly is true", function(assert) {
     // arrange
     var dataGrid = createDataGrid({
