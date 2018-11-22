@@ -250,7 +250,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 .map(editData => editData.oldData);
         },
 
-        _closeEditItem: function($targetElement) {
+        _needToCloseEditableCell: function($targetElement) {
             var isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length,
                 $targetCell = $targetElement.closest("." + ROW_CLASS + "> td"),
                 columnIndex = $targetCell[0] && $targetCell[0].cellIndex,
@@ -259,7 +259,11 @@ var EditingController = modules.ViewController.inherit((function() {
                 // TODO jsdmitry: Move this code to _rowClick method of rowsView
                 allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
 
-            if(this.isEditing() && (!isDataRow || (isDataRow && !allowEditing && !this.isEditCell(rowIndex, columnIndex)))) {
+            return this.isEditing() && (!isDataRow || (isDataRow && !allowEditing && !this.isEditCell(rowIndex, columnIndex)));
+        },
+
+        _closeEditItem: function($targetElement) {
+            if(this._needToCloseEditableCell($targetElement)) {
                 this.closeEditCell();
             }
         },
