@@ -62,15 +62,26 @@ class LessMetadataPostCompilerPlugin {
             }
         });
 
+        const changeSwatchSelectorOrder = (css, selector) => {
+            const swatchOrderRegex = new RegExp(`(([+~]\\s)(?!${selector}\\s).*?|^(${selector}\\s)?[^+~\\n]+?)(${selector}\\s)([^,{+~]*)`, "gm");
+            return css.replace(swatchOrderRegex, (_, group1, group2, group3, group4, group5) => {
+                if(group3) {
+                    group1 = group1.replace(group3, "");
+                }
+                return (group2 || "") + group4 + group1 + group5;
+            });
+        };
+
         if(this.swatchSelector) {
             const escapedSelector = this.swatchSelector.replace(".", "\\.");
-            const customStylesDuplicateRegex = new RegExp("\\s+" + escapedSelector + "\\s+\.dx-theme-.*?-typography\\s+\.dx-theme-.*?{[\\s\\S]*?}[\\r\\n]*?", "g");
+
+            const customStylesDuplicateRegex = new RegExp(`\\s+${escapedSelector}\\s+\.dx-theme-.*?-typography\\s+\.dx-theme-.*?{[\\s\\S]*?}[\\r\\n]*?`, "g");
             const themeMarkerRegex = /(\.dx-theme-marker\s*{\s*font-family:\s*['"]dx\..*?\.)(.*)(['"])/g;
-            css = css
+
+            css = changeSwatchSelectorOrder(css, escapedSelector)
                 .replace(customStylesDuplicateRegex, "")
                 .replace(/\s\.dx-theme-.*?-typography/g, "")
                 .replace(themeMarkerRegex, "$1" + this.colorScheme + "$3");
-
         }
 
         return css.replace(metadataRegex, "");
