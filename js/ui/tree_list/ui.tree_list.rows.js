@@ -40,8 +40,8 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
     return {
         _renderExpandIcon: function($container, options) {
             var $iconContainer = $("<div>")
-                    .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
-                    .appendTo($container);
+                .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
+                .appendTo($container);
 
             renderIcons($iconContainer, options.row);
 
