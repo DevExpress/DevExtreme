@@ -1,7 +1,7 @@
-var $ = require("jquery"),
-    renderer = require("core/renderer"),
-    eventsEngine = require("events/core/events_engine"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import $ from "jquery";
+import renderer from "core/renderer";
+import eventsEngine from "events/core/events_engine";
+import keyboardMock from "../../helpers/keyboardMock.js";
 
 QUnit.testStart(function() {
     var markup =
@@ -24,27 +24,24 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/data_grid/ui.data_grid");
-require("ui/autocomplete");
-require("ui/color_box");
+import "ui/data_grid/ui.data_grid";
+import "ui/autocomplete";
+import "ui/color_box";
 
-var fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    MockColumnsController = dataGridMocks.MockColumnsController,
-    MockDataController = dataGridMocks.MockDataController,
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    getCells = dataGridMocks.getCells,
-    devices = require("core/devices"),
-    device = devices.real(),
-    domUtils = require("core/utils/dom"),
-    browser = require("core/utils/browser"),
-    typeUtils = require("core/utils/type"),
-    config = require("core/config"),
-    errors = require("ui/widget/ui.errors");
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import { MockColumnsController, MockDataController, setupDataGridModules, getCells } from "../../helpers/dataGridMocks.js";
+import domUtils from "core/utils/dom";
+import browser from "core/utils/browser";
+import typeUtils from "core/utils/type";
+import config from "core/config";
+import errors from "ui/widget/ui.errors";
+import devices from "core/devices";
+
+const device = devices.real();
 
 function getInputElements($container) {
     return $container.find("input:not([type='hidden'])");
@@ -7393,6 +7390,44 @@ QUnit.test("The cell should be editable after selecting the row when repaintChan
     $cellElement = $(this.rowsView.getCellElement(0, 1));
     assert.ok($cellElement.hasClass("dx-editor-cell"), "has editor cell");
     assert.strictEqual($cellElement.find(".dx-textbox").length, 1, "has textbox");
+});
+
+// T690041
+QUnit.test("Changing edit icon in the 'buttons' command column if repaintChangesOnly is true", function(assert) {
+    // arrange
+    var $linkElements;
+
+    this.options.editing = {
+        mode: "cell",
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    this.options.columns = [
+        {
+            type: "buttons",
+            buttons: [
+                { name: "edit", icon: "active-icon", visible: e => e.row.data.state === "active" },
+                { name: "delete", icon: "remove", visible: e => e.row.data.state !== "active" }
+            ]
+        },
+        "state"
+    ];
+
+    this.options.dataSource = [{ state: "disabled" }];
+
+    this.options.repaintChangesOnly = true;
+
+    // act
+    this.setupModules();
+    this.cellValue(0, "state", "active");
+    $linkElements = $(this.getCellElement(0, 0)).find(".dx-link");
+    assert.equal($linkElements.length, 1);
+    assert.ok($linkElements.eq(0).hasClass("dx-icon-active-icon"), "the edit link");
+
+    this.cellValue(0, "state", "disabled");
+    $linkElements = $(this.getCellElement(0, 0)).find(".dx-link");
+    assert.equal($linkElements.length, 1);
+    assert.ok($linkElements.eq(0).hasClass("dx-icon-remove"));
 });
 
 
