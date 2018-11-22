@@ -3,7 +3,6 @@ import dateLocalization from "../../localization/date";
 import { extend } from "../../core/utils/extend";
 import { fitIntoRange } from "../../core/utils/math";
 import { noop } from "../../core/utils/common";
-import { escapeRegExp } from "../../core/utils/common";
 
 const PATTERN_GETTERS = {
     a: (date) => date.getHours() < 12 ? 0 : 1,
@@ -77,7 +76,7 @@ const renderDateParts = (text, format) => {
 
         sections.push({
             index: i - 1,
-            isStub: pattern === escapeRegExp(result[i]),
+            isStub: pattern === result[i],
             caret: { start: start, end: end },
             pattern: pattern,
             text: result[i],

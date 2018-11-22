@@ -11,6 +11,13 @@ require("localization/currency");
 
 QUnit.module("date parser");
 
+QUnit.test("parse with escaped chars", function(assert) {
+    var date = new Date(2018, 10, 12, 14, 15, 16),
+        parser = getDateParser("EEEE, d. MMMM yyyy 'um' H:mm:ss", dateParts);
+
+    assert.deepEqual(parser("Monday, 12. November 2018 um 14:15:16"), date, "parse correct date string");
+});
+
 QUnit.test("parse dd/MM/yyyy format", function(assert) {
     var parser = getDateParser("dd/MM/yyyy"),
         date = new Date(2017, 8, 22);
