@@ -1017,7 +1017,16 @@ Axis.prototype = {
         if(this.isArgumentAxis) {
             if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
                 if(range.axisType === constants.discrete) {
-                    if(range.categories && newRange.categories && newRange.categories.every((c, i) => c === range.categories[i])) {
+                    const categories = range.categories;
+                    const newCategories = newRange.categories;
+                    const visualRange = this.visualRange();
+                    if(categories &&
+                        newCategories &&
+                        categories.length === newCategories.length &&
+                        newCategories.every((c, i) => c.valueOf() === categories[i].valueOf()) &&
+                        (visualRange.startValue.valueOf() !== newCategories[0].valueOf() ||
+                            visualRange.endValue.valueOf() !== newCategories[newCategories.length - 1].valueOf())
+                    ) {
                         value = KEEP;
                     } else {
                         value = RESET;
@@ -1059,7 +1068,6 @@ Axis.prototype = {
         if(!currentBusinessRange.isDefined() || currentBusinessRange.stubData || currentBusinessRange.isEstimatedRange) {
             return;
         }
-
         if(!that.isArgumentAxis) {
             const viewport = that.getViewport();
 
