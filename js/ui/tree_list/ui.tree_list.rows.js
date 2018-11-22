@@ -29,16 +29,28 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
         return $iconElement;
     };
 
+    var renderIcons = function($container, row) {
+        var level = row.level;
+
+        for(var i = 0; i <= level; i++) {
+            $container.append(createIcon(i === level && row.node.hasChildren, row.isExpanded));
+        }
+    };
+
     return {
         _renderExpandIcon: function($container, options) {
-            var level = options.row.level,
-                $iconContainer = $("<div>")
+            var $iconContainer = $("<div>")
                     .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
                     .appendTo($container);
 
-            for(var i = 0; i <= level; i++) {
-                $iconContainer.append(createIcon(i === level && options.row.node.hasChildren, options.row.isExpanded));
-            }
+            renderIcons($iconContainer, options.row);
+
+            options.watch && options.watch(function() {
+                return [options.row.level, options.row.isExpanded, options.row.node.hasChildren];
+            }, function() {
+                $iconContainer.empty();
+                renderIcons($iconContainer, options.row);
+            });
 
             $container.addClass(TREELIST_CELL_EXPANDABLE_CLASS);
 

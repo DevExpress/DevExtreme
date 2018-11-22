@@ -660,6 +660,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             this.data = options.data = row.data;
             this.rowIndex = options.rowIndex = row.rowIndex;
             this.dataIndex = options.dataIndex = row.dataIndex;
+            this.isExpanded = options.isExpanded = row.isExpanded;
 
             watchers.forEach(function(watcher) {
                 watcher();

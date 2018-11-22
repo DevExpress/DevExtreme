@@ -914,6 +914,28 @@ QUnit.test("Scrollbar position must be kept after expanding node when the treeli
     });
 });
 
+// T692068
+QUnit.test("Expand row if repaintChangesOnly is true", function(assert) {
+    // arrange
+    var treeList = createTreeList({
+        height: 120,
+        loadingTimeout: undefined,
+        repaintChangesOnly: true,
+        dataSource: [
+            { id: 1, name: 'node_1' },
+            { id: 2, name: 'node_1_1', parentId: 1 },
+            { id: 3, name: 'node_1_2', parentId: 1 }
+        ]
+    });
+
+    // act
+    treeList.expandRow(1);
+
+    // assert
+    assert.strictEqual(treeList.getVisibleRows()[0].isExpanded, true, "first row has corrent isExpanded state");
+    assert.strictEqual($(treeList.getRowElement(0)).find(".dx-treelist-expanded").length, 1, "first row has expanded icon");
+});
+
 QUnit.module("Focused Row", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
