@@ -2,7 +2,6 @@ var $ = require("../../core/renderer"),
     Editor = require("../editor/editor"),
     NumberBox = require("../number_box"),
     SelectBox = require("../select_box"),
-    ensureDefined = require("../../core/utils/common").ensureDefined,
     Box = require("../box"),
     extend = require("../../core/utils/extend").extend,
     registerComponent = require("../../core/component_registrator"),
@@ -177,12 +176,8 @@ var TimeView = Editor.inherit({
             max: 24,
             value: this._getValue().getHours(),
             onValueChanged: (function(args) {
-                var newHours = this._normalizeHours((24 + args.value) % 24);
-
-                this._hourBox.option("value", newHours);
-
                 var time = new Date(this._getValue());
-                time.setHours(this._denormalizeHours(newHours, args.value > args.previousValue));
+                time.setHours(args.value);
                 uiDateUtils.normalizeTime(time);
                 this.option("value", time);
             }).bind(this)
@@ -260,22 +255,7 @@ var TimeView = Editor.inherit({
     },
 
     _normalizeHours: function(hours) {
-        if(this.option("use24HourFormat")) return hours;
-
-        return hours % 12 || 12;
-    },
-
-    _denormalizeHours: function(hours, moveForward) {
-        hours = ensureDefined(hours, this._getValue().getHours());
-        if(this.option("use24HourFormat")) return hours;
-
-        var isPM = this._format12.option("value") === TIMEVIEW_FORMAT12_PM;
-
-        if(hours === 11 && !moveForward) {
-            isPM = !isPM;
-        }
-
-        return (isPM ? (hours + 12) : hours) % 24;
+        return this.option("use24HourFormat") ? hours : hours % 12 || 12;
     },
 
     _updateField: function() {
