@@ -491,38 +491,6 @@ describe("LessTemplateLoader", () => {
             });
     });
 
-    it("load - do not change the order of cascade's classes by swatch class (T692470) - double parent case", () => {
-        let config = {
-            isBootstrap: false,
-            lessCompiler: lessCompiler,
-            outColorScheme: "my-custom",
-            makeSwatch: true,
-            reader: () => {
-                return new Promise(resolve => {
-                    resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
-                    .dx-searchbox {
-                        &.dx-rtl& {
-                            border: none;
-                        }
-                    }`);
-                });
-            }
-        };
-
-        let lessTemplateLoader = new LessTemplateLoader(config);
-        lessTemplateLoader._makeInfoHeader = emptyHeader;
-        return lessTemplateLoader.load(
-            themeName,
-            colorScheme,
-            metadata).then(data => {
-                assert.equal(data.css, `.dx-swatch-my-custom .dx-searchbox.dx-rtl.dx-searchbox {
-  border: none;
-}
-
-`);
-            });
-    });
-
     it("load - do not change the order of cascade's classes by swatch class (T692470) - tabs case", () => {
         let config = {
             isBootstrap: false,
@@ -565,7 +533,7 @@ describe("LessTemplateLoader", () => {
                 return new Promise(resolve => {
                     resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
                     .dx-tab-selected {
-                        .s & + & {
+                        & + .s & {
                             border: none;
                         }
                     }`);
@@ -579,7 +547,7 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata).then(data => {
-                assert.equal(data.css, `.dx-swatch-my-custom .s .dx-tab-selected + .dx-swatch-my-custom .dx-tab-selected {
+                assert.equal(data.css, `.dx-swatch-my-custom .dx-tab-selected + .dx-swatch-my-custom .s .dx-tab-selected {
   border: none;
 }
 

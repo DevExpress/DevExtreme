@@ -63,12 +63,10 @@ class LessMetadataPostCompilerPlugin {
         });
 
         const changeSwatchSelectorOrder = (css, selector) => {
-            const swatchOrderRegex = new RegExp(`(([+~]\\s)(?!${selector}\\s).*?|^(${selector}\\s)?[^+~\\n]+?)(${selector}\\s)([^,{+~]*)`, "gm");
-            return css.replace(swatchOrderRegex, (_, group1, group2, group3, group4, group5) => {
-                if(group3) {
-                    group1 = group1.replace(group3, "");
-                }
-                return (group2 || "") + group4 + group1 + group5;
+            const swatchOrderRegex = new RegExp(`([+~]\\s(?!${selector}\\s).*?|^[^+~\\n]+?)(${selector}\\s)([^,{+~]*)`, "gm");
+            return css.replace(swatchOrderRegex, (_, group1, group2, group3) => {
+                const plusRemovedGroup = group1.replace(/^\+\s/, "");
+                return (plusRemovedGroup === group1 ? "" : "+ ") + group2 + plusRemovedGroup + group3;
             });
         };
 
