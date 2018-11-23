@@ -186,6 +186,9 @@ class DrawerStrategy {
         }
     }
 
+    needOrderContent() {
+        return false;
+    }
 };
 
 module.exports = DrawerStrategy;

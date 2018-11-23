@@ -191,6 +191,10 @@ class OverlapStrategy extends DrawerStrategy {
 
         this.getDrawerInstance().setZIndex(zIndex);
     }
+
+    needOrderContent(position) {
+        return position === "right" || position === "bottom";
+    }
 };
 
 module.exports = OverlapStrategy;
