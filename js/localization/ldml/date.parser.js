@@ -164,6 +164,14 @@ var getRegExpInfo = function(format, dateParts) {
         isEscaping,
         patterns = [];
 
+    var addPreviousStub = function() {
+        if(stubText) {
+            patterns.push(stubText);
+            regexpText += escapeRegExp(stubText) + ")";
+            stubText = "";
+        }
+    };
+
     for(var i = 0; i < format.length; i++) {
         var char = format[i],
             isEscapeChar = char === "'",
@@ -180,12 +188,7 @@ var getRegExpInfo = function(format, dateParts) {
             var count = getSameCharCount(format, i),
                 pattern = createPattern(char, count);
 
-            if(stubText) {
-                patterns.push(stubText);
-                regexpText += escapeRegExp(stubText) + ")";
-                stubText = "";
-            }
-
+            addPreviousStub();
             patterns.push(pattern);
 
             regexpText += "(" + regexpPart(count, dateParts) + ")";
@@ -198,9 +201,7 @@ var getRegExpInfo = function(format, dateParts) {
         }
     }
 
-    if(stubText) {
-        regexpText += stubText + ")";
-    }
+    addPreviousStub();
 
     return {
         patterns: patterns,

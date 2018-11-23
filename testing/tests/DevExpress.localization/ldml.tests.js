@@ -1,6 +1,7 @@
 var getNumberFormatter = require("localization/ldml/number").getFormatter,
     getNumberFormat = require("localization/ldml/number").getFormat,
     getDateParser = require("localization/ldml/date.parser").getParser,
+    getRegExpInfo = require("localization/ldml/date.parser").getRegExpInfo,
     getDateFormatter = require("localization/ldml/date.formatter").getFormatter,
     getDateFormat = require("localization/ldml/date.format").getFormat,
     dateParts = require("localization/default_date_names"),
@@ -305,4 +306,13 @@ QUnit.test("getFormat for function number formats", function(assert) {
     checkFormat(function(value) {
         return value.toFixed(2);
     }, "#0.00");
+});
+
+QUnit.module("getRegExpInfo method");
+
+QUnit.test("getRegExpInfo should return correct pattern set when stub is in the end", function(assert) {
+    var regExpInfo = getRegExpInfo("EEE, MMMM, dd, HH:mm:ss '(stub)'", dateParts);
+    assert.deepEqual(regExpInfo.patterns, [
+        "EEE", ", ", "MMMM", ", ", "dd", ", ", "HH", ":", "mm", ":", "ss", " (stub)"
+    ]);
 });
