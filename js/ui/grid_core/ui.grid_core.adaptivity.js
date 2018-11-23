@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    isDefined = typeUtils.isDefined,
     each = require("../../core/utils/iterator").each,
     browser = require("../../core/utils/browser"),
     extend = require("../../core/utils/extend").extend,
@@ -417,9 +418,32 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP;
     },
 
+    _isPixelWidth: function(width) {
+        return (!width || width === "auto") && !this._isPercentWidth(width);
+    },
+
+    _getColumnWidth: function(columnId) {
+        let width = this._columnsController.columnOption(columnId, "width"),
+            columnWidth;
+        if(this._isPixelWidth(width)) {
+            let minWidth = this._columnsController.columnOption(columnId, "minWidth");
+            if(this._isPixelWidth(minWidth)) {
+                let commonMinWidth = this.option("columnMinWidth");
+                if(this._isPixelWidth(commonMinWidth)) {
+                    let columnBestFitWidth = this._columnsController.columnOption(columnId, "bestFitWidth");
+                    columnWidth = columnBestFitWidth || 0;
+                } else {
+                    columnWidth = commonMinWidth;
+                }
+            } else {
+                columnWidth = minWidth;
+            }
+        }
+        return columnWidth;
+    },
+
     hideRedundantColumns: function(resultWidths, visibleColumns, hiddenQueue) {
-        var that = this,
-            visibleColumn;
+        var that = this;
 
         this._hiddenColumns = [];
 
@@ -428,9 +452,8 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 percentWidths,
                 $rootElement = that.component.$element(),
                 rootElementWidth = $rootElement.width() - that._getCommandColumnsWidth(),
-                getVisibleContentColumns = function() {
-                    return visibleColumns.filter(item => !item.command && this._hiddenColumns.filter(i => i.dataField === item.dataField).length === 0);
-                }.bind(this),
+                getVisibleContentColumns = () => visibleColumns.filter(item =>
+                    !item.command && this._hiddenColumns.filter(i => i.dataField === item.dataField).length === 0),
                 visibleContentColumns = getVisibleContentColumns(),
                 contentColumnsCount = visibleContentColumns.length,
                 columnsCanFit,
@@ -446,25 +469,22 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
                 columnsCanFit = percentWidths < 100 && percentWidths !== 0;
                 for(i = 0; i < visibleColumns.length; i++) {
-                    visibleColumn = visibleColumns[i];
-
-                    var columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, visibleContentColumns, columnsCanFit),
-                        columnId = getColumnId(that, visibleColumn),
-                        widthOption = that._columnsController.columnOption(columnId, "width"),
-                        columnBestFitWidth = that._columnsController.columnOption(columnId, "bestFitWidth");
-
                     if(resultWidths[i] === HIDDEN_COLUMNS_WIDTH) {
                         hasHiddenColumns = true;
                         continue;
                     }
+
+                    let visibleColumn = visibleColumns[i],
+                        columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, visibleContentColumns, columnsCanFit);
+
                     if(!columnWidth && !visibleColumn.command && !visibleColumn.fixed) {
                         needHideColumn = true;
                         break;
                     }
 
-                    if(!widthOption || widthOption === "auto") {
-                        columnWidth = columnBestFitWidth || 0;
-                    }
+                    let columnId = getColumnId(that, visibleColumn),
+                        columnWidthOption = this._getColumnWidth(columnId);
+                    columnWidth = isDefined(columnWidthOption) ? columnWidthOption : columnWidth;
 
                     if(visibleColumn.command !== ADAPTIVE_COLUMN_NAME || hasHiddenColumns) {
                         totalWidth += columnWidth;
