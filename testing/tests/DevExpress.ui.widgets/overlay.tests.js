@@ -1426,10 +1426,7 @@ QUnit.test("content ready should be fired correctly when async template is used"
             templates: {
                 "content": {
                     render: function(args) {
-                        var $div = $("<div/>").appendTo(args.container);
                         setTimeout(() => {
-                            $div.css("height", 600);
-                            $div.css("width", 200);
                             contentIsRendered = true;
                             args.onRendered();
                         }, 100);

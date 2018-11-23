@@ -531,7 +531,7 @@ QUnit.test("drawer panel should have correct width when async template is used",
                 }
             }
         }
-    }).dxDrawer("instance");
+    });
 
     clock.tick(100);
     const $panel = $("#drawer").find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
@@ -560,7 +560,7 @@ QUnit.test("drawer panel should have correct width when async template is used, 
                 }
             }
         }
-    }).dxDrawer("instance");
+    });
 
     clock.tick(100);
     const $panelOverlayContent = $("#drawer").find(".dx-overlay-content");
@@ -590,7 +590,7 @@ QUnit.test("drawer panel should have correct margin when async template is used"
                 }
             }
         }
-    }).dxDrawer("instance");
+    });
 
     clock.tick(100);
     const $panel = $("#drawer").find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
