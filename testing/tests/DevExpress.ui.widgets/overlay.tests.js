@@ -800,6 +800,21 @@ QUnit.test("shading height should change after container resize (B237292)", func
     assert.strictEqual(translator.locate($wrapper).top, 0);
 });
 
+QUnit.test("shading height should change after iOS address bar resize (T653828)", function(assert) {
+    if(devices.real().platform !== "ios" || devices.real().deviceType === "desktop") {
+        assert.ok(true);
+        return;
+    }
+
+    var $wrapper,
+        overlay = $("#overlay").dxOverlay({
+            visible: true
+        }).dxOverlay("instance");
+
+    $wrapper = $(overlay.$content().parent());
+    assert.equal($wrapper.css("minHeight").replace("px", ""), window.innerHeight, "overlay wrapper has right min-height style");
+});
+
 QUnit.test("shading color should be customized by option", function(assert) {
     var overlay = $("#overlay").dxOverlay({
             shading: true,

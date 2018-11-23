@@ -71,6 +71,7 @@ var realDevice = devices.real(),
 
     firefoxDesktop = browser.mozilla && realDevice.deviceType === "desktop",
     iOS = realDevice.platform === "ios",
+    hasSafariAddressBar = browser.safari && realDevice.deviceType !== "desktop",
     iOS7_0andBelow = iOS && compareVersions(realVersion, [7, 1]) < 0,
     android4_0nativeBrowser = realDevice.platform === "android" && compareVersions(realVersion, [4, 0], 2) === 0 && navigator.userAgent.indexOf("Chrome") === -1;
 
@@ -1198,6 +1199,12 @@ var Overlay = Widget.inherit({
         }
     },
 
+    _fixHeightAfterSafariAddressBarResizing: function() {
+        if(this._isWindow(this._getContainer()) && hasSafariAddressBar) {
+            this._$wrapper.css("minHeight", window.innerHeight);
+        }
+    },
+
     _renderGeometry: function() {
         if(this.option("visible") && windowUtils.hasWindow()) {
             this._renderGeometryImpl();
@@ -1208,6 +1215,7 @@ var Overlay = Widget.inherit({
         this._stopAnimation();
 
         this._normalizePosition();
+        this._fixHeightAfterSafariAddressBarResizing();
         this._renderShading();
         this._renderDimensions();
         var resultPosition = this._renderPosition();
