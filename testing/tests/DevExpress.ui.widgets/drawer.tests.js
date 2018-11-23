@@ -515,7 +515,7 @@ QUnit.test("drawer panel should have correct width when async template is used",
     var clock = sinon.useFakeTimers();
 
     $("#drawer").dxDrawer({
-        openedStateMode: "shrink",
+        openedStateMode: "push",
         templatesRenderAsynchronously: true,
         integrationOptions: {
             templates: {
@@ -531,12 +531,72 @@ QUnit.test("drawer panel should have correct width when async template is used",
                 }
             }
         }
-    }).dxDrawer("instance");
+    });
 
     clock.tick(100);
     const $panel = $("#drawer").find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
 
     assert.equal($panel.width(), 200, "panel has correct size");
+    clock.restore();
+});
+
+QUnit.test("drawer panel should have correct width when async template is used, overlap mode", assert => {
+    var clock = sinon.useFakeTimers();
+
+    $("#drawer").dxDrawer({
+        openedStateMode: "overlap",
+        templatesRenderAsynchronously: true,
+        integrationOptions: {
+            templates: {
+                "panel": {
+                    render: function(args) {
+                        var $div = $("<div/>").appendTo(args.container);
+                        setTimeout(() => {
+                            $div.css("height", 600);
+                            $div.css("width", 200);
+                            args.onRendered();
+                        }, 100);
+                    }
+                }
+            }
+        }
+    });
+
+    clock.tick(100);
+    const $panelOverlayContent = $("#drawer").find(".dx-overlay-content");
+
+    assert.equal($panelOverlayContent.width(), 200, "panel has correct size");
+    clock.restore();
+});
+
+QUnit.test("drawer panel should have correct margin when async template is used", assert => {
+    var clock = sinon.useFakeTimers();
+
+    $("#drawer").dxDrawer({
+        openedStateMode: "shrink",
+        templatesRenderAsynchronously: true,
+        opened: true,
+        integrationOptions: {
+            templates: {
+                "panel": {
+                    render: function(args) {
+                        var $div = $("<div/>").appendTo(args.container);
+                        setTimeout(() => {
+                            $div.css("height", 600);
+                            $div.css("width", 200);
+                            args.onRendered();
+                        }, 100);
+                    }
+                }
+            }
+        }
+    });
+
+    clock.tick(100);
+    const $panel = $("#drawer").find("." + DRAWER_PANEL_CONTENT_CLASS).eq(0);
+
+    assert.equal($panel.css("marginLeft"), "0px", "panel has correct margin");
+    clock.restore();
 });
 
 QUnit.module("Animation", {

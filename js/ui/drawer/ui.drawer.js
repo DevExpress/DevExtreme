@@ -434,6 +434,7 @@ const Drawer = Widget.inherit({
     },
 
     _dimensionChanged() {
+        this._initSize();
         this._strategy.setPanelSize(this.option("revealMode") === "slide");
     },
 

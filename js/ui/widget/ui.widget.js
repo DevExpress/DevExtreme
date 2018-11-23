@@ -476,13 +476,11 @@ var Widget = DOMComponent.inherit({
     },
 
     _renderContent: function() {
-        var that = this;
-
-        commonUtils.deferRender(function() {
-            that._renderContentImpl();
+        commonUtils.deferRender(() => {
+            return this._renderContentImpl();
+        }).done(() => {
+            this._fireContentReadyAction();
         });
-
-        that._fireContentReadyAction();
     },
 
     _renderContentImpl: commonUtils.noop,

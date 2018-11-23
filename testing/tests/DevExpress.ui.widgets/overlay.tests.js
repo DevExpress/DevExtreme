@@ -1412,6 +1412,33 @@ QUnit.test("behavior if option set to false", function(assert) {
     assert.ok(!onContentReadyFired, "after show overlay content do not render");
 });
 
+QUnit.test("content ready should be fired correctly when async template is used", assert => {
+    var clock = sinon.useFakeTimers(),
+        contentIsRendered = false;
+
+    $("#overlay").dxOverlay({
+        templatesRenderAsynchronously: true,
+        deferRendering: false,
+        onContentReady: function() {
+            assert.ok(contentIsRendered, "Content is rendered before content ready firing");
+        },
+        integrationOptions: {
+            templates: {
+                "content": {
+                    render: function(args) {
+                        setTimeout(() => {
+                            contentIsRendered = true;
+                            args.onRendered();
+                        }, 100);
+                    }
+                }
+            }
+        }
+    });
+
+    clock.tick(100);
+    clock.restore();
+});
 
 QUnit.module("close on outside click", moduleConfig);
 
