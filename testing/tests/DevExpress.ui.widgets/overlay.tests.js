@@ -866,7 +866,7 @@ QUnit.test("shading height should change after iOS address bar resize (T653828)"
         }).dxOverlay("instance");
 
     $wrapper = $(overlay.$content().parent());
-    assert.equal($wrapper.css("minHeight").replace("px", ""), window.innerHeight, "");
+    assert.equal($wrapper.css("minHeight").replace("px", ""), window.innerHeight, "overlay wrapper has right min-height style");
 });
 
 QUnit.test("shading color should be customized by option", function(assert) {
