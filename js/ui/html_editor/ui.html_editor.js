@@ -368,7 +368,10 @@ const HtmlEditor = Editor.inherit({
 
     _clean: function() {
         if(this._quillInstance) {
+            const toolbar = this._quillInstance.getModule("toolbar");
+
             this._quillInstance.off("text-change", this._textChangeHandlerWithContext);
+            toolbar && toolbar.clean();
         }
 
         this._abortUpdateContentTask();

@@ -237,23 +237,24 @@ class ToolbarModule extends BaseModule {
 
     _renderToolbar() {
         const container = this.options.container || this._getContainer();
-        const $container = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
         const toolbarItems = this._prepareToolbarItems();
         const $toolbar = $("<div>")
             .addClass(TOOLBAR_CLASS)
             .appendTo(container);
+
+        this._$toolbarContainer = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
 
         eventsEngine.on($toolbar, addNamespace("mousedown", this._editorInstance.NAME), (e) => {
             e.preventDefault();
         });
 
         this.toolbarInstance = this._editorInstance._createComponent($toolbar, Toolbar, { dataSource: toolbarItems });
+    }
 
-        this._editorInstance.on("disposing", () => {
-            $container
-                .empty()
-                .removeClass(TOOLBAR_WRAPPER_CLASS);
-        });
+    clean() {
+        this._$toolbarContainer
+            .empty()
+            .removeClass(TOOLBAR_WRAPPER_CLASS);
     }
 
     _getContainer() {
