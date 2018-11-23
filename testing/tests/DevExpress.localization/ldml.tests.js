@@ -1,6 +1,7 @@
 var getNumberFormatter = require("localization/ldml/number").getFormatter,
     getNumberFormat = require("localization/ldml/number").getFormat,
     getDateParser = require("localization/ldml/date.parser").getParser,
+    getRegExpInfo = require("localization/ldml/date.parser").getRegExpInfo,
     getDateFormatter = require("localization/ldml/date.formatter").getFormatter,
     getDateFormat = require("localization/ldml/date.format").getFormat,
     dateParts = require("localization/default_date_names"),
@@ -10,6 +11,13 @@ var getNumberFormatter = require("localization/ldml/number").getFormatter,
 require("localization/currency");
 
 QUnit.module("date parser");
+
+QUnit.test("parse with escaped chars", function(assert) {
+    var date = new Date(2018, 10, 12, 14, 15, 16),
+        parser = getDateParser("EEEE, d. MMMM yyyy 'um' H:mm:ss", dateParts);
+
+    assert.deepEqual(parser("Monday, 12. November 2018 um 14:15:16"), date, "parse correct date string");
+});
 
 QUnit.test("parse dd/MM/yyyy format", function(assert) {
     var parser = getDateParser("dd/MM/yyyy"),
@@ -298,4 +306,13 @@ QUnit.test("getFormat for function number formats", function(assert) {
     checkFormat(function(value) {
         return value.toFixed(2);
     }, "#0.00");
+});
+
+QUnit.module("getRegExpInfo method");
+
+QUnit.test("getRegExpInfo should return correct pattern set when stub is in the end", function(assert) {
+    var regExpInfo = getRegExpInfo("EEE, MMMM, dd, HH:mm:ss '(stub)'", dateParts);
+    assert.deepEqual(regExpInfo.patterns, [
+        "EEE", ", ", "MMMM", ", ", "dd", ", ", "HH", ":", "mm", ":", "ss", " (stub)"
+    ]);
 });
