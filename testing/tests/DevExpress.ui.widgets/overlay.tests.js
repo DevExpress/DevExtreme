@@ -1427,7 +1427,7 @@ QUnit.test("behavior if option set to false", function(assert) {
     assert.ok(!onContentReadyFired, "after show overlay content do not render");
 });
 
-QUnit.test("content ready should be fired correctly when async template is used", assert => {
+QUnit.test("content ready should be fired correctly when async template is used", function(assert) {
     var clock = sinon.useFakeTimers(),
         contentIsRendered = false;
 
@@ -1441,7 +1441,7 @@ QUnit.test("content ready should be fired correctly when async template is used"
             templates: {
                 "content": {
                     render: function(args) {
-                        setTimeout(() => {
+                        setTimeout(function() {
                             contentIsRendered = true;
                             args.onRendered();
                         }, 100);
