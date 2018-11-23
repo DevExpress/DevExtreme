@@ -77,15 +77,15 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
         cellDuration = 3600000 * interval;
 
     const cellCountInGroup = cellCount;
-    assert.equal($element.find(".dx-scheduler-time-panel-row").length, cellCount * groupCount, "Time panel has a right count of rows");
-    assert.equal($element.find(".dx-scheduler-time-panel-cell").length, cellCount * groupCount, "Time panel has a right count of cells");
+    assert.equal($element.find(".dx-scheduler-time-panel-row").length, Math.ceil(cellCount * groupCount), "Time panel has a right count of rows");
+    assert.equal($element.find(".dx-scheduler-time-panel-cell").length, Math.ceil(cellCount * groupCount), "Time panel has a right count of cells");
 
     $element.find(".dx-scheduler-time-panel-cell").each(function(index) {
         let time;
         let cellIndex = index % cellCountInGroup;
 
         if(cellIndex % 2 === 0) {
-            time = dateLocalization.format(new Date(new Date(1970, 0).getTime() + cellDuration * cellIndex + start * 3600000), "shorttime");
+            time = dateLocalization.format(new Date(new Date(1970, 0).getTime() + Math.round(cellDuration) * cellIndex + start * 3600000), "shorttime");
         } else {
             time = "";
         }
@@ -447,6 +447,15 @@ QUnit.module("Workspace Day markup", dayModuleConfig, () => {
         });
 
         checkRowsAndCells(this.instance.$element(), assert, 1, 2);
+    });
+
+    QUnit.test("Time panel should have right cell text when hoursInterval is fractional", (assert) => {
+        this.instance.option({
+            hoursInterval: 2.1666666666666665,
+            endDayHour: 5
+        });
+
+        checkRowsAndCells(this.instance.$element(), assert, 2.1666666666666665, 0, 5);
     });
 
     QUnit.test("Cell count should depend on start/end day hour & hoursInterval", (assert) => {
