@@ -1434,7 +1434,7 @@ QUnit.test("content ready should be fired correctly when async template is used"
                 }
             }
         }
-    }).dxOverlay("instance");
+    });
 
     clock.tick(100);
     clock.restore();
