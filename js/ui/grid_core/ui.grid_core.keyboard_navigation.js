@@ -163,10 +163,16 @@ var KeyboardNavigationController = core.ViewController.inherit({
             isCellEditMode = this._isCellEditMode(),
             args;
 
-        args = this._fireFocusedRowChanging(event, $cell.parent());
+        this.setCellFocusType();
+        args = this._fireFocusChangingEvents(event, $cell, true);
+
         if(!args.cancel) {
             if(args.rowIndexChanged) {
                 $cell = this._getFocusedCell();
+            }
+
+            if(!args.isHighlighted) {
+                this.setRowFocusType();
             }
 
             this._updateFocusedCellPosition($cell);
@@ -174,10 +180,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(this._allowRowUpdating() && isCellEditMode && column && column.allowEditing) {
                 this._isHiddenFocus = false;
             } else {
-                var isInteractiveTarget = $(event.target).not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR);
-                this._focus($cell, true, isInteractiveTarget);
+                var isInteractiveTarget = $(event.target).not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR),
+                    isDisabled = !args.isHighlighted || isInteractiveTarget;
+                this._focus($cell, isDisabled, isInteractiveTarget);
             }
         } else {
+            this.setRowFocusType();
             this.setFocusedRowIndex(args.prevRowIndex);
             $cell = this._getFocusedCell();
             if(this._isCellValid($cell)) {
@@ -519,31 +527,37 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _arrowKeysHandlerFocusCell: function($event, $cell, upDown) {
-        var args;
+        var args = this._fireFocusChangingEvents($event, $cell, upDown);
+        if(!args.cancel && this._isCellValid($cell)) {
+            this._focus($cell, !args.isHighlighted);
+        }
+    },
+
+    _fireFocusChangingEvents: function($event, $cell, fireRowEvent) {
+        var args = { },
+            isHighlighted;
 
         if(this.isCellFocusType()) {
             args = this._fireFocusedCellChanging($event, $cell);
-            if(args.cancel) {
-                return;
-            }
-            if(args.$newCellElement) {
-                $cell = args.$newCellElement;
+            if(!args.cancel) {
+                isHighlighted = args.isHighlighted;
+                if(args.$newCellElement) {
+                    $cell = args.$newCellElement;
+                }
             }
         }
 
-        if(upDown) {
+        if(!args.cancel && fireRowEvent) {
             args = this._fireFocusedRowChanging($event, $cell.parent());
-            if(args.cancel) {
-                return;
-            }
-            if(args.rowIndexChanged) {
-                $cell = this._getFocusedCell();
+            if(!args.cancel) {
+                args.isHighlighted = isHighlighted;
+                if(args.rowIndexChanged) {
+                    $cell = this._getFocusedCell();
+                }
             }
         }
 
-        if($cell && this._isCellValid($cell)) {
-            this._focus($cell);
-        }
+        return args;
     },
 
     _isVirtualScrolling: function() {
@@ -1245,6 +1259,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             cellPosition = that._getCellPosition($cellElement),
             columnIndex = cellPosition ? cellPosition.columnIndex : -1,
             rowIndex = cellPosition ? cellPosition.rowIndex : -1,
+            isHighlighted = !$event || !$event.type || $event.type.indexOf(pointerEvents.down) === -1,
             args = {
                 cellElement: $cellElement,
                 prevColumnIndex: prevCellIndex,
@@ -1254,6 +1269,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 rows: that.getController("data").getVisibleRows(),
                 columns: that.getController("columns").getVisibleColumns(),
                 event: $event,
+                isHighlighted: isHighlighted,
                 cancel: false
             };
 
