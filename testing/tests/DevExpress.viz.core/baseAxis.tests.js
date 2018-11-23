@@ -4010,21 +4010,42 @@ QUnit.test("Auto. Discrete axis - keep if categories aren't changed", function(a
     });
     this.axis.validate();
     this.axis.setBusinessRange({
-        categories: [1, 2, 3, 4]
+        categories: [new Date(1), new Date(2), new Date(3), new Date(4)]
     });
 
-    this.axis.visualRange(2, 3);
+    this.axis.visualRange(new Date(2), new Date(3));
     this.axis.createTicks(this.canvas);
 
     this.axis.setBusinessRange({
-        categories: [1, 2, 3, 4]
+        categories: [new Date(1), new Date(2), new Date(3), new Date(4)]
     });
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
 
-    assert.deepEqual(businessRange.categories, [1, 2, 3, 4]);
-    assert.equal(businessRange.minVisible, 2);
-    assert.equal(businessRange.maxVisible, 3);
+    assert.deepEqual(businessRange.categories, [new Date(1), new Date(2), new Date(3), new Date(4)]);
+    assert.deepEqual(businessRange.minVisible, new Date(2));
+    assert.deepEqual(businessRange.maxVisible, new Date(3));
+});
+
+QUnit.test("Auto. Discrete axis - reset if categories aren't changed and visualRange consist all categories", function(assert) {
+    this.updateOptions({
+        type: "discrete"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        categories: [new Date(1), new Date(2), new Date(3), new Date(4)]
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    this.axis.setBusinessRange({
+        categories: [new Date(1), new Date(2), new Date(3), new Date(4)]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.deepEqual(businessRange.categories, [new Date(1), new Date(2), new Date(3), new Date(4)]);
+    assert.equal(this.axis._lastVisualRangeUpdateMode, "reset");
 });
 
 QUnit.test("Do not reset initial viewport if current bussiness range has isEstimatedRange flag", function(assert) {
