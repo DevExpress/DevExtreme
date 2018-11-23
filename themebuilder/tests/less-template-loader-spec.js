@@ -446,13 +446,13 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata).then(data => {
-                assert.equal(data.css, `.dx-swatch-my-custom .dx-checkbox-checked .dx-checkbox-icon,
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-checkbox-checked .dx-checkbox-icon,
 .dx-swatch-my-custom .dx-checkbox-checked.dx-checkbox-icon {
   background-color: #fff;
 }
 
 `);
-            });
+        });
     });
 
     it("load - do not change the order of cascade's classes by swatch class (T692470) - underlined editor case", () => {
@@ -482,13 +482,13 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata).then(data => {
-                assert.equal(data.css, `.dx-swatch-my-custom .dx-rtl.dx-editor-underlined.dx-searchbox .dx-placeholder:before,
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-rtl.dx-editor-underlined.dx-searchbox .dx-placeholder:before,
 .dx-swatch-my-custom .dx-rtl .dx-editor-underlined.dx-searchbox .dx-placeholder:before {
   padding-right: 0;
 }
 
 `);
-            });
+        });
     });
 
     it("load - do not change the order of cascade's classes by swatch class (T692470) - tabs case", () => {
@@ -515,12 +515,12 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata).then(data => {
-                assert.equal(data.css, `.dx-swatch-my-custom .dx-tab-selected + .dx-swatch-my-custom .dx-tab-selected {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-tab-selected + .dx-swatch-my-custom .dx-tab-selected {
   border: none;
 }
 
 `);
-            });
+        });
     });
 
     it("load - do not change the order of cascade's classes by swatch class (T692470) - tabs case with extra selector", () => {
@@ -547,11 +547,11 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata).then(data => {
-                assert.equal(data.css, `.dx-swatch-my-custom .dx-tab-selected + .dx-swatch-my-custom .s .dx-tab-selected {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-tab-selected + .dx-swatch-my-custom .s .dx-tab-selected {
   border: none;
 }
 
 `);
-            });
+        });
     });
 });
