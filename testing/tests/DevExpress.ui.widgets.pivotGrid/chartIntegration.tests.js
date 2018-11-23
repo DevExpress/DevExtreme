@@ -333,7 +333,7 @@ QUnit.test("Not redraw chart during virtual scrolling", function(assert) {
     pivotGrid.bindChart(chart);
     chart.on("done", chartReady);
     pivotGrid._dataController.scrollChanged.empty();
-   // act
+    // act
     pivotGrid._dataController.setViewportPosition(0, 2000);
 
     assert.strictEqual(chartReady.callCount, 0);
@@ -344,10 +344,10 @@ QUnit.module("Chart dataSource item generation with single dataField", {
         executeAsyncMock.setup();
 
         this.fields = [
-                { dataField: "OrderDate", dataType: "date", area: "column", filterValues: [[1996], [1997]] },
-                { dataField: "ShipCountry", dataType: "string", area: "row", filterValues: ["Argentina", "Brazil"] },
-                { dataField: "ShipCity", dataType: "string", area: "row" },
-                { summaryType: "count", caption: 'Count', area: "data" }
+            { dataField: "OrderDate", dataType: "date", area: "column", filterValues: [[1996], [1997]] },
+            { dataField: "ShipCountry", dataType: "string", area: "row", filterValues: ["Argentina", "Brazil"] },
+            { dataField: "ShipCity", dataType: "string", area: "row" },
+            { summaryType: "count", caption: 'Count', area: "data" }
         ];
 
         var that = this,
@@ -1123,10 +1123,10 @@ QUnit.module("Customize Chart", {
         executeAsyncMock.setup();
 
         this.fields = [
-                { dataField: "OrderDate", dataType: "date", area: "column", filterValues: [[1996], [1997]] },
-                { dataField: "ShipCountry", dataType: "string", area: "row", filterValues: ["Argentina", "Brazil"] },
-                { dataField: "ShipCity", dataType: "string", area: "row" },
-                { summaryType: "count", caption: 'Count', area: "data" }
+            { dataField: "OrderDate", dataType: "date", area: "column", filterValues: [[1996], [1997]] },
+            { dataField: "ShipCountry", dataType: "string", area: "row", filterValues: ["Argentina", "Brazil"] },
+            { dataField: "ShipCity", dataType: "string", area: "row" },
+            { summaryType: "count", caption: 'Count', area: "data" }
         ];
 
         var that = this,

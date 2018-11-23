@@ -545,8 +545,8 @@ QUnit.test("Form items order is equal to the grid columns order", function(asser
     $(".dx-datagrid").width(100);
 
     this.items = [
-            { firstName: "Alex", lastName: "Dow", city: "Washington" },
-            { firstName: "John", lastName: "Pierce", city: "Oakwille" }
+        { firstName: "Alex", lastName: "Dow", city: "Washington" },
+        { firstName: "John", lastName: "Pierce", city: "Oakwille" }
     ];
 
     this.options = {
@@ -580,8 +580,8 @@ QUnit.test("Form items were created readOnly if columns were readOnly", function
     $(".dx-datagrid").width(100);
 
     this.items = [
-            { firstName: "Alex", lastName: "Dow", city: "Washington", state: true },
-            { firstName: "John", lastName: "Pierce", city: "Oakwille", state: false }
+        { firstName: "Alex", lastName: "Dow", city: "Washington", state: true },
+        { firstName: "John", lastName: "Pierce", city: "Oakwille", state: false }
     ];
 
     this.options = {
@@ -589,9 +589,9 @@ QUnit.test("Form items were created readOnly if columns were readOnly", function
     };
 
     this.columns = [
-                { dataField: 'firstName', index: 0, allowEditing: true },
-                { dataField: 'lastName', index: 1, allowEditing: true },
-                { dataField: 'state', index: 2, allowEditing: true },
+        { dataField: 'firstName', index: 0, allowEditing: true },
+        { dataField: 'lastName', index: 1, allowEditing: true },
+        { dataField: 'state', index: 2, allowEditing: true },
     ];
 
     setupDataGrid(this);
@@ -735,7 +735,8 @@ QUnit.test("Update adaptive state when adaptive command column is located on lef
 QUnit.test("Show the form with cellTemplate when an adaptive row is expanded", function(assert) {
     // arrange
     $(".dx-datagrid").width(200);
-    var _column;
+    var _data;
+
     this.columns = [
         {
             dataField: 'firstName',
@@ -748,7 +749,7 @@ QUnit.test("Show the form with cellTemplate when an adaptive row is expanded", f
             allowEditing: true,
             cellTemplate: function(container, data) {
                 assert.equal(typeUtils.isRenderer(container), !!config().useJQuery, "cellElement is correct");
-                _column = data.column;
+                _data = data;
                 $(container).text(data.value + " template");
             }
         }
@@ -769,7 +770,11 @@ QUnit.test("Show the form with cellTemplate when an adaptive row is expanded", f
     assert.equal(form.option("items")[0].column.dataField, "lastName", "dataField of column");
     assert.equal(form.option("items")[0].dataField, "lastName", "dataField of item");
     assert.equal($(".dx-field-item-content").text(), "Psy template", "template text of item");
-    assert.equal(_column.dataField, "lastName", "column of data argument in cellTemplate");
+    assert.equal(_data.column.dataField, "lastName", "column of data argument in cellTemplate");
+    assert.strictEqual(_data.text, "Psy", "text of column");
+
+    // T692357
+    assert.strictEqual(_data.displayValue, "Psy", "display value of column");
 });
 
 QUnit.test("Hide the form widget when an adaptive row is collapsed", function(assert) {

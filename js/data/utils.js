@@ -1,12 +1,10 @@
 import { isFunction } from "../core/utils/type";
 import domAdapter from "../core/dom_adapter";
 import { add as ready } from "../core/utils/ready_callbacks";
-import windowUtils from "../core/utils/window";
+import { getWindow } from "../core/utils/window";
 import { map } from "../core/utils/iterator";
 import { toComparable } from "../core/utils/data";
 import { Deferred } from "../core/utils/deferred";
-
-var window = windowUtils.getWindow();
 
 var XHR_ERROR_UNLOAD = "DEVEXTREME_XHR_ERROR_UNLOAD";
 
@@ -67,6 +65,7 @@ var errorMessageFromXhr = (function() {
     // T542570, https://stackoverflow.com/a/18170879
     var unloading;
     ready(function() {
+        var window = getWindow();
         domAdapter.listen(window, "beforeunload", function() { unloading = true; });
     });
 

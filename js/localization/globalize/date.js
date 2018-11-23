@@ -675,8 +675,13 @@ if(Globalize && Globalize.formatDate) {
             return Globalize.locale().main("dates/calendars/gregorian/" + path);
         },
 
-        getMonthNames: function(format) {
-            var months = Globalize.locale().main("dates/calendars/gregorian/months/stand-alone/" + (format || "wide"));
+        getPeriodNames: function() {
+            var json = Globalize.locale().main("dates/calendars/gregorian/dayPeriods/stand-alone/wide");
+            return [json["am"], json["pm"]];
+        },
+
+        getMonthNames: function(format, type) {
+            var months = Globalize.locale().main("dates/calendars/gregorian/months/" + (type || "stand-alone") + "/" + (format || "wide"));
 
             return iteratorUtils.map(months, function(month) { return month; });
         },

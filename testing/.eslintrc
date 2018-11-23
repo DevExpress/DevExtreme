@@ -1,6 +1,7 @@
 {
     "env": {
-        "qunit": true
+        "qunit": true,
+        "browser": true
     },
     "globals": {
         "define": true,

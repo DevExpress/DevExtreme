@@ -316,8 +316,8 @@ QUnit.module("layouting", moduleConfig, () => {
                 height: size
             });
         },
-            errors.Error("E1025"),
-            "raised error E1025");
+        errors.Error("E1025"),
+        "raised error E1025");
     });
 
     QUnit.test("dxUpdate trigger async after render and dimension changed", (assert) => {

@@ -98,10 +98,10 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 this._updateLine(this.mark, {
                     points: axis._getTickMarkPoints(tick.coords, tickOptions.length)
                 },
-                    this._storedCoords && {
-                        points: axis._getTickMarkPoints(tick._storedCoords, tickOptions.length)
-                    },
-                    animate);
+                this._storedCoords && {
+                    points: axis._getTickMarkPoints(tick._storedCoords, tickOptions.length)
+                },
+                animate);
             },
             drawLabel: function(range) {
                 const stubData = axis.getTranslator().getBusinessRange().stubData;
@@ -117,7 +117,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 const text = axis.formatLabel(value, labelOptions, range);
 
                 if(this.label) {
-                    this.label.attr({ text }).append(elementsGroup);
+                    this.label.attr({ text, rotate: 0 }).append(elementsGroup);
                     this.updateLabelPosition();
                     return;
                 }

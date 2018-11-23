@@ -11,10 +11,10 @@ exports.MockDataProvider = function(data, columns) {
     ];
 
     columns = columns || [
-                { dataType: "boolean", width: 100, alignment: "center", dataField: "Column1", caption: "Column1" },
-                { dataType: "string", width: 200, alignment: "left", dataField: "Column2", caption: "ColumnClone" },
-                { dataType: "number", width: 150, alignment: "right", dataField: "Column3", caption: "ColumnClone" },
-                { dataType: "date", width: 160, alignment: "center", dataField: "Column4", caption: "Column4", format: "shortDate" }
+        { dataType: "boolean", width: 100, alignment: "center", dataField: "Column1", caption: "Column1" },
+        { dataType: "string", width: 200, alignment: "left", dataField: "Column2", caption: "ColumnClone" },
+        { dataType: "number", width: 150, alignment: "right", dataField: "Column3", caption: "ColumnClone" },
+        { dataType: "date", width: 160, alignment: "center", dataField: "Column4", caption: "Column4", format: "shortDate" }
     ];
 
     return {

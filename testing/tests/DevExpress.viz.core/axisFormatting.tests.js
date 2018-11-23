@@ -232,7 +232,7 @@ QUnit.test("No formats for logarithmic ticks with logarithmBase !== 10", functio
             visible: true
         }
     }, [512, 1024, 2048, 4096], 1,
-        ["512", "1024", "2048", "4096"]);
+    ["512", "1024", "2048", "4096"]);
 });
 
 QUnit.test("Label's hint - use auto formatter", function(assert) {

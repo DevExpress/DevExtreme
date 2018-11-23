@@ -1033,12 +1033,12 @@ QUnit.test("One vertical element", function(assert) {
         });
 
     layoutManager.layoutElements(
-            [layoutElement],
+        [layoutElement],
         this.canvas,
         noop,
-            [{ canvas: this.canvas }],
+        [{ canvas: this.canvas }],
         false,
-            {}
+        {}
     );
 
     assert.ok(!this.checkLayoutElementVisibility(layoutElement));
@@ -1062,12 +1062,12 @@ QUnit.test("Two vertical elements", function(assert) {
         });
 
     layoutManager.layoutElements(
-            [layoutElement1, layoutElement2],
+        [layoutElement1, layoutElement2],
         this.canvas,
         noop,
-            [{ canvas: this.canvas }],
+        [{ canvas: this.canvas }],
         false,
-            {}
+        {}
     );
 
     assert.ok(this.checkLayoutElementVisibility(layoutElement1));
@@ -1084,12 +1084,12 @@ QUnit.test("One horizontal element", function(assert) {
         });
 
     layoutManager.layoutElements(
-            [layoutElement],
+        [layoutElement],
         this.canvas,
         noop,
-            [{ canvas: this.canvas }],
+        [{ canvas: this.canvas }],
         false,
-            {}
+        {}
     );
 
     assert.ok(!this.checkLayoutElementVisibility(layoutElement));
@@ -1113,12 +1113,12 @@ QUnit.test("Perpendicular elements. Vertical is hidden", function(assert) {
         });
 
     layoutManager.layoutElements(
-            [layoutElement1, layoutElement2],
+        [layoutElement1, layoutElement2],
         this.canvas,
         noop,
-            [{ canvas: this.canvas }],
+        [{ canvas: this.canvas }],
         false,
-            {}
+        {}
     );
 
     assert.ok(this.checkLayoutElementVisibility(layoutElement1));
@@ -1146,12 +1146,12 @@ QUnit.test("Perpendicular elements. Horizontal is hidden", function(assert) {
         });
 
     layoutManager.layoutElements(
-            [layoutElement2, layoutElement1],
+        [layoutElement2, layoutElement1],
         this.canvas,
         noop,
-            [{ canvas: this.canvas }],
+        [{ canvas: this.canvas }],
         false,
-            {}
+        {}
     );
 
     assert.ok(!this.checkLayoutElementVisibility(layoutElement1));
@@ -1170,7 +1170,7 @@ QUnit.test("Check axis drawing params", function(assert) {
         });
 
     layoutManager.layoutElements(
-            [],
+        [],
         this.canvas,
         axesDrawer,
         this.getLayoutTargets(),

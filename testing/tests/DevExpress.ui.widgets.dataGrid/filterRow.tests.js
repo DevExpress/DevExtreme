@@ -787,9 +787,9 @@ QUnit.test('Draw filterRow when all columns grouped', function(assert) {
         filterRow;
 
     $.extend(this.columns, [{ headerCaption: 'Column 1', groupIndex: 0 },
-                            { headerCaption: 'Column 2', groupIndex: 1 },
-                            { headerCaption: 'Column 3', groupIndex: 2 },
-                            { command: 'empty' }
+        { headerCaption: 'Column 2', groupIndex: 1 },
+        { headerCaption: 'Column 3', groupIndex: 2 },
+        { command: 'empty' }
     ]);
 
     // act

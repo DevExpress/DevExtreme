@@ -72,6 +72,16 @@ define(function(require, exports, module) {
             "Array of month names");
     });
 
+    QUnit.test("getMonthNames with specified type", function(assert) {
+        assert.deepEqual(dateLocalization.getMonthNames("wide", "format"),
+            ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"],
+            "Array of month names");
+    });
+
+    QUnit.test("getPeriodNames", function(assert) {
+        assert.deepEqual(dateLocalization.getPeriodNames(), ["ДП", "ПП"], "Array of period names");
+    });
+
     QUnit.test("getDayNames", function(assert) {
         assert.deepEqual(dateLocalization.getDayNames(),
             ["воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"],

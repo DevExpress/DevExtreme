@@ -1,7 +1,7 @@
-var $ = require("jquery"),
-    renderer = require("core/renderer"),
-    eventsEngine = require("events/core/events_engine"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import $ from "jquery";
+import renderer from "core/renderer";
+import eventsEngine from "events/core/events_engine";
+import keyboardMock from "../../helpers/keyboardMock.js";
 
 QUnit.testStart(function() {
     var markup =
@@ -24,27 +24,24 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/data_grid/ui.data_grid");
-require("ui/autocomplete");
-require("ui/color_box");
+import "ui/data_grid/ui.data_grid";
+import "ui/autocomplete";
+import "ui/color_box";
 
-var fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    MockColumnsController = dataGridMocks.MockColumnsController,
-    MockDataController = dataGridMocks.MockDataController,
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    getCells = dataGridMocks.getCells,
-    devices = require("core/devices"),
-    device = devices.real(),
-    domUtils = require("core/utils/dom"),
-    browser = require("core/utils/browser"),
-    typeUtils = require("core/utils/type"),
-    config = require("core/config"),
-    errors = require("ui/widget/ui.errors");
+import fx from "animation/fx";
+import pointerMock from "../../helpers/pointerMock.js";
+import { MockColumnsController, MockDataController, setupDataGridModules, getCells } from "../../helpers/dataGridMocks.js";
+import domUtils from "core/utils/dom";
+import browser from "core/utils/browser";
+import typeUtils from "core/utils/type";
+import config from "core/config";
+import errors from "ui/widget/ui.errors";
+import devices from "core/devices";
+
+const device = devices.real();
 
 function getInputElements($container) {
     return $container.find("input:not([type='hidden'])");
@@ -56,9 +53,9 @@ QUnit.module('Editing', {
     beforeEach: function() {
         this.dataControllerOptions = {
             items: [
-            { key: 'test1', data: { name: 'test1', id: 1, date: new Date(2001, 0, 1), isTested: true, isTested2: true }, values: ['test1', 1, new Date(2001, 0, 1), true, true], rowType: 'data' },
-            { key: 'test2', data: { name: 'test2', id: 2, date: new Date(2002, 1, 2), isTested: false, isTested2: false }, values: ['test2', 2, new Date(2002, 1, 2), false, false], rowType: 'data' },
-            { key: 'test3', data: { name: 'test3', id: 3, date: new Date(2003, 2, 3), isTested: true, isTested2: true }, values: ['test3', 3, new Date(2003, 2, 3), true, true], rowType: 'data' }]
+                { key: 'test1', data: { name: 'test1', id: 1, date: new Date(2001, 0, 1), isTested: true, isTested2: true }, values: ['test1', 1, new Date(2001, 0, 1), true, true], rowType: 'data' },
+                { key: 'test2', data: { name: 'test2', id: 2, date: new Date(2002, 1, 2), isTested: false, isTested2: false }, values: ['test2', 2, new Date(2002, 1, 2), false, false], rowType: 'data' },
+                { key: 'test3', data: { name: 'test3', id: 3, date: new Date(2003, 2, 3), isTested: true, isTested2: true }, values: ['test3', 3, new Date(2003, 2, 3), true, true], rowType: 'data' }]
         };
 
         var defaultSetCellValue = function(data, value) {
@@ -2231,7 +2228,7 @@ QUnit.test('Apply column editorOptions to cell editor', function(assert) {
 
 // T529043
 QUnit.test("The first cell should not be switched to the editing state when clicking on grid inside cellTemplate", function(assert) {
-   // arrange
+    // arrange
     var that = this,
         $mainTable,
         $internalTable,
@@ -2270,7 +2267,7 @@ QUnit.test("The first cell should not be switched to the editing state when clic
 
 // T531154
 QUnit.test("The cell should be editable after cancel removing the row", function(assert) {
-   // arrange
+    // arrange
     var that = this,
         $cellElement,
         countCallOnRowRemoving = 0,
@@ -2556,13 +2553,13 @@ QUnit.module('Editing with real dataController', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.array = [
-                { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1, stateId: 0, state: { name: "state 1" } },
-                { name: 'Dan', age: 16, lastName: "Skip", phone: "553355", room: 2, stateId: 1, state: { name: "state 2" } },
-                { name: 'Vadim', age: 17, lastName: "Dog", phone: "225555", room: 3, stateId: 0, state: { name: "state 1" } },
-                { name: 'Dmitry', age: 18, lastName: "Cat", phone: "115555", room: 4, stateId: 1, state: { name: "state 2" } },
-                { name: 'Sergey', age: 18, lastName: "Larry", phone: "550055", room: 5, stateId: 0, state: { name: "state 1" } },
-                { name: 'Kate', age: 20, lastName: "Glock", phone: "501555", room: 6, stateId: 1, state: { name: "state 2" } },
-                { name: 'Dan', age: 21, lastName: "Zikerman", phone: "1228844", room: 7, stateId: 0, state: { name: "state 1" } }
+            { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1, stateId: 0, state: { name: "state 1" } },
+            { name: 'Dan', age: 16, lastName: "Skip", phone: "553355", room: 2, stateId: 1, state: { name: "state 2" } },
+            { name: 'Vadim', age: 17, lastName: "Dog", phone: "225555", room: 3, stateId: 0, state: { name: "state 1" } },
+            { name: 'Dmitry', age: 18, lastName: "Cat", phone: "115555", room: 4, stateId: 1, state: { name: "state 2" } },
+            { name: 'Sergey', age: 18, lastName: "Larry", phone: "550055", room: 5, stateId: 0, state: { name: "state 1" } },
+            { name: 'Kate', age: 20, lastName: "Glock", phone: "501555", room: 6, stateId: 1, state: { name: "state 2" } },
+            { name: 'Dan', age: 21, lastName: "Zikerman", phone: "1228844", room: 7, stateId: 0, state: { name: "state 1" } }
         ];
         this.columns = ['name', 'age', { dataField: "lastName", allowEditing: false }, { dataField: 'phone' }, 'room'];
         this.options = {
@@ -3312,7 +3309,7 @@ QUnit.test("Insert row when set onRowInserted", function(assert) {
     that.options.onRowInserted = function(params) {
         // assert
         assert.ok(params.data.__KEY__);
-        assert.deepEqual(params.key, params.data, "parameter key");  // T457499
+        assert.deepEqual(params.key, params.data, "parameter key"); // T457499
         delete params.data.__KEY__;
         assert.deepEqual(params.data, { name: "Test" }, "parameter data");
     };
@@ -4558,8 +4555,8 @@ QUnit.test('Edit Cell when the width of the columns in percent', function(assert
     rowsView.render(testElement);
 
     that.options.columns = [
-            { dataField: 'name', width: '60%' },
-            { dataField: 'age', width: '40%' }
+        { dataField: 'name', width: '60%' },
+        { dataField: 'age', width: '40%' }
     ];
 
     that.columnsController.optionChanged({ name: 'columns', fullName: 'columns' });
@@ -5677,7 +5674,7 @@ QUnit.test("loadingChanged should be called before editing oeprations", function
 
 // T533546
 QUnit.testInActiveWindow("The lookup column should keep focus after changing value when it has 'setCellValue' option", function(assert) {
-   // arrange
+    // arrange
     var that = this,
         $cellElement,
         lookupInstance,
@@ -7081,11 +7078,11 @@ QUnit.module('Refresh modes', {
         this.clock = sinon.useFakeTimers();
 
         this.array = [
-                { id: 1, name: 'Alex', age: 15 },
-                { id: 2, name: 'Dan', age: 16 },
-                { id: 3, name: 'Vadim', age: 17 },
-                { id: 4, name: 'Alex', age: 18 },
-                { id: 5, name: 'Sergey', age: 18 }
+            { id: 1, name: 'Alex', age: 15 },
+            { id: 2, name: 'Dan', age: 16 },
+            { id: 3, name: 'Vadim', age: 17 },
+            { id: 4, name: 'Alex', age: 18 },
+            { id: 5, name: 'Sergey', age: 18 }
         ];
         this.columns = ['name', 'age'];
         this.options = {
@@ -7395,13 +7392,51 @@ QUnit.test("The cell should be editable after selecting the row when repaintChan
     assert.strictEqual($cellElement.find(".dx-textbox").length, 1, "has textbox");
 });
 
+// T690041
+QUnit.test("Changing edit icon in the 'buttons' command column if repaintChangesOnly is true", function(assert) {
+    // arrange
+    var $linkElements;
+
+    this.options.editing = {
+        mode: "cell",
+        allowUpdating: true,
+        allowDeleting: true
+    };
+    this.options.columns = [
+        {
+            type: "buttons",
+            buttons: [
+                { name: "edit", icon: "active-icon", visible: e => e.row.data.state === "active" },
+                { name: "delete", icon: "remove", visible: e => e.row.data.state !== "active" }
+            ]
+        },
+        "state"
+    ];
+
+    this.options.dataSource = [{ state: "disabled" }];
+
+    this.options.repaintChangesOnly = true;
+
+    // act
+    this.setupModules();
+    this.cellValue(0, "state", "active");
+    $linkElements = $(this.getCellElement(0, 0)).find(".dx-link");
+    assert.equal($linkElements.length, 1);
+    assert.ok($linkElements.eq(0).hasClass("dx-icon-active-icon"), "the edit link");
+
+    this.cellValue(0, "state", "disabled");
+    $linkElements = $(this.getCellElement(0, 0)).find(".dx-link");
+    assert.equal($linkElements.length, 1);
+    assert.ok($linkElements.eq(0).hasClass("dx-icon-remove"));
+});
+
 
 QUnit.module('Editing with validation', {
     beforeEach: function() {
         this.array = [
-                { name: 'Alex', age: 15, lastName: "John", },
-                { name: 'Dan', age: 16, lastName: "Skip" },
-                { name: 'Vadim', age: 17, lastName: "Dog" }
+            { name: 'Alex', age: 15, lastName: "John", },
+            { name: 'Dan', age: 16, lastName: "Skip" },
+            { name: 'Vadim', age: 17, lastName: "Dog" }
         ];
         this.options = {
             errorRowEnabled: true,
@@ -10595,13 +10630,13 @@ QUnit.test("Validation error message should not hide behind a grouped row when t
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
         this.array = [
-                { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 },
-                { name: 'Dan', age: 16, lastName: "Skip", phone: "553355", room: 2 },
-                { name: 'Vadim', age: 17, lastName: "Dog", phone: "225555", room: 3 },
-                { name: 'Dmitry', age: 18, lastName: "Cat", phone: "115555", room: 4 },
-                { name: 'Sergey', age: 18, lastName: "Larry", phone: "550055", room: 5 },
-                { name: 'Kate', age: 20, lastName: "Glock", phone: "501555", room: 6 },
-                { name: 'Dan', age: 21, lastName: "Zikerman", phone: "1228844", room: 7 }
+            { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 },
+            { name: 'Dan', age: 16, lastName: "Skip", phone: "553355", room: 2 },
+            { name: 'Vadim', age: 17, lastName: "Dog", phone: "225555", room: 3 },
+            { name: 'Dmitry', age: 18, lastName: "Cat", phone: "115555", room: 4 },
+            { name: 'Sergey', age: 18, lastName: "Larry", phone: "550055", room: 5 },
+            { name: 'Kate', age: 20, lastName: "Glock", phone: "501555", room: 6 },
+            { name: 'Dan', age: 21, lastName: "Zikerman", phone: "1228844", room: 7 }
         ];
         this.columns = ['name', 'age', { dataField: "lastName", allowEditing: false }, 'phone', 'room'];
         this.options = {
@@ -11603,13 +11638,13 @@ QUnit.module('Edit Form', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.array = [
-                { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 },
-                { name: 'Dan', age: 16, lastName: "Skip", phone: "553355", room: 2 },
-                { name: 'Vadim', age: 17, lastName: "Dog", phone: "225555", room: 3 },
-                { name: 'Dmitry', age: 18, lastName: "Cat", phone: "115555", room: 4 },
-                { name: 'Sergey', age: 18, lastName: "Larry", phone: "550055", room: 5 },
-                { name: 'Kate', age: 20, lastName: "Glock", phone: "501555", room: 6 },
-                { name: 'Dan', age: 21, lastName: "Zikerman", phone: "1228844", room: 7 }
+            { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 },
+            { name: 'Dan', age: 16, lastName: "Skip", phone: "553355", room: 2 },
+            { name: 'Vadim', age: 17, lastName: "Dog", phone: "225555", room: 3 },
+            { name: 'Dmitry', age: 18, lastName: "Cat", phone: "115555", room: 4 },
+            { name: 'Sergey', age: 18, lastName: "Larry", phone: "550055", room: 5 },
+            { name: 'Kate', age: 20, lastName: "Glock", phone: "501555", room: 6 },
+            { name: 'Dan', age: 21, lastName: "Zikerman", phone: "1228844", room: 7 }
         ];
         this.columns = [{
             dataField: 'name',
@@ -12646,13 +12681,13 @@ QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.array = [
-                { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 },
-                { name: 'Dan', age: 16, lastName: "Skip", phone: "553355", room: 2 },
-                { name: 'Vadim', age: 17, lastName: "Dog", phone: "225555", room: 3 },
-                { name: 'Dmitry', age: 18, lastName: "Cat", phone: "115555", room: 4 },
-                { name: 'Sergey', age: 18, lastName: "Larry", phone: "550055", room: 5 },
-                { name: 'Kate', age: 20, lastName: "Glock", phone: "501555", room: 6 },
-                { name: 'Dan', age: 21, lastName: "Zikerman", phone: "1228844", room: 7 }
+            { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 },
+            { name: 'Dan', age: 16, lastName: "Skip", phone: "553355", room: 2 },
+            { name: 'Vadim', age: 17, lastName: "Dog", phone: "225555", room: 3 },
+            { name: 'Dmitry', age: 18, lastName: "Cat", phone: "115555", room: 4 },
+            { name: 'Sergey', age: 18, lastName: "Larry", phone: "550055", room: 5 },
+            { name: 'Kate', age: 20, lastName: "Glock", phone: "501555", room: 6 },
+            { name: 'Dan', age: 21, lastName: "Zikerman", phone: "1228844", room: 7 }
         ];
         this.columns = [{
             dataField: 'name',
@@ -13068,8 +13103,8 @@ QUnit.test("Show error row in header when remove error", function(assert) {
         that.columnHeadersView.render(that.$testElement);
         that.renderRowsView();
 
-        that.editRow(0);            // render popup
-        that.cancelEditData();      //
+        that.editRow(0); // render popup
+        that.cancelEditData(); //
         that.preparePopupHelpers();
 
         // assert

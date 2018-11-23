@@ -61,11 +61,11 @@ describe("LessTemplateLoader", () => {
             bootstrapMetadata,
             lessFileContent,
             config.bootstrapVersion).then(data => {
-                assert.equal(data.compiledMetadata["@base-bg"], "#000");
-                assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
-                assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
-                assert.equal(data.css, "div {\n  color: #000;\n}\n");
-            });
+            assert.equal(data.compiledMetadata["@base-bg"], "#000");
+            assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
+            assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
+            assert.equal(data.css, "div {\n  color: #000;\n}\n");
+        });
     });
 
     it("analyzeBootstrapTheme - bootstrap 4", () => {
@@ -103,11 +103,11 @@ describe("LessTemplateLoader", () => {
             bootstrapMetadata,
             sassFileContent,
             config.bootstrapVersion).then((data) => {
-                assert.equal(data.compiledMetadata["@base-bg"], "#000");
-                assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
-                assert.equal(data.compiledMetadata["@base-text-color"], "#212529");
-                assert.equal(data.css, "div {\n  color: #000;\n  background: #212529;\n}\n");
-            });
+            assert.equal(data.compiledMetadata["@base-bg"], "#000");
+            assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
+            assert.equal(data.compiledMetadata["@base-text-color"], "#212529");
+            assert.equal(data.css, "div {\n  color: #000;\n  background: #212529;\n}\n");
+        });
     });
 
     it("load - variable change", () => {
@@ -129,11 +129,11 @@ describe("LessTemplateLoader", () => {
             colorScheme,
             metadata,
             [{ key: "@base-bg", value: "green" }]).then(data => {
-                assert.equal(data.compiledMetadata["@base-bg"], "green");
-                assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
-                assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
-                assert.equal(data.css, "div {\n  color: green;\n}\n");
-            });
+            assert.equal(data.compiledMetadata["@base-bg"], "green");
+            assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
+            assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
+            assert.equal(data.css, "div {\n  color: green;\n}\n");
+        });
     });
 
     it("load - variable change, color swatch", () => {
@@ -157,9 +157,9 @@ describe("LessTemplateLoader", () => {
             colorScheme,
             metadata,
             [{ key: "@base-bg", value: "green" }]).then(data => {
-                assert.equal(data.compiledMetadata["@base-bg"], "green");
-                assert.equal(data.css, ".dx-swatch-my-custom div {\n  color: green;\n}\n\n");
-            });
+            assert.equal(data.compiledMetadata["@base-bg"], "green");
+            assert.equal(data.css, ".dx-swatch-my-custom div {\n  color: green;\n}\n\n");
+        });
     });
 
     it("load - variable change, color swatch, typography and special classes", () => {
@@ -190,7 +190,7 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata).then(data => {
-                assert.equal(data.css, `.dx-swatch-my-custom div {
+            assert.equal(data.css, `.dx-swatch-my-custom div {
   color: #fff;
 }
 .dx-swatch-my-custom .dx-theme-accent-as-text-color {
@@ -201,7 +201,7 @@ describe("LessTemplateLoader", () => {
 }
 
 `);
-            });
+        });
     });
 
     it("load - default less path", () => {
@@ -365,7 +365,7 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata).then(data => {
-                assert.equal(data.css, `.dx-swatch-my-custom .dx-theme-marker {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-theme-marker {
   font-family: 'dx.generic.my-custom';
 }
 .dx-swatch-my-custom div {
@@ -379,7 +379,7 @@ describe("LessTemplateLoader", () => {
 }
 
 `);
-            });
+        });
     });
 
     it("compile less with options", () => {

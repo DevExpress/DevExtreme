@@ -43,7 +43,7 @@ window.DATA = (function() {
                     { key: 12, text: "Nested item 1" },
                     {
                         key: 13, text: "Nested item 2", items: [
-                                { key: 131, text: "Last item" }
+                            { key: 131, text: "Last item" }
                         ]
                     }
                 ]
@@ -85,7 +85,7 @@ window.DATA = (function() {
         // 5
         [
             {
-                    // id: "!/#$%&'()*+,./:;<=>?@[\]^`{|}~",
+                // id: "!/#$%&'()*+,./:;<=>?@[\]^`{|}~",
                 id: 1,
                 text: "Item 1",
                 items: [
@@ -119,8 +119,8 @@ window.DATA = (function() {
                 items: [
                     {
                         id: 22, text: "Nested Item 2", items: [
-                                { id: 221, text: "Third level item 1" },
-                                { id: 222, text: "Third level item 2" }
+                            { id: 221, text: "Third level item 1" },
+                            { id: 222, text: "Third level item 2" }
                         ]
                     }
                 ]
@@ -130,22 +130,22 @@ window.DATA = (function() {
 })();
 
 window.data2 = [
-        { id: 1, parentId: 0, text: "Animals" },
-        { id: 2, parentId: 1, text: "Cat" },
-        { id: 3, parentId: 1, text: "Dog" },
-        { id: 4, parentId: 1, text: "Cow" },
-        { id: 5, parentId: 2, text: "Abyssinian" },
-        { id: 6, parentId: 2, text: "Aegean cat" },
-        { id: 7, parentId: 2, text: "Australian Mist" },
-        { id: 8, parentId: 3, text: "Affenpinscher" },
-        { id: 9, parentId: 3, text: "Afghan Hound" },
-        { id: 10, parentId: 3, text: "Airedale Terrier" },
-        { id: 11, parentId: 3, text: "Akita Inu" },
-        { id: 12, parentId: 0, text: "Birds" },
-        { id: 13, parentId: 12, text: "Akekee" },
-        { id: 14, parentId: 12, text: "Arizona Woodpecker" },
-        { id: 15, parentId: 12, text: "Black-chinned Sparrow" },
-        { id: 16, parentId: 0, text: "Others" }
+    { id: 1, parentId: 0, text: "Animals" },
+    { id: 2, parentId: 1, text: "Cat" },
+    { id: 3, parentId: 1, text: "Dog" },
+    { id: 4, parentId: 1, text: "Cow" },
+    { id: 5, parentId: 2, text: "Abyssinian" },
+    { id: 6, parentId: 2, text: "Aegean cat" },
+    { id: 7, parentId: 2, text: "Australian Mist" },
+    { id: 8, parentId: 3, text: "Affenpinscher" },
+    { id: 9, parentId: 3, text: "Afghan Hound" },
+    { id: 10, parentId: 3, text: "Airedale Terrier" },
+    { id: 11, parentId: 3, text: "Akita Inu" },
+    { id: 12, parentId: 0, text: "Birds" },
+    { id: 13, parentId: 12, text: "Akekee" },
+    { id: 14, parentId: 12, text: "Arizona Woodpecker" },
+    { id: 15, parentId: 12, text: "Black-chinned Sparrow" },
+    { id: 16, parentId: 0, text: "Others" }
 ];
 
 window.dataID = [

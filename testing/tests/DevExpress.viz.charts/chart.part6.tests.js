@@ -1441,8 +1441,8 @@ QUnit.test("Common axis settings more strips", function(assert) {
         }),
         newOptions = {
             strips: [{ startValue: 10, endValue: 20, color: "red" },
-            { startValue: 30, endValue: 40, color: "red" },
-            { startValue: 50, endValue: 60, color: "red" }]
+                { startValue: 30, endValue: 40, color: "red" },
+                { startValue: 50, endValue: 60, color: "red" }]
         };
     // Act
     chart.option({
@@ -1456,8 +1456,8 @@ QUnit.test("Common axis settings less strips", function(assert) {
     var chart = this.createChart({
             commonAxisSettings: {
                 strips: [{ startValue: 10, endValue: 20, color: "red" },
-            { startValue: 30, endValue: 40, color: "red" },
-            { startValue: 50, endValue: 60, color: "red" }]
+                    { startValue: 30, endValue: 40, color: "red" },
+                    { startValue: 50, endValue: 60, color: "red" }]
             }
         }),
         newOptions = {
@@ -1497,8 +1497,8 @@ QUnit.test("Argument axis more strips", function(assert) {
         }),
         newOptions = {
             strips: [{ startValue: 10, endValue: 20, color: "red" },
-            { startValue: 30, endValue: 40, color: "red" },
-            { startValue: 50, endValue: 60, color: "red" }]
+                { startValue: 30, endValue: 40, color: "red" },
+                { startValue: 50, endValue: 60, color: "red" }]
         };
     // Act
     chart.option({
@@ -1512,8 +1512,8 @@ QUnit.test("Argument axis less strips", function(assert) {
     var chart = this.createChart({
             argumentAxis: {
                 strips: [{ startValue: 10, endValue: 20, color: "red" },
-            { startValue: 30, endValue: 40, color: "red" },
-            { startValue: 50, endValue: 60, color: "red" }]
+                    { startValue: 30, endValue: 40, color: "red" },
+                    { startValue: 50, endValue: 60, color: "red" }]
             }
         }),
         newOptions = {
@@ -1553,8 +1553,8 @@ QUnit.test("Value axis more strips", function(assert) {
         }),
         newOptions = {
             strips: [{ startValue: 10, endValue: 20, color: "red" },
-            { startValue: 30, endValue: 40, color: "red" },
-            { startValue: 50, endValue: 60, color: "red" }]
+                { startValue: 30, endValue: 40, color: "red" },
+                { startValue: 50, endValue: 60, color: "red" }]
         };
     // Act
     chart.option({
@@ -1568,8 +1568,8 @@ QUnit.test("Value axis less strips", function(assert) {
     var chart = this.createChart({
             valueAxis: {
                 strips: [{ startValue: 10, endValue: 20, color: "red" },
-            { startValue: 30, endValue: 40, color: "red" },
-            { startValue: 50, endValue: 60, color: "red" }]
+                    { startValue: 30, endValue: 40, color: "red" },
+                    { startValue: 50, endValue: 60, color: "red" }]
             }
         }),
         newOptions = {
@@ -1593,12 +1593,12 @@ QUnit.test("Multiple Value axis more strips", function(assert) {
         }),
         newOptions = [{
             strips: [{ startValue: 10, endValue: 20, color: "green" },
-            { startValue: 30, endValue: 40, color: "green" },
-            { startValue: 50, endValue: 60, color: "green" }]
+                { startValue: 30, endValue: 40, color: "green" },
+                { startValue: 50, endValue: 60, color: "green" }]
         }, {
             strips: [{ startValue: 70, endValue: 80, color: "red" },
-            { startValue: 90, endValue: 100, color: "red" },
-            { startValue: 110, endValue: 120, color: "red" }]
+                { startValue: 90, endValue: 100, color: "red" },
+                { startValue: 110, endValue: 120, color: "red" }]
         }];
     // Act
     chart.option({
@@ -1612,12 +1612,12 @@ QUnit.test("Multiple Value axis less strips", function(assert) {
     var chart = this.createChart({
             valueAxis: [{
                 strips: [{ startValue: 10, endValue: 20, color: "green" },
-            { startValue: 30, endValue: 40, color: "green" },
-            { startValue: 50, endValue: 60, color: "green" }]
+                    { startValue: 30, endValue: 40, color: "green" },
+                    { startValue: 50, endValue: 60, color: "green" }]
             }, {
                 strips: [{ startValue: 70, endValue: 80, color: "red" },
-            { startValue: 90, endValue: 100, color: "red" },
-            { startValue: 110, endValue: 120, color: "red" }]
+                    { startValue: 90, endValue: 100, color: "red" },
+                    { startValue: 110, endValue: 120, color: "red" }]
             }]
         }),
         newOptions = [{
@@ -1641,12 +1641,12 @@ QUnit.test("Single Value axis to multiple with strips", function(assert) {
         }),
         newOptions = [{
             strips: [{ startValue: 10, endValue: 20, color: "green" },
-            { startValue: 30, endValue: 40, color: "green" },
-            { startValue: 50, endValue: 60, color: "green" }]
+                { startValue: 30, endValue: 40, color: "green" },
+                { startValue: 50, endValue: 60, color: "green" }]
         }, {
             strips: [{ startValue: 70, endValue: 80, color: "red" },
-            { startValue: 90, endValue: 100, color: "red" },
-            { startValue: 110, endValue: 120, color: "red" }]
+                { startValue: 90, endValue: 100, color: "red" },
+                { startValue: 110, endValue: 120, color: "red" }]
         }];
     // Act
     chart.option({
@@ -1660,12 +1660,12 @@ QUnit.test("Multiple Value axis to single with strips", function(assert) {
     var chart = this.createChart({
             valueAxis: [{
                 strips: [{ startValue: 10, endValue: 20, color: "green" },
-            { startValue: 30, endValue: 40, color: "green" },
-            { startValue: 50, endValue: 60, color: "green" }]
+                    { startValue: 30, endValue: 40, color: "green" },
+                    { startValue: 50, endValue: 60, color: "green" }]
             }, {
                 strips: [{ startValue: 70, endValue: 80, color: "red" },
-            { startValue: 90, endValue: 100, color: "red" },
-            { startValue: 110, endValue: 120, color: "red" }]
+                    { startValue: 90, endValue: 100, color: "red" },
+                    { startValue: 110, endValue: 120, color: "red" }]
             }]
         }),
         newOptions = {

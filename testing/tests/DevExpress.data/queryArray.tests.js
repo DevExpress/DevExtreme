@@ -643,33 +643,33 @@ QUnit.test("mixin and/or conditions inside a single group throws", function(asse
     }
 
     assert.throws(createFn([
-            ["foo"],
-            ["bar"],
+        ["foo"],
+        ["bar"],
         "or",
-            ["foobar"]
+        ["foobar"]
     ]));
 
     assert.throws(createFn([
-            ["foo"],
+        ["foo"],
         "&&",
-            ["bar"],
+        ["bar"],
         "||",
-            ["foobar"]
+        ["foobar"]
     ]));
 
     assert.throws(createFn([
-            ["foo"],
+        ["foo"],
         "or",
-            ["bar"],
-            ["foobar"]
+        ["bar"],
+        ["foobar"]
     ]));
 
     assert.throws(createFn([
-            ["foo"],
+        ["foo"],
         "or",
-            ["bar"],
+        ["bar"],
         "and",
-            ["foobar"]
+        ["foobar"]
     ]));
 });
 
@@ -679,9 +679,9 @@ QUnit.test("basic usage", function(assert) {
     var done = assert.async();
 
     var input = [
-            { a: 2 },
-            { a: 1 },
-            { a: 2 }
+        { a: 2 },
+        { a: 1 },
+        { a: 2 }
     ];
 
     QUERY(input).groupBy("a").enumerate().done(function(groups) {
@@ -715,25 +715,25 @@ QUnit.test("group uses getter", function(assert) {
 QUnit.test("T348632: Rows in a group with an undefined group value are not sorted", function(assert) {
 
     var data = [
-            { foo: undefined, bar: 1 },
-            { foo: undefined, bar: 2 },
-            { foo: null, bar: 1 },
-            { foo: null, bar: 2 },
-            { foo: 'a', bar: 1 },
-            { foo: 'a', bar: 2 }
+        { foo: undefined, bar: 1 },
+        { foo: undefined, bar: 2 },
+        { foo: null, bar: 1 },
+        { foo: null, bar: 2 },
+        { foo: 'a', bar: 1 },
+        { foo: 'a', bar: 2 }
     ];
 
     assert.deepEqual(
         QUERY(data).sortBy("foo").thenBy("bar", true).toArray(),
         [
-                { foo: null, bar: 2 },
-                { foo: null, bar: 1 },
-                { foo: 'a', bar: 2 },
-                { foo: 'a', bar: 1 },
-                { foo: undefined, bar: 2 },
-                { foo: undefined, bar: 1 }
+            { foo: null, bar: 2 },
+            { foo: null, bar: 1 },
+            { foo: 'a', bar: 2 },
+            { foo: 'a', bar: 1 },
+            { foo: undefined, bar: 2 },
+            { foo: undefined, bar: 1 }
         ]
-        );
+    );
 });
 
 QUnit.module("Aggregates");

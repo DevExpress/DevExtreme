@@ -205,7 +205,7 @@ QUnit.test("dxshown event fire when visible option changed to true", function(as
 });
 
 QUnit.test("Reset editor's value when the formData option is empty object", function(assert) {
-        // arrange
+    // arrange
     var values = [],
         form = $("#form").dxForm({
             formData: {
@@ -221,10 +221,10 @@ QUnit.test("Reset editor's value when the formData option is empty object", func
             }
         }).dxForm("instance");
 
-        // act
+    // act
     form.option("formData", {});
 
-        // assert
+    // assert
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
     assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
 
@@ -233,7 +233,7 @@ QUnit.test("Reset editor's value when the formData option is empty object", func
 });
 
 QUnit.test("Reset editor's value when the formData option is null", function(assert) {
-        // arrange
+    // arrange
     var form = $("#form").dxForm({
         formData: {
             name: "User",
@@ -242,16 +242,16 @@ QUnit.test("Reset editor's value when the formData option is null", function(ass
         items: ["name", "room"]
     }).dxForm("instance");
 
-        // act
+    // act
     form.option("formData", null);
 
-        // assert
+    // assert
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
     assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
 });
 
 QUnit.test("Reset editor's value when the formData option is undefined", function(assert) {
-        // arrange
+    // arrange
     var form = $("#form").dxForm({
         formData: {
             name: "User",
@@ -260,16 +260,16 @@ QUnit.test("Reset editor's value when the formData option is undefined", functio
         items: ["name", "room"]
     }).dxForm("instance");
 
-        // act
+    // act
     form.option("formData", undefined);
 
-        // assert
+    // assert
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
     assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
 });
 
 QUnit.test("Reset editor's value with validation", function(assert) {
-        // arrange
+    // arrange
     var form = $("#form").dxForm({
         formData: {
             name: "User",
@@ -278,10 +278,10 @@ QUnit.test("Reset editor's value with validation", function(assert) {
         items: ["name", { dataField: "lastName", isRequired: true }]
     }).dxForm("instance");
 
-        // act
+    // act
     form.option("formData", undefined);
 
-        // assert
+    // assert
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
     assert.equal(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
 
@@ -1531,8 +1531,8 @@ QUnit.test("Use 'itemOption' do not change the order of an items", function(asse
             formData: { ID: 1, FistName: "Alex", LastName: "Johnson", Address: "Alabama" },
             items: [
                 "ID",
-            { dataField: "FirstName" },
-            { dataField: "LastName" },
+                { dataField: "FirstName" },
+                { dataField: "LastName" },
                 "Address"
             ]
         }),
@@ -2143,8 +2143,8 @@ QUnit.test("Changing editorOptions of subitem change editor options (T316522)", 
                 itemType: "group", items: [
                     {
                         itemType: "group", items: [
-                                { dataField: "firstName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
-                                { dataField: "lastName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
+                            { dataField: "firstName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
+                            { dataField: "lastName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
                         ]
                     }
                 ]
@@ -2170,8 +2170,8 @@ QUnit.test("editorOptions correctly updates in case when only item name is defin
                 itemType: "group", items: [
                     {
                         itemType: "group", items: [
-                                { name: "firstName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
-                                { name: "lastName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
+                            { name: "firstName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
+                            { name: "lastName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
                         ]
                     }
                 ]
@@ -2193,7 +2193,7 @@ QUnit.test("editorOptions correctly updates in case when only item name is defin
 });
 
 QUnit.test("Reset editor's value", function(assert) {
-        // arrange
+    // arrange
     var form = $("#form").dxForm({
         formData: {
             name: "User",
@@ -2204,10 +2204,10 @@ QUnit.test("Reset editor's value", function(assert) {
         items: ["name", "lastName", "room", "isDeveloper"]
     }).dxForm("instance");
 
-        // act
+    // act
     form.resetValues();
 
-        // assert
+    // assert
     assert.strictEqual(form.getEditor("name").option("value"), "", "editor for the name dataField");
     assert.strictEqual(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
     assert.strictEqual(form.getEditor("room").option("value"), null, "editor for the room dataField");
@@ -2217,7 +2217,7 @@ QUnit.test("Reset editor's value", function(assert) {
 QUnit.module("Adaptivity");
 
 QUnit.test("One column screen should be customizable with screenByWidth option on init", function(assert) {
-        // arrange
+    // arrange
     var $form = $("#form");
 
     $form.dxForm({
@@ -2232,13 +2232,13 @@ QUnit.test("One column screen should be customizable with screenByWidth option o
         items: ["name", "lastName", "room", "isDeveloper"]
     });
 
-        // assert
+    // assert
     assert.equal($form.find(".dx-layout-manager-one-col").length, 1, "single column screen was changed");
     assert.equal($form.find(".dx-single-column-item-content").length, 4, "There are 4 items in the column");
 });
 
 QUnit.test("One column screen should be customizable with screenByWidth option on option change", function(assert) {
-        // arrange
+    // arrange
     var $form = $("#form"),
         form = $form.dxForm({
             formData: {

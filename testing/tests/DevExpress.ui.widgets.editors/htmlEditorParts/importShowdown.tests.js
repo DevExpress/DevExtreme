@@ -15,7 +15,7 @@ define(function(require) {
                     return /(E1041)[\s\S]*(Showdown)/.test(e.message);
                 },
                 "The showdown script isn't referenced"
-             );
+            );
         });
 
         QUnit.test("initialize showdown from window", function(assert) {

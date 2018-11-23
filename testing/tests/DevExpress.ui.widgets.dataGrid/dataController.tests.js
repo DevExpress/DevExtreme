@@ -600,11 +600,11 @@ QUnit.test("Using focusedRowEnabled should set sorting for the not sorted simple
         { team: 'internal', name: 'Dan', age: 25 },
         { team: 'internal', name: 'Bob', age: 20 },
         { team: 'public', name: 'Alice', age: 19 }],
-        { key: "name" },
-        {
-            pageSize: 2,
-            asyncLoadEnabled: false
-        });
+    { key: "name" },
+    {
+        pageSize: 2,
+        asyncLoadEnabled: false
+    });
 
     this.applyOptions({
         dataSource: dataSource,
@@ -630,11 +630,11 @@ QUnit.test("Using focusedRowEnabled should set sorting for the not sorted compos
         { team: 'internal', name: 'Dan', age: 25 },
         { team: 'internal', name: 'Bob', age: 20 },
         { team: 'public', name: 'Alice', age: 19 }],
-        { key: [ "name", "age" ] },
-        {
-            pageSize: 2,
-            asyncLoadEnabled: false
-        });
+    { key: [ "name", "age" ] },
+    {
+        pageSize: 2,
+        asyncLoadEnabled: false
+    });
 
     this.applyOptions({
         dataSource: dataSource,
@@ -686,10 +686,10 @@ QUnit.test("Get page index by simple key", function(assert) {
     // arrange
     var count = 0,
         dataSource = createDataSource([
-        { team: 'internal', name: 'Alex', age: 30 },
-        { team: 'internal', name: 'Dan', age: 25 },
-        { team: 'internal', name: 'Bob', age: 20 },
-        { team: 'public', name: 'Alice', age: 19 }],
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Dan', age: 25 },
+            { team: 'internal', name: 'Bob', age: 20 },
+            { team: 'public', name: 'Alice', age: 19 }],
         { key: "name" },
         { pageSize: 1, asyncLoadEnabled: false });
 
@@ -713,11 +713,11 @@ QUnit.test("Get page index by composite key", function(assert) {
         { team: 'internal', name: 'Bob', age: 25 },
         { team: 'internal', name: 'Bob', age: 20 },
         { team: 'public', name: 'Alice', age: 19 }],
-        { key: [ 'name', 'age' ] },
-        {
-            pageSize: 1,
-            asyncLoadEnabled: false
-        });
+    { key: [ 'name', 'age' ] },
+    {
+        pageSize: 1,
+        asyncLoadEnabled: false
+    });
 
     this.applyOptions({
         dataSource: dataSource
@@ -737,11 +737,11 @@ QUnit.test("Get page index by simple key with sorting", function(assert) {
         { team: 'internal', name: 'Dan', age: 25 },
         { team: 'internal', name: 'Bob', age: 20 },
         { team: 'public', name: 'Alice', age: 19 }],
-        { key: 'name' },
-        {
-            pageSize: 1,
-            asyncLoadEnabled: false
-        });
+    { key: 'name' },
+    {
+        pageSize: 1,
+        asyncLoadEnabled: false
+    });
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -763,11 +763,11 @@ QUnit.test("Get page index by composite key with sorting", function(assert) {
         { team: 'internal', name: 'Bob', age: 25 },
         { team: 'internal', name: 'Bob', age: 20 },
         { team: 'public', name: 'Alice', age: 19 }],
-        { key: [ 'name', 'age' ] },
-        {
-            pageSize: 1,
-            asyncLoadEnabled: false
-        });
+    { key: [ 'name', 'age' ] },
+    {
+        pageSize: 1,
+        asyncLoadEnabled: false
+    });
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -789,11 +789,11 @@ QUnit.test("Get page index by simple key with sorting by unbound column", functi
         { team: 'internal', name: 'Bob', age: 25 },
         { team: 'internal', name: 'Den', age: 20 },
         { team: 'public', name: 'Alice', age: 19 }],
-        { key: 'name' },
-        {
-            pageSize: 1,
-            asyncLoadEnabled: false
-        });
+    { key: 'name' },
+    {
+        pageSize: 1,
+        asyncLoadEnabled: false
+    });
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -823,11 +823,11 @@ QUnit.test("Get page index by composite key with sorting by unbound column", fun
         { team: 'internal', name: 'Bob', age: 25 },
         { team: 'internal', name: 'Den', age: 20 },
         { team: 'public', name: 'Alice', age: 19 }],
-        { key: [ 'name', 'age' ] },
-        {
-            pageSize: 1,
-            asyncLoadEnabled: false
-        });
+    { key: [ 'name', 'age' ] },
+    {
+        pageSize: 1,
+        asyncLoadEnabled: false
+    });
 
     this.applyOptions({
         commonColumnSettings: { autoExpandGroup: true },
@@ -857,8 +857,8 @@ QUnit.test("Get page index by simple key if combined filter present", function(a
         { team: 'internal', name: 'Bob', age: 25 },
         { team: 'internal', name: 'Den', age: 20 },
         { team: 'public', name: 'Alice', age: 19 }],
-        { key: 'name' },
-        { filter: ['age', '>', 20], pageSize: 1, asyncLoadEnabled: false, allowFiltering: true }
+    { key: 'name' },
+    { filter: ['age', '>', 20], pageSize: 1, asyncLoadEnabled: false, allowFiltering: true }
     );
 
     this.applyOptions({
@@ -881,8 +881,8 @@ QUnit.test("Get page index by simple key if combined filter present and remote o
         { team: 'internal', name: 'Bob', age: 30 },
         { team: 'internal', name: 'Den', age: 20 },
         { team: 'public', name: 'Alice', age: 25 }],
-        { key: 'name' },
-        { pageSize: 1, asyncLoadEnabled: false, sort: "age" }
+    { key: 'name' },
+    { pageSize: 1, asyncLoadEnabled: false, sort: "age" }
     );
 
     this.applyOptions({
@@ -910,8 +910,8 @@ QUnit.test("Get page index by composite key if combined filter present", functio
             { team: 'internal', name: 'Bob', age: 22 },
             { team: 'internal', name: 'Den', age: 20 },
             { team: 'public', name: 'Alice', age: 19 }],
-            { key: [ 'name', 'age' ] },
-            { filter: ['age', '>', 20], pageSize: 1, asyncLoadEnabled: false, allowFiltering: true, sort: [ "name", "age" ] }
+        { key: [ 'name', 'age' ] },
+        { filter: ['age', '>', 20], pageSize: 1, asyncLoadEnabled: false, allowFiltering: true, sort: [ "name", "age" ] }
         );
 
     this.applyOptions({
@@ -942,8 +942,8 @@ QUnit.test("Get row index if group by one column and simple key (group sizes are
             { team: 'internal1', name: 'Clark', age: 22 },
             { team: 'public', name: 'Alice', age: 19 },
             { team: 'public', name: 'Zeb', age: 18 }],
-            { key: 'name' },
-            { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { key: 'name' },
+        { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1006,8 +1006,8 @@ QUnit.test("Get row index if group by one column and simple key", function(asser
             { team: 'internal1', name: 'Clark', age: 22 },
             { team: 'public', name: 'Alice', age: 19 },
             { team: 'public', name: 'Zeb', age: 18 }],
-            { key: 'name' },
-            { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { key: 'name' },
+        { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1074,8 +1074,8 @@ QUnit.test("Get row index if group by one column and simple key and remote opera
             { team: 'internal1', name: 'Clark', age: 22 },
             { team: 'public', name: 'Alice', age: 19 },
             { team: 'public', name: 'Zeb', age: 18 }],
-            { key: 'name' },
-            { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { key: 'name' },
+        { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1143,8 +1143,8 @@ QUnit.test("Get row index if group by one column and simple key and OData", func
             { team: 'internal1', name: 'Clark', age: 22 },
             { team: 'public', name: 'Alice', age: 19 },
             { team: 'public', name: 'Zeb', age: 18 }],
-            { key: 'name' },
-            { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { key: 'name' },
+        { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1212,8 +1212,8 @@ QUnit.test("Get row index if group by two columns and simple key", function(asse
             { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
             { team: 'public', name: 'Alice', age: 19, g0: 3 },
             { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-            { key: 'name' },
-            { group: ["team", "g0"], pageSize: 5, asyncLoadEnabled: false, paginate: true }
+        { key: 'name' },
+        { group: ["team", "g0"], pageSize: 5, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1280,8 +1280,8 @@ QUnit.test("Get row index if group by two columns and simple key and remote oper
             { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
             { team: 'public', name: 'Alice', age: 19, g0: 3 },
             { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-            { key: 'name' },
-            { group: ["team", "g0"], pageSize: 5, asyncLoadEnabled: false, paginate: true }
+        { key: 'name' },
+        { group: ["team", "g0"], pageSize: 5, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1349,8 +1349,8 @@ QUnit.test("Get row index if group by two columns and simple key and OData", fun
             { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
             { team: 'public', name: 'Alice', age: 19, g0: 3 },
             { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-            { key: 'name' },
-            { group: ["team", "g0"], pageSize: 5, asyncLoadEnabled: false, paginate: true }
+        { key: 'name' },
+        { group: ["team", "g0"], pageSize: 5, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1418,8 +1418,8 @@ QUnit.test("Get row index if group by one column, simple key and virtual scrolli
             { team: 'internal1', name: 'Clark', age: 22 },
             { team: 'public', name: 'Alice', age: 19 },
             { team: 'public', name: 'Zeb', age: 18 }],
-            { key: 'name' },
-            { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { key: 'name' },
+        { group: "team", pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1486,8 +1486,8 @@ QUnit.test("Get row index if group by two columns, simple key and virtual scroll
             { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
             { team: 'public', name: 'Alice', age: 19, g0: 3 },
             { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-            { key: 'name' },
-            { group: ["team", "g0"], pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { key: 'name' },
+        { group: ["team", "g0"], pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1554,8 +1554,8 @@ QUnit.test("Get row index if group by two columns, simple key and virtual scroll
             { team: 'internal1', name: 'Clark', age: 22, g0: 3 },
             { team: 'public', name: 'Alice', age: 19, g0: 3 },
             { team: 'public', name: 'Zeb', age: 18, g0: 0 }],
-            { key: 'name' },
-            { group: ["team", "g0"], pageSize: 3, asyncLoadEnabled: false, paginate: true }
+        { key: 'name' },
+        { group: ["team", "g0"], pageSize: 3, asyncLoadEnabled: false, paginate: true }
         );
 
     this.applyOptions({
@@ -1738,9 +1738,9 @@ QUnit.test("Load group from state when columns generated by dataSource", functio
 QUnit.test("Reset sort/group parameters from user state for removed columns", function(assert) {
     // arrange
     var dataSource = [
-            { age: 30 },
-            { age: 20 },
-            { age: 25 }
+        { age: 30 },
+        { age: 20 },
+        { age: 25 }
     ];
 
     // user state has options for removed column with dataField 'name'
@@ -2179,9 +2179,9 @@ QUnit.test("Not Update lookup items on change sorting", function(assert) {
 QUnit.test("byKey from loaded items", function(assert) {
     // arrange
     var array = [
-        { name: 'Alex', phone: '55-55-55' },
-        { name: 'Sam', phone: '66-66-66' },
-        { name: 'Dan', phone: '98-75-21' }
+            { name: 'Alex', phone: '55-55-55' },
+            { name: 'Sam', phone: '66-66-66' },
+            { name: 'Dan', phone: '98-75-21' }
         ],
         data;
 
@@ -2203,9 +2203,9 @@ QUnit.test("byKey from loaded items", function(assert) {
 QUnit.test("byKey from data store", function(assert) {
     // arrange
     var array = [
-        { name: 'Alex', phone: '55-55-55' },
-        { name: 'Sam', phone: '66-66-66' },
-        { name: 'Dan', phone: '98-75-21' }
+            { name: 'Alex', phone: '55-55-55' },
+            { name: 'Sam', phone: '66-66-66' },
+            { name: 'Dan', phone: '98-75-21' }
         ],
         data;
 
@@ -2227,9 +2227,9 @@ QUnit.test("byKey from data store", function(assert) {
 QUnit.test("byKey when not has key", function(assert) {
     // arrange
     var array = [
-        { name: 'Alex', phone: '55-55-55' },
-        { name: 'Sam', phone: '66-66-66' },
-        { name: 'Dan', phone: '98-75-21' }
+            { name: 'Alex', phone: '55-55-55' },
+            { name: 'Sam', phone: '66-66-66' },
+            { name: 'Dan', phone: '98-75-21' }
         ],
         data;
 
@@ -2251,9 +2251,9 @@ QUnit.test("byKey when not has key", function(assert) {
 QUnit.test("getDataByKeys from loaded items and data store", function(assert) {
     // arrange
     var array = [
-        { name: 'Alex', phone: '55-55-55' },
-        { name: 'Sam', phone: '66-66-66' },
-        { name: 'Dan', phone: '98-75-21' }
+            { name: 'Alex', phone: '55-55-55' },
+            { name: 'Sam', phone: '66-66-66' },
+            { name: 'Dan', phone: '98-75-21' }
         ],
         data;
 
@@ -2277,9 +2277,9 @@ QUnit.test("getDataByKeys from loaded items and data store", function(assert) {
 QUnit.test("getDataByKeys not has keys", function(assert) {
     // arrange
     var array = [
-        { name: 'Alex', phone: '55-55-55' },
-        { name: 'Sam', phone: '66-66-66' },
-        { name: 'Dan', phone: '98-75-21' }
+            { name: 'Alex', phone: '55-55-55' },
+            { name: 'Sam', phone: '66-66-66' },
+            { name: 'Dan', phone: '98-75-21' }
         ],
         data;
 
@@ -5780,9 +5780,9 @@ QUnit.test("column filter for one column", function(assert) {
 
 QUnit.test("Filtering with additional filter when dataController's filter expression is function (assertT149995)", function(assert) {
     var dataSource = createDataSource([
-                { name: 'Alex', age: 15, birthDate: new Date(1999, 2, 5), state: 0, processed: false },
-                { name: 'Alla', age: 21, birthDate: new Date(1993, 5, 2), state: 0, processed: false },
-                { name: 'Dan', age: 19, birthDate: new Date(1996, 1, 20), state: 1, processed: true }
+            { name: 'Alex', age: 15, birthDate: new Date(1999, 2, 5), state: 0, processed: false },
+            { name: 'Alla', age: 21, birthDate: new Date(1993, 5, 2), state: 0, processed: false },
+            { name: 'Dan', age: 19, birthDate: new Date(1996, 1, 20), state: 1, processed: true }
         ]),
         columnFilterItemsCount;
 
@@ -6399,8 +6399,8 @@ QUnit.test("rows with simple grouping", function(assert) {
     var items = [
         {
             key: 1, items: [
-                    { field1: 1, field2: 4 },
-                    { field1: 1, field2: 5 }
+                { field1: 1, field2: 4 },
+                { field1: 1, field2: 5 }
             ]
         },
         { key: 2, items: [{ field1: 2, field2: 3 }] }
@@ -6587,7 +6587,7 @@ QUnit.test("rows with multilevel grouping", function(assert) {
         key: 1, items: [
             {
                 key: 2, items: [
-                        { field1: 1, field2: 2, field3: 4 }, { field1: 1, field2: 2, field3: 5 }
+                    { field1: 1, field2: 2, field3: 4 }, { field1: 1, field2: 2, field3: 5 }
                 ]
             }
         ]
@@ -6660,7 +6660,7 @@ QUnit.test("collapsed group", function(assert) {
     assert.deepEqual(rows[1].isExpanded, true);
     assert.deepEqual(rows[1].data, {
         key: 2, items: [
-                { field1: 2, field2: 3 }
+            { field1: 2, field2: 3 }
         ]
     });
     assert.deepEqual(rows[2].values, [null, 3]);
@@ -6671,8 +6671,8 @@ QUnit.test("continue group", function(assert) {
     var items = [
         {
             key: 1, isContinuation: true, items: [
-                    { field1: 1, field2: 4 },
-                    { field1: 1, field2: 5 }
+                { field1: 1, field2: 4 },
+                { field1: 1, field2: 5 }
             ]
         },
         { key: 2, items: [{ field1: 2, field2: 3 }] }
@@ -6712,8 +6712,8 @@ QUnit.test("continue group when virtual scrolling", function(assert) {
     var items = [
         {
             key: 1, isContinuation: true, items: [
-                    { field1: 1, field2: 4 },
-                    { field1: 1, field2: 5 }
+                { field1: 1, field2: 4 },
+                { field1: 1, field2: 5 }
             ]
         },
         { key: 2, items: [{ field1: 2, field2: 3 }] }
@@ -6752,8 +6752,8 @@ QUnit.test("continue group when infinite scrolling", function(assert) {
     var items = [
         {
             key: 1, isContinuation: true, items: [
-                    { field1: 1, field2: 4 },
-                    { field1: 1, field2: 5 }
+                { field1: 1, field2: 4 },
+                { field1: 1, field2: 5 }
             ]
         },
         { key: 2, items: [{ field1: 2, field2: 3 }] }
@@ -6793,14 +6793,14 @@ QUnit.test("continue multilevel group", function(assert) {
         key: 1, isContinuation: true, items: [
             {
                 key: 2, isContinuation: true, items: [
-                        { field1: 1, field2: 2, field3: 4 }, { field1: 1, field2: 2, field3: 5 }
+                    { field1: 1, field2: 2, field3: 4 }, { field1: 1, field2: 2, field3: 5 }
                 ]
             }
         ]
     },
     {
         key: 2, items: [
-                        { key: 1, items: [{ field1: 2, field2: 1, field3: 3 }] }
+            { key: 1, items: [{ field1: 2, field2: 1, field3: 3 }] }
         ]
     }
     ];
@@ -6845,14 +6845,14 @@ QUnit.test("continue multilevel group when virtual scrolling", function(assert) 
         key: 1, isContinuation: true, items: [
             {
                 key: 2, isContinuation: true, items: [
-                        { field1: 1, field2: 2, field3: 4 }, { field1: 1, field2: 2, field3: 5 }
+                    { field1: 1, field2: 2, field3: 4 }, { field1: 1, field2: 2, field3: 5 }
                 ]
             }
         ]
     },
     {
         key: 2, items: [
-                        { key: 1, items: [{ field1: 2, field2: 1, field3: 3 }] }
+            { key: 1, items: [{ field1: 2, field2: 1, field3: 3 }] }
         ]
     }
     ];
@@ -12147,11 +12147,11 @@ QUnit.test("update one cell when summary values are changed", function(assert) {
 QUnit.module("Using DataSource instance", {
     beforeEach: function() {
         this.array = [
-                { field1: 1, field2: 2, field3: 3 },
-                { field1: 1, field2: 2, field3: 4 },
-                { field1: 2, field2: 2, field3: 5 },
-                { field1: 2, field2: 3, field3: 6 },
-                { field1: 2, field2: 3, field3: 7 }
+            { field1: 1, field2: 2, field3: 3 },
+            { field1: 1, field2: 2, field3: 4 },
+            { field1: 2, field2: 2, field3: 5 },
+            { field1: 2, field2: 3, field3: 6 },
+            { field1: 2, field2: 3, field3: 7 }
         ];
 
         this.dataSource = new DataSource(this.array);
@@ -12389,11 +12389,11 @@ QUnit.test("assign loaded dataSource", function(assert) {
 QUnit.module("Exporting", {
     beforeEach: function() {
         this.array = [
-                { field1: 1, field2: 2, field3: 3 },
-                { field1: 1, field2: 2, field3: 4 },
-                { field1: 2, field2: 2, field3: 5 },
-                { field1: 2, field2: 3, field3: 6 },
-                { field1: 2, field2: 3, field3: 7 }
+            { field1: 1, field2: 2, field3: 3 },
+            { field1: 1, field2: 2, field3: 4 },
+            { field1: 2, field2: 2, field3: 5 },
+            { field1: 2, field2: 3, field3: 6 },
+            { field1: 2, field2: 3, field3: 7 }
         ];
 
         this.setupDataGridModules = function(options) {
@@ -12642,7 +12642,7 @@ QUnit.test("loadAll when remote summary enabled", function(assert) {
 
                 return $.Deferred().resolve([
                     { field1: 1, field2: 2 }, { field1: 3, field2: 4 }],
-                    { totalCount: 2, summary: [6] }
+                { totalCount: 2, summary: [6] }
                 );
             }
         },
@@ -12706,12 +12706,12 @@ QUnit.test("loadAll when remote grouping and summary enabled", function(assert) 
                 if(e.group) {
                     return $.Deferred().resolve([
                         { key: 1, summary: [2], items: null, count: 1 }, { key: 3, summary: [4], items: null, count: 1 }],
-                        { summary: [4] }
+                    { summary: [4] }
                     );
                 } else {
                     return $.Deferred().resolve([
                         { field1: 1, field2: 2 }, { field1: 3, field2: 4 }],
-                        { summary: [4] }
+                    { summary: [4] }
                     );
                 }
             },
@@ -12796,12 +12796,12 @@ QUnit.test("loadAll by selected items when remote grouping and summary enabled",
                 if(e.group) {
                     return $.Deferred().resolve([
                         { key: 1, summary: [2], items: null, count: 1 }, { key: 3, summary: [4], items: null, count: 1 }],
-                        { summary: [4] }
+                    { summary: [4] }
                     );
                 } else {
                     return $.Deferred().resolve([
                         { field1: 1, field2: 2 }, { field1: 3, field2: 4 }],
-                        { summary: [4] }
+                    { summary: [4] }
                     );
                 }
             },

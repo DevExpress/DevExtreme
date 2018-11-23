@@ -144,7 +144,7 @@ QUnit.test("Scheduler tasks should have a right parent", function(assert) {
 
 QUnit.test("Tasks should have right boundOffset", function(assert) {
     var tasks = [
-            { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
+        { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -165,7 +165,7 @@ QUnit.test("Tasks should have right boundOffset", function(assert) {
 
 QUnit.test("Draggable rendering option 'immediate' should be turned off", function(assert) {
     var tasks = [
-            { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
+        { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -185,7 +185,7 @@ QUnit.test("Draggable rendering option 'immediate' should be turned off", functi
 
 QUnit.test("Tasks should have right draggable area", function(assert) {
     var tasks = [
-            { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
+        { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -229,10 +229,10 @@ QUnit.test("Tasks should be filtered by date before render", function(assert) {
 
 QUnit.test("Tasks should be filtered by start day hour before render", function(assert) {
     var tasks = [
-            { text: "One", startDate: new Date(2015, 2, 16, 5), endDate: new Date(2015, 2, 16, 5, 30) },
-            { text: "Two", startDate: new Date(2015, 2, 16, 2), endDate: new Date(2015, 2, 16, 2, 30) },
-            { text: "Three", startDate: new Date(2015, 2, 17, 2), endDate: new Date(2015, 2, 17, 2, 30) },
-            { text: "Five", startDate: new Date(2015, 2, 10, 6), endDate: new Date(2015, 2, 10, 6, 30) }
+        { text: "One", startDate: new Date(2015, 2, 16, 5), endDate: new Date(2015, 2, 16, 5, 30) },
+        { text: "Two", startDate: new Date(2015, 2, 16, 2), endDate: new Date(2015, 2, 16, 2, 30) },
+        { text: "Three", startDate: new Date(2015, 2, 17, 2), endDate: new Date(2015, 2, 17, 2, 30) },
+        { text: "Five", startDate: new Date(2015, 2, 10, 6), endDate: new Date(2015, 2, 10, 6, 30) }
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -333,10 +333,10 @@ QUnit.test("tasks should be filtered by resources before render", function(asser
 
 QUnit.test("Tasks should be filtered by resources if dataSource is changed", function(assert) {
     var tasks = [
-            { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
-            { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
-            { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 3, roomId: [1, 2] }, // false
-            { text: "c", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2, 3] } // true
+        { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
+        { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
+        { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 3, roomId: [1, 2] }, // false
+        { text: "c", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2, 3] } // true
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -376,10 +376,10 @@ QUnit.test("Tasks should be filtered by resources if dataSource is changed", fun
 
 QUnit.test("Tasks should be filtered by resources if resources are changed", function(assert) {
     var tasks = [
-            { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
-            { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
-            { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 3, roomId: [1, 2] }, // false
-            { text: "c", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2, 3] } // true
+        { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
+        { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
+        { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 3, roomId: [1, 2] }, // false
+        { text: "c", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2, 3] } // true
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -419,10 +419,10 @@ QUnit.test("Tasks should be filtered by resources if resources are changed", fun
 
 QUnit.test("Tasks should be filtered by resources if groups are changed", function(assert) {
     var tasks = [
-            { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
-            { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 1 }, // true
-            { text: "c", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 3, roomId: [1, 2] }, // false
-            { text: "d", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2, 3] } // false
+        { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
+        { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 1 }, // true
+        { text: "c", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 3, roomId: [1, 2] }, // false
+        { text: "d", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2, 3] } // false
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -3616,9 +3616,9 @@ QUnit.test("Month appointment inside grouped view should have a right resizable 
 
 QUnit.test("Appointment size should depend on neighbor appointments", function(assert) {
     var items = [{ text: "a", startDate: new Date(2015, 2, 4, 1), endDate: new Date(2015, 2, 4, 2) },
-    { text: "b", startDate: new Date(2015, 2, 4, 2, 30), endDate: new Date(2015, 2, 4, 3) },
-    { text: "c", startDate: new Date(2015, 2, 4, 2, 30), endDate: new Date(2015, 2, 4, 3) },
-    { text: "d", startDate: new Date(2015, 2, 4, 1, 30), endDate: new Date(2015, 2, 4, 3) }];
+        { text: "b", startDate: new Date(2015, 2, 4, 2, 30), endDate: new Date(2015, 2, 4, 3) },
+        { text: "c", startDate: new Date(2015, 2, 4, 2, 30), endDate: new Date(2015, 2, 4, 3) },
+        { text: "d", startDate: new Date(2015, 2, 4, 1, 30), endDate: new Date(2015, 2, 4, 3) }];
 
     this.createInstance({
         currentView: "week",
