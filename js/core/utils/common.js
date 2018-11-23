@@ -5,8 +5,6 @@ var config = require("../config"),
     each = require("./iterator").each,
     typeUtils = require("./type");
 
-var RESOLVED_PROMISE = new Deferred().resolve().promise();
-
 var ensureDefined = function(value, defaultValue) {
     return typeUtils.isDefined(value) ? value : defaultValue;
 };
@@ -77,7 +75,7 @@ var deferExecute = function(name, func, deferred) {
         if(!executingName && delayedFuncs.length) {
             (delayedNames.shift() === "render" ? deferRender : deferUpdate)(delayedFuncs.shift(), delayedDeferreds.shift());
         }
-        return result || RESOLVED_PROMISE;
+        return result || when();
     }
 };
 
