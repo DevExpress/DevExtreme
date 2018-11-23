@@ -331,17 +331,14 @@ function calculateTranslatorRange(seriesDataSource, scaleOptions) {
         maxValue = categoriesInfo.end;
     }
 
-    isEqualDates = _isDate(minValue) && _isDate(maxValue) && (minValue.getTime() === maxValue.getTime());
-    if((scaleOptions.type === SEMIDISCRETE) || ((minValue !== maxValue) && !isEqualDates)) {
-        translatorRange.addRange({
-            invert: inverted,
-            min: minValue,
-            max: maxValue,
-            minVisible: minValue,
-            maxVisible: maxValue,
-            dataType: scaleOptions.valueType
-        });
-    }
+    translatorRange.addRange({
+        invert: inverted,
+        min: minValue,
+        max: maxValue,
+        minVisible: minValue,
+        maxVisible: maxValue,
+        dataType: scaleOptions.valueType
+    });
 
     translatorRange.addRange({
         categories: !seriesDataSource ? categories : undefined,
@@ -376,7 +373,7 @@ function getTextBBox(renderer, text, fontOptions) {
 function getDateMarkerVisibilityChecker(screenDelta) {
     return function(isDateScale, isMarkerVisible, min, max, tickInterval) {
         if(isMarkerVisible && isDateScale) {
-            if(tickInterval.years || tickInterval.months >= 6 ||
+            if(!_isDefined(tickInterval) || tickInterval.years || tickInterval.months >= 6 ||
                 (screenDelta / SEMIDISCRETE_GRID_SPACING_FACTOR < (_ceil((max - min) / dateToMilliseconds("year")) + 1))) {
                 isMarkerVisible = false;
             }
