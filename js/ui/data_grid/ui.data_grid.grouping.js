@@ -45,7 +45,7 @@ var GroupingDataSourceAdapterExtender = (function() {
             return (totalCount > 0 && that._dataSource.group() && that._dataSource.requireTotalCount()) ? totalCount + that._grouping.totalCountCorrection() : totalCount;
         },
         itemsCount: function() {
-            return this._dataSource.group() ? (this._grouping.itemsCount() || 0) : this.callBase();
+            return this._dataSource.group() ? (this._grouping.itemsCount() || 0) : this.callBase.apply(this, arguments);
         },
         allowCollapseAll: function() {
             return this._grouping.allowCollapseAll();
