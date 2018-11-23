@@ -1191,6 +1191,23 @@ QUnit.testStart(function() {
         });
     });
 
+    QUnit.test("Each cell should contain jQuery dxCellData depend on fractional hoursInterval", function(assert) {
+        this.instance.option({
+            currentDate: new Date(2015, 2, 16),
+            firstDayOfWeek: 1,
+            hoursInterval: 2.1666666666666665,
+            endDayHour: 5
+        });
+
+        var $cell = this.instance.$element().find("." + CELL_CLASS).eq(0);
+
+        assert.deepEqual($cell.data("dxCellData"), {
+            startDate: new Date(2015, 1, 23, 0, 0),
+            endDate: new Date(2015, 1, 23, 5, 0),
+            allDay: undefined
+        });
+    });
+
     QUnit.test("WorkSpace should calculate max left position", function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 2, 16),
