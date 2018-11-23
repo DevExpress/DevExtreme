@@ -10,13 +10,28 @@ var $ = require("../../core/renderer"),
 var ROW_FOCUSED_CLASS = "dx-row-focused",
     FOCUSED_ROW_SELECTOR = ".dx-row" + "." + ROW_FOCUSED_CLASS,
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    UPDATE_FOCUSED_ROW_CHANGE_TYPE = "updateFocusedRow";
+    UPDATE_FOCUSED_ROW_CHANGE_TYPE = "updateFocusedRow",
+    DATAGRID_CELL_SELECTOR = ".dx-row > td";
 
 exports.FocusController = core.ViewController.inherit((function() {
     return {
         init: function() {
             this._dataController = this.getController("data");
             this._keyboardController = this.getController("keyboardNavigation");
+            this._updateActiveStateUnit();
+        },
+
+        _updateActiveStateUnit: function() {
+            var focusedRowIndex = this.option("focusedRowIndex"),
+                focusedColumnIndex = this.option("focusedColumnIndex");
+
+            if(focusedRowIndex >= 0 && focusedColumnIndex >= 0) {
+                this.component._activeStateUnit = DATAGRID_CELL_SELECTOR;
+            }
+        },
+
+        _needFocusCell: function() {
+            return this.component._activeStateUnit === DATAGRID_CELL_SELECTOR;
         },
 
         optionChanged: function(args) {
@@ -580,7 +595,11 @@ module.exports = {
                         $cellElements = that.getCellElements(rowIndex >= 0 ? rowIndex : 0);
                         $row = $cellElements.eq(0).parent();
                         if($row.length) {
-                            $row.attr("tabIndex", tabIndex);
+                            if(this.getController("focus")._needFocusCell()) {
+                                that.callBase($cellElements);
+                            } else {
+                                $row.attr("tabIndex", tabIndex);
+                            }
                             if(rowIndex >= 0) {
                                 if(columnIndex < 0) {
                                     columnIndex = 0;

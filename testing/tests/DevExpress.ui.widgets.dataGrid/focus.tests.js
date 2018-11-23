@@ -1362,6 +1362,107 @@ QUnit.testInActiveWindow("DataGrid - Should paginate to the defined focusedRowKe
     assert.ok(this.gridView.getView("rowsView").getRow(0).hasClass("dx-row-focused"), "Row 0 is the focused row");
 });
 
+QUnit.testInActiveWindow("Need focus cell if focusedRowIndex and focusedColumnIndex are set", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowIndex: 1,
+        focusedColumnIndex: 1
+    };
+    this.setupModule();
+    this.gridView.render($("#container"));
+
+    // assert
+    assert.ok(this.getController("focus")._needFocusCell(), "Need focus cell");
+});
+
+QUnit.testInActiveWindow("No need focus cell if focusedRowIndex is not set", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedColumnIndex: 1
+    };
+    this.setupModule();
+    this.gridView.render($("#container"));
+
+    // assert
+    assert.notOk(this.getController("focus")._needFocusCell(), "Need focus cell");
+});
+
+QUnit.testInActiveWindow("No need focus cell if focusedColumnIndex is not set", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowIndex: 1
+    };
+    this.setupModule();
+    this.gridView.render($("#container"));
+
+    // assert
+    assert.notOk(this.getController("focus")._needFocusCell(), "Need focus cell");
+});
+
+QUnit.testInActiveWindow("Need focus cell if focusedRowEnabled, focusedRowIndex, focusedColumnIndex are set", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowEnabled: true,
+        focusedRowIndex: 1,
+        focusedColumnIndex: 1
+    };
+    this.setupModule();
+    this.gridView.render($("#container"));
+
+    // assert
+    assert.ok(this.getController("focus")._needFocusCell(), "Need focus cell");
+});
+
+QUnit.testInActiveWindow("No need focus cell if focusedRowEnabled=true and focusedRowIndex is not set", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowEnabled: true,
+        focusedColumnIndex: 1
+    };
+    this.setupModule();
+    this.gridView.render($("#container"));
+
+    // assert
+    assert.notOk(this.getController("focus")._needFocusCell(), "Need focus cell");
+});
+
+QUnit.testInActiveWindow("No need focus cell if focusedRowEnabled=true and focusedColumnIndex is not set", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowEnabled: true,
+        focusedRowIndex: 1
+    };
+    this.setupModule();
+    this.gridView.render($("#container"));
+
+    // assert
+    assert.notOk(this.getController("focus")._needFocusCell(), "Need focus cell");
+});
+
 
 QUnit.testInActiveWindow("Fire onFocusedRowChanging by click", function(assert) {
     // arrange
