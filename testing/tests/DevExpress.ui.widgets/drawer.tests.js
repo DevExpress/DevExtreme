@@ -447,7 +447,7 @@ QUnit.test("drawer panel should be repositioned after dimension changed, right p
 
     resizeCallbacks.fire();
 
-    assert.equal($panelOverlayContent.position().left, 0, "panel overlay content position is OK");
+    assert.equal($panelOverlayContent.position().left, -200, "panel overlay content position is OK");
 
     fx.off = false;
 });
@@ -810,6 +810,30 @@ QUnit.test("drawer panel should be repositioned correctly after dimension change
     assert.equal($panelOverlayContent.css("transform"), "matrix(1, 0, 0, 1, 0, 0)", "panel overlay content position is OK");
 
     fx.off = false;
+});
+
+QUnit.test("wrapper content should be reversed if position = 'right' and openedStateMode is changed, rtl", assert => {
+    const $element = $("#drawer").dxDrawer({
+        openedStateMode: "push",
+        rtlEnabled: true,
+        position: "left"
+    });
+    const instance = $element.dxDrawer("instance");
+
+    instance.option("openedStateMode", "shrink");
+    debugger;
+    let $wrapper = $element.find(".dx-drawer-wrapper").eq(0);
+    let $content = $wrapper.children();
+
+    assert.ok($content.eq(1).hasClass("dx-drawer-panel-content"));
+    assert.ok($content.eq(0).hasClass("dx-drawer-content"));
+
+    instance.option("position", "right");
+
+    $content = $wrapper.children();
+
+    assert.ok($content.eq(0).hasClass("dx-drawer-panel-content"));
+    assert.ok($content.eq(1).hasClass("dx-drawer-content"));
 });
 
 QUnit.module("CloseOnOutsideClick");

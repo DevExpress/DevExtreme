@@ -56,7 +56,7 @@ class ShrinkStrategy extends DrawerStrategy {
     }
 
     needOrderContent(position, isRtl) {
-        return isRtl ? position === "left" : position === "right";
+        return (isRtl ? position === "left" : position === "right") || position === "bottom";
     }
 };
 
