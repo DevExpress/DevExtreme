@@ -7,7 +7,7 @@ class ShrinkStrategy extends DrawerStrategy {
         super.renderPosition(offset, animate);
 
         const drawer = this.getDrawerInstance();
-        const direction = drawer.getDrawerPosition();
+        const direction = drawer.option("position");
         const $panel = $(drawer.content());
 
         if(drawer.option("revealMode") === "slide") {
@@ -53,6 +53,10 @@ class ShrinkStrategy extends DrawerStrategy {
                 }
             }
         }
+    }
+
+    needOrderContent(position, isRtl) {
+        return (isRtl ? position === "left" : position === "right") || position === "bottom";
     }
 };
 

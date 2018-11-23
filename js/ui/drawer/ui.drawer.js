@@ -297,15 +297,11 @@ const Drawer = Widget.inherit({
     },
 
     _orderContent(position) {
-        if(this._needOrderContent() && (position === "right" || position === "bottom")) {
+        if(this._strategy.needOrderContent(position, this.option("rtlEnabled"))) {
             this._$wrapper.prepend(this._$contentWrapper);
         } else {
             this._$wrapper.prepend(this._$panel);
         }
-    },
-
-    _needOrderContent() {
-        return this.option("openedStateMode") !== "push";
     },
 
     _refreshRevealModeClass(prevClass) {
@@ -373,17 +369,6 @@ const Drawer = Widget.inherit({
         return $children.length ? $children.eq(0).get(0).getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
     },
 
-    getDrawerPosition() {
-        let resultPosition = this.option("position");
-        let rtl = this.option("rtlEnabled");
-
-        if(this.isHorizontalDirection() && rtl) {
-            return resultPosition === "right" ? "left" : "right";
-        }
-
-        return resultPosition;
-    },
-
     isHorizontalDirection() {
         return this.option("position") === "left" || this.option("position") === "right";
     },
@@ -403,7 +388,7 @@ const Drawer = Widget.inherit({
     },
 
     _isInvertedPosition() {
-        const position = this.getDrawerPosition();
+        const position = this.option("position");
 
         return position === "right" || position === "bottom";
     },
