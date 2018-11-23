@@ -785,6 +785,147 @@ QUnit.testInActiveWindow("Focus next row if grouping and virtual scrolling mode"
     assert.equal($(rowsView.getRow(11)).find("td").eq(1).text(), "Alice", "Alice");
 });
 
+QUnit.testInActiveWindow("DataGrid should focus row by focusedRowIndex if data was filtered", function(assert) {
+    var rowsView,
+        visibleRows;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowIndex: 0,
+        columns: ["team", "name", "age"]
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    $(this.getCellElement(0, 0)).trigger("dxpointerdown").focus();
+
+    // act
+    this.dataController.filter("team", "=", "public");
+    this.dataController.load();
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    visibleRows = this.dataController.getVisibleRows();
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 0, "focusedRowIndex");
+    assert.ok(rowsView.getRow(0).hasClass("dx-row-focused"), "row 0 is focused");
+    assert.equal(visibleRows.length, 2, "visible rows count");
+    assert.equal(visibleRows[0].key, "Alice", "row 0");
+});
+
+QUnit.testInActiveWindow("DataGrid should restore focused row when data without focused row was filtered", function(assert) {
+    var rowsView,
+        visibleRows;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        columns: ["team", "name", "age"]
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    $(this.getCellElement(5, 0)).trigger("dxpointerdown").focus();
+
+    // act
+    this.dataController.filter("team", "=", "public");
+    this.dataController.load();
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    visibleRows = this.dataController.getVisibleRows();
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 1, "focusedRowIndex");
+    assert.ok(rowsView.getRow(1).hasClass("dx-row-focused"), "row 1 is focused");
+    assert.equal(visibleRows.length, 2, "visible rows count");
+    assert.equal(visibleRows[1].key, "Zeb", "row 1");
+});
+
+QUnit.testInActiveWindow("DataGrid should restore focused row when focused row data was filtered", function(assert) {
+    var rowsView,
+        visibleRows;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }
+    ];
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        columns: ["team", "name", "age"]
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    $(this.getCellElement(5, 0)).trigger("dxpointerdown").focus();
+
+    // act
+    this.dataController.filter("team", "=", "internal");
+    this.dataController.load();
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+    visibleRows = this.dataController.getVisibleRows();
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 1, "focusedRowIndex");
+    assert.ok(rowsView.getRow(1).hasClass("dx-row-focused"), "row 1 is focused");
+    assert.equal(visibleRows.length, 2, "visible rows count");
+});
+
 QUnit.testInActiveWindow("DataGrid should focus the corresponding group row if group collapsed and inner data row was focused", function(assert) {
     var rowsView;
 
