@@ -18,6 +18,8 @@ var TIMEVIEW_CLASS = "dx-timeview",
     TIMEVIEW_FORMAT12_PM = 1,
     TIMEVIEW_MINUTEARROW_CLASS = "dx-timeview-minutearrow";
 
+var MAX_HOURS_VALUE = 24;
+
 var rotateArrow = function($arrow, angle, offset) {
     cssRotate($arrow, angle, offset);
 };
@@ -176,14 +178,20 @@ var TimeView = Editor.inherit({
             max: 24,
             value: this._getValue().getHours(),
             onValueChanged: (function(args) {
-                var time = new Date(this._getValue());
-                time.setHours(args.value);
+                var hours = this._convertMaxHourToMin(args.value),
+                    time = new Date(this._getValue());
+
+                time.setHours(hours);
                 uiDateUtils.normalizeTime(time);
                 this.option("value", time);
             }).bind(this)
         }, this._getNumberBoxConfig()));
 
         this._hourBox.setAria("label", "hours");
+    },
+
+    _convertMaxHourToMin: function(hours) {
+        return (MAX_HOURS_VALUE + hours) % MAX_HOURS_VALUE;
     },
 
     _createMinuteBox: function() {
