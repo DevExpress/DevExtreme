@@ -106,4 +106,21 @@ QUnit.module("Toolbar integration", {
 
         assert.roughEqual(quillContainerHeight + toolbarHeight, height, 1, "Toolbar + editor equals to the predefined height");
     }));
+
+    test("Toolbar correctly disposed after repaint", (assert) => {
+        const $toolbarContainer = $("<div>").addClass("external-container");
+        $("#qunit-fixture").append($toolbarContainer);
+
+        const editor = $("#htmlEditor").dxHtmlEditor({
+            toolbar: {
+                container: $toolbarContainer,
+                items: ["bold"]
+            }
+        }).dxHtmlEditor("instance");
+
+        editor.repaint();
+
+        assert.ok($toolbarContainer.hasClass(TOOLBAR_WRAPPER_CLASS), "Container has wrapper class");
+        assert.equal($toolbarContainer.find(`.${TOOLBAR_CLASS}`).length, 1, "Toolbar container contains the htmlEditor's toolbar");
+    });
 });
