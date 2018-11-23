@@ -657,7 +657,7 @@ QUnit.test("Using the single section of axis options for some panes (check custo
 });
 
 // T681674
-QUnit.test("actual visualRange after dataSource updating (argument axis without visual range)", function(assert) {
+QUnit.test("actual value axis visualRange after dataSource updating (argument axis without visual range)", function(assert) {
     var chart = this.createChart({
         dataSource: [{
             arg: 1,
@@ -682,7 +682,7 @@ QUnit.test("actual visualRange after dataSource updating (argument axis without 
 });
 
 // T681674
-QUnit.test("actual visualRange after dataSource updating (argument axis with visual range)", function(assert) {
+QUnit.test("actual value axis visualRange after dataSource updating (argument axis with visual range)", function(assert) {
     var chart = this.createChart({
         dataSource: [{
             arg: 1,
@@ -709,6 +709,31 @@ QUnit.test("actual visualRange after dataSource updating (argument axis with vis
     chart.option("dataSource", [{ arg: 2, val1: 5 }, { arg: 2, val1: 10 }]);
 
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 0, endValue: 80 });
+});
+
+QUnit.test("actual argument axis visualRange after dataSource updating", function(assert) {
+    var chart = this.createChart({
+        dataSource: [{
+            arg: 1,
+            val1: -10
+        }, {
+            arg: 60,
+            val1: 20
+        }],
+        argumentAxis: {
+            valueMarginsEnabled: false,
+            wholeRange: {
+                startValue: -100,
+                endValue: 100
+            }
+        },
+        series: [{ type: "line", valueField: "val1" }]
+    });
+
+    chart.option("argumentAxis.visualRange", { startValue: 0, endValue: 80 });
+    chart.option("dataSource", [{ arg: 20, val1: 5 }, { arg: 50, val1: 10 }]);
+
+    assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 0, endValue: 80 });
 });
 
 QUnit.test("Set the visualRange option by the different ways", function(assert) {
