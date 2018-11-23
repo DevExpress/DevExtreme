@@ -19,7 +19,7 @@ class PushStrategy extends DrawerStrategy {
             let animationConfig = {
                 $element: $content,
                 position: contentPosition,
-                direction: drawer.option("position"),
+                direction: drawer.getDrawerPosition(),
                 duration: drawer.option("animationDuration"),
                 complete: () => {
                     this._contentAnimationResolve();
