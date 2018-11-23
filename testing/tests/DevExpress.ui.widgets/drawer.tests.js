@@ -821,7 +821,7 @@ QUnit.test("wrapper content should be reversed if position = 'right' and openedS
     const instance = $element.dxDrawer("instance");
 
     instance.option("openedStateMode", "shrink");
-    debugger;
+
     let $wrapper = $element.find(".dx-drawer-wrapper").eq(0);
     let $content = $wrapper.children();
 
