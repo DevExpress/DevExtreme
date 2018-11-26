@@ -1014,6 +1014,12 @@ var Overlay = Widget.inherit({
         this._renderResize();
         this._renderScrollTerminator();
 
+        whenContentRendered.done(() => {
+            if(this.option("visible")) {
+                this._moveToContainer();
+            }
+        });
+
         return whenContentRendered.promise();
     },
 
@@ -1171,14 +1177,6 @@ var Overlay = Widget.inherit({
             left: isAllowedDrag ? position.left + shaderOffset.left + boundaryOffset.h : 0,
             right: isAllowedDrag ? -position.left - shaderOffset.left + deltaSize.width - boundaryOffset.h : 0
         };
-    },
-
-    _fireContentReadyAction: function() {
-        if(this.option("visible")) {
-            this._moveToContainer();
-        }
-
-        this.callBase.apply(this, arguments);
     },
 
     _moveFromContainer: function() {
