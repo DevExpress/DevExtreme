@@ -625,7 +625,7 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
             endDayHour: 7
         });
 
-        assert.deepEqual(appts, [{ text: "b", StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() }], "Appointments are OK");
+        assert.deepEqual(appts, [{ text: "b", StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() }], "Appointments are OK. Appointment 'a' was filtered");
     });
 
     QUnit.test("Loaded appointments should be filtered by decimal start & end day hours", function(assert) {
