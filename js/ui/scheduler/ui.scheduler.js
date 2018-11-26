@@ -50,6 +50,8 @@ var $ = require("../../core/renderer"),
     BindableTemplate = require("../widget/bindable_template"),
     themes = require("../themes");
 
+var toMs = dateUtils.dateToMilliseconds;
+
 var WIDGET_CLASS = "dx-scheduler",
     WIDGET_SMALL_CLASS = "dx-scheduler-small",
     WIDGET_READONLY_CLASS = "dx-scheduler-readonly",
@@ -2231,7 +2233,7 @@ var Scheduler = Widget.inherit({
 
         function convert(obj, dateFieldName) {
             var date = new Date(this.fire("getField", dateFieldName, obj));
-            var tzDiff = this._getTimezoneOffsetByOption() * 3600000 + this.fire("getClientTimezoneOffset", date);
+            var tzDiff = this._getTimezoneOffsetByOption() * toMs("hour") + this.fire("getClientTimezoneOffset", date);
 
             return new Date(date.getTime() + tzDiff);
         }
@@ -2353,13 +2355,13 @@ var Scheduler = Widget.inherit({
             );
 
             if(typeof commonTimezoneOffset === "number" && !isNaN(commonTimezoneOffset)) {
-                var startDateClientTzOffset = -(this._subscribes["getClientTimezoneOffset"](startDate) / 3600000);
-                var endDateClientTzOffset = -(this._subscribes["getClientTimezoneOffset"](endDate) / 3600000);
-                var processedStartDateInUTC = processedStartDate.getTime() - startDateClientTzOffset * 3600000,
-                    processedEndDateInUTC = processedEndDate.getTime() - endDateClientTzOffset * 3600000;
+                var startDateClientTzOffset = -(this._subscribes["getClientTimezoneOffset"](startDate) / toMs("hour"));
+                var endDateClientTzOffset = -(this._subscribes["getClientTimezoneOffset"](endDate) / toMs("hour"));
+                var processedStartDateInUTC = processedStartDate.getTime() - startDateClientTzOffset * toMs("hour"),
+                    processedEndDateInUTC = processedEndDate.getTime() - endDateClientTzOffset * toMs("hour");
 
-                processedStartDate = new Date(processedStartDateInUTC + commonTimezoneOffset * 3600000);
-                processedEndDate = new Date(processedEndDateInUTC + commonTimezoneOffset * 3600000);
+                processedStartDate = new Date(processedStartDateInUTC + commonTimezoneOffset * toMs("hour"));
+                processedEndDate = new Date(processedEndDateInUTC + commonTimezoneOffset * toMs("hour"));
             }
 
             this.fire("setField", "startDate", appointment, processedStartDate);
@@ -2407,6 +2409,10 @@ var Scheduler = Widget.inherit({
         var startDate = this.fire("convertDateByTimezoneBack", targetStartDate, startDateTimeZone);
 
         exceptionDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
+
+        var timezoneDiff = targetStartDate.getTimezoneOffset() - exceptionDate.getTimezoneOffset();
+        timezoneDiff = timezoneDiff * toMs("minute");
+        exceptionDate = new Date(exceptionDate.getTime() - timezoneDiff);
 
         return dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ");
     },
