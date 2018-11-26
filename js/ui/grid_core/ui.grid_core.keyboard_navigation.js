@@ -384,7 +384,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _focus: function($cell, disableFocus, isInteractiveElement) {
-        var $row = $cell && $cell.parent();
+        var $row = ($cell && $cell.is("td")) ? $cell.parent() : $cell;
 
         if($row && isNotFocusedRow($row)) {
             return;
@@ -1154,15 +1154,27 @@ var KeyboardNavigationController = core.ViewController.inherit({
     * @param1 element:Node|jQuery
     */
     focus: function(element) {
-        var $element = $(element);
-        var focusView = this._getFocusedViewByElement($element);
+        if(!element) {
+            var activeElementSelector = this.option("focusedRowEnabled") ? ".dx-row" : ".dx-row > td";
+            element = this.component.element().find(activeElementSelector + "[tabindex]").first();
+        }
+        if(element) {
+            var $element = $(element);
+            var focusView = this._getFocusedViewByElement($element);
 
-        if(focusView) {
-            this._focusView(focusView.view, focusView.viewIndex);
-            this._isNeedFocus = true;
-            this._isNeedScroll = true;
-            this._focus($element);
-            this._focusInteractiveElement($element);
+            if($element.is(".dx-row")) {
+                this.setRowFocusType();
+            } else {
+                this.setCellFocusType();
+            }
+
+            if(focusView) {
+                this._focusView(focusView.view, focusView.viewIndex);
+                this._isNeedFocus = true;
+                this._isNeedScroll = true;
+                this._focus($element);
+                this._focusInteractiveElement($element);
+            }
         }
     },
 

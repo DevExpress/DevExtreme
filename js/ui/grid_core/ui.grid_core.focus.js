@@ -17,7 +17,6 @@ exports.FocusController = core.ViewController.inherit((function() {
         init: function() {
             this._dataController = this.getController("data");
             this._keyboardController = this.getController("keyboardNavigation");
-            this._needFocusCell = this.option("focusedRowIndex") >= 0 && this.option("focusedColumnIndex") >= 0;
         },
 
         optionChanged: function(args) {
@@ -307,7 +306,7 @@ module.exports = {
                 },
 
                 _escapeKeyHandler: function(eventArgs, isEditing) {
-                    if(isEditing || !this.option("focusedRowEnabled") || this.getController("focus")._needFocusCell) {
+                    if(isEditing || !this.option("focusedRowEnabled")) {
                         this.callBase(eventArgs, isEditing);
                         return;
                     }
@@ -581,11 +580,7 @@ module.exports = {
                         $cellElements = that.getCellElements(rowIndex >= 0 ? rowIndex : 0);
                         $row = $cellElements.eq(0).parent();
                         if($row.length) {
-                            if(this.getController("focus")._needFocusCell) {
-                                that.callBase($cellElements);
-                            } else {
-                                $row.attr("tabIndex", tabIndex);
-                            }
+                            $row.attr("tabIndex", tabIndex);
                             if(rowIndex >= 0) {
                                 if(columnIndex < 0) {
                                     columnIndex = 0;

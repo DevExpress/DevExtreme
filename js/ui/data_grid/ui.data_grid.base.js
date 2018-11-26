@@ -9,10 +9,10 @@ var $ = require("../../core/renderer"),
     Widget = require("../widget/ui.widget"),
     gridCore = require("./ui.data_grid.core"),
     themes = require("../themes"),
+    eventsEngine = require("../../events/core/events_engine"),
     callModuleItemsMethod = gridCore.callModuleItemsMethod;
 
 var DATAGRID_ROW_SELECTOR = ".dx-row",
-    DATAGRID_CELL_SELECTOR = ".dx-row > td",
     DATAGRID_DEPRECATED_TEMPLATE_WARNING = "Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.";
 
 require("./ui.data_grid.column_headers");
@@ -219,6 +219,29 @@ var DataGrid = Widget.inherit({
         callModuleItemsMethod(that, "dispose");
     },
 
+    _findTabIndexElement: function() {
+        var elements = this.element().find(":not(tr)[tabindex]"),
+            $element,
+            elementTabIndex,
+            itemTabIndex,
+            $item;
+
+        elements.each(function(_, item) {
+            $item = $(item);
+            if(!$element) {
+                $element = $item;
+            } else {
+                elementTabIndex = $element.attr("tabindex");
+                itemTabIndex = $item.attr("tabindex");
+                if(itemTabIndex >= 0 && elementTabIndex === undefined || itemTabIndex >= 0 && elementTabIndex >= 0 && elementTabIndex < itemTabIndex) {
+                    $element = $item;
+                }
+            }
+        });
+
+        return $element;
+    },
+
     isReady: function() {
         return this.getController("data").isReady();
     },
@@ -246,21 +269,15 @@ var DataGrid = Widget.inherit({
     },
 
     focus: function(element) {
-        var prevActiveStateUnit = this._activeStateUnit,
-            focusedRowIndex = this.option("focusedRowIndex"),
-            focusedColumnIndex = this.option("focusedColumnIndex");
-
-        if(focusedRowIndex >= 0 && focusedColumnIndex >= 0) {
-            this._activeStateUnit += ", " + DATAGRID_CELL_SELECTOR;
+        if(!element) {
+            element = this._findTabIndexElement();
+            if(element) {
+                eventsEngine.trigger(element, "focus");
+                return;
+            }
         }
 
-        this.callBase();
-
-        this._activeStateUnit = prevActiveStateUnit;
-
-        if(typeUtils.isDefined(element)) {
-            this.getController("keyboardNavigation").focus(element);
-        }
+        this.getController("keyboardNavigation").focus(element);
     }
 });
 
