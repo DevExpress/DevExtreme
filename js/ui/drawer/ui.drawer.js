@@ -326,8 +326,8 @@ const Drawer = Widget.inherit({
     },
 
     getDrawerPosition() {
-        let position = this.option("position");
-        let rtl = this.option("rtlEnabled");
+        const position = this.option("position");
+        const rtl = this.option("rtlEnabled");
 
         if(position === "before") {
             return rtl ? "right" : "left";
@@ -385,7 +385,7 @@ const Drawer = Widget.inherit({
     },
 
     isHorizontalDirection() {
-        var position = this.getDrawerPosition();
+        const position = this.getDrawerPosition();
 
         return position === "left" || position === "right";
     },
