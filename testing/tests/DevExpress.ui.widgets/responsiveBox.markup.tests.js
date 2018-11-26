@@ -395,6 +395,7 @@ QUnit.module("layouting", moduleConfig, () => {
 
     QUnit.test("Set the shrink option of row to box", (assert) => {
         const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            _layoutStrategy: "flex",
             rows: [{
                 ratio: 1,
                 shrink: 0
@@ -415,6 +416,7 @@ QUnit.module("layouting", moduleConfig, () => {
 
     QUnit.test("Set the shrink option of column to box", (assert) => {
         const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            _layoutStrategy: "flex",
             rows: [{ ratio: 1 }],
             cols: [{ ratio: 1 }, { ratio: 1, shrink: 0 }],
             items: [
