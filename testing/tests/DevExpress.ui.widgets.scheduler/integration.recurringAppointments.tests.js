@@ -1116,16 +1116,21 @@ QUnit.test("Recurrence exception should be adjusted by appointment timezone afte
         currentDate: new Date(2018, 3, 1)
     });
 
-
     $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
 
     $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(0).trigger("dxclick");
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
-    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
+        exceptionDate = new Date(2018, 3, 1, 10),
+        timezoneDiff = new Date(2018, 2, 26).getTimezoneOffset() - exceptionDate.getTimezoneOffset();
+
+    timezoneDiff = timezoneDiff * 60000;
+    exceptionDate = new Date(exceptionDate.getTime() - timezoneDiff);
 
     assert.notOk($appointment.length, "appt is deleted");
+    assert.equal(this.instance.option("dataSource")[0].recurrenceException, dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ"), "exception is correct");
 });
 
 QUnit.test("Single changed appointment should be rendered correctly in specified timeZone", function(assert) {
