@@ -846,16 +846,16 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
             expandedRowKeys: [1],
             dataSource: [
                 { name: 'Category1', id: 1 },
-                    { name: 'SubCategory1', id: 2, parentId: 1 },
-                    { name: 'SubCategory2', id: 3, parentId: 1 },
+                { name: 'SubCategory1', id: 2, parentId: 1 },
+                { name: 'SubCategory2', id: 3, parentId: 1 },
                 { name: 'Category2', id: 4 },
                 { name: 'Category3', id: 5 },
                 { name: 'Category4', id: 6 },
                 { name: 'Category7', id: 7 },
                 { name: 'Category5', id: 8 },
-                    { name: 'SubCategory3', id: 9, parentId: 8 },
-                        { name: 'SubCategory5', id: 12, parentId: 9 },
-                    { name: 'SubCategory4', id: 10, parentId: 8 },
+                { name: 'SubCategory3', id: 9, parentId: 8 },
+                { name: 'SubCategory5', id: 12, parentId: 9 },
+                { name: 'SubCategory4', id: 10, parentId: 8 },
                 { name: 'Category6', id: 11 }
             ]
         }),
@@ -912,6 +912,28 @@ QUnit.test("Scrollbar position must be kept after expanding node when the treeli
             done();
         }, 310);
     });
+});
+
+// T692068
+QUnit.test("Expand row if repaintChangesOnly is true", function(assert) {
+    // arrange
+    var treeList = createTreeList({
+        height: 120,
+        loadingTimeout: undefined,
+        repaintChangesOnly: true,
+        dataSource: [
+            { id: 1, name: 'node_1' },
+            { id: 2, name: 'node_1_1', parentId: 1 },
+            { id: 3, name: 'node_1_2', parentId: 1 }
+        ]
+    });
+
+    // act
+    treeList.expandRow(1);
+
+    // assert
+    assert.strictEqual(treeList.getVisibleRows()[0].isExpanded, true, "first row has corrent isExpanded state");
+    assert.strictEqual($(treeList.getRowElement(0)).find(".dx-treelist-expanded").length, 1, "first row has expanded icon");
 });
 
 QUnit.module("Focused Row", {

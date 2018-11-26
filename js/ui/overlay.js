@@ -72,6 +72,7 @@ var realDevice = devices.real(),
 
     firefoxDesktop = browser.mozilla && realDevice.deviceType === "desktop",
     iOS = realDevice.platform === "ios",
+    hasSafariAddressBar = browser.safari && realDevice.deviceType !== "desktop",
     iOS7_0andBelow = iOS && compareVersions(realVersion, [7, 1]) < 0,
     android4_0nativeBrowser = realDevice.platform === "android" && compareVersions(realVersion, [4, 0], 2) === 0 && navigator.userAgent.indexOf("Chrome") === -1;
 
@@ -187,6 +188,8 @@ var Overlay = Widget.inherit({
             /**
             * @name dxOverlayOptions.position
             * @default { my: 'center', at: 'center', of: window }
+            * @fires dxOverlayOptions.onPositioning
+            * @fires dxOverlayOptions.onPositioned
             */
             position: {
                 my: "center",
@@ -993,18 +996,31 @@ var Overlay = Widget.inherit({
         const $element = this.$element();
         this._$content.appendTo($element);
 
+        const whenContentRendered = new Deferred();
+
         const contentTemplateOption = this.option("contentTemplate"),
             contentTemplate = this._getTemplate(contentTemplateOption),
             transclude = this._getAnonymousTemplateName() === contentTemplateOption;
         contentTemplate && contentTemplate.render({
             container: getPublicElement(this.$content()),
             noModel: true,
-            transclude
+            transclude,
+            onRendered: () => {
+                whenContentRendered.resolve();
+            }
         });
 
         this._renderDrag();
         this._renderResize();
         this._renderScrollTerminator();
+
+        whenContentRendered.done(() => {
+            if(this.option("visible")) {
+                this._moveToContainer();
+            }
+        });
+
+        return whenContentRendered.promise();
     },
 
     _renderDrag: function() {
@@ -1163,14 +1179,6 @@ var Overlay = Widget.inherit({
         };
     },
 
-    _fireContentReadyAction: function() {
-        if(this.option("visible")) {
-            this._moveToContainer();
-        }
-
-        this.callBase.apply(this, arguments);
-    },
-
     _moveFromContainer: function() {
         this._$content.appendTo(this.$element());
 
@@ -1199,6 +1207,12 @@ var Overlay = Widget.inherit({
         this._$wrapper.appendTo(renderContainer);
     },
 
+    _fixHeightAfterSafariAddressBarResizing: function() {
+        if(this._isWindow(this._getContainer()) && hasSafariAddressBar) {
+            this._$wrapper.css("minHeight", window.innerHeight);
+        }
+    },
+
     _renderGeometry: function() {
         if(this.option("visible") && windowUtils.hasWindow()) {
             this._renderGeometryImpl();
@@ -1209,6 +1223,7 @@ var Overlay = Widget.inherit({
         this._stopAnimation();
 
         this._normalizePosition();
+        this._fixHeightAfterSafariAddressBarResizing();
         this._renderShading();
         this._renderDimensions();
         var resultPosition = this._renderPosition();
@@ -1419,8 +1434,11 @@ var Overlay = Widget.inherit({
             case "maxWidth":
             case "minHeight":
             case "maxHeight":
-            case "position":
             case "boundaryOffset":
+                this._renderGeometry();
+                break;
+            case "position":
+                this._positionChangeHandled = false;
                 this._renderGeometry();
                 break;
             case "visible":

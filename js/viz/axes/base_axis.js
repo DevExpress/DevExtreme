@@ -1011,43 +1011,75 @@ Axis.prototype = {
         return range;
     },
 
-    _getVisualRangeUpdateMode(range, newRange) {
+    _getVisualRangeUpdateMode(range, newRange, oppositeValue) {
         let value = this._options.visualRangeUpdateMode;
-        if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
-            if(range.axisType === constants.discrete) {
-                if(range.categories && newRange.categories && newRange.categories.every((c, i) => c === range.categories[i])) {
-                    value = KEEP;
+
+        if(this.isArgumentAxis) {
+            if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
+                if(range.axisType === constants.discrete) {
+                    const categories = range.categories;
+                    const newCategories = newRange.categories;
+                    const visualRange = this.visualRange();
+                    if(categories &&
+                        newCategories &&
+                        categories.length === newCategories.length &&
+                        newCategories.every((c, i) => c.valueOf() === categories[i].valueOf()) &&
+                        (visualRange.startValue.valueOf() !== newCategories[0].valueOf() ||
+                            visualRange.endValue.valueOf() !== newCategories[newCategories.length - 1].valueOf())
+                    ) {
+                        value = KEEP;
+                    } else {
+                        value = RESET;
+                    }
                 } else {
-                    value = RESET;
+                    const translator = this._translator;
+                    const minPoint = translator.translate(range.min);
+                    const minVisiblePoint = translator.translate(range.minVisible);
+
+                    const maxPoint = translator.translate(range.max);
+                    const maxVisiblePoint = translator.translate(range.maxVisible);
+
+                    if(minPoint === minVisiblePoint && maxPoint === maxVisiblePoint) {
+                        value = RESET;
+                    } else if(minPoint !== minVisiblePoint && maxPoint === maxVisiblePoint) {
+                        value = SHIFT;
+                    } else {
+                        value = KEEP;
+                    }
                 }
-            } else {
-                const translator = this._translator;
-                const minPoint = translator.translate(range.min);
-                const minVisiblePoint = translator.translate(range.minVisible);
+            }
+        } else {
+            if([KEEP, RESET].indexOf(value) === -1) {
 
-                const maxPoint = translator.translate(range.max);
-                const maxVisiblePoint = translator.translate(range.maxVisible);
-
-                if(minPoint === minVisiblePoint && maxPoint === maxVisiblePoint) {
-                    value = RESET;
-                } else if(minPoint !== minVisiblePoint && maxPoint === maxVisiblePoint) {
-                    value = SHIFT;
-                } else {
+                if(oppositeValue === KEEP) {
                     value = KEEP;
+                } else {
+                    value = RESET;
                 }
             }
         }
+
         return value;
     },
 
-    _handleBusinessRangeChanged(seriesData) {
-        const currentBusinessRange = new rangeModule.Range(this._translator.getBusinessRange());
-        if(!currentBusinessRange.isDefined() || currentBusinessRange.stubData || !this.isArgumentAxis || currentBusinessRange.isEstimatedRange) {
+    _handleBusinessRangeChanged(seriesData, oppositeVisualRangeUpdateMode) {
+        const that = this;
+        const currentBusinessRange = new rangeModule.Range(that._translator.getBusinessRange());
+        if(!currentBusinessRange.isDefined() || currentBusinessRange.stubData || currentBusinessRange.isEstimatedRange) {
             return;
         }
-        const that = this;
-        const visualRangeUpdateMode = this._getVisualRangeUpdateMode(currentBusinessRange, seriesData);
+        if(!that.isArgumentAxis) {
+            const viewport = that.getViewport();
 
+            if(isDefined(viewport.startValue) ||
+                isDefined(viewport.endValue) ||
+                isDefined(viewport.length)) {
+                that._resetVisualRangeOption();
+                return;
+            }
+        }
+
+        const visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(currentBusinessRange, seriesData, oppositeVisualRangeUpdateMode);
         if(visualRangeUpdateMode === KEEP) {
             that._setVisualRange([currentBusinessRange.minVisible, currentBusinessRange.maxVisible]);
         }
@@ -1074,14 +1106,36 @@ Axis.prototype = {
         return length;
     },
 
-    setBusinessRange(range, categoriesOrder) {
+    getVisualRangeCenter(range) {
+        const businessRange = this._translator.getBusinessRange();
+        const currentBusinessRange = range || businessRange;
+        const { type, logarithmBase } = this._options;
+        let center;
+
+        if(!isDefined(currentBusinessRange.minVisible) || !isDefined(currentBusinessRange.maxVisible)) {
+            return;
+        }
+
+        if(type === constants.logarithmic) {
+            center = vizUtils.raiseTo(adjust(vizUtils.getLog(currentBusinessRange.maxVisible * currentBusinessRange.minVisible, logarithmBase)) / 2, logarithmBase);
+        } else if(type === constants.discrete) {
+            const categoriesInfo = vizUtils.getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
+            const index = Math.ceil(categoriesInfo.categories.length / 2) - 1;
+            center = businessRange.categories.indexOf(categoriesInfo.categories[index]);
+        } else {
+            center = (currentBusinessRange.maxVisible.valueOf() + currentBusinessRange.minVisible.valueOf()) / 2;
+        }
+        return center;
+    },
+
+    setBusinessRange(range, categoriesOrder, oppositeVisualRangeUpdateMode) {
         const that = this;
         const options = that._options;
         const isDiscrete = options.type === constants.discrete;
 
         that._seriesData = new rangeModule.Range(range);
 
-        that._handleBusinessRangeChanged(that._seriesData);
+        that._handleBusinessRangeChanged(that._seriesData, oppositeVisualRangeUpdateMode);
 
         that._seriesData.addRange({
             categories: options.categories,
@@ -1596,6 +1650,11 @@ Axis.prototype = {
         drawGrids(that._minorTicks, drawGridLine);
 
         callAction(that._majorTicks, "drawLabel", that._getViewportRange());
+        that._majorTicks.forEach(function(tick) {
+            tick.labelRotationAngle = 0;
+            tick.labelAlignment = undefined;
+            tick.labelOffset = 0;
+        });
 
         callAction(that._outsideConstantLines.concat(that._insideConstantLines), "draw");
 
@@ -1771,6 +1830,7 @@ Axis.prototype = {
 
     _applyZooming(visualRange) {
         const that = this;
+        that._resetVisualRangeOption();
         that._setVisualRange(visualRange);
 
         const viewPort = that.getViewport();
@@ -1783,21 +1843,27 @@ Axis.prototype = {
         that._translator.updateBusinessRange(that._getViewportRange());
     },
 
-    getZoomStartEventArg() {
+    getZoomStartEventArg(event, actionType) {
         return {
             axis: this,
             range: this.visualRange(),
-            cancel: false
+            cancel: false,
+            event,
+            actionType
         };
     },
 
-    getZoomEndEventArg(currentRange) {
+    getZoomEndEventArg(previousRange, event, actionType, zoomFactor, shift) {
         const newRange = this.visualRange();
         return {
             axis: this,
-            previousRange: currentRange,
+            previousRange,
             range: newRange,
             cancel: false,
+            event,
+            actionType,
+            zoomFactor,
+            shift,
             // backwards
             rangeStart: newRange.startValue,
             rangeEnd: newRange.endValue
@@ -1814,11 +1880,15 @@ Axis.prototype = {
         };
     },
 
-    setCustomVisualRange(value) {
-        this._options._customVisualRange = value;
+    _resetVisualRangeOption() {
+        this._options._customVisualRange = {};
     },
 
-     // API
+    setCustomVisualRange(range) {
+        this._options._customVisualRange = range;
+    },
+
+    // API
     visualRange() {
         const that = this;
         const args = arguments;
@@ -1853,31 +1923,62 @@ Axis.prototype = {
         }
     },
 
-    handleZooming(visualRange, preventEvents) {
+    handleZooming(visualRange, preventEvents, domEvent, action) {
         const that = this;
         preventEvents = preventEvents || {};
 
-        visualRange = that._validateVisualRange(visualRange);
+        if(isDefined(visualRange)) {
+            visualRange = that._validateVisualRange(visualRange);
+        }
 
-        const zoomStartEvent = that.getZoomStartEventArg();
-        const currentRange = preventEvents.startRange && that._validateVisualRange(preventEvents.startRange) || zoomStartEvent.range;
+        const zoomStartEvent = that.getZoomStartEventArg(domEvent, action);
+        const previousRange = zoomStartEvent.range;
 
         !preventEvents.start && that._eventTrigger("zoomStart", zoomStartEvent);
-        const zoomResults = { isPrevented: zoomStartEvent.cancel, range: visualRange };
+        const zoomResults = {
+            isPrevented: zoomStartEvent.cancel,
+            range: visualRange || zoomStartEvent.range
+        };
 
         if(!zoomStartEvent.cancel) {
-            that._applyZooming(visualRange);
-            const zoomEndEvent = that.getZoomEndEventArg(currentRange);
-
-            !preventEvents.end && that._eventTrigger("zoomEnd", zoomEndEvent);
-
-            if(zoomEndEvent.cancel) {
-                that._applyZooming(currentRange);
-                zoomResults.range = currentRange;
+            isDefined(visualRange) && that._applyZooming(visualRange);
+            if(!isDefined(that._storedZoomEndParams)) {
+                that._storedZoomEndParams = {
+                    startRange: previousRange,
+                };
             }
+            that._storedZoomEndParams.event = domEvent;
+            that._storedZoomEndParams.action = action;
+            that._storedZoomEndParams.prevent = !!preventEvents.end;
         }
 
         return zoomResults;
+    },
+
+    handleZoomEnd() {
+        const that = this;
+        if(isDefined(that._storedZoomEndParams) && !that._storedZoomEndParams.prevent) {
+            const previousRange = that._storedZoomEndParams.startRange;
+            const domEvent = that._storedZoomEndParams.event;
+            const action = that._storedZoomEndParams.action;
+            const previousBusinessRange = {
+                minVisible: previousRange.startValue,
+                maxVisible: previousRange.endValue,
+                categories: previousRange.categories
+            };
+            const shift = adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange));
+            const zoomFactor = +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2");
+            const zoomEndEvent = that.getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
+
+            that._eventTrigger("zoomEnd", zoomEndEvent);
+
+            if(zoomEndEvent.cancel) {
+                that._storedZoomEndParams = null;
+                that._applyZooming(previousRange);
+                that._visualRange(that, previousRange);
+            }
+            that._storedZoomEndParams = null;
+        }
     },
 
     dataVisualRangeIsReduced() {

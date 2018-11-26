@@ -23,7 +23,7 @@ var environment = {
         this.renderer = new vizMocks.Renderer();
         this.seriesGroup = this.renderer.g();
         this.data = [
-                { date: "arg1", high: "high1", low: "low1", open: "open1", close: "close1" }
+            { date: "arg1", high: "high1", low: "low1", open: "open1", close: "close1" }
         ];
         this.createPoint = sinon.stub(pointModule, "Point", function() {
             var stub = mockPoints[mockPointIndex++];
@@ -381,11 +381,11 @@ var checkGroups = function(assert, series) {
             environment.beforeEach.call(this);
 
             this.data = [{ date: 1, o: 2, h: 5, l: 0, c: 4 },
-                        { date: 2, o: 1, h: 7, l: 1, c: 6 },
-                        { date: 3, o: 5, h: 5, l: 3, c: 3 },
-                        { date: null, o: 5, h: 5, l: 3, c: 3 },
-                        { date: 4, o: 4, h: 9, l: 2, c: null },
-                        { date: 5, o: 4, h: 9, l: 2, c: 5 }];
+                { date: 2, o: 1, h: 7, l: 1, c: 6 },
+                { date: 3, o: 5, h: 5, l: 3, c: 3 },
+                { date: null, o: 5, h: 5, l: 3, c: 3 },
+                { date: 4, o: 4, h: 9, l: 2, c: null },
+                { date: 5, o: 4, h: 9, l: 2, c: 5 }];
 
 
         },
@@ -443,10 +443,10 @@ var checkGroups = function(assert, series) {
 
     QUnit.test("double updateData", function(assert) {
         var data = [{ date: 1, o: 2, h: 5, l: 0, c: 4 },
-                        { date: 2, o: 1, h: 7, l: 1, c: 6 },
-                        { date: 3, o: 5, h: 5, l: 3, c: 3 },
-                        { date: 4, o: 4, h: 9, l: 2, c: null },
-                        { date: 5, o: 4, h: 9, l: 2, c: 5 }],
+                { date: 2, o: 1, h: 7, l: 1, c: 6 },
+                { date: 3, o: 5, h: 5, l: 3, c: 3 },
+                { date: 4, o: 4, h: 9, l: 2, c: null },
+                { date: 5, o: 4, h: 9, l: 2, c: 5 }],
             series = createSeries({
                 type: seriesType,
                 argumentField: "date",
@@ -532,11 +532,11 @@ var checkGroups = function(assert, series) {
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ date: 1, o: 2, h: 5, l: 0, c: 4 },
-                        { date: 2, o: 1, h: 7, l: 1, c: 6 },
-                        { date: 3, o: 5, h: 5, l: 3, c: 3 },
-                        { date: null, o: 5, h: 5, l: 3, c: 3 },
-                        { date: 4, o: 4, h: 9, l: 2, c: null },
-                        { date: 5, o: 4, h: 9, l: 2, c: 5 }];
+                { date: 2, o: 1, h: 7, l: 1, c: 6 },
+                { date: 3, o: 5, h: 5, l: 3, c: 3 },
+                { date: null, o: 5, h: 5, l: 3, c: 3 },
+                { date: 4, o: 4, h: 9, l: 2, c: null },
+                { date: 5, o: 4, h: 9, l: 2, c: 5 }];
         },
         afterEach: environment.afterEach
     });
@@ -1053,11 +1053,11 @@ var checkGroups = function(assert, series) {
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ date: 1, o: 2, h: 5, l: 0, c: 4 },
-                        { date: 2, o: 1, h: 7, l: 1, c: 6 },
-                        { date: 3, o: 5, h: 5, l: 3, c: 3 },
-                        { date: null, o: 5, h: 5, l: 3, c: 3 },
-                        { date: 4, o: 4, h: 9, l: 2, c: null },
-                        { date: 5, o: 4, h: 9, l: 2, c: 5 }];
+                { date: 2, o: 1, h: 7, l: 1, c: 6 },
+                { date: 3, o: 5, h: 5, l: 3, c: 3 },
+                { date: null, o: 5, h: 5, l: 3, c: 3 },
+                { date: 4, o: 4, h: 9, l: 2, c: null },
+                { date: 5, o: 4, h: 9, l: 2, c: 5 }];
         },
         afterEach: environment.afterEach
     });
@@ -1586,11 +1586,11 @@ var checkGroups = function(assert, series) {
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ date: 1, o: 2, h: 5, l: 0, c: 4 },
-                        { date: 2, o: 1, h: 7, l: 1, c: 6 },
-                        { date: 3, o: 5, h: 5, l: 3, c: 3 },
-                        { date: null, o: 5, h: 5, l: 3, c: 3 },
-                        { date: 4, o: 4, h: 9, l: 2, c: null },
-                        { date: 5, o: 4, h: 9, l: 2, c: 5 }];
+                { date: 2, o: 1, h: 7, l: 1, c: 6 },
+                { date: 3, o: 5, h: 5, l: 3, c: 3 },
+                { date: null, o: 5, h: 5, l: 3, c: 3 },
+                { date: 4, o: 4, h: 9, l: 2, c: null },
+                { date: 5, o: 4, h: 9, l: 2, c: 5 }];
         },
         afterEach: environment.afterEach
     });
@@ -1646,10 +1646,10 @@ var checkGroups = function(assert, series) {
 
     QUnit.test("double updateData", function(assert) {
         var data = [{ date: 1, o: 2, h: 5, l: 0, c: 4 },
-                        { date: 2, o: 1, h: 7, l: 1, c: 6 },
-                        { date: 3, o: 5, h: 5, l: 3, c: 3 },
-                        { date: 4, o: 4, h: 9, l: 2, c: null },
-                        { date: 5, o: 4, h: 9, l: 2, c: 5 }],
+                { date: 2, o: 1, h: 7, l: 1, c: 6 },
+                { date: 3, o: 5, h: 5, l: 3, c: 3 },
+                { date: 4, o: 4, h: 9, l: 2, c: null },
+                { date: 5, o: 4, h: 9, l: 2, c: 5 }],
             series = createSeries({
                 type: seriesType,
                 argumentField: "date",
@@ -1735,11 +1735,11 @@ var checkGroups = function(assert, series) {
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ date: 1, o: 2, h: 5, l: 0, c: 4 },
-                        { date: 2, o: 1, h: 7, l: 1, c: 6 },
-                        { date: 3, o: 5, h: 5, l: 3, c: 3 },
-                        { date: null, o: 5, h: 5, l: 3, c: 3 },
-                        { date: 4, o: 4, h: 9, l: 2, c: null },
-                        { date: 5, o: 4, h: 9, l: 2, c: 5 }];
+                { date: 2, o: 1, h: 7, l: 1, c: 6 },
+                { date: 3, o: 5, h: 5, l: 3, c: 3 },
+                { date: null, o: 5, h: 5, l: 3, c: 3 },
+                { date: 4, o: 4, h: 9, l: 2, c: null },
+                { date: 5, o: 4, h: 9, l: 2, c: 5 }];
 
         },
         afterEach: environment.afterEach
@@ -2072,11 +2072,11 @@ var checkGroups = function(assert, series) {
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ date: 1, o: 2, h: 5, l: 0, c: 4 },
-                        { date: 2, o: 1, h: 7, l: 1, c: 6 },
-                        { date: 3, o: 5, h: 5, l: 3, c: 3 },
-                        { date: null, o: 5, h: 5, l: 3, c: 3 },
-                        { date: 4, o: 4, h: 9, l: 2, c: null },
-                        { date: 5, o: 4, h: 9, l: 2, c: 5 }];
+                { date: 2, o: 1, h: 7, l: 1, c: 6 },
+                { date: 3, o: 5, h: 5, l: 3, c: 3 },
+                { date: null, o: 5, h: 5, l: 3, c: 3 },
+                { date: 4, o: 4, h: 9, l: 2, c: null },
+                { date: 5, o: 4, h: 9, l: 2, c: 5 }];
         },
         afterEach: environment.afterEach
     });

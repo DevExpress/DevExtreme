@@ -405,7 +405,6 @@ var AdvancedChart = BaseChart.inherit({
         const that = this;
         const rotated = that._isRotated();
         const argRange = new rangeModule.Range({ rotated: !!rotated });
-        const groupsData = that._groupsData;
         const series = that._getVisibleSeries();
 
         that._valueAxes.forEach(valueAxis => {
@@ -425,12 +424,12 @@ var AdvancedChart = BaseChart.inherit({
 
             if(!updatedAxis || updatedAxis && groupSeries.length && valueAxis === updatedAxis) {
                 valueAxis.setGroupSeries(groupSeries);
-                valueAxis.setBusinessRange(groupRange);
+                valueAxis.setBusinessRange(groupRange, undefined, that._argumentAxes[0]._lastVisualRangeUpdateMode);
             }
         });
 
         if(!updatedAxis || updatedAxis && series.length) {
-            that._argumentAxes.forEach(a => a.setBusinessRange(argRange, groupsData.categories));
+            that._argumentAxes.forEach(a => a.setBusinessRange(argRange, that._groupsData.categories));
         }
 
         that._populateMarginOptions();

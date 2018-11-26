@@ -132,7 +132,7 @@ QUnit.test("Numeric. Date with same arguments", function(assert) {
 
 QUnit.test("Data with valueErrorBar (lowError < highError)", function(assert) {
     var data = getOriginalData([{ arg: 2, val: 11, highError: 27, lowError: 20 }, { arg: 5, val: 22, highError: 25, lowError: 20 },
-        { arg: 13, val: 10, highError: 3, lowError: 5 }, { arg: 20, val: 15, highError: 1, lowError: 8 }]),
+            { arg: 13, val: 10, highError: 3, lowError: 5 }, { arg: 20, val: 15, highError: 1, lowError: 8 }]),
         rangeData,
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "auto", highValueField: "highError", lowValueField: "lowError" } });
 
@@ -149,7 +149,7 @@ QUnit.test("Data with valueErrorBar (lowError < highError)", function(assert) {
 
 QUnit.test("Data with valueErrorBar (lowError > highError)", function(assert) {
     var data = getOriginalData([{ arg: 2, val: 11, highError: 20, lowError: 27 }, { arg: 5, val: 22, highError: 25, lowError: 20 },
-        { arg: 13, val: 10, highError: 3, lowError: 5 }, { arg: 20, val: 15, highError: 10, lowError: 8 }]),
+            { arg: 13, val: 10, highError: 3, lowError: 5 }, { arg: 20, val: 15, highError: 10, lowError: 8 }]),
         rangeData,
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "auto", highValueField: "highError", lowValueField: "lowError" } });
 
@@ -166,7 +166,7 @@ QUnit.test("Data with valueErrorBar (lowError > highError)", function(assert) {
 
 QUnit.test("Data with valueErrorBar. low mode", function(assert) {
     var data = getOriginalData([{ arg: 2, val: 11, highError: 3, lowError: 2 }, { arg: 5, val: 22, highError: 40, lowError: 1 },
-                { arg: 13, val: 3, highError: 5, lowError: 4 }, { arg: 20, val: 15, highError: 6, lowError: 6 }]),
+            { arg: 13, val: 3, highError: 5, lowError: 4 }, { arg: 20, val: 15, highError: 6, lowError: 6 }]),
         rangeData,
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "low", highValueField: "highError", lowValueField: "lowError" } });
 
@@ -183,7 +183,7 @@ QUnit.test("Data with valueErrorBar. low mode", function(assert) {
 
 QUnit.test("Data with valueErrorBar. high mode", function(assert) {
     var data = getOriginalData([{ arg: 2, val: 11, highError: 3, lowError: 2 }, { arg: 5, val: 22, highError: 40, lowError: 1 },
-                { arg: 13, val: 3, highError: 5, lowError: 4 }, { arg: 20, val: 15, highError: 6, lowError: 6 }]),
+            { arg: 13, val: 3, highError: 5, lowError: 4 }, { arg: 20, val: 15, highError: 6, lowError: 6 }]),
         rangeData,
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "high", highValueField: "highError", lowValueField: "lowError" } });
 
@@ -200,7 +200,7 @@ QUnit.test("Data with valueErrorBar. high mode", function(assert) {
 
 QUnit.test("Data with valueErrorBar. none mode", function(assert) {
     var data = getOriginalData([{ arg: 2, val: 11, highError: 3, lowError: 2 }, { arg: 5, val: 22, highError: 40, lowError: 1 },
-                { arg: 13, val: 3, highError: 5, lowError: 4 }, { arg: 20, val: 15, highError: 6, lowError: 6 }]),
+            { arg: 13, val: 3, highError: 5, lowError: 4 }, { arg: 20, val: 15, highError: 6, lowError: 6 }]),
         rangeData,
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "none", highValueField: "highError", lowValueField: "lowError" } });
 
@@ -217,7 +217,7 @@ QUnit.test("Data with valueErrorBar. none mode", function(assert) {
 
 QUnit.test("Data with valueErrorBar. invalid mode", function(assert) {
     var data = getOriginalData([{ arg: 2, val: 11, highError: 27, lowError: 20 }, { arg: 5, val: 22, highError: 25, lowError: 20 },
-        { arg: 13, val: 10, highError: 3, lowError: 5 }, { arg: 20, val: 15, highError: 1, lowError: 8 }]),
+            { arg: 13, val: 10, highError: 3, lowError: 5 }, { arg: 20, val: 15, highError: 1, lowError: 8 }]),
         rangeData,
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "invalidMode", highValueField: "highError", lowValueField: "lowError" } });
 
@@ -2726,13 +2726,13 @@ QUnit.test("Include value of edge points that out of argument viewport but they 
 
 QUnit.test("Line series without zoom", function(assert) {
     var data = [
-        { arg: 1, val: 10 },
-        { arg: 2, val: 20 },
-        { arg: 3, val: 30 },
-        { arg: 4, val: 40 },
-        { arg: 5, val: 50 },
-        { arg: 6, val: 60 },
-        { arg: 7, val: 70 }
+            { arg: 1, val: 10 },
+            { arg: 2, val: 20 },
+            { arg: 3, val: 30 },
+            { arg: 4, val: 40 },
+            { arg: 5, val: 50 },
+            { arg: 6, val: 60 },
+            { arg: 7, val: 70 }
         ],
         series = createSeries({ type: "line", argumentAxisType: "continuous" }, { argumentAxis: this.argumentAxis, valueAxis: this.valueAxis });
 

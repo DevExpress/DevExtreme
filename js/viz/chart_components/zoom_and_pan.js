@@ -19,12 +19,8 @@ const SCROLL_BAR_START_EVENT_NAME = "dxc-scroll-start" + EVENTS_NS;
 const SCROLL_BAR_MOVE_EVENT_NAME = "dxc-scroll-move" + EVENTS_NS;
 const SCROLL_BAR_END_EVENT_NAME = "dxc-scroll-end" + EVENTS_NS;
 
-const DEFAULT_ARG_AXIS_NAME = "_arg_axis_internal_name_";
-
-const ZOOM_START = "zoomStart";
-const ZOOM_END = "zoomEnd";
-
 const GESTURE_TIMEOUT = 300;
+const MIN_DRAG_DELTA = 5;
 
 const _min = Math.min;
 const _max = Math.max;
@@ -62,6 +58,11 @@ module.exports = {
         const chart = this,
             renderer = this._renderer;
 
+        function cancelEvent(e) {
+            e.cancel = true;
+            e.originalEvent && (e.originalEvent.cancel = true);
+        }
+
         function startAxesViewportChanging(zoomAndPan, actionField, e) {
             const options = zoomAndPan.options;
             const actionData = zoomAndPan.actionData;
@@ -73,12 +74,9 @@ module.exports = {
                 axes = axes.concat(actionData.valueAxes);
             }
 
-            e.cancel = axes.some(axis => {
-                const eventArg = axis.getZoomStartEventArg();
-                chart._eventTrigger(ZOOM_START, eventArg);
-                actionData.startRanges[axis.name || DEFAULT_ARG_AXIS_NAME] = eventArg.range;
-                return eventArg.cancel;
-            });
+            axes.some(axis => {
+                return axis.handleZooming(null, { end: true }, e, actionField).isPrevented;
+            }) && cancelEvent(e);
         }
 
         function axesViewportChanging(zoomAndPan, actionField, e, offsetCalc, centerCalc) {
@@ -90,7 +88,7 @@ module.exports = {
                     const translate = -offsetCalc(e, actionData, coordField, scale);
                     zoom = axis.getTranslator().zoom(translate, scale, axis.getZoomBounds());
                     if(!isDefined(viewport) || viewport.startValue.valueOf() !== zoom.min.valueOf() || viewport.endValue.valueOf() !== zoom.max.valueOf()) {
-                        axis.handleZooming([zoom.min, zoom.max], { start: true, end: true });
+                        axis.handleZooming([zoom.min, zoom.max], { start: true, end: true }, e, actionField);
                         zoom.zoomed = true;
                         zoom.deltaTranslate = translate - zoom.translate;
                     }
@@ -138,7 +136,7 @@ module.exports = {
                     const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
                     const scale = e.scale || 1;
                     const zoom = axis.getTranslator().zoom(-offsetCalc(e, actionData, coordField, scale), scale, axis.getZoomBounds());
-                    axis.handleZooming([zoom.min, zoom.max], { start: true, end: silent, startRange: actionData.startRanges[axis.name || DEFAULT_ARG_AXIS_NAME] });
+                    axis.handleZooming([zoom.min, zoom.max], { start: true, end: silent }, e, actionField);
                 });
             }
 
@@ -159,14 +157,7 @@ module.exports = {
                 }
 
                 axes.forEach(axis => {
-                    const currentRange = actionData.startRanges[axis.name || DEFAULT_ARG_AXIS_NAME];
-                    const zoomEndEvent = axis.getZoomEndEventArg(currentRange);
-
-                    chart._eventTrigger(ZOOM_END, zoomEndEvent);
-
-                    if(zoomEndEvent.cancel) {
-                        axis._applyZooming(currentRange);
-                    }
+                    axis.handleZooming(null, { start: true }, e, actionField);
                 });
             }
             chart._requestChange(["VISUAL_RANGE"]);
@@ -183,8 +174,7 @@ module.exports = {
                 valueAxes: axes.length && chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), coords)),
                 offset: { x: 0, y: 0 },
                 center: coords,
-                startCenter: coords,
-                startRanges: {}
+                startCenter: coords
             };
         }
 
@@ -319,19 +309,27 @@ module.exports = {
                 preventDefaults(e);
                 if(actionData.action === "zoom") {
                     function zoomAxes(axes, criteria, coordField, startCoords, curCoords, onlyAxisToNotify) {
-                        criteria && axes.forEach(axis => {
-                            const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify),
-                                tr = axis.getTranslator();
+                        const curCoord = curCoords[coordField];
+                        const startCoord = startCoords[coordField];
+                        if(_abs(curCoord - startCoord) > MIN_DRAG_DELTA) {
+                            criteria && axes.forEach(axis => {
+                                const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify),
+                                    tr = axis.getTranslator();
 
-                            axis.handleZooming([tr.from(startCoords[coordField]), tr.from(curCoords[coordField])], { start: !!silent, end: !!silent });
-                        });
+                                axis.handleZooming([tr.from(startCoord), tr.from(curCoord)], { start: !!silent, end: !!silent }, e, actionData.action);
+                            });
+                            return true;
+                        }
+                        return false;
                     }
 
                     const curCoords = getPointerCoord(actionData.curAxisRect, e);
-                    zoomAxes(chart._argumentAxes, options.argumentAxis.zoom, rotated ? "y" : "x", actionData.startCoords, curCoords, chart.getArgumentAxis());
-                    zoomAxes(actionData.valueAxes, options.valueAxis.zoom, rotated ? "x" : "y", actionData.startCoords, curCoords);
+                    const valueAxesZoomed = zoomAxes(chart._argumentAxes, options.argumentAxis.zoom, rotated ? "y" : "x", actionData.startCoords, curCoords, chart.getArgumentAxis());
+                    const argumentAxesZoomed = zoomAxes(actionData.valueAxes, options.valueAxis.zoom, rotated ? "x" : "y", actionData.startCoords, curCoords);
 
-                    chart._requestChange(["VISUAL_RANGE"]);
+                    if(valueAxesZoomed || argumentAxesZoomed) {
+                        chart._requestChange(["VISUAL_RANGE"]);
+                    }
 
                     actionData.rect.dispose();
                 } else if(actionData.action === "pan") {
@@ -344,7 +342,7 @@ module.exports = {
 
                 const actionData = prepareActionData(calcCenterForPinch(e), "zoom");
                 if(actionData.cancel) {
-                    e.cancel = true;
+                    cancelEvent(e);
                     return;
                 }
                 zoomAndPan.actionData = actionData;
@@ -370,6 +368,9 @@ module.exports = {
             },
             setup: function(options) {
                 zoomAndPan.cleanup();
+                if(!options.argumentAxis.pan) {
+                    renderer.root.on(SCROLL_BAR_START_EVENT_NAME, cancelEvent);
+                }
                 if(options.argumentAxis.none && options.valueAxis.none) {
                     return;
                 }
@@ -388,7 +389,7 @@ module.exports = {
                                     scale = translator.getMinScale(delta > 0),
                                     zoom = translator.zoom(-(coord - coord * scale), scale, axis.getZoomBounds());
 
-                                axis.handleZooming([zoom.min, zoom.max], { start: !!silent, end: !!silent });
+                                axis.handleZooming([zoom.min, zoom.max], { start: !!silent, end: !!silent }, e, "zoom");
                             });
                         }
 
@@ -434,7 +435,6 @@ module.exports = {
                         .on(SCROLL_BAR_START_EVENT_NAME, function(e) {
                             zoomAndPan.actionData = {
                                 valueAxes: [],
-                                startRanges: {},
                                 offset: { x: 0, y: 0 },
                                 center: { x: 0, y: 0 }
                             };

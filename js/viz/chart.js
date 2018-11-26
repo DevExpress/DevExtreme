@@ -1143,7 +1143,9 @@ var dxChart = AdvancedChart.inherit({
         return function(axis, visualRange) {
             if(axis.getOptions().optionPath) {
                 chart._parseVisualRangeOption(axis.getOptions().optionPath + ".visualRange", visualRange);
-                axis.setCustomVisualRange(visualRange);
+                if(axis.isArgumentAxis) {
+                    axis.setCustomVisualRange(visualRange);
+                }
             }
 
             if(axis.isArgumentAxis) {
@@ -1175,14 +1177,18 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _change_VISUAL_RANGE: function() {
-        this._recreateSizeDependentObjects(false);
-        this._doRender({
+        const that = this;
+
+        that._recreateSizeDependentObjects(false);
+        that._doRender({
             force: true,
             drawTitle: false,
             drawLegend: false,
             adjustAxes: this.option("adjustAxesOnZoom") || false, // T690411
             animate: false
         });
+        that._argumentAxes.forEach(axis => axis.handleZoomEnd());
+        that._valueAxes.forEach(axis => axis.handleZoomEnd());
     },
 
     _notifyOptionChanged(option, value, previousValue) {

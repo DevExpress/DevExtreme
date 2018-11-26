@@ -78,7 +78,7 @@ QUnit.test('creation', function(assert) {
 
 QUnit.test('disposing', function(assert) {
     this.legend.dispose();
-    this.legend.dispose = noop;   // To prevent exception on teardown
+    this.legend.dispose = noop; // To prevent exception on teardown
 
     assert.deepEqual(this.removeItem.lastCall.args, [this.legend], 'removed from layout');
     assert.strictEqual(this.unbind.lastCall, null, 'unbind');
@@ -88,7 +88,7 @@ QUnit.test('disposing', function(assert) {
 
 QUnit.test('disposing / with unbinding', function(assert) {
     this.legend.setOptions(this.options).dispose();
-    this.legend.dispose = noop;   // To prevent exception on teardown
+    this.legend.dispose = noop; // To prevent exception on teardown
 
     assert.deepEqual(this.removeItem.lastCall.args, [this.legend], 'removed from layout');
     assert.deepEqual(this.unbind.lastCall.args, ['test-source', 'test-field', this.bind.lastCall.args[2]], 'unbind');
@@ -294,7 +294,7 @@ QUnit.test("dispose", function(assert) {
     this.legendsControl.setOptions(options);
 
     this.legendsControl.dispose();
-    this.legendsControl.dispose = noop;   // To prevent exception on teardown
+    this.legendsControl.dispose = noop; // To prevent exception on teardown
 
     $.each(StubLegend.items, function(i, legend) {
         assert.deepEqual(legend.dispose.lastCall.args, [], 'dispose ' + i);

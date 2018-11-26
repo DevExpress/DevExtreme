@@ -316,8 +316,8 @@ QUnit.module("layouting", moduleConfig, () => {
                 height: size
             });
         },
-            errors.Error("E1025"),
-            "raised error E1025");
+        errors.Error("E1025"),
+        "raised error E1025");
     });
 
     QUnit.test("dxUpdate trigger async after render and dimension changed", (assert) => {
@@ -391,6 +391,43 @@ QUnit.module("layouting", moduleConfig, () => {
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "xs"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "sm"));
         assert.ok(!$responsiveBox.hasClass(SCREEN_SIZE_CLASS_PREFIX + "md"));
+    });
+
+    QUnit.test("Set the shrink option of row to box", (assert) => {
+        const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            _layoutStrategy: "flex",
+            rows: [{
+                ratio: 1,
+                shrink: 0
+            }, {
+                ratio: 1
+            }],
+            cols: [{ ratio: 1 }],
+            items: [
+                { location: { row: 0, col: 0 } },
+                { location: { row: 1, col: 0 } }
+            ]
+        });
+
+        const $items = $responsiveBox.find("." + BOX_ITEM_CLASS);
+        assert.equal($items.eq(0).css("flex-shrink"), 0, "flex-shrink style for first row");
+        assert.equal($items.eq(1).css("flex-shrink"), 1, "flex-shrink style for second row");
+    });
+
+    QUnit.test("Set the shrink option of column to box", (assert) => {
+        const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            _layoutStrategy: "flex",
+            rows: [{ ratio: 1 }],
+            cols: [{ ratio: 1 }, { ratio: 1, shrink: 0 }],
+            items: [
+                { location: { row: 0, col: 0 } },
+                { location: { row: 0, col: 1 } }
+            ]
+        });
+
+        const $items = $responsiveBox.find("." + BOX_ITEM_CLASS);
+        assert.equal($items.eq(1).css("flex-shrink"), 1, "flex-shrink style for first column");
+        assert.equal($items.eq(2).css("flex-shrink"), 0, "flex-shrink style for second column");
     });
 });
 

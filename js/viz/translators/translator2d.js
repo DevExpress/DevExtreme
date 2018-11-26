@@ -348,12 +348,6 @@ _Translator2d.prototype = {
     },
 
     translateSpecialCase(value) {
-        const range = this._businessRange;
-        if(isDefined(range.maxVisible) && isDefined(range.minVisible) &&
-            range.maxVisible.valueOf() === range.minVisible.valueOf() &&
-            range.maxVisible.valueOf() === value.valueOf()) {
-            value = "canvas_position_center";
-        }
         return this.sc[value];
     },
 
@@ -378,21 +372,26 @@ _Translator2d.prototype = {
     },
 
     translate(bp, direction) {
-        const range = this._businessRange;
         const specialValue = this.translateSpecialCase(bp);
 
         if(isDefined(specialValue)) {
             return Math.round(specialValue);
         }
 
-        if((isDefined(range.minVisible) && isDefined(range.maxVisible) && range.maxVisible.valueOf() === range.minVisible.valueOf()) || isNaN(bp)) {
+        if(isNaN(bp)) {
             return null;
         }
         return this.to(bp, direction);
     },
 
     getInterval: function() {
-        return Math.round(this._canvasOptions.ratioOfCanvasRange * (this._businessRange.interval || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)));
+        const canvasOptions = this._canvasOptions;
+        const interval = this._businessRange.interval;
+        if(interval) {
+            return Math.round(canvasOptions.ratioOfCanvasRange * interval);
+        }
+
+        return Math.round(canvasOptions.endPoint - canvasOptions.startPoint);
     },
 
     zoom(translate, scale, wholeRange) {
@@ -505,6 +504,16 @@ _Translator2d.prototype = {
     },
 
     to: function(bp, direction) {
+        const range = this.getBusinessRange();
+
+        if(isDefined(range.maxVisible) && isDefined(range.minVisible) &&
+            range.maxVisible.valueOf() === range.minVisible.valueOf()) {
+            if(!isDefined(bp) || range.maxVisible.valueOf() !== bp.valueOf()) {
+                return null;
+            }
+            return this.translateSpecialCase("canvas_position_middle");
+        }
+
         bp = this._fromValue(bp);
 
         var that = this,

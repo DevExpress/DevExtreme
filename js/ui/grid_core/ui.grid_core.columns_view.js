@@ -1,5 +1,7 @@
 var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     clickEvent = require("../../events/click"),
@@ -349,7 +351,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _renderDelayedTemplatesCoreAsync: function(templates) {
         var that = this;
         if(templates.length) {
-            (window.requestIdleCallback || window.setTimeout)(function() {
+            window.setTimeout(function() {
                 that._renderDelayedTemplatesCore(templates, true);
             });
         }
@@ -363,9 +365,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             templateParameters = templates.shift();
 
             var options = templateParameters.options,
-                model = options.model;
+                model = options.model,
+                doc = domAdapter.getDocument();
 
-            if(!isAsync || $(options.container).closest(document).length) {
+            if(!isAsync || $(options.container).closest(doc).length) {
                 templateParameters.template.render(options);
 
                 if(model && model.column) {
@@ -536,35 +539,20 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var $cells = $rowElement.children(),
             $newCells = $newRowElement.children(),
             highlightChanges = this.option("highlightChanges"),
-            cellUpdatedClass = this.addWidgetPrefix(CELL_UPDATED_ANIMATION_CLASS),
-            highlightedCells = [],
-            needToRefreshAnimation = false;
+            cellUpdatedClass = this.addWidgetPrefix(CELL_UPDATED_ANIMATION_CLASS);
 
         columnIndices.forEach(function(columnIndex, index) {
             var $cell = $cells.eq(columnIndex),
-                $newCell = $newCells.eq(index),
-                $newContent = $newCell.contents();
+                $newCell = $newCells.eq(index);
 
-            if($newContent.length) {
-                needToRefreshAnimation = needToRefreshAnimation || $cell.hasClass(cellUpdatedClass);
+            $cell.replaceWith($newCell);
 
-                $cell.contents().remove();
-                $cell.append($newContent);
-
-                copyAttributes($cell.get(0), $newCell.get(0));
-            } else {
-                $cell.replaceWith($newCell);
-                $cell = $newCell;
+            if(highlightChanges) {
+                $newCell.addClass(cellUpdatedClass);
             }
-            highlightChanges && highlightedCells.push($cell);
         });
 
         copyAttributes($rowElement.get(0), $newRowElement.get(0));
-
-        needToRefreshAnimation && $rowElement.width();
-        highlightedCells.forEach(cell => {
-            cell.addClass(cellUpdatedClass);
-        });
     },
 
     _setCellAriaAttributes: function($cell, cellOptions) {
@@ -660,6 +648,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             this.data = options.data = row.data;
             this.rowIndex = options.rowIndex = row.rowIndex;
             this.dataIndex = options.dataIndex = row.dataIndex;
+            this.isExpanded = options.isExpanded = row.isExpanded;
 
             watchers.forEach(function(watcher) {
                 watcher();

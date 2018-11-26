@@ -79,7 +79,7 @@ QUnit.test("Unselect disabled item via API", function(assert) {
 
 QUnit.test("selection by key", function(assert) {
     var data = [
-        { id: 1, text: "Item 1", expanded: true, items: [{ id: 11, text: "Item 11" }] }, { id: 12, text: "Item 12" }
+            { id: 1, text: "Item 1", expanded: true, items: [{ id: 11, text: "Item 11" }] }, { id: 12, text: "Item 12" }
         ],
         treeView = initTree({ items: data }).dxTreeView("instance");
 

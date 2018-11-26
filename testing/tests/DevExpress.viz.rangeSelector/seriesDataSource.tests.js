@@ -51,13 +51,13 @@ QUnit.test("one series", function(assert) {
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-                    { x: 10, y1: 0 },
-                    { x: 15, y1: 6 },
-                    { x: 20, y1: 8 },
-                    { x: 30, y1: 10 },
-                    { x: 50, y1: 16 },
-                    { x: 150, y1: 12 },
-                    { x: 180, y1: 8 }
+            { x: 10, y1: 0 },
+            { x: 15, y1: 6 },
+            { x: 20, y1: 8 },
+            { x: 30, y1: 10 },
+            { x: 50, y1: 16 },
+            { x: 150, y1: 12 },
+            { x: 180, y1: 8 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -162,8 +162,8 @@ QUnit.test("seriesDateSource with categories", function(assert) {
     // arrange/act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-                { x: 10, y1: 3, y2: 5 },
-                { x: 50, y1: 16, y2: 1 }
+            { x: 10, y1: 3, y2: 5 },
+            { x: 50, y1: 16, y2: 1 }
         ],
         incidentOccurred: noop,
         chart: {
@@ -193,8 +193,8 @@ QUnit.test("seriesDateSource with categories", function(assert) {
 QUnit.test("argument categories", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-                    { arg: "a1", val: 2 },
-                    { arg: "a2", val: 2 }
+            { arg: "a1", val: 2 },
+            { arg: "a2", val: 2 }
         ],
         chart: {
             series: [{}]
@@ -210,8 +210,8 @@ QUnit.test("several series", function(assert) {
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-                { x: 10, y1: 3, y2: 5 },
-                { x: 50, y1: 16, y2: 1 }
+            { x: 10, y1: 3, y2: 5 },
+            { x: 50, y1: 16, y2: 1 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -253,8 +253,8 @@ QUnit.test("several series. Set valueType", function(assert) {
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-                { x: 10, y1: 3, y2: 5 },
-                { x: 50, y1: 16, y2: 1 }
+            { x: 10, y1: 3, y2: 5 },
+            { x: 50, y1: 16, y2: 1 }
         ],
         chart: {
             commonSeriesSettings: { type: "bar", argumentField: "x" },
@@ -276,8 +276,8 @@ QUnit.test("series theme", function(assert) {
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-                { x: 10, y1: 3, y2: 5 },
-                { x: 50, y1: 16, y2: 1 }
+            { x: 10, y1: 3, y2: 5 },
+            { x: 50, y1: 16, y2: 1 }
         ],
         chart: {
             series: [{
@@ -350,8 +350,8 @@ QUnit.test("getBoundRange with topIndent, bottomIndent", function(assert) {
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }
+            { arg: 3, val: 200 },
+            { arg: 5, val: 12 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -378,8 +378,8 @@ QUnit.test("getBoundRange with topIndent>1, bottomIndent<0", function(assert) {
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
+            { arg: 3, val: 200 },
+            { arg: 5, val: 12 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -424,8 +424,8 @@ QUnit.test("getBoundRange with topIndent, bottomIndent, valueAxis min", function
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
+            { arg: 3, val: 200 },
+            { arg: 5, val: 12 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -454,8 +454,8 @@ QUnit.test("getBoundRange with topIndent, bottomIndent, valueAxis max", function
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
+            { arg: 3, val: 200 },
+            { arg: 5, val: 12 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -483,8 +483,8 @@ QUnit.test("getBoundRange with valueAxis min/max", function(assert) {
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
+            { arg: 3, val: 200 },
+            { arg: 5, val: 12 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -512,8 +512,8 @@ QUnit.test("getBoundRange valueAxis inverted", function(assert) {
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
+            { arg: 3, val: 200 },
+            { arg: 5, val: 12 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -537,9 +537,9 @@ QUnit.test("getBoundRange with topIndent, bottomIndent, valueAxis inverted", fun
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-                    { arg: 1, val: 0 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }
+            { arg: 1, val: 0 },
+            { arg: 3, val: 200 },
+            { arg: 5, val: 12 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -566,8 +566,8 @@ QUnit.test("several series getBoundRange", function(assert) {
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
-                        { arg: 3, val: 6, arg1: 7, val1: 5 },
-                        { arg: 5, val: 12, arg1: 9, val1: 2 }],
+            { arg: 3, val: 6, arg1: 7, val1: 5 },
+            { arg: 5, val: 12, arg1: 9, val1: 2 }],
         chart: {
             commonSeriesSettings: {
                 type: "line"
@@ -611,8 +611,8 @@ QUnit.test("getBoundRange for objects dataSource default dataSourceField", funct
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-                { arg: 10, y1: 3, y2: 5 },
-                { arg: 50, y1: 16, y2: 1 }
+            { arg: 10, y1: 3, y2: 5 },
+            { arg: 50, y1: 16, y2: 1 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -632,8 +632,8 @@ QUnit.test("getBoundRange for objects dataSource with dataSourceField", function
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-                { x: 10, y1: 3, y2: 5 },
-                { x: 50, y1: 16, y2: 1 }
+            { x: 10, y1: 3, y2: 5 },
+            { x: 50, y1: 16, y2: 1 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -654,8 +654,8 @@ QUnit.test("several series getBoundRange with valueAxis min/max", function(asser
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
-                    { arg: 3, val: 6, arg1: 7, val1: 5 },
-                    { arg: 5, val: 12, arg1: 9, val1: 2 }],
+            { arg: 3, val: 6, arg1: 7, val1: 5 },
+            { arg: 5, val: 12, arg1: 9, val1: 2 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -685,8 +685,8 @@ QUnit.test("getBoundRange of Line series with equal values", function(assert) {
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 10 },
-                    { arg: 3, val: 10 },
-                    { arg: 5, val: 10 }],
+            { arg: 3, val: 10 },
+            { arg: 5, val: 10 }],
         chart: {
             commonSeriesSettings: {
                 type: "line"
@@ -710,8 +710,8 @@ QUnit.test("getBoundRange valueAxis has logarithmic type", function(assert) {
     // arrange, act
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 4 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
+            { arg: 3, val: 200 },
+            { arg: 5, val: 12 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -735,8 +735,8 @@ QUnit.test("getBoundRange valueAxis has logarithmic type", function(assert) {
 QUnit.test("Logarithmic value axis. 'Type' option should be passed to the series", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 4 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
+            { arg: 3, val: 200 },
+            { arg: 5, val: 12 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -757,8 +757,8 @@ QUnit.test("Logarithmic value axis. 'Type' option should be passed to the series
 QUnit.test("'valueType' option should be passed to the series", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 4 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
+            { arg: 3, val: 200 },
+            { arg: 5, val: 12 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -912,16 +912,16 @@ QUnit.test("without dataSourceField, (valueField from commonSeriesSettings)", fu
 });
 
 var seriesTemplateDataSource = [
-        { series: "2004", x: 10, y: 20 },
-        { series: "2004", x: 20, y: 30 },
-        { series: "2004", x: 30, y: 10 },
-        { series: "2004", x: 40, y: 5 },
-        { series: "2004", x: 50, y: 15 },
-        { series: "2001", x: 10, y: 43 },
-        { series: "2001", x: 20, y: 32 },
-        { series: "2001", x: 30, y: 42 },
-        { series: "2001", x: 40, y: 21 },
-        { series: "2001", x: 50, y: 82 }];
+    { series: "2004", x: 10, y: 20 },
+    { series: "2004", x: 20, y: 30 },
+    { series: "2004", x: 30, y: 10 },
+    { series: "2004", x: 40, y: 5 },
+    { series: "2004", x: 50, y: 15 },
+    { series: "2001", x: 10, y: 43 },
+    { series: "2001", x: 20, y: 32 },
+    { series: "2001", x: 30, y: 42 },
+    { series: "2001", x: 40, y: 21 },
+    { series: "2001", x: 50, y: 82 }];
 
 QUnit.test("seriesTemplate", function(assert) {
     // arrange,act
@@ -1029,8 +1029,8 @@ QUnit.test("empty dataSource", function(assert) {
 QUnit.test("one type for all series", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
-                        { arg: 3, val: 6, arg1: 7, val1: 5 },
-                        { arg: 5, val: 12, arg1: 9, val1: 2 }],
+            { arg: 3, val: 6, arg1: 7, val1: 5 },
+            { arg: 5, val: 12, arg1: 9, val1: 2 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -1056,26 +1056,26 @@ QUnit.test("one type for all series", function(assert) {
 
 QUnit.test("adjustSeriesDimensions", function(assert) {
     var seriesDataSource = createSeriesDataSource(
-        {
-            dataSource: [
-                { arg: 1, val: 3, arg1: 4, val1: 10 },
-                { arg: 3, val: 6, arg1: 7, val1: 5 },
-                { arg: 5, val: 12, arg1: 9, val1: 2 }
-            ],
-            chart: {
-                commonSeriesSettings: {
-                    type: "area"
+            {
+                dataSource: [
+                    { arg: 1, val: 3, arg1: 4, val1: 10 },
+                    { arg: 3, val: 6, arg1: 7, val1: 5 },
+                    { arg: 5, val: 12, arg1: 9, val1: 2 }
+                ],
+                chart: {
+                    commonSeriesSettings: {
+                        type: "area"
+                    },
+                    series: [{
+                        type: "line",
+                    }, {
+                        valueField: "val1",
+                        argumentField: "arg1"
+                    }]
                 },
-                series: [{
-                    type: "line",
-                }, {
-                    valueField: "val1",
-                    argumentField: "arg1"
-                }]
-            },
-            renderer: new vizMocks.Renderer(),
-            argumentAxis: this.argumentAxis
-        }),
+                renderer: new vizMocks.Renderer(),
+                argumentAxis: this.argumentAxis
+            }),
         series = seriesDataSource.getSeries();
 
     $.each(series, function(_, s) {
@@ -1133,9 +1133,9 @@ QUnit.test("SeriesDataSource updates axes' translator with argument range", func
 QUnit.test("several types for all series", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-                    { arg: 1, val: 3, arg1: 4, val1: 10, arg2: 5, val2: 10 },
-                    { arg: 3, val: 6, arg1: 7, val1: 5, arg2: 8, val2: 5 },
-                    { arg: 5, val: 12, arg1: 9, val1: 2, arg2: 9, val2: 2 }
+            { arg: 1, val: 3, arg1: 4, val1: 10, arg2: 5, val2: 10 },
+            { arg: 3, val: 6, arg1: 7, val1: 5, arg2: 8, val2: 5 },
+            { arg: 5, val: 12, arg1: 9, val1: 2, arg2: 9, val2: 2 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -1173,9 +1173,9 @@ QUnit.test("several types for all series", function(assert) {
 QUnit.test("Calculated valueType - numeric", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-                    { arg: 1, val: 3 },
-                    { arg: 3, val: 6 },
-                    { arg: 5, val: 12 }
+            { arg: 1, val: 3 },
+            { arg: 3, val: 6 },
+            { arg: 5, val: 12 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -1196,9 +1196,9 @@ QUnit.test("Calculated valueType - numeric", function(assert) {
 QUnit.test("Calculated valueType - datetime", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-    { arg: new Date(12312), val: 3 },
-                    { arg: new Date(342354), val: 6 },
-                    { arg: new Date(1242312), val: 12 }
+            { arg: new Date(12312), val: 3 },
+            { arg: new Date(342354), val: 6 },
+            { arg: new Date(1242312), val: 12 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -1219,9 +1219,9 @@ QUnit.test("Calculated valueType - datetime", function(assert) {
 QUnit.test("Calculated valueType - string", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-    { arg: "a", val: 3 },
-                    { arg: "b", val: 6 },
-                    { arg: "c", val: 12 }
+            { arg: "a", val: 3 },
+            { arg: "b", val: 6 },
+            { arg: "c", val: 12 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -1242,8 +1242,8 @@ QUnit.test("Calculated valueType - string", function(assert) {
 QUnit.test("seriesDataSource with bubbleSize option", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 },
-                    { arg: "b", val: 6 },
-                    { arg: "c", val: 12 }
+            { arg: "b", val: 6 },
+            { arg: "c", val: 12 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -1268,8 +1268,8 @@ QUnit.test("seriesDataSource with bubbleSize option", function(assert) {
 QUnit.test("seriesDataSource with equalBarWidth option", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 },
-                    { arg: "b", val: 6 },
-                    { arg: "c", val: 12 }
+            { arg: "b", val: 6 },
+            { arg: "c", val: 12 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -1319,9 +1319,9 @@ QUnit.test("seriesDataSource with barGroupWidth option", function(assert) {
 QUnit.test("seriesDataSource with equalBarWidth option is false", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [
-    { arg: "a", val: 3 },
-                    { arg: "b", val: 6 },
-                    { arg: "c", val: 12 }
+            { arg: "a", val: 3 },
+            { arg: "b", val: 6 },
+            { arg: "c", val: 12 }
         ],
         chart: {
             commonSeriesSettings: {
@@ -1341,8 +1341,8 @@ QUnit.test("seriesDataSource with equalBarWidth option is false", function(asser
 QUnit.test("seriesDataSource with barWidth option", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 },
-                    { arg: "b", val: 6 },
-                    { arg: "c", val: 12 }],
+            { arg: "b", val: 6 },
+            { arg: "c", val: 12 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -1361,8 +1361,8 @@ QUnit.test("seriesDataSource with barWidth option", function(assert) {
 QUnit.test("seriesDataSource with negativesAsZeroes option", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 },
-                    { arg: "b", val: 6 },
-                    { arg: "c", val: 12 }],
+            { arg: "b", val: 6 },
+            { arg: "c", val: 12 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -1381,8 +1381,8 @@ QUnit.test("seriesDataSource with negativesAsZeroes option", function(assert) {
 QUnit.test("seriesDataSource with negativesAsZeros (misspelled) option", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 },
-                    { arg: "b", val: 6 },
-                    { arg: "c", val: 12 }],
+            { arg: "b", val: 6 },
+            { arg: "c", val: 12 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -1401,8 +1401,8 @@ QUnit.test("seriesDataSource with negativesAsZeros (misspelled) option", functio
 QUnit.test("seriesDataSource with negativesAsZeroes (correct + misspelled) option", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: "a", val: 3 },
-                    { arg: "b", val: 6 },
-                    { arg: "c", val: 12 }],
+            { arg: "b", val: 6 },
+            { arg: "c", val: 12 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"
@@ -1422,8 +1422,8 @@ QUnit.test("seriesDataSource with negativesAsZeroes (correct + misspelled) optio
 QUnit.test("Create series points before series families processing", function(assert) {
     var seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
-                        { arg: 3, val: 6, arg1: 7, val1: 5 },
-                        { arg: 5, val: 12, arg1: 9, val1: 2 }],
+            { arg: 3, val: 6, arg1: 7, val1: 5 },
+            { arg: 5, val: 12, arg1: 9, val1: 2 }],
         chart: {
             commonSeriesSettings: {
                 type: "area"

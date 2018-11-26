@@ -250,7 +250,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 .map(editData => editData.oldData);
         },
 
-        _closeEditItem: function($targetElement) {
+        _needToCloseEditableCell: function($targetElement) {
             var isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length,
                 $targetCell = $targetElement.closest("." + ROW_CLASS + "> td"),
                 columnIndex = $targetCell[0] && $targetCell[0].cellIndex,
@@ -259,7 +259,11 @@ var EditingController = modules.ViewController.inherit((function() {
                 // TODO jsdmitry: Move this code to _rowClick method of rowsView
                 allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
 
-            if(this.isEditing() && (!isDataRow || (isDataRow && !allowEditing && !this.isEditCell(rowIndex, columnIndex)))) {
+            return this.isEditing() && (!isDataRow || (isDataRow && !allowEditing && !this.isEditCell(rowIndex, columnIndex)));
+        },
+
+        _closeEditItem: function($targetElement) {
+            if(this._needToCloseEditableCell($targetElement)) {
                 this.closeEditCell();
             }
         },
@@ -380,23 +384,33 @@ var EditingController = modules.ViewController.inherit((function() {
             });
         },
 
-        _getEditCommandCellTemplate: function() {
-            var that = this;
+        _renderEditingButtons: function($container, buttons, options) {
+            buttons.forEach((button) => {
+                if(this._isButtonVisible(button, options)) {
+                    this._createButton($container, button, options);
+                }
+            });
+        },
 
-            return function(container, options) {
+        _getEditCommandCellTemplate: function() {
+            return (container, options) => {
                 var $container = $(container),
                     buttons;
 
                 if(options.rowType === "data") {
                     $container.css("textAlign", "center");
-                    options.rtlEnabled = that.option("rtlEnabled");
-                    buttons = that._getEditingButtons(options);
+                    options.rtlEnabled = this.option("rtlEnabled");
+                    buttons = this._getEditingButtons(options);
 
-                    buttons.forEach((button) => {
-                        if(that._isButtonVisible(button, options)) {
-                            that._createButton($container, button, options);
+                    this._renderEditingButtons($container, buttons, options);
+
+                    options.watch && options.watch(
+                        () => buttons.map(button => this._isButtonVisible(button, options)),
+                        () => {
+                            $container.empty();
+                            this._renderEditingButtons($container, buttons, options);
                         }
-                    });
+                    );
                 } else {
                     gridCoreUtils.setEmptyText($container);
                 }

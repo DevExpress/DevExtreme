@@ -7,7 +7,7 @@ import "../../select_box";
 import "../../color_box/color_view";
 
 import { each } from "../../../core/utils/iterator";
-import { isString, isObject, isDefined, isEmptyObject } from "../../../core/utils/type";
+import { isString, isObject, isDefined, isEmptyObject, isBoolean } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
 import { format } from "../../../localization/message";
 import { titleize } from "../../../core/utils/inflector";
@@ -69,11 +69,12 @@ class ToolbarModule extends BaseModule {
     _getDefaultClickHandler(formatName) {
         return (e) => {
             const formats = this.quill.getFormat();
-            const value = !formats[formatName];
+            const value = formats[formatName];
+            const newValue = !(isBoolean(value) ? value : isDefined(value));
 
-            this.quill.format(formatName, value, USER_ACTION);
+            this.quill.format(formatName, newValue, USER_ACTION);
 
-            this._updateFormatWidget(formatName, value, formats);
+            this._updateFormatWidget(formatName, newValue, formats);
         };
     }
 
@@ -236,23 +237,24 @@ class ToolbarModule extends BaseModule {
 
     _renderToolbar() {
         const container = this.options.container || this._getContainer();
-        const $container = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
         const toolbarItems = this._prepareToolbarItems();
         const $toolbar = $("<div>")
             .addClass(TOOLBAR_CLASS)
             .appendTo(container);
+
+        this._$toolbarContainer = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
 
         eventsEngine.on($toolbar, addNamespace("mousedown", this._editorInstance.NAME), (e) => {
             e.preventDefault();
         });
 
         this.toolbarInstance = this._editorInstance._createComponent($toolbar, Toolbar, { dataSource: toolbarItems });
+    }
 
-        this._editorInstance.on("disposing", () => {
-            $container
-                .empty()
-                .removeClass(TOOLBAR_WRAPPER_CLASS);
-        });
+    clean() {
+        this._$toolbarContainer
+            .empty()
+            .removeClass(TOOLBAR_WRAPPER_CLASS);
     }
 
     _getContainer() {

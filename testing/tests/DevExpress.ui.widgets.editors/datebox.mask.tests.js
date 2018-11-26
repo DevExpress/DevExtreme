@@ -75,7 +75,7 @@ if(devices.real().deviceType === "desktop") {
         };
 
         QUnit.test("Check parts length", (assert) => {
-            assert.equal(this.parts.length, 15);
+            assert.equal(this.parts.length, 13);
         });
 
         QUnit.test("Day of week", (assert) => {
@@ -97,15 +97,15 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Month", (assert) => {
-            checkAndRemoveLimits(this.parts[3], { min: 0, max: 11 }, assert);
+            checkAndRemoveLimits(this.parts[2], { min: 0, max: 11 }, assert);
 
             let date = new Date(2012, 2, 30);
-            this.parts[3].setter(date, 1);
+            this.parts[2].setter(date, 1);
             assert.equal(date.getMonth(), 1, "setter sets month");
-            delete this.parts[3].setter;
+            delete this.parts[2].setter;
 
-            assert.deepEqual(this.parts[3], {
-                index: 3,
+            assert.deepEqual(this.parts[2], {
+                index: 2,
                 isStub: false,
                 caret: { start: 9, end: 13 },
                 getter: "getMonth",
@@ -115,10 +115,10 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Day", (assert) => {
-            checkAndRemoveLimits(this.parts[5], { min: 1, max: 29 }, assert);
+            checkAndRemoveLimits(this.parts[4], { min: 1, max: 29 }, assert);
 
-            assert.deepEqual(this.parts[5], {
-                index: 5,
+            assert.deepEqual(this.parts[4], {
+                index: 4,
                 isStub: false,
                 caret: { start: 14, end: 15 },
                 getter: "getDate",
@@ -129,15 +129,15 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Year", (assert) => {
-            checkAndRemoveLimits(this.parts[8], { min: 0, max: 9999 }, assert);
+            checkAndRemoveLimits(this.parts[6], { min: 0, max: 9999 }, assert);
 
             let date = new Date(2012, 1, 4, 15, 6);
-            this.parts[8].setter(date, 15);
+            this.parts[6].setter(date, 15);
             assert.equal(date.getFullYear(), 2015, "setter sets AM");
-            delete this.parts[8].setter;
+            delete this.parts[6].setter;
 
-            assert.deepEqual(this.parts[8], {
-                index: 8,
+            assert.deepEqual(this.parts[6], {
+                index: 6,
                 isStub: false,
                 caret: { start: 17, end: 21 },
                 getter: "getFullYear",
@@ -147,10 +147,10 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Hours", (assert) => {
-            checkAndRemoveLimits(this.parts[10], { min: 0, max: 23 }, assert);
+            checkAndRemoveLimits(this.parts[8], { min: 0, max: 23 }, assert);
 
-            assert.deepEqual(this.parts[10], {
-                index: 10,
+            assert.deepEqual(this.parts[8], {
+                index: 8,
                 isStub: false,
                 caret: { start: 22, end: 24 },
                 getter: "getHours",
@@ -161,10 +161,10 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Minutes", (assert) => {
-            checkAndRemoveLimits(this.parts[12], { min: 0, max: 59 }, assert);
+            checkAndRemoveLimits(this.parts[10], { min: 0, max: 59 }, assert);
 
-            assert.deepEqual(this.parts[12], {
-                index: 12,
+            assert.deepEqual(this.parts[10], {
+                index: 10,
                 isStub: false,
                 caret: { start: 25, end: 27 },
                 getter: "getMinutes",
@@ -175,20 +175,20 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Time indication", (assert) => {
-            checkAndRemoveLimits(this.parts[14], { min: 0, max: 1 }, assert);
+            checkAndRemoveLimits(this.parts[12], { min: 0, max: 1 }, assert);
 
             let date = new Date(2012, 1, 4, 15, 6);
 
-            let isPm = this.parts[14].getter(date);
+            let isPm = this.parts[12].getter(date);
             assert.equal(isPm, 1, "getter returns PM");
-            delete this.parts[14].getter;
+            delete this.parts[12].getter;
 
-            this.parts[14].setter(date, 0);
+            this.parts[12].setter(date, 0);
             assert.equal(date.getHours(), 3, "setter sets AM");
-            delete this.parts[14].setter;
+            delete this.parts[12].setter;
 
-            assert.deepEqual(this.parts[14], {
-                index: 14,
+            assert.deepEqual(this.parts[12], {
+                index: 12,
                 isStub: false,
                 caret: { start: 28, end: 30 },
                 pattern: "a",
@@ -202,29 +202,29 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.parts[1], {
                 index: 1,
                 isStub: true,
-                caret: { start: 7, end: 8 },
-                pattern: ",",
-                text: ","
+                caret: { start: 7, end: 9 },
+                pattern: ", ",
+                text: ", "
             });
         });
 
         QUnit.test("Space stub", (assert) => {
-            checkAndRemoveAccessors(this.parts[2], "\\", assert);
+            checkAndRemoveAccessors(this.parts[3], " ", assert);
 
-            assert.deepEqual(this.parts[2], {
-                index: 2,
+            assert.deepEqual(this.parts[3], {
+                index: 3,
                 isStub: true,
-                caret: { start: 8, end: 9 },
-                pattern: "\\ ",
+                caret: { start: 13, end: 14 },
+                pattern: " ",
                 text: " "
             });
         });
 
         QUnit.test("Colon stub", (assert) => {
-            checkAndRemoveAccessors(this.parts[11], ":", assert);
+            checkAndRemoveAccessors(this.parts[9], ":", assert);
 
-            assert.deepEqual(this.parts[11], {
-                index: 11,
+            assert.deepEqual(this.parts[9], {
+                index: 9,
                 isStub: true,
                 caret: { start: 24, end: 25 },
                 pattern: ":",
@@ -241,38 +241,38 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Find month", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 9), 3, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 10), 3, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 13), 3, "end position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 9), 2, "start position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 10), 2, "middle position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 13), 2, "end position of the group");
         });
 
         QUnit.test("Find day", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 14), 5, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 15), 5, "end position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 14), 4, "start position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 15), 4, "end position of the group");
         });
 
         QUnit.test("Find year", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 17), 8, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 19), 8, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 21), 8, "end position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 17), 6, "start position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 19), 6, "middle position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 21), 6, "end position of the group");
         });
 
         QUnit.test("Find hours", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 22), 10, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 23), 10, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 24), 10, "end position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 22), 8, "start position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 23), 8, "middle position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 24), 8, "end position of the group");
         });
 
         QUnit.test("Find minutes", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 25), 12, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 26), 12, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 27), 12, "end position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 25), 10, "start position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 26), 10, "middle position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 27), 10, "end position of the group");
         });
 
         QUnit.test("Find time indicator", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 28), 14, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 29), 14, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 30), 14, "end position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 28), 12, "start position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 29), 12, "middle position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 30), 12, "end position of the group");
         });
     });
 

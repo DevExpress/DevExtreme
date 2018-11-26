@@ -834,7 +834,7 @@ QUnit.test("apply view", function(assert) {
     });
 });
 
-    // hover view
+// hover view
 QUnit.test("apply view/ hovered point", function(assert) {
     this.point.fullState = 1;
     this.point.applyView();
@@ -880,7 +880,7 @@ QUnit.test("set hover view n times, reset hover view n times", function(assert) 
     assert.strictEqual(this.getCurrentStyle(), "normal");
 });
 
-    // selection view
+// selection view
 QUnit.test("apply view. selected point", function(assert) {
     this.point.fullState = 2;
     this.point.applyView();
@@ -925,7 +925,7 @@ QUnit.test("set selection view n times, reset selection view n times", function(
 
     assert.strictEqual(this.getCurrentStyle(), "normal");
 });
-    // hover & selection
+// hover & selection
 QUnit.test("apply view. hovered and selected point", function(assert) {
     this.point.fullState = 3;
     this.point.applyView();

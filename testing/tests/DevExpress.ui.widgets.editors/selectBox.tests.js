@@ -942,12 +942,12 @@ QUnit.test("option value", function(assert) {
     var items = [{ text: "txt1", value: 1 }, { text: "txt2", value: 2 }];
 
     var $element = $("#selectBox")
-            .dxSelectBox({
-                items: items,
-                displayExpr: "text",
-                valueExpr: "value",
-                value: 2
-            });
+        .dxSelectBox({
+            items: items,
+            displayExpr: "text",
+            valueExpr: "value",
+            value: 2
+        });
 
     var instance = $element.dxSelectBox("instance");
 
@@ -980,12 +980,12 @@ QUnit.test("option displayValue", function(assert) {
     var items = [{ text: "txt1", value: 1 }, { text: "txt2", value: 2 }];
 
     var $element = $("#selectBox")
-            .dxSelectBox({
-                items: items,
-                displayExpr: "text",
-                valueExpr: "value",
-                value: 2
-            });
+        .dxSelectBox({
+            items: items,
+            displayExpr: "text",
+            valueExpr: "value",
+            value: 2
+        });
 
     var instance = $element.dxSelectBox("instance");
 
@@ -3698,14 +3698,14 @@ QUnit.test("value should be correctly changed via arrow keys when grouped dataso
 
 QUnit.test("disabled item should not be selected via keyboard if the widget is closed", function(assert) {
     var $element = $("#selectBox").dxSelectBox({ items: [
-                { text: "Item 1" },
-                { text: "Item 2", disabled: true },
-                { text: "Item 3", disabled: false }
+            { text: "Item 1" },
+            { text: "Item 2", disabled: true },
+            { text: "Item 3", disabled: false }
         ],
-            value: "Item 1",
-            opened: false,
-            valueExpr: "text",
-            displayExpr: "text"
+        value: "Item 1",
+        opened: false,
+        valueExpr: "text",
+        displayExpr: "text"
         }),
         instance = $element.dxSelectBox("instance"),
         $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS)),

@@ -765,8 +765,8 @@ QUnit.test("Agenda should contain a right appointment sorting after adding of th
 
 QUnit.test("Agenda should contain a right appointment sorting after updating of the", function(assert) {
     var items = [
-            { Start: new Date(2016, 1, 24, 6), endDate: new Date(2016, 1, 24, 6, 30), text: "a" },
-            { Start: new Date(2016, 1, 27, 1), endDate: new Date(2016, 1, 27, 1, 30), text: "b" }
+        { Start: new Date(2016, 1, 24, 6), endDate: new Date(2016, 1, 24, 6, 30), text: "a" },
+        { Start: new Date(2016, 1, 27, 1), endDate: new Date(2016, 1, 27, 1, 30), text: "b" }
     ];
     this.createInstance({
         views: ["agenda"],
@@ -809,8 +809,8 @@ QUnit.test("Long & recurrence appts should be sorted correctly", function(assert
         currentView: "agenda",
         currentDate: new Date(2015, 1, 23),
         dataSource: [
-                { startDate: new Date(2015, 1, 22, 1), endDate: new Date(2015, 1, 22, 1, 30), text: "a", recurrenceRule: "FREQ=DAILY" },
-                { startDate: new Date(2015, 1, 23, 3), endDate: new Date(2015, 1, 28, 3, 30), text: "long..." },
+            { startDate: new Date(2015, 1, 22, 1), endDate: new Date(2015, 1, 22, 1, 30), text: "a", recurrenceRule: "FREQ=DAILY" },
+            { startDate: new Date(2015, 1, 23, 3), endDate: new Date(2015, 1, 28, 3, 30), text: "long..." },
         ]
     });
 
@@ -1085,7 +1085,7 @@ QUnit.test("No Data message should be removed after dataSource changing", functi
     });
 
     this.instance.option("dataSource", [
-            { startDate: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 25, 1, 30) }
+        { startDate: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 25, 1, 30) }
     ]);
 
     var $element = this.instance.$element(),
@@ -1430,7 +1430,7 @@ QUnit.test("Long appointment should have a correct template", function(assert) {
 
 QUnit.test("Agenda should contain a right appointment quantity after dataSource reloading", function(assert) {
     var data = [
-            { startDate: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 24, 1, 30) },
+        { startDate: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 24, 1, 30) },
     ];
 
     var dataSource = new DataSource({

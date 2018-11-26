@@ -120,7 +120,7 @@ QUnit.test("Dispose", function(assert) {
     this.context.str.reset = sinon.spy();
     this.context.grouping = { g1: 1, g2: 2 };
     this.layer.dispose();
-    this.layer.dispose = noop;    // To prevent failure on `afterEach`
+    this.layer.dispose = noop; // To prevent failure on `afterEach`
 
     assert.deepEqual(this.projection.on.lastCall.returnValue.lastCall.args, [], "projection callbacks");
 
@@ -148,7 +148,7 @@ QUnit.test("dataSource disposing", function(assert) {
     this.layer.setOptions({ dataSource: [{}] });
 
     this.layer.dispose();
-    this.layer.dispose = noop;    // To prevent failure on `afterEach`
+    this.layer.dispose = noop; // To prevent failure on `afterEach`
 
     assert.strictEqual(this.layer.getDataSource(), null);
 });
@@ -418,7 +418,7 @@ QUnit.test("Dispose when data is set", function(assert) {
     });
 
     this.layer.dispose();
-    this.layer.dispose = noop;    // To prevent failure on `afterEach`
+    this.layer.dispose = noop; // To prevent failure on `afterEach`
 
     $.each(StubMapLayerElement.items, function(i, item) {
         assert.deepEqual(item.dispose.lastCall.args, [], "disposed - " + i);

@@ -314,6 +314,7 @@ module.exports = {
              * @type_function_param1_field15 isExpanded:boolean
              * @type_function_param1_field16 cellElement:dxElement
              * @type_function_param1_field17 watch:function
+             * @type_function_param1_field18 oldValue:any
              * @extends Action
              * @action
              */
@@ -335,6 +336,7 @@ module.exports = {
              * @type_function_param1_field15 isExpanded:boolean
              * @type_function_param1_field16 cellElement:dxElement
              * @type_function_param1_field17 watch:function
+             * @type_function_param1_field18 oldValue:any
              * @extends Action
              * @action
              */

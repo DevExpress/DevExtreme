@@ -4,7 +4,7 @@ import $ from "../../core/renderer";
 import translator from "../../animation/translator";
 import Overlay from "../overlay";
 import typeUtils from "../../core/utils/type";
-
+import { getWindow, hasWindow } from "../../core/utils/window";
 
 class OverlapStrategy extends DrawerStrategy {
 
@@ -20,23 +20,16 @@ class OverlapStrategy extends DrawerStrategy {
             position: position,
             width: "auto",
             height: "100%",
+            templatesRenderAsynchronously: drawer.option("templatesRenderAsynchronously"),
             animation: {
                 show: {
                     duration: 0
                 }
             },
             onPositioned: (function(e) {
-                // NOTE: overlay should be positioned in extended wrapper
-                const drawer = this.getDrawerInstance();
-
-                if(typeUtils.isDefined(this._initialPosition) && !drawer.option("rtlEnabled")) {
-                    translator.move(e.component.$content(), { left: this._initialPosition.left });
-                }
-                if(drawer.getDrawerPosition() === "right") {
-                    e.component.$content().css("left", "auto");
-                }
+                this._fixOverlayPosition(e.component.$content());
             }).bind(this),
-            contentTemplate: template,
+            contentTemplate: drawer.option("template"),
             onContentReady: () => {
                 whenPanelRendered.resolve();
             },
@@ -47,9 +40,25 @@ class OverlapStrategy extends DrawerStrategy {
         this._processOverlayZIndex();
     }
 
+    _fixOverlayPosition($overlayContent) {
+        // NOTE: overlay should be positioned in extended wrapper
+        const drawer = this.getDrawerInstance();
+
+        if(typeUtils.isDefined(this._initialPosition)) {
+            translator.move($overlayContent, { left: this._initialPosition.left });
+        }
+        if(drawer.option("position") === "right") {
+            $overlayContent.css("left", "auto");
+
+            if(drawer.option("rtlEnabled")) {
+                translator.move($overlayContent, { left: 0 });
+            }
+        }
+    }
+
     getOverlayPosition() {
         const drawer = this.getDrawerInstance();
-        const panelPosition = drawer.getDrawerPosition();
+        const panelPosition = drawer.option("position");
 
         let result = {};
 
@@ -101,7 +110,7 @@ class OverlapStrategy extends DrawerStrategy {
         this._initialPosition = drawer.getOverlay().$content().position();
 
         const $content = $(drawer.viewContent());
-        const position = drawer.getDrawerPosition();
+        const position = drawer.option("position");
 
         if(drawer.isHorizontalDirection()) {
             $content.css("paddingLeft", drawer.option("minSize") * drawer._getPositionCorrection());
@@ -177,10 +186,19 @@ class OverlapStrategy extends DrawerStrategy {
     }
 
     _processOverlayZIndex() {
+        if(!hasWindow()) {
+            return;
+        }
+
+        const window = getWindow();
         const styles = window.getComputedStyle(this.getPanelContent().get(0));
         const zIndex = styles.zIndex || 1;
 
         this.getDrawerInstance().setZIndex(zIndex);
+    }
+
+    needOrderContent(position) {
+        return position === "right" || position === "bottom";
     }
 };
 

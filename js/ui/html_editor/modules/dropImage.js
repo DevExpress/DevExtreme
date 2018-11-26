@@ -4,6 +4,7 @@ import eventsEngine from "../../../events/core/events_engine";
 import { addNamespace } from "../../../events/utils";
 import { each } from "../../../core/utils/iterator";
 import browser from "../../../core/utils/browser";
+import { getWindow } from "../../../core/utils/window";
 
 const BaseModule = getQuill().import("core/module");
 
@@ -58,18 +59,19 @@ class DropImageModule extends BaseModule {
     }
 
     _getImage(files, callback) {
+        const window = getWindow();
         each(files, (index, file) => {
             if(!this._isImage(file)) {
                 return;
             }
 
-            const reader = new FileReader();
+            const reader = new window.FileReader();
             reader.onload = (e) => {
                 callback(e.target.result);
             };
 
             const readableFile = file.getAsFile ? file.getAsFile() : file;
-            if(readableFile instanceof Blob) {
+            if(readableFile instanceof window.Blob) {
                 reader.readAsDataURL(readableFile);
             }
         });

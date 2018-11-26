@@ -1463,7 +1463,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getTimeCellDate: function(i) {
         var startViewDate = new Date(this.getStartViewDate()),
-            timeCellDuration = this.getCellDuration(),
+            timeCellDuration = Math.round(this.getCellDuration()),
             lastCellInDay = this._calculateDayDuration() / this.option("hoursInterval");
 
         startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * (i % lastCellInDay));
@@ -1541,7 +1541,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     calculateEndDate: function(startDate) {
         var result = new Date(startDate);
-        result.setMilliseconds(result.getMilliseconds() + this._getInterval());
+        result.setMilliseconds(result.getMilliseconds() + Math.round(this._getInterval()));
         return result;
     },
 

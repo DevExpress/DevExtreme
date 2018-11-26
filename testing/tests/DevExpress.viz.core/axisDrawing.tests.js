@@ -5093,7 +5093,7 @@ QUnit.test("Horizontal bottom. With date markers, last marker without label", fu
         var idx = 0;
         return function() {
             return [
-                { x: 0, y: 0, width: 10, height: 10 },  // title
+                { x: 0, y: 0, width: 10, height: 10 }, // title
                 { x: 0, y: 0, width: 10, height: 10 }, // tick label
                 { x: 0, y: 0, width: 10, height: 11 }, // tick label
                 { x: 0, y: 0, width: 10, height: 12 }, // tick label
@@ -5221,7 +5221,7 @@ QUnit.test("Horizontal top", function(assert) {
         var idx = 0;
         return function() {
             return [
-                { x: 0, y: 0, width: 10, height: 10 },  // title
+                { x: 0, y: 0, width: 10, height: 10 }, // title
                 { x: 0, y: 0, width: 10, height: 10 }, // tick label
                 { x: 0, y: 0, width: 10, height: 11 }, // tick label
                 { x: 0, y: 0, width: 10, height: 12 }, // tick label
@@ -5335,7 +5335,7 @@ QUnit.test("Vertical left", function(assert) {
         var idx = 0;
         return function() {
             return [
-                { x: 0, y: 0, width: 14, height: 10 },  // title
+                { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 11, height: 10 }, // tick label
                 { x: 0, y: 0, width: 12, height: 10 }, // tick label
                 { x: 0, y: 0, width: 13, height: 10 }, // tick label
@@ -5449,7 +5449,7 @@ QUnit.test("Vertical right", function(assert) {
         var idx = 0;
         return function() {
             return [
-                { x: 0, y: 0, width: 14, height: 10 },  // title
+                { x: 0, y: 0, width: 14, height: 10 }, // title
                 { x: 0, y: 0, width: 11, height: 10 }, // tick label
                 { x: 0, y: 0, width: 12, height: 10 }, // tick label
                 { x: 0, y: 0, width: 13, height: 10 }, // tick label
@@ -9871,7 +9871,7 @@ QUnit.test("Animate label to the new position on second drawing", function(asser
 
     assert.equal(renderer.text.callCount, 1);
 
-    assert.deepEqual(label.attr.firstCall.args[0], { text: "1" });
+    assert.deepEqual(label.attr.firstCall.args[0], { text: "1", rotate: 0 });
 
     assert.deepEqual(label.attr.secondCall.args[0], {
         x: 45,

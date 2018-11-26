@@ -190,11 +190,11 @@ QUnit.test("showPane option", function(assert) {
 QUnit.test("LoadPanel with custom indicator", function(assert) {
     var url = "../../testing/content/customLoadIndicator.png",
         instance = this.element
-        .dxLoadPanel({
-            showIndicator: true,
-            indicatorSrc: url
-        })
-        .dxLoadPanel("instance");
+            .dxLoadPanel({
+                showIndicator: true,
+                indicatorSrc: url
+            })
+            .dxLoadPanel("instance");
     instance.show();
 
     var loadIndicatorInstance = this.instance.$content().find(".dx-loadindicator").dxLoadIndicator().dxLoadIndicator("instance");
@@ -206,12 +206,12 @@ QUnit.test("LoadPanel with custom indicator", function(assert) {
 
 QUnit.test("Load panel should not close on esc button when focusStateEnabled is true", function(assert) {
     var instance = this.element
-        .dxLoadPanel({
-            focusStateEnabled: true,
-            width: 1,
-            height: 1,
-            visible: true
-        }).dxLoadPanel("instance"),
+            .dxLoadPanel({
+                focusStateEnabled: true,
+                width: 1,
+                height: 1,
+                visible: true
+            }).dxLoadPanel("instance"),
         keyboard = keyboardMock(instance.$content());
 
     keyboard.keyDown("esc");

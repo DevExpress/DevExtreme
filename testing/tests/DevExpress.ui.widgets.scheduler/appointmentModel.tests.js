@@ -593,6 +593,41 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
         assert.deepEqual(appts, [{ text: "b", StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() }], "Appointments are OK");
     });
 
+    QUnit.test("Loaded appointments on the borders should be filtered by start & end day hours", function(assert) {
+        var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
+            getter: {
+                startDate: compileGetter("StartDate"),
+                endDate: compileGetter("EndDate"),
+                recurrenceRule: compileGetter("RecurrenceRule"),
+                recurrenceException: compileGetter("Exception"),
+                allDay: compileGetter("AllDay"),
+                startDateTimeZone: compileGetter("StartDateTimeZone"),
+                endDateTimeZone: compileGetter("EndDateTimeZone")
+            },
+            setter: {
+                startDate: compileSetter("StartDate"),
+                endDate: compileGetter("EndDate")
+            },
+            expr: {
+                startDateExpr: "StartDate",
+                endDateExpr: "EndDate",
+                allDayExpr: "AllDay",
+                recurrenceRuleExpr: "RecurrenceRule",
+                recurrenceExceptionExpr: "Exception"
+            }
+        });
+
+        appointmentModel.add({ text: "a", StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 3).toString() });
+        appointmentModel.add({ text: "b", StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() });
+
+        var appts = appointmentModel.filterLoadedAppointments({
+            startDayHour: 3,
+            endDayHour: 7
+        });
+
+        assert.deepEqual(appts, [{ text: "b", StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() }], "Appointments are OK. Appointment 'a' was filtered");
+    });
+
     QUnit.test("Loaded appointments should be filtered by decimal start & end day hours", function(assert) {
         var appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
             getter: {

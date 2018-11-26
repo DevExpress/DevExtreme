@@ -236,14 +236,6 @@ var browser, focused;
         return $element.is("input") && editableInputTypesRE.test($element.prop("type")) || $element.is("textarea") || ($element.prop("tabindex") >= 0);
     };
 
-    var getActiveElement = function(currentDocument) {
-        var doc = currentDocument || document,
-            activeElement = doc.activeElement || $('body')[0];
-        return activeElement.tagName && activeElement.tagName.toLowerCase() === 'iframe'
-            ? getActiveElement($(activeElement).contents()[0])
-            : activeElement;
-    };
-
     var deleteSelection = function() {
         var caretPosition = caret.getPosition(),
             value = $element.val();

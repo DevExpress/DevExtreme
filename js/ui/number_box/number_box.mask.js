@@ -349,7 +349,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var caret = this._caret(),
             point = number.getDecimalSeparator(),
             pointIndex = text.indexOf(point),
-            isCaretOnFloat = pointIndex > 0 && pointIndex < caret.start,
+            isCaretOnFloat = pointIndex >= 0 && pointIndex < caret.start,
             textParts = this._removeStubs(text, true).split(point);
 
         if(!isCaretOnFloat || textParts.length !== 2) {

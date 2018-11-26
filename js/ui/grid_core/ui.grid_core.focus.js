@@ -232,7 +232,7 @@ exports.FocusController = core.ViewController.inherit((function() {
 module.exports = {
     defaultOptions: function() {
         return {
-             /**
+            /**
              * @name GridBaseOptions.focusedRowEnabled
              * @type boolean
              * @default false
@@ -299,7 +299,12 @@ module.exports = {
 
                 setFocusedRowIndex: function(rowIndex) {
                     this.callBase(rowIndex);
-                    this.option("focusedRowIndex", rowIndex);
+
+                    if(this.option("focusedRowIndex") === rowIndex) {
+                        this.getController("focus")._focusRowByIndex(rowIndex);
+                    } else {
+                        this.option("focusedRowIndex", rowIndex);
+                    }
                 },
 
                 setFocusedColumnIndex: function(columnIndex) {
@@ -549,8 +554,8 @@ module.exports = {
                     this.callBase.apply(this, arguments);
 
                     if(this.option("focusedRowEnabled") && this.option("dataSource")) {
-                        var keyExpr = this._dataController.store() && this._dataController.store().key();
-                        if(!keyExpr) {
+                        var store = this._dataController.store();
+                        if(store && !store.key()) {
                             this._dataController.dataErrorOccurred.fire(errors.Error("E4024"));
                         }
                     }

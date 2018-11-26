@@ -174,13 +174,13 @@ QUnit.test("Customize text alignment", function(assert) {
     // arrange
     var footerView = this.createFooterView(getFooterOptions({
             0: [
-            { summaryType: "count", value: 100, alignment: "center" },
-            { summaryType: "min", value: 0, alignment: "center" },
-            { summaryType: "max", value: 120001, alignment: "center" }
+                { summaryType: "count", value: 100, alignment: "center" },
+                { summaryType: "min", value: 0, alignment: "center" },
+                { summaryType: "max", value: 120001, alignment: "center" }
             ],
             2: [
-            { summaryType: "sum", value: 1234, alignment: "right" },
-            { summaryType: "avg", value: 123.54, alignment: "right" }
+                { summaryType: "sum", value: 1234, alignment: "right" },
+                { summaryType: "avg", value: 123.54, alignment: "right" }
             ]
         }, 5)),
         $summaryItems;
@@ -421,11 +421,11 @@ QUnit.test("Custom Css class for summary item", function(assert) {
     // arrange
     var footerView = this.createFooterView(getFooterOptions({
             0: [
-            { summaryType: "min", cssClass: "min-bold" },
-            { summaryType: "max", cssClass: "max-italic" }
+                { summaryType: "min", cssClass: "min-bold" },
+                { summaryType: "max", cssClass: "max-italic" }
             ],
             2: [
-            { summaryType: "count", cssClass: "count-red" }
+                { summaryType: "count", cssClass: "count-red" }
             ]
         }, 5)),
         $container = $("#container"),
@@ -563,9 +563,9 @@ QUnit.module("Group footer", {
 
         that.createRowsView = function(items) {
             var columns = [
-                { caption: 'Column 1', alignment: "left" },
-                { caption: 'Column 2', alignment: "left" },
-                { caption: 'Column 3', alignment: "right" }
+                    { caption: 'Column 1', alignment: "left" },
+                    { caption: 'Column 2', alignment: "left" },
+                    { caption: 'Column 3', alignment: "right" }
                 ],
                 mockDataGrid = {
                     options: that.options,
@@ -596,12 +596,12 @@ QUnit.test("Show summary", function(assert) {
     var rowsView = this.createRowsView([{
             rowType: "groupFooter", values: [], summaryCells: [
                 [
-                { summaryType: "count", value: "10" },
-                { summaryType: "min", value: "1245" }
+                    { summaryType: "count", value: "10" },
+                    { summaryType: "min", value: "1245" }
                 ],
-            [],
+                [],
                 [
-                { summaryType: "avg", value: "34.009" }
+                    { summaryType: "avg", value: "34.009" }
                 ]]
         }]),
         $summaryItems;
@@ -975,15 +975,15 @@ QUnit.test("Invalid value is not shown", function(assert) {
     this.setupDataGridModules();
 
     var summaryItems = [
-        { column: "name", summaryType: "avg" },
-        { column: "cash", summaryType: "sum" },
-        { column: "age", summaryType: "max" }
+            { column: "name", summaryType: "avg" },
+            { column: "cash", summaryType: "sum" },
+            { column: "age", summaryType: "max" }
         ],
         aggregates = [NaN, 1234, NaN],
         visibleColumns = [
-        { dataField: 'name', index: 0 },
-        { dataField: 'age', index: 1 },
-        { dataField: 'cash', index: 2 }
+            { dataField: 'name', index: 0 },
+            { dataField: 'age', index: 1 },
+            { dataField: 'cash', index: 2 }
         ],
         summaryCells = this.dataController._calculateSummaryCells(summaryItems, aggregates, visibleColumns, function(summaryItem, column) {
             return column.index;

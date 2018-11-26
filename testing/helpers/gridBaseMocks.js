@@ -908,18 +908,22 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         that.option = function(options, value) {
             var result = that.options,
-                path;
+                path,
+                changed;
 
             if(typeUtils.isString(options)) {
                 path = options.split('.');
                 while(result && path.length) {
                     if(arguments.length > 1 && path.length === 1) {
-                        result[path[0]] = value;
+                        if(result[path[0]] !== value) {
+                            changed = true;
+                            result[path[0]] = value;
+                        }
                     }
                     result = result[path[0]];
                     path.shift();
                 }
-                that.optionCalled.fire(options, value);
+                changed && that.optionCalled.fire(options, value);
                 return result;
             }
 

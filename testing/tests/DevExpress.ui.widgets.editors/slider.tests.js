@@ -1216,13 +1216,13 @@ QUnit.test("B233256 - incorrect options", function(assert) {
 
 QUnit.test("B233288 - incorrect behavior when swipe on handle", function(assert) {
     var $element = $("#slider")
-            .css("width", 500)
-            .dxSlider({
-                max: 500,
-                min: 0,
-                value: 250,
-                useInkRipple: false
-            });
+        .css("width", 500)
+        .dxSlider({
+            max: 500,
+            min: 0,
+            value: 250,
+            useInkRipple: false
+        });
 
     var $handle = $element.find("." + SLIDER_HANDLE_CLASS),
         handleX = $handle.offset().left + $handle.outerWidth() / 2,
