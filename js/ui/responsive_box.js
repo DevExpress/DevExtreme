@@ -606,6 +606,10 @@ var ResponsiveBox = CollectionWidget.inherit({
             result.baseSize += sizeConfig.baseSize;
             result.minSize += sizeConfig.minSize;
             result.maxSize += sizeConfig.maxSize;
+
+            if(typeUtils.isDefined(sizeConfig.shrink)) {
+                result.shrink = sizeConfig.shrink;
+            }
         }
 
         result.minSize = result.minSize ? result.minSize : "auto";
