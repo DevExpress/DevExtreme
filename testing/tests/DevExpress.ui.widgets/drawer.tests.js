@@ -599,6 +599,27 @@ QUnit.test("drawer panel should have correct margin when async template is used"
     clock.restore();
 });
 
+QUnit.test("getting real panel position in accordance with rtlEnabled and position options", assert => {
+    const $element = $("#drawer").dxDrawer({
+        position: "after"
+    });
+    const instance = $element.dxDrawer("instance");
+
+    assert.equal(instance.getDrawerPosition(), "right");
+
+    instance.option("position", "before");
+
+    assert.equal(instance.getDrawerPosition(), "left");
+
+    instance.option("rtlEnabled", true);
+
+    assert.equal(instance.getDrawerPosition(), "right");
+
+    instance.option("position", "after");
+
+    assert.equal(instance.getDrawerPosition(), "left");
+});
+
 QUnit.module("Animation", {
     beforeEach() {
         this.capturedAnimations = animationCapturing.start();

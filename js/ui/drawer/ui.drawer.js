@@ -329,11 +329,15 @@ const Drawer = Widget.inherit({
         let position = this.option("position");
         let rtl = this.option("rtlEnabled");
 
-        if(position === "auto") {
+        if(position === "before") {
             return rtl ? "right" : "left";
-        } else {
-            return position;
         }
+
+        if(position === "after") {
+            return rtl ? "left" : "right";
+        }
+
+        return position;
     },
 
     getOverlayTarget() {
