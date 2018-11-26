@@ -20,6 +20,7 @@ const SCROLL_BAR_MOVE_EVENT_NAME = "dxc-scroll-move" + EVENTS_NS;
 const SCROLL_BAR_END_EVENT_NAME = "dxc-scroll-end" + EVENTS_NS;
 
 const GESTURE_TIMEOUT = 300;
+const MIN_DRAG_DELTA = 5;
 
 const _min = Math.min;
 const _max = Math.max;
@@ -308,19 +309,27 @@ module.exports = {
                 preventDefaults(e);
                 if(actionData.action === "zoom") {
                     function zoomAxes(axes, criteria, coordField, startCoords, curCoords, onlyAxisToNotify) {
-                        criteria && axes.forEach(axis => {
-                            const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify),
-                                tr = axis.getTranslator();
+                        const curCoord = curCoords[coordField];
+                        const startCoord = startCoords[coordField];
+                        if(_abs(curCoord - startCoord) > MIN_DRAG_DELTA) {
+                            criteria && axes.forEach(axis => {
+                                const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify),
+                                    tr = axis.getTranslator();
 
-                            axis.handleZooming([tr.from(startCoords[coordField]), tr.from(curCoords[coordField])], { start: !!silent, end: !!silent }, e, actionData.action);
-                        });
+                                axis.handleZooming([tr.from(startCoord), tr.from(curCoord)], { start: !!silent, end: !!silent }, e, actionData.action);
+                            });
+                            return true;
+                        }
+                        return false;
                     }
 
                     const curCoords = getPointerCoord(actionData.curAxisRect, e);
-                    zoomAxes(chart._argumentAxes, options.argumentAxis.zoom, rotated ? "y" : "x", actionData.startCoords, curCoords, chart.getArgumentAxis());
-                    zoomAxes(actionData.valueAxes, options.valueAxis.zoom, rotated ? "x" : "y", actionData.startCoords, curCoords);
+                    const valueAxesZoomed = zoomAxes(chart._argumentAxes, options.argumentAxis.zoom, rotated ? "y" : "x", actionData.startCoords, curCoords, chart.getArgumentAxis());
+                    const argumentAxesZoomed = zoomAxes(actionData.valueAxes, options.valueAxis.zoom, rotated ? "x" : "y", actionData.startCoords, curCoords);
 
-                    chart._requestChange(["VISUAL_RANGE"]);
+                    if(valueAxesZoomed || argumentAxesZoomed) {
+                        chart._requestChange(["VISUAL_RANGE"]);
+                    }
 
                     actionData.rect.dispose();
                 } else if(actionData.action === "pan") {

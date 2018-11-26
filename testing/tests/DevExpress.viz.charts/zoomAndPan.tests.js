@@ -809,6 +809,57 @@ QUnit.test("Zoom argument and value axis", function(assert) {
     assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 2, endValue: 4 });
 });
 
+QUnit.test("Zoom argument axis. Argument axis has too small zoom area", function(assert) {
+    const onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            zoomAndPan: {
+                valueAxis: "zoom",
+                argumentAxis: "zoom",
+                dragToZoom: true
+            },
+            onZoomEnd: onZoomEnd
+        });
+
+    const valueAxis = chart.getValueAxis();
+
+    this.pointer.start({ x: 200, y: 120 }).dragStart().drag(5, 240).dragEnd();
+
+    assert.strictEqual(onZoomEnd.callCount, 1);
+    assert.strictEqual(onZoomEnd.getCall(0).args[0].axis, valueAxis, "zoom end for value axis");
+});
+
+QUnit.test("Zoom value axis. Value axis has too small zoom area", function(assert) {
+    const onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            argumentAxis: {
+                visualRange: {
+                    startValue: 2,
+                    endValue: 10
+                }
+            },
+            valueAxis: {
+                visualRange: {
+                    startValue: 0,
+                    endValue: 5
+                }
+            },
+            zoomAndPan: {
+                valueAxis: "zoom",
+                argumentAxis: "zoom",
+                dragToZoom: true
+            },
+            onZoomEnd: onZoomEnd
+        });
+
+    const argumentAxis = chart.getArgumentAxis();
+
+    // act
+    this.pointer.start({ x: 200, y: 120 }).dragStart().drag(400, 5).dragEnd();
+
+    assert.strictEqual(onZoomEnd.callCount, 1);
+    assert.strictEqual(onZoomEnd.getCall(0).args[0].axis, argumentAxis, "zoom end for argument axis");
+});
+
 QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
     const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
