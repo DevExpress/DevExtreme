@@ -2408,6 +2408,12 @@ var Scheduler = Widget.inherit({
 
         exceptionDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
 
+        var currentOffset = targetStartDate.getTimezoneOffset() - exceptionDate.getTimezoneOffset();
+
+        currentOffset = currentOffset * 60000;
+
+        exceptionDate = new Date(exceptionDate.getTime() - currentOffset);
+
         return dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ");
     },
 
