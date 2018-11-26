@@ -902,6 +902,39 @@ QUnit.test("Columns - show column headers", function(assert) {
     );
 });
 
+QUnit.test("Columns - show column headers & visibleIndex", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="1" topLeftCell="A2" /></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="3" max="3" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s"><v>2</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="3" uniqueCount="3">' +
+        '<si><t>F2</t></si>' +
+        '<si><t>F3</t></si>' +
+        '<si><t>F1</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: 'f1', visibleIndex: 2, width: 100 },
+                { dataField: 'f2', visibleIndex: 0, width: 200 },
+                { dataField: 'f3', visibleIndex: 1, width: 50 }
+            ],
+            dataSource: [],
+            showColumnHeaders: true,
+            export: { enabled: true, ignoreExcelErrors: false },
+        },
+        { worksheet, sharedStrings, fixedColumnWidth_100: false }
+    );
+});
+
 QUnit.test("Columns - show column headers & 'column.visible: false' in onExporting/Exported", function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
@@ -980,6 +1013,34 @@ QUnit.test("Columns - hide column headers", function(assert) {
             dataSource: [ { f1: 42, f2: 43 } ],
             showColumnHeaders: false,
             export: { ignoreExcelErrors: false },
+        },
+        { worksheet, fixedColumnWidth_100: false }
+    );
+});
+
+QUnit.test("Columns - hide column headers & visibleIndex", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr/><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="' + excelColumnWidthFrom_200 + '" min="1" max="1" />' +
+        '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
+        '<col width="' + excelColumnWidthFrom_100 + '" min="3" max="3" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="n"><v>43</v></c><c r="B1" s="3" t="n"><v>44</v></c><c r="C1" s="3" t="n"><v>42</v></c></row>' +
+        '</sheetData></worksheet>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [
+                { dataField: 'f1', visibleIndex: 2, width: 100 },
+                { dataField: 'f2', visibleIndex: 0, width: 200 },
+                { dataField: 'f3', visibleIndex: 1, width: 50 }
+            ],
+            dataSource: [ { f1: 42, f2: 43, f3: 44 } ],
+            showColumnHeaders: false,
+            export: { enabled: true, ignoreExcelErrors: false },
         },
         { worksheet, fixedColumnWidth_100: false }
     );
