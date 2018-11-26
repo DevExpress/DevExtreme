@@ -12,6 +12,7 @@ var $ = require("../../core/renderer"),
     callModuleItemsMethod = gridCore.callModuleItemsMethod;
 
 var DATAGRID_ROW_SELECTOR = ".dx-row",
+    DATAGRID_CELL_SELECTOR = ".dx-row > td",
     DATAGRID_DEPRECATED_TEMPLATE_WARNING = "Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.";
 
 require("./ui.data_grid.column_headers");
@@ -245,7 +246,17 @@ var DataGrid = Widget.inherit({
     },
 
     focus: function(element) {
+        var prevActiveStateUnit = this._activeStateUnit,
+            focusedRowIndex = this.option("focusedRowIndex"),
+            focusedColumnIndex = this.option("focusedColumnIndex");
+
+        if(focusedRowIndex >= 0 && focusedColumnIndex >= 0) {
+            this._activeStateUnit += ", " + DATAGRID_CELL_SELECTOR;
+        }
+
         this.callBase();
+
+        this._activeStateUnit = prevActiveStateUnit;
 
         if(typeUtils.isDefined(element)) {
             this.getController("keyboardNavigation").focus(element);

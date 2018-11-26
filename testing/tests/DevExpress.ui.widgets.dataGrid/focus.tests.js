@@ -1376,7 +1376,7 @@ QUnit.testInActiveWindow("Need focus cell if focusedRowIndex and focusedColumnIn
     this.gridView.render($("#container"));
 
     // assert
-    assert.ok(this.getController("focus")._needFocusCell(), "Need focus cell");
+    assert.ok(this.getController("focus")._needFocusCell, "Need focus cell");
 });
 
 QUnit.testInActiveWindow("No need focus cell if focusedRowIndex is not set", function(assert) {
@@ -1392,7 +1392,7 @@ QUnit.testInActiveWindow("No need focus cell if focusedRowIndex is not set", fun
     this.gridView.render($("#container"));
 
     // assert
-    assert.notOk(this.getController("focus")._needFocusCell(), "Need focus cell");
+    assert.notOk(this.getController("focus")._needFocusCell, "Need focus cell");
 });
 
 QUnit.testInActiveWindow("No need focus cell if focusedColumnIndex is not set", function(assert) {
@@ -1408,7 +1408,7 @@ QUnit.testInActiveWindow("No need focus cell if focusedColumnIndex is not set", 
     this.gridView.render($("#container"));
 
     // assert
-    assert.notOk(this.getController("focus")._needFocusCell(), "Need focus cell");
+    assert.notOk(this.getController("focus")._needFocusCell, "Need focus cell");
 });
 
 QUnit.testInActiveWindow("Need focus cell if focusedRowEnabled, focusedRowIndex, focusedColumnIndex are set", function(assert) {
@@ -1426,7 +1426,7 @@ QUnit.testInActiveWindow("Need focus cell if focusedRowEnabled, focusedRowIndex,
     this.gridView.render($("#container"));
 
     // assert
-    assert.ok(this.getController("focus")._needFocusCell(), "Need focus cell");
+    assert.ok(this.getController("focus")._needFocusCell, "Need focus cell");
 });
 
 QUnit.testInActiveWindow("No need focus cell if focusedRowEnabled=true and focusedRowIndex is not set", function(assert) {
@@ -1443,7 +1443,7 @@ QUnit.testInActiveWindow("No need focus cell if focusedRowEnabled=true and focus
     this.gridView.render($("#container"));
 
     // assert
-    assert.notOk(this.getController("focus")._needFocusCell(), "Need focus cell");
+    assert.notOk(this.getController("focus")._needFocusCell, "Need focus cell");
 });
 
 QUnit.testInActiveWindow("No need focus cell if focusedRowEnabled=true and focusedColumnIndex is not set", function(assert) {
@@ -1460,7 +1460,7 @@ QUnit.testInActiveWindow("No need focus cell if focusedRowEnabled=true and focus
     this.gridView.render($("#container"));
 
     // assert
-    assert.notOk(this.getController("focus")._needFocusCell(), "Need focus cell");
+    assert.notOk(this.getController("focus")._needFocusCell, "Need focus cell");
 });
 
 
