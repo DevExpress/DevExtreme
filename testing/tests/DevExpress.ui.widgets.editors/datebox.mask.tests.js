@@ -481,7 +481,6 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-
     QUnit.module("Search", setupModule, () => {
         QUnit.test("Time indication", (assert) => {
             this.instance.option("displayFormat", "a");
@@ -857,6 +856,72 @@ if(devices.real().deviceType === "desktop") {
 
             this.keyboard.type("38");
             assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was not moved");
+        });
+    });
+
+    QUnit.module("Custom setters", setupModule, () => {
+        QUnit.test("Custom setter should be called for keydown event", (assert) => {
+            const yearSetter = sinon.spy();
+
+            this.instance.option({
+                displayFormat: "yyyy",
+                dateComponentSetters: { y: yearSetter }
+            });
+
+            this.keyboard.press("up");
+            assert.equal(yearSetter.callCount, 1, "setter has been called");
+            assert.deepEqual(yearSetter.getCall(0).args[0], new Date("10/10/2012 13:07"), "first argument is a date");
+            assert.deepEqual(yearSetter.getCall(0).args[1], 2013, "second argument is a value");
+            assert.equal(yearSetter.getCall(0).args[2].type, "keydown", "third argument is an event");
+        });
+
+        QUnit.test("Custom setter should be called for mousewheel event", (assert) => {
+            const yearSetter = sinon.spy();
+
+            this.instance.option({
+                displayFormat: "yyyy",
+                dateComponentSetters: { y: yearSetter }
+            });
+
+            this.pointer.wheel(10);
+            assert.equal(yearSetter.callCount, 1, "setter has been called");
+            assert.deepEqual(yearSetter.getCall(0).args[0], new Date("10/10/2012 13:07"), "first argument is a date");
+            assert.deepEqual(yearSetter.getCall(0).args[1], 2013, "second argument is a value");
+            assert.equal(yearSetter.getCall(0).args[2].type, "dxmousewheel", "third argument is an event");
+        });
+
+        QUnit.test("Custom setter should be called with correct typed value", (assert) => {
+            const yearSetter = sinon.spy();
+
+            this.instance.option({
+                displayFormat: "yyyy",
+                dateComponentSetters: { y: yearSetter }
+            });
+
+            this.keyboard.type("20351");
+            assert.equal(yearSetter.callCount, 5, "setter has been called for each char");
+            assert.deepEqual(yearSetter.getCall(0).args[1], 2, "first char is correct");
+            assert.deepEqual(yearSetter.getCall(1).args[1], 20, "second char is correct");
+            assert.deepEqual(yearSetter.getCall(2).args[1], 203, "third char is correct");
+            assert.deepEqual(yearSetter.getCall(3).args[1], 2035, "fourth char is correct");
+            assert.deepEqual(yearSetter.getCall(4).args[1], 1, "fourth char starts a new input");
+        });
+
+        QUnit.test("Custom setters can be changed in runtime", (assert) => {
+            const yearSetter = sinon.spy();
+            const newSetter = sinon.spy();
+
+            this.instance.option({
+                displayFormat: "yyyy",
+                dateComponentSetters: { y: yearSetter }
+            });
+
+            this.keyboard.press("up");
+            this.instance.option("dateComponentSetters", { y: newSetter });
+
+            this.keyboard.press("up");
+            assert.equal(yearSetter.callCount, 1, "old setter has been called once");
+            assert.equal(newSetter.callCount, 1, "new setter has been called once");
         });
     });
 }

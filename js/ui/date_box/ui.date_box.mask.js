@@ -48,6 +48,13 @@ let DateBoxMask = DateBoxBase.inherit({
              */
             useMaskBehavior: false,
 
+            /**
+             * @name dxDateBoxOptions.dateComponentSetters
+             * @type object
+             * @default null
+             */
+            dateComponentSetters: null,
+
             advanceCaret: true
         });
     },
@@ -68,7 +75,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
         this._setNewDateIfEmpty();
 
-        isNaN(parseInt(key)) ? this._searchString(key) : this._searchNumber(key);
+        isNaN(parseInt(key)) ? this._searchString(key, e.originalEvent) : this._searchNumber(key, e.originalEvent);
 
         e.originalEvent.preventDefault();
 
@@ -95,7 +102,7 @@ let DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _searchNumber(char) {
+    _searchNumber(char, e) {
         this._searchValue += char;
 
         let limits = this._getActivePartLimits(),
@@ -111,7 +118,7 @@ let DateBoxMask = DateBoxBase.inherit({
             newValue = parseInt(char);
         }
 
-        this._setActivePartValue(newValue);
+        this._setActivePartValue(newValue, e);
 
         if(this.option("advanceCaret")) {
             if(parseInt(this._searchValue + "0") > limits.max) {
@@ -120,7 +127,7 @@ let DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _searchString(char) {
+    _searchString(char, e) {
         if(!isNaN(parseInt(this._getActivePartProp("text")))) {
             return;
         }
@@ -137,11 +144,11 @@ let DateBoxMask = DateBoxBase.inherit({
             }
         }
 
-        this._revertPart(0);
+        this._revertPart(0, e);
 
         if(this._searchValue) {
             this._clearSearchValue();
-            this._searchString(char);
+            this._searchString(char, e);
         }
     },
 
@@ -157,7 +164,7 @@ let DateBoxMask = DateBoxBase.inherit({
         if(!isAllSelected) {
             if(value) {
                 const actual = this._getActivePartValue(value);
-                this._setActivePartValue(actual);
+                this._setActivePartValue(actual, e);
             }
 
             this._selectNextPart(direction, e);
@@ -190,7 +197,7 @@ let DateBoxMask = DateBoxBase.inherit({
         const text = this.option("text") || this._getDisplayedText(this._maskValue);
 
         if(text) {
-            this._dateParts = renderDateParts(text, this._getFormatPattern());
+            this._dateParts = renderDateParts(text, this._getFormatPattern(), this.option("dateComponentSetters"));
             this._selectNextPart(0);
         }
     },
@@ -262,14 +269,14 @@ let DateBoxMask = DateBoxBase.inherit({
         return isFunction(getter) ? getter(dateValue) : dateValue[getter]();
     },
 
-    _setActivePartValue(value, dateValue) {
-        dateValue = dateValue || this._maskValue;
+    _setActivePartValue(value, e) {
+        const dateValue = this._maskValue;
         const setter = this._getActivePartProp("setter"),
             limits = this._getActivePartLimits();
 
         value = fitIntoRange(value, limits.min, limits.max);
 
-        isFunction(setter) ? setter(dateValue, value) : dateValue[setter](value);
+        isFunction(setter) ? setter(dateValue, value, e) : dateValue[setter](value);
         this._renderDisplayText(this._getDisplayedText(dateValue));
 
         this._renderDateParts();
@@ -315,7 +322,7 @@ let DateBoxMask = DateBoxBase.inherit({
         newValue = newValue > limits.max ? limits.min : newValue;
         newValue = newValue < limits.min ? limits.max : newValue;
 
-        this._setActivePartValue(newValue);
+        this._setActivePartValue(newValue, e);
         e && e.preventDefault();
     },
 
@@ -381,6 +388,8 @@ let DateBoxMask = DateBoxBase.inherit({
     _optionChanged(args) {
         switch(args.name) {
             case "useMaskBehavior":
+            case "dateComponentGetters":
+            case "dateComponentSetters":
                 this._renderMask();
                 break;
             case "displayFormat":
