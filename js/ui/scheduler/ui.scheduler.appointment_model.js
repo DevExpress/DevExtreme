@@ -83,7 +83,7 @@ var compareDateWithStartDayHour = function(startDate, endDate, startDayHour, all
     var startTime = dateUtils.dateTimeFromDecimal(startDayHour);
 
     var result = (startDate.getHours() >= startTime.hours && startDate.getMinutes() >= startTime.minutes) ||
-                (endDate.getHours() > startTime.hours && endDate.getMinutes() > startTime.minutes) ||
+                (endDate.getHours() > startTime.hours && endDate.getMinutes() >= startTime.minutes) ||
                 allDay;
 
     return result;
