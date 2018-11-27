@@ -735,7 +735,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _refreshPopupVisibility: function() {
-        if(this.option("readOnly")) {
+        if(this.option("readOnly") || !this._searchValue()) {
             return;
         }
 

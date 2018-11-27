@@ -624,18 +624,8 @@ var SelectBox = DropDownList.inherit({
         this.option("value", null);
     },
 
-    _clearValueHandler: function(e, options) {
-        this._preventPopupOpening = !this._wasSearch();
-        this.callBase(e);
-    },
-
     _needToOpenPopup: function() {
-        if(this._preventPopupOpening) {
-            delete this._preventPopupOpening;
-            return false;
-        }
-
-        return this.callBase();
+        return this._needPassDataSourceToList();
     },
 
     _renderValueChangeEvent: function() {
