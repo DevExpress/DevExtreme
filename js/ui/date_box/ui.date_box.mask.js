@@ -388,7 +388,6 @@ let DateBoxMask = DateBoxBase.inherit({
     _optionChanged(args) {
         switch(args.name) {
             case "useMaskBehavior":
-            case "dateComponentGetters":
             case "dateComponentAccessors":
                 this._renderMask();
                 break;
