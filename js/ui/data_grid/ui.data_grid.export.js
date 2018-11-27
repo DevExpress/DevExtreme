@@ -308,8 +308,8 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
         };
     },
 
-    _updateColumnWidth: function(column, width) {
-        column.width = width; // see also 'ui.grid_core.adaptivity.js'
+    _updateColumnWidth: function(column, width) { // this function is overridden in 'ui.grid_core.adaptivity.js'
+        column.width = width;
     },
 
     _getColumns: function(initialColumnWidthsByColumnIndex) {
