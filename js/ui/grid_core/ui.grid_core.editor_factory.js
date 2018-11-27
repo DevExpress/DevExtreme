@@ -101,8 +101,9 @@ var EditorFactory = modules.ViewController.inherit({
         if($element === undefined) {
             return that._$focusedElement;
         } else if($element) {
-            // TODO: this code should be before timeout else focus is not will move to adaptive form by shift + tab key
+            // To prevent overlay flicking
             if(!$element.is(that._$focusedElement)) {
+                // TODO: this code should be before timeout else focus is not will move to adaptive form by shift + tab key
                 that._$focusedElement && that._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
             }
             that._$focusedElement = $element;

@@ -1386,12 +1386,40 @@ QUnit.testInActiveWindow("Highlight cell on focus()", function(assert) {
 
     keyboardController = this.getController("keyboardNavigation");
     keyboardController._focusedView = this.getView("rowsView");
-    keyboardController.focus(null, true);
+    keyboardController.focus(null);
     this.clock.tick();
 
     // assert
     assert.equal(focusedCellChangingCount, 1, "onFocusedCellChanging fires count");
     assert.ok($("#container .dx-datagrid-focus-overlay:visible").length, "has focus overlay");
+});
+
+QUnit.testInActiveWindow("Highlight cell on focus() if focusedRowIndex, focusedColumnIndex are not set", function(assert) {
+    var focusedCellChangingCount = 0,
+        keyboardController;
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        onFocusedCellChanging: function(e) {
+            ++focusedCellChangingCount;
+        }
+    };
+
+    this.setupModule();
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = this.getView("rowsView");
+    keyboardController.focus();
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedCellChangingCount, 1, "onFocusedCellChanging fires count");
+    assert.notOk($("#container .dx-datagrid-focus-overlay:visible").length, "has no focus overlay");
 });
 
 QUnit.testInActiveWindow("Highlight cell on focus() if focusedRowEnabled is true and focusedColumnIndex, focusedRowIndex are set", function(assert) {
@@ -1419,12 +1447,130 @@ QUnit.testInActiveWindow("Highlight cell on focus() if focusedRowEnabled is true
 
     keyboardController = this.getController("keyboardNavigation");
     keyboardController._focusedView = this.getView("rowsView");
-    keyboardController.focus(null, true);
+    keyboardController.focus(null);
     this.clock.tick();
+
+    // assert
+    assert.equal(focusedCellChangingCount, 0, "No focusedCellChanging event");
+    assert.notOk($("#container .dx-datagrid-focus-overlay:visible").length, "has no focus overlay");
+});
+
+QUnit.testInActiveWindow("Not highlight cell on focus() if focusedRowEnabled is true and focusedColumnIndex is not set", function(assert) {
+    var focusedCellChangingCount = 0,
+        keyboardController;
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        focusedRowEnabled: true,
+        onFocusedCellChanging: function(e) {
+            ++focusedCellChangingCount;
+        }
+    };
+
+    this.setupModule();
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = this.getView("rowsView");
+    keyboardController.focus(null);
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedCellChangingCount, 0, "onFocusedCellChanging fires count");
+    assert.notOk($("#container .dx-datagrid-focus-overlay:visible").length, "has no focus overlay");
+});
+
+QUnit.testInActiveWindow("Group row should focused on focus()", function(assert) {
+    var keyboardController,
+        focusedCellChangingCount = 0;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }
+    ];
+
+    this.options = {
+        columns: [
+            { dataField: "team", groupIndex: 0, autoExpandGroup: true },
+            "name",
+            "age"
+        ],
+        onFocusedCellChanging: function(e) {
+            ++focusedCellChangingCount;
+        }
+    };
+
+    this.setupModule();
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = this.getView("rowsView");
+    keyboardController.focus(null);
+    this.clock.tick(500);
+
+    // assert
+    assert.equal(focusedCellChangingCount, 1, "onFocusedCellChanging fires count");
+    assert.notOk($("#container .dx-datagrid-focus-overlay:visible").length, "has no focus overlay");
+    assert.ok(this.getView("rowsView").getRow(0).is(":focus"), "row 0 is focused");
+});
+
+QUnit.testInActiveWindow("Highlight group row on focus()", function(assert) {
+    var keyboardController,
+        focusedCellChangingCount = 0;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.data = [
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Bob', age: 29 },
+        { team: 'internal0', name: 'Den', age: 24 },
+        { team: 'internal0', name: 'Dan', age: 23 },
+        { team: 'public', name: 'Alice', age: 19 },
+        { team: 'public', name: 'Zeb', age: 18 }
+    ];
+
+    this.options = {
+        columns: [
+            { dataField: "team", groupIndex: 0, autoExpandGroup: true },
+            "name",
+            "age"
+        ],
+        onFocusedCellChanging: function(e) {
+            ++focusedCellChangingCount;
+            e.isHighlighted = true;
+        }
+    };
+
+    this.setupModule();
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = this.getView("rowsView");
+    keyboardController.focus(null);
+    this.clock.tick(500);
 
     // assert
     assert.equal(focusedCellChangingCount, 1, "onFocusedCellChanging fires count");
     assert.ok($("#container .dx-datagrid-focus-overlay:visible").length, "has focus overlay");
+    assert.ok(this.getView("rowsView").getRow(0).is(":focus"), "row 0 is focused");
 });
 
 QUnit.testInActiveWindow("Fire onFocusedRowChanging by click", function(assert) {
@@ -3305,7 +3451,7 @@ QUnit.testInActiveWindow("DataGrid should focus the row bellow by arrowDown key 
     assert.ok(rowsView.getRow(1).hasClass("dx-row-focused"), "Row 1 is focused");
 });
 
-QUnit.testInActiveWindow("DataGrid should focus the row bellow by arrowDown key if grid focused and grouping enabled", function(assert) {
+QUnit.testInActiveWindow("DataGrid should focus the row below by arrowDown key if grid focused and grouping enabled", function(assert) {
     var rowsView,
         keyboardController,
         $cell;
@@ -3352,7 +3498,7 @@ QUnit.testInActiveWindow("DataGrid should focus the row bellow by arrowDown key 
     $cell = keyboardController._getNextCell("downArrow");
 
     // assert
-    assert.ok(keyboardController._isCellValid($cell), "Cell is valid");
+    assert.equal($cell, undefined, "Cell is undefined");
 });
 
 QUnit.testInActiveWindow("If editing in row edit mode and focusedRowEnabled - focusOverlay should render for the editing row", function(assert) {

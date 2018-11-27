@@ -171,7 +171,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 $cell = this._getFocusedCell();
             }
 
-            if(!args.isHighlighted) {
+            if(!args.isHighlighted && !isCellEditMode) {
                 this.setRowFocusType();
             }
 
@@ -409,17 +409,18 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._updateFocusedCellPosition($cell);
         }
 
-        if($focusElement && !isInteractiveElement) {
-            this._applyTabIndexToElement($focusElement);
-            eventsEngine.trigger($focusElement, "focus");
-        }
-
-        if(disableFocus) {
-            $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
-            $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
-        } else {
-            $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + ":not(." + MASTER_DETAIL_CELL_CLASS + ")").removeClass(CELL_FOCUS_DISABLED_CLASS);
-            this.getController("editorFactory").focus($focusElement);
+        if($focusElement) {
+            if(!isInteractiveElement) {
+                this._applyTabIndexToElement($focusElement);
+                eventsEngine.trigger($focusElement, "focus");
+            }
+            if(disableFocus) {
+                $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
+                $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
+            } else {
+                $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + ":not(." + MASTER_DETAIL_CELL_CLASS + ")").removeClass(CELL_FOCUS_DISABLED_CLASS);
+                this.getController("editorFactory").focus($focusElement);
+            }
         }
     },
 
@@ -527,18 +528,17 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _arrowKeysHandlerFocusCell: function($event, $cell, upDown) {
-        var args = this._fireFocusChangingEvents($event, $cell, upDown);
+        var args = this._fireFocusChangingEvents($event, $cell, upDown, true);
         if(!args.cancel && this._isCellValid($cell)) {
             this._focus($cell, !args.isHighlighted);
         }
     },
 
-    _fireFocusChangingEvents: function($event, $cell, fireRowEvent) {
-        var args = { },
-            isHighlighted;
+    _fireFocusChangingEvents: function($event, $cell, fireRowEvent, isHighlighted) {
+        var args = { };
 
         if(this.isCellFocusType()) {
-            args = this._fireFocusedCellChanging($event, $cell);
+            args = this._fireFocusedCellChanging($event, $cell, isHighlighted);
             if(!args.cancel) {
                 isHighlighted = args.isHighlighted;
                 if(args.$newCellElement) {
@@ -795,7 +795,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
     _getNextCellByTabKey: function($event, direction, elementType) {
         var $cell = this._getNextCell(direction, elementType),
-            args = this._fireFocusedCellChanging($event, $cell);
+            args = this._fireFocusedCellChanging($event, $cell, true);
         if(args.cancel) {
             return;
         }
@@ -1156,40 +1156,36 @@ var KeyboardNavigationController = core.ViewController.inherit({
     focus: function(element) {
         var activeElementSelector,
             focusedRowEnabled = this.option("focusedRowEnabled"),
-            focusedColumnIndex = this.option("focusedColumnIndex");
+            isHighlighted = isCellElement($(element));
 
         if(!element) {
-            activeElementSelector = focusedRowEnabled ? ".dx-row" : ".dx-row > td";
-            element = this.component.$element().find(activeElementSelector + "[tabindex]").first();
-            if(focusedRowEnabled && focusedColumnIndex >= 0) {
-                element = this.getFirstValidCellInRow(element, focusedColumnIndex);
-            }
+            activeElementSelector = focusedRowEnabled ? ".dx-row[tabindex]" : ".dx-row[tabIndex], .dx-row > td[tabindex]";
+            element = this.component.$element().find(activeElementSelector).first();
         }
 
-        if(element) {
-            this._focusElementInActiveView($(element));
-        }
+        element && this._focusElement($(element), isHighlighted);
     },
 
-    _focusElementInActiveView: function($element) {
+    _focusElement: function($element, isHighlighted) {
         var focusView = this._getFocusedViewByElement($element),
-            args;
+            isRowFocusType = this.isRowFocusType(),
+            args = { };
 
-        if(!focusView) {
+        if(!focusView || isCellElement($element) && !this._isCellValid($element)) {
             return;
-        }
-
-        if($element.is(".dx-row")) {
-            this.setRowFocusType();
-        } else {
-            this.setCellFocusType();
         }
 
         this._focusView(focusView.view, focusView.viewIndex);
         this._isNeedFocus = true;
         this._isNeedScroll = true;
 
-        args = this._fireFocusChangingEvents(null, $element);
+        if(isCellElement($element) || isGroupRow($element)) {
+            this.setCellFocusType();
+            args = this._fireFocusChangingEvents(null, $element, false, isHighlighted);
+            if(isRowFocusType && !args.isHighlighted) {
+                this.setRowFocusType();
+            }
+        }
 
         this._focus($element, !args.isHighlighted);
         this._focusInteractiveElement($element);
@@ -1281,14 +1277,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
         eventsEngine.off(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), this._documentClickHandler);
     },
 
-    _fireFocusedCellChanging: function($event, $cellElement) {
+    _fireFocusedCellChanging: function($event, $cellElement, isHighlighted) {
         var that = this,
             prevCellIndex = that.option("focusedColumnIndex"),
             prevRowIndex = that.option("focusedRowIndex"),
             cellPosition = that._getCellPosition($cellElement),
             columnIndex = cellPosition ? cellPosition.columnIndex : -1,
             rowIndex = cellPosition ? cellPosition.rowIndex : -1,
-            isHighlighted = !$event || !$event.type || $event.type.indexOf(pointerEvents.down) === -1,
             args = {
                 cellElement: $cellElement,
                 prevColumnIndex: prevCellIndex,
@@ -1298,7 +1293,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 rows: that.getController("data").getVisibleRows(),
                 columns: that.getController("columns").getVisibleColumns(),
                 event: $event,
-                isHighlighted: isHighlighted,
+                isHighlighted: isHighlighted || false,
                 cancel: false
             };
 
