@@ -1,6 +1,12 @@
 var vizMocks = require("../../helpers/vizMocks.js"),
     exportModule = require("viz/core/export"),
+    themeModule = require("viz/themes"),
     clientExporter = require("client_exporter");
+
+themeModule.registerTheme({
+    name: "someTheme.light",
+    backgroundColor: "some_theme_color"
+});
 
 QUnit.module("Creation", {
     beforeEach: function() {
@@ -375,10 +381,12 @@ QUnit.module("API", {
         };
         this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, "toDataURL");
         this.toDataURLStub.returnsArg(0);
+        this.srcCurrentTheme = themeModule.currentTheme();
     },
     afterEach: function() {
         clientExporter.export.restore();
         this.toDataURLStub.restore();
+        themeModule.currentTheme(this.srcCurrentTheme);
     },
     createExportMenu: function() {
         var exportMenu = new exportModule.ExportMenu({
@@ -413,7 +421,8 @@ QUnit.test("exportFromMarkup method. Defaults", function(assert) {
         margin: 10,
         fileSavingAction: undefined,
         exportingAction: undefined,
-        exportedAction: undefined
+        exportedAction: undefined,
+        backgroundColor: undefined
     }, "Export options");
 });
 
@@ -475,7 +484,7 @@ QUnit.test("exportFromMarkup unsupported image format - export as PNG", function
             onExported: "exported callback",
             forceProxy: true
         },
-        markup = "testMarkup";
+        markup = 'testMarkup data-backgroundcolor="someColor"';
 
     // act
     exportModule.exportFromMarkup(markup, options);
@@ -499,16 +508,77 @@ QUnit.test("exportFromMarkup unsupported image format - export as PNG", function
     }, "Export options");
 });
 
-QUnit.test("combineWidgets method", function(assert) {
-    var createWidget = function(size) {
-        return {
-            svg: sinon.stub().returns("<svg </svg>"),
-            getSize: sinon.stub().returns(size)
-        };
-    };
-    var widgets = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+QUnit.test("exportFromMarkup. backgroundColor from markup", function(assert) {
+    // arrange
+    var options = {
+            width: 600,
+            height: 400
+        },
+        markup = 'testMarkup data-backgroundcolor="someColor"';
 
-    assert.equal(widgets, "<svg height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+    // act
+    exportModule.exportFromMarkup(markup, options);
+
+    // assert
+    assert.equal(clientExporter.export.callCount, 1, "Export was called");
+    assert.deepEqual(clientExporter.export.getCall(0).args[1], {
+        backgroundColor: "someColor",
+        format: "PNG",
+        fileName: "file",
+        width: 600,
+        height: 400,
+        margin: 10,
+        fileSavingAction: undefined,
+        exportingAction: undefined,
+        exportedAction: undefined
+    }, "Export options");
+});
+
+QUnit.test("getMarkup method", function(assert) {
+    var createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg </svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "backgroundColor") return "backgroundColor";
+                }
+            };
+        },
+        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+
+    assert.equal(markup, "<svg data-backgroundcolor=\"backgroundColor\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+});
+
+QUnit.test("getMarkup. BackgroundColor in theme", function(assert) {
+    var createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg </svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "theme") return "someTheme.light";
+                }
+            };
+        },
+        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+
+    assert.equal(markup, "<svg data-backgroundcolor=\"some_theme_color\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+});
+
+QUnit.test("getMarkup. Different colors in charts. No backgroundColor in result", function(assert) {
+    var colors = ["color_1", "color_2"],
+        i = 0,
+        createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg </svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "backgroundColor") return colors[i++];
+                }
+            };
+        },
+        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+
+    assert.equal(markup, "<svg height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
 });
 
 QUnit.test("Get layout options", function(assert) {
