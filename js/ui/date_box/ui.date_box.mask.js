@@ -49,11 +49,11 @@ let DateBoxMask = DateBoxBase.inherit({
             useMaskBehavior: false,
 
             /**
-             * @name dxDateBoxOptions.dateComponentSetters
+             * @name dxDateBoxOptions.dateComponentAccessors
              * @type object
              * @default null
              */
-            dateComponentSetters: null,
+            dateComponentAccessors: null,
 
             advanceCaret: true
         });
@@ -189,6 +189,15 @@ let DateBoxMask = DateBoxBase.inherit({
         }
     },
 
+    _getCustomSetters() {
+        var optionValue = this.option("dateComponentAccessors");
+        if(!optionValue) {
+            return null;
+        }
+
+        return optionValue.set;
+    },
+
     _renderDateParts() {
         if(!this._useMaskBehavior()) {
             return;
@@ -197,7 +206,7 @@ let DateBoxMask = DateBoxBase.inherit({
         const text = this.option("text") || this._getDisplayedText(this._maskValue);
 
         if(text) {
-            this._dateParts = renderDateParts(text, this._getFormatPattern(), this.option("dateComponentSetters"));
+            this._dateParts = renderDateParts(text, this._getFormatPattern(), this._getCustomSetters());
             this._selectNextPart(0);
         }
     },
@@ -389,7 +398,7 @@ let DateBoxMask = DateBoxBase.inherit({
         switch(args.name) {
             case "useMaskBehavior":
             case "dateComponentGetters":
-            case "dateComponentSetters":
+            case "dateComponentAccessors":
                 this._renderMask();
                 break;
             case "displayFormat":

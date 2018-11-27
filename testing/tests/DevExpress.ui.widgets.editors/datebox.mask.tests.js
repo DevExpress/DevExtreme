@@ -865,7 +865,7 @@ if(devices.real().deviceType === "desktop") {
 
             this.instance.option({
                 displayFormat: "yyyy",
-                dateComponentSetters: { y: yearSetter }
+                dateComponentAccessors: { set: { y: yearSetter } }
             });
 
             this.keyboard.press("up");
@@ -880,7 +880,7 @@ if(devices.real().deviceType === "desktop") {
 
             this.instance.option({
                 displayFormat: "yyyy",
-                dateComponentSetters: { y: yearSetter }
+                dateComponentAccessors: { set: { y: yearSetter } }
             });
 
             this.pointer.wheel(10);
@@ -895,7 +895,7 @@ if(devices.real().deviceType === "desktop") {
 
             this.instance.option({
                 displayFormat: "yyyy",
-                dateComponentSetters: { y: yearSetter }
+                dateComponentAccessors: { set: { y: yearSetter } }
             });
 
             this.keyboard.type("20351");
@@ -913,11 +913,11 @@ if(devices.real().deviceType === "desktop") {
 
             this.instance.option({
                 displayFormat: "yyyy",
-                dateComponentSetters: { y: yearSetter }
+                dateComponentAccessors: { set: { y: yearSetter } }
             });
 
             this.keyboard.press("up");
-            this.instance.option("dateComponentSetters", { y: newSetter });
+            this.instance.option("dateComponentAccessors", { set: { y: newSetter } });
 
             this.keyboard.press("up");
             assert.equal(yearSetter.callCount, 1, "old setter has been called once");
