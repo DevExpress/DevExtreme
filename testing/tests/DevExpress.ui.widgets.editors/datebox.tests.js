@@ -4064,7 +4064,8 @@ QUnit.test("value should be changed on cell click in calendar with defined dateS
 QUnit.test("T678838: DateBox doesn't switch format when time is changed", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
         value: new Date(2018, 6, 6, 2),
-        type: "datetime"
+        type: "datetime",
+        pickerType: "calendar"
     });
 
     var instance = $dateBox.dxDateBox("instance");
@@ -4096,7 +4097,8 @@ QUnit.test("date value should be formatted after change AM/PM format", function(
 
     var $dateBox = $("#dateBox").dxDateBox({
         value: new Date(2018, 6, 6, 16),
-        type: "datetime"
+        type: "datetime",
+        pickerType: "calendar"
     });
 
     var instance = $dateBox.dxDateBox("instance");
