@@ -448,11 +448,11 @@ var BaseRenderingStrategy = Class.inherit({
 
     startDate: function(appointment, skipNormalize, position) {
         var startDate = position && position.startDate,
-            viewStartDate = this.instance._getStartDate(appointment, skipNormalize),
+            comparableStartDate = this.instance._getStartDate(appointment, skipNormalize),
             text = this.instance.fire("getField", "text", appointment);
 
-        if((startDate && viewStartDate > startDate) || !startDate) {
-            startDate = viewStartDate;
+        if((startDate && comparableStartDate > startDate) || !startDate) {
+            startDate = comparableStartDate;
         }
 
         if(isNaN(startDate.getTime())) {
