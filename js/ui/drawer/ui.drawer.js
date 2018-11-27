@@ -289,7 +289,7 @@ const Drawer = Widget.inherit({
         prevClass && this.$element()
             .removeClass(DRAWER_CLASS + "-" + prevClass);
 
-        const position = this.option("position");
+        const position = this.getDrawerPosition();
 
         this.$element().addClass(DRAWER_CLASS + "-" + position);
 
@@ -323,6 +323,21 @@ const Drawer = Widget.inherit({
 
         this._maxSize = this.option("maxSize") || realPanelSize;
         this._minSize = this.option("minSize") || 0;
+    },
+
+    getDrawerPosition() {
+        const position = this.option("position");
+        const rtl = this.option("rtlEnabled");
+
+        if(position === "before") {
+            return rtl ? "right" : "left";
+        }
+
+        if(position === "after") {
+            return rtl ? "left" : "right";
+        }
+
+        return position;
     },
 
     getOverlayTarget() {
@@ -370,7 +385,9 @@ const Drawer = Widget.inherit({
     },
 
     isHorizontalDirection() {
-        return this.option("position") === "left" || this.option("position") === "right";
+        const position = this.getDrawerPosition();
+
+        return position === "left" || position === "right";
     },
 
     stopAnimations(jumpToEnd) {
@@ -388,7 +405,7 @@ const Drawer = Widget.inherit({
     },
 
     _isInvertedPosition() {
-        const position = this.option("position");
+        const position = this.getDrawerPosition();
 
         return position === "right" || position === "bottom";
     },
@@ -456,7 +473,7 @@ const Drawer = Widget.inherit({
         this._cleanPanel();
 
         this._renderPanelElement();
-        this._orderContent(this.option("position"));
+        this._orderContent(this.getDrawerPosition());
 
         this._whenPanelRefreshed = new Deferred();
         this._strategy.renderPanel(this._getTemplate(this.option("template")), this._whenPanelRefreshed);

@@ -47,7 +47,7 @@ class OverlapStrategy extends DrawerStrategy {
         if(typeUtils.isDefined(this._initialPosition)) {
             translator.move($overlayContent, { left: this._initialPosition.left });
         }
-        if(drawer.option("position") === "right") {
+        if(drawer.getDrawerPosition() === "right") {
             $overlayContent.css("left", "auto");
 
             if(drawer.option("rtlEnabled")) {
@@ -58,7 +58,7 @@ class OverlapStrategy extends DrawerStrategy {
 
     getOverlayPosition() {
         const drawer = this.getDrawerInstance();
-        const panelPosition = drawer.option("position");
+        const panelPosition = drawer.getDrawerPosition();
 
         let result = {};
 
@@ -110,7 +110,7 @@ class OverlapStrategy extends DrawerStrategy {
         this._initialPosition = drawer.getOverlay().$content().position();
 
         const $content = $(drawer.viewContent());
-        const position = drawer.option("position");
+        const position = drawer.getDrawerPosition();
 
         if(drawer.isHorizontalDirection()) {
             $content.css("paddingLeft", drawer.option("minSize") * drawer._getPositionCorrection());
