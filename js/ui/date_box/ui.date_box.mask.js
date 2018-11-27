@@ -114,7 +114,10 @@ let DateBoxMask = DateBoxBase.inherit({
         this._setActivePartValue(newValue);
 
         if(this.option("advanceCaret")) {
-            if(parseInt(this._searchValue + "0") > limits.max) {
+            const isLengthExceeded = this._searchValue.length === String(limits.max).length;
+            const isValueOverflowed = parseInt(this._searchValue + "0") > limits.max;
+
+            if(isLengthExceeded || isValueOverflowed) {
                 this._selectNextPart(FORWARD);
             }
         }

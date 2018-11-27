@@ -856,7 +856,17 @@ if(devices.real().deviceType === "desktop") {
             });
 
             this.keyboard.type("38");
-            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was not moved");
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved to month");
+        });
+
+        QUnit.test("Move caret to the next group after string length overflow", (assert) => {
+            this.instance.option({
+                advanceCaret: true,
+                displayFormat: "dd.MM"
+            });
+
+            this.keyboard.type("01");
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved to month");
         });
     });
 }
