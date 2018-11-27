@@ -688,6 +688,27 @@ QUnit.test("UpdateAppointmentStartDate should return corrected startDate", funct
     });
 });
 
+QUnit.test("UpdateAppointmentStartDate should return corrected startDate when appointment is short", function(assert) {
+    this.createInstance();
+    this.instance.option({
+        currentView: "week",
+        currentDate: new Date(2016, 1, 1),
+        startDayHour: 9
+    });
+
+    var appointment = {
+        startDate: new Date(2016, 1, 2, 8, 30),
+        endDate: new Date(2016, 1, 2, 9, 1)
+    };
+
+    this.instance.fire("updateAppointmentStartDate", {
+        startDate: appointment.startDate,
+        callback: function(result) {
+            assert.deepEqual(result, new Date(2016, 1, 2, 9, 0), "Updated date is correct");
+        }
+    });
+});
+
 QUnit.test("appointmentTakesSeveralDays should return true, if startDate and endDate is different days", function(assert) {
     this.createInstance();
     this.instance.option({
