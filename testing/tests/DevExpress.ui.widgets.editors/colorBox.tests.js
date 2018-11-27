@@ -340,11 +340,25 @@ QUnit.test("Update colors preview", function(assert) {
 
     showColorBox.call(this);
 
-    var currentColor = colorPicker._$currentColor.css("backgroundColor"),
-        newColor = colorPicker._$newColor.css("backgroundColor");
+    var baseColor = $(".dx-colorview-color-preview-color-current").css("backgroundColor");
+    var newColor = $(".dx-colorview-color-preview-color-new").css("backgroundColor");
 
-    assert.equal(new Color(currentColor).toHex(), "#d0ff00");
-    assert.equal(new Color(newColor).toHex(), "#d0ff00");
+    assert.equal(new Color(newColor).toHex(), "#d0ff00", "new color");
+    assert.equal(new Color(baseColor).toHex(), "#000000", "default color");
+});
+
+QUnit.test("Update colors preview after value change", function(assert) {
+    var colorBox = showColorBox.call(this, { value: "#fafafa" }).dxColorBox("instance");
+
+    colorBox.option("value", "#f0f0f0");
+    this.updateColorInput("hex", "d0ff00");
+    colorBox._colorView.applyColor();
+
+    var baseColor = $(".dx-colorview-color-preview-color-current").css("backgroundColor");
+    var newColor = $(".dx-colorview-color-preview-color-new").css("backgroundColor");
+
+    assert.equal(new Color(newColor).toHex(), "#d0ff00", "new color");
+    assert.equal(new Color(baseColor).toHex(), "#f0f0f0", "current ColorBox value still the same");
 });
 
 QUnit.test("Validate value of colorbox input", function(assert) {

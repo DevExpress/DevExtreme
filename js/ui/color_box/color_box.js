@@ -238,6 +238,7 @@ var ColorBox = DropDownEditor.inherit({
 
         return {
             value: that.option("value"),
+            matchValue: that.option("value"),
             editAlphaChannel: that.option("editAlphaChannel"),
             applyValueMode: that.option("applyValueMode"),
             focusStateEnabled: that.option("focusStateEnabled"),
@@ -367,7 +368,14 @@ var ColorBox = DropDownEditor.inherit({
             value = this.option("value");
 
         $input.val(value);
-        this._colorView && this._colorView.option("value", value);
+        this._updateColorViewValue(value);
+    },
+
+    _updateColorViewValue: function(value) {
+        if(this._colorView) {
+            this._colorView.option("value", value);
+            this._colorView.option("matchValue", value);
+        }
     },
 
     _valueChangeEventHandler: function(e) {
@@ -376,7 +384,7 @@ var ColorBox = DropDownEditor.inherit({
         if(value) {
             value = this._applyColorFromInput(value);
 
-            this._colorView && this._colorView.option("value", value);
+            this._updateColorViewValue(value);
         }
         this.callBase(e, value);
     },
@@ -406,10 +414,7 @@ var ColorBox = DropDownEditor.inherit({
                     this._$colorResultPreview.removeAttr("style");
                 }
 
-                if(this._colorView) {
-                    this._colorView.option("value", value);
-                }
-
+                this._updateColorViewValue(value);
                 this.callBase(args);
                 break;
             case "applyButtonText":
