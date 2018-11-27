@@ -6,7 +6,9 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     messageLocalization = require("../../localization/message"),
-    when = require("../../core/utils/deferred").when,
+    deferredUntils = require("../../core/utils/deferred"),
+    when = deferredUntils.when,
+    Deferred = deferredUntils.Deferred,
     domAdapter = require("../../core/dom_adapter"),
     browser = require("../../core/utils/browser");
 
@@ -484,18 +486,25 @@ var ResizingController = modules.ViewController.inherit({
             return;
         }
 
-        return commonUtils.deferRender(function() {
-            if(that._dataController.isLoaded()) {
-                that._synchronizeColumns();
-            }
-            commonUtils.deferUpdate(function() {
-                commonUtils.deferRender(function() {
-                    commonUtils.deferUpdate(function() {
-                        that._updateDimensionsCore();
+        var result = new Deferred();
+
+        when(that._resizeDeferred).always(function() {
+            that._resizeDeferred = result;
+            commonUtils.deferRender(function() {
+                if(that._dataController.isLoaded()) {
+                    that._synchronizeColumns();
+                }
+                commonUtils.deferUpdate(function() {
+                    commonUtils.deferRender(function() {
+                        commonUtils.deferUpdate(function() {
+                            that._updateDimensionsCore();
+                        });
                     });
                 });
-            });
+            }).done(result.resolve).fail(result.reject);
         });
+
+        return result.promise();
     },
     _checkSize: function(checkSize) {
         var $rootElement = this.component.$element();
