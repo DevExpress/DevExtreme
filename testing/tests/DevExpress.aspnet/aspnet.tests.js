@@ -177,7 +177,7 @@
                     </div>\
                     </script>\
                     \
-                    <div id="buttonWithInnerTemplate"><script>// DevExpress.aspnet.setTemplateEngine();</script><script type="text/html">BUTTON_CONTENT</script></div>'
+                    <div id="buttonWithInnerTemplate"><script>// DevExpress.aspnet.setTemplateEngine();</script>BUTTON_CONTENT</div>'
                 );
 
                 if(!window.DevExpress || !window.DevExpress.aspnet) {
@@ -239,6 +239,7 @@
 
             QUnit.test("Inner template is rendered correctly when another script tags exist", function(assert) {
                 var $buttonElement = $("#buttonWithInnerTemplate").dxButton();
+                $buttonElement.find("script").remove();
                 assert.equal($buttonElement.text(), "BUTTON_CONTENT");
             });
         }
