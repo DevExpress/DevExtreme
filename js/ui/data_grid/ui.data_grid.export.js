@@ -331,8 +331,10 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                 } else {
                     columnWidthsByColumnIndex = {};
                     const columnWidths = this._getColumnWidths(this._headersView, this._rowsView);
-                    for(let i = 0; i < columns.length; i++) {
-                        columnWidthsByColumnIndex[columns[i].index] = columnWidths[i];
+                    if(columnWidths && columnWidths.length) {
+                        for(let i = 0; i < columns.length; i++) {
+                            columnWidthsByColumnIndex[columns[i].index] = columnWidths[i];
+                        }
                     }
                 }
             }
@@ -563,11 +565,14 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
     getExportFormat: function() { return ["EXCEL"]; },
 
     getDataProvider: function() {
-        const columnsLastRowVisibleColumns = this._columnsController.getVisibleColumns(this._columnsController.getRowCount(), true);
         const columnWidths = this._getColumnWidths(this._headersView, this._rowsView);
-        const initialColumnWidthsByColumnIndex = {};
-        for(let i = 0; i < columnsLastRowVisibleColumns.length; i++) {
-            initialColumnWidthsByColumnIndex[columnsLastRowVisibleColumns[i].index] = columnWidths[i];
+        let initialColumnWidthsByColumnIndex;
+        if(columnWidths && columnWidths.length) {
+            initialColumnWidthsByColumnIndex = {};
+            const columnsLastRowVisibleColumns = this._columnsController.getVisibleColumns(this._columnsController.getRowCount(), true);
+            for(let i = 0; i < columnsLastRowVisibleColumns.length; i++) {
+                initialColumnWidthsByColumnIndex[columnsLastRowVisibleColumns[i].index] = columnWidths[i];
+            }
         }
         return new exports.DataProvider(this, initialColumnWidthsByColumnIndex);
     },
