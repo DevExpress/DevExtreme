@@ -10,8 +10,7 @@ import exportTestsHelper from "./exportTestsHelper.js";
 
 const dataGridExportTestsHelper = Object.create(exportTestsHelper);
 
-dataGridExportTestsHelper.runGeneralTest = function(assert, options,
-        { styles = undefined, worksheet = undefined, sharedStrings = undefined, getCustomizeExcelCellExpectedCells = undefined, fixedColumnWidth_100 = true } = {}) {
+dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, getCustomizeExcelCellExpectedCells = undefined, fixedColumnWidth_100 = true } = {}) {
     const that = this;
     const done = assert.async();
     const actualGridCells = [];
