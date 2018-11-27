@@ -5052,6 +5052,57 @@ QUnit.test("contentReady event must be raised once when scrolling mode is virtua
     assert.equal(contentReadyCallCount, 1, "one contentReady on start");
 });
 
+// T691574
+QUnit.test("refresh and height change should not break layout if rowRenderingMode is virtual", function(assert) {
+    function generateData(count) {
+        var items = [];
+
+        for(var i = 0; i < count; i++) {
+            items.push({
+                someValue1: i,
+                someValue2: i
+            });
+        }
+
+        return items;
+    }
+
+    // act
+    var dataGrid = createDataGrid({
+        height: 200,
+        columnAutoWidth: true,
+        loadingTimeout: undefined,
+        dataSource: generateData(10),
+        scrolling: {
+            rowPageSize: 2,
+            rowRenderingMode: "virtual",
+            updateTimeout: 0
+        },
+        columns: [{
+            dataField: "someValue1",
+            fixed: true
+        }, {
+            dataField: "someValue2"
+        }],
+        summary: {
+            totalItems: [{
+                column: "someValue1",
+                summaryType: "sum"
+            }, {
+                column: "someValue2",
+                summaryType: "sum"
+            }]
+        }
+    });
+
+    // act
+    dataGrid.refresh();
+    dataGrid.option("height", 300);
+
+    // assert
+    assert.equal($(dataGrid.element()).find(".dx-datagrid-total-footer td").length, 4, "summary cell count");
+});
+
 QUnit.test("row alternation should be correct if virtual scrolling is enabled and grouping is used", function(assert) {
     var dataSource = [
         { id: 1, group: 1 },
