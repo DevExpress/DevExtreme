@@ -258,25 +258,6 @@ QUnit.test("Tasks should be filtered by start day hour before render", function(
     assert.deepEqual(dataUtils.data($appointments.get(2), "dxItemData"), tasks[2], "Appointment data is OK");
 });
 
-QUnit.test("Tasks should be cropped by start day on render (T692698)", function(assert) {
-    var tasks = [
-        { text: "One", startDate: new Date(2018, 10, 27, 3, 30), endDate: new Date(2018, 10, 27, 4, 1) }
-    ];
-    var dataSource = new DataSource({
-        store: tasks
-    });
-    this.createInstance({
-        currentDate: new Date(2018, 10, 27),
-        dataSource: dataSource,
-        startDayHour: 4,
-        currentView: "week"
-    });
-
-    var $appointments = this.instance.$element().find("." + APPOINTMENT_CLASS);
-
-    assert.equal($appointments.length, 1, "There is only one appointment part");
-});
-
 QUnit.test("Tasks should be filtered by end day hour before render", function(assert) {
     var tasks = [
         { text: "One", startDate: new Date(2015, 2, 16, 7), endDate: new Date(2015, 2, 16, 7, 30) },

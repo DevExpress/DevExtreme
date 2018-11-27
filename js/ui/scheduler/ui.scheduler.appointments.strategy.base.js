@@ -455,15 +455,6 @@ var BaseRenderingStrategy = Class.inherit({
             startDate = viewStartDate;
         }
 
-        if(this._cropDateByStartDayHour() && !skipNormalize) {
-            var startDayHour = this.instance.fire("getStartDayHour"),
-                startTime = dateUtils.dateTimeFromDecimal(startDayHour);
-
-            if(startDate.getHours() === startTime.hours && startDate.getMinutes() < startTime.minutes || startDate.getHours() < startTime.hours) {
-                startDate.setHours(startTime.hours);
-                startDate.setMinutes(startTime.minutes);
-            }
-        }
         if(isNaN(startDate.getTime())) {
             throw errors.Error("E1032", text);
         }
@@ -504,10 +495,6 @@ var BaseRenderingStrategy = Class.inherit({
         }
 
         return endDate;
-    },
-
-    _cropDateByStartDayHour: function() {
-        return false;
     },
 
     _adjustDurationByDaylightDiff: function(duration, startDate, endDate) {

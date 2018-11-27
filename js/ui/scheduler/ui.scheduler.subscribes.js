@@ -415,7 +415,7 @@ var subscribes = {
 
         var startTime = dateUtils.dateTimeFromDecimal(startDayHour);
 
-        if(updatedStartDate.getHours() <= startTime.hours && updatedStartDate.getMinutes() <= startTime.minutes) {
+        if(updatedStartDate.getHours() === startTime.hours && updatedStartDate.getMinutes() < startTime.minutes || updatedStartDate.getHours() < startTime.hours) {
             updatedStartDate.setHours(startTime.hours, startTime.minutes, 0, 0);
         }
 
