@@ -1154,28 +1154,45 @@ var KeyboardNavigationController = core.ViewController.inherit({
     * @param1 element:Node|jQuery
     */
     focus: function(element) {
+        var activeElementSelector,
+            focusedRowEnabled = this.option("focusedRowEnabled"),
+            focusedColumnIndex = this.option("focusedColumnIndex");
+
         if(!element) {
-            var activeElementSelector = this.option("focusedRowEnabled") ? ".dx-row" : ".dx-row > td";
-            element = this.component.element().find(activeElementSelector + "[tabindex]").first();
+            activeElementSelector = focusedRowEnabled ? ".dx-row" : ".dx-row > td";
+            element = this.component.$element().find(activeElementSelector + "[tabindex]").first();
+            if(focusedRowEnabled && focusedColumnIndex >= 0) {
+                element = this.getFirstValidCellInRow(element, focusedColumnIndex);
+            }
         }
+
         if(element) {
-            var $element = $(element);
-            var focusView = this._getFocusedViewByElement($element);
-
-            if($element.is(".dx-row")) {
-                this.setRowFocusType();
-            } else {
-                this.setCellFocusType();
-            }
-
-            if(focusView) {
-                this._focusView(focusView.view, focusView.viewIndex);
-                this._isNeedFocus = true;
-                this._isNeedScroll = true;
-                this._focus($element);
-                this._focusInteractiveElement($element);
-            }
+            this._focusElementInActiveView($(element));
         }
+    },
+
+    _focusElementInActiveView: function($element) {
+        var focusView = this._getFocusedViewByElement($element),
+            args;
+
+        if(!focusView) {
+            return;
+        }
+
+        if($element.is(".dx-row")) {
+            this.setRowFocusType();
+        } else {
+            this.setCellFocusType();
+        }
+
+        this._focusView(focusView.view, focusView.viewIndex);
+        this._isNeedFocus = true;
+        this._isNeedScroll = true;
+
+        args = this._fireFocusChangingEvents(null, $element);
+
+        this._focus($element, !args.isHighlighted);
+        this._focusInteractiveElement($element);
     },
 
     getFocusedView: function() {
