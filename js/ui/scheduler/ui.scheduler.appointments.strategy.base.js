@@ -447,7 +447,7 @@ var BaseRenderingStrategy = Class.inherit({
             startDate = viewStartDate;
         }
 
-        if(this._cropDateByStartDayHour()) {
+        if(this._cropDateByStartDayHour() && !skipNormalize) {
             var startDayHour = this.instance.fire("getStartDayHour"),
                 startTime = dateUtils.dateTimeFromDecimal(startDayHour);
 
