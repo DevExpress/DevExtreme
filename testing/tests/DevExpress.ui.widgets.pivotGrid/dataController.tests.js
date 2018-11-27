@@ -96,10 +96,12 @@ QUnit.test("Empty dataSource when showRowGrandTotals/showColumnGrandTotals disab
     var dataController = new DataController({
         showRowGrandTotals: false,
         showColumnGrandTotals: false,
-        dataSource: {}
+        dataSource: {},
+        texts: texts
     });
-    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: "GT", isLast: true }]], "Rows Info");
-    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: "GT", isLast: true }]], "Columns Info");
+
+    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: undefined, isLast: true }]], "Rows Info");
+    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: undefined, isLast: true }]], "Columns Info");
     assert.deepEqual(dataController.getCellsInfo(), [], "Cells Info");
 });
 
@@ -461,16 +463,16 @@ QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTota
     assert.deepEqual(dataController.getColumnsInfo(), [[
         {
             isLast: true,
-            text: "Grand Total",
-            type: "GT"
+            text: undefined,
+            type: undefined
         }
     ]], "Columns Info");
 
     assert.deepEqual(dataController.getRowsInfo(), [[
         {
             isLast: true,
-            text: "Grand Total",
-            type: "GT"
+            text: undefined,
+            type: undefined
         }
     ]], "Rows Info");
 });

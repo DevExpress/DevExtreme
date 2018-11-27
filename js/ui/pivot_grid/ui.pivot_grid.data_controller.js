@@ -185,7 +185,7 @@ exports.DataController = Class.inherit((function() {
 
                 if(options.showGrandTotals || headerDescriptions.length === 0) {
                     viewHeaderItems[!options.showTotalsPrior ? "push" : "unshift"]({
-                        type: GRAND_TOTAL_TYPE,
+                        type: options.showGrandTotals ? GRAND_TOTAL_TYPE : undefined,
                         isEmpty: options.isEmptyGrandTotal
                     });
                 }
