@@ -189,15 +189,6 @@ let DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _getCustomSetters() {
-        var optionValue = this.option("dateComponentAccessors");
-        if(!optionValue) {
-            return null;
-        }
-
-        return optionValue.set;
-    },
-
     _renderDateParts() {
         if(!this._useMaskBehavior()) {
             return;
@@ -206,7 +197,7 @@ let DateBoxMask = DateBoxBase.inherit({
         const text = this.option("text") || this._getDisplayedText(this._maskValue);
 
         if(text) {
-            this._dateParts = renderDateParts(text, this._getFormatPattern(), this._getCustomSetters());
+            this._dateParts = renderDateParts(text, this._getFormatPattern(), this.option("dateComponentAccessors"));
             this._selectNextPart(0);
         }
     },

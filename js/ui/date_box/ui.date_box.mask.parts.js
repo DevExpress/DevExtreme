@@ -55,12 +55,19 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
     }
 });
 
-const getPatternGetter = (patternChar) => {
+const getPatternGetter = (accessors, patternChar) => {
     const unsupportedCharGetter = () => patternChar;
-    return PATTERN_GETTERS[patternChar] || unsupportedCharGetter;
+    const accessor = accessors && accessors[patternChar] && accessors[patternChar].get;
+
+    return accessor || PATTERN_GETTERS[patternChar] || unsupportedCharGetter;
 };
 
-const renderDateParts = (text, format, setters) => {
+const getPatternSetter = (accessors, patternChar) => {
+    const accessor = accessors && accessors[patternChar] && accessors[patternChar].set;
+    return accessor || PATTERN_SETTERS[patternChar[0]] || noop;
+};
+
+const renderDateParts = (text, format, accessors) => {
     const regExpInfo = getRegExpInfo(format, dateLocalization),
         result = regExpInfo.regexp.exec(text);
 
@@ -73,8 +80,8 @@ const renderDateParts = (text, format, setters) => {
         end = start + result[i].length;
 
         let pattern = regExpInfo.patterns[i - 1],
-            getter = getPatternGetter(pattern[0]),
-            setter = (setters && setters[pattern[0]]) || PATTERN_SETTERS[pattern[0]] || noop;
+            getter = getPatternGetter(accessors, pattern[0]),
+            setter = getPatternSetter(accessors, pattern[0]);
 
         sections.push({
             index: i - 1,
