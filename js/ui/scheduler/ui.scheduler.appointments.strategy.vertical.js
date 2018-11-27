@@ -90,6 +90,10 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return result;
     },
 
+    _cropDateByStartDayHour: function() {
+        return true;
+    },
+
     _isMultiDayAppointment: function(position, height) {
         var maxTop = position.vMax,
             result = height > (maxTop - position.top);
