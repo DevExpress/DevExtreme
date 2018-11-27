@@ -329,9 +329,9 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                 if(this._updateLockCount) {
                     columnWidthsByColumnIndex = initialColumnWidthsByColumnIndex;
                 } else {
-                    columnWidthsByColumnIndex = {};
                     const columnWidths = this._getColumnWidths(this._headersView, this._rowsView);
                     if(columnWidths && columnWidths.length) {
+                        columnWidthsByColumnIndex = {};
                         for(let i = 0; i < columns.length; i++) {
                             columnWidthsByColumnIndex[columns[i].index] = columnWidths[i];
                         }
@@ -345,7 +345,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                 });
 
                 if(column.allowExporting && !column.command) {
-                    if(columnWidthsByColumnIndex && Object.keys(columnWidthsByColumnIndex).length) {
+                    if(columnWidthsByColumnIndex) {
                         this._updateColumnWidth(column, columnWidthsByColumnIndex[column.index]);
                     }
                     result[i].push(column);
