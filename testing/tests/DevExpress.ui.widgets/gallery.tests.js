@@ -95,6 +95,7 @@ var GALLERY_CLASS = "dx-gallery",
     GALLERY_WRAPPER_CLASS = GALLERY_CLASS + "-wrapper",
     GALLERY_ITEM_CONTAINER_CLASS = GALLERY_CLASS + "-container",
     GALLERY_ITEM_CLASS = GALLERY_CLASS + "-item",
+    GALLERY_ITEM_IMAGE_CLASS = GALLERY_ITEM_CLASS + "-image",
     GALLERY_INVISIBLE_ITEM_CLASS = GALLERY_CLASS + "-item-invisible",
     GALLERY_INDICATOR_CLASS = "dx-gallery-indicator",
     GALLERY_LOOP_ITEM_CLASS = GALLERY_CLASS + "-item-loop",
@@ -966,6 +967,29 @@ QUnit.test("'wrapAround' option changed test", function(assert) {
     instance.option("wrapAround", false);
 
     assert.equal(calculateItemPosition($galleryItems.eq(2), $gallery), 0);
+});
+
+QUnit.test("Image should have correct sizes across the browsers", function(assert) {
+    var done = assert.async();
+    var $gallery = $("#gallerySimple").dxGallery({
+        width: 800,
+        height: 500,
+        stretchImages: false,
+        items: ["test.jpg"]
+    });
+
+    var imageWidth = 540;
+    var imageHeight = 338;
+
+    var $galleryItemImage = $gallery.find("." + GALLERY_ITEM_IMAGE_CLASS);
+
+    $galleryItemImage
+        .on('load', function() {
+            assert.equal($galleryItemImage.width(), imageWidth);
+            assert.equal($galleryItemImage.height(), imageHeight);
+            done();
+        })
+        .attr("src", "../../testing/content/LightBlueSky.jpg");
 });
 
 QUnit.module("options changed callbacks", {
