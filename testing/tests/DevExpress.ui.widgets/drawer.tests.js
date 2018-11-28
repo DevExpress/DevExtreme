@@ -720,6 +720,20 @@ QUnit.test("shader should have correct visibility after toggling state", assert 
     assert.equal($shader.css("visibility"), "hidden", "shader is hidden");
 });
 
+QUnit.test("shader should have correct opacity after toggling state", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        shading: true,
+        animationEnabled: false
+    });
+    const instance = $element.dxDrawer("instance");
+    const $shader = $element.find("." + DRAWER_SHADER_CLASS);
+
+    assert.ok($shader.css("opacity"), 1, "shader has right opacity");
+    instance.toggle();
+    assert.ok($shader.css("opacity"), 0, "shader has right opacity");
+});
+
 QUnit.test("shading option", assert => {
     const $element = $("#drawer").dxDrawer({
         opened: true,

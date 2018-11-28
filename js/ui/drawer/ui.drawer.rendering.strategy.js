@@ -155,13 +155,13 @@ class DrawerStrategy {
     _getFadeConfig(offset) {
         if(offset) {
             return {
-                to: 0.5,
+                to: 1,
                 from: 0
             };
         } else {
             return {
                 to: 0,
-                from: 0.5
+                from: 1
             };
         }
     }
