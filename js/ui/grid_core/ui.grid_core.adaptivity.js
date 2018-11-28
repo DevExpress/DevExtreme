@@ -451,6 +451,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                     var columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, visibleContentColumns, columnsCanFit),
                         columnId = getColumnId(that, visibleColumn),
                         widthOption = that._columnsController.columnOption(columnId, "width"),
+                        minWidth = that._columnsController.columnOption(columnId, "minWidth"),
                         columnBestFitWidth = that._columnsController.columnOption(columnId, "bestFitWidth");
 
                     if(resultWidths[i] === HIDDEN_COLUMNS_WIDTH) {
@@ -463,7 +464,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                     }
 
                     if(!widthOption || widthOption === "auto") {
-                        columnWidth = columnBestFitWidth || 0;
+                        columnWidth = Math.max(columnBestFitWidth || 0, minWidth || 0);
                     }
 
                     if(visibleColumn.command !== ADAPTIVE_COLUMN_NAME || hasHiddenColumns) {
