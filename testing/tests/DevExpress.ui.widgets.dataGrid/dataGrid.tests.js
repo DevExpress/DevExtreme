@@ -60,6 +60,7 @@ var $ = require("jquery"),
     gridCore = require("ui/data_grid/ui.data_grid.core"),
     gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
     DataSource = require("data/data_source/data_source").DataSource,
+    ArrayStore = require("data/array_store"),
     messageLocalization = require("localization/message"),
     setTemplateEngine = require("ui/set_template_engine"),
     fx = require("animation/fx"),
@@ -11679,6 +11680,57 @@ QUnit.test("Push with reshape and repaintChangesOnly if scrolling mode is virtua
     assert.strictEqual(dataGrid.getVisibleRows().length, 4, "visible rows");
     assert.ok($(dataGrid.getCellElement(1, 0)).is($firstCell), "first cell is not recreated");
     assert.notOk($(dataGrid.getCellElement(1, 1)).is($secondCell), "second cell is recreated");
+    assert.strictEqual($(dataGrid.getCellElement(1, 1)).text(), "updated", "second cell value is updated");
+});
+
+QUnit.test("Push without reshape should not force load if scrolling mode is virtual", function(assert) {
+    // arrange
+    var data = [
+        { id: 1, name: "test 1" },
+        { id: 2, name: "test 2" },
+        { id: 3, name: "test 3" },
+        { id: 4, name: "test 4" },
+        { id: 5, name: "test 5" }
+    ];
+
+    var loadingCount = 0;
+
+    var arrayStore = new ArrayStore({
+        key: "id",
+        data: data,
+        onLoading: function() {
+            loadingCount++;
+        }
+    });
+
+    var dataGrid = createDataGrid({
+        height: 50,
+        loadingTimeout: undefined,
+        repaintChangesOnly: true,
+        scrolling: {
+            mode: "virtual",
+            updateTimeout: 0
+        },
+        remoteOperations: true,
+        cacheEnabled: false,
+        paging: {
+            pageSize: 2
+        },
+        dataSource: {
+            store: arrayStore,
+            pushAggregationTimeout: 0
+        },
+        columns: ["id", "name"]
+    });
+
+    // assert
+    assert.strictEqual(loadingCount, 2, "loadingCount after init");
+
+    // act
+    arrayStore.push([{ type: "update", key: 2, data: { name: "updated" } }]);
+
+    // assert
+    assert.strictEqual(loadingCount, 2, "loadingCount is not changed after push");
     assert.strictEqual($(dataGrid.getCellElement(1, 1)).text(), "updated", "second cell value is updated");
 });
 
