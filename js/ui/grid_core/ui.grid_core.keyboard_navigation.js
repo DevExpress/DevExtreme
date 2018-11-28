@@ -1406,6 +1406,7 @@ module.exports = {
              * @type_function_param1_field10 rows:Array<dxDataGridRowObject>
              * @type_function_param1_field11 columns:Array<dxDataGridColumn>
              * @type_function_param1_field12 cancel:boolean
+             * @type_function_param1_field13 isHighlighted:boolean
              * @extends Action
              * @action
              */
@@ -1422,6 +1423,7 @@ module.exports = {
              * @type_function_param1_field10 rows:Array<dxTreeListRowObject>
              * @type_function_param1_field11 columns:Array<dxTreeListColumn>
              * @type_function_param1_field12 cancel:boolean
+             * @type_function_param1_field13 isHighlighted:boolean
              * @extends Action
              * @action
              */
