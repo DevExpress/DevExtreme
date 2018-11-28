@@ -100,8 +100,8 @@ QUnit.test("Empty dataSource when showRowGrandTotals/showColumnGrandTotals disab
         texts: texts
     });
 
-    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: undefined, isLast: true }]], "Rows Info");
-    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: undefined, isLast: true }]], "Columns Info");
+    assert.deepEqual(dataController.getRowsInfo(), [[{ text: undefined, type: undefined }]], "Rows Info");
+    assert.deepEqual(dataController.getColumnsInfo(), [[{ text: undefined, type: undefined }]], "Columns Info");
     assert.deepEqual(dataController.getCellsInfo(), [], "Cells Info");
 });
 
@@ -462,7 +462,6 @@ QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTota
 
     assert.deepEqual(dataController.getColumnsInfo(), [[
         {
-            isLast: true,
             text: undefined,
             type: undefined
         }
@@ -470,7 +469,6 @@ QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTota
 
     assert.deepEqual(dataController.getRowsInfo(), [[
         {
-            isLast: true,
             text: undefined,
             type: undefined
         }
@@ -1487,6 +1485,28 @@ QUnit.test("cellInfo when cells descriptions count === 1 when showGrandTotals di
             { columnType: "D", rowType: "D", text: "9" }
         ]]);
 
+});
+
+QUnit.test("cellInfo when no columns and when showGrandTotals disabled", function(assert) {
+    var dataController = new DataController({
+        showRowGrandTotals: false,
+        showColumnGrandTotals: false,
+        dataSource: {
+            fields: [
+                { area: "row" },
+                { caption: 'Sum', format: 'decimal', area: "data" }
+            ],
+            rows: [{ value: 'Vasya', index: 0 }, { value: 'Piter', index: 1 }],
+            columns: [],
+            values: [
+                [1],
+                [2],
+                [3]
+            ]
+        }
+    });
+
+    assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [[], []]);
 });
 
 QUnit.test("cellInfo when cells descriptions count > 1", function(assert) {
