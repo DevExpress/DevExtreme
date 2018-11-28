@@ -430,7 +430,7 @@ const Drawer = Widget.inherit({
 
     _animationCompleteHandler() {
         if(this._animationPromise) {
-            this._toggleResolve();
+            this._animationPromise.resolve();
             this._animations = [];
         }
     },
@@ -592,12 +592,10 @@ const Drawer = Widget.inherit({
     toggle(showing) {
         showing = showing === undefined ? !this.option("opened") : showing;
 
-        this._animationPromise = new Promise((resolve) => {
-            this._toggleResolve = resolve;
-        });
+        this._animationPromise = new Deferred();
         this.option("opened", showing);
 
-        return this._animationPromise;
+        return this._animationPromise.promise();
     }
 
     /**
