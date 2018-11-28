@@ -251,12 +251,26 @@ QUnit.test("Position of alpha channel handle with rgba(255, 0, 0, 0)", function(
 QUnit.test("Render colors preview", function(assert) {
     showColorView.call(this);
     var $colorPreviewContainer = this.element.find(".dx-colorview-color-preview-container"),
-        $colorPreviewContainerInner = this.element.find(".dx-colorview-color-preview-container-inner");
+        $colorPreviewContainerInner = this.element.find(".dx-colorview-color-preview-container-inner"),
+        $baseColor = $colorPreviewContainerInner.find(".dx-colorview-color-preview-color-current"),
+        $newColor = $colorPreviewContainerInner.find(".dx-colorview-color-preview-color-new");
 
     assert.equal($colorPreviewContainer.length, 1);
     assert.equal($colorPreviewContainerInner.length, 1);
-    assert.equal($colorPreviewContainerInner.find(".dx-colorview-color-preview-color-current").length, 1);
-    assert.equal($colorPreviewContainerInner.find(".dx-colorview-color-preview-color-new").length, 1);
+    assert.equal($baseColor.length, 1);
+    assert.equal($newColor.length, 1);
+    assert.equal(new Color($baseColor.css("backgroundColor")).toHex(), "#000000");
+    assert.equal(new Color($newColor.css("backgroundColor")).toHex(), "#000000");
+});
+
+QUnit.test("Render colors preview with predefined values", function(assert) {
+    showColorView.call(this, { value: "#fafafa", matchValue: "#dadada" });
+    var $colorPreviewContainerInner = this.element.find(".dx-colorview-color-preview-container-inner"),
+        $baseColor = $colorPreviewContainerInner.find(".dx-colorview-color-preview-color-current"),
+        $newColor = $colorPreviewContainerInner.find(".dx-colorview-color-preview-color-new");
+
+    assert.equal(new Color($baseColor.css("backgroundColor")).toHex(), "#dadada");
+    assert.equal(new Color($newColor.css("backgroundColor")).toHex(), "#fafafa");
 });
 
 QUnit.test("In 'instantly' mode 'OK' and 'Cancel' buttons should not be rendered", function(assert) {
@@ -717,11 +731,15 @@ QUnit.test("Markup should be updated when value was changed", function(assert) {
 
 QUnit.test("Preview for current color should be updated when value was changed", function(assert) {
     var colorView = showColorView.call(this, {
-        value: "red"
+        value: "red",
+        matchValue: "red"
     }).dxColorView("instance");
+    var $baseColor = this.element.find(".dx-colorview-color-preview-color-current");
+    var $newColor = this.element.find(".dx-colorview-color-preview-color-new");
 
     colorView.option("value", "green");
-    assert.equal(new Color(colorView._$currentColor.css("backgroundColor")).toHex(), "#008000");
+    assert.equal(new Color($baseColor.css("backgroundColor")).toHex(), "#ff0000", "base preview keeps initial match value");
+    assert.equal(new Color($newColor.css("backgroundColor")).toHex(), "#008000", "new color preview show selected value");
 });
 
 QUnit.test("Click on label should not focus the input (T179488)", function(assert) {
