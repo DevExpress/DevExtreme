@@ -599,10 +599,20 @@ if(devices.real().deviceType === "desktop") {
         QUnit.test("Year", (assert) => {
             this.instance.option("displayFormat", "yyyy");
 
-            this.keyboard
-                .type("99991");
+            this.keyboard.type("1995");
+            assert.equal(this.$input.val(), "1995");
 
-            assert.equal(this.$input.val(), "9991", "year should be limited");
+            this.keyboard.type("2");
+            assert.equal(this.$input.val(), "9952");
+
+            this.keyboard.type("0");
+            assert.equal(this.$input.val(), "9520");
+
+            this.keyboard.type("1");
+            assert.equal(this.$input.val(), "5201");
+
+            this.keyboard.type("8");
+            assert.equal(this.$input.val(), "2018");
         });
 
         QUnit.test("Short Year", (assert) => {
