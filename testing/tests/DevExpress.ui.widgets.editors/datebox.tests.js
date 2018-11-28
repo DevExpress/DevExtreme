@@ -4060,3 +4060,57 @@ QUnit.test("value should be changed on cell click in calendar with defined dateS
         options: { dateSerializationFormat: null }
     });
 });
+
+QUnit.test("T678838: DateBox doesn't switch format when time is changed", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+        value: new Date(2018, 6, 6, 2),
+        type: "datetime",
+        pickerType: "calendar"
+    });
+
+    var instance = $dateBox.dxDateBox("instance");
+    instance.open();
+
+    var $inputs = $("." + DATEBOX_WRAPPER_CLASS + " ." + TEXTEDITOR_INPUT_CLASS),
+        $hoursInput = $inputs.eq(0),
+        $formatInput = $inputs.eq(2);
+
+    assert.equal($formatInput.val(), "AM", "format value is correct");
+
+    $hoursInput
+        .val(16)
+        .trigger("change");
+
+    assert.equal(parseInt($hoursInput.val()), 4, "hour input value is correct formated after set hour in 24 format");
+    assert.equal($formatInput.val(), "PM", "format value is changed");
+
+    $("." + DATEBOX_WRAPPER_CLASS)
+        .find(".dx-button.dx-popup-done")
+        .trigger("dxclick");
+
+    assert.equal(instance.option("value").valueOf(), (new Date(2018, 6, 6, 16)).valueOf(), "DateBox value is correct");
+});
+
+QUnit.test("date value should be formatted after change AM/PM format", function(assert) {
+    var TIMEVIEW_FORMAT12_AM = -1,
+        TIMEVIEW_FORMAT12_PM = 1;
+
+    var $dateBox = $("#dateBox").dxDateBox({
+        value: new Date(2018, 6, 6, 16),
+        type: "datetime",
+        pickerType: "calendar"
+    });
+
+    var instance = $dateBox.dxDateBox("instance");
+    instance.open();
+
+    var formatSelectBox = $(".dx-timeview-format12").dxSelectBox("instance");
+    assert.equal(formatSelectBox.option("value"), TIMEVIEW_FORMAT12_PM, "correct value on init");
+
+    formatSelectBox.option("value", TIMEVIEW_FORMAT12_AM);
+    $("." + DATEBOX_WRAPPER_CLASS)
+        .find(".dx-button.dx-popup-done")
+        .trigger("dxclick");
+
+    assert.equal(instance.option("value").valueOf(), (new Date(2018, 6, 6, 4)).valueOf(), "DateBox value is formatted");
+});
