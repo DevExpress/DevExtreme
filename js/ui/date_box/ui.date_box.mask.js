@@ -66,6 +66,10 @@ let DateBoxMask = DateBoxBase.inherit({
             return result;
         }
 
+        if(this._isAllSelected()) {
+            this._activePartIndex = 0;
+        }
+
         this._setNewDateIfEmpty();
 
         isNaN(parseInt(key)) ? this._searchString(key) : this._searchNumber(key);
@@ -73,6 +77,12 @@ let DateBoxMask = DateBoxBase.inherit({
         e.originalEvent.preventDefault();
 
         return result;
+    },
+
+    _isAllSelected() {
+        const caret = this._caret();
+
+        return caret.end - caret.start === this.option("text").length;
     },
 
     _getFormatPattern() {
@@ -154,10 +164,8 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _revertPart: function(direction, e) {
         const value = this.dateOption("value");
-        const caret = this._caret();
-        const isAllSelected = caret.end - caret.start === this.option("text").length;
 
-        if(!isAllSelected) {
+        if(!this._isAllSelected()) {
             if(value) {
                 const actual = this._getActivePartValue(value);
                 this._setActivePartValue(actual);
