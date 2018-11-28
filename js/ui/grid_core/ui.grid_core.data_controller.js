@@ -457,12 +457,15 @@ module.exports = {
 
                             that._isDataSourceApplying = false;
 
-                            var additionalFilter = that._calculateAdditionalFilter(),
+                            var hasAdditionalFilter = () => {
+                                    var additionalFilter = that._calculateAdditionalFilter();
+                                    return additionalFilter && additionalFilter.length;
+                                },
                                 needApplyFilter = that._needApplyFilter;
 
                             that._needApplyFilter = false;
 
-                            if(needApplyFilter && additionalFilter && additionalFilter.length && !that._isAllDataTypesDefined) {
+                            if(needApplyFilter && !that._isAllDataTypesDefined && hasAdditionalFilter()) {
                                 errors.log("W1005", that.component.NAME);
                                 that._applyFilter();
                             } else {
