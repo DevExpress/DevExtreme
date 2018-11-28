@@ -5913,6 +5913,24 @@ QUnit.test("column filter for column with calculateFilterExpression", function(a
     assert.equal(this.dataController.items()[0].data.name, 'Alex');
 });
 
+// T694441
+QUnit.test("calculateFilterExpression should be called once after filterValue change", function(assert) {
+    this.setupFilterableData();
+
+    var calculateFilterExpressionCallCount = 0;
+    this.columnsController.columnOption(3, 'calculateFilterExpression', function(text, operation) {
+        calculateFilterExpressionCallCount++;
+        return [['name', operation || 'contains', text], 'or', ['age', operation || 'contains', text]];
+    });
+
+    // act
+    this.columnsController.columnOption(3, 'filterValue', '9');
+
+    // assert
+    assert.equal(calculateFilterExpressionCallCount, 1);
+    assert.equal(this.dataController.items().length, 1);
+});
+
 QUnit.test("column filter for column with calculateFilterExpression using function selector when cache enabled", function(assert) {
     this.setupFilterableData();
 
