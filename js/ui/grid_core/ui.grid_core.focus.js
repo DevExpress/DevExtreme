@@ -305,13 +305,6 @@ module.exports = {
                     this.option("focusedColumnIndex", columnIndex);
                 },
 
-                _clickHandler: function(e) {
-                    if(this.option("focusedRowEnabled")) {
-                        this.setRowFocusType();
-                    }
-                    this.callBase(e);
-                },
-
                 _escapeKeyHandler: function(eventArgs, isEditing) {
                     if(isEditing || !this.option("focusedRowEnabled")) {
                         this.callBase(eventArgs, isEditing);

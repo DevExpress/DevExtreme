@@ -2972,6 +2972,63 @@ QUnit.test("Enable rows hover", function(assert) {
     assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
 });
 
+QUnit.test("Enable rows hover and row position", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "hover is disabled for not desktop devices");
+        return;
+    }
+
+    // arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: [],
+            columns: [
+                { dataField: "firstName" },
+                { dataField: "lastName" },
+                { dataField: "room" },
+                { dataField: "birthDay" }
+            ],
+            hoverStateEnabled: true,
+            focusedRowIndex: 0,
+            focusedColumnIndex: 0
+        }),
+        $firstRow = $dataGrid.find(".dx-row").first();
+
+    // act
+    $($dataGrid).trigger({ target: $firstRow.get(0), type: "dxpointerenter", pointerType: "mouse" });
+
+    // assert
+    assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
+});
+
+QUnit.test("Enable rows hover, row position and focused row", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "hover is disabled for not desktop devices");
+        return;
+    }
+
+    // arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: [],
+            columns: [
+                { dataField: "firstName" },
+                { dataField: "lastName" },
+                { dataField: "room" },
+                { dataField: "birthDay" }
+            ],
+            hoverStateEnabled: true,
+            focusedRowEnabled: true,
+            focusedRowIndex: 0,
+            focusedColumnIndex: 0
+        }),
+        $firstRow = $dataGrid.find(".dx-row").first();
+
+    // act
+    $($dataGrid).trigger({ target: $firstRow.get(0), type: "dxpointerenter", pointerType: "mouse" });
+
+    // assert
+    assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
+});
+
 QUnit.test("Enable rows hover via option method", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "hover is disabled for not desktop devices");
