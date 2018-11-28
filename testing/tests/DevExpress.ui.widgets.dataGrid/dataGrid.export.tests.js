@@ -1422,78 +1422,6 @@ QUnit.test("Bands - show column headers & 'column.visible: true' in onExporting/
     );
 });
 
-// QUnit.test("Bands - show column headers & 'column.allowExporting: false'", function(assert) {
-//     const worksheet = helper.WORKSHEET_HEADER_XML +
-//         '<sheetPr/><dimension ref="A1:C1"/>' +
-//         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
-//         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-//         '<cols>' +
-//         '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-//         '<col width="' + excelColumnWidthFrom_200 + '" min="2" max="2" />' +
-//         '<col width="' + excelColumnWidthFrom_200 + '" min="3" max="3" />' +
-//         '</cols>' +
-//         '<sheetData>' +
-//         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /></row>' +
-//         '<row r="2" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>2</v></c><c r="C2" s="0" t="s"><v>3</v></c></row>' +
-//         '</sheetData>' +
-//         '<mergeCells count="2"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /></mergeCells>' +
-//         '</worksheet>';
-
-//     helper.runGeneralTest(
-//         assert,
-//         {
-//             columns: [
-//                 { dataField: "f1", width: 100 },
-//                 {
-//                     caption: 'Band1',
-//                     columns: [
-//                         { dataField: "f2", width: 50, allowExporting: false },
-//                         { dataField: "f3", width: 200 },
-//                         { dataField: "f4", width: 200 },
-//                     ]
-//                 }
-//             ],
-//             showColumnHeaders: true,
-//             dataSource: [],
-//             export: { enabled: true, ignoreExcelErrors: false },
-//         },
-//         { worksheet, fixedColumnWidth_100: false }
-//     );
-// });
-
-// QUnit.test("Bands - show column headers & 'band.allowExporting: false'", function(assert) {
-//     const worksheet = helper.WORKSHEET_HEADER_XML +
-//         '<sheetPr/><dimension ref="A1:C1"/>' +
-//         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
-//         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-//         '<cols><col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" /></cols>' +
-//         '<sheetData>' +
-//         '<row r="1" spans="1:3" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /></row>' +
-//         '</sheetData>' +
-//         '</worksheet>';
-
-//     helper.runGeneralTest(
-//         assert,
-//         {
-//             columns: [
-//                 { dataField: "f1", width: 100 },
-//                 {
-//                     caption: 'Band1', allowExporting: false,
-//                     columns: [
-//                         { dataField: "f2", width: 50 },
-//                         { dataField: "f3", width: 200 },
-//                         { dataField: "f4", width: 200 },
-//                     ]
-//                 }
-//             ],
-//             showColumnHeaders: true,
-//             dataSource: [],
-//             export: { enabled: true, ignoreExcelErrors: false },
-//         },
-//         { worksheet, fixedColumnWidth_100: false }
-//     );
-// });
-
 QUnit.test("Bands - show column headers & two bands", function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
         '<sheetPr/><dimension ref="A1:C1"/>' +
@@ -1597,59 +1525,6 @@ QUnit.test("Bands - show column headers & two bands & 'column.visible: false'", 
         { worksheet, fixedColumnWidth_100: false }
     );
 });
-
-// QUnit.test("Bands - show column headers & two bands & 'column.allowExporting: false'", function(assert) {
-//     const worksheet = helper.WORKSHEET_HEADER_XML +
-//         '<sheetPr/><dimension ref="A1:C1"/>' +
-//         '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane activePane="bottomLeft" state="frozen" ySplit="2" topLeftCell="A3" /></sheetView></sheetViews>' +
-//         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
-//         '<cols>' +
-//         '<col width="' + excelColumnWidthFrom_100 + '" min="1" max="1" />' +
-//         '<col width="' + excelColumnWidthFrom_50 + '" min="2" max="2" />' +
-//         '<col width="' + excelColumnWidthFrom_100 + '" min="3" max="3" />' +
-//         '<col width="' + excelColumnWidthFrom_50 + '" min="4" max="4" />' +
-//         '<col width="' + excelColumnWidthFrom_200 + '" min="5" max="5" />' +
-//         '</cols>' +
-//         '<sheetData>' +
-//         '<row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
-//         '<c r="A1" s="0" t="s"><v>0</v></c><c r="B1" s="0" t="s"><v>1</v></c><c r="C1" s="0" t="s" /><c r="D1" s="0" t="s"><v>2</v></c><c r="E1" s="0" t="s" />' +
-//         '</row>' +
-//         '<row r="2" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
-//         '<c r="A2" s="0" t="s" /><c r="B2" s="0" t="s"><v>3</v></c><c r="C2" s="0" t="s"><v>4</v></c><c r="D2" s="0" t="s"><v>5</v></c><c r="E2" s="0" t="s"><v>6</v></c>' +
-//         '</row>' +
-//         '</sheetData>' +
-//         '<mergeCells count="3"><mergeCell ref="A1:A2" /><mergeCell ref="B1:C1" /><mergeCell ref="D1:E1" /></mergeCells>' +
-//         '</worksheet>';
-
-//     helper.runGeneralTest(
-//         assert,
-//         {
-//             columns: [
-//                 { dataField: "f1", width: 100 },
-//                 {
-//                     caption: 'Band1',
-//                     columns: [
-//                         { dataField: "f2", width: 50 },
-//                         { dataField: "f3", width: 200, allowExporting: false },
-//                         { dataField: "f4", width: 100 },
-//                     ]
-//                 },
-//                 {
-//                     caption: 'Band2',
-//                     columns: [
-//                         { dataField: "f5", width: 100, allowExporting: false },
-//                         { dataField: "f6", width: 50 },
-//                         { dataField: "f7", width: 200 },
-//                     ]
-//                 }
-//             ],
-//             showColumnHeaders: true,
-//             dataSource: [],
-//             export: { enabled: true, ignoreExcelErrors: false },
-//         },
-//         { worksheet, fixedColumnWidth_100: false }
-//     );
-// });
 
 QUnit.test("Bands - hide column headers", function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML +
