@@ -443,6 +443,31 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.type("jqwed");
             assert.equal(this.instance.option("text"), "December 10 2012", "text has been changed");
         });
+
+        QUnit.test("first part should be active if select all parts and type new date", (assert) => {
+            this.keyboard.press("right");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group has been selected");
+
+            this.keyboard
+                .caret({ start: 0, end: 15 })
+                .type("1");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "next group has been selected");
+        });
+
+        QUnit.test("first part should be active if select all parts, delete and type new", (assert) => {
+            this.keyboard.press("right");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group has been selected");
+
+            this.keyboard
+                .caret({ start: 0, end: 15 })
+                .press("del")
+                .type("1");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "next group has been selected");
+        });
     });
 
     QUnit.module("Events", setupModule, () => {
