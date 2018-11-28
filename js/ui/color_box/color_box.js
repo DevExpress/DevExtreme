@@ -373,8 +373,10 @@ var ColorBox = DropDownEditor.inherit({
 
     _updateColorViewValue: function(value) {
         if(this._colorView) {
-            this._colorView.option("value", value);
-            this._colorView.option("matchValue", value);
+            this._colorView.option({
+                "value": value,
+                "matchValue": value
+            });
         }
     },
 
