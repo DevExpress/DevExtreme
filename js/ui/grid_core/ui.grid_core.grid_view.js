@@ -486,10 +486,10 @@ var ResizingController = modules.ViewController.inherit({
             return;
         }
 
-        var result = new Deferred();
+        var prevResult = that._resizeDeferred,
+            result = that._resizeDeferred = new Deferred();
 
-        when(that._resizeDeferred).always(function() {
-            that._resizeDeferred = result;
+        when(prevResult).always(function() {
             commonUtils.deferRender(function() {
                 if(that._dataController.isLoaded()) {
                     that._synchronizeColumns();
