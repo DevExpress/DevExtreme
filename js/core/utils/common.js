@@ -75,7 +75,7 @@ var deferExecute = function(name, func, deferred) {
         if(!executingName && delayedFuncs.length) {
             (delayedNames.shift() === "render" ? deferRender : deferUpdate)(delayedFuncs.shift(), delayedDeferreds.shift());
         }
-        return result;
+        return result || when();
     }
 };
 
