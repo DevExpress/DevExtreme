@@ -292,7 +292,7 @@
         }
     }
 
-    &:not(.dx-scheduler-work-space-count)&:not(.dx-scheduler-work-space-grouped) {
+    &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped) {
         .dx-scheduler-date-table-cell, .dx-scheduler-all-day-table-cell {
             border-left: @SCHEDULER_BASE_BORDER;
 
@@ -596,7 +596,7 @@
     padding-top: @MATERIAL_SCHEDULER_HEADER_HEIGHT;
     margin-top: -@MATERIAL_SCHEDULER_HEADER_HEIGHT - 1;
 
-    &:not(.dx-scheduler-work-space-all-day)&:not(.dx-scheduler-work-space-month)&:not(.dx-scheduler-timeline) {
+    &:not(.dx-scheduler-work-space-all-day):not(.dx-scheduler-work-space-month):not(.dx-scheduler-timeline) {
         .dx-scheduler-header-panel {
             border-bottom-width: 1px;
         }
