@@ -48,6 +48,7 @@ let DateBoxMask = DateBoxBase.inherit({
              */
             useMaskBehavior: false,
 
+            emptyDateValue: new Date(2000, 0, 1, 0, 0, 0),
             advanceCaret: true
         });
     },
@@ -151,7 +152,7 @@ let DateBoxMask = DateBoxBase.inherit({
             }
         }
 
-        this._revertPart(0);
+        this._setNewDateIfEmpty();
 
         if(this._searchValue) {
             this._clearSearchValue();
@@ -164,13 +165,9 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _revertPart: function(direction, e) {
-        const value = this.dateOption("value");
-
         if(!this._isAllSelected()) {
-            if(value) {
-                const actual = this._getActivePartValue(value);
-                this._setActivePartValue(actual);
-            }
+            const actual = this._getActivePartValue(this.option("emptyDateValue"));
+            this._setActivePartValue(actual);
 
             this._selectNextPart(direction, e);
         }
@@ -407,6 +404,7 @@ let DateBoxMask = DateBoxBase.inherit({
                 this._renderDateParts();
                 break;
             case "advanceCaret":
+            case "emptyDateValue":
                 break;
             default:
                 this.callBase(args);
