@@ -166,7 +166,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.E1042
     */
-    E1042: 'Deferred selection cannot be performed. Set the "key" field for the data store',
+    E1042: '{0} requires the key field to be specified',
 
     /**
     * @name ErrorsUIWidgets.E1043

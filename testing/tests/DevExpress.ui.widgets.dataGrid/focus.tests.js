@@ -514,7 +514,7 @@ QUnit.testInActiveWindow("Focus row if virtual scrolling mode", function(assert)
     assert.equal($(rowsView.getRow(2)).find("td").eq(0).text(), "Test", "Focused row ");
 });
 
-QUnit.testInActiveWindow("DataGrid should show error E4024 if keyExpr is absent and focusedRowEnabled when focusedRowKey is set", function(assert) {
+QUnit.testInActiveWindow("DataGrid should show error E1042 if keyExpr is absent and focusedRowEnabled when focusedRowKey is set", function(assert) {
     var dataErrors = [];
 
     // arrange
@@ -551,10 +551,10 @@ QUnit.testInActiveWindow("DataGrid should show error E4024 if keyExpr is absent 
 
     // assert
     assert.equal(dataErrors.length, 1, "One error");
-    assert.ok(dataErrors[0].message.indexOf("E4024") !== -1, "E4024");
+    assert.ok(dataErrors[0].message.indexOf("E1042 - Row focusing requires the key field to be specified") !== -1, "E1042 text");
 });
 
-QUnit.testInActiveWindow("DataGrid should show error E4024 if keyExpr is absent and focusedRowEnabled", function(assert) {
+QUnit.testInActiveWindow("DataGrid should show error E1042 if keyExpr is missing and focusedRowEnabled", function(assert) {
     var dataErrors = [];
 
     // arrange
@@ -594,10 +594,10 @@ QUnit.testInActiveWindow("DataGrid should show error E4024 if keyExpr is absent 
 
     // assert
     assert.equal(dataErrors.length, 1, "One error");
-    assert.ok(dataErrors[0].message.indexOf("E4024") !== -1, "E4024");
+    assert.ok(dataErrors[0].message.indexOf("E1042") !== -1, "E1042");
 });
 
-QUnit.testInActiveWindow("DataGrid should not show error E4024 if keyExpr is absent and focusedRowEnabled is false", function(assert) {
+QUnit.testInActiveWindow("DataGrid should not show error E1042 if keyExpr is missing and focusedRowEnabled is false", function(assert) {
     var dataErrors = [];
 
     // arrange
