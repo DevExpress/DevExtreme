@@ -8591,6 +8591,32 @@ QUnit.module("Customization of the command columns", {
         assert.notOk(visibleColumns[1].allowReordering, "allowReordering of the second grouped column");
         assert.notOk(visibleColumns[1].allowFixing, "allowFixing of the second grouped column");
     });
+
+    // T695370
+    QUnit.test("Change the command column position via columnOption method when there are fixed columns", function(assert) {
+        // arrange
+        this.applyOptions({
+            editing: {
+                mode: "row",
+                allowUpdating: true,
+                allowDeleting: true
+            },
+            columns: [
+                { dataField: 'TestField3', caption: 'Custom Title 3', fixed: true },
+                { dataField: 'TestField4', caption: 'Custom Title 4' }
+            ]
+        });
+
+        // act
+        this.columnOption("command:edit", { visibleIndex: -1 });
+
+        // assert
+        var fixedColumns = this.columnsController.getFixedColumns();
+        assert.strictEqual(fixedColumns.length, 3, "fixed column count");
+        assert.strictEqual(fixedColumns[0].type, "buttons", "command column");
+        assert.strictEqual(fixedColumns[1].dataField, "TestField3", "fixed column");
+        assert.strictEqual(fixedColumns[2].command, "transparent", "transparent column");
+    });
 });
 
 // T622771
