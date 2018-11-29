@@ -1,6 +1,7 @@
 import $ from "jquery";
 import { ERROR_MESSAGES as dxErrors } from "viz/core/errors_warnings";
 import translator2DModule from "viz/translators/translator2d";
+import { Range } from "viz/translators/range";
 import tickGeneratorModule from "viz/axes/tick_generator";
 import { Axis } from "viz/axes/base_axis";
 import vizMocks from "../../helpers/vizMocks.js";
@@ -57,8 +58,8 @@ var environment = {
         });
 
         this.translator = new StubTranslator();
-        this.translator.stub("getBusinessRange").returns({ });
         this.translator.stub("getCanvasVisibleArea").returns({ min: 10, max: 90 }); // for horizontal only
+        this.translator.stub("getBusinessRange").returns(new Range());
     },
     createAxis: function(options) {
         var stripsGroup = this.renderer.g(),
@@ -2011,7 +2012,7 @@ QUnit.test("Labels with hints. Check callback's param", function(assert) {
     });
 });
 
-QUnit.test("Stub data. Do not draw labels", function(assert) {
+QUnit.test("Do not draw labels with empty range", function(assert) {
     // arrange
     this.createAxis();
     this.updateOptions({
@@ -2027,7 +2028,7 @@ QUnit.test("Stub data. Do not draw labels", function(assert) {
     this.generatedTicks = [1];
 
     this.translator.stub("translate").withArgs(1).returns(40);
-    this.axis.setBusinessRange({ stubData: true });
+    this.axis.setBusinessRange({ });
 
     // act
     this.axis.draw(this.canvas);
@@ -2526,9 +2527,7 @@ QUnit.test("With stub data", function(assert) {
         }]
     });
 
-    this.axis.setBusinessRange({
-        stubData: true
-    });
+    this.axis.setBusinessRange({});
     this.translator.stub("translate").withArgs(1).returns(40);
     this.axis.parser = function(value) {
         return value;
@@ -6733,11 +6732,7 @@ QUnit.test("Stub data - do not create strips", function(assert) {
         }]
     });
 
-    this.axis.setBusinessRange({
-        stubData: true,
-        min: 0,
-        max: 10
-    });
+    this.axis.setBusinessRange({});
     this.translator.stub("translate").withArgs(2).returns(20);
     this.translator.stub("translate").withArgs(4).returns(40);
     this.axis.parser = function(value) {
@@ -8179,7 +8174,7 @@ QUnit.test("Axis has no visible labels nor outside constantLines - hideOuterElem
     assert.ok(!spy.called, "incidentOccurred is not called");
 });
 
-QUnit.test("Axis has stubData - hideOuterElements does nothing", function(assert) {
+QUnit.test("Axis with empty - hideOuterElements does nothing", function(assert) {
     var spy = sinon.spy();
 
     this.createAxis({ incidentOccurred: spy });
@@ -8192,7 +8187,7 @@ QUnit.test("Axis has stubData - hideOuterElements does nothing", function(assert
             visible: true
         }
     });
-    this.axis.setBusinessRange({ stubData: true });
+    this.axis.setBusinessRange({ });
     this.axis.draw(this.canvas);
     this.renderer.g.getCall(3).returnValue.clear.reset();
 

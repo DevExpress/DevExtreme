@@ -982,7 +982,7 @@ QUnit.test('min/minVisible/maxVisible != undefined, max = undefined', function(a
     });
 });
 
-QUnit.module('isDefined functionality', {
+QUnit.module('isEmpty functionality', {
     beforeEach: function() {
         this.createRange = function(rangeData) {
             this.range = new rangeModule.Range(rangeData);
@@ -995,7 +995,7 @@ QUnit.test('Empty', function(assert) {
     this.createRange();
 
     // act/assert
-    assert.ok(!this.range.isDefined());
+    assert.equal(this.range.isEmpty(), true);
 });
 
 QUnit.test('With min and without max', function(assert) {
@@ -1003,7 +1003,7 @@ QUnit.test('With min and without max', function(assert) {
     this.createRange({ min: 0 });
 
     // act/assert
-    assert.ok(!this.range.isDefined());
+    assert.equal(this.range.isEmpty(), true);
 });
 
 QUnit.test('Without min and with max', function(assert) {
@@ -1011,7 +1011,7 @@ QUnit.test('Without min and with max', function(assert) {
     this.createRange({ max: 10 });
 
     // act/assert
-    assert.ok(!this.range.isDefined());
+    assert.equal(this.range.isEmpty(), true);
 });
 
 QUnit.test('With min and max', function(assert) {
@@ -1019,7 +1019,7 @@ QUnit.test('With min and max', function(assert) {
     this.createRange({ min: 0, max: 10 });
 
     // act/assert
-    assert.ok(this.range.isDefined());
+    assert.equal(this.range.isEmpty(), false);
 });
 
 QUnit.test('With categories', function(assert) {
@@ -1030,7 +1030,7 @@ QUnit.test('With categories', function(assert) {
     this.range.addRange({ categories: ['a', 'b'] });
 
     // assert
-    assert.ok(this.range.isDefined());
+    assert.equal(this.range.isEmpty(), false);
 });
 
 QUnit.test('With categories that is empty', function(assert) {
@@ -1038,112 +1038,7 @@ QUnit.test('With categories that is empty', function(assert) {
     this.createRange({ categories: [] });
 
     // act/assert
-    assert.ok(!this.range.isDefined());
-});
-
-QUnit.module('StubData functionality', {
-    beforeEach: function() {
-        this.range = new rangeModule.Range();
-    }
-});
-
-QUnit.test('Set StubData without dataType', function(assert) {
-    // act
-    var returnValue = this.range.setStubData();
-
-    // assert
-    assert.strictEqual(this.range, returnValue);
-    assert.strictEqual(this.range.max, 10);
-    assert.strictEqual(this.range.min, 0);
-    assert.strictEqual(this.range.stubData, true);
-});
-
-QUnit.test('Set StubData with dataType = numeric', function(assert) {
-    // act
-    var returnValue = this.range.setStubData('numeric');
-
-    // assert
-    assert.strictEqual(this.range, returnValue);
-    assert.strictEqual(this.range.max, 10);
-    assert.strictEqual(this.range.min, 0);
-    assert.strictEqual(this.range.stubData, true);
-});
-
-QUnit.test('Set StubData with dataType = datetime', function(assert) {
-    var year = new Date().getFullYear() - 1;
-
-    // act
-    var returnValue = this.range.setStubData('datetime');
-
-    // assert
-    assert.strictEqual(this.range, returnValue);
-    assert.deepEqual(this.range.max, new Date(year, 11, 31));
-    assert.deepEqual(this.range.min, new Date(year, 0, 1));
-    assert.strictEqual(this.range.stubData, true);
-});
-
-QUnit.test('Set StubData with logarithmic axis type', function(assert) {
-    this.range.axisType = 'logarithmic';
-    // act
-    var returnValue = this.range.setStubData();
-
-    // assert
-    assert.strictEqual(this.range, returnValue);
-    assert.strictEqual(this.range.max, 10);
-    assert.strictEqual(this.range.min, 1);
-    assert.strictEqual(this.range.stubData, true);
-});
-
-QUnit.test('Set StubData with discrete axis type without dataType', function(assert) {
-    var originalType = this.range.axisType;
-
-    this.range.axisType = 'discrete';
-    // act
-    var returnValue = this.range.setStubData();
-
-    // assert
-    assert.strictEqual(this.range, returnValue);
-    assert.strictEqual(this.range.max, undefined);
-    assert.strictEqual(this.range.min, undefined);
-    assert.deepEqual(this.range.categories, ['0', '1', '2']);
-    assert.strictEqual(this.range.stubData, true);
-
-    this.range.axisType = originalType;
-});
-
-QUnit.test('Set StubData with discrete axis type with dataType = datetime', function(assert) {
-    var year = new Date().getFullYear() - 1;
-    var originalType = this.range.axisType;
-
-    this.range.axisType = 'discrete';
-    // act
-    var returnValue = this.range.setStubData('datetime');
-
-    // assert
-    assert.strictEqual(this.range, returnValue);
-    assert.strictEqual(this.range.max, undefined);
-    assert.strictEqual(this.range.min, undefined);
-    assert.deepEqual(this.range.categories, [new Date(year, 0, 1), new Date(year, 3, 1), new Date(year, 6, 1), new Date(year, 9, 1)]);
-    assert.strictEqual(this.range.stubData, true);
-
-    this.range.axisType = originalType;
-});
-
-QUnit.test('Set StubData with discrete axis type with dataType = numeric', function(assert) {
-    var originalType = this.range.axisType;
-
-    this.range.axisType = 'discrete';
-    // act
-    var returnValue = this.range.setStubData('numeric');
-
-    // assert
-    assert.strictEqual(this.range, returnValue);
-    assert.strictEqual(this.range.max, undefined);
-    assert.strictEqual(this.range.min, undefined);
-    assert.deepEqual(this.range.categories, ['0', '1', '2']);
-    assert.strictEqual(this.range.stubData, true);
-
-    this.range.axisType = originalType;
+    assert.equal(this.range.isEmpty(), true);
 });
 
 QUnit.module('Correct Zero level functionality', {

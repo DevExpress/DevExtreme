@@ -65,6 +65,7 @@ var AdvancedChart = BaseChart.inherit({
     _reinitAxes: function() {
         this.panes = this._createPanes();
         this._populateAxes();
+        this._axesReinitialized = true;
     },
 
     _getCrosshairMargins: function() {
@@ -424,14 +425,15 @@ var AdvancedChart = BaseChart.inherit({
 
             if(!updatedAxis || updatedAxis && groupSeries.length && valueAxis === updatedAxis) {
                 valueAxis.setGroupSeries(groupSeries);
-                valueAxis.setBusinessRange(groupRange, undefined, that._argumentAxes[0]._lastVisualRangeUpdateMode);
+                valueAxis.setBusinessRange(groupRange, undefined, that._argumentAxes[0]._lastVisualRangeUpdateMode, that._axesReinitialized);
             }
         });
 
         if(!updatedAxis || updatedAxis && series.length) {
-            that._argumentAxes.forEach(a => a.setBusinessRange(argRange, that._groupsData.categories));
+            that._argumentAxes.forEach(a => a.setBusinessRange(argRange, that._groupsData.categories, undefined, that._axesReinitialized));
         }
 
+        that._axesReinitialized = false;
         that._populateMarginOptions();
     },
 

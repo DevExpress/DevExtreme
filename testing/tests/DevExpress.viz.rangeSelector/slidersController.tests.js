@@ -184,7 +184,7 @@ QUnit.test("Slider text formatting", function(assert) {
 });
 
 QUnit.test("Slider text when no data", function(assert) {
-    this.translator.update({ stubData: true }, { left: 1000, width: 2000 }, { isHorizontal: true });
+    this.translator.update({ }, { left: 1000, width: 2000 }, { isHorizontal: true });
     this.update({
         sliderMarker: {
             format: "fixedPoint", precision: 3,
@@ -244,7 +244,7 @@ QUnit.test("Selected area cursor when range is full (categories)", function(asse
 });
 
 QUnit.test("Selected area cursor when range is full (no data)", function(assert) {
-    this.translator.update({ stubData: true }, { left: 1000, width: 3000 }, { isHorizontal: true });
+    this.translator.update({ }, { left: 1000, width: 3000 }, { isHorizontal: true });
     this.update();
 
     assert.deepEqual(this.selectedAreaTracker().attr.lastCall.args, [{ points: [1000, 15, 3000, 15, 3000, 25, 1000, 25] }], "position");
@@ -521,7 +521,7 @@ QUnit.test("'maxRange' is ignored", function(assert) {
 });
 
 QUnit.test("translator range is empty", function(assert) {
-    this.translator.update({ stubData: true }, { left: 1000, width: 3000 }, { isHorizontal: true });
+    this.translator.update({ }, { left: 1000, width: 3000 }, { isHorizontal: true });
     this.update();
 
     this.setRange(11, 12);
