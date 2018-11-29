@@ -16,6 +16,7 @@ import FormDialog from "./ui/formDialog";
 
 const HTML_EDITOR_CLASS = "dx-htmleditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
+const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
 
 const MARKDOWN_VALUE_TYPE = "markdown";
 
@@ -48,6 +49,12 @@ const HtmlEditor = Editor.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field4 event:event
             * @action
+            */
+            /**
+            * @name dxHtmlEditorOptions.name
+            * @type string
+            * @hidden false
+            * @inheritdoc
             */
 
             /**
@@ -146,13 +153,27 @@ const HtmlEditor = Editor.inherit({
             transclude
         });
 
+        this._renderSubmitElement();
         this.callBase();
 
         this._updateContainerMarkup();
     },
 
-    _hasTranscludedContent: function() {
-        return this._$templateResult && this._$templateResult.length;
+    _renderSubmitElement: function() {
+        this._$submitElement = $("<textarea>")
+            .addClass(HTML_EDITOR_SUBMIT_ELEMENT_CLASS)
+            .attr("hidden", true)
+            .appendTo(this.$element());
+
+        this._setSubmitValue(this.option("value"));
+    },
+
+    _setSubmitValue: function(value) {
+        this._$submitElement.val(value);
+    },
+
+    _getSubmitElement: function() {
+        return this._$submitElement;
     },
 
     _updateContainerMarkup: function() {
@@ -227,6 +248,10 @@ const HtmlEditor = Editor.inherit({
                 this._updateHtmlContent(this._deltaConverter.toHtml());
             });
         }
+    },
+
+    _hasTranscludedContent: function() {
+        return this._$templateResult && this._$templateResult.length;
     },
 
     _getModulesConfig: function() {
@@ -322,6 +347,7 @@ const HtmlEditor = Editor.inherit({
             case "value":
                 if(!this._quillInstance) {
                     this._$htmlContainer.html(args.value);
+                    this._setSubmitValue(args.value);
                     return;
                 }
 
@@ -331,6 +357,8 @@ const HtmlEditor = Editor.inherit({
                     const updatedValue = this._isMarkdownValue() ? this._updateValueByType("HTML", args.value) : args.value;
                     this._updateHtmlContent(updatedValue);
                 }
+
+                this._setSubmitValue(args.value);
                 this.callBase(args);
                 break;
             case "placeholder":
