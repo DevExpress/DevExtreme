@@ -106,25 +106,26 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _searchNumber(char) {
-        this._searchValue += char;
-
         let limits = this._getActivePartLimits(),
             getter = this._getActivePartProp("getter"),
-            newValue = parseInt(this._searchValue);
+            maxSearchLength = String(limits.max).length;
+
+        this._searchValue = (this._searchValue + char).substr(-maxSearchLength);
+
+        let newValue = parseInt(this._searchValue);
 
         if(getter === "getMonth") {
             newValue--;
         }
 
         if(!inRange(newValue, limits.min, limits.max)) {
-            this._searchValue = char;
             newValue = parseInt(char);
         }
 
         this._setActivePartValue(newValue);
 
         if(this.option("advanceCaret")) {
-            const isLengthExceeded = this._searchValue.length === String(limits.max).length;
+            const isLengthExceeded = this._searchValue.length === maxSearchLength;
             const isValueOverflowed = parseInt(this._searchValue + "0") > limits.max;
 
             if(isLengthExceeded || isValueOverflowed) {
@@ -254,11 +255,12 @@ let DateBoxMask = DateBoxBase.inherit({
             }
         }
 
-        this._activePartIndex = index;
-        this._caret(this._getActivePartProp("caret"));
-        if(step !== 0) {
+        if(this._activePartIndex !== index) {
             this._clearSearchValue();
         }
+
+        this._activePartIndex = index;
+        this._caret(this._getActivePartProp("caret"));
         e && e.preventDefault();
     },
 
