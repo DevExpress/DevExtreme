@@ -395,11 +395,34 @@ module.exports = {
 
                         const coords = calcCenterForDrag(e);
                         if(options.valueAxis.zoom) {
-                            const targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), coords));
+                            let targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), coords));
+
+                            if(targetAxes.length === 0) {
+                                const targetCanvas = chart._valueAxes.reduce((r, axis) => {
+                                    if(!r && axis.coordsIn(coords.x, coords.y)) {
+                                        r = axis.getCanvas();
+                                    }
+                                    return r;
+                                }, null);
+                                if(targetCanvas) {
+                                    targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), {
+                                        x: targetCanvas.left,
+                                        y: targetCanvas.top
+                                    }));
+                                }
+                            }
+
                             zoomAxes(targetAxes, rotated ? coords.x : coords.y, e.delta);
                         }
                         if(options.argumentAxis.zoom) {
-                            zoomAxes(chart._argumentAxes, rotated ? coords.y : coords.x, e.delta, chart.getArgumentAxis());
+                            const canZoom = chart._argumentAxes.some(axis => {
+                                if(checkCoords(canvasToRect(axis.getCanvas()), coords)
+                                    || axis.coordsIn(coords.x, coords.y)) {
+                                    return true;
+                                }
+                                return false;
+                            });
+                            canZoom && zoomAxes(chart._argumentAxes, rotated ? coords.y : coords.x, e.delta, chart.getArgumentAxis());
                         }
 
                         chart._requestChange(["VISUAL_RANGE"]);
