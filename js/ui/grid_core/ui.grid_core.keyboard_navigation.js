@@ -165,6 +165,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         this.setCellFocusType();
         args = this._fireFocusChangingEvents(event, $cell, true);
+        $cell = args.$newCellElement;
 
         if(!args.cancel) {
             if(args.rowIndexChanged) {
@@ -529,32 +530,36 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _arrowKeysHandlerFocusCell: function($event, $cell, upDown) {
         var args = this._fireFocusChangingEvents($event, $cell, upDown, true);
+        $cell = args.$newCellElement;
         if(!args.cancel && this._isCellValid($cell)) {
             this._focus($cell, !args.isHighlighted);
         }
     },
 
     _fireFocusChangingEvents: function($event, $cell, fireRowEvent, isHighlighted) {
-        var args = { };
+        var args = { },
+            cellPosition = { };
 
         if(this.isCellFocusType()) {
             args = this._fireFocusedCellChanging($event, $cell, isHighlighted);
             if(!args.cancel) {
+                cellPosition.columnIndex = args.newColumnIndex;
+                cellPosition.rowIndex = args.newRowIndex;
                 isHighlighted = args.isHighlighted;
-                if(args.$newCellElement) {
-                    $cell = args.$newCellElement;
-                }
             }
         }
 
         if(!args.cancel && fireRowEvent) {
             args = this._fireFocusedRowChanging($event, $cell.parent());
             if(!args.cancel) {
+                cellPosition.rowIndex = args.newRowIndex;
                 args.isHighlighted = isHighlighted;
-                if(args.rowIndexChanged) {
-                    $cell = this._getFocusedCell();
-                }
             }
+        }
+
+        args.$newCellElement = this._getCell(cellPosition);
+        if(!args.$newCellElement || !args.$newCellElement.length) {
+            args.$newCellElement = $cell;
         }
 
         return args;
@@ -1182,6 +1187,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         if(isCellElement($element) || isGroupRow($element)) {
             this.setCellFocusType();
             args = this._fireFocusChangingEvents(null, $element, false, isHighlighted);
+            $element = args.$newCellElement;
             if(isRowFocusType && !args.isHighlighted) {
                 this.setRowFocusType();
             }
