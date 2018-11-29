@@ -1321,10 +1321,36 @@ QUnit.test("'clear' button click should not open selectbox", function(assert) {
         showClearButton: true,
         value: 1
     });
+    var selectBox = $element.dxSelectBox("instance");
 
     this.clock.tick(TIME_TO_WAIT);
     pointerMock($element.find(".dx-clear-button-area")).click();
-    assert.equal($element.dxSelectBox("option", "opened"), false, "selectbox is closed after click on clear button");
+    assert.equal(selectBox.option("opened"), false, "selectbox is closed after click on clear button");
+
+    selectBox.option("searchEnabled", true);
+    selectBox.option("searchTimeout", 0);
+    pointerMock($element.find(".dx-clear-button-area")).click();
+    assert.equal(selectBox.option("opened"), false, "selectbox is closed after click on clear button if searchEnabled = true");
+});
+
+QUnit.test("drop down list should be still opened if click 'clear' during the search", function(assert) {
+    var $element = $("#selectBox").dxSelectBox({
+        items: [1, 2, 3],
+        showClearButton: true,
+        searchEnabled: true,
+        searchTimeout: 0,
+        value: 1
+    });
+    var selectBox = $element.dxSelectBox("instance"),
+        $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+    keyboardMock($input)
+        .focus()
+        .type("50")
+        .change();
+    pointerMock($element.find(".dx-clear-button-area")).click();
+
+    assert.ok(selectBox.option("opened"), "selectbox is opened");
 });
 
 QUnit.test("'clear' button should clear value when items is object and searchEnabled is true", function(assert) {
