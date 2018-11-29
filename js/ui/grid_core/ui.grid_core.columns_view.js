@@ -84,7 +84,7 @@ var subscribeToRowClick = function(that, $table) {
 
 var getWidthStyle = function(width) {
     if(width === "auto") return "";
-    return typeof width === "number" ? width + "px" : width;
+    return typeUtils.isNumeric(width) ? width + "px" : width;
 };
 
 var setCellWidth = function(cell, column, width) {

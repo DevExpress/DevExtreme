@@ -260,9 +260,10 @@ var ResizingController = modules.ViewController.inherit({
             }
 
             each(visibleColumns, function(index) {
-                if(this.width !== "auto") {
-                    if(typeUtils.isDefined(this.width)) {
-                        resultWidths[index] = this.width;
+                var width = this.width;
+                if(width !== "auto") {
+                    if(typeUtils.isDefined(width)) {
+                        resultWidths[index] = typeUtils.isNumeric(width) ? parseFloat(width) : width;
                     } else if(!columnAutoWidth) {
                         resultWidths[index] = undefined;
                     }
