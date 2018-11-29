@@ -1563,7 +1563,7 @@ QUnit.test("T309987 - value should not be changed when moving focus by the 'tab'
     assert.deepEqual(this.instance.option("value"), value, "the value is correct");
 });
 
-QUnit.testInActiveWindow("Value should be correct when not last item is selected by 'tab'", function(assert) {
+QUnit.testInActiveWindow("Value should be correct when not last item is focused and the 'tab' key pressed", function(assert) {
     if(devices.real().platform !== "generic") {
         assert.ok(true, "desktop specific test");
         return;
@@ -1583,7 +1583,7 @@ QUnit.testInActiveWindow("Value should be correct when not last item is selected
         .keyDown("down")
         .press("tab");
 
-    assert.deepEqual(this.instance.option("value"), [items[0], items[2], items[1]], "all items are selected");
+    assert.deepEqual(this.instance.option("value"), [items[0], items[2]], "value is still the same");
 });
 
 QUnit.test("First item is not selected when edit is disabled", function(assert) {
@@ -1778,7 +1778,7 @@ QUnit.test("the 'enter' key should not add/remove tags if the editor is closed (
     assert.deepEqual(this.instance.option("value"), [], "value is not changed");
 });
 
-QUnit.test("onValueChanged should be fired once on the 'tab' key press (T385415)", function(assert) {
+QUnit.test("onValueChanged shouldn't be fired on the 'tab' key press", function(assert) {
     if(devices.real().platform !== "generic") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
@@ -1793,16 +1793,16 @@ QUnit.test("onValueChanged should be fired once on the 'tab' key press (T385415)
         .press("down")
         .press("tab");
 
-    assert.equal(spy.callCount, 1, "onValueChanged event is fired once");
+    assert.equal(spy.callCount, 0, "onValueChanged event isn't fired");
 });
 
-QUnit.test("value should be changed correctly on 'tab' if there is a focused item in the drop down list (T386900)", function(assert) {
+QUnit.test("value shouldn't be changed on 'tab' if there is a focused item in the drop down list", function(assert) {
     if(devices.real().platform !== "generic") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
     }
 
-    var expectedValue = this.instance.option("items");
+    var expectedValue = this.instance.option("value");
 
     this.keyboard
         .focus()
