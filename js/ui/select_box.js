@@ -624,7 +624,7 @@ var SelectBox = DropDownList.inherit({
         this.option("value", null);
     },
 
-    _isNeedToOpenPopup: function() {
+    _shouldOpenPopup: function() {
         return this._needPassDataSourceToList();
     },
 

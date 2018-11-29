@@ -730,7 +730,7 @@ var DropDownList = DropDownEditor.inherit({
         this._refreshPopupVisibility();
     },
 
-    _isNeedToOpenPopup: function() {
+    _shouldOpenPopup: function() {
         return this._hasItemsToShow();
     },
 
@@ -739,7 +739,7 @@ var DropDownList = DropDownEditor.inherit({
             return;
         }
 
-        this.option("opened", this._isNeedToOpenPopup());
+        this.option("opened", this._shouldOpenPopup());
         if(this.option("opened")) {
             this._dimensionChanged();
         }
