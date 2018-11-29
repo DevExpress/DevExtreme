@@ -730,12 +730,16 @@ var DropDownList = DropDownEditor.inherit({
         this._refreshPopupVisibility();
     },
 
+    _shouldOpenPopup: function() {
+        return this._hasItemsToShow();
+    },
+
     _refreshPopupVisibility: function() {
-        if(this.option("readOnly")) {
+        if(this.option("readOnly") || !this._searchValue()) {
             return;
         }
 
-        this.option("opened", this._hasItemsToShow());
+        this.option("opened", this._shouldOpenPopup());
         if(this.option("opened")) {
             this._dimensionChanged();
         }
