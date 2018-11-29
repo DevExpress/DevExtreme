@@ -153,6 +153,10 @@ var TagBox = SelectBox.inherit({
         });
     },
 
+    _allowSelectItemByTab: function() {
+        return false;
+    },
+
     _isCaretAtTheStart: function() {
         var position = caret(this._input());
         return position.start === 0 && position.end === 0;
