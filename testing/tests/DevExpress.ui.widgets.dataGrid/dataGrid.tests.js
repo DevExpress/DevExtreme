@@ -1777,6 +1777,26 @@ QUnit.test("Change column width via columnOption method (T628065)", function(ass
     assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
 });
 
+// T688721, T694661
+QUnit.test("column width as string should works correctly", function(assert) {
+    // act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 1000,
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columnAutoWidth: true,
+        columns: [{
+            caption: "FirstName",
+            width: "200",
+            fixed: true
+        }, "LastName"]
+    }).dxDataGrid("instance");
+
+    // assert
+    assert.strictEqual($(dataGrid.getCellElement(0, 1)).outerWidth(), 800, "second column width is correct");
+    assert.strictEqual(dataGrid.columnOption(0, "visibleWidth"), 200, "visibleWidth for first column is number");
+});
+
 function isColumnHidden($container, index) {
     var $colsHeadersView = $container.find(".dx-datagrid-headers col"),
         $colsRowsView = $container.find(".dx-datagrid-headers col"),
