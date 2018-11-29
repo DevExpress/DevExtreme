@@ -11,7 +11,7 @@ var registerTemplateEngine = function(name, templateEngine) {
 
 registerTemplateEngine("default", {
     compile: (element) => domUtils.normalizeTemplateElement(element),
-    render: (template, model, index, transclude) => transclude ? template : template.clone()
+    render: (template, model, index) => template.clone()
 });
 
 registerTemplateEngine("jquery-tmpl", {
@@ -105,13 +105,16 @@ var Template = TemplateBase.inherit({
 
     ctor: function(element) {
         this._element = element;
-
-        this._compiledTemplate = currentTemplateEngine.compile(element);
     },
 
     _renderCore: function(options) {
+        const transclude = options.transclude;
+        if(!transclude && !this._compiledTemplate) {
+            this._compiledTemplate = currentTemplateEngine.compile(this._element);
+        }
+
         return $("<div>").append(
-            currentTemplateEngine.render(this._compiledTemplate, options.model, options.index, options.transclude)
+            transclude ? this._element : currentTemplateEngine.render(this._compiledTemplate, options.model, options.index)
         ).contents();
     },
 
