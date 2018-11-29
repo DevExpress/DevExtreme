@@ -245,11 +245,7 @@ var DataGrid = Widget.inherit({
     },
 
     focus: function(element) {
-        this.callBase();
-
-        if(typeUtils.isDefined(element)) {
-            this.getController("keyboardNavigation").focus(element);
-        }
+        this.getController("keyboardNavigation").focus(element);
     }
 });
 

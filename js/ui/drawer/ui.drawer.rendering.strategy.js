@@ -1,5 +1,6 @@
 import $ from "../../core/renderer";
 import fx from "../../animation/fx";
+import { Deferred, when } from "../../core/utils/deferred";
 
 const animation = {
     moveTo(config) {
@@ -105,21 +106,30 @@ class DrawerStrategy {
     }
 
     renderPosition(offset, animate) {
-        this._drawer._animations.push(new Promise((resolve) => {
-            this._contentAnimationResolve = resolve;
-        }));
-        this._drawer._animations.push(new Promise((resolve) => {
-            this._panelAnimationResolve = resolve;
-        }));
-        this._drawer._animations.push(new Promise((resolve) => {
-            this._shaderAnimationResolve = resolve;
-        }));
+        this._contentAnimation = new Deferred();
+        this._panelAnimation = new Deferred();
+        this._shaderAnimation = new Deferred();
+
+        this._drawer._animations.push(this._contentAnimation, this._panelAnimation, this._shaderAnimation);
 
         if(animate) {
-            Promise.all(this._drawer._animations).then(() => {
+            when.apply($, this._drawer._animations).done(() => {
                 this._drawer._animationCompleteHandler();
             });
         }
+    }
+
+    _elementsAnimationCompleteHandler() {
+        this._contentAnimation.resolve();
+        this._panelAnimation.resolve();
+    }
+
+    _defaultAnimationConfig() {
+        return {
+            complete: () => {
+                this._elementsAnimationCompleteHandler();
+            }
+        };
     }
 
     _getPanelOffset(offset) {
@@ -144,7 +154,7 @@ class DrawerStrategy {
         if(animate) {
             animation.fade($(drawer._$shader), fadeConfig, duration, () => {
                 this._drawer._toggleShaderVisibility(offset);
-                this._shaderAnimationResolve();
+                this._shaderAnimation.resolve();
             });
         } else {
             drawer._toggleShaderVisibility(offset);
@@ -155,13 +165,13 @@ class DrawerStrategy {
     _getFadeConfig(offset) {
         if(offset) {
             return {
-                to: 0.5,
+                to: 1,
                 from: 0
             };
         } else {
             return {
                 to: 0,
-                from: 0.5
+                from: 1
             };
         }
     }

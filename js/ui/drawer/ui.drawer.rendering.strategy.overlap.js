@@ -5,6 +5,7 @@ import translator from "../../animation/translator";
 import Overlay from "../overlay";
 import typeUtils from "../../core/utils/type";
 import { getWindow, hasWindow } from "../../core/utils/window";
+import { extend } from "../../core/utils/extend";
 
 class OverlapStrategy extends DrawerStrategy {
 
@@ -111,6 +112,7 @@ class OverlapStrategy extends DrawerStrategy {
 
         const $content = $(drawer.viewContent());
         const position = drawer.getDrawerPosition();
+        const defaultAnimationConfig = this._defaultAnimationConfig();
 
         if(drawer.isHorizontalDirection()) {
             $content.css("paddingLeft", drawer.option("minSize") * drawer._getPositionCorrection());
@@ -124,16 +126,12 @@ class OverlapStrategy extends DrawerStrategy {
             const panelOffset = this._getPanelOffset(offset) * drawer._getPositionCorrection();
 
             if(animate) {
-                let animationConfig = {
+                let animationConfig = extend(defaultAnimationConfig, {
                     $element: $panel,
                     position: panelOffset,
                     duration: drawer.option("animationDuration"),
                     direction: position,
-                    complete: () => {
-                        this._contentAnimationResolve();
-                        this._panelAnimationResolve();
-                    }
-                };
+                });
 
                 animation.moveTo(animationConfig);
             } else {
@@ -153,17 +151,13 @@ class OverlapStrategy extends DrawerStrategy {
 
             translator.move($panelOverlayContent, { left: 0 });
 
-            let animationConfig = {
+            let animationConfig = extend(defaultAnimationConfig, {
                 $element: $panelOverlayContent,
                 size: size,
                 duration: drawer.option("animationDuration"),
                 direction: position,
                 marginTop: marginTop,
-                complete: () => {
-                    this._contentAnimationResolve();
-                    this._panelAnimationResolve();
-                }
-            };
+            });
 
             if(animate) {
                 animation.size(animationConfig);

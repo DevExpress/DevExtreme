@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     equalByValue = require("../../core/utils/common").equalByValue,
     isDefined = require("../../core/utils/type").isDefined,
-    errors = require("../../data/errors").errors,
+    errors = require("../widget/ui.errors"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
 var ROW_FOCUSED_CLASS = "dx-row-focused",
@@ -305,13 +305,6 @@ module.exports = {
                     this.option("focusedColumnIndex", columnIndex);
                 },
 
-                _clickHandler: function(e) {
-                    if(this.option("focusedRowEnabled")) {
-                        this.setRowFocusType();
-                    }
-                    this.callBase(e);
-                },
-
                 _escapeKeyHandler: function(eventArgs, isEditing) {
                     if(isEditing || !this.option("focusedRowEnabled")) {
                         this.callBase(eventArgs, isEditing);
@@ -549,7 +542,7 @@ module.exports = {
                     if(this.option("focusedRowEnabled") && this.option("dataSource")) {
                         var store = this._dataController.store();
                         if(store && !store.key()) {
-                            this._dataController.dataErrorOccurred.fire(errors.Error("E4024"));
+                            this._dataController.dataErrorOccurred.fire(errors.Error("E1042", "Row focusing"));
                         }
                     }
                 },

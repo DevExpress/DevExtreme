@@ -697,6 +697,25 @@ QUnit.module("Sync on initialization", {
         assert.deepEqual(this.columnsController.columnOption("field", "filterValues"), ["1"]);
     });
 
+    // T695018
+    QUnit.test("sync column.filterValue if column has dataField && name", function(assert) {
+        // act
+        this.setupDataGrid({
+            filterValue: null,
+            filterSyncEnabled: true,
+            columns: [{
+                dataField: "field",
+                name: "field1",
+                dataType: "string",
+                selectedFilterOperation: "=",
+                filterValue: "1"
+            }]
+        });
+
+        // assert
+        assert.deepEqual(this.option("filterValue"), ["field", "=", "1" ], "filterValue");
+    });
+
     QUnit.test("Error E1049", function(assert) {
         assert.throws(
             function() {

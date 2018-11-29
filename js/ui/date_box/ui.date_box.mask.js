@@ -48,6 +48,7 @@ let DateBoxMask = DateBoxBase.inherit({
              */
             useMaskBehavior: false,
 
+            emptyDateValue: new Date(2000, 0, 1, 0, 0, 0),
             advanceCaret: true
         });
     },
@@ -66,6 +67,10 @@ let DateBoxMask = DateBoxBase.inherit({
             return result;
         }
 
+        if(this._isAllSelected()) {
+            this._activePartIndex = 0;
+        }
+
         this._setNewDateIfEmpty();
 
         isNaN(parseInt(key)) ? this._searchString(key) : this._searchNumber(key);
@@ -73,6 +78,12 @@ let DateBoxMask = DateBoxBase.inherit({
         e.originalEvent.preventDefault();
 
         return result;
+    },
+
+    _isAllSelected() {
+        const caret = this._caret();
+
+        return caret.end - caret.start === this.option("text").length;
     },
 
     _getFormatPattern() {
@@ -96,25 +107,26 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _searchNumber(char) {
-        this._searchValue += char;
-
         let limits = this._getActivePartLimits(),
             getter = this._getActivePartProp("getter"),
-            newValue = parseInt(this._searchValue);
+            maxSearchLength = String(limits.max).length;
+
+        this._searchValue = (this._searchValue + char).substr(-maxSearchLength);
+
+        let newValue = parseInt(this._searchValue);
 
         if(getter === "getMonth") {
             newValue--;
         }
 
         if(!inRange(newValue, limits.min, limits.max)) {
-            this._searchValue = char;
             newValue = parseInt(char);
         }
 
         this._setActivePartValue(newValue);
 
         if(this.option("advanceCaret")) {
-            const isLengthExceeded = this._searchValue.length === String(limits.max).length;
+            const isLengthExceeded = this._searchValue.length === maxSearchLength;
             const isValueOverflowed = parseInt(this._searchValue + "0") > limits.max;
 
             if(isLengthExceeded || isValueOverflowed) {
@@ -140,7 +152,7 @@ let DateBoxMask = DateBoxBase.inherit({
             }
         }
 
-        this._revertPart(0);
+        this._setNewDateIfEmpty();
 
         if(this._searchValue) {
             this._clearSearchValue();
@@ -153,15 +165,9 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _revertPart: function(direction, e) {
-        const value = this.dateOption("value");
-        const caret = this._caret();
-        const isAllSelected = caret.end - caret.start === this.option("text").length;
-
-        if(!isAllSelected) {
-            if(value) {
-                const actual = this._getActivePartValue(value);
-                this._setActivePartValue(actual);
-            }
+        if(!this._isAllSelected()) {
+            const actual = this._getActivePartValue(this.option("emptyDateValue"));
+            this._setActivePartValue(actual);
 
             this._selectNextPart(direction, e);
         }
@@ -246,11 +252,12 @@ let DateBoxMask = DateBoxBase.inherit({
             }
         }
 
-        this._activePartIndex = index;
-        this._caret(this._getActivePartProp("caret"));
-        if(step !== 0) {
+        if(this._activePartIndex !== index) {
             this._clearSearchValue();
         }
+
+        this._activePartIndex = index;
+        this._caret(this._getActivePartProp("caret"));
         e && e.preventDefault();
     },
 
@@ -397,6 +404,7 @@ let DateBoxMask = DateBoxBase.inherit({
                 this._renderDateParts();
                 break;
             case "advanceCaret":
+            case "emptyDateValue":
                 break;
             default:
                 this.callBase(args);

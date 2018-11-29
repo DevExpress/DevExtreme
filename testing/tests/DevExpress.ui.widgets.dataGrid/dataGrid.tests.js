@@ -60,6 +60,7 @@ var $ = require("jquery"),
     gridCore = require("ui/data_grid/ui.data_grid.core"),
     gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
     DataSource = require("data/data_source/data_source").DataSource,
+    ArrayStore = require("data/array_store"),
     messageLocalization = require("localization/message"),
     setTemplateEngine = require("ui/set_template_engine"),
     fx = require("animation/fx"),
@@ -1776,6 +1777,26 @@ QUnit.test("Change column width via columnOption method (T628065)", function(ass
     assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
 });
 
+// T688721, T694661
+QUnit.test("column width as string should works correctly", function(assert) {
+    // act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 1000,
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columnAutoWidth: true,
+        columns: [{
+            caption: "FirstName",
+            width: "200",
+            fixed: true
+        }, "LastName"]
+    }).dxDataGrid("instance");
+
+    // assert
+    assert.strictEqual($(dataGrid.getCellElement(0, 1)).outerWidth(), 800, "second column width is correct");
+    assert.strictEqual(dataGrid.columnOption(0, "visibleWidth"), 200, "visibleWidth for first column is number");
+});
+
 function isColumnHidden($container, index) {
     var $colsHeadersView = $container.find(".dx-datagrid-headers col"),
         $colsRowsView = $container.find(".dx-datagrid-headers col"),
@@ -2962,6 +2983,63 @@ QUnit.test("Enable rows hover", function(assert) {
                 { dataField: "birthDay" }
             ],
             hoverStateEnabled: true
+        }),
+        $firstRow = $dataGrid.find(".dx-row").first();
+
+    // act
+    $($dataGrid).trigger({ target: $firstRow.get(0), type: "dxpointerenter", pointerType: "mouse" });
+
+    // assert
+    assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
+});
+
+QUnit.test("Enable rows hover and row position", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "hover is disabled for not desktop devices");
+        return;
+    }
+
+    // arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: [],
+            columns: [
+                { dataField: "firstName" },
+                { dataField: "lastName" },
+                { dataField: "room" },
+                { dataField: "birthDay" }
+            ],
+            hoverStateEnabled: true,
+            focusedRowIndex: 0,
+            focusedColumnIndex: 0
+        }),
+        $firstRow = $dataGrid.find(".dx-row").first();
+
+    // act
+    $($dataGrid).trigger({ target: $firstRow.get(0), type: "dxpointerenter", pointerType: "mouse" });
+
+    // assert
+    assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
+});
+
+QUnit.test("Enable rows hover, row position and focused row", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "hover is disabled for not desktop devices");
+        return;
+    }
+
+    // arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: [],
+            columns: [
+                { dataField: "firstName" },
+                { dataField: "lastName" },
+                { dataField: "room" },
+                { dataField: "birthDay" }
+            ],
+            hoverStateEnabled: true,
+            focusedRowEnabled: true,
+            focusedRowIndex: 0,
+            focusedColumnIndex: 0
         }),
         $firstRow = $dataGrid.find(".dx-row").first();
 
@@ -5181,6 +5259,57 @@ QUnit.test("contentReady should not be raised on row click if focusedRowEnabled"
     assert.strictEqual(dataGrid.option("focusedRowIndex"), 0, "focusedRowIndex is assigned");
     assert.strictEqual(dataGrid.option("focusedColumnIndex"), 0, "focusedColumnIndex is assigned");
     assert.strictEqual(dataGrid.option("focusedRowKey"), 1, "focusedRowKey is assigned");
+});
+
+// T691574
+QUnit.test("refresh and height change should not break layout if rowRenderingMode is virtual", function(assert) {
+    function generateData(count) {
+        var items = [];
+
+        for(var i = 0; i < count; i++) {
+            items.push({
+                someValue1: i,
+                someValue2: i
+            });
+        }
+
+        return items;
+    }
+
+    // act
+    var dataGrid = createDataGrid({
+        height: 200,
+        columnAutoWidth: true,
+        loadingTimeout: undefined,
+        dataSource: generateData(10),
+        scrolling: {
+            rowPageSize: 2,
+            rowRenderingMode: "virtual",
+            updateTimeout: 0
+        },
+        columns: [{
+            dataField: "someValue1",
+            fixed: true
+        }, {
+            dataField: "someValue2"
+        }],
+        summary: {
+            totalItems: [{
+                column: "someValue1",
+                summaryType: "sum"
+            }, {
+                column: "someValue2",
+                summaryType: "sum"
+            }]
+        }
+    });
+
+    // act
+    dataGrid.refresh();
+    dataGrid.option("height", 300);
+
+    // assert
+    assert.equal($(dataGrid.element()).find(".dx-datagrid-total-footer td").length, 4, "summary cell count");
 });
 
 QUnit.test("row alternation should be correct if virtual scrolling is enabled and grouping is used", function(assert) {
@@ -11571,6 +11700,57 @@ QUnit.test("Push with reshape and repaintChangesOnly if scrolling mode is virtua
     assert.strictEqual(dataGrid.getVisibleRows().length, 4, "visible rows");
     assert.ok($(dataGrid.getCellElement(1, 0)).is($firstCell), "first cell is not recreated");
     assert.notOk($(dataGrid.getCellElement(1, 1)).is($secondCell), "second cell is recreated");
+    assert.strictEqual($(dataGrid.getCellElement(1, 1)).text(), "updated", "second cell value is updated");
+});
+
+QUnit.test("Push without reshape should not force load if scrolling mode is virtual", function(assert) {
+    // arrange
+    var data = [
+        { id: 1, name: "test 1" },
+        { id: 2, name: "test 2" },
+        { id: 3, name: "test 3" },
+        { id: 4, name: "test 4" },
+        { id: 5, name: "test 5" }
+    ];
+
+    var loadingCount = 0;
+
+    var arrayStore = new ArrayStore({
+        key: "id",
+        data: data,
+        onLoading: function() {
+            loadingCount++;
+        }
+    });
+
+    var dataGrid = createDataGrid({
+        height: 50,
+        loadingTimeout: undefined,
+        repaintChangesOnly: true,
+        scrolling: {
+            mode: "virtual",
+            updateTimeout: 0
+        },
+        remoteOperations: true,
+        cacheEnabled: false,
+        paging: {
+            pageSize: 2
+        },
+        dataSource: {
+            store: arrayStore,
+            pushAggregationTimeout: 0
+        },
+        columns: ["id", "name"]
+    });
+
+    // assert
+    assert.strictEqual(loadingCount, 2, "loadingCount after init");
+
+    // act
+    arrayStore.push([{ type: "update", key: 2, data: { name: "updated" } }]);
+
+    // assert
+    assert.strictEqual(loadingCount, 2, "loadingCount is not changed after push");
     assert.strictEqual($(dataGrid.getCellElement(1, 1)).text(), "updated", "second cell value is updated");
 });
 

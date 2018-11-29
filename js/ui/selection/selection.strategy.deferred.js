@@ -111,7 +111,7 @@ module.exports = SelectionStrategy.inherit({
         var key = this.options.key;
 
         if(key && key() === undefined) {
-            throw errors.Error("E1042");
+            throw errors.Error("E1042", "Deferred selection");
         }
     },
 

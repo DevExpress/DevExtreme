@@ -421,4 +421,137 @@ describe("LessTemplateLoader", () => {
 `);
         });
     });
+
+    it("load - do not change the order of cascade's classes by swatch class (T692470) - checkbox case", () => {
+        let config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            outColorScheme: "my-custom",
+            makeSwatch: true,
+            reader: () => {
+                return new Promise(resolve => {
+                    resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+                    .dx-checkbox-icon {
+                        .dx-checkbox-checked &, .dx-checkbox-checked& {
+                            background-color: #fff;
+                        }
+                    }`);
+                });
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata).then(data => {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-checkbox-checked .dx-checkbox-icon,
+.dx-swatch-my-custom .dx-checkbox-checked.dx-checkbox-icon {
+  background-color: #fff;
+}
+
+`);
+        });
+    });
+
+    it("load - do not change the order of cascade's classes by swatch class (T692470) - underlined editor case", () => {
+        let config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            outColorScheme: "my-custom",
+            makeSwatch: true,
+            reader: () => {
+                return new Promise(resolve => {
+                    resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+                    .dx-searchbox {
+                        .dx-placeholder:before {
+                            .dx-rtl.dx-editor-underlined&,
+                            .dx-rtl .dx-editor-underlined& {
+                                padding-right: 0;
+                            }
+                        }
+                    }`);
+                });
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata).then(data => {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-rtl.dx-editor-underlined.dx-searchbox .dx-placeholder:before,
+.dx-swatch-my-custom .dx-rtl .dx-editor-underlined.dx-searchbox .dx-placeholder:before {
+  padding-right: 0;
+}
+
+`);
+        });
+    });
+
+    it("load - do not change the order of cascade's classes by swatch class (T692470) - tabs case", () => {
+        let config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            outColorScheme: "my-custom",
+            makeSwatch: true,
+            reader: () => {
+                return new Promise(resolve => {
+                    resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+                    .dx-tab-selected {
+                        & + & {
+                            border: none;
+                        }
+                    }`);
+                });
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata).then(data => {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-tab-selected + .dx-swatch-my-custom .dx-tab-selected {
+  border: none;
+}
+
+`);
+        });
+    });
+
+    it("load - do not change the order of cascade's classes by swatch class (T692470) - tabs case with extra selector", () => {
+        let config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            outColorScheme: "my-custom",
+            makeSwatch: true,
+            reader: () => {
+                return new Promise(resolve => {
+                    resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+                    .dx-tab-selected {
+                        & + .s & {
+                            border: none;
+                        }
+                    }`);
+                });
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata).then(data => {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-tab-selected + .dx-swatch-my-custom .s .dx-tab-selected {
+  border: none;
+}
+
+`);
+        });
+    });
 });

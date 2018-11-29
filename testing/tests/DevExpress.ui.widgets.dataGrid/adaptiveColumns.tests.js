@@ -1561,6 +1561,29 @@ QUnit.test("Calculate correct an average width of column when some columns has p
     assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 2, "command adaptive element");
 });
 
+// T691724
+QUnit.test("Columns should hide consistently if they have minWidth", function(assert) {
+    // arrange
+    $(".dx-datagrid").width(300);
+
+    this.items = [
+        { firstName: 'Blabl', lastName: "Psy", phone: "1" }];
+    this.columns = [
+        { dataField: 'firstName', index: 0, minWidth: 200 },
+        { dataField: 'lastName', index: 1, hidingPriority: 1, minWidth: 200 },
+        { dataField: 'phone', index: 2, hidingPriority: 2, minWidth: 200 }];
+
+    setupDataGrid(this);
+
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    // assert
+    assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 1, "command adaptive element");
+    assert.equal($(".dx-datagrid-hidden-column").length, 2, "hidden columns count");
+});
+
 QUnit.test("Columns should hide consistently if percentage width (T640539)", function(assert) {
     // arrange
     $(".dx-datagrid").width(700);

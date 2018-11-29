@@ -10,7 +10,7 @@ var modules = require("./ui.grid_core.modules"),
 var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"];
 
 function getColumnIdentifier(column) {
-    return column.name || column.dataField;
+    return column.dataField || column.name;
 }
 
 function checkForErrors(columns) {

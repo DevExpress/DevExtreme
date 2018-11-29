@@ -5211,7 +5211,10 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
 
         this.options = {
             useKeyboard: true,
-            editing: { mode: 'cell' }
+            editing: {
+                allowUpdating: true,
+                mode: 'cell'
+            }
         };
         this.columns = [{ dataField: "name", allowEditing: false }, "phone", "room"];
 

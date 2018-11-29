@@ -64,13 +64,16 @@ class LessMetadataPostCompilerPlugin {
 
         if(this.swatchSelector) {
             const escapedSelector = this.swatchSelector.replace(".", "\\.");
-            const customStylesDuplicateRegex = new RegExp("\\s+" + escapedSelector + "\\s+\.dx-theme-.*?-typography\\s+\.dx-theme-.*?{[\\s\\S]*?}[\\r\\n]*?", "g");
+
+            const customStylesDuplicateRegex = new RegExp(`\\s+${escapedSelector}\\s+\.dx-theme-.*?-typography\\s+\.dx-theme-.*?{[\\s\\S]*?}[\\r\\n]*?`, "g");
+            const swatchOrderRegex = new RegExp(`([ \\t]*)([\\w\\.#:\\*][\\w\\.#:\\*\\->()\\s]*)(${escapedSelector}\\s)([^,{+~]*)`, "gm");
             const themeMarkerRegex = /(\.dx-theme-marker\s*{\s*font-family:\s*['"]dx\..*?\.)(.*)(['"])/g;
+
             css = css
+                .replace(swatchOrderRegex, "$1$3$2$4")
                 .replace(customStylesDuplicateRegex, "")
                 .replace(/\s\.dx-theme-.*?-typography/g, "")
                 .replace(themeMarkerRegex, "$1" + this.colorScheme + "$3");
-
         }
 
         return css.replace(metadataRegex, "");

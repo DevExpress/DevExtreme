@@ -26,6 +26,7 @@ var SCROLLABLE = "dxScrollable",
     SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container",
     SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper",
     SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content",
+    SCROLLABLE_CUSTOMIZABLE_SCROLLBARS_CLASS = "dx-scrollable-customizable-scrollbars",
     VERTICAL = "vertical",
     HORIZONTAL = "horizontal",
     BOTH = "both";
@@ -262,7 +263,7 @@ var Scrollable = DOMComponent.inherit({
         // NOTE: Customize native scrollbars for dashboard team
 
         if(devices.real().deviceType === "desktop" && !(navigator.platform.indexOf('Mac') > -1 && browser['webkit'])) {
-            this.$element().addClass("dx-scrollable-customizable-scrollbars");
+            this.$element().addClass(SCROLLABLE_CUSTOMIZABLE_SCROLLBARS_CLASS);
         }
     },
 

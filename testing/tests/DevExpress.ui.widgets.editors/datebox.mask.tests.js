@@ -373,40 +373,58 @@ if(devices.real().deviceType === "desktop") {
             assert.ok(this.instance.option("opened"), "datebox is opened");
         });
 
-        QUnit.test("delete should revert group to initial value and go to the next one", (assert) => {
+        QUnit.test("delete should revert group to an empty date and go to the next part", (assert) => {
             this.keyboard.press("up");
             assert.equal(this.instance.option("text"), "November 10 2012", "text has been changed");
 
             this.keyboard.press("del");
 
-            assert.equal(this.instance.option("text"), "October 10 2012", "text is correct");
+            assert.equal(this.instance.option("text"), "January 10 2012", "text is correct");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "caret is good");
+
+            this.keyboard.press("del");
+            assert.equal(this.instance.option("text"), "January 1 2012", "text is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 10, end: 14 }, "caret is good");
+
+            this.keyboard.press("del");
+            assert.equal(this.instance.option("text"), "January 1 2000", "text is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 10, end: 14 }, "caret is good");
         });
 
-        QUnit.test("delete should not revert a part when the value is null", (assert) => {
+        QUnit.test("delete should revert a part when the value is null", (assert) => {
             this.instance.option({
                 displayFormat: "MMM yyyy",
                 value: null
             });
             this.keyboard.press("up");
 
-            let text = this.instance.option("text");
             assert.ok(this.instance.option("text"), "text has been rendered");
 
             this.keyboard.press("del");
-            assert.equal(this.instance.option("text"), text, "text has not been changed");
+            assert.equal(this.instance.option("text"), "Jan 1970", "text has been reverted");
             assert.deepEqual(this.keyboard.caret(), { start: 4, end: 8 }, "next group is selected");
         });
 
-        QUnit.test("backspace should revert group to initial value and go to the previous one", (assert) => {
+        QUnit.test("backspace should revert group to an empty date and go to the previous part", (assert) => {
             this.keyboard.press("right");
             this.keyboard.press("up");
             assert.equal(this.instance.option("text"), "October 11 2012", "text has been changed");
 
             this.keyboard.press("backspace");
 
-            assert.equal(this.instance.option("text"), "October 10 2012", "text is correct");
+            assert.equal(this.instance.option("text"), "October 1 2012", "text is correct");
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "caret is good");
+        });
+
+        QUnit.test("emptyDateValue option should work", (assert) => {
+            this.instance.option("emptyDateValue", new Date(2015, 5, 4));
+            this.keyboard.press("up");
+            assert.equal(this.instance.option("text"), "November 10 2012", "text has been changed");
+
+            this.keyboard.press("del");
+
+            assert.equal(this.instance.option("text"), "June 10 2012", "text is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 5, end: 7 }, "caret is good");
         });
 
         QUnit.test("removing all text should be possible", (assert) => {
@@ -442,6 +460,31 @@ if(devices.real().deviceType === "desktop") {
         QUnit.test("incorrect input should clear search value", (assert) => {
             this.keyboard.type("jqwed");
             assert.equal(this.instance.option("text"), "December 10 2012", "text has been changed");
+        });
+
+        QUnit.test("first part should be active if select all parts and type new date", (assert) => {
+            this.keyboard.press("right");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group has been selected");
+
+            this.keyboard
+                .caret({ start: 0, end: 15 })
+                .type("1");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "next group has been selected");
+        });
+
+        QUnit.test("first part should be active if select all parts, delete and type new", (assert) => {
+            this.keyboard.press("right");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group has been selected");
+
+            this.keyboard
+                .caret({ start: 0, end: 15 })
+                .press("del")
+                .type("1");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "next group has been selected");
         });
     });
 
@@ -574,10 +617,20 @@ if(devices.real().deviceType === "desktop") {
         QUnit.test("Year", (assert) => {
             this.instance.option("displayFormat", "yyyy");
 
-            this.keyboard
-                .type("99991");
+            this.keyboard.type("1995");
+            assert.equal(this.$input.val(), "1995");
 
-            assert.equal(this.$input.val(), "9991", "year should be limited");
+            this.keyboard.type("2");
+            assert.equal(this.$input.val(), "9952");
+
+            this.keyboard.type("0");
+            assert.equal(this.$input.val(), "9520");
+
+            this.keyboard.type("1");
+            assert.equal(this.$input.val(), "5201");
+
+            this.keyboard.type("8");
+            assert.equal(this.$input.val(), "2018");
         });
 
         QUnit.test("Short Year", (assert) => {

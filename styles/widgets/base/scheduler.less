@@ -817,13 +817,13 @@
             .dx-scheduler-scrollable-offset-mixin(@SCHEDULER_HEADER_PANEL_OFFSET, @SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT, @SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
         }
 
-        &:not(.dx-scheduler-work-space-all-day)&:not(.dx-scheduler-work-space-month)&:not(.dx-scheduler-timeline) {
+        &:not(.dx-scheduler-work-space-all-day):not(.dx-scheduler-work-space-month):not(.dx-scheduler-timeline) {
             .dx-scheduler-header-panel {
                 border-bottom: 2px solid @SCHEDULER_BASE_BORDER_COLOR;
             }
         }
 
-        &.dx-scheduler-work-space-month&:not(.dx-scheduler-work-space-vertical-grouped) {
+        &.dx-scheduler-work-space-month:not(.dx-scheduler-work-space-vertical-grouped) {
             .dx-scheduler-header-panel {
                 border-bottom: @SCHEDULER_BASE_BORDER;
             }
@@ -909,7 +909,7 @@
     }
 
     .dx-scheduler-work-space-day {
-        &:not(.dx-scheduler-work-space-count)&:not(.dx-scheduler-work-space-grouped) {
+        &:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped) {
             .dx-scheduler-all-day-table-cell {
                 border-top: none;
                 border-left: none;

@@ -10,7 +10,7 @@ import exportTestsHelper from "./exportTestsHelper.js";
 
 const dataGridExportTestsHelper = Object.create(exportTestsHelper);
 
-dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, getCustomizeExcelCellExpectedCells = undefined } = {}) {
+dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, getCustomizeExcelCellExpectedCells = undefined, fixedColumnWidth_100 = true } = {}) {
     const that = this;
     const done = assert.async();
     const actualGridCells = [];
@@ -91,17 +91,19 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
 
     const dataGrid = $("#dataGrid").dxDataGrid(options).dxDataGrid("instance");
 
-    const getColumnWidthsHeadersOld = dataGrid.getView("columnHeadersView").getColumnWidths;
-    dataGrid.getView("columnHeadersView").getColumnWidths = function() {
-        const columnWidths = getColumnWidthsHeadersOld.apply(this);
-        return columnWidths.map(() => 100);
-    };
+    if(fixedColumnWidth_100) {
+        const getColumnWidthsHeadersOld = dataGrid.getView("columnHeadersView").getColumnWidths;
+        dataGrid.getView("columnHeadersView").getColumnWidths = function() {
+            const columnWidths = getColumnWidthsHeadersOld.apply(this);
+            return columnWidths.map(() => 100);
+        };
 
-    const getColumnWidthsRowsOld = dataGrid.getView("rowsView").getColumnWidths;
-    dataGrid.getView("rowsView").getColumnWidths = function() {
-        const columnWidths = getColumnWidthsRowsOld.apply(this);
-        return columnWidths.map(() => 100);
-    };
+        const getColumnWidthsRowsOld = dataGrid.getView("rowsView").getColumnWidths;
+        dataGrid.getView("rowsView").getColumnWidths = function() {
+            const columnWidths = getColumnWidthsRowsOld.apply(this);
+            return columnWidths.map(() => 100);
+        };
+    }
     dataGrid.exportToExcel();
 };
 
