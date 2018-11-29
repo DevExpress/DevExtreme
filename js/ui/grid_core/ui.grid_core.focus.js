@@ -382,11 +382,12 @@ module.exports = {
                 },
 
                 _fireChanged: function(e) {
-                    var operationTypes,
+                    var dataSource = this._dataSource,
+                        operationTypes,
                         focusController;
 
-                    if(this.option("focusedRowEnabled")) {
-                        operationTypes = this._dataSource.operationTypes();
+                    if(this.option("focusedRowEnabled") && dataSource) {
+                        operationTypes = dataSource.operationTypes();
                         focusController = this.getController("focus");
 
                         if(e.changeType === "refresh") {
