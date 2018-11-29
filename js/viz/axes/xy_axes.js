@@ -929,6 +929,10 @@ module.exports = {
                 position = this._options.position,
                 coord = isHorizontal ? y : x;
 
+            if(isHorizontal && (x < canvas.left || x > (canvas.width - canvas.right))
+                || !isHorizontal && (y < canvas.top || y > (canvas.height - canvas.bottom))) {
+                return false;
+            }
             if(isHorizontal && position === constants.top || !isHorizontal && position === constants.left) {
                 return coord < canvas[position];
             }

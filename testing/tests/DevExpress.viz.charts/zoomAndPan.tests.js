@@ -25,7 +25,6 @@ const environment = {
             commonAxisSettings: {
                 grid: { visible: false },
                 label: { visible: false },
-                point: { visible: false },
                 tick: { visible: false },
                 visible: false
             },
@@ -683,6 +682,147 @@ QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert)
     chart._argumentAxes.forEach(axis => {
         assert.deepEqual(axis.visualRange(), { startValue: 3, endValue: 7 });
     });
+});
+
+QUnit.module("Wheel zooming. Mouse on axis", environment);
+
+QUnit.test("Mouse over value axis - zoom only value axes in one pane axes", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            size: {
+                height: 610
+            },
+            zoomAndPan: {
+                argumentAxis: "zoom",
+                valueAxis: "zoom",
+                allowMouseWheel: true
+            },
+            panes: [
+                { name: "p1" },
+                { name: "p2" }
+            ],
+            valueAxis: [
+                { name: "v1", visualRange: { startValue: 0.9, endValue: 4.2 }, placeholderSize: 100 },
+                { name: "v2", visualRange: { startValue: 1.8, endValue: 8.4 }, placeholderSize: 100 },
+                { name: "v3", visualRange: { startValue: 0.9, endValue: 4.2 }, placeholderSize: 100 }
+            ],
+            series: [
+                { pane: "p1", axis: "v1" },
+                { pane: "p1", axis: "v2" },
+                { pane: "p2", axis: "v3" }
+            ],
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    const valueAxis1 = chart.getValueAxis("v1");
+    const valueAxis2 = chart.getValueAxis("v2");
+
+    // act
+    this.pointer.start({ x: 75, y: 200 }).wheel(10);
+
+    assert.equal(onZoomStart.callCount, 2);
+    assert.equal(onZoomStart.getCall(0).args[0].axis, valueAxis1);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, { startValue: 0.9, endValue: 4.2 });
+
+    assert.equal(onZoomStart.getCall(1).args[0].axis, valueAxis2);
+    assert.deepEqual(onZoomStart.getCall(1).args[0].range, { startValue: 1.8, endValue: 8.4 });
+
+    assert.equal(onZoomEnd.callCount, 2);
+    assert.equal(onZoomEnd.getCall(0).args[0].axis, valueAxis1);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 0.9, endValue: 4.2 });
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 1, endValue: 4 });
+
+    assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis2);
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 1.8, endValue: 8.4 });
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 2, endValue: 8 });
+});
+
+QUnit.test("Mouse over argument axis - zoom only argument axes", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy(),
+        chart = this.createChart({
+            size: {
+                width: 900,
+                height: 700
+            },
+            commonAxisSettings: {
+                placeholderSize: 100
+            },
+            argumentAxis: {
+                visualRange: {
+                    startValue: 2.9,
+                    endValue: 7.3
+                }
+            },
+            panes: [
+                { name: "p1" },
+                { name: "p2" }
+            ],
+            series: [
+                { pane: "p1" },
+                { pane: "p2" }
+            ],
+            zoomAndPan: {
+                argumentAxis: "zoom",
+                valueAxis: "zoom",
+                allowMouseWheel: true
+            },
+            onZoomStart: onZoomStart,
+            onZoomEnd: onZoomEnd
+        });
+
+    // act
+    this.pointer.start({ x: 300, y: 650 }).wheel(10);
+
+    assert.equal(onZoomStart.callCount, 1);
+    assert.equal(onZoomEnd.callCount, 1);
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 3, endValue: 7 });
+    });
+});
+
+QUnit.test("Mouse not on axes nor panes - do not zoom any axis", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy();
+    this.createChart({
+        size: {
+            height: 710,
+            width: 900
+        },
+        commonAxisSettings: {
+            placeholderSize: 100
+        },
+        zoomAndPan: {
+            argumentAxis: "zoom",
+            valueAxis: "zoom",
+            allowMouseWheel: true
+        },
+        panes: [
+            { name: "p1" },
+            { name: "p2" }
+        ],
+        valueAxis: [
+            { name: "v1", visualRange: { startValue: 0.9, endValue: 4.2 } },
+            { name: "v2", visualRange: { startValue: 1.8, endValue: 8.4 } },
+            { name: "v3", visualRange: { startValue: 0.9, endValue: 4.2 } }
+        ],
+        series: [
+            { pane: "p1", axis: "v1" },
+            { pane: "p1", axis: "v2" },
+            { pane: "p2", axis: "v3" }
+        ],
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
+
+    // act
+    this.pointer.start({ x: 50, y: 650 }).wheel(10);
+
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
 });
 
 QUnit.module("Shutter zoom. Test zooming", environment);

@@ -2768,7 +2768,7 @@ QUnit.test("no custom format - use auto format based on estimated tickInterval",
     assert.strictEqual(this.renderer.text.getCall(0).args[0], "February");
 });
 
-QUnit.module("Coors In", $.extend({}, environment2DTranslator, {
+QUnit.module("Coords In", $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         environment2DTranslator.beforeEach.call(this);
         this.axis = this.createSimpleAxis();
@@ -2789,8 +2789,10 @@ QUnit.test("Horizontal axis. bottom position", function(assert) {
         position: "bottom"
     });
 
-    assert.strictEqual(this.axis.coordsIn(0, 100), false);
-    assert.strictEqual(this.axis.coordsIn(0, 601), true);
+    assert.strictEqual(this.axis.coordsIn(500, 601), true);
+    assert.strictEqual(this.axis.coordsIn(10, 100), false);
+    assert.strictEqual(this.axis.coordsIn(950, 100), false);
+    assert.strictEqual(this.axis.coordsIn(500, 100), false);
 });
 
 QUnit.test("Horizontal axis. top position", function(assert) {
@@ -2799,9 +2801,11 @@ QUnit.test("Horizontal axis. top position", function(assert) {
         position: "top"
     });
 
-    assert.strictEqual(this.axis.coordsIn(0, 100), false);
-    assert.strictEqual(this.axis.coordsIn(0, 601), false);
-    assert.strictEqual(this.axis.coordsIn(0, 9), true);
+    assert.strictEqual(this.axis.coordsIn(500, 9), true);
+    assert.strictEqual(this.axis.coordsIn(10, 9), false);
+    assert.strictEqual(this.axis.coordsIn(950, 9), false);
+    assert.strictEqual(this.axis.coordsIn(500, 100), false);
+    assert.strictEqual(this.axis.coordsIn(500, 601), false);
 });
 
 QUnit.test("Vertica axis. left position", function(assert) {
@@ -2812,6 +2816,8 @@ QUnit.test("Vertica axis. left position", function(assert) {
 
     assert.strictEqual(this.axis.coordsIn(10, 100), true);
     assert.strictEqual(this.axis.coordsIn(31, 100), false);
+    assert.strictEqual(this.axis.coordsIn(10, 5), false);
+    assert.strictEqual(this.axis.coordsIn(10, 700), false);
 });
 
 QUnit.test("Vertical axis. right position", function(assert) {
@@ -2820,8 +2826,10 @@ QUnit.test("Vertical axis. right position", function(assert) {
         position: "right"
     });
 
-    assert.strictEqual(this.axis.coordsIn(800, 100), false);
     assert.strictEqual(this.axis.coordsIn(920, 100), true);
+    assert.strictEqual(this.axis.coordsIn(800, 100), false);
+    assert.strictEqual(this.axis.coordsIn(920, 5), false);
+    assert.strictEqual(this.axis.coordsIn(920, 700), false);
 });
 
 QUnit.module("API: Shift", environment2DTranslator);
