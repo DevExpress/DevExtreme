@@ -171,6 +171,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
             this._selectNextPart(direction, e);
         }
+        this._clearSearchValue();
     },
 
     _useMaskBehavior() {
