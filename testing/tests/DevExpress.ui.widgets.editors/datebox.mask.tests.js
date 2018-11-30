@@ -670,15 +670,19 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Empty dateBox", setupModule, () => {
-        QUnit.test("Current date should be rendered on first input", (assert) => {
+    QUnit.module("Empty dateBox", {
+        beforeEach: () => {
+            setupModule.beforeEach.call(this);
             this.instance.option("value", null);
+        },
+        afterEach: setupModule.afterEach
+    }, () => {
+        QUnit.test("Current date should be rendered on first input", (assert) => {
             this.keyboard.type("1");
             assert.equal(this.$input.val(), "January 14 2015", "first part was changed, other parts is from the current date");
         });
 
         QUnit.test("Bluring the input after first input should update the value", (assert) => {
-            this.instance.option("value", null);
             this.keyboard.type("1");
             this.$input.trigger("focusout");
 
@@ -709,7 +713,6 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Incorrect search on empty input should render current date", (assert) => {
-            this.instance.option("value", null);
             this.keyboard.type("qq");
 
             assert.equal(this.$input.val(), "April 14 2015", "text is correct");
@@ -717,7 +720,6 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("focus and blur empty input should not change it's value", (assert) => {
-            this.instance.option("value", null);
             this.$input.trigger("focusin");
             this.$input.trigger("focusout");
 
@@ -726,7 +728,6 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("focusing datebox by click should work", (assert) => {
-            this.instance.option("value", null);
             this.$input.trigger("dxclick");
             this.keyboard.type("2");
 
@@ -735,7 +736,6 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("focusing datebox by mousewheel should work", (assert) => {
-            this.instance.option("value", null);
             this.pointer.wheel(10);
             this.keyboard.type("2");
 
@@ -755,10 +755,7 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Short Year should use current date", (assert) => {
-            this.instance.option({
-                displayFormat: "yy",
-                value: null
-            });
+            this.instance.option("displayFormat", "yy");
 
             let dateStart = new Date().getFullYear().toString().substr(0, 2);
 
@@ -770,10 +767,7 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Click and leave empty datebox should not change the value", (assert) => {
-            this.instance.option({
-                displayFormat: "yy",
-                value: null
-            });
+            this.instance.option("displayFormat", "yy");
 
             this.$input.trigger("dxclick");
             this.keyboard.press("enter");
@@ -783,7 +777,6 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("navigation keys should do nothing in an empty datebox", (assert) => {
-            this.instance.option("value", null);
             this.keyboard.press("home");
             this.keyboard.press("end");
             this.keyboard.press("del");
