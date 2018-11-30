@@ -2260,7 +2260,8 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "timelineWeek",
             views: [{
                 type: "timelineWeek",
-                maxAppointmentsPerCell: 'auto'
+                maxAppointmentsPerCell: 'auto',
+                forceMaxAppointmentPerCell: true
             }],
             height: 200,
             dataSource: items
