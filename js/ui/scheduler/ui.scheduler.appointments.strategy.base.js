@@ -680,7 +680,7 @@ var BaseRenderingStrategy = Class.inherit({
     _getDynamicAppointmentCountPerCell: function() {
         var cellHeight = this.instance.fire("getCellHeight");
 
-        return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight());
+        return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight()) || 1;
     },
 
     _isCompactTheme: function() {
