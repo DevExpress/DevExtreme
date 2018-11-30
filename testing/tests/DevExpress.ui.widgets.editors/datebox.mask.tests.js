@@ -391,6 +391,27 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 10, end: 14 }, "caret is good");
         });
 
+        QUnit.test("search value should be cleared after part is reverted", (assert) => {
+            this.instance.option("displayFormat", "dd, yyyy");
+
+            this.keyboard.press("right");
+            this.keyboard.type("33");
+            this.keyboard.press("del");
+            this.keyboard.type("44");
+
+            assert.equal(this.instance.option("text"), "10, 2044", "text is correct");
+        });
+
+        QUnit.test("search value should be cleared after part is reverted when all text is selected", (assert) => {
+            this.instance.option("displayFormat", "yyyy");
+
+            this.keyboard.type("33");
+            this.keyboard.press("del");
+            this.keyboard.type("44");
+
+            assert.equal(this.instance.option("text"), "2044", "text is correct");
+        });
+
         QUnit.test("delete should revert a part when the value is null", (assert) => {
             this.instance.option({
                 displayFormat: "MMM yyyy",
