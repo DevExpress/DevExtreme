@@ -305,12 +305,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             return;
         }
 
-        var $focusedCell = this._getFocusedCell(),
+        var $prevFocusedCell = this._getFocusedCell(),
             focusedView = this._focusedView,
             $focusViewElement = focusedView && focusedView.element(),
             $focusElement;
-
-        $focusedCell && $focusedCell.is("td") && $focusedCell.removeAttr("tabIndex");
 
         this._isHiddenFocus = disableFocus;
 
@@ -324,12 +322,14 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._updateFocusedCellPosition($cell);
         }
 
+        $prevFocusedCell && $prevFocusedCell.is("td") && $prevFocusedCell.not($focusElement).removeAttr("tabIndex");
+
         if($focusElement && !isInteractiveElement) {
             this._applyTabIndexToElement($focusElement);
             eventsEngine.trigger($focusElement, "focus");
         }
         if(disableFocus) {
-            $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
+            $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").not($focusElement).removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
             $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
         } else {
             $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + ":not(." + MASTER_DETAIL_CELL_CLASS + ")").removeClass(CELL_FOCUS_DISABLED_CLASS);
