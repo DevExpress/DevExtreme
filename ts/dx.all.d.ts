@@ -2385,7 +2385,7 @@ declare module DevExpress.ui {
         /** A function that is executed after the pointer enters or leaves a cell. */
         onCellHoverChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
         /** A function that is executed after a cell is created. */
-        onCellPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function }) => any);
+        onCellPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function, oldValue?: any }) => any);
         /** A function that is executed before the context menu is rendered. */
         onContextMenuPreparing?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, row?: dxDataGridRowObject }) => any);
         /** A function that is executed before a cell or row switches to the editing state. */
@@ -2403,7 +2403,7 @@ declare module DevExpress.ui {
         /** A function that is executed after the focused cell changes. */
         onFocusedCellChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any);
         /** A function that is executed before the focused cell changes. */
-        onFocusedCellChanging?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxDataGridRowObject>, columns?: Array<dxDataGridColumn>, cancel?: boolean }) => any);
+        onFocusedCellChanging?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxDataGridRowObject>, columns?: Array<dxDataGridColumn>, cancel?: boolean, isHighlighted?: boolean }) => any);
         /** A function that is executed after the focused row changes. Applies only when focusedRowEnabled is true. */
         onFocusedRowChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, rowElement?: DevExpress.core.dxElement, rowIndex?: number, row?: dxDataGridRowObject }) => any);
         /** A function that is executed before the focused row changes. Applies only when focusedRowEnabled is true. */
@@ -2583,7 +2583,7 @@ declare module DevExpress.ui {
         /** Specifies how the drawer interacts with the view in the opened state. */
         openedStateMode?: 'overlap' | 'shrink' | 'push';
         /** Specifies the drawer's position in relation to the view. */
-        position?: 'left' | 'right' | 'top' | 'bottom';
+        position?: 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
         /** Specifies the drawer's reveal mode. */
         revealMode?: 'slide' | 'expand';
         /** Specifies whether to shade the view when the drawer is opened. */
@@ -2884,6 +2884,8 @@ declare module DevExpress.ui {
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
+        /** The value to be assigned to the `name` attribute of the underlying HTML element. */
+        name?: string;
         /** A function that is executed when the widget gets focus. */
         onFocusIn?: ((e: { component?: dxHtmlEditor, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
         /** A function that is executed when the widget loses focus. */
@@ -2919,6 +2921,7 @@ declare module DevExpress.ui {
         getFormat(index: number, length: number): any;
         /** Gets the entire content's length. */
         getLength(): number;
+        /** Gets a format, module, or Parchment. */
         getModule(modulePath: string): any;
         /** Gets Quill's instance. */
         getQuillInstance(): any;
@@ -2930,6 +2933,7 @@ declare module DevExpress.ui {
         insertText(index: number, text: string, formats: any): void;
         /** Reapplies the most recent undone change. Repeated calls reapply preceding undone changes. */
         redo(): void;
+        /** Registers formats and modules. */
         registerModules(modules: any): void;
         /** Removes all formatting and embedded content from the specified range. */
         removeFormat(index: number, length: number): void;
@@ -3829,13 +3833,13 @@ declare module DevExpress.ui {
         endDateExpr?: string;
         /** Specifies the name of the data source item field that defines the timezone of the appointment end date. */
         endDateTimeZoneExpr?: string;
-        /** Specifies an end hour in the scheduler view's time interval. */
+        /** Specifies the last hour in the time scale. Cannot be greater than 24. */
         endDayHour?: number;
         /** Specifies the first day of a week. Does not apply to the agenda view. */
         firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
-        /** Specifies whether to group appointments by date first. Applies to all view types except "agenda". */
+        /** Specifies whether to group appointments by date first. Applies only if groupOrientation is "horizontal". */
         groupByDate?: boolean;
         /** Specifies the resource kinds by which the scheduler's appointments are grouped in a timetable. */
         groups?: Array<string>;
@@ -3863,7 +3867,7 @@ declare module DevExpress.ui {
         onAppointmentDeleted?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
         /** A function that is executed before an appointment is deleted from the data source. */
         onAppointmentDeleting?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
-        /** A function that is executed when an appointment's edit form is created. */
+        /** A function that is executed before an appointment details form is opened. */
         onAppointmentFormCreated?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
         /** A function that is executed when an appointment is rendered. */
         onAppointmentRendered?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any, appointmentElement?: DevExpress.core.dxElement }) => any);
@@ -3899,7 +3903,7 @@ declare module DevExpress.ui {
         startDateExpr?: string;
         /** Specifies the name of the data source item field that defines the timezone of the appointment start date. */
         startDateTimeZoneExpr?: string;
-        /** Specifies a start hour in the scheduler view's time interval. */
+        /** Specifies the first hour in the time scale. */
         startDayHour?: number;
         /** Specifies the name of the data source item field that holds the subject of an appointment. */
         textExpr?: string;
@@ -4367,7 +4371,7 @@ declare module DevExpress.ui {
         /** A function that is executed after the pointer enters or leaves a cell. */
         onCellHoverChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
         /** A function that is executed after a grid cell is created. */
-        onCellPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function }) => any);
+        onCellPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function, oldValue?: any }) => any);
         /** A function that is executed before the context menu is rendered. */
         onContextMenuPreparing?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /** A function that is executed before a cell or row switches to the editing state. */
@@ -4379,7 +4383,7 @@ declare module DevExpress.ui {
         /** A function that is executed after the focused cell changes. */
         onFocusedCellChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any);
         /** A function that is executed before the focused cell changes. */
-        onFocusedCellChanging?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxTreeListRowObject>, columns?: Array<dxTreeListColumn>, cancel?: boolean }) => any);
+        onFocusedCellChanging?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: event, rows?: Array<dxTreeListRowObject>, columns?: Array<dxTreeListColumn>, cancel?: boolean, isHighlighted?: boolean }) => any);
         /** A function that executed when the focused row changes. Applies only when focusedRowEnabled is true. */
         onFocusedRowChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, rowElement?: DevExpress.core.dxElement, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /** A function that is executed before the focused row changes. Applies only when focusedRowEnabled is true. */
@@ -6010,9 +6014,9 @@ declare module DevExpress.viz {
         /** A function that is executed when a series is selected or selection is canceled. */
         onSeriesSelectionChanged?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, target?: chartSeriesObject }) => any);
         /** A function that is executed when zooming or panning ends. */
-        onZoomEnd?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean }) => any);
+        onZoomEnd?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, event?: event, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => any);
         /** A function that is executed when zooming or panning begins. */
-        onZoomStart?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, axis?: chartAxisObject, range?: VizRange, cancel?: boolean }) => any);
+        onZoomStart?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, event?: event, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => any);
         /** Declares a collection of panes. */
         panes?: dxChartPanes | Array<dxChartPanes>;
         /** Specifies how the chart must behave when series point labels overlap. */
@@ -6094,7 +6098,7 @@ declare module DevExpress.viz {
         visualRange?: VizRange | Array<number | string | Date>;
         /** Specifies how the axis's visual range should behave when chart data is updated. */
         visualRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
-        /** Defines the range where the axis can be zoomed and panned. Equals the data range when unspecified. */
+        /** Defines the range where the axis can be zoomed and panned. */
         wholeRange?: VizRange | Array<number | string | Date>;
         /** Leaves only workdays on the axis: the work week days plus single workdays minus holidays. Applies only if the axis' argumentType is "datetime". */
         workdaysOnly?: boolean;
@@ -6409,7 +6413,8 @@ declare module DevExpress.viz {
         valueType?: 'datetime' | 'numeric' | 'string';
         /** Defines the axis' displayed range. Cannot be wider than the wholeRange. */
         visualRange?: VizRange | Array<number | string | Date>;
-        /** Defines the range where the axis can be zoomed and panned. Equals the data range when not set. */
+        visualRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
+        /** Defines the range where the axis can be zoomed and panned. */
         wholeRange?: VizRange | Array<number | string | Date>;
     }
     /** Declares a collection of constant lines belonging to the value axis. */
@@ -6974,6 +6979,7 @@ declare module DevExpress.viz {
         getSeriesByPos(seriesIndex: number): chartSeriesObject;
         /** Hides all widget tooltips. */
         hideTooltip(): void;
+        /** Reloads data and repaints the widget. */
         refresh(): void;
         /** Redraws the widget. */
         render(): void;
@@ -7923,6 +7929,7 @@ declare module DevExpress.viz {
     }
     /** A base object for gauge value and subvalue indicators. Includes the options of indicators of all types. */
     export interface GaugeIndicator extends CommonIndicator {
+        /** Specifies the type of gauge indicators. */
         type?: 'circle' | 'rangeBar' | 'rectangle' | 'rectangleNeedle' | 'rhombus' | 'textCloud' | 'triangleMarker' | 'triangleNeedle' | 'twoColorNeedle';
     }
     /** A base object for gauge value and subvalue indicators. Includes the options of indicators of all types. */
