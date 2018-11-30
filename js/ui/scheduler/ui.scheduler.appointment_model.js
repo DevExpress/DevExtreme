@@ -112,6 +112,9 @@ var compareDateWithEndDayHour = function(startDate, endDate, startDayHour, endDa
 };
 
 var AppointmentModel = Class.inherit({
+    ctor: function() {
+        this._updatedAppointments = [];
+    },
 
     _createFilter: function(min, max, remoteFiltering, dateSerializationFormat) {
         this._filterMaker.make("date", [min, max]);
@@ -215,7 +218,7 @@ var AppointmentModel = Class.inherit({
             apptEndDayHour = endDate.getHours();
 
         return (apptStartDayHour <= startDayHour && apptEndDayHour <= endDayHour && apptEndDayHour >= startDayHour) ||
-                   (apptEndDayHour >= endDayHour && apptStartDayHour <= endDayHour && apptStartDayHour >= startDayHour);
+                    (apptEndDayHour >= endDayHour && apptStartDayHour <= endDayHour && apptStartDayHour >= startDayHour);
     },
 
     _createCombinedFilter: function(filterOptions, timeZoneProcessor) {
@@ -298,17 +301,22 @@ var AppointmentModel = Class.inherit({
 
     _initStoreChangeHandlers: function() {
         this._dataSource && this._dataSource.store()
-            .on("updating", (function(newItem) {
-                this._updatedAppointment = newItem;
-            }).bind(this));
+            .on("updating", function(item) { this._updatedAppointments.push(item); }.bind(this));
+        this._dataSource && this._dataSource.store()
+            .on("push", function(items) {
+                var newItems = items.map(function(item) {
+                    return item.data;
+                });
+                this._updatedAppointments = this._updatedAppointments.concat(newItems);
+            }.bind(this));
     },
 
-    getUpdatedAppointment: function() {
-        return this._updatedAppointment;
+    getUpdatedAppointments: function() {
+        return this._updatedAppointments;
     },
 
     cleanModelState: function() {
-        delete this._updatedAppointment;
+        this._updatedAppointments = [];
     },
 
     setDataAccessors: function(dataAccessors) {
