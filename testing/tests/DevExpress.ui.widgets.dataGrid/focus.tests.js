@@ -3724,3 +3724,30 @@ QUnit.testInActiveWindow("Focused row public API should be accessible", function
     assert.notOk(this.navigateToRow("Alex"), "navigateToRow");
     assert.ok(this.isRowFocused("Alex"), "isRowFocused true");
 });
+
+QUnit.test("DataGrid should not operate with focused row if dataSource is missing", function(assert) {
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true
+    };
+
+    this.setupModule();
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    try {
+        // act
+        this.option("dataSource", null);
+        this.getController("data").optionChanged({ name: "dataSource", value: null });
+        // assert
+        assert.ok(true, "No exception after dataSource is null");
+    } catch(e) {
+        // assert
+        assert.ok(false, e.message);
+    }
+});
