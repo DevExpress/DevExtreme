@@ -398,7 +398,7 @@ if(devices.real().deviceType === "desktop") {
             });
             this.keyboard.press("up");
 
-            assert.ok(this.instance.option("text"), "", "text has been rendered");
+            assert.equal(this.instance.option("text"), "May 2015", "text has been rendered");
 
             this.keyboard.press("del");
             assert.equal(this.instance.option("text"), "Jan 2015", "text has been reverted");
