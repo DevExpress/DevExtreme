@@ -1370,7 +1370,10 @@ module.exports = {
                 return rowCount;
             };
 
-            var getFixedPosition = function(column) {
+            var getFixedPosition = function(that, column) {
+                if(column.command && !isCustomCommandColumn(that, column)) {
+                    return column.visibleIndex < 0 ? "left" : "right";
+                }
                 return !column.fixedPosition ? "left" : column.fixedPosition;
             };
 
@@ -1828,7 +1831,7 @@ module.exports = {
                                     if(!isDefined(transparentColumnIndex)) {
                                         transparentColumnIndex = j;
                                     }
-                                } else if(prevColumn && prevColumn.fixed && getFixedPosition(prevColumn) !== getFixedPosition(column)) {
+                                } else if(prevColumn && prevColumn.fixed && getFixedPosition(that, prevColumn) !== getFixedPosition(that, column)) {
                                     if(!isDefined(transparentColumnIndex)) {
                                         transparentColumnIndex = j;
                                     }
