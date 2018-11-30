@@ -41,3 +41,23 @@
 .dx-dialog-message {
     padding: 10px 10px 5px 10px;
 }
+
+.dx-popup-auto-resizeble {
+    &.dx-overlay-wrapper {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .dx-overlay-content {
+        display: flex;
+        max-height: 250px;
+        position: relative;
+    }
+    
+    .dx-popup-content {
+        flex-grow: 1;
+        min-height: 0;
+        flex-basis: auto;
+        flex-shrink: 1;
+    }
+}

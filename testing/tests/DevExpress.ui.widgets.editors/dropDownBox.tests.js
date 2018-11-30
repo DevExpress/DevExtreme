@@ -424,6 +424,27 @@ QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets includin
     }
 });
 
+QUnit.test("Dropdownbox popup height can be changed according to the content if height = auto", function(assert) {
+    var $content;
+
+    this.$element.dxDropDownBox({
+        height: "auto",
+        opened: true,
+        contentTemplate: function(e) {
+            $content = $("<div>").attr("id", "content");
+            return $content;
+        }
+    });
+    var popup = $(".dx-dropdowneditor-overlay .dx-overlay-content").eq(0),
+        popupHeight = popup.height();
+
+    $("<div>").height(50).appendTo($content);
+
+    assert.equal(popup.height(), popupHeight + 50, "popup height has been changed");
+
+
+});
+
 QUnit.module("keyboard navigation", moduleConfig);
 
 QUnit.testInActiveWindow("first focusable element inside of content should get focused after tab pressing", function(assert) {
