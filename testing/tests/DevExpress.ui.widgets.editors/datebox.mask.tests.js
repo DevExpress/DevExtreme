@@ -25,7 +25,7 @@ if(devices.real().deviceType === "desktop") {
             this.$input = this.$element.find(".dx-texteditor-input");
             this.keyboard = keyboardMock(this.$input, true);
             this.pointer = pointerMock(this.$input);
-            this.clock = sinon.useFakeTimers();
+            this.clock = sinon.useFakeTimers(new Date(2015, 3, 14).getTime());
         },
 
         afterEach: () => {
@@ -398,10 +398,10 @@ if(devices.real().deviceType === "desktop") {
             });
             this.keyboard.press("up");
 
-            assert.ok(this.instance.option("text"), "text has been rendered");
+            assert.ok(this.instance.option("text"), "", "text has been rendered");
 
             this.keyboard.press("del");
-            assert.equal(this.instance.option("text"), "Jan 1970", "text has been reverted");
+            assert.equal(this.instance.option("text"), "Jan 2015", "text has been reverted");
             assert.deepEqual(this.keyboard.caret(), { start: 4, end: 8 }, "next group is selected");
         });
 
@@ -670,32 +670,15 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Empty dateBox", {
-        beforeEach: () => {
-            this.$element = $("#dateBox").dxDateBox({
-                value: null,
-                useMaskBehavior: true,
-                mode: "text",
-                displayFormat: "MMMM d yyyy"
-            });
-
-            this.instance = this.$element.dxDateBox("instance");
-            this.$input = this.$element.find(".dx-texteditor-input");
-            this.keyboard = keyboardMock(this.$input, true);
-            this.pointer = pointerMock(this.$input);
-
-            this.dateStub = sinon.useFakeTimers(new Date(2015, 3, 14).getTime());
-        },
-        afterEach: () => {
-            this.dateStub.restore();
-        }
-    }, () => {
+    QUnit.module("Empty dateBox", setupModule, () => {
         QUnit.test("Current date should be rendered on first input", (assert) => {
+            this.instance.option("value", null);
             this.keyboard.type("1");
             assert.equal(this.$input.val(), "January 14 2015", "first part was changed, other parts is from the current date");
         });
 
         QUnit.test("Bluring the input after first input should update the value", (assert) => {
+            this.instance.option("value", null);
             this.keyboard.type("1");
             this.$input.trigger("focusout");
 
@@ -726,6 +709,7 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Incorrect search on empty input should render current date", (assert) => {
+            this.instance.option("value", null);
             this.keyboard.type("qq");
 
             assert.equal(this.$input.val(), "April 14 2015", "text is correct");
@@ -733,6 +717,7 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("focus and blur empty input should not change it's value", (assert) => {
+            this.instance.option("value", null);
             this.$input.trigger("focusin");
             this.$input.trigger("focusout");
 
@@ -741,6 +726,7 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("focusing datebox by click should work", (assert) => {
+            this.instance.option("value", null);
             this.$input.trigger("dxclick");
             this.keyboard.type("2");
 
@@ -749,6 +735,7 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("focusing datebox by mousewheel should work", (assert) => {
+            this.instance.option("value", null);
             this.pointer.wheel(10);
             this.keyboard.type("2");
 
@@ -769,7 +756,8 @@ if(devices.real().deviceType === "desktop") {
 
         QUnit.test("Short Year should use current date", (assert) => {
             this.instance.option({
-                displayFormat: "yy"
+                displayFormat: "yy",
+                value: null
             });
 
             let dateStart = new Date().getFullYear().toString().substr(0, 2);
@@ -795,6 +783,7 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("navigation keys should do nothing in an empty datebox", (assert) => {
+            this.instance.option("value", null);
             this.keyboard.press("home");
             this.keyboard.press("end");
             this.keyboard.press("del");
