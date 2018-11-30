@@ -538,7 +538,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _fireFocusChangingEvents: function($event, $cell, fireRowEvent, isHighlighted) {
         var args = { },
-            cellPosition = { };
+            cellPosition = this._getCellPosition($cell) || { };
 
         if(this.isCellFocusType()) {
             args = this._fireFocusedCellChanging($event, $cell, isHighlighted);
@@ -1064,7 +1064,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _isLastValidCell: function(cellPosition) {
-        var checkingPosition = { columnIndex: cellPosition.columnIndex + 1, rowIndex: cellPosition.rowIndex },
+        var nextColumnIndex = cellPosition.columnIndex >= 0 ? cellPosition.columnIndex + 1 : 0,
+            checkingPosition = {
+                columnIndex: nextColumnIndex,
+                rowIndex: cellPosition.rowIndex
+            },
             visibleColumnsCount = this._getVisibleColumnCount(),
             isCheckingCellValid = this._isCellByPositionValid(checkingPosition);
 
