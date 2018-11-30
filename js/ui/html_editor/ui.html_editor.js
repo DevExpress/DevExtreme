@@ -169,7 +169,7 @@ const HtmlEditor = Editor.inherit({
     },
 
     _setSubmitValue: function(value) {
-        this._$submitElement.val(value);
+        this._getSubmitElement().val(value);
     },
 
     _getSubmitElement: function() {
@@ -345,9 +345,10 @@ const HtmlEditor = Editor.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":
+                !this._isEditorUpdating && this._setSubmitValue(args.value);
+
                 if(!this._quillInstance) {
                     this._$htmlContainer.html(args.value);
-                    this._setSubmitValue(args.value);
                     return;
                 }
 
@@ -358,7 +359,6 @@ const HtmlEditor = Editor.inherit({
                     this._updateHtmlContent(updatedValue);
                 }
 
-                this._setSubmitValue(args.value);
                 this.callBase(args);
                 break;
             case "placeholder":
