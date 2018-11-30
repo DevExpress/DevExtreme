@@ -3825,3 +3825,42 @@ QUnit.test("DataGrid should not operate with focused row if dataSource is missin
         assert.ok(false, e.message);
     }
 });
+
+QUnit.testInActiveWindow("DataGrid should not focus adaptive rows", function(assert) {
+    // arrange
+    var rowsView,
+        focusedRowChangingCount = 0,
+        focusedRowChangedCount = 0;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        width: 200,
+        keyExpr: "name",
+        columnHidingEnabled: true,
+        focusedRowEnabled: true,
+        onFocusedRowChanging: function() {
+            focusedRowChangingCount++;
+        },
+        onFocusedRowChanged: function() {
+            focusedRowChangedCount++;
+        }
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    this.expandRow("Dan");
+    this.clock.tick();
+    rowsView = this.gridView.getView("rowsView");
+    $(rowsView.getRow(2).find("td").first()).trigger("dxpointerdown").click();
+
+    // assert
+    assert.equal(focusedRowChangingCount, 0, "No focused row changing");
+    assert.equal(focusedRowChangedCount, 0, "No focused row changed");
+});

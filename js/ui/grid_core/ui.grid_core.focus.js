@@ -45,10 +45,17 @@ exports.FocusController = core.ViewController.inherit((function() {
                     localIndex = index >= 0 ? index - dataController.getRowIndexOffset() : -1,
                     rowKey = dataController.getKeyByRowIndex(localIndex);
 
-                if(isDefined(rowKey) && !this.isRowFocused(rowKey)) {
+                if(isDefined(rowKey) && !this.isRowFocused(rowKey) && this._isValidFocusedRowIndex(localIndex)) {
                     this.option("focusedRowKey", rowKey);
                 }
             }
+        },
+
+        _isValidFocusedRowIndex: function(rowIndex) {
+            var dataController = this.getController("data"),
+                row = dataController.getVisibleRows()[rowIndex];
+
+            return !row || row.rowType === "data" || row.rowType === "group";
         },
 
         publicMethods: function() {
@@ -92,12 +99,14 @@ exports.FocusController = core.ViewController.inherit((function() {
             var dataController = this.getController("data"),
                 rowIndex = dataController.getRowIndexByKey(key) + dataController.getRowIndexOffset();
 
-            this.getController("keyboardNavigation").setFocusedRowIndex(rowIndex);
+            if(this._isValidFocusedRowIndex(rowIndex)) {
+                this.getController("keyboardNavigation").setFocusedRowIndex(rowIndex);
 
-            dataController.updateItems({
-                changeType: "updateFocusedRow",
-                focusedRowKey: key
-            });
+                dataController.updateItems({
+                    changeType: "updateFocusedRow",
+                    focusedRowKey: key
+                });
+            }
         },
 
         _handleDataChanged: function(e) {
