@@ -11,7 +11,8 @@ var toMs = dateUtils.dateToMilliseconds;
 
 var abstract = Class.abstract;
 
-var APPOINTMENT_MIN_SIZE = 2,
+var APPOINTMENT_MIN_COUNT = 1,
+    APPOINTMENT_MIN_SIZE = 2,
     COMPACT_APPOINTMENT_DEFAULT_SIZE = 15,
     APPOINTMENT_DEFAULT_HEIGHT = 20,
     APPOINTMENT_DEFAULT_WIDTH = 40,
@@ -681,7 +682,11 @@ var BaseRenderingStrategy = Class.inherit({
     _getDynamicAppointmentCountPerCell: function() {
         var cellHeight = this.instance.fire("getCellHeight");
 
-        return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight());
+        return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
+    },
+
+    _getAppointmentMinCount: function() {
+        return APPOINTMENT_MIN_COUNT;
     },
 
     _isCompactTheme: function() {
