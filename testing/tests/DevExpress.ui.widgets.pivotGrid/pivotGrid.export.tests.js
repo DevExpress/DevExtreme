@@ -37,7 +37,7 @@ QUnit.test("Export empty pivot", function(assert) {
     helper.runGeneralTest(assert, {}, { styles, worksheet, sharedStrings });
 });
 
-QUnit.test("Check cell styles", function(assert) { // column headers, row headers, showColumnGrandTotals, showRowGrandTotals, column totals, row totals
+QUnit.test("Check header/data/total cell style/data type", function(assert) { // column headers, row headers, showColumnGrandTotals, showRowGrandTotals, column totals, row totals
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="3">' +
@@ -53,9 +53,24 @@ QUnit.test("Check cell styles", function(assert) { // column headers, row header
         '<cols><col width="13.57" min="1" max="1" /><col width="13.57" min="2" max="2" /><col width="13.57" min="3" max="3" />' +
         '<col width="13.57" min="4" max="4" /><col width="13.57" min="5" max="5" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="0" t="s" /><c r="B1" s="2" t="n" /></row>' +
-        '<row r="2" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="1" t="s"><v>0</v></c><c r="B2" s="2" t="s" /></row>' +
-        '</sheetData></worksheet>';
+        '<row r="1" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="0" t="s" /><c r="B1" s="2" t="n" /><c r="C1" s="0" t="s" /><c r="D1" s="0" t="s" /><c r="E1" s="0" t="s" />' +
+        '</row>' +
+        '<row r="2" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A2" s="2" t="n" /><c r="B2" s="2" t="n" /><c r="C2" s="0" t="s" /><c r="D2" s="0" t="s" /><c r="E2" s="0" t="s" />' +
+        '</row>' +
+        '<row r="3" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A3" s="1" t="s" /><c r="B3" s="1" t="s" /><c r="C3" s="2" t="n" /><c r="D3" s="2" t="n" /><c r="E3" s="2" t="n" />' +
+        '</row>' +
+        '<row r="4" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A4" s="1" t="s" /><c r="B4" s="1" t="s" /><c r="C4" s="2" t="n" /><c r="D4" s="2" t="n" /><c r="E4" s="2" t="n" />' +
+        '</row>' +
+        '<row r="5" spans="1:5" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A5" s="1" t="s" /><c r="B5" s="1" t="s" /><c r="C5" s="2" t="n" /><c r="D5" s="2" t="n" /><c r="E5" s="2" t="n" />' +
+        '</row>' +
+        '</sheetData>' +
+        '<mergeCells count="5"><mergeCell ref="A1:B2" /><mergeCell ref="D1:D2" /><mergeCell ref="E1:E2" /><mergeCell ref="A4:B4" /><mergeCell ref="A5:B5" /></mergeCells>' +
+        '</worksheet>';
 
     helper.runGeneralTest(assert,
         {
@@ -73,7 +88,7 @@ QUnit.test("Check cell styles", function(assert) { // column headers, row header
                     { row1: 'A', row2: 'A1', col1: 'a', col2: 'a1' },
                 ]
             },
-            export: { enabled: true, ignoreExcelErrors: false, customizeExcelCell: e => e.value = !e.value ? e.value : 42 }
+            export: { customizeExcelCell: e => e.value = undefined }
         },
         { styles, worksheet });
 });
