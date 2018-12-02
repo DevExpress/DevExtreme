@@ -3,6 +3,7 @@ import "common.css!";
 import "ui/pivot_grid/ui.pivot_grid";
 
 import $ from "jquery";
+import { isDefined } from "../../../js/core/utils/type.js";
 import { excel as excelCreator } from "exporter";
 import exportTestsHelper from "./exportTestsHelper.js";
 
@@ -15,6 +16,9 @@ pivotGridExportTestsHelper.runGeneralTest = function(assert, options, { styles =
     options.loadingTimeout = undefined;
     options.export = options.export || {};
     options.export.ignoreExcelErrors = false;
+    if(!isDefined(styles)) {
+        options.export.customizeExcelCell = e => e.clearStyle();
+    }
 
     options.onFileSaving = e => {
         const zipMock = that.getLastCreatedJSZipInstance();
