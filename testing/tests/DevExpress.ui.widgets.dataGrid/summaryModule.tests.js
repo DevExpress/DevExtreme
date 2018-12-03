@@ -715,7 +715,7 @@ QUnit.module("Footer with real dataController and columnController", {
         ];
 
         this.setupDataGridModules = function(userOptions) {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'grouping', 'summary', 'pager', 'editing'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'columnFixing', 'grouping', 'summary', 'pager', 'editing'], {
                 initViews: true,
                 initDefaultOptions: true,
                 options: $.extend(true, {
@@ -1091,6 +1091,46 @@ QUnit.test("Show group footer when has calculateCustomSummary and groupItems wit
     // assert
     assert.equal($testElement.find(".dx-datagrid-group-footer").length, 6, "count group footer rows");
     assert.equal($testElement.find(".dx-datagrid-group-footer").eq(0).children().eq(1).text(), "Sum Group: 0", "count group footer rows");
+});
+
+// T695403
+QUnit.test("Total summary should be correctly updated after editing cell when there are fixed columns and recalculateWhileEditing is enabled", function(assert) {
+    // arrange
+    var that = this,
+        $summaryElements,
+        $testElement = $("#container");
+
+    that.columns[0].fixed = true;
+
+    that.setupDataGridModules({
+        editing: {
+            allowUpdating: true,
+            mode: "batch"
+        },
+        summary: {
+            recalculateWhileEditing: true,
+            totalItems: [{
+                column: "cash",
+                summaryType: "sum"
+            }]
+        }
+    });
+
+    that.rowsView.render($testElement);
+    that.footerView.render($testElement);
+
+    // assert
+    $summaryElements = $(that.footerView.element()).find(".dx-datagrid-summary-item");
+    assert.strictEqual($summaryElements.length, 1, "summary item count");
+    assert.strictEqual($summaryElements.first().text(), "Sum: 1216857", "");
+
+    // act
+    that.cellValue(6, 2, 100);
+
+    // assert
+    $summaryElements = $(that.footerView.element()).find(".dx-datagrid-summary-item");
+    assert.strictEqual($summaryElements.length, 1, "summary item count");
+    assert.strictEqual($summaryElements.first().text(), "Sum: 16257", "");
 });
 
 var generateData = function(countRow) {
