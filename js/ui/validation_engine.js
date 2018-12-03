@@ -219,7 +219,6 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
-        ;
 
         var validator = rule.validator,
             dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
