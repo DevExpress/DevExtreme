@@ -123,14 +123,16 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var tabIndex = this.option("tabIndex");
         $element.attr("tabIndex", isDefined(tabIndex) ? tabIndex : 0);
     },
-
+    _isEventInCurrentGrid: function(event) {
+        var $grid = $(event.target).closest("." + this.getWidgetContainerClass()).parent();
+        return $grid.is(this.component.$element());
+    },
     _clickHandler: function(e) {
         var event = e.event,
             $target = $(event.currentTarget),
-            $grid = $(event.target).closest("." + this.getWidgetContainerClass()).parent(),
             data = event.data;
 
-        if($grid.is(this.component.$element()) && this._isCellValid($target)) {
+        if(this._isEventInCurrentGrid(event) && this._isCellValid($target)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
 
@@ -1139,8 +1141,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             that._initFocusedViews();
 
             that._documentClickHandler = that.createAction(function(e) {
-                var $target = $(e.event.target);
-                if(!$target.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).length && !$target.closest("." + DROPDOWN_EDITOR_OVERLAY_CLASS).length) {
+                var $target = $(e.event.target),
+                    isCurrentRowsViewClick = that._isEventInCurrentGrid(e.event) && $target.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).length,
+                    isEditorOverlay = $target.closest("." + DROPDOWN_EDITOR_OVERLAY_CLASS).length;
+                if(!isCurrentRowsViewClick && !isEditorOverlay) {
                     that._resetFocusedCell();
                 }
             });

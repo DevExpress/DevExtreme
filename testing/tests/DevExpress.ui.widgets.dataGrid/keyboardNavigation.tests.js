@@ -5141,6 +5141,40 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 
+    // T684122
+    QUnit.testInActiveWindow("Focus should not be restored on dataSource change after click in another grid", function(assert) {
+        // arrange
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true
+        };
+
+        this.setupModule();
+
+        this.gridView.render($("#container"));
+        var $anotherGrid = $("<div>").addClass("dx-datagrid").insertAfter($("#container"));
+        var $anotherRowsView = $("<div>").addClass("dx-datagrid-rowsview").appendTo($anotherGrid);
+
+        // act
+        $(this.getCellElement(0, 0)).trigger(CLICK_EVENT);
+        this.clock.tick();
+
+        // assert
+        assert.ok($(":focus").closest("#container").length, "focus in grid");
+
+
+        // act
+        $anotherRowsView.trigger(CLICK_EVENT);
+        this.rowsView.render();
+        this.clock.tick();
+
+        // assert
+        assert.notOk($(":focus").closest("#container").length, "focus in not in grid");
+    });
+
     QUnit.testInActiveWindow("Focus must be after enter key pressed if 'cell' edit mode (T653709)", function(assert) {
         var rowsView,
             $cell;
