@@ -1970,15 +1970,56 @@ Axis.prototype = {
             const zoomFactor = +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2");
             const zoomEndEvent = that.getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 
+            zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor);
             that._eventTrigger("zoomEnd", zoomEndEvent);
 
             if(zoomEndEvent.cancel) {
-                that._storedZoomEndParams = null;
-                that._applyZooming(previousRange);
-                that._visualRange(that, previousRange);
+                that.restorePreviousVisualRange(previousRange);
             }
             that._storedZoomEndParams = null;
         }
+    },
+
+    restorePreviousVisualRange(previousRange) {
+        const that = this;
+        that._storedZoomEndParams = null;
+        that._applyZooming(previousRange);
+        that._visualRange(that, previousRange);
+    },
+
+    isZoomingLowerLimitOvercome(zoomFactor, range) {
+        const that = this;
+        const options = that._options;
+        let minZoom = options.minVisualRangeLength;
+        let isOvercoming = zoomFactor >= 1;
+        const businessRange = that._translator.getBusinessRange();
+        let visualRange;
+        if(isDefined(range)) {
+            visualRange = that.adjustRange(vizUtils.getVizRangeObject(range));
+            visualRange = {
+                minVisible: visualRange.startValue,
+                maxVisible: visualRange.endValue,
+                categories: businessRange.categories
+            };
+        }
+        const visualRangeLength = that.getVisualRangeLength(visualRange);
+
+        if(isDefined(minZoom)) {
+            if(options.dataType === "datetime" && !isNumeric(minZoom)) {
+                minZoom = dateToMilliseconds(minZoom);
+            }
+            isOvercoming &= minZoom >= visualRangeLength;
+        } else {
+            const canvasLength = that._translator.canvasLength;
+            const fullRange = {
+                minVisible: businessRange.min,
+                maxVisible: businessRange.max,
+                categories: businessRange.categories
+            };
+            isOvercoming &= that.getVisualRangeLength(fullRange) / canvasLength >= visualRangeLength;
+        }
+
+        return !!isOvercoming;
     },
 
     dataVisualRangeIsReduced() {

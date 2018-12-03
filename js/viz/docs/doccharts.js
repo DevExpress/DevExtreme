@@ -1475,6 +1475,13 @@ var dxChart = {
         */
         visualRangeUpdateMode: "auto",
         /**
+        * @name dxChartOptions.argumentAxis.minVisualRangeLength
+        * @inherits VizTimeInterval
+        * @default undefined
+        * @notUsedInTheme
+        */
+        minVisualRangeLength: undefined,
+        /**
         * @name dxChartOptions.argumentAxis.axisDivisionFactor
         * @type number
         * @default 70
@@ -1771,6 +1778,13 @@ var dxChart = {
         * @default 'auto'
         */
         visualRangeUpdateMode: "auto",
+        /**
+        * @name dxChartOptions.valueAxis.minVisualRangeLength
+        * @inherits VizTimeInterval
+        * @default undefined
+        * @notUsedInTheme
+        */
+        minVisualRangeLength: undefined,
         /**
         * @name dxChartOptions.valueAxis.axisDivisionFactor
         * @type number
