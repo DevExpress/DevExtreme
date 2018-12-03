@@ -95,7 +95,7 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
 
         _updateContent: function($newTable, change) {
             if(change && change.changeType === "update" && change.columnIndices) {
-                var $row = this.element().find(".dx-row"),
+                var $row = this._getTableElement().find(".dx-row"),
                     $newRow = $newTable.find(".dx-row");
 
                 this._updateCells($row, $newRow, change.columnIndices[0]);
