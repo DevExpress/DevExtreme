@@ -1217,6 +1217,19 @@ QUnit.test("label's height > tile height", function(assert) {
     assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "hidden");
 });
 
+QUnit.test("Hide multiline tile's label", function(assert) {
+    this.renderer.bBoxTemplate = sinon.stub();
+    this.renderer.bBoxTemplate.returns({ x: 0, y: 0, width: 4, height: 5 }).onCall(2).returns({ x: 0, y: 0, width: 4, height: 25 });
+    common.createWidget({
+        size: {
+            height: 10
+        },
+        dataSource: [{ value: 1, name: "some<br />second line" }]
+    });
+
+    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "hidden");
+});
+
 QUnit.test("hide long label in header", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 10, height: 5 };
 
