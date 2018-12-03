@@ -771,6 +771,7 @@ QUnit.test("Can cancel zooming on zoom end", function(assert) {
         min: 0,
         max: 50
     });
+    this.axis._translator.canvasLength = 800;
 
     sinon.spy(this.axis, "_visualRange");
 
