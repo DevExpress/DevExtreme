@@ -1144,10 +1144,10 @@ module.exports = {
                 }
                 prevValue = optionGetter(column, { functionsAsIs: true });
                 if(prevValue !== value) {
-                    if(optionName === "groupIndex") {
+                    if(optionName === "groupIndex" || optionName === "calculateGroupValue") {
                         changeType = "grouping";
                         updateSortOrderWhenGrouping(column, value, prevValue);
-                    } else if(optionName === "sortIndex" || optionName === "sortOrder") {
+                    } else if(optionName === "sortIndex" || optionName === "sortOrder" || optionName === "calculateSortValue") {
                         changeType = "sorting";
                     } else {
                         changeType = "columns";
