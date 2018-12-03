@@ -4524,6 +4524,58 @@ QUnit.test("update column groupIndex", function(assert) {
     assert.ok(columnsChangedArgs[0].changeTypes.grouping);
 });
 
+QUnit.test("update column calculateGroupValue", function(assert) {
+    this.applyOptions({ columns: [{ dataField: "field1", groupIndex: 0, calculateGroupValue: function() {} }, "field2"] });
+
+    var columnsChangedArgs = [];
+
+    var dataSource = new DataSource([]);
+
+    dataSource.load();
+
+    this.columnsController.applyDataSource(dataSource);
+
+    this.columnsController.columnsChanged.add(function(e) {
+        columnsChangedArgs.push(e);
+    });
+
+    // act
+    this.columnsController.columnOption('field2', "calculateGroupValue", function() {});
+    dataSource.load();
+
+    // assert
+    assert.strictEqual(this.columnsController.getColumns()[0].groupIndex, 0);
+    assert.strictEqual(this.columnsController.getColumns()[1].groupIndex, undefined);
+    assert.strictEqual(columnsChangedArgs.length, 1);
+    assert.ok(columnsChangedArgs[0].changeTypes.grouping);
+});
+
+QUnit.test("update column calculateSortValue", function(assert) {
+    this.applyOptions({ columns: [{ dataField: "field1", sortOrder: "asc", sortIndex: 0, calculateSortValue: function() {} }, "field2"] });
+
+    var columnsChangedArgs = [];
+
+    var dataSource = new DataSource([]);
+
+    dataSource.load();
+
+    this.columnsController.applyDataSource(dataSource);
+
+    this.columnsController.columnsChanged.add(function(e) {
+        columnsChangedArgs.push(e);
+    });
+
+    // act
+    this.columnsController.columnOption('field2', "calculateSortValue", function() {});
+    dataSource.load();
+
+    // assert
+    assert.strictEqual(this.columnsController.getColumns()[0].sortIndex, 0);
+    assert.strictEqual(this.columnsController.getColumns()[1].sortIndex, undefined);
+    assert.strictEqual(columnsChangedArgs.length, 1);
+    assert.ok(columnsChangedArgs[0].changeTypes.sorting);
+});
+
     // T364892
 QUnit.test("update column groupIndex after endUpdate", function(assert) {
     this.applyOptions({ columns: [{ dataField: "field1" }, { dataField: "field2" }, "field3"] });
