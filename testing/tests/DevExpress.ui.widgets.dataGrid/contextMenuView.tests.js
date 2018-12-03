@@ -95,9 +95,9 @@ QUnit.test("Show context menu with defined menu items", function(assert) {
         testElement = $("#container");
 
     that.contextMenuItems1 = [
-                    { text: "asc" },
-                    { text: "desc" },
-                    { text: "none" }
+        { text: "asc" },
+        { text: "desc" },
+        { text: "none" }
     ];
 
     // act

@@ -117,18 +117,20 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var tabIndex = this.option("tabIndex");
         $element.attr("tabIndex", isDefined(tabIndex) ? tabIndex : 0);
     },
-
+    _isEventInCurrentGrid: function(event) {
+        var $grid = $(event.target).closest("." + this.getWidgetContainerClass()).parent();
+        return $grid.is(this.component.$element());
+    },
     _clickHandler: function(e) {
         var event = e.event,
             $target = $(event.currentTarget),
-            $grid = $(event.target).closest("." + this.getWidgetContainerClass()).parent(),
             data = event.data,
             isCellEditMode = this._isCellEditMode(),
             columnIndex,
             column,
             allowUpdating;
 
-        if($grid.is(this.component.$element()) && this._isCellValid($target)) {
+        if(this._isEventInCurrentGrid(event) && this._isCellValid($target)) {
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
             this._updateFocusedCellPosition($target);
@@ -305,12 +307,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             return;
         }
 
-        var $focusedCell = this._getFocusedCell(),
+        var $prevFocusedCell = this._getFocusedCell(),
             focusedView = this._focusedView,
             $focusViewElement = focusedView && focusedView.element(),
             $focusElement;
-
-        $focusedCell && $focusedCell.is("td") && $focusedCell.removeAttr("tabIndex");
 
         this._isHiddenFocus = disableFocus;
 
@@ -324,12 +324,14 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._updateFocusedCellPosition($cell);
         }
 
+        $prevFocusedCell && $prevFocusedCell.is("td") && $prevFocusedCell.not($focusElement).removeAttr("tabIndex");
+
         if($focusElement && !isInteractiveElement) {
             this._applyTabIndexToElement($focusElement);
             eventsEngine.trigger($focusElement, "focus");
         }
         if(disableFocus) {
-            $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
+            $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + "[tabIndex]").not($focusElement).removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr("tabIndex");
             $focusElement.addClass(CELL_FOCUS_DISABLED_CLASS);
         } else {
             $focusViewElement && $focusViewElement.find("." + CELL_FOCUS_DISABLED_CLASS + ":not(." + MASTER_DETAIL_CELL_CLASS + ")").removeClass(CELL_FOCUS_DISABLED_CLASS);
@@ -900,8 +902,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             that._initFocusedViews();
 
             that._documentClickHandler = that.createAction(function(e) {
-                var $target = $(e.event.target);
-                if(!$target.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).length && !$target.closest("." + DROPDOWN_EDITOR_OVERLAY_CLASS).length) {
+                var $target = $(e.event.target),
+                    isCurrentRowsViewClick = that._isEventInCurrentGrid(e.event) && $target.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).length,
+                    isEditorOverlay = $target.closest("." + DROPDOWN_EDITOR_OVERLAY_CLASS).length;
+                if(!isCurrentRowsViewClick && !isEditorOverlay) {
                     that._resetFocusedCell();
                 }
             });

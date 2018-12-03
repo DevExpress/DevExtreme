@@ -11,7 +11,8 @@ var toMs = dateUtils.dateToMilliseconds;
 
 var abstract = Class.abstract;
 
-var APPOINTMENT_MIN_SIZE = 2,
+var APPOINTMENT_MIN_COUNT = 1,
+    APPOINTMENT_MIN_SIZE = 2,
     COMPACT_APPOINTMENT_DEFAULT_SIZE = 15,
     APPOINTMENT_DEFAULT_HEIGHT = 20,
     APPOINTMENT_DEFAULT_WIDTH = 40,
@@ -440,12 +441,13 @@ var BaseRenderingStrategy = Class.inherit({
 
     _startDate: function(appointment, skipNormalize, position) {
         var startDate = position && position.startDate,
-            viewStartDate = this.instance._getStartDate(appointment, skipNormalize),
+            rangeStartDate = this.instance._getStartDate(appointment, skipNormalize),
             text = this.instance.fire("getField", "text", appointment);
 
-        if((startDate && viewStartDate > startDate) || !startDate) {
-            startDate = viewStartDate;
+        if((startDate && rangeStartDate > startDate) || !startDate) {
+            startDate = rangeStartDate;
         }
+
         if(isNaN(startDate.getTime())) {
             throw errors.Error("E1032", text);
         }
@@ -680,7 +682,11 @@ var BaseRenderingStrategy = Class.inherit({
     _getDynamicAppointmentCountPerCell: function() {
         var cellHeight = this.instance.fire("getCellHeight");
 
-        return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight());
+        return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
+    },
+
+    _getAppointmentMinCount: function() {
+        return APPOINTMENT_MIN_COUNT;
     },
 
     _isCompactTheme: function() {

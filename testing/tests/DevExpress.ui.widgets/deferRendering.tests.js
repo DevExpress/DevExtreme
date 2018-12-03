@@ -54,8 +54,8 @@ QUnit.module("dxDeferRendering");
 
 QUnit.test("dxDeferRendering warps content transparently (doesn't affect css styles)", function(assert) {
     var $deferRendering = $("#renderContent")
-            .find(".defer-rendering")
-            .dxDeferRendering();
+        .find(".defer-rendering")
+        .dxDeferRendering();
 
     assert.ok(!$deferRendering.is(".dx-widget"));
 });

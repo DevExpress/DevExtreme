@@ -1,5 +1,5 @@
 (function(root, factory) {
-    /* global define, DevExpress, jQuery */
+    /* global window, define, DevExpress, jQuery */
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             module.exports = factory(
@@ -18,7 +18,7 @@
             DevExpress.framework.html.layoutSets,
             DevExpress.framework.html.DefaultLayoutController,
             DevExpress.layouts.SimpleLayout.SimpleLayoutController
-         );
+        );
         root.DevExpress.framework.html.OverlayLayoutControllerBase = root.DevExpress.layouts.PopupLayout.OverlayLayoutControllerBase;
         root.DevExpress.framework.html.PopupLayoutController = root.DevExpress.layouts.PopupLayout.PopupLayoutController;
     }

@@ -185,19 +185,19 @@ QUnit.test("'shift+end' key pressing extends selection up to the last node", fun
     assert.ok($secondNodeCheckBox.dxCheckBox("instance").option("value"), true, "node was selected");
 }),
 
-    QUnit.test("'shift+end' key pressing without checkBoxes", function(assert) {
-        var $treeView = initTree({
-                focusStateEnabled: true,
-                height: 500,
-                items: $.extend(true, [], DATA[0])
-            }),
-            $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0);
+QUnit.test("'shift+end' key pressing without checkBoxes", function(assert) {
+    var $treeView = initTree({
+            focusStateEnabled: true,
+            height: 500,
+            items: $.extend(true, [], DATA[0])
+        }),
+        $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0);
 
-        $firstItem.trigger("dxpointerdown");
-        $treeView.trigger($.Event("keydown", { which: 35, shiftKey: true }));
+    $firstItem.trigger("dxpointerdown");
+    $treeView.trigger($.Event("keydown", { which: 35, shiftKey: true }));
 
-        assert.equal($treeView.dxTreeView("instance").option("selectedIndex"), -1);
-    }),
+    assert.equal($treeView.dxTreeView("instance").option("selectedIndex"), -1);
+}),
 
 QUnit.test("up arrow move focus to the previous element", function(assert) {
     var $treeView = initTree({

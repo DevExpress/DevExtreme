@@ -135,7 +135,7 @@ QUnit.performanceTest("layout recreate navigation performance test", function(as
                 },
                 initOptions: {
                     navigation: [
-                    { title: "c1", id: "c1" }
+                        { title: "c1", id: "c1" }
                     ]
                 }
             }),

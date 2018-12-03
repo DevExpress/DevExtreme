@@ -1,5 +1,6 @@
 var $ = require("jquery"),
-    themes = require("ui/themes");
+    themes = require("ui/themes"),
+    dateSerialization = require("core/utils/date_serialization");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -119,17 +120,17 @@ QUnit.test("Click on appointment should not call scheduler.showAppointmentToolti
 
 QUnit.test("Shown tooltip should have right boundary", function(assert) {
     var tasks = [
-        {
-            text: "Task 1",
-            startDate: new Date(2015, 1, 9, 1, 0),
-            endDate: new Date(2015, 1, 9, 2, 0)
-        },
-        {
-            text: "Task 2",
-            startDate: new Date(2015, 1, 9, 11, 0),
-            endDate: new Date(2015, 1, 9, 11, 0, 30),
-            allDay: true
-        }
+            {
+                text: "Task 1",
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: "Task 2",
+                startDate: new Date(2015, 1, 9, 11, 0),
+                endDate: new Date(2015, 1, 9, 11, 0, 30),
+                allDay: true
+            }
         ],
         data = new DataSource({
             store: tasks
@@ -417,7 +418,7 @@ QUnit.test("Click on tooltip-edit button should call scheduler.showAppointmentPo
         endDate: new Date(2015, 1, 9, 12, 0),
         text: "Task 2"
     },
-        "showAppointmentPopup has a right appointment data arg");
+    "showAppointmentPopup has a right appointment data arg");
 
     assert.equal(args[1], false, "showAppointmentPopup has a right 'createNewAppointment' arg");
 
@@ -463,7 +464,7 @@ QUnit.test("Click on tooltip-remove button should call scheduler.updateAppointme
             startDate: new Date(2018, 6, 30, 10, 0),
             endDate: new Date(2018, 6, 30, 11, 0),
             SC_RecurrenceRule: "FREQ=DAILY;COUNT=3",
-            SC_RecurrenceException: "20170626T100000"
+            SC_RecurrenceException: "20170626T100000Z"
         }
         ]
     });
@@ -475,13 +476,16 @@ QUnit.test("Click on tooltip-remove button should call scheduler.updateAppointme
     var $tooltip = $(".dx-scheduler-appointment-tooltip");
     $tooltip.find(".dx-scheduler-appointment-tooltip-buttons").find(".dx-button").eq(0).trigger("dxclick");
 
+    var exceptionDate = new Date(2018, 6, 31, 10, 0, 0, 0),
+        exceptionString = dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmssZ");
+
     assert.deepEqual(stub.getCall(0).args[1],
         {
             startDate: new Date(2018, 6, 30, 10, 0),
             endDate: new Date(2018, 6, 30, 11, 0),
             text: "Meeting of Instructors",
             SC_RecurrenceRule: "FREQ=DAILY;COUNT=3",
-            SC_RecurrenceException: "20170626T100000,20180731T100000"
+            SC_RecurrenceException: "20170626T100000Z," + exceptionString
         },
         "updateAppointment has a right arguments");
 

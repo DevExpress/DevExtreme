@@ -163,7 +163,7 @@ QUnit.test("Components disposing", function(assert) {
 
     this.$container.remove();
 
-    assert.ok(this.renderer.dispose.called, "renderer");    // Should it be tester here?
+    assert.ok(this.renderer.dispose.called, "renderer"); // Should it be tester here?
     assert.deepEqual(this.themeManager.stub("dispose").lastCall.args, [], "theme manager");
     assert.deepEqual(this.tracker.stub("dispose").lastCall.args, [], "tracker");
     assert.deepEqual(this.title.stub("dispose").lastCall.args, [], "title");

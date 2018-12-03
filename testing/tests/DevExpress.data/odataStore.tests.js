@@ -2119,13 +2119,13 @@ QUnit.test("T226529", function(assert) {
                     keyProperty: 0,
 
                     collectionProperty1: [
-                            { keyProperty: 0 },
-                            { keyProperty: 1 }
+                        { keyProperty: 0 },
+                        { keyProperty: 1 }
                     ],
 
                     collectionProperty2: [
-                            { keyProperty: 0 },
-                            { keyProperty: 1 }
+                        { keyProperty: 0 },
+                        { keyProperty: 1 }
                     ]
                 }
             ]);

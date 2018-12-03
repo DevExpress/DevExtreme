@@ -105,8 +105,8 @@ QUnit.module("dxPivotGrid", {
                         children: [
                             {
                                 value: "2", index: 3, children: [
-                                { value: "2", index: 3 },
-                                { value: "3", index: 4 }
+                                    { value: "2", index: 3 },
+                                    { value: "3", index: 4 }
                                 ]
                             },
                             { value: "3", index: 4 }
@@ -374,11 +374,11 @@ QUnit.test("getCellType. fields dataType is not defined", function(assert) {
         items: [
             [{ rowspan: 1 }, {}, {}, {}, {}, {}],
             [{ text: "row1" },
-                    { caption: "Val1", value: 10, dataIndex: 0 },
-                    { caption: "Val2", value: 10, dataIndex: 1 },
-                    { caption: "Val3", value: 10, dataIndex: 2 },
-                    { caption: "Val4", value: 10, dataIndex: 3 },
-                    { caption: "Val5", value: 10, dataIndex: 4 }
+                { caption: "Val1", value: 10, dataIndex: 0 },
+                { caption: "Val2", value: 10, dataIndex: 1 },
+                { caption: "Val3", value: 10, dataIndex: 2 },
+                { caption: "Val4", value: 10, dataIndex: 3 },
+                { caption: "Val5", value: 10, dataIndex: 4 }
             ]
         ],
         dataFields: [
@@ -404,22 +404,22 @@ QUnit.test("getCellType. fields dataType is not defined", function(assert) {
 QUnit.test("getCellType. Data fields have customizeText", function(assert) {
     var dataProvider = new DataProvider({
         items: [
-                [{ rowspan: 1 }, {}, {}, {}, {}, {}, {}],
+            [{ rowspan: 1 }, {}, {}, {}, {}, {}, {}],
             [{ text: "row1" },
-                    { caption: "Val1", dataIndex: 0, value: 10 },
-                    { caption: "Val2", dataIndex: 1, value: 10 },
-                    { caption: "Val3", dataIndex: 2, value: 10, text: "text" },
-                    { caption: "Val4", dataIndex: 3, value: 10 },
-                    { caption: "Val5", dataIndex: 4, value: 10 },
-                    { caption: "Val6", dataIndex: 5, value: new Date() }
+                { caption: "Val1", dataIndex: 0, value: 10 },
+                { caption: "Val2", dataIndex: 1, value: 10 },
+                { caption: "Val3", dataIndex: 2, value: 10, text: "text" },
+                { caption: "Val4", dataIndex: 3, value: 10 },
+                { caption: "Val5", dataIndex: 4, value: 10 },
+                { caption: "Val6", dataIndex: 5, value: new Date() }
             ]
         ],
         dataFields: [
-                { customizeText: function() { }, dataType: "string", format: "fixedPoint" },
-                { customizeText: function() { } },
-                { customizeText: function() { }, dataType: "number", format: "fixedPoint" },
-                { customizeText: function() { }, format: "fixedPoint" },
-                { customizeText: function() { }, format: "shortDate" }
+            { customizeText: function() { }, dataType: "string", format: "fixedPoint" },
+            { customizeText: function() { } },
+            { customizeText: function() { }, dataType: "number", format: "fixedPoint" },
+            { customizeText: function() { }, format: "fixedPoint" },
+            { customizeText: function() { }, format: "shortDate" }
         ]
     });
 
@@ -438,11 +438,11 @@ QUnit.test("getCellType. Data fields have customizeText", function(assert) {
 QUnit.test("getCellType for headers", function(assert) {
     var dataProvider = new DataProvider({
         items: [
-                [{ rowspan: 2, colspan: 2 }, { text: "a1", value: 1, format: "fixedPoint" }, { text: "a2", value: 2 }],
-                [{ text: "b1", value: 1, format: "fixedPoint" }, { text: "b2", value: 2 }],
+            [{ rowspan: 2, colspan: 2 }, { text: "a1", value: 1, format: "fixedPoint" }, { text: "a2", value: 2 }],
+            [{ text: "b1", value: 1, format: "fixedPoint" }, { text: "b2", value: 2 }],
             [{ text: "row1" }, { text: "row 2" },
-                    { caption: "Val1", dataIndex: 0, value: 10 },
-                    { caption: "Val2", dataIndex: 1, value: 10 }
+                { caption: "Val1", dataIndex: 0, value: 10 },
+                { caption: "Val2", dataIndex: 1, value: 10 }
             ]
         ],
         dataFields: [

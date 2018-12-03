@@ -313,10 +313,10 @@ QUnit.test('Merge categories', function(assert) {
     // arrange
         that.createRange({ categories: rangeCategories });
 
-    // act
+        // act
         var returnValue = that.range.addRange({ categories: otherRangeCategories });
 
-    // assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.deepEqual(that.range.categories, expected, message);
     };
@@ -431,10 +431,10 @@ QUnit.test('Merge categories', function(assert) {
     // arrange
         that.createRange({ categories: rangeCategories, dataType: "datetime" });
 
-    // act
+        // act
         var returnValue = that.range.addRange({ categories: otherRangeCategories });
 
-    // assert
+        // assert
         assert.strictEqual(that.range, returnValue);
         assert.deepEqual(that.range.categories, expected, message);
     };
@@ -1026,10 +1026,10 @@ QUnit.test('With categories', function(assert) {
     // arrange
     this.createRange({});
 
-// act
+    // act
     this.range.addRange({ categories: ['a', 'b'] });
 
-// assert
+    // assert
     assert.ok(this.range.isDefined());
 });
 

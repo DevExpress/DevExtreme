@@ -114,7 +114,7 @@ QUnit.test("check default value valueType when start value is datetime", functio
     var options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, undefined);
     assert.strictEqual(options.endValue, undefined);
-    assert.strictEqual(options.valueType, "numeric");
+    assert.strictEqual(options.valueType, "datetime");
 });
 
 QUnit.test("check valueType when start value is datetime and valueType = datetime", function(assert) {
@@ -130,7 +130,7 @@ QUnit.test("check valueType when start value is datetime and valueType = datetim
     var options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.startValue, undefined);
     assert.strictEqual(options.endValue, undefined);
-    assert.strictEqual(options.valueType, "numeric");
+    assert.strictEqual(options.valueType, "datetime");
 });
 
 QUnit.test("set range by dataSource", function(assert) {

@@ -422,17 +422,17 @@ QUnit.test("Send data with request (cached resources)", function(assert) {
 
 QUnit.test("Accept headers for different dataTypes", function(assert) {
     var dataTypes = [
-            { type: "", header: "*/*" },
-            { type: "someType", header: "*/*" },
-            { type: undefined, header: "*/*" },
-            { type: null, header: "*/*" },
-            { type: "*", header: "*/*" },
-            { type: "text", header: "text/plain, */*; q=0.01" },
-            { type: "html", header: "text/html, */*; q=0.01" },
-            { type: "json", header: "application/json, text/javascript, */*; q=0.01" },
-            { type: "xml", header: "application/xml, text/xml, */*; q=0.01" },
-            { type: "script", header: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" },
-            { type: "jsonp", header: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" }];
+        { type: "", header: "*/*" },
+        { type: "someType", header: "*/*" },
+        { type: undefined, header: "*/*" },
+        { type: null, header: "*/*" },
+        { type: "*", header: "*/*" },
+        { type: "text", header: "text/plain, */*; q=0.01" },
+        { type: "html", header: "text/html, */*; q=0.01" },
+        { type: "json", header: "application/json, text/javascript, */*; q=0.01" },
+        { type: "xml", header: "application/xml, text/xml, */*; q=0.01" },
+        { type: "script", header: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" },
+        { type: "jsonp", header: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" }];
 
     for(var i in dataTypes) {
         ajax.sendRequest({

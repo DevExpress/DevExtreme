@@ -22,7 +22,7 @@
             root.pointerMock,
             DevExpress.testHelpers,
             DevExpress.layouts.PivotLayout.PivotLayoutController
-         );
+        );
     }
 }(this, function($, Component, dxCommand, fx, pointerMock, layoutHelper, PivotLayoutController) {
 
@@ -284,8 +284,8 @@
                     layoutController.deactivate();// logoff
 
                     var newNavigation = layoutHelper.prepareNavigation([
-                            { title: "c2", id: "c2" },
-                            { title: "c3", id: "c3" }
+                        { title: "c2", id: "c2" },
+                        { title: "c3", id: "c3" }
                     ], commandMapping);
 
                     layoutController.renderNavigation(newNavigation);

@@ -12,7 +12,7 @@ var $ = require("jquery"),
     legendModule = require("viz/components/legend"),
     layoutManagerModule = require("viz/chart_components/layout_manager"),
     LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager),
-    validateData,   // It lives outside of a test context because of "resetMocksInChart" which lives outside of a test context
+    validateData, // It lives outside of a test context because of "resetMocksInChart" which lives outside of a test context
     dataValidatorModule = require("viz/components/data_validator"),
     CustomStore = require("data/custom_store"),
     chartThemeManagerModule = require("viz/components/chart_theme_manager"),

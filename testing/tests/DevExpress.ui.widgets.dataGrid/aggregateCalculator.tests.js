@@ -238,12 +238,12 @@ QUnit.test("group aggregates should not calculates if groupLevel < 1", function(
 QUnit.test("skipEmpty", function(assert) {
     var data = [{
         items: [
-                { foo: 1 },
-                { foo: "" },
-                { foo: NaN },
-                { foo: null },
-                { foo: 12345 },
-                { foo: undefined }]
+            { foo: 1 },
+            { foo: "" },
+            { foo: NaN },
+            { foo: null },
+            { foo: 12345 },
+            { foo: undefined }]
     }];
 
     var aggregator = {
@@ -293,12 +293,12 @@ QUnit.test("skipEmpty", function(assert) {
 QUnit.test("skipEmpty ignored in case of count", function(assert) {
     var data = [{
         items: [
-                { foo: 1 },
-                { foo: "" },
-                { foo: NaN },
-                { foo: null },
-                { foo: 12345 },
-                { foo: undefined }]
+            { foo: 1 },
+            { foo: "" },
+            { foo: NaN },
+            { foo: null },
+            { foo: 12345 },
+            { foo: undefined }]
     }];
 
     var calculator = new AggregateCalculator({

@@ -84,14 +84,12 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         var that = this,
             $container = $(container),
             column = item.column,
-            cellValue = column.calculateCellValue(cellOptions.data),
             focusAction = that.createAction(function() {
                 eventsEngine.trigger($container, clickEvent.name);
             }),
-            cellText;
-
-        cellValue = gridCoreUtils.getDisplayValue(column, cellValue, cellOptions.data, cellOptions.rowType);
-        cellText = gridCoreUtils.formatValue(cellValue, column);
+            value = column.calculateCellValue(cellOptions.data),
+            displayValue = gridCoreUtils.getDisplayValue(column, value, cellOptions.data, cellOptions.rowType),
+            text = gridCoreUtils.formatValue(displayValue, column);
 
         if(column.allowEditing && that.option("useKeyboard")) {
             $container.attr("tabIndex", that.option("tabIndex"));
@@ -100,18 +98,18 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
 
         if(column.cellTemplate) {
-            var templateOptions = extend({}, cellOptions, { value: cellValue, text: cellText, column: column });
+            var templateOptions = extend({}, cellOptions, { value: value, displayValue: displayValue, text: text, column: column });
             that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(window.document).length);
         } else {
             container = $container.get(0);
             if(column.encodeHtml) {
-                container.textContent = cellText;
+                container.textContent = text;
             } else {
-                container.innerHTML = cellText;
+                container.innerHTML = text;
             }
 
             $container.addClass(ADAPTIVE_ITEM_TEXT_CLASS);
-            if(!typeUtils.isDefined(cellText) || cellText === "") {
+            if(!typeUtils.isDefined(text) || text === "") {
                 $container.html("&nbsp;");
             }
 

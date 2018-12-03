@@ -58,7 +58,7 @@ QUnit.module("Fixed columns", {
         var that = this;
 
         that.items = [{ values: ["test4", "test1", "test3", "test5", "test2"], rowType: "data" },
-                        { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" }];
+            { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" }];
 
         that.columns = [
             {
@@ -576,8 +576,8 @@ QUnit.test("Draw fixed table for rowsView with group row", function(assert) {
         $testElement = $("#container");
 
     that.items = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: ["test4"] },
-                    { values: [null, "test1", "test3", "test5", "test2"], rowType: "data" },
-                    { values: [null, "test6", "test8", "test10", "test7"], rowType: "data" }];
+        { values: [null, "test1", "test3", "test5", "test2"], rowType: "data" },
+        { values: [null, "test6", "test8", "test10", "test7"], rowType: "data" }];
 
     $.extend(that.columns[0], {
         groupIndex: 0,
@@ -728,8 +728,8 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed column in group 
             }
         }]]
     },
-                    { values: [null, "test1", "test3", "test5", "test2"], rowType: "data" },
-                    { values: [null, "test6", "test8", "test10", "test7"], rowType: "data" }];
+    { values: [null, "test1", "test3", "test5", "test2"], rowType: "data" },
+    { values: [null, "test6", "test8", "test10", "test7"], rowType: "data" }];
 
     $.extend(that.columns[0], {
         groupIndex: 0,
@@ -785,8 +785,8 @@ QUnit.test("Draw fixed table for rowsView with summary by unfixed column in grou
             }
         }], []]
     },
-                    { values: [null, "test1", "test3", "test5", "test2"], rowType: "data" },
-                    { values: [null, "test6", "test8", "test10", "test7"], rowType: "data" }];
+    { values: [null, "test1", "test3", "test5", "test2"], rowType: "data" },
+    { values: [null, "test6", "test8", "test10", "test7"], rowType: "data" }];
 
     $.extend(that.columns[0], {
         groupIndex: 0,
@@ -852,8 +852,8 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed (on left side) a
             }
         }], []]
     },
-                    { values: [null, "test1", "test3", "test5", "test2"], rowType: "data" },
-                    { values: [null, "test6", "test8", "test10", "test7"], rowType: "data" }];
+    { values: [null, "test1", "test3", "test5", "test2"], rowType: "data" },
+    { values: [null, "test6", "test8", "test10", "test7"], rowType: "data" }];
 
     that.columns[1].fixed = true;
     that.columns[2].fixed = true;
@@ -925,8 +925,8 @@ QUnit.test("Draw fixed table for rowsView with summary by fixed (on right side) 
             }
         }]]
     },
-                    { values: [null, "test1", "test3", "test5", "test2"], rowType: "data" },
-                    { values: [null, "test6", "test8", "test10", "test7"], rowType: "data" }];
+    { values: [null, "test1", "test3", "test5", "test2"], rowType: "data" },
+    { values: [null, "test6", "test8", "test10", "test7"], rowType: "data" }];
 
     $.extend(that.columns[0], {
         groupIndex: 0,
@@ -1313,11 +1313,11 @@ QUnit.test("Synchronize position fixed table with main table", function(assert) 
         $testElement = $("#container");
 
     that.items = [{ values: ["test4", "test1", "test3", "test5", "test2"], rowType: "data" },
-                    { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" },
-                    { values: ["test14", "test11", "test13", "test15", "test12"], rowType: "data" },
-                    { values: ["test19", "test16", "test18", "test20", "test17"], rowType: "data" },
-                    { values: ["test24", "test21", "test23", "test25", "test22"], rowType: "data" },
-                    { values: ["test29", "test26", "test28", "test30", "test27"], rowType: "data" }];
+        { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" },
+        { values: ["test14", "test11", "test13", "test15", "test12"], rowType: "data" },
+        { values: ["test19", "test16", "test18", "test20", "test17"], rowType: "data" },
+        { values: ["test24", "test21", "test23", "test25", "test22"], rowType: "data" },
+        { values: ["test29", "test26", "test28", "test30", "test27"], rowType: "data" }];
 
     that.setupDataGrid();
     that.rowsView.render($testElement);
@@ -1413,11 +1413,11 @@ if(device.deviceType === "desktop") {
             $testElement = $("#container");
 
         that.items = [{ values: ["test4", "test1", "test3", "test5", "test2"], rowType: "data" },
-                        { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" },
-                        { values: ["test14", "test11", "test13", "test15", "test12"], rowType: "data" },
-                        { values: ["test19", "test16", "test18", "test20", "test17"], rowType: "data" },
-                        { values: ["test24", "test21", "test23", "test25", "test22"], rowType: "data" },
-                        { values: ["test29", "test26", "test28", "test30", "test27"], rowType: "data" }];
+            { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" },
+            { values: ["test14", "test11", "test13", "test15", "test12"], rowType: "data" },
+            { values: ["test19", "test16", "test18", "test20", "test17"], rowType: "data" },
+            { values: ["test24", "test21", "test23", "test25", "test22"], rowType: "data" },
+            { values: ["test29", "test26", "test28", "test30", "test27"], rowType: "data" }];
 
         that.setupDataGrid();
         that.rowsView.render($testElement);
@@ -1473,11 +1473,11 @@ if(device.deviceType === "desktop") {
             };
 
         that.items = [{ values: ["test4", "test1", "test3", "test5", "test2"], rowType: "data" },
-                        { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" },
-                        { values: ["test14", "test11", "test13", "test15", "test12"], rowType: "data" },
-                        { values: ["test19", "test16", "test18", "test20", "test17"], rowType: "data" },
-                        { values: ["test24", "test21", "test23", "test25", "test22"], rowType: "data" },
-                        { values: ["test29", "test26", "test28", "test30", "test27"], rowType: "data" }];
+            { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" },
+            { values: ["test14", "test11", "test13", "test15", "test12"], rowType: "data" },
+            { values: ["test19", "test16", "test18", "test20", "test17"], rowType: "data" },
+            { values: ["test24", "test21", "test23", "test25", "test22"], rowType: "data" },
+            { values: ["test29", "test26", "test28", "test30", "test27"], rowType: "data" }];
 
         that.setupDataGrid();
         that.rowsView.render($testElement);
@@ -1529,11 +1529,11 @@ if(device.deviceType === "desktop") {
             };
 
         that.items = [{ values: ["test4", "test1", "test3", "test5", "test2"], rowType: "data" },
-                        { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" },
-                        { values: ["test14", "test11", "test13", "test15", "test12"], rowType: "data" },
-                        { values: ["test19", "test16", "test18", "test20", "test17"], rowType: "data" },
-                        { values: ["test24", "test21", "test23", "test25", "test22"], rowType: "data" },
-                        { values: ["test29", "test26", "test28", "test30", "test27"], rowType: "data" }];
+            { values: ["test9", "test6", "test8", "test10", "test7"], rowType: "data" },
+            { values: ["test14", "test11", "test13", "test15", "test12"], rowType: "data" },
+            { values: ["test19", "test16", "test18", "test20", "test17"], rowType: "data" },
+            { values: ["test24", "test21", "test23", "test25", "test22"], rowType: "data" },
+            { values: ["test29", "test26", "test28", "test30", "test27"], rowType: "data" }];
 
         that.setupDataGrid();
         that.rowsView.render($testElement);
@@ -2031,7 +2031,7 @@ QUnit.test("Updating position of the fixed table (when scrollbar at the bottom) 
         positionTop = $fixedTable.position().top;
 
         // act
-        $testElement.find(".dx-data-row").eq(1).remove();  // remove second row of the main table
+        $testElement.find(".dx-data-row").eq(1).remove(); // remove second row of the main table
         $testElement.find(".dx-data-row").eq(20).remove(); // remove second row of the fixed table
         that.rowsView.resize();
 

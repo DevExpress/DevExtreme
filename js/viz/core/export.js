@@ -9,6 +9,7 @@ var extend = require("../../core/utils/extend").extend,
     pdfExporter = clientExporter.pdf,
     isDefined = require("../../core/utils/type").isDefined,
 
+    themeModule = require("../themes"),
     hoverEvent = require("../../events/hover"),
     pointerEvents = require("../../events/pointer"),
     pointerActions = [pointerEvents.down, pointerEvents.move].join(" "),
@@ -32,7 +33,9 @@ var extend = require("../../core/utils/extend").extend,
     EXPORT_CSS_CLASS = "dx-export-menu",
 
     EXPORT_DATA_KEY = "export-element-type",
-    FORMAT_DATA_KEY = "export-element-format";
+    FORMAT_DATA_KEY = "export-element-format",
+
+    GET_COLOR_REGEX = /data-backgroundcolor="([^"]*)"/;
 
 function getValidFormats() {
     var imageFormats = imageExporter.testFormats(ALLOWED_IMAGE_FORMATS);
@@ -200,6 +203,12 @@ function createMenuItems(renderer, options) {
     return items;
 }
 
+function getBackgroundColorFromMarkup(markup) {
+    var parsedMarkup = GET_COLOR_REGEX.exec(markup);
+
+    return parsedMarkup ? parsedMarkup[1] : undefined;
+}
+
 exports.exportFromMarkup = function(markup, options) {
     options.format = validateFormat(options.format) || DEFAULT_EXPORT_FORMAT;
     options.fileName = options.fileName || "file";
@@ -208,22 +217,31 @@ exports.exportFromMarkup = function(markup, options) {
     options.exportedAction = options.onExported;
     options.fileSavingAction = options.onFileSaving;
     options.margin = isDefined(options.margin) ? options.margin : MARGIN;
-
+    options.backgroundColor = isDefined(options.backgroundColor) ? options.backgroundColor : getBackgroundColorFromMarkup(markup);
     clientExporter.export(markup, options, getCreatorFunc(options.format));
 };
 
 exports.getMarkup = function(widgets) {
     var svgArr = [],
         height = 0,
-        width = 0;
+        width = 0,
+        backgroundColors = [],
+        backgroundColorStr = "";
 
     widgets.forEach(function(widget) {
-        var size = widget.getSize();
+        var size = widget.getSize(),
+            backgroundColor = widget.option("backgroundColor") || themeModule.getTheme(widget.option("theme")).backgroundColor;
+
+        backgroundColor && backgroundColors.indexOf(backgroundColor) === -1 && backgroundColors.push(backgroundColor);
         svgArr.push(widget.svg().replace('<svg', '<g transform="translate(0,' + height + ')" ').replace('</svg>', '</g>'));
         height += size.height;
         width = Math.max(width, size.width);
     });
-    return '<svg height="' + height + '" width="' + width + '" version="1.1" xmlns="http://www.w3.org/2000/svg">' + svgArr.join('') + '</svg>';
+
+    if(backgroundColors.length === 1) {
+        backgroundColorStr = 'data-backgroundcolor="' + backgroundColors[0] + '" ';
+    }
+    return '<svg ' + backgroundColorStr + 'height="' + height + '" width="' + width + '" version="1.1" xmlns="http://www.w3.org/2000/svg">' + svgArr.join('') + '</svg>';
 };
 
 exports.ExportMenu = function(params) {

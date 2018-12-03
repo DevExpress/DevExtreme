@@ -658,9 +658,9 @@ QUnit.test("valueExpr option", function(assert) {
             value: "",
             searchTimeout: 0,
             dataSource: [
-            { item: "item 1", description: "aq", caption: "qa" },
-            { item: "item 2", description: "sw", caption: "ws" },
-            { item: "item 3", description: "de", caption: "ed" }
+                { item: "item 1", description: "aq", caption: "qa" },
+                { item: "item 2", description: "sw", caption: "ws" },
+                { item: "item 3", description: "de", caption: "ed" }
             ],
             valueExpr: "item"
         }),
@@ -723,9 +723,9 @@ QUnit.testInActiveWindow("using multifield datasource with template", function(a
             itemTemplate: "item",
             value: "",
             dataSource: [
-            { item: "item 1", description: "aq" },
-            { item: "item 2", description: "sw" },
-            { item: "item 3", description: "de" }
+                { item: "item 1", description: "aq" },
+                { item: "item 2", description: "sw" },
+                { item: "item 3", description: "de" }
             ],
             valueExpr: "item",
             searchTimeout: 0,

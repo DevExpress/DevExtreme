@@ -923,14 +923,14 @@ QUnit.test("zero should not be incomplete", function(assert) {
     assert.equal(this.input.val(), "0.00", "zero has been formatted");
 });
 
-QUnit.test("value without integer part is not supported", function(assert) {
+QUnit.test("value without an integer part is supported", function(assert) {
     this.instance.option({
         format: "$ #.#",
         value: null
     });
 
     this.keyboard.type(".5");
-    assert.equal(this.input.val(), "$ 5", "point should be prevented");
+    assert.equal(this.input.val(), "$ .5", "point should be prevented");
 });
 
 QUnit.test("value with more than one point should not be incomplete", function(assert) {

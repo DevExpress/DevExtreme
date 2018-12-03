@@ -5054,6 +5054,34 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(this.gridView.component.editorFactoryController.focus(), "has overlay focus");
     });
 
+    // T692137
+    QUnit.testInActiveWindow("Focus should not be lost after several clicks on the same cell", function(assert) {
+        // arrange
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            paging: { pageSize: 2, enabled: true }
+        };
+
+        this.setupModule();
+
+        this.gridView.render($("#container"));
+
+        this.clock.tick();
+
+        // act
+        var $cell = $(this.getCellElement(0, 1));
+        $cell.trigger("dxpointerdown");
+        $cell.trigger("dxpointerdown");
+
+        // assert
+        assert.equal($(this.getCellElement(0, 1)).attr("tabIndex"), 0, "cell has tab index");
+        assert.ok($(this.getCellElement(0, 1)).is(":focus"), "cell is focused");
+    });
+
     QUnit.testInActiveWindow("Focus must be after cell click if edit mode == 'cell'", function(assert) {
         // arrange
         this.$element = function() {
@@ -5079,6 +5107,39 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(!keyboardNavigationController._isHiddenFocus, "not hidden focus");
         assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "cell has no .dx-cell-focus-disabled");
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
+    });
+
+    // T684122
+    QUnit.testInActiveWindow("Focus should not be restored on dataSource change after click in another grid", function(assert) {
+        // arrange
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true
+        };
+
+        this.setupModule();
+
+        this.gridView.render($("#container"));
+        var $anotherGrid = $("<div>").addClass("dx-datagrid").insertAfter($("#container"));
+        var $anotherRowsView = $("<div>").addClass("dx-datagrid-rowsview").appendTo($anotherGrid);
+
+        // act
+        $(this.getCellElement(0, 0)).trigger(CLICK_EVENT);
+        this.clock.tick();
+
+        // assert
+        assert.ok($(":focus").closest("#container").length, "focus in grid");
+
+        // act
+        $anotherRowsView.trigger(CLICK_EVENT);
+        this.rowsView.render();
+        this.clock.tick();
+
+        // assert
+        assert.notOk($(":focus").closest("#container").length, "focus is not in grid");
     });
 
     QUnit.testInActiveWindow("Focus must be after enter key pressed if 'cell' edit mode (T653709)", function(assert) {
