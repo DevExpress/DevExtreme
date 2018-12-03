@@ -1318,6 +1318,92 @@ QUnit.test("Remove registered group", function(assert) {
     assert.ok(!groupConfig, "Group config should be removed from the list");
 });
 
+QUnit.module("ignoreEmptyValue option");
+
+QUnit.test("Should not work with required rule", function(assert) {
+    testInvalidRule({
+        type: "required",
+        message: "A message",
+        ignoreEmptyValue: true
+    }, "", assert);
+});
+
+QUnit.test("Disable the option for the numeric rule", function(assert) {
+    testInvalidRule({
+        type: "numeric",
+        message: "A message",
+        ignoreEmptyValue: false
+    }, "", assert);
+});
+
+QUnit.test("Disable the option for the range rule", function(assert) {
+    testInvalidRule({
+        type: "range",
+        message: "A message",
+        min: 0,
+        max: 10,
+        ignoreEmptyValue: false
+    }, "", assert);
+});
+
+QUnit.test("Use the option for the StringLength rule", function(assert) {
+    var result = ValidationEngine.validate("", [{
+        type: "stringLength",
+        message: "A message",
+        min: 2,
+        max: 10,
+        ignoreEmptyValue: true
+    }]);
+
+    assert.ok(result, "Result is defined");
+    assert.ok(result.isValid, "IsValid");
+});
+
+QUnit.test("Use the option for the Compare rule", function(assert) {
+    var result = ValidationEngine.validate("", [{
+        type: "compare",
+        message: "A message",
+        comparisonTarget: function() {
+            return 1;
+        },
+        comparisonType: ">",
+        ignoreEmptyValue: true
+    }]);
+
+    assert.ok(result, "Result is defined");
+    assert.ok(result.isValid, "IsValid");
+});
+
+QUnit.test("Disable the option for the Pattern rule", function(assert) {
+    testInvalidRule({
+        type: "pattern",
+        message: "A message",
+        pattern: /^\d+$/,
+        ignoreEmptyValue: false
+    }, "", assert);
+});
+
+QUnit.test("Use the option for the Custom rule", function(assert) {
+    var result = ValidationEngine.validate("", [{
+        type: "custom",
+        message: "A message",
+        validationCallback: function() {
+            return false;
+        },
+        ignoreEmptyValue: true
+    }]);
+
+    assert.ok(result, "Result is defined");
+    assert.ok(result.isValid, "IsValid");
+});
+
+QUnit.test("Disable the option for the Email rule", function(assert) {
+    testInvalidRule({
+        type: "email",
+        message: "A message",
+        ignoreEmptyValue: false
+    }, "", assert);
+});
 
 QUnit.module("ViewModel");
 // all unit tests for KO are in koValidationTests.js

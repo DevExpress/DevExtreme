@@ -15,6 +15,10 @@ var BaseRuleValidator = Class.inherit({
     defaultMessage: function(value) { return messageLocalization.getFormatter("validation-" + this.NAME)(value); },
     defaultFormattedMessage: function(value) { return messageLocalization.getFormatter("validation-" + this.NAME + "-formatted")(value); },
 
+    _isValueEmpty: function(value) {
+        return !rulesValidators.required.validate(value, {});
+    },
+
     validate: function(value, rule) {
         var valueArray = Array.isArray(value) ? value : [value],
             result = true;
@@ -76,7 +80,7 @@ var NumericRuleValidator = BaseRuleValidator.inherit({
      * @default 'Value should be a number'
      */
     _validate: function(value, rule) {
-        if(!rulesValidators.required.validate(value, {})) {
+        if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
 
@@ -115,12 +119,12 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
      */
 
     _validate: function(value, rule) {
-        if(!rulesValidators.required.validate(value, {})) {
+        if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
 
         var validNumber = rulesValidators["numeric"].validate(value, rule),
-            validValue = typeUtils.isDefined(value),
+            validValue = typeUtils.isDefined(value) && value !== "",
             number = validNumber ? parseFloat(value) : validValue && value.valueOf(),
             min = rule.min,
             max = rule.max;
@@ -175,6 +179,10 @@ var StringLengthRuleValidator = BaseRuleValidator.inherit({
             value = value.trim();
         }
 
+        if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
+            return true;
+        }
+
         return rulesValidators.range.validate(value.length,
             extend({}, rule));
     }
@@ -208,6 +216,11 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
      * @default false
      */
     validate: function(value, rule) {
+        if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
+            return true;
+        }
+        ;
+
         var validator = rule.validator,
             dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
             data = typeUtils.isFunction(dataGetter) && dataGetter(),
@@ -257,6 +270,10 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
             throw errors.Error("E0102");
         }
 
+        if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
+            return true;
+        }
+
         extend(rule, { reevaluate: true });
 
         var otherValue = rule.comparisonTarget(),
@@ -301,7 +318,7 @@ var PatternRuleValidator = BaseRuleValidator.inherit({
      * @default 'Value does not match pattern'
      */
     _validate: function(value, rule) {
-        if(!rulesValidators.required.validate(value, {})) {
+        if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
         var pattern = rule.pattern;
@@ -325,7 +342,7 @@ var EmailRuleValidator = BaseRuleValidator.inherit({
      * @default 'Email is invalid'
      */
     _validate: function(value, rule) {
-        if(!rulesValidators.required.validate(value, {})) {
+        if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
         return rulesValidators.pattern.validate(value,
