@@ -5105,14 +5105,13 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         // assert
         assert.ok($(":focus").closest("#container").length, "focus in grid");
 
-
         // act
         $anotherRowsView.trigger(CLICK_EVENT);
         this.rowsView.render();
         this.clock.tick();
 
         // assert
-        assert.notOk($(":focus").closest("#container").length, "focus in not in grid");
+        assert.notOk($(":focus").closest("#container").length, "focus is not in grid");
     });
 
     QUnit.testInActiveWindow("Focus must be after enter key pressed if 'cell' edit mode (T653709)", function(assert) {
