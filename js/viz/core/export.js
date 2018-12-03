@@ -67,15 +67,8 @@ function getCreatorFunc(format) {
     }
 }
 
-function doExport(menu, markup, options) {
-    menu && menu.hide();
-    clientExporter.export(markup(), options, getCreatorFunc(options.format));
-    menu && menu.show();
-}
-
-function print(data, backgroundColor) {
-    var vizWindow = windowUtils.openWindow(),
-        svg;
+function print(data, __testPrintDone) {
+    var vizWindow = windowUtils.openWindow();
 
     if(!vizWindow) {
         return;
@@ -84,11 +77,12 @@ function print(data, backgroundColor) {
     vizWindow.document.open();
     vizWindow.document.write(data);
     vizWindow.document.close();
-    svg = vizWindow.document.body.getElementsByTagName("svg")[0];
-    svg && (svg.style.backgroundColor = backgroundColor);
-    vizWindow.print();
 
-    vizWindow.close();
+    setTimeout(function() {
+        vizWindow.print();
+        vizWindow.close();
+        if(__testPrintDone) __testPrintDone();
+    }, 10);
 }
 
 function getItemAttributes(options, type, itemIndex) {
@@ -248,7 +242,8 @@ exports.ExportMenu = function(params) {
     var that = this,
         renderer = that._renderer = params.renderer;
     that._incidentOccurred = params.incidentOccurred;
-    that._svgMethod = params.svgMethod;
+    that._exportTo = params.exportTo;
+    that._print = params.print;
 
     that._shadow = renderer.shadowFilter("-50%", "-50%", "200%", "200%", SHADOW_OFFSET, 6, SHADOW_BLUR);
     that._shadow.attr({ opacity: 0.8 });
@@ -303,7 +298,6 @@ extend(exports.ExportMenu.prototype, {
 
     draw: function(width, height, canvas) {
         var layoutOptions;
-        this.updateCanvasSize(canvas);
         this._group.move(width - BUTTON_SIZE - SHADOW_OFFSET - SHADOW_BLUR + canvas.left, Math.floor(height / 2 - BUTTON_SIZE / 2));
 
         layoutOptions = this.getLayoutOptions();
@@ -345,14 +339,6 @@ extend(exports.ExportMenu.prototype, {
             that._hideList();
         } else {
             that.hide();
-        }
-    },
-
-    updateCanvasSize: function(canvas) {
-        if(this._options && this._options.exportOptions) {
-            var exportOptions = this._options.exportOptions;
-            exportOptions.width = canvas.width;
-            exportOptions.height = canvas.height;
         }
     },
 
@@ -429,9 +415,7 @@ extend(exports.ExportMenu.prototype, {
         var that = this;
 
         that._renderer.root.on(pointerEvents.up + ".export", function(e) {
-            var elementType = e.target[EXPORT_DATA_KEY],
-                exportOptions,
-                options = that._options;
+            var elementType = e.target[EXPORT_DATA_KEY];
 
             if(!elementType) {
                 if(that._button) {
@@ -449,15 +433,10 @@ extend(exports.ExportMenu.prototype, {
                     that._showList();
                 }
             } else if(elementType === "printing") {
-                that.hide();
-
-                print(that._svgMethod(), options.backgroundColor);
-
-                that.show();
+                that._print();
                 that._hideList();
             } else if(elementType === "exporting") {
-                exportOptions = extend({}, options.exportOptions, { format: e.target[FORMAT_DATA_KEY] });
-                doExport(that, function() { return that._svgMethod(); }, exportOptions);
+                that._exportTo(e.target[FORMAT_DATA_KEY]);
                 that._hideList();
             }
         });
@@ -554,7 +533,8 @@ function getExportOptions(widget, exportOptions, fileName, format) {
         forceProxy: exportOptions.forceProxy,
         exportingAction: widget._createActionByOption("onExporting"),
         exportedAction: widget._createActionByOption("onExported"),
-        fileSavingAction: widget._createActionByOption("onFileSaving")
+        fileSavingAction: widget._createActionByOption("onFileSaving"),
+        __testPrintDone: exportOptions.__testPrintDone
     };
 }
 
@@ -564,8 +544,9 @@ exports.plugin = {
         var that = this;
         that._exportMenu = new exports.ExportMenu({
             renderer: that._renderer,
-            svgMethod: function() { return that.svg(); },
-            incidentOccurred: that._incidentOccurred
+            incidentOccurred: that._incidentOccurred,
+            print: function() { return that.print(); },
+            exportTo: function(format) { return that.exportTo(undefined, format); }
         });
         that._layout.add(that._exportMenu);
     },
@@ -574,29 +555,37 @@ exports.plugin = {
         this._exportMenu = null;
     },
 
-    extenders: {
-        _change_LAYOUT: function() {
-            if(this._exportMenu) {
-                this._exportMenu.updateCanvasSize(this._canvas);
-            }
-        }
-    },
-
     members: {
         _getExportMenuOptions: function() {
-            var userOptions = this._getOption("export") || {},
-                options = getExportOptions(this, userOptions);
-
-            return extend({}, userOptions, { exportOptions: options, rtl: this._getOption("rtlEnabled", true) });
+            return extend({}, this._getOption("export"), { rtl: this._getOption("rtlEnabled", true) });
         },
         exportTo: function(fileName, format) {
             var that = this,
-                exportOptions = getExportOptions(that, that._getOption("export") || {}, fileName, format);
+                menu = that._exportMenu,
+                options = getExportOptions(that, that._getOption("export") || {}, fileName, format);
 
-            doExport(that._exportMenu, function() { return that.svg(); }, exportOptions);
+            menu && menu.hide();
+            clientExporter.export(that._renderer.root.element, options, getCreatorFunc(options.format));
+            menu && menu.show();
         },
         print: function() {
-            print(this.svg(), this._getOption("export").backgroundColor);
+            var that = this,
+                menu = that._exportMenu,
+                options = getExportOptions(that, that._getOption("export") || {});
+
+            options.exportingAction = null;
+            options.exportedAction = null;
+            options.margin = 0;
+            options.format = "PNG";
+            options.forceProxy = true;
+            options.fileSavingAction = function(eventArgs) {
+                print(`<img src="data:image/png;base64,${eventArgs.data}"></img>`, options.__testPrintDone);
+                eventArgs.cancel = true;
+            };
+
+            menu && menu.hide();
+            clientExporter.export(that._renderer.root.element, options, getCreatorFunc(options.format));
+            menu && menu.show();
         }
     },
     customize: function(constructor) {
