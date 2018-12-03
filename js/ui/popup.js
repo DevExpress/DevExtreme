@@ -418,7 +418,7 @@ var Popup = Overlay.inherit({
     },
 
     _shouldUseContentAutoResizableClass() {
-        if(this.option("shading") || this.option("fullScreen") || this.option("showTitle") || this._getToolbarItems("bottom").length) {
+        if(this.option("height") !== "auto" || this.option("shading") || this.option("fullScreen") || this.option("showTitle") || this._getToolbarItems("bottom").length) {
             return false;
         }
 
@@ -796,6 +796,7 @@ var Popup = Overlay.inherit({
                 this._toggleShading(this.option("visible"));
                 this._renderAutoResizableGeometry();
                 break;
+            case "height":
             case "useAutoHeightWithLimits":
                 this._renderAutoResizableGeometry();
                 break;

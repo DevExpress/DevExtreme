@@ -599,7 +599,7 @@ QUnit.test("content should have auto-resizable class if useAutoHeightWithLimits 
     assert.notOk($(toSelector(POPUP_WRAPPER_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "no class if fullScreen");
 });
 
-QUnit.test("popup height can be changed according to the content if height = auto and useAutoHeightWithLimits = true", function(assert) {
+QUnit.test("popup height can be changed according to the content if useAutoHeightWithLimits = true", function(assert) {
     var $content,
         popup = $("#popup").dxPopup({
             visible: true,
