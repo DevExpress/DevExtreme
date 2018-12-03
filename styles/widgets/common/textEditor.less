@@ -56,6 +56,10 @@
     outline: 0;
     border: 0;
     .user-select(text);
+
+    &:-webkit-autofill + .dx-placeholder {
+        display: none;
+    }
 }
 
 .dx-show-clear-button {
