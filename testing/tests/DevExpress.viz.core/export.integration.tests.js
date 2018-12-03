@@ -363,8 +363,7 @@ QUnit.test('Print method', function(assert) {
                 proxyUrl: "testProxy",
                 format: "JPEG",
                 forceProxy: false,
-                margin: 40,
-                __testPrintDone: checkPrinting
+                margin: 40
             },
             onExporting: exportingStub,
             onExported: exportedStub,
@@ -372,7 +371,7 @@ QUnit.test('Print method', function(assert) {
         });
 
     // act
-    widget.print();
+    widget.print().done(checkPrinting);
 
     var that = this;
     var firstExportCall = exportFunc.getCall(0);
