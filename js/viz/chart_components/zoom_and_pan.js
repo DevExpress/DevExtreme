@@ -349,12 +349,20 @@ module.exports = {
                 startAxesViewportChanging(zoomAndPan, "zoom", e);
             },
             pinchHandler: function(e) {
+                if(!zoomAndPan.actionData) {
+                    return;
+                }
+
                 preventDefaults(e);
                 axesViewportChanging(zoomAndPan, "zoom", e,
                     (e, actionData, coordField, scale) => calcCenterForPinch(e)[coordField] - actionData.center[coordField] + (actionData.center[coordField] - actionData.center[coordField] * scale),
                     calcCenterForPinch);
             },
             pinchEndHandler: function(e) {
+                if(!zoomAndPan.actionData) {
+                    return;
+                }
+
                 preventDefaults(e);
                 finishAxesViewportChanging(zoomAndPan, "zoom", e,
                     (e, actionData, coordField, scale) => actionData.center[coordField] - actionData.startCenter[coordField] + (actionData.startCenter[coordField] - actionData.startCenter[coordField] * scale));
