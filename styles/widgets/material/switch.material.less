@@ -19,12 +19,19 @@
     @MATERIAL_SWITCH_ON_OFF_ADDING_PADDING: 0;
 }
 
+@MATERIAL_SWITCH_SHADOW_BLUR_RADIUS: 10px;
 @MATERIAL_SWITCH_TRANSITION: all .4s cubic-bezier(0.23, 1, 0.32, 1);
-@MATERIAL_ON_VALUE_SWITCH_SHADOW: 0 0 0 10px fade(@switch-handle-on-bg, 10%);
-@MATERIAL_SWITCH_SHADOW: 0 0 0 10px fade(@base-text-color, 10%);
+@MATERIAL_ON_VALUE_SWITCH_SHADOW: 0 0 0 @MATERIAL_SWITCH_SHADOW_BLUR_RADIUS fade(@switch-handle-on-bg, 10%);
+@MATERIAL_SWITCH_SHADOW: 0 0 0 @MATERIAL_SWITCH_SHADOW_BLUR_RADIUS fade(@base-text-color, 10%);
 
 .dx-switch-wrapper {
     position: relative;
+    padding: 10px;
+    box-sizing: content-box;
+    position: relative;
+    left: -@MATERIAL_SWITCH_SHADOW_BLUR_RADIUS;
+    top: -@MATERIAL_SWITCH_SHADOW_BLUR_RADIUS;
+    overflow: hidden;
 }
 
 .dx-switch {
@@ -62,9 +69,9 @@
 }
 
 .dx-switch-container {
-    overflow: visible;
-    margin-top: -3px;
     height: @MATERIAL_SWITCH_HEIGHT;
+    overflow: visible;
+    position: relative;
 
     &:before {
         position: absolute;
