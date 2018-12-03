@@ -248,7 +248,7 @@ var Popup = Overlay.inherit({
             bottomTemplate: "bottom",
             useDefaultToolbarButtons: false,
             useFlatToolbarButtons: false,
-            canUseAutoHeightWithMaxLimit: false
+            useAutoHeightWithLimits: false
         });
     },
 
@@ -404,11 +404,10 @@ var Popup = Overlay.inherit({
     },
 
     _render: function() {
-        var isFullscreen = this.option("fullScreen"),
-            contentAutoResizeEnabled = this.option("canUseAutoHeightWithMaxLimit");
+        var isFullscreen = this.option("fullScreen");
 
         this._toggleFullScreenClass(isFullscreen);
-        this._toggleContentAutoResizableClass(contentAutoResizeEnabled);
+        this._toggleContentAutoResizableClass();
         this.callBase();
     },
 
@@ -418,13 +417,21 @@ var Popup = Overlay.inherit({
             .toggleClass(POPUP_NORMAL_CLASS, !value);
     },
 
-    _toggleContentAutoResizableClass: function(value) {
-        var newValue = value;
-
-        if(newValue && this.option("showTitle") || this._getToolbarItems("bottom").length) {
-            newValue = false;
+    _shouldUseContentAutoResizableClass() {
+        if(this.option("shading") || this.option("fullScreen") || this.option("showTitle") || this._getToolbarItems("bottom").length) {
+            return false;
         }
-        this._$wrapper.toggleClass(POPUP_AUTO_RESIZABLE_CLASS, newValue);
+
+        return this.option("useAutoHeightWithLimits");
+    },
+
+    _toggleContentAutoResizableClass: function() {
+        this._$wrapper.toggleClass(POPUP_AUTO_RESIZABLE_CLASS, this._shouldUseContentAutoResizableClass());
+    },
+
+    _renderAutoResizableGeometry: function() {
+        this._toggleContentAutoResizableClass();
+        this._renderGeometry();
     },
 
     _initTemplates: function() {
@@ -694,10 +701,11 @@ var Popup = Overlay.inherit({
 
     _disallowUpdateContentHeight: function() {
         var isHeightAuto = this._$content.get(0).style.height === "auto",
-            useMaxHeightLimit = !this.option("canUseAutoHeightWithMaxLimit") && this._$content.css("maxHeight") !== "none",
-            minHeightSpecified = parseInt(this._$content.css("minHeight")) > 0;
+            useAutoHeightWithLimits = this._shouldUseContentAutoResizableClass(),
+            useMaxHeightLimit = !useAutoHeightWithLimits && this._$content.css("maxHeight") !== "none",
+            useMinHeightLimit = !useAutoHeightWithLimits && parseInt(this._$content.css("minHeight")) > 0;
 
-        return isHeightAuto && !(useMaxHeightLimit || minHeightSpecified);
+        return isHeightAuto && !(useMaxHeightLimit || useMinHeightLimit);
     },
 
     _renderDimensions: function() {
@@ -752,8 +760,7 @@ var Popup = Overlay.inherit({
             case "title":
             case "titleTemplate":
                 this._renderTitle();
-                this._toggleContentAutoResizableClass();
-                this._renderGeometry();
+                this._renderAutoResizableGeometry();
                 break;
             case "bottomTemplate":
                 this._renderBottom();
@@ -779,15 +786,18 @@ var Popup = Overlay.inherit({
                 break;
             case "fullScreen":
                 this._toggleFullScreenClass(args.value);
-                this._renderGeometry();
+                this._renderAutoResizableGeometry();
                 domUtils.triggerResizeEvent(this._$content);
                 break;
             case "showCloseButton":
                 this._renderTitle();
                 break;
-            case "canUseAutoHeightWithMaxLimit":
-                this._toggleContentAutoResizableClass(args.value);
-                this._renderGeometry();
+            case "shading":
+                this._toggleShading(this.option("visible"));
+                this._renderAutoResizableGeometry();
+                break;
+            case "useAutoHeightWithLimits":
+                this._renderAutoResizableGeometry();
                 break;
             default:
                 this.callBase(args);

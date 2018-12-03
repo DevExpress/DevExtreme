@@ -289,7 +289,7 @@ var DropDownBox = DropDownEditor.inherit({
             dragEnabled: false,
             focusStateEnabled: this.option("focusStateEnabled"),
             maxHeight: this._getMaxHeight.bind(this),
-            canUseAutoHeightWithMaxLimit: this.option("height") === "auto"
+            useAutoHeightWithLimits: this.option("height") === "auto"
         }, this.option("dropDownOptions"));
     },
 

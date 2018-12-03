@@ -1255,7 +1255,7 @@ var Overlay = Widget.inherit({
         if(this.option("shading")) {
             var $container = this._getContainer();
 
-            wrapperWidth = this._isWindow($container) ? "100%" : $container.outerWidth(),
+            wrapperWidth = this._isWindow($container) ? "100%" : $container.outerWidth();
             wrapperHeight = this._isWindow($container) ? "100%" : $container.outerHeight();
         } else {
             wrapperWidth = "";

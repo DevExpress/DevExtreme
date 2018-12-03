@@ -75,7 +75,7 @@ var POPUP_CLASS = "dx-popup",
     POPUP_TITLE_CLASS = "dx-popup-title",
     POPUP_TITLE_CLOSEBUTTON_CLASS = "dx-closebutton",
     POPUP_NORMAL_CLASS = "dx-popup-normal",
-    POPUP_AUTO_RESIZEBLE_CLASS = "dx-popup-auto-resizeble",
+    POPUP_AUTO_RESIZEBLE_CLASS = "dx-popup-auto-resizable",
 
     POPUP_DRAGGABLE_CLASS = "dx-popup-draggable",
 
@@ -566,30 +566,62 @@ QUnit.test("width/height", function(assert) {
     assert.equal($overlayContent.outerHeight(), 567);
 });
 
-QUnit.test("content should have auto-resizeble class if canUseAutoHeightWithMaxLimit = true", function(assert) {
+QUnit.test("content should have auto-resizable class if useAutoHeightWithLimits = true", function(assert) {
     var popup = $("#popup").dxPopup({
         visible: true,
         height: "auto",
         showTitle: false,
-        canUseAutoHeightWithMaxLimit: true
+        shading: false,
+        useAutoHeightWithLimits: true
     }).dxPopup("instance");
 
-    assert.ok($(toSelector(POPUP_NORMAL_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "has class");
+    assert.ok($(toSelector(POPUP_WRAPPER_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "has class");
 
-    popup.option("canUseAutoHeightWithMaxLimit", false);
-    assert.notOk($(toSelector(POPUP_NORMAL_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "no class after set option as false");
+    popup.option("useAutoHeightWithLimits", false);
+    assert.notOk($(toSelector(POPUP_WRAPPER_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "no class after set option as false");
 
-    popup.option("canUseAutoHeightWithMaxLimit", true);
-    assert.ok($(toSelector(POPUP_NORMAL_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "has class after option has been set");
+    popup.option("useAutoHeightWithLimits", true);
+    assert.ok($(toSelector(POPUP_WRAPPER_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "has class after option has been set");
 
     popup.option("showTitle", true);
-    assert.notOk($(toSelector(POPUP_NORMAL_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "no class if showTitle is true");
-
+    assert.notOk($(toSelector(POPUP_WRAPPER_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "no class if showTitle is true");
 
     popup.option("showTitle", false);
     popup.option("toolbarItems", [{ text: "test 1 bottom", toolbar: "bottom", location: "before" }]);
-    assert.notOk($(toSelector(POPUP_NORMAL_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "no class if has bottom toolbar");
+    assert.notOk($(toSelector(POPUP_WRAPPER_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "no class if has bottom toolbar");
+
+    popup.option("toolbarItems", []);
+    popup.option("shading", true);
+    assert.notOk($(toSelector(POPUP_WRAPPER_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "no class if has shading");
+
+    popup.option("shading", false);
+    popup.option("fullScreen", true);
+    assert.notOk($(toSelector(POPUP_WRAPPER_CLASS)).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "no class if fullScreen");
 });
+
+QUnit.test("popup height can be changed according to the content if height = auto and useAutoHeightWithLimits = true", function(assert) {
+    var $content,
+        popup = $("#popup").dxPopup({
+            visible: true,
+            height: "auto",
+            showTitle: false,
+            contentTemplate: function(e) {
+                $content = $("<div>").attr("id", "content");
+                return $content;
+            },
+            maxHeight: 400,
+            shading: false,
+            useAutoHeightWithLimits: true
+        }).dxPopup("instance");
+
+    var popup = $("." + POPUP_WRAPPER_CLASS + " ." + OVERLAY_CONTENT_CLASS).eq(0),
+        popupHeight = popup.height();
+
+    $("<div>").height(50).appendTo($content);
+
+    assert.equal(popup.height(), popupHeight + 50, "popup height has been changed");
+});
+
 
 QUnit.test("fullScreen", function(assert) {
     this.instance.option({

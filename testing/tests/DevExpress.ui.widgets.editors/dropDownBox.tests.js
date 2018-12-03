@@ -20,7 +20,9 @@ QUnit.testStart(function() {
 
 var DX_TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
     TAB_KEY_CODE = 9,
-    DX_STATE_FOCUSED_CLASS = "dx-state-focused";
+    DX_STATE_FOCUSED_CLASS = "dx-state-focused",
+    DROP_DOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
+    POPUP_AUTO_RESIZEBLE_CLASS = "dx-popup-auto-resizable";
 
 var moduleConfig = {
     beforeEach: function() {
@@ -424,25 +426,13 @@ QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets includin
     }
 });
 
-QUnit.test("Dropdownbox popup height can be changed according to the content if height = auto", function(assert) {
-    var $content;
-
+QUnit.test("Dropdownbox popup should have popup resizable class", function(assert) {
     this.$element.dxDropDownBox({
         height: "auto",
-        opened: true,
-        contentTemplate: function(e) {
-            $content = $("<div>").attr("id", "content");
-            return $content;
-        }
+        opened: true
     });
-    var popup = $(".dx-dropdowneditor-overlay .dx-overlay-content").eq(0),
-        popupHeight = popup.height();
 
-    $("<div>").height(50).appendTo($content);
-
-    assert.equal(popup.height(), popupHeight + 50, "popup height has been changed");
-
-
+    assert.ok($("." + DROP_DOWN_EDITOR_OVERLAY_CLASS).hasClass(POPUP_AUTO_RESIZEBLE_CLASS), "popup has popup auto resizable class");
 });
 
 QUnit.module("keyboard navigation", moduleConfig);
