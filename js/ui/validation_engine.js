@@ -79,6 +79,11 @@ var NumericRuleValidator = BaseRuleValidator.inherit({
      * @type string
      * @default 'Value should be a number'
      */
+    /**
+     * @name NumericRule.ignoreEmptyValue
+     * @type boolean
+     * @default true
+     */
     _validate: function(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
@@ -117,7 +122,11 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
      * @type boolean
      * @default false
      */
-
+    /**
+     * @name RangeRule.ignoreEmptyValue
+     * @type boolean
+     * @default true
+     */
     _validate: function(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
@@ -173,6 +182,11 @@ var StringLengthRuleValidator = BaseRuleValidator.inherit({
      * @type string
      * @default 'The length of the value is not correct'
      */
+    /**
+     * @name StringLengthRule.ignoreEmptyValue
+     * @type boolean
+     * @default false
+     */
     _validate: function(value, rule) {
         value = typeUtils.isDefined(value) ? String(value) : "";
         if(rule.trim || !typeUtils.isDefined(rule.trim)) {
@@ -212,6 +226,11 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
      */
     /**
      * @name CustomRule.reevaluate
+     * @type boolean
+     * @default false
+     */
+    /**
+     * @name CustomRule.ignoreEmptyValue
      * @type boolean
      * @default false
      */
@@ -263,6 +282,11 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
      * @name CompareRule.reevaluate
      * @type boolean
      * @default true
+     */
+    /**
+     * @name CompareRule.ignoreEmptyValue
+     * @type boolean
+     * @default false
      */
     _validate: function(value, rule) {
         if(!rule.comparisonTarget) {
@@ -316,6 +340,11 @@ var PatternRuleValidator = BaseRuleValidator.inherit({
      * @type string
      * @default 'Value does not match pattern'
      */
+    /**
+     * @name PatternRule.ignoreEmptyValue
+     * @type boolean
+     * @default true
+     */
     _validate: function(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
@@ -339,6 +368,11 @@ var EmailRuleValidator = BaseRuleValidator.inherit({
      * @name EmailRule.message
      * @type string
      * @default 'Email is invalid'
+     */
+    /**
+     * @name EmailRule.ignoreEmptyValue
+     * @type boolean
+     * @default true
      */
     _validate: function(value, rule) {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
