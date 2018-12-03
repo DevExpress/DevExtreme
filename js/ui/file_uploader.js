@@ -128,7 +128,7 @@ var FileUploader = Editor.inherit({
             /**
             * @name dxFileUploaderOptions.name
             * @type string
-            * @default ""
+            * @default "files[]"
             */
             name: "files[]",
 
