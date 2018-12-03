@@ -618,7 +618,6 @@ QUnit.test("popup height can be changed according to the content if height = aut
         popupHeight = popup.height();
 
     $("<div>").height(50).appendTo($content);
-
     assert.equal(popup.height(), popupHeight + 50, "popup height has been changed");
 });
 
