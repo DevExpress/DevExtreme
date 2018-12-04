@@ -308,8 +308,8 @@ QUnit.test("Send data with request (jsonp)", function(assert) {
         var params = {},
             urlParts = url.split("?")[1].split("&");
 
-        for(var i in urlParts) {
-            var paramParts = urlParts[i].split("=");
+        for(const urlPart of urlParts) {
+            var paramParts = urlPart.split("=");
             params[paramParts[0]] = paramParts[1];
         }
 
@@ -395,7 +395,7 @@ QUnit.test("Send data with request (cached resources)", function(assert) {
         }
     ];
 
-    for(var i in testData) {
+    for(var i = 0; i < testData.length; i++) {
         ajax.sendRequest({
             url: testData[i].optionUrl || "/some-url",
             data: { top: 20, skip: 5, filter: "%any value%" },
@@ -434,16 +434,16 @@ QUnit.test("Accept headers for different dataTypes", function(assert) {
         { type: "script", header: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" },
         { type: "jsonp", header: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" }];
 
-    for(var i in dataTypes) {
+    for(const dataType of dataTypes) {
         ajax.sendRequest({
             url: "/some-url",
-            dataType: dataTypes[i].type
+            dataType: dataType.type
         });
     }
 
     assert.equal(this.requests.length, dataTypes.length);
 
-    for(var index in dataTypes) {
+    for(var index = 0; index < dataTypes.length; index++) {
         assert.equal(this.requests[index].requestHeaders["Accept"], dataTypes[index].header);
     }
 
@@ -493,7 +493,7 @@ QUnit.test("Post process of data with different dataType (same domain)", functio
         status = statusText;
     };
 
-    for(var i in dataTypes) {
+    for(var i = 0; i < dataTypes.length; i++) {
         ajax.sendRequest({
             url: "/json-url",
             dataType: dataTypes[i].type
@@ -540,7 +540,7 @@ QUnit.test("X-Requested-With headers (no cors)", function(assert) {
         { url: location.origin + "/some-url", crossDomain: false }
     ];
 
-    for(var i in testData) {
+    for(var i = 0; i < testData.length; i++) {
         ajax.sendRequest({
             url: testData[i].url
         });
@@ -556,7 +556,7 @@ QUnit.test("X-Requested-With headers (cors)", function(assert) {
         { url: "http://example.com:80x", crossDomain: true }
     ];
 
-    for(var i in testData) {
+    for(var i = 0; i < testData.length; i++) {
         ajax.sendRequest({
             url: testData[i].url
         });
