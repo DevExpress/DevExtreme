@@ -151,14 +151,13 @@ function drawImage(context, options) {
     };
 
     image.onerror = function() {
-        // Warning TODO
         d.resolve();
     };
 
     imageDeferreds.push(d);
 
     image.setAttribute("crossOrigin", "anonymous");
-    image.src = options["xlink:href"];
+    image.src = options["href"] || options["xlink:href"];
 }
 
 function drawPath(context, dAttr) {

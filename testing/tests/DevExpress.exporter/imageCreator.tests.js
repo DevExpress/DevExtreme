@@ -3,7 +3,8 @@ var $ = require("jquery"),
     typeUtils = require("core/utils/type"),
     testingMarkupStart = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>",
     testingMarkupEnd = "</svg>",
-    browser = require("core/utils/browser");
+    browser = require("core/utils/browser"),
+    proxyUrlFormatter = require("data/proxy_url_formatter");
 
 function setupCanvasStub(drawnElements, paths) {
     var prototype = window.CanvasRenderingContext2D.prototype,
@@ -13,7 +14,14 @@ function setupCanvasStub(drawnElements, paths) {
     sinon.stub(prototype, "drawImage", function(img, x, y, width, height) {
         drawnElements.push({
             type: "image",
-            args: arguments
+            args: {
+                node: img.nodeName,
+                src: proxyUrlFormatter.parseUrl(img.src).pathname,
+                x: x,
+                y: y,
+                width: width,
+                height: height
+            }
         });
     });
 
@@ -830,6 +838,87 @@ QUnit.test("Circle", function(assert) {
                 globalAlpha: 0.5
             }, "Style of fill");
 
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Image with xlink:href", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/testing/content/add.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd,
+        imageBlob = getData(markup),
+        context = window.CanvasRenderingContext2D.prototype;
+
+    assert.expect(8);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 3, "Canvas elements count");
+
+            assert.equal(that.drawnElements[2].type, "image", "Canvas drawn rect element");
+            assert.deepEqual(that.drawnElements[2].args, {
+                node: "IMG",
+                src: "/testing/content/add.png",
+                x: -10,
+                y: -15,
+                width: 20,
+                height: 25
+            });
+            assert.deepEqual(context.translate.getCall(2).args, [427, 82]);
+
+            assert.deepEqual(that.drawnElements[1].args, {
+                height: 30,
+                width: 500,
+                x: 0,
+                y: 30
+            }, "clippath args");
+
+            assert.equal(context.clip.callCount, 1, "Two clips");
+            assert.equal(context.save.callCount, 3, "Two saving");
+            assert.equal(context.restore.callCount, 3, "Two restoring");
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Image with href", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart + '<image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/add.png" visibility="visible"></image>' + testingMarkupEnd,
+        imageBlob = getData(markup);
+
+    assert.expect(3);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 2, "Canvas elements count");
+
+            assert.equal(that.drawnElements[1].type, "image", "Canvas drawn rect element");
+            assert.deepEqual(that.drawnElements[1].args, {
+                node: "IMG",
+                src: "/testing/content/add.png",
+                x: -10,
+                y: -15,
+                width: 20,
+                height: 25
+            });
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Image with 404 href", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart + '<image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/wrongurl" visibility="visible"></image>' + testingMarkupEnd,
+        imageBlob = getData(markup);
+
+    assert.expect(1);
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 1, "Canvas elements count");
         } finally {
             done();
         }
