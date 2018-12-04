@@ -89,7 +89,7 @@ var EditStrategy = Class.inherit({
             return $(value);
         }
 
-        return this._getItemByNormalizedIndex(this.getIndexByItemData(value));
+        return this._getItemByNormalizedIndex(this._normalizeItemIndex(this.getIndexByItemData(value)));
     },
 
     deleteItemAtIndex: abstract,
