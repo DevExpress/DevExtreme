@@ -1,44 +1,45 @@
-var extend = require("../../core/utils/extend").extend,
-    windowUtils = require("../../core/utils/window"),
-    patchFontOptions = require("./utils").patchFontOptions,
+import { extend } from "../../core/utils/extend";
+import windowUtils from "../../core/utils/window";
+import { patchFontOptions } from "./utils";
+import clientExporter from "../../exporter";
+import messageLocalization from "../../localization/message";
+import { isDefined } from "../../core/utils/type";
+import themeModule from "../themes";
+import hoverEvent from "../../events/hover";
+import pointerEvents from "../../events/pointer";
+import { Deferred } from "../../core/utils/deferred";
 
-    clientExporter = require("../../exporter"),
-    messageLocalization = require("../../localization/message"),
-    imageExporter = clientExporter.image,
-    svgExporter = clientExporter.svg,
-    pdfExporter = clientExporter.pdf,
-    isDefined = require("../../core/utils/type").isDefined,
+const imageExporter = clientExporter.image;
+const svgExporter = clientExporter.svg;
+const pdfExporter = clientExporter.pdf;
 
-    themeModule = require("../themes"),
-    hoverEvent = require("../../events/hover"),
-    pointerEvents = require("../../events/pointer"),
-    pointerActions = [pointerEvents.down, pointerEvents.move].join(" "),
+const pointerActions = [pointerEvents.down, pointerEvents.move].join(" ");
 
-    BUTTON_SIZE = 35,
-    ICON_COORDS = [[9, 12, 26, 12, 26, 14, 9, 14], [9, 17, 26, 17, 26, 19, 9, 19], [9, 22, 26, 22, 26, 24, 9, 24]],
+const BUTTON_SIZE = 35;
+const ICON_COORDS = [[9, 12, 26, 12, 26, 14, 9, 14], [9, 17, 26, 17, 26, 19, 9, 19], [9, 22, 26, 22, 26, 24, 9, 24]];
 
-    LIST_PADDING_TOP = 4,
-    LIST_WIDTH = 120,
-    VERTICAL_TEXT_MARGIN = 8,
-    HORIZONTAL_TEXT_MARGIN = 15,
-    MENU_ITEM_HEIGHT = 30,
-    LIST_STROKE_WIDTH = 1,
-    MARGIN = 10,
-    SHADOW_OFFSET = 2,
-    SHADOW_BLUR = 3,
+const LIST_PADDING_TOP = 4;
+const LIST_WIDTH = 120;
+const VERTICAL_TEXT_MARGIN = 8;
+const HORIZONTAL_TEXT_MARGIN = 15;
+const MENU_ITEM_HEIGHT = 30;
+const LIST_STROKE_WIDTH = 1;
+const MARGIN = 10;
+const SHADOW_OFFSET = 2;
+const SHADOW_BLUR = 3;
 
-    DEFAULT_EXPORT_FORMAT = "PNG",
-    ALLOWED_IMAGE_FORMATS = [DEFAULT_EXPORT_FORMAT, "JPEG", "GIF"],
-    ALLOWED_EXTRA_FORMATS = ["PDF", "SVG"],
-    EXPORT_CSS_CLASS = "dx-export-menu",
+const DEFAULT_EXPORT_FORMAT = "PNG";
+const ALLOWED_IMAGE_FORMATS = [DEFAULT_EXPORT_FORMAT, "JPEG", "GIF"];
+const ALLOWED_EXTRA_FORMATS = ["PDF", "SVG"];
+const EXPORT_CSS_CLASS = "dx-export-menu";
 
-    EXPORT_DATA_KEY = "export-element-type",
-    FORMAT_DATA_KEY = "export-element-format",
+const EXPORT_DATA_KEY = "export-element-type";
+const FORMAT_DATA_KEY = "export-element-format";
 
-    GET_COLOR_REGEX = /data-backgroundcolor="([^"]*)"/;
+const GET_COLOR_REGEX = /data-backgroundcolor="([^"]*)"/;
 
 function getValidFormats() {
-    var imageFormats = imageExporter.testFormats(ALLOWED_IMAGE_FORMATS);
+    const imageFormats = imageExporter.testFormats(ALLOWED_IMAGE_FORMATS);
     return {
         unsupported: imageFormats.unsupported,
         supported: imageFormats.supported.concat(ALLOWED_EXTRA_FORMATS)
@@ -67,15 +68,8 @@ function getCreatorFunc(format) {
     }
 }
 
-function doExport(menu, markup, options) {
-    menu && menu.hide();
-    clientExporter.export(markup(), options, getCreatorFunc(options.format));
-    menu && menu.show();
-}
-
-function print(data, backgroundColor) {
-    var vizWindow = windowUtils.openWindow(),
-        svg;
+function print(data) {
+    const vizWindow = windowUtils.openWindow();
 
     if(!vizWindow) {
         return;
@@ -84,40 +78,42 @@ function print(data, backgroundColor) {
     vizWindow.document.open();
     vizWindow.document.write(data);
     vizWindow.document.close();
-    svg = vizWindow.document.body.getElementsByTagName("svg")[0];
-    svg && (svg.style.backgroundColor = backgroundColor);
-    vizWindow.print();
 
-    vizWindow.close();
+    const result = new Deferred();
+    setTimeout(() => {
+        vizWindow.print();
+        vizWindow.close();
+        result.resolve();
+    }, 10);
+
+    return result;
 }
 
 function getItemAttributes(options, type, itemIndex) {
-    var path,
-        attr = {},
-        x = BUTTON_SIZE - LIST_WIDTH,
-        y = BUTTON_SIZE + LIST_PADDING_TOP + LIST_STROKE_WIDTH + itemIndex * MENU_ITEM_HEIGHT;
+    const x = BUTTON_SIZE - LIST_WIDTH;
+    const y = BUTTON_SIZE + LIST_PADDING_TOP + LIST_STROKE_WIDTH + itemIndex * MENU_ITEM_HEIGHT;
 
-    attr.rect = {
-        width: LIST_WIDTH - LIST_STROKE_WIDTH * 2,
-        height: MENU_ITEM_HEIGHT,
-        x: x + LIST_STROKE_WIDTH,
-        y: y
-    };
-    attr.text = {
-        x: x + (options.rtl ? LIST_WIDTH - HORIZONTAL_TEXT_MARGIN : HORIZONTAL_TEXT_MARGIN),
-        y: y + MENU_ITEM_HEIGHT - VERTICAL_TEXT_MARGIN
+    const attr = {
+        rect: {
+            width: LIST_WIDTH - LIST_STROKE_WIDTH * 2,
+            height: MENU_ITEM_HEIGHT,
+            x: x + LIST_STROKE_WIDTH,
+            y: y
+        },
+        text: {
+            x: x + (options.rtl ? LIST_WIDTH - HORIZONTAL_TEXT_MARGIN : HORIZONTAL_TEXT_MARGIN),
+            y: y + MENU_ITEM_HEIGHT - VERTICAL_TEXT_MARGIN
+        }
     };
 
     if(type === "printing") {
-        path = "M " + x + " " + (y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH) + " " +
-                   "L " + (x + LIST_WIDTH) + " " + (y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH);
-
         attr.separator = {
             stroke: options.button.default.borderColor,
             "stroke-width": LIST_STROKE_WIDTH,
             cursor: "pointer",
             sharp: "v",
-            d: path
+            d: "M " + x + " " + (y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH) + " " +
+                "L " + (x + LIST_WIDTH) + " " + (y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH)
         };
     }
 
@@ -125,23 +121,21 @@ function getItemAttributes(options, type, itemIndex) {
 }
 
 function createMenuItem(renderer, options, settings) {
-    var itemData = {},
-        menuItem,
-        type = settings.type,
-        format = settings.format,
-        attr = getItemAttributes(options, type, settings.itemIndex),
-        fontStyle = patchFontOptions(options.font),
-        rect = renderer.rect(),
-        text = renderer.text(settings.text);
+    const itemData = {};
+    const type = settings.type;
+    const format = settings.format;
+    const attr = getItemAttributes(options, type, settings.itemIndex);
+    const fontStyle = patchFontOptions(options.font);
     fontStyle["pointer-events"] = "none";
 
-    menuItem = renderer.g().attr({ "class": EXPORT_CSS_CLASS + "-list-item" });
+    const menuItem = renderer.g().attr({ "class": EXPORT_CSS_CLASS + "-list-item" });
 
     itemData[EXPORT_DATA_KEY] = type;
     if(format) {
         itemData[FORMAT_DATA_KEY] = format;
     }
 
+    const rect = renderer.rect();
     rect.attr(attr.rect).
         css({
             cursor: "pointer",
@@ -149,12 +143,12 @@ function createMenuItem(renderer, options, settings) {
         }).
         data(itemData);
 
-    rect.on(hoverEvent.start + ".export", function() { rect.attr({ fill: options.button.hover.backgroundColor }); })
-        .on(hoverEvent.end + ".export", function() { rect.attr({ fill: null }); });
+    rect.on(hoverEvent.start + ".export", () => rect.attr({ fill: options.button.hover.backgroundColor }))
+        .on(hoverEvent.end + ".export", () => rect.attr({ fill: null }));
 
     rect.append(menuItem);
 
-    text.css(fontStyle).
+    const text = renderer.text(settings.text).css(fontStyle).
         attr(attr.text).
         append(menuItem);
 
@@ -167,21 +161,16 @@ function createMenuItem(renderer, options, settings) {
     return {
         g: menuItem,
         rect: rect,
-        resetState: function() {
-            rect.attr({ fill: null });
-        },
-        fixPosition: function() {
-            var textBBox = text.getBBox(),
-                x = attr.text.x - textBBox.x;
-            options.rtl && (x -= textBBox.width);
-            text.move(x);
+        resetState: () => rect.attr({ fill: null }),
+        fixPosition: () => {
+            const textBBox = text.getBBox();
+            text.move(attr.text.x - textBBox.x - (options.rtl ? textBBox.width : 0));
         }
     };
 }
 
 function createMenuItems(renderer, options) {
-    var formats = options.formats,
-        items = [];
+    let items = [];
 
     if(options.printingEnabled) {
         items.push(createMenuItem(renderer, options, {
@@ -190,7 +179,7 @@ function createMenuItems(renderer, options) {
             itemIndex: items.length
         }));
     }
-    items = formats.reduce(function(r, format) {
+    items = options.formats.reduce((r, format) => {
         r.push(createMenuItem(renderer, options, {
             type: "exporting",
             text: messageLocalization.getFormatter("vizExport-exportButtonText")(format),
@@ -204,12 +193,12 @@ function createMenuItems(renderer, options) {
 }
 
 function getBackgroundColorFromMarkup(markup) {
-    var parsedMarkup = GET_COLOR_REGEX.exec(markup);
+    const parsedMarkup = GET_COLOR_REGEX.exec(markup);
 
     return parsedMarkup ? parsedMarkup[1] : undefined;
 }
 
-exports.exportFromMarkup = function(markup, options) {
+export const exportFromMarkup = function(markup, options) {
     options.format = validateFormat(options.format) || DEFAULT_EXPORT_FORMAT;
     options.fileName = options.fileName || "file";
 
@@ -221,15 +210,15 @@ exports.exportFromMarkup = function(markup, options) {
     clientExporter.export(markup, options, getCreatorFunc(options.format));
 };
 
-exports.getMarkup = function(widgets) {
-    var svgArr = [],
-        height = 0,
-        width = 0,
-        backgroundColors = [],
-        backgroundColorStr = "";
+export const getMarkup = function(widgets) {
+    const svgArr = [];
+    let height = 0;
+    let width = 0;
+    const backgroundColors = [];
+    let backgroundColorStr = "";
 
-    widgets.forEach(function(widget) {
-        var size = widget.getSize(),
+    widgets.forEach(widget => {
+        const size = widget.getSize(),
             backgroundColor = widget.option("backgroundColor") || themeModule.getTheme(widget.option("theme")).backgroundColor;
 
         backgroundColor && backgroundColors.indexOf(backgroundColor) === -1 && backgroundColors.push(backgroundColor);
@@ -244,39 +233,38 @@ exports.getMarkup = function(widgets) {
     return '<svg ' + backgroundColorStr + 'height="' + height + '" width="' + width + '" version="1.1" xmlns="http://www.w3.org/2000/svg">' + svgArr.join('') + '</svg>';
 };
 
-exports.ExportMenu = function(params) {
-    var that = this,
-        renderer = that._renderer = params.renderer;
-    that._incidentOccurred = params.incidentOccurred;
-    that._svgMethod = params.svgMethod;
+export const ExportMenu = function(params) {
+    const renderer = this._renderer = params.renderer;
+    this._incidentOccurred = params.incidentOccurred;
+    this._exportTo = params.exportTo;
+    this._print = params.print;
 
-    that._shadow = renderer.shadowFilter("-50%", "-50%", "200%", "200%", SHADOW_OFFSET, 6, SHADOW_BLUR);
-    that._shadow.attr({ opacity: 0.8 });
-    that._group = renderer.g().attr({ "class": EXPORT_CSS_CLASS }).linkOn(renderer.root, { name: "export-menu", after: "peripheral" });
-    that._buttonGroup = renderer.g().attr({ "class": EXPORT_CSS_CLASS + "-button" }).append(that._group);
-    that._listGroup = renderer.g().attr({ "class": EXPORT_CSS_CLASS + "-list" }).append(that._group);
+    this._shadow = renderer.shadowFilter("-50%", "-50%", "200%", "200%", SHADOW_OFFSET, 6, SHADOW_BLUR);
+    this._shadow.attr({ opacity: 0.8 });
+    this._group = renderer.g().attr({ "class": EXPORT_CSS_CLASS }).linkOn(renderer.root, { name: "export-menu", after: "peripheral" });
+    this._buttonGroup = renderer.g().attr({ "class": EXPORT_CSS_CLASS + "-button" }).append(this._group);
+    this._listGroup = renderer.g().attr({ "class": EXPORT_CSS_CLASS + "-list" }).append(this._group);
 
-    that._overlay = renderer.rect(-LIST_WIDTH + BUTTON_SIZE, BUTTON_SIZE + LIST_PADDING_TOP, LIST_WIDTH, 0);
-    that._overlay.attr({
+    this._overlay = renderer.rect(-LIST_WIDTH + BUTTON_SIZE, BUTTON_SIZE + LIST_PADDING_TOP, LIST_WIDTH, 0);
+    this._overlay.attr({
         "stroke-width": LIST_STROKE_WIDTH,
         cursor: "pointer",
         rx: 4,
         ry: 4,
-        filter: that._shadow.id
+        filter: this._shadow.id
     });
-    that._overlay.data({ "export-element-type": "list" });
-    that.validFormats = getValidFormats();
+    this._overlay.data({ "export-element-type": "list" });
+    this.validFormats = getValidFormats();
 
-    that._subscribeEvents();
+    this._subscribeEvents();
 };
 
-extend(exports.ExportMenu.prototype, {
-
-    getLayoutOptions: function() {
+extend(ExportMenu.prototype, {
+    getLayoutOptions() {
         if(this._hiddenDueToLayout) {
             return { width: 0, height: 0, cutSide: "vertical", cutLayoutSide: "top" };
         }
-        var bBox = this._buttonGroup.getBBox();
+        const bBox = this._buttonGroup.getBBox();
 
         bBox.cutSide = "vertical";
         bBox.cutLayoutSide = "top";
@@ -292,21 +280,19 @@ extend(exports.ExportMenu.prototype, {
         return bBox;
     },
 
-    probeDraw: function() {
+    probeDraw() {
         this._fillSpace();
         this.show();
     },
 
-    shift: function(_, y) {
+    shift(_, y) {
         this._group.attr({ translateY: this._group.attr("translateY") + y });
     },
 
-    draw: function(width, height, canvas) {
-        var layoutOptions;
-        this.updateCanvasSize(canvas);
+    draw(width, height, canvas) {
         this._group.move(width - BUTTON_SIZE - SHADOW_OFFSET - SHADOW_BLUR + canvas.left, Math.floor(height / 2 - BUTTON_SIZE / 2));
 
-        layoutOptions = this.getLayoutOptions();
+        const layoutOptions = this.getLayoutOptions();
         if(layoutOptions.width > width || layoutOptions.height > height) {
             this.freeSpace();
         }
@@ -314,108 +300,88 @@ extend(exports.ExportMenu.prototype, {
         return this;
     },
 
-    show: function() {
+    show() {
         this._group.linkAppend();
     },
 
-    hide: function() {
+    hide() {
         this._group.linkRemove();
     },
 
-    setOptions: function(options) {
-        var that = this;
-        that._options = options;
+    setOptions(options) {
+        this._options = options;
 
         if(options.formats) {
-            options.formats = options.formats.reduce(function(r, format) {
-                format = validateFormat(format, that._incidentOccurred, that.validFormats);
+            options.formats = options.formats.reduce((r, format) => {
+                format = validateFormat(format, this._incidentOccurred, this.validFormats);
                 format && r.push(format);
                 return r;
             }, []);
         } else {
-            options.formats = that.validFormats.supported.slice();
+            options.formats = this.validFormats.supported.slice();
         }
 
         options.printingEnabled = options.printingEnabled === undefined ? true : options.printingEnabled;
 
         if(options.enabled && (options.formats.length || options.printingEnabled)) {
-            that.show();
-            that._updateButton();
-            that._updateList();
-            that._hideList();
+            this.show();
+            this._updateButton();
+            this._updateList();
+            this._hideList();
         } else {
-            that.hide();
+            this.hide();
         }
     },
 
-    updateCanvasSize: function(canvas) {
-        if(this._options && this._options.exportOptions) {
-            var exportOptions = this._options.exportOptions;
-            exportOptions.width = canvas.width;
-            exportOptions.height = canvas.height;
-        }
-    },
+    dispose() {
+        this._unsubscribeEvents();
 
-    dispose: function() {
-        var that = this;
-
-        that._unsubscribeEvents();
-
-        that._group.linkRemove().linkOff();
-        that._group.dispose();
-        that._shadow.dispose();
-
-        that._shadow = that._group = that._listGroup = that._buttonGroup = that._button = null;
-        that._options = null;
+        this._group.linkRemove().linkOff();
+        this._group.dispose();
+        this._shadow.dispose();
     },
 
     // BaseWidget_layout_implementation
-    layoutOptions: function() {
-        var options = this._options;
-        return options.enabled && { horizontalAlignment: "right", verticalAlignment: "top", weak: true };
+    layoutOptions() {
+        return this._options.enabled && { horizontalAlignment: "right", verticalAlignment: "top", weak: true };
     },
 
-    measure: function() {
+    measure() {
         this._fillSpace();
         return [BUTTON_SIZE + SHADOW_OFFSET, BUTTON_SIZE];
     },
 
-    move: function(rect) {
+    move(rect) {
         this._group.attr({ translateX: Math.round(rect[0]), translateY: Math.round(rect[1]) });
     },
 
-    _fillSpace: function() {
+    _fillSpace() {
         this._hiddenDueToLayout = false;
         this.show();
     },
 
-    freeSpace: function() {
+    freeSpace() {
         this._incidentOccurred("W2107");
         this._hiddenDueToLayout = true;
         this.hide();
     },
     // BaseWidget_layout_implementation
 
-    _hideList: function() {
+    _hideList() {
         this._listGroup.remove();
         this._listShown = false;
         this._setButtonState("default");
-        this._menuItems.forEach(function(item) {
-            item.resetState();
-        });
+        this._menuItems.forEach(item => item.resetState());
     },
 
-    _showList: function() {
+    _showList() {
         this._listGroup.append(this._group);
         this._listShown = true;
-        this._menuItems.forEach(function(item) {
-            item.fixPosition();
-        });
+        this._menuItems.forEach(item => item.fixPosition());
     },
 
-    _setButtonState: function(state) {
-        var that = this,
-            style = that._options.button[state];
+    _setButtonState(state) {
+        const style = this._options.button[state];
 
         this._button.attr({
             stroke: style.borderColor,
@@ -425,75 +391,56 @@ extend(exports.ExportMenu.prototype, {
         this._icon.attr({ fill: style.color });
     },
 
-    _subscribeEvents: function() {
-        var that = this;
-
-        that._renderer.root.on(pointerEvents.up + ".export", function(e) {
-            var elementType = e.target[EXPORT_DATA_KEY],
-                exportOptions,
-                options = that._options;
+    _subscribeEvents() {
+        this._renderer.root.on(pointerEvents.up + ".export", e => {
+            var elementType = e.target[EXPORT_DATA_KEY];
 
             if(!elementType) {
-                if(that._button) {
-                    that._hideList();
+                if(this._button) {
+                    this._hideList();
                 }
                 return;
             }
 
             if(elementType === "button") {
-                if(that._listShown) {
-                    that._setButtonState("default");
-                    that._hideList();
+                if(this._listShown) {
+                    this._setButtonState("default");
+                    this._hideList();
                 } else {
-                    that._setButtonState("focus");
-                    that._showList();
+                    this._setButtonState("focus");
+                    this._showList();
                 }
             } else if(elementType === "printing") {
-                that.hide();
-
-                print(that._svgMethod(), options.backgroundColor);
-
-                that.show();
-                that._hideList();
+                this._print();
+                this._hideList();
             } else if(elementType === "exporting") {
-                exportOptions = extend({}, options.exportOptions, { format: e.target[FORMAT_DATA_KEY] });
-                doExport(that, function() { return that._svgMethod(); }, exportOptions);
-                that._hideList();
+                this._exportTo(e.target[FORMAT_DATA_KEY]);
+                this._hideList();
             }
         });
 
-        that._listGroup.on(pointerActions, function(e) { e.stopPropagation(); });
 
-        that._buttonGroup.on(pointerEvents.enter, function() {
-            that._setButtonState("hover");
-        });
-        that._buttonGroup.on(pointerEvents.leave, function() {
-            that._setButtonState(that._listShown ? "focus" : "default");
-        });
-        that._buttonGroup.on(pointerEvents.down + ".export", function() {
-            that._setButtonState("active");
-        });
+        this._listGroup.on(pointerActions, e => e.stopPropagation());
+
+        this._buttonGroup.on(pointerEvents.enter, () => this._setButtonState("hover"));
+        this._buttonGroup.on(pointerEvents.leave, () => this._setButtonState(this._listShown ? "focus" : "default"));
+        this._buttonGroup.on(pointerEvents.down + ".export", () => this._setButtonState("active"));
     },
 
-    _unsubscribeEvents: function() {
+    _unsubscribeEvents() {
         this._renderer.root.off(".export");
         this._listGroup.off();
         this._buttonGroup.off();
     },
 
-    _updateButton: function() {
-        var that = this,
-            renderer = that._renderer,
-            options = that._options,
-            iconAttr = {
-                fill: options.button.default.color,
-                cursor: "pointer"
-            },
-            exportData = { "export-element-type": "button" };
+    _updateButton() {
+        const renderer = this._renderer;
+        const options = this._options;
+        const exportData = { "export-element-type": "button" };
 
-        if(!that._button) {
-            that._button = renderer.rect(0, 0, BUTTON_SIZE, BUTTON_SIZE).append(that._buttonGroup);
-            that._button.attr({
+        if(!this._button) {
+            this._button = renderer.rect(0, 0, BUTTON_SIZE, BUTTON_SIZE).append(this._buttonGroup);
+            this._button.attr({
                 rx: 4,
                 ry: 4,
                 fill: options.button.default.backgroundColor,
@@ -501,40 +448,40 @@ extend(exports.ExportMenu.prototype, {
                 "stroke-width": 1,
                 cursor: "pointer"
             });
-            that._button.data(exportData);
+            this._button.data(exportData);
 
-            that._icon = renderer.path(ICON_COORDS).append(that._buttonGroup);
-            that._icon.attr(iconAttr);
-            that._icon.data(exportData);
+            this._icon = renderer.path(ICON_COORDS).append(this._buttonGroup);
+            this._icon.attr({
+                fill: options.button.default.color,
+                cursor: "pointer"
+            });
+            this._icon.data(exportData);
 
-            that._buttonGroup.setTitle(messageLocalization.format("vizExport-titleMenuText"));
+            this._buttonGroup.setTitle(messageLocalization.format("vizExport-titleMenuText"));
         }
     },
 
-    _updateList: function() {
-        var that = this,
-            options = that._options,
-            buttonDefault = options.button.default,
-            listGroup = that._listGroup,
-            items = createMenuItems(that._renderer, options);
+    _updateList() {
+        const options = this._options;
+        const buttonDefault = options.button.default;
+        const listGroup = this._listGroup;
+        const items = createMenuItems(this._renderer, options);
 
-        that._shadow.attr({
+        this._shadow.attr({
             color: options.shadowColor
         });
 
-        that._overlay.attr({
+        this._overlay.attr({
             height: items.length * MENU_ITEM_HEIGHT + LIST_STROKE_WIDTH * 2,
             fill: buttonDefault.backgroundColor,
             stroke: buttonDefault.borderColor
         });
 
         listGroup.clear();
-        that._overlay.append(listGroup);
-        items.forEach(function(item) {
-            item.g.append(listGroup);
-        });
+        this._overlay.append(listGroup);
+        items.forEach(item => item.g.append(listGroup));
 
-        that._menuItems = items;
+        this._menuItems = items;
     }
 });
 
@@ -558,53 +505,61 @@ function getExportOptions(widget, exportOptions, fileName, format) {
     };
 }
 
-exports.plugin = {
+export const plugin = {
     name: "export",
-    init: function() {
-        var that = this;
-        that._exportMenu = new exports.ExportMenu({
-            renderer: that._renderer,
-            svgMethod: function() { return that.svg(); },
-            incidentOccurred: that._incidentOccurred
+    init() {
+        this._exportMenu = new exports.ExportMenu({
+            renderer: this._renderer,
+            incidentOccurred: this._incidentOccurred,
+            print: () => this.print(),
+            exportTo: format => this.exportTo(undefined, format)
         });
-        that._layout.add(that._exportMenu);
+        this._layout.add(this._exportMenu);
     },
-    dispose: function() {
+    dispose() {
         this._exportMenu.dispose();
-        this._exportMenu = null;
-    },
-
-    extenders: {
-        _change_LAYOUT: function() {
-            if(this._exportMenu) {
-                this._exportMenu.updateCanvasSize(this._canvas);
-            }
-        }
     },
 
     members: {
-        _getExportMenuOptions: function() {
-            var userOptions = this._getOption("export") || {},
-                options = getExportOptions(this, userOptions);
-
-            return extend({}, userOptions, { exportOptions: options, rtl: this._getOption("rtlEnabled", true) });
+        _getExportMenuOptions() {
+            return extend({}, this._getOption("export"), { rtl: this._getOption("rtlEnabled", true) });
         },
-        exportTo: function(fileName, format) {
-            var that = this,
-                exportOptions = getExportOptions(that, that._getOption("export") || {}, fileName, format);
+        exportTo(fileName, format) {
+            const menu = this._exportMenu;
+            const options = getExportOptions(this, this._getOption("export") || {}, fileName, format);
 
-            doExport(that._exportMenu, function() { return that.svg(); }, exportOptions);
+            menu && menu.hide();
+            clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format));
+            menu && menu.show();
         },
-        print: function() {
-            print(this.svg(), this._getOption("export").backgroundColor);
+        print() {
+            const menu = this._exportMenu;
+            const options = getExportOptions(this, this._getOption("export") || {});
+            const result = new Deferred();
+
+            options.exportingAction = null;
+            options.exportedAction = null;
+            options.margin = 0;
+            options.format = "PNG";
+            options.forceProxy = true;
+            options.fileSavingAction = eventArgs => {
+                print(`<img src="data:image/png;base64,${eventArgs.data}"></img>`).done(result.resolve);
+                eventArgs.cancel = true;
+            };
+
+            menu && menu.hide();
+            clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format));
+            menu && menu.show();
+
+            return result;
         }
     },
-    customize: function(constructor) {
-        var proto = constructor.prototype;
+    customize(constructor) {
+        const proto = constructor.prototype;
 
         constructor.addChange({
             code: "EXPORT",
-            handler: function() {
+            handler() {
                 this._exportMenu.setOptions(this._getExportMenuOptions());
                 this._change(["LAYOUT"]);
             },

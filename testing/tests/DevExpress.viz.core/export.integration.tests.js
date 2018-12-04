@@ -16,8 +16,6 @@ QUnit.module("Export", {
             return renderer;
         };
 
-        this.renderer.svg = sinon.stub().returns("testMarkup");
-
         var exportMenu = this.exportMenu = new vizMocks.ExportMenu();
         exportModule.ExportMenu = sinon.spy(function() { return exportMenu; });
 
@@ -66,7 +64,7 @@ QUnit.test('Export method. Defined options', function(assert) {
 
     // assert
     assert.ok(exportFunc.callCount, 1, "export was called one time");
-    assert.equal(firstExportCall.args[0], "testMarkup", "export data");
+    assert.equal(firstExportCall.args[0], this.renderer.root.element, "export data");
 
     assert.equal(firstExportCall.args[1].width, 200, "width");
     assert.equal(firstExportCall.args[1].height, 150, "height");
@@ -294,16 +292,26 @@ QUnit.test('Export method. Undefined options', function(assert) {
 QUnit.test('Export menu creation', function(assert) {
     // arrange, act
     var incidentOccurred = sinon.spy();
-    this.createWidget({
+    var widget = this.createWidget({
         onIncidentOccurred: incidentOccurred,
         rtlEnabled: "rtl option"
     });
+    widget.exportTo = sinon.spy();
+    widget.print = sinon.spy();
+
 
     // assert
     assert.equal(exportModule.ExportMenu.lastCall.args[0].renderer, this.renderer);
-    assert.ok(typeof exportModule.ExportMenu.lastCall.args[0].svgMethod === "function");
     assert.ok(typeof exportModule.ExportMenu.lastCall.args[0].incidentOccurred === "function");
     assert.strictEqual(this.exportMenu.setOptions.getCall(0).args[0].rtl, "rtl option");
+    assert.ok(typeof exportModule.ExportMenu.lastCall.args[0].exportTo === "function");
+    assert.ok(typeof exportModule.ExportMenu.lastCall.args[0].print === "function");
+
+    exportModule.ExportMenu.lastCall.args[0].exportTo("FORMAT");
+    assert.deepEqual(widget.exportTo.getCall(0).args, [undefined, "FORMAT"]);
+
+    exportModule.ExportMenu.lastCall.args[0].print();
+    assert.equal(widget.print.callCount, 1);
 });
 
 QUnit.test("Export menu disposing", function(assert) {
@@ -317,26 +325,6 @@ QUnit.test("Export menu disposing", function(assert) {
     assert.equal(this.exportMenu.dispose.callCount, 1, "disposing of export menu is called");
 });
 
-QUnit.test("export menu option", function(assert) {
-    // arrange
-    var widget = this.createWidget();
-
-    // act
-    widget.option("export", { tag: "options" });
-
-    // assert
-    var exportOptions = this.exportMenu.setOptions.getCall(0).args[0].exportOptions;
-
-    assert.equal(exportOptions.fileName, "file", "file name");
-    assert.equal(exportOptions.format, "PNG", "format");
-    assert.equal(exportOptions.height, 150, "canvas height");
-    assert.equal(exportOptions.width, 200, "canvas width");
-
-    assert.ok(exportOptions.exportedAction, "exportedAction");
-    assert.ok(exportOptions.exportingAction, "exportingAction");
-    assert.ok(exportOptions.fileSavingAction, "fileSavingAction");
-});
-
 QUnit.test("Depends on theme", function(assert) {
     var widget = this.createWidget();
     this.exportMenu.setOptions.reset();
@@ -348,31 +336,79 @@ QUnit.test("Depends on theme", function(assert) {
 
 QUnit.test('Print method', function(assert) {
     // arrange
-    var widget = this.createWidget(),
-        svgNode = { style: {} };
+    var docSpy = {
+            open: sinon.spy(),
+            write: sinon.spy(),
+            close: sinon.spy()
+        },
+        printSpy = sinon.stub(),
+        closeSpy = sinon.stub();
 
-    widget.svg = sinon.spy();
     sinon.stub(window, "open", function() {
         return {
-            document: {
-                open: sinon.stub(),
-                write: sinon.stub(),
-                close: sinon.stub(),
-                body: { getElementsByTagName: sinon.stub().withArgs("svg").returns([svgNode]) }
-            },
-            print: sinon.stub(),
-            close: sinon.stub()
+            document: docSpy,
+            print: printSpy,
+            close: closeSpy
         };
     });
 
+    var done = assert.async();
+    var exportFunc = clientExporter.export,
+        exportedStub = sinon.spy(),
+        exportingStub = sinon.spy(),
+        fileSavingStub = sinon.spy(),
+        widget = this.createWidget({
+            "export": {
+                backgroundColor: "#ff0000",
+                proxyUrl: "testProxy",
+                format: "JPEG",
+                forceProxy: false,
+                margin: 40
+            },
+            onExporting: exportingStub,
+            onExported: exportedStub,
+            onFileSaving: fileSavingStub
+        });
+
     // act
-    widget.print();
+    widget.print().done(checkPrinting);
 
-    // assert
-    assert.ok(widget.svg.callCount, 1, "svg method");
-    assert.deepEqual(svgNode.style, { backgroundColor: "#ffffff" });
+    var that = this;
+    var firstExportCall = exportFunc.getCall(0);
+    var fileSavingEventArgs = { data: "imageData" };
+    firstExportCall.args[1].fileSavingAction(fileSavingEventArgs);
 
-    window.open.restore();
+    function checkPrinting() {
+        assert.ok(fileSavingEventArgs.cancel, "file should not be saved");
+
+        assert.ok(exportFunc.callCount, 1, "export was called one time");
+        assert.equal(firstExportCall.args[0], that.renderer.root.element, "export data");
+
+        assert.equal(firstExportCall.args[1].width, 200, "width");
+        assert.equal(firstExportCall.args[1].height, 150, "height");
+        assert.equal(firstExportCall.args[1].backgroundColor, "#ff0000", "backgroundColor");
+        assert.equal(firstExportCall.args[1].fileName, "file", "fileName");
+        assert.equal(firstExportCall.args[1].format, "PNG", "format");
+        assert.equal(firstExportCall.args[1].proxyUrl, "testProxy", "proxyUrl");
+        assert.equal(firstExportCall.args[1].margin, 0, "margin");
+        assert.equal(firstExportCall.args[1].forceProxy, true, "image data should be base64");
+        assert.ok(firstExportCall.args[1].fileSavingAction);
+        assert.equal(firstExportCall.args[1].exportingAction, null);
+        assert.equal(firstExportCall.args[1].exportedAction, null);
+
+        assert.equal(exportingStub.callCount, 0, "exporting event");
+        assert.equal(exportedStub.callCount, 0, "exported event");
+        assert.equal(fileSavingStub.callCount, 0, "file saving event");
+
+        assert.equal(docSpy.open.callCount, 1, "open doc");
+        assert.equal(docSpy.write.callCount, 1, "write doc");
+        assert.equal(docSpy.write.getCall(0).args[0], '<img src="data:image/png;base64,imageData"></img>', "write doc args");
+        assert.equal(printSpy.callCount, 1, "print doc");
+        assert.equal(closeSpy.callCount, 1, "close doc");
+
+        window.open.restore();
+        done();
+    }
 });
 
 QUnit.test("Export with right size after resize", function(assert) {
@@ -390,4 +426,43 @@ QUnit.test("Export with right size after resize", function(assert) {
     // assert
     assert.equal(exportFunc.getCall(0).args[1].width, 100, "width");
     assert.equal(exportFunc.getCall(0).args[1].height, 200, "height");
+});
+
+QUnit.test("Hide export menu before exporting and show after", function(assert) {
+    var exportFunc = clientExporter.export;
+    var widget = this.createWidget();
+
+    widget.option({
+        size: {
+            width: 100,
+            height: 200
+        }
+    });
+    widget.exportTo("testName", "jpeg");
+
+    // assert
+    assert.equal(this.exportMenu.hide.callCount, 1);
+    assert.equal(this.exportMenu.show.callCount, 1);
+
+    assert.ok(this.exportMenu.hide.getCall(0).calledBefore(exportFunc.getCall(0)));
+    assert.ok(this.exportMenu.show.getCall(0).calledAfter(exportFunc.getCall(0)));
+});
+QUnit.test("Hide export menu before printing and show after", function(assert) {
+    var exportFunc = clientExporter.export;
+    var widget = this.createWidget();
+
+    widget.option({
+        size: {
+            width: 100,
+            height: 200
+        }
+    });
+    widget.print();
+
+    // assert
+    assert.equal(this.exportMenu.hide.callCount, 1);
+    assert.equal(this.exportMenu.show.callCount, 1);
+
+    assert.ok(this.exportMenu.hide.getCall(0).calledBefore(exportFunc.getCall(0)));
+    assert.ok(this.exportMenu.show.getCall(0).calledAfter(exportFunc.getCall(0)));
 });
