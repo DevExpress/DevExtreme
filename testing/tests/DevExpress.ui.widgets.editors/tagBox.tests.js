@@ -509,7 +509,7 @@ QUnit.test("clear button should also clear the input value", function(assert) {
     $clearButton.trigger("dxclick");
 
     assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 0, "tags are cleared");
-    assert.equal($tagBox.find(".dx-texteditor-input").val(), "", "input is also cleared");
+    assert.equal($input.val(), "", "input is also cleared");
 });
 
 
