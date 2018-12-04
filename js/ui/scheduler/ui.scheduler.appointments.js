@@ -881,6 +881,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 items: virtualItems,
                 buttonColor: virtualGroup.buttonColor,
                 itemTemplate: this.option("itemTemplate"),
+                dropDownButtonTemplate: this.invoke("getDropDownButtonTemplate"),
                 buttonWidth: buttonWidth - this.option("_appointmentGroupButtonOffset"),
                 onAppointmentClick: this.option("onItemClick"),
                 isCompact: !virtualGroup.isAllDay && this.invoke("supportCompactDropDownAppointments")
