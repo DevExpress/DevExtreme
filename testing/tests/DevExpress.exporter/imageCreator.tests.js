@@ -1,10 +1,12 @@
-var $ = require("jquery"),
-    imageCreator = require("exporter").image.creator,
-    typeUtils = require("core/utils/type"),
-    testingMarkupStart = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>",
-    testingMarkupEnd = "</svg>",
-    browser = require("core/utils/browser"),
-    proxyUrlFormatter = require("data/proxy_url_formatter");
+import $ from "jquery";
+import exporter from "exporter";
+
+const imageCreator = exporter.image.creator;
+import typeUtils from "core/utils/type";
+const testingMarkupStart = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>";
+const testingMarkupEnd = "</svg>";
+import browser from "core/utils/browser";
+import proxyUrlFormatter from "data/proxy_url_formatter";
 
 function setupCanvasStub(drawnElements, paths) {
     var prototype = window.CanvasRenderingContext2D.prototype,
@@ -923,6 +925,35 @@ QUnit.test("Image with 404 href", function(assert) {
             done();
         }
     });
+});
+
+QUnit.test("Export image in group", function(assert) {
+    var done = assert.async(),
+        markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/add.png" visibility="visible"></image></g>' + testingMarkupEnd,
+        imageBlob = getData(markup),
+        context = window.CanvasRenderingContext2D.prototype;
+
+    assert.expect(5);
+    $.when(imageBlob).done(() => {
+        try {
+            assert.equal(this.drawnElements.length, 2, "Canvas elements count");
+            assert.equal(this.drawnElements[1].type, "image");
+            assert.equal(context.save.callCount, 3);
+            assert.equal(context.restore.callCount, 3);
+            assert.ok(context.restore.secondCall.calledAfter(context.save.lastCall));
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Export draws into hidden canvas", function(assert) {
+    var done = assert.async(),
+        markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/add.png" visibility="visible"></image></g>' + testingMarkupEnd;
+
+    getData(markup).then(done);
+
+    assert.strictEqual($("canvas")[0].hidden, true);
 });
 
 QUnit.test("Text", function(assert) {

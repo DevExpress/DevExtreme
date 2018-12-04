@@ -1,39 +1,35 @@
-var $ = require("../core/renderer"),
-    Color = require("../color"),
-    isFunction = require("../core/utils/type").isFunction,
-    svgUtils = require("../core/utils/svg"),
-    iteratorUtils = require("../core/utils/iterator"),
-    extend = require("../core/utils/extend").extend,
-    domAdapter = require("../core/dom_adapter"),
-    domUtils = require("../core/utils/dom"),
-    windowUtils = require("../core/utils/window"),
-    window = windowUtils.getWindow(),
-    camelize = require("../core/utils/inflector").camelize,
-    deferredUtils = require("../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
+import $ from "../core/renderer";
+import Color from "../color";
+import { isFunction, isDeferred } from "../core/utils/type";
+import svgUtils from "../core/utils/svg";
+import iteratorUtils from "../core/utils/iterator";
+import { extend } from "../core/utils/extend";
+import domAdapter from "../core/dom_adapter";
+import domUtils from "../core/utils/dom";
+import windowUtils from "../core/utils/window";
+const window = windowUtils.getWindow();
+import { camelize } from "../core/utils/inflector";
+import { Deferred } from "../core/utils/deferred";
 
-    _math = Math,
-    PI = _math.PI,
-    _min = _math.min,
-    _abs = _math.abs,
-    _sqrt = _math.sqrt,
-    _pow = _math.pow,
-    _atan2 = _math.atan2,
-    _cos = _math.cos,
-    _sin = _math.sin,
+const _math = Math;
+const PI = _math.PI;
+const _min = _math.min;
+const _abs = _math.abs;
+const _sqrt = _math.sqrt;
+const _pow = _math.pow;
+const _atan2 = _math.atan2;
+const _cos = _math.cos;
+const _sin = _math.sin;
+const _each = iteratorUtils.each;
+const _number = Number;
 
-    _each = iteratorUtils.each,
-    _number = Number,
+const IMAGE_QUALITY = 1;
+const TEXT_DECORATION_LINE_WIDTH_COEFF = 0.05;
+const DEFAULT_FONT_SIZE = "10px";
+const DEFAULT_FONT_FAMILY = "sans-serif";
+const DEFAULT_TEXT_COLOR = "#000";
 
-    IMAGE_QUALITY = 1,
-    TEXT_DECORATION_LINE_WIDTH_COEFF = 0.05,
-    DEFAULT_FONT_SIZE = "10px",
-    DEFAULT_FONT_FAMILY = "sans-serif",
-    DEFAULT_TEXT_COLOR = "#000",
-
-    clipPaths,
-    imageDeferreds,
+let clipPaths,
     patterns,
     filters;
 
@@ -42,6 +38,7 @@ function createCanvas(width, height, margin) {
 
     canvas.width = width + margin * 2;
     canvas.height = height + margin * 2;
+    canvas.hidden = true;
 
     return canvas;
 }
@@ -154,10 +151,10 @@ function drawImage(context, options) {
         d.resolve();
     };
 
-    imageDeferreds.push(d);
-
     image.setAttribute("crossOrigin", "anonymous");
     image.src = options["href"] || options["xlink:href"];
+
+    return d;
 }
 
 function drawPath(context, dAttr) {
@@ -394,6 +391,8 @@ function drawElement(element, context, parentOptions) {
     clipElement(context, options);
     aggregateOpacity(options);
 
+    let d;
+
     context.beginPath();
     switch(element.tagName) {
         case undefined:
@@ -404,7 +403,7 @@ function drawElement(element, context, parentOptions) {
             drawTextElement(element.childNodes, context, options);
             break;
         case "image":
-            drawImage(context, options);
+            d = drawImage(context, options);
             break;
         case "path":
             drawPath(context, options.d);
@@ -426,6 +425,8 @@ function drawElement(element, context, parentOptions) {
     }
 
     context.restore();
+
+    return d;
 }
 
 function applyFilter(context, options) {
@@ -512,29 +513,53 @@ function createFilter(element) {
     filters[element.id] = filterOptions;
 }
 
+function asyncEach(array, callback, d) {
+    d = d || new Deferred();
+    if(array.length === 0) {
+        return d.resolve();
+    }
+
+    const result = callback(array[0]);
+    function next() {
+        asyncEach(Array.prototype.slice.call(array, 1), callback, d);
+    }
+    if(isDeferred(result)) {
+        result.then(next);
+    } else {
+        next();
+    }
+
+    return d;
+}
+
 function drawCanvasElements(elements, context, parentOptions) {
-    var options;
-    _each(elements, function(_, element) {
+    return asyncEach(elements, function(element) {
         switch(element.tagName && element.tagName.toLowerCase()) {
             case "g":
-                options = extend({}, parentOptions, getElementOptions(element));
+                const options = extend({}, parentOptions, getElementOptions(element));
 
                 context.save();
 
                 transformElement(context, options);
                 clipElement(context, options);
-                drawCanvasElements(element.childNodes, context, options);
 
-                context.restore();
+                function onDone() {
+                    context.restore();
+                    d.resolve();
+                }
+                const d = drawCanvasElements(element.childNodes, context, options);
+                if(isDeferred(d)) {
+                    d.then(onDone);
+                } else {
+                    onDone();
+                }
+                return d;
 
-                break;
             case "defs":
                 clipPaths = {};
                 patterns = {};
                 filters = {};
-
-                drawCanvasElements(element.childNodes, context);
-                break;
+                return drawCanvasElements(element.childNodes, context);
             case "clippath":
                 createClipPath(element);
                 break;
@@ -545,7 +570,7 @@ function drawCanvasElements(elements, context, parentOptions) {
                 createFilter(element);
                 break;
             default:
-                drawElement(element, context, parentOptions);
+                return drawElement(element, context, parentOptions);
         }
     });
 }
@@ -616,37 +641,30 @@ function drawBackground(context, width, height, backgroundColor, margin) {
 }
 
 function getCanvasFromSvg(markup, width, height, backgroundColor, margin) {
-    var canvas = createCanvas(width, height, margin),
+    var d = new Deferred(),
+        canvas = createCanvas(width, height, margin),
         context = canvas.getContext("2d"),
         svgElem = svgUtils.getSvgElement(markup);
 
     context.translate(margin, margin);
 
-    imageDeferreds = [];
     domAdapter.getBody().appendChild(canvas); // for rtl mode
     if(svgElem.attributes.direction) {
         canvas.dir = svgElem.attributes.direction.textContent;
     }
 
     drawBackground(context, width, height, backgroundColor, margin);
-    drawCanvasElements(svgElem.childNodes, context, {});
-
-    domAdapter.getBody().removeChild(canvas);
-
-    return canvas;
-}
-
-function resolveString(string, canvas, mimeType) {
-    when.apply($, imageDeferreds).done(function() {
-        var resultString = getStringFromCanvas(canvas, mimeType);
-        string.resolve(resultString);
+    drawCanvasElements(svgElem.childNodes, context, {}).then(() => {
+        domAdapter.getBody().removeChild(canvas);
+        d.resolve(canvas);
     });
+
+    return d;
 }
 
 exports.imageCreator = {
     getImageData: function(markup, options) {
         var mimeType = "image/" + options.format,
-            string = new Deferred(),
             width = options.width,
             height = options.height,
             backgroundColor = options.backgroundColor;
@@ -655,26 +673,19 @@ exports.imageCreator = {
             parseAttributes = options.__parseAttributesFn;
         }
 
-        resolveString(string, getCanvasFromSvg(markup, width, height, backgroundColor, options.margin), mimeType);
-
-        return string;
+        return getCanvasFromSvg(markup, width, height, backgroundColor, options.margin).then(canvas => getStringFromCanvas(canvas, mimeType));
     },
 
     getData: function(markup, options) {
-        var that = this,
-            imageData = exports.imageCreator.getImageData(markup, options),
-            mimeType = "image/" + options.format,
-            data = new Deferred();
+        var that = this;
 
-        when(imageData).done(function(binaryData) {
-            imageData = isFunction(window.Blob) && !options.forceProxy ?
+        return exports.imageCreator.getImageData(markup, options).then(binaryData => {
+            const mimeType = "image/" + options.format;
+
+            return isFunction(window.Blob) && !options.forceProxy ?
                 that._getBlob(binaryData, mimeType) :
                 that._getBase64(binaryData);
-
-            data.resolve(imageData);
         });
-
-        return data;
     },
 
     _getBlob: function(binaryData, mimeType) {
@@ -694,7 +705,7 @@ exports.imageCreator = {
 };
 
 exports.getData = function(data, options, callback) {
-    exports.imageCreator.getData(data, options).done(callback);
+    exports.imageCreator.getData(data, options).then(callback);
 };
 
 exports.testFormats = function(formats) {
