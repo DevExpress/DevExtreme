@@ -660,7 +660,7 @@ QUnit.test("Scheduler timeline month getPositionShift should return null shift",
         currentDate: new Date(2015, 9, 21)
     });
 
-    assert.deepEqual(this.instance.getPositionShift(), { top: 0, left: 0, cellShift: 0 }, "First view date is OK");
+    assert.deepEqual(this.instance.getPositionShift(), { top: 0, left: 0, cellPosition: 0 }, "First view date is OK");
 });
 
 QUnit.test("Scrollables should be updated after currentDate changing", function(assert) {
