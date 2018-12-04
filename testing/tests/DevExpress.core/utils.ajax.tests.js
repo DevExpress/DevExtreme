@@ -308,8 +308,8 @@ QUnit.test("Send data with request (jsonp)", function(assert) {
         var params = {},
             urlParts = url.split("?")[1].split("&");
 
-        for(const urlPart of urlParts) {
-            var paramParts = urlPart.split("=");
+        for(var i = 0; i < urlParts.length; i++) {
+            var paramParts = urlParts[i].split("=");
             params[paramParts[0]] = paramParts[1];
         }
 
@@ -434,10 +434,10 @@ QUnit.test("Accept headers for different dataTypes", function(assert) {
         { type: "script", header: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" },
         { type: "jsonp", header: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" }];
 
-    for(const dataType of dataTypes) {
+    for(var i = 0; i < dataTypes.length; i++) {
         ajax.sendRequest({
             url: "/some-url",
-            dataType: dataType.type
+            dataType: dataTypes[i].type
         });
     }
 
