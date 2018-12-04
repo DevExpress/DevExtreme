@@ -154,7 +154,7 @@ QUnit.test('Create numeric translator', function(assert) {
     assert.ok($.isFunction(translator.getInterval));
 });
 
-QUnit.test('Create numeric translator when business range delta = 0, Min = max = minVisible = maxVisible', function(assert) {
+QUnit.test('Create numeric translator when business range delta = 0, Min = max = minVisible = maxVisible != 0', function(assert) {
     var range = {
             min: 100,
             max: 100,
@@ -177,6 +177,29 @@ QUnit.test('Create numeric translator when business range delta = 0, Min = max =
     assert.equal(translator.to(100), 325);
     assert.equal(translator.to(null), null);
     assert.equal(translator.to(12), null);
+});
+
+QUnit.test('Create horizontal numeric translator when business range delta = 0, Min = max = minVisible = maxVisible = 0 (T696532)', function(assert) {
+    var range = {
+            min: 0,
+            max: 0,
+            interval: 0,
+            axisType: 'continuous',
+            dataType: 'numeric'
+        },
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = this.createTranslator(range, canvas);
+
+    assert.ok(translator);
+    assert.equal(translator._canvasOptions.rangeMin, 0, 'range min is correct');
+    assert.equal(translator._canvasOptions.rangeMax, 0, 'range max is correct');
+    assert.equal(translator._canvasOptions.rangeMinVisible, 0, 'range min visible is correct');
+    assert.equal(translator._canvasOptions.rangeMaxVisible, 0, 'range max visible is correct');
+
+    assert.equal(translator.translate(0), 70);
+    assert.equal(translator.to(0), 70);
 });
 
 QUnit.test('Create numeric translator when business range delta = 0, min < minVisible = maxVisible != 0 < max', function(assert) {
@@ -2112,8 +2135,13 @@ QUnit.test('Default value', function(assert) {
     checkTranslator(1500, { min: -200, max: -100, invert: true, axisType: 'continuous', dataType: 'numeric' }, { isHorizontal: false }, 'Invert = true. Position = vertical. Range is negative');
     checkTranslator(1000, { min: -200, max: 200, invert: true, axisType: 'continuous', dataType: 'numeric' }, { isHorizontal: false }, 'Invert = true. Position = vertical. Range includes zero');
 
-    checkTranslator(1000, { min: 180, max: 180, axisType: 'continuous', dataType: 'numeric' }, { }, 'Invert = false. Position = horizontal. Middle of the canvas is default');
-    checkTranslator(1000, { min: new Date(10000), max: new Date(10000), invert: true, axisType: 'continuous', dataType: 'datetime' }, 'Datetime. Invert = true. Position = horizontal. Middle of the canvas is default');
+    checkTranslator(500, { min: 180, max: 180, axisType: 'continuous', dataType: 'numeric' }, { }, 'Invert = false. Position = horizontal. Start of the canvas is default');
+    checkTranslator(1500, { min: new Date(10000), max: new Date(10000), invert: true, axisType: 'continuous', dataType: 'datetime' }, {}, 'Datetime. Invert = true. Position = horizontal. End of the canvas is default');
+
+    checkTranslator(500, { min: 0, max: 0, axisType: 'continuous', dataType: 'numeric' }, { }, 'Invert = false. Position = horizontal. Start of the canvas is default');
+    checkTranslator(1500, { min: 0, max: 0, axisType: 'continuous', dataType: 'numeric' }, { isHorizontal: false }, 'Invert = false. Position = vertical. End of the canvas is default');
+
+    checkTranslator(1500, { min: -100, max: 0, axisType: 'continuous', dataType: 'numeric' }, { }, 'Invert = false. Position = horizontal. End of the canvas is default');
 });
 
 QUnit.test('Other values', function(assert) {
