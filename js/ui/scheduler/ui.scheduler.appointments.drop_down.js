@@ -133,7 +133,7 @@ var dropDownAppointments = Class.inherit({
             this._initDynamicButtonTemplate(items.data.length, isCompact);
 
             var template = this.instance._getAppointmentTemplate("dropDownAppointmentTemplate"),
-                buttonTemplate = this.instance._getAppointmentTemplate("dropDownButtonTemplate");
+                buttonTemplate = this.instance._getAppointmentTemplate("appointmentCollectorTemplate");
 
             this.instance._createComponent($menu, DropDownMenu, {
                 buttonIcon: null,
@@ -281,7 +281,7 @@ var dropDownAppointments = Class.inherit({
     _initDynamicButtonTemplate: function(count, isCompact) {
         var that = this;
 
-        this.instance._defaultTemplates["dropDownButton"] = new FunctionTemplate(function(options) {
+        this.instance._defaultTemplates["appointmentCollector"] = new FunctionTemplate(function(options) {
             return that._createButtonTemplate(count, $(options.container), isCompact);
         });
     },

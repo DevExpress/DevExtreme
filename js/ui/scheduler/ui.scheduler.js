@@ -193,7 +193,7 @@ var Scheduler = Widget.inherit({
                 */
 
             /**
-                * @pseudo DropDownButtonTemplate
+                * @pseudo appointmentCollectorTemplate
                 * @type template|function
                 * @default "dropDownButton"
                 * @type_function_param1 data:object
@@ -307,9 +307,9 @@ var Scheduler = Widget.inherit({
                 */
 
             /**
-                * @name dxSchedulerOptions.views.dropDownButtonTemplate
-                * @default "dropDownButton"
-                * @extends DropDownButtonTemplate
+                * @name dxSchedulerOptions.views.appointmentCollectorTemplate
+                * @default "appointmentCollector"
+                * @extends appointmentCollectorTemplate
                 */
 
             /**
@@ -443,11 +443,11 @@ var Scheduler = Widget.inherit({
             dropDownAppointmentTemplate: "dropDownAppointment",
 
             /**
-                * @name dxSchedulerOptions.dropDownButtonTemplate
-                * @default "dropDownButton"
+                * @name dxSchedulerOptions.appointmentCollectorTemplate
+                * @default "appointmentCollector"
                 * @extends AppointmentTemplate
                 */
-            dropDownButtonTemplate: "dropDownButton",
+            appointmentCollectorTemplate: "appointmentCollector",
 
             /**
                 * @name dxSchedulerOptions.dataCellTemplate

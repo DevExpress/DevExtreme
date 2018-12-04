@@ -437,10 +437,6 @@ var subscribes = {
         this._dropDownAppointments.render(options, this);
     },
 
-    getDropDownButtonTemplate: function() {
-        return this.option("dropDownButtonTemplate");
-    },
-
     supportCompactDropDownAppointments: function() {
         return this._workSpace._supportCompactDropDownAppointments();
     },
