@@ -19,6 +19,10 @@ var isAppendMode = function(that) {
     return that.option("scrolling.mode") === SCROLLING_MODE_INFINITE && !that._isVirtual;
 };
 
+exports.getPixelRatio = function(window) {
+    return window.devicePixelRatio || 1;
+};
+
 exports.getContentHeightLimit = function(browser) {
     if(browser.msie) {
         return 4000000;
@@ -26,7 +30,7 @@ exports.getContentHeightLimit = function(browser) {
         return 8000000;
     }
 
-    return 15000000;
+    return 15000000 / exports.getPixelRatio(window);
 };
 
 exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, $targetElement) {
