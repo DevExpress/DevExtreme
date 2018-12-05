@@ -188,7 +188,9 @@ var ResizingController = modules.ViewController.inherit({
                 $rowsTable.get(0).style.width = isBestFit ? "auto" : "";
             }
             if(browser.msie && parseInt(browser.version) === 11) {
-                $rowsTable.find("." + this.addWidgetPrefix(TABLE_FIXED_CLASS)).css("width", isBestFit ? "10px" : "");
+                $rowsTable.find("." + this.addWidgetPrefix(TABLE_FIXED_CLASS)).each(function() {
+                    this.style.width = isBestFit ? "10px" : "";
+                });
             }
         } else {
             $element.find("." + this.addWidgetPrefix(TABLE_CLASS)).toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
