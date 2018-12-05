@@ -141,8 +141,17 @@ var dropDownAppointments = Class.inherit({
                 popupHeight: "auto",
                 popupMaxHeight: 200,
                 items: items.data,
-                // buttonTemplate: this.
-                buttonTemplate: buttonTemplate,
+                buttonTemplate: new FunctionTemplate(function(options) {
+                    var model = {
+                        appointmentsCount: items.data.length,
+                        isCompact: isCompact
+                    };
+
+                    return buttonTemplate.render({
+                        model: model,
+                        container: options.container
+                    });
+                }),
                 buttonWidth: config.buttonWidth,
                 closeOnClick: false,
                 onItemClick: (function(args) {

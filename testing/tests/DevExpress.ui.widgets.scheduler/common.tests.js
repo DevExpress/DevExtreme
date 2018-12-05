@@ -408,6 +408,32 @@ QUnit.testStart(function() {
         $(".dx-scheduler-dropdown-appointments").eq(1).dxDropDownMenu("instance").open();
     });
 
+    QUnit.test("appointmentCollectorTemplate rendering args should be correct", function(assert) {
+        this.instance.option({
+            dataSource: [{
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                recurrenceRule: "FREQ=DAILY;COUNT=2",
+                allDay: true,
+                text: "Task 1"
+            }, {
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                recurrenceRule: "FREQ=DAILY;COUNT=2",
+                text: "Task 2"
+            }],
+            maxAppointmentsPerCell: 1,
+            currentDate: new Date(2015, 4, 24),
+            views: ["month"],
+            appointmentCollectorTemplate: function(data) {
+                assert.equal(data.appointmentsCount, 1, "Appointments count is OK");
+                assert.equal(data.isCompact, false, "Compact flag is ok");
+            },
+            currentView: "month"
+        });
+    });
+
 })("Initialization");
 
 (function() {
@@ -4122,6 +4148,46 @@ QUnit.testStart(function() {
                 }
             }],
             dropDownAppointmentTemplate: function() {
+                countCallTemplate1++;
+            },
+            currentView: "month"
+        });
+
+        $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
+
+        assert.equal(countCallTemplate1, 0, "count call first template");
+        assert.notEqual(countCallTemplate2, 0, "count call second template");
+    });
+
+    QUnit.test("Scheduler should have specific appointmentCollectorTemplate setting of the view", function(assert) {
+        var countCallTemplate1 = 0,
+            countCallTemplate2 = 0;
+
+        this.createInstance({
+            dataSource: [{
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 1"
+            }, {
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 2"
+            }, {
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 3"
+            }],
+            currentDate: new Date(2015, 4, 24),
+            views: [{
+                type: "month",
+                appointmentCollectorTemplate: function() {
+                    countCallTemplate2++;
+                }
+            }],
+            appointmentCollectorTemplate: function() {
                 countCallTemplate1++;
             },
             currentView: "month"
