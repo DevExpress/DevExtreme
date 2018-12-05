@@ -1010,6 +1010,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
 var TablePositionViewController = modules.ViewController.inherit({
     update: function(top) {
         var that = this,
+            params = {},
             $element = that._columnHeadersView.element(),
             offset = $element && $element.offset(),
             offsetTop = offset && offset.top || 0,
@@ -1017,10 +1018,13 @@ var TablePositionViewController = modules.ViewController.inherit({
             columnsHeadersHeight = that._columnHeadersView ? that._columnHeadersView.getHeight() : 0,
             rowsHeight = that._rowsView ? that._rowsView.height() - that._rowsView.getScrollbarWidth(true) : 0;
 
-        that.positionChanged.fire({
-            height: columnsHeadersHeight + rowsHeight - diffOffsetTop,
-            top: $element && $element.length && $element[0].offsetTop + diffOffsetTop
-        });
+        params.height = columnsHeadersHeight + rowsHeight - diffOffsetTop;
+
+        if(top !== null && $element && $element.length) {
+            params.top = $element[0].offsetTop + diffOffsetTop;
+        }
+
+        that.positionChanged.fire(params);
     },
 
     init: function() {
@@ -1034,7 +1038,7 @@ var TablePositionViewController = modules.ViewController.inherit({
 
         that._rowsView.resizeCompleted.add(function() {
             if(that.option("allowColumnResizing")) {
-                that.update();
+                that.update(null);
             }
         });
     },
