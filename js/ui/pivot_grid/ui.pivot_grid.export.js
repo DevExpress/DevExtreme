@@ -48,12 +48,38 @@ exports.ExportMixin = extend({}, exportMixin, {
         return cellCount;
     },
 
+    _correctCellsInfoItemLengths: function(cellsInfo, expectedLength) {
+        for(let i = 0; i < cellsInfo.length; i++) {
+            while(cellsInfo[i].length < expectedLength) {
+                cellsInfo[i].push({});
+            }
+        }
+        return cellsInfo;
+    },
+
+    _calculateCellInfoItemLength: function(columnsRow) {
+        let result = 0;
+        for(let columnIndex = 0; columnIndex < columnsRow.length; columnIndex++) {
+            result += isDefined(columnsRow[columnIndex].colspan) ? columnsRow[columnIndex].colspan : 1;
+        }
+        return result;
+    },
+
     _getAllItems: function(columnsInfo, rowsInfoItems, cellsInfo) {
         var cellIndex,
             rowIndex,
-            sourceItems = columnsInfo.concat(cellsInfo),
+            correctedCellsInfo = cellsInfo,
+            sourceItems,
             rowsLength = this._getLength(rowsInfoItems),
             headerRowsCount = columnsInfo.length;
+
+        if(columnsInfo.length > 0 && columnsInfo[0].length > 0 && cellsInfo.length > 0 && cellsInfo[0].length === 0) {
+            const cellInfoItemLength = this._calculateCellInfoItemLength(columnsInfo[0]);
+            if(cellInfoItemLength > 0) {
+                correctedCellsInfo = this._correctCellsInfoItemLengths(cellsInfo, cellInfoItemLength);
+            }
+        }
+        sourceItems = columnsInfo.concat(correctedCellsInfo);
 
         for(rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex++) {
             for(cellIndex = rowsInfoItems[rowIndex].length - 1; cellIndex >= 0; cellIndex--) {
