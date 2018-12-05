@@ -383,8 +383,8 @@ exports.AreaItem = Class.inherit({
             colgroupElementHTML += '<col style="width: ' + columnWidth[i] + 'px">';
         }
         this._colgroupElement.html(colgroupElementHTML);
-        this._tableWidth = totalWidth;
-        tableElement.style.width = totalWidth + 'px';
+        this._tableWidth = totalWidth - this._groupWidth > 0.01 ? Math.ceil(totalWidth) : totalWidth;
+        tableElement.style.width = this._tableWidth + 'px';
         tableElement.style.tableLayout = 'fixed';
     },
 
