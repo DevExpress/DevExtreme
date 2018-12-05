@@ -5409,6 +5409,19 @@ QUnit.test('Set column width', function(assert) {
     assert.deepEqual(setColumnWidth([40, 50, 30, 60, 80]), [40, 50, 30, 140]);
 });
 
+// T696415
+QUnit.test('Set column width with floating point', function(assert) {
+    // arrange
+    var headersArea = createHeadersArea(null, true);
+
+    headersArea.render($('#pivotArea'), this.data);
+
+    headersArea.groupWidth(100);
+    headersArea.setColumnsWidth([40, 50, 30, 60.29]);
+
+    assert.equal(headersArea.tableElement().width(), 40 + 50 + 30 + 61, "table width is correct");
+});
+
 QUnit.test('Update colspans. when new columns count greater than headers area have', function(assert) {
     // arrange
     var headersArea = createHeadersArea(null, true);
