@@ -5547,6 +5547,29 @@ QUnit.test("Error row is not hidden when rowKey is undefined by mode is cell", f
     clock.restore();
 });
 
+// T689367
+QUnit.test("Horizontal scroll should not exist if master-detail contains the simple nested grid", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        dataSource: [{ id: 1 }],
+        loadingTimeout: undefined,
+        columnAutoWidth: true,
+        masterDetail: {
+            autoExpandAll: true,
+            template: function(detailElement) {
+                $("<div>").appendTo(detailElement).dxDataGrid({
+                    loadingTimeout: undefined,
+                    columns: ["field1"]
+                });
+            }
+        }
+    });
+
+    // assert
+    var scrollable = dataGrid.getScrollable();
+    assert.equal($(scrollable.content()).width(), $(scrollable._container()).width(), "no scroll");
+});
+
 if(browser.msie && parseInt(browser.version) <= 11) {
     QUnit.test("Update the scrollable for IE browsers when the adaptive column is hidden", function(assert) {
         // arrange
