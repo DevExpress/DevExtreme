@@ -600,8 +600,14 @@ var DateBox = DropDownEditor.inherit({
 
     _valueChangeEventHandler: function(e) {
         var text = this.option("text"),
-            parsedDate = this._getParsedDate(text),
-            value = this.dateOption("value") || this._getDateByDefault(),
+            currentValue = this.dateOption("value");
+
+        if(text === this._getDisplayedText(currentValue)) {
+            return;
+        }
+
+        var parsedDate = this._getParsedDate(text),
+            value = currentValue || this._getDateByDefault(),
             type = this.option("type"),
             newValue = uiDateUtils.mergeDates(value, parsedDate, type),
             date = parsedDate && type === "time" ? newValue : parsedDate;
