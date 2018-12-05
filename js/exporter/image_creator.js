@@ -29,10 +29,6 @@ const DEFAULT_FONT_SIZE = "10px";
 const DEFAULT_FONT_FAMILY = "sans-serif";
 const DEFAULT_TEXT_COLOR = "#000";
 
-let clipPaths,
-    patterns,
-    filters;
-
 function createCanvas(width, height, margin) {
     var canvas = $("<canvas>")[0];
 
@@ -130,7 +126,7 @@ function drawRect(context, options) {
     }
 }
 
-function drawImage(context, options) {
+function drawImage(context, options, shared) {
     var d = new Deferred(),
         image = new window.Image();
 
@@ -139,7 +135,7 @@ function drawImage(context, options) {
 
         context.globalAlpha = options.globalAlpha;
         transformElement(context, options);
-        clipElement(context, options);
+        clipElement(context, options, shared);
 
         context.drawImage(image, options.x, options.y, options.width, options.height);
 
@@ -249,7 +245,7 @@ function drawText(context, options) {
     drawTextDecoration(context, options);
 }
 
-function drawTextDecoration(context, options) {
+function drawTextDecoration(context, options, shared) {
     if(!options.textDecoration || options.textDecoration === "none") {
         return;
     }
@@ -273,16 +269,8 @@ function drawTextDecoration(context, options) {
     }
 
     context.rect(x, y, textWidth, lineHeight);
-    fillElement(context, options);
+    fillElement(context, options, shared);
     strokeElement(context, options);
-}
-
-function createClipPath(element) {
-    clipPaths[element.attributes.id.textContent] = element.childNodes[0];
-}
-
-function createPattern(element) {
-    patterns[element.attributes.id.textContent] = element;
 }
 
 function aggregateOpacity(options) {
@@ -305,7 +293,7 @@ function hasTspan(element) {
     return false;
 }
 
-function drawTextElement(childNodes, context, options) {
+function drawTextElement(childNodes, context, options, shared) {
     var lines = [],
         line,
         offset = 0;
@@ -314,13 +302,13 @@ function drawTextElement(childNodes, context, options) {
         var element = childNodes[i];
 
         if(element.tagName === undefined) {
-            drawElement(element, context, options);
+            drawElement(element, context, options, shared);
         } else if(element.tagName === "tspan" || element.tagName === "text") {
             var elementOptions = getElementOptions(element),
                 mergedOptions = extend({}, options, elementOptions);
 
             if(element.tagName === "tspan" && hasTspan(element)) {
-                drawTextElement(element.childNodes, context, mergedOptions);
+                drawTextElement(element.childNodes, context, mergedOptions, shared);
                 continue;
             }
 
@@ -370,13 +358,13 @@ function drawTextElement(childNodes, context, options) {
         });
 
         line.elements.forEach(function(element, index) {
-            drawTextElement(element.childNodes, context, line.options[index]);
+            drawTextElement(element.childNodes, context, line.options[index], shared);
         });
 
     });
 }
 
-function drawElement(element, context, parentOptions) {
+function drawElement(element, context, parentOptions, shared) {
     var tagName = element.tagName,
         isText = tagName === "text" || tagName === "tspan" || tagName === undefined,
         isImage = tagName === "image",
@@ -388,7 +376,7 @@ function drawElement(element, context, parentOptions) {
 
     context.save();
     !isImage && transformElement(context, options);
-    clipElement(context, options);
+    clipElement(context, options, shared);
     aggregateOpacity(options);
 
     let d;
@@ -400,10 +388,10 @@ function drawElement(element, context, parentOptions) {
             break;
         case "text":
         case "tspan":
-            drawTextElement(element.childNodes, context, options);
+            drawTextElement(element.childNodes, context, options, shared);
             break;
         case "image":
-            d = drawImage(context, options);
+            d = drawImage(context, options, shared);
             break;
         case "path":
             drawPath(context, options.d);
@@ -417,10 +405,10 @@ function drawElement(element, context, parentOptions) {
             break;
     }
 
-    applyFilter(context, options);
+    applyFilter(context, options, shared);
 
     if(!isText) {
-        fillElement(context, options);
+        fillElement(context, options, shared);
         strokeElement(context, options);
     }
 
@@ -429,12 +417,12 @@ function drawElement(element, context, parentOptions) {
     return d;
 }
 
-function applyFilter(context, options) {
+function applyFilter(context, options, shared) {
     var filterOptions,
         id = parseUrl(options.filter);
 
     if(id) {
-        filterOptions = filters && filters[id];
+        filterOptions = shared.filters[id];
 
         if(!filterOptions) {
             filterOptions = {
@@ -468,9 +456,9 @@ function transformElement(context, options) {
     }
 }
 
-function clipElement(context, options) {
+function clipElement(context, options, shared) {
     if(options["clip-path"]) {
-        drawElement(clipPaths[parseUrl(options["clip-path"])], context, {});
+        drawElement(shared.clipPaths[parseUrl(options["clip-path"])], context, {}, shared);
         context.clip();
         delete options["clip-path"];
     }
@@ -510,7 +498,7 @@ function createFilter(element) {
         }
     });
 
-    filters[element.id] = filterOptions;
+    return filterOptions;
 }
 
 function asyncEach(array, callback, d) {
@@ -532,7 +520,7 @@ function asyncEach(array, callback, d) {
     return d;
 }
 
-function drawCanvasElements(elements, context, parentOptions) {
+function drawCanvasElements(elements, context, parentOptions, shared) {
     return asyncEach(elements, function(element) {
         switch(element.tagName && element.tagName.toLowerCase()) {
             case "g":
@@ -541,13 +529,13 @@ function drawCanvasElements(elements, context, parentOptions) {
                 context.save();
 
                 transformElement(context, options);
-                clipElement(context, options);
+                clipElement(context, options, shared);
 
                 function onDone() {
                     context.restore();
                     d.resolve();
                 }
-                const d = drawCanvasElements(element.childNodes, context, options);
+                const d = drawCanvasElements(element.childNodes, context, options, shared);
                 if(isDeferred(d)) {
                     d.then(onDone);
                 } else {
@@ -556,21 +544,18 @@ function drawCanvasElements(elements, context, parentOptions) {
                 return d;
 
             case "defs":
-                clipPaths = {};
-                patterns = {};
-                filters = {};
-                return drawCanvasElements(element.childNodes, context);
+                return drawCanvasElements(element.childNodes, context, {}, shared);
             case "clippath":
-                createClipPath(element);
+                shared.clipPaths[element.attributes.id.textContent] = element.childNodes[0];
                 break;
             case "pattern":
-                createPattern(element);
+                shared.patterns[element.attributes.id.textContent] = element;
                 break;
             case "filter":
-                createFilter(element);
+                shared.filters[element.id] = createFilter(element);
                 break;
             default:
-                return drawElement(element, context, parentOptions);
+                return drawElement(element, context, parentOptions, shared);
         }
     });
 }
@@ -599,22 +584,22 @@ function strokeElement(context, options, isText) {
     }
 }
 
-function getPattern(context, fill) {
-    var pattern = patterns[parseUrl(fill)],
+function getPattern(context, fill, shared) {
+    var pattern = shared.patterns[parseUrl(fill)],
         options = getElementOptions(pattern),
         patternCanvas = createCanvas(options.width, options.height, 0),
         patternContext = patternCanvas.getContext("2d");
 
-    drawCanvasElements(pattern.childNodes, patternContext, options);
+    drawCanvasElements(pattern.childNodes, patternContext, options, shared);
 
     return context.createPattern(patternCanvas, "repeat");
 }
 
-function fillElement(context, options) {
+function fillElement(context, options, shared) {
     var fill = options.fill;
 
     if(fill && fill !== "none") {
-        context.fillStyle = fill.search(/url/) === -1 ? fill : getPattern(context, fill);
+        context.fillStyle = fill.search(/url/) === -1 ? fill : getPattern(context, fill, shared);
         context.globalAlpha = options.fillOpacity;
         context.fill();
     }
@@ -654,7 +639,11 @@ function getCanvasFromSvg(markup, width, height, backgroundColor, margin) {
     }
 
     drawBackground(context, width, height, backgroundColor, margin);
-    drawCanvasElements(svgElem.childNodes, context, {}).then(() => {
+    drawCanvasElements(svgElem.childNodes, context, {}, {
+        clipPaths: {},
+        patterns: {},
+        filters: {}
+    }).then(() => {
         domAdapter.getBody().removeChild(canvas);
         d.resolve(canvas);
     });
