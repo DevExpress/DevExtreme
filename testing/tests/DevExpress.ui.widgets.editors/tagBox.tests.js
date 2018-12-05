@@ -505,8 +505,9 @@ QUnit.test("clear button should also clear the input value", function(assert) {
 
     keyboard.type("123");
 
-    var $clearButton = $tagBox.find(".dx-clear-button-area");
-    $clearButton.trigger("dxclick");
+    $tagBox
+        .find(".dx-clear-button-area")
+        .trigger("dxclick");
 
     assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 0, "tags are cleared");
     assert.equal($input.val(), "", "input is also cleared");
