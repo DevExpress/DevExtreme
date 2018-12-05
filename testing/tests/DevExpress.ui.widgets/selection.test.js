@@ -839,6 +839,59 @@ QUnit.test("selection should works with complex key", function(assert) {
     assert.deepEqual(selectionChangedArgs[0].selectedItems, [{ data: { id: 2 }, text: "Item 2" }], "selectedItems is right");
 });
 
+// T696853
+QUnit.test("selection should works with complex key if key with another item order", function(assert) {
+    var selectionChangedArgs = [];
+    var dataSource = new DataSource({
+        pageSize: 2,
+        store: {
+            type: "array",
+            data: [
+                { data1: { id: 1 }, data2: { id: 1 }, text: "Item 1" },
+                { data1: { id: 2 }, data2: { id: 1 }, text: "Item 2" },
+                { data1: { id: 3 }, data2: { id: 1 }, text: "Item 3" }
+            ],
+            key: ["data1.id", "data2.id"]
+        }
+    });
+
+    var selection = new Selection({
+        onSelectionChanged: function(args) {
+            selectionChangedArgs.push(args);
+        },
+        key: function() {
+            var store = dataSource && dataSource.store();
+            return store && store.key();
+        },
+        keyOf: function(item) {
+            var store = dataSource.store();
+            return store && store.keyOf(item);
+        },
+        load: function(options) {
+            return dataSource && dataSource.store().load(options);
+        },
+        dataFields: function() {
+            return dataSource.select();
+        },
+        plainItems: function() {
+            return dataSource.items();
+        },
+        filter: function() {
+            return dataSource && dataSource.filter();
+        }
+    });
+
+    dataSource.load();
+
+    // act
+    selection.selectedItemKeys([{ data2: { id: 1 }, data1: { id: 2 } }]);
+
+    // assert
+    assert.equal(selectionChangedArgs.length, 1, "selectionChanged is called once");
+    assert.deepEqual(selectionChangedArgs[0].selectedItemKeys, [{ data1: { id: 2 }, data2: { id: 1 } }], "selectedItemsKeys is right");
+    assert.deepEqual(selectionChangedArgs[0].selectedItems, [{ data1: { id: 2 }, data2: { id: 1 }, text: "Item 2" }], "selectedItems is right");
+});
+
 QUnit.test("selection module should support object returned by load method", function(assert) {
     var selectionChangedHandler = sinon.spy();
 
