@@ -12,7 +12,7 @@ bundle = bundle.replace(/.config.js$/, "");
 
 var baseConfig = require("./webpack.config.js");
 var createConfig = function(outputFile, mode) {
-    var config = Object.create(baseConfig);
+    var config = Object.assign({}, baseConfig);
 
     if(webpackVersion.split(".")[0] >= 4) {
         config.mode = mode;
