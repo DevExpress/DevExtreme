@@ -3187,6 +3187,30 @@ QUnit.test("validator correctly check value with 'time' format", function(assert
     assert.equal(dateBox.option("isValid"), true, "Editor should be marked as valid");
 });
 
+QUnit.testInActiveWindow("select a new value via the Enter key", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+            type: "time",
+            value: new Date(2018, 2, 2, 12, 0, 13),
+            pickerType: "list"
+        }),
+        dateBox = $dateBox.dxDateBox("instance"),
+        $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS),
+        keyboard = keyboardMock($input);
+
+    $input.focusin();
+    this.dateBox.option("opened", true);
+    keyboard
+        .keyDown("down")
+        .keyDown("down")
+        .keyDown("enter");
+
+    var value = dateBox.option("value");
+    assert.equal($input.val(), "1:00 PM", "Correct input value");
+    assert.equal(value.getHours(), 13, "Correct hours");
+    assert.equal(value.getMinutes(), 0, "Correct minutes");
+});
+
+
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
         fx.off = true;
