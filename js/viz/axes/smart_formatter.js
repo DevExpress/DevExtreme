@@ -157,7 +157,7 @@ export function smartFormatter(tick, options) {
     if(!isDefined(format) && options.type !== "discrete" && tick && (options.logarithmBase === 10 || !isLogarithmic)) {
         if(options.dataType !== "datetime") {
             if(ticks.length === 1 && ticks.indexOf(tick) === 0 && !isDefined(tickInterval)) {
-                tickInterval = abs(tick) > 1 ? 1 : adjust(1 - abs(tick), tick);
+                tickInterval = abs(tick) >= 1 ? 1 : adjust(1 - abs(tick), tick);
             }
 
             if(ticks.length && ticks.indexOf(tick) === -1) {
