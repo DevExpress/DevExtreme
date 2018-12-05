@@ -308,10 +308,9 @@ module.exports = {
                     var $tableElement = this._getTableElement(),
                         $headerRows = $tableElement && $tableElement.find("." + HEADER_ROW_CLASS);
 
-                    if($headerRows && $headerRows.length) {
-                        return $headerRows.first().height() * $headerRows.length;
-                    }
-                    return 0;
+                    return $headerRows && $headerRows.toArray().reduce(function(sum, headerRow) {
+                        return sum + $(headerRow).height();
+                    }, 0) || 0;
                 },
 
                 getHeaderElement: function(index) {
