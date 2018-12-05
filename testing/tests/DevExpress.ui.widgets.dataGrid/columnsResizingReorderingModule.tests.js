@@ -50,6 +50,7 @@ var gridCore = require("ui/data_grid/ui.data_grid.core"),
     columnResizingReordering = require("ui/data_grid/ui.data_grid.columns_resizing_reordering"),
     ColumnChooserView = require("ui/data_grid/ui.data_grid.column_chooser").ColumnChooserView,
     ColumnHeadersView = require("ui/data_grid/ui.data_grid.column_headers").ColumnHeadersView,
+    ColumnsController = require("ui/grid_core/ui.grid_core.columns_controller").controllers.columns,
     RowsView = require("ui/data_grid/ui.data_grid.rows").RowsView,
     GroupingHeaderPanelExtender = require("ui/data_grid/ui.data_grid.grouping").GroupingHeaderPanelExtender,
     HeaderPanel = require("ui/data_grid/ui.data_grid.header_panel").HeaderPanel,
@@ -2830,6 +2831,103 @@ function getEvent(options) {
 
         // assert
         assert.equal(resizeController._columnsSeparatorView.cursorName, "");
+    });
+
+    // T694325
+    QUnit.test("Change cursor after hovering mouse to the bottom of the banded column when wordWrapEnabled is true", function(assert) {
+        // arrange
+        this.options.wordWrapEnabled = true;
+        this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+        this.component._controllers.tablePosition.init();
+
+        var $testElement = $("#container"),
+            resizeController = this.createColumnsResizerViewController([
+                [
+                    { caption: 'Column 1', width: '125px', rowspan: 2, index: 0, allowResizing: true },
+                    { caption: "Band Column 1", isBand: true, colspan: 2, index: 1, allowResizing: true }
+                ],
+                [
+                    { caption: 'Long column header that wraps', width: '115px', ownerBand: "Band Column 1", index: 2, allowResizing: true },
+                    { caption: 'Long column header that wraps', width: '115px', ownerBand: "Band Column 1", index: 3, allowResizing: true },
+                    { caption: 'Really long column header that wraps many times', width: '115px', ownerBand: "Band Column 1", index: 4, allowResizing: true }
+                ],
+                [
+                    { caption: 'Column 1', width: '125px', rowspan: 2, rowIndex: 0, index: 0, allowResizing: true },
+                    { caption: 'Long column header that wraps', width: '115px', ownerBand: "Band Column 1", index: 2, allowResizing: true, rowIndex: 1 },
+                    { caption: 'Long column header that wraps', width: '115px', ownerBand: "Band Column 1", index: 3, allowResizing: true, rowIndex: 1 },
+                    { caption: 'Really long column header that wraps many times', width: '115px', ownerBand: "Band Column 1", index: 4, allowResizing: true, rowIndex: 1 }
+                ]
+            ]);
+
+        this.initViews();
+        this.renderViews($testElement);
+        this.component._controllers.tablePosition.update();
+
+        sinon.spy(resizeController._columnsSeparatorView, "changeCursor");
+
+        // act
+        resizeController._moveSeparator(getEvent({
+            data: resizeController,
+            type: 'mousemove',
+            pageX: -9760,
+            pageY: -10000 + $(".dx-datagrid-headers").height() - 5
+        }));
+
+        // assert
+        assert.strictEqual(resizeController._columnsSeparatorView.changeCursor.callCount, 1);
+        assert.strictEqual(resizeController._columnsSeparatorView.changeCursor.getCall(0).args[0], "col-resize", "cursor has been changed");
+    });
+
+    // T694325
+    QUnit.test("Resizing of the banded column should work correctly when wordWrapEnabled is true", function(assert) {
+        // arrange
+        this.options.wordWrapEnabled = true;
+        this.options.columns = [
+            { caption: "Column 1", width: 125 },
+            { caption: "Band Column 1", columns: [
+                { caption: "Long column header that wraps", width: 115 },
+                { caption: "Long column header that wraps", width: 115 },
+                { caption: "Really long column header that wraps many times", width: 115 },
+            ] }
+        ];
+
+        this.component._notifyOptionChanged = noop;
+        this.component._controllers.columns = new ColumnsController(this.component);
+        this.component._controllers.tablePosition = new columnResizingReordering.TablePositionViewController(this.component);
+
+        this.component._controllers.columns.init();
+        this.component._controllers.tablePosition.init();
+
+        var $testElement = $("#container"),
+            $headersContainer,
+            separatorOffsetTop,
+            resizeController = this.createColumnsResizerViewController();
+
+        this.initViews();
+        this.renderViews($testElement);
+        this.component._controllers.tablePosition.update();
+
+        // act
+        resizeController._startResizing(getEvent({
+            data: resizeController,
+            type: "touchstart",
+            target: $(".dx-columns-separator"),
+            pageX: -9760,
+            pageY: -10000 + $(".dx-datagrid-headers").height() - 5
+        }));
+        resizeController._moveSeparator(getEvent({
+            data: resizeController,
+            type: 'mousemove',
+            pageX: -9800,
+            pageY: -10000 + $(".dx-datagrid-headers").height() - 5
+        }));
+        this.component._views.rowsView.resizeCompleted.fire();
+
+        // assert
+        $headersContainer = $(resizeController._columnHeadersView.element());
+        separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find(".dx-header-row").first().height();
+        assert.strictEqual(this.component._controllers.columns.columnOption(2, "width"), 75, "width of the first banded column");
+        assert.strictEqual($(resizeController._columnsSeparatorView.element()).offset().top, separatorOffsetTop, "separator offset top");
     });
 }());
 
