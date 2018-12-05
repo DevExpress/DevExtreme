@@ -1316,6 +1316,11 @@ var TagBox = SelectBox.inherit({
         }
     },
 
+    reset: function() {
+        this._restoreInputText();
+        this.callBase();
+    },
+
     _clean: function() {
         this.callBase();
         delete this._defaultTagTemplate;

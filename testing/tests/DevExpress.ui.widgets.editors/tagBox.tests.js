@@ -493,6 +493,26 @@ QUnit.test("clear button should save valueChangeEvent", function(assert) {
     assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
 });
 
+QUnit.test("clear button should also clear the input value", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1],
+            showClearButton: true,
+            searchEnabled: true,
+            value: ["1"]
+        }),
+        $input = $tagBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("123");
+
+    $tagBox
+        .find(".dx-clear-button-area")
+        .trigger("dxclick");
+
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 0, "tags are cleared");
+    assert.equal($input.val(), "", "input is also cleared");
+});
+
 
 QUnit.module("multi tag support", {
     beforeEach: function() {
