@@ -407,7 +407,6 @@ var Popup = Overlay.inherit({
         var isFullscreen = this.option("fullScreen");
 
         this._toggleFullScreenClass(isFullscreen);
-        this._toggleContentAutoResizableClass();
         this.callBase();
     },
 
@@ -427,11 +426,6 @@ var Popup = Overlay.inherit({
 
     _toggleContentAutoResizableClass: function() {
         this._$wrapper.toggleClass(POPUP_AUTO_RESIZABLE_CLASS, this._shouldUseContentAutoResizableClass());
-    },
-
-    _renderAutoResizableGeometry: function() {
-        this._toggleContentAutoResizableClass();
-        this._renderGeometry();
     },
 
     _initTemplates: function() {
@@ -658,6 +652,11 @@ var Popup = Overlay.inherit({
         this._setContentHeight();
     },
 
+    _renderGeometry: function() {
+        this._toggleContentAutoResizableClass();
+        this.callBase.apply(this, arguments);
+    },
+
     _resetContentHeight: function() {
         this._$popupContent.css({
             "height": "auto"
@@ -760,7 +759,7 @@ var Popup = Overlay.inherit({
             case "title":
             case "titleTemplate":
                 this._renderTitle();
-                this._renderAutoResizableGeometry();
+                this._renderGeometry();
                 break;
             case "bottomTemplate":
                 this._renderBottom();
@@ -775,7 +774,6 @@ var Popup = Overlay.inherit({
                 var isPartialUpdate = args.fullName.search(".options") !== -1;
                 this._renderTitle();
                 this._renderBottom();
-                this._toggleContentAutoResizableClass();
 
                 if(!isPartialUpdate) {
                     this._renderGeometry();
@@ -786,7 +784,7 @@ var Popup = Overlay.inherit({
                 break;
             case "fullScreen":
                 this._toggleFullScreenClass(args.value);
-                this._renderAutoResizableGeometry();
+                this._renderGeometry();
                 domUtils.triggerResizeEvent(this._$content);
                 break;
             case "showCloseButton":
@@ -794,11 +792,10 @@ var Popup = Overlay.inherit({
                 break;
             case "shading":
                 this._toggleShading(this.option("visible"));
-                this._renderAutoResizableGeometry();
+                this._renderGeometry();
                 break;
-            case "height":
             case "useAutoHeightWithLimits":
-                this._renderAutoResizableGeometry();
+                this._renderGeometry();
                 break;
             default:
                 this.callBase(args);
