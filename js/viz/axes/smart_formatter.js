@@ -154,8 +154,12 @@ export function smartFormatter(tick, options) {
         nextDateIndex,
         isLogarithmic = options.type === "logarithmic";
 
-    if(!isDefined(format) && isDefined(tickInterval) && options.type !== "discrete" && tick && (options.logarithmBase === 10 || !isLogarithmic)) {
+    if(!isDefined(format) && options.type !== "discrete" && tick && (options.logarithmBase === 10 || !isLogarithmic)) {
         if(options.dataType !== "datetime") {
+            if(ticks.length === 1 && ticks.indexOf(tick) === 0 && !isDefined(tickInterval)) {
+                tickInterval = abs(tick) > 1 ? 1 : adjust(1 - abs(tick), tick);
+            }
+
             if(ticks.length && ticks.indexOf(tick) === -1) {
                 indexOfTick = getTransitionTickIndex(ticks, tick);
                 tickInterval = adjust(abs(tick - ticks[indexOfTick]), tick);
