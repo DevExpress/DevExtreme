@@ -190,12 +190,8 @@ function setupCanvasStub(drawnElements, paths) {
     // texts
     sinon.stub(prototype, "fillText", function() {
         var tempFont = this.font.replace(/px\s/g, "px__"),
-            fontParts = tempFont.split("__");
-
-        drawnElements.push({
-            type: "text",
-            args: arguments,
-            style: {
+            fontParts = tempFont.split("__"),
+            style = {
                 weight: getFontParam(fontParts[0], "weight"),
                 style: getFontParam(fontParts[0], "style"),
                 size: getFontParam(fontParts[0], "size"),
@@ -203,18 +199,28 @@ function setupCanvasStub(drawnElements, paths) {
                 fillStyle: this.fillStyle,
                 textAlign: this.textAlign,
                 globalAlpha: this.globalAlpha
-            }
+            };
+
+        if(this.shadowBlur) {
+            style.shadow = {
+                offsetX: this.shadowOffsetX,
+                offsetY: this.shadowOffsetY,
+                color: this.shadowColor,
+                blur: this.shadowBlur
+            };
+        }
+
+        drawnElements.push({
+            type: "text",
+            args: arguments,
+            style: style
         });
     });
 
     sinon.stub(prototype, "strokeText", function() {
         var tempFont = this.font.replace(/px\s/g, "px__"),
-            fontParts = tempFont.split("__");
-
-        drawnElements.push({
-            type: "strokeText",
-            args: arguments,
-            style: {
+            fontParts = tempFont.split("__"),
+            style = {
                 weight: getFontParam(fontParts[0], "weight"),
                 style: getFontParam(fontParts[0], "style"),
                 size: getFontParam(fontParts[0], "size"),
@@ -224,7 +230,21 @@ function setupCanvasStub(drawnElements, paths) {
                 lineWidth: this.lineWidth,
                 textAlign: this.textAlign,
                 globalAlpha: this.globalAlpha
-            }
+            };
+
+        if(this.shadowBlur) {
+            style.shadow = {
+                offsetX: this.shadowOffsetX,
+                offsetY: this.shadowOffsetY,
+                color: this.shadowColor,
+                blur: this.shadowBlur
+            };
+        }
+
+        drawnElements.push({
+            type: "strokeText",
+            args: arguments,
+            style: style
         });
     });
 
@@ -1137,22 +1157,22 @@ QUnit.test("Multiline text", function(assert) {
         done = assert.async(),
         markup = testingMarkupStart +
             '<text x="10" y="30" text-anchor="start" style="font-size:28px; fill:#232323; font-family: sans-serif;">' +
-
             '<tspan x="10" y="30">World </tspan>' +
             '<tspan x="10" dy="28">Populationby</tspan>' +
-            '<tspan x="10" dy="28px"> Decade</tspan>' +
-
-            '</text > ' +
+            '<tspan x="10" y="30">World </tspan>' +
+            '<tspan x="10" dy="34px">Populationby</tspan>' +
+            '<tspan x="10" dy="16">Populationby</tspan>' +
+            '</text>' +
 
             testingMarkupEnd,
         imageBlob = getData(markup);
 
-    assert.expect(7);
+    assert.expect(11);
 
     $.when(imageBlob).done(function(blob) {
         try {
 
-            assert.equal(that.drawnElements.length, 5, "Canvas elements count");
+            assert.equal(that.drawnElements.length, 6, "Canvas elements count");
 
             assert.equal(that.drawnElements[1].args[1], 10, "Text out of tspanElement position X");
             assert.equal(that.drawnElements[1].args[2], 30, "Text out of tspanElement position Y");
@@ -1161,7 +1181,13 @@ QUnit.test("Multiline text", function(assert) {
             assert.equal(that.drawnElements[2].args[2], 30 + 28, "tSpan text element without x,y,dx,dy attributes position Y");
 
             assert.strictEqual(that.drawnElements[3].args[1], 10, "tSpan text element with dx,dy attributes position X");
-            assert.equal(that.drawnElements[3].args[2], 30 + 28 + 28, "tSpan text element with dx,dy attributes position Y");
+            assert.equal(that.drawnElements[3].args[2], 30, "tSpan text element with dx,dy attributes position Y");
+
+            assert.strictEqual(that.drawnElements[4].args[1], 10, "tSpan text element with dx,dy attributes position X");
+            assert.equal(that.drawnElements[4].args[2], 30 + 34, "tSpan text element with dx,dy attributes position Y");
+
+            assert.strictEqual(that.drawnElements[5].args[1], 10, "tSpan text element with dx,dy attributes position X");
+            assert.equal(that.drawnElements[5].args[2], 30 + 34 + 16, "tSpan text element with dx,dy attributes position Y");
         } finally {
             done();
         }
@@ -1206,7 +1232,7 @@ QUnit.test("Stroke text", function(assert) {
             var strokeText = that.drawnElements[2];
 
             assert.equal(that.drawnElements.length, 3, "Canvas elements count");
-            assert.equal(strokeText.type, "strokeText", "The fird element on canvas is strokeText");
+            assert.equal(strokeText.type, "strokeText", "The third element on canvas is strokeText");
 
             assert.equal(strokeText.style.weight, "bold", "Stroke element style weight");
 
@@ -1222,6 +1248,143 @@ QUnit.test("Stroke text", function(assert) {
             assert.equal(strokeText.args[1], 50, "First line. X coord");
             assert.equal(strokeText.args[2], 50, "First line. Y coord");
 
+        } finally {
+            done();
+        }
+    });
+});
+
+// T697125
+QUnit.test("Multiline text with shadow and stroked texts", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart +
+        '<defs>' +
+        '<filter id="testFilter1" x="-40%" y="-40%" width="180%" height="200%" transform="translate(0,0)"><feGaussianBlur in="SourceGraphic" result="gaussianBlurResult" stdDeviation="1"></feGaussianBlur><feOffset in="gaussianBlurResult" result="offsetResult" dx="0" dy="1"></feOffset><feFlood result="floodResult" flood-color="#223387" flood-opacity="0.2"></feFlood><feComposite in="floodResult" in2="offsetResult" operator="in" result="compositeResult"></feComposite><feComposite in="SourceGraphic" in2="compositeResult" operator="over"></feComposite></filter>' +
+        '</defs>' +
+        '<text filter="url(#testFilter1)" style="white-space: pre; fill: #232323; font-style: italic; font-weight: bold; font-family: \'Trebuchet MS\', Verdana; font-size: 14px; cursor: default;" x="0" y="0" transform="translate(463,51)">' +
+        '<tspan x="0" y="0" stroke="#f2f2f2" stroke-width="1" stroke-opacity="0.3" stroke-linejoin="round">Text1</tspan>' +
+        '<tspan x="0" dy="13px" stroke="#f2f2f2" stroke-width="1" stroke-opacity="0.3" stroke-linejoin="round">Text2</tspan>' +
+        '<tspan x="0" y="0">Text1</tspan>' +
+        '<tspan x="0" dy="13px">Text2</tspan>' +
+        '</text>' + testingMarkupEnd,
+        imageBlob = getData(markup);
+
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements.length, 7, "Canvas elements count");
+
+            assert.equal(that.drawnElements[1].type, "text", "1st stroked element's fillText");
+            assert.equal(that.drawnElements[1].style.weight, "bold", "Style weight");
+            assert.equal(that.drawnElements[1].style.font, "\"Trebuchet MS\",Verdana", "Style font");
+            assert.equal(that.drawnElements[1].style.size, "14px", "Style size");
+            assert.equal(that.drawnElements[1].style.style, "italic", "Style");
+            assert.equal(that.drawnElements[1].style.fillStyle, "#232323", "Style fill");
+            assert.equal(that.drawnElements[1].style.textAlign, "start", "Text element textAlign");
+            assert.equal(that.drawnElements[1].style.globalAlpha, 1, "Style opacity");
+            assert.equal(that.drawnElements[1].args[0], "Text1", "Text");
+            assert.equal(that.drawnElements[1].args[1], 0, "X coord");
+            assert.equal(that.drawnElements[1].args[2], 0, "Y coord");
+            assert.deepEqual(that.drawnElements[1].style.shadow, {
+                blur: 1,
+                color: "rgba(34, 51, 135, 0.2)",
+                offsetX: 0,
+                offsetY: 1
+            });
+
+            assert.equal(that.drawnElements[2].type, "strokeText", "1st stroked element's strokeText");
+            assert.equal(that.drawnElements[2].style.weight, "bold", "Stroke element style weight");
+            assert.equal(that.drawnElements[2].style.font, "\"Trebuchet MS\",Verdana", "First line. Style font");
+            assert.equal(that.drawnElements[2].style.size, "14px", "Stroke element font-size");
+            assert.equal(that.drawnElements[2].style.style, "italic", "Stroke element font-style");
+            assert.equal(that.drawnElements[2].style.fillStyle, "#232323", "Stroke element fill color");
+            assert.equal(that.drawnElements[2].style.strokeStyle, "#f2f2f2", "Stroke element stroke color");
+            assert.roughEqual(that.drawnElements[2].style.globalAlpha, 0.3, 0.1, "Stroke element stroke opacity");
+            assert.equal(that.drawnElements[2].style.lineWidth, 1, "Stroke element stroke width");
+            assert.equal(that.drawnElements[2].style.textAlign, "start", "Stroke element stroke textAlign");
+            assert.equal(that.drawnElements[2].args[0], "Text1", "First line. Text");
+            assert.equal(that.drawnElements[2].args[1], 0, "First line. X coord");
+            assert.equal(that.drawnElements[2].args[2], 0, "First line. Y coord");
+            assert.deepEqual(that.drawnElements[2].style.shadow, {
+                blur: 1,
+                color: "rgba(34, 51, 135, 0.2)",
+                offsetX: 0,
+                offsetY: 1
+            });
+
+            assert.equal(that.drawnElements[3].type, "text", "2nd stroked element's fillText");
+            assert.equal(that.drawnElements[3].style.weight, "bold", "Style weight");
+            assert.equal(that.drawnElements[3].style.font, "\"Trebuchet MS\",Verdana", "Style font");
+            assert.equal(that.drawnElements[3].style.size, "14px", "Style size");
+            assert.equal(that.drawnElements[3].style.style, "italic", "Style");
+            assert.equal(that.drawnElements[3].style.fillStyle, "#232323", "Style fill");
+            assert.equal(that.drawnElements[3].style.textAlign, "start", "Text element textAlign");
+            assert.equal(that.drawnElements[3].style.globalAlpha, 1, "Style opacity");
+            assert.equal(that.drawnElements[3].args[0], "Text2", "Text");
+            assert.equal(that.drawnElements[3].args[1], 0, "X coord");
+            assert.equal(that.drawnElements[3].args[2], 13, "Y coord");
+            assert.deepEqual(that.drawnElements[3].style.shadow, {
+                blur: 1,
+                color: "rgba(34, 51, 135, 0.2)",
+                offsetX: 0,
+                offsetY: 1
+            });
+
+            assert.equal(that.drawnElements[4].type, "strokeText", "2nd stroked element's strokeText");
+            assert.equal(that.drawnElements[4].style.weight, "bold", "Stroke element style weight");
+            assert.equal(that.drawnElements[4].style.font, "\"Trebuchet MS\",Verdana", "First line. Style font");
+            assert.equal(that.drawnElements[4].style.size, "14px", "Stroke element font-size");
+            assert.equal(that.drawnElements[4].style.style, "italic", "Stroke element font-style");
+            assert.equal(that.drawnElements[4].style.fillStyle, "#232323", "Stroke element fill color");
+            assert.equal(that.drawnElements[4].style.strokeStyle, "#f2f2f2", "Stroke element stroke color");
+            assert.roughEqual(that.drawnElements[4].style.globalAlpha, 0.3, 0.1, "Stroke element stroke opacity");
+            assert.equal(that.drawnElements[4].style.lineWidth, 1, "Stroke element stroke width");
+            assert.equal(that.drawnElements[4].style.textAlign, "start", "Stroke element stroke textAlign");
+            assert.equal(that.drawnElements[4].args[0], "Text2", "First line. Text");
+            assert.equal(that.drawnElements[4].args[1], 0, "First line. X coord");
+            assert.equal(that.drawnElements[4].args[2], 13, "First line. Y coord");
+            assert.deepEqual(that.drawnElements[4].style.shadow, {
+                blur: 1,
+                color: "rgba(34, 51, 135, 0.2)",
+                offsetX: 0,
+                offsetY: 1
+            });
+
+            assert.equal(that.drawnElements[5].type, "text", "3rd element's fillText");
+            assert.equal(that.drawnElements[5].style.weight, "bold", "Style weight");
+            assert.equal(that.drawnElements[5].style.font, "\"Trebuchet MS\",Verdana", "Style font");
+            assert.equal(that.drawnElements[5].style.size, "14px", "Style size");
+            assert.equal(that.drawnElements[5].style.style, "italic", "Style");
+            assert.equal(that.drawnElements[5].style.fillStyle, "#232323", "Style fill");
+            assert.equal(that.drawnElements[5].style.textAlign, "start", "Text element textAlign");
+            assert.equal(that.drawnElements[5].style.globalAlpha, 1, "Style opacity");
+            assert.equal(that.drawnElements[5].args[0], "Text1", "Text");
+            assert.equal(that.drawnElements[5].args[1], 0, "X coord");
+            assert.equal(that.drawnElements[5].args[2], 0, "Y coord");
+            assert.deepEqual(that.drawnElements[5].style.shadow, {
+                blur: 1,
+                color: "rgba(34, 51, 135, 0.2)",
+                offsetX: 0,
+                offsetY: 1
+            });
+
+            assert.equal(that.drawnElements[6].type, "text", "4th element's fillText");
+            assert.equal(that.drawnElements[6].style.weight, "bold", "Style weight");
+            assert.equal(that.drawnElements[6].style.font, "\"Trebuchet MS\",Verdana", "Style font");
+            assert.equal(that.drawnElements[6].style.size, "14px", "Style size");
+            assert.equal(that.drawnElements[6].style.style, "italic", "Style");
+            assert.equal(that.drawnElements[6].style.fillStyle, "#232323", "Style fill");
+            assert.equal(that.drawnElements[6].style.textAlign, "start", "Text element textAlign");
+            assert.equal(that.drawnElements[6].style.globalAlpha, 1, "Style opacity");
+            assert.equal(that.drawnElements[6].args[0], "Text2", "Text");
+            assert.equal(that.drawnElements[6].args[1], 0, "X coord");
+            assert.equal(that.drawnElements[6].args[2], 13, "Y coord");
+            assert.deepEqual(that.drawnElements[6].style.shadow, {
+                blur: 1,
+                color: "rgba(34, 51, 135, 0.2)",
+                offsetX: 0,
+                offsetY: 1
+            });
         } finally {
             done();
         }
