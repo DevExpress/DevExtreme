@@ -195,7 +195,7 @@ var Scheduler = Widget.inherit({
             /**
                 * @pseudo appointmentCollectorTemplate
                 * @type template|function
-                * @default "dropDownButton"
+                * @default "appointmentCollector"
                 * @type_function_param1 data:object
                 * @type_function_param2 contentElement:dxElement
                 * @type_function_return string|Node|jQuery
