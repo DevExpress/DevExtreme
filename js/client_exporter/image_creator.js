@@ -234,6 +234,7 @@ function setFontStyle(context, options) {
 
 function drawText(context, options) {
     setFontStyle(context, options);
+    applyFilter(context, options);
     options.text && context.fillText(options.text, options.x || 0, options.y || 0);
     strokeElement(context, options, true);
     drawTextDecoration(context, options);
@@ -325,6 +326,9 @@ function drawTextElement(childNodes, context, options) {
                 lines.push(line);
             }
 
+            if(elementOptions.y !== undefined) {
+                offset = 0;
+            }
             if(elementOptions.dy !== undefined) {
                 offset += parseFloat(elementOptions.dy);
             }
@@ -405,9 +409,8 @@ function drawElement(element, context, parentOptions) {
             break;
     }
 
-    applyFilter(context, options);
-
     if(!isText) {
+        applyFilter(context, options);
         fillElement(context, options);
         strokeElement(context, options);
     }
@@ -560,6 +563,7 @@ function strokeElement(context, options, isText) {
         context.globalAlpha = options.strokeOpacity;
         context.strokeStyle = stroke;
         isText ? context.strokeText(options.text, options.x, options.y) : context.stroke();
+        context.globalAlpha = 1;
     }
 }
 
@@ -581,6 +585,7 @@ function fillElement(context, options) {
         context.fillStyle = fill.search(/url/) === -1 ? fill : getPattern(context, fill);
         context.globalAlpha = options.fillOpacity;
         context.fill();
+        context.globalAlpha = 1;
     }
 }
 
