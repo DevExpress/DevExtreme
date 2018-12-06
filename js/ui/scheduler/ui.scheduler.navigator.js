@@ -237,6 +237,7 @@ var SchedulerNavigator = Widget.inherit({
             case "step":
             case "date":
             case "intervalCount":
+            case "displayedDate":
                 this._updateButtonsState();
                 this._renderCaption();
                 this._setCalendarOption("value", this.option("date"));
@@ -401,7 +402,7 @@ var SchedulerNavigator = Widget.inherit({
     },
 
     _renderCaption: function() {
-        var date = this.option("date"),
+        var date = this.option("displayedDate") || this.option("date"),
             caption = this._getConfig().getCaption.call(this, date);
 
         this._caption.option({
