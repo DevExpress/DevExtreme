@@ -68,28 +68,20 @@ function getScrollBarWidth() {
 
 var moduleConfig = {
     beforeEach: function() {
-        var rowItems = [
-            {
+        var rowItems = [{
                 value: 'C1', index: 2,
                 children: [{ value: 'P1', index: 0 }, { value: 'P2 Test Test Test Test Test', index: 1 }]
             }, {
                 value: 'C2', index: 5,
                 children: [{ value: 'P3', index: 3 }, { value: 'P4', index: 4 }]
             }],
-            columnItems = [
-                {
-                    value: '2010', index: 2,
-                    children: [
-                        { value: '1', index: 0 },
-                        { value: '2', index: 1 }
-                    ]
-                }, {
-                    value: '2012', index: 5,
-                    children: [
-                        { value: '2', index: 3 },
-                        { value: '3', index: 4 }
-                    ]
-                }],
+            columnItems = [{
+                value: '2010', index: 2,
+                children: [{ value: '1', index: 0 }, { value: '2', index: 1 }]
+            }, {
+                value: '2012', index: 5,
+                children: [{ value: '2', index: 3 }, { value: '3', index: 4 }]
+            }],
             cellSet = [
                 [[1, 0.1], [8, 0.8], [15, 0.15], [22, 0.22], [29, 0.29], [36, 0.36], [43, 0.43]],
                 [[2, 0.2], [9, 0.9], [16, 0.16], [23, 0.23], [30, 0.3], [37, 0.37], [44, 0.44]],
