@@ -370,7 +370,7 @@ function drawElement(element, context, parentOptions, shared) {
         isImage = tagName === "image",
         options = extend({}, parentOptions, getElementOptions(element));
 
-    if(options.visibility === "hidden") {
+    if(options.visibility === "hidden" || options["hidden-for-export"]) {
         return;
     }
 

@@ -1657,6 +1657,30 @@ QUnit.test("Elements with visibility", function(assert) {
     });
 });
 
+QUnit.test("Do not export elements with 'hidden-for-export' attribute", function(assert) {
+    const done = assert.async();
+    const markup = testingMarkupStart + '<g hidden-for-export="true"><rect x="20" y="20" width="200" height="200" fill="#FF0000"></rect></g><rect x="50" y="50" width="200" height="200" fill="#00FF00"></rect>' + testingMarkupEnd;
+
+    assert.expect(3);
+    getData(markup).then(() => {
+        try {
+            assert.equal(this.drawnElements.length, 3, "Canvas elements count");
+            assert.deepEqual(this.drawnElements[1].args, {
+                x: 50,
+                y: 50,
+                width: 200,
+                height: 200
+            }, "Rect args");
+            assert.deepEqual(this.drawnElements[2].style, {
+                fillStyle: "#00ff00",
+                globalAlpha: 1
+            }, "Rect style");
+        } finally {
+            done();
+        }
+    });
+});
+
 QUnit.test("Defined background color", function(assert) {
     var that = this,
         done = assert.async(),
