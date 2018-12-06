@@ -57,7 +57,7 @@ exports.svgCreator = {
             that = this;
 
         if(element.tagName === "image") {
-            href = $(element).attr("xlink:href");
+            href = $(element).attr("href") || $(element).attr("xlink:href");
             if(!that._imageArray[href]) {
                 that._imageArray[href] = "";
             }
@@ -81,10 +81,12 @@ exports.svgCreator = {
             xmlVersion = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>',
             blob = new Deferred(),
             svgElem = svgUtils.getSvgElement(data),
-            $svgObject = $(svgElem);
+            $svgObject = $(svgElem),
+            backgroundColor = $svgObject.css("backgroundColor");
 
         $svgObject.css("backgroundColor", options.backgroundColor);
         markup = xmlVersion + svgUtils.getSvgMarkup($svgObject.get(0));
+        $svgObject.css("backgroundColor", backgroundColor);
 
         that._prepareImages(svgElem).done(function() {
             each(that._imageArray, function(href, dataURI) {
