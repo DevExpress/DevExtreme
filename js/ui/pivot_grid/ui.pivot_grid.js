@@ -1554,10 +1554,6 @@ var PivotGrid = Widget.inherit({
             columnHeaderContainer = $(TD).addClass("dx-column-header");
             rowHeaderContainer = $(TD).addClass(DESCRIPTION_AREA_CELL_CLASS);
 
-            if(browser.msie) { // T656699 - use alternative rendering in IE browser
-                rowHeaderContainer.addClass("dx-ie");
-            }
-
             $(TR)
                 .append(filterHeaderContainer)
                 .appendTo(tableElement);
@@ -1567,8 +1563,8 @@ var PivotGrid = Widget.inherit({
                 .append(columnHeaderContainer)
                 .appendTo(tableElement);
 
-
             $(TR)
+                .toggleClass("dx-ie", browser.msie === true)
                 .append(rowHeaderContainer)
                 .append(columnsAreaElement)
                 .appendTo(tableElement);
@@ -1839,8 +1835,6 @@ var PivotGrid = Widget.inherit({
                 if(descriptionCellHeight > columnsAreaHeight) {
                     adjustSizeArray(columnsAreaRowHeights, columnsAreaHeight - descriptionCellHeight);
                     columnsArea.setRowsHeight(columnsAreaRowHeights);
-                } else if(rowFieldsHeader.isVisible()) {
-                    rowFieldsHeader.groupElement().css("marginTop", columnsAreaHeight - descriptionCellHeight); // T656699
                 }
 
                 tableElement.removeClass(INCOMPRESSIBLE_FIELDS_CLASS);
