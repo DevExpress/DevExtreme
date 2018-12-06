@@ -108,14 +108,6 @@ var dropDownAppointments = Class.inherit({
         }).bind(this));
     },
 
-    _createButtonTemplate: function(appointmentCount, isCompact) {
-        var text = isCompact ? appointmentCount : messageLocalization.getFormatter("dxScheduler-moreAppointments")(appointmentCount);
-
-        return $("<div>").append(
-            [$("<span>").text(text)]
-        ).addClass(DROPDOWN_APPOINTMENTS_CONTENT_CLASS);
-    },
-
     _applyInnerShadow: function($element) {
         $element.css("boxShadow", "inset " + $element.get(0).getBoundingClientRect().width + "px 0 0 0 rgba(0, 0, 0, 0.3)");
     },
@@ -138,8 +130,10 @@ var dropDownAppointments = Class.inherit({
 
         if(!DropDownMenu.getInstance($menu)) {
             this._initDynamicTemplate(items);
+            this._initDynamicButtonTemplate(items.data.length, isCompact);
 
-            var template = this.instance._getAppointmentTemplate("dropDownAppointmentTemplate");
+            var template = this.instance._getAppointmentTemplate("dropDownAppointmentTemplate"),
+                buttonTemplate = this.instance._getAppointmentTemplate("appointmentCollectorTemplate");
 
             this.instance._createComponent($menu, DropDownMenu, {
                 buttonIcon: null,
@@ -147,7 +141,17 @@ var dropDownAppointments = Class.inherit({
                 popupHeight: "auto",
                 popupMaxHeight: 200,
                 items: items.data,
-                buttonTemplate: this._createButtonTemplate(items.data.length, isCompact),
+                buttonTemplate: new FunctionTemplate(function(options) {
+                    var model = {
+                        appointmentsCount: items.data.length,
+                        isCompact: isCompact
+                    };
+
+                    return buttonTemplate.render({
+                        model: model,
+                        container: options.container
+                    });
+                }),
                 buttonWidth: config.buttonWidth,
                 closeOnClick: false,
                 onItemClick: (function(args) {
@@ -281,6 +285,22 @@ var dropDownAppointments = Class.inherit({
         this.instance._defaultTemplates["dropDownAppointment"] = new FunctionTemplate(function(options) {
             return that._createDropDownAppointmentTemplate(options.model, $(options.container), items.colors[options.index]);
         });
+    },
+
+    _initDynamicButtonTemplate: function(count, isCompact) {
+        var that = this;
+
+        this.instance._defaultTemplates["appointmentCollector"] = new FunctionTemplate(function(options) {
+            return that._createButtonTemplate(count, $(options.container), isCompact);
+        });
+    },
+
+    _createButtonTemplate: function(appointmentCount, element, isCompact) {
+        var text = isCompact ? appointmentCount : messageLocalization.getFormatter("dxScheduler-moreAppointments")(appointmentCount);
+
+        return element.append(
+            [$("<span>").text(text)]
+        ).addClass(DROPDOWN_APPOINTMENTS_CONTENT_CLASS);
     },
 
     _createDropDownAppointmentTemplate: function(appointmentData, appointmentElement, color) {
