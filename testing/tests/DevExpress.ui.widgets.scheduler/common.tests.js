@@ -428,7 +428,7 @@ QUnit.testStart(function() {
             views: ["month"],
             appointmentCollectorTemplate: function(data) {
                 assert.equal(data.appointmentsCount, 1, "Appointments count is OK");
-                assert.equal(data.isCompact, false, "Compact flag is ok");
+                assert.deepEqual(data.isCompact, false, "Compact flag is ok");
             },
             currentView: "month"
         });
