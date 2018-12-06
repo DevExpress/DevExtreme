@@ -7072,6 +7072,31 @@ QUnit.test("Set delete button for a specific row", function(assert) {
     assert.strictEqual($rowElements.eq(2).find(".dx-link-delete").length, 1, "third row has the delete link");
 });
 
+// T697205
+QUnit.test("The button column should not be shown in the edit form", function(assert) {
+    // arrange
+    var that = this,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "form",
+        allowUpdating: true
+    };
+    that.options.columns.unshift({
+        type: "buttons",
+        buttons: ["edit"]
+    });
+    that.columnsController.reset();
+    rowsView.render($testElement);
+
+    // act
+    that.editRow(0);
+
+    // assert
+    assert.strictEqual($testElement.find(".dx-datagrid-edit-form-item").length, 5, "count editor of the form");
+});
+
 
 QUnit.module('Refresh modes', {
     beforeEach: function() {
