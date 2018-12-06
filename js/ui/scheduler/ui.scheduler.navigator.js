@@ -210,6 +210,7 @@ var SchedulerNavigator = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             date: new Date(),
+            displayedDate: new Date(),
             step: "day",
             intervalCount: 1,
             min: undefined,
