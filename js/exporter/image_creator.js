@@ -1,6 +1,6 @@
 import $ from "../core/renderer";
 import Color from "../color";
-import { isFunction, isDeferred } from "../core/utils/type";
+import { isFunction, isPromise } from "../core/utils/type";
 import svgUtils from "../core/utils/svg";
 import iteratorUtils from "../core/utils/iterator";
 import { extend } from "../core/utils/extend";
@@ -379,7 +379,7 @@ function drawElement(element, context, parentOptions, shared) {
     clipElement(context, options, shared);
     aggregateOpacity(options);
 
-    let d;
+    let promise;
 
     context.beginPath();
     switch(element.tagName) {
@@ -391,7 +391,7 @@ function drawElement(element, context, parentOptions, shared) {
             drawTextElement(element.childNodes, context, options, shared);
             break;
         case "image":
-            d = drawImage(context, options, shared);
+            promise = drawImage(context, options, shared);
             break;
         case "path":
             drawPath(context, options.d);
@@ -414,7 +414,7 @@ function drawElement(element, context, parentOptions, shared) {
 
     context.restore();
 
-    return d;
+    return promise;
 }
 
 function applyFilter(context, options, shared) {
@@ -501,8 +501,7 @@ function createFilter(element) {
     return filterOptions;
 }
 
-function asyncEach(array, callback, d) {
-    d = d || new Deferred();
+function asyncEach(array, callback, d = new Deferred()) {
     if(array.length === 0) {
         return d.resolve();
     }
@@ -511,7 +510,7 @@ function asyncEach(array, callback, d) {
     function next() {
         asyncEach(Array.prototype.slice.call(array, 1), callback, d);
     }
-    if(isDeferred(result)) {
+    if(isPromise(result)) {
         result.then(next);
     } else {
         next();
@@ -533,10 +532,10 @@ function drawCanvasElements(elements, context, parentOptions, shared) {
 
                 function onDone() {
                     context.restore();
-                    d.resolve();
                 }
                 const d = drawCanvasElements(element.childNodes, context, options, shared);
-                if(isDeferred(d)) {
+
+                if(isPromise(d)) {
                     d.then(onDone);
                 } else {
                     onDone();
@@ -626,8 +625,7 @@ function drawBackground(context, width, height, backgroundColor, margin) {
 }
 
 function getCanvasFromSvg(markup, width, height, backgroundColor, margin) {
-    var d = new Deferred(),
-        canvas = createCanvas(width, height, margin),
+    var canvas = createCanvas(width, height, margin),
         context = canvas.getContext("2d"),
         svgElem = svgUtils.getSvgElement(markup);
 
@@ -639,16 +637,14 @@ function getCanvasFromSvg(markup, width, height, backgroundColor, margin) {
     }
 
     drawBackground(context, width, height, backgroundColor, margin);
-    drawCanvasElements(svgElem.childNodes, context, {}, {
+    return drawCanvasElements(svgElem.childNodes, context, {}, {
         clipPaths: {},
         patterns: {},
         filters: {}
     }).then(() => {
         domAdapter.getBody().removeChild(canvas);
-        d.resolve(canvas);
+        return canvas;
     });
-
-    return d;
 }
 
 exports.imageCreator = {
