@@ -1337,7 +1337,6 @@ var Scheduler = Widget.inherit({
     _updateHeader: function() {
         var viewCountConfig = this._getViewCountConfig();
         this._header.option("intervalCount", viewCountConfig.intervalCount);
-        this._header.option("startDate", viewCountConfig.startDate || new Date(this.option("currentDate")));
         this._header.option("min", this._dateOption("min"));
         this._header.option("max", this._dateOption("max"));
         this._header.option("currentDate", this._dateOption("currentDate"));
