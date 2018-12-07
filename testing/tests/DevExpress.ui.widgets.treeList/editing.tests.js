@@ -735,3 +735,57 @@ QUnit.test("Edit cell - The editable cell should be closed after click on expand
     // assert
     assert.strictEqual($(this.getCellElement(0, 0)).find(".dx-texteditor").length, 0, "hasn't editor");
 });
+
+// T697344
+QUnit.test("Removing a selected row should not throw an exception", function(assert) {
+    // arrange
+    var $testElement = $("#container");
+
+    this.options.editing = {
+        mode: "row",
+        allowDeleting: true
+    };
+    this.options.selection = { mode: "multiple" };
+    this.options.selectedRowKeys = [1];
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    try {
+        // act
+        this.deleteRow(0);
+
+        // assert
+        assert.strictEqual(this.getVisibleRows().length, 0);
+    } catch(e) {
+        assert.ok(false, "exception");
+    }
+});
+
+QUnit.test("Selection should be updated correctly after deleting a nested node", function(assert) {
+    // arrange
+    var $testElement = $("#container");
+
+    this.options.editing = {
+        mode: "row",
+        allowDeleting: true
+    };
+    this.options.selection = { mode: "multiple", recursive: true };
+    this.options.selectedRowKeys = [2];
+    this.options.expandedRowKeys = [1];
+    this.options.dataSource.store.data = [
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2003, 2, 3) },
+        { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2004, 3, 4) }
+    ];
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    // act
+    this.deleteRow(1);
+
+    // assert
+    assert.strictEqual(this.isRowSelected(1), false, "first node is not selected");
+});
