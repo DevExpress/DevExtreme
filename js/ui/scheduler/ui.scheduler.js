@@ -193,7 +193,7 @@ var Scheduler = Widget.inherit({
                 */
 
             /**
-                * @pseudo appointmentCollectorTemplate
+                * @pseudo AppointmentCollectorTemplate
                 * @type template|function
                 * @default "appointmentCollector"
                 * @type_function_param1 data:object
@@ -309,7 +309,7 @@ var Scheduler = Widget.inherit({
             /**
                 * @name dxSchedulerOptions.views.appointmentCollectorTemplate
                 * @default "appointmentCollector"
-                * @extends appointmentCollectorTemplate
+                * @extends AppointmentCollectorTemplate
                 */
 
             /**
@@ -445,7 +445,7 @@ var Scheduler = Widget.inherit({
             /**
                 * @name dxSchedulerOptions.appointmentCollectorTemplate
                 * @default "appointmentCollector"
-                * @extends AppointmentTemplate
+                * @extends AppointmentCollectorTemplate
                 */
             appointmentCollectorTemplate: "appointmentCollector",
 
