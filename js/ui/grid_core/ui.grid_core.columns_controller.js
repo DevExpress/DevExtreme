@@ -1372,7 +1372,7 @@ module.exports = {
 
             var getFixedPosition = function(that, column) {
                 if(column.command && !isCustomCommandColumn(that, column)) {
-                    return column.visibleIndex < 0 ? "left" : "right";
+                    return column.visibleIndex < 0 || column.type === GROUP_COMMAND_COLUMN_NAME ? "left" : "right";
                 }
                 return !column.fixedPosition ? "left" : column.fixedPosition;
             };
