@@ -87,15 +87,16 @@ module.exports = Class.inherit({
     },
 
     _aggregate: function(aggregates, data, container) {
-        var i, j;
+        var i, j,
+            length = data.items ? data.items.length : 0;
 
         for(i = 0; i < aggregates.length; i++) {
             if(isCount(aggregates[i].aggregator)) {
-                container[i] = (container[i] || 0) + data.items.length;
+                container[i] = (container[i] || 0) + length;
                 continue;
             }
 
-            for(j = 0; j < data.items.length; j++) {
+            for(j = 0; j < length; j++) {
                 this._accumulate(i, aggregates[i], container, data.items[j]);
             }
         }
