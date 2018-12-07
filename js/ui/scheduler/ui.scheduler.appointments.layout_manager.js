@@ -100,49 +100,55 @@ var AppointmentLayoutManager = Class.inherit({
         return result;
     },
 
-    _isEqualWithUpdateAppointments: function(appointment) {
-        var result = false;
-        this.instance.getUpdatedAppointments().forEach(function(item) {
-            if(item === appointment) {
-                result = true;
-            }
-        });
-        return result;
-    },
     markRepaintedAppointments: function(appointments, renderedItems) {
         var isAgenda = this.renderingStrategy === "agenda",
+            updatedAppointment = this.instance.getUpdatedAppointment(),
             result = this._markDeletedAppointments(renderedItems, appointments),
-            itemFound = false,
+            itemFound,
+            coordinatesChanged,
+            objectChanged,
             repaintAll = false;
 
-        appointments.forEach(function(appItem) {
+        each(appointments, (function(_, currentItem) {
             itemFound = false;
-            appItem.needRepaint = false;
+            coordinatesChanged = false,
+            currentItem.needRepaint = false;
 
-            renderedItems.forEach(function(renderedItem) {
-                if(appItem.itemData === renderedItem.itemData) {
-                    renderedItem.needRepaint = false;
+            each(renderedItems, (function(_, item) {
+                if(currentItem.itemData === item.itemData) {
+                    item.needRepaint = false;
                     itemFound = true;
 
-                    if(repaintAll || this._compareSettings(appItem, renderedItem, isAgenda) || this._isEqualWithUpdateAppointments(renderedItem.itemData)) {
-                        renderedItem.settings = appItem.settings;
-                        renderedItem.needRepaint = true;
-                        renderedItem.needRemove = false;
+                    if(updatedAppointment && commonUtils.equalByValue(item.itemData, updatedAppointment)) {
+                        item.needRepaint = true;
                         if(isAgenda) {
-                            result.push(renderedItem);
+                            repaintAll = true;
+                        }
+                    }
+                    coordinatesChanged = this._compareSettings(currentItem, item, isAgenda);
+                    objectChanged = updatedAppointment && (Object.keys(updatedAppointment).length !== Object.keys(item.itemData).length);
+
+                    if(coordinatesChanged || objectChanged || repaintAll) {
+                        item.settings = currentItem.settings;
+                        item.needRepaint = true;
+                        item.needRemove = false;
+                        if(isAgenda) {
+                            result.push(item);
                             repaintAll = true;
                         }
                     }
                 }
-            }.bind(this));
+
+            }).bind(this));
 
             if(!itemFound) {
-                appItem.needRepaint = true;
-                appItem.needRemove = false;
-                renderedItems.push(appItem);
-                isAgenda && result.push(appItem);
+                currentItem.needRepaint = true;
+                currentItem.needRemove = false;
+                renderedItems.push(currentItem);
+                isAgenda && result.push(currentItem);
             }
-        }.bind(this));
+
+        }).bind(this));
 
         return isAgenda && result.length ? result : renderedItems;
     },
