@@ -109,7 +109,7 @@ QUnit.test("getData. correct process two images with similar href", function(ass
 
     // arrange. act
     var done = assert.async(),
-        imageHtml = "<image xlink:href=\"../../testing/content/add\" width=\"300\" height=\"200\"></image><image xlink:href=\"../../testing/content/add2\" width=\"300\" height=\"200\"></image>",
+        imageHtml = "<image xlink:href=\"../../testing/content/add.png\" width=\"300\" height=\"200\"></image><image xlink:href=\"../../testing/content/add.png.png\" width=\"300\" height=\"200\"></image>",
         testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>" + imageHtml + "</svg>",
         deferred = svgCreator.getData(testingMarkup, {});
 
