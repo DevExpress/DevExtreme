@@ -606,6 +606,28 @@ var DropDownList = DropDownEditor.inherit({
         };
     },
 
+    _getSpecificDataSourceOption: function() {
+        let dataSource = this.option("dataSource");
+
+        if(Array.isArray(dataSource) && this.option("grouped")) {
+            dataSource = dataSource.reduce((accumulator, item) => {
+                const items = item.items.map((innerItem) => {
+                    return Object.assign({ key: item.key }, innerItem);
+                });
+                return accumulator.concat(items);
+            }, []);
+            dataSource = {
+                store: {
+                    type: "array",
+                    data: dataSource,
+                },
+                group: "key"
+            };
+        };
+
+        return dataSource;
+    },
+
     _dataSourceFromUrlLoadMode: function() {
         return "raw";
     },
