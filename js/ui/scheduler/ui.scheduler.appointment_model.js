@@ -492,7 +492,7 @@ var AppointmentModel = Class.inherit({
         }).bind(this);
     },
 
-    add: function(data, tz) {
+    add: function(data) {
         return this._dataSource.store().insert(data).done((function() {
             this._dataSource.load();
         }).bind(this));
