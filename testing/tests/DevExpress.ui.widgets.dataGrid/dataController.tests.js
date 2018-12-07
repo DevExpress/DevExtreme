@@ -10246,6 +10246,9 @@ QUnit.module("Summary with Editing", {
             editing: {
                 mode: "batch"
             },
+            grouping: {
+                autoExpandAll: true
+            },
             summary: {
                 recalculateWhileEditing: true,
                 skipEmptyValues: true,
@@ -10265,7 +10268,7 @@ QUnit.module("Summary with Editing", {
 
         this.getTotalValues = function() {
             return this.dataController.footerItems()[0].summaryCells.map(function(summaryItems) {
-                return summaryItems.length === 1 ? summaryItems[0].value : summaryItems.map(function(item) { return item.value; });
+                return summaryItems.length <= 1 ? (summaryItems[0] && summaryItems[0].value) : summaryItems.map(function(item) { return item.value; });
             });
         };
 
@@ -10324,6 +10327,19 @@ QUnit.test("add row", function(assert) {
     assert.deepEqual(this.getTotalValues(), [6, 20]);
 });
 
+// T697805
+QUnit.test("add row if data is grouped", function(assert) {
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+    this.getDataSource().group("id");
+    this.getDataSource().load();
+    this.addRow();
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [undefined, 20]);
+});
+
 QUnit.test("add row and modify cell", function(assert) {
     // act
     this.setupDataGridModules();
@@ -10354,6 +10370,19 @@ QUnit.test("delete row", function(assert) {
 
     // assert
     assert.deepEqual(this.getTotalValues(), [4, 15]);
+});
+
+// T697805
+QUnit.test("delete row if data is grouped", function(assert) {
+    // act
+    this.setupDataGridModules();
+    this.clock.tick();
+    this.getDataSource().group("id");
+    this.getDataSource().load();
+    this.deleteRow(this.getRowIndexByKey(4));
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [undefined, 15]);
 });
 
 QUnit.test("modify cell and delete row", function(assert) {

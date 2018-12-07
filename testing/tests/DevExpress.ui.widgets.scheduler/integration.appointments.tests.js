@@ -4696,6 +4696,44 @@ QUnit.test("DropDown appointment should be rendered correctly when timezone is s
     }
 });
 
+QUnit.test("DropDown button should be rendered correctly when appointmentCollectorTemplate is used", function(assert) {
+    var startDate = new Date(2015, 1, 4, 1),
+        endDate = new Date(2015, 1, 4, 2);
+    var appointments = [{
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "Item 1"
+    }, {
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "Item 2"
+    }, {
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "Item 3"
+    }];
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 4),
+        views: ["month"],
+        currentView: "month",
+        firstDayOfWeek: 1,
+        dataSource: appointments,
+        startDateExpr: "Start",
+        endDateExpr: "End",
+        textExpr: "Text",
+        height: 500,
+        maxAppointmentsPerCell: "auto",
+        appointmentCollectorTemplate: function(data) {
+            return "<div class='button-title'>Appointments count is " + data.appointmentsCount + "</div>";
+        }
+    });
+
+    var $dropDown = $(".dx-scheduler-dropdown-appointments").eq(0);
+
+    assert.equal($dropDown.find(".button-title").text(), "Appointments count is 2", "Template is applied correctly");
+});
+
 QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {
 
     var startDate = new Date(2015, 1, 4, 1),

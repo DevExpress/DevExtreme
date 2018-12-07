@@ -2053,6 +2053,23 @@ QUnit.test("list should be scrolled to item from bottom by scrollToItem", functi
     assert.equal(scrollToElementSpy.firstCall.args[0].get(0), $item.get(0), "list scrolled to item");
 });
 
+QUnit.test("it should be possible to scroll to an item by denormalized index", function(assert) {
+    var $list = $("#list").dxList({
+            dataSource: new DataSource({
+                store: [{ group: "Group 1", text: "Item 1", id: 1 }, { group: "Group 2", text: "Item 2", id: 2 }],
+                key: "id",
+                group: "group"
+            }),
+            grouped: true
+        }),
+        list = $list.dxList("instance"),
+        $item = list.itemElements().eq(1),
+        scrollToElementSpy = sinon.spy($list.dxScrollView("instance"), "scrollToElement");
+
+    list.scrollToItem(list.option("items")[1]);
+    assert.equal(scrollToElementSpy.getCall(0).args[0].text(), $item.text(), "list scrolled to correct item");
+});
+
 QUnit.test("list shouldn't be scrolled if item isn't specified", function(assert) {
     var $list = $("#list").dxList({
             items: ["0"]

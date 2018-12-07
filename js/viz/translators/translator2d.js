@@ -320,13 +320,11 @@ _Translator2d.prototype = {
         const canvas_position_center_middle = startPoint + canvasOptions.canvasLength / 2;
         let canvas_position_default;
 
-        if(isDefined(minVisible) && isDefined(maxVisible) && minVisible.valueOf() === maxVisible.valueOf()) {
-            canvas_position_default = canvas_position_center_middle;
-        } else if(minVisible <= 0 && maxVisible >= 0) {
+        if(minVisible < 0 && maxVisible > 0 && minVisible !== maxVisible) {
             canvas_position_default = that.translate(0, 1);
         }
         if(!isDefined(canvas_position_default)) {
-            const invert = range.invert ^ (minVisible <= 0 && maxVisible <= 0);
+            const invert = range.invert ^ (minVisible < 0 && maxVisible <= 0);
             if(that._options.isHorizontal) {
                 canvas_position_default = invert ? endPoint : startPoint;
             } else {
@@ -511,7 +509,7 @@ _Translator2d.prototype = {
             if(!isDefined(bp) || range.maxVisible.valueOf() !== bp.valueOf()) {
                 return null;
             }
-            return this.translateSpecialCase("canvas_position_middle");
+            return this.translateSpecialCase(bp === 0 ? "canvas_position_default" : "canvas_position_middle");
         }
 
         bp = this._fromValue(bp);

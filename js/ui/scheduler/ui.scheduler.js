@@ -193,6 +193,15 @@ var Scheduler = Widget.inherit({
                 */
 
             /**
+                * @pseudo AppointmentCollectorTemplate
+                * @type template|function
+                * @default "appointmentCollector"
+                * @type_function_param1 data:object
+                * @type_function_param2 contentElement:dxElement
+                * @type_function_return string|Node|jQuery
+                */
+
+            /**
                 * @name dxSchedulerOptions.views
                 * @type Array<string, object>
                 * @default ['day', 'week']
@@ -295,6 +304,12 @@ var Scheduler = Widget.inherit({
             /**
                 * @name dxSchedulerOptions.views.resourceCellTemplate
                 * @extends ResourceCellTemplate
+                */
+
+            /**
+                * @name dxSchedulerOptions.views.appointmentCollectorTemplate
+                * @default "appointmentCollector"
+                * @extends AppointmentCollectorTemplate
                 */
 
             /**
@@ -426,6 +441,13 @@ var Scheduler = Widget.inherit({
                 * @extends AppointmentTemplate
                 */
             dropDownAppointmentTemplate: "dropDownAppointment",
+
+            /**
+                * @name dxSchedulerOptions.appointmentCollectorTemplate
+                * @default "appointmentCollector"
+                * @extends AppointmentCollectorTemplate
+                */
+            appointmentCollectorTemplate: "appointmentCollector",
 
             /**
                 * @name dxSchedulerOptions.dataCellTemplate
@@ -1272,6 +1294,7 @@ var Scheduler = Widget.inherit({
             case "remoteFiltering":
             case "timeZone":
             case "dropDownAppointmentTemplate":
+            case "appointmentCollectorTemplate":
             case "_appointmentTooltipOffset":
             case "_appointmentTooltipButtonsPosition":
             case "_appointmentTooltipCloseButton":

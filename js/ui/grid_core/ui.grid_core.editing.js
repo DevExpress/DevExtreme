@@ -1766,7 +1766,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     var columns = that.getController("columns").getColumns();
                     items = [];
                     each(columns, function(_, column) {
-                        if(!column.isBand) {
+                        if(!column.isBand && !column.type) {
                             items.push({
                                 column: column,
                                 name: column.name,

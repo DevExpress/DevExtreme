@@ -68,28 +68,20 @@ function getScrollBarWidth() {
 
 var moduleConfig = {
     beforeEach: function() {
-        var rowItems = [
-                {
-                    value: 'C1', index: 2,
-                    children: [{ value: 'P1', index: 0 }, { value: 'P2 Test Test Test Test Test', index: 1 }]
-                }, {
-                    value: 'C2', index: 5,
-                    children: [{ value: 'P3', index: 3 }, { value: 'P4', index: 4 }]
-                }],
-            columnItems = [
-                {
-                    value: '2010', index: 2,
-                    children: [
-                        { value: '1', index: 0 },
-                        { value: '2', index: 1 }
-                    ]
-                }, {
-                    value: '2012', index: 5,
-                    children: [
-                        { value: '2', index: 3 },
-                        { value: '3', index: 4 }
-                    ]
-                }],
+        var rowItems = [{
+                value: 'C1', index: 2,
+                children: [{ value: 'P1', index: 0 }, { value: 'P2 Test Test Test Test Test', index: 1 }]
+            }, {
+                value: 'C2', index: 5,
+                children: [{ value: 'P3', index: 3 }, { value: 'P4', index: 4 }]
+            }],
+            columnItems = [{
+                value: '2010', index: 2,
+                children: [{ value: '1', index: 0 }, { value: '2', index: 1 }]
+            }, {
+                value: '2012', index: 5,
+                children: [{ value: '2', index: 3 }, { value: '3', index: 4 }]
+            }],
             cellSet = [
                 [[1, 0.1], [8, 0.8], [15, 0.15], [22, 0.22], [29, 0.29], [36, 0.36], [43, 0.43]],
                 [[2, 0.2], [9, 0.9], [16, 0.16], [23, 0.23], [30, 0.3], [37, 0.37], [44, 0.44]],
@@ -3885,103 +3877,6 @@ QUnit.test("Synchronize rowsFields and row headers", function(assert) {
     assert.roughEqual(sumArray(rowAreaColumnWidth), sumArray(rowFieldsAreaColumnWidth), 1);
 });
 
-QUnit.test("Place row fields on the bottom of description cell. Without export menu", function(assert) {
-    var pivotGrid = createPivotGrid(this.testOptions, assert);
-
-    var commonHeight = 0;
-    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
-        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
-    });
-
-    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
-});
-
-QUnit.test("Place row fields on the bottom of description cell. With export menu in description cell", function(assert) {
-    this.testOptions.fieldChooser = {
-        enabled: true
-    };
-
-    this.testOptions.export = {
-        enabled: true
-    };
-
-    this.testOptions.fieldPanel.showFilterFields = false;
-    this.testOptions.fieldPanel.showColumnFields = false;
-    this.testOptions.fieldPanel.showDataFields = false;
-
-    var pivotGrid = createPivotGrid(this.testOptions, assert);
-
-    var commonHeight = 0;
-    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
-        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
-    });
-
-    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
-});
-
-QUnit.test("Place row fields on the bottom of description cell. Without wxport menu and small columns area height", function(assert) {
-    this.testOptions.dataSource = {
-        fields: [
-            { area: "row" },
-            { area: "column" },
-            { caption: 'Sum1', area: "data" }
-        ],
-        rows: [
-            { value: 'Accessories_1', index: 0 }
-        ],
-        columns: [{
-            value: 'CY 2010', index: 0
-        }, {
-            value: 'CY 2012', index: 1
-        }],
-        values: [
-            [[1], [1], [15]]
-        ]
-    };
-    this.testOptions.fieldPanel.showFilterFields = false;
-    this.testOptions.fieldPanel.showColumnFields = false;
-    this.testOptions.fieldPanel.showDataFields = false;
-
-    var pivotGrid = createPivotGrid(this.testOptions, assert);
-
-    var commonHeight = 0;
-    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
-        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
-    });
-
-    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
-});
-
-QUnit.test("Place row fields on the bottom of description cell. Treeview layout", function(assert) {
-    this.testOptions.rowHeaderLayout = "tree";
-
-    var pivotGrid = createPivotGrid(this.testOptions, assert);
-
-    var commonHeight = 0;
-    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
-        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
-    });
-
-    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
-});
-
-QUnit.test("Description cell doesn't accumulate height", function(assert) {
-    var pivotGrid = createPivotGrid(this.testOptions, assert);
-
-    var expectedHeight = pivotGrid.$element().find(".dx-area-description-cell").height();
-
-    pivotGrid.repaint();
-
-    assert.equal(pivotGrid.$element().find(".dx-area-description-cell").height(), expectedHeight);
-
-    var commonHeight = 0;
-    pivotGrid.$element().find(".dx-area-description-cell").children().each(function() {
-        commonHeight += $(this).outerHeight() + parseFloat($(this).css("marginTop"));
-    });
-
-    assert.roughEqual(commonHeight, pivotGrid._columnsArea.groupElement().outerHeight(), 2);
-});
-
 QUnit.test("synchronize rowsFields and row headers when rowHeaderLayout is tree", function(assert) {
     this.testOptions.dataSource.fields.push({ area: "row", caption: "Row Field 3" });
 
@@ -5407,6 +5302,19 @@ QUnit.test('Set column width', function(assert) {
     assert.deepEqual(setColumnWidth([40, 50, 30, 60]), [40, 50, 30, 60]);
     assert.deepEqual(setColumnWidth([40, 50, 30]), [40, 50, 30, 0]);
     assert.deepEqual(setColumnWidth([40, 50, 30, 60, 80]), [40, 50, 30, 140]);
+});
+
+// T696415
+QUnit.test('Set column width with floating point', function(assert) {
+    // arrange
+    var headersArea = createHeadersArea(null, true);
+
+    headersArea.render($('#pivotArea'), this.data);
+
+    headersArea.groupWidth(100);
+    headersArea.setColumnsWidth([40, 50, 30, 60.29]);
+
+    assert.equal(headersArea.tableElement().width(), 40 + 50 + 30 + 61, "table width is correct");
 });
 
 QUnit.test('Update colspans. when new columns count greater than headers area have', function(assert) {

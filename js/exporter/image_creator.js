@@ -238,11 +238,12 @@ function setFontStyle(context, options) {
     context.globalAlpha = options.globalAlpha;
 }
 
-function drawText(context, options) {
+function drawText(context, options, shared) {
     setFontStyle(context, options);
+    applyFilter(context, options, shared);
     options.text && context.fillText(options.text, options.x || 0, options.y || 0);
     strokeElement(context, options, true);
-    drawTextDecoration(context, options);
+    drawTextDecoration(context, options, shared);
 }
 
 function drawTextDecoration(context, options, shared) {
@@ -323,6 +324,9 @@ function drawTextElement(childNodes, context, options, shared) {
                 lines.push(line);
             }
 
+            if(elementOptions.y !== undefined) {
+                offset = 0;
+            }
             if(elementOptions.dy !== undefined) {
                 offset += parseFloat(elementOptions.dy);
             }
@@ -384,7 +388,7 @@ function drawElement(element, context, parentOptions, shared) {
     context.beginPath();
     switch(element.tagName) {
         case undefined:
-            drawText(context, options);
+            drawText(context, options, shared);
             break;
         case "text":
         case "tspan":
@@ -405,9 +409,8 @@ function drawElement(element, context, parentOptions, shared) {
             break;
     }
 
-    applyFilter(context, options, shared);
-
     if(!isText) {
+        applyFilter(context, options, shared);
         fillElement(context, options, shared);
         strokeElement(context, options);
     }
@@ -580,6 +583,7 @@ function strokeElement(context, options, isText) {
         context.globalAlpha = options.strokeOpacity;
         context.strokeStyle = stroke;
         isText ? context.strokeText(options.text, options.x, options.y) : context.stroke();
+        context.globalAlpha = 1;
     }
 }
 
@@ -601,6 +605,7 @@ function fillElement(context, options, shared) {
         context.fillStyle = fill.search(/url/) === -1 ? fill : getPattern(context, fill, shared);
         context.globalAlpha = options.fillOpacity;
         context.fill();
+        context.globalAlpha = 1;
     }
 }
 

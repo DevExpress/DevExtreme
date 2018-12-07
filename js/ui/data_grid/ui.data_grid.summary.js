@@ -207,6 +207,14 @@ var SummaryDataSourceAdapterExtender = (function() {
 })();
 
 var SummaryDataSourceAdapterClientExtender = (function() {
+    var applyRemovedData = function(data, removedData, groupLevel) {
+        if(groupLevel) {
+            return data.map(data => extend({}, data, { items: applyRemovedData(data.items || [], removedData, groupLevel - 1) }));
+        }
+
+        return data.filter(data => removedData.indexOf(data) < 0);
+    };
+
     var calculateAggregates = function(that, summary, data, groupLevel) {
         var calculator;
 
@@ -220,7 +228,7 @@ var SummaryDataSourceAdapterClientExtender = (function() {
 
                 var removedData = editingController.getRemovedData();
                 if(removedData.length) {
-                    data = data.filter(data => removedData.indexOf(data) < 0);
+                    data = applyRemovedData(data, removedData, groupLevel);
                 }
             }
         }

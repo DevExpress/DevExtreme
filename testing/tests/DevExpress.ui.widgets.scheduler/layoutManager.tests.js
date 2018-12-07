@@ -653,7 +653,7 @@ QUnit.test("More than 3 cloned appointments should be grouped", function(assert)
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
@@ -1759,7 +1759,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
@@ -1789,8 +1789,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
         tableCellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth(),
         $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
-        dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.roughEqual($appointment.eq(0).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
     assert.roughEqual($appointment.eq(1).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
@@ -1826,8 +1825,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     );
 
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
-        dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
     assert.equal(dropDownMenuText, "4 more", "DropDown menu has correct text");
@@ -1997,7 +1995,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
@@ -2040,7 +2038,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
@@ -2195,7 +2193,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 2, "ddAppointment is rendered");
 
@@ -2236,7 +2234,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 4, "ddAppointment is rendered");
 
@@ -2277,7 +2275,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 8, "ddAppointment is rendered");
 
@@ -2374,7 +2372,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
@@ -2414,7 +2412,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
@@ -2479,7 +2477,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
     assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
@@ -2496,7 +2494,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
     $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick");
     dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance");
     groupedAppointments = dropDownMenu.option("items");
-    dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+    dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
     assert.equal(groupedAppointments.length, 3, "DropDown menu has correct items");
