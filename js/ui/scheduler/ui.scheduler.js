@@ -2670,8 +2670,8 @@ var Scheduler = Widget.inherit({
         return this._appointmentForm;
     },
 
-    getUpdatedAppointments: function() {
-        return this._appointmentModel.getUpdatedAppointments();
+    getUpdatedAppointment: function() {
+        return this._appointmentModel.getUpdatedAppointment();
     },
 
     getAppointmentsInstance: function() {
