@@ -8669,6 +8669,31 @@ QUnit.module("Customization of the command columns", {
         assert.strictEqual(fixedColumns[1].dataField, "TestField3", "fixed column");
         assert.strictEqual(fixedColumns[2].command, "transparent", "transparent column");
     });
+
+    QUnit.test("getFixedColumns when there are grouped columns", function(assert) {
+        // arrange
+        this.applyOptions({
+            columnFixing: {
+                enabled: true
+            },
+            columns: [
+                { dataField: "TestField1", caption: "Custom Title 1", fixed: true },
+                { dataField: "TestField2", caption: "Custom Title 2", groupIndex: 0 },
+                { dataField: "TestField3", caption: "Custom Title 3", groupIndex: 1, fixedPosition: "right" },
+                { dataField: "TestField4", caption: "Custom Title 4" }
+            ]
+        });
+
+        // act
+        var fixedColumns = this.columnsController.getFixedColumns();
+
+        // assert
+        assert.strictEqual(fixedColumns.length, 4, "fixed column count");
+        assert.strictEqual(fixedColumns[0].dataField, "TestField2", "grouped column");
+        assert.strictEqual(fixedColumns[1].dataField, "TestField3", "grouped column");
+        assert.strictEqual(fixedColumns[2].dataField, "TestField1", "fixed column");
+        assert.strictEqual(fixedColumns[3].command, "transparent", "transparent column");
+    });
 });
 
 // T622771
