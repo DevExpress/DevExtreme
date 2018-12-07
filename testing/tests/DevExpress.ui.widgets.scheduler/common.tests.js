@@ -774,6 +774,57 @@ QUnit.testStart(function() {
         assert.equal(this.instance.$element().find(".dx-scheduler-appointment-title").eq(0).text(), "def", "Appointment is rerendered");
     });
 
+    QUnit.test("Pushed directly from store item should be rerendered correctly", function(assert) {
+        var data = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [{
+                    id: 0,
+                    text: "abc",
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30)
+                },
+                {
+                    id: 1,
+                    text: "abc",
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30)
+                }]
+            }
+        });
+
+        this.createInstance({
+            dataSource: data,
+            views: ["week"],
+            currentView: "week",
+            currentDate: new Date(2017, 4, 25)
+        });
+
+        var dataSource = this.instance.getDataSource();
+        dataSource.store().push([
+            {
+                type: "update", key: 0, data: {
+                    text: "Update-1",
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30)
+                }
+            },
+            {
+                type: "update", key: 1, data: {
+                    text: "Update-2",
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30)
+                }
+            }
+        ]);
+        dataSource.load();
+
+        var appointment = this.instance.$element().find(".dx-scheduler-appointment-title");
+        assert.equal(appointment.eq(0).text(), "Update-1", "Appointment is rerendered");
+        assert.equal(appointment.eq(1).text(), "Update-2", "Appointment is rerendered");
+    });
+
     QUnit.test("the 'update' method of store should have key as arg is store has the 'key' field", function(assert) {
         var data = [{
             id: 1, text: "abc", startDate: new Date(2015, 1, 9, 10)

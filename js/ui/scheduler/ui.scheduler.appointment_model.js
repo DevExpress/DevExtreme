@@ -286,6 +286,7 @@ var AppointmentModel = Class.inherit({
         this.setDataSource(dataSource);
 
         this._filterMaker = new FilterMaker(dataAccessors);
+        this._dataChanged = false;
     },
 
     setDataSource: function(dataSource) {
@@ -297,18 +298,27 @@ var AppointmentModel = Class.inherit({
     },
 
     _initStoreChangeHandlers: function() {
-        this._dataSource && this._dataSource.store()
-            .on("updating", (function(newItem) {
-                this._updatedAppointment = newItem;
-            }).bind(this));
+        this._dataSource
+            && this._dataSource.store()
+                .on("updating", (function(newItem) {
+                    this._updatedAppointment = newItem;
+                }).bind(this))
+            && this._dataSource.store()
+                .on("push", function() {
+                    this._dataChanged = true;
+                }.bind(this));
     },
 
+    getIsDataChanged: function() {
+        return this._dataChanged;
+    },
     getUpdatedAppointment: function() {
         return this._updatedAppointment;
     },
 
     cleanModelState: function() {
         delete this._updatedAppointment;
+        this._dataChanged = false;
     },
 
     setDataAccessors: function(dataAccessors) {

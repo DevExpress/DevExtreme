@@ -107,7 +107,7 @@ var AppointmentLayoutManager = Class.inherit({
             itemFound,
             coordinatesChanged,
             objectChanged,
-            repaintAll = false;
+            repaintAll = this.instance.getIsDataChanged();
 
         each(appointments, (function(_, currentItem) {
             itemFound = false;

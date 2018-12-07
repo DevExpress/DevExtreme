@@ -2674,6 +2674,10 @@ var Scheduler = Widget.inherit({
         return this._appointmentModel.getUpdatedAppointment();
     },
 
+    getIsDataChanged: function() {
+        return this._appointmentModel.getIsDataChanged();
+    },
+
     getAppointmentsInstance: function() {
         return this._appointments;
     },
