@@ -180,26 +180,28 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         hasNonSelectedState,
                         hasSelectedState;
 
-                    if(parentNode.children.length > 1) {
-                        if(isSelected === false) {
-                            hasSelectedState = parentNode.children.some(function(childNode, index, children) {
-                                return that._selectionStateByKey[childNode.key];
-                            });
+                    if(parentNode) {
+                        if(parentNode.children.length > 1) {
+                            if(isSelected === false) {
+                                hasSelectedState = parentNode.children.some(function(childNode, index, children) {
+                                    return that._selectionStateByKey[childNode.key];
+                                });
 
-                            state = hasSelectedState ? undefined : false;
-                        } else if(isSelected === true) {
-                            hasNonSelectedState = parentNode.children.some(function(childNode) {
-                                return !that._selectionStateByKey[childNode.key];
-                            });
+                                state = hasSelectedState ? undefined : false;
+                            } else if(isSelected === true) {
+                                hasNonSelectedState = parentNode.children.some(function(childNode) {
+                                    return !that._selectionStateByKey[childNode.key];
+                                });
 
-                            state = hasNonSelectedState ? undefined : true;
+                                state = hasNonSelectedState ? undefined : true;
+                            }
                         }
-                    }
 
-                    this._selectionStateByKey[parentNode.key] = state;
+                        this._selectionStateByKey[parentNode.key] = state;
 
-                    if(parentNode.parent && parentNode.parent.level >= 0) {
-                        this._updateParentSelectionState(parentNode, state);
+                        if(parentNode.parent && parentNode.parent.level >= 0) {
+                            this._updateParentSelectionState(parentNode, state);
+                        }
                     }
                 },
 
@@ -207,7 +209,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     var that = this,
                         children = node.children;
 
-                    children.forEach(function(childNode) {
+                    children && children.forEach(function(childNode) {
                         that._selectionStateByKey[childNode.key] = isSelected;
 
                         if(childNode.children.length > 0) {
@@ -510,6 +512,11 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                     return selectedRowsData;
                 },
+
+                refresh: function() {
+                    this._selectionStateByKey = {};
+                    return this.callBase.apply(this, arguments);
+                }
             }
         },
         views: {
