@@ -1165,3 +1165,19 @@ QUnit.test("title should be rendered if custom 'titleTemplate' is specified and 
     assert.equal($title.length, 1, "title is rendered");
     assert.equal($title.text(), "testTitle", "title template is rendered correctly");
 });
+
+QUnit.test("popup title should be rendered before content", function(assert) {
+    var contentIsRendered = false;
+
+    $("#popupWithTitleTemplate").dxPopup({
+        visible: true,
+        titleTemplate: function() {
+            if(!contentIsRendered) {
+                assert.ok(true, "Popup title is rendered before content");
+            }
+        },
+        contentTemplate: function() {
+            contentIsRendered = true;
+        }
+    });
+});
