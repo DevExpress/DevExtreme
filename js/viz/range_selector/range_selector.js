@@ -667,17 +667,17 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
         if(options.dataSource) {
             let selectedRangeUpdateMode = that.option("selectedRangeUpdateMode");
+            const value = that.getValue();
+            const valueIsReady = _isDefined(value[0]) && _isDefined(value[1]);
             if(_isDefined(selectedRangeUpdateMode)) {
                 selectedRangeUpdateMode = _normalizeEnum(selectedRangeUpdateMode);
                 that.__skipAnimation = true;
-            } else {
+            } else if(valueIsReady) { // T696409
                 selectedRangeUpdateMode = RESET;
             }
-            const value = that.getValue();
-            const valueIsReady = _isDefined(value[0]) && _isDefined(value[1]);
 
             if(selectedRangeUpdateMode === "auto" && valueIsReady) {
-                var rangesInfo = axis.allScaleSelected(value);
+                const rangesInfo = axis.allScaleSelected(value);
 
                 if(rangesInfo.startValue && rangesInfo.endValue) {
                     selectedRangeUpdateMode = RESET;

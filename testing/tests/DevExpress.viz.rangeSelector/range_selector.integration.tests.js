@@ -1,5 +1,6 @@
 import $ from "jquery";
 import "viz/range_selector/range_selector";
+import { DataSource } from "data/data_source/data_source";
 
 QUnit.testStart(function() {
     var markup =
@@ -533,4 +534,30 @@ QUnit.test("Keep mode", function(assert) {
     rangeSelector.option("dataSource", dataSource);
 
     assert.deepEqual(rangeSelector.getValue(), [5, 7]);
+});
+
+// T696409
+QUnit.test("RS with DX dataSource", function(assert) {
+    var done = assert.async(1),
+        rangeSelector = this.createRangeSelector({
+            chart: { series: [{}] },
+            value: [2, 4],
+            onValueChanged: function(e) {
+                assert.deepEqual(rangeSelector.getValue(), [2, 4]);
+                done();
+            },
+            dataSource: new DataSource({
+                load: function() {
+                    return new Promise(function(r) {
+                        return r([{
+                            arg: 1,
+                            val: 1
+                        }, {
+                            arg: 10,
+                            val: 1
+                        }]);
+                    });
+                }
+            })
+        });
 });
