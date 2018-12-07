@@ -81,16 +81,14 @@ exports.svgCreator = {
             xmlVersion = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>',
             blob = new Deferred(),
             svgElem = svgUtils.getSvgElement(data),
-            $svgObject = $(svgElem),
-            backgroundColor = $svgObject.css("backgroundColor");
+            $svgObject = $(svgElem);
 
-        $svgObject.css("backgroundColor", options.backgroundColor);
-        markup = xmlVersion + svgUtils.getSvgMarkup($svgObject.get(0));
-        $svgObject.css("backgroundColor", backgroundColor);
+        markup = xmlVersion + svgUtils.getSvgMarkup($svgObject.get(0), options.backgroundColor);
 
         that._prepareImages(svgElem).done(function() {
             each(that._imageArray, function(href, dataURI) {
-                markup = markup.split(href).join(dataURI);
+                const regexpString = `href=['|"]${href}['|"]`;
+                markup = markup.replace(new RegExp(regexpString, "gi"), `href="${dataURI}"`);
             });
 
             blob.resolve(isFunction(window.Blob) ? that._getBlob(markup) : that._getBase64(markup));
