@@ -259,7 +259,9 @@ const Drawer = Widget.inherit({
         this.callBase();
 
         this._whenPanelRendered.always(() => {
-            this._dimensionChanged();
+            this._initSize();
+            this._strategy.setPanelSize(this.option("revealMode") === "slide" || !this.isHorizontalDirection());
+
             this._renderPosition(this.option("opened"), false);
         });
     },
