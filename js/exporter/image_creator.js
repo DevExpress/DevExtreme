@@ -663,19 +663,27 @@ exports.imageCreator = {
             parseAttributes = options.__parseAttributesFn;
         }
 
-        return getCanvasFromSvg(markup, width, height, backgroundColor, options.margin).then(canvas => getStringFromCanvas(canvas, mimeType));
+        const deferred = new Deferred();
+        getCanvasFromSvg(markup, width, height, backgroundColor, options.margin).then(canvas => {
+            deferred.resolve(getStringFromCanvas(canvas, mimeType));
+        });
+        return deferred;
     },
 
     getData: function(markup, options) {
         var that = this;
 
-        return exports.imageCreator.getImageData(markup, options).then(binaryData => {
-            const mimeType = "image/" + options.format;
+        const deferred = new Deferred();
 
-            return isFunction(window.Blob) && !options.forceProxy ?
+        exports.imageCreator.getImageData(markup, options).then(binaryData => {
+            const mimeType = "image/" + options.format;
+            const data = isFunction(window.Blob) && !options.forceProxy ?
                 that._getBlob(binaryData, mimeType) :
                 that._getBase64(binaryData);
+            deferred.resolve(data);
         });
+
+        return deferred;
     },
 
     _getBlob: function(binaryData, mimeType) {
