@@ -97,18 +97,20 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Month", (assert) => {
-            checkAndRemoveLimits(this.parts[2], { min: 0, max: 11 }, assert);
+            checkAndRemoveLimits(this.parts[2], { min: 1, max: 12 }, assert);
 
             let date = new Date(2012, 2, 30);
             this.parts[2].setter(date, 1);
-            assert.equal(date.getMonth(), 1, "setter sets month");
+            assert.equal(date.getMonth(), 0, "setter sets month");
             delete this.parts[2].setter;
+
+            assert.equal(this.parts[2].getter(date), 1, "getter gets moth");
+            delete this.parts[2].getter;
 
             assert.deepEqual(this.parts[2], {
                 index: 2,
                 isStub: false,
                 caret: { start: 9, end: 13 },
-                getter: "getMonth",
                 pattern: "MMMM",
                 text: "July"
             });
@@ -652,6 +654,9 @@ if(devices.real().deviceType === "desktop") {
 
             this.keyboard.type("8");
             assert.equal(this.$input.val(), "2018");
+
+            this.keyboard.type("0000");
+            assert.equal(this.$input.val(), "0000");
         });
 
         QUnit.test("Short Year", (assert) => {
