@@ -249,6 +249,26 @@ QUnit.test("events rising on second initialize not shared dataSource", function(
     assert.strictEqual(changedCount, 1, 'changed called');
 });
 
+// T697860
+QUnit.test("loading should be rised once on change dataSource and grouping", function(assert) {
+    var loadingSpy = sinon.spy();
+
+    // act
+    this.applyOptions({
+        loadingTimeout: 0,
+        dataSource: createDataSource([], {
+            onLoading: loadingSpy
+        })
+    });
+
+    this.dataController.optionChanged({ name: "dataSource" });
+    this.dataController.optionChanged({ name: "grouping" });
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(loadingSpy.callCount, 1, 'loading called once');
+});
+
 QUnit.test("update rows on columnsChanged (changeType == 'columns')", function(assert) {
     var changedCount = 0;
     var array = [
