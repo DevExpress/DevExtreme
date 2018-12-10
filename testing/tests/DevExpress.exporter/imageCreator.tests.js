@@ -869,7 +869,7 @@ QUnit.test("Circle", function(assert) {
 QUnit.test("Image with xlink:href", function(assert) {
     var that = this,
         done = assert.async(),
-        markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/testing/content/add.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd,
+        markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/testing/content/exporterTestsContent/test-image.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd,
         imageBlob = getData(markup),
         context = window.CanvasRenderingContext2D.prototype;
 
@@ -881,7 +881,7 @@ QUnit.test("Image with xlink:href", function(assert) {
             assert.equal(that.drawnElements[2].type, "image", "Canvas drawn rect element");
             assert.deepEqual(that.drawnElements[2].args, {
                 node: "IMG",
-                src: "/testing/content/add.png",
+                src: "/testing/content/exporterTestsContent/test-image.png",
                 x: -10,
                 y: -15,
                 width: 20,
@@ -908,7 +908,7 @@ QUnit.test("Image with xlink:href", function(assert) {
 QUnit.test("Image with href", function(assert) {
     var that = this,
         done = assert.async(),
-        markup = testingMarkupStart + '<image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/add.png" visibility="visible"></image>' + testingMarkupEnd,
+        markup = testingMarkupStart + '<image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image>' + testingMarkupEnd,
         imageBlob = getData(markup);
 
     assert.expect(3);
@@ -919,7 +919,7 @@ QUnit.test("Image with href", function(assert) {
             assert.equal(that.drawnElements[1].type, "image", "Canvas drawn rect element");
             assert.deepEqual(that.drawnElements[1].args, {
                 node: "IMG",
-                src: "/testing/content/add.png",
+                src: "/testing/content/exporterTestsContent/test-image.png",
                 x: -10,
                 y: -15,
                 width: 20,
@@ -949,7 +949,7 @@ QUnit.test("Image with 404 href", function(assert) {
 
 QUnit.test("Export image in group", function(assert) {
     var done = assert.async(),
-        markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/add.png" visibility="visible"></image></g>' + testingMarkupEnd,
+        markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image></g>' + testingMarkupEnd,
         imageBlob = getData(markup),
         context = window.CanvasRenderingContext2D.prototype;
 
@@ -969,7 +969,7 @@ QUnit.test("Export image in group", function(assert) {
 
 QUnit.test("Export draws into hidden canvas", function(assert) {
     var done = assert.async(),
-        markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/add.png" visibility="visible"></image></g>' + testingMarkupEnd;
+        markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image></g>' + testingMarkupEnd;
 
     getData(markup).then(done);
 
