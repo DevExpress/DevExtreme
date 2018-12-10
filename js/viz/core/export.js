@@ -241,7 +241,10 @@ export const ExportMenu = function(params) {
 
     this._shadow = renderer.shadowFilter("-50%", "-50%", "200%", "200%", SHADOW_OFFSET, 6, SHADOW_BLUR);
     this._shadow.attr({ opacity: 0.8 });
-    this._group = renderer.g().attr({ "class": EXPORT_CSS_CLASS }).linkOn(renderer.root, { name: "export-menu", after: "peripheral" });
+    this._group = renderer.g().attr({
+        "class": EXPORT_CSS_CLASS,
+        "hidden-for-export": true
+    }).linkOn(renderer.root, { name: "export-menu", after: "peripheral" });
     this._buttonGroup = renderer.g().attr({ "class": EXPORT_CSS_CLASS + "-button" }).append(this._group);
     this._listGroup = renderer.g().attr({ "class": EXPORT_CSS_CLASS + "-list" }).append(this._group);
 

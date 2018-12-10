@@ -73,7 +73,7 @@ QUnit.test("Groups creation", function(assert) {
 
     // assert
     assert.equal(this.renderer.g.callCount, 5, "Three groups");
-    assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu" }, "Group css-class");
+    assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu", "hidden-for-export": true }, "Group attributes");
     assert.deepEqual(this.renderer.g.getCall(1).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu-button" }, "Button css-class");
     assert.deepEqual(this.renderer.g.getCall(2).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu-list" }, "List css-class");
     assert.deepEqual(this.renderer.g.getCall(3).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu-list-item" }, "List item css-class");
