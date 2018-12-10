@@ -50,30 +50,30 @@ function queryByOptions(query, options, isCountQuery) {
         group = normalizeSortingInfo(group);
     }
 
-    if(!isCountQuery) {
-        if(sort || group) {
-            sort = normalizeSortingInfo(sort || []);
-            if(group) {
-                sort = arrangeSortingInfo(group, sort);
-            }
-            each(sort, function(index) {
-                query = query[index ? "thenBy" : "sortBy"](this.selector, this.desc, this.compare);
-            });
-        }
+    if(isCountQuery) {
+        return query;
+    }
 
-        if(select) {
-            query = query.select(select);
+    if(sort || group) {
+        sort = normalizeSortingInfo(sort || []);
+        if(group) {
+            sort = arrangeSortingInfo(group, sort);
         }
+        each(sort, function(index) {
+            query = query[index ? "thenBy" : "sortBy"](this.selector, this.desc, this.compare);
+        });
+    }
+
+    if(select) {
+        query = query.select(select);
     }
 
     if(group) {
         query = multiLevelGroup(query, group);
     }
 
-    if(!isCountQuery) {
-        if(take || skip) {
-            query = query.slice(skip || 0, take);
-        }
+    if(take || skip) {
+        query = query.slice(skip || 0, take);
     }
 
     return query;
