@@ -1,10 +1,12 @@
-var $ = require("jquery"),
-    imageCreator = require("exporter").image.creator,
-    typeUtils = require("core/utils/type"),
-    testingMarkupStart = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>",
-    testingMarkupEnd = "</svg>",
-    browser = require("core/utils/browser"),
-    proxyUrlFormatter = require("data/proxy_url_formatter");
+import $ from "jquery";
+import exporter from "exporter";
+
+const imageCreator = exporter.image.creator;
+import typeUtils from "core/utils/type";
+const testingMarkupStart = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>";
+const testingMarkupEnd = "</svg>";
+import browser from "core/utils/browser";
+import proxyUrlFormatter from "data/proxy_url_formatter";
 
 function setupCanvasStub(drawnElements, paths) {
     var prototype = window.CanvasRenderingContext2D.prototype,
@@ -867,7 +869,7 @@ QUnit.test("Circle", function(assert) {
 QUnit.test("Image with xlink:href", function(assert) {
     var that = this,
         done = assert.async(),
-        markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/testing/content/add.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd,
+        markup = testingMarkupStart + '<defs><clipPath id="clippath1"><rect x="0" y="30" width="500" height="30"></rect></clipPath></defs><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" transform="translate(427,82)" xlink:href="/testing/content/exporterTestsContent/test-image.png" visibility="visible" clip-path="url(#clippath1)"></image>' + testingMarkupEnd,
         imageBlob = getData(markup),
         context = window.CanvasRenderingContext2D.prototype;
 
@@ -879,7 +881,7 @@ QUnit.test("Image with xlink:href", function(assert) {
             assert.equal(that.drawnElements[2].type, "image", "Canvas drawn rect element");
             assert.deepEqual(that.drawnElements[2].args, {
                 node: "IMG",
-                src: "/testing/content/add.png",
+                src: "/testing/content/exporterTestsContent/test-image.png",
                 x: -10,
                 y: -15,
                 width: 20,
@@ -906,7 +908,7 @@ QUnit.test("Image with xlink:href", function(assert) {
 QUnit.test("Image with href", function(assert) {
     var that = this,
         done = assert.async(),
-        markup = testingMarkupStart + '<image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/add.png" visibility="visible"></image>' + testingMarkupEnd,
+        markup = testingMarkupStart + '<image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image>' + testingMarkupEnd,
         imageBlob = getData(markup);
 
     assert.expect(3);
@@ -917,7 +919,7 @@ QUnit.test("Image with href", function(assert) {
             assert.equal(that.drawnElements[1].type, "image", "Canvas drawn rect element");
             assert.deepEqual(that.drawnElements[1].args, {
                 node: "IMG",
-                src: "/testing/content/add.png",
+                src: "/testing/content/exporterTestsContent/test-image.png",
                 x: -10,
                 y: -15,
                 width: 20,
@@ -943,6 +945,35 @@ QUnit.test("Image with 404 href", function(assert) {
             done();
         }
     });
+});
+
+QUnit.test("Export image in group", function(assert) {
+    var done = assert.async(),
+        markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image></g>' + testingMarkupEnd,
+        imageBlob = getData(markup),
+        context = window.CanvasRenderingContext2D.prototype;
+
+    assert.expect(5);
+    $.when(imageBlob).done(() => {
+        try {
+            assert.equal(this.drawnElements.length, 2, "Canvas elements count");
+            assert.equal(this.drawnElements[1].type, "image");
+            assert.equal(context.save.callCount, 3);
+            assert.equal(context.restore.callCount, 3);
+            assert.ok(context.restore.secondCall.calledAfter(context.save.lastCall));
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Export draws into hidden canvas", function(assert) {
+    var done = assert.async(),
+        markup = testingMarkupStart + '<g transform="translate(10, 10)"><image x="-10" y="-15" width="20" height="25" preserveAspectRatio="xMidYMid" href="/testing/content/exporterTestsContent/test-image.png" visibility="visible"></image></g>' + testingMarkupEnd;
+
+    getData(markup).then(done);
+
+    assert.strictEqual($("canvas")[0].hidden, true);
 });
 
 QUnit.test("Text", function(assert) {
@@ -1780,6 +1811,30 @@ QUnit.test("Elements with visibility", function(assert) {
                 height: 200
             }, "Rect args");
             assert.deepEqual(that.drawnElements[2].style, {
+                fillStyle: "#00ff00",
+                globalAlpha: 1
+            }, "Rect style");
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Do not export elements with 'hidden-for-export' attribute", function(assert) {
+    const done = assert.async();
+    const markup = testingMarkupStart + '<g hidden-for-export="true"><rect x="20" y="20" width="200" height="200" fill="#FF0000"></rect></g><rect x="50" y="50" width="200" height="200" fill="#00FF00"></rect>' + testingMarkupEnd;
+
+    assert.expect(3);
+    getData(markup).then(() => {
+        try {
+            assert.equal(this.drawnElements.length, 3, "Canvas elements count");
+            assert.deepEqual(this.drawnElements[1].args, {
+                x: 50,
+                y: 50,
+                width: 200,
+                height: 200
+            }, "Rect args");
+            assert.deepEqual(this.drawnElements[2].style, {
                 fillStyle: "#00ff00",
                 globalAlpha: 1
             }, "Rect style");

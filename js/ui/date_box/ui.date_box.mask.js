@@ -108,22 +108,11 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _searchNumber(char) {
         let limits = this._getActivePartLimits(),
-            getter = this._getActivePartProp("getter"),
             maxSearchLength = String(limits.max).length;
 
         this._searchValue = (this._searchValue + char).substr(-maxSearchLength);
 
-        let newValue = parseInt(this._searchValue);
-
-        if(getter === "getMonth") {
-            newValue--;
-        }
-
-        if(!inRange(newValue, limits.min, limits.max)) {
-            newValue = parseInt(char);
-        }
-
-        this._setActivePartValue(newValue);
+        this._setActivePartValue(this._searchValue);
 
         if(this.option("advanceCaret")) {
             const isLengthExceeded = this._searchValue.length === maxSearchLength;
@@ -273,12 +262,21 @@ let DateBoxMask = DateBoxBase.inherit({
         return isFunction(getter) ? getter(dateValue) : dateValue[getter]();
     },
 
+    _addLeadingZeroes(value) {
+        const zeroes = this._searchValue.match(/^0+/),
+            limits = this._getActivePartLimits(),
+            maxLimitLength = String(limits.max).length;
+
+        return ((zeroes && zeroes[0]) || "" + String(value)).substr(-maxLimitLength);
+    },
+
     _setActivePartValue(value, dateValue) {
         dateValue = dateValue || this._maskValue;
         const setter = this._getActivePartProp("setter"),
             limits = this._getActivePartLimits();
 
-        value = fitIntoRange(value, limits.min, limits.max);
+        value = inRange(value, limits.min, limits.max) ? value : value % 10;
+        value = this._addLeadingZeroes(fitIntoRange(value, limits.min, limits.max));
 
         isFunction(setter) ? setter(dateValue, value) : dateValue[setter](value);
         this._renderDisplayText(this._getDisplayedText(dateValue));

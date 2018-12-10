@@ -118,8 +118,27 @@ var moduleConfig = {
 };
 
 QUnit.module("uploading by chunks", moduleConfig, function() {
+    QUnit.test("fileUploader should prevent upload chunks", function(assert) {
+        var isPreventedUpload = false;
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            uploadMode: "instantly",
+            chunkSize: 2000,
+            onUploadAborted: function() {
+                isPreventedUpload = true;
+            }
+        });
+        simulateFileChoose($fileUploader, [createBlobFile("fake.png", 100023)]);
+
+        var instance = $fileUploader.dxFileUploader("instance");
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT_DEFAULT);
+        instance.option("value", []);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT_DEFAULT);
+
+        assert.ok(isPreventedUpload, "file uploading is prevented");
+    });
     QUnit.test("file should correctly cut and sent it", function(assert) {
-        this.xhrMock.changeTimeouts(100, 100);
+        this.xhrMock.startSeries();
         var fakeContentFile = createBlobFile("fake.png", 100023);
         var index = 0;
         var loadedBytes = 0;
@@ -167,7 +186,7 @@ QUnit.module("uploading by chunks", moduleConfig, function() {
         assert.ok(this.xhrMock.getInstanceAt().uploadAborted, "request is aborted");
     });
     QUnit.test("multiple files should correctly cut and sent it", function(assert) {
-        this.xhrMock.changeTimeouts(100, 100);
+        this.xhrMock.startSeries();
         var fileUploadedCount = 0;
         var totalBytes = 0;
         var totalLoadedBytes = 0;
@@ -208,7 +227,7 @@ QUnit.module("uploading by chunks", moduleConfig, function() {
     });
     QUnit.test("uploading multiple files should be succesed", function(assert) {
         var uploadedFiles = [];
-        this.xhrMock.changeTimeouts(100, 100);
+        this.xhrMock.startSeries();
         var $fileUploader = $("#fileuploader").dxFileUploader({
             multiple: true,
             uploadMode: "instantly",

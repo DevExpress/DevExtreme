@@ -547,12 +547,13 @@ module.exports = {
                     }
                 },
                 _loadDataSource: function() {
-                    var dataSource = this._dataSource,
+                    var that = this,
+                        dataSource = that._dataSource,
                         result = new Deferred();
 
                     when(this._columnsController.refresh(true)).always(function() {
                         if(dataSource) {
-                            dataSource.load().done(result.resolve).fail(result.reject);
+                            that._operationId = dataSource.load().done(result.resolve).fail(result.reject).operationId;
                         } else {
                             result.resolve();
                         }
@@ -1097,6 +1098,7 @@ module.exports = {
                         oldDataSource.loadError.remove(that._loadErrorHandler);
                         oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
                         oldDataSource.changing.remove(that._changingHandler);
+                        oldDataSource.cancel(that._operationId);
                         oldDataSource.dispose(that._isSharedDataSource);
                     }
 
