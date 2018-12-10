@@ -421,8 +421,8 @@ var Popup = Overlay.inherit({
     },
 
     _renderContentImpl: function() {
-        this.callBase();
         this._renderTitle();
+        this.callBase();
         this._renderBottom();
     },
 
