@@ -179,10 +179,18 @@ var setPublicElementWrapper = function(value) {
     elementStrategy = value;
 };
 
+var getElementMaxHeightByWindow = function($element) {
+    var offsetTop = $element.offset().top - $(window).scrollTop(),
+        offsetBottom = $(window).innerHeight() - offsetTop - $element.outerHeight();
+
+    return Math.max(offsetTop, offsetBottom) * 0.9;
+};
+
 setPublicElementWrapper(function(element) {
     return element && element.get(0);
 });
 
+exports.getElementMaxHeightByWindow = getElementMaxHeightByWindow;
 exports.setPublicElementWrapper = setPublicElementWrapper;
 exports.resetActiveElement = resetActiveElement;
 exports.createMarkupFromString = createMarkupFromString;

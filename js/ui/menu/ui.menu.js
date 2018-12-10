@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
+    getElementMaxHeightByWindow = require("../../core/utils/dom").getElementMaxHeightByWindow,
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
     hoverEvents = require("../../events/hover"),
@@ -32,6 +33,7 @@ var DX_MENU_CLASS = "dx-menu",
 
     DX_ADAPTIVE_MODE_CLASS = DX_MENU_CLASS + "-adaptive-mode",
     DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS = DX_MENU_CLASS + "-hamburger-button",
+    DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS = DX_ADAPTIVE_MODE_CLASS + "-overlay-wrapper",
 
 
     FOCUS_UP = "up",
@@ -424,6 +426,9 @@ var Menu = MenuBase.inherit({
             position = rtl ? "right" : "left";
 
         return {
+            maxHeight: function() {
+                return getElementMaxHeightByWindow(this.$element());
+            }.bind(this),
             deferRendering: false,
             shading: false,
             animation: false,
@@ -497,6 +502,8 @@ var Menu = MenuBase.inherit({
             .append(this._treeView.$element())
             .addClass(DX_ADAPTIVE_MODE_CLASS)
             .addClass(this.option("cssClass"));
+
+        this._overlay._wrapper().addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
 
         this._$adaptiveContainer.append($hamburger);
         this._$adaptiveContainer.append(this._overlay.$element());

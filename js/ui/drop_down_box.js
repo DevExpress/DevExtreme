@@ -1,7 +1,6 @@
 var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     DataExpressionMixin = require("./editor/ui.data_expression"),
     commonUtils = require("../core/utils/common"),
-    window = require("../core/utils/window").getWindow(),
     map = require("../core/utils/iterator").map,
     selectors = require("./widget/selectors"),
     KeyboardProcessor = require("./widget/ui.keyboard_processor"),
@@ -12,6 +11,7 @@ var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     eventsEngine = require("../events/core/events_engine"),
     grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
+    getElementMaxHeightByWindow = require("../core/utils/dom").getElementMaxHeightByWindow,
     registerComponent = require("../core/component_registrator");
 
 var DROP_DOWN_BOX_CLASS = "dx-dropdownbox";
@@ -277,17 +277,10 @@ var DropDownBox = DropDownEditor.inherit({
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled: this.option("focusStateEnabled"),
-            maxHeight: this._getMaxHeight.bind(this)
+            maxHeight: function() {
+                return getElementMaxHeightByWindow(this.$element());
+            }.bind(this)
         }, this.option("dropDownOptions"));
-    },
-
-    _getMaxHeight: function() {
-        var $element = this.$element(),
-            offsetTop = $element.offset().top - $(window).scrollTop(),
-            offsetBottom = $(window).innerHeight() - offsetTop - $element.outerHeight(),
-            maxHeight = Math.max(offsetTop, offsetBottom) * 0.9;
-
-        return maxHeight;
     },
 
     _popupShownHandler: function() {

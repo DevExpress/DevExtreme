@@ -45,6 +45,7 @@ var DX_MENU_CLASS = "dx-menu",
     DX_MENU_ITEM_POPOUT_CLASS = DX_MENU_ITEM_CLASS + "-popout",
     DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS = DX_MENU_CLASS + "-hamburger-button",
     DX_ADAPTIVE_MODE_CLASS = DX_MENU_CLASS + "-adaptive-mode",
+    DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS = DX_ADAPTIVE_MODE_CLASS + "-overlay-wrapper",
     DX_TREEVIEW_CLASS = "dx-treeview",
     DX_TREEVIEW_ITEM_CLASS = DX_TREEVIEW_CLASS + "-item",
 
@@ -1885,6 +1886,36 @@ QUnit.test("Adaptivity should be available for horizontal orientation only", fun
     assert.equal($adaptiveContainer.length, 0, "adaptiveContainer was not rendered");
 });
 
+QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets when height of overlay content more windows height", function(assert) {
+    var getData = function(count) {
+        var result = [];
+        for(var i = 0; i < count; i++) {
+            result.push({ text: "item_" + i });
+        }
+        return result;
+    };
+
+    new Menu(this.$element, {
+        items: getData(10),
+        adaptivityEnabled: true
+    });
+
+    var scrollTop = sinon.stub(renderer.fn, "scrollTop").returns(100),
+        windowHeight = sinon.stub(renderer.fn, "innerHeight").returns(700),
+        offset = sinon.stub(renderer.fn, "offset").returns({ left: 0, top: 200 });
+
+    try {
+        var overlay = $(".dx-overlay").dxOverlay("instance"),
+            maxHeight = overlay.option("maxHeight");
+
+        assert.roughEqual(Math.floor(maxHeight()), 523, 2, "maxHeight is correct");
+        assert.ok(overlay._wrapper().hasClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS), "special class for overlay wrapper");
+    } finally {
+        scrollTop.restore();
+        windowHeight.restore();
+        offset.restore();
+    }
+});
 
 QUnit.module("adaptivity: transfer options", {
     beforeEach: function() {
