@@ -206,6 +206,8 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.deepEqual(theme.barGauge.export, theme.export, "export");
     assert.deepEqual(theme.map.export, theme.export, "export");
     assert.deepEqual(theme.rangeSelector.export, theme.export, "export");
+    assert.deepEqual(theme.sparkline.export, theme.export, "export");
+    assert.deepEqual(theme.bullet.export, theme.export, "export");
 
     // legend
     assert.deepEqual(theme.chart.legend, theme.legend, "legend");
