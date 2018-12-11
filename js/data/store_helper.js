@@ -35,45 +35,46 @@ function arrangeSortingInfo(groupInfo, sortInfo) {
 function queryByOptions(query, options, isCountQuery) {
     options = options || {};
 
-    var filter = options.filter,
-        sort = options.sort,
-        select = options.select,
-        group = options.group,
-        skip = options.skip,
-        take = options.take;
+    var filter = options.filter;
 
     if(filter) {
         query = query.filter(filter);
     }
 
+    if(isCountQuery) {
+        return query;
+    }
+
+    var sort = options.sort,
+        select = options.select,
+        group = options.group,
+        skip = options.skip,
+        take = options.take;
+
     if(group) {
         group = normalizeSortingInfo(group);
     }
 
-    if(!isCountQuery) {
-        if(sort || group) {
-            sort = normalizeSortingInfo(sort || []);
-            if(group) {
-                sort = arrangeSortingInfo(group, sort);
-            }
-            each(sort, function(index) {
-                query = query[index ? "thenBy" : "sortBy"](this.selector, this.desc, this.compare);
-            });
+    if(sort || group) {
+        sort = normalizeSortingInfo(sort || []);
+        if(group) {
+            sort = arrangeSortingInfo(group, sort);
         }
+        each(sort, function(index) {
+            query = query[index ? "thenBy" : "sortBy"](this.selector, this.desc, this.compare);
+        });
+    }
 
-        if(select) {
-            query = query.select(select);
-        }
+    if(select) {
+        query = query.select(select);
     }
 
     if(group) {
         query = multiLevelGroup(query, group);
     }
 
-    if(!isCountQuery) {
-        if(take || skip) {
-            query = query.slice(skip || 0, take);
-        }
+    if(take || skip) {
+        query = query.slice(skip || 0, take);
     }
 
     return query;

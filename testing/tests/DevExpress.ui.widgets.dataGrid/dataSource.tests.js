@@ -5,6 +5,7 @@ var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     ODataStore = require("data/odata/store"),
     dataQuery = require("data/query"),
+    queryByOptions = require("data/store_helper").queryByOptions,
     gridCore = require("ui/data_grid/ui.data_grid.core"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
@@ -2550,7 +2551,12 @@ function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOpt
                             extra.totalCount = totalCount;
                         }
                         if(loadOptions.requireGroupCount && !brokeOptions.skipGroupCount) {
-                            extra.groupCount = totalCount;
+                            queryByOptions(arrayStore.createQuery(), {
+                                filter: loadOptions.filter,
+                                group: loadOptions.group
+                            }).count().done(function(groupCount) {
+                                extra.groupCount = groupCount;
+                            });
                         }
                         if(brokeOptions.useNativePromise) {
                             d.resolve($.extend({ data: data }, extra));
