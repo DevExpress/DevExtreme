@@ -3356,18 +3356,18 @@ function createCustomStore(data, key) {
 
 QUnit.test("the 'onSelectionChanged' action should contain correct 'addedItems' when a remote store is used", function(assert) {
     var data = [
-            {
-                "id": 1,
-                "title": "item 1"
-            },
-            {
-                "id": 2,
-                "title": "item 2"
-            },
-            {
-                "id": 3,
-                "title": "item 3"
-            }],
+        {
+            "id": 1,
+            "title": "item 1"
+        },
+        {
+            "id": 2,
+            "title": "item 2"
+        },
+        {
+            "id": 3,
+            "title": "item 3"
+        }],
         spy = sinon.spy(),
         tagBox = $("#tagBox").dxTagBox({
             dataSource: createCustomStore(data, "id"),
@@ -3390,18 +3390,18 @@ QUnit.test("the 'onSelectionChanged' action should contain correct 'addedItems' 
 
 QUnit.test("the 'onSelectionChanged' action should contain correct 'removedItems' when a remote store is used", function(assert) {
     var data = [
-            {
-                "id": 1,
-                "title": "item 1"
-            },
-            {
-                "id": 2,
-                "title": "item 2"
-            },
-            {
-                "id": 3,
-                "title": "item 3"
-            }],
+        {
+            "id": 1,
+            "title": "item 1"
+        },
+        {
+            "id": 2,
+            "title": "item 2"
+        },
+        {
+            "id": 3,
+            "title": "item 3"
+        }],
         spy = sinon.spy(),
         tagBox = $("#tagBox").dxTagBox({
             dataSource: createCustomStore(data, "id"),
@@ -4527,6 +4527,26 @@ QUnit.test("'byKey' should not be called on initialization (T533200)", function(
     });
 
     assert.equal(byKeySpy.callCount, 0);
+});
+
+QUnit.test("tagBox should not load data from the DataSource when showDataBeforeSearch is disabled", function(assert) {
+    var load = sinon.stub().returns([{ text: "Item 1" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: { load: load },
+            searchTimeout: 0,
+            minSearchLength: 3,
+            searchEnabled: true,
+            showDataBeforeSearch: false
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        kb = keyboardMock($tagBox.find("input"));
+
+    tagBox.open();
+    assert.notOk(load.called, "load has not been called");
+
+    kb.type("Item");
+    this.clock.tick(0);
+    assert.ok(load.called, "load has been called after the search only");
 });
 
 
