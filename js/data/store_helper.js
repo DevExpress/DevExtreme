@@ -35,23 +35,24 @@ function arrangeSortingInfo(groupInfo, sortInfo) {
 function queryByOptions(query, options, isCountQuery) {
     options = options || {};
 
-    var filter = options.filter,
-        sort = options.sort,
-        select = options.select,
-        group = options.group,
-        skip = options.skip,
-        take = options.take;
+    var filter = options.filter;
 
     if(filter) {
         query = query.filter(filter);
     }
 
-    if(group) {
-        group = normalizeSortingInfo(group);
-    }
-
     if(isCountQuery) {
         return query;
+    }
+
+    var sort = options.sort,
+        select = options.select,
+        group = options.group,
+        skip = options.skip,
+        take = options.take;
+
+    if(group) {
+        group = normalizeSortingInfo(group);
     }
 
     if(sort || group) {
