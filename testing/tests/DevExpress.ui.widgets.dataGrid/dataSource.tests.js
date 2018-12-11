@@ -2550,7 +2550,9 @@ function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOpt
                             extra.totalCount = totalCount;
                         }
                         if(loadOptions.requireGroupCount && !brokeOptions.skipGroupCount) {
-                            extra.groupCount = totalCount;
+                            arrayStore._loadImpl({ filter: loadOptions.filter, group: loadOptions.group }).done(function(allData) {
+                                extra.groupCount = allData.length;
+                            });
                         }
                         if(brokeOptions.useNativePromise) {
                             d.resolve($.extend({ data: data }, extra));
