@@ -71,7 +71,7 @@ QUnit.module("Keyboard navigation", {
     });
 
     // T697525
-    QUnit.test("keyup for enter key shouled fired twice between compositionstart & compositionend events", function(assert) {
+    QUnit.test("keyup for enter key should not fired between compositionstart & compositionend events", function(assert) {
         this.instance.option("value", ["State", "<>", "State"]);
         this.showTextEditor();
         var textEditorElement = this.getTextEditorElement();
@@ -83,6 +83,25 @@ QUnit.module("Keyboard navigation", {
         textEditorElement.find("input").trigger("compositionend");
         keyboardMock(textEditorElement).keyUp(ENTER_KEY);
         assert.ok(this.getTextEditorElement().length, "skip first keyup after composition");
+
+        keyboardMock(textEditorElement).keyUp(ENTER_KEY);
+        assert.notOk(this.getTextEditorElement().length, "keyup fired");
+    });
+
+    // T697525
+    QUnit.test("keyup for enter key shouled fired after compositionend on safari", function(assert) {
+        this.instance.option("value", ["State", "<>", "State"]);
+        this.showTextEditor();
+        var textEditorElement = this.getTextEditorElement();
+        textEditorElement.find("input").trigger("compositionstart");
+
+        keyboardMock(textEditorElement).keyUp(ENTER_KEY);
+        assert.ok(this.getTextEditorElement().length, "skip keyup while composition");
+
+        textEditorElement.find("input").trigger("compositionend");
+        keyboardMock(textEditorElement).keyDown(229);
+        keyboardMock(textEditorElement).keyUp(ENTER_KEY);
+        assert.ok(this.getTextEditorElement().length, "wait for keydown != 229 after composition");
 
         keyboardMock(textEditorElement).keyUp(ENTER_KEY);
         assert.notOk(this.getTextEditorElement().length, "keyup fired");
