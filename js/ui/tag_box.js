@@ -1199,10 +1199,6 @@ var TagBox = SelectBox.inherit({
         this._list && this._list.option("selectedItems", this._selectedItems);
     },
 
-    _getDataSource: function() {
-        return this._dataSource;
-    },
-
     _resetListDataSourceFilter: function() {
         var dataSource = this._getDataSource();
 
