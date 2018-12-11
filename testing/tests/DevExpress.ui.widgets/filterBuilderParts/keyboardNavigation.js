@@ -70,6 +70,24 @@ QUnit.module("Keyboard navigation", {
         assert.ok(this.getTextEditorElement().length);
     });
 
+    // T697525
+    QUnit.test("keyup for enter key shouled fired twice between compositionstart & compositionend events", function(assert) {
+        this.instance.option("value", ["State", "<>", "State"]);
+        this.showTextEditor();
+        var textEditorElement = this.getTextEditorElement();
+        textEditorElement.find("input").trigger("compositionstart");
+
+        keyboardMock(textEditorElement).keyUp(ENTER_KEY);
+        assert.ok(this.getTextEditorElement().length, "skip keyup while composition");
+
+        textEditorElement.find("input").trigger("compositionend");
+        keyboardMock(textEditorElement).keyUp(ENTER_KEY);
+        assert.ok(this.getTextEditorElement().length, "skip first keyup after composition");
+
+        keyboardMock(textEditorElement).keyUp(ENTER_KEY);
+        assert.notOk(this.getTextEditorElement().length, "keyup fired");
+    });
+
     QUnit.test("enter keyup for value button and editor", function(assert) {
         this.instance.option("value", ["Zipcode", "<>", 123]);
 
