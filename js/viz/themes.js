@@ -120,10 +120,10 @@ function patchTheme(theme) {
         mergeScalar(theme[section], "redrawOnResize", theme);
         mergeScalar(theme[section], "containerBackgroundColor", null, theme.backgroundColor);
         mergeObject(theme[section], "tooltip", theme);
+        mergeObject(theme[section], "export", theme);
     });
     _each(["chart", "pie", "polar", "gauge", "barGauge", "map", "treeMap", "funnel", "rangeSelector"], function(_, section) {
         mergeObject(theme[section], "loadingIndicator", theme);
-        mergeObject(theme[section], "export", theme);
         mergeObject(theme[section], "legend", theme);
         mergeObject(theme[section], "title", theme);
     });
