@@ -6,7 +6,8 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     domUtils = require("core/utils/dom"),
     internals = require("ui/form/ui.form").__internals,
-    themes = require("ui/themes");
+    themes = require("ui/themes"),
+    LayoutManager = require("ui/form/ui.form.layout_manager");
 
 require("ui/text_area");
 
@@ -1296,10 +1297,17 @@ QUnit.test("Align labels when layout is changed when small window size by defaul
 QUnit.module("Public API", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.renderLabelSpy = sinon.spy(LayoutManager.prototype, '_renderLabel');
+        this.renderValidatorSpy = sinon.spy(LayoutManager.prototype, '_renderValidator');
     },
 
     afterEach: function() {
         this.clock.restore();
+        this.renderLabelSpy.restore();
+        this.renderValidatorSpy.restore();
+        if(this.form_renderComponentSpy) {
+            this.form_renderComponentSpy.restore();
+        }
     }
 });
 
@@ -2090,11 +2098,198 @@ QUnit.test("Changing an validationRules options of an any item does not invalida
                 { dataField: "count", editorType: "dxTextBox", validationRules: [{ type: "range", max: 10 }] }
             ]
         }).dxForm("instance"),
-        formInvalidateSpy = sinon.spy(form, "_invalidate");
+        formInvalidateSpy = sinon.spy(form, "_invalidate"),
+        renderComponentSpy = sinon.spy(form, "_renderComponent");
 
     form.option("items[1].validationRules[0].max", 11);
     assert.strictEqual(form.option("items[1].validationRules[0].max"), 11, "correct validationRule option");
     assert.strictEqual(formInvalidateSpy.callCount, 0, "Invalidate does not called");
+    assert.strictEqual(renderComponentSpy.callCount, 0, "renderComponentSpy.callCount");
+});
+
+function runChangeItemRageRuleToInvalidTest(test, assert, changeItemRageRuleToInvalidFunc) {
+    const form = $("#form").dxForm({
+        formData: { f1: 10 },
+        items: [{
+            dataField: 'f1',
+            validationRules: [{ type: 'range', max: 11 }]
+        }]
+    }).dxForm("instance");
+
+    test.form_renderComponentSpy = sinon.spy(form, '_renderComponent');
+    test.renderValidatorSpy.reset();
+    test.renderLabelSpy.reset();
+
+    changeItemRageRuleToInvalidFunc(form);
+    form.itemOption('f1').validationRules[0].max = 1;
+
+    assert.strictEqual(form.itemOption('f1').validationRules[0].max, 1);
+    assert.strictEqual(form.option('items[0].validationRules[0].max'), 1);
+    assert.strictEqual(test.renderLabelSpy.callCount, 0);
+    assert.strictEqual(test.form_renderComponentSpy.callCount, 0, 'form_renderComponentSpy.callCount');
+    assert.strictEqual(test.renderValidatorSpy.callCount, 0);
+    assert.strictEqual(form.validate().isValid, false);
+}
+
+QUnit.test("Change item.rangeRule to invalid via form.option", function(assert) {
+    runChangeItemRageRuleToInvalidTest(this, assert, (form) => form.option('items[0].validationRules[0].max', 1));
+});
+
+QUnit.test("Change item.rangeRule to invalid via form.itemOption", function(assert) {
+    runChangeItemRageRuleToInvalidTest(this, assert, (form) => form.itemOption('f1').validationRules[0].max = 1);
+});
+
+function runChangeItemRageRuleToValidTest(test, assert, changeItemRageRuleToValidFunc) {
+    const form = $("#form").dxForm({
+        formData: { f1: 10 },
+        items: [{
+            dataField: 'f1',
+            validationRules: [{ type: 'range', max: 1 }]
+        }]
+    }).dxForm("instance");
+
+    test.form_renderComponentSpy = sinon.spy(form, '_renderComponent');
+    test.renderValidatorSpy.reset();
+    test.renderLabelSpy.reset();
+
+    changeItemRageRuleToValidFunc(form);
+
+    assert.strictEqual(form.itemOption('f1').validationRules[0].max, 11);
+    assert.strictEqual(form.option('items[0].validationRules[0].max'), 11);
+    assert.strictEqual(test.renderLabelSpy.callCount, 0);
+    assert.strictEqual(test.form_renderComponentSpy.callCount, 0, 'form_renderComponentSpy.callCount');
+    assert.strictEqual(test.renderValidatorSpy.callCount, 0);
+    assert.strictEqual(form.validate().isValid, true);
+}
+
+QUnit.test("Change item.rangeRule to valid via form.option", function(assert) {
+    runChangeItemRageRuleToValidTest(this, assert, (form) => form.option('items[0].validationRules[0].max', 11));
+});
+
+QUnit.test("Change item.rangeRule to valid via form.itemOption", function(assert) {
+    runChangeItemRageRuleToValidTest(this, assert, (form) => form.itemOption('f1').validationRules[0].max = 11);
+});
+
+function runSetItemRequiredRuleTest(test, assert, setValidationRulesFunc) {
+    const form = $("#form").dxForm({
+        formData: { f1: undefined },
+        items: [{
+            dataField: 'f1',
+            validationRules: []
+        }]
+    }).dxForm("instance");
+
+    test.form_renderComponentSpy = sinon.spy(form, '_renderComponent');
+    test.renderLabelSpy.reset();
+    test.renderValidatorSpy.reset();
+    const validationRules = [{ type: 'required' }];
+
+    setValidationRulesFunc(form, validationRules);
+
+    assert.strictEqual(form.option('items[0].validationRules'), validationRules);
+    assert.strictEqual(form.itemOption('f1').validationRules, validationRules);
+    assert.strictEqual(test.renderLabelSpy.getCall(0).args[0].isRequired, true);
+    assert.strictEqual(test.renderValidatorSpy.getCall(0).args[1][0].type, 'required');
+    assert.strictEqual(test.form_renderComponentSpy.callCount, 0, 'form_renderComponentSpy.callCount');
+    assert.strictEqual(form.validate().isValid, false);
+}
+
+QUnit.test("Set item RequiredRule via form.option", function(assert) {
+    runSetItemRequiredRuleTest(this, assert, (form, validationRules) => form.option('items[0].validationRules', validationRules));
+});
+
+QUnit.test("Set item RequiredRule via form.itemOption", function(assert) {
+    runSetItemRequiredRuleTest(this, assert, (form, validationRules) => form.itemOption('f1', 'validationRules', validationRules));
+});
+
+function runClearItemRequiredRuleTest(test, assert, setValidationRulesFunc) {
+    const form = $("#form").dxForm({
+        formData: { f1: undefined },
+        items: [{
+            dataField: 'f1',
+            validationRules: [{ type: 'required' }]
+        }]
+    }).dxForm("instance");
+
+    test.form_renderComponentSpy = sinon.spy(form, '_renderComponent');
+    test.renderLabelSpy.reset();
+    const validationRules = []; // TODO: undefined? null?
+
+    setValidationRulesFunc(form, validationRules);
+
+    assert.strictEqual(form.option('items[0].validationRules'), validationRules);
+    assert.strictEqual(form.itemOption('f1').validationRules, validationRules);
+    assert.strictEqual((((test.renderLabelSpy.getCall(0) || {}).args || {})[0] || {}).isRequired, false, 'renderLabelSpy.getCall(0).args[0].isRequired');
+    assert.strictEqual(test.renderValidatorSpy.callCount, 1, 'renderValidatorSpy.callCount');
+    assert.strictEqual(test.form_renderComponentSpy.callCount, 0, 'form_renderComponentSpy.callCount');
+    assert.strictEqual((form.validate() || {}).isValid, true);
+}
+
+QUnit.test("Clear item RequiredRule via form.option", function(assert) {
+    runClearItemRequiredRuleTest(this, assert, (form, validationRules) => form.option('items[0].validationRules', validationRules));
+});
+
+QUnit.test("Clear item RequiredRule via form.itemOption", function(assert) {
+    runClearItemRequiredRuleTest(this, assert, (form, validationRules) => form.itemOption('f1', 'validationRules', validationRules));
+});
+
+function runEnableItemIsRequiredTest(test, assert, enableIsRequiredFunc) {
+    const form = $("#form").dxForm({
+        formData: {},
+        items: [
+            { dataField: "f1", isRequired: false },
+        ]
+    }).dxForm("instance");
+
+    test.form_renderComponentSpy = sinon.spy(form, '_renderComponent');
+    test.renderLabelSpy.reset();
+    test.renderValidatorSpy.reset();
+
+    enableIsRequiredFunc(form);
+
+    assert.strictEqual(form.option('items[0].isRequired'), true);
+    assert.strictEqual(form.itemOption('f1').isRequired, true);
+    assert.strictEqual(test.renderLabelSpy.getCall(0).args[0].isRequired, true);
+    assert.strictEqual(test.renderValidatorSpy.getCall(0).args[1][0].type, 'required');
+    assert.strictEqual(test.form_renderComponentSpy.callCount, 0, 'form_renderComponentSpy.callCount');
+    assert.strictEqual(form.validate().isValid, false);
+}
+
+QUnit.test("Enable item.isRequired via form.option", function(assert) {
+    runEnableItemIsRequiredTest(this, assert, (form) => form.option('items[0].isRequired', true));
+});
+
+QUnit.test("Enable item.isRequired via form.itemOption", function(assert) {
+    runEnableItemIsRequiredTest(this, assert, (form) => form.itemOption('f1', 'isRequired', true));
+});
+
+function run_disable_isRequired_test(test, assert, disableIsRequiredFunc) {
+    const form = $("#form").dxForm({
+        formData: {},
+        items: [
+            { dataField: "f1", isRequired: true },
+        ]
+    }).dxForm("instance");
+
+    test.form_renderComponentSpy = sinon.spy(form, '_renderComponent');
+    test.renderLabelSpy.reset();
+    test.renderValidatorSpy.reset();
+
+    disableIsRequiredFunc(form);
+
+    assert.strictEqual(form.option('items[0].isRequired'), false);
+    assert.strictEqual(form.itemOption('f1').isRequired, false);
+    assert.strictEqual(test.renderLabelSpy.getCall(0).args[0].isRequired, false);
+    assert.strictEqual(test.form_renderComponentSpy.callCount, 0, 'form_renderComponentSpy.callCount');
+    assert.strictEqual(form.validate(), undefined);
+}
+
+QUnit.test("Disable item.isRequired via form.option", function(assert) {
+    run_disable_isRequired_test(this, assert, (form) => form.option('items[0].isRequired', false));
+});
+
+QUnit.test("Disable item.isRequired via form.itemOption", function(assert) {
+    run_disable_isRequired_test(this, assert, (form) => form.itemOption('f1', 'isRequired', false));
 });
 
 QUnit.test("Changing an editor/button options of an any item does not invalidate whole form (T311892, T681241)", function(assert) {
