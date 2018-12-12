@@ -23,7 +23,8 @@ var $ = require("../../core/renderer"),
     deviceDependentOptions = require("../scroll_view/ui.scrollable").deviceDependentOptions,
     CollectionWidget = require("../collection/ui.collection_widget.live_update").default,
     BindableTemplate = require("../widget/bindable_template"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+    Deferred = require("../../core/utils/deferred").Deferred,
+    DataConverterMixin = require("../shared/hierarchical_data_converter_mixin");
 
 var LIST_CLASS = "dx-list",
     LIST_ITEM_CLASS = "dx-list-item",
@@ -607,25 +608,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _getSpecificDataSourceOption: function() {
-        let dataSource = this.option("dataSource");
-
-        if(Array.isArray(dataSource) && this.option("grouped")) {
-            dataSource = dataSource.reduce((accumulator, item) => {
-                const items = item.items.map((innerItem) => {
-                    return Object.assign({}, { key: item.key }, innerItem);
-                });
-                return accumulator.concat(items);
-            }, []);
-            dataSource = {
-                store: {
-                    type: "array",
-                    data: dataSource
-                },
-                group: "key"
-            };
-        };
-
-        return dataSource;
+        return this._getPlainDataMixin();
     },
 
     _dataSourceFromUrlLoadMode: function() {
@@ -1298,7 +1281,7 @@ var ListBase = CollectionWidget.inherit({
         this._scrollView.scrollToElement($item);
     }
 
-});
+}).include(DataConverterMixin);
 
 ListBase.ItemClass = ListItem;
 

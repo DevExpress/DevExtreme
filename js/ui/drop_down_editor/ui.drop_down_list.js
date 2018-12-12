@@ -16,7 +16,8 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     themes = require("../themes"),
     ChildDefaultTemplate = require("../widget/child_default_template"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+    Deferred = require("../../core/utils/deferred").Deferred,
+    DataConverterMixin = require("../shared/hierarchical_data_converter_mixin");
 
 var LIST_ITEM_SELECTOR = ".dx-list-item",
     LIST_ITEM_DATA_KEY = "dxListItemData",
@@ -607,25 +608,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _getSpecificDataSourceOption: function() {
-        let dataSource = this.option("dataSource");
-
-        if(Array.isArray(dataSource) && this.option("grouped")) {
-            dataSource = dataSource.reduce((accumulator, item) => {
-                const items = item.items.map((innerItem) => {
-                    return Object.assign({ key: item.key }, innerItem);
-                });
-                return accumulator.concat(items);
-            }, []);
-            dataSource = {
-                store: {
-                    type: "array",
-                    data: dataSource,
-                },
-                group: "key"
-            };
-        };
-
-        return dataSource;
+        return this._getPlainDataMixin();
     },
 
     _dataSourceFromUrlLoadMode: function() {
@@ -918,7 +901,7 @@ var DropDownList = DropDownEditor.inherit({
         }
     }
 
-}).include(DataExpressionMixin);
+}).include(DataExpressionMixin, DataConverterMixin);
 
 registerComponent("dxDropDownList", DropDownList);
 
