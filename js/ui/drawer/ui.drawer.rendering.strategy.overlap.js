@@ -45,7 +45,7 @@ class OverlapStrategy extends DrawerStrategy {
         const drawer = this.getDrawerInstance();
 
         if(typeUtils.isDefined(this._initialPosition)) {
-            translator.move($overlayContent, { left: this._initialPosition.left });
+            translator.move($overlayContent, { left: this._initialPosition.left, top: this._initialPosition.top });
         }
         if(drawer.getDrawerPosition() === "right") {
             $overlayContent.css("left", "auto");
@@ -98,7 +98,7 @@ class OverlapStrategy extends DrawerStrategy {
             overlay.option("width", keepMaxSize ? drawer.getRealPanelWidth() : this._getPanelSize(drawer.option("opened")));
         } else {
             overlay.option("width", overlay.option("container").width());
-            overlay.option("height", drawer.getRealPanelHeight());
+            overlay.option("height", keepMaxSize ? drawer.getRealPanelHeight() : this._getPanelSize(drawer.option("opened")));
         }
     }
 

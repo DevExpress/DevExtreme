@@ -965,26 +965,77 @@ var FilterBuilder = Widget.inherit({
         }
     },
 
+    _addDocumentKeyUp: function($editor, handler) {
+        var document = domAdapter.getDocument();
+        var documentKeyUpHandler = (e) => {
+            if(isComposing || hasCompositionJustEnded) {
+                // IME composing fires
+                hasCompositionJustEnded = false;
+                return;
+            }
+            handler(e);
+        };
+        eventsEngine.on(document, "keyup", documentKeyUpHandler);
+
+        var isComposing = false; // IME Composing going on
+        var hasCompositionJustEnded = false; // Used to swallow keyup event related to compositionend
+
+        var input = $editor.find("input");
+        eventsEngine.on(input, "compositionstart", () => {
+            isComposing = true;
+        });
+
+        eventsEngine.on(input, "compositionend", () => {
+            isComposing = false;
+            // some browsers (IE, Firefox, Safari) send a keyup event after
+            // compositionend, some (Chrome, Edge) don't. This is to swallow
+            // the next keyup event, unless a keydown event happens first
+            hasCompositionJustEnded = true;
+        });
+
+        // Safari on OS X may send a keydown of 229 after compositionend
+        eventsEngine.on(input, "keydown", (event) => {
+            if(event.which !== 229) {
+                hasCompositionJustEnded = false;
+            }
+        });
+
+        return documentKeyUpHandler;
+    },
+
+    _addDocumentClick: function($editor, closeEditorFunc) {
+        var document = domAdapter.getDocument();
+        var documentClickHandler = (e) => {
+            if(!this._isFocusOnEditorParts($editor, e.target)) {
+                eventsEngine.trigger($editor.find("input"), "change");
+                closeEditorFunc();
+            }
+        };
+        eventsEngine.on(document, "dxpointerdown", documentClickHandler);
+
+        return documentClickHandler;
+    },
+
+    _isFocusOnEditorParts: function($editor, target) {
+        var activeElement = target || domAdapter.getActiveElement();
+        return $(activeElement).closest($editor.children()).length
+            || $(activeElement).closest(".dx-dropdowneditor-overlay").length;
+    },
+
     _createValueEditorWithEvents: function(item, field, $container) {
         var document = domAdapter.getDocument(),
-            that = this,
             value = item[2],
             removeEvents = function() {
                 eventsEngine.off(document, "keyup", documentKeyUpHandler);
                 eventsEngine.off(document, "dxpointerdown", documentClickHandler);
             },
-            isFocusOnEditorParts = function(target) {
-                var activeElement = target || domAdapter.getActiveElement();
-                return $(activeElement).closest($editor.children()).length
-                    || $(activeElement).closest(".dx-dropdowneditor-overlay").length;
-            },
-            createValueText = function() {
+            createValueText = () => {
                 $container.empty();
                 removeEvents();
-                return that._createValueText(item, field, $container);
+                return this._createValueText(item, field, $container);
             },
-            closeEditor = function() {
-                that._updateConditionValue(item, value, function() {
+            closeEditor = () => {
+                this._updateConditionValue(item, value, function() {
                     createValueText();
                 });
             };
@@ -1001,24 +1052,16 @@ var FilterBuilder = Widget.inherit({
 
         $container.empty();
 
-        var $editor = that._createValueEditor($container, field, options);
-
+        var $editor = this._createValueEditor($container, field, options);
         eventsEngine.trigger($editor.find("input").not(':hidden').eq(0), "focus");
 
-        var documentClickHandler = function(e) {
-            if(!isFocusOnEditorParts(e.target)) {
-                eventsEngine.trigger($editor.find("input"), "change");
-                closeEditor();
-            }
-        };
-        eventsEngine.on(document, "dxpointerdown", documentClickHandler);
-
-        var documentKeyUpHandler = function(e) {
+        var documentClickHandler = this._addDocumentClick($editor, closeEditor);
+        var documentKeyUpHandler = this._addDocumentKeyUp($editor, (e) => {
             if(e.keyCode === TAB_KEY) {
-                if(isFocusOnEditorParts()) {
+                if(this._isFocusOnEditorParts($editor)) {
                     return;
                 }
-                that._updateConditionValue(item, value, function() {
+                this._updateConditionValue(item, value, function() {
                     createValueText();
                     if(e.shiftKey) {
                         eventsEngine.trigger($container.prev(), "focus");
@@ -1029,12 +1072,11 @@ var FilterBuilder = Widget.inherit({
                 eventsEngine.trigger(createValueText(), "focus");
             }
             if(e.keyCode === ENTER_KEY) {
-                that._updateConditionValue(item, value, function() {
+                this._updateConditionValue(item, value, function() {
                     eventsEngine.trigger(createValueText(), "focus");
                 });
             }
-        };
-        eventsEngine.on(document, "keyup", documentKeyUpHandler);
+        });
     },
 
     _createValueButton: function(item, field) {

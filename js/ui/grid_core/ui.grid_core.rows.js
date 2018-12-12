@@ -165,7 +165,7 @@ module.exports = {
                 /**
                 * @name GridBaseOptions.loadPanel.shading
                 * @type boolean
-                * @default true
+                * @default false
                 */
 
                 /**

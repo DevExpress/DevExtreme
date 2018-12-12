@@ -34,7 +34,7 @@ QUnit.test("totalCount", assert => {
 
         })
         .done(r => {
-            assert.equal(r, 3);
+            assert.equal(r, 5);
             done();
         });
 });
