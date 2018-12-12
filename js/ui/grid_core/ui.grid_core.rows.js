@@ -1079,8 +1079,10 @@ module.exports = {
                             } else {
                                 freeSpaceRowElements.hide();
                                 commonUtils.deferUpdate(function() {
-                                    var scrollbarWidth = that.getScrollbarWidth(true),
-                                        elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth,
+                                    var scrollable = that.getScrollable(),
+                                        scrollablePadding = scrollable ? Math.ceil(parseFloat(scrollable.$content().css("paddingBottom"))) : 0, // T697699
+                                        scrollbarWidth = that.getScrollbarWidth(true),
+                                        elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth - scrollablePadding,
                                         contentHeight = contentElement.outerHeight(),
                                         showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0,
                                         rowsHeight = that._getRowsHeight(contentElement.children().first()),
