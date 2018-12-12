@@ -1887,16 +1887,8 @@ QUnit.test("Adaptivity should be available for horizontal orientation only", fun
 });
 
 QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets when height of overlay content more windows height", function(assert) {
-    var getData = function(count) {
-        var result = [];
-        for(var i = 0; i < count; i++) {
-            result.push({ text: "item_" + i });
-        }
-        return result;
-    };
-
     new Menu(this.$element, {
-        items: getData(10),
+        items: this.items,
         adaptivityEnabled: true
     });
 
@@ -1905,7 +1897,7 @@ QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets when hei
         offset = sinon.stub(renderer.fn, "offset").returns({ left: 0, top: 200 });
 
     try {
-        var overlay = $(".dx-overlay").dxOverlay("instance"),
+        var overlay = this.$element.find(".dx-overlay").dxOverlay("instance"),
             maxHeight = overlay.option("maxHeight");
 
         assert.roughEqual(Math.floor(maxHeight()), 523, 2, "maxHeight is correct");

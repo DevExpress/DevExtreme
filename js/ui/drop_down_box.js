@@ -11,7 +11,7 @@ var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     eventsEngine = require("../events/core/events_engine"),
     grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
-    getElementMaxHeightByWindow = require("../core/utils/dom").getElementMaxHeightByWindow,
+    getElementMaxHeightByWindow = require("../ui/overlay/utils").getElementMaxHeightByWindow,
     registerComponent = require("../core/component_registrator");
 
 var DROP_DOWN_BOX_CLASS = "dx-dropdownbox";
