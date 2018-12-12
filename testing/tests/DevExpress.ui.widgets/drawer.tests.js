@@ -401,6 +401,58 @@ QUnit.test("drawer panel should be repositioned correctly after dimension change
     fx.off = false;
 });
 
+QUnit.test("drawer panel should be repositioned correctly after dimension changed,top position", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        opened: false,
+        position: "top",
+        revealMode: "slide",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+    const $panelOverlayContent = $element.find(".dx-overlay-content");
+
+    resizeCallbacks.fire();
+
+    assert.equal($panelOverlayContent.position().top, 0, "panel overlay content position is OK");
+
+    fx.off = false;
+});
+
+QUnit.test("drawer panel should have correct size after dimension changed,top position", assert => {
+    fx.off = true;
+
+    const $element = $("#drawer").dxDrawer({
+        opened: false,
+        position: "top",
+        revealMode: "expand",
+        openedStateMode: "overlap",
+        template: function($content) {
+            var $div = $("<div/>");
+            $div.css("height", 600);
+            $div.css("width", 200);
+
+            return $div;
+        }
+    });
+    const drawer = $element.dxDrawer("instance");
+    const $panelOverlayContent = $element.find(".dx-overlay-content");
+
+    resizeCallbacks.fire();
+
+    drawer.toggle();
+    assert.equal($panelOverlayContent.height(), 600, "panel overlay height is OK");
+
+    fx.off = false;
+});
+
 QUnit.test("drawer panel should be repositioned correctly after dimension changed, right position", assert => {
     fx.off = true;
 
