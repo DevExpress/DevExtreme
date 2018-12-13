@@ -6646,6 +6646,23 @@ if(browser.webkit) {
     });
 }
 
+// T697699
+QUnit.test("The vertical scrollbar should not be shown if showScrollbar is always", function(assert) {
+    // arrange
+    var rows = [{ values: ["test1"], rowType: "data" }],
+        columns = ["field1"],
+        rowsView = this.createRowsView(rows, null, columns, null, { scrolling: { useNative: false, showScrollbar: "always" } }),
+        $testElement = $('#container');
+
+    // act
+    rowsView.render($testElement);
+    rowsView.height(500);
+    rowsView.resize();
+
+    // assert
+    assert.strictEqual(rowsView.getScrollable().$content().outerHeight(), rowsView.getScrollable()._container().outerHeight(), "No vertical scroll");
+});
+
 QUnit.module('No data text', {
     beforeEach: function() {
         this.createRowsView = createRowsView;
