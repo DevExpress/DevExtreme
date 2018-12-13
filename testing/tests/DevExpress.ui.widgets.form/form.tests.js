@@ -6,6 +6,7 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     domUtils = require("core/utils/dom"),
     internals = require("ui/form/ui.form").__internals,
+    layout_manager_internals = require("ui/form/ui.form.layout_manager").__internals,
     themes = require("ui/themes"),
     LayoutManager = require("ui/form/ui.form.layout_manager");
 
@@ -2108,7 +2109,7 @@ QUnit.test("Changing an validationRules options of an any item does not invalida
     assert.strictEqual(renderComponentSpy.callCount, 0, "renderComponentSpy.callCount");
 });
 
-function runChangeItemRageRuleToInvalidTest(test, assert, changeItemRageRuleToInvalidFunc) {
+function runChangeItemRageRuleToInvalidTest(test, assert, useItemOption) {
     const form = $("#form").dxForm({
         formData: { f1: 10 },
         items: [{
@@ -2120,31 +2121,29 @@ function runChangeItemRageRuleToInvalidTest(test, assert, changeItemRageRuleToIn
     $("#form").find('.' + TEXTEDITOR_INPUT_CLASS).focus();
     assert.ok($("#form").find('.' + TEXTEDITOR_INPUT_CLASS).is(":focus"), 'initial focus');
 
-    test.form_renderComponentSpy = sinon.spy(form, '_renderComponent');
-    test.renderValidatorSpy.reset();
-    test.renderLabelSpy.reset();
-
-    changeItemRageRuleToInvalidFunc(form);
-    form.itemOption('f1').validationRules[0].max = 1;
+    if(useItemOption) {
+        form.itemOption('f1').validationRules[0].max = 1;
+    } else {
+        form.option('items[0].validationRules[0].max', 1);
+    }
 
     assert.strictEqual(form.itemOption('f1').validationRules[0].max, 1);
     assert.strictEqual(form.option('items[0].validationRules[0].max'), 1);
-    assert.strictEqual(test.renderLabelSpy.callCount, 0);
-    assert.strictEqual(test.form_renderComponentSpy.callCount, 0, 'form_renderComponentSpy.callCount');
-    assert.strictEqual(test.renderValidatorSpy.callCount, 0);
-    assert.strictEqual(form.validate().isValid, false);
     assert.ok($("#form").find('.' + TEXTEDITOR_INPUT_CLASS).is(":focus"), 'final focus');
+
+    assert.strictEqual(form.validate().isValid, false);
+    assert.strictEqual($("#form").find('.' + 'dx-invalid').length, 1, "dx-invalid");
 }
 
 QUnit.test("Change item.rangeRule to invalid via form.option", function(assert) {
-    runChangeItemRageRuleToInvalidTest(this, assert, (form) => form.option('items[0].validationRules[0].max', 1));
+    runChangeItemRageRuleToInvalidTest(this, assert, false);
 });
 
 QUnit.test("Change item.rangeRule to invalid via form.itemOption", function(assert) {
-    runChangeItemRageRuleToInvalidTest(this, assert, (form) => form.itemOption('f1').validationRules[0].max = 1);
+    runChangeItemRageRuleToInvalidTest(this, assert, true);
 });
 
-function runChangeItemRageRuleToValidTest(test, assert, changeItemRageRuleToValidFunc) {
+function runChangeItemRageRuleToValidTest(test, assert, useItemOption) {
     const form = $("#form").dxForm({
         formData: { f1: 10 },
         items: [{
@@ -2156,30 +2155,30 @@ function runChangeItemRageRuleToValidTest(test, assert, changeItemRageRuleToVali
     $("#form").find('.' + TEXTEDITOR_INPUT_CLASS).focus();
     assert.ok($("#form").find('.' + TEXTEDITOR_INPUT_CLASS).is(":focus"), 'initial focus');
 
-    test.form_renderComponentSpy = sinon.spy(form, '_renderComponent');
-    test.renderValidatorSpy.reset();
-    test.renderLabelSpy.reset();
-
-    changeItemRageRuleToValidFunc(form);
+    if(useItemOption) {
+        form.itemOption('f1').validationRules[0].max = 11;
+    } else {
+        form.option('items[0].validationRules[0].max', 11);
+    }
 
     assert.strictEqual(form.itemOption('f1').validationRules[0].max, 11);
     assert.strictEqual(form.option('items[0].validationRules[0].max'), 11);
-    assert.strictEqual(test.renderLabelSpy.callCount, 0);
-    assert.strictEqual(test.form_renderComponentSpy.callCount, 0, 'form_renderComponentSpy.callCount');
-    assert.strictEqual(test.renderValidatorSpy.callCount, 0);
-    assert.strictEqual(form.validate().isValid, true);
+
     assert.ok($("#form").find('.' + TEXTEDITOR_INPUT_CLASS).is(":focus"), 'final focus');
+
+    assert.strictEqual(form.validate().isValid, true);
+    assert.strictEqual($("#form").find('.' + 'dx-invalid').length, 0, "dx-invalid");
 }
 
 QUnit.test("Change item.rangeRule to valid via form.option", function(assert) {
-    runChangeItemRageRuleToValidTest(this, assert, (form) => form.option('items[0].validationRules[0].max', 11));
+    runChangeItemRageRuleToValidTest(this, assert, false);
 });
 
 QUnit.test("Change item.rangeRule to valid via form.itemOption", function(assert) {
-    runChangeItemRageRuleToValidTest(this, assert, (form) => form.itemOption('f1').validationRules[0].max = 11);
+    runChangeItemRageRuleToValidTest(this, assert, true);
 });
 
-function runSetItemRequiredRuleTest(test, assert, setValidationRulesFunc) {
+function runSetItemRequiredRuleTest(test, assert, useItemOption) {
     const form = $("#form").dxForm({
         formData: { f1: undefined },
         items: [{
@@ -2190,32 +2189,35 @@ function runSetItemRequiredRuleTest(test, assert, setValidationRulesFunc) {
 
     $("#form").find('.' + TEXTEDITOR_INPUT_CLASS).focus();
     assert.ok($("#form").find('.' + TEXTEDITOR_INPUT_CLASS).is(":focus"), 'initial focus');
-
-    test.form_renderComponentSpy = sinon.spy(form, '_renderComponent');
-    test.renderLabelSpy.reset();
-    test.renderValidatorSpy.reset();
+    assert.strictEqual($("#form").find('.' + layout_manager_internals.FIELD_ITEM_REQUIRED_MARK_CLASS).length, 0, "initial required mark");
+    assert.strictEqual($("#form").find('.' + 'dx-invalid').length, 0, "initial dx-invalid");
 
     const validationRules = [{ type: 'required' }];
-    setValidationRulesFunc(form, validationRules);
+    if(useItemOption) {
+        form.itemOption('f1', 'validationRules', validationRules);
+    } else {
+        form.option('items[0].validationRules', validationRules);
+    }
 
     assert.strictEqual(form.option('items[0].validationRules'), validationRules);
     assert.strictEqual(form.itemOption('f1').validationRules, validationRules);
-    assert.strictEqual(test.renderLabelSpy.getCall(0).args[0].isRequired, true);
-    assert.strictEqual(test.renderValidatorSpy.getCall(0).args[1][0].type, 'required');
-    assert.strictEqual(test.form_renderComponentSpy.callCount, 0, 'form_renderComponentSpy.callCount');
-    assert.strictEqual(form.validate().isValid, false);
+
     assert.ok($("#form").find('.' + TEXTEDITOR_INPUT_CLASS).is(":focus"), 'final focus');
+    assert.strictEqual($("#form").find('.' + layout_manager_internals.FIELD_ITEM_REQUIRED_MARK_CLASS).length, 1, "final required mark");
+
+    assert.strictEqual(form.validate().isValid, false);
+    assert.strictEqual($("#form").find('.' + 'dx-invalid').length, 1, "final dx-invalid");
 }
 
 QUnit.test("Set item RequiredRule via form.option", function(assert) {
-    runSetItemRequiredRuleTest(this, assert, (form, validationRules) => form.option('items[0].validationRules', validationRules));
+    runSetItemRequiredRuleTest(this, assert, false);
 });
 
 QUnit.test("Set item RequiredRule via form.itemOption", function(assert) {
-    runSetItemRequiredRuleTest(this, assert, (form, validationRules) => form.itemOption('f1', 'validationRules', validationRules));
+    runSetItemRequiredRuleTest(this, assert, true);
 });
 
-function runClearItemRequiredRuleTest(test, assert, setValidationRulesFunc) {
+function runClearItemRequiredRuleTest(test, assert, useItemOption) {
     const form = $("#form").dxForm({
         formData: { f1: undefined },
         items: [{
@@ -2226,31 +2228,35 @@ function runClearItemRequiredRuleTest(test, assert, setValidationRulesFunc) {
 
     $("#form").find('.' + TEXTEDITOR_INPUT_CLASS).focus();
     assert.ok($("#form").find('.' + TEXTEDITOR_INPUT_CLASS).is(":focus"), 'initial focus');
+    assert.strictEqual($("#form").find('.' + layout_manager_internals.FIELD_ITEM_REQUIRED_MARK_CLASS).length, 1, "initial required mark");
+    assert.strictEqual($("#form").find('.' + 'dx-invalid').length, 0, "initial dx-invalid");
 
-    test.form_renderComponentSpy = sinon.spy(form, '_renderComponent');
-    test.renderLabelSpy.reset();
-
-    const validationRules = []; // TODO: undefined? null?
-    setValidationRulesFunc(form, validationRules);
+    const validationRules = []; // empty array, undefined and null are not supported
+    if(useItemOption) {
+        form.itemOption('f1', 'validationRules', validationRules);
+    } else {
+        form.option('items[0].validationRules', validationRules);
+    }
 
     assert.strictEqual(form.option('items[0].validationRules'), validationRules);
     assert.strictEqual(form.itemOption('f1').validationRules, validationRules);
-    assert.strictEqual(test.renderLabelSpy.getCall(0).args[0].isRequired, false, 'renderLabelSpy.getCall(0).args[0].isRequired');
-    assert.strictEqual(test.renderValidatorSpy.callCount, 1, 'renderValidatorSpy.callCount');
-    assert.strictEqual(test.form_renderComponentSpy.callCount, 0, 'form_renderComponentSpy.callCount');
-    assert.ok((form.validate() || { isValid: true }).isValid, true);
+
     assert.ok($("#form").find('.' + TEXTEDITOR_INPUT_CLASS).is(":focus"), 'final focus');
+    assert.strictEqual($("#form").find('.' + layout_manager_internals.FIELD_ITEM_REQUIRED_MARK_CLASS).length, 0, "final required mark");
+
+    const validationResult = form.validate();
+    assert.ok(!validationResult || validationResult.isValid, true);
 }
 
 QUnit.test("Clear item RequiredRule via form.option", function(assert) {
-    runClearItemRequiredRuleTest(this, assert, (form, validationRules) => form.option('items[0].validationRules', validationRules));
+    runClearItemRequiredRuleTest(this, assert, false);
 });
 
 QUnit.test("Clear item RequiredRule via form.itemOption", function(assert) {
-    runClearItemRequiredRuleTest(this, assert, (form, validationRules) => form.itemOption('f1', 'validationRules', validationRules));
+    runClearItemRequiredRuleTest(this, assert, true);
 });
 
-function runEnableItemIsRequiredTest(test, assert, enableIsRequiredFunc) {
+function runEnableItemIsRequiredTest(test, assert, useItemOption) {
     const form = $("#form").dxForm({
         formData: {},
         items: [
@@ -2260,31 +2266,33 @@ function runEnableItemIsRequiredTest(test, assert, enableIsRequiredFunc) {
 
     $("#form").find('.' + TEXTEDITOR_INPUT_CLASS).focus();
     assert.ok($("#form").find('.' + TEXTEDITOR_INPUT_CLASS).is(":focus"), 'initial focus');
+    assert.strictEqual($("#form").find('.' + layout_manager_internals.FIELD_ITEM_REQUIRED_MARK_CLASS).length, 0, "initial required mark");
+    assert.strictEqual($("#form").find('.' + 'dx-invalid').length, 0, "initial dx-invalid");
 
-    test.form_renderComponentSpy = sinon.spy(form, '_renderComponent');
-    test.renderLabelSpy.reset();
-    test.renderValidatorSpy.reset();
-
-    enableIsRequiredFunc(form);
+    if(useItemOption) {
+        form.itemOption('f1', 'isRequired', true);
+    } else {
+        form.option('items[0].isRequired', true);
+    }
 
     assert.strictEqual(form.option('items[0].isRequired'), true);
     assert.strictEqual(form.itemOption('f1').isRequired, true);
-    assert.strictEqual(test.renderLabelSpy.getCall(0).args[0].isRequired, true);
-    assert.strictEqual(test.renderValidatorSpy.getCall(0).args[1][0].type, 'required');
-    assert.strictEqual(test.form_renderComponentSpy.callCount, 0, 'form_renderComponentSpy.callCount');
-    assert.strictEqual(form.validate().isValid, false);
+
     assert.ok($("#form").find('.' + TEXTEDITOR_INPUT_CLASS).is(":focus"), 'final focus');
+    assert.strictEqual($("#form").find('.' + layout_manager_internals.FIELD_ITEM_REQUIRED_MARK_CLASS).length, 1, "final required mark");
+
+    assert.strictEqual(form.validate().isValid, false);
 }
 
 QUnit.test("Enable item.isRequired via form.option", function(assert) {
-    runEnableItemIsRequiredTest(this, assert, (form) => form.option('items[0].isRequired', true));
+    runEnableItemIsRequiredTest(this, assert, false);
 });
 
 QUnit.test("Enable item.isRequired via form.itemOption", function(assert) {
-    runEnableItemIsRequiredTest(this, assert, (form) => form.itemOption('f1', 'isRequired', true));
+    runEnableItemIsRequiredTest(this, assert, true);
 });
 
-function run_disable_isRequired_test(test, assert, disableIsRequiredFunc) {
+function run_disable_isRequired_test(test, assert, useItemOption) {
     const form = $("#form").dxForm({
         formData: {},
         items: [
@@ -2294,27 +2302,30 @@ function run_disable_isRequired_test(test, assert, disableIsRequiredFunc) {
 
     $("#form").find('.' + TEXTEDITOR_INPUT_CLASS).focus();
     assert.ok($("#form").find('.' + TEXTEDITOR_INPUT_CLASS).is(":focus"), 'initial focus');
+    assert.strictEqual($("#form").find('.' + layout_manager_internals.FIELD_ITEM_REQUIRED_MARK_CLASS).length, 1, "initial required mark");
+    assert.strictEqual($("#form").find('.' + 'dx-invalid').length, 0, "initial dx-invalid");
 
-    test.form_renderComponentSpy = sinon.spy(form, '_renderComponent');
-    test.renderLabelSpy.reset();
-    test.renderValidatorSpy.reset();
-
-    disableIsRequiredFunc(form);
+    if(useItemOption) {
+        form.itemOption('f1', 'isRequired', false);
+    } else {
+        form.option('items[0].isRequired', false);
+    }
 
     assert.strictEqual(form.option('items[0].isRequired'), false);
     assert.strictEqual(form.itemOption('f1').isRequired, false);
-    assert.strictEqual(test.renderLabelSpy.getCall(0).args[0].isRequired, false);
-    assert.strictEqual(test.form_renderComponentSpy.callCount, 0, 'form_renderComponentSpy.callCount');
-    assert.strictEqual(form.validate(), undefined);
+
     assert.ok($("#form").find('.' + TEXTEDITOR_INPUT_CLASS).is(":focus"), 'final focus');
+    assert.strictEqual($("#form").find('.' + layout_manager_internals.FIELD_ITEM_REQUIRED_MARK_CLASS).length, 0, "final required mark");
+
+    assert.strictEqual(form.validate(), undefined);
 }
 
 QUnit.test("Disable item.isRequired via form.option", function(assert) {
-    run_disable_isRequired_test(this, assert, (form) => form.option('items[0].isRequired', false));
+    run_disable_isRequired_test(this, assert, false);
 });
 
 QUnit.test("Disable item.isRequired via form.itemOption", function(assert) {
-    run_disable_isRequired_test(this, assert, (form) => form.itemOption('f1', 'isRequired', false));
+    run_disable_isRequired_test(this, assert, true);
 });
 
 QUnit.test("Changing an editor/button options of an any item does not invalidate whole form (T311892, T681241)", function(assert) {
