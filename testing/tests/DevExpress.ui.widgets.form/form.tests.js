@@ -2109,7 +2109,7 @@ QUnit.test("Changing an validationRules options of an any item does not invalida
     assert.strictEqual(renderComponentSpy.callCount, 0, "renderComponentSpy.callCount");
 });
 
-function runChangeItemRageRuleToInvalidTest(test, assert, useItemOption) {
+function runChangeItemRageRuleToInvalidTest(assert, useItemOption) {
     const form = $("#form").dxForm({
         formData: { f1: 10 },
         items: [{
@@ -2136,14 +2136,14 @@ function runChangeItemRageRuleToInvalidTest(test, assert, useItemOption) {
 }
 
 QUnit.test("Change item.rangeRule to invalid via form.option", function(assert) {
-    runChangeItemRageRuleToInvalidTest(this, assert, false);
+    runChangeItemRageRuleToInvalidTest(assert, false);
 });
 
 QUnit.test("Change item.rangeRule to invalid via form.itemOption", function(assert) {
-    runChangeItemRageRuleToInvalidTest(this, assert, true);
+    runChangeItemRageRuleToInvalidTest(assert, true);
 });
 
-function runChangeItemRageRuleToValidTest(test, assert, useItemOption) {
+function runChangeItemRageRuleToValidTest(assert, useItemOption) {
     const form = $("#form").dxForm({
         formData: { f1: 10 },
         items: [{
@@ -2171,14 +2171,14 @@ function runChangeItemRageRuleToValidTest(test, assert, useItemOption) {
 }
 
 QUnit.test("Change item.rangeRule to valid via form.option", function(assert) {
-    runChangeItemRageRuleToValidTest(this, assert, false);
+    runChangeItemRageRuleToValidTest(assert, false);
 });
 
 QUnit.test("Change item.rangeRule to valid via form.itemOption", function(assert) {
-    runChangeItemRageRuleToValidTest(this, assert, true);
+    runChangeItemRageRuleToValidTest(assert, true);
 });
 
-function runSetItemRequiredRuleTest(test, assert, useItemOption) {
+function runSetItemRequiredRuleTest(assert, useItemOption) {
     const form = $("#form").dxForm({
         formData: { f1: undefined },
         items: [{
@@ -2210,14 +2210,14 @@ function runSetItemRequiredRuleTest(test, assert, useItemOption) {
 }
 
 QUnit.test("Set item RequiredRule via form.option", function(assert) {
-    runSetItemRequiredRuleTest(this, assert, false);
+    runSetItemRequiredRuleTest(assert, false);
 });
 
 QUnit.test("Set item RequiredRule via form.itemOption", function(assert) {
-    runSetItemRequiredRuleTest(this, assert, true);
+    runSetItemRequiredRuleTest(assert, true);
 });
 
-function runClearItemRequiredRuleTest(test, assert, useItemOption) {
+function runClearItemRequiredRuleTest(assert, useItemOption) {
     const form = $("#form").dxForm({
         formData: { f1: undefined },
         items: [{
@@ -2249,14 +2249,14 @@ function runClearItemRequiredRuleTest(test, assert, useItemOption) {
 }
 
 QUnit.test("Clear item RequiredRule via form.option", function(assert) {
-    runClearItemRequiredRuleTest(this, assert, false);
+    runClearItemRequiredRuleTest(assert, false);
 });
 
 QUnit.test("Clear item RequiredRule via form.itemOption", function(assert) {
-    runClearItemRequiredRuleTest(this, assert, true);
+    runClearItemRequiredRuleTest(assert, true);
 });
 
-function runEnableItemIsRequiredTest(test, assert, useItemOption) {
+function runEnableItemIsRequiredTest(assert, useItemOption) {
     const form = $("#form").dxForm({
         formData: {},
         items: [
@@ -2285,14 +2285,14 @@ function runEnableItemIsRequiredTest(test, assert, useItemOption) {
 }
 
 QUnit.test("Enable item.isRequired via form.option", function(assert) {
-    runEnableItemIsRequiredTest(this, assert, false);
+    runEnableItemIsRequiredTest(assert, false);
 });
 
 QUnit.test("Enable item.isRequired via form.itemOption", function(assert) {
-    runEnableItemIsRequiredTest(this, assert, true);
+    runEnableItemIsRequiredTest(assert, true);
 });
 
-function run_disable_isRequired_test(test, assert, useItemOption) {
+function run_disable_isRequired_test(assert, useItemOption) {
     const form = $("#form").dxForm({
         formData: {},
         items: [
@@ -2321,11 +2321,11 @@ function run_disable_isRequired_test(test, assert, useItemOption) {
 }
 
 QUnit.test("Disable item.isRequired via form.option", function(assert) {
-    run_disable_isRequired_test(this, assert, false);
+    run_disable_isRequired_test(assert, false);
 });
 
 QUnit.test("Disable item.isRequired via form.itemOption", function(assert) {
-    run_disable_isRequired_test(this, assert, true);
+    run_disable_isRequired_test(assert, true);
 });
 
 QUnit.test("Changing an editor/button options of an any item does not invalidate whole form (T311892, T681241)", function(assert) {
