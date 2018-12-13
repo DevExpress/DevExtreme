@@ -141,6 +141,30 @@ var FilterPanelView = modules.View.inherit({
         return result;
     },
 
+    _getValueMaskedText: function(value) {
+        return Array.isArray(value) ? `('${value.join("', '")}')` : ` '${value}'`;
+    },
+
+    _getValueText: function(field, customOperation, value) {
+        const deferred = new Deferred(),
+            hasCustomOperation = customOperation && customOperation.customizeText;
+        if(isDefined(value) || hasCustomOperation) {
+            if(!hasCustomOperation && field.lookup) {
+                utils.getCurrentLookupValueText(field, value, data => {
+                    deferred.resolve(this._getValueMaskedText(data));
+                });
+            } else {
+                let displayValue = Array.isArray(value) ? value : gridUtils.getDisplayValue(field, value);
+                when(utils.getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done(data => {
+                    deferred.resolve(this._getValueMaskedText(data));
+                });
+            }
+        } else {
+            deferred.resolve("");
+        }
+        return deferred.promise();
+    },
+
     getConditionText: function(filterValue, options) {
         var that = this,
             operation = filterValue[1],
@@ -158,16 +182,9 @@ var FilterPanelView = modules.View.inherit({
         } else {
             operationText = utils.getCaptionByOperation(operation, options.filterOperationDescriptions);
         }
-
-        if(isDefined(value) || (customOperation && customOperation.customizeText)) {
-            let displayValue = Array.isArray(value) ? value : gridUtils.getDisplayValue(field, value);
-            when(utils.getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done(data => {
-                let valueText = Array.isArray(data) ? `('${data.join("', '")}')` : ` '${data}'`;
-                deferred.resolve(that._getConditionText(fieldText, operationText, valueText));
-            });
-        } else {
-            deferred.resolve(that._getConditionText(fieldText, operationText));
-        }
+        this._getValueText(field, customOperation, value).done((valueText) => {
+            deferred.resolve(that._getConditionText(fieldText, operationText, valueText));
+        });
         return deferred;
     },
 
