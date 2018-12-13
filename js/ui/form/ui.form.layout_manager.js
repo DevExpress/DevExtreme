@@ -643,7 +643,7 @@ var LayoutManager = Widget.inherit({
                 validationRules = this._prepareValidationRules(item.validationRules, item.isRequired, item.itemType, fieldName);
 
             if(Array.isArray(validationRules) && validationRules.length) {
-                that._renderValidator($validationTarget, item);
+                that._renderValidator($validationTarget, validationRules);
             }
         }
 
