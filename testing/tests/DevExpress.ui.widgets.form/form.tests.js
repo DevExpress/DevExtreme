@@ -7,8 +7,7 @@ var $ = require("jquery"),
     domUtils = require("core/utils/dom"),
     internals = require("ui/form/ui.form").__internals,
     layout_manager_internals = require("ui/form/ui.form.layout_manager").__internals,
-    themes = require("ui/themes"),
-    LayoutManager = require("ui/form/ui.form.layout_manager");
+    themes = require("ui/themes");
 
 require("ui/text_area");
 
@@ -1299,17 +1298,10 @@ QUnit.test("Align labels when layout is changed when small window size by defaul
 QUnit.module("Public API", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        this.renderLabelSpy = sinon.spy(LayoutManager.prototype, '_renderLabel');
-        this.renderValidatorSpy = sinon.spy(LayoutManager.prototype, '_renderValidator');
     },
 
     afterEach: function() {
         this.clock.restore();
-        this.renderLabelSpy.restore();
-        this.renderValidatorSpy.restore();
-        if(this.form_renderComponentSpy) {
-            this.form_renderComponentSpy.restore();
-        }
     }
 });
 
