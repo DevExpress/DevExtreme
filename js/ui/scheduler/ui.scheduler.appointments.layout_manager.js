@@ -100,35 +100,45 @@ var AppointmentLayoutManager = Class.inherit({
         return result;
     },
 
+    checkRepaintItemByKeys: function(itemData) {
+        var result = false;
+        this.instance.getUpdatedAppointmentKeys().forEach(function(obj) {
+            if(itemData[obj.key] === obj.value) {
+                result = true;
+            }
+
+        });
+        return result;
+    },
+
+    checkRepaintItemByValue: function(itemData) {
+        var appointment = this.instance.getUpdatedAppointment();
+        return appointment && (commonUtils.equalByValue(itemData, appointment) || Object.keys(appointment).length !== Object.keys(itemData).length);
+    },
+
     markRepaintedAppointments: function(appointments, renderedItems) {
         var isAgenda = this.renderingStrategy === "agenda",
-            updatedAppointment = this.instance.getUpdatedAppointment(),
             result = this._markDeletedAppointments(renderedItems, appointments),
             itemFound,
-            coordinatesChanged,
-            objectChanged,
             repaintAll = false;
 
         each(appointments, (function(_, currentItem) {
             itemFound = false;
-            coordinatesChanged = false,
             currentItem.needRepaint = false;
 
-            each(renderedItems, (function(_, item) {
+            each(renderedItems, function(_, item) {
                 if(currentItem.itemData === item.itemData) {
                     item.needRepaint = false;
                     itemFound = true;
 
-                    if(updatedAppointment && commonUtils.equalByValue(item.itemData, updatedAppointment)) {
+                    if(this.checkRepaintItemByValue(item.itemData) || this.checkRepaintItemByKeys(item.itemData)) {
                         item.needRepaint = true;
                         if(isAgenda) {
                             repaintAll = true;
                         }
                     }
-                    coordinatesChanged = this._compareSettings(currentItem, item, isAgenda);
-                    objectChanged = updatedAppointment && (Object.keys(updatedAppointment).length !== Object.keys(item.itemData).length);
 
-                    if(coordinatesChanged || objectChanged || repaintAll) {
+                    if(this._compareSettings(currentItem, item, isAgenda) || repaintAll) {
                         item.settings = currentItem.settings;
                         item.needRepaint = true;
                         item.needRemove = false;
@@ -139,7 +149,7 @@ var AppointmentLayoutManager = Class.inherit({
                     }
                 }
 
-            }).bind(this));
+            }.bind(this));
 
             if(!itemFound) {
                 currentItem.needRepaint = true;

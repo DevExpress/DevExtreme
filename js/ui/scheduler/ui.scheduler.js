@@ -2698,6 +2698,10 @@ var Scheduler = Widget.inherit({
         return this._appointmentModel.getUpdatedAppointment();
     },
 
+    getUpdatedAppointmentKeys: function() {
+        return this._appointmentModel.getUpdatedAppointmentKeys();
+    },
+
     getAppointmentsInstance: function() {
         return this._appointments;
     },

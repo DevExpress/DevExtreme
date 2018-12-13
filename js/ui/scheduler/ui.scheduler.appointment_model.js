@@ -284,6 +284,7 @@ var AppointmentModel = Class.inherit({
     ctor: function(dataSource, dataAccessors) {
         this.setDataAccessors(dataAccessors);
         this.setDataSource(dataSource);
+        this._updatedAppointmentKeys = [];
 
         this._filterMaker = new FilterMaker(dataAccessors);
     },
@@ -301,14 +302,25 @@ var AppointmentModel = Class.inherit({
             .on("updating", (function(newItem) {
                 this._updatedAppointment = newItem;
             }).bind(this));
+
+        this._dataSource && this._dataSource.store()
+            .on("push", function(items) {
+                items.forEach(function(item) {
+                    this._updatedAppointmentKeys.push({ key: this._dataSource.store().key(), value: item.key });
+                }.bind(this));
+            }.bind(this));
     },
 
     getUpdatedAppointment: function() {
         return this._updatedAppointment;
     },
+    getUpdatedAppointmentKeys: function() {
+        return this._updatedAppointmentKeys;
+    },
 
     cleanModelState: function() {
-        delete this._updatedAppointment;
+        this._updatedAppointment = null;
+        this._updatedAppointmentKeys = [];
     },
 
     setDataAccessors: function(dataAccessors) {
