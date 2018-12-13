@@ -639,7 +639,12 @@ var LayoutManager = Widget.inherit({
         var $validationTarget = $editor.children().first();
 
         if($validationTarget && $validationTarget.data("dx-validation-target")) {
-            that._tryRenderValidator($validationTarget, item);
+            var fieldName = this._getFieldLabelName(item),
+                validationRules = this._prepareValidationRules(item.validationRules, item.isRequired, item.itemType, fieldName);
+
+            if(Array.isArray(validationRules) && validationRules.length) {
+                that._renderValidator($validationTarget, item);
+            }
         }
 
         that._renderHelpText(item, $editor, helpID);
@@ -800,15 +805,6 @@ var LayoutManager = Widget.inherit({
             validationRules: validationRules,
             validationGroup: this.option("validationGroup")
         });
-    },
-
-    _tryRenderValidator: function($editor, item) {
-        var fieldName = this._getFieldLabelName(item),
-            validationRules = this._prepareValidationRules(item.validationRules, item.isRequired, item.itemType, fieldName);
-
-        if(Array.isArray(validationRules) && validationRules.length) {
-            this._renderValidator($editor, validationRules);
-        }
     },
 
     _getFieldLabelName: function(item) {
