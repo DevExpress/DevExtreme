@@ -3,6 +3,7 @@ var config = require("../config"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
     each = require("./iterator").each,
+    toComparable = require("./data").toComparable,
     typeUtils = require("./type");
 
 var ensureDefined = function(value, defaultValue) {
@@ -248,14 +249,15 @@ var isObjectsEqualByValue = function(object1, object2, deep) {
     return true;
 };
 
+var maxEqualityDeep = 3;
+
 var equalByValue = function(object1, object2, deep) {
-    if(object1 === object2) return true;
-
-    var maxDeep = 3;
-
     deep = deep || 0;
 
-    if(deep >= maxDeep) {
+    object1 = toComparable(object1, true);
+    object2 = toComparable(object2, true);
+
+    if(object1 === object2 || deep >= maxEqualityDeep) {
         return true;
     }
 
@@ -263,8 +265,6 @@ var equalByValue = function(object1, object2, deep) {
         return isObjectsEqualByValue(object1, object2, deep);
     } else if(Array.isArray(object1) && Array.isArray(object2)) {
         return isArraysEqualByValue(object1, object2, deep);
-    } else if(typeUtils.isDate(object1) && typeUtils.isDate(object2)) {
-        return object1.getTime() === object2.getTime();
     }
 
     return false;
