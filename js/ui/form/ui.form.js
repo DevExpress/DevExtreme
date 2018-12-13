@@ -1278,9 +1278,10 @@ var Form = Widget.inherit({
                         break;
                     } else if(fullName.search("validationRules") !== -1) {
                         var validator = dataUtils.data(instance.$element()[0], "dxValidator");
-
-                        validator && validator.option("validationRules", item.validationRules);
-                        break;
+                        if(validator) {
+                            validator.option("validationRules", item.validationRules);
+                            break;
+                        }
                     }
                 }
 
