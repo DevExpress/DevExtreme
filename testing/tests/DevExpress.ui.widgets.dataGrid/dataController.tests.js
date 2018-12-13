@@ -10272,6 +10272,10 @@ QUnit.module("Summary with Editing", {
             summary: {
                 recalculateWhileEditing: true,
                 skipEmptyValues: true,
+                groupItems: [{
+                    column: "value",
+                    summaryType: "sum"
+                }],
                 totalItems: [{
                     column: "id",
                     summaryType: "count"
@@ -10355,9 +10359,10 @@ QUnit.test("add row if data is grouped", function(assert) {
     this.getDataSource().group("id");
     this.getDataSource().load();
     this.addRow();
+    this.setValue(0, 1);
 
     // assert
-    assert.deepEqual(this.getTotalValues(), [undefined, 20]);
+    assert.deepEqual(this.getTotalValues(), [undefined, 21]);
 });
 
 QUnit.test("add row and modify cell", function(assert) {
@@ -10399,10 +10404,17 @@ QUnit.test("delete row if data is grouped", function(assert) {
     this.clock.tick();
     this.getDataSource().group("id");
     this.getDataSource().load();
-    this.deleteRow(this.getRowIndexByKey(4));
 
     // assert
-    assert.deepEqual(this.getTotalValues(), [undefined, 15]);
+    assert.deepEqual(this.getTotalValues(), [undefined, 20]);
+    assert.deepEqual(this.getVisibleRows()[0].data.aggregates, [2]);
+
+    // act
+    this.deleteRow(1);
+
+    // assert
+    assert.deepEqual(this.getTotalValues(), [undefined, 18]);
+    assert.deepEqual(this.getVisibleRows()[0].data.aggregates, [0]);
 });
 
 QUnit.test("modify cell and delete row", function(assert) {
