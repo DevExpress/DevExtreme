@@ -512,4 +512,30 @@ QUnit.module("Filter Panel", {
         // assert
         assert.ok(this.filterPanelView.element().hasClass(FILTER_PANEL_CLASS));
     });
+
+    // T698723
+    QUnit.test("Has correct value when calculateDisplayValue is defined && column has lookup", function(assert) {
+        this.initFilterPanelView({
+            filterPanel: {
+                visible: true
+            },
+            filterValue: ["StateID", "=", 1],
+            columns: [{
+                dataField: "StateID",
+                calculateDisplayValue: "StateName",
+                lookup: {
+                    dataSource: [{
+                        "ID": 1,
+                        "Name": "Tuscaloosa",
+                        "StateID": 1
+                    }],
+                    valueExpr: "ID",
+                    displayExpr: "Name"
+                }
+            }]
+        });
+
+        // assert
+        assert.equal(this.filterPanelView.element().find("." + FILTER_PANEL_TEXT_CLASS).text(), "[State ID] Equals 'Tuscaloosa'", "filterPanel text");
+    });
 });
