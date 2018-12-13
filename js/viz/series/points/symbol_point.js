@@ -172,20 +172,20 @@ module.exports = {
     correctValue: function(correction) {
         var that = this;
         if(that.hasValue()) {
-            that.value = that.initialValue + correction;
+            that.value = that.properValue = that.initialValue + correction;
             that.minValue = correction;
         }
     },
 
     resetCorrection: function() {
-        this.value = this.initialValue;
+        this.value = this.properValue = this.initialValue;
         this.minValue = CANVAS_POSITION_DEFAULT;
     },
 
     resetValue: function() {
         var that = this;
         if(that.hasValue()) {
-            that.value = that.initialValue = 0;
+            that.value = that.properValue = that.initialValue = 0;
             that.minValue = 0;
 
             that._label.setDataField("value", that.value);
@@ -504,7 +504,7 @@ module.exports = {
                 that.rightHole /= absTotal - rightHoleTotal;
                 that.minRightHole /= absTotal - rightHoleTotal;
             }
-            that.value = valuePercent;
+            that.value = that.properValue = valuePercent;
             that.minValue = !minValuePercent ? that.minValue : minValuePercent;
         }
     },
@@ -562,7 +562,7 @@ module.exports = {
 
     _updateData: function(data) {
         var that = this;
-        that.value = that.initialValue = that.originalValue = data.value;
+        that.value = that.properValue = that.initialValue = that.originalValue = data.value;
         that.minValue = that.initialMinValue = that.originalMinValue = _isDefined(data.minValue) ? data.minValue : CANVAS_POSITION_DEFAULT;
     },
 
@@ -577,7 +577,7 @@ module.exports = {
     getCrosshairData: function() {
         var that = this,
             r = that._options.rotated,
-            value = that.value,
+            value = that.properValue,
             argument = that.argument;
         return {
             x: that.vx,
