@@ -27,6 +27,7 @@ module.exports = {
                 compress: { screw_ie8: true },
                 mangle: { screw_ie8: true },
                 preserveComments: saveLicenseComments,
+                output: { ascii_only: true }
             }));
         })
         .pipe(eol),
@@ -59,7 +60,8 @@ module.exports = {
                 },
                 preserveComments: saveLicenseComments,
                 output: {
-                    'bracketize': true
+                    'bracketize': true,
+                    'ascii_only': true
                 }
             }));
         })
