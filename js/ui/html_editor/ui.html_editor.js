@@ -345,19 +345,18 @@ const HtmlEditor = Editor.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":
-                !this._isEditorUpdating && this._setSubmitValue(args.value);
-
-                if(!this._quillInstance) {
-                    this._$htmlContainer.html(args.value);
-                    return;
-                }
-
-                if(this._isEditorUpdating) {
-                    delete this._isEditorUpdating;
+                if(this._quillInstance) {
+                    if(this._isEditorUpdating) {
+                        this._isEditorUpdating = false;
+                    } else {
+                        const updatedValue = this._isMarkdownValue() ? this._updateValueByType("HTML", args.value) : args.value;
+                        this._updateHtmlContent(updatedValue);
+                    }
                 } else {
-                    const updatedValue = this._isMarkdownValue() ? this._updateValueByType("HTML", args.value) : args.value;
-                    this._updateHtmlContent(updatedValue);
+                    this._$htmlContainer.html(args.value);
                 }
+
+                this._setSubmitValue(args.value);
 
                 this.callBase(args);
                 break;
