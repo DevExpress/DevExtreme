@@ -76,7 +76,8 @@ QUnit.module("Navigator markup", moduleConfig, () => {
 
         this.instance.option("date", date);
         this.instance.option("customizeDateNavigatorText", function(args) {
-            assert.deepEqual(args.date, date, "passed date is ok");
+            assert.deepEqual(args.startDate, date, "passed date is ok");
+            assert.deepEqual(args.endDate, date, "passed date is ok");
             assert.equal(args.text, caption, "passed text is ok");
 
             return "Custom text is " + args.text;
