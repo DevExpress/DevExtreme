@@ -433,11 +433,11 @@ var Scheduler = Widget.inherit({
 
             /**
                 * @name dxSchedulerOptions.customizeDateNavigatorText
-                * @type function(cellInfo)
-                * @type_function_param1 cellInfo:object
+                * @type function(info)
+                * @type_function_param1 info:object
                 * @type_function_param1_field1 startDate:date
                 * @type_function_param1_field1 endDate:date
-                * @type_function_param1_field2 valueText:string
+                * @type_function_param1_field2 text:string
                 * @type_function_return string
                 * @default undefined
                 */
