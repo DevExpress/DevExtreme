@@ -2884,18 +2884,16 @@ var Scheduler = Widget.inherit({
         * @param3 currentAppointmentData:Object|undefined
         */
     showAppointmentPopup: function(appointmentData, createNewAppointment, currentAppointmentData) {
-        var singleAppointment = currentAppointmentData || this._getSingleAppointmentData(appointmentData);
+        var singleAppointment = currentAppointmentData || this._getSingleAppointmentData(appointmentData, { skipDateCalculation: true });
         var startDate = this.fire("getField", "startDate", currentAppointmentData || appointmentData);
 
         this._checkRecurringAppointment(appointmentData, singleAppointment, startDate, function() {
-            var editing = this._editing;
-
             if(createNewAppointment) {
                 delete this._editAppointmentData;
-                editing.allowAdding && this._showAppointmentPopup(appointmentData, true, false);
+                this._editing.allowAdding && this._showAppointmentPopup(appointmentData, true, false);
             } else {
                 this._editAppointmentData = appointmentData;
-                this._showAppointmentPopup(appointmentData, editing.allowUpdating, true);
+                this._showAppointmentPopup(appointmentData, this._editing.allowUpdating, true);
             }
         }.bind(this), false, true);
     },
