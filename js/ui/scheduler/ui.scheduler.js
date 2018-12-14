@@ -436,8 +436,8 @@ var Scheduler = Widget.inherit({
                 * @type function(info)
                 * @type_function_param1 info:object
                 * @type_function_param1_field1 startDate:date
-                * @type_function_param1_field1 endDate:date
-                * @type_function_param1_field2 text:string
+                * @type_function_param1_field2 endDate:date
+                * @type_function_param1_field3 text:string
                 * @type_function_return string
                 * @default undefined
                 */
