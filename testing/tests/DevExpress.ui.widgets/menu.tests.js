@@ -1900,7 +1900,7 @@ QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets when hei
         var overlay = this.$element.find(".dx-overlay").dxOverlay("instance"),
             maxHeight = overlay.option("maxHeight");
 
-        assert.roughEqual(Math.floor(maxHeight()), 523, 2, "maxHeight is correct");
+        assert.ok(Math.floor(maxHeight()) < windowHeight(), "maxHeight is correct");
         assert.ok(overlay._wrapper().hasClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS), "special class for overlay wrapper");
     } finally {
         scrollTop.restore();
