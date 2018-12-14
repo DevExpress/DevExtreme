@@ -123,7 +123,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             scrollingOptions = that.option("scrolling"),
             useNativeScrolling = that.option("scrolling.useNative");
 
-        var options = extend({}, scrollingOptions, {
+        var options = extend({ pushBackValue: 0 }, scrollingOptions, {
             direction: "both",
             bounceEnabled: false,
             useKeyboard: false

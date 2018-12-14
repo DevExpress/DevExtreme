@@ -197,7 +197,9 @@ var Scheduler = Widget.inherit({
                 * @type template|function
                 * @default "appointmentCollector"
                 * @type_function_param1 data:object
-                * @type_function_param2 contentElement:dxElement
+                * @type_function_param1_field1 appointmentCount:number
+                * @type_function_param1_field2 isCompact:boolean
+                * @type_function_param2 collectorElement:dxElement
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -2696,6 +2698,10 @@ var Scheduler = Widget.inherit({
 
     getUpdatedAppointment: function() {
         return this._appointmentModel.getUpdatedAppointment();
+    },
+
+    getUpdatedAppointmentKeys: function() {
+        return this._appointmentModel.getUpdatedAppointmentKeys();
     },
 
     getAppointmentsInstance: function() {

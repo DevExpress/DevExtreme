@@ -15,7 +15,6 @@
     }
 }
 
-
 .dx-menu-vertical {
     .vertical-middle();
 
@@ -75,6 +74,21 @@
 
         &:last-child {
             border-bottom: none;
+        }
+    }
+}
+
+.dx-menu-adaptive-mode-overlay-wrapper {
+    .flex-container(row);
+
+    .dx-overlay-content {
+        display: flex;
+        position: relative;
+
+        .dx-treeview {
+            height: auto;
+
+            .flex-item();
         }
     }
 }

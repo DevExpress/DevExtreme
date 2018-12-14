@@ -4,6 +4,7 @@ import "ui/html_editor";
 import "ui/html_editor/converters/markdown";
 
 const CONTENT_CLASS = "dx-htmleditor-content";
+const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
 
 function getSelector(className) {
     return `.${className}`;
@@ -86,10 +87,12 @@ QUnit.module("Value as HTML markup", moduleConfig, () => {
 
     test("change value by user", (assert) => {
         const done = assert.async();
+        const expectedValue = "<p>Hi! <strong>Test.</strong></p><p>New line</p>";
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
                 onValueChanged: (e) => {
-                    assert.equal(e.value, "<p>Hi! <strong>Test.</strong></p><p>New line</p>");
+                    assert.equal(e.value, expectedValue);
+                    assert.equal($(e.element).find(`.${HTML_EDITOR_SUBMIT_ELEMENT_CLASS}`).val(), expectedValue);
                     done();
                 }
             })
