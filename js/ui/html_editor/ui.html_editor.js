@@ -347,7 +347,7 @@ const HtmlEditor = Editor.inherit({
             case "value":
                 if(this._quillInstance) {
                     if(this._isEditorUpdating) {
-                        this._isEditorUpdating = undefined;
+                        this._isEditorUpdating = false;
                     } else {
                         const updatedValue = this._isMarkdownValue() ? this._updateValueByType("HTML", args.value) : args.value;
                         this._updateHtmlContent(updatedValue);
