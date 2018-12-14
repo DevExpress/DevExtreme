@@ -1470,21 +1470,6 @@ QUnit.testStart(function() {
         assert.equal(navigator.option("customizeDateNavigatorText")(), "abc", "option is passed correctly");
     });
 
-    QUnit.test("groupByDate option should be passed to workSpace", function(assert) {
-        this.createInstance({
-            currentView: "week",
-            groupByDate: false
-        });
-
-        var workSpaceWeek = this.instance.getWorkSpace();
-
-        assert.equal(workSpaceWeek.option("groupByDate"), false, "workspace has correct groupByDate");
-
-        this.instance.option("groupByDate", true);
-
-        assert.equal(workSpaceWeek.option("groupByDate"), true, "workspace has correct groupByDate");
-    });
-
     QUnit.test("showCurrentTimeIndicator option should be passed to workSpace", function(assert) {
         this.createInstance({
             currentView: "week",
