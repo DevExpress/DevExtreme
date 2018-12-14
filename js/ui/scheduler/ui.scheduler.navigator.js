@@ -3,6 +3,7 @@ var $ = require("../../core/renderer"),
     isNumeric = require("../../core/utils/type").isNumeric,
     errors = require("../widget/ui.errors"),
     dateUtils = require("../../core/utils/date"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     registerComponent = require("../../core/component_registrator"),
     devices = require("../../core/devices"),
@@ -404,7 +405,13 @@ var SchedulerNavigator = Widget.inherit({
 
     _renderCaption: function() {
         var date = this.option("displayedDate") || this.option("date"),
-            caption = this._getConfig().getCaption.call(this, date);
+            captionText = this._getConfig().getCaption.call(this, date),
+            customizationFunction = this.option("customizeDateNavigatorText");
+
+        var caption = typeUtils.isFunction(customizationFunction) ? customizationFunction.call(this, {
+            date: date,
+            text: captionText
+        }) : captionText;
 
         this._caption.option({
             text: caption,
