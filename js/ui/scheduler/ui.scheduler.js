@@ -2884,19 +2884,10 @@ var Scheduler = Widget.inherit({
         * @param3 currentAppointmentData:Object|undefined
         */
     showAppointmentPopup: function(appointmentData, createNewAppointment, currentAppointmentData) {
-        var singleAppointment = !currentAppointmentData && appointmentData.length ?
-            this._getSingleAppointmentData(appointmentData) :
-            currentAppointmentData;
+        var singleAppointment = currentAppointmentData || this._getSingleAppointmentData(appointmentData);
+        var startDate = this.fire("getField", "startDate", currentAppointmentData || appointmentData);
 
-        var startDate;
-
-        if(currentAppointmentData) {
-            startDate = this.fire("getField", "startDate", currentAppointmentData);
-        } else {
-            startDate = this.fire("getField", "startDate", appointmentData);
-        }
-
-        this._checkRecurringAppointment(appointmentData, singleAppointment, startDate, (function() {
+        this._checkRecurringAppointment(appointmentData, singleAppointment, startDate, function() {
             var editing = this._editing;
 
             if(createNewAppointment) {
@@ -2906,7 +2897,7 @@ var Scheduler = Widget.inherit({
                 this._editAppointmentData = appointmentData;
                 this._showAppointmentPopup(appointmentData, editing.allowUpdating, true);
             }
-        }).bind(this), false, true);
+        }.bind(this), false, true);
     },
 
     /**
