@@ -27,10 +27,8 @@ function runChangeRuleTest({ assert, fieldValue, initialRules, targetRules, useI
         }]
     }).dxForm("instance");
 
-    if(isKeepFocusSupported) {
-        $('#form').find('.' + TEXTEDITOR_INPUT_CLASS).focus();
-        assert.ok($('#form').find('.' + TEXTEDITOR_INPUT_CLASS).is(':focus'), 'initial focus');
-    }
+    $('#form').find('.' + TEXTEDITOR_INPUT_CLASS).focus();
+    assert.ok($('#form').find('.' + TEXTEDITOR_INPUT_CLASS).is(':focus'), 'initial focus');
     assert.strictEqual($('#form').find('.' + INVALID_CLASS).length, 0, `initial [${INVALID_CLASS}].length`);
 
     if(changeRulesFunc === null) {
@@ -50,9 +48,8 @@ function runChangeRuleTest({ assert, fieldValue, initialRules, targetRules, useI
         checkOptionsFunc(assert, form);
     }
 
-    if(isKeepFocusSupported) {
-        assert.ok($('#form').find('.' + TEXTEDITOR_INPUT_CLASS).is(':focus'), 'final focus');
-    }
+    const isInputFocused = $('#form').find('.' + TEXTEDITOR_INPUT_CLASS).is(':focus');
+    assert.ok(isKeepFocusSupported ? isInputFocused : !isInputFocused, 'final focus');
 
     const validate_result = form.validate();
     assert.strictEqual((validate_result === undefined) || validate_result.isValid, validationResult, 'validate_Result');
@@ -60,33 +57,25 @@ function runChangeRuleTest({ assert, fieldValue, initialRules, targetRules, useI
 }
 
 function runSetRangeRuleTest(options) {
-    [true, false].forEach(useItemOption => {
-        runChangeRuleTest(extend(
-            {
-                fieldValue: 10,
-                targetRules: [{ type: 'range', max: 1 }],
-                validationResult: false,
-                isKeepFocusSupported: true,
-            },
-            { useItemOption },
-            options
-        ));
-    });
+    runChangeRuleTest(extend(
+        {
+            fieldValue: 10,
+            targetRules: [{ type: 'range', max: 1 }],
+            validationResult: false,
+        },
+        options
+    ));
 }
 
 function runRemoveRangedRuleTest(options) {
-    [true, false].forEach(useItemOption => {
-        runChangeRuleTest(extend(
-            {
-                fieldValue: 10,
-                initialRules: [{ type: 'range', max: 1 }],
-                validationResult: true,
-                isKeepFocusSupported: true,
-            },
-            { useItemOption },
-            options
-        ));
-    });
+    runChangeRuleTest(extend(
+        {
+            fieldValue: 10,
+            initialRules: [{ type: 'range', max: 1 }],
+            validationResult: true,
+        },
+        options
+    ));
 }
 
 function runSetRequiredRuleTest(options) {
@@ -97,8 +86,8 @@ function runSetRequiredRuleTest(options) {
                 targetRules: [{ type: 'required' }],
                 validationResult: false,
                 isKeepFocusSupported: false,
+                useItemOption
             },
-            { useItemOption },
             options
         ));
     });
@@ -112,8 +101,8 @@ function runRemoveRequiredRuleTest(options) {
                 initialRules: [{ type: 'required' }],
                 validationResult: true,
                 isKeepFocusSupported: false,
+                useItemOption
             },
-            { useItemOption },
             options
         ));
     });
@@ -2253,10 +2242,17 @@ QUnit.test("Test RangeRule.max changing", function(assert) {
 
 QUnit.test("Test set/remove item RangeRule", function(assert) {
     [undefined, null, []].forEach(initialRules => {
-        runSetRangeRuleTest({ assert, initialRules });
+        runSetRangeRuleTest({ assert, useItemOption: false, isKeepFocusSupported: true, initialRules: [] });
     });
-    [undefined, null, []].forEach(targetRules => {
-        runRemoveRangedRuleTest({ assert, targetRules });
+    [undefined, null, []].forEach(initialRules => {
+        runSetRangeRuleTest({ assert, useItemOption: true, isKeepFocusSupported: false, initialRules: [] });
+    });
+
+    [undefined, null, []].forEach(initialRules => {
+        runRemoveRangedRuleTest({ assert, useItemOption: false, isKeepFocusSupported: true, initialRules: [] });
+    });
+    [undefined, null, []].forEach(initialRules => {
+        runRemoveRangedRuleTest({ assert, useItemOption: true, isKeepFocusSupported: false, initialRules: [] });
     });
 });
 
