@@ -430,12 +430,12 @@ var SchedulerNavigator = Widget.inherit({
     },
 
     _renderCaption: function() {
-        var date = this.option("date"),
+        var date = this.option("displayedDate") || this.option("date"),
             captionConfig = this._getConfig().getCaption.call(this, date),
             customizationFunction = this.option("customizeDateNavigatorText");
 
         var caption = typeUtils.isFunction(customizationFunction) ? customizationFunction.call(this, captionConfig) : captionConfig.text;
-      
+
         this._caption.option({
             text: caption,
             onClick: (function() {
