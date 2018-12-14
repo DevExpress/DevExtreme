@@ -1,8 +1,8 @@
 module.exports = {
-    _getPlainDataMixin: function() {
+    _getSpecificDataSourceOption: function() {
         let dataSource = this.option("dataSource");
 
-        if(this.option("grouped") && this._isCorrectStructure(dataSource)) {
+        if(this._getGroupedOption() && this._isCorrectStructure(dataSource)) {
             dataSource = dataSource.reduce((accumulator, item) => {
                 const items = item.items.map((innerItem) => {
                     return Object.assign({ key: item.key }, innerItem);
@@ -24,7 +24,10 @@ module.exports = {
 
     _isCorrectStructure: function(data) {
         return Array.isArray(data) && data.every(function(item) {
-            return Object.keys(item).length === 2 && "key" in item && "items" in item && Array.isArray(item.items);
+            var hasTwoFields = Object.keys(item).length === 2,
+                hasCorrectFields = "key" in item && "items" in item;
+
+            return hasTwoFields && hasCorrectFields && Array.isArray(item.items);
         });
     }
 };

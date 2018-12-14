@@ -170,7 +170,7 @@ QUnit.test("grouped list should change it's selection after selectedItem option 
 
     this.$element.dxSlideOut({
         menuGrouped: true,
-        dataSource: items
+        items: items
     });
 
     var $menuItems = this.$element.find("." + LIST_ITEM_CLASS),
@@ -381,7 +381,7 @@ QUnit.test("First slideout item content should be loaded when deferred data sour
             }
         });
 
-        clock.tick(100);
+        clock.tick(200);
 
         assert.equal(this.$element.find(".dx-list-item-selected").text(), "Item 2", "item is selected");
         assert.equal(this.$element.find(".dx-slideout-item-content").text(), "Item 2", "content was loaded");

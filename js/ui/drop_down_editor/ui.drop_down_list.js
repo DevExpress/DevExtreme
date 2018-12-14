@@ -17,7 +17,7 @@ var $ = require("../../core/renderer"),
     themes = require("../themes"),
     ChildDefaultTemplate = require("../widget/child_default_template"),
     Deferred = require("../../core/utils/deferred").Deferred,
-    DataConverterMixin = require("../shared/hierarchical_data_converter_mixin");
+    DataConverterMixin = require("../shared/grouped_data_converter_mixin");
 
 var LIST_ITEM_SELECTOR = ".dx-list-item",
     LIST_ITEM_DATA_KEY = "dxListItemData",
@@ -607,8 +607,8 @@ var DropDownList = DropDownEditor.inherit({
         };
     },
 
-    _getSpecificDataSourceOption: function() {
-        return this._getPlainDataMixin();
+    _getGroupedOption: function() {
+        return this.option("grouped");
     },
 
     _dataSourceFromUrlLoadMode: function() {

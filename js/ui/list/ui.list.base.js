@@ -24,7 +24,7 @@ var $ = require("../../core/renderer"),
     CollectionWidget = require("../collection/ui.collection_widget.live_update").default,
     BindableTemplate = require("../widget/bindable_template"),
     Deferred = require("../../core/utils/deferred").Deferred,
-    DataConverterMixin = require("../shared/hierarchical_data_converter_mixin");
+    DataConverterMixin = require("../shared/grouped_data_converter_mixin");
 
 var LIST_CLASS = "dx-list",
     LIST_ITEM_CLASS = "dx-list-item",
@@ -607,8 +607,8 @@ var ListBase = CollectionWidget.inherit({
         });
     },
 
-    _getSpecificDataSourceOption: function() {
-        return this._getPlainDataMixin();
+    _getGroupedOption: function() {
+        return this.option("grouped");
     },
 
     _dataSourceFromUrlLoadMode: function() {
