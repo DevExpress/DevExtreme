@@ -32,6 +32,7 @@ var $ = require("../../core/renderer"),
     Resizable = require("../resizable"),
     EmptyTemplate = require("../widget/empty_template"),
     Deferred = require("../../core/utils/deferred").Deferred,
+    OverlayUtils = require("./utils"),
     getSwatchContainer = require("../widget/swatch_container");
 
 var OVERLAY_CLASS = "dx-overlay",
@@ -46,8 +47,6 @@ var OVERLAY_CLASS = "dx-overlay",
     RTL_DIRECTION_CLASS = "dx-rtl",
 
     ACTIONS = ["onShowing", "onShown", "onHiding", "onHidden", "onPositioning", "onPositioned", "onResizeStart", "onResize", "onResizeEnd"],
-
-    FIRST_Z_INDEX = 1500,
 
     OVERLAY_STACK = [],
 
@@ -582,7 +581,7 @@ var Overlay = Widget.inherit({
     },
 
     _zIndexInitValue: function() {
-        return FIRST_Z_INDEX;
+        return Overlay.baseZIndex();
     },
 
     _toggleViewPortSubscription: function(toggle) {
@@ -773,7 +772,7 @@ var Overlay = Widget.inherit({
         this._toggleVisibility(visible);
 
         this._$content.toggleClass(INVISIBLE_STATE_CLASS, !visible);
-        this._updateZIndexStackPosition(visible);
+        this._updateZIndexStackPosition(!Boolean(this._zIndex) && visible);
 
         if(visible) {
             this._renderContent();
@@ -798,8 +797,7 @@ var Overlay = Widget.inherit({
 
         if(pushToStack) {
             if(index === -1) {
-                var length = overlayStack.length;
-                this._zIndex = (length ? overlayStack[length - 1]._zIndex : this._zIndexInitValue()) + 1;
+                this._zIndex = OverlayUtils.createNewZIndex();
 
                 overlayStack.push(this);
             }
@@ -1394,6 +1392,7 @@ var Overlay = Widget.inherit({
 
         this.callBase();
 
+        OverlayUtils.removeZIndex(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
     },
@@ -1560,7 +1559,7 @@ var Overlay = Widget.inherit({
 * @static
 */
 Overlay.baseZIndex = function(zIndex) {
-    FIRST_Z_INDEX = zIndex;
+    return OverlayUtils.baseZIndex(zIndex);
 };
 
 registerComponent("dxOverlay", Overlay);

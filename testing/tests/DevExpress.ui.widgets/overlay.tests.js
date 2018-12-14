@@ -14,6 +14,7 @@ var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     eventsEngine = require("events/core/events_engine"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
+    overlayUtils = require("ui/overlay/utils"),
     selectors = require("ui/widget/selectors");
 
 require("common.css!");
@@ -127,6 +128,8 @@ var moduleConfig = {
         fx.off = true;
     },
     afterEach: function() {
+        overlayUtils.clearZIndexStack();
+        Overlay.baseZIndex(1500);
         fx.off = false;
     }
 };
@@ -3285,15 +3288,88 @@ QUnit.test("overlay should render with correct z-index by default", function(ass
 });
 
 QUnit.test("base z-index should be changed using the static method", function(assert) {
-    Overlay.baseZIndex(10000);
+    try {
+        Overlay.baseZIndex(10000);
 
-    var $overlay = $("#overlay").dxOverlay({
-            visible: true
-        }),
-        overlay = $overlay.dxOverlay("instance"),
-        $content = $(overlay.content()),
-        $wrapper = $content.parent();
+        var $overlay = $("#overlay").dxOverlay({
+                visible: true
+            }),
+            overlay = $overlay.dxOverlay("instance"),
+            $content = $(overlay.content()),
+            $wrapper = $content.parent();
 
-    assert.equal($content.css("zIndex"), 10001, "z-index for content is correct");
-    assert.equal($wrapper.css("zIndex"), 10001, "z-index for wrapper is correct");
+        assert.equal($content.css("zIndex"), 10001, "z-index for content is correct");
+        assert.equal($wrapper.css("zIndex"), 10001, "z-index for wrapper is correct");
+    } finally {
+        Overlay.baseZIndex(1500);
+    }
+});
+
+QUnit.module("overlay utils", moduleConfig);
+
+QUnit.test("Overlay Base Zindex should return default ZIndex", function(assert) {
+    assert.equal(Overlay.baseZIndex(), 1500, "base zindex is correct");
+
+    Overlay.baseZIndex(2000);
+    assert.equal(Overlay.baseZIndex(), 2000, "base zindex is correct");
+});
+
+QUnit.test("createNewZIndex should return the redefined base zindex when no opened overlays exists", function(assert) {
+    Overlay.baseZIndex(2000);
+    assert.equal(overlayUtils.createNewZIndex(), 2001);
+});
+
+QUnit.test("new created zindex should be greater than last one", function(assert) {
+    assert.equal(overlayUtils.createNewZIndex(), 1501);
+    assert.equal(overlayUtils.createNewZIndex(), 1502);
+    assert.equal(overlayUtils.createNewZIndex(), 1503);
+});
+
+QUnit.test("it should be possible to remove zindex from the stack", function(assert) {
+    overlayUtils.createNewZIndex();
+    overlayUtils.createNewZIndex();
+
+    overlayUtils.removeZIndex(1502);
+    assert.equal(overlayUtils.createNewZIndex(), 1502, "zindex has been restored");
+});
+
+QUnit.test("it should be possible to remove all created zindices", function(assert) {
+    overlayUtils.createNewZIndex();
+    overlayUtils.createNewZIndex();
+
+    overlayUtils.clearZIndexStack();
+    assert.equal(overlayUtils.createNewZIndex(), 1501);
+});
+
+QUnit.test("a new overlay should create a new zindex on first showing", function(assert) {
+    $("#overlay").dxOverlay({ visible: true });
+    assert.equal(overlayUtils.createNewZIndex(), 1502, "new zindex is larger than overlay's");
+});
+
+QUnit.test("overlay should remove its zindex from the stack on dispose", function(assert) {
+    $("#overlay").dxOverlay({ visible: true });
+    $("#overlay").remove();
+    assert.equal(overlayUtils.createNewZIndex(), 1501, "zindex has been removed");
+});
+
+QUnit.test("overlay should create new zindex only at first showing", function(assert) {
+    var overlay = $("#overlay").dxOverlay({ visible: true }).dxOverlay("instance");
+
+    overlay.option("visible", false);
+    overlay.option("visible", true);
+    overlay.option("visible", false);
+    overlay.option("visible", true);
+
+    assert.equal(overlayUtils.createNewZIndex(), 1502, "new zindex is larger than overlay's");
+});
+
+QUnit.test("overlay should get next z-index if the first one has been created before", function(assert) {
+    overlayUtils.createNewZIndex();
+
+    var overlay = $("#overlay").dxOverlay({ visible: true }).dxOverlay("instance"),
+        $content = $(overlay.content());
+
+    assert.equal($content.css("zIndex"), 1502);
+
+    assert.equal(overlayUtils.createNewZIndex(), 1503, "new zindex is larger than overlay's");
 });
