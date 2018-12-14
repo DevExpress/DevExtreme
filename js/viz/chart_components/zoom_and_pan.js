@@ -88,7 +88,7 @@ module.exports = {
                     const translate = -offsetCalc(e, actionData, coordField, scale);
                     zoom = axis.getTranslator().zoom(translate, scale, axis.getZoomBounds());
                     if(!isDefined(viewport) || viewport.startValue.valueOf() !== zoom.min.valueOf() || viewport.endValue.valueOf() !== zoom.max.valueOf()) {
-                        const range = [zoom.min, zoom.max];
+                        const range = { startValue: zoom.min, endValue: zoom.max };
                         const isMinZoom = axis.isZoomingLowerLimitOvercome(scale, range);
 
                         axis.handleZooming(isMinZoom ? null : range, { start: true, end: true }, e, actionField);
@@ -412,7 +412,7 @@ module.exports = {
                                     translator = axis.getTranslator(),
                                     scale = translator.getMinScale(delta > 0),
                                     zoom = translator.zoom(-(coord - coord * scale), scale, axis.getZoomBounds()),
-                                    range = [zoom.min, zoom.max],
+                                    range = { startValue: zoom.min, endValue: zoom.max },
                                     isMinZoom = axis.isZoomingLowerLimitOvercome(scale, range);
 
                                 axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, "zoom");

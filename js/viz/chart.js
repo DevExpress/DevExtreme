@@ -784,6 +784,10 @@ var dxChart = AdvancedChart.inherit({
             _extend(pane.canvas, panesCanvases[pane.name]);
         });
 
+        (rotated ? horizontalAxes : verticalAxes).forEach((axis) => {
+            axis.setInitRange(axis.getZoomBounds());
+        });
+
         return cleanPanesCanvases;
     },
 
