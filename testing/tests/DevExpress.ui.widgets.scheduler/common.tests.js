@@ -1530,6 +1530,23 @@ QUnit.testStart(function() {
         assert.equal(this.instance.option("showCurrentTimeIndicator"), true, "showCurrentTimeIndicator option value is right on init");
     });
 
+    QUnit.test("customizeDateNavigatorText should be passed to header & navigator", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            currentDate: new Date(2017, 10, 25),
+            customizeDateNavigatorText: function() {
+                return "abc";
+            },
+            views: ["week"]
+        });
+
+        var header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.deepEqual(header.option("customizeDateNavigatorText")(), "abc", "option is passed correctly");
+        assert.equal(navigator.option("customizeDateNavigatorText")(), "abc", "option is passed correctly");
+    });
+
     QUnit.test("groupByDate option should be passed to workSpace", function(assert) {
         this.createInstance({
             currentView: "week",
