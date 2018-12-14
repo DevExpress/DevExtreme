@@ -282,4 +282,18 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         this.instance.option("step", "agenda");
         assert.equal(button.option("text"), "29 Mar-4 Apr 2015", "Step is week: Caption is OK");
     });
+
+    QUnit.test("Caption should be OK for workWeek view and depends on displayedDate", (assert) => {
+        var $element = this.instance.$element(),
+            button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance");
+
+        this.instance.option("firstDayOfWeek", 6);
+        this.instance.option("date", new Date(2016, 0, 10));
+        this.instance.option("displayedDate", new Date(2016, 1, 13));
+
+        var caption = devices.real().generic ? "15-19 February 2016" : "15-19 Feb 2016";
+
+        this.instance.option("step", "workWeek");
+        assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
+    });
 });

@@ -78,8 +78,10 @@ var SchedulerHeader = Widget.inherit({
                 this._changeViewSwitcherLabelText();
                 break;
             case "currentDate":
-            case "startDate":
                 this._navigator.option("date", value);
+                break;
+            case "displayedDate":
+                this._navigator.option("displayedDate", value);
                 break;
             case "min":
             case "max":

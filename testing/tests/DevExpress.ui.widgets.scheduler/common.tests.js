@@ -1738,7 +1738,7 @@ QUnit.testStart(function() {
         assert.equal(navigator.option("intervalCount"), 2, "navigator has correct count");
 
         assert.deepEqual(workSpaceWeek.option("startDate"), new Date(2017, 10, 1), "workspace has correct startDate");
-        assert.deepEqual(header.option("startDate"), new Date(2017, 10, 1), "header has correct startDate");
+        assert.deepEqual(header.option("displayedDate"), new Date(2017, 10, 25), "header has correct displayedDate");
         assert.equal(navigator.option("date").getMonth(), 10, "navigator has correct date");
     });
 

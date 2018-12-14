@@ -1094,7 +1094,8 @@ var Scheduler = Widget.inherit({
                 value = this._dateOption(name);
                 value = dateUtils.trimTime(new Date(value));
                 this._workSpace.option(name, value);
-                this._header.option(name, this._workSpace._getViewStartByOptions());
+                this._header.option(name, value);
+                this._header.option("displayedDate", this._workSpace._getViewStartByOptions());
                 this._appointments.option("items", []);
                 this._filterAppointmentsByDate();
 
@@ -1319,7 +1320,7 @@ var Scheduler = Widget.inherit({
     _updateHeader: function() {
         var viewCountConfig = this._getViewCountConfig();
         this._header.option("intervalCount", viewCountConfig.intervalCount);
-        this._header.option("startDate", viewCountConfig.startDate || new Date(this.option("currentDate")));
+        this._header.option("displayedDate", this._workSpace._getViewStartByOptions());
         this._header.option("min", this._dateOption("min"));
         this._header.option("max", this._dateOption("max"));
         this._header.option("currentDate", this._dateOption("currentDate"));
