@@ -284,11 +284,14 @@
     .set-size(@size) {
         .dx-scheduler-group-table,
         .dx-scheduler-sidebar-scrollable,
-        .dx-scheduler-group-header-content,
         .dx-scheduler-sidebar-scrollable:before {
             width: @size;
         }
 
+        .dx-scheduler-group-header-content {
+            width: 100%;
+        }
+    
         .dx-scheduler-date-table-scrollable,
         .dx-scheduler-header-scrollable {
             margin-left: @size;
@@ -334,9 +337,12 @@
 
 .dx-scheduler-vertical-group-table-mixin(@offset: 0px) {
     .set-size(@size) {
-        .dx-scheduler-work-space-vertical-group-table,
-        .dx-scheduler-group-header-content {
+        .dx-scheduler-work-space-vertical-group-table {
             width: @size;
+        }
+
+        .dx-scheduler-group-header-content {
+            width: 100%;
         }
 
         .dx-scheduler-date-table {
