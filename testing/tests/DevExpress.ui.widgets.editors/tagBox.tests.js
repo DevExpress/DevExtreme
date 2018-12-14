@@ -4832,6 +4832,30 @@ QUnit.module("regression", {
     }
 });
 
+QUnit.test("Selection refreshing process should wait for the items data will be loaded from the data source (T673636)", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        refreshSelectedCalled = false,
+        tagBox = $("#tagBox").dxTagBox({
+            valueExpr: "id",
+            dataSource: {
+                load: () => {
+                    var d = $.Deferred();
+
+                    setTimeout(() => d.resolve([]), 0);
+
+                    return d.promise();
+                }
+            }
+        }).dxTagBox("instance");
+
+    tagBox._refreshSelected = () => refreshSelectedCalled = true;
+
+    tagBox.option("value", [1]);
+    assert.notOk(refreshSelectedCalled);
+    clock.tick();
+    assert.ok(refreshSelectedCalled);
+});
+
 QUnit.test("tagBox should not fail when asynchronous data source is used (T381326)", function(assert) {
     var data = [1, 2, 3, 4, 5],
         timeToWait = 500;

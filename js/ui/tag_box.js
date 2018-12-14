@@ -654,7 +654,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderInputValueImpl: function() {
-        this._renderMultiSelect();
+        return this._renderMultiSelect();
     },
 
     _loadInputValue: function() {
@@ -729,14 +729,21 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderMultiSelect: function() {
+        var that = this,
+            d = new Deferred();
+
         this._$tagsContainer = this.$element()
             .find("." + TEXTEDITOR_CONTAINER_CLASS)
             .addClass(TAGBOX_TAG_CONTAINER_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
-        this._renderTags();
-        this._popup && this._popup.refreshPosition();
+        this._renderTags().always((function() {
+            that._popup && that._popup.refreshPosition();
+            d.resolve();
+        }).bind(this));
+
+        return d.promise();
     },
 
     _listItemClickHandler: function(e) {
@@ -827,7 +834,6 @@ var TagBox = SelectBox.inherit({
 
             return d.promise();
         }
-
     },
 
     _createTagsData: function(values, filteredItems) {
@@ -878,15 +884,21 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderTags: function() {
+        var d = new Deferred();
+
         this._loadTagData().always((function(items) {
             this._renderTagsCore(items);
+
+            this._renderEmptyState();
+
+            if(!this._preserveFocusedTag) {
+                this._clearTagFocus();
+            }
+
+            d.resolve();
         }).bind(this));
 
-        this._renderEmptyState();
-
-        if(!this._preserveFocusedTag) {
-            this._clearTagFocus();
-        }
+        return d.promise();
     },
 
     _renderTagsCore: function(items) {
