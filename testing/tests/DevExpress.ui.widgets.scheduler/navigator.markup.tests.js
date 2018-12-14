@@ -69,6 +69,25 @@ QUnit.module("Navigator markup", moduleConfig, () => {
         assert.equal(button.option("text"), caption, "Caption is OK");
     });
 
+    QUnit.test("customizeDateNavigatorText shoulde be applied correctly", (assert) => {
+        var $element = this.instance.$element(),
+            date = new Date(2018, 11, 14, 9, 20),
+            caption = [dateLocalization.format(date, "day"), dateLocalization.format(date, "monthAndYear")].join(" ");
+
+        this.instance.option("date", date);
+        this.instance.option("customizeDateNavigatorText", function(args) {
+            assert.deepEqual(args.startDate, date, "passed date is ok");
+            assert.deepEqual(args.endDate, date, "passed date is ok");
+            assert.equal(args.text, caption, "passed text is ok");
+
+            return "Custom text is " + args.text;
+        });
+
+        var button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance");
+        assert.equal(button.option("text"), "Custom text is " + caption, "Caption is OK");
+    });
+
+
     QUnit.test("Caption should be OK when step and date are changed", (assert) => {
         var $element = this.instance.$element(),
             button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
