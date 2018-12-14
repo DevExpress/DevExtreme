@@ -2104,8 +2104,7 @@ QUnit.test("Data of tree view doesn't load twice when uses the custom store", fu
         adaptivityEnabled: true
     });
 
-    clock.tick(300);
-    clock.tick(300);
+    clock.tick(600);
 
     assert.equal(dataLoadCounter, 2);
 
