@@ -814,8 +814,8 @@ QUnit.testStart(function() {
                 {
                     id: 1,
                     text: "abc",
-                    startDate: new Date(2017, 4, 22, 9, 30),
-                    endDate: new Date(2017, 4, 22, 11, 30)
+                    startDate: new Date(2017, 4, 23, 9, 30),
+                    endDate: new Date(2017, 4, 23, 11, 30)
                 }]
             }
         });
@@ -839,8 +839,8 @@ QUnit.testStart(function() {
             {
                 type: "update", key: 1, data: {
                     text: "Update-2",
-                    startDate: new Date(2017, 4, 22, 9, 30),
-                    endDate: new Date(2017, 4, 22, 11, 30)
+                    startDate: new Date(2017, 4, 23, 9, 30),
+                    endDate: new Date(2017, 4, 23, 11, 30)
                 }
             }
         ]);
