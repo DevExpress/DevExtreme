@@ -252,6 +252,9 @@ var SchedulerNavigator = Widget.inherit({
             case "firstDayOfWeek":
                 this._setCalendarOption(args.name, args.value);
                 break;
+            case "customizeDateNavigatorText":
+                this._renderCaption();
+                break;
             case "tabIndex":
             case "focusStateEnabled":
                 this._next.option(args.name, args.value);
@@ -409,7 +412,7 @@ var SchedulerNavigator = Widget.inherit({
             customizationFunction = this.option("customizeDateNavigatorText");
 
         var caption = typeUtils.isFunction(customizationFunction) ? customizationFunction.call(this, {
-            date: date,
+            date: new Date(date),
             text: captionText
         }) : captionText;
 
