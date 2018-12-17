@@ -621,6 +621,35 @@ QUnit.test("drawer panel should have correct width when async template is used, 
     clock.restore();
 });
 
+QUnit.test("drawer panel should have correct z-index when async template is used, overlap mode", assert => {
+    var clock = sinon.useFakeTimers();
+
+    $("#drawer").dxDrawer({
+        openedStateMode: "overlap",
+        templatesRenderAsynchronously: true,
+        integrationOptions: {
+            templates: {
+                "panel": {
+                    render: function(args) {
+                        var $div = $("<div/>").appendTo(args.container);
+                        setTimeout(() => {
+                            $div.css("height", 600);
+                            $div.css("width", 200);
+                            args.onRendered();
+                        }, 100);
+                    }
+                }
+            }
+        }
+    });
+
+    clock.tick(100);
+    const $panel = $("#drawer").find(".dx-drawer-panel-content");
+
+    assert.equal($panel.css("zIndex"), 1501, "panel has correct zIndex");
+    clock.restore();
+});
+
 QUnit.test("drawer panel should have correct margin when async template is used", assert => {
     var clock = sinon.useFakeTimers();
 

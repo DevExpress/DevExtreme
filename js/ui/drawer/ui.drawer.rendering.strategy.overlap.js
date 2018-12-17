@@ -30,14 +30,13 @@ class OverlapStrategy extends DrawerStrategy {
                 this._fixOverlayPosition(e.component.$content());
             }).bind(this),
             contentTemplate: drawer.option("template"),
-            onContentReady: () => {
+            onContentReady: (args) => {
                 whenPanelRendered.resolve();
+                this._processOverlayZIndex(args.component.content());
             },
             visible: true,
             propagateOutsideClick: true
         });
-
-        this._processOverlayZIndex();
     }
 
     _fixOverlayPosition($overlayContent) {
@@ -178,8 +177,8 @@ class OverlapStrategy extends DrawerStrategy {
         return $(this.getDrawerInstance().getOverlay().content());
     }
 
-    _processOverlayZIndex() {
-        const styles = this.getPanelContent().get(0).style;
+    _processOverlayZIndex($element) {
+        const styles = $element.get(0).style;
         const zIndex = styles.zIndex || 1;
 
         this.getDrawerInstance().setZIndex(zIndex);
