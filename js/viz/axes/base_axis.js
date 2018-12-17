@@ -1886,9 +1886,9 @@ Axis.prototype = {
         };
     },
 
-    setInitRange(range) {
+    setInitRange() {
         if(Object.keys(this._options.wholeRange || {}).length === 0) {
-            this._initRange = range;
+            this._initRange = this.getZoomBounds();
         }
     },
 

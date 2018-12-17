@@ -4339,7 +4339,10 @@ QUnit.test("whole range values are set to null - get from option", function(asse
 });
 
 QUnit.test("getZoomBounds when initRange is set, and wholeRange is not set", function(assert) {
-    this.axis.setInitRange({ startValue: 5, endValue: 7 });
+    this.translator.getBusinessRange = sinon.stub();
+    this.translator.getBusinessRange.returns({ min: 5, max: 7 });
+
+    this.axis.setInitRange();
 
     assert.deepEqual(this.axis.getZoomBounds(), { startValue: 5, endValue: 7 });
 });
@@ -4348,9 +4351,11 @@ QUnit.test("getZoomBounds when initRange is set, and wholeRange is set", functio
     this.updateOptions({
         wholeRange: { startValue: 1, endValue: 2 }
     });
+    this.translator.getBusinessRange = sinon.stub();
+    this.translator.getBusinessRange.returns({ min: 5, max: 7 });
 
     this.axis.validate();
-    this.axis.setInitRange({ startValue: 5, endValue: 7 });
+    this.axis.setInitRange();
 
     assert.deepEqual(this.axis.getZoomBounds(), { startValue: 1, endValue: 2 });
 });

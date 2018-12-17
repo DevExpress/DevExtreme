@@ -785,7 +785,7 @@ var dxChart = AdvancedChart.inherit({
         });
 
         that._valueAxes.forEach((axis) => {
-            axis.setInitRange(axis.getZoomBounds());
+            axis.setInitRange();
         });
 
         return cleanPanesCanvases;

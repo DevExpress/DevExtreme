@@ -962,8 +962,6 @@ QUnit.test("check call 'setInitRange'", function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
-    valAxis.getZoomBounds = sinon.stub();
-    valAxis.getZoomBounds.returns({ startValue: 5, endValue: 7 });
     valAxis.setInitRange = sinon.spy();
 
     this.setupAxes([argAxis, valAxis]);
@@ -982,17 +980,12 @@ QUnit.test("check call 'setInitRange'", function(assert) {
     var valAxis1 = this.axisStub.getCall(1).returnValue;
 
     assert.equal(valAxis1.setInitRange.callCount, 1);
-    assert.equal(valAxis1.getZoomBounds.callCount, 1);
-
-    assert.deepEqual(valAxis1.setInitRange.lastCall.args, [{ startValue: 5, endValue: 7 }]);
 });
 
 QUnit.test("check call 'setInitRange'. Rotated", function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
 
-    valAxis.getZoomBounds = sinon.stub();
-    valAxis.getZoomBounds.returns({ startValue: 5, endValue: 7 });
     valAxis.setInitRange = sinon.spy();
 
     this.setupAxes([argAxis, valAxis]);
@@ -1012,9 +1005,6 @@ QUnit.test("check call 'setInitRange'. Rotated", function(assert) {
     var valAxis1 = this.axisStub.getCall(1).returnValue;
 
     assert.equal(valAxis1.setInitRange.callCount, 1);
-    assert.equal(valAxis1.getZoomBounds.callCount, 1);
-
-    assert.deepEqual(valAxis1.setInitRange.lastCall.args, [{ startValue: 5, endValue: 7 }]);
 });
 
 QUnit.module("Shift axes", environment);
