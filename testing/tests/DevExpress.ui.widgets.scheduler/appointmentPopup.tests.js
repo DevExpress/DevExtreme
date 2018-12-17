@@ -42,7 +42,7 @@ var moduleOptions = {
 
 QUnit.module("Appointment Popup Content", moduleOptions);
 
-QUnit.test("showAppointmentPopup method with passed a recurrence apointment should render popup(T698732)", function(assert) {
+QUnit.test("showAppointmentPopup method with passed a recurrence appointment should render popup(T698732)", function(assert) {
     var appointments = [
         {
             text: "TEST_TEXT",
