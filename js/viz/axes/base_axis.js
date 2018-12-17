@@ -1983,7 +1983,7 @@ Axis.prototype = {
             const zoomFactor = +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2");
             const zoomEndEvent = that.getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 
-            zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor);
+            zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor === 1 ? "pan" : "zoom", zoomFactor);
             that._eventTrigger("zoomEnd", zoomEndEvent);
 
             if(zoomEndEvent.cancel) {
@@ -2000,11 +2000,11 @@ Axis.prototype = {
         that._visualRange(that, previousRange);
     },
 
-    isZoomingLowerLimitOvercome(zoomFactor, range) {
+    isZoomingLowerLimitOvercome(actionType, zoomFactor, range) {
         const that = this;
         const options = that._options;
         let minZoom = options.minVisualRangeLength;
-        let isOvercoming = zoomFactor >= 1;
+        let isOvercoming = actionType === "zoom" && zoomFactor >= 1;
         const businessRange = that._translator.getBusinessRange();
         let visualRange;
         if(isDefined(range)) {
@@ -2017,19 +2017,24 @@ Axis.prototype = {
         }
         const visualRangeLength = that.getVisualRangeLength(visualRange);
 
-        if(isDefined(minZoom)) {
-            if(options.dataType === "datetime" && !isNumeric(minZoom)) {
-                minZoom = dateToMilliseconds(minZoom);
+        if(options.type !== "discrete") {
+            if(isDefined(minZoom)) {
+                if(options.dataType === "datetime" && !isNumeric(minZoom)) {
+                    minZoom = dateToMilliseconds(minZoom);
+                }
+                isOvercoming &= minZoom >= visualRangeLength;
+            } else {
+                const canvasLength = that._translator.canvasLength;
+                const fullRange = {
+                    minVisible: businessRange.min,
+                    maxVisible: businessRange.max,
+                    categories: businessRange.categories
+                };
+                isOvercoming &= that.getVisualRangeLength(fullRange) / canvasLength >= visualRangeLength;
             }
-            isOvercoming &= minZoom >= visualRangeLength;
         } else {
-            const canvasLength = that._translator.canvasLength;
-            const fullRange = {
-                minVisible: businessRange.min,
-                maxVisible: businessRange.max,
-                categories: businessRange.categories
-            };
-            isOvercoming &= that.getVisualRangeLength(fullRange) / canvasLength >= visualRangeLength;
+            !isDefined(minZoom) && (minZoom = 1);
+            isOvercoming &= isDefined(range) && that.getVisualRangeLength() === minZoom && visualRangeLength <= minZoom;
         }
 
         return !!isOvercoming;
