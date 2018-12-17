@@ -1393,6 +1393,24 @@ QUnit.test("Get button instance", function(assert) {
     assert.strictEqual(formInvalidateSpy.callCount, 0, "Invalidate does not called");
 });
 
+QUnit.testInActiveWindow("Change Button.text", function(assert) {
+    var form = $("#form").dxForm({
+        items: [{
+            itemType: "button",
+            name: "button1",
+            buttonOptions: { text: "button1" }
+        }]
+    }).dxForm("instance");
+
+    $('#form').find('.dx-button').focus();
+    assert.ok($('#form').find('.dx-button').is(':focus'), 'initial focus');
+
+    form.option("items[0].buttonOptions.text", "new text");
+
+    assert.strictEqual(form.getButton("button1").option("text"), "new text");
+    assert.ok($('#form').find('.dx-button').is(':focus'), 'final focus');
+});
+
 QUnit.test("Get editor instance", function(assert) {
     // arrange
     var $testContainer = $("#form");
