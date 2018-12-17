@@ -71,15 +71,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-QUnit.module("Validation rules", {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-
-    afterEach: function() {
-        this.clock.restore();
-    }
-});
+QUnit.module("Form validation rules");
 
 function getID(form, dataField) {
     return "dx_" + form.option("formID") + "_" + dataField;
