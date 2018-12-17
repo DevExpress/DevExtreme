@@ -113,7 +113,7 @@
 .dx-colorview-color-preview-container-inner,
 .dx-colorview-alpha-channel-wrapper,
 .dx-colorbox-input-container::after {
-    .double-gradient-linear( ~"45deg," @COLORVIEW_TRANSPARENT_BACKGROUND_COLOR ~"25%, transparent 25%, transparent 74%, " @COLORVIEW_TRANSPARENT_BACKGROUND_COLOR ~"75%," @COLORVIEW_TRANSPARENT_BACKGROUND_COLOR, ~"45deg," @COLORVIEW_TRANSPARENT_BACKGROUND_COLOR ~"25%, transparent 25%, transparent 74%, " @COLORVIEW_TRANSPARENT_BACKGROUND_COLOR ~"75%," @COLORVIEW_TRANSPARENT_BACKGROUND_COLOR );
+    background-image: linear-gradient(45deg, @COLORVIEW_TRANSPARENT_BACKGROUND_COLOR 25%, transparent 25%, transparent 74%, @COLORVIEW_TRANSPARENT_BACKGROUND_COLOR 75%, @COLORVIEW_TRANSPARENT_BACKGROUND_COLOR), linear-gradient(45deg, @COLORVIEW_TRANSPARENT_BACKGROUND_COLOR 25%, transparent 25%, transparent 74%, @COLORVIEW_TRANSPARENT_BACKGROUND_COLOR 75%, @COLORVIEW_TRANSPARENT_BACKGROUND_COLOR);
     background-size: 16px 16px;
     background-position: 0 0, 8px 8px;
 }

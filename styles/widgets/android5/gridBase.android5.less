@@ -197,7 +197,7 @@
     .dx-@{widgetName}-filter-range-overlay .dx-overlay-content {
         border: ~"@{@{widgetName}-border}";
         overflow: inherit;
-        .box-shadow(2px 2px 3px fade(black, 15%));
+        box-shadow: 2px 2px 3px fade(black, 15%);
 
         .dx-editor-container.dx-highlight-outline::after {
             border-color: ~"@{@{widgetName}-data-modified-color}";
@@ -272,7 +272,7 @@
                 background-color: ~"@{@{widgetName}-headers-background-color}";
                 border: ~"@{@{widgetName}-border}";
                 padding: @GRID_BASE_CELL_PADDING;
-                .box-shadow(0px 1px 3px -1px rgba(0, 0, 0, 0.2));
+                box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.2);
 
                 .dx-treeview-item-content {
                     color: ~"@{@{widgetName}-headers-color}";
@@ -290,7 +290,7 @@
     }
 
     .dx-@{widgetName}-drag-header {
-        .box-shadow(@GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @GRID_BASE_DRAG_HEADER_SECOND_SHADOW);
+        box-shadow: @GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @GRID_BASE_DRAG_HEADER_SECOND_SHADOW;
         padding: @GRID_BASE_CELL_PADDING;
         line-height: normal;
         border: ~"@{@{widgetName}-drag-header-border}";
@@ -339,7 +339,7 @@
 
     .dx-@{widgetName}-headers {
         color: ~"@{@{widgetName}-headers-color}";
-        .touch-action(pinch-zoom);
+        touch-action: pinch-zoom;
 
         .dx-texteditor-input, .dx-placeholder::before {
            padding: @GRID_BASE_CELL_PADDING;
@@ -549,7 +549,7 @@
             .dx-invalid-message {
                 .dx-overlay-content {
                     padding: 14px 17px 12px;
-                    .border-radius(0px);
+                    border-radius: 0px;
                 }
             }
 

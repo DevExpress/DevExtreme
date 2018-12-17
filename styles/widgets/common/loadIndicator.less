@@ -18,8 +18,8 @@
 }
 
 .dx-loadindicator-image {
-    .background-size-prop(contain);
-    .transform-origin(50% 50%);
+    background-size: contain;
+    transform-origin: 50% 50%;
     background-position: 50%;
     background-repeat: no-repeat;
 }
@@ -32,9 +32,9 @@
     position: relative;
     width: 100%;
     height: 100%;
-    .background-size();
-    .transform-origin(50% 50%);
-    .animation(dx-loadindicator-icon-custom-rotate 1.5s infinite linear);
+    background-size: 100% 100%;
+    transform-origin: 50% 50%;
+    animation: dx-loadindicator-icon-custom-rotate 1.5s infinite linear;
 
     @-webkit-keyframes dx-loadindicator-icon-custom-rotate {
         from {

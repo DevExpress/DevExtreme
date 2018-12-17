@@ -21,7 +21,7 @@
     top: @ANDROID5_TEXTEDITOR_ICON_TOP;
     width: @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
     height: @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
-    .border-radius(@radius: @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH / 2);
+    border-radius: @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH / 2;
     text-align: center;
     line-height: @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
 }
@@ -67,9 +67,9 @@
         &.dx-state-focused {
             .dx-texteditor-container {
                 &:before {
-                    .transform(scale(1));
+                    transform: scale(1);
                     background-color: @ANDROID5_INVALID_COLOR;
-                    .transition-transform(0.3s, cubic-bezier(0.2, 0, 0.03, 1));
+                    transition: transform 0.3s cubic-bezier(0.2, 0, 0.03, 1);
                 }
             }
         }
@@ -92,7 +92,7 @@
     color: @ANDROID5_TEXTEDITOR_COLOR;
     font-size: @ANDROID5_TEXTEDITOR_FONT_SIZE;
     &:-moz-ui-invalid:not(output) {
-        .box-shadow(none);
+        box-shadow: none;
     }
 }
 
@@ -111,7 +111,7 @@
         bottom: -1px;
         height: 2px;
         width: 100%;
-        .transform(scale(0, 2));
+        transform: scale(0, 2);
     }
 }
 
@@ -140,9 +140,9 @@
 .dx-state-focused.dx-texteditor {
     .dx-texteditor-container {
         &:before {
-            .transform(scale(1));
+            transform: scale(1);
             background-color: @ANDROID5_TEXTEDITOR_FOCUSED_BORDER_COLOR;
-            .transition-transform(0.3s, cubic-bezier(0.2, 0, 0.03, 1));
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0.03, 1);
         }
     }
 }

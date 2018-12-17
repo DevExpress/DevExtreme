@@ -7,13 +7,13 @@
 }
 
 .dx-buttongroup-item {
-    .flex-item(0, 1, auto);
+    flex: 0 1 auto;
 
     &.dx-button-mode-outlined, &.dx-button-mode-contained {
         border-left-width: 0;
 
         &.dx-button {
-            .border-radius(0);
+            border-radius: 0;
         }
     }
 
@@ -23,7 +23,7 @@
 }
 
 .dx-buttongroup-item-has-width {
-    .flex-item();
+    flex: 1 1 auto;
     width: 100%;
 }
 
