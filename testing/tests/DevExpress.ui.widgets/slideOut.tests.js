@@ -161,7 +161,7 @@ QUnit.test("grouped list should change it's selection after selectedIndex option
 });
 
 QUnit.test("grouped list should change it's selection after selectedItem option was changed", function(assert) {
-    var items = [
+    var dataSource = [
         { key: "Group 1", items: [
             { text: "Item 1" },
             { text: "Item 2" }
@@ -170,13 +170,13 @@ QUnit.test("grouped list should change it's selection after selectedItem option 
 
     this.$element.dxSlideOut({
         menuGrouped: true,
-        items: items
+        items: dataSource
     });
 
     var $menuItems = this.$element.find("." + LIST_ITEM_CLASS),
         instance = this.$element.dxSlideOut("instance");
 
-    instance.option("selectedItem", items[0].items[1]);
+    instance.option("selectedItem", dataSource[0].items[1]);
 
     assert.ok($menuItems.eq(1).hasClass("dx-list-item-selected"), "item is selected");
 });
@@ -435,11 +435,11 @@ QUnit.test("onMenuGroupRendered option on init", function(assert) {
             dataSource: [
                 {
                     key: "a",
-                    items: ["0", "1"]
+                    items: [ { text: "0" }, { text: "1" } ]
                 },
                 {
                     key: "b",
-                    items: ["2"]
+                    items: [{ text: "2" } ]
                 }
             ],
             menuGrouped: true,
@@ -464,11 +464,11 @@ QUnit.test("onMenuGroupRendered option change", function(assert) {
     slideOut.option("dataSource", [
         {
             key: "a",
-            items: ["0", "1"]
+            items: [ { text: "0" }, { text: "1" } ]
         },
         {
             key: "b",
-            items: ["2"]
+            items: [{ text: "2" } ]
         }
     ]);
 
