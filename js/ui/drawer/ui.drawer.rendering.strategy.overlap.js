@@ -178,7 +178,7 @@ class OverlapStrategy extends DrawerStrategy {
     }
 
     _processOverlayZIndex($element) {
-        const styles = $element.get(0).style;
+        const styles = $($element).get(0).style;
         const zIndex = styles.zIndex || 1;
 
         this.getDrawerInstance().setZIndex(zIndex);
