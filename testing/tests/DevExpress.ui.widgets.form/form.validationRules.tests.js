@@ -7,83 +7,60 @@ var INVALID_CLASS = "dx-invalid",
     VALIDATION_SUMMARY_ITEM_CLASS = "dx-validationsummary-item",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
-function runChangeRuleTest({ assert, fieldValue, initialRules, targetRules, useItemOption, changeRulesFunc = null, checkOptionsFunc = null, validationResult, isKeepFocusSupported = true }) {
+function toString(val) {
+    switch(val) {
+        case undefined:
+            return 'undefined';
+        case null:
+            return 'null';
+        default:
+            if(Array.isArray(val)) {
+                return '[' + val.length + ' items]';
+            }
+            return val;
+    }
+}
+
+function runChangeValidationRuleTest({ assert, fieldValue, validationRules, newValidationRules, useItemOption, changeRulesFunc = null, checkOptionsFunc = null, validationResult, isKeepFocusSupported = true }) {
+    const context = 'context: useItemOption = ' + toString(useItemOption) + '; ' +
+        'validationRules = ' + toString(validationRules) + '; ' +
+        'newValidationRules = ' + toString(newValidationRules);
+
     const form = $("#form").dxForm({
         formData: { f1: fieldValue },
         items: [{
             dataField: 'f1',
-            validationRules: initialRules
+            validationRules: validationRules
         }]
     }).dxForm("instance");
 
     $('#form').find('.' + TEXTEDITOR_INPUT_CLASS).focus();
-    assert.ok($('#form').find('.' + TEXTEDITOR_INPUT_CLASS).is(':focus'), 'initial focus');
-    assert.strictEqual($('#form').find('.' + INVALID_CLASS).length, 0, `initial [${INVALID_CLASS}].length`);
+    assert.ok($('#form').find('.' + TEXTEDITOR_INPUT_CLASS).is(':focus'), 'initial focus, ' + context);
+    assert.strictEqual($('#form').find('.' + INVALID_CLASS).length, 0, `initial [${INVALID_CLASS}].length, ` + context);
 
     if(changeRulesFunc === null) {
         if(useItemOption) {
-            form.itemOption('f1', 'validationRules', targetRules);
+            form.itemOption('f1', 'validationRules', newValidationRules);
         } else {
-            form.option('items[0].validationRules', targetRules);
+            form.option('items[0].validationRules', newValidationRules);
         }
     } else {
         changeRulesFunc(form);
     }
 
     if(checkOptionsFunc === null) {
-        assert.strictEqual(form.option('items[0].validationRules'), targetRules);
-        assert.strictEqual(form.itemOption('f1').validationRules, targetRules);
+        assert.strictEqual(form.option('items[0].validationRules'), newValidationRules, context);
+        assert.strictEqual(form.itemOption('f1').validationRules, newValidationRules, context);
     } else {
         checkOptionsFunc(assert, form);
     }
 
     const isInputFocused = $('#form').find('.' + TEXTEDITOR_INPUT_CLASS).is(':focus');
-    assert.ok(isKeepFocusSupported ? isInputFocused : !isInputFocused, 'final focus');
+    assert.ok(isKeepFocusSupported ? isInputFocused : !isInputFocused, 'final focus, ' + context);
 
     const validate_result = form.validate();
-    assert.strictEqual((validate_result === undefined) || validate_result.isValid, validationResult, 'validate_Result');
-    assert.strictEqual($('#form').find('.' + INVALID_CLASS).length, validationResult ? 0 : 1, `final [${INVALID_CLASS}].length`);
-}
-
-function runRemoveRangedRuleTest(options) {
-    runChangeRuleTest(extend(
-        {
-            fieldValue: 10,
-            initialRules: [{ type: 'range', max: 1 }],
-            validationResult: true,
-        },
-        options
-    ));
-}
-
-function runSetRequiredRuleTest(options) {
-    [true, false].forEach(useItemOption => {
-        runChangeRuleTest(extend(
-            {
-                fieldValue: null,
-                targetRules: [{ type: 'required' }],
-                validationResult: false,
-                isKeepFocusSupported: false,
-                useItemOption
-            },
-            options
-        ));
-    });
-}
-
-function runRemoveRequiredRuleTest(options) {
-    [true, false].forEach(useItemOption => {
-        runChangeRuleTest(extend(
-            {
-                fieldValue: null,
-                initialRules: [{ type: 'required' }],
-                validationResult: true,
-                isKeepFocusSupported: false,
-                useItemOption
-            },
-            options
-        ));
-    });
+    assert.strictEqual((validate_result === undefined) || validate_result.isValid, validationResult, 'validate_Result, ' + context);
+    assert.strictEqual($('#form').find('.' + INVALID_CLASS).length, validationResult ? 0 : 1, `final [${INVALID_CLASS}].length, ` + context);
 }
 
 QUnit.testStart(function() {
@@ -325,13 +302,13 @@ QUnit.test("Changing an validationRules options of an any item does not invalida
     assert.strictEqual(renderComponentSpy.callCount, 0, "renderComponentSpy.callCount");
 });
 
-QUnit.test("Test RangeRule.max changing", function(assert) {
+QUnit.testInActiveWindow("Test RangeRule.max changing", function(assert) {
     const runChangeRuleRageMaxTest = (options) => {
         [true, false].forEach(useItemOption => {
-            runChangeRuleTest({
+            runChangeValidationRuleTest({
                 assert: assert,
                 fieldValue: options.fieldValue,
-                initialRules: [{ type: 'range', max: options.initialMax }],
+                validationRules: [{ type: 'range', max: options.initialMax }],
                 changeRulesFunc: form => {
                     if(useItemOption) {
                         form.itemOption('f1').validationRules[0].max = options.targetMax;
@@ -352,50 +329,86 @@ QUnit.test("Test RangeRule.max changing", function(assert) {
     runChangeRuleRageMaxTest({ fieldValue: 10, initialMax: 1, targetMax: 11, validationResult: true });
 });
 
-QUnit.test("Test set item RangeRule", function(assert) {
+QUnit.testInActiveWindow("Test set item RangeRule", function(assert) {
     const runSetRangeRuleTest = (options) => {
-        runChangeRuleTest(extend(
+        runChangeValidationRuleTest(extend(
             {
                 assert,
                 fieldValue: 10,
-                targetRules: [{ type: 'range', max: 1 }],
+                newValidationRules: [{ type: 'range', max: 1 }],
                 validationResult: false,
             },
             options
         ));
     };
 
-    [undefined, null, []].forEach(initialRules => {
-        runSetRangeRuleTest({ useItemOption: false, isKeepFocusSupported: true, initialRules: [] });
-    });
-    [undefined, null, []].forEach(initialRules => {
-        runSetRangeRuleTest({ useItemOption: true, isKeepFocusSupported: false, initialRules: [] });
+    [undefined, null].forEach(validationRules => {
+        [true, false].forEach(useItemOption => {
+            runSetRangeRuleTest({ validationRules, useItemOption, isKeepFocusSupported: false });
+        });
     });
 
+    runSetRangeRuleTest({ validationRules: [], useItemOption: true, isKeepFocusSupported: false });
+    runSetRangeRuleTest({ validationRules: [], useItemOption: false, isKeepFocusSupported: true });
 });
 
-QUnit.test("Test remove item RangeRule", function(assert) {
-    [undefined, null, []].forEach(initialRules => {
-        runRemoveRangedRuleTest({ assert, useItemOption: false, isKeepFocusSupported: true, initialRules: [] });
+QUnit.testInActiveWindow("Test remove item RangeRule", function(assert) {
+    const runRemoveRangedRuleTest = (options) => {
+        runChangeValidationRuleTest(extend(
+            {
+                assert,
+                fieldValue: 10,
+                validationRules: [{ type: 'range', max: 1 }],
+                validationResult: true,
+            },
+            options
+        ));
+    };
+
+    [undefined, null, []].forEach(newValidationRules => {
+        runRemoveRangedRuleTest({ newValidationRules, useItemOption: false, isKeepFocusSupported: true });
     });
-    [undefined, null, []].forEach(initialRules => {
-        runRemoveRangedRuleTest({ assert, useItemOption: true, isKeepFocusSupported: false, initialRules: [] });
+    [undefined, null, []].forEach(newValidationRules => {
+        runRemoveRangedRuleTest({ newValidationRules, useItemOption: true, isKeepFocusSupported: false });
     });
 });
 
-QUnit.test("Test set/remove item RequiredRule", function(assert) {
-    [undefined, null, []].forEach(initialRules => {
-        runSetRequiredRuleTest({ assert, initialRules });
-    });
-    [undefined, null, []].forEach(targetRules => {
-        runRemoveRequiredRuleTest({ assert, targetRules });
+QUnit.testInActiveWindow("Test set item RequiredRule", function(assert) {
+    [undefined, null, []].forEach(validationRules => {
+        [true, false].forEach(useItemOption => {
+            runChangeValidationRuleTest({
+                assert,
+                fieldValue: null,
+                validationRules,
+                newValidationRules: [{ type: 'required' }],
+                validationResult: false,
+                isKeepFocusSupported: false,
+                useItemOption
+            });
+        });
     });
 });
 
-QUnit.test("Test item.isRequired", function(assert) {
+QUnit.testInActiveWindow("Test remove item RequiredRule", function(assert) {
+    [undefined, null, []].forEach(newValidationRules => {
+        [true, false].forEach(useItemOption => {
+            runChangeValidationRuleTest({
+                assert,
+                fieldValue: null,
+                validationRules: [{ type: 'required' }],
+                newValidationRules,
+                validationResult: true,
+                isKeepFocusSupported: false,
+                useItemOption
+            });
+        });
+    });
+});
+
+QUnit.testInActiveWindow("Test item.isRequired", function(assert) {
     [true, false].forEach(isRequired => {
         [true, false].forEach(useItemOption => {
-            runChangeRuleTest({
+            runChangeValidationRuleTest({
                 assert: assert,
                 fieldValue: null,
                 changeRulesFunc: form => {
