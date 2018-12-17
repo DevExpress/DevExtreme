@@ -42,6 +42,38 @@ var moduleOptions = {
 
 QUnit.module("Appointment Popup Content", moduleOptions);
 
+QUnit.test("showAppointmentPopup method with passed a recurrence apointment should render popup(T698732)", function(assert) {
+    var appointments = [
+        {
+            text: "TEST_TEXT",
+            startDate: new Date(2017, 4, 1, 9, 30),
+            endDate: new Date(2017, 4, 1, 11),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10"
+        }
+    ];
+    this.instance.option({
+        dataSource: appointments,
+        currentDate: new Date(2017, 4, 25),
+        startDayHour: 9,
+    });
+
+    this.instance.showAppointmentPopup(appointments[0], false);
+
+    var popupChoiceAppointmentEdit = $('.dx-popup-normal.dx-resizable').not('.dx-state-invisible');
+    assert.equal(popupChoiceAppointmentEdit.length, 1, "Popup with choice edit mode is rendered");
+
+    popupChoiceAppointmentEdit.find(".dx-popup-bottom .dx-button:eq(1)").trigger("click");
+    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Appointment popup is rendered");
+
+    var form = this.instance.getAppointmentDetailsForm(),
+        startDateBox = form.getEditor("startDate"),
+        endDateBox = form.getEditor("endDate");
+
+    assert.equal(startDateBox.option("value").valueOf(), appointments[0].startDate.valueOf(), "Value in start dateBox valid");
+    assert.equal(endDateBox.option("value").valueOf(), appointments[0].endDate.valueOf(), "Value in end dateBox valid");
+});
+
+
 QUnit.test("showAppointmentPopup should render a popup only once", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
 
