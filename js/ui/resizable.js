@@ -1,7 +1,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
-    commonUtils = require("../core/utils/string"),
+    commonUtils = require("../core/utils/common"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
