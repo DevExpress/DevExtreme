@@ -1393,22 +1393,36 @@ QUnit.test("Get button instance", function(assert) {
     assert.strictEqual(formInvalidateSpy.callCount, 0, "Invalidate does not called");
 });
 
-QUnit.testInActiveWindow("Change Button.text", function(assert) {
-    var form = $("#form").dxForm({
-        items: [{
-            itemType: "button",
-            name: "button1",
-            buttonOptions: { text: "button1" }
-        }]
-    }).dxForm("instance");
+QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
+    ['option', 'itemOption', 'editor.option'].forEach(setOptionWay => {
+        var form = $("#form").dxForm({
+            items: [{
+                itemType: "button",
+                name: "button1",
+                buttonOptions: { icon: "icon1" }
+            }]
+        }).dxForm("instance");
 
-    $('#form').find('.dx-button').focus();
-    assert.ok($('#form').find('.dx-button').is(':focus'), 'initial focus');
+        $('#form').find('.dx-button').focus();
+        assert.ok($('#form').find('.dx-button').is(':focus'), 'initial focus');
 
-    form.option("items[0].buttonOptions.text", "new text");
+        switch(setOptionWay) {
+            case 'option':
+                form.option("items[0].buttonOptions.icon", "icon2");
+                break;
+            case 'itemOption':
+                const buttonOptions = form.itemOption('button1').buttonOptions;
+                buttonOptions.icon = 'icon2';
+                form.itemOption('button1', 'buttonOptions', buttonOptions);
+                break;
+            case 'editor.option':
+                form.getButton("button1").option("icon", 'icon2');
+                break;
+        }
 
-    assert.strictEqual(form.getButton("button1").option("text"), "new text");
-    assert.ok($('#form').find('.dx-button').is(':focus'), 'final focus');
+        assert.strictEqual(form.getButton("button1").option("icon"), "icon2");
+        assert.ok($('#form').find('.dx-button').is(':focus') === (setOptionWay !== 'itemOption'), 'final focus');
+    });
 });
 
 QUnit.test("Get editor instance", function(assert) {
