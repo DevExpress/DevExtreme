@@ -60,7 +60,12 @@ function checkAxesSynchronization(assert, options) {
             return axis;
         };
         return $.map(axesOptions, function(axisOptions) {
-            return createAxis(axisOptions);
+            var axis = createAxis(axisOptions);
+            $.each(axisOptions.mockFunctions, function(func, wrapper) {
+                wrapper(axis[func]);
+            });
+
+            return axis;
         });
     };
 
@@ -285,6 +290,52 @@ QUnit.test('No synchronization for non-number tickValues', function(assert) {
             }
         ],
         syncIndexes: [[0], [1]]
+    });
+});
+
+// T684665
+QUnit.test("No syncronize axis if viewport have field 'action' with value 'zoom'", function(assert) {
+    var mockFunctions = {
+        getViewport: function(instance) { instance.returns({ action: "zoom" }); }
+    };
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            {
+                range: { min: 0, max: 10, axisType: 'continuous' },
+                tickValues: [2, 4, 6, 8],
+                tickInterval: 2,
+                mockFunctions: mockFunctions
+            },
+            {
+                range: { min: 15, max: 60, axisType: 'continuous' },
+                tickValues: [20, 30, 40, 50, 60],
+                tickInterval: 0,
+                mockFunctions: mockFunctions
+            }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 0,
+                    minVisible: 0,
+                    max: 10,
+                    maxVisible: 10
+                },
+                tickValues: [2, 4, 6, 8]
+
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 15,
+                    minVisible: 15,
+                    max: 60,
+                    maxVisible: 60
+                },
+                tickValues: [20, 30, 40, 50, 60]
+            }
+        ]
     });
 });
 

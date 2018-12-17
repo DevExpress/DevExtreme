@@ -784,6 +784,10 @@ var dxChart = AdvancedChart.inherit({
             _extend(pane.canvas, panesCanvases[pane.name]);
         });
 
+        that._valueAxes.forEach((axis) => {
+            axis.setInitRange();
+        });
+
         return cleanPanesCanvases;
     },
 

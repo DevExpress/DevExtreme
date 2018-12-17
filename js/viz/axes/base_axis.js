@@ -296,6 +296,8 @@ const Axis = exports.Axis = function(renderSettings) {
     that._viewport = {};
 
     that._firstDrawing = true;
+
+    that._initRange = {};
 };
 
 Axis.prototype = {
@@ -1873,11 +1875,21 @@ Axis.prototype = {
     getZoomBounds() {
         const wholeRange = vizUtils.getVizRangeObject(this._options.wholeRange);
         const range = this.getTranslator().getBusinessRange();
+        const secondPriorityRange = {
+            startValue: getZoomBoundValue(this._initRange.startValue, range.min),
+            endValue: getZoomBoundValue(this._initRange.endValue, range.max)
+        };
 
         return {
-            startValue: getZoomBoundValue(wholeRange.startValue, range.min),
-            endValue: getZoomBoundValue(wholeRange.endValue, range.max)
+            startValue: getZoomBoundValue(wholeRange.startValue, secondPriorityRange.startValue),
+            endValue: getZoomBoundValue(wholeRange.endValue, secondPriorityRange.endValue)
         };
+    },
+
+    setInitRange() {
+        if(Object.keys(this._options.wholeRange || {}).length === 0) {
+            this._initRange = this.getZoomBounds();
+        }
     },
 
     _resetVisualRangeOption() {
@@ -1929,6 +1941,7 @@ Axis.prototype = {
 
         if(isDefined(visualRange)) {
             visualRange = that._validateVisualRange(visualRange);
+            visualRange.action = action;
         }
 
         const zoomStartEvent = that.getZoomStartEventArg(domEvent, action);
@@ -1970,7 +1983,7 @@ Axis.prototype = {
             const zoomFactor = +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2");
             const zoomEndEvent = that.getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 
-            zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor);
+            zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor === 1 ? "pan" : "zoom", zoomFactor);
             that._eventTrigger("zoomEnd", zoomEndEvent);
 
             if(zoomEndEvent.cancel) {
@@ -1987,11 +2000,11 @@ Axis.prototype = {
         that._visualRange(that, previousRange);
     },
 
-    isZoomingLowerLimitOvercome(zoomFactor, range) {
+    isZoomingLowerLimitOvercome(actionType, zoomFactor, range) {
         const that = this;
         const options = that._options;
         let minZoom = options.minVisualRangeLength;
-        let isOvercoming = zoomFactor >= 1;
+        let isOvercoming = actionType === "zoom" && zoomFactor >= 1;
         const businessRange = that._translator.getBusinessRange();
         let visualRange;
         if(isDefined(range)) {
@@ -2004,19 +2017,24 @@ Axis.prototype = {
         }
         const visualRangeLength = that.getVisualRangeLength(visualRange);
 
-        if(isDefined(minZoom)) {
-            if(options.dataType === "datetime" && !isNumeric(minZoom)) {
-                minZoom = dateToMilliseconds(minZoom);
+        if(options.type !== "discrete") {
+            if(isDefined(minZoom)) {
+                if(options.dataType === "datetime" && !isNumeric(minZoom)) {
+                    minZoom = dateToMilliseconds(minZoom);
+                }
+                isOvercoming &= minZoom >= visualRangeLength;
+            } else {
+                const canvasLength = that._translator.canvasLength;
+                const fullRange = {
+                    minVisible: businessRange.min,
+                    maxVisible: businessRange.max,
+                    categories: businessRange.categories
+                };
+                isOvercoming &= that.getVisualRangeLength(fullRange) / canvasLength >= visualRangeLength;
             }
-            isOvercoming &= minZoom >= visualRangeLength;
         } else {
-            const canvasLength = that._translator.canvasLength;
-            const fullRange = {
-                minVisible: businessRange.min,
-                maxVisible: businessRange.max,
-                categories: businessRange.categories
-            };
-            isOvercoming &= that.getVisualRangeLength(fullRange) / canvasLength >= visualRangeLength;
+            !isDefined(minZoom) && (minZoom = 1);
+            isOvercoming &= isDefined(range) && that.getVisualRangeLength() === minZoom && visualRangeLength <= minZoom;
         }
 
         return !!isOvercoming;

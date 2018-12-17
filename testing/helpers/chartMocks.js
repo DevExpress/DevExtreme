@@ -896,6 +896,10 @@ export const MockAxis = function(renderOptions) {
 
         setBusinessRange: sinon.stub(),
 
+        getZoomBounds: sinon.stub(),
+
+        setInitRange: sinon.stub(),
+
         setGroupSeries: sinon.stub(),
 
         restoreBusinessRange: sinon.stub(),

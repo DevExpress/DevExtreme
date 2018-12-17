@@ -471,6 +471,7 @@ var Menu = MenuBase.inherit({
         });
 
         return extend(menuOptions, {
+            dataSource: that.getDataSource(),
             animationEnabled: !!this.option("animation"),
             onItemClick: that._treeviewItemClickHandler.bind(that),
             onItemExpanded: (function(e) {

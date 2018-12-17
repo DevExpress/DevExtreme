@@ -1,6 +1,7 @@
 
 import { isDefined } from "../../core/utils/type";
-import { normalizeEnum } from "../core/utils";
+import { extend } from "../../core/utils/extend";
+import { normalizeEnum, getVizRangeObject } from "../core/utils";
 import { name as wheelEvent } from "../../events/core/wheel";
 import transformEvents from "../../events/transform";
 import dragEvents from "../../events/drag";
@@ -59,8 +60,10 @@ module.exports = {
             renderer = this._renderer;
 
         function cancelEvent(e) {
-            e.cancel = true;
-            e.originalEvent && (e.originalEvent.cancel = true);
+            if(e.cancelable) {
+                e.cancel = true;
+                e.originalEvent && (e.originalEvent.cancel = true);
+            }
         }
 
         function startAxesViewportChanging(zoomAndPan, actionField, e) {
@@ -83,19 +86,31 @@ module.exports = {
             function zoomAxes(axes, criteria, coordField, e, actionData) {
                 let zoom = { zoomed: false };
                 criteria && axes.forEach(axis => {
+                    const options = axis.getOptions();
                     const viewport = axis.visualRange();
                     const scale = axis.getTranslator().getEventScale(e);
                     const translate = -offsetCalc(e, actionData, coordField, scale);
-                    zoom = axis.getTranslator().zoom(translate, scale, axis.getZoomBounds());
-                    if(!isDefined(viewport) || viewport.startValue.valueOf() !== zoom.min.valueOf() || viewport.endValue.valueOf() !== zoom.max.valueOf()) {
-                        const range = [zoom.min, zoom.max];
-                        const isMinZoom = axis.isZoomingLowerLimitOvercome(scale, range);
+                    zoom = extend(true, zoom, axis.getTranslator().zoom(translate, scale, axis.getZoomBounds()));
+                    const range = axis.adjustRange(getVizRangeObject([zoom.min, zoom.max]));
+                    const isMinZoom = axis.isZoomingLowerLimitOvercome(actionField, scale, range);
 
+                    if(!isDefined(viewport) ||
+                        viewport.startValue.valueOf() !== range.startValue.valueOf() ||
+                        viewport.endValue.valueOf() !== range.endValue.valueOf()) {
                         axis.handleZooming(isMinZoom ? null : range, { start: true, end: true }, e, actionField);
                         if(!isMinZoom) {
                             zoom.zoomed = true;
                             zoom.deltaTranslate = translate - zoom.translate;
                         }
+                    } else if(e.pointerType === "touch" && options.type === "discrete") {
+                        const isMinPosition = axis.isExtremePosition(false);
+                        const isMaxPosition = axis.isExtremePosition(true);
+                        const zoomInEnabled = scale > 1 && !isMinZoom;
+                        const zoomOutEnabled = scale < 1 && (!isMinPosition || !isMaxPosition);
+                        const panningEnabled = scale === 1 && !(isMinPosition && (translate < 0 && !options.inverted || translate > 0 && options.inverted) ||
+                            isMaxPosition && (translate > 0 && !options.inverted || translate < 0 && options.inverted));
+
+                        zoom.enabled = zoomInEnabled || zoomOutEnabled || panningEnabled;
                     }
                 });
                 return zoom;
@@ -133,6 +148,7 @@ module.exports = {
             if(!argZoom.zoomed && !valZoom.zoomed) {
                 actionData.center = center;
             }
+            return argZoom.zoomed || valZoom.zoomed || actionData.fallback || argZoom.enabled || valZoom.enabled;
         }
 
         function finishAxesViewportChanging(zoomAndPan, actionField, e, offsetCalc) {
@@ -142,8 +158,8 @@ module.exports = {
                     const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
                     const scale = e.scale || 1;
                     const zoom = axis.getTranslator().zoom(-offsetCalc(e, actionData, coordField, scale), scale, axis.getZoomBounds());
-                    const range = [zoom.min, zoom.max];
-                    const isMinZoom = axis.isZoomingLowerLimitOvercome(scale, range);
+                    const range = { startValue: zoom.min, endValue: zoom.max };
+                    const isMinZoom = axis.isZoomingLowerLimitOvercome(actionField, scale, range);
 
                     axis.handleZooming(isMinZoom ? null : range, { start: true, end: silent }, e, actionField);
                     isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
@@ -241,7 +257,8 @@ module.exports = {
 
                 if(isTouch) {
                     if(options.allowTouchGestures && wantPan) {
-                        action = "pan";
+                        const cancelPanning = !zoomAndPan.panningVisualRangeEnabled() || zoomAndPan.skipEvent;
+                        action = cancelPanning ? null : "pan";
                     }
                 } else {
                     if(dragToZoom && wantPan && panKeyPressed) {
@@ -255,6 +272,7 @@ module.exports = {
 
                 const actionData = prepareActionData(calcCenterForDrag(e), action);
                 if(actionData.cancel) {
+                    zoomAndPan.skipEvent = false;
                     e.cancel = true;
                     return;
                 }
@@ -274,13 +292,15 @@ module.exports = {
                 const rotated = chart.option("rotated");
                 const options = zoomAndPan.options;
                 const actionData = zoomAndPan.actionData;
+                const isTouch = e.pointerType === "touch";
 
-                if(!actionData) {
+                if(!actionData || isTouch && !zoomAndPan.panningVisualRangeEnabled()) {
                     return;
                 }
-                preventDefaults(e);
 
                 if(actionData.action === "zoom") {
+                    preventDefaults(e);
+
                     const curCanvas = actionData.curAxisRect,
                         startCoords = actionData.startCoords,
                         curCoords = getPointerCoord(curCanvas, e),
@@ -306,19 +326,31 @@ module.exports = {
 
                     actionData.rect.attr(rect);
                 } else if(actionData.action === "pan") {
-                    axesViewportChanging(zoomAndPan, "pan", e, calcOffsetForDrag, e => e.offset);
+                    const viewportChanged = axesViewportChanging(zoomAndPan, "pan", e, calcOffsetForDrag, e => e.offset);
+
+                    if(isTouch) {
+                        zoomAndPan.defineTouchBehavior(!viewportChanged, e);
+                        if(!viewportChanged && zoomAndPan.panningVisualRangeEnabled()) {
+                            cancelEvent(e);
+                            zoomAndPan.skipEvent = true;
+                            zoomAndPan.actionData = null;
+                        }
+                    } else {
+                        preventDefaults(e);
+                    }
                 }
             },
             dragEndHandler: function(e) {
                 const rotated = chart.option("rotated");
                 const options = zoomAndPan.options;
                 const actionData = zoomAndPan.actionData;
+                const isTouch = e.pointerType === "touch";
 
-                if(!actionData) {
+                if(!actionData || isTouch && !zoomAndPan.panningVisualRangeEnabled()) {
                     return;
                 }
 
-                preventDefaults(e);
+                (!isTouch || !zoomAndPan.actionData.isNative) && preventDefaults(e);
                 if(actionData.action === "zoom") {
                     function zoomAxes(axes, criteria, coordField, startCoords, curCoords, onlyAxisToNotify) {
                         const curCoord = curCoords[coordField];
@@ -329,7 +361,7 @@ module.exports = {
                                 const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify),
                                     tr = axis.getTranslator(),
                                     range = [tr.from(startCoord), tr.from(curCoord)],
-                                    isMinZoom = axis.isZoomingLowerLimitOvercome(tr.getMinScale(true), range);
+                                    isMinZoom = axis.isZoomingLowerLimitOvercome(actionData.action, tr.getMinScale(true), range);
 
                                 axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, actionData.action);
                                 isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
@@ -356,6 +388,7 @@ module.exports = {
                 preventDefaults(e);
 
                 const actionData = prepareActionData(calcCenterForPinch(e), "zoom");
+                actionData.isNative = !zoomAndPan.panningVisualRangeEnabled();
                 if(actionData.cancel) {
                     cancelEvent(e);
                     return;
@@ -364,21 +397,24 @@ module.exports = {
                 startAxesViewportChanging(zoomAndPan, "zoom", e);
             },
             pinchHandler: function(e) {
+                if(zoomAndPan.actionData && zoomAndPan.actionData.isNative && e.deltaScale <= 1) {
+                    zoomAndPan.defineTouchBehavior(true, e);
+                    zoomAndPan.actionData = null;
+                }
                 if(!zoomAndPan.actionData) {
                     return;
                 }
-
-                preventDefaults(e);
-                axesViewportChanging(zoomAndPan, "zoom", e,
+                const viewportChanged = axesViewportChanging(zoomAndPan, "zoom", e,
                     (e, actionData, coordField, scale) => calcCenterForPinch(e)[coordField] - actionData.center[coordField] + (actionData.center[coordField] - actionData.center[coordField] * scale),
                     calcCenterForPinch);
+                zoomAndPan.defineTouchBehavior(!viewportChanged, e);
             },
             pinchEndHandler: function(e) {
                 if(!zoomAndPan.actionData) {
                     return;
                 }
 
-                preventDefaults(e);
+                !zoomAndPan.actionData.isNative && preventDefaults(e);
                 finishAxesViewportChanging(zoomAndPan, "zoom", e,
                     (e, actionData, coordField, scale) => actionData.center[coordField] - actionData.startCenter[coordField] + (actionData.startCenter[coordField] - actionData.startCenter[coordField] * scale));
                 zoomAndPan.actionData = null;
@@ -403,8 +439,6 @@ module.exports = {
 
                 if((options.argumentAxis.zoom || options.valueAxis.zoom) && options.allowMouseWheel) {
                     renderer.root.on(wheelEvent + EVENTS_NS, function(e) {
-                        preventDefaults(e); // T249548
-
                         function zoomAxes(axes, coord, delta, onlyAxisToNotify) {
                             let zoomStarted = false;
                             axes.forEach(axis => {
@@ -412,8 +446,8 @@ module.exports = {
                                     translator = axis.getTranslator(),
                                     scale = translator.getMinScale(delta > 0),
                                     zoom = translator.zoom(-(coord - coord * scale), scale, axis.getZoomBounds()),
-                                    range = [zoom.min, zoom.max],
-                                    isMinZoom = axis.isZoomingLowerLimitOvercome(scale, range);
+                                    range = { startValue: zoom.min, endValue: zoom.max },
+                                    isMinZoom = axis.isZoomingLowerLimitOvercome("zoom", scale, range);
 
                                 axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, "zoom");
                                 isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
@@ -455,7 +489,10 @@ module.exports = {
                             axesZoomed |= canZoom && zoomAxes(chart._argumentAxes, rotated ? coords.y : coords.x, e.delta, chart.getArgumentAxis());
                         }
 
-                        axesZoomed && chart._requestChange(["VISUAL_RANGE"]);
+                        if(axesZoomed) {
+                            chart._requestChange(["VISUAL_RANGE"]);
+                            zoomAndPan.panningVisualRangeEnabled() && preventDefaults(e); // T249548
+                        }
                     });
                 }
                 if(options.allowTouchGestures) {
@@ -466,15 +503,7 @@ module.exports = {
                             .on(PINCH_END_EVENT_NAME, zoomAndPan.pinchEndHandler);
                     }
 
-                    let touchAction = "none";
-                    if(!options.argumentAxis.zoom && !options.valueAxis.zoom) {
-                        touchAction = "pinch-zoom";
-                    }
-
-                    if(!options.argumentAxis.pan && !options.valueAxis.pan) {
-                        touchAction = "pan-x pan-y";
-                    }
-                    renderer.root.css({ "touch-action": touchAction, "-ms-touch-action": touchAction });
+                    zoomAndPan.setTouchAction(false);
                 }
 
                 renderer.root
@@ -504,6 +533,41 @@ module.exports = {
                             zoomAndPan.actionData = null;
                         });
                 }
+            },
+
+            defineTouchBehavior: function(isDefault, e) {
+                zoomAndPan.setTouchAction(isDefault);
+                zoomAndPan.actionData && (zoomAndPan.actionData.isNative = isDefault);
+                if(!isDefault) {
+                    preventDefaults(e);
+                }
+            },
+
+            setTouchAction: function(isDefault) {
+                const options = zoomAndPan.options;
+                if(!options.allowTouchGestures) {
+                    return;
+                }
+
+                let touchAction = isDefault ? "" : "none";
+                if(!isDefault) {
+                    if(!options.argumentAxis.zoom && !options.valueAxis.zoom) {
+                        touchAction = "pinch-zoom";
+                    }
+
+                    if(!options.argumentAxis.pan && !options.valueAxis.pan) {
+                        touchAction = "pan-x pan-y";
+                    }
+                }
+                renderer.root.css({ "touch-action": touchAction, "-ms-touch-action": touchAction });
+            },
+
+            panningVisualRangeEnabled: function() {
+                const enablePanByValueAxis =
+                    chart._valueAxes.some(axis => !axis.isExtremePosition(false) || !axis.isExtremePosition(true));
+                const enablePanByArgumentAxis =
+                    chart._argumentAxes.some(axis => !axis.isExtremePosition(false) || !axis.isExtremePosition(true));
+                return enablePanByValueAxis || enablePanByArgumentAxis;
             }
         };
 
