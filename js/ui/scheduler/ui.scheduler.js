@@ -414,6 +414,18 @@ var Scheduler = Widget.inherit({
             dataSource: null,
 
             /**
+                * @name dxSchedulerOptions.customizeDateNavigatorText
+                * @type function(info)
+                * @type_function_param1 info:object
+                * @type_function_param1_field1 startDate:date
+                * @type_function_param1_field2 endDate:date
+                * @type_function_param1_field3 text:string
+                * @type_function_return string
+                * @default undefined
+                */
+            customizeDateNavigatorText: undefined,
+
+            /**
                 * @name dxSchedulerOptions.appointmentTemplate
                 * @extends AppointmentTemplate
                 */
@@ -1071,6 +1083,9 @@ var Scheduler = Widget.inherit({
             name = args.name;
 
         switch(args.name) {
+            case "customizeDateNavigatorText":
+                this._updateOption("header", name, value);
+                break;
             case "firstDayOfWeek":
                 this._updateOption("workSpace", name, value);
                 this._updateOption("header", name, value);
@@ -1785,7 +1800,8 @@ var Scheduler = Widget.inherit({
             width: this.option("width"),
             rtlEnabled: this.option("rtlEnabled"),
             useDropDownViewSwitcher: this.option("useDropDownViewSwitcher"),
-            _dropDownButtonIcon: this.option("_dropDownButtonIcon")
+            _dropDownButtonIcon: this.option("_dropDownButtonIcon"),
+            customizeDateNavigatorText: this.option("customizeDateNavigatorText")
         }, currentViewOptions);
 
         result.observer = this;
