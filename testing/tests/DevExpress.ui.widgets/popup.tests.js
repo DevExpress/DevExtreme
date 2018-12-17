@@ -565,6 +565,38 @@ QUnit.test("width/height", function(assert) {
     assert.equal($overlayContent.outerHeight(), 567);
 });
 
+QUnit.test("popup height can be changed according to the content after the updateHeight method call", function(assert) {
+    var $content,
+        popup = $("#popup").dxPopup({
+            visible: true,
+            showTitle: true,
+            title: "Information",
+            height: "auto",
+            contentTemplate: function(e) {
+                $content = $("<div>").attr("id", "content");
+                $("<div>").height(50).appendTo($content);
+                return $content;
+            },
+            maxHeight: 400,
+            minHeight: 50
+        }).dxPopup("instance");
+
+    var $popup = $(popup.content()).parent(toSelector(OVERLAY_CONTENT_CLASS)).eq(0),
+        popupHeight = $popup.height();
+
+    $("<div>").height(50).appendTo($content);
+    popup.updateHeight();
+    assert.equal($popup.height(), popupHeight + 50, "popup height has been changed");
+
+    $("<div>").height(450).appendTo($content);
+    popup.updateHeight();
+    assert.equal($popup.height(), 400, "popup height has been changed, it is equal to the maxHeight");
+
+    $content.empty();
+    popup.updateHeight();
+    assert.equal($popup.height(), 50, "popup height has been changed, it is equal to the minHeight");
+});
+
 QUnit.test("fullScreen", function(assert) {
     this.instance.option({
         fullScreen: true,

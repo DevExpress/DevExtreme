@@ -788,8 +788,16 @@ var Popup = Overlay.inherit({
 
     overlayContent: function() {
         return this._$content;
-    }
+    },
 
+    /**
+    * @name dxPopupMethods.updateHeight
+    * @publicName updateHeight()
+    */
+    updateHeight: function() {
+        this._resetContentHeight();
+        this._setContentHeight();
+    }
 });
 
 registerComponent("dxPopup", Popup);
