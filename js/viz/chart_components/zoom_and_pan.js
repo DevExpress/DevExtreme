@@ -158,7 +158,7 @@ module.exports = {
                     const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
                     const scale = e.scale || 1;
                     const zoom = axis.getTranslator().zoom(-offsetCalc(e, actionData, coordField, scale), scale, axis.getZoomBounds());
-                    const range = [zoom.min, zoom.max];
+                    const range = { startValue: zoom.min, endValue: zoom.max };
                     const isMinZoom = axis.isZoomingLowerLimitOvercome(actionField, scale, range);
 
                     axis.handleZooming(isMinZoom ? null : range, { start: true, end: silent }, e, actionField);
@@ -446,7 +446,7 @@ module.exports = {
                                     translator = axis.getTranslator(),
                                     scale = translator.getMinScale(delta > 0),
                                     zoom = translator.zoom(-(coord - coord * scale), scale, axis.getZoomBounds()),
-                                    range = [zoom.min, zoom.max],
+                                    range = { startValue: zoom.min, endValue: zoom.max },
                                     isMinZoom = axis.isZoomingLowerLimitOvercome("zoom", scale, range);
 
                                 axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, "zoom");

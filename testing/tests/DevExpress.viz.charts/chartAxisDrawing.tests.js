@@ -958,6 +958,55 @@ QUnit.test("Rotated. Multiple panes - individual margins on left and right, comm
     }, "updateSize valAxis_rightPane_bottom_outer canvas");
 });
 
+QUnit.test("check call 'setInitRange'", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs();
+
+    valAxis.setInitRange = sinon.spy();
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        valueAxis: [
+            { name: "valAxis" }
+        ],
+        series: [
+            { axis: "valAxis" }
+        ],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    var valAxis1 = this.axisStub.getCall(1).returnValue;
+
+    assert.equal(valAxis1.setInitRange.callCount, 1);
+});
+
+QUnit.test("check call 'setInitRange'. Rotated", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs();
+
+    valAxis.setInitRange = sinon.spy();
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        rotated: true,
+        valueAxis: [
+            { name: "valAxis" }
+        ],
+        series: [
+            { axis: "valAxis" }
+        ],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    var valAxis1 = this.axisStub.getCall(1).returnValue;
+
+    assert.equal(valAxis1.setInitRange.callCount, 1);
+});
+
 QUnit.module("Shift axes", environment);
 
 QUnit.test("Multiple axes - shift only to the right/left, multipleAxesSpacing is not passed directly to axis shift method", function(assert) {

@@ -296,6 +296,8 @@ const Axis = exports.Axis = function(renderSettings) {
     that._viewport = {};
 
     that._firstDrawing = true;
+
+    that._initRange = {};
 };
 
 Axis.prototype = {
@@ -1873,11 +1875,21 @@ Axis.prototype = {
     getZoomBounds() {
         const wholeRange = vizUtils.getVizRangeObject(this._options.wholeRange);
         const range = this.getTranslator().getBusinessRange();
+        const secondPriorityRange = {
+            startValue: getZoomBoundValue(this._initRange.startValue, range.min),
+            endValue: getZoomBoundValue(this._initRange.endValue, range.max)
+        };
 
         return {
-            startValue: getZoomBoundValue(wholeRange.startValue, range.min),
-            endValue: getZoomBoundValue(wholeRange.endValue, range.max)
+            startValue: getZoomBoundValue(wholeRange.startValue, secondPriorityRange.startValue),
+            endValue: getZoomBoundValue(wholeRange.endValue, secondPriorityRange.endValue)
         };
+    },
+
+    setInitRange() {
+        if(Object.keys(this._options.wholeRange || {}).length === 0) {
+            this._initRange = this.getZoomBounds();
+        }
     },
 
     _resetVisualRangeOption() {
@@ -1929,6 +1941,7 @@ Axis.prototype = {
 
         if(isDefined(visualRange)) {
             visualRange = that._validateVisualRange(visualRange);
+            visualRange.action = action;
         }
 
         const zoomStartEvent = that.getZoomStartEventArg(domEvent, action);

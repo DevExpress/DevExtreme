@@ -658,6 +658,14 @@ QUnit.module("Zoom", {
     updateOptions: environment.updateOptions
 });
 
+QUnit.test("getViewport return object with field 'action' if need", function(assert) {
+    this.updateOptions();
+
+    this.axis.handleZooming({ startValue: 1, endValue: 2 }, undefined, undefined, "zoom");
+
+    assert.deepEqual(this.axis.getViewport(), { startValue: 1, endValue: 2, action: "zoom" });
+});
+
 QUnit.test("hold min/max for single point series", function(assert) {
     var businessRange;
     this.updateOptions({
@@ -4328,6 +4336,28 @@ QUnit.test("whole range values are set to null - get from option", function(asse
     });
 
     assert.deepEqual(this.axis.getZoomBounds(), { startValue: undefined, endValue: undefined });
+});
+
+QUnit.test("getZoomBounds when initRange is set, and wholeRange is not set", function(assert) {
+    this.translator.getBusinessRange = sinon.stub();
+    this.translator.getBusinessRange.returns({ min: 5, max: 7 });
+
+    this.axis.setInitRange();
+
+    assert.deepEqual(this.axis.getZoomBounds(), { startValue: 5, endValue: 7 });
+});
+
+QUnit.test("getZoomBounds when initRange is set, and wholeRange is set", function(assert) {
+    this.updateOptions({
+        wholeRange: { startValue: 1, endValue: 2 }
+    });
+    this.translator.getBusinessRange = sinon.stub();
+    this.translator.getBusinessRange.returns({ min: 5, max: 7 });
+
+    this.axis.validate();
+    this.axis.setInitRange();
+
+    assert.deepEqual(this.axis.getZoomBounds(), { startValue: 1, endValue: 2 });
 });
 
 QUnit.module("dataVisualRangeIsReduced method", {

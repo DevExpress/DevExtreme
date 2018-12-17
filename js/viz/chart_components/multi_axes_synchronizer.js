@@ -91,7 +91,6 @@ var populateAxesInfo = function(axes) {
             minValue = businessRange.minVisible,
             maxValue = businessRange.maxVisible,
             axisInfo,
-
             tickInterval = axis._tickInterval,
             synchronizedValue = options.synchronizedValue;
 
@@ -99,7 +98,8 @@ var populateAxesInfo = function(axes) {
             typeUtils.isNumeric(majorTicks[0]) &&
             options.type !== "discrete" &&
             !businessRange.stubData &&
-            !(businessRange.breaks && businessRange.breaks.length)
+            !(businessRange.breaks && businessRange.breaks.length) &&
+            axis.getViewport().action !== "zoom"
         ) {
 
             if(minValue === maxValue && _isDefined(synchronizedValue)) {
