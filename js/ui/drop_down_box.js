@@ -243,10 +243,6 @@ var DropDownBox = DropDownEditor.inherit({
         this._setPopupOption("width", this.$element().outerWidth());
     },
 
-    _updateHeight: function() {
-        this._popup._updateHeight();
-    },
-
     _popupElementTabHandler: function(e) {
         if(e.key !== "tab") return;
 
