@@ -4,11 +4,10 @@ var $ = require("../core/renderer"),
     domAdapter = require("../core/dom_adapter"),
     eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
-    stringUtils = require("../core/utils/string"),
+    commonUtils = require("../core/utils/common"),
     extend = require("../core/utils/extend").extend,
     translator = require("../animation/translator"),
     positionUtils = require("../animation/position"),
-    noop = require("../core/utils/common").noop,
     typeUtils = require("../core/utils/type"),
     mathUtils = require("../core/utils/math"),
     eventUtils = require("../events/utils"),
@@ -395,7 +394,7 @@ var Popover = Popup.inherit({
         this._renderOverlayPosition();
     },
 
-    _renderOverlayBoundaryOffset: noop,
+    _renderOverlayBoundaryOffset: commonUtils.noop,
 
     _renderOverlayPosition: function() {
         this._resetOverlayPosition();
@@ -446,7 +445,7 @@ var Popover = Popup.inherit({
     },
 
     _getContainerPosition: function() {
-        var offset = stringUtils.pairToObject(this._position.offset || "");
+        var offset = commonUtils.pairToObject(this._position.offset || "");
         var hOffset = offset.h;
         var vOffset = offset.v;
 
