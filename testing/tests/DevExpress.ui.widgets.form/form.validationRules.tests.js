@@ -1,7 +1,7 @@
-var $ = require("jquery"),
-    extend = require("core/utils/extend").extend;
+import $ from "jquery";
+import { extend } from "core/utils/extend";
 
-require("ui/form/ui.form").__internals;
+import "ui/form/ui.form";
 
 var INVALID_CLASS = "dx-invalid",
     VALIDATION_SUMMARY_ITEM_CLASS = "dx-validationsummary-item",
