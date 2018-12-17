@@ -6,8 +6,7 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     domUtils = require("core/utils/dom"),
     internals = require("ui/form/ui.form").__internals,
-    themes = require("ui/themes"),
-    extend = require("core/utils/extend").extend;
+    themes = require("ui/themes");
 
 require("ui/text_area");
 
