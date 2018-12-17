@@ -2086,29 +2086,31 @@ QUnit.test("Data of tree view doesn't load twice when uses the custom store", fu
         dataLoadCounter = 0,
         clock = sinon.useFakeTimers();
 
-    new Menu(that.$element, {
-        dataSource: {
-            store: new CustomStore({
-                load: function(loadOptions) {
-                    return $.Deferred(function(d) {
-                        setTimeout(function() {
-                            new ArrayStore(that.items).load(loadOptions).done(function() {
-                                ++dataLoadCounter;
-                                d.resolve.apply(d, arguments);
-                            });
-                        }, 300);
-                    }).promise();
-                }
-            })
-        },
-        adaptivityEnabled: true
-    });
+    try {
+        new Menu(that.$element, {
+            dataSource: {
+                store: new CustomStore({
+                    load: function(loadOptions) {
+                        return $.Deferred(function(d) {
+                            setTimeout(function() {
+                                new ArrayStore(that.items).load(loadOptions).done(function() {
+                                    ++dataLoadCounter;
+                                    d.resolve.apply(d, arguments);
+                                });
+                            }, 300);
+                        }).promise();
+                    }
+                })
+            },
+            adaptivityEnabled: true
+        });
 
-    clock.tick(600);
+        clock.tick(600);
 
-    assert.equal(dataLoadCounter, 2);
-
-    clock.restore();
+        assert.equal(dataLoadCounter, 2);
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.test("Set new data source of menu to tree view", function(assert) {
