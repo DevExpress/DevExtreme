@@ -302,7 +302,7 @@ QUnit.test("Changing an validationRules options of an any item does not invalida
     assert.strictEqual(renderComponentSpy.callCount, 0, "renderComponentSpy.callCount");
 });
 
-QUnit.testInActiveWindow("Test RangeRule.max changing", function(assert) {
+QUnit.testInActiveWindow("Change RangeRule.max", function(assert) {
     const runChangeRuleRageMaxTest = (options) => {
         [true, false].forEach(useItemOption => {
             runChangeValidationRuleTest({
@@ -329,7 +329,7 @@ QUnit.testInActiveWindow("Test RangeRule.max changing", function(assert) {
     runChangeRuleRageMaxTest({ fieldValue: 10, initialMax: 1, targetMax: 11, validationResult: true });
 });
 
-QUnit.testInActiveWindow("Test set item RangeRule", function(assert) {
+QUnit.testInActiveWindow("Add RangeRule to item.validationRules", function(assert) {
     const runSetRangeRuleTest = (options) => {
         runChangeValidationRuleTest(extend(
             {
@@ -342,17 +342,14 @@ QUnit.testInActiveWindow("Test set item RangeRule", function(assert) {
         ));
     };
 
-    [undefined, null].forEach(validationRules => {
+    [undefined, null, []].forEach(validationRules => {
         [true, false].forEach(useItemOption => {
             runSetRangeRuleTest({ validationRules, useItemOption, isKeepFocusSupported: false });
         });
     });
-
-    runSetRangeRuleTest({ validationRules: [], useItemOption: true, isKeepFocusSupported: false });
-    runSetRangeRuleTest({ validationRules: [], useItemOption: false, isKeepFocusSupported: true });
 });
 
-QUnit.testInActiveWindow("Test remove item RangeRule", function(assert) {
+QUnit.testInActiveWindow("Remove RangeRule from item.validationRules", function(assert) {
     const runRemoveRangedRuleTest = (options) => {
         runChangeValidationRuleTest(extend(
             {
@@ -373,7 +370,7 @@ QUnit.testInActiveWindow("Test remove item RangeRule", function(assert) {
     });
 });
 
-QUnit.testInActiveWindow("Test set item RequiredRule", function(assert) {
+QUnit.testInActiveWindow("Add RequiredRule to item.validationRules", function(assert) {
     [undefined, null, []].forEach(validationRules => {
         [true, false].forEach(useItemOption => {
             runChangeValidationRuleTest({
@@ -389,7 +386,7 @@ QUnit.testInActiveWindow("Test set item RequiredRule", function(assert) {
     });
 });
 
-QUnit.testInActiveWindow("Test remove item RequiredRule", function(assert) {
+QUnit.testInActiveWindow("Remove RequiredRule from item.validationRules", function(assert) {
     [undefined, null, []].forEach(newValidationRules => {
         [true, false].forEach(useItemOption => {
             runChangeValidationRuleTest({
@@ -405,7 +402,7 @@ QUnit.testInActiveWindow("Test remove item RequiredRule", function(assert) {
     });
 });
 
-QUnit.testInActiveWindow("Test item.isRequired", function(assert) {
+QUnit.testInActiveWindow("Change item.isRequired", function(assert) {
     [true, false].forEach(isRequired => {
         [true, false].forEach(useItemOption => {
             runChangeValidationRuleTest({
