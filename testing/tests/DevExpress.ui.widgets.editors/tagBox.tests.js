@@ -4851,7 +4851,7 @@ QUnit.test("Selection refreshing process should wait for the items data will be 
     tagBox.option("value", [1]);
     assert.ok(containerHandler.notCalled);
     clock.tick();
-    assert.ok(containerHandler.calledOnce);
+    assert.ok(containerHandler.called);
     clock.restore();
 });
 
