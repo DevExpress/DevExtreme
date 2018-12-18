@@ -4725,13 +4725,13 @@ QUnit.test("DropDown button should be rendered correctly when appointmentCollect
         height: 500,
         maxAppointmentsPerCell: "auto",
         appointmentCollectorTemplate: function(data) {
-            return "<div class='button-title'>Appointments count is " + data.appointmentsCount + "</div>";
+            return "<div class='button-title'>Appointments count is " + data.appointmentCount + "</div>";
         }
     });
 
     var $dropDown = $(".dx-scheduler-dropdown-appointments").eq(0);
 
-    assert.equal($dropDown.find(".button-title").text(), "Appointments count is 2", "Template is applied correctly");
+    assert.equal($dropDown.find(".button-title").text(), "Appointment count is 2", "Template is applied correctly");
 });
 
 QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {

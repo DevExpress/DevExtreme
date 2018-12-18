@@ -427,7 +427,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 4, 24),
             views: ["month"],
             appointmentCollectorTemplate: function(data) {
-                assert.equal(data.appointmentsCount, 1, "Appointments count is OK");
+                assert.equal(data.appointmentCount, 1, "Appointments count is OK");
                 assert.strictEqual(data.isCompact, false, "Compact flag is ok");
             },
             currentView: "month"
