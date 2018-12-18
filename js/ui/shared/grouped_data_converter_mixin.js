@@ -1,5 +1,5 @@
-var isCorrectStructure = function(data) {
-    return Array.isArray(data) && data.every(function(item) {
+const isCorrectStructure = data => {
+    return Array.isArray(data) && data.every(item => {
         const hasTwoFields = Object.keys(item).length === 2;
         const hasCorrectFields = "key" in item && "items" in item;
 
@@ -7,14 +7,14 @@ var isCorrectStructure = function(data) {
     });
 };
 
-module.exports = {
+export default {
     _getSpecificDataSourceOption: function() {
         const groupKey = "key";
         let dataSource = this.option("dataSource");
 
         if(this._getGroupedOption() && isCorrectStructure(dataSource)) {
             dataSource = dataSource.reduce((accumulator, item) => {
-                const items = item.items.map((innerItem) => {
+                const items = item.items.map(innerItem => {
                     if(!(groupKey in innerItem)) {
                         innerItem[groupKey] = item.key;
                     }

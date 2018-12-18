@@ -9,7 +9,7 @@ var $ = require("../core/renderer"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     List = require("./list"),
     ChildDefaultTemplate = require("./widget/child_default_template"),
-    DataConverterMixin = require("./shared/grouped_data_converter_mixin"),
+    DataConverterMixin = require("./shared/grouped_data_converter_mixin").default,
     EmptyTemplate = require("./widget/empty_template");
 
 var SLIDEOUT_CLASS = "dx-slideout",

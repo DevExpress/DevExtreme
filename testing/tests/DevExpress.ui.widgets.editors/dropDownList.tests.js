@@ -599,7 +599,7 @@ QUnit.test("dropDownList should search in grouped DataSource", function(assert) 
             valueExpr: "name",
             displayExpr: "name",
             searchExpr: "name",
-            dataSource: [{ key: "a", items: [{ name: "1" }] }, { key: "b", items: [{ name: "2" }] }],
+            dataSource: [{ key: "a", items: [{ name: "1" }] }, { key: "b", items: [{ name: "2" }] }]
         }),
         instance = $element.dxDropDownList("instance"),
         $input = $element.find("input"),
@@ -607,7 +607,7 @@ QUnit.test("dropDownList should search in grouped DataSource", function(assert) 
         expectedValue = { key: "b", items: [{ name: "2", key: "b" }] };
 
     kb.type("2");
-    this.clock.tick(600);
+    this.clock.tick(500);
 
     assert.deepEqual(instance.option("items")[0], expectedValue, "widget searched for a suitable values");
 });
