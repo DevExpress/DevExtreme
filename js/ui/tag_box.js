@@ -729,8 +729,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderMultiSelect: function() {
-        var that = this,
-            d = new Deferred();
+        var d = new Deferred();
 
         this._$tagsContainer = this.$element()
             .find("." + TEXTEDITOR_CONTAINER_CLASS)
@@ -739,7 +738,7 @@ var TagBox = SelectBox.inherit({
 
         this._renderInputSize();
         this._renderTags().always((function() {
-            that._popup && that._popup.refreshPosition();
+            this._popup && this._popup.refreshPosition();
             d.resolve();
         }).bind(this));
 
@@ -888,7 +887,6 @@ var TagBox = SelectBox.inherit({
 
         this._loadTagData().always((function(items) {
             this._renderTagsCore(items);
-
             this._renderEmptyState();
 
             if(!this._preserveFocusedTag) {

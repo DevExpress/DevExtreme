@@ -4834,7 +4834,6 @@ QUnit.module("regression", {
 
 QUnit.test("Selection refreshing process should wait for the items data will be loaded from the data source (T673636)", function(assert) {
     var clock = sinon.useFakeTimers(),
-        refreshSelectedCalled = false,
         tagBox = $("#tagBox").dxTagBox({
             valueExpr: "id",
             dataSource: {
@@ -4846,14 +4845,14 @@ QUnit.test("Selection refreshing process should wait for the items data will be 
                     return d.promise();
                 }
             }
-        }).dxTagBox("instance");
-
-    tagBox._refreshSelected = () => refreshSelectedCalled = true;
+        }).dxTagBox("instance"),
+        containerHandler = tagBox._refreshSelected = sinon.stub();
 
     tagBox.option("value", [1]);
-    assert.notOk(refreshSelectedCalled);
+    assert.ok(containerHandler.notCalled);
     clock.tick();
-    assert.ok(refreshSelectedCalled);
+    assert.ok(containerHandler.calledOnce);
+    clock.restore();
 });
 
 QUnit.test("tagBox should not fail when asynchronous data source is used (T381326)", function(assert) {
