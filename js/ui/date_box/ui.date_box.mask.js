@@ -8,6 +8,7 @@ import eventsEngine from "../../events/core/events_engine";
 import wheelEvent from "../../events/core/wheel";
 import { getDatePartIndexByPosition, renderDateParts } from "./ui.date_box.mask.parts";
 import dateLocalization from "../../localization/date";
+import { getRegExpInfo } from "../../localization/ldml/date.parser";
 import { getFormat } from "../../localization/ldml/date.format";
 import DateBoxBase from "./ui.date_box.base";
 
@@ -87,15 +88,22 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _getFormatPattern() {
+        if(this._formatPattern) {
+            return this._formatPattern;
+        }
+
         var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
             isLDMLPattern = typeof format === "string" && (format.indexOf("0") >= 0 || format.indexOf("#") >= 0);
 
         if(isLDMLPattern) {
+            this._formatPattern = format;
             return format;
         } else {
-            return getFormat(function(value) {
+            const format = getFormat(function(value) {
                 return dateLocalization.format(value, format);
             });
+            this._formatPattern = format;
+            return format;
         }
     },
 
@@ -167,16 +175,21 @@ let DateBoxMask = DateBoxBase.inherit({
         return this.option("useMaskBehavior") && this.option("mode") === "text";
     },
 
+    _initState() {
+        this._activePartIndex = 0;
+        this._formatPattern = null;
+        this._regexpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
+        this._loadMaskValue();
+    },
+
     _renderMask() {
         this.callBase();
         this._detachMaskEvents();
         this._clearState();
 
         if(this._useMaskBehavior()) {
-            this._activePartIndex = 0;
             this._attachMaskEvents();
-
-            this._loadMaskValue();
+            this._initState();
             this._renderDateParts();
         }
     },
@@ -189,7 +202,7 @@ let DateBoxMask = DateBoxBase.inherit({
         const text = this.option("text") || this._getDisplayedText(this._maskValue);
 
         if(text) {
-            this._dateParts = renderDateParts(text, this._getFormatPattern());
+            this._dateParts = renderDateParts(text, this._regexpInfo);
             this._selectNextPart(0);
         }
     },
