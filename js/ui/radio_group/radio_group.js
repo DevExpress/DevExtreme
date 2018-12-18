@@ -218,12 +218,17 @@ var RadioGroup = Editor.inherit({
 
     _renderFocusState: noop,
 
+    _fireContentReadyAction: function(force) {
+        force && this.callBase();
+    },
+
     _renderRadios: function() {
         var $radios = $("<div>").appendTo(this.$element());
 
-        this._radios = this._createComponent($radios, RadioCollection, {
+        this._createComponent($radios, RadioCollection, {
             dataSource: this._dataSource,
             onItemRendered: this._itemRenderedHandler.bind(this),
+            onContentReady: this._contentReadyHandler.bind(this),
             onItemClick: this._itemClickHandler.bind(this),
             itemTemplate: this._getTemplateByOption("itemTemplate"),
             scrollingEnabled: false,
@@ -232,9 +237,6 @@ var RadioGroup = Editor.inherit({
             tabIndex: this.option("tabIndex"),
             noDataText: ""
         });
-
-        this._setCollectionWidgetOption("onContentReady", this._contentReadyHandler.bind(this));
-        this._contentReadyHandler();
     },
 
     _renderSubmitElement: function() {
@@ -255,9 +257,12 @@ var RadioGroup = Editor.inherit({
         return this._$submitElement;
     },
 
-    _contentReadyHandler: function() {
+    _contentReadyHandler: function(e) {
+        this._radios = this._radios || e.component;
+
         this.itemElements().addClass(RADIO_BUTTON_CLASS);
         this._refreshSelected();
+        this._fireContentReadyAction(true);
     },
 
     _itemRenderedHandler: function(e) {

@@ -1,9 +1,8 @@
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
-
-require("ui/radio_group");
+import $ from "jquery";
+import devices from "core/devices";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import "ui/radio_group";
 
 QUnit.testStart(function() {
     var markup =
@@ -98,8 +97,6 @@ QUnit.module("nested radio group", moduleConfig, function() {
 
 QUnit.module("buttons group rendering");
 
-QUnit.module("buttons group rendering");
-
 QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
     assert.expect(2);
 
@@ -112,6 +109,18 @@ QUnit.test("onContentReady fired after the widget is fully ready", function(asse
             assert.ok($(e.element).find("." + RADIO_BUTTON_CLASS).length);
         }
     });
+});
+
+QUnit.test("onContentReady should rise after changing dataSource (T697809)", assert => {
+    const onContentReadyHandler = sinon.stub(),
+        instance = $("#radioGroup").dxRadioGroup({
+            dataSource: ["str1", "str2", "str3"],
+            onContentReady: onContentReadyHandler
+        }).dxRadioGroup("instance");
+
+    assert.ok(onContentReadyHandler.calledOnce);
+    instance.option("dataSource", [1, 2, 3]);
+    assert.strictEqual(onContentReadyHandler.callCount, 2);
 });
 
 
