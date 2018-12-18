@@ -10,63 +10,62 @@ var INVALID_CLASS = "dx-invalid",
 function toString(val) {
     switch(val) {
         case undefined:
-            return 'undefined';
+            return "undefined";
         case null:
-            return 'null';
+            return "null";
         default:
             if(Array.isArray(val)) {
-                return '[' + val.length + ' items]';
+                return `[${val.length} items]`;
             }
             return val;
     }
 }
 
 function runChangeValidationRuleTest({ assert, fieldValue, validationRules, newValidationRules, useItemOption, changeRulesFunc = null, checkOptionsFunc = null, validationResult, isKeepFocusSupported = true }) {
-    const context = 'context: useItemOption = ' + toString(useItemOption) + '; ' +
-        'validationRules = ' + toString(validationRules) + '; ' +
-        'newValidationRules = ' + toString(newValidationRules);
+    const context = `context: useItemOption = ${toString(useItemOption)}; ` +
+        `validationRules = ${toString(validationRules)}; ` +
+        `newValidationRules = ${toString(newValidationRules)}`;
 
     const form = $("#form").dxForm({
         formData: { f1: fieldValue },
         items: [{
-            dataField: 'f1',
+            dataField: "f1",
             validationRules: validationRules
         }]
     }).dxForm("instance");
 
-    $('#form').find('.' + TEXTEDITOR_INPUT_CLASS).focus();
-    assert.ok($('#form').find('.' + TEXTEDITOR_INPUT_CLASS).is(':focus'), 'initial focus, ' + context);
-    assert.strictEqual($('#form').find('.' + INVALID_CLASS).length, 0, `initial [${INVALID_CLASS}].length, ` + context);
+    $("#form").find("." + TEXTEDITOR_INPUT_CLASS).focus();
+    assert.ok($("#form").find("." + TEXTEDITOR_INPUT_CLASS).is(":focus"), `initial focus, ${context}`);
+    assert.strictEqual($("#form").find("." + INVALID_CLASS).length, 0, `initial [${INVALID_CLASS}].length, ${context}`);
 
     if(changeRulesFunc === null) {
         if(useItemOption) {
-            form.itemOption('f1', 'validationRules', newValidationRules);
+            form.itemOption("f1", "validationRules", newValidationRules);
         } else {
-            form.option('items[0].validationRules', newValidationRules);
+            form.option("items[0].validationRules", newValidationRules);
         }
     } else {
         changeRulesFunc(form);
     }
 
     if(checkOptionsFunc === null) {
-        assert.strictEqual(form.option('items[0].validationRules'), newValidationRules, context);
-        assert.strictEqual(form.itemOption('f1').validationRules, newValidationRules, context);
+        assert.strictEqual(form.option("items[0].validationRules"), newValidationRules, context);
+        assert.strictEqual(form.itemOption("f1").validationRules, newValidationRules, context);
     } else {
         checkOptionsFunc(assert, form);
     }
 
-    const isInputFocused = $('#form').find('.' + TEXTEDITOR_INPUT_CLASS).is(':focus');
-    assert.ok(isKeepFocusSupported ? isInputFocused : !isInputFocused, 'final focus, ' + context);
+    const isInputFocused = $("#form").find(`.${TEXTEDITOR_INPUT_CLASS}`).is(":focus");
+    assert.ok(isKeepFocusSupported ? isInputFocused : !isInputFocused, `final focus, ${context}`);
 
     const validate_result = form.validate();
-    assert.strictEqual((validate_result === undefined) || validate_result.isValid, validationResult, 'validate_Result, ' + context);
-    assert.strictEqual($('#form').find('.' + INVALID_CLASS).length, validationResult ? 0 : 1, `final [${INVALID_CLASS}].length, ` + context);
+    assert.strictEqual((validate_result === undefined) || validate_result.isValid, validationResult, `validate_Result, ${context}`);
+    assert.strictEqual($("#form").find(`.${INVALID_CLASS}`).length, validationResult ? 0 : 1, `final [${INVALID_CLASS}].length, ${context}`);
 }
 
 QUnit.testStart(function() {
     var markup =
-        '<div id="form"></div>\
-        <div id="form2"></div>';
+        `<div id="form"></div><div id="form2"></div>`;
 
     $("#qunit-fixture").html(markup);
 });
@@ -238,7 +237,7 @@ QUnit.test("Validate via validationRules when rules and 'isRequired' item option
         },
         customizeItem: function(item) {
             item.isRequired = true;
-            item.validationRules = [{ type: 'stringLength', max: 3 }];
+            item.validationRules = [{ type: "stringLength", max: 3 }];
         }
     }).dxForm("instance");
 
@@ -300,17 +299,17 @@ QUnit.testInActiveWindow("Change RangeRule.max", function(assert) {
             runChangeValidationRuleTest({
                 assert: assert,
                 fieldValue: options.fieldValue,
-                validationRules: [{ type: 'range', max: options.initialMax }],
+                validationRules: [{ type: "range", max: options.initialMax }],
                 changeRulesFunc: form => {
                     if(useItemOption) {
-                        form.itemOption('f1').validationRules[0].max = options.targetMax;
+                        form.itemOption("f1").validationRules[0].max = options.targetMax;
                     } else {
-                        form.option('items[0].validationRules[0].max', options.targetMax);
+                        form.option("items[0].validationRules[0].max", options.targetMax);
                     }
                 },
                 checkOptionsFunc: (assert, form) => {
-                    assert.strictEqual(form.itemOption('f1').validationRules[0].max, options.targetMax);
-                    assert.strictEqual(form.option('items[0].validationRules[0].max'), options.targetMax);
+                    assert.strictEqual(form.itemOption("f1").validationRules[0].max, options.targetMax);
+                    assert.strictEqual(form.option("items[0].validationRules[0].max"), options.targetMax);
                 },
                 validationResult: options.validationResult
             });
@@ -327,7 +326,7 @@ QUnit.testInActiveWindow("Add RangeRule to item.validationRules", function(asser
             {
                 assert,
                 fieldValue: 10,
-                newValidationRules: [{ type: 'range', max: 1 }],
+                newValidationRules: [{ type: "range", max: 1 }],
                 validationResult: false,
             },
             options
@@ -347,7 +346,7 @@ QUnit.testInActiveWindow("Remove RangeRule from item.validationRules", function(
             {
                 assert,
                 fieldValue: 10,
-                validationRules: [{ type: 'range', max: 1 }],
+                validationRules: [{ type: "range", max: 1 }],
                 validationResult: true,
             },
             options
@@ -369,7 +368,7 @@ QUnit.testInActiveWindow("Add RequiredRule to item.validationRules", function(as
                 assert,
                 fieldValue: null,
                 validationRules,
-                newValidationRules: [{ type: 'required' }],
+                newValidationRules: [{ type: "required" }],
                 validationResult: false,
                 isKeepFocusSupported: false,
                 useItemOption
@@ -384,7 +383,7 @@ QUnit.testInActiveWindow("Remove RequiredRule from item.validationRules", functi
             runChangeValidationRuleTest({
                 assert,
                 fieldValue: null,
-                validationRules: [{ type: 'required' }],
+                validationRules: [{ type: "required" }],
                 newValidationRules,
                 validationResult: true,
                 isKeepFocusSupported: false,
@@ -402,14 +401,14 @@ QUnit.testInActiveWindow("Change item.isRequired", function(assert) {
                 fieldValue: null,
                 changeRulesFunc: form => {
                     if(useItemOption) {
-                        form.itemOption('f1', 'isRequired', isRequired);
+                        form.itemOption("f1", "isRequired", isRequired);
                     } else {
-                        form.option('items[0].isRequired', isRequired);
+                        form.option("items[0].isRequired", isRequired);
                     }
                 },
                 checkOptionsFunc: (assert, form) => {
-                    assert.strictEqual(form.itemOption('f1').isRequired, isRequired);
-                    assert.strictEqual(form.option('items[0].isRequired'), isRequired);
+                    assert.strictEqual(form.itemOption("f1").isRequired, isRequired);
+                    assert.strictEqual(form.option("items[0].isRequired"), isRequired);
                 },
                 validationResult: !isRequired,
                 isKeepFocusSupported: false,

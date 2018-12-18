@@ -1394,7 +1394,7 @@ QUnit.test("Get button instance", function(assert) {
 });
 
 QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
-    ['option', 'itemOption', 'editor.option'].forEach(setOptionWay => {
+    ["option", "itemOption", "editor.option"].forEach(setOptionWay => {
         var form = $("#form").dxForm({
             items: [{
                 itemType: "button",
@@ -1403,25 +1403,25 @@ QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
             }]
         }).dxForm("instance");
 
-        $('#form').find('.dx-button').focus();
-        assert.ok($('#form').find('.dx-button').is(':focus'), 'initial focus');
+        $("#form").find(".dx-button").focus();
+        assert.ok($("#form").find(".dx-button").is(":focus"), "initial focus");
 
         switch(setOptionWay) {
-            case 'option':
+            case "option":
                 form.option("items[0].buttonOptions.icon", "icon2");
                 break;
-            case 'itemOption':
-                const buttonOptions = form.itemOption('button1').buttonOptions;
-                buttonOptions.icon = 'icon2';
-                form.itemOption('button1', 'buttonOptions', buttonOptions);
+            case "itemOption":
+                const buttonOptions = form.itemOption("button1").buttonOptions;
+                buttonOptions.icon = "icon2";
+                form.itemOption("button1", "buttonOptions", buttonOptions);
                 break;
-            case 'editor.option':
-                form.getButton("button1").option("icon", 'icon2');
+            case "editor.option":
+                form.getButton("button1").option("icon", "icon2");
                 break;
         }
 
         assert.strictEqual(form.getButton("button1").option("icon"), "icon2");
-        assert.ok($('#form').find('.dx-button').is(':focus') === (setOptionWay !== 'itemOption'), 'final focus');
+        assert.ok($("#form").find(".dx-button").is(":focus") === (setOptionWay !== "itemOption"), "final focus");
     });
 });
 
