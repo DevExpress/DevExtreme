@@ -635,6 +635,9 @@ if(devices.real().deviceType === "desktop") {
 
             this.keyboard.type("30");
             assert.equal(this.$input.val(), "January");
+
+            this.keyboard.type("05");
+            assert.equal(this.$input.val(), "May");
         });
 
         QUnit.test("Year", (assert) => {

@@ -267,7 +267,7 @@ let DateBoxMask = DateBoxBase.inherit({
             limits = this._getActivePartLimits(),
             maxLimitLength = String(limits.max).length;
 
-        return ((zeroes && zeroes[0]) || "" + String(value)).substr(-maxLimitLength);
+        return ((zeroes && zeroes[0] || "") + String(value)).substr(-maxLimitLength);
     },
 
     _setActivePartValue(value, dateValue) {
