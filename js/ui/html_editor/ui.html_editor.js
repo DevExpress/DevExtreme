@@ -109,6 +109,11 @@ const HtmlEditor = Editor.inherit({
             * @name dxHtmlEditorToolbarItem.formatValues
             * @type Array<string,number,boolean>
             */
+            /**
+            * @name dxHtmlEditorToolbarItem.location
+            * @type string
+            * @default "before"
+            */
 
             /**
             * @name dxHtmlEditorVariables
