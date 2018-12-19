@@ -92,19 +92,18 @@ let DateBoxMask = DateBoxBase.inherit({
             return this._formatPattern;
         }
 
-        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
+        var format = this.option("displayFormat"),
             isLDMLPattern = typeof format === "string" && (format.indexOf("0") >= 0 || format.indexOf("#") >= 0);
 
         if(isLDMLPattern) {
             this._formatPattern = format;
-            return format;
         } else {
-            const format = getFormat(function(value) {
+            this._formatPattern = getFormat(function(value) {
                 return dateLocalization.format(value, format);
             });
-            this._formatPattern = format;
-            return format;
         }
+
+        return this._formatPattern;
     },
 
     _setNewDateIfEmpty() {
