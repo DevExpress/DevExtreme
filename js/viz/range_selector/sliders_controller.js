@@ -229,8 +229,8 @@ SlidersController.prototype = {
             endValue: translator.isValid(visualRange.endValue) ? translator.getCorrectValue(visualRange.endValue, -1) : undefined,
             length: visualRange.length
         }, {
-            min: businessRange.min,
-            max: businessRange.max,
+            min: businessRange.minVisible,
+            max: businessRange.maxVisible,
             categories: businessRange.categories
         });
 
