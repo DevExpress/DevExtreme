@@ -4725,7 +4725,7 @@ QUnit.test("DropDown button should be rendered correctly when appointmentCollect
         height: 500,
         maxAppointmentsPerCell: "auto",
         appointmentCollectorTemplate: function(data) {
-            return "<div class='button-title'>Appointments count is " + data.appointmentCount + "</div>";
+            return "<div class='button-title'>Appointment count is " + data.appointmentCount + "</div>";
         }
     });
 
