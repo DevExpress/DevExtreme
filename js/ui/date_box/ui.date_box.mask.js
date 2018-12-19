@@ -92,7 +92,7 @@ let DateBoxMask = DateBoxBase.inherit({
             return this._formatPattern;
         }
 
-        var format = this.option("displayFormat"),
+        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
             isLDMLPattern = typeof format === "string" && (format.indexOf("0") >= 0 || format.indexOf("#") >= 0);
 
         if(isLDMLPattern) {
