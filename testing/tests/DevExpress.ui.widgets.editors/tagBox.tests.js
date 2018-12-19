@@ -4840,18 +4840,18 @@ QUnit.test("Selection refreshing process should wait for the items data will be 
                 load: () => {
                     var d = $.Deferred();
 
-                    setTimeout(() => d.resolve([]), 0);
+                    setTimeout(() => d.resolve([{ id: 1 }, { id: 2 }]), 0);
 
                     return d.promise();
                 }
             }
-        }).dxTagBox("instance"),
-        containerHandler = tagBox._refreshSelected = sinon.stub();
+        }).dxTagBox("instance");
 
     tagBox.option("value", [1]);
-    assert.ok(containerHandler.notCalled);
+    
+    assert.notOk(tagBox.option("selectedItems").length);
     clock.tick();
-    assert.ok(containerHandler.called);
+    assert.ok(tagBox.option("selectedItems").length);
     clock.restore();
 });
 
