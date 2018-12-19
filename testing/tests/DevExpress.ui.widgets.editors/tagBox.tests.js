@@ -4848,7 +4848,7 @@ QUnit.test("Selection refreshing process should wait for the items data will be 
         }).dxTagBox("instance");
 
     tagBox.option("value", [1]);
-    
+
     assert.notOk(tagBox.option("selectedItems").length);
     clock.tick();
     assert.ok(tagBox.option("selectedItems").length);
