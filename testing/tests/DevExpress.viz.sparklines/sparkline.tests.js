@@ -1216,7 +1216,7 @@ QUnit.begin(function() {
         });
 
         this.checkCustomizePoint(assert, [{ border: { color: "green" }, visible: true },
-            { },
+            {},
             { border: { color: "red" }, visible: true }]);
     });
 
@@ -1430,7 +1430,7 @@ QUnit.begin(function() {
             { border: { color: "red" }, visible: true },
             {},
             { border: { color: "green" }, visible: true },
-            { },
+            {},
             { border: { color: "#666666" }, visible: true }
         ]);
     });
@@ -1612,7 +1612,7 @@ QUnit.begin(function() {
         this.checkCustomizePoint(assert, [
             { visible: true, border: { color: "#666666" } },
             { visible: true, border: { color: "red" } },
-            { },
+            {},
             { visible: true, border: { color: "green" } },
             { visible: true, border: { color: "#666666" } }
         ]);
