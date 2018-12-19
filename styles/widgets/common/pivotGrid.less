@@ -62,12 +62,12 @@
 
     td {
         vertical-align: top;
-        .box-sizing(content-box);
+        box-sizing: content-box;
     }
 
     .dx-area-description-cell {
         position: relative;
-        .background-clip(padding-box);  // T379462
+        background-clip: padding-box;  // T379462
         .dx-pivotgrid-fields-area {
             position: absolute;
             bottom: 0;
@@ -243,5 +243,5 @@
 }
 
 .dx-pivotgrid-drag-action {
-    .touch-action(pinch-zoom);
+    touch-action: pinch-zoom;
 }

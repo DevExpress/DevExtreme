@@ -15,7 +15,7 @@
 .dx-slider {
     .dx-tooltip-wrapper {
         .dx-overlay-content {
-            .box-shadow(none);
+            box-shadow: none;
         }
     }
 }
@@ -28,18 +28,18 @@
     margin: @GENERIC_SLIDER_HEIGHT/2 @GENERIC_SLIDER_WIDTH / 2;
     height: @GENERIC_SLIDER_TRACK_HEIGHT;
     background: @slider-bar-bg;
-    .border-radius(@GENERIC_SLIDER_RADIUS);
+    border-radius: @GENERIC_SLIDER_RADIUS;
 }
 
 .dx-slider-range {
     border: 1px solid transparent;
     height: @GENERIC_SLIDER_TRACK_HEIGHT - 2px;
-    .box-sizing(content-box);
+    box-sizing: content-box;
 
     &.dx-slider-range-visible {
         border: 1px solid @slider-range-border-color;
         background: @slider-range-bg;
-        .border-radius(@GENERIC_SLIDER_RADIUS);
+        border-radius: @GENERIC_SLIDER_RADIUS;
     }
 }
 
@@ -63,8 +63,8 @@
     height: @GENERIC_SLIDER_HEIGHT;
     border: 1px solid @slider-handle-border-color;
     background-color: @slider-handle-bg;
-    .border-radius(@slider-handle-border-radius);
-    .box-sizing(content-box);
+    border-radius: @slider-handle-border-radius;
+    box-sizing: content-box;
 }
 
 .dx-state-disabled .dx-slider,

@@ -133,7 +133,7 @@
                 }
 
                 .dx-texteditor-input {
-                    .border-radius(0px);
+                    border-radius: 0px;
                     border-width: 0px;
                     background: ~"@{@{widgetName}-editor-background}";
                 }
@@ -160,7 +160,7 @@
             }
 
             .dx-dropdowneditor-icon {
-                .box-shadow(none);
+                box-shadow: none;
             }
         }
 
@@ -209,14 +209,14 @@
     .dx-@{widgetName}-filter-range-overlay .dx-overlay-content {
         border: ~"@{@{widgetName}-border}";
         overflow: inherit;
-        .box-shadow(2px 2px 3px fade(black, 15%));
+        box-shadow: 2px 2px 3px fade(black, 15%);
 
         .dx-texteditor-container {
             border: none;
         }
 
         &, .dx-texteditor-container {
-            .border-radius(0px);
+            border-radius: 0px;
         }
 
         .dx-editor-container.dx-highlight-outline::after {
@@ -318,8 +318,8 @@
         }
 
         .dx-overlay-content {
-            .border-radius(0px);
-            .box-shadow(0px 1px 3px rgba(0, 0, 0, 0.2));
+            border-radius: 0px;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
 
             .dx-popup-content {
                 .dx-list-item-content::after {
@@ -329,7 +329,7 @@
                 .dx-column-chooser-item {
                     padding: 0px;
                     border: ~"@{@{widgetName}-border}";
-                    .box-shadow(0px 1px 3px -1px rgba(0, 0, 0, 0.2));
+                    box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.2);
                     background-color: ~"@{@{widgetName}-headers-background-color}";
 
                     .dx-treeview-item-content {
@@ -349,7 +349,7 @@
     }
 
     .dx-@{widgetName}-drag-header {
-        .box-shadow(@GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @GRID_BASE_DRAG_HEADER_SECOND_SHADOW);
+        box-shadow: @GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @GRID_BASE_DRAG_HEADER_SECOND_SHADOW;
         text-transform: uppercase;
         font-size: 0.9em;
         font-weight: bold;
@@ -405,7 +405,7 @@
 
     .dx-@{widgetName}-headers {
         color: ~"@{@{widgetName}-headers-color}";
-        .touch-action(pinch-zoom);
+        touch-action: pinch-zoom;
 
         .dx-@{widgetName}-table {
             .dx-row {
@@ -550,7 +550,7 @@
             .dx-invalid-message {
                 .dx-overlay-content {
                     padding: 10px 17px 9px;
-                    .border-radius(0px);
+                    border-radius: 0px;
                 }
             }
 
@@ -573,7 +573,7 @@
 
         .dx-adaptive-detail-row {
             .dx-@{widgetName}-invalid {
-                .border-radius(6px);
+                border-radius: 6px;
                 border: 1px solid ~"@{@{widgetName}-data-invalid-color}";
 
                 &.dx-adaptive-item-text {
@@ -585,7 +585,7 @@
         }
 
         .dx-item-modified {
-            .border-radius(6px);
+            border-radius: 6px;
             border: 2px solid ~"@{@{widgetName}-data-modified-color}";
 
             &.dx-adaptive-item-text {
@@ -676,7 +676,7 @@
             min-width: 32px;
 
             .dx-popup-content{
-                .border-radius(4px);
+                border-radius: 4px;
             }
         }
 

@@ -12,7 +12,7 @@
     background-color: @progressbar-range-bg;
     margin-top: -1px;
 
-    .box-sizing(content-box);
+    box-sizing: content-box;
 }
 
 .dx-progressbar-animating-container {
@@ -20,7 +20,7 @@
     background-color: @progressbar-bg;
     background-size: @MATERIAL_BACKGROUND_WIDTH 5px;
 
-    .animation(loader 2s linear infinite);
+    animation: loader 2s linear infinite;
     .gradient-linear(@MATERIAL_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
     background-repeat: repeat;
 }
@@ -31,7 +31,7 @@
     }
 
     .dx-progressbar-animating-container {
-        .animation(none);
+        animation: none;
         background-position-x: @MATERIAL_BACKGROUND_WIDTH / 2;
     }
 }
@@ -48,7 +48,7 @@
 .dx-rtl {
     .dx-progressbar, &.dx-progressbar {
         .dx-progressbar-animating-container {
-            .animation(loader-rtl 2s linear infinite);
+            animation: loader-rtl 2s linear infinite;
             .gradient-linear(@MATERIAL_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
             background-repeat: repeat;
         }
