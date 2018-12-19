@@ -155,9 +155,9 @@ var Application = Class.inherit({
     init: function() {
         var that = this;
 
-        that._initState = INIT_IN_PROGRESS;
+        that._initMaskState = INIT_IN_PROGRESS;
         return that._callComponentMethod("init").done(function() {
-            that._initState = INIT_COMPLETE;
+            that._initMaskState = INIT_COMPLETE;
             that._processEvent("initialized");
         }).fail(function(error) {
             throw error || errors.Error("E3022");
@@ -490,12 +490,12 @@ var Application = Class.inherit({
             }
         }
 
-        if(!that._initState) {
+        if(!that._initMaskState) {
             that.init().done(function() {
                 that.restoreState();
                 that.navigate(uri, options);
             });
-        } else if(that._initState === INIT_COMPLETE) {
+        } else if(that._initMaskState === INIT_COMPLETE) {
             if(!that._isNavigating || uri) {
                 that.navigationManager.navigate(uri, options);
             }
