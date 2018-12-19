@@ -29,6 +29,11 @@ var RadioCollection = CollectionWidget.inherit({
         });
     },
 
+    _initMarkup: function() {
+        this.callBase();
+        this.itemElements().addClass(RADIO_BUTTON_CLASS);
+    },
+
     _supportedKeys: function() {
         var parent = this.callBase();
 
@@ -56,6 +61,12 @@ var RadioCollection = CollectionWidget.inherit({
     _refreshContent: function() {
         this._prepareContent();
         this._renderContent();
+    },
+
+    itemElements: function() {
+        var elements = this.callBase();
+
+        return elements.not(elements.find(this._itemSelector()));
     }
 });
 
@@ -225,7 +236,7 @@ var RadioGroup = Editor.inherit({
     _renderRadios: function() {
         var $radios = $("<div>").appendTo(this.$element());
 
-        this._createComponent($radios, RadioCollection, {
+        this._radios = this._createComponent($radios, RadioCollection, {
             dataSource: this._dataSource,
             onItemRendered: this._itemRenderedHandler.bind(this),
             onContentReady: this._contentReadyHandler.bind(this),
@@ -258,10 +269,7 @@ var RadioGroup = Editor.inherit({
     },
 
     _contentReadyHandler: function(e) {
-        this._radios = this._radios || e.component;
-
-        this.itemElements().addClass(RADIO_BUTTON_CLASS);
-        this._refreshSelected();
+        this._refreshSelected(e.component.itemElements());
         this._fireContentReadyAction(true);
     },
 
@@ -292,8 +300,7 @@ var RadioGroup = Editor.inherit({
     },
 
     itemElements: function() {
-        var result = this._radios.itemElements();
-        return result.not(result.find(this._radios._itemSelector()));
+        return this._radios.itemElements();
     },
 
     _renderLayout: function() {
@@ -302,10 +309,12 @@ var RadioGroup = Editor.inherit({
         this.$element().toggleClass(RADIO_GROUP_HORIZONTAL_CLASS, layout === "horizontal");
     },
 
-    _refreshSelected: function() {
+    _refreshSelected: function(itemElements) {
         var selectedValue = this.option("value");
 
-        this.itemElements().each((function(_, item) {
+        itemElements = itemElements || this.itemElements();
+
+        itemElements.each((function(_, item) {
             var $item = $(item);
             var itemValue = this._valueGetter($item.data(ITEM_DATA_KEY));
             var isValueEquals = this._isValueEquals(itemValue, selectedValue);
