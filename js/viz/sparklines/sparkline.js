@@ -65,7 +65,7 @@ function findMinMax(data, valField) {
     if(max === min) {
         minIndexes = maxIndexes = [];
     }
-    return { minIndexes, maxIndexes };
+    return { minIndexes: minIndexes.slice(0, 1), maxIndexes: maxIndexes.slice(0, 1) };
 }
 
 function parseNumericDataSource(data, argField, valField, ignoreEmptyPoints) {
