@@ -45,7 +45,6 @@ function correctStackCoordinates(series, currentStacks, arg, stack, parameters, 
         if(isDefined(barPadding) || isDefined(barWidth)) {
             extraParameters = calculateParams(barsArea, currentStacks.length, 1 - barPadding, barWidth);
             width = extraParameters.width;
-            offset = getOffset(stackIndex, extraParameters);
         }
 
         correctPointCoordinates(points, width, offset);
@@ -63,8 +62,9 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
         barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
 
     series.forEach(function(s, i) {
-        var stackName = s.getStackName && s.getStackName() || i.toString(),
+        var stackName = s.getStackName() || s.getGroupName() || i.toString(),
             argument;
+
         for(argument in s.pointsByArgument) {
             if(allArguments.indexOf(argument.valueOf()) === -1) {
                 allArguments.push(argument.valueOf());

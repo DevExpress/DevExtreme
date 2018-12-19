@@ -1178,6 +1178,10 @@ Series.prototype = {
         return this._stackName;
     },
 
+    getGroupName: function() {
+        return this._options.group;
+    },
+
     getPointByCoord: function(x, y) {
         var point = this.getNeighborPoint(x, y);
         return point && point.coordsIn(x, y) ? point : null;
