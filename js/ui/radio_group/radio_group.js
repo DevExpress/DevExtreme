@@ -1,14 +1,15 @@
 var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
     devices = require("../../core/devices"),
     extend = require("../../core/utils/extend").extend,
-    registerComponent = require("../../core/component_registrator"),
-    Editor = require("../editor/editor"),
+    hasWindow = require("../../core/utils/window").hasWindow,
     inkRipple = require("../widget/utils.ink_ripple"),
-    DataExpressionMixin = require("../editor/ui.data_expression"),
+    noop = require("../../core/utils/common").noop,
+    registerComponent = require("../../core/component_registrator"),
     themes = require("../themes"),
-    CollectionWidget = require("../collection/ui.collection_widget.edit"),
-    ChildDefaultTemplate = require("../widget/child_default_template");
+    DataExpressionMixin = require("../editor/ui.data_expression"),
+    Editor = require("../editor/editor"),
+    ChildDefaultTemplate = require("../widget/child_default_template"),
+    CollectionWidget = require("../collection/ui.collection_widget.edit");
 
 var RADIO_GROUP_CLASS = "dx-radiogroup",
     RADIO_GROUP_VERTICAL_CLASS = "dx-radiogroup-vertical",
@@ -248,6 +249,12 @@ var RadioGroup = Editor.inherit({
             tabIndex: this.option("tabIndex"),
             noDataText: ""
         });
+
+        var willRadiosRiseContentReady = hasWindow();
+
+        if(!willRadiosRiseContentReady) {
+            this._refreshSelected();
+        }
     },
 
     _renderSubmitElement: function() {
