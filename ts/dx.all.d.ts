@@ -5635,6 +5635,7 @@ declare module DevExpress.viz {
         getSeriesByPos(seriesIndex: number): chartSeriesObject;
         /** Hides all widget tooltips. */
         hideTooltip(): void;
+        /** Reloads data and repaints the widget. */
         refresh(): void;
         /** Redraws the widget. */
         render(): void;
