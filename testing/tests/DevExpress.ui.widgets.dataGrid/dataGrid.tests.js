@@ -11247,6 +11247,43 @@ QUnit.test("Change dataSource to new with new item instances if repaintChangesOn
     assert.strictEqual(cellPreparedArgs[2].data, newItems[1], "cellPrepared 2 data is updated");
 });
 
+// T699807
+QUnit.test("Change dataSource array during state loading", function(assert) {
+    // arrange
+    var stateDeferred = $.Deferred(),
+        dataGrid = createDataGrid({
+            stateStoring: {
+                enabled: true,
+                type: "custom",
+                customLoad: function() {
+                    return stateDeferred;
+                }
+            },
+            keyExpr: "id",
+            loadingTimeout: undefined,
+            repaintChangesOnly: true,
+            dataSource: [
+                { id: 1, field1: "test1", detail: "detail1" },
+                { id: 2, field1: "test2", detail: "detail2" }
+            ],
+            columns: ["id", "field1"]
+        });
+
+    this.clock.tick();
+
+    // act
+    var newItems = [
+        { id: 1, field1: "test1", detail: "detail1" },
+        { id: 2, field1: "test2", detail: "updated" }
+    ];
+
+    dataGrid.option("dataSource", newItems);
+    stateDeferred.resolve({});
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows()[1].data.detail, "updated", "row 1 data is updated");
+});
+
 QUnit.test("Using watch in cellPrepared event for editor if repaintChangesOnly", function(assert) {
     // arrange
     var dataSource = new DataSource({
