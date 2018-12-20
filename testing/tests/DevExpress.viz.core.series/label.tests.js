@@ -218,6 +218,7 @@ QUnit.test("Draw(true) - draw label", function(assert) {
 });
 
 QUnit.test("Rotation angle can be reseted", function(assert) {
+    this.options.rotationAngle = 30;
     var label = this.createLabel().draw(true);
 
     this.options.rotationAngle = 0;
