@@ -174,7 +174,7 @@ function adjustStackedSeriesValues() {
         lastSeriesInStack = {};
 
     series.forEach(function(singleSeries) {
-        var stackName = singleSeries.getStackName(),
+        var stackName = singleSeries.getStackName() || singleSeries.getGroupName(),
             hole = false;
 
         singleSeries._prevSeries = lastSeriesInStack[stackName];
@@ -198,11 +198,11 @@ function adjustStackedSeriesValues() {
             currentStack = stacks[stackName];
 
             if(currentStack[argument]) {
-                point.correctValue(currentStack[argument]);
+                if(singleSeries.type !== "bar") point.correctValue(currentStack[argument]);
                 currentStack[argument] += value;
             } else {
                 currentStack[argument] = value;
-                point.resetCorrection();
+                if(singleSeries.type !== "bar") point.resetCorrection();
             }
             if(!point.hasValue()) {
                 var prevPoint = points[index - 1];
@@ -231,11 +231,12 @@ function adjustStackedSeriesValues() {
             point._skipSetRightHole = null;
         });
     });
+
     that._stackKeepers = stackKeepers;
     series.forEach(function(singleSeries) {
         singleSeries.getPoints().forEach(function(point) {
             var argument = point.argument.valueOf(),
-                stackName = singleSeries.getStackName(),
+                stackName = singleSeries.getStackName() || singleSeries.getGroupName(),
                 absTotal = getAbsStackSumByArg(stackKeepers, stackName, argument),
                 total = getStackSumByArg(stackKeepers, stackName, argument);
 
@@ -391,6 +392,7 @@ function SeriesFamily(options) {
         case "bar":
             that.adjustSeriesDimensions = adjustBarSeriesDimensions;
             that.updateSeriesValues = updateBarSeriesValues;
+            that.adjustSeriesValues = adjustStackedSeriesValues;
             break;
         case "rangebar":
             that.adjustSeriesDimensions = adjustBarSeriesDimensions;

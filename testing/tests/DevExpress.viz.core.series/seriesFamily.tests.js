@@ -1379,8 +1379,11 @@ QUnit.test("Set three series - custom min size is not specify ", function(assert
         series3 = createSeries({
             points: points3
         }),
-        series = [series1, series2, series3],
-        family = createSeriesFamily("bar", series);
+        series = [series1, series2, series3];
+
+    [points1, points2, points3].forEach(points => points.forEach(point => point.series = { type: "bar" }));
+
+    var family = createSeriesFamily("bar", series);
 
     checkStackedPointHeight(assert, family.series[0], 5, 6, 7, 0, 0, 0);
     checkStackedPointHeight(assert, family.series[1], 2, 3, 4, 0, 0, 0);

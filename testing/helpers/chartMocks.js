@@ -430,6 +430,7 @@ export const MockAngularTranslator = function(data) {
 // Mock series
 export const MockSeries = function MockSeries(options) {
     options = options || {};
+
     return {
         dispose: function() {
             delete this.options;
@@ -653,7 +654,7 @@ export const MockPoint = Class.inherit(
                 this.value = options.reductionValue;
             }
             this.labelFormatObject = {};
-            this.series = options.series;
+            this.series = options.series || { type: "" };
 
             this.options = this.mockOptions.options;
             this.pointClassName = options.pointClassName;
@@ -722,7 +723,8 @@ export const MockPoint = Class.inherit(
             if(this.hasValue()) {
                 this.total = total;
                 this.percent = this.value / total;
-                if(fullStacked) {
+                var isFullStackedSeries = this.series.type === "" || this.series.type.indexOf("fullstacked") === 0;
+                if(fullStacked && isFullStackedSeries) {
                     this.value = this.value / total;
                     this.minValue = this.minValue / total;
                 }
