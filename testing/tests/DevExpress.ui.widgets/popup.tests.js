@@ -611,16 +611,21 @@ QUnit.test("popup height should support top and bottom toolbars if height = auto
         }).dxPopup("instance");
 
     var $popup = popup.$content().parent(),
+        $popupContent = popup.$content(),
         topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight(),
         bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).innerHeight(),
-        popupContentHeight = $popup.find(toSelector(POPUP_CONTENT_CLASS)).eq(0).innerHeight();
+        popupContentHeight = $popupContent.innerHeight(),
+        popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
 
     assert.roughEqual($popup.innerHeight(), 150, 1, "popup has max height");
     assert.roughEqual(popupContentHeight, 150 - topToolbarHeight - bottomToolbarHeight, 1, "popup has minimum content height");
 
+    $("<div>").height(150).appendTo($content);
+    popupContentHeight = $popupContent.innerHeight();
+    assert.roughEqual(popupContentHeight, 150 + popupContentPadding, 1, "popup has right height");
 
     $("<div>").height(300).appendTo($content);
-    popupContentHeight = $popup.find(toSelector(POPUP_CONTENT_CLASS)).eq(0).innerHeight();
+    popupContentHeight = $popupContent.innerHeight();
     assert.roughEqual($popup.innerHeight(), 300, 1, "popup has max height");
     assert.roughEqual(popupContentHeight, 300 - topToolbarHeight - bottomToolbarHeight, 1, "popup has maximum content height");
 });
