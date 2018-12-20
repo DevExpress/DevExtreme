@@ -62,7 +62,7 @@ QUnit.test("showAppointmentPopup method with passed a recurrence appointment sho
     var popupChoiceAppointmentEdit = $('.dx-popup-normal.dx-resizable').not('.dx-state-invisible');
     assert.equal(popupChoiceAppointmentEdit.length, 1, "Popup with choice edit mode is rendered");
 
-    popupChoiceAppointmentEdit.find(".dx-popup-bottom .dx-button:eq(1)").trigger("click");
+    popupChoiceAppointmentEdit.find(".dx-popup-bottom .dx-button:eq(1)").trigger("dxclick");
     assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Appointment popup is rendered");
 
     var form = this.instance.getAppointmentDetailsForm(),
