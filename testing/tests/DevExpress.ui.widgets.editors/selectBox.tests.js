@@ -59,9 +59,9 @@ var POPUP_CLASS = "dx-selectbox-popup",
     PLACEHOLDER_CLASS = "dx-placeholder",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
-var KEY_DOWN = 40,
-    KEY_ENTER = 13,
-    KEY_SPACE = 32;
+var KEY_DOWN = "ArrowDown",
+    KEY_ENTER = "Enter",
+    KEY_SPACE = "Space";
 
 var TIME_TO_WAIT = 500;
 
@@ -3322,7 +3322,7 @@ QUnit.test("dataSource null reference error", function(assert) {
         $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
     $input.click();
-    $($input).trigger("keyup", { which: 40 });
+    $($input).trigger("keyup", { key: "ArrowDown" });
 });
 
 QUnit.test("dataSource option", function(assert) {
@@ -3348,7 +3348,7 @@ QUnit.test("incorrect list items count after press key_down", function(assert) {
     $input.click();
     this.clock.tick(TIME_TO_WAIT);
 
-    $($input).trigger("keyup", { which: 40 });
+    $($input).trigger("keyup", { key: "ArrowDown" });
     this.clock.tick(TIME_TO_WAIT);
 
     assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).length === 3);
@@ -3994,8 +3994,7 @@ QUnit.test("T323427 - item should be chosen after focus on it if input is empty"
         $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
         keyboard = keyboardMock($input);
 
-    var downKey = 40,
-        altDownEvent = $.Event("keydown", { which: downKey, altKey: true });
+    var altDownEvent = $.Event("keydown", { key: "ArrowDown", altKey: true });
 
     $input
         .focus()
@@ -4512,13 +4511,13 @@ QUnit.test("filtering is reset when open control with keyboard", function(assert
         kb = keyboardMock($input);
 
     kb.type("a").press("esc");
-    $($input).trigger($.Event("keydown", { which: 40, altKey: true }));
+    $($input).trigger($.Event("keydown", { key: "ArrowDown", altKey: true }));
     this.clock.tick(TIME_TO_WAIT);
     assert.equal($.trim($(toSelector(LIST_ITEM_CLASS)).text()), "a", "filter should not be cleared before focusout");
 
     $input.focusout();
     this.instance.option("opened", false);
-    $($input).trigger($.Event("keydown", { which: 40, altKey: true }));
+    $($input).trigger($.Event("keydown", { key: "ArrowDown", altKey: true }));
     this.clock.tick(TIME_TO_WAIT);
     assert.equal($.trim($(toSelector(LIST_ITEM_CLASS)).text()), "abc", "no filtering");
 });

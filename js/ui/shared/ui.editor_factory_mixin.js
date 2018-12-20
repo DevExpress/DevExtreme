@@ -64,7 +64,7 @@ var EditorFactoryMixin = (function() {
                 }
             },
             onKeyDown: function(e) {
-                if(isEnterBug && e.event.keyCode === 13) {
+                if(isEnterBug && e.event.key === "Enter") {
                     eventsEngine.trigger($(e.component._input()), "change");
                 }
             },
@@ -81,7 +81,7 @@ var EditorFactoryMixin = (function() {
                 options.setValue(args.value);
             },
             onKeyDown: function(e) {
-                if(checkEnterBug() && e.event.keyCode === 13) {
+                if(checkEnterBug() && e.event.key === "Enter") {
                     e.component.blur();
                     e.component.focus();
                 }

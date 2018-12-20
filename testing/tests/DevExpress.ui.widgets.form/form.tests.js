@@ -1472,9 +1472,9 @@ QUnit.test("UpdateDimensions", function(assert) {
     assert.ok(isSizeUpdated);
 });
 
-function triggerKeyUp($element, keyCode) {
+function triggerKeyUp($element, key) {
     var e = $.Event("keyup");
-    e.which = keyCode;
+    e.key = key;
     $($element.find("input").first()).trigger(e);
 }
 
@@ -1496,7 +1496,7 @@ QUnit.test("Check component instance onEditorEnterKey", function(assert) {
 
     // act
     editor = form.getEditor("work");
-    triggerKeyUp(editor.$element(), 13);
+    triggerKeyUp(editor.$element(), "Enter");
 
     // assert
     assert.notEqual(testArgs.component, undefined, "component");

@@ -1,38 +1,44 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    Class = require("../../core/class"),
-    inArray = require("../../core/utils/array").inArray,
-    each = require("../../core/utils/iterator").each,
-    eventUtils = require("../../events/utils");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import Class from "../../core/class";
+import { inArray } from "../../core/utils/array";
+import { each } from "../../core/utils/iterator";
+import eventUtils from "../../events/utils";
 
-var KeyboardProcessor = Class.inherit({
+const KeyboardProcessor = Class.inherit({
     _keydown: eventUtils.addNamespace("keydown", "KeyboardProcessor"),
 
-    codes: {
-        "8": "backspace",
-        "9": "tab",
-        "13": "enter",
-        "27": "escape",
-        "33": "pageUp",
-        "34": "pageDown",
-        "35": "end",
-        "36": "home",
-        "37": "leftArrow",
-        "38": "upArrow",
-        "39": "rightArrow",
-        "40": "downArrow",
-        "46": "del",
-        "32": "space",
-        "70": "F",
-        "65": "A",
-        "106": "asterisk",
-        "109": "minus",
-        "189": "minus",
-        "173": "minus"
+    keyMap: {
+        "backspace": "backspace",
+        "tab": "tab",
+        "enter": "enter",
+        "escape": "escape",
+        "pageup": "pageUp",
+        "pagedown": "pageDown",
+        "end": "end",
+        "home": "home",
+        "arrowleft": "leftArrow",
+        "arrowup": "upArrow",
+        "arrowright": "rightArrow",
+        "arrowdown": "downArrow",
+        "delete": "del",
+        " ": "space",
+        "f": "F",
+        "a": "A",
+        "*": "asterisk",
+        "-": "minus",
+        // IE11:
+        "left": "leftArrow",
+        "up": "upArrow",
+        "right": "rightArrow",
+        "down": "downArrow",
+        "multiply": "asterisk",
+        "spacebar": "space",
+        "del": "del",
+        "subtract": "minus"
     },
 
     ctor: function(options) {
-        var _this = this;
         options = options || {};
         if(options.element) {
             this._element = $(options.element);
@@ -44,8 +50,8 @@ var KeyboardProcessor = Class.inherit({
         this._context = options.context;
         this._childProcessors = [];
         if(this._element) {
-            this._processFunction = function(e) {
-                _this.process(e);
+            this._processFunction = (e) => {
+                this.process(e);
             };
             eventsEngine.on(this._element, this._keydown, this._processFunction);
         }
@@ -92,8 +98,12 @@ var KeyboardProcessor = Class.inherit({
         }
 
         var args = {
-            key: this.codes[e.which] || e.which,
+            keyName: this.keyMap[e.key.toLowerCase()] || e.key,
+            key: e.key,
+            code: e.code,
             ctrl: e.ctrlKey,
+            location: e.location,
+            metaKey: e.metaKey,
             shift: e.shiftKey,
             alt: e.altKey,
             originalEvent: e

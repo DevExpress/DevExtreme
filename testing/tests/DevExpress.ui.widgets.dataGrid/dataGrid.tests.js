@@ -8652,7 +8652,8 @@ QUnit.testInActiveWindow("Keyboard navigation works well with multilevel groupin
         }),
         navigationController = dataGrid.getController("keyboardNavigation"),
         keyUpEvent = {
-            key: "upArrow",
+            key: "ArrowUp",
+            keyName: "upArrow",
             originalEvent: $.Event("keyup")
         };
 
@@ -8703,7 +8704,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     this.clock.tick();
 
     $(dataGrid.$element()).find(".dx-textbox").dxTextBox("instance").option("value", "Test");
-    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.$element()).find("input").get(0) }) });
+    navigationController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.$element()).find("input").get(0) }) });
     this.clock.tick();
 
     // assert
@@ -8734,12 +8735,12 @@ QUnit.testInActiveWindow("Tab key on editor should focus next cell if editing mo
     dataGrid.focus($(dataGrid.getCellElement(0, 0)));
     this.clock.tick();
 
-    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
+    navigationController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
     this.clock.tick();
 
 
     // act
-    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
+    navigationController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
     $(dataGrid.getCellElement(0, 1)).find(".dx-numberbox").dxNumberBox("instance").option("value", 10);
     this.clock.tick();
 
@@ -8784,7 +8785,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     this.clock.tick();
 
     $(dataGrid.$element()).find(".dx-textbox").dxTextBox("instance").option("value", "Test");
-    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.$element()).find("input").get(0) }) });
+    navigationController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.$element()).find("input").get(0) }) });
     this.clock.tick();
 
     // assert
@@ -8822,7 +8823,7 @@ QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour",
 
     // act
     var event = $.Event("keydown", { target: $(":focus").get(0) });
-    navigationController._keyDownHandler({ key: "enter", originalEvent: event });
+    navigationController._keyDownHandler({ key: "Enter", keyName: "enter", originalEvent: event });
     this.clock.tick();
 
     // assert
@@ -9725,7 +9726,8 @@ QUnit.test("Focused cell position has correct value when focus grouping row cell
         keyboardNavigationController = dataGrid.getController("keyboardNavigation"),
         triggerTabPress = function($target, isShiftPressed) {
             keyboardNavigationController._keyDownHandler({
-                key: "tab",
+                key: "Tab",
+                keyName: "tab",
                 shift: !!isShiftPressed,
                 originalEvent: {
                     target: $target,
@@ -9793,7 +9795,8 @@ QUnit.test("Focused cell position has correct value when focus grouping row with
         keyboardNavigationController = dataGrid.getController("keyboardNavigation"),
         triggerTabPress = function($target, isShiftPressed) {
             keyboardNavigationController._keyDownHandler({
-                key: "tab",
+                key: "Tab",
+                keyName: "tab",
                 shift: !!isShiftPressed,
                 originalEvent: {
                     target: $target,
@@ -10127,7 +10130,8 @@ QUnit.testInActiveWindow("Scroll positioned correct with fixed columns and editi
         }),
         triggerTabPress = function($target) {
             dataGrid.getController("keyboardNavigation")._keyDownHandler({
-                key: "tab",
+                key: "Tab",
+                keyName: "tab",
                 originalEvent: {
                     target: $target,
                     preventDefault: commonUtils.noop,
@@ -10173,7 +10177,8 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
         }),
         triggerTabPress = function(target) {
             dataGrid.getController("keyboardNavigation")._keyDownProcessor.process({
-                which: 9,
+                key: "Tab",
+                keyName: "tab",
                 target: target && target[0] || target,
                 preventDefault: $.noop,
                 isDefaultPrevented: function() {

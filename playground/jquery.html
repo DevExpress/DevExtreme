@@ -23,7 +23,14 @@
 </head>
 <body>
     <div id="button"></div>
+    <input id="qwe">
     <script>
+        document.getElementById("qwe").addEventListener('keydown', logKey);
+
+        function logKey(e) {
+            console.log(e);
+        }
+
         $(function() {
             $("#button").dxButton({
                 text: 'Click me!',

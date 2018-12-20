@@ -46,11 +46,11 @@ var TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
     LIST_ITEM_CLASS = "dx-list-item",
     FOCUSED_STATE_SELECTOR = ".dx-state-focused",
 
-    KEY_DOWN = 40,
-    KEY_UP = 38,
-    KEY_ENTER = 13,
-    KEY_ESC = 27,
-    KEY_TAB = 9;
+    KEY_DOWN = "ArrowDown",
+    KEY_UP = "ArrowUp",
+    KEY_ENTER = "Enter",
+    KEY_ESC = "Escape",
+    KEY_TAB = "Tab";
 
 QUnit.module("dxAutocomplete", {
     beforeEach: function() {

@@ -668,10 +668,10 @@ var Widget = DOMComponent.inherit({
 
     _keyboardHandler: function(options) {
         var e = options.originalEvent,
-            key = options.key;
+            keyName = options.keyName;
 
         var keys = this._supportedKeys(e),
-            func = keys[key];
+            func = keys[keyName];
 
         if(func !== undefined) {
             var handler = func.bind(this);

@@ -18,7 +18,6 @@ var stubCaret = function() {
 };
 
 var EMPTY_CHAR = " ";
-var EMPTY_CHAR_CODE = 32;
 var ESCAPED_CHAR = "\\";
 
 var TEXTEDITOR_MASKED_CLASS = "dx-texteditor-masked";
@@ -394,7 +393,7 @@ var TextEditorMask = TextEditorBase.inherit({
         }
 
         this._maskKeyHandler(e, function() {
-            this._handleKey(e.which);
+            this._handleKey(e.key);
             return true;
         });
     },
@@ -426,7 +425,7 @@ var TextEditorMask = TextEditorBase.inherit({
             this._caret({ start: caret.start, end: caret.start });
 
             this._maskKeyHandler(e, function() {
-                this._handleKey(char.charCodeAt());
+                this._handleKey(char);
                 return true;
             });
         }).bind(this));
@@ -480,7 +479,7 @@ var TextEditorMask = TextEditorBase.inherit({
                 return;
             }
 
-            that._handleKey(EMPTY_CHAR_CODE, BACKWARD_DIRECTION);
+            that._handleKey(EMPTY_CHAR, BACKWARD_DIRECTION);
             afterBackspaceHandler(true, function(currentCaret) {
                 that._displayMask(currentCaret);
                 that._maskRulesChain.reset();
@@ -491,7 +490,7 @@ var TextEditorMask = TextEditorBase.inherit({
     _maskDelHandler: function(e) {
         this._keyPressHandled = true;
         this._maskKeyHandler(e, function() {
-            !this._hasSelection() && this._handleKey(EMPTY_CHAR_CODE);
+            !this._hasSelection() && this._handleKey(EMPTY_CHAR);
             return true;
         });
     },
@@ -577,11 +576,10 @@ var TextEditorMask = TextEditorBase.inherit({
         this._maskRulesChain.reset();
     },
 
-    _handleKey: function(keyCode, direction) {
-        var char = String.fromCharCode(keyCode);
+    _handleKey: function(key, direction) {
         this._direction(direction || FORWARD_DIRECTION);
-        this._adjustCaret(char);
-        this._handleKeyChain(char);
+        this._adjustCaret(key);
+        this._handleKeyChain(key);
         this._moveCaret();
     },
 

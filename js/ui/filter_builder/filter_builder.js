@@ -40,9 +40,9 @@ const FILTER_BUILDER_CLASS = "dx-filterbuilder",
     SOURCE = "filterBuilder",
     DISABLED_STATE_CLASS = "dx-state-disabled",
 
-    TAB_KEY = 9,
-    ENTER_KEY = 13,
-    ESCAPE_KEY = 27;
+    TAB_KEY = "tab",
+    ENTER_KEY = "enter",
+    ESCAPE_KEY = "escape";
 
 var ACTIONS = [{
         name: "onEditorPreparing",
@@ -731,8 +731,8 @@ var FilterBuilder = Widget.inherit({
                 var treeViewElement = $(info.component.content()).find(".dx-treeview"),
                     treeView = treeViewElement.dxTreeView("instance");
                 eventsEngine.on(treeViewElement, "keyup keydown", function(e) {
-                    if((e.type === "keydown" && e.keyCode === TAB_KEY)
-                            || (e.type === "keyup" && (e.keyCode === ESCAPE_KEY || e.keyCode === ENTER_KEY))) {
+                    if((e.type === "keydown" && e.keyName === TAB_KEY)
+                            || (e.type === "keyup" && (e.keyName === ESCAPE_KEY || e.keyName === ENTER_KEY))) {
                         info.component.hide();
                         eventsEngine.trigger(options.menu.position.of, "focus");
                     }
@@ -1057,7 +1057,7 @@ var FilterBuilder = Widget.inherit({
 
         var documentClickHandler = this._addDocumentClick($editor, closeEditor);
         var documentKeyUpHandler = this._addDocumentKeyUp($editor, (e) => {
-            if(e.keyCode === TAB_KEY) {
+            if(e.keyName === TAB_KEY) {
                 if(this._isFocusOnEditorParts($editor)) {
                     return;
                 }
@@ -1068,10 +1068,10 @@ var FilterBuilder = Widget.inherit({
                     }
                 });
             }
-            if(e.keyCode === ESCAPE_KEY) {
+            if(e.keyName === ESCAPE_KEY) {
                 eventsEngine.trigger(createValueText(), "focus");
             }
-            if(e.keyCode === ENTER_KEY) {
+            if(e.keyName === ENTER_KEY) {
                 this._updateConditionValue(item, value, function() {
                     eventsEngine.trigger(createValueText(), "focus");
                 });
@@ -1137,7 +1137,7 @@ var FilterBuilder = Widget.inherit({
     _subscribeOnClickAndEnterKey: function($button, handler) {
         eventsEngine.on($button, "dxclick", handler);
         eventsEngine.on($button, "keyup", function(e) {
-            if(e.keyCode === ENTER_KEY) {
+            if(e.keyName === ENTER_KEY) {
                 handler(e);
             }
         });

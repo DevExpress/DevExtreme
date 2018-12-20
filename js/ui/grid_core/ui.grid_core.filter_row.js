@@ -264,7 +264,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
                         var $prevElement = $cell.find("[tabindex]").not(e.target).first();
 
-                        if(e.which === 9 && e.shiftKey) {
+                        if(e.keyName === "tab" && e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
 
@@ -281,7 +281,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
                     eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
-                        if(e.which === 9 && !e.shiftKey) {
+                        if(e.keyName === "tab" && !e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
                             eventsEngine.trigger($cell.next().find("[tabindex]").first(), "focus");

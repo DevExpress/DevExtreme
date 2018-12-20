@@ -684,7 +684,7 @@ var TextEditorBase = Editor.inherit({
             return;
         }
 
-        if(e.which === 13) {
+        if(e.key === "Enter") {
             this._enterKeyAction({
                 event: e
             });

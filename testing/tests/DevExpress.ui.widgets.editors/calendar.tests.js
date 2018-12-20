@@ -43,15 +43,15 @@ var CALENDAR_BODY_CLASS = "dx-calendar-body",
 
     ACTIVE_STATE_CLASS = "dx-state-active",
 
-    ENTER_KEY_CODE = 13,
-    PAGE_UP_KEY_CODE = 33,
-    PAGE_DOWN_KEY_CODE = 34,
-    END_KEY_CODE = 35,
-    HOME_KEY_CODE = 36,
-    LEFT_ARROW_KEY_CODE = 37,
-    UP_ARROW_KEY_CODE = 38,
-    RIGHT_ARROW_KEY_CODE = 39,
-    DOWN_ARROW_KEY_CODE = 40;
+    ENTER_KEY_CODE = "Enter",
+    PAGE_UP_KEY_CODE = "PageUp",
+    PAGE_DOWN_KEY_CODE = "PageDown",
+    END_KEY_CODE = "End",
+    HOME_KEY_CODE = "Home",
+    LEFT_ARROW_KEY_CODE = "ArrowLeft",
+    UP_ARROW_KEY_CODE = "ArrowUp",
+    RIGHT_ARROW_KEY_CODE = "ArrowRight",
+    DOWN_ARROW_KEY_CODE = "ArrowDown";
 
 var getShortDate = function(date) {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
@@ -911,8 +911,8 @@ QUnit.test("pressing ctrl+arrows or pageup/pagedown keys must change view correc
         "century": [new Date(1913, 9, 13), new Date(2013, 9, 13)]
     };
 
-    var trigger = function(which, ctrl) {
-        var e = $.Event("keydown", { which: which, ctrlKey: ctrl });
+    var trigger = function(key, ctrl) {
+        var e = $.Event("keydown", { key: key, ctrlKey: ctrl });
         $($element).trigger(e);
         return e;
     };
@@ -949,7 +949,7 @@ QUnit.test("pressing ctrl+arrows must navigate in inverse direction in RTL mode"
     });
 
     var $element = this.$element,
-        trigger = function(which, ctrl) { var e = $.Event("keydown", { which: which, ctrlKey: ctrl }); $element.trigger(e); };
+        trigger = function(key, ctrl) { var e = $.Event("keydown", { key: key, ctrlKey: ctrl }); $element.trigger(e); };
 
     trigger(LEFT_ARROW_KEY_CODE, true);
     assert.deepEqual(this.calendar.option("currentDate"), new Date(2013, 10, this.value.getDate()), "ctrl+left arrow navigates correctly");
@@ -968,7 +968,7 @@ QUnit.test("correct currentDate change after navigating on other view cell by ke
 
     var $element = this.$element,
         calendar = this.calendar,
-        trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.trigger(e); };
+        trigger = function(key) { var e = $.Event("keydown", { key: key }); $element.trigger(e); };
 
     $element.trigger("focusin");
 
@@ -1023,7 +1023,7 @@ QUnit.test("pressing ctrl+up/down arrow keys must call navigateUp/navigateDown",
 
     var $element = this.$element;
     var calendar = this.calendar;
-    var trigger = function(which, ctrl) { var e = $.Event("keydown", { which: which, ctrlKey: ctrl }); $element.trigger(e); };
+    var trigger = function(key, ctrl) { var e = $.Event("keydown", { key: key, ctrlKey: ctrl }); $element.trigger(e); };
 
     $.each(["year", "decade", "century"], function(_, type) {
         trigger(UP_ARROW_KEY_CODE, true);
@@ -1044,7 +1044,7 @@ QUnit.test("Pressing home/end keys must contour first/last cell", function(asser
 
     var calendar = this.calendar,
         $element = this.$element,
-        trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.trigger(e); };
+        trigger = function(key) { var e = $.Event("keydown", { key: key }); $element.trigger(e); };
 
     $($element).trigger("focusin");
 
@@ -1079,7 +1079,7 @@ QUnit.test("home/end keypress must contoured first and last allowable cells", fu
         this.reinit($.extend({}, { zoomLevel: type, focusStateEnabled: true }, params[type]));
 
         var $element = this.$element;
-        var trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.trigger(e); };
+        var trigger = function(key) { var e = $.Event("keydown", { key: key }); $element.trigger(e); };
 
         $($element).trigger("focusin");
 
@@ -1115,10 +1115,10 @@ QUnit.test("keydown event default behavior should be prevented by calendar keydo
             assert.ok(e.isDefaultPrevented());
         })
         .find("[data-value='2013/12/15']")
-        .trigger($.Event("keydown", { which: LEFT_ARROW_KEY_CODE }))
-        .trigger($.Event("keydown", { which: UP_ARROW_KEY_CODE }))
-        .trigger($.Event("keydown", { which: RIGHT_ARROW_KEY_CODE }))
-        .trigger($.Event("keydown", { which: DOWN_ARROW_KEY_CODE }))
+        .trigger($.Event("keydown", { key: LEFT_ARROW_KEY_CODE }))
+        .trigger($.Event("keydown", { key: UP_ARROW_KEY_CODE }))
+        .trigger($.Event("keydown", { key: RIGHT_ARROW_KEY_CODE }))
+        .trigger($.Event("keydown", { key: DOWN_ARROW_KEY_CODE }))
         .off(".TEST");
 });
 
@@ -1181,7 +1181,7 @@ QUnit.test("T277555 - time should not be reset if keyboard is used", function(as
     var calendar = this.calendar,
         $calendar = this.$element;
 
-    var trigger = function(which) { var e = $.Event("keydown", { which: which }); $calendar.trigger(e); };
+    var trigger = function(key) { var e = $.Event("keydown", { key: key }); $calendar.trigger(e); };
 
     calendar.option("value", new Date(2015, 8, 1, 12, 57));
 
@@ -1662,7 +1662,7 @@ QUnit.test("change ZoomLevel after pressing enter key on view cell", function(as
         value: new Date(2015, 2, 15),
         focusStateEnabled: true
     }).dxCalendar("instance");
-    var trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.trigger(e); };
+    var trigger = function(key) { var e = $.Event("keydown", { key: key }); $element.trigger(e); };
 
 
     $.each(["century", "decade"], function(_, type) {
@@ -1793,8 +1793,8 @@ QUnit.test("calendar should not allow to navigate to a date earlier than min and
         };
 
         var that = this,
-            trigger = function(which) {
-                var e = $.Event("keydown", { which: which });
+            trigger = function(key) {
+                var e = $.Event("keydown", { key: key });
                 that.$element.trigger(e);
             },
             minimumCurrentDate = new Date(this.value.getFullYear(), this.value.getMonth() - 1, this.value.getDate()),
@@ -2070,8 +2070,8 @@ QUnit.test("calendar should not allow to navigate to a disabled date via keyboar
         };
 
         var that = this,
-            trigger = function(which) {
-                var e = $.Event("keydown", { which: which });
+            trigger = function(key) {
+                var e = $.Event("keydown", { key: key });
                 that.$element.trigger(e);
             };
 
@@ -2122,8 +2122,8 @@ QUnit.test("calendar should properly set the first and the last available cells"
     });
 
     var that = this,
-        trigger = function(which) {
-            var e = $.Event("keydown", { which: which });
+        trigger = function(key) {
+            var e = $.Event("keydown", { key: key });
             that.$element.trigger(e);
         };
 
@@ -2290,7 +2290,7 @@ QUnit.test("current date is correct when trying to navigate out of available ran
             { zoomLevel: type, focusStateEnabled: true },
             params[type])).dxCalendar("instance");
 
-        var trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.trigger(e); };
+        var trigger = function(key) { var e = $.Event("keydown", { key: key }); $element.trigger(e); };
 
         $($element).trigger("focusin");
 
@@ -2325,7 +2325,7 @@ QUnit.test("after pressing upArrow/downArrow button the current view should be c
             focusStateEnabled: true
         }).dxCalendar("instance");
 
-        var trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.trigger(e); };
+        var trigger = function(key) { var e = $.Event("keydown", { key: key }); $element.trigger(e); };
         var currentDate = calendar.option("currentDate");
 
         $($element).trigger("focusin");
@@ -2347,7 +2347,7 @@ QUnit.test("current date should be saved while navigating up and down", function
         focusStateEnabled: true
     }).dxCalendar("instance");
 
-    var trigger = function(which, ctrl) { var e = $.Event("keydown", { which: which, ctrlKey: ctrl }); $element.trigger(e); };
+    var trigger = function(key, ctrl) { var e = $.Event("keydown", { key: key, ctrlKey: ctrl }); $element.trigger(e); };
 
     $($element).trigger("focusin");
 
@@ -3028,7 +3028,7 @@ QUnit.test("T190814: dxCalendar - unable to navigate by keyboard from December 2
         focusStateEnabled: true
     }).dxCalendar("instance");
 
-    $(this.$element).trigger($.Event("keydown", { which: RIGHT_ARROW_KEY_CODE }));
+    $(this.$element).trigger($.Event("keydown", { key: RIGHT_ARROW_KEY_CODE }));
     assert.equal(calendar.option("currentDate").getMonth(), 0);
 });
 
