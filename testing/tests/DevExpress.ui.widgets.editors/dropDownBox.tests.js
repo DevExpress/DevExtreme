@@ -425,7 +425,7 @@ QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets includin
     }
 });
 
-QUnit.test("Dropdownbox popup should change height after updateHeight method call", function(assert) {
+QUnit.test("Dropdownbox popup should change height according to the content", function(assert) {
     var $content,
         instance = this.$element.dxDropDownBox({
             opened: true,
@@ -439,7 +439,6 @@ QUnit.test("Dropdownbox popup should change height after updateHeight method cal
         popupHeight = $popupContent.height();
 
     $("<div>").height(50).appendTo($content);
-    instance.updateHeight();
     assert.equal($popupContent.height(), popupHeight + 50, "popup height has been changed");
 });
 

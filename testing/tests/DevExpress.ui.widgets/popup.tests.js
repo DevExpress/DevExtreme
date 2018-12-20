@@ -565,7 +565,7 @@ QUnit.test("width/height", function(assert) {
     assert.equal($overlayContent.outerHeight(), 567);
 });
 
-QUnit.test("popup height can be changed according to the content after the updateHeight method call", function(assert) {
+QUnit.test("popup height can be changed according to the content if height = auto", function(assert) {
     var $content,
         popup = $("#popup").dxPopup({
             visible: true,
@@ -585,16 +585,78 @@ QUnit.test("popup height can be changed according to the content after the updat
         popupHeight = $popup.height();
 
     $("<div>").height(50).appendTo($content);
-    popup.updateHeight();
     assert.equal($popup.height(), popupHeight + 50, "popup height has been changed");
 
     $("<div>").height(450).appendTo($content);
-    popup.updateHeight();
     assert.equal($popup.height(), 400, "popup height has been changed, it is equal to the maxHeight");
 
     $content.empty();
-    popup.updateHeight();
     assert.equal($popup.height(), 50, "popup height has been changed, it is equal to the minHeight");
+});
+
+QUnit.test("popup height should support top and bottom toolbars if height = auto", function(assert) {
+    var $content,
+        popup = $("#popup").dxPopup({
+            visible: true,
+            height: "auto",
+            showTitle: true,
+            title: "Information",
+            toolbarItems: [{ shortcut: "cancel" }],
+            contentTemplate: function(e) {
+                $content = $("<div>").attr("id", "content");
+                return $content;
+            },
+            maxHeight: 300,
+            minHeight: 150
+        }).dxPopup("instance");
+
+    var $popup = popup.$content().parent(),
+        topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight(),
+        bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).innerHeight(),
+        popupContentHeight = $popup.find(toSelector(POPUP_CONTENT_CLASS)).eq(0).innerHeight();
+
+    assert.roughEqual($popup.innerHeight(), 150, 1, "popup has max height");
+    assert.roughEqual(popupContentHeight, 150 - topToolbarHeight - bottomToolbarHeight, 1, "popup has minimum content height");
+
+
+    $("<div>").height(300).appendTo($content);
+    popupContentHeight = $popup.find(toSelector(POPUP_CONTENT_CLASS)).eq(0).innerHeight();
+    assert.roughEqual($popup.innerHeight(), 300, 1, "popup has max height");
+    assert.roughEqual(popupContentHeight, 300 - topToolbarHeight - bottomToolbarHeight, 1, "popup has maximum content height");
+});
+
+QUnit.test("popup height should support any maxHeight and minHeight option values if height = auto", function(assert) {
+    var $content,
+        popup = $("#popup").dxPopup({
+            visible: true,
+            height: "auto",
+            showTitle: true,
+            title: "Information",
+            contentTemplate: function(e) {
+                $content = $("<div>").attr("id", "content");
+                return $content;
+            },
+            maxHeight: "90%",
+            minHeight: "50%"
+        }).dxPopup("instance");
+
+    var $popup = popup.$content().parent(),
+        windowHeight = $(window).innerHeight(),
+        $popupContent = popup.$content(),
+        topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight(),
+        popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
+
+    assert.roughEqual($popup.height(), windowHeight * 0.5, 1, "minimum popup height in percentages");
+
+    $("<div>").height(windowHeight).appendTo($content);
+    assert.roughEqual($popup.height(), windowHeight * 0.9, 1, "maximum popup height in percentages");
+
+    popup.option("maxHeight", "none");
+    assert.roughEqual($popup.height(), windowHeight + popupContentPadding + topToolbarHeight, 1, "popup maxHeight: none");
+
+    $content.empty();
+    popup.option("minHeight", "auto");
+    assert.roughEqual($popup.height(), $popup.find(toSelector(POPUP_TITLE_CLASS)).innerHeight() + popupContentPadding, 1, "popup minHeight: auto");
 });
 
 QUnit.test("fullScreen", function(assert) {

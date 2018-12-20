@@ -662,28 +662,68 @@ var Popup = Overlay.inherit({
     _setContentHeight: function() {
         (this.option("forceApplyBindings") || noop)();
 
-        if(this._disallowUpdateContentHeight()) {
-            return;
+        var nonContentHeight = this._getNonContentElementsHeight(),
+            content = this._$content.get(0),
+            cssStyles = {};
+
+        if(this._isHeightAuto()) {
+            var maxHeightValue = this._calculateLimitHeight(this._getOptionValue("maxHeight", content), nonContentHeight, "none"),
+                minHeightValue = this._calculateLimitHeight(this._getOptionValue("minHeight", content), nonContentHeight, 0);
+
+            if(minHeightValue !== undefined) {
+                cssStyles.minHeight = minHeightValue;
+            }
+
+            if(maxHeightValue !== undefined) {
+                cssStyles.maxHeight = maxHeightValue;
+            }
+        } else {
+            var contentHeight = content.getBoundingClientRect().height - (nonContentHeight);
+            cssStyles = { height: contentHeight < 0 ? 0 : contentHeight };
         }
 
-        var contentPaddings = this._$content.outerHeight() - this._$content.height(),
-            contentHeight = this._$content.get(0).getBoundingClientRect().height - contentPaddings;
-        if(this._$title && this._$title.is(":visible")) {
-            contentHeight -= this._$title.get(0).getBoundingClientRect().height || 0;
-        }
-        if(this._$bottom && this._$bottom.is(":visible")) {
-            contentHeight -= this._$bottom.get(0).getBoundingClientRect().height || 0;
-        }
-
-        this._$popupContent.css("height", contentHeight < 0 ? 0 : contentHeight);
+        this._$popupContent.css(cssStyles);
     },
 
-    _disallowUpdateContentHeight: function() {
-        var isHeightAuto = this._$content.get(0).style.height === "auto",
-            maxHeightSpecified = this._$content.css("maxHeight") !== "none",
-            minHeightSpecified = parseInt(this._$content.css("minHeight")) > 0;
+    _isHeightAuto: function() {
+        return this._$content.get(0).style.height === "auto";
+    },
 
-        return isHeightAuto && !(maxHeightSpecified || minHeightSpecified);
+    _calculateLimitHeight: function(value, heightToReduce, defaultValue) {
+        if(!value || value === "auto" || value === "none" || value === "inherit" || value === "initial") {
+            return defaultValue;
+        }
+
+        if(typeof value === "string") {
+            if(value.indexOf("px") > 0) {
+                value = parseInt(value.replace("px", ""));
+            } else if(value.indexOf("%") > 0) {
+                value = parseInt(value.replace("%", "")) * $(this._getContainer()).innerHeight() / 100;
+            }
+        }
+
+        if(typeof value === "number") {
+            var resultValue = value - heightToReduce;
+            return resultValue > 0 ? resultValue : 0;
+        }
+
+        return "calc(" + value + " - " + heightToReduce + "px)";
+    },
+
+    _getNonContentElementsHeight: function() {
+        var height = this._$content.outerHeight() - this._$content.height();
+
+        height += this._$popupContent.outerHeight() - this._$popupContent.height();
+
+        if(this._$title && this._$title.is(":visible")) {
+            height += (this._$title.get(0).getBoundingClientRect().height || 0);
+        }
+
+        if(this._$bottom && this._$bottom.is(":visible")) {
+            height += (this._$bottom.get(0).getBoundingClientRect().height || 0);
+        }
+
+        return height || 0;
     },
 
     _renderDimensions: function() {
@@ -788,15 +828,6 @@ var Popup = Overlay.inherit({
 
     overlayContent: function() {
         return this._$content;
-    },
-
-    /**
-    * @name dxPopupMethods.updateHeight
-    * @publicName updateHeight()
-    */
-    updateHeight: function() {
-        this._resetContentHeight();
-        this._setContentHeight();
     }
 });
 

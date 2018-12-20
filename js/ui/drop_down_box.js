@@ -341,14 +341,6 @@ var DropDownBox = DropDownEditor.inherit({
             default:
                 this.callBase(args);
         }
-    },
-
-    /**
-    * @name dxDropDownBoxMethods.updateHeight
-    * @publicName updateHeight()
-    */
-    updateHeight: function() {
-        this._popup.updateHeight();
     }
 }).include(DataExpressionMixin);
 
