@@ -1,5 +1,4 @@
-import { getPatternSetters, getRegExpInfo } from "../../localization/ldml/date.parser";
-import dateLocalization from "../../localization/date";
+import { getPatternSetters } from "../../localization/ldml/date.parser";
 import { extend } from "../../core/utils/extend";
 import { fitIntoRange } from "../../core/utils/math";
 import { noop } from "../../core/utils/common";
@@ -69,9 +68,8 @@ const getPatternGetter = (patternChar) => {
     return PATTERN_GETTERS[patternChar] || unsupportedCharGetter;
 };
 
-const renderDateParts = (text, format) => {
-    const regExpInfo = getRegExpInfo(format, dateLocalization),
-        result = regExpInfo.regexp.exec(text);
+const renderDateParts = (text, regExpInfo) => {
+    const result = regExpInfo.regexp.exec(text);
 
     let start = 0,
         end = 0,
