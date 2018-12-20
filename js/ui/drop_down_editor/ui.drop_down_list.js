@@ -567,13 +567,6 @@ var DropDownList = DropDownEditor.inherit({
         return devices.real().deviceType === "desktop";
     },
 
-    _getListKeyExpr: function() {
-        var valueExpr = this.option("valueExpr"),
-            isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== "this";
-
-        return isValueExprField ? valueExpr : null;
-    },
-
     _listConfig: function() {
         var options = {
             selectionMode: "single",
@@ -584,7 +577,7 @@ var DropDownList = DropDownEditor.inherit({
             onContentReady: this._listContentReadyHandler.bind(this),
             itemTemplate: this._getTemplateByOption("itemTemplate"),
             indicateLoading: false,
-            keyExpr: this._getListKeyExpr(),
+            keyExpr: this._getInternalCollectionKeyExpr(),
             groupTemplate: this.option("groupTemplate"),
             tabIndex: null,
             onItemClick: this._listItemClickAction.bind(this),
@@ -856,7 +849,7 @@ var DropDownList = DropDownEditor.inherit({
                 break;
             case "valueExpr":
                 this._renderValue();
-                this._setListOption("keyExpr", this._getListKeyExpr());
+                this._setListOption("keyExpr", this._getInternalCollectionKeyExpr());
                 break;
             case "displayExpr":
                 this._renderValue();

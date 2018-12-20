@@ -481,18 +481,20 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _postprocessRenderItem: function(args) {
-        if(this.option("selectionMode") === "none") {
-            return;
-        }
+        if(this.option("selectionMode") !== "none") {
+            var $itemElement = $(args.itemElement),
+                normalizedItemIndex = this._editStrategy.getNormalizedIndex($itemElement),
+                isItemSelected = this._isItemSelected(normalizedItemIndex);
 
-        var $itemElement = $(args.itemElement);
-
-        if(this._isItemSelected(this._editStrategy.getNormalizedIndex($itemElement))) {
-            $itemElement.addClass(this._selectedItemClass());
-            this._setAriaSelected($itemElement, "true");
-        } else {
-            this._setAriaSelected($itemElement, "false");
+            this._processSelectableItem($itemElement, isItemSelected);
         }
+    },
+
+    _processSelectableItem: function($itemElement, isSelected) {
+        var selectedItemClass = this._selectedItemClass();
+
+        isSelected ? $itemElement.addClass(selectedItemClass) : $itemElement.removeClass(selectedItemClass);
+        this._setAriaSelected($itemElement, String(isSelected));
     },
 
     _updateSelectedItems: function(args) {
@@ -550,8 +552,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         var $itemElement = this._editStrategy.getItemElement(normalizedIndex);
 
         if(indexExists(normalizedIndex)) {
-            $itemElement.removeClass(this._selectedItemClass());
-            this._setAriaSelected($itemElement, "false");
+            this._processSelectableItem($itemElement, false);
             eventsEngine.triggerHandler($itemElement, "stateChanged", false);
         }
     },
@@ -565,8 +566,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         var $itemElement = this._editStrategy.getItemElement(normalizedIndex);
 
         if(indexExists(normalizedIndex)) {
-            $itemElement.addClass(this._selectedItemClass());
-            this._setAriaSelected($itemElement, "true");
+            this._processSelectableItem($itemElement, true);
             eventsEngine.triggerHandler($itemElement, "stateChanged", true);
         }
     },
