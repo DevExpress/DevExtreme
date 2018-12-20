@@ -2,7 +2,7 @@
     display: inline-block;
     cursor: pointer;
     .user-select(none);
-    .user-drag(none);
+    user-drag: none;
 }
 
 .dx-switch-wrapper {
@@ -38,20 +38,20 @@
 }
 
 .dx-switch-inner {
-    .transform(~"translateX(-50%)");
+    transform: translateX(-50%);
 }
 
 .dx-switch-handle {
-    .transform(~"translateX(0%)");
+    transform: translateX(0%);
 }
 
 .dx-switch-on-value {
     .dx-switch-inner {
-        .transform(~"translateX(0%)");
+        transform: translateX(0%);
     }
 
     .dx-switch-handle {
-        .transform(~"translateX(-100%)");
+        transform: translateX(-100%);
     }
 }
 .dx-rtl {
@@ -60,16 +60,16 @@
     }
 
     .dx-switch-inner {
-        .transform(~"translateX(50%)");
+        transform: translateX(50%);
     }
 
     .dx-switch-handle {
-        .transform(~"translateX(-100%)");
+        transform: translateX(-100%);
     }
 
     &.dx-switch-on-value {
         .dx-switch-handle {
-            .transform(~"translateX(0%)");
+            transform: translateX(0%);
         }
     }
 }
