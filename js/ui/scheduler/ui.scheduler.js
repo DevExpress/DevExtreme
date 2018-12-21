@@ -2798,17 +2798,23 @@ var Scheduler = Widget.inherit({
                 startDateTimeZone = this.fire("getField", "startDateTimeZone", appointmentData),
                 exceptionByStartDate = this.fire("convertDateByTimezone", startDate, startDateTimeZone);
 
-            exceptions.forEach(function(item, i) {
-                exceptions[i] = item.replace(/\s/g, "");
-                exceptions[i] = dateSerialization.deserializeDate(exceptions[i]);
-                exceptions[i].setHours(exceptionByStartDate.getHours());
-                exceptions[i] = dateSerialization.serializeDate(exceptions[i], "yyyyMMddTHHmmss");
-            });
+            for(var i = 0; i < exceptions.length; i++) {
+                exceptions[i] = this._convertRecurrenceException(exceptions[i], exceptionByStartDate, startDateTimeZone);
+            }
 
             recurrenceException = exceptions.join();
         }
 
         return recurrenceException;
+    },
+
+    _convertRecurrenceException: function(exception, exceptionByStartDate, startDateTimeZone) {
+        exception = exception.replace(/\s/g, "");
+        exception = dateSerialization.deserializeDate(exception);
+        exception = this.fire("convertDateByTimezone", exception, startDateTimeZone);
+        exception.setHours(exceptionByStartDate.getHours());
+        exception = dateSerialization.serializeDate(exception, "yyyyMMddTHHmmss");
+        return exception;
     },
 
     recurrenceEditorVisibilityChanged: function(visible) {
