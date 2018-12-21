@@ -1394,7 +1394,7 @@ QUnit.test("Get button instance", function(assert) {
 });
 
 QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
-    ["option", "itemOption", "editor.option"].forEach(setOptionWay => {
+    ["option", "itemOption", "editor.option"].forEach(function(setOptionWay) {
         var form = $("#form").dxForm({
             items: [{
                 itemType: "button",
