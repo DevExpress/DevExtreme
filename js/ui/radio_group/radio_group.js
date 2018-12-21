@@ -1,6 +1,5 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
-import { noop } from "../../core/utils/common";
 import devices from "../../core/devices";
 import inkRipple from "../widget/utils.ink_ripple";
 import registerComponent from "../../core/component_registrator";
@@ -87,15 +86,6 @@ class RadioCollection extends CollectionWidget {
 }
 
 class RadioGroup extends Editor {
-    constructor(element, options) {
-        super(element, options);
-
-        this._activeStateUnit = `.${RADIO_BUTTON_CLASS}`;
-        this._feedbackHideTimeout = RADIO_FEEDBACK_HIDE_TIMEOUT;
-
-        this._renderFocusState = noop;
-    }
-
     _clean() {
         delete this._inkRipple;
         super._clean();
@@ -201,6 +191,8 @@ class RadioGroup extends Editor {
 
     _init() {
         super._init();
+        this._activeStateUnit = `.${RADIO_BUTTON_CLASS}`;
+        this._feedbackHideTimeout = RADIO_FEEDBACK_HIDE_TIMEOUT;
         this._initDataExpressions();
     }
 
@@ -283,6 +275,9 @@ class RadioGroup extends Editor {
         this._renderLayout();
         super._render();
         this._updateItemsSize();
+    }
+
+    _renderFocusState() {
     }
 
     _renderInkRipple() {
