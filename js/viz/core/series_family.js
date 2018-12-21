@@ -186,6 +186,7 @@ function adjustStackedSeriesValues() {
             var value = point.initialValue,
                 argument = point.argument.valueOf(),
                 stacks = (value >= 0) ? stackKeepers.positive : stackKeepers.negative,
+                isNotBarSeries = singleSeries.type !== "bar",
                 currentStack;
 
             if(negativesAsZeroes && value < 0) {
@@ -198,11 +199,11 @@ function adjustStackedSeriesValues() {
             currentStack = stacks[stackName];
 
             if(currentStack[argument]) {
-                if(singleSeries.type !== "bar") point.correctValue(currentStack[argument]);
+                if(isNotBarSeries) point.correctValue(currentStack[argument]);
                 currentStack[argument] += value;
             } else {
                 currentStack[argument] = value;
-                if(singleSeries.type !== "bar") point.resetCorrection();
+                if(isNotBarSeries) point.resetCorrection();
             }
             if(!point.hasValue()) {
                 var prevPoint = points[index - 1];
