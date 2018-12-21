@@ -259,7 +259,7 @@ class RadioGroup extends Editor {
                 this._setCollectionWidgetOption("dataSource");
                 break;
             case "valueExpr":
-                this._setCollectionWidgetOption("keyExpr", this._getInternalCollectionKeyExpr());
+                this._setCollectionWidgetOption("keyExpr", this._getCollectionKeyExpr());
                 break;
             case "value":
                 this._setCollectionWidgetOption("selectedItemKeys", [value]);
@@ -305,7 +305,7 @@ class RadioGroup extends Editor {
         const $radios = $("<div>").appendTo(this.$element());
 
         this._radios = this._createComponent($radios, RadioCollection, {
-            keyExpr: this._getInternalCollectionKeyExpr(),
+            keyExpr: this._getCollectionKeyExpr(),
             selectionMode: "single",
             selectedItemKeys: [this.option("value")],
             dataSource: this._dataSource,

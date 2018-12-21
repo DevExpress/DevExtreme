@@ -217,7 +217,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
         this._setCollectionWidgetOption("itemTemplate", this._getTemplateByOption("itemTemplate"));
     },
 
-    _getInternalCollectionKeyExpr: function() {
+    _getCollectionKeyExpr: function() {
         var valueExpr = this.option("valueExpr"),
             isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== "this";
 

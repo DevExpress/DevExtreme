@@ -577,7 +577,7 @@ var DropDownList = DropDownEditor.inherit({
             onContentReady: this._listContentReadyHandler.bind(this),
             itemTemplate: this._getTemplateByOption("itemTemplate"),
             indicateLoading: false,
-            keyExpr: this._getInternalCollectionKeyExpr(),
+            keyExpr: this._getCollectionKeyExpr(),
             groupTemplate: this.option("groupTemplate"),
             tabIndex: null,
             onItemClick: this._listItemClickAction.bind(this),
@@ -849,7 +849,7 @@ var DropDownList = DropDownEditor.inherit({
                 break;
             case "valueExpr":
                 this._renderValue();
-                this._setListOption("keyExpr", this._getInternalCollectionKeyExpr());
+                this._setListOption("keyExpr", this._getCollectionKeyExpr());
                 break;
             case "displayExpr":
                 this._renderValue();

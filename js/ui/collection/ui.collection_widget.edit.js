@@ -491,9 +491,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _processSelectableItem: function($itemElement, isSelected) {
-        var selectedItemClass = this._selectedItemClass();
-
-        isSelected ? $itemElement.addClass(selectedItemClass) : $itemElement.removeClass(selectedItemClass);
+        $itemElement.toggleClass(this._selectedItemClass(), isSelected);
         this._setAriaSelected($itemElement, String(isSelected));
     },
 
