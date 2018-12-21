@@ -11060,6 +11060,35 @@ QUnit.test("highlighting works, if twoWayBinding is enabled and watchMethod is s
     assert.ok($(dataGrid.getCellElement(0, 2)).hasClass(CELL_UPDATED_CLASS));
 });
 
+// T700770
+QUnit.test("highlighting is skipped when clicking by expand button", function(assert) {
+    // arrange
+    var dataSource = [
+            { id: 1, field1: "test1" },
+            { id: 2, field1: "test2" },
+            { id: 3, field1: "test3" },
+            { id: 4, field1: "test4" }
+        ],
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: dataSource,
+            highlightChanges: true,
+            repaintChangesOnly: true,
+            masterDetail: {
+                enabled: true,
+            }
+        });
+
+    this.clock.tick();
+    var expandColumn = $(dataGrid.element()).find(".dx-datagrid-rowsview .dx-command-expand").first();
+    assert.ok(expandColumn.length);
+    expandColumn.trigger("dxclick");
+    this.clock.tick();
+
+    // assert
+    assert.notOk($(dataGrid.getCellElement(0, 0)).hasClass(CELL_UPDATED_CLASS));
+});
+
 QUnit.test("Refresh with changesOnly and cellTemplate", function(assert) {
     // arrange
     var $cellElements,
