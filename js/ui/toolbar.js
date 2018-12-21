@@ -80,6 +80,12 @@ var Toolbar = ToolbarBase.inherit({
             */
 
             /**
+             * @name dxToolbarItemTemplate.cssClass
+             * @type string
+             * @default undefined
+             */
+
+            /**
             * @name dxToolbarOptions.renderAs
             * @type Enums.ToolbarRenderMode
             * @default 'topToolbar'
