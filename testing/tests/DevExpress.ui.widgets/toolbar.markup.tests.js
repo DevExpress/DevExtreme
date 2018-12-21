@@ -141,6 +141,25 @@ QUnit.module("render", {
             assert.equal(element.find("." + TOOLBAR_CLASS + "-" + this).text(), this);
         });
     });
+
+    test("add a custom CSS class to item", (assert) => {
+        this.element.dxToolbar({
+            items: [
+                { location: "before", cssClass: "test-before" },
+                { location: "after", cssClass: "test-after" },
+                { location: "center", cssClass: "test-center" }
+            ]
+        });
+
+        const findItem = location => {
+            const selector = `.${TOOLBAR_CLASS + "-" + location} > .${TOOLBAR_ITEM_CLASS}.test-${location}`;
+            return this.element.find(selector);
+        };
+
+        $.each(["before", "after", "center"], (_, value) => {
+            assert.equal(findItem(value).length, 1, `item in the ${value} container`);
+        });
+    });
 });
 
 QUnit.test("elementAttr should be rendered on button items", function(assert) {
@@ -170,7 +189,6 @@ QUnit.module("option change handlers", {
     });
 });
 
-
 QUnit.module("regressions", {
     beforeEach: () => {
         this.element = $("#toolbar").dxToolbar({});
@@ -189,7 +207,6 @@ QUnit.module("regressions", {
     });
 });
 
-
 QUnit.module("aria accessibility", () => {
     test("aria role", (assert) => {
         let $element = $("#toolbar").dxToolbar();
@@ -197,7 +214,6 @@ QUnit.module("aria accessibility", () => {
         assert.equal($element.attr("role"), "toolbar", "role is correct");
     });
 });
-
 
 QUnit.module("item groups", {
     beforeEach: () => {
@@ -253,7 +269,6 @@ QUnit.module("item groups", {
         assert.equal($after.find("." + TOOLBAR_ITEM_CLASS).length, 2, "2 items are in after");
     });
 });
-
 
 QUnit.module("default template", () => {
     test("template should be rendered correctly with text", (assert) => {
