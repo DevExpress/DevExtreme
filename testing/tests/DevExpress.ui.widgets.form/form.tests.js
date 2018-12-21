@@ -6,7 +6,8 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     domUtils = require("core/utils/dom"),
     internals = require("ui/form/ui.form").__internals,
-    themes = require("ui/themes");
+    themes = require("ui/themes"),
+    device = require("core/devices").real();
 
 require("ui/text_area");
 
@@ -1403,8 +1404,10 @@ QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
             }]
         }).dxForm("instance");
 
-        $("#form").find(".dx-button").focus();
-        assert.ok($("#form").find(".dx-button").is(":focus"), "initial focus");
+        if(device.deviceType === "desktop") {
+            $("#form").find(".dx-button").focus();
+            assert.ok($("#form").find(".dx-button").is(":focus"), "initial focus");
+        }
 
         switch(setOptionWay) {
             case "option":
@@ -1421,7 +1424,9 @@ QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
         }
 
         assert.strictEqual(form.getButton("button1").option("icon"), "icon2");
-        assert.ok($("#form").find(".dx-button").is(":focus") === (setOptionWay !== "itemOption"), "final focus");
+        if(device.deviceType === "desktop") {
+            assert.ok($("#form").find(".dx-button").is(":focus") === (setOptionWay !== "itemOption"), "final focus");
+        }
     });
 });
 
