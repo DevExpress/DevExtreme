@@ -662,13 +662,14 @@ var Popup = Overlay.inherit({
     _setContentHeight: function() {
         (this.option("forceApplyBindings") || noop)();
 
-        var nonContentHeight = this._getNonContentElementsHeight(),
+        var toolbarsAndPaddingsHeight = this._getToolbarsAndPaddingsHeight(),
             content = this._$content.get(0),
+            $container = $(this._getContainer()),
             cssStyles = {};
 
-        if(this._isHeightAuto()) {
-            var maxHeightValue = this._calculateLimitHeight(this._getOptionValue("maxHeight", content), nonContentHeight, "none"),
-                minHeightValue = this._calculateLimitHeight(this._getOptionValue("minHeight", content), nonContentHeight, 0);
+        if(this._isAutoHeight()) {
+            var maxHeightValue = domUtils.calculateMaxHeight(this._getOptionValue("maxHeight", content), $container, -toolbarsAndPaddingsHeight),
+                minHeightValue = domUtils.calculateMinHeight(this._getOptionValue("minHeight", content), $container, -toolbarsAndPaddingsHeight);
 
             if(minHeightValue !== undefined) {
                 cssStyles.minHeight = minHeightValue;
@@ -678,52 +679,25 @@ var Popup = Overlay.inherit({
                 cssStyles.maxHeight = maxHeightValue;
             }
         } else {
-            var contentHeight = content.getBoundingClientRect().height - (nonContentHeight);
+            var contentHeight = content.getBoundingClientRect().height - toolbarsAndPaddingsHeight;
             cssStyles = { height: contentHeight < 0 ? 0 : contentHeight };
         }
 
         this._$popupContent.css(cssStyles);
     },
 
-    _isHeightAuto: function() {
+    _isAutoHeight: function() {
         return this._$content.get(0).style.height === "auto";
     },
 
-    _calculateLimitHeight: function(value, heightToReduce, defaultValue) {
-        if(!value || value === "auto" || value === "none" || value === "inherit" || value === "initial") {
-            return defaultValue;
-        }
-
-        if(typeof value === "string") {
-            if(value.indexOf("px") > 0) {
-                value = parseInt(value.replace("px", ""));
-            } else if(value.indexOf("%") > 0) {
-                value = parseInt(value.replace("%", "")) * $(this._getContainer()).innerHeight() / 100;
-            }
-        }
-
-        if(typeof value === "number") {
-            var resultValue = value - heightToReduce;
-            return resultValue > 0 ? resultValue : 0;
-        }
-
-        return "calc(" + value + " - " + heightToReduce + "px)";
+    _getToolbarsAndPaddingsHeight: function() {
+        return domUtils.getPaddingsHeight(this._$content)
+            + domUtils.getPaddingsHeight(this._$popupContent)
+            + this._getToolbarsHeight();
     },
 
-    _getNonContentElementsHeight: function() {
-        var height = this._$content.outerHeight() - this._$content.height();
-
-        height += this._$popupContent.outerHeight() - this._$popupContent.height();
-
-        if(this._$title && this._$title.is(":visible")) {
-            height += (this._$title.get(0).getBoundingClientRect().height || 0);
-        }
-
-        if(this._$bottom && this._$bottom.is(":visible")) {
-            height += (this._$bottom.get(0).getBoundingClientRect().height || 0);
-        }
-
-        return height || 0;
+    _getToolbarsHeight: function() {
+        return domUtils.getVisibleHeight(this._$title) + domUtils.getVisibleHeight(this._$bottom);
     },
 
     _renderDimensions: function() {

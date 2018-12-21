@@ -1,12 +1,12 @@
-var $ = require("jquery"),
-    renderer = require("core/renderer"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    fx = require("animation/fx"),
-    DropDownBox = require("ui/drop_down_box"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config");
+import $ from "jquery";
+import renderer from "core/renderer";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import fx from "animation/fx";
+import DropDownBox from "ui/drop_down_box";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
 
-require("common.css!");
+import "common.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -426,20 +426,20 @@ QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets includin
 });
 
 QUnit.test("Dropdownbox popup should change height according to the content", function(assert) {
-    var $content,
+    const $content = $("<div>"),
         instance = this.$element.dxDropDownBox({
             opened: true,
-            contentTemplate: function(e) {
-                $content = $("<div>").attr("id", "content");
+            contentTemplate: function() {
+                $content.attr("id", "content");
                 return $content;
             }
         }).dxDropDownBox("instance");
 
-    var $popupContent = $(instance.content()).parent("." + OVERLAY_CONTENT_CLASS),
+    const $popupContent = $(instance.content()).parent("." + OVERLAY_CONTENT_CLASS),
         popupHeight = $popupContent.height();
 
     $("<div>").height(50).appendTo($content);
-    assert.equal($popupContent.height(), popupHeight + 50, "popup height has been changed");
+    assert.strictEqual($popupContent.height(), popupHeight + 50, "popup height has been changed");
 });
 
 QUnit.module("keyboard navigation", moduleConfig);
