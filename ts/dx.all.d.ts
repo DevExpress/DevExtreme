@@ -4316,6 +4316,8 @@ declare module DevExpress.ui {
     }
     /** This section lists the data source fields that are used in a default template for toolbar items. */
     export interface dxToolbarItemTemplate extends CollectionWidgetItemTemplate {
+        /** Specifies a CSS class to be applied to the toolbar's item. */
+        cssClass?: string;
         /** Specifies when to display an item in the toolbar's overflow menu. */
         locateInMenu?: 'always' | 'auto' | 'never';
         /** Specifies a location for the item on the toolbar. */

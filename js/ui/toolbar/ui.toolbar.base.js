@@ -311,7 +311,8 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
 
         itemElement
             .toggleClass(this._buttonClass(), !itemHasText)
-            .toggleClass(TOOLBAR_LABEL_CLASS, itemHasText);
+            .toggleClass(TOOLBAR_LABEL_CLASS, itemHasText)
+            .addClass(item.cssClass);
 
         return itemElement;
     },
