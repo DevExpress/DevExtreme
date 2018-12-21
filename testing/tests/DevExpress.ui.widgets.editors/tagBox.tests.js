@@ -1,20 +1,20 @@
-var $ = require("jquery"),
-    TagBox = require("ui/tag_box"),
-    devices = require("core/devices"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store"),
-    messageLocalization = require("localization/message"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    fx = require("animation/fx"),
-    browser = require("core/utils/browser"),
-    dataQuery = require("data/query"),
-    isRenderer = require("core/utils/type").isRenderer,
-    errors = require("core/errors"),
-    config = require("core/config");
+import $ from "jquery";
+import { DataSource } from "data/data_source/data_source";
+import { isRenderer } from "core/utils/type";
+import browser from "core/utils/browser";
+import config from "core/config";
+import dataQuery from "data/query";
+import devices from "core/devices";
+import errors from "core/errors";
+import fx from "animation/fx";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import messageLocalization from "localization/message";
+import pointerMock from "../../helpers/pointerMock.js";
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
+import TagBox from "ui/tag_box";
 
-require("common.css!");
+import "common.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -4832,13 +4832,13 @@ QUnit.module("regression", {
     }
 });
 
-QUnit.test("Selection refreshing process should wait for the items data will be loaded from the data source (T673636)", function(assert) {
-    var clock = sinon.useFakeTimers(),
+QUnit.test("Selection refreshing process should wait for the items data will be loaded from the data source (T673636)", assert => {
+    const clock = sinon.useFakeTimers(),
         tagBox = $("#tagBox").dxTagBox({
             valueExpr: "id",
             dataSource: {
                 load: () => {
-                    var d = $.Deferred();
+                    const d = $.Deferred();
 
                     setTimeout(() => d.resolve([{ id: 1 }, { id: 2 }]), 0);
 
