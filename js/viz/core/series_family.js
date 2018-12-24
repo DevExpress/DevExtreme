@@ -62,7 +62,7 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
         barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
 
     series.forEach(function(s, i) {
-        var stackName = s.getStackName() || s.getGroupName() || i.toString(),
+        var stackName = s.getStackName() || s.getBarOverlapGroup() || i.toString(),
             argument;
 
         for(argument in s.pointsByArgument) {
@@ -174,7 +174,7 @@ function adjustStackedSeriesValues() {
         lastSeriesInStack = {};
 
     series.forEach(function(singleSeries) {
-        var stackName = singleSeries.getStackName() || singleSeries.getGroupName(),
+        var stackName = singleSeries.getStackName() || singleSeries.getBarOverlapGroup(),
             hole = false;
 
         singleSeries._prevSeries = lastSeriesInStack[stackName];
@@ -237,7 +237,7 @@ function adjustStackedSeriesValues() {
     series.forEach(function(singleSeries) {
         singleSeries.getPoints().forEach(function(point) {
             var argument = point.argument.valueOf(),
-                stackName = singleSeries.getStackName() || singleSeries.getGroupName(),
+                stackName = singleSeries.getStackName() || singleSeries.getBarOverlapGroup(),
                 absTotal = getAbsStackSumByArg(stackKeepers, stackName, argument),
                 total = getStackSumByArg(stackKeepers, stackName, argument);
 

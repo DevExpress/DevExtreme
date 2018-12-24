@@ -1178,8 +1178,8 @@ Series.prototype = {
         return this._stackName;
     },
 
-    getGroupName: function() {
-        return this._options.group;
+    getBarOverlapGroup: function() {
+        return this._options.barOverlapGroup;
     },
 
     getPointByCoord: function(x, y) {

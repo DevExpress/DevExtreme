@@ -868,15 +868,15 @@ QUnit.test("Set three series, all of them in one group", function(assert) {
         mixedPoints3 = pointsForStacking.mixedPoints3(),
         series1 = createSeries({
             points: mixedPoints1,
-            group: "first"
+            barOverlapGroup: "first"
         }),
         series2 = createSeries({
             points: mixedPoints2,
-            group: "first"
+            barOverlapGroup: "first"
         }),
         series3 = createSeries({
             points: mixedPoints3,
-            group: "first"
+            barOverlapGroup: "first"
         }),
         series = [series1, series2, series3],
         expectedWidth = 70,
@@ -900,15 +900,15 @@ QUnit.test("Set three series, tw0 of them in one group, and last in another grou
         mixedPoints3 = pointsForStacking.mixedPoints3(),
         series1 = createSeries({
             points: mixedPoints1,
-            group: "g1"
+            barOverlapGroup: "g1"
         }),
         series2 = createSeries({
             points: mixedPoints2,
-            group: "g1"
+            barOverlapGroup: "g1"
         }),
         series3 = createSeries({
             points: mixedPoints3,
-            group: "g2"
+            barOverlapGroup: "g2"
         }),
         series = [series1, series2, series3];
 
@@ -923,22 +923,22 @@ QUnit.test("Set three series, tw0 of them in one group, and last in another grou
     checkStackedPoints(assert, mixedPoints3);
 });
 
-QUnit.test("Set three series, tw0 of them in one group, and last in another group, and one series have custom barWidth", function(assert) {
+QUnit.test("Set three series, two of them in one group, and last in another group, and one series have custom barWidth", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints3(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
         series1 = createSeries({
             points: mixedPoints1,
-            group: "g1",
+            barOverlapGroup: "g1",
             barWidth: 10
         }),
         series2 = createSeries({
             points: mixedPoints2,
-            group: "g1"
+            barOverlapGroup: "g1"
         }),
         series3 = createSeries({
             points: mixedPoints3,
-            group: "g2"
+            barOverlapGroup: "g2"
         }),
         series = [series1, series2, series3];
 

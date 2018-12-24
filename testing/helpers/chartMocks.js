@@ -536,8 +536,8 @@ export const MockSeries = function MockSeries(options) {
         getStackName: function() {
             return options.stack;
         },
-        getGroupName: function() {
-            return options.group;
+        getBarOverlapGroup: function() {
+            return options.barOverlapGroup;
         },
         isFullStackedSeries: function() {
             return this.type && this.type.indexOf("fullstacked") !== -1;
