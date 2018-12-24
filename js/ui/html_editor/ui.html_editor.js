@@ -112,6 +112,7 @@ const HtmlEditor = Editor.inherit({
             /**
             * @name dxHtmlEditorToolbarItem.location
             * @default "before"
+            * @inheritdoc
             */
 
             /**
