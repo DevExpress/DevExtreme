@@ -613,15 +613,15 @@ var BaseRenderingStrategy = Class.inherit({
         if(coordinates.allDay) {
             var dateTableOffset = this.instance.fire("getTimePanelWidth");
 
-            var convertedSizes = this.convertToPercentAllDay(width, appointmentHeight, dateTableOffset);
-            var convertedPositions = this.convertToPercentAllDay(left - dateTableOffset, top, dateTableOffset);
+            var convertedSizes = this.convertToPercents(width, dateTableOffset);
+            var convertedPositions = this.convertToPercents(left - dateTableOffset, dateTableOffset);
+            var leftOffset = dateTableOffset - convertedPositions.x;
 
-            var a = dateTableOffset - convertedPositions.x;
             return {
                 height: appointmentHeight,
                 width: "calc(" + convertedSizes.x + "% - " + convertedSizes.x + "px)",
                 top: top,
-                left: "calc(" + convertedPositions.x + "% + " + a + "px)",
+                left: "calc(" + convertedPositions.x + "% + " + leftOffset + "px)",
                 empty: this._isAppointmentEmpty(height, width)
             };
         } else {
@@ -635,7 +635,7 @@ var BaseRenderingStrategy = Class.inherit({
         }
     },
 
-    convertToPercentAllDay: function(x, y, offset) {
+    convertToPercents: function(x, offset) {
         return {
             x: x * 100 / (this.instance.fire("getDateTableWidth") - offset)
         };
