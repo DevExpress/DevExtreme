@@ -611,7 +611,7 @@ var BaseRenderingStrategy = Class.inherit({
         }
 
         if(coordinates.allDay) {
-            var dateTableOffset = this.instance.fire("getWorkSpaceDateTableOffset");
+            var dateTableOffset = this.instance.fire("getTimePanelWidth");
 
             var convertedSizes = this.convertToPercentAllDay(width, appointmentHeight, dateTableOffset);
             var convertedPositions = this.convertToPercentAllDay(left - dateTableOffset, top, dateTableOffset);

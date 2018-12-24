@@ -331,6 +331,10 @@ var subscribes = {
         return this._workSpace.getDateTableWidth();
     },
 
+    getTimePanelWidth: function() {
+        return this._workSpace.getTimePanelWidth();
+    },
+
     correctAppointmentCoordinates: function(options) {
         var isAllDay = options.allDay,
             containerSign = options.isFixedContainer ? -1 : 1;

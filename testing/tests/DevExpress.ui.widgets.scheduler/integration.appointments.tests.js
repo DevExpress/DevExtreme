@@ -921,7 +921,7 @@ QUnit.test("Two vertical neighbor appointments should be placed correctly", func
 
     assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 100, 2.001, "Left position is OK");
-    assert.roughEqual(translator.locate($allDayAppts.eq(0)).left, 100, 2.001, "Left position is OK");
+    assert.roughEqual($allDayAppts.eq(0).position().left, 100, 2.001, "Left position is OK");
 
     assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - appointmentOffset, 1.001, "Width is OK");
     assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - appointmentOffset, 1.001, "Width is OK");
