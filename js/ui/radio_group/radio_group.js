@@ -1,5 +1,6 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
+import { isDefined } from "../../core/utils/type";
 import devices from "../../core/devices";
 import inkRipple from "../widget/utils.ink_ripple";
 import registerComponent from "../../core/component_registrator";
@@ -254,7 +255,7 @@ class RadioGroup extends Editor {
                 this._setCollectionWidgetOption("keyExpr", this._getCollectionKeyExpr());
                 break;
             case "value":
-                this._setCollectionWidgetOption("selectedItemKeys", [value]);
+                this._setCollectionWidgetOption("selectedItemKeys", isDefined(value) ? [value] : []);
                 this._setSubmitValue(value);
                 super._optionChanged(args);
                 break;
