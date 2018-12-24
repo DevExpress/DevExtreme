@@ -547,7 +547,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
             $cell.replaceWith($newCell);
 
-            if(highlightChanges) {
+            if(highlightChanges && !$newCell.hasClass("dx-command-expand")) {
                 $newCell.addClass(cellUpdatedClass);
             }
         });
