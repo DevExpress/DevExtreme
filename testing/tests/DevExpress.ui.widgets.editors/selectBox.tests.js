@@ -2152,6 +2152,31 @@ QUnit.test("search timer should not be cleared when the widget is opening", func
     assert.equal($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, "filter was cleared");
 });
 
+QUnit.test("Custom value should be selected in the list", function(assert) {
+    var ds = new DataSource({
+            store: ["1", "2", "3"]
+        }),
+        $selectBox = $("#selectBox").dxSelectBox({
+            dataSource: ds,
+            acceptCustomValue: true,
+            onCustomItemCreating: function(e) {
+                e.customItem = e.text;
+                ds.store().insert(e.customItem);
+            },
+            searchEnabled: true
+        }),
+        selectBox = $selectBox.dxSelectBox("instance"),
+        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
+        kb = keyboardMock($input);
+
+    kb.type("Custom value").change();
+    selectBox.open();
+
+    var list = $(selectBox.content()).find(".dx-list").dxList("instance");
+    assert.deepEqual(list.option("items"), ["1", "2", "3", "Custom value"], "list items are correct");
+    assert.deepEqual(list.option("selectedItems"), ["Custom value"], "selected item is correct");
+});
+
 QUnit.test("Custom value should be selected in list if items were modified on custom item creation", function(assert) {
     var items = [1, 2, 3],
         $selectBox = $("#selectBox").dxSelectBox({
