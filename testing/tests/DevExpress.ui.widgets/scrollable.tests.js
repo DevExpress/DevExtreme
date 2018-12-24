@@ -198,6 +198,20 @@ QUnit.test("init option 'rtl' is true", function(assert) {
     assert.ok(!$element.hasClass(RTL_CLASS));
 });
 
+QUnit.test("rtlEnabled scrolls to very right position when a width was changing via API", function(assert) {
+    var $scrollable = $("#scrollable").css("border", "1px solid red").dxScrollable({
+        direction: "horizontal",
+        rtlEnabled: true,
+        useNative: true
+    });
+
+    var scrollable = $scrollable.dxScrollable("instance");
+    scrollable.option("width", 50);
+
+    var veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    assert.equal(scrollable.scrollLeft(), veryRightPosition, "scrolled to very right position");
+});
+
 
 QUnit.module("actions", moduleConfig);
 
