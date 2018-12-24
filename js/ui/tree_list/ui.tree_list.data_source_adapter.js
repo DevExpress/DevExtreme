@@ -458,8 +458,6 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 if(index >= 0) {
                     parentNode.children.splice(index, 1);
 
-                    // this._isChildrenLoaded[parentNode.key] = true;
-
                     if(!parentNode.children.length) {
                         this._setHasItems(parentNode, false);
                     }
