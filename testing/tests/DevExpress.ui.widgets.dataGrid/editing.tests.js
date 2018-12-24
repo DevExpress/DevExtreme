@@ -11105,6 +11105,7 @@ QUnit.test("Change position of the inserted row when virtual scrolling", functio
 
     // arrange
     this.rowsView.scrollTo({ y: 3500 });
+    this.clock.tick();
 
     // assert
     items = this.dataController.items();
@@ -11113,6 +11114,7 @@ QUnit.test("Change position of the inserted row when virtual scrolling", functio
 
     // act
     this.addRow();
+    this.clock.tick();
 
     // assert
     items = this.dataController.items();
@@ -11121,6 +11123,7 @@ QUnit.test("Change position of the inserted row when virtual scrolling", functio
 
     // act
     this.rowsView.scrollTo({ y: 0 });
+    this.clock.tick();
 
     // assert
     items = this.dataController.items();
