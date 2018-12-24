@@ -425,15 +425,12 @@ QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets includin
     }
 });
 
-QUnit.test("Dropdownbox popup should change height according to the content", function(assert) {
-    const $content = $("<div>"),
-        instance = this.$element.dxDropDownBox({
+QUnit.test("Dropdownbox popup should change height according to the content", assert => {
+    const $content = $("<div>").attr("id", "content"),
+        instance = new DropDownBox($("#dropDownBox"), {
             opened: true,
-            contentTemplate: function() {
-                $content.attr("id", "content");
-                return $content;
-            }
-        }).dxDropDownBox("instance");
+            contentTemplate: () => $content
+        });
 
     const $popupContent = $(instance.content()).parent("." + OVERLAY_CONTENT_CLASS),
         popupHeight = $popupContent.height();

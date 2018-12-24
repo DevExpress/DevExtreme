@@ -178,27 +178,37 @@ QUnit.module("style utils", {
 });
 
 QUnit.test("check calculateMaxHeight", function(assert) {
-    assert.strictEqual(domUtils.calculateMaxHeight(300, null, 0), 300, "simple");
-    assert.strictEqual(domUtils.calculateMaxHeight(300, null, -100), 200, "with offset");
-    assert.strictEqual(domUtils.calculateMaxHeight("300", null, -100), 200, "string value");
-    assert.strictEqual(domUtils.calculateMaxHeight("300px", null, -100), 200, "string value in px");
+    const checkFunc = ({ value, container, offset }, expected) => {
+        assert.strictEqual(domUtils.calculateMaxHeight(value, container, offset), expected);
+    };
+
+    checkFunc({ value: 300, container: null, offset: 0 }, 300);
+    checkFunc({ value: 300, container: null, offset: -100 }, 200);
+    checkFunc({ value: "300", container: null, offset: -100 }, 200);
+    checkFunc({ value: "300px", container: null, offset: -100 }, 200);
+    checkFunc({ value: "100mm", container: null, offset: -50 }, "calc(100mm - 50px)");
+    checkFunc({ value: "100pt", container: null, offset: -50 }, "calc(100pt - 50px)");
+    checkFunc({ value: "auto", container: null, offset: -50 }, "none");
+    checkFunc({ value: null, container: null, offset: -50 }, "none");
+
     assert.roughEqual(domUtils.calculateMaxHeight("50%", window, -20), windowHeight / 2 - 20, 1, "string value in percent");
-    assert.strictEqual(domUtils.calculateMaxHeight("100mm", null, -50), "calc(100mm - 50px)", "value in mm");
-    assert.strictEqual(domUtils.calculateMaxHeight("100pt", null, -50), "calc(100pt - 50px)", "value in pt");
-    assert.strictEqual(domUtils.calculateMaxHeight("auto", null, -50), "none", "'auto' value should be normalized to default value");
-    assert.strictEqual(domUtils.calculateMaxHeight(null, null, -50), "none", "default value");
 });
 
 QUnit.test("check calculateMinHeight", function(assert) {
-    assert.strictEqual(domUtils.calculateMinHeight(300, null, 0), 300, "simple");
-    assert.strictEqual(domUtils.calculateMinHeight(300, null, -100), 200, "with offset");
-    assert.strictEqual(domUtils.calculateMinHeight("300", null, -100), 200, "string value");
-    assert.strictEqual(domUtils.calculateMinHeight("300px", null, -100), 200, "string value in px");
+    const checkFunc = ({ value, container, offset }, expected) => {
+        assert.strictEqual(domUtils.calculateMinHeight(value, container, offset), expected);
+    };
+
+    checkFunc({ value: 300, container: null, offset: 0 }, 300);
+    checkFunc({ value: 300, container: null, offset: -100 }, 200);
+    checkFunc({ value: "300", container: null, offset: -100 }, 200);
+    checkFunc({ value: "300px", container: null, offset: -100 }, 200);
+    checkFunc({ value: "100mm", container: null, offset: -50 }, "calc(100mm - 50px)");
+    checkFunc({ value: "100pt", container: null, offset: -50 }, "calc(100pt - 50px)");
+    checkFunc({ value: "auto", container: null, offset: -50 }, 0);
+    checkFunc({ value: null, container: null, offset: -50 }, 0);
+
     assert.roughEqual(domUtils.calculateMinHeight("50%", window, -20), windowHeight / 2 - 20, 1, "string value in percent");
-    assert.strictEqual(domUtils.calculateMinHeight("100mm", null, -50), "calc(100mm - 50px)", "value in mm");
-    assert.strictEqual(domUtils.calculateMaxHeight("100pt", null, -50), "calc(100pt - 50px)", "value in pt");
-    assert.strictEqual(domUtils.calculateMinHeight("auto", null, -50), 0, "'auto' value should be normalized to default value");
-    assert.strictEqual(domUtils.calculateMinHeight(null, null, -50), 0, "default value");
 });
 
 QUnit.test("check getPaddingsHeight", function(assert) {
