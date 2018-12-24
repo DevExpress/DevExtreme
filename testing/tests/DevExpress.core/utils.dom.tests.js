@@ -202,7 +202,6 @@ QUnit.test("check calculateMinHeight", function(assert) {
 });
 
 QUnit.test("check getPaddingsHeight", function(assert) {
-    debugger;
     assert.strictEqual(domUtils.getPaddingsHeight(null), 0, "no element");
     assert.strictEqual(domUtils.getPaddingsHeight(this.$container), 20, "container paddings");
     assert.strictEqual(domUtils.getPaddingsHeight(this.$container, true), 30, "include margins");
