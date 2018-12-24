@@ -237,7 +237,6 @@ class ToolbarModule extends BaseModule {
 
     _renderToolbar() {
         const container = this.options.container || this._getContainer();
-        const toolbarItems = this._prepareToolbarItems();
         const $toolbar = $("<div>")
             .addClass(TOOLBAR_CLASS)
             .appendTo(container);
@@ -248,7 +247,24 @@ class ToolbarModule extends BaseModule {
             e.preventDefault();
         });
 
-        this.toolbarInstance = this._editorInstance._createComponent($toolbar, Toolbar, { dataSource: toolbarItems });
+        this.toolbarInstance = this._editorInstance._createComponent($toolbar, Toolbar, this._prepareToolbarConfig());
+
+        this._editorInstance.on("optionChanged", (args) => {
+            if(args.name === "readOnly" || args.name === "disabled") {
+                this.toolbarInstance.option("disabled", this._isInteractionDisabled());
+            }
+        });
+    }
+
+    _prepareToolbarConfig() {
+        return {
+            dataSource: this._prepareToolbarItems(),
+            disabled: this._isInteractionDisabled()
+        };
+    }
+
+    _isInteractionDisabled() {
+        return this._editorInstance.option("readOnly") || this._editorInstance.option("disabled");
     }
 
     clean() {
