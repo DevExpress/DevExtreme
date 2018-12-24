@@ -610,12 +610,34 @@ var BaseRenderingStrategy = Class.inherit({
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
 
+        if(coordinates.allDay) {
+            var dateTableOffset = this.instance.fire("getWorkSpaceDateTableOffset");
+
+            var convertedSizes = this.convertToPercentAllDay(width, appointmentHeight, dateTableOffset);
+            var convertedPositions = this.convertToPercentAllDay(left - dateTableOffset, top, dateTableOffset);
+
+            var a = dateTableOffset - convertedPositions.x;
+            return {
+                height: appointmentHeight,
+                width: "calc(" + convertedSizes.x + "% - " + convertedSizes.x + "px)",
+                top: top,
+                left: "calc(" + convertedPositions.x + "% + " + a + "px)",
+                empty: this._isAppointmentEmpty(height, width)
+            };
+        } else {
+            return {
+                height: appointmentHeight,
+                width: width,
+                top: top,
+                left: left,
+                empty: this._isAppointmentEmpty(height, width)
+            };
+        }
+    },
+
+    convertToPercentAllDay: function(x, y, offset) {
         return {
-            height: appointmentHeight,
-            width: width,
-            top: top,
-            left: left,
-            empty: this._isAppointmentEmpty(height, width)
+            x: x * 100 / (this.instance.fire("getDateTableWidth") - offset)
         };
     },
 
