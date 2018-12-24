@@ -166,4 +166,19 @@ QUnit.module("API", moduleConfig, () => {
 
         assert.ok(focusSpy.calledOnce, "Quill focus() should triggered on the editor's focus()");
     });
+
+    test("change value via 'option' method should correctly update content", (assert) => {
+        const valueChangeStub = sinon.stub();
+        const updateContentSpy = sinon.spy(this.instance, "_updateHtmlContent");
+
+        this.instance.on("valueChanged", valueChangeStub);
+        this.instance.option("value", "<p>First row</p><p>Second row</p>");
+        this.clock.tick();
+        this.instance.option("value", "New text");
+        this.clock.tick();
+
+        assert.equal(valueChangeStub.lastCall.args[0].value, "New text");
+        assert.equal(updateContentSpy.callCount, 2, "value changed twice -> update content two times");
+        assert.equal(updateContentSpy.lastCall.args[0], "New text", "Update content with the new value");
+    });
 });
