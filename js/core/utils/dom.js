@@ -238,7 +238,7 @@ var calculateMinHeight = function(value, $container, offset) {
 var getPaddingsHeight = function(element, includeMargin) {
     var $element = $(element);
 
-    return $element.length ? $element.outerHeight(includeMargin) - $element.height() : 0;
+    return $element.length ? $element.outerHeight(includeMargin || false) - $element.height() : 0;
 };
 
 var getVisibleHeight = function(element) {

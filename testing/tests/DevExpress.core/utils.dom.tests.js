@@ -168,7 +168,7 @@ QUnit.test("it correctly detect the body element", function(assert) {
 
 QUnit.module("style utils", {
     beforeEach: function() {
-        this.$container = $("<div style='width: 100px; height: 100px; padding: 10px; box-sizing: border-box;'></div>").appendTo("#qunit-fixture");
+        this.$container = $("<div style='width: 100px; height: 100px; padding: 10px; box-sizing: border-box; margin: 5px'></div>").appendTo("#qunit-fixture");
         this.$invisibleElement = $("<div style='width: 50px; height: 50px; display: none; padding: 5px;'></div>");
         this.$container.append(this.$invisibleElement);
     },
@@ -202,8 +202,10 @@ QUnit.test("check calculateMinHeight", function(assert) {
 });
 
 QUnit.test("check getPaddingsHeight", function(assert) {
+    debugger;
     assert.strictEqual(domUtils.getPaddingsHeight(null), 0, "no element");
     assert.strictEqual(domUtils.getPaddingsHeight(this.$container), 20, "container paddings");
+    assert.strictEqual(domUtils.getPaddingsHeight(this.$container, true), 30, "include margins");
     assert.strictEqual(domUtils.getPaddingsHeight(this.$container.get(0)), 20, "dom element in arguments");
     assert.strictEqual(domUtils.getPaddingsHeight(this.$invisibleElement), 10, "element paddings");
 });
