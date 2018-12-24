@@ -778,7 +778,7 @@ var SelectBox = DropDownList.inherit({
 
         item = item || null;
         this.option("selectedItem", item);
-        if(this._wasSearch()) {
+        if(this._shouldClearFilter()) {
             this._filterDataSource(null);
         }
         this._setValue(this._valueGetter(item));
