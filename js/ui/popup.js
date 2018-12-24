@@ -691,8 +691,8 @@ var Popup = Overlay.inherit({
     },
 
     _getToolbarsAndPaddingsHeight: function() {
-        return domUtils.getPaddingsHeight(this._$content)
-            + domUtils.getPaddingsHeight(this._$popupContent)
+        return domUtils.getPaddingsHeight(this._$content, true)
+            + domUtils.getPaddingsHeight(this._$popupContent, true)
             + this._getToolbarsHeight();
     },
 
