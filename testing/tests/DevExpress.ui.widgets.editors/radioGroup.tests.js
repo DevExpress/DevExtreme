@@ -1,7 +1,9 @@
 import $ from "jquery";
 import devices from "core/devices";
+import errors from "ui/widget/ui.errors";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
+
 import "ui/radio_group";
 
 QUnit.testStart(function() {
@@ -178,6 +180,23 @@ QUnit.test("the hidden input should get correct value on widget value change", f
 
 
 QUnit.module("value", moduleConfig);
+
+QUnit.test("should not throw an error when the value is \"null\" or \"undefine\"", assert => {
+    const errorLogStub = sinon.stub(errors, "log");
+
+    $("#radioGroup").dxRadioGroup({
+        items: ['item1', 'item2', 'item3'],
+        value: void 0
+    });
+
+    $("#radioGroup").dxRadioGroup({
+        items: ['item1', 'item2', 'item3'],
+        value: null
+    });
+
+    assert.notOk(errorLogStub.called, "Exception was not thrown");
+    errorLogStub.restore();
+});
 
 QUnit.test("repaint of widget shouldn't reset value option", function(assert) {
     var items = [{ text: "0" }, { text: "1" }];
