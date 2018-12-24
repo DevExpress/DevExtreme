@@ -1,17 +1,17 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    typeUtils = require("core/utils/type"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    ajaxMock = require("../../helpers/ajaxMock.js"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    Store = require("data/abstract_store"),
-    ArrayStore = require("data/array_store"),
-    ODataStore = require("data/odata/store"),
-    AggregateCalculator = require("ui/data_grid/aggregate_calculator");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import typeUtils from "core/utils/type";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import ajaxMock from "../../helpers/ajaxMock.js";
+import { DataSource } from "data/data_source/data_source";
+import Store from "data/abstract_store";
+import ArrayStore from "data/array_store";
+import ODataStore from "data/odata/store";
+import AggregateCalculator from "ui/data_grid/aggregate_calculator";
 
-var TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         executeAsyncMock.setup();
     },
@@ -75,6 +75,29 @@ QUnit.test("with no key specified", function(assert) {
         }),
 
         source.loadSingle("a", "1").fail(function() {
+            assert.ok(true, "shouldn't retrieve filtered values");
+        })
+    );
+});
+
+QUnit.test("set filter as a function(T686655)", (assert) => {
+    assert.expect(2);
+
+    const source = new DataSource({
+        store: [
+            { a: "1", i: 1 },
+            { a: "2", i: 2 },
+            { a: "3", i: 3 }
+        ],
+        filter: (itemData) => itemData.a !== "2"
+    });
+
+    $.when(
+        source.loadSingle("a", "1").done((r) => {
+            assert.deepEqual(r, { a: "1", i: 1 });
+        }),
+
+        source.loadSingle("a", "2").fail(() => {
             assert.ok(true, "shouldn't retrieve filtered values");
         })
     );
