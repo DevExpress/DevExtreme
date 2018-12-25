@@ -215,13 +215,11 @@ QUnit.test("check getPaddingsHeight", function(assert) {
     assert.strictEqual(domUtils.getPaddingsHeight(null), 0, "no element");
     assert.strictEqual(domUtils.getPaddingsHeight(this.$container), 20, "container paddings");
     assert.strictEqual(domUtils.getPaddingsHeight(this.$container, true), 30, "include margins");
-    assert.strictEqual(domUtils.getPaddingsHeight(this.$container.get(0)), 20, "dom element in arguments");
     assert.strictEqual(domUtils.getPaddingsHeight(this.$invisibleElement), 10, "element paddings");
 });
 
 QUnit.test("check getVisibleHeight", function(assert) {
     assert.strictEqual(domUtils.getPaddingsHeight(null), 0, "no element");
     assert.strictEqual(domUtils.getVisibleHeight(this.$container), 100, "container height");
-    assert.strictEqual(domUtils.getVisibleHeight(this.$container.get(0)), 100, "dom element in arguments");
     assert.strictEqual(domUtils.getVisibleHeight(this.$invisibleElement), 0, "invisible element height");
 });

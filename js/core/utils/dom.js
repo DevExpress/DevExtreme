@@ -218,8 +218,7 @@ var calculateLimitHeight = function(value, container, offset, defaultValue) {
     }
 
     if(typeof value === "number") {
-        var resultValue = value + offset;
-        return resultValue > 0 ? resultValue : 0;
+        return Math.max(0, value + offset);
     }
 
     var operationString = offset < 0 ? " - " : " ";
@@ -235,18 +234,12 @@ var calculateMinHeight = function(value, $container, offset) {
     return calculateLimitHeight(value, $container, offset, 0);
 };
 
-var getPaddingsHeight = function(element, includeMargin) {
-    var $element = $(element);
-
-    return $element.length ? $element.outerHeight(includeMargin || false) - $element.height() : 0;
+var getPaddingsHeight = function($element, includeMargin) {
+    return $element && $element.length ? $element.outerHeight(includeMargin || false) - $element.height() : 0;
 };
 
-var getVisibleHeight = function(element) {
-    var $element = $(element);
-
-    return ($element.length && $element.is(":visible"))
-        ? $element.get(0).getBoundingClientRect().height
-        : 0;
+var getVisibleHeight = function($element) {
+    return $element && $element.is(":visible") ? $element.get(0).getBoundingClientRect().height : 0;
 };
 
 exports.setPublicElementWrapper = setPublicElementWrapper;

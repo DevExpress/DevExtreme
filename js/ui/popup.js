@@ -664,11 +664,11 @@ var Popup = Overlay.inherit({
 
         var toolbarsAndPaddingsHeight = this._getToolbarsAndPaddingsHeight(),
             content = this._$content.get(0),
-            $container = $(this._getContainer()),
             cssStyles = {};
 
         if(this._isAutoHeight()) {
-            var maxHeightValue = domUtils.calculateMaxHeight(this._getOptionValue("maxHeight", content), $container, -toolbarsAndPaddingsHeight),
+            var $container = $(this._getContainer()),
+                maxHeightValue = domUtils.calculateMaxHeight(this._getOptionValue("maxHeight", content), $container, -toolbarsAndPaddingsHeight),
                 minHeightValue = domUtils.calculateMinHeight(this._getOptionValue("minHeight", content), $container, -toolbarsAndPaddingsHeight);
 
             if(minHeightValue !== undefined) {
@@ -680,7 +680,7 @@ var Popup = Overlay.inherit({
             }
         } else {
             var contentHeight = content.getBoundingClientRect().height - toolbarsAndPaddingsHeight;
-            cssStyles = { height: contentHeight < 0 ? 0 : contentHeight };
+            cssStyles = { height: Math.max(0, contentHeight) };
         }
 
         this._$popupContent.css(cssStyles);
