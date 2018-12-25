@@ -286,6 +286,26 @@ QUnit.test('Scroll position after set column widths', function(assert) {
     assert.deepEqual($scrollContainer.scrollLeft(), 50);
 });
 
+// T702241
+QUnit.test('Scroll position headers after rerender', function(assert) {
+    // arrange
+    var testElement = $('#containerIE').width(300),
+        $scrollContainer;
+
+    $.extend(this.columns, [{ caption: 'Column 1', width: 300 }, { caption: 'Column 2', width: 300 }]);
+
+    // act
+    this.columnHeadersView.render(testElement);
+    this.columnHeadersView.scrollTo({ left: 50 });
+
+    // act
+    this.columnHeadersView.render();
+
+    // assert
+    $scrollContainer = this.columnHeadersView.element().find(".dx-datagrid-scroll-container");
+    assert.deepEqual($scrollContainer.scrollLeft(), 50);
+});
+
 QUnit.test('Draw grouped column header', function(assert) {
     // arrange
     var testElement = $('#container'),
