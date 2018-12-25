@@ -4648,6 +4648,8 @@ QUnit.test('Scroll position headers after changing of headerFilter setting', fun
     // assert
     $headersView = $dataGrid.find(".dx-datagrid-headers" + " .dx-datagrid-scroll-container").first();
     assert.equal($headersView.scrollLeft(), 200);
+
+    clock.restore();
 });
 
 QUnit.test("Horizontal scroll position of footer view is changed_T251448", function(assert) {
