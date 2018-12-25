@@ -35,7 +35,7 @@
     margin-right: -@ANDROID5_SLIDER_HANDLE_SIZE / 2;
     width: @ANDROID5_SLIDER_HANDLE_SIZE;
     height: @ANDROID5_SLIDER_HANDLE_SIZE;
-    .border-radius(@ANDROID5_SLIDER_RADIUS);
+    border-radius: @ANDROID5_SLIDER_RADIUS;
 
     &:after {
         position: absolute;
@@ -48,7 +48,7 @@
         height: @ANDROID5_SLIDER_HANDLE_INNER_SIZE;
         background: @ANDROID5_SLIDER_BACKGROUND;
         content: "";
-        .border-radius(@ANDROID5_SLIDER_RADIUS);
+        border-radius: @ANDROID5_SLIDER_RADIUS;
     }
 
     .dx-tooltip-wrapper .dx-popup-content {
@@ -109,7 +109,7 @@
 }
 
 .dx-state-active.dx-slider-handle:after {
-    .transform(scale(1.3));
+    transform: scale(1.3);
 }
 
 .dx-rtl {

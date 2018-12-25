@@ -427,7 +427,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 4, 24),
             views: ["month"],
             appointmentCollectorTemplate: function(data) {
-                assert.equal(data.appointmentsCount, 1, "Appointments count is OK");
+                assert.equal(data.appointmentCount, 1, "Appointments count is OK");
                 assert.strictEqual(data.isCompact, false, "Compact flag is ok");
             },
             currentView: "month"
@@ -2453,7 +2453,7 @@ QUnit.testStart(function() {
         var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-right").eq(0)).start();
         pointer.dragStart().drag(cellWidth * 3, 0).dragEnd();
 
-        assert.equal(this.instance.$element().find(".dx-scheduler-appointment").eq(0).outerWidth(), initialWidth, "Width is OK");
+        assert.roughEqual(this.instance.$element().find(".dx-scheduler-appointment").eq(0).outerWidth(), 1.1, initialWidth, "Width is OK");
     });
 
     QUnit.test("Appointment should have initial left coordinate if 'cancel' flag is defined as true during resize operation", function(assert) {

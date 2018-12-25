@@ -466,7 +466,7 @@
 
 .dx-scheduler-appointment-focused-mixin() {
     &.dx-state-focused {
-        .box-shadow(none);
+        box-shadow: none;
 
         &:before {
             pointer-events: none;
@@ -511,6 +511,7 @@
     }
 
     .dx-scheduler-fixed-appointments {
+        width: 100%;
         z-index: 100;
         position: absolute;
         left: @SCHEDULER_LEFT_COLUMN_WIDTH;
@@ -643,7 +644,7 @@
             background-color:  @SCHEDULER_TIME_INDICATOR_COLOR;
             position: absolute;
             pointer-events: none;
-            .box-shadow(@SCHEDULER_TIME_INDICATOR_SHADOW);
+            box-shadow: @SCHEDULER_TIME_INDICATOR_SHADOW;
 
             &:before {
                 font-size: @SCHEDULER_TIME_INDICATOR_FONT_SIZE;
@@ -652,7 +653,7 @@
                 z-index: 1000;
                 margin-top: -@SCHEDULER_TIME_INDICATOR_TOP;
                 margin-left: -@SCHEDULER_TIME_INDICATOR_LEFT;
-                .text-shadow(@SCHEDULER_TIME_INDICATOR_TEXT_SHADOW);
+                text-shadow: @SCHEDULER_TIME_INDICATOR_TEXT_SHADOW;
             }
     }
 
@@ -786,7 +787,7 @@
 
         .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
             border-bottom: 2px solid @SCHEDULER_TIME_INDICATOR_COLOR;
-            .box-shadow(none);
+            box-shadow: none;
             &:before {
                 content: none;
             }
@@ -1791,23 +1792,23 @@
         .user-select(none);
         background-color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
         color: @SCHEDULER_APPOINTMENT_TEXT_COLOR;
-        .box-shadow(@SCHEDULER_VERTICAL_APPOINTMENT_SHADOW);
+        box-shadow: @SCHEDULER_VERTICAL_APPOINTMENT_SHADOW;
         left: 0;
 
         min-width: @SCHEDULER_APPOINTMENT_MIN_SIZE;
         min-height: @SCHEDULER_APPOINTMENT_MIN_SIZE;
     
         &.dx-state-active, &.dx-resizable-resizing {
-            .box-shadow(@SCHEDULER_VERTICAL_APPOINTMENT_RESIZING_SHADOW);
+            box-shadow: @SCHEDULER_VERTICAL_APPOINTMENT_RESIZING_SHADOW;
         }
 
         .dx-scheduler-appointment-focused-mixin;
 
         &.dx-state-hover {
-            .box-shadow(@SCHEDULER_VERTICAL_APPOINTMENT_HOVERING_SHADOW);
+            box-shadow: @SCHEDULER_VERTICAL_APPOINTMENT_HOVERING_SHADOW;
 
             &.dx-resizable {
-                .box-shadow(@SCHEDULER_VERTICAL_APPOINTMENT_RESIZABLE_HOVERING_SHADOW);
+                box-shadow: @SCHEDULER_VERTICAL_APPOINTMENT_RESIZABLE_HOVERING_SHADOW;
             }
 
             .dx-resizable-handle-top {
@@ -1820,7 +1821,7 @@
         }
 
         &.dx-draggable-dragging {
-            .box-shadow(@SCHEDULER_APPOINTMENT_DRAGGING_SHADOW, @SCHEDULER_VERTICAL_APPOINTMENT_RESIZING_SHADOW);
+            box-shadow: @SCHEDULER_APPOINTMENT_DRAGGING_SHADOW, @SCHEDULER_VERTICAL_APPOINTMENT_RESIZING_SHADOW;
         }
 
         &.dx-resizable-resizing,
@@ -1883,36 +1884,36 @@
     .dx-scheduler-timeline .dx-scheduler-appointment,
     .dx-scheduler-work-space-month .dx-scheduler-appointment,
     .dx-scheduler-all-day-appointment {
-        .box-shadow(@SCHEDULER_HORIZONTAL_APPOINTMENT_SHADOW);
+        box-shadow: @SCHEDULER_HORIZONTAL_APPOINTMENT_SHADOW;
 
         .dx-rtl & {
-            .box-shadow(@SCHEDULER_HORIZONTAL_APPOINTMENT_SHADOW_RTL);
+            box-shadow: @SCHEDULER_HORIZONTAL_APPOINTMENT_SHADOW_RTL;
         }
 
         &.dx-state-active, &.dx-resizable-resizing {
-            .box-shadow(@SCHEDULER_HORIZONTAL_APPOINTMENT_RESIZING_SHADOW);
+            box-shadow: @SCHEDULER_HORIZONTAL_APPOINTMENT_RESIZING_SHADOW;
         }
 
         .dx-scheduler-appointment-focused-mixin;
 
         &.dx-state-hover {
-            .box-shadow(@SCHEDULER_HORIZONTAL_APPOINTMENT_HOVERING_SHADOW);
+            box-shadow: @SCHEDULER_HORIZONTAL_APPOINTMENT_HOVERING_SHADOW;
 
             &.dx-resizable {
-                .box-shadow(@SCHEDULER_HORIZONTAL_APPOINTMENT_RESIZABLE_HOVERING_SHADOW);
+                box-shadow: @SCHEDULER_HORIZONTAL_APPOINTMENT_RESIZABLE_HOVERING_SHADOW;
             }
 
             .dx-rtl & {
-                .box-shadow(@SCHEDULER_HORIZONTAL_APPOINTMENT_HOVERING_SHADOW_RTL);
+                box-shadow: @SCHEDULER_HORIZONTAL_APPOINTMENT_HOVERING_SHADOW_RTL;
 
                 &.dx-resizable {
-                    .box-shadow(@SCHEDULER_HORIZONTAL_APPOINTMENT_RESIZABLE_HOVERING_SHADOW_RTL);
+                    box-shadow: @SCHEDULER_HORIZONTAL_APPOINTMENT_RESIZABLE_HOVERING_SHADOW_RTL;
                 }
             }
         }
 
         &.dx-draggable-dragging {
-            .box-shadow(@SCHEDULER_HORIZONTAL_APPOINTMENT_RESIZING_SHADOW, @SCHEDULER_APPOINTMENT_DRAGGING_SHADOW);
+            box-shadow: @SCHEDULER_HORIZONTAL_APPOINTMENT_RESIZING_SHADOW, @SCHEDULER_APPOINTMENT_DRAGGING_SHADOW;
         }
     }
 
@@ -2132,7 +2133,7 @@
             background-color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
             color: @SCHEDULER_APPOINTMENT_TEXT_COLOR;
             border: none;
-            .box-shadow(none);
+            box-shadow: none;
 
             .dx-button-content {
                 line-height: inherit;
@@ -2199,7 +2200,7 @@
 
         .dx-scheduler-appointment {
             position: relative;
-            .box-shadow(none);
+            box-shadow: none;
         }
 
         .dx-scheduler-time-panel {

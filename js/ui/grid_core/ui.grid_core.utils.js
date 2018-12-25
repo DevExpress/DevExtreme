@@ -381,8 +381,8 @@ module.exports = (function() {
 
                 point = {
                     index: columnIndex,
-                    x: offset ? offset.left + ((!isVertical && (rtlEnabled ^ (i === cellsLength))) ? item.outerWidth() : 0) : 0,
-                    y: offset ? offset.top + ((isVertical && i === cellsLength) ? item.outerHeight() : 0) : 0,
+                    x: offset ? offset.left + ((!isVertical && (rtlEnabled ^ (i === cellsLength))) ? item[0].getBoundingClientRect().width : 0) : 0,
+                    y: offset ? offset.top + ((isVertical && i === cellsLength) ? item[0].getBoundingClientRect().height : 0) : 0,
                     columnIndex: columnIndex
                 };
 

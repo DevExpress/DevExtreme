@@ -230,6 +230,21 @@ QUnit.module("Value", function(hook) {
         });
         assert.deepEqual(this.rangeSelector.getValue(), ["c", "d"]);
     });
+
+    QUnit.test("Value can't go out from scale", function(assert) {
+        this.rangeSelector.option({
+            scale:
+            {
+                startValue: 1,
+                endValue: 5
+            },
+            dataSource: [
+                { arg: 1, val: 1 },
+                { arg: 8, val: 8 }
+            ]
+        });
+        assert.deepEqual(this.rangeSelector.getValue(), [1, 5]);
+    });
 });
 
 QUnit.module("T465345, onOptionChanged", function(hook) {

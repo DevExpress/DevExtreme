@@ -921,7 +921,7 @@ QUnit.test("Two vertical neighbor appointments should be placed correctly", func
 
     assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 100, 2.001, "Left position is OK");
-    assert.roughEqual(translator.locate($allDayAppts.eq(0)).left, 100, 2.001, "Left position is OK");
+    assert.roughEqual($allDayAppts.eq(0).position().left, 100, 2.001, "Left position is OK");
 
     assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - appointmentOffset, 1.001, "Width is OK");
     assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - appointmentOffset, 1.001, "Width is OK");
@@ -4725,13 +4725,13 @@ QUnit.test("DropDown button should be rendered correctly when appointmentCollect
         height: 500,
         maxAppointmentsPerCell: "auto",
         appointmentCollectorTemplate: function(data) {
-            return "<div class='button-title'>Appointments count is " + data.appointmentsCount + "</div>";
+            return "<div class='button-title'>Appointment count is " + data.appointmentCount + "</div>";
         }
     });
 
     var $dropDown = $(".dx-scheduler-dropdown-appointments").eq(0);
 
-    assert.equal($dropDown.find(".button-title").text(), "Appointments count is 2", "Template is applied correctly");
+    assert.equal($dropDown.find(".button-title").text(), "Appointment count is 2", "Template is applied correctly");
 });
 
 QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {
@@ -5815,11 +5815,11 @@ QUnit.test("Rival allDay appointments from different groups should be rendered c
 
     assert.roughEqual($appointments.eq(0).position().top, 0, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).position().left, 314, 1, "correct left position of allDay appointment");
 
     assert.roughEqual($appointments.eq(1).position().top, 7 * cellHeight, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(1).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.equal($appointments.eq(1).position().left, 314, "correct left position of allDay appointment");
+    assert.roughEqual($appointments.eq(1).position().left, 314, 1, "correct left position of allDay appointment");
 });
 
 QUnit.test("Rival allDay appointments from same groups should be rendered correctly in vertical grouped workspace Week", function(assert) {
@@ -5869,7 +5869,7 @@ QUnit.test("Rival allDay appointments from same groups should be rendered correc
 
     assert.roughEqual($appointments.eq(0).position().top, 0.5 * cellHeight, 2.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).position().left, 314, 1, "correct left position of allDay appointment");
 });
 
 QUnit.test("Rival appointments from one group should be rendered correctly in vertical grouped workspace Week", function(assert) {

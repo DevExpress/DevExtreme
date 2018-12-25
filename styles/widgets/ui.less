@@ -3,7 +3,7 @@
 }
 
 .dx-translate-disabled {
-    .transform(e("none !important"));
+    transform: none !important;
 }
 
 .dx-hidden-input {
@@ -23,7 +23,7 @@
 }
 
 .dx-gesture-cover {
-    .transform(e("translate3d(0,0,0)"));
+    transform: translate3d(0, 0, 0);
     position: fixed;
     top: 0;
     right: 0;
@@ -267,32 +267,32 @@
 .dx-win-pop-animation {
 
     &.dx-enter.dx-forward {
-        .scale(0.5);
+        transform: scale(0.5);
         opacity: 0;
     }
 
     &.dx-enter.dx-enter-active.dx-forward {
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     &.dx-leave.dx-leave-active.dx-forward {
-        .scale(1.5);
+        transform: scale(1.5);
         opacity: 0;
     }
 
     &.dx-enter.dx-backward {
-        .scale(1.5);
+        transform: scale(1.5);
         opacity: 0;
     }
 
     &.dx-enter.dx-enter-active.dx-backward {
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     &.dx-leave.dx-leave-active.dx-backward {
-        .scale(0.5);
+        transform: scale(0.5);
         opacity: 0;
     }
 }

@@ -1333,7 +1333,8 @@ module.exports = {
                         rowElements,
                         rowElement,
                         scrollPosition = that._scrollTop,
-                        contentElementOffsetTop = that._findContentElement().offset().top,
+                        $contentElement = that._findContentElement(),
+                        contentElementOffsetTop = $contentElement && $contentElement.offset().top,
                         items = that._dataController.items(),
                         tableElement = that._getTableElement();
 

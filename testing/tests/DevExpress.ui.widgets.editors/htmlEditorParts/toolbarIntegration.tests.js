@@ -8,6 +8,7 @@ const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 const DROPDOWNMENU_CLASS = "dx-dropdownmenu-button";
 const BUTTON_CONTENT_CLASS = "dx-button-content";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
+const STATE_DISABLED_CLASS = "dx-state-disabled";
 
 const { test } = QUnit;
 
@@ -122,5 +123,43 @@ QUnit.module("Toolbar integration", {
 
         assert.ok($toolbarContainer.hasClass(TOOLBAR_WRAPPER_CLASS), "Container has wrapper class");
         assert.equal($toolbarContainer.find(`.${TOOLBAR_CLASS}`).length, 1, "Toolbar container contains the htmlEditor's toolbar");
+    });
+
+    test("Toolbar should be disabled once editor is read only", (assert) => {
+        $("#htmlEditor").dxHtmlEditor({
+            readOnly: true,
+            toolbar: { items: ["bold"] }
+        });
+
+        const isToolbarDisabled = $(`.${TOOLBAR_CLASS}`).hasClass(STATE_DISABLED_CLASS);
+        assert.ok(isToolbarDisabled);
+    });
+
+    test("Toolbar should be disabled once editor is disabled", (assert) => {
+        $("#htmlEditor").dxHtmlEditor({
+            disabled: true,
+            toolbar: { items: ["bold"] }
+        });
+
+        const isToolbarDisabled = $(`.${TOOLBAR_CLASS}`).hasClass(STATE_DISABLED_CLASS);
+        assert.ok(isToolbarDisabled);
+    });
+
+    test("Toolbar should correctly update disabled state on the option changed", (assert) => {
+        const editor = $("#htmlEditor").dxHtmlEditor({
+            disabled: true,
+            readOnly: true,
+            toolbar: { items: ["bold"] }
+        }).dxHtmlEditor("instance");
+        const $toolbar = $(`.${TOOLBAR_CLASS}`);
+
+        editor.option("disabled", false);
+        assert.ok($toolbar.hasClass(STATE_DISABLED_CLASS));
+
+        editor.option("readOnly", false);
+        assert.notOk($toolbar.hasClass(STATE_DISABLED_CLASS));
+
+        editor.option("disabled", true);
+        assert.ok($toolbar.hasClass(STATE_DISABLED_CLASS));
     });
 });

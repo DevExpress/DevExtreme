@@ -110,7 +110,7 @@ QUnit.test("Fixed column should be rendered in separate table", function(assert)
 QUnit.test("Resize columns", function(assert) {
     // arrange
     var treeList = createTreeList({
-            width: 470,
+            width: 400,
             allowColumnResizing: true,
             loadingTimeout: undefined,
             dataSource: [{ id: 1, firstName: "Dmitriy", lastName: "Semenov", room: 101, birthDay: "1992/08/06" }],
@@ -124,12 +124,12 @@ QUnit.test("Resize columns", function(assert) {
     resizeController = treeList.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 1 };
-    resizeController._setupResizingInfo(-9830);
+    resizeController._setupResizingInfo(-9800);
     resizeController._moveSeparator({
         event: {
             data: resizeController,
             type: "mousemove",
-            pageX: -9780,
+            pageX: -9750,
             preventDefault: noop
         }
     });
@@ -863,7 +863,7 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
 
     try {
         scrollable.scrollTo({ y: 300 }); // scroll to the last page
-        $(scrollable._container()).trigger("scroll");
+        devices.real().deviceType !== "desktop" && $(scrollable._container()).trigger("scroll");
         clock.tick();
 
         topVisibleRowData = treeList.getTopVisibleRowData();

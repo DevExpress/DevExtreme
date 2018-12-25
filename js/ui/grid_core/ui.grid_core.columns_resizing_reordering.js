@@ -706,9 +706,9 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
         that._resizingInfo = {
             startPosX: posX,
             currentColumnIndex: currentColumnIndex,
-            currentColumnWidth: currentHeader && currentHeader.length > 0 ? currentHeader.outerWidth() : 0,
+            currentColumnWidth: currentHeader && currentHeader.length > 0 ? currentHeader[0].getBoundingClientRect().width : 0,
             nextColumnIndex: nextColumnIndex,
-            nextColumnWidth: nextHeader && nextHeader.length > 0 ? nextHeader.outerWidth() : 0
+            nextColumnWidth: nextHeader && nextHeader.length > 0 ? nextHeader[0].getBoundingClientRect().width : 0
         };
     },
 

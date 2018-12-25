@@ -270,7 +270,9 @@ module.exports = {
                     if(args.name === "dataSource" && args.name === args.fullName && (args.value === args.previousValue || (that.option("columns") && Array.isArray(args.value) && Array.isArray(args.previousValue)))) {
                         if(args.value !== args.previousValue) {
                             var store = that.store();
-                            store._array = args.value;
+                            if(store) {
+                                store._array = args.value;
+                            }
                         }
                         handled();
                         that.refresh(that.option("repaintChangesOnly"));
