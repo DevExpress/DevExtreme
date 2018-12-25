@@ -7455,6 +7455,34 @@ QUnit.test("Changing edit icon in the 'buttons' command column if repaintChanges
     assert.ok($linkElements.eq(0).hasClass("dx-icon-remove"));
 });
 
+// T700691
+QUnit.test("Custom button click should be prevented", function(assert) {
+    // arrange
+    var $linkElement,
+        event = $.Event("dxclick");
+
+    this.options.columns = [
+        {
+            type: "buttons",
+            buttons: [
+                {
+                    text: "Test",
+                    onClick: function() {}
+                }
+            ]
+        },
+        "state"
+    ];
+    this.setupModules();
+    $linkElement = $(this.getCellElement(0, 0)).find(".dx-link").first();
+
+    // act
+    $linkElement.trigger(event);
+
+    // assert
+    assert.ok(event.isDefaultPrevented(), "default is prevented");
+});
+
 
 QUnit.module('Editing with validation', {
     beforeEach: function() {
