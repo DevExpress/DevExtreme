@@ -3,6 +3,7 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     support = require("core/utils/support"),
     styleUtils = require("core/utils/style"),
+    size = require("core/utils/size"),
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
     domUtils = require("core/utils/dom"),
@@ -3854,7 +3855,7 @@ QUnit.test("clientWidth", function(assert) {
     });
     var $container = $("." + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
-    assert.equal($scrollable.dxScrollable("clientWidth"), $container.width(), "client width equals to container width");
+    assert.equal($scrollable.dxScrollable("clientWidth"), size.getSize($container.get(0), "width", {}), "client width equals to container width");
 });
 
 QUnit.test("scroll reachedTop true only at the top", function(assert) {
