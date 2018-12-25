@@ -247,23 +247,23 @@ class ToolbarModule extends BaseModule {
             e.preventDefault();
         });
 
-        this.toolbarInstance = this._editorInstance._createComponent($toolbar, Toolbar, this._prepareToolbarConfig());
+        this.toolbarInstance = this._editorInstance._createComponent($toolbar, Toolbar, this.toolbarConfig);
 
-        this._editorInstance.on("optionChanged", (args) => {
-            if(args.name === "readOnly" || args.name === "disabled") {
-                this.toolbarInstance.option("disabled", this._isInteractionDisabled());
+        this._editorInstance.on("optionChanged", ({ name }) => {
+            if(name === "readOnly" || name === "disabled") {
+                this.toolbarInstance.option("disabled", this.isInteractionDisabled);
             }
         });
     }
 
-    _prepareToolbarConfig() {
+    get toolbarConfig() {
         return {
             dataSource: this._prepareToolbarItems(),
-            disabled: this._isInteractionDisabled()
+            disabled: this.isInteractionDisabled
         };
     }
 
-    _isInteractionDisabled() {
+    get isInteractionDisabled() {
         return this._editorInstance.option("readOnly") || this._editorInstance.option("disabled");
     }
 
