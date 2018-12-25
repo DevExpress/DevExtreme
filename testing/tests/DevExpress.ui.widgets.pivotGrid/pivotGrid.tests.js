@@ -1922,7 +1922,7 @@ QUnit.test("Sorting by Summary context menu when sorting defined", function(asse
     }], "field args");
 });
 
-QUnit.test("Render to invisible container", function(assert) {
+QUnit.skip("Render to invisible container", function(assert) {
     var $pivotGridElement = $("#pivotGrid")
             .hide()
             .width(2000)
