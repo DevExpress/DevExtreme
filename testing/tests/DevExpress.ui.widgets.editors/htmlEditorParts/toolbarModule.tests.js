@@ -71,6 +71,7 @@ const simpleModuleConfig = {
                 _createComponent: ($element, widget, options) => {
                     return new widget($element, options);
                 },
+                option: noop,
                 on: noop
             }
         };
@@ -117,6 +118,7 @@ const dialogModuleConfig = {
                     return new widget($element, options);
                 },
                 on: noop,
+                option: noop,
                 formDialogOption: this.formDialogOptionStub,
                 showFormDialog: (formConfig) => {
                     return this.formDialog.show(formConfig);
