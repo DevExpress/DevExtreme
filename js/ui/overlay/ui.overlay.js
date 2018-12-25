@@ -859,7 +859,7 @@ var Overlay = Widget.inherit({
     },
 
     _tabKeyHandler: function(e) {
-        if(e.keyName !== TAB_KEY || !this._isTopOverlay()) {
+        if(eventUtils.normalizeKeyName(e.key) !== TAB_KEY || !this._isTopOverlay()) {
             return;
         }
 

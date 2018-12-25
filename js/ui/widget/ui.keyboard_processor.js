@@ -3,40 +3,10 @@ import eventsEngine from "../../events/core/events_engine";
 import Class from "../../core/class";
 import { inArray } from "../../core/utils/array";
 import { each } from "../../core/utils/iterator";
-import eventUtils from "../../events/utils";
+import { addNamespace, normalizeKeyName } from "../../events/utils";
 
 const KeyboardProcessor = Class.inherit({
-    _keydown: eventUtils.addNamespace("keydown", "KeyboardProcessor"),
-
-    keyMap: {
-        "backspace": "backspace",
-        "tab": "tab",
-        "enter": "enter",
-        "escape": "escape",
-        "pageup": "pageUp",
-        "pagedown": "pageDown",
-        "end": "end",
-        "home": "home",
-        "arrowleft": "leftArrow",
-        "arrowup": "upArrow",
-        "arrowright": "rightArrow",
-        "arrowdown": "downArrow",
-        "delete": "del",
-        " ": "space",
-        "f": "F",
-        "a": "A",
-        "*": "asterisk",
-        "-": "minus",
-        // IE11:
-        "left": "leftArrow",
-        "up": "upArrow",
-        "right": "rightArrow",
-        "down": "downArrow",
-        "multiply": "asterisk",
-        "spacebar": "space",
-        "del": "del",
-        "subtract": "minus"
-    },
+    _keydown: addNamespace("keydown", "KeyboardProcessor"),
 
     ctor: function(options) {
         options = options || {};
@@ -98,7 +68,7 @@ const KeyboardProcessor = Class.inherit({
         }
 
         var args = {
-            keyName: this.keyMap[e.key.toLowerCase()] || e.key,
+            keyName: normalizeKeyName(e.key),
             key: e.key,
             code: e.code,
             ctrl: e.ctrlKey,

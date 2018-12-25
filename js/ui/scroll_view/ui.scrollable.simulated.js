@@ -727,7 +727,7 @@ var SimulatedStrategy = Class.inherit({
 
         var handled = true;
 
-        switch(e.keyName) {
+        switch(eventUtils.normalizeKeyName(e.key)) {
             case KEY_CODES.DOWN:
                 this._scrollByLine({ y: 1 });
                 break;

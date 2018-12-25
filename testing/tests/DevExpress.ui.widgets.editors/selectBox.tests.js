@@ -61,7 +61,7 @@ var POPUP_CLASS = "dx-selectbox-popup",
 
 var KEY_DOWN = "ArrowDown",
     KEY_ENTER = "Enter",
-    KEY_SPACE = "Space";
+    KEY_SPACE = " ";
 
 var TIME_TO_WAIT = 500;
 

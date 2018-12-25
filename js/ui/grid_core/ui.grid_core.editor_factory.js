@@ -9,7 +9,8 @@ var $ = require("../../core/renderer"),
     addNamespace = eventUtils.addNamespace,
     browser = require("../../core/utils/browser"),
     extend = require("../../core/utils/extend").extend,
-    EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
+    EditorFactoryMixin = require("../shared/ui.editor_factory_mixin"),
+    normalizeKeyName = eventUtils.normalizeKeyName;
 
 var EDITOR_INLINE_BLOCK = "dx-editor-inline-block",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
@@ -187,7 +188,7 @@ var EditorFactory = modules.ViewController.inherit({
         if($container) {
             // T179518
             eventsEngine.on($container, addNamespace("keydown", MODULE_NAMESPACE), function(e) {
-                if(e.keyName === "tab") {
+                if(normalizeKeyName(e.key) === "tab") {
                     that._updateFocusHandler(e);
                 }
             });

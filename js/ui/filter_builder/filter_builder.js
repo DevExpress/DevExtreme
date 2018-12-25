@@ -12,6 +12,7 @@ import { isDefined } from "../../core/utils/type";
 import TreeView from "../tree_view";
 import Popup from "../popup";
 import EditorFactoryMixin from "../shared/ui.editor_factory_mixin";
+import { normalizeKeyName } from "../../events/utils";
 
 const FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_CLASS = FILTER_BUILDER_CLASS + "-group",
@@ -731,8 +732,10 @@ var FilterBuilder = Widget.inherit({
                 var treeViewElement = $(info.component.content()).find(".dx-treeview"),
                     treeView = treeViewElement.dxTreeView("instance");
                 eventsEngine.on(treeViewElement, "keyup keydown", function(e) {
-                    if((e.type === "keydown" && e.keyName === TAB_KEY)
-                            || (e.type === "keyup" && (e.keyName === ESCAPE_KEY || e.keyName === ENTER_KEY))) {
+                    const keyName = normalizeKeyName(e.key);
+
+                    if((e.type === "keydown" && keyName === TAB_KEY)
+                            || (e.type === "keyup" && (keyName === ESCAPE_KEY || keyName === ENTER_KEY))) {
                         info.component.hide();
                         eventsEngine.trigger(options.menu.position.of, "focus");
                     }
@@ -1057,7 +1060,9 @@ var FilterBuilder = Widget.inherit({
 
         var documentClickHandler = this._addDocumentClick($editor, closeEditor);
         var documentKeyUpHandler = this._addDocumentKeyUp($editor, (e) => {
-            if(e.keyName === TAB_KEY) {
+            const keyName = normalizeKeyName(e.key);
+
+            if(keyName === TAB_KEY) {
                 if(this._isFocusOnEditorParts($editor)) {
                     return;
                 }
@@ -1068,10 +1073,10 @@ var FilterBuilder = Widget.inherit({
                     }
                 });
             }
-            if(e.keyName === ESCAPE_KEY) {
+            if(keyName === ESCAPE_KEY) {
                 eventsEngine.trigger(createValueText(), "focus");
             }
-            if(e.keyName === ENTER_KEY) {
+            if(keyName === ENTER_KEY) {
                 this._updateConditionValue(item, value, function() {
                     eventsEngine.trigger(createValueText(), "focus");
                 });
@@ -1137,7 +1142,7 @@ var FilterBuilder = Widget.inherit({
     _subscribeOnClickAndEnterKey: function($button, handler) {
         eventsEngine.on($button, "dxclick", handler);
         eventsEngine.on($button, "keyup", function(e) {
-            if(e.keyName === ENTER_KEY) {
+            if(normalizeKeyName(e.key) === ENTER_KEY) {
                 handler(e);
             }
         });

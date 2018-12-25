@@ -8,7 +8,8 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     Editor = require("../editor/editor"),
     Overlay = require("../overlay"),
-    Menu = require("../menu");
+    Menu = require("../menu"),
+    normalizeKeyName = require("../../events/utils").normalizeKeyName;
 
 var OPERATION_ICONS = {
     "=": "filter-operation-equals",
@@ -264,7 +265,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
                         var $prevElement = $cell.find("[tabindex]").not(e.target).first();
 
-                        if(e.keyName === "tab" && e.shiftKey) {
+                        if(normalizeKeyName(e.key) === "tab" && e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
 
@@ -281,7 +282,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
                     eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
-                        if(e.keyName === "tab" && !e.shiftKey) {
+                        if(normalizeKeyName(e.key) === "tab" && !e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
                             eventsEngine.trigger($cell.next().find("[tabindex]").first(), "focus");
