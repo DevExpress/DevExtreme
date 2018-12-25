@@ -1892,8 +1892,9 @@ var EditingController = modules.ViewController.inherit((function() {
                     $button.attr("title", button.hint);
                 }
 
-                eventsEngine.on($button, addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(args) {
-                    button.onClick.call(button, extend({}, args, { row: options.row, column: options.column }));
+                eventsEngine.on($button, addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(e) {
+                    button.onClick.call(button, extend({}, e, { row: options.row, column: options.column }));
+                    e.event.preventDefault();
                 }));
                 options.rtlEnabled ? $container.prepend($button, "&nbsp;") : $container.append($button, "&nbsp;");
             }
