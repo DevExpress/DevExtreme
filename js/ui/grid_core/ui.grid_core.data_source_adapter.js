@@ -145,12 +145,17 @@ module.exports = gridCore.Controller.inherit((function() {
         resetPagesCache: function() {
             this._cachedPagesData = createEmptyPagesData();
         },
-        push: function(changes, fromStore) {
+        _needClearStoreDataCache: function() {
             var remoteOperations = this.remoteOperations(),
-                store = this.store(),
-                isLocalOperations = Object.keys(remoteOperations).every(operationName => !remoteOperations[operationName]);
+                operationTypes = calculateOperationTypes(this._lastLoadOptions || {}, {}),
+                isLocalOperations = Object.keys(remoteOperations).every(operationName => !operationTypes[operationName] || !remoteOperations[operationName]);
 
-            if(!isLocalOperations) {
+            return !isLocalOperations;
+        },
+        push: function(changes, fromStore) {
+            var store = this.store();
+
+            if(this._needClearStoreDataCache()) {
                 this._cachedStoreData = undefined;
             }
 
@@ -166,16 +171,19 @@ module.exports = gridCore.Controller.inherit((function() {
                 this._applyBatch(changes);
             }
         },
+        _getKeyInfo: function() {
+            return this.store();
+        },
         _applyBatch: function(changes) {
-            var store = this.store(),
+            var keyInfo = this._getKeyInfo(),
                 groupCount = gridCore.normalizeSortingInfo(this.group()).length;
 
             changes = changes.filter(function(change) {
                 return change.type !== "insert" || change.index !== undefined;
             });
 
-            arrayUtils.applyBatch(store, this._items, changes, groupCount, true);
-            arrayUtils.applyBatch(store, this._dataSource.items(), changes, groupCount, true);
+            arrayUtils.applyBatch(keyInfo, this._items, changes, groupCount, true);
+            arrayUtils.applyBatch(keyInfo, this._dataSource.items(), changes, groupCount, true);
             changes.splice(0, changes.length);
         },
         _handlePush: function(changes) {

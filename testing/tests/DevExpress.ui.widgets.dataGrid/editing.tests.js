@@ -7269,6 +7269,7 @@ QUnit.test("Load after editing with refresh mode repaint and remoteOperations", 
     // arrange
     this.options.editing.refreshMode = "repaint";
     this.options.remoteOperations = { sorting: true, filtering: true };
+    this.options.columns.push({ dataField: "id", sortOrder: "asc" });
     this.setupModules();
 
     this.addRow();
@@ -7453,6 +7454,34 @@ QUnit.test("Changing edit icon in the 'buttons' command column if repaintChanges
     $linkElements = $(this.getCellElement(0, 0)).find(".dx-link");
     assert.equal($linkElements.length, 1);
     assert.ok($linkElements.eq(0).hasClass("dx-icon-remove"));
+});
+
+// T700691
+QUnit.test("Custom button click should be prevented", function(assert) {
+    // arrange
+    var $linkElement,
+        event = $.Event("dxclick");
+
+    this.options.columns = [
+        {
+            type: "buttons",
+            buttons: [
+                {
+                    text: "Test",
+                    onClick: function() {}
+                }
+            ]
+        },
+        "state"
+    ];
+    this.setupModules();
+    $linkElement = $(this.getCellElement(0, 0)).find(".dx-link").first();
+
+    // act
+    $linkElement.trigger(event);
+
+    // assert
+    assert.ok(event.isDefaultPrevented(), "default is prevented");
 });
 
 
