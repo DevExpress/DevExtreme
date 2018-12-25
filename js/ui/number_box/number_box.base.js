@@ -257,10 +257,6 @@ var NumberBoxBase = TextEditor.inherit({
         this.option("text", this._input().val());
     },
 
-    _renderValueEventName: function() {
-        return this.callBase() + " keypress";
-    },
-
     _toggleDisabledState: function(value) {
         if(this._$spinUp) {
             SpinButton.getInstance(this._$spinUp).option("disabled", value);

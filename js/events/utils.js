@@ -5,6 +5,36 @@ import { focused } from "../ui/widget/selectors";
 import { extend } from "../core/utils/extend";
 import { each } from "../core/utils/iterator";
 
+const KEY_MAP = {
+    "backspace": "backspace",
+    "tab": "tab",
+    "enter": "enter",
+    "escape": "escape",
+    "pageup": "pageUp",
+    "pagedown": "pageDown",
+    "end": "end",
+    "home": "home",
+    "arrowleft": "leftArrow",
+    "arrowup": "upArrow",
+    "arrowright": "rightArrow",
+    "arrowdown": "downArrow",
+    "delete": "del",
+    " ": "space",
+    "f": "F",
+    "a": "A",
+    "*": "asterisk",
+    "-": "minus",
+    // IE11:
+    "left": "leftArrow",
+    "up": "upArrow",
+    "right": "rightArrow",
+    "down": "downArrow",
+    "multiply": "asterisk",
+    "spacebar": "space",
+    "del": "del",
+    "subtract": "minus"
+};
+
 const eventSource = (() => {
     const EVENT_SOURCES_REGEX = {
         "dx": /^dx/i,
@@ -151,36 +181,6 @@ const addNamespace = function(eventNames, namespace) {
     });
 
     return eventNames.join(" ");
-};
-
-const KEY_MAP = {
-    "backspace": "backspace",
-    "tab": "tab",
-    "enter": "enter",
-    "escape": "escape",
-    "pageup": "pageUp",
-    "pagedown": "pageDown",
-    "end": "end",
-    "home": "home",
-    "arrowleft": "leftArrow",
-    "arrowup": "upArrow",
-    "arrowright": "rightArrow",
-    "arrowdown": "downArrow",
-    "delete": "del",
-    " ": "space",
-    "f": "F",
-    "a": "A",
-    "*": "asterisk",
-    "-": "minus",
-    // IE11:
-    "left": "leftArrow",
-    "up": "upArrow",
-    "right": "rightArrow",
-    "down": "downArrow",
-    "multiply": "asterisk",
-    "spacebar": "space",
-    "del": "del",
-    "subtract": "minus"
 };
 
 const normalizeKeyName = (keyName) => {
