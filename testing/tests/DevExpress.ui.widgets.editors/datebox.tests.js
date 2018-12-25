@@ -1297,7 +1297,7 @@ QUnit.test("component should have correct width when it was rendered in a scaled
     component.repaint();
     $parent.css("transform", "scale(1)");
 
-    assert.equal(component.$element().outerWidth(), initialWidth, "component has correct width");
+    assert.roughEqual(component.$element().outerWidth(), initialWidth, 0.01, "component has correct width");
 });
 
 QUnit.test("change width", function(assert) {
