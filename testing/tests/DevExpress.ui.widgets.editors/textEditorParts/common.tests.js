@@ -38,6 +38,17 @@ var moduleConfig = {
     }
 };
 
+function prepareEvent(eventName) {
+    var params = {},
+        name = eventName.toLowerCase();
+
+    if(name.indexOf("key") !== -1) {
+        params.key = "";
+    }
+
+    return $.Event(name, params);
+}
+
 
 QUnit.module("general");
 
@@ -574,14 +585,7 @@ QUnit.test("event handler callbacks", function(assert) {
     assert.equal(called, 0, "when start, testID = 0");
 
     $.each(EVENTS, function(index, eventName) {
-        var params = {};
-
-        if(eventName.indexOf("Key") !== -1) {
-            params.key = "";
-        }
-
-        var event = $.Event(eventName.toLowerCase(), params);
-        input.trigger(event);
+        input.trigger(prepareEvent(eventName));
         assert.equal(called, eventName.toLowerCase(), eventName + " event handler callback trigger");
     });
 });
@@ -602,14 +606,7 @@ QUnit.test("events should be fired in readOnly state", function(assert) {
     this.element.dxTextEditor(options);
 
     $.each(EVENTS, function(index, eventName) {
-        var params = {};
-
-        if(eventName.indexOf("Key") !== -1) {
-            params.key = "";
-        }
-
-        var event = $.Event(eventName.toLowerCase(), params);
-        input.trigger(event);
+        input.trigger(prepareEvent(eventName));
         assert.equal(called, eventName.toLowerCase(), eventName + " event handler callback trigger");
     });
 });
@@ -638,14 +635,7 @@ QUnit.test("editor should have actual value in the event handler when this event
     $.each(EVENTS, function(index, eventName) {
         input.val(index + 1);
 
-        var params = {};
-
-        if(eventName.indexOf("Key") !== -1) {
-            params.key = "";
-        }
-
-        var event = $.Event(eventName.toLowerCase(), params);
-        input.trigger(event);
+        input.trigger(prepareEvent(eventName));
     });
 });
 
@@ -981,14 +971,7 @@ QUnit.test("event handlers are not set", function(assert) {
     this.element.dxTextEditor({});
 
     $.each(EVENTS, function(index, eventName) {
-        var params = {};
-
-        if(eventName.indexOf("key") !== -1) {
-            params.key = "";
-        }
-
-        var event = $.Event(eventName.toLowerCase(), params);
-        input.trigger(event);
+        input.trigger(prepareEvent(eventName));
     });
 });
 

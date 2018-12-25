@@ -4731,12 +4731,12 @@ QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded p
     that.clock.tick();
 
     // act
-    $(that.rowsView.element()).trigger($.Event("keydown", { key: KEYS.upArrow, keyName: "upArrow" }));
+    $(that.rowsView.element()).trigger($.Event("keydown", { key: KEYS.upArrow }));
     $(that.rowsView.getScrollable()._container()).trigger("scroll");
     that.clock.tick();
 
     // act
-    $(that.rowsView.element()).trigger($.Event("keydown", { key: KEYS.upArrow, keyName: "upArrow" }));
+    $(that.rowsView.element()).trigger($.Event("keydown", { key: KEYS.upArrow }));
     that.clock.tick();
 
     // assert
@@ -5598,7 +5598,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
 
         that.clock.tick();
 
-        $input.trigger($.Event("keydown", { key: "Enter", keyName: "enter" }));
+        $input.trigger($.Event("keydown", { key: "Enter" }));
 
         that.clock.tick();
 
@@ -5694,7 +5694,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         $inputElement.change();
         that.clock.tick();
         $inputElement = $testElement.find(".dx-texteditor-input").first();
-        $testElement.find(".dx-datagrid-rowsview").trigger($.Event("keydown", { key: "Tab", keyName: "tab", target: $inputElement }));
+        $testElement.find(".dx-datagrid-rowsview").trigger($.Event("keydown", { key: "Tab", target: $inputElement }));
         that.clock.tick();
 
         // assert

@@ -2815,7 +2815,7 @@ QUnit.test('Edit number cell via keyboard arrows (arrow up key)', function(asser
     $testInput = getInputElements($testElement).first();
     $testInput
         .val('15')
-        .trigger($.Event('keydown', { key: UP_KEY, keyName: "upArrow" }));
+        .trigger($.Event('keydown', { key: UP_KEY }));
 
     this.editingController.closeEditCell();
 
@@ -2847,7 +2847,7 @@ QUnit.test('Edit number cell via keyboard arrows (arrow down key)', function(ass
     $testInput = getInputElements($testElement).first();
     $testInput
         .val('15')
-        .trigger($.Event('keydown', { key: DOWN_KEY, keyName: "downArrow" }));
+        .trigger($.Event('keydown', { key: DOWN_KEY }));
 
     this.editingController.closeEditCell();
 
@@ -2883,7 +2883,7 @@ QUnit.test('Close Editing Number Cell and edit next cell on tab key', function(a
 
     $input.val('15');
     $input.change();
-    $($input).trigger($.Event('keydown', { key: TAB_KEY, keyName: "tab" }));
+    $($input).trigger($.Event('keydown', { key: TAB_KEY }));
     this.editingController.closeEditCell();
     this.clock.tick();
 
@@ -2897,7 +2897,7 @@ QUnit.test('Close Editing Number Cell and edit next cell on tab key', function(a
     $input = getInputElements(testElement).first();
     $input.val('20');
     $input.change();
-    $($input).trigger($.Event('keydown', { key: TAB_KEY, keyName: "tab" }));
+    $($input).trigger($.Event('keydown', { key: TAB_KEY }));
 
     this.editingController.closeEditCell();
     this.clock.tick();
