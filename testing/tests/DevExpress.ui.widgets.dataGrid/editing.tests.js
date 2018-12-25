@@ -7269,6 +7269,7 @@ QUnit.test("Load after editing with refresh mode repaint and remoteOperations", 
     // arrange
     this.options.editing.refreshMode = "repaint";
     this.options.remoteOperations = { sorting: true, filtering: true };
+    this.options.columns.push({ dataField: "id", sortOrder: "asc" });
     this.setupModules();
 
     this.addRow();
