@@ -26,7 +26,7 @@ var setupModule = function() {
         }
     };
 
-    setupTreeListModules(this, ["data", "columns", "masterDetail"]);
+    setupTreeListModules(this, ["data", "columns", "masterDetail", "virtualScrolling"]);
 
     this.applyOptions = function(options) {
         $.extend(this.options, options);
@@ -490,6 +490,33 @@ QUnit.test("Initialize from dataSource with plain structure when virtual scrolli
     assert.equal(items[0].key, 1, "key of first item");
     assert.equal(items[1].key, 2, "key of second item");
     assert.equal(items[2].key, 3, "key of third item");
+});
+
+QUnit.test("Initialize when remoteOperations and virtual scrolling are enabled and two pages are loaded", function(assert) {
+    // arrange
+    var array = [
+            { name: 'SubCategory1', phone: '55-66-77', id: 5, parentId: 2 },
+            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
+            { name: 'Category3', phone: '98-75-22', id: 3, parentId: 0 },
+            { name: 'Category4', phone: '98-75-23', id: 4, parentId: 0 }
+        ],
+        dataSource = createDataSource(array, {}, { pageSize: 2 });
+
+    // act
+    this.applyOptions({
+        scrolling: {
+            mode: "virtual"
+        },
+        remoteOperations: { filtering: true },
+        autoExpandAll: true,
+        dataSource: dataSource
+    });
+
+    // assert
+    assert.equal(this.dataController.totalItemsCount(), 5, "totalItemsCount");
+    assert.equal(this.getVisibleRows().length, 4, "row count");
+    assert.strictEqual(this.getVisibleRows()[0].node, this.getNodeByKey(1), "first node instance is correct");
 });
 
 QUnit.test("Expand node when virtual scrolling enabled", function(assert) {

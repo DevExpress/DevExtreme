@@ -507,9 +507,10 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
         _processTreeStructure: function(options, visibleItems) {
             var data = options.data,
+                parentIds = options.storeLoadOptions.parentIds,
                 expandedRowKeys = [];
 
-            if(options.remoteOperations.filtering || this._isReload) {
+            if(parentIds && parentIds.length || this._isReload) {
                 if(options.fullData && options.fullData.length > options.data.length) {
                     data = options.fullData;
                     visibleItems = visibleItems || options.data;
