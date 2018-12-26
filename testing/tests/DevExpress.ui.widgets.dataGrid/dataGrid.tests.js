@@ -4628,6 +4628,9 @@ QUnit.test('Scroll position headers after changing of headerFilter setting', fun
     var clock = sinon.useFakeTimers(),
         $dataGrid = $("#dataGrid").dxDataGrid({
             width: 200,
+            scrolling: {
+                useNative: false
+            },
             columns: [
                 { dataField: 'firstName', width: 200 },
                 { dataField: 'lastName', width: 200 }
