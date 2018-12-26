@@ -5,10 +5,8 @@ var eventsEngine = require("../../events/core/events_engine"),
     ready = require("../../core/utils/ready_callbacks").add,
     wheelEvent = require("../../events/core/wheel"),
 
-    TOOLTIP_SHOW_DELAY = 300,
-    TOOLTIP_HIDE_DELAY = 300,
-    TOOLTIP_TOUCH_SHOW_DELAY = 400,
-    TOOLTIP_TOUCH_HIDE_DELAY = 300;
+    TOOLTIP_HIDE_DELAY = 100,
+    TOOLTIP_TOUCH_HIDE_DELAY = 200;
 
 var Tracker = Class.inherit({
     ctor: function(parameters) {
@@ -22,7 +20,6 @@ var Tracker = Class.inherit({
         that._element = parameters.renderer.g().attr({ 'class': 'dxg-tracker', stroke: 'none', "stroke-width": 0, fill: '#000000', opacity: 0.0001 }).linkOn(parameters.container, { name: "tracker", after: "peripheral" });
 
         that._showTooltipCallback = function() {
-            that._showTooltipTimeout = null;
             var target = that._tooltipEvent.target,
                 data_target = target["gauge-data-target"],
                 data_info = target["gauge-data-info"];
@@ -41,16 +38,13 @@ var Tracker = Class.inherit({
             }
         };
         that._dispose = function() {
-            clearTimeout(that._showTooltipTimeout);
             clearTimeout(that._hideTooltipTimeout);
             that._showTooltipCallback = that._hideTooltipCallback = that._dispose = null;
         };
         ///#DEBUG
-        that._DEBUG_showTooltipTimeoutSet = that._DEBUG_showTooltipTimeoutCleared = that._DEBUG_hideTooltipTimeoutSet = that._DEBUG_hideTooltipTimeoutCleared = 0;
+        that._DEBUG_hideTooltipTimeoutSet = that._DEBUG_hideTooltipTimeoutCleared = 0;
 
-        that.TOOLTIP_SHOW_DELAY = TOOLTIP_SHOW_DELAY;
         that.TOOLTIP_HIDE_DELAY = TOOLTIP_HIDE_DELAY;
-        that.TOOLTIP_TOUCH_SHOW_DELAY = TOOLTIP_TOUCH_SHOW_DELAY;
         that.TOOLTIP_TOUCH_HIDE_DELAY = TOOLTIP_TOUCH_HIDE_DELAY;
         ///#ENDDEBUG
     },
@@ -99,7 +93,7 @@ var Tracker = Class.inherit({
         return this;
     },
 
-    _showTooltip: function(event, delay) {
+    _showTooltip: function(event) {
         var that = this;
 
         ///#DEBUG
@@ -111,21 +105,12 @@ var Tracker = Class.inherit({
         if(that._tooltipTarget === event.target) {
             return;
         }
-        clearTimeout(that._showTooltipTimeout);
         that._tooltipEvent = event;
-        ///#DEBUG
-        ++that._DEBUG_showTooltipTimeoutSet;
-        ///#ENDDEBUG
-        that._showTooltipTimeout = setTimeout(that._showTooltipCallback, delay);
+        that._showTooltipCallback();
     },
 
     _hideTooltip: function(delay) {
         var that = this;
-        ///#DEBUG
-        that._showTooltipTimeout && ++that._DEBUG_showTooltipTimeoutCleared;
-        ///#ENDDEBUG
-        clearTimeout(that._showTooltipTimeout);
-        that._showTooltipTimeout = null;
         clearTimeout(that._hideTooltipTimeout);
         if(delay) {
             ///#DEBUG
@@ -159,15 +144,15 @@ function handleTooltipMouseOver(event) {
     tracker._x = event.pageX;
     tracker._y = event.pageY;
     tracker._element.off(tooltipMouseMoveEvents).on(tooltipMouseMoveEvents, event.data);
-    tracker._showTooltip(event, TOOLTIP_SHOW_DELAY);
+    tracker._showTooltip(event);
 }
 
 function handleTooltipMouseMove(event) {
     var tracker = event.data.tracker;
-    if(tracker._showTooltipTimeout && _abs(event.pageX - tracker._x) > 4 || _abs(event.pageY - tracker._y) > 4) {
+    if(_abs(event.pageX - tracker._x) > 4 || _abs(event.pageY - tracker._y) > 4) {
         tracker._x = event.pageX;
         tracker._y = event.pageY;
-        tracker._showTooltip(event, TOOLTIP_SHOW_DELAY);
+        tracker._showTooltip(event);
     }
 }
 
@@ -196,7 +181,7 @@ function handleTooltipTouchStart(event) {
         tracker._hideTooltip(TOOLTIP_TOUCH_HIDE_DELAY);
     }
     tracker = active_touch_tooltip_tracker = event.data.tracker;
-    tracker._showTooltip(event, TOOLTIP_TOUCH_SHOW_DELAY);
+    tracker._showTooltip(event);
     tracker._touch = true;
 }
 
@@ -214,10 +199,8 @@ function handleTooltipDocumentTouchStart() {
 function handleTooltipDocumentTouchEnd() {
     var tracker = active_touch_tooltip_tracker;
     if(tracker) {
-        if(tracker._showTooltipTimeout) {
-            tracker._hideTooltip(TOOLTIP_TOUCH_HIDE_DELAY);
-            active_touch_tooltip_tracker = null;
-        }
+        tracker._hideTooltip(TOOLTIP_TOUCH_HIDE_DELAY);
+        active_touch_tooltip_tracker = null;
     }
 }
 
