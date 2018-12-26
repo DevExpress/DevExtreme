@@ -73,6 +73,10 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
         _createHasItemsSetter: function() {
             var hasItemsExpr = this.option("hasItemsExpr");
 
+            if(typeUtils.isFunction(hasItemsExpr)) {
+                return hasItemsExpr;
+            }
+
             return hasItemsExpr && dataCoreUtils.compileSetter(hasItemsExpr);
         },
 
@@ -88,13 +92,14 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
         _calculateHasItems: function(node, options) {
             var that = this,
+                parentIds = options.storeLoadOptions.parentIds,
                 hasItems;
 
-            if(that._hasItemsGetter) {
+            if(that._hasItemsGetter && (parentIds || !options.storeLoadOptions.filter)) {
                 hasItems = that._hasItemsGetter(node.data);
             }
             if(hasItems === undefined) {
-                if(!that._isChildrenLoaded[node.key] && options.remoteOperations.filtering && options.storeLoadOptions.parentIds) {
+                if(!that._isChildrenLoaded[node.key] && options.remoteOperations.filtering && parentIds) {
                     hasItems = true;
                 } else {
                     hasItems = node.hasChildren;
@@ -241,7 +246,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                     this._isChildrenLoaded = {};
                 }
 
-                if(this.option("expandNodesOnFiltering") && (operationTypes.filtering || options.storeLoadOptions.filter)) {
+                if(this.option("expandNodesOnFiltering") && (operationTypes.filtering || this._isReload && options.storeLoadOptions.filter)) {
                     if(options.storeLoadOptions.filter) {
                         expandVisibleNodes = true;
                     } else {
@@ -342,6 +347,12 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
             if(!parentIds.length) {
                 return d.resolve(data);
+            }
+
+            var parentIdNodes = parentIds.map(id => this.getNodeByKey(id)).filter(node => node);
+
+            if(parentIdNodes.length === parentIds.length) {
+                return that._loadParents(data.concat(parentIdNodes.map(node => node.data)), options);
             }
 
             filter = that._createIdFilter(that.getKeyExpr(), parentIds);
@@ -507,9 +518,10 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
         _processTreeStructure: function(options, visibleItems) {
             var data = options.data,
+                parentIds = options.storeLoadOptions.parentIds,
                 expandedRowKeys = [];
 
-            if(options.remoteOperations.filtering || this._isReload) {
+            if(parentIds && parentIds.length || this._isReload) {
                 if(options.fullData && options.fullData.length > options.data.length) {
                     data = options.fullData;
                     visibleItems = visibleItems || options.data;

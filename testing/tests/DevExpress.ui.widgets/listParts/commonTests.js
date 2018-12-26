@@ -2717,8 +2717,7 @@ QUnit.test("Delayed search value should be applied on the widget reset", functio
 });
 
 QUnit.test("Search in items of grouped dataSource", function(assert) {
-    var searchEditor,
-        $element = $("#list").dxList({
+    var $element = $("#list").dxList({
             dataSource: [{ key: "a", items: [{ name: "1" }] }, { key: "b", items: [{ name: "2" }] }],
             grouped: true,
             searchEnabled: true,
@@ -2727,8 +2726,27 @@ QUnit.test("Search in items of grouped dataSource", function(assert) {
         instance = $element.dxList("instance"),
         expectedValue = { key: "a", items: [{ name: "1", key: "a" }] };
 
-    searchEditor = $element.children().first().dxTextBox("instance");
-    searchEditor.option("value", "1");
+    assert.equal(instance.getDataSource().searchExpr(), "name", "dataSource has correct searchExpr");
+
+    instance.option("searchValue", "1");
+
+    assert.deepEqual(instance.option("items")[0], expectedValue, "items");
+});
+
+QUnit.test("Search in items of grouped dataSource with simple items", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [{ key: "a", items: ["1", "2"] }],
+            grouped: true,
+            searchEnabled: true
+        }),
+        instance = $element.dxList("instance"),
+        expectedItems = [{ key: "a", items: [ { text: "1", key: "a" }, { text: "2", key: "a" }] }],
+        expectedValue = { key: "a", items: [ { text: "1", key: "a" }] };
+
+    assert.deepEqual(instance.option("items"), expectedItems, "items have correct structure");
+    assert.equal(instance.getDataSource().searchExpr(), "text", "dataSource has correct searchExpr");
+
+    instance.option("searchValue", "1");
 
     assert.deepEqual(instance.option("items")[0], expectedValue, "items");
 });

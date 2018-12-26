@@ -93,7 +93,7 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
                     }).done(function(data) {
 
                         if(!data || data.length === 0 || !isDefined(data[0].key) || data[0].key === -1) {
-                            return deferred.promise();
+                            return deferred.resolve(-1).promise();
                         }
 
                         groupPath = that._getGroupPath(data[0]);
@@ -125,6 +125,11 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
                         var count,
                             currentPageOffset,
                             groupContinuationCount;
+
+                        if(dataOffset < 0) {
+                            deferred.resolve(-1);
+                            return;
+                        }
 
                         currentPageOffset = (groupOffset % pageSize) || pageSize;
 

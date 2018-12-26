@@ -426,7 +426,7 @@ var Scheduler = Widget.inherit({
 
             /**
                 * @name dxSchedulerOptions.dataSource
-                * @type string|Array<dxSchedulerAppointmentTemplate>|DataSource|DataSourceOptions
+                * @type string|Array<dxSchedulerAppointment>|DataSource|DataSourceOptions
                 * @default null
                 */
             dataSource: null,
@@ -911,62 +911,62 @@ var Scheduler = Widget.inherit({
                 * @inheritdoc
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate
-                * @inherits CollectionWidgetItemTemplate
+                * @name dxSchedulerAppointment
+                * @inherits CollectionWidgetItem
                 * @type object
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.html
+                * @name dxSchedulerAppointment.html
                 * @type String
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.disabled
+                * @name dxSchedulerAppointment.disabled
                 * @type boolean
                 * @default false
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.visible
+                * @name dxSchedulerAppointment.visible
                 * @type boolean
                 * @default true
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.template
+                * @name dxSchedulerAppointment.template
                 * @type template
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.text
+                * @name dxSchedulerAppointment.text
                 * @type String
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.startDate
+                * @name dxSchedulerAppointment.startDate
                 * @type Date
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.endDate
+                * @name dxSchedulerAppointment.endDate
                 * @type Date
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.description
+                * @name dxSchedulerAppointment.description
                 * @type String
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.recurrenceRule
+                * @name dxSchedulerAppointment.recurrenceRule
                 * @type String
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.recurrenceException
+                * @name dxSchedulerAppointment.recurrenceException
                 * @type String
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.allDay
+                * @name dxSchedulerAppointment.allDay
                 * @type Boolean
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.startDateTimeZone
+                * @name dxSchedulerAppointment.startDateTimeZone
                 * @type String
                 */
             /**
-                * @name dxSchedulerAppointmentTemplate.endDateTimeZone
+                * @name dxSchedulerAppointment.endDateTimeZone
                 * @type String
                 */
             /**
