@@ -382,27 +382,33 @@ var ListBase = CollectionWidget.inherit({
             * @inheritdoc
             */
 
+            /**
+             * @name dxListOptions.items
+             * @type Array<string, dxListItem, object>
+             * @fires dxListOptions.onOptionChanged
+             */
+
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
             badgeExpr: function(data) { return data ? data.badge : undefined; }
             /**
-            * @name dxListItemTemplate
-            * @inherits CollectionWidgetItemTemplate
+            * @name dxListItem
+            * @inherits CollectionWidgetItem
             * @type object
             */
             /**
-            * @name dxListItemTemplate.badge
+            * @name dxListItem.badge
             * @type String
             */
             /**
-            * @name dxListItemTemplate.showChevron
+            * @name dxListItem.showChevron
             * @type boolean
             */
             /**
-             * @name dxListItemTemplate.icon
+             * @name dxListItem.icon
              * @type String
              */
             /**
-             * @name dxListItemTemplate.key
+             * @name dxListItem.key
              * @type String
              */
         });

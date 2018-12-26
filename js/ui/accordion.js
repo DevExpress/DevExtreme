@@ -124,6 +124,12 @@ var Accordion = CollectionWidget.inherit({
             deferRendering: true,
 
             /**
+             * @name dxAccordionOptions.items
+             * @type Array<string, dxAccordionItem, object>
+             * @fires dxAccordionOptions.onOptionChanged
+             */
+
+            /**
             * @name dxAccordionOptions.itemTemplate
             * @type template|function
             * @default "item"
@@ -193,16 +199,16 @@ var Accordion = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
         /**
-        * @name dxAccordionItemTemplate
-        * @inherits CollectionWidgetItemTemplate
+        * @name dxAccordionItem
+        * @inherits CollectionWidgetItem
         * @type object
         */
         /**
-        * @name dxAccordionItemTemplate.title
+        * @name dxAccordionItem.title
         * @type String
         */
         /**
-        * @name dxAccordionItemTemplate.icon
+        * @name dxAccordionItem.icon
         * @type String
         */
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {

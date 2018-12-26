@@ -99,7 +99,7 @@ const HtmlEditor = Editor.inherit({
 
             /**
             * @name dxHtmlEditorToolbarItem
-            * @inherits dxToolbarItemTemplate
+            * @inherits dxToolbarItem
             */
             /**
             * @name dxHtmlEditorToolbarItem.formatName
