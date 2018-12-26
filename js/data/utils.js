@@ -232,9 +232,19 @@ var isGroupOperator = function(value) {
 };
 
 var isGroupCriterion = function(crit) {
-    return Array.isArray(crit[0])
-            || (typeUtils.isFunction(crit[0])
-                && (Array.isArray(crit[1]) || isGroupOperator(crit[1]) && crit[2]));
+    var first = crit[0],
+        second = crit[1];
+
+    if(Array.isArray(first)) {
+        return true;
+    }
+    if(typeUtils.isFunction(first)) {
+        if(Array.isArray(second) || typeUtils.isFunction(second) || isGroupOperator(second)) {
+            return true;
+        }
+    }
+
+    return false;
 };
 
 var trivialPromise = function() {

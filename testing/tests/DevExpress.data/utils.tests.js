@@ -145,18 +145,16 @@ QUnit.module("isGroupCriterion");
 
 QUnit.test("check isGroupCriterion", function(assert) {
     const testFunc = () => {};
+    const testBinary = ["id", "=", 1];
 
-    assert.notOk(isGroupCriterion([null]));
-    assert.notOk(isGroupCriterion([testFunc]));
-    assert.ok(isGroupCriterion([[]]));
-    assert.ok(isGroupCriterion([[testFunc]]));
-    assert.ok(isGroupCriterion([[], testFunc]));
-    assert.ok(isGroupCriterion([testFunc, []]));
+    assert.ok(isGroupCriterion([testBinary, testBinary]));
+    assert.ok(isGroupCriterion([testBinary, testFunc]));
+    assert.ok(isGroupCriterion([testFunc, testBinary]));
+    assert.ok(isGroupCriterion([testFunc, testFunc]));
+    assert.ok(isGroupCriterion([testFunc, "and", testBinary]));
     assert.ok(isGroupCriterion([testFunc, "or", testFunc]));
-    assert.notOk(isGroupCriterion([testFunc, "and"]));
-    assert.notOk(isGroupCriterion(testFunc));
-    assert.notOk(isGroupCriterion([testFunc, "=", "value"]));
-    assert.notOk(isGroupCriterion([testFunc, "value"]));
-    assert.notOk(isGroupCriterion([testFunc, "="]));
-    assert.notOk(isGroupCriterion([testFunc, "=", testFunc]));
+
+    assert.notOk(isGroupCriterion([testFunc]));
+    assert.notOk(isGroupCriterion([testFunc, "=", 1]));
+    assert.notOk(isGroupCriterion([testFunc, 1]));
 });
