@@ -231,7 +231,7 @@ var isGroupOperator = function(value) {
     return value === "and" || value === "or";
 };
 
-var isGroupCriteria = function(crit) {
+var isGroupCriterion = function(crit) {
     return Array.isArray(crit[0])
             || (typeUtils.isFunction(crit[0])
                 && (Array.isArray(crit[1]) || isGroupOperator(crit[1]) && crit[2]));
@@ -301,7 +301,7 @@ var utils = {
     processRequestResultLock: processRequestResultLock,
 
     isUnaryOperation: isUnaryOperation,
-    isGroupCriteria: isGroupCriteria,
+    isGroupCriterion: isGroupCriterion,
 
     /**
     * @name Utils.base64_encode

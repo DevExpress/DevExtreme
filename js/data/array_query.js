@@ -336,7 +336,7 @@ var compileCriteria = (function() {
         if(typeUtils.isFunction(crit)) {
             return crit;
         }
-        if(dataUtils.isGroupCriteria(crit)) {
+        if(dataUtils.isGroupCriterion(crit)) {
             return compileGroup(crit);
         }
         if(dataUtils.isUnaryOperation(crit)) {

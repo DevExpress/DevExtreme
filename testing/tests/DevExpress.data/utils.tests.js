@@ -6,7 +6,7 @@ const keysEqual = dataUtils.keysEqual,
     processRequestResultLock = dataUtils.processRequestResultLock,
     b64 = dataUtils.base64_encode,
     throttleChanges = dataUtils.throttleChanges,
-    isGroupCriteria = dataUtils.isGroupCriteria;
+    isGroupCriterion = dataUtils.isGroupCriterion;
 
 QUnit.module("keysEqual");
 
@@ -141,22 +141,22 @@ QUnit.module("Throttling", {
     });
 });
 
-QUnit.module("isGroupCriteria");
+QUnit.module("isGroupCriterion");
 
-QUnit.test("check isGroupCriteria", function(assert) {
+QUnit.test("check isGroupCriterion", function(assert) {
     const testFunc = () => {};
 
-    assert.notOk(isGroupCriteria([null]));
-    assert.notOk(isGroupCriteria([testFunc]));
-    assert.ok(isGroupCriteria([[]]));
-    assert.ok(isGroupCriteria([[testFunc]]));
-    assert.ok(isGroupCriteria([[], testFunc]));
-    assert.ok(isGroupCriteria([testFunc, []]));
-    assert.ok(isGroupCriteria([testFunc, "or", testFunc]));
-    assert.notOk(isGroupCriteria([testFunc, "and"]));
-    assert.notOk(isGroupCriteria(testFunc));
-    assert.notOk(isGroupCriteria([testFunc, "=", "value"]));
-    assert.notOk(isGroupCriteria([testFunc, "value"]));
-    assert.notOk(isGroupCriteria([testFunc, "="]));
-    assert.notOk(isGroupCriteria([testFunc, "=", testFunc]));
+    assert.notOk(isGroupCriterion([null]));
+    assert.notOk(isGroupCriterion([testFunc]));
+    assert.ok(isGroupCriterion([[]]));
+    assert.ok(isGroupCriterion([[testFunc]]));
+    assert.ok(isGroupCriterion([[], testFunc]));
+    assert.ok(isGroupCriterion([testFunc, []]));
+    assert.ok(isGroupCriterion([testFunc, "or", testFunc]));
+    assert.notOk(isGroupCriterion([testFunc, "and"]));
+    assert.notOk(isGroupCriterion(testFunc));
+    assert.notOk(isGroupCriterion([testFunc, "=", "value"]));
+    assert.notOk(isGroupCriterion([testFunc, "value"]));
+    assert.notOk(isGroupCriterion([testFunc, "="]));
+    assert.notOk(isGroupCriterion([testFunc, "=", testFunc]));
 });
