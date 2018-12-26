@@ -80,20 +80,19 @@ QUnit.test("with no key specified", function(assert) {
     );
 });
 
-QUnit.test("set filter as a function(T686655)", (assert) => {
+QUnit.test("with filter as a function (T686655)", (assert) => {
     assert.expect(2);
 
     const source = new DataSource({
         store: [
-            { a: "1", i: 1 },
-            { a: "2", i: 2 },
-            { a: "3", i: 3 }
+            { a: "1" },
+            { a: "2" }
         ],
         filter: (itemData) => itemData.a !== "2"
     });
 
     source.loadSingle("a", "1").done((r) => {
-        assert.deepEqual(r, { a: "1", i: 1 });
+        assert.equal(r.a, "1");
     });
 
     source.loadSingle("a", "2").fail(() => {
