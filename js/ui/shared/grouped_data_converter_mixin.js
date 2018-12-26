@@ -1,3 +1,4 @@
+const isObject = require("../../core/utils/type").isObject;
 const isCorrectStructure = data => {
     return Array.isArray(data) && data.every(item => {
         const hasTwoFields = Object.keys(item).length === 2;
@@ -15,9 +16,14 @@ export default {
         if(this._getGroupedOption() && isCorrectStructure(dataSource)) {
             dataSource = dataSource.reduce((accumulator, item) => {
                 const items = item.items.map(innerItem => {
+                    if(!isObject(innerItem)) {
+                        innerItem = { text: innerItem };
+                    }
+
                     if(!(groupKey in innerItem)) {
                         innerItem[groupKey] = item.key;
                     }
+
                     return innerItem;
                 });
                 return accumulator.concat(items);
