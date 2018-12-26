@@ -40,9 +40,6 @@ class RadioCollection extends CollectionWidget {
         this.itemElements().addClass(RADIO_BUTTON_CLASS);
     }
 
-    _itemSelectHandler() {
-    }
-
     _keyboardEventBindingTarget() {
         return this._focusTarget();
     }
@@ -318,18 +315,19 @@ class RadioGroup extends Editor {
         const $radios = $("<div>").appendTo(this.$element());
 
         this._radios = this._createComponent($radios, RadioCollection, {
-            keyExpr: this._getCollectionKeyExpr(),
-            selectionMode: "single",
-            selectedItemKeys: this._getSelectedItemKeys(),
+            accessKey: this.option("accessKey"),
             dataSource: this._dataSource,
+            focusStateEnabled: this.option("focusStateEnabled"),
+            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            keyExpr: this._getCollectionKeyExpr(),
+            noDataText: "",
             onContentReady: () => this._fireContentReadyAction(true),
             onItemClick: this._itemClickHandler.bind(this),
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
             scrollingEnabled: false,
-            focusStateEnabled: this.option("focusStateEnabled"),
-            accessKey: this.option("accessKey"),
-            tabIndex: this.option("tabIndex"),
-            noDataText: ""
+            selectionByClick: false,
+            selectionMode: "single",
+            selectedItemKeys: this._getSelectedItemKeys(),
+            tabIndex: this.option("tabIndex")
         });
     }
 
