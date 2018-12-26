@@ -1547,6 +1547,56 @@ QUnit.test("Initial load when dataSource has filter and filterMode is extended (
     assert.equal(items[3].level, 0, "item 4 level");
 });
 
+// T698573
+QUnit.test("Collapse node when dataSource has filter and filterMode is extended (default)", function(assert) {
+    // arrange, act
+    var loadingArgs = [];
+
+    var arrayStore = new ArrayStore({
+        data: this.items
+    });
+
+    this.setupTreeList({
+        expandNodesOnFiltering: true,
+        hasItemsExpr: function() {
+            return true;
+        },
+        dataSource: {
+            load: function(loadOptions) {
+                var d = $.Deferred();
+                loadingArgs.push(loadOptions);
+                setTimeout(function() {
+                    arrayStore.load(loadOptions).done(function(data) {
+                        d.resolve(data);
+                    }).fail(d.reject);
+                });
+
+                return d;
+            },
+            filter: ["age", "=", 19]
+        }
+    });
+
+    this.clock.tick();
+
+    assert.equal(loadingArgs.length, 2, "two loading on init");
+
+    // act
+    loadingArgs = [];
+    this.collapseRow(1);
+    this.clock.tick();
+
+    // assert
+    var items = this.dataController.items();
+    assert.equal(loadingArgs.length, 0, "no loadings on collapse row");
+    assert.strictEqual(items.length, 2, "item count");
+    assert.strictEqual(this.isRowExpanded(items[0].key), false, "item 0 is collapsed");
+    assert.strictEqual(items[0].node.children.length, 1, "item 0 children");
+    assert.strictEqual(items[0].node.hasChildren, true, "item 0 hasChildren");
+    assert.strictEqual(items[1].node.children.length, 0, "item 1 children");
+    assert.strictEqual(items[1].node.hasChildren, false, "item 1 hasChildren");
+});
+
 QUnit.test("Filter changing should expand nodes", function(assert) {
     // arrange, act
     this.setupTreeList({
