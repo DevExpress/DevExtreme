@@ -34,6 +34,7 @@ export default {
                     type: "array",
                     data: dataSource
                 },
+                searchExpr: "text",
                 group: "key"
             };
         };
