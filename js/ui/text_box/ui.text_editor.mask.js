@@ -442,7 +442,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _isControlKeyFired: function(e) {
-        return this._isControlKey(e.key) || e.ctrlKey // NOTE: FF fires control keys on keypress
+        return this._isControlKey(eventUtils.normalizeKeyName(e)) || e.ctrlKey // NOTE: FF fires control keys on keypress
                 || e.metaKey; // NOTE: Safari fires keys with ctrl modifier on keypress
     },
 

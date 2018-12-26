@@ -732,7 +732,7 @@ var FilterBuilder = Widget.inherit({
                 var treeViewElement = $(info.component.content()).find(".dx-treeview"),
                     treeView = treeViewElement.dxTreeView("instance");
                 eventsEngine.on(treeViewElement, "keyup keydown", function(e) {
-                    const keyName = normalizeKeyName(e.key);
+                    const keyName = normalizeKeyName(e);
 
                     if((e.type === "keydown" && keyName === TAB_KEY)
                             || (e.type === "keyup" && (keyName === ESCAPE_KEY || keyName === ENTER_KEY))) {
@@ -1060,7 +1060,7 @@ var FilterBuilder = Widget.inherit({
 
         var documentClickHandler = this._addDocumentClick($editor, closeEditor);
         var documentKeyUpHandler = this._addDocumentKeyUp($editor, (e) => {
-            const keyName = normalizeKeyName(e.key);
+            const keyName = normalizeKeyName(e);
 
             if(keyName === TAB_KEY) {
                 if(this._isFocusOnEditorParts($editor)) {
@@ -1142,7 +1142,7 @@ var FilterBuilder = Widget.inherit({
     _subscribeOnClickAndEnterKey: function($button, handler) {
         eventsEngine.on($button, "dxclick", handler);
         eventsEngine.on($button, "keyup", function(e) {
-            if(normalizeKeyName(e.key) === ENTER_KEY) {
+            if(normalizeKeyName(e) === ENTER_KEY) {
                 handler(e);
             }
         });

@@ -243,7 +243,7 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _popupElementTabHandler: function(e) {
-        if(normalizeKeyName(e.key) !== "tab") return;
+        if(normalizeKeyName(e) !== "tab") return;
 
         var $firstTabbable = this._getTabbableElements().first().get(0),
             $lastTabbable = this._getTabbableElements().last().get(0),

@@ -138,7 +138,7 @@ var TextBox = TextEditor.inherit({
         var maxLength = this.option("maxLength");
         if(maxLength) {
             var $input = $(e.target),
-                key = eventUtils.normalizeKeyName(e.key);
+                key = eventUtils.normalizeKeyName(e);
 
             this._cutOffExtraChar($input);
 

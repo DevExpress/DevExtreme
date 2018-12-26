@@ -24,6 +24,9 @@ const KEY_MAP = {
     "a": "A",
     "*": "asterisk",
     "-": "minus",
+    "alt": "alt",
+    "control": "control",
+    "shift": "shift",
     // IE11:
     "left": "leftArrow",
     "up": "upArrow",
@@ -33,6 +36,33 @@ const KEY_MAP = {
     "spacebar": "space",
     "del": "del",
     "subtract": "minus"
+};
+
+const LEGACY_KEY_CODES = {
+    // iOS 10.2 and lower didn't supports KeyboardEvent.key
+    "8": "backspace",
+    "9": "tab",
+    "13": "enter",
+    "27": "escape",
+    "33": "pageUp",
+    "34": "pageDown",
+    "35": "end",
+    "36": "home",
+    "37": "leftArrow",
+    "38": "upArrow",
+    "39": "rightArrow",
+    "40": "downArrow",
+    "46": "del",
+    "32": "space",
+    "70": "F",
+    "65": "A",
+    "106": "asterisk",
+    "109": "minus",
+    "189": "minus",
+    "173": "minus",
+    "16": "shift",
+    "17": "control",
+    "18": "alt"
 };
 
 const eventSource = (() => {
@@ -183,8 +213,21 @@ const addNamespace = function(eventNames, namespace) {
     return eventNames.join(" ");
 };
 
-const normalizeKeyName = (keyName) => {
-    return KEY_MAP[keyName.toLowerCase()] || keyName;
+const normalizeKeyName = (event) => {
+    const isKeySupported = !!event.key;
+    let key = isKeySupported ? event.key : event.which;
+
+    if(!key) {
+        return;
+    }
+
+    if(isKeySupported) {
+        key = KEY_MAP[key.toLowerCase()] || key;
+    } else {
+        key = LEGACY_KEY_CODES[key] || String.fromCharCode(key);
+    }
+
+    return key;
 };
 
 

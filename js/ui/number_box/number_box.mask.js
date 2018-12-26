@@ -41,7 +41,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isDeleteKey: function(key) {
-        return key === "Delete" || key === "Del";
+        return key === "del";
     },
 
     _supportedKeys: function() {
@@ -158,7 +158,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _keyboardHandler: function(e) {
-        this._lastKey = number.convertDigits(e.originalEvent.key, true);
+        var keyName = this._getKeyName(e);
+        this._lastKey = number.convertDigits(keyName, true);
 
         if(!this._shouldHandleKey(e.originalEvent)) {
             return this.callBase(e);
@@ -185,6 +186,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return this.callBase(e);
     },
 
+    _getKeyName: function(event) {
+        return eventUtils.normalizeKeyName(event).replace("minus", "-");
+    },
+
     _keyPressHandler: function(e) {
         if(!this._useMaskBehavior()) {
             this.callBase(e);
@@ -195,18 +200,19 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var caret = this._caret(),
             text = this._getInputVal(),
             start = caret.start,
-            end = caret.end;
+            end = caret.end,
+            keyName = this._getKeyName(e);
 
-        this._lastKey = e.key;
+        this._lastKey = keyName;
 
         if(caret.start === caret.end) {
-            this._isDeleteKey(e.key) ? end++ : start--;
+            this._isDeleteKey(keyName) ? end++ : start--;
         }
 
         var char = text.slice(start, end);
 
         if(this._isStub(char)) {
-            this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
+            this._moveCaret(this._isDeleteKey(keyName) ? 1 : -1);
             if(this._parsedValue < 0 || 1 / this._parsedValue === -Infinity) {
                 this._revertSign(e);
                 this._setTextByParsedValue();
@@ -219,7 +225,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         if(char === decimalSeparator) {
             var decimalSeparatorIndex = text.indexOf(decimalSeparator);
             if(this._isNonStubAfter(decimalSeparatorIndex + 1)) {
-                this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
+                this._moveCaret(this._isDeleteKey(keyName) ? 1 : -1);
                 e.preventDefault();
             }
             return;
@@ -415,8 +421,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _shouldHandleKey: function(e) {
-        var isSpecialChar = e.ctrlKey || e.shiftKey || e.altKey || !this._isChar(e.key),
-            isMinusKey = e.key === MINUS,
+        var keyName = this._getKeyName(e),
+            isSpecialChar = e.ctrlKey || e.shiftKey || e.altKey || !this._isChar(keyName),
+            isMinusKey = keyName === MINUS,
             useMaskBehavior = this._useMaskBehavior();
 
         return useMaskBehavior && !isSpecialChar && !isMinusKey;
@@ -491,9 +498,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var caret = this._caret();
-
         if(caret.start !== caret.end) {
-            if((e.key === MINUS || e.key === NUMPUD_MINUS_KEY_IE)) {
+            if(this._getKeyName(e) === MINUS) {
                 this._applyRevertedSign(e, caret, true);
                 return;
             } else {

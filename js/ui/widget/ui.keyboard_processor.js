@@ -68,7 +68,7 @@ const KeyboardProcessor = Class.inherit({
         }
 
         var args = {
-            keyName: normalizeKeyName(e.key),
+            keyName: normalizeKeyName(e),
             key: e.key,
             code: e.code,
             ctrl: e.ctrlKey,

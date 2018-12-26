@@ -188,7 +188,7 @@ var EditorFactory = modules.ViewController.inherit({
         if($container) {
             // T179518
             eventsEngine.on($container, addNamespace("keydown", MODULE_NAMESPACE), function(e) {
-                if(normalizeKeyName(e.key) === "tab") {
+                if(normalizeKeyName(e) === "tab") {
                     that._updateFocusHandler(e);
                 }
             });
