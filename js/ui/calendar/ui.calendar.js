@@ -3,6 +3,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
+    inRange = require("../../core/utils/math").inRange,
     extend = require("../../core/utils/extend").extend,
     Button = require("../button"),
     Editor = require("../editor/editor"),
@@ -344,50 +345,81 @@ var Calendar = Editor.inherit({
         this.option(optionName, dateSerialization.serializeDate(optionValue, serializationFormat));
     },
 
+    _normalizeOffset: function(zoomLevel, offset) {
+        var offsetCorrection = 2 * offset / Math.abs(offset);
+
+        if(Math.abs(offset) <= 1) {
+            return offset;
+        }
+
+        if(zoomLevel === "decade") {
+            return offset - offsetCorrection;
+        }
+
+        if(zoomLevel === "century") {
+            return 10 * (offset - offsetCorrection);
+        }
+
+        return 0;
+    },
+
     _moveCurrentDate: function(offset, baseDate) {
         var currentDate = baseDate || new Date(this.option("currentDate")),
             maxDate = this.option("max"),
             minDate = this.option("min"),
             zoomLevel = this.option("zoomLevel"),
-            isAvailableDateFound = false,
-            newDate;
+            dateForward = new Date(currentDate),
+            dateBackward = new Date(currentDate),
+            dateForwardInRange = inRange(dateBackward, minDate, maxDate),
+            dateBackwardInRange = inRange(dateForward, minDate, maxDate);
 
-        while(!isAvailableDateFound) {
-            newDate = new Date(currentDate);
+        while((!offset && (dateForwardInRange || dateBackwardInRange)) || (offset && dateForwardInRange)) {
+            var step = offset || 1;
+
             switch(zoomLevel) {
                 case "month":
-                    newDate.setDate(currentDate.getDate() + offset);
+                    dateForward.setDate(dateForward.getDate() + step);
+                    dateBackward.setDate(dateBackward.getDate() - step);
                     break;
                 case "year":
-                    newDate.setMonth(currentDate.getMonth() + offset);
+                    dateForward.setMonth(dateForward.getMonth() + step);
+                    dateBackward.setMonth(dateBackward.getMonth() - step);
                     break;
                 case "decade":
-                    newDate.setFullYear(currentDate.getFullYear() + offset);
+                    dateForward.setFullYear(dateForward.getFullYear() + step);
+                    dateBackward.setFullYear(dateBackward.getFullYear() - step);
                     break;
                 case "century":
-                    newDate.setFullYear(currentDate.getFullYear() + 10 * offset);
+                    dateForward.setFullYear(dateForward.getFullYear() + 10 * step);
+                    dateBackward.setFullYear(dateBackward.getFullYear() - 10 * step);
                     break;
             }
 
-            var offsetCorrection = 2 * offset / Math.abs(offset);
-
-            if(Math.abs(offset) > 1 && !dateUtils.sameView(zoomLevel, currentDate, newDate)) {
-                if(zoomLevel === "decade") {
-                    newDate.setFullYear(currentDate.getFullYear() + offset - offsetCorrection);
+            if(Math.abs(step) > 1) {
+                if(!dateUtils.sameView(zoomLevel, currentDate, dateForward)) {
+                    dateForward.setFullYear(dateForward.getFullYear() - this._normalizeOffset(zoomLevel, step));
                 }
-                if(zoomLevel === "century") {
-                    newDate.setFullYear(currentDate.getFullYear() + 10 * (offset - offsetCorrection));
+
+                if(!dateUtils.sameView(zoomLevel, currentDate, dateBackward)) {
+                    dateBackward.setFullYear(dateBackward.getFullYear() - this._normalizeOffset(zoomLevel, step));
                 }
             }
 
-            if(this._view.isDateDisabled(newDate) && newDate <= new Date(maxDate) && newDate >= new Date(minDate)) {
-                currentDate = newDate;
-            } else {
-                isAvailableDateFound = true;
+            if(!this._view.isDateDisabled(dateForward)) {
+                currentDate = dateForward;
+                break;
             }
+
+            if(!offset && !this._view.isDateDisabled(dateBackward)) {
+                currentDate = dateBackward;
+                break;
+            }
+
+            dateBackwardInRange = inRange(dateBackward, minDate, maxDate);
+            dateForwardInRange = inRange(dateForward, minDate, maxDate);
         }
 
-        this.option("currentDate", newDate);
+        this.option("currentDate", currentDate);
     },
 
     _moveToClosestAvailableDate: function(baseDate, offset) {
@@ -599,7 +631,7 @@ var Calendar = Editor.inherit({
         this._updateAriaId();
 
         if(this._view.isDateDisabled(this.option("currentDate"))) {
-            this._moveCurrentDate(1);
+            this._moveCurrentDate(0);
         }
 
     },
