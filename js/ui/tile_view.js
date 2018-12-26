@@ -55,6 +55,12 @@ var TileView = CollectionWidget.inherit({
             items: null,
 
             /**
+             * @name dxTileViewOptions.items
+             * @type Array<string, dxTileViewItem, object>
+             * @fires dxTileViewOptions.onOptionChanged
+             */
+
+            /**
             * @name dxTileViewOptions.direction
             * @type Enums.Orientation
             * @default 'horizontal'
@@ -114,19 +120,19 @@ var TileView = CollectionWidget.inherit({
             indicateLoading: true
 
             /**
-            * @name dxTileViewItemTemplate
-            * @inherits CollectionWidgetItemTemplate
+            * @name dxTileViewItem
+            * @inherits CollectionWidgetItem
             * @type object
             */
 
             /**
-            * @name dxTileViewItemTemplate.widthRatio
+            * @name dxTileViewItem.widthRatio
             * @type number
             * @default 1
             */
 
             /**
-            * @name dxTileViewItemTemplate.heightRatio
+            * @name dxTileViewItem.heightRatio
             * @type number
             * @default 1
             */

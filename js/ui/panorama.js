@@ -584,6 +584,12 @@ var Panorama = CollectionWidget.inherit({
             */
 
             /**
+             * @name dxPanoramaOptions.items
+             * @type Array<string, dxPanoramaItem, object>
+             * @fires dxPanoramaOptions.onOptionChanged
+             */
+
+            /**
             * @name dxPanoramaOptions.focusStateEnabled
             * @type boolean
             * @default false
@@ -998,16 +1004,16 @@ var Panorama = CollectionWidget.inherit({
     */
 });
 /**
-* @name dxPanoramaItemTemplate
-* @inherits CollectionWidgetItemTemplate
+* @name dxPanoramaItem
+* @inherits CollectionWidgetItem
 * @type object
 */
 /**
-* @name dxPanoramaItemTemplate.title
+* @name dxPanoramaItem.title
 * @type String
 */
 /**
-* @name dxPanoramaItemTemplate.visible
+* @name dxPanoramaItem.visible
 * @hidden
 * @inheritdoc
 */

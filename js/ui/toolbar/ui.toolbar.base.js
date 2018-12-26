@@ -29,17 +29,24 @@ var TOOLBAR_CLASS = "dx-toolbar",
 
 var ToolbarBase = AsyncCollectionWidget.inherit({
     compactMode: false,
+
     /**
-    * @name dxToolbarItemTemplate
-    * @inherits CollectionWidgetItemTemplate
+     * @name dxToolbarOptions.items
+     * @type Array<string, dxToolbarItem, object>
+     * @fires dxToolbarOptions.onOptionChanged
+     */
+
+    /**
+    * @name dxToolbarItem
+    * @inherits CollectionWidgetItem
     * @type object
     */
     /**
-    * @name dxToolbarItemTemplate.widget
+    * @name dxToolbarItem.widget
     * @type Enums.ToolbarItemWidget
     */
     /**
-    * @name dxToolbarItemTemplate.options
+    * @name dxToolbarItem.options
     * @type object
     */
 

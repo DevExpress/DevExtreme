@@ -72,7 +72,7 @@ var ContextMenu = MenuBase.inherit((function() {
             return extend(this.callBase(), {
                 /**
                 * @name dxContextMenuOptions.items
-                * @type Array<dxContextMenuItemTemplate>
+                * @type Array<dxContextMenuItem>
                 * @inheritdoc
                 */
                 /**
@@ -201,14 +201,14 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @inheritdoc
                 */
                 /**
-                * @name dxContextMenuItemTemplate
-                * @inherits dxMenuBaseItemTemplate
+                * @name dxContextMenuItem
+                * @inherits dxMenuBaseItem
                 * @type object
                 * @inheritdoc
                 */
                 /**
-                * @name dxContextMenuItemTemplate.items
-                * @type Array<dxContextMenuItemTemplate>
+                * @name dxContextMenuItem.items
+                * @type Array<dxContextMenuItem>
                 * @inheritdoc
                 */
 
