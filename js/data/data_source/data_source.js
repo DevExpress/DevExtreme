@@ -789,14 +789,9 @@ var DataSource = Class.inherit({
 
             options.take = 1;
 
-            if(options.filter) {
-                if(typeUtils.isFunction(options.filter)) {
-                    options.filter = [options.filter];
-                }
-                options.filter = [options.filter, [propName, propValue]];
-            } else {
-                options.filter = [propName, propValue];
-            }
+            options.filter = options.filter
+                ? [options.filter, [propName, propValue]]
+                : [propName, propValue];
 
             return store.load(options);
 

@@ -92,15 +92,13 @@ QUnit.test("set filter as a function(T686655)", (assert) => {
         filter: (itemData) => itemData.a !== "2"
     });
 
-    $.when(
-        source.loadSingle("a", "1").done((r) => {
-            assert.deepEqual(r, { a: "1", i: 1 });
-        }),
+    source.loadSingle("a", "1").done((r) => {
+        assert.deepEqual(r, { a: "1", i: 1 });
+    });
 
-        source.loadSingle("a", "2").fail(() => {
-            assert.ok(true, "shouldn't retrieve filtered values");
-        })
-    );
+    source.loadSingle("a", "2").fail(() => {
+        assert.ok(true, "shouldn't retrieve filtered values");
+    });
 });
 
 QUnit.test("use key if no propName specified", function(assert) {

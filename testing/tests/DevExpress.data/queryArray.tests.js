@@ -281,6 +281,35 @@ QUnit.test("filter by function", function(assert) {
     });
 });
 
+QUnit.test("filter by mixed type conditions", function(assert) {
+    assert.expect(2);
+
+    var done = assert.async(),
+        data = [
+            { id: 0, value: 0 },
+            { id: 1, value: 2 },
+            { id: 2, value: 5 },
+        ],
+        functionCondition = function(itemData) {
+            return itemData.value > 1;
+        },
+        arrayCondition = ["value", "<", 5];
+
+    var q1 = QUERY(data).filter([functionCondition, arrayCondition]),
+        q2 = QUERY(data).filter([arrayCondition, functionCondition]);
+
+    $.when(
+        q1.enumerate().done(function(r) {
+            assert.deepEqual(r, [{ id: 1, value: 2 }]);
+        }),
+        q2.enumerate().done(function(r) {
+            assert.deepEqual(r, [{ id: 1, value: 2 }]);
+        })
+    ).done(function() {
+        done();
+    });
+});
+
 QUnit.test("comparison operators", function(assert) {
     assert.expect(6);
 

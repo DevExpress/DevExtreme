@@ -5,6 +5,7 @@ import { getWindow } from "../core/utils/window";
 import { map } from "../core/utils/iterator";
 import { toComparable } from "../core/utils/data";
 import { Deferred } from "../core/utils/deferred";
+import typeUtils from "../core/utils/type";
 
 var XHR_ERROR_UNLOAD = "DEVEXTREME_XHR_ERROR_UNLOAD";
 
@@ -226,6 +227,16 @@ var isUnaryOperation = function(crit) {
     return crit[0] === "!" && Array.isArray(crit[1]);
 };
 
+var isGroupOperator = function(value) {
+    return value === "and" || value === "or";
+};
+
+var isGroupCriteria = function(crit) {
+    return Array.isArray(crit[0])
+            || (typeUtils.isFunction(crit[0])
+                && (Array.isArray(crit[1]) || isGroupOperator(crit[1]) && crit[2]));
+};
+
 var trivialPromise = function() {
     var d = new Deferred();
     return d.resolve.apply(d, arguments).promise();
@@ -290,6 +301,7 @@ var utils = {
     processRequestResultLock: processRequestResultLock,
 
     isUnaryOperation: isUnaryOperation,
+    isGroupCriteria: isGroupCriteria,
 
     /**
     * @name Utils.base64_encode

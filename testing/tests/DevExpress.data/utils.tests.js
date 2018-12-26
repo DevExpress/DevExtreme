@@ -1,10 +1,12 @@
-var Guid = require("core/guid"),
-    dataUtils = require("data/utils"),
-    keysEqual = dataUtils.keysEqual,
+import Guid from "core/guid";
+import dataUtils from "data/utils";
+import odataUtils from "data/odata/utils";
+
+const keysEqual = dataUtils.keysEqual,
     processRequestResultLock = dataUtils.processRequestResultLock,
     b64 = dataUtils.base64_encode,
     throttleChanges = dataUtils.throttleChanges,
-    odataUtils = require("data/odata/utils");
+    isGroupCriteria = dataUtils.isGroupCriteria;
 
 QUnit.module("keysEqual");
 
@@ -137,4 +139,24 @@ QUnit.module("Throttling", {
         this.clock.tick(100);
         assert.equal(spy.callCount, 0);
     });
+});
+
+QUnit.module("isGroupCriteria");
+
+QUnit.test("check isGroupCriteria", function(assert) {
+    const testFunc = () => {};
+
+    assert.notOk(isGroupCriteria([null]));
+    assert.notOk(isGroupCriteria([testFunc]));
+    assert.ok(isGroupCriteria([[]]));
+    assert.ok(isGroupCriteria([[testFunc]]));
+    assert.ok(isGroupCriteria([[], testFunc]));
+    assert.ok(isGroupCriteria([testFunc, []]));
+    assert.ok(isGroupCriteria([testFunc, "or", testFunc]));
+    assert.notOk(isGroupCriteria([testFunc, "and"]));
+    assert.notOk(isGroupCriteria(testFunc));
+    assert.notOk(isGroupCriteria([testFunc, "=", "value"]));
+    assert.notOk(isGroupCriteria([testFunc, "value"]));
+    assert.notOk(isGroupCriteria([testFunc, "="]));
+    assert.notOk(isGroupCriteria([testFunc, "=", testFunc]));
 });
