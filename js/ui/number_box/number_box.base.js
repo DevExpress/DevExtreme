@@ -201,9 +201,9 @@ var NumberBoxBase = TextEditor.inherit({
     _keyPressHandler: function(e) {
         this.callBase(e);
 
-        var ch = e.key || String.fromCharCode(e.which),
+        var char = eventUtils.getChar(e),
             validCharRegExp = /[\d.,eE\-+]|Subtract/, // Workaround for IE (T592690)
-            isInputCharValid = validCharRegExp.test(ch);
+            isInputCharValid = validCharRegExp.test(char);
 
         if(!isInputCharValid) {
             var keyName = eventUtils.normalizeKeyName(e);

@@ -230,6 +230,10 @@ const normalizeKeyName = (event) => {
     return key;
 };
 
+const getChar = (event) => {
+    return event.key || String.fromCharCode(event.which);
+};
+
 
 module.exports = {
     eventSource: eventSource,
@@ -251,5 +255,6 @@ module.exports = {
     addNamespace: addNamespace,
     setEventFixMethod: setEventFixMethod,
 
-    normalizeKeyName: normalizeKeyName
+    normalizeKeyName: normalizeKeyName,
+    getChar: getChar
 };

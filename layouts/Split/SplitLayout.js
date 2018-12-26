@@ -128,9 +128,9 @@
         },
 
         _keyUpHandler: function(e) {
-            var key = e.key ? e.key : String.fromCharCode(e.which);
+            var char = e.key || String.fromCharCode(e.which);
 
-            if(this._winKeyPressed && (key.toLowerCase() === KEY_Z)) {
+            if(this._winKeyPressed && (char.toLowerCase() === KEY_Z)) {
                 this._toggleAppBarState();
             } else if(KEYS_WIN.indexOf(e.key) !== -1) {
                 this._winKeyPressed = false;

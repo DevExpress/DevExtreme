@@ -1,6 +1,13 @@
 import $ from "jquery";
 import { compare } from "core/utils/version";
-import { eventData, eventDelta, needSkipEvent, addNamespace, normalizeKeyName } from "events/utils";
+import {
+    eventData,
+    eventDelta,
+    needSkipEvent,
+    addNamespace,
+    normalizeKeyName,
+    getChar
+} from "events/utils";
 import pointerMock from "../../helpers/pointerMock.js";
 import nativePointerMock from "../../helpers/nativePointerMock.js";
 
@@ -135,12 +142,18 @@ QUnit.module("event utils", () => {
         assert.equal(severalEventsByArray, "custom1.Widget custom2.Widget", "several custom event names");
     });
 
-    test("normalizeKeyName method should normalize key name based on 'key' or 'which' property", (assert) => {
+    test("normalizeKeyName method should normalize key name based on 'key' or 'which' attribute", (assert) => {
         assert.strictEqual(normalizeKeyName({ key: "Up" }), "upArrow", "IE11 API");
         assert.strictEqual(normalizeKeyName({ key: "ArrowUp" }), "upArrow", "Standard API");
-        assert.strictEqual(normalizeKeyName({ key: "ArrowUp", which: 36 }), "upArrow", "'key' property is prior");
-        assert.strictEqual(normalizeKeyName({ which: 38 }), "upArrow", "'which' property used where 'key' property unsupported");
-        assert.strictEqual(normalizeKeyName({ }), undefined, "return undefined in case event has no 'key' or 'which' property");
+        assert.strictEqual(normalizeKeyName({ key: "ArrowUp", which: 36 }), "upArrow", "'key' attribute is prior");
+        assert.strictEqual(normalizeKeyName({ which: 38 }), "upArrow", "'which' attribute used where 'key' attribute unsupported");
+        assert.strictEqual(normalizeKeyName({ }), undefined, "return undefined in case event has no 'key' or 'which' attribute");
+    });
+
+    test("getChar method should get char based on 'key' or 'which' attribute", (assert) => {
+        assert.strictEqual(getChar({ key: "z" }), "z");
+        assert.strictEqual(getChar({ which: 50 }), "2");
+        assert.strictEqual(getChar({ key: "z", which: 50 }), "z", "'key' attribute is prior");
 
     });
 });
