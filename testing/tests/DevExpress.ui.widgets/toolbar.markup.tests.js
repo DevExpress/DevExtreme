@@ -160,6 +160,48 @@ QUnit.module("render", {
             assert.equal(findItem(value).length, 1, `item in the ${value} container`);
         });
     });
+
+    test("items with nested toolbar 1", (assert) => {
+        this.element.dxToolbar({
+            items: [
+                {
+                    template: () => {
+                        return $('<div id="toolbar2">').dxToolbar({
+                            items: [{ html: '<div id="2">2</div>' }]
+                        });
+                    }
+                },
+                { html: '<div id="1">1</div>' }
+            ]
+        });
+
+        assert.equal(this.element.find("#1").length, 1);
+        assert.equal(this.element.find("#toolbar2 #1").length, 0);
+
+        assert.equal(this.element.find("#2").length, 1);
+        assert.equal(this.element.find("#toolbar2 #2").length, 1);
+    });
+
+    test("items with nested toolbar 2", (assert) => {
+        this.element.dxToolbar({
+            items: [
+                { html: '<div id="1">1</div>' },
+                {
+                    template: () => {
+                        return $('<div id="toolbar2">').dxToolbar({
+                            items: [{ html: '<div id="2">2</div>' }]
+                        });
+                    }
+                }
+            ]
+        });
+
+        assert.equal(this.element.find("#1").length, 1);
+        assert.equal(this.element.find("#toolbar2 #1").length, 0);
+
+        assert.equal(this.element.find("#2").length, 1);
+        assert.equal(this.element.find("#toolbar2 #2").length, 1);
+    });
 });
 
 QUnit.test("elementAttr should be rendered on button items", function(assert) {
