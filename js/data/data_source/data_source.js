@@ -788,7 +788,6 @@ var DataSource = Class.inherit({
             }
 
             options.take = 1;
-
             options.filter = options.filter
                 ? [options.filter, [propName, propValue]]
                 : [propName, propValue];
