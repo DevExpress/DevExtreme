@@ -1,6 +1,6 @@
-var $ = require("jquery"),
-    QUERY = require("data/query"),
-    ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js");
+import $ from "jquery";
+import QUERY from "data/query";
+import ErrorHandlingHelper from "../../helpers/data.errorHandlingHelper.js";
 
 QUnit.module("Misc");
 
@@ -281,18 +281,16 @@ QUnit.test("filter by function", function(assert) {
     });
 });
 
-QUnit.test("group criterion with function", function(assert) {
+QUnit.test("group criterion with function", (assert) => {
     assert.expect(2);
 
-    var data = [
-            { value: 0 },
-            { value: 2 },
-            { value: 5 }
-        ],
-        functionCondition = function(itemData) {
-            return itemData.value > 1;
-        },
-        arrayCondition = ["value", "<", 5];
+    const data = [
+        { value: 0 },
+        { value: 2 },
+        { value: 5 }
+    ];
+    const functionCondition = (itemData) => itemData.value > 1;
+    const arrayCondition = ["value", "<", 5];
 
     assert.equal(
         QUERY(data).filter([functionCondition, arrayCondition]).toArray()[0].value,
