@@ -13,12 +13,15 @@ export default {
     _getSpecificDataSourceOption: function() {
         const groupKey = "key";
         let dataSource = this.option("dataSource");
+        let hasSimpleItems = false;
+        let data = {};
 
         if(this._getGroupedOption() && isCorrectStructure(dataSource)) {
-            dataSource = dataSource.reduce((accumulator, item) => {
+            data = dataSource.reduce((accumulator, item) => {
                 const items = item.items.map(innerItem => {
                     if(!isObject(innerItem)) {
                         innerItem = { text: innerItem };
+                        hasSimpleItems = true;
                     }
 
                     if(!(groupKey in innerItem)) {
@@ -33,11 +36,14 @@ export default {
             dataSource = {
                 store: {
                     type: "array",
-                    data: dataSource
+                    data
                 },
-                searchExpr: "text",
                 group: "key"
             };
+
+            if(hasSimpleItems) {
+                dataSource.searchExpr = "text";
+            }
         };
 
         return dataSource;

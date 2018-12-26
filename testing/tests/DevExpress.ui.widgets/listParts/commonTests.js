@@ -2727,6 +2727,8 @@ QUnit.test("Search in items of grouped dataSource", function(assert) {
         instance = $element.dxList("instance"),
         expectedValue = { key: "a", items: [{ name: "1", key: "a" }] };
 
+    assert.equal(instance.getDataSource().searchExpr(), "name", "dataSource has correct searchExpr");
+
     searchEditor = $element.children().first().dxTextBox("instance");
     searchEditor.option("value", "1");
 
