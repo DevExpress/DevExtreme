@@ -393,7 +393,7 @@ var TextEditorMask = TextEditorBase.inherit({
         }
 
         this._maskKeyHandler(e, function() {
-            this._handleKey(eventUtils.normalizeKeyName(e));
+            this._handleKey(e.key || String.fromCharCode(e.which));
             return true;
         });
     },
