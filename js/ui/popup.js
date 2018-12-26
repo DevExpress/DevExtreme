@@ -16,6 +16,7 @@ var $ = require("../core/renderer"),
     Overlay = require("./overlay"),
     EmptyTemplate = require("./widget/empty_template"),
     domUtils = require("../core/utils/dom"),
+    sizeUtils = require("../core/utils/calculated_size"),
     windowUtils = require("../core/utils/window");
 
 require("./toolbar/ui.toolbar.base");
@@ -668,8 +669,8 @@ var Popup = Overlay.inherit({
 
         if(this._isAutoHeight()) {
             var $container = $(this._getContainer()),
-                maxHeightValue = domUtils.calculateMaxHeight(this._getOptionValue("maxHeight", content), $container, -toolbarsAndPaddingsHeight),
-                minHeightValue = domUtils.calculateMinHeight(this._getOptionValue("minHeight", content), $container, -toolbarsAndPaddingsHeight);
+                maxHeightValue = sizeUtils.calculateMaxHeight(this._getOptionValue("maxHeight", content), $container, -toolbarsAndPaddingsHeight),
+                minHeightValue = sizeUtils.calculateMinHeight(this._getOptionValue("minHeight", content), $container, -toolbarsAndPaddingsHeight);
 
             if(minHeightValue !== undefined) {
                 cssStyles.minHeight = minHeightValue;
@@ -691,13 +692,13 @@ var Popup = Overlay.inherit({
     },
 
     _getToolbarsAndPaddingsHeight: function() {
-        return domUtils.getPaddingsHeight(this._$content, true)
-            + domUtils.getPaddingsHeight(this._$popupContent, true)
+        return sizeUtils.getPaddingsHeight(this._$content, true)
+            + sizeUtils.getPaddingsHeight(this._$popupContent, true)
             + this._getToolbarsHeight();
     },
 
     _getToolbarsHeight: function() {
-        return domUtils.getVisibleHeight(this._$title) + domUtils.getVisibleHeight(this._$bottom);
+        return sizeUtils.getVisibleHeight(this._$title) + sizeUtils.getVisibleHeight(this._$bottom);
     },
 
     _renderDimensions: function() {
