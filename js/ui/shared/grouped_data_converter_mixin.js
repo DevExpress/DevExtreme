@@ -1,4 +1,5 @@
-const isObject = require("../../core/utils/type").isObject;
+import { isObject } from "../../core/utils/type";
+
 const isCorrectStructure = data => {
     return Array.isArray(data) && data.every(item => {
         const hasTwoFields = Object.keys(item).length === 2;
