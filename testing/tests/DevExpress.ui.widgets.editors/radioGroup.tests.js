@@ -200,23 +200,24 @@ QUnit.test("should not throw an error when the value is \"null\" or \"undefine\"
 
 QUnit.test("should have correct initialized selection", assert => {
     let radioGroupInstance = null;
-    const getCheckedItems = () => radioGroupInstance.element().querySelectorAll('.dx-radiobutton-checked');
+    const isItemChecked = index => radioGroupInstance.itemElements().eq(index).hasClass(RADIO_BUTTON_CHECKED_CLASS);
 
     radioGroupInstance = $("#radioGroup").dxRadioGroup({
         items: ['item1', 'item2', 'item3']
     }).dxRadioGroup('instance');
 
-    assert.strictEqual(getCheckedItems().length, 0);
+    assert.notOk(isItemChecked(0));
+    assert.notOk(isItemChecked(1));
+    assert.notOk(isItemChecked(2));
 
     radioGroupInstance = $("#radioGroup").dxRadioGroup({
         items: ['item1', 'item2', 'item3'],
         value: 'item2'
     }).dxRadioGroup('instance');
 
-    const checkedItems = getCheckedItems();
-
-    assert.strictEqual(checkedItems.length, 1);
-    assert.strictEqual(checkedItems[0], radioGroupInstance.itemElements()[1]);
+    assert.notOk(isItemChecked(0));
+    assert.ok(isItemChecked(1));
+    assert.notOk(isItemChecked(2));
 });
 
 QUnit.test("repaint of widget shouldn't reset value option", function(assert) {
