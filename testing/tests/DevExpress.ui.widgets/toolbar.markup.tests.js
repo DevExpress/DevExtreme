@@ -222,7 +222,7 @@ QUnit.module("render", {
                 {
                     location: "center",
                     html: '<div id="1">1</div>'
-                },
+                }
             ]
         });
 
