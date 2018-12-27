@@ -34,6 +34,7 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
      * @name dxToolbarOptions.items
      * @type Array<string, dxToolbarItem, object>
      * @fires dxToolbarOptions.onOptionChanged
+     * @inheritdoc
      */
 
     /**

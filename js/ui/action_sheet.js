@@ -156,6 +156,7 @@ var ActionSheet = CollectionWidget.inherit({
              * @name dxActionSheetOptions.items
              * @type Array<string, dxActionSheetItem, object>
              * @fires dxActionSheetOptions.onOptionChanged
+             * @inheritdoc
              */
 
             /**

@@ -127,6 +127,7 @@ var Accordion = CollectionWidget.inherit({
              * @name dxAccordionOptions.items
              * @type Array<string, dxAccordionItem, object>
              * @fires dxAccordionOptions.onOptionChanged
+             * @inheritdoc
              */
 
             /**

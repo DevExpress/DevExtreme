@@ -58,6 +58,7 @@ var TileView = CollectionWidget.inherit({
              * @name dxTileViewOptions.items
              * @type Array<string, dxTileViewItem, object>
              * @fires dxTileViewOptions.onOptionChanged
+             * @inheritdoc
              */
 
             /**
