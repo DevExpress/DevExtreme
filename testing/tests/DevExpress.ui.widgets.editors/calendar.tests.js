@@ -93,15 +93,16 @@ QUnit.module("Hidden input", {
         fx.off = false;
         this.$element.remove();
     }
+}, () => {
+    QUnit.test("Calendar should pass value to the hidden input on widget value change", (assert) => {
+        const $input = this.$element.find("input");
+
+        const date = new Date(2016, 6, 9);
+        this.calendar.option("value", date);
+        assert.equal($input.val(), this.stringValue(date), "input value is correct after widget value change");
+    });
 });
 
-QUnit.test("Calendar should pass value to the hidden input on widget value change", (assert) => {
-    const $input = this.$element.find("input");
-
-    const date = new Date(2016, 6, 9);
-    this.calendar.option("value", date);
-    assert.equal($input.val(), this.stringValue(date), "input value is correct after widget value change");
-});
 
 QUnit.module("Navigator", {
     beforeEach: () => {
@@ -2238,6 +2239,24 @@ QUnit.module("disabledDates option", {
         $("." + CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS).click();
 
         assert.ok(this.calendar.option("currentDate") >= this.calendar.option("min"));
+    });
+
+    QUnit.test("current day should be moved to the closest available date on init", (assert) => {
+        const newDateMock = sinon.useFakeTimers(new Date(2017, 11, 30).valueOf());
+        const maxAvailableDate = new Date(2017, 10, 25);
+
+        try {
+            this.reinit({
+                focusStateEnabled: true,
+                disabledDates: (args) => {
+                    return args.date > maxAvailableDate;
+                }
+            });
+
+            assert.deepEqual(this.calendar.option("currentDate"), maxAvailableDate);
+        } finally {
+            newDateMock.restore();
+        }
     });
 });
 
