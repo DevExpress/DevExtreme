@@ -13391,3 +13391,26 @@ QUnit.test("No exceptions on editing data when validationRules and editCellTempl
         errors.log.restore();
     }
 });
+
+QUnit.test("The editCellTemplate should be called once for the form when adding a new row", function(assert) {
+    // arrange
+    var editCellTemplate = sinon.spy(function() {
+        return $("<div class='myEditor'/>").text("<input />");
+    });
+
+    this.columns[0].editCellTemplate = editCellTemplate;
+
+    this.setupModules(this);
+    this.renderRowsView();
+
+    // act
+    this.addRow();
+    this.clock.tick();
+    this.preparePopupHelpers();
+    this.clock.tick();
+
+    // arrange
+    assert.strictEqual(editCellTemplate.callCount, 1, "editCellTemplate call count");
+    assert.strictEqual($(this.getRowElement(0)).find(".myEditor").length, 0, "row hasn't custom editor");
+    assert.strictEqual($(this.getEditPopupContent()).find(".myEditor").length, 1, "form has custom editor");
+});
