@@ -2353,9 +2353,14 @@ module.exports = {
                     this._editingController.correctEditRowIndex(getRowIndexCorrection);
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    var editingController = this.getController("editing");
+                    var editingController = this.getController("editing"),
+                        isRowEditMode = editingController.isRowEditMode();
 
-                    if(oldItem.rowType === newItem.rowType && editingController.isRowEditMode() && editingController.isEditRow(rowIndex)) {
+                    if(oldItem.inserted !== newItem.inserted || oldItem.removed !== newItem.removed || (isRowEditMode && oldItem.isEditing !== newItem.isEditing)) {
+                        return;
+                    }
+
+                    if(oldItem.rowType === newItem.rowType && isRowEditMode && editingController.isEditRow(rowIndex)) {
                         return isLiveUpdate ? [] : undefined;
                     }
 
