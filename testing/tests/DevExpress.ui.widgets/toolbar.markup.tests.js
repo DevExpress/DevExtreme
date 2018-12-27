@@ -160,6 +160,78 @@ QUnit.module("render", {
             assert.equal(findItem(value).length, 1, `item in the ${value} container`);
         });
     });
+
+    test("items with nested toolbar config 1", (assert) => {
+        this.element.dxToolbar({
+            items: [
+                {
+                    template: () => {
+                        return $('<div id="toolbar2">').dxToolbar({
+                            items: [{ html: '<div id="2">2</div>' }]
+                        });
+                    }
+                },
+                { html: '<div id="1">1</div>' }
+            ]
+        });
+
+        assert.equal(this.element.find("#1").length, 1, "#1");
+        assert.equal(this.element.find("#toolbar2 #1").length, 0, "#toolbar2 #1");
+
+        assert.equal(this.element.find("#2").length, 1, "#2");
+        assert.equal(this.element.find("#toolbar2 #2").length, 1, "#toolbar2 #2");
+    });
+
+    test("items with nested toolbar config 2", (assert) => {
+        this.element.dxToolbar({
+            items: [
+                { html: '<div id="1">1</div>' },
+                {
+                    template: () => {
+                        return $('<div id="toolbar2">').dxToolbar({
+                            items: [{ html: '<div id="2">2</div>' }]
+                        });
+                    }
+                }
+            ]
+        });
+
+        assert.equal(this.element.find("#1").length, 1, "#1");
+        assert.equal(this.element.find("#toolbar2 #1").length, 0, "#toolbar2 #1");
+
+        assert.equal(this.element.find("#2").length, 1, "#2");
+        assert.equal(this.element.find("#toolbar2 #2").length, 1, "#toolbar2 #2");
+    });
+
+    test("items with nested toolbar config 3", (assert) => {
+        this.element.dxToolbar({
+            items: [
+                {
+                    location: "before",
+                    template: () => {
+                        return $('<div id="toolbar2">').dxToolbar({
+                            items: [
+                                {
+                                    location: "center",
+                                    html: '<div id="2">2</div>'
+                                }
+                            ]
+                        });
+                    }
+                },
+                {
+                    location: "center",
+                    html: '<div id="1">1</div>'
+                }
+            ]
+        });
+
+        assert.equal(this.element.find("#1").length, 1, "#1");
+        assert.equal(this.element.find("#toolbar2 #1").length, 0, "#toolbar2 #1");
+
+        assert.equal(this.element.find("#2").length, 1, "#2");
+        assert.equal(this.element.find("#toolbar2 #2").length, 1, "#toolbar2 #2");
+    });
 });
 
 QUnit.test("elementAttr should be rendered on button items", function(assert) {
