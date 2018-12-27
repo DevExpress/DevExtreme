@@ -365,8 +365,8 @@ var Calendar = Editor.inherit({
 
     _moveCurrentDate: function(offset, baseDate) {
         var currentDate = baseDate || new Date(this.option("currentDate")),
-            maxDate = this.option("max"),
-            minDate = this.option("min"),
+            maxDate = this._getMaxDate(),
+            minDate = this._getMinDate(),
             zoomLevel = this.option("zoomLevel"),
             dateForward = new Date(currentDate),
             dateBackward = new Date(currentDate),
