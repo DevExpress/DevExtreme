@@ -424,11 +424,11 @@ QUnit.test("Rival duplicated appointments should have correct positions", functi
 
     assert.equal(firstAppointmentPosition.left, 0, "appointment is rendered in right place");
     assert.roughEqual(firstAppointmentPosition.top, 26, 1.5, "appointment is rendered in right place");
-    assert.equal($appointment.eq(0).outerWidth(), $tableCell.outerWidth(), "appointment has a right size");
+    assert.roughEqual($appointment.eq(0).outerWidth(), $tableCell.outerWidth(), 0.01, "appointment has a right size");
 
     assert.equal(secondAppointmentPosition.left, 0, "appointment is rendered in right place");
     assert.roughEqual(secondAppointmentPosition.top, 46, 1.5, "appointment is rendered in right place");
-    assert.equal($appointment.eq(1).outerWidth(), $tableCell.outerWidth() * 2, "appointment has a right size");
+    assert.roughEqual($appointment.eq(1).outerWidth(), $tableCell.outerWidth() * 2, 0.01, "appointment has a right size");
 });
 
 QUnit.test("More than 3 small appointments should be grouped", function(assert) {
