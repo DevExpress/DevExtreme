@@ -836,20 +836,27 @@ var TagBox = SelectBox.inherit({
     },
 
     _createTagsData: function(values, filteredItems) {
-        var items = [],
-            cache = {};
+        var items = [];
+        var cache = {};
+        var thisValueExpr = this._valueGetterExpr() === "this";
+        var filteredValues = {};
 
-        each(values, function(valueIndex, value) {
-            var item = filteredItems[valueIndex];
+        for(var i = 0; i < filteredItems.length; i++) {
+            filteredValues[thisValueExpr ? JSON.stringify(filteredItems[i]) : this._valueGetter(filteredItems[i])] = filteredItems[i];
+        }
 
-            if(this._valueGetterExpr() === "this" && !isDefined(item)) {
+        for(var i = 0; i < values.length; i++) {
+            var value = values[i];
+            var currentItem = filteredValues[thisValueExpr ? JSON.stringify(value) : value];
+
+            if(thisValueExpr && !isDefined(currentItem)) {
                 this._loadItem(value, cache).always((function(item) {
-                    this._createTagData(items, item, value, valueIndex);
+                    this._createTagData(items, item, value, i);
                 }).bind(this));
             } else {
-                this._createTagData(items, item, value, valueIndex);
+                this._createTagData(items, currentItem, value, i);
             }
-        }.bind(this));
+        }
 
         return items;
     },
@@ -866,7 +873,7 @@ var TagBox = SelectBox.inherit({
         }
     },
 
-    _loadTagData: function() {
+    _loadTagsData: function() {
         var values = this._getValue(),
             tagData = new Deferred();
 
@@ -885,7 +892,7 @@ var TagBox = SelectBox.inherit({
     _renderTags: function() {
         var d = new Deferred();
 
-        this._loadTagData().always((function(items) {
+        this._loadTagsData().always((function(items) {
             this._renderTagsCore(items);
             this._renderEmptyState();
 
