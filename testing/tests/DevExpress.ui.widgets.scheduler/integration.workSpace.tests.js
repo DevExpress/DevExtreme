@@ -1623,6 +1623,28 @@ QUnit.test("SelectedCellData option should have rigth data of focused cell", fun
     assert.deepEqual(this.instance.option("selectedCellData"), [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }], "option has right value");
 });
 
+QUnit.test("SelectedCellData option should be applied correctly in ungrouped workspace", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["week"],
+        currentView: "week",
+        showAllDayPanel: true,
+        groups: undefined,
+        currentDate: new Date(2018, 3, 11),
+        height: 600,
+        selectedCellData: [{
+            allDay: false,
+            startDate: new Date(2018, 3, 8),
+            endDate: new Date(2018, 3, 8, 0, 30),
+            groups: {
+                groupId: 1
+            }
+        }]
+    });
+
+    assert.ok(true, "WorkSpace works correctly");
+});
+
 QUnit.test("SelectedCellData option should make cell in focused state", function(assert) {
     this.createInstance({
         dataSource: [],
