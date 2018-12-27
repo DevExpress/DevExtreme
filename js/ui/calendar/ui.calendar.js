@@ -38,11 +38,16 @@ var CALENDAR_CLASS = "dx-calendar",
     CALENDAR_INPUT_STANDARD_PATTERN = "yyyy-MM-dd",
     CALENDAR_DATE_VALUE_KEY = "dxDateValueKey",
 
+    ZOOM_LEVEL_MONTH = "month",
+    ZOOM_LEVEL_YEAR = "year",
+    ZOOM_LEVEL_DECADE = "decade",
+    ZOOM_LEVEL_CENTURY = "century",
+
     LEVEL_COMPARE_MAP = {
-        "month": 3,
-        "year": 2,
-        "decade": 1,
-        "century": 0
+        ZOOM_LEVEL_MONTH: 3,
+        ZOOM_LEVEL_YEAR: 2,
+        ZOOM_LEVEL_DECADE: 1,
+        ZOOM_LEVEL_CENTURY: 0
     };
 
 var Calendar = Editor.inherit({
@@ -116,21 +121,21 @@ var Calendar = Editor.inherit({
             * @default 'month'
             * @fires dxCalendarOptions.onOptionChanged
             */
-            zoomLevel: "month",
+            zoomLevel: ZOOM_LEVEL_MONTH,
 
             /**
             * @name dxCalendarOptions.maxZoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'month'
             */
-            maxZoomLevel: "month",
+            maxZoomLevel: ZOOM_LEVEL_MONTH,
 
             /**
             * @name dxCalendarOptions.minZoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'century'
             */
-            minZoomLevel: "century",
+            minZoomLevel: ZOOM_LEVEL_CENTURY,
 
             /**
             * @name dxCalendarOptions.showTodayButton
@@ -352,11 +357,11 @@ var Calendar = Editor.inherit({
             return offset;
         }
 
-        if(zoomLevel === "decade") {
+        if(zoomLevel === ZOOM_LEVEL_DECADE) {
             return offset - offsetCorrection;
         }
 
-        if(zoomLevel === "century") {
+        if(zoomLevel === ZOOM_LEVEL_CENTURY) {
             return 10 * (offset - offsetCorrection);
         }
 
@@ -377,19 +382,19 @@ var Calendar = Editor.inherit({
             var step = offset || 1;
 
             switch(zoomLevel) {
-                case "month":
+                case ZOOM_LEVEL_MONTH:
                     dateForward.setDate(dateForward.getDate() + step);
                     dateBackward.setDate(dateBackward.getDate() - step);
                     break;
-                case "year":
+                case ZOOM_LEVEL_YEAR:
                     dateForward.setMonth(dateForward.getMonth() + step);
                     dateBackward.setMonth(dateBackward.getMonth() - step);
                     break;
-                case "decade":
+                case ZOOM_LEVEL_DECADE:
                     dateForward.setFullYear(dateForward.getFullYear() + step);
                     dateBackward.setFullYear(dateBackward.getFullYear() - step);
                     break;
-                case "century":
+                case ZOOM_LEVEL_CENTURY:
                     dateForward.setFullYear(dateForward.getFullYear() + 10 * step);
                     dateBackward.setFullYear(dateBackward.getFullYear() - 10 * step);
                     break;
@@ -537,17 +542,17 @@ var Calendar = Editor.inherit({
     _getViewsOffset: function(startDate, endDate) {
         var zoomLevel = this.option("zoomLevel");
 
-        if(zoomLevel === "month") {
+        if(zoomLevel === ZOOM_LEVEL_MONTH) {
             return this._getMonthsOffset(startDate, endDate);
         }
 
         var zoomCorrection;
 
         switch(zoomLevel) {
-            case "century":
+            case ZOOM_LEVEL_CENTURY:
                 zoomCorrection = 100;
                 break;
-            case "decade":
+            case ZOOM_LEVEL_DECADE:
                 zoomCorrection = 10;
                 break;
             default:
