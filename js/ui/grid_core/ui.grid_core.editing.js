@@ -2404,7 +2404,6 @@ module.exports = {
                         each($cellElements, function(index, cellElement) {
                             if($(cellElement).find($cell).length) {
                                 cellIndex = index;
-                                return false;
                             }
                         });
 
