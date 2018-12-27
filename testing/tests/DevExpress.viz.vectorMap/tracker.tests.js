@@ -4,12 +4,12 @@
 // Every time "mousewheel" event is triggered within a test animation frame is requested
 // It is done by widgets event system ("dxwheel")
 // It is not used in map and requesting frame is just suppressed
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    trackerModule = require("viz/vector_map/tracker"),
-    eventEmitterModule = require("viz/vector_map/event_emitter"),
-    animationFrame = require("animation/frame");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import vizMocks from "../../helpers/vizMocks.js";
+import trackerModule from "viz/vector_map/tracker";
+import eventEmitterModule from "viz/vector_map/event_emitter";
+import animationFrame from "animation/frame";
 
 $("#qunit-fixture").append('<div id="test-root"></div>');
 
