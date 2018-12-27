@@ -312,14 +312,9 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
 
     _renderItem: function(index, item, itemContainer, $after) {
         var location = item.location || "center",
-            container = itemContainer || this._$toolbarItemsContainer.find(".dx-toolbar-" + location),
+            container = itemContainer || this["_$" + location + "Section"],
             itemHasText = !!(item.text || item.html),
-            itemElement;
-
-        if(container.length > 1) {
-            container = this["_$" + location + "Section"];
-        }
-        itemElement = this.callBase(index, item, container, $after);
+            itemElement = this.callBase(index, item, container, $after);
 
         itemElement
             .toggleClass(this._buttonClass(), !itemHasText)
