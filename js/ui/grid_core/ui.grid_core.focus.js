@@ -419,8 +419,10 @@ module.exports = {
                                         focusController._focusRowByIndex();
                                     }
                                 });
-                            } else if(paging && !isVirtualScrolling) {
-                                focusController._focusRowByIndex();
+                            } else if(paging) {
+                                if(!isVirtualScrolling) {
+                                    focusController._focusRowByIndex();
+                                }
                             } else {
                                 focusController._focusRowByKeyOrIndex();
                             }
