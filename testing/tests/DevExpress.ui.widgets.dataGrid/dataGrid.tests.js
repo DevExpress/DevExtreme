@@ -3657,6 +3657,7 @@ QUnit.test("scroll position should not be reseted if virtual scrolling and cell 
     }).dxDataGrid("instance");
 
     // act
+    dataGrid.getView("rowsView")._isScrollByEvent = true;
     dataGrid.getScrollable().scrollTo({ y: 2000 });
 
     // assert
