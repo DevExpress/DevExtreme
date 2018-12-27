@@ -227,6 +227,10 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
                 }
             }
             return that.callBase.apply(that, arguments);
+        },
+        dispose: function() {
+            this._virtualScrollController.dispose();
+            this.callBase.apply(this, arguments);
         }
     };
 
@@ -1043,6 +1047,13 @@ module.exports = {
 
                         var dataSource = this._dataSource;
                         return dataSource && dataSource.getContentOffset.apply(dataSource, arguments);
+                    },
+                    dispose: function() {
+                        var rowsScrollController = this._rowsScrollController;
+
+                        rowsScrollController && rowsScrollController.dispose();
+
+                        this.callBase.apply(this, arguments);
                     }
                 };
 
