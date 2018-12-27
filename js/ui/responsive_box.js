@@ -181,6 +181,7 @@ var ResponsiveBox = CollectionWidget.inherit({
              * @name dxResponsiveBoxOptions.items
              * @type Array<string, dxResponsiveBoxItem, object>
              * @fires dxResponsiveBoxOptions.onOptionChanged
+             * @inheritdoc
              */
 
             onLayoutChanged: null,

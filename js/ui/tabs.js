@@ -122,6 +122,7 @@ var Tabs = CollectionWidget.inherit({
              * @name dxTabsOptions.items
              * @type Array<string, dxTabsItem, object>
              * @fires dxTabsOptions.onOptionChanged
+             * @inheritdoc
              */
 
             activeStateEnabled: true,

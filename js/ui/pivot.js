@@ -167,6 +167,7 @@ var Pivot = CollectionWidget.inherit({
              * @name dxPivotOptions.items
              * @type Array<string, dxPivotItem, object>
              * @fires dxPivotOptions.onOptionChanged
+             * @inheritdoc
              */
         });
     },

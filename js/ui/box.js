@@ -551,6 +551,7 @@ var Box = CollectionWidget.inherit({
              * @name dxBoxOptions.items
              * @type Array<string, dxBoxItem, object>
              * @fires dxBoxOptions.onOptionChanged
+             * @inheritdoc
              */
         });
     },

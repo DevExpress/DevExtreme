@@ -128,6 +128,7 @@ var MultiView = CollectionWidget.inherit({
              * @name dxMultiViewOptions.items
              * @type Array<string, dxMultiViewItem, object>
              * @fires dxMultiViewOptions.onOptionChanged
+             * @inheritdoc
              */
 
             _itemAttributes: { role: "tabpanel" },

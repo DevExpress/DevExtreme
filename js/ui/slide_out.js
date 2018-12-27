@@ -45,6 +45,7 @@ var SlideOut = CollectionWidget.inherit({
              * @name dxSlideOutOptions.items
              * @type Array<string, dxSlideOutItem, object>
              * @fires dxSlideOutOptions.onOptionChanged
+             * @inheritdoc
              */
 
             /**
