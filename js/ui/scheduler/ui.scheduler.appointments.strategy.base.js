@@ -615,11 +615,11 @@ var BaseRenderingStrategy = Class.inherit({
 
             var convertedSizes = this.convertToPercents(width, dateTableOffset);
             var convertedPositions = this.convertToPercents(left - dateTableOffset, dateTableOffset);
-            var leftOffset = dateTableOffset - convertedPositions.x;
+            var leftOffset = dateTableOffset - convertedPositions.x * dateTableOffset / 100;
 
             return {
                 height: appointmentHeight,
-                width: "calc(" + convertedSizes.x + "% - " + convertedSizes.x + "px)",
+                width: "calc(" + convertedSizes.x + "% - " + convertedSizes.x * dateTableOffset / 100 + "px)",
                 top: top,
                 left: "calc(" + convertedPositions.x + "% + " + leftOffset + "px)",
                 empty: this._isAppointmentEmpty(height, width)
