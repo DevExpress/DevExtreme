@@ -3,7 +3,6 @@ import browser from "core/utils/browser";
 import { noop } from "core/utils/common";
 import support from "core/utils/support";
 import styleUtils from "core/utils/style";
-import size from "core/utils/size";
 import translator from "animation/translator";
 import animationFrame from "animation/frame";
 import domUtils from "core/utils/dom";
@@ -3870,7 +3869,7 @@ QUnit.test("clientWidth", function(assert) {
     });
     var $container = $("." + SCROLLABLE_CONTAINER_CLASS, $scrollable);
 
-    assert.equal($scrollable.dxScrollable("clientWidth"), size.getSize($container.get(0), "width", {}), "client width equals to container width");
+    assert.equal($scrollable.dxScrollable("clientWidth"), $container.width(), "client width equals to container width");
 });
 
 QUnit.test("scroll reachedTop true only at the top", function(assert) {

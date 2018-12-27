@@ -8,7 +8,7 @@ var $ = require("jquery"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js");
 
 require("common.css!");
-var Popup = require("ui/popup");
+require("ui/popup");
 
 QUnit.testStart(function() {
     var markup =
@@ -409,26 +409,20 @@ QUnit.test("content must not overlap bottom buttons", function(assert) {
 });
 
 QUnit.test("dimensions should be shrunk correctly with height = auto specified", function(assert) {
-    var getSquareElement = function() {
-        var element = document.createElement("div");
-        element.style.width = "200px";
-        element.style.height = "200px";
-        return element;
-    };
-
-    var content = new Popup(document.getElementById("popup"), {
+    var $content = $("#popup").dxPopup({
         visible: true,
         width: "auto",
         height: "auto",
-        contentTemplate: getSquareElement
-    }).$content().get(0);
+        contentTemplate: function() {
+            return $("<div>").width(200).height(200);
+        }
+    }).dxPopup("instance").$content();
 
-    var popupContentHeight = content.getBoundingClientRect().height;
-    var addedContent = getSquareElement();
-    content.append(addedContent);
-    var addedContentHeight = addedContent.getBoundingClientRect().height;
+    var popupContentHeight = $content.height();
+    var addedContent = $("<div>").width(200).height(200);
+    $content.append(addedContent);
 
-    assert.equal(content.getBoundingClientRect().height, popupContentHeight + addedContentHeight);
+    assert.equal($content.height(), popupContentHeight + addedContent.height());
 });
 
 QUnit.test("dxPopup should render custom template with render function that returns dom node", function(assert) {
