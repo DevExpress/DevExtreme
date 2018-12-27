@@ -44,10 +44,10 @@ var CALENDAR_CLASS = "dx-calendar",
     ZOOM_LEVEL_CENTURY = "century",
 
     LEVEL_COMPARE_MAP = {
-        ZOOM_LEVEL_MONTH: 3,
-        ZOOM_LEVEL_YEAR: 2,
-        ZOOM_LEVEL_DECADE: 1,
-        ZOOM_LEVEL_CENTURY: 0
+        "month": 3,
+        "year": 2,
+        "decade": 1,
+        "century": 0
     };
 
 var Calendar = Editor.inherit({
