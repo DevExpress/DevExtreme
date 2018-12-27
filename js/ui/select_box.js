@@ -414,12 +414,15 @@ var SelectBox = DropDownList.inherit({
 
     _renderInputValueAsync: function() {
         this._renderTooltip();
-        this._renderInputValueImpl();
-        this._refreshSelected();
+        this._renderInputValueImpl().always(function() {
+            this._refreshSelected();
+        }.bind(this));
     },
 
     _renderInputValueImpl: function() {
         this._renderInputAddons();
+
+        return new Deferred().resolve();
     },
 
     _fitIntoRange: function(value, start, end) {
