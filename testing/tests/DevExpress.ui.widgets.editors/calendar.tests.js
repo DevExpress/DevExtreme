@@ -1,5 +1,5 @@
 import $ from "jquery";
-import inflector from "core/utils/inflector";
+import { camelize } from "core/utils/inflector";
 import translator from "animation/translator";
 import dateUtils from "core/utils/date";
 import dateSerialization from "core/utils/date_serialization";
@@ -15,8 +15,6 @@ import config from "core/config";
 import browser from "core/utils/browser";
 import dataUtils from "core/element_data";
 import dateLocalization from "localization/date";
-
-const camelize = inflector.camelize;
 
 import "common.css!";
 import "generic_light.css!";
