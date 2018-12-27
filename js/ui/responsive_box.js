@@ -277,7 +277,7 @@ var ResponsiveBox = CollectionWidget.inherit({
         }).bind(this));
     },
 
-    _getDefaultRows: function() {
+    getSingleColumnRows: function() {
         var rows = this.option("rows"),
             screenItemsLength = this._screenItems.length;
 
@@ -301,7 +301,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     _prepareRowsAndCols: function() {
         if(this._isSingleColumnScreen()) {
             this._prepareSingleColumnScreenItems();
-            this._rows = this._getDefaultRows();
+            this._rows = this.getSingleColumnRows();
             this._cols = this._defaultSizeConfig(1);
         } else {
             this._rows = this._sizesByScreen(this.option("rows"));
