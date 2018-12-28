@@ -106,7 +106,7 @@ var BaseRenderingStrategy = Class.inherit({
             allDay = this.isAllDay(item),
             result = [],
             startDate = new Date(this.instance.fire("getField", "startDate", item)),
-            isRecurring = !!item.recurrenceRule;
+            isRecurring = !!this.instance.fire("getField", "recurrenceRule", item);
 
         for(var j = 0; j < position.length; j++) {
             var height = this.calculateAppointmentHeight(item, position[j]),
