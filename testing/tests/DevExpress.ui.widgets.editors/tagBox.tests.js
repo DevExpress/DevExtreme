@@ -3206,6 +3206,25 @@ QUnit.test("adding the custom tag should clear input value (T385448)", function(
     assert.equal($input.val(), "", "the input is empty");
 });
 
+QUnit.test("adding the custom tag shouldn't lead to duplicating of ordinary tags", (assert) => {
+    const $tagBox = $("#tagBox").dxTagBox({
+        acceptCustomValue: true,
+        items: [1, 2, 3]
+    });
+    const $input = $tagBox.find("input");
+    const tagBoxInstance = $tagBox.dxTagBox("instance");
+
+    keyboardMock($input)
+        .type("custom")
+        .press("enter");
+
+    $($tagBox.find("." + LIST_ITEM_CLASS).first()).trigger("dxclick");
+    const $tags = $tagBox.find(".dx-tag");
+
+    assert.strictEqual($tags.length, 2, "only two tags are added");
+    assert.deepEqual(tagBoxInstance.option("selectedItems"), ["custom", 1], "selected items are correct");
+});
+
 
 QUnit.module("the 'selectedItems' option", moduleSetup);
 
@@ -4703,7 +4722,7 @@ QUnit.test("Select All should use cache", function(assert) {
     $(".dx-list-select-all-checkbox").trigger("dxclick");
 
     // assert
-    assert.equal(keyGetterCounter, 1404, "key getter call count");
+    assert.equal(keyGetterCounter, 1504, "key getter call count");
     assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
 });
 
@@ -4912,7 +4931,6 @@ QUnit.test("tagBox should not fail when asynchronous data source is used in the 
 
 QUnit.test("tagBox should not render duplicated tags after searching", function(assert) {
     var data = [{ "id": 1, "Name": "Item14" }, { "id": 2, "Name": "Item21" }, { "id": 3, "Name": "Item31" }, { "id": 4, "Name": "Item41" }];
-
     var tagBox = $("#tagBox").dxTagBox({
         dataSource: new CustomStore({
             key: "id",
@@ -4937,18 +4955,6 @@ QUnit.test("tagBox should not render duplicated tags after searching", function(
                     }
                 });
 
-                return d.promise();
-            },
-            byKey: function(key) {
-                var d = $.Deferred();
-                setTimeout(function(i) {
-                    data.forEach(function(i) {
-                        if(i.id === key) {
-                            d.resolve(i);
-                            return;
-                        }
-                    });
-                });
                 return d.promise();
             }
         }),
