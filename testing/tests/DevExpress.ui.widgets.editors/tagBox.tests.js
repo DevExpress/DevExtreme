@@ -3208,9 +3208,9 @@ QUnit.test("adding the custom tag should clear input value (T385448)", function(
 
 QUnit.test("adding the custom tag shouldn't lead to duplicating of ordinary tags", (assert) => {
     const $tagBox = $("#tagBox").dxTagBox({
-            acceptCustomValue: true,
-            items: [1, 2, 3]
-        });
+        acceptCustomValue: true,
+        items: [1, 2, 3]
+    });
     const $input = $tagBox.find("input");
     const tagBoxInstance = $tagBox.dxTagBox("instance");
 
