@@ -16,7 +16,7 @@ var $ = require("../core/renderer"),
     Overlay = require("./overlay"),
     EmptyTemplate = require("./widget/empty_template"),
     domUtils = require("../core/utils/dom"),
-    sizeUtils = require("../core/utils/calculated_size"),
+    sizeUtils = require("../core/utils/size"),
     windowUtils = require("../core/utils/window");
 
 require("./toolbar/ui.toolbar.base");
@@ -668,9 +668,9 @@ var Popup = Overlay.inherit({
             cssStyles = {};
 
         if(this._isAutoHeight()) {
-            var $container = $(this._getContainer()),
-                maxHeightValue = sizeUtils.calculateMaxHeight(this._getOptionValue("maxHeight", content), $container, -toolbarsAndPaddingsHeight),
-                minHeightValue = sizeUtils.calculateMinHeight(this._getOptionValue("minHeight", content), $container, -toolbarsAndPaddingsHeight);
+            var container = $(this._getContainer()).get(0),
+                maxHeightValue = sizeUtils.calculateMaxHeight(this._getOptionValue("maxHeight", content), container, -toolbarsAndPaddingsHeight),
+                minHeightValue = sizeUtils.calculateMinHeight(this._getOptionValue("minHeight", content), container, -toolbarsAndPaddingsHeight);
 
             if(minHeightValue !== undefined) {
                 cssStyles.minHeight = minHeightValue;
@@ -692,13 +692,13 @@ var Popup = Overlay.inherit({
     },
 
     _getToolbarsAndPaddingsHeight: function() {
-        return sizeUtils.getPaddingsHeight(this._$content, true)
-            + sizeUtils.getPaddingsHeight(this._$popupContent, true)
+        return sizeUtils.getPaddingsHeight(this._$content.get(0), true)
+            + sizeUtils.getPaddingsHeight(this._$popupContent.get(0), true)
             + this._getToolbarsHeight();
     },
 
     _getToolbarsHeight: function() {
-        return sizeUtils.getVisibleHeight(this._$title) + sizeUtils.getVisibleHeight(this._$bottom);
+        return sizeUtils.getVisibleHeight(this._$title && this._$title.get(0)) + sizeUtils.getVisibleHeight(this._$bottom && this._$bottom.get(0));
     },
 
     _renderDimensions: function() {
