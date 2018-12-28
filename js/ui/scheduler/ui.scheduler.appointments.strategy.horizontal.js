@@ -18,8 +18,8 @@ var HorizontalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             allDay = this.instance.fire("getField", "allDay", appointment),
             width;
 
-        var startDate = this.startDate(appointment, false, position),
-            endDate = this.endDate(appointment, position, isRecurring),
+        var startDate = this._startDate(appointment, false, position),
+            endDate = this._endDate(appointment, position, isRecurring),
             appointmentDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
 
         appointmentDuration = this._adjustDurationByDaylightDiff(appointmentDuration, startDate, endDate);
