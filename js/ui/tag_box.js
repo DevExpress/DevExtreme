@@ -838,20 +838,20 @@ var TagBox = SelectBox.inherit({
     _createTagsData: function(values, filteredItems) {
         var items = [];
         var cache = {};
-        var thisValueExpr = this._valueGetterExpr() === "this";
+        var isValueExprSpecified = this._valueGetterExpr() === "this";
         var filteredValues = {};
 
         for(var i = 0; i < filteredItems.length; i++) {
-            var filteredItem = thisValueExpr ? JSON.stringify(filteredItems[i]) : this._valueGetter(filteredItems[i]);
+            var filteredItem = isValueExprSpecified ? JSON.stringify(filteredItems[i]) : this._valueGetter(filteredItems[i]);
 
             filteredValues[filteredItem] = filteredItems[i];
         }
 
         for(var i = 0; i < values.length; i++) {
             var value = values[i];
-            var currentItem = filteredValues[thisValueExpr ? JSON.stringify(value) : value];
+            var currentItem = filteredValues[isValueExprSpecified ? JSON.stringify(value) : value];
 
-            if(thisValueExpr && !isDefined(currentItem)) {
+            if(isValueExprSpecified && !isDefined(currentItem)) {
                 this._loadItem(value, cache).always((function(item) {
                     this._createTagData(items, item, value, i);
                 }).bind(this));

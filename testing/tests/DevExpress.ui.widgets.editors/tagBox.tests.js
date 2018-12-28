@@ -3206,21 +3206,23 @@ QUnit.test("adding the custom tag should clear input value (T385448)", function(
     assert.equal($input.val(), "", "the input is empty");
 });
 
-QUnit.test("adding the custom tag shouldn't lead to duplicating of ordinary tags ", function(assert) {
-    var $tagBox = $("#tagBox").dxTagBox({
+QUnit.test("adding the custom tag shouldn't lead to duplicating of ordinary tags ", (assert) => {
+    const $tagBox = $("#tagBox").dxTagBox({
             acceptCustomValue: true,
             items: [1, 2, 3]
         }),
-        $input = $tagBox.find("input");
+        $input = $tagBox.find("input"),
+        tagBoxInstance = $tagBox.dxTagBox("instance");
 
     keyboardMock($input)
         .type("custom")
         .press("enter");
 
     $($tagBox.find("." + LIST_ITEM_CLASS).first()).trigger("dxclick");
-    var $tags = $tagBox.find(".dx-tag");
+    const $tags = $tagBox.find(".dx-tag");
 
-    assert.equal($tags.length, 2, "only two tags are added");
+    assert.strictEqual($tags.length, 2, "only two tags are added");
+    assert.deepEqual(tagBoxInstance.option("selectedItems"), ["custom", 1], "selected items are correct");
 });
 
 
