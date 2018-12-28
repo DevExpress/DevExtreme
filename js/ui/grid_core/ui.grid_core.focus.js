@@ -20,36 +20,53 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         optionChanged: function(args) {
-            var that = this;
-
             if(args.name === "focusedRowIndex") {
-                that._focusRowByIndex(args.value);
+                this._focusRowByIndex(args.value);
                 args.handled = true;
             } else if(args.name === "focusedRowKey") {
-                that.navigateToRow(args.value);
+                this._focusRowByKey(args.value);
                 args.handled = true;
             } else if(args.name === "focusedColumnIndex") {
                 args.handled = true;
             } else if(args.name === "focusedRowEnabled") {
                 args.handled = true;
             } else {
-                that.callBase(args);
+                this.callBase(args);
             }
         },
 
         _focusRowByIndex: function(index) {
-            if(this.option("focusedRowEnabled")) {
-                index = index !== undefined ? index : this.option("focusedRowIndex");
+            if(!this.option("focusedRowEnabled")) return;
 
+            index = index !== undefined ? index : this.option("focusedRowIndex");
+
+            if(index < 0) {
+                this._resetFocusedRow();
+            } else {
                 var dataController = this.getController("data"),
                     localIndex = index >= 0 ? index - dataController.getRowIndexOffset() : -1,
                     rowKey = dataController.getKeyByRowIndex(localIndex);
-
                 if(isDefined(rowKey) && !this.isRowFocused(rowKey) && this._isValidFocusedRowIndex(localIndex)) {
                     this.option("focusedRowKey", rowKey);
-                    return true;
                 }
             }
+        },
+
+        _focusRowByKey: function(key) {
+            if(key === undefined) {
+                this._resetFocusedRow();
+            } else {
+                this.navigateToRow(key);
+            }
+        },
+
+        _resetFocusedRow: function() {
+            this.option("focusedRowKey", undefined);
+            this.option("focusedRowIndex", -1);
+            this.getController("data").updateItems({
+                changeType: "updateFocusedRow",
+                focusedRowKey: undefined
+            });
         },
 
         _isValidFocusedRowIndex: function(rowIndex) {

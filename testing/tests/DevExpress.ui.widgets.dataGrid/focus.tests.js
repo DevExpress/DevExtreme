@@ -18,10 +18,9 @@ var $ = require("jquery"),
 
 var addOptionChangedHandlers = function(that) {
     that.optionCalled.add(function(optionName, value) {
-        if(value !== undefined &&
-            (optionName === "focusedRowIndex" ||
-             optionName === "focusedRowKey" ||
-             optionName === "focusedColumnIndex")) {
+        if(optionName === "focusedRowIndex" ||
+           optionName === "focusedRowKey" ||
+           optionName === "focusedColumnIndex") {
             that.focusController.optionChanged({ name: optionName, value: value });
         }
     });
@@ -3917,4 +3916,67 @@ QUnit.testInActiveWindow("DataGrid should not focus adaptive rows", function(ass
     // assert
     assert.equal(focusedRowChangingCount, 0, "No focused row changing");
     assert.equal(focusedRowChangedCount, 0, "No focused row changed");
+});
+
+QUnit.testInActiveWindow("DataGrid should reset the focused row if focusedRowKey is set to undefined", function(assert) {
+    // arrange
+    var rowsView;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowIndex: 1
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // assert
+    rowsView = this.gridView.getView("rowsView");
+    assert.ok($(rowsView.getRow(1)).hasClass("dx-row-focused"), "focused row");
+
+    // act
+    this.option("focusedRowKey", undefined);
+
+    // assert
+    assert.notOk($(rowsView.getRow(1)).hasClass("dx-row-focused"), "no focused row");
+    assert.equal(this.option("focusedRowIndex"), -1, "focusedRowIndex");
+});
+
+QUnit.testInActiveWindow("DataGrid should reset the focused row if focusedRowIndex is set to < 0", function(assert) {
+    // arrange
+    var rowsView;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowIndex: 1
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // assert
+    rowsView = this.gridView.getView("rowsView");
+    assert.ok($(rowsView.getRow(1)).hasClass("dx-row-focused"), "focused row");
+    assert.ok(this.option("focusedRowKey"), "focusedRowKey");
+
+    // act
+    this.option("focusedRowIndex", -1);
+
+    // assert
+    assert.notOk($(rowsView.getRow(1)).hasClass("dx-row-focused"), "no focused row");
+    assert.notOk(this.option("focusedRowKey"), "No focusedRowKey");
 });
