@@ -2956,28 +2956,21 @@ QUnit.module("search substitution", {
     });
 
     QUnit.test("items should not be loaded after substitution is removed on the 'backspace' key press", (assert) => {
-        const that = this;
-        let loadCount = 0;
+        const loadMock = sinon.stub().returns([this.testItem]);
 
         this.reinit({
-            dataSource: new DataSource({
-                load: () => {
-                    loadCount++;
-                    return [that.item];
-                }
-            })
+            dataSource: new DataSource({ load: loadMock })
         });
 
         this.keyboard
-            .focus()
             .type(this.testItem[0]);
 
-        loadCount = 0;
+        loadMock.reset();
 
         this.keyboard
             .press('backspace');
 
-        assert.equal(loadCount, 0, "items are not loaded");
+        assert.equal(loadMock.callCount, 0, "items are not loaded");
     });
 
     QUnit.test("there is no search value substitution if no items are found", (assert) => {
