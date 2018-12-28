@@ -842,7 +842,9 @@ var TagBox = SelectBox.inherit({
         var filteredValues = {};
 
         for(var i = 0; i < filteredItems.length; i++) {
-            filteredValues[thisValueExpr ? JSON.stringify(filteredItems[i]) : this._valueGetter(filteredItems[i])] = filteredItems[i];
+            var filteredItem = thisValueExpr ? JSON.stringify(filteredItems[i]) : this._valueGetter(filteredItems[i]);
+
+            filteredValues[filteredItem] = filteredItems[i];
         }
 
         for(var i = 0; i < values.length; i++) {
