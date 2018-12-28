@@ -5,7 +5,8 @@ var isFunction = require("../core/utils/type").isFunction,
     window = windowUtils.getWindow(),
     map = require("../core/utils/iterator").map,
     toComparable = require("../core/utils/data").toComparable,
-    Deferred = require("../core/utils/deferred").Deferred;
+    Deferred = require("../core/utils/deferred").Deferred,
+    typeUtils = require("../core/utils/type");
 
 var XHR_ERROR_UNLOAD = "DEVEXTREME_XHR_ERROR_UNLOAD";
 
@@ -226,6 +227,26 @@ var isUnaryOperation = function(crit) {
     return crit[0] === "!" && Array.isArray(crit[1]);
 };
 
+var isGroupOperator = function(value) {
+    return value === "and" || value === "or";
+};
+
+var isGroupCriterion = function(crit) {
+    var first = crit[0],
+        second = crit[1];
+
+    if(Array.isArray(first)) {
+        return true;
+    }
+    if(typeUtils.isFunction(first)) {
+        if(Array.isArray(second) || typeUtils.isFunction(second) || isGroupOperator(second)) {
+            return true;
+        }
+    }
+
+    return false;
+};
+
 /**
 * @name Utils
 */
@@ -245,6 +266,7 @@ var utils = {
     processRequestResultLock: processRequestResultLock,
 
     isUnaryOperation: isUnaryOperation,
+    isGroupCriterion: isGroupCriterion,
 
     /**
     * @name Utils.base64_encode
