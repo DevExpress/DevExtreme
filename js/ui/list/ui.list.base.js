@@ -386,6 +386,7 @@ var ListBase = CollectionWidget.inherit({
              * @name dxListOptions.items
              * @type Array<string, dxListItem, object>
              * @fires dxListOptions.onOptionChanged
+             * @inheritdoc
              */
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },

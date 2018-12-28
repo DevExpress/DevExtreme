@@ -1,6 +1,5 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    size = require("../../core/utils/size"),
     support = require("../../core/utils/support"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
@@ -580,7 +579,7 @@ var Scrollable = DOMComponent.inherit({
     * @return numeric
     */
     clientWidth: function() {
-        return size.getSize(this._$container.get(0), "width", {});
+        return this._$container.width();
     },
 
     /**

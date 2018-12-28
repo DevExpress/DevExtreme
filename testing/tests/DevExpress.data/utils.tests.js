@@ -1,10 +1,12 @@
-var Guid = require("core/guid"),
-    dataUtils = require("data/utils"),
-    keysEqual = dataUtils.keysEqual,
+import Guid from "core/guid";
+import dataUtils from "data/utils";
+import odataUtils from "data/odata/utils";
+
+const keysEqual = dataUtils.keysEqual,
     processRequestResultLock = dataUtils.processRequestResultLock,
     b64 = dataUtils.base64_encode,
     throttleChanges = dataUtils.throttleChanges,
-    odataUtils = require("data/odata/utils");
+    isGroupCriterion = dataUtils.isGroupCriterion;
 
 QUnit.module("keysEqual");
 
@@ -137,4 +139,24 @@ QUnit.module("Throttling", {
         this.clock.tick(100);
         assert.equal(spy.callCount, 0);
     });
+});
+
+QUnit.module("isGroupCriterion", () => {
+
+    QUnit.test("check", (assert) => {
+        const testFunc = () => {};
+        const testBinary = ["id", "=", 1];
+
+        assert.ok(isGroupCriterion([testBinary, testBinary]));
+        assert.ok(isGroupCriterion([testBinary, testFunc]));
+        assert.ok(isGroupCriterion([testFunc, testBinary]));
+        assert.ok(isGroupCriterion([testFunc, testFunc]));
+        assert.ok(isGroupCriterion([testFunc, "and", testBinary]));
+        assert.ok(isGroupCriterion([testFunc, "or", testFunc]));
+
+        assert.notOk(isGroupCriterion([testFunc]));
+        assert.notOk(isGroupCriterion([testFunc, "=", 1]));
+        assert.notOk(isGroupCriterion([testFunc, 1]));
+    });
+
 });

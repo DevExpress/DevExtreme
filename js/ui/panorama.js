@@ -587,6 +587,7 @@ var Panorama = CollectionWidget.inherit({
              * @name dxPanoramaOptions.items
              * @type Array<string, dxPanoramaItem, object>
              * @fires dxPanoramaOptions.onOptionChanged
+             * @inheritdoc
              */
 
             /**
