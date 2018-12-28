@@ -350,33 +350,16 @@ var Calendar = Editor.inherit({
         this.option(optionName, dateSerialization.serializeDate(optionValue, serializationFormat));
     },
 
-    _normalizeOffset: function(zoomLevel, offset) {
-        var offsetCorrection = 2 * offset / Math.abs(offset);
-
-        if(Math.abs(offset) <= 1) {
-            return offset;
-        }
-
-        if(zoomLevel === ZOOM_LEVEL_DECADE) {
-            return offset - offsetCorrection;
-        }
-
-        if(zoomLevel === ZOOM_LEVEL_CENTURY) {
-            return 10 * (offset - offsetCorrection);
-        }
-
-        return 0;
-    },
-
     _moveCurrentDate: function(offset, baseDate) {
         var currentDate = baseDate || new Date(this.option("currentDate")),
             maxDate = this._getMaxDate(),
             minDate = this._getMinDate(),
             zoomLevel = this.option("zoomLevel"),
+            currentDateInRange = inRange(currentDate, minDate, maxDate),
             dateForward = new Date(currentDate),
             dateBackward = new Date(currentDate),
-            dateForwardInRange = inRange(dateBackward, minDate, maxDate),
-            dateBackwardInRange = inRange(dateForward, minDate, maxDate);
+            dateForwardInRange = currentDateInRange,
+            dateBackwardInRange = currentDateInRange;
 
         while((!offset && (dateForwardInRange || dateBackwardInRange)) || (offset && dateForwardInRange)) {
             var step = offset || 1;
@@ -398,16 +381,6 @@ var Calendar = Editor.inherit({
                     dateForward.setFullYear(dateForward.getFullYear() + 10 * step);
                     dateBackward.setFullYear(dateBackward.getFullYear() - 10 * step);
                     break;
-            }
-
-            if(Math.abs(step) > 1) {
-                if(!dateUtils.sameView(zoomLevel, currentDate, dateForward)) {
-                    dateForward.setFullYear(dateForward.getFullYear() - this._normalizeOffset(zoomLevel, step));
-                }
-
-                if(!dateUtils.sameView(zoomLevel, currentDate, dateBackward)) {
-                    dateBackward.setFullYear(dateBackward.getFullYear() - this._normalizeOffset(zoomLevel, step));
-                }
             }
 
             if(!this._view.isDateDisabled(dateForward)) {

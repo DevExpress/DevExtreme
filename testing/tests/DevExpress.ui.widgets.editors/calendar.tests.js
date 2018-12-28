@@ -2378,8 +2378,8 @@ QUnit.module("Current date", {
         const params = {
             "month": { startDate: new Date(2015, 2, 3), expectedDate: new Date(2015, 1, 24) },
             "year": { startDate: new Date(2015, 2, 1), expectedDate: new Date(2014, 10, 1) },
-            "decade": { startDate: new Date(2010, 0, 1), expectedDate: new Date(2008, 0, 1) },
-            "century": { startDate: new Date(2015, 0, 1), expectedDate: new Date(1995, 0, 1) }
+            "decade": { startDate: new Date(2010, 0, 1), expectedDate: new Date(2006, 0, 1) },
+            "century": { startDate: new Date(2015, 0, 1), expectedDate: new Date(1975, 0, 1) }
         };
 
         iterateViews($.proxy((_, type) => {
