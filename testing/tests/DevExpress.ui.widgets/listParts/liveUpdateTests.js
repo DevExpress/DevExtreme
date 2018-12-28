@@ -455,4 +455,17 @@ QUnit.module("live update", {
         assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after reload");
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.a, "Item Updated", "check updated item");
     });
+
+    QUnit.test("onContentReady called after push", function(assert) {
+        var contentReadySpy = sinon.spy();
+        var list = this.createList({
+                onContentReady: contentReadySpy
+            }),
+            store = list.getDataSource().store();
+
+        var pushData = [{ type: "update", data: { a: "Item 0 Updated", id: 0 }, key: 0 }];
+        store.push(pushData);
+
+        assert.equal(contentReadySpy.callCount, 2);
+    });
 });
