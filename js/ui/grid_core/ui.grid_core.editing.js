@@ -2595,6 +2595,13 @@ module.exports = {
 
                     return cellOptions;
                 },
+                _renderCellContent: function($cell, options) {
+                    if(options.rowType === "data" && getEditMode(this) === EDIT_MODE_POPUP && options.row.visible === false) {
+                        return;
+                    }
+
+                    this.callBase.apply(this, arguments);
+                },
                 /**
                  * @name GridBaseMethods.cellValue
                  * @publicName cellValue(rowIndex, visibleColumnIndex)
