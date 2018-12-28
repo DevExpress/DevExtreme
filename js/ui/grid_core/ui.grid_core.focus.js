@@ -41,7 +41,7 @@ exports.FocusController = core.ViewController.inherit((function() {
             index = index !== undefined ? index : this.option("focusedRowIndex");
 
             if(index < 0) {
-                this._resetFocusedRow(true);
+                this._resetFocusedRow();
             } else {
                 var dataController = this.getController("data"),
                     localIndex = index >= 0 ? index - dataController.getRowIndexOffset() : -1,
@@ -60,12 +60,9 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
         },
 
-        _resetFocusedRow: function(byIndex) {
-            if(byIndex) {
-                this.option("focusedRowKey", undefined);
-            } else {
-                this.option("focusedRowIndex", -1);
-            }
+        _resetFocusedRow: function() {
+            this.option("focusedRowKey", undefined);
+            this.option("focusedRowIndex", -1);
             this.getController("data").updateItems({
                 changeType: "updateFocusedRow",
                 focusedRowKey: undefined
