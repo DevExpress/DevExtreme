@@ -1185,6 +1185,31 @@ QUnit.test("Four rival appointments should have correct sizes", function(assert)
     assert.equal($appointment.eq(3).outerHeight(), 100, "appointment has a right size");
 });
 
+QUnit.test("Recurrence appointment should be rendered correctly on timelineWeek (T701534)", function(assert) {
+    var items = [{
+        allDay: false,
+        endDate: new Date(2018, 11, 12, 2),
+        RecurrenceRule: "FREQ=DAILY;COUNT=2",
+        startDate: new Date(2018, 11, 11, 2)
+    }];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2018, 11, 10),
+            currentView: "timelineWeek",
+            height: 530,
+            dataSource: items,
+            startDayHour: 1,
+            cellDuration: 1440,
+            recurrenceRuleExpr: "RecurrenceRule"
+        }
+    );
+
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
+
+    assert.equal($appointment.length, 2, "appointments are rendered correctly");
+});
+
 QUnit.module("Vertical Strategy", moduleOptions);
 
 QUnit.test("AllDay recurrent appointments count should be correct if recurrenceException is set", function(assert) {
