@@ -463,7 +463,7 @@ QUnit.module("live update", {
             }),
             store = list.getDataSource().store();
 
-        var pushData = [{ type: "update", data: { a: "Item 0 Updated", id: 0 }, key: 0 }];
+        var pushData = [{ type: "insert", data: { a: "Item 2 Inserted", id: 2 } }];
         store.push(pushData);
 
         assert.equal(contentReadySpy.callCount, 2);
