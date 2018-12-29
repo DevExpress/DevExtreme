@@ -95,7 +95,7 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
 
         _updateContent: function($newTable, change) {
             if(change && change.changeType === "update" && change.columnIndices) {
-                var $row = this.element().find(".dx-row"),
+                var $row = this._getTableElement().find(".dx-row"),
                     $newRow = $newTable.find(".dx-row");
 
                 this._updateCells($row, $newRow, change.columnIndices[0]);
@@ -207,6 +207,36 @@ var SummaryDataSourceAdapterExtender = (function() {
 })();
 
 var SummaryDataSourceAdapterClientExtender = (function() {
+    var applyAddedData = function(data, insertedData, groupLevel) {
+        if(groupLevel) {
+            return applyAddedData(data, insertedData.map(item => {
+                return { items: [item] };
+            }, groupLevel - 1));
+        }
+
+        return data.concat(insertedData);
+    };
+
+    var applyRemovedData = function(data, removedData, groupLevel) {
+        if(groupLevel) {
+            return data.map(data => {
+                var updatedData = {},
+                    updatedItems = applyRemovedData(data.items || [], removedData, groupLevel - 1);
+
+                Object.defineProperty(updatedData, 'aggregates', {
+                    get: () => data.aggregates,
+                    set: value => {
+                        data.aggregates = value;
+                    }
+                });
+
+                return extend(updatedData, data, { items: updatedItems });
+            });
+        }
+
+        return data.filter(data => removedData.indexOf(data) < 0);
+    };
+
     var calculateAggregates = function(that, summary, data, groupLevel) {
         var calculator;
 
@@ -215,12 +245,12 @@ var SummaryDataSourceAdapterClientExtender = (function() {
             if(editingController) {
                 var insertedData = editingController.getInsertedData();
                 if(insertedData.length) {
-                    data = data.concat(insertedData);
+                    data = applyAddedData(data, insertedData, groupLevel);
                 }
 
                 var removedData = editingController.getRemovedData();
                 if(removedData.length) {
-                    data = data.filter(data => removedData.indexOf(data) < 0);
+                    data = applyRemovedData(data, removedData, groupLevel);
                 }
             }
         }

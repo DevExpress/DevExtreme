@@ -1,6 +1,7 @@
 /**
 * @name dxHtmlEditor
 * @inherits Editor
+* @hasTranscludedContent
 * @isEditor
 * @module ui/html_editor
 * @export default

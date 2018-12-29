@@ -996,6 +996,23 @@ QUnit.testStart(function() {
         assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().top, "Top cell coordinates are right");
         assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(40).position().left, "Left cell coordinates are right");
     });
+
+    QUnit.test("Work space should find cell coordinates by date in allDay row, groupByDate = true", function(assert) {
+        var $element = this.instance.$element();
+
+        this.instance.option("currentDate", new Date(2015, 2, 4));
+        var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 2, 2, 0), 1, true);
+
+        assert.equal(coords.top, 0, "Top cell coordinates are right");
+        assert.equal(coords.hMax, 998, "hMax cell coordinates are right");
+        assert.equal(coords.left, $element.find(".dx-scheduler-all-day-table tbody td").eq(3).position().left, "Left cell coordinates are right");
+
+        coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 2, 0), 0, true);
+
+        assert.equal(coords.top, 0, "Top cell coordinates are right");
+        assert.equal(coords.hMax, 998, "hMax cell coordinates are right");
+        assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(8).position().left, "Left cell coordinates are right");
+    });
 })("Work Space Week with grouping by date");
 
 (function() {
@@ -1170,6 +1187,23 @@ QUnit.testStart(function() {
         assert.deepEqual($cell.data("dxCellData"), {
             startDate: new Date(2015, 1, 23, 0, 0),
             endDate: new Date(2015, 1, 23, 10, 0),
+            allDay: undefined
+        });
+    });
+
+    QUnit.test("Each cell should contain jQuery dxCellData depend on fractional hoursInterval", function(assert) {
+        this.instance.option({
+            currentDate: new Date(2015, 2, 16),
+            firstDayOfWeek: 1,
+            hoursInterval: 2.1666666666666665,
+            endDayHour: 5
+        });
+
+        var $cell = this.instance.$element().find("." + CELL_CLASS).eq(0);
+
+        assert.deepEqual($cell.data("dxCellData"), {
+            startDate: new Date(2015, 1, 23, 0, 0),
+            endDate: new Date(2015, 1, 23, 5, 0),
             allDay: undefined
         });
     });
@@ -2698,22 +2732,6 @@ QUnit.testStart(function() {
                 stubInvokeMethod(this.instance);
             };
         }
-    });
-
-    QUnit.test("getDateIntervalIndex should return correct interval index", function(assert) {
-        this.createInstance({
-            intervalCount: 3,
-            currentDate: new Date(2017, 5, 2)
-        });
-
-        var index = this.instance.getDateIntervalIndex(new Date(2017, 5, 2));
-        assert.equal(index, 0);
-
-        index = this.instance.getDateIntervalIndex(new Date(2017, 5, 3));
-        assert.equal(index, 1);
-
-        index = this.instance.getDateIntervalIndex(new Date(2017, 5, 4));
-        assert.equal(index, 2);
     });
 
     QUnit.test("WorkSpace Day view cells have right cellData with view option intervalCount=2", function(assert) {

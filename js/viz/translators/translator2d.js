@@ -298,6 +298,10 @@ _Translator2d.prototype = {
         return this._businessRange;
     },
 
+    getEventScale: function(zoomEvent) {
+        return zoomEvent.deltaScale || 1;
+    },
+
     getCanvasVisibleArea: function() {
         return {
             min: this._canvasOptions.startPoint,
@@ -316,13 +320,11 @@ _Translator2d.prototype = {
         const canvas_position_center_middle = startPoint + canvasOptions.canvasLength / 2;
         let canvas_position_default;
 
-        if(isDefined(minVisible) && isDefined(maxVisible) && minVisible.valueOf() === maxVisible.valueOf()) {
-            canvas_position_default = canvas_position_center_middle;
-        } else if(minVisible <= 0 && maxVisible >= 0) {
+        if(minVisible < 0 && maxVisible > 0 && minVisible !== maxVisible) {
             canvas_position_default = that.translate(0, 1);
         }
         if(!isDefined(canvas_position_default)) {
-            const invert = range.invert ^ (minVisible <= 0 && maxVisible <= 0);
+            const invert = range.invert ^ (minVisible < 0 && maxVisible <= 0);
             if(that._options.isHorizontal) {
                 canvas_position_default = invert ? endPoint : startPoint;
             } else {
@@ -344,12 +346,6 @@ _Translator2d.prototype = {
     },
 
     translateSpecialCase(value) {
-        const range = this._businessRange;
-        if(isDefined(range.maxVisible) && isDefined(range.minVisible) &&
-            range.maxVisible.valueOf() === range.minVisible.valueOf() &&
-            range.maxVisible.valueOf() === value.valueOf()) {
-            value = "canvas_position_center";
-        }
         return this.sc[value];
     },
 
@@ -374,21 +370,26 @@ _Translator2d.prototype = {
     },
 
     translate(bp, direction) {
-        const range = this._businessRange;
         const specialValue = this.translateSpecialCase(bp);
 
         if(isDefined(specialValue)) {
             return Math.round(specialValue);
         }
 
-        if((isDefined(range.minVisible) && isDefined(range.maxVisible) && range.maxVisible.valueOf() === range.minVisible.valueOf()) || isNaN(bp)) {
+        if(isNaN(bp)) {
             return null;
         }
         return this.to(bp, direction);
     },
 
     getInterval: function() {
-        return Math.round(this._canvasOptions.ratioOfCanvasRange * (this._businessRange.interval || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)));
+        const canvasOptions = this._canvasOptions;
+        const interval = this._businessRange.interval;
+        if(interval) {
+            return Math.round(canvasOptions.ratioOfCanvasRange * interval);
+        }
+
+        return Math.round(canvasOptions.endPoint - canvasOptions.startPoint);
     },
 
     zoom(translate, scale, wholeRange) {
@@ -501,6 +502,16 @@ _Translator2d.prototype = {
     },
 
     to: function(bp, direction) {
+        const range = this.getBusinessRange();
+
+        if(isDefined(range.maxVisible) && isDefined(range.minVisible) &&
+            range.maxVisible.valueOf() === range.minVisible.valueOf()) {
+            if(!isDefined(bp) || range.maxVisible.valueOf() !== bp.valueOf()) {
+                return null;
+            }
+            return this.translateSpecialCase(bp === 0 ? "canvas_position_default" : "canvas_position_middle");
+        }
+
         bp = this._fromValue(bp);
 
         var that = this,

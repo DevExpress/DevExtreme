@@ -220,6 +220,10 @@ var ColumnsControllerExtender = (function() {
             this._virtualVisibleColumns[visibleColumnsHash] = visibleColumns;
 
             return visibleColumns;
+        },
+        dispose: function() {
+            clearTimeout(this._changedTimeout);
+            this.callBase.apply(this, arguments);
         }
     };
 

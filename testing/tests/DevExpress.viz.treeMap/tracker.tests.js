@@ -105,8 +105,8 @@ QUnit.test("Default is prevented and propagation is stopped on down", function(a
 
     $target.trigger($event);
 
-    assert.strictEqual($event.isPropagationStopped(), false, "propagation");    // T396917
-    assert.strictEqual($event.isDefaultPrevented(), false, "default");  // T633107
+    assert.strictEqual($event.isPropagationStopped(), false, "propagation"); // T396917
+    assert.strictEqual($event.isDefaultPrevented(), false, "default"); // T633107
 });
 
 QUnit.test("Click", function(assert) {

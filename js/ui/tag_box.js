@@ -163,6 +163,10 @@ var TagBox = SelectBox.inherit({
         });
     },
 
+    _allowSelectItemByTab: function() {
+        return false;
+    },
+
     _isCaretAtTheStart: function() {
         var position = caret(this._input());
         return position.start === 0 && position.end === 0;
@@ -650,7 +654,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderInputValueImpl: function() {
-        this._renderMultiSelect();
+        return this._renderMultiSelect();
     },
 
     _loadInputValue: function() {
@@ -725,14 +729,20 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderMultiSelect: function() {
+        var d = new Deferred();
+
         this._$tagsContainer = this.$element()
             .find("." + TEXTEDITOR_CONTAINER_CLASS)
             .addClass(TAGBOX_TAG_CONTAINER_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
-        this._renderTags();
-        this._popup && this._popup.refreshPosition();
+        this._renderTags().always((function() {
+            this._popup && this._popup.refreshPosition();
+            d.resolve();
+        }).bind(this));
+
+        return d.promise();
     },
 
     _listItemClickHandler: function(e) {
@@ -823,22 +833,29 @@ var TagBox = SelectBox.inherit({
 
             return d.promise();
         }
-
     },
 
     _createTagsData: function(values, filteredItems) {
-        var items = [],
-            cache = {};
+        var items = [];
+        var cache = {};
+        var isValueExprSpecified = this._valueGetterExpr() === "this";
+        var filteredValues = {};
 
-        each(values, function(valueIndex, value) {
-            var item = filteredItems[valueIndex];
+        filteredItems.forEach(function(filteredItem) {
+            var filteredItemValue = isValueExprSpecified ? JSON.stringify(filteredItem) : this._valueGetter(filteredItem);
 
-            if(this._valueGetterExpr() === "this" && !isDefined(item)) {
+            filteredValues[filteredItemValue] = filteredItem;
+        }.bind(this));
+
+        values.forEach(function(value, index) {
+            var currentItem = filteredValues[isValueExprSpecified ? JSON.stringify(value) : value];
+
+            if(isValueExprSpecified && !isDefined(currentItem)) {
                 this._loadItem(value, cache).always((function(item) {
-                    this._createTagData(items, item, value, valueIndex);
+                    this._createTagData(items, item, value, index);
                 }).bind(this));
             } else {
-                this._createTagData(items, item, value, valueIndex);
+                this._createTagData(items, currentItem, value, index);
             }
         }.bind(this));
 
@@ -857,7 +874,7 @@ var TagBox = SelectBox.inherit({
         }
     },
 
-    _loadTagData: function() {
+    _loadTagsData: function() {
         var values = this._getValue(),
             tagData = new Deferred();
 
@@ -874,15 +891,20 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderTags: function() {
-        this._loadTagData().always((function(items) {
+        var d = new Deferred();
+
+        this._loadTagsData().always((function(items) {
             this._renderTagsCore(items);
+            this._renderEmptyState();
+
+            if(!this._preserveFocusedTag) {
+                this._clearTagFocus();
+            }
+
+            d.resolve();
         }).bind(this));
 
-        this._renderEmptyState();
-
-        if(!this._preserveFocusedTag) {
-            this._clearTagFocus();
-        }
+        return d.promise();
     },
 
     _renderTagsCore: function(items) {
@@ -1199,10 +1221,6 @@ var TagBox = SelectBox.inherit({
         this._list && this._list.option("selectedItems", this._selectedItems);
     },
 
-    _getDataSource: function() {
-        return this._dataSource;
-    },
-
     _resetListDataSourceFilter: function() {
         var dataSource = this._getDataSource();
 
@@ -1310,6 +1328,11 @@ var TagBox = SelectBox.inherit({
         if(this.option("applyValueMode") === "useButtons" && !this.option("opened")) {
             this._refreshSelected();
         }
+    },
+
+    reset: function() {
+        this._restoreInputText();
+        this.callBase();
     },
 
     _clean: function() {

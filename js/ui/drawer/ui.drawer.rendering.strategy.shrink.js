@@ -1,6 +1,7 @@
 import { animation } from "./ui.drawer.rendering.strategy";
 import DrawerStrategy from "./ui.drawer.rendering.strategy";
 import $ from "../../core/renderer";
+import { extend } from "../../core/utils/extend";
 
 class ShrinkStrategy extends DrawerStrategy {
     renderPosition(offset, animate) {
@@ -9,21 +10,18 @@ class ShrinkStrategy extends DrawerStrategy {
         const drawer = this.getDrawerInstance();
         const direction = drawer.getDrawerPosition();
         const $panel = $(drawer.content());
+        const defaultAnimationConfig = this._defaultAnimationConfig();
 
         if(drawer.option("revealMode") === "slide") {
             const panelOffset = this._getPanelOffset(offset);
             if(animate) {
 
-                let animationConfig = {
+                let animationConfig = extend(defaultAnimationConfig, {
                     $element: $panel,
                     margin: panelOffset,
                     duration: drawer.option("animationDuration"),
-                    direction: direction,
-                    complete: () => {
-                        this._contentAnimationResolve();
-                        this._panelAnimationResolve();
-                    }
-                };
+                    direction: direction
+                });
                 animation.margin(animationConfig);
             } else {
                 $panel.css("margin" + direction.charAt(0).toUpperCase() + direction.substr(1), panelOffset);
@@ -33,15 +31,12 @@ class ShrinkStrategy extends DrawerStrategy {
         if(drawer.option("revealMode") === "expand") {
             const size = this._getPanelSize(offset);
 
-            let animationConfig = {
+            let animationConfig = extend(defaultAnimationConfig, {
                 $element: $panel,
                 size: size,
                 duration: drawer.option("animationDuration"),
-                direction: direction,
-                complete: () => {
-                    this._panelAnimationResolve();
-                }
-            };
+                direction: direction
+            });
 
             if(animate) {
                 animation.size(animationConfig);
@@ -53,6 +48,10 @@ class ShrinkStrategy extends DrawerStrategy {
                 }
             }
         }
+    }
+
+    needOrderContent(position, isRtl) {
+        return (isRtl ? position === "left" : position === "right") || position === "bottom";
     }
 };
 

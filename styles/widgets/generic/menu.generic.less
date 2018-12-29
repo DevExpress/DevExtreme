@@ -2,7 +2,7 @@
 {
 	background-color: transparent;
 	border: @GENERIC_MENU_POPUP_BORDER;
-	.box-shadow(0px 1px 1px @menu-container-shadow-color);
+	box-shadow: 0px 1px 1px @menu-container-shadow-color;
 }
 
 .dx-context-menu-content-delimiter {
@@ -80,10 +80,10 @@
 
     .dx-treeview {
         border: 1px solid @menu-popup-border-color;
-        .border-radius(@base-border-radius);
+        border-radius: @base-border-radius;
 
         &, &.dx-state-focused {
-            .box-shadow(0px 3px 10px fade(@base-shadow-color, 10%));
+            box-shadow: 0px 3px 10px fade(@base-shadow-color, 10%);
         }
     }
 

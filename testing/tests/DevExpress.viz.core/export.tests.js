@@ -1,6 +1,12 @@
 var vizMocks = require("../../helpers/vizMocks.js"),
     exportModule = require("viz/core/export"),
+    themeModule = require("viz/themes"),
     clientExporter = require("exporter");
+
+themeModule.registerTheme({
+    name: "someTheme.light",
+    backgroundColor: "some_theme_color"
+});
 
 QUnit.module("Creation", {
     beforeEach: function() {
@@ -54,7 +60,6 @@ QUnit.module("Creation", {
     createExportMenu: function() {
         var exportMenu = new exportModule.ExportMenu({
             renderer: this.renderer,
-            svgMethod: this.svgMethod,
             incidentOccurred: this.incidentOccurred
         });
         exportMenu.setOptions(this.options);
@@ -68,7 +73,7 @@ QUnit.test("Groups creation", function(assert) {
 
     // assert
     assert.equal(this.renderer.g.callCount, 5, "Three groups");
-    assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu" }, "Group css-class");
+    assert.deepEqual(this.renderer.g.getCall(0).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu", "hidden-for-export": true }, "Group attributes");
     assert.deepEqual(this.renderer.g.getCall(1).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu-button" }, "Button css-class");
     assert.deepEqual(this.renderer.g.getCall(2).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu-list" }, "List css-class");
     assert.deepEqual(this.renderer.g.getCall(3).returnValue.attr.getCall(0).args[0], { "class": "dx-export-menu-list-item" }, "List item css-class");
@@ -375,15 +380,16 @@ QUnit.module("API", {
         };
         this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, "toDataURL");
         this.toDataURLStub.returnsArg(0);
+        this.srcCurrentTheme = themeModule.currentTheme();
     },
     afterEach: function() {
         clientExporter.export.restore();
         this.toDataURLStub.restore();
+        themeModule.currentTheme(this.srcCurrentTheme);
     },
     createExportMenu: function() {
         var exportMenu = new exportModule.ExportMenu({
             renderer: this.renderer,
-            svgMethod: this.svgMethod,
             incidentOccurred: this.incidentOccurred
         });
         exportMenu.setOptions(this.options);
@@ -413,7 +419,8 @@ QUnit.test("exportFromMarkup method. Defaults", function(assert) {
         margin: 10,
         fileSavingAction: undefined,
         exportingAction: undefined,
-        exportedAction: undefined
+        exportedAction: undefined,
+        backgroundColor: undefined
     }, "Export options");
 });
 
@@ -475,7 +482,7 @@ QUnit.test("exportFromMarkup unsupported image format - export as PNG", function
             onExported: "exported callback",
             forceProxy: true
         },
-        markup = "testMarkup";
+        markup = 'testMarkup data-backgroundcolor="someColor"';
 
     // act
     exportModule.exportFromMarkup(markup, options);
@@ -499,16 +506,77 @@ QUnit.test("exportFromMarkup unsupported image format - export as PNG", function
     }, "Export options");
 });
 
-QUnit.test("combineWidgets method", function(assert) {
-    var createWidget = function(size) {
-        return {
-            svg: sinon.stub().returns("<svg </svg>"),
-            getSize: sinon.stub().returns(size)
-        };
-    };
-    var widgets = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+QUnit.test("exportFromMarkup. backgroundColor from markup", function(assert) {
+    // arrange
+    var options = {
+            width: 600,
+            height: 400
+        },
+        markup = 'testMarkup data-backgroundcolor="someColor"';
 
-    assert.equal(widgets, "<svg height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+    // act
+    exportModule.exportFromMarkup(markup, options);
+
+    // assert
+    assert.equal(clientExporter.export.callCount, 1, "Export was called");
+    assert.deepEqual(clientExporter.export.getCall(0).args[1], {
+        backgroundColor: "someColor",
+        format: "PNG",
+        fileName: "file",
+        width: 600,
+        height: 400,
+        margin: 10,
+        fileSavingAction: undefined,
+        exportingAction: undefined,
+        exportedAction: undefined
+    }, "Export options");
+});
+
+QUnit.test("getMarkup method", function(assert) {
+    var createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg </svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "backgroundColor") return "backgroundColor";
+                }
+            };
+        },
+        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+
+    assert.equal(markup, "<svg data-backgroundcolor=\"backgroundColor\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+});
+
+QUnit.test("getMarkup. BackgroundColor in theme", function(assert) {
+    var createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg </svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "theme") return "someTheme.light";
+                }
+            };
+        },
+        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+
+    assert.equal(markup, "<svg data-backgroundcolor=\"some_theme_color\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+});
+
+QUnit.test("getMarkup. Different colors in charts. No backgroundColor in result", function(assert) {
+    var colors = ["color_1", "color_2"],
+        i = 0,
+        createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg </svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "backgroundColor") return colors[i++];
+                }
+            };
+        },
+        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+
+    assert.equal(markup, "<svg height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
 });
 
 QUnit.test("Get layout options", function(assert) {
@@ -667,7 +735,7 @@ QUnit.test("Set options", function(assert) {
 });
 
 QUnit.test("Dispose", function(assert) {
-    // assert
+    // arrange
     var exportMenu = this.createExportMenu();
 
     // act
@@ -722,7 +790,8 @@ QUnit.module("Events", {
     createExportMenu: function() {
         var exportMenu = new exportModule.ExportMenu({
             renderer: this.renderer,
-            svgMethod: this.svgMethod,
+            exportTo: this.exportTo || function() {},
+            print: this.print || function() {},
             incidentOccurred: this.incidentOccurred
         });
         exportMenu.setOptions(this.options);
@@ -731,7 +800,7 @@ QUnit.module("Events", {
 });
 
 QUnit.test("'On' subscribe", function(assert) {
-    // assert, act
+    // arrange, act
     this.createExportMenu();
 
     // assert
@@ -750,7 +819,7 @@ QUnit.test("'On' subscribe", function(assert) {
 });
 
 QUnit.test("'Off' unsubscribe", function(assert) {
-    // assert
+    // arrange
     var exportMenu = this.createExportMenu();
 
     // act
@@ -764,7 +833,7 @@ QUnit.test("'Off' unsubscribe", function(assert) {
 });
 
 QUnit.test("Button hover", function(assert) {
-    // assert
+    // arrange
     this.createExportMenu();
 
     this.renderer.rect.getCall(1).returnValue.attr.reset();
@@ -777,7 +846,7 @@ QUnit.test("Button hover", function(assert) {
 });
 
 QUnit.test("Button mousedown", function(assert) {
-    // assert
+    // arrange
     this.createExportMenu();
 
     this.renderer.rect.getCall(1).returnValue.attr.reset();
@@ -788,7 +857,7 @@ QUnit.test("Button mousedown", function(assert) {
 });
 
 QUnit.test("Button unhover", function(assert) {
-    // assert
+    // arrange
     this.createExportMenu();
 
     this.renderer.rect.getCall(1).returnValue.attr.reset();
@@ -802,7 +871,7 @@ QUnit.test("Button unhover", function(assert) {
 });
 
 QUnit.test("menuItem hover", function(assert) {
-    // assert
+    // arrange
     this.createExportMenu();
     var menuItemRect = this.renderer.rect.getCall(2).returnValue;
 
@@ -816,7 +885,7 @@ QUnit.test("menuItem hover", function(assert) {
 });
 
 QUnit.test("menuItem unhover", function(assert) {
-    // assert
+    // arrange
     this.createExportMenu();
     var menuItemRect = this.renderer.rect.getCall(2).returnValue;
 
@@ -832,7 +901,7 @@ QUnit.test("menuItem unhover", function(assert) {
 });
 
 QUnit.test("Button hover when button is selected", function(assert) {
-    // assert
+    // arrange
     this.createExportMenu();
 
     // act
@@ -845,7 +914,7 @@ QUnit.test("Button hover when button is selected", function(assert) {
 });
 
 QUnit.test("Button unhover when button is selected", function(assert) {
-    // assert
+    // arrange
     this.createExportMenu();
 
     // act
@@ -859,7 +928,7 @@ QUnit.test("Button unhover when button is selected", function(assert) {
 });
 
 QUnit.test("List opening", function(assert) {
-    // assert
+    // arrange
     this.createExportMenu();
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
@@ -875,7 +944,7 @@ QUnit.test("List opening", function(assert) {
 });
 
 QUnit.test("Correct texts positions on list opening", function(assert) {
-    // assert
+    // arrange
     this.createExportMenu();
 
     // act
@@ -886,7 +955,7 @@ QUnit.test("Correct texts positions on list opening", function(assert) {
 });
 
 QUnit.test("Correct texts positions on list opening. RTL", function(assert) {
-    // assert
+    // arrange
     this.options.rtl = true;
     this.options.printingEnabled = false;
     this.createExportMenu();
@@ -899,7 +968,7 @@ QUnit.test("Correct texts positions on list opening. RTL", function(assert) {
 });
 
 QUnit.test("List closing by menu button", function(assert) {
-    // assert
+    // arrange
     this.createExportMenu();
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
@@ -915,7 +984,7 @@ QUnit.test("List closing by menu button", function(assert) {
 });
 
 QUnit.test("List closing by any place", function(assert) {
-    // assert
+    // arrange
     this.createExportMenu();
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
@@ -931,7 +1000,7 @@ QUnit.test("List closing by any place", function(assert) {
 });
 
 QUnit.test("List isn't closing by click on list", function(assert) {
-    // assert
+    // arrange
     this.createExportMenu();
 
     this.renderer.g.getCall(2).returnValue.attr.reset();
@@ -946,9 +1015,8 @@ QUnit.test("List isn't closing by click on list", function(assert) {
 });
 
 QUnit.test("Exporting by click on format text", function(assert) {
-    // assert
-    this.svgMethod = sinon.stub(),
-    this.svgMethod.returns("svgMarkup");
+    // arrange
+    this.exportTo = sinon.spy();
 
     var exportMenu = this.createExportMenu();
     exportMenu.draw(50, 50, { width: 15, height: 25 });
@@ -967,55 +1035,14 @@ QUnit.test("Exporting by click on format text", function(assert) {
     });
 
     // assert
-    assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1, "common group was removed");
-    assert.equal(this.renderer.g.getCall(0).returnValue.linkAppend.callCount, 1, "common group was appended");
-
-    assert.equal(this.svgMethod.callCount, 1, "svg method was called");
-
-    assert.equal(clientExporter.export.callCount, 1, "export was called");
-    assert.equal(clientExporter.export.getCall(0).args[0], "svgMarkup", "export svg data");
-    assert.deepEqual(clientExporter.export.getCall(0).args[1], {
-        format: "JPEG",
-        width: 15,
-        height: 25
-    }, "export args");
-    assert.ok(clientExporter.export.getCall(0).args[2], "export getBlob method");
+    assert.equal(this.exportTo.callCount, 1);
+    assert.deepEqual(this.exportTo.getCall(0).args, ["JPEG"]);
 
     assert.deepEqual(this.renderer.g.getCall(2).returnValue.remove.callCount, 2, "list is closed");
     assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#123456", stroke: "#b6b6b6" }, "unselected button");
 });
 
-QUnit.test("Hide menu on export before getting markup", function(assert) {
-    // assert
-    this.svgMethod = sinon.stub(),
-    this.svgMethod.returns("svgMarkup");
-
-    var exportMenu = this.createExportMenu();
-    exportMenu.draw(50, 50, { width: 15, height: 25 });
-
-    this.renderer.g.getCall(2).returnValue.attr.reset();
-    this.renderer.g.getCall(0).returnValue.linkAppend.reset();
-
-    // act
-    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
-    this.renderer.rect.getCall(0).returnValue.attr.reset();
-    this.renderer.root.on.getCall(0).args[1]({
-        target: {
-            "export-element-type": "exporting",
-            "export-element-format": "JPEG"
-        }
-    });
-
-    // assert
-    assert.ok(this.svgMethod.lastCall.calledAfter(this.renderer.g.getCall(0).returnValue.linkRemove.lastCall));
-    assert.ok(this.svgMethod.lastCall.calledBefore(this.renderer.g.getCall(0).returnValue.linkAppend.lastCall));
-});
-
 QUnit.test("Open list after exporting - previously clicked item is unhovered. T511729", function(assert) {
-    // assert
-    this.svgMethod = sinon.stub(),
-    this.svgMethod.returns("svgMarkup");
-
     var exportMenu = this.createExportMenu();
     exportMenu.draw(50, 50, { width: 15, height: 25 });
 
@@ -1038,27 +1065,8 @@ QUnit.test("Open list after exporting - previously clicked item is unhovered. T5
     assert.deepEqual(menuItemRect.attr.lastCall.args[0], { fill: null }, "Menu item unhovered");
 });
 
-QUnit.test("Printing by menu", function(assert) {
-    // assert
-    var svgNode = { style: {} },
-        docStub = {
-            open: sinon.stub(),
-            write: sinon.stub(),
-            close: sinon.stub(),
-            body: { getElementsByTagName: sinon.stub().withArgs("svg").returns([svgNode]) }
-        },
-        printStub = sinon.stub(),
-        closeStub = sinon.stub();
-
-    this.svgMethod = sinon.stub();
-    this.svgMethod.returns("svgMarkup");
-    sinon.stub(window, "open", function() {
-        return {
-            document: docStub,
-            print: printStub,
-            close: closeStub
-        };
-    });
+QUnit.test("Printing by menu - close list", function(assert) {
+    this.print = sinon.spy();
 
     this.createExportMenu();
 
@@ -1071,22 +1079,10 @@ QUnit.test("Printing by menu", function(assert) {
     this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "printing" } });
 
     // assert
-    assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1, "common group was removed");
-    assert.equal(this.renderer.g.getCall(0).returnValue.linkAppend.callCount, 1, "common group was appended");
-
-    assert.equal(this.svgMethod.callCount, 1, "svg method was called");
+    assert.equal(this.print.callCount, 1);
 
     assert.deepEqual(this.renderer.g.getCall(2).returnValue.remove.callCount, 2, "list is closed");
     assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#123456", stroke: "#b6b6b6" }, "unselected button");
-
-    assert.equal(docStub.open.callCount, 1, "open doc");
-    assert.equal(docStub.write.callCount, 1, "write doc");
-    assert.equal(docStub.write.getCall(0).args[0], "svgMarkup", "write doc args");
-    assert.deepEqual(svgNode.style, { backgroundColor: "#001122" });
-    assert.equal(printStub.callCount, 1, "print doc");
-    assert.equal(closeStub.callCount, 1, "close doc");
-
-    window.open.restore();
 });
 
 // T397838
@@ -1156,7 +1152,6 @@ QUnit.module("Layout", {
     createExportMenu: function() {
         var exportMenu = new exportModule.ExportMenu({
             renderer: this.renderer,
-            svgMethod: this.svgMethod,
             incidentOccurred: this.incidentOccurred
         });
         exportMenu.setOptions(this.options);

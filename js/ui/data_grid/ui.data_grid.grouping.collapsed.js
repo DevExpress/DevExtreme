@@ -3,8 +3,8 @@ var extend = require("../../core/utils/extend").extend,
     gridCore = require("./ui.data_grid.core"),
     normalizeSortingInfo = gridCore.normalizeSortingInfo,
     groupingCore = require("./ui.data_grid.grouping.core"),
-    createGroupFilter = groupingCore.createGroupFilter,
     createOffsetFilter = groupingCore.createOffsetFilter,
+    createGroupFilter = require("./ui.data_grid.utils").createGroupFilter,
     errors = require("../widget/ui.errors"),
     dataErrors = require("../../data/errors").errors,
     deferredUtils = require("../../core/utils/deferred"),
@@ -375,7 +375,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
             var groups = this._dataSource.group();
             return isGroupExpanded(groups, groupIndex);
         },
-        _updatePagingOptions: function(options) {
+        _updatePagingOptions: function(options, callback) {
             var that = this,
                 isVirtualPaging = that._isVirtualPaging(),
                 pageSize = that._dataSource.pageSize(),
@@ -399,6 +399,8 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
                         skipContinuationGroupCount = 0,
                         groupInfoCount = groupInfo.count + groupInfo.childrenTotalCount,
                         childrenGroupInfoCount = groupInfoCount;
+
+                    callback && callback(groupInfo, totalOffset);
 
                     skip = options.skip - totalOffset;
                     if(totalOffset <= options.skip + options.take && groupInfoCount) {

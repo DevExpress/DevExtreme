@@ -177,7 +177,7 @@
                     </div>\
                     </script>\
                     \
-                    <div id="buttonWithInnerTemplate"><script>// DevExpress.aspnet.setTemplateEngine();</script><script type="text/html">BUTTON_CONTENT</script></div>'
+                    <div id="buttonWithInnerTemplate"><script>// DevExpress.aspnet.setTemplateEngine();</script>BUTTON_CONTENT</div>'
                 );
 
                 if(!window.DevExpress || !window.DevExpress.aspnet) {
@@ -239,6 +239,7 @@
 
             QUnit.test("Inner template is rendered correctly when another script tags exist", function(assert) {
                 var $buttonElement = $("#buttonWithInnerTemplate").dxButton();
+                $buttonElement.find("script").remove();
                 assert.equal($buttonElement.text(), "BUTTON_CONTENT");
             });
         }
@@ -315,4 +316,39 @@
             "<script>alert(1)</script>"
         );
     });
+
+    QUnit.test("Transcluded content (T691770, T693379)", function(assert) {
+        aspnet.setTemplateEngine();
+        try {
+            window.testCounters = {
+                innerEval: 0,
+                innerClick: 0
+            };
+
+            $("#qunit-fixture").html("\
+                <div id=test-button>\
+                    <div id=test-button-inner></div>\
+                    <script>\
+                        testCounters.innerEval++;\
+                        $('#test-button-inner')\
+                            .append('test-button-inner-text')\
+                            .click(function() {\
+                                testCounters.innerClick++;\
+                            });\
+                    </script>\
+                </div>\
+            ");
+
+            $("#test-button").dxButton();
+            $("#test-button-inner").trigger("click");
+
+            assert.equal(window.testCounters.innerEval, 1);
+            assert.equal(window.testCounters.innerClick, 1);
+            assert.equal($("#test-button-inner").html(), "test-button-inner-text");
+        } finally {
+            setTemplateEngine("default");
+            delete window.testCounters;
+        }
+    });
+
 }));

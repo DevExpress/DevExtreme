@@ -29,8 +29,8 @@ var CommandManager = Class.inherit({
             adapters = commandToDXWidgetAdapters;
 
         if(componentNames) {
-            for(var index in componentNames) {
-                var widgetName = componentNames[index];
+            for(var i = 0; i < componentNames.length; i++) {
+                var widgetName = componentNames[i];
                 if(widgetName in adapters) {
                     // TODO return the adapter instance here
                     return adapters[widgetName];

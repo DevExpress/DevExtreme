@@ -236,6 +236,11 @@
  */
 
 /**
+ * @typedef {string} Enums.ChartZoomPanActionType
+ * @enum {'zoom'|'pan'}
+ */
+
+/**
  * @typedef {string} Enums.AxisScaleType
  * @enum {'continuous'|'discrete'|'logarithmic'}
  */
@@ -557,7 +562,7 @@
 
 /**
  * @typedef {string} Enums.ToolbarItemWidget
- * @enum {'dxAutocomplete'|'dxButton'|'dxCheckBox'|'dxDateBox'|'dxMenu'|'dxSelectBox'|'dxTabs'|'dxTextBox'}
+ * @enum {'dxAutocomplete'|'dxButton'|'dxCheckBox'|'dxDateBox'|'dxMenu'|'dxSelectBox'|'dxTabs'|'dxTextBox'|'dxButtonGroup'}
  */
 
 /**
@@ -622,7 +627,7 @@
 
 /**
  * @typedef {string} Enums.DrawerPosition
- * @enum {'left'|'right'|'top'|'bottom'}
+ * @enum {'left'|'right'|'top'|'bottom'|'before'|'after'}
  */
 
 /**
@@ -915,12 +920,12 @@
  * @enum {'darkDown'|'darkGray'|'darkGrid'|'darkHorizontal'|'darkTrellis'|'darkUp'|'darkVertical'|'gray0625'|'gray125'|'lightDown'|'lightGray'|'lightGrid'|'lightHorizontal'|'lightTrellis'|'lightUp'|'lightVertical'|'mediumGray'|'none'|'solid'}
  */
 
- /**
+/**
  * @typedef {string} Enums.HtmlEditorValueType
  * @enum {'html'|'markdown'}
  */
 
- /**
+/**
  * @typedef {string} Enums.EditorStylingMode
  * @enum {'outlined'|'underlined'|'filled'}
  */

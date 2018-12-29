@@ -11,7 +11,8 @@ var toMs = dateUtils.dateToMilliseconds;
 
 var abstract = Class.abstract;
 
-var APPOINTMENT_MIN_SIZE = 2,
+var APPOINTMENT_MIN_COUNT = 1,
+    APPOINTMENT_MIN_SIZE = 2,
     COMPACT_APPOINTMENT_DEFAULT_SIZE = 15,
     APPOINTMENT_DEFAULT_HEIGHT = 20,
     APPOINTMENT_DEFAULT_WIDTH = 40,
@@ -105,7 +106,7 @@ var BaseRenderingStrategy = Class.inherit({
             allDay = this.isAllDay(item),
             result = [],
             startDate = new Date(this.instance.fire("getField", "startDate", item)),
-            isRecurring = !!item.recurrenceRule;
+            isRecurring = !!this.instance.fire("getField", "recurrenceRule", item);
 
         for(var j = 0; j < position.length; j++) {
             var height = this.calculateAppointmentHeight(item, position[j]),
@@ -257,7 +258,7 @@ var BaseRenderingStrategy = Class.inherit({
                     j: j,
                     top: item.top,
                     left: item.left,
-                    cellShift: item.cellShift,
+                    cellPosition: item.cellPosition,
                     isStart: true,
                     allDay: item.allDay,
                     __tmpIndex: __tmpIndex
@@ -270,7 +271,7 @@ var BaseRenderingStrategy = Class.inherit({
                     j: j,
                     top: item.top + item.height,
                     left: item.left + item.width,
-                    cellShift: item.cellShift,
+                    cellPosition: item.cellPosition,
                     isStart: false,
                     allDay: item.allDay,
                     __tmpIndex: __tmpIndex
@@ -314,7 +315,8 @@ var BaseRenderingStrategy = Class.inherit({
     _normalizeCondition: function(first, second) {
         // NOTE: ie & ff pixels
         var result = first - second;
-        return Math.abs(result) > 0.001 ? result : 0;
+
+        return Math.abs(result) > 0.1 ? result : 0;
     },
 
     _getResultPositions: function(sortedArray) {
@@ -447,12 +449,13 @@ var BaseRenderingStrategy = Class.inherit({
 
     startDate: function(appointment, skipNormalize, position) {
         var startDate = position && position.startDate,
-            viewStartDate = this.instance._getStartDate(appointment, skipNormalize),
+            rangeStartDate = this.instance._getStartDate(appointment, skipNormalize),
             text = this.instance.fire("getField", "text", appointment);
 
-        if((startDate && viewStartDate > startDate) || !startDate) {
-            startDate = viewStartDate;
+        if((startDate && rangeStartDate > startDate) || !startDate) {
+            startDate = rangeStartDate;
         }
+
         if(isNaN(startDate.getTime())) {
             throw errors.Error("E1032", text);
         }
@@ -497,12 +500,15 @@ var BaseRenderingStrategy = Class.inherit({
 
     _adjustDurationByDaylightDiff: function(duration, startDate, endDate) {
         var daylightDiff = this.instance.fire("getDaylightOffset", startDate, endDate);
+        return this._needAdjustDuration(daylightDiff) ? this._calculateDurationByDaylightDiff(duration, daylightDiff) : duration;
+    },
 
-        if(daylightDiff !== 0) {
-            duration += daylightDiff * toMs("minute");
-        }
+    _needAdjustDuration: function(diff) {
+        return diff !== 0;
+    },
 
-        return duration;
+    _calculateDurationByDaylightDiff: function(duration, diff) {
+        return duration + diff * toMs("minute");
     },
 
     _checkWrongEndDate: function(appointment, startDate, endDate) {
@@ -604,12 +610,34 @@ var BaseRenderingStrategy = Class.inherit({
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
 
+        if(coordinates.allDay) {
+            var dateTableOffset = this.instance.fire("getTimePanelWidth");
+
+            var convertedSizes = this.convertToPercents(width, dateTableOffset);
+            var convertedPositions = this.convertToPercents(left - dateTableOffset, dateTableOffset);
+            var leftOffset = dateTableOffset - convertedPositions.x * dateTableOffset / 100;
+
+            return {
+                height: appointmentHeight,
+                width: "calc(" + convertedSizes.x + "% - " + convertedSizes.x * dateTableOffset / 100 + "px)",
+                top: top,
+                left: "calc(" + convertedPositions.x + "% + " + leftOffset + "px)",
+                empty: this._isAppointmentEmpty(height, width)
+            };
+        } else {
+            return {
+                height: appointmentHeight,
+                width: width,
+                top: top,
+                left: left,
+                empty: this._isAppointmentEmpty(height, width)
+            };
+        }
+    },
+
+    convertToPercents: function(x, offset) {
         return {
-            height: appointmentHeight,
-            width: width,
-            top: top,
-            left: left,
-            empty: this._isAppointmentEmpty(height, width)
+            x: x * 100 / (this.instance.fire("getDateTableWidth") - offset)
         };
     },
 
@@ -688,7 +716,11 @@ var BaseRenderingStrategy = Class.inherit({
     _getDynamicAppointmentCountPerCell: function() {
         var cellHeight = this.instance.fire("getCellHeight");
 
-        return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight());
+        return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
+    },
+
+    _getAppointmentMinCount: function() {
+        return APPOINTMENT_MIN_COUNT;
     },
 
     _isCompactTheme: function() {

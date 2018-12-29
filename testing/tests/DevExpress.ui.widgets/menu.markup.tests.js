@@ -44,7 +44,7 @@ QUnit.test("Render items with custom model", (assert) => {
                 child: [{
                     name: "item 11",
                     child: [
-                    { name: "item 111" }
+                        { name: "item 111" }
                     ]
                 }]
             }],

@@ -270,7 +270,9 @@ module.exports = {
                     if(args.name === "dataSource" && args.name === args.fullName && (args.value === args.previousValue || (that.option("columns") && Array.isArray(args.value) && Array.isArray(args.previousValue)))) {
                         if(args.value !== args.previousValue) {
                             var store = that.store();
-                            store._array = args.value;
+                            if(store) {
+                                store._array = args.value;
+                            }
                         }
                         handled();
                         that.refresh(that.option("repaintChangesOnly"));
@@ -457,12 +459,15 @@ module.exports = {
 
                             that._isDataSourceApplying = false;
 
-                            var additionalFilter = that._calculateAdditionalFilter(),
+                            var hasAdditionalFilter = () => {
+                                    var additionalFilter = that._calculateAdditionalFilter();
+                                    return additionalFilter && additionalFilter.length;
+                                },
                                 needApplyFilter = that._needApplyFilter;
 
                             that._needApplyFilter = false;
 
-                            if(needApplyFilter && additionalFilter && additionalFilter.length && !that._isAllDataTypesDefined) {
+                            if(needApplyFilter && !that._isAllDataTypesDefined && hasAdditionalFilter()) {
                                 errors.log("W1005", that.component.NAME);
                                 that._applyFilter();
                             } else {
@@ -544,12 +549,13 @@ module.exports = {
                     }
                 },
                 _loadDataSource: function() {
-                    var dataSource = this._dataSource,
+                    var that = this,
+                        dataSource = that._dataSource,
                         result = new Deferred();
 
                     when(this._columnsController.refresh(true)).always(function() {
                         if(dataSource) {
-                            dataSource.load().done(result.resolve).fail(result.reject);
+                            that._operationId = dataSource.load().done(result.resolve).fail(result.reject).operationId;
                         } else {
                             result.resolve();
                         }
@@ -734,7 +740,7 @@ module.exports = {
                     return false;
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group" && oldItem.inserted === newItem.inserted && oldItem.removed === newItem.removed) {
+                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group") {
                         var columnIndices = [];
 
                         for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
@@ -862,6 +868,7 @@ module.exports = {
                 _updateItemsCore: function(change) {
                     var that = this,
                         items,
+                        oldItems,
                         dataSource = that._dataSource,
                         changeType = change.changeType || "refresh";
 
@@ -873,11 +880,15 @@ module.exports = {
                         items = that._processItems(items, changeType);
 
                         change.items = items;
+                        oldItems = that._items.length === items.length && that._items;
 
                         that._applyChange(change);
 
                         each(that._items, function(index, item) {
                             item.rowIndex = index;
+                            if(oldItems) {
+                                item.cells = oldItems[index].cells;
+                            }
                         });
                     } else {
                         that._items = [];
@@ -1089,6 +1100,7 @@ module.exports = {
                         oldDataSource.loadError.remove(that._loadErrorHandler);
                         oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
                         oldDataSource.changing.remove(that._changingHandler);
+                        oldDataSource.cancel(that._operationId);
                         oldDataSource.dispose(that._isSharedDataSource);
                     }
 

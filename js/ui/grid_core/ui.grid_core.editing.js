@@ -250,7 +250,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 .map(editData => editData.oldData);
         },
 
-        _closeEditItem: function($targetElement) {
+        _needToCloseEditableCell: function($targetElement) {
             var isDataRow = $targetElement.closest("." + DATA_ROW_CLASS).length,
                 $targetCell = $targetElement.closest("." + ROW_CLASS + "> td"),
                 columnIndex = $targetCell[0] && $targetCell[0].cellIndex,
@@ -259,7 +259,11 @@ var EditingController = modules.ViewController.inherit((function() {
                 // TODO jsdmitry: Move this code to _rowClick method of rowsView
                 allowEditing = visibleColumns[columnIndex] && visibleColumns[columnIndex].allowEditing;
 
-            if(this.isEditing() && (!isDataRow || (isDataRow && !allowEditing && !this.isEditCell(rowIndex, columnIndex)))) {
+            return this.isEditing() && (!isDataRow || (isDataRow && !allowEditing && !this.isEditCell(rowIndex, columnIndex)));
+        },
+
+        _closeEditItem: function($targetElement) {
+            if(this._needToCloseEditableCell($targetElement)) {
                 this.closeEditCell();
             }
         },
@@ -380,23 +384,33 @@ var EditingController = modules.ViewController.inherit((function() {
             });
         },
 
-        _getEditCommandCellTemplate: function() {
-            var that = this;
+        _renderEditingButtons: function($container, buttons, options) {
+            buttons.forEach((button) => {
+                if(this._isButtonVisible(button, options)) {
+                    this._createButton($container, button, options);
+                }
+            });
+        },
 
-            return function(container, options) {
+        _getEditCommandCellTemplate: function() {
+            return (container, options) => {
                 var $container = $(container),
                     buttons;
 
                 if(options.rowType === "data") {
                     $container.css("textAlign", "center");
-                    options.rtlEnabled = that.option("rtlEnabled");
-                    buttons = that._getEditingButtons(options);
+                    options.rtlEnabled = this.option("rtlEnabled");
+                    buttons = this._getEditingButtons(options);
 
-                    buttons.forEach((button) => {
-                        if(that._isButtonVisible(button, options)) {
-                            that._createButton($container, button, options);
+                    this._renderEditingButtons($container, buttons, options);
+
+                    options.watch && options.watch(
+                        () => buttons.map(button => this._isButtonVisible(button, options)),
+                        () => {
+                            $container.empty();
+                            this._renderEditingButtons($container, buttons, options);
                         }
-                    });
+                    );
                 } else {
                     gridCoreUtils.setEmptyText($container);
                 }
@@ -1752,7 +1766,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     var columns = that.getController("columns").getColumns();
                     items = [];
                     each(columns, function(_, column) {
-                        if(!column.isBand) {
+                        if(!column.isBand && !column.type) {
                             items.push({
                                 column: column,
                                 name: column.name,
@@ -1878,8 +1892,9 @@ var EditingController = modules.ViewController.inherit((function() {
                     $button.attr("title", button.hint);
                 }
 
-                eventsEngine.on($button, addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(args) {
-                    button.onClick.call(button, extend({}, args, { row: options.row, column: options.column }));
+                eventsEngine.on($button, addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(e) {
+                    button.onClick.call(button, extend({}, e, { row: options.row, column: options.column }));
+                    e.event.preventDefault();
                 }));
                 options.rtlEnabled ? $container.prepend($button, "&nbsp;") : $container.append($button, "&nbsp;");
             }
@@ -2123,12 +2138,8 @@ module.exports = {
                 refreshMode: "full",
                 /**
                  * @name dxDataGridOptions.editing.allowAdding
-                 * @type boolean|function
+                 * @type boolean
                  * @default false
-                 * @type_function_param1 options:object
-                 * @type_function_param1_field1 component:dxDataGrid
-                 * @type_function_param1_field2 row:dxDataGridRowObject
-                 * @type_function_return Boolean
                  */
                 /**
                  * @name dxTreeListOptions.editing.allowAdding
@@ -2342,9 +2353,14 @@ module.exports = {
                     this._editingController.correctEditRowIndex(getRowIndexCorrection);
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    var editingController = this.getController("editing");
+                    var editingController = this.getController("editing"),
+                        isRowEditMode = editingController.isRowEditMode();
 
-                    if(oldItem.rowType === newItem.rowType && editingController.isRowEditMode() && editingController.isEditRow(rowIndex)) {
+                    if(oldItem.inserted !== newItem.inserted || oldItem.removed !== newItem.removed || (isRowEditMode && oldItem.isEditing !== newItem.isEditing)) {
+                        return;
+                    }
+
+                    if(oldItem.rowType === newItem.rowType && isRowEditMode && editingController.isEditRow(rowIndex)) {
                         return isLiveUpdate ? [] : undefined;
                     }
 
@@ -2393,7 +2409,6 @@ module.exports = {
                         each($cellElements, function(index, cellElement) {
                             if($(cellElement).find($cell).length) {
                                 cellIndex = index;
-                                return false;
                             }
                         });
 
@@ -2579,6 +2594,13 @@ module.exports = {
                     cellOptions.isEditing = this._editingController.isEditCell(cellOptions.rowIndex, cellOptions.columnIndex);
 
                     return cellOptions;
+                },
+                _renderCellContent: function($cell, options) {
+                    if(options.rowType === "data" && getEditMode(this) === EDIT_MODE_POPUP && options.row.visible === false) {
+                        return;
+                    }
+
+                    this.callBase.apply(this, arguments);
                 },
                 /**
                  * @name GridBaseMethods.cellValue

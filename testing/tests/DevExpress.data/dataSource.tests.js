@@ -1,17 +1,17 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    typeUtils = require("core/utils/type"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    ajaxMock = require("../../helpers/ajaxMock.js"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    Store = require("data/abstract_store"),
-    ArrayStore = require("data/array_store"),
-    ODataStore = require("data/odata/store"),
-    AggregateCalculator = require("ui/data_grid/aggregate_calculator");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import typeUtils from "core/utils/type";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import ajaxMock from "../../helpers/ajaxMock.js";
+import { DataSource } from "data/data_source/data_source";
+import Store from "data/abstract_store";
+import ArrayStore from "data/array_store";
+import ODataStore from "data/odata/store";
+import AggregateCalculator from "ui/data_grid/aggregate_calculator";
 
-var TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-var moduleConfig = {
+const moduleConfig = {
     beforeEach: function() {
         executeAsyncMock.setup();
     },
@@ -78,6 +78,26 @@ QUnit.test("with no key specified", function(assert) {
             assert.ok(true, "shouldn't retrieve filtered values");
         })
     );
+});
+
+QUnit.test("with filter as a function (T686655)", (assert) => {
+    assert.expect(2);
+
+    const source = new DataSource({
+        store: [
+            { a: "1" },
+            { a: "2" }
+        ],
+        filter: (itemData) => itemData.a !== "2"
+    });
+
+    source.loadSingle("a", "1").done((r) => {
+        assert.equal(r.a, "1");
+    });
+
+    source.loadSingle("a", "2").fail(() => {
+        assert.ok(true, "shouldn't retrieve filtered values");
+    });
 });
 
 QUnit.test("use key if no propName specified", function(assert) {
@@ -873,8 +893,8 @@ QUnit.test("search API, default impl, no selector", function(assert) {
 
 QUnit.test("search API, default impl, single selector", function(assert) {
     var store = new ArrayStore([
-            { text: "abc" },
-            { text: "xyz" }
+        { text: "abc" },
+        { text: "xyz" }
     ]);
 
     var source = new DataSource(store);
@@ -889,9 +909,9 @@ QUnit.test("search API, default impl, single selector", function(assert) {
 
 QUnit.test("search API, default impl, multi selectors, custom op", function(assert) {
     var store = new ArrayStore([
-            { text: "abc", description: "xyz" },
-            { text: "xyz", description: "abc" },
-            { text: "xyz", description: "xyz" }
+        { text: "abc", description: "xyz" },
+        { text: "xyz", description: "abc" },
+        { text: "xyz", description: "xyz" }
     ]);
 
     var source = new DataSource(store);
@@ -906,7 +926,7 @@ QUnit.test("search API, default impl, multi selectors, custom op", function(asse
 
 QUnit.test("search API, default impl, complex selector", function(assert) {
     var store = new ArrayStore([
-            { date: new Date(1984, 5, 14) }
+        { date: new Date(1984, 5, 14) }
     ]);
 
     var source = new DataSource(store);
@@ -1681,6 +1701,23 @@ QUnit.module("live update", {
             });
         };
 
+        this.initPlainDataSource = function(options) {
+            this.array = [
+                { id: 1, text: "test 1" },
+                { id: 2, text: "test 2" }
+            ];
+
+            return new DataSource($.extend({
+                store: {
+                    type: "array",
+                    data: this.array,
+                    key: "id"
+                },
+                paginate: false,
+                pushAggregationTimeout: 0
+            }, options));
+        };
+
         this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
@@ -1861,5 +1898,94 @@ QUnit.module("live update", {
             { type: "delete", key: 2 }
         ]);
         assert.deepEqual(dataSource.items()[0].items.length, 2);
+    });
+
+    QUnit.test("push type='insert' if item is exists", function(assert) {
+        var dataSource = this.initPlainDataSource();
+        dataSource.load();
+
+        dataSource.store().push([
+            { type: "insert", data: { id: 2, text: "modified" } }
+        ]);
+
+        assert.deepEqual(dataSource.items().length, 2);
+    });
+
+    QUnit.test("push type='insert' if item is exists if reshapeOnPush", function(assert) {
+        var dataSource = this.initPlainDataSource({ reshapeOnPush: true });
+        dataSource.load();
+
+        dataSource.store().push([
+            { type: "insert", data: { id: 2, text: "modified" } }
+        ]);
+
+        assert.deepEqual(dataSource.items().length, 2);
+        assert.deepEqual(this.array.length, 2);
+    });
+
+    QUnit.test("push type='remove' and type='insert'", function(assert) {
+        var dataSource = this.initPlainDataSource();
+        dataSource.load();
+
+        dataSource.store().push([
+            { type: "remove", key: 1 },
+            { type: "insert", data: { id: 1, text: "modified" } }
+        ]);
+
+        assert.deepEqual(this.array, [
+            { id: 2, text: "test 2" },
+            { id: 1, text: "modified" }
+        ]);
+        assert.deepEqual(dataSource.items(), this.array);
+    });
+
+    QUnit.test("push type='remove' and type='insert' if reshapeOnPush", function(assert) {
+        var dataSource = this.initPlainDataSource({ reshapeOnPush: true });
+        dataSource.load();
+
+        dataSource.store().push([
+            { type: "remove", key: 1 },
+            { type: "insert", data: { id: 1, text: "modified" } }
+        ]);
+
+        assert.deepEqual(this.array, [
+            { id: 2, text: "test 2" },
+            { id: 1, text: "modified" }
+        ]);
+        assert.deepEqual(dataSource.items(), this.array);
+    });
+
+    QUnit.test("push type='insert' with same key", function(assert) {
+        var dataSource = this.initPlainDataSource();
+        dataSource.load();
+
+        dataSource.store().push([
+            { type: "insert", data: { id: 3, text: "first" } },
+            { type: "insert", data: { id: 3, text: "second" } }
+        ]);
+
+        assert.deepEqual(this.array, [
+            { id: 1, text: "test 1" },
+            { id: 2, text: "test 2" },
+            { id: 3, text: "first" }
+        ]);
+        assert.deepEqual(dataSource.items(), this.array);
+    });
+
+    QUnit.test("push type='remove' after insert if reshapeOnPush", function(assert) {
+        var dataSource = this.initPlainDataSource({ reshapeOnPush: true });
+        dataSource.load();
+
+        dataSource.store().push([
+            { type: "insert", data: { id: 3, text: "first" } },
+            { type: "insert", data: { id: 3, text: "second" } }
+        ]);
+
+        assert.deepEqual(this.array, [
+            { id: 1, text: "test 1" },
+            { id: 2, text: "test 2" },
+            { id: 3, text: "first" }
+        ]);
+        assert.deepEqual(dataSource.items(), this.array);
     });
 });

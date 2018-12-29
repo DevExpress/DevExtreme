@@ -132,6 +132,10 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
 
         allowAdding: function(options) {
             return this._allowEditAction("allowAdding", options);
+        },
+
+        _needToCloseEditableCell: function($targetElement) {
+            return this.callBase.apply(this, arguments) || $targetElement.closest("." + TREELIST_EXPAND_ICON_CONTAINER_CLASS).length && this.isEditing();
         }
     };
 })());

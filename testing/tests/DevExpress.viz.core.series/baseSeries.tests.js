@@ -197,7 +197,6 @@ var environmentWithSinonStubPoint = {
             stub.visibleTopMarker = true;
             stub.visibleBottomMarker = true;
             stub.hide.reset();
-            stub.applyStyle.reset();
             stub.isHovered.returns(false);
             stub.isSelected.returns(false);
             stub.coordsIn.returns(false);
@@ -571,7 +570,7 @@ QUnit.test("Update series data when points are not empty. Old points length > ne
 });
 
 QUnit.test("Create points for dataItems with coresponding series (series template)", function(assert) {
-    var options = { type: "mockType", argumentField: "arg", valueField: "val", nameField: "series", name: "1", label: { visible: false } },
+    var options = { type: "mockType", argumentField: "arg", valueField: "val", nameField: "series", name: "1", nameFieldValue: "1", label: { visible: false } },
         series = createSeries(options),
         data = [{ arg: 1, val: 10, series: "1" }, { arg: 2, val: 20, series: "2" }];
 
@@ -583,6 +582,17 @@ QUnit.test("Create points for dataItems with coresponding series (series templat
     assert.equal(series.getAllPoints()[0].mockOptions.argument, 1, "Arg");
     assert.equal(series.getAllPoints()[0].mockOptions.value, 10, "Val");
     assert.ok(series.canRenderCompleteHandle());
+});
+
+// T688232
+QUnit.test("Create points when series' name and value of value nameField are different", function(assert) {
+    var options = { type: "mockType", argumentField: "arg", valueField: "val", nameField: "series", name: "customName", nameFieldValue: "1", label: { visible: false } },
+        series = createSeries(options);
+
+    series.updateData([{ arg: 1, val: 10, series: "1" }]);
+    series.createPoints();
+
+    assert.equal(series.getAllPoints().length, 1, "Series should have 1 point");
 });
 
 QUnit.test("Update series data when points are not empty. Old points length < new points length", function(assert) {
@@ -2710,8 +2720,8 @@ QUnit.test("select hovered series - selectionMode is excludePoints", function(as
 
 
     $.each(series.getPoints(), function(i, p) {
-        if(p.applyStyle.called) {
-            assert.strictEqual(p.applyStyle.lastCall.args[0], "normal");
+        if(p.resetView.called) {
+            assert.strictEqual(p.resetView.lastCall.args[0], "hover");
         }
     });
 });
@@ -2740,8 +2750,8 @@ QUnit.test("select hovered series - selectionMode is includePoints", function(as
 
 
     $.each(series.getPoints(), function(i, p) {
-        if(p.applyStyle.called) {
-            assert.strictEqual(p.applyStyle.lastCall.args[0], "selection");
+        if(p.setView.called) {
+            assert.strictEqual(p.setView.lastCall.args[0], "selection");
         }
     });
 });
@@ -2772,8 +2782,8 @@ QUnit.test("select hovered series - release selected series, update hover", func
     assert.strictEqual(series.stylesHistory[2], "hover");
 
     $.each(series.getPoints(), function(i, p) {
-        if(p.applyStyle.called) {
-            assert.strictEqual(p.applyStyle.lastCall.args[0], "hover");
+        if(p.setView.called) {
+            assert.strictEqual(p.setView.lastCall.args[0], "hover");
         }
     });
 });
@@ -3712,16 +3722,6 @@ QUnit.test("Set Hover point with point.selected. ", function(assert) {
     assert.ok(this.point.applyView.callCount, 2, "Point style");
 });
 
-QUnit.test("Set Hover point with point.selected. ", function(assert) {
-    this.series.selectPoint(this.point);
-    this.point.isSelected.returns(true);
-    // act
-    this.series.hoverPoint(this.point);
-
-    assert.equal(this.point.fullState, 2 | 1, "fullState");
-    assert.ok(this.point.applyView.callCount, 2, "Point style");
-});
-
 QUnit.test("Set Hover point view without change state with point.selected. ", function(assert) {
     this.series.selectPoint(this.point);
     this.point.isSelected.returns(true);
@@ -4441,7 +4441,7 @@ QUnit.test("notification of series. allSeriesPoints. multiply mode", function(as
     target2 = series.getAllPoints()[1];
     target1.getOptions.returns({ selectionMode: "allSeriesPoints" });
     target2.getOptions.returns({ selectionMode: "allSeriesPoints" });
-    target1.isSelected.returns(true);   // emulation multiple mode
+    target1.isSelected.returns(true); // emulation multiple mode
     series.notify({
         action: "pointSelect",
         target: target1
@@ -4792,7 +4792,7 @@ QUnit.test("point hover. allSeriesPoints. apply hover style only points target s
         target: series2.getAllPoints()[0]
     });
     // assert
-    assert.equal(series1.getAllPoints()[0].applyStyle.callCount, 0);
+    assert.equal(series1.getAllPoints()[0].setView.callCount, 0);
 });
 
 QUnit.test("point clear hover. allArgumentPoints", function(assert) {

@@ -224,7 +224,7 @@ QUnit.test("slice and dice algorithm. multiple levels 1", function(assert) {
     this.checkLayout(assert, [
         [0, 0, 225, 400],
         [225, 0, 300, 400],
-            [300, 0, 600, 400],
+        [300, 0, 600, 400],
         [300, 0, 600, 0],
         [300, 0, 600, 200],
         [300, 200, 600, 400]

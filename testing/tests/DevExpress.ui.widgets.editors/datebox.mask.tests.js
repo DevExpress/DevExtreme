@@ -1,5 +1,7 @@
 import $ from "jquery";
 import { renderDateParts, getDatePartIndexByPosition } from "ui/date_box/ui.date_box.mask.parts";
+import dateParser from "localization/ldml/date.parser";
+import dateLocalization from "localization/date";
 import { noop } from "core/utils/common";
 import pointerMock from "../../helpers/pointerMock.js";
 import "ui/date_box";
@@ -13,7 +15,7 @@ QUnit.testStart(() => {
 if(devices.real().deviceType === "desktop") {
     let setupModule = {
         beforeEach: () => {
-            this.parts = renderDateParts("Tuesday, July 2, 2024 16:19 PM", "EEEE, MMMM d, yyyy HH:mm a");
+            this.parts = renderDateParts("Tuesday, July 2, 2024 16:19 PM", dateParser.getRegExpInfo("EEEE, MMMM d, yyyy HH:mm a", dateLocalization));
             this.$element = $("#dateBox").dxDateBox({
                 value: new Date("10/10/2012 13:07"),
                 useMaskBehavior: true,
@@ -25,7 +27,7 @@ if(devices.real().deviceType === "desktop") {
             this.$input = this.$element.find(".dx-texteditor-input");
             this.keyboard = keyboardMock(this.$input, true);
             this.pointer = pointerMock(this.$input);
-            this.clock = sinon.useFakeTimers();
+            this.clock = sinon.useFakeTimers(new Date(2015, 3, 14).getTime());
         },
 
         afterEach: () => {
@@ -75,7 +77,7 @@ if(devices.real().deviceType === "desktop") {
         };
 
         QUnit.test("Check parts length", (assert) => {
-            assert.equal(this.parts.length, 15);
+            assert.equal(this.parts.length, 13);
         });
 
         QUnit.test("Day of week", (assert) => {
@@ -97,28 +99,30 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Month", (assert) => {
-            checkAndRemoveLimits(this.parts[3], { min: 0, max: 11 }, assert);
+            checkAndRemoveLimits(this.parts[2], { min: 1, max: 12 }, assert);
 
             let date = new Date(2012, 2, 30);
-            this.parts[3].setter(date, 1);
-            assert.equal(date.getMonth(), 1, "setter sets month");
-            delete this.parts[3].setter;
+            this.parts[2].setter(date, 1);
+            assert.equal(date.getMonth(), 0, "setter sets month");
+            delete this.parts[2].setter;
 
-            assert.deepEqual(this.parts[3], {
-                index: 3,
+            assert.equal(this.parts[2].getter(date), 1, "getter gets moth");
+            delete this.parts[2].getter;
+
+            assert.deepEqual(this.parts[2], {
+                index: 2,
                 isStub: false,
                 caret: { start: 9, end: 13 },
-                getter: "getMonth",
                 pattern: "MMMM",
                 text: "July"
             });
         });
 
         QUnit.test("Day", (assert) => {
-            checkAndRemoveLimits(this.parts[5], { min: 1, max: 29 }, assert);
+            checkAndRemoveLimits(this.parts[4], { min: 1, max: 29 }, assert);
 
-            assert.deepEqual(this.parts[5], {
-                index: 5,
+            assert.deepEqual(this.parts[4], {
+                index: 4,
                 isStub: false,
                 caret: { start: 14, end: 15 },
                 getter: "getDate",
@@ -129,15 +133,15 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Year", (assert) => {
-            checkAndRemoveLimits(this.parts[8], { min: 0, max: 9999 }, assert);
+            checkAndRemoveLimits(this.parts[6], { min: 0, max: 9999 }, assert);
 
             let date = new Date(2012, 1, 4, 15, 6);
-            this.parts[8].setter(date, 15);
+            this.parts[6].setter(date, 15);
             assert.equal(date.getFullYear(), 2015, "setter sets AM");
-            delete this.parts[8].setter;
+            delete this.parts[6].setter;
 
-            assert.deepEqual(this.parts[8], {
-                index: 8,
+            assert.deepEqual(this.parts[6], {
+                index: 6,
                 isStub: false,
                 caret: { start: 17, end: 21 },
                 getter: "getFullYear",
@@ -147,10 +151,10 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Hours", (assert) => {
-            checkAndRemoveLimits(this.parts[10], { min: 0, max: 23 }, assert);
+            checkAndRemoveLimits(this.parts[8], { min: 0, max: 23 }, assert);
 
-            assert.deepEqual(this.parts[10], {
-                index: 10,
+            assert.deepEqual(this.parts[8], {
+                index: 8,
                 isStub: false,
                 caret: { start: 22, end: 24 },
                 getter: "getHours",
@@ -161,10 +165,10 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Minutes", (assert) => {
-            checkAndRemoveLimits(this.parts[12], { min: 0, max: 59 }, assert);
+            checkAndRemoveLimits(this.parts[10], { min: 0, max: 59 }, assert);
 
-            assert.deepEqual(this.parts[12], {
-                index: 12,
+            assert.deepEqual(this.parts[10], {
+                index: 10,
                 isStub: false,
                 caret: { start: 25, end: 27 },
                 getter: "getMinutes",
@@ -175,20 +179,20 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Time indication", (assert) => {
-            checkAndRemoveLimits(this.parts[14], { min: 0, max: 1 }, assert);
+            checkAndRemoveLimits(this.parts[12], { min: 0, max: 1 }, assert);
 
             let date = new Date(2012, 1, 4, 15, 6);
 
-            let isPm = this.parts[14].getter(date);
+            let isPm = this.parts[12].getter(date);
             assert.equal(isPm, 1, "getter returns PM");
-            delete this.parts[14].getter;
+            delete this.parts[12].getter;
 
-            this.parts[14].setter(date, 0);
+            this.parts[12].setter(date, 0);
             assert.equal(date.getHours(), 3, "setter sets AM");
-            delete this.parts[14].setter;
+            delete this.parts[12].setter;
 
-            assert.deepEqual(this.parts[14], {
-                index: 14,
+            assert.deepEqual(this.parts[12], {
+                index: 12,
                 isStub: false,
                 caret: { start: 28, end: 30 },
                 pattern: "a",
@@ -202,29 +206,29 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.parts[1], {
                 index: 1,
                 isStub: true,
-                caret: { start: 7, end: 8 },
-                pattern: ",",
-                text: ","
+                caret: { start: 7, end: 9 },
+                pattern: ", ",
+                text: ", "
             });
         });
 
         QUnit.test("Space stub", (assert) => {
-            checkAndRemoveAccessors(this.parts[2], "\\", assert);
+            checkAndRemoveAccessors(this.parts[3], " ", assert);
 
-            assert.deepEqual(this.parts[2], {
-                index: 2,
+            assert.deepEqual(this.parts[3], {
+                index: 3,
                 isStub: true,
-                caret: { start: 8, end: 9 },
-                pattern: "\\ ",
+                caret: { start: 13, end: 14 },
+                pattern: " ",
                 text: " "
             });
         });
 
         QUnit.test("Colon stub", (assert) => {
-            checkAndRemoveAccessors(this.parts[11], ":", assert);
+            checkAndRemoveAccessors(this.parts[9], ":", assert);
 
-            assert.deepEqual(this.parts[11], {
-                index: 11,
+            assert.deepEqual(this.parts[9], {
+                index: 9,
                 isStub: true,
                 caret: { start: 24, end: 25 },
                 pattern: ":",
@@ -241,42 +245,50 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Find month", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 9), 3, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 10), 3, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 13), 3, "end position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 9), 2, "start position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 10), 2, "middle position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 13), 2, "end position of the group");
         });
 
         QUnit.test("Find day", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 14), 5, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 15), 5, "end position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 14), 4, "start position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 15), 4, "end position of the group");
         });
 
         QUnit.test("Find year", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 17), 8, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 19), 8, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 21), 8, "end position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 17), 6, "start position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 19), 6, "middle position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 21), 6, "end position of the group");
         });
 
         QUnit.test("Find hours", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 22), 10, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 23), 10, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 24), 10, "end position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 22), 8, "start position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 23), 8, "middle position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 24), 8, "end position of the group");
         });
 
         QUnit.test("Find minutes", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 25), 12, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 26), 12, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 27), 12, "end position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 25), 10, "start position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 26), 10, "middle position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 27), 10, "end position of the group");
         });
 
         QUnit.test("Find time indicator", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 28), 14, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 29), 14, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 30), 14, "end position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 28), 12, "start position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 29), 12, "middle position of the group");
+            assert.equal(getDatePartIndexByPosition(this.parts, 30), 12, "end position of the group");
         });
     });
 
     QUnit.module("Keyboard navigation", setupModule, () => {
+        QUnit.test("RegisterKeyHandler should work", (assert) => {
+            const handler = sinon.spy();
+            this.instance.registerKeyHandler("del", handler);
+
+            this.keyboard.press("del");
+            assert.equal(handler.callCount, 1, "registerKeyHandler works");
+        });
+
         QUnit.test("Right and left arrows should move the selection", (assert) => {
             this.keyboard.press("right");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group is selected");
@@ -365,25 +377,79 @@ if(devices.real().deviceType === "desktop") {
             assert.ok(this.instance.option("opened"), "datebox is opened");
         });
 
-        QUnit.test("delete should revert group to initial value and go to the next one", (assert) => {
+        QUnit.test("delete should revert group to an empty date and go to the next part", (assert) => {
             this.keyboard.press("up");
             assert.equal(this.instance.option("text"), "November 10 2012", "text has been changed");
 
             this.keyboard.press("del");
 
-            assert.equal(this.instance.option("text"), "October 10 2012", "text is correct");
+            assert.equal(this.instance.option("text"), "January 10 2012", "text is correct");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "caret is good");
+
+            this.keyboard.press("del");
+            assert.equal(this.instance.option("text"), "January 1 2012", "text is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 10, end: 14 }, "caret is good");
+
+            this.keyboard.press("del");
+            assert.equal(this.instance.option("text"), "January 1 2000", "text is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 10, end: 14 }, "caret is good");
         });
 
-        QUnit.test("backspace should revert group to initial value and go to the previous one", (assert) => {
+        QUnit.test("search value should be cleared after part is reverted", (assert) => {
+            this.instance.option("displayFormat", "dd, yyyy");
+
+            this.keyboard.press("right");
+            this.keyboard.type("33");
+            this.keyboard.press("del");
+            this.keyboard.type("44");
+
+            assert.equal(this.instance.option("text"), "10, 2044", "text is correct");
+        });
+
+        QUnit.test("search value should be cleared after part is reverted when all text is selected", (assert) => {
+            this.instance.option("displayFormat", "yyyy");
+
+            this.keyboard.type("33");
+            this.keyboard.press("del");
+            this.keyboard.type("44");
+
+            assert.equal(this.instance.option("text"), "2044", "text is correct");
+        });
+
+        QUnit.test("delete should revert a part when the value is null", (assert) => {
+            this.instance.option({
+                displayFormat: "MMM yyyy",
+                value: null
+            });
+            this.keyboard.press("up");
+
+            assert.equal(this.instance.option("text"), "May 2015", "text has been rendered");
+
+            this.keyboard.press("del");
+            assert.equal(this.instance.option("text"), "Jan 2015", "text has been reverted");
+            assert.deepEqual(this.keyboard.caret(), { start: 4, end: 8 }, "next group is selected");
+        });
+
+        QUnit.test("backspace should revert group to an empty date and go to the previous part", (assert) => {
             this.keyboard.press("right");
             this.keyboard.press("up");
             assert.equal(this.instance.option("text"), "October 11 2012", "text has been changed");
 
             this.keyboard.press("backspace");
 
-            assert.equal(this.instance.option("text"), "October 10 2012", "text is correct");
+            assert.equal(this.instance.option("text"), "October 1 2012", "text is correct");
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "caret is good");
+        });
+
+        QUnit.test("emptyDateValue option should work", (assert) => {
+            this.instance.option("emptyDateValue", new Date(2015, 5, 4));
+            this.keyboard.press("up");
+            assert.equal(this.instance.option("text"), "November 10 2012", "text has been changed");
+
+            this.keyboard.press("del");
+
+            assert.equal(this.instance.option("text"), "June 10 2012", "text is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 5, end: 7 }, "caret is good");
         });
 
         QUnit.test("removing all text should be possible", (assert) => {
@@ -402,8 +468,8 @@ if(devices.real().deviceType === "desktop") {
 
             this.$input.trigger("focusout");
             this.keyboard.type("2");
-            assert.equal(this.instance.option("text"), "January 2 2012", "search value was cleared");
-            assert.deepEqual(this.keyboard.caret(), { start: 8, end: 9 }, "next group has been selected");
+            assert.equal(this.instance.option("text"), "February 10 2012", "search value and position was cleared");
+            assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, "first group has been filled again");
         });
 
         QUnit.test("enter should clear search value", (assert) => {
@@ -419,6 +485,31 @@ if(devices.real().deviceType === "desktop") {
         QUnit.test("incorrect input should clear search value", (assert) => {
             this.keyboard.type("jqwed");
             assert.equal(this.instance.option("text"), "December 10 2012", "text has been changed");
+        });
+
+        QUnit.test("first part should be active if select all parts and type new date", (assert) => {
+            this.keyboard.press("right");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group has been selected");
+
+            this.keyboard
+                .caret({ start: 0, end: 15 })
+                .type("1");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "next group has been selected");
+        });
+
+        QUnit.test("first part should be active if select all parts, delete and type new", (assert) => {
+            this.keyboard.press("right");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "next group has been selected");
+
+            this.keyboard
+                .caret({ start: 0, end: 15 })
+                .press("del")
+                .type("1");
+
+            assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "next group has been selected");
         });
     });
 
@@ -546,15 +637,31 @@ if(devices.real().deviceType === "desktop") {
 
             this.keyboard.type("30");
             assert.equal(this.$input.val(), "January");
+
+            this.keyboard.type("05");
+            assert.equal(this.$input.val(), "May");
         });
 
         QUnit.test("Year", (assert) => {
             this.instance.option("displayFormat", "yyyy");
 
-            this.keyboard
-                .type("99991");
+            this.keyboard.type("1995");
+            assert.equal(this.$input.val(), "1995");
 
-            assert.equal(this.$input.val(), "9901", "year should be limited");
+            this.keyboard.type("2");
+            assert.equal(this.$input.val(), "9952");
+
+            this.keyboard.type("0");
+            assert.equal(this.$input.val(), "9520");
+
+            this.keyboard.type("1");
+            assert.equal(this.$input.val(), "5201");
+
+            this.keyboard.type("8");
+            assert.equal(this.$input.val(), "2018");
+
+            this.keyboard.type("0000");
+            assert.equal(this.$input.val(), "0000");
         });
 
         QUnit.test("Short Year", (assert) => {
@@ -596,23 +703,10 @@ if(devices.real().deviceType === "desktop") {
 
     QUnit.module("Empty dateBox", {
         beforeEach: () => {
-            this.$element = $("#dateBox").dxDateBox({
-                value: null,
-                useMaskBehavior: true,
-                mode: "text",
-                displayFormat: "MMMM d yyyy"
-            });
-
-            this.instance = this.$element.dxDateBox("instance");
-            this.$input = this.$element.find(".dx-texteditor-input");
-            this.keyboard = keyboardMock(this.$input, true);
-            this.pointer = pointerMock(this.$input);
-
-            this.dateStub = sinon.useFakeTimers(new Date(2015, 3, 14).getTime());
+            setupModule.beforeEach.call(this);
+            this.instance.option("value", null);
         },
-        afterEach: () => {
-            this.dateStub.restore();
-        }
+        afterEach: setupModule.afterEach
     }, () => {
         QUnit.test("Current date should be rendered on first input", (assert) => {
             this.keyboard.type("1");
@@ -692,9 +786,7 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Short Year should use current date", (assert) => {
-            this.instance.option({
-                displayFormat: "yy"
-            });
+            this.instance.option("displayFormat", "yy");
 
             let dateStart = new Date().getFullYear().toString().substr(0, 2);
 
@@ -706,10 +798,7 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Click and leave empty datebox should not change the value", (assert) => {
-            this.instance.option({
-                displayFormat: "yy",
-                value: null
-            });
+            this.instance.option("displayFormat", "yy");
 
             this.$input.trigger("dxclick");
             this.keyboard.press("enter");
@@ -801,6 +890,16 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.press("7").change();
             assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different after change event");
         });
+
+        QUnit.test("performance - value change should not lead to recreate regexp and format pattern", (assert) => {
+            const regExpInfo = sinon.spy(dateParser, "getRegExpInfo");
+
+            this.instance.option("displayFormat", "dd.MM");
+            assert.equal(regExpInfo.callCount, 1, "regexpInfo should be called when format changed");
+
+            this.instance.option("value", new Date(2018, 2, 5, 10, 15, 25));
+            assert.equal(regExpInfo.callCount, 1, "regexpInfo should not be called when value changed");
+        });
     });
 
     QUnit.module("Advanced caret", setupModule, () => {
@@ -833,7 +932,17 @@ if(devices.real().deviceType === "desktop") {
             });
 
             this.keyboard.type("38");
-            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was not moved");
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved to month");
+        });
+
+        QUnit.test("Move caret to the next group after string length overflow", (assert) => {
+            this.instance.option({
+                advanceCaret: true,
+                displayFormat: "dd.MM"
+            });
+
+            this.keyboard.type("01");
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved to month");
         });
     });
 }

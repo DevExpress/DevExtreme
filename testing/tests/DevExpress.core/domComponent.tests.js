@@ -222,7 +222,7 @@ QUnit.test("component lifecycle, changing a couple of options", function(assert)
         optionChangedArgs = instance._getTraceLogByMethod("_optionChanged");
 
     assert.deepEqual(methodCallStack, [
-        "beginUpdate",     // ctor
+        "beginUpdate", // ctor
         "beginUpdate",
         "endUpdate",
 
@@ -805,6 +805,17 @@ QUnit.test("the 'elementAttr' option should set attributes to widget element acc
     });
 
     assert.equal($element.attr("attr1"), "widget 01", "the second attribute is set correctly");
+});
+
+QUnit.test("changing elementAttr option should not rerender the component", function(assert) {
+    var $element = $("#component").TestComponent({ elementAttr: { attr1: "widget 01" } }),
+        instance = $element.TestComponent("instance"),
+        render = sinon.spy(instance, "_render");
+
+    instance.option("elementAttr", { attr1: "widget 02" });
+
+    assert.equal(render.callCount, 0, "render should not be called");
+    assert.equal($element.attr("attr1"), "widget 02", "attribute is correct");
 });
 
 QUnit.test("changing class via 'elementAttr' option should preserve component specific classes", function(assert) {

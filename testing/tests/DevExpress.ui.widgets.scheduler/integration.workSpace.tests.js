@@ -1317,7 +1317,7 @@ QUnit.test("WorkSpace recalculation works fine after render dateCellTemplate if 
 });
 
 QUnit.test("Timepanel text should be calculated correctly if DST makes sense (T442904)", function(assert) {
-        // can be reproduced in PST timezone
+    // can be reproduced in PST timezone
     this.createInstance({
         dataSource: [],
         views: ["week"],
@@ -1621,6 +1621,28 @@ QUnit.test("SelectedCellData option should have rigth data of focused cell", fun
     $($cells.eq(0)).trigger("dxpointerdown");
 
     assert.deepEqual(this.instance.option("selectedCellData"), [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }], "option has right value");
+});
+
+QUnit.test("SelectedCellData option should be applied correctly in ungrouped workspace", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["week"],
+        currentView: "week",
+        showAllDayPanel: true,
+        groups: undefined,
+        currentDate: new Date(2018, 3, 11),
+        height: 600,
+        selectedCellData: [{
+            allDay: false,
+            startDate: new Date(2018, 3, 8),
+            endDate: new Date(2018, 3, 8, 0, 30),
+            groups: {
+                groupId: 1
+            }
+        }]
+    });
+
+    assert.ok(true, "WorkSpace works correctly");
 });
 
 QUnit.test("SelectedCellData option should make cell in focused state", function(assert) {

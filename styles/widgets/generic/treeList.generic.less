@@ -11,13 +11,16 @@
     .dx-treelist-empty-space {
         position: relative;
         display: inline-block;
-        color: @treelist-spin-icon-color;
         width: @TREELIST_EMPTY_SPACE_WIDTH;
         .dx-icon-spinright;
 
         &:before {
             visibility: hidden;
         }
+    }
+
+    tr:not(.dx-row-focused) .dx-treelist-empty-space {
+        color: @treelist-spin-icon-color;
     }
 
     .dx-treelist-expanded span {
@@ -44,8 +47,8 @@
         }
     }
 
-    .dx-selection {
-        .dx-treelist-empty-space  {
+    tr:not(.dx-row-focused).dx-selection {
+        .dx-treelist-empty-space {
             color: @treelist-selection-spin-icon-color;
         }
     }

@@ -197,7 +197,7 @@ QUnit.test("Boolean columns initialize with correct 'showEditorAlways' option wh
                 container.text("custom");
             }
         },
-            'TestField3'
+        'TestField3'
         ]
     });
 
@@ -1475,6 +1475,8 @@ QUnit.test("Initialize Lookup column with paging", function(assert) {
     assert.equal(lookup.dataType, 'string', 'lookup type');
     assert.deepEqual(lookup.items, this.options.columns[1].lookup.dataSource.store, 'lookup items');
     assert.equal(lookup.calculateCellValue(1), 'Category 1', 'lookup calculateCellValue');
+    // T701148
+    assert.strictEqual(lookup.dataSource.store, this.options.columns[1].lookup.dataSource.store, 'lookup store array instance is not changed');
 });
 
 // T630253
@@ -1567,9 +1569,9 @@ QUnit.test("Initialize Lookup column by columnOption", function(assert) {
     this.columnsController.applyDataSource(dataSource);
 
     var store = [
-                { id: 1, category_name: 'Category 1' },
-                { id: 2, category_name: 'Category 2' },
-                { id: 3, category_name: 'Category 3' }
+        { id: 1, category_name: 'Category 1' },
+        { id: 2, category_name: 'Category 2' },
+        { id: 3, category_name: 'Category 3' }
     ];
 
     this.columnsController.columnOption("category_id", "lookup", {
@@ -2049,8 +2051,8 @@ QUnit.test("Serialize value when data and value is number type", function(assert
 // T453073
 QUnit.test("Deserialize value for grouped lookup column with dataType number", function(assert) {
     var array = [
-            { name: 'Alex', state: 1 },
-            { name: 'Dan', state: 2 }
+        { name: 'Alex', state: 1 },
+        { name: 'Dan', state: 2 }
     ];
 
     var dataSource = new DataSource({ store: array });
@@ -2672,7 +2674,7 @@ QUnit.test("isColumnOptionUsed method", function(assert) {
 QUnit.test("Initialize from array store. Field as a function", function(assert) {
     // arrange
     var dataSource = new DataSource([
-        { name: 'Alex', age: 15, lastName: function() { } },
+            { name: 'Alex', age: 15, lastName: function() { } },
         ]),
         visibleColumns;
 
@@ -4587,7 +4589,59 @@ QUnit.test("update column groupIndex", function(assert) {
     assert.ok(columnsChangedArgs[0].changeTypes.grouping);
 });
 
-    // T364892
+QUnit.test("update column calculateGroupValue", function(assert) {
+    this.applyOptions({ columns: [{ dataField: "field1", groupIndex: 0, calculateGroupValue: function() {} }, "field2"] });
+
+    var columnsChangedArgs = [];
+
+    var dataSource = new DataSource([]);
+
+    dataSource.load();
+
+    this.columnsController.applyDataSource(dataSource);
+
+    this.columnsController.columnsChanged.add(function(e) {
+        columnsChangedArgs.push(e);
+    });
+
+    // act
+    this.columnsController.columnOption('field2', "calculateGroupValue", function() {});
+    dataSource.load();
+
+    // assert
+    assert.strictEqual(this.columnsController.getColumns()[0].groupIndex, 0);
+    assert.strictEqual(this.columnsController.getColumns()[1].groupIndex, undefined);
+    assert.strictEqual(columnsChangedArgs.length, 1);
+    assert.ok(columnsChangedArgs[0].changeTypes.grouping);
+});
+
+QUnit.test("update column calculateSortValue", function(assert) {
+    this.applyOptions({ columns: [{ dataField: "field1", sortOrder: "asc", sortIndex: 0, calculateSortValue: function() {} }, "field2"] });
+
+    var columnsChangedArgs = [];
+
+    var dataSource = new DataSource([]);
+
+    dataSource.load();
+
+    this.columnsController.applyDataSource(dataSource);
+
+    this.columnsController.columnsChanged.add(function(e) {
+        columnsChangedArgs.push(e);
+    });
+
+    // act
+    this.columnsController.columnOption('field2', "calculateSortValue", function() {});
+    dataSource.load();
+
+    // assert
+    assert.strictEqual(this.columnsController.getColumns()[0].sortIndex, 0);
+    assert.strictEqual(this.columnsController.getColumns()[1].sortIndex, undefined);
+    assert.strictEqual(columnsChangedArgs.length, 1);
+    assert.ok(columnsChangedArgs[0].changeTypes.sorting);
+});
+
+// T364892
 QUnit.test("update column groupIndex after endUpdate", function(assert) {
     this.applyOptions({ columns: [{ dataField: "field1" }, { dataField: "field2" }, "field3"] });
 
@@ -6325,9 +6379,9 @@ QUnit.test("Add column for band columns", function(assert) {
     assert.notOk(columns[1].added);
 });
 
-    // T387546
+// T387546
 QUnit.test("Dynamically added column must be kept after change editing.mode option", function(assert) {
-        // arrange
+    // arrange
     var that = this;
 
     that.applyOptions({
@@ -6339,13 +6393,13 @@ QUnit.test("Dynamically added column must be kept after change editing.mode opti
     });
     that.columnsController.applyDataSource(createMockDataSource([{ TestField: 'test' }]));
 
-        // act
+    // act
     that.columnsController.addColumn({ dataField: 'AddedColumn', caption: "My Column" });
     that.columnOption("AddedColumn", "filterValue", "Test");
     that.options.editing.mode = "batch";
     that.columnsController.optionChanged({ name: "editing" });
 
-        // assert
+    // assert
     var columns = that.columnsController.getVisibleColumns();
 
     assert.equal(columns.length, 2, "two columns exists");
@@ -6552,7 +6606,7 @@ QUnit.test('Get user state', function(assert) {
 });
 
 QUnit.test('Get user state for dynamically added column', function(assert) {
-        // arrange
+    // arrange
     var that = this,
         columns;
 
@@ -6562,10 +6616,10 @@ QUnit.test('Get user state for dynamically added column', function(assert) {
 
     that.addColumn("TestField2");
 
-        // act
+    // act
     columns = that.columnsController.getUserState();
 
-        // assert
+    // assert
     assert.equal(columns.length, 2);
     assert.deepEqual(columns[0], { "dataField": "TestField1", "dataType": "string", "visibleIndex": 0, "visible": true, "width": 100, "sortOrder": "asc", "sortIndex": 0, "filterValue": "TestFilter1", "selectedFilterOperation": "=", filterValues: ["TestFilter1"], filterType: "include", fixed: true, fixedPosition: "right" });
     assert.deepEqual(columns[1], { "dataField": "TestField2", "visibleIndex": 1, "visible": true, "added": "TestField2" });
@@ -6620,25 +6674,25 @@ QUnit.test('Apply user state', function(assert) {
 });
 
 QUnit.test('Apply user state for dynamically added column', function(assert) {
-        // arrange
+    // arrange
     var that = this,
         columns;
 
-        // act
+    // act
     that.columnsController.setUserState([
-            { dataField: "TestField1", visibleIndex: 0, visible: true, "width": 50, sortOrder: "desc", filterValue: "Test1", selectedFilterOperation: "startswith" },
-            { dataField: "TestField2", visibleIndex: 1, visible: false, width: 150, sortOrder: "desc", filterValue: "Test2", selectedFilterOperation: "=", added: { dataField: "TestField2", dataType: "string" } }
+        { dataField: "TestField1", visibleIndex: 0, visible: true, "width": 50, sortOrder: "desc", filterValue: "Test1", selectedFilterOperation: "startswith" },
+        { dataField: "TestField2", visibleIndex: 1, visible: false, width: 150, sortOrder: "desc", filterValue: "Test2", selectedFilterOperation: "=", added: { dataField: "TestField2", dataType: "string" } }
     ]);
 
     that.applyOptions({
         columns: [
-                { dataField: 'TestField1', dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: '=' }
+            { dataField: 'TestField1', dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: '=' }
         ]
     });
 
     columns = this.getColumns();
 
-        // assert
+    // assert
     assert.equal(columns.length, 2);
     assert.deepEqual(columns[0], { "dataField": "TestField1", "visible": true, "width": 50, "sortOrder": "desc", sortIndex: 0, "filterValue": "Test1", "selectedFilterOperation": "startswith", index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
     assert.deepEqual(columns[1], { "dataField": "TestField2", "visible": false, "width": 150, "sortOrder": "desc", sortIndex: 1, "filterValue": "Test2", "selectedFilterOperation": "=", index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: null, showEditorAlways: false, added: { dataField: "TestField2", dataType: "string" } });
@@ -6825,7 +6879,7 @@ QUnit.test("Apply user state columns are generated by dataSource", function(asse
 
     // act
     this.columnsController.setUserState([{ "dataField": "name", "visibleIndex": 1, "visible": true, "width": 50, "sortOrder": "desc", sortIndex: 1, "filterValue": "Test1", "selectedFilterOperation": "startswith" },
-                                            { "dataField": "age", "visibleIndex": 0, "visible": false, "width": 150, "sortOrder": "desc", sortIndex: 0, "filterValue": "Test2", "selectedFilterOperation": "=" }]);
+        { "dataField": "age", "visibleIndex": 0, "visible": false, "width": 150, "sortOrder": "desc", sortIndex: 0, "filterValue": "Test2", "selectedFilterOperation": "=" }]);
 
     this.applyOptions({});
     this.columnsController.applyDataSource(dataSource);
@@ -6847,7 +6901,7 @@ QUnit.test("Apply user state columns are generated by dataSource and dataSource 
 
     // act
     this.columnsController.setUserState([{ "dataField": "name", "visibleIndex": 1, "visible": true, "width": 50, "sortOrder": "desc", sortIndex: 1, "filterValue": "Test1", "selectedFilterOperation": "startswith" },
-                                            { "dataField": "age", "visibleIndex": 0, "visible": false, "width": 150, "sortOrder": "desc", sortIndex: 0, "filterValue": "Test2", "selectedFilterOperation": "=" }]);
+        { "dataField": "age", "visibleIndex": 0, "visible": false, "width": 150, "sortOrder": "desc", sortIndex: 0, "filterValue": "Test2", "selectedFilterOperation": "=" }]);
 
     this.applyOptions({});
     this.columnsController.applyDataSource(dataSource);
@@ -6917,8 +6971,8 @@ QUnit.test('Apply user state when 15_1 options in columns', function(assert) {
 
     that.applyOptions({
         columns: [
-                { dataField: 'TestField1', dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: 'startswith', fixed: true, fixedPosition: "right" },
-                { dataField: 'TestField2', dataType: 'string', width: 50, sortOrder: 'asc', filterValue: 'TestFilter2', selectedFilterOperation: '=' }
+            { dataField: 'TestField1', dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: 'startswith', fixed: true, fixedPosition: "right" },
+            { dataField: 'TestField2', dataType: 'string', width: 50, sortOrder: 'asc', filterValue: 'TestFilter2', selectedFilterOperation: '=' }
         ]
     });
 
@@ -6943,8 +6997,8 @@ QUnit.test('Apply user state when 15_1 options in user state', function(assert) 
 
     that.applyOptions({
         columns: [
-                { dataField: 'TestField1', dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: 'startswith', fixed: true, fixedPosition: "right" },
-                { dataField: 'TestField2', dataType: 'string', width: 50, sortOrder: 'asc', filterValue: 'TestFilter2', selectedFilterOperation: '=' }
+            { dataField: 'TestField1', dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: 'startswith', fixed: true, fixedPosition: "right" },
+            { dataField: 'TestField2', dataType: 'string', width: 50, sortOrder: 'asc', filterValue: 'TestFilter2', selectedFilterOperation: '=' }
         ]
     });
 
@@ -6969,8 +7023,8 @@ QUnit.test('No apply user state when dataField in columns and user state are dif
     ]);
     that.applyOptions({
         columns: [
-                { dataField: 'TestField1', dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: '=' },
-                { dataField: 'TestField2', dataType: 'string', width: 50, sortOrder: 'asc', filterValue: 'TestFilter2', selectedFilterOperation: '=' }
+            { dataField: 'TestField1', dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: '=' },
+            { dataField: 'TestField2', dataType: 'string', width: 50, sortOrder: 'asc', filterValue: 'TestFilter2', selectedFilterOperation: '=' }
         ]
     });
 
@@ -6990,13 +7044,13 @@ QUnit.test('apply user state when several calculated columns without names', fun
 
     // act
     that.columnsController.setUserState([
-            { "visibleIndex": 0, "visible": true, "width": 50, "sortOrder": "desc", "filterValue": "Test1", "selectedFilterOperation": "startswith" },
-            { "visibleIndex": 1, "visible": false, "width": 150, "sortOrder": "desc", "filterValue": "Test2", "selectedFilterOperation": "=" }
+        { "visibleIndex": 0, "visible": true, "width": 50, "sortOrder": "desc", "filterValue": "Test1", "selectedFilterOperation": "startswith" },
+        { "visibleIndex": 1, "visible": false, "width": 150, "sortOrder": "desc", "filterValue": "Test2", "selectedFilterOperation": "=" }
     ]);
     that.applyOptions({
         columns: [
-                { dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: 'startswith' },
-                { dataType: 'string', width: 50, sortOrder: 'asc', filterValue: 'TestFilter2', selectedFilterOperation: '=' }
+            { dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: 'startswith' },
+            { dataType: 'string', width: 50, sortOrder: 'asc', filterValue: 'TestFilter2', selectedFilterOperation: '=' }
         ]
     });
 
@@ -7009,26 +7063,26 @@ QUnit.test('apply user state when several calculated columns without names', fun
 });
 
 QUnit.test('apply user state when several columns with same dataField', function(assert) {
-        // arrange
+    // arrange
     var that = this,
         columns;
 
 
-        // act
+    // act
     that.columnsController.setUserState([
-            { dataField: "Test", "visibleIndex": 0, "visible": true, "width": 50, "sortOrder": "desc", "filterValue": "Test1", "selectedFilterOperation": "startswith" },
-            { dataField: "Test", "visibleIndex": 1, "visible": false, "width": 150, "sortOrder": "desc", "filterValue": "Test2", "selectedFilterOperation": "=" }
+        { dataField: "Test", "visibleIndex": 0, "visible": true, "width": 50, "sortOrder": "desc", "filterValue": "Test1", "selectedFilterOperation": "startswith" },
+        { dataField: "Test", "visibleIndex": 1, "visible": false, "width": 150, "sortOrder": "desc", "filterValue": "Test2", "selectedFilterOperation": "=" }
     ]);
     that.applyOptions({
         columns: [
-                { dataField: "Test", dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: 'startswith' },
-                { dataField: "Test", dataType: 'string', width: 50, sortOrder: 'asc', filterValue: 'TestFilter2', selectedFilterOperation: '=' }
+            { dataField: "Test", dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: 'startswith' },
+            { dataField: "Test", dataType: 'string', width: 50, sortOrder: 'asc', filterValue: 'TestFilter2', selectedFilterOperation: '=' }
         ]
     });
 
     columns = this.getColumns();
 
-        // assert
+    // assert
     assert.equal(columns.length, 2);
     assert.deepEqual(columns[0], { dataField: "Test", caption: "Test", "visible": true, "width": 50, "sortOrder": "desc", sortIndex: 0, "filterValue": "Test1", "selectedFilterOperation": "startswith", index: 0, dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false }, "state is applied");
     assert.deepEqual(columns[1], { dataField: "Test", caption: "Test", "visible": false, "width": 150, "sortOrder": "desc", sortIndex: 1, "filterValue": "Test2", "selectedFilterOperation": "=", index: 1, dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false }, "state is applied");
@@ -7036,22 +7090,22 @@ QUnit.test('apply user state when several columns with same dataField', function
 
 // T352648
 QUnit.test('apply user state when columns count in columns and columns user state are different', function(assert) {
-        // arrange
+    // arrange
     var that = this,
         columns;
 
-        // act
+    // act
     that.columnsController.setUserState([{ "dataField": "TestField2", "visibleIndex": 0, "visible": true, "width": 150, "sortOrder": "desc", "filterValue": "Test1", "selectedFilterOperation": "<>" }]);
     that.applyOptions({
         columns: [
-                { dataField: 'TestField1', dataType: 'string', width: 50, sortOrder: 'asc', filterValue: 'TestFilter2', selectedFilterOperation: 'startswith' },
-                { dataField: 'TestField2', dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: '=' }
+            { dataField: 'TestField1', dataType: 'string', width: 50, sortOrder: 'asc', filterValue: 'TestFilter2', selectedFilterOperation: 'startswith' },
+            { dataField: 'TestField2', dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: '=' }
         ]
     });
 
     columns = this.getColumns();
 
-        // assert
+    // assert
     assert.equal(columns.length, 2);
     assert.deepEqual(columns[0], { "dataField": "TestField1", "visible": true, "width": 50, "sortOrder": "asc", sortIndex: 0, "filterValue": "TestFilter2", "selectedFilterOperation": "startswith", index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: 'startswith', showEditorAlways: false });
     assert.deepEqual(columns[1], { "dataField": "TestField2", "visible": true, "width": 150, "sortOrder": "desc", sortIndex: 1, "filterValue": "Test1", "selectedFilterOperation": "<>", index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
@@ -7403,7 +7457,7 @@ QUnit.test("calculate colspan for band columns and rowspan for data columns", fu
     assert.ok(this.columnsController.isInitialized());
 
     // act
-    var columns = this.columnsController.getVisibleColumns();  // get data columns
+    var columns = this.columnsController.getVisibleColumns(); // get data columns
 
     // assert
     assert.equal(columns.length, 6, "count column");
@@ -7479,8 +7533,8 @@ QUnit.test("visible index of the band columns", function(assert) {
                 ]
             }, {
                 caption: "Band Column 2", columns: [
-                        { dataField: "TestField3", caption: "TestField3" },
-                        { dataField: "TestField4", caption: "TestField4" }
+                    { dataField: "TestField3", caption: "TestField3" },
+                    { dataField: "TestField4", caption: "TestField4" }
                 ]
             },
             {
@@ -7552,8 +7606,8 @@ QUnit.test("getVisibleIndex when there is band columns", function(assert) {
             { dataField: "TestField3", caption: "TestField3" },
             {
                 caption: "Band Column 2", columns: [
-                        { dataField: "TestField4", caption: "TestField4" },
-                        { dataField: "TestField5", caption: "TestField5" }
+                    { dataField: "TestField4", caption: "TestField4" },
+                    { dataField: "TestField5", caption: "TestField5" }
                 ]
             }
         ]
@@ -7699,7 +7753,7 @@ QUnit.test("Initialization band columns with user state", function(assert) {
 });
 
 QUnit.test("getRowCount", function(assert) {
-        // arrange
+    // arrange
     this.applyOptions({
         columns: [
             { dataField: "TestField1", caption: "Column 1" },
@@ -7749,7 +7803,7 @@ QUnit.test("getRowCount after hiding the band column", function(assert) {
 
 // T407797
 QUnit.test("getRowCount with several band columns", function(assert) {
-        // arrange
+    // arrange
     this.applyOptions({
         columns: [
             { dataField: "TestField1", caption: "Column 1" },
@@ -7785,7 +7839,7 @@ QUnit.test("getRowCount with several band columns", function(assert) {
 });
 
 QUnit.test("getRowIndex", function(assert) {
-        // arrange
+    // arrange
     this.applyOptions({
         columns: [
             { dataField: "TestField1", caption: "Column 1" },
@@ -8590,6 +8644,57 @@ QUnit.module("Customization of the command columns", {
         assert.notOk(visibleColumns[1].fixed, "second grouped column isn't fixed");
         assert.notOk(visibleColumns[1].allowReordering, "allowReordering of the second grouped column");
         assert.notOk(visibleColumns[1].allowFixing, "allowFixing of the second grouped column");
+    });
+
+    // T695370
+    QUnit.test("Change the command column position via columnOption method when there are fixed columns", function(assert) {
+        // arrange
+        this.applyOptions({
+            editing: {
+                mode: "row",
+                allowUpdating: true,
+                allowDeleting: true
+            },
+            columns: [
+                { dataField: 'TestField3', caption: 'Custom Title 3', fixed: true },
+                { dataField: 'TestField4', caption: 'Custom Title 4' }
+            ]
+        });
+
+        // act
+        this.columnOption("command:edit", { visibleIndex: -1 });
+
+        // assert
+        var fixedColumns = this.columnsController.getFixedColumns();
+        assert.strictEqual(fixedColumns.length, 3, "fixed column count");
+        assert.strictEqual(fixedColumns[0].type, "buttons", "command column");
+        assert.strictEqual(fixedColumns[1].dataField, "TestField3", "fixed column");
+        assert.strictEqual(fixedColumns[2].command, "transparent", "transparent column");
+    });
+
+    QUnit.test("getFixedColumns when there are grouped columns", function(assert) {
+        // arrange
+        this.applyOptions({
+            columnFixing: {
+                enabled: true
+            },
+            columns: [
+                { dataField: "TestField1", caption: "Custom Title 1", fixed: true },
+                { dataField: "TestField2", caption: "Custom Title 2", groupIndex: 0 },
+                { dataField: "TestField3", caption: "Custom Title 3", groupIndex: 1, fixedPosition: "right" },
+                { dataField: "TestField4", caption: "Custom Title 4" }
+            ]
+        });
+
+        // act
+        var fixedColumns = this.columnsController.getFixedColumns();
+
+        // assert
+        assert.strictEqual(fixedColumns.length, 4, "fixed column count");
+        assert.strictEqual(fixedColumns[0].dataField, "TestField2", "grouped column");
+        assert.strictEqual(fixedColumns[1].dataField, "TestField3", "grouped column");
+        assert.strictEqual(fixedColumns[2].dataField, "TestField1", "fixed column");
+        assert.strictEqual(fixedColumns[3].command, "transparent", "transparent column");
     });
 });
 

@@ -24,6 +24,7 @@ var clickEvent = require("../../events/click");
 
 var RECURRENCE_EDITOR = "dx-recurrence-editor",
     LABEL_POSTFIX = "-label",
+    WRAPPER_POSTFIX = "-wrapper",
     RECURRENCE_EDITOR_CONTAINER = "dx-recurrence-editor-container",
     SWITCH_REPEAT_END_EDITOR = "dx-recurrence-switch-repeat-end",
     FREQUENCY_EDITOR = "dx-recurrence-radiogroup-freq",
@@ -650,7 +651,7 @@ var RecurrenceEditor = Editor.inherit({
 
     _renderRepeatCountEditor: function() {
         var repeatCount = this._recurrenceRule.rules().count || 1,
-            $editorTemplate = $("<div>");
+            $editorTemplate = $("<div>").addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
 
         $("<div>")
             .text(messageLocalization.format("dxScheduler-recurrenceAfter") + ":")
@@ -698,7 +699,7 @@ var RecurrenceEditor = Editor.inherit({
 
     _renderRepeatUntilEditor: function() {
         var repeatUntil = this._recurrenceRule.rules().until || this._formatUntilDate(new Date()),
-            $editorTemplate = $("<div>");
+            $editorTemplate = $("<div>").addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
 
         $("<div>")
             .text(messageLocalization.format("dxScheduler-recurrenceOn") + ":")

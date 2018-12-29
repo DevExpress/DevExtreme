@@ -653,7 +653,7 @@ QUnit.test("More than 3 cloned appointments should be grouped", function(assert)
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
@@ -1123,9 +1123,9 @@ QUnit.test("End date of long multiday appointment should be changed considering 
 
 QUnit.test("Four rival appointments should have correct positions", function(assert) {
     var items = [{ text: "Appointment 1", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
-    { text: "Appointment 2", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
-    { text: "Appointment 3", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
-    { text: "Appointment 4", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) }];
+        { text: "Appointment 2", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
+        { text: "Appointment 3", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
+        { text: "Appointment 4", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) }];
 
     this.createInstance(
         {
@@ -1155,9 +1155,9 @@ QUnit.test("Four rival appointments should have correct positions", function(ass
 
 QUnit.test("Four rival appointments should have correct sizes", function(assert) {
     var items = [{ text: "Appointment 1", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
-    { text: "Appointment 2", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
-    { text: "Appointment 3", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
-    { text: "Appointment 4", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) }];
+        { text: "Appointment 2", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
+        { text: "Appointment 3", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
+        { text: "Appointment 4", startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) }];
 
     this.createInstance(
         {
@@ -1183,6 +1183,31 @@ QUnit.test("Four rival appointments should have correct sizes", function(assert)
 
     assert.equal($appointment.eq(3).outerWidth(), tableCellWidth, "appointment has a right size");
     assert.equal($appointment.eq(3).outerHeight(), 100, "appointment has a right size");
+});
+
+QUnit.test("Recurrence appointment should be rendered correctly on timelineWeek (T701534)", function(assert) {
+    var items = [{
+        allDay: false,
+        endDate: new Date(2018, 11, 12, 2),
+        RecurrenceRule: "FREQ=DAILY;COUNT=2",
+        startDate: new Date(2018, 11, 11, 2)
+    }];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2018, 11, 10),
+            currentView: "timelineWeek",
+            height: 530,
+            dataSource: items,
+            startDayHour: 1,
+            cellDuration: 1440,
+            recurrenceRuleExpr: "RecurrenceRule"
+        }
+    );
+
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
+
+    assert.equal($appointment.length, 2, "appointments are rendered correctly");
 });
 
 QUnit.module("Vertical Strategy", moduleOptions);
@@ -1214,9 +1239,9 @@ QUnit.test("AllDay recurrent appointments count should be correct if recurrenceE
 
 QUnit.test("Four rival all day appointments should have correct sizes", function(assert) {
     var items = [{ text: "Appointment 1", startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 10), allDay: true },
-    { text: "Appointment 2", startDate: new Date(2015, 1, 9, 9), endDate: new Date(2015, 1, 9, 10), allDay: true },
-    { text: "Appointment 3", startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 12), allDay: true },
-    { text: "Appointment 4", startDate: new Date(2015, 1, 9, 12), endDate: new Date(2015, 1, 9, 14), allDay: true }];
+        { text: "Appointment 2", startDate: new Date(2015, 1, 9, 9), endDate: new Date(2015, 1, 9, 10), allDay: true },
+        { text: "Appointment 3", startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 12), allDay: true },
+        { text: "Appointment 4", startDate: new Date(2015, 1, 9, 12), endDate: new Date(2015, 1, 9, 14), allDay: true }];
 
     this.createInstance(
         {
@@ -1272,7 +1297,7 @@ QUnit.test("Dates of allDay appointment should be changed when resize is finishe
     var stub = sinon.stub(this.instance.getAppointmentsInstance(), "notifyObserver").withArgs("updateAppointmentAfterResize"),
         pointer = pointerMock($appointment.find(".dx-resizable-handle-left")).start();
 
-    pointer.dragStart().drag(-100, 0).dragEnd();
+    pointer.dragStart().drag(-120, 0).dragEnd();
 
     var args = stub.getCall(0).args;
 
@@ -1534,17 +1559,18 @@ QUnit.test("Two rival all day appointments should have correct sizes and positio
     );
 
     var $appointment = $(".dx-scheduler-all-day-appointments .dx-scheduler-appointment"),
-        firstAppointmentPosition = translator.locate($appointment.eq(0)),
-        secondAppointmentPosition = translator.locate($appointment.eq(1));
+        firstAppointmentPosition = $appointment.eq(0).position(),
+        secondAppointmentPosition = $appointment.eq(1).position(),
+        containerOffset = $(this.instance.$element().find(".dx-scheduler-all-day-appointments")).position().top;
 
     assert.equal($appointment.length, 2, "All appointments are rendered");
 
-    assert.equal(firstAppointmentPosition.top, 0, "appointment is rendered in right place");
+    assert.equal(firstAppointmentPosition.top, 0 + containerOffset, "appointment is rendered in right place");
     assert.roughEqual(firstAppointmentPosition.left, 100, 1, "appointment is rendered in right place");
     assert.roughEqual($appointment.eq(0).outerWidth(), 798, 1.1, "appointment has a right width");
     assert.roughEqual($appointment.eq(0).outerHeight(), 37, 1.1, "appointment has a right height");
 
-    assert.roughEqual(secondAppointmentPosition.top, 37, 1, "appointment is rendered in right place");
+    assert.roughEqual(secondAppointmentPosition.top, 37 + containerOffset, 1, "appointment is rendered in right place");
     assert.roughEqual(secondAppointmentPosition.left, 100, 1, "appointment is rendered in right place");
     assert.roughEqual($appointment.eq(1).outerWidth(), 798, 1.1, "appointment has a right width");
     assert.roughEqual($appointment.eq(1).outerHeight(), 37, 1.1, "appointment has a right height");
@@ -1567,7 +1593,7 @@ QUnit.test("All day appointments should have correct left position, vertical str
 
     var $appointment = $(".dx-scheduler-all-day-appointments .dx-scheduler-appointment"),
         $allDayCell = $(this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(0)),
-        appointmentPosition = translator.locate($appointment.eq(0));
+        appointmentPosition = $appointment.eq(0).position();
 
     assert.equal($appointment.length, 1, "Appointment was rendered");
     assert.roughEqual(appointmentPosition.left, $allDayCell.outerWidth() * 2, 2, "Appointment left coordinate has been adjusted ");
@@ -1589,14 +1615,15 @@ QUnit.test("Parts of long compact appt should have right positions", function(as
     );
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
-        gap = 3,
+        containerOffset = $(this.instance.$element().find(".dx-scheduler-all-day-appointments")).position().top,
+        gap = 3 + containerOffset,
         cellBorderOffset = 1,
         cellWidth = this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth();
 
     for(var i = 2; i < $appointment.length; i++) {
-        var appointmentPosition = translator.locate($appointment.eq(i));
+        var appointmentPosition = $appointment.eq(i).position();
 
-        assert.equal($appointment.eq(i).outerWidth(), 15, "appointment has a right size");
+        assert.roughEqual($appointment.eq(i).outerWidth(), 15, 1, "appointment has a right size");
         assert.equal(appointmentPosition.top, gap, "Appointment top is OK");
         assert.roughEqual(appointmentPosition.left, (cellBorderOffset + cellWidth) * (i + 1) + 100, 3, "Appointment left is OK");
     }
@@ -1619,9 +1646,9 @@ QUnit.test("Focus shouldn't be prevent when last appointment is reached", functi
         currentView: "month",
         currentDate: new Date(2015, 9, 16),
         dataSource: [{ text: "Appointment 1", startDate: new Date(2015, 9, 16, 9), endDate: new Date(2015, 9, 16, 11) },
-                    { text: "Appointment 2", startDate: new Date(2015, 9, 17, 8), endDate: new Date(2015, 9, 17, 10) },
-                    { text: "Appointment 3", startDate: new Date(2015, 9, 18, 8), endDate: new Date(2015, 9, 18, 10) },
-                    { text: "Appointment 4", startDate: new Date(2015, 9, 19, 8), endDate: new Date(2015, 9, 19, 10) }]
+            { text: "Appointment 2", startDate: new Date(2015, 9, 17, 8), endDate: new Date(2015, 9, 17, 10) },
+            { text: "Appointment 3", startDate: new Date(2015, 9, 18, 8), endDate: new Date(2015, 9, 18, 10) },
+            { text: "Appointment 4", startDate: new Date(2015, 9, 19, 8), endDate: new Date(2015, 9, 19, 10) }]
     });
 
     var $appointments = $(this.instance.$element().find(".dx-scheduler-appointment"));
@@ -1646,9 +1673,9 @@ QUnit.testInActiveWindow("Apps should be focused in right order", function(asser
         startDayHour: 8,
         currentDate: new Date(2015, 9, 16),
         dataSource: [{ text: "Appointment 1", startDate: new Date(2015, 9, 11, 9), endDate: new Date(2015, 9, 11, 11) },
-                    { text: "Appointment 2", startDate: new Date(2015, 9, 12, 8), endDate: new Date(2015, 9, 12, 10) },
-                    { text: "Appointment 3", startDate: new Date(2015, 9, 13, 8), endDate: new Date(2015, 9, 13, 10) },
-                    { text: "Appointment 4", startDate: new Date(2015, 9, 14, 8), endDate: new Date(2015, 9, 14, 10) }]
+            { text: "Appointment 2", startDate: new Date(2015, 9, 12, 8), endDate: new Date(2015, 9, 12, 10) },
+            { text: "Appointment 3", startDate: new Date(2015, 9, 13, 8), endDate: new Date(2015, 9, 13, 10) },
+            { text: "Appointment 4", startDate: new Date(2015, 9, 14, 8), endDate: new Date(2015, 9, 14, 10) }]
     });
 
     var $appointments = $(this.instance.$element().find(".dx-scheduler-appointment")),
@@ -1680,9 +1707,9 @@ QUnit.testInActiveWindow("Apps should be focused in right order on month view wi
         height: 600,
         currentDate: new Date(2015, 9, 16),
         dataSource: [{ text: "Appointment 1", startDate: new Date(2015, 9, 11, 9), endDate: new Date(2015, 9, 11, 11) },
-                    { text: "Appointment 2", startDate: new Date(2015, 9, 11, 8), endDate: new Date(2015, 9, 11, 10) },
-                    { text: "Appointment 3", startDate: new Date(2015, 9, 11, 8), endDate: new Date(2015, 9, 11, 10) },
-                    { text: "Appointment 4", startDate: new Date(2015, 9, 12, 8), endDate: new Date(2015, 9, 12, 10) }]
+            { text: "Appointment 2", startDate: new Date(2015, 9, 11, 8), endDate: new Date(2015, 9, 11, 10) },
+            { text: "Appointment 3", startDate: new Date(2015, 9, 11, 8), endDate: new Date(2015, 9, 11, 10) },
+            { text: "Appointment 4", startDate: new Date(2015, 9, 12, 8), endDate: new Date(2015, 9, 12, 10) }]
     });
 
     var $appointments = $(this.instance.$element().find(".dx-scheduler-appointment")),
@@ -1705,9 +1732,9 @@ QUnit.testInActiveWindow("Apps should be focused in back order while press shift
         currentView: "month",
         currentDate: new Date(2015, 9, 16),
         dataSource: [{ text: "Appointment 1", startDate: new Date(2015, 9, 16, 9), endDate: new Date(2015, 9, 16, 11) },
-                    { text: "Appointment 2", startDate: new Date(2015, 9, 17, 8), endDate: new Date(2015, 9, 17, 10) },
-                    { text: "Appointment 3", startDate: new Date(2015, 9, 18, 8), endDate: new Date(2015, 9, 18, 10) },
-                    { text: "Appointment 4", startDate: new Date(2015, 9, 19, 8), endDate: new Date(2015, 9, 19, 10) }]
+            { text: "Appointment 2", startDate: new Date(2015, 9, 17, 8), endDate: new Date(2015, 9, 17, 10) },
+            { text: "Appointment 3", startDate: new Date(2015, 9, 18, 8), endDate: new Date(2015, 9, 18, 10) },
+            { text: "Appointment 4", startDate: new Date(2015, 9, 19, 8), endDate: new Date(2015, 9, 19, 10) }]
     });
 
     var $appointments = $(this.instance.$element().find(".dx-scheduler-appointment")),
@@ -1759,7 +1786,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
@@ -1789,8 +1816,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
         tableCellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth(),
         $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
-        dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.roughEqual($appointment.eq(0).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
     assert.roughEqual($appointment.eq(1).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
@@ -1826,8 +1852,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     );
 
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
-        dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
     assert.equal(dropDownMenuText, "4 more", "DropDown menu has correct text");
@@ -1997,7 +2022,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
@@ -2040,7 +2065,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
@@ -2195,7 +2220,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 2, "ddAppointment is rendered");
 
@@ -2236,12 +2261,53 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 4, "ddAppointment is rendered");
 
     assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
     assert.equal(dropDownMenuText, "1 more", "DropDown menu has correct text");
+});
+
+QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'auto' mode, narrow height", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 4, 0) },
+        { text: "Task 2", startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
+        { text: "Task 3", startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 5, 0) },
+        { text: "Task 4", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 2, 0) },
+        { text: "Task 5", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
+        { text: "Task 6", startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "timelineWeek",
+            views: [{
+                type: "timelineWeek",
+                maxAppointmentsPerCell: 'auto'
+            }],
+            height: 200,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")),
+        tableCellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+
+    for(var i = 0; i < 2; i++) {
+        var appointmentHeight = $appointment.eq(i).outerHeight();
+
+        assert.roughEqual(appointmentHeight, (tableCellHeight - 26), 1.5, "appointment is full-size");
+    }
+
+    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
+        dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
+        groupedAppointments = dropDownMenu.option("items"),
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
+
+    assert.equal($dropDownMenu.length, 8, "ddAppointment is rendered");
+
+    assert.equal(groupedAppointments.length, 3, "DropDown menu has correct items");
+    assert.equal(dropDownMenuText, "3 more", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'unlimited' mode", function(assert) {
@@ -2333,12 +2399,12 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
-    assert.equal(groupedAppointments.length, 2, "DropDown menu has correct items");
-    assert.equal(dropDownMenuText, "2", "DropDown menu has correct text");
+    assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
+    assert.equal(dropDownMenuText, "1", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'numeric' mode", function(assert) {
@@ -2373,7 +2439,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
@@ -2438,7 +2504,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
         dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
         groupedAppointments = dropDownMenu.option("items"),
-        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+        dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
     assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
@@ -2455,7 +2521,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell and wi
     $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick");
     dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance");
     groupedAppointments = dropDownMenu.option("items");
-    dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+    dropDownMenuText = $dropDownMenu.find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
     assert.equal(groupedAppointments.length, 3, "DropDown menu has correct items");

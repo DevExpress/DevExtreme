@@ -1,14 +1,14 @@
-require("common.css!");
-require("ui/scroll_view/ui.scrollable");
+import "common.css!";
+import "ui/scroll_view/ui.scrollable";
 
-var $ = require("jquery"),
-    memoryLeaksHelper = require("../../helpers/memoryLeaksHelper.js"),
-    virtualScrollingCore = require("ui/grid_core/ui.grid_core.virtual_scrolling_core"),
-    VirtualScrollController = virtualScrollingCore.VirtualScrollController,
-    browser = require("core/utils/browser"),
-    devices = require("core/devices"),
-    renderer = require("core/renderer"),
-    mockComponent = {
+import $ from "jquery";
+import memoryLeaksHelper from "../../helpers/memoryLeaksHelper.js";
+import virtualScrollingCore, { VirtualScrollController } from "ui/grid_core/ui.grid_core.virtual_scrolling_core";
+import browser from "core/utils/browser";
+import devices from "core/devices";
+import renderer from "core/renderer";
+
+const mockComponent = {
         option: sinon.stub()
     },
 
@@ -38,11 +38,10 @@ var $ = require("jquery"),
         onChanged: sinon.stub()
     },
 
-    CONTENT_HEIGHT_LIMIT = virtualScrollingCore.getContentHeightLimit(browser),
-
     DEFAULT_TOTAL_ITEMS_COUNT = 20000,
 
-    DEFAULT_PAGE_SIZE = 20;
+    DEFAULT_PAGE_SIZE = 20,
+    CONTENT_HEIGHT_LIMIT = virtualScrollingCore.getContentHeightLimit(browser);
 
 function resetMock(mock) {
     $.each(mock, function(_, method) {
@@ -107,7 +106,7 @@ QUnit.test("Load", function(assert) {
 
 
     assert.strictEqual(mockDataSource.load.callCount, 2);
-    assert.equal(this.externalDataChangedHandler.callCount, 2);  // TODO 1
+    assert.equal(this.externalDataChangedHandler.callCount, 2); // TODO 1
     // assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
 
     assert.strictEqual(this.scrollController.beginPageIndex(), 0);
@@ -127,7 +126,7 @@ QUnit.test("Load with removeInvisiblePages is true", function(assert) {
 
 
     assert.strictEqual(mockDataSource.load.callCount, 2);
-    assert.equal(this.externalDataChangedHandler.callCount, 1);  // TODO 1
+    assert.equal(this.externalDataChangedHandler.callCount, 1); // TODO 1
     // assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
 
     assert.strictEqual(this.scrollController.beginPageIndex(), 0);
@@ -781,4 +780,6 @@ QUnit.test("Content height limit for different browsers", function(assert) {
     assert.equal(virtualScrollingCore.getContentHeightLimit({ msie: true }), 4000000, "content height limit for ie");
     assert.equal(virtualScrollingCore.getContentHeightLimit({ mozilla: true }), 8000000, "content height limit for firefox");
     assert.equal(virtualScrollingCore.getContentHeightLimit({}), 15000000, "content height limit for other browsers");
+    virtualScrollingCore.getPixelRatio = () => 2;
+    assert.equal(virtualScrollingCore.getContentHeightLimit({}), 7500000, "content height limit depends on devicePixelRatio for other browsers"); // T692460
 });

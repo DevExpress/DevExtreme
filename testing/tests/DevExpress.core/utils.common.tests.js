@@ -1,5 +1,6 @@
 var $ = require("jquery"),
     commonUtils = require("core/utils/common"),
+    Guid = require("core/guid"),
     config = require("core/config");
 
 QUnit.module("runtime utils", {
@@ -89,15 +90,15 @@ QUnit.module("findBestMatches");
 
 QUnit.test("basic", function(assert) {
     var items = [
-        {
-            a: 1,
-            b: 2
-        },
-        {
-            a: 1,
-            b: 2,
-            c: 3
-        }
+            {
+                a: 1,
+                b: 2
+            },
+            {
+                a: 1,
+                b: 2,
+                c: 3
+            }
         ],
         filter = {
             b: 2,
@@ -157,22 +158,22 @@ QUnit.test("only filter fields should be considered for calculating a specificit
 
 QUnit.test("filtering items by array fields", function(assert) {
     var items = [
-        {
-            a: 1
-        },
-        {
-            a: [1]
-        },
-        {
-            a: [1, 2]
-        },
-        {
-            a: [1, 0, 2]
-        },
-        {
-            a: [1, 2, 3],
-            b: 1
-        }
+            {
+                a: 1
+            },
+            {
+                a: [1]
+            },
+            {
+                a: [1, 2]
+            },
+            {
+                a: [1, 0, 2]
+            },
+            {
+                a: [1, 2, 3],
+                b: 1
+            }
         ],
         filter,
         filteredItems;
@@ -450,4 +451,16 @@ QUnit.test("basic", function(assert) {
     assert.deepEqual(commonUtils.grep(object, filterNumbers), [6, 8]);
     assert.deepEqual(commonUtils.grep(object, filterNumbers, false), [6, 8]);
     assert.deepEqual(commonUtils.grep(object, filterNumbers, true), [3, 2, 5]);
+});
+
+QUnit.module("equalByValue");
+
+QUnit.test("The `equalByValue` should compare GUIDs by values", function(assert) {
+    var guid1 = new Guid('1111'),
+        guid2 = new Guid('1111');
+
+    guid1.changed = true;
+    guid2.changed = false;
+
+    assert.ok(commonUtils.equalByValue(guid1, guid2));
 });

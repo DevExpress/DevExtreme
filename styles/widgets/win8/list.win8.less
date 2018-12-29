@@ -45,10 +45,10 @@
     .dx-theme-win8-typography.dx-font-s;
 
     &.dx-state-active .dx-list-item-content {
-        .translate(5px, 1px);
+        transform: translate(5px, 1px);
 
         .dx-rtl & {
-            .translate(-5px, 1px);
+            transform: translate(-5px, 1px);
         }
     }
 }
@@ -91,7 +91,7 @@
         background-image: @WIN8_LIST_DELETE_SWITCH_BACKGROUND;
         background-position: center;
         background-repeat: no-repeat;
-        .background-size-prop(100%);
+        background-size: 100%;
     }
 
     .dx-list-select-checkbox,

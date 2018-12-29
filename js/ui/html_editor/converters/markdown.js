@@ -2,21 +2,26 @@
 import TurnDown from "turndown";
 import ShowDown from "showdown";
 
+import { getWindow } from "../../../core/utils/window";
 import Errors from "../../widget/ui.errors";
 import converterController from "../converterController";
 
 class MarkdownConverter {
     constructor() {
-        if(!TurnDown) {
+        const window = getWindow();
+        const turndown = window && window.TurndownService || TurnDown;
+        const showdown = window && window.showdown || ShowDown;
+
+        if(!turndown) {
             throw Errors.Error("E1041", "Turndown");
         }
 
-        if(!ShowDown) {
+        if(!showdown) {
             throw Errors.Error("E1041", "Showdown");
         }
 
-        this._html2Markdown = new TurnDown();
-        this._markdown2Html = new ShowDown.Converter({
+        this._html2Markdown = new turndown();
+        this._markdown2Html = new showdown.Converter({
             simpleLineBreaks: true,
             strikethrough: true
         });

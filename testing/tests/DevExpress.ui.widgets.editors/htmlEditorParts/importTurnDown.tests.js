@@ -1,4 +1,3 @@
-
 SystemJS.config({
     map: {
         'turndown': '/testing/helpers/quillDependencies/noTurndown.js'
@@ -17,6 +16,20 @@ define(function(require) {
                 },
                 "The Turndown script isn't referenced"
             );
+        });
+
+        QUnit.test("initialize turndown from window", function(assert) {
+            var prevWinTurndown = window.TurndownService;
+
+            window.TurndownService = function() {
+                this.initialized = true;
+            };
+
+            var converter = new MarkdownConverter();
+
+            assert.ok(converter._html2Markdown.initialized);
+
+            window.TurndownService = prevWinTurndown;
         });
     });
 });

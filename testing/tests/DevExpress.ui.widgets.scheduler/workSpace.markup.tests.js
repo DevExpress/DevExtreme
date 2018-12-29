@@ -78,15 +78,15 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
         cellDuration = 3600000 * interval;
 
     const cellCountInGroup = cellCount;
-    assert.equal($element.find(".dx-scheduler-time-panel-row").length, cellCount * groupCount, "Time panel has a right count of rows");
-    assert.equal($element.find(".dx-scheduler-time-panel-cell").length, cellCount * groupCount, "Time panel has a right count of cells");
+    assert.equal($element.find(".dx-scheduler-time-panel-row").length, Math.ceil(cellCount * groupCount), "Time panel has a right count of rows");
+    assert.equal($element.find(".dx-scheduler-time-panel-cell").length, Math.ceil(cellCount * groupCount), "Time panel has a right count of cells");
 
     $element.find(".dx-scheduler-time-panel-cell").each(function(index) {
         let time;
         let cellIndex = index % cellCountInGroup;
 
         if(cellIndex % 2 === 0) {
-            time = dateLocalization.format(new Date(new Date(1970, 0).getTime() + cellDuration * cellIndex + start * 3600000), "shorttime");
+            time = dateLocalization.format(new Date(new Date(1970, 0).getTime() + Math.round(cellDuration) * cellIndex + start * 3600000), "shorttime");
         } else {
             time = "";
         }
@@ -470,6 +470,15 @@ QUnit.module("Workspace Day markup", dayModuleConfig, () => {
         checkRowsAndCells(this.instance.$element(), assert, 1, 2);
     });
 
+    QUnit.test("Time panel should have right cell text when hoursInterval is fractional", (assert) => {
+        this.instance.option({
+            hoursInterval: 2.1666666666666665,
+            endDayHour: 5
+        });
+
+        checkRowsAndCells(this.instance.$element(), assert, 2.1666666666666665, 0, 5);
+    });
+
     QUnit.test("Cell count should depend on start/end day hour & hoursInterval", (assert) => {
         const $element = this.instance.$element();
 
@@ -802,6 +811,48 @@ QUnit.module("Workspace Week markup", weekModuleConfig, () => {
 
         assert.equal($element.find(".dx-scheduler-group-row").eq(0).find("th").attr("colspan"), "14", "Group header has a right 'colspan'");
         assert.equal($element.find(".dx-scheduler-group-row").eq(1).find("th").attr("colspan"), "7", "Group header has a right 'colspan'");
+    });
+
+    QUnit.test("Group header should be rendered if there are some groups, groupByDate = true", (assert) => {
+
+        assert.equal(this.instance.$element().find(".dx-scheduler-group-header").length, 0, "Groups are not rendered");
+
+        this.instance.option("groups", [
+            {
+                name: "one",
+                items: [{ id: 1, text: "a" }, { id: 2, text: "b" }]
+            },
+            {
+                name: "two",
+                items: [{ id: 1, text: "c" }, { id: 2, text: "d" }, { id: 3, text: "e" }]
+            }
+        ]);
+
+        this.instance.option("groupByDate", true);
+
+        const rows = this.instance.$element().find(".dx-scheduler-group-row"),
+            firstRowCells = rows.eq(0).find(".dx-scheduler-group-header"),
+            secondRowCells = rows.eq(1).find(".dx-scheduler-group-header");
+
+        assert.equal(rows.length, 2, "There are two group rows");
+        assert.equal(this.instance.$element().attr("dx-group-row-count"), 2, "'dx-group-row-count' is right");
+
+        assert.equal(firstRowCells.length, 14, "The first group row contains 14 group headers");
+        assert.equal(firstRowCells.attr("colspan"), "3", "Cells of the first group row have a right colspan attr");
+        assert.equal(firstRowCells.eq(0).text(), "a", "Cell has a right text");
+        assert.equal(firstRowCells.eq(1).text(), "b", "Cell has a right text");
+
+        assert.equal(secondRowCells.length, 42, "The second group row contains 42 group headers");
+
+        assert.strictEqual(secondRowCells.attr("colspan"), "1", "Cells of the second group row do not have colspan attr");
+
+        assert.equal(secondRowCells.eq(0).text(), "c", "Cell has a right text");
+        assert.equal(secondRowCells.eq(1).text(), "d", "Cell has a right text");
+        assert.equal(secondRowCells.eq(2).text(), "e", "Cell has a right text");
+
+        assert.equal(secondRowCells.eq(3).text(), "c", "Cell has a right text");
+        assert.equal(secondRowCells.eq(4).text(), "d", "Cell has a right text");
+        assert.equal(secondRowCells.eq(5).text(), "e", "Cell has a right text");
     });
 
     QUnit.test("Group row should be rendered before header row", (assert) => {

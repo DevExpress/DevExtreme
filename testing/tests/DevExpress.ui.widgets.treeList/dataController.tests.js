@@ -26,7 +26,7 @@ var setupModule = function() {
         }
     };
 
-    setupTreeListModules(this, ["data", "columns", "masterDetail"]);
+    setupTreeListModules(this, ["data", "columns", "masterDetail", "virtualScrolling"]);
 
     this.applyOptions = function(options) {
         $.extend(this.options, options);
@@ -490,6 +490,33 @@ QUnit.test("Initialize from dataSource with plain structure when virtual scrolli
     assert.equal(items[0].key, 1, "key of first item");
     assert.equal(items[1].key, 2, "key of second item");
     assert.equal(items[2].key, 3, "key of third item");
+});
+
+QUnit.test("Initialize when remoteOperations and virtual scrolling are enabled and two pages are loaded", function(assert) {
+    // arrange
+    var array = [
+            { name: 'SubCategory1', phone: '55-66-77', id: 5, parentId: 2 },
+            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
+            { name: 'Category3', phone: '98-75-22', id: 3, parentId: 0 },
+            { name: 'Category4', phone: '98-75-23', id: 4, parentId: 0 }
+        ],
+        dataSource = createDataSource(array, {}, { pageSize: 2 });
+
+    // act
+    this.applyOptions({
+        scrolling: {
+            mode: "virtual"
+        },
+        remoteOperations: { filtering: true },
+        autoExpandAll: true,
+        dataSource: dataSource
+    });
+
+    // assert
+    assert.equal(this.dataController.totalItemsCount(), 5, "totalItemsCount");
+    assert.equal(this.getVisibleRows().length, 4, "row count");
+    assert.strictEqual(this.getVisibleRows()[0].node, this.getNodeByKey(1), "first node instance is correct");
 });
 
 QUnit.test("Expand node when virtual scrolling enabled", function(assert) {
@@ -1545,6 +1572,56 @@ QUnit.test("Initial load when dataSource has filter and filterMode is extended (
     assert.strictEqual(items[3].node.hasChildren, false, "item 4 name hasChildren");
     assert.equal(items[3].node.children.length, 0, "item 4 name children length");
     assert.equal(items[3].level, 0, "item 4 level");
+});
+
+// T698573
+QUnit.test("Collapse node when dataSource has filter and filterMode is extended (default)", function(assert) {
+    // arrange, act
+    var loadingArgs = [];
+
+    var arrayStore = new ArrayStore({
+        data: this.items
+    });
+
+    this.setupTreeList({
+        expandNodesOnFiltering: true,
+        hasItemsExpr: function() {
+            return true;
+        },
+        dataSource: {
+            load: function(loadOptions) {
+                var d = $.Deferred();
+                loadingArgs.push(loadOptions);
+                setTimeout(function() {
+                    arrayStore.load(loadOptions).done(function(data) {
+                        d.resolve(data);
+                    }).fail(d.reject);
+                });
+
+                return d;
+            },
+            filter: ["age", "=", 19]
+        }
+    });
+
+    this.clock.tick();
+
+    assert.equal(loadingArgs.length, 2, "two loading on init");
+
+    // act
+    loadingArgs = [];
+    this.collapseRow(1);
+    this.clock.tick();
+
+    // assert
+    var items = this.dataController.items();
+    assert.equal(loadingArgs.length, 0, "no loadings on collapse row");
+    assert.strictEqual(items.length, 2, "item count");
+    assert.strictEqual(this.isRowExpanded(items[0].key), false, "item 0 is collapsed");
+    assert.strictEqual(items[0].node.children.length, 1, "item 0 children");
+    assert.strictEqual(items[0].node.hasChildren, true, "item 0 hasChildren");
+    assert.strictEqual(items[1].node.children.length, 0, "item 1 children");
+    assert.strictEqual(items[1].node.hasChildren, false, "item 1 hasChildren");
 });
 
 QUnit.test("Filter changing should expand nodes", function(assert) {

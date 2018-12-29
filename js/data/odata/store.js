@@ -265,8 +265,8 @@ var ODataStore = Store.inherit({
 
         if(Array.isArray(key)) {
             result = {};
-            for(var keyIndex in key) {
-                var keyName = key[keyIndex];
+            for(var i = 0; i < key.length; i++) {
+                var keyName = key[i];
                 result[keyName] = odataUtils.convertPrimitiveValue(fieldTypes[keyName], value[keyName]);
             }
         } else if(fieldTypes[key]) {

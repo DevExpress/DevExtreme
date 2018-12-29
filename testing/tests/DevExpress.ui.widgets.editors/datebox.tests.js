@@ -2988,6 +2988,22 @@ QUnit.test("T351678 - the date is reset after item click", function(assert) {
     assert.deepEqual(this.dateBox.option("value"), new Date(2020, 4, 13, 1, 30), "date is correct");
 });
 
+QUnit.test("the date should be in range after the selection", function(assert) {
+    this.dateBox.option({
+        type: "time",
+        pickerType: "list",
+        min: new Date(2016, 10, 5, 12, 0, 0),
+        max: new Date(2016, 10, 5, 14, 0, 0),
+        opened: true
+    });
+
+    var $item = $(this.dateBox.content()).find(".dx-list-item").eq(0);
+
+    $item.trigger("dxclick");
+
+    assert.deepEqual(this.dateBox.option("value"), new Date(2016, 10, 5, 12, 0, 0), "date is correct");
+});
+
 QUnit.test("list should have items if the 'min' option is specified (T395529)", function(assert) {
     this.dateBox.option({
         min: new Date(2016, 5, 20),
@@ -3170,6 +3186,30 @@ QUnit.test("validator correctly check value with 'time' format", function(assert
     assert.equal(value.getMinutes(), 30, "Correct minutes");
     assert.equal(dateBox.option("isValid"), true, "Editor should be marked as valid");
 });
+
+QUnit.testInActiveWindow("select a new value via the Enter key", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+            type: "time",
+            value: new Date(2018, 2, 2, 12, 0, 13),
+            pickerType: "list"
+        }),
+        dateBox = $dateBox.dxDateBox("instance"),
+        $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS),
+        keyboard = keyboardMock($input);
+
+    $input.focusin();
+    this.dateBox.option("opened", true);
+    keyboard
+        .keyDown("down")
+        .keyDown("down")
+        .keyDown("enter");
+
+    var value = dateBox.option("value");
+    assert.equal($input.val(), "1:00 PM", "Correct input value");
+    assert.equal(value.getHours(), 13, "Correct hours");
+    assert.equal(value.getMinutes(), 0, "Correct minutes");
+});
+
 
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
@@ -4040,4 +4080,58 @@ QUnit.test("value should be changed on cell click in calendar with defined dateS
     Calendar.defaultOptions({
         options: { dateSerializationFormat: null }
     });
+});
+
+QUnit.test("T678838: DateBox doesn't switch format when time is changed", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+        value: new Date(2018, 6, 6, 2),
+        type: "datetime",
+        pickerType: "calendar"
+    });
+
+    var instance = $dateBox.dxDateBox("instance");
+    instance.open();
+
+    var $inputs = $("." + DATEBOX_WRAPPER_CLASS + " ." + TEXTEDITOR_INPUT_CLASS),
+        $hoursInput = $inputs.eq(0),
+        $formatInput = $inputs.eq(2);
+
+    assert.equal($formatInput.val(), "AM", "format value is correct");
+
+    $hoursInput
+        .val(16)
+        .trigger("change");
+
+    assert.equal(parseInt($hoursInput.val()), 4, "hour input value is correct formated after set hour in 24 format");
+    assert.equal($formatInput.val(), "PM", "format value is changed");
+
+    $("." + DATEBOX_WRAPPER_CLASS)
+        .find(".dx-button.dx-popup-done")
+        .trigger("dxclick");
+
+    assert.equal(instance.option("value").valueOf(), (new Date(2018, 6, 6, 16)).valueOf(), "DateBox value is correct");
+});
+
+QUnit.test("date value should be formatted after change AM/PM format", function(assert) {
+    var TIMEVIEW_FORMAT12_AM = -1,
+        TIMEVIEW_FORMAT12_PM = 1;
+
+    var $dateBox = $("#dateBox").dxDateBox({
+        value: new Date(2018, 6, 6, 16),
+        type: "datetime",
+        pickerType: "calendar"
+    });
+
+    var instance = $dateBox.dxDateBox("instance");
+    instance.open();
+
+    var formatSelectBox = $(".dx-timeview-format12").dxSelectBox("instance");
+    assert.equal(formatSelectBox.option("value"), TIMEVIEW_FORMAT12_PM, "correct value on init");
+
+    formatSelectBox.option("value", TIMEVIEW_FORMAT12_AM);
+    $("." + DATEBOX_WRAPPER_CLASS)
+        .find(".dx-button.dx-popup-done")
+        .trigger("dxclick");
+
+    assert.equal(instance.option("value").valueOf(), (new Date(2018, 6, 6, 4)).valueOf(), "DateBox value is formatted");
 });

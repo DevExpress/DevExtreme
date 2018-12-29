@@ -11,7 +11,7 @@
         .dx-area-field.dx-area-box {
             background-color: fade(@pivotgrid-field-area-box-background-color, 90%);
             border: none;
-            .box-shadow(@MATERIAL_PIVOTGRID_DRAG_HEADER_SHADOW);
+            box-shadow: @MATERIAL_PIVOTGRID_DRAG_HEADER_SHADOW;
         }
     }
 
@@ -67,7 +67,7 @@
             padding-left: 8px;
 
             .dx-button {
-                .dx-button-flat-color-styling(@PIVOTGRID_AREA_COLOR);
+                .dx-button-flat-color-styling(@base-text-color);
             }
         }
     }
@@ -82,7 +82,7 @@
             .dx-button {
                 margin-top: 7px;
 
-                .dx-button-flat-color-styling(@PIVOTGRID_AREA_COLOR);
+                .dx-button-flat-color-styling(@base-text-color);
             }
         }
     }

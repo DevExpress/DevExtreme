@@ -1032,13 +1032,13 @@ QUnit.test("sorting data for series with many argument fields", function(assert)
 
     assert.deepEqual(chartMocks.seriesMockData.series[0].reinitializedData,
         [{ arg1: "a1", val1: 1, arg2: "b1", val2: 1 },
-        { arg1: "a2", val1: 2, arg2: "b2", val2: 2 },
-        { arg1: "a3", val1: 3, arg2: "a3", val2: 3 }]
-        );
+            { arg1: "a2", val1: 2, arg2: "b2", val2: 2 },
+            { arg1: "a3", val1: 3, arg2: "a3", val2: 3 }]
+    );
 
     assert.deepEqual(chartMocks.seriesMockData.series[1].reinitializedData,
         [{ arg1: "a3", val1: 3, arg2: "a3", val2: 3 },
-        { arg1: "a1", val1: 1, arg2: "b1", val2: 1 },
-        { arg1: "a2", val1: 2, arg2: "b2", val2: 2 }]
-        );
+            { arg1: "a1", val1: 1, arg2: "b1", val2: 1 },
+            { arg1: "a2", val1: 2, arg2: "b2", val2: 2 }]
+    );
 });

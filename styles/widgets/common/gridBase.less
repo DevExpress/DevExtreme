@@ -185,12 +185,12 @@
                 .dx-column-chooser-item {
                     opacity: 0.5;
                     margin-bottom: 10px;
-                    .box-shadow(0px 1px 3px -1px rgba(0, 0, 0, 0.2));
+                    box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.2);
 
                     &.dx-@{widgetName}-drag-action {
                         opacity: 1;
                         cursor: pointer;
-                        .touch-action(pinch-zoom);
+                        touch-action: pinch-zoom;
                     }
                 }
             }
@@ -229,7 +229,7 @@
         cursor: pointer;
         z-index: 10000;
         // T105728
-        .box-sizing(content-box);
+        box-sizing: content-box;
 
         &.dx-drag-command-cell {
             padding: 0px;
@@ -521,7 +521,7 @@
     }
 
     .dx-row {
-        .dx-numberbox {
+        .dx-numberbox, .dx-textbox {
             &.dx-show-clear-button {
                 .dx-texteditor-input {
                     padding-right: @GRID_TEXTEDITOR_INPUT_PADDING;
@@ -740,7 +740,7 @@
         &.dx-scrollable {
             display: flex;
 
-            .dx-scrollable-wrapper {
+            & > .dx-scrollable-wrapper {
                 flex: 1;
                 height: auto;
                 min-width: 0;
@@ -910,7 +910,7 @@
         &.dx-popover-wrapper {
             .dx-overlay-content {
                 border: none;
-                .box-shadow(none);
+                box-shadow: none;
 
                 .dx-popup-content {
                     padding: 0;

@@ -15,8 +15,8 @@ class ExtImage extends Image {
             }
 
             setAttribute("alt", data.alt);
-            setAttribute("width", `${data.width}px`);
-            setAttribute("height", `${data.height}px`);
+            setAttribute("width", data.width);
+            setAttribute("height", data.height);
         }
 
         return node;
@@ -48,8 +48,8 @@ class ExtImage extends Image {
     static value(domNode) {
         return {
             src: domNode.getAttribute("src"),
-            width: parseInt(domNode.getAttribute("width")),
-            height: parseInt(domNode.getAttribute("height")),
+            width: domNode.getAttribute("width"),
+            height: domNode.getAttribute("height"),
             alt: domNode.getAttribute("alt")
         };
     }

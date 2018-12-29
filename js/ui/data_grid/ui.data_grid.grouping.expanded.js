@@ -6,8 +6,8 @@ var toComparable = require("../../core/utils/data").toComparable,
     gridCore = require("./ui.data_grid.core"),
     normalizeSortingInfo = gridCore.normalizeSortingInfo,
     groupingCore = require("./ui.data_grid.grouping.core"),
-    createGroupFilter = groupingCore.createGroupFilter,
     createOffsetFilter = groupingCore.createOffsetFilter,
+    createGroupFilter = require("./ui.data_grid.utils").createGroupFilter,
     dataQuery = require("../../data/query"),
     deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,
@@ -316,7 +316,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
                 }
             }
         },
-        _isGroupItemCountable: function(item) {
+        isGroupItemCountable: function(item) {
             return item.items === null;
         },
         updateTotalItemsCount: function() {

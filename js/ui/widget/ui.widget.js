@@ -353,9 +353,13 @@ var Widget = DOMComponent.inherit({
             return this._defaultTemplates[templateSource.name];
         }
 
+        if(templateSource instanceof TemplateBase) {
+            return templateSource;
+        }
+
         // TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
         if(typeUtils.isFunction(templateSource.render) && !typeUtils.isRenderer(templateSource)) {
-            return templateSource;
+            return this._addOneRenderedCall(templateSource);
         }
 
         if(templateSource.nodeType || typeUtils.isRenderer(templateSource)) {
@@ -371,19 +375,25 @@ var Widget = DOMComponent.inherit({
         return this._acquireTemplate(templateSource.toString(), createTemplate);
     },
 
+    _addOneRenderedCall: (template) => {
+        const render = template.render.bind(template);
+        return extend({}, template, {
+            render(options) {
+                const templateResult = render(options);
+                options && options.onRendered && options.onRendered();
+                return templateResult;
+            }
+        });
+    },
+
     _renderIntegrationTemplate: function(templateSource) {
         let integrationTemplate = this.option("integrationOptions.templates")[templateSource];
 
         if(integrationTemplate && !(integrationTemplate instanceof TemplateBase)) {
             const isAsyncTemplate = this.option("templatesRenderAsynchronously");
-            const render = integrationTemplate.render.bind(integrationTemplate);
-            integrationTemplate = extend({}, integrationTemplate, {
-                render(options) {
-                    const templateResult = render(options);
-                    options.onRendered && !isAsyncTemplate && options.onRendered();
-                    return templateResult;
-                }
-            });
+            if(!isAsyncTemplate) {
+                return this._addOneRenderedCall(integrationTemplate);
+            }
         }
 
         return integrationTemplate;
@@ -466,13 +476,11 @@ var Widget = DOMComponent.inherit({
     },
 
     _renderContent: function() {
-        var that = this;
-
-        commonUtils.deferRender(function() {
-            that._renderContentImpl();
+        commonUtils.deferRender(() => {
+            return this._renderContentImpl();
+        }).done(() => {
+            this._fireContentReadyAction();
         });
-
-        that._fireContentReadyAction();
     },
 
     _renderContentImpl: commonUtils.noop,

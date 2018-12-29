@@ -165,7 +165,7 @@ module.exports = {
                 /**
                 * @name GridBaseOptions.loadPanel.shading
                 * @type boolean
-                * @default true
+                * @default false
                 */
 
                 /**
@@ -314,6 +314,7 @@ module.exports = {
              * @type_function_param1_field15 isExpanded:boolean
              * @type_function_param1_field16 cellElement:dxElement
              * @type_function_param1_field17 watch:function
+             * @type_function_param1_field18 oldValue:any
              * @extends Action
              * @action
              */
@@ -335,6 +336,7 @@ module.exports = {
              * @type_function_param1_field15 isExpanded:boolean
              * @type_function_param1_field16 cellElement:dxElement
              * @type_function_param1_field17 watch:function
+             * @type_function_param1_field18 oldValue:any
              * @extends Action
              * @action
              */
@@ -1077,8 +1079,10 @@ module.exports = {
                             } else {
                                 freeSpaceRowElements.hide();
                                 commonUtils.deferUpdate(function() {
-                                    var scrollbarWidth = that.getScrollbarWidth(true),
-                                        elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth,
+                                    var scrollable = that.getScrollable(),
+                                        scrollablePadding = scrollable ? Math.ceil(parseFloat(scrollable.$content().css("paddingBottom"))) : 0, // T697699
+                                        scrollbarWidth = that.getScrollbarWidth(true),
+                                        elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth - scrollablePadding,
                                         contentHeight = contentElement.outerHeight(),
                                         showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0,
                                         rowsHeight = that._getRowsHeight(contentElement.children().first()),
@@ -1329,7 +1333,8 @@ module.exports = {
                         rowElements,
                         rowElement,
                         scrollPosition = that._scrollTop,
-                        contentElementOffsetTop = that._findContentElement().offset().top,
+                        $contentElement = that._findContentElement(),
+                        contentElementOffsetTop = $contentElement && $contentElement.offset().top,
                         items = that._dataController.items(),
                         tableElement = that._getTableElement();
 

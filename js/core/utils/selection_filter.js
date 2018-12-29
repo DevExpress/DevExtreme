@@ -4,9 +4,9 @@ var getKeyHash = require("./common").getKeyHash,
 
 var SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
 
-    this.getLocalFilter = function(keyGetter, equalKeys, equalByReference) {
+    this.getLocalFilter = function(keyGetter, equalKeys, equalByReference, keyExpr) {
         equalKeys = equalKeys === undefined ? equalByValue : equalKeys;
-        return functionFilter.bind(this, equalKeys, keyGetter, equalByReference);
+        return functionFilter.bind(this, equalKeys, keyGetter, equalByReference, keyExpr);
     };
 
     this.getExpr = function(keyExpr) {
@@ -70,7 +70,11 @@ var SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
         return selectedItemKeyHashesMap;
     };
 
-    var functionFilter = function(equalKeys, keyOf, equalByReference, item) {
+    var normalizeKeys = function(keys, keyOf, keyExpr) {
+        return Array.isArray(keyExpr) ? keys.map(key => keyOf(key)) : keys;
+    };
+
+    var functionFilter = function(equalKeys, keyOf, equalByReference, keyExpr, item) {
         var key = keyOf(item),
             keyHash,
             i;
@@ -78,7 +82,7 @@ var SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
         if(!equalByReference) {
             keyHash = getKeyHash(key);
             if(!typeUtils.isObject(keyHash)) {
-                var selectedKeyHashesMap = getSelectedItemKeyHashesMap(selectedItemKeys);
+                var selectedKeyHashesMap = getSelectedItemKeyHashesMap(normalizeKeys(selectedItemKeys, keyOf, keyExpr));
                 if(selectedKeyHashesMap[keyHash]) {
                     return !isSelectAll;
                 }

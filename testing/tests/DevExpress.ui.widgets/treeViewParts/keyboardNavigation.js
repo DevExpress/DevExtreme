@@ -185,19 +185,19 @@ QUnit.test("'shift+end' key pressing extends selection up to the last node", fun
     assert.ok($secondNodeCheckBox.dxCheckBox("instance").option("value"), true, "node was selected");
 }),
 
-    QUnit.test("'shift+end' key pressing without checkBoxes", function(assert) {
-        var $treeView = initTree({
-                focusStateEnabled: true,
-                height: 500,
-                items: $.extend(true, [], DATA[0])
-            }),
-            $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0);
+QUnit.test("'shift+end' key pressing without checkBoxes", function(assert) {
+    var $treeView = initTree({
+            focusStateEnabled: true,
+            height: 500,
+            items: $.extend(true, [], DATA[0])
+        }),
+        $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0);
 
-        $firstItem.trigger("dxpointerdown");
-        $treeView.trigger($.Event("keydown", { which: 35, shiftKey: true }));
+    $firstItem.trigger("dxpointerdown");
+    $treeView.trigger($.Event("keydown", { which: 35, shiftKey: true }));
 
-        assert.equal($treeView.dxTreeView("instance").option("selectedIndex"), -1);
-    }),
+    assert.equal($treeView.dxTreeView("instance").option("selectedIndex"), -1);
+}),
 
 QUnit.test("up arrow move focus to the previous element", function(assert) {
     var $treeView = initTree({
@@ -629,6 +629,23 @@ QUnit.test("'enter' key pressing fire onItemClick", function(assert) {
 
     assert.equal(clickFired, 1);
 });
+
+QUnit.test("item should be expanded by enter when expandEvent is click", function(assert) {
+    var items = [{ text: "Item 1", items: [{ text: "Item 11" }] }],
+        $treeView = initTree({
+            focusStateEnabled: true,
+            items: items,
+            expandEvent: "click"
+        }),
+        $item = $treeView.find(".dx-treeview-item").eq(0),
+        keyboard = keyboardMock($treeView);
+
+    $item.trigger("dxpointerdown");
+    keyboard.keyDown("enter");
+
+    assert.ok(items[0].expanded, "item should be expanded");
+});
+
 
 QUnit.test("'enter' key pressing select/unselect nodes if checkboxes are visible", function(assert) {
     var $treeView = initTree({

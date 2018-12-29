@@ -26,6 +26,7 @@ var SCROLLABLE = "dxScrollable",
     SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container",
     SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper",
     SCROLLABLE_CONTENT_CLASS = "dx-scrollable-content",
+    SCROLLABLE_CUSTOMIZABLE_SCROLLBARS_CLASS = "dx-scrollable-customizable-scrollbars",
     VERTICAL = "vertical",
     HORIZONTAL = "horizontal",
     BOTH = "both";
@@ -227,7 +228,7 @@ var Scrollable = DOMComponent.inherit({
     _visibilityChanged: function(visible) {
         if(visible) {
             this.update();
-            this._updateRtlPosition(this.option("rtlEnabled"));
+            this._updateRtlPosition();
             this._savedScrollOffset && this.scrollTo(this._savedScrollOffset);
             delete this._savedScrollOffset;
         } else {
@@ -262,7 +263,7 @@ var Scrollable = DOMComponent.inherit({
         // NOTE: Customize native scrollbars for dashboard team
 
         if(devices.real().deviceType === "desktop" && !(navigator.platform.indexOf('Mac') > -1 && browser['webkit'])) {
-            this.$element().addClass("dx-scrollable-customizable-scrollbars");
+            this.$element().addClass(SCROLLABLE_CUSTOMIZABLE_SCROLLBARS_CLASS);
         }
     },
 
@@ -281,11 +282,12 @@ var Scrollable = DOMComponent.inherit({
         this.update();
 
         this.callBase();
-        this._updateRtlPosition(this.option("rtlEnabled"));
+        this._updateRtlPosition();
     },
 
-    _updateRtlPosition: function(rtl) {
-        var that = this;
+    _updateRtlPosition: function() {
+        var that = this,
+            rtl = that.option("rtlEnabled");
 
         this._updateBounds();
         if(rtl && this.option("direction") !== VERTICAL) {
@@ -410,6 +412,10 @@ var Scrollable = DOMComponent.inherit({
                 this._strategy && this._strategy.disabledChanged();
                 break;
             case "updateManually":
+                break;
+            case "width":
+                this.callBase(args);
+                this._updateRtlPosition();
                 break;
             default:
                 this.callBase(args);
@@ -633,13 +639,14 @@ var Scrollable = DOMComponent.inherit({
     scrollTo: function(targetLocation) {
         targetLocation = this._normalizeLocation(targetLocation);
 
-        if(!this.option("useNative")) {
-            targetLocation = this._strategy._applyScaleRatio(targetLocation);
-        }
-
         this._updateIfNeed();
 
         var location = this._location();
+
+        if(!this.option("useNative")) {
+            targetLocation = this._strategy._applyScaleRatio(targetLocation);
+            location = this._strategy._applyScaleRatio(location);
+        }
 
         var distance = this._normalizeLocation({
             left: location.left - commonUtils.ensureDefined(targetLocation.left, location.left),

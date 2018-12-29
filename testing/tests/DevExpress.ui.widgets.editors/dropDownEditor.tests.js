@@ -892,9 +892,9 @@ QUnit.testInActiveWindow("focus editor in the case when 'openOnFieldClick' is fa
 
 QUnit.test("DropDownEditor doesn't opened on field click when it located in element with disabled state", function(assert) {
     var dropDownEditor = $("#dropDownEditorLazy")
-            .wrap("<div class='dx-state-disabled'>")
-            .dxDropDownEditor({ openOnFieldClick: true })
-            .dxDropDownEditor("instance");
+        .wrap("<div class='dx-state-disabled'>")
+        .dxDropDownEditor({ openOnFieldClick: true })
+        .dxDropDownEditor("instance");
 
     $("#dropDownEditorLazy input").trigger("dxclick");
 

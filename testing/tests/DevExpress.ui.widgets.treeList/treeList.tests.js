@@ -110,7 +110,7 @@ QUnit.test("Fixed column should be rendered in separate table", function(assert)
 QUnit.test("Resize columns", function(assert) {
     // arrange
     var treeList = createTreeList({
-            width: 470,
+            width: 400,
             allowColumnResizing: true,
             loadingTimeout: undefined,
             dataSource: [{ id: 1, firstName: "Dmitriy", lastName: "Semenov", room: 101, birthDay: "1992/08/06" }],
@@ -124,12 +124,12 @@ QUnit.test("Resize columns", function(assert) {
     resizeController = treeList.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 1 };
-    resizeController._setupResizingInfo(-9830);
+    resizeController._setupResizingInfo(-9800);
     resizeController._moveSeparator({
         event: {
             data: resizeController,
             type: "mousemove",
-            pageX: -9780,
+            pageX: -9750,
             preventDefault: noop
         }
     });
@@ -831,7 +831,7 @@ QUnit.module("Expand/Collapse rows");
 // T627926
 QUnit.test("Nodes should not be shifted after expanding node on last page", function(assert) {
     // arrange
-    var done = assert.async(),
+    var clock = sinon.useFakeTimers(),
         topVisibleRowData,
         treeList = createTreeList({
             height: 120,
@@ -846,23 +846,26 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
             expandedRowKeys: [1],
             dataSource: [
                 { name: 'Category1', id: 1 },
-                    { name: 'SubCategory1', id: 2, parentId: 1 },
-                    { name: 'SubCategory2', id: 3, parentId: 1 },
+                { name: 'SubCategory1', id: 2, parentId: 1 },
+                { name: 'SubCategory2', id: 3, parentId: 1 },
                 { name: 'Category2', id: 4 },
                 { name: 'Category3', id: 5 },
                 { name: 'Category4', id: 6 },
                 { name: 'Category7', id: 7 },
                 { name: 'Category5', id: 8 },
-                    { name: 'SubCategory3', id: 9, parentId: 8 },
-                        { name: 'SubCategory5', id: 12, parentId: 9 },
-                    { name: 'SubCategory4', id: 10, parentId: 8 },
+                { name: 'SubCategory3', id: 9, parentId: 8 },
+                { name: 'SubCategory5', id: 12, parentId: 9 },
+                { name: 'SubCategory4', id: 10, parentId: 8 },
                 { name: 'Category6', id: 11 }
             ]
-        });
+        }),
+        scrollable = treeList.getScrollable();
 
-    treeList.getScrollable().scrollTo({ y: 300 }); // scroll to the last page
+    try {
+        scrollable.scrollTo({ y: 300 }); // scroll to the last page
+        devices.real().deviceType !== "desktop" && $(scrollable._container()).trigger("scroll");
+        clock.tick();
 
-    setTimeout(function() {
         topVisibleRowData = treeList.getTopVisibleRowData();
 
         // assert
@@ -877,8 +880,9 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
         assert.strictEqual(treeList.pageIndex(), 3, "page index");
         assert.strictEqual(treeList.pageCount(), 6, "page count");
         assert.deepEqual(treeList.getTopVisibleRowData(), topVisibleRowData, "top visible row data has not changed");
-        done();
-    }, 100);
+    } finally {
+        clock.restore();
+    }
 });
 
 // T648005
@@ -908,6 +912,28 @@ QUnit.test("Scrollbar position must be kept after expanding node when the treeli
             done();
         }, 310);
     });
+});
+
+// T692068
+QUnit.test("Expand row if repaintChangesOnly is true", function(assert) {
+    // arrange
+    var treeList = createTreeList({
+        height: 120,
+        loadingTimeout: undefined,
+        repaintChangesOnly: true,
+        dataSource: [
+            { id: 1, name: 'node_1' },
+            { id: 2, name: 'node_1_1', parentId: 1 },
+            { id: 3, name: 'node_1_2', parentId: 1 }
+        ]
+    });
+
+    // act
+    treeList.expandRow(1);
+
+    // assert
+    assert.strictEqual(treeList.getVisibleRows()[0].isExpanded, true, "first row has corrent isExpanded state");
+    assert.strictEqual($(treeList.getRowElement(0)).find(".dx-treelist-expanded").length, 1, "first row has expanded icon");
 });
 
 QUnit.module("Focused Row", {
@@ -970,6 +996,59 @@ QUnit.test("TreeList with remoteOperations and focusedRowKey", function(assert) 
     assert.equal(treeList.pageIndex(), 1, "page is changed");
     assert.deepEqual(treeList.option("expandedRowKeys"), [11], "focus parent is expanded");
     assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(12))).hasClass("dx-row-focused"), "focused row is visible");
+});
+
+QUnit.test("TreeList with remoteOperations(filtering, sorting, grouping) and focusedRowKey should not generate repeated node", function(assert) {
+    // arrange, act
+    var childrenNodes,
+        treeList = createTreeList({
+            dataSource: [
+                { "Task_ID": 1, "Task_Parent_ID": 0 },
+                { "Task_ID": 3, "Task_Parent_ID": 1 },
+                { "Task_ID": 4, "Task_Parent_ID": 2 },
+                { "Task_ID": 5, "Task_Parent_ID": 3 }
+            ],
+            keyExpr: "Task_ID",
+            parentIdExpr: "Task_Parent_ID",
+            remoteOperations: {
+                filtering: true,
+                sorting: true,
+                grouping: true
+            },
+            focusedRowEnabled: true,
+            focusedRowKey: 5
+        });
+
+    this.clock.tick();
+
+    // arrange
+    childrenNodes = treeList.getNodeByKey(1).children;
+
+    // assert
+    assert.equal(childrenNodes.length, 1, "children nodes count");
+    assert.equal(childrenNodes[0].key, 3, "children node key");
+});
+
+QUnit.testInActiveWindow("DataGrid should focus the corresponding group row if group collapsed and inner data row was focused", function(assert) {
+    // arrange
+    var treeList = createTreeList({
+        keyExpr: "id",
+        dataSource: generateData(10),
+        focusedRowEnabled: true,
+        expandedRowKeys: [3],
+        focusedRowKey: 4
+    });
+
+    this.clock.tick();
+
+    // act
+    treeList.collapseRow(3);
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(treeList.isRowExpanded(3), false, "parent node collapsed");
+    assert.equal(treeList.option("focusedRowKey"), 3, "parent node focused");
 });
 
 QUnit.test("TreeList navigateTo", function(assert) {

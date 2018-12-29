@@ -41,7 +41,7 @@ var DropDownList = DropDownEditor.inherit({
 
         return extend({}, parent, {
             tab: function(e) {
-                if(this.option("opened") && this.option("applyValueMode") === "instantly") {
+                if(this._allowSelectItemByTab()) {
                     this._saveValueChangeEvent(e);
                     var $focusedItem = $(this._list.option("focusedElement"));
                     $focusedItem.length && this._setSelectedElement($focusedItem);
@@ -53,6 +53,10 @@ var DropDownList = DropDownEditor.inherit({
             home: commonUtils.noop,
             end: commonUtils.noop
         });
+    },
+
+    _allowSelectItemByTab: function() {
+        return this.option("opened") && this.option("applyValueMode") === "instantly";
     },
 
     _setSelectedElement: function($element) {
@@ -562,13 +566,6 @@ var DropDownList = DropDownEditor.inherit({
         return devices.real().deviceType === "desktop";
     },
 
-    _getListKeyExpr: function() {
-        var valueExpr = this.option("valueExpr"),
-            isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== "this";
-
-        return isValueExprField ? valueExpr : null;
-    },
-
     _listConfig: function() {
         var options = {
             selectionMode: "single",
@@ -579,7 +576,7 @@ var DropDownList = DropDownEditor.inherit({
             onContentReady: this._listContentReadyHandler.bind(this),
             itemTemplate: this._getTemplateByOption("itemTemplate"),
             indicateLoading: false,
-            keyExpr: this._getListKeyExpr(),
+            keyExpr: this._getCollectionKeyExpr(),
             groupTemplate: this.option("groupTemplate"),
             tabIndex: null,
             onItemClick: this._listItemClickAction.bind(this),
@@ -730,12 +727,16 @@ var DropDownList = DropDownEditor.inherit({
         this._refreshPopupVisibility();
     },
 
+    _shouldOpenPopup: function() {
+        return this._hasItemsToShow();
+    },
+
     _refreshPopupVisibility: function() {
-        if(this.option("readOnly")) {
+        if(this.option("readOnly") || !this._searchValue()) {
             return;
         }
 
-        this.option("opened", this._hasItemsToShow());
+        this.option("opened", this._shouldOpenPopup());
         if(this.option("opened")) {
             this._dimensionChanged();
         }
@@ -843,7 +844,7 @@ var DropDownList = DropDownEditor.inherit({
                 break;
             case "valueExpr":
                 this._renderValue();
-                this._setListOption("keyExpr", this._getListKeyExpr());
+                this._setListOption("keyExpr", this._getCollectionKeyExpr());
                 break;
             case "displayExpr":
                 this._renderValue();

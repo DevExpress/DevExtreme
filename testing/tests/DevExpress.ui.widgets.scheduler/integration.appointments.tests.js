@@ -144,7 +144,7 @@ QUnit.test("Scheduler tasks should have a right parent", function(assert) {
 
 QUnit.test("Tasks should have right boundOffset", function(assert) {
     var tasks = [
-            { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
+        { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -165,7 +165,7 @@ QUnit.test("Tasks should have right boundOffset", function(assert) {
 
 QUnit.test("Draggable rendering option 'immediate' should be turned off", function(assert) {
     var tasks = [
-            { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
+        { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -185,7 +185,7 @@ QUnit.test("Draggable rendering option 'immediate' should be turned off", functi
 
 QUnit.test("Tasks should have right draggable area", function(assert) {
     var tasks = [
-            { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
+        { text: "Task", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -229,10 +229,10 @@ QUnit.test("Tasks should be filtered by date before render", function(assert) {
 
 QUnit.test("Tasks should be filtered by start day hour before render", function(assert) {
     var tasks = [
-            { text: "One", startDate: new Date(2015, 2, 16, 5), endDate: new Date(2015, 2, 16, 5, 30) },
-            { text: "Two", startDate: new Date(2015, 2, 16, 2), endDate: new Date(2015, 2, 16, 2, 30) },
-            { text: "Three", startDate: new Date(2015, 2, 17, 2), endDate: new Date(2015, 2, 17, 2, 30) },
-            { text: "Five", startDate: new Date(2015, 2, 10, 6), endDate: new Date(2015, 2, 10, 6, 30) }
+        { text: "One", startDate: new Date(2015, 2, 16, 5), endDate: new Date(2015, 2, 16, 5, 30) },
+        { text: "Two", startDate: new Date(2015, 2, 16, 2), endDate: new Date(2015, 2, 16, 2, 30) },
+        { text: "Three", startDate: new Date(2015, 2, 17, 2), endDate: new Date(2015, 2, 17, 2, 30) },
+        { text: "Five", startDate: new Date(2015, 2, 10, 6), endDate: new Date(2015, 2, 10, 6, 30) }
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -333,10 +333,10 @@ QUnit.test("tasks should be filtered by resources before render", function(asser
 
 QUnit.test("Tasks should be filtered by resources if dataSource is changed", function(assert) {
     var tasks = [
-            { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
-            { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
-            { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 3, roomId: [1, 2] }, // false
-            { text: "c", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2, 3] } // true
+        { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
+        { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
+        { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 3, roomId: [1, 2] }, // false
+        { text: "c", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2, 3] } // true
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -376,10 +376,10 @@ QUnit.test("Tasks should be filtered by resources if dataSource is changed", fun
 
 QUnit.test("Tasks should be filtered by resources if resources are changed", function(assert) {
     var tasks = [
-            { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
-            { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
-            { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 3, roomId: [1, 2] }, // false
-            { text: "c", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2, 3] } // true
+        { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
+        { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
+        { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 3, roomId: [1, 2] }, // false
+        { text: "c", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2, 3] } // true
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -419,10 +419,10 @@ QUnit.test("Tasks should be filtered by resources if resources are changed", fun
 
 QUnit.test("Tasks should be filtered by resources if groups are changed", function(assert) {
     var tasks = [
-            { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
-            { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 1 }, // true
-            { text: "c", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 3, roomId: [1, 2] }, // false
-            { text: "d", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2, 3] } // false
+        { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
+        { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 1 }, // true
+        { text: "c", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 3, roomId: [1, 2] }, // false
+        { text: "d", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2, 3] } // false
     ];
     var dataSource = new DataSource({
         store: tasks
@@ -921,7 +921,7 @@ QUnit.test("Two vertical neighbor appointments should be placed correctly", func
 
     assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 100, 2.001, "Left position is OK");
-    assert.roughEqual(translator.locate($allDayAppts.eq(0)).left, 100, 2.001, "Left position is OK");
+    assert.roughEqual($allDayAppts.eq(0).position().left, 100, 2.001, "Left position is OK");
 
     assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - appointmentOffset, 1.001, "Width is OK");
     assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - appointmentOffset, 1.001, "Width is OK");
@@ -1735,6 +1735,36 @@ QUnit.test("Appointment should have a correct template with custom timezone", fu
         assert.equal($contentDates.first().text(), "10:00 AM", "Start date is correct");
         assert.equal($contentDates.last().text(), "10:30 AM", "End date is correct");
 
+    } finally {
+        tzOffsetStub.restore();
+    }
+});
+
+QUnit.test("onAppointmentAdding event args should be consistent with adding appointment when custom timezone (T686572)", function(assert) {
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+
+    try {
+        this.createInstance({
+            currentDate: new Date(2016, 4, 7),
+            dateSerializationFormat: "yyyy-MM-ddTHH:mm:ssZ",
+            timeZone: 'Etc/UTC',
+            views: ["day"],
+            currentView: "day",
+            dataSource: [],
+            height: 800,
+            onAppointmentAdding: function(e) {
+                assert.equal(e.appointmentData.startDate, "2016-05-07T08:00:00Z", "Start date is ok");
+                assert.equal(e.appointmentData.endDate, "2016-05-07T08:30:00Z", "End date is ok");
+            }
+        });
+
+        this.instance.addAppointment({
+            startDate: new Date(Date.UTC(2016, 4, 7, 5)),
+            endDate: new Date(Date.UTC(2016, 4, 7, 5, 30)),
+            startDateTimeZone: "Asia/Qyzylorda", // +6:00
+            endDateTimeZone: "Asia/Qyzylorda",
+            text: 'new Date sample'
+        });
     } finally {
         tzOffsetStub.restore();
     }
@@ -3586,9 +3616,9 @@ QUnit.test("Month appointment inside grouped view should have a right resizable 
 
 QUnit.test("Appointment size should depend on neighbor appointments", function(assert) {
     var items = [{ text: "a", startDate: new Date(2015, 2, 4, 1), endDate: new Date(2015, 2, 4, 2) },
-    { text: "b", startDate: new Date(2015, 2, 4, 2, 30), endDate: new Date(2015, 2, 4, 3) },
-    { text: "c", startDate: new Date(2015, 2, 4, 2, 30), endDate: new Date(2015, 2, 4, 3) },
-    { text: "d", startDate: new Date(2015, 2, 4, 1, 30), endDate: new Date(2015, 2, 4, 3) }];
+        { text: "b", startDate: new Date(2015, 2, 4, 2, 30), endDate: new Date(2015, 2, 4, 3) },
+        { text: "c", startDate: new Date(2015, 2, 4, 2, 30), endDate: new Date(2015, 2, 4, 3) },
+        { text: "d", startDate: new Date(2015, 2, 4, 1, 30), endDate: new Date(2015, 2, 4, 3) }];
 
     this.createInstance({
         currentView: "week",
@@ -3774,12 +3804,14 @@ QUnit.test("Many dropDown appts should be grouped correctly with one multi day t
     this.createInstance({
         views: ['month'],
         currentView: 'month',
+        maxAppointmentsPerCell: 1,
         currentDate: new Date(2017, 5, 25),
         width: 800,
-        height: 600
+        height: 950
     });
 
     this.instance.option("dataSource", [
+        { text: 'long appt', startDate: new Date(2017, 5, 8, 9, 0), endDate: new Date(2017, 5, 20, 9, 15) },
         { text: '1', startDate: new Date(2017, 5, 11, 9, 30), endDate: new Date(2017, 5, 11, 11, 30) },
         { text: '2', startDate: new Date(2017, 5, 11, 12, 0), endDate: new Date(2017, 5, 11, 13, 0) },
         { text: '3', startDate: new Date(2017, 5, 11, 12, 0), endDate: new Date(2017, 5, 11, 13, 0) },
@@ -3792,8 +3824,7 @@ QUnit.test("Many dropDown appts should be grouped correctly with one multi day t
         { text: '10', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
         { text: '11', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
         { text: '12', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
-        { text: '13', startDate: new Date(2017, 5, 11, 14, 30), endDate: new Date(2017, 5, 11, 16, 0) },
-        { text: 'long appt', startDate: new Date(2017, 5, 1, 9, 0), endDate: new Date(2017, 5, 20, 9, 15) }
+        { text: '13', startDate: new Date(2017, 5, 11, 14, 30), endDate: new Date(2017, 5, 11, 16, 0) }
     ]);
 
     var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
@@ -3801,7 +3832,7 @@ QUnit.test("Many dropDown appts should be grouped correctly with one multi day t
     dropDown.open();
     var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
 
-    assert.equal(ddAppointments.length, 12, "There are 12 drop down appts");
+    assert.equal(ddAppointments.length, 13, "There are 13 drop down appts");
 });
 
 QUnit.test("DropDown appointment button should have correct coordinates: rtl mode", function(assert) {
@@ -4257,9 +4288,33 @@ QUnit.test("Appointment should be rendered correctly with recurrenceRule express
     assert.equal($recAppointment.find(".dx-scheduler-appointment-recurrence-icon").length, 1, "Recurrence icon is rendered");
 });
 
+QUnit.test("Appointment should have correct height, when startDayHour is decimal", function(assert) {
+    var appointments = [{
+        startDate: new Date(2015, 1, 4, 5, 35).toString(),
+        endDate: new Date(2015, 1, 4, 5, 45).toString(),
+        text: "abc"
+    }];
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 4),
+        cellDuration: 5,
+        views: ["day"],
+        currentView: "day",
+        firstDayOfWeek: 1,
+        dataSource: appointments,
+        startDayHour: 5.5
+    });
+
+    var $appointment = $(this.instance.$element()).find("." + APPOINTMENT_CLASS).eq(0),
+        cellHeight = this.instance.$element().find("." + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
+
+    assert.roughEqual($appointment.position().top, cellHeight, 2.001, "Appointment top is correct");
+    assert.roughEqual($appointment.outerHeight(), 2 * cellHeight, 2.001, "Appointment height is correct");
+});
+
 QUnit.test("Appointment should be rendered correctly when custom timezone was set", function(assert) {
     var startDate = new Date(2015, 1, 4, 5),
-        endDate = new Date(2015, 1, 4, 6);
+        endDate = new Date(2015, 1, 4, 7);
 
     var appointments = [{
         startDate: startDate.toString(),
@@ -4291,7 +4346,7 @@ QUnit.test("Appointment should be rendered correctly when custom timezone was se
 
 QUnit.test("Appointment should be rendered correctly when custom timezone was set as string", function(assert) {
     var startDate = new Date(2015, 1, 4, 5),
-        endDate = new Date(2015, 1, 4, 6);
+        endDate = new Date(2015, 1, 4, 7);
 
     var appointments = [{
         startDate: startDate.toString(),
@@ -4641,6 +4696,44 @@ QUnit.test("DropDown appointment should be rendered correctly when timezone is s
     }
 });
 
+QUnit.test("DropDown button should be rendered correctly when appointmentCollectorTemplate is used", function(assert) {
+    var startDate = new Date(2015, 1, 4, 1),
+        endDate = new Date(2015, 1, 4, 2);
+    var appointments = [{
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "Item 1"
+    }, {
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "Item 2"
+    }, {
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "Item 3"
+    }];
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 4),
+        views: ["month"],
+        currentView: "month",
+        firstDayOfWeek: 1,
+        dataSource: appointments,
+        startDateExpr: "Start",
+        endDateExpr: "End",
+        textExpr: "Text",
+        height: 500,
+        maxAppointmentsPerCell: "auto",
+        appointmentCollectorTemplate: function(data) {
+            return "<div class='button-title'>Appointment count is " + data.appointmentCount + "</div>";
+        }
+    });
+
+    var $dropDown = $(".dx-scheduler-dropdown-appointments").eq(0);
+
+    assert.equal($dropDown.find(".button-title").text(), "Appointment count is 2", "Template is applied correctly");
+});
+
 QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {
 
     var startDate = new Date(2015, 1, 4, 1),
@@ -4767,6 +4860,36 @@ QUnit.test("Appointment should have right position on timeline month view", func
 
     assert.roughEqual($appointment.position().top, $targetCell.position().top, 1.001, "appointment top is correct");
     assert.roughEqual($appointment.position().left, $targetCell.position().left, 1.001, "appointment left is correct");
+});
+
+QUnit.test("Rival appointments should have right position on timeline month view", function(assert) {
+    var data = [{
+        "id": "1",
+        "text": "Recurrence event",
+        "recurrenceRule": "FREQ=DAILY;INTERVAL=2;COUNT=2",
+        "startDate": new Date(2018, 11, 3, 9, 0),
+        "endDate": new Date(2018, 11, 1, 10, 30)
+    },
+    {
+        "id": "2",
+        "text": "Some event",
+        "startDate": new Date(2018, 11, 4, 9, 0),
+        "endDate": new Date(2018, 11, 4, 10, 29),
+    }];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2018, 11, 3),
+        firstDayOfWeek: 0,
+        startDayHour: 8,
+        endDayHour: 20
+    });
+
+    this.instance.$element().find("." + APPOINTMENT_CLASS).each(function(index, appointment) {
+        assert.equal($(appointment).position().top, 0, "Appointment top is ok");
+    });
 });
 
 QUnit.test("Long appointment part should have right width on timeline month view", function(assert) {
@@ -5692,11 +5815,11 @@ QUnit.test("Rival allDay appointments from different groups should be rendered c
 
     assert.roughEqual($appointments.eq(0).position().top, 0, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).position().left, 314, 1, "correct left position of allDay appointment");
 
     assert.roughEqual($appointments.eq(1).position().top, 7 * cellHeight, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(1).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.equal($appointments.eq(1).position().left, 314, "correct left position of allDay appointment");
+    assert.roughEqual($appointments.eq(1).position().left, 314, 1, "correct left position of allDay appointment");
 });
 
 QUnit.test("Rival allDay appointments from same groups should be rendered correctly in vertical grouped workspace Week", function(assert) {
@@ -5746,7 +5869,7 @@ QUnit.test("Rival allDay appointments from same groups should be rendered correc
 
     assert.roughEqual($appointments.eq(0).position().top, 0.5 * cellHeight, 2.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).position().left, 314, 1, "correct left position of allDay appointment");
 });
 
 QUnit.test("Rival appointments from one group should be rendered correctly in vertical grouped workspace Week", function(assert) {

@@ -57,7 +57,7 @@ exports.svgCreator = {
             that = this;
 
         if(element.tagName === "image") {
-            href = $(element).attr("xlink:href");
+            href = $(element).attr("href") || $(element).attr("xlink:href");
             if(!that._imageArray[href]) {
                 that._imageArray[href] = "";
             }
@@ -83,12 +83,12 @@ exports.svgCreator = {
             svgElem = svgUtils.getSvgElement(data),
             $svgObject = $(svgElem);
 
-        $svgObject.css("backgroundColor", options.backgroundColor);
-        markup = xmlVersion + svgUtils.getSvgMarkup($svgObject.get(0));
+        markup = xmlVersion + svgUtils.getSvgMarkup($svgObject.get(0), options.backgroundColor);
 
         that._prepareImages(svgElem).done(function() {
             each(that._imageArray, function(href, dataURI) {
-                markup = markup.split(href).join(dataURI);
+                const regexpString = `href=['|"]${href}['|"]`;
+                markup = markup.replace(new RegExp(regexpString, "gi"), `href="${dataURI}"`);
             });
 
             blob.resolve(isFunction(window.Blob) ? that._getBlob(markup) : that._getBase64(markup));

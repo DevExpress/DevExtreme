@@ -117,16 +117,6 @@
     &.dx-state-disabled {
         opacity: 1;
     }
-
-    .dx-toolbar-item-content,
-    .dx-toolbar-button {
-        > .dx-button.dx-button-normal {
-            .dx-icon {
-                color: @base-icon-color;
-            }
-            color: @base-icon-color;
-        }
-    }
 }
 
 .dx-toolbar-after {
@@ -180,12 +170,12 @@
     .dx-button-onlyicon-sizing();
 
     &.dx-button-has-icon.dx-button-has-text {
-        .border-radius(50%);
+        border-radius: 50%;
     }
 }
 
 .dx-toolbar-menu-action .dx-button.dx-button-has-icon:not(.dx-button-has-text) {
-    .border-radius(0);
+    border-radius: 0;
 }
 
 .dx-toolbar .dx-tab {

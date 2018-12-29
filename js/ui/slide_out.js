@@ -28,17 +28,25 @@ var SlideOut = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         /**
-        * @name dxSlideOutItemTemplate
-        * @inherits CollectionWidgetItemTemplate
+        * @name dxSlideOutItem
+        * @inherits CollectionWidgetItem
         * @type object
         */
         /**
-        * @name dxSlideOutItemTemplate.menuTemplate
+        * @name dxSlideOutItem.menuTemplate
         * @type template|function
         * @type_function_return string|Node|jQuery
         */
 
         return extend(this.callBase(), {
+
+            /**
+             * @name dxSlideOutOptions.items
+             * @type Array<string, dxSlideOutItem, object>
+             * @fires dxSlideOutOptions.onOptionChanged
+             * @inheritdoc
+             */
+
             /**
             * @name dxSlideOutOptions.activeStateEnabled
             * @type boolean

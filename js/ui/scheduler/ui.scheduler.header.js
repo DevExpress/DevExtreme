@@ -69,14 +69,19 @@ var SchedulerHeader = Widget.inherit({
                     selectedItem: this.option("currentView")
                 });
                 break;
+            case "customizeDateNavigatorText":
+                this._navigator.option(args.name, value);
+                break;
             case "currentView":
                 this._viewSwitcher.option("selectedItem", value);
                 this._navigator.option("step", STEP_MAP[this._getCurrentViewType()]);
                 this._changeViewSwitcherLabelText();
                 break;
             case "currentDate":
-            case "startDate":
                 this._navigator.option("date", value);
+                break;
+            case "displayedDate":
+                this._navigator.option("displayedDate", value);
                 break;
             case "min":
             case "max":
@@ -120,7 +125,8 @@ var SchedulerHeader = Widget.inherit({
             firstDayOfWeek: this.option("firstDayOfWeek"),
             tabIndex: this.option("tabIndex"),
             focusStateEnabled: this.option("focusStateEnabled"),
-            observer: this.option("observer")
+            observer: this.option("observer"),
+            customizeDateNavigatorText: this.option("customizeDateNavigatorText")
         });
 
         this._navigator.$element().appendTo(this.$element());

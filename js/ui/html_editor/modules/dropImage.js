@@ -1,9 +1,10 @@
 import { getQuill } from "../quill_importer";
 
 import eventsEngine from "../../../events/core/events_engine";
-import eventUtils from "../../../events/utils";
+import { addNamespace } from "../../../events/utils";
 import { each } from "../../../core/utils/iterator";
 import browser from "../../../core/utils/browser";
+import { getWindow } from "../../../core/utils/window";
 
 const BaseModule = getQuill().import("core/module");
 
@@ -14,9 +15,9 @@ class DropImageModule extends BaseModule {
         this.editorInstance = options.editorInstance;
         const widgetName = this.editorInstance.NAME;
 
-        eventsEngine.on(this.quill.root, eventUtils.addNamespace("dragover", widgetName), this._dragOverHandler.bind(this));
-        eventsEngine.on(this.quill.root, eventUtils.addNamespace("drop", widgetName), this._dropHandler.bind(this));
-        eventsEngine.on(this.quill.root, eventUtils.addNamespace("paste", widgetName), this._pasteHandler.bind(this));
+        eventsEngine.on(this.quill.root, addNamespace("dragover", widgetName), this._dragOverHandler.bind(this));
+        eventsEngine.on(this.quill.root, addNamespace("drop", widgetName), this._dropHandler.bind(this));
+        eventsEngine.on(this.quill.root, addNamespace("paste", widgetName), this._pasteHandler.bind(this));
     }
 
     _dragOverHandler(e) {
@@ -58,18 +59,19 @@ class DropImageModule extends BaseModule {
     }
 
     _getImage(files, callback) {
+        const window = getWindow();
         each(files, (index, file) => {
             if(!this._isImage(file)) {
                 return;
             }
 
-            const reader = new FileReader();
+            const reader = new window.FileReader();
             reader.onload = (e) => {
                 callback(e.target.result);
             };
 
             const readableFile = file.getAsFile ? file.getAsFile() : file;
-            if(readableFile instanceof Blob) {
+            if(readableFile instanceof window.Blob) {
                 reader.readAsDataURL(readableFile);
             }
         });
@@ -79,7 +81,7 @@ class DropImageModule extends BaseModule {
         const selection = this.quill.getSelection();
         const pasteIndex = selection ? selection.index : this.quill.getLength();
 
-        this.quill.insertEmbed(pasteIndex, "image", data, "user");
+        this.quill.insertEmbed(pasteIndex, "extendedImage", data, "user");
     }
 }
 

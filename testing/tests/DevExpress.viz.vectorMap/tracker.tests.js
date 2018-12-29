@@ -4,12 +4,12 @@
 // Every time "mousewheel" event is triggered within a test animation frame is requested
 // It is done by widgets event system ("dxwheel")
 // It is not used in map and requesting frame is just suppressed
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    trackerModule = require("viz/vector_map/tracker"),
-    eventEmitterModule = require("viz/vector_map/event_emitter"),
-    animationFrame = require("animation/frame");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import vizMocks from "../../helpers/vizMocks.js";
+import trackerModule from "viz/vector_map/tracker";
+import eventEmitterModule from "viz/vector_map/event_emitter";
+import animationFrame from "animation/frame";
 
 $("#qunit-fixture").append('<div id="test-root"></div>');
 
@@ -167,7 +167,7 @@ QUnit.module("Default prevention", $.extend({}, environment, {
         trackerModule._DEBUG_forceEventMode(eventMode);
         this.eventMode = eventMode;
         this.tracker.dispose();
-        this.createTracker();    // To attach with correct event names
+        this.createTracker(); // To attach with correct event names
 
         var preventDefault = sinon.spy(),
             stopPropagation = sinon.spy();
@@ -208,7 +208,7 @@ $.each(["mouse", "touch", "MSPointer", "pointer"], function(_, mode) {
 });
 
 QUnit.test("mouse - wheel", function(assert) {
-    this.check(assert, "mouse", "wheel", true, 1, 2);   // second "stopPropagation" is called by the dxmousewheel system
+    this.check(assert, "mouse", "wheel", true, 1, 2); // second "stopPropagation" is called by the dxmousewheel system
 });
 
 QUnit.test("mouse - wheel / no data", function(assert) {

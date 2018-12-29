@@ -2899,6 +2899,36 @@ QUnit.test("Remove ticks that in the break", function(assert) {
     assert.deepEqual(this.axis._minorTicks.map(value).slice(10, 20), [13, 14, 16, 17, 18, 19, 21, 22, 48, 49], "minor ticks");
 });
 
+QUnit.test("Remove ticks that in the break. DateTime", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous",
+        calculateMinors: true,
+        tickInterval: { hours: 2 },
+        minorTickInterval: { hours: 1 },
+        breakStyle: { width: 0 },
+        breaks: [{ startValue: new Date(2017, 10, 5), endValue: new Date(2017, 10, 5, 7) }]
+    });
+
+    this.axis.setBusinessRange({ min: new Date(2017, 10, 4, 22), max: new Date(2017, 10, 5, 8) });
+
+    // act
+    this.axis.createTicks(canvas(1000));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [
+        new Date(2017, 10, 4, 22),
+        new Date(2017, 10, 5),
+        new Date(2017, 10, 5, 6),
+        new Date(2017, 10, 5, 8)
+    ].map(function(d) { return d.valueOf(); }), "major ticks");
+
+    assert.deepEqual(this.axis._minorTicks.map(value), [
+        new Date(2017, 10, 4, 23),
+        new Date(2017, 10, 5, 7)
+    ].map(function(d) { return d.valueOf(); }), "minor ticks");
+});
+
 QUnit.test("Tune scale break values. Datetime", function(assert) {
     this.createAxis();
     this.updateOptions({

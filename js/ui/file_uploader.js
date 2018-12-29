@@ -128,7 +128,7 @@ var FileUploader = Editor.inherit({
             /**
             * @name dxFileUploaderOptions.name
             * @type string
-            * @default ""
+            * @default "files[]"
             */
             name: "files[]",
 
@@ -578,6 +578,7 @@ var FileUploader = Editor.inherit({
         this._initStatusMessage(file);
         this._initCancelButton(file);
     },
+
     _setStatusMessage: function(file, key) {
         setTimeout(function() {
             if(this.option("showFileList")) {
@@ -592,20 +593,29 @@ var FileUploader = Editor.inherit({
         var value = this.option("value");
 
         if(!this._files || value.length === 0 || !this._shouldFileListBeExtended()) {
+            this._preventFilesUploading(this._files);
             this._files = [];
         }
 
-        each(value.slice(this._files.length), (function(_, value) {
+        each(value.slice(this._files.length), function(_, value) {
             var file = this._createFile(value);
             this._validateFile(file);
             this._files.push(file);
-        }).bind(this));
+        }.bind(this));
     },
+
+    _preventFilesUploading: function(files) {
+        each(files, function(_, file) {
+            file.request && file.request.abort();
+        }.bind(this));
+    },
+
     _validateFile: function(file) {
         file.isValidFileExtension = this._validateFileExtension(file);
         file.isValidMinSize = this._validateMinFileSize(file);
         file.isValidMaxSize = this._validateMaxFileSize(file);
     },
+
     _validateFileExtension: function(file) {
         var allowedExtensions = this.option("allowedFileExtensions"),
             fileExtension = file.value.name.substring(file.value.name.lastIndexOf('.')).toLowerCase();
@@ -619,11 +629,13 @@ var FileUploader = Editor.inherit({
         }
         return false;
     },
+
     _validateMaxFileSize: function(file) {
         var fileSize = file.value.size,
             maxFileSize = this.option("maxFileSize");
         return maxFileSize > 0 ? fileSize <= maxFileSize : true;
     },
+
     _validateMinFileSize: function(file) {
         var fileSize = file.value.size,
             minFileSize = this.option("minFileSize");
@@ -1174,12 +1186,10 @@ var FileUploader = Editor.inherit({
     },
 
     _initCancelButton: function(file) {
-        var cancelClickHandler = (function() {
-            file.request.abort();
+        file.cancelButton.option("onClick", function() {
+            this._preventFilesUploading([file]);
             this._removeFile(file);
-        }).bind(this);
-
-        file.cancelButton.option("onClick", cancelClickHandler);
+        }.bind(this));
 
         var hideCancelButton = function() {
             setTimeout(function() {

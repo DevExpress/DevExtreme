@@ -14,6 +14,12 @@ env:
     - TARGET=test CONSTEL=ui.grid
     - TARGET=test CONSTEL=ui.scheduler
     - TARGET=test CONSTEL=viz
+    - TARGET=test BROWSER=firefox CONSTEL=misc
+    - TARGET=test BROWSER=firefox CONSTEL=ui
+    - TARGET=test BROWSER=firefox CONSTEL=ui.editors
+    - TARGET=test BROWSER=firefox CONSTEL=ui.grid
+    - TARGET=test BROWSER=firefox CONSTEL=ui.scheduler
+    - TARGET=test BROWSER=firefox CONSTEL=viz
 
 cache:
   directories:
@@ -29,6 +35,7 @@ script:
     docker run -t
     -e HEADLESS=true
     -e TARGET=$TARGET
+    -e BROWSER=$BROWSER
     -e CONSTEL=$CONSTEL
     -v $TRAVIS_BUILD_DIR:/devextreme
     docker.io/devexpress/devextreme-build:18_2

@@ -22,8 +22,7 @@ class PushStrategy extends DrawerStrategy {
                 direction: drawer.getDrawerPosition(),
                 duration: drawer.option("animationDuration"),
                 complete: () => {
-                    this._contentAnimationResolve();
-                    this._panelAnimationResolve();
+                    this._elementsAnimationCompleteHandler();
                 }
             };
 

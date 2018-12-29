@@ -227,6 +227,10 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
                 }
             }
             return that.callBase.apply(that, arguments);
+        },
+        dispose: function() {
+            this._virtualScrollController.dispose();
+            this.callBase.apply(this, arguments);
         }
     };
 
@@ -918,8 +922,10 @@ module.exports = {
                         if(removeCount) {
                             for(var i = 0; i < removeCount + 1; i++) {
                                 var item = that._items[changeType === "prepend" ? that._items.length - 1 - i : i];
-                                if(item && item.rowType !== "data" && item.rowType !== "group") {
-                                    removeCount++;
+                                if(item && item.rowType !== "data") {
+                                    if(item.rowType !== "group" || (!this._dataSource.isGroupItemCountable(item.data) && (changeType === "prepend" || i < removeCount))) {
+                                        removeCount++;
+                                    }
                                 }
                             }
                             change.removeCount = removeCount;
@@ -1041,6 +1047,13 @@ module.exports = {
 
                         var dataSource = this._dataSource;
                         return dataSource && dataSource.getContentOffset.apply(dataSource, arguments);
+                    },
+                    dispose: function() {
+                        var rowsScrollController = this._rowsScrollController;
+
+                        rowsScrollController && rowsScrollController.dispose();
+
+                        this.callBase.apply(this, arguments);
                     }
                 };
 

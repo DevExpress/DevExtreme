@@ -1,14 +1,23 @@
 var domAdapter = require("../../core/dom_adapter"),
-    window = require("./window").getWindow();
+    window = require("./window").getWindow(),
+    $ = require("../../core/renderer");
 
-function getMarkup(element) {
+function getMarkup(element, backgroundColor) {
     var temp = domAdapter.createElement('div');
-    temp.appendChild(element.cloneNode(true));
+    var clone = element.cloneNode(true);
+    if(backgroundColor) {
+        $(clone).css("backgroundColor", backgroundColor);
+    }
+    temp.appendChild(clone);
     return temp.innerHTML;
 }
 
-function fixIENamespaces(markup) {
+function fixNamespaces(markup) {
     var first = true;
+
+    if(markup.indexOf("xmlns:xlink") === -1) {
+        markup = markup.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+    }
 
     markup = markup.replace(/xmlns="[\s\S]*?"/gi, function(match) {
         if(!first) return "";
@@ -32,8 +41,8 @@ function decodeHtmlEntities(markup) {
         .replace(/&shy;/gi, "&#173;");
 }
 
-exports.getSvgMarkup = function(element) {
-    return fixIENamespaces(decodeHtmlEntities(getMarkup(element)));
+exports.getSvgMarkup = function(element, backgroundColor) {
+    return fixNamespaces(decodeHtmlEntities(getMarkup(element, backgroundColor)));
 };
 
 exports.getSvgElement = function(markup) {

@@ -13,8 +13,8 @@
     width: @ANDROID5_RADIOBUTTON_SIZE;
     height: @ANDROID5_RADIOBUTTON_SIZE;
     position: relative;
-    .transition(~"border-color .14s");
-    .border-radius(50%);
+    transition: border-color .14s;
+    border-radius: 50%;
 }
 
 .dx-radiobutton-icon-dot {
@@ -24,15 +24,15 @@
     width: 10px;
     height: 10px;
     background-color: @ANDROID5_RADIOBUTTON_CHECKED_BACKGROUND;
-    .border-radius(50%);
-    .scale(0);
-    .transition(~"transform .14s");
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform .14s;
 }
 
 .dx-radiobutton-icon-checked {
     border-color: @ANDROID5_RADIOBUTTON_CHECKED_BACKGROUND;
     .dx-radiobutton-icon-dot {
-        .scale(1);
+        transform: scale(1);
     }
 }
 

@@ -10,6 +10,11 @@ var $ = require("jquery"),
     dateUtils = require("core/utils/date"),
     config = require("core/config");
 
+
+function getTimezoneDifference(date, timeZone) {
+    return date.getTimezoneOffset() * dateUtils.dateToMilliseconds("minute") + timeZone * dateUtils.dateToMilliseconds("hour");
+}
+
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler"></div>');
 });
@@ -683,6 +688,27 @@ QUnit.test("UpdateAppointmentStartDate should return corrected startDate", funct
     });
 });
 
+QUnit.test("UpdateAppointmentStartDate should return corrected startDate when appointment is short", function(assert) {
+    this.createInstance();
+    this.instance.option({
+        currentView: "week",
+        currentDate: new Date(2016, 1, 1),
+        startDayHour: 9
+    });
+
+    var appointment = {
+        startDate: new Date(2016, 1, 2, 8, 30),
+        endDate: new Date(2016, 1, 2, 9, 1)
+    };
+
+    this.instance.fire("updateAppointmentStartDate", {
+        startDate: appointment.startDate,
+        callback: function(result) {
+            assert.deepEqual(result, new Date(2016, 1, 2, 9, 0), "Updated date is correct");
+        }
+    });
+});
+
 QUnit.test("appointmentTakesSeveralDays should return true, if startDate and endDate is different days", function(assert) {
     this.createInstance();
     this.instance.option({
@@ -808,7 +834,7 @@ QUnit.test("'convertDateByTimezone' should return date according to the custom t
     });
 
     var date = new Date(2015, 6, 3, 3),
-        timezoneDifference = date.getTimezoneOffset() * 60000 + timezoneValue * 3600000;
+        timezoneDifference = getTimezoneDifference(date, timezoneValue);
 
     var convertedDate = this.instance.fire("convertDateByTimezone", date);
 
@@ -816,7 +842,6 @@ QUnit.test("'convertDateByTimezone' should return date according to the custom t
 });
 
 QUnit.test("'convertDateByTimezone' should return date according to the custom timeZone as string", function(assert) {
-
     var timezone = { id: "Asia/Ashkhabad", value: 5 };
     this.createInstance();
 
@@ -825,7 +850,23 @@ QUnit.test("'convertDateByTimezone' should return date according to the custom t
     });
 
     var date = new Date(2015, 6, 3, 3),
-        timezoneDifference = date.getTimezoneOffset() * 60000 + timezone.value * 3600000;
+        timezoneDifference = getTimezoneDifference(date, timezone.value);
+
+    var convertedDate = this.instance.fire("convertDateByTimezone", date);
+
+    assert.deepEqual(convertedDate, new Date(date.getTime() + timezoneDifference), "'convertDateByTimezone' works fine");
+});
+
+QUnit.test("'convertDateByTimezone' should return date according to the custom timeZone with non-integer number", function(assert) {
+    var timezone = { id: "Australia/Broken_Hill", value: 9.5 };
+    this.createInstance();
+
+    this.instance.option({
+        timeZone: timezone.id
+    });
+
+    var date = new Date(2015, 6, 3, 3),
+        timezoneDifference = getTimezoneDifference(date, timezone.value);
 
     var convertedDate = this.instance.fire("convertDateByTimezone", date);
 

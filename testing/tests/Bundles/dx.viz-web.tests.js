@@ -6,7 +6,7 @@ require("bundles/dx.viz-web.js");
 
 QUnit.test("DevExpress namespaces", function(assert) {
     var namespaces = [
-        "Color",        // from core
+        "Color", // from core
 
         "framework",
         "data",

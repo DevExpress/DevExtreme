@@ -1,12 +1,11 @@
 import { isFunction } from "../core/utils/type";
 import domAdapter from "../core/dom_adapter";
 import { add as ready } from "../core/utils/ready_callbacks";
-import windowUtils from "../core/utils/window";
+import { getWindow } from "../core/utils/window";
 import { map } from "../core/utils/iterator";
 import { toComparable } from "../core/utils/data";
 import { Deferred } from "../core/utils/deferred";
-
-var window = windowUtils.getWindow();
+import typeUtils from "../core/utils/type";
 
 var XHR_ERROR_UNLOAD = "DEVEXTREME_XHR_ERROR_UNLOAD";
 
@@ -67,6 +66,7 @@ var errorMessageFromXhr = (function() {
     // T542570, https://stackoverflow.com/a/18170879
     var unloading;
     ready(function() {
+        var window = getWindow();
         domAdapter.listen(window, "beforeunload", function() { unloading = true; });
     });
 
@@ -227,6 +227,26 @@ var isUnaryOperation = function(crit) {
     return crit[0] === "!" && Array.isArray(crit[1]);
 };
 
+var isGroupOperator = function(value) {
+    return value === "and" || value === "or";
+};
+
+var isGroupCriterion = function(crit) {
+    var first = crit[0],
+        second = crit[1];
+
+    if(Array.isArray(first)) {
+        return true;
+    }
+    if(typeUtils.isFunction(first)) {
+        if(Array.isArray(second) || typeUtils.isFunction(second) || isGroupOperator(second)) {
+            return true;
+        }
+    }
+
+    return false;
+};
+
 var trivialPromise = function() {
     var d = new Deferred();
     return d.resolve.apply(d, arguments).promise();
@@ -291,6 +311,7 @@ var utils = {
     processRequestResultLock: processRequestResultLock,
 
     isUnaryOperation: isUnaryOperation,
+    isGroupCriterion: isGroupCriterion,
 
     /**
     * @name Utils.base64_encode

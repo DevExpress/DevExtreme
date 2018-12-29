@@ -294,7 +294,7 @@ extend(exports, {
             if(nameField in data) {
                 series = generatedSeries[data[nameField]];
                 if(!series) {
-                    series = generatedSeries[data[nameField]] = { name: data[nameField] };
+                    series = generatedSeries[data[nameField]] = { name: data[nameField], nameFieldValue: data[nameField] };
                     seriesOrder.push(series.name);
                 }
             }

@@ -772,143 +772,7 @@ QUnit.test("Delete marker", function(assert) {
     assert.ok(!point.graphic, "point graphic should be deleted");
 });
 
-QUnit.module("states and styles", {
-    beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
-        this.group = this.renderer.g();
-        this.series = sinon.createStubInstance(Series);
-        this.series.isVisible.returns(true);
-        this.options = {
-            styles: { normal: { style: "normal" }, hover: { style: "hover" }, selection: { style: "selection" } },
-            label: {},
-            visible: true,
-            widgetType: "chart",
-            symbol: "circle"
-        };
-        this.data = { argument: 1, value: 1, lowError: 2, highError: 4 };
-        this.series.getVisibleArea = function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
-        this.series.getValueAxis.returns({
-            getTranslator: function() {
-                return new MockTranslator({
-                    translate: { "null": 0, 1: 22, 2: 23, 3: 24, 4: 25 }
-                });
-            }
-        });
-        this.series.getArgumentAxis.returns({
-            getTranslator: function() {
-                return new MockTranslator({
-                    translate: { "null": 0, 1: 11, 2: 12, 3: 13, 4: 14 }
-                });
-            }
-        });
-
-        this.groups = {
-            markers: this.group,
-            errorBars: this.renderer.g()
-        };
-    }
-});
-
-QUnit.test("Apply normal style", function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
-    point.translate();
-
-    point.draw(this.renderer, this.groups);
-    point.graphic.stub("attr").reset();
-    point.applyStyle("normal");
-
-    assert.ok(!point.graphic.stub("toForeground").called);
-    assert.deepEqual(point.graphic.stub("attr").secondCall.args[0], { style: "normal" });
-    // TO-DO rework it and delete test
-    assert.deepEqual(point.graphic.stub("attr").firstCall.args[0], {
-        fill: null,
-        stroke: null,
-        dashStyle: null
-    });
-});
-
-QUnit.test("Apply hover style", function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
-    point.translate();
-    point.draw(this.renderer, this.groups);
-    point.graphic.stub("attr").reset();
-    point.applyStyle("hover");
-
-    assert.deepEqual(point.graphic.stub("attr").firstCall.args[0], { style: "hover" });
-    assert.ok(point.graphic.stub("toForeground").calledOnce);
-});
-
-QUnit.test("Apply selection style", function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
-    point.translate();
-    point.draw(this.renderer, this.groups);
-    point.graphic.stub("attr").reset();
-
-    point.applyStyle("selection");
-
-    assert.deepEqual(point.graphic.stub("attr").firstCall.args[0], { style: "selection" });
-    assert.ok(point.graphic.stub("toForeground").calledOnce);
-});
-
-QUnit.test("Draw point with some style, point in the visible area after it was in invisible area and wasn't drawn", function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
-    point.translate();
-    point.applyStyle('selection');
-    point.draw(this.renderer, this.groups);
-
-    assert.deepEqual(point.graphic.stub("attr").firstCall.args[0].style, "selection");
-});
-
-QUnit.test("T333557", function(assert) {
-    this.options.styles.normal = { style: 'normal', fill: 'red' };
-    var point = createPoint(this.series, this.data, this.options);
-    point.translate();
-    point.draw(this.renderer, this.groups);
-
-    // act
-    point.applyStyle('hover');
-    point.applyStyle('normal');
-    this.options.styles.normal = { style: 'newStyle', fill: 'green' };
-
-    point.update(this.data, this.options);
-    point.draw(this.renderer, this.groups);
-
-    // assert
-    assert.deepEqual(point.graphic.stub("attr").lastCall.args[0].style, "newStyle");
-    assert.deepEqual(point.graphic.stub("attr").lastCall.args[0].fill, "green");
-});
-
-QUnit.test("Draw point without state", function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
-    point.translate();
-    point.draw(this.renderer, this.groups);
-
-    // assert
-    assert.deepEqual(point.graphic.stub("attr").firstCall.args[0].style, "normal");
-});
-
-QUnit.test("Release hover state", function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
-    point.translate();
-    point.draw(this.renderer, this.groups);
-    // act
-    point.releaseHoverState();
-    // assert
-    assert.ok(point.graphic.stub("toBackground").calledOnce);
-});
-
-QUnit.test("Release hover state check background when state is selected", function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
-    point.translate();
-    point.draw(this.renderer, this.groups);
-    point.fullState = 2;
-
-    point.releaseHoverState();
-
-    assert.ok(!point.graphic.stub("toBackground").called);
-});
-
-QUnit.module("point views", {
+QUnit.module("Point views", {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.group = this.renderer.g();
@@ -946,7 +810,7 @@ QUnit.module("point views", {
         var point = createPoint(this.series, this.data, this.options);
         point.translate();
         point.draw(this.renderer, this.groups);
-        // point.graphic.stub("attr").reset();
+        point.graphic.stub("attr").reset();
 
         this.point = point;
 
@@ -960,14 +824,23 @@ QUnit.test("apply view", function(assert) {
     this.point.applyView();
 
     assert.strictEqual(this.getCurrentStyle(), "normal");
+
+    assert.ok(!this.point.graphic.stub("toForeground").called);
+    // TO-DO rework it and delete test
+    assert.deepEqual(this.point.graphic.stub("attr").firstCall.args[0], {
+        fill: null,
+        stroke: null,
+        dashStyle: null
+    });
 });
 
-    // hover view
+// hover view
 QUnit.test("apply view/ hovered point", function(assert) {
     this.point.fullState = 1;
     this.point.applyView();
 
     assert.strictEqual(this.getCurrentStyle(), "hover");
+    assert.ok(this.point.graphic.stub("toForeground").calledOnce);
 });
 
 QUnit.test("set view hover view. normal point", function(assert) {
@@ -1007,12 +880,13 @@ QUnit.test("set hover view n times, reset hover view n times", function(assert) 
     assert.strictEqual(this.getCurrentStyle(), "normal");
 });
 
-    // selection view
+// selection view
 QUnit.test("apply view. selected point", function(assert) {
     this.point.fullState = 2;
     this.point.applyView();
 
     assert.strictEqual(this.getCurrentStyle(), "selection");
+    assert.ok(this.point.graphic.stub("toForeground").calledOnce);
 });
 
 QUnit.test("set view selection view. normal point", function(assert) {
@@ -1051,7 +925,7 @@ QUnit.test("set selection view n times, reset selection view n times", function(
 
     assert.strictEqual(this.getCurrentStyle(), "normal");
 });
-    // hover & selection
+// hover & selection
 QUnit.test("apply view. hovered and selected point", function(assert) {
     this.point.fullState = 3;
     this.point.applyView();
@@ -1159,6 +1033,104 @@ QUnit.test("apply view with selected state in 'none' mode", function(assert) {
     assert.strictEqual(this.getCurrentStyle(), "selection");
 });
 
+QUnit.module("states and styles", {
+    beforeEach: function() {
+        this.renderer = new vizMocks.Renderer();
+        this.group = this.renderer.g();
+        this.series = sinon.createStubInstance(Series);
+        this.series.isVisible.returns(true);
+        this.options = {
+            styles: { normal: { style: "normal" }, hover: { style: "hover" }, selection: { style: "selection" } },
+            label: {},
+            visible: true,
+            widgetType: "chart",
+            symbol: "circle"
+        };
+        this.data = { argument: 1, value: 1, lowError: 2, highError: 4 };
+        this.series.getVisibleArea = function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
+        this.series.getValueAxis.returns({
+            getTranslator: function() {
+                return new MockTranslator({
+                    translate: { "null": 0, 1: 22, 2: 23, 3: 24, 4: 25 }
+                });
+            }
+        });
+        this.series.getArgumentAxis.returns({
+            getTranslator: function() {
+                return new MockTranslator({
+                    translate: { "null": 0, 1: 11, 2: 12, 3: 13, 4: 14 }
+                });
+            }
+        });
+
+        this.groups = {
+            markers: this.group,
+            errorBars: this.renderer.g()
+        };
+    }
+});
+
+QUnit.test("Draw point with some style, point in the visible area after it was in invisible area and wasn't drawn", function(assert) {
+    var point = createPoint(this.series, this.data, this.options);
+    point.translate();
+    point.fullState = 2;
+    point.applyView();
+    point.draw(this.renderer, this.groups);
+
+    assert.deepEqual(point.graphic.stub("attr").firstCall.args[0].style, "selection");
+});
+
+QUnit.test("T333557", function(assert) {
+    this.options.styles.normal = { style: 'normal', fill: 'red' };
+    var point = createPoint(this.series, this.data, this.options);
+    point.translate();
+    point.draw(this.renderer, this.groups);
+
+    // act
+    point.fullState = 1;
+    point.applyView();
+    point.fullState = 0;
+    point.applyView();
+    this.options.styles.normal = { style: 'newStyle', fill: 'green' };
+
+    point.update(this.data, this.options);
+    point.draw(this.renderer, this.groups);
+
+    // assert
+    assert.deepEqual(point.graphic.stub("attr").lastCall.args[0].style, "newStyle");
+    assert.deepEqual(point.graphic.stub("attr").lastCall.args[0].fill, "green");
+});
+
+QUnit.test("Draw point without state", function(assert) {
+    var point = createPoint(this.series, this.data, this.options);
+    point.translate();
+    point.draw(this.renderer, this.groups);
+
+    // assert
+    assert.deepEqual(point.graphic.stub("attr").firstCall.args[0].style, "normal");
+});
+
+QUnit.test("Release hover state", function(assert) {
+    var point = createPoint(this.series, this.data, this.options);
+    point.translate();
+    point.draw(this.renderer, this.groups);
+    // act
+    point.releaseHoverState();
+    // assert
+    assert.ok(point.graphic.stub("toBackground").calledOnce);
+});
+
+QUnit.test("Release hover state check background when state is selected", function(assert) {
+    var point = createPoint(this.series, this.data, this.options);
+    point.translate();
+    point.draw(this.renderer, this.groups);
+    point.fullState = 2;
+
+    point.releaseHoverState();
+
+    assert.ok(!point.graphic.stub("toBackground").called);
+});
+
 QUnit.module("Event binding", {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
@@ -1211,17 +1183,6 @@ QUnit.test("Point clear selection event passed to series", function(assert) {
     // assert
     assert.ok(this.series.deselectPoint.calledOnce);
     assert.strictEqual(this.series.deselectPoint.lastCall.args[0], point, "Point selection should be cleared on series level");
-});
-
-QUnit.test("Point hover passed to series", function(assert) {
-    var point = createPoint(this.series, this.data, this.options);
-
-    // act
-    point.hover();
-
-    // assert
-    assert.ok(this.series.hoverPoint.calledOnce);
-    assert.strictEqual(this.series.hoverPoint.lastCall.args[0], point);
 });
 
 QUnit.test("Point clear hover passed to series", function(assert) {

@@ -10,7 +10,7 @@
     background-color: transparent;
     opacity: 1;
     overflow: hidden;
-    .transition(~"opacity 0s linear");
+    transition: opacity 0s linear;
 
     .dx-rtl & {
         padding-left: 0;
@@ -20,7 +20,7 @@
 
 .dx-scrollable-scroll.dx-state-invisible {
     opacity: 0;
-    .transition(~"opacity .5s linear 1s");
+    transition: opacity .5s linear 1s;
 }
 
 .dx-scrollable-scroll-content {
@@ -51,20 +51,20 @@
 
     &.dx-scrollbar-hoverable {
         width: @SCROLLBAR_SIZE_THIN;
-        .transition(~"width .2s linear .15s, background-color .2s linear .15s");
+        transition: width .2s linear .15s, background-color .2s linear .15s;
 
         .dx-scrollable-scroll {
-            .transition(~"background-color .5s linear 1s, width .2s linear 150ms");
+            transition: background-color .5s linear 1s, width .2s linear 150ms;
 
             .dx-scrollable-scroll-content {
-                .transition(~"box-shadow .15s linear .15s, background-color .15s linear .15s");
+                transition: box-shadow .15s linear .15s, background-color .15s linear .15s;
             }
 
             &.dx-state-invisible {
-                .transition(~"background-color .5s linear 1s, width .2s linear .15s");
+                transition: background-color .5s linear 1s, width .2s linear .15s;
 
                 .dx-scrollable-scroll-content {
-                    .transition(~"box-shadow .5s linear 1s, background-color .5s linear 1s");
+                    transition: box-shadow .5s linear 1s, background-color .5s linear 1s;
                 }
             }
         }
@@ -86,20 +86,20 @@
 
     &.dx-scrollbar-hoverable {
         height: @SCROLLBAR_SIZE_THIN;
-        .transition(~"height .2s linear .15s, background-color .2s linear .15s");
+        transition: height .2s linear .15s, background-color .2s linear .15s;
 
         .dx-scrollable-scroll {
-            .transition(~"background-color .5s linear 1s, height .2s linear .15s");
+            transition: background-color .5s linear 1s, height .2s linear .15s;
 
             .dx-scrollable-scroll-content {
-                .transition(~"box-shadow .15s linear .15s, background-color .15s linear .15s");
+                transition: box-shadow .15s linear .15s, background-color .15s linear .15s;
             }
 
             &.dx-state-invisible {
-                .transition(~"background-color .5s linear 1s, height .2s linear .15s");
+                transition: background-color .5s linear 1s, height .2s linear .15s;
 
                 .dx-scrollable-scroll-content {
-                    .transition(~"box-shadow .5s linear 1s, background-color .5s linear 1s");
+                    transition: box-shadow .5s linear 1s, background-color .5s linear 1s;
                 }
             }
         }
@@ -136,7 +136,7 @@
     }
 }
 
-.dx-scrollable-customizable-scrollbars {
+.dx-scrollable-customizable-scrollbars .dx-scrollable-container {
     /*IE*/
     -ms-scrollbar-base-color: @scrollable-scrollbar-custom-bg;
     -ms-scrollbar-arrow-color: @scrollable-scrollbar-arrow-custom-bg;
@@ -175,22 +175,22 @@
     }
 
     ::-webkit-scrollbar-button:horizontal:decrement {
-        background: @sctollbar-button-horizontal-decrement-bg;
+        background: @scrollbar-button-horizontal-decrement-bg;
         background-position: center;
     }
 
     ::-webkit-scrollbar-button:horizontal:increment {
-        background: @sctollbar-button-horizontal-increment-bg;
+        background: @scrollbar-button-horizontal-increment-bg;
         background-position: center;
     }
 
     ::-webkit-scrollbar-button:vertical:decrement {
-        background: @sctollbar-button-vertical-decrement-bg;
+        background: @scrollbar-button-vertical-decrement-bg;
         background-position: 3px 5px;
     }
 
     ::-webkit-scrollbar-button:vertical:increment {
-        background: @sctollbar-button-vertical-increment-bg;
+        background: @scrollbar-button-vertical-increment-bg;
         background-position: 3px 5px;
     }
 }

@@ -19,12 +19,19 @@
     @MATERIAL_SWITCH_ON_OFF_ADDING_PADDING: 0;
 }
 
+@MATERIAL_SWITCH_SHADOW_BLUR_RADIUS: 10px;
 @MATERIAL_SWITCH_TRANSITION: all .4s cubic-bezier(0.23, 1, 0.32, 1);
-@MATERIAL_ON_VALUE_SWITCH_SHADOW: 0 0 0 10px fade(@switch-handle-on-bg, 10%);
-@MATERIAL_SWITCH_SHADOW: 0 0 0 10px fade(@base-text-color, 10%);
+@MATERIAL_ON_VALUE_SWITCH_SHADOW: 0 0 0 @MATERIAL_SWITCH_SHADOW_BLUR_RADIUS fade(@switch-handle-on-bg, 10%);
+@MATERIAL_SWITCH_SHADOW: 0 0 0 @MATERIAL_SWITCH_SHADOW_BLUR_RADIUS fade(@base-text-color, 10%);
 
 .dx-switch-wrapper {
     position: relative;
+    padding: @MATERIAL_SWITCH_SHADOW_BLUR_RADIUS;
+    box-sizing: content-box;
+    left: -@MATERIAL_SWITCH_SHADOW_BLUR_RADIUS;
+    top: -@MATERIAL_SWITCH_SHADOW_BLUR_RADIUS;
+    overflow: hidden;
+    vertical-align: middle;
 }
 
 .dx-switch {
@@ -45,8 +52,8 @@
     &.dx-state-active,
     &.dx-state-focused {
         .dx-switch-handle:before {
-            .box-shadow(@MATERIAL_SWITCH_SHADOW);
-            .border-radius(50%)
+            box-shadow: @MATERIAL_SWITCH_SHADOW;
+            border-radius: 50%;
         }
     }
 }
@@ -55,23 +62,23 @@
 .dx-switch {
     &.dx-state-readonly.dx-state-focused {
         .dx-switch-handle:before {
-            .box-shadow(@MATERIAL_SWITCH_SHADOW);
-            .border-radius(50%)
+            box-shadow: @MATERIAL_SWITCH_SHADOW;
+            border-radius: 50%;
         }
     }
 }
 
 .dx-switch-container {
-    overflow: visible;
-    margin-top: -3px;
     height: @MATERIAL_SWITCH_HEIGHT;
+    overflow: visible;
+    position: relative;
 
     &:before {
         position: absolute;
         content: '';
         width: 100%;
         height: 14px;
-        .border-radius(500px);
+        border-radius: 500px;
         background-color: @switch-bg;
         margin: 3px 0;
     }
@@ -113,8 +120,8 @@
     width: @MATERIAL_SWITCH_HEIGHT;
     height: @MATERIAL_SWITCH_HEIGHT;
     background-color: @switch-handle-off-bg;
-    .box-shadow(@MATERIAL_SWITCH_HANDLE_SHADOW);
-    .border-radius(@switch-handle-border-radius);
+    box-shadow: @MATERIAL_SWITCH_HANDLE_SHADOW;
+    border-radius: @switch-handle-border-radius;
 
     &:before {
         display: block;
@@ -122,8 +129,8 @@
         width: 100%;
         height: 100%;
         background-color: @switch-handle-off-bg;
-        .border-radius(@switch-handle-border-radius);
-        .transition(@MATERIAL_SWITCH_TRANSITION);
+        border-radius: @switch-handle-border-radius;
+        transition: @MATERIAL_SWITCH_TRANSITION;
     }
 }
 
@@ -139,8 +146,8 @@
     &.dx-state-active,
     &.dx-state-focused {
         .dx-switch-handle:before {
-            .box-shadow(@MATERIAL_ON_VALUE_SWITCH_SHADOW);
-            .border-radius(50%)
+            box-shadow: @MATERIAL_ON_VALUE_SWITCH_SHADOW;
+            border-radius: 50%;
         }
     }
 }

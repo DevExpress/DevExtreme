@@ -3299,7 +3299,7 @@ QUnit.test("Header Filter with calculateFilterExpression", function(assert) {
 
     // assert
     filter = that.getCombinedFilter();
-    assert.strictEqual(filter[2], "customFilterValue3", "filter values of the first column");
+    assert.strictEqual(filter[2], "customFilterValue2", "filter values of the first column");
 });
 
 QUnit.test("Apply header filter", function(assert) {

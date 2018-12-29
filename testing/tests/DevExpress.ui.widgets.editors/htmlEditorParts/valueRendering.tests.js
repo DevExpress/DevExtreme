@@ -4,6 +4,7 @@ import "ui/html_editor";
 import "ui/html_editor/converters/markdown";
 
 const CONTENT_CLASS = "dx-htmleditor-content";
+const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
 
 function getSelector(className) {
     return `.${className}`;
@@ -11,7 +12,16 @@ function getSelector(className) {
 
 const { test } = QUnit;
 
-QUnit.module("Value as HTML markup", () => {
+const moduleConfig = {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: () => {
+        this.clock.restore();
+    }
+};
+
+QUnit.module("Value as HTML markup", moduleConfig, () => {
     test("show placeholder is value undefined", (assert) => {
         const instance = $("#htmlEditor").dxHtmlEditor({
                 placeholder: "test placeholder"
@@ -33,12 +43,56 @@ QUnit.module("Value as HTML markup", () => {
         assert.equal(markup, "<h1>Hi!</h1><p>Test</p>");
     });
 
+    test("render transclude content", (assert) => {
+        assert.expect(4);
+        const instance = $("#htmlEditor")
+            .html("<h1>Hi!</h1><p>Test</p>")
+            .dxHtmlEditor()
+            .dxHtmlEditor("instance");
+        const $element = instance.$element();
+        const markup = $element.find(getSelector(CONTENT_CLASS)).html();
+        const updateContentTask = instance._updateContentTask;
+
+        if(updateContentTask) {
+            const taskPromise = updateContentTask && updateContentTask.promise;
+
+            assert.ok(true, "There is a task that update the value with a transcluded content");
+
+            taskPromise.then(() => {
+                assert.ok(true, "Update value task finished");
+            });
+        }
+
+        this.clock.tick();
+
+        assert.equal(instance.option("value"), "<h1>Hi!</h1><p>Test</p>");
+        assert.equal(markup, "<h1>Hi!</h1><p>Test</p>");
+    });
+
+    test("render transclude content and predefined value", (assert) => {
+        const instance = $("#htmlEditor")
+                .html("<h1>Hi!</h1><p>Test</p>")
+                .dxHtmlEditor({
+                    value: "<p>Test1</p><p>Test2</p>"
+                })
+                .dxHtmlEditor("instance"),
+            $element = instance.$element(),
+            markup = $element.find(getSelector(CONTENT_CLASS)).html();
+
+        this.clock.tick();
+
+        assert.equal(instance.option("value"), "<p>Test1</p><p>Test2</p>");
+        assert.equal(markup, "<p>Test1</p><p>Test2</p>");
+    });
+
     test("change value by user", (assert) => {
         const done = assert.async();
+        const expectedValue = "<p>Hi! <strong>Test.</strong></p><p>New line</p>";
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
                 onValueChanged: (e) => {
-                    assert.equal(e.value, "<p>Hi! <strong>Test.</strong></p>");
+                    assert.equal(e.value, expectedValue);
+                    assert.equal($(e.element).find(`.${HTML_EDITOR_SUBMIT_ELEMENT_CLASS}`).val(), expectedValue);
                     done();
                 }
             })
@@ -47,7 +101,7 @@ QUnit.module("Value as HTML markup", () => {
         instance
             .$element()
             .find(getSelector(CONTENT_CLASS))
-            .html("<p>Hi! <strong>Test.</strong></p>");
+            .html("<p>Hi! <strong>Test.</strong></p><p>New line</p>");
     });
 
     test("value after change valueType", (assert) => {
@@ -55,10 +109,10 @@ QUnit.module("Value as HTML markup", () => {
         const instance = $("#htmlEditor")
             .dxHtmlEditor({
                 valueType: "markdown",
-                value: "Hi! **Test.**",
+                value: "Hi! **Test. 123**\nNew line",
                 onValueChanged: (e) => {
                     if(e.component.option("valueType") === "html") {
-                        assert.equal(e.value, "<p>Hi! <strong>Test.</strong></p>");
+                        assert.equal(e.value, "<p>Hi! <strong>Test. 123</strong></p><p>New line</p>", "value is OK");
                         done();
                     }
                 }
@@ -86,6 +140,38 @@ QUnit.module("Value as HTML markup", () => {
         const markup = $element.find(getSelector(CONTENT_CLASS)).html();
 
         assert.equal(markup, '<p><span style="font-family: Terminal;">Test</span></p>');
+    });
+
+    test("editor should preserve break lines", (assert) => {
+        const expectedMarkup = "<p><br></p><p><br></p><h1>Hi!</h1><p>Te</p><p>st</p>";
+        const instance = $("#htmlEditor")
+            .html("<br><br><h1>Hi!</h1><p>Te<br>st</p>")
+            .dxHtmlEditor()
+            .dxHtmlEditor("instance");
+
+        this.clock.tick();
+
+        const $element = instance.$element();
+        const markup = $element.find(getSelector(CONTENT_CLASS)).html();
+
+        assert.equal(instance.option("value"), expectedMarkup);
+        assert.equal(markup, expectedMarkup);
+    });
+
+    test("editor shouldn't create unexpected break lines", (assert) => {
+        const expectedMarkup = "<p>hi</p><ul><li>test</li></ul>";
+        const instance = $("#htmlEditor")
+            .html("<p>hi</p><ul><li>test</li></ul>")
+            .dxHtmlEditor()
+            .dxHtmlEditor("instance");
+
+        this.clock.tick();
+
+        const $element = instance.$element();
+        const markup = $element.find(getSelector(CONTENT_CLASS)).html();
+
+        assert.equal(instance.option("value"), expectedMarkup);
+        assert.equal(markup, expectedMarkup);
     });
 });
 
@@ -148,14 +234,23 @@ QUnit.module("Custom blots rendering", {
     }
 }, () => {
     test("render image", (assert) => {
-        const expected = "<p><img src='http://test.com/test.jpg' width='100px' height='100px' alt='altering'></p>";
+        const testTag = /<img([\w\W]+?)/;
+        const testSrc = /src="http:\/\/test.com\/test.jpg"/g;
+        const testAlt = /alt="altering"/g;
+        const testWidth = /width="100"/g;
+        const testHeight = /height="100"/g;
+
         const instance = $("#htmlEditor")
-        .dxHtmlEditor({
-            onValueChanged: (e) => {
-                assert.equal(e.value, expected, "markup contains an image");
-            }
-        })
-        .dxHtmlEditor("instance");
+            .dxHtmlEditor({
+                onValueChanged: (e) => {
+                    assert.ok(testTag.test(e.value));
+                    assert.ok(testSrc.test(e.value));
+                    assert.ok(testAlt.test(e.value));
+                    assert.ok(testWidth.test(e.value));
+                    assert.ok(testHeight.test(e.value));
+                }
+            })
+            .dxHtmlEditor("instance");
 
         instance.insertEmbed(0, "extendedImage", { src: "http://test.com/test.jpg", width: 100, height: 100, alt: "altering" });
         this.clock.tick();
@@ -163,27 +258,27 @@ QUnit.module("Custom blots rendering", {
 
     test("render link", (assert) => {
         const instance = $("#htmlEditor")
-        .dxHtmlEditor({
-            value: "test",
-            onValueChanged: (e) => {
-                assert.equal(e.value, '<p><a href="http://test.com" target="_blank">test</a>test</p>', "markup contains an image");
-            }
-        })
-        .dxHtmlEditor("instance");
+            .dxHtmlEditor({
+                value: "test",
+                onValueChanged: (e) => {
+                    assert.equal(e.value, '<a href="http://test.com" target="_blank">test</a>test', "markup contains an image");
+                }
+            })
+            .dxHtmlEditor("instance");
 
         instance.setSelection(0, 0);
         instance.insertText(0, "test", "link", { href: "http://test.com", target: true });
     });
 
     test("render variable", (assert) => {
-        const expected = "<p><span class='dx-variable' data-var-start-esc-char=# data-var-end-esc-char=# data-var-value=Test><span>#Test#</span></span></p>";
+        const expected = '<span class="dx-variable" data-var-start-esc-char="#" data-var-end-esc-char="#" data-var-value="Test"><span contenteditable="false">#Test#</span></span>';
         const instance = $("#htmlEditor")
-        .dxHtmlEditor({
-            onValueChanged: (e) => {
-                assert.equal(e.value, expected, "markup contains a variable");
-            }
-        })
-        .dxHtmlEditor("instance");
+            .dxHtmlEditor({
+                onValueChanged: (e) => {
+                    assert.equal(e.value.replace(/\uFEFF/g, ""), expected, "markup contains a variable");
+                }
+            })
+            .dxHtmlEditor("instance");
 
         instance.insertEmbed(0, "variable", { escapeChar: "#", value: "Test" });
     });

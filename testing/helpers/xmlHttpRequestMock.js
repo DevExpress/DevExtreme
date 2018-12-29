@@ -11,6 +11,10 @@ window.XMLHttpRequestMock = function() {
     var PROGRESS_INTERVAL = this.PROGRESS_INTERVAL = PROGRESS_INTERVAL_DEFAULT;
     var STATUS = this.STATUS = 200;
 
+    this.startSeries = function() {
+        this.changeTimeouts(100, 100);
+    },
+
     this.changeTimeouts = function(loadTimeout, progressInterval) {
         LOAD_TIMEOUT = this.LOAD_TIMEOUT = loadTimeout;
         PROGRESS_INTERVAL = this.PROGRESS_INTERVAL = progressInterval;

@@ -141,6 +141,10 @@ var DataGrid = Widget.inherit({
                 },
                 options: {
                     grouping: {
+                        /**
+                         * @name dxDataGridOptions.grouping.expandMode
+                         * @default 'rowClick' @for mobile_devices
+                         */
                         expandMode: "rowClick"
                     }
                 }
@@ -241,11 +245,7 @@ var DataGrid = Widget.inherit({
     },
 
     focus: function(element) {
-        this.callBase();
-
-        if(typeUtils.isDefined(element)) {
-            this.getController("keyboardNavigation").focus(element);
-        }
+        this.getController("keyboardNavigation").focus(element);
     }
 });
 

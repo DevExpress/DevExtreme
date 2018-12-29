@@ -114,7 +114,7 @@ QUnit.module("options", {
         fx.off = true;
 
         this.items = [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
-                        { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
+            { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
 
         this.$tabPanel = $("#tabPanel").dxTabPanel({
             items: this.items
@@ -223,7 +223,7 @@ QUnit.module("action handlers", {
 
         this.$tabPanel = $("#tabPanel").dxTabPanel({
             dataSource: [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
-                        { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }],
+                { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }],
 
             onItemClick: function(e) {
                 QUnit.assert.ok(true, "option 'onItemClick' successfully passed to nested multiview widget and raised on click");
@@ -356,7 +356,7 @@ QUnit.module("events handlers", {
 
             that.$tabPanel = $("#tabPanel").dxTabPanel({
                 dataSource: [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
-                            { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }],
+                    { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }],
                 onInitialized: function(e) {
                     spies.titleClick && e.component.on("titleClick", that.titleClickSpy);
                     spies.titleHold && e.component.on("titleHold", that.titleHoldSpy);
@@ -452,7 +452,7 @@ QUnit.test("click on dxTabPanel should not scroll page to the tabs", function(as
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
         var items = [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
-                        { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
+            { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }];
 
         fx.off = true;
         this.$element = $("#tabPanel").dxTabPanel({
@@ -650,5 +650,22 @@ QUnit.module("Live Update", {
         assert.equal(this.titleRenderedSpy.callCount, 1, "only one title is updated after push");
         assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, "2 Inserted", "check added item");
+    });
+
+    QUnit.test("should not rerender items if the badge/disabled/visible changed", function(assert) {
+        var tabPanel = $("#tabPanel").dxTabPanel({
+                items: [{ title: "title" }],
+                itemTemplate: function() { return $("<div id='itemContent'>"); }
+            }).dxTabPanel("instance"),
+            contentElement = $('#itemContent').get(0);
+
+        tabPanel.option("items[0].badge", 'badge text');
+        tabPanel.option("items[0].disabled", true);
+        tabPanel.option("items[0].visible", false);
+
+        assert.strictEqual(tabPanel.option('items[0].badge'), 'badge text');
+        assert.strictEqual(tabPanel.option('items[0].disabled'), true);
+        assert.strictEqual(tabPanel.option('items[0].visible'), false);
+        assert.strictEqual(contentElement, $('#itemContent').get(0));
     });
 });

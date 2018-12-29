@@ -1,6 +1,7 @@
 var $ = require("jquery"),
     isFunction = require("core/utils/type").isFunction,
-    svgCreator = require("exporter").svg.creator;
+    svgCreator = require("exporter").svg.creator,
+    svgUtils = require("core/utils/svg");
 
 function setupCanvasStub() {
     // Blob
@@ -88,7 +89,7 @@ QUnit.test("getData. markup with image", function(assert) {
 
     // arrange. act
     var done = assert.async(),
-        imageHtml = "<image xlink:href=\"../../testing/content/LightBlueSky.jpg\" width=\"300\" height=\"200\"></image>",
+        imageHtml = "<image xlink:href=\"../../testing/content/exporterTestsContent/test-image.png\" width=\"300\" height=\"200\"></image>",
         testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>" + imageHtml + "</svg>",
         deferred = svgCreator.getData(testingMarkup, {});
 
@@ -96,7 +97,48 @@ QUnit.test("getData. markup with image", function(assert) {
     $.when(deferred).done(function(blob) {
         try {
             // assert
-            assert.ok(blob.arrayBuffer[0].indexOf("data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD") !== -1, "Image href was replaced on dataURI");
+            assert.ok(blob.arrayBuffer[0].indexOf("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1") !== -1, "Image href was replaced on dataURI");
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("getData. correct process two images with similar href", function(assert) {
+    if(!checkForBlob.call(this, assert)) return;
+
+    // arrange. act
+    var done = assert.async(),
+        imageHtml = "<image xlink:href=\"../../testing/content/exporterTestsContent/test-image.png\" width=\"300\" height=\"200\"></image><image xlink:href=\"../../testing/content/exporterTestsContent/test-image.png.png\" width=\"300\" height=\"200\"></image>",
+        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>" + imageHtml + "</svg>",
+        deferred = svgCreator.getData(testingMarkup, {});
+
+    assert.expect(2);
+    $.when(deferred).done(function(blob) {
+        try {
+            // assert
+            assert.ok(blob.arrayBuffer[0].indexOf("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/j") !== -1);
+            assert.ok(blob.arrayBuffer[0].indexOf("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2B") !== -1);
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("getData. markup with image with href", function(assert) {
+    if(!checkForBlob.call(this, assert)) return;
+
+    // arrange. act
+    var done = assert.async(),
+        imageHtml = "<image href=\"../../testing/content/exporterTestsContent/test-image.png\" width=\"300\" height=\"200\"></image>",
+        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>" + imageHtml + "</svg>",
+        deferred = svgCreator.getData(testingMarkup, {});
+
+    assert.expect(1);
+    $.when(deferred).done(function(blob) {
+        try {
+            // assert
+            assert.ok(blob.arrayBuffer[0].indexOf("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1") !== -1, "Image href was replaced on dataURI");
         } finally {
             done();
         }
@@ -119,6 +161,22 @@ QUnit.test("getData. markup with background-color", function(assert) {
         } finally {
             done();
         }
+    });
+});
+
+QUnit.test("getData. markup with background-color. Source element hasn't background color", function(assert) {
+    if(!checkForBlob.call(this, assert)) return;
+
+    // arrange. act
+    var done = assert.async(),
+        testingMarkup = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'><text>test</text></svg>",
+        testingElement = svgUtils.getSvgElement(testingMarkup),
+        originalBackgroundColor = $(testingElement).css("backgroundColor"),
+        deferred = svgCreator.getData(testingElement, { backgroundColor: "#aaa" });
+
+    $.when(deferred).done(function() {
+        assert.strictEqual($(testingElement).css("backgroundColor"), originalBackgroundColor);
+        done();
     });
 });
 

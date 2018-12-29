@@ -236,7 +236,9 @@ var getDatesDifferences = function(date1, date2) {
 
 function addDateInterval(value, interval, dir) {
     var result = new Date(value.getTime()),
-        intervalObject = isString(interval) ? getDateIntervalByString(interval.toLowerCase()) : interval;
+        intervalObject = isString(interval) ? getDateIntervalByString(interval.toLowerCase())
+            : typeUtils.isNumeric(interval) ? convertMillisecondsToDateUnits(interval)
+                : interval;
     if(intervalObject.years) {
         result.setFullYear(result.getFullYear() + intervalObject.years * dir);
     }
@@ -521,6 +523,16 @@ var dateInRange = function(date, min, max, format) {
     return normalizeDate(date, min, max) === date;
 };
 
+var dateTimeFromDecimal = function(number) {
+    var hours = Math.floor(number),
+        minutes = (number % 1) * 60;
+
+    return {
+        hours: hours,
+        minutes: minutes
+    };
+};
+
 var normalizeDate = function(date, min, max) {
     var normalizedDate = date;
 
@@ -602,6 +614,7 @@ var dateUtils = {
     getDatesDifferences: getDatesDifferences,
     correctDateWithUnitBeginning: correctDateWithUnitBeginning,
     trimTime: trimTime,
+    dateTimeFromDecimal: dateTimeFromDecimal,
 
     addDateInterval: addDateInterval,
     addInterval: addInterval,

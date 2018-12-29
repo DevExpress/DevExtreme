@@ -4,6 +4,9 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     fx = require("animation/fx");
 
+var TREEVIEW_NODE_CONTAINER_CLASS = "dx-treeview-node-container",
+    TREEVIEW_NODE_CONTAINER_OPENED_CLASS = "dx-treeview-node-container-opened";
+
 QUnit.module("Expanded items", {
     beforeEach: function() {
         this.checkFunctionArguments = function(assert, actualArgs, expectedArgs) {
@@ -33,7 +36,7 @@ QUnit.test("Some item has'expanded' field", function(assert) {
 
 QUnit.test("expansion by itemData", function(assert) {
     var data = [
-        { id: 1, text: "Item 1", expanded: false, items: [{ id: 11, text: "Item 11" }] }, { id: 12, text: "Item 12" }
+            { id: 1, text: "Item 1", expanded: false, items: [{ id: 11, text: "Item 11" }] }, { id: 12, text: "Item 12" }
         ],
         treeView = initTree({ items: data }).dxTreeView("instance");
 
@@ -375,6 +378,33 @@ QUnit.test("expand parent items in recursive case", function(assert) {
     var nodes = treeView.getNodes();
     assert.ok(nodes[0].expanded, "root node is expanded");
     assert.ok(nodes[0].children[0].expanded, "child node is expanded");
+});
+
+QUnit.test("Expand parent items in markup after expand of rendered nested child (T671960)", function(assert) {
+    var items = [{
+            text: "1",
+            id: 1,
+            items: [{
+                text: "11",
+                id: 11,
+                items: [{
+                    text: "111",
+                    id: 111
+                }]
+            }]
+        }],
+        $treeView = initTree({
+            items: items
+        }),
+        treeView = $treeView.dxTreeView("instance");
+
+    treeView.expandAll();
+    treeView.collapseAll();
+    treeView.expandItem(111);
+
+    var nodeElements = $treeView.find("." + TREEVIEW_NODE_CONTAINER_CLASS);
+    assert.ok(nodeElements.eq(1).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), "item 11");
+    assert.ok(nodeElements.eq(2).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), "item 111");
 });
 
 QUnit.test("expand childless item in recursive case", function(assert) {

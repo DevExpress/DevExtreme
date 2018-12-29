@@ -1,47 +1,40 @@
-var $ = require("../core/renderer"),
-    Color = require("../color"),
-    isFunction = require("../core/utils/type").isFunction,
-    svgUtils = require("../core/utils/svg"),
-    iteratorUtils = require("../core/utils/iterator"),
-    extend = require("../core/utils/extend").extend,
-    domAdapter = require("../core/dom_adapter"),
-    domUtils = require("../core/utils/dom"),
-    windowUtils = require("../core/utils/window"),
-    window = windowUtils.getWindow(),
-    camelize = require("../core/utils/inflector").camelize,
-    deferredUtils = require("../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
+import $ from "../core/renderer";
+import Color from "../color";
+import { isFunction, isPromise } from "../core/utils/type";
+import svgUtils from "../core/utils/svg";
+import iteratorUtils from "../core/utils/iterator";
+import { extend } from "../core/utils/extend";
+import domAdapter from "../core/dom_adapter";
+import domUtils from "../core/utils/dom";
+import windowUtils from "../core/utils/window";
+const window = windowUtils.getWindow();
+import { camelize } from "../core/utils/inflector";
+import { Deferred } from "../core/utils/deferred";
 
-    _math = Math,
-    PI = _math.PI,
-    _min = _math.min,
-    _abs = _math.abs,
-    _sqrt = _math.sqrt,
-    _pow = _math.pow,
-    _atan2 = _math.atan2,
-    _cos = _math.cos,
-    _sin = _math.sin,
+const _math = Math;
+const PI = _math.PI;
+const _min = _math.min;
+const _abs = _math.abs;
+const _sqrt = _math.sqrt;
+const _pow = _math.pow;
+const _atan2 = _math.atan2;
+const _cos = _math.cos;
+const _sin = _math.sin;
+const _each = iteratorUtils.each;
+const _number = Number;
 
-    _each = iteratorUtils.each,
-    _number = Number,
-
-    IMAGE_QUALITY = 1,
-    TEXT_DECORATION_LINE_WIDTH_COEFF = 0.05,
-    DEFAULT_FONT_SIZE = "10px",
-    DEFAULT_FONT_FAMILY = "sans-serif",
-    DEFAULT_TEXT_COLOR = "#000",
-
-    clipPaths,
-    imageDeferreds,
-    patterns,
-    filters;
+const IMAGE_QUALITY = 1;
+const TEXT_DECORATION_LINE_WIDTH_COEFF = 0.05;
+const DEFAULT_FONT_SIZE = "10px";
+const DEFAULT_FONT_FAMILY = "sans-serif";
+const DEFAULT_TEXT_COLOR = "#000";
 
 function createCanvas(width, height, margin) {
     var canvas = $("<canvas>")[0];
 
     canvas.width = width + margin * 2;
     canvas.height = height + margin * 2;
+    canvas.hidden = true;
 
     return canvas;
 }
@@ -133,7 +126,7 @@ function drawRect(context, options) {
     }
 }
 
-function drawImage(context, options) {
+function drawImage(context, options, shared) {
     var d = new Deferred(),
         image = new window.Image();
 
@@ -142,7 +135,7 @@ function drawImage(context, options) {
 
         context.globalAlpha = options.globalAlpha;
         transformElement(context, options);
-        clipElement(context, options);
+        clipElement(context, options, shared);
 
         context.drawImage(image, options.x, options.y, options.width, options.height);
 
@@ -151,14 +144,13 @@ function drawImage(context, options) {
     };
 
     image.onerror = function() {
-        // Warning TODO
         d.resolve();
     };
 
-    imageDeferreds.push(d);
-
     image.setAttribute("crossOrigin", "anonymous");
-    image.src = options["xlink:href"];
+    image.src = options["href"] || options["xlink:href"];
+
+    return d;
 }
 
 function drawPath(context, dAttr) {
@@ -246,14 +238,15 @@ function setFontStyle(context, options) {
     context.globalAlpha = options.globalAlpha;
 }
 
-function drawText(context, options) {
+function drawText(context, options, shared) {
     setFontStyle(context, options);
+    applyFilter(context, options, shared);
     options.text && context.fillText(options.text, options.x || 0, options.y || 0);
     strokeElement(context, options, true);
-    drawTextDecoration(context, options);
+    drawTextDecoration(context, options, shared);
 }
 
-function drawTextDecoration(context, options) {
+function drawTextDecoration(context, options, shared) {
     if(!options.textDecoration || options.textDecoration === "none") {
         return;
     }
@@ -277,16 +270,8 @@ function drawTextDecoration(context, options) {
     }
 
     context.rect(x, y, textWidth, lineHeight);
-    fillElement(context, options);
+    fillElement(context, options, shared);
     strokeElement(context, options);
-}
-
-function createClipPath(element) {
-    clipPaths[element.attributes.id.textContent] = element.childNodes[0];
-}
-
-function createPattern(element) {
-    patterns[element.attributes.id.textContent] = element;
 }
 
 function aggregateOpacity(options) {
@@ -309,7 +294,7 @@ function hasTspan(element) {
     return false;
 }
 
-function drawTextElement(childNodes, context, options) {
+function drawTextElement(childNodes, context, options, shared) {
     var lines = [],
         line,
         offset = 0;
@@ -318,13 +303,13 @@ function drawTextElement(childNodes, context, options) {
         var element = childNodes[i];
 
         if(element.tagName === undefined) {
-            drawElement(element, context, options);
+            drawElement(element, context, options, shared);
         } else if(element.tagName === "tspan" || element.tagName === "text") {
             var elementOptions = getElementOptions(element),
                 mergedOptions = extend({}, options, elementOptions);
 
             if(element.tagName === "tspan" && hasTspan(element)) {
-                drawTextElement(element.childNodes, context, mergedOptions);
+                drawTextElement(element.childNodes, context, mergedOptions, shared);
                 continue;
             }
 
@@ -339,6 +324,9 @@ function drawTextElement(childNodes, context, options) {
                 lines.push(line);
             }
 
+            if(elementOptions.y !== undefined) {
+                offset = 0;
+            }
             if(elementOptions.dy !== undefined) {
                 offset += parseFloat(elementOptions.dy);
             }
@@ -374,38 +362,40 @@ function drawTextElement(childNodes, context, options) {
         });
 
         line.elements.forEach(function(element, index) {
-            drawTextElement(element.childNodes, context, line.options[index]);
+            drawTextElement(element.childNodes, context, line.options[index], shared);
         });
 
     });
 }
 
-function drawElement(element, context, parentOptions) {
+function drawElement(element, context, parentOptions, shared) {
     var tagName = element.tagName,
         isText = tagName === "text" || tagName === "tspan" || tagName === undefined,
         isImage = tagName === "image",
         options = extend({}, parentOptions, getElementOptions(element));
 
-    if(options.visibility === "hidden") {
+    if(options.visibility === "hidden" || options["hidden-for-export"]) {
         return;
     }
 
     context.save();
     !isImage && transformElement(context, options);
-    clipElement(context, options);
+    clipElement(context, options, shared);
     aggregateOpacity(options);
+
+    let promise;
 
     context.beginPath();
     switch(element.tagName) {
         case undefined:
-            drawText(context, options);
+            drawText(context, options, shared);
             break;
         case "text":
         case "tspan":
-            drawTextElement(element.childNodes, context, options);
+            drawTextElement(element.childNodes, context, options, shared);
             break;
         case "image":
-            drawImage(context, options);
+            promise = drawImage(context, options, shared);
             break;
         case "path":
             drawPath(context, options.d);
@@ -419,22 +409,23 @@ function drawElement(element, context, parentOptions) {
             break;
     }
 
-    applyFilter(context, options);
-
     if(!isText) {
-        fillElement(context, options);
+        applyFilter(context, options, shared);
+        fillElement(context, options, shared);
         strokeElement(context, options);
     }
 
     context.restore();
+
+    return promise;
 }
 
-function applyFilter(context, options) {
+function applyFilter(context, options, shared) {
     var filterOptions,
         id = parseUrl(options.filter);
 
     if(id) {
-        filterOptions = filters && filters[id];
+        filterOptions = shared.filters[id];
 
         if(!filterOptions) {
             filterOptions = {
@@ -468,9 +459,9 @@ function transformElement(context, options) {
     }
 }
 
-function clipElement(context, options) {
+function clipElement(context, options, shared) {
     if(options["clip-path"]) {
-        drawElement(clipPaths[parseUrl(options["clip-path"])], context, {});
+        drawElement(shared.clipPaths[parseUrl(options["clip-path"])], context, {}, shared);
         context.clip();
         delete options["clip-path"];
     }
@@ -510,43 +501,63 @@ function createFilter(element) {
         }
     });
 
-    filters[element.id] = filterOptions;
+    return filterOptions;
 }
 
-function drawCanvasElements(elements, context, parentOptions) {
-    var options;
-    _each(elements, function(_, element) {
+function asyncEach(array, callback, d = new Deferred()) {
+    if(array.length === 0) {
+        return d.resolve();
+    }
+
+    const result = callback(array[0]);
+    function next() {
+        asyncEach(Array.prototype.slice.call(array, 1), callback, d);
+    }
+    if(isPromise(result)) {
+        result.then(next);
+    } else {
+        next();
+    }
+
+    return d;
+}
+
+function drawCanvasElements(elements, context, parentOptions, shared) {
+    return asyncEach(elements, function(element) {
         switch(element.tagName && element.tagName.toLowerCase()) {
             case "g":
-                options = extend({}, parentOptions, getElementOptions(element));
+                const options = extend({}, parentOptions, getElementOptions(element));
 
                 context.save();
 
                 transformElement(context, options);
-                clipElement(context, options);
-                drawCanvasElements(element.childNodes, context, options);
+                clipElement(context, options, shared);
 
-                context.restore();
+                function onDone() {
+                    context.restore();
+                }
+                const d = drawCanvasElements(element.childNodes, context, options, shared);
 
-                break;
+                if(isPromise(d)) {
+                    d.then(onDone);
+                } else {
+                    onDone();
+                }
+                return d;
+
             case "defs":
-                clipPaths = {};
-                patterns = {};
-                filters = {};
-
-                drawCanvasElements(element.childNodes, context);
-                break;
+                return drawCanvasElements(element.childNodes, context, {}, shared);
             case "clippath":
-                createClipPath(element);
+                shared.clipPaths[element.attributes.id.textContent] = element.childNodes[0];
                 break;
             case "pattern":
-                createPattern(element);
+                shared.patterns[element.attributes.id.textContent] = element;
                 break;
             case "filter":
-                createFilter(element);
+                shared.filters[element.id] = createFilter(element);
                 break;
             default:
-                drawElement(element, context, parentOptions);
+                return drawElement(element, context, parentOptions, shared);
         }
     });
 }
@@ -572,27 +583,29 @@ function strokeElement(context, options, isText) {
         context.globalAlpha = options.strokeOpacity;
         context.strokeStyle = stroke;
         isText ? context.strokeText(options.text, options.x, options.y) : context.stroke();
+        context.globalAlpha = 1;
     }
 }
 
-function getPattern(context, fill) {
-    var pattern = patterns[parseUrl(fill)],
+function getPattern(context, fill, shared) {
+    var pattern = shared.patterns[parseUrl(fill)],
         options = getElementOptions(pattern),
         patternCanvas = createCanvas(options.width, options.height, 0),
         patternContext = patternCanvas.getContext("2d");
 
-    drawCanvasElements(pattern.childNodes, patternContext, options);
+    drawCanvasElements(pattern.childNodes, patternContext, options, shared);
 
     return context.createPattern(patternCanvas, "repeat");
 }
 
-function fillElement(context, options) {
+function fillElement(context, options, shared) {
     var fill = options.fill;
 
     if(fill && fill !== "none") {
-        context.fillStyle = fill.search(/url/) === -1 ? fill : getPattern(context, fill);
+        context.fillStyle = fill.search(/url/) === -1 ? fill : getPattern(context, fill, shared);
         context.globalAlpha = options.fillOpacity;
         context.fill();
+        context.globalAlpha = 1;
     }
 }
 
@@ -623,31 +636,25 @@ function getCanvasFromSvg(markup, width, height, backgroundColor, margin) {
 
     context.translate(margin, margin);
 
-    imageDeferreds = [];
     domAdapter.getBody().appendChild(canvas); // for rtl mode
     if(svgElem.attributes.direction) {
         canvas.dir = svgElem.attributes.direction.textContent;
     }
 
     drawBackground(context, width, height, backgroundColor, margin);
-    drawCanvasElements(svgElem.childNodes, context, {});
-
-    domAdapter.getBody().removeChild(canvas);
-
-    return canvas;
-}
-
-function resolveString(string, canvas, mimeType) {
-    when.apply($, imageDeferreds).done(function() {
-        var resultString = getStringFromCanvas(canvas, mimeType);
-        string.resolve(resultString);
+    return drawCanvasElements(svgElem.childNodes, context, {}, {
+        clipPaths: {},
+        patterns: {},
+        filters: {}
+    }).then(() => {
+        domAdapter.getBody().removeChild(canvas);
+        return canvas;
     });
 }
 
 exports.imageCreator = {
     getImageData: function(markup, options) {
         var mimeType = "image/" + options.format,
-            string = new Deferred(),
             width = options.width,
             height = options.height,
             backgroundColor = options.backgroundColor;
@@ -656,26 +663,27 @@ exports.imageCreator = {
             parseAttributes = options.__parseAttributesFn;
         }
 
-        resolveString(string, getCanvasFromSvg(markup, width, height, backgroundColor, options.margin), mimeType);
-
-        return string;
+        const deferred = new Deferred();
+        getCanvasFromSvg(markup, width, height, backgroundColor, options.margin).then(canvas => {
+            deferred.resolve(getStringFromCanvas(canvas, mimeType));
+        });
+        return deferred;
     },
 
     getData: function(markup, options) {
-        var that = this,
-            imageData = exports.imageCreator.getImageData(markup, options),
-            mimeType = "image/" + options.format,
-            data = new Deferred();
+        var that = this;
 
-        when(imageData).done(function(binaryData) {
-            imageData = isFunction(window.Blob) && !options.forceProxy ?
+        const deferred = new Deferred();
+
+        exports.imageCreator.getImageData(markup, options).then(binaryData => {
+            const mimeType = "image/" + options.format;
+            const data = isFunction(window.Blob) && !options.forceProxy ?
                 that._getBlob(binaryData, mimeType) :
                 that._getBase64(binaryData);
-
-            data.resolve(imageData);
+            deferred.resolve(data);
         });
 
-        return data;
+        return deferred;
     },
 
     _getBlob: function(binaryData, mimeType) {
@@ -695,7 +703,7 @@ exports.imageCreator = {
 };
 
 exports.getData = function(data, options, callback) {
-    exports.imageCreator.getData(data, options).done(callback);
+    exports.imageCreator.getData(data, options).then(callback);
 };
 
 exports.testFormats = function(formats) {

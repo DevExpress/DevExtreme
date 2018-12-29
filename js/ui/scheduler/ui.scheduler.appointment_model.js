@@ -79,6 +79,38 @@ var FilterMaker = Class.inherit({
     }
 });
 
+var compareDateWithStartDayHour = function(startDate, endDate, startDayHour, allDay) {
+    var startTime = dateUtils.dateTimeFromDecimal(startDayHour);
+
+    var result = (startDate.getHours() >= startTime.hours && startDate.getMinutes() >= startTime.minutes) ||
+                (endDate.getHours() === startTime.hours && endDate.getMinutes() > startTime.minutes) ||
+                (endDate.getHours() > startTime.hours) ||
+                allDay;
+
+    return result;
+};
+
+var compareDateWithEndDayHour = function(startDate, endDate, startDayHour, endDayHour, allDay, max) {
+    var hiddenInterval = (24 - endDayHour + startDayHour) * 3600000,
+        apptDuration = endDate.getTime() - startDate.getTime(),
+        delta = (hiddenInterval - apptDuration) / (1000 * 60 * 60),
+        apptStartHour = startDate.getHours(),
+        apptStartMinutes = startDate.getMinutes(),
+        result;
+
+    var endTime = dateUtils.dateTimeFromDecimal(endDayHour);
+
+    result = (apptStartHour < endTime.hours) || (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes) || allDay && startDate <= max;
+
+    if(apptDuration < hiddenInterval) {
+        if((apptStartHour > endTime.hours && apptStartMinutes > endTime.minutes) && (delta <= apptStartHour - endDayHour)) {
+            result = false;
+        }
+    }
+
+    return result;
+};
+
 var AppointmentModel = Class.inherit({
 
     _createFilter: function(min, max, remoteFiltering, dateSerializationFormat) {
@@ -201,10 +233,6 @@ var AppointmentModel = Class.inherit({
                 endDate = new Date(dataAccessors.getter.endDate(appointment)),
                 appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, startDayHour, endDayHour),
                 isAllDay = dataAccessors.getter.allDay(appointment),
-                apptStartHour = startDate.getHours(),
-                hiddenInterval = (24 - endDayHour + startDayHour) * 3600000,
-                apptDuration = endDate.getTime() - startDate.getTime(),
-                delta = (hiddenInterval - apptDuration) / (1000 * 60 * 60),
                 useRecurrence = typeUtils.isDefined(dataAccessors.getter.recurrenceRule),
                 recurrenceRule;
 
@@ -237,17 +265,11 @@ var AppointmentModel = Class.inherit({
                 comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
 
             if(result && startDayHour !== undefined) {
-                result = comparableStartDate.getHours() >= startDayHour || comparableEndDate.getHours() >= startDayHour || appointmentTakesAllDay;
+                result = compareDateWithStartDayHour(comparableStartDate, comparableEndDate, startDayHour, appointmentTakesAllDay);
             }
 
             if(result && endDayHour !== undefined) {
-                result = comparableStartDate.getHours() < endDayHour || appointmentTakesAllDay && comparableStartDate <= max;
-
-                if(apptDuration < hiddenInterval) {
-                    if(apptStartHour > endDayHour && (delta <= apptStartHour - endDayHour)) {
-                        result = false;
-                    }
-                }
+                result = compareDateWithEndDayHour(comparableStartDate, comparableEndDate, startDayHour, endDayHour, appointmentTakesAllDay, max);
             }
 
             if(result && useRecurrence && !recurrenceRule) {
@@ -262,6 +284,7 @@ var AppointmentModel = Class.inherit({
     ctor: function(dataSource, dataAccessors) {
         this.setDataAccessors(dataAccessors);
         this.setDataSource(dataSource);
+        this._updatedAppointmentKeys = [];
 
         this._filterMaker = new FilterMaker(dataAccessors);
     },
@@ -269,7 +292,35 @@ var AppointmentModel = Class.inherit({
     setDataSource: function(dataSource) {
         this._dataSource = dataSource;
 
+        this.cleanModelState();
+        this._initStoreChangeHandlers();
         this._filterMaker && this._filterMaker.clearRegistry();
+    },
+
+    _initStoreChangeHandlers: function() {
+        this._dataSource && this._dataSource.store()
+            .on("updating", (function(newItem) {
+                this._updatedAppointment = newItem;
+            }).bind(this));
+
+        this._dataSource && this._dataSource.store()
+            .on("push", function(items) {
+                items.forEach(function(item) {
+                    this._updatedAppointmentKeys.push({ key: this._dataSource.store().key(), value: item.key });
+                }.bind(this));
+            }.bind(this));
+    },
+
+    getUpdatedAppointment: function() {
+        return this._updatedAppointment;
+    },
+    getUpdatedAppointmentKeys: function() {
+        return this._updatedAppointmentKeys;
+    },
+
+    cleanModelState: function() {
+        this._updatedAppointment = null;
+        this._updatedAppointmentKeys = [];
     },
 
     setDataAccessors: function(dataAccessors) {
@@ -422,22 +473,6 @@ var AppointmentModel = Class.inherit({
         return startDateCopy.getTime() !== endDateCopy.getTime();
     },
 
-    _mapDateFieldsDependOnTZ: function(appointment, tz) {
-        function convert(date) {
-            date = dateUtils.makeDate(date);
-
-            var tzDiff = tz.value * 3600000 + tz.clientOffset;
-
-            return new Date(date.getTime() - tzDiff);
-        }
-
-        var startDate = this._dataAccessors.getter.startDate(appointment),
-            endDate = this._dataAccessors.getter.endDate(appointment);
-
-        this._dataAccessors.setter.startDate(appointment, convert(startDate));
-        this._dataAccessors.setter.endDate(appointment, convert(endDate));
-    },
-
     customizeDateFilter: function(dateFilter, timeZoneProcessor) {
         var currentFilter = extend(true, [], dateFilter);
 
@@ -460,9 +495,6 @@ var AppointmentModel = Class.inherit({
     },
 
     add: function(data, tz) {
-        if(tz && tz.value !== undefined) {
-            this._mapDateFieldsDependOnTZ(data, tz);
-        }
         return this._dataSource.store().insert(data).done((function() {
             this._dataSource.load();
         }).bind(this));

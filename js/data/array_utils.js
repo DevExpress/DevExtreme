@@ -45,10 +45,37 @@ function getItems(keyInfo, items, key, groupCount) {
     return items;
 }
 
+function generateHasKeyCache(keyInfo, array) {
+    if(keyInfo.key() && !array._hasKeyMap) {
+        var hasKeyMap = {};
+        for(var i = 0, arrayLength = array.length; i < arrayLength; i++) {
+            hasKeyMap[JSON.stringify(keyInfo.keyOf(array[i]))] = true;
+        }
+
+        array._hasKeyMap = hasKeyMap;
+    }
+}
+
+function getHasKeyCacheValue(array, key) {
+    if(array._hasKeyMap) {
+        return array._hasKeyMap[JSON.stringify(key)];
+    }
+
+    return true;
+}
+
+function setHasKeyCacheValue(array, key) {
+    if(array._hasKeyMap) {
+        array._hasKeyMap[JSON.stringify(key)] = true;
+    }
+}
 
 function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex) {
     batchData.forEach(item => {
         var items = item.type === "insert" ? array : getItems(keyInfo, array, item.key, groupCount);
+
+        generateHasKeyCache(keyInfo, items);
+
         switch(item.type) {
             case "update": update(keyInfo, items, item.key, item.data, true); break;
             case "insert": insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true); break;
@@ -64,12 +91,12 @@ function update(keyInfo, array, key, data, isBatch) {
 
     if(keyExpr) {
         if(hasKey(data, keyExpr) && !keysEqual(keyExpr, key, keyInfo.keyOf(data))) {
-            return rejectedPromise(errors.Error("E4017"));
+            return !isBatch && rejectedPromise(errors.Error("E4017"));
         }
 
         let index = indexByKey(keyInfo, array, key);
         if(index < 0) {
-            return rejectedPromise(errors.Error("E4009"));
+            return !isBatch && rejectedPromise(errors.Error("E4009"));
         }
 
         target = array[index];
@@ -102,8 +129,8 @@ function insert(keyInfo, array, data, index, isBatch) {
             }
             keyValue = obj[keyExpr] = String(new Guid());
         } else {
-            if(!isBatch && array[indexByKey(keyInfo, array, keyValue)] !== undefined) {
-                return rejectedPromise(errors.Error("E4008"));
+            if(array[indexByKey(keyInfo, array, keyValue)] !== undefined) {
+                return !isBatch && rejectedPromise(errors.Error("E4008"));
             }
         }
     } else {
@@ -114,6 +141,9 @@ function insert(keyInfo, array, data, index, isBatch) {
     } else {
         array.push(obj);
     }
+
+    setHasKeyCacheValue(array, keyValue);
+
     if(!isBatch) {
         return trivialPromise(config().useLegacyStoreResult ? data : obj, keyValue);
     }
@@ -131,6 +161,11 @@ function remove(keyInfo, array, key, isBatch) {
 
 function indexByKey(keyInfo, array, key) {
     var keyExpr = keyInfo.key();
+
+    if(!getHasKeyCacheValue(array, key)) {
+        return -1;
+    }
+
     for(var i = 0, arrayLength = array.length; i < arrayLength; i++) {
         if(keysEqual(keyExpr, keyInfo.keyOf(array[i]), key)) {
             return i;

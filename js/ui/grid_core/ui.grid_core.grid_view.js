@@ -6,7 +6,9 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     messageLocalization = require("../../localization/message"),
-    when = require("../../core/utils/deferred").when,
+    deferredUntils = require("../../core/utils/deferred"),
+    when = deferredUntils.when,
+    Deferred = deferredUntils.Deferred,
     domAdapter = require("../../core/dom_adapter"),
     browser = require("../../core/utils/browser");
 
@@ -97,7 +99,7 @@ var ResizingController = modules.ViewController.inherit({
                     }
                 }
 
-                if(changeType && changeType !== "updateSelection" && !isDelayed) {
+                if(changeType && changeType !== "updateSelection" && changeType !== "updateFocusedRow" && !isDelayed) {
                     when(resizeDeferred).done(function() {
                         that._setAriaRowColCount();
                         that.component._fireContentReadyAction();
@@ -185,6 +187,11 @@ var ResizingController = modules.ViewController.inherit({
             if(that._needStretch()) {
                 $rowsTable.get(0).style.width = isBestFit ? "auto" : "";
             }
+            if(browser.msie && parseInt(browser.version) === 11) {
+                $rowsTable.find("." + this.addWidgetPrefix(TABLE_FIXED_CLASS)).each(function() {
+                    this.style.width = isBestFit ? "10px" : "";
+                });
+            }
         } else {
             $element.find("." + this.addWidgetPrefix(TABLE_CLASS)).toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
@@ -260,9 +267,10 @@ var ResizingController = modules.ViewController.inherit({
             }
 
             each(visibleColumns, function(index) {
-                if(this.width !== "auto") {
-                    if(typeUtils.isDefined(this.width)) {
-                        resultWidths[index] = this.width;
+                var width = this.width;
+                if(width !== "auto") {
+                    if(typeUtils.isDefined(width)) {
+                        resultWidths[index] = typeUtils.isNumeric(width) ? parseFloat(width) : width;
                     } else if(!columnAutoWidth) {
                         resultWidths[index] = undefined;
                     }
@@ -484,18 +492,25 @@ var ResizingController = modules.ViewController.inherit({
             return;
         }
 
-        return commonUtils.deferRender(function() {
-            if(that._dataController.isLoaded()) {
-                that._synchronizeColumns();
-            }
-            commonUtils.deferUpdate(function() {
-                commonUtils.deferRender(function() {
-                    commonUtils.deferUpdate(function() {
-                        that._updateDimensionsCore();
+        var prevResult = that._resizeDeferred,
+            result = that._resizeDeferred = new Deferred();
+
+        when(prevResult).always(function() {
+            commonUtils.deferRender(function() {
+                if(that._dataController.isLoaded()) {
+                    that._synchronizeColumns();
+                }
+                commonUtils.deferUpdate(function() {
+                    commonUtils.deferRender(function() {
+                        commonUtils.deferUpdate(function() {
+                            that._updateDimensionsCore();
+                        });
                     });
                 });
-            });
+            }).done(result.resolve).fail(result.reject);
         });
+
+        return result.promise();
     },
     _checkSize: function(checkSize) {
         var $rootElement = this.component.$element();

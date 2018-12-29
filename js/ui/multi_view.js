@@ -124,6 +124,13 @@ var MultiView = CollectionWidget.inherit({
             * @inheritdoc
             */
 
+            /**
+             * @name dxMultiViewOptions.items
+             * @type Array<string, dxMultiViewItem, object>
+             * @fires dxMultiViewOptions.onOptionChanged
+             * @inheritdoc
+             */
+
             _itemAttributes: { role: "tabpanel" },
             loopItemFocus: false,
             selectOnFocus: true,
@@ -454,12 +461,12 @@ var MultiView = CollectionWidget.inherit({
 
 });
 /**
-* @name dxMultiViewItemTemplate
-* @inherits CollectionWidgetItemTemplate
+* @name dxMultiViewItem
+* @inherits CollectionWidgetItem
 * @type object
 */
 /**
-* @name dxMultiViewItemTemplate.visible
+* @name dxMultiViewItem.visible
 * @hidden
 * @inheritdoc
 */

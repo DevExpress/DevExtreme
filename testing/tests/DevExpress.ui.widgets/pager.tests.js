@@ -264,6 +264,26 @@ QUnit.test('Select page after click', function(assert) {
     assert.equal(getText(pagesElement[7]), '8', 'last page');
 });
 
+QUnit.test('Select page after pointer up', function(assert) {
+    var testElement = $('#container'),
+        $pager = testElement.dxPager({ maxPagesCount: 7, pageCount: 8 }),
+        instance = $pager.dxPager("instance"),
+        pagesElement;
+
+    $(instance._pages[4]._$page).trigger("dxpointerup");
+
+    pagesElement = getPagesElement(testElement);
+    assert.equal(pagesElement.length, 8, 'pages elements count');
+    assert.equal(getText(pagesElement[0]), '1', 'page 1');
+    assert.equal(getText(pagesElement[1]), '. . .', 'separator');
+    assert.equal(getText(pagesElement[2]), '3', 'page 2');
+    assert.equal(getText(pagesElement[3]), '4', 'page 3');
+    assert.equal(getText(pagesElement[4]), '5', 'page 4');
+    assert.equal(getText(pagesElement[5]), '6', 'page 4');
+    assert.equal(getText(pagesElement[6]), '. . .', 'separator');
+    assert.equal(getText(pagesElement[7]), '8', 'last page');
+});
+
 QUnit.test("PagesChooser is not visible if pages count equal one", function(assert) {
     var testElement = $('#container'),
         $pages;
@@ -645,6 +665,26 @@ QUnit.test("Click on navigate buttons", function(assert) {
 
     $button = $(".dx-prev-button");
     $($button).trigger("dxclick");
+    assert.equal(currentDirection, "prev");
+});
+
+QUnit.test("Pointer up on navigate button", function(assert) {
+    var $pager = $("#container").dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }),
+        instance = $pager.dxPager("instance"),
+        $button,
+        currentDirection;
+
+    instance.option("pageIndex", 8);
+    instance._nextPage = function(direction) {
+        currentDirection = direction;
+    };
+
+    $button = $(".dx-next-button");
+    $($button).trigger("dxpointerup");
+    assert.equal(currentDirection, "next");
+
+    $button = $(".dx-prev-button");
+    $($button).trigger("dxpointerup");
     assert.equal(currentDirection, "prev");
 });
 
@@ -1359,16 +1399,16 @@ QUnit.test("LightMode.Next button is disabled when first page is chosen ", funct
 
 QUnit.test("Pager is not re-rendered in the Light mode when width is not changed", function(assert) {
     var pager = $("#container")
-            .width(PAGER_LIGHT_MODE_WIDTH)
-            .dxPager({
-                maxPagesCount: 8,
-                pageCount: 10,
-                pageSizes: [5, 10, 20],
-                showInfo: true,
-                totalCount: 86,
-                infoText: "Page {0} of {1} ({2} items)",
-                pagesCountText: "of"
-            }).dxPager("instance");
+        .width(PAGER_LIGHT_MODE_WIDTH)
+        .dxPager({
+            maxPagesCount: 8,
+            pageCount: 10,
+            pageSizes: [5, 10, 20],
+            showInfo: true,
+            totalCount: 86,
+            infoText: "Page {0} of {1} ({2} items)",
+            pagesCountText: "of"
+        }).dxPager("instance");
 
     var spy = sinon.spy(pager, "_renderContentImpl");
 

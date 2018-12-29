@@ -2,7 +2,7 @@
     height: 100%;
     width: 100%;
     
-    .touch-action(pinch-zoom);
+    touch-action: pinch-zoom;
 }
 
 .dx-drawer-wrapper {
@@ -17,8 +17,7 @@
     bottom: 0px;
 }
 
-.dx-drawer-right .dx-drawer-panel-content,
-.dx-drawer-left.dx-rtl .dx-drawer-panel-content {
+.dx-drawer-right .dx-drawer-panel-content{
     right: 0px;
 }
 
@@ -74,12 +73,20 @@
 }
 
 .dx-drawer-overlap {
-    .dx-drawer-wrapper {
-        overflow: visible;
+    &.dx-drawer-left,
+    &.dx-drawer-right {
+        .dx-drawer-wrapper {
+            overflow-y: visible;
+        }
     }
-    .dx-drawer-panel-content {
-        z-index: 1;
+
+    &.dx-drawer-top,
+    &.dx-drawer-bottom {
+        .dx-drawer-wrapper {
+            overflow-x: visible;
+        }
     }
+
 
     &.dx-drawer-right.dx-drawer-expand {
         .dx-overlay-content {

@@ -658,6 +658,14 @@ QUnit.module("Zoom", {
     updateOptions: environment.updateOptions
 });
 
+QUnit.test("getViewport return object with field 'action' if need", function(assert) {
+    this.updateOptions();
+
+    this.axis.handleZooming({ startValue: 1, endValue: 2 }, undefined, undefined, "zoom");
+
+    assert.deepEqual(this.axis.getViewport(), { startValue: 1, endValue: 2, action: "zoom" });
+});
+
 QUnit.test("hold min/max for single point series", function(assert) {
     var businessRange;
     this.updateOptions({
@@ -708,7 +716,7 @@ QUnit.test("Trigger zoom events", function(assert) {
 
     this.axis.visualRange(10, 20);
 
-    assert.equal(this.eventTrigger.callCount, 2);
+    assert.equal(this.eventTrigger.callCount, 1);
     assert.equal(this.eventTrigger.firstCall.args[0], "zoomStart");
     assert.equal(this.eventTrigger.firstCall.args[1].axis, this.axis);
     assert.deepEqual(this.eventTrigger.firstCall.args[1].range, {
@@ -717,20 +725,15 @@ QUnit.test("Trigger zoom events", function(assert) {
     });
     assert.strictEqual(this.eventTrigger.firstCall.args[1].cancel, false);
 
-    assert.equal(this.eventTrigger.secondCall.args[0], "zoomEnd");
-    assert.equal(this.eventTrigger.secondCall.args[1].axis, this.axis);
-    assert.deepEqual(this.eventTrigger.secondCall.args[1].previousRange, {
-        startValue: 0,
-        endValue: 50
+    assert.deepEqual(this.axis._storedZoomEndParams, {
+        prevent: false,
+        action: undefined,
+        event: undefined,
+        startRange: {
+            startValue: 0,
+            endValue: 50
+        }
     });
-    assert.deepEqual(this.eventTrigger.secondCall.args[1].range, {
-        startValue: 10,
-        endValue: 20
-    });
-    assert.strictEqual(this.eventTrigger.secondCall.args[1].cancel, false);
-
-    assert.strictEqual(this.eventTrigger.secondCall.args[1].rangeStart, 10);
-    assert.strictEqual(this.eventTrigger.secondCall.args[1].rangeEnd, 20);
 });
 
 QUnit.test("Can cancel zooming on zoom start", function(assert) {
@@ -776,10 +779,12 @@ QUnit.test("Can cancel zooming on zoom end", function(assert) {
         min: 0,
         max: 50
     });
+    this.axis._translator.canvasLength = 800;
 
     sinon.spy(this.axis, "_visualRange");
 
     this.axis.visualRange(10, 20);
+    this.axis.handleZoomEnd();
 
     assert.equal(this.eventTrigger.callCount, 2);
     assert.equal(this.eventTrigger.secondCall.args[0], "zoomEnd");
@@ -800,8 +805,16 @@ QUnit.test("Can prevent zoomStart", function(assert) {
 
     this.axis.visualRange([10, 20], { start: true });
 
-    assert.equal(this.eventTrigger.callCount, 1);
-    assert.equal(this.eventTrigger.firstCall.args[0], "zoomEnd");
+    assert.equal(this.eventTrigger.callCount, 0);
+    assert.deepEqual(this.axis._storedZoomEndParams, {
+        prevent: false,
+        action: undefined,
+        event: undefined,
+        startRange: {
+            startValue: 0,
+            endValue: 50
+        }
+    });
 });
 
 QUnit.test("Can prevent zoomEnd", function(assert) {
@@ -816,6 +829,15 @@ QUnit.test("Can prevent zoomEnd", function(assert) {
 
     assert.equal(this.eventTrigger.callCount, 1);
     assert.equal(this.eventTrigger.firstCall.args[0], "zoomStart");
+    assert.deepEqual(this.axis._storedZoomEndParams, {
+        prevent: true,
+        action: undefined,
+        event: undefined,
+        startRange: {
+            startValue: 0,
+            endValue: 50
+        }
+    });
 });
 
 QUnit.test("Set visual range using array", function(assert) {
@@ -3670,7 +3692,7 @@ QUnit.test("Value axis ignores visual range on update option", function(assert) 
     assert.equal(businessRange.maxVisible, 118);
 });
 
-QUnit.module("Visual range on update", {
+QUnit.module("Visual range on update. Argument axis", {
     beforeEach: function() {
         environment.beforeEach.call(this);
         sinon.spy(translator2DModule, "Translator2D");
@@ -3997,21 +4019,42 @@ QUnit.test("Auto. Discrete axis - keep if categories aren't changed", function(a
     });
     this.axis.validate();
     this.axis.setBusinessRange({
-        categories: [1, 2, 3, 4]
+        categories: [new Date(1), new Date(2), new Date(3), new Date(4)]
     });
 
-    this.axis.visualRange(2, 3);
+    this.axis.visualRange(new Date(2), new Date(3));
     this.axis.createTicks(this.canvas);
 
     this.axis.setBusinessRange({
-        categories: [1, 2, 3, 4]
+        categories: [new Date(1), new Date(2), new Date(3), new Date(4)]
     });
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
 
-    assert.deepEqual(businessRange.categories, [1, 2, 3, 4]);
-    assert.equal(businessRange.minVisible, 2);
-    assert.equal(businessRange.maxVisible, 3);
+    assert.deepEqual(businessRange.categories, [new Date(1), new Date(2), new Date(3), new Date(4)]);
+    assert.deepEqual(businessRange.minVisible, new Date(2));
+    assert.deepEqual(businessRange.maxVisible, new Date(3));
+});
+
+QUnit.test("Auto. Discrete axis - reset if categories aren't changed and visualRange consist all categories", function(assert) {
+    this.updateOptions({
+        type: "discrete"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        categories: [new Date(1), new Date(2), new Date(3), new Date(4)]
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    this.axis.setBusinessRange({
+        categories: [new Date(1), new Date(2), new Date(3), new Date(4)]
+    });
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.deepEqual(businessRange.categories, [new Date(1), new Date(2), new Date(3), new Date(4)]);
+    assert.equal(this.axis._lastVisualRangeUpdateMode, "reset");
 });
 
 QUnit.test("Do not reset initial viewport if current bussiness range has isEstimatedRange flag", function(assert) {
@@ -4034,6 +4077,203 @@ QUnit.test("Do not reset initial viewport if current bussiness range has isEstim
     assert.equal(businessRange.max, 100);
     assert.equal(businessRange.minVisible, 10);
     assert.equal(businessRange.maxVisible, 20);
+});
+
+QUnit.module("Visual range on update. Value axis", {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        sinon.spy(translator2DModule, "Translator2D");
+
+        this.axis = new Axis({
+            renderer: this.renderer,
+            axisType: "xyAxes",
+            drawingType: "linear",
+            isArgumentAxis: false,
+            eventTrigger: () => { }
+        });
+
+        this.canvas = {
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: 0,
+            width: 100,
+            height: 100
+        };
+
+        this.axis.updateCanvas(this.canvas);
+
+        this.updateOptions({});
+        this.translator = translator2DModule.Translator2D.lastCall.returnValue;
+        sinon.spy(this.translator, "updateBusinessRange");
+    },
+    afterEach: function() {
+        environment.afterEach.call(this);
+        translator2DModule.Translator2D.restore();
+    },
+    updateOptions: environment.updateOptions
+});
+
+QUnit.test("Auto mode. argument axis mode is shift - reset", function(assert) {
+    this.updateOptions({
+        visualRangeUpdateMode: "auto"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.visualRange(115, 118);
+    this.axis.createTicks(this.canvas);
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    }, undefined, "shift");
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 300);
+});
+
+QUnit.test("Auto mode. argument axis mode is reset - reset", function(assert) {
+    this.updateOptions({
+        visualRangeUpdateMode: "auto"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.visualRange(115, 118);
+    this.axis.createTicks(this.canvas);
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    }, undefined, "reset");
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 300);
+});
+
+QUnit.test("Auto mode. argument axis mode is keep - keep", function(assert) {
+    this.updateOptions({
+        visualRangeUpdateMode: "auto"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.visualRange(115, 118);
+    this.axis.createTicks(this.canvas);
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    }, undefined, "keep");
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 115);
+    assert.equal(businessRange.maxVisible, 118);
+});
+
+QUnit.test("Auto. no argument axis mode - reset", function(assert) {
+    this.updateOptions({
+        visualRangeUpdateMode: "auto"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.visualRange(115, 118);
+    this.axis.createTicks(this.canvas);
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    }, undefined, undefined);
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 300);
+});
+
+QUnit.test("Own mode keep, argument axis mode reset - own mode wins", function(assert) {
+    this.updateOptions({
+        visualRangeUpdateMode: "keep"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.visualRange(115, 118);
+    this.axis.createTicks(this.canvas);
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    }, undefined, "reset");
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 115);
+    assert.equal(businessRange.maxVisible, 118);
+});
+
+QUnit.test("Own mode is reset, argument axis mode keep - own mode wins", function(assert) {
+    this.updateOptions({
+        visualRangeUpdateMode: "reset"
+    });
+    this.axis.validate();
+    this.axis.setBusinessRange({
+        min: 100,
+        max: 120
+    });
+
+    this.axis.visualRange(115, 118);
+    this.axis.createTicks(this.canvas);
+    this.axis.validate();
+
+    this.axis.setBusinessRange({
+        min: 0,
+        max: 300
+    }, undefined, "keep");
+
+    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(businessRange.min, 0);
+    assert.equal(businessRange.max, 300);
+    assert.equal(businessRange.minVisible, 0);
+    assert.equal(businessRange.maxVisible, 300);
 });
 
 QUnit.module("Get scroll bounds", {
@@ -4096,6 +4336,28 @@ QUnit.test("whole range values are set to null - get from option", function(asse
     });
 
     assert.deepEqual(this.axis.getZoomBounds(), { startValue: undefined, endValue: undefined });
+});
+
+QUnit.test("getZoomBounds when initRange is set, and wholeRange is not set", function(assert) {
+    this.translator.getBusinessRange = sinon.stub();
+    this.translator.getBusinessRange.returns({ min: 5, max: 7 });
+
+    this.axis.setInitRange();
+
+    assert.deepEqual(this.axis.getZoomBounds(), { startValue: 5, endValue: 7 });
+});
+
+QUnit.test("getZoomBounds when initRange is set, and wholeRange is set", function(assert) {
+    this.updateOptions({
+        wholeRange: { startValue: 1, endValue: 2 }
+    });
+    this.translator.getBusinessRange = sinon.stub();
+    this.translator.getBusinessRange.returns({ min: 5, max: 7 });
+
+    this.axis.validate();
+    this.axis.setInitRange();
+
+    assert.deepEqual(this.axis.getZoomBounds(), { startValue: 1, endValue: 2 });
 });
 
 QUnit.module("dataVisualRangeIsReduced method", {

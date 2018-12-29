@@ -1,6 +1,6 @@
-var $ = require("jquery"),
-    QUERY = require("data/query"),
-    ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js");
+import $ from "jquery";
+import QUERY from "data/query";
+import ErrorHandlingHelper from "../../helpers/data.errorHandlingHelper.js";
 
 QUnit.module("Misc");
 
@@ -279,6 +279,28 @@ QUnit.test("filter by function", function(assert) {
             done();
         });
     });
+});
+
+QUnit.test("group criterion with function", (assert) => {
+    assert.expect(2);
+
+    const data = [
+        { value: 0 },
+        { value: 2 },
+        { value: 5 }
+    ];
+    const functionCondition = (itemData) => itemData.value > 1;
+    const arrayCondition = ["value", "<", 5];
+
+    assert.equal(
+        QUERY(data).filter([functionCondition, arrayCondition]).toArray()[0].value,
+        2
+    );
+
+    assert.equal(
+        QUERY(data).filter([arrayCondition, functionCondition]).toArray()[0].value,
+        2
+    );
 });
 
 QUnit.test("comparison operators", function(assert) {
@@ -643,33 +665,33 @@ QUnit.test("mixin and/or conditions inside a single group throws", function(asse
     }
 
     assert.throws(createFn([
-            ["foo"],
-            ["bar"],
+        ["foo"],
+        ["bar"],
         "or",
-            ["foobar"]
+        ["foobar"]
     ]));
 
     assert.throws(createFn([
-            ["foo"],
+        ["foo"],
         "&&",
-            ["bar"],
+        ["bar"],
         "||",
-            ["foobar"]
+        ["foobar"]
     ]));
 
     assert.throws(createFn([
-            ["foo"],
+        ["foo"],
         "or",
-            ["bar"],
-            ["foobar"]
+        ["bar"],
+        ["foobar"]
     ]));
 
     assert.throws(createFn([
-            ["foo"],
+        ["foo"],
         "or",
-            ["bar"],
+        ["bar"],
         "and",
-            ["foobar"]
+        ["foobar"]
     ]));
 });
 
@@ -679,9 +701,9 @@ QUnit.test("basic usage", function(assert) {
     var done = assert.async();
 
     var input = [
-            { a: 2 },
-            { a: 1 },
-            { a: 2 }
+        { a: 2 },
+        { a: 1 },
+        { a: 2 }
     ];
 
     QUERY(input).groupBy("a").enumerate().done(function(groups) {
@@ -715,25 +737,25 @@ QUnit.test("group uses getter", function(assert) {
 QUnit.test("T348632: Rows in a group with an undefined group value are not sorted", function(assert) {
 
     var data = [
-            { foo: undefined, bar: 1 },
-            { foo: undefined, bar: 2 },
-            { foo: null, bar: 1 },
-            { foo: null, bar: 2 },
-            { foo: 'a', bar: 1 },
-            { foo: 'a', bar: 2 }
+        { foo: undefined, bar: 1 },
+        { foo: undefined, bar: 2 },
+        { foo: null, bar: 1 },
+        { foo: null, bar: 2 },
+        { foo: 'a', bar: 1 },
+        { foo: 'a', bar: 2 }
     ];
 
     assert.deepEqual(
         QUERY(data).sortBy("foo").thenBy("bar", true).toArray(),
         [
-                { foo: null, bar: 2 },
-                { foo: null, bar: 1 },
-                { foo: 'a', bar: 2 },
-                { foo: 'a', bar: 1 },
-                { foo: undefined, bar: 2 },
-                { foo: undefined, bar: 1 }
+            { foo: null, bar: 2 },
+            { foo: null, bar: 1 },
+            { foo: 'a', bar: 2 },
+            { foo: 'a', bar: 1 },
+            { foo: undefined, bar: 2 },
+            { foo: undefined, bar: 1 }
         ]
-        );
+    );
 });
 
 QUnit.module("Aggregates");

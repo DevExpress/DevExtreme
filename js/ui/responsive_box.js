@@ -177,6 +177,12 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @hidden
             * @inheritdoc
             */
+            /**
+             * @name dxResponsiveBoxOptions.items
+             * @type Array<string, dxResponsiveBoxItem, object>
+             * @fires dxResponsiveBoxOptions.onOptionChanged
+             * @inheritdoc
+             */
 
             onLayoutChanged: null,
             currentScreenFactor: undefined,
@@ -606,6 +612,10 @@ var ResponsiveBox = CollectionWidget.inherit({
             result.baseSize += sizeConfig.baseSize;
             result.minSize += sizeConfig.minSize;
             result.maxSize += sizeConfig.maxSize;
+
+            if(typeUtils.isDefined(sizeConfig.shrink)) {
+                result.shrink = sizeConfig.shrink;
+            }
         }
 
         result.minSize = result.minSize ? result.minSize : "auto";
@@ -716,34 +726,34 @@ var ResponsiveBox = CollectionWidget.inherit({
     */
 });
 /**
-* @name dxResponsiveBoxItemTemplate
-* @inherits CollectionWidgetItemTemplate
+* @name dxResponsiveBoxItem
+* @inherits CollectionWidgetItem
 * @type object
 */
 /**
-* @name dxResponsiveBoxItemTemplate.location
+* @name dxResponsiveBoxItem.location
 * @type Object|Array<Object>
 */
 /**
-* @name dxResponsiveBoxItemTemplate.location.row
+* @name dxResponsiveBoxItem.location.row
 * @type number
 */
 /**
-* @name dxResponsiveBoxItemTemplate.location.col
+* @name dxResponsiveBoxItem.location.col
 * @type number
 */
 /**
-* @name dxResponsiveBoxItemTemplate.location.rowspan
-* @type number
-* @default undefined
-*/
-/**
-* @name dxResponsiveBoxItemTemplate.location.colspan
+* @name dxResponsiveBoxItem.location.rowspan
 * @type number
 * @default undefined
 */
 /**
-* @name dxResponsiveBoxItemTemplate.location.screen
+* @name dxResponsiveBoxItem.location.colspan
+* @type number
+* @default undefined
+*/
+/**
+* @name dxResponsiveBoxItem.location.screen
 * @type string
 * @default undefined
 */

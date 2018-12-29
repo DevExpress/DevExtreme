@@ -210,9 +210,9 @@ QUnit.test("buttons should be rendered correctly after toolbar was repainted", f
     var $popup = $("#popup").dxPopup({
             visible: true,
             toolbarItems: [
-            { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
-            { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
-            { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
+                { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
+                { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
+                { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
 
         }),
         instance = $popup.dxPopup("instance"),
@@ -319,9 +319,9 @@ QUnit.test("toolbar must receive 'rtlEnabled' option from dxPopup", function(ass
             visible: true,
             rtlEnabled: true,
             toolbarItems: [
-            { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
-            { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
-            { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
+                { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
+                { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
+                { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
 
         }),
         instance = $popup.dxPopup("instance"),
@@ -336,9 +336,9 @@ QUnit.test("toolbar must receive 'rtlEnabled' from dxPopup after optionChanged",
             rtlEnabled: true,
             deferRendering: false,
             toolbarItems: [
-            { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
-            { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
-            { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
+                { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
+                { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
+                { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
 
         }),
         instance = $popup.dxPopup("instance");
@@ -1164,4 +1164,20 @@ QUnit.test("title should be rendered if custom 'titleTemplate' is specified and 
     var $title = $(toSelector(POPUP_TITLE_CLASS), viewport());
     assert.equal($title.length, 1, "title is rendered");
     assert.equal($title.text(), "testTitle", "title template is rendered correctly");
+});
+
+QUnit.test("popup title should be rendered before content", function(assert) {
+    var contentIsRendered = false;
+
+    $("#popupWithTitleTemplate").dxPopup({
+        visible: true,
+        titleTemplate: function() {
+            if(!contentIsRendered) {
+                assert.ok(true, "Popup title is rendered before content");
+            }
+        },
+        contentTemplate: function() {
+            contentIsRendered = true;
+        }
+    });
 });

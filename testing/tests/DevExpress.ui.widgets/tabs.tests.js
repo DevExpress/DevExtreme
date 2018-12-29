@@ -53,9 +53,9 @@ QUnit.module("general");
 QUnit.test("mouseup switch selected tab", function(assert) {
     var tabsElement = $("#tabs").dxTabs({
             items: [
-            { text: "0" },
-            { text: "1" },
-            { text: "2" }
+                { text: "0" },
+                { text: "1" },
+                { text: "2" }
             ]
         }),
         tabsInstance = tabsElement.dxTabs("instance");
@@ -78,9 +78,9 @@ QUnit.test("mouseup switch selected tab", function(assert) {
 QUnit.test("repeated click doesn't change selected tab state", function(assert) {
     var tabsElement = $("#tabs").dxTabs({
             items: [
-            { text: "0" },
-            { text: "1" },
-            { text: "2" }
+                { text: "0" },
+                { text: "1" },
+                { text: "2" }
             ]
         }),
         tabsInstance = tabsElement.dxTabs("instance");
@@ -101,12 +101,12 @@ QUnit.test("repeated click doesn't change selected tab state", function(assert) 
 QUnit.test("disabled tab can't be selected by click", function(assert) {
     var tabsElement = $("#tabs").dxTabs({
             items: [
-            { text: "1" },
+                { text: "1" },
                 {
                     text: "2",
                     disabled: true
                 },
-            { text: "3" }
+                { text: "3" }
             ]
         }),
         tabsInstance = tabsElement.dxTabs("instance");
@@ -273,11 +273,11 @@ QUnit.test("nav buttons should be rendered when widget is rendered invisible", f
     try {
         var $element = $("<div>").appendTo($container).dxTabs({
             items: [
-                    { text: "user" },
-                    { text: "analytics" },
-                    { text: "customers" },
-                    { text: "search" },
-                    { text: "favorites" }
+                { text: "user" },
+                { text: "analytics" },
+                { text: "customers" },
+                { text: "search" },
+                { text: "favorites" }
             ],
             wordWrap: false,
             scrollingEnabled: true,
@@ -297,11 +297,11 @@ QUnit.test("nav buttons should be rendered when widget is rendered invisible", f
 QUnit.test("Tabs in multiple mode", function(assert) {
     var $element = $("#widget").dxTabs({
             items: [
-            { text: "user" },
-            { text: "analytics" },
-            { text: "customers" },
-            { text: "search" },
-            { text: "favorites" }
+                { text: "user" },
+                { text: "analytics" },
+                { text: "customers" },
+                { text: "search" },
+                { text: "favorites" }
             ], width: 400,
             selectionMode: "multiple",
             selectedIndex: 2
@@ -335,6 +335,27 @@ QUnit.test("tabs should be wrapped into scrollable if scrollingEnabled=true", fu
     assert.ok($scrollable.length, "scroll created");
     assert.ok($scrollable.hasClass(TABS_SCROLLABLE_CLASS), "wrapper class added");
     assert.ok($scrollable.find("." + TABS_ITEM_CLASS).length, "items wrapped into scrollable");
+});
+
+QUnit.test("tabs should be wrapped into scrollable for some disabled items", function(assert) {
+    var $element = $("#scrollableTabs").dxTabs({
+            items: [{ text: "item 1" }, { text: "item 2", disabled: true }, { text: "item 3", disabled: true }, { text: "item 4", disabled: true }],
+            width: 200
+        }),
+        $scrollable = $element.children("." + SCROLLABLE_CLASS);
+
+    assert.ok($scrollable.length, "scroll created");
+    assert.ok($scrollable.hasClass(TABS_SCROLLABLE_CLASS), "wrapper class added");
+    assert.ok($scrollable.find("." + TABS_ITEM_CLASS).length, "items wrapped into scrollable");
+});
+
+QUnit.test("tabs should not be wrapped into scrollable for some invisible items", function(assert) {
+    var $element = $("#scrollableTabs").dxTabs({
+        items: [{ text: "item 1" }, { text: "item 2", visible: false }, { text: "item 3", visible: false }, { text: "item 4", visible: false }],
+        width: 200
+    });
+
+    assert.notOk(!!$element.children("." + SCROLLABLE_CLASS).length, "no scroll for invisible items");
 });
 
 QUnit.test("scrollable should have correct option scrollByContent", function(assert) {
@@ -409,7 +430,7 @@ QUnit.test("click on right nav button should scroll tabs to right", function(ass
 QUnit.test("hold on right nav button should scroll tabs to right to end", function(assert) {
     var $element = $("#scrollableTabs").dxTabs({
             items: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }, { text: "item 4" },
-        { text: "item 5" }],
+                { text: "item 5" }],
             wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
@@ -464,7 +485,7 @@ QUnit.test("click on left nav button should scroll tabs to left", function(asser
 QUnit.test("hold on left nav button should scroll tabs to left to end", function(assert) {
     var $element = $("#scrollableTabs").dxTabs({
             items: [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }, { text: "item 4" },
-        { text: "item 5" }, { text: "item 6" }, { text: "item 7" }, { text: "item 8" }],
+                { text: "item 5" }, { text: "item 6" }, { text: "item 7" }, { text: "item 8" }],
             wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,

@@ -1,5 +1,6 @@
 import $ from "jquery";
 import "viz/range_selector/range_selector";
+import { DataSource } from "data/data_source/data_source";
 
 QUnit.testStart(function() {
     var markup =
@@ -229,6 +230,21 @@ QUnit.module("Value", function(hook) {
         });
         assert.deepEqual(this.rangeSelector.getValue(), ["c", "d"]);
     });
+
+    QUnit.test("Value can't go out from scale", function(assert) {
+        this.rangeSelector.option({
+            scale:
+            {
+                startValue: 1,
+                endValue: 5
+            },
+            dataSource: [
+                { arg: 1, val: 1 },
+                { arg: 8, val: 8 }
+            ]
+        });
+        assert.deepEqual(this.rangeSelector.getValue(), [1, 5]);
+    });
 });
 
 QUnit.module("T465345, onOptionChanged", function(hook) {
@@ -384,7 +400,7 @@ QUnit.module("Begin/end update functionality", function() {
     QUnit.test("Update is began during processing option change and ended some time after it", function(assert) {
         var widget = $("#container").dxRangeSelector().dxRangeSelector("instance");
         widget.option("onDrawn", function() {
-            widget.option("onDrawn", null);     // Only event after "dataSource" update is required for test scenario.
+            widget.option("onDrawn", null); // Only event after "dataSource" update is required for test scenario.
             widget.beginUpdate();
         });
         widget.option("dataSource", [{ arg: 10, val: 1 }, { arg: 20, val: 2 }]);
@@ -435,3 +451,128 @@ QUnit.test("Range selector with aggregation", function(assert) {
     assert.deepEqual(rangeSelector.getValue(), [0, 2]);
 });
 
+QUnit.module("selectedRangeUpdateMode", {
+    createRangeSelector: function(options) {
+        return $("#container").dxRangeSelector(options).dxRangeSelector("instance");
+    }
+});
+
+QUnit.test("Auto mode. Reset behavior", function(assert) {
+    var dataSource = [{ arg: 1, val: 1 }, { arg: 10, val: 10 }];
+    var rangeSelector = this.createRangeSelector({
+        selectedRangeUpdateMode: "auto",
+        dataSource: dataSource,
+        chart: { series: [{}] }
+    });
+
+    dataSource.push({ arg: 11, val: 11 });
+
+    rangeSelector.option("dataSource", dataSource);
+
+    assert.deepEqual(rangeSelector.getValue(), [1, 11]);
+});
+
+QUnit.test("Auto mode. Shift behavior", function(assert) {
+    var dataSource = [{ arg: 1, val: 1 }, { arg: 10, val: 10 }];
+    var rangeSelector = this.createRangeSelector({
+        selectedRangeUpdateMode: "auto",
+        dataSource: dataSource,
+        chart: { series: [{}] }
+    });
+
+    rangeSelector.setValue([5, 10]);
+    dataSource.push({ arg: 11, val: 11 });
+
+    rangeSelector.option("dataSource", dataSource);
+
+    assert.deepEqual(rangeSelector.getValue(), [6, 11]);
+});
+
+QUnit.test("Auto mode. Keep behavior", function(assert) {
+    var dataSource = [{ arg: 1, val: 1 }, { arg: 10, val: 10 }];
+    var rangeSelector = this.createRangeSelector({
+        selectedRangeUpdateMode: "auto",
+        dataSource: dataSource,
+        chart: { series: [{}] }
+    });
+
+    rangeSelector.setValue([5, 7]);
+    dataSource.push({ arg: 11, val: 11 });
+
+    rangeSelector.option("dataSource", dataSource);
+
+    assert.deepEqual(rangeSelector.getValue(), [5, 7]);
+});
+
+QUnit.test("Reset mode", function(assert) {
+    var dataSource = [{ arg: 1, val: 1 }, { arg: 10, val: 10 }];
+    var rangeSelector = this.createRangeSelector({
+        selectedRangeUpdateMode: "reset",
+        dataSource: dataSource,
+        chart: { series: [{}] }
+    });
+
+    dataSource.push({ arg: 11, val: 11 });
+
+    rangeSelector.option("dataSource", dataSource);
+
+    assert.deepEqual(rangeSelector.getValue(), [1, 11]);
+});
+
+QUnit.test("Shift mode", function(assert) {
+    var dataSource = [{ arg: 1, val: 1 }, { arg: 10, val: 10 }];
+    var rangeSelector = this.createRangeSelector({
+        selectedRangeUpdateMode: "shift",
+        dataSource: dataSource,
+        chart: { series: [{}] }
+    });
+
+    rangeSelector.setValue([5, 10]);
+    dataSource.push({ arg: 11, val: 11 });
+
+    rangeSelector.option("dataSource", dataSource);
+
+    assert.deepEqual(rangeSelector.getValue(), [6, 11]);
+});
+
+QUnit.test("Keep mode", function(assert) {
+    var dataSource = [{ arg: 1, val: 1 }, { arg: 10, val: 10 }];
+    var rangeSelector = this.createRangeSelector({
+        selectedRangeUpdateMode: "keep",
+        dataSource: dataSource,
+        chart: { series: [{}] }
+    });
+
+    rangeSelector.setValue([5, 7]);
+    dataSource.push({ arg: 11, val: 11 });
+
+    rangeSelector.option("dataSource", dataSource);
+
+    assert.deepEqual(rangeSelector.getValue(), [5, 7]);
+});
+
+// T696409
+QUnit.test("RS with DX dataSource", function(assert) {
+    var done = assert.async(1),
+        rangeSelector = this.createRangeSelector({
+            chart: { series: [{}] },
+            value: [2, 4],
+            onValueChanged: function(e) {
+                assert.deepEqual(rangeSelector.getValue(), [2, 4]);
+                done();
+            },
+            dataSource: new DataSource({
+                load: function() {
+                    return new Promise(function(r) {
+                        return r([{
+                            arg: 1,
+                            val: 1
+                        }, {
+                            arg: 10,
+                            val: 1
+                        }]);
+                    });
+                }
+            })
+        });
+});

@@ -11,6 +11,7 @@ var $ = require("../../core/renderer"),
     config = require("../../core/config"),
     isDefined = typeUtils.isDefined,
     objectUtils = require("../../core/utils/object"),
+    deepExtendArraySafe = objectUtils.deepExtendArraySafe,
     errors = require("../widget/ui.errors"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
@@ -695,6 +696,10 @@ module.exports = {
                 GROUP_LOCATION = "group",
                 COLUMN_CHOOSER_LOCATION = "columnChooser";
 
+            var setFilterOperationsAsDefaultValues = function(column) {
+                column.filterOperations = column.defaultFilterOperations;
+            };
+
             var createColumn = function(that, columnOptions, userStateColumnOptions, bandColumn) {
                 var commonColumnOptions = {},
                     calculatedColumnOptions;
@@ -706,8 +711,9 @@ module.exports = {
                         };
                     }
 
+                    let result;
                     if(columnOptions.command) {
-                        return extend(true, {}, columnOptions);
+                        result = deepExtendArraySafe(commonColumnOptions, columnOptions);
                     } else {
                         commonColumnOptions = that.getCommonSettings(columnOptions);
                         if(userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
@@ -715,8 +721,16 @@ module.exports = {
                         }
                         calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
 
-                        return extend(true, { id: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS, commonColumnOptions, calculatedColumnOptions, columnOptions, { selector: null });
+                        result = deepExtendArraySafe({ id: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS);
+                        deepExtendArraySafe(result, commonColumnOptions);
+                        deepExtendArraySafe(result, calculatedColumnOptions);
+                        deepExtendArraySafe(result, columnOptions);
+                        deepExtendArraySafe(result, { selector: null });
                     }
+                    if(columnOptions.filterOperations === columnOptions.defaultFilterOperations) {
+                        setFilterOperationsAsDefaultValues(result);
+                    }
+                    return result;
                 }
             };
 
@@ -1256,10 +1270,10 @@ module.exports = {
                 }
                 prevValue = optionGetter(column, { functionsAsIs: true });
                 if(prevValue !== value) {
-                    if(optionName === "groupIndex") {
+                    if(optionName === "groupIndex" || optionName === "calculateGroupValue") {
                         changeType = "grouping";
                         updateSortOrderWhenGrouping(column, value, prevValue);
-                    } else if(optionName === "sortIndex" || optionName === "sortOrder") {
+                    } else if(optionName === "sortIndex" || optionName === "sortOrder" || optionName === "calculateSortValue") {
                         changeType = "sorting";
                     } else {
                         changeType = "columns";
@@ -1361,7 +1375,10 @@ module.exports = {
                 return rowCount;
             };
 
-            var getFixedPosition = function(column) {
+            var getFixedPosition = function(that, column) {
+                if(column.command && !isCustomCommandColumn(that, column)) {
+                    return column.visibleIndex < 0 || column.type === GROUP_COMMAND_COLUMN_NAME ? "left" : "right";
+                }
                 return !column.fixedPosition ? "left" : column.fixedPosition;
             };
 
@@ -1819,7 +1836,7 @@ module.exports = {
                                     if(!isDefined(transparentColumnIndex)) {
                                         transparentColumnIndex = j;
                                     }
-                                } else if(prevColumn && prevColumn.fixed && getFixedPosition(prevColumn) !== getFixedPosition(column)) {
+                                } else if(prevColumn && prevColumn.fixed && getFixedPosition(that, prevColumn) !== getFixedPosition(that, column)) {
                                     if(!isDefined(transparentColumnIndex)) {
                                         transparentColumnIndex = j;
                                     }
@@ -2292,7 +2309,7 @@ module.exports = {
                         column.customizeText = column.customizeText || getCustomizeTextByDataType(dataType);
                         column.defaultFilterOperations = column.defaultFilterOperations || !lookup && DATATYPE_OPERATIONS[dataType] || [];
                         if(!isDefined(column.filterOperations)) {
-                            column.filterOperations = column.defaultFilterOperations;
+                            setFilterOperationsAsDefaultValues(column);
                         }
                         column.defaultFilterOperation = column.filterOperations && column.filterOperations[0] || "=";
                         column.showEditorAlways = isDefined(column.showEditorAlways) ? column.showEditorAlways : (dataType === "boolean" && !column.cellTemplate);

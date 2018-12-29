@@ -83,15 +83,13 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     _renderFormViewTemplate: function(item, cellOptions, $container) {
         var that = this,
             column = item.column,
-            cellValue = column.calculateCellValue(cellOptions.data),
             focusAction = that.createAction(function() {
                 eventsEngine.trigger($container, clickEvent.name);
             }),
             container,
-            cellText;
-
-        cellValue = gridCoreUtils.getDisplayValue(column, cellValue, cellOptions.data, cellOptions.rowType);
-        cellText = gridCoreUtils.formatValue(cellValue, column);
+            value = column.calculateCellValue(cellOptions.data),
+            displayValue = gridCoreUtils.getDisplayValue(column, value, cellOptions.data, cellOptions.rowType),
+            text = gridCoreUtils.formatValue(displayValue, column);
 
         if(column.allowEditing && that.option("useKeyboard")) {
             $container.attr("tabIndex", that.option("tabIndex"));
@@ -100,18 +98,18 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
 
         if(column.cellTemplate) {
-            var templateOptions = extend({}, cellOptions, { value: cellValue, text: cellText, column: column });
+            var templateOptions = extend({}, cellOptions, { value: value, displayValue: displayValue, text: text, column: column });
             that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(window.document).length);
         } else {
             container = $container.get(0);
             if(column.encodeHtml) {
-                container.textContent = cellText;
+                container.textContent = text;
             } else {
-                container.innerHTML = cellText;
+                container.innerHTML = text;
             }
 
             $container.addClass(ADAPTIVE_ITEM_TEXT_CLASS);
-            if(!typeUtils.isDefined(cellText) || cellText === "") {
+            if(!typeUtils.isDefined(text) || text === "") {
                 $container.html("&nbsp;");
             }
 
@@ -453,6 +451,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                     var columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, visibleContentColumns, columnsCanFit),
                         columnId = getColumnId(that, visibleColumn),
                         widthOption = that._columnsController.columnOption(columnId, "width"),
+                        minWidth = that._columnsController.columnOption(columnId, "minWidth"),
                         columnBestFitWidth = that._columnsController.columnOption(columnId, "bestFitWidth");
 
                     if(resultWidths[i] === HIDDEN_COLUMNS_WIDTH) {
@@ -465,7 +464,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                     }
 
                     if(!widthOption || widthOption === "auto") {
-                        columnWidth = columnBestFitWidth || 0;
+                        columnWidth = Math.max(columnBestFitWidth || 0, minWidth || 0);
                     }
 
                     if(visibleColumn.command !== ADAPTIVE_COLUMN_NAME || hasHiddenColumns) {
@@ -655,6 +654,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
      * @name GridBaseMethods.isAdaptiveDetailRowExpanded
      * @publicName isAdaptiveDetailRowExpanded(key)
      * @param1 key:any
+     * @return boolean
      */
     isAdaptiveDetailRowExpanded: function(key) {
         return this._dataController.adaptiveExpandedKey() && commonUtils.equalByValue(this._dataController.adaptiveExpandedKey(), key);

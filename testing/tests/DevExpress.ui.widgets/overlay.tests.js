@@ -854,6 +854,21 @@ QUnit.test("shading height should change after container resize (B237292)", func
     assert.strictEqual(translator.locate($wrapper).top, 0);
 });
 
+QUnit.test("shading height should change after iOS address bar resize (T653828)", function(assert) {
+    if(devices.real().platform !== "ios" || devices.real().deviceType === "desktop") {
+        assert.ok(true);
+        return;
+    }
+
+    var $wrapper,
+        overlay = $("#overlay").dxOverlay({
+            visible: true
+        }).dxOverlay("instance");
+
+    $wrapper = $(overlay.$content().parent());
+    assert.equal($wrapper.css("minHeight").replace("px", ""), window.innerHeight, "overlay wrapper has right min-height style");
+});
+
 QUnit.test("shading color should be customized by option", function(assert) {
     var overlay = $("#overlay").dxOverlay({
             shading: true,
@@ -1049,27 +1064,27 @@ QUnit.test("animation complete callback arguments should be correct", function(a
 
 QUnit.test("no merging for animation option should be present", function(assert) {
     var overlay = $("#overlay")
-        .dxOverlay({
-            animation: {
-                type: "pop",
-                show: {
-                    from: {
-                        opacity: 0
+            .dxOverlay({
+                animation: {
+                    type: "pop",
+                    show: {
+                        from: {
+                            opacity: 0
+                        },
+                        to: {
+                            opacity: 1
+                        }
                     },
-                    to: {
-                        opacity: 1
-                    }
-                },
-                hide: {
-                    from: {
-                        opacity: 1
-                    },
-                    to: {
-                        opacity: 0
+                    hide: {
+                        from: {
+                            opacity: 1
+                        },
+                        to: {
+                            opacity: 0
+                        }
                     }
                 }
-            }
-        }).dxOverlay("instance"),
+            }).dxOverlay("instance"),
         animation;
 
     overlay.option("animation", {
@@ -1399,11 +1414,11 @@ QUnit.test("behavior if option set to true", function(assert) {
 QUnit.test("behavior if option set to false", function(assert) {
     var onContentReadyFired = false,
         instance = $("#overlay")
-        .dxOverlay({
-            deferRendering: false,
-            onContentReady: function() { onContentReadyFired = true; }
-        })
-        .dxOverlay("instance");
+            .dxOverlay({
+                deferRendering: false,
+                onContentReady: function() { onContentReadyFired = true; }
+            })
+            .dxOverlay("instance");
 
     assert.ok(onContentReadyFired, "after overlay render, content is render too");
 
@@ -1412,6 +1427,33 @@ QUnit.test("behavior if option set to false", function(assert) {
     assert.ok(!onContentReadyFired, "after show overlay content do not render");
 });
 
+QUnit.test("content ready should be fired correctly when async template is used", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        contentIsRendered = false;
+
+    $("#overlay").dxOverlay({
+        templatesRenderAsynchronously: true,
+        deferRendering: false,
+        onContentReady: function() {
+            assert.ok(contentIsRendered, "Content is rendered before content ready firing");
+        },
+        integrationOptions: {
+            templates: {
+                "content": {
+                    render: function(args) {
+                        setTimeout(function() {
+                            contentIsRendered = true;
+                            args.onRendered();
+                        }, 100);
+                    }
+                }
+            }
+        }
+    });
+
+    clock.tick(100);
+    clock.restore();
+});
 
 QUnit.module("close on outside click", moduleConfig);
 
@@ -1420,7 +1462,7 @@ QUnit.test("overlay should be hidden after click outside was present", function(
             closeOnOutsideClick: true,
             visible: true
         })
-        .dxOverlay("instance"),
+            .dxOverlay("instance"),
         $content = overlay.$content();
 
     $($content).trigger("dxpointerdown");
@@ -1452,7 +1494,7 @@ QUnit.test("overlay should not be hidden after click in detached element", funct
         closeOnOutsideClick: true,
         visible: true
     })
-    .dxOverlay("instance");
+        .dxOverlay("instance");
 
     $("#content").on("dxpointerdown", function(e) {
         $("#content").replaceWith($("<div>").attr("id", "content"));
@@ -2575,6 +2617,24 @@ QUnit.test("overlay should be dragged correctly when position.of and shading (T5
     assert.roughEqual(startEvent.maxBottomOffset, viewHeight - $overlayContent.outerHeight() - containerPosition.top - overlayPosition.top - 200, 1, "overlay should be dragged bottom");
 });
 
+QUnit.test("change position after dragging", function(assert) {
+    var $overlay = $("#overlay").dxOverlay({
+        visible: true,
+        dragEnabled: true,
+        position: { my: 'top', at: 'top', of: viewport(), offset: '0 0' }
+    });
+    var overlay = $overlay.dxOverlay("instance");
+    var $content = $(overlay.content());
+    var pointer = pointerMock($content);
+
+    pointer.start().dragStart().drag(50, 50).dragEnd();
+    assert.equal($content.position().top, 50, "overlay positioned correctly after dragging");
+
+    overlay.option("position.offset", '0 20');
+
+    assert.equal($content.position().top, 20, "overlay positioned correctly after change the 'position' option");
+});
+
 QUnit.module("resize", moduleConfig);
 
 QUnit.test("overlay should have resizable component on content", function(assert) {
@@ -2994,7 +3054,7 @@ QUnit.test("tab target inside of wrapper but outside of content should not be ou
             .html("Tabbable div")
             .prependTo($wrapper);
 
-    eventsEngine.on($tabbableDiv, "focus", contentFocusHandler);
+    eventsEngine.on($tabbableDiv, "focusin", contentFocusHandler);
     keyboardMock($tabbableDiv).press("tab");
 
     assert.equal(contentFocusHandler.callCount, 1, "focus has been triggered once from keyboardMock");

@@ -6,7 +6,7 @@ import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import Widget from "../widget/ui.widget";
 import EmptyTemplate from "../widget/empty_template";
-import windowUtils from "../../core/utils/window";
+import { hasWindow } from "../../core/utils/window";
 import PushStrategy from "./ui.drawer.rendering.strategy.push";
 import ShrinkStrategy from "./ui.drawer.rendering.strategy.shrink";
 import OverlapStrategy from "./ui.drawer.rendering.strategy.overlap";
@@ -234,6 +234,7 @@ const Drawer = Widget.inherit({
 
         this._refreshModeClass();
         this._refreshRevealModeClass();
+        this._renderShader();
 
         this._whenPanelRendered = new Deferred();
         this._strategy.renderPanel(this._getTemplate(this.option("template")), this._whenPanelRendered);
@@ -248,7 +249,6 @@ const Drawer = Widget.inherit({
             transclude
         });
 
-        this._renderShader();
         this._initCloseOnOutsideClickHandler();
         this._refreshPositionClass();
     },
@@ -259,7 +259,9 @@ const Drawer = Widget.inherit({
         this.callBase();
 
         this._whenPanelRendered.always(() => {
-            this._dimensionChanged();
+            this._initSize();
+            this._strategy.setPanelSize(this.option("revealMode") === "slide" || !this.isHorizontalDirection());
+
             this._renderPosition(this.option("opened"), false);
         });
     },
@@ -289,7 +291,7 @@ const Drawer = Widget.inherit({
         prevClass && this.$element()
             .removeClass(DRAWER_CLASS + "-" + prevClass);
 
-        const position = this.option("position");
+        const position = this.getDrawerPosition();
 
         this.$element().addClass(DRAWER_CLASS + "-" + position);
 
@@ -297,15 +299,11 @@ const Drawer = Widget.inherit({
     },
 
     _orderContent(position) {
-        if(this._needOrderContent() && (position === "right" || position === "bottom")) {
+        if(this._strategy.needOrderContent(position, this.option("rtlEnabled"))) {
             this._$wrapper.prepend(this._$contentWrapper);
         } else {
             this._$wrapper.prepend(this._$panel);
         }
-    },
-
-    _needOrderContent() {
-        return this.option("openedStateMode") !== "push";
     },
 
     _refreshRevealModeClass(prevClass) {
@@ -329,6 +327,21 @@ const Drawer = Widget.inherit({
         this._minSize = this.option("minSize") || 0;
     },
 
+    getDrawerPosition() {
+        const position = this.option("position");
+        const rtl = this.option("rtlEnabled");
+
+        if(position === "before") {
+            return rtl ? "right" : "left";
+        }
+
+        if(position === "after") {
+            return rtl ? "left" : "right";
+        }
+
+        return position;
+    },
+
     getOverlayTarget() {
         return this.option("target") || this._$wrapper;
     },
@@ -346,7 +359,7 @@ const Drawer = Widget.inherit({
     },
 
     getRealPanelWidth() {
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             return this.getElementWidth(this._strategy.getPanelContent());
         } else {
             return 0;
@@ -354,11 +367,13 @@ const Drawer = Widget.inherit({
     },
 
     getElementWidth($element) {
-        return $element.get(0).hasChildNodes() ? $element.get(0).childNodes[0].getBoundingClientRect().width : $element.get(0).getBoundingClientRect().width;
+        var $children = $element.children();
+
+        return $children.length ? $children.eq(0).get(0).getBoundingClientRect().width : $element.get(0).getBoundingClientRect().width;
     },
 
     getRealPanelHeight() {
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             return this.getElementHeight(this._strategy.getPanelContent());
         } else {
             return 0;
@@ -366,22 +381,15 @@ const Drawer = Widget.inherit({
     },
 
     getElementHeight($element) {
-        return $element.get(0).hasChildNodes() ? $element.get(0).childNodes[0].getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
-    },
+        var $children = $element.children();
 
-    getDrawerPosition() {
-        let resultPosition = this.option("position");
-        let rtl = this.option("rtlEnabled");
-
-        if(this.isHorizontalDirection() && rtl) {
-            return resultPosition === "right" ? "left" : "right";
-        }
-
-        return resultPosition;
+        return $children.length ? $children.eq(0).get(0).getBoundingClientRect().height : $element.get(0).getBoundingClientRect().height;
     },
 
     isHorizontalDirection() {
-        return this.option("position") === "left" || this.option("position") === "right";
+        const position = this.getDrawerPosition();
+
+        return position === "left" || position === "right";
     },
 
     stopAnimations(jumpToEnd) {
@@ -391,6 +399,11 @@ const Drawer = Widget.inherit({
 
         const overlay = this.getOverlay();
         overlay && fx.stop($(overlay.$content()), jumpToEnd);
+    },
+
+    setZIndex(zIndex) {
+        this._$shader.css("zIndex", zIndex - 1);
+        this._$panel.css("zIndex", zIndex);
     },
 
     _isInvertedPosition() {
@@ -406,7 +419,7 @@ const Drawer = Widget.inherit({
 
         animate = typeUtils.isDefined(animate) ? animate && this.option("animationEnabled") : this.option("animationEnabled");
 
-        if(!windowUtils.hasWindow()) return;
+        if(!hasWindow()) return;
 
         const duration = this.option("animationDuration");
 
@@ -419,7 +432,7 @@ const Drawer = Widget.inherit({
 
     _animationCompleteHandler() {
         if(this._animationPromise) {
-            this._toggleResolve();
+            this._animationPromise.resolve();
             this._animations = [];
         }
     },
@@ -440,6 +453,7 @@ const Drawer = Widget.inherit({
     },
 
     _dimensionChanged() {
+        this._initSize();
         this._strategy.setPanelSize(this.option("revealMode") === "slide");
     },
 
@@ -461,12 +475,12 @@ const Drawer = Widget.inherit({
         this._cleanPanel();
 
         this._renderPanelElement();
-        this._orderContent(this.option("position"));
+        this._orderContent(this.getDrawerPosition());
 
         this._whenPanelRefreshed = new Deferred();
         this._strategy.renderPanel(this._getTemplate(this.option("template")), this._whenPanelRefreshed);
 
-        this._whenPanelRefreshed.always(() => {
+        hasWindow() && this._whenPanelRefreshed.always(() => {
             this._strategy.setPanelSize(this.option("revealMode") === "slide");
             this._renderPosition(this.option("opened"), false, true);
         });
@@ -580,12 +594,10 @@ const Drawer = Widget.inherit({
     toggle(showing) {
         showing = showing === undefined ? !this.option("opened") : showing;
 
-        this._animationPromise = new Promise((resolve) => {
-            this._toggleResolve = resolve;
-        });
+        this._animationPromise = new Deferred();
         this.option("opened", showing);
 
-        return this._animationPromise;
+        return this._animationPromise.promise();
     }
 
     /**

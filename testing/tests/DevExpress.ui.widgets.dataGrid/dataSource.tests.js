@@ -5,6 +5,7 @@ var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     ODataStore = require("data/odata/store"),
     dataQuery = require("data/query"),
+    queryByOptions = require("data/store_helper").queryByOptions,
     gridCore = require("ui/data_grid/ui.data_grid.core"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
@@ -1134,8 +1135,8 @@ QUnit.test("grouping with pageSize less items count. Continue on next page group
     assert.equal(source.totalItemsCount(), 4);
     assert.deepEqual(source.items(), [{
         key: 1, isContinuationOnNextPage: true, items: [
-                    { field1: 1, field2: 2, field3: 3 },
-                    { field1: 1, field2: 2, field3: 4 }
+            { field1: 1, field2: 2, field3: 3 },
+            { field1: 1, field2: 2, field3: 4 }
         ]
     }]);
 });
@@ -1263,21 +1264,21 @@ QUnit.test("expand group item if group level is collapsed", function(assert) {
 
 QUnit.test("grouping with paginate. Collapse group when remote sorting and local sorting are different", function(assert) {
     var arrayStore = new ArrayStore([
-            { field1: "ES", field2: 1 },
-            { field1: "ES", field2: 2 },
-            { field1: "ES", field2: 3 },
-            { field1: "ES", field2: 4 },
-            { field1: "ES", field2: 5 },
-            { field1: "Győr", field2: 6 },
-            { field1: "Győr", field2: 7 },
-            { field1: "Győr", field2: 8 },
-            { field1: "Győr", field2: 9 },
-            { field1: "Győr", field2: 10 },
-            { field1: "Göd", field2: 11 },
-            { field1: "Göd", field2: 12 },
-            { field1: "Göd", field2: 13 },
-            { field1: "Göd", field2: 14 },
-            { field1: "Göd", field2: 15 }
+        { field1: "ES", field2: 1 },
+        { field1: "ES", field2: 2 },
+        { field1: "ES", field2: 3 },
+        { field1: "ES", field2: 4 },
+        { field1: "ES", field2: 5 },
+        { field1: "Győr", field2: 6 },
+        { field1: "Győr", field2: 7 },
+        { field1: "Győr", field2: 8 },
+        { field1: "Győr", field2: 9 },
+        { field1: "Győr", field2: 10 },
+        { field1: "Göd", field2: 11 },
+        { field1: "Göd", field2: 12 },
+        { field1: "Göd", field2: 13 },
+        { field1: "Göd", field2: 14 },
+        { field1: "Göd", field2: 15 }
     ]);
 
     var source = this.createDataSource({
@@ -1885,8 +1886,8 @@ QUnit.test("grouping with paginate", function(assert) {
     assert.deepEqual(source.items(), [{
         key: 1, isContinuationOnNextPage: true, items: [{
             key: 2, items: [
-            { field1: 1, field2: 2, field3: 3 },
-            { field1: 1, field2: 2, field3: 4 }
+                { field1: 1, field2: 2, field3: 3 },
+                { field1: 1, field2: 2, field3: 4 }
             ]
         },
         {
@@ -1913,8 +1914,8 @@ QUnit.test("grouping with paginate and totalCount from extra", function(assert) 
     assert.deepEqual(source.items(), [{
         key: 1, isContinuationOnNextPage: true, items: [{
             key: 2, items: [
-            { field1: 1, field2: 2, field3: 3 },
-            { field1: 1, field2: 2, field3: 4 }
+                { field1: 1, field2: 2, field3: 3 },
+                { field1: 1, field2: 2, field3: 4 }
             ]
         },
         {
@@ -1956,14 +1957,14 @@ QUnit.test("grouping without paginate", function(assert) {
 
 QUnit.test("change group order when remote data", function(assert) {
     var arrayStore = new ArrayStore([
-            { field1: 1, field2: 2, field3: 3 },
-            { field1: 1, field2: 2, field3: 4 },
-            { field1: 1, field2: 2, field3: 5 },
-            { field1: 1, field2: 2, field3: 6 },
-            { field1: 1, field2: 3, field3: 7 },
-            { field1: 1, field2: 3, field3: 8 },
-            { field1: 1, field2: 3, field3: 9 },
-            { field1: 2, field2: 4, field3: 10 }
+        { field1: 1, field2: 2, field3: 3 },
+        { field1: 1, field2: 2, field3: 4 },
+        { field1: 1, field2: 2, field3: 5 },
+        { field1: 1, field2: 2, field3: 6 },
+        { field1: 1, field2: 3, field3: 7 },
+        { field1: 1, field2: 3, field3: 8 },
+        { field1: 1, field2: 3, field3: 9 },
+        { field1: 2, field2: 4, field3: 10 }
     ]);
 
     var source = this.createDataSource({
@@ -2177,13 +2178,13 @@ QUnit.test("Collapse second level group and first level group", function(assert)
 // T406350
 QUnit.test("Collapse second level group and first level group when scrolling mode is virtual", function(assert) {
     this.array = [
-            { field1: 1, field2: 1, field3: 1 },
-            { field1: 1, field2: 2, field3: 2 },
-            { field1: 1, field2: 2, field3: 3 },
-            { field1: 1, field2: 2, field3: 4 },
-            { field1: 1, field2: 2, field3: 5 },
-            { field1: 1, field2: 2, field3: 6 },
-            { field1: 2, field2: 1, field3: 7 }
+        { field1: 1, field2: 1, field3: 1 },
+        { field1: 1, field2: 2, field3: 2 },
+        { field1: 1, field2: 2, field3: 3 },
+        { field1: 1, field2: 2, field3: 4 },
+        { field1: 1, field2: 2, field3: 5 },
+        { field1: 1, field2: 2, field3: 6 },
+        { field1: 2, field2: 1, field3: 7 }
     ];
 
     var source = this.createDataSource({
@@ -2216,14 +2217,14 @@ QUnit.test("Collapse second level group and first level group when scrolling mod
 // T371565
 QUnit.test("Collapse several second level groups", function(assert) {
     this.array = [
-            { field1: 1, field2: 2, field3: 3 },
-            { field1: 1, field2: 2, field3: 4 },
-            { field1: 1, field2: 3, field3: 5 },
-            { field1: 1, field2: 3, field3: 6 },
-            { field1: 2, field2: 4, field3: 7 },
-            { field1: 2, field2: 4, field3: 8 },
-            { field1: 2, field2: 5, field3: 9 },
-            { field1: 2, field2: 5, field3: 10 },
+        { field1: 1, field2: 2, field3: 3 },
+        { field1: 1, field2: 2, field3: 4 },
+        { field1: 1, field2: 3, field3: 5 },
+        { field1: 1, field2: 3, field3: 6 },
+        { field1: 2, field2: 4, field3: 7 },
+        { field1: 2, field2: 4, field3: 8 },
+        { field1: 2, field2: 5, field3: 9 },
+        { field1: 2, field2: 5, field3: 10 },
     ];
 
     var source = this.createDataSource({
@@ -2420,15 +2421,15 @@ QUnit.test("clear second level groups info when change change groups count to on
 QUnit.test("Update group offset for expanded grouped row of the first level when change sortOrder of the first level group field", function(assert) {
     // arrange
     this.array = [
-            { field1: 1, field2: 2, field3: 3 },
-            { field1: 1, field2: 2, field3: 4 },
-            { field1: 1, field2: 3, field3: 5 },
-            { field1: 2, field2: 4, field3: 6 },
-            { field1: 3, field2: 5, field3: 7 },
-            { field1: 4, field2: 6, field3: 8 },
-            { field1: 4, field2: 6, field3: 9 },
-            { field1: 4, field2: 6, field3: 10 },
-            { field1: 4, field2: 6, field3: 11 }
+        { field1: 1, field2: 2, field3: 3 },
+        { field1: 1, field2: 2, field3: 4 },
+        { field1: 1, field2: 3, field3: 5 },
+        { field1: 2, field2: 4, field3: 6 },
+        { field1: 3, field2: 5, field3: 7 },
+        { field1: 4, field2: 6, field3: 8 },
+        { field1: 4, field2: 6, field3: 9 },
+        { field1: 4, field2: 6, field3: 10 },
+        { field1: 4, field2: 6, field3: 11 }
     ];
 
     var source = this.createDataSource({
@@ -2550,7 +2551,12 @@ function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOpt
                             extra.totalCount = totalCount;
                         }
                         if(loadOptions.requireGroupCount && !brokeOptions.skipGroupCount) {
-                            extra.groupCount = totalCount;
+                            queryByOptions(arrayStore.createQuery(), {
+                                filter: loadOptions.filter,
+                                group: loadOptions.group
+                            }).count().done(function(groupCount) {
+                                extra.groupCount = groupCount;
+                            });
                         }
                         if(brokeOptions.useNativePromise) {
                             d.resolve($.extend({ data: data }, extra));
@@ -2925,13 +2931,13 @@ QUnit.test("Load collapsed groups and expand first item when two groups", functi
 
 QUnit.test("Load collapsed groups, expand second big item and go to third page when two groups", function(assert) {
     var array = [{ field1: 1, field2: 2, field3: 3 },
-                    { field1: 2, field2: 3, field3: 4 },
-                    { field1: 2, field2: 4, field3: 5 },
-                    { field1: 2, field2: 5, field3: 6 },
-                    { field1: 2, field2: 6, field3: 7 },
-                    { field1: 2, field2: 7, field3: 8 },
-                    { field1: 2, field2: 8, field3: 9 },
-                    { field1: 3, field2: 9, field3: 10 }];
+        { field1: 2, field2: 3, field3: 4 },
+        { field1: 2, field2: 4, field3: 5 },
+        { field1: 2, field2: 5, field3: 6 },
+        { field1: 2, field2: 6, field3: 7 },
+        { field1: 2, field2: 7, field3: 8 },
+        { field1: 2, field2: 8, field3: 9 },
+        { field1: 3, field2: 9, field3: 10 }];
 
     var dataSource = this.createDataSource({
         store: array,
@@ -2971,13 +2977,13 @@ QUnit.test("Load collapsed groups, expand second big item and go to third page w
 
 QUnit.test("Load collapsed groups, expand second level item, expand third level big item and go to third page when two groups", function(assert) {
     var array = [{ field1: 1, field2: 2, field3: 3 },
-                    { field1: 2, field2: 3, field3: 4 },
-                    { field1: 2, field2: 4, field3: 5 },
-                    { field1: 2, field2: 4, field3: 6 },
-                    { field1: 2, field2: 4, field3: 7 },
-                    { field1: 2, field2: 4, field3: 8 },
-                    { field1: 2, field2: 4, field3: 9 },
-                    { field1: 3, field2: 5, field3: 10 }];
+        { field1: 2, field2: 3, field3: 4 },
+        { field1: 2, field2: 4, field3: 5 },
+        { field1: 2, field2: 4, field3: 6 },
+        { field1: 2, field2: 4, field3: 7 },
+        { field1: 2, field2: 4, field3: 8 },
+        { field1: 2, field2: 4, field3: 9 },
+        { field1: 3, field2: 5, field3: 10 }];
 
     var dataSource = this.createDataSource({
         store: array,
@@ -3114,10 +3120,10 @@ QUnit.test("Change page several times after expand groups if data is grouped by 
 QUnit.test("Expand third level group", function(assert) {
     var array = [
         /* 1 */
-            /* 2 */
-                /* 3 */
-                    { field1: 1, field2: 2, field3: 3, id: 1 },
-                    { field1: 1, field2: 2, field3: 3, id: 2 },
+        /* 2 */
+        /* 3 */
+        { field1: 1, field2: 2, field3: 3, id: 1 },
+        { field1: 1, field2: 2, field3: 3, id: 2 },
         /* 2 */ { field1: 2, field2: 2, field3: 4, id: 3 },
         // ===
         { field1: 3, field2: 3, field3: 5, id: 4 },
@@ -3706,23 +3712,23 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         assert.equal(source.itemsCount(), 2);
     });
 
-// T356413
+    // T356413
     QUnit.test("grouping with pageSize less items count. Change pageSize at runtime", function(assert) {
         var source = this.createDataSource({
             group: "group",
             store: [
-            { group: 1, id: 1 },
-            { group: 1, id: 2 },
-            { group: 1, id: 3 },
-            { group: 1, id: 4 },
-            { group: 1, id: 5 },
-            { group: 1, id: 6 },
-            { group: 2, id: 7 },
+                { group: 1, id: 1 },
+                { group: 1, id: 2 },
+                { group: 1, id: 3 },
+                { group: 1, id: 4 },
+                { group: 1, id: 5 },
+                { group: 1, id: 6 },
+                { group: 2, id: 7 },
             ],
             pageSize: 3
         });
 
-    // act
+        // act
         source.load();
 
         source.changeRowExpand([1]);
@@ -3733,12 +3739,12 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
         source.pageIndex(2);
         source.load();
 
-    // assert
+        // assert
         assert.equal(source.totalItemsCount(), 10);
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1, isContinuation: true, items: [
-            { group: 1, id: 5 },
-            { group: 1, id: 6 },
+                { group: 1, id: 5 },
+                { group: 1, id: 6 },
             ]
         }]);
         assert.equal(source.itemsCount(), 3);
@@ -4109,21 +4115,21 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             });
             source.load();
 
-    // act
+            // act
             source.collapseAll();
             source.load();
 
-    // assert
+            // assert
             assert.equal(source.pageCount(), 2, "pageCount");
             assert.deepEqual(source.items(), [
-        { field1: 1, field2: 2, field3: 3 },
-        { field1: 1, field2: 2, field3: 4 }
+                { field1: 1, field2: 2, field3: 3 },
+                { field1: 1, field2: 2, field3: 4 }
             ], "items");
         });
 
-// T112478
+        // T112478
         QUnit.test("collapseAll for remote data", function(assert) {
-    // arrange
+            // arrange
             var source = this.createDataSource({
                     load: function() { return [{ group: "group 1", text: "text 1" }, { group: "group 1", text: "text 2" }, { group: "group 2", text: "text 3" }]; },
                     totalCount: function() { return -1; },
@@ -4142,11 +4148,11 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             assert.ok(source._grouping instanceof ExpandedGroupingHelper, "expanded grouping helper");
 
 
-    // act
+            // act
             source.collapseAll();
             source.load();
 
-    // assert
+            // assert
             assert.ok(source._grouping instanceof CollapsedGroupingHelper, "collapsed grouping helper");
             assert.ok(!messageError, "no error");
             assert.deepEqual(this.processItems(source.items()), [{ key: "group 1", items: null }, { key: "group 2", items: null }]);
@@ -4159,26 +4165,26 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             });
             source.load();
 
-    // act
+            // act
             source.expandAll();
             source.load();
 
-    // assert
+            // assert
             assert.equal(source.pageCount(), 2, "pageCount");
             assert.deepEqual(source.items(), [
-        { field1: 1, field2: 2, field3: 3 },
-        { field1: 1, field2: 2, field3: 4 }
+                { field1: 1, field2: 2, field3: 3 },
+                { field1: 1, field2: 2, field3: 4 }
             ], "items");
         });
 
-// T183365
+        // T183365
         QUnit.test("change grouping and reload with custom store", function(assert) {
             var source = this.createDataSource({
                 load: function() {
                     return [
-                { name: 'Chai', customer: 'John' },
-                { name: 'Chang', customer: 'John' },
-                { name: 'Queso Caprale', customer: 'Bob' }
+                        { name: 'Chai', customer: 'John' },
+                        { name: 'Chang', customer: 'John' },
+                        { name: 'Queso Caprale', customer: 'Bob' }
                     ];
                 },
                 totalCount: function() { return 3; },
@@ -4186,11 +4192,11 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             });
             source.load();
 
-    // act
+            // act
             source.group('name');
             source.reload();
 
-    // assert
+            // assert
             assert.equal(source.totalItemsCount(), 3);
             assert.deepEqual(source.items(), [{
                 key: 'Chai', items: null
@@ -4202,7 +4208,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             assert.equal(source.itemsCount(), 3);
         });
 
-// T266248
+        // T266248
         QUnit.test("change sortOrder of group", function(assert) {
             var source = this.createDataSource({
                 pageSize: 5,
@@ -4210,11 +4216,11 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             });
             source.load();
 
-    // act
+            // act
             source.group([{ selector: "field1", isExpanded: true, desc: true }]);
             source.reload();
 
-    // assert
+            // assert
             assert.equal(source.pageCount(), 2, "pageCount");
             assert.deepEqual(source.items(), [
                 {
@@ -4224,8 +4230,8 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
                 {
                     isContinuationOnNextPage: true,
                     items: [
-                { field1: 1, field2: 2, field3: 3 },
-                { field1: 1, field2: 2, field3: 4 }
+                        { field1: 1, field2: 2, field3: 3 },
+                        { field1: 1, field2: 2, field3: 4 }
                     ],
                     key: 1
                 }
@@ -4579,8 +4585,8 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
                     key: 2
                 }, {
                     items: [
-                            { field1: 1, field2: 3, field3: 5 },
-                            { field1: 1, field2: 3, field3: 6 }
+                        { field1: 1, field2: 3, field3: 5 },
+                        { field1: 1, field2: 3, field3: 6 }
                     ],
                     key: 3
                 }],
@@ -4716,8 +4722,8 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1, items:
             [
-                    { key: 2, items: null },
-                    { key: 3, items: null }
+                { key: 2, items: null },
+                { key: 3, items: null }
             ]
         }]);
     });
@@ -4741,8 +4747,8 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1, items:
             [
-                    { key: 2, items: null },
-                    { key: 3, items: null }
+                { key: 2, items: null },
+                { key: 3, items: null }
             ]
         }]);
     });
@@ -4760,8 +4766,8 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1, items:
             [
-                    { key: 2, items: null },
-                    { key: 3, items: null }
+                { key: 2, items: null },
+                { key: 3, items: null }
             ]
         }]);
     });
@@ -4784,8 +4790,8 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             key: 1, items: [
                 {
                     key: 2, items: [
-                                { field1: 1, field2: 2, field3: 3 },
-                                { field1: 1, field2: 2, field3: 4 }
+                        { field1: 1, field2: 2, field3: 3 },
+                        { field1: 1, field2: 2, field3: 4 }
                     ]
                 }
             ]
@@ -4830,13 +4836,13 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
         assert.deepEqual(this.processItems(source.items()), [{
             key: 1, items:
             [
-                    { key: 3, items: null },
-                    { key: 2, items: null }
+                { key: 3, items: null },
+                { key: 2, items: null }
             ]
         }]);
     });
 
-// T382926
+    // T382926
     QUnit.test("change sortOrder for second group level when all groups expanded", function(assert) {
         var array = [
             { field1: 1, field2: 2, field3: 1 },
@@ -4854,7 +4860,7 @@ $.each(["Grouping without remoteOperations. Second level", "Grouping with remote
             group: [{ selector: 'field1', desc: false, isExpanded: true }, { selector: 'field2', desc: false, isExpanded: true }]
         });
 
-    // act
+        // act
         source.load();
 
         source.group([{ selector: 'field1', desc: false, isExpanded: true }, { selector: 'field2', desc: true, isExpanded: true }]);

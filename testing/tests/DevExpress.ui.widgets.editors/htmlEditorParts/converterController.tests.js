@@ -27,7 +27,7 @@ QUnit.module("Unknown converter", () => {
         assert.throws(
             function() { $("#htmlEditor").dxHtmlEditor({ valueType: "markdown" }); },
             function(e) {
-                return /E1050/.test(e.message);
+                return /E1051 - HtmlEditor's valueType is "markdown"/.test(e.message);
             },
             "Converter isn't defined"
         );

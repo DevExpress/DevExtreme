@@ -309,6 +309,7 @@ QUnit.test("center", function(assert) {
 QUnit.test("center with geocode error", function(assert) {
     var done = assert.async();
     var d1 = $.Deferred();
+    var errorStub = sinon.stub(errors, "log");
 
     var $map = $("#map").dxMap({
             provider: "google",
@@ -316,7 +317,7 @@ QUnit.test("center with geocode error", function(assert) {
             onReady: function() {
                 assert.equal(window.google.geocodeCalled, 1, "geocode used");
                 assert.deepEqual(window.google.assignedCenter, window.geocodedWithErrorLocation, "center specified correctly");
-
+                assert.deepEqual(errorStub.firstCall.args, ["W1006", 1]);
                 d1.resolve();
             }
         }),
@@ -326,6 +327,7 @@ QUnit.test("center with geocode error", function(assert) {
         map.option("onUpdated", function() {
             assert.equal(window.google.geocodeCalled, 2, "geocode used");
             assert.deepEqual(window.google.assignedCenter, window.geocodedLocation, "center changed");
+            errorStub.restore();
 
             done();
         });
@@ -1227,16 +1229,17 @@ QUnit.test("add route with incorrect response", function(assert) {
         }),
         map = $map.dxMap("instance");
 
-    var errorSpy = sinon.spy(errors, "log");
+    var errorStub = sinon.stub(errors, "log");
     d.done(function() {
         google.statusCallback = function() {
             return google.maps.DirectionsStatus.OVER_QUERY_LIMIT;
         };
         map.addRoute(ROUTES[1]).done(function(instance) {
-            assert.ok(errorSpy.withArgs("W1006").calledOnce, "warning is fired");
+            assert.ok(errorStub.withArgs("W1006").calledOnce, "warning is fired");
             assert.ok(!window.google.routeRemoved, "previous route does not removed");
 
             assert.ok(instance instanceof google.maps.DirectionsRenderer, "route instance returned");
+            errorStub.restore();
 
             done();
         });

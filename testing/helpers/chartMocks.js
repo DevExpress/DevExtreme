@@ -603,8 +603,8 @@ export const MockSeries = function MockSeries(options) {
         },
         setClippingParams: function(baseId, wideId, force) {
             this["clip-path"] = baseId,
-                this.wideId = wideId,
-                this.forceClipping = force;
+            this.wideId = wideId,
+            this.forceClipping = force;
         },
         drawLabelsWOPoints: sinon.spy(),
         hideLabels: sinon.spy(),
@@ -896,6 +896,10 @@ export const MockAxis = function(renderOptions) {
 
         setBusinessRange: sinon.stub(),
 
+        getZoomBounds: sinon.stub(),
+
+        setInitRange: sinon.stub(),
+
         setGroupSeries: sinon.stub(),
 
         restoreBusinessRange: sinon.stub(),
@@ -971,7 +975,7 @@ export const MockAxis = function(renderOptions) {
         _axisElementsGroup: axisElementsGroup,
         validate: function(isArgumentAxisType, incidentOccurred) {
             this.validated = true,
-                this.incidentOccurred = incidentOccurred;
+            this.incidentOccurred = incidentOccurred;
             this.isArgumentAxisType = isArgumentAxisType;
         },
         validateUnit: function(value) {
@@ -1005,7 +1009,8 @@ export const MockAxis = function(renderOptions) {
         _getAdjustedBusinessRange: sinon.spy(),
         refreshVisualRangeOption: sinon.spy(),
         prepareAnimation: sinon.spy(),
-        setCustomVisualRange: sinon.spy()
+        setCustomVisualRange: sinon.spy(),
+        handleZoomEnd: sinon.spy()
     };
 };
 

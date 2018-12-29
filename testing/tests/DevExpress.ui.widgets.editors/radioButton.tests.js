@@ -10,7 +10,8 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var RADIO_BUTTON_CHECKED_CLASS = "dx-radiobutton-checked";
+var RADIO_BUTTON_CHECKED_CLASS = "dx-radiobutton-checked",
+    RADIO_BUTTON_ICON_CHECKED_CLASS = "dx-radiobutton-icon-checked";
 
 QUnit.module("value changing");
 
@@ -22,6 +23,7 @@ QUnit.test("widget should be selected if value is changed dynamically", function
 
     radioButton.option("value", true);
     assert.ok($radioButton.hasClass(RADIO_BUTTON_CHECKED_CLASS), "selected class added");
+    assert.ok($radioButton.children().hasClass(RADIO_BUTTON_ICON_CHECKED_CLASS), "selected class added on icon element");
 });
 
 QUnit.test("value change action should be fired on value change", function(assert) {

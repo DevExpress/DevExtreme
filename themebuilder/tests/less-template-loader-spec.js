@@ -61,11 +61,11 @@ describe("LessTemplateLoader", () => {
             bootstrapMetadata,
             lessFileContent,
             config.bootstrapVersion).then(data => {
-                assert.equal(data.compiledMetadata["@base-bg"], "#000");
-                assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
-                assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
-                assert.equal(data.css, "div {\n  color: #000;\n}\n");
-            });
+            assert.equal(data.compiledMetadata["@base-bg"], "#000");
+            assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
+            assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
+            assert.equal(data.css, "div {\n  color: #000;\n}\n");
+        });
     });
 
     it("analyzeBootstrapTheme - bootstrap 4", () => {
@@ -103,11 +103,11 @@ describe("LessTemplateLoader", () => {
             bootstrapMetadata,
             sassFileContent,
             config.bootstrapVersion).then((data) => {
-                assert.equal(data.compiledMetadata["@base-bg"], "#000");
-                assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
-                assert.equal(data.compiledMetadata["@base-text-color"], "#212529");
-                assert.equal(data.css, "div {\n  color: #000;\n  background: #212529;\n}\n");
-            });
+            assert.equal(data.compiledMetadata["@base-bg"], "#000");
+            assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
+            assert.equal(data.compiledMetadata["@base-text-color"], "#212529");
+            assert.equal(data.css, "div {\n  color: #000;\n  background: #212529;\n}\n");
+        });
     });
 
     it("load - variable change", () => {
@@ -129,11 +129,11 @@ describe("LessTemplateLoader", () => {
             colorScheme,
             metadata,
             [{ key: "@base-bg", value: "green" }]).then(data => {
-                assert.equal(data.compiledMetadata["@base-bg"], "green");
-                assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
-                assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
-                assert.equal(data.css, "div {\n  color: green;\n}\n");
-            });
+            assert.equal(data.compiledMetadata["@base-bg"], "green");
+            assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
+            assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
+            assert.equal(data.css, "div {\n  color: green;\n}\n");
+        });
     });
 
     it("load - variable change, color swatch", () => {
@@ -157,9 +157,9 @@ describe("LessTemplateLoader", () => {
             colorScheme,
             metadata,
             [{ key: "@base-bg", value: "green" }]).then(data => {
-                assert.equal(data.compiledMetadata["@base-bg"], "green");
-                assert.equal(data.css, ".dx-swatch-my-custom div {\n  color: green;\n}\n\n");
-            });
+            assert.equal(data.compiledMetadata["@base-bg"], "green");
+            assert.equal(data.css, ".dx-swatch-my-custom div {\n  color: green;\n}\n\n");
+        });
     });
 
     it("load - variable change, color swatch, typography and special classes", () => {
@@ -190,7 +190,7 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata).then(data => {
-                assert.equal(data.css, `.dx-swatch-my-custom div {
+            assert.equal(data.css, `.dx-swatch-my-custom div {
   color: #fff;
 }
 .dx-swatch-my-custom .dx-theme-accent-as-text-color {
@@ -201,7 +201,7 @@ describe("LessTemplateLoader", () => {
 }
 
 `);
-            });
+        });
     });
 
     it("load - default less path", () => {
@@ -365,7 +365,7 @@ describe("LessTemplateLoader", () => {
             themeName,
             colorScheme,
             metadata).then(data => {
-                assert.equal(data.css, `.dx-swatch-my-custom .dx-theme-marker {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-theme-marker {
   font-family: 'dx.generic.my-custom';
 }
 .dx-swatch-my-custom div {
@@ -379,7 +379,7 @@ describe("LessTemplateLoader", () => {
 }
 
 `);
-            });
+        });
     });
 
     it("compile less with options", () => {
@@ -418,6 +418,139 @@ describe("LessTemplateLoader", () => {
   font-weight: normal;
   font-style: normal;
 }
+`);
+        });
+    });
+
+    it("load - do not change the order of cascade's classes by swatch class (T692470) - checkbox case", () => {
+        let config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            outColorScheme: "my-custom",
+            makeSwatch: true,
+            reader: () => {
+                return new Promise(resolve => {
+                    resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+                    .dx-checkbox-icon {
+                        .dx-checkbox-checked &, .dx-checkbox-checked& {
+                            background-color: #fff;
+                        }
+                    }`);
+                });
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata).then(data => {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-checkbox-checked .dx-checkbox-icon,
+.dx-swatch-my-custom .dx-checkbox-checked.dx-checkbox-icon {
+  background-color: #fff;
+}
+
+`);
+        });
+    });
+
+    it("load - do not change the order of cascade's classes by swatch class (T692470) - underlined editor case", () => {
+        let config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            outColorScheme: "my-custom",
+            makeSwatch: true,
+            reader: () => {
+                return new Promise(resolve => {
+                    resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+                    .dx-searchbox {
+                        .dx-placeholder:before {
+                            .dx-rtl.dx-editor-underlined&,
+                            .dx-rtl .dx-editor-underlined& {
+                                padding-right: 0;
+                            }
+                        }
+                    }`);
+                });
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata).then(data => {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-rtl.dx-editor-underlined.dx-searchbox .dx-placeholder:before,
+.dx-swatch-my-custom .dx-rtl .dx-editor-underlined.dx-searchbox .dx-placeholder:before {
+  padding-right: 0;
+}
+
+`);
+        });
+    });
+
+    it("load - do not change the order of cascade's classes by swatch class (T692470) - tabs case", () => {
+        let config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            outColorScheme: "my-custom",
+            makeSwatch: true,
+            reader: () => {
+                return new Promise(resolve => {
+                    resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+                    .dx-tab-selected {
+                        & + & {
+                            border: none;
+                        }
+                    }`);
+                });
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata).then(data => {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-tab-selected + .dx-swatch-my-custom .dx-tab-selected {
+  border: none;
+}
+
+`);
+        });
+    });
+
+    it("load - do not change the order of cascade's classes by swatch class (T692470) - tabs case with extra selector", () => {
+        let config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            outColorScheme: "my-custom",
+            makeSwatch: true,
+            reader: () => {
+                return new Promise(resolve => {
+                    resolve(`@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+                    .dx-tab-selected {
+                        & + .s & {
+                            border: none;
+                        }
+                    }`);
+                });
+            }
+        };
+
+        let lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.load(
+            themeName,
+            colorScheme,
+            metadata).then(data => {
+            assert.equal(data.css, `.dx-swatch-my-custom .dx-tab-selected + .dx-swatch-my-custom .s .dx-tab-selected {
+  border: none;
+}
+
 `);
         });
     });

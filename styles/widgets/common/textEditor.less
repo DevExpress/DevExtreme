@@ -56,6 +56,10 @@
     outline: 0;
     border: 0;
     .user-select(text);
+
+    &:-webkit-autofill + .dx-placeholder {
+        display: none;
+    }
 }
 
 .dx-show-clear-button {
@@ -73,7 +77,7 @@
     .dx-icon-clear {
         position: absolute;
         display: inline-block;
-        .background-size-prop(contain);
+        background-size: contain;
     }
 }
 

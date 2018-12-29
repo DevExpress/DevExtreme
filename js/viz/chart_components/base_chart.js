@@ -1094,7 +1094,7 @@ var BaseChart = BaseWidget.inherit({
         that._repopulateSeries();
         that._seriesPopulatedHandlerCore();
         that._populateBusinessRange();
-        that._tracker.updateSeries(that.series);
+        that._tracker.updateSeries(that.series, that._skipRender);
         that._updateLegend();
         needRedraw && that._forceRender();
     },
@@ -1247,7 +1247,9 @@ var BaseChart = BaseWidget.inherit({
         that.needToPopulateSeries = false;
 
         _each(seriesThemes, (_, theme) => {
-            const curSeries = that.series && that.series.filter(s => s.name === theme.name)[0];
+            const curSeries = that.series && that.series.filter(s =>
+                s.name === theme.name && seriesBasis.map(sb => sb.series).indexOf(s) === -1
+            )[0];
             if(curSeries && curSeries.type === theme.type) {
                 seriesBasis.push({ series: curSeries, options: theme });
             } else {
@@ -1338,6 +1340,13 @@ var BaseChart = BaseWidget.inherit({
         that.callBase.apply(that, arguments);
         that.__renderOptions = that.__forceRender = null;
         return that;
+    },
+
+    refresh: function() {
+        this._disposeSeries();
+        this._disposeSeriesFamilies();
+        this._change(["CONTAINER_SIZE"]);
+        this._requestChange(["REFRESH_SERIES_REINIT"]);
     }
 });
 

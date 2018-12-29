@@ -157,12 +157,6 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         this.callBase(options);
     },
 
-    _getHorizontalMax: function(groupIndex) {
-        groupIndex = this.option("groupByDate") ? this._getGroupCount() - 1 : groupIndex;
-
-        return this._groupedStrategy.getHorizontalMax(groupIndex);
-    },
-
     _getCellText: function(rowIndex, cellIndex) {
         if(this.option("groupByDate")) {
             cellIndex = Math.floor(cellIndex / this._getGroupCount());
@@ -239,7 +233,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
     getPositionShift: function(timeShift) {
         return {
-            cellShift: timeShift * this.getCellWidth(),
+            cellPosition: timeShift * this.getCellWidth(),
             top: 0,
             left: 0
         };

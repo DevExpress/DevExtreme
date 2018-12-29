@@ -14,34 +14,46 @@ RUN apt-get install -y ca-certificates curl
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https gdebi-core gnupg localepurge
 
 # Node
-RUN curl -L https://deb.nodesource.com/setup_8.x | bash -
+RUN curl -L https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
-RUN npm i -g npm@5
+RUN npm i -g npm@6
 RUN npm cache clean --force
 RUN npm set progress=false
 RUN npm set loglevel=error
 RUN npm set unsafe-perm=true
 RUN npm set fetch-retries 5
+RUN npm set audit false
 
 # .NET Core
 RUN curl -L https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-bionic-prod bionic main" > /etc/apt/sources.list.d/dotnetdev.list
 RUN apt-get update
-RUN DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 apt-get install -y dotnet-sdk-2.1.200
+RUN DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 apt-get install -y dotnet-sdk-2.1
 RUN rm /usr/share/dotnet/sdk/*/nuGetPackagesArchive.lzma
 
 # Slim
 RUN rm -r /usr/share/dotnet/sdk/*/FSharp
-RUN rm -r /usr/share/dotnet/store/*
+RUN rm -r /usr/share/dotnet/sdk/NuGetFallbackFolder/*
+RUN rm -r /usr/share/dotnet/shared/Microsoft.AspNetCore.*
 RUN find /usr/share/dotnet -type f -name '*.resources.dll' -delete
 RUN find /usr/share/dotnet -type f -wholename '**/runtimes/win*/**' -delete
 
 # Chrome, see https://stackoverflow.com/a/36906724
-RUN curl -L https://www.slimjet.com/chrome/lnx/chrome64_66.0.3359.181.deb > chrome.deb
+RUN curl -L http://www.slimjetbrowser.com/chrome/files/70.0.3538.77/google-chrome-stable_current_amd64.deb > chrome.deb
 RUN gdebi -n ./chrome.deb
 RUN unlink ./chrome.deb
-RUN rm -rf /opt/google/chrome/swiftshader
+RUN rm -rf /opt/google/chrome/swiftshader /opt/google/chrome/libwidevinecdm.so
 RUN find /opt/google/chrome/locales -type f ! -name 'en-US.pak' -delete
+
+# Firefox
+RUN apt-get install -y firefox
+RUN mkdir /firefox-profile
+RUN for p in \
+    '"browser.shell.checkDefaultBrowser", false' \
+    '"datareporting.policy.dataSubmissionEnabled", false' \
+    '"font.name-list.monospace.x-western", "Liberation Mono"' \
+    '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
+    '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> /firefox-profile/prefs.js; done
 
 # Utils for docker-ci.sh
 RUN apt-get install -y dbus-x11 httping x11vnc xvfb
@@ -61,21 +73,13 @@ RUN localepurge
 # Ensure UTC
 RUN [ "$(date +%Z)" = "UTC" ] || exit 1
 
-# Fix fonts
-# https://bugs.launchpad.net/bugs/1769654
-# https://steemit.com/linux/@arrowj/fixing-font-rendering-issues-in-ubuntu-bionic-beaver-lts
-RUN curl -L http://archive.ubuntu.com/ubuntu/pool/main/f/fonts-liberation/fonts-liberation_1.07.4-1_all.deb > liberation.deb
-RUN curl -L http://archive.ubuntu.com/ubuntu/pool/main/f/freetype/libfreetype6_2.8-0.2ubuntu2.1_amd64.deb > freetype.deb
-RUN dpkg -i freetype.deb liberation.deb
-RUN rm freetype.deb liberation.deb
-
 # Remove build-time utils
 RUN apt-get purge -y apt-transport-https gdebi-core gnupg localepurge
 
 # Clean APT
 RUN apt-get autoremove -y --purge
 RUN apt-get clean
-RUN rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
+RUN rm -rf /etc/apt/sources.list.d/* /tmp/* /usr/share/doc/* /var/cache/* /var/lib/apt/lists/* /var/log/* 
 
 #############################################################
 

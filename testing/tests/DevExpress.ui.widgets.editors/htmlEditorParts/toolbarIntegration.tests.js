@@ -2,9 +2,13 @@ import $ from "jquery";
 
 import "ui/html_editor";
 
+const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
+const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 const DROPDOWNMENU_CLASS = "dx-dropdownmenu-button";
 const BUTTON_CONTENT_CLASS = "dx-button-content";
+const QUILL_CONTAINER_CLASS = "dx-quill-container";
+const STATE_DISABLED_CLASS = "dx-state-disabled";
 
 const { test } = QUnit;
 
@@ -35,7 +39,7 @@ QUnit.module("Toolbar integration", {
 
     test("Apply simple format with selection", (assert) => {
         const done = assert.async();
-        const expected = "<p><strong>te</strong>st</p>";
+        const expected = "<strong>te</strong>st";
         const instance = $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
             toolbar: { items: ["bold"] },
@@ -44,7 +48,7 @@ QUnit.module("Toolbar integration", {
                 done();
             }
         })
-        .dxHtmlEditor("instance");
+            .dxHtmlEditor("instance");
 
         instance.setSelection(0, 2);
         $("#htmlEditor")
@@ -63,5 +67,99 @@ QUnit.module("Toolbar integration", {
         const expectedContent = '<i class="dx-icon dx-icon-overflow"></i>';
 
         assert.equal(buttonContent, expectedContent);
+    });
+
+    test("Editor disposing should dispose external toolbar", (assert) => {
+        const $toolbarContainer = $("<div>").addClass("external-container");
+        $("#qunit-fixture").append($toolbarContainer);
+
+        const editor = $("#htmlEditor").dxHtmlEditor({
+            toolbar: {
+                container: $toolbarContainer,
+                items: ["bold"]
+            }
+        }).dxHtmlEditor("instance");
+
+        assert.ok($toolbarContainer.hasClass(TOOLBAR_WRAPPER_CLASS), "Container has wrapper class");
+        assert.equal($toolbarContainer.find(`.${TOOLBAR_CLASS}`).length, 1, "Toolbar container contains the htmlEditor's toolbar");
+
+        editor.dispose();
+
+        assert.equal($toolbarContainer.html(), "", "Container's inner html is empty");
+        assert.notOk($toolbarContainer.hasClass(TOOLBAR_WRAPPER_CLASS), "Container hasn't wrapper class");
+    });
+
+    test("Editor should consider toolbar height", (assert => {
+        const height = 100;
+        let markup = "";
+
+        for(let i = 1; i < 50; i++) {
+            markup += `<p>test ${i}</p>`;
+        }
+
+        $("#htmlEditor").html(markup).dxHtmlEditor({
+            height: height,
+            toolbar: { items: ["bold"] }
+        });
+
+        const quillContainerHeight = $(`#htmlEditor .${QUILL_CONTAINER_CLASS}`).outerHeight();
+        const toolbarHeight = $(`#htmlEditor .${TOOLBAR_WRAPPER_CLASS}`).outerHeight();
+
+        assert.roughEqual(quillContainerHeight + toolbarHeight, height, 1, "Toolbar + editor equals to the predefined height");
+    }));
+
+    test("Toolbar correctly disposed after repaint", (assert) => {
+        const $toolbarContainer = $("<div>").addClass("external-container");
+        $("#qunit-fixture").append($toolbarContainer);
+
+        const editor = $("#htmlEditor").dxHtmlEditor({
+            toolbar: {
+                container: $toolbarContainer,
+                items: ["bold"]
+            }
+        }).dxHtmlEditor("instance");
+
+        editor.repaint();
+
+        assert.ok($toolbarContainer.hasClass(TOOLBAR_WRAPPER_CLASS), "Container has wrapper class");
+        assert.equal($toolbarContainer.find(`.${TOOLBAR_CLASS}`).length, 1, "Toolbar container contains the htmlEditor's toolbar");
+    });
+
+    test("Toolbar should be disabled once editor is read only", (assert) => {
+        $("#htmlEditor").dxHtmlEditor({
+            readOnly: true,
+            toolbar: { items: ["bold"] }
+        });
+
+        const isToolbarDisabled = $(`.${TOOLBAR_CLASS}`).hasClass(STATE_DISABLED_CLASS);
+        assert.ok(isToolbarDisabled);
+    });
+
+    test("Toolbar should be disabled once editor is disabled", (assert) => {
+        $("#htmlEditor").dxHtmlEditor({
+            disabled: true,
+            toolbar: { items: ["bold"] }
+        });
+
+        const isToolbarDisabled = $(`.${TOOLBAR_CLASS}`).hasClass(STATE_DISABLED_CLASS);
+        assert.ok(isToolbarDisabled);
+    });
+
+    test("Toolbar should correctly update disabled state on the option changed", (assert) => {
+        const editor = $("#htmlEditor").dxHtmlEditor({
+            disabled: true,
+            readOnly: true,
+            toolbar: { items: ["bold"] }
+        }).dxHtmlEditor("instance");
+        const $toolbar = $(`.${TOOLBAR_CLASS}`);
+
+        editor.option("disabled", false);
+        assert.ok($toolbar.hasClass(STATE_DISABLED_CLASS));
+
+        editor.option("readOnly", false);
+        assert.notOk($toolbar.hasClass(STATE_DISABLED_CLASS));
+
+        editor.option("disabled", true);
+        assert.ok($toolbar.hasClass(STATE_DISABLED_CLASS));
     });
 });

@@ -18,7 +18,9 @@ setTemplateEngine("hogan");
 $("body").addClass("dx-viewport");
 QUnit.testStart(function() {
     var markup =
-        '<div id="container" class="dx-datagrid"></div>\
+        '<div class="dx-widget">\
+            <div id="container" class="dx-datagrid"></div>\
+        </div>\
         <div id="containerIE" class="dx-datagrid"></div>';
 
     $("#qunit-fixture").html(markup);
@@ -491,10 +493,10 @@ QUnit.test('Draw filterRow', function(assert) {
         $filterCell;
 
     $.extend(this.columns, [
-            { caption: 'Column 1', allowFiltering: true, calculateFilterExpression: function() { }, alignment: "left" },
-            { caption: 'Column 2', allowFiltering: true, calculateFilterExpression: function() { }, alignment: "right" },
-            { caption: 'Column 3' }, // not draw filter textbox when allowFiltering is false
-            { caption: 'Column 4', allowFiltering: true, calculateFilterExpression: function() { }, groupIndex: 0, command: 'expand' } // B238226
+        { caption: 'Column 1', allowFiltering: true, calculateFilterExpression: function() { }, alignment: "left" },
+        { caption: 'Column 2', allowFiltering: true, calculateFilterExpression: function() { }, alignment: "right" },
+        { caption: 'Column 3' }, // not draw filter textbox when allowFiltering is false
+        { caption: 'Column 4', allowFiltering: true, calculateFilterExpression: function() { }, groupIndex: 0, command: 'expand' } // B238226
     ]);
 
     this.options.showColumnHeaders = false;
@@ -575,7 +577,7 @@ QUnit.test('Draw filterRow with date column', function(assert) {
     var testElement = $('#container');
 
     $.extend(this.columns, [
-            { caption: 'Column 1', index: 0, allowFiltering: true, calculateFilterExpression: function() { }, filterValue: new Date('1996/7/4'), dataType: 'date', format: 'shortDate', parseValue: function(text) { return dateLocalization.parse(text); } }
+        { caption: 'Column 1', index: 0, allowFiltering: true, calculateFilterExpression: function() { }, filterValue: new Date('1996/7/4'), dataType: 'date', format: 'shortDate', parseValue: function(text) { return dateLocalization.parse(text); } }
     ]);
 
     this.options.showColumnHeaders = false;
@@ -1681,7 +1683,7 @@ QUnit.test("Invalidate instead of render for options", function(assert) {
 
 QUnit.test("getHeadersRowHeight with band columns", function(assert) {
     // arrange
-    var $trElements,
+    var $headerRowElements,
         $testElement = $('#container');
 
     $.extend(this.columns, [
@@ -1704,9 +1706,9 @@ QUnit.test("getHeadersRowHeight with band columns", function(assert) {
     this.columnHeadersView.render($testElement);
 
     // assert
-    $trElements = $testElement.find("tbody > tr");
-    assert.equal($trElements.length, 2, "count row");
-    assert.equal(this.columnHeadersView.getHeadersRowHeight(), $trElements.first().height() * $trElements.length, "height of the headers");
+    $headerRowElements = this.columnHeadersView._getRowElements();
+    assert.equal($headerRowElements.length, 2, "count row");
+    assert.equal(this.columnHeadersView.getHeadersRowHeight(), $($headerRowElements).toArray().reduce((sum, row) => sum + $(row).height(), 0), "height of the headers");
 });
 
 QUnit.test("Header with headerFilter - alignment cell content", function(assert) {
@@ -2088,7 +2090,7 @@ QUnit.module('Headers with band columns', {
 });
 
 QUnit.test("Draw band columns", function(assert) {
-        // arrange
+    // arrange
     var $cells,
         $trElements,
         $testElement = $('#container');
@@ -2096,10 +2098,10 @@ QUnit.test("Draw band columns", function(assert) {
     this.columns = [{ caption: "Band column 1", columns: ["Column1", "Column2"] }, "Column3", { caption: "Band column 2", columns: ["Column4", "Column5"] }];
     this.setupDataGrid();
 
-        // act
+    // act
     this.columnHeadersView.render($testElement);
 
-        // assert
+    // assert
     $trElements = $testElement.find("tbody > tr");
     $cells = $trElements.find("td");
     assert.equal($trElements.length, 2, "count row");
@@ -2107,7 +2109,7 @@ QUnit.test("Draw band columns", function(assert) {
     assert.equal($trElements.last().children().length, 4, "count cell of the second row");
     assert.equal($cells.length, 7, "count cell");
 
-        // first row
+    // first row
     assert.equal($cells.eq(0).text(), "Band column 1", "text of the first cell of the first row");
     assert.equal($cells.eq(0).attr("colspan"), 2, "colspan of the first cell of the first row");
 
@@ -2117,7 +2119,7 @@ QUnit.test("Draw band columns", function(assert) {
     assert.equal($cells.eq(2).text(), "Band column 2", "text of the third cell of the first row");
     assert.equal($cells.eq(2).attr("colspan"), 2, "colspan of the third cell of the first row");
 
-        // second row
+    // second row
     assert.equal($cells.eq(3).text(), "Column 1", "text of the first cell of the second row");
     assert.equal($cells.eq(4).text(), "Column 2", "text of the second cell of the second row");
     assert.equal($cells.eq(5).text(), "Column 4", "text of the third cell of the second row");
@@ -2125,7 +2127,7 @@ QUnit.test("Draw band columns", function(assert) {
 });
 
 QUnit.test("Draw band columns(complex hierarchy)", function(assert) {
-        // arrange
+    // arrange
     var $cells,
         $trElements,
         $testElement = $('#container');
@@ -2143,10 +2145,10 @@ QUnit.test("Draw band columns(complex hierarchy)", function(assert) {
     }];
     this.setupDataGrid();
 
-        // act
+    // act
     this.columnHeadersView.render($testElement);
 
-        // assert
+    // assert
     $trElements = $testElement.find("tbody > tr");
     $cells = $trElements.find("td");
     assert.equal($trElements.length, 6, "count row");
@@ -2158,42 +2160,42 @@ QUnit.test("Draw band columns(complex hierarchy)", function(assert) {
     assert.equal($trElements.eq(5).children().length, 1, "count cell of the sixth row");
     assert.equal($cells.length, 11, "count cell");
 
-        // first row
+    // first row
     assert.equal($cells.eq(0).text(), "Column 1", "text of the first cell of the first row");
     assert.equal($cells.eq(0).attr("rowspan"), 6, "rowspan of the first cell of the first row");
 
     assert.equal($cells.eq(1).text(), "Band column 1", "text of the second cell of the first row");
     assert.equal($cells.eq(1).attr("colspan"), 5, "colspan of the second cell of the first row");
 
-        // second row
+    // second row
     assert.equal($cells.eq(2).text(), "Column 2", "text of the first cell of the second row");
     assert.equal($cells.eq(2).attr("rowspan"), 5, "rowspan of the first cell of the second row");
 
     assert.equal($cells.eq(3).text(), "Band column 2", "text of the second cell of the second row");
     assert.equal($cells.eq(3).attr("colspan"), 4, "colspan of the second cell of the second row");
 
-        // third row
+    // third row
     assert.equal($cells.eq(4).text(), "Column 3", "text of the first cell of the third row");
     assert.equal($cells.eq(4).attr("rowspan"), 4, "rowspan of the first cell of the third row");
 
     assert.equal($cells.eq(5).text(), "Band column 3", "text of the second cell of the third row");
     assert.equal($cells.eq(5).attr("colspan"), 3, "colspan of the second cell of the third row");
 
-        // fourth row
+    // fourth row
     assert.equal($cells.eq(6).text(), "Column 4", "text of the first cell of the fourth row");
     assert.equal($cells.eq(6).attr("rowspan"), 3, "rowspan of the first cell of the fourth row");
 
     assert.equal($cells.eq(7).text(), "Band column 4", "text of the second cell of the fourth row");
     assert.equal($cells.eq(7).attr("colspan"), 2, "colspan of the second cell of the fourth row");
 
-        // fifth row
+    // fifth row
     assert.equal($cells.eq(8).text(), "Column 5", "text of the first cell of the fifth row");
     assert.equal($cells.eq(8).attr("rowspan"), 2, "rowspan of the first cell of the fifth row");
 
     assert.equal($cells.eq(9).text(), "Band column 5", "text of the second cell of the fifth row");
     assert.ok(!$cells.eq(9).attr("colspan"), "colspan of the second cell of the fifth row");
 
-        // sixth row
+    // sixth row
     assert.equal($cells.eq(10).text(), "Column 6", "text of the first cell of the sixth row");
     assert.ok(!$cells.eq(10).attr("rowspan"), "rowspan of the first cell of the sixth row");
 });

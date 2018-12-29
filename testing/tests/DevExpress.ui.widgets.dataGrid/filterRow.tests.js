@@ -787,9 +787,9 @@ QUnit.test('Draw filterRow when all columns grouped', function(assert) {
         filterRow;
 
     $.extend(this.columns, [{ headerCaption: 'Column 1', groupIndex: 0 },
-                            { headerCaption: 'Column 2', groupIndex: 1 },
-                            { headerCaption: 'Column 3', groupIndex: 2 },
-                            { command: 'empty' }
+        { headerCaption: 'Column 2', groupIndex: 1 },
+        { headerCaption: 'Column 3', groupIndex: 2 },
+        { command: 'empty' }
     ]);
 
     // act
@@ -1346,6 +1346,23 @@ QUnit.testInActiveWindow("Title is not appended for menu item of filter row", fu
     // assert
     assert.equal($filterMenu.attr("title"), undefined, "title of menu item");
 });
+
+// T688843
+QUnit.test("The filter menu should be rendered correctly when specified headerCellTemplate", function(assert) {
+    // arrange
+    var $firstCell,
+        $testElement = $("#container");
+
+    $.extend(this.columns, [{ caption: "Column 1", allowFiltering: true, filterOperations: ['=', '<>'], headerCellTemplate: function() {} }]);
+
+    // act
+    this.columnHeadersView.render($testElement);
+
+    // assert
+    $firstCell = $(this.columnHeadersView.element()).find(".dx-datagrid-filter-row").children().first();
+    assert.ok($firstCell.children().first().hasClass("dx-editor-with-menu"), "editor with menu");
+});
+
 
 QUnit.module('Filter Row with real dataController and columnsController', {
     beforeEach: function() {

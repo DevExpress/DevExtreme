@@ -4,22 +4,6 @@ var $ = require("../../core/renderer"),
     normalizeSortingInfo = require("../../data/utils").normalizeSortingInfo,
     when = require("../../core/utils/deferred").when;
 
-exports.createGroupFilter = function(path, storeLoadOptions) {
-    var groups = normalizeSortingInfo(storeLoadOptions.group),
-        i,
-        filter = [];
-
-    for(i = 0; i < path.length; i++) {
-        filter.push([groups[i].selector, "=", path[i]]);
-    }
-
-    if(storeLoadOptions.filter) {
-        filter.push(storeLoadOptions.filter);
-    }
-    return gridCore.combineFilters(filter);
-};
-
-
 exports.createOffsetFilter = function(path, storeLoadOptions) {
     var groups = normalizeSortingInfo(storeLoadOptions.group),
         i,
@@ -136,7 +120,7 @@ exports.GroupingHelper = Class.inherit((function() {
                 result = items.length;
             } else {
                 for(i = 0; i < items.length; i++) {
-                    if(that._isGroupItemCountable(items[i])) {
+                    if(that.isGroupItemCountable(items[i])) {
                         result++;
                     }
                     result += calculateItemsCount(that, items[i].items, groupsCount - 1);
@@ -161,7 +145,7 @@ exports.GroupingHelper = Class.inherit((function() {
         updateTotalItemsCount: function(totalCountCorrection) {
             this._totalCountCorrection = totalCountCorrection || 0;
         },
-        _isGroupItemCountable: function(item) {
+        isGroupItemCountable: function(item) {
             return !this._isVirtualPaging() || !item.isContinuation;
         },
         _isVirtualPaging: function() {

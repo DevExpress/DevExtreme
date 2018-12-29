@@ -579,7 +579,7 @@ function layoutTextNode(node, params) {
         paddingLeftRight = params.paddingLeftRight,
         paddingTopBottom = params.paddingTopBottom,
         effectiveWidth = rect[2] - rect[0] - paddingLeftRight,
-        fitByHeight = params.height + paddingTopBottom <= rect[3] - rect[1],
+        fitByHeight = bBox.height + paddingTopBottom <= rect[3] - rect[1],
         fitByWidth = bBox.width <= effectiveWidth;
 
     if(params.resolveLabelOverflow === "ellipsis" && fitByHeight) {
