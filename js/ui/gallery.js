@@ -216,6 +216,13 @@ var Gallery = CollectionWidget.inherit({
             * @inheritdoc
             */
 
+            /**
+             * @name dxGalleryOptions.items
+             * @type Array<string, dxGalleryItem, object>
+             * @fires dxGalleryOptions.onOptionChanged
+             * @inheritdoc
+             */
+
             _itemAttributes: { role: "option" },
             loopItemFocus: false,
             selectOnFocus: true,
@@ -253,20 +260,20 @@ var Gallery = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
         /**
-        * @name dxGalleryItemTemplate
-        * @inherits CollectionWidgetItemTemplate
+        * @name dxGalleryItem
+        * @inherits CollectionWidgetItem
         * @type object
         */
         /**
-        * @name dxGalleryItemTemplate.imageSrc
+        * @name dxGalleryItem.imageSrc
         * @type String
         */
         /**
-        * @name dxGalleryItemTemplate.imageAlt
+        * @name dxGalleryItem.imageAlt
         * @type String
         */
         /**
-        * @name dxGalleryItemTemplate.visible
+        * @name dxGalleryItem.visible
         * @hidden
         * @inheritdoc
         */

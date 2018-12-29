@@ -381,7 +381,7 @@ exports.headerFilterMixin = {
 
     optionChanged: function(args) {
         if(args.name === "headerFilter") {
-            this._invalidate();
+            this._invalidate(true, true);
             args.handled = true;
         } else {
             this.callBase(args);

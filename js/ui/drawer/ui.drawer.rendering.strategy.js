@@ -190,9 +190,9 @@ class DrawerStrategy {
 
 
         if(drawer.isHorizontalDirection()) {
-            $(drawer.content()).css("width", keepMaxSize ? drawer.getRealPanelWidth() : panelSize);
+            $(drawer.content()).width(keepMaxSize ? drawer.getRealPanelWidth() : panelSize);
         } else {
-            $(drawer.content()).css("height", keepMaxSize ? drawer.getRealPanelHeight() : panelSize);
+            $(drawer.content()).height(keepMaxSize ? drawer.getRealPanelHeight() : panelSize);
         }
     }
 

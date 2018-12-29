@@ -3046,6 +3046,80 @@ QUnit.test("Enable rows hover, row position and focused row", function(assert) {
     assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
 });
 
+QUnit.test("Paging should not raise the exception if OData and a group row was focused", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        data = [
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal0', name: 'Ben', age: 24 },
+            { team: 'internal0', name: 'Dan', age: 23 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            dataSource: data,
+            remoteOperations: { filtering: true, sorting: true, paging: true },
+            columns: [{ dataField: "team", groupIndex: 0 }, "name", "age"],
+            focusedRowEnabled: true,
+            focusedRowIndex: 0,
+            grouping: { autoExpandAll: true },
+            paging: { pageSize: 2 }
+        }).dxDataGrid("instance");
+
+    // act, assert
+    try {
+        dataGrid.pageIndex(1);
+        clock.tick();
+    } catch(e) {
+        assert.ok(false, e);
+    }
+
+    // assert
+    assert.ok(true, "Grid was paging with focused group row");
+
+    clock.restore();
+});
+
+QUnit.test("DataGrid should not scroll back to the focused row after pageIndex changed in virtual scrolling", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        data = [],
+        dataGrid,
+        generateData = function() {
+            for(var i = 0; i < 100; ++i) {
+                data.push({ id: i, c0: "c0_" + i, c1: "c1_" + i });
+            }
+        };
+
+    generateData();
+
+    dataGrid = $("#dataGrid").dxDataGrid({
+        height: 300,
+        keyExpr: "id",
+        loadingTimeout1: undefined,
+        dataSource: data,
+        focusedRowEnabled: true,
+        focusedRowIndex: 3,
+        paging: { pageSize: 5 },
+        scrolling: {
+            mode: "virtual"
+        }
+    }).dxDataGrid("instance");
+
+    clock.tick();
+
+    // act
+    dataGrid.getScrollable().scrollTo({ y: 1000 });
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getScrollable().scrollTop(), 1000, "scrollTop");
+
+    clock.restore();
+});
+
 QUnit.test("Enable rows hover via option method", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "hover is disabled for not desktop devices");
@@ -3583,6 +3657,7 @@ QUnit.test("scroll position should not be reseted if virtual scrolling and cell 
     }).dxDataGrid("instance");
 
     // act
+    dataGrid.getView("rowsView")._isScrollByEvent = true;
     dataGrid.getScrollable().scrollTo({ y: 2000 });
 
     // assert
@@ -4620,6 +4695,39 @@ QUnit.test("Horizontal scroll position of headers view is changed_T251448", func
     // assert
     assert.equal(dataGrid._views.rowsView.getScrollable().scrollLeft(), 400, "scroll left of rows view");
     assert.equal($footerView.scrollLeft(), 400, "scroll left of footer view");
+});
+
+// T702241
+QUnit.test('Scroll position headers after changing of headerFilter setting', function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        $dataGrid = $("#dataGrid").dxDataGrid({
+            width: 200,
+            scrolling: {
+                useNative: false
+            },
+            columns: [
+                { dataField: 'firstName', width: 200 },
+                { dataField: 'lastName', width: 200 }
+            ]
+        }),
+        dataGrid = $dataGrid.dxDataGrid("instance"),
+        $headersView;
+
+    // act
+    clock.tick();
+
+    $headersView = $dataGrid.find(".dx-datagrid-headers" + " .dx-datagrid-scroll-container").first();
+    $headersView.scrollLeft(200);
+    $($headersView).trigger("scroll");
+
+    dataGrid.option("headerFilter.visible", true);
+
+    // assert
+    $headersView = $dataGrid.find(".dx-datagrid-headers" + " .dx-datagrid-scroll-container").first();
+    assert.equal($headersView.scrollLeft(), 200);
+
+    clock.restore();
 });
 
 QUnit.test("Horizontal scroll position of footer view is changed_T251448", function(assert) {

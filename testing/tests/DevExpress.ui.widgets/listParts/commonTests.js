@@ -2715,20 +2715,3 @@ QUnit.test("Delayed search value should be applied on the widget reset", functio
     assert.equal(searchBoxInstance._input().val(), "test", "Search input has the correct value");
     clock.restore();
 });
-
-QUnit.test("Search in items of grouped dataSource", function(assert) {
-    var searchEditor,
-        $element = $("#list").dxList({
-            dataSource: [{ key: "a", items: [{ name: "1" }] }, { key: "b", items: [{ name: "2" }] }],
-            grouped: true,
-            searchEnabled: true,
-            searchExpr: "name"
-        }),
-        instance = $element.dxList("instance"),
-        expectedValue = { key: "a", items: [{ name: "1", key: "a" }] };
-
-    searchEditor = $element.children().first().dxTextBox("instance");
-    searchEditor.option("value", "1");
-
-    assert.deepEqual(instance.option("items")[0], expectedValue, "items");
-});

@@ -44,6 +44,22 @@ class RadioCollection extends CollectionWidget {
         return this._focusTarget();
     }
 
+    _postprocessRenderItem(args) {
+        const { itemData: { html }, itemElement } = args;
+
+        if(!html) {
+            const $radio = $("<div>").addClass(RADIO_BUTTON_ICON_CLASS);
+
+            $("<div>").addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
+
+            const $radioContainer = $("<div>").append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
+
+            $(itemElement).prepend($radioContainer);
+        }
+
+        super._postprocessRenderItem(args);
+    }
+
     _processSelectableItem($itemElement, isSelected) {
         super._processSelectableItem($itemElement, isSelected);
 
@@ -217,20 +233,12 @@ class RadioGroup extends Editor {
 
     _itemClickHandler({ itemElement, event, itemData }) {
         if(this.itemElements().is(itemElement)) {
-            this._saveValueChangeEvent(event);
-            this.option("value", this._getItemValue(itemData));
-        }
-    }
+            const newValue = this._getItemValue(itemData);
 
-    _itemRenderedHandler({ itemData: { html }, itemElement }) {
-        if(!html) {
-            const $radio = $("<div>").addClass(RADIO_BUTTON_ICON_CLASS);
-
-            $("<div>").addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
-
-            const $radioContainer = $("<div>").append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
-
-            $(itemElement).prepend($radioContainer);
+            if(newValue !== this.option("value")) {
+                this._saveValueChangeEvent(event);
+                this.option("value", newValue);
+            }
         }
     }
 
@@ -307,19 +315,19 @@ class RadioGroup extends Editor {
         const $radios = $("<div>").appendTo(this.$element());
 
         this._radios = this._createComponent($radios, RadioCollection, {
-            keyExpr: this._getCollectionKeyExpr(),
-            selectionMode: "single",
-            selectedItemKeys: this._getSelectedItemKeys(),
+            accessKey: this.option("accessKey"),
             dataSource: this._dataSource,
-            onItemRendered: this._itemRenderedHandler,
+            focusStateEnabled: this.option("focusStateEnabled"),
+            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            keyExpr: this._getCollectionKeyExpr(),
+            noDataText: "",
             onContentReady: () => this._fireContentReadyAction(true),
             onItemClick: this._itemClickHandler.bind(this),
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
             scrollingEnabled: false,
-            focusStateEnabled: this.option("focusStateEnabled"),
-            accessKey: this.option("accessKey"),
-            tabIndex: this.option("tabIndex"),
-            noDataText: ""
+            selectionByClick: false,
+            selectionMode: "single",
+            selectedItemKeys: this._getSelectedItemKeys(),
+            tabIndex: this.option("tabIndex")
         });
     }
 

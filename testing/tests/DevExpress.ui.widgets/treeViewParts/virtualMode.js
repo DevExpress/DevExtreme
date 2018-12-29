@@ -1,13 +1,19 @@
 /* global data2, dataID, internals, makeSlowDataSource */
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    fx = require("animation/fx"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store"),
-    dblclickEvent = require("events/dblclick"),
-    TreeView = require("ui/tree_view");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import fx from "animation/fx";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
+import dblclickEvent from "events/dblclick";
+import TreeView from "ui/tree_view";
+
+import "common.css!";
+import "generic_light.css!";
+
+const NODE_LOAD_INDICATOR_CLASS = "dx-treeview-node-loadindicator";
+const TREEVIEW_ITEM_CLASS = "dx-treeview-item";
 
 QUnit.module("Virtual mode", {
     beforeEach: function() {
@@ -1089,6 +1095,30 @@ QUnit.test("Expand all method with the virtual mode", function(assert) {
     assert.ok(nodes[0].expanded, "item 1");
     assert.notOk(nodes[0].items[0].expanded, "item 11");
     assert.equal(nodes[0].items[0].items.length, 0, "children count of the item 11");
+});
+
+QUnit.test("load indicator should be located before an item", assert => {
+    const treeView = new TreeView($("#treeView"), {
+        virtualModeEnabled: true,
+        items: [
+            { id: 1, text: "Item 1", parentId: 0 },
+            { id: 2, text: "Item 2", parentId: 1 }
+        ],
+        dataStructure: "plain"
+    });
+
+    let itemOffsetLeft;
+    let loadIndicatorOffsetLeft;
+    const createLoadIndicator = treeView._createLoadIndicator;
+    treeView._createLoadIndicator = $node => {
+        createLoadIndicator.call(treeView, $node);
+        itemOffsetLeft = $node.find(`.${TREEVIEW_ITEM_CLASS}`).offset().left;
+        loadIndicatorOffsetLeft = $node.find(`.${NODE_LOAD_INDICATOR_CLASS}`).offset().left;
+    };
+
+    treeView.expandItem(1);
+
+    assert.ok(loadIndicatorOffsetLeft < itemOffsetLeft, "the load indicator is shown before item");
 });
 
 QUnit.module("the 'createChildren' option");

@@ -989,7 +989,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         for(var i = 0; i < data.length; i++) {
             var groups = data[i].groups,
-                groupIndex = groups ? this._getGroupIndexByResourceId(groups) : 0,
+                groupIndex = this.option("groups").length && groups ? this._getGroupIndexByResourceId(groups) : 0,
                 allDay = !!(data[i].allDay),
                 coordinates = this.getCoordinatesByDate(data[i].startDate, groupIndex, allDay),
                 $cell = this._getCellByCoordinates(coordinates, groupIndex);

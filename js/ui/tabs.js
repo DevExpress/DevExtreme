@@ -118,6 +118,13 @@ var Tabs = CollectionWidget.inherit({
              * @inheritdoc
              */
 
+            /**
+             * @name dxTabsOptions.items
+             * @type Array<string, dxTabsItem, object>
+             * @fires dxTabsOptions.onOptionChanged
+             * @inheritdoc
+             */
+
             activeStateEnabled: true,
             selectionRequired: false,
             selectOnFocus: true,
@@ -125,16 +132,16 @@ var Tabs = CollectionWidget.inherit({
             useInkRipple: false,
             badgeExpr: function(data) { return data ? data.badge : undefined; }
             /**
-            * @name dxTabsItemTemplate
-            * @inherits CollectionWidgetItemTemplate
+            * @name dxTabsItem
+            * @inherits CollectionWidgetItem
             * @type object
             */
             /**
-            * @name dxTabsItemTemplate.icon
+            * @name dxTabsItem.icon
             * @type String
             */
             /**
-            * @name dxTabsItemTemplate.badge
+            * @name dxTabsItem.badge
             * @type String
             */
         });

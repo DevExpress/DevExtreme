@@ -11,6 +11,7 @@ var $ = require("../../core/renderer"),
     config = require("../../core/config"),
     isDefined = typeUtils.isDefined,
     objectUtils = require("../../core/utils/object"),
+    deepExtendArraySafe = objectUtils.deepExtendArraySafe,
     errors = require("../widget/ui.errors"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
@@ -712,7 +713,7 @@ module.exports = {
 
                     let result;
                     if(columnOptions.command) {
-                        result = extend(true, commonColumnOptions, columnOptions);
+                        result = deepExtendArraySafe(commonColumnOptions, columnOptions);
                     } else {
                         commonColumnOptions = that.getCommonSettings(columnOptions);
                         if(userStateColumnOptions && userStateColumnOptions.name && userStateColumnOptions.dataField) {
@@ -720,7 +721,11 @@ module.exports = {
                         }
                         calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
 
-                        result = extend(true, { id: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS, commonColumnOptions, calculatedColumnOptions, columnOptions, { selector: null });
+                        result = deepExtendArraySafe({ id: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS);
+                        deepExtendArraySafe(result, commonColumnOptions);
+                        deepExtendArraySafe(result, calculatedColumnOptions);
+                        deepExtendArraySafe(result, columnOptions);
+                        deepExtendArraySafe(result, { selector: null });
                     }
                     if(columnOptions.filterOperations === columnOptions.defaultFilterOperations) {
                         setFilterOperationsAsDefaultValues(result);

@@ -9,7 +9,6 @@ var $ = require("../core/renderer"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     List = require("./list"),
     ChildDefaultTemplate = require("./widget/child_default_template"),
-    DataConverterMixin = require("./shared/grouped_data_converter_mixin").default,
     EmptyTemplate = require("./widget/empty_template");
 
 var SLIDEOUT_CLASS = "dx-slideout",
@@ -29,17 +28,25 @@ var SlideOut = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         /**
-        * @name dxSlideOutItemTemplate
-        * @inherits CollectionWidgetItemTemplate
+        * @name dxSlideOutItem
+        * @inherits CollectionWidgetItem
         * @type object
         */
         /**
-        * @name dxSlideOutItemTemplate.menuTemplate
+        * @name dxSlideOutItem.menuTemplate
         * @type template|function
         * @type_function_return string|Node|jQuery
         */
 
         return extend(this.callBase(), {
+
+            /**
+             * @name dxSlideOutOptions.items
+             * @type Array<string, dxSlideOutItem, object>
+             * @fires dxSlideOutOptions.onOptionChanged
+             * @inheritdoc
+             */
+
             /**
             * @name dxSlideOutOptions.activeStateEnabled
             * @type boolean
@@ -257,11 +264,12 @@ var SlideOut = CollectionWidget.inherit({
         this._list = this._createComponent($list, List, {
             itemTemplateProperty: "menuTemplate",
             selectionMode: this.option("selectionMode"),
+            selectedIndex: this.option("selectedIndex"),
             selectionRequired: this.option("selectionRequired"),
             indicateLoading: false,
             onItemClick: this._listItemClickHandler.bind(this),
             items: this.option("items"),
-            dataSource: this._dataSource,
+            dataSource: this.option("dataSource"),
             itemTemplate: this._getTemplateByOption("menuItemTemplate"),
             grouped: this.option("menuGrouped"),
             groupTemplate: this._getTemplateByOption("menuGroupTemplate"),
@@ -269,7 +277,6 @@ var SlideOut = CollectionWidget.inherit({
             onGroupRendered: this.option("onMenuGroupRendered"),
             onContentReady: this._updateSlideOutView.bind(this)
         });
-        this._list.option("selectedIndex", this.option("selectedIndex"));
     },
 
     _updateSlideOutView: function() {
@@ -278,10 +285,6 @@ var SlideOut = CollectionWidget.inherit({
 
     _renderItemClickAction: function() {
         this._itemClickAction = this._createActionByOption("onItemClick");
-    },
-
-    _getGroupedOption: function() {
-        return this.option("menuGrouped");
     },
 
     _listItemClickHandler: function(e) {
@@ -456,7 +459,7 @@ var SlideOut = CollectionWidget.inherit({
     * @hidden
     * @inheritdoc
     */
-}).include(DataConverterMixin);
+});
 
 registerComponent("dxSlideOut", SlideOut);
 

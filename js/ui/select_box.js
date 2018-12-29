@@ -781,11 +781,11 @@ var SelectBox = DropDownList.inherit({
 
         item = item || null;
         this.option("selectedItem", item);
-        this._setValue(this._valueGetter(item));
-        this._renderDisplayText(this._displayGetter(item));
-        if(item === null && this._wasSearch()) {
+        if(this._shouldClearFilter()) {
             this._filterDataSource(null);
         }
+        this._setValue(this._valueGetter(item));
+        this._renderDisplayText(this._displayGetter(item));
     },
 
     _createClearButton: function() {
