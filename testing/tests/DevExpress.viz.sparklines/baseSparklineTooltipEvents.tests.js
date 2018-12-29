@@ -4,8 +4,7 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     rendererModule = require("viz/core/renderers/renderer"),
     baseSparkline = require("viz/sparklines/base_sparkline"),
-    DEFAULT_EVENTS_DELAY = 100,
-    TOUCH_EVENTS_DELAY = 1000;
+    DEFAULT_EVENTS_DELAY = 100;
 
 require("viz/sparkline");
 
@@ -313,7 +312,7 @@ QUnit.test('Quick touchend', function(assert) {
 
     this.trigger("touchstart", tracker);
     this.triggerDocument("touchend");
-    this.clock.tick(TOUCH_EVENTS_DELAY);
+    this.clock.tick(DEFAULT_EVENTS_DELAY);
 });
 
 QUnit.test('Quick pointerup', function(assert) {
@@ -334,7 +333,7 @@ QUnit.test('Quick pointerup', function(assert) {
 
     this.trigger("pointerdown", tracker);
     this.triggerDocument("pointerup");
-    this.clock.tick(TOUCH_EVENTS_DELAY);
+    this.clock.tick(DEFAULT_EVENTS_DELAY);
 });
 
 QUnit.test('Touchstart in another place', function(assert) {
@@ -352,7 +351,7 @@ QUnit.test('Touchstart in another place', function(assert) {
 
     sparkline._DEBUG_showCallback = function() {
         that.triggerDocument("touchstart");
-        that.clock.tick(TOUCH_EVENTS_DELAY);
+        that.clock.tick(DEFAULT_EVENTS_DELAY);
     };
 
     sparkline._DEBUG_hideCallback = function() {
@@ -360,7 +359,7 @@ QUnit.test('Touchstart in another place', function(assert) {
     };
 
     this.trigger("touchstart", tracker);
-    this.clock.tick(TOUCH_EVENTS_DELAY);
+    this.clock.tick(DEFAULT_EVENTS_DELAY);
 });
 
 QUnit.test('Pointerdown in another place', function(assert) {
@@ -378,7 +377,7 @@ QUnit.test('Pointerdown in another place', function(assert) {
 
     sparkline._DEBUG_showCallback = function() {
         that.triggerDocument("pointerdown");
-        that.clock.tick(TOUCH_EVENTS_DELAY);
+        that.clock.tick(DEFAULT_EVENTS_DELAY);
     };
 
     sparkline._DEBUG_hideCallback = function() {
@@ -386,7 +385,7 @@ QUnit.test('Pointerdown in another place', function(assert) {
     };
 
     this.trigger("pointerdown", tracker);
-    this.clock.tick(TOUCH_EVENTS_DELAY);
+    this.clock.tick(DEFAULT_EVENTS_DELAY);
 });
 
 QUnit.test('Touchstart on document after tooltip showing', function(assert) {
@@ -404,7 +403,7 @@ QUnit.test('Touchstart on document after tooltip showing', function(assert) {
 
     sparkline._DEBUG_showCallback = function() {
         that.triggerDocument("touchstart");
-        that.clock.tick(TOUCH_EVENTS_DELAY);
+        that.clock.tick(DEFAULT_EVENTS_DELAY);
     };
 
     sparkline._DEBUG_hideCallback = function() {
@@ -412,7 +411,7 @@ QUnit.test('Touchstart on document after tooltip showing', function(assert) {
     };
 
     this.trigger("touchstart", tracker);
-    this.clock.tick(TOUCH_EVENTS_DELAY);
+    this.clock.tick(DEFAULT_EVENTS_DELAY);
 });
 
 QUnit.test('Pointerdown on document after tooltip showing', function(assert) {
@@ -430,7 +429,7 @@ QUnit.test('Pointerdown on document after tooltip showing', function(assert) {
 
     sparkline._DEBUG_showCallback = function() {
         that.triggerDocument("pointerdown");
-        that.clock.tick(TOUCH_EVENTS_DELAY);
+        that.clock.tick(DEFAULT_EVENTS_DELAY);
     };
 
     sparkline._DEBUG_hideCallback = function() {
@@ -438,5 +437,5 @@ QUnit.test('Pointerdown on document after tooltip showing', function(assert) {
     };
 
     this.trigger("pointerdown", tracker);
-    this.clock.tick(TOUCH_EVENTS_DELAY);
+    this.clock.tick(DEFAULT_EVENTS_DELAY);
 });

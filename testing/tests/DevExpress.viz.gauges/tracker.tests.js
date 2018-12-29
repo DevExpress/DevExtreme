@@ -299,7 +299,7 @@ QUnit.test('"Hide" is raised on touchstart outside the element', function(assert
         assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutSet, 1, 'timeout is set');
     };
     this.trigger('touchstart', element);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_HIDE_DELAY);
+    this.clock.tick(this.tracker.TOOLTIP_HIDE_DELAY);
 });
 
 QUnit.test('"Hide" is raised after delay on touchstart then touchend on other element if tooltip is shown', function(assert) {
@@ -320,5 +320,5 @@ QUnit.test('"Hide" is raised after delay on touchstart then touchend on other el
         assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutSet, 1, 'timeout is set');
     };
     this.trigger('touchstart', element1);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_HIDE_DELAY);
+    this.clock.tick(this.tracker.TOOLTIP_HIDE_DELAY);
 });

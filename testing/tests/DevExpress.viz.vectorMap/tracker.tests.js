@@ -11,8 +11,7 @@ import trackerModule from "viz/vector_map/tracker";
 import eventEmitterModule from "viz/vector_map/event_emitter";
 import animationFrame from "animation/frame";
 
-const FOCUS_OFF_DELAY_MOUSE = 100;
-const FOCUS_OFF_DELAY_TOUCH = 200;
+const FOCUS_OFF_DELAY = 100;
 
 $("#qunit-fixture").append('<div id="test-root"></div>');
 
@@ -509,14 +508,14 @@ QUnit.module('focus / mouse', $.extend({}, environment, {
 QUnit.test('focus is turned off then turned on on move over element with data', function(assert) {
     this.trigger('move', { x: 10, y: 20 });
 
-    assert.deepEqual(this.focus.turnOff.lastCall.args, [FOCUS_OFF_DELAY_MOUSE], 'turn off');
+    assert.strictEqual(this.focus.turnOff.callCount, 1, 'turn off');
     assert.deepEqual(this.focus.turnOn.lastCall.args, ['test-data', { x: 10, y: 20 }], 'turn on');
 });
 
 QUnit.test('focus is turned off and not turned on on move over element without data', function(assert) {
     this.triggerNoData('move', {});
 
-    assert.deepEqual(this.focus.turnOff.lastCall.args, [FOCUS_OFF_DELAY_MOUSE], 'turn off');
+    assert.strictEqual(this.focus.turnOff.callCount, 1, 'turn off');
     assert.strictEqual(this.focus.stub('turnOn').lastCall, null, 'turn on');
 });
 
@@ -549,14 +548,14 @@ $.each(['touch', 'MSPointer', 'pointer'], function(_, type) {
     QUnit.test('focus is turned off then turned on on start on element with data', function(assert) {
         this.trigger('start', { x: 10, y: 20 });
 
-        assert.deepEqual(this.focus.turnOff.lastCall.args, [FOCUS_OFF_DELAY_TOUCH], 'turn off');
+        assert.strictEqual(this.focus.turnOff.callCount, 1, 'turn off');
         assert.deepEqual(this.focus.turnOn.lastCall.args, ['test-data', { x: 10, y: 20 }], 'turn on');
     });
 
     QUnit.test('focus is turned off and not turned on on start on element without data', function(assert) {
         this.triggerNoData('start', {});
 
-        assert.deepEqual(this.focus.turnOff.lastCall.args, [FOCUS_OFF_DELAY_TOUCH], 'turn off');
+        assert.strictEqual(this.focus.turnOff.callCount, 2, 'turn off');
         assert.strictEqual(this.focus.stub('turnOn').lastCall, null, 'turn on');
     });
 
@@ -651,16 +650,16 @@ QUnit.test('turnOn / data is changed', function(assert) {
 QUnit.test('turnOff when on', function(assert) {
     this.focus.turnOn('data-1', { x: 10, y: 20 });
     this.focusOn.lastCall.args[0].done(true);
-    this.focus.turnOff(100);
+    this.focus.turnOff(FOCUS_OFF_DELAY);
 
-    this.clock.tick(100);
+    this.clock.tick(FOCUS_OFF_DELAY);
     assert.deepEqual(this.focusOff.lastCall.args, [{ data: 'data-1' }]);
 });
 
 QUnit.test('turnOff when off', function(assert) {
     this.focus.turnOn('data-1', { x: 10, y: 20 });
     this.focusOn.lastCall.args[0].done(false);
-    this.focus.turnOff(100);
+    this.focus.turnOff(FOCUS_OFF_DELAY);
 
     assert.strictEqual(this.focusOff.lastCall, null);
 });
@@ -685,10 +684,10 @@ QUnit.test('on disabled target then on other target then on initial target again
     this.focus.turnOn('data-1', {});
     this.focusOn.lastCall.args[0].done(false);
 
-    this.focus.turnOff(100);
+    this.focus.turnOff(FOCUS_OFF_DELAY);
     this.focus.turnOn('data-2', {});
 
-    this.focus.turnOff(100);
+    this.focus.turnOff(FOCUS_OFF_DELAY);
     this.focus.turnOn('data-1', {});
 
     assert.strictEqual(this.focusMove.lastCall, null);

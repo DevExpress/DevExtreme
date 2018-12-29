@@ -31,8 +31,7 @@ const CLICK_COORD_THRESHOLD_MOUSE = 5;
 const CLICK_COORD_THRESHOLD_TOUCH = 20;
 const DRAG_COORD_THRESHOLD_MOUSE = 5;
 const DRAG_COORD_THRESHOLD_TOUCH = 10;
-const FOCUS_OFF_DELAY_MOUSE = 100;
-const FOCUS_OFF_DELAY_TOUCH = 200;
+const FOCUS_OFF_DELAY = 100;
 const WHEEL_COOLDOWN = 50;
 const WHEEL_DIRECTION_COOLDOWN = 300;
 
@@ -276,12 +275,8 @@ Tracker.prototype = {
 
         if(isTouchEvent(event) !== isTouch) { return; }
 
-        that._focus.turnOff(isTouch ? FOCUS_OFF_DELAY_TOUCH : FOCUS_OFF_DELAY_MOUSE);
+        that._focus.turnOff();
         data && that._focus.turnOn(data, getEventCoords(event));
-    },
-
-    _endFocus: function(event) {
-        if(!isTouchEvent(event)) { return; }
     },
 
     _cancelFocus: function() {
@@ -333,7 +328,6 @@ Tracker.prototype = {
             that._endClick(event, data);
             that._endDrag(event, data);
             that._endZoom(event, data);
-            that._endFocus(event, data);
         };
 
         that._rootHandlers[EVENTS.wheel] = function(event) {
@@ -451,14 +445,14 @@ var Focus = function(fire) {
             }
         }
     };
-    that.turnOff = function(timeout) {
+    that.turnOff = function() {
         _data = null;
         if(_activeData && !_disabled) {
             _offTimer = _offTimer || setTimeout(function() {
                 _offTimer = null;
                 fire(EVENT_FOCUS_OFF, { data: _activeData });
                 _activeData = null;
-            }, timeout);
+            }, FOCUS_OFF_DELAY);
         }
     };
     that.cancel = function() {

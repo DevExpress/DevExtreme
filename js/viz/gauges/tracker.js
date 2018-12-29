@@ -1,12 +1,10 @@
 var eventsEngine = require("../../events/core/events_engine"),
-    _abs = Math.abs,
     Class = require("../../core/class"),
     domAdapter = require("../../core/dom_adapter"),
     ready = require("../../core/utils/ready_callbacks").add,
     wheelEvent = require("../../events/core/wheel"),
 
-    TOOLTIP_HIDE_DELAY = 100,
-    TOOLTIP_TOUCH_HIDE_DELAY = 200;
+    TOOLTIP_HIDE_DELAY = 100;
 
 var Tracker = Class.inherit({
     ctor: function(parameters) {
@@ -43,9 +41,7 @@ var Tracker = Class.inherit({
         };
         ///#DEBUG
         that._DEBUG_hideTooltipTimeoutSet = that._DEBUG_hideTooltipTimeoutCleared = 0;
-
         that.TOOLTIP_HIDE_DELAY = TOOLTIP_HIDE_DELAY;
-        that.TOOLTIP_TOUCH_HIDE_DELAY = TOOLTIP_TOUCH_HIDE_DELAY;
         ///#ENDDEBUG
     },
 
@@ -149,11 +145,10 @@ function handleTooltipMouseOver(event) {
 
 function handleTooltipMouseMove(event) {
     var tracker = event.data.tracker;
-    if(_abs(event.pageX - tracker._x) > 4 || _abs(event.pageY - tracker._y) > 4) {
-        tracker._x = event.pageX;
-        tracker._y = event.pageY;
-        tracker._showTooltip(event);
-    }
+
+    tracker._x = event.pageX;
+    tracker._y = event.pageY;
+    tracker._showTooltip(event);
 }
 
 function handleTooltipMouseOut(event) {
@@ -178,7 +173,7 @@ function handleTooltipTouchStart(event) {
     event.preventDefault();
     var tracker = active_touch_tooltip_tracker;
     if(tracker && tracker !== event.data.tracker) {
-        tracker._hideTooltip(TOOLTIP_TOUCH_HIDE_DELAY);
+        tracker._hideTooltip(TOOLTIP_HIDE_DELAY);
     }
     tracker = active_touch_tooltip_tracker = event.data.tracker;
     tracker._showTooltip(event);
@@ -189,7 +184,7 @@ function handleTooltipDocumentTouchStart() {
     var tracker = active_touch_tooltip_tracker;
     if(tracker) {
         if(!tracker._touch) {
-            tracker._hideTooltip(TOOLTIP_TOUCH_HIDE_DELAY);
+            tracker._hideTooltip(TOOLTIP_HIDE_DELAY);
             active_touch_tooltip_tracker = null;
         }
         tracker._touch = null;
@@ -199,7 +194,7 @@ function handleTooltipDocumentTouchStart() {
 function handleTooltipDocumentTouchEnd() {
     var tracker = active_touch_tooltip_tracker;
     if(tracker) {
-        tracker._hideTooltip(TOOLTIP_TOUCH_HIDE_DELAY);
+        tracker._hideTooltip(TOOLTIP_HIDE_DELAY);
         active_touch_tooltip_tracker = null;
     }
 }
