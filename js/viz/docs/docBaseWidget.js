@@ -513,12 +513,18 @@ var BaseWidget = {
     */
     loadingIndicator: {
         /**
-       * @name BaseWidgetOptions.loadingIndicator.show
-       * @type boolean
-       * @default false
-       * @fires BaseWidgetOptions.onOptionChanged
-       */
+        * @name BaseWidgetOptions.loadingIndicator.show
+        * @type boolean
+        * @default false
+        * @fires BaseWidgetOptions.onOptionChanged
+        */
         show: false,
+        /**
+        * @name BaseWidgetOptions.loadingIndicator.enabled
+        * @type boolean
+        * @default false
+        */
+        enabled: false,
         /**
         * @name BaseWidgetOptions.loadingIndicator.text
         * @type string
