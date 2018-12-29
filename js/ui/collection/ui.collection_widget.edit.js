@@ -364,10 +364,13 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
             case "selectedItemKeys":
                 var selectedItemKeys = this.option("selectedItemKeys");
-                var selectedItemIndex = this._getIndexByKey(selectedItemKeys[0]);
 
-                if(this.option("selectionRequired") && !indexExists(selectedItemIndex)) {
-                    return this._syncSelectionOptions("selectedIndex");
+                if(this.option("selectionRequired")) {
+                    var selectedItemIndex = this._getIndexByKey(selectedItemKeys[0]);
+
+                    if(!indexExists(selectedItemIndex)) {
+                        return this._syncSelectionOptions("selectedIndex");
+                    }
                 }
 
                 return this._selection.setSelection(selectedItemKeys);
