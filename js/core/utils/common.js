@@ -294,7 +294,7 @@ var applyServerDecimalSeparator = function(value) {
 };
 
 var noop = function() {};
-var asyncNoop = function() { return new Deferred.resolve().promise(); };
+var asyncNoop = function() { return new Deferred().resolve().promise(); };
 
 var grep = function(elements, checkFunction, invert) {
     var result = [],
