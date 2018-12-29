@@ -432,6 +432,7 @@ QUnit.module("layouting", moduleConfig, () => {
         this.updateScreenSize(500);
 
         const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            _layoutStrategy: "flex",
             rows: [{
                 shrink: 0, screen: "xs"
             }, {
