@@ -1,6 +1,8 @@
 var window = require("../../core/utils/window").getWindow();
 var typeUtils = require("../utils/type");
 
+var NOT_LENGTH_VALUES = ["auto", "none", "inherit", "initial"];
+
 var getSizeByStyles = function(elementStyles, styles) {
     var result = 0;
 
@@ -63,27 +65,30 @@ var getSize = function(element, name, include) {
     return result;
 };
 
-var calculateLimitHeight = function(value, container, offset, defaultValue) {
+var getContainerHeight = function(container) {
+    return typeUtils.isWindow(container) ? container.innerHeight : container.offsetHeight;
+};
+
+var getHeightWithOffset = function(value, offset, container) {
     if(!value) {
-        return defaultValue;
+        return null;
     }
 
-    if(value === "auto" || value === "none" || value === "inherit" || value === "initial") {
-        return offset ? defaultValue : value;
+    if(NOT_LENGTH_VALUES.includes(value)) {
+        return offset ? null : value;
     }
 
     if(typeof value === "string") {
         if(value.indexOf("px") > 0) {
             value = parseInt(value.replace("px", ""));
         } else if(value.indexOf("%") > 0) {
-            var containerHeight = typeUtils.isWindow(container) ? container.innerHeight : container.offsetHeight;
-            value = parseInt(value.replace("%", "")) * containerHeight / 100;
+            value = parseInt(value.replace("%", "")) * getContainerHeight(container) / 100;
         } else if(!isNaN(value)) {
             value = parseInt(value);
         }
     }
 
-    if(typeof value === "number") {
+    if(typeUtils.isNumeric(value)) {
         return Math.max(0, value + offset);
     }
 
@@ -92,24 +97,26 @@ var calculateLimitHeight = function(value, container, offset, defaultValue) {
     return "calc(" + value + operationString + Math.abs(offset) + "px)";
 };
 
-var calculateMaxHeight = function(value, container, offset) {
-    return calculateLimitHeight(value, container, offset, "none");
+var addOffsetToMaxHeight = function(value, offset, container) {
+    var maxHeight = getHeightWithOffset(value, offset, container);
+    return maxHeight !== null ? maxHeight : "none";
 };
 
-var calculateMinHeight = function(value, container, offset) {
-    return calculateLimitHeight(value, container, offset, 0);
+var addOffsetToMinHeight = function(value, offset, container) {
+    var minHeight = getHeightWithOffset(value, offset, container);
+    return minHeight !== null ? minHeight : 0;
 };
 
-var getPaddingsHeight = function(element, includeMargin) {
+var getVerticalOffsets = function(element, withMargins) {
     if(!element) {
         return 0;
     }
 
-    const boxParams = getElementBoxParams("height", window.getComputedStyle(element));
+    var boxParams = getElementBoxParams("height", window.getComputedStyle(element));
 
     return boxParams.padding
         + boxParams.border
-        + (includeMargin ? boxParams.margin : 0);
+        + (withMargins ? boxParams.margin : 0);
 };
 
 var getVisibleHeight = function(element) {
@@ -126,7 +133,7 @@ var getVisibleHeight = function(element) {
 
 exports.getSize = getSize;
 exports.getElementBoxParams = getElementBoxParams;
-exports.calculateMaxHeight = calculateMaxHeight;
-exports.calculateMinHeight = calculateMinHeight;
-exports.getPaddingsHeight = getPaddingsHeight;
+exports.addOffsetToMaxHeight = addOffsetToMaxHeight;
+exports.addOffsetToMinHeight = addOffsetToMinHeight;
+exports.getVerticalOffsets = getVerticalOffsets;
 exports.getVisibleHeight = getVisibleHeight;

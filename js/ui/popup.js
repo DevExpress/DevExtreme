@@ -629,7 +629,7 @@ var Popup = Overlay.inherit({
     },
 
     _getDragTarget: function() {
-        return this._$title;
+        return this.topToolbar();
     },
 
     _renderGeometryImpl: function() {
@@ -663,42 +663,47 @@ var Popup = Overlay.inherit({
     _setContentHeight: function() {
         (this.option("forceApplyBindings") || noop)();
 
-        var toolbarsAndPaddingsHeight = this._getToolbarsAndPaddingsHeight(),
-            content = this._$content.get(0),
+        var popupHeightParts = this._splitPopupHeight(),
+            toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
+                + popupHeightParts.footer
+                + popupHeightParts.contentVerticalOffsets
+                + popupHeightParts.popupVerticalOffsets,
+            overlayContent = this.overlayContent().get(0),
             cssStyles = {};
 
         if(this._isAutoHeight()) {
             var container = $(this._getContainer()).get(0),
-                maxHeightValue = sizeUtils.calculateMaxHeight(this._getOptionValue("maxHeight", content), container, -toolbarsAndPaddingsHeight),
-                minHeightValue = sizeUtils.calculateMinHeight(this._getOptionValue("minHeight", content), container, -toolbarsAndPaddingsHeight);
+                contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
+                contentMinHeight = this._getOptionValue("minHeight", overlayContent),
+                maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container),
+                minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
 
-            if(minHeightValue !== undefined) {
-                cssStyles.minHeight = minHeightValue;
-            }
-
-            if(maxHeightValue !== undefined) {
-                cssStyles.maxHeight = maxHeightValue;
-            }
+            cssStyles = extend(cssStyles, {
+                minHeight: minHeightValue,
+                maxHeight: maxHeightValue
+            });
         } else {
-            var contentHeight = content.getBoundingClientRect().height - toolbarsAndPaddingsHeight;
+            var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
             cssStyles = { height: Math.max(0, contentHeight) };
         }
 
-        this._$popupContent.css(cssStyles);
+        this.$content().css(cssStyles);
     },
 
     _isAutoHeight: function() {
-        return this._$content.get(0).style.height === "auto";
+        return this.overlayContent().get(0).style.height === "auto";
     },
 
-    _getToolbarsAndPaddingsHeight: function() {
-        return sizeUtils.getPaddingsHeight(this._$content.get(0), true)
-            + sizeUtils.getPaddingsHeight(this._$popupContent.get(0), true)
-            + this._getToolbarsHeight();
-    },
+    _splitPopupHeight: function() {
+        var topToolbar = this.topToolbar(),
+            bottomToolbar = this.bottomToolbar();
 
-    _getToolbarsHeight: function() {
-        return sizeUtils.getVisibleHeight(this._$title && this._$title.get(0)) + sizeUtils.getVisibleHeight(this._$bottom && this._$bottom.get(0));
+        return {
+            header: sizeUtils.getVisibleHeight(topToolbar && topToolbar.get(0)),
+            footer: sizeUtils.getVisibleHeight(bottomToolbar && bottomToolbar.get(0)),
+            contentVerticalOffsets: sizeUtils.getVerticalOffsets(this.overlayContent().get(0), true),
+            popupVerticalOffsets: sizeUtils.getVerticalOffsets(this.$content().get(0), true)
+        };
     },
 
     _renderDimensions: function() {
@@ -791,6 +796,10 @@ var Popup = Overlay.inherit({
 
     bottomToolbar: function() {
         return this._$bottom;
+    },
+
+    topToolbar: function() {
+        return this._$title;
     },
 
     $content: function() {

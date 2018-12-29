@@ -257,51 +257,51 @@ QUnit.module("calculate height", {
     }
 });
 
-QUnit.test("check calculateMaxHeight", function(assert) {
-    const checkFunc = ({ value, container, offset }, expected) => {
-        assert.strictEqual(sizeUtils.calculateMaxHeight(value, container, offset), expected);
+QUnit.test("check addOffsetToMaxHeight", function(assert) {
+    const checkFunc = ({ value, offset, container }, expected) => {
+        assert.strictEqual(sizeUtils.addOffsetToMaxHeight(value, offset, container), expected);
     };
 
-    checkFunc({ value: 300, container: null, offset: 0 }, 300);
-    checkFunc({ value: 300, container: null, offset: -100 }, 200);
-    checkFunc({ value: "300", container: null, offset: -100 }, 200);
-    checkFunc({ value: "300px", container: null, offset: -100 }, 200);
-    checkFunc({ value: "100mm", container: null, offset: -50 }, "calc(100mm - 50px)");
-    checkFunc({ value: "100pt", container: null, offset: -50 }, "calc(100pt - 50px)");
-    checkFunc({ value: "auto", container: null, offset: -50 }, "none");
-    checkFunc({ value: null, container: null, offset: -50 }, "none");
+    checkFunc({ value: 300, offset: 0, container: null }, 300);
+    checkFunc({ value: 300, offset: -100, container: null }, 200);
+    checkFunc({ value: "300", offset: -100, container: null }, 200);
+    checkFunc({ value: "300px", offset: -100, container: null }, 200);
+    checkFunc({ value: "100mm", offset: -50, container: null }, "calc(100mm - 50px)");
+    checkFunc({ value: "100pt", offset: -50, container: null }, "calc(100pt - 50px)");
+    checkFunc({ value: "auto", offset: -50, container: null }, "none");
+    checkFunc({ value: null, offset: -50, container: null }, "none");
 
-    assert.roughEqual(sizeUtils.calculateMaxHeight("50%", window, -20), windowHeight / 2 - 20, 1, "string value in percent");
-    assert.roughEqual(sizeUtils.calculateMaxHeight("50%", this.container, -20), 30, 1, "string value in percent with specific container");
+    assert.roughEqual(sizeUtils.addOffsetToMaxHeight("50%", -20, window), windowHeight / 2 - 20, 1, "string value in percent");
+    assert.roughEqual(sizeUtils.addOffsetToMaxHeight("50%", -20, this.container), 30, 1, "string value in percent with specific container");
 });
 
-QUnit.test("check calculateMinHeight", function(assert) {
-    const checkFunc = ({ value, container, offset }, expected) => {
-        assert.strictEqual(sizeUtils.calculateMinHeight(value, container, offset), expected);
+QUnit.test("check addOffsetToMinHeight", function(assert) {
+    const checkFunc = ({ value, offset, container }, expected) => {
+        assert.strictEqual(sizeUtils.addOffsetToMinHeight(value, offset, container), expected);
     };
 
-    checkFunc({ value: 300, container: null, offset: 0 }, 300);
-    checkFunc({ value: 300, container: null, offset: -100 }, 200);
-    checkFunc({ value: "300", container: null, offset: -100 }, 200);
-    checkFunc({ value: "300px", container: null, offset: -100 }, 200);
-    checkFunc({ value: "100mm", container: null, offset: -50 }, "calc(100mm - 50px)");
-    checkFunc({ value: "100pt", container: null, offset: -50 }, "calc(100pt - 50px)");
-    checkFunc({ value: "auto", container: null, offset: -50 }, 0);
-    checkFunc({ value: null, container: null, offset: -50 }, 0);
+    checkFunc({ value: 300, offset: 0, container: null }, 300);
+    checkFunc({ value: 300, offset: -100, container: null }, 200);
+    checkFunc({ value: "300", offset: -100, container: null }, 200);
+    checkFunc({ value: "300px", offset: -100, container: null }, 200);
+    checkFunc({ value: "100mm", offset: -50, container: null }, "calc(100mm - 50px)");
+    checkFunc({ value: "100pt", offset: -50, container: null }, "calc(100pt - 50px)");
+    checkFunc({ value: "auto", offset: -50, container: null }, 0);
+    checkFunc({ value: null, offset: -50, container: null }, 0);
 
-    assert.roughEqual(sizeUtils.calculateMinHeight("50%", window, -20), windowHeight / 2 - 20, 1, "string value in percent");
-    assert.roughEqual(sizeUtils.calculateMaxHeight("50%", this.container, -20), 30, 1, "string value in percent with specific container");
+    assert.roughEqual(sizeUtils.addOffsetToMinHeight("50%", -20, window), windowHeight / 2 - 20, 1, "string value in percent");
+    assert.roughEqual(sizeUtils.addOffsetToMaxHeight("50%", -20, this.container), 30, 1, "string value in percent with specific container");
 });
 
-QUnit.test("check getPaddingsHeight", function(assert) {
-    assert.strictEqual(sizeUtils.getPaddingsHeight(null), 0, "no element");
-    assert.strictEqual(sizeUtils.getPaddingsHeight(this.container), 20, "container paddings");
-    assert.strictEqual(sizeUtils.getPaddingsHeight(this.container, true), 30, "include margins");
-    assert.strictEqual(sizeUtils.getPaddingsHeight(this.invisibleElement), 10, "invisible element paddings");
+QUnit.test("check getVerticalOffsets", function(assert) {
+    assert.strictEqual(sizeUtils.getVerticalOffsets(null), 0, "no element");
+    assert.strictEqual(sizeUtils.getVerticalOffsets(this.container), 20, "container paddings");
+    assert.strictEqual(sizeUtils.getVerticalOffsets(this.container, true), 30, "include margins");
+    assert.strictEqual(sizeUtils.getVerticalOffsets(this.invisibleElement), 10, "invisible element paddings");
 });
 
 QUnit.test("check getVisibleHeight", function(assert) {
-    assert.strictEqual(sizeUtils.getPaddingsHeight(null), 0, "no element");
+    assert.strictEqual(sizeUtils.getVerticalOffsets(null), 0, "no element");
     assert.strictEqual(sizeUtils.getVisibleHeight(this.container), 100, "container height");
     assert.strictEqual(sizeUtils.getVisibleHeight(this.invisibleElement), 0, "invisible element height");
 });
