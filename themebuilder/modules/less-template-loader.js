@@ -14,7 +14,7 @@ const createModifyVars = modifyVars => {
 };
 
 const addSwatchClass = (less, swatchSelector, modifyVars) => {
-    if(!swatchSelector) return less;
+    if(!swatchSelector) return less + createModifyVars(modifyVars);
     return swatchSelector + "{" + less + createModifyVars(modifyVars) + "}";
 };
 
