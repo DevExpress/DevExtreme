@@ -99,7 +99,7 @@ const HtmlEditor = Editor.inherit({
 
             /**
             * @name dxHtmlEditorToolbarItem
-            * @inherits dxToolbarItemTemplate
+            * @inherits dxToolbarItem
             */
             /**
             * @name dxHtmlEditorToolbarItem.formatName
@@ -112,6 +112,7 @@ const HtmlEditor = Editor.inherit({
             /**
             * @name dxHtmlEditorToolbarItem.location
             * @default "before"
+            * @inheritdoc
             */
 
             /**
@@ -305,11 +306,13 @@ const HtmlEditor = Editor.inherit({
     _textChangeHandler: function(newDelta, oldDelta, source) {
         const htmlMarkup = this._deltaConverter.toHtml();
 
-        this._isEditorUpdating = true;
 
         const value = this._isMarkdownValue() ? this._updateValueByType(MARKDOWN_VALUE_TYPE, htmlMarkup) : htmlMarkup;
 
-        this.option("value", value);
+        if(this.option("value") !== value) {
+            this._isEditorUpdating = true;
+            this.option("value", value);
+        }
     },
 
     _updateValueByType: function(valueType, value) {

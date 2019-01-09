@@ -40,14 +40,6 @@ QUnit.test("case insensitive date parsing for months", function(assert) {
     assert.deepEqual(parser("nOv").getMonth(), 10, "random register");
 });
 
-QUnit.test("case insensitive date parsing for days of week", function(assert) {
-    var parser = getDateParser("EEE", dateParts);
-
-    assert.deepEqual(parser("mon").getDay(), 1, "small register");
-    assert.deepEqual(parser("Mon").getDay(), 1, "normal register");
-    assert.deepEqual(parser("mOn").getDay(), 1, "random register");
-});
-
 QUnit.test("case insensitive date parsing for part of day", function(assert) {
     var _dateParts = extend({}, dateParts, {
             getPeriodNames: function() {

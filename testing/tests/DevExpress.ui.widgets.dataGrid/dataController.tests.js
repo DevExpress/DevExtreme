@@ -11920,6 +11920,35 @@ QUnit.test("edit row should not be updated on data change", function(assert) {
     assert.deepEqual(changedArgs.columnIndices, [[], [2]], "only second row cell is updated");
 });
 
+// T702112
+QUnit.test("edit row should be updated on cancel", function(assert) {
+    this.setupModules();
+
+    this.options.editing = {
+        mode: "row"
+    };
+
+    this.options.repaintChangesOnly = true;
+
+    this.editRow(0);
+
+    var changedArgs;
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    // act
+    this.cancelEditData();
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(changedArgs.changeType, "update");
+    assert.deepEqual(changedArgs.changeTypes, ["update", "update"]);
+    assert.deepEqual(changedArgs.rowIndices, [0, 1]);
+    assert.deepEqual(changedArgs.items, [items[0], items[1]]);
+    assert.deepEqual(changedArgs.columnIndices, [undefined, []], "first row is updated fully");
+});
+
 QUnit.test("edit form row should not be updated on data change", function(assert) {
     this.setupModules();
 

@@ -161,7 +161,7 @@ QUnit.test("grouped list should change it's selection after selectedIndex option
 });
 
 QUnit.test("grouped list should change it's selection after selectedItem option was changed", function(assert) {
-    var dataSource = [
+    var items = [
         { key: "Group 1", items: [
             { text: "Item 1" },
             { text: "Item 2" }
@@ -170,13 +170,13 @@ QUnit.test("grouped list should change it's selection after selectedItem option 
 
     this.$element.dxSlideOut({
         menuGrouped: true,
-        items: dataSource
+        dataSource: items
     });
 
     var $menuItems = this.$element.find("." + LIST_ITEM_CLASS),
         instance = this.$element.dxSlideOut("instance");
 
-    instance.option("selectedItem", dataSource[0].items[1]);
+    instance.option("selectedItem", items[0].items[1]);
 
     assert.ok($menuItems.eq(1).hasClass("dx-list-item-selected"), "item is selected");
 });
@@ -381,7 +381,7 @@ QUnit.test("First slideout item content should be loaded when deferred data sour
             }
         });
 
-        clock.tick(200);
+        clock.tick(100);
 
         assert.equal(this.$element.find(".dx-list-item-selected").text(), "Item 2", "item is selected");
         assert.equal(this.$element.find(".dx-slideout-item-content").text(), "Item 2", "content was loaded");
@@ -435,11 +435,11 @@ QUnit.test("onMenuGroupRendered option on init", function(assert) {
             dataSource: [
                 {
                     key: "a",
-                    items: [ { text: "0" }, { text: "1" } ]
+                    items: ["0", "1"]
                 },
                 {
                     key: "b",
-                    items: [{ text: "2" } ]
+                    items: ["2"]
                 }
             ],
             menuGrouped: true,
@@ -464,11 +464,11 @@ QUnit.test("onMenuGroupRendered option change", function(assert) {
     slideOut.option("dataSource", [
         {
             key: "a",
-            items: [ { text: "0" }, { text: "1" } ]
+            items: ["0", "1"]
         },
         {
             key: "b",
-            items: [{ text: "2" } ]
+            items: ["2"]
         }
     ]);
 

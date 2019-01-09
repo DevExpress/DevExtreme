@@ -131,6 +131,7 @@ export default CollectionWidget.inherit({
         changes.forEach(change => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
         this._renderedItemsCount = items.length;
         this._refreshItemsCache();
+        this._fireContentReadyAction();
     },
 
     _appendItemToContainer: function($container, $itemFrame, index) {

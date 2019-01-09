@@ -563,6 +563,25 @@ QUnit.test("content container should have correct position if it is rendered in 
     assert.equal(position($content), 50, "container rendered at correct position");
 });
 
+QUnit.test("drawer panel should have correct width when panel content is wrapped by div with borders (T702576)", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        template: function($content) {
+            var $outerDiv = $("<div/>");
+            $("<div/>").css("height", 600).css("width", 200).appendTo($outerDiv);
+
+            return $outerDiv;
+        }
+    });
+
+    const $panelContent = $element.find(".dx-drawer-panel-content").css("border", "10px solid black");
+
+    resizeCallbacks.fire();
+
+    assert.equal($panelContent.width(), 180, "panel content has correct width");
+    assert.equal($panelContent.outerWidth(), 200, "panel content has correct outerWidth");
+});
+
 QUnit.test("drawer panel should have correct width when async template is used", assert => {
     var clock = sinon.useFakeTimers();
 

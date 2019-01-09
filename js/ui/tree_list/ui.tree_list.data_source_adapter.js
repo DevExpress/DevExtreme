@@ -70,6 +70,16 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             return hasItemsExpr && dataCoreUtils.compileGetter(hasItemsExpr);
         },
 
+        _createHasItemsSetter: function() {
+            var hasItemsExpr = this.option("hasItemsExpr");
+
+            if(typeUtils.isFunction(hasItemsExpr)) {
+                return hasItemsExpr;
+            }
+
+            return hasItemsExpr && dataCoreUtils.compileSetter(hasItemsExpr);
+        },
+
         _updateIndexByKeyObject: function(items) {
             var that = this;
 
@@ -82,16 +92,14 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
         _calculateHasItems: function(node, options) {
             var that = this,
+                parentIds = options.storeLoadOptions.parentIds,
                 hasItems;
 
-            if(that._hasItemsGetter) {
+            if(that._hasItemsGetter && (parentIds || !options.storeLoadOptions.filter)) {
                 hasItems = that._hasItemsGetter(node.data);
             }
             if(hasItems === undefined) {
-                var hasItemsByMap = that._hasItemsMap[node.key];
-                if(hasItemsByMap !== undefined) {
-                    hasItems = hasItemsByMap;
-                } else if(options.remoteOperations.filtering && options.storeLoadOptions.parentIds) {
+                if(!that._isChildrenLoaded[node.key] && options.remoteOperations.filtering && parentIds) {
                     hasItems = true;
                 } else {
                     hasItems = node.hasChildren;
@@ -235,10 +243,10 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
             if(!options.isCustomLoading) {
                 if(!options.cachedStoreData) {
-                    this._hasItemsMap = {};
+                    this._isChildrenLoaded = {};
                 }
 
-                if(this.option("expandNodesOnFiltering") && (operationTypes.filtering || options.storeLoadOptions.filter)) {
+                if(this.option("expandNodesOnFiltering") && (operationTypes.filtering || this._isReload && options.storeLoadOptions.filter)) {
                     if(options.storeLoadOptions.filter) {
                         expandVisibleNodes = true;
                     } else {
@@ -254,7 +262,9 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             var parentIdsToLoad = [];
 
             for(var i = 0; i < parentIds.length; i++) {
-                if(this._hasItemsMap[parentIds[i]] === undefined) {
+                var node = this.getNodeByKey(parentIds[i]);
+
+                if(node && node.hasChildren && !node.children.length) {
                     parentIdsToLoad.push(parentIds[i]);
                 }
             }
@@ -339,6 +349,12 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 return d.resolve(data);
             }
 
+            var parentIdNodes = parentIds.map(id => this.getNodeByKey(id)).filter(node => node);
+
+            if(parentIdNodes.length === parentIds.length) {
+                return that._loadParents(data.concat(parentIdNodes.map(node => node.data)), options);
+            }
+
             filter = that._createIdFilter(that.getKeyExpr(), parentIds);
             filterLength = encodeURI(JSON.stringify(filter)).length;
 
@@ -371,25 +387,100 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
         },
 
         _updateHasItemsMap: function(options) {
-            var data = options.data,
-                parentIds = options.storeLoadOptions.parentIds;
+            var parentIds = options.storeLoadOptions.parentIds;
 
             if(parentIds) {
                 for(var i = 0; i < parentIds.length; i++) {
-                    for(var dataIndex = 0; dataIndex < data.length; dataIndex++) {
-                        var parentId = this._parentIdGetter(data[dataIndex]);
-
-                        if(dataCoreUtils.toComparable(parentId, true) === dataCoreUtils.toComparable(parentIds[i], true)) {
-                            this._hasItemsMap[parentIds[i]] = true;
-                            break;
-                        }
-                    }
-
-                    if(dataIndex === data.length) {
-                        this._hasItemsMap[parentIds[i]] = false;
-                    }
+                    this._isChildrenLoaded[parentIds[i]] = true;
                 }
             }
+        },
+
+        _getKeyInfo: function() {
+            return {
+                key: () => "key",
+                keyOf: data => data.key
+            };
+        },
+
+        _applyBatch: function(changes) {
+            var baseChanges = [];
+
+            changes.forEach(change => {
+                if(change.type === "insert") {
+                    baseChanges = baseChanges.concat(this._applyInsert(change));
+                } else if(change.type === "remove") {
+                    baseChanges = baseChanges.concat(this._applyRemove(change));
+                } else if(change.type === "update") {
+                    baseChanges.push({ type: change.type, key: change.key, data: { data: change.data } });
+                }
+            });
+
+            this.callBase(baseChanges);
+        },
+
+        _setHasItems: function(node, value) {
+            var hasItemsSetter = this._hasItemsSetter;
+            node.hasChildren = value;
+            if(hasItemsSetter && node.data) {
+                hasItemsSetter(node.data, value);
+            }
+        },
+
+        _applyInsert: function(change) {
+            var that = this,
+                baseChanges = [],
+                parentId = that.parentKeyOf(change.data),
+                parentNode = that.getNodeByKey(parentId);
+
+            if(parentNode) {
+                var rootValue = that.option("rootValue"),
+                    node = that._convertItemToNode(change.data, rootValue, that._nodeByKey);
+
+                node.hasChildren = false;
+                node.level = parentNode.level + 1;
+                node.visible = true;
+
+                parentNode.children.push(node);
+
+                that._isChildrenLoaded[node.key] = true;
+
+                that._setHasItems(parentNode, true);
+
+                if((!parentNode.parent || that.isRowExpanded(parentNode.key)) && change.index !== undefined) {
+                    var index = that.items().indexOf(parentNode) + 1;
+
+                    index += change.index >= 0 ? Math.min(change.index, parentNode.children.length) : parentNode.children.length;
+
+                    baseChanges.push({ type: change.type, data: node, index: index });
+                }
+            }
+
+            return baseChanges;
+        },
+
+        _applyRemove: function(change) {
+            var baseChanges = [];
+            var node = this.getNodeByKey(change.key);
+            var parentNode = node.parent;
+
+            if(parentNode) {
+                var index = parentNode.children.indexOf(node);
+                if(index >= 0) {
+                    parentNode.children.splice(index, 1);
+
+                    if(!parentNode.children.length) {
+                        this._setHasItems(parentNode, false);
+                    }
+
+                    baseChanges.push(change);
+                    baseChanges = baseChanges.concat(this.getChildNodeKeys(change.key).map(key => {
+                        return { type: change.type, key: key };
+                    }));
+                }
+            }
+
+            return baseChanges;
         },
 
         _handleDataLoaded: function(options) {
@@ -427,9 +518,10 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
         _processTreeStructure: function(options, visibleItems) {
             var data = options.data,
+                parentIds = options.storeLoadOptions.parentIds,
                 expandedRowKeys = [];
 
-            if(options.remoteOperations.filtering || this._isReload) {
+            if(parentIds && parentIds.length || this._isReload) {
                 if(options.fullData && options.fullData.length > options.data.length) {
                     data = options.fullData;
                     visibleItems = visibleItems || options.data;
@@ -493,6 +585,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             this._keyGetter = this._createKeyGetter();
             this._parentIdGetter = this._createParentIdGetter();
             this._hasItemsGetter = this._createHasItemsGetter();
+            this._hasItemsSetter = this._createHasItemsSetter();
 
             if(dataStructure === "tree") {
                 this._itemsGetter = this._createItemsGetter();
@@ -501,7 +594,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             }
 
             this._nodeByKey = {};
-            this._hasItemsMap = {};
+            this._isChildrenLoaded = {};
             this._totalItemsCount = 0;
             this.createAction("onNodesInitialized");
         },

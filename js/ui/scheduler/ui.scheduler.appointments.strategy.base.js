@@ -106,7 +106,7 @@ var BaseRenderingStrategy = Class.inherit({
             allDay = this.isAllDay(item),
             result = [],
             startDate = new Date(this.instance.fire("getField", "startDate", item)),
-            isRecurring = !!item.recurrenceRule;
+            isRecurring = !!this.instance.fire("getField", "recurrenceRule", item);
 
         for(var j = 0; j < position.length; j++) {
             var height = this.calculateAppointmentHeight(item, position[j]),
@@ -610,12 +610,34 @@ var BaseRenderingStrategy = Class.inherit({
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
 
+        if(coordinates.allDay) {
+            var dateTableOffset = this.instance.fire("getTimePanelWidth");
+
+            var convertedSizes = this.convertToPercents(width, dateTableOffset);
+            var convertedPositions = this.convertToPercents(left - dateTableOffset, dateTableOffset);
+            var leftOffset = dateTableOffset - convertedPositions.x * dateTableOffset / 100;
+
+            return {
+                height: appointmentHeight,
+                width: "calc(" + convertedSizes.x + "% - " + convertedSizes.x * dateTableOffset / 100 + "px)",
+                top: top,
+                left: "calc(" + convertedPositions.x + "% + " + leftOffset + "px)",
+                empty: this._isAppointmentEmpty(height, width)
+            };
+        } else {
+            return {
+                height: appointmentHeight,
+                width: width,
+                top: top,
+                left: left,
+                empty: this._isAppointmentEmpty(height, width)
+            };
+        }
+    },
+
+    convertToPercents: function(x, offset) {
         return {
-            height: appointmentHeight,
-            width: width,
-            top: top,
-            left: left,
-            empty: this._isAppointmentEmpty(height, width)
+            x: x * 100 / (this.instance.fire("getDateTableWidth") - offset)
         };
     },
 

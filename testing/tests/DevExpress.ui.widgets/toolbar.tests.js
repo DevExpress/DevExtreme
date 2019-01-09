@@ -37,6 +37,8 @@ var TOOLBAR_CLASS = "dx-toolbar",
     TOOLBAR_MENU_BUTTON_CLASS = "dx-toolbar-menu-button",
     TOOLBAR_LIST_VISIBLE_CLASS = "dx-toolbar-list-visible",
     TOOLBAR_ITEMS_CONTAINER_CLASS = "dx-toolbar-items-container",
+    TOOLBAR_MENU_SECTION_CLASS = "dx-toolbar-menu-section",
+    LIST_ITEM_CLASS = "dx-list-item",
 
     DROP_DOWN_MENU_CLASS = "dx-dropdownmenu";
 
@@ -1427,7 +1429,6 @@ QUnit.test("toolbar menu should have correct item element", function(assert) {
     assert.equal($(".dx-list-item").length, 1, "only one item in menu is rendered");
 });
 
-
 QUnit.test("toolbar menu should be rendered after change item visible", function(assert) {
     assert.expect(3);
 
@@ -1501,6 +1502,24 @@ QUnit.testInActiveWindow("items should not be rearranged if width is not changed
     assert.ok($input.is(":focus"), "focus is not lost");
 });
 
+QUnit.test("add a custom CSS to item of menu", function(assert) {
+    var $element = $("#widget").dxToolbar({
+        items: [
+            {
+                location: "before",
+                locateInMenu: "always",
+                cssClass: "test"
+            }
+        ]
+    });
+
+    var $dropDownMenu = $element.find("." + DROP_DOWN_MENU_CLASS),
+        dropDown = $dropDownMenu.dxDropDownMenu("instance");
+
+    dropDown.open();
+
+    assert.equal($("." + TOOLBAR_MENU_SECTION_CLASS + " ." + LIST_ITEM_CLASS + ".test").length, 1, "item with the custom CSS");
+});
 
 QUnit.module("default template", {
     prepareItemTest: function(data) {

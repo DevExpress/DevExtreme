@@ -16,8 +16,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     themes = require("../themes"),
     ChildDefaultTemplate = require("../widget/child_default_template"),
-    Deferred = require("../../core/utils/deferred").Deferred,
-    DataConverterMixin = require("../shared/grouped_data_converter_mixin").default;
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var LIST_ITEM_SELECTOR = ".dx-list-item",
     LIST_ITEM_DATA_KEY = "dxListItemData",
@@ -567,13 +566,6 @@ var DropDownList = DropDownEditor.inherit({
         return devices.real().deviceType === "desktop";
     },
 
-    _getListKeyExpr: function() {
-        var valueExpr = this.option("valueExpr"),
-            isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== "this";
-
-        return isValueExprField ? valueExpr : null;
-    },
-
     _listConfig: function() {
         var options = {
             selectionMode: "single",
@@ -584,7 +576,7 @@ var DropDownList = DropDownEditor.inherit({
             onContentReady: this._listContentReadyHandler.bind(this),
             itemTemplate: this._getTemplateByOption("itemTemplate"),
             indicateLoading: false,
-            keyExpr: this._getListKeyExpr(),
+            keyExpr: this._getCollectionKeyExpr(),
             groupTemplate: this.option("groupTemplate"),
             tabIndex: null,
             onItemClick: this._listItemClickAction.bind(this),
@@ -605,10 +597,6 @@ var DropDownList = DropDownEditor.inherit({
         return {
             paginate: false
         };
-    },
-
-    _getGroupedOption: function() {
-        return this.option("grouped");
     },
 
     _dataSourceFromUrlLoadMode: function() {
@@ -856,7 +844,7 @@ var DropDownList = DropDownEditor.inherit({
                 break;
             case "valueExpr":
                 this._renderValue();
-                this._setListOption("keyExpr", this._getListKeyExpr());
+                this._setListOption("keyExpr", this._getCollectionKeyExpr());
                 break;
             case "displayExpr":
                 this._renderValue();
@@ -901,7 +889,7 @@ var DropDownList = DropDownEditor.inherit({
         }
     }
 
-}).include(DataExpressionMixin, DataConverterMixin);
+}).include(DataExpressionMixin);
 
 registerComponent("dxDropDownList", DropDownList);
 

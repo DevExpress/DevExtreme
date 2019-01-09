@@ -23,8 +23,7 @@ var $ = require("../../core/renderer"),
     deviceDependentOptions = require("../scroll_view/ui.scrollable").deviceDependentOptions,
     CollectionWidget = require("../collection/ui.collection_widget.live_update").default,
     BindableTemplate = require("../widget/bindable_template"),
-    Deferred = require("../../core/utils/deferred").Deferred,
-    DataConverterMixin = require("../shared/grouped_data_converter_mixin").default;
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var LIST_CLASS = "dx-list",
     LIST_ITEM_CLASS = "dx-list-item",
@@ -382,27 +381,34 @@ var ListBase = CollectionWidget.inherit({
             * @inheritdoc
             */
 
+            /**
+             * @name dxListOptions.items
+             * @type Array<string, dxListItem, object>
+             * @fires dxListOptions.onOptionChanged
+             * @inheritdoc
+             */
+
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
             badgeExpr: function(data) { return data ? data.badge : undefined; }
             /**
-            * @name dxListItemTemplate
-            * @inherits CollectionWidgetItemTemplate
+            * @name dxListItem
+            * @inherits CollectionWidgetItem
             * @type object
             */
             /**
-            * @name dxListItemTemplate.badge
+            * @name dxListItem.badge
             * @type String
             */
             /**
-            * @name dxListItemTemplate.showChevron
+            * @name dxListItem.showChevron
             * @type boolean
             */
             /**
-             * @name dxListItemTemplate.icon
+             * @name dxListItem.icon
              * @type String
              */
             /**
-             * @name dxListItemTemplate.key
+             * @name dxListItem.key
              * @type String
              */
         });
@@ -605,10 +611,6 @@ var ListBase = CollectionWidget.inherit({
         return extend(this.callBase(), {
             paginate: commonUtils.ensureDefined(scrollBottom || nextButton, true)
         });
-    },
-
-    _getGroupedOption: function() {
-        return this.option("grouped");
     },
 
     _dataSourceFromUrlLoadMode: function() {
@@ -1281,7 +1283,7 @@ var ListBase = CollectionWidget.inherit({
         this._scrollView.scrollToElement($item);
     }
 
-}).include(DataConverterMixin);
+});
 
 ListBase.ItemClass = ListItem;
 

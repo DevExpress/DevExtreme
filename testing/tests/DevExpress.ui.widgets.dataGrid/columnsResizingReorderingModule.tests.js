@@ -847,13 +847,15 @@ function getEvent(options) {
             };
 
             that.createColumnsResizerViewController = function(columns) {
+                var controller;
+
                 if(columns) {
                     that.component._controllers.columns = new MockColumnsController(columns, that.commonColumnSettings);
                 }
 
                 that.component._controllers.editing = new MockEditingController();
 
-                var controller = new columnResizingReordering.ColumnsResizerViewController(that.component);
+                that.resizeController = controller = new columnResizingReordering.ColumnsResizerViewController(that.component);
 
                 controller.init();
 
@@ -863,6 +865,9 @@ function getEvent(options) {
             };
 
             $('#container').css({ width: '300px' });
+        },
+        afterEach: function() {
+            this.resizeController && this.resizeController.dispose();
         }
     });
 
@@ -2925,7 +2930,7 @@ function getEvent(options) {
 
         // assert
         $headersContainer = $(resizeController._columnHeadersView.element());
-        separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find(".dx-header-row").first().height();
+        separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find(".dx-header-row")[0].getBoundingClientRect().height;
         assert.strictEqual(this.component._controllers.columns.columnOption(2, "width"), 75, "width of the first banded column");
         assert.strictEqual($(resizeController._columnsSeparatorView.element()).offset().top, separatorOffsetTop, "separator offset top");
     });
@@ -5487,6 +5492,9 @@ function getEvent(options) {
             });
 
             that.controller = that.draggingHeaderController;
+        },
+        afterEach: function() {
+            this.dispose();
         }
     });
 
@@ -5965,7 +5973,7 @@ function getEvent(options) {
             opacityValue;
 
         this.controller._rowsView = {};
-        this.controller._columnHeadersView = { setRowsOpacity: noop };
+        this.controller._columnHeadersView = { setRowsOpacity: noop, getColumnElements: noop };
         this.controller._rowsView.setRowsOpacity = function(columnIndex, value) {
             columnIndexOpacity = columnIndex;
             opacityValue = value;
@@ -6034,7 +6042,7 @@ function getEvent(options) {
             testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = {};
+        that.controller._columnHeadersView = { getColumnElements: noop };
         that.controller._rowsView.setRowsOpacity = function() {
         };
         that.controller._columnHeadersView.element = function() {
@@ -6100,7 +6108,7 @@ function getEvent(options) {
             testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = { setRowsOpacity: noop };
+        that.controller._columnHeadersView = { setRowsOpacity: noop, getColumnElements: noop };
         that.controller._rowsView.setRowsOpacity = function() {
         };
         that.controller._columnHeadersView.element = function() {
@@ -6164,7 +6172,7 @@ function getEvent(options) {
             testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = {};
+        that.controller._columnHeadersView = { getColumnElements: noop };
         that.controller._rowsView.setRowsOpacity = function() {
         };
         that.controller._columnHeadersView.element = function() {

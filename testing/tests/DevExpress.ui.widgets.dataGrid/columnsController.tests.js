@@ -1475,6 +1475,8 @@ QUnit.test("Initialize Lookup column with paging", function(assert) {
     assert.equal(lookup.dataType, 'string', 'lookup type');
     assert.deepEqual(lookup.items, this.options.columns[1].lookup.dataSource.store, 'lookup items');
     assert.equal(lookup.calculateCellValue(1), 'Category 1', 'lookup calculateCellValue');
+    // T701148
+    assert.strictEqual(lookup.dataSource.store, this.options.columns[1].lookup.dataSource.store, 'lookup store array instance is not changed');
 });
 
 // T630253
