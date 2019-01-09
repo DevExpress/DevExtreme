@@ -1000,7 +1000,7 @@ var FilterBuilder = Widget.inherit({
             }
         });
 
-        return documentKeyUpHandler;
+        this._documentKeyUpHandler = documentKeyUpHandler;
     },
 
     _addDocumentClick: function($editor, closeEditorFunc) {
@@ -1013,7 +1013,7 @@ var FilterBuilder = Widget.inherit({
         };
         eventsEngine.on(document, "dxpointerdown", documentClickHandler);
 
-        return documentClickHandler;
+        this._documentClickHandler = documentClickHandler;
     },
 
     _isFocusOnEditorParts: function($editor, target) {
@@ -1061,8 +1061,10 @@ var FilterBuilder = Widget.inherit({
         var $editor = this._createValueEditor($container, field, options);
         eventsEngine.trigger($editor.find("input").not(':hidden').eq(0), "focus");
 
-        this._documentClickHandler = this._addDocumentClick($editor, closeEditor);
-        this._documentKeyUpHandler = this._addDocumentKeyUp($editor, (e) => {
+        this._removeEvents();
+
+        this._addDocumentClick($editor, closeEditor);
+        this._addDocumentKeyUp($editor, (e) => {
             if(e.keyCode === TAB_KEY) {
                 if(this._isFocusOnEditorParts($editor)) {
                     return;

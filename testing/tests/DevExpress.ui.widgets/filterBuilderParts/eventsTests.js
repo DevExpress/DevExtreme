@@ -148,9 +148,11 @@ QUnit.module("Events", function() {
 
         filterBuilder._addDocumentClick = function() {
             $(document).on("dxpointerdown", dxPointerDownSpy);
+            this._documentClickHandler = dxPointerDownSpy;
         };
         filterBuilder._addDocumentKeyUp = function() {
             $(document).on("keyup", keyUpSpy);
+            this._documentKeyUpHandler = keyUpSpy;
         };
 
         // act
