@@ -244,7 +244,10 @@ exports.VirtualScrollController = Class.inherit((function() {
     var processChanged = function(that, changed, changeType, isDelayChanged, removeCacheItem) {
         var dataSource = that._dataSource,
             items = dataSource.items().slice(),
-            change = typeUtils.isObject(changeType) ? changeType : undefined;
+            change = typeUtils.isObject(changeType) ? changeType : undefined,
+            isPrepend = changeType === "prepend",
+            viewportItems = dataSource.viewportItems();
+
         if(changeType && typeUtils.isString(changeType) && !that._isDelayChanged) {
             change = {
                 changeType: changeType,
@@ -252,18 +255,26 @@ exports.VirtualScrollController = Class.inherit((function() {
             };
             if(removeCacheItem) {
                 change.removeCount = removeCacheItem.itemsCount;
+                if(change.removeCount && dataSource.correctCount) {
+                    change.removeCount = dataSource.correctCount(viewportItems, change.removeCount, isPrepend);
+                }
             }
         }
-        var viewportItems = that._dataSource.viewportItems();
+        var removeItemCount = removeCacheItem ? removeCacheItem.itemsLength : 0;
+
+        if(removeItemCount && dataSource.correctCount) {
+            removeItemCount = dataSource.correctCount(viewportItems, removeItemCount, isPrepend);
+        }
+
         if(changeType === "append") {
             viewportItems.push.apply(viewportItems, items);
             if(removeCacheItem) {
-                viewportItems.splice(0, removeCacheItem.itemsLength);
+                viewportItems.splice(0, removeItemCount);
             }
-        } else if(changeType === "prepend") {
+        } else if(isPrepend) {
             viewportItems.unshift.apply(viewportItems, items);
             if(removeCacheItem) {
-                viewportItems.splice(-removeCacheItem.itemsLength);
+                viewportItems.splice(-removeItemCount);
             }
         } else {
             that._dataSource.viewportItems(items);
@@ -588,7 +599,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     }
                 }
 
-                cacheItem = { pageIndex: dataSource.pageIndex(), itemsLength: dataSource.items().length, itemsCount: that.itemsCount(true) };
+                cacheItem = { pageIndex: dataSource.pageIndex(), itemsLength: dataSource.items(true).length, itemsCount: that.itemsCount(true) };
 
                 if(!that.option("legacyRendering") && that.option("scrolling.removeInvisiblePages") && isVirtualMode(that)) {
                     removeInvisiblePages = that._cache.length > Math.max(getPreloadPageCount(this) + (that.option("scrolling.preloadEnabled") ? 1 : 0), 2);

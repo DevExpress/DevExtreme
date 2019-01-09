@@ -3395,6 +3395,68 @@ QUnit.test("scroll to second render page", function(assert) {
     }]);
 });
 
+QUnit.test("scroll to second render page after expand row on the first page", function(assert) {
+    this.dataController.expandRow(1);
+    this.changedArgs = [];
+    this.dataController.setViewportPosition(50);
+
+    assert.strictEqual(this.dataController.pageIndex(), 0);
+    assert.strictEqual(this.dataController.items().length, 15);
+    assert.strictEqual(this.dataController.items()[0].key, 5);
+    assert.strictEqual(this.dataController.getContentOffset("begin"), 50);
+    assert.strictEqual(this.dataController.getContentOffset("end"), 800);
+    assert.deepEqual(this.changedArgs, [{
+        changeType: "append",
+        removeCount: 6,
+        items: this.dataController.items().slice(10, 15)
+    }]);
+
+    assert.strictEqual(this.changedArgs[0].items[0].key, 15);
+});
+
+QUnit.test("scroll to second render page and expand row after expand row on the first page", function(assert) {
+    this.dataController.expandRow(1);
+    this.dataController.setViewportPosition(50);
+    this.dataController.expandRow(5);
+
+    assert.strictEqual(this.dataController.items().length, 16);
+    assert.strictEqual(this.dataController.items()[0].key, 5);
+    assert.strictEqual(this.dataController.items()[0].rowType, "data");
+    assert.strictEqual(this.dataController.items()[1].key, 5);
+    assert.strictEqual(this.dataController.items()[1].rowType, "detail");
+});
+
+QUnit.test("scroll to second render page and expand row after expand row on the first page and refresh", function(assert) {
+    this.dataController.expandRow(1);
+    this.dataController.refresh();
+    this.dataController.setViewportPosition(50);
+    this.dataController.expandRow(5);
+
+    assert.strictEqual(this.dataController.items().length, 16);
+    assert.strictEqual(this.dataController.items()[0].key, 5);
+    assert.strictEqual(this.dataController.items()[0].rowType, "data");
+    assert.strictEqual(this.dataController.items()[1].key, 5);
+    assert.strictEqual(this.dataController.items()[1].rowType, "detail");
+});
+
+QUnit.test("scroll to second render page and return to first after expand row on the first page", function(assert) {
+    this.dataController.expandRow(1);
+    this.dataController.setViewportPosition(50);
+    this.changedArgs = [];
+    this.dataController.setViewportPosition(0);
+
+    assert.strictEqual(this.dataController.pageIndex(), 0);
+    assert.strictEqual(this.dataController.items().length, 16);
+    assert.strictEqual(this.dataController.items()[0].key, 0);
+    assert.deepEqual(this.changedArgs, [{
+        changeType: "prepend",
+        removeCount: 5,
+        items: this.dataController.items().slice(0, 6)
+    }]);
+
+    assert.strictEqual(this.changedArgs[0].items[0].key, 0);
+});
+
 QUnit.test("scroll to third render page", function(assert) {
     this.dataController.setViewportPosition(100);
 
