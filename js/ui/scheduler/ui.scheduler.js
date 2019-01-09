@@ -2799,7 +2799,7 @@ var Scheduler = Widget.inherit({
                 exceptionByStartDate = this.fire("convertDateByTimezone", startDate, startDateTimeZone);
 
             for(var i = 0; i < exceptions.length; i++) {
-                exceptions[i] = this._convertRecurrenceException(exceptions[i], exceptionByStartDate, startDateTimeZone);
+                exceptions[i] = this._updateRecurrenceException(exceptions[i], exceptionByStartDate, startDateTimeZone);
             }
 
             recurrenceException = exceptions.join();
@@ -2808,7 +2808,7 @@ var Scheduler = Widget.inherit({
         return recurrenceException;
     },
 
-    _convertRecurrenceException: function(exception, exceptionByStartDate, startDateTimeZone) {
+    _updateRecurrenceException: function(exception, exceptionByStartDate, startDateTimeZone) {
         exception = exception.replace(/\s/g, "");
         exception = dateSerialization.deserializeDate(exception);
         exception = this.fire("convertDateByTimezone", exception, startDateTimeZone);
