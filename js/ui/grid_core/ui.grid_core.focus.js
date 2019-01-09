@@ -122,16 +122,22 @@ exports.FocusController = core.ViewController.inherit((function() {
 
         _triggerUpdateFocusedRow: function(key, result) {
             var dataController = this.getController("data"),
-                rowIndex = dataController.getRowIndexByKey(key) + dataController.getRowIndexOffset();
+                rowIndex = dataController.getRowIndexByKey(key),
+                focusedRowIndex = rowIndex + dataController.getRowIndexOffset();
 
-            if(this._isValidFocusedRowIndex(rowIndex)) {
-                this.getController("keyboardNavigation").setFocusedRowIndex(rowIndex);
+            if(this._isValidFocusedRowIndex(focusedRowIndex)) {
+                this.getController("keyboardNavigation").setFocusedRowIndex(focusedRowIndex);
 
-                dataController.updateItems({
-                    changeType: "updateFocusedRow",
-                    focusedRowKey: key
-                });
-                result && result.resolve(rowIndex);
+                if(this.option("focusedRowEnabled")) {
+                    dataController.updateItems({
+                        changeType: "updateFocusedRow",
+                        focusedRowKey: key
+                    });
+                } else {
+                    this._scrollToFocusedRow(this.getView("rowsView").getRow(rowIndex));
+                }
+
+                result && result.resolve(focusedRowIndex);
             } else {
                 result && result.resolve(-1);
             }
@@ -205,24 +211,13 @@ exports.FocusController = core.ViewController.inherit((function() {
             }
         },
         _prepareFocusedRow: function(changedItem, $tableElement, focusedRowIndex) {
-            var that = this,
-                $row,
-                keyboardController,
-                tabIndex = that.option("tabindex") || 0;
+            var $row,
+                tabIndex = this.option("tabindex") || 0;
 
             if(changedItem && (changedItem.rowType === "data" || changedItem.rowType === "group")) {
-                $row = $(that.getView("rowsView")._getRowElements($tableElement).eq(focusedRowIndex));
+                $row = $(this.getView("rowsView")._getRowElements($tableElement).eq(focusedRowIndex));
                 $row.addClass(ROW_FOCUSED_CLASS).attr("tabindex", tabIndex);
-                if(that._needRestoreFocus) {
-                    that._needRestoreFocus = false;
-                    keyboardController = that.getController("keyboardNavigation");
-                    var $cell = keyboardController._getFocusedCell();
-                    if($cell) {
-                        keyboardController.focus($cell);
-                    }
-                } else {
-                    that._scrollToFocusedRow($row);
-                }
+                this._scrollToFocusedRow($row);
             }
 
             return $row;
