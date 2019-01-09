@@ -1024,8 +1024,8 @@ var FilterBuilder = Widget.inherit({
 
     _removeEvents: function() {
         const document = domAdapter.getDocument();
-        this._documentKeyUpHandler && eventsEngine.off(document, "keyup", this._documentKeyUpHandler);
-        this._documentClickHandler && eventsEngine.off(document, "dxpointerdown", this._documentClickHandler);
+        isDefined(this._documentKeyUpHandler) && eventsEngine.off(document, "keyup", this._documentKeyUpHandler);
+        isDefined(this._documentClickHandler) && eventsEngine.off(document, "dxpointerdown", this._documentClickHandler);
     },
 
     _dispose: function() {
@@ -1061,8 +1061,8 @@ var FilterBuilder = Widget.inherit({
         var $editor = this._createValueEditor($container, field, options);
         eventsEngine.trigger($editor.find("input").not(':hidden').eq(0), "focus");
 
-        this.documentClickHandler = this._addDocumentClick($editor, closeEditor);
-        this.documentKeyUpHandler = this._addDocumentKeyUp($editor, (e) => {
+        this._documentClickHandler = this._addDocumentClick($editor, closeEditor);
+        this._documentKeyUpHandler = this._addDocumentKeyUp($editor, (e) => {
             if(e.keyCode === TAB_KEY) {
                 if(this._isFocusOnEditorParts($editor)) {
                     return;
