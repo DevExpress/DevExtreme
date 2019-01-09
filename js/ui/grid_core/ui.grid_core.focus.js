@@ -122,10 +122,11 @@ exports.FocusController = core.ViewController.inherit((function() {
 
         _triggerUpdateFocusedRow: function(key, result) {
             var dataController = this.getController("data"),
-                rowIndex = dataController.getRowIndexByKey(key) + dataController.getRowIndexOffset();
+                rowIndex = dataController.getRowIndexByKey(key),
+                focusedRowIndex = rowIndex + dataController.getRowIndexOffset();
 
-            if(this._isValidFocusedRowIndex(rowIndex)) {
-                this.getController("keyboardNavigation").setFocusedRowIndex(rowIndex);
+            if(this._isValidFocusedRowIndex(focusedRowIndex)) {
+                this.getController("keyboardNavigation").setFocusedRowIndex(focusedRowIndex);
 
                 if(this.option("focusedRowEnabled")) {
                     dataController.updateItems({
@@ -136,7 +137,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                     this._scrollToFocusedRow(this.getView("rowsView").getRow(rowIndex));
                 }
 
-                result && result.resolve(rowIndex);
+                result && result.resolve(focusedRowIndex);
             } else {
                 result && result.resolve(-1);
             }
