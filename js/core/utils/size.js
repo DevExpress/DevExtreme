@@ -1,7 +1,7 @@
 var window = require("../../core/utils/window").getWindow();
 var typeUtils = require("../utils/type");
 
-var NOT_LENGTH_VALUES = ["auto", "none", "inherit", "initial"];
+var SPECIAL_HEIGHT_VALUES = ["auto", "none", "inherit", "initial"];
 
 var getSizeByStyles = function(elementStyles, styles) {
     var result = 0;
@@ -74,7 +74,7 @@ var getHeightWithOffset = function(value, offset, container) {
         return null;
     }
 
-    if(NOT_LENGTH_VALUES.includes(value)) {
+    if(SPECIAL_HEIGHT_VALUES.includes(value)) {
         return offset ? null : value;
     }
 
