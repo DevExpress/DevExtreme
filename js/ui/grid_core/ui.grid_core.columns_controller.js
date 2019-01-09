@@ -1376,10 +1376,11 @@ module.exports = {
             };
 
             var getFixedPosition = function(that, column) {
-                if(column.command && !isCustomCommandColumn(that, column)) {
-                    return column.visibleIndex < 0 || column.type === GROUP_COMMAND_COLUMN_NAME ? "left" : "right";
+                if(column.command && !isCustomCommandColumn(that, column) || !column.fixedPosition) {
+                    return "left";
                 }
-                return !column.fixedPosition ? "left" : column.fixedPosition;
+
+                return column.fixedPosition;
             };
 
             var processExpandColumns = function(columns, expandColumns, type, columnIndex) {
