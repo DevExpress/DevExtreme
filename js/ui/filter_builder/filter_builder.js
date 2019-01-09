@@ -1024,8 +1024,8 @@ var FilterBuilder = Widget.inherit({
 
     _removeEvents: function() {
         const document = domAdapter.getDocument();
-        eventsEngine.off(document, "keyup", this._documentKeyUpHandler);
-        eventsEngine.off(document, "dxpointerdown", this._documentClickHandler);
+        this._documentKeyUpHandler && eventsEngine.off(document, "keyup", this._documentKeyUpHandler);
+        this._documentClickHandler && eventsEngine.off(document, "dxpointerdown", this._documentClickHandler);
     },
 
     _dispose: function() {
