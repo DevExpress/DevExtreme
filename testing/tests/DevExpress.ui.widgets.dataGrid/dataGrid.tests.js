@@ -3046,6 +3046,55 @@ QUnit.test("Enable rows hover, row position and focused row", function(assert) {
     assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
 });
 
+QUnit.test("The navigateToRow method should not affect vertical scrolling", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        rowsView,
+        rect,
+        rowsViewRect,
+        data = [
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal0', name: 'Ben', age: 24 },
+            { team: 'internal0', name: 'Dan', age: 23 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 80,
+            width: 200,
+            dataSource: data,
+            keyExpr: "name",
+            paging: { pageSize: 2 },
+            pager: { visible: false },
+            columnResizingMode: "widget",
+            columns: [
+                { dataField: "team", width: 150 },
+                { dataField: "name", width: 150 },
+                { dataField: "age", width: 150 },
+            ]
+        }).dxDataGrid("instance"),
+        keyboardController = dataGrid.getController("keyboardNavigation");
+
+    // act
+    dataGrid.navigateToRow("Zeb");
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.pageIndex(), 2, "Page index");
+    assert.equal(keyboardController.getVisibleRowIndex(), 1, "Visible row index");
+
+    rowsView = dataGrid.getView("rowsView");
+    rect = rowsView.getRow(1)[0].getBoundingClientRect();
+    rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+    assert.equal(rowsView.getScrollable().scrollLeft(), 0, "Scroll left");
+
+    clock.restore();
+});
+
 QUnit.test("Test navigateToRow method if virtual scrolling", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers(),

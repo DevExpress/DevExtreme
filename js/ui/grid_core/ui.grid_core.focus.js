@@ -247,7 +247,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 }
 
                 if(diff) {
-                    rowsView.scrollTo(rowsView._scrollTop + diff);
+                    rowsView.scrollTo({ y: rowsView._scrollTop + diff });
                 }
             }
         }
