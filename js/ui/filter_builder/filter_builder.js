@@ -1000,7 +1000,7 @@ var FilterBuilder = Widget.inherit({
             }
         });
 
-        return documentKeyUpHandler;
+        this._documentKeyUpHandler = documentKeyUpHandler;
     },
 
     _addDocumentClick: function($editor, closeEditorFunc) {
@@ -1013,7 +1013,7 @@ var FilterBuilder = Widget.inherit({
         };
         eventsEngine.on(document, "dxpointerdown", documentClickHandler);
 
-        return documentClickHandler;
+        this._documentClickHandler = documentClickHandler;
     },
 
     _isFocusOnEditorParts: function($editor, target) {
@@ -1022,16 +1022,22 @@ var FilterBuilder = Widget.inherit({
             || $(activeElement).closest(".dx-dropdowneditor-overlay").length;
     },
 
+    _removeEvents: function() {
+        const document = domAdapter.getDocument();
+        isDefined(this._documentKeyUpHandler) && eventsEngine.off(document, "keyup", this._documentKeyUpHandler);
+        isDefined(this._documentClickHandler) && eventsEngine.off(document, "dxpointerdown", this._documentClickHandler);
+    },
+
+    _dispose: function() {
+        this._removeEvents();
+        this.callBase();
+    },
+
     _createValueEditorWithEvents: function(item, field, $container) {
-        var document = domAdapter.getDocument(),
-            value = item[2],
-            removeEvents = function() {
-                eventsEngine.off(document, "keyup", documentKeyUpHandler);
-                eventsEngine.off(document, "dxpointerdown", documentClickHandler);
-            },
+        var value = item[2],
             createValueText = () => {
                 $container.empty();
-                removeEvents();
+                this._removeEvents();
                 return this._createValueText(item, field, $container);
             },
             closeEditor = () => {
@@ -1055,8 +1061,10 @@ var FilterBuilder = Widget.inherit({
         var $editor = this._createValueEditor($container, field, options);
         eventsEngine.trigger($editor.find("input").not(':hidden').eq(0), "focus");
 
-        var documentClickHandler = this._addDocumentClick($editor, closeEditor);
-        var documentKeyUpHandler = this._addDocumentKeyUp($editor, (e) => {
+        this._removeEvents();
+
+        this._addDocumentClick($editor, closeEditor);
+        this._addDocumentKeyUp($editor, (e) => {
             if(e.keyCode === TAB_KEY) {
                 if(this._isFocusOnEditorParts($editor)) {
                     return;
