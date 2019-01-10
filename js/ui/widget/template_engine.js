@@ -1,12 +1,27 @@
-var $ = require("../../core/renderer"),
-    errors = require("../../core/errors"),
+var errors = require("../../core/errors"),
     typeUtils = require("../../core/utils/type"),
-    TemplateBase = require("./ui.template_base"),
     domUtils = require("../../core/utils/dom");
 
 var templateEngines = {};
+var currentTemplateEngine;
+
 var registerTemplateEngine = function(name, templateEngine) {
     templateEngines[name] = templateEngine;
+};
+
+var setTemplateEngine = function(templateEngine) {
+    if(typeUtils.isString(templateEngine)) {
+        currentTemplateEngine = templateEngines[templateEngine];
+        if(!currentTemplateEngine) {
+            throw errors.Error("E0020", templateEngine);
+        }
+    } else {
+        currentTemplateEngine = templateEngine;
+    }
+};
+
+var getCurrentTemplateEngine = () => {
+    return currentTemplateEngine;
 };
 
 registerTemplateEngine("default", {
@@ -85,44 +100,8 @@ registerTemplateEngine("doT", {
     }
 });
 
-
-var currentTemplateEngine;
-var setTemplateEngine = function(templateEngine) {
-    if(typeUtils.isString(templateEngine)) {
-        currentTemplateEngine = templateEngines[templateEngine];
-        if(!currentTemplateEngine) {
-            throw errors.Error("E0020", templateEngine);
-        }
-    } else {
-        currentTemplateEngine = templateEngine;
-    }
-};
-
 setTemplateEngine("default");
 
-
-var Template = TemplateBase.inherit({
-
-    ctor: function(element) {
-        this._element = element;
-    },
-
-    _renderCore: function(options) {
-        const transclude = options.transclude;
-        if(!transclude && !this._compiledTemplate) {
-            this._compiledTemplate = currentTemplateEngine.compile(this._element);
-        }
-
-        return $("<div>").append(
-            transclude ? this._element : currentTemplateEngine.render(this._compiledTemplate, options.model, options.index)
-        ).contents();
-    },
-
-    source: function() {
-        return $(this._element).clone();
-    }
-
-});
-
-module.exports = Template;
 module.exports.setTemplateEngine = setTemplateEngine;
+module.exports.registerTemplateEngine = registerTemplateEngine;
+module.exports.getCurrentTemplateEngine = getCurrentTemplateEngine;
