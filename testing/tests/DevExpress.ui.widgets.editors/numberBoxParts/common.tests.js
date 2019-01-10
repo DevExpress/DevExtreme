@@ -455,6 +455,21 @@ QUnit.test("mousewheel action should not work in disabled state", function(asser
     assert.equal(numberBox.option("value"), 100.6, "value is not changed");
 });
 
+QUnit.test("mousewheel action should not work if widget is not focused", (assert) => {
+    const $numberBox = $("#numberbox").dxNumberBox({ value: 100 });
+    const numberBox = $numberBox.dxNumberBox("instance");
+    const input = $(".dx-texteditor-input", $numberBox).get(0);
+    const mouse = pointerMock(input).start();
+
+    mouse.wheel(10);
+    assert.strictEqual(numberBox.option("value"), 100);
+
+    input.focus();
+
+    mouse.wheel(10);
+    assert.notStrictEqual(numberBox.option("value"), 100);
+});
+
 QUnit.testInActiveWindow("input is not focused when spin buttons are clicked if useLargeSpinButtons = true", function(assert) {
     var $element = $("#numberbox").dxNumberBox({
             showSpinButtons: true,

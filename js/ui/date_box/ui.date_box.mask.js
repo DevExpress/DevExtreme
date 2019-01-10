@@ -5,7 +5,6 @@ import { extend } from "../../core/utils/extend";
 import { fitIntoRange } from "../../core/utils/math";
 import { inRange } from "../../core/utils/math";
 import eventsEngine from "../../events/core/events_engine";
-import wheelEvent from "../../events/core/wheel";
 import { getDatePartIndexByPosition, renderDateParts } from "./ui.date_box.mask.parts";
 import dateLocalization from "../../localization/date";
 import { getRegExpInfo } from "../../localization/ldml/date.parser";
@@ -217,7 +216,6 @@ let DateBoxMask = DateBoxBase.inherit({
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
             this._selectNextPart(0, e);
         });
-        eventsEngine.on(this._input(), eventsUtils.addNamespace(wheelEvent.name, MASK_EVENT_NAMESPACE), this._mouseWheelHandler.bind(this));
     },
 
     _selectLastPart(e) {
@@ -234,8 +232,10 @@ let DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _mouseWheelHandler(e) {
-        this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD, e);
+    _onMouseWheel(e) {
+        if(this._useMaskBehavior()) {
+            this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD);
+        }
     },
 
     _selectNextPart(step, e) {
@@ -327,7 +327,7 @@ let DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _partIncrease(step, e) {
+    _partIncrease(step) {
         this._setNewDateIfEmpty();
 
         let limits = this._getActivePartLimits(),
@@ -337,7 +337,6 @@ let DateBoxMask = DateBoxBase.inherit({
         newValue = newValue < limits.min ? limits.max : newValue;
 
         this._setActivePartValue(newValue);
-        e && e.preventDefault();
     },
 
     _maskClickHandler() {

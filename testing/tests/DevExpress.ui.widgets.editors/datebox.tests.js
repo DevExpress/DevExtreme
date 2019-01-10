@@ -624,6 +624,22 @@ QUnit.testInActiveWindow("set focus on 'tab' key from editor to overlay and inve
     assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), "dateBox on focus reset focus to element");
 });
 
+QUnit.test("mousewheel action should not work if dateBox is not focused", (assert) => {
+    const $dateBox = $("#dateBox").dxDateBox({ type: "datetime", useMaskBehavior: true });
+    const dateBox = $dateBox.dxDateBox("instance");
+    const initText = dateBox.option("text");
+    const input = $(".dx-texteditor-input", $dateBox).get(0);
+    const mouse = pointerMock(input).start();
+
+    mouse.wheel(10);
+    assert.strictEqual(dateBox.option("text"), initText);
+
+    input.focus();
+
+    mouse.wheel(10);
+    assert.notStrictEqual(dateBox.option("text"), initText);
+});
+
 
 QUnit.module("options changed callbacks", moduleConfig);
 

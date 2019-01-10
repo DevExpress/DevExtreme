@@ -522,6 +522,8 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Increment and decrement date part by mouse wheel", (assert) => {
+            this.$input.get(0).focus();
+
             this.pointer.wheel(10);
             assert.equal(this.$input.val(), "November 10 2012", "increment works");
 
