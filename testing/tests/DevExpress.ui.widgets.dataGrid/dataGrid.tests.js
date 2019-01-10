@@ -6455,6 +6455,62 @@ QUnit.test("scroll position should not be changed after refresh", function(asser
     assert.roughEqual(dataGrid.getScrollable().scrollTop(), 100, 1.1, "scroll top is not changed");
 });
 
+// T699304
+QUnit.test("scroll should works correctly if row height and totalCount are large", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers();
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 500,
+        dataSource: {
+            load: function(options) {
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    var items = [];
+
+                    for(var i = options.skip; i < options.skip + options.take; i++) {
+                        items.push({ id: i + 1 });
+                    }
+                    d.resolve({ data: items, totalCount: 1000000 });
+                });
+
+                return d;
+            }
+        },
+        remoteOperations: true,
+        loadingTimeout: undefined,
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            timeout: 0,
+            updateTimeout: 0,
+            useNative: false
+        },
+        paging: {
+            pageSize: 100
+        },
+        onRowPrepared: function(e) {
+            if(e.rowType === "data") {
+                $(e.rowElement).get(0).style.height = "200px";
+            }
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    clock.tick(1000);
+    dataGrid.getScrollable().scrollTo(100000);
+    clock.tick(1000);
+
+    // assert
+    var topVisibleRowData = dataGrid.getTopVisibleRowData();
+    var visibleRows = dataGrid.getVisibleRows();
+
+    assert.ok(topVisibleRowData.id > 1, "top visible row data is not first");
+    assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id > 3, "rows in viewport are rendered");
+
+    clock.restore();
+});
+
 QUnit.module("Rendered on server", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

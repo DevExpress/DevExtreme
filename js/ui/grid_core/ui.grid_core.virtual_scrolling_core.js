@@ -551,7 +551,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         loadIfNeed: function() {
             var that = this;
 
-            if((isVirtualMode(that) || isAppendMode(that)) && !that._dataSource.isLoading() && !that._isChangedFiring) {
+            if((isVirtualMode(that) || isAppendMode(that)) && !that._dataSource.isLoading() && (!that._isChangedFiring || that._isVirtual)) {
                 var position = that.getViewportPosition();
                 if(position > 0) {
                     that._setViewportPositionCore(position);
