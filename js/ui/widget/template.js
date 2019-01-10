@@ -1,8 +1,8 @@
-var $ = require("../../core/renderer"),
+const $ = require("../../core/renderer"),
     TemplateBase = require("./ui.template_base"),
     templateEngine = require("./template_engine");
 
-var Template = TemplateBase.inherit({
+const Template = TemplateBase.inherit({
 
     ctor: function(element) {
         this._element = element;
