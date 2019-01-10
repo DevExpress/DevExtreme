@@ -133,7 +133,6 @@ var FilterBuilder = Widget.inherit({
 
             /**
             * @name dxFilterBuilderOptions.onContentReady
-            * @hidden true
             * @action
             */
 
@@ -550,9 +549,14 @@ var FilterBuilder = Widget.inherit({
 
     _updateFilter: function() {
         this._disableInvalidateForValue = true;
-        var value = extend(true, [], this._model);
-        this.option("value", utils.getNormalizedFilter(value));
+        var value = extend(true, [], this._model),
+            normalizedValue = utils.getNormalizedFilter(value),
+            oldValue = utils.getNormalizedFilter(this._getModel(this.option("value")));
+        if(JSON.stringify(oldValue) !== JSON.stringify(normalizedValue)) {
+            this.option("value", normalizedValue);
+        }
         this._disableInvalidateForValue = false;
+        this._fireContentReadyAction();
     },
 
     _init: function() {
@@ -571,8 +575,12 @@ var FilterBuilder = Widget.inherit({
         this._customOperations = utils.getMergedOperations(this.option("customOperations"), this.option("filterOperationDescriptions.between"));
     },
 
+    _getModel: function(value) {
+        return utils.convertToInnerStructure(value, this._customOperations);
+    },
+
     _initModel: function() {
-        this._model = utils.convertToInnerStructure(this.option("value"), this._customOperations);
+        this._model = this._getModel(this.option("value"));
     },
 
     _initActions: function() {
@@ -631,9 +639,7 @@ var FilterBuilder = Widget.inherit({
             this._createRemoveButton(() => {
                 utils.removeItem(parent, criteria);
                 $group.remove();
-                if(!utils.isEmptyGroup(criteria)) {
-                    this._updateFilter();
-                }
+                this._updateFilter();
             }).appendTo($groupItem);
         }
 
@@ -643,14 +649,13 @@ var FilterBuilder = Widget.inherit({
             var newGroup = utils.createEmptyGroup(this.option("defaultGroupOperation"));
             utils.addItem(newGroup, criteria);
             this._createGroupElement(newGroup, criteria, groupLevel + 1).appendTo($groupContent);
+            this._updateFilter();
         }, () => {
             var field = this.option("fields")[0],
                 newCondition = utils.createCondition(field, this._customOperations);
             utils.addItem(newCondition, criteria);
             this._createConditionElement(newCondition, criteria).appendTo($groupContent);
-            if(utils.isValidCondition(newCondition)) {
-                this._updateFilter();
-            }
+            this._updateFilter();
         }, groupLevel).appendTo($groupItem);
 
         return $group;
@@ -773,7 +778,7 @@ var FilterBuilder = Widget.inherit({
                     onContentReady: function(e) {
                         e.component.selectItem(currentOperation);
                     },
-                    onItemClick: function(e) {
+                    onItemClick: (e) => {
                         if(currentOperation !== e.itemData) {
                             currentOperation = e.itemData;
                             utils.updateConditionByOperation(condition, currentOperation.value, that._customOperations);
@@ -787,7 +792,7 @@ var FilterBuilder = Widget.inherit({
                                 $valueButton.remove();
                             }
                             $operationButton.html(currentOperation.text);
-                            that._updateFilter();
+                            this._updateFilter();
                         }
                     },
                     cssClass: FILTER_BUILDER_FILTER_OPERATIONS_CLASS
@@ -825,19 +830,18 @@ var FilterBuilder = Widget.inherit({
                 dataStructure: "plain",
                 keyExpr: "dataField",
                 displayExpr: "caption",
-                onItemClick: function(e) {
+                onItemClick: (e) => {
                     if(item !== e.itemData) {
                         item = e.itemData;
                         condition[0] = item.dataField;
                         condition[2] = item.dataType === "object" ? null : "";
                         utils.updateConditionByOperation(condition, utils.getDefaultOperation(item), that._customOperations);
-
                         $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
                         that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
                         var caption = getFullCaption(item, e.component.option("items"));
                         $fieldButton.html(caption);
-                        that._updateFilter();
+                        this._updateFilter();
                     }
                 },
                 onContentReady: function(e) {
@@ -853,17 +857,14 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createConditionItem: function(condition, parent) {
-        var that = this,
-            $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
+        var $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
             fields = this._getNormalizedFields(),
             field = utils.getField(condition[0], fields);
 
-        this._createRemoveButton(function() {
+        this._createRemoveButton(() => {
             utils.removeItem(parent, condition);
             $item.remove();
-            if(utils.isValidCondition(condition)) {
-                that._updateFilter();
-            }
+            this._updateFilter();
         }).appendTo($item);
         this._createFieldButtonWithMenu(fields, condition, field).appendTo($item);
         this._createOperationAndValueButtons(condition, field, $item);
@@ -960,9 +961,7 @@ var FilterBuilder = Widget.inherit({
             item[2] = value;
         }
         callback();
-        if(areValuesDifferent) {
-            this._updateFilter();
-        }
+        this._updateFilter();
     },
 
     _addDocumentKeyUp: function($editor, handler) {
@@ -1085,6 +1084,7 @@ var FilterBuilder = Widget.inherit({
                 });
             }
         });
+        this._fireContentReadyAction();
     },
 
     _createValueButton: function(item, field) {
