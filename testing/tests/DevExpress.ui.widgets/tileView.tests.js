@@ -1,11 +1,11 @@
-var $ = require("jquery"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    isRenderer = require("core/utils/type").isRenderer,
-    globalConfig = require("core/config");
+import $ from "jquery";
+import globalConfig from "core/config";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import { DataSource } from "data/data_source/data_source";
+import { isRenderer } from "core/utils/type";
 
-require("ui/tile_view");
-require("common.css!");
+import "ui/tile_view";
+import "common.css!";
 
 QUnit.testStart(function() {
     var markup =
