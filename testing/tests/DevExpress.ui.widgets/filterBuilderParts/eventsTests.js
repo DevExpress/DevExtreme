@@ -280,7 +280,7 @@ QUnit.module("Events", function() {
             container = $("#container");
 
         container.dxFilterBuilder({
-            value: ["NumberField", "=", ""],
+            value: [["NumberField", "=", ""], "and", ["NumberField", "=", ""]],
             fields: fields,
             onValueChanged: spy
         });
@@ -294,16 +294,16 @@ QUnit.module("Events", function() {
 
         // act
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
-        clickByButtonAndSelectMenuItem($fieldButton, 6);
+        clickByButtonAndSelectMenuItem($fieldButton.eq(0), 6);
+        clickByButtonAndSelectMenuItem($fieldButton.eq(1), 6);
         // assert
-        assert.strictEqual($fieldButton.text(), "Caption of Object Field");
-        assert.strictEqual(spy.callCount, 1, "onValueChanged is called"); // field has a valid condition by default
+        assert.strictEqual(spy.callCount, 2, "onValueChanged is called"); // field has a valid condition by default
 
         // act
         clickByButtonAndSelectMenuItem($groupButton, 0);
         // assert
         assert.strictEqual($groupButton.text(), "And");
-        assert.strictEqual(spy.callCount, 2, "onValueChanged is called"); // group is valid
+        assert.strictEqual(spy.callCount, 3, "onValueChanged is called"); // group is valid
     });
 
     QUnit.test("onInitialized", function(assert) {
