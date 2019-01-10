@@ -3,7 +3,10 @@ var errors = require("../../core/errors"),
     domUtils = require("../../core/utils/dom");
 
 var templateEngines = {};
-var currentTemplateEngine;
+var currentTemplateEngine = {
+    compile: (element) => domUtils.normalizeTemplateElement(element),
+    render: (template, model, index) => template.clone()
+};
 
 var registerTemplateEngine = function(name, templateEngine) {
     templateEngines[name] = templateEngine;
@@ -23,11 +26,6 @@ var setTemplateEngine = function(templateEngine) {
 var getCurrentTemplateEngine = () => {
     return currentTemplateEngine;
 };
-
-registerTemplateEngine("default", {
-    compile: (element) => domUtils.normalizeTemplateElement(element),
-    render: (template, model, index) => template.clone()
-});
 
 registerTemplateEngine("jquery-tmpl", {
     compile: function(element) {
@@ -99,8 +97,6 @@ registerTemplateEngine("doT", {
         return template(data);
     }
 });
-
-setTemplateEngine("default");
 
 module.exports.setTemplateEngine = setTemplateEngine;
 module.exports.registerTemplateEngine = registerTemplateEngine;
