@@ -1,18 +1,15 @@
-var errors = require("../../core/errors"),
+const errors = require("../../core/errors"),
     typeUtils = require("../../core/utils/type"),
     domUtils = require("../../core/utils/dom");
 
-var templateEngines = {};
-var currentTemplateEngine = {
-    compile: (element) => domUtils.normalizeTemplateElement(element),
-    render: (template, model, index) => template.clone()
-};
+let templateEngines = {};
+let currentTemplateEngine;
 
-var registerTemplateEngine = function(name, templateEngine) {
+const registerTemplateEngine = (name, templateEngine) => {
     templateEngines[name] = templateEngine;
 };
 
-var setTemplateEngine = function(templateEngine) {
+const setTemplateEngine = (templateEngine) => {
     if(typeUtils.isString(templateEngine)) {
         currentTemplateEngine = templateEngines[templateEngine];
         if(!currentTemplateEngine) {
@@ -23,80 +20,87 @@ var setTemplateEngine = function(templateEngine) {
     }
 };
 
-var getCurrentTemplateEngine = () => {
+const getCurrentTemplateEngine = () => {
     return currentTemplateEngine;
 };
 
+registerTemplateEngine("default", {
+    compile: (element) => domUtils.normalizeTemplateElement(element),
+    render: (template, model, index) => template.clone()
+});
+
 registerTemplateEngine("jquery-tmpl", {
-    compile: function(element) {
+    compile: (element) => {
         return domUtils.extractTemplateMarkup(element);
     },
-    render: function(template, data) {
+    render: (template, data) => {
         /* global jQuery */
         return jQuery.tmpl(template, data);
     }
 });
 
 registerTemplateEngine("jsrender", {
-    compile: function(element) {
+    compile: (element) => {
         /* global jQuery */
         /* global jsrender */
         return (jQuery ? jQuery : jsrender).templates(domUtils.extractTemplateMarkup(element));
     },
-    render: function(template, data) {
+    render: (template, data) => {
         return template.render(data);
     }
 });
 
 registerTemplateEngine("mustache", {
-    compile: function(element) {
+    compile: (element) => {
         /* global Mustache */
         return domUtils.extractTemplateMarkup(element);
     },
-    render: function(template, data) {
+    render: (template, data) => {
         return Mustache.render(template, data);
     }
 });
 
 registerTemplateEngine("hogan", {
-    compile: function(element) {
+    compile: (element) => {
         /* global Hogan */
         return Hogan.compile(domUtils.extractTemplateMarkup(element));
     },
-    render: function(template, data) {
+    render: (template, data) => {
         return template.render(data);
     }
 });
 
 registerTemplateEngine("underscore", {
-    compile: function(element) {
+    compile: (element) => {
         /* global _ */
         return _.template(domUtils.extractTemplateMarkup(element));
     },
-    render: function(template, data) {
+    render: (template, data) => {
         return template(data);
     }
 });
 
 registerTemplateEngine("handlebars", {
-    compile: function(element) {
+    compile: (element) => {
         /* global Handlebars */
         return Handlebars.compile(domUtils.extractTemplateMarkup(element));
     },
-    render: function(template, data) {
+    render: (template, data) => {
         return template(data);
     }
 });
 
 registerTemplateEngine("doT", {
-    compile: function(element) {
+    compile: (element) => {
         /* global doT */
         return doT.template(domUtils.extractTemplateMarkup(element));
     },
-    render: function(template, data) {
+    render: (template, data) => {
         return template(data);
     }
 });
+
+setTemplateEngine("default");
 
 module.exports.setTemplateEngine = setTemplateEngine;
 module.exports.registerTemplateEngine = registerTemplateEngine;

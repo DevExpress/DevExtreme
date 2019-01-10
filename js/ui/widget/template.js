@@ -1,17 +1,16 @@
-var $ = require("../../core/renderer"),
+const $ = require("../../core/renderer"),
     TemplateBase = require("./ui.template_base"),
     templateEngine = require("./template_engine");
 
-var Template = TemplateBase.inherit({
+const Template = TemplateBase.inherit({
 
-    ctor: function(element) {
+    ctor: (element) => {
         this._element = element;
     },
 
-    _renderCore: function(options) {
+    _renderCore: (options) => {
         const transclude = options.transclude;
         if(!transclude && !this._compiledTemplate) {
-            debugger;
             this._compiledTemplate = templateEngine.getCurrentTemplateEngine().compile(this._element);
         }
 
@@ -20,7 +19,7 @@ var Template = TemplateBase.inherit({
         ).contents();
     },
 
-    source: function() {
+    source: () => {
         return $(this._element).clone();
     }
 
