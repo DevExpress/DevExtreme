@@ -1,12 +1,12 @@
-var $ = require("jquery"),
-    SpinButton = require("ui/number_box/number_box.spin"),
-    devices = require("core/devices"),
-    config = require("core/config"),
-    pointerMock = require("../../../helpers/pointerMock.js"),
-    keyboardMock = require("../../../helpers/keyboardMock.js");
+import $ from "jquery";
+import SpinButton from "ui/number_box/number_box.spin";
+import config from "core/config";
+import devices from "core/devices";
+import keyboardMock from "../../../helpers/keyboardMock.js";
+import pointerMock from "../../../helpers/pointerMock.js";
 
-require("ui/number_box"),
-require("ui/validator");
+import "ui/number_box";
+import "ui/validator";
 
 var NUMBERBOX_CLASS = "dx-numberbox",
     INVALID_CLASS = "dx-invalid",
