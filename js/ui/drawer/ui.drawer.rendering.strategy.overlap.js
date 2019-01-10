@@ -112,9 +112,7 @@ class OverlapStrategy extends DrawerStrategy {
         const position = drawer.getDrawerPosition();
         const defaultAnimationConfig = this._defaultAnimationConfig();
 
-        if(drawer.isHorizontalDirection()) {
-            $content.css("paddingLeft", drawer.option("minSize") * drawer._getPositionCorrection());
-        }
+        $content.css("padding" + position.charAt(0).toUpperCase() + position.substr(1), drawer.option("minSize"));
 
         $content.css("transform", "inherit");
 
