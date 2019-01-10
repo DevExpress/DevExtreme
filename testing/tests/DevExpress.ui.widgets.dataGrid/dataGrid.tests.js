@@ -448,6 +448,29 @@ QUnit.test("Horizontal scrollbar should not be shown if container height is not 
     assert.strictEqual(dataGrid.getScrollbarWidth(true), 0);
 });
 
+// T703649
+QUnit.test("Fixed and main table should have same scroll top if showScrollbar is always", function(assert) {
+    // act
+    var dataGrid = createDataGrid({
+        height: 200,
+        dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+        loadingTimeout: undefined,
+        scrolling: {
+            useNative: false,
+            showScrollbar: "always"
+        },
+        columns: [{ dataField: "column1", fixed: true }, "column2"]
+    });
+
+    var scrollable = dataGrid.getScrollable();
+
+    scrollable.scrollTo({ y: 10000 });
+
+    // assert
+    assert.ok(scrollable.scrollTop() > 0, "content is scrolled");
+    assert.strictEqual(scrollable.scrollTop(), $(scrollable.element()).children(".dx-datagrid-content-fixed").scrollTop(), "scroll top are same for main and fixed table");
+});
+
 QUnit.test("noDataText option", function(assert) {
     // act
     var noDataText = "Custom no data",
