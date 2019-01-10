@@ -677,12 +677,10 @@ var FilterBuilder = Widget.inherit({
                         keyExpr: "value",
                         onItemClick: (e) => {
                             if(groupMenuItem !== e.itemData) {
-                                var isValidOld = utils.isValidGroup(criteria);
                                 utils.setGroupValue(criteria, e.itemData.value);
-                                var isValidNew = utils.isValidGroup(criteria);
                                 $operationButton.html(e.itemData.text);
                                 groupMenuItem = e.itemData;
-                                let needUpdateFilter = this._needUpdateFilter(isValidOld, isValidNew);
+                                let needUpdateFilter = utils.isValidGroup(criteria);
                                 this._updateContent(needUpdateFilter);
                             }
                         },
