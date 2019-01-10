@@ -36,6 +36,13 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         _focusRowByIndex: function(index) {
+            var that = this,
+                dataController,
+                isVirtualScrolling,
+                focusedRowKey,
+                isLocalIndex,
+                pageIndex;
+
             if(!this.option("focusedRowEnabled")) return;
 
             index = index !== undefined ? index : this.option("focusedRowIndex");
@@ -43,12 +50,19 @@ exports.FocusController = core.ViewController.inherit((function() {
             if(index < 0) {
                 this._resetFocusedRow();
             } else {
-                var dataController = this.getController("data"),
-                    localIndex = index >= 0 ? index - dataController.getRowIndexOffset() : -1,
-                    rowKey = dataController.getKeyByRowIndex(localIndex);
-                if(isDefined(rowKey) && !this.isRowFocused(rowKey) && this._isValidFocusedRowIndex(localIndex)) {
-                    this.option("focusedRowKey", rowKey);
-                }
+                dataController = this.getController("data");
+                isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling();
+                pageIndex = Math.floor(index / dataController.pageSize());
+                isLocalIndex = !isVirtualScrolling || dataController.pageIndex() === pageIndex;
+
+                (!isLocalIndex ? dataController.pageIndex(pageIndex) : new Deferred().resolve()).done(function(_) {
+                    if(that._isValidFocusedRowIndex(index)) {
+                        focusedRowKey = dataController.getKeyByRowIndex(index - dataController.getRowIndexOffset());
+                        if(isDefined(focusedRowKey) && !that.isRowFocused(focusedRowKey)) {
+                            that.option("focusedRowKey", focusedRowKey);
+                        }
+                    }
+                });
             }
         },
 
@@ -161,8 +175,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                     this.navigateToRow(focusedRowKey);
                 }
             } else {
-                focusedRowKey = dataController.getKeyByRowIndex(focusedRowIndex);
-                this.option("focusedRowKey", focusedRowKey);
+                this.getController("focus")._focusRowByIndex(focusedRowIndex);
             }
         },
 

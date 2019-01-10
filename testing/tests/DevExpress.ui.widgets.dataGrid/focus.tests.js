@@ -586,6 +586,54 @@ QUnit.testInActiveWindow("Focus row if virtual scrolling mode", function(assert)
     assert.equal($(rowsView.getRow(2)).find("td").eq(0).text(), "Test", "Focused row ");
 });
 
+QUnit.testInActiveWindow("Focus row if virtual scrolling and index is on the not loaded page", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        height: 40,
+        focusedRowEnabled: true,
+        focusedRowIndex: 3,
+        keyExpr: "name",
+        showColumnHeaders: false,
+        scrolling: {
+            mode: "virtual",
+            removeInvisiblePages: true
+        },
+        paging: {
+            pageSize: 1
+        }
+    };
+
+    this.data = [
+        { name: "Alex", phone: "555555", room: 1 },
+        { name: "Ben", phone: "553355", room: 2 },
+        { name: "Dan", phone: "6666666", room: 3 },
+        { name: "Mark1", phone: "777777", room: 4 },
+        { name: "Mark3", phone: "888888", room: 5 }
+    ];
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 3, "focusedRowIndex");
+    assert.equal(this.option("focusedRowKey"), "Mark1", "focusedRowKey");
+    assert.ok(rowsView.getRow(0).hasClass("dx-row-focused"), "Focused row");
+    assert.equal($(rowsView.getRow(0)).find("td").eq(0).text(), "Mark1", "Focused row cell text");
+});
+
 QUnit.testInActiveWindow("DataGrid should show error E1042 if keyExpr is absent and focusedRowEnabled when focusedRowKey is set", function(assert) {
     var dataErrors = [];
 
