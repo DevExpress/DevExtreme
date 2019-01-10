@@ -133,7 +133,6 @@ var FilterBuilder = Widget.inherit({
 
             /**
             * @name dxFilterBuilderOptions.onContentReady
-            * @hidden true
             * @action
             */
 
@@ -555,6 +554,13 @@ var FilterBuilder = Widget.inherit({
         this._disableInvalidateForValue = false;
     },
 
+    _updateContent: function(needUpdateFilter) {
+        if(needUpdateFilter) {
+            this._updateFilter();
+        }
+        this._fireContentReadyAction();
+    },
+
     _init: function() {
         this._initCustomOperations();
         this._initModel();
@@ -631,9 +637,7 @@ var FilterBuilder = Widget.inherit({
             this._createRemoveButton(() => {
                 utils.removeItem(parent, criteria);
                 $group.remove();
-                if(!utils.isEmptyGroup(criteria)) {
-                    this._updateFilter();
-                }
+                this._updateContent(!utils.isEmptyGroup(criteria));
             }).appendTo($groupItem);
         }
 
@@ -643,14 +647,13 @@ var FilterBuilder = Widget.inherit({
             var newGroup = utils.createEmptyGroup(this.option("defaultGroupOperation"));
             utils.addItem(newGroup, criteria);
             this._createGroupElement(newGroup, criteria, groupLevel + 1).appendTo($groupContent);
+            this._updateContent();
         }, () => {
             var field = this.option("fields")[0],
                 newCondition = utils.createCondition(field, this._customOperations);
             utils.addItem(newCondition, criteria);
             this._createConditionElement(newCondition, criteria).appendTo($groupContent);
-            if(utils.isValidCondition(newCondition)) {
-                this._updateFilter();
-            }
+            this._updateContent(utils.isValidCondition(newCondition));
         }, groupLevel).appendTo($groupItem);
 
         return $group;
@@ -674,10 +677,13 @@ var FilterBuilder = Widget.inherit({
                         keyExpr: "value",
                         onItemClick: (e) => {
                             if(groupMenuItem !== e.itemData) {
+                                var isValidOld = utils.isValidGroup(criteria);
                                 utils.setGroupValue(criteria, e.itemData.value);
+                                var isValidNew = utils.isValidGroup(criteria);
                                 $operationButton.html(e.itemData.text);
                                 groupMenuItem = e.itemData;
-                                this._updateFilter();
+                                let needUpdateFilter = this._needUpdateFilter(isValidOld, isValidNew);
+                                this._updateContent(needUpdateFilter);
                             }
                         },
                         onContentReady: function(e) {
@@ -758,6 +764,10 @@ var FilterBuilder = Widget.inherit({
             : condition[2] !== null;
     },
 
+    _needUpdateFilter: function(isValidOld, isValidNew) {
+        return isValidOld !== isValidNew || (isValidOld && isValidNew);
+    },
+
     _createOperationButtonWithMenu: function(condition, field) {
         var that = this,
             availableOperations = utils.getAvailableOperations(field, this.option("filterOperationDescriptions"), this._customOperations),
@@ -773,10 +783,12 @@ var FilterBuilder = Widget.inherit({
                     onContentReady: function(e) {
                         e.component.selectItem(currentOperation);
                     },
-                    onItemClick: function(e) {
+                    onItemClick: (e) => {
                         if(currentOperation !== e.itemData) {
+                            let isValidOld = utils.isValidCondition(condition);
                             currentOperation = e.itemData;
                             utils.updateConditionByOperation(condition, currentOperation.value, that._customOperations);
+                            let isValidNew = utils.isValidCondition(condition);
                             var $valueButton = $operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
                             if(that._hasValueButton(condition)) {
                                 if($valueButton.length !== 0) {
@@ -787,7 +799,8 @@ var FilterBuilder = Widget.inherit({
                                 $valueButton.remove();
                             }
                             $operationButton.html(currentOperation.text);
-                            that._updateFilter();
+                            const needUpdateFilter = this._needUpdateFilter(isValidOld, isValidNew);
+                            this._updateContent(needUpdateFilter);
                         }
                     },
                     cssClass: FILTER_BUILDER_FILTER_OPERATIONS_CLASS
@@ -825,19 +838,22 @@ var FilterBuilder = Widget.inherit({
                 dataStructure: "plain",
                 keyExpr: "dataField",
                 displayExpr: "caption",
-                onItemClick: function(e) {
+                onItemClick: (e) => {
                     if(item !== e.itemData) {
+                        let isValidOld = utils.isValidCondition(condition);
                         item = e.itemData;
                         condition[0] = item.dataField;
                         condition[2] = item.dataType === "object" ? null : "";
                         utils.updateConditionByOperation(condition, utils.getDefaultOperation(item), that._customOperations);
+                        let isValidNew = utils.isValidCondition(condition);
 
                         $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
                         that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
                         var caption = getFullCaption(item, e.component.option("items"));
                         $fieldButton.html(caption);
-                        that._updateFilter();
+                        const needUpdateFilter = this._needUpdateFilter(isValidOld, isValidNew);
+                        this._updateContent(needUpdateFilter);
                     }
                 },
                 onContentReady: function(e) {
@@ -853,17 +869,14 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createConditionItem: function(condition, parent) {
-        var that = this,
-            $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
+        var $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
             fields = this._getNormalizedFields(),
             field = utils.getField(condition[0], fields);
 
-        this._createRemoveButton(function() {
+        this._createRemoveButton(() => {
             utils.removeItem(parent, condition);
             $item.remove();
-            if(utils.isValidCondition(condition)) {
-                that._updateFilter();
-            }
+            this._updateContent(utils.isValidCondition(condition));
         }).appendTo($item);
         this._createFieldButtonWithMenu(fields, condition, field).appendTo($item);
         this._createOperationAndValueButtons(condition, field, $item);
@@ -960,9 +973,7 @@ var FilterBuilder = Widget.inherit({
             item[2] = value;
         }
         callback();
-        if(areValuesDifferent) {
-            this._updateFilter();
-        }
+        this._updateContent(areValuesDifferent);
     },
 
     _addDocumentKeyUp: function($editor, handler) {
@@ -1085,6 +1096,7 @@ var FilterBuilder = Widget.inherit({
                 });
             }
         });
+        this._updateContent();
     },
 
     _createValueButton: function(item, field) {

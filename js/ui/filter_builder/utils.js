@@ -656,6 +656,20 @@ function isValidCondition(condition) {
     return condition[2] !== "";
 }
 
+function isValidGroup(group) {
+    var criteria = getGroupCriteria(group);
+
+    if(isCondition(criteria)) {
+        return isValidCondition(criteria);
+    }
+
+    var hasConditions = criteria.some(function(item) {
+        return isCondition(item) && isValidCondition(item);
+    });
+
+    return hasConditions;
+}
+
 function getMergedOperations(customOperations, betweenCaption) {
     var result = extend(true, [], customOperations),
         betweenIndex = -1;
@@ -778,6 +792,7 @@ function filterHasField(filter, dataField) {
 }
 
 exports.isValidCondition = isValidCondition;
+exports.isValidGroup = isValidGroup;
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
 exports.updateConditionByOperation = updateConditionByOperation;
