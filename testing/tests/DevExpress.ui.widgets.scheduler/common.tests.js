@@ -2341,6 +2341,31 @@ QUnit.testStart(function() {
         assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "caption" }], "Update operation is canceled");
     });
 
+    QUnit.test("Appointment should be returned to the initial state if 'cancel' flag is defined as true during async operation", function(assert) {
+        this.createInstance({
+            onAppointmentUpdating: function(args) {
+                var d = $.Deferred();
+                args.cancel = d.promise();
+                setTimeout(function() {
+                    d.reject();
+                }, 200);
+            },
+            currentView: "week",
+            dataSource: [{ startDate: new Date(2015, 1, 11), endDate: new Date(2015, 1, 13), text: "caption" }],
+            firstDayOfWeek: 1,
+            currentDate: new Date(2015, 1, 9)
+        });
+
+        var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").eq(0)),
+            initialLeftPosition = translator.locate($appointment).left,
+            cellWidth = this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth(),
+            pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-left").eq(0)).start();
+
+        pointer.dragStart().drag(-cellWidth * 2, 0).dragEnd();
+        this.clock.tick(200);
+        assert.equal(translator.locate(this.instance.$element().find(".dx-scheduler-appointment").eq(0)).left, initialLeftPosition, "Left position is OK");
+    });
+
     QUnit.test("Appointment should have initial position if 'cancel' flag is defined as true during update operation", function(assert) {
         var appointments = [{ startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2), text: "caption" }],
             dataSource = new DataSource({

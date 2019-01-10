@@ -2658,10 +2658,13 @@ var Scheduler = Widget.inherit({
     },
 
     _processActionResult: function(actionOptions, callback) {
+        when(deferredUtils.fromPromise(actionOptions.cancel)).always((cancel) => {
+            if(!typeUtils.isDefined(cancel)) {
+                cancel = actionOptions.cancel;
+                cancel = typeof cancel === "boolean" ? cancel : actionOptions.cancel.state() === "rejected";
+            }
 
-        when(deferredUtils.fromPromise(actionOptions.cancel)).always(() => {
-            var cancel = actionOptions.cancel;
-            callback.call(this, typeof cancel === "boolean" ? cancel : actionOptions.cancel.state() === "rejected");
+            callback.call(this, cancel);
         });
     },
 
