@@ -448,6 +448,29 @@ QUnit.test("Horizontal scrollbar should not be shown if container height is not 
     assert.strictEqual(dataGrid.getScrollbarWidth(true), 0);
 });
 
+// T703649
+QUnit.test("Fixed and main table should have same scroll top if showScrollbar is always", function(assert) {
+    // act
+    var dataGrid = createDataGrid({
+        height: 200,
+        dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+        loadingTimeout: undefined,
+        scrolling: {
+            useNative: false,
+            showScrollbar: "always"
+        },
+        columns: [{ dataField: "column1", fixed: true }, "column2"]
+    });
+
+    var scrollable = dataGrid.getScrollable();
+
+    scrollable.scrollTo({ y: 10000 });
+
+    // assert
+    assert.ok(scrollable.scrollTop() > 0, "content is scrolled");
+    assert.strictEqual(scrollable.scrollTop(), $(scrollable.element()).children(".dx-datagrid-content-fixed").scrollTop(), "scroll top are same for main and fixed table");
+});
+
 QUnit.test("noDataText option", function(assert) {
     // act
     var noDataText = "Custom no data",
@@ -3044,6 +3067,137 @@ QUnit.test("Enable rows hover, row position and focused row", function(assert) {
 
     // assert
     assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
+});
+
+QUnit.test("The navigateToRow method should not affect vertical scrolling", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        rowsView,
+        rect,
+        rowsViewRect,
+        data = [
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal0', name: 'Ben', age: 24 },
+            { team: 'internal0', name: 'Dan', age: 23 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 80,
+            width: 200,
+            dataSource: data,
+            keyExpr: "name",
+            paging: { pageSize: 2 },
+            pager: { visible: false },
+            columnResizingMode: "widget",
+            columns: [
+                { dataField: "team", width: 150 },
+                { dataField: "name", width: 150 },
+                { dataField: "age", width: 150 },
+            ]
+        }).dxDataGrid("instance"),
+        keyboardController = dataGrid.getController("keyboardNavigation");
+
+    // act
+    dataGrid.navigateToRow("Zeb");
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.pageIndex(), 2, "Page index");
+    assert.equal(keyboardController.getVisibleRowIndex(), 1, "Visible row index");
+
+    rowsView = dataGrid.getView("rowsView");
+    rect = rowsView.getRow(1)[0].getBoundingClientRect();
+    rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+    assert.equal(rowsView.getScrollable().scrollLeft(), 0, "Scroll left");
+
+    clock.restore();
+});
+
+QUnit.test("Test navigateToRow method if virtual scrolling", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        rowsView,
+        rect,
+        rowsViewRect,
+        data = [
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal0', name: 'Ben', age: 24 },
+            { team: 'internal0', name: 'Dan', age: 23 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 80,
+            dataSource: data,
+            keyExpr: "name",
+            paging: { pageSize: 2 },
+            scrolling: { mode: "virtual" }
+        }).dxDataGrid("instance"),
+        keyboardController = dataGrid.getController("keyboardNavigation");
+
+    // act
+    dataGrid.navigateToRow("Zeb");
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.pageIndex(), 2, "Page index");
+    assert.equal(keyboardController.getVisibleRowIndex(), 5, "Visible row index");
+
+    rowsView = dataGrid.getView("rowsView");
+    rect = rowsView.getRow(5)[0].getBoundingClientRect();
+    rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+
+    clock.restore();
+});
+
+QUnit.test("Test navigateToRow method if paging", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        rowsView,
+        rect,
+        rowsViewRect,
+        data = [
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal0', name: 'Ben', age: 24 },
+            { team: 'internal0', name: 'Dan', age: 23 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 80,
+            dataSource: data,
+            keyExpr: "name",
+            paging: { pageSize: 2 },
+            pager: { visible: false }
+        }).dxDataGrid("instance"),
+        keyboardController = dataGrid.getController("keyboardNavigation");
+
+    // act
+    dataGrid.navigateToRow("Zeb");
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.pageIndex(), 2, "Page index");
+    assert.equal(keyboardController.getVisibleRowIndex(), 1, "Visible row index");
+
+    rowsView = dataGrid.getView("rowsView");
+    rect = rowsView.getRow(1)[0].getBoundingClientRect();
+    rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+
+    clock.restore();
 });
 
 QUnit.test("Paging should not raise the exception if OData and a group row was focused", function(assert) {

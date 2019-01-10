@@ -8696,6 +8696,51 @@ QUnit.module("Customization of the command columns", {
         assert.strictEqual(fixedColumns[2].dataField, "TestField1", "fixed column");
         assert.strictEqual(fixedColumns[3].command, "transparent", "transparent column");
     });
+
+    // T703779
+    QUnit.test("getFixedColumns if masterDetail is enabled", function(assert) {
+        // arrange
+        this.applyOptions({
+            masterDetail: {
+                enabled: true
+            },
+            columns: [
+                { dataField: "TestField1", fixed: true },
+                { dataField: "TestField2" }
+            ]
+        });
+
+        // act
+        var fixedColumns = this.columnsController.getFixedColumns();
+
+        // assert
+        assert.strictEqual(fixedColumns.length, 3, "fixed column count");
+        assert.strictEqual(fixedColumns[0].type, "detailExpand", "detail expand column");
+        assert.strictEqual(fixedColumns[1].dataField, "TestField1", "fixed column");
+        assert.strictEqual(fixedColumns[2].command, "transparent", "transparent column");
+    });
+
+    QUnit.test("getFixedColumns if editing is enabled", function(assert) {
+        // arrange
+        this.applyOptions({
+            editing: {
+                allowUpdating: true
+            },
+            columns: [
+                { dataField: "TestField1", fixed: true },
+                { dataField: "TestField2" }
+            ]
+        });
+
+        // act
+        var fixedColumns = this.columnsController.getFixedColumns();
+
+        // assert
+        assert.strictEqual(fixedColumns.length, 3, "fixed column count");
+        assert.strictEqual(fixedColumns[0].dataField, "TestField1", "fixed column");
+        assert.strictEqual(fixedColumns[1].command, "transparent", "transparent column");
+        assert.strictEqual(fixedColumns[2].command, "edit", "edit column");
+    });
 });
 
 // T622771
