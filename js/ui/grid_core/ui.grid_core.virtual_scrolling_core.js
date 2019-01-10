@@ -538,25 +538,39 @@ exports.VirtualScrollController = Class.inherit((function() {
         },
         load: function() {
             var pageIndexForLoad,
-                dataSource = this._dataSource,
+                that = this,
+                dataSource = that._dataSource,
+                loadResult,
                 result;
 
-            if(isVirtualMode(this) || isAppendMode(this)) {
-                pageIndexForLoad = getPageIndexForLoad(this);
+            if(isVirtualMode(that) || isAppendMode(that)) {
+                pageIndexForLoad = getPageIndexForLoad(that);
 
                 if(pageIndexForLoad >= 0) {
-                    result = loadCore(this, pageIndexForLoad);
+                    loadResult = loadCore(that, pageIndexForLoad);
+                    if(loadResult) {
+                        result = new Deferred();
+                        loadResult.done(function() {
+                            var delayDeferred = that._delayDeferred;
+                            if(delayDeferred) {
+                                delayDeferred.done(result.resolve).fail(result.reject);
+                            } else {
+                                result.resolve();
+                            }
+                        }).fail(result.reject);
+                    }
                 }
                 dataSource.updateLoading();
             } else {
                 result = dataSource.load();
             }
 
-            if(!result && this._lastPageIndex !== this.pageIndex()) {
-                this._dataSource.onChanged({
+            if(!result && that._lastPageIndex !== that.pageIndex()) {
+                that._dataSource.onChanged({
                     changeType: "pageIndex"
                 });
             }
+
             return result || new Deferred().resolve();
         },
         loadIfNeed: function() {

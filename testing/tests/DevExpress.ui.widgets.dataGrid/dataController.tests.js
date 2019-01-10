@@ -3947,7 +3947,6 @@ QUnit.test("update loading on reload when error occurred", function(assert) {
 
     this.options.loadingTimeout = 0;
 
-
     this.dataSource = new DataSource({
         load: function() {
             return loadResult || [];
@@ -3955,18 +3954,17 @@ QUnit.test("update loading on reload when error occurred", function(assert) {
     });
     this.dataController.setDataSource(this.dataSource);
 
-    var dataController = this.dataController;
+    var dataController = this.dataController,
+        isLoadingByEvent,
+        changedArgs = [];
 
     dataController.load().done(function() {
-        var isLoadingByEvent;
         dataController.loadingChanged.add(function(isLoading) {
             isLoadingByEvent = isLoading;
             if(isLoading) {
                 assert.ok(!dataController.isLoaded(), 'isLoaded on reload in loadingChanged event');
             }
         });
-
-        var changedArgs = [];
 
         dataController.changed.add(function(e) {
             changedArgs.push(e);
@@ -3982,21 +3980,23 @@ QUnit.test("update loading on reload when error occurred", function(assert) {
         assert.ok(dataController.isLoading(), 'isLoading');
         assert.ok(isLoadingByEvent, 'isLoading by event');
 
-        clock.tick();
-
-        assert.ok(!dataController.isLoaded(), 'isLoaded after error');
-        assert.ok(!dataController.isLoading(), 'isLoading after error');
-        assert.ok(!isLoadingByEvent, 'isLoading by event after error');
-
-        assert.equal(changedArgs.length, 1);
-        assert.equal(changedArgs[0].changeType, 'loadError');
-        assert.equal(changedArgs[0].error.message, 'user error');
-
         finalized = true;
     });
 
     clock.tick();
+
+    // assert
     assert.ok(finalized);
+    clock.tick();
+
+    // assert
+    assert.ok(!dataController.isLoaded(), 'isLoaded after error');
+    assert.ok(!dataController.isLoading(), 'isLoading after error');
+    assert.ok(!isLoadingByEvent, 'isLoading by event after error');
+
+    assert.equal(changedArgs.length, 1);
+    assert.equal(changedArgs[0].changeType, 'loadError');
+    assert.equal(changedArgs[0].error.message, 'user error');
 });
 
 // T103219

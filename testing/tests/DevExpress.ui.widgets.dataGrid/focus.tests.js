@@ -586,6 +586,54 @@ QUnit.testInActiveWindow("Focus row if virtual scrolling mode", function(assert)
     assert.equal($(rowsView.getRow(2)).find("td").eq(0).text(), "Test", "Focused row ");
 });
 
+QUnit.testInActiveWindow("Focus row if virtual scrolling and index is on the not loaded page", function(assert) {
+    var rowsView;
+
+    // arrange
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        height: 40,
+        focusedRowEnabled: true,
+        focusedRowIndex: 3,
+        keyExpr: "name",
+        showColumnHeaders: false,
+        scrolling: {
+            mode: "virtual",
+            removeInvisiblePages: true
+        },
+        paging: {
+            pageSize: 1
+        }
+    };
+
+    this.data = [
+        { name: "Alex", phone: "555555", room: 1 },
+        { name: "Ben", phone: "553355", room: 2 },
+        { name: "Dan", phone: "6666666", room: 3 },
+        { name: "Mark1", phone: "777777", room: 4 },
+        { name: "Mark3", phone: "888888", room: 5 }
+    ];
+
+    this.setupModule();
+
+    addOptionChangedHandlers(this);
+
+    this.gridView.render($("#container"));
+
+    this.clock.tick();
+
+    rowsView = this.gridView.getView("rowsView");
+
+    // assert
+    assert.equal(this.option("focusedRowIndex"), 3, "focusedRowIndex");
+    assert.equal(this.option("focusedRowKey"), "Mark1", "focusedRowKey");
+    assert.ok(rowsView.getRow(0).hasClass("dx-row-focused"), "Focused row");
+    assert.equal($(rowsView.getRow(0)).find("td").eq(0).text(), "Mark1", "Focused row cell text");
+});
+
 QUnit.testInActiveWindow("DataGrid should show error E1042 if keyExpr is absent and focusedRowEnabled when focusedRowKey is set", function(assert) {
     var dataErrors = [];
 
@@ -3310,94 +3358,6 @@ QUnit.testInActiveWindow("Test navigateToRow method if virtualScrolling", functi
     assert.equal(keyboardController.getVisibleRowIndex(), 5, "Focused row index");
 });
 
-QUnit.testInActiveWindow("Focused row should be visible if page size has height more than scrollable container", function(assert) {
-    // arrange
-    var rowsView;
-
-    this.$element = function() {
-        return $("#container");
-    };
-
-    this.data = [
-        { name: "Alex", phone: "111111", room: 6 },
-        { name: "Dan", phone: "2222222", room: 5 },
-        { name: "Ben", phone: "333333", room: 4 },
-        { name: "Sean", phone: "4545454", room: 3 },
-        { name: "Smith", phone: "555555", room: 2 },
-        { name: "Zeb", phone: "6666666", room: 1 }
-    ];
-
-    this.options = {
-        keyExpr: "name",
-        height: 100,
-        focusedRowEnabled: true
-    };
-
-    this.setupModule();
-
-    this.gridView.render($("#container"));
-    rowsView = this.gridView.getView("rowsView");
-    rowsView.height(100);
-    this.clock.tick();
-
-    this.getController("focus").navigateToRow("Smith");
-    this.clock.tick();
-
-    // assert
-    assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
-    var rect = rowsView.getRow(4)[0].getBoundingClientRect();
-    var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
-    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
-    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
-});
-
-QUnit.testInActiveWindow("Focused row should be visible in virtual scrolling mode", function(assert) {
-    // arrange
-    var rowsView;
-
-    this.$element = function() {
-        return $("#container");
-    };
-
-    this.data = [
-        { name: "Alex", phone: "111111", room: 6 },
-        { name: "Dan", phone: "2222222", room: 5 },
-        { name: "Ben", phone: "333333", room: 4 },
-        { name: "Sean", phone: "4545454", room: 3 },
-        { name: "Smith", phone: "555555", room: 2 },
-        { name: "Zeb", phone: "6666666", room: 1 }
-    ];
-
-    this.options = {
-        keyExpr: "name",
-        height: 100,
-        focusedRowEnabled: true,
-        editing: {
-            allowEditing: false
-        },
-        scrolling: {
-            mode: "virtual"
-        }
-    };
-
-    this.setupModule();
-
-    this.gridView.render($("#container"));
-    rowsView = this.gridView.getView("rowsView");
-    rowsView.height(100);
-    this.clock.tick();
-
-    this.getController("focus").navigateToRow("Smith");
-    this.clock.tick();
-
-    // assert
-    assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
-    var rect = rowsView.getRow(4)[0].getBoundingClientRect();
-    var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
-    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
-    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
-});
-
 QUnit.testInActiveWindow("Focused row should be visible if set focusedRowKey", function(assert) {
     // arrange
     var rowsView,
@@ -3439,53 +3399,6 @@ QUnit.testInActiveWindow("Focused row should be visible if set focusedRowKey", f
     // assert
     assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
     assert.ok(counter > 0, "_scrollToFocusedRow invoked");
-});
-
-QUnit.testInActiveWindow("Focused row should be visible in infinite scrolling mode", function(assert) {
-    // arrange
-    var rowsView;
-
-    this.$element = function() {
-        return $("#container");
-    };
-
-    this.data = [
-        { name: "Alex", phone: "111111", room: 6 },
-        { name: "Dan", phone: "2222222", room: 5 },
-        { name: "Ben", phone: "333333", room: 4 },
-        { name: "Sean", phone: "4545454", room: 3 },
-        { name: "Smith", phone: "555555", room: 2 },
-        { name: "Zeb", phone: "6666666", room: 1 }
-    ];
-
-    this.options = {
-        keyExpr: "name",
-        height: 100,
-        focusedRowEnabled: true,
-        editing: {
-            allowEditing: false
-        },
-        scrolling: {
-            mode: "infinite"
-        }
-    };
-
-    this.setupModule();
-
-    this.gridView.render($("#container"));
-    rowsView = this.gridView.getView("rowsView");
-    rowsView.height(100);
-    this.clock.tick();
-
-    this.getController("focus").navigateToRow("Smith");
-    this.clock.tick();
-
-    // assert
-    assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
-    var rect = rowsView.getRow(4)[0].getBoundingClientRect();
-    var rowsViewRect = rowsView.element()[0].getBoundingClientRect();
-    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
-    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
 });
 
 QUnit.testInActiveWindow("Focused row should be visible in virual scrolling mode if page not loaded", function(assert) {
