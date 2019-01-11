@@ -2661,13 +2661,13 @@ var Scheduler = Widget.inherit({
         if(typeUtils.isPromise(actionOptions.cancel)) {
             when(deferredUtils.fromPromise(actionOptions.cancel)).always((cancel) => {
                 if(!typeUtils.isDefined(cancel)) {
-                    cancel = actionOptions.cancel.state() === "rejected" ? true : false;
+                    cancel = actionOptions.cancel.state() === "rejected";
                 }
 
                 callback.call(this, cancel);
             });
         } else {
-            callback(actionOptions.cancel);
+            callback.call(this, actionOptions.cancel);
         }
     },
 
