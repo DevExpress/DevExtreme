@@ -2658,7 +2658,17 @@ var Scheduler = Widget.inherit({
     },
 
     _processActionResult: function(actionOptions, callback) {
-        when(deferredUtils.fromPromise(actionOptions.cancel)).done(callback.bind(this));
+        if(typeUtils.isPromise(actionOptions.cancel)) {
+            when(deferredUtils.fromPromise(actionOptions.cancel)).always((cancel) => {
+                if(!typeUtils.isDefined(cancel)) {
+                    cancel = actionOptions.cancel.state() === "rejected";
+                }
+
+                callback.call(this, cancel);
+            });
+        } else {
+            callback.call(this, actionOptions.cancel);
+        }
     },
 
     _expandAllDayPanel: function(appointment) {
