@@ -2658,14 +2658,17 @@ var Scheduler = Widget.inherit({
     },
 
     _processActionResult: function(actionOptions, callback) {
-        when(deferredUtils.fromPromise(actionOptions.cancel)).always((cancel) => {
-            if(!typeUtils.isDefined(cancel)) {
-                cancel = actionOptions.cancel;
-                cancel = typeof cancel === "boolean" ? cancel : actionOptions.cancel.state() === "rejected";
-            }
+        if(typeUtils.isPromise(actionOptions.cancel)) {
+            when(deferredUtils.fromPromise(actionOptions.cancel)).always((cancel) => {
+                if(!typeUtils.isDefined(cancel)) {
+                    cancel = actionOptions.cancel.state() === "rejected" ? true : false;
+                }
 
-            callback.call(this, cancel);
-        });
+                callback.call(this, cancel);
+            });
+        } else {
+            callback(actionOptions.cancel);
+        }
     },
 
     _expandAllDayPanel: function(appointment) {
