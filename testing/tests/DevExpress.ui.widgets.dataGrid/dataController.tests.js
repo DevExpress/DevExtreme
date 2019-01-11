@@ -7072,6 +7072,34 @@ QUnit.test("No exceptions on moving the column from group panel to headers (Angu
     }
 });
 
+// T700356
+QUnit.test("Group row should have correct values if calculateDisplayValue is defined", function(assert) {
+    this.applyOptions({
+        columns: [{
+            dataField: "ID",
+            caption: "Company",
+            calculateDisplayValue: "CompanyName",
+            groupIndex: 0
+        }, "City"]
+    });
+
+    var dataSource = createDataSource([{
+        ID: 1,
+        CompanyName: "123Super Mart of the West",
+        City: "Bentonville"
+    }]);
+
+    this.dataController.setDataSource(dataSource);
+
+    // act
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(this.dataController.items()[0].rowType, "group", "item 1 rowType");
+    assert.deepEqual(this.dataController.items()[0].key, ["123Super Mart of the West"], "item 1 key");
+    assert.deepEqual(this.dataController.items()[0].values, ["123Super Mart of the West"], "item 1 values");
+});
+
 QUnit.module("Editing", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Inserting Row", function(assert) {
