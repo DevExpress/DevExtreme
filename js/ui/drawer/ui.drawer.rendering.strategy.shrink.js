@@ -25,7 +25,7 @@ class ShrinkStrategy extends DrawerStrategy {
                 });
                 animation.margin(animationConfig);
             } else {
-                $panel.css("margin" + camelize(direction), panelOffset);
+                $panel.css("margin" + camelize(direction, true), panelOffset);
             }
         }
 
