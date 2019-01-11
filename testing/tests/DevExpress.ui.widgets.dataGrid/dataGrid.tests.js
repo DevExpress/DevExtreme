@@ -3244,7 +3244,10 @@ QUnit.test("Test navigateToRow method if virtual scrolling", function(assert) {
             dataSource: data,
             keyExpr: "name",
             paging: { pageSize: 2 },
-            scrolling: { mode: "virtual" }
+            scrolling: {
+                mode: "virtual",
+                useNative: false
+            }
         }).dxDataGrid("instance"),
         keyboardController = dataGrid.getController("keyboardNavigation");
 
@@ -3359,7 +3362,6 @@ QUnit.test("DataGrid should not scroll back to the focused row after pageIndex c
     dataGrid = $("#dataGrid").dxDataGrid({
         height: 300,
         keyExpr: "id",
-        loadingTimeout1: undefined,
         dataSource: data,
         focusedRowEnabled: true,
         focusedRowIndex: 3,
