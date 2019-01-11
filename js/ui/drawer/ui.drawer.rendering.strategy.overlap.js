@@ -5,6 +5,7 @@ import translator from "../../animation/translator";
 import Overlay from "../overlay";
 import typeUtils from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
+import { camelize } from "../../core/utils/inflector";
 
 class OverlapStrategy extends DrawerStrategy {
 
@@ -112,7 +113,7 @@ class OverlapStrategy extends DrawerStrategy {
         const position = drawer.getDrawerPosition();
         const defaultAnimationConfig = this._defaultAnimationConfig();
 
-        $content.css("padding" + position.charAt(0).toUpperCase() + position.substr(1), drawer.option("minSize"));
+        $content.css("padding" + camelize(position, true), drawer.option("minSize"));
 
         $content.css("transform", "inherit");
 
