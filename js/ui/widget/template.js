@@ -1,6 +1,6 @@
-const $ = require("../../core/renderer"),
-    TemplateBase = require("./ui.template_base"),
-    templateEngine = require("./template_engine");
+import $ from "../../core/renderer";
+import TemplateBase from "./ui.template_base";
+import { getCurrentTemplateEngine } from "./template_engine";
 
 const Template = TemplateBase.inherit({
 
@@ -11,11 +11,11 @@ const Template = TemplateBase.inherit({
     _renderCore: function(options) {
         const transclude = options.transclude;
         if(!transclude && !this._compiledTemplate) {
-            this._compiledTemplate = templateEngine.getCurrentTemplateEngine().compile(this._element);
+            this._compiledTemplate = getCurrentTemplateEngine().compile(this._element);
         }
 
         return $("<div>").append(
-            transclude ? this._element : templateEngine.getCurrentTemplateEngine().render(this._compiledTemplate, options.model, options.index)
+            transclude ? this._element : getCurrentTemplateEngine().render(this._compiledTemplate, options.model, options.index)
         ).contents();
     },
 
