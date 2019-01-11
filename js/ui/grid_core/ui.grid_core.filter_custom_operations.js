@@ -53,6 +53,10 @@ function baseOperation(grid) {
                 column = extend({}, column, { filterType: "include", filterValues: [value] });
                 var dataSourceOptions = headerFilterController.getDataSource(column);
                 dataSourceOptions.paginate = false;
+                let headerFilterDataSource = headerFilter && headerFilter.dataSource;
+                if(!headerFilterDataSource && lookup.items) {
+                    dataSourceOptions.store = lookup.items;
+                }
                 var dataSource = new DataSourceModule.DataSource(dataSourceOptions),
                     result = new deferredUtils.Deferred();
 
