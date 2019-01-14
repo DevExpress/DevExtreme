@@ -35,9 +35,9 @@ QUnit.test("parse dd/MM/yyyy format", function(assert) {
 QUnit.test("case insensitive date parsing for months", function(assert) {
     var parser = getDateParser("MMM", dateParts);
 
-    assert.deepEqual(parser("nov").getMonth(), 10, "small register");
-    assert.deepEqual(parser("Nov").getMonth(), 10, "normal register");
-    assert.deepEqual(parser("nOv").getMonth(), 10, "random register");
+    assert.deepEqual(parser("nov").getMonth(), 10, "lower case");
+    assert.deepEqual(parser("Nov").getMonth(), 10, "capitalized");
+    assert.deepEqual(parser("nOv").getMonth(), 10, "random case");
 });
 
 QUnit.test("case insensitive date parsing for part of day", function(assert) {
