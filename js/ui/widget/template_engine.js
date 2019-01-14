@@ -1,9 +1,12 @@
 import { isString } from "../../core/utils/type";
 import errors from "../../core/errors";
-import { getTemplateEngines } from "./template_engines_registration";
 
-let templateEngines = getTemplateEngines();
+let templateEngines = {};
 let currentTemplateEngine;
+
+const registerTemplateEngine = (name, templateEngine) => {
+    templateEngines[name] = templateEngine;
+};
 
 const setTemplateEngine = (templateEngine) => {
     if(isString(templateEngine)) {
@@ -20,7 +23,6 @@ const getCurrentTemplateEngine = () => {
     return currentTemplateEngine;
 };
 
-setTemplateEngine("default");
-
 module.exports.setTemplateEngine = setTemplateEngine;
 module.exports.getCurrentTemplateEngine = getCurrentTemplateEngine;
+module.exports.registerTemplateEngine = registerTemplateEngine;

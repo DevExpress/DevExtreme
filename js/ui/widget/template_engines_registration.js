@@ -1,87 +1,80 @@
 import { normalizeTemplateElement, extractTemplateMarkup } from "../../core/utils/dom";
+import { registerTemplateEngine } from './template_engine';
 
-let templateEngines = {};
+module.exports = () => {
+    registerTemplateEngine("default", {
+        compile: (element) => normalizeTemplateElement(element),
+        render: (template, model, index) => template.clone()
+    });
 
-const registerTemplateEngine = (name, templateEngine) => {
-    templateEngines[name] = templateEngine;
-};
+    registerTemplateEngine("jquery-tmpl", {
+        compile: (element) => {
+            return extractTemplateMarkup(element);
+        },
+        render: (template, data) => {
+            /* global jQuery */
+            return jQuery.tmpl(template, data);
+        }
+    });
 
-registerTemplateEngine("default", {
-    compile: (element) => normalizeTemplateElement(element),
-    render: (template, model, index) => template.clone()
-});
+    registerTemplateEngine("jsrender", {
+        compile: (element) => {
+            /* global jQuery */
+            /* global jsrender */
+            return (jQuery ? jQuery : jsrender).templates(extractTemplateMarkup(element));
+        },
+        render: (template, data) => {
+            return template.render(data);
+        }
+    });
 
-registerTemplateEngine("jquery-tmpl", {
-    compile: (element) => {
-        return extractTemplateMarkup(element);
-    },
-    render: (template, data) => {
-        /* global jQuery */
-        return jQuery.tmpl(template, data);
-    }
-});
+    registerTemplateEngine("mustache", {
+        compile: (element) => {
+            /* global Mustache */
+            return extractTemplateMarkup(element);
+        },
+        render: (template, data) => {
+            return Mustache.render(template, data);
+        }
+    });
 
-registerTemplateEngine("jsrender", {
-    compile: (element) => {
-        /* global jQuery */
-        /* global jsrender */
-        return (jQuery ? jQuery : jsrender).templates(extractTemplateMarkup(element));
-    },
-    render: (template, data) => {
-        return template.render(data);
-    }
-});
+    registerTemplateEngine("hogan", {
+        compile: (element) => {
+            /* global Hogan */
+            return Hogan.compile(extractTemplateMarkup(element));
+        },
+        render: (template, data) => {
+            return template.render(data);
+        }
+    });
 
-registerTemplateEngine("mustache", {
-    compile: (element) => {
-        /* global Mustache */
-        return extractTemplateMarkup(element);
-    },
-    render: (template, data) => {
-        return Mustache.render(template, data);
-    }
-});
+    registerTemplateEngine("underscore", {
+        compile: (element) => {
+            /* global _ */
+            return _.template(extractTemplateMarkup(element));
+        },
+        render: (template, data) => {
+            return template(data);
+        }
+    });
 
-registerTemplateEngine("hogan", {
-    compile: (element) => {
-        /* global Hogan */
-        return Hogan.compile(extractTemplateMarkup(element));
-    },
-    render: (template, data) => {
-        return template.render(data);
-    }
-});
+    registerTemplateEngine("handlebars", {
+        compile: (element) => {
+            /* global Handlebars */
+            return Handlebars.compile(extractTemplateMarkup(element));
+        },
+        render: (template, data) => {
+            return template(data);
+        }
+    });
 
-registerTemplateEngine("underscore", {
-    compile: (element) => {
-        /* global _ */
-        return _.template(extractTemplateMarkup(element));
-    },
-    render: (template, data) => {
-        return template(data);
-    }
-});
-
-registerTemplateEngine("handlebars", {
-    compile: (element) => {
-        /* global Handlebars */
-        return Handlebars.compile(extractTemplateMarkup(element));
-    },
-    render: (template, data) => {
-        return template(data);
-    }
-});
-
-registerTemplateEngine("doT", {
-    compile: (element) => {
-        /* global doT */
-        return doT.template(extractTemplateMarkup(element));
-    },
-    render: (template, data) => {
-        return template(data);
-    }
-});
-
-module.exports.getTemplateEngines = () => {
-    return templateEngines;
+    registerTemplateEngine("doT", {
+        compile: (element) => {
+            /* global doT */
+            return doT.template(extractTemplateMarkup(element));
+        },
+        render: (template, data) => {
+            return template(data);
+        }
+    });
 };

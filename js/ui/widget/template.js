@@ -1,6 +1,10 @@
 import $ from "../../core/renderer";
 import TemplateBase from "./ui.template_base";
-import { getCurrentTemplateEngine } from "./template_engine";
+import { getCurrentTemplateEngine, setTemplateEngine } from "./template_engine";
+import templateEnginesRegistration from "./template_engines_registration";
+
+templateEnginesRegistration();
+setTemplateEngine("default");
 
 const Template = TemplateBase.inherit({
 
