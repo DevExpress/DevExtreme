@@ -5795,6 +5795,7 @@ QUnit.test("Raise error if key field is missed", function(assert) {
     var $errorRow = $($(dataGrid.$element()).find(".dx-error-row"));
     assert.equal($errorRow.length, 1, "error row is shown");
     assert.equal($errorRow.find(".dx-error-message").text().slice(0, 5), "E1046", "error number");
+    assert.notEqual($errorRow.find(".dx-error-message > a").attr("href").indexOf("E1046"), -1, "Url error code");
     clock.restore();
 });
 
