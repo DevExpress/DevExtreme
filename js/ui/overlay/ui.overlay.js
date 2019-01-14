@@ -663,8 +663,8 @@ var Overlay = Widget.inherit({
                 });
             }.bind(this);
 
-            this._stopShowTimer();
             if(this.option("templatesRenderAsynchronously")) {
+                this._stopShowTimer();
                 this._asyncShowTimeout = setTimeout(show);
             } else {
                 show();
