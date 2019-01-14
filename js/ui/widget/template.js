@@ -1,9 +1,14 @@
 import $ from "../../core/renderer";
 import TemplateBase from "./ui.template_base";
-import { getCurrentTemplateEngine, setTemplateEngine } from "./template_engine";
-import templateEnginesRegistration from "./template_engines_registration";
+import { normalizeTemplateElement } from "../../core/utils/dom";
+import { getCurrentTemplateEngine, setTemplateEngine, registerTemplateEngine } from "./template_engine";
+import "./template_engines";
 
-templateEnginesRegistration();
+registerTemplateEngine("default", {
+    compile: (element) => normalizeTemplateElement(element),
+    render: (template, model, index) => template.clone()
+});
+
 setTemplateEngine("default");
 
 const Template = TemplateBase.inherit({
