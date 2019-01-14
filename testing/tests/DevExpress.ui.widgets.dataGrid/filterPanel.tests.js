@@ -2,6 +2,7 @@ require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
+    CustomStore = require("data/custom_store"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules;
 
@@ -251,6 +252,44 @@ QUnit.module("Filter Panel", {
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
             assert.equal(result, "[Field] Is any of('Text 1', 'Text 2')");
+        });
+    });
+
+    // T703158
+    QUnit.test("skip additional load in anyof", function(assert) {
+        var spy = sinon.spy();
+        // arrange
+        var filter = ["field", "anyof", [1, 2]];
+        this.initFilterPanelView({
+            filterValue: filter,
+            headerFilter: {
+                texts: {}
+            },
+            columns: [{
+                dataField: "field",
+                lookup: {
+                    dataSource: {
+                        store: new CustomStore({
+                            load: function() {
+                                spy();
+                                return [
+                                    { id: 1, text: "Text 1" },
+                                    { id: 2, text: "Text 2" }
+                                ];
+                            }
+                        })
+                    },
+                    valueExpr: "id",
+                    displayExpr: "text"
+                }
+            }]
+        });
+
+        // act
+        assert.expect(2);
+        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+            assert.equal(result, "[Field] Is any of('Text 1', 'Text 2')");
+            assert.equal(spy.callCount, 1);
         });
     });
 
