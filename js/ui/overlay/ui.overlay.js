@@ -663,6 +663,7 @@ var Overlay = Widget.inherit({
             }.bind(this);
 
             if(this.option("templatesRenderAsynchronously")) {
+                this._stopShowTimer();
                 this._asyncShowTimeout = setTimeout(show);
             } else {
                 show();
@@ -712,6 +713,7 @@ var Overlay = Widget.inherit({
             this._forceFocusLost();
             this._toggleShading(false);
             this._toggleSubscriptions(false);
+            this._stopShowTimer();
 
             this._animate(hideAnimation,
                 function() {
@@ -763,7 +765,6 @@ var Overlay = Widget.inherit({
         this._currentVisible = visible;
 
         this._stopAnimation();
-        clearTimeout(this._asyncShowTimeout);
 
         if(!visible) {
             domUtils.triggerHidingEvent(this._$content);
@@ -1369,8 +1370,17 @@ var Overlay = Widget.inherit({
         }
 
         this._renderVisibility(false);
+        this._stopShowTimer();
 
         this._cleanFocusState();
+    },
+
+    _stopShowTimer() {
+        if(this._asyncShowTimeout) {
+            clearTimeout(this._asyncShowTimeout);
+        }
+
+        this._asyncShowTimeout = null;
     },
 
     _dispose: function() {
