@@ -235,6 +235,7 @@ QUnit.module("Rendering", function() {
         assert.equal(getSelectedMenuText(), "Is greater than");
     });
 
+    // T704561
     QUnit.test("check menu correct maxHeight & position", function(assert) {
         var container = $("#container");
 
