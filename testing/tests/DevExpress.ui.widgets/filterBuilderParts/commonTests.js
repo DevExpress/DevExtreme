@@ -2,6 +2,7 @@ import $ from "jquery";
 import { isRenderer } from "core/utils/type";
 import devices from "core/devices";
 import config from "core/config";
+import renderer from "core/renderer";
 import fields from "../../../helpers/filterBuilderTestData.js";
 
 import "ui/filter_builder/filter_builder";
@@ -232,6 +233,37 @@ QUnit.module("Rendering", function() {
 
         $operationButton.trigger("dxclick");
         assert.equal(getSelectedMenuText(), "Is greater than");
+    });
+
+    QUnit.test("check menu correct maxHeight & position", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["Date", "=", ""]
+            ],
+            fields: fields
+        });
+
+        var scrollTop = sinon.stub(renderer.fn, "scrollTop").returns(100),
+            windowHeight = sinon.stub(renderer.fn, "innerHeight").returns(300),
+            offset = sinon.stub(renderer.fn, "offset").returns({ left: 0, top: 200 });
+
+        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        $operationButton.trigger("dxclick");
+
+        try {
+            var popup = container.find(".dx-overlay").dxPopup("instance"),
+                maxHeight = popup.option("maxHeight"),
+                positionCollision = popup.option("position.collision");
+
+            assert.ok(Math.floor(maxHeight()) < windowHeight(), "maxHeight is correct");
+            assert.equal(positionCollision, "flip", "collision is correct");
+        } finally {
+            scrollTop.restore();
+            windowHeight.restore();
+            offset.restore();
+        }
     });
 
     // T588221
