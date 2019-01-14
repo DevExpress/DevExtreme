@@ -87,6 +87,24 @@ var ExcelCreator = Class.inherit({
         return VALID_TYPES[dataType] || "s";
     },
 
+    _tryGetExcelCellDataType: function(object) {
+        if(typeUtils.isDefined(object)) {
+            if((typeof object === "number")) {
+                if(isFinite(object)) {
+                    return VALID_TYPES["number"];
+                } else {
+                    return VALID_TYPES["string"];
+                }
+            } else if(typeUtils.isString(object)) {
+                return VALID_TYPES["string"];
+            } else if(typeUtils.isDate(object)) {
+                return VALID_TYPES["number"];
+            } else if(typeUtils.isBoolean(object)) {
+                return VALID_TYPES["boolean"];
+            }
+        }
+    },
+
     _formatObjectConverter: function(format, dataType) {
         var result = {
             format: format,
@@ -174,7 +192,7 @@ var ExcelCreator = Class.inherit({
         };
     },
 
-    _callCustomizeExcelCell: function({ dataProvider, value, dataType, style, sourceData }) {
+    _callCustomizeExcelCell: function({ dataProvider, value, style, sourceData }) {
         const styleCopy = ExcelFile.copyCellFormat(style);
 
         const args = {
@@ -220,7 +238,6 @@ var ExcelCreator = Class.inherit({
 
         return {
             value: args.value,
-            dataType: dataType,
             style: newStyle,
         };
     },
@@ -250,13 +267,17 @@ var ExcelCreator = Class.inherit({
                     const modifiedExcelCell = this._callCustomizeExcelCell({
                         dataProvider: dataProvider,
                         value: value,
-                        dataType: cellData.type,
                         style: that._styleArray[styleArrayIndex],
                         sourceData: cellData.cellSourceData,
                     });
 
-                    cellData.type = modifiedExcelCell.dataType;
                     if(modifiedExcelCell.value !== value) {
+                        if(typeof modifiedExcelCell.value !== typeof value || (typeof modifiedExcelCell.value === "number") && !isFinite(modifiedExcelCell.value)) {
+                            const cellDataType = this._tryGetExcelCellDataType(modifiedExcelCell.value);
+                            if(typeUtils.isDefined(cellDataType)) {
+                                cellData.type = cellDataType;
+                            }
+                        }
                         // 18.18.11 ST_CellType (Cell Type)
                         switch(cellData.type) {
                             case 's':
