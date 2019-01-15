@@ -280,13 +280,13 @@ var ExcelCreator = Class.inherit({
                         }
                         // 18.18.11 ST_CellType (Cell Type)
                         switch(cellData.type) {
-                            case 's':
+                            case "s":
                                 cellData.value = this._appendString(modifiedExcelCell.value);
                                 break;
-                            case 'd':
+                            case "d":
                                 cellData.value = modifiedExcelCell.value;
                                 break;
-                            case 'n':
+                            case "n":
                                 let newValue = modifiedExcelCell.value;
                                 const excelDateValue = this._tryGetExcelDateValue(newValue);
                                 if(typeUtils.isDefined(excelDateValue)) {
