@@ -20,10 +20,9 @@ function assertStrictEqual(assert, value1, value2, message) {
     }
 }
 
-dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, getCustomizeExcelCellExpectedCells = undefined, getExpectedArgs = undefined, fixedColumnWidth_100 = true } = {}) {
+dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, getExpectedArgs = undefined, fixedColumnWidth_100 = true } = {}) {
     const that = this;
     const done = assert.async();
-    const actualGridCells = [];
     const actualArgs = [];
 
     options.loadingTimeout = undefined;
@@ -36,15 +35,6 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
                 oldCustomizeExcelCell(e);
             }
             actualArgs.push(e);
-        };
-    }
-    if(getCustomizeExcelCellExpectedCells) {
-        const oldCustomizeExcelCell = options.export.customizeExcelCell;
-        options.export.customizeExcelCell = e => {
-            if(oldCustomizeExcelCell) {
-                oldCustomizeExcelCell(e);
-            }
-            actualGridCells.push(e.gridCell);
         };
     }
 
