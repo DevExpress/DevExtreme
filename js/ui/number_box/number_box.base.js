@@ -5,12 +5,10 @@ var $ = require("../../core/renderer"),
     mathUtils = require("../../core/utils/math"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
-    focused = require("../widget/selectors").focused,
     devices = require("../../core/devices"),
     TextEditor = require("../text_box/ui.text_editor"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
-    wheelEvent = require("../../events/core/wheel"),
     SpinButton = require("./number_box.spin"),
     messageLocalization = require("../../localization/message");
 
@@ -180,7 +178,6 @@ var NumberBoxBase = TextEditor.inherit({
     _renderContentImpl: function() {
         this.option("isValid") && this._validateValue(this.option("value"));
         this.setAria("role", "spinbutton");
-        this._renderMouseWheelHandler();
     },
 
     _renderSubmitElement: function() {
@@ -218,27 +215,8 @@ var NumberBoxBase = TextEditor.inherit({
         this._keyPressed = true;
     },
 
-    _renderMouseWheelHandler: function() {
-        var eventName = eventUtils.addNamespace(wheelEvent.name, this.NAME);
-
-        var mouseWheelAction = this._createAction((function(e) {
-            this._mouseWheelHandler(e.event);
-        }).bind(this));
-
-        eventsEngine.off(this._input(), eventName);
-        eventsEngine.on(this._input(), eventName, function(e) {
-            mouseWheelAction({ event: e });
-        });
-    },
-
-    _mouseWheelHandler: function(dxEvent) {
-        if(!focused(this._input())) {
-            return;
-        }
-
+    _onMouseWheel: function(dxEvent) {
         dxEvent.delta > 0 ? this._spinValueChange(1, dxEvent) : this._spinValueChange(-1, dxEvent);
-        dxEvent.preventDefault();
-        dxEvent.stopPropagation();
     },
 
     _renderValue: function() {
