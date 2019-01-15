@@ -1870,7 +1870,7 @@ QUnit.test("Change date undefined to date", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: 'f1', dataType: 'number' }],
+            columns: [{ dataField: 'f1', dataType: 'date' }],
             dataSource: [
                 { f1: undefined }
             ],
@@ -1879,7 +1879,6 @@ QUnit.test("Change date undefined to date", function(assert) {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    assert.deepEqual(e.value, undefined);
                     e.value = new Date(2019, 0, 22, 16, 55);
                 },
             },
@@ -1901,7 +1900,7 @@ QUnit.test("Change date null to date", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: 'f1', dataType: 'number' }],
+            columns: [{ dataField: 'f1', dataType: 'date' }],
             dataSource: [
                 { f1: null }
             ],
@@ -1910,7 +1909,6 @@ QUnit.test("Change date null to date", function(assert) {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    assert.deepEqual(e.value, null);
                     e.value = new Date(2019, 0, 22, 16, 55);
                 },
             },
@@ -1934,7 +1932,7 @@ QUnit.test("Change date value to string", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: 'f1', dataType: 'number' }],
+            columns: [{ dataField: 'f1', dataType: 'date' }],
             dataSource: [
                 { f1: new Date(2018, 0, 21, 16, 55) }
             ],
@@ -1943,7 +1941,6 @@ QUnit.test("Change date value to string", function(assert) {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    assert.deepEqual(e.value, new Date(2018, 0, 21, 16, 55));
                     e.value = 'a';
                 },
             },
@@ -1965,7 +1962,7 @@ QUnit.test("Change date value to undefined", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: 'f1', dataType: 'number' }],
+            columns: [{ dataField: 'f1', dataType: 'date' }],
             dataSource: [
                 { f1: new Date(2018, 0, 21, 16, 55) },
             ],
@@ -1974,7 +1971,6 @@ QUnit.test("Change date value to undefined", function(assert) {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    assert.deepEqual(e.value, new Date(2018, 0, 21, 16, 55));
                     e.value = undefined;
                 },
             },
@@ -1996,7 +1992,7 @@ QUnit.test("Change date value to null", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: 'f1', dataType: 'number' }],
+            columns: [{ dataField: 'f1', dataType: 'date' }],
             dataSource: [
                 { f1: new Date(2018, 0, 21, 16, 55) },
             ],
@@ -2005,7 +2001,6 @@ QUnit.test("Change date value to null", function(assert) {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    assert.deepEqual(e.value, new Date(2018, 0, 21, 16, 55));
                     e.value = undefined;
                 },
             },
@@ -2027,7 +2022,7 @@ QUnit.test("Change date value to number", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: 'f1', dataType: 'number' }],
+            columns: [{ dataField: 'f1', dataType: 'date' }],
             dataSource: [
                 { f1: new Date(2018, 0, 21, 16, 55) },
             ],
@@ -2036,7 +2031,6 @@ QUnit.test("Change date value to number", function(assert) {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    assert.deepEqual(e.value, new Date(2018, 0, 21, 16, 55));
                     e.value = 42;
                 },
             },
@@ -2061,7 +2055,7 @@ QUnit.test("Change date value to date", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: 'f1', dataType: 'number' }],
+            columns: [{ dataField: 'f1', dataType: 'date' }],
             dataSource: [
                 { f1: new Date(2018, 0, 21, 16, 55) },
                 { f1: new Date(2019, 0, 21, 16, 55) }
@@ -2072,10 +2066,8 @@ QUnit.test("Change date value to date", function(assert) {
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
                     if(e.value.getTime() === new Date(2018, 0, 21, 16, 55).getTime()) {
-                        assert.deepEqual(e.value, new Date(2018, 0, 21, 16, 55));
                         e.value = new Date(2018, 0, 22, 16, 55);
                     } else {
-                        assert.deepEqual(e.value, new Date(2019, 0, 21, 16, 55));
                         e.value = 43487.70486111111; // new Date(2019, 0, 22, 16, 55)
                     }
                 },
@@ -2098,7 +2090,7 @@ QUnit.test("Change date value to boolean", function(assert) {
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: 'f1', dataType: 'number' }],
+            columns: [{ dataField: 'f1', dataType: 'date' }],
             dataSource: [
                 { f1: new Date(2018, 0, 21, 16, 55) },
             ],
@@ -2107,7 +2099,6 @@ QUnit.test("Change date value to boolean", function(assert) {
                 enabled: true,
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    assert.deepEqual(e.value, new Date(2018, 0, 21, 16, 55));
                     e.value = true;
                 },
             },
