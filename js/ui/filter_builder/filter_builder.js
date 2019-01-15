@@ -11,6 +11,7 @@ import deferredUtils from "../../core/utils/deferred";
 import { isDefined } from "../../core/utils/type";
 import TreeView from "../tree_view";
 import Popup from "../popup";
+import { getElementMaxHeightByWindow } from "../overlay/utils";
 import EditorFactoryMixin from "../shared/ui.editor_factory_mixin";
 
 const FILTER_BUILDER_CLASS = "dx-filterbuilder",
@@ -717,7 +718,7 @@ var FilterBuilder = Widget.inherit({
             onHiding: function(e) {
                 $button.removeClass(ACTIVE_CLASS);
             },
-            position: { my: position + " top", at: position + " bottom", offset: "0 1", of: $button },
+            position: { my: position + " top", at: position + " bottom", offset: "0 1", of: $button, collision: "flip" },
             animation: null,
             onHidden: function() {
                 removeMenu();
@@ -1125,6 +1126,9 @@ var FilterBuilder = Widget.inherit({
                 var $menuContainer = $("<div>");
                 that._createComponent($menuContainer, TreeView, options.menu);
                 return $menuContainer;
+            },
+            maxHeight: function() {
+                return getElementMaxHeightByWindow(options.menu.position.of);
             },
             visible: true,
             focusStateEnabled: false,
