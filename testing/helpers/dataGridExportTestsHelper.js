@@ -11,7 +11,7 @@ import exportTestsHelper from "./exportTestsHelper.js";
 const dataGridExportTestsHelper = Object.create(exportTestsHelper);
 
 function assertStrictEqual(assert, value1, value2, message) {
-    if(typeof value1 === 'number' && typeof value2 === 'number' && isNaN(value1) && isNaN(value2)) {
+    if(typeof value1 === "number" && typeof value2 === "number" && isNaN(value1) && isNaN(value2)) {
         assert.ok(true);
     } else if(value1 instanceof Date && value2 instanceof Date) {
         assert.strictEqual(value1.getTime(), value2.getTime(), message);
@@ -67,11 +67,11 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
 
         if(getExpectedArgs) {
             const expectedArgs = getExpectedArgs(e.component);
-            assert.strictEqual(actualArgs.length, expectedArgs.length, 'actualArgs.length');
+            assert.strictEqual(actualArgs.length, expectedArgs.length, "actualArgs.length");
             for(let i = 0; i < actualArgs.length; i++) {
                 const actualArgsItem = actualArgs[i];
                 const expectedArgsItem = expectedArgs[i];
-                const gridCellSkipProperties = ['column', 'row'];
+                const gridCellSkipProperties = ["column", "row"];
 
                 if(expectedArgsItem.value !== "skip") {
                     assertStrictEqual(assert, actualArgsItem.value, expectedArgsItem.value, `value, ${i}`);
