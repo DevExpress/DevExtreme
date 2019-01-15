@@ -110,7 +110,7 @@ var LayoutManager = Widget.inherit({
         this._itemWatchers = [];
         this._instanceStorage = new InstanceStorage();
         this._updateReferencedOptions(layoutData);
-        this._initDataAndItems(this.option("layoutData"));
+        this._initDataAndItems(layoutData);
     },
 
     _dispose: function() {
