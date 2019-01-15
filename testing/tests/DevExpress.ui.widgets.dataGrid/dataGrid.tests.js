@@ -57,6 +57,7 @@ var $ = require("jquery"),
     typeUtils = require("core/utils/type"),
     devices = require("core/devices"),
     browser = require("core/utils/browser"),
+    version = require("core/version"),
     gridCore = require("ui/data_grid/ui.data_grid.core"),
     gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
     DataSource = require("data/data_source/data_source").DataSource,
@@ -5783,6 +5784,7 @@ QUnit.test("Error on loading", function(assert) {
 QUnit.test("Raise error if key field is missed", function(assert) {
     // act
     var clock = sinon.useFakeTimers(),
+        errorUrl = "http://js.devexpress.com/error/" + version.split(".").slice(0, 2).join("_") + "/E1046",
         dataGrid = createDataGrid({
             columns: ["field1"],
             keyExpr: "ID",
@@ -5795,6 +5797,8 @@ QUnit.test("Raise error if key field is missed", function(assert) {
     var $errorRow = $($(dataGrid.$element()).find(".dx-error-row"));
     assert.equal($errorRow.length, 1, "error row is shown");
     assert.equal($errorRow.find(".dx-error-message").text().slice(0, 5), "E1046", "error number");
+
+    assert.equal($errorRow.find(".dx-error-message > a").attr("href"), errorUrl, "Url error code");
     clock.restore();
 });
 
