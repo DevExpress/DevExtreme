@@ -303,6 +303,17 @@ QUnit.test("clear button should change validation state to valid", function(asse
     assert.ok(dateBox.option("isValid"), "widget is valid");
 });
 
+QUnit.test("datebox should create validation error if isValid = false on init ", function(assert) {
+    var $dateBox = $("#widthRootStyle").dxDateBox({
+            type: "datetime",
+            isValid: false,
+            value: null
+        }),
+        dateBox = $dateBox.dxDateBox("instance");
+
+    assert.notOk(dateBox.option("isValid"), "widget is invalid");
+});
+
 QUnit.test("T252737 - the 'acceptCustomValue' option correct behavior", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
         acceptCustomValue: false,

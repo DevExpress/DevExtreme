@@ -415,6 +415,10 @@ var DateBox = DropDownEditor.inherit({
 
         this.callBase();
 
+        if(this.option("isValid") !== false) {
+            this._validateValue(this.dateOption("value"));
+        }
+
         this._refreshFormatClass();
         this._refreshPickerTypeClass();
 
@@ -571,7 +575,6 @@ var DateBox = DropDownEditor.inherit({
 
         this._strategy.renderValue();
         this.callBase();
-        this._validateValue(value);
     },
 
     _getDisplayedText: function(value) {
@@ -853,6 +856,7 @@ var DateBox = DropDownEditor.inherit({
     reset: function() {
         this.callBase();
         this._updateValue();
+        this._validateValue(this.dateOption("value"));
     }
 });
 
