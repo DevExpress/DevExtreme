@@ -1896,7 +1896,7 @@ module.exports = {
                             minWidth: null,
                             cellTemplate: !typeUtils.isDefined(column.groupIndex) ? column.cellTemplate : null,
                             headerCellTemplate: null,
-                            fixed: !isDefined(column.groupIndex) || !isDefined(isFixedFirstGroupColumn) ? isColumnFixing : isFixedFirstGroupColumn
+                            fixed: !isDefined(column.groupIndex) || !isFixedFirstGroupColumn ? isColumnFixing : true,
                         }, expandColumn, {
                             index: column.index,
                             type: column.type || GROUP_COMMAND_COLUMN_NAME
