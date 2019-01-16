@@ -303,17 +303,6 @@ QUnit.test("clear button should change validation state to valid", function(asse
     assert.ok(dateBox.option("isValid"), "widget is valid");
 });
 
-QUnit.test("datebox should create validation error if isValid = false on init ", function(assert) {
-    var $dateBox = $("#widthRootStyle").dxDateBox({
-            type: "datetime",
-            isValid: false,
-            value: null
-        }),
-        dateBox = $dateBox.dxDateBox("instance");
-
-    assert.notOk(dateBox.option("isValid"), "widget is invalid");
-});
-
 QUnit.test("T252737 - the 'acceptCustomValue' option correct behavior", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
         acceptCustomValue: false,
@@ -3557,6 +3546,38 @@ QUnit.test("validation should be correct when max value is chosen (T266206)", fu
         dateBox = $dateBox.dxDateBox("instance");
 
     assert.ok(dateBox.option("isValid"), "datebox is valid");
+});
+
+QUnit.test("datebox should create validation error if user set isValid = false", function(assert) {
+    var dateBox = $("#widthRootStyle").dxDateBox({
+        type: "datetime",
+        isValid: false,
+        value: null
+    }).dxDateBox("instance");
+
+    assert.notOk(dateBox.option("isValid"), "on init");
+
+    dateBox.option("value", new Date(2018, 1, 1));
+    assert.ok(dateBox.option("isValid"), "valid after valid value is setted");
+
+    dateBox.option("isValid", false);
+    assert.notOk(dateBox.option("isValid"), "set isValid = false by API");
+});
+
+QUnit.test("datebox should be invalid after out of range value was setted", function(assert) {
+    var dateBox = $("#widthRootStyle").dxDateBox({
+        type: "datetime",
+        min: new Date(2019, 1, 1),
+        value: null
+    }).dxDateBox("instance");
+
+    assert.ok(dateBox.option("isValid"), "widget is valid");
+
+    dateBox.option("value", new Date(2018, 0, 1));
+    assert.notOk(dateBox.option("isValid"), "widget is invalid");
+
+    dateBox.option("value", new Date(2019, 1, 2));
+    assert.ok(dateBox.option("isValid"), "widget is valid");
 });
 
 QUnit.test("widget is still valid after drop down is opened", function(assert) {
