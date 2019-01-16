@@ -58,11 +58,12 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     isAdaptivityChanged: function() {
-        var isAdaptiveMode = this._isShrinkView();
+        var isAdaptiveMode = this._isShrinkView(),
+            currentAdaptiveMode = this._currentAdaptiveMode;
 
-        if(isAdaptiveMode !== this._currentAdaptiveMode) {
+        if(isAdaptiveMode !== currentAdaptiveMode) {
             this._currentAdaptiveMode = isAdaptiveMode;
-            return true;
+            return currentAdaptiveMode !== undefined;
         }
 
         return this.callBase();

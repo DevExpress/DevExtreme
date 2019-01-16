@@ -2571,6 +2571,18 @@ QUnit.test("date box wrapper adaptivity class depends on the screen size", funct
     }
 });
 
+QUnit.test("dateBox with datetime strategy should be rendered once on init", function(assert) {
+    var contentReadyHandler = sinon.spy();
+
+    $("#dateBox").dxDateBox({
+        type: "datetime",
+        pickerType: "calendar",
+        onContentReady: contentReadyHandler
+    }).dxDateBox("instance");
+
+    assert.equal(contentReadyHandler.callCount, 1, "contentReady has been called once");
+});
+
 QUnit.test("date box popup should have maximum 100% width", function(assert) {
     var currentDevice = sinon.stub(devices, "current").returns({
         platform: "generic",

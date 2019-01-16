@@ -3796,6 +3796,34 @@ QUnit.test("virtual columns", function(assert) {
     assert.equal(dataGrid.$element().find(".dx-data-row").children().length, 6, "visible column count");
 });
 
+// T706583
+QUnit.test("grouping if columnRenderingMode is virtual, filterRow is visible and datetime column exists", function(assert) {
+    // arrange, act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: [{}],
+        loadingTimeout: undefined,
+        scrolling: {
+            columnRenderingMode: "virtual"
+        },
+        columnWidth: 100,
+        width: 500,
+        filterRow: {
+            visible: true
+        },
+        columns: [{
+            dataField: "c1",
+            dataType: "datetime"
+        },
+        "c2", "c3", "c4", "c5", "c6"]
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.columnOption("c2", "groupIndex", 0);
+
+    // assert
+    assert.equal(dataGrid.getVisibleColumns()[0].type, "groupExpand", "grouping is applied");
+});
+
 QUnit.test("visible items should be rendered if virtual scrolling and preload are enabled", function(assert) {
     // arrange, act
     var clock = sinon.useFakeTimers(),
