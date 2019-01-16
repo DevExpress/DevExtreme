@@ -30,11 +30,11 @@ var hasDot = function(x) {
 };
 
 var pad = function(text, length, right) {
-    var str = String(text);
-    while(str.length < length) {
-        str = right ? str.concat("0") : "0".concat(str);
+    text = String(text);
+    while(text.length < length) {
+        text = right ? (text + "0") : ("0" + text);
     }
-    return str;
+    return text;
 };
 
 function formatISO8601(date, skipZeroTime, skipTimezone) {
