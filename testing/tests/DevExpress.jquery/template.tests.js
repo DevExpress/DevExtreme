@@ -6,7 +6,7 @@ SystemJS.config({
 
 define(function(require) {
     var $ = require("jquery"),
-        Template = require("ui/widget/jquery.template"),
+        Template = require("ui/widget/template"),
         setTemplateEngine = require("ui/set_template_engine"),
         errors = require("core/errors");
 
