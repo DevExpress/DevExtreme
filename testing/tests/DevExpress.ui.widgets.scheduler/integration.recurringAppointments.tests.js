@@ -1088,15 +1088,15 @@ QUnit.test("T697037. Recurrence exception date should equal date of appointment,
         currentDate: new Date(2018, 10, 26),
         dateSerializationFormat: "yyyy-MM-ddTHH:mm:ssZ",
         timeZone: "Etc/UTC",
-        onAppointmentUpdating: (e) => {
+        editing: true,
+        onAppointmentUpdating: function(e) {
             assert.equal(e.newData.recurrenceException, "20181128T020000Z", "correct recurrence exception date");
         }
     });
     var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2),
         pointer = pointerMock($appointment).start();
 
-    pointer.dragStart().drag(0, -30);
-    pointer.dragEnd();
+    pointer.dragStart().drag(0, -30).dragEnd();
 
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 });
