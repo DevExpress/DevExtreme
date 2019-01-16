@@ -2719,6 +2719,16 @@ var Scheduler = Widget.inherit({
         if(!this._appointmentForm) {
             this._initDynamicPopupTemplate(data, processTimeZone);
             this._popup.option(this._popupConfig(data));
+        } else {
+            if(this._appointmentForm) {
+                var startDateExpr = this._dataAccessors.expr.startDateExpr,
+                    endDateExpr = this._dataAccessors.expr.endDateExpr;
+
+                this._appointmentForm.option("formData", data);
+                this._appointmentForm.option("readOnly", this._editAppointmentData ? !this._editing.allowUpdating : false);
+
+                AppointmentForm.checkEditorsType(this._appointmentForm, startDateExpr, endDateExpr, data.allDay);
+            }
         }
         this._popup.show();
     },
