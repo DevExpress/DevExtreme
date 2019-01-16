@@ -1,7 +1,7 @@
 import $ from "../../core/renderer";
 import TemplateBase from "./ui.template_base";
 import { normalizeTemplateElement } from "../../core/utils/dom";
-import { getCurrentTemplateEngine, setTemplateEngine, registerTemplateEngine } from "./template_engine";
+import { getCurrentTemplateEngine, setTemplateEngine, registerTemplateEngine } from "./template_engine_registry";
 import "./template_engines";
 
 registerTemplateEngine("default", {

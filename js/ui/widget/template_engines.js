@@ -1,5 +1,5 @@
 import { extractTemplateMarkup } from "../../core/utils/dom";
-import { registerTemplateEngine } from './template_engine';
+import { registerTemplateEngine } from './template_engine_registry';
 
 registerTemplateEngine("jquery-tmpl", {
     compile: (element) => {
