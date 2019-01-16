@@ -2715,8 +2715,11 @@ var Scheduler = Widget.inherit({
             toolbarItems: toolbarItems,
             showCloseButton: showCloseButton
         });
-        this._initDynamicPopupTemplate(data, processTimeZone);
-        this._popup.option(this._popupConfig(data));
+
+        if(!this._appointmentForm) {
+            this._initDynamicPopupTemplate(data, processTimeZone);
+            this._popup.option(this._popupConfig(data));
+        }
         this._popup.show();
     },
 
