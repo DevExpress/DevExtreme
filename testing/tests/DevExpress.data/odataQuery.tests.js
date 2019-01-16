@@ -338,7 +338,14 @@ QUnit.test("works", function(assert) {
         url: "odata.org",
         responseText: { d: { results: [] } },
         callback: function(bag) {
-            assert.equal(bag.data.$filter, "date eq datetime'1996-07-04T01:01:01.1'", "second version should transform date to datetime'YYYY-MM-DDThh:mm:ss[.mmm]' format");
+            var expected = [
+                "(date eq datetime'1996-07-04T01:01:01.001')",
+                "(date eq datetime'1996-07-04T01:01:01.010')",
+                "(date eq datetime'1996-07-04T01:01:01.100')",
+                "(date eq datetime'1996-07-04T01:01:01.123')"
+            ].join(" and ");
+
+            assert.equal(bag.data.$filter, expected, "second version should transform date to datetime'yyyy-mm-ddThh:mm[:ss[.fffffff]]' format");
         }
     });
 
@@ -346,17 +353,34 @@ QUnit.test("works", function(assert) {
         url: "odata4.org",
         responseText: { d: { results: [] } },
         callback: function(bag) {
-            assert.equal(bag.data.$filter, "date eq 1996-07-04T00:00:00Z", "fourth version should transform date to ISO8601 like format");
+            var expected = [
+                "(date eq 1996-07-04T01:01:01.001Z)",
+                "(date eq 1996-07-04T01:01:01.010Z)",
+                "(date eq 1996-07-04T01:01:01.100Z)",
+                "(date eq 1996-07-04T01:01:01.123Z)"
+            ].join(" and ");
+
+            assert.equal(bag.data.$filter, expected, "fourth version should transform date to ISO8601 like format");
         }
     });
 
     var promises = [
         QUERY("odata.org")
-            .filter(["date", new Date(1996, 6, 4, 1, 1, 1, 1)])
+            .filter([
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 1)],
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 10)],
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 100)],
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 123)]
+            ])
             .enumerate(),
 
         QUERY("odata4.org", { version: 4 })
-            .filter(["date", new Date(1996, 6, 4, 0, 0, 0, 0)])
+            .filter([
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 1)],
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 10)],
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 100)],
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 123)]
+            ])
             .enumerate()
     ];
 

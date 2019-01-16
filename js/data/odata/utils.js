@@ -43,6 +43,14 @@ function formatISO8601(date, skipZeroTime, skipTimezone) {
         return date.getHours() + date.getMinutes() + date.getSeconds() + date.getMilliseconds() < 1;
     };
 
+    var millisecondsToFractionalSeconds = function(milliseconds) {
+        var fractional = pad(milliseconds);
+        if(milliseconds < 100) {
+            fractional = "0" + fractional;
+        }
+        return fractional;
+    };
+
     bag.push(date.getFullYear());
     bag.push("-");
     bag.push(pad(date.getMonth() + 1));
@@ -59,7 +67,7 @@ function formatISO8601(date, skipZeroTime, skipTimezone) {
 
         if(date.getMilliseconds()) {
             bag.push(".");
-            bag.push(date.getMilliseconds());
+            bag.push(millisecondsToFractionalSeconds(date.getMilliseconds()));
         }
 
         if(!skipTimezone) {
@@ -76,6 +84,13 @@ function parseISO8601(isoString) {
         date = /(\d{4})-(\d{2})-(\d{2})/.exec(chunks[0]),
         time = /(\d{2}):(\d{2}):(\d{2})\.?(\d{0,7})?/.exec(chunks[1]);
 
+    var fractionalSecondsToMilliseconds = function(fractional) {
+        var SIZE = 3;
+        var fixed = (fractional || "").slice(0, SIZE);
+        var delta = SIZE - fixed.length;
+        return Number(fixed) * (delta > 0 ? Math.pow(10, delta) : 1);
+    };
+
     result.setFullYear(Number(date[1]));
     result.setMonth(Number(date[2]) - 1);
     result.setDate(Number(date[3]));
@@ -84,7 +99,7 @@ function parseISO8601(isoString) {
         result.setHours(Number(time[1]));
         result.setMinutes(Number(time[2]));
         result.setSeconds(Number(time[3]));
-        result.setMilliseconds(Number(String(time[4]).substr(0, 3)) || 0);
+        result.setMilliseconds(fractionalSecondsToMilliseconds(time[4]));
     }
 
     return result;
