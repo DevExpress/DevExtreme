@@ -233,7 +233,7 @@ var GroupingDataControllerExtender = (function() {
                         if(item && "items" in item) {
                             options.data = item;
                             options.path.push(item.key);
-                            options.values.push(column && column.deserializeValue ? column.deserializeValue(item.key) : item.key);
+                            options.values.push(column && column.deserializeValue && !column.calculateDisplayValue ? column.deserializeValue(item.key) : item.key);
                             that._processGroupItems(item.items, groupsCount - 1, options);
                             options.data = undefined;
                             options.path.pop();

@@ -1,28 +1,31 @@
-var $ = require("jquery"),
-    renderer = require("core/renderer"),
-    noop = require("core/utils/common").noop,
-    browser = require("core/utils/browser"),
-    support = require("core/utils/support"),
-    dateUtils = require("core/utils/date"),
-    typeUtils = require("core/utils/type"),
-    uiDateUtils = require("ui/date_box/ui.date_utils"),
-    devices = require("core/devices"),
-    themes = require("ui/themes"),
-    DateBox = require("ui/date_box"),
-    Calendar = require("ui/calendar"),
-    Box = require("ui/box"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    fx = require("animation/fx"),
-    config = require("core/config"),
-    dateLocalization = require("localization/date"),
-    messageLocalization = require("localization/message"),
-    dateSerialization = require("core/utils/date_serialization");
+import $ from "jquery";
+import Box from "ui/box";
+import Calendar from "ui/calendar";
+import DateBox from "ui/date_box";
+import browser from "core/utils/browser";
+import config from "core/config";
+import dateLocalization from "localization/date";
+import dateSerialization from "core/utils/date_serialization";
+import dateUtils from "core/utils/date";
+import devices from "core/devices";
+import fx from "animation/fx";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import messageLocalization from "localization/message";
+import pointerMock from "../../helpers/pointerMock.js";
+import renderer from "core/renderer";
+import support from "core/utils/support";
+import themes from "ui/themes";
+import typeUtils from "core/utils/type";
+import uiDateUtils from "ui/date_box/ui.date_utils";
+import { noop } from "core/utils/common";
 
-require("../../helpers/l10n/cldrNumberDataDe.js");
-require("../../helpers/l10n/cldrCalendarDataDe.js");
+import "../../helpers/l10n/cldrNumberDataDe.js";
+import "../../helpers/l10n/cldrCalendarDataDe.js";
+import "../../helpers/calendarFixtures.js";
 
-require("ui/validator");
+import "ui/validator";
+import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -39,11 +42,6 @@ QUnit.testStart(function() {
 
     $("#qunit-fixture").html(markup);
 });
-
-require("../../helpers/calendarFixtures.js");
-
-require("common.css!");
-require("generic_light.css!");
 
 var currentDate = new Date(2015, 11, 31),
     firstDayOfWeek = 0,
@@ -622,6 +620,27 @@ QUnit.testInActiveWindow("set focus on 'tab' key from editor to overlay and inve
     $($inputHourBox).trigger($.Event("keydown", { which: 9, shiftKey: true }));
 
     assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), "dateBox on focus reset focus to element");
+});
+
+QUnit.test("mousewheel action should not work if dateBox is not focused", (assert) => {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "desktop specific test");
+        return;
+    }
+
+    const $dateBox = $("#dateBox").dxDateBox({ type: "datetime", useMaskBehavior: true });
+    const dateBox = $dateBox.dxDateBox("instance");
+    const initText = dateBox.option("text");
+    const input = $(".dx-texteditor-input", $dateBox).get(0);
+    const mouse = pointerMock(input).start();
+
+    mouse.wheel(10);
+    assert.strictEqual(dateBox.option("text"), initText);
+
+    input.focus();
+
+    mouse.wheel(10);
+    assert.notStrictEqual(dateBox.option("text"), initText);
 });
 
 

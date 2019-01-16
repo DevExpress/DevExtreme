@@ -694,6 +694,10 @@ var Widget = DOMComponent.inherit({
         this._toggleFocusClass(false);
         $element.removeAttr("tabIndex");
 
+        this._disposeKeyboardProcessor();
+    },
+
+    _disposeKeyboardProcessor() {
         if(this._keyboardProcessor) {
             this._keyboardProcessor.dispose();
             delete this._keyboardProcessor;

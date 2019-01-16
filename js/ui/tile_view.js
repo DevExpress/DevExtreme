@@ -536,6 +536,11 @@ var TileView = CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case "items":
+                this.callBase(args);
+                this._renderGeometry();
+                this._updateScrollView();
+                break;
             case "showScrollbar":
                 this._initScrollView();
                 break;

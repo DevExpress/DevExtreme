@@ -658,7 +658,7 @@ module.exports = {
                 _handleDataChanged: function(e) {
                     this.callBase.apply(this, arguments);
 
-                    if(!e || e.changeType === "refresh") {
+                    if((!e || e.changeType === "refresh") && !this._repaintChangesOnly) {
                         this.getController("selection").focusedItemIndex(-1);
                     }
                 }

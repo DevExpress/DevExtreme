@@ -472,12 +472,17 @@ function getCurrentLookupValueText(field, value, handler) {
         handler("");
         return;
     }
-    var dataSource = new DataSource(field.lookup.dataSource);
-    dataSource.loadSingle(field.lookup.valueExpr, value).done(function(result) {
-        result ? handler(field.lookup.displayExpr ? result[field.lookup.displayExpr] : result) : handler("");
-    }).fail(function() {
-        handler("");
-    });
+    let lookup = field.lookup;
+    if(lookup.items) {
+        handler(lookup.calculateCellValue(value) || "");
+    } else {
+        var dataSource = new DataSource(lookup.dataSource);
+        dataSource.loadSingle(lookup.valueExpr, value).done(function(result) {
+            result ? handler(lookup.displayExpr ? result[lookup.displayExpr] : result) : handler("");
+        }).fail(function() {
+            handler("");
+        });
+    }
 }
 
 function getPrimitiveValueText(field, value, customOperation, target) {
