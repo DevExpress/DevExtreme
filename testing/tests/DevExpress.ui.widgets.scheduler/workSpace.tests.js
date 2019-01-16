@@ -11,8 +11,7 @@ var $ = require("jquery"),
     dateUtils = require("core/utils/date"),
     dateLocalization = require("localization/date"),
     dragEvents = require("events/drag"),
-    memoryLeaksHelper = require("../../helpers/memoryLeaksHelper.js"),
-    pointerEvents = require("events/pointer");
+    memoryLeaksHelper = require("../../helpers/memoryLeaksHelper.js");
 
 require("common.css!");
 require("generic_light.css!");
@@ -1584,7 +1583,9 @@ QUnit.testStart(function() {
         assert.equal(cells.slice(1, 10).filter(".dx-state-focused").length, 9, " right cells are focused");
     });
 
-    QUnit.test("Pointeruip event subscriptions should be detached on dispose", function(assert) {
+    QUnit.test("Event subscriptions should be detached on dispose", function(assert) {
+        var originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
+
         var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
                 focusStateEnabled: true,
                 firstDayOfWeek: 1,
@@ -1594,15 +1595,13 @@ QUnit.testStart(function() {
 
         var cells = $element.find("." + CELL_CLASS);
 
-        var originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
-
         pointerMock(cells.eq(3)).start().click();
         keyboard.keyDown("left", { shiftKey: true });
         keyboard.keyDown("right", { shiftKey: true });
 
         $element.dxSchedulerWorkSpaceMonth("instance").dispose();
 
-        assert.deepEqual(memoryLeaksHelper.getAllEventSubscriptions()[pointerEvents.up], originalEventSubscriptions[pointerEvents.up], "Subscribes after dispose are OK");
+        assert.deepEqual(memoryLeaksHelper.getAllEventSubscriptions(), originalEventSubscriptions, "Subscribes after dispose are OK");
     });
 
     QUnit.test("Workspace should allow select/unselect cells with shift & right/left arrow", function(assert) {
