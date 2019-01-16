@@ -10,7 +10,9 @@ var $ = require("jquery"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
     dateUtils = require("core/utils/date"),
     dateLocalization = require("localization/date"),
-    dragEvents = require("events/drag");
+    dragEvents = require("events/drag"),
+    memoryLeaksHelper = require("../../helpers/memoryLeaksHelper.js"),
+    pointerEvents = require("events/pointer");
 
 require("common.css!");
 require("generic_light.css!");
@@ -1592,13 +1594,15 @@ QUnit.testStart(function() {
 
         var cells = $element.find("." + CELL_CLASS);
 
+        var originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
+
         pointerMock(cells.eq(3)).start().click();
         keyboard.keyDown("left", { shiftKey: true });
         keyboard.keyDown("right", { shiftKey: true });
 
         $element.dxSchedulerWorkSpaceMonth("instance").dispose();
 
-        assert.equal($._data(document, "events"), undefined, "Event subscriptions were detached");
+        assert.deepEqual(memoryLeaksHelper.getAllEventSubscriptions()[pointerEvents.up], originalEventSubscriptions[pointerEvents.up], "Subscribes after dispose are OK");
     });
 
     QUnit.test("Workspace should allow select/unselect cells with shift & right/left arrow", function(assert) {
