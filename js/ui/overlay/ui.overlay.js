@@ -360,6 +360,7 @@ var Overlay = Widget.inherit({
             onPositioned: null,
             boundaryOffset: { h: 0, v: 0 },
             propagateOutsideClick: false,
+            ignoreChildEvents: true,
             _checkParentVisibility: true
         });
     },
@@ -1349,7 +1350,7 @@ var Overlay = Widget.inherit({
         var e = options.originalEvent,
             $target = $(e.target);
 
-        if($target.is(this._$content)) {
+        if($target.is(this._$content) || !this.option("ignoreChildEvents")) {
             this.callBase.apply(this, arguments);
         }
     },
