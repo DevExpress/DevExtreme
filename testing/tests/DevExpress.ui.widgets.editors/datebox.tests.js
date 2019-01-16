@@ -623,6 +623,11 @@ QUnit.testInActiveWindow("set focus on 'tab' key from editor to overlay and inve
 });
 
 QUnit.test("mousewheel action should not work if dateBox is not focused", (assert) => {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "desktop specific test");
+        return;
+    }
+
     const $dateBox = $("#dateBox").dxDateBox({ type: "datetime", useMaskBehavior: true });
     const dateBox = $dateBox.dxDateBox("instance");
     const initText = dateBox.option("text");
