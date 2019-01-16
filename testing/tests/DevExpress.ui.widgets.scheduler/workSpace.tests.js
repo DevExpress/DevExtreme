@@ -1582,6 +1582,25 @@ QUnit.testStart(function() {
         assert.equal(cells.slice(1, 10).filter(".dx-state-focused").length, 9, " right cells are focused");
     });
 
+    QUnit.test("Pointeruip event subscriptions should be detached on dispose", function(assert) {
+        var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
+                focusStateEnabled: true,
+                firstDayOfWeek: 1,
+                currentDate: new Date(2015, 3, 1)
+            }),
+            keyboard = keyboardMock($element);
+
+        var cells = $element.find("." + CELL_CLASS);
+
+        pointerMock(cells.eq(3)).start().click();
+        keyboard.keyDown("left", { shiftKey: true });
+        keyboard.keyDown("right", { shiftKey: true });
+
+        $element.dxSchedulerWorkSpaceMonth("instance").dispose();
+
+        assert.equal($._data(document, "events"), undefined, "Event subscriptions were detached");
+    });
+
     QUnit.test("Workspace should allow select/unselect cells with shift & right/left arrow", function(assert) {
         var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
                 focusStateEnabled: true,
