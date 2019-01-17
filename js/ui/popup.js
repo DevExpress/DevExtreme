@@ -16,6 +16,7 @@ var $ = require("../core/renderer"),
     Overlay = require("./overlay"),
     EmptyTemplate = require("./widget/empty_template"),
     domUtils = require("../core/utils/dom"),
+    sizeUtils = require("../core/utils/size"),
     windowUtils = require("../core/utils/window");
 
 require("./toolbar/ui.toolbar.base");
@@ -628,7 +629,7 @@ var Popup = Overlay.inherit({
     },
 
     _getDragTarget: function() {
-        return this._$title;
+        return this.topToolbar();
     },
 
     _renderGeometryImpl: function() {
@@ -662,28 +663,47 @@ var Popup = Overlay.inherit({
     _setContentHeight: function() {
         (this.option("forceApplyBindings") || noop)();
 
-        if(this._disallowUpdateContentHeight()) {
-            return;
+        var popupHeightParts = this._splitPopupHeight(),
+            toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
+                + popupHeightParts.footer
+                + popupHeightParts.contentVerticalOffsets
+                + popupHeightParts.popupVerticalOffsets,
+            overlayContent = this.overlayContent().get(0),
+            cssStyles = {};
+
+        if(this._isAutoHeight()) {
+            var container = $(this._getContainer()).get(0),
+                contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
+                contentMinHeight = this._getOptionValue("minHeight", overlayContent),
+                maxHeightValue = sizeUtils.addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container),
+                minHeightValue = sizeUtils.addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
+
+            cssStyles = extend(cssStyles, {
+                minHeight: minHeightValue,
+                maxHeight: maxHeightValue
+            });
+        } else {
+            var contentHeight = overlayContent.getBoundingClientRect().height - toolbarsAndVerticalOffsetsHeight;
+            cssStyles = { height: Math.max(0, contentHeight) };
         }
 
-        var contentPaddings = this._$content.outerHeight() - this._$content.height(),
-            contentHeight = this._$content.get(0).getBoundingClientRect().height - contentPaddings;
-        if(this._$title && this._$title.is(":visible")) {
-            contentHeight -= this._$title.get(0).getBoundingClientRect().height || 0;
-        }
-        if(this._$bottom && this._$bottom.is(":visible")) {
-            contentHeight -= this._$bottom.get(0).getBoundingClientRect().height || 0;
-        }
-
-        this._$popupContent.css("height", contentHeight < 0 ? 0 : contentHeight);
+        this.$content().css(cssStyles);
     },
 
-    _disallowUpdateContentHeight: function() {
-        var isHeightAuto = this._$content.get(0).style.height === "auto",
-            maxHeightSpecified = this._$content.css("maxHeight") !== "none",
-            minHeightSpecified = parseInt(this._$content.css("minHeight")) > 0;
+    _isAutoHeight: function() {
+        return this.overlayContent().get(0).style.height === "auto";
+    },
 
-        return isHeightAuto && !(maxHeightSpecified || minHeightSpecified);
+    _splitPopupHeight: function() {
+        var topToolbar = this.topToolbar(),
+            bottomToolbar = this.bottomToolbar();
+
+        return {
+            header: sizeUtils.getVisibleHeight(topToolbar && topToolbar.get(0)),
+            footer: sizeUtils.getVisibleHeight(bottomToolbar && bottomToolbar.get(0)),
+            contentVerticalOffsets: sizeUtils.getVerticalOffsets(this.overlayContent().get(0), true),
+            popupVerticalOffsets: sizeUtils.getVerticalOffsets(this.$content().get(0), true)
+        };
     },
 
     _renderDimensions: function() {
@@ -778,6 +798,10 @@ var Popup = Overlay.inherit({
         return this._$bottom;
     },
 
+    topToolbar: function() {
+        return this._$title;
+    },
+
     $content: function() {
         return this._$popupContent;
     },
@@ -789,7 +813,6 @@ var Popup = Overlay.inherit({
     overlayContent: function() {
         return this._$content;
     }
-
 });
 
 registerComponent("dxPopup", Popup);
