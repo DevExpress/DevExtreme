@@ -1,16 +1,18 @@
-var $ = require("jquery"),
-    keyboardMock = require("../../../helpers/keyboardMock.js"),
-    fields = require("../../../helpers/filterBuilderTestData.js");
+import $ from "jquery";
+import keyboardMock from "../../../helpers/keyboardMock.js";
+import fields from "../../../helpers/filterBuilderTestData.js";
 
-require("ui/filter_builder/filter_builder");
+import "ui/filter_builder/filter_builder";
 
-var FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
-    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
+import {
+    FILTER_BUILDER_ITEM_OPERATION_CLASS,
+    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS
+} from "./constants.js";
 
-    TAB_KEY = "Tab",
-    ENTER_KEY = "Enter",
-    ESCAPE_KEY = "Escape",
-    DOWN_ARROW_KEY = "ArrowDown";
+const TAB_KEY = "Tab";
+const ENTER_KEY = "Enter";
+const ESCAPE_KEY = "Escape";
+const DOWN_ARROW_KEY = "ArrowDown";
 
 QUnit.module("Keyboard navigation", {
     beforeEach: function() {

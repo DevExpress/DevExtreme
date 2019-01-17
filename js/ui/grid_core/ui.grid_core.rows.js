@@ -410,6 +410,11 @@ module.exports = {
                 }
             };
 
+            var getScrollableBottomPadding = function(that) {
+                var scrollable = that.getScrollable();
+                return scrollable ? Math.ceil(parseFloat(scrollable.$content().css("paddingBottom"))) : 0;
+            };
+
             return {
                 _getDefaultTemplate: function(column) {
                     switch(column.command) {
@@ -1079,8 +1084,7 @@ module.exports = {
                             } else {
                                 freeSpaceRowElements.hide();
                                 commonUtils.deferUpdate(function() {
-                                    var scrollable = that.getScrollable(),
-                                        scrollablePadding = scrollable ? Math.ceil(parseFloat(scrollable.$content().css("paddingBottom"))) : 0, // T697699
+                                    var scrollablePadding = getScrollableBottomPadding(that), // T697699
                                         scrollbarWidth = that.getScrollbarWidth(true),
                                         elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth - scrollablePadding,
                                         contentHeight = contentElement.outerHeight(),
@@ -1185,6 +1189,7 @@ module.exports = {
                             scrollbarWidth = scrollableContainer.clientWidth ? scrollableContainer.offsetWidth - scrollableContainer.clientWidth : 0;
                         } else {
                             scrollbarWidth = scrollableContainer.clientHeight ? scrollableContainer.offsetHeight - scrollableContainer.clientHeight : 0;
+                            scrollbarWidth += getScrollableBottomPadding(this); // T703649
                         }
                     }
                     return scrollbarWidth > 0 ? scrollbarWidth : 0;

@@ -1950,6 +1950,27 @@ QUnit.test("changeRowSelection with shift key after filtering", function(assert)
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 6], "selectedRowKeys");
 });
 
+QUnit.test("changeRowSelection with shift key after partial refresh", function(assert) {
+    // arrange
+    var that = this;
+    this.applyOptions({
+        selection: {
+            mode: "multiple",
+            showCheckBoxesMode: "always"
+        },
+        onSelectionChanged: function(e) {
+            that.refresh(true);
+        }
+    });
+
+    // act
+    this.selectionController.changeItemSelection(1);
+    this.selectionController.changeItemSelection(3, { shift: true });
+
+    // assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 4, 3], "selectedRowKeys");
+});
+
 // T547950
 QUnit.test("focusedItemIndex should be reset to -1 after change page index", function(assert) {
     // arrange

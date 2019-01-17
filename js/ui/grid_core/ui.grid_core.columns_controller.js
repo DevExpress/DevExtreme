@@ -1376,10 +1376,11 @@ module.exports = {
             };
 
             var getFixedPosition = function(that, column) {
-                if(column.command && !isCustomCommandColumn(that, column)) {
-                    return column.visibleIndex < 0 || column.type === GROUP_COMMAND_COLUMN_NAME ? "left" : "right";
+                if(column.command && !isCustomCommandColumn(that, column) || !column.fixedPosition) {
+                    return "left";
                 }
-                return !column.fixedPosition ? "left" : column.fixedPosition;
+
+                return column.fixedPosition;
             };
 
             var processExpandColumns = function(columns, expandColumns, type, columnIndex) {
@@ -1895,7 +1896,7 @@ module.exports = {
                             minWidth: null,
                             cellTemplate: !typeUtils.isDefined(column.groupIndex) ? column.cellTemplate : null,
                             headerCellTemplate: null,
-                            fixed: !isDefined(column.groupIndex) || !isDefined(isFixedFirstGroupColumn) ? isColumnFixing : isFixedFirstGroupColumn
+                            fixed: !isDefined(column.groupIndex) || !isFixedFirstGroupColumn ? isColumnFixing : true,
                         }, expandColumn, {
                             index: column.index,
                             type: column.type || GROUP_COMMAND_COLUMN_NAME

@@ -1,7 +1,7 @@
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     devices = require("core/devices"),
-    Template = require("ui/widget/jquery.template"),
+    Template = require("ui/widget/template"),
     Guid = require("core/guid"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),

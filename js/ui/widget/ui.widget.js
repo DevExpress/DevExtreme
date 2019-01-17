@@ -11,7 +11,7 @@ var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
     devices = require("../../core/devices"),
     DOMComponent = require("../../core/dom_component"),
-    Template = require("./jquery.template"),
+    Template = require("./template"),
     TemplateBase = require("./ui.template_base"),
     FunctionTemplate = require("./function_template"),
     EmptyTemplate = require("./empty_template"),
@@ -694,6 +694,10 @@ var Widget = DOMComponent.inherit({
         this._toggleFocusClass(false);
         $element.removeAttr("tabIndex");
 
+        this._disposeKeyboardProcessor();
+    },
+
+    _disposeKeyboardProcessor() {
         if(this._keyboardProcessor) {
             this._keyboardProcessor.dispose();
             delete this._keyboardProcessor;

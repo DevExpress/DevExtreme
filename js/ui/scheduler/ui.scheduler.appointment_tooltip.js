@@ -166,17 +166,17 @@ var appointmentTooltip = {
     },
 
     _getDeleteButton: function(appointmentData, singleAppointmentData) {
-        var that = this;
-        return (new Button($("<div>").addClass(APPOINTMENT_TOOLTIP_DELETE_BUTTONS_CLASS), {
+        var button = new Button($("<div>").addClass(APPOINTMENT_TOOLTIP_DELETE_BUTTONS_CLASS), {
             icon: "trash",
             onClick: function() {
-                var startDate = that.instance.fire("getField", "startDate", singleAppointmentData);
-                that.instance._checkRecurringAppointment(appointmentData, singleAppointmentData, startDate, function() {
-                    that.instance.deleteAppointment(appointmentData);
-                }, true);
-                that.hide();
-            }
-        })).$element();
+                var startDate = this.instance._getStartDate(singleAppointmentData, true);
+                this.instance._checkRecurringAppointment(appointmentData, singleAppointmentData, startDate, function() {
+                    this.instance.deleteAppointment(appointmentData);
+                }.bind(this), true);
+                this.hide();
+            }.bind(this)
+        });
+        return button.$element();
     },
 
     _getOpenButton: function(appointmentData, singleAppointmentData) {

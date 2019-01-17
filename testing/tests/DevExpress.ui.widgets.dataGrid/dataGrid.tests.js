@@ -57,6 +57,7 @@ var $ = require("jquery"),
     typeUtils = require("core/utils/type"),
     devices = require("core/devices"),
     browser = require("core/utils/browser"),
+    version = require("core/version"),
     gridCore = require("ui/data_grid/ui.data_grid.core"),
     gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
     DataSource = require("data/data_source/data_source").DataSource,
@@ -446,6 +447,29 @@ QUnit.test("Horizontal scrollbar should not be shown if container height is not 
 
     // assert
     assert.strictEqual(dataGrid.getScrollbarWidth(true), 0);
+});
+
+// T703649
+QUnit.test("Fixed and main table should have same scroll top if showScrollbar is always", function(assert) {
+    // act
+    var dataGrid = createDataGrid({
+        height: 200,
+        dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+        loadingTimeout: undefined,
+        scrolling: {
+            useNative: false,
+            showScrollbar: "always"
+        },
+        columns: [{ dataField: "column1", fixed: true }, "column2"]
+    });
+
+    var scrollable = dataGrid.getScrollable();
+
+    scrollable.scrollTo({ y: 10000 });
+
+    // assert
+    assert.ok(scrollable.scrollTop() > 0, "content is scrolled");
+    assert.strictEqual(scrollable.scrollTop(), $(scrollable.element()).children(".dx-datagrid-content-fixed").scrollTop(), "scroll top are same for main and fixed table");
 });
 
 QUnit.test("noDataText option", function(assert) {
@@ -3046,6 +3070,247 @@ QUnit.test("Enable rows hover, row position and focused row", function(assert) {
     assert.ok($firstRow.hasClass(DX_STATE_HOVER_CLASS), "row has hover class");
 });
 
+QUnit.testInActiveWindow("Focused row should be visible if page size has height more than scrollable container", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        rect,
+        rowsViewRect,
+        data = [
+            { name: "Alex", phone: "111111", room: 6 },
+            { name: "Dan", phone: "2222222", room: 5 },
+            { name: "Ben", phone: "333333", room: 4 },
+            { name: "Sean", phone: "4545454", room: 3 },
+            { name: "Smith", phone: "555555", room: 2 },
+            { name: "Zeb", phone: "6666666", room: 1 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 100,
+            dataSource: data,
+            keyExpr: "name",
+            focusedRowEnabled: true
+        }).dxDataGrid("instance"),
+        rowsView = dataGrid.getView("rowsView");
+
+    // act
+    dataGrid.navigateToRow("Smith");
+    clock.tick();
+
+    // assert
+    assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
+    rect = rowsView.getRow(4)[0].getBoundingClientRect();
+    rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+
+    clock.restore();
+});
+
+QUnit.test("Focused row should be visible in virtual scrolling mode", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        rect,
+        rowsViewRect,
+        data = [
+            { name: "Alex", phone: "111111", room: 6 },
+            { name: "Dan", phone: "2222222", room: 5 },
+            { name: "Ben", phone: "333333", room: 4 },
+            { name: "Sean", phone: "4545454", room: 3 },
+            { name: "Smith", phone: "555555", room: 2 },
+            { name: "Zeb", phone: "6666666", room: 1 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 100,
+            dataSource: data,
+            keyExpr: "name",
+            focusedRowEnabled: true,
+            scrolling: { mode: "virtual" }
+        }).dxDataGrid("instance"),
+        rowsView = dataGrid.getView("rowsView");
+
+    // act
+    dataGrid.navigateToRow("Smith");
+    clock.tick();
+
+    // assert
+    assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
+    rect = rowsView.getRow(4)[0].getBoundingClientRect();
+    rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+
+    clock.restore();
+});
+
+QUnit.test("Focused row should be visible in infinite scrolling mode", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        rect,
+        rowsViewRect,
+        data = [
+            { name: "Alex", phone: "111111", room: 6 },
+            { name: "Dan", phone: "2222222", room: 5 },
+            { name: "Ben", phone: "333333", room: 4 },
+            { name: "Sean", phone: "4545454", room: 3 },
+            { name: "Smith", phone: "555555", room: 2 },
+            { name: "Zeb", phone: "6666666", room: 1 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 100,
+            dataSource: data,
+            keyExpr: "name",
+            focusedRowEnabled: true,
+            scrolling: { mode: "infinite" }
+        }).dxDataGrid("instance"),
+        rowsView = dataGrid.getView("rowsView");
+
+    // act
+    dataGrid.navigateToRow("Smith");
+    clock.tick();
+
+    // assert
+    assert.ok(rowsView.getRow(4).hasClass("dx-row-focused"), "Focused row");
+    rect = rowsView.getRow(4)[0].getBoundingClientRect();
+    rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+
+    clock.restore();
+});
+
+QUnit.test("The navigateToRow method should not affect vertical scrolling", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        rowsView,
+        rect,
+        rowsViewRect,
+        data = [
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal0', name: 'Ben', age: 24 },
+            { team: 'internal0', name: 'Dan', age: 23 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 80,
+            width: 200,
+            dataSource: data,
+            keyExpr: "name",
+            paging: { pageSize: 2 },
+            pager: { visible: false },
+            columnResizingMode: "widget",
+            columns: [
+                { dataField: "team", width: 150 },
+                { dataField: "name", width: 150 },
+                { dataField: "age", width: 150 },
+            ]
+        }).dxDataGrid("instance"),
+        keyboardController = dataGrid.getController("keyboardNavigation");
+
+    // act
+    dataGrid.navigateToRow("Zeb");
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.pageIndex(), 2, "Page index");
+    assert.equal(keyboardController.getVisibleRowIndex(), 1, "Visible row index");
+
+    rowsView = dataGrid.getView("rowsView");
+    rect = rowsView.getRow(1)[0].getBoundingClientRect();
+    rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+    assert.equal(rowsView.getScrollable().scrollLeft(), 0, "Scroll left");
+
+    clock.restore();
+});
+
+QUnit.test("Test navigateToRow method if virtual scrolling", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        rowsView,
+        rect,
+        rowsViewRect,
+        data = [
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal0', name: 'Ben', age: 24 },
+            { team: 'internal0', name: 'Dan', age: 23 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 80,
+            dataSource: data,
+            keyExpr: "name",
+            paging: { pageSize: 2 },
+            scrolling: {
+                mode: "virtual",
+                useNative: false
+            }
+        }).dxDataGrid("instance"),
+        keyboardController = dataGrid.getController("keyboardNavigation");
+
+    // act
+    dataGrid.navigateToRow("Zeb");
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.pageIndex(), 2, "Page index");
+    assert.equal(keyboardController.getVisibleRowIndex(), 5, "Visible row index");
+
+    rowsView = dataGrid.getView("rowsView");
+    rect = rowsView.getRow(5)[0].getBoundingClientRect();
+    rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+
+    clock.restore();
+});
+
+QUnit.test("Test navigateToRow method if paging", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        rowsView,
+        rect,
+        rowsViewRect,
+        data = [
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal0', name: 'Ben', age: 24 },
+            { team: 'internal0', name: 'Dan', age: 23 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 80,
+            dataSource: data,
+            keyExpr: "name",
+            paging: { pageSize: 2 },
+            pager: { visible: false }
+        }).dxDataGrid("instance"),
+        keyboardController = dataGrid.getController("keyboardNavigation");
+
+    // act
+    dataGrid.navigateToRow("Zeb");
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.pageIndex(), 2, "Page index");
+    assert.equal(keyboardController.getVisibleRowIndex(), 1, "Visible row index");
+
+    rowsView = dataGrid.getView("rowsView");
+    rect = rowsView.getRow(1)[0].getBoundingClientRect();
+    rowsViewRect = rowsView.element()[0].getBoundingClientRect();
+
+    assert.ok(rect.top > rowsViewRect.top, "focusedRow.Y > rowsView.Y");
+    assert.equal(rowsViewRect.bottom, rect.bottom, "focusedRow.bottom === rowsView.bottom");
+
+    clock.restore();
+});
+
 QUnit.test("Paging should not raise the exception if OData and a group row was focused", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers(),
@@ -3098,7 +3363,6 @@ QUnit.test("DataGrid should not scroll back to the focused row after pageIndex c
     dataGrid = $("#dataGrid").dxDataGrid({
         height: 300,
         keyExpr: "id",
-        loadingTimeout1: undefined,
         dataSource: data,
         focusedRowEnabled: true,
         focusedRowIndex: 3,
@@ -3530,6 +3794,34 @@ QUnit.test("virtual columns", function(assert) {
 
     // assert
     assert.equal(dataGrid.$element().find(".dx-data-row").children().length, 6, "visible column count");
+});
+
+// T706583
+QUnit.test("grouping if columnRenderingMode is virtual, filterRow is visible and datetime column exists", function(assert) {
+    // arrange, act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: [{}],
+        loadingTimeout: undefined,
+        scrolling: {
+            columnRenderingMode: "virtual"
+        },
+        columnWidth: 100,
+        width: 500,
+        filterRow: {
+            visible: true
+        },
+        columns: [{
+            dataField: "c1",
+            dataType: "datetime"
+        },
+        "c2", "c3", "c4", "c5", "c6"]
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.columnOption("c2", "groupIndex", 0);
+
+    // assert
+    assert.equal(dataGrid.getVisibleColumns()[0].type, "groupExpand", "grouping is applied");
 });
 
 QUnit.test("visible items should be rendered if virtual scrolling and preload are enabled", function(assert) {
@@ -5520,6 +5812,7 @@ QUnit.test("Error on loading", function(assert) {
 QUnit.test("Raise error if key field is missed", function(assert) {
     // act
     var clock = sinon.useFakeTimers(),
+        errorUrl = "http://js.devexpress.com/error/" + version.split(".").slice(0, 2).join("_") + "/E1046",
         dataGrid = createDataGrid({
             columns: ["field1"],
             keyExpr: "ID",
@@ -5532,6 +5825,8 @@ QUnit.test("Raise error if key field is missed", function(assert) {
     var $errorRow = $($(dataGrid.$element()).find(".dx-error-row"));
     assert.equal($errorRow.length, 1, "error row is shown");
     assert.equal($errorRow.find(".dx-error-message").text().slice(0, 5), "E1046", "error number");
+
+    assert.equal($errorRow.find(".dx-error-message > a").attr("href"), errorUrl, "Url error code");
     clock.restore();
 });
 
@@ -6453,6 +6748,62 @@ QUnit.test("scroll position should not be changed after refresh", function(asser
 
     // assert
     assert.roughEqual(dataGrid.getScrollable().scrollTop(), 100, 1.1, "scroll top is not changed");
+});
+
+// T699304
+QUnit.test("scroll should works correctly if row height and totalCount are large", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers();
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 500,
+        dataSource: {
+            load: function(options) {
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    var items = [];
+
+                    for(var i = options.skip; i < options.skip + options.take; i++) {
+                        items.push({ id: i + 1 });
+                    }
+                    d.resolve({ data: items, totalCount: 1000000 });
+                });
+
+                return d;
+            }
+        },
+        remoteOperations: true,
+        loadingTimeout: undefined,
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            timeout: 0,
+            updateTimeout: 0,
+            useNative: false
+        },
+        paging: {
+            pageSize: 100
+        },
+        onRowPrepared: function(e) {
+            if(e.rowType === "data") {
+                $(e.rowElement).get(0).style.height = "200px";
+            }
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    clock.tick(1000);
+    dataGrid.getScrollable().scrollTo(100000);
+    clock.tick(1000);
+
+    // assert
+    var topVisibleRowData = dataGrid.getTopVisibleRowData();
+    var visibleRows = dataGrid.getVisibleRows();
+
+    assert.ok(topVisibleRowData.id > 1, "top visible row data is not first");
+    assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id > 3, "rows in viewport are rendered");
+
+    clock.restore();
 });
 
 QUnit.module("Rendered on server", {

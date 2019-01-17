@@ -728,6 +728,89 @@ QUnit.test('Not Load pageSize from state when scrolling mode is virtual', functi
     assert.strictEqual(this.dataController.items().length, 3);
 });
 
+QUnit.test('Load pageSize from state when scrolling mode is virtual and pager.visible, pager.showPageSizeSelector is set', function(assert) {
+    // arrange, act
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return { pageSize: 2 };
+            },
+            customSave: function() {
+            }
+        },
+        scrolling: { mode: "virtual" },
+        loadingTimeout: null,
+        dataSource: {
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]
+        },
+        pager: {
+            visible: true,
+            showPageSizeSelector: true
+        }
+    });
+
+    // assert
+    assert.strictEqual(this.dataController.pageSize(), 2);
+    assert.strictEqual(this.dataController.items().length, 4);
+});
+
+QUnit.test('Load pageSize from state when scrolling mode is infinite and pager.visible, pager.showPageSizeSelector is set', function(assert) {
+    // arrange, act
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return { pageSize: 2 };
+            },
+            customSave: function() {
+            }
+        },
+        scrolling: { mode: "infinite" },
+        loadingTimeout: null,
+        dataSource: {
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }]
+        },
+        pager: {
+            visible: true,
+            showPageSizeSelector: true
+        }
+    });
+
+    // assert
+    assert.strictEqual(this.dataController.pageSize(), 2);
+    assert.strictEqual(this.dataController.items().length, 2);
+});
+
+QUnit.test('Not Load pageSize from state when scrolling mode is virtual and pager.visible is not set, pager.showPageSizeSelector is set', function(assert) {
+    // arrange, act
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return { pageSize: 2 };
+            },
+            customSave: function() {
+            }
+        },
+        scrolling: { mode: "infinite" },
+        loadingTimeout: null,
+        dataSource: {
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }]
+        },
+        pager: {
+            showPageSizeSelector: true
+        }
+    });
+
+    // assert
+    assert.strictEqual(this.dataController.pageSize(), 20);
+    assert.strictEqual(this.dataController.items().length, 3);
+});
+
 QUnit.test('Load allowedPageSizes from state', function(assert) {
     // arrange, act
     this.setupDataGridModules({

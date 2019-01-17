@@ -444,7 +444,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     // TODO: implement these functions
     _initSelectedItems: commonUtils.noop,
-    _syncSelectionOptions: commonUtils.noop,
+    _syncSelectionOptions: commonUtils.asyncNoop,
 
     _fireSelectionChanged: function() {
         var selectionChangePromise = this._selectionChangePromise;

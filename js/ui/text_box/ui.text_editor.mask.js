@@ -1,17 +1,19 @@
 var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
     caret = require("./utils.caret"),
     domUtils = require("../../core/utils/dom"),
-    focused = require("../widget/selectors").focused,
-    isDefined = require("../../core/utils/type").isDefined,
-    stringUtils = require("../../core/utils/string"),
-    inArray = require("../../core/utils/array").inArray,
-    extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
+    eventUtils = require("../../events/utils"),
+    eventsEngine = require("../../events/core/events_engine"),
+    extend = require("../../core/utils/extend").extend,
+    focused = require("../widget/selectors").focused,
+    inArray = require("../../core/utils/array").inArray,
+    isDefined = require("../../core/utils/type").isDefined,
     messageLocalization = require("../../localization/message"),
-    TextEditorBase = require("./ui.text_editor.base"),
+    noop = require("../../core/utils/common").noop,
+    stringUtils = require("../../core/utils/string"),
+    wheelEvent = require("../../events/core/wheel"),
     MaskRules = require("./ui.text_editor.mask.rule"),
-    eventUtils = require("../../events/utils");
+    TextEditorBase = require("./ui.text_editor.base");
 
 var stubCaret = function() {
     return {};
@@ -139,9 +141,37 @@ var TextEditorMask = TextEditorBase.inherit({
         this.callBase();
     },
 
+    _attachMouseWheelEventHandlers: function() {
+        var hasMouseWheelHandler = this._onMouseWheel !== noop;
+
+        if(!hasMouseWheelHandler) {
+            return;
+        }
+
+        var input = this._input();
+        var eventName = eventUtils.addNamespace(wheelEvent.name, this.NAME);
+        var mouseWheelAction = this._createAction((function(e) {
+            if(focused(input)) {
+                var dxEvent = e.event;
+
+                this._onMouseWheel(dxEvent);
+                dxEvent.preventDefault();
+                dxEvent.stopPropagation();
+            }
+        }).bind(this));
+
+        eventsEngine.off(input, eventName);
+        eventsEngine.on(input, eventName, function(e) {
+            mouseWheelAction({ event: e });
+        });
+    },
+
+    _onMouseWheel: noop,
+
     _render: function() {
         this.callBase();
         this._renderMask();
+        this._attachMouseWheelEventHandlers();
     },
 
     _renderHiddenElement: function() {
