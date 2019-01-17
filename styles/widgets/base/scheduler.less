@@ -1119,7 +1119,7 @@
         .dx-scheduler-group-row {
             .flex-container(row, nowrap);
 
-            flex: 1
+            flex-grow: 1;
         }
 
         .dx-scheduler-group-header {
@@ -2431,8 +2431,8 @@
         
         .dx-scheduler-group-row {
             .flex-container(row, nowrap);
-             flex: 1
-         }	
+            flex-grow: 1;
+        }
 
         .dx-scheduler-group-row:before {
             display: none;
@@ -2446,7 +2446,7 @@
             text-align: center;
             border-bottom: 2px solid @SCHEDULER_BASE_BORDER_COLOR;
             padding: 0;
-            overflow: hidden;	            
+            overflow: hidden;
             width: 100%;
 
             border-right: none;
@@ -2471,7 +2471,7 @@
                 line-height: normal;
             }
         }
-        
+
         &[dx-group-column-count='2'], &[dx-group-column-count='3'] {
             .dx-scheduler-group-header:last-child {
                 font-weight: normal;
