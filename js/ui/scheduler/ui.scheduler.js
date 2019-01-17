@@ -2123,7 +2123,7 @@ var Scheduler = Widget.inherit({
 
     _popupContent: function(appointmentData, processTimeZone) {
         var $popupContent = this._popup.$content();
-        this._updateAppointmentForm(appointmentData, $popupContent, processTimeZone);
+        this._createOrUpdateForm(appointmentData, processTimeZone, $popupContent);
 
         return $popupContent;
     },
@@ -2156,7 +2156,7 @@ var Scheduler = Widget.inherit({
         );
     },
 
-    _updateAppointmentForm: function(appointmentData, $content, processTimeZone) {
+    _createOrUpdateForm: function(appointmentData, processTimeZone, $content) {
         var allDay = this.fire("getField", "allDay", appointmentData),
             startDate = this.fire("getField", "startDate", appointmentData),
             endDate = this.fire("getField", "endDate", appointmentData);
@@ -2722,7 +2722,7 @@ var Scheduler = Widget.inherit({
         });
 
         if(this._appointmentForm) {
-            this._updateAppointmentForm(data, undefined, processTimeZone);
+            this._createOrUpdateForm(data, processTimeZone);
         } else {
             this._initDynamicPopupTemplate(data, processTimeZone);
             this._popup.option(this._popupConfig(data));
