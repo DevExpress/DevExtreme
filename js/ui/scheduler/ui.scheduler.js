@@ -2721,14 +2721,13 @@ var Scheduler = Widget.inherit({
             showCloseButton: showCloseButton
         });
 
-        if(!this._appointmentForm) {
+        if(this._appointmentForm) {
+            this._updateAppointmentForm(data, undefined, processTimeZone);
+        } else {
             this._initDynamicPopupTemplate(data, processTimeZone);
             this._popup.option(this._popupConfig(data));
-        } else {
-            if(this._appointmentForm) {
-                this._updateAppointmentForm(data, undefined, processTimeZone);
-            }
         }
+
         this._popup.show();
     },
 
