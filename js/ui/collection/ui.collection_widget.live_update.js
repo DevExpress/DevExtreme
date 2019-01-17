@@ -64,6 +64,7 @@ export default CollectionWidget.inherit({
             let result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), this.keyOf.bind(this), this._isItemEquals);
             if(result) {
                 this._modifyByChanges(result, true);
+                this._renderEmptyMessage();
                 return true;
             } else {
                 this._refreshItemsCache();
@@ -131,6 +132,7 @@ export default CollectionWidget.inherit({
         changes.forEach(change => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
         this._renderedItemsCount = items.length;
         this._refreshItemsCache();
+        this._fireContentReadyAction();
     },
 
     _appendItemToContainer: function($container, $itemFrame, index) {

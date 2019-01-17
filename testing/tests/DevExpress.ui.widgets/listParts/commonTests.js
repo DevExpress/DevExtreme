@@ -1,23 +1,24 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config"),
-    fx = require("animation/fx"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    List = require("ui/list"),
-    executeAsyncMock = require("../../../helpers/executeAsyncMock.js"),
-    pointerMock = require("../../../helpers/pointerMock.js"),
-    KeyboardProcessor = require("ui/widget/ui.keyboard_processor"),
-    keyboardMock = require("../../../helpers/keyboardMock.js"),
-    registerComponent = require("core/component_registrator"),
-    DOMComponent = require("core/dom_component"),
-    holdEvent = require("events/hold"),
-    swipeEvents = require("events/swipe"),
-    ScrollView = require("ui/scroll_view"),
-    errors = require("ui/widget/ui.errors"),
-    themes = require("ui/themes"),
-    devices = require("core/devices");
+import $ from "jquery";
+import { DataSource } from "data/data_source/data_source";
+import { isRenderer } from "core/utils/type";
+import { noop } from "core/utils/common";
+import config from "core/config";
+import devices from "core/devices";
+import errors from "ui/widget/ui.errors";
+import executeAsyncMock from "../../../helpers/executeAsyncMock.js";
+import fx from "animation/fx";
+import holdEvent from "events/hold";
+import keyboardMock from "../../../helpers/keyboardMock.js";
+import pointerMock from "../../../helpers/pointerMock.js";
+import registerComponent from "core/component_registrator";
+import swipeEvents from "events/swipe";
+import themes from "ui/themes";
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
+import DOMComponent from "core/dom_component";
+import KeyboardProcessor from "ui/widget/ui.keyboard_processor";
+import List from "ui/list";
+import ScrollView from "ui/scroll_view";
 
 var LIST_ITEM_CLASS = "dx-list-item",
     LIST_GROUP_CLASS = "dx-list-group",
@@ -1093,6 +1094,35 @@ QUnit.test("dataSource change should save filter", function(assert) {
 });
 
 QUnit.module("selection", moduleSetup);
+
+QUnit.test("should select item from invisible page", (assert) => {
+    const clock = sinon.useFakeTimers();
+    const done = assert.async();
+
+    $("#list").dxList({
+        selectionMode: "single",
+        onSelectionChanged: (e) => {
+            assert.deepEqual(e.addedItems, ['Item5']);
+            done();
+        },
+        selectedItemKeys: 'Item5',
+        dataSource: {
+            pageSize: 3,
+            paginate: true,
+            store: new CustomStore({
+                load: ({ take }) => {
+                    const deferred = $.Deferred();
+
+                    setTimeout(() => deferred.resolve(['Item1', 'Item2', 'Item3', 'Item4', 'Item5', 'Item6'].slice(0, take)), 0);
+
+                    return deferred.promise();
+                }
+            })
+        }
+    });
+
+    clock.tick(0);
+});
 
 QUnit.test("selection should not be removed after second click if selectionMode is single", function(assert) {
     var $element = this.element.dxList({
@@ -2714,39 +2744,4 @@ QUnit.test("Delayed search value should be applied on the widget reset", functio
     assert.equal(instance.option("searchValue"), "test", "Correct option");
     assert.equal(searchBoxInstance._input().val(), "test", "Search input has the correct value");
     clock.restore();
-});
-
-QUnit.test("Search in items of grouped dataSource", function(assert) {
-    var $element = $("#list").dxList({
-            dataSource: [{ key: "a", items: [{ name: "1" }] }, { key: "b", items: [{ name: "2" }] }],
-            grouped: true,
-            searchEnabled: true,
-            searchExpr: "name"
-        }),
-        instance = $element.dxList("instance"),
-        expectedValue = { key: "a", items: [{ name: "1", key: "a" }] };
-
-    assert.equal(instance.getDataSource().searchExpr(), "name", "dataSource has correct searchExpr");
-
-    instance.option("searchValue", "1");
-
-    assert.deepEqual(instance.option("items")[0], expectedValue, "items");
-});
-
-QUnit.test("Search in items of grouped dataSource with simple items", function(assert) {
-    var $element = $("#list").dxList({
-            dataSource: [{ key: "a", items: ["1", "2"] }],
-            grouped: true,
-            searchEnabled: true
-        }),
-        instance = $element.dxList("instance"),
-        expectedItems = [{ key: "a", items: [ { text: "1", key: "a" }, { text: "2", key: "a" }] }],
-        expectedValue = { key: "a", items: [ { text: "1", key: "a" }] };
-
-    assert.deepEqual(instance.option("items"), expectedItems, "items have correct structure");
-    assert.equal(instance.getDataSource().searchExpr(), "text", "dataSource has correct searchExpr");
-
-    instance.option("searchValue", "1");
-
-    assert.deepEqual(instance.option("items")[0], expectedValue, "items");
 });

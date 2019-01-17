@@ -707,7 +707,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         return this._itemContainer().is(':empty');
     },
 
-    _syncSelectionOptions: commonUtils.noop,
+    _syncSelectionOptions: commonUtils.asyncNoop,
 
     _optionChanged: function(args) {
         if(this._cancelOptionChange === args.name) {

@@ -989,7 +989,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         for(var i = 0; i < data.length; i++) {
             var groups = data[i].groups,
-                groupIndex = groups ? this._getGroupIndexByResourceId(groups) : 0,
+                groupIndex = this.option("groups").length && groups ? this._getGroupIndexByResourceId(groups) : 0,
                 allDay = !!(data[i].allDay),
                 coordinates = this.getCoordinatesByDate(data[i].startDate, groupIndex, allDay),
                 $cell = this._getCellByCoordinates(coordinates, groupIndex);
@@ -1736,6 +1736,12 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$groupTable.empty();
         delete this._hiddenInterval;
         delete this._interval;
+    },
+
+    _clean: function() {
+        eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+
+        this.callBase();
     },
 
     getWorkArea: function() {

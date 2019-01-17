@@ -294,6 +294,7 @@ var applyServerDecimalSeparator = function(value) {
 };
 
 var noop = function() {};
+var asyncNoop = function() { return new Deferred().resolve().promise(); };
 
 var grep = function(elements, checkFunction, invert) {
     var result = [],
@@ -336,4 +337,5 @@ exports.escapeRegExp = escapeRegExp;
 exports.applyServerDecimalSeparator = applyServerDecimalSeparator;
 
 exports.noop = noop;
+exports.asyncNoop = asyncNoop;
 exports.grep = grep;

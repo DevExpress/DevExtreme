@@ -593,6 +593,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                 $content = $("<div>").addClass(contentClass);
 
                 eventsEngine.on($content, "scroll", function(e) {
+                    clearTimeout(that._fixedScrollTimeout);
                     that._fixedScrollTimeout = setTimeout(function() {
                         scrollTop = $(e.target).scrollTop();
                         scrollable.scrollTo({ y: scrollTop });

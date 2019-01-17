@@ -2,61 +2,42 @@ import $ from "jquery";
 import { isRenderer } from "core/utils/type";
 import devices from "core/devices";
 import config from "core/config";
+import renderer from "core/renderer";
 import fields from "../../../helpers/filterBuilderTestData.js";
 
 import "ui/filter_builder/filter_builder";
 import "ui/drop_down_box";
 import "ui/button";
 
-const
-    FILTER_BUILDER_CLASS = "dx-filterbuilder",
-    FILTER_BUILDER_ITEM_FIELD_CLASS = FILTER_BUILDER_CLASS + "-item-field",
-    FILTER_BUILDER_ITEM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-item-operation",
-    FILTER_BUILDER_ITEM_VALUE_CLASS = FILTER_BUILDER_CLASS + "-item-value",
-    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = FILTER_BUILDER_CLASS + "-item-value-text",
-    FILTER_BUILDER_OVERLAY_CLASS = FILTER_BUILDER_CLASS + "-overlay",
-    FILTER_BUILDER_GROUP_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-group-operation",
-    FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
-    FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
-    FILTER_BUILDER_RANGE_CLASS = FILTER_BUILDER_CLASS + "-range",
-    FILTER_BUILDER_RANGE_START_CLASS = FILTER_BUILDER_RANGE_CLASS + "-start",
-    FILTER_BUILDER_RANGE_END_CLASS = FILTER_BUILDER_RANGE_CLASS + "-end",
-    FILTER_BUILDER_RANGE_SEPARATOR_CLASS = FILTER_BUILDER_RANGE_CLASS + "-separator",
-    ACTIVE_CLASS = "dx-state-active",
-    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = FILTER_BUILDER_CLASS + "-menu-custom-operation",
-    TREE_VIEW_CLASS = "dx-treeview",
-    TREE_VIEW_ITEM_CLASS = TREE_VIEW_CLASS + "-item",
-    DISABLED_STATE_CLASS = "dx-state-disabled";
+import {
+    FILTER_BUILDER_ITEM_FIELD_CLASS,
+    FILTER_BUILDER_ITEM_OPERATION_CLASS,
+    FILTER_BUILDER_ITEM_VALUE_CLASS,
+    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS,
+    FILTER_BUILDER_OVERLAY_CLASS,
+    FILTER_BUILDER_GROUP_OPERATION_CLASS,
+    FILTER_BUILDER_IMAGE_ADD_CLASS,
+    FILTER_BUILDER_IMAGE_REMOVE_CLASS,
+    FILTER_BUILDER_RANGE_CLASS,
+    FILTER_BUILDER_RANGE_START_CLASS,
+    FILTER_BUILDER_RANGE_END_CLASS,
+    FILTER_BUILDER_RANGE_SEPARATOR_CLASS,
+    ACTIVE_CLASS,
+    FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS,
+    TREE_VIEW_CLASS,
+    TREE_VIEW_ITEM_CLASS,
+    DISABLED_STATE_CLASS
+} from "./constants.js";
 
-var getSelectedMenuText = function() {
-    return $(".dx-treeview-node.dx-state-selected").text();
-};
-
-var getFilterBuilderGroups = function(container) {
-    return container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS);
-};
-
-var getFilterBuilderItems = function(container) {
-    return container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
-};
-
-var clickByOutside = function() {
-    $("body").trigger("dxpointerdown"); // use dxpointerdown because T600142
-};
-
-var clickByValue = function(index) {
-    $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).eq(index || 0).trigger("dxclick");
-};
-
-var selectMenuItem = function(menuItemIndex) {
-    $(`.${TREE_VIEW_ITEM_CLASS}`).eq(menuItemIndex).trigger("dxclick");
-};
-
-var clickByButtonAndSelectMenuItem = function($button, menuItemIndex) {
-    $button.trigger("dxclick");
-    selectMenuItem(menuItemIndex);
-    $(`.${TREE_VIEW_ITEM_CLASS}`).eq(menuItemIndex).trigger("dxclick");
-};
+import {
+    getSelectedMenuText,
+    getFilterBuilderGroups,
+    getFilterBuilderItems,
+    clickByOutside,
+    clickByValue,
+    selectMenuItem,
+    clickByButtonAndSelectMenuItem
+} from "./helpers.js";
 
 QUnit.module("Rendering", function() {
     QUnit.test("field menu test", function(assert) {
@@ -252,6 +233,38 @@ QUnit.module("Rendering", function() {
 
         $operationButton.trigger("dxclick");
         assert.equal(getSelectedMenuText(), "Is greater than");
+    });
+
+    // T704561
+    QUnit.test("check menu correct maxHeight & position", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["Date", "=", ""]
+            ],
+            fields: fields
+        });
+
+        var scrollTop = sinon.stub(renderer.fn, "scrollTop").returns(100),
+            windowHeight = sinon.stub(renderer.fn, "innerHeight").returns(300),
+            offset = sinon.stub(renderer.fn, "offset").returns({ left: 0, top: 200 });
+
+        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        $operationButton.trigger("dxclick");
+
+        try {
+            var popup = container.find(".dx-overlay").dxPopup("instance"),
+                maxHeight = popup.option("maxHeight"),
+                positionCollision = popup.option("position.collision");
+
+            assert.ok(Math.floor(maxHeight()) < windowHeight(), "maxHeight is correct");
+            assert.equal(positionCollision, "flip", "collision is correct");
+        } finally {
+            scrollTop.restore();
+            windowHeight.restore();
+            offset.restore();
+        }
     });
 
     // T588221

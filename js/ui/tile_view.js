@@ -58,6 +58,7 @@ var TileView = CollectionWidget.inherit({
              * @name dxTileViewOptions.items
              * @type Array<string, dxTileViewItem, object>
              * @fires dxTileViewOptions.onOptionChanged
+             * @inheritdoc
              */
 
             /**
@@ -535,6 +536,11 @@ var TileView = CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case "items":
+                this.callBase(args);
+                this._renderGeometry();
+                this._updateScrollView();
+                break;
             case "showScrollbar":
                 this._initScrollView();
                 break;

@@ -1,7 +1,7 @@
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     devices = require("core/devices"),
-    Template = require("ui/widget/jquery.template"),
+    Template = require("ui/widget/template"),
     Guid = require("core/guid"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
@@ -590,26 +590,6 @@ QUnit.test("dropDownList should search for a pasted value", function(assert) {
     this.clock.tick(600);
 
     assert.equal(searchSpy.callCount, 1, "widget searched for a suitable values");
-});
-
-QUnit.test("dropDownList should search in grouped DataSource", function(assert) {
-    var $element = $("#dropDownList").dxDropDownList({
-            grouped: true,
-            searchEnabled: true,
-            valueExpr: "name",
-            displayExpr: "name",
-            searchExpr: "name",
-            dataSource: [{ key: "a", items: [{ name: "1" }] }, { key: "b", items: [{ name: "2" }] }]
-        }),
-        instance = $element.dxDropDownList("instance"),
-        $input = $element.find("input"),
-        kb = keyboardMock($input),
-        expectedValue = { key: "b", items: [{ name: "2", key: "b" }] };
-
-    kb.type("2");
-    this.clock.tick(500);
-
-    assert.deepEqual(instance.option("items")[0], expectedValue, "widget searched for a suitable values");
 });
 
 QUnit.test("valueExpr should not be passed to the list if it is 'this'", function(assert) {

@@ -408,7 +408,11 @@ var Popover = Popup.inherit({
         this._togglePositionClass("dx-position-" + positionSide);
         this._toggleFlippedClass(resultLocation.h.flip, resultLocation.v.flip);
 
-        this._renderArrowPosition(positionSide);
+        var isArrowVisible = this._isHorizontalSide() || this._isVerticalSide();
+
+        if(isArrowVisible) {
+            this._renderArrowPosition(positionSide);
+        }
     },
 
     _resetOverlayPosition: function() {
@@ -448,14 +452,17 @@ var Popover = Popup.inherit({
         var offset = commonUtils.pairToObject(this._position.offset || "");
         var hOffset = offset.h;
         var vOffset = offset.v;
+        var isVerticalSide = this._isVerticalSide();
+        var isHorizontalSide = this._isHorizontalSide();
 
-        var isPopoverInside = this._isPopoverInside();
-        var sign = (isPopoverInside ? -1 : 1) * WEIGHT_OF_SIDES[this._positionSide];
-        var arrowSizeCorrection = this._getContentBorderWidth(this._positionSide);
-        if(this._isVerticalSide()) {
-            vOffset += sign * (this._$arrow.height() - arrowSizeCorrection);
-        } else if(this._isHorizontalSide()) {
-            hOffset += sign * (this._$arrow.width() - arrowSizeCorrection);
+        if(isVerticalSide || isHorizontalSide) {
+            var isPopoverInside = this._isPopoverInside();
+            var sign = (isPopoverInside ? -1 : 1) * WEIGHT_OF_SIDES[this._positionSide];
+            var arrowSize = isVerticalSide ? this._$arrow.height() : this._$arrow.width();
+            var arrowSizeCorrection = this._getContentBorderWidth(this._positionSide);
+            var arrowOffset = sign * (arrowSize - arrowSizeCorrection);
+
+            isVerticalSide ? vOffset += arrowOffset : hOffset += arrowOffset;
         }
 
         return extend({}, this._position, { offset: hOffset + " " + vOffset });

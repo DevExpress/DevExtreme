@@ -46,6 +46,18 @@ var getBodies = function($table) {
     return $table.children("tbody").not(".dx-header").not(".dx-footer");
 };
 
+var correctCount = function(items, count, fromEnd, isItemCountableFunc) {
+    var countCorrection = (fromEnd ? 0 : 1);
+    for(var i = 0; i < count + countCorrection; i++) {
+        var item = items[fromEnd ? items.length - 1 - i : i];
+        if(item && !isItemCountableFunc(item, i === count)) {
+            count++;
+        }
+    }
+    return count;
+};
+
+
 var VirtualScrollingDataSourceAdapterExtender = (function() {
     var updateLoading = function(that) {
         var beginPageIndex = that._virtualScrollController.beginPageIndex(-1);
@@ -227,6 +239,10 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
                 }
             }
             return that.callBase.apply(that, arguments);
+        },
+        dispose: function() {
+            this._virtualScrollController.dispose();
+            this.callBase.apply(this, arguments);
         }
     };
 
@@ -780,12 +796,16 @@ module.exports = {
 
                         that._visibleItems = [];
 
+                        var isItemCountable = function(item) {
+                            return item.rowType === "data" || item.rowType === "group";
+                        };
+
                         that._rowsScrollController = new virtualScrollingCore.VirtualScrollController(that.component, {
                             pageSize: function() {
                                 return that.getRowPageSize();
                             },
                             totalItemsCount: function() {
-                                return isVirtualMode(that) ? that.totalItemsCount() : that._items.length;
+                                return isVirtualMode(that) ? that.totalItemsCount() : that._items.filter(isItemCountable).length;
                             },
                             hasKnownLastPage: function() {
                                 return true;
@@ -810,7 +830,7 @@ module.exports = {
                                 }
 
                                 if(!that._rowsScrollController._dataSource.items().length && this.totalItemsCount()) return;
-                                that._rowsScrollController.handleDataChanged(function(change) {
+                                that._rowsScrollController.handleDataChanged(change => {
                                     change = change || {};
                                     change.changeType = change.changeType || "refresh";
                                     change.items = change.items || that._visibleItems;
@@ -824,9 +844,12 @@ module.exports = {
                             updateLoading: function() {
                             },
                             itemsCount: function() {
-                                return that._rowsScrollController._dataSource.items().length;
+                                return that._rowsScrollController._dataSource.items().filter(isItemCountable).length;
                             },
-                            items: function() {
+                            correctCount: function(items, count, fromEnd) {
+                                return correctCount(items, count, fromEnd, isItemCountable);
+                            },
+                            items: function(countableOnly) {
                                 var dataSource = that.dataSource(),
                                     virtualItemsCount = dataSource && dataSource.virtualItemsCount(),
                                     begin = virtualItemsCount ? virtualItemsCount.begin : 0,
@@ -842,13 +865,15 @@ module.exports = {
                                 }
 
                                 if(skip) {
+                                    skip = this.correctCount(result, skip);
                                     result = result.slice(skip);
                                 }
                                 if(take) {
+                                    take = this.correctCount(result, take);
                                     result = result.slice(0, take);
                                 }
 
-                                return result;
+                                return countableOnly ? result.filter(isItemCountable) : result;
                             },
                             viewportItems: function(items) {
                                 if(items) {
@@ -916,14 +941,11 @@ module.exports = {
                             removeCount = change.removeCount;
 
                         if(removeCount) {
-                            for(var i = 0; i < removeCount + 1; i++) {
-                                var item = that._items[changeType === "prepend" ? that._items.length - 1 - i : i];
-                                if(item && item.rowType !== "data") {
-                                    if(item.rowType !== "group" || (!this._dataSource.isGroupItemCountable(item.data) && (changeType === "prepend" || i < removeCount))) {
-                                        removeCount++;
-                                    }
-                                }
-                            }
+                            var fromEnd = changeType === "prepend";
+                            removeCount = correctCount(that._items, removeCount, fromEnd, function(item, isNextAfterLast) {
+                                return item.rowType === "data" || (item.rowType === "group" && (that._dataSource.isGroupItemCountable(item.data) || isNextAfterLast));
+                            });
+
                             change.removeCount = removeCount;
                         }
 
@@ -1043,6 +1065,13 @@ module.exports = {
 
                         var dataSource = this._dataSource;
                         return dataSource && dataSource.getContentOffset.apply(dataSource, arguments);
+                    },
+                    dispose: function() {
+                        var rowsScrollController = this._rowsScrollController;
+
+                        rowsScrollController && rowsScrollController.dispose();
+
+                        this.callBase.apply(this, arguments);
                     }
                 };
 

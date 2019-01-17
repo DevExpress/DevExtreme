@@ -2353,9 +2353,14 @@ module.exports = {
                     this._editingController.correctEditRowIndex(getRowIndexCorrection);
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    var editingController = this.getController("editing");
+                    var editingController = this.getController("editing"),
+                        isRowEditMode = editingController.isRowEditMode();
 
-                    if(oldItem.rowType === newItem.rowType && editingController.isRowEditMode() && editingController.isEditRow(rowIndex)) {
+                    if(oldItem.inserted !== newItem.inserted || oldItem.removed !== newItem.removed || (isRowEditMode && oldItem.isEditing !== newItem.isEditing)) {
+                        return;
+                    }
+
+                    if(oldItem.rowType === newItem.rowType && isRowEditMode && editingController.isEditRow(rowIndex)) {
                         return isLiveUpdate ? [] : undefined;
                     }
 
@@ -2404,7 +2409,6 @@ module.exports = {
                         each($cellElements, function(index, cellElement) {
                             if($(cellElement).find($cell).length) {
                                 cellIndex = index;
-                                return false;
                             }
                         });
 
@@ -2590,6 +2594,13 @@ module.exports = {
                     cellOptions.isEditing = this._editingController.isEditCell(cellOptions.rowIndex, cellOptions.columnIndex);
 
                     return cellOptions;
+                },
+                _renderCellContent: function($cell, options) {
+                    if(options.rowType === "data" && getEditMode(this) === EDIT_MODE_POPUP && options.row.visible === false) {
+                        return;
+                    }
+
+                    this.callBase.apply(this, arguments);
                 },
                 /**
                  * @name GridBaseMethods.cellValue

@@ -13220,6 +13220,58 @@ QUnit.testInActiveWindow("Form should repaint after change data of the column wi
     assert.ok($popupContent.find(".dx-texteditor").eq(1).hasClass("dx-state-focused"), "second cell is focused");
 });
 
+// T702664
+QUnit.testInActiveWindow("Form should restore focus to item in group after change data of the column with 'setCellValue' option", function(assert) {
+    // arrange
+    var that = this,
+        $popupContent,
+        $inputElement,
+        callSetCellValue;
+
+    that.columns[1] = {
+        dataField: "age",
+        setCellValue: function(rowData, value) {
+            callSetCellValue = true;
+            rowData.lastName = "Test2";
+            this.defaultSetCellValue(rowData, value);
+        }
+    };
+
+    that.options.editing.form = {
+        items: [{
+            itemType: "group",
+            items: [
+                { dataField: "name" },
+                { dataField: "age" },
+                { dataField: "lastName" },
+            ]
+        }]
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    that.editRow(0);
+    that.clock.tick(500);
+    that.preparePopupHelpers();
+    $popupContent = $(that.editPopupInstance.content());
+
+    // assert
+    assert.ok($popupContent.find(".dx-texteditor").first().hasClass("dx-state-focused"), "first cell is focused");
+
+    // act
+    $inputElement = $popupContent.find("input").not("[type='hidden']").eq(1);
+    $inputElement.focus();
+    $inputElement.val(666);
+    $($inputElement).trigger("change");
+    that.clock.tick(500);
+
+    // assert
+    assert.ok(callSetCellValue, "setCellValue is called");
+    assert.strictEqual($popupContent.find("input").not("[type='hidden']").eq(2).val(), "Test2", "value of the third cell");
+    assert.ok($popupContent.find(".dx-texteditor").eq(1).hasClass("dx-state-focused"), "second cell is focused");
+});
+
 // T613963
 QUnit.testInActiveWindow("Form should repaint after change lookup dataSource", function(assert) {
     // arrange
@@ -13390,4 +13442,27 @@ QUnit.test("No exceptions on editing data when validationRules and editCellTempl
         fx.off = false;
         errors.log.restore();
     }
+});
+
+QUnit.test("The editCellTemplate should be called once for the form when adding a new row", function(assert) {
+    // arrange
+    var editCellTemplate = sinon.spy(function() {
+        return $("<div class='myEditor'/>").text("<input />");
+    });
+
+    this.columns[0].editCellTemplate = editCellTemplate;
+
+    this.setupModules(this);
+    this.renderRowsView();
+
+    // act
+    this.addRow();
+    this.clock.tick();
+    this.preparePopupHelpers();
+    this.clock.tick();
+
+    // arrange
+    assert.strictEqual(editCellTemplate.callCount, 1, "editCellTemplate call count");
+    assert.strictEqual($(this.getRowElement(0)).find(".myEditor").length, 0, "row hasn't custom editor");
+    assert.strictEqual($(this.getEditPopupContent()).find(".myEditor").length, 1, "form has custom editor");
 });

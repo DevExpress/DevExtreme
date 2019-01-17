@@ -220,6 +220,7 @@ var Gallery = CollectionWidget.inherit({
              * @name dxGalleryOptions.items
              * @type Array<string, dxGalleryItem, object>
              * @fires dxGalleryOptions.onOptionChanged
+             * @inheritdoc
              */
 
             _itemAttributes: { role: "option" },

@@ -37,6 +37,7 @@ var TabPanel = MultiView.inherit({
              * @name dxTabPanelOptions.items
              * @type Array<string, dxTabPanelItem, object>
              * @fires dxTabPanelOptions.onOptionChanged
+             * @inheritdoc
              */
 
             /**
