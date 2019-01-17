@@ -13,7 +13,7 @@ var DEFAULT_PROTOCOL_VERSION = 2;
 
 var compileCriteria = (function() {
     var protocolVersion,
-        stringToLower,
+        forceLowerCase,
         fieldTypes;
 
     var createBinaryOperationFormatter = function(op) {
@@ -24,8 +24,7 @@ var compileCriteria = (function() {
 
     var createStringFuncFormatter = function(op, reverse) {
         return function(prop, val) {
-            var bag = [op, "("],
-                forceLowerCase = typeUtils.isDefined(stringToLower) ? stringToLower : config().stringToLower;
+            var bag = [op, "("];
 
             if(forceLowerCase) {
                 prop = prop.indexOf("tolower(") === -1 ? "tolower(" + prop + ")" : prop;
@@ -138,9 +137,9 @@ var compileCriteria = (function() {
         return compileBinary(criteria);
     };
 
-    return function(criteria, version, types, lowerCase) {
+    return function(criteria, version, types, stringToLower) {
         fieldTypes = types;
-        stringToLower = lowerCase;
+        forceLowerCase = typeUtils.isDefined(stringToLower) ? stringToLower : config().stringToLower;
         protocolVersion = version;
 
         return compileCore(criteria);
