@@ -399,7 +399,7 @@ function getFilterExpression(value, fields, customOperations, target) {
 
     if(isNegationGroup(value)) {
         let filterExpression = getFilterExpression(value[1], fields, customOperations, target);
-        return ["!", isCondition(filterExpression) || isNegationGroup(filterExpression) ? [filterExpression] : filterExpression];
+        return ["!", filterExpression];
     }
     let criteria = getGroupCriteria(value);
     if(isCondition(criteria)) {
