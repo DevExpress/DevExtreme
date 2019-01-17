@@ -69,6 +69,18 @@ var getContainerHeight = function(container) {
     return typeUtils.isWindow(container) ? container.innerHeight : container.offsetHeight;
 };
 
+var parseHeight = function(value, container) {
+    if(value.indexOf("px") > 0) {
+        value = parseInt(value.replace("px", ""));
+    } else if(value.indexOf("%") > 0) {
+        value = parseInt(value.replace("%", "")) * getContainerHeight(container) / 100;
+    } else if(!isNaN(value)) {
+        value = parseInt(value);
+    }
+
+    return value;
+};
+
 var getHeightWithOffset = function(value, offset, container) {
     if(!value) {
         return null;
@@ -78,14 +90,8 @@ var getHeightWithOffset = function(value, offset, container) {
         return offset ? null : value;
     }
 
-    if(typeof value === "string") {
-        if(value.indexOf("px") > 0) {
-            value = parseInt(value.replace("px", ""));
-        } else if(value.indexOf("%") > 0) {
-            value = parseInt(value.replace("%", "")) * getContainerHeight(container) / 100;
-        } else if(!isNaN(value)) {
-            value = parseInt(value);
-        }
+    if(typeUtils.isString(value)) {
+        value = parseHeight(value, container);
     }
 
     if(typeUtils.isNumeric(value)) {
