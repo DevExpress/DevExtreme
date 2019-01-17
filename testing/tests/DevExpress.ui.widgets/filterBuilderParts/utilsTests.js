@@ -711,7 +711,8 @@ QUnit.module("Convert to inner structure", function() {
                         ],
                         "and"
                     ]
-                ]
+                ],
+                "and"
             ]
         ]);
     });

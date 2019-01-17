@@ -354,7 +354,7 @@ function convertToInnerStructure(value, customOperations) {
     if(isNegationGroup(value)) {
         return ["!", isCondition(value[1])
             ? [convertToInnerCondition(value[1], customOperations), AND_GROUP_OPERATION]
-            : isNegationGroup(value[1]) ? [convertToInnerStructure(value[1], customOperations)] : convertToInnerGroup(value[1], customOperations)];
+            : isNegationGroup(value[1]) ? [convertToInnerStructure(value[1], customOperations), AND_GROUP_OPERATION] : convertToInnerGroup(value[1], customOperations)];
     }
     return convertToInnerGroup(value, customOperations);
 }
