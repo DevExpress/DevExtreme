@@ -572,7 +572,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        var textWasChanged = this._formattedValue !== text;
+        var textWasChanged = number.convertDigits(this._formattedValue, true) !== text;
         if(textWasChanged) {
             var value = this._tryParse(text, caret, "");
             if(typeUtils.isDefined(value)) {

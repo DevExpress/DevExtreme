@@ -654,6 +654,12 @@ QUnit.test("mask should work with arabic digit shaping", function(assert) {
 
         assert.equal(this.input.val(), "١٢٣٤");
         assert.equal(this.instance.option("value"), 1234);
+
+        this.keyboard
+            .keyDown(MINUS_KEY)
+            .type("-");
+
+        assert.equal(this.input.val(), "-١٢٣٤", "arabic minus should work");
     } finally {
         numberLocalization.resetInjection();
     }
