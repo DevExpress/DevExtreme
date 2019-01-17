@@ -2123,14 +2123,41 @@ var Scheduler = Widget.inherit({
 
     _popupContent: function(appointmentData, processTimeZone) {
         var $popupContent = this._popup.$content();
-        this._createAppointmentForm(appointmentData, $popupContent, processTimeZone);
+        this._createOrUpdateForm(appointmentData, processTimeZone, $popupContent);
 
         return $popupContent;
     },
 
-    _createAppointmentForm: function(appointmentData, $content, processTimeZone) {
+    _createAppointmentForm: function(formData, $content) {
+        var allDay = this.fire("getField", "allDay", formData),
+            resources = this.option("resources");
+
+        AppointmentForm.prepareAppointmentFormEditors(allDay, {
+            textExpr: this._dataAccessors.expr.textExpr,
+            allDayExpr: this._dataAccessors.expr.allDayExpr,
+            startDateExpr: this._dataAccessors.expr.startDateExpr,
+            endDateExpr: this._dataAccessors.expr.endDateExpr,
+            descriptionExpr: this._dataAccessors.expr.descriptionExpr,
+            recurrenceRuleExpr: this._dataAccessors.expr.recurrenceRuleExpr,
+            startDateTimeZoneExpr: this._dataAccessors.expr.startDateTimeZoneExpr,
+            endDateTimeZoneExpr: this._dataAccessors.expr.endDateTimeZoneExpr
+        }, this);
+
+        if(resources && resources.length) {
+            this._resourcesManager.setResources(this.option("resources"));
+            AppointmentForm.concatResources(this._resourcesManager.getEditors());
+        }
+
+        this._appointmentForm = AppointmentForm.create(
+            this._createComponent.bind(this),
+            $content,
+            this._editAppointmentData ? !this._editing.allowUpdating : false,
+            formData
+        );
+    },
+
+    _createOrUpdateForm: function(appointmentData, processTimeZone, $content) {
         var allDay = this.fire("getField", "allDay", appointmentData),
-            resources = this.option("resources"),
             startDate = this.fire("getField", "startDate", appointmentData),
             endDate = this.fire("getField", "endDate", appointmentData);
 
@@ -2157,29 +2184,7 @@ var Scheduler = Widget.inherit({
 
             AppointmentForm.checkEditorsType(this._appointmentForm, startDateExpr, endDateExpr, allDay);
         } else {
-            AppointmentForm.prepareAppointmentFormEditors(allDay, {
-                textExpr: this._dataAccessors.expr.textExpr,
-                allDayExpr: this._dataAccessors.expr.allDayExpr,
-                startDateExpr: this._dataAccessors.expr.startDateExpr,
-                endDateExpr: this._dataAccessors.expr.endDateExpr,
-                descriptionExpr: this._dataAccessors.expr.descriptionExpr,
-                recurrenceRuleExpr: this._dataAccessors.expr.recurrenceRuleExpr,
-                startDateTimeZoneExpr: this._dataAccessors.expr.startDateTimeZoneExpr,
-                endDateTimeZoneExpr: this._dataAccessors.expr.endDateTimeZoneExpr
-            }, this);
-
-            if(resources && resources.length) {
-                this._resourcesManager.setResources(this.option("resources"));
-                AppointmentForm.concatResources(this._resourcesManager.getEditors());
-            }
-
-            this._appointmentForm = AppointmentForm.create(
-                this._createComponent.bind(this),
-                $content,
-                this._editAppointmentData ? !this._editing.allowUpdating : false,
-                formData
-            );
-
+            this._createAppointmentForm(formData, $content);
         }
 
         var recurrenceRuleExpr = this._dataAccessors.expr.recurrenceRuleExpr,
@@ -2715,8 +2720,14 @@ var Scheduler = Widget.inherit({
             toolbarItems: toolbarItems,
             showCloseButton: showCloseButton
         });
-        this._initDynamicPopupTemplate(data, processTimeZone);
-        this._popup.option(this._popupConfig(data));
+
+        if(this._appointmentForm) {
+            this._createOrUpdateForm(data, processTimeZone);
+        } else {
+            this._initDynamicPopupTemplate(data, processTimeZone);
+            this._popup.option(this._popupConfig(data));
+        }
+
         this._popup.show();
     },
 
