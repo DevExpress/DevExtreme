@@ -701,14 +701,16 @@ QUnit.module("Convert to inner structure", function() {
         assert.deepEqual(model, [
             "!",
             [
-                "!",
                 [
+                    "!",
                     [
-                        "CompanyName",
-                        "=",
-                        "Super Mart of the West"
-                    ],
-                    "and"
+                        [
+                            "CompanyName",
+                            "=",
+                            "Super Mart of the West"
+                        ],
+                        "and"
+                    ]
                 ]
             ]
         ]);
@@ -1141,7 +1143,7 @@ QUnit.module("Custom filter expressions", {
     QUnit.test("calculateFilterExpression for negative group with one condition", function(assert) {
         var value = ["!", ["field", "=", 1]],
             normalizedFields = utils.getNormalizedFields([{ dataField: "field" }]);
-        assert.deepEqual(utils.getFilterExpression(value, normalizedFields, [], "filterBuilder"), ["!", ["field", "=", 1]]);
+        assert.deepEqual(utils.getFilterExpression(value, normalizedFields, [], "filterBuilder"), ["!", [["field", "=", 1]]]);
     });
 
     QUnit.test("calculateFilterExpression for isBlank (string field)", function(assert) {
@@ -1393,7 +1395,7 @@ QUnit.module("Custom filter expressions", {
             ["!", value]
         ], fields, []), [
             "!",
-            ["!", value]
+            [["!", [value]]]
         ]);
     });
 });
