@@ -22,31 +22,28 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
-    dataUtils = require("core/element_data"),
-    commonUtils = require("core/utils/common"),
-    typeUtils = require("core/utils/type"),
-    devices = require("core/devices"),
-    config = require("core/config"),
-    support = require("core/utils/support"),
-    browser = require("core/utils/browser"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    nativePointerMock = require("../../helpers/nativePointerMock.js"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    numberLocalization = require("localization/number"),
-    virtualScrollingCore = require("ui/grid_core/ui.grid_core.virtual_scrolling_core"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController,
-    MockSelectionController = dataGridMocks.MockSelectionController,
-    getCells = dataGridMocks.getCells,
-    expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
+import $ from "jquery";
+import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
+import dataUtils from "core/element_data";
+import commonUtils from "core/utils/common";
+import typeUtils from "core/utils/type";
+import devices from "core/devices";
+import config from "core/config";
+import support from "core/utils/support";
+import browser from "core/utils/browser";
+import pointerMock from "../../helpers/pointerMock.js";
+import nativePointerMock from "../../helpers/nativePointerMock.js";
+import { setupDataGridModules, MockDataController, MockColumnsController, MockSelectionController, getCells } from "../../helpers/dataGridMocks.js";
+import numberLocalization from "localization/number";
+import virtualScrollingCore from "ui/grid_core/ui.grid_core.virtual_scrolling_core";
+import ODataStore from "data/odata/store";
+
+var expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
 function getText(element) {
     return $(element).text();
@@ -886,7 +883,6 @@ QUnit.test('Highlight searchText - case sensitive for odata when highlightCaseSe
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(this.items, dataController, columns),
         testElement = $('#container'),
-        ODataStore = require("data/odata/store"),
         store = new ODataStore({ url: "test.org" }),
         $rows;
 
@@ -922,7 +918,6 @@ QUnit.test('Highlight searchText - case sensitive for odata', function(assert) {
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(this.items, dataController, columns),
         testElement = $('#container'),
-        ODataStore = require("data/odata/store"),
         store = new ODataStore({ url: "test.org" }),
         $rows;
 

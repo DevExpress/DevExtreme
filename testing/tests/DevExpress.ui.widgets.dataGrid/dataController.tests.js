@@ -1,15 +1,13 @@
-var $ = require("jquery"),
-    config = require("core/config"),
-    formatHelper = require("format_helper"),
-    errors = require("ui/widget/ui.errors"),
-    typeUtils = require("core/utils/type"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockGridDataSource = dataGridMocks.MockGridDataSource;
+import $ from "jquery";
+import config from "core/config";
+import formatHelper from "format_helper";
+import errors from "ui/widget/ui.errors";
+import typeUtils from "core/utils/type";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import { setupDataGridModules, MockGridDataSource } from "../../helpers/dataGridMocks.js";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
 var createDataSource = function(data, storeOptions, dataSourceOptions) {
     var arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data);

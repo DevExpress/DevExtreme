@@ -7,14 +7,13 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
+import "common.css!";
 
-require("ui/data_grid/ui.data_grid");
-require("data/odata/store");
+import "ui/data_grid/ui.data_grid";
+import "data/odata/store";
 
-var $ = require("jquery"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
+import $ from "jquery";
+import { setupDataGridModules, generateItems } from "../../helpers/dataGridMocks.js";
 
 var addOptionChangedHandlers = function(that) {
     that.optionCalled.add(function(optionName, value) {
@@ -1855,7 +1854,7 @@ QUnit.testInActiveWindow("Fire onFocusedRowChanging by UpArrow key when virtual 
         return $("#container");
     };
 
-    this.data = dataGridMocks.generateItems(100);
+    this.data = generateItems(100);
 
     this.options = {
         keyExpr: "id",
