@@ -763,7 +763,7 @@ var Scheduler = Widget.inherit({
             onAppointmentDeleted: null,
 
             /**
-                * @name dxSchedulerOptions.onAppointmentFormCreated
+                * @name dxSchedulerOptions.onAppointmentFormOpening
                 * @extends Action
                 * @type function(e)
                 * @type_function_param1 e:object
@@ -771,7 +771,7 @@ var Scheduler = Widget.inherit({
                 * @type_function_param1_field5 form:dxForm
                 * @action
                */
-            onAppointmentFormCreated: null,
+            onAppointmentFormOpening: null,
 
             /**
                 * @name dxSchedulerOptions.appointmentTooltipTemplate
@@ -1095,6 +1095,19 @@ var Scheduler = Widget.inherit({
         ]);
     },
 
+    _setDeprecatedOptions: function() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            /**
+             * @name dxSwitchOptions.onAppointmentFormCreated
+             * @type string
+             * @deprecated dxSwitchOptions.onAppointmentFormOpening
+             */
+            onAppointmentFormCreated: { since: "18.2", alias: "onAppointmentFormOpening" },
+        });
+    },
+
     _postponeDataSourceLoading: function(promise) {
         this.postponedOperations.add("_reloadDataSource", this._reloadDataSource.bind(this), promise);
     },
@@ -1224,7 +1237,7 @@ var Scheduler = Widget.inherit({
             case "onAppointmentUpdated":
             case "onAppointmentDeleting":
             case "onAppointmentDeleted":
-            case "onAppointmentFormCreated":
+            case "onAppointmentFormOpening":
                 this._actions[name] = this._createActionByOption(name);
                 break;
             case "onAppointmentRendered":
@@ -1772,7 +1785,7 @@ var Scheduler = Widget.inherit({
             "onAppointmentUpdated": this._createActionByOption("onAppointmentUpdated"),
             "onAppointmentDeleting": this._createActionByOption("onAppointmentDeleting"),
             "onAppointmentDeleted": this._createActionByOption("onAppointmentDeleted"),
-            "onAppointmentFormCreated": this._createActionByOption("onAppointmentFormCreated")
+            "onAppointmentFormOpening": this._createActionByOption("onAppointmentFormOpening")
         };
     },
 
@@ -2196,7 +2209,7 @@ var Scheduler = Widget.inherit({
             this._appointmentForm.itemOption(recurrenceRuleExpr, "editorOptions", options);
         }
 
-        this._actions["onAppointmentFormCreated"]({
+        this._actions["onAppointmentFormOpening"]({
             form: this._appointmentForm,
             appointmentData: appointmentData
         });

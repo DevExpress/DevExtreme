@@ -494,7 +494,7 @@ QUnit.test("Popup should not contain recurrence editor, if recurrenceRuleExpr is
 });
 
 QUnit.test("Recurrence editor should has right startDate after form items change", function(assert) {
-    this.instance.option("onAppointmentFormCreated", function(e) {
+    this.instance.option("onAppointmentFormOpening", function(e) {
         var items = e.form.option("items");
 
         items.push({
@@ -682,7 +682,7 @@ QUnit.test("Popup should not contain endDateTimeZone editor by default", functio
 });
 
 QUnit.test("It should be possible to render startDateTimeZone editor on appt form", function(assert) {
-    this.instance.option("onAppointmentFormCreated", function(e) {
+    this.instance.option("onAppointmentFormOpening", function(e) {
         e.form.itemOption("startDateTimeZone", { visible: true });
     });
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: "caption", description: "First task of this day", allDay: true });
@@ -695,7 +695,7 @@ QUnit.test("It should be possible to render startDateTimeZone editor on appt for
 });
 
 QUnit.test("It should be possible to render endDateTimeZone editor on appt form", function(assert) {
-    this.instance.option("onAppointmentFormCreated", function(e) {
+    this.instance.option("onAppointmentFormOpening", function(e) {
         e.form.itemOption("endDateTimeZone", { visible: true });
     });
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: "caption", description: "First task of this day", allDay: true });
@@ -746,7 +746,7 @@ QUnit.test("Done button shouldn't be disabled if validation fail", function(asse
 
     this.instance.option({ dataSource: data });
     this.instance.option({
-        onAppointmentFormCreated: function(data) {
+        onAppointmentFormOpening: function(data) {
             var form = data.form;
 
             form.option("items", [{
@@ -775,7 +775,7 @@ QUnit.test("Done button custom configuration should be correct", function(assert
 
     this.instance.option({ dataSource: data });
     this.instance.option({
-        onAppointmentFormCreated: function(e) {
+        onAppointmentFormOpening: function(e) {
             var buttons = e.component._popup.option('toolbarItems');
             buttons[0].options = { text: 'Text 1' };
             e.component._popup.option('toolbarItems', buttons);
