@@ -1,5 +1,5 @@
-var windowUtils = require("../../core/utils/window");
-var virtualColumnsCore = require("./ui.grid_core.virtual_columns_core");
+import { hasWindow } from "../../core/utils/window";
+import { createColumnsInfo } from "./ui.grid_core.virtual_columns_core";
 
 var DEFAULT_COLUMN_WIDTH = 50;
 
@@ -120,7 +120,7 @@ var ColumnsControllerExtender = (function() {
             }
         },
         isVirtualMode: function() {
-            return windowUtils.hasWindow() && this.option("scrolling.columnRenderingMode") === "virtual";
+            return hasWindow() && this.option("scrolling.columnRenderingMode") === "virtual";
         },
         resize: function() {
             this._setScrollPositionCore(this._position);
@@ -200,9 +200,9 @@ var ColumnsControllerExtender = (function() {
                 for(var i = 0; i < rowCount; i++) {
                     columnsInfo.push(this.callBase(i));
                 }
-                beginFixedColumns = virtualColumnsCore.createColumnsInfo(columnsInfo, 0, beginFixedColumns.length)[rowIndex] || [];
-                endFixedColumns = virtualColumnsCore.createColumnsInfo(columnsInfo, visibleColumns.length - endFixedColumns.length, visibleColumns.length)[rowIndex] || [];
-                visibleColumns = virtualColumnsCore.createColumnsInfo(columnsInfo, startIndex, endIndex)[rowIndex] || [];
+                beginFixedColumns = createColumnsInfo(columnsInfo, 0, beginFixedColumns.length)[rowIndex] || [];
+                endFixedColumns = createColumnsInfo(columnsInfo, visibleColumns.length - endFixedColumns.length, visibleColumns.length)[rowIndex] || [];
+                visibleColumns = createColumnsInfo(columnsInfo, startIndex, endIndex)[rowIndex] || [];
             } else {
                 visibleColumns = visibleColumns.slice(startIndex, endIndex);
             }

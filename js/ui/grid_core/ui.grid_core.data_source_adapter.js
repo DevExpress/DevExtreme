@@ -1,14 +1,12 @@
-var Callbacks = require("../../core/utils/callbacks"),
-    gridCore = require("../data_grid/ui.data_grid.core"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    ArrayStore = require("../../data/array_store"),
-    arrayUtils = require("../../data/array_utils"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+import Callbacks from "../../core/utils/callbacks";
+import gridCore from "../data_grid/ui.data_grid.core";
+import commonUtils from "../../core/utils/common";
+import typeUtils from "../../core/utils/type";
+import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import ArrayStore from "../../data/array_store";
+import arrayUtils from "../../data/array_utils";
+import { when, Deferred } from "../../core/utils/deferred";
 
 module.exports = gridCore.Controller.inherit((function() {
     function cloneItems(items, groupCount) {

@@ -1,23 +1,21 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
-    eventsEngine = require("../../events/core/events_engine"),
-    dataUtils = require("../../core/element_data"),
-    clickEvent = require("../../events/click"),
-    browser = require("../../core/utils/browser"),
-    commonUtils = require("../../core/utils/common"),
-    styleUtils = require("../../core/utils/style"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    typeUtils = require("../../core/utils/type"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    extend = require("../../core/utils/extend").extend,
-    getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
-    devices = require("../../core/devices"),
-    modules = require("./ui.grid_core.modules"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    columnStateMixin = require("./ui.grid_core.column_state_mixin"),
-    noop = commonUtils.noop;
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import { getWindow } from "../../core/utils/window";
+import eventsEngine from "../../events/core/events_engine";
+import dataUtils from "../../core/element_data";
+import clickEvent from "../../events/click";
+import browser from "../../core/utils/browser";
+import { noop } from "../../core/utils/common";
+import styleUtils from "../../core/utils/style";
+import { getPublicElement } from "../../core/utils/dom";
+import typeUtils from "../../core/utils/type";
+import iteratorUtils from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import { getDefaultAlignment } from "../../core/utils/position";
+import devices from "../../core/devices";
+import modules from "./ui.grid_core.modules";
+import { checkChanges } from "./ui.grid_core.utils";
+import columnStateMixin from "./ui.grid_core.column_state_mixin";
 
 var SCROLL_CONTAINER_CLASS = "scroll-container",
     GROUP_SPACE_CLASS = "group-space",
@@ -305,9 +303,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $table;
     },
 
-    _isNativeClick: commonUtils.noop,
+    _isNativeClick: noop,
 
-    _rowClick: commonUtils.noop,
+    _rowClick: noop,
 
     _createColGroup: function(columns) {
         var i, j,
@@ -351,7 +349,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _renderDelayedTemplatesCoreAsync: function(templates) {
         var that = this;
         if(templates.length) {
-            window.setTimeout(function() {
+            getWindow().setTimeout(function() {
                 that._renderDelayedTemplatesCore(templates, true);
             });
         }
@@ -677,7 +675,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _columnOptionChanged: function(e) {
         var optionNames = e.optionNames;
 
-        if(gridCoreUtils.checkChanges(optionNames, ["width", "visibleWidth"])) {
+        if(checkChanges(optionNames, ["width", "visibleWidth"])) {
             var visibleColumns = this._columnsController.getVisibleColumns();
             var widths = iteratorUtils.map(visibleColumns, function(column) {
                 var width = column.visibleWidth || column.width;
@@ -739,7 +737,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         that._dataController && that._dataController.changed.add(that._handleDataChanged.bind(that));
     },
 
-    _afterRowPrepared: commonUtils.noop,
+    _afterRowPrepared: noop,
 
     _handleDataChanged: function() {
     },
@@ -790,7 +788,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         this._wrapTableInScrollContainer($newTableElement);
     },
 
-    _findContentElement: commonUtils.noop,
+    _findContentElement: noop,
 
     _getWidths: function($cellElements) {
         var result = [],

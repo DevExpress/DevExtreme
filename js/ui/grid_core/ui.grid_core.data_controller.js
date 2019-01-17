@@ -1,19 +1,16 @@
-var $ = require("../../core/renderer"),
-    modules = require("./ui.grid_core.modules"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    ArrayStore = require("../../data/array_store"),
-    CustomStore = require("../../data/custom_store"),
-    errors = require("../widget/ui.errors"),
-    commonUtils = require("../../core/utils/common"),
-    each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    DataHelperMixin = require("../../data_helper"),
-    equalKeys = commonUtils.equalByValue,
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    findChanges = require("../../core/utils/array_compare").findChanges;
+import $ from "../../core/renderer";
+import modules from "./ui.grid_core.modules";
+import gridCoreUtils from "./ui.grid_core.utils";
+import ArrayStore from "../../data/array_store";
+import CustomStore from "../../data/custom_store";
+import errors from "../widget/ui.errors";
+import { noop, deferRender, equalByValue } from "../../core/utils/common";
+import { each } from "../../core/utils/iterator";
+import typeUtils from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import DataHelperMixin from "../../data_helper";
+import { when, Deferred } from "../../core/utils/deferred";
+import { findChanges } from "../../core/utils/array_compare";
 
 module.exports = {
     defaultOptions: function() {
@@ -666,7 +663,7 @@ module.exports = {
                     change.changeTypes = [];
 
                     var equalItems = function(item1, item2, strict) {
-                        var result = item1 && item2 && equalKeys(item1.key, item2.key);
+                        var result = item1 && item2 && equalByValue(item1.key, item2.key);
                         if(result && strict) {
                             result = item1.rowType === item2.rowType && (item2.rowType !== "detail" || item1.isEditing === item2.isEditing);
                         }
@@ -864,7 +861,7 @@ module.exports = {
                         return newRowIndex >= 0 ? newRowIndex - rowIndex : 0;
                     });
                 },
-                _correctRowIndices: commonUtils.noop,
+                _correctRowIndices: noop,
                 _updateItemsCore: function(change) {
                     var that = this,
                         items,
@@ -948,7 +945,7 @@ module.exports = {
                 },
                 _fireChanged: function(change) {
                     var that = this;
-                    commonUtils.deferRender(function() {
+                    deferRender(function() {
                         that.changed.fire(change);
                     });
                 },
@@ -1056,7 +1053,7 @@ module.exports = {
 
                     that.changed.add(changedHandler);
                 },
-                _getDataSourceAdapter: commonUtils.noop,
+                _getDataSourceAdapter: noop,
                 _createDataSourceAdapterCore: function(dataSource, remoteOperations) {
                     var dataSourceAdapterProvider = this._getDataSourceAdapter(),
                         dataSourceAdapter = dataSourceAdapterProvider.create(this.component);

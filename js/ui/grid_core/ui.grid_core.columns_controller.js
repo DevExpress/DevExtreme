@@ -1,35 +1,28 @@
-var $ = require("../../core/renderer"),
-    Callbacks = require("../../core/utils/callbacks"),
-    isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
-    dataCoreUtils = require("../../core/utils/data"),
-    grep = require("../../core/utils/common").grep,
-    typeUtils = require("../../core/utils/type"),
-    iteratorUtils = require("../../core/utils/iterator"),
-    getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
-    extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
-    config = require("../../core/config"),
-    isDefined = typeUtils.isDefined,
-    objectUtils = require("../../core/utils/object"),
-    deepExtendArraySafe = objectUtils.deepExtendArraySafe,
-    errors = require("../widget/ui.errors"),
-    modules = require("./ui.grid_core.modules"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    normalizeSortingInfo = gridCoreUtils.normalizeSortingInfo,
-    equalSortParameters = gridCoreUtils.equalSortParameters,
-    normalizeIndexes = require("../../core/utils/array").normalizeIndexes,
-    inflector = require("../../core/utils/inflector"),
-    dateSerialization = require("../../core/utils/date_serialization"),
-    numberLocalization = require("../../localization/number"),
-    dateLocalization = require("../../localization/date"),
-    messageLocalization = require("../../localization/message"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    Store = require("../../data/abstract_store"),
-    DataSourceModule = require("../../data/data_source/data_source"),
-    normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions,
-    filterUtils = require("../shared/filtering");
+import $ from "../../core/renderer";
+import Callbacks from "../../core/utils/callbacks";
+import { isWrapped } from "../../core/utils/variable_wrapper";
+import dataCoreUtils from "../../core/utils/data";
+import { grep } from "../../core/utils/common";
+import { isDefined, isString, isNumeric, isFunction, isObject, isPlainObject, type } from "../../core/utils/type";
+import iteratorUtils from "../../core/utils/iterator";
+import { getDefaultAlignment } from "../../core/utils/position";
+import { extend } from "../../core/utils/extend";
+import { inArray } from "../../core/utils/array";
+import config from "../../core/config";
+import { orderEach, deepExtendArraySafe } from "../../core/utils/object";
+import errors from "../widget/ui.errors";
+import modules from "./ui.grid_core.modules";
+import { isDateType, getFormatByDataType, getDisplayValue, normalizeSortingInfo, equalSortParameters } from "./ui.grid_core.utils";
+import { normalizeIndexes } from "../../core/utils/array";
+import inflector from "../../core/utils/inflector";
+import dateSerialization from "../../core/utils/date_serialization";
+import numberLocalization from "../../localization/number";
+import dateLocalization from "../../localization/date";
+import messageLocalization from "../../localization/message";
+import { when, Deferred } from "../../core/utils/deferred";
+import Store from "../../data/abstract_store";
+import { DataSource, normalizeDataSourceOptions } from "../../data/data_source/data_source";
+import filterUtils from "../shared/filtering";
 
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
     USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
@@ -705,7 +698,7 @@ module.exports = {
                     calculatedColumnOptions;
 
                 if(columnOptions) {
-                    if(typeUtils.isString(columnOptions)) {
+                    if(isString(columnOptions)) {
                         columnOptions = {
                             dataField: columnOptions
                         };
@@ -869,7 +862,7 @@ module.exports = {
             };
 
             var getValueDataType = function(value) {
-                var dataType = typeUtils.type(value);
+                var dataType = type(value);
                 if(dataType !== "string" && dataType !== "boolean" && dataType !== "number" && dataType !== "date" && dataType !== "object") {
                     dataType = undefined;
                 }
@@ -882,11 +875,11 @@ module.exports = {
                     case "datetime":
                         return dateSerialization.getDateSerializationFormat(value);
                     case "number":
-                        if(typeUtils.isString(value)) {
+                        if(isString(value)) {
                             return "string";
                         }
 
-                        if(typeUtils.isNumeric(value)) {
+                        if(isNumeric(value)) {
                             return null;
                         }
                 }
@@ -894,12 +887,12 @@ module.exports = {
 
             var updateSerializers = function(options, dataType) {
                 if(!options.deserializeValue) {
-                    if(gridCoreUtils.isDateType(dataType)) {
+                    if(isDateType(dataType)) {
                         options.deserializeValue = function(value) {
                             return dateSerialization.deserializeDate(value);
                         };
                         options.serializeValue = function(value) {
-                            return typeUtils.isString(value) ? value : dateSerialization.serializeDate(value, this.serializationFormat);
+                            return isString(value) ? value : dateSerialization.serializeDate(value, this.serializationFormat);
                         };
                     }
                     if(dataType === "number") {
@@ -950,7 +943,7 @@ module.exports = {
                 for(i = 0; i < firstItems.length; i++) {
                     if(firstItems[i]) {
                         for(fieldName in firstItems[i]) {
-                            if(!typeUtils.isFunction(firstItems[i][fieldName]) || isWrapped(firstItems[i][fieldName])) {
+                            if(!isFunction(firstItems[i][fieldName]) || isWrapped(firstItems[i][fieldName])) {
                                 processedFields[fieldName] = true;
                             }
                         }
@@ -972,7 +965,7 @@ module.exports = {
                 });
 
                 iteratorUtils.each(that._columns, function(index, column) {
-                    if(typeUtils.isObject(column.ownerBand)) {
+                    if(isObject(column.ownerBand)) {
                         column.ownerBand = column.ownerBand.index;
                     }
                 });
@@ -1034,11 +1027,11 @@ module.exports = {
             };
 
             var getColumnIndexByVisibleIndex = function(that, visibleIndex, location) {
-                var rowIndex = typeUtils.isObject(visibleIndex) ? visibleIndex.rowIndex : null,
+                var rowIndex = isObject(visibleIndex) ? visibleIndex.rowIndex : null,
                     columns = location === GROUP_LOCATION ? that.getGroupColumns() : location === COLUMN_CHOOSER_LOCATION ? that.getChooserColumns() : that.getVisibleColumns(rowIndex),
                     column;
 
-                visibleIndex = typeUtils.isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
+                visibleIndex = isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
                 column = columns[visibleIndex];
 
                 if(column && column.type === GROUP_COMMAND_COLUMN_NAME) {
@@ -1298,7 +1291,7 @@ module.exports = {
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
                             column = that.getColumnByPath(fullOptionName, columns);
-                            if(typeUtils.isString(column)) {
+                            if(isString(column)) {
                                 column = columns[columnIndex] = { dataField: column };
                             }
                             if(column) {
@@ -1894,7 +1887,7 @@ module.exports = {
                         return extend({}, column, {
                             visibleWidth: null,
                             minWidth: null,
-                            cellTemplate: !typeUtils.isDefined(column.groupIndex) ? column.cellTemplate : null,
+                            cellTemplate: !isDefined(column.groupIndex) ? column.cellTemplate : null,
                             headerCellTemplate: null,
                             fixed: !isDefined(column.groupIndex) || !isFixedFirstGroupColumn ? isColumnFixing : true,
                         }, expandColumn, {
@@ -2019,13 +2012,13 @@ module.exports = {
                     });
 
                     iteratorUtils.each(result, function(rowIndex) {
-                        objectUtils.orderEach(negativeIndexedColumns[rowIndex], function(_, columns) {
+                        orderEach(negativeIndexedColumns[rowIndex], function(_, columns) {
                             result[rowIndex].unshift.apply(result[rowIndex], columns);
                         });
 
                         firstPositiveIndexColumn = result[rowIndex].length;
                         iteratorUtils.each(positiveIndexedColumns[rowIndex], function(index, columnsByFixing) {
-                            objectUtils.orderEach(columnsByFixing, function(_, columnsByVisibleIndex) {
+                            orderEach(columnsByFixing, function(_, columnsByVisibleIndex) {
                                 result[rowIndex].push.apply(result[rowIndex], columnsByVisibleIndex);
                             });
                         });
@@ -2095,8 +2088,8 @@ module.exports = {
                                 return false;
                             }
 
-                            fromVisibleIndex = typeUtils.isObject(fromVisibleIndex) ? fromVisibleIndex.columnIndex : fromVisibleIndex;
-                            toVisibleIndex = typeUtils.isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
+                            fromVisibleIndex = isObject(fromVisibleIndex) ? fromVisibleIndex.columnIndex : fromVisibleIndex;
+                            toVisibleIndex = isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
 
                             return fromVisibleIndex !== toVisibleIndex && fromVisibleIndex + 1 !== toVisibleIndex;
                         } else if((sourceLocation === GROUP_LOCATION && targetLocation !== COLUMN_CHOOSER_LOCATION) || targetLocation === GROUP_LOCATION) {
@@ -2119,7 +2112,7 @@ module.exports = {
 
                     if(fromIndex >= 0) {
                         column = that._columns[fromIndex];
-                        toVisibleIndex = typeUtils.isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
+                        toVisibleIndex = isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
                         targetGroupIndex = toIndex >= 0 ? that._columns[toIndex].groupIndex : -1;
 
                         if(isDefined(column.groupIndex) && sourceLocation === GROUP_LOCATION) {
@@ -2282,13 +2275,13 @@ module.exports = {
 
                     iteratorUtils.each(["calculateSortValue", "calculateGroupValue", "calculateDisplayValue"], function(_, calculateCallbackName) {
                         var calculateCallback = column[calculateCallbackName];
-                        if(typeUtils.isFunction(calculateCallback) && !calculateCallback.originalCallback) {
+                        if(isFunction(calculateCallback) && !calculateCallback.originalCallback) {
                             column[calculateCallbackName] = function(data) { return calculateCallback.call(column, data); };
                             column[calculateCallbackName].originalCallback = calculateCallback;
                         }
                     });
 
-                    if(typeUtils.isString(column.calculateDisplayValue)) {
+                    if(isString(column.calculateDisplayValue)) {
                         column.displayField = column.calculateDisplayValue;
                         column.calculateDisplayValue = dataCoreUtils.compileGetter(column.displayField);
                     }
@@ -2306,7 +2299,7 @@ module.exports = {
                     var dataType = lookup ? lookup.dataType : column.dataType;
                     if(dataType) {
                         column.alignment = column.alignment || getAlignmentByDataType(dataType, this.option("rtlEnabled"));
-                        column.format = column.format || gridCoreUtils.getFormatByDataType(dataType);
+                        column.format = column.format || getFormatByDataType(dataType);
                         column.customizeText = column.customizeText || getCustomizeTextByDataType(dataType);
                         column.defaultFilterOperations = column.defaultFilterOperations || !lookup && DATATYPE_OPERATIONS[dataType] || [];
                         if(!isDefined(column.filterOperations)) {
@@ -2330,10 +2323,10 @@ module.exports = {
                             valueDataType,
                             lookup = column.lookup;
 
-                        if(gridCoreUtils.isDateType(column.dataType) && column.serializationFormat === undefined) {
+                        if(isDateType(column.dataType) && column.serializationFormat === undefined) {
                             column.serializationFormat = dateSerializationFormat;
                         }
-                        if(lookup && gridCoreUtils.isDateType(lookup.dataType) && column.serializationFormat === undefined) {
+                        if(lookup && isDateType(lookup.dataType) && column.serializationFormat === undefined) {
                             lookup.serializationFormat = dateSerializationFormat;
                         }
 
@@ -2351,7 +2344,7 @@ module.exports = {
                                     }
 
                                     if(lookup && !lookup.dataType) {
-                                        valueDataType = getValueDataType(gridCoreUtils.getDisplayValue(column, value, firstItems[i]));
+                                        valueDataType = getValueDataType(getDisplayValue(column, value, firstItems[i]));
                                         lookupDataType = lookupDataType || valueDataType;
                                         if(lookupDataType && valueDataType && lookupDataType !== valueDataType) {
                                             lookupDataType = "string";
@@ -2396,7 +2389,7 @@ module.exports = {
 
                     if(customizeColumns) {
                         hasOwnerBand = columns.some(function(column) {
-                            return typeUtils.isObject(column.ownerBand);
+                            return isObject(column.ownerBand);
                         });
 
                         if(hasOwnerBand) {
@@ -2536,7 +2529,7 @@ module.exports = {
                     columnIndex = filter.columnIndex || columnIndex;
                     filterValue = filter.filterValue || filterValue;
 
-                    if(typeUtils.isString(filter[0])) {
+                    if(isString(filter[0])) {
                         column = that.columnOption(filter[0]);
 
                         if(remoteFiltering) {
@@ -2549,7 +2542,7 @@ module.exports = {
                                 filter[0].columnIndex = column.index;
                             }
                         }
-                    } else if(typeUtils.isFunction(filter[0])) {
+                    } else if(isFunction(filter[0])) {
                         filter[0].columnIndex = columnIndex;
                         filter[0].filterValue = filterValue;
                     }
@@ -2597,7 +2590,7 @@ module.exports = {
                 columnOption: function(identifier, option, value, notFireEvent) {
                     var that = this,
                         i,
-                        identifierOptionName = typeUtils.isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
+                        identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
                         columns = that._columns.concat(that._commandColumns),
                         needUpdateIndexes,
                         column;
@@ -2626,14 +2619,14 @@ module.exports = {
                         if(arguments.length === 1) {
                             return extend({}, column);
                         }
-                        if(typeUtils.isString(option)) {
+                        if(isString(option)) {
                             if(arguments.length === 2) {
                                 return columnOptionCore(that, column, option);
                             } else {
                                 needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[option];
                                 columnOptionCore(that, column, option, value, notFireEvent);
                             }
-                        } else if(typeUtils.isObject(option)) {
+                        } else if(isObject(option)) {
                             iteratorUtils.each(option, function(optionName, value) {
                                 needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[optionName];
                                 columnOptionCore(that, column, optionName, value, notFireEvent);
@@ -2798,7 +2791,7 @@ module.exports = {
                     }
 
                     if(dataField) {
-                        if(typeUtils.isString(dataField)) {
+                        if(isString(dataField)) {
                             getter = dataCoreUtils.compileGetter(dataField);
                             calculatedColumnOptions = {
                                 caption: inflector.captionize(dataField),
@@ -2813,13 +2806,13 @@ module.exports = {
                                         parsedValue;
 
                                     if(column.dataType === "number") {
-                                        if(typeUtils.isString(text) && column.format) {
+                                        if(isString(text) && column.format) {
                                             parsedValue = numberLocalization.parse(text);
 
-                                            if(typeUtils.isNumeric(parsedValue)) {
+                                            if(isNumeric(parsedValue)) {
                                                 result = parsedValue;
                                             }
-                                        } else if(isDefined(text) && typeUtils.isNumeric(text)) {
+                                        } else if(isDefined(text) && isNumeric(text)) {
                                             result = Number(text);
                                         }
                                     } else if(column.dataType === "boolean") {
@@ -2828,7 +2821,7 @@ module.exports = {
                                         } else if(text === column.falseText) {
                                             result = false;
                                         }
-                                    } else if(gridCoreUtils.isDateType(column.dataType)) {
+                                    } else if(isDateType(column.dataType)) {
                                         parsedValue = dateLocalization.parse(text, column.format);
                                         if(parsedValue) {
                                             result = parsedValue;
@@ -2854,7 +2847,7 @@ module.exports = {
                         if(this.calculateFilterExpression) {
                             result = this.calculateFilterExpression.apply(this, arguments);
                         }
-                        if(typeUtils.isFunction(result)) {
+                        if(isFunction(result)) {
                             result = [result, "=", true];
                         } else if(result) {
                             result.columnIndex = this.index;
@@ -2863,7 +2856,7 @@ module.exports = {
                         return result;
                     };
 
-                    if(!dataField || !typeUtils.isString(dataField)) {
+                    if(!dataField || !isString(dataField)) {
                         extend(true, calculatedColumnOptions, {
                             allowSorting: false,
                             allowGrouping: false,
@@ -2914,14 +2907,14 @@ module.exports = {
                                     dataSourceOptions;
 
                                 if(dataSource) {
-                                    if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
+                                    if(isFunction(dataSource) && !isWrapped(dataSource)) {
                                         dataSource = dataSource({});
                                     }
-                                    if(typeUtils.isPlainObject(dataSource) || (dataSource instanceof Store) || Array.isArray(dataSource)) {
+                                    if(isPlainObject(dataSource) || (dataSource instanceof Store) || Array.isArray(dataSource)) {
                                         if(that.valueExpr) {
                                             dataSourceOptions = normalizeDataSourceOptions(dataSource);
                                             dataSourceOptions.paginate = false;
-                                            dataSource = new DataSourceModule.DataSource(dataSourceOptions);
+                                            dataSource = new DataSource(dataSourceOptions);
                                             return dataSource.load().done(function(data) {
                                                 that.items = data;
                                                 that.updateValueMap && that.updateValueMap();
@@ -2944,7 +2937,7 @@ module.exports = {
 
                     iteratorUtils.each(calculatedColumnOptions, function(optionName) {
                         var defaultOptionName;
-                        if(typeUtils.isFunction(calculatedColumnOptions[optionName]) && optionName.indexOf("default") !== 0) {
+                        if(isFunction(calculatedColumnOptions[optionName]) && optionName.indexOf("default") !== 0) {
                             defaultOptionName = "default" + optionName.charAt(0).toUpperCase() + optionName.substr(1);
                             calculatedColumnOptions[defaultOptionName] = calculatedColumnOptions[optionName];
                         }

@@ -1,10 +1,8 @@
-var commonUtils = require("../../core/utils/common"),
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    stateStoringCore = require("./ui.grid_core.state_storing_core"),
-    Deferred = require("../../core/utils/deferred").Deferred,
-    equalByValue = commonUtils.equalByValue;
-
+import { equalByValue, getKeyHash } from "../../core/utils/common";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import stateStoringCore from "./ui.grid_core.state_storing_core";
+import { Deferred } from "../../core/utils/deferred";
 
 // TODO move processLoadState to target modules (data, columns, pagerView)
 var processLoadState = function(that) {
@@ -17,8 +15,8 @@ var processLoadState = function(that) {
     if(columnsController) {
         columnsController.columnsChanged.add(function() {
             var columnsState = columnsController.getUserState(),
-                columnsStateHash = commonUtils.getKeyHash(columnsState),
-                currentColumnsStateHash = commonUtils.getKeyHash(that._state.columns);
+                columnsStateHash = getKeyHash(columnsState),
+                currentColumnsStateHash = getKeyHash(that._state.columns);
 
             if(!equalByValue(currentColumnsStateHash, columnsStateHash)) {
                 extend(that._state, {
