@@ -22,6 +22,12 @@ var config = {
     * @type string
     */
     defaultCurrency: "USD",
+    /**
+    * @name globalConfig.stringToLower
+    * @default true
+    * @type boolean
+    */
+    stringToLower: true,
     designMode: false,
     /**
     * @name globalConfig.serverDecimalSeparator
