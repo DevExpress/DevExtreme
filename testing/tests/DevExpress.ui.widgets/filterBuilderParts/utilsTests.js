@@ -873,7 +873,13 @@ QUnit.module("Filter normalization", function() {
         var group = [
             "!",
             [
-                ["!", [condition1, "and"]],
+                [
+                    "!",
+                    [
+                        [condition1, "and"],
+                        "and"
+                    ]
+                ],
                 "and"
             ]
         ];
@@ -1378,26 +1384,6 @@ QUnit.module("Custom filter expressions", {
 
         // act, assert
         assert.deepEqual(utils.getFilterExpression(value, fields, []), ["field", "=", "2"]);
-    });
-
-    QUnit.test("calculateFilterExpression for negative group with inner negative group", function(assert) {
-        // arrange
-        var fields = [{
-                dataField: "field",
-                defaultCalculateFilterExpression: function() {
-                    return value;
-                }
-            }],
-            value = ["field", "=", "1"];
-
-        // act, assert
-        assert.deepEqual(utils.getFilterExpression([
-            "!",
-            ["!", value]
-        ], fields, []), [
-            "!",
-            ["!", value]
-        ]);
     });
 });
 
