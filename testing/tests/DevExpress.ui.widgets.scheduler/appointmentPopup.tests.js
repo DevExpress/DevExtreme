@@ -135,6 +135,20 @@ QUnit.test("showAppointmentPopup should render a popup form only once", function
     assert.equal($form.find(".dx-textbox").eq(0).dxTextBox("instance").option("text"), "appointment 2", "Form data is correct");
 });
 
+QUnit.test("showAppointmentPopup should render a popup content only once", function(assert) {
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 1" });
+
+    var popup = this.instance.getAppointmentPopup(),
+        contentReadyCalled = 0;
+
+    popup.option("onContentReady", function() {
+        contentReadyCalled++;
+    });
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 2" });
+
+    assert.equal(contentReadyCalled, 0, "Content wasn't rerendered");
+});
+
 QUnit.test("Popup should contain editors and components with right dx-rtl classes and rtlEnabled option value", function(assert) {
     this.instance = $("#scheduler").dxScheduler({ rtlEnabled: true }).dxScheduler("instance");
     this.instance.showAppointmentPopup({});
