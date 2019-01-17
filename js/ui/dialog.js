@@ -156,7 +156,7 @@ exports.custom = function(options) {
             return isFunction(widthOption) ? widthOption() : widthOption;
         },
         showCloseButton: options.showCloseButton || false,
-        focusStateEnabled: false,
+        ignoreChildEvents: false,
         onContentReady: function(args) {
             args.component.$content()
                 .addClass(DX_DIALOG_CONTENT_CLASSNAME)
