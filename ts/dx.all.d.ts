@@ -3199,7 +3199,7 @@ declare module DevExpress.ui {
         searchEnabled?: boolean;
         /** The text that is provided as a hint in the lookup's search bar. */
         searchPlaceholder?: string;
-        /** A Boolean value specifying whether or not the main screen is inactive while the lookup is active. */
+        /** Specifies whether to shade the container when the lookup is active. Applies only if usePopover is false. */
         shading?: boolean;
         /** Specifies whether to display the Cancel button in the lookup window. */
         showCancelButton?: boolean;
@@ -3403,7 +3403,7 @@ declare module DevExpress.ui {
         onShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Positions the widget. */
         position?: any;
-        /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
+        /** Specifies whether to shade the container when the widget is active. */
         shading?: boolean;
         /** Specifies the shading color. */
         shadingColor?: string;
@@ -3601,7 +3601,7 @@ declare module DevExpress.ui {
         hideEvent?: { name?: string, delay?: number } | string;
         /** An object defining widget positioning options. */
         position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
-        /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
+        /** Specifies whether to shade the container when the widget is active. */
         shading?: boolean;
         /** Specifies options for displaying the widget. */
         showEvent?: { name?: string, delay?: number } | string;
@@ -3821,6 +3821,7 @@ declare module DevExpress.ui {
     export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
         /** Specifies the name of the data source item field whose value defines whether or not the corresponding appointment is an all-day appointment. */
         allDayExpr?: string;
+        /** Specifies an appointment collector's custom template. */
         appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies a custom template for appointments. */
         appointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
@@ -3834,6 +3835,7 @@ declare module DevExpress.ui {
         currentDate?: Date | number | string;
         /** Specifies the currently displayed view. Accepts the view's name or type. */
         currentView?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+        /** Customizes the date navigator's text. */
         customizeDateNavigatorText?: ((info: { startDate?: Date, endDate?: Date, text?: string }) => string);
         /** Specifies a custom template for table cells. */
         dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
@@ -3887,8 +3889,7 @@ declare module DevExpress.ui {
         onAppointmentDeleted?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
         /** A function that is executed before an appointment is deleted from the data source. */
         onAppointmentDeleting?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
-        /** A function that is executed before an appointment details form is opened. */
-        onAppointmentFormCreated?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
+        onAppointmentFormOpening?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
         /** A function that is executed when an appointment is rendered. */
         onAppointmentRendered?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any, appointmentElement?: DevExpress.core.dxElement }) => any);
         /** A function that is executed after an appointment is updated in the data source. */
@@ -4100,6 +4101,8 @@ declare module DevExpress.ui {
         name?: string;
         /** @deprecated Use the switchedOffText option instead. */
         offText?: string;
+        /** @deprecated Use onAppointmentFormOpening instead. */
+        onAppointmentFormCreated?: string;
         /** @deprecated Use the switchedOnText option instead. */
         onText?: string;
         /** Specifies the text displayed when the widget is switched off. */
@@ -4131,7 +4134,7 @@ declare module DevExpress.ui {
         selectedItems?: Array<string | number | any>;
         /** Specifies whether the widget enables an end-user to select only a single item or multiple items. */
         selectionMode?: 'multiple' | 'single';
-        /** A Boolean value that specifies the availability of navigation buttons. */
+        /** Specifies whether navigation buttons should be available when tabs exceed the widget's width. */
         showNavButtons?: boolean;
     }
     /** The Tabs is a tab strip used to switch between pages or views. This widget is included in the TabPanel widget, but you can use the Tabs separately as well. */
@@ -4169,7 +4172,7 @@ declare module DevExpress.ui {
         scrollByContent?: boolean;
         /** A Boolean indicating whether or not to add scrolling support for tabs in the title. */
         scrollingEnabled?: boolean;
-        /** A Boolean value that specifies the availability of navigation buttons. */
+        /** Specifies whether navigation buttons should be available when tabs exceed the widget's width. */
         showNavButtons?: boolean;
         /** A Boolean value specifying whether or not to allow users to change the selected index by swiping. */
         swipeEnabled?: boolean;
@@ -4310,7 +4313,7 @@ declare module DevExpress.ui {
         minWidth?: number | string | (() => number | string);
         /** Positions the widget. */
         position?: positionConfig | string;
-        /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
+        /** Specifies whether to shade the container when the widget is active. */
         shading?: boolean;
         /** Specifies the Toast widget type. */
         type?: 'custom' | 'error' | 'info' | 'success' | 'warning';
@@ -5415,7 +5418,7 @@ declare module DevExpress.ui {
         container?: string | Element | JQuery;
         items?: Array<dxHtmlEditorToolbarItem | string>;
     }
-    /** Configures toolbar controls which allow users to format text and execute commands. */
+    /** Configures toolbar controls. These controls allow users to format text and execute commands. */
     export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
         /** Specifies the built-in control that this object customizes or a format with multiple choices. */
         formatName?: string;
