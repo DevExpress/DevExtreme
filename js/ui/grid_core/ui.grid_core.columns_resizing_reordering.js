@@ -1,18 +1,17 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    Callbacks = require("../../core/utils/callbacks"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
-    dragEvents = require("../../events/drag"),
-    addNamespace = eventUtils.addNamespace,
-    modules = require("./ui.grid_core.modules"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    fx = require("../../animation/fx"),
-    getSwatchContainer = require("../widget/swatch_container");
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import eventsEngine from "../../events/core/events_engine";
+import Callbacks from "../../core/utils/callbacks";
+import typeUtils from "../../core/utils/type";
+import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import { addNamespace, eventData as getEventData, isTouchEvent } from "../../events/utils";
+import pointerEvents from "../../events/pointer";
+import dragEvents from "../../events/drag";
+import modules from "./ui.grid_core.modules";
+import gridCoreUtils from "./ui.grid_core.utils";
+import fx from "../../animation/fx";
+import getSwatchContainer from "../widget/swatch_container";
 
 var COLUMNS_SEPARATOR_CLASS = "columns-separator",
     COLUMNS_SEPARATOR_TRANSPARENT = "columns-separator-transparent",
@@ -462,7 +461,7 @@ var DraggingHeaderView = modules.View.inherit({
             newTop,
             moveDeltaX,
             moveDeltaY,
-            eventData = eventUtils.eventData(e),
+            eventData = getEventData(e),
             isResizing = that._columnsResizerViewController ? that._columnsResizerViewController.isResizing() : false,
             dragOptions = that._dragOptions;
 
@@ -623,7 +622,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             deltaX = columnsSeparatorWidth / 2,
             parentOffset = that._$parentContainer.offset(),
             parentOffsetLeft = parentOffset.left,
-            eventData = eventUtils.eventData(e);
+            eventData = getEventData(e);
 
         if(that._isResizing && that._resizingInfo) {
             if(parentOffsetLeft <= eventData.x && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
@@ -715,12 +714,12 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     _startResizing: function(args) {
         var e = args.event,
             that = e.data,
-            eventData = eventUtils.eventData(e),
+            eventData = getEventData(e),
             editingController = that.getController("editing"),
             editingMode = that.option("editing.mode"),
             isCellEditing = editingController.isEditing() && (editingMode === "batch" || editingMode === "cell");
 
-        if(eventUtils.isTouchEvent(e)) {
+        if(isTouchEvent(e)) {
             if(that._isHeadersRowArea(eventData.y)) {
                 that._targetPoint = that._getTargetPoint(that.pointsByColumns(), eventData.x, COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH);
                 if(that._targetPoint) {
@@ -1098,7 +1097,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                             $columnElement.addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
                             eventsEngine.on($columnElement, addNamespace(dragEvents.start, MODULE_NAMESPACE), that.createAction(function(args) {
                                 var e = args.event,
-                                    eventData = eventUtils.eventData(e);
+                                    eventData = getEventData(e);
 
                                 draggingHeader.dragHeader({
                                     deltaX: eventData.x - $(e.currentTarget).offset().left,

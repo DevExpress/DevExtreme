@@ -1,14 +1,14 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    eventsEngine = require("../../events/core/events_engine"),
-    core = require("./ui.grid_core.modules"),
-    isDefined = require("../../core/utils/type").isDefined,
-    inArray = require("../../core/utils/array").inArray,
-    focused = require("../widget/selectors").focused,
-    each = require("../../core/utils/iterator").each,
-    KeyboardProcessor = require("../widget/ui.keyboard_processor"),
-    eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer");
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import eventsEngine from "../../events/core/events_engine";
+import core from "./ui.grid_core.modules";
+import { isDefined } from "../../core/utils/type";
+import { inArray } from "../../core/utils/array";
+import { focused } from "../widget/selectors";
+import { each } from "../../core/utils/iterator";
+import KeyboardProcessor from "../widget/ui.keyboard_processor";
+import eventUtils from "../../events/utils";
+import pointerEvents from "../../events/pointer";
 
 var ROWS_VIEW_CLASS = "rowsview",
     EDIT_FORM_CLASS = "edit-form",

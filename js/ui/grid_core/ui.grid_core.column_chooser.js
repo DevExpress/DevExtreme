@@ -1,17 +1,17 @@
-var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
-    modules = require("./ui.grid_core.modules"),
-    columnsView = require("./ui.grid_core.columns_view"),
-    noop = require("../../core/utils/common").noop,
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    messageLocalization = require("../../localization/message"),
-    themes = require("../themes"),
-    Button = require("../button"),
-    TreeView = require("../tree_view"),
-    devices = require("../../core/devices"),
-    Popup = require("../popup");
+import $ from "../../core/renderer";
+import { deferUpdate } from "../../core/utils/common";
+import modules from "./ui.grid_core.modules";
+import columnsView from "./ui.grid_core.columns_view";
+import messageLocalization from "../../localization/message";
+import themes from "../themes";
+import Button from "../button";
+import TreeView from "../tree_view";
+import devices from "../../core/devices";
+import Popup from "../popup";
+import { noop } from "../../core/utils/common";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
 
 var COLUMN_CHOOSER_CLASS = "column-chooser",
     COLUMN_CHOOSER_BUTTON_CLASS = "column-chooser-button",
@@ -201,7 +201,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         }
 
         treeViewConfig.onContentReady = function(e) {
-            commonUtils.deferUpdate(function() {
+            deferUpdate(function() {
                 if(scrollTop) {
                     var scrollable = $(e.element).find(".dx-scrollable").data("dxScrollable");
                     scrollable && scrollable.scrollTo({ y: scrollTop });

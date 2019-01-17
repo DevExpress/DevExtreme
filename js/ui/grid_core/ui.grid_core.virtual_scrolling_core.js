@@ -1,12 +1,12 @@
-var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
-    eventsEngine = require("../../events/core/events_engine"),
-    browser = require("../../core/utils/browser"),
-    typeUtils = require("../../core/utils/type"),
-    positionUtils = require("../../animation/position"),
-    each = require("../../core/utils/iterator").each,
-    Class = require("../../core/class"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+import $ from "../../core/renderer";
+import { getWindow } from "../../core/utils/window";
+import eventsEngine from "../../events/core/events_engine";
+import browser from "../../core/utils/browser";
+import { isObject, isString } from "../../core/utils/type";
+import positionUtils from "../../animation/position";
+import { each } from "../../core/utils/iterator";
+import Class from "../../core/class";
+import { Deferred } from "../../core/utils/deferred";
 
 var SCROLLING_MODE_INFINITE = "infinite",
     SCROLLING_MODE_VIRTUAL = "virtual";
@@ -30,7 +30,7 @@ exports.getContentHeightLimit = function(browser) {
         return 8000000;
     }
 
-    return 15000000 / exports.getPixelRatio(window);
+    return 15000000 / exports.getPixelRatio(getWindow());
 };
 
 exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, $targetElement) {
@@ -75,7 +75,7 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
         var eventsStrategy = widgetScrollStrategy;
 
         if(!scrollable) {
-            scrollable = isDocument && $(window) || $scrollElement.css("overflowY") === "auto" && $scrollElement;
+            scrollable = isDocument && $(getWindow()) || $scrollElement.css("overflowY") === "auto" && $scrollElement;
             eventsStrategy = eventsEngine;
             if(!scrollable) return;
         }
@@ -244,11 +244,11 @@ exports.VirtualScrollController = Class.inherit((function() {
     var processChanged = function(that, changed, changeType, isDelayChanged, removeCacheItem) {
         var dataSource = that._dataSource,
             items = dataSource.items().slice(),
-            change = typeUtils.isObject(changeType) ? changeType : undefined,
+            change = isObject(changeType) ? changeType : undefined,
             isPrepend = changeType === "prepend",
             viewportItems = dataSource.viewportItems();
 
-        if(changeType && typeUtils.isString(changeType) && !that._isDelayChanged) {
+        if(changeType && isString(changeType) && !that._isDelayChanged) {
             change = {
                 changeType: changeType,
                 items: items
