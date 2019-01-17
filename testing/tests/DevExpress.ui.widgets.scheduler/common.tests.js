@@ -3281,7 +3281,7 @@ QUnit.testStart(function() {
         assert.deepEqual(appointments.option("onAppointmentDblClick")(), this.instance.option("onAppointmentDblClick")(), "scheduler has correct onAppointmentDblClick after option change");
     });
 
-    QUnit.test("onAppointmentFormCreated event should be fired while details form is opening", function(assert) {
+    QUnit.test("onAppointmentFormOpening event should be fired while details form is opening", function(assert) {
         var stub = sinon.stub(),
             data = {
                 text: "One",
@@ -3289,7 +3289,7 @@ QUnit.testStart(function() {
             };
         this.createInstance({
             currentView: 'month',
-            onAppointmentFormCreated: stub
+            onAppointmentFormOpening: stub
         });
 
         this.instance.showAppointmentPopup(data);
@@ -3311,7 +3311,7 @@ QUnit.testStart(function() {
             "onAppointmentUpdated": function() { return true; },
             "onAppointmentDeleting": function() { return true; },
             "onAppointmentDeleted": function() { return true; },
-            "onAppointmentFormCreated": function() { return true; }
+            "onAppointmentFormOpening": function() { return true; }
         });
 
         $.each(this.instance.getActions(), function(name, action) {
