@@ -1,11 +1,11 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    isDefined = require("../../core/utils/type").isDefined,
-    compileGetter = require("../../core/utils/data").compileGetter,
-    each = require("../../core/utils/iterator").each,
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    messageLocalization = require("../../localization/message"),
-    dataQuery = require("../../data/query");
+import $ from "../../core/renderer";
+import domAdapter from "../../core/dom_adapter";
+import { isDefined } from "../../core/utils/type";
+import { compileGetter } from "../../core/utils/data";
+import { each } from "../../core/utils/iterator";
+import { combineFilters, getFormatOptionsByColumn, formatValue } from "./ui.grid_core.utils";
+import messageLocalization from "../../localization/message";
+import dataQuery from "../../data/query";
 
 var SEARCH_PANEL_CLASS = "search-panel",
     SEARCH_TEXT_CLASS = "search-text",
@@ -123,7 +123,7 @@ module.exports = {
                         }
                     }
 
-                    return gridCoreUtils.combineFilters(filters, "or");
+                    return combineFilters(filters, "or");
                 };
 
                 return {
@@ -135,7 +135,7 @@ module.exports = {
                             filter = that.callBase(),
                             searchFilter = calculateSearchFilter(that, that.option("searchPanel.text"));
 
-                        return gridCoreUtils.combineFilters([filter, searchFilter]);
+                        return combineFilters([filter, searchFilter]);
                     },
 
                     /**
@@ -260,8 +260,8 @@ module.exports = {
 
                 _getFormattedSearchText: function(column, searchText) {
                     var value = parseValue(column, searchText),
-                        formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, "search");
-                    return gridCoreUtils.formatValue(value, formatOptions);
+                        formatOptions = getFormatOptionsByColumn(column, "search");
+                    return formatValue(value, formatOptions);
                 },
 
                 _getStringNormalizer: function() {

@@ -1,17 +1,17 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    gridCore = require("../data_grid/ui.data_grid.core"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    support = require("../../core/utils/support"),
-    clickEvent = require("../../events/click"),
-    messageLocalization = require("../../localization/message"),
-    eventUtils = require("../../events/utils"),
-    holdEvent = require("../../events/hold"),
-    Selection = require("../selection/selection"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import gridCore from "../data_grid/ui.data_grid.core";
+import { setEmptyText } from "./ui.grid_core.utils";
+import { isDefined } from "../../core/utils/type";
+import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import support from "../../core/utils/support";
+import clickEvent from "../../events/click";
+import messageLocalization from "../../localization/message";
+import { addNamespace } from "../../events/utils";
+import holdEvent from "../../events/hold";
+import Selection from "../selection/selection";
+import { Deferred } from "../../core/utils/deferred";
 
 var EDITOR_CELL_CLASS = "dx-editor-cell",
     ROW_CLASS = "dx-row",
@@ -462,7 +462,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         focusedItemIndex: function(itemIndex) {
             var that = this;
 
-            if(typeUtils.isDefined(itemIndex)) {
+            if(isDefined(itemIndex)) {
                 that._selection._focusedItemIndex = itemIndex;
             } else {
                 return that._selection._focusedItemIndex;
@@ -758,7 +758,7 @@ module.exports = {
                         this.setAria("label", messageLocalization.format("dxDataGrid-ariaSelectRow"), $container);
                         this._renderSelectCheckBox($container, options);
                     } else {
-                        gridCoreUtils.setEmptyText($container);
+                        setEmptyText($container);
                     }
                 },
 
@@ -842,7 +842,7 @@ module.exports = {
                     if(selectionMode !== "none") {
                         if(that.option(SHOW_CHECKBOXES_MODE) === "onLongTap" || !support.touch) {
                             // TODO Not working timeout by hold when it is larger than other timeouts by hold
-                            eventsEngine.on($table, eventUtils.addNamespace(holdEvent.name, "dxDataGridRowsView"), "." + DATA_ROW_CLASS, that.createAction(function(e) {
+                            eventsEngine.on($table, addNamespace(holdEvent.name, "dxDataGridRowsView"), "." + DATA_ROW_CLASS, that.createAction(function(e) {
                                 processLongTap(that.component, e.event);
 
                                 e.event.stopPropagation();

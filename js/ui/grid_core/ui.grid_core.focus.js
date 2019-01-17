@@ -1,11 +1,11 @@
-var $ = require("../../core/renderer"),
-    core = require("./ui.grid_core.modules"),
-    each = require("../../core/utils/iterator").each,
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    equalByValue = require("../../core/utils/common").equalByValue,
-    isDefined = require("../../core/utils/type").isDefined,
-    errors = require("../widget/ui.errors"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+import $ from "../../core/renderer";
+import core from "./ui.grid_core.modules";
+import { each } from "../../core/utils/iterator";
+import { combineFilters } from "./ui.grid_core.utils";
+import { equalByValue } from "../../core/utils/common";
+import { isDefined } from "../../core/utils/type";
+import errors from "../widget/ui.errors";
+import { Deferred } from "../../core/utils/deferred";
 
 var ROW_FOCUSED_CLASS = "dx-row-focused",
     FOCUSED_ROW_SELECTOR = ".dx-row" + "." + ROW_FOCUSED_CLASS,
@@ -503,7 +503,7 @@ module.exports = {
                 },
                 _concatWithCombinedFilter: function(filter, groupFilter) {
                     var combinedFilter = this.getCombinedFilter();
-                    return gridCoreUtils.combineFilters([filter, combinedFilter, groupFilter]);
+                    return combineFilters([filter, combinedFilter, groupFilter]);
                 },
                 _generateOperationFilterByKey: function(key, rowData, useGroup) {
                     var that = this,

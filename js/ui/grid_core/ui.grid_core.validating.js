@@ -1,22 +1,21 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    modules = require("./ui.grid_core.modules"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    commonUtils = require("../../core/utils/common"),
-    each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type"),
-    extend = require("../../core/utils/extend").extend,
-    focused = require("../widget/selectors").focused,
-    equalByValue = commonUtils.equalByValue,
-    messageLocalization = require("../../localization/message"),
-    Button = require("../button"),
-    pointerEvents = require("../../events/pointer"),
-    ValidationEngine = require("../validation_engine"),
-    Validator = require("../validator"),
-    Tooltip = require("../tooltip"),
-    Overlay = require("../overlay"),
-    themes = require("../themes"),
-    errors = require("../widget/ui.errors");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import modules from "./ui.grid_core.modules";
+import { createObjectWithChanges, getIndexByKey } from "./ui.grid_core.utils";
+import { equalByValue, grep } from "../../core/utils/common";
+import { each } from "../../core/utils/iterator";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { focused } from "../widget/selectors";
+import messageLocalization from "../../localization/message";
+import Button from "../button";
+import pointerEvents from "../../events/pointer";
+import ValidationEngine from "../validation_engine";
+import Validator from "../validator";
+import Tooltip from "../tooltip";
+import Overlay from "../overlay";
+import themes from "../themes";
+import errors from "../widget/ui.errors";
 
 var INVALIDATE_CLASS = "invalid",
     REVERT_TOOLTIP_CLASS = "revert-tooltip",
@@ -186,7 +185,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                 columnsController,
                 showEditorAlways = column.showEditorAlways;
 
-            if(!column.validationRules || !Array.isArray(column.validationRules) || typeUtils.isDefined(column.command)) return;
+            if(!column.validationRules || !Array.isArray(column.validationRules) || isDefined(column.command)) return;
 
             editIndex = editingController.getIndexByKey(parameters.key, editingController._editData);
 
@@ -222,7 +221,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                         applyValidationResults: defaultValidationResult
                     },
                     dataGetter: function() {
-                        return gridCoreUtils.createObjectWithChanges(editData.oldData, editData.data);
+                        return createObjectWithChanges(editData.oldData, editData.data);
                     }
                 });
 
@@ -382,7 +381,7 @@ module.exports = {
                         editMode = that.getEditMode();
 
                     if(editMode === EDIT_MODE_BATCH && isInserted && key) {
-                        editIndex = gridCoreUtils.getIndexByKey(key, that._editData);
+                        editIndex = getIndexByKey(key, that._editData);
 
                         if(editIndex >= 0) {
                             editData = that._editData[editIndex];
@@ -399,7 +398,7 @@ module.exports = {
 
                 _createInvisibleColumnValidators: function(editData) {
                     var validatingController = this.getController("validating"),
-                        invisibleColumns = commonUtils.grep(this.getController("columns").getInvisibleColumns(), function(column) { return !column.isBand; }),
+                        invisibleColumns = grep(this.getController("columns").getInvisibleColumns(), function(column) { return !column.isBand; }),
                         invisibleColumnValidators = [];
 
                     if(FORM_BASED_MODES.indexOf(this.getEditMode()) === -1) {
@@ -409,7 +408,7 @@ module.exports = {
                                 if(options.type === "insert") {
                                     data = options.data;
                                 } else if(options.type === "update") {
-                                    data = gridCoreUtils.createObjectWithChanges(options.oldData, options.data);
+                                    data = createObjectWithChanges(options.oldData, options.data);
                                 }
                                 if(data) {
                                     var validator = validatingController.createValidator({
@@ -537,7 +536,7 @@ module.exports = {
                     }
                 },
                 getEditDataByKey: function(key) {
-                    return this._editData[gridCoreUtils.getIndexByKey(key, this._editData)];
+                    return this._editData[getIndexByKey(key, this._editData)];
                 }
             },
             editorFactory: {

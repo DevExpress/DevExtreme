@@ -1958,6 +1958,29 @@ QUnit.test("dateBox should not change value when setting to an earlier date than
     assert.deepEqual(this.fixture.dateBox.option("value"), lateDate);
 });
 
+QUnit.test("should execute custom validator while validation state reevaluating", function(assert) {
+    this.reinitFixture({ opened: true });
+
+    const dateBox = this.fixture.dateBox;
+
+    dateBox.$element().dxValidator({
+        validationRules: [{
+            type: "custom",
+            validationCallback: () => false
+        }]
+    });
+
+    const cell = dateBox._popup._wrapper().find(".dx-calendar-cell");
+
+    assert.ok(dateBox.option("isValid"));
+    assert.strictEqual(dateBox.option("text"), "");
+
+    $(cell).trigger("dxclick");
+
+    assert.notOk(dateBox.option("isValid"));
+    assert.notStrictEqual(dateBox.option("text"), "");
+});
+
 QUnit.test("Editor should reevaluate validation state after change text to the current value", function(assert) {
     this.reinitFixture({
         min: new Date(2010, 10, 5),

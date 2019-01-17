@@ -37,6 +37,7 @@ define(function(require) {
                     name === "fileSavingAction" ||
                     name === "validationMessageOffset" ||
                     name === "templatesRenderAsynchronously" ||
+                    name === "ignoreChildEvents" ||
                     name === "_checkParentVisibility") {
                     return;
                 }
