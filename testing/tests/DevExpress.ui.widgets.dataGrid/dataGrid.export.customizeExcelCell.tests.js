@@ -2396,7 +2396,7 @@ QUnit.test("Change group cell value", function(assert) {
         '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
-        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="4" t="n"><v>9999</v></c></row>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="4" t="n"><v>1011</v></c></row>' +
         '<row r="2" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1002</v></c></row>' +
         '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
@@ -2416,7 +2416,7 @@ QUnit.test("Change group cell value", function(assert) {
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
                     if(e.gridCell !== undefined && e.gridCell.rowType === "group" && e.gridCell.column.dataField === "f1") {
-                        e.value = 9999;
+                        e.value = e.gridCell.value + 10;
                     }
                 },
             },
