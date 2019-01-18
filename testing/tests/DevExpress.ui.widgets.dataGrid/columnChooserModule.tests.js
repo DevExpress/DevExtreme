@@ -572,27 +572,25 @@ if(device.deviceType === "desktop") {
     });
 }
 
-if(device.deviceType !== "desktop") {
-    QUnit.test("Close and cancel buttons for mobile theme", function(assert) {
-        // arrange
-        var testElement = $("#container"),
-            currentThemes = themes.current(),
-            columnChooserView = this.columnChooserView;
+QUnit.test("Close and cancel buttons for mobile theme", function(assert) {
+    // arrange
+    var testElement = $("#container"),
+        origIsGeneric = themes.isGeneric,
+        columnChooserView = this.columnChooserView;
 
-        this.setTestElement(testElement);
+    this.setTestElement(testElement);
 
-        themes.current(themes.themeNameFromDevice(device));
+    themes.isGeneric = function() { return false; };
 
-        // act
-        this.renderColumnChooser();
-        columnChooserView._popupContainer.toggle(true);
+    // act
+    this.renderColumnChooser();
+    columnChooserView._popupContainer.toggle(true);
 
-        // assert
-        assert.ok(!$(".dx-closebutton").length, "close button is hidden");
-        assert.ok($(".dx-button-text").length, "cancel button is shown");
-        themes.current(currentThemes);
-    });
-}
+    // assert
+    assert.ok(!$(".dx-closebutton").length, "close button is hidden");
+    assert.ok($(".dx-button-text").length, "cancel button is shown");
+    themes.isGeneric = origIsGeneric;
+});
 
 
 QUnit.test("Close and cancel buttons for material theme", function(assert) {
