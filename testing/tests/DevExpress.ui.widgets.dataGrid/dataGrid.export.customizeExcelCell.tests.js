@@ -1015,7 +1015,7 @@ QUnit.test("Check arguments for group summary", function(assert) {
         {
             getExpectedArgs: (grid) => [
                 { value: "F2", gridCell: { rowType: "header", column: grid.columnOption(1) } },
-                { value: `F1: ${ds[0].f1 } (Max of F2 is ${ds[0].f2})`, gridCell: { rowType: "group", column: grid.columnOption(0), value: ds[0].f1, summaryItems: [{ name: 1, value: ds[0].f2 }] } },
+                { value: `F1: ${ds[0].f1 } (Max of F2 is ${ds[0].f2})`, gridCell: { rowType: "group", column: grid.columnOption(0), value: ds[0].f1, groupSummaryItems: [{ name: 1, value: ds[0].f2 }] } },
                 { value: ds[0].f2, gridCell: { rowType: "data", column: grid.columnOption(1), data: ds[0], value: ds[0].f2 } }
             ]
         }
@@ -1038,7 +1038,7 @@ QUnit.test("Check arguments for group summary with null", function(assert) {
         {
             getExpectedArgs: (grid) => [
                 { value: "F2" },
-                { value: `F1: ${ds[0].f1 } (Max of F2 is )`, gridCell: { rowType: "group", column: grid.columnOption(0), value: ds[0].f1, summaryItems: [{ name: 1, value: ds[0].f2 }] } },
+                { value: `F1: ${ds[0].f1 } (Max of F2 is )`, gridCell: { rowType: "group", column: grid.columnOption(0), value: ds[0].f1, groupSummaryItems: [{ name: 1, value: ds[0].f2 }] } },
                 { value: ds[0].f2 }
             ]
         }
@@ -1067,7 +1067,7 @@ QUnit.test("Check arguments for group summary with alignByColumn", function(asse
                 { value: "F2", gridCell: { column: grid.columnOption(1), rowType: "header" } },
                 { value: "F3", gridCell: { column: grid.columnOption(2), rowType: "header" } },
                 { value: `F1: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: "group", value: ds[0].f1 } },
-                { value: `Max: ${ds[0].f3} \n Count: 1`, gridCell: { column: grid.columnOption(2), rowType: "group", summaryItems: [{ name: 1, value: ds[0].f3 }, { name: 2, value: 1 }] } },
+                { value: `Max: ${ds[0].f3} \n Count: 1`, gridCell: { column: grid.columnOption(2), rowType: "group", groupSummaryItems: [{ name: 1, value: ds[0].f3 }, { name: 2, value: 1 }] } },
                 { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[0], value: ds[0].f2 } },
                 { value: ds[0].f3, gridCell: { column: grid.columnOption(2), rowType: "data", data: ds[0], value: ds[0].f3 } }
             ]
@@ -1142,7 +1142,7 @@ QUnit.test("Check arguments for total summary", function(assert) {
             getExpectedArgs: (grid) => [
                 { value: ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: "data", data: ds[0], value: ds[0].f1 } },
                 { value: ds[0].f2, gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[0], value: ds[0].f2 } },
-                { value: `Max: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: ds[0].f1, totalItemName: 1 } },
+                { value: `Max: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: ds[0].f1, totalSummaryItemName: 1 } },
                 { value: undefined, gridCell: undefined }
             ]
         }
@@ -1168,8 +1168,8 @@ QUnit.test("Check arguments for total summary (2 totals for 1 column)", function
         {
             getExpectedArgs: (grid) => [
                 { value: ds[0].f1, gridCell: { column: grid.columnOption(0), rowType: "data", data: ds[0], value: ds[0].f1 } },
-                { value: `Max: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: ds[0].f1, totalItemName: 1 } },
-                { value: `Count: 1`, gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: 1, totalItemName: 2 } }
+                { value: `Max: ${ds[0].f1}`, gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: ds[0].f1, totalSummaryItemName: 1 } },
+                { value: `Count: 1`, gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: 1, totalSummaryItemName: 2 } }
             ]
         }
     );
@@ -1224,8 +1224,8 @@ QUnit.test("Check arguments for total summary with null/undefined", function(ass
         {
             getExpectedArgs: (grid) => [
                 { value: null }, { value: undefined }, { value: null }, { value: undefined },
-                { value: "Max: ", gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: ds[0].f1, totalItemName: 1 } },
-                { value: "Max: ", gridCell: { column: grid.columnOption(1), rowType: "totalFooter", value: ds[0].f2, totalItemName: 2 } },
+                { value: "Max: ", gridCell: { column: grid.columnOption(0), rowType: "totalFooter", value: ds[0].f1, totalSummaryItemName: 1 } },
+                { value: "Max: ", gridCell: { column: grid.columnOption(1), rowType: "totalFooter", value: ds[0].f2, totalSummaryItemName: 2 } },
                 { value: undefined, gridCell: undefined },
                 { value: undefined, gridCell: undefined }
             ]
@@ -2470,7 +2470,7 @@ QUnit.test("Change group summary cell value with alignByColumn", function(assert
                 ignoreExcelErrors: false,
                 customizeExcelCell: e => {
                     if(e.gridCell !== undefined && e.gridCell.rowType === "group" && e.gridCell.column.dataField === "f3") {
-                        e.value = e.gridCell.summaryItems.map(item => `${item.name}: ${item.value}`).join('\n');
+                        e.value = e.gridCell.groupSummaryItems.map(item => `${item.name}: ${item.value}`).join('\n');
                     }
                 },
             }
@@ -2525,7 +2525,7 @@ QUnit.test("Change total summary cell value", function(assert) {
                 enabled: true,
                 customizeExcelCell: e => {
                     if(e.gridCell !== undefined && e.gridCell.rowType === "totalFooter" && e.gridCell.column.dataField === "f2") {
-                        e.value = e.gridCell.totalItemName + ": " + e.gridCell.value;
+                        e.value = e.gridCell.totalSummaryItemName + ": " + e.gridCell.value;
                     }
                 }
             }

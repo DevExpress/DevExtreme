@@ -199,12 +199,12 @@ exports.DataProvider = Class.inherit({
         });
     },
 
-    _convertFromGridSummaryItems: function(gridSummaryItems) {
+    _convertFromGridGroupSummaryItems: function(gridGroupSummaryItems) {
         let result;
-        if(isDefined(gridSummaryItems) && gridSummaryItems.length > 0) {
+        if(isDefined(gridGroupSummaryItems) && gridGroupSummaryItems.length > 0) {
             result = [];
-            for(let i = 0; i < gridSummaryItems.length; i++) {
-                result.push({ value: gridSummaryItems[i].value, name: gridSummaryItems[i].name });
+            for(let i = 0; i < gridGroupSummaryItems.length; i++) {
+                result.push({ value: gridGroupSummaryItems[i].value, name: gridGroupSummaryItems[i].name });
             }
         }
         return result;
@@ -243,7 +243,7 @@ exports.DataProvider = Class.inherit({
                             value = itemValues[correctedCellIndex];
                             if(isDefined(value)) {
                                 result.cellSourceData.value = value.value;
-                                result.cellSourceData.totalItemName = value.name;
+                                result.cellSourceData.totalSummaryItemName = value.name;
                                 result.value = dataGridCore.getSummaryText(value, this._options.summaryTexts);
                             } else {
                                 result.cellSourceData = undefined;
@@ -254,12 +254,12 @@ exports.DataProvider = Class.inherit({
                         if(cellIndex < 1) {
                             result.cellSourceData.column = this._options.groupColumns[item.groupIndex];
                             result.cellSourceData.value = item.key[item.groupIndex];
-                            result.cellSourceData.summaryItems = this._convertFromGridSummaryItems(item.summaryCells[0]);
+                            result.cellSourceData.groupSummaryItems = this._convertFromGridGroupSummaryItems(item.summaryCells[0]);
                             result.value = this._getGroupValue(item);
                         } else {
                             summaryItems = item.values[correctedCellIndex];
                             if(Array.isArray(summaryItems)) {
-                                result.cellSourceData.summaryItems = this._convertFromGridSummaryItems(summaryItems);
+                                result.cellSourceData.groupSummaryItems = this._convertFromGridGroupSummaryItems(summaryItems);
                                 value = "";
                                 for(i = 0; i < summaryItems.length; i++) {
                                     value += (i > 0 ? " \n " : "") + dataGridCore.getSummaryText(summaryItems[i], this._options.summaryTexts);
