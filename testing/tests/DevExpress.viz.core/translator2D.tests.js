@@ -2498,6 +2498,21 @@ QUnit.test("Scroll with whole range", function(assert) {
     });
 });
 
+// T702708
+QUnit.test("Min correction by wholeRange", function(assert) {
+    const range = $.extend({ minVisible: 10, maxVisible: 110, invert: false }, numericRange);
+    const canvas = { left: 0, right: 0, width: 100 };
+
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.deepEqual(translator.zoom(-10, 1, { startValue: 5, endValue: 300 }), {
+        min: 5,
+        max: 105,
+        scale: 1,
+        translate: -5
+    });
+});
+
 QUnit.test("Scroll with whole range. inverted", function(assert) {
     const range = $.extend({ minVisible: 10, maxVisible: 110, invert: true }, numericRange);
     const canvas = { left: 0, right: 0, width: 100 };
