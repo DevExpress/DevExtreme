@@ -2479,6 +2479,58 @@ QUnit.test("Change group summary cell value with alignByColumn", function(assert
     );
 });
 
+QUnit.test("Change group cell with group summary items value", function(assert) {
+    const styles = helper.STYLESHEET_HEADER_XML +
+        helper.BASE_STYLE_XML +
+        '<cellXfs count="5">' +
+        helper.STYLESHEET_STANDARDSTYLES +
+        '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="right" /></xf>' +
+        '<xf xfId="0" applyAlignment="1" fontId="1" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="left" /></xf>' +
+        '</cellXfs>' +
+        helper.STYLESHEET_FOOTER_XML;
+    const worksheet = helper.WORKSHEET_HEADER_XML +
+        '<sheetPr><outlinePr summaryBelow="0"/></sheetPr><dimension ref="A1:C1"/>' +
+        '<sheetViews><sheetView tabSelected="1" workbookViewId="0"></sheetView></sheetViews>' +
+        '<sheetFormatPr defaultRowHeight="15" outlineLevelRow="0" x14ac:dyDescent="0.25"/>' +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="4" t="s"><v>1</v></c></row>' +
+        '<row r="2" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>1002</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>F1: 1001 (Max: 1001, Count: 1)</t></si>' +
+        '<si><t>Total: 1001 (item1: 1001, item2: 1)</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(assert,
+        {
+            columns: [
+                { dataField: "f1", dataType: "number", groupIndex: 0 },
+                { dataField: "f2", dataType: "number" }
+            ],
+            dataSource: [{ f1: 1001, f2: 1002, f3: 1003, f4: 1004 }],
+            summary: {
+                groupItems: [
+                    { name: 'item1', column: 'f1', summaryType: 'max' },
+                    { name: 'item2', column: 'f1', summaryType: 'count' },
+                ]
+            },
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    if(e.gridCell !== undefined && e.gridCell.rowType === "group" && e.gridCell.column.dataField === "f1") {
+                        const groupSummaryText = e.gridCell.groupSummaryItems.map(item => `${item.name}: ${item.value}`).join(', ');
+                        e.value = "Total: " + e.gridCell.value + " (" + groupSummaryText + ")";
+                    }
+                },
+            }
+        },
+        { worksheet, sharedStrings, styles }
+    );
+});
+
 QUnit.test("Change total summary cell value", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
