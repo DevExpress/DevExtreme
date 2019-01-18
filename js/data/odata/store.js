@@ -147,7 +147,7 @@ var ODataStore = Store.inherit({
     },
 
     _customLoadOptions: function() {
-        return ["expand", "customQueryParams", "stringToLower"];
+        return ["expand", "customQueryParams"];
     },
 
     /**
