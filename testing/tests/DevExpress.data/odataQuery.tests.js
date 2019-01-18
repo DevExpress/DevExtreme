@@ -727,7 +727,7 @@ QUnit.test("string functions", function(assert) {
         .always(done);
 });
 
-QUnit.test("string functions with stringToLower is false", function(assert) {
+QUnit.test("string functions with stringToLower equal false", function(assert) {
     assert.expect(4);
 
     var done = assert.async();
@@ -755,12 +755,12 @@ QUnit.test("string functions with stringToLower is false", function(assert) {
         .always(done);
 });
 
-QUnit.test("string functions with global stringToLower is false", function(assert) {
+QUnit.test("string functions with global stringToLower equal false", function(assert) {
     assert.expect(4);
 
     var done = assert.async();
 
-    config({ stringToLower: false });
+    config({ oDataStringToLower: false });
 
     var check = function(operation, expectation) {
         return QUERY("odata.org")
@@ -783,7 +783,7 @@ QUnit.test("string functions with global stringToLower is false", function(asser
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .always(() => {
-            config({ stringToLower: true });
+            config({ oDataStringToLower: true });
         })
         .always(done);
 });
@@ -816,7 +816,7 @@ QUnit.test("string functions (v4)", function(assert) {
         .always(done);
 });
 
-QUnit.test("string functions (v4) with stringToLower is false", function(assert) {
+QUnit.test("string functions (v4) with stringToLower equal false", function(assert) {
     assert.expect(4);
 
     var done = assert.async();
@@ -844,12 +844,12 @@ QUnit.test("string functions (v4) with stringToLower is false", function(assert)
         .always(done);
 });
 
-QUnit.test("string functions (v4) with global stringToLower is false", function(assert) {
+QUnit.test("string functions (v4) with global stringToLower equal false", function(assert) {
     assert.expect(4);
 
     var done = assert.async();
 
-    config({ stringToLower: false });
+    config({ oDataStringToLower: false });
 
     var check = function(operation, expectation) {
         return QUERY("odata.org", { version: 4 })
@@ -872,7 +872,7 @@ QUnit.test("string functions (v4) with global stringToLower is false", function(
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .always(() => {
-            config({ stringToLower: true });
+            config({ oDataStringToLower: true });
         })
         .always(done);
 });

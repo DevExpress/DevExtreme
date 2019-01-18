@@ -139,7 +139,7 @@ var compileCriteria = (function() {
 
     return function(criteria, version, types, stringToLower) {
         fieldTypes = types;
-        forceLowerCase = typeUtils.isDefined(stringToLower) ? stringToLower : config().stringToLower;
+        forceLowerCase = typeUtils.isDefined(stringToLower) ? stringToLower : config().oDataStringToLower;
         protocolVersion = version;
 
         return compileCore(criteria);
