@@ -620,7 +620,7 @@ QUnit.test("categories axis. range with startValue, without endValue", function(
     assert.strictEqual(range.axisType, "discrete");
     assert.strictEqual(range.min, "a1");
     assert.strictEqual(range.max, undefined);
-    assert.deepEqual(range.categories, ["0", "1", "2"]);
+    assert.strictEqual(range.isEmpty(), true);
 });
 
 QUnit.test("categories axis. range with endValue, without startValue", function(assert) {
@@ -637,7 +637,7 @@ QUnit.test("categories axis. range with endValue, without startValue", function(
     assert.strictEqual(range.axisType, "discrete");
     assert.strictEqual(range.min, undefined);
     assert.strictEqual(range.max, "a2");
-    assert.deepEqual(range.categories, ["0", "1", "2"]);
+    assert.strictEqual(range.isEmpty(), true);
 });
 
 QUnit.test("categories axis. range with startValue, without endValue (with categories)", function(assert) {

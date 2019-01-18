@@ -441,7 +441,7 @@ function getAddFunction(range, correctZeroLevel) {
 function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     const minDefined = typeUtils.isDefined(visualRange.startValue);
     const maxDefined = typeUtils.isDefined(visualRange.endValue);
-    const isDiscrete = options.axisType === "discrete";
+    const nonDiscrete = options.axisType !== "discrete";
 
     dataRange = dataRange || wholeRange;
 
@@ -452,8 +452,15 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     let rangeLength = visualRange.length;
     const categories = dataRange.categories;
 
+    if(nonDiscrete && !typeUtils.isDefined(min) && !typeUtils.isDefined(max)) {
+        return {
+            startValue: min,
+            endValue: max
+        };
+    }
+
     if(isDefined(rangeLength)) {
-        if(!isDiscrete) {
+        if(nonDiscrete) {
             if(options.dataType === "datetime" && !isNumber(rangeLength)) {
                 rangeLength = dateToMilliseconds(rangeLength);
             }
@@ -483,7 +490,7 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
         }
     }
 
-    if(!isDiscrete) {
+    if(nonDiscrete) {
         if(isDefined(wholeRange.max) && max > wholeRange.max) {
             max = wholeRange.max;
         }
