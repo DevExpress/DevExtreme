@@ -85,6 +85,10 @@ var ODataStore = Store.inherit({
          * @default false
          */
         /**
+         * @name ODataStoreOptions.stringToLower
+         * @type boolean
+         */
+        /**
          * @name ODataStoreOptions.deserializeDates
          * @type boolean
          */
@@ -143,7 +147,7 @@ var ODataStore = Store.inherit({
     },
 
     _customLoadOptions: function() {
-        return ["expand", "customQueryParams"];
+        return ["expand", "customQueryParams", "stringToLower"];
     },
 
     /**
@@ -196,6 +200,10 @@ var ODataStore = Store.inherit({
             url = loadOptions.urlOverride;
         } else {
             url = this._url;
+        }
+
+        if(isDefined(this._stringToLower)) {
+            queryOptions.stringToLower = this._stringToLower;
         }
 
         if(loadOptions.customQueryParams) {

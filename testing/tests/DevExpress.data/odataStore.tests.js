@@ -2499,6 +2499,19 @@ QUnit.test("withCredentials is set", function(assert) {
         .load();
 });
 
+QUnit.test("stringToLower equal false", function(assert) {
+    ajaxMock.setup({
+        url: "odata.org",
+        responseText: { d: { results: [] } },
+        callback: function(request) {
+            assert.equal(request.data.$filter, "substringof('O',prop/nested/prop)");
+        }
+    });
+
+    new ODataStore({ url: "odata.org", stringToLower: false })
+        .load({ filter: ["prop.nested.prop", "contains", "O"] });
+});
+
 QUnit.test("verbose MIME specifier is used", function(assert) {
     var done = assert.async();
 
