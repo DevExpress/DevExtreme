@@ -1,12 +1,12 @@
-import $ from "jquery";
-import renderer from "core/renderer";
-import keyboardMock from "../../helpers/keyboardMock.js";
-import fx from "animation/fx";
-import DropDownBox from "ui/drop_down_box";
-import { isRenderer } from "core/utils/type";
-import config from "core/config";
+var $ = require("jquery"),
+    renderer = require("core/renderer"),
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    fx = require("animation/fx"),
+    DropDownBox = require("ui/drop_down_box"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
-import "common.css!";
+require("common.css!");
 
 QUnit.testStart(function() {
     var markup =
@@ -20,8 +20,7 @@ QUnit.testStart(function() {
 
 var DX_TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
     TAB_KEY_CODE = 9,
-    DX_STATE_FOCUSED_CLASS = "dx-state-focused",
-    OVERLAY_CONTENT_CLASS = "dx-overlay-content";
+    DX_STATE_FOCUSED_CLASS = "dx-state-focused";
 
 var moduleConfig = {
     beforeEach: function() {
@@ -390,7 +389,7 @@ QUnit.test("popup should be flipped when container size is smaller than content 
             }
         });
 
-        var $popupContent = $("." + OVERLAY_CONTENT_CLASS);
+        var $popupContent = $(".dx-overlay-content");
 
         assert.ok($popupContent.hasClass("dx-dropdowneditor-overlay-flipped"), "popup was flipped");
     } finally {
@@ -425,20 +424,6 @@ QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets includin
     }
 });
 
-QUnit.test("Dropdownbox popup should change height according to the content", assert => {
-    const $content = $("<div>").attr("id", "content"),
-        instance = new DropDownBox($("#dropDownBox"), {
-            opened: true,
-            contentTemplate: () => $content
-        });
-
-    const $popupContent = $(instance.content()).parent("." + OVERLAY_CONTENT_CLASS),
-        popupHeight = $popupContent.height();
-
-    $("<div>").height(50).appendTo($content);
-    assert.strictEqual($popupContent.height(), popupHeight + 50, "popup height has been changed");
-});
-
 QUnit.module("keyboard navigation", moduleConfig);
 
 QUnit.testInActiveWindow("first focusable element inside of content should get focused after tab pressing", function(assert) {
@@ -456,7 +441,7 @@ QUnit.testInActiveWindow("first focusable element inside of content should get f
 
     keyboard.press("tab");
 
-    assert.equal($(instance.content()).parent("." + OVERLAY_CONTENT_CLASS).attr("tabindex"), -1, "popup content should not be tabbable");
+    assert.equal($(instance.content()).parent(".dx-overlay-content").attr("tabindex"), -1, "popup content should not be tabbable");
     assert.ok(instance.option("opened"), "popup was not closed after tab key pressed");
     assert.ok($input1.is(":focus"), "first focusable content element got focused");
 });
