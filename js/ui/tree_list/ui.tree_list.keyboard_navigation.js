@@ -1,6 +1,6 @@
-var core = require("./ui.tree_list.core"),
-    keyboardNavigationModule = require("../grid_core/ui.grid_core.keyboard_navigation"),
-    extend = require("../../core/utils/extend").extend;
+import core from './ui.tree_list.core';
+import keyboardNavigationModule from '../grid_core/ui.grid_core.keyboard_navigation';
+import { extend } from '../../core/utils/extend';
 
 core.registerModule("keyboardNavigation", extend(true, {}, keyboardNavigationModule, {
     extenders: {

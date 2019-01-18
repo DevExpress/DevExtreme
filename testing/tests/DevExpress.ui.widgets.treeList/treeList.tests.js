@@ -10,14 +10,13 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
-require("ui/tree_list/ui.tree_list");
-
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    devices = require("core/devices"),
-    fx = require("animation/fx");
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/tree_list/ui.tree_list';
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import devices from 'core/devices';
+import fx from 'animation/fx';
 
 fx.off = true;
 

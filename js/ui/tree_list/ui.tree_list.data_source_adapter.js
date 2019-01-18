@@ -1,20 +1,20 @@
-var treeListCore = require("./ui.tree_list.core"),
-    errors = require("../widget/ui.errors"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    dataCoreUtils = require("../../core/utils/data"),
-    extend = require("../../core/utils/extend").extend,
-    gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
-    ArrayStore = require("../../data/array_store"),
-    query = require("../../data/query"),
-    DataSourceAdapter = require("../grid_core/ui.grid_core.data_source_adapter"),
-    Deferred = require("../../core/utils/deferred").Deferred,
-    queryByOptions = require("../../data/store_helper").queryByOptions;
+import treeListCore from './ui.tree_list.core';
+import errors from '../widget/ui.errors';
+import commonUtils from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import dataCoreUtils from '../../core/utils/data';
+import { extend } from '../../core/utils/extend';
+import gridCoreUtils from '../grid_core/ui.grid_core.utils';
+import ArrayStore from '../../data/array_store';
+import query from '../../data/query';
+import DataSourceAdapter from '../grid_core/ui.grid_core.data_source_adapter';
+import { Deferred } from '../../core/utils/deferred';
+import { queryByOptions } from '../../data/store_helper';
 
 var DEFAULT_KEY_EXPRESSION = "id";
 
-DataSourceAdapter = DataSourceAdapter.inherit((function() {
+var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
     var getChildKeys = function(that, keys) {
         var childKeys = [];
 
@@ -748,9 +748,9 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
 module.exports = {
     extend: function(extender) {
-        DataSourceAdapter = DataSourceAdapter.inherit(extender);
+        DataSourceAdapterTreeList = DataSourceAdapterTreeList.inherit(extender);
     },
     create: function(component) {
-        return new DataSourceAdapter(component);
+        return new DataSourceAdapterTreeList(component);
     }
 };
