@@ -43,11 +43,11 @@ var inputType = function(type) {
     }
 };
 
-var detectTouchEvents = function(window) {
-    return (window.hasProperty("ontouchstart") || window.hasProperty("TouchEvent")) && !window.hasProperty("callPhantom");
+var detectTouchEvents = function(window, maxTouchPoints) {
+    return (window.hasProperty("ontouchstart") || !!maxTouchPoints) && !window.hasProperty("callPhantom");
 };
 
-var touchEvents = detectTouchEvents(windowUtils),
+var touchEvents = detectTouchEvents(windowUtils, !!navigator.maxTouchPoints),
     pointerEvents = !!navigator.pointerEnabled || !!navigator.msPointerEnabled,
     touchPointersPresent = !!navigator.maxTouchPoints || !!navigator.msMaxTouchPoints;
 
