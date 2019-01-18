@@ -1,10 +1,9 @@
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    CustomStore = require("data/custom_store"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
+import $ from "jquery";
+import { DataSource } from "data/data_source/data_source";
+import CustomStore from "data/custom_store";
+import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
 
 var FILTER_PANEL_CLASS = "dx-datagrid-filter-panel",
     FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text",

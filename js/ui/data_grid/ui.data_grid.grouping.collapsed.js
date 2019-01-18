@@ -1,17 +1,13 @@
-var extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    gridCore = require("./ui.data_grid.core"),
-    normalizeSortingInfo = gridCore.normalizeSortingInfo,
-    groupingCore = require("./ui.data_grid.grouping.core"),
-    createOffsetFilter = groupingCore.createOffsetFilter,
-    createGroupFilter = require("./ui.data_grid.utils").createGroupFilter,
-    errors = require("../widget/ui.errors"),
-    dataErrors = require("../../data/errors").errors,
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import { combineFilters, normalizeSortingInfo } from "./ui.data_grid.core";
+import { GroupingHelper, createOffsetFilter } from "./ui.data_grid.grouping.core";
+import { createGroupFilter } from "./ui.data_grid.utils";
+import errors from "../widget/ui.errors";
+import { errors as dataErrors } from "../../data/errors";
+import { when, Deferred } from "../../core/utils/deferred";
 
-exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
+exports.GroupingHelper = GroupingHelper.inherit((function() {
     var foreachExpandedGroups = function(that, callback, updateGroups) {
         return that.foreachGroups(function(groupInfo, parents) {
             if(groupInfo.isExpanded) {
@@ -293,7 +289,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
         var filter = options.storeLoadOptions.filter;
 
         if(!options.storeLoadOptions.isLoadingAll) {
-            filter = gridCore.combineFilters([filter, gridCore.combineFilters(expandedFilters, "or")]);
+            filter = combineFilters([filter, combineFilters(expandedFilters, "or")]);
         }
 
         var loadOptions = extend({}, options.storeLoadOptions, {

@@ -1,8 +1,8 @@
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
-    gridCore = require("./ui.data_grid.core"),
-    normalizeSortingInfo = require("../../data/utils").normalizeSortingInfo,
-    when = require("../../core/utils/deferred").when;
+import $ from "../../core/renderer";
+import Class from "../../core/class";
+import gridCore from "./ui.data_grid.core";
+import { normalizeSortingInfo } from "../../data/utils";
+import { when } from "../../core/utils/deferred";
 
 exports.createOffsetFilter = function(path, storeLoadOptions) {
     var groups = normalizeSortingInfo(storeLoadOptions.group),

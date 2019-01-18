@@ -8,30 +8,27 @@ QUnit.testStart(function() {
 });
 
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
-    devices = require("core/devices"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    browser = require("core/utils/browser"),
-    device = devices.real(),
-    commonUtils = require("core/utils/common"),
-    typeUtils = require("core/utils/type"),
-    eventUtils = require("events/utils"),
-    eventsEngine = require("events/core/events_engine"),
-    KeyboardNavigationController = require("ui/grid_core/ui.grid_core.keyboard_navigation").controllers.keyboardNavigation,
-    RowsView = require("ui/data_grid/ui.data_grid.rows").RowsView,
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController,
-    MockEditingController = dataGridMocks.MockEditingController,
-    MockSelectionController = dataGridMocks.MockSelectionController,
-    publicComponentUtils = require("core/utils/public_component");
+import $ from "jquery";
+import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
+import devices from "core/devices";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import browser from "core/utils/browser";
+import commonUtils from "core/utils/common";
+import typeUtils from "core/utils/type";
+import eventUtils from "events/utils";
+import eventsEngine from "events/core/events_engine";
+import keyboardNavigationModule from "ui/grid_core/ui.grid_core.keyboard_navigation";
+var KeyboardNavigationController = keyboardNavigationModule.controllers.keyboardNavigation;
+import { RowsView } from "ui/data_grid/ui.data_grid.rows";
+import { setupDataGridModules, MockDataController, MockColumnsController, MockEditingController, MockSelectionController } from "../../helpers/dataGridMocks.js";
+import publicComponentUtils from "core/utils/public_component";
+
+var device = devices.real();
 
 var CLICK_EVENT = eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation");
 

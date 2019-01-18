@@ -1,14 +1,12 @@
-var $ = require("jquery"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    ArrayStore = require("data/array_store"),
-    Promise = require("core/polyfills/promise"),
-    fx = require("animation/fx");
+import $ from "jquery";
+import { setupDataGridModules, MockDataController } from "../../helpers/dataGridMocks.js";
+import ArrayStore from "data/array_store";
+import Promise from "core/polyfills/promise";
+import fx from "animation/fx";
 
-require("ui/data_grid/ui.data_grid");
-require("common.css!");
-require("generic_light.css!");
+import "ui/data_grid/ui.data_grid";
+import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(function() {
     var markup = '<div id="container" class="dx-datagrid"></div>';

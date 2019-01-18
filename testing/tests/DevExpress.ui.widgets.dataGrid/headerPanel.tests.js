@@ -8,17 +8,14 @@ QUnit.testStart(function() {
 });
 
 
-require("common.css!");
+import "common.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    devices = require("core/devices"),
-    typeUtils = require("core/utils/type"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController;
+import $ from "jquery";
+import { setupDataGridModules, MockDataController, MockColumnsController } from "../../helpers/dataGridMocks.js";
+import devices from "core/devices";
+import typeUtils from "core/utils/type";
 
 QUnit.module('Header panel', {
     beforeEach: function() {
