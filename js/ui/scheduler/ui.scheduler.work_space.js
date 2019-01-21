@@ -769,16 +769,20 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createHeaderScrollable: function() {
-        var dateTableScrollableOnScroll,
-            $headerScrollable = $("<div>")
-                .addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS)
-                .appendTo(this.$element());
+        var $headerScrollable = $("<div>")
+            .addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS)
+            .appendTo(this.$element());
 
-        this._headerScrollable = this._createComponent($headerScrollable, Scrollable, {
+        this._headerScrollable = this._createComponent($headerScrollable, Scrollable, this._headerScrollableConfig());
+    },
+
+    _headerScrollableConfig: function() {
+        var dateTableScrollableOnScroll;
+
+        var config = {
             useKeyboard: false,
             showScrollbar: false,
             direction: "horizontal",
-            scrollByContent: true,
             useNative: false,
             updateManually: true,
             bounceEnabled: false,
@@ -795,7 +799,9 @@ var SchedulerWorkSpace = Widget.inherit({
             onEnd: (function(e) {
                 this._dateTableScrollable.option("onScroll", dateTableScrollableOnScroll);
             }).bind(this)
-        });
+        };
+
+        return config;
     },
 
     _createSidebarScrollable: function() {
