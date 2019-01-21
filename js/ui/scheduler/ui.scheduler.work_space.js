@@ -778,6 +778,7 @@ var SchedulerWorkSpace = Widget.inherit({
             useKeyboard: false,
             showScrollbar: false,
             direction: "horizontal",
+            scrollByContent: true,
             useNative: false,
             updateManually: true,
             bounceEnabled: false,
