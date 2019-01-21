@@ -279,10 +279,6 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
  * @name LoadOptions.requireGroupCount
  * @type boolean
  */
-/**
- * @name LoadOptions.stringToLower
- * @type boolean
- */
 
 /**
 * @name CustomStore
