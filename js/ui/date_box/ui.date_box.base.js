@@ -664,7 +664,12 @@ var DateBox = DropDownEditor.inherit({
             }
         });
 
-        return isValid;
+        this.validationRequest.fire({
+            editor: this,
+            value: value
+        });
+
+        return this.option("isValid");
     },
 
     _isValueChanged: function(newValue) {
@@ -843,10 +848,6 @@ var DateBox = DropDownEditor.inherit({
         } else if(this._isTextChanged(value)) {
             this._updateValue();
             this._validateValue(value);
-            this.validationRequest.fire({
-                editor: this,
-                value
-            });
         }
 
         return this.dateOption("value", value);
