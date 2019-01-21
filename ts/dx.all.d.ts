@@ -3889,6 +3889,9 @@ declare module DevExpress.ui {
         onAppointmentDeleted?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
         /** A function that is executed before an appointment is deleted from the data source. */
         onAppointmentDeleting?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
+        /** @deprecated Use the onAppointmentFormOpening option instead. */
+        onAppointmentFormCreated?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
+        /** A function that is executed before an appointment details form is opened. */
         onAppointmentFormOpening?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
         /** A function that is executed when an appointment is rendered. */
         onAppointmentRendered?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any, appointmentElement?: DevExpress.core.dxElement }) => any);
@@ -4101,8 +4104,6 @@ declare module DevExpress.ui {
         name?: string;
         /** @deprecated Use the switchedOffText option instead. */
         offText?: string;
-        /** @deprecated Use onAppointmentFormOpening instead. */
-        onAppointmentFormCreated?: string;
         /** @deprecated Use the switchedOnText option instead. */
         onText?: string;
         /** Specifies the text displayed when the widget is switched off. */
