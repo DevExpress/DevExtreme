@@ -1,16 +1,14 @@
-var $ = require("../../core/renderer"),
-    modules = require("./ui.grid_core.modules"),
-    commonUtils = require("../../core/utils/common"),
-    windowUtils = require("../../core/utils/window"),
-    each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    messageLocalization = require("../../localization/message"),
-    deferredUntils = require("../../core/utils/deferred"),
-    when = deferredUntils.when,
-    Deferred = deferredUntils.Deferred,
-    domAdapter = require("../../core/dom_adapter"),
-    browser = require("../../core/utils/browser");
+import $ from "../../core/renderer";
+import modules from "./ui.grid_core.modules";
+import commonUtils from "../../core/utils/common";
+import windowUtils from "../../core/utils/window";
+import { each } from "../../core/utils/iterator";
+import typeUtils from "../../core/utils/type";
+import gridCoreUtils from "./ui.grid_core.utils";
+import messageLocalization from "../../localization/message";
+import { when, Deferred } from "../../core/utils/deferred";
+import domAdapter from "../../core/dom_adapter";
+import browser from "../../core/utils/browser";
 
 var TABLE_CLASS = "table",
     BORDERS_CLASS = "borders",

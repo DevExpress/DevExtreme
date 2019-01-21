@@ -1,14 +1,12 @@
-var $ = require("../../core/renderer"),
-    windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
-    commonUtils = require("../../core/utils/common"),
-    virtualScrollingCore = require("./ui.grid_core.virtual_scrolling_core"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    each = require("../../core/utils/iterator").each,
-    deferredUtils = require("../../core/utils/deferred"),
-    Deferred = deferredUtils.Deferred,
-    translator = require("../../animation/translator"),
-    LoadIndicator = require("../load_indicator");
+import $ from "../../core/renderer";
+import { getWindow, hasWindow } from "../../core/utils/window";
+import { deferUpdate, deferRender } from "../../core/utils/common";
+import virtualScrollingCore from "./ui.grid_core.virtual_scrolling_core";
+import gridCoreUtils from "./ui.grid_core.utils";
+import { each } from "../../core/utils/iterator";
+import { Deferred } from "../../core/utils/deferred";
+import translator from "../../animation/translator";
+import LoadIndicator from "../load_indicator";
 
 var TABLE_CLASS = "table",
     BOTTOM_LOAD_PANEL_CLASS = "bottom-load-panel",
@@ -346,7 +344,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                 virtualItemsCount = that._dataController.virtualItemsCount();
 
             if(virtualItemsCount && that.option("legacyRendering")) {
-                if(windowUtils.hasWindow()) {
+                if(hasWindow()) {
                     tableElement.addClass(that.addWidgetPrefix(TABLE_CONTENT_CLASS));
                 }
 
@@ -466,7 +464,7 @@ var VirtualScrollingRowsViewExtender = (function() {
 
                 !isRender && that._updateScrollTopPosition(top);
             } else {
-                commonUtils.deferUpdate(function() {
+                deferUpdate(function() {
                     that._updateContentPositionCore();
                 });
             }
@@ -504,7 +502,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                 contentHeight = that._dataController.getVirtualContentSize();
                 top = that._dataController.getContentOffset();
 
-                commonUtils.deferRender(function() {
+                deferRender(function() {
                     translator.move($contentTable, { left: 0, top: top });
 
                     // TODO jsdmitry: Separate this functionality on render and resize
@@ -634,7 +632,7 @@ var VirtualScrollingRowsViewExtender = (function() {
 
                 that._updateContentPosition();
 
-                viewportHeight = that._hasHeight ? that.element().outerHeight() : $(window).outerHeight();
+                viewportHeight = that._hasHeight ? that.element().outerHeight() : $(getWindow()).outerHeight();
                 that._dataController.viewportSize(Math.ceil(viewportHeight / that._rowHeight));
             }
         },
@@ -668,7 +666,7 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that.callBase();
 
-            if(that.component.$element() && !that._windowScroll && $element.closest(window.document).length) {
+            if(that.component.$element() && !that._windowScroll && $element.closest(getWindow().document).length) {
                 that._windowScroll = virtualScrollingCore.subscribeToExternalScrollers($element, function(scrollPos) {
                     if(!that._hasHeight && that._rowHeight) {
                         that._dataController.setViewportPosition(scrollPos);

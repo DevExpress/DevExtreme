@@ -1,11 +1,10 @@
 import { isDefined } from "../../core/utils/type";
-
-var modules = require("./ui.grid_core.modules"),
-    utils = require("../filter_builder/utils"),
-    errors = require("../widget/ui.errors"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    filterUtils = require("../shared/filtering"),
-    customOperations = require("./ui.grid_core.filter_custom_operations");
+import modules from "./ui.grid_core.modules";
+import utils from "../filter_builder/utils";
+import errors from "../widget/ui.errors";
+import gridCoreUtils from "./ui.grid_core.utils";
+import filterUtils from "../shared/filtering";
+import customOperations from "./ui.grid_core.filter_custom_operations";
 
 var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"],
     FILTER_TYPES_INCLUDE = "include",

@@ -32,7 +32,7 @@ export default function createConstantLine(axis, options) {
         },
 
         draw() {
-            if(!isDefined(options.value) || axis._translator.getBusinessRange().stubData) {
+            if(!isDefined(options.value) || axis._translator.getBusinessRange().isEmpty()) {
                 return this;
             }
             const canvas = axis._getCanvasStartEnd();

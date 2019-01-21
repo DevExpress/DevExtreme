@@ -96,9 +96,6 @@ var dxPieChart = BaseChart.inherit({
         this.series.map(function(series) {
             var range = new rangeModule.Range();
             range.addRange(series.getRangeData().val);
-            if(!range.isDefined()) {
-                range.setStubData();
-            }
             series.getValueAxis().setBusinessRange(range);
             return range;
         });

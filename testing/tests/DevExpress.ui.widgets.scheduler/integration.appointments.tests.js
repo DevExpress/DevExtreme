@@ -5313,7 +5313,7 @@ QUnit.test("Exception should not be thrown on second details view opening if for
         currentDate: new Date(2017, 2, 13),
         currentView: "week",
         views: ["week"],
-        onAppointmentFormCreated: function(e) {
+        onAppointmentFormOpening: function(e) {
             e.form.option("items", []);
         }
     });
@@ -5340,7 +5340,7 @@ QUnit.test("FormData should be reset on saveChanges, dateSerializationFormat is 
         views: ["week"],
         startDateExpr: "StartDate",
         endDateExpr: "EndDate",
-        onAppointmentFormCreated: function(data) {
+        onAppointmentFormOpening: function(data) {
             var form = data.form,
                 startDate = data.appointmentData.StartDate,
                 endDate = data.appointmentData.EndDate;

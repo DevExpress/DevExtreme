@@ -23,6 +23,7 @@ const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 const TOOLBAR_SEPARATOR_CLASS = "dx-htmleditor-toolbar-separator";
 const TOOLBAR_MENU_SEPARATOR_CLASS = "dx-htmleditor-toolbar-menu-separator";
 const ACTIVE_FORMAT_CLASS = "dx-format-active";
+const BOX_ITEM_CONTENT_CLASS = "dx-box-item-content";
 
 const ICON_CLASS = "dx-icon";
 
@@ -42,6 +43,7 @@ const DIALOG_IMAGE_FIELD_WIDTH = "dxHtmlEditor-dialogImageWidthField";
 const DIALOG_IMAGE_FIELD_HEIGHT = "dxHtmlEditor-dialogImageHeightField";
 
 const USER_ACTION = "user";
+const SILENT_ACTION = "silent";
 
 const HEADING_TEXT = format("dxHtmlEditor-heading");
 const NORMAL_TEXT = format("dxHtmlEditor-normalText");
@@ -159,16 +161,13 @@ class ToolbarModule extends BaseModule {
             });
 
             promise.done((formData) => {
-                let index;
-                let length;
-
                 if(selection && !formats.link) {
                     const text = formData.text;
+                    const { index, length } = selection;
+
                     formData.text = "";
 
-                    index = selection.index;
-                    length = selection.length;
-                    length && this.quill.deleteText(index, length);
+                    length && this.quill.deleteText(index, length, SILENT_ACTION);
                     this.quill.insertText(index, text, "link", formData, USER_ACTION);
                     this.quill.setSelection(index + text.length, 0);
 
@@ -220,18 +219,22 @@ class ToolbarModule extends BaseModule {
                 items: formItems
             });
 
-            promise.done((formData) => {
-                if(isUpdateDialog) {
-                    const formatIndex = selection && !selection.length && selection.index - 1 || pasteIndex;
-                    this.quill.formatText(formatIndex, 1, {
-                        width: formData.width,
-                        height: formData.height,
-                        alt: formData.alt
-                    }, USER_ACTION);
-                } else {
-                    this.quill.insertEmbed(pasteIndex, "extendedImage", formData, USER_ACTION);
-                }
-            });
+            promise
+                .done((formData) => {
+                    if(isUpdateDialog) {
+                        const formatIndex = selection && !selection.length && selection.index - 1 || pasteIndex;
+                        this.quill.formatText(formatIndex, 1, {
+                            width: formData.width,
+                            height: formData.height,
+                            alt: formData.alt
+                        }, USER_ACTION);
+                    } else {
+                        this.quill.insertEmbed(pasteIndex, "extendedImage", formData, USER_ACTION);
+                    }
+                })
+                .always(() => {
+                    this.quill.focus();
+                });
         };
     }
 
@@ -365,6 +368,11 @@ class ToolbarModule extends BaseModule {
                     dataField: formatName,
                     editorType: "dxColorView",
                     editorOptions: {
+                        onContentReady: (e) => {
+                            $(e.element)
+                                .closest(`.${BOX_ITEM_CONTENT_CLASS}`)
+                                .css("flexBasis", "auto"); // WA for the T590137
+                        },
                         focusStateEnabled: false
                     },
                     label: { visible: false }

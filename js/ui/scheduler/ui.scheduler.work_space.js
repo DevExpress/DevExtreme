@@ -1738,6 +1738,12 @@ var SchedulerWorkSpace = Widget.inherit({
         delete this._interval;
     },
 
+    _clean: function() {
+        eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+
+        this.callBase();
+    },
+
     getWorkArea: function() {
         return this._dateTableScrollable.$content();
     },

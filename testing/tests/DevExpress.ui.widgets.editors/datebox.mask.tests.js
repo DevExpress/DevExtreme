@@ -235,6 +235,14 @@ if(devices.real().deviceType === "desktop") {
                 text: ":"
             });
         });
+
+        QUnit.test("Pattern stub", (assert) => {
+            const parts = renderDateParts("dd 2016", dateParser.getRegExpInfo("'dd' yyyy", dateLocalization));
+
+            assert.equal(parts.length, 2, "there are 2 parts rendered");
+            assert.ok(parts[0].isStub, "first part is the stub");
+            assert.notOk(parts[1].isStub, "second part is not the stub");
+        });
     });
 
     QUnit.module("Date parts find", setupModule, () => {
@@ -522,6 +530,8 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Increment and decrement date part by mouse wheel", (assert) => {
+            this.$input.get(0).focus();
+
             this.pointer.wheel(10);
             assert.equal(this.$input.val(), "November 10 2012", "increment works");
 

@@ -1,5 +1,5 @@
-var gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
-    normalizeSortingInfo = require("../../data/utils").normalizeSortingInfo;
+import gridCoreUtils from "../grid_core/ui.grid_core.utils";
+import { normalizeSortingInfo as normalizeSortingInfo } from "../../data/utils";
 
 exports.createGroupFilter = function(path, storeLoadOptions) {
     var groups = normalizeSortingInfo(storeLoadOptions.group),

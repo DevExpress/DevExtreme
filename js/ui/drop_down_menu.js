@@ -172,7 +172,8 @@ var DropDownMenu = Widget.inherit({
             menuWidget: List,
             popupMaxHeight: undefined,
             closeOnClick: true,
-            useInkRipple: false
+            useInkRipple: false,
+            container: undefined
         });
     },
 
@@ -379,7 +380,8 @@ var DropDownMenu = Widget.inherit({
             target: this.$element(),
             height: this.option("popupHeight"),
             width: this.option("popupWidth"),
-            maxHeight: this.option("popupMaxHeight")
+            maxHeight: this.option("popupMaxHeight"),
+            container: this.option("container")
         };
     },
 

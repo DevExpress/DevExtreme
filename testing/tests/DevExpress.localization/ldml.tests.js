@@ -19,6 +19,13 @@ QUnit.test("parse with escaped chars", function(assert) {
     assert.deepEqual(parser("Monday, 12. November 2018 um 14:15:16"), date, "parse correct date string");
 });
 
+QUnit.test("parse with escaped pattern chars", function(assert) {
+    var date = new Date(2018, 0, 1, 0, 0, 0),
+        parser = getDateParser("'dd' yyyy", dateParts);
+
+    assert.deepEqual(parser("dd 2018"), date, "parse correct date string");
+});
+
 QUnit.test("parse dd/MM/yyyy format", function(assert) {
     var parser = getDateParser("dd/MM/yyyy"),
         date = new Date(2017, 8, 22);
@@ -305,6 +312,6 @@ QUnit.module("getRegExpInfo method");
 QUnit.test("getRegExpInfo should return correct pattern set when stub is in the end", function(assert) {
     var regExpInfo = getRegExpInfo("EEE, MMMM, dd, HH:mm:ss '(stub)'", dateParts);
     assert.deepEqual(regExpInfo.patterns, [
-        "EEE", ", ", "MMMM", ", ", "dd", ", ", "HH", ":", "mm", ":", "ss", " (stub)"
+        "EEE", "', '", "MMMM", "', '", "dd", "', '", "HH", "':'", "mm", "':'", "ss", "' (stub)'"
     ]);
 });

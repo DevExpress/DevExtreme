@@ -1,17 +1,13 @@
-var toComparable = require("../../core/utils/data").toComparable,
-    dataUtils = require("../../data/utils"),
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    storeHelper = require("../../data/store_helper"),
-    gridCore = require("./ui.data_grid.core"),
-    normalizeSortingInfo = gridCore.normalizeSortingInfo,
-    groupingCore = require("./ui.data_grid.grouping.core"),
-    createOffsetFilter = groupingCore.createOffsetFilter,
-    createGroupFilter = require("./ui.data_grid.utils").createGroupFilter,
-    dataQuery = require("../../data/query"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+import { toComparable } from "../../core/utils/data";
+import { keysEqual } from "../../data/utils";
+import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import { arrangeSortingInfo, multiLevelGroup } from "../../data/store_helper";
+import { combineFilters, normalizeSortingInfo } from "./ui.data_grid.core";
+import { GroupingHelper, createOffsetFilter } from "./ui.data_grid.grouping.core";
+import { createGroupFilter } from "./ui.data_grid.utils";
+import dataQuery from "../../data/query";
+import { when, Deferred } from "../../core/utils/deferred";
 
 var loadTotalCount = function(dataSource, options) {
     var d = new Deferred(),
@@ -27,7 +23,7 @@ var loadTotalCount = function(dataSource, options) {
 exports.loadTotalCount = loadTotalCount;
 ///#ENDDEBUG
 
-exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
+exports.GroupingHelper = GroupingHelper.inherit((function() {
 
     var foreachCollapsedGroups = function(that, callback, updateOffsets) {
         return that.foreachGroups(function(groupInfo) {
@@ -126,7 +122,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
         var i;
         if(path1.length !== path2.length) return false;
         for(i = 0; i < path1.length; i++) {
-            if(!dataUtils.keysEqual(null, path1[i], path2[i])) {
+            if(!keysEqual(null, path1[i], path2[i])) {
                 return false;
             }
         }
@@ -170,7 +166,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
         if(loadOptions.group) {
             groups = normalizeSortingInfo(loadOptions.group);
             sorts = normalizeSortingInfo(storeLoadOptions.sort);
-            storeLoadOptions.sort = storeHelper.arrangeSortingInfo(groups, sorts);
+            storeLoadOptions.sort = arrangeSortingInfo(groups, sorts);
             delete loadOptions.group;
         }
     };
@@ -187,11 +183,11 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
             for(j = 0; j <= i; j++) {
                 filterElement.push([groups[j].selector, i === j ? "<>" : "=", path[j]]);
             }
-            filter.push(gridCore.combineFilters(filterElement));
+            filter.push(combineFilters(filterElement));
         }
-        filter = gridCore.combineFilters(filter, "or");
+        filter = combineFilters(filter, "or");
 
-        return gridCore.combineFilters([filter, storeLoadOptions.filter]);
+        return combineFilters([filter, storeLoadOptions.filter]);
     };
 
     var getGroupCount = function(item, groupCount) {
@@ -299,7 +295,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
 
             if(groupCount) {
                 query = dataQuery(data);
-                storeHelper.multiLevelGroup(query, groups).enumerate().done(function(groupedData) {
+                multiLevelGroup(query, groups).enumerate().done(function(groupedData) {
                     data = groupedData;
                 });
                 if(collapsedGroups) {

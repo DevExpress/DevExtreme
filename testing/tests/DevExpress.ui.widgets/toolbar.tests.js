@@ -1,17 +1,17 @@
-require("ui/action_sheet");
-require("ui/drop_down_menu");
+import "ui/action_sheet";
+import "ui/drop_down_menu";
 
-var $ = require("jquery"),
-    Toolbar = require("ui/toolbar"),
-    fx = require("animation/fx"),
-    hideTopOverlayCallback = require("mobile/hide_top_overlay").hideCallback,
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    themes = require("ui/themes");
+import $ from "jquery";
+import Toolbar from "ui/toolbar";
+import fx from "animation/fx";
+import { hideCallback as hideTopOverlayCallback } from "mobile/hide_top_overlay";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import pointerMock from "../../helpers/pointerMock.js";
+import themes from "ui/themes";
 
-require("common.css!");
-require("ui/button");
-require("ui/tabs");
+import "common.css!";
+import "ui/button";
+import "ui/tabs";
 
 $("#qunit-fixture").html('<style>\
         #toolbarWithMenu .dx-toolbar-menu-container {\
@@ -28,19 +28,19 @@ $("#qunit-fixture").html('<style>\
     <div id="widget"></div>\
     <div id="widthRootStyle" style="width: 300px;"></div>');
 
-var TOOLBAR_CLASS = "dx-toolbar",
-    TOOLBAR_ITEM_CLASS = "dx-toolbar-item",
-    TOOLBAR_BEFORE_CONTAINER_CLASS = "dx-toolbar-before",
-    TOOLBAR_AFTER_CONTAINER_CLASS = "dx-toolbar-after",
-    TOOLBAR_CENTER_CONTAINER_CLASS = "dx-toolbar-center",
-    TOOLBAR_LABEL_CLASS = "dx-toolbar-label",
-    TOOLBAR_MENU_BUTTON_CLASS = "dx-toolbar-menu-button",
-    TOOLBAR_LIST_VISIBLE_CLASS = "dx-toolbar-list-visible",
-    TOOLBAR_ITEMS_CONTAINER_CLASS = "dx-toolbar-items-container",
-    TOOLBAR_MENU_SECTION_CLASS = "dx-toolbar-menu-section",
-    LIST_ITEM_CLASS = "dx-list-item",
+const TOOLBAR_CLASS = "dx-toolbar";
+const TOOLBAR_ITEM_CLASS = "dx-toolbar-item";
+const TOOLBAR_BEFORE_CONTAINER_CLASS = "dx-toolbar-before";
+const TOOLBAR_AFTER_CONTAINER_CLASS = "dx-toolbar-after";
+const TOOLBAR_CENTER_CONTAINER_CLASS = "dx-toolbar-center";
+const TOOLBAR_LABEL_CLASS = "dx-toolbar-label";
+const TOOLBAR_MENU_BUTTON_CLASS = "dx-toolbar-menu-button";
+const TOOLBAR_LIST_VISIBLE_CLASS = "dx-toolbar-list-visible";
+const TOOLBAR_ITEMS_CONTAINER_CLASS = "dx-toolbar-items-container";
+const TOOLBAR_MENU_SECTION_CLASS = "dx-toolbar-menu-section";
+const LIST_ITEM_CLASS = "dx-list-item";
 
-    DROP_DOWN_MENU_CLASS = "dx-dropdownmenu";
+const DROP_DOWN_MENU_CLASS = "dx-dropdownmenu";
 
 QUnit.module("render", {
     beforeEach: function() {
@@ -1519,6 +1519,23 @@ QUnit.test("add a custom CSS to item of menu", function(assert) {
     dropDown.open();
 
     assert.equal($("." + TOOLBAR_MENU_SECTION_CLASS + " ." + LIST_ITEM_CLASS + ".test").length, 1, "item with the custom CSS");
+});
+
+QUnit.test("dropDown should use Toolbar element as default container", (assert) => {
+    const $element = $("#widget").dxToolbar({
+        items: [
+            {
+                location: "before",
+                locateInMenu: "always",
+                cssClass: "test"
+            }
+        ]
+    });
+
+    const dropDown = $element.find(`.${DROP_DOWN_MENU_CLASS}`).dxDropDownMenu("instance");
+    const $container = dropDown.option("container");
+
+    assert.ok($element.is($container), "Toolbar's container is default container for the dropDownMenu");
 });
 
 QUnit.module("default template", {

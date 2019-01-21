@@ -1,21 +1,20 @@
-var $ = require("jquery"),
-    logger = require("core/utils/console").logger,
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store"),
-    ODataStore = require("data/odata/store"),
-    dataQuery = require("data/query"),
-    queryByOptions = require("data/store_helper").queryByOptions,
-    gridCore = require("ui/data_grid/ui.data_grid.core"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    loadTotalCount = require("ui/data_grid/ui.data_grid.grouping.expanded").loadTotalCount,
-    createOffsetFilter = require("ui/data_grid/ui.data_grid.grouping.core").createOffsetFilter,
-    getContinuationGroupCount = require("ui/data_grid/ui.data_grid.grouping.collapsed").getContinuationGroupCount,
-    ExpandedGroupingHelper = require("ui/data_grid/ui.data_grid.grouping.expanded").GroupingHelper,
-    CollapsedGroupingHelper = require("ui/data_grid/ui.data_grid.grouping.collapsed").GroupingHelper;
+import $ from "jquery";
+import { logger } from "core/utils/console";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
+import ODataStore from "data/odata/store";
+import dataQuery from "data/query";
+import { queryByOptions } from "data/store_helper";
+import gridCore from "ui/data_grid/ui.data_grid.core";
+import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
+import { loadTotalCount } from "ui/data_grid/ui.data_grid.grouping.expanded";
+import { createOffsetFilter } from "ui/data_grid/ui.data_grid.grouping.core";
+import { getContinuationGroupCount } from "ui/data_grid/ui.data_grid.grouping.collapsed";
+import { GroupingHelper as ExpandedGroupingHelper } from "ui/data_grid/ui.data_grid.grouping.expanded";
+import { GroupingHelper as CollapsedGroupingHelper } from "ui/data_grid/ui.data_grid.grouping.collapsed";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
 
 var TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

@@ -695,8 +695,8 @@ var environment = {
     QUnit.module("Multi level pie chart", {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
-            this.mockSeries1 = new MockSeries({ points: this.stubPoints });
-            this.mockSeries2 = new MockSeries({ points: this.stubPoints });
+            this.mockSeries1 = new MockSeries({ range: { val: { min: 0, max: 10 } } }),
+            this.mockSeries2 = new MockSeries({ range: { val: { min: 0, max: 10 } } });
 
             var translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
 

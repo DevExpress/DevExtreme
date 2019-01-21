@@ -1,8 +1,8 @@
-var Class = require("../../core/class"),
-    compileGetter = require("../../core/utils/data").compileGetter,
-    isFunction = require("../../core/utils/type").isFunction,
-    errors = require("../../data/errors").errors,
-    dataUtils = require("../../data/utils");
+import Class from "../../core/class";
+import { compileGetter } from "../../core/utils/data";
+import { isFunction } from "../../core/utils/type";
+import { errors } from "../../data/errors";
+import { aggregators } from "../../data/utils";
 
 function depthFirstSearch(i, depth, root, callback) {
     var j = 0;
@@ -38,7 +38,7 @@ function isEmpty(x) {
 }
 
 function isCount(aggregator) {
-    return aggregator === dataUtils.aggregators.count;
+    return aggregator === aggregators.count;
 }
 
 function normalizeAggregate(aggregate) {
@@ -50,7 +50,7 @@ function normalizeAggregate(aggregate) {
 
 
     if(typeof aggregator === "string") {
-        aggregator = dataUtils.aggregators[aggregator];
+        aggregator = aggregators[aggregator];
         if(!aggregator) {
             throw errors.Error("E4001", aggregate.aggregator);
         }

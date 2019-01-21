@@ -40,37 +40,38 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("../../../node_modules/underscore/underscore-min.js");
-require("../../../node_modules/jsrender/jsrender.min.js");
+import "../../../node_modules/underscore/underscore-min.js";
+import "../../../node_modules/jsrender/jsrender.min.js";
 
-var DataGrid = require("ui/data_grid/ui.data_grid");
-var $ = require("jquery"),
-    Class = require("core/class"),
-    ODataUtils = require("data/odata/utils"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    logger = require("core/utils/console").logger,
-    errors = require("ui/widget/ui.errors"),
-    commonUtils = require("core/utils/common"),
-    typeUtils = require("core/utils/type"),
-    devices = require("core/devices"),
-    browser = require("core/utils/browser"),
-    gridCore = require("ui/data_grid/ui.data_grid.core"),
-    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    messageLocalization = require("localization/message"),
-    setTemplateEngine = require("ui/set_template_engine"),
-    fx = require("animation/fx"),
-    config = require("core/config"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    ajaxMock = require("../../helpers/ajaxMock.js"),
-    themes = require("ui/themes"),
+import DataGrid from "ui/data_grid/ui.data_grid";
+import $ from "jquery";
+import Class from "core/class";
+import ODataUtils from "data/odata/utils";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import { logger } from "core/utils/console";
+import errors from "ui/widget/ui.errors";
+import commonUtils from "core/utils/common";
+import typeUtils from "core/utils/type";
+import devices from "core/devices";
+import browser from "core/utils/browser";
+import version from "core/version";
+import gridCore from "ui/data_grid/ui.data_grid.core";
+import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import messageLocalization from "localization/message";
+import setTemplateEngine from "ui/set_template_engine";
+import fx from "animation/fx";
+import config from "core/config";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import ajaxMock from "../../helpers/ajaxMock.js";
+import themes from "ui/themes";
 
-    DX_STATE_HOVER_CLASS = "dx-state-hover",
+var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
     CELL_UPDATED_CLASS = "dx-datagrid-cell-updated-animation",
     ROW_INSERTED_CLASS = "dx-datagrid-row-inserted-animation";
@@ -3795,6 +3796,34 @@ QUnit.test("virtual columns", function(assert) {
     assert.equal(dataGrid.$element().find(".dx-data-row").children().length, 6, "visible column count");
 });
 
+// T706583
+QUnit.test("grouping if columnRenderingMode is virtual, filterRow is visible and datetime column exists", function(assert) {
+    // arrange, act
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: [{}],
+        loadingTimeout: undefined,
+        scrolling: {
+            columnRenderingMode: "virtual"
+        },
+        columnWidth: 100,
+        width: 500,
+        filterRow: {
+            visible: true
+        },
+        columns: [{
+            dataField: "c1",
+            dataType: "datetime"
+        },
+        "c2", "c3", "c4", "c5", "c6"]
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.columnOption("c2", "groupIndex", 0);
+
+    // assert
+    assert.equal(dataGrid.getVisibleColumns()[0].type, "groupExpand", "grouping is applied");
+});
+
 QUnit.test("visible items should be rendered if virtual scrolling and preload are enabled", function(assert) {
     // arrange, act
     var clock = sinon.useFakeTimers(),
@@ -5783,6 +5812,7 @@ QUnit.test("Error on loading", function(assert) {
 QUnit.test("Raise error if key field is missed", function(assert) {
     // act
     var clock = sinon.useFakeTimers(),
+        errorUrl = "http://js.devexpress.com/error/" + version.split(".").slice(0, 2).join("_") + "/E1046",
         dataGrid = createDataGrid({
             columns: ["field1"],
             keyExpr: "ID",
@@ -5795,6 +5825,8 @@ QUnit.test("Raise error if key field is missed", function(assert) {
     var $errorRow = $($(dataGrid.$element()).find(".dx-error-row"));
     assert.equal($errorRow.length, 1, "error row is shown");
     assert.equal($errorRow.find(".dx-error-message").text().slice(0, 5), "E1046", "error number");
+
+    assert.equal($errorRow.find(".dx-error-message > a").attr("href"), errorUrl, "Url error code");
     clock.restore();
 });
 

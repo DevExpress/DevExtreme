@@ -79,7 +79,7 @@ const renderDateParts = (text, regExpInfo) => {
         start = end;
         end = start + result[i].length;
 
-        let pattern = regExpInfo.patterns[i - 1],
+        let pattern = regExpInfo.patterns[i - 1].replace(/^'|'$/g, ""),
             getter = getPatternGetter(pattern[0]);
 
         sections.push({

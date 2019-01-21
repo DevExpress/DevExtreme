@@ -808,66 +808,98 @@ QUnit.test("Check default number format for [Number|Number|Date] columns", funct
     );
 });
 
-QUnit.test("Check e.gridCell for data cells", function(assert) {
+QUnit.test("Check customizeExcelCell(args) for data cells", function(assert) {
     const configurations = [
-        { dataType: "number", values: [undefined, null, 0, 1] },
-        { dataType: "string", values: [undefined, null, '', 's'] },
-        { dataType: "date", values: [undefined, null, new Date(2018, 11, 1)] },
-        { dataType: "datetime", values: [undefined, null, new Date(2018, 11, 1, 16, 10)] },
-        { dataType: "boolean", values: [undefined, null, false, true] },
         {
-            dataType: "lookup", values: [undefined, null, 1],
+            dataType: "number",
+            values: [undefined, null, 0, 1, Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY],
+            callbackValues: [undefined, null, 0, 1, "NaN", "Infinity", "-Infinity"]
+        },
+        {
+            dataType: "string",
+            values: [undefined, null, "", "s"],
+            callbackValues: [undefined, undefined, undefined, "s"],
+        },
+        {
+            dataType: "date",
+            values: [undefined, null, new Date(2018, 11, 1)],
+            callbackValues: [undefined, undefined, new Date(2018, 11, 1)],
+        },
+        {
+            dataType: "datetime",
+            values: [undefined, null, new Date(2018, 11, 1, 16, 10)],
+            callbackValues: [undefined, undefined, new Date(2018, 11, 1, 16, 10)]
+        },
+        {
+            dataType: "boolean",
+            values: [undefined, null, false, true],
+            callbackValues: [undefined, undefined, "false", "true"]
+        },
+        {
+            dataType: "lookup",
+            values: [undefined, null, 1],
+            callbackValues: [undefined, undefined, "name1"],
             lookup: {
                 dataSource: {
-                    store: { type: 'array', data: [{ id: 1, name: 'name1' }] },
-                    key: 'id'
+                    store: { type: "array", data: [{ id: 1, name: "name1" }] },
+                    key: "id"
                 },
-                valueExpr: 'id',
-                displayExpr: 'name'
+                valueExpr: "id",
+                displayExpr: "name"
             }
-        },
+        }
     ];
     configurations.forEach(config => {
         const column = { dataField: 'f1', dataType: config.dataType, lookup: config.lookup },
             ds = config.values.map(item => { return { f1: item }; });
 
-        helper.runCustomizeExcelCellTest(assert,
+        helper.runGeneralTest(assert,
             {
                 columns: [column],
                 dataSource: ds,
                 showColumnHeaders: false,
             },
-            (grid) => {
-                const result = [];
-                for(let i = 0; i < config.values.length; i++) {
-                    result.push({
-                        rowType: 'data',
-                        data: ds[i],
-                        column: grid.columnOption(0),
-                        value: config.values[i]
-                    });
+            {
+                getExpectedArgs: (grid) => {
+                    const result = [];
+                    for(let i = 0; i < config.values.length; i++) {
+                        result.push({
+                            value: config.callbackValues[i],
+                            gridCell: {
+                                rowType: 'data',
+                                data: ds[i],
+                                column: grid.columnOption(0),
+                                value: config.values[i]
+                            }
+                        });
+                    }
+                    return result;
                 }
-                return result;
             }
         );
     });
 });
 
-QUnit.test("Check e.gridCell for header", function(assert) {
-    helper.runCustomizeExcelCellTest(assert,
+QUnit.test("Check customizeExcelCell(args) for header", function(assert) {
+    helper.runGeneralTest(assert,
         {
             columns: [{ dataField: "f1" }],
             dataSource: [],
         },
-        (grid) => [
-            { rowType: 'header', column: grid.columnOption(0) },
-        ]
+        {
+            getExpectedArgs: (grid) => [
+                {
+                    value: 'F1',
+                    gridCell: { rowType: 'header', column: grid.columnOption(0) }
+                },
+            ]
+        }
     );
 });
 
-QUnit.test("Check e.gridCell for bands", function(assert) {
+QUnit.test("Check customizeExcelCell(args) for bands", function(assert) {
     const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
-    helper.runCustomizeExcelCellTest(assert,
+    helper.runGeneralTest(assert,
         {
             columns: [
                 { dataField: "f1" },
@@ -881,23 +913,25 @@ QUnit.test("Check e.gridCell for bands", function(assert) {
             ],
             dataSource: ds,
         },
-        (grid) => [
-            { rowType: 'header', column: grid.columnOption(0) },
-            { rowType: 'header', column: grid.columnOption(1) },
-            { rowType: 'header', column: grid.columnOption(1) },
-            { rowType: 'header', column: grid.columnOption(0) },
-            { rowType: 'header', column: grid.columnOption(2) },
-            { rowType: 'header', column: grid.columnOption(3) },
-            { rowType: 'data', column: grid.columnOption(0), data: ds[0], value: ds[0].f1 },
-            { rowType: 'data', column: grid.columnOption(2), data: ds[0], value: ds[0].f2 },
-            { rowType: 'data', column: grid.columnOption(3), data: ds[0], value: ds[0].f3 },
-        ]
+        {
+            getExpectedArgs: (grid) => [
+                { value: "skip", gridCell: { rowType: 'header', column: grid.columnOption(0) } },
+                { value: "skip", gridCell: { rowType: 'header', column: grid.columnOption(1) } },
+                { value: "skip", gridCell: { rowType: 'header', column: grid.columnOption(1) } },
+                { value: "skip", gridCell: { rowType: 'header', column: grid.columnOption(0) } },
+                { value: "skip", gridCell: { rowType: 'header', column: grid.columnOption(2) } },
+                { value: "skip", gridCell: { rowType: 'header', column: grid.columnOption(3) } },
+                { value: "skip", gridCell: { rowType: 'data', column: grid.columnOption(0), data: ds[0], value: ds[0].f1 } },
+                { value: "skip", gridCell: { rowType: 'data', column: grid.columnOption(2), data: ds[0], value: ds[0].f2 } },
+                { value: "skip", gridCell: { rowType: 'data', column: grid.columnOption(3), data: ds[0], value: ds[0].f3 } }
+            ]
+        }
     );
 });
 
-QUnit.test("Check e.gridCell for groupping 1 level", function(assert) {
-    const ds = [{ f1: 'f1', f2: 'f2' }];
-    helper.runCustomizeExcelCellTest(assert,
+QUnit.test("Check customizeExcelCell(args) for groupping 1 level", function(assert) {
+    const ds = [{ f1: "f1", f2: "f2" }];
+    helper.runGeneralTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -905,17 +939,19 @@ QUnit.test("Check e.gridCell for groupping 1 level", function(assert) {
             ],
             dataSource: ds,
         },
-        (grid) => [
-            { rowType: 'header', column: grid.columnOption(1) },
-            { rowType: 'group', column: grid.columnOption(0) },
-            { rowType: 'data', column: grid.columnOption(1), data: ds[0], value: ds[0].f2 },
-        ]
+        {
+            getExpectedArgs: (grid) => [
+                { value: "skip", gridCell: { rowType: "header", column: grid.columnOption(1) } },
+                { value: "skip", gridCell: { rowType: "group", column: grid.columnOption(0) } },
+                { value: "skip", gridCell: { rowType: "data", column: grid.columnOption(1), data: ds[0], value: ds[0].f2 } }
+            ]
+        }
     );
 });
 
-QUnit.test("Check e.gridCell for groupping 2 levels", function(assert) {
-    const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3' }];
-    helper.runCustomizeExcelCellTest(assert,
+QUnit.test("Check customizeExcelCell(args) for groupping 2 levels", function(assert) {
+    const ds = [{ f1: "f1", f2: "f2", f3: "f3" }];
+    helper.runGeneralTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -924,18 +960,20 @@ QUnit.test("Check e.gridCell for groupping 2 levels", function(assert) {
             ],
             dataSource: ds,
         },
-        (grid) => [
-            { rowType: 'header', column: grid.columnOption(2) },
-            { rowType: 'group', column: grid.columnOption(0) },
-            { rowType: 'group', column: grid.columnOption(1) },
-            { rowType: 'data', column: grid.columnOption(2), data: ds[0], value: ds[0].f3 },
-        ]
+        {
+            getExpectedArgs: (grid) => [
+                { value: "skip", gridCell: { rowType: "header", column: grid.columnOption(2) } },
+                { value: "skip", gridCell: { rowType: "group", column: grid.columnOption(0) } },
+                { value: "skip", gridCell: { rowType: "group", column: grid.columnOption(1) } },
+                { value: "skip", gridCell: { rowType: "data", column: grid.columnOption(2), data: ds[0], value: ds[0].f3 } }
+            ]
+        }
     );
 });
 
-QUnit.test("Check e.gridCell for group summary", function(assert) {
-    const ds = [{ f1: 'str1', f2: 1 }];
-    helper.runCustomizeExcelCellTest(assert,
+QUnit.test("Check customizeExcelCell(args) for group summary", function(assert) {
+    const ds = [{ f1: "str1", f2: 1 }];
+    helper.runGeneralTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -943,20 +981,22 @@ QUnit.test("Check e.gridCell for group summary", function(assert) {
             ],
             dataSource: ds,
             summary: {
-                groupItems: [{ column: 'f2', summaryType: 'sum' }]
+                groupItems: [{ column: "f2", summaryType: "sum" }]
             },
         },
-        (grid) => [
-            { rowType: 'header', column: grid.columnOption(1) },
-            { rowType: 'group', column: grid.columnOption(0) },
-            { rowType: 'data', column: grid.columnOption(1), data: ds[0], value: ds[0].f2 },
-        ]
+        {
+            getExpectedArgs: (grid) => [
+                { value: "skip", gridCell: { rowType: "header", column: grid.columnOption(1) } },
+                { value: "skip", gridCell: { rowType: "group", column: grid.columnOption(0) } },
+                { value: "skip", gridCell: { rowType: "data", column: grid.columnOption(1), data: ds[0], value: ds[0].f2 } }
+            ]
+        }
     );
 });
 
-QUnit.test("Check e.gridCell for group summary with alignByColumn", function(assert) {
-    const ds = [{ f1: 'f1', f2: 'f2', f3: 'f3', f4: 'f4' }];
-    helper.runCustomizeExcelCellTest(assert,
+QUnit.test("Check customizeExcelCell(args) for group summary with alignByColumn", function(assert) {
+    const ds = [{ f1: "f1", f2: "f2", f3: "f3", f4: "f4" }];
+    helper.runGeneralTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -966,29 +1006,30 @@ QUnit.test("Check e.gridCell for group summary with alignByColumn", function(ass
             ],
             dataSource: ds,
             summary: {
-                groupItems: [{ column: 'f3', summaryType: 'count' }, { column: 'f4', summaryType: 'count', alignByColumn: true }]
+                groupItems: [{ column: "f3", summaryType: "count" }, { column: "f4", summaryType: "count", alignByColumn: true }]
             },
         },
-        (grid) => [
-            { column: grid.columnOption(2), rowType: 'header' },
-            { column: grid.columnOption(3), rowType: 'header' },
-            { column: grid.columnOption(0), rowType: 'group' },
-            { column: grid.columnOption(0), rowType: 'group' },
-            { column: grid.columnOption(1), rowType: 'group' },
-            { column: grid.columnOption(1), rowType: 'group' },
-            { column: grid.columnOption(2), rowType: 'data', data: ds[0], value: ds[0].f3 },
-            { column: grid.columnOption(3), rowType: 'data', data: ds[0], value: ds[0].f4 },
-
-        ]
+        {
+            getExpectedArgs: (grid) => [
+                { value: "skip", gridCell: { column: grid.columnOption(2), rowType: "header" } },
+                { value: "skip", gridCell: { column: grid.columnOption(3), rowType: "header" } },
+                { value: "skip", gridCell: { column: grid.columnOption(0), rowType: "group" } },
+                { value: "skip", gridCell: { column: grid.columnOption(0), rowType: "group" } },
+                { value: "skip", gridCell: { column: grid.columnOption(1), rowType: "group" } },
+                { value: "skip", gridCell: { column: grid.columnOption(1), rowType: "group" } },
+                { value: "skip", gridCell: { column: grid.columnOption(2), rowType: "data", data: ds[0], value: ds[0].f3 } },
+                { value: "skip", gridCell: { column: grid.columnOption(3), rowType: "data", data: ds[0], value: ds[0].f4 } }
+            ]
+        }
     );
 });
 
-QUnit.test("Check e.gridCell for group summary with showInGroupFooter", function(assert) {
+QUnit.test("Check customizeExcelCell(args) for group summary with showInGroupFooter", function(assert) {
     const ds = [
-        { f1: '1_f1', f2: '1_f2', f3: '1_f3', f4: '1_f4' },
-        { f1: '2_f1', f2: '2_f2', f3: '2_f3', f4: '2_f4' }
+        { f1: "1_f1", f2: "1_f2", f3: "1_f3", f4: "1_f4" },
+        { f1: "2_f1", f2: "2_f2", f3: "2_f3", f4: "2_f4" }
     ];
-    helper.runCustomizeExcelCellTest(assert,
+    helper.runGeneralTest(assert,
         {
             columns: [
                 { dataField: "f1", groupIndex: 0 },
@@ -998,71 +1039,77 @@ QUnit.test("Check e.gridCell for group summary with showInGroupFooter", function
             ],
             dataSource: ds,
             summary: {
-                groupItems: [{ column: 'f3', summaryType: 'count', showInGroupFooter: true }, { column: 'f4', summaryType: 'count', showInGroupFooter: true }]
+                groupItems: [{ column: "f3", summaryType: "count", showInGroupFooter: true }, { column: "f4", summaryType: "count", showInGroupFooter: true }]
             },
         },
-        (grid) => [
-            { column: grid.columnOption(1), rowType: 'header' },
-            { column: grid.columnOption(2), rowType: 'header' },
-            { column: grid.columnOption(3), rowType: 'header' },
-            { column: grid.columnOption(0), rowType: 'group' },
-            { column: grid.columnOption(0), rowType: 'group' },
-            { column: grid.columnOption(0), rowType: 'group' },
-            { column: grid.columnOption(1), rowType: 'data', data: ds[0], value: ds[0].f2 },
-            { column: grid.columnOption(2), rowType: 'data', data: ds[0], value: ds[0].f3 },
-            { column: grid.columnOption(3), rowType: 'data', data: ds[0], value: ds[0].f4 },
-            { column: grid.columnOption(1), rowType: 'groupfooter' },
-            { column: grid.columnOption(2), rowType: 'groupfooter' },
-            { column: grid.columnOption(3), rowType: 'groupfooter' },
-            { column: grid.columnOption(0), rowType: 'group' },
-            { column: grid.columnOption(0), rowType: 'group' },
-            { column: grid.columnOption(0), rowType: 'group' },
-            { column: grid.columnOption(1), rowType: 'data', data: ds[1], value: ds[1].f2 },
-            { column: grid.columnOption(2), rowType: 'data', data: ds[1], value: ds[1].f3 },
-            { column: grid.columnOption(3), rowType: 'data', data: ds[1], value: ds[1].f4 },
-            { column: grid.columnOption(1), rowType: 'groupfooter' },
-            { column: grid.columnOption(2), rowType: 'groupfooter' },
-            { column: grid.columnOption(3), rowType: 'groupfooter' },
-        ]
+        {
+            getExpectedArgs: (grid) => [
+                { value: "skip", gridCell: { column: grid.columnOption(1), rowType: "header" } },
+                { value: "skip", gridCell: { column: grid.columnOption(2), rowType: "header" } },
+                { value: "skip", gridCell: { column: grid.columnOption(3), rowType: "header" } },
+                { value: "skip", gridCell: { column: grid.columnOption(0), rowType: "group" } },
+                { value: "skip", gridCell: { column: grid.columnOption(0), rowType: "group" } },
+                { value: "skip", gridCell: { column: grid.columnOption(0), rowType: "group" } },
+                { value: "skip", gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[0], value: ds[0].f2 } },
+                { value: "skip", gridCell: { column: grid.columnOption(2), rowType: "data", data: ds[0], value: ds[0].f3 } },
+                { value: "skip", gridCell: { column: grid.columnOption(3), rowType: "data", data: ds[0], value: ds[0].f4 } },
+                { value: "skip", gridCell: { column: grid.columnOption(1), rowType: "groupFooter" } },
+                { value: "skip", gridCell: { column: grid.columnOption(2), rowType: "groupFooter" } },
+                { value: "skip", gridCell: { column: grid.columnOption(3), rowType: "groupFooter" } },
+                { value: "skip", gridCell: { column: grid.columnOption(0), rowType: "group" } },
+                { value: "skip", gridCell: { column: grid.columnOption(0), rowType: "group" } },
+                { value: "skip", gridCell: { column: grid.columnOption(0), rowType: "group" } },
+                { value: "skip", gridCell: { column: grid.columnOption(1), rowType: "data", data: ds[1], value: ds[1].f2 } },
+                { value: "skip", gridCell: { column: grid.columnOption(2), rowType: "data", data: ds[1], value: ds[1].f3 } },
+                { value: "skip", gridCell: { column: grid.columnOption(3), rowType: "data", data: ds[1], value: ds[1].f4 } },
+                { value: "skip", gridCell: { column: grid.columnOption(1), rowType: "groupFooter" } },
+                { value: "skip", gridCell: { column: grid.columnOption(2), rowType: "groupFooter" } },
+                { value: "skip", gridCell: { column: grid.columnOption(3), rowType: "groupFooter" } }
+            ]
+        }
     );
 });
 
-QUnit.test("Check e.gridCell for total summary", function(assert) {
+QUnit.test("Check customizeExcelCell(args) for total summary", function(assert) {
     const ds = [{ f1: 1 }];
-    helper.runCustomizeExcelCellTest(assert,
+    helper.runGeneralTest(assert,
         {
             columns: [{ dataField: "f1", dataType: "number" }],
             dataSource: ds,
             summary: {
-                totalItems: [{ column: 'f1', summaryType: 'sum' }]
+                totalItems: [{ column: "f1", summaryType: "sum" }]
             },
             showColumnHeaders: false,
         },
-        (grid) => [
-            { column: grid.columnOption(0), rowType: 'data', data: ds[0], value: ds[0].f1 },
-            { column: grid.columnOption(0), rowType: 'totalFooter' },
-        ]
+        {
+            getExpectedArgs: (grid) => [
+                { value: "skip", gridCell: { column: grid.columnOption(0), rowType: "data", data: ds[0], value: ds[0].f1 } },
+                { value: "skip", gridCell: { column: grid.columnOption(0), rowType: "totalFooter" } }
+            ]
+        }
     );
 });
 
-QUnit.test("Check e.gridCell for changes from customizeExportData", function(assert) {
-    const ds = [{ f1: 'f1' }];
-    helper.runCustomizeExcelCellTest(assert,
+QUnit.test("Check customizeExcelCell(args) for changes from customizeExportData", function(assert) {
+    const ds = [{ f1: "f1" }];
+    helper.runGeneralTest(assert,
         {
             columns: [{ dataField: "f1", dataType: "string" }],
             dataSource: ds,
             customizeExportData: (columns, rows) => {
-                rows[0].values[0] += '+';
+                rows[0].values[0] += "+";
             },
             showColumnHeaders: false,
         },
-        (grid) => [
-            { column: grid.columnOption(0), rowType: 'data', data: ds[0], value: 'f1+' },
-        ]
+        {
+            getExpectedArgs: (grid) => [
+                { value: "skip", gridCell: { column: grid.columnOption(0), rowType: "data", data: ds[0], value: "f1+" } }
+            ]
+        }
     );
 });
 
-QUnit.test("Check e.gridCell: change horizontalAlignment depending on data row values", function(assert) {
+QUnit.test("Check customizeExcelCell(args): change horizontalAlignment depending on data row values", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
         helper.BASE_STYLE_XML +
         '<cellXfs count="6">' +
@@ -1104,15 +1151,190 @@ QUnit.test("Check e.gridCell: change horizontalAlignment depending on data row v
     );
 });
 
-QUnit.test("Change string value", function(assert) {
+QUnit.test("Change string undefined to string", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>0</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>a</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: undefined }],
+            showColumnHeaders: false,
+            export: {
+                ignoreExcelErrors: false,
+                enabled: true,
+                customizeExcelCell: e => {
+                    e.value = 'a';
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change string undefined to number", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: undefined }],
+            showColumnHeaders: false,
+            export: {
+                ignoreExcelErrors: false,
+                enabled: true,
+                customizeExcelCell: e => {
+                    e.value = 42;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change string null to string", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>0</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>a</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: null }],
+            showColumnHeaders: false,
+            export: {
+                ignoreExcelErrors: false,
+                enabled: true,
+                customizeExcelCell: e => {
+                    e.value = 'a';
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change string null to number", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: null }],
+            showColumnHeaders: false,
+            export: {
+                ignoreExcelErrors: false,
+                enabled: true,
+                customizeExcelCell: e => {
+                    e.value = 42;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change string value to undefined", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s" />' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>a</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: 'a' }],
+            showColumnHeaders: false,
+            export: {
+                ignoreExcelErrors: false,
+                enabled: true,
+                customizeExcelCell: e => {
+                    e.value = undefined;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change string value to null", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s" />' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>a</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: 'a' }],
+            showColumnHeaders: false,
+            export: {
+                ignoreExcelErrors: false,
+                enabled: true,
+                customizeExcelCell: e => {
+                    e.value = null;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change string value to string", function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="s"><v>1</v></c>' +
         '</row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+        '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
         '<si><t>a</t></si>' +
         '<si><t>b</t></si>' +
@@ -1126,8 +1348,8 @@ QUnit.test("Change string value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    assert.strictEqual(e.value, 'a');
                     e.value = 'b';
                 },
             },
@@ -1136,15 +1358,339 @@ QUnit.test("Change string value", function(assert) {
     );
 });
 
-QUnit.test("Change number value", function(assert) {
+QUnit.test("Change string value to number", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>a</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: 'a' }],
+            showColumnHeaders: false,
+            export: {
+                ignoreExcelErrors: false,
+                enabled: true,
+                customizeExcelCell: e => {
+                    e.value = 42;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change string value to Number.NaN", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>1</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>a</t></si>' +
+        '<si><t>NaN</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: 'a' }],
+            showColumnHeaders: false,
+            export: {
+                ignoreExcelErrors: false,
+                enabled: true,
+                customizeExcelCell: e => {
+                    e.value = Number.NaN;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change string value to Number.POSITIVE_INFINITY", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>1</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>a</t></si>' +
+        '<si><t>Infinity</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: 'a' }],
+            showColumnHeaders: false,
+            export: {
+                ignoreExcelErrors: false,
+                enabled: true,
+                customizeExcelCell: e => {
+                    e.value = Number.POSITIVE_INFINITY;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change string value to Number.NEGATIVE_INFINITY", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>1</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>a</t></si>' +
+        '<si><t>-Infinity</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: 'a' }],
+            showColumnHeaders: false,
+            export: {
+                ignoreExcelErrors: false,
+                enabled: true,
+                customizeExcelCell: e => {
+                    e.value = Number.NEGATIVE_INFINITY;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change string value to date", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>43122.70486111111</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>a</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: 'a' }],
+            showColumnHeaders: false,
+            export: {
+                ignoreExcelErrors: false,
+                enabled: true,
+                customizeExcelCell: e => {
+                    e.value = new Date(2018, 0, 22, 16, 55);
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change string value to boolean", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="b"><v>true</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>a</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'string' }],
+            dataSource: [{ f1: 'a' }],
+            showColumnHeaders: false,
+            export: {
+                ignoreExcelErrors: false,
+                enabled: true,
+                customizeExcelCell: e => {
+                    e.value = true;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number undefined to number", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: undefined }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = 42;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number null to number", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: null }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = 42;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number value to undefined", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n" />' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = undefined;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number value to null", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n" />' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = null;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number value to string", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>0</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>a</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = 'a';
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number value to number", function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A1" s="3" t="n"><v>43</v></c>' +
         '</row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C1" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+        '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
     helper.runGeneralTest(
@@ -1155,8 +1701,8 @@ QUnit.test("Change number value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                ignoreExcelErrors: false,
                 customizeExcelCell: e => {
-                    assert.strictEqual(e.value, 42);
                     e.value = 43;
                 },
             },
@@ -1165,7 +1711,335 @@ QUnit.test("Change number value", function(assert) {
     );
 });
 
-QUnit.test("Change date value", function(assert) {
+QUnit.test("Change number value to number.NaN", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>0</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>NaN</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = Number.NaN;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number value to number.POSITIVE_INFINITY", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>0</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>Infinity</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = Number.POSITIVE_INFINITY;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number value to number.NEGATIVE_INFINITY", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>0</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>-Infinity</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = Number.NEGATIVE_INFINITY;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number value to date", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>43122.70486111111</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = new Date(2018, 0, 22, 16, 55);
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change number value to boolean", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="b"><v>true</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'number' }],
+            dataSource: [{ f1: 42 }],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = true;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change date undefined to date", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>43487.70486111111</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'date' }],
+            dataSource: [
+                { f1: undefined }
+            ],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = new Date(2019, 0, 22, 16, 55);
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change date null to date", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>43487.70486111111</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="0" uniqueCount="0"></sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'date' }],
+            dataSource: [
+                { f1: null }
+            ],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = new Date(2019, 0, 22, 16, 55);
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change date value to string", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>0</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>a</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'date' }],
+            dataSource: [
+                { f1: new Date(2018, 0, 21, 16, 55) }
+            ],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = 'a';
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change date value to undefined", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n" />' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'date' }],
+            dataSource: [
+                { f1: new Date(2018, 0, 21, 16, 55) },
+            ],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = undefined;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change date value to null", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n" />' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'date' }],
+            dataSource: [
+                { f1: new Date(2018, 0, 21, 16, 55) },
+            ],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = undefined;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change date value to number", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>42</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'date' }],
+            dataSource: [
+                { f1: new Date(2018, 0, 21, 16, 55) },
+            ],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = 42;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change date value to date", function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
@@ -1175,14 +2049,13 @@ QUnit.test("Change date value", function(assert) {
         '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
         '<c r="A2" s="3" t="n"><v>43487.70486111111</v></c>' +
         '</row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+        '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
     helper.runGeneralTest(
         assert,
         {
-            columns: [{ dataField: 'f1', dataType: 'number' }],
+            columns: [{ dataField: 'f1', dataType: 'date' }],
             dataSource: [
                 { f1: new Date(2018, 0, 21, 16, 55) },
                 { f1: new Date(2019, 0, 21, 16, 55) }
@@ -1190,12 +2063,11 @@ QUnit.test("Change date value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                ignoreExcelErrors: false,
                 customizeExcelCell: e => {
                     if(e.value.getTime() === new Date(2018, 0, 21, 16, 55).getTime()) {
-                        assert.deepEqual(e.value, new Date(2018, 0, 21, 16, 55));
                         e.value = new Date(2018, 0, 22, 16, 55);
                     } else {
-                        assert.deepEqual(e.value, new Date(2019, 0, 21, 16, 55));
                         e.value = 43487.70486111111; // new Date(2019, 0, 22, 16, 55)
                     }
                 },
@@ -1205,14 +2077,137 @@ QUnit.test("Change date value", function(assert) {
     );
 });
 
-QUnit.test("Change boolean value", function(assert) {
+QUnit.test("Change date value to boolean", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="b"><v>true</v></c>' +
+        '</row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_EMPTY;
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'date' }],
+            dataSource: [
+                { f1: new Date(2018, 0, 21, 16, 55) },
+            ],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = true;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change boolean value to string", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="s"><v>1</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
+        '<si><t>true</t></si>' +
+        '<si><t>a</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'boolean' }],
+            dataSource: [
+                { f1: true }
+            ],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = 'a';
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change boolean value to number", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>42</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>true</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'boolean' }],
+            dataSource: [
+                { f1: true }
+            ],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = 42;
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change boolean value to date", function(assert) {
+    const worksheet = helper.WORKSHEET_HEADER_XML1 +
+        '<cols><col width="13.57" min="1" max="1" /></cols>' +
+        '<sheetData>' +
+        '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25">' +
+        '<c r="A1" s="3" t="n"><v>43122.70486111111</v></c></row>' +
+        '</sheetData></worksheet>';
+    const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="1" uniqueCount="1">' +
+        '<si><t>true</t></si>' +
+        '</sst>';
+
+    helper.runGeneralTest(
+        assert,
+        {
+            columns: [{ dataField: 'f1', dataType: 'boolean' }],
+            dataSource: [
+                { f1: true }
+            ],
+            showColumnHeaders: false,
+            export: {
+                enabled: true,
+                ignoreExcelErrors: false,
+                customizeExcelCell: e => {
+                    e.value = new Date(2018, 0, 22, 16, 55);
+                },
+            },
+        },
+        { worksheet, sharedStrings }
+    );
+});
+
+QUnit.test("Change boolean value to boolean", function(assert) {
     const worksheet = helper.WORKSHEET_HEADER_XML1 +
         '<cols><col width="13.57" min="1" max="1" /></cols>' +
         '<sheetData>' +
         '<row r="1" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="3" t="s"><v>1</v></c></row>' +
-        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="s"><v>0</v></c></row>' +
-        '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+        '<row r="2" spans="1:1" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="b"><v>true</v></c></row>' +
+        '</sheetData></worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="2" uniqueCount="2">' +
         '<si><t>true</t></si>' +
         '<si><t>false</t></si>' +
@@ -1229,12 +2224,11 @@ QUnit.test("Change boolean value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                ignoreExcelErrors: false,
                 customizeExcelCell: e => {
                     if(e.gridCell.value) {
-                        assert.strictEqual(e.value, 'true');
                         e.value = 'false';
                     } else {
-                        assert.strictEqual(e.value, 'false');
                         e.value = true;
                     }
                 },

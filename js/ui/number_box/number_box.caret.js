@@ -3,19 +3,23 @@ var fitIntoRange = require("../../core/utils/math").fitIntoRange,
     number = require("../../localization/number");
 
 var getCaretBoundaries = function(text, format) {
-    var signParts = format.split(";"),
-        sign = number.getSign(text, format);
+    var signParts = format.split(";");
+    var sign = number.getSign(text, format);
 
     signParts[1] = signParts[1] || "-" + signParts[0];
-    format = sign < 0 ? signParts[1] : signParts[0];
+    format = signParts[sign < 0 ? 1 : 0];
 
-    var clearedFormat = format.replace(/'([^']*)'/g, "$1"),
-        result = /^([^#0\.,]*)([#0\.,]*)([^#0\.,]*)$/.exec(clearedFormat);
+    var mockEscapedStubs = (str) => str.replace(/'([^']*)'/g, str => str.split("").map(() => " ").join("").substr(2));
 
-    var startBorder = result[1].length,
-        endBorder = text.length - result[3].length;
+    format = mockEscapedStubs(format);
 
-    return { start: startBorder, end: endBorder };
+    var prefixStubLength = /^[^#0\.,]*/.exec(format)[0].length;
+    var postfixStubLength = /[^#0\.,]*$/.exec(format)[0].length;
+
+    return {
+        start: prefixStubLength,
+        end: text.length - postfixStubLength
+    };
 };
 
 var _getDigitCountBeforeIndex = function(index, text) {
