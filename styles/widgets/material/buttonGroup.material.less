@@ -41,31 +41,41 @@
 }
 
 .dx-buttongroup-item {
-    &.dx-button-mode-outlined {
-        &.dx-state-disabled {
-            opacity: 1;
-
-            .dx-button-content {
-                opacity: @button-disabled-icon-opacity;
+    &.dx-button {
+        &.dx-button-mode-outlined {
+            &.dx-state-disabled {
+                opacity: 1;
+    
+                .dx-button-content {
+                    opacity: @button-disabled-icon-opacity;
+                }
             }
         }
-    }
 
-    &.dx-item-selected {
-        background-color: @button-group-normal-selected-bg;
-
-        &.dx-button-success {
-            background-color: @button-group-success-selected-bg;
+        &.dx-state-focused {
+            background-color: fade(@button-normal-color, 4%);
         }
 
-        &.dx-button-default {
-            background-color: @button-group-default-selected-bg;
-            color: @button-group-normal-selected-color;
+        &.dx-state-hover {
+            background-color: fade(@button-normal-color, 4%);
         }
-
-        &.dx-button-danger {
-            background-color: @button-group-danger-selected-bg;
-            color: @button-group-danger-selected-color;
+    
+        &.dx-item-selected {
+            background-color: @button-group-normal-selected-bg;
+    
+            &.dx-button-success {
+                background-color: @button-group-success-selected-bg;
+            }
+    
+            &.dx-button-default {
+                background-color: @button-group-default-selected-bg;
+                color: @button-group-normal-selected-color;
+            }
+    
+            &.dx-button-danger {
+                background-color: @button-group-danger-selected-bg;
+                color: @button-group-danger-selected-color;
+            }
         }
     }
 }
