@@ -111,7 +111,7 @@ exports.custom = function(options) {
         .appendTo(viewPortUtils.value());
 
     var $message = $("<div>").addClass(DX_DIALOG_MESSAGE_CLASSNAME)
-        .html(String(options.message));
+        .text(String(options.message));
 
     var popupToolbarItems = [];
 

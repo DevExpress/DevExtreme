@@ -101,7 +101,7 @@ QUnit.test("dialog content", function(assert) {
     instance.show();
 
     assert.equal(this.dialog().find(".dx-popup-title").text(), this.title, "Actual title is equal to expected.");
-    assert.equal((this.dialog().find(".dx-dialog-message").html() || "").toLowerCase(), this.message.toLowerCase(), "Actual message is equal to expected.");
+    assert.equal((this.dialog().find(".dx-dialog-message").text() || "").toLowerCase(), this.message.toLowerCase(), "Actual message is equal to expected.");
     instance.hide();
 
     assert.ok(this.thereIsNoDialog(), "Dialog is not shown.");
