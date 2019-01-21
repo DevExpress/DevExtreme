@@ -623,7 +623,7 @@ QUnit.module("format: arabic digit shaping", {
 
         numberLocalization.inject({
             format: function(number) {
-                return number && standardToArabicMock(String(number));
+                return !isNaN(number) && standardToArabicMock(String(number));
             },
             parse: function(text) {
                 return text && parseFloat(arabicToStandardMock(text));
@@ -651,6 +651,11 @@ QUnit.test("mask should work with arabic digit shaping", function(assert) {
         .type("-");
 
     assert.equal(this.input.val(), "-١٢٣٤", "arabic minus should work");
+});
+
+QUnit.test("getFormatPattern should return correct format with arabic digit shaping", function(assert) {
+    this.instance.option("format", "currency");
+    assert.equal(this.instance._getFormatPattern(), "#0.##############");
 });
 
 
