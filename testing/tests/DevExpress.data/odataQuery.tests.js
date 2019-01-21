@@ -784,8 +784,8 @@ QUnit.test("string functions with global stringToLower equal false", function(as
         })
         .always(() => {
             config({ oDataStringToLower: true });
-        })
-        .always(done);
+            done();
+        });
 });
 
 QUnit.test("string functions (v4)", function(assert) {
@@ -873,8 +873,8 @@ QUnit.test("string functions (v4) with global stringToLower equal false", functi
         })
         .always(() => {
             config({ oDataStringToLower: true });
-        })
-        .always(done);
+            done();
+        });
 });
 
 QUnit.test("Explicit Edm literals (Q441230 case)", function(assert) {

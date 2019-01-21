@@ -2504,12 +2504,12 @@ QUnit.test("stringToLower equal false", function(assert) {
         url: "odata.org",
         responseText: { d: { results: [] } },
         callback: function(request) {
-            assert.equal(request.data.$filter, "substringof('O',prop/nested/prop)");
+            assert.equal(request.data.$filter, "substringof('O',B)");
         }
     });
 
     new ODataStore({ url: "odata.org", stringToLower: false })
-        .load({ filter: ["prop.nested.prop", "contains", "O"] });
+        .load({ filter: ["B", "contains", "O"] });
 });
 
 QUnit.test("verbose MIME specifier is used", function(assert) {
