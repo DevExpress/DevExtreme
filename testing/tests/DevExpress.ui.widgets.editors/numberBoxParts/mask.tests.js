@@ -596,6 +596,68 @@ QUnit.test("boundary value should correctly apply after second try to set overfl
     assert.equal(this.instance.option("value"), 1, "value is adjusted to min");
 });
 
+QUnit.module("format: arabic digit shaping", {
+    beforeEach: function() {
+        moduleConfig.beforeEach.call(this);
+
+        var arabicDigits = "٠١٢٣٤٥٦٧٨٩";
+        var arabicSeparator = "٫";
+        var standardToArabicMock = function(text) {
+            return text.split("").map(function(sign) {
+                if(sign === ".") {
+                    return arabicSeparator;
+                }
+                return arabicDigits[sign] || sign;
+            }).join("");
+        };
+
+        var arabicToStandardMock = function(text) {
+            return text.split("").map(function(sign) {
+                if(sign === arabicSeparator) {
+                    return ".";
+                }
+                var standardSign = arabicDigits.indexOf(sign);
+                return standardSign < 0 ? sign : standardSign;
+            }).join("");
+        };
+
+        numberLocalization.inject({
+            format: function(number) {
+                return !isNaN(number) && standardToArabicMock(String(number));
+            },
+            parse: function(text) {
+                return text && parseFloat(arabicToStandardMock(text));
+            }
+        });
+    },
+
+    afterEach: function() {
+        moduleConfig.afterEach.call(this);
+        numberLocalization.resetInjection();
+    }
+});
+
+QUnit.test("mask should work with arabic digit shaping", function(assert) {
+    this.keyboard
+        .type("١٢٣٤٥")
+        .press("backspace")
+        .change();
+
+    assert.equal(this.input.val(), "١٢٣٤");
+    assert.equal(this.instance.option("value"), 1234);
+
+    this.keyboard
+        .keyDown(MINUS_KEY)
+        .type("-");
+
+    assert.equal(this.input.val(), "-١٢٣٤", "arabic minus should work");
+});
+
+QUnit.test("getFormatPattern should return correct format with arabic digit shaping", function(assert) {
+    this.instance.option("format", "currency");
+    assert.equal(this.instance._getFormatPattern(), "#0.##############");
+});
+
 
 QUnit.module("format: text input", moduleConfig);
 
@@ -612,51 +674,6 @@ QUnit.test("clearing numberbox via keyboard should be possible if non required f
 
     assert.equal(this.input.val(), "", "text was cleared");
     assert.equal(this.instance.option("value"), null, "value is correct");
-});
-
-QUnit.test("mask should work with arabic digit shaping", function(assert) {
-    var arabicDigits = "٠١٢٣٤٥٦٧٨٩";
-    var arabicSeparator = "٫";
-
-    var standardToArabicMock = function(text) {
-        return text.split("").map(function(sign) {
-            if(sign === ".") {
-                return arabicSeparator;
-            }
-            return arabicDigits[sign] || sign;
-        }).join("");
-    };
-
-    var arabicToStandardMock = function(text) {
-        return text.split("").map(function(sign) {
-            if(sign === arabicSeparator) {
-                return ".";
-            }
-            var standardSign = arabicDigits.indexOf(sign);
-            return standardSign < 0 ? sign : standardSign;
-        }).join("");
-    };
-
-    numberLocalization.inject({
-        format: function(number) {
-            return number && standardToArabicMock(String(number));
-        },
-        parse: function(text) {
-            return text && parseFloat(arabicToStandardMock(text));
-        }
-    });
-
-    try {
-        this.keyboard
-            .type("١٢٣٤٥")
-            .press("backspace")
-            .change();
-
-        assert.equal(this.input.val(), "١٢٣٤");
-        assert.equal(this.instance.option("value"), 1234);
-    } finally {
-        numberLocalization.resetInjection();
-    }
 });
 
 QUnit.test("invalid chars should be prevented on keydown", function(assert) {
