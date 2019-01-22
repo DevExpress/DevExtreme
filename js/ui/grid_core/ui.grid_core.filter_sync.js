@@ -305,6 +305,7 @@ var DataControllerFilterSyncExtender = {
                         filterSyncController._skipSyncColumnOptions = false;
                     }
                 }
+                this.callBase(args);
                 break;
             default:
                 this.callBase(args);
