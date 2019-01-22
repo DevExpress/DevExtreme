@@ -9,21 +9,23 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
-require("ui/data_grid/ui.data_grid");
+import "common.css!";
+import "generic_light.css!";
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    device = devices.real(),
-    noop = require("core/utils/common").noop,
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity",
-    eventsEngine = require("events/core/events_engine"),
-    typeUtils = require("core/utils/type"),
-    config = require("core/config"),
-    renderer = require("core/renderer"),
-    themes = require("ui/themes");
+import $ from "jquery";
+import devices from "core/devices";
+import { noop as noop } from "core/utils/common";
+import dataGridMocks from "../../helpers/dataGridMocks.js";
+import eventsEngine from "events/core/events_engine";
+import typeUtils from "core/utils/type";
+import config from "core/config";
+import renderer from "core/renderer";
+import themes from "ui/themes";
+
+var device = devices.real();
+
+const CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity";
 
 function setupDataGrid(that, $dataGridContainer) {
     that.$element = function() {

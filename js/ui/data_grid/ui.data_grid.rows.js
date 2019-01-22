@@ -1,5 +1,5 @@
-var gridCore = require("./ui.data_grid.core"),
-    rowsViewModule = require("../grid_core/ui.grid_core.rows");
+import gridCore from "./ui.data_grid.core";
+import rowsViewModule from "../grid_core/ui.grid_core.rows";
 
 exports.RowsView = rowsViewModule.views.rowsView;
 

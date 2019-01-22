@@ -15,25 +15,25 @@ QUnit.testStart(function() {
 });
 
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-window.Hogan = require("../../../node_modules/hogan.js/dist/hogan-3.0.2.js");
+import hogan from "../../../node_modules/hogan.js/dist/hogan-3.0.2.js";
 
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    device = devices.real(),
-    setTemplateEngine = require("ui/set_template_engine"),
-    nativePointerMock = require("../../helpers/nativePointerMock.js"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController,
-    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
-    expandCellTemplate = gridCoreUtils.getExpandCellTemplate(),
-    dataUtils = require("core/element_data");
+window.Hogan = hogan;
+
+import $ from "jquery";
+import devices from "core/devices";
+import setTemplateEngine from "ui/set_template_engine";
+import nativePointerMock from "../../helpers/nativePointerMock.js";
+import { setupDataGridModules, MockDataController, MockColumnsController } from "../../helpers/dataGridMocks.js";
+import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
+import dataUtils from "core/element_data";
+
+var device = devices.real(),
+    expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
 var generateData = function(countItems) {
     var j = 1,

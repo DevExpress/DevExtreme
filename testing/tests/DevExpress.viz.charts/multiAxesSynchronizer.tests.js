@@ -195,32 +195,22 @@ QUnit.test('No synchronization for 2 axis in different panes', function(assert) 
     });
 });
 
-QUnit.test('No synchronization if all axes with stubData', function(assert) {
+QUnit.test('No synchronization if all axes with no data (stubData)', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
-            { range: { min: 0, max: 10, stubData: true, axisType: 'continuous' }, tickValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], tickInterval: 1 },
-            { range: { min: 15, max: 60, stubData: true, axisType: 'continuous' }, tickValues: [20, 30, 40, 50, 60], tickInterval: 10 }
+            { range: { axisType: 'continuous' }, tickValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], tickInterval: 1 },
+            { range: { axisType: 'continuous' }, tickValues: [20, 30, 40, 50, 60], tickInterval: 10 }
         ],
         axesOptionsAfterSync: [
             {
                 range: {
-                    axisType: 'continuous',
-                    min: 0,
-                    minVisible: 0,
-                    max: 10,
-                    maxVisible: 10,
-                    stubData: true
+                    axisType: 'continuous'
                 },
                 tickValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
             },
             {
                 range: {
-                    axisType: 'continuous',
-                    min: 15,
-                    minVisible: 15,
-                    max: 60,
-                    maxVisible: 60,
-                    stubData: true
+                    axisType: 'continuous'
                 },
                 tickValues: [20, 30, 40, 50, 60]
             }
@@ -1176,22 +1166,17 @@ QUnit.test('Synchronization for 3 axis with different tickValues count. B254389'
 });
 
 // B231325
-QUnit.test('Synchronization for 3 axis when first with stubData', function(assert) {
+QUnit.test('Synchronization for 3 axis when first with no data (stubData)', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
-            { range: { min: 0, max: 10, stubData: true, axisType: 'continuous' }, tickValues: [0, 2, 4, 6, 8, 10], tickInterval: 2 },
+            { range: { axisType: 'continuous' }, tickValues: [0, 2, 4, 6, 8, 10], tickInterval: 2 },
             { range: { min: 2, max: 6, axisType: 'continuous' }, tickValues: [2, 4, 6, 8], tickInterval: 2 },
             { range: { min: 20, max: 50, axisType: 'continuous' }, tickValues: [20, 30, 40, 50, 60], tickInterval: 10 }
         ],
         axesOptionsAfterSync: [
             {
                 range: {
-                    axisType: 'continuous',
-                    min: 0,
-                    minVisible: 0,
-                    max: 10,
-                    maxVisible: 10,
-                    stubData: true
+                    axisType: 'continuous'
                 },
                 tickValues: [0, 2, 4, 6, 8, 10]
             },

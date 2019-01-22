@@ -9,25 +9,25 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-window.Hogan = require("../../../node_modules/hogan.js/dist/hogan-3.0.2.js");
+import hogan from "../../../node_modules/hogan.js/dist/hogan-3.0.2.js";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    viewPort = require("core/utils/view_port").value,
-    devices = require("core/devices"),
-    device = devices.real(),
-    fx = require("animation/fx"),
-    setTemplateEngine = require("ui/set_template_engine"),
-    dateLocalization = require("localization/date"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController;
+window.Hogan = hogan;
+
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import { value as viewPort } from "core/utils/view_port";
+import devices from "core/devices";
+import fx from "animation/fx";
+import setTemplateEngine from "ui/set_template_engine";
+import dateLocalization from "localization/date";
+import { setupDataGridModules, MockDataController, MockColumnsController } from "../../helpers/dataGridMocks.js";
+
+var device = devices.real();
 
 var TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
 
@@ -729,11 +729,11 @@ QUnit.test("update filter value for boolean column to false", function(assert) {
     });
 });
 
+import "ui/tag_box";
+
 QUnit.test("update filter value for array column with dxTagBox", function(assert) {
     // arrange
     var testElement = $("#container");
-
-    require("ui/tag_box");
 
     this.options.onEditorPreparing = function(e) {
         if(e.parentType === "filterRow" && e.caption === "Tags") {

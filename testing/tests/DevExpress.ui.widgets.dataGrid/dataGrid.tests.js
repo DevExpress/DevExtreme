@@ -40,38 +40,38 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("../../../node_modules/underscore/underscore-min.js");
-require("../../../node_modules/jsrender/jsrender.min.js");
+import "../../../node_modules/underscore/underscore-min.js";
+import "../../../node_modules/jsrender/jsrender.min.js";
 
-var DataGrid = require("ui/data_grid/ui.data_grid");
-var $ = require("jquery"),
-    Class = require("core/class"),
-    ODataUtils = require("data/odata/utils"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    logger = require("core/utils/console").logger,
-    errors = require("ui/widget/ui.errors"),
-    commonUtils = require("core/utils/common"),
-    typeUtils = require("core/utils/type"),
-    devices = require("core/devices"),
-    browser = require("core/utils/browser"),
-    version = require("core/version"),
-    gridCore = require("ui/data_grid/ui.data_grid.core"),
-    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    messageLocalization = require("localization/message"),
-    setTemplateEngine = require("ui/set_template_engine"),
-    fx = require("animation/fx"),
-    config = require("core/config"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    ajaxMock = require("../../helpers/ajaxMock.js"),
-    themes = require("ui/themes"),
+import DataGrid from "ui/data_grid/ui.data_grid";
+import $ from "jquery";
+import Class from "core/class";
+import ODataUtils from "data/odata/utils";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import { logger } from "core/utils/console";
+import errors from "ui/widget/ui.errors";
+import commonUtils from "core/utils/common";
+import typeUtils from "core/utils/type";
+import devices from "core/devices";
+import browser from "core/utils/browser";
+import version from "core/version";
+import gridCore from "ui/data_grid/ui.data_grid.core";
+import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import messageLocalization from "localization/message";
+import setTemplateEngine from "ui/set_template_engine";
+import fx from "animation/fx";
+import config from "core/config";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import ajaxMock from "../../helpers/ajaxMock.js";
+import themes from "ui/themes";
 
-    DX_STATE_HOVER_CLASS = "dx-state-hover",
+var DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
     CELL_UPDATED_CLASS = "dx-datagrid-cell-updated-animation",
     ROW_INSERTED_CLASS = "dx-datagrid-row-inserted-animation";

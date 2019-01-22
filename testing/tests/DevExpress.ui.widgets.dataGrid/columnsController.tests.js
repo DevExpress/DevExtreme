@@ -1,17 +1,17 @@
-var $ = require("jquery"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    dateLocalization = require("localization/date"),
-    isFunction = require("core/utils/type").isFunction,
-    gridCore = require("ui/data_grid/ui.data_grid.core"),
-    dataSourceAdapter = require("ui/data_grid/ui.data_grid.data_source_adapter"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    config = require("core/config"),
-    errors = require("ui/widget/ui.errors"),
-    ajaxMock = require("../../helpers/ajaxMock.js");
+import $ from "jquery";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import dateLocalization from "localization/date";
+import { isFunction } from "core/utils/type";
+import gridCore from "ui/data_grid/ui.data_grid.core";
+import dataSourceAdapter from "ui/data_grid/ui.data_grid.data_source_adapter";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import dataGridMocks from "../../helpers/dataGridMocks.js";
+import config from "core/config";
+import errors from "ui/widget/ui.errors";
+import ajaxMock from "../../helpers/ajaxMock.js";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
 QUnit.testDone(function() {
     ajaxMock.clear();

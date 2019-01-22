@@ -769,7 +769,7 @@ module.exports = {
                 options = this._options,
                 constantLineOptions = that._outsideConstantLines.filter(l => l.labelOptions.visible).map(l => l.options),
                 rootElement = that._renderer.root,
-                labelIsVisible = options.label.visible && !range.stubData && ticks.length,
+                labelIsVisible = options.label.visible && !range.isEmpty() && ticks.length,
                 labelValue = labelIsVisible && that.formatLabel(ticks[ticks.length - 1], options.label, undefined, undefined, tickInterval, ticks),
                 labelElement = labelIsVisible && that._renderer.text(labelValue, 0, 0)
                     .css(that._textFontStyles)

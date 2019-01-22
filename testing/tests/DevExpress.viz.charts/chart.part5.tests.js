@@ -595,8 +595,11 @@ QUnit.test("chart with one empty pane", function(assert) {
     // assert
     assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0], chart._argumentAxes[1].setBusinessRange.lastCall.args[0]);
 
-    assert.equal(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].stubData, undefined, "bottom pane should not have value stubData");
-    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].stubData, undefined, "bottom pane should not have value stubData");
+    assert.equal(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
+    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
+
+    assert.equal(chart._argumentAxes[1].setBusinessRange.lastCall.args[0].isEmpty(), false);
+    assert.equal(chart._valueAxes[1].setBusinessRange.lastCall.args[0].isEmpty(), true);
 });
 
 QUnit.test("Rotated chart with one empty pane", function(assert) {
@@ -626,8 +629,11 @@ QUnit.test("Rotated chart with one empty pane", function(assert) {
     // assert
     assert.strictEqual(chart._argumentAxes[1].setBusinessRange.lastCall.args[0], chart._argumentAxes[0].setBusinessRange.lastCall.args[0], "all argument axes have same range");
 
-    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].stubData, undefined, "bottom pane should not have value stubData");
-    assert.equal(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].stubData, undefined, "bottom pane should not have argument stubData");
+    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
+    assert.equal(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
+
+    assert.equal(chart._valueAxes[1].setBusinessRange.lastCall.args[0].isEmpty(), true);
+    assert.equal(chart._argumentAxes[1].setBusinessRange.lastCall.args[0].isEmpty(), false);
 });
 
 QUnit.test("Update axis canvas. One pane", function(assert) {

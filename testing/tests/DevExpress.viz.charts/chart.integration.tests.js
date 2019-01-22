@@ -50,13 +50,7 @@ var chartContainerCounter = 1,
             return this.createChartCore(options, dxChart);
         },
         createChartCore: function(options, chartType) {
-            var chart;
-            var mergedOptions = $.extend(true,
-                {},
-                options);
-
-            chart = new chartType(this.$container, mergedOptions);
-            return chart;
+            return new chartType(this.$container, $.extend(true, {}, options));
         }
     };
 
@@ -2122,7 +2116,7 @@ QUnit.test("Legend and title should have original place", function(assert) {
 QUnit.test('T295685. Do not expand range on adaptive layout', function(assert) {
     // arrange
     var chart = createChartInstance({
-        dataSource: [],
+        dataSource: [{ arg: 10, val1: 100 }, { arg: 20, val1: 200 }],
         series: [{
             name: 'First',
             valueField: 'val1'
@@ -2136,10 +2130,10 @@ QUnit.test('T295685. Do not expand range on adaptive layout', function(assert) {
     chart.option("size", { width: 50, height: 50 });
 
     // assert
-    assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().min, 0, "min arg");
-    assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().max, 10, "max arg");
-    assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().min, 0, "min val");
-    assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().max, 10, "min val");
+    assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().min, 10, "min arg");
+    assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().max, 20, "max arg");
+    assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().min, 100, "min val");
+    assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().max, 200, "min val");
 });
 
 QUnit.test("Pie chart with sizeGroup, change option in between rendering steps - legend and title should have original place", function(assert) {
@@ -2345,7 +2339,7 @@ QUnit.module("dxPolarChart", moduleSetup);
 
 QUnit.test("Add extra ticks (endOnTick) for extend visualRange and hide overlapping labels", function(assert) {
     var data = [
-        { "temperature": 11.9, "sales": 185 },
+        { "temperature": 11.8, "sales": 185 },
         { "temperature": 14.2, "sales": 215 },
         { "temperature": 15.2, "sales": 332 },
         { "temperature": 16.4, "sales": 325 },
@@ -2405,7 +2399,7 @@ QUnit.test("Overlapping of the labels should be taken into account canvas with l
 
 QUnit.module("Series visibility changed", moduleSetup);
 
-QUnit.test("Do not set stub data when all series were hidden", function(assert) {
+QUnit.test("All series are hidden. Axes have range from the last visible series", function(assert) {
     var chart = this.createChart({
         argumentAxis: {
             valueMarginsEnabled: false,
@@ -2427,12 +2421,10 @@ QUnit.test("Do not set stub data when all series were hidden", function(assert) 
     var argRange = chart.getArgumentAxis().getTranslator().getBusinessRange();
     assert.equal(argRange.min, 1);
     assert.equal(argRange.max, 5);
-    assert.ok(!argRange.stubData);
 
     var valRange = chart.getValueAxis().getTranslator().getBusinessRange();
     assert.equal(valRange.min, 100);
     assert.equal(valRange.max, 900);
-    assert.ok(!valRange.stubData);
 });
 
 QUnit.test("Recalculate range data when one series is hidden", function(assert) {
@@ -2485,7 +2477,7 @@ QUnit.test("Recalculate argument range data from all visible series", function(a
     var argRange = chart.getArgumentAxis().getTranslator().getBusinessRange();
     assert.equal(argRange.min, 2);
     assert.equal(argRange.max, 3);
-    assert.ok(!argRange.stubData);
+    assert.equal(argRange.isEmpty(), false);
 });
 
 // T688232

@@ -10,6 +10,7 @@ QUnit.test("getCaretWithOffset", function(assert) {
 });
 
 QUnit.test("getCaretBoundaries", function(assert) {
+    assert.deepEqual(maskCaret.getCaretBoundaries("  #  1,230.45  #  ", " ' # ' #,##0.## ' # ' "), { start: 5, end: 13 });
     assert.deepEqual(maskCaret.getCaretBoundaries("$ 123 tst", "$ #0 tst"), { start: 2, end: 5 });
     assert.deepEqual(maskCaret.getCaretBoundaries("-$ 123 tst", "$ #0 tst"), { start: 3, end: 6 });
     assert.deepEqual(maskCaret.getCaretBoundaries("(($ 123 tst))", "$ #0 tst;(($ #0 tst))"), { start: 4, end: 7 });

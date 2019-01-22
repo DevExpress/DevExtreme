@@ -65,12 +65,12 @@ function hideGridsOnNonFirstValueAxisForPane(axesForPane) {
             if(axisShown) {
                 changeVisibilityAxisGrids(axis, false, false);
             } else if(gridOpt && gridOpt.visible) {
-                if(!axis.getTranslator().getBusinessRange().stubData) {
-                    axisShown = true;
-                    changeVisibilityAxisGrids(axis, gridVisibility, minorGridVisibility);
-                } else {
+                if(axis.getTranslator().getBusinessRange().isEmpty()) {
                     changeVisibilityAxisGrids(axis, false, false);
                     hiddenStubAxis.push(axis);
+                } else {
+                    axisShown = true;
+                    changeVisibilityAxisGrids(axis, gridVisibility, minorGridVisibility);
                 }
             }
         });
@@ -649,14 +649,9 @@ var dxChart = AdvancedChart.inherit({
             viewport.addRange(s.getArgumentRange());
         });
 
-        if(!viewport.isDefined()) {
-            viewport.setStubData(that._argumentAxes[0].getOptions().argumentType);
-        }
-
         that._argumentAxes.forEach(function(axis) {
             axis.updateCanvas(that._canvas);
-            viewport.isEstimatedRange = true;
-            axis.setBusinessRange(viewport);
+            axis.setBusinessRange(viewport, undefined, undefined, that._axesReinitialized);
         });
 
         that.callBase();
@@ -1147,9 +1142,7 @@ var dxChart = AdvancedChart.inherit({
         return function(axis, visualRange) {
             if(axis.getOptions().optionPath) {
                 chart._parseVisualRangeOption(axis.getOptions().optionPath + ".visualRange", visualRange);
-                if(axis.isArgumentAxis) {
-                    axis.setCustomVisualRange(visualRange);
-                }
+                axis.setCustomVisualRange(visualRange);
             }
 
             if(axis.isArgumentAxis) {

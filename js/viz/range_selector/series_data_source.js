@@ -204,7 +204,7 @@ SeriesDataSource.prototype = {
             argRange.addRange(rangeData.arg);
         });
 
-        if(valRange.isDefined() && argRange.isDefined()) {
+        if(!valRange.isEmpty() && !argRange.isEmpty()) {
             minIndent = valueAxis.inverted ? that._indent.top : that._indent.bottom;
             maxIndent = valueAxis.inverted ? that._indent.bottom : that._indent.top;
             rangeYSize = valRange.max - valRange.min;

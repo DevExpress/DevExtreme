@@ -2419,6 +2419,12 @@ QUnit.test("Do nothing if no actions allowed", function(assert) {
                     endValue: 7
                 }
             },
+            valueAxis: {
+                visualRange: {
+                    startValue: 30,
+                    endValue: 70
+                }
+            },
             zoomAndPan: {
                 argumentAxis: "none",
                 valueAxis: "none",
@@ -2552,6 +2558,81 @@ QUnit.test("Reject API zoom-in both axes by default minVisualRangeLength option"
     assert.deepEqual(onZoomEnd.getCall(1).args[0].range, valVisualRange);
     assert.equal(onZoomEnd.getCall(1).args[0].shift, 0);
     assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 1);
+});
+
+QUnit.module("Axes with empty range", environment);
+
+QUnit.test("Pan - do nothing", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy();
+    this.createChart({
+        dataSource: null,
+        argumentAxis: {},
+        valueAxis: {},
+        zoomAndPan: {
+            argumentAxis: "both",
+            valueAxis: "both"
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
+
+    // act
+    const e = this.pointer.start({ x: 100, y: 250, cancelable: true }).dragStart().lastEvent();
+
+    // assert
+    assert.strictEqual(e.cancel, true);
+    assert.strictEqual(e.originalEvent.cancel, true);
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+});
+
+QUnit.test("Mouse wheel - do nothing", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy();
+    this.createChart({
+        dataSource: null,
+        argumentAxis: {},
+        valueAxis: {},
+        zoomAndPan: {
+            argumentAxis: "both",
+            valueAxis: "both",
+            allowMouseWheel: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
+
+    // act
+    this.pointer.start({ x: 200, y: 250 }).wheel(10);
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+});
+
+QUnit.test("Shutter zoom - do nothing", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy();
+    this.createChart({
+        dataSource: null,
+        argumentAxis: {},
+        valueAxis: {},
+        zoomAndPan: {
+            valueAxis: "zoom",
+            argumentAxis: "zoom",
+            dragToZoom: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
+
+    // act
+    this.pointer.start({ x: 200, y: 120 }).dragStart().drag(400, 240).dragEnd();
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
 });
 
 QUnit.module("Prevent default behavior", environment);

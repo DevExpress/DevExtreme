@@ -26,14 +26,16 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
+import "common.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    MockTablePositionViewController = dataGridMocks.MockTablePositionViewController,
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import fx from "animation/fx";
+import dataGridMocks from "../../helpers/dataGridMocks.js";
+
+var MockTablePositionViewController = dataGridMocks.MockTablePositionViewController,
     MockTrackerView = dataGridMocks.MockTrackerView,
     MockColumnsSeparatorView = dataGridMocks.MockColumnsSeparatorView,
     MockDraggingPanel = dataGridMocks.MockDraggingPanel,
@@ -41,23 +43,23 @@ var $ = require("jquery"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockDataController = dataGridMocks.MockDataController,
     MockColumnsController = dataGridMocks.MockColumnsController,
-    MockEditingController = dataGridMocks.MockEditingController,
-    fx = require("animation/fx");
+    MockEditingController = dataGridMocks.MockEditingController;
 
 
-var gridCore = require("ui/data_grid/ui.data_grid.core"),
-    dragEvents = require("events/drag"),
-    columnResizingReordering = require("ui/data_grid/ui.data_grid.columns_resizing_reordering"),
-    ColumnChooserView = require("ui/data_grid/ui.data_grid.column_chooser").ColumnChooserView,
-    ColumnHeadersView = require("ui/data_grid/ui.data_grid.column_headers").ColumnHeadersView,
-    ColumnsController = require("ui/grid_core/ui.grid_core.columns_controller").controllers.columns,
-    RowsView = require("ui/data_grid/ui.data_grid.rows").RowsView,
-    GroupingHeaderPanelExtender = require("ui/data_grid/ui.data_grid.grouping").GroupingHeaderPanelExtender,
-    HeaderPanel = require("ui/data_grid/ui.data_grid.header_panel").HeaderPanel,
-    domUtils = require("core/utils/dom"),
-    Action = require("core/action"),
-    devices = require("core/devices"),
-    publicComponentUtils = require("core/utils/public_component");
+import gridCore from "ui/data_grid/ui.data_grid.core";
+import dragEvents from "events/drag";
+import columnResizingReordering from "ui/data_grid/ui.data_grid.columns_resizing_reordering";
+import { ColumnChooserView } from "ui/data_grid/ui.data_grid.column_chooser";
+import { ColumnHeadersView } from "ui/data_grid/ui.data_grid.column_headers";
+import columnsModule from "ui/grid_core/ui.grid_core.columns_controller";
+var ColumnsController = columnsModule.controllers.columns;
+import { RowsView } from "ui/data_grid/ui.data_grid.rows";
+import { GroupingHeaderPanelExtender } from "ui/data_grid/ui.data_grid.grouping";
+import { HeaderPanel } from "ui/data_grid/ui.data_grid.header_panel";
+import domUtils from "core/utils/dom";
+import Action from "core/action";
+import devices from "core/devices";
+import publicComponentUtils from "core/utils/public_component";
 
 var TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
     callDragCounter: 0,
