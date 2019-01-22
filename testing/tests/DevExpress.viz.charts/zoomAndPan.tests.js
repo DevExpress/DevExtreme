@@ -2583,7 +2583,7 @@ QUnit.test("On pan", function(assert) {
     assert.equal(this.trackerStopHandling.callCount, 3);
 });
 
-QUnit.test("Two value axis. Pan", function(assert) {
+QUnit.test("Pan action in pane without zoom if another pane has a zoom", function(assert) {
     const preventDefault = sinon.spy(),
         stopPropagation = sinon.spy(),
         chart = this.createChart({
