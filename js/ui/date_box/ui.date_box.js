@@ -415,6 +415,10 @@ var DateBox = DropDownEditor.inherit({
 
         this.callBase();
 
+        if(this.option("isValid") !== false) {
+            this._validateValue(this.dateOption("value"));
+        }
+
         this._refreshFormatClass();
         this._refreshPickerTypeClass();
 
@@ -571,7 +575,6 @@ var DateBox = DropDownEditor.inherit({
 
         this._strategy.renderValue();
         this.callBase();
-        this._validateValue(value);
     },
 
     _getDisplayedText: function(value) {
@@ -644,7 +647,7 @@ var DateBox = DropDownEditor.inherit({
             hasText = !!text && value !== null,
             isDate = !!value && typeUtils.isDate(value) && !isNaN(value.getTime()),
             isDateInRange = isDate && dateUtils.dateInRange(value, this.dateOption("min"), this.dateOption("max"), this.option("type")),
-            isValid = !hasText || !hasText && !value || isDateInRange,
+            isValid = !hasText && !value || isDateInRange,
             validationMessage = "";
 
         if(!isDate) {
@@ -661,7 +664,12 @@ var DateBox = DropDownEditor.inherit({
             }
         });
 
-        return isValid;
+        this.validationRequest.fire({
+            editor: this,
+            value: value
+        });
+
+        return this.option("isValid");
     },
 
     _isValueChanged: function(newValue) {
@@ -797,6 +805,10 @@ var DateBox = DropDownEditor.inherit({
                 this._strategy.textChangedHandler(args.value);
                 this.callBase.apply(this, arguments);
                 break;
+            case "value":
+                this._validateValue(this.dateOption("value"));
+                this.callBase.apply(this, arguments);
+                break;
             case "isValid":
                 this.callBase.apply(this, arguments);
                 this._updateSize();
@@ -853,6 +865,7 @@ var DateBox = DropDownEditor.inherit({
     reset: function() {
         this.callBase();
         this._updateValue();
+        this._validateValue(this.dateOption("value"));
     }
 });
 
