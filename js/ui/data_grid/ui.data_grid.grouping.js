@@ -24,9 +24,12 @@ var GroupingDataSourceAdapterExtender = (function() {
         },
         _initGroupingHelper: function(options) {
             var grouping = this._grouping,
-                remoteOperations = options ? options.remoteOperations : this.remoteOperations();
+                isAutoExpandAll = this.option("grouping.autoExpandAll"),
+                isFocusedRowEnabled = this.option("focusedRowEnabled"),
+                remoteOperations = options ? options.remoteOperations : this.remoteOperations(),
+                isODataRemoteOperations = remoteOperations.filtering && remoteOperations.sorting && remoteOperations.paging;
 
-            if(remoteOperations.filtering && remoteOperations.sorting && remoteOperations.paging && !remoteOperations.grouping) {
+            if(isODataRemoteOperations && !remoteOperations.grouping && (isAutoExpandAll || !isFocusedRowEnabled)) {
                 if(!grouping || grouping instanceof CollapsedGroupingHelper) {
                     this._grouping = new ExpandedGroupingHelper(this);
                 }
