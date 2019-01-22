@@ -3609,7 +3609,7 @@ QUnit.test("datebox should create validation error if user set isValid = false",
         value: null
     }).dxDateBox("instance");
 
-    assert.notOk(dateBox.option("isValid"), "on init");
+    assert.notOk(dateBox.option("isValid"), "isValid = false does not change on widget init by value validation");
 
     dateBox.option("value", new Date(2018, 1, 1));
     assert.ok(dateBox.option("isValid"), "valid after valid value is setted");
