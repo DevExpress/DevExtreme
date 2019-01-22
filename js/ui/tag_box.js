@@ -822,12 +822,14 @@ var TagBox = SelectBox.inherit({
         if(selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
-            var dataSourceFilter = this._dataSource.filter(),
-                filterExpr = creator.getCombinedFilter(this.option("valueExpr"), dataSourceFilter),
-                filterLength = encodeURI(JSON.stringify(filterExpr)).length,
-                resultFilter = filterLength > this.option("maxFilterLength") ? undefined : filterExpr;
+            var dataSourceFilter = this._dataSource.filter();
+            var filterExpr = creator.getCombinedFilter(this.option("valueExpr"), dataSourceFilter);
+            var filterLength = encodeURI(JSON.stringify(filterExpr)).length;
+            var filter = filterLength > this.option("maxFilterLength") ? undefined : filterExpr;
+            var loadOptions = this._dataSource.loadOptions();
+            var customQueryParams = loadOptions.customQueryParams;
 
-            this._dataSource.store().load({ filter: resultFilter }).done(function(items) {
+            this._dataSource.store().load({ filter, customQueryParams }).done(function(items) {
                 d.resolve(items.filter(clientFilterFunction));
             });
 
