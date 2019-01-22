@@ -351,6 +351,32 @@ QUnit.test("sort/group by function (regression)", assert => {
 
 });
 
+QUnit.test("turn off sort in grouping", assert => {
+    const done = assert.async();
+
+    new ArrayStore([
+        { key: "c", text: "c1" },
+        { key: "a", text: "a1" }
+    ])
+        .load({
+            group: { selector: "key", keepInitialKeyOrder: true }
+        })
+        .done(data => {
+            assert.deepEqual(data, [
+                {
+                    key: "c",
+                    items: [{ key: "c", text: "c1" }]
+                },
+                {
+                    key: "a",
+                    items: [ { key: "a", text: "a1" }]
+                }
+            ]);
+
+            done();
+        });
+});
+
 QUnit.test("byKey", assert => {
     const done = assert.async();
 
