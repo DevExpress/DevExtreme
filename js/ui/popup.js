@@ -246,7 +246,8 @@ var Popup = Overlay.inherit({
 
             bottomTemplate: "bottom",
             useDefaultToolbarButtons: false,
-            useFlatToolbarButtons: false
+            useFlatToolbarButtons: false,
+            autoResizeEnabled: true
         });
     },
 
@@ -671,7 +672,7 @@ var Popup = Overlay.inherit({
             overlayContent = this.overlayContent().get(0),
             cssStyles = {};
 
-        if(this._isAutoHeight()) {
+        if(this.option("autoResizeEnabled") && this._isAutoHeight()) {
             var container = $(this._getContainer()).get(0),
                 contentMaxHeight = this._getOptionValue("maxHeight", overlayContent),
                 contentMinHeight = this._getOptionValue("minHeight", overlayContent),
@@ -780,6 +781,10 @@ var Popup = Overlay.inherit({
                 break;
             case "dragEnabled":
                 this._renderDrag();
+                break;
+            case "autoResizeEnabled":
+                this._renderGeometry();
+                domUtils.triggerResizeEvent(this._$content);
                 break;
             case "fullScreen":
                 this._toggleFullScreenClass(args.value);
