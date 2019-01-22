@@ -101,7 +101,7 @@ var environment = {
             this.renderSettings = {
                 stripsGroup: this.renderer.g(),
                 labelAxesGroup: this.renderer.g(),
-                constantLinesGroup: this.renderer.g(),
+                constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
                 axesContainerGroup: this.renderer.g(),
                 gridGroup: this.renderer.g(),
                 renderer: this.renderer,
@@ -2812,11 +2812,11 @@ QUnit.test("All margins are zero", function(assert) {
     this.options.multipleAxesSpacing = 5;
     var axis = this.createDrawnAxis();
 
-    this.renderer.g.getCall(5).returnValue.attr.reset();
+    this.renderer.g.getCall(6).returnValue.attr.reset();
 
     axis.shift({ top: 0, bottom: 0, left: 0, right: 0 });
     // T548860
-    assert.deepEqual(this.renderer.g.getCall(5).returnValue.attr.lastCall.args[0], {
+    assert.deepEqual(this.renderer.g.getCall(6).returnValue.attr.lastCall.args[0], {
         translateX: 0
     });
 });
@@ -2836,7 +2836,7 @@ QUnit.test("Vertical axis position is left", function(assert) {
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(5).returnValue;
+    var axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, -50);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, undefined);
@@ -2849,7 +2849,7 @@ QUnit.test("Vertical axis with multipleAxesSpacing option", function(assert) {
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(5).returnValue;
+    var axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, -55);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, undefined);
@@ -2861,7 +2861,7 @@ QUnit.test("Vertical axis position is right", function(assert) {
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(5).returnValue;
+    var axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, 76);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, undefined);
@@ -2873,7 +2873,7 @@ QUnit.test("Horizontal axis position is top", function(assert) {
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(5).returnValue;
+    var axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, undefined);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, -64);
@@ -2885,7 +2885,7 @@ QUnit.test("Horizontal axis position is bottom", function(assert) {
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(5).returnValue;
+    var axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, undefined);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, 45);
@@ -2897,8 +2897,9 @@ QUnit.test("Horizontal axis. Shift outside constant line groups vertically", fun
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var topGroup = this.renderer.g.getCall(12).returnValue,
-        bottomGroup = this.renderer.g.getCall(13).returnValue;
+    var topGroup = this.renderer.g.getCall(13).returnValue,
+        bottomGroup = this.renderer.g.getCall(14).returnValue;
+    debugger;
     assert.deepEqual(topGroup.attr.lastCall.args, [{ translateY: -(64 + 5) }]);
     assert.deepEqual(bottomGroup.attr.lastCall.args, [{ translateY: 45 + 5 }]);
 });
@@ -2909,8 +2910,8 @@ QUnit.test("Vertical axis. Shift outside constant line groups horizontally", fun
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var leftGroup = this.renderer.g.getCall(12).returnValue,
-        rightGroup = this.renderer.g.getCall(13).returnValue;
+    var leftGroup = this.renderer.g.getCall(13).returnValue,
+        rightGroup = this.renderer.g.getCall(14).returnValue;
     assert.deepEqual(leftGroup.attr.lastCall.args, [{ translateX: -(50 + 5) }]);
     assert.deepEqual(rightGroup.attr.lastCall.args, [{ translateX: 76 + 5 }]);
 });

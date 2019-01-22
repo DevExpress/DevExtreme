@@ -64,7 +64,7 @@ var environment = {
     createAxis: function(options) {
         var stripsGroup = this.renderer.g(),
             labelAxesGroup = this.renderer.g(),
-            constantLinesGroup = this.renderer.g(),
+            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup = this.renderer.g(),
             gridGroup = this.renderer.g(),
             scaleBreaksGroup = this.renderer.g();
@@ -139,7 +139,7 @@ QUnit.test("Create groups and append them to groups from options", function(asse
     var renderer = this.renderer,
         stripsGroup = this.renderer.g(),
         labelAxesGroup = this.renderer.g(),
-        constantLinesGroup = this.renderer.g(),
+        constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
         axesContainerGroup = this.renderer.g(),
         gridGroup = this.renderer.g();
 
@@ -165,10 +165,15 @@ QUnit.test("Create groups and append them to groups from options", function(asse
     assert.deepEqual(g.getCall(3).returnValue.append.getCall(0).args[0], g.getCall(0).returnValue, "_axisElementsGroup");
     assert.deepEqual(g.getCall(4).returnValue.append.getCall(0).args[0], g.getCall(0).returnValue, "_axisLineGroup");
     assert.deepEqual(g.getCall(5).returnValue.append.getCall(0).args[0], g.getCall(0).returnValue, "_axisTitleGroup");
-    assert.deepEqual(g.getCall(6).returnValue.append.getCall(0).args[0], constantLinesGroup, "_axisConstantLineGroups.insideGroup");
-    assert.deepEqual(g.getCall(7).returnValue.append.getCall(0).args[0], constantLinesGroup, "_axisConstantLineGroups.outsideGroup1");
-    assert.deepEqual(g.getCall(8).returnValue.append.getCall(0).args[0], constantLinesGroup, "_axisConstantLineGroups.outsideGroup2");
-    assert.deepEqual(g.getCall(9).returnValue.append.getCall(0).args[0], labelAxesGroup, "_axisStripLabelGroup");
+    // above
+    assert.deepEqual(g.getCall(6).returnValue.append.getCall(0).args[0], constantLinesGroup.above, "_axisConstantLineGroups.above.insideGroup");
+    assert.deepEqual(g.getCall(7).returnValue.append.getCall(0).args[0], constantLinesGroup.above, "_axisConstantLineGroups.above.outsideGroup1");
+    assert.deepEqual(g.getCall(8).returnValue.append.getCall(0).args[0], constantLinesGroup.above, "_axisConstantLineGroups.above.outsideGroup2");
+    // under
+    assert.deepEqual(g.getCall(9).returnValue.append.getCall(0).args[0], constantLinesGroup.under, "_axisConstantLineGroups.under.insideGroup");
+    assert.deepEqual(g.getCall(10).returnValue.append.getCall(0).args[0], constantLinesGroup.under, "_axisConstantLineGroups.under.outsideGroup1");
+    assert.deepEqual(g.getCall(11).returnValue.append.getCall(0).args[0], constantLinesGroup.under, "_axisConstantLineGroups.under.outsideGroup2");
+    assert.deepEqual(g.getCall(12).returnValue.append.getCall(0).args[0], labelAxesGroup, "_axisStripLabelGroup");
 });
 
 QUnit.test("Some groups are not passed - created groups are not appended", function(assert) {
@@ -6823,7 +6828,8 @@ QUnit.test("Styles and attributes", function(assert) {
         "font-weight": 700
     }, "css");
 
-    var group = this.renderer.g.getCall(9).returnValue;
+    debugger;
+    var group = this.renderer.g.lastCall.returnValue;
     assert.deepEqual(renderer.text.getCall(0).returnValue.append.getCall(0).args[0], group);
     assert.deepEqual(renderer.text.getCall(1).returnValue.append.getCall(0).args[0], group);
 });
@@ -8906,7 +8912,7 @@ QUnit.test("Drawing scale breaks. Value axis. Elements creation.", function(asse
 
     this.axis.drawScaleBreaks();
 
-    elementsGroup = this.renderer.g.getCall(11).returnValue;
+    elementsGroup = this.renderer.g.lastCall.returnValue;
 
     // assert
     assert.strictEqual(this.renderer.path.callCount, 3);
@@ -9048,7 +9054,7 @@ QUnit.test("Apply cliprect for breaks", function(assert) {
     this.axis.drawScaleBreaks();
 
     // assert
-    assert.strictEqual(this.renderer.g.getCall(10).returnValue.attr.lastCall.args[0]["clip-path"], this.renderer.clipRect.lastCall.returnValue.id);
+    assert.strictEqual(this.renderer.g.getCall(13).returnValue.attr.lastCall.args[0]["clip-path"], this.renderer.clipRect.lastCall.returnValue.id);
 });
 
 QUnit.test("Apply cliprect for breaks. Rotated chart", function(assert) {
@@ -9100,7 +9106,7 @@ QUnit.test("Drawing scale breaks using drawScaleBreaks method", function(assert)
     // act
     this.axis.drawScaleBreaks();
 
-    elementsGroup = this.renderer.g.getCall(11).returnValue;
+    elementsGroup = this.renderer.g.lastCall.returnValue;
     // assert
     assert.strictEqual(this.renderer.path.callCount, 3);
     assert.strictEqual(this.renderer.path.getCall(0).returnValue.append.lastCall.args[0], elementsGroup);
@@ -9241,7 +9247,7 @@ QUnit.test("Create group for breaks", function(assert) {
     this.axis.drawScaleBreaks();
 
     // assert
-    var group = this.renderer.g.getCall(10).returnValue;
+    var group = this.renderer.g.getCall(13).returnValue;
     assert.strictEqual(group.append.lastCall.args[0], externalBreaksGroup);
     assert.strictEqual(group.attr.lastCall.args[0]["class"], "widget-axis-breaks");
 });
@@ -9265,7 +9271,7 @@ QUnit.test("Create group for breaks if shifted axis", function(assert) {
     this.axis.drawScaleBreaks();
 
     // assert
-    var additionGroup = this.renderer.g.getCall(11).returnValue;
+    var additionGroup = this.renderer.g.getCall(14).returnValue;
     assert.strictEqual(additionGroup.append.lastCall.args[0], externalBreaksGroup);
     assert.strictEqual(additionGroup.attr.lastCall.args[0]["clip-path"], this.renderer.clipRect.getCall(1).returnValue.id);
     assert.strictEqual(additionGroup.attr.lastCall.args[0]["class"], "widget-axis-breaks");
@@ -9313,7 +9319,7 @@ QUnit.test("Recreate group for breaks if shifted axis", function(assert) {
     this.axis.updateSize(this.canvas);
     this.axis.drawScaleBreaks();
 
-    var oldAdditionGroup = this.renderer.g.getCall(11).returnValue;
+    var oldAdditionGroup = this.renderer.g.getCall(13).returnValue;
     var oldAdditionClipRect = this.renderer.clipRect.getCall(1).returnValue;
 
     this.renderer.clipRect.reset();

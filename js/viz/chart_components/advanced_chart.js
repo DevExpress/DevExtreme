@@ -371,7 +371,8 @@ var AdvancedChart = BaseChart.inherit({
         that._stripsGroup.linkAppend();
         that._gridGroup.linkAppend();
         that._axesGroup.linkAppend();
-        that._constantLinesGroup.linkAppend();
+        that._constantLinesGroup.above.linkAppend();
+        that._constantLinesGroup.under.linkAppend();
         that._labelAxesGroup.linkAppend();
         that._scaleBreaksGroup.linkAppend();
     },

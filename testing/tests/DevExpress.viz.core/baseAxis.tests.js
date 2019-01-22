@@ -80,7 +80,7 @@ QUnit.test("Create axis", function(assert) {
     var renderer = this.renderer,
         stripsGroup = renderer.g(),
         labelAxesGroup = renderer.g(),
-        constantLinesGroup = renderer.g(),
+        constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
         axesContainerGroup = renderer.g(),
         gridGroup = renderer.g(),
         axis;
@@ -101,7 +101,7 @@ QUnit.test("Create axis", function(assert) {
     });
 
     assert.ok(axis, "Axis was created");
-    assert.equal(renderer.g.callCount, 10, "groups were created");
+    assert.equal(renderer.g.callCount, 13, "groups were created");
 
     assert.equal(renderer.g.getCall(0).returnValue._stored_settings["class"], "testWidget-testType-axis", "Group for axis was created");
     assert.equal(renderer.g.getCall(1).returnValue._stored_settings["class"], "testWidget-testType-strips", "Group for axis strips was created");
@@ -112,14 +112,17 @@ QUnit.test("Create axis", function(assert) {
     assert.equal(renderer.g.getCall(6).returnValue._stored_settings["class"], "testWidget-testType-constant-lines", "Group for axis constant lines was created");
     assert.equal(renderer.g.getCall(7).returnValue._stored_settings["class"], "testWidget-testType-constant-lines", "Group for axis constant lines was created");
     assert.equal(renderer.g.getCall(8).returnValue._stored_settings["class"], "testWidget-testType-constant-lines", "Group for axis constant lines was created");
-    assert.equal(renderer.g.getCall(9).returnValue._stored_settings["class"], "testWidget-testType-axis-labels", "Group for axis labels was created");
+    assert.equal(renderer.g.getCall(9).returnValue._stored_settings["class"], "testWidget-testType-constant-lines", "Group for axis constant lines was created");
+    assert.equal(renderer.g.getCall(10).returnValue._stored_settings["class"], "testWidget-testType-constant-lines", "Group for axis constant lines was created");
+    assert.equal(renderer.g.getCall(11).returnValue._stored_settings["class"], "testWidget-testType-constant-lines", "Group for axis constant lines was created");
+    assert.equal(renderer.g.getCall(12).returnValue._stored_settings["class"], "testWidget-testType-axis-labels", "Group for axis labels was created");
 });
 
 QUnit.test("Create axis when axis class is undefined", function(assert) {
     var renderer = this.renderer,
         stripsGroup = renderer.g(),
         labelAxesGroup = renderer.g(),
-        constantLinesGroup = renderer.g(),
+        constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
         axesContainerGroup = renderer.g(),
         gridGroup = renderer.g();
 
@@ -167,7 +170,7 @@ QUnit.module("API", {
         var renderer = that.renderer,
             stripsGroup = renderer.g(),
             labelAxesGroup = renderer.g(),
-            constantLinesGroup = renderer.g(),
+            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup = renderer.g(),
             gridGroup = renderer.g();
 
@@ -351,7 +354,7 @@ QUnit.module("Labels Settings", {
         var renderer = this.renderer,
             stripsGroup = renderer.g(),
             labelAxesGroup = renderer.g(),
-            constantLinesGroup = renderer.g(),
+            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup = renderer.g(),
             gridGroup = renderer.g();
 
@@ -436,7 +439,7 @@ QUnit.module("Validate", {
         var renderer = this.renderer,
             stripsGroup = renderer.g(),
             labelAxesGroup = renderer.g(),
-            constantLinesGroup = renderer.g(),
+            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup = renderer.g(),
             gridGroup = renderer.g();
 
@@ -621,7 +624,7 @@ QUnit.module("Zoom", {
         var renderer = this.renderer,
             stripsGroup = renderer.g(),
             labelAxesGroup = renderer.g(),
-            constantLinesGroup = renderer.g(),
+            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup = renderer.g(),
             gridGroup = renderer.g();
 
@@ -1029,7 +1032,7 @@ QUnit.module("VisualRange", {
         var renderer = this.renderer,
             stripsGroup = renderer.g(),
             labelAxesGroup = renderer.g(),
-            constantLinesGroup = renderer.g(),
+            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup = renderer.g(),
             gridGroup = renderer.g();
 
@@ -1195,7 +1198,7 @@ QUnit.module("Data margins calculations", {
                 renderer: renderer,
                 stripsGroup: renderer.g(),
                 labelAxesGroup: renderer.g(),
-                constantLinesGroup: renderer.g(),
+                constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
                 axesContainerGroup: renderer.g(),
                 gridGroup: renderer.g(),
                 isArgumentAxis: isArgumentAxis,
@@ -2560,7 +2563,7 @@ QUnit.module("Data margins calculations after zooming", {
                 renderer: renderer,
                 stripsGroup: renderer.g(),
                 labelAxesGroup: renderer.g(),
-                constantLinesGroup: renderer.g(),
+                constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
                 axesContainerGroup: renderer.g(),
                 gridGroup: renderer.g(),
                 isArgumentAxis: isArgumentAxis,
