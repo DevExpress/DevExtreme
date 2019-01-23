@@ -27,3 +27,26 @@ QUnit.module("Touch events detection", () => {
         assert.notOk(detectTouchEvents(windowMock, 0), "touch events are not detected");
     });
 });
+
+QUnit.module("Pointer event detection", () => {
+    QUnit.test("pointerEvent = true when 'PointerEvent' exists (Surface pro, edge 17+, latest IE11)", assert => {
+        const windowMock = createWindowMock("PointerEvent");
+        const navigatorMock = {};
+
+        assert.ok(detectTouchEvents(windowMock, navigatorMock), "PointerEvent detected");
+    });
+
+    QUnit.test("pointerEvent = true when 'pointerEnabled' exists (surface with old IE11)", assert => {
+        const windowMock = createWindowMock();
+        const navigatorMock = { pointerEnabled: true };
+
+        assert.ok(detectTouchEvents(windowMock, navigatorMock), "PointerEvent detected");
+    });
+
+    QUnit.test("pointerEvent = false when 'pointerEnabled' or 'PointerEvent' not exists", assert => {
+        const windowMock = createWindowMock();
+
+        assert.notOk(detectTouchEvents(windowMock, {}), "PointerEvent isn't detected");
+    });
+});
+
