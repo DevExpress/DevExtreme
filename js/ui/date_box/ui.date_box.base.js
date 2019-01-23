@@ -787,7 +787,8 @@ var DateBox = DropDownEditor.inherit({
                 this._invalidate();
                 break;
             case "displayFormat":
-                this._updateValue();
+                this.option("text", this._getDisplayedText(this.dateOption("value")));
+                this._renderInputValue();
                 break;
             case "formatWidthCalculator":
                 break;
@@ -842,12 +843,18 @@ var DateBox = DropDownEditor.inherit({
         return dateSerialization.getDateSerializationFormat(value);
     },
 
+    _updateValue: function(value) {
+        this.callBase();
+        if(value !== undefined) {
+            this._validateValue(value);
+        }
+    },
+
     dateValue: function(value, dxEvent) {
         if(this._isValueChanged(value) && dxEvent) {
             this._saveValueChangeEvent(dxEvent);
         } else if(this._isTextChanged(value)) {
-            this._updateValue();
-            this._validateValue(value);
+            this._updateValue(value);
         }
 
         return this.dateOption("value", value);
@@ -864,8 +871,7 @@ var DateBox = DropDownEditor.inherit({
 
     reset: function() {
         this.callBase();
-        this._updateValue();
-        this._validateValue(this.dateOption("value"));
+        this._updateValue(this.dateOption("value"));
     }
 });
 
