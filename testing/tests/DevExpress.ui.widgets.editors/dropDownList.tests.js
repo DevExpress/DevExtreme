@@ -1072,6 +1072,20 @@ QUnit.test("popup should be configured with templatesRenderAsynchronously=false 
     assert.strictEqual(popup.option("templatesRenderAsynchronously"), false, "templatesRenderAsynchronously should have false value");
 });
 
+QUnit.test("popup should be configured with autoResizeEnabled=false (to prevent issues with pushBackValue and scrolling in IOS)", (assert) => {
+    const data = ["item-1"];
+
+    $("#dropDownList").dxDropDownList({
+        dataSource: new DataSource(data),
+        value: data[0],
+        opened: true
+    });
+
+    const popup = $(".dx-dropdowneditor-overlay.dx-popup").dxPopup("instance");
+
+    assert.strictEqual(popup.option("autoResizeEnabled"), false, "autoResizeEnabled should have false value");
+});
+
 
 QUnit.module("dataSource integration", moduleConfig);
 

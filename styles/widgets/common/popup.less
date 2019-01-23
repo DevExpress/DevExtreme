@@ -24,11 +24,25 @@
 }
 
 .dx-popup-content {
+    box-sizing: content-box;
     padding: 10px;
     .user-drag(none);
 
     &.dx-dialog-content {
         padding: 0;
+    }
+
+    > .dx-treeview,
+    > .dx-scrollable,
+    > .dx-treeview > .dx-scrollable {
+        max-height: inherit;
+        min-height: inherit;
+
+        > .dx-scrollable-wrapper,
+        > .dx-scrollable-wrapper > .dx-scrollable-container {
+            max-height: inherit;
+            min-height: inherit;
+        }
     }
 }
 
