@@ -727,13 +727,13 @@ QUnit.test("string functions", function(assert) {
         .always(done);
 });
 
-QUnit.test("string functions with stringToLower equal false", function(assert) {
+QUnit.test("string functions with filterToLower equal false", function(assert) {
     assert.expect(4);
 
     var done = assert.async();
 
     var check = function(operation, expectation) {
-        return QUERY("odata.org", { stringToLower: false })
+        return QUERY("odata.org", { filterToLower: false })
             .filter("f.p", operation, "Ab")
             .enumerate()
             .done(function(r) {
@@ -755,12 +755,12 @@ QUnit.test("string functions with stringToLower equal false", function(assert) {
         .always(done);
 });
 
-QUnit.test("string functions with global stringToLower equal false", function(assert) {
+QUnit.test("string functions with global filterToLower equal false", function(assert) {
     assert.expect(4);
 
     var done = assert.async();
 
-    config({ oDataStringToLower: false });
+    config({ oDataFilterToLower: false });
 
     var check = function(operation, expectation) {
         return QUERY("odata.org")
@@ -783,7 +783,7 @@ QUnit.test("string functions with global stringToLower equal false", function(as
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .always(() => {
-            config({ oDataStringToLower: true });
+            config({ oDataFilterToLower: true });
             done();
         });
 });
@@ -816,13 +816,13 @@ QUnit.test("string functions (v4)", function(assert) {
         .always(done);
 });
 
-QUnit.test("string functions (v4) with stringToLower equal false", function(assert) {
+QUnit.test("string functions (v4) with filterToLower equal false", function(assert) {
     assert.expect(4);
 
     var done = assert.async();
 
     var check = function(operation, expectation) {
-        return QUERY("odata.org", { version: 4, stringToLower: false })
+        return QUERY("odata.org", { version: 4, filterToLower: false })
             .filter("f.p", operation, "Ab")
             .enumerate()
             .done(function(r) {
@@ -844,12 +844,12 @@ QUnit.test("string functions (v4) with stringToLower equal false", function(asse
         .always(done);
 });
 
-QUnit.test("string functions (v4) with global stringToLower equal false", function(assert) {
+QUnit.test("string functions (v4) with global filterToLower equal false", function(assert) {
     assert.expect(4);
 
     var done = assert.async();
 
-    config({ oDataStringToLower: false });
+    config({ oDataFilterToLower: false });
 
     var check = function(operation, expectation) {
         return QUERY("odata.org", { version: 4 })
@@ -872,7 +872,7 @@ QUnit.test("string functions (v4) with global stringToLower equal false", functi
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .always(() => {
-            config({ oDataStringToLower: true });
+            config({ oDataFilterToLower: true });
             done();
         });
 });

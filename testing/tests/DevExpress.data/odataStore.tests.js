@@ -2499,7 +2499,7 @@ QUnit.test("withCredentials is set", function(assert) {
         .load();
 });
 
-QUnit.test("stringToLower equal false", function(assert) {
+QUnit.test("filterToLower equal false", function(assert) {
     ajaxMock.setup({
         url: "odata.org",
         responseText: { d: { results: [] } },
@@ -2508,7 +2508,7 @@ QUnit.test("stringToLower equal false", function(assert) {
         }
     });
 
-    new ODataStore({ url: "odata.org", stringToLower: false })
+    new ODataStore({ url: "odata.org", filterToLower: false })
         .load({ filter: ["B", "contains", "O"] });
 });
 

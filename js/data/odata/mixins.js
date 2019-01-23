@@ -41,7 +41,7 @@ var SharedMethods = {
         this._version = options.version || DEFAULT_PROTOCOL_VERSION;
         this._withCredentials = options.withCredentials;
         this._deserializeDates = options.deserializeDates;
-        this._stringToLower = options.stringToLower;
+        this._filterToLower = options.filterToLower;
     },
 
     _sendRequest: function(url, method, params, payload) {

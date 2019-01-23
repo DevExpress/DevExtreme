@@ -1436,7 +1436,7 @@ QUnit.test("expand option for OData store", function(assert) {
         .always(done);
 });
 
-QUnit.test("stringToLower option equal false for OData store", function(assert) {
+QUnit.test("filterToLower option equal false for OData store", function(assert) {
     var done = assert.async();
 
     ajaxMock.setup({
@@ -1449,7 +1449,7 @@ QUnit.test("stringToLower option equal false for OData store", function(assert) 
     new DataSource({
         store: new ODataStore({
             url: "odata.org",
-            stringToLower: false
+            filterToLower: false
         }),
         filter: ["prop.nested.prop", "contains", "O"]
     }).load()

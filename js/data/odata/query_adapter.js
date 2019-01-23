@@ -137,9 +137,9 @@ var compileCriteria = (function() {
         return compileBinary(criteria);
     };
 
-    return function(criteria, version, types, stringToLower) {
+    return function(criteria, version, types, filterToLower) {
         fieldTypes = types;
-        forceLowerCase = typeUtils.isDefined(stringToLower) ? stringToLower : config().oDataStringToLower;
+        forceLowerCase = typeUtils.isDefined(filterToLower) ? filterToLower : config().oDataFilterToLower;
         protocolVersion = version;
 
         return compileCore(criteria);
@@ -195,9 +195,9 @@ var createODataQueryAdapter = function(queryOptions) {
         if(_criteria.length) {
             var criteria = _criteria.length < 2 ? _criteria[0] : _criteria,
                 fieldTypes = queryOptions && queryOptions.fieldTypes,
-                stringToLower = queryOptions && queryOptions.stringToLower;
+                filterToLower = queryOptions && queryOptions.filterToLower;
 
-            result["$filter"] = compileCriteria(criteria, _oDataVersion, fieldTypes, stringToLower);
+            result["$filter"] = compileCriteria(criteria, _oDataVersion, fieldTypes, filterToLower);
         }
 
         if(_countQuery) {

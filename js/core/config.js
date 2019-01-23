@@ -23,11 +23,11 @@ var config = {
     */
     defaultCurrency: "USD",
     /**
-    * @name globalConfig.oDataStringToLower
+    * @name globalConfig.oDataFilterToLower
     * @default true
     * @type boolean
     */
-    oDataStringToLower: true,
+    oDataFilterToLower: true,
     designMode: false,
     /**
     * @name globalConfig.serverDecimalSeparator

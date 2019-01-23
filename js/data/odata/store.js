@@ -85,7 +85,7 @@ var ODataStore = Store.inherit({
          * @default false
          */
         /**
-         * @name ODataStoreOptions.stringToLower
+         * @name ODataStoreOptions.filterToLower
          * @type boolean
          */
         /**
@@ -202,8 +202,8 @@ var ODataStore = Store.inherit({
             url = this._url;
         }
 
-        if(isDefined(this._stringToLower)) {
-            queryOptions.stringToLower = this._stringToLower;
+        if(isDefined(this._filterToLower)) {
+            queryOptions.filterToLower = this._filterToLower;
         }
 
         if(loadOptions.customQueryParams) {
