@@ -2512,6 +2512,46 @@ QUnit.test("filterToLower equal false", function(assert) {
         .load({ filter: ["B", "contains", "O"] });
 });
 
+QUnit.test("filterToLower equal false for ODataContext", function(assert) {
+    assert.expect(2);
+
+    var done = assert.async();
+
+    ajaxMock.setup({
+        url: "odata.org/name",
+        callback: function(bag) {
+            this.responseText = { value: [bag] };
+        }
+    });
+
+    var ctx = new ODataContext({
+        version: 4,
+        url: "odata.org",
+        filterToLower: false,
+        entities: {
+            "X": { name: "name", filterToLower: true },
+            "Y": { name: "name" }
+        }
+    });
+
+    var promises = [
+        ctx.X.load({ filter: ["B", "contains", "O"] })
+            .done(function(request) {
+                debugger;
+                assert.equal(request[0].data.$filter, "contains(tolower(B),'o')");
+            }),
+
+        ctx.Y.load({ filter: ["B", "contains", "O"] })
+            .done(function(request) {
+                assert.equal(request[0].data.$filter, "contains(B,'O')");
+            })
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); })
+        .always(done);
+});
+
 QUnit.test("verbose MIME specifier is used", function(assert) {
     var done = assert.async();
 
