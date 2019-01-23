@@ -1,4 +1,4 @@
-import { detectTouchEvents } from "core/utils/support";
+import { detectTouchEvents, detectPointerEvent } from "core/utils/support";
 
 const createWindowMock = (...properties) => { return { hasProperty: name => properties.indexOf(name) > -1 }; };
 
@@ -33,20 +33,20 @@ QUnit.module("Pointer event detection", () => {
         const windowMock = createWindowMock("PointerEvent");
         const navigatorMock = {};
 
-        assert.ok(detectTouchEvents(windowMock, navigatorMock), "PointerEvent detected");
+        assert.ok(detectPointerEvent(windowMock, navigatorMock), "PointerEvent detected");
     });
 
     QUnit.test("pointerEvent = true when 'pointerEnabled' exists (surface with old IE11)", assert => {
         const windowMock = createWindowMock();
         const navigatorMock = { pointerEnabled: true };
 
-        assert.ok(detectTouchEvents(windowMock, navigatorMock), "PointerEvent detected");
+        assert.ok(detectPointerEvent(windowMock, navigatorMock), "PointerEvent detected");
     });
 
     QUnit.test("pointerEvent = false when 'pointerEnabled' or 'PointerEvent' not exists", assert => {
         const windowMock = createWindowMock();
 
-        assert.notOk(detectTouchEvents(windowMock, {}), "PointerEvent isn't detected");
+        assert.notOk(detectPointerEvent(windowMock, {}), "PointerEvent isn't detected");
     });
 });
 
