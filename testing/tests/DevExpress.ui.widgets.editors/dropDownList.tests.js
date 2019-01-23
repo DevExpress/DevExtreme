@@ -1072,8 +1072,8 @@ QUnit.test("popup should be configured with templatesRenderAsynchronously=false 
     assert.strictEqual(popup.option("templatesRenderAsynchronously"), false, "templatesRenderAsynchronously should have false value");
 });
 
-QUnit.test("popup should be configured with autoResizeEnabled=false (to prevent issues with pushBackValue and scrolling in IOS)", function(assert) {
-    var data = ["item-1"];
+QUnit.test("popup should be configured with autoResizeEnabled=false (to prevent issues with pushBackValue and scrolling in IOS)", (assert) => {
+    const data = ["item-1"];
 
     $("#dropDownList").dxDropDownList({
         dataSource: new DataSource(data),
@@ -1081,7 +1081,7 @@ QUnit.test("popup should be configured with autoResizeEnabled=false (to prevent 
         opened: true
     });
 
-    var popup = $(".dx-dropdowneditor-overlay.dx-popup").dxPopup("instance");
+    const popup = $(".dx-dropdowneditor-overlay.dx-popup").dxPopup("instance");
 
     assert.strictEqual(popup.option("autoResizeEnabled"), false, "autoResizeEnabled should have false value");
 });
