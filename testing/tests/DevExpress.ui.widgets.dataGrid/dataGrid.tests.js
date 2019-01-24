@@ -3410,6 +3410,38 @@ QUnit.test("DataGrid should not scroll back to the focused row after pageIndex c
     clock.restore();
 });
 
+QUnit.testInActiveWindow("Data cell in group column with showWhenGrouped=true should be focused", function(assert) {
+    // arrange
+    var $cell,
+        keyboardController,
+        clock = sinon.useFakeTimers(),
+        data = [
+            { name: "Alex", phone: "555555", room: 0 },
+            { name: "Dan1", phone: "666666", room: 1 },
+            { name: "Dan2", phone: "777777", room: 2 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            dataSource: data,
+            columns: ["name", "phone", { dataField: "room", groupIndex: 0, showWhenGrouped: true }],
+            grouping: { autoExpandAll: true }
+        }).dxDataGrid("instance");
+
+    // act
+    dataGrid.focus(dataGrid.getCellElement(1, 2));
+    keyboardController = dataGrid.getController("keyboardNavigation");
+    keyboardController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
+    clock.tick();
+
+    $cell = $(dataGrid.element()).find(".dx-focused");
+
+    // assert
+    assert.equal($cell.text(), "0");
+    assert.deepEqual(keyboardController._focusedCellPosition, { rowIndex: 1, columnIndex: 3 }, "focused cell position");
+
+    clock.restore();
+});
+
 QUnit.test("Enable rows hover via option method", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "hover is disabled for not desktop devices");
