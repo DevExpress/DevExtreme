@@ -2899,7 +2899,7 @@ QUnit.test("Horizontal axis. Shift outside constant line groups vertically", fun
 
     var topGroup = this.renderer.g.getCall(13).returnValue,
         bottomGroup = this.renderer.g.getCall(14).returnValue;
-    debugger;
+
     assert.deepEqual(topGroup.attr.lastCall.args, [{ translateY: -(64 + 5) }]);
     assert.deepEqual(bottomGroup.attr.lastCall.args, [{ translateY: 45 + 5 }]);
 });

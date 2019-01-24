@@ -1742,7 +1742,7 @@ var environment = {
         assert.strictEqual(chart._legendGroup, null, "legend gorup is null");
         assert.ok(chart._stripsGroupDisposed, "_stripsGroup");
         assert.strictEqual(chart._stripsGroup, null, "strips group is null");
-        debugger;
+
         assert.ok(chart._constantLinesGroupDisposed, "_constantLinesGroup");
         assert.strictEqual(chart._constantLinesGroup, null, "constant lines group is null");
         assert.ok(chart._axesGroupDisposed, "_axesGroup");

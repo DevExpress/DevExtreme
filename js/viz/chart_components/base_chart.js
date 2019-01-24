@@ -603,7 +603,6 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _doRender: function(_options) {
-        debugger;
         var that = this,
             drawOptions,
             recreateCanvas;

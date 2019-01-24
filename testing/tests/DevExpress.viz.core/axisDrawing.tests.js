@@ -6922,7 +6922,6 @@ QUnit.test("Styles and attributes", function(assert) {
         "font-weight": 700
     }, "css");
 
-    debugger;
     var group = this.renderer.g.lastCall.returnValue;
     assert.deepEqual(renderer.text.getCall(0).returnValue.append.getCall(0).args[0], group);
     assert.deepEqual(renderer.text.getCall(1).returnValue.append.getCall(0).args[0], group);

@@ -721,7 +721,6 @@ Axis.prototype = {
     },
 
     getMargins: function() {
-        debugger;
         var that = this,
             options = that._options,
             position = options.position,
