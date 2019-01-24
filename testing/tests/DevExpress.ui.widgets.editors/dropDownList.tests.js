@@ -1092,7 +1092,7 @@ QUnit.test("popup should be configured with templatesRenderAsynchronously=false 
     assert.strictEqual(popup.option("templatesRenderAsynchronously"), false, "templatesRenderAsynchronously should have false value");
 });
 
-QUnit.test("popup should be configured with autoResizeEnabled=false (to prevent issues with pushBackValue and scrolling in IOS)", (assert) => {
+QUnit.test("popup should be configured with autoResizeEnabled=false (to prevent issues with pushBackValue and scrolling in IOS)", function(assert) {
     const data = ["item-1"];
 
     $("#dropDownList").dxDropDownList({
