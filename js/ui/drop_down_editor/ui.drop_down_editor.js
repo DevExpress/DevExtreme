@@ -193,6 +193,7 @@ var DropDownEditor = TextBox.inherit({
              */
             showDropDownButton: true,
 
+            dropDownOptions: {},
             popupPosition: this._getDefaultPopupPosition(),
             onPopupInitialized: null,
             applyButtonText: messageLocalization.format("OK"),
@@ -532,7 +533,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderPopup: function() {
-        this._popup = this._createComponent(this._$popup, Popup, this._popupConfig());
+        this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this.option("dropDownOptions")));
 
         this._popup.on({
             "showing": this._popupShowingHandler.bind(this),
@@ -546,6 +547,12 @@ var DropDownEditor = TextBox.inherit({
 
         this._popupContentId = "dx-" + new Guid();
         this.setAria("id", this._popupContentId, this._popup.$content());
+
+        // Breaking code
+        this._options.dropDownOptions = extend({}, this._popup.option());
+        this._popup.on("optionChanged", function(e) {
+            this.option("dropDownOptions" + "." + e.fullName, e.value);
+        }.bind(this));
     },
 
     _contentReadyHandler: commonUtils.noop,
@@ -657,6 +664,7 @@ var DropDownEditor = TextBox.inherit({
     _clean: function() {
         delete this._$dropDownButton;
         delete this._openOnFieldClickAction;
+        delete this._options.dropDownOptions;
 
         if(this._$popup) {
             this._$popup.remove();
@@ -767,6 +775,25 @@ var DropDownEditor = TextBox.inherit({
         this._$dropDownButton && this._$dropDownButton.dxButton("option", "disabled", this.option("readOnly"));
     },
 
+    _updatePopupWidth: commonUtils.noop,
+
+    _popupOptionChanged: function(args) {
+        var options = {};
+
+        if(args.name === args.fullName) {
+            options = args.value;
+        } else {
+            var option = args.fullName.split(".").pop();
+            options[option] = args.value;
+        }
+
+        this._setPopupOption(options);
+
+        if(Object.keys(options).indexOf("width") !== -1 && options["width"] === undefined) {
+            this._updatePopupWidth();
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "opened":
@@ -794,6 +821,9 @@ var DropDownEditor = TextBox.inherit({
                 break;
             case "dropDownButtonTemplate":
                 this._renderDropDownButton();
+                break;
+            case "dropDownOptions":
+                this._popupOptionChanged(args);
                 break;
             case "popupPosition":
             case "deferRendering":
