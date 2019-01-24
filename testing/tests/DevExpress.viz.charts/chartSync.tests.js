@@ -1671,7 +1671,7 @@ var environment = {
         };
 
         var mockObjectDispose = function(propName) {
-            chart[propName] && (chart[propName].dispose = function() { debugger; chart[propName + "Disposed"] = true; });
+            chart[propName] && (chart[propName].dispose = function() { chart[propName + "Disposed"] = true; });
         };
 
         countDisposedObjects("series");

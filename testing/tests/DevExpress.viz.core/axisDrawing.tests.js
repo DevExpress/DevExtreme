@@ -7851,7 +7851,7 @@ QUnit.test("Axis with constant lines with ouside labels", function(assert) {
 
     this.renderer.g.getCall(7).returnValue.getBBox = sinon.stub().returns({ x: -10, y: 20, width: 120, height: 20 });
     this.renderer.g.getCall(8).returnValue.getBBox = sinon.stub().returns({ x: 10, y: 80, width: 10, height: 30 });
-    debugger;
+
     // act
     var margins = this.axis.getMargins();
 
@@ -7893,7 +7893,7 @@ QUnit.test("Axis with constant lines with ouside labels; One of them behind seri
     this.axis.parser = function() {
         return 0;
     };
-    debugger;
+
     this.axis.draw(this.canvas);
 
     // constant line above series
