@@ -40,7 +40,7 @@ export default function createConstantLine(axis, options) {
 
             this.coord = axis._getConstantLinePos(parsedValue, canvas.start, canvas.end);
 
-            const rootGroup = options.position === "under" ? axis._axisConstantLineGroups.under : axis._axisConstantLineGroups.above;
+            const rootGroup = options.displayBehindSeries ? axis._axisConstantLineGroups.under : axis._axisConstantLineGroups.above;
             let group = rootGroup[labelPosition];
 
             if(!group) {
@@ -57,11 +57,8 @@ export default function createConstantLine(axis, options) {
                 "stroke-width": options.width,
                 dashStyle: options.dashStyle
             });
-            // debugger;
 
-            // var constantLineContainer = axis._renderer.g().attr({ "class": "constant-line-container", "data-z-index": -2 });
             this.line = path.append(rootGroup.inside);
-            debugger;
             this.label = labelOptions.visible ? axis._drawConstantLineLabels(parsedValue, labelOptions, this.coord, group) : null;
 
             this.updatePosition();
