@@ -47,6 +47,7 @@
         "no-multi-spaces": "error",
         "no-trailing-spaces": "error",
         "no-duplicate-case": "error",
+        "no-extra-semi": "error",
         "no-new-func": "error",
         "no-eval": "error",
         "no-undef": "error",
