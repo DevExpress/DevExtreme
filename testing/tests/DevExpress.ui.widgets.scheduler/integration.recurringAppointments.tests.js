@@ -1077,6 +1077,33 @@ QUnit.test("Recurrence exception should be adjusted by scheduler timezone", func
     }
 });
 
+QUnit.test("T697037. Recurrence exception date should equal date of appointment, which excluded from recurrence", function(assert) {
+    this.createInstance({
+        dataSource: [ {
+            text: "Increase Price - North Region",
+            startDate: "2018-11-26T02:00:00Z",
+            endDate: "2018-11-26T02:15:00Z",
+            recurrenceRule: "FREQ=DAILY;COUNT=5",
+            recurrenceException: ""
+        }],
+        views: ["week"],
+        currentView: "week",
+        currentDate: new Date(2018, 10, 26),
+        dateSerializationFormat: "yyyy-MM-ddTHH:mm:ssZ",
+        timeZone: "Etc/UTC",
+        editing: true,
+        onAppointmentUpdating: function(e) {
+            assert.equal(e.newData.recurrenceException, "20181128T020000Z", "correct recurrence exception date");
+        }
+    });
+    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2),
+        pointer = pointerMock($appointment).start();
+
+    pointer.dragStart().drag(0, -30).dragEnd();
+
+    $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
+});
+
 QUnit.test("Recurrence exception should be adjusted by scheduler timezone after deleting of the single appt", function(assert) {
     this.createInstance({
         dataSource: [{
