@@ -581,6 +581,29 @@ QUnit.test("createOffsetFilter should generate filters with =/<> filter operatio
     });
 });
 
+QUnit.test("Custom store with remote paging and with local filtering", function(assert) {
+    // arrange
+    var loadArgs = [];
+    var source = createDataSource({
+        remoteOperations: { paging: true },
+        load: function(e) {
+            loadArgs.push(e);
+            return $.Deferred().resolve([{ x: 1 }, { x: 2 }]);
+        }
+    });
+
+    // act
+    source.filter(["x", ">", 1]);
+    source.load();
+
+    // assert
+    assert.strictEqual(source.items().length, 1, "items are filtered");
+    assert.strictEqual(loadArgs.length, 1);
+    assert.strictEqual(loadArgs[0].skip, undefined, "skip is not exists");
+    assert.strictEqual(loadArgs[0].take, undefined, "take is not exists");
+    assert.strictEqual(loadArgs[0].filter, undefined, "filter is not exists");
+});
+
 QUnit.module("DataSource when not requireTotalCount", {
     beforeEach: function() {
         this.dataSource = createDataSource({
@@ -1847,7 +1870,6 @@ QUnit.test("Ungrouping with custom store - there are no exceptions when remote p
         assert.ok(false, "exception was threw:" + error);
     }
 });
-
 
 QUnit.module("Grouping with basic remoteOperations. Second level", {
     beforeEach: function() {
