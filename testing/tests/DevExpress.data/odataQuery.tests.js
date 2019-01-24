@@ -1,5 +1,6 @@
 var $ = require("jquery"),
     query = require("data/query"),
+    config = require("core/config"),
     EdmLiteral = require("data/odata/utils").EdmLiteral,
     ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js"),
     ajaxMock = require("../../helpers/ajaxMock.js");
@@ -726,6 +727,67 @@ QUnit.test("string functions", function(assert) {
         .always(done);
 });
 
+QUnit.test("string functions with filterToLower equal false", function(assert) {
+    assert.expect(4);
+
+    var done = assert.async();
+
+    var check = function(operation, expectation) {
+        return QUERY("odata.org", { filterToLower: false })
+            .filter("f.p", operation, "Ab")
+            .enumerate()
+            .done(function(r) {
+                assert.equal(r[0].data["$filter"], expectation);
+            });
+    };
+
+    var promises = [
+        check("startsWith", "startswith(f/p,'Ab')"),
+        check("endsWith", "endswith(f/p,'Ab')"),
+        check("contains", "substringof('Ab',f/p)"),
+        check("notContains", "not substringof('Ab',f/p)")
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(done);
+});
+
+QUnit.test("string functions with global filterToLower equal false", function(assert) {
+    assert.expect(4);
+
+    var done = assert.async();
+
+    config({ oDataFilterToLower: false });
+
+    var check = function(operation, expectation) {
+        return QUERY("odata.org")
+            .filter("f.p", operation, "Ab")
+            .enumerate()
+            .done(function(r) {
+                assert.equal(r[0].data["$filter"], expectation);
+            });
+    };
+
+    var promises = [
+        check("startsWith", "startswith(f/p,'Ab')"),
+        check("endsWith", "endswith(f/p,'Ab')"),
+        check("contains", "substringof('Ab',f/p)"),
+        check("notContains", "not substringof('Ab',f/p)")
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(() => {
+            config({ oDataFilterToLower: true });
+            done();
+        });
+});
+
 QUnit.test("string functions (v4)", function(assert) {
     assert.expect(4);
 
@@ -752,6 +814,67 @@ QUnit.test("string functions (v4)", function(assert) {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .always(done);
+});
+
+QUnit.test("string functions (v4) with filterToLower equal false", function(assert) {
+    assert.expect(4);
+
+    var done = assert.async();
+
+    var check = function(operation, expectation) {
+        return QUERY("odata.org", { version: 4, filterToLower: false })
+            .filter("f.p", operation, "Ab")
+            .enumerate()
+            .done(function(r) {
+                assert.equal(r[0].data["$filter"], expectation);
+            });
+    };
+
+    var promises = [
+        check("startsWith", "startswith(f/p,'Ab')"),
+        check("endsWith", "endswith(f/p,'Ab')"),
+        check("contains", "contains(f/p,'Ab')"),
+        check("notContains", "not contains(f/p,'Ab')")
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(done);
+});
+
+QUnit.test("string functions (v4) with global filterToLower equal false", function(assert) {
+    assert.expect(4);
+
+    var done = assert.async();
+
+    config({ oDataFilterToLower: false });
+
+    var check = function(operation, expectation) {
+        return QUERY("odata.org", { version: 4 })
+            .filter("f.p", operation, "Ab")
+            .enumerate()
+            .done(function(r) {
+                assert.equal(r[0].data["$filter"], expectation);
+            });
+    };
+
+    var promises = [
+        check("startsWith", "startswith(f/p,'Ab')"),
+        check("endsWith", "endswith(f/p,'Ab')"),
+        check("contains", "contains(f/p,'Ab')"),
+        check("notContains", "not contains(f/p,'Ab')")
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(() => {
+            config({ oDataFilterToLower: true });
+            done();
+        });
 });
 
 QUnit.test("Explicit Edm literals (Q441230 case)", function(assert) {

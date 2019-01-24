@@ -1,5 +1,6 @@
 var typeUtils = require("../../core/utils/type"),
     iteratorUtils = require("../../core/utils/iterator"),
+    config = require("../../core/config"),
     extend = require("../../core/utils/extend").extend,
     queryAdapters = require("../query_adapters"),
     odataUtils = require("./utils"),
@@ -12,6 +13,7 @@ var DEFAULT_PROTOCOL_VERSION = 2;
 
 var compileCriteria = (function() {
     var protocolVersion,
+        forceLowerCase,
         fieldTypes;
 
     var createBinaryOperationFormatter = function(op) {
@@ -20,18 +22,16 @@ var compileCriteria = (function() {
         };
     };
 
-    var createStringFuncFormatter = function(op, params) {
-        params = params || {};
-
+    var createStringFuncFormatter = function(op, reverse) {
         return function(prop, val) {
             var bag = [op, "("];
 
-            if(params.forceLowerCase) {
+            if(forceLowerCase) {
                 prop = prop.indexOf("tolower(") === -1 ? "tolower(" + prop + ")" : prop;
                 val = val.toLowerCase();
             }
 
-            if(params.reverse) {
+            if(reverse) {
                 bag.push(val, ",", prop);
             } else {
                 bag.push(prop, ",", val);
@@ -49,18 +49,18 @@ var compileCriteria = (function() {
         ">=": createBinaryOperationFormatter("ge"),
         "<": createBinaryOperationFormatter("lt"),
         "<=": createBinaryOperationFormatter("le"),
-        "startswith": createStringFuncFormatter("startswith", { forceLowerCase: true }),
-        "endswith": createStringFuncFormatter("endswith", { forceLowerCase: true })
+        "startswith": createStringFuncFormatter("startswith"),
+        "endswith": createStringFuncFormatter("endswith")
     };
 
     var formattersV2 = extend({}, formatters, {
-        "contains": createStringFuncFormatter("substringof", { reverse: true, forceLowerCase: true }),
-        "notcontains": createStringFuncFormatter("not substringof", { reverse: true, forceLowerCase: true })
+        "contains": createStringFuncFormatter("substringof", true),
+        "notcontains": createStringFuncFormatter("not substringof", true)
     });
 
     var formattersV4 = extend({}, formatters, {
-        "contains": createStringFuncFormatter("contains", { forceLowerCase: true }),
-        "notcontains": createStringFuncFormatter("not contains", { forceLowerCase: true })
+        "contains": createStringFuncFormatter("contains"),
+        "notcontains": createStringFuncFormatter("not contains")
     });
 
     var compileBinary = function(criteria) {
@@ -137,8 +137,9 @@ var compileCriteria = (function() {
         return compileBinary(criteria);
     };
 
-    return function(criteria, version, types) {
+    return function(criteria, version, types, filterToLower) {
         fieldTypes = types;
+        forceLowerCase = typeUtils.isDefined(filterToLower) ? filterToLower : config().oDataFilterToLower;
         protocolVersion = version;
 
         return compileCore(criteria);
@@ -193,9 +194,10 @@ var createODataQueryAdapter = function(queryOptions) {
 
         if(_criteria.length) {
             var criteria = _criteria.length < 2 ? _criteria[0] : _criteria,
-                fieldTypes = queryOptions && queryOptions.fieldTypes;
+                fieldTypes = queryOptions && queryOptions.fieldTypes,
+                filterToLower = queryOptions && queryOptions.filterToLower;
 
-            result["$filter"] = compileCriteria(criteria, _oDataVersion, fieldTypes);
+            result["$filter"] = compileCriteria(criteria, _oDataVersion, fieldTypes, filterToLower);
         }
 
         if(_countQuery) {
