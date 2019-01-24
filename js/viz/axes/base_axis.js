@@ -614,7 +614,17 @@ Axis.prototype = {
             top: outsideGroup1,
             outside2: outsideGroup2,
             right: outsideGroup2,
-            bottom: outsideGroup2
+            bottom: outsideGroup2,
+            remove: function() {
+                this.inside.remove();
+                this.outside1.remove();
+                this.outside2.remove();
+            },
+            clear: function() {
+                this.inside.clear();
+                this.outside1.clear();
+                this.outside2.clear();
+            }
         };
     },
 
@@ -644,14 +654,8 @@ Axis.prototype = {
         that._axisGroup.remove();
         that._axisStripGroup.remove();
         that._axisStripLabelGroup.remove();
-        that._axisConstantLineGroups.above.inside.remove();
-        that._axisConstantLineGroups.above.outside1.remove();
-        that._axisConstantLineGroups.above.outside2.remove();
-
-        that._axisConstantLineGroups.under.inside.remove();
-        that._axisConstantLineGroups.under.outside1.remove();
-        that._axisConstantLineGroups.under.outside2.remove();
-
+        that._axisConstantLineGroups.above.remove();
+        that._axisConstantLineGroups.under.remove();
         that._axisGridGroup.remove();
 
         that._axisTitleGroup.clear();
@@ -660,13 +664,8 @@ Axis.prototype = {
         that._axisLineGroup && that._axisLineGroup.clear();
         that._axisStripGroup && that._axisStripGroup.clear();
         that._axisGridGroup && that._axisGridGroup.clear();
-        that._axisConstantLineGroups.above.inside.clear();
-        that._axisConstantLineGroups.above.outside1.clear();
-        that._axisConstantLineGroups.above.outside2.clear();
-
-        that._axisConstantLineGroups.under.inside.clear();
-        that._axisConstantLineGroups.under.outside1.clear();
-        that._axisConstantLineGroups.under.outside2.clear();
+        that._axisConstantLineGroups.above.clear();
+        that._axisConstantLineGroups.under.clear();
         that._axisStripLabelGroup && that._axisStripLabelGroup.clear();
     },
 
@@ -733,7 +732,9 @@ Axis.prototype = {
             cRight = canvas.width - canvas.right,
             cBottom = canvas.height - canvas.bottom,
             edgeMarginCorrection = _max(options.grid.visible && options.grid.width || 0, options.tick.visible && options.tick.width || 0),
-            boxes = [that._axisElementsGroup, that._axisConstantLineGroups.above.outside1, that._axisConstantLineGroups.above.outside2, that._axisConstantLineGroups.under.outside1, that._axisConstantLineGroups.under.outside2]
+            boxes = [that._axisElementsGroup,
+                that._axisConstantLineGroups.above.outside1, that._axisConstantLineGroups.above.outside2,
+                that._axisConstantLineGroups.under.outside1, that._axisConstantLineGroups.under.outside2]
                 .map(function(group) { return group && group.getBBox(); })
                 .concat((function(group) {
                     var box = group && group.getBBox();
@@ -1695,7 +1696,7 @@ Axis.prototype = {
         that._labelAxesGroup && that._axisStripLabelGroup.append(that._labelAxesGroup);
         that._gridContainerGroup && that._axisGridGroup.append(that._gridContainerGroup);
         that._stripsGroup && that._axisStripGroup.append(that._stripsGroup);
-        debugger;
+
         if(that._constantLinesGroup) {
             that._axisConstantLineGroups.above.inside.append(that._constantLinesGroup.above);
             that._axisConstantLineGroups.above.outside1.append(that._constantLinesGroup.above);

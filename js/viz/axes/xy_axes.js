@@ -1206,19 +1206,17 @@ module.exports = {
 
             that._axisShift = shiftGroup(options.position, that._axisGroup);
 
+            const sides = [];
             if(isHorizontal) {
-                shiftGroup("top", constantLinesGroups.under);
-                shiftGroup("bottom", constantLinesGroups.under);
-
-                shiftGroup("top", constantLinesGroups.above);
-                shiftGroup("bottom", constantLinesGroups.above);
+                sides.push("top", "bottom");
             } else {
-                shiftGroup("left", constantLinesGroups.above);
-                shiftGroup("right", constantLinesGroups.above);
-
-                shiftGroup("left", constantLinesGroups.under);
-                shiftGroup("right", constantLinesGroups.under);
+                sides.push("left", "right");
             }
+
+            sides.forEach((side) => {
+                shiftGroup(side, constantLinesGroups.above);
+                shiftGroup(side, constantLinesGroups.under);
+            });
         }
     }
 };
