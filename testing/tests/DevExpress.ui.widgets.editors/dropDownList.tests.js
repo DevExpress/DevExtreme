@@ -1028,9 +1028,6 @@ QUnit.testInActiveWindow("After search and load new page scrollTop should not be
         return;
     }
 
-    require("common.css!");
-    require("generic_light.css!");
-
     this.clock.restore();
 
     var data = [],
