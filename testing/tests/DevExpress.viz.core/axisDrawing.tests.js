@@ -4501,6 +4501,49 @@ QUnit.test("Do not draw date marker when axis type is discrete", function(assert
     assert.notOk(this.renderer.path.called);
 });
 
+QUnit.test("Do not draw date marker is business range is empty", function(assert) {
+    // arrange
+    var date0 = new Date(2011, 5, 25, 23, 21, 33, 123),
+        date1 = new Date(2011, 5, 26, 1, 21, 33, 123),
+        date2 = new Date(2011, 5, 26, 2, 21, 33, 123);
+
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        argumentType: "datetime",
+        type: "continuous",
+        position: "bottom",
+        marker: {
+            visible: true,
+            separatorHeight: 33,
+            textLeftIndent: 5,
+            textTopIndent: 11,
+            topIndent: 10,
+            color: "black",
+            width: 2,
+            opacity: 0.1,
+            label: {
+                font: {
+                    size: 12,
+                    color: "green"
+                }
+            }
+        }
+    });
+
+    this.axis.setBusinessRange({ });
+
+    this.generatedTicks = [date0, date1, date2];
+    this.generatedTickInterval = "hour";
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.notOk(this.renderer.text.called);
+    assert.notOk(this.renderer.path.called);
+});
+
 QUnit.test("Date marker with millisecond delta", function(assert) {
     // arrange
     var date0 = new Date(2011, 5, 25, 1, 21, 33, 988),
