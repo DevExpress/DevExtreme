@@ -415,7 +415,7 @@ var DateBox = DropDownEditor.inherit({
 
         this.callBase();
 
-        if(this.option("isValid") !== false) {
+        if(this.option("isValid")) {
             this._validateValue(this.dateOption("value"));
         }
 
@@ -806,10 +806,6 @@ var DateBox = DropDownEditor.inherit({
                 this._strategy.textChangedHandler(args.value);
                 this.callBase.apply(this, arguments);
                 break;
-            case "value":
-                this._validateValue(this.dateOption("value"));
-                this.callBase.apply(this, arguments);
-                break;
             case "isValid":
                 this.callBase.apply(this, arguments);
                 this._updateSize();
@@ -845,9 +841,7 @@ var DateBox = DropDownEditor.inherit({
 
     _updateValue: function(value) {
         this.callBase();
-        if(value !== undefined) {
-            this._validateValue(value);
-        }
+        this._validateValue(value || this.dateOption("value"));
     },
 
     dateValue: function(value, dxEvent) {
