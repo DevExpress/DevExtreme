@@ -59,5 +59,5 @@ export default class InstanceStorage {
                 handler(instance, item, guid);
             }
         });
-    };
+    }
 }
