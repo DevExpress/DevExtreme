@@ -1405,11 +1405,17 @@ var dxChart = {
             */
             value: undefined,
             /**
+            * @name dxChartOptions.argumentAxis.constantLines.displayBehindSeries
+            * @type boolean
+            * @default false
+            */
+            displayBehindSeries: false,
+            /**
             * @name dxChartOptions.argumentAxis.constantLines.extendAxis
             * @type boolean
             * @default false
             */
-            extendAxis: false,
+           extendAxis: false,
             /**
             * @name dxChartOptions.argumentAxis.constantLines.label
             * @type object
@@ -1708,6 +1714,12 @@ var dxChart = {
             * @default undefined
             */
             value: undefined,
+            /**
+            * @name dxChartOptions.argumentAxis.constantLines.displayBehindSeries
+            * @type boolean
+            * @default false
+            */
+            displayBehindSeries: false,
             /**
             * @name dxChartOptions.valueAxis.constantLines.extendAxis
             * @type boolean
@@ -2751,6 +2763,12 @@ var dxPolarChart = {
             */
             value: undefined,
             /**
+            * @name dxChartOptions.argumentAxis.constantLines.displayBehindSeries
+            * @type boolean
+            * @default false
+            */
+            displayBehindSeries: false,
+            /**
             * @name dxPolarChartOptions.argumentAxis.constantLines.extendAxis
             * @type boolean
             * @default false
@@ -2933,6 +2951,12 @@ var dxPolarChart = {
             * @type boolean
             * @default false
             */
+            /**
+            * @name dxChartOptions.argumentAxis.constantLines.displayBehindSeries
+            * @type boolean
+            * @default false
+            */
+            displayBehindSeries: false,
             extendAxis: false,
             /**
             * @name dxPolarChartOptions.valueAxis.constantLines.label
