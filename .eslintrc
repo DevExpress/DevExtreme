@@ -53,6 +53,7 @@
         "no-unused-vars": ["error", { "args": "none" }],
         "no-extend-native": "error",
         "no-alert": "error",
+        "no-useless-escape": "error",
         "no-whitespace-before-property": "error",
         "object-curly-spacing": [ "error", "always" ],
         "semi-spacing": "error",
