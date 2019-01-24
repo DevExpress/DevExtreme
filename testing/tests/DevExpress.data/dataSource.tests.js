@@ -1436,6 +1436,32 @@ QUnit.test("expand option for OData store", function(assert) {
         .always(done);
 });
 
+QUnit.test("filterToLower option equal false for OData store", function(assert) {
+    var done = assert.async();
+
+    ajaxMock.setup({
+        url: "odata.org",
+        callback: function(bag) {
+            this.responseText = { value: [bag] };
+        }
+    });
+
+    new DataSource({
+        store: new ODataStore({
+            url: "odata.org",
+            filterToLower: false
+        }),
+        filter: ["prop.nested.prop", "contains", "O"]
+    }).load()
+        .done(function(data) {
+            assert.equal(data[0].data.$filter, "substringof('O',prop/nested/prop)");
+        })
+        .always(function() {
+            ajaxMock.clear();
+        })
+        .always(done);
+});
+
 QUnit.test("Q456193", function(assert) {
     var store = new ArrayStore(["a", "b", "c"]),
         source = new DataSource(store);
