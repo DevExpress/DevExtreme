@@ -2120,7 +2120,7 @@ QUnit.test("Without text, all variations. Do not draw labels", function(assert) 
                         return undefined;
                     case 3:
                         return "";
-                    case 4:	
+                    case 4:
                         return "      ";
                 }
             }
