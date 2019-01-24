@@ -1,11 +1,11 @@
-var $ = require("jquery"),
-    query = require("data/query"),
-    config = require("core/config"),
-    EdmLiteral = require("data/odata/utils").EdmLiteral,
-    ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js"),
-    ajaxMock = require("../../helpers/ajaxMock.js");
+import $ from "jquery";
+import { EdmLiteral } from "data/odata/utils";
+import query from "data/query";
+import config from "core/config";
+import ErrorHandlingHelper from "../../helpers/data.errorHandlingHelper.js";
+import ajaxMock from "../../helpers/ajaxMock.js";
 
-require("data/odata/query_adapter");
+import "data/odata/query_adapter";
 
 var MUST_NOT_REACH_MESSAGE = "Shouldn't reach this point";
 
