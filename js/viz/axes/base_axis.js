@@ -731,9 +731,11 @@ Axis.prototype = {
             cRight = canvas.width - canvas.right,
             cBottom = canvas.height - canvas.bottom,
             edgeMarginCorrection = _max(options.grid.visible && options.grid.width || 0, options.tick.visible && options.tick.width || 0),
+            constantLineAboveSeries = that._axisConstantLineGroups.above,
+            constantLineUnderSeries = that._axisConstantLineGroups.under,
             boxes = [that._axisElementsGroup,
-                that._axisConstantLineGroups.above.outside1, that._axisConstantLineGroups.above.outside2,
-                that._axisConstantLineGroups.under.outside1, that._axisConstantLineGroups.under.outside2]
+                constantLineAboveSeries.outside1, constantLineAboveSeries.outside2,
+                constantLineUnderSeries.outside1, constantLineUnderSeries.outside2]
                 .map(function(group) { return group && group.getBBox(); })
                 .concat((function(group) {
                     var box = group && group.getBBox();

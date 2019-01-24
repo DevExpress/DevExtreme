@@ -2897,11 +2897,19 @@ QUnit.test("Horizontal axis. Shift outside constant line groups vertically", fun
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var topGroup = this.renderer.g.getCall(13).returnValue,
-        bottomGroup = this.renderer.g.getCall(14).returnValue;
+    var groupAboveSeries = {
+            topGroup: this.renderer.g.getCall(13).returnValue,
+            bottomGroup: this.renderer.g.getCall(14).returnValue
+        },
+        groupUnderSeries = {
+            topGroup: this.renderer.g.getCall(16).returnValue,
+            bottomGroup: this.renderer.g.getCall(17).returnValue
+        };
 
-    assert.deepEqual(topGroup.attr.lastCall.args, [{ translateY: -(64 + 5) }]);
-    assert.deepEqual(bottomGroup.attr.lastCall.args, [{ translateY: 45 + 5 }]);
+    assert.deepEqual(groupAboveSeries.topGroup.attr.lastCall.args, [{ translateY: -(64 + 5) }]);
+    assert.deepEqual(groupUnderSeries.topGroup.attr.lastCall.args, [{ translateY: -(64 + 5) }]);
+    assert.deepEqual(groupAboveSeries.bottomGroup.attr.lastCall.args, [{ translateY: 45 + 5 }]);
+    assert.deepEqual(groupUnderSeries.bottomGroup.attr.lastCall.args, [{ translateY: 45 + 5 }]);
 });
 
 QUnit.test("Vertical axis. Shift outside constant line groups horizontally", function(assert) {
@@ -2910,10 +2918,19 @@ QUnit.test("Vertical axis. Shift outside constant line groups horizontally", fun
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var leftGroup = this.renderer.g.getCall(13).returnValue,
-        rightGroup = this.renderer.g.getCall(14).returnValue;
-    assert.deepEqual(leftGroup.attr.lastCall.args, [{ translateX: -(50 + 5) }]);
-    assert.deepEqual(rightGroup.attr.lastCall.args, [{ translateX: 76 + 5 }]);
+    var groupAboveSeries = {
+            leftGroup: this.renderer.g.getCall(13).returnValue,
+            rightGroup: this.renderer.g.getCall(14).returnValue
+        },
+        groupUnderSeries = {
+            leftGroup: this.renderer.g.getCall(16).returnValue,
+            rightGroup: this.renderer.g.getCall(17).returnValue
+        };
+    assert.deepEqual(groupAboveSeries.leftGroup.attr.lastCall.args, [{ translateX: -(50 + 5) }]);
+    assert.deepEqual(groupUnderSeries.leftGroup.attr.lastCall.args, [{ translateX: -(50 + 5) }]);
+
+    assert.deepEqual(groupAboveSeries.rightGroup.attr.lastCall.args, [{ translateX: 76 + 5 }]);
+    assert.deepEqual(groupUnderSeries.rightGroup.attr.lastCall.args, [{ translateX: 76 + 5 }]);
 });
 
 QUnit.test("Inside constant line group is not shifted", function(assert) {

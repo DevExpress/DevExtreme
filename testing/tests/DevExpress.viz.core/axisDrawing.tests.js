@@ -7851,7 +7851,7 @@ QUnit.test("Axis with constant lines with ouside labels", function(assert) {
 
     this.renderer.g.getCall(7).returnValue.getBBox = sinon.stub().returns({ x: -10, y: 20, width: 120, height: 20 });
     this.renderer.g.getCall(8).returnValue.getBBox = sinon.stub().returns({ x: 10, y: 80, width: 10, height: 30 });
-
+    debugger;
     // act
     var margins = this.axis.getMargins();
 
@@ -7860,6 +7860,62 @@ QUnit.test("Axis with constant lines with ouside labels", function(assert) {
     assert.strictEqual(margins.left, 20, "left");
     assert.strictEqual(margins.right, 20, "right");
     assert.strictEqual(margins.top, 10, "top");
+});
+
+QUnit.test("Axis with constant lines with ouside labels; One of them behind series", function(assert) {
+    // arrange
+    this.updateOptions({
+        title: "Title text",
+        argumentType: "datetime",
+        isHorizontal: true,
+        position: "bottom",
+        constantLines: [{
+            value: 0,
+            label: {
+                text: "text",
+                position: "outside",
+                visible: true,
+                verticalAlignment: "top"
+            },
+            displayBehindSeries: true
+
+        }, {
+            value: 0,
+            label: {
+                text: "text",
+                position: "outside",
+                visible: false
+            }
+        }]
+    });
+
+    this.translator.stub("translate").returns(50);
+    this.axis.parser = function() {
+        return 0;
+    };
+    debugger;
+    this.axis.draw(this.canvas);
+
+    // constant line above series
+    this.renderer.g.getCall(7).returnValue.getBBox = sinon.stub().returns({ x: -10, y: 20, width: 120, height: 20 });
+    this.renderer.g.getCall(8).returnValue.getBBox = sinon.stub().returns({ x: 10, y: 80, width: 10, height: 30 });
+
+    // constant line under series
+    this.renderer.g.getCall(10).returnValue.getBBox = sinon.stub().returns({ x: -20, y: 30, width: 110, height: 30 });
+    this.renderer.g.getCall(11).returnValue.getBBox = sinon.stub().returns({ x: 20, y: 90, width: 20, height: 40 });
+
+    // act
+    var margins = this.axis.getMargins();
+
+    // assert
+    assert.strictEqual(margins.bottom, 60, "bottom");
+    assert.strictEqual(margins.left, 30, "left");
+    assert.strictEqual(margins.right, 20, "right");
+    assert.strictEqual(margins.top, 10, "top");
+
+    assert.ok(this.renderer.g.getCall(7).returnValue.getBBox.callCount > 0);
+    assert.ok(this.renderer.g.getCall(8).returnValue.getBBox.callCount > 0);
+    assert.ok(this.renderer.g.getCall(10).returnValue.getBBox.callCount > 0);
 });
 
 QUnit.test("Constant line with invisible label", function(assert) {
