@@ -302,6 +302,12 @@ module.exports = {
                         case "rtlEnabled":
                             that.reset();
                             break;
+                        case "columns":
+                            var dataSource = that.dataSource();
+                            if(dataSource && dataSource.isLoading() && args.name === args.fullName) {
+                                dataSource.load();
+                            }
+                            break;
                         default:
                             that.callBase(args);
                     }
@@ -385,8 +391,6 @@ module.exports = {
                     storeLoadOptions.sort = columnsController.getSortDataSourceParameters(!dataSource.remoteOperations().sorting);
 
                     e.group = columnsController.getGroupDataSourceParameters(!dataSource.remoteOperations().grouping);
-                    this._isFirstLoading = false;
-
                 },
                 _handleColumnsChanged: function(e) {
                     var that = this,
@@ -441,6 +445,8 @@ module.exports = {
                         dataSource = that._dataSource,
                         columnsController = that._columnsController,
                         isAsyncDataSourceApplying = false;
+
+                    this._isFirstLoading = false;
 
                     if(dataSource && !that._isDataSourceApplying) {
                         that._isDataSourceApplying = true;

@@ -7586,6 +7586,22 @@ QUnit.test("columns change when changed dataSource parameters", function(assert)
     assert.equal(dataGrid.getController("data").items()[0].data.b, 1);
 });
 
+// T708525
+QUnit.test("change columns with grouping after dataSource change", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({});
+
+    // act
+    dataGrid.option("dataSource", [{ a: 1, b: 2 }]);
+    dataGrid.option("columns", ["a", { dataField: "b", groupIndex: 0 }]);
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].rowType, "group", "first row type is");
+    assert.equal(dataGrid.columnOption("b", "groupIndex"), 0, "column b is grouped");
+});
+
 QUnit.test("Toolbar update it's items only when corresponding options are change", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
