@@ -465,8 +465,9 @@ module.exports = {
 
                         const coords = calcCenterForDrag(e);
                         let axesZoomed = false;
+                        let targetAxes;
                         if(options.valueAxis.zoom) {
-                            let targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), coords));
+                            targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), coords));
 
                             if(targetAxes.length === 0) {
                                 const targetCanvas = chart._valueAxes.reduce((r, axis) => {
@@ -498,7 +499,7 @@ module.exports = {
 
                         if(axesZoomed) {
                             chart._requestChange(["VISUAL_RANGE"]);
-                            zoomAndPan.panningVisualRangeEnabled() && preventDefaults(e); // T249548
+                            zoomAndPan.panningVisualRangeEnabled(targetAxes) && preventDefaults(e); // T249548
                         }
                     });
                 }
@@ -569,7 +570,10 @@ module.exports = {
                 renderer.root.css({ "touch-action": touchAction, "-ms-touch-action": touchAction });
             },
 
-            panningVisualRangeEnabled: function() {
+            panningVisualRangeEnabled: function(targetAxes) {
+                if(targetAxes && targetAxes.length) {
+                    return targetAxes.some(axis => !axis.isExtremePosition(false) || !axis.isExtremePosition(true));
+                }
                 const enablePanByValueAxis =
                     chart._valueAxes.some(axis => !axis.isExtremePosition(false) || !axis.isExtremePosition(true));
                 const enablePanByArgumentAxis =

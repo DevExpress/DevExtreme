@@ -2536,6 +2536,36 @@ QUnit.test("Scroll with whole range", function(assert) {
     });
 });
 
+// T702708
+QUnit.test("Min/max correction by wholeRange", function(assert) {
+    const range = $.extend({ minVisible: 10, maxVisible: 110, invert: false }, numericRange);
+    const canvas = { left: 0, right: 0, width: 100 };
+
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.deepEqual(translator.zoom(-9.6, 0.9, { startValue: 3.93, endValue: 5.5 }), {
+        min: 3.93,
+        max: 5.5,
+        scale: 50,
+        translate: -300
+    });
+});
+
+// T702708
+QUnit.test("Min/max correction by wholeRange. Inverted", function(assert) {
+    const range = $.extend({ minVisible: 10, maxVisible: 110, invert: true }, numericRange);
+    const canvas = { left: 0, right: 0, width: 100 };
+
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.deepEqual(translator.zoom(-9.6, 0.9, { startValue: 3.93, endValue: 5.5 }), {
+        max: 3.93,
+        min: 5.5,
+        scale: 100,
+        translate: 10500
+    });
+});
+
 QUnit.test("Scroll with whole range. inverted", function(assert) {
     const range = $.extend({ minVisible: 10, maxVisible: 110, invert: true }, numericRange);
     const canvas = { left: 0, right: 0, width: 100 };

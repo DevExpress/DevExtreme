@@ -3347,6 +3347,32 @@ QUnit.test("Paging should not raise the exception if OData and a group row was f
     clock.restore();
 });
 
+QUnit.test("Focused row should be visible inside group if OData grouping.autoExpandAll is false", function(assert) {
+    // arrange
+    var data = [
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Bob', age: 29 },
+            { team: 'internal0', name: 'Ben', age: 24 },
+            { team: 'internal0', name: 'Dan', age: 23 },
+            { team: 'public', name: 'Alice', age: 19 },
+            { team: 'public', name: 'Zeb', age: 18 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            dataSource: data,
+            keyExpr: "name",
+            remoteOperations: { filtering: true, sorting: true, paging: true },
+            columns: [{ dataField: "team", groupIndex: 0 }, "name", "age"],
+            focusedRowEnabled: true,
+            focusedRowKey: "Ben",
+            grouping: { autoExpandAll: false },
+        }).dxDataGrid("instance");
+
+    // assert
+    assert.ok(dataGrid.isRowExpanded(["internal0"]), "Row expanded");
+    assert.ok(dataGrid.isRowFocused("Ben"), "Row focused");
+});
+
 QUnit.test("DataGrid should not scroll back to the focused row after pageIndex changed in virtual scrolling", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers(),
@@ -7558,6 +7584,22 @@ QUnit.test("columns change when changed dataSource parameters", function(assert)
     // assert
     assert.equal(loadingCount, 2, "second load for apply sorting");
     assert.equal(dataGrid.getController("data").items()[0].data.b, 1);
+});
+
+// T708525
+QUnit.test("change columns with grouping after dataSource change", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({});
+
+    // act
+    dataGrid.option("dataSource", [{ a: 1, b: 2 }]);
+    dataGrid.option("columns", ["a", { dataField: "b", groupIndex: 0 }]);
+
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getVisibleRows()[0].rowType, "group", "first row type is");
+    assert.equal(dataGrid.columnOption("b", "groupIndex"), 0, "column b is grouped");
 });
 
 QUnit.test("Toolbar update it's items only when corresponding options are change", function(assert) {

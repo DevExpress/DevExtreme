@@ -69,10 +69,23 @@
     }
 
     &.dx-state-readonly {
-        border-color: @texteditor-readonly-border-color;
+        border-style: dashed;
         &.dx-editor-filled {
             border-color: transparent;
-            background-color: fade(@texteditor-filled-bg, 2%);
+            background-color: fade(@texteditor-filled-bg, 3%);
+            &.dx-state-focused {
+                background-color: fade(@texteditor-filled-bg, 3%);
+            }
+            &.dx-state-hover {
+                background-color: fade(@texteditor-hover-border-color, 7%);
+            }
+        }
+        &.dx-editor-underlined {
+            border-style: none;
+            border-bottom-style: dashed;
+        }
+        .dx-texteditor-buttons-container {
+            display: none;
         }
     }
 

@@ -172,6 +172,16 @@ QUnit.test("T204185 - dxDateBox input should be editable when pickerType is 'cal
     assert.ok(!$input.prop("readOnly"), "correct readOnly value");
 });
 
+QUnit.test("readonly property should not be applied to the native picker", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+            pickerType: "native",
+            acceptCustomValue: false
+        }),
+        $input = $dateBox.find(".dx-texteditor-input");
+
+    assert.ok(!$input.prop("readOnly"), "correct readOnly value");
+});
+
 QUnit.test("T204179 - dxDateBox should not render dropDownButton only for generic device when pickerType is 'native'", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
             pickerType: "native"

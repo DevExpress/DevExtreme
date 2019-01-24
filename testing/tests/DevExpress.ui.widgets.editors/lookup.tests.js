@@ -2285,8 +2285,8 @@ QUnit.test("list option bouncing", function(assert) {
 });
 
 QUnit.test("group options bouncing", function(assert) {
-    var dataSource = [{ key: "header", items: ["1", "2"] },
-            { key: "header", items: ["1", "2"] }],
+    var dataSource = [{ key: "header1", items: ["1", "2"] },
+            { key: "header2", items: ["1", "2"] }],
         $lookup = $("#lookupOptions").dxLookup({
             dataSource: dataSource,
             grouped: true,

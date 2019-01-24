@@ -2080,12 +2080,14 @@ Axis.prototype = {
 
     isExtremePosition(isMax) {
         let extremeDataValue;
+        let seriesData;
 
-        const seriesData = this._translator.getBusinessRange();
         if(this._options.type === "discrete") {
+            seriesData = this._translator.getBusinessRange();
             extremeDataValue = isMax ? seriesData.categories[seriesData.categories.length - 1] : seriesData.categories[0];
         } else {
-            extremeDataValue = isMax ? seriesData.max : seriesData.min;
+            seriesData = this.getZoomBounds(); // T702708
+            extremeDataValue = isMax ? seriesData.endValue : seriesData.startValue;
         }
 
         const translator = this.getTranslator();

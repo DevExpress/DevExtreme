@@ -64,6 +64,14 @@ QUnit.test("Header scrollable should update position if date scrollable position
     assert.equal(headerScrollable.scrollLeft(), 100, "Scroll position is OK");
 });
 
+QUnit.test("Header scrollable should have right scrolloByContent (T708008)", function(assert) {
+    var $element = this.instance.$element(),
+        headerScrollable = $element.find(".dx-scheduler-header-scrollable").dxScrollable("instance");
+
+    assert.strictEqual(headerScrollable.option("scrollByContent"), true, "scrolloByContent is OK");
+});
+
+
 QUnit.test("Header scrollable shouldn't update position if date scrollable position is changed to bottom", function(assert) {
     var $element = this.instance.$element(),
         headerScrollable = $element.find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
