@@ -2266,6 +2266,7 @@ QUnit.test("Horizontal axis.", function(assert) {
 
     // assert
     var insideGroup = this.renderer.g.getCall(6).returnValue;
+
     assert.equal(renderer.path.callCount, 3, "path");
     assert.deepEqual(renderer.path.getCall(0).args, [[40, 30, 40, 70], "line"], "args");
     assert.deepEqual(renderer.path.getCall(0).returnValue.attr.getCall(0).args[0], { dashStyle: "dot", stroke: "#111111", "stroke-width": 3 }, "attr");
@@ -2312,7 +2313,8 @@ QUnit.test("Vertical axis. Only outside constant lines are rendered", function(a
             width: 5,
             label: {
                 position: "outside"
-            }
+            },
+            position: "under"
         }]
     });
 
@@ -2543,6 +2545,98 @@ QUnit.test("With stub data", function(assert) {
     // assert
     assert.equal(renderer.stub("path").callCount, 0);
     assert.equal(renderer.stub("text").callCount, 0);
+});
+
+QUnit.test("Horizontal axis. First constant line have custom position and second by default", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        constantLines: [{
+            value: 1,
+            color: "#111111",
+            width: 3,
+            dashStyle: "dot",
+            position: "under",
+            label: {}
+        }, {
+            value: 2,
+            color: "#222222",
+            width: 4,
+            dashStyle: "dot",
+            label: {}
+        }]
+    });
+
+    this.translator.stub("translate").withArgs(1).returns(40);
+    this.translator.stub("translate").withArgs(2).returns(50);
+    this.axis.parser = function(value) {
+        return value;
+    };
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    var insideGroup = this.renderer.g.getCall(6).returnValue,
+        outsideGroup = this.renderer.g.getCall(9).returnValue;
+
+    assert.equal(renderer.path.callCount, 2, "path");
+    assert.deepEqual(renderer.path.getCall(0).args, [[40, 30, 40, 70], "line"], "args");
+    assert.deepEqual(renderer.path.getCall(0).returnValue.attr.getCall(0).args[0], { dashStyle: "dot", stroke: "#111111", "stroke-width": 3 }, "attr");
+    assert.deepEqual(renderer.path.getCall(0).returnValue.sharp.getCall(0).args[0], "h", "sharp");
+    assert.deepEqual(renderer.path.getCall(0).returnValue.append.getCall(0).args[0], outsideGroup);
+
+    assert.deepEqual(renderer.path.getCall(1).args, [[50, 30, 50, 70], "line"], "args");
+    assert.deepEqual(renderer.path.getCall(1).returnValue.attr.getCall(0).args[0], { dashStyle: "dot", stroke: "#222222", "stroke-width": 4 }, "attr");
+    assert.deepEqual(renderer.path.getCall(1).returnValue.sharp.getCall(0).args[0], "h", "sharp");
+    assert.deepEqual(renderer.path.getCall(1).returnValue.append.getCall(0).args[0], insideGroup);
+});
+
+QUnit.test("Vertical axis. First constant line have custom position and second by default", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        constantLines: [{
+            value: 1,
+            color: "#111111",
+            width: 3,
+            dashStyle: "dot",
+            position: "under",
+            label: {}
+        }, {
+            value: 2,
+            color: "#222222",
+            width: 4,
+            dashStyle: "dot",
+            label: {}
+        }]
+    });
+
+    this.translator.stub("translate").withArgs(1).returns(40);
+    this.translator.stub("translate").withArgs(2).returns(50);
+    this.axis.parser = function(value) {
+        return value;
+    };
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    var insideGroup = this.renderer.g.getCall(6).returnValue,
+        outsideGroup = this.renderer.g.getCall(9).returnValue;
+
+    assert.equal(renderer.path.callCount, 2, "path");
+    assert.deepEqual(renderer.path.getCall(0).args, [[10, 40, 90, 40], "line"], "args");
+    assert.deepEqual(renderer.path.getCall(0).returnValue.attr.getCall(0).args[0], { dashStyle: "dot", stroke: "#111111", "stroke-width": 3 }, "attr");
+    assert.deepEqual(renderer.path.getCall(0).returnValue.sharp.getCall(0).args[0], "v", "sharp");
+    assert.deepEqual(renderer.path.getCall(0).returnValue.append.getCall(0).args[0], outsideGroup);
+
+    assert.deepEqual(renderer.path.getCall(1).args, [[10, 50, 90, 50], "line"], "args");
+    assert.deepEqual(renderer.path.getCall(1).returnValue.attr.getCall(0).args[0], { dashStyle: "dot", stroke: "#222222", "stroke-width": 4 }, "attr");
+    assert.deepEqual(renderer.path.getCall(1).returnValue.sharp.getCall(0).args[0], "v", "sharp");
+    assert.deepEqual(renderer.path.getCall(1).returnValue.append.getCall(0).args[0], insideGroup);
 });
 
 QUnit.module("XY linear axis. Draw. Check constant line (outside) labels", environment);
