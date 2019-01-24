@@ -163,7 +163,6 @@ var isCrossDomain = function(url) {
 
     try {
         urlAnchor.href = url;
-        urlAnchor.href = urlAnchor.href;
 
         crossDomain = originAnchor.protocol + "//" + originAnchor.host !==
             urlAnchor.protocol + "//" + urlAnchor.host;
