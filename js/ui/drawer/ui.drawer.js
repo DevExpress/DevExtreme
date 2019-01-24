@@ -515,6 +515,7 @@ const Drawer = Widget.inherit({
             case "position":
                 this._refreshPositionClass(args.previousValue);
                 this._invalidate();
+                break;
             case "contentTemplate":
             case "template":
                 this._invalidate();
