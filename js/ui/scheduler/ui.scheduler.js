@@ -1100,9 +1100,14 @@ var Scheduler = Widget.inherit({
 
         extend(this._deprecatedOptions, {
             /**
-             * @name dxSwitchOptions.onAppointmentFormCreated
-             * @type string
-             * @deprecated dxSwitchOptions.onAppointmentFormOpening
+             * @name dxSchedulerOptions.onAppointmentFormCreated
+             * @extends Action
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 appointmentData:object
+             * @type_function_param1_field5 form:dxForm
+             * @action
+             * @deprecated dxSchedulerOptions.onAppointmentFormOpening
              */
             onAppointmentFormCreated: { since: "18.2", alias: "onAppointmentFormOpening" },
         });

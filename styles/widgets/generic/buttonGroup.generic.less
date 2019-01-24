@@ -35,46 +35,56 @@
 }
 
 .dx-buttongroup-item {
-    &.dx-button-mode-outlined, &.dx-button-mode-contained {
-        &.dx-state-disabled {
-            opacity: 1;
+    &.dx-button {
+        &.dx-button-mode-outlined, &.dx-button-mode-contained {
+            &.dx-state-disabled {
+                opacity: 1;
 
-            .dx-button-content {
-                opacity: @button-disabled-icon-opacity;
+                .dx-button-content {
+                    opacity: @button-disabled-icon-opacity;
+                }
             }
         }
-    }
 
-    &.dx-item-selected {
-        background-color: @button-group-normal-selected-bg;
-
-        &.dx-button-success {
-            background-color: @button-group-success-selected-bg;
+        &.dx-state-focused {
+            background-color: fade(@button-normal-color, 4%);
         }
 
-        &.dx-button-default {
-            background-color: @button-group-default-selected-bg;
+        &.dx-state-hover {
+            background-color: fade(@button-normal-color, 4%);
         }
 
-        &.dx-button-danger {
-            background-color: @button-group-danger-selected-bg;
+        &.dx-item-selected {
+            background-color: @button-group-normal-selected-bg;
+
+            &.dx-button-success {
+                background-color: @button-group-success-selected-bg;
+            }
+
+            &.dx-button-default {
+                background-color: @button-group-default-selected-bg;
+            }
+
+            &.dx-button-danger {
+                background-color: @button-group-danger-selected-bg;
+            }
+
+                &.dx-button-normal, &.dx-button-normal .dx-icon {
+                    color: @button-group-normal-selected-color;
+                }
+
+                &.dx-button-success, &.dx-button-success .dx-icon {
+                    color: @button-group-success-selected-color;
+                }
+
+                &.dx-button-default, &.dx-button-default .dx-icon {
+                    color: @button-group-default-selected-color;
+                }
+
+                &.dx-button-danger, &.dx-button-danger .dx-icon {
+                    color: @button-group-danger-selected-color;
+                }
         }
-
-            &.dx-button-normal, &.dx-button-normal .dx-icon {
-                color: @button-group-normal-selected-color;
-            }
-
-            &.dx-button-success, &.dx-button-success .dx-icon {
-                color: @button-group-success-selected-color;
-            }
-
-            &.dx-button-default, &.dx-button-default .dx-icon {
-                color: @button-group-default-selected-color;
-            }
-
-            &.dx-button-danger, &.dx-button-danger .dx-icon {
-                color: @button-group-danger-selected-color;
-            }
     }
 }
 
