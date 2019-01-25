@@ -13,8 +13,7 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    Tooltip = require("ui/tooltip"),
+var Tooltip = require("ui/tooltip"),
     tooltip = require("ui/tooltip/ui.tooltip"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
     fx = require("animation/fx"),

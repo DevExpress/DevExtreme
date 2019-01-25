@@ -1093,8 +1093,6 @@ QUnit.module("rendering", {
     }
 });
 
-var POPUP_BOTTOM_CLASS = "dx-popup-bottom";
-
 QUnit.test("anonymous content template rendering", function(assert) {
     var $popup = $("#popupWithAnonymousTmpl").dxPopup({
         visible: true
