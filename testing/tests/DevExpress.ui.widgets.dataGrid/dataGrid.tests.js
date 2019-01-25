@@ -13061,6 +13061,26 @@ QUnit.test("column with width auto should have minimum size by content", functio
     assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, "last column width by content");
 });
 
+// T709106
+QUnit.test("column widths if all columns have width auto and columnAutoWidth is true", function(assert) {
+    // act
+    var dataGrid = $("#dataGrid").css("width", "").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columnAutoWidth: true,
+        columns: [{
+            dataField: "a",
+            width: "auto"
+        }, {
+            dataField: "a",
+            width: "auto"
+        }]
+    }).dxDataGrid("instance");
+
+    // assert
+    assert.roughEqual($(dataGrid.getCellElement(0, 0)).outerWidth(), $(dataGrid.getCellElement(0, 1)).outerWidth(), 1.01, "first and second column widths are equals");
+});
+
 // T672282
 QUnit.test("column with width auto should have minimum size by content if columnAutoWidth is disabled", function(assert) {
     var CONTENT_WIDTH = 50;
