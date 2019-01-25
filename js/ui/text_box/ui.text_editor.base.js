@@ -756,7 +756,6 @@ var TextEditorBase = Editor.inherit({
                 break;
             case "stylingMode":
                 this._renderStylingMode();
-                this._invalidate();
                 break;
             case "valueFormat":
                 this._invalidate();
