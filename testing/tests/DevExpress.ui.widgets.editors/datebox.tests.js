@@ -3551,8 +3551,8 @@ QUnit.test("validation should be correct when max value is chosen (T266206)", fu
     assert.ok(dateBox.option("isValid"), "datebox is valid");
 });
 
-QUnit.test("datebox should create validation error if user set isValid = false", (assert) => {
-    const dateBox = $("#widthRootStyle").dxDateBox({
+QUnit.test("datebox should create validation error if user set isValid = false", function(assert) {
+    var dateBox = $("#widthRootStyle").dxDateBox({
         type: "datetime",
         isValid: false,
         value: null
@@ -3567,8 +3567,8 @@ QUnit.test("datebox should create validation error if user set isValid = false",
     assert.notOk(dateBox.option("isValid"), "set isValid = false by API");
 });
 
-QUnit.test("datebox should be invalid after out of range value was setted", (assert) => {
-    const dateBox = $("#widthRootStyle").dxDateBox({
+QUnit.test("datebox should be invalid after out of range value was setted", function(assert) {
+    var dateBox = $("#widthRootStyle").dxDateBox({
         type: "datetime",
         min: new Date(2019, 1, 1),
         value: null
