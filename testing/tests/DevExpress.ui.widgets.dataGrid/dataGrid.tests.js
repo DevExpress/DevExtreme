@@ -12501,6 +12501,38 @@ QUnit.test("Sorting should not throw an exception when headers are hidden", func
     }
 });
 
+// T709033
+QUnit.test("Band columns should be displayed correctly after adding columns and changing the summary", function(assert) {
+    // arrange
+    var visibleColumns,
+        dataGrid = createDataGrid({
+            dataSource: [{ field1: 1, field2: 2, field3: 3 }, { field1: 4, field2: 5, field3: 6 }],
+            columns: [{
+                caption: "1",
+                columns: ["field1", "field2"]
+            }]
+        });
+
+    // act
+    dataGrid.addColumn({
+        caption: "2",
+        columns: ["field3"]
+    });
+    dataGrid.option("summary", { totalItems: [{ column: "field1", summaryType: "count" }] });
+
+    // assert
+    visibleColumns = dataGrid.getVisibleColumns(0);
+    assert.strictEqual(visibleColumns.length, 2, "number of columns in the first row");
+    assert.strictEqual(visibleColumns[0].caption, "1", "caption of the first column in the first row");
+    assert.strictEqual(visibleColumns[1].caption, "2", "caption of the second column in the first row");
+
+    visibleColumns = dataGrid.getVisibleColumns(1);
+    assert.strictEqual(visibleColumns.length, 3, "number of columns in the second row");
+    assert.strictEqual(visibleColumns[0].dataField, "field1", "dataField of the first column in the second row");
+    assert.strictEqual(visibleColumns[1].dataField, "field2", "dataField of the second column in the second row");
+    assert.strictEqual(visibleColumns[2].dataField, "field3", "dataField of the third column in the second row");
+});
+
 QUnit.module("templates");
 
 QUnit.test("template no found - create text node", function(assert) {
