@@ -781,14 +781,7 @@ var DropDownEditor = TextBox.inherit({
     _updatePopupWidth: commonUtils.noop,
 
     _popupOptionChanged: function(args) {
-        var options = {};
-
-        if(args.name === args.fullName) {
-            options = args.value;
-        } else {
-            var option = args.fullName.split(".").pop();
-            options[option] = args.value;
-        }
+        var options = this._getInnerChangedOptions(args);
 
         this._setPopupOption(options);
 

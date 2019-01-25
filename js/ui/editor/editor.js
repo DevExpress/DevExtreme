@@ -102,7 +102,9 @@ var Editor = Widget.inherit({
 
             validationBoundary: undefined,
 
-            validationMessageOffset: { h: 0, v: 0 }
+            validationMessageOffset: { h: 0, v: 0 },
+
+            validationOverlayOptions: {}
         });
     },
 
@@ -169,6 +171,13 @@ var Editor = Widget.inherit({
         this._valueChangeEventInstance = e;
     },
 
+    _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
+        this._options[optionsContainer] = extend({}, innerWidget.option());
+        this._validationMessage.on("optionChanged", function(e) {
+            this._options[optionsContainer] = extend({}, e.component.option());
+        }.bind(this));
+    },
+
     _renderValidationState: function() {
         var isValid = this.option("isValid"),
             validationError = this.option("validationError"),
@@ -192,7 +201,7 @@ var Editor = Widget.inherit({
                 .html(validationError.message)
                 .appendTo($element);
 
-            this._validationMessage = this._createComponent(this._$validationMessage, Overlay, {
+            this._validationMessage = this._createComponent(this._$validationMessage, Overlay, extend({
                 integrationOptions: {},
                 templatesRenderAsynchronously: false,
                 target: this._getValidationMessageTarget(),
@@ -207,13 +216,14 @@ var Editor = Widget.inherit({
                 visible: true,
                 propagateOutsideClick: true,
                 _checkParentVisibility: false
-            });
+            }, this.option("validationOverlayOptions")));
 
             this._$validationMessage
                 .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === "auto")
                 .toggleClass(INVALID_MESSAGE_ALWAYS, validationMessageMode === "always");
 
             this._setValidationMessageMaxWidth();
+            this._bindInnerWidgetOptions(this._validationMessage, "validationOverlayOptions");
         }
     },
 
@@ -283,6 +293,23 @@ var Editor = Widget.inherit({
         return null;
     },
 
+    _getInnerChangedOptions: function(args) {
+        var options = {};
+
+        if(args.name === args.fullName) {
+            options = args.value;
+        } else {
+            var option = args.fullName.split(".").pop();
+            options[option] = args.value;
+        }
+
+        return options;
+    },
+
+    _setValidationOverlayOptions: function(optionName, value) {
+        this._setWidgetOption("_validationMessage", arguments);
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "onValueChanged":
@@ -293,6 +320,9 @@ var Editor = Widget.inherit({
             case "validationBoundary":
             case "validationMessageMode":
                 this._renderValidationState();
+                break;
+            case "validationOverlayOptions":
+                this._setValidationOverlayOptions(this._getInnerChangedOptions(args));
                 break;
             case "readOnly":
                 this._toggleReadOnlyState();
