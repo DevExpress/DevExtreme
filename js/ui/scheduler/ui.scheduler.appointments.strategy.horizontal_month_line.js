@@ -46,7 +46,7 @@ var HorizontalMonthLineRenderingStrategy = HorizontalAppointmentsStrategy.inheri
         var result = this.callBase(map);
 
         if(!skipSorting) {
-            result = query(result).sortBy("top").thenBy("cellPosition").thenBy("left").thenBy("i").toArray();
+            result = query(result).sortBy("top").thenBy("left").thenBy("i").toArray();
         }
 
         return result;
