@@ -542,8 +542,8 @@ module.exports = {
                 }
             },
             editorFactory: (function() {
-                var getWidthOfVisibleCells = function(that, options) {
-                    let rowIndex = $(options.element).closest("tr").index(),
+                var getWidthOfVisibleCells = function(that, element) {
+                    let rowIndex = $(element).closest("tr").index(),
                         $cellElements = $(that._rowsView.getRowElement(rowIndex)).first().children().filter(":not(.dx-hidden-cell)");
 
                     return that._rowsView._getWidths($cellElements).reduce((w1, w2) => w1 + w2, 0);
@@ -702,44 +702,32 @@ module.exports = {
                         }
 
                         let position,
-                            columnIndex,
-                            boundaryNonFixedColumnsInfo,
-                            visibleTableWidth = !isRevertButton && getWidthOfVisibleCells(this, options),
+                            visibleTableWidth = !isRevertButton && getWidthOfVisibleCells(this, options.element),
                             $overlayContentElement = isRevertButton ? options.component.overlayContent() : options.component.$content(),
-                            validationMessageWidth = $overlayContentElement.outerWidth(true);
-
-                        if(!isRevertButton && validationMessageWidth > visibleTableWidth) {
-                            return {
-                                maxWidth: visibleTableWidth - 2,
-                                position: {
-                                    my: "top left",
-                                    at: "bottom left"
-                                }
-                            };
-                        } else {
-                            columnIndex = this._rowsView.getCellIndex($(options.element).closest("td"));
+                            validationMessageWidth = $overlayContentElement.outerWidth(true),
+                            needMaxWidth = !isRevertButton && validationMessageWidth > visibleTableWidth,
+                            columnIndex = this._rowsView.getCellIndex($(options.element).closest("td")),
                             boundaryNonFixedColumnsInfo = getBoundaryNonFixedColumnsInfo(fixedColumns);
 
-                            if(!isRevertButton && columnIndex === boundaryNonFixedColumnsInfo.startColumnIndex) {
-                                position = {
-                                    collision: "none flip",
-                                    my: "top left",
-                                    at: isOverlayVisible ? "top right" : "bottom left"
-                                };
-                            } else if(columnIndex === boundaryNonFixedColumnsInfo.endColumnIndex) {
-                                position = {
-                                    collision: "none flip",
-                                    my: "top right",
-                                    at: isRevertButton || isOverlayVisible ? "top left" : "bottom right"
-                                };
+                        if(!isRevertButton && (columnIndex === boundaryNonFixedColumnsInfo.startColumnIndex || needMaxWidth)) {
+                            position = {
+                                collision: "none flip",
+                                my: "top left",
+                                at: isOverlayVisible ? "top right" : "bottom left"
+                            };
+                        } else if(columnIndex === boundaryNonFixedColumnsInfo.endColumnIndex) {
+                            position = {
+                                collision: "none flip",
+                                my: "top right",
+                                at: isRevertButton || isOverlayVisible ? "top left" : "bottom right"
+                            };
 
-                                if(isRevertButton) {
-                                    position.offset = "-1 0";
-                                }
+                            if(isRevertButton) {
+                                position.offset = "-1 0";
                             }
-
-                            return position && { position: position };
                         }
+
+                        return position && { position: position, maxWidth: needMaxWidth ? visibleTableWidth - 2 : undefined };
                     },
 
                     _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {
