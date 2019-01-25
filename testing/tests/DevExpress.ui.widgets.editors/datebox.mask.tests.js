@@ -910,6 +910,22 @@ if(devices.real().deviceType === "desktop") {
             this.instance.option("value", new Date(2018, 2, 5, 10, 15, 25));
             assert.equal(regExpInfo.callCount, 1, "regexpInfo should not be called when value changed");
         });
+
+        QUnit.test("valueChanged event should be rised after the date parts are rendered (T708971)", (assert) => {
+            const done = assert.async();
+            const date = "1/1/2019";
+            const instance = $("#dateBox").dxDateBox({
+                useMaskBehavior: true,
+                onValueChanged: ({ value }) => {
+                    instance.blur();
+                    assert.strictEqual(value, date);
+                    done();
+                }
+            }).dxDateBox("instance");
+
+            this.$input.get(0).focus();
+            instance.option("value", date);
+        });
     });
 
     QUnit.module("Advanced caret", setupModule, () => {

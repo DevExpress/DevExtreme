@@ -410,8 +410,8 @@ let DateBoxMask = DateBoxBase.inherit({
                 break;
             case "value":
                 this._loadMaskValue();
-                this.callBase(args);
                 this._renderDateParts();
+                this.callBase(args);
                 break;
             case "advanceCaret":
             case "emptyDateValue":
