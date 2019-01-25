@@ -2,6 +2,7 @@ import $ from "jquery";
 import MsPointerStrategy from "events/pointer/mspointer";
 import registerEvent from "events/core/event_registrator";
 import { pointerEvents as isPointerEventsSupported } from "core/utils/support";
+import { isFunction } from "core/utils/type.js";
 import nativePointerMock from "../../../helpers/nativePointerMock.js";
 import { special } from "../../../helpers/eventHelper.js";
 
@@ -157,6 +158,27 @@ QUnit.module("mspointer events", {
     });
 
     if(isPointerEventsSupported) {
+        const createEvent = (type, options) => {
+            if(isFunction(window.PointerEvent)) {
+                return new PointerEvent(type, options);
+            }
+
+            const event = document.createEvent("pointerEvent");
+            const args = [];
+            $.each(["type", "bubbles", "cancelable", "view", "detail", "screenX", "screenY", "clientX", "clientY", "ctrlKey", "altKey",
+                "shiftKey", "metaKey", "button", "relatedTarget", "offsetX", "offsetY", "width", "height", "pressure", "rotation", "tiltX",
+                "tiltY", "pointerId", "pointerType", "hwTimestamp", "isPrimary"], function(i, name) {
+                if(name in options) {
+                    args.push(options[name]);
+                } else {
+                    args.push(event[name]);
+                }
+            });
+            event.initPointerEvent.apply(event, args);
+
+            return event;
+        };
+
         const simulatePointerEvent = ($element, type, options) => {
             options = $.extend({
                 bubbles: true,
@@ -164,7 +186,7 @@ QUnit.module("mspointer events", {
                 type: type
             }, options);
 
-            const event = new PointerEvent(type, options);
+            const event = createEvent(type, options);
 
             $element[0].dispatchEvent(event);
         };
