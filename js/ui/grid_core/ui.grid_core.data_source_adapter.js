@@ -198,6 +198,10 @@ module.exports = gridCore.Controller.inherit((function() {
                 cachedPagingData = that._cachedPagingData,
                 cachedPagesData = that._cachedPagesData;
 
+            if(options.storeLoadOptions.filter && !options.remoteOperations.filtering) {
+                options.remoteOperations = {};
+            }
+
             if(isReload) {
                 cachedStoreData = undefined;
                 cachedPagingData = undefined;

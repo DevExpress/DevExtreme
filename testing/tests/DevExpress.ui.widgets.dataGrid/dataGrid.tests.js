@@ -5619,7 +5619,7 @@ QUnit.test("Load count on start when EdmLiteral in calculatedFilterExpression is
             },
             height: 100,
             remoteOperations: {
-                paging: true
+                paging: true, filtering: true
             },
             loadingTimeout: undefined,
             scrolling: {
