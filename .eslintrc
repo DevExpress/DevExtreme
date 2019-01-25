@@ -49,6 +49,7 @@
         "no-duplicate-case": "error",
         "no-mixed-spaces-and-tabs": "error",
         "no-extra-semi": "error",
+        "no-fallthrough": "error",
         "no-new-func": "error",
         "no-eval": "error",
         "no-undef": "error",
