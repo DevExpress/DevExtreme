@@ -173,7 +173,7 @@ var Editor = Widget.inherit({
 
     _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
         this._options[optionsContainer] = extend({}, innerWidget.option());
-        this._validationMessage.on("optionChanged", function(e) {
+        innerWidget.on("optionChanged", function(e) {
             this._options[optionsContainer] = extend({}, e.component.option());
         }.bind(this));
     },
@@ -293,7 +293,7 @@ var Editor = Widget.inherit({
         return null;
     },
 
-    _getInnerChangedOptions: function(args) {
+    _getOptionsFromContainer: function(args) {
         var options = {};
 
         if(args.name === args.fullName) {
@@ -322,7 +322,7 @@ var Editor = Widget.inherit({
                 this._renderValidationState();
                 break;
             case "validationOverlayOptions":
-                this._setValidationOverlayOptions(this._getInnerChangedOptions(args));
+                this._setValidationOverlayOptions(this._getOptionsFromContainer(args));
                 break;
             case "readOnly":
                 this._toggleReadOnlyState();

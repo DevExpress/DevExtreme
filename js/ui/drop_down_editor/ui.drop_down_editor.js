@@ -532,10 +532,6 @@ var DropDownEditor = TextBox.inherit({
         this._renderPopupContent();
     },
 
-    _refreshDropDownOptions: function() {
-        this._options.dropDownOptions = extend({}, this._popup.option());
-    },
-
     _renderPopup: function() {
         this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this.option("dropDownOptions")));
 
@@ -552,10 +548,7 @@ var DropDownEditor = TextBox.inherit({
         this._popupContentId = "dx-" + new Guid();
         this.setAria("id", this._popupContentId, this._popup.$content());
 
-        this._refreshDropDownOptions();
-        this._popup.on("optionChanged", function(e) {
-            this._refreshDropDownOptions();
-        }.bind(this));
+        this._bindInnerWidgetOptions(this._popup, "dropDownOptions");
     },
 
     _contentReadyHandler: commonUtils.noop,
@@ -667,7 +660,6 @@ var DropDownEditor = TextBox.inherit({
     _clean: function() {
         delete this._$dropDownButton;
         delete this._openOnFieldClickAction;
-        delete this._options.dropDownOptions;
 
         if(this._$popup) {
             this._$popup.remove();
@@ -781,7 +773,7 @@ var DropDownEditor = TextBox.inherit({
     _updatePopupWidth: commonUtils.noop,
 
     _popupOptionChanged: function(args) {
-        var options = this._getInnerChangedOptions(args);
+        var options = this._getOptionsFromContainer(args);
 
         this._setPopupOption(options);
 
