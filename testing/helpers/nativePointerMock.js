@@ -52,17 +52,9 @@
                 "contextmenu": 1
             },
 
-            MS_POINTER_EVENTS = {
-                MSPointerOver: 1,
-                MSPointerOut: 1,
-                MSPointerDown: 1,
-                MSPointerUp: 1,
-                MSPointerMove: 1
-            },
-
             POINTER_EVENTS = {
                 "pointerover": 1,
-                "pointerOut": 1,
+                "pointerout": 1,
                 "pointerdown": 1,
                 "pointerup": 1,
                 "pointermove": 1
@@ -210,7 +202,7 @@
 
 
             if(isString(type)) {
-                if(!MOUSE_EVENTS[type.toLowerCase()] && !MS_POINTER_EVENTS[type] && !POINTER_EVENTS[type]) {
+                if(!MOUSE_EVENTS[type.toLowerCase()] && !POINTER_EVENTS[type]) {
                     throw Error("Event type '" + type + "' not supported.");
                 }
             } else {
@@ -515,7 +507,7 @@
         return function(target, type, options) {
             options = options || {};
 
-            if(MOUSE_EVENTS[type] || MS_POINTER_EVENTS[type] || POINTER_EVENTS[type]) {
+            if(MOUSE_EVENTS[type] || POINTER_EVENTS[type]) {
                 simulateMouseEvent(target, type, options.bubbles,
                     options.cancelable, options.view, options.detail, options.screenX,
                     options.screenY, options.clientX, options.clientY, options.ctrlKey,
@@ -554,29 +546,16 @@
         };
     })();
 
-    var pointerEventsSupport = navigator.pointerEnabled,
-        msPointerEventsSupport = !!window.MSPointerEvent && !pointerEventsSupport;
+    var pointerEventsSupport = !!window.PointerEvent;
 
     var simulatePointerEvent = function($element, type, options) {
         options = $.extend({
-            canBubble: true,
+            bubbles: true,
             cancelable: true,
             type: type
         }, options);
 
-        var event = document.createEvent(msPointerEventsSupport ? "MSPointerEvent" : "pointerEvent");
-
-        var args = [];
-        $.each(["type", "canBubble", "cancelable", "view", "detail", "screenX", "screenY", "clientX", "clientY", "ctrlKey", "altKey",
-            "shiftKey", "metaKey", "button", "relatedTarget", "offsetX", "offsetY", "width", "height", "pressure", "rotation", "tiltX",
-            "tiltY", "pointerId", "pointerType", "hwTimestamp", "isPrimary"], function(i, name) {
-            if(name in options) {
-                args.push(options[name]);
-            } else {
-                args.push(event[name]);
-            }
-        });
-        event.initPointerEvent.apply(event, args);
+        var event = new PointerEvent(type, options);
 
         $element[0].dispatchEvent(event);
     };
@@ -832,7 +811,7 @@
             },
 
             pointerDown: function() {
-                var eventName = msPointerEventsSupport ? "MSPointerDown" : "pointerdown";
+                var eventName = "pointerdown";
                 try {
                     simulatePointerEvent($element, eventName, { clientX: _x, clientY: _y, pointerType: "mouse", pointerId: 1 });
                 } catch(e) {
@@ -842,7 +821,7 @@
             },
 
             pointerMove: function(deltaX, deltaY) {
-                var eventName = msPointerEventsSupport ? "MSPointerMove" : "pointermove";
+                var eventName = "pointermove";
 
                 _x += deltaX || 0;
                 _y += deltaY || 0;
@@ -855,7 +834,7 @@
             },
 
             pointerUp: function() {
-                var eventName = msPointerEventsSupport ? "MSPointerUp" : "pointerup";
+                var eventName = "pointerup";
                 try {
                     simulatePointerEvent($element, eventName, { clientX: _x, clientY: _y, pointerType: "mouse", pointerId: 1 });
                 } catch(e) {
@@ -865,7 +844,7 @@
             },
 
             pointerCancel: function() {
-                var eventName = msPointerEventsSupport ? "MSPointerCancel" : "pointercancel";
+                var eventName = "pointercancel";
                 try {
                     simulatePointerEvent($element, eventName, { clientX: _x, clientY: _y, pointerType: "mouse", pointerId: 1 });
                 } catch(e) {
@@ -914,7 +893,7 @@
             down: function(x, y) {
                 _x = x || _x;
                 _y = y || _y;
-                pointerEventsSupport || msPointerEventsSupport ? this.pointerDown() : this.touchStart();
+                pointerEventsSupport ? this.pointerDown() : this.touchStart();
                 this.mouseDown();
                 return this;
             },
@@ -923,14 +902,14 @@
                 if($.isArray(x)) {
                     this.move.apply(this, x);
                 } else {
-                    pointerEventsSupport || msPointerEventsSupport ? this.pointerMove(x, y) : this.touchMove(x, y);
+                    pointerEventsSupport ? this.pointerMove(x, y) : this.touchMove(x, y);
                     this.mouseMove();
                 }
                 return this;
             },
 
             up: function() {
-                pointerEventsSupport || msPointerEventsSupport ? this.pointerUp() : this.touchEnd();
+                pointerEventsSupport ? this.pointerUp() : this.touchEnd();
                 this.mouseUp();
                 this.click(true);
                 return this;
