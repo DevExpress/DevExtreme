@@ -294,7 +294,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var format = this._getFormatForSign(text),
             thousandsSeparator = number.getThousandsSeparator(),
             stubs = format.replace(/[#0.,]/g, ""),
-            regExp = new RegExp("[\-" + escapeRegExp((excludeComma ? "" : thousandsSeparator) + stubs) + "]", "g");
+            regExp = new RegExp("[-" + escapeRegExp((excludeComma ? "" : thousandsSeparator) + stubs) + "]", "g");
 
         return text.replace(regExp, "");
     },
