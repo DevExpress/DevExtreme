@@ -82,8 +82,8 @@ QUnit.test("dxPopup", function(assert) {
     var $markup = $("\
         <div dx-popup='popupOptions'>\
             <div data-options='dxTemplate: { name: \"custom\" }' style='line-height: 18px'>\
-		        {{VeryVeryVeryLongField.value1}}\
-		        {{VeryVeryVeryLongField.value2}}\
+                {{VeryVeryVeryLongField.value1}}\
+                {{VeryVeryVeryLongField.value2}}\
             </div>\
         </div>\
     ");
