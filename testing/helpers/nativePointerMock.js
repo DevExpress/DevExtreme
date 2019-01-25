@@ -32,6 +32,10 @@
             result.chrome = version[0];
         }
 
+        if(/edge|trident/ig.test(ua)) {
+            result.msie = true;
+        }
+
         return result;
     })();
 
@@ -546,7 +550,28 @@
         };
     })();
 
-    var pointerEventsSupport = !!window.PointerEvent;
+    var pointerEventsSupport = !!window.PointerEvent && UA.msie;
+
+    var createEvent = function(type, options) {
+        if(typeof window.PointerEvent === "function") {
+            return new PointerEvent(type, options);
+        }
+
+        var event = document.createEvent("pointerEvent");
+        var args = [];
+        $.each(["type", "bubbles", "cancelable", "view", "detail", "screenX", "screenY", "clientX", "clientY", "ctrlKey", "altKey",
+            "shiftKey", "metaKey", "button", "relatedTarget", "offsetX", "offsetY", "width", "height", "pressure", "rotation", "tiltX",
+            "tiltY", "pointerId", "pointerType", "hwTimestamp", "isPrimary"], function(i, name) {
+            if(name in options) {
+                args.push(options[name]);
+            } else {
+                args.push(event[name]);
+            }
+        });
+        event.initPointerEvent.apply(event, args);
+
+        return event;
+    };
 
     var simulatePointerEvent = function($element, type, options) {
         options = $.extend({
@@ -555,7 +580,7 @@
             type: type
         }, options);
 
-        var event = new PointerEvent(type, options);
+        var event = createEvent(type, options);
 
         $element[0].dispatchEvent(event);
     };
@@ -690,7 +715,7 @@
             options = $.extend({
                 type: null, // click, mousedown, mouseup, mouseover, mousemove, mouseout.
 
-                canBubble: true, // whether or not the event can bubble. Sets the value of
+                bubbles: true, // whether or not the event can bubble. Sets the value of
                 cancelable: true, // whether or not the event's default action can be prevented. Sets the value of event.cancelable.
 
                 view: window, // the Event's AbstractView. You should pass the window object here. Sets the value of event.view.
