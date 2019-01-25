@@ -2499,6 +2499,105 @@ QUnit.test("withCredentials is set", function(assert) {
         .load();
 });
 
+QUnit.test("filterToLower equal false", function(assert) {
+    ajaxMock.setup({
+        url: "odata.org",
+        responseText: { d: { results: [] } },
+        callback: function(request) {
+            assert.equal(request.data.$filter, "substringof('O',B)");
+        }
+    });
+
+    new ODataStore({ url: "odata.org", filterToLower: false })
+        .load({ filter: ["B", "contains", "O"] });
+});
+
+QUnit.test("filterToLower equal false for ODataContext", function(assert) {
+    assert.expect(2);
+
+    var done = assert.async();
+
+    ajaxMock.setup({
+        url: "odata.org/name",
+        callback: function(bag) {
+            this.responseText = { value: [bag] };
+        }
+    });
+
+    var ctx = new ODataContext({
+        version: 4,
+        url: "odata.org",
+        filterToLower: false,
+        entities: {
+            "X": { name: "name", filterToLower: true },
+            "Y": { name: "name" }
+        }
+    });
+
+    var promises = [
+        ctx.X.load({ filter: ["B", "contains", "O"] })
+            .done(function(request) {
+                assert.equal(request[0].data.$filter, "contains(tolower(B),'o')");
+            }),
+
+        ctx.Y.load({ filter: ["B", "contains", "O"] })
+            .done(function(request) {
+                assert.equal(request[0].data.$filter, "contains(B,'O')");
+            })
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); })
+        .always(done);
+});
+
+QUnit.test("oDataFilterToLower equal false for ODataContext", function(assert) {
+    assert.expect(3);
+
+    var done = assert.async();
+
+    config({ oDataFilterToLower: false });
+
+    ajaxMock.setup({
+        url: "odata.org/name",
+        callback: function(bag) {
+            this.responseText = { value: [bag] };
+        }
+    });
+
+    var ctx = new ODataContext({
+        version: 4,
+        url: "odata.org",
+        filterToLower: true,
+        entities: {
+            "X": { name: "name" },
+            "Y": { name: "name", filterToLower: false },
+            "Z": { name: "name", filterToLower: true }
+        }
+    });
+
+    var promises = [
+        ctx.X.load({ filter: ["B", "contains", "O"] })
+            .done(function(request) {
+                assert.equal(request[0].data.$filter, "contains(tolower(B),'o')");
+            }),
+
+        ctx.Y.load({ filter: ["B", "contains", "O"] })
+            .done(function(request) {
+                assert.equal(request[0].data.$filter, "contains(B,'O')");
+            }),
+
+        ctx.Z.load({ filter: ["B", "contains", "O"] })
+            .done(function(request) {
+                assert.equal(request[0].data.$filter, "contains(tolower(B),'o')");
+            })
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); })
+        .always(done);
+});
+
 QUnit.test("verbose MIME specifier is used", function(assert) {
     var done = assert.async();
 

@@ -129,6 +129,35 @@ QUnit.test("init scrollBar. Rotated", function(assert) {
     );
 });
 
+QUnit.test("init scrollBar. Remove min and max ", function(assert) {
+    var group = new vizMocks.Element(),
+        scrollBar = new ScrollBar(this.renderer, group),
+        discreteRange = $.extend({}, range, { axisType: "discrete" });
+    scrollBar.update(this.options).updateSize(canvas);
+
+    // act
+    scrollBar.init(discreteRange, false);
+    // Assert
+    assert.ok(translator2DModule.Translator2D.calledOnce);
+    var scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
+
+    assert.ok(scrollTranslator.update.calledOnce);
+
+    assert.deepEqual(scrollTranslator.update.lastCall.args, [{
+        categories: [],
+        inverted: true,
+        max: null,
+        maxVisible: null,
+        min: null,
+        minVisible: null,
+        visibleCategories: null,
+        axisType: "discrete"
+    }, canvas, {
+        isHorizontal: true,
+        stick: false
+    }]);
+});
+
 QUnit.test("update scrollBar", function(assert) {
     var group = new vizMocks.Element(),
         scrollBar = new ScrollBar(this.renderer, group);

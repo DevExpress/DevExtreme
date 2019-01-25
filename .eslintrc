@@ -46,6 +46,9 @@
         "no-irregular-whitespace": "error",
         "no-multi-spaces": "error",
         "no-trailing-spaces": "error",
+        "no-mixed-spaces-and-tabs": "error",
+        "no-extra-semi": "error",
+        "no-fallthrough": "error",
         "no-new-func": "error",
         "no-eval": "error",
         "no-undef": "error",
@@ -84,6 +87,7 @@
             }
         ],
         "no-console": "error",
+        "no-debugger": "error",
         "spellcheck/spell-checker": [
             "error",
             {

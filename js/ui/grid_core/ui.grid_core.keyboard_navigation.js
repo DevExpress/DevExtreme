@@ -363,9 +363,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 editingController = this._editingController,
                 editMode = editingController && editingController.getEditMode(),
                 isEditingCurrentRow = editingController && (editMode === EDIT_MODE_ROW ? editingController.isEditRow(visibleRowIndex) : editingController.isEditing()),
+                $row = $cell.parent(),
                 isMasterDetailRow = isDetailRow($cell.parent()),
+                isShowWhenGrouped = column && column.showWhenGrouped,
+                isDataCell = column && !$cell.hasClass(COMMAND_EXPAND_CLASS) && isDataRow($row),
                 isValidGroupSpaceColumn = function() {
-                    return !isMasterDetailRow && column && !isDefined(column.groupIndex) || parseInt($cell.attr("colspan")) > 1;
+                    return !isMasterDetailRow && column && (!isDefined(column.groupIndex) || isShowWhenGrouped && isDataCell) || parseInt($cell.attr("colspan")) > 1;
                 };
 
             if(this._isMasterDetailCell($cell)) {

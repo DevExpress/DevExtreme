@@ -70,7 +70,7 @@ function triggerKeyDown(key, ctrl, shift, target, result) {
     });
 
     return result;
-};
+}
 
 QUnit.module("FocusedRow with real dataController and columnsController", {
     setupModule: function() {
