@@ -54,6 +54,7 @@
         "no-undef": "error",
         "no-unused-expressions": "off",
         "no-unused-vars": ["error", { "args": "none" }],
+        "no-self-assign": "error",
         "no-extend-native": "error",
         "no-alert": "error",
         "no-whitespace-before-property": "error",
