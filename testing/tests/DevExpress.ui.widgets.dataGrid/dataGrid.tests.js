@@ -8156,6 +8156,32 @@ QUnit.test("showRowLines/showColumnLines change", function(assert) {
     assert.equal(resizeCalledCount, 2, "resize called");
 });
 
+// T709078
+QUnit.test("selectedRowKeys change several times", function(assert) {
+    // arrange
+    var selectionChangedSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        keyExpr: "id",
+        onSelectionChanged: selectionChangedSpy,
+        dataSource: [{ id: 1 }, { id: 2 }]
+    });
+
+    var resizingController = dataGrid.getController("resizing");
+    sinon.spy(resizingController, "updateDimensions");
+
+    // act
+    dataGrid.beginUpdate();
+    dataGrid.option("selectedRowKeys", [1]);
+    dataGrid.option("selectedRowKeys", [2]);
+    dataGrid.endUpdate();
+
+    // assert
+    assert.strictEqual(resizingController.updateDimensions.callCount, 0, "updateDimensions is not called");
+    assert.strictEqual(selectionChangedSpy.callCount, 2, "onSelectionChanged is called twice");
+    assert.notOk($(dataGrid.getRowElement(0)).hasClass("dx-selection"), "no dx-selection on the first row");
+    assert.ok($(dataGrid.getRowElement(1)).hasClass("dx-selection"), "dx-selection on the second row");
+});
 
 QUnit.test("dataSource instance of DataSource", function(assert) {
     // arrange, act

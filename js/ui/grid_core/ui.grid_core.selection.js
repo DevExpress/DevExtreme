@@ -661,6 +661,15 @@ module.exports = {
                     if((!e || e.changeType === "refresh") && !this._repaintChangesOnly) {
                         this.getController("selection").focusedItemIndex(-1);
                     }
+                },
+                _endUpdateCore: function() {
+                    var changes = this._changes;
+                    var isUpdateSelection = changes.length > 1 && changes.every(change => change.changeType === "updateSelection");
+                    if(isUpdateSelection) {
+                        var itemIndexes = changes.map(change => change.itemIndexes || []).reduce((a, b) => a.concat(b));
+                        this._changes = [{ changeType: "updateSelection", itemIndexes }];
+                    }
+                    this.callBase.apply(this, arguments);
                 }
             },
             contextMenu: {
