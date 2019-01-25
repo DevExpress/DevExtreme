@@ -43,16 +43,6 @@ function checkCoords(rect, coords) {
         && y >= rect.y && y <= (rect.height + rect.y);
 }
 
-function getDragDirection(options, rotated) {
-    let anyArg = !options.argumentAxis.none,
-        anyVal = !options.valueAxis.none;
-
-    if(anyArg && anyVal) {
-        return "both";
-    }
-    return (rotated && anyArg || !rotated && anyVal) ? "vertical" : "horizontal";
-}
-
 module.exports = {
     name: "zoom_and_pan",
     init: function() {
@@ -515,7 +505,7 @@ module.exports = {
                 }
 
                 renderer.root
-                    .on(DRAG_START_EVENT_NAME, { direction: getDragDirection(options, rotated), immediate: true }, zoomAndPan.dragStartHandler)
+                    .on(DRAG_START_EVENT_NAME, { immediate: true }, zoomAndPan.dragStartHandler)
                     .on(DRAG_EVENT_NAME, zoomAndPan.dragHandler)
                     .on(DRAG_END_EVENT_NAME, zoomAndPan.dragEndHandler);
 
