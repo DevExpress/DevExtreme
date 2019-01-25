@@ -76,6 +76,7 @@ const KeyboardProcessor = Class.inherit({
             metaKey: e.metaKey,
             shift: e.shiftKey,
             alt: e.altKey,
+            which: e.which,
             originalEvent: e
         };
 
