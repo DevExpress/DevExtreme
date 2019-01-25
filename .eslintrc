@@ -46,6 +46,7 @@
         "no-irregular-whitespace": "error",
         "no-multi-spaces": "error",
         "no-trailing-spaces": "error",
+        "no-duplicate-case": "error",
         "no-mixed-spaces-and-tabs": "error",
         "no-extra-semi": "error",
         "no-new-func": "error",
