@@ -25,7 +25,8 @@ var SLIDER_CLASS = "dx-slider",
     SLIDER_RANGE_VISIBLE_CLASS = "dx-slider-range-visible",
     SLIDER_LABEL_CLASS = "dx-slider-label",
     SLIDER_LABEL_POSITION_CLASS_PREFIX = "dx-slider-label-position-",
-    SLIDER_TOOLTIP_POSITION_CLASS_PREFIX = "dx-slider-tooltip-position-";
+    SLIDER_TOOLTIP_POSITION_CLASS_PREFIX = "dx-slider-tooltip-position-",
+    INVALID_MESSAGE_VISIBLE_CLASS = "dx-invalid-message-visible";
 
 /**
 * @name dxSliderBase
@@ -221,7 +222,15 @@ var Slider = TrackBar.inherit({
            */
             keyStep: 1,
 
-            useInkRipple: false
+            useInkRipple: false,
+
+            onFocusIn: function() {
+                this._toggleValidationMessage(true);
+            },
+
+            onFocusOut: function() {
+                this._toggleValidationMessage(false);
+            }
 
             /**
             * @name dxSliderBaseOptions.name
@@ -230,6 +239,13 @@ var Slider = TrackBar.inherit({
             * @inheritdoc
             */
         });
+    },
+
+    _toggleValidationMessage: function(visible) {
+        if(!this.option("isValid")) {
+            var $element = this.$element();
+            $element.toggleClass(INVALID_MESSAGE_VISIBLE_CLASS, visible);
+        }
     },
 
     _defaultOptionsRules: function() {
