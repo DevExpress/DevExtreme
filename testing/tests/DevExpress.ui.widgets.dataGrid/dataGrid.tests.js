@@ -3430,7 +3430,7 @@ QUnit.testInActiveWindow("Data cell in group column with showWhenGrouped=true sh
     // act
     dataGrid.focus(dataGrid.getCellElement(1, 2));
     keyboardController = dataGrid.getController("keyboardNavigation");
-    keyboardController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
+    keyboardController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
     clock.tick();
 
     $cell = $(dataGrid.element()).find(".dx-focused");
