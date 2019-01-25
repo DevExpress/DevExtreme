@@ -667,7 +667,7 @@ QUnit.test('Highlight searchText for a cell template (T656969)', function(assert
     assert.equal(getNormalizeMarkup(cells.eq(2)), '1/01/2001', 'cell 2');
 });
 function getNormalizeMarkup($element) {
-    var quoteRE = new RegExp('\"', 'g'),
+    var quoteRE = new RegExp('"', 'g'),
         spanRE = new RegExp('span', 'gi');
     return $element.html().replace(quoteRE, '').replace(spanRE, "span");
 }
