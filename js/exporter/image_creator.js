@@ -533,9 +533,9 @@ function drawCanvasElements(elements, context, parentOptions, shared) {
                 transformElement(context, options);
                 clipElement(context, options, shared);
 
-                function onDone() {
+                const onDone = () => {
                     context.restore();
-                }
+                };
                 const d = drawCanvasElements(element.childNodes, context, options, shared);
 
                 if(isPromise(d)) {
