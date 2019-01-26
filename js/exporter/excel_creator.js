@@ -59,7 +59,8 @@ var ExcelCreator = Class.inherit({
     _getCellIndex: function(rowIndex, cellIndex) {
         var sheetIndex = '',
             max = 26,
-            charCode;
+            charCode,
+            cellIndexOutOfMax;
 
         if(this._maxIndex[0] < Number(rowIndex)) {
             this._maxIndex[0] = Number(rowIndex);
@@ -69,16 +70,15 @@ var ExcelCreator = Class.inherit({
             this._maxIndex[1] = Number(cellIndex);
         }
 
-        while(true) {
-            charCode = 65 + ((cellIndex >= max) ? (cellIndex % max) : Math.ceil(cellIndex));
+        do {
+            cellIndexOutOfMax = cellIndex >= max;
+            charCode = 65 + (cellIndexOutOfMax ? (cellIndex % max) : Math.ceil(cellIndex));
             sheetIndex = String.fromCharCode(charCode) + sheetIndex;
 
-            if(cellIndex >= max) {
+            if(cellIndexOutOfMax) {
                 cellIndex = Math.floor(cellIndex / max) - 1;
-            } else {
-                break;
             }
-        }
+        } while(cellIndexOutOfMax);
 
         return sheetIndex + rowIndex;
     },
