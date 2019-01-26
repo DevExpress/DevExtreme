@@ -53,6 +53,7 @@
         "no-new-func": "error",
         "no-eval": "error",
         "no-undef": "error",
+        "no-undef-init": "error",
         "no-unused-expressions": "off",
         "no-unused-vars": ["error", { "args": "none" }],
         "no-self-assign": "error",
