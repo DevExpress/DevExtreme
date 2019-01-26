@@ -525,7 +525,7 @@ function asyncEach(array, callback, d = new Deferred()) {
 function drawCanvasElements(elements, context, parentOptions, shared) {
     return asyncEach(elements, function(element) {
         switch(element.tagName && element.tagName.toLowerCase()) {
-            case "g":
+            case "g": {
                 const options = extend({}, parentOptions, getElementOptions(element));
 
                 context.save();
@@ -544,7 +544,7 @@ function drawCanvasElements(elements, context, parentOptions, shared) {
                     onDone();
                 }
                 return d;
-
+            }
             case "defs":
                 return drawCanvasElements(element.childNodes, context, {}, shared);
             case "clippath":

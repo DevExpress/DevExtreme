@@ -818,7 +818,7 @@ module.exports = {
 
                     result.forEach((change) => {
                         switch(change.type) {
-                            case "update":
+                            case "update": {
                                 let index = change.index,
                                     newItem = change.data,
                                     oldItem = change.oldItem,
@@ -832,6 +832,7 @@ module.exports = {
                                 newItem.oldValues = oldItem.values;
                                 columnIndices.push(currentColumnIndices);
                                 break;
+                            }
                             case "insert":
                                 rowIndices.push(change.index);
                                 changeTypes.push("insert");
