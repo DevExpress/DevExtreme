@@ -216,7 +216,7 @@ function parseStyles(element, options) {
 }
 
 function parseUrl(urlString) {
-    var matches = urlString && urlString.match(/url\(.*\#(.*?)["']?\)/i);
+    var matches = urlString && urlString.match(/url\(.*#(.*?)["']?\)/i);
     return matches && matches[1];
 }
 
