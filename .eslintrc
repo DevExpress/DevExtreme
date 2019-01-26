@@ -58,6 +58,7 @@
         "no-self-assign": "error",
         "no-extend-native": "error",
         "no-alert": "error",
+        "no-unsafe-finally": "error",
         "no-whitespace-before-property": "error",
         "object-curly-spacing": [ "error", "always" ],
         "semi-spacing": "error",
