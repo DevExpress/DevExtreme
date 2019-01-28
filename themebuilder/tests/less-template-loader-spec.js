@@ -62,7 +62,7 @@ describe("LessTemplateLoader", () => {
             lessFileContent,
             config.bootstrapVersion).then(data => {
             assert.equal(data.compiledMetadata["@base-bg"], "#000");
-            assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
+            assert.equal(data.compiledMetadata["@base-font-family"], "'default'");
             assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
             assert.equal(data.css, "div {\n  color: #000;\n}\n");
         });
@@ -104,7 +104,7 @@ describe("LessTemplateLoader", () => {
             sassFileContent,
             config.bootstrapVersion).then((data) => {
             assert.equal(data.compiledMetadata["@base-bg"], "#000");
-            assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
+            assert.equal(data.compiledMetadata["@base-font-family"], "'default'");
             assert.equal(data.compiledMetadata["@base-text-color"], "#212529");
             assert.equal(data.css, "div {\n  color: #000;\n  background: #212529;\n}\n");
         });
@@ -130,7 +130,7 @@ describe("LessTemplateLoader", () => {
             metadata,
             [{ key: "@base-bg", value: "green" }]).then(data => {
             assert.equal(data.compiledMetadata["@base-bg"], "green");
-            assert.equal(data.compiledMetadata["@base-font-family"], "\'default\'");
+            assert.equal(data.compiledMetadata["@base-font-family"], "'default'");
             assert.equal(data.compiledMetadata["@base-text-color"], "#0f0");
             assert.equal(data.css, "div {\n  color: green;\n}\n");
         });
