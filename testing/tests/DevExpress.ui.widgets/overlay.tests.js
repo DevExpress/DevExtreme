@@ -2910,8 +2910,8 @@ QUnit.test("overlay doesn't handle keyboard propagated events", function(assert)
 
 QUnit.module("focus policy", {
     beforeEach: function() {
-        this.tabEvent = $.Event("keydown", { keyCode: 9 });
-        this.shiftTabEvent = $.Event("keydown", { keyCode: 9, shiftKey: true });
+        this.tabEvent = $.Event("keydown", { key: "Tab" });
+        this.shiftTabEvent = $.Event("keydown", { key: "Tab", shiftKey: true });
 
         moduleConfig.beforeEach.apply(this, arguments);
     },

@@ -61,9 +61,7 @@ var currentDate = new Date(2015, 11, 31),
 
     STATE_FOCUSED_CLASS = "dx-state-focused",
 
-    widgetName = "dxDateBox",
-
-    TAB_KEY_CODE = 9;
+    widgetName = "dxDateBox";
 
 var getShortDate = function(date) {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
@@ -627,7 +625,7 @@ QUnit.testInActiveWindow("set focus on 'tab' key from editor to overlay and inve
         $inputHourBox = instance._strategy._timeView._hourBox._input();
     assert.ok($hourBox.hasClass(STATE_FOCUSED_CLASS), "tab set focus to first input in overlay");
 
-    $($inputHourBox).trigger($.Event("keydown", { which: 9, shiftKey: true }));
+    $($inputHourBox).trigger($.Event("keydown", { key: "Tab", shiftKey: true }));
 
     assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), "dateBox on focus reset focus to element");
 });
@@ -1861,7 +1859,7 @@ QUnit.test("Swiping must not close the calendar", function(assert) {
 });
 
 QUnit.test("Pressing escape must hide the calendar and clean focus", function(assert) {
-    var escapeKeyDown = $.Event("keydown", { which: 27 });
+    var escapeKeyDown = $.Event("keydown", { key: "Escape" });
     this.fixture.dateBox.option("focusStateEnabled", true);
     this.fixture.dateBox.open();
     $(this.fixture.dateBox._input()).trigger(escapeKeyDown);
@@ -3379,10 +3377,10 @@ QUnit.test("apply contoured date on enter for date and datetime mode", function(
 
     var $input = this.$dateBox.find(".dx-texteditor-input");
 
-    $($input).trigger($.Event("keydown", { which: 38 }));
-    $($input).trigger($.Event("keydown", { which: 40 }));
-    $($input).trigger($.Event("keydown", { which: 38 }));
-    $($input).trigger($.Event("keydown", { which: 13 }));
+    $($input).trigger($.Event("keydown", { key: "ArrowUp" }));
+    $($input).trigger($.Event("keydown", { key: "ArrowDown" }));
+    $($input).trigger($.Event("keydown", { key: "ArrowUp" }));
+    $($input).trigger($.Event("keydown", { key: "Enter" }));
 
     assert.equal(this.dateBox.option("opened"), false, "popup is hidden");
 
@@ -3438,7 +3436,7 @@ QUnit.testInActiveWindow("onValueChanged fires after clearing and enter key pres
     $input.val("");
     this.dateBox.option("text", "");
 
-    $($input).trigger($.Event("keydown", { which: 13 }));
+    $($input).trigger($.Event("keydown", { key: "Enter" }));
 
     assert.equal(valueChanged.callCount, 2, "valueChanged is called");
 });
@@ -3489,7 +3487,7 @@ QUnit.testInActiveWindow("the 'shift+tab' key press leads to the cancel button f
     $input
         .focus()
         .trigger($.Event("keydown", {
-            which: TAB_KEY_CODE,
+            key: "Tab",
             shiftKey: true
         }));
 

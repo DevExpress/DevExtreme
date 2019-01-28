@@ -1395,10 +1395,10 @@ QUnit.test("onValueChanged option should get jQuery event as a parameter when up
         keyboard = keyboardMock($input);
 
     keyboard.keyDown("up");
-    assert.equal(jQueryEvent.keyCode, 38, "jQuery event is defined when up key pressed");
+    assert.equal(jQueryEvent.key, "ArrowUp", "jQuery event is defined when up key pressed");
 
     keyboard.keyDown("down");
-    assert.equal(jQueryEvent.keyCode, 40, "jQuery event is defined when down key pressed");
+    assert.equal(jQueryEvent.key, "ArrowDown", "jQuery event is defined when down key pressed");
 });
 
 QUnit.module("regressions", {
@@ -1733,7 +1733,7 @@ QUnit.test("keypress with meta key should not be prevented", function(assert) {
     $input.on("keypress", function(e) {
         isKeyPressPrevented = e.isDefaultPrevented();
     });
-    keyboard.triggerEvent("keypress", { keyCode: 48, metaKey: true });
+    keyboard.triggerEvent("keypress", { key: "0", metaKey: true });
     assert.equal(isKeyPressPrevented, false, "keypress with meta is not prevented");
 });
 
@@ -1749,7 +1749,7 @@ QUnit.test("keypress with ctrl key should not be prevented", function(assert) {
     $input.on("keypress", function(e) {
         isKeyPressPrevented = e.isDefaultPrevented();
     });
-    keyboard.triggerEvent("keypress", { keyCode: 48, ctrlKey: true });
+    keyboard.triggerEvent("keypress", { key: "0", ctrlKey: true });
     assert.equal(isKeyPressPrevented, false, "keypress with meta is not prevented");
 });
 

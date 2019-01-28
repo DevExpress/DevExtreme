@@ -1345,6 +1345,19 @@ require("common.css!");
         assert.equal(handlerFired, 1, "new handler fired");
     });
 
+    QUnit.test("registerKeyHandler can attach a key handler to widget by a key code", function(assert) {
+        var $element = $("#widget").dxWidget({ focusStateEnabled: true }),
+            widget = $element.dxWidget("instance"),
+            handler = sinon.stub();
+
+        widget.registerKeyHandler("113", handler);
+
+        var event = $.Event('keydown', { which: 113, key: "F2" });
+        $element.trigger(event);
+
+        assert.equal(handler.callCount, 1, "new handler fired");
+    });
+
 
     (function() {
 

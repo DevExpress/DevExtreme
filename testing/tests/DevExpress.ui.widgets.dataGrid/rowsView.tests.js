@@ -1269,7 +1269,7 @@ QUnit.test('Selection rows by space keydown on checkbox', function(assert) {
     rowsView.render(testElement);
     checkBoxes = testElement.find('.dx-checkbox');
     assert.equal(checkBoxes.length, 3);
-    checkBoxes.eq(1).trigger($.Event("keydown", { which: 32 }));
+    checkBoxes.eq(1).trigger($.Event("keydown", { key: " " }));
 
     // assert
     assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 1);

@@ -2,6 +2,7 @@ import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
+import { normalizeKeyName } from "../../events/utils";
 import iteratorUtils from "../../core/utils/iterator";
 import modules from "./ui.grid_core.modules";
 import gridCoreUtils from "./ui.grid_core.utils";
@@ -264,7 +265,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
                         var $prevElement = $cell.find("[tabindex]").not(e.target).first();
 
-                        if(e.which === 9 && e.shiftKey) {
+                        if(normalizeKeyName(e) === "tab" && e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
 
@@ -281,7 +282,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
                     eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
-                        if(e.which === 9 && !e.shiftKey) {
+                        if(normalizeKeyName(e) === "tab" && !e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
                             eventsEngine.trigger($cell.next().find("[tabindex]").first(), "focus");
