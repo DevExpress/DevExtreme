@@ -2,7 +2,6 @@ var registerComponent = require("../../core/component_registrator"),
     dateUtils = require("../../core/utils/date"),
     toMs = dateUtils.dateToMilliseconds,
     SchedulerWorkSpaceWeek = require("./ui.scheduler.work_space_week"),
-    dateUtils = require("../../core/utils/date"),
     dateLocalization = require("../../localization/date");
 
 var WORK_WEEK_CLASS = "dx-scheduler-work-space-work-week";

@@ -54,6 +54,7 @@
         "no-extra-semi": "error",
         "no-fallthrough": "error",
         "no-new-func": "error",
+        "no-redeclare": "error",
         "no-eval": "error",
         "no-undef": "error",
         "no-undef-init": "error",

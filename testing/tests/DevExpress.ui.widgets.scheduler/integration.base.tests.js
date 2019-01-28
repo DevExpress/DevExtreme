@@ -11,8 +11,7 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
+var noop = require("core/utils/common").noop,
     errors = require("ui/widget/ui.errors"),
     DataSource = require("data/data_source/data_source").DataSource,
     config = require("core/config");

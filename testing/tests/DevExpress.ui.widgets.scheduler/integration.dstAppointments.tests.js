@@ -8,8 +8,7 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    dateLocalization = require("localization/date"),
+var dateLocalization = require("localization/date"),
     fx = require("animation/fx"),
     subscribes = require("ui/scheduler/ui.scheduler.subscribes");
 
