@@ -187,7 +187,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                 columnsController,
                 showEditorAlways = column.showEditorAlways;
 
-            if(!column.validationRules || !Array.isArray(column.validationRules) || isDefined(column.command)) return;
+            if(!column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length || isDefined(column.command)) return;
 
             editIndex = editingController.getIndexByKey(parameters.key, editingController._editData);
 
