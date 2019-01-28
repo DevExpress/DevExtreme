@@ -915,8 +915,8 @@ QUnit.module("box", {
 QUnit.test("innerBox with nested box item", function(assert) {
     var $markup = $("\
         <div dx-box=\"{}\">\
-            <div data-options=\"dxItem: {baseSize: 272, ratio: 0, box: {direction: \'col\'}}\">\
-                <div data-options=\"dxItem: {baseSize: \'auto\', ratio: 0}\"><h2>Box1</h2></div>\
+            <div data-options=\"dxItem: {baseSize: 272, ratio: 0, box: {direction: 'col'}}\">\
+                <div data-options=\"dxItem: {baseSize: 'auto', ratio: 0}\"><h2>Box1</h2></div>\
             </div>\
         </div>\
     ");
