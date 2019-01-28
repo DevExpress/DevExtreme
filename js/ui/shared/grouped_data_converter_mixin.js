@@ -44,7 +44,7 @@ export default {
             if(hasSimpleItems) {
                 dataSource.searchExpr = "text";
             }
-        };
+        }
 
         return dataSource;
     }

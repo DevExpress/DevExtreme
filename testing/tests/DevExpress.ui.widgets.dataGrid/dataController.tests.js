@@ -12244,8 +12244,31 @@ QUnit.test("insert one row without index using push", function(assert) {
     var items = this.dataController.items();
     assert.deepEqual(items.length, 3);
     assert.deepEqual(changedArgs.changeType, 'update');
-    assert.deepEqual(changedArgs.changeTypes, []);
+    assert.deepEqual(changedArgs.changeTypes, [], "item is not inserted");
     assert.deepEqual(changedArgs.rowIndices, []);
+});
+
+// T709020
+QUnit.test("insert one row without index using push if paging is disabled", function(assert) {
+    this.setupModules({ pushAggregationTimeout: 0, paginate: false });
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    this.options.repaintChangesOnly = true;
+
+    // act
+    this.dataSource.store().push([{ type: "insert", data: { id: 999, name: "Test", age: 99 } }]);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items.length, 4);
+    assert.deepEqual(changedArgs.changeType, 'update');
+    assert.deepEqual(changedArgs.changeTypes, ["insert"], "item is inserted");
+    assert.deepEqual(changedArgs.rowIndices, [3], "item is inserted to end");
 });
 
 QUnit.test("remove one row using push", function(assert) {

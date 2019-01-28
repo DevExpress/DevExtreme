@@ -1026,7 +1026,7 @@ QUnit.test("Node changed should fire if any node was changed", function(assert) 
 });
 
 QUnit.test("Searching with special symbols should not crash the regular expression", function(assert) {
-    var symbols = "[]{}()-+?*,.\^$|#".split(""),
+    var symbols = "[]{}()-+?*,.\\^$|#".split(""),
 
         dataAdapter = initDataAdapter({
             items: [{ text: "item 1", expanded: true, items: [{ text: "item 11" }] }],

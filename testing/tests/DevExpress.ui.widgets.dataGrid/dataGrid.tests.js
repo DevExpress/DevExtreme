@@ -19,7 +19,7 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'test\' }">Template Content</div>\
             <div data-options="dxTemplate: { name: \'test2\' }">Template Content2</div>\
             <table data-options="dxTemplate: { name: \'testRow\' }"><tr class="dx-row dx-data-row test"><td colspan="2">Row Content</td></tr></table>\
-            <table data-options="dxTemplate: { name: \'testRowWithExpand\' }"><tr class="dx-row"><td colspan="2">Row Content <em class=\"dx-command-expand dx-datagrid-expand\">More info</em></td></tr></table>\
+            <table data-options="dxTemplate: { name: \'testRowWithExpand\' }"><tr class="dx-row"><td colspan="2">Row Content <em class="dx-command-expand dx-datagrid-expand">More info</em></td></tr></table>\
             <div data-options="dxTemplate: { name: \'testDetail\' }"><p>Test Details</p></div>\
         </div>\
 \
@@ -3410,6 +3410,38 @@ QUnit.test("DataGrid should not scroll back to the focused row after pageIndex c
     clock.restore();
 });
 
+QUnit.testInActiveWindow("Data cell in group column with showWhenGrouped=true should be focused", function(assert) {
+    // arrange
+    var $cell,
+        keyboardController,
+        clock = sinon.useFakeTimers(),
+        data = [
+            { name: "Alex", phone: "555555", room: 0 },
+            { name: "Dan1", phone: "666666", room: 1 },
+            { name: "Dan2", phone: "777777", room: 2 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            dataSource: data,
+            columns: ["name", "phone", { dataField: "room", groupIndex: 0, showWhenGrouped: true }],
+            grouping: { autoExpandAll: true }
+        }).dxDataGrid("instance");
+
+    // act
+    dataGrid.focus(dataGrid.getCellElement(1, 2));
+    keyboardController = dataGrid.getController("keyboardNavigation");
+    keyboardController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
+    clock.tick();
+
+    $cell = $(dataGrid.element()).find(".dx-focused");
+
+    // assert
+    assert.equal($cell.text(), "0");
+    assert.deepEqual(keyboardController._focusedCellPosition, { rowIndex: 1, columnIndex: 3 }, "focused cell position");
+
+    clock.restore();
+});
+
 QUnit.test("Enable rows hover via option method", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "hover is disabled for not desktop devices");
@@ -5587,7 +5619,7 @@ QUnit.test("Load count on start when EdmLiteral in calculatedFilterExpression is
             },
             height: 100,
             remoteOperations: {
-                paging: true
+                paging: true, filtering: true
             },
             loadingTimeout: undefined,
             scrolling: {
@@ -8124,6 +8156,32 @@ QUnit.test("showRowLines/showColumnLines change", function(assert) {
     assert.equal(resizeCalledCount, 2, "resize called");
 });
 
+// T709078
+QUnit.test("selectedRowKeys change several times", function(assert) {
+    // arrange
+    var selectionChangedSpy = sinon.spy();
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        keyExpr: "id",
+        onSelectionChanged: selectionChangedSpy,
+        dataSource: [{ id: 1 }, { id: 2 }]
+    });
+
+    var resizingController = dataGrid.getController("resizing");
+    sinon.spy(resizingController, "updateDimensions");
+
+    // act
+    dataGrid.beginUpdate();
+    dataGrid.option("selectedRowKeys", [1]);
+    dataGrid.option("selectedRowKeys", [2]);
+    dataGrid.endUpdate();
+
+    // assert
+    assert.strictEqual(resizingController.updateDimensions.callCount, 0, "updateDimensions is not called");
+    assert.strictEqual(selectionChangedSpy.callCount, 2, "onSelectionChanged is called twice");
+    assert.notOk($(dataGrid.getRowElement(0)).hasClass("dx-selection"), "no dx-selection on the first row");
+    assert.ok($(dataGrid.getRowElement(1)).hasClass("dx-selection"), "dx-selection on the second row");
+});
 
 QUnit.test("dataSource instance of DataSource", function(assert) {
     // arrange, act
@@ -9149,7 +9207,8 @@ QUnit.testInActiveWindow("Keyboard navigation works well with multilevel groupin
         }),
         navigationController = dataGrid.getController("keyboardNavigation"),
         keyUpEvent = {
-            key: "upArrow",
+            key: "ArrowUp",
+            keyName: "upArrow",
             originalEvent: $.Event("keyup")
         };
 
@@ -9200,7 +9259,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     this.clock.tick();
 
     $(dataGrid.$element()).find(".dx-textbox").dxTextBox("instance").option("value", "Test");
-    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.$element()).find("input").get(0) }) });
+    navigationController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.$element()).find("input").get(0) }) });
     this.clock.tick();
 
     // assert
@@ -9231,12 +9290,12 @@ QUnit.testInActiveWindow("Tab key on editor should focus next cell if editing mo
     dataGrid.focus($(dataGrid.getCellElement(0, 0)));
     this.clock.tick();
 
-    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
+    navigationController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
     this.clock.tick();
 
 
     // act
-    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
+    navigationController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
     $(dataGrid.getCellElement(0, 1)).find(".dx-numberbox").dxNumberBox("instance").option("value", 10);
     this.clock.tick();
 
@@ -9281,7 +9340,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     this.clock.tick();
 
     $(dataGrid.$element()).find(".dx-textbox").dxTextBox("instance").option("value", "Test");
-    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.$element()).find("input").get(0) }) });
+    navigationController._keyDownHandler({ key: "Tab", keyName: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.$element()).find("input").get(0) }) });
     this.clock.tick();
 
     // assert
@@ -9319,7 +9378,7 @@ QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour",
 
     // act
     var event = $.Event("keydown", { target: $(":focus").get(0) });
-    navigationController._keyDownHandler({ key: "enter", originalEvent: event });
+    navigationController._keyDownHandler({ key: "Enter", keyName: "enter", originalEvent: event });
     this.clock.tick();
 
     // assert
@@ -10222,7 +10281,8 @@ QUnit.test("Focused cell position has correct value when focus grouping row cell
         keyboardNavigationController = dataGrid.getController("keyboardNavigation"),
         triggerTabPress = function($target, isShiftPressed) {
             keyboardNavigationController._keyDownHandler({
-                key: "tab",
+                key: "Tab",
+                keyName: "tab",
                 shift: !!isShiftPressed,
                 originalEvent: {
                     target: $target,
@@ -10290,7 +10350,8 @@ QUnit.test("Focused cell position has correct value when focus grouping row with
         keyboardNavigationController = dataGrid.getController("keyboardNavigation"),
         triggerTabPress = function($target, isShiftPressed) {
             keyboardNavigationController._keyDownHandler({
-                key: "tab",
+                key: "Tab",
+                keyName: "tab",
                 shift: !!isShiftPressed,
                 originalEvent: {
                     target: $target,
@@ -10624,7 +10685,8 @@ QUnit.testInActiveWindow("Scroll positioned correct with fixed columns and editi
         }),
         triggerTabPress = function($target) {
             dataGrid.getController("keyboardNavigation")._keyDownHandler({
-                key: "tab",
+                key: "Tab",
+                keyName: "tab",
                 originalEvent: {
                     target: $target,
                     preventDefault: commonUtils.noop,
@@ -10670,7 +10732,8 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
         }),
         triggerTabPress = function(target) {
             dataGrid.getController("keyboardNavigation")._keyDownProcessor.process({
-                which: 9,
+                key: "Tab",
+                keyName: "tab",
                 target: target && target[0] || target,
                 preventDefault: $.noop,
                 isDefaultPrevented: function() {
@@ -12469,6 +12532,38 @@ QUnit.test("Sorting should not throw an exception when headers are hidden", func
     }
 });
 
+// T709033
+QUnit.test("Band columns should be displayed correctly after adding columns and changing the summary", function(assert) {
+    // arrange
+    var visibleColumns,
+        dataGrid = createDataGrid({
+            dataSource: [{ field1: 1, field2: 2, field3: 3 }, { field1: 4, field2: 5, field3: 6 }],
+            columns: [{
+                caption: "1",
+                columns: ["field1", "field2"]
+            }]
+        });
+
+    // act
+    dataGrid.addColumn({
+        caption: "2",
+        columns: ["field3"]
+    });
+    dataGrid.option("summary", { totalItems: [{ column: "field1", summaryType: "count" }] });
+
+    // assert
+    visibleColumns = dataGrid.getVisibleColumns(0);
+    assert.strictEqual(visibleColumns.length, 2, "number of columns in the first row");
+    assert.strictEqual(visibleColumns[0].caption, "1", "caption of the first column in the first row");
+    assert.strictEqual(visibleColumns[1].caption, "2", "caption of the second column in the first row");
+
+    visibleColumns = dataGrid.getVisibleColumns(1);
+    assert.strictEqual(visibleColumns.length, 3, "number of columns in the second row");
+    assert.strictEqual(visibleColumns[0].dataField, "field1", "dataField of the first column in the second row");
+    assert.strictEqual(visibleColumns[1].dataField, "field2", "dataField of the second column in the second row");
+    assert.strictEqual(visibleColumns[2].dataField, "field3", "dataField of the third column in the second row");
+});
+
 QUnit.module("templates");
 
 QUnit.test("template no found - create text node", function(assert) {
@@ -13027,6 +13122,26 @@ QUnit.test("column with width auto should have minimum size by content", functio
 
 
     assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, "last column width by content");
+});
+
+// T709106
+QUnit.test("column widths if all columns have width auto and columnAutoWidth is true", function(assert) {
+    // act
+    var dataGrid = $("#dataGrid").css("width", "").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columnAutoWidth: true,
+        columns: [{
+            dataField: "a",
+            width: "auto"
+        }, {
+            dataField: "a",
+            width: "auto"
+        }]
+    }).dxDataGrid("instance");
+
+    // assert
+    assert.roughEqual($(dataGrid.getCellElement(0, 0)).outerWidth(), $(dataGrid.getCellElement(0, 1)).outerWidth(), 1.01, "first and second column widths are equals");
 });
 
 // T672282

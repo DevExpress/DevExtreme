@@ -44,11 +44,11 @@ var LIST_CLASS = "dx-list",
 
     TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
-var KEY_TAB = 9,
-    KEY_ENTER = 13,
-    KEY_ESC = 27,
-    KEY_DOWN = 40,
-    KEY_SPACE = 32;
+var KEY_TAB = "Tab",
+    KEY_ENTER = "Enter",
+    KEY_ESC = "Escape",
+    KEY_DOWN = "ArrowDown",
+    KEY_SPACE = " ";
 
 var TIME_TO_WAIT = 500;
 
@@ -1891,7 +1891,7 @@ QUnit.testInActiveWindow("the input should be focused on the 'shift+tab' key pre
     $selectAllCheckbox
         .focus()
         .trigger($.Event("keydown", {
-            which: KEY_TAB,
+            key: KEY_TAB,
             shiftKey: true
         }));
 
@@ -1915,7 +1915,7 @@ QUnit.testInActiveWindow("popup should be closed on the 'esc' key press if the s
     $selectAllCheckbox
         .focus()
         .trigger($.Event("keydown", {
-            which: KEY_ESC,
+            key: KEY_ESC,
             shiftKey: true
         }));
 

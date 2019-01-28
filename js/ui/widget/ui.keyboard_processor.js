@@ -1,38 +1,14 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    Class = require("../../core/class"),
-    inArray = require("../../core/utils/array").inArray,
-    each = require("../../core/utils/iterator").each,
-    eventUtils = require("../../events/utils");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import Class from "../../core/class";
+import { inArray } from "../../core/utils/array";
+import { each } from "../../core/utils/iterator";
+import { addNamespace, normalizeKeyName } from "../../events/utils";
 
-var KeyboardProcessor = Class.inherit({
-    _keydown: eventUtils.addNamespace("keydown", "KeyboardProcessor"),
-
-    codes: {
-        "8": "backspace",
-        "9": "tab",
-        "13": "enter",
-        "27": "escape",
-        "33": "pageUp",
-        "34": "pageDown",
-        "35": "end",
-        "36": "home",
-        "37": "leftArrow",
-        "38": "upArrow",
-        "39": "rightArrow",
-        "40": "downArrow",
-        "46": "del",
-        "32": "space",
-        "70": "F",
-        "65": "A",
-        "106": "asterisk",
-        "109": "minus",
-        "189": "minus",
-        "173": "minus"
-    },
+const KeyboardProcessor = Class.inherit({
+    _keydown: addNamespace("keydown", "KeyboardProcessor"),
 
     ctor: function(options) {
-        var _this = this;
         options = options || {};
         if(options.element) {
             this._element = $(options.element);
@@ -44,8 +20,8 @@ var KeyboardProcessor = Class.inherit({
         this._context = options.context;
         this._childProcessors = [];
         if(this._element) {
-            this._processFunction = function(e) {
-                _this.process(e);
+            this._processFunction = (e) => {
+                this.process(e);
             };
             eventsEngine.on(this._element, this._keydown, this._processFunction);
         }
@@ -92,10 +68,15 @@ var KeyboardProcessor = Class.inherit({
         }
 
         var args = {
-            key: this.codes[e.which] || e.which,
+            keyName: normalizeKeyName(e),
+            key: e.key,
+            code: e.code,
             ctrl: e.ctrlKey,
+            location: e.location,
+            metaKey: e.metaKey,
             shift: e.shiftKey,
             alt: e.altKey,
+            which: e.which,
             originalEvent: e
         };
 

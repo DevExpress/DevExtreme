@@ -2,6 +2,7 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     dragEvents = require("events/drag"),
     support = require("core/utils/support"),
+    browser = require("core/utils/browser"),
     GestureEmitter = require("events/gesture/emitter.gesture"),
     dropTargets = dragEvents.dropTargets,
     pointerMock = require("../../helpers/pointerMock.js");
@@ -692,7 +693,7 @@ QUnit.test("default behaviour on dxpointermove should be prevented to reduce use
 });
 
 QUnit.test("drag should not crash with multiple touches", function(assert) {
-    if(!support.touchEvents) {
+    if(!support.touchEvents || browser.msie) {
         assert.ok(true);
         return;
     }
@@ -722,7 +723,7 @@ QUnit.test("drag should not crash with multiple touches", function(assert) {
 });
 
 QUnit.test("drag correctly works with FireFox on touch-based devices (T602186)", function(assert) {
-    if(!support.touchEvents) {
+    if(!support.touchEvents || browser.msie) {
         assert.ok(true);
         return;
     }

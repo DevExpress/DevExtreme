@@ -422,6 +422,11 @@
 
                 .dx-@{widgetName}-invalid .dx-invalid-message.dx-overlay {
                     position: static;
+
+                    .dx-overlay-content {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
                 }
 
             .dx-editor-cell {

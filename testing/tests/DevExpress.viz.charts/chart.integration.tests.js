@@ -22,7 +22,6 @@ QUnit.testStart(function() {
 
 var chartContainerCounter = 1,
     containerName,
-    executeAsyncMock = DevExpress.testing.executeAsyncMock,
     moduleSetup = {
         beforeEach: function() {
             containerName = "chartContainer" + chartContainerCounter;

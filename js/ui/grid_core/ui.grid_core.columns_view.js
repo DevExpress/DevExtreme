@@ -89,10 +89,7 @@ var getWidthStyle = function(width) {
 };
 
 var setCellWidth = function(cell, column, width) {
-    cell.style.width = cell.style.maxWidth = width;
-    if(!column.command && column.width === "auto" && width === "") {
-        cell.style.width = "1px";
-    }
+    cell.style.width = cell.style.maxWidth = column.width === "auto" ? "" : width;
 };
 
 var copyAttributes = function(element, newElement) {

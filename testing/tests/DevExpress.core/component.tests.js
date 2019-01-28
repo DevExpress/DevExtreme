@@ -1,7 +1,6 @@
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     Component = require("core/component"),
-    Component = require("core/component"),
     PostponedOperations = require("core/component").PostponedOperations,
     errors = require("core/errors"),
     devices = require("core/devices"),

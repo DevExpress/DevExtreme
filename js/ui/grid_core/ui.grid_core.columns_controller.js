@@ -1148,6 +1148,7 @@ module.exports = {
                             applyFieldsState(column, columnUserState);
                             resultColumns.push(column);
                             if(columnUserState.added.columns) {
+                                updateColumnIndexes(that);
                                 resultColumns = createColumnsFromOptions(that, resultColumns);
                             }
                         }
