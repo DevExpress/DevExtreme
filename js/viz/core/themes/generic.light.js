@@ -704,6 +704,7 @@ registerTheme({
         zoomingMode: NONE,
         scrollingMode: NONE,
         synchronizeMultiAxes: true,
+        stickyHovering: true,
         equalBarWidth: true,
         barGroupPadding: 0.3,
         minBubbleSize: 12,
