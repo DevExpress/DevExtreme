@@ -1,5 +1,4 @@
-var $ = require("jquery"),
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
+var $ = require("jquery");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -12,8 +11,7 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
+var noop = require("core/utils/common").noop,
     errors = require("ui/widget/ui.errors"),
     translator = require("animation/translator"),
     dateLocalization = require("localization/date"),

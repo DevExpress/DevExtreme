@@ -2474,7 +2474,7 @@ var Scheduler = Widget.inherit({
     },
 
     _getRecurrenceExceptionDate: function(exceptionStartDate, targetStartDate, startDateTimeZone) {
-        var exceptionStartDate = this.fire("convertDateByTimezoneBack", exceptionStartDate, startDateTimeZone);
+        exceptionStartDate = this.fire("convertDateByTimezoneBack", exceptionStartDate, startDateTimeZone);
         var appointmentStartDate = this.fire("convertDateByTimezoneBack", targetStartDate, startDateTimeZone);
 
         exceptionStartDate.setHours(appointmentStartDate.getHours(),
