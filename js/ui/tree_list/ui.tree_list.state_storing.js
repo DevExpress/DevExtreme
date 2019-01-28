@@ -1,7 +1,7 @@
-var treeListCore = require("./ui.tree_list.core"),
-    extend = require("../../core/utils/extend").extend,
-    stateStoringModule = require("../grid_core/ui.grid_core.state_storing"),
-    origApplyState = stateStoringModule.extenders.controllers.stateStoring.applyState;
+import treeListCore from './ui.tree_list.core';
+import { extend } from '../../core/utils/extend';
+import stateStoringModule from '../grid_core/ui.grid_core.state_storing';
+var origApplyState = stateStoringModule.extenders.controllers.stateStoring.applyState;
 
 treeListCore.registerModule("stateStoring", extend(true, {}, stateStoringModule, {
     extenders: {
