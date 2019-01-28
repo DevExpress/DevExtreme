@@ -359,7 +359,7 @@ var Button = Widget.inherit({
 
         if(iconUtils.getImageSourceType(icon) === "image") {
             if(icon.indexOf("base64") === -1) {
-                icon = icon.replace(/.+\/([^\.]+)\..+$/, "$1");
+                icon = icon.replace(/.+\/([^.]+)\..+$/, "$1");
             } else {
                 icon = "Base64";
             }

@@ -1883,7 +1883,7 @@ QUnit.test("dateBox should not reposition the calendar icon in RTL mode", functi
     assert.strictEqual(iconRepositionCount, 0);
 });
 
-QUnit.test("dateBox must apply the wrapper class with appropriate picker typ\ to the drop-down overlay wrapper", function(assert) {
+QUnit.test("dateBox must apply the wrapper class with appropriate picker type to the drop-down overlay wrapper", function(assert) {
     var dateBox = this.fixture.dateBox;
     dateBox.open();
     assert.ok(this.fixture.dateBox._popup._wrapper().hasClass(DATEBOX_WRAPPER_CLASS + "-" + dateBox.option("pickerType")));
@@ -3670,7 +3670,7 @@ QUnit.test("widget is still valid after drop down is opened", function(assert) {
     assert.ok(dateBox.option("isValid"), "value is valid too");
 });
 
-QUnit.test("datebox with 'date' type should ignore time in min\max options", function(assert) {
+QUnit.test("datebox with 'date' type should ignore time in min/max options", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
         value: new Date(2015, 0, 31, 10),
         focusStateEnabled: true,

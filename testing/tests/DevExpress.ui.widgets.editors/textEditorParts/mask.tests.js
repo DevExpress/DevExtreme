@@ -1531,7 +1531,7 @@ QUnit.test("text argument has maskChar instead of spaces", function(assert) {
 
 QUnit.module("escape built-in rules");
 
-QUnit.test("built-in rules should be escaped with '\'", function(assert) {
+QUnit.test("built-in rules should be escaped with '\\'", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
         mask: '\\ll',
         value: 'a'
