@@ -7,8 +7,9 @@ var $ = require("jquery"),
 
 require("ui/text_box/ui.text_editor");
 
-var INPUT_CLASS = "dx-texteditor-input",
-    PLACEHOLDER_CLASS = "dx-placeholder";
+var INPUT_CLASS = "dx-texteditor-input";
+var PLACEHOLDER_CLASS = "dx-placeholder";
+var IE_NUMPAD_MINUS_KEY = "Subtract";
 
 var moduleConfig = {
     beforeEach: function() {
@@ -216,6 +217,9 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
 });
 
 QUnit.test("pressing numpad minus button should revert the number", function(assert) {
+    const isIE = browser.msie;
+    const keyName = isIE ? IE_NUMPAD_MINUS_KEY : "-";
+
     this.instance.option({
         format: "#.000",
         value: 123.456
@@ -223,11 +227,11 @@ QUnit.test("pressing numpad minus button should revert the number", function(ass
 
     this.keyboard
         .caret(3)
-        .keyDown("-")
-        .keyPress("-")
-        .keyUp("-");
+        .keyDown(keyName)
+        .keyPress(keyName)
+        .keyUp(keyName);
 
-    if(!browser.msie) {
+    if(!isIE) {
         this.keyboard.input();
     }
 
