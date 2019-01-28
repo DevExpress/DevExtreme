@@ -590,7 +590,7 @@ var Fixture = Class.inherit({
             validationError: {
                 message: "Error message"
             },
-            validationOverlayOptions: {
+            validationTooltipOptions: {
                 width: 200,
                 customOption: "Test"
             },
@@ -613,15 +613,15 @@ var Fixture = Class.inherit({
                 isValid: false
             });
 
-        assert.equal(instance.option("validationOverlayOptions.width"), "auto", "options are readable on init");
+        assert.equal(instance.option("validationTooltipOptions.width"), "auto", "options are readable on init");
 
         var overlay = instance._validationMessage;
 
         overlay.option("width", 150);
-        assert.equal(instance.option("validationOverlayOptions.width"), 150, "option has ben changed");
+        assert.equal(instance.option("validationTooltipOptions.width"), 150, "option has ben changed");
     });
 
-    QUnit.test("it should be possible to set validationOverlayOptions dynamically", function(assert) {
+    QUnit.test("it should be possible to set validationTooltipOptions dynamically", function(assert) {
         var $element = this.fixture.createOnlyElement(),
             instance = new Editor($element, {
                 validationMessageMode: "always",
@@ -632,13 +632,13 @@ var Fixture = Class.inherit({
             }),
             overlay = instance._validationMessage;
 
-        instance.option("validationOverlayOptions.width", 130);
+        instance.option("validationTooltipOptions.width", 130);
         assert.equal(overlay.option("width"), 130, "option has ben changed");
 
-        instance.option("validationOverlayOptions", { height: 50 });
+        instance.option("validationTooltipOptions", { height: 50 });
         assert.equal(overlay.option("height"), 50, "option has ben changed");
-        assert.equal(instance.option("validationOverlayOptions.width"), 130, "redefined object's fields was not changed");
-        assert.equal(instance.option("validationOverlayOptions.shading"), false, "default object's fields was not changed");
+        assert.equal(instance.option("validationTooltipOptions.width"), 130, "redefined object's fields was not changed");
+        assert.equal(instance.option("validationTooltipOptions.shading"), false, "default object's fields was not changed");
     });
 })("Validation Events");
 

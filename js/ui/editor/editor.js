@@ -104,7 +104,7 @@ var Editor = Widget.inherit({
 
             validationMessageOffset: { h: 0, v: 0 },
 
-            validationOverlayOptions: {}
+            validationTooltipOptions: {}
         });
     },
 
@@ -216,14 +216,14 @@ var Editor = Widget.inherit({
                 visible: true,
                 propagateOutsideClick: true,
                 _checkParentVisibility: false
-            }, this.option("validationOverlayOptions")));
+            }, this.option("validationTooltipOptions")));
 
             this._$validationMessage
                 .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === "auto")
                 .toggleClass(INVALID_MESSAGE_ALWAYS, validationMessageMode === "always");
 
             this._setValidationMessageMaxWidth();
-            this._bindInnerWidgetOptions(this._validationMessage, "validationOverlayOptions");
+            this._bindInnerWidgetOptions(this._validationMessage, "validationTooltipOptions");
         }
     },
 
@@ -306,7 +306,7 @@ var Editor = Widget.inherit({
         return options;
     },
 
-    _setValidationOverlayOptions: function(optionName, value) {
+    _setValidationTooltipOptions: function(optionName, value) {
         this._setWidgetOption("_validationMessage", arguments);
     },
 
@@ -321,8 +321,8 @@ var Editor = Widget.inherit({
             case "validationMessageMode":
                 this._renderValidationState();
                 break;
-            case "validationOverlayOptions":
-                this._setValidationOverlayOptions(this._getOptionsFromContainer(args));
+            case "validationTooltipOptions":
+                this._setValidationTooltipOptions(this._getOptionsFromContainer(args));
                 break;
             case "readOnly":
                 this._toggleReadOnlyState();
