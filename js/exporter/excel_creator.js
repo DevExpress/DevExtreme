@@ -70,15 +70,17 @@ var ExcelCreator = Class.inherit({
             this._maxIndex[1] = Number(cellIndex);
         }
 
-        do {
-            cellIndexOutOfMax = cellIndex >= max;
-            charCode = 65 + (cellIndexOutOfMax ? (cellIndex % max) : Math.ceil(cellIndex));
+        var isCellIndexFound = false;
+        while(!isCellIndexFound) {
+            charCode = 65 + ((cellIndex >= max) ? (cellIndex % max) : Math.ceil(cellIndex));
             sheetIndex = String.fromCharCode(charCode) + sheetIndex;
-
-            if(cellIndexOutOfMax) {
+ 
+            if(cellIndex >= max) {
                 cellIndex = Math.floor(cellIndex / max) - 1;
+            } else {
+                isCellIndexFound = true;
             }
-        } while(cellIndexOutOfMax);
+        }
 
         return sheetIndex + rowIndex;
     },
