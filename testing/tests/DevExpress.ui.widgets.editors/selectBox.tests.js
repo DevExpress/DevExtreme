@@ -59,9 +59,9 @@ const POPUP_CLASS = "dx-selectbox-popup",
     PLACEHOLDER_CLASS = "dx-placeholder",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
-const KEY_DOWN = 40,
-    KEY_ENTER = 13,
-    KEY_SPACE = 32;
+const KEY_DOWN = "ArrowDown";
+const KEY_ENTER = "Enter";
+const KEY_SPACE = " ";
 
 const TIME_TO_WAIT = 500;
 
@@ -3351,7 +3351,7 @@ QUnit.module("regressions", moduleSetup, () => {
             $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
         $input.click();
-        $($input).trigger("keyup", { which: 40 });
+        $($input).trigger("keyup", { key: KEY_DOWN });
     });
 
     QUnit.test("dataSource option", (assert) => {
@@ -3377,7 +3377,7 @@ QUnit.module("regressions", moduleSetup, () => {
         $input.click();
         this.clock.tick(TIME_TO_WAIT);
 
-        $($input).trigger("keyup", { which: 40 });
+        $($input).trigger("keyup", { key: KEY_DOWN });
         this.clock.tick(TIME_TO_WAIT);
 
         assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).length === 3);
@@ -4030,8 +4030,7 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
             $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
             keyboard = keyboardMock($input);
 
-        const downKey = 40,
-            altDownEvent = $.Event("keydown", { which: downKey, altKey: true });
+        const altDownEvent = $.Event("keydown", { key: KEY_DOWN, altKey: true });
 
         $input
             .focus()
@@ -4546,13 +4545,13 @@ QUnit.module("focus policy", {
             kb = keyboardMock($input);
 
         kb.type("a").press("esc");
-        $($input).trigger($.Event("keydown", { which: 40, altKey: true }));
+        $($input).trigger($.Event("keydown", { key: KEY_DOWN, altKey: true }));
         this.clock.tick(TIME_TO_WAIT);
         assert.equal($.trim($(toSelector(LIST_ITEM_CLASS)).text()), "a", "filter should not be cleared before focusout");
 
         $input.focusout();
         this.instance.option("opened", false);
-        $($input).trigger($.Event("keydown", { which: 40, altKey: true }));
+        $($input).trigger($.Event("keydown", { key: KEY_DOWN, altKey: true }));
         this.clock.tick(TIME_TO_WAIT);
         assert.equal($.trim($(toSelector(LIST_ITEM_CLASS)).text()), "abc", "no filtering");
     });

@@ -1,12 +1,10 @@
-require("ui/tree_list/ui.tree_list");
-
-var $ = require("jquery"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    Guid = require("core/guid"),
-    query = require("data/query"),
-    treeListMocks = require("../../helpers/treeListMocks.js"),
-    setupTreeListModules = treeListMocks.setupTreeListModules;
+import 'ui/tree_list/ui.tree_list';
+import $ from 'jquery';
+import { DataSource } from 'data/data_source/data_source';
+import ArrayStore from 'data/array_store';
+import Guid from 'core/guid';
+import query from 'data/query';
+import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
 var createDataSource = function(data, storeOptions, dataSourceOptions) {
     var arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data),

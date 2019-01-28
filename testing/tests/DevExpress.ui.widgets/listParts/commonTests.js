@@ -2372,11 +2372,11 @@ QUnit.test("'enter'/'space' keys pressing on selectAll checkbox", function(asser
     this.clock.tick();
     assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
 
-    $element.trigger($.Event("keydown", { which: 13 }));
+    $element.trigger($.Event("keydown", { key: "Enter" }));
 
     assert.ok($selectAllCheckBox.hasClass("dx-checkbox-checked"), "selectAll checkbox is checked");
 
-    $element.trigger($.Event("keydown", { which: 32 }));
+    $element.trigger($.Event("keydown", { key: " " }));
 
     assert.ok(!$selectAllCheckBox.hasClass("dx-checkbox-checked"), "selectAll checkbox isn't checked");
 });
@@ -2590,7 +2590,7 @@ QUnit.test("list should attach keyboard events even if focusStateEnabled is fals
         }).dxList("instance");
 
     instance.registerKeyHandler("enter", handler);
-    $element.trigger($.Event("keydown", { which: 13 }));
+    $element.trigger($.Event("keydown", { key: "Enter" }));
 
     assert.equal(handler.callCount, 1, "keyboardProcessor is attached");
 });
@@ -2616,7 +2616,7 @@ QUnit.testInActiveWindow("First list item should be focused on the 'tab' key pre
         $element.find("[tabIndex]:not(:focus)").first().focus();
     });
 
-    $element.trigger($.Event("keydown", { which: 9 }));
+    $element.trigger($.Event("keydown", { key: "Tab" }));
     this.clock.tick();
 
     $searchEditor = $element.children(".dx-list-search");

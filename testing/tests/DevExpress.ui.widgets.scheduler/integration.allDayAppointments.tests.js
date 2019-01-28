@@ -11,8 +11,7 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    translator = require("animation/translator"),
+var translator = require("animation/translator"),
     dblclickEvent = require("events/dblclick"),
     fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),

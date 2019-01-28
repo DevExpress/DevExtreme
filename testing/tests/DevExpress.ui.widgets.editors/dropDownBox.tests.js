@@ -19,7 +19,7 @@ QUnit.testStart(function() {
 });
 
 var DX_TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
-    TAB_KEY_CODE = 9,
+    TAB_KEY_CODE = "Tab",
     DX_STATE_FOCUSED_CLASS = "dx-state-focused",
     OVERLAY_CONTENT_CLASS = "dx-overlay-content";
 
@@ -472,7 +472,7 @@ QUnit.testInActiveWindow("last focusable element inside of content should get fo
             }
         }),
         $input = this.$element.find("." + DX_TEXTEDITOR_INPUT_CLASS),
-        event = $.Event("keydown", { which: TAB_KEY_CODE, shiftKey: true });
+        event = $.Event("keydown", { key: TAB_KEY_CODE, shiftKey: true });
 
     $input.focus().trigger(event);
 
@@ -508,7 +508,7 @@ QUnit.testInActiveWindow("input should get focused when shift+tab pressed on fir
                 $(content).append($input1, $input2);
             }
         }),
-        event = $.Event("keydown", { which: TAB_KEY_CODE, shiftKey: true });
+        event = $.Event("keydown", { key: TAB_KEY_CODE, shiftKey: true });
 
     $input1.focus().trigger(event);
 

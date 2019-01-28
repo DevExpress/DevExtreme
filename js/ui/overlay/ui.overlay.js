@@ -53,7 +53,7 @@ var OVERLAY_CLASS = "dx-overlay",
 
     DISABLED_STATE_CLASS = "dx-state-disabled",
 
-    TAB_KEY = 9,
+    TAB_KEY = "tab",
 
     POSITION_ALIASES = {
         "top": { my: "top center", at: "top center" },
@@ -861,7 +861,7 @@ var Overlay = Widget.inherit({
     },
 
     _tabKeyHandler: function(e) {
-        if(e.keyCode !== TAB_KEY || !this._isTopOverlay()) {
+        if(eventUtils.normalizeKeyName(e) !== TAB_KEY || !this._isTopOverlay()) {
             return;
         }
 

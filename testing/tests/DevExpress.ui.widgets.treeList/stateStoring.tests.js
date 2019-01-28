@@ -10,13 +10,11 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
-require("ui/tree_list/ui.tree_list");
-
-var $ = require("jquery"),
-    treeListMocks = require("../../helpers/treeListMocks.js"),
-    setupTreeListModules = treeListMocks.setupTreeListModules;
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/tree_list/ui.tree_list';
+import $ from 'jquery';
+import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
 QUnit.module("State Storing", {
     beforeEach: function() {

@@ -484,7 +484,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         if(!isEditing && isDataRow($row)) {
             this.setCellFocusType();
-            directionCode = this._getDirectionCodeByKey(eventArgs.key);
+            directionCode = this._getDirectionCodeByKey(eventArgs.keyName);
 
             this._arrowKeysHandlerFocusCell($event, this._getNextCell(directionCode));
 
@@ -512,11 +512,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $event = eventArgs.originalEvent,
             $cell,
             rowHeight,
-            isUpArrow = eventArgs.key === "upArrow",
+            isUpArrow = eventArgs.keyName === "upArrow",
             dataSource = this._dataController.dataSource();
 
         if(!isEditing && $row && !isDetailRow($row)) {
-            $cell = this._getNextCell(eventArgs.key);
+            $cell = this._getNextCell(eventArgs.keyName);
             if($cell && this._isCellValid($cell)) {
 
                 this._arrowKeysHandlerFocusCell($event, $cell, true);
@@ -623,7 +623,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var pageIndex = this._dataController.pageIndex(),
             pageCount = this._dataController.pageCount(),
             pagingEnabled = this.option("paging.enabled"),
-            isPageUp = eventArgs.key === "pageUp",
+            isPageUp = eventArgs.keyName === "pageUp",
             pageStep = (isPageUp ? -1 : 1),
             scrollable = this.getView("rowsView").getScrollable();
 
@@ -917,7 +917,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._updateFocusedCellPosition(this._getCellElementFromTarget(args.event.target));
 
         if(!args.handled) {
-            switch(e.key) {
+            switch(e.keyName) {
                 case "leftArrow":
                 case "rightArrow":
                     this._leftRightKeysHandler(e, isEditing);
