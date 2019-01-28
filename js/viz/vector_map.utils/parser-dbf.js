@@ -13,9 +13,8 @@ function parseDBF(stream, errors) {
         timeEnd = new Date();
     } catch(e) {
         errors.push("dbf: parsing error: " + e.message + " / " + e.description);
-    } finally {
-        return { records: records, errors: errors, time: timeEnd - timeStart };
     }
+    return { records: records, errors: errors, time: timeEnd - timeStart };
 }
 
 function parseDataBaseFileHeader(stream, errors) {
