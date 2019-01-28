@@ -22,13 +22,13 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             return level;
         },
 
-        _generateDataItem: function(node) {
+        _generateDataItem: function(node, options) {
             return {
                 rowType: "data",
                 node: node,
                 key: node.key,
                 data: node.data,
-                isExpanded: this.isRowExpanded(node.key),
+                isExpanded: this.isRowExpanded(node.key, options),
                 level: this._getNodeLevel(node)
             };
         },
@@ -92,8 +92,8 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
          * @param1 key:any
          * @return boolean
          */
-        isRowExpanded: function(key) {
-            return this._dataSource && this._dataSource.isRowExpanded(key);
+        isRowExpanded: function(key, cache) {
+            return this._dataSource && this._dataSource.isRowExpanded(key, cache);
         },
 
         /**
