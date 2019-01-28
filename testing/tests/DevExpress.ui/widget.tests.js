@@ -707,19 +707,15 @@ require("common.css!");
         instance._activeStateUnit = ".widget-item-hover";
         instance.option("hoverStateEnabled", true);
 
-        try {
-            element.trigger({ target: item1.get(0), type: "dxpointerenter", pointerType: "mouse" });
+        element.trigger({ target: item1.get(0), type: "dxpointerenter", pointerType: "mouse" });
 
-            assert.equal(item1.hasClass(HOVER_STATE_CLASS), true, "first element has hovered class after hover");
-            assert.equal(item2.hasClass(HOVER_STATE_CLASS), false, "second element has not hovered class after hover on first");
+        assert.equal(item1.hasClass(HOVER_STATE_CLASS), true, "first element has hovered class after hover");
+        assert.equal(item2.hasClass(HOVER_STATE_CLASS), false, "second element has not hovered class after hover on first");
 
-            element.trigger({ target: item2.get(0), type: "dxpointerenter", pointerType: "mouse" });
+        element.trigger({ target: item2.get(0), type: "dxpointerenter", pointerType: "mouse" });
 
-            assert.equal(item1.hasClass(HOVER_STATE_CLASS), false, "first element has not hovered class after hover on second");
-            assert.equal(item2.hasClass(HOVER_STATE_CLASS), true, "second element has hovered class after hover");
-        } finally {
-
-        }
+        assert.equal(item1.hasClass(HOVER_STATE_CLASS), false, "first element has not hovered class after hover on second");
+        assert.equal(item2.hasClass(HOVER_STATE_CLASS), true, "second element has hovered class after hover");
     });
 
     QUnit.test("allow to use widget CSS classes (T145015)", function(assert) {
