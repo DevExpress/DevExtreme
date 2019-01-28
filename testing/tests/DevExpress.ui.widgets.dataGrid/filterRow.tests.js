@@ -2273,7 +2273,7 @@ if(device.deviceType === "desktop") {
         assert.equal($numberBoxElements.length, 2, "count number box");
 
         // act
-        $($numberBoxElements.last().find(TEXTEDITOR_INPUT_SELECTOR)).trigger($.Event("keydown", { which: 9 })); // focus on menu of the second cell, hide range
+        $($numberBoxElements.last().find(TEXTEDITOR_INPUT_SELECTOR)).trigger($.Event("keydown", { key: "Tab" })); // focus on menu of the second cell, hide range
 
         // assert
         assert.equal($cells.first().find(".dx-filter-range-content").length, 1, "has filter range content");
@@ -2310,7 +2310,7 @@ if(device.deviceType === "desktop") {
         assert.equal($numberBoxElements.length, 2, "count number box");
 
         // act
-        $($numberBoxElements.first().find("input")).trigger($.Event("keydown", { which: 9, shiftKey: true })); // focus on menu of the first cell, hide range
+        $($numberBoxElements.first().find("input")).trigger($.Event("keydown", { key: "Tab", shiftKey: true })); // focus on menu of the first cell, hide range
 
         // assert
         assert.equal($cells.first().find(".dx-filter-range-content").length, 1, "has filter range content");

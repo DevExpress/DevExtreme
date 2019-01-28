@@ -227,7 +227,7 @@ QUnit.test("Remove error row in rows view after cancel edit data", function(asse
 
     // assert
     assert.equal($testElement.find('tbody > tr').length, 6, "count rows");
-    var $errorRow = $testElement.find('.dx-datagrid-rowsview .dx-error-row');
+    $errorRow = $testElement.find('.dx-datagrid-rowsview .dx-error-row');
     assert.equal($errorRow.length, 1, "has error row");
     assert.strictEqual($errorRow.find("td").first().text(), "Test", "error message");
 

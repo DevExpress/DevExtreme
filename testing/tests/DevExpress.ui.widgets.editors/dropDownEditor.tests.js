@@ -3,7 +3,6 @@ var $ = require("jquery"),
     Overlay = require("ui/overlay"),
     devices = require("core/devices"),
     eventsEngine = require("events/core/events_engine"),
-    config = require("core/config"),
     support = require("core/utils/support"),
     fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),
@@ -27,8 +26,8 @@ var DROP_DOWN_EDITOR_BUTTON_ICON = "dx-dropdowneditor-icon",
     DROP_DOWN_EDITOR_OVERLAY = "dx-dropdowneditor-overlay",
     DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active";
 
-var TAB_KEY_CODE = 9,
-    ESC_KEY_CODE = 27;
+var TAB_KEY_CODE = "Tab",
+    ESC_KEY_CODE = "Escape";
 
 var beforeEach = function() {
     fx.off = true;
@@ -463,8 +462,8 @@ QUnit.module("keyboard navigation", {
 });
 
 QUnit.test("control keys test", function(assert) {
-    var altDown = $.Event("keydown", { which: 40, altKey: true }),
-        altUp = $.Event("keydown", { which: 38, altKey: true });
+    var altDown = $.Event("keydown", { key: "ArrowDown", altKey: true }),
+        altUp = $.Event("keydown", { key: "ArrowUp", altKey: true });
 
     assert.ok(!this.dropDownEditor.option("opened"), "overlay is hidden on first show");
 
@@ -481,7 +480,7 @@ QUnit.test("control keys test", function(assert) {
 });
 
 QUnit.test("space/altDown key press on readOnly drop down doesn't toggle popup visibility", function(assert) {
-    var altDown = $.Event("keydown", { which: 40, altKey: true });
+    var altDown = $.Event("keydown", { key: "ArrowDown", altKey: true });
 
     this.dropDownEditor.option("readOnly", true);
 
@@ -573,7 +572,7 @@ QUnit.test("Keyboard navigation with field template", function(assert) {
         $(container).append($("<div>").dxTextBox({ value: data }));
     });
 
-    this.$rootElement.find(".dx-texteditor-input").trigger($.Event("keydown", { which: 40, altKey: true }));
+    this.$rootElement.find(".dx-texteditor-input").trigger($.Event("keydown", { key: "ArrowDown", altKey: true }));
     assert.ok(this.dropDownEditor.option("opened"), "overlay is visible on alt+down press");
 
     this.dropDownEditor.option("value", "123");
@@ -581,7 +580,7 @@ QUnit.test("Keyboard navigation with field template", function(assert) {
     keyboardMock(this.$rootElement.find(".dx-texteditor-input")).keyDown("esc");
     assert.ok(!this.dropDownEditor.option("opened"), "overlay is not visible on esc press after value changed");
 
-    this.$rootElement.find(".dx-texteditor-input").trigger($.Event("keydown", { which: 40, altKey: true }));
+    this.$rootElement.find(".dx-texteditor-input").trigger($.Event("keydown", { key: "ArrowDown", altKey: true }));
     assert.ok(this.dropDownEditor.option("opened"), "overlay is visible on esc press after value changed");
 });
 
@@ -638,7 +637,7 @@ QUnit.module("keyboard navigation inside popup", {
         this.$cancelButton = $popupWrapper.find(".dx-popup-cancel.dx-button");
 
         this.triggerKeyPress = function($element, keyCode, shiftKey) {
-            var eventConfig = { which: keyCode };
+            var eventConfig = { key: keyCode };
 
             if(shiftKey) {
                 eventConfig.shiftKey = shiftKey;
@@ -835,9 +834,16 @@ QUnit.test("events should be rendered for input after value is changed when fiel
 
     instance.option("value", 2);
 
-    $.each(events, function(_, event) {
-        $dropDownEditor.find("input").trigger(event.toLowerCase());
-        assert.equal(spies[event].callCount, 1, "the '" + event + "' event was fired after value change");
+    $.each(events, function(_, eventName) {
+        var params = {};
+
+        if(eventName.indexOf("Key") !== -1) {
+            params.key = "";
+        }
+
+        var event = $.Event(eventName.toLowerCase(), params);
+        $dropDownEditor.find("input").trigger(event);
+        assert.equal(spies[eventName].callCount, 1, "the '" + eventName + "' event was fired after value change");
     });
 });
 

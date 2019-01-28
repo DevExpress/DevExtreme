@@ -2798,7 +2798,7 @@ QUnit.test('Edit number cell via keyboard arrows (arrow up key)', function(asser
     var $testElement = $('#container'),
         $testInput;
 
-    var UP_KEY = 38;
+    var UP_KEY = "ArrowUp";
 
     this.options.editing = {
         allowUpdating: true,
@@ -2815,7 +2815,7 @@ QUnit.test('Edit number cell via keyboard arrows (arrow up key)', function(asser
     $testInput = getInputElements($testElement).first();
     $testInput
         .val('15')
-        .trigger($.Event('keydown', { which: UP_KEY }));
+        .trigger($.Event('keydown', { key: UP_KEY }));
 
     this.editingController.closeEditCell();
 
@@ -2830,7 +2830,7 @@ QUnit.test('Edit number cell via keyboard arrows (arrow down key)', function(ass
     var $testElement = $('#container'),
         $testInput;
 
-    var DOWN_KEY = 40;
+    var DOWN_KEY = "ArrowDown";
 
     this.options.editing = {
         allowUpdating: true,
@@ -2847,7 +2847,7 @@ QUnit.test('Edit number cell via keyboard arrows (arrow down key)', function(ass
     $testInput = getInputElements($testElement).first();
     $testInput
         .val('15')
-        .trigger($.Event('keydown', { which: DOWN_KEY }));
+        .trigger($.Event('keydown', { key: DOWN_KEY }));
 
     this.editingController.closeEditCell();
 
@@ -2865,7 +2865,7 @@ QUnit.test('Close Editing Number Cell and edit next cell on tab key', function(a
         headerPanel = this.headerPanel,
         testElement = $('#container');
 
-    var TAB_KEY = 9,
+    var TAB_KEY = "Tab",
         $input;
 
     that.options.editing = {
@@ -2883,7 +2883,7 @@ QUnit.test('Close Editing Number Cell and edit next cell on tab key', function(a
 
     $input.val('15');
     $input.change();
-    $($input).trigger($.Event('keydown', { which: TAB_KEY }));
+    $($input).trigger($.Event('keydown', { key: TAB_KEY }));
     this.editingController.closeEditCell();
     this.clock.tick();
 
@@ -2897,7 +2897,7 @@ QUnit.test('Close Editing Number Cell and edit next cell on tab key', function(a
     $input = getInputElements(testElement).first();
     $input.val('20');
     $input.change();
-    $($input).trigger($.Event('keydown', { which: TAB_KEY }));
+    $($input).trigger($.Event('keydown', { key: TAB_KEY }));
 
     this.editingController.closeEditCell();
     this.clock.tick();

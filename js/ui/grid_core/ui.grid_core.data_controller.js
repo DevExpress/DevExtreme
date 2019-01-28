@@ -258,7 +258,8 @@ module.exports = {
                     this._refreshDataSource();
                 },
                 optionChanged: function(args) {
-                    var that = this;
+                    var that = this,
+                        dataSource;
 
                     function handled() {
                         args.handled = true;
@@ -293,7 +294,7 @@ module.exports = {
                             }
                             break;
                         case "paging":
-                            var dataSource = that.dataSource();
+                            dataSource = that.dataSource();
                             if(dataSource && that._setPagingOptions(dataSource)) {
                                 dataSource.load();
                             }
@@ -303,7 +304,7 @@ module.exports = {
                             that.reset();
                             break;
                         case "columns":
-                            var dataSource = that.dataSource();
+                            dataSource = that.dataSource();
                             if(dataSource && dataSource.isLoading() && args.name === args.fullName) {
                                 dataSource.load();
                             }

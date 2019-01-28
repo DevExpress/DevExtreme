@@ -343,7 +343,7 @@ module.exports = {
 
                 (!isTouch || !zoomAndPan.actionData.isNative) && preventDefaults(e);
                 if(actionData.action === "zoom") {
-                    function zoomAxes(axes, criteria, coordField, startCoords, curCoords, onlyAxisToNotify) {
+                    const zoomAxes = (axes, criteria, coordField, startCoords, curCoords, onlyAxisToNotify) => {
                         const curCoord = curCoords[coordField];
                         const startCoord = startCoords[coordField];
                         let zoomStarted = false;
@@ -362,7 +362,7 @@ module.exports = {
                             });
                         }
                         return zoomStarted;
-                    }
+                    };
 
                     const curCoords = getPointerCoord(actionData.curAxisRect, e);
                     const valueAxesZoomed = zoomAxes(chart._argumentAxes, options.argumentAxis.zoom, rotated ? "y" : "x", actionData.startCoords, curCoords, chart.getArgumentAxis());
