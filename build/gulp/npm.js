@@ -188,7 +188,7 @@ gulp.task('npm-dts-check', ['npm-dts-generator'], function() {
 
             var uniqueIdentifier = moduleMeta.name
                 .replace(/\./g, '_')
-                .split('\/')
+                .split('/')
                 .concat([name])
                 .join('__');
 
