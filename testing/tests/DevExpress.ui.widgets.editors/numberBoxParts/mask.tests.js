@@ -231,7 +231,7 @@ QUnit.test("pressing numpad minus button should revert the number", function(ass
         .keyPress(keyName)
         .keyUp(keyName);
 
-    if(!browser.msie) {
+    if(!isIE) {
         this.keyboard.input();
     }
 
