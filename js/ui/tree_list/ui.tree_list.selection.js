@@ -89,6 +89,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 _getVisibleNodeKeys: function(isRecursiveSelection) {
                     var component = this.component,
                         root = component.getRootNode(),
+                        cache = {},
                         keys = [];
 
                     root && treeListCore.foreachNodes(root.children, function(node) {
@@ -96,7 +97,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                             keys.push(node.key);
                         }
 
-                        return isRecursiveSelection ? false : component.isRowExpanded(node.key);
+                        return isRecursiveSelection ? false : component.isRowExpanded(node.key, cache);
                     });
 
                     return keys;

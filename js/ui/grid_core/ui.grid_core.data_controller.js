@@ -594,7 +594,7 @@ module.exports = {
                     return result;
                 },
                 _processItem: function(item, options) {
-                    item = this._generateDataItem(item);
+                    item = this._generateDataItem(item, options);
                     item = this._processDataItem(item, options);
                     item.dataIndex = options.dataIndex++;
                     return item;

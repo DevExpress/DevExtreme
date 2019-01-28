@@ -117,7 +117,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                     result.push(nodes[i]);
                 }
 
-                if((that.isRowExpanded(nodes[i].key) || !nodes[i].visible) && nodes[i].hasChildren && nodes[i].children.length) {
+                if((that.isRowExpanded(nodes[i].key, options) || !nodes[i].visible) && nodes[i].hasChildren && nodes[i].children.length) {
                     result = result.concat(that._createVisibleItemsByNodes(nodes[i].children, options));
                 }
             }
@@ -629,7 +629,18 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             return this._totalItemsCount;
         },
 
-        isRowExpanded: function(key) {
+        isRowExpanded: function(key, cache) {
+            if(cache) {
+                var isExpandedByKey = cache.isExpandedByKey;
+                if(!isExpandedByKey) {
+                    isExpandedByKey = cache.isExpandedByKey = {};
+                    this.option("expandedRowKeys").forEach(function(key) {
+                        isExpandedByKey[key] = true;
+                    });
+                }
+                return !!isExpandedByKey[key];
+            }
+
             var indexExpandedNodeKey = gridCoreUtils.getIndexByKey(key, this.option("expandedRowKeys"), null);
 
             return indexExpandedNodeKey >= 0;
