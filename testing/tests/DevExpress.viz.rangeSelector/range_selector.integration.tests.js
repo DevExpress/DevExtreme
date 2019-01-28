@@ -451,7 +451,7 @@ QUnit.test("Range selector with aggregation", function(assert) {
     assert.deepEqual(rangeSelector.getValue(), [0, 2]);
 });
 
-QUnit.test("Range selector with aggregation and async dataSource", function(assert) {
+QUnit.test("Range selector with aggregation when dataSource is set after widget creation", function(assert) {
     var rangeSelector = $("#container").dxRangeSelector({
         dataSource: [],
         chart: {
