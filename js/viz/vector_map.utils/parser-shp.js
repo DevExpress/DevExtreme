@@ -33,15 +33,15 @@ function parseShape(stream, errors) {
         timeEnd = new Date();
     } catch(e) {
         errors.push("shp: records parsing error: " + e.message + " / " + e.description);
-    } finally {
-        return {
-            bBox: header.bBox_XY,
-            type: header.shapeType,
-            shapes: records,
-            errors: errors,
-            time: timeEnd - timeStart
-        };
     }
+
+    return {
+        bBox: header.bBox_XY,
+        type: header.shapeType,
+        shapes: records,
+        errors: errors,
+        time: timeEnd - timeStart
+    };
 }
 
 function readPointShape(stream, record) {
