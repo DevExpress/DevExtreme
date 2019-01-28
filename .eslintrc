@@ -57,6 +57,7 @@
         "no-undef-init": "error",
         "no-unused-expressions": "off",
         "no-unused-vars": ["error", { "args": "none" }],
+        "no-constant-condition": "error",
         "no-self-assign": "error",
         "no-extend-native": "error",
         "no-alert": "error",
