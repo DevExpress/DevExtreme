@@ -592,8 +592,10 @@ var SelectBox = DropDownList.inherit({
     },
 
     _sameSelectedItem: function() {
-        var initialSelectedItem = this.option("selectedItem");
-        return (this._displayGetter(initialSelectedItem) || "").toString() === this._searchValue();
+        var initialSelectedItem = this.option("selectedItem"),
+            displayValue = (this._displayGetter(initialSelectedItem) || "").toString();
+
+        return displayValue === this._searchValue();
     },
 
     _popupHidingHandler: function() {
