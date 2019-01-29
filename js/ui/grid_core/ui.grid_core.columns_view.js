@@ -154,7 +154,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var $cell = $(cell);
 
         if(options.rowType === "data") {
-            column.id && this.setAria("describedby", column.id, $cell);
+            column.headerId && this.setAria("describedby", column.headerId, $cell);
         }
 
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {

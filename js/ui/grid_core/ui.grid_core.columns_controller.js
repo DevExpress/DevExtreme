@@ -714,7 +714,7 @@ module.exports = {
                         }
                         calculatedColumnOptions = that._createCalculatedColumnOptions(columnOptions, bandColumn);
 
-                        result = deepExtendArraySafe({ id: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS);
+                        result = deepExtendArraySafe({ headerId: `dx-col-${globalColumnId++}` }, DEFAULT_COLUMN_OPTIONS);
                         deepExtendArraySafe(result, commonColumnOptions);
                         deepExtendArraySafe(result, calculatedColumnOptions);
                         deepExtendArraySafe(result, columnOptions);
@@ -1447,7 +1447,7 @@ module.exports = {
                             columnOptions = {
                                 visibleIndex: column.visibleIndex,
                                 index: column.index,
-                                id: column.id,
+                                headerId: column.headerId,
                                 allowFixing: column.groupIndex === 0,
                                 allowReordering: column.groupIndex === 0,
                                 groupIndex: column.groupIndex
