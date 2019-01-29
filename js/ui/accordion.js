@@ -313,11 +313,11 @@ var Accordion = CollectionWidget.inherit({
         })));
     },
 
-    _attachItemTitleClickAction: function(titleTitle) {
+    _attachItemTitleClickAction: function(itemTitle) {
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
-        eventsEngine.off(titleTitle, eventName);
-        eventsEngine.on(titleTitle, eventName, this._itemTitleClickHandler.bind(this));
+        eventsEngine.off(itemTitle, eventName);
+        eventsEngine.on(itemTitle, eventName, this._itemTitleClickHandler.bind(this));
     },
 
     _itemTitleClickHandler: function(e) {
