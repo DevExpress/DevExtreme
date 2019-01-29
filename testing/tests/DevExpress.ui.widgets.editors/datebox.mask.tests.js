@@ -198,6 +198,24 @@ if(devices.real().deviceType === "desktop") {
             });
         });
 
+        test("Milliseconds", (assert) => {
+            const dateString = "Tuesday, July 2, 2024 16:19:22:333";
+            const regExpInfo = dateParser.getRegExpInfo("EEEE, MMMM d, yyyy HH:mm:ss:SSS", dateLocalization);
+
+            this.parts = renderDateParts(dateString, regExpInfo);
+            checkAndRemoveLimits(this.parts[14], { min: 0, max: 999 }, assert);
+
+            assert.deepEqual(this.parts[14], {
+                index: 14,
+                isStub: false,
+                caret: { start: 31, end: 34 },
+                getter: "getMilliseconds",
+                setter: "setMilliseconds",
+                pattern: "SSS",
+                text: "333"
+            });
+        });
+
         test("Time indication", (assert) => {
             checkAndRemoveLimits(this.parts[12], { min: 0, max: 1 }, assert);
 
