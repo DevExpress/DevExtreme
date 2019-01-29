@@ -8,7 +8,7 @@ import "ui/date_box";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import devices from "core/devices";
 
-const { test } = QUnit;
+const { test, module } = QUnit;
 
 QUnit.testStart(() => {
     $("#qunit-fixture").html("<div id='dateBox'></div>");
@@ -37,7 +37,7 @@ if(devices.real().deviceType === "desktop") {
         }
     };
 
-    QUnit.module("Rendering", setupModule, () => {
+    module("Rendering", setupModule, () => {
         test("Text option should depend on the input value", (assert) => {
             this.keyboard.press("up");
             assert.equal(this.instance.option("text"), "November 10 2012", "text is correct");
@@ -61,7 +61,7 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Date parts rendering", setupModule, () => {
+    module("Date parts rendering", setupModule, () => {
         let checkAndRemoveAccessors = (part, stub, assert) => {
             assert.equal(part.getter(), stub, "stub getter");
             assert.deepEqual(part.setter, noop, "stub setter");
@@ -265,7 +265,7 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Date parts find", setupModule, () => {
+    module("Date parts find", setupModule, () => {
         test("Find day of week", (assert) => {
             assert.equal(getDatePartIndexByPosition(this.parts, 0), 0, "start position of the group");
             assert.equal(getDatePartIndexByPosition(this.parts, 3), 0, "middle position of the group");
@@ -308,7 +308,7 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Keyboard navigation", setupModule, () => {
+    module("Keyboard navigation", setupModule, () => {
         test("RegisterKeyHandler should work", (assert) => {
             const handler = sinon.spy();
             this.instance.registerKeyHandler("del", handler);
@@ -541,7 +541,7 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Events", setupModule, () => {
+    module("Events", setupModule, () => {
         test("Select date part on click", (assert) => {
             this.keyboard.caret(9);
             this.$input.trigger("dxclick");
@@ -580,7 +580,7 @@ if(devices.real().deviceType === "desktop") {
     });
 
 
-    QUnit.module("Search", setupModule, () => {
+    module("Search", setupModule, () => {
         test("Time indication", (assert) => {
             this.instance.option("displayFormat", "a");
 
@@ -731,7 +731,7 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Empty dateBox", {
+    module("Empty dateBox", {
         beforeEach: () => {
             setupModule.beforeEach.call(this);
             this.instance.option("value", null);
@@ -853,7 +853,7 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Options changed", setupModule, () => {
+    module("Options changed", setupModule, () => {
         test("The 'useMaskBehavior' option is changed to false", (assert) => {
             this.keyboard.caret(9);
             this.$input.trigger("dxclick");
@@ -932,7 +932,7 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
-    QUnit.module("Advanced caret", setupModule, () => {
+    module("Advanced caret", setupModule, () => {
         test("Move caret to the next group", (assert) => {
             this.instance.option({
                 advanceCaret: true,
