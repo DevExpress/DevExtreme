@@ -105,6 +105,11 @@ var createDataGrid = function(options) {
     return dataGrid;
 };
 
+var getFirstAccessibilityColumnIndex = function() {
+    var $headers = $(".dx-datagrid-headers");
+    return parseInt($headers.find("[id*=dx-col-]").eq(0).attr("id").replace("dx-col-", ""));
+};
+
 QUnit.test("Empty options", function(assert) {
     var dataGrid = createDataGrid({});
     assert.ok(dataGrid);
@@ -139,6 +144,33 @@ QUnit.test("columns option is not changed after initialization when columnAutoWi
 
 QUnit.test("formatValue for grouped column with calculateGroupValue", function(assert) {
     assert.strictEqual(gridCore.formatValue("2012", { format: "shortDate" }), "2012");
+});
+
+QUnit.test("Accessibility columns id should not set for columns editors (T710132)", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        firstColumnIndex,
+        dataGrid = createDataGrid({
+            columns: ["field1", "field2"],
+            filterRow: { visible: true },
+            headerFilter: { visible: true },
+            searchPanel: { visible: true },
+            editing: { mode: "row", allowUpdating: true },
+            dataSource: [{ field1: "1", field2: "2" }]
+        });
+
+    clock.tick();
+
+    // act
+    firstColumnIndex = getFirstAccessibilityColumnIndex();
+    dataGrid.editRow(0);
+    clock.tick();
+
+    // assert
+    assert.equal($(dataGrid.$element().find("[id=dx-col-" + firstColumnIndex + "]")).length, 1, "only header column has an accessibility id");
+    assert.equal($(dataGrid.$element().find("[id=dx-col-" + (firstColumnIndex + 1) + "]")).length, 1, "only header column has an accessibility id");
+
+    clock.restore();
 });
 
 QUnit.test("commonColumnOptions", function(assert) {
@@ -202,7 +234,7 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
 
     $headers = $(".dx-datagrid-headers");
 
-    firstColumnIndex = parseInt($headers.find("[id*=dx-col-]").eq(0).attr("id").replace("dx-col-", ""));
+    firstColumnIndex = getFirstAccessibilityColumnIndex();
 
     assert.equal($(".dx-widget").attr("role"), "presentation");
 
@@ -258,7 +290,7 @@ QUnit.testInActiveWindow("Global column index should be unique for the different
 
     $headers = $(".dx-datagrid-headers");
 
-    firstColumnIndex = parseInt($headers.find("[id*=dx-col-]").eq(0).attr("id").replace("dx-col-", ""));
+    firstColumnIndex = getFirstAccessibilityColumnIndex();
 
     dataGrid.expandRow("1");
 
