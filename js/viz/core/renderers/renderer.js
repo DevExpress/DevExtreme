@@ -1476,7 +1476,7 @@ extend(TextSvgElement.prototype, {
 function updateIndexes(items, k) {
     var i,
         item;
-    for(i = k; !!(item = items[i]); ++i) {
+    for(i = k; (item = items[i]); ++i) {
         item._link.i = i;
     }
 }

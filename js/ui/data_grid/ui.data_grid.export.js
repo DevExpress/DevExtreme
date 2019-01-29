@@ -53,7 +53,7 @@ exports.DataProvider = Class.inherit({
         this._options = {
             columns: exportController._getColumns(this._initialColumnWidthsByColumnIndex),
             groupColumns: groupColumns,
-            items: !!exportController._selectionOnly ? exportController._getSelectedItems() : exportController._getAllItems(),
+            items: exportController._selectionOnly ? exportController._getSelectedItems() : exportController._getAllItems(),
             getVisibleIndex: exportController._columnsController.getVisibleIndex.bind(exportController._columnsController),
             isHeadersVisible: exportController.option("showColumnHeaders"),
             summaryTexts: exportController.option("summary.texts"),
