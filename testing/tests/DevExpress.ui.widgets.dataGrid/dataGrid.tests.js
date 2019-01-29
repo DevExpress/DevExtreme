@@ -149,7 +149,6 @@ QUnit.test("formatValue for grouped column with calculateGroupValue", function(a
 QUnit.test("Accessibility columns id should not set for columns editors (T710132)", function(assert) {
     // arrange, act
     var clock = sinon.useFakeTimers(),
-        firstColumnIndex,
         dataGrid = createDataGrid({
             columns: ["field1", "field2"],
             filterRow: { visible: true },
@@ -162,13 +161,11 @@ QUnit.test("Accessibility columns id should not set for columns editors (T710132
     clock.tick();
 
     // act
-    firstColumnIndex = getFirstAccessibilityColumnIndex();
     dataGrid.editRow(0);
     clock.tick();
 
     // assert
-    assert.equal($(dataGrid.$element().find("[id=dx-col-" + firstColumnIndex + "]")).length, 1, "only header column has an accessibility id");
-    assert.equal($(dataGrid.$element().find("[id=dx-col-" + (firstColumnIndex + 1) + "]")).length, 1, "only header column has an accessibility id");
+    assert.equal($(".dx-texteditor [id]").length, 0, "editors has no accessibility id");
 
     clock.restore();
 });
