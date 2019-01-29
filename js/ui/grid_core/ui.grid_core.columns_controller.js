@@ -1447,7 +1447,7 @@ module.exports = {
                             columnOptions = {
                                 visibleIndex: column.visibleIndex,
                                 index: column.index,
-                                id: column.headerId,
+                                headerId: column.headerId,
                                 allowFixing: column.groupIndex === 0,
                                 allowReordering: column.groupIndex === 0,
                                 groupIndex: column.groupIndex
