@@ -1413,11 +1413,12 @@ QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
             case "option":
                 form.option("items[0].buttonOptions.icon", "icon2");
                 break;
-            case "itemOption":
+            case "itemOption": {
                 const buttonOptions = form.itemOption("button1").buttonOptions;
                 buttonOptions.icon = "icon2";
                 form.itemOption("button1", "buttonOptions", buttonOptions);
                 break;
+            }
             case "editor.option":
                 form.getButton("button1").option("icon", "icon2");
                 break;

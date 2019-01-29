@@ -9718,6 +9718,80 @@ QUnit.test('Edit cell with edit mode batch and change page', function(assert) {
     assert.ok(cells.eq(1).children().first().hasClass("dx-highlight-outline"), "has highlight");
 });
 
+// T709466
+QUnit.test('Edit cell with edit mode batch and change page if hidden column has empty validationRules', function(assert) {
+    // arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container'),
+        cells,
+        inputElement;
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        editing: {
+            mode: "batch"
+        },
+        columns: ['name', {
+            dataField: 'age',
+            validationRules: [{ type: "range", min: 1, max: 100 }]
+        }, "lastName", {
+            dataField: "hidden",
+            visible: false,
+            validationRules: []
+        }]
+    });
+
+    that.dataController.pageSize(2);
+
+    cells = rowsView.element().find('tbody > tr').first().find("td");
+
+    // assert
+    assert.equal(testElement.find('tbody > tr').length, 3, "count rows");
+
+    // act
+    that.editCell(0, 1);
+
+    // assert
+    assert.equal(getInputElements(testElement).length, 1, "has input");
+
+    // act
+    inputElement = getInputElements(testElement).first();
+    inputElement.val(101);
+    inputElement.trigger('change');
+
+    that.closeEditCell();
+    that.clock.tick();
+
+    cells = rowsView.element().find('tbody > tr').first().find("td");
+
+    // assert
+    assert.equal(getInputElements(testElement).length, 0, "has input");
+    assert.ok(cells.eq(1).hasClass("dx-datagrid-invalid"), "failed validation");
+    assert.ok(cells.eq(1).children().first().hasClass("dx-highlight-outline"), "has highlight");
+
+    // act
+    that.dataController.pageIndex(1);
+
+    cells = rowsView.element().find('tbody > tr').first().find("td");
+
+    // assert
+    assert.ok(!cells.eq(1).hasClass("dx-datagrid-invalid"), "not failed validation");
+    assert.equal(testElement.find('tbody > tr').length, 2, "count rows");
+
+    // act
+    that.saveEditData();
+
+    cells = rowsView.element().find('tbody > tr').first().find("td");
+
+    // assert
+    assert.ok(that.hasEditData(), "data is not saved");
+    assert.equal(testElement.find('tbody > tr').length, 3, "count rows");
+    assert.ok(cells.eq(1).hasClass("dx-datagrid-invalid"), "failed validation");
+    assert.ok(cells.eq(1).children().first().hasClass("dx-highlight-outline"), "has highlight");
+});
+
 // T495625
 QUnit.test('Row with invalid values should move to current page after saving if cancel updating in onRowUpdating event', function(assert) {
     // arrange

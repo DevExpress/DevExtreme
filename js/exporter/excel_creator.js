@@ -287,7 +287,7 @@ var ExcelCreator = Class.inherit({
                             case VALID_TYPES.date:
                                 cellData.value = modifiedExcelCell.value;
                                 break;
-                            case VALID_TYPES.number:
+                            case VALID_TYPES.number: {
                                 let newValue = modifiedExcelCell.value;
                                 const excelDateValue = this._tryGetExcelDateValue(newValue);
                                 if(typeUtils.isDefined(excelDateValue)) {
@@ -295,6 +295,7 @@ var ExcelCreator = Class.inherit({
                                 }
                                 cellData.value = newValue;
                                 break;
+                            }
                             default:
                                 cellData.value = modifiedExcelCell.value;
                         }

@@ -267,9 +267,7 @@ class RadioGroup extends Editor {
                 this._setCollectionWidgetOption("keyExpr", this._getCollectionKeyExpr());
                 break;
             case "value":
-                const selectedItemKeys = this._getSelectedItemKeys(value);
-
-                this._setCollectionWidgetOption("selectedItemKeys", selectedItemKeys);
+                this._setCollectionWidgetOption("selectedItemKeys", this._getSelectedItemKeys(value));
                 this._setSubmitValue(value);
                 super._optionChanged(args);
                 break;

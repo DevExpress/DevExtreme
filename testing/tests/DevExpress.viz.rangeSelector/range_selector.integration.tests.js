@@ -451,6 +451,35 @@ QUnit.test("Range selector with aggregation", function(assert) {
     assert.deepEqual(rangeSelector.getValue(), [0, 2]);
 });
 
+QUnit.test("Range selector with aggregation when dataSource is set after widget creation", function(assert) {
+    var rangeSelector = $("#container").dxRangeSelector({
+        dataSource: [],
+        chart: {
+            series: [{
+                aggregation: {
+                    enabled: true
+                }
+            }]
+        },
+        scale: {
+            aggregationInterval: 10
+        }
+    }).dxRangeSelector("instance");
+
+    // act
+    rangeSelector.option({
+        dataSource: [
+            { arg: 53, val: 1 },
+            { arg: 63, val: 1 },
+            { arg: 73, val: 1 },
+            { arg: 83, val: 1 },
+            { arg: 93, val: 1 }
+        ]
+    });
+
+    assert.deepEqual(rangeSelector.getValue(), [50, 90]);
+});
+
 QUnit.module("selectedRangeUpdateMode", {
     createRangeSelector: function(options) {
         return $("#container").dxRangeSelector(options).dxRangeSelector("instance");

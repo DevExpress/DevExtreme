@@ -595,7 +595,7 @@ module.exports = {
                     return result;
                 },
                 _processItem: function(item, options) {
-                    item = this._generateDataItem(item);
+                    item = this._generateDataItem(item, options);
                     item = this._processDataItem(item, options);
                     item.dataIndex = options.dataIndex++;
                     return item;
@@ -819,7 +819,7 @@ module.exports = {
 
                     result.forEach((change) => {
                         switch(change.type) {
-                            case "update":
+                            case "update": {
                                 let index = change.index,
                                     newItem = change.data,
                                     oldItem = change.oldItem,
@@ -833,6 +833,7 @@ module.exports = {
                                 newItem.oldValues = oldItem.values;
                                 columnIndices.push(currentColumnIndices);
                                 break;
+                            }
                             case "insert":
                                 rowIndices.push(change.index);
                                 changeTypes.push("insert");

@@ -167,7 +167,7 @@
                     \
                     <script id="templateWithExoticId" type="text/html">\
                     <div id="templateContent">\
-                        <%= DevExpress.aspnet.renderComponent("dxButton", { }, "id-_1α♠!#$%&()*+,./:;<=>?@[\]^`{|}~") %>\
+                        <%= DevExpress.aspnet.renderComponent("dxButton", { }, "id-_1α♠!#$%&()*+,./:;<=>?@[\\\\]^`{|}~") %>\
                     </div>\
                     </script>\
                     \

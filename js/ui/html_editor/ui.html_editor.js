@@ -372,7 +372,7 @@ const HtmlEditor = Editor.inherit({
             case "toolbar":
                 this._invalidate();
                 break;
-            case "valueType":
+            case "valueType": {
                 this._prepareConverters();
                 const newValue = this._updateValueByType(args.value);
 
@@ -382,6 +382,7 @@ const HtmlEditor = Editor.inherit({
                     this.option("value", newValue);
                 }
                 break;
+            }
             case "readOnly":
             case "disabled":
                 this.callBase(args);
