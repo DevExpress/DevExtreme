@@ -1085,8 +1085,8 @@ QUnit.test("Set state", function(assert) {
 });
 
 QUnit.test("Arrange", function(assert) {
-    var count = sinon.stub(),
-        createPalette = sinon.stub().returns({ count: count }),
+    var getColors = sinon.stub(),
+        createPalette = sinon.stub().returns({ getColors: getColors }),
         set = sinon.spy();
     this.context.name = "test-name";
     this.context.grouping = {};
@@ -1095,7 +1095,7 @@ QUnit.test("Arrange", function(assert) {
         dataExchanger: { set: set }
     };
 
-    count.returns(["c1", "c2", "c3"]);
+    getColors.returns(["c1", "c2", "c3"]);
     this.context.settings = { palette: "test-palette" };
 
     pointPieStrategy.arrange(this.context, [
@@ -1105,7 +1105,7 @@ QUnit.test("Arrange", function(assert) {
     ]);
 
     assert.deepEqual(createPalette.lastCall.args, ["test-palette", { useHighlight: true, extensionMode: "alternate" }], "palette");
-    assert.strictEqual(count.callCount, 1, "get colors");
+    assert.strictEqual(getColors.callCount, 1, "get colors");
     assert.deepEqual(this.context.settings._colors, ["c1", "c2", "c3"], "colors");
     assert.deepEqual(this.context.grouping, { color: { callback: noop, field: "", partition: [], values: [] } }, "grouping");
     assert.deepEqual(set.lastCall.args, ["test-name", "color", { partition: [], values: ["c1", "c2", "c3"] }], "data is set");

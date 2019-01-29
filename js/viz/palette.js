@@ -429,7 +429,7 @@ Palette.prototype = {
         return this._extensionStrategy.getColor(this._currentColor++, count);
     },
 
-    count: function(count, parameters) {
+    getColors: function(count, parameters) {
         return this._extensionStrategy.getColors(count, (parameters || {}).repeat);
     },
 
