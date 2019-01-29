@@ -51,6 +51,21 @@ QUnit.test("Updating layoutManager options", function(assert) {
     assert.deepEqual(layoutManager.setOptions.lastCall.args, [{ width: "someWidth", height: "someHeight" }]);
 });
 
+// T708642
+QUnit.test("Claer hover after series updating", function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
+
+    var options = { series: [{ name: "series1" }, { name: "series2" }] },
+        chart = this.createChart(options);
+
+    commons.getTrackerStub().stub("clearHover").reset();
+
+    chart.option(options);
+
+    assert.equal(commons.getTrackerStub().stub("clearHover").callCount, 1);
+});
+
 QUnit.test("Create Tracker.", function(assert) {
     this.themeManager.getOptions.withArgs("pointSelectionMode").returns("pointSelectionModeWithTheme");
     this.themeManager.getOptions.withArgs("seriesSelectionMode").returns("serieSelectionModeWithTheme");
