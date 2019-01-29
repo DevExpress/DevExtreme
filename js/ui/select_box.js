@@ -591,15 +591,17 @@ var SelectBox = DropDownList.inherit({
         this._setPopupOption("width");
     },
 
-    _sameSelectedItem: function() {
-        var initialSelectedItem = this.option("selectedItem"),
-            displayValue = (this._displayGetter(initialSelectedItem) || "").toString();
+    _isValueEqualInputText: function() {
+        var initialSelectedItem = this.option("selectedItem");
+        var value = this._displayGetter(initialSelectedItem);
+        var displayValue = value ? String(value) : '';
+        var inputText = this._searchValue();
 
-        return displayValue === this._searchValue();
+        return displayValue === inputText;
     },
 
     _popupHidingHandler: function() {
-        if(this._sameSelectedItem()) {
+        if(this._isValueEqualInputText()) {
             this._cancelEditing();
         }
         this.callBase();
@@ -621,7 +623,7 @@ var SelectBox = DropDownList.inherit({
                 }
             }
 
-            if(this._sameSelectedItem()) {
+            if(this._isValueEqualInputText()) {
                 return;
             }
 
