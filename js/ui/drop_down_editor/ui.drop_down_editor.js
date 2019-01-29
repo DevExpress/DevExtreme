@@ -660,6 +660,7 @@ var DropDownEditor = TextBox.inherit({
     _clean: function() {
         delete this._$dropDownButton;
         delete this._openOnFieldClickAction;
+        delete this._options.dropDownOptions;
 
         if(this._$popup) {
             this._$popup.remove();
