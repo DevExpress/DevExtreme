@@ -38,5 +38,5 @@ script:
     -e BROWSER=$BROWSER
     -e CONSTEL=$CONSTEL
     -v $TRAVIS_BUILD_DIR:/devextreme
-    docker.io/devexpress/devextreme-build:18_2
+    docker.io/devexpress/devextreme-build:19_1
     ./docker-ci.sh
