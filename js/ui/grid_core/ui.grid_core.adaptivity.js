@@ -1031,8 +1031,6 @@ module.exports = {
                             inserted: item.inserted,
                             values: item.values
                         });
-                    } else {
-                        that._adaptiveExpandedKey = undefined;
                     }
 
                     return items;
