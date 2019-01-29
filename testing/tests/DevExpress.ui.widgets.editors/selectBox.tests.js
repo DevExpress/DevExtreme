@@ -1627,18 +1627,32 @@ QUnit.module("editing", moduleSetup, () => {
         assert.equal(prevented, 1, "defaults prevented on enter key when acceptCustomValue is true");
     });
 
-    QUnit.test("selectBox should restore old value after outside click if custom value is accepted", (assert) => {
+    QUnit.test("selectBox should save custom value after outside click", (assert) => {
+        const $element = $("#selectBox").dxSelectBox({
+                items: ["item 1", "item 2"],
+                acceptCustomValue: true
+            }),
+            $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        $input.val("custom");
+        $(document).trigger("dxpointerdown");
+
+        assert.equal($input.val(), "custom", "initial value");
+    });
+
+    QUnit.test("selectBox should restore initial value after press 'down' and outside click", (assert) => {
         const $element = $("#selectBox").dxSelectBox({
                 items: ["item 1", "item 2"],
                 value: "item 1",
-                acceptCustomValue: true,
-                opened: true
+                acceptCustomValue: true
             }),
             $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
             keyboard = keyboardMock($input);
 
-        keyboard.press("down");
-        $(document).trigger("dxpointerdown");
+        $element.dxSelectBox("instance").option("opened", true);
+        keyboard
+            .press("down")
+            .blur();
 
         assert.equal($input.val(), "item 1", "value has been reverted");
     });

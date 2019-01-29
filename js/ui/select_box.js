@@ -591,14 +591,28 @@ var SelectBox = DropDownList.inherit({
         this._setPopupOption("width");
     },
 
+    _isValueEqualInputText: function() {
+        var initialSelectedItem = this.option("selectedItem");
+        var value = this._displayGetter(initialSelectedItem);
+        var displayValue = value ? String(value) : '';
+        var inputText = this._searchValue();
+
+        return displayValue === inputText;
+    },
+
     _popupHidingHandler: function() {
-        this._cancelEditing();
+        if(this._isValueEqualInputText()) {
+            this._cancelEditing();
+        }
         this.callBase();
     },
 
     _restoreInputText: function() {
         this._loadItemDeferred && this._loadItemDeferred.always((function() {
+            var initialSelectedItem = this.option("selectedItem");
+
             if(this.option("acceptCustomValue")) {
+                this._updateField(initialSelectedItem);
                 return;
             }
 
@@ -609,13 +623,12 @@ var SelectBox = DropDownList.inherit({
                 }
             }
 
-            var oldSelectedItem = this.option("selectedItem");
-            if((this._displayGetter(oldSelectedItem) || "").toString() === this._searchValue()) {
+            if(this._isValueEqualInputText()) {
                 return;
             }
 
             this._renderInputValue().always((function(selectedItem) {
-                var newSelectedItem = commonUtils.ensureDefined(selectedItem, oldSelectedItem);
+                var newSelectedItem = commonUtils.ensureDefined(selectedItem, initialSelectedItem);
                 this._setSelectedItem(newSelectedItem);
                 this._updateField(newSelectedItem);
                 this._clearFilter();
