@@ -7,6 +7,7 @@ var $ = require("../core/renderer"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
+    isEmpty = require("../core/utils/string").isEmpty,
     deferredUtils = require("../core/utils/deferred"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     Deferred = deferredUtils.Deferred,
@@ -110,10 +111,9 @@ var SelectBox = DropDownList.inherit({
             },
             enter: function(e) {
                 var inputText = this._input().val();
-                var inputTextIsEmpty = inputText === "";
-                var customInput = this._list && !this._list.option("focusedElement");
+                var inputHasCustomValue = this._list && !this._list.option("focusedElement");
 
-                if(inputTextIsEmpty && this.option("value") && this.option("allowClearing")) {
+                if(isEmpty(inputText) && this.option("value") && this.option("allowClearing")) {
                     this.option({
                         selectedItem: null,
                         value: null
@@ -124,7 +124,7 @@ var SelectBox = DropDownList.inherit({
                     if(this.option("acceptCustomValue")) {
                         e.preventDefault();
 
-                        if(!inputTextIsEmpty && customInput) {
+                        if(!isEmpty(inputText) && inputHasCustomValue) {
                             this._valueChangeEventHandler();
                             if(this.option("opened")) this._toggleOpenState();
                         }
