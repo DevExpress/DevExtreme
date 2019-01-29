@@ -295,6 +295,7 @@ QUnit.test("palette", function(assert) {
     assert.deepEqual(items[2].smartAttr.lastCall.args[0].fill, "#804000");
 
     assert.deepEqual(paletteModule.Palette.lastCall.args[1], {
+        count: 3,
         useHighlight: true,
         extensionMode: "blend"
     }, "useHighlight");

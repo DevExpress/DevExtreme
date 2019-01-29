@@ -747,6 +747,7 @@
     "exports": {
       "currentPalette": { "path": "viz.currentPalette" },
       "getPalette": { "path": "viz.getPalette" },
+      "Palette": { "path": "viz.Palette" },
       "registerPalette": { "path": "viz.registerPalette" }
     }
   },

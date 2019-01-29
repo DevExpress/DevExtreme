@@ -616,3 +616,53 @@ QUnit.test('Create palette with current case', function(assert) {
     assert.strictEqual(p.getNextColor(), 'c1');
 
 });
+
+QUnit.test('Generate colors', function(assert) {
+    const p = new this.Palette("material"),
+        colors = p.count(10);
+
+    assert.deepEqual(colors, ["#1db2f5", "#f5564a", "#c69053", "#97c95c", "#cbc83e", "#ffc720", "#f57e4a", "#eb3573", "#c93996", "#a63db8"]);
+});
+
+QUnit.test('Repeat colors', function(assert) {
+    const p = new this.Palette("material"),
+        colors = p.count(10, { repeat: true });
+
+    assert.deepEqual(colors, ["#1db2f5", "#f5564a", "#97c95c", "#ffc720", "#eb3573", "#a63db8", "#1db2f5", "#f5564a", "#97c95c", "#ffc720"]);
+});
+
+QUnit.test('Generate all colors', function(assert) {
+    const p = new this.Palette("material", { count: 10 }),
+        colors = p.count();
+
+    assert.deepEqual(colors, ["#1db2f5", "#f5564a", "#c69053", "#97c95c", "#cbc83e", "#ffc720", "#f57e4a", "#eb3573", "#c93996", "#a63db8"]);
+});
+
+QUnit.test('Generate colors with custom palette', function(assert) {
+    const p = new this.Palette(['#d6e5f4', '#0f5ba3'], { keepLastColorInEnd: true }),
+        colors = p.count(10);
+
+    assert.deepEqual(colors, ["#d6e5f4", "#c0d6eb", "#aac6e2", "#94b7d9", "#7ea8d0", "#6798c7", "#5189be", "#3b7ab5", "#256aac", "#0f5ba3"]);
+});
+
+QUnit.test('Iterate by colors', function(assert) {
+    const p = new this.Palette("material", { keepLastColorInEnd: true, count: 2 }),
+        colors = [];
+
+    for(let i = 0; i < 5; i++) {
+        colors.push(p.getNextColor());
+    }
+
+    assert.deepEqual(colors, ["#1db2f5", "#f5564a", "#1db2f5", "#f5564a", "#1db2f5"]);
+});
+
+QUnit.test('Iterate by colors with custom palette', function(assert) {
+    const p = new this.Palette(['#d6e5f4', '#0f5ba3'], { keepLastColorInEnd: true, count: 3 }),
+        colors = [];
+
+    for(let i = 0; i < 6; i++) {
+        colors.push(p.getNextColor());
+    }
+
+    assert.deepEqual(colors, ["#d6e5f4", "#73a0cc", "#0f5ba3", "#d6e5f4", "#73a0cc", "#0f5ba3"]);
+});

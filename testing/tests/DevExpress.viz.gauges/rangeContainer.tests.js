@@ -462,7 +462,7 @@ QUnit.module('BaseRangeContainer - palette', $.extend({}, environment, {
         assert.strictEqual(list[list.length - 1].range.color, 'none', 'background color');
 
         assert.strictEqual(this.themeManager.createPalette.callCount, 1);
-        assert.deepEqual(this.themeManager.createPalette.firstCall.args, [palette, { type: 'indicatingSet', keepLastColorInEnd: true, extensionMode: paletteExtensionMode }]);
+        assert.deepEqual(this.themeManager.createPalette.firstCall.args, [palette, { type: 'indicatingSet', keepLastColorInEnd: true, extensionMode: paletteExtensionMode, count: ranges.length }]);
     }
 }));
 

@@ -205,6 +205,16 @@ function AlternateColors(palette, parameters) {
             return color;
         },
 
+        getColors: function(count) {
+            const colors = [];
+            count = count || parameters.count;
+            for(var i = 0; i < count; i++) {
+                colors.push(this.getColor(i));
+            }
+
+            return colors;
+        },
+
         reset: function() {
             paletteSteps.reset();
             reset();
@@ -212,7 +222,7 @@ function AlternateColors(palette, parameters) {
     };
 }
 
-function ExtrapolateColors(palette) {
+function ExtrapolateColors(palette, parameters) {
     function convertColor(color, cycleIndex, cycleCount) {
         var hsl = new _Color(color).hsl,
             l = hsl.l / 100,
@@ -252,6 +262,13 @@ function ExtrapolateColors(palette) {
             }
 
             return color;
+        },
+
+        getColors: function(count) {
+            const colors = [];
+            count = count || parameters.count;
+            for(let i = 0; i < count; i++) colors.push(this.getColor(i, count));
+            return colors;
         },
 
         reset: function() {
@@ -356,13 +373,26 @@ function BlendColors(palette, parameters) {
 
     return {
         getColor: function(index, count) {
-            count = count || paletteCount;
+            count = count || parameters.count || paletteCount;
 
             if(extendedPalette.length !== count) {
                 extendedPalette = extendPalette(count);
             }
 
             return extendedPalette[index % count];
+        },
+
+        getColors: function(count, repeat) {
+            count = count || parameters.count;
+            if(repeat && count > paletteCount) {
+                let colors = extendPalette(paletteCount);
+                for(let i = 0; i < count - paletteCount; i++) {
+                    colors.push(colors[i]);
+                }
+                return colors;
+            } else {
+                return paletteCount > 0 ? extendPalette(count) : [];
+            }
         },
 
         reset: function() {
@@ -380,7 +410,7 @@ export function Palette(palette, parameters, themeDefaultPalette) {
     if(extensionMode === "alternate") {
         this._extensionStrategy = AlternateColors(colors, parameters);
     } else if(extensionMode === "extrapolate") {
-        this._extensionStrategy = ExtrapolateColors(colors);
+        this._extensionStrategy = ExtrapolateColors(colors, parameters);
     } else {
         this._extensionStrategy = BlendColors(colors, parameters);
     }
@@ -397,6 +427,10 @@ Palette.prototype = {
 
     getNextColor: function(count) {
         return this._extensionStrategy.getColor(this._currentColor++, count);
+    },
+
+    count: function(count, parameters) {
+        return this._extensionStrategy.getColors(count, (parameters || {}).repeat);
     },
 
     reset: function() {

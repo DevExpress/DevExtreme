@@ -214,14 +214,15 @@ var dxFunnel = require("../core/base_widget").inherit({
     _buildNodes: function() {
         var that = this,
             data = that._getData(),
-            palette = that._themeManager.createPalette(that._getOption("palette", true), {
-                useHighlight: true,
-                extensionMode: that._getOption("paletteExtensionMode", true)
-            }),
             algorithm = tiling.getAlgorithm(that._getOption("algorithm", true)),
             percents = algorithm.normalizeValues(data),
             itemOptions = that._getOption("item"),
-            figures = algorithm.getFigures(percents, that._getOption("neckWidth", true), that._getOption("neckHeight", true));
+            figures = algorithm.getFigures(percents, that._getOption("neckWidth", true), that._getOption("neckHeight", true)),
+            palette = that._themeManager.createPalette(that._getOption("palette", true), {
+                useHighlight: true,
+                extensionMode: that._getOption("paletteExtensionMode", true),
+                count: figures.length
+            });
 
         that._items = figures.map(function(figure, index) {
             var curData = data[index],
@@ -230,7 +231,7 @@ var dxFunnel = require("../core/base_widget").inherit({
                     data: curData,
                     percent: percents[index],
                     id: index,
-                    color: curData.color || palette.getNextColor(figures.length),
+                    color: curData.color || palette.getNextColor(),
                     itemOptions: itemOptions
                 });
 
