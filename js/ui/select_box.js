@@ -109,7 +109,11 @@ var SelectBox = DropDownList.inherit({
                 this._cancelEditing();
             },
             enter: function(e) {
-                if(this._input().val() === "" && this.option("value") && this.option("allowClearing")) {
+                var inputText = this._input().val();
+                var inputTextIsEmpty = inputText === "";
+                var customInput = this._list && !this._list.option("focusedElement");
+
+                if(inputTextIsEmpty && this.option("value") && this.option("allowClearing")) {
                     this.option({
                         selectedItem: null,
                         value: null
@@ -119,6 +123,12 @@ var SelectBox = DropDownList.inherit({
                 } else {
                     if(this.option("acceptCustomValue")) {
                         e.preventDefault();
+
+                        if(!inputTextIsEmpty && customInput) {
+                            this._valueChangeEventHandler();
+                            if(this.option("opened")) this._toggleOpenState();
+                        }
+
                         return this.option("opened");
                     }
 
