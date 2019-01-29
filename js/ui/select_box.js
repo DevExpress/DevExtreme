@@ -111,9 +111,10 @@ var SelectBox = DropDownList.inherit({
             },
             enter: function(e) {
                 var inputText = this._input().val();
+                var inputTextIsEmpty = isEmpty(inputText);
                 var inputHasCustomValue = this._list && !this._list.option("focusedElement");
 
-                if(isEmpty(inputText) && this.option("value") && this.option("allowClearing")) {
+                if(inputTextIsEmpty && this.option("value") && this.option("allowClearing")) {
                     this.option({
                         selectedItem: null,
                         value: null
@@ -124,7 +125,7 @@ var SelectBox = DropDownList.inherit({
                     if(this.option("acceptCustomValue")) {
                         e.preventDefault();
 
-                        if(!isEmpty(inputText) && inputHasCustomValue) {
+                        if(!inputTextIsEmpty && inputHasCustomValue) {
                             this._valueChangeEventHandler();
                             if(this.option("opened")) this._toggleOpenState();
                         }
