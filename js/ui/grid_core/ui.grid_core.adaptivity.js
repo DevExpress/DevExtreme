@@ -1031,6 +1031,8 @@ module.exports = {
                             inserted: item.inserted,
                             values: item.values
                         });
+                    } else if(changeType === "refresh") {
+                        that._adaptiveExpandedKey = undefined;
                     }
 
                     return items;
