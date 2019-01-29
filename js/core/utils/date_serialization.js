@@ -71,7 +71,7 @@ var parseISO8601String = function(text) {
         },
         millisecond = parseMilliseconds(parts[11]);
 
-    if(!!parts[12]) {
+    if(parts[12]) {
         return new Date(Date.UTC(year, month, day, hour, minute, second, millisecond));
     }
 
