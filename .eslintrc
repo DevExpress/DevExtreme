@@ -47,6 +47,7 @@
         "no-multi-spaces": "error",
         "no-trailing-spaces": "error",
         "no-duplicate-case": "error",
+        "no-case-declarations": "error",
         "no-empty": ["error", { "allowEmptyCatch": true }],
         "no-mixed-spaces-and-tabs": "error",
         "no-extra-semi": "error",
