@@ -777,6 +777,20 @@ QUnit.test("'onItemRendered' option", function(assert) {
     assert.equal(actionValue, this.items.length, "'onItemRendered' fired once for each item");
 });
 
+QUnit.test("subscribe on the itemClick event when a title of item is changed", function(assert) {
+    const itemClickStub = sinon.stub(),
+        instance = this.$element.dxAccordion({
+            items: this.items,
+            onItemTitleClick: itemClickStub
+        }).dxAccordion("instance");
+
+    instance.option("items[0].title", "New title");
+
+    this.$element.find(`.${ACCORDION_ITEM_TITLE_CLASS}`).first().trigger("dxclick");
+
+    assert.ok(itemClickStub.called, "event was thrown");
+});
+
 
 QUnit.module("widget behavior", moduleSetup);
 
