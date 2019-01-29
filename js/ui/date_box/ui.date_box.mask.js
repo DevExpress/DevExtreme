@@ -234,7 +234,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _onMouseWheel(e) {
         if(this._useMaskBehavior()) {
-            this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD);
+            this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD, e);
         }
     },
 
@@ -327,7 +327,7 @@ let DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _partIncrease(step) {
+    _partIncrease(step, e) {
         this._setNewDateIfEmpty();
 
         let limits = this._getActivePartLimits(),
@@ -337,6 +337,8 @@ let DateBoxMask = DateBoxBase.inherit({
         newValue = newValue < limits.min ? limits.max : newValue;
 
         this._setActivePartValue(newValue);
+
+        e && e.preventDefault();
     },
 
     _maskClickHandler() {
