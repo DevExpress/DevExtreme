@@ -71,7 +71,7 @@ if(devices.real().deviceType === "desktop") {
 
         let checkAndRemoveLimits = (part, expected, assert) => {
             let limits = part.limits;
-            assert.deepEqual(limits(new Date(2012, 1, 4, 5, 6)), expected, "limits for " + part.pattern);
+            assert.deepEqual(limits(new Date(2012, 1, 4, 5, 6, 7)), expected, "limits for " + part.pattern);
 
             delete part.limits;
         };
@@ -175,6 +175,24 @@ if(devices.real().deviceType === "desktop") {
                 setter: "setMinutes",
                 pattern: "mm",
                 text: "19"
+            });
+        });
+
+        QUnit.test("Seconds", (assert) => {
+            const dateString = "Tuesday, July 2, 2024 16:19:22";
+            const regExpInfo = dateParser.getRegExpInfo("EEEE, MMMM d, yyyy HH:mm:ss", dateLocalization);
+
+            this.parts = renderDateParts(dateString, regExpInfo);
+            checkAndRemoveLimits(this.parts[12], { min: 0, max: 59 }, assert);
+
+            assert.deepEqual(this.parts[12], {
+                index: 12,
+                isStub: false,
+                caret: { start: 28, end: 30 },
+                getter: "getSeconds",
+                setter: "setSeconds",
+                pattern: "ss",
+                text: "22"
             });
         });
 
