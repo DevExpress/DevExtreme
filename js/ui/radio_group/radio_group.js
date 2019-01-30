@@ -283,7 +283,7 @@ var RadioGroup = Editor.inherit({
     },
 
     _getItemValue: function(item) {
-        return !!this._valueGetter ? this._valueGetter(item) : item.text;
+        return this._valueGetter ? this._valueGetter(item) : item.text;
     },
 
     itemElements: function() {
