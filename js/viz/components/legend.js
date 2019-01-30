@@ -452,11 +452,15 @@ extend(legendPrototype, {
     },
 
     _getItemData: function() {
-        var items = this._data;
+        let items = this._data;
+        const options = this._options;
         // For maps in dashboards
-        if(this._options.inverted) {
+        if(options.inverted) {
             items = items.slice().reverse();
         }
+
+        items = options.processItems && options.processItems(items.slice()) || items;
+
         return items;
     },
 

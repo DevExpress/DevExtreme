@@ -1,7 +1,7 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    legendModule = require("viz/components/legend");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import vizMocks from "../../helpers/vizMocks.js";
+import legendModule from "viz/components/legend";
 
 var Legend = legendModule.Legend;
 
@@ -1872,6 +1872,28 @@ QUnit.test('Items in inverted order', function(assert) {
 
     var createMarker = this.createMarker;
     $.each(this.data.reverse(), function(i, data) {
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: undefined }], String(i));
+    });
+});
+
+QUnit.test('Customize order using processItems', function(assert) {
+    this.options.processItems = function(i) {
+        return i.reverse();
+    };
+    this.createAndDrawLegend();
+
+    var createMarker = this.createMarker;
+    $.each(this.data.reverse(), function(i, data) {
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: undefined }], String(i));
+    });
+});
+
+QUnit.test('Process items return nothing - get original items', function(assert) {
+    this.options.processItems = noop;
+    this.createAndDrawLegend();
+
+    var createMarker = this.createMarker;
+    $.each(this.data, function(i, data) {
         assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: undefined }], String(i));
     });
 });
