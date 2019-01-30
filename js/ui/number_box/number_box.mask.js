@@ -199,14 +199,26 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         this._lastKey = e.key;
 
-        if(caret.start === caret.end) {
-            this._isDeleteKey(e.key) ? end++ : start--;
+        var isDeleteKey = this._isDeleteKey(e.key);
+        var isBackspaceKey = !isDeleteKey;
+
+        if(start === end) {
+            var caretPosition = start;
+            var canDelete = isBackspaceKey && caretPosition > 0 || isDeleteKey && caretPosition < text.length;
+
+            if(canDelete) {
+                isDeleteKey && end++;
+                isBackspaceKey && start--;
+            } else {
+                e.preventDefault();
+                return;
+            }
         }
 
         var char = text.slice(start, end);
 
         if(this._isStub(char)) {
-            this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
+            this._moveCaret(isDeleteKey ? 1 : -1);
             if(this._parsedValue < 0 || 1 / this._parsedValue === -Infinity) {
                 this._revertSign(e);
                 this._setTextByParsedValue();
@@ -219,7 +231,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         if(char === decimalSeparator) {
             var decimalSeparatorIndex = text.indexOf(decimalSeparator);
             if(this._isNonStubAfter(decimalSeparatorIndex + 1)) {
-                this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
+                this._moveCaret(isDeleteKey ? 1 : -1);
                 e.preventDefault();
             }
             return;
