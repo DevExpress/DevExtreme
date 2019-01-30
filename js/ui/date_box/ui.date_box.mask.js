@@ -22,44 +22,42 @@ let DateBoxMask = DateBoxBase.inherit({
             return this.callBase(e);
         }
 
-        let that = this;
-
         return extend(this.callBase(e), {
             del: (e) => {
-                that._revertPart(FORWARD);
+                this._revertPart(FORWARD);
                 this._isAllSelected() || e.preventDefault();
             },
             backspace: (e) => {
-                that._revertPart(BACKWARD);
+                this._revertPart(BACKWARD);
                 this._isAllSelected() || e.preventDefault();
             },
             home: (e) => {
-                that._selectFirstPart();
+                this._selectFirstPart();
                 e.preventDefault();
             },
             end: (e) => {
-                that._selectLastPart();
+                this._selectLastPart();
                 e.preventDefault();
             },
             escape: (e) => {
-                that._revertChanges();
+                this._revertChanges();
                 e.preventDefault();
             },
-            enter: that._enterHandler.bind(that),
+            enter: this._enterHandler,
             leftArrow: (e) => {
-                that._selectNextPart(BACKWARD);
+                this._selectNextPart(BACKWARD);
                 e.preventDefault();
             },
             rightArrow: (e) => {
-                that._selectNextPart(FORWARD);
+                this._selectNextPart(FORWARD);
                 e.preventDefault();
             },
             upArrow: (e) => {
-                that._partIncrease(FORWARD);
+                this._partIncrease(FORWARD);
                 e.preventDefault();
             },
             downArrow: (e) => {
-                that._partIncrease(BACKWARD);
+                this._partIncrease(BACKWARD);
                 e.preventDefault();
             },
         });
