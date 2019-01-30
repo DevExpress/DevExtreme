@@ -1,9 +1,10 @@
 import { isObject } from "./type";
+import { stringify } from "./stringify";
 
 var getKeyWrapper = function(item, getKey) {
     var key = getKey(item);
     if(isObject(key)) {
-        key = JSON.stringify(key);
+        key = stringify(key);
     }
     return key;
 };
