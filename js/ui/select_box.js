@@ -7,7 +7,6 @@ var $ = require("../core/renderer"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
-    isEmpty = require("../core/utils/string").isEmpty,
     deferredUtils = require("../core/utils/deferred"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     Deferred = deferredUtils.Deferred,
@@ -110,11 +109,11 @@ var SelectBox = DropDownList.inherit({
                 this._cancelEditing();
             },
             enter: function(e) {
-                var inputText = this._input().val();
-                var inputTextIsEmpty = isEmpty(inputText);
-                var inputHasCustomValue = this._list && !this._list.option("focusedElement");
+                var isOpened = this.option("opened");
+                var inputText = this._input().val().trim();
+                var isCustomText = inputText && this._list && !this._list.option("focusedElement");
 
-                if(inputTextIsEmpty && this.option("value") && this.option("allowClearing")) {
+                if(!inputText && this.option("value") && this.option("allowClearing")) {
                     this.option({
                         selectedItem: null,
                         value: null
@@ -125,16 +124,16 @@ var SelectBox = DropDownList.inherit({
                     if(this.option("acceptCustomValue")) {
                         e.preventDefault();
 
-                        if(!inputTextIsEmpty && inputHasCustomValue) {
+                        if(isCustomText) {
                             this._valueChangeEventHandler();
-                            if(this.option("opened")) this._toggleOpenState();
+                            if(isOpened) this._toggleOpenState();
                         }
 
-                        return this.option("opened");
+                        return isOpened;
                     }
 
                     if(parent.enter && parent.enter.apply(this, arguments)) {
-                        return this.option("opened");
+                        return isOpened;
                     }
                 }
             },
