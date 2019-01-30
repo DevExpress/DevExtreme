@@ -385,7 +385,7 @@ QUnit.test("getMarkup. Different colors in charts. No backgroundColor in result"
         },
         markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
 
-    assert.equal(markup, "<svg height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+    assert.equal(markup, "<svg data-backgroundcolor=\"\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
 });
 
 QUnit.test("Combine widgets markups (combineMarkups), array of widgets - column", function(assert) {

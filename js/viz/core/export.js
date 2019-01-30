@@ -262,16 +262,12 @@ export const combineMarkups = function(widgets, options = { }) {
         r.items = r.items.concat(rowInfo.items);
         r.itemWidth = Math.max(r.itemWidth, rowInfo.itemWidth);
         r.maxItemLen = Math.max(r.maxItemLen, rowInfo.items.length);
-        if(compactView) {
-            r.totalWidth = Math.max(r.totalWidth, rowInfo.width);
-        } else {
-            r.totalWidth = r.maxItemLen * r.itemWidth;
-        }
+        r.totalWidth = compactView ? Math.max(r.totalWidth, rowInfo.width) : (r.maxItemLen * r.itemWidth);
 
         return r;
     }, { items: [], rowOffsets: [], rowHeights: [], itemWidth: 0, totalHeight: 0, maxItemLen: 0, totalWidth: 0, backgroundColors: [] });
 
-    const backgroundColor = exportItems.backgroundColors.length === 1 ? 'data-backgroundcolor="' + exportItems.backgroundColors[0] + '" ' : "";
+    const backgroundColor = `data-backgroundcolor="${exportItems.backgroundColors.length === 1 ? exportItems.backgroundColors[0] : '' }" `;
     const getVOffset = item => {
         const align = options.verticalAlignment;
         const dy = exportItems.rowHeights[item.r] - item.height;
