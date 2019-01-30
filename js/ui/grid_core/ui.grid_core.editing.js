@@ -654,7 +654,7 @@ var EditingController = modules.ViewController.inherit((function() {
                         item.modified = true;
                         item.oldData = item.data;
                         item.data = createObjectWithChanges(item.data, data);
-                        item.modifiedValues = generateDataValues(data, columns);
+                        item.modifiedValues = generateDataValues(data, columns, true);
                         break;
                     case DATA_EDIT_DATA_REMOVE_TYPE:
                         if(editMode === EDIT_MODE_BATCH) {
@@ -2356,8 +2356,8 @@ module.exports = {
                         return;
                     }
 
-                    if(oldItem.rowType === newItem.rowType && isRowEditMode && editingController.isEditRow(rowIndex)) {
-                        return isLiveUpdate ? [] : undefined;
+                    if(oldItem.rowType === newItem.rowType && isRowEditMode && editingController.isEditRow(rowIndex) && isLiveUpdate) {
+                        return [];
                     }
 
                     return this.callBase.apply(this, arguments);
