@@ -109,7 +109,11 @@ var SelectBox = DropDownList.inherit({
                 this._cancelEditing();
             },
             enter: function(e) {
-                if(this._input().val() === "" && this.option("value") && this.option("allowClearing")) {
+                var isOpened = this.option("opened");
+                var inputText = this._input().val().trim();
+                var isCustomText = inputText && this._list && !this._list.option("focusedElement");
+
+                if(!inputText && this.option("value") && this.option("allowClearing")) {
                     this.option({
                         selectedItem: null,
                         value: null
@@ -119,11 +123,17 @@ var SelectBox = DropDownList.inherit({
                 } else {
                     if(this.option("acceptCustomValue")) {
                         e.preventDefault();
-                        return this.option("opened");
+
+                        if(isCustomText) {
+                            this._valueChangeEventHandler();
+                            if(isOpened) this._toggleOpenState();
+                        }
+
+                        return isOpened;
                     }
 
                     if(parent.enter && parent.enter.apply(this, arguments)) {
-                        return this.option("opened");
+                        return isOpened;
                     }
                 }
             },
