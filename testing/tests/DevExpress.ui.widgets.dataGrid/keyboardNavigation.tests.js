@@ -3309,7 +3309,9 @@ if(device.deviceType === "desktop") {
         assert.equal(this.editingController._editRowIndex, 0, "cell is editing");
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
         assert.ok(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
-        assert.deepEqual(this.getController("data").items()[0].data, { Column1: "D" }, "cell value");
+        assert.deepEqual(this.getController("data").items()[0].data, { }, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "test1", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
 
         // act
         this.triggerKeyDown("enter");
@@ -3323,6 +3325,7 @@ if(device.deviceType === "desktop") {
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
         assert.notOk(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.deepEqual(this.getController("data").items()[0].data, { Column1: "D" }, "data");
     });
 
     QUnit.testInActiveWindow("RightArrow key if excelNavigation and editing began by the key press", function(assert) {
@@ -3361,7 +3364,9 @@ if(device.deviceType === "desktop") {
         assert.equal(this.editingController._editRowIndex, 0, "cell is editing");
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
         assert.ok(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
-        assert.deepEqual(this.getController("data").items()[0].data, { Column1: "D" }, "cell value");
+        assert.deepEqual(this.getController("data").items()[0].data, { }, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "test1", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
 
         // act
         this.triggerKeyDown("rightArrow");
@@ -3374,6 +3379,7 @@ if(device.deviceType === "desktop") {
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
         assert.notOk(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.deepEqual(this.getController("data").items()[0].data, { Column1: "D" }, "data");
     });
 
     QUnit.testInActiveWindow("LeftArrow key if excelNavigation and editing began by the key press", function(assert) {
@@ -3412,7 +3418,9 @@ if(device.deviceType === "desktop") {
         assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
         assert.ok(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
-        assert.deepEqual(this.getController("data").items()[1].data, { Column2: "D" }, "cell value");
+        assert.equal(this.getController("data").items()[1].data, undefined, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "test2", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
 
         // act
         this.triggerKeyDown("leftArrow");
@@ -3425,6 +3433,7 @@ if(device.deviceType === "desktop") {
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
         assert.notOk(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { Column2: "D" }, "cell value");
     });
 
     QUnit.testInActiveWindow("UpArrow key if excelNavigation and editing began by the key press", function(assert) {
@@ -3463,7 +3472,9 @@ if(device.deviceType === "desktop") {
         assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
         assert.ok(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
-        assert.deepEqual(this.getController("data").items()[1].data, { Column2: "D" }, "cell value");
+        assert.equal(this.getController("data").items()[1].data, undefined, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "test2", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
 
         // act
         this.triggerKeyDown("upArrow");
@@ -3476,6 +3487,7 @@ if(device.deviceType === "desktop") {
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
         assert.notOk(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { Column2: "D" }, "cell value");
     });
 
     QUnit.testInActiveWindow("DownArrow key if excelNavigation and editing began by the key press", function(assert) {
@@ -3514,7 +3526,10 @@ if(device.deviceType === "desktop") {
         assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
         assert.ok(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
-        assert.deepEqual(this.getController("data").items()[1].data, { Column2: "D" }, "cell value");
+        assert.equal(this.getController("data").items()[1].data, undefined, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "test2", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
+
 
         // act
         this.triggerKeyDown("downArrow");
@@ -3527,6 +3542,7 @@ if(device.deviceType === "desktop") {
         assert.notOk(this.keyboardNavigationController._isEditing);
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 3 }, "focusedCellPosition");
         assert.notOk(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { Column2: "D" }, "cell value");
     });
 
     QUnit.testInActiveWindow("DownArrow key if excelNavigation and editing began 2nd time by the key press", function(assert) {
@@ -5482,6 +5498,7 @@ QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded p
             mode: "virtual"
         },
         paging: {
+            pageSize: 20,
             pageIndex: 20
         }
     };
@@ -5496,12 +5513,13 @@ QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded p
     that.clock.tick();
 
     // act
-    $(that.rowsView.element()).trigger($.Event("keydown", { key: KEYS.upArrow }));
+
+    this.triggerKeyDown("arrowUp");
     $(that.rowsView.getScrollable()._container()).trigger("scroll");
     that.clock.tick();
 
     // act
-    $(that.rowsView.element()).trigger($.Event("keydown", { key: KEYS.upArrow }));
+    this.triggerKeyDown("arrowUp");
     that.clock.tick();
 
     // assert
