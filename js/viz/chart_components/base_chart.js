@@ -60,7 +60,8 @@ var commonUtils = require("../../core/utils/common"),
         "resolveLabelOverlapping",
         "adjustOnZoom",
         "zoomingMode",
-        "scrollingMode"
+        "scrollingMode",
+        "stickyHovering"
     ];
 
 function checkHeightRollingStock(rollingStocks, stubCanvas) {

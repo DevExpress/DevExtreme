@@ -486,6 +486,12 @@ var dxChart = {
     */
     scrollingMode: 'none',
     /**
+    * @name dxChartOptions.stickyHovering
+    * @type boolean
+    * @default true
+    */
+    stickyHovering: true,
+    /**
     * @name dxChartOptions.useAggregation
     * @type boolean
     * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled

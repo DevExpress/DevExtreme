@@ -61,8 +61,7 @@ QUnit.test("Create Tracker.", function(assert) {
             commonPaneSettings: {
                 border: { visible: true }
             },
-            zoomingMode: "zoomingModeValue",
-            scrollingMode: "scrollingModeValue",
+            stickyHovering: false,
             rotated: "rotated"
         }),
         trackerStub = trackerModule.ChartTracker;
@@ -82,8 +81,7 @@ QUnit.test("Create Tracker.", function(assert) {
     assert.equal(updateArg0.crosshair, chart._crosshair, "crosshair");
     assert.equal(updateArg0.chart, chart, "chart");
     assert.equal(updateArg0.rotated, "rotated", "rotated");
-    assert.equal(updateArg0.zoomingMode, "zoomingModeValue", "zoomingMode");
-    assert.equal(updateArg0.scrollingMode, "scrollingModeValue", "scrollingMode");
+    assert.strictEqual(updateArg0.stickyHovering, false, "stickyHovering");
     assert.equal(updateArg0.seriesSelectionMode, "serieSelectionModeWithTheme", "series selection mode");
     assert.equal(updateArg0.pointSelectionMode, "pointSelectionModeWithTheme", "point selection mode");
 

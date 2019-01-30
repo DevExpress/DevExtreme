@@ -1106,60 +1106,23 @@ QUnit.test("'done' event is triggered after all '_render' calls when async serie
 
 QUnit.module("Change options - force render, series and axes are not recreated", commons.environment);
 
-QUnit.test("zoomingMode option", function(assert) {
+QUnit.test("stickyHovering option", function(assert) {
     var stubSeries1 = new MockSeries({});
     chartMocks.seriesMockData.series.push(stubSeries1);
 
     var chart = this.createChart({
         series: [
             { type: "line" }
-        ],
-        zoomingMode: "all"
+        ]
     });
     commons.getTrackerStub().stub("update").reset();
-    chart._themeManager.getOptions.withArgs("zoomingMode").returns("none");
-
-    var series = chart.getAllSeries()[0],
-        valAxis = chart._valueAxes[0],
-        argAxis = chart._argumentAxes[0];
+    chart._themeManager.getOptions.withArgs("stickyHovering").returns(true);
     // Act
     chart.option({
-        zoomingMode: "none"
+        stickyHovering: true
     });
     // Assert
-    assert.strictEqual(commons.getTrackerStub().stub("update").lastCall.args[0].zoomingMode, "none", "new zoomingMode");
-
-    assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
-    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
-    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
-});
-
-QUnit.test("scrollingMode option", function(assert) {
-    var stubSeries1 = new MockSeries({});
-    chartMocks.seriesMockData.series.push(stubSeries1);
-
-    var chart = this.createChart({
-        series: [
-            { type: "line" }
-        ],
-        scrollingMode: "all"
-    });
-    commons.getTrackerStub().stub("update").reset();
-    chart._themeManager.getOptions.withArgs("scrollingMode").returns("none");
-
-    var series = chart.getAllSeries()[0],
-        valAxis = chart._valueAxes[0],
-        argAxis = chart._argumentAxes[0];
-    // Act
-    chart.option({
-        scrollingMode: "none"
-    });
-    // Assert
-    assert.strictEqual(commons.getTrackerStub().stub("update").lastCall.args[0].scrollingMode, "none", "new scrollingMode");
-
-    assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
-    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
-    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+    assert.strictEqual(commons.getTrackerStub().stub("update").lastCall.args[0].stickyHovering, true, "new stick value");
 });
 
 QUnit.test("title option", function(assert) {
