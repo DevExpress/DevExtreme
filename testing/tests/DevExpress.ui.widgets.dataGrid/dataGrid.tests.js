@@ -879,6 +879,48 @@ QUnit.test("Show contextMenu for hidden adaptive columns", function(assert) {
     clock.restore();
 });
 
+// T708072
+QUnit.test("Expand adaptive detail row after scrolling if scrolling mode is virtual", function(assert) {
+    var array = [];
+
+    for(var i = 0; i < 10; i++) {
+        array.push({ id: i, value: "text" + i });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 200,
+        height: 200,
+        dataSource: array,
+        keyExpr: "id",
+        columnHidingEnabled: true,
+        paging: {
+            pageSize: 2
+        },
+        scrolling: {
+            mode: "virtual"
+        },
+        loadingTimeout: undefined,
+        legacyRendering: true,
+        columns: [{
+            dataField: "value"
+        }, {
+            dataField: "hidden",
+            width: 10000
+        }],
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.expandAdaptiveDetailRow(0);
+    dataGrid.pageIndex(1);
+    dataGrid.getController("data").toggleExpandAdaptiveDetailRow(1);
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows()[1].rowType, "data", "row 1 type");
+    assert.strictEqual(dataGrid.getVisibleRows()[1].key, 1, "row 1 key");
+    assert.strictEqual(dataGrid.getVisibleRows()[2].rowType, "detailAdaptive", "row 2 type");
+    assert.strictEqual(dataGrid.getVisibleRows()[2].key, 1, "row 2 key");
+});
+
 // T315857
 QUnit.test("Editing should work with classes as data objects", function(assert) {
     // arrange
