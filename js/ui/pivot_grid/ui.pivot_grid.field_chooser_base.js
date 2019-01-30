@@ -16,7 +16,6 @@ var $ = require("../../core/renderer"),
     pivotGridUtils = require("./ui.pivot_grid.utils"),
     Sortable = require("./ui.sortable"),
     Deferred = require("../../core/utils/deferred").Deferred,
-    inArray = inArray,
     each = iteratorUtils.each,
     IE_FIELD_WIDTH_CORRECTION = 1,
     DIV = "<div>";

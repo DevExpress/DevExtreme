@@ -11,7 +11,6 @@ var $ = require("../../core/renderer"),
     TreeView = require("../tree_view"),
     ContextMenu = require("../context_menu"),
     BaseFieldChooser = require("./ui.pivot_grid.field_chooser_base"),
-    inArray = inArray,
     each = iteratorUtils.each,
     DIV = "<div>";
 

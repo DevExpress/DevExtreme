@@ -206,7 +206,7 @@ function parseStyles(style, options) {
 }
 
 function parseUrl(urlString) {
-    var matches = urlString && urlString.match(/url\(.*\#(.*?)["']?\)/i);
+    var matches = urlString && urlString.match(/url\(.*#(.*?)["']?\)/i);
     return matches && matches[1];
 }
 
@@ -501,11 +501,10 @@ function createFilter(element) {
 }
 
 function drawCanvasElements(elements, context, parentOptions) {
-    var options;
     _each(elements, function(_, element) {
         switch(element.tagName && element.tagName.toLowerCase()) {
-            case "g":
-                options = extend({}, parentOptions, getElementOptions(element));
+            case "g": {
+                const options = extend({}, parentOptions, getElementOptions(element));
 
                 context.save();
 
@@ -516,6 +515,7 @@ function drawCanvasElements(elements, context, parentOptions) {
                 context.restore();
 
                 break;
+            }
             case "defs":
                 clipPaths = {};
                 patterns = {};

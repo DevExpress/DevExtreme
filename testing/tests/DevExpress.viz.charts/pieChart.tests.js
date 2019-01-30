@@ -113,8 +113,7 @@ var environment = {
             that.createPieChart = function(options) {
                 var pieChart;
                 $.each(options || {}, function(k, v) {
-                    if(k === "valueAxis" || k === "argumentAxis" || k === "series" || k === "pieSegment") {
-                    } else if(k === "commonPaneSettings") {
+                    if(k === "commonPaneSettings") {
                         that.themeManager.getOptions.withArgs(k).returns($.extend(true, {
                             backgroundColor: "none",
                             border: {
@@ -126,7 +125,7 @@ var environment = {
                                 dashStyle: "solid"
                             }
                         }, v));
-                    } else {
+                    } else if(k !== "valueAxis" && k !== "argumentAxis" && k !== "series" && k !== "pieSegment") {
                         that.themeManager.getOptions.withArgs(k).returns(v);
                     }
                 });

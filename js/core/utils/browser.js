@@ -2,10 +2,10 @@ var extend = require("./extend").extend,
     windowUtils = require("./window"),
     navigator = windowUtils.getNavigator();
 
-var webkitRegExp = /(webkit)[ \/]([\w.]+)/,
+var webkitRegExp = /(webkit)[ /]([\w.]+)/,
     ieRegExp = /(msie) (\d{1,2}\.\d)/,
     ie11RegExp = /(trident).*rv:(\d{1,2}\.\d)/,
-    msEdge = /(edge)\/((\d+)?[\w\.]+)/,
+    msEdge = /(edge)\/((\d+)?[\w.]+)/,
     safari = /(safari)/i,
     mozillaRegExp = /(mozilla)(?:.*? rv:([\w.]+))/;
 
