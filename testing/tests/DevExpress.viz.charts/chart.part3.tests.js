@@ -1074,6 +1074,44 @@ QUnit.test("Legend visible after zooming", function(assert) {
     assert.deepEqual(this.layoutManager.layoutElements.lastCall.args[0], []);
 });
 
+QUnit.test("Set visible property in legend items", function(assert) {
+    // arrange
+    var stubSeries = new MockSeries({
+        name: "First series",
+        visible: false,
+        showInLegend: true
+    });
+
+    chartMocks.seriesMockData.series.push(stubSeries);
+
+    // act
+    this.createChart({ series: { type: "line" } });
+
+    // assert
+    var legend = commons.getLegendStub();
+
+    assert.strictEqual(legend.update.lastCall.args[0][0].visible, true);
+});
+
+QUnit.test("Set visible property false in legend item if showInLegend is false", function(assert) {
+    // arrange
+    var stubSeries = new MockSeries({
+        name: "First series",
+        visible: false,
+        showInLegend: false
+    });
+
+    chartMocks.seriesMockData.series.push(stubSeries);
+
+    // act
+    this.createChart({ series: { type: "line" } });
+
+    // assert
+    var legend = commons.getLegendStub();
+
+    assert.strictEqual(legend.update.lastCall.args[0][0].visible, false);
+});
+
 QUnit.module("dxChart Title", commons.environment);
 
 QUnit.test("Draw title (text is not specified)", function(assert) {

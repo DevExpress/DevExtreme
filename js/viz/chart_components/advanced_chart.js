@@ -261,12 +261,12 @@ var AdvancedChart = BaseChart.inherit({
         this._scrollBar && this._scrollBarGroup.linkAppend(); // TODO: Must be appended in the same place where removed (chart)
     },
     _getLegendTargets: function() {
-        var that = this;
-        return _map(that.series, function(item) {
-            if(item.getOptions().showInLegend) {
-                return that._getLegendOptions(item);
+        return this.series.map(s => {
+            const item = this._getLegendOptions(s);
+            if(!s.getOptions().showInLegend) {
+                item.legendData.visible = false;
             }
-            return null;
+            return item;
         });
     },
     _legendItemTextField: "name",

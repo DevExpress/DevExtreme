@@ -366,7 +366,7 @@ extend(legendPrototype, {
         var that = this,
             options = that._options,
             renderer = that._renderer,
-            items = that._data;
+            items = that._getItemData();
 
         this._size = { width: width, height: height };
         that.erase();
@@ -378,7 +378,7 @@ extend(legendPrototype, {
         that._insideLegendGroup = renderer.g().append(that._legendGroup);
         that._createBackground();
         // TODO review pass or process states in legend
-        that._createItems(that._getItemData());
+        that._createItems(items);
 
         that._locateElements(options);
         that._finalUpdate(options);
@@ -452,16 +452,15 @@ extend(legendPrototype, {
     },
 
     _getItemData: function() {
-        let items = this._data;
-        const options = this._options;
+        let items = this._data || [];
+        const options = this._options || {};
         // For maps in dashboards
         if(options.inverted) {
             items = items.slice().reverse();
         }
 
         items = options.processItems && options.processItems(items.slice()) || items;
-
-        return items;
+        return items.filter(i => i.visible);
     },
 
     _finalUpdate: function(options) {

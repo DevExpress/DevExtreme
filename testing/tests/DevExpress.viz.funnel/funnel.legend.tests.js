@@ -66,6 +66,7 @@ QUnit.test("Update", function(assert) {
         assert.equal(lastCallUpdate[i].data.argument, items[i].data.argument);
         assert.deepEqual(lastCallUpdate[i].states, items[i].states);
         assert.equal(lastCallUpdate[i].id, items[i].id);
+        assert.equal(lastCallUpdate[i].visible, true);
     }
 });
 

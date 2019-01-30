@@ -20,6 +20,7 @@ function buildData(partition, values, field) {
         };
         item[field] = values[i];
         item.states = { normal: { fill: item.color } };
+        item.visible = true;
     }
     return list;
 }

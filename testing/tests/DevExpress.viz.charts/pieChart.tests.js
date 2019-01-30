@@ -987,7 +987,8 @@ var environment = {
                 hover: undefined,
                 selection: undefined,
                 normal: { opacity: 0.3 }
-            }
+            },
+            visible: true
         }, "Legend opacity should be change");
         assert.deepEqual(legend.update.lastCall.args[0][1], {
             id: 1,
@@ -998,7 +999,8 @@ var environment = {
                 hover: undefined,
                 selection: undefined,
                 normal: {}
-            }
+            },
+            visible: true
         }, "Legend opacity should not be change");
     });
 
