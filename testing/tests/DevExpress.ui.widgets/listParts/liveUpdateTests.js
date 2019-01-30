@@ -456,6 +456,17 @@ QUnit.module("live update", {
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.a, "Item Updated", "check updated item");
     });
 
+    QUnit.test("repaintChangesOnly, circular item is pushed", function(assert) {
+        var store = this.createList({
+            repaintChangesOnly: true
+        }).getDataSource().store();
+
+        var circularItem = { id: 200, text: "text " + 200, index: 0 };
+        circularItem.child = circularItem;
+        store.push([{ type: "insert", data: circularItem, index: 0 }]);
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, circularItem, "check updated item");
+    });
+
     QUnit.test("onContentReady called after push", function(assert) {
         var contentReadySpy = sinon.spy();
         var list = this.createList({
