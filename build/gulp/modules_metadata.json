@@ -721,7 +721,8 @@
     "name": "viz/export",
     "exports": {
       "exportFromMarkup": { "path": "viz.exportFromMarkup" },
-      "getMarkup": { "path": "viz.getMarkup" }
+      "getMarkup": { "path": "viz.getMarkup" },
+      "exportWidgets": { "path": "viz.exportWidgets" }
     }
   },
   {
