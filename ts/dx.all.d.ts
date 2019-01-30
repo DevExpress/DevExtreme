@@ -848,9 +848,9 @@ declare module DevExpress {
         static currentTheme(platform: string, colorScheme: string): void;
         /** Changes the current theme for all data visualization widgets on the page. */
         static currentTheme(theme: string): void;
-        static export(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: string, backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function }): void;
         /** Allows you to export widgets using their SVG markup. */
         static exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number }): void;
+        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: string, backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function }): void;
         /** Gets the SVG markup of specific widgets for their subsequent export. */
         static getMarkup(widgetInstances: Array<DOMComponent>): string;
         /** Gets the color sets of a predefined or registered palette. */
