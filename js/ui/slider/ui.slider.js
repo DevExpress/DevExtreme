@@ -232,7 +232,9 @@ var Slider = TrackBar.inherit({
                 this._toggleValidationMessage(false);
             },
 
-            validationMessageOffset: themes.isMaterial() ? { h: 18, v: 0 } : { h: 7, v: 4 }
+            validationMessageOffset: themes.isMaterial() ? { h: 18, v: 0 } : { h: 7, v: 4 },
+
+            focusStateEnabled: true
 
             /**
             * @name dxSliderBaseOptions.name
