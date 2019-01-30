@@ -1939,6 +1939,15 @@ QUnit.test("repairTooltip", function(assert) {
     assert.ok(point.getTooltipParams.calledOnce);
 });
 
+QUnit.test("clearHover", function(assert) {
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
+    this.clock.tick(this.tracker.__trackerDelay);
+
+    this.tracker.clearHover();
+
+    assert.equal(this.series.clearHover.callCount, 1);
+});
+
 QUnit.test('Can be disposed', function(assert) {
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, pointers: [], target: this.seriesGroup.element }));
     this.renderer.root.off.reset();
