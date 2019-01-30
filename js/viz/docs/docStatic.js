@@ -58,8 +58,8 @@ var staticMethods = {
     */
     getTheme: function() { },
     /**
-    * @name vizmethods.export
-    * @publicName export(widgetInstances)
+    * @name vizmethods.exportWidgets
+    * @publicName exportWidgets(widgetInstances)
     * @param1 widgetInstances:Array<Array<DOMComponent>>
     * @param2 options:object
     * @param2_field1 fileName:string
@@ -75,9 +75,9 @@ var staticMethods = {
     * @param2_field11 onFileSaving:function(e)
     * @static
     * @module viz/export
-    * @export export
+    * @export exportWidgets
     */
-    export: function() { },
+    exportWidgets: function() { },
     /**
     * @name vizmethods.exportFromMarkup
     * @publicName exportFromMarkup(markup, options)

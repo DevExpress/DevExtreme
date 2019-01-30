@@ -642,12 +642,12 @@ QUnit.test("exportFromMarkup. backgroundColor from markup", function(assert) {
     }, "Export options");
 });
 
-QUnit.test("export method. Defaults", function(assert) {
+QUnit.test("exportWidgets method. Defaults", function(assert) {
     // arrange
     exportModule.combineMarkups.returns({ markup: "testMarkup", width: 600, height: 400 });
 
     // act
-    exportModule.export([{ widget1: true }, { widget2: true }]);
+    exportModule.exportWidgets([{ widget1: true }, { widget2: true }]);
 
     // assert
     assert.deepEqual(exportModule.combineMarkups.getCall(0).args, [
@@ -673,7 +673,7 @@ QUnit.test("export method. Defaults", function(assert) {
     }, "Export options");
 });
 
-QUnit.test("export method. Set options. Size options are ignored", function(assert) {
+QUnit.test("exportWidgets method. Set options. Size options are ignored", function(assert) {
     // arrange
     var options = {
         format: "jpeg",
@@ -694,7 +694,7 @@ QUnit.test("export method. Set options. Size options are ignored", function(asse
     exportModule.combineMarkups.returns({ markup: "testMarkup", width: 600, height: 400 });
 
     // act
-    exportModule.export([{ widget1: true }, { widget2: true }], options);
+    exportModule.exportWidgets([{ widget1: true }, { widget2: true }], options);
 
     // assert
     assert.deepEqual(exportModule.combineMarkups.getCall(0).args, [

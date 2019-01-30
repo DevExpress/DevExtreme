@@ -212,7 +212,7 @@ export const exportFromMarkup = function(markup, options) {
 
 export const getMarkup = widgets => combineMarkups(widgets).markup;
 
-const exportWidgets = function(widgets, options) {
+export const exportWidgets = function(widgets, options) {
     options = options || {};
     const markupInfo = exports.combineMarkups(widgets, {
         gridLayout: options.gridLayout,
@@ -223,8 +223,6 @@ const exportWidgets = function(widgets, options) {
     options.height = markupInfo.height;
     exportFromMarkup(markupInfo.markup, options);
 };
-
-export { exportWidgets as export };
 
 export const combineMarkups = function(widgets, options = { }) {
     if(!Array.isArray(widgets)) {
