@@ -611,20 +611,20 @@ module.exports = {
                     dataItem.values = this.generateDataValues(dataItem.data, options.visibleColumns);
                     return dataItem;
                 },
-                generateDataValues: function(data, columns) {
+                generateDataValues: function(data, columns, isModified) {
                     var values = [],
                         column,
                         value;
 
                     for(var i = 0; i < columns.length; i++) {
                         column = columns[i];
-                        value = null;
-                        if(column.command) {
-                            value = null;
-                        } else if(column.calculateCellValue) {
-                            value = column.calculateCellValue(data);
-                        } else if(column.dataField) {
-                            value = data[column.dataField];
+                        value = isModified ? undefined : null;
+                        if(!column.command) {
+                            if(column.calculateCellValue) {
+                                value = column.calculateCellValue(data);
+                            } else if(column.dataField) {
+                                value = data[column.dataField];
+                            }
                         }
                         values.push(value);
 
@@ -737,7 +737,11 @@ module.exports = {
                         return true;
                     }
 
-                    if(JSON.stringify(oldRow.modifiedValues && oldRow.modifiedValues[columnIndex]) !== JSON.stringify(newRow.modifiedValues && newRow.modifiedValues[columnIndex])) {
+                    function isCellModified(row, columnIndex) {
+                        return row.modifiedValues ? row.modifiedValues[columnIndex] !== undefined : false;
+                    }
+
+                    if(isCellModified(oldRow, columnIndex) !== isCellModified(newRow, columnIndex)) {
                         return true;
                     }
 
