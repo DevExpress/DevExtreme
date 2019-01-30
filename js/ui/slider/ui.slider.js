@@ -230,7 +230,9 @@ var Slider = TrackBar.inherit({
 
             onFocusOut: function() {
                 this._toggleValidationMessage(false);
-            }
+            },
+
+            validationMessageOffset: themes.isMaterial() ? { h: 18, v: 0 } : { h: 7, v: 4 }
 
             /**
             * @name dxSliderBaseOptions.name
