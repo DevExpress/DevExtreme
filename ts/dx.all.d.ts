@@ -131,6 +131,13 @@ interface JQuery {
     dxFileUploader(options: DevExpress.ui.dxFileUploaderOptions): JQuery;
 }
 interface JQuery {
+    dxFileManager(): JQuery;
+    dxFileManager(options: "instance"): DevExpress.ui.dxFileManager;
+    dxFileManager(options: string): any;
+    dxFileManager(options: string, ...params: any[]): any;
+    dxFileManager(options: DevExpress.ui.dxFileManagerOptions): JQuery;
+}
+interface JQuery {
     dxFilterBuilder(): JQuery;
     dxFilterBuilder(options: "instance"): DevExpress.ui.dxFilterBuilder;
     dxFilterBuilder(options: string): any;
@@ -2738,6 +2745,12 @@ declare module DevExpress.ui {
     export class dxFileUploader extends Editor {
         constructor(element: Element, options?: dxFileUploaderOptions)
         constructor(element: JQuery, options?: dxFileUploaderOptions)
+    }
+    export interface dxFileManagerOptions extends WidgetOptions<dxFileManager>{
+    }
+    export class dxFileManager extends Widget {
+        constructor(element: Element, options?: dxFileManagerOptions)
+        constructor(element: JQuery, options?: dxFileManagerOptions)
     }
     export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
         /** Specifies whether the widget can display hierarchical data fields. */

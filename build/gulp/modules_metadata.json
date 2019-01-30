@@ -360,6 +360,12 @@
     }
   },
   {
+    "name": "ui/file_manager",
+    "exports": {
+      "default": { "path": "ui.dxFileManager", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/form",
     "exports": {
       "default": { "path": "ui.dxForm", "isWidget": true }

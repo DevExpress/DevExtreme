@@ -16,4 +16,5 @@ data.XmlaStore = require("../../../ui/pivot_grid/xmla_store");
 ui.dxScheduler = require("../../../ui/scheduler");
 ui.dxTreeView = require("../../../ui/tree_view");
 ui.dxFilterBuilder = require("../../../ui/filter_builder");
+ui.dxFileManager = require("../../../ui/file_manager");
 /// BUNDLER_PARTS_END
