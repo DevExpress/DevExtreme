@@ -99,6 +99,15 @@ var staticMethods = {
     Palette: function() { },
     /**
     * @name vizmethods.currentPalette
+    * @publicName currentPalette()
+    * @return string
+    * @static
+    * @module viz/palette
+    * @export currentPalette
+    */
+    currentPalette: function() { },
+    /**
+    * @name vizmethods.currentPalette
     * @publicName currentPalette(paletteName)
     * @param1 paletteName:string
     * @static
