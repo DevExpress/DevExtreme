@@ -263,6 +263,7 @@ var AdvancedChart = BaseChart.inherit({
     _getLegendTargets: function() {
         return this.series.map(s => {
             const item = this._getLegendOptions(s);
+            item.legendData.series = s;
             if(!s.getOptions().showInLegend) {
                 item.legendData.visible = false;
             }
