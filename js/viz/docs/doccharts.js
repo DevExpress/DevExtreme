@@ -1014,7 +1014,13 @@ var dxChart = {
             * @type number
             * @default 8
             */
-            length: 8
+            length: 8,
+            /**
+            * @name dxChartOptions.commonAxisSettings.tick.shift
+            * @type number
+            * @default 0
+            */
+            shift: 0
         },
         /**
        * @name dxChartOptions.commonAxisSettings.minorTick
@@ -1051,6 +1057,12 @@ var dxChart = {
             * @default 8
             */
             length: 8,
+            /**
+            * @name dxChartOptions.commonAxisSettings.minorTick.shift
+            * @type number
+            * @default 0
+            */
+            shift: 0
         },
         /**
         * @name dxChartOptions.commonAxisSettings.title

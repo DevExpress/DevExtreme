@@ -695,6 +695,36 @@ QUnit.test("Horizontal top, minor tick marks", function(assert) {
     assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [70, 30 - 5, 70, 30 + 5], opacity: 1 });
 });
 
+QUnit.test("Horizontal top, minor tick marks with offset", function(assert) {
+    // arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        minorTick: {
+            visible: true,
+            width: 5,
+            length: 10,
+            shift: 5
+        }
+    });
+
+    this.generatedMinorTicks = [1, 2, 3];
+
+    this.translator.stub("translate").withArgs(1).returns(30);
+    this.translator.stub("translate").withArgs(2).returns(50);
+    this.translator.stub("translate").withArgs(3).returns(70);
+
+    // act
+    this.axis.draw(this.canvas);
+
+    var path = this.renderer.path;
+
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0].points, [30, 20, 30, 30]);
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0].points, [50, 20, 50, 30]);
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0].points, [70, 20, 70, 30]);
+});
+
 QUnit.test("Categories. DiscreteAxisDivisionMode - betweenLabels. Do not draw last tick mark", function(assert) {
     // arrange
     var categories = ["a", "b", "c", "d"];
@@ -936,6 +966,122 @@ QUnit.test("Vertical. Ticks (major and minor) are outside canvas (on zoom) - do 
     this.axis.draw(this.canvas);
 
     assert.strictEqual(this.renderer.stub("path").callCount, 0);
+});
+
+QUnit.test("Horizontal. Position top. Positive tick offset", function(assert) {
+    // arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "top",
+        tick: {
+            visible: true,
+            width: 5,
+            length: 10,
+            shift: 5
+        }
+    });
+
+    this.generatedTicks = [1, 2, 3];
+
+    this.translator.stub("translate").withArgs(1).returns(30);
+    this.translator.stub("translate").withArgs(2).returns(50);
+    this.translator.stub("translate").withArgs(3).returns(70);
+
+    // act
+    this.axis.draw(this.canvas);
+
+    var path = this.renderer.path;
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 20, 30, 30], opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 20, 50, 30], opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [70, 20, 70, 30], opacity: 1 });
+});
+
+QUnit.test("Horizontal. Position bottom. Positive tick offset", function(assert) {
+    // arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "bottom",
+        tick: {
+            visible: true,
+            width: 5,
+            length: 10,
+            shift: 5
+        }
+    });
+
+    this.generatedTicks = [1, 2, 3];
+
+    this.translator.stub("translate").withArgs(1).returns(30);
+    this.translator.stub("translate").withArgs(2).returns(50);
+    this.translator.stub("translate").withArgs(3).returns(70);
+
+    // act
+    this.axis.draw(this.canvas);
+
+    var path = this.renderer.path;
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 70, 30, 80], opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [50, 70, 50, 80], opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [70, 70, 70, 80], opacity: 1 });
+});
+
+QUnit.test("Vertical. Position left. Positive tick offset", function(assert) {
+    // arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        position: "left",
+        tick: {
+            visible: true,
+            width: 5,
+            length: 10,
+            shift: 5
+        }
+    });
+
+    this.generatedTicks = [1, 2, 3];
+
+    this.translator.stub("translate").withArgs(1).returns(30);
+    this.translator.stub("translate").withArgs(2).returns(50);
+    this.translator.stub("translate").withArgs(3).returns(70);
+
+    // act
+    this.axis.draw(this.canvas);
+
+    var path = this.renderer.path;
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [0, 30, 10, 30], opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [0, 50, 10, 50], opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [0, 70, 10, 70], opacity: 1 });
+});
+
+QUnit.test("Vertical. Position right. Positive tick offset", function(assert) {
+    // arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        position: "right",
+        tick: {
+            visible: true,
+            width: 5,
+            length: 10,
+            shift: 5
+        }
+    });
+
+    this.generatedTicks = [1, 2, 3];
+
+    this.translator.stub("translate").withArgs(1).returns(30);
+    this.translator.stub("translate").withArgs(2).returns(50);
+    this.translator.stub("translate").withArgs(3).returns(70);
+
+    // act
+    this.axis.draw(this.canvas);
+
+    var path = this.renderer.path;
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [90, 30, 100, 30], opacity: 1 });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [90, 50, 100, 50], opacity: 1 });
+    assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [90, 70, 100, 70], opacity: 1 });
 });
 
 QUnit.module("XY linear axis. Draw. Check tick marks. Boundary ticks", environment);
