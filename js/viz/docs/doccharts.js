@@ -2017,7 +2017,14 @@ var dxPieChart = {
        * @type_function_param1_field3 pointColor:string
        * @type_function_return string
        */
-        customizeHint: undefined,
+       customizeHint: undefined,
+       /**
+       * @name dxPieChartOptions.legend.customizeItems
+       * @type function(items)
+       * @type_function_param1 items:Array<PieChartLegendItem>
+       * @type_function_return items:Array<PieChartLegendItem>
+       */
+       customizeItems: undefined
     },
     /**
     * @name dxPieChartOptions.resolveLabelOverlapping
@@ -2327,7 +2334,14 @@ var dxPolarChart = {
         * @type Enums.ChartLegendHoverMode
         * @default 'includePoints'
         */
-        hoverMode: 'includePoints'
+        hoverMode: 'includePoints',
+        /**
+       * @name dxPolarChartOptions.legend.customizeItems
+       * @type function(items)
+       * @type_function_param1 items:Array<BaseChartLegendItem>
+       * @type_function_return items:Array<BaseChartLegendItem>
+       */
+       customizeItems: undefined
     },
     /**
     * @name dxPolarChartOptions.commonAxisSettings
@@ -3359,7 +3373,14 @@ var BaseChart = {
         * @type number
         * @default 8
         */
-        rowItemSpacing: 8
+        rowItemSpacing: 8,
+        /**
+        * @name dxChartOptions.legend.customizeItems
+        * @type function(items)
+        * @type_function_param1 items:Array<BaseChartLegendItem>
+        * @type_function_return items:Array<BaseChartLegendItem>
+        */
+        customizeItems: undefined
     },
     /**
     * @name BaseChartOptions.series

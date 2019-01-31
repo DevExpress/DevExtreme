@@ -91,3 +91,36 @@ var LayerElement = {
     applySettings: function() { }
 };
 
+/**
+* @name VectorMapLegendItem
+* @publicName LegendItem
+* @type object
+* @hidden
+*/
+var legendItem = {
+    /**
+    * @name VectorMapLegendItem.start
+    * @type number
+    */
+    start: undefined,
+    /**
+    * @name VectorMapLegendItem.end
+    * @type number
+    */
+    end: undefined,
+    /**
+    * @name VectorMapLegendItem.color
+    * @type string
+    */
+    color: undefined,
+    /**
+    * @name VectorMapLegendItem.size
+    * @type number
+    */
+    size: undefined,
+    /**
+    * @name VectorMapLegendItem.visible
+    * @type boolean
+    */
+    visible: true
+};

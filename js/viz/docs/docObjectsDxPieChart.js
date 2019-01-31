@@ -54,3 +54,38 @@ var pieChartSeriesObject = {
     */
     isHovered: function() { }
 };
+
+
+/**
+* @name PieChartLegendItem
+* @publicName LegendItem
+* @type object
+* @hidden
+*/
+var legendItem = {
+  /**
+  * @name PieChartLegendItem.text
+  * @type string
+  */
+  text: undefined,
+  /**
+  * @name PieChartLegendItem.points
+  * @type Array<piePointObject>
+  */
+  points: [],
+  /**
+  * @name PieChartLegendItem.visible
+  * @type boolean
+  */
+  visible: true,
+  /**
+  * @name PieChartLegendItem.argument
+  * @type string|Date|number
+  */
+  argument: undefined,
+  /**
+  * @name PieChartLegendItem.argumentIndex
+  * @type number
+  */
+  argumentIndex: undefined,
+};
