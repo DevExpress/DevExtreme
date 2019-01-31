@@ -883,10 +883,10 @@ exports.plugin = {
             renderer: that._renderer,
             group: group,
             textField: "text",
-            getFormatObject: function(item) {
+            getFormatObject: function(data) {
                 return {
-                    item: item,
-                    text: item.argument
+                    item: data.item,
+                    text: data.item.argument
                 };
             },
         });
@@ -921,7 +921,7 @@ exports.plugin = {
         },
 
         _createLegendItems: function() {
-            if(this._legend.update(this.getAllItems(), this._getOption("legend"))) {
+            if(this._legend.update(this._getLegendData(), this._getOption("legend"))) {
                 this._requestChange(["LAYOUT"]);
             }
         }
