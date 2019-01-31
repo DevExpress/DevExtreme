@@ -886,7 +886,7 @@ exports.plugin = {
             getFormatObject: function(data) {
                 return {
                     item: data.item,
-                    text: data.item.argument
+                    text: data.text
                 };
             },
         });

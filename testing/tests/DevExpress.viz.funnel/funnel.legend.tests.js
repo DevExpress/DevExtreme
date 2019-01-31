@@ -63,6 +63,7 @@ QUnit.test("Update", function(assert) {
         lastCallUpdate = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
 
     for(var i = 0; i < items.length; i++) {
+        assert.equal(lastCallUpdate[i].text, items[i].data.argument);
         assert.equal(lastCallUpdate[i].item.data.argument, items[i].data.argument);
         assert.deepEqual(lastCallUpdate[i].states, items[i].states);
         assert.equal(lastCallUpdate[i].id, items[i].id);
