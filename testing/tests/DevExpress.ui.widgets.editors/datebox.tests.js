@@ -3050,7 +3050,8 @@ QUnit.test("T351678 - the date is reset after item click", function(assert) {
     assert.deepEqual(this.dateBox.option("value"), new Date(2020, 4, 13, 1, 30), "date is correct");
 });
 
-QUnit.test("the date should be in range after the selection", function(assert) {
+// TODO: https://github.com/DevExpress/DevExtreme/issues/6748
+QUnit.skip("the date should be in range after the selection", function(assert) {
     this.dateBox.option({
         type: "time",
         pickerType: "list",
