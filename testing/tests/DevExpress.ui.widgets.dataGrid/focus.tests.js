@@ -3893,3 +3893,27 @@ QUnit.testInActiveWindow("DataGrid should reset the focused row if focusedRowInd
     assert.notOk($(rowsView.getRow(1)).hasClass("dx-row-focused"), "no focused row");
     assert.notOk(this.option("focusedRowKey"), "No focusedRowKey");
 });
+
+QUnit.testInActiveWindow("DataGrid should raise exception if focusedRowEnabled and dataSource has no operationTypes", function(assert) {
+    this.$element = () => $("#container");
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    this.getController("data")._dataSource.operationTypes = () => undefined;
+    try {
+        this.option("focusedRowKey", "Dan");
+    } catch(e) {
+        // assert
+        assert.ok(false, e);
+    }
+    // assert
+    assert.ok(true, "undefined operationTypes does not generate exception");
+});
