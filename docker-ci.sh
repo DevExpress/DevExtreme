@@ -6,20 +6,20 @@ trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
 export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
+export DEVEXTREME_QUNIT_CI=true
 
 function run_lint {
-    export DEVEXTREME_QUNIT_CI=true
     npm i eslint eslint-plugin-spellcheck
     npm run lint
 }
 
-function run_build {
+function run_ts {
     npm i
-    npm run build
+    npx gulp ts
+    npx gulp npm
 }
 
 function run_test {
-    export DEVEXTREME_QUNIT_CI=true
     local port=`node -e "console.log(require('./ports.json').qunit)"`
     local url="http://localhost:$port/run?notimers=true&nojquery=true"
     local runner_pid
@@ -89,7 +89,7 @@ echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
 case "$TARGET" in
     "lint") run_lint ;;
-    "build") run_build ;;
+    "ts") run_ts ;;
     "test") run_test ;;
 
     *)
