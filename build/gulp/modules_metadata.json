@@ -722,7 +722,7 @@
     "exports": {
       "exportFromMarkup": { "path": "viz.exportFromMarkup" },
       "getMarkup": { "path": "viz.getMarkup" },
-      "export": { "path": "viz.export" }
+      "exportWidgets": { "path": "viz.exportWidgets" }
     }
   },
   {
