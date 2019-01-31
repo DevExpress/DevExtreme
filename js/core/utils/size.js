@@ -86,7 +86,7 @@ var getHeightWithOffset = function(value, offset, container) {
         return null;
     }
 
-    if(SPECIAL_HEIGHT_VALUES.includes(value)) {
+    if(SPECIAL_HEIGHT_VALUES.indexOf(value) > -1) {
         return offset ? null : value;
     }
 

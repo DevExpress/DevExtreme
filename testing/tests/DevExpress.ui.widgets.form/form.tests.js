@@ -1413,11 +1413,12 @@ QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
             case "option":
                 form.option("items[0].buttonOptions.icon", "icon2");
                 break;
-            case "itemOption":
+            case "itemOption": {
                 const buttonOptions = form.itemOption("button1").buttonOptions;
                 buttonOptions.icon = "icon2";
                 form.itemOption("button1", "buttonOptions", buttonOptions);
                 break;
+            }
             case "editor.option":
                 form.getButton("button1").option("icon", "icon2");
                 break;
@@ -1508,9 +1509,9 @@ QUnit.test("UpdateDimensions", function(assert) {
     assert.ok(isSizeUpdated);
 });
 
-function triggerKeyUp($element, keyCode) {
+function triggerKeyUp($element, key) {
     var e = $.Event("keyup");
-    e.which = keyCode;
+    e.key = key;
     $($element.find("input").first()).trigger(e);
 }
 
@@ -1532,7 +1533,7 @@ QUnit.test("Check component instance onEditorEnterKey", function(assert) {
 
     // act
     editor = form.getEditor("work");
-    triggerKeyUp(editor.$element(), 13);
+    triggerKeyUp(editor.$element(), "Enter");
 
     // assert
     assert.notEqual(testArgs.component, undefined, "component");

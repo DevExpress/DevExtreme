@@ -135,7 +135,9 @@ function getCriteriaOperation(criteria) {
             if(value && value !== item) {
                 throw new dataErrors.Error("E4019");
             }
-            value = item;
+            if(item !== "!") {
+                value = item;
+            }
         }
     }
     return value;
@@ -352,7 +354,7 @@ function convertToInnerStructure(value, customOperations) {
     if(isNegationGroup(value)) {
         return ["!", isCondition(value[1])
             ? [convertToInnerCondition(value[1], customOperations), AND_GROUP_OPERATION]
-            : convertToInnerGroup(value[1], customOperations)];
+            : isNegationGroup(value[1]) ? [convertToInnerStructure(value[1], customOperations), AND_GROUP_OPERATION] : convertToInnerGroup(value[1], customOperations)];
     }
     return convertToInnerGroup(value, customOperations);
 }
@@ -395,14 +397,18 @@ function getFilterExpression(value, fields, customOperations, target) {
         return null;
     }
 
-    var criteria = getGroupCriteria(value),
-        result = [];
-
+    if(isNegationGroup(value)) {
+        let filterExpression = getFilterExpression(value[1], fields, customOperations, target);
+        return ["!", filterExpression];
+    }
+    let criteria = getGroupCriteria(value);
     if(isCondition(criteria)) {
-        result = getConditionFilterExpression(criteria, fields, customOperations, target) || null;
+        return getConditionFilterExpression(criteria, fields, customOperations, target) || null;
     } else {
-        var filterExpression,
-            groupValue = getGroupValue(criteria);
+        let filterExpression,
+            groupValue = getGroupValue(criteria),
+            result = [];
+
         for(var i = 0; i < criteria.length; i++) {
             if(isGroup(criteria[i])) {
                 filterExpression = getFilterExpression(criteria[i], fields, customOperations, target);
@@ -418,9 +424,8 @@ function getFilterExpression(value, fields, customOperations, target) {
                 }
             }
         }
-        result = result.length ? result : null;
+        return result.length ? result : null;
     }
-    return result && isNegationGroup(value) ? ["!", result] : result;
 }
 
 function getNormalizedFilter(group) {

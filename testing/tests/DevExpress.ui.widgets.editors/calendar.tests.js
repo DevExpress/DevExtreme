@@ -41,15 +41,15 @@ const CALENDAR_BODY_CLASS = "dx-calendar-body",
 
     ACTIVE_STATE_CLASS = "dx-state-active",
 
-    ENTER_KEY_CODE = 13,
-    PAGE_UP_KEY_CODE = 33,
-    PAGE_DOWN_KEY_CODE = 34,
-    END_KEY_CODE = 35,
-    HOME_KEY_CODE = 36,
-    LEFT_ARROW_KEY_CODE = 37,
-    UP_ARROW_KEY_CODE = 38,
-    RIGHT_ARROW_KEY_CODE = 39,
-    DOWN_ARROW_KEY_CODE = 40;
+    ENTER_KEY_CODE = "Enter",
+    PAGE_UP_KEY_CODE = "PageUp",
+    PAGE_DOWN_KEY_CODE = "PageDown",
+    END_KEY_CODE = "End",
+    HOME_KEY_CODE = "Home",
+    LEFT_ARROW_KEY_CODE = "ArrowLeft",
+    UP_ARROW_KEY_CODE = "ArrowUp",
+    RIGHT_ARROW_KEY_CODE = "ArrowRight",
+    DOWN_ARROW_KEY_CODE = "ArrowDown";
 
 const getShortDate = (date) => {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
@@ -73,6 +73,17 @@ const iterateViews = (callback) => {
     const views = ["month", "year", "decade", "century"];
     $.each(views, callback);
 };
+
+function triggerKeydown($element, key, ctrl) {
+    var options = { key: key };
+
+    if(ctrl) {
+        options.ctrlKey = ctrl;
+    }
+
+    var e = $.Event("keydown", options);
+    $element.trigger(e);
+}
 
 QUnit.module("Hidden input", {
     beforeEach: () => {
@@ -920,31 +931,25 @@ QUnit.module("Keyboard navigation", {
             "century": [new Date(1913, 9, 13), new Date(2013, 9, 13)]
         };
 
-        const trigger = (which, ctrl) => {
-            const e = $.Event("keydown", { which: which, ctrlKey: ctrl });
-            $($element).trigger(e);
-            return e;
-        };
-
         const clock = this.clock;
 
         iterateViews((_, type) => {
             calendar.option("zoomLevel", type);
 
             clock.tick();
-            trigger(LEFT_ARROW_KEY_CODE, true);
+            triggerKeydown($element, LEFT_ARROW_KEY_CODE, true);
             assert.deepEqual(calendar.option("currentDate"), expectedDates[type][0], "ctrl+left arrow navigates correctly");
 
             clock.tick();
-            trigger(RIGHT_ARROW_KEY_CODE, true);
+            triggerKeydown($element, RIGHT_ARROW_KEY_CODE, true);
             assert.deepEqual(calendar.option("currentDate"), expectedDates[type][1], "ctrl+right arrow navigates correctly");
 
             clock.tick();
-            trigger(PAGE_UP_KEY_CODE);
+            triggerKeydown($element, PAGE_UP_KEY_CODE);
             assert.deepEqual(calendar.option("currentDate"), expectedDates[type][0], "pageup navigates correctly");
 
             clock.tick();
-            trigger(PAGE_DOWN_KEY_CODE);
+            triggerKeydown($element, PAGE_DOWN_KEY_CODE);
             assert.deepEqual(calendar.option("currentDate"), expectedDates[type][1], "pagedown navigates correctly");
         });
     });
@@ -957,17 +962,13 @@ QUnit.module("Keyboard navigation", {
             focusStateEnabled: true
         });
 
-        const $element = this.$element,
-            trigger = (which, ctrl) => {
-                const e = $.Event("keydown", { which: which, ctrlKey: ctrl });
-                $element.trigger(e);
-            };
+        const $element = this.$element;
 
-        trigger(LEFT_ARROW_KEY_CODE, true);
+        triggerKeydown($element, LEFT_ARROW_KEY_CODE, true);
         assert.deepEqual(this.calendar.option("currentDate"), new Date(2013, 10, this.value.getDate()), "ctrl+left arrow navigates correctly");
 
         this.clock.tick();
-        trigger(RIGHT_ARROW_KEY_CODE, true);
+        triggerKeydown($element, RIGHT_ARROW_KEY_CODE, true);
         assert.deepEqual(this.calendar.option("currentDate"), new Date(2013, 9, this.value.getDate()), "ctrl+right arrow navigates correctly");
     });
 
@@ -979,31 +980,27 @@ QUnit.module("Keyboard navigation", {
         });
 
         const $element = this.$element,
-            calendar = this.calendar,
-            trigger = (which) => {
-                const e = $.Event("keydown", { which: which });
-                $element.trigger(e);
-            };
+            calendar = this.calendar;
 
         $element.trigger("focusin");
 
         calendar.option("currentDate", dateUtils.getLastMonthDate(calendar.option("currentDate")));
-        trigger(RIGHT_ARROW_KEY_CODE);
+        triggerKeydown($element, RIGHT_ARROW_KEY_CODE);
         assert.deepEqual(calendar.option("currentDate"), new Date(2015, 3, 1), "month changed correctly");
 
         calendar.option("zoomLevel", "year");
         calendar.option("currentDate", new Date(2015, 11, 1));
-        trigger(RIGHT_ARROW_KEY_CODE);
+        triggerKeydown($element, RIGHT_ARROW_KEY_CODE);
         assert.deepEqual(calendar.option("currentDate"), new Date(2016, 0, 1), "year changed correctly");
 
         calendar.option("zoomLevel", "decade");
         calendar.option("currentDate", new Date(2019, 0, 1));
-        trigger(RIGHT_ARROW_KEY_CODE);
+        triggerKeydown($element, RIGHT_ARROW_KEY_CODE);
         assert.deepEqual(calendar.option("currentDate"), new Date(2020, 0, 1), "decade changed correctly");
 
         calendar.option("zoomLevel", "century");
         calendar.option("currentDate", new Date(2090, 0, 1));
-        trigger(RIGHT_ARROW_KEY_CODE);
+        triggerKeydown($element, RIGHT_ARROW_KEY_CODE);
         assert.deepEqual(calendar.option("currentDate"), new Date(2100, 0, 1), "century changed correctly");
     });
 
@@ -1038,18 +1035,14 @@ QUnit.module("Keyboard navigation", {
 
         const $element = this.$element;
         const calendar = this.calendar;
-        const trigger = (which, ctrl) => {
-            const e = $.Event("keydown", { which: which, ctrlKey: ctrl });
-            $element.trigger(e);
-        };
 
         $.each(["year", "decade", "century"], (_, type) => {
-            trigger(UP_ARROW_KEY_CODE, true);
+            triggerKeydown($element, UP_ARROW_KEY_CODE, true);
             assert.equal(calendar.option("zoomLevel"), type, "type view matches zoomLevel type");
         });
 
         $.each(["decade", "year", "month"], (_, type) => {
-            trigger(DOWN_ARROW_KEY_CODE, true);
+            triggerKeydown($element, DOWN_ARROW_KEY_CODE, true);
             assert.equal(calendar.option("zoomLevel"), type, "type view matches zoomLevel type");
         });
     });
@@ -1061,11 +1054,7 @@ QUnit.module("Keyboard navigation", {
         });
 
         const calendar = this.calendar,
-            $element = this.$element,
-            trigger = (which) => {
-                const e = $.Event("keydown", { which: which });
-                $element.trigger(e);
-            };
+            $element = this.$element;
 
         $($element).trigger("focusin");
 
@@ -1079,11 +1068,11 @@ QUnit.module("Keyboard navigation", {
 
             let expectedContoured = dataUtils.data($view.find(toSelector(CALENDAR_CELL_CLASS)).not(toSelector(CALENDAR_OTHER_VIEW_CLASS)).first().get(0), CALENDAR_DATE_VALUE_KEY);
 
-            trigger(HOME_KEY_CODE);
+            triggerKeydown($element, HOME_KEY_CODE);
             assert.deepEqual(view.option("contouredDate"), expectedContoured, "home button contoured first cell");
 
             expectedContoured = dataUtils.data($view.find(toSelector(CALENDAR_CELL_CLASS)).not(toSelector(CALENDAR_OTHER_VIEW_CLASS)).last().get(0), CALENDAR_DATE_VALUE_KEY);
-            trigger(END_KEY_CODE);
+            triggerKeydown($element, END_KEY_CODE);
             assert.deepEqual(view.option("contouredDate"), expectedContoured, "end button contoured last cell");
         });
     });
@@ -1100,19 +1089,15 @@ QUnit.module("Keyboard navigation", {
             this.reinit($.extend({}, { zoomLevel: type, focusStateEnabled: true }, params[type]));
 
             const $element = this.$element;
-            const trigger = (which) => {
-                const e = $.Event("keydown", { which: which });
-                $element.trigger(e);
-            };
 
             $($element).trigger("focusin");
 
             const view = getCurrentViewInstance(this.calendar);
 
-            trigger(HOME_KEY_CODE);
+            triggerKeydown($element, HOME_KEY_CODE);
             assert.deepEqual(view.option("contouredDate"), params[type].min, "home button contoured min cell");
 
-            trigger(END_KEY_CODE);
+            triggerKeydown($element, END_KEY_CODE);
             assert.deepEqual(view.option("contouredDate"), params[type].max, "end button contoured max cell");
         }, this));
     });
@@ -1139,10 +1124,10 @@ QUnit.module("Keyboard navigation", {
                 assert.ok(e.isDefaultPrevented());
             })
             .find("[data-value='2013/12/15']")
-            .trigger($.Event("keydown", { which: LEFT_ARROW_KEY_CODE }))
-            .trigger($.Event("keydown", { which: UP_ARROW_KEY_CODE }))
-            .trigger($.Event("keydown", { which: RIGHT_ARROW_KEY_CODE }))
-            .trigger($.Event("keydown", { which: DOWN_ARROW_KEY_CODE }))
+            .trigger($.Event("keydown", { key: LEFT_ARROW_KEY_CODE }))
+            .trigger($.Event("keydown", { key: UP_ARROW_KEY_CODE }))
+            .trigger($.Event("keydown", { key: RIGHT_ARROW_KEY_CODE }))
+            .trigger($.Event("keydown", { key: DOWN_ARROW_KEY_CODE }))
             .off(".TEST");
     });
 
@@ -1205,17 +1190,12 @@ QUnit.module("Preserve time component on value change", {
         const calendar = this.calendar,
             $calendar = this.$element;
 
-        const trigger = (which) => {
-            const e = $.Event("keydown", { which: which });
-            $calendar.trigger(e);
-        };
-
         calendar.option("value", new Date(2015, 8, 1, 12, 57));
 
         $($calendar).trigger("focusin");
 
-        trigger(RIGHT_ARROW_KEY_CODE);
-        trigger(ENTER_KEY_CODE);
+        triggerKeydown($calendar, RIGHT_ARROW_KEY_CODE);
+        triggerKeydown($calendar, ENTER_KEY_CODE);
 
         assert.deepEqual(calendar.option("value"), new Date(2015, 8, 2, 12, 57));
     });
@@ -1698,15 +1678,11 @@ QUnit.module("ZoomLevel option", {
             value: new Date(2015, 2, 15),
             focusStateEnabled: true
         }).dxCalendar("instance");
-        const trigger = (which) => {
-            const e = $.Event("keydown", { which: which });
-            $element.trigger(e);
-        };
 
         $.each(["century", "decade"], (_, type) => {
             calendar.option("zoomLevel", type);
             $($element).trigger("focusin");
-            trigger(ENTER_KEY_CODE);
+            triggerKeydown($element, ENTER_KEY_CODE);
             assert.ok(calendar.option("zoomLevel") !== type, "zoomLevel option view is changed");
         });
     });
@@ -1832,37 +1808,32 @@ QUnit.module("Min & Max options", {
                 return animate.apply(fx, args);
             };
 
-            const that = this,
-                trigger = (which) => {
-                    const e = $.Event("keydown", { which: which });
-                    that.$element.trigger(e);
-                },
-                minimumCurrentDate = new Date(this.value.getFullYear(), this.value.getMonth() - 1, this.value.getDate()),
-                currentDate = new Date(this.value.getFullYear(), this.value.getMonth(), this.value.getDate()),
-                maximumCurrentDate = new Date(this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate());
+            const minimumCurrentDate = new Date(this.value.getFullYear(), this.value.getMonth() - 1, this.value.getDate());
+            const currentDate = new Date(this.value.getFullYear(), this.value.getMonth(), this.value.getDate());
+            const maximumCurrentDate = new Date(this.value.getFullYear(), this.value.getMonth() + 1, this.value.getDate());
 
             $(this.$element).trigger("focusin");
 
-            trigger(PAGE_UP_KEY_CODE);
+            triggerKeydown(this.$element, PAGE_UP_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option("currentDate"), minimumCurrentDate);
             assert.equal(animateCount, 1, "view is changed with animation after the 'page up' key press the first time");
 
-            trigger(PAGE_UP_KEY_CODE);
+            triggerKeydown(this.$element, PAGE_UP_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option("currentDate"), minimumCurrentDate);
             assert.equal(animateCount, 1, "view is not changed after the 'page up' key press the second time");
 
-            trigger(PAGE_DOWN_KEY_CODE);
+            triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option("currentDate"), currentDate);
 
-            trigger(PAGE_DOWN_KEY_CODE);
+            triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option("currentDate"), maximumCurrentDate);
             assert.equal(animateCount, 3, "view is changed with animation after the 'page down' key press the first time");
 
-            trigger(PAGE_DOWN_KEY_CODE);
+            triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option("currentDate"), maximumCurrentDate);
             assert.equal(animateCount, 3, "view is not changed after the 'page down' key press the second time");
@@ -2110,37 +2081,31 @@ QUnit.module("disabledDates option", {
                 return animate.apply(fx, args);
             };
 
-            const that = this,
-                trigger = (which) => {
-                    const e = $.Event("keydown", { which: which });
-                    that.$element.trigger(e);
-                };
-
             this.$element.trigger("focusin");
 
-            trigger(PAGE_UP_KEY_CODE);
+            triggerKeydown(this.$element, PAGE_UP_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
 
             assert.deepEqual(this.calendar.option("currentDate"), new Date(2010, 8, 30), "Skip disabled dates");
             assert.equal(animateCount, 1, "view is changed with animation after the 'page up' key press the first time");
 
-            trigger(PAGE_UP_KEY_CODE);
+            triggerKeydown(this.$element, PAGE_UP_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
 
             assert.deepEqual(this.calendar.option("currentDate"), new Date(2010, 7, 30));
             assert.equal(animateCount, 2, "view is changed after the 'page up' key press the second time");
 
-            trigger(PAGE_DOWN_KEY_CODE);
+            triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option("currentDate"), new Date(2010, 8, 30));
             assert.equal(animateCount, 3, "view is changed with animation after the 'page down' key press the first time");
 
-            trigger(PAGE_DOWN_KEY_CODE);
+            triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option("currentDate"), new Date(2010, 10, 1));
             assert.equal(animateCount, 4, "view is changed with animation after the 'page down' key press the first time");
 
-            trigger(PAGE_DOWN_KEY_CODE);
+            triggerKeydown(this.$element, PAGE_DOWN_KEY_CODE);
             this.clock.tick(VIEW_ANIMATION_DURATION);
             assert.deepEqual(this.calendar.option("currentDate"), new Date(2011, 0, 1), "Skip disabled dates");
             assert.equal(animateCount, 5, "view is changed after the 'page down' key press the second time");
@@ -2162,18 +2127,12 @@ QUnit.module("disabledDates option", {
             focusStateEnabled: true
         });
 
-        const that = this,
-            trigger = (which) => {
-                const e = $.Event("keydown", { which: which });
-                that.$element.trigger(e);
-            };
-
         this.$element.trigger("focusin");
 
-        trigger(HOME_KEY_CODE);
+        triggerKeydown(this.$element, HOME_KEY_CODE);
         assert.deepEqual(this.calendar.option("currentDate"), new Date(2010, 10, 3));
 
-        trigger(END_KEY_CODE);
+        triggerKeydown(this.$element, END_KEY_CODE);
         assert.deepEqual(this.calendar.option("currentDate"), new Date(2010, 10, 29));
     });
 
@@ -2354,21 +2313,16 @@ QUnit.module("Current date", {
                 { zoomLevel: type, focusStateEnabled: true },
                 params[type])).dxCalendar("instance");
 
-            const trigger = (which) => {
-                const e = $.Event("keydown", { which: which });
-                $element.trigger(e);
-            };
-
             $($element).trigger("focusin");
 
-            trigger(RIGHT_ARROW_KEY_CODE);
-            trigger(RIGHT_ARROW_KEY_CODE);
+            triggerKeydown($element, RIGHT_ARROW_KEY_CODE);
+            triggerKeydown($element, RIGHT_ARROW_KEY_CODE);
             assert.deepEqual(calendar.option("currentDate"), calendar.option("max"), "currentDate is correct");
             assert.deepEqual(getCurrentViewInstance(calendar).option("contouredDate"), calendar.option("currentDate"), "view contouredDate is the same as calendar currentDate");
 
-            trigger(LEFT_ARROW_KEY_CODE);
-            trigger(LEFT_ARROW_KEY_CODE);
-            trigger(LEFT_ARROW_KEY_CODE);
+            triggerKeydown($element, LEFT_ARROW_KEY_CODE);
+            triggerKeydown($element, LEFT_ARROW_KEY_CODE);
+            triggerKeydown($element, LEFT_ARROW_KEY_CODE);
             assert.deepEqual(calendar.option("currentDate"), calendar.option("min"), "min date is countoured");
             assert.deepEqual(getCurrentViewInstance(calendar).option("contouredDate"), calendar.option("currentDate"), "view contouredDate is the same as calendar currentDate");
         }, this));
@@ -2392,19 +2346,15 @@ QUnit.module("Current date", {
                 focusStateEnabled: true
             }).dxCalendar("instance");
 
-            const trigger = (which) => {
-                const e = $.Event("keydown", { which: which });
-                $element.trigger(e);
-            };
             const currentDate = calendar.option("currentDate");
 
             $($element).trigger("focusin");
 
-            trigger(UP_ARROW_KEY_CODE);
+            triggerKeydown($element, UP_ARROW_KEY_CODE);
             assert.ok(!dateUtils.sameMonthAndYear(calendar.option("currentDate"), currentDate), "current view is changed");
             assert.deepEqual(getCurrentViewInstance(calendar).option("contouredDate"), params[type].expectedDate, "contouredDate is countoured");
 
-            trigger(DOWN_ARROW_KEY_CODE);
+            triggerKeydown($element, DOWN_ARROW_KEY_CODE);
             assert.ok(dateUtils.sameMonthAndYear(calendar.option("currentDate"), currentDate), "current view is changed");
             assert.deepEqual(getCurrentViewInstance(calendar).option("contouredDate"), params[type].startDate, "contouredDate is countoured");
         }, this));
@@ -2417,30 +2367,25 @@ QUnit.module("Current date", {
             focusStateEnabled: true
         }).dxCalendar("instance");
 
-        const trigger = (which, ctrl) => {
-            const e = $.Event("keydown", { which: which, ctrlKey: ctrl });
-            $element.trigger(e);
-        };
-
         $($element).trigger("focusin");
 
-        trigger(UP_ARROW_KEY_CODE, true);
+        triggerKeydown($element, UP_ARROW_KEY_CODE, true);
         assert.deepEqual(calendar.option("currentDate"), new Date(2015, 2, 10), "contoured is correct on year view (up)");
 
-        trigger(UP_ARROW_KEY_CODE, true);
+        triggerKeydown($element, UP_ARROW_KEY_CODE, true);
         assert.deepEqual(calendar.option("currentDate"), new Date(2015, 2, 10), "contoured is correct on decade view (up)");
 
-        trigger(UP_ARROW_KEY_CODE, true);
+        triggerKeydown($element, UP_ARROW_KEY_CODE, true);
         assert.deepEqual(calendar.option("currentDate"), new Date(2015, 2, 10), "contoured is correct on century view (up)");
 
-        trigger(RIGHT_ARROW_KEY_CODE);
-        trigger(DOWN_ARROW_KEY_CODE, true);
+        triggerKeydown($element, RIGHT_ARROW_KEY_CODE);
+        triggerKeydown($element, DOWN_ARROW_KEY_CODE, true);
         assert.deepEqual(calendar.option("currentDate"), new Date(2025, 2, 10), "contoured is correct on decade view (down)");
 
-        trigger(DOWN_ARROW_KEY_CODE, true);
+        triggerKeydown($element, DOWN_ARROW_KEY_CODE, true);
         assert.deepEqual(calendar.option("currentDate"), new Date(2025, 2, 10), "contoured is correct on year view (down)");
 
-        trigger(DOWN_ARROW_KEY_CODE, true);
+        triggerKeydown($element, DOWN_ARROW_KEY_CODE, true);
         assert.deepEqual(calendar.option("currentDate"), new Date(2025, 2, 10), "contoured is correct on month view (down)");
     });
 
@@ -3105,7 +3050,7 @@ QUnit.module("Regression", {
             focusStateEnabled: true
         }).dxCalendar("instance");
 
-        $(this.$element).trigger($.Event("keydown", { which: RIGHT_ARROW_KEY_CODE }));
+        $(this.$element).trigger($.Event("keydown", { key: RIGHT_ARROW_KEY_CODE }));
         assert.equal(calendar.option("currentDate").getMonth(), 0);
     });
 });

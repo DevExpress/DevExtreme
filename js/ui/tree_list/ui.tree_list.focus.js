@@ -1,7 +1,7 @@
-var core = require("./ui.tree_list.core"),
-    extend = require("../../core/utils/extend").extend,
-    Deferred = require("../../core/utils/deferred").Deferred,
-    focusModule = require("../grid_core/ui.grid_core.focus");
+import core from './ui.tree_list.core';
+import { extend } from '../../core/utils/extend';
+import { Deferred } from '../../core/utils/deferred';
+import focusModule from '../grid_core/ui.grid_core.focus';
 
 function findIndex(items, callback) {
     var result = -1;

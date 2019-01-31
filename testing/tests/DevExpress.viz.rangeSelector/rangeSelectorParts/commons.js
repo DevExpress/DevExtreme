@@ -34,7 +34,7 @@ var themeManagerModule = require("viz/range_selector/theme_manager"),
             return true;
         },
         getBusinessRange: function() {
-            return {};
+            return new StubRange();
         }
     });
 

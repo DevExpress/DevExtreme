@@ -188,7 +188,7 @@ gulp.task('npm-dts-check', ['npm-dts-generator'], function() {
 
             var uniqueIdentifier = moduleMeta.name
                 .replace(/\./g, '_')
-                .split('\/')
+                .split('/')
                 .concat([name])
                 .join('__');
 
@@ -198,7 +198,7 @@ gulp.task('npm-dts-check', ['npm-dts-generator'], function() {
             var widgetName = widgetNameByPath(exportEntry.path);
             if(exportEntry.isWidget && widgetName) {
                 return `$('<div>').${widgetName}();\n${importStatement}`;
-            };
+            }
 
             return importStatement;
         }).join('\n');

@@ -97,7 +97,7 @@ var populateAxesInfo = function(axes) {
         if(majorTicks && majorTicks.length > 0 &&
             typeUtils.isNumeric(majorTicks[0]) &&
             options.type !== "discrete" &&
-            !businessRange.stubData &&
+            !businessRange.isEmpty() &&
             !(businessRange.breaks && businessRange.breaks.length) &&
             axis.getViewport().action !== "zoom"
         ) {
@@ -123,12 +123,6 @@ var populateAxesInfo = function(axes) {
                 tickInterval: tickInterval,
                 synchronizedValue: synchronizedValue
             };
-
-            if(businessRange.stubData) {
-                axisInfo.stubData = true;
-                axisInfo.tickInterval = axisInfo.tickInterval || options.tickInterval;
-                axisInfo.isLogarithmic = false;
-            }
 
             convertAxisInfo(axisInfo, linearConverter);
 
@@ -301,10 +295,6 @@ var applyMinMaxValues = function(axesInfo) {
         }
         range.minVisible = info.minValue;
         range.maxVisible = info.maxValue;
-
-        if(_isDefined(info.stubData)) {
-            range.stubData = info.stubData;
-        }
 
         if(range.min > range.minVisible) {
             range.min = range.minVisible;

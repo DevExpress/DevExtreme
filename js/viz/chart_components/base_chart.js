@@ -1264,6 +1264,7 @@ var BaseChart = BaseWidget.inherit({
                 changedStateSeriesCount++;
             }
         });
+        that._tracker.clearHover();
         that.series = [];
 
         changedStateSeriesCount > 0 && that._disposeSeriesFamilies();

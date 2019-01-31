@@ -1100,9 +1100,14 @@ var Scheduler = Widget.inherit({
 
         extend(this._deprecatedOptions, {
             /**
-             * @name dxSwitchOptions.onAppointmentFormCreated
-             * @type string
-             * @deprecated dxSwitchOptions.onAppointmentFormOpening
+             * @name dxSchedulerOptions.onAppointmentFormCreated
+             * @extends Action
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 appointmentData:object
+             * @type_function_param1_field5 form:dxForm
+             * @action
+             * @deprecated dxSchedulerOptions.onAppointmentFormOpening
              */
             onAppointmentFormCreated: { since: "18.2", alias: "onAppointmentFormOpening" },
         });
@@ -1167,7 +1172,7 @@ var Scheduler = Widget.inherit({
                 break;
             case "views":
                 this._processCurrentView();
-                if(!!this._getCurrentViewOptions()) {
+                if(this._getCurrentViewOptions()) {
                     this.repaint();
                 } else {
                     this._header.option(name, value);
@@ -1672,7 +1677,7 @@ var Scheduler = Widget.inherit({
         }
 
         each(fields, (function(name, expr) {
-            if(!!expr) {
+            if(expr) {
 
                 var getter = dataCoreUtils.compileGetter(expr),
                     setter = dataCoreUtils.compileSetter(expr);
@@ -2469,7 +2474,7 @@ var Scheduler = Widget.inherit({
     },
 
     _getRecurrenceExceptionDate: function(exceptionStartDate, targetStartDate, startDateTimeZone) {
-        var exceptionStartDate = this.fire("convertDateByTimezoneBack", exceptionStartDate, startDateTimeZone);
+        exceptionStartDate = this.fire("convertDateByTimezoneBack", exceptionStartDate, startDateTimeZone);
         var appointmentStartDate = this.fire("convertDateByTimezoneBack", targetStartDate, startDateTimeZone);
 
         exceptionStartDate.setHours(appointmentStartDate.getHours(),

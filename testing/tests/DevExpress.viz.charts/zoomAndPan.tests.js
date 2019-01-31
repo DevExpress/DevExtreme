@@ -15,7 +15,7 @@ const environment = {
         this.tooltipHiddenSpy = sinon.spy();
     },
     createChart: function(options) {
-        const chart = $("#chart").dxChart($.extend(true, {
+        const chart = $("#chart").dxChart($.extend(true, {}, {
             size: {
                 width: 800,
                 height: 600
@@ -2419,6 +2419,12 @@ QUnit.test("Do nothing if no actions allowed", function(assert) {
                     endValue: 7
                 }
             },
+            valueAxis: {
+                visualRange: {
+                    startValue: 30,
+                    endValue: 70
+                }
+            },
             zoomAndPan: {
                 argumentAxis: "none",
                 valueAxis: "none",
@@ -2554,6 +2560,81 @@ QUnit.test("Reject API zoom-in both axes by default minVisualRangeLength option"
     assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 1);
 });
 
+QUnit.module("Axes with empty range", environment);
+
+QUnit.test("Pan - do nothing", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy();
+    this.createChart({
+        dataSource: null,
+        argumentAxis: {},
+        valueAxis: {},
+        zoomAndPan: {
+            argumentAxis: "both",
+            valueAxis: "both"
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
+
+    // act
+    const e = this.pointer.start({ x: 100, y: 250, cancelable: true }).dragStart().lastEvent();
+
+    // assert
+    assert.strictEqual(e.cancel, true);
+    assert.strictEqual(e.originalEvent.cancel, true);
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+});
+
+QUnit.test("Mouse wheel - do nothing", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy();
+    this.createChart({
+        dataSource: null,
+        argumentAxis: {},
+        valueAxis: {},
+        zoomAndPan: {
+            argumentAxis: "both",
+            valueAxis: "both",
+            allowMouseWheel: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
+
+    // act
+    this.pointer.start({ x: 200, y: 250 }).wheel(10);
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+});
+
+QUnit.test("Shutter zoom - do nothing", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy();
+    this.createChart({
+        dataSource: null,
+        argumentAxis: {},
+        valueAxis: {},
+        zoomAndPan: {
+            valueAxis: "zoom",
+            argumentAxis: "zoom",
+            dragToZoom: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
+
+    // act
+    this.pointer.start({ x: 200, y: 120 }).dragStart().drag(400, 240).dragEnd();
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+});
+
 QUnit.module("Prevent default behavior", environment);
 
 QUnit.test("On pan", function(assert) {
@@ -2581,6 +2662,56 @@ QUnit.test("On pan", function(assert) {
     assert.equal(preventDefault.callCount, 3);
     assert.equal(stopPropagation.callCount, 3);
     assert.equal(this.trackerStopHandling.callCount, 3);
+});
+
+QUnit.test("Pan action in pane without zoom if another pane has a zoom", function(assert) {
+    const preventDefault = sinon.spy(),
+        stopPropagation = sinon.spy(),
+        chart = this.createChart({
+            dataSource: [{
+                arg: "a1",
+                val1: 4.1,
+                val2: 109
+            }, {
+                arg: "a2",
+                val1: 10,
+                val2: 104
+            }],
+            panes: [{
+                name: "topPane"
+            }, {
+                name: "bottomPane"
+            }],
+            zoomAndPan: {
+                valueAxis: "both",
+                allowMouseWheel: true
+            },
+            series: [{
+                pane: "topPane",
+                valueField: "val1"
+            }, {
+                valueField: "val2"
+            }],
+            valueAxis: [{
+                pane: "bottomPane",
+                name: "bottomAxis"
+            }, {
+                visualRange: {
+                    startValue: 4,
+                    endValue: 5
+                },
+                pane: "topPane",
+                name: "topAxis"
+            }]
+        });
+
+    // act
+    const $root = $(chart._renderer.root.element);
+    $root.trigger(new $.Event("dxmousewheel", { d: 10, pageX: 0, pageY: 350, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+
+    assert.equal(preventDefault.callCount, 0);
+    assert.equal(stopPropagation.callCount, 0);
+    assert.equal(this.trackerStopHandling.callCount, 0);
 });
 
 QUnit.test("Default behavior - no prevent. On panning by drag (goes to the edge)", function(assert) {

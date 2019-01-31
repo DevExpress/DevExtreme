@@ -120,7 +120,7 @@ QUnit.test('Text editor enter in ios (T344096)', function(assert) {
     // act
     $container.find("input").focus();
     $container.find("input").val('AB');
-    $container.find("input").trigger($.Event("keydown", { keyCode: 13 }));
+    $container.find("input").trigger($.Event("keydown", { key: "Enter" }));
 
     // assert
     assert.equal(valueChangeEvent, 'change', 'value change event for ios');
@@ -157,7 +157,7 @@ if(browser.msie) {
         // act
         $container.find("input").focus();
         $container.find("input").val("AB");
-        $container.find("input").trigger($.Event("keydown", { keyCode: 13 }));
+        $container.find("input").trigger($.Event("keydown", { key: "Enter" }));
 
         this.clock.tick();
 
@@ -197,7 +197,7 @@ if(browser.msie) {
         assert.ok(dateBox, 'dxTextBox created');
 
         // act
-        $container.find("input").trigger($.Event("keydown", { keyCode: 13 }));
+        $container.find("input").trigger($.Event("keydown", { key: "Enter" }));
 
         // assert
         assert.deepEqual(methods, ["blur", "focus"], "blur and focus called");
@@ -1337,7 +1337,7 @@ QUnit.test("Update focus on tab keydown", function(assert) {
         isFocused = true;
     };
 
-    testElement.trigger($.Event('keydown.dxDataGridEditorFactory', { which: 9 }));
+    testElement.trigger($.Event('keydown.dxDataGridEditorFactory', { key: "Tab" }));
     this.clock.tick();
 
     // assert

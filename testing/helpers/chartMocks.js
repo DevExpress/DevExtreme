@@ -230,7 +230,6 @@ export const createVerticalAxis = function createVerticalAxis(translatorData, or
 function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHorizontal) {
     function createTranslator(data, options) {
         var useOriginalTranslator = options.useOriginalTranslator;
-        data.stubData = data.stubData || options.stubData;
         data.categories = data.categories || options.categories;
         data.maxVisible = data.maxVisible || options.max;
         data.minVisible = data.minVisible || options.min;

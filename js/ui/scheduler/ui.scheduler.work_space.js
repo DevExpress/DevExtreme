@@ -769,12 +769,17 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createHeaderScrollable: function() {
-        var dateTableScrollableOnScroll,
-            $headerScrollable = $("<div>")
-                .addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS)
-                .appendTo(this.$element());
+        var $headerScrollable = $("<div>")
+            .addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS)
+            .appendTo(this.$element());
 
-        this._headerScrollable = this._createComponent($headerScrollable, Scrollable, {
+        this._headerScrollable = this._createComponent($headerScrollable, Scrollable, this._headerScrollableConfig());
+    },
+
+    _headerScrollableConfig: function() {
+        var dateTableScrollableOnScroll;
+
+        var config = {
             useKeyboard: false,
             showScrollbar: false,
             direction: "horizontal",
@@ -794,7 +799,9 @@ var SchedulerWorkSpace = Widget.inherit({
             onEnd: (function(e) {
                 this._dateTableScrollable.option("onScroll", dateTableScrollableOnScroll);
             }).bind(this)
-        });
+        };
+
+        return config;
     },
 
     _createSidebarScrollable: function() {
@@ -2076,7 +2083,7 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         var coordinates = {
-            cellPosition: position.left + shift.cellPosition,
+            cellShift: position.left + shift.cellShift,
             top: position.top + shift.top,
             left: position.left + shift.left,
             rowIndex: position.rowIndex,
@@ -2114,7 +2121,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return {
             top: timeShift * this.getCellHeight(),
             left: 0,
-            cellPosition: 0
+            cellShift: 0
         };
     },
 

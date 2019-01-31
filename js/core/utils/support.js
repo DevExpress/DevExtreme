@@ -43,10 +43,22 @@ var inputType = function(type) {
     }
 };
 
-var touchEvents = windowUtils.hasProperty("ontouchstart") && !windowUtils.hasProperty("callPhantom"),
-    pointerEvents = !!navigator.pointerEnabled || !!navigator.msPointerEnabled,
-    touchPointersPresent = !!navigator.maxTouchPoints || !!navigator.msMaxTouchPoints;
+var detectTouchEvents = function(window, maxTouchPoints) {
+    return (window.hasProperty("ontouchstart") || !!maxTouchPoints) && !window.hasProperty("callPhantom");
+};
 
+var detectPointerEvent = function(window, navigator) {
+    return window.hasProperty("PointerEvent") || !!navigator.pointerEnabled;
+};
+
+var touchEvents = detectTouchEvents(windowUtils, navigator.maxTouchPoints);
+var pointerEvents = detectPointerEvent(windowUtils, navigator);
+var touchPointersPresent = !!navigator.maxTouchPoints || !!navigator.msMaxTouchPoints;
+
+///#DEBUG
+exports.detectTouchEvents = detectTouchEvents;
+exports.detectPointerEvent = detectPointerEvent;
+///#ENDDEBUG
 exports.touchEvents = touchEvents;
 exports.pointerEvents = pointerEvents;
 exports.touch = touchEvents || pointerEvents && touchPointersPresent;

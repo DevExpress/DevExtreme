@@ -446,7 +446,7 @@ var LayoutManager = Widget.inherit({
         }
 
         if(colCount === "auto") {
-            if(!!this._cashedColCount) {
+            if(this._cashedColCount) {
                 return this._cashedColCount;
             }
 

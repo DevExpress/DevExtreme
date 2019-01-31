@@ -588,6 +588,10 @@ QUnit.test("popup height can be changed according to the content if height = aut
 
     $content.empty();
     assert.strictEqual($popup.height(), 50, "popup height has been changed, it is equal to the minHeight");
+
+    popup.option("autoResizeEnabled", false);
+    $("<div>").height(450).appendTo($content);
+    assert.strictEqual($popup.height(), 50, "popup height does not change if autoResizeEnabled = false");
 });
 
 QUnit.test("popup height should support top and bottom toolbars if height = auto", assert => {
@@ -1088,8 +1092,6 @@ QUnit.module("rendering", {
         devices.current("desktop");
     }
 });
-
-var POPUP_BOTTOM_CLASS = "dx-popup-bottom";
 
 QUnit.test("anonymous content template rendering", function(assert) {
     var $popup = $("#popupWithAnonymousTmpl").dxPopup({

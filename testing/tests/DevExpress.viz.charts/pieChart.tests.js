@@ -113,8 +113,7 @@ var environment = {
             that.createPieChart = function(options) {
                 var pieChart;
                 $.each(options || {}, function(k, v) {
-                    if(k === "valueAxis" || k === "argumentAxis" || k === "series" || k === "pieSegment") {
-                    } else if(k === "commonPaneSettings") {
+                    if(k === "commonPaneSettings") {
                         that.themeManager.getOptions.withArgs(k).returns($.extend(true, {
                             backgroundColor: "none",
                             border: {
@@ -126,7 +125,7 @@ var environment = {
                                 dashStyle: "solid"
                             }
                         }, v));
-                    } else {
+                    } else if(k !== "valueAxis" && k !== "argumentAxis" && k !== "series" && k !== "pieSegment") {
                         that.themeManager.getOptions.withArgs(k).returns(v);
                     }
                 });
@@ -695,8 +694,8 @@ var environment = {
     QUnit.module("Multi level pie chart", {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
-            this.mockSeries1 = new MockSeries({ points: this.stubPoints });
-            this.mockSeries2 = new MockSeries({ points: this.stubPoints });
+            this.mockSeries1 = new MockSeries({ range: { val: { min: 0, max: 10 } } }),
+            this.mockSeries2 = new MockSeries({ range: { val: { min: 0, max: 10 } } });
 
             var translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
 

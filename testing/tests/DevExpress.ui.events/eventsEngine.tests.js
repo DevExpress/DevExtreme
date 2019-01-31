@@ -242,12 +242,12 @@ QUnit.test("Simulate clicks, check which property", function(assert) {
     }
 });
 
-QUnit.test("Simulate tab press, check which property", function(assert) {
+QUnit.test("Simulate tab press, check key property", function(assert) {
     var done = assert.async();
     var input = document.createElement("input");
     input.type = "text";
     var handler = function(e) {
-        assert.equal(e.which, 9);
+        assert.equal(e.key, "Tab");
         done();
     };
 

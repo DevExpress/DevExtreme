@@ -15,7 +15,7 @@ QUnit.module("get width and height", {
     beforeEach: function() {
         this.$parent = $("<div style='width: 100px; height: 110px'></div>").appendTo("#qunit-fixture");
         this.$element = $("<div/>");
-        this.$parent.append(this.$element);
+        this.$element.appendTo(this.$parent);
     },
 
     afterEach: function() {
@@ -253,7 +253,7 @@ QUnit.module("calculate height", {
     beforeEach: function() {
         this.container = $("<div style='width: 100px; height: 100px; padding: 10px; box-sizing: border-box; margin: 5px'></div>").appendTo("#qunit-fixture").get(0);
         this.invisibleElement = $("<div style='width: 50px; height: 50px; display: none; padding: 5px;'></div>").get(0);
-        this.container.append(this.invisibleElement);
+        $(this.container).append(this.invisibleElement);
     }
 });
 
@@ -269,6 +269,7 @@ QUnit.test("check addOffsetToMaxHeight", function(assert) {
     checkFunc({ value: "100mm", offset: -50, container: null }, "calc(100mm - 50px)");
     checkFunc({ value: "100pt", offset: -50, container: null }, "calc(100pt - 50px)");
     checkFunc({ value: "auto", offset: -50, container: null }, "none");
+    checkFunc({ value: "auto", offset: 0, container: null }, "auto");
     checkFunc({ value: null, offset: -50, container: null }, "none");
 
     assert.roughEqual(sizeUtils.addOffsetToMaxHeight("50%", -20, window), windowHeight / 2 - 20, 1, "string value in percent");
@@ -287,6 +288,7 @@ QUnit.test("check addOffsetToMinHeight", function(assert) {
     checkFunc({ value: "100mm", offset: -50, container: null }, "calc(100mm - 50px)");
     checkFunc({ value: "100pt", offset: -50, container: null }, "calc(100pt - 50px)");
     checkFunc({ value: "auto", offset: -50, container: null }, 0);
+    checkFunc({ value: "auto", offset: 0, container: null }, "auto");
     checkFunc({ value: null, offset: -50, container: null }, 0);
 
     assert.roughEqual(sizeUtils.addOffsetToMinHeight("50%", -20, window), windowHeight / 2 - 20, 1, "string value in percent");

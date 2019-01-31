@@ -10,8 +10,7 @@ QUnit.testStart(function() {
 require("common.css!");
 require("generic_light.css!");
 
-var $ = require("jquery"),
-    dblclickEvent = require("events/dblclick"),
+var dblclickEvent = require("events/dblclick"),
     Color = require("color"),
     fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),

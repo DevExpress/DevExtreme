@@ -1473,6 +1473,26 @@ QUnit.test("selectRows with key as array of undefined", function(assert) {
     });
 });
 
+// T708122
+QUnit.test("selectAll when remote paging and local filtering", function(assert) {
+    this.applyOptions({
+        remoteOperations: { paging: true }
+    });
+
+    this.dataSource = createDataSource(this.array, {}, { pageSize: 5, filter: ["age", ">", 15] });
+    this.dataController.setDataSource(this.dataSource);
+    this.dataSource.load();
+
+    // act
+    this.selectionController.selectAll();
+
+    // assert
+    assert.strictEqual(this.getVisibleRows().length, 5, "visible row count");
+    assert.strictEqual(this.totalCount(), 6, "total count");
+    assert.strictEqual(this.getSelectedRowKeys().length, 6, "selected row count");
+    assert.strictEqual(this.selectionController.isSelectAll(), true, "isSelectAll");
+});
+
 QUnit.module("Selection without dataSource", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("getters", function(assert) {
