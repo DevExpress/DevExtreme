@@ -1943,8 +1943,8 @@ QUnit.test('Items in inverted order', function(assert) {
     });
 });
 
-QUnit.test('Customize order using processItems', function(assert) {
-    this.options.processItems = function(i) {
+QUnit.test('Customize order using customizeItems', function(assert) {
+    this.options.customizeItems = function(i) {
         return i.reverse();
     };
     this.createAndDrawLegend();
@@ -1956,7 +1956,7 @@ QUnit.test('Customize order using processItems', function(assert) {
 });
 
 QUnit.test('Process items return nothing - get original items', function(assert) {
-    this.options.processItems = noop;
+    this.options.customizeItems = noop;
     this.createAndDrawLegend();
 
     var createMarker = this.createMarker;

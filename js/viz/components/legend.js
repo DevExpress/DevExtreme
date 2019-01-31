@@ -458,8 +458,7 @@ extend(legendPrototype, {
         if(options.inverted) {
             items = items.slice().reverse();
         }
-
-        items = options.processItems && options.processItems(items.slice()) || items;
+        items = options.customizeItems && options.customizeItems(items.slice()) || items;
         return items.filter(i => i.visible);
     },
 
