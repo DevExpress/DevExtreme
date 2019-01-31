@@ -1770,44 +1770,44 @@ module.exports = {
                 }
             },
             editorFactory: {
-                createEditor: function() {
+                createEditor: function(_, options) {
                     var keyboardController = this.getController("keyboardNavigation"),
-                        isEditingNavigationMode = keyboardController && keyboardController._isEditingNavigationMode(),
-                        onEditorPrepared = this.option("onEditorPrepared");
-
-                    if(isEditingNavigationMode) {
-                        this.option("onEditorPrepared", function(e) {
-                            var editorInstance;
-
-                            onEditorPrepared && onEditorPrepared(e);
-                            this.option("onEditorPrepared", onEditorPrepared);
-
-                            editorInstance = e.editorElement[e.editorName]("instance");
-                            if(editorInstance) {
-                                var arrowDownKeyHandler = editorInstance._supportedKeys()["downArrow"],
-                                    arrowUpKeyHandler = editorInstance._supportedKeys()["upArrow"],
-                                    $input = editorInstance._input();
-
-                                editorInstance.registerKeyHandler("upArrow", e => {
-                                    if($input.attr("aria-expanded") === "true") {
-                                        return arrowUpKeyHandler && arrowUpKeyHandler.call(editorInstance, e);
-                                    }
-                                });
-                                editorInstance.registerKeyHandler("downArrow", e => {
-                                    if($input.attr("aria-expanded") === "true") {
-                                        return arrowDownKeyHandler && arrowDownKeyHandler.call(editorInstance, e);
-                                    }
-                                });
-                                editorInstance.registerKeyHandler("rightArrow", noop);
-                                editorInstance.registerKeyHandler("leftArrow", noop);
-                                if(e.editorName === "dxDateBox") {
-                                    editorInstance.registerKeyHandler("enter", noop);
-                                }
-                            }
-                        });
-                    }
+                        isEditingNavigationMode = keyboardController && keyboardController._isEditingNavigationMode();
 
                     this.callBase.apply(this, arguments);
+
+                    if(isEditingNavigationMode) {
+                        this._prepareEditingNavigationEditor(options);
+                    }
+                },
+
+                _prepareEditingNavigationEditor: function(options) {
+                    var editorName = options.editorName,
+                        editorElement = options.editorElement,
+                        editorInstance = editorElement[editorName] && editorElement[editorName]("instance");
+
+                    if(editorInstance) {
+                        var arrowDownKeyHandler = editorInstance._supportedKeys()["downArrow"],
+                            arrowUpKeyHandler = editorInstance._supportedKeys()["upArrow"];
+
+                        editorInstance.registerKeyHandler("upArrow", e => {
+                            var $input = editorInstance._input();
+                            if(!$input || $input.attr("aria-expanded") === "true") {
+                                return arrowUpKeyHandler && arrowUpKeyHandler.call(editorInstance, e);
+                            }
+                        });
+                        editorInstance.registerKeyHandler("downArrow", e => {
+                            var $input = editorInstance._input();
+                            if(!$input || $input.attr("aria-expanded") === "true") {
+                                return arrowDownKeyHandler && arrowDownKeyHandler.call(editorInstance, e);
+                            }
+                        });
+                        editorInstance.registerKeyHandler("rightArrow", noop);
+                        editorInstance.registerKeyHandler("leftArrow", noop);
+                        if(editorName === "dxDateBox") {
+                            editorInstance.registerKeyHandler("enter", noop);
+                        }
+                    }
                 }
             },
             data: {
