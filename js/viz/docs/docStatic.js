@@ -59,9 +59,9 @@ var staticMethods = {
     getTheme: function() { },
     /**
     * @name vizmethods.exportWidgets
-    * @publicName exportWidgets(widgetInstances)
+    * @publicName exportWidgets(widgetInstances, options)
     * @param1 widgetInstances:Array<Array<DOMComponent>>
-    * @param2 options:object
+    * @param2 options:object|undefined
     * @param2_field1 fileName:string
     * @param2_field2 format:string
     * @param2_field3 backgroundColor:string
