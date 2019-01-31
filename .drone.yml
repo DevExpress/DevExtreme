@@ -19,6 +19,7 @@ pipeline:
 matrix:
   include:
     - { TARGET: lint }
+    - { TARGET: build }
     - { TARGET: test, CONSTEL: misc }
     - { TARGET: test, CONSTEL: ui }
     - { TARGET: test, CONSTEL: ui.editors }
