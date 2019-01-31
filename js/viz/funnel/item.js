@@ -30,7 +30,6 @@ function Item(widget, options) {
 
     that.id = options.id;
     that.color = options.color;
-    that.visible = true;
 
     that.states = {
         normal: parseStyles(options.color, options.itemOptions, options.itemOptions),

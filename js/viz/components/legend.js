@@ -347,16 +347,15 @@ extend(legendPrototype, {
     },
 
     update: function(data, options) {
-        var that = this;
-
-        that._data = data;
+        const that = this;
+        options = that._options = parseOptions(options, that._textField) || {};
+        that._data = data && options.customizeItems && options.customizeItems(data.slice()) || data;
         that._boundingRect = {
             width: 0,
             height: 0,
             x: 0,
             y: 0
         };
-        that._options = parseOptions(options, that._textField);
 
         return that;
     },
@@ -458,7 +457,7 @@ extend(legendPrototype, {
         if(options.inverted) {
             items = items.slice().reverse();
         }
-        items = options.customizeItems && options.customizeItems(items.slice()) || items;
+
         return items.filter(i => i.visible);
     },
 

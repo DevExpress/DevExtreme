@@ -260,7 +260,7 @@ var dxFunnel = require("../core/base_widget").inherit({
 
             return {
                 id: item.id,
-                visible: item.visible,
+                visible: true,
                 text: item.argument,
                 item: item,
                 states: item.states
