@@ -369,9 +369,11 @@ if(devices.real().deviceType === "desktop") {
 
                 this.keyboard.press("up");
                 assert.equal(this.$input.val(), group.up, "group '" + group.pattern + "' increased");
+                assert.ok(this.keyboard.event.isDefaultPrevented(), "event should be prevented to save text selection after the press");
 
                 this.keyboard.press("down");
                 assert.equal(this.$input.val(), group.down, "group '" + group.pattern + "' decreased");
+                assert.ok(this.keyboard.event.isDefaultPrevented(), "event should be prevented to save text selection after the press");
             }.bind(this));
         });
 
