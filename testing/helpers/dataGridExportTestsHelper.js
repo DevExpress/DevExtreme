@@ -61,15 +61,10 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
             assert.strictEqual(actualArgs.length, expectedArgs.length, "actualArgs.length");
             for(let i = 0; i < actualArgs.length && i < expectedArgs.length; i++) {
                 const expectedArgsItem = expectedArgs[i];
-                if(expectedArgsItem === "skip") {
-                    continue;
-                }
                 const actualArgsItem = actualArgs[i];
                 const gridCellSkipProperties = ["column", "row"];
 
-                if(expectedArgsItem.value !== "skip") {
-                    assertStrictEqual(assert, actualArgsItem.value, expectedArgsItem.value, `value, ${i}`);
-                }
+                assertStrictEqual(assert, actualArgsItem.value, expectedArgsItem.value, `value, ${i}`);
 
                 if(expectedArgsItem.hasOwnProperty("gridCell")) {
                     if(expectedArgsItem.gridCell === undefined) {
