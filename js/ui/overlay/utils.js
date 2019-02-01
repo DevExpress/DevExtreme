@@ -21,9 +21,9 @@ const baseZIndex = (ZIndex) => {
     BASE_ZINDEX = ZIndex;
 };
 
-const createNewZIndex = (baseZIndex) => {
+const createNewZIndex = (baseIndex) => {
     const length = ZIndexStack.length;
-    const index = length ? ZIndexStack[length - 1] + 1 : (baseZIndex || baseZIndex()) + 1;
+    const index = length ? ZIndexStack[length - 1] + 1 : (baseIndex || baseZIndex()) + 1;
 
     ZIndexStack.push(index);
 
