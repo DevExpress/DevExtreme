@@ -1530,9 +1530,9 @@ module("validation", () => {
         const handle = $slider.find(`.${ SLIDER_HANDLE_CLASS }`).first();
 
         handle.trigger("focusin");
-        instance.option("focusStateEnabled", "false");
+        instance.option("focusStateEnabled", false);
 
         assert.notOk($slider.hasClass(INVALID_MESSAGE_VISIBLE_CLASS));
-        assert.equal($(".dx-overlay-wrapper.dx-invalid-message").css("visibility"), "hidden", "validation message is hidden");
+        assert.strictEqual($(".dx-overlay-wrapper.dx-invalid-message").css("visibility"), "hidden", "validation message is hidden");
     });
 });
