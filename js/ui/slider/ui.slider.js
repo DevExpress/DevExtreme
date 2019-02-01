@@ -224,14 +224,6 @@ var Slider = TrackBar.inherit({
 
             useInkRipple: false,
 
-            onFocusIn: function() {
-                this._toggleValidationMessage(true);
-            },
-
-            onFocusOut: function() {
-                this._toggleValidationMessage(false);
-            },
-
             validationMessageOffset: themes.isMaterial() ? { h: 18, v: 0 } : { h: 7, v: 4 },
 
             focusStateEnabled: true
@@ -247,8 +239,8 @@ var Slider = TrackBar.inherit({
 
     _toggleValidationMessage: function(visible) {
         if(!this.option("isValid")) {
-            var $element = this.$element();
-            $element.toggleClass(INVALID_MESSAGE_VISIBLE_CLASS, visible);
+            this.$element()
+                .toggleClass(INVALID_MESSAGE_VISIBLE_CLASS, visible);
         }
     },
 
@@ -289,6 +281,27 @@ var Slider = TrackBar.inherit({
         this._renderLabels();
         this._renderStartHandler();
         this._renderAriaMinAndMax();
+    },
+
+    _attachFocusEvents: function() {
+        this.callBase();
+
+        var focusInEvent = eventUtils.addNamespace("focusin", this.NAME);
+        var focusOutEvent = eventUtils.addNamespace("focusout", this.NAME);
+
+        var $focusTarget = this._focusTarget();
+        eventsEngine.on($focusTarget, focusInEvent, this._toggleValidationMessage.bind(this, true));
+        eventsEngine.on($focusTarget, focusOutEvent, this._toggleValidationMessage.bind(this, false));
+    },
+
+    _detachFocusEvents: function() {
+        this.callBase();
+
+        var focusEvents = eventUtils.addNamespace("focusin", this.NAME) + " " + eventUtils.addNamespace("focusout", this.NAME);
+        var $focusTarget = this._focusTarget();
+
+        this._toggleValidationMessage(false);
+        eventsEngine.off($focusTarget, focusEvents);
     },
 
     _render: function() {

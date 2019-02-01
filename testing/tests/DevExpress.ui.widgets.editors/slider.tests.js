@@ -1517,4 +1517,22 @@ module("validation", () => {
         assert.notOk($slider.hasClass(INVALID_MESSAGE_VISIBLE_CLASS));
         assert.equal($(".dx-overlay-wrapper.dx-invalid-message").css("visibility"), "hidden", "validation message is hidden");
     });
+
+    testInActiveWindow("validation message should be hidden once focusStateEnabled option switch off", assert => {
+        const $slider = $("#slider");
+        const instance = $slider.dxSlider({
+            max: 100,
+            min: 0,
+            value: 50,
+            isValid: false,
+            validationError: { message: "Test message" }
+        }).dxSlider("instance");
+        const handle = $slider.find(`.${ SLIDER_HANDLE_CLASS }`).first();
+
+        handle.trigger("focusin");
+        instance.option("focusStateEnabled", "false");
+
+        assert.notOk($slider.hasClass(INVALID_MESSAGE_VISIBLE_CLASS));
+        assert.equal($(".dx-overlay-wrapper.dx-invalid-message").css("visibility"), "hidden", "validation message is hidden");
+    });
 });
