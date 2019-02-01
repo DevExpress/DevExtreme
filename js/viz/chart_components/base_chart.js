@@ -759,9 +759,13 @@ var BaseChart = BaseWidget.inherit({
 
         that._clearCanvas();
 
+        that._renderExtraElements();
+
         that._drawn();
         that._renderCompleteHandler();
     },
+
+    _renderExtraElements() {},
 
     _clearCanvas: function() {
         // T207665, T336349, T503616

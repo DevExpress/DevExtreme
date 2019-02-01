@@ -1828,7 +1828,8 @@ var VALIDATE_GROUPS = [
     "dxc-labels-group",
     "dxc-crosshair-cursor",
     // "dxc-title",
-    "dxc-legend"
+    "dxc-legend",
+    "dxc-annotations"
 ];
 
 QUnit.test("Legend inside position", function(assert) {
@@ -1948,7 +1949,9 @@ QUnit.test("ScrollBar", function(assert) {
         groupTag = root[0].tagName.toLowerCase() === "div" ? "div" : "g",
         groups = root.find(">" + groupTag);
 
-    checkOrder(assert, groups, VALIDATE_GROUPS.concat("dxc-scroll-bar"));
+    var expectedGroups = VALIDATE_GROUPS.slice();
+    expectedGroups.splice(-1, 0, "dxc-scroll-bar");
+    checkOrder(assert, groups, expectedGroups);
 });
 
 QUnit.module("Private functions", {
