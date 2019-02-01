@@ -772,7 +772,7 @@ var Overlay = Widget.inherit({
         this._toggleVisibility(visible);
 
         this._$content.toggleClass(INVISIBLE_STATE_CLASS, !visible);
-        this._updateZIndexStackPosition(!Boolean(this._zIndex) && visible);
+        this._updateZIndexStackPosition(!this._zIndex && visible);
 
         if(visible) {
             this._renderContent();
@@ -797,7 +797,7 @@ var Overlay = Widget.inherit({
 
         if(pushToStack) {
             if(index === -1) {
-                this._zIndex = OverlayUtils.createNewZIndex();
+                this._zIndex = OverlayUtils.createNewZIndex(this._zIndexInitValue());
 
                 overlayStack.push(this);
             }
