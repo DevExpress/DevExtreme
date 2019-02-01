@@ -2037,6 +2037,33 @@ QUnit.test("Do not draw labels with empty range", function(assert) {
     assert.equal(this.renderer.stub("text").callCount, 0);
 });
 
+QUnit.test("Do not draw labels nor check format for discrete datetime axis with empty range", function(assert) {
+    // arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        argumentType: "datetime",
+        type: "discrete",
+        position: "bottom",
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: "left"
+        }
+    });
+
+    this.generatedTicks = [1];
+
+    this.translator.stub("translate").withArgs(1).returns(40);
+    this.axis.setBusinessRange({ });
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(this.renderer.stub("text").callCount, 0);
+});
+
 QUnit.test("Store data in label", function(assert) {
     // arrange
     this.createAxis();
@@ -4501,7 +4528,7 @@ QUnit.test("Do not draw date marker when axis type is discrete", function(assert
     assert.notOk(this.renderer.path.called);
 });
 
-QUnit.test("Do not draw date marker is business range is empty", function(assert) {
+QUnit.test("Do not draw date marker if business range is empty", function(assert) {
     // arrange
     var date0 = new Date(2011, 5, 25, 23, 21, 33, 123),
         date1 = new Date(2011, 5, 26, 1, 21, 33, 123),
@@ -8217,7 +8244,7 @@ QUnit.test("Axis has no visible labels nor outside constantLines - hideOuterElem
     assert.ok(!spy.called, "incidentOccurred is not called");
 });
 
-QUnit.test("Axis with empty - hideOuterElements does nothing", function(assert) {
+QUnit.test("Axis with empty range - hideOuterElements does nothing", function(assert) {
     var spy = sinon.spy();
 
     this.createAxis({ incidentOccurred: spy });
