@@ -2554,6 +2554,10 @@ module.exports = {
                         }
                     }
 
+                    if(isEditing) {
+                        this._prepareCellEditorNavigation($cell);
+                    }
+
                     var modifiedValues = parameters.row && (parameters.row.inserted ? parameters.row.values : parameters.row.modifiedValues);
 
                     if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
@@ -2565,6 +2569,7 @@ module.exports = {
 
                     this.callBase.apply(this, arguments);
                 },
+                _prepareCellEditorNavigation: function($cell) { },
                 _formItemPrepared: function() { },
                 _isFormItem: function(parameters) {
                     var isDetailRow = parameters.rowType === "detail" || parameters.rowType === "detailAdaptive",

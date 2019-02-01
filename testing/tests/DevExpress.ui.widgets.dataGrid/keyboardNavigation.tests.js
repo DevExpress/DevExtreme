@@ -5497,7 +5497,6 @@ QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded p
             mode: "virtual"
         },
         paging: {
-            pageSize: 20,
             pageIndex: 20
         }
     };
