@@ -141,7 +141,7 @@ exports.custom = function(options) {
         });
     });
 
-    var popupInstance = new Popup($element, {
+    var popupInstance = new Popup($element, extend({
         title: options.title || exports.title,
         showTitle: function() {
             var isTitle = options.showTitle === undefined ? true : options.showTitle;
@@ -203,7 +203,7 @@ exports.custom = function(options) {
         },
         rtlEnabled: config().rtlEnabled,
         boundaryOffset: { h: 10, v: 0 }
-    });
+    }, options.popupOptions));
 
     popupInstance._wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);
 

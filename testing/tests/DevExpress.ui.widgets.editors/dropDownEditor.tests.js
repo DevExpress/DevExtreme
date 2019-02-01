@@ -302,6 +302,63 @@ QUnit.test("field method returning overlay content", function(assert) {
     assert.ok($field.hasClass("dx-texteditor-input"), "field has class dx-texteditor-input");
 });
 
+QUnit.module("dropDownOptions");
+
+QUnit.test("dropDownOptions should work on init", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+        opened: true,
+        dropDownOptions: { customOption: "Test" }
+    }).dxDropDownEditor("instance");
+
+    assert.equal(instance._popup.option("customOption"), "Test", "Option has been passed to the popup");
+});
+
+QUnit.test("dropDownOptions should redefine built-in values", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+        opened: true,
+        dropDownOptions: { showTitle: true }
+    }).dxDropDownEditor("instance");
+
+    assert.strictEqual(instance._popup.option("showTitle"), true, "Option has been redefined");
+});
+
+QUnit.test("dropDownOptions should be prior than built-in public options", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+        opened: true,
+        showPopupTitle: false,
+        dropDownOptions: { showTitle: true }
+    }).dxDropDownEditor("instance");
+
+    assert.strictEqual(instance._popup.option("showTitle"), true, "Option has been redefined");
+});
+
+QUnit.test("dropDownOptions should be updated when popup option changed", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+            opened: true
+        }).dxDropDownEditor("instance"),
+        popup = instance._popup;
+
+    assert.equal(popup.option("width"), instance.option("dropDownOptions.width"), "dropDownOptions has been updated on init");
+
+    popup.option("width", 400);
+    assert.equal(instance.option("dropDownOptions.width"), 400, "dropDownOptions has been updated on popup's option changed");
+});
+
+QUnit.test("it should be possible to set part of the dropDownOptions without full object changing", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+            opened: true
+        }).dxDropDownEditor("instance"),
+        popup = instance._popup;
+
+    instance.option("dropDownOptions.width", 300);
+    assert.equal(popup.option("width"), 300, "popup's width has been changed");
+
+    instance.option("dropDownOptions", { height: 200 });
+    assert.equal(popup.option("width"), 300, "popup's width has not been changed");
+    assert.equal(popup.option("height"), 200, "popup's height has been changed");
+    assert.equal(instance.option("dropDownOptions.width"), 300, "dropDownOptions object has not been rewrited");
+});
+
 
 QUnit.module("focus policy");
 

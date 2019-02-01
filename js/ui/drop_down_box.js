@@ -85,7 +85,6 @@ var DropDownBox = DropDownEditor.inherit({
              * @type dxPopupOptions
              * @default {}
              */
-            dropDownOptions: {},
 
             /**
              * @name dxDropDownBoxOptions.fieldTemplate
@@ -263,11 +262,6 @@ var DropDownBox = DropDownEditor.inherit({
 
     _renderPopup: function(e) {
         this.callBase();
-        this._options.dropDownOptions = extend({}, this._popup.option());
-
-        this._popup.on("optionChanged", function(e) {
-            this.option("dropDownOptions" + "." + e.fullName, e.value);
-        }.bind(this));
 
         if(this.option("focusStateEnabled")) {
             this._popup._keyboardProcessor.push(new KeyboardProcessor({
@@ -290,30 +284,13 @@ var DropDownBox = DropDownEditor.inherit({
             maxHeight: function() {
                 return getElementMaxHeightByWindow(this.$element());
             }.bind(this)
-        }, this.option("dropDownOptions"));
+        });
     },
 
     _popupShownHandler: function() {
         this.callBase();
         var $firstElement = this._getTabbableElements().first();
         eventsEngine.trigger($firstElement, "focus");
-    },
-
-    _popupOptionChanged: function(args) {
-        var options = {};
-
-        if(args.name === args.fullName) {
-            options = args.value;
-        } else {
-            var option = args.fullName.split(".").pop();
-            options[option] = args.value;
-        }
-
-        this._setPopupOption(options);
-
-        if(Object.keys(options).indexOf("width") !== -1 && options["width"] === undefined) {
-            this._updatePopupWidth();
-        }
     },
 
     _setCollectionWidgetOption: commonUtils.noop,
@@ -324,9 +301,6 @@ var DropDownBox = DropDownEditor.inherit({
             case "width":
                 this.callBase(args);
                 this._updatePopupWidth();
-                break;
-            case "dropDownOptions":
-                this._popupOptionChanged(args);
                 break;
             case "dataSource":
                 this._renderInputValue();
