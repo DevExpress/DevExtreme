@@ -1,11 +1,11 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    wheelEvent = require("../../events/core/wheel"),
-    messageLocalization = require("../../localization/message"),
-    gridCoreUtils = require("../grid_core/ui.grid_core.utils");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import wheelEvent from "../../events/core/wheel";
+import messageLocalization from "../../localization/message";
+import gridCoreUtils from "../grid_core/ui.grid_core.utils";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
 
 var CONTENT_CLASS = "content",
     CONTENT_FIXED_CLASS = "content-fixed",
@@ -593,6 +593,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                 $content = $("<div>").addClass(contentClass);
 
                 eventsEngine.on($content, "scroll", function(e) {
+                    clearTimeout(that._fixedScrollTimeout);
                     that._fixedScrollTimeout = setTimeout(function() {
                         scrollTop = $(e.target).scrollTop();
                         scrollable.scrollTo({ y: scrollTop });

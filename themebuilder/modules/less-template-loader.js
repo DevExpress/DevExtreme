@@ -127,8 +127,16 @@ class LessTemplateLoader {
     compileLess(less, modifyVars, metadata) {
         return new Promise((resolve, reject) => {
             let compiledMetadata = {};
-            let options = {
-                modifyVars: modifyVars, plugins: [{
+            let options = {};
+
+            // while using `less/lib/less-browser`, the global options are not passed to the `render` method, lets do it by ourselves
+            if(this.lessCompiler.options && typeof (this.lessCompiler.options) === "object") {
+                Object.assign(options, this.lessCompiler.options);
+            }
+
+            let customOptions = {
+                modifyVars: modifyVars,
+                plugins: [{
                     install: (_, pluginManager) => {
                         pluginManager.addPostProcessor(new LessFontPlugin(this.options));
                     }
@@ -143,10 +151,7 @@ class LessTemplateLoader {
                 }]
             };
 
-            // while using `less/lib/less-browser`, the global options are not passed to the `render` method, lets do it by ourselves
-            if(this.lessCompiler.options && typeof (this.lessCompiler.options) === "object") {
-                Object.assign(options, this.lessCompiler.options);
-            }
+            Object.assign(options, customOptions);
 
             this.lessCompiler.render(less, options).then(output => {
                 resolve({

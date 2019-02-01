@@ -1,20 +1,22 @@
-var $ = require("jquery"),
-    TagBox = require("ui/tag_box"),
-    devices = require("core/devices"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store"),
-    messageLocalization = require("localization/message"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    fx = require("animation/fx"),
-    browser = require("core/utils/browser"),
-    dataQuery = require("data/query"),
-    isRenderer = require("core/utils/type").isRenderer,
-    errors = require("core/errors"),
-    config = require("core/config");
+import $ from "jquery";
+import { DataSource } from "data/data_source/data_source";
+import { isRenderer } from "core/utils/type";
+import ajaxMock from "../../helpers/ajaxMock.js";
+import browser from "core/utils/browser";
+import config from "core/config";
+import dataQuery from "data/query";
+import devices from "core/devices";
+import errors from "core/errors";
+import fx from "animation/fx";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import messageLocalization from "localization/message";
+import pointerMock from "../../helpers/pointerMock.js";
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
+import ODataStore from "data/odata/store";
+import TagBox from "ui/tag_box";
 
-require("common.css!");
+import "common.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -2955,6 +2957,27 @@ QUnit.test("filter should be reset after the search value clearing (T385456)", f
     assert.equal($listItems.length, items.length, "list items count is correct");
 });
 
+QUnit.test("filtering operation should pass 'customQueryParams' to the data source (T683047)", (assert) => {
+    const done = assert.async();
+
+    ajaxMock.setup({
+        url: "odata4.org(param='value')",
+        callback: ({ data }) => {
+            assert.deepEqual(data, { $filter: "this eq '1'" });
+            ajaxMock.clear();
+            done();
+        }
+    });
+
+    $("#tagBox").dxTagBox({
+        value: ["1"],
+        dataSource: new DataSource({
+            customQueryParams: { param: "value" },
+            store: new ODataStore({ version: 4, url: "odata4.org" })
+        })
+    });
+});
+
 QUnit.testInActiveWindow("input should be focused after click on field (searchEnabled is true or acceptCustomValue is true)", function(assert) {
     var items = ["111", "222", "333"];
 
@@ -3204,6 +3227,25 @@ QUnit.test("adding the custom tag should clear input value (T385448)", function(
         .press("enter");
 
     assert.equal($input.val(), "", "the input is empty");
+});
+
+QUnit.test("adding the custom tag shouldn't lead to duplicating of ordinary tags", (assert) => {
+    const $tagBox = $("#tagBox").dxTagBox({
+        acceptCustomValue: true,
+        items: [1, 2, 3]
+    });
+    const $input = $tagBox.find("input");
+    const tagBoxInstance = $tagBox.dxTagBox("instance");
+
+    keyboardMock($input)
+        .type("custom")
+        .press("enter");
+
+    $($tagBox.find("." + LIST_ITEM_CLASS).first()).trigger("dxclick");
+    const $tags = $tagBox.find(".dx-tag");
+
+    assert.strictEqual($tags.length, 2, "only two tags are added");
+    assert.deepEqual(tagBoxInstance.option("selectedItems"), ["custom", 1], "selected items are correct");
 });
 
 
@@ -4703,7 +4745,7 @@ QUnit.test("Select All should use cache", function(assert) {
     $(".dx-list-select-all-checkbox").trigger("dxclick");
 
     // assert
-    assert.equal(keyGetterCounter, 1404, "key getter call count");
+    assert.equal(keyGetterCounter, 1504, "key getter call count");
     assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
 });
 
@@ -4832,6 +4874,29 @@ QUnit.module("regression", {
     }
 });
 
+QUnit.test("Selection refreshing process should wait for the items data will be loaded from the data source (T673636)", assert => {
+    const clock = sinon.useFakeTimers(),
+        tagBox = $("#tagBox").dxTagBox({
+            valueExpr: "id",
+            dataSource: {
+                load: () => {
+                    const d = $.Deferred();
+
+                    setTimeout(() => d.resolve([{ id: 1 }, { id: 2 }]), 0);
+
+                    return d.promise();
+                }
+            }
+        }).dxTagBox("instance");
+
+    tagBox.option("value", [1]);
+
+    assert.notOk(tagBox.option("selectedItems").length);
+    clock.tick();
+    assert.ok(tagBox.option("selectedItems").length);
+    clock.restore();
+});
+
 QUnit.test("tagBox should not fail when asynchronous data source is used (T381326)", function(assert) {
     var data = [1, 2, 3, 4, 5],
         timeToWait = 500;
@@ -4889,7 +4954,6 @@ QUnit.test("tagBox should not fail when asynchronous data source is used in the 
 
 QUnit.test("tagBox should not render duplicated tags after searching", function(assert) {
     var data = [{ "id": 1, "Name": "Item14" }, { "id": 2, "Name": "Item21" }, { "id": 3, "Name": "Item31" }, { "id": 4, "Name": "Item41" }];
-
     var tagBox = $("#tagBox").dxTagBox({
         dataSource: new CustomStore({
             key: "id",
@@ -4914,18 +4978,6 @@ QUnit.test("tagBox should not render duplicated tags after searching", function(
                     }
                 });
 
-                return d.promise();
-            },
-            byKey: function(key) {
-                var d = $.Deferred();
-                setTimeout(function(i) {
-                    data.forEach(function(i) {
-                        if(i.id === key) {
-                            d.resolve(i);
-                            return;
-                        }
-                    });
-                });
                 return d.promise();
             }
         }),

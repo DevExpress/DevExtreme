@@ -563,6 +563,25 @@ QUnit.test("content container should have correct position if it is rendered in 
     assert.equal(position($content), 50, "container rendered at correct position");
 });
 
+QUnit.test("drawer panel should have correct width when panel content is wrapped by div with borders (T702576)", assert => {
+    const $element = $("#drawer").dxDrawer({
+        opened: true,
+        template: function($content) {
+            var $outerDiv = $("<div/>");
+            $("<div/>").css("height", 600).css("width", 200).appendTo($outerDiv);
+
+            return $outerDiv;
+        }
+    });
+
+    const $panelContent = $element.find(".dx-drawer-panel-content").css("border", "10px solid black");
+
+    resizeCallbacks.fire();
+
+    assert.equal($panelContent.width(), 180, "panel content has correct width");
+    assert.equal($panelContent.outerWidth(), 200, "panel content has correct outerWidth");
+});
+
 QUnit.test("drawer panel should have correct width when async template is used", assert => {
     var clock = sinon.useFakeTimers();
 
@@ -618,6 +637,35 @@ QUnit.test("drawer panel should have correct width when async template is used, 
     const $panelOverlayContent = $("#drawer").find(".dx-overlay-content");
 
     assert.equal($panelOverlayContent.width(), 200, "panel has correct size");
+    clock.restore();
+});
+
+QUnit.test("drawer panel should have correct z-index when async template is used, overlap mode", assert => {
+    var clock = sinon.useFakeTimers();
+
+    $("#drawer").dxDrawer({
+        openedStateMode: "overlap",
+        templatesRenderAsynchronously: true,
+        integrationOptions: {
+            templates: {
+                "panel": {
+                    render: function(args) {
+                        var $div = $("<div/>").appendTo(args.container);
+                        setTimeout(() => {
+                            $div.css("height", 600);
+                            $div.css("width", 200);
+                            args.onRendered();
+                        }, 100);
+                    }
+                }
+            }
+        }
+    });
+
+    clock.tick(100);
+    const $panel = $("#drawer").find(".dx-drawer-panel-content");
+
+    assert.equal($panel.css("zIndex"), 1501, "panel has correct zIndex");
     clock.restore();
 });
 
@@ -1530,14 +1578,14 @@ QUnit.module("Overlap mode", {
         const $overlayContent = $(".dx-drawer-panel-content.dx-overlay-wrapper .dx-overlay-content").eq(0);
 
         assert.equal($content.position().left, 0, "content has correct left when minSize and max size are set");
-        assert.equal($content.css("paddingLeft"), "0px", "content has correct padding when minSize and max size are set");
+        assert.equal($content.css("paddingRight"), "50px", "content has correct padding when minSize and max size are set");
         assert.equal($panel.position().left, 800, "panel has correct left when minSize and max size are set");
         assert.equal($overlayContent.width(), 50, "panel content has correct width when minSize and max size are set");
 
         this.instance.toggle();
 
         assert.equal($content.position().left, 0, "content has correct left when minSize and max size are set");
-        assert.equal($content.css("paddingLeft"), "0px", "content has correct padding when minSize and max size are set");
+        assert.equal($content.css("paddingRight"), "50px", "content has correct padding when minSize and max size are set");
         assert.equal($panel.position().left, 800, "panel has correct left when minSize and max size are set");
         assert.equal($overlayContent.width(), 300, "panel content has correct width when minSize and max size are set");
     });
@@ -1576,14 +1624,18 @@ QUnit.module("Overlap mode", {
             position: "top"
         });
 
+        const $element = this.instance.$element();
         const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
+        const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
         const $panelContent = $panel.find(".dx-overlay-content");
 
         assert.equal($panelContent.height(), 50, "panel content has correct height when minSize is set");
+        assert.equal($content.css("paddingTop"), "50px", "content has correct padding when minSize and max size are set");
 
         this.instance.toggle();
 
         assert.equal($panelContent.height(), 300, "panel content has correct height when minSize is set");
+        assert.equal($content.css("paddingTop"), "50px", "content has correct padding when minSize and max size are set");
     });
 
     QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, top panel position slide", assert => {
@@ -1616,16 +1668,20 @@ QUnit.module("Overlap mode", {
             position: "bottom"
         });
 
+        const $element = this.instance.$element();
         const $panel = $(".dx-drawer-panel-content.dx-overlay").eq(0);
+        const $content = $element.find("." + DRAWER_CONTENT_CLASS).eq(0);
         const $panelContent = $panel.find(".dx-overlay-content");
 
         assert.equal($panelContent.height(), 50, "panel content has correct height when minSize is set");
         assert.equal($panelContent.css("marginTop"), "150px", "panel content has correct margin when minSize is set");
+        assert.equal($content.css("paddingBottom"), "50px", "content has correct padding when minSize and max size are set");
 
         this.instance.toggle();
 
         assert.equal($panelContent.height(), 300, "panel content has correct height when minSize is set");
         assert.equal($panelContent.css("marginTop"), "-100px", "panel content has correct margin when minSize is set");
+        assert.equal($content.css("paddingBottom"), "50px", "content has correct padding when minSize and max size are set");
     });
 
     QUnit.test("minSize and maxSize should be rendered correctly in overlap mode, bottom panel position slide", assert => {

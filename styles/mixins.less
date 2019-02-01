@@ -13,356 +13,40 @@
 
 .gradient-linear(@options) {
     background-repeat: no-repeat;
-    background-image: -webkit-linear-gradient(@options);
-    background-image:    -moz-linear-gradient(@options);
-    background-image:      -o-linear-gradient(@options);
-    background-image:      linear-gradient(@options);
-}
-
-.double-gradient-linear(@options1, @options2) {
-    background-image: -webkit-linear-gradient(@options1), -webkit-linear-gradient(@options2);
-    background-image:    -moz-linear-gradient(@options1), -moz-linear-gradient(@options2);
-    background-image:      -o-linear-gradient(@options1), -o-linear-gradient(@options2);
-    background-image:         linear-gradient(@options1), linear-gradient(@options2);
-}
-
-.gradient-radial(@value) {
-    background: -webkit-gradient(@value);
-    background: -webkit-radial-gradient(@value);
-    background:    -moz-radial-gradient(@value);
-    background:      -o-radial-gradient(@value);
-    background:         radial-gradient(@value);
-}
-
-.gradient-radial(@startColor, @endColor) {
-    background: @startColor;
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, @startColor), color-stop(100%,  @endColor)); /* Chrome,Safari4+ */
-    background: -webkit-radial-gradient(center, ellipse cover, @startColor 0%, @endColor 100%); /* Chrome10+, Safari5.1+ */
-    background:    -moz-radial-gradient(center, ellipse cover, @startColor 0%, @endColor 100%); /* FF3.6+ */
-    background:      -o-radial-gradient(center, ellipse cover, @startColor 0%, @endColor 100%); /* Opera 12+ */
-    background:         radial-gradient(ellipse at center,     @startColor 0%, @endColor 100%); /* W3C */
+    background-image: linear-gradient(@options);
 }
 
 .gradient-radial-circle2(@startColor, @startPosition, @middleColor, @middlePosition, @endColor, @endPosition) {
     background: @startColor;
-    background: -webkit-radial-gradient(circle closest-side, @startColor @startPosition, @middleColor @middlePosition, @endColor @endPosition);
-    background:    -moz-radial-gradient(circle closest-side, @startColor @startPosition, @middleColor @middlePosition, @endColor @endPosition);
-    background:      -o-radial-gradient(circle closest-side, @startColor @startPosition, @middleColor @middlePosition, @endColor @endPosition);
-    background:         radial-gradient(circle closest-side at center, @startColor @startPosition, @middleColor @middlePosition, @endColor @endPosition);
+    background: radial-gradient(circle closest-side at center, @startColor @startPosition, @middleColor @middlePosition, @endColor @endPosition);
 }
 
 .gradient-radial-circle(@startColor, @startPosition, @endColor, @endPosition) {
     background: @startColor;
-    background: -webkit-radial-gradient(circle closest-side, @startColor @startPosition, @endColor @endPosition); /* Chrome10+, Safari5.1+ */
-    background:    -moz-radial-gradient(circle closest-side, @startColor @startPosition, @endColor @endPosition); /* FF3.6+ */
-    background:      -o-radial-gradient(circle closest-side, @startColor @startPosition, @endColor @endPosition); /* Opera 12+ */
-    background:         radial-gradient(circle closest-side at center,    @startColor @startPosition, @endColor @endPosition); /* W3C */
+    background: radial-gradient(circle closest-side at center, @startColor @startPosition, @endColor @endPosition);
 }
 
-.background-size(@x: 100%, @y: 100%) {
-    -webkit-background-size: @x @y;
-       -moz-background-size: @x @y;
-            background-size: @x @y;
-}
-
-.background-size-prop(@property: cover) {
-    -webkit-background-size: @property;
-       -moz-background-size: @property;
-            background-size: @property;
-}
-
-.box-shadow(@value) {
-    -webkit-box-shadow: @value;
-       -moz-box-shadow: @value;
-            box-shadow: @value;
-}
-
-.box-shadow(@value1, @value2) {
-    -webkit-box-shadow: @value1, @value2;
-       -moz-box-shadow: @value1, @value2;
-            box-shadow: @value1, @value2;
-}
-
-.box-shadow(@value1, @value2, @value3) {
-    -webkit-box-shadow: @value1, @value2, @value3;
-       -moz-box-shadow: @value1, @value2, @value3;
-            box-shadow: @value1, @value2, @value3;
-}
-
-.text-shadow(@value) {
-    text-shadow: @value;
-}
-
-.box-sizing(@value: border-box) {
-    -webkit-box-sizing: @value;
-       -moz-box-sizing: @value;
-            box-sizing: @value;
-}
-
-.background-clip(@value: border-box) {
-    -moz-background-clip: @value;
-    -webkit-background-clip: @value;
-    background-clip: @value;
-}
-
-/* border radius */
-.border-radius(@radius: 10px) {
-    -webkit-border-radius: @radius;
-       -moz-border-radius: @radius;
-         -o-border-radius: @radius;
-            border-radius: @radius;
-}
-.border-radius-top-left(@radius: 10px) {
-    -webkit-border-top-left-radius: @radius;
-       -moz-border-top-left-radius: @radius;
-            border-top-left-radius: @radius;
-}
-.border-radius-top-right(@radius: 10px) {
-    -webkit-border-top-right-radius: @radius;
-       -moz-border-top-right-radius: @radius;
-            border-top-right-radius: @radius;
-}
-.border-radius-bottom-left(@radius: 10px) {
-    -webkit-border-bottom-left-radius: @radius;
-       -moz-border-bottom-left-radius: @radius;
-            border-bottom-left-radius: @radius;
-}
-.border-radius-bottom-right(@radius: 10px) {
-    -webkit-border-bottom-right-radius: @radius;
-       -moz-border-bottom-right-radius: @radius;
-            border-bottom-right-radius: @radius;
-}
-.border-radius-right(@radius: 10px) {
-    -webkit-border-bottom-right-radius: @radius;
-       -moz-border-bottom-right-radius: @radius;
-            border-bottom-right-radius: @radius;
-    -webkit-border-top-right-radius: @radius;
-       -moz-border-top-right-radius: @radius;
-            border-top-right-radius: @radius;
-}
-.border-radius-left(@radius: 10px) {
-    -webkit-border-bottom-left-radius: @radius;
-       -moz-border-bottom-left-radius: @radius;
-            border-bottom-left-radius: @radius;
-    -webkit-border-top-left-radius: @radius;
-       -moz-border-top-left-radius: @radius;
-            border-top-left-radius: @radius;
-}
-.border-radius-custom(@radius-top-left: 10px, @radius-top-right: 10px, @radius-bottom-right: 10px, @radius-bottom-left: 10px) {
-    -webkit-border-radius:@radius-top-left @radius-top-right @radius-bottom-right @radius-bottom-left;
-       -moz-border-radius:@radius-top-left @radius-top-right @radius-bottom-right @radius-bottom-left;
-            border-radius:@radius-top-left @radius-top-right @radius-bottom-right @radius-bottom-left;
-}
 /* flex */
 .flex-container(@direction: row, @wrap: wrap) {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-flex;
     display: flex;
-
-    -webkit-flex-flow: @direction @wrap;
-    -moz-flex-flow: @direction @wrap;
     flex-flow: @direction @wrap;
 }
 
-.flex-item(@grow: 1, @shrink: 1, @basis: auto) {
-    -webkit-box-flex:@grow;
-    -webkit-flex:@grow @shrink @basis;
-    -moz-flex:@grow @shrink @basis;
-    flex:@grow @shrink @basis;
-}
-
-.transition-transform(@time: 1s, @ease: linear) {
-    -webkit-transition: -webkit-transform @time @ease;
-       -moz-transition: -moz-transform @time @ease;
-         -o-transition: -o-transform @time @ease;
-            transition: transform @time @ease;
-}
-
-.transition(@transition) {
-    -webkit-transition: @transition;
-       -moz-transition: @transition;
-         -o-transition: @transition;
-            transition: @transition;
-}
-
-.transition-property(@arguments: all) {
-    webkit-transition-property: @arguments;
-    moz-transition-property: @arguments;
-    o-transition-property: @arguments;
-    transition-property: @arguments;
-}
-
-.transition-duration(@arguments: 1s) {
-    webkit-transition-duration: @arguments;
-    moz-transition-duration: @arguments;
-    o-transition-duration: @arguments;
-    transition-duration: @arguments;
-}
-
-.transition-timing-function(@arguments: linear) {
-    webkit-transition-timing-function: @arguments;
-    moz-transition-timing-function: @arguments;
-    o-transition-timing-function: @arguments;
-    transition-timing-function: @arguments;
-}
-
-.transition-delay(@arguments: 0s) {
-    webkit-transition-delay: @arguments;
-    moz-transition-delay: @arguments;
-    o-transition-delay: @arguments;
-    transition-delay: @arguments;
-}
-
 .user-select(@value: text) {
-    -webkit-user-select: @value;
-     -khtml-user-select: @value;
-       -moz-user-select: @value;
-        -ms-user-select: @value;
-         -o-user-select: @value;
-            user-select: @value;
+    user-select: @value;
 }
 .user-select(@value) when (@value = none) {
     -webkit-touch-callout: none;
 }
 
-.user-drag(@value: text) {
-    -webkit-user-drag: @value;
-       -moz-user-drag: @value;
-        -ms-user-drag: @value;
-         -o-user-drag: @value;
-            user-drag: @value;
-}
-
-.transform(@string){
-    -webkit-transform: @string;
-       -moz-transform: @string;
-         -o-transform: @string;
-            transform: @string;
-}
-
-.scale(@factor) {
-    -webkit-transform: scale(@factor);
-       -moz-transform: scale(@factor);
-         -o-transform: scale(@factor);
-            transform: scale(@factor);
-}
-
-.rotate(@deg) {
-    -webkit-transform: rotate(@deg);
-       -moz-transform: rotate(@deg);
-         -o-transform: rotate(@deg);
-            transform: rotate(@deg);
-}
-
-.rotate3d(@x, @y, @z, @deg) {
-    -webkit-transform: rotate3d(@x, @y, @z, @deg);
-       -moz-transform: rotate3d(@x, @y, @z, @deg);
-         -o-transform: rotate3d(@x, @y, @z, @deg);
-            transform: rotate3d(@x, @y, @z, @deg);
-}
-
-.translate(@x, @y:0) {
-    -webkit-transform: translate(@x, @y);
-       -moz-transform: translate(@x, @y);
-         -o-transform: translate(@x, @y);
-             transform: translate(@x, @y);
-}
-
-.scale3d(@x, @y: 0, @z: 0) {
-    -webkit-transform: scale3d(@x, @y, @z);
-       -moz-transform: scale3d(@x, @y, @z);
-         -o-transform: scale3d(@x, @y, @z);
-            transform: scale3d(@x, @y, @z);
-}
-
-.translate3d(@x, @y: 0, @z: 0) {
-    -webkit-transform: translate3d(@x, @y, @z);
-       -moz-transform: translate3d(@x, @y, @z);
-         -o-transform: translate3d(@x, @y, @z);
-            transform: translate3d(@x, @y, @z);
-}
-
 .dx-overflow(@x: hidden) {
     overflow: @x;
-    -o-text-overflow: ellipsis;
-    -ms-text-overflow: ellipsis;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.transform-origin(@prop) {
-    -webkit-transform-origin: @prop;
-       -moz-transform-origin: @prop;
-         -o-transform-origin: @prop;
-            transform-origin: @prop;
-}
-
-.animation(@prop) {
-    -webkit-animation: @prop;
-       -moz-animation: @prop;
-         -o-animation: @prop;
-            animation: @prop;
-}
-
-.animation-name(@prop) {
-    -webkit-animation-name: @prop;
-       -moz-animation-name: @prop;
-         -o-animation-name: @prop;
-            animation-name: @prop;
-}
-
-.animation-duration(@prop) {
-    -webkit-animation-duration: @prop;
-       -moz-animation-duration: @prop;
-         -o-animation-duration: @prop;
-            animation-duration: @prop;
-}
-
-.animation-iteration-count(@prop) {
-    -webkit-animation-iteration-count: @prop;
-       -moz-animation-iteration-count: @prop;
-         -o-animation-iteration-count: @prop;
-            animation-iteration-count: @prop;
-}
-
-.animation-delay(@prop) {
-    -webkit-animation-delay: @prop;
-       -moz-animation-delay: @prop;
-         -o-animation-delay: @prop;
-            animation-delay: @prop;
-}
-
-.animation-timing(@prop) {
--webkit-animation-timing-function: @prop;
-   -moz-animation-timing-function: @prop;
-     -o-animation-timing-function: @prop;
-        animation-timing-function: @prop;
-}
-
-.animation-fill-mode(@prop: both) {
--webkit-animation-fill-mode: @prop;
-   -moz-animation-fill-mode: @prop;
-    -ms-animation-fill-mode: @prop;
-        animation-fill-mode: @prop;
-}
-
-.backface-visibility(@prop: hidden) {
-    -webkit-backface-visibility: @prop;
-    -moz-backface-visibility: @prop;
-    -ms-backface-visibility: @prop;
-    backface-visibility: @prop;
-}
-
 .flip-horizontally() {
-    -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
-}
-
-.touch-action(@value) {
-    touch-action: @value;
 }
 
 .vertical-middle() {
@@ -391,29 +75,20 @@
     }
 }
 
-.printable-background() {
-    -webkit-print-color-adjust: exact;
-    color-adjust: exact;
-}
-
 .flexible-scrollable() {
     & > .dx-scrollable,
     & > .dx-treeview,
     & > .dx-treeview > .dx-scrollable {
         display: -webkit-flex;
         display: flex;
-        -webkit-flex-grow: 1;
         flex-grow: 1;
-        -webkit-flex-direction: column;
         flex-direction: column;
         height: 0;
 
         & > .dx-scrollable-wrapper {
             display: -webkit-flex;
             display:  flex;
-            -webkit-flex-grow: 1;
             flex-grow: 1;
-            -webkit-flex-direction: column;
             flex-direction: column;
             height: 0;
 

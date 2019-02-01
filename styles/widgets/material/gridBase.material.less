@@ -481,14 +481,14 @@
                     font-size: @MATERIAL_GRID_BASE_HEADER_CELL_FONT_SIZE;
                     padding: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
                     line-height: @MATERIAL_GRID_BASE_HEADER_LINE_HEIGHT;
-                    .box-shadow(@MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW);
+                    box-shadow: @MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW;
                 }
             }
         }
     }
 
     .dx-@{widgetName}-drag-header {
-        .box-shadow(@MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW);
+        box-shadow: @MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW;
         color: ~"@{@{widgetName}-columnchooser-item-color}";
         font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
         padding: @MATERIAL_GRID_BASE_HEADER_CELL_VERTICAL_PADDING;
@@ -555,7 +555,7 @@
 
     .dx-@{widgetName}-headers {
         color: ~"@{@{widgetName}-columnchooser-item-color}";
-        .touch-action(pinch-zoom);
+        touch-action: pinch-zoom;
         border-bottom: ~"@{@{widgetName}-border}";
 
         .dx-@{widgetName}-content {
@@ -653,7 +653,7 @@
         .dx-overlay-content {
             overflow: inherit;
             background-color: ~"@{@{widgetName}-filter-row-background-color}";
-            .box-shadow(@MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW);
+            box-shadow: @MATERIAL_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @MATERIAL_GRID_BASE_DRAG_HEADER_SECOND_SHADOW;
 
             .dx-texteditor {
                 &.dx-state-focused:after,
@@ -696,7 +696,7 @@
         }
 
         .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
-            .border-radius(50%);
+            border-radius: 50%;
         }
 
         .dx-@{widgetName}-toolbar-button {
@@ -825,7 +825,7 @@
             }
             .dx-field-item-content {
                 line-height: @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT;
-                height: @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT;
+                min-height: @MATERIAL_GRID_BASE_ADAPTIVE_COLUMN_HEIGHT;
                 font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
 
                 &.dx-focused {
@@ -846,7 +846,7 @@
             }
 
             .dx-texteditor.dx-editor-outlined {
-                .box-shadow(none);
+                box-shadow: none;
             }
         }
 
@@ -962,7 +962,7 @@
             min-width: inherit;
 
             &.dx-button-has-icon:not(.dx-button-has-text) {
-                .border-radius(2px);
+                border-radius: 2px;
             }
 
             &.dx-state-hover {

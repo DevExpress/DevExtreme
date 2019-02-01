@@ -1,21 +1,19 @@
-var eventsEngine = require("../../events/core/events_engine"),
-    modules = require("./ui.grid_core.modules"),
-    filterUtils = require("../shared/filtering"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    headerFilterCore = require("./ui.grid_core.header_filter_core"),
-    headerFilterMixin = headerFilterCore.headerFilterMixin,
-    messageLocalization = require("../../localization/message"),
-    allowHeaderFiltering = headerFilterCore.allowHeaderFiltering,
-    clickEvent = require("../../events/click"),
-    dataCoreUtils = require("../../core/utils/data"),
-    each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type"),
-    getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
-    extend = require("../../core/utils/extend").extend,
-    normalizeDataSourceOptions = require("../../data/data_source/data_source").normalizeDataSourceOptions,
-    dateLocalization = require("../../localization/date"),
-    isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
-    Deferred = require("../../core/utils/deferred").Deferred;
+import eventsEngine from "../../events/core/events_engine";
+import modules from "./ui.grid_core.modules";
+import filterUtils from "../shared/filtering";
+import gridCoreUtils from "./ui.grid_core.utils";
+import { headerFilterMixin, HeaderFilterView, updateHeaderFilterItemSelectionState, allowHeaderFiltering } from "./ui.grid_core.header_filter_core";
+import messageLocalization from "../../localization/message";
+import clickEvent from "../../events/click";
+import { compileGetter } from "../../core/utils/data";
+import { each } from "../../core/utils/iterator";
+import { isDefined, isObject, isFunction } from "../../core/utils/type";
+import { getDefaultAlignment } from "../../core/utils/position";
+import { extend } from "../../core/utils/extend";
+import { normalizeDataSourceOptions } from "../../data/data_source/data_source";
+import dateLocalization from "../../localization/date";
+import { isWrapped } from "../../core/utils/variable_wrapper";
+import { Deferred } from "../../core/utils/deferred";
 
 var DATE_INTERVAL_FORMATS = {
     'month': function(value) {
@@ -69,7 +67,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                     this._updateSelectedState(items[i].items, column);
                 }
 
-                headerFilterCore.updateHeaderFilterItemSelectionState(item, gridCoreUtils.getIndexByKey(items[i].value, column.filterValues, null) > -1, isExclude);
+                updateHeaderFilterItemSelectionState(item, gridCoreUtils.getIndexByKey(items[i].value, column.filterValues, null) > -1, isExclude);
             }
         },
 
@@ -89,7 +87,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 displayValue = value;
             }
 
-            if(!typeUtils.isObject(item)) {
+            if(!isObject(item)) {
                 item = {};
             } else if(item === value) {
                 item = extend({}, item);
@@ -131,8 +129,8 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
             currentLevel = currentLevel || 0;
 
             if(lookup) {
-                displaySelector = dataCoreUtils.compileGetter(lookup.displayExpr);
-                valueSelector = dataCoreUtils.compileGetter(lookup.valueExpr);
+                displaySelector = compileGetter(lookup.displayExpr);
+                valueSelector = compileGetter(lookup.valueExpr);
             }
 
             for(var i = 0; i < groupItems.length; i++) {
@@ -145,7 +143,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 });
 
                 if("items" in groupItems[i]) {
-                    if(currentLevel === level || !typeUtils.isDefined(groupItems[i].value)) {
+                    if(currentLevel === level || !isDefined(groupItems[i].value)) {
                         delete groupItems[i].items;
                     } else {
                         that._processGroupItems(groupItems[i].items, currentLevel + 1, path, options);
@@ -172,12 +170,12 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
             if(!dataSource) return;
 
-            if(typeUtils.isDefined(headerFilterDataSource) && !typeUtils.isFunction(headerFilterDataSource)) {
+            if(isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
                 options.dataSource = normalizeDataSourceOptions(headerFilterDataSource);
             } else if(column.lookup) {
                 isLookup = true;
                 dataSource = column.lookup.dataSource;
-                if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
+                if(isFunction(dataSource) && !isWrapped(dataSource)) {
                     dataSource = dataSource({});
                 }
                 dataSource = normalizeDataSourceOptions(dataSource);
@@ -212,7 +210,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 };
             }
 
-            if(typeUtils.isFunction(headerFilterDataSource)) {
+            if(isFunction(headerFilterDataSource)) {
                 headerFilterDataSource.call(column, options);
             }
 
@@ -308,7 +306,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
     };
 })());
 
-var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterCore.headerFilterMixin, {
+var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
     _renderCellContent: function($cell, options) {
         var that = this,
             $headerFilterIndicator,
@@ -529,7 +527,7 @@ module.exports = {
     },
 
     views: {
-        headerFilterView: headerFilterCore.HeaderFilterView
+        headerFilterView: HeaderFilterView
     },
     extenders: {
         controllers: {

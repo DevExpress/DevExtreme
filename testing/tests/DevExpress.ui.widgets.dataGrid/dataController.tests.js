@@ -1,15 +1,13 @@
-var $ = require("jquery"),
-    config = require("core/config"),
-    formatHelper = require("format_helper"),
-    errors = require("ui/widget/ui.errors"),
-    typeUtils = require("core/utils/type"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockGridDataSource = dataGridMocks.MockGridDataSource;
+import $ from "jquery";
+import config from "core/config";
+import formatHelper from "format_helper";
+import errors from "ui/widget/ui.errors";
+import typeUtils from "core/utils/type";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import { setupDataGridModules, MockGridDataSource } from "../../helpers/dataGridMocks.js";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
 var createDataSource = function(data, storeOptions, dataSourceOptions) {
     var arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data);
@@ -3395,6 +3393,68 @@ QUnit.test("scroll to second render page", function(assert) {
     }]);
 });
 
+QUnit.test("scroll to second render page after expand row on the first page", function(assert) {
+    this.dataController.expandRow(1);
+    this.changedArgs = [];
+    this.dataController.setViewportPosition(50);
+
+    assert.strictEqual(this.dataController.pageIndex(), 0);
+    assert.strictEqual(this.dataController.items().length, 15);
+    assert.strictEqual(this.dataController.items()[0].key, 5);
+    assert.strictEqual(this.dataController.getContentOffset("begin"), 50);
+    assert.strictEqual(this.dataController.getContentOffset("end"), 800);
+    assert.deepEqual(this.changedArgs, [{
+        changeType: "append",
+        removeCount: 6,
+        items: this.dataController.items().slice(10, 15)
+    }]);
+
+    assert.strictEqual(this.changedArgs[0].items[0].key, 15);
+});
+
+QUnit.test("scroll to second render page and expand row after expand row on the first page", function(assert) {
+    this.dataController.expandRow(1);
+    this.dataController.setViewportPosition(50);
+    this.dataController.expandRow(5);
+
+    assert.strictEqual(this.dataController.items().length, 16);
+    assert.strictEqual(this.dataController.items()[0].key, 5);
+    assert.strictEqual(this.dataController.items()[0].rowType, "data");
+    assert.strictEqual(this.dataController.items()[1].key, 5);
+    assert.strictEqual(this.dataController.items()[1].rowType, "detail");
+});
+
+QUnit.test("scroll to second render page and expand row after expand row on the first page and refresh", function(assert) {
+    this.dataController.expandRow(1);
+    this.dataController.refresh();
+    this.dataController.setViewportPosition(50);
+    this.dataController.expandRow(5);
+
+    assert.strictEqual(this.dataController.items().length, 16);
+    assert.strictEqual(this.dataController.items()[0].key, 5);
+    assert.strictEqual(this.dataController.items()[0].rowType, "data");
+    assert.strictEqual(this.dataController.items()[1].key, 5);
+    assert.strictEqual(this.dataController.items()[1].rowType, "detail");
+});
+
+QUnit.test("scroll to second render page and return to first after expand row on the first page", function(assert) {
+    this.dataController.expandRow(1);
+    this.dataController.setViewportPosition(50);
+    this.changedArgs = [];
+    this.dataController.setViewportPosition(0);
+
+    assert.strictEqual(this.dataController.pageIndex(), 0);
+    assert.strictEqual(this.dataController.items().length, 16);
+    assert.strictEqual(this.dataController.items()[0].key, 0);
+    assert.deepEqual(this.changedArgs, [{
+        changeType: "prepend",
+        removeCount: 5,
+        items: this.dataController.items().slice(0, 6)
+    }]);
+
+    assert.strictEqual(this.changedArgs[0].items[0].key, 0);
+});
+
 QUnit.test("scroll to third render page", function(assert) {
     this.dataController.setViewportPosition(100);
 
@@ -3885,7 +3945,6 @@ QUnit.test("update loading on reload when error occurred", function(assert) {
 
     this.options.loadingTimeout = 0;
 
-
     this.dataSource = new DataSource({
         load: function() {
             return loadResult || [];
@@ -3893,18 +3952,17 @@ QUnit.test("update loading on reload when error occurred", function(assert) {
     });
     this.dataController.setDataSource(this.dataSource);
 
-    var dataController = this.dataController;
+    var dataController = this.dataController,
+        isLoadingByEvent,
+        changedArgs = [];
 
     dataController.load().done(function() {
-        var isLoadingByEvent;
         dataController.loadingChanged.add(function(isLoading) {
             isLoadingByEvent = isLoading;
             if(isLoading) {
                 assert.ok(!dataController.isLoaded(), 'isLoaded on reload in loadingChanged event');
             }
         });
-
-        var changedArgs = [];
 
         dataController.changed.add(function(e) {
             changedArgs.push(e);
@@ -3920,21 +3978,23 @@ QUnit.test("update loading on reload when error occurred", function(assert) {
         assert.ok(dataController.isLoading(), 'isLoading');
         assert.ok(isLoadingByEvent, 'isLoading by event');
 
-        clock.tick();
-
-        assert.ok(!dataController.isLoaded(), 'isLoaded after error');
-        assert.ok(!dataController.isLoading(), 'isLoading after error');
-        assert.ok(!isLoadingByEvent, 'isLoading by event after error');
-
-        assert.equal(changedArgs.length, 1);
-        assert.equal(changedArgs[0].changeType, 'loadError');
-        assert.equal(changedArgs[0].error.message, 'user error');
-
         finalized = true;
     });
 
     clock.tick();
+
+    // assert
     assert.ok(finalized);
+    clock.tick();
+
+    // assert
+    assert.ok(!dataController.isLoaded(), 'isLoaded after error');
+    assert.ok(!dataController.isLoading(), 'isLoading after error');
+    assert.ok(!isLoadingByEvent, 'isLoading by event after error');
+
+    assert.equal(changedArgs.length, 1);
+    assert.equal(changedArgs[0].changeType, 'loadError');
+    assert.equal(changedArgs[0].error.message, 'user error');
 });
 
 // T103219
@@ -7008,6 +7068,34 @@ QUnit.test("No exceptions on moving the column from group panel to headers (Angu
         // assert
         assert.ok(false, "the error is thrown");
     }
+});
+
+// T700356
+QUnit.test("Group row should have correct values if calculateDisplayValue is defined", function(assert) {
+    this.applyOptions({
+        columns: [{
+            dataField: "ID",
+            caption: "Company",
+            calculateDisplayValue: "CompanyName",
+            groupIndex: 0
+        }, "City"]
+    });
+
+    var dataSource = createDataSource([{
+        ID: 1,
+        CompanyName: "123Super Mart of the West",
+        City: "Bentonville"
+    }]);
+
+    this.dataController.setDataSource(dataSource);
+
+    // act
+    dataSource.load();
+
+    // assert
+    assert.deepEqual(this.dataController.items()[0].rowType, "group", "item 1 rowType");
+    assert.deepEqual(this.dataController.items()[0].key, ["123Super Mart of the West"], "item 1 key");
+    assert.deepEqual(this.dataController.items()[0].values, ["123Super Mart of the West"], "item 1 values");
 });
 
 QUnit.module("Editing", { beforeEach: setupModule, afterEach: teardownModule });
@@ -11918,6 +12006,35 @@ QUnit.test("edit row should not be updated on data change", function(assert) {
     assert.deepEqual(changedArgs.rowIndices, [0, 1]);
     assert.deepEqual(changedArgs.items, [items[0], items[1]]);
     assert.deepEqual(changedArgs.columnIndices, [[], [2]], "only second row cell is updated");
+});
+
+// T702112
+QUnit.test("edit row should be updated on cancel", function(assert) {
+    this.setupModules();
+
+    this.options.editing = {
+        mode: "row"
+    };
+
+    this.options.repaintChangesOnly = true;
+
+    this.editRow(0);
+
+    var changedArgs;
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    // act
+    this.cancelEditData();
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(changedArgs.changeType, "update");
+    assert.deepEqual(changedArgs.changeTypes, ["update", "update"]);
+    assert.deepEqual(changedArgs.rowIndices, [0, 1]);
+    assert.deepEqual(changedArgs.items, [items[0], items[1]]);
+    assert.deepEqual(changedArgs.columnIndices, [undefined, []], "first row is updated fully");
 });
 
 QUnit.test("edit form row should not be updated on data change", function(assert) {

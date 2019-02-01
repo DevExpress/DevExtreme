@@ -13,8 +13,8 @@ QUnit.testStart(function() {
         border-collapse: separate !important;\
     }\
 </style>\
-<div>\
-    <div class="dx-datagrid">\
+<div class="dx-widget">\
+    <div class="dx-datagrid dx-gridbase-container">\
         <div id="container"></div>\
     </div>\
 </div>';
@@ -22,31 +22,28 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
-    dataUtils = require("core/element_data"),
-    commonUtils = require("core/utils/common"),
-    typeUtils = require("core/utils/type"),
-    devices = require("core/devices"),
-    config = require("core/config"),
-    support = require("core/utils/support"),
-    browser = require("core/utils/browser"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    nativePointerMock = require("../../helpers/nativePointerMock.js"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    numberLocalization = require("localization/number"),
-    virtualScrollingCore = require("ui/grid_core/ui.grid_core.virtual_scrolling_core"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController,
-    MockSelectionController = dataGridMocks.MockSelectionController,
-    getCells = dataGridMocks.getCells,
-    expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
+import $ from "jquery";
+import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
+import dataUtils from "core/element_data";
+import commonUtils from "core/utils/common";
+import typeUtils from "core/utils/type";
+import devices from "core/devices";
+import config from "core/config";
+import support from "core/utils/support";
+import browser from "core/utils/browser";
+import pointerMock from "../../helpers/pointerMock.js";
+import nativePointerMock from "../../helpers/nativePointerMock.js";
+import { setupDataGridModules, MockDataController, MockColumnsController, MockSelectionController, getCells } from "../../helpers/dataGridMocks.js";
+import numberLocalization from "localization/number";
+import virtualScrollingCore from "ui/grid_core/ui.grid_core.virtual_scrolling_core";
+import ODataStore from "data/odata/store";
+
+var expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
 function getText(element) {
     return $(element).text();
@@ -249,6 +246,8 @@ QUnit.test('Render scrollable', function(assert) {
     assert.strictEqual(scrollable.option("test"), "test", 'scrollable test');
     // T654402
     assert.strictEqual(scrollable.option("updateManually"), false, 'scrollable updateManually');
+    // T698156
+    assert.strictEqual(scrollable.option("pushBackValue"), 0, 'scrollable pushBackValue');
 });
 
 QUnit.test('Check WAI-ARIA attributes for data rows/cells after render rows', function(assert) {
@@ -884,7 +883,6 @@ QUnit.test('Highlight searchText - case sensitive for odata when highlightCaseSe
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(this.items, dataController, columns),
         testElement = $('#container'),
-        ODataStore = require("data/odata/store"),
         store = new ODataStore({ url: "test.org" }),
         $rows;
 
@@ -920,7 +918,6 @@ QUnit.test('Highlight searchText - case sensitive for odata', function(assert) {
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(this.items, dataController, columns),
         testElement = $('#container'),
-        ODataStore = require("data/odata/store"),
         store = new ODataStore({ url: "test.org" }),
         $rows;
 
@@ -2004,7 +2001,7 @@ QUnit.test('Render additional row for free space_B232625', function(assert) {
     // assert
     assert.equal(rowsView._getFreeSpaceRowElements().css('display'), 'table-row', 'display style is table-row');
     assert.ok(oldTableHeight < $testElement.height(), 'old table height');
-    assert.ok(Math.floor(Math.abs($table.height() - $testElement.height())) <= 1);
+    assert.ok(Math.abs($table[0].offsetHeight - $testElement[0].offsetHeight) <= 1);
     assert.ok(rowsView._getFreeSpaceRowElements()[0].style.height, 'free space rows height');
 });
 
@@ -2143,16 +2140,18 @@ QUnit.test('Height free space row for virtual scroller', function(assert) {
         rowsView = this.createRowsView(this.items, dataController),
         $testElement = $('#container'),
         freeSpaceRowHeight,
-        borderTopWidth;
+        borderTopWidth,
+        tableBorderTopWidth;
 
     // act
     rowsView.render($testElement);
     rowsView.height(400);
     rowsView.resize();
-    borderTopWidth = Math.ceil(parseFloat(rowsView.getTableElements().css("borderTopWidth")));
+    borderTopWidth = Math.ceil(parseFloat($(rowsView.element()).css("borderTopWidth")));
+    tableBorderTopWidth = Math.ceil(parseFloat(rowsView.getTableElements().css("borderTopWidth")));
 
     // assert
-    freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight - borderTopWidth;
+    freeSpaceRowHeight = 400 - 3 * rowsView._rowHeight - borderTopWidth - tableBorderTopWidth;
     assert.equal(rowsView._getFreeSpaceRowElements().css('display'), 'table-row', 'display style is none');
     assert.equal(rowsView._getFreeSpaceRowElements()[0].offsetHeight, Math.round(freeSpaceRowHeight), 'height free space row');
 });
@@ -4157,7 +4156,6 @@ QUnit.test('None-zero initial pageIndex when virtual scrolling mode', function(a
     this.rowsView.render(testElement);
     this.rowsView.height(50);
     this.rowsView.resize();
-    this.rowsView.resize();
 });
 
 // B254955
@@ -4284,9 +4282,7 @@ QUnit.test('Scroll position is not reset on change dataSource', function(assert)
         scrollOffsetChangedCallCount++;
         if(scrollOffsetChangedCallCount === 1) {
             assert.ok(e.top > 0, 'scroll position more 0');
-            setTimeout(function() {
-                that.dataController.optionChanged({ name: 'dataSource' });
-            });
+            that.dataController.optionChanged({ name: 'dataSource' });
         } else {
             assert.equal(scrollOffsetChangedCallCount, 2, 'scrollChanged Call Count');
             assert.equal(e.top, 150, 'scroll position is 150');
@@ -5407,8 +5403,8 @@ QUnit.test('Render rows with virtual items count is more 1 000 000', function(as
     assert.equal(content.children().length, 1);
     assert.equal(content.children().eq(0)[0].tagName, 'TABLE');
     assert.equal(content.children().eq(0).find('tbody > tr').length, 6, '3 data row + 1 freespace row + 2 virtual row');
-    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(0).height(), rowHeight * heightRatio * 7000000, 1);
-    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row").eq(1).height(), rowHeight * heightRatio * 3000000, 1);
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row")[0].getBoundingClientRect().height, rowHeight * heightRatio * 7000000, 1);
+    assert.roughEqual(content.children().eq(0).find(".dx-virtual-row")[1].getBoundingClientRect().height, rowHeight * heightRatio * 3000000, 1);
     assert.ok(content.children().eq(0).height() < 16000000, "height is less then height limit");
     assert.equal(content.children().eq(0).find("." + "dx-datagrid-group-space").length, 0, "group space class");
 });
@@ -6313,6 +6309,11 @@ QUnit.test("Last data row of the last tbody should not have border bottom width"
 
 // T487466
 QUnit.test("Vertical scroll position should be correct after render rows when scroll up", function(assert) {
+    if(!browser.webkit) {
+        assert.ok(true, "This test is only relevant for webkit browser");
+        return;
+    }
+
     // arrange
     var options = {
             items: [

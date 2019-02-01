@@ -24,6 +24,7 @@
             _scrollLeft,
             _clock,
             _shiftKey,
+            _cancelable,
             _pointerType = "mouse",
             _lastEvent;
 
@@ -36,11 +37,11 @@
                     pageY: _y,
                     which: 1,
                     shiftKey: _shiftKey,
+                    cancelable: _cancelable,
                     target: $element.get(0),
                     pointerType: _pointerType,
                     pointers: []
-                },
-                args));
+                }, args));
 
             $(event.delegatedTarget || event.target).trigger(event);
 
@@ -58,6 +59,7 @@
                     _scrollLeft = params.scrollLeft || 0;
                     _clock = params.clock || $.now();
                     _shiftKey = params.shiftKey || false;
+                    _cancelable = params.cancelable;
                     _pointerType = params.pointerType || _pointerType;
                 } else {
                     _x = 0;

@@ -1,20 +1,17 @@
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
-    arrayUtils = require("../../core/utils/array"),
-    dataGridCore = require("./ui.data_grid.core"),
-    exportMixin = require("../grid_core/ui.grid_core.export_mixin"),
-    clientExporter = require("../../exporter"),
-    messageLocalization = require("../../localization/message"),
-    excelExporter = clientExporter.excel,
-    Button = require("../button"),
-    List = require("../list"),
-    ContextMenu = require("../context_menu"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+import $ from "../../core/renderer";
+import Class from "../../core/class";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { getDefaultAlignment } from "../../core/utils/position";
+import arrayUtils from "../../core/utils/array";
+import dataGridCore from "./ui.data_grid.core";
+import exportMixin from "../grid_core/ui.grid_core.export_mixin";
+import { export as clientExport, excel } from "../../exporter";
+import messageLocalization from "../../localization/message";
+import Button from "../button";
+import List from "../list";
+import ContextMenu from "../context_menu";
+import { when, Deferred } from "../../core/utils/deferred";
 
 var DATAGRID_EXPORT_MENU_CLASS = "dx-datagrid-export-menu",
     DATAGRID_EXPORT_BUTTON_CLASS = "dx-datagrid-export-button",
@@ -586,7 +583,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 
         that._selectionOnly = selectionOnly;
 
-        clientExporter.export(that.component.getDataProvider(), {
+        clientExport(that.component.getDataProvider(), {
             fileName: that.option("export.fileName"),
             proxyUrl: that.option("export.proxyUrl"),
             format: "EXCEL",
@@ -596,7 +593,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
             exportingAction: that.getAction("onExporting"),
             exportedAction: that.getAction("onExported"),
             fileSavingAction: that.getAction("onFileSaving")
-        }, excelExporter.getData);
+        }, excel.getData);
     },
 
     publicMethods: function() {

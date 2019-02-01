@@ -1,5 +1,7 @@
 import $ from "jquery";
 import { renderDateParts, getDatePartIndexByPosition } from "ui/date_box/ui.date_box.mask.parts";
+import dateParser from "localization/ldml/date.parser";
+import dateLocalization from "localization/date";
 import { noop } from "core/utils/common";
 import pointerMock from "../../helpers/pointerMock.js";
 import "ui/date_box";
@@ -13,7 +15,7 @@ QUnit.testStart(() => {
 if(devices.real().deviceType === "desktop") {
     let setupModule = {
         beforeEach: () => {
-            this.parts = renderDateParts("Tuesday, July 2, 2024 16:19 PM", "EEEE, MMMM d, yyyy HH:mm a");
+            this.parts = renderDateParts("Tuesday, July 2, 2024 16:19 PM", dateParser.getRegExpInfo("EEEE, MMMM d, yyyy HH:mm a", dateLocalization));
             this.$element = $("#dateBox").dxDateBox({
                 value: new Date("10/10/2012 13:07"),
                 useMaskBehavior: true,
@@ -232,6 +234,14 @@ if(devices.real().deviceType === "desktop") {
                 pattern: ":",
                 text: ":"
             });
+        });
+
+        QUnit.test("Pattern stub", (assert) => {
+            const parts = renderDateParts("dd 2016", dateParser.getRegExpInfo("'dd' yyyy", dateLocalization));
+
+            assert.equal(parts.length, 2, "there are 2 parts rendered");
+            assert.ok(parts[0].isStub, "first part is the stub");
+            assert.notOk(parts[1].isStub, "second part is not the stub");
         });
     });
 
@@ -520,6 +530,8 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Increment and decrement date part by mouse wheel", (assert) => {
+            this.$input.get(0).focus();
+
             this.pointer.wheel(10);
             assert.equal(this.$input.val(), "November 10 2012", "increment works");
 
@@ -635,6 +647,9 @@ if(devices.real().deviceType === "desktop") {
 
             this.keyboard.type("30");
             assert.equal(this.$input.val(), "January");
+
+            this.keyboard.type("05");
+            assert.equal(this.$input.val(), "May");
         });
 
         QUnit.test("Year", (assert) => {
@@ -884,6 +899,16 @@ if(devices.real().deviceType === "desktop") {
 
             this.keyboard.press("7").change();
             assert.ok(this.instance._maskValue !== this.instance.option("value"), "objects are different after change event");
+        });
+
+        QUnit.test("performance - value change should not lead to recreate regexp and format pattern", (assert) => {
+            const regExpInfo = sinon.spy(dateParser, "getRegExpInfo");
+
+            this.instance.option("displayFormat", "dd.MM");
+            assert.equal(regExpInfo.callCount, 1, "regexpInfo should be called when format changed");
+
+            this.instance.option("value", new Date(2018, 2, 5, 10, 15, 25));
+            assert.equal(regExpInfo.callCount, 1, "regexpInfo should not be called when value changed");
         });
     });
 

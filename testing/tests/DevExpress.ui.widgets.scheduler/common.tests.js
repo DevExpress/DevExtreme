@@ -427,7 +427,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 4, 24),
             views: ["month"],
             appointmentCollectorTemplate: function(data) {
-                assert.equal(data.appointmentsCount, 1, "Appointments count is OK");
+                assert.equal(data.appointmentCount, 1, "Appointments count is OK");
                 assert.strictEqual(data.isCompact, false, "Compact flag is ok");
             },
             currentView: "month"
@@ -798,6 +798,57 @@ QUnit.testStart(function() {
         dataSource.load();
 
         assert.equal(this.instance.$element().find(".dx-scheduler-appointment-title").eq(0).text(), "def", "Appointment is rerendered");
+    });
+
+    QUnit.test("Pushed directly from store item should be rerendered correctly", function(assert) {
+        var data = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [{
+                    id: 0,
+                    text: "abc",
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30)
+                },
+                {
+                    id: 1,
+                    text: "abc",
+                    startDate: new Date(2017, 4, 23, 9, 30),
+                    endDate: new Date(2017, 4, 23, 11, 30)
+                }]
+            }
+        });
+
+        this.createInstance({
+            dataSource: data,
+            views: ["week"],
+            currentView: "week",
+            currentDate: new Date(2017, 4, 25)
+        });
+
+        var dataSource = this.instance.getDataSource();
+        dataSource.store().push([
+            {
+                type: "update", key: 0, data: {
+                    text: "Update-1",
+                    startDate: new Date(2017, 4, 22, 9, 30),
+                    endDate: new Date(2017, 4, 22, 11, 30)
+                }
+            },
+            {
+                type: "update", key: 1, data: {
+                    text: "Update-2",
+                    startDate: new Date(2017, 4, 23, 9, 30),
+                    endDate: new Date(2017, 4, 23, 11, 30)
+                }
+            }
+        ]);
+        dataSource.load();
+
+        var appointment = this.instance.$element().find(".dx-scheduler-appointment-title");
+        assert.equal(appointment.eq(0).text(), "Update-1", "Appointment is rerendered");
+        assert.equal(appointment.eq(1).text(), "Update-2", "Appointment is rerendered");
     });
 
     QUnit.test("the 'update' method of store should have key as arg is store has the 'key' field", function(assert) {
@@ -1477,6 +1528,23 @@ QUnit.testStart(function() {
         this.createInstance();
 
         assert.equal(this.instance.option("showCurrentTimeIndicator"), true, "showCurrentTimeIndicator option value is right on init");
+    });
+
+    QUnit.test("customizeDateNavigatorText should be passed to header & navigator", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            currentDate: new Date(2017, 10, 25),
+            customizeDateNavigatorText: function() {
+                return "abc";
+            },
+            views: ["week"]
+        });
+
+        var header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.deepEqual(header.option("customizeDateNavigatorText")(), "abc", "option is passed correctly");
+        assert.equal(navigator.option("customizeDateNavigatorText")(), "abc", "option is passed correctly");
     });
 
     QUnit.test("groupByDate option should be passed to workSpace", function(assert) {
@@ -2273,6 +2341,31 @@ QUnit.testStart(function() {
         assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "caption" }], "Update operation is canceled");
     });
 
+    QUnit.test("Appointment should be returned to the initial state if 'cancel' flag is defined as true during async operation", function(assert) {
+        this.createInstance({
+            onAppointmentUpdating: function(args) {
+                var d = $.Deferred();
+                args.cancel = d.promise();
+                setTimeout(function() {
+                    d.reject();
+                }, 200);
+            },
+            currentView: "week",
+            dataSource: [{ startDate: new Date(2015, 1, 11), endDate: new Date(2015, 1, 13), text: "caption" }],
+            firstDayOfWeek: 1,
+            currentDate: new Date(2015, 1, 9)
+        });
+
+        var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").eq(0)),
+            initialLeftPosition = translator.locate($appointment).left,
+            cellWidth = this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth(),
+            pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-left").eq(0)).start();
+
+        pointer.dragStart().drag(-cellWidth * 2, 0).dragEnd();
+        this.clock.tick(200);
+        assert.equal(translator.locate(this.instance.$element().find(".dx-scheduler-appointment").eq(0)).left, initialLeftPosition, "Left position is OK");
+    });
+
     QUnit.test("Appointment should have initial position if 'cancel' flag is defined as true during update operation", function(assert) {
         var appointments = [{ startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2), text: "caption" }],
             dataSource = new DataSource({
@@ -2385,7 +2478,7 @@ QUnit.testStart(function() {
         var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-right").eq(0)).start();
         pointer.dragStart().drag(cellWidth * 3, 0).dragEnd();
 
-        assert.equal(this.instance.$element().find(".dx-scheduler-appointment").eq(0).outerWidth(), initialWidth, "Width is OK");
+        assert.roughEqual(this.instance.$element().find(".dx-scheduler-appointment").eq(0).outerWidth(), 1.1, initialWidth, "Width is OK");
     });
 
     QUnit.test("Appointment should have initial left coordinate if 'cancel' flag is defined as true during resize operation", function(assert) {
@@ -3188,7 +3281,7 @@ QUnit.testStart(function() {
         assert.deepEqual(appointments.option("onAppointmentDblClick")(), this.instance.option("onAppointmentDblClick")(), "scheduler has correct onAppointmentDblClick after option change");
     });
 
-    QUnit.test("onAppointmentFormCreated event should be fired while details form is opening", function(assert) {
+    QUnit.test("onAppointmentFormOpening event should be fired while details form is opening", function(assert) {
         var stub = sinon.stub(),
             data = {
                 text: "One",
@@ -3196,7 +3289,7 @@ QUnit.testStart(function() {
             };
         this.createInstance({
             currentView: 'month',
-            onAppointmentFormCreated: stub
+            onAppointmentFormOpening: stub
         });
 
         this.instance.showAppointmentPopup(data);
@@ -3218,7 +3311,7 @@ QUnit.testStart(function() {
             "onAppointmentUpdated": function() { return true; },
             "onAppointmentDeleting": function() { return true; },
             "onAppointmentDeleted": function() { return true; },
-            "onAppointmentFormCreated": function() { return true; }
+            "onAppointmentFormOpening": function() { return true; }
         });
 
         $.each(this.instance.getActions(), function(name, action) {

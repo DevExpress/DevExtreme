@@ -8,12 +8,6 @@ import { Axis } from "viz/axes/base_axis";
 var TranslatorStubCtor = new vizMocks.ObjectPool(translator2DModule.Translator2D),
     RangeStubCtor = new vizMocks.ObjectPool(rangeModule.Range);
 
-function getStub2DTranslatorWithSettings() {
-    var translator = sinon.createStubInstance(translator2DModule.Translator2D);
-    translator.getBusinessRange.returns({ arg: { minVisible: 0, maxVisible: 10 }, val: { minVisible: 0, maxVisible: 10 }, addRange: sinon.stub() });
-    return translator;
-}
-
 function spyRendererText(markersBBoxes) {
     var that = this,
         baseCreateText = this.renderer.stub("text");
@@ -40,12 +34,6 @@ var environment = {
                     minorTicks: []
                 };
             };
-        });
-
-        this.translator = getStub2DTranslatorWithSettings();
-
-        sinon.stub(translator2DModule, "Translator2D", function() {
-            return that.translator;
         });
 
         this.options = {
@@ -95,6 +83,12 @@ var environment = {
         this.range.min = 0;
         this.range.max = 100;
 
+        this.translator = new TranslatorStubCtor();
+        this.translator.getBusinessRange.returns(new RangeStubCtor());
+
+        sinon.stub(translator2DModule, "Translator2D", function() {
+            return that.translator;
+        });
     },
     afterEach: function() {
         this.tickGenerator.restore();
@@ -108,6 +102,7 @@ var environment = {
         this.range.minVisible = options.min;
         this.range.maxVisible = options.max;
         this.range.addRange = sinon.stub();
+        this.range.isEmpty.returns(false);
 
         axis = this.createAxis(this.renderSettings, options);
 
@@ -2040,5 +2035,5 @@ QUnit.test("Set business range when period is set and argumentType is string", f
     this.axis.setBusinessRange({});
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-    assert.ok(businessRange.stubData, true);
+    assert.equal(businessRange.isEmpty(), true);
 });

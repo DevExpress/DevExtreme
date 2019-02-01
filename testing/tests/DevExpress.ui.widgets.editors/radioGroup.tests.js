@@ -1,9 +1,10 @@
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import $ from "jquery";
+import devices from "core/devices";
+import errors from "ui/widget/ui.errors";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
 
-require("ui/radio_group");
+import "ui/radio_group";
 
 QUnit.testStart(function() {
     var markup =
@@ -98,8 +99,6 @@ QUnit.module("nested radio group", moduleConfig, function() {
 
 QUnit.module("buttons group rendering");
 
-QUnit.module("buttons group rendering");
-
 QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
     assert.expect(2);
 
@@ -112,6 +111,18 @@ QUnit.test("onContentReady fired after the widget is fully ready", function(asse
             assert.ok($(e.element).find("." + RADIO_BUTTON_CLASS).length);
         }
     });
+});
+
+QUnit.test("onContentReady should rise after changing dataSource (T697809)", assert => {
+    const onContentReadyHandler = sinon.stub(),
+        instance = $("#radioGroup").dxRadioGroup({
+            dataSource: ["str1", "str2", "str3"],
+            onContentReady: onContentReadyHandler
+        }).dxRadioGroup("instance");
+
+    assert.ok(onContentReadyHandler.calledOnce);
+    instance.option("dataSource", [1, 2, 3]);
+    assert.strictEqual(onContentReadyHandler.callCount, 2);
 });
 
 
@@ -169,6 +180,45 @@ QUnit.test("the hidden input should get correct value on widget value change", f
 
 
 QUnit.module("value", moduleConfig);
+
+QUnit.test("should not throw an error when the value is \"null\" or \"undefine\"", assert => {
+    const errorLogStub = sinon.stub(errors, "log");
+
+    $("#radioGroup").dxRadioGroup({
+        items: ['item1', 'item2', 'item3'],
+        value: void 0
+    });
+
+    $("#radioGroup").dxRadioGroup({
+        items: ['item1', 'item2', 'item3'],
+        value: null
+    });
+
+    assert.notOk(errorLogStub.called, "Exception was not thrown");
+    errorLogStub.restore();
+});
+
+QUnit.test("should have correct initialized selection", assert => {
+    let radioGroupInstance = null;
+    const isItemChecked = index => radioGroupInstance.itemElements().eq(index).hasClass(RADIO_BUTTON_CHECKED_CLASS);
+
+    radioGroupInstance = $("#radioGroup").dxRadioGroup({
+        items: ['item1', 'item2', 'item3']
+    }).dxRadioGroup('instance');
+
+    assert.notOk(isItemChecked(0));
+    assert.notOk(isItemChecked(1));
+    assert.notOk(isItemChecked(2));
+
+    radioGroupInstance = $("#radioGroup").dxRadioGroup({
+        items: ['item1', 'item2', 'item3'],
+        value: 'item2'
+    }).dxRadioGroup('instance');
+
+    assert.notOk(isItemChecked(0));
+    assert.ok(isItemChecked(1));
+    assert.notOk(isItemChecked(2));
+});
 
 QUnit.test("repaint of widget shouldn't reset value option", function(assert) {
     var items = [{ text: "0" }, { text: "1" }];

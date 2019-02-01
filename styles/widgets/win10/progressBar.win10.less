@@ -15,11 +15,11 @@
     height: 4px;
     width: 4px;
     background-color: @WIN10_PROGRESSBAR_ACCENT_COLOR;
-    .border-radius(50%);
+    border-radius: 50%;
 
-    .animation(loader 4s infinite);
-    .animation-timing(cubic-bezier(0.030, 0.615, 0.995, 0.415));
-    .animation-fill-mode();
+    animation: loader 4s infinite;
+    animation-timing-function: cubic-bezier(0.030, 0.615, 0.995, 0.415);
+    animation-fill-mode: both;
 }
 
 .dx-state-disabled.dx-progressbar {
@@ -30,7 +30,7 @@
     }
 
     .dx-progressbar-animating-segment {
-        .animation(none);
+        animation: none;
         background-color: @WIN10_PROGRESSBAR_ACCENT_COLOR;
     }
 
@@ -60,28 +60,28 @@
     .dx-progressbar-animating-segment {
         left: auto;
         right: 0;
-        .animation-name(loader-rtl);
+        animation-name: loader-rtl;
     }
 }
 
 .dx-progressbar-animating-segment-1 {
-    .animation-delay(1s);
+    animation-delay: 1s;
 }
 
 .dx-progressbar-animating-segment-2 {
-    .animation-delay(0.8s);
+    animation-delay: 0.8s;
 }
 
 .dx-progressbar-animating-segment-3 {
-    .animation-delay(0.6s);
+    animation-delay: 0.6s;
 }
 
 .dx-progressbar-animating-segment-4 {
-    .animation-delay(0.4s);
+    animation-delay: 0.4s;
 }
 
 .dx-progressbar-animating-segment-5 {
-    .animation-delay(0.2s);
+    animation-delay: 0.2s;
 }
 
 @-webkit-keyframes loader {

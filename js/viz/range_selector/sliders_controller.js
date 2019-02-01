@@ -152,7 +152,7 @@ SlidersController.prototype = {
         sliders[0].cancelAnimation();
         sliders[1].cancelAnimation();
         that._shutter.stopAnimation();
-        if(that._params.translator.isEmptyValueRange()) {
+        if(that._params.translator.getBusinessRange().isEmpty()) {
             sliders[0]._setText(emptySliderMarkerText);
             sliders[1]._setText(emptySliderMarkerText);
             sliders[0]._value = sliders[1]._value = undefined;
@@ -229,8 +229,8 @@ SlidersController.prototype = {
             endValue: translator.isValid(visualRange.endValue) ? translator.getCorrectValue(visualRange.endValue, -1) : undefined,
             length: visualRange.length
         }, {
-            min: businessRange.min,
-            max: businessRange.max,
+            min: businessRange.minVisible,
+            max: businessRange.maxVisible,
             categories: businessRange.categories
         });
 

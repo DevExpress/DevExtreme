@@ -42,6 +42,38 @@ var moduleOptions = {
 
 QUnit.module("Appointment Popup Content", moduleOptions);
 
+QUnit.test("showAppointmentPopup method with passed a recurrence appointment should render popup(T698732)", function(assert) {
+    var appointments = [
+        {
+            text: "TEST_TEXT",
+            startDate: new Date(2017, 4, 1, 9, 30),
+            endDate: new Date(2017, 4, 1, 11),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10"
+        }
+    ];
+    this.instance.option({
+        dataSource: appointments,
+        currentDate: new Date(2017, 4, 25),
+        startDayHour: 9,
+    });
+
+    this.instance.showAppointmentPopup(appointments[0], false);
+
+    var popupChoiceAppointmentEdit = $('.dx-popup-normal.dx-resizable').not('.dx-state-invisible');
+    assert.equal(popupChoiceAppointmentEdit.length, 1, "Popup with choice edit mode is rendered");
+
+    popupChoiceAppointmentEdit.find(".dx-popup-bottom .dx-button:eq(1)").trigger("dxclick");
+    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Appointment popup is rendered");
+
+    var form = this.instance.getAppointmentDetailsForm(),
+        startDateBox = form.getEditor("startDate"),
+        endDateBox = form.getEditor("endDate");
+
+    assert.equal(startDateBox.option("value").valueOf(), appointments[0].startDate.valueOf(), "Value in start dateBox valid");
+    assert.equal(endDateBox.option("value").valueOf(), appointments[0].endDate.valueOf(), "Value in end dateBox valid");
+});
+
+
 QUnit.test("showAppointmentPopup should render a popup only once", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
 
@@ -101,6 +133,20 @@ QUnit.test("showAppointmentPopup should render a popup form only once", function
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 2" });
 
     assert.equal($form.find(".dx-textbox").eq(0).dxTextBox("instance").option("text"), "appointment 2", "Form data is correct");
+});
+
+QUnit.test("showAppointmentPopup should render a popup content only once", function(assert) {
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 1" });
+
+    var popup = this.instance.getAppointmentPopup(),
+        contentReadyCalled = 0;
+
+    popup.option("onContentReady", function() {
+        contentReadyCalled++;
+    });
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 2" });
+
+    assert.equal(contentReadyCalled, 0, "Content wasn't rerendered");
 });
 
 QUnit.test("Popup should contain editors and components with right dx-rtl classes and rtlEnabled option value", function(assert) {
@@ -448,7 +494,7 @@ QUnit.test("Popup should not contain recurrence editor, if recurrenceRuleExpr is
 });
 
 QUnit.test("Recurrence editor should has right startDate after form items change", function(assert) {
-    this.instance.option("onAppointmentFormCreated", function(e) {
+    this.instance.option("onAppointmentFormOpening", function(e) {
         var items = e.form.option("items");
 
         items.push({
@@ -636,7 +682,7 @@ QUnit.test("Popup should not contain endDateTimeZone editor by default", functio
 });
 
 QUnit.test("It should be possible to render startDateTimeZone editor on appt form", function(assert) {
-    this.instance.option("onAppointmentFormCreated", function(e) {
+    this.instance.option("onAppointmentFormOpening", function(e) {
         e.form.itemOption("startDateTimeZone", { visible: true });
     });
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: "caption", description: "First task of this day", allDay: true });
@@ -649,7 +695,7 @@ QUnit.test("It should be possible to render startDateTimeZone editor on appt for
 });
 
 QUnit.test("It should be possible to render endDateTimeZone editor on appt form", function(assert) {
-    this.instance.option("onAppointmentFormCreated", function(e) {
+    this.instance.option("onAppointmentFormOpening", function(e) {
         e.form.itemOption("endDateTimeZone", { visible: true });
     });
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: "caption", description: "First task of this day", allDay: true });
@@ -700,7 +746,7 @@ QUnit.test("Done button shouldn't be disabled if validation fail", function(asse
 
     this.instance.option({ dataSource: data });
     this.instance.option({
-        onAppointmentFormCreated: function(data) {
+        onAppointmentFormOpening: function(data) {
             var form = data.form;
 
             form.option("items", [{
@@ -729,7 +775,7 @@ QUnit.test("Done button custom configuration should be correct", function(assert
 
     this.instance.option({ dataSource: data });
     this.instance.option({
-        onAppointmentFormCreated: function(e) {
+        onAppointmentFormOpening: function(e) {
             var buttons = e.component._popup.option('toolbarItems');
             buttons[0].options = { text: 'Text 1' };
             e.component._popup.option('toolbarItems', buttons);

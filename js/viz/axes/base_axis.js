@@ -8,7 +8,7 @@ import formatHelper from "../../format_helper";
 import parseUtils from "../components/parse_utils";
 import tickGeneratorModule from "./tick_generator";
 import Translator2DModule from "../translators/translator2d";
-import rangeModule from "../translators/range";
+import { Range } from "../translators/range";
 import { tick } from "./tick";
 import { adjust } from "../../core/utils/math";
 import { dateToMilliseconds } from "../../core/utils/date";
@@ -50,14 +50,14 @@ const dateIntervals = {
     week: 604800000
 };
 
-function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
+function getTickGenerator(options, incidentOccurred, skipTickGeneration, rangeIsEmpty, adjustDivisionFactor) {
     return tickGeneratorModule.tickGenerator({
         axisType: options.type,
         dataType: options.dataType,
         logBase: options.logarithmBase,
 
-        axisDivisionFactor: options.axisDivisionFactor || DEFAULT_AXIS_DIVISION_FACTOR,
-        minorAxisDivisionFactor: options.minorAxisDivisionFactor || DEFAULT_MINOR_AXIS_DIVISION_FACTOR,
+        axisDivisionFactor: adjustDivisionFactor(options.axisDivisionFactor || DEFAULT_AXIS_DIVISION_FACTOR),
+        minorAxisDivisionFactor: adjustDivisionFactor(options.minorAxisDivisionFactor || DEFAULT_MINOR_AXIS_DIVISION_FACTOR),
         numberMultipliers: options.numberMultipliers,
         calculateMinors: options.minorTick.visible || options.minorGrid.visible || options.calculateMinors,
 
@@ -72,7 +72,8 @@ function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
 
         generateExtraTick: options.generateExtraTick,
 
-        minTickInterval: options.minTickInterval
+        minTickInterval: options.minTickInterval,
+        rangeIsEmpty
     });
 }
 
@@ -250,7 +251,7 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, 
     });
 
     return function(tickInterval, skipTickGeneration, min, max, breaks) {
-        return getTickGenerator(tickGeneratorOptions, _noop, skipTickGeneration)(
+        return getTickGenerator(tickGeneratorOptions, _noop, skipTickGeneration, viewPort.isEmpty(), v => v)(
             {
                 min: min,
                 max: max,
@@ -296,6 +297,8 @@ const Axis = exports.Axis = function(renderSettings) {
     that._viewport = {};
 
     that._firstDrawing = true;
+
+    that._initRange = {};
 };
 
 Axis.prototype = {
@@ -930,7 +933,7 @@ Axis.prototype = {
         var that = this,
             options = that._options;
 
-        if((options.label.visible || that._outsideConstantLines.length) && !that._translator.getBusinessRange().stubData) {
+        if((options.label.visible || that._outsideConstantLines.length) && !that._translator.getBusinessRange().isEmpty()) {
             that._incidentOccurred("W2106", [that._isHorizontal ? "horizontal" : "vertical"]);
             that._axisElementsGroup.clear();
             callAction(that._outsideConstantLines, "removeLabel");
@@ -945,7 +948,7 @@ Axis.prototype = {
         const wholeRange = that.adjustRange(getVizRangeObject(options.wholeRange));
         const visualRange = that.getViewport() || {};
 
-        const result = new rangeModule.Range(businessRange);
+        const result = new Range(businessRange);
         that._addConstantLinesToRange(result, "minVisible", "maxVisible");
 
         let minDefined = isDefined(visualRange.startValue);
@@ -990,6 +993,9 @@ Axis.prototype = {
         result.minVisible = adjustedVisualRange.startValue;
         result.maxVisible = adjustedVisualRange.endValue;
 
+        !isDefined(result.min) && (result.min = result.minVisible);
+        !isDefined(result.max) && (result.max = result.maxVisible);
+
         return result;
     },
 
@@ -1011,8 +1017,10 @@ Axis.prototype = {
         return range;
     },
 
-    _getVisualRangeUpdateMode(range, newRange, oppositeValue) {
+    _getVisualRangeUpdateMode(viewport, newRange, oppositeValue) {
         let value = this._options.visualRangeUpdateMode;
+        const translator = this._translator;
+        const range = translator.getBusinessRange();
 
         if(this.isArgumentAxis) {
             if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
@@ -1022,22 +1030,21 @@ Axis.prototype = {
                     const visualRange = this.visualRange();
                     if(categories &&
                         newCategories &&
-                        categories.length === newCategories.length &&
-                        newCategories.every((c, i) => c.valueOf() === categories[i].valueOf()) &&
-                        (visualRange.startValue.valueOf() !== newCategories[0].valueOf() ||
-                            visualRange.endValue.valueOf() !== newCategories[newCategories.length - 1].valueOf())
+                        categories.length &&
+                        newCategories.map(c => c.valueOf()).join(",").indexOf(categories.map(c => c.valueOf()).join(",")) !== -1 &&
+                        (visualRange.startValue.valueOf() !== categories[0].valueOf() ||
+                            visualRange.endValue.valueOf() !== categories[categories.length - 1].valueOf())
                     ) {
                         value = KEEP;
                     } else {
                         value = RESET;
                     }
                 } else {
-                    const translator = this._translator;
                     const minPoint = translator.translate(range.min);
-                    const minVisiblePoint = translator.translate(range.minVisible);
+                    const minVisiblePoint = translator.translate(viewport.startValue);
 
                     const maxPoint = translator.translate(range.max);
-                    const maxVisiblePoint = translator.translate(range.maxVisible);
+                    const maxVisiblePoint = translator.translate(viewport.endValue);
 
                     if(minPoint === minVisiblePoint && maxPoint === maxVisiblePoint) {
                         value = RESET;
@@ -1050,7 +1057,6 @@ Axis.prototype = {
             }
         } else {
             if([KEEP, RESET].indexOf(value) === -1) {
-
                 if(oppositeValue === KEEP) {
                     value = KEEP;
                 } else {
@@ -1062,26 +1068,28 @@ Axis.prototype = {
         return value;
     },
 
-    _handleBusinessRangeChanged(seriesData, oppositeVisualRangeUpdateMode) {
+    _handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized) {
         const that = this;
-        const currentBusinessRange = new rangeModule.Range(that._translator.getBusinessRange());
-        if(!currentBusinessRange.isDefined() || currentBusinessRange.stubData || currentBusinessRange.isEstimatedRange) {
+        const visualRange = this.visualRange();
+
+        if(axisReinitialized || that._translator.getBusinessRange().isEmpty()) {
             return;
         }
+
+        let visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(visualRange, that._seriesData, oppositeVisualRangeUpdateMode);
         if(!that.isArgumentAxis) {
             const viewport = that.getViewport();
-
-            if(isDefined(viewport.startValue) ||
-                isDefined(viewport.endValue) ||
-                isDefined(viewport.length)) {
-                that._resetVisualRangeOption();
-                return;
+            if(!isDefined(viewport.startValue) &&
+                !isDefined(viewport.endValue) &&
+                !isDefined(viewport.length)) {
+                visualRangeUpdateMode = RESET;
             }
         }
 
-        const visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(currentBusinessRange, seriesData, oppositeVisualRangeUpdateMode);
+        that._prevDataWasEmpty && (visualRangeUpdateMode = KEEP);
+
         if(visualRangeUpdateMode === KEEP) {
-            that._setVisualRange([currentBusinessRange.minVisible, currentBusinessRange.maxVisible]);
+            that._setVisualRange([visualRange.startValue, visualRange.endValue]);
         }
         if(visualRangeUpdateMode === RESET) {
             that._setVisualRange([null, null]);
@@ -1128,14 +1136,15 @@ Axis.prototype = {
         return center;
     },
 
-    setBusinessRange(range, categoriesOrder, oppositeVisualRangeUpdateMode) {
+    setBusinessRange(range, categoriesOrder, oppositeVisualRangeUpdateMode, axisReinitialized) {
         const that = this;
         const options = that._options;
         const isDiscrete = options.type === constants.discrete;
 
-        that._seriesData = new rangeModule.Range(range);
-
-        that._handleBusinessRangeChanged(that._seriesData, oppositeVisualRangeUpdateMode);
+        that._seriesData = new Range(range);
+        const dataIsEmpty = that._seriesData.isEmpty();
+        that._handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized);
+        that._prevDataWasEmpty = dataIsEmpty;
 
         that._seriesData.addRange({
             categories: options.categories,
@@ -1172,10 +1181,6 @@ Axis.prototype = {
                 that._seriesData.correctValueZeroLevel();
             }
             that._seriesData.sortCategories(that.getCategoriesSorter());
-        }
-
-        if(!that._seriesData.isDefined()) {
-            that._seriesData.setStubData(that._seriesData.dataType);
         }
 
         that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
@@ -1281,13 +1286,17 @@ Axis.prototype = {
         this._isSynchronized = true;
     },
 
+    _adjustDivisionFactor: function(val) {
+        return val;
+    },
+
     _getTicks: function(viewPort, incidentOccurred, skipTickGeneration) {
         var that = this,
             options = that._options,
             customTicks = options.customTicks,
             customMinorTicks = options.customMinorTicks;
 
-        return getTickGenerator(options, incidentOccurred || that._incidentOccurred, skipTickGeneration)(
+        return getTickGenerator(options, incidentOccurred || that._incidentOccurred, skipTickGeneration, that._translator.getBusinessRange().isEmpty(), that._adjustDivisionFactor.bind(that))(
             {
                 min: viewPort.minVisible,
                 max: viewPort.maxVisible,
@@ -1297,7 +1306,7 @@ Axis.prototype = {
                 checkMaxDataVisibility: viewPort.checkMaxDataVisibility
             },
             that._getScreenDelta(),
-            that._translator.getBusinessRange().stubData ? null : options.tickInterval,
+            options.tickInterval,
             options.label.overlappingBehavior === "ignore" || options.forceUserTickInterval,
             {
                 majors: customTicks,
@@ -1326,7 +1335,7 @@ Axis.prototype = {
         let that = this,
             options = that._options,
             marginOptions = that._marginOptions,
-            businessRange = new rangeModule.Range(that.getTranslator().getBusinessRange()).addRange(range),
+            businessRange = new Range(that.getTranslator().getBusinessRange()).addRange(range),
             visualRange = that.getViewport(),
             minVisible = visualRange && isDefined(visualRange.startValue) ? visualRange.startValue : businessRange.minVisible,
             maxVisible = visualRange && isDefined(visualRange.endValue) ? visualRange.endValue : businessRange.maxVisible,
@@ -1549,7 +1558,7 @@ Axis.prototype = {
 
     _applyMargins: function(dataRange) {
         var that = this,
-            range = new rangeModule.Range(dataRange),
+            range = new Range(dataRange),
             options = that._options,
             margins = isDefined(that._marginOptions) ? that._marginOptions : {},
             marginSize = margins.size,
@@ -1576,7 +1585,7 @@ Axis.prototype = {
             return value;
         }
 
-        if(valueMarginsEnabled) {
+        if(valueMarginsEnabled && !range.isEmpty()) {
             if(isDefined(minValueMargin)) {
                 minVisible = add(minVisible, -maxMinDistance * minValueMargin);
             }
@@ -1685,7 +1694,7 @@ Axis.prototype = {
 
         var offset = that._constantLabelOffset = that._adjustConstantLineLabels(that._outsideConstantLines);
 
-        if(!that._translator.getBusinessRange().stubData) {
+        if(!that._translator.getBusinessRange().isEmpty()) {
             that._setLabelsPlacement();
             offset = that._adjustLabels(offset);
         }
@@ -1741,7 +1750,7 @@ Axis.prototype = {
 
         that._ticksToRemove = null;
 
-        if(!that._translator.getBusinessRange().stubData) {
+        if(!that._translator.getBusinessRange().isEmpty()) {
             that._firstDrawing = false;
         }
     },
@@ -1873,11 +1882,21 @@ Axis.prototype = {
     getZoomBounds() {
         const wholeRange = vizUtils.getVizRangeObject(this._options.wholeRange);
         const range = this.getTranslator().getBusinessRange();
+        const secondPriorityRange = {
+            startValue: getZoomBoundValue(this._initRange.startValue, range.min),
+            endValue: getZoomBoundValue(this._initRange.endValue, range.max)
+        };
 
         return {
-            startValue: getZoomBoundValue(wholeRange.startValue, range.min),
-            endValue: getZoomBoundValue(wholeRange.endValue, range.max)
+            startValue: getZoomBoundValue(wholeRange.startValue, secondPriorityRange.startValue),
+            endValue: getZoomBoundValue(wholeRange.endValue, secondPriorityRange.endValue)
         };
+    },
+
+    setInitRange() {
+        if(Object.keys(this._options.wholeRange || {}).length === 0) {
+            this._initRange = this.getZoomBounds();
+        }
     },
 
     _resetVisualRangeOption() {
@@ -1929,6 +1948,7 @@ Axis.prototype = {
 
         if(isDefined(visualRange)) {
             visualRange = that._validateVisualRange(visualRange);
+            visualRange.action = action;
         }
 
         const zoomStartEvent = that.getZoomStartEventArg(domEvent, action);
@@ -1970,7 +1990,7 @@ Axis.prototype = {
             const zoomFactor = +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + "e+2") + "e-2");
             const zoomEndEvent = that.getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 
-            zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor);
+            zoomEndEvent.cancel = that.isZoomingLowerLimitOvercome(zoomFactor === 1 ? "pan" : "zoom", zoomFactor);
             that._eventTrigger("zoomEnd", zoomEndEvent);
 
             if(zoomEndEvent.cancel) {
@@ -1987,11 +2007,11 @@ Axis.prototype = {
         that._visualRange(that, previousRange);
     },
 
-    isZoomingLowerLimitOvercome(zoomFactor, range) {
+    isZoomingLowerLimitOvercome(actionType, zoomFactor, range) {
         const that = this;
         const options = that._options;
         let minZoom = options.minVisualRangeLength;
-        let isOvercoming = zoomFactor >= 1;
+        let isOvercoming = actionType === "zoom" && zoomFactor >= 1;
         const businessRange = that._translator.getBusinessRange();
         let visualRange;
         if(isDefined(range)) {
@@ -2004,19 +2024,24 @@ Axis.prototype = {
         }
         const visualRangeLength = that.getVisualRangeLength(visualRange);
 
-        if(isDefined(minZoom)) {
-            if(options.dataType === "datetime" && !isNumeric(minZoom)) {
-                minZoom = dateToMilliseconds(minZoom);
+        if(options.type !== "discrete") {
+            if(isDefined(minZoom)) {
+                if(options.dataType === "datetime" && !isNumeric(minZoom)) {
+                    minZoom = dateToMilliseconds(minZoom);
+                }
+                isOvercoming &= minZoom >= visualRangeLength;
+            } else {
+                const canvasLength = that._translator.canvasLength;
+                const fullRange = {
+                    minVisible: businessRange.min,
+                    maxVisible: businessRange.max,
+                    categories: businessRange.categories
+                };
+                isOvercoming &= that.getVisualRangeLength(fullRange) / canvasLength >= visualRangeLength;
             }
-            isOvercoming &= minZoom >= visualRangeLength;
         } else {
-            const canvasLength = that._translator.canvasLength;
-            const fullRange = {
-                minVisible: businessRange.min,
-                maxVisible: businessRange.max,
-                categories: businessRange.categories
-            };
-            isOvercoming &= that.getVisualRangeLength(fullRange) / canvasLength >= visualRangeLength;
+            !isDefined(minZoom) && (minZoom = 1);
+            isOvercoming &= isDefined(range) && that.getVisualRangeLength() === minZoom && visualRangeLength <= minZoom;
         }
 
         return !!isOvercoming;
@@ -2037,6 +2062,10 @@ Axis.prototype = {
             maxDataValue = seriesData.max;
         }
 
+        if(!isDefined(minDataValue) || !isDefined(maxDataValue)) {
+            return false;
+        }
+
         const startPoint = translator.translate(minDataValue);
         const endPoint = translator.translate(maxDataValue);
         const edges = [Math.min(startPoint, endPoint), Math.max(startPoint, endPoint)];
@@ -2051,12 +2080,14 @@ Axis.prototype = {
 
     isExtremePosition(isMax) {
         let extremeDataValue;
+        let seriesData;
 
-        const seriesData = this._translator.getBusinessRange();
         if(this._options.type === "discrete") {
+            seriesData = this._translator.getBusinessRange();
             extremeDataValue = isMax ? seriesData.categories[seriesData.categories.length - 1] : seriesData.categories[0];
         } else {
-            extremeDataValue = isMax ? seriesData.max : seriesData.min;
+            seriesData = this.getZoomBounds(); // T702708
+            extremeDataValue = isMax ? seriesData.endValue : seriesData.startValue;
         }
 
         const translator = this.getTranslator();
@@ -2317,8 +2348,7 @@ Axis.prototype = {
     },
 
     _getAdjustedBusinessRange() {
-        const businessRange = new rangeModule.Range(this._translator.getBusinessRange());
-        return this.adjustViewport(businessRange);
+        return this.adjustViewport(this._translator.getBusinessRange());
     },
 
     ///#DEBUG

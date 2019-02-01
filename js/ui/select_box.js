@@ -420,12 +420,15 @@ var SelectBox = DropDownList.inherit({
 
     _renderInputValueAsync: function() {
         this._renderTooltip();
-        this._renderInputValueImpl();
-        this._refreshSelected();
+        this._renderInputValueImpl().always(function() {
+            this._refreshSelected();
+        }.bind(this));
     },
 
     _renderInputValueImpl: function() {
         this._renderInputAddons();
+
+        return new Deferred().resolve();
     },
 
     _fitIntoRange: function(value, start, end) {
@@ -778,11 +781,11 @@ var SelectBox = DropDownList.inherit({
 
         item = item || null;
         this.option("selectedItem", item);
-        this._setValue(this._valueGetter(item));
-        this._renderDisplayText(this._displayGetter(item));
-        if(item === null && this._wasSearch()) {
+        if(this._shouldClearFilter()) {
             this._filterDataSource(null);
         }
+        this._setValue(this._valueGetter(item));
+        this._renderDisplayText(this._displayGetter(item));
     },
 
     _createClearButton: function() {

@@ -34,6 +34,13 @@ var TabPanel = MultiView.inherit({
             */
 
             /**
+             * @name dxTabPanelOptions.items
+             * @type Array<string, dxTabPanelItem, object>
+             * @fires dxTabPanelOptions.onOptionChanged
+             * @inheritdoc
+             */
+
+            /**
             * @name dxTabPanelOptions.itemTitleTemplate
             * @type template|function
             * @default "title"
@@ -111,31 +118,31 @@ var TabPanel = MultiView.inherit({
             badgeExpr: function(data) { return data ? data.badge : undefined; }
 
             /**
-            * @name dxTabPanelItemTemplate
-            * @inherits dxMultiViewItemTemplate
+            * @name dxTabPanelItem
+            * @inherits dxMultiViewItem
             * @type object
             */
             /**
-            * @name dxTabPanelItemTemplate.tabTemplate
+            * @name dxTabPanelItem.tabTemplate
             * @type template|function
             * @type_function_return string|Node|jQuery
             */
 
             /**
-            * @name dxTabPanelItemTemplate.visible
+            * @name dxTabPanelItem.visible
             * @hidden
             * @inheritdoc
             */
             /**
-            * @name dxTabPanelItemTemplate.title
+            * @name dxTabPanelItem.title
             * @type String
             */
             /**
-            * @name dxTabPanelItemTemplate.icon
+            * @name dxTabPanelItem.icon
             * @type String
             */
             /**
-            * @name dxTabPanelItemTemplate.badge
+            * @name dxTabPanelItem.badge
             * @type String
             */
         });

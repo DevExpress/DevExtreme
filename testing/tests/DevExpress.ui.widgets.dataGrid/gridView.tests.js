@@ -21,19 +21,15 @@ QUnit.testStart(function() {
 });
 
 
-require("common.css!");
+import "common.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    gridCore = require("ui/data_grid/ui.data_grid.core"),
-    domUtils = require("core/utils/dom"),
-    devices = require("core/devices"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController,
-    getCells = dataGridMocks.getCells;
+import $ from "jquery";
+import gridCore from "ui/data_grid/ui.data_grid.core";
+import domUtils from "core/utils/dom";
+import devices from "core/devices";
+import { setupDataGridModules, MockDataController, MockColumnsController, getCells } from "../../helpers/dataGridMocks.js";
 
 function getTextFromCell(cell) {
     return $(cell).text();

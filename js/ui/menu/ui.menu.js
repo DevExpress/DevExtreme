@@ -58,7 +58,7 @@ var Menu = MenuBase.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxMenuOptions.items
-            * @type Array<dxMenuItemTemplate>
+            * @type Array<dxMenuItem>
             * @inheritdoc
             */
             /**
@@ -184,14 +184,14 @@ var Menu = MenuBase.inherit({
             * @inheritdoc
             */
             /**
-            * @name dxMenuItemTemplate
-            * @inherits dxMenuBaseItemTemplate
+            * @name dxMenuItem
+            * @inherits dxMenuBaseItem
             * @type object
             * @inheritdoc
             */
             /**
-            * @name dxMenuItemTemplate.items
-            * @type Array<dxMenuItemTemplate>
+            * @name dxMenuItem.items
+            * @type Array<dxMenuItem>
             * @inheritdoc
             */
         });
@@ -471,6 +471,7 @@ var Menu = MenuBase.inherit({
         });
 
         return extend(menuOptions, {
+            dataSource: that.getDataSource(),
             animationEnabled: !!this.option("animation"),
             onItemClick: that._treeviewItemClickHandler.bind(that),
             onItemExpanded: (function(e) {

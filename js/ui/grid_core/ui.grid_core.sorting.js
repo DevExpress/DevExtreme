@@ -1,13 +1,11 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import clickEvent from "../../events/click";
-import typeUtils from "../../core/utils/type";
-const isDefined = typeUtils.isDefined;
-import extendUtils from "../../core/utils/extend";
-const extend = extendUtils.extend;
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
 import sortingMixin from "../grid_core/ui.grid_core.sorting_mixin";
 import messageLocalization from "../../localization/message";
-import eventUtils from "../../events/utils";
+import { addNamespace } from "../../events/utils";
 
 const COLUMN_HEADERS_VIEW_NAMESPACE = "dxDataGridColumnHeadersView";
 
@@ -17,7 +15,7 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
         const $row = that.callBase(row);
 
         if(row.rowType === "header") {
-            eventsEngine.on($row, eventUtils.addNamespace(clickEvent.name, COLUMN_HEADERS_VIEW_NAMESPACE), "td", that.createAction(e => {
+            eventsEngine.on($row, addNamespace(clickEvent.name, COLUMN_HEADERS_VIEW_NAMESPACE), "td", that.createAction(e => {
                 if($(e.event.currentTarget).parent().get(0) !== $row.get(0)) {
                     return;
                 }
@@ -104,7 +102,7 @@ const HeaderPanelSortingExtender = extend({}, sortingMixin, {
         const that = this;
         const $item = that.callBase(...arguments);
 
-        eventsEngine.on($item, eventUtils.addNamespace(clickEvent.name, "dxDataGridHeaderPanel"), that.createAction(() => {
+        eventsEngine.on($item, addNamespace(clickEvent.name, "dxDataGridHeaderPanel"), that.createAction(() => {
             setTimeout(() => {
                 that.getController("columns").changeSortOrder(groupColumn.index);
             });

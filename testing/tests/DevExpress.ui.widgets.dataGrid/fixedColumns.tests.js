@@ -15,25 +15,25 @@ QUnit.testStart(function() {
 });
 
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-window.Hogan = require("../../../node_modules/hogan.js/dist/hogan-3.0.2.js");
+import hogan from "../../../node_modules/hogan.js/dist/hogan-3.0.2.js";
 
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    device = devices.real(),
-    setTemplateEngine = require("ui/set_template_engine"),
-    nativePointerMock = require("../../helpers/nativePointerMock.js"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController,
-    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
-    expandCellTemplate = gridCoreUtils.getExpandCellTemplate(),
-    dataUtils = require("core/element_data");
+window.Hogan = hogan;
+
+import $ from "jquery";
+import devices from "core/devices";
+import setTemplateEngine from "ui/set_template_engine";
+import nativePointerMock from "../../helpers/nativePointerMock.js";
+import { setupDataGridModules, MockDataController, MockColumnsController } from "../../helpers/dataGridMocks.js";
+import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
+import dataUtils from "core/element_data";
+
+var device = devices.real(),
+    expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
 var generateData = function(countItems) {
     var j = 1,
@@ -200,7 +200,7 @@ QUnit.test("Draw fixed table for rowsView", function(assert) {
     if(device.platform === "ios") {
         scrollableInstance = $testElement.find(".dx-datagrid-rowsview").dxScrollable("instance");
         assert.ok(scrollableInstance, "has dxScrollable");
-        assert.equal(scrollableInstance.scrollTop(), -1, "scroll top of the main table");
+        assert.equal(scrollableInstance.scrollTop(), 0, "scroll top of the main table");
         assert.equal($fixTable.position().top, 0, "scroll top of the fixed table");
     }
 });
@@ -1170,9 +1170,9 @@ QUnit.test("Synchronize rows for fixed table with master detail", function(asser
 
     assert.equal($table.find("tbody > tr").length, 4, "count rows");
     assert.equal($fixTable.find("tbody > tr").length, 4, "count fixed rows");
-    assert.ok($table.find("tbody > tr").first().outerHeight() === $fixTable.find("tbody > tr").first().outerHeight(), "height first row");
-    assert.ok($table.find("tbody > tr").eq(1).outerHeight() === $fixTable.find("tbody > tr").eq(1).outerHeight(), "height second row");
-    assert.roughEqual($table.find("tbody > tr").eq(2).outerHeight(), $fixTable.find("tbody > tr").eq(2).outerHeight(), 0.1, "height third row");
+    assert.ok($table.find("tbody > tr")[0].getBoundingClientRect().height === $fixTable.find("tbody > tr")[0].getBoundingClientRect().height, "height first row");
+    assert.ok($table.find("tbody > tr")[1].getBoundingClientRect().height === $fixTable.find("tbody > tr")[1].getBoundingClientRect().height, "height second row");
+    assert.roughEqual($table.find("tbody > tr")[2].getBoundingClientRect().height, $fixTable.find("tbody > tr")[2].getBoundingClientRect().height, 0.1, "height third row");
 });
 
 QUnit.test("Synchronize rows with floating-point height", function(assert) {

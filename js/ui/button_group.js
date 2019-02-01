@@ -147,7 +147,7 @@ const ButtonGroup = Widget.inherit({
 
         /**
          * @name dxButtonGroupItem
-         * @inherits CollectionWidgetItemTemplate
+         * @inherits CollectionWidgetItem
          * @type object
          */
         /**

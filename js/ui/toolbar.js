@@ -56,28 +56,34 @@ var Toolbar = ToolbarBase.inherit({
             submenuType: "dropDownMenu"
 
             /**
-            * @name dxToolbarItemTemplate.location
+            * @name dxToolbarItem.location
             * @type Enums.ToolbarItemLocation
             * @default 'center'
             */
 
             /**
-            * @name dxToolbarItemTemplate.locateInMenu
+            * @name dxToolbarItem.locateInMenu
             * @type Enums.ToolbarItemLocateInMenuMode
             * @default 'never'
             */
 
             /**
-            * @name dxToolbarItemTemplate.showText
+            * @name dxToolbarItem.showText
             * @type Enums.ToolbarItemShowTextMode
             * @default 'always'
             */
 
             /**
-            * @name dxToolbarItemTemplate.menuItemTemplate
+            * @name dxToolbarItem.menuItemTemplate
             * @type template|function
             * @type_function_return string|Node|jQuery
             */
+
+            /**
+             * @name dxToolbarItem.cssClass
+             * @type string
+             * @default undefined
+             */
 
             /**
             * @name dxToolbarOptions.renderAs

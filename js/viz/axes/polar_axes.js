@@ -78,11 +78,10 @@ circularAxes = polarAxes.circular = {
     },
 
     _processCanvas: function(canvas) {
-        var options = this._options;
         this._updateRadius(canvas);
         this._updateCenter(canvas);
 
-        return { left: 0, right: 0, width: _math.abs(options.endAngle - options.startAngle) };
+        return { left: 0, right: 0, width: this._getScreenDelta() };
     },
 
     _createAxisElement: function() {
@@ -205,9 +204,13 @@ circularAxes = polarAxes.circular = {
 
     _checkAlignmentConstantLineLabels: _noop,
 
+    _adjustDivisionFactor: function(val) {
+        return val * 180 / (this.getRadius() * Math.PI);
+    },
+
     _getScreenDelta: function() {
-        var angles = this.getAngles();
-        return _abs(angles[0] - angles[1]) * this.getRadius() * Math.PI / 180;
+        const angles = this.getAngles();
+        return _math.abs(angles[0] - angles[1]);
     },
 
     _getTickMarkPoints: function(coords, length) {

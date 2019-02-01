@@ -95,17 +95,16 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
             },
 
             updateTickPosition: function(animate) {
-                this._updateLine(this.mark, {
-                    points: axis._getTickMarkPoints(tick.coords, tickOptions.length)
-                },
-                this._storedCoords && {
-                    points: axis._getTickMarkPoints(tick._storedCoords, tickOptions.length)
-                },
-                animate);
+                this._updateLine(this.mark,
+                    { points: axis._getTickMarkPoints(tick.coords, tickOptions.length) },
+                    this._storedCoords && { points: axis._getTickMarkPoints(tick._storedCoords, tickOptions.length) },
+                    animate);
             },
             drawLabel: function(range) {
-                const stubData = axis.getTranslator().getBusinessRange().stubData;
-                const labelIsVisible = labelOptions.visible && !skipLabels && !stubData && !axis.areCoordsOutsideAxis(this.labelCoords);
+                const labelIsVisible = labelOptions.visible
+                    && !skipLabels
+                    && !axis.getTranslator().getBusinessRange().isEmpty()
+                    && !axis.areCoordsOutsideAxis(this.labelCoords);
 
                 if(!labelIsVisible) {
                     if(this.label) {

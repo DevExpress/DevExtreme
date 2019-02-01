@@ -1,21 +1,20 @@
-var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
-    eventsEngine = require("../../events/core/events_engine"),
-    eventUtils = require("../../events/utils"),
-    clickEvent = require("../../events/click"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    browser = require("../../core/utils/browser"),
-    extend = require("../../core/utils/extend").extend,
-    equalByValue = commonUtils.equalByValue,
-    Guid = require("../../core/guid"),
-    modules = require("./ui.grid_core.modules"),
-    Form = require("../form"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    themes = require("../themes"),
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import eventUtils from "../../events/utils";
+import clickEvent from "../../events/click";
+import typeUtils from "../../core/utils/type";
+import browser from "../../core/utils/browser";
+import Guid from "../../core/guid";
+import modules from "./ui.grid_core.modules";
+import Form from "../form";
+import gridCoreUtils from "./ui.grid_core.utils";
+import themes from "../themes";
+import { getWindow } from "../../core/utils/window";
+import { equalByValue } from "../../core/utils/common";
+import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
 
-    COLUMN_HEADERS_VIEW = "columnHeadersView",
+var COLUMN_HEADERS_VIEW = "columnHeadersView",
     ROWS_VIEW = "rowsView",
     FOOTER_VIEW = "footerView",
     COLUMN_VIEWS = [COLUMN_HEADERS_VIEW, ROWS_VIEW, FOOTER_VIEW],
@@ -99,7 +98,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(column.cellTemplate) {
             var templateOptions = extend({}, cellOptions, { value: value, displayValue: displayValue, text: text, column: column });
-            that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(window.document).length);
+            that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(getWindow().document).length);
         } else {
             container = $container.get(0);
             if(column.encodeHtml) {
@@ -657,7 +656,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
      * @return boolean
      */
     isAdaptiveDetailRowExpanded: function(key) {
-        return this._dataController.adaptiveExpandedKey() && commonUtils.equalByValue(this._dataController.adaptiveExpandedKey(), key);
+        return this._dataController.adaptiveExpandedKey() && equalByValue(this._dataController.adaptiveExpandedKey(), key);
     },
 
     /**

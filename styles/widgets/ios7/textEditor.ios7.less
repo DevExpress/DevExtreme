@@ -48,7 +48,7 @@
 
 .dx-texteditor-container {
     border: @TEXTEDITOR_BORDER;
-    .border-radius(@TEXTEDITOR_BORDER_RADIUS);
+    border-radius: @TEXTEDITOR_BORDER_RADIUS;
     overflow: hidden;
 
     .dx-hairlines &{
@@ -76,7 +76,7 @@
     font-family: @IOS7_FONT;
 
     &:invalid {
-        .box-shadow(none);
+        box-shadow: none;
     }
 }
 
@@ -132,7 +132,7 @@
     margin-top: -@TEXTEDITOR_INVALID_BADGE_WIDTH/2;
     width: @TEXTEDITOR_INVALID_BADGE_WIDTH;
     height: @TEXTEDITOR_INVALID_BADGE_WIDTH;
-    .border-radius(@radius: 11px);
+    border-radius: 11px;
     text-align: center;
     line-height: @TEXTEDITOR_INVALID_BADGE_WIDTH - 3px;
 }
