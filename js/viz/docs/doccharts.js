@@ -2334,14 +2334,7 @@ var dxPolarChart = {
         * @type Enums.ChartLegendHoverMode
         * @default 'includePoints'
         */
-        hoverMode: 'includePoints',
-        /**
-       * @name dxPolarChartOptions.legend.customizeItems
-       * @type function(items)
-       * @type_function_param1 items:Array<BaseChartLegendItem>
-       * @type_function_return items:Array<BaseChartLegendItem>
-       */
-       customizeItems: undefined
+        hoverMode: 'includePoints'
     },
     /**
     * @name dxPolarChartOptions.commonAxisSettings
@@ -3375,7 +3368,7 @@ var BaseChart = {
         */
         rowItemSpacing: 8,
         /**
-        * @name dxChartOptions.legend.customizeItems
+        * @name BaseChartOptions.legend.customizeItems
         * @type function(items)
         * @type_function_param1 items:Array<BaseChartLegendItem>
         * @type_function_return items:Array<BaseChartLegendItem>

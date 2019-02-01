@@ -65,7 +65,7 @@ var pieChartSeriesObject = {
 var legendItem = {
   /**
   * @name PieChartLegendItem.text
-  * @type string
+  * @type any
   */
   text: undefined,
   /**
