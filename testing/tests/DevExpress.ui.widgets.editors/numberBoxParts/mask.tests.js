@@ -1347,6 +1347,27 @@ QUnit.test("removing decimal separator if decimal separator is not default", fun
     }
 });
 
+QUnit.test("should parse float numbers with the ',' separator", function(assert) {
+    const oldDecimalSeparator = config().decimalSeparator;
+    const input = this.input;
+
+    config({ decimalSeparator: "," });
+
+    this.instance.option({ format: "#.##" });
+
+    try {
+        this.keyboard.type("2,333");
+        assert.strictEqual(input.val(), "2,33");
+
+        this.keyboard.caret({ start: 0, end: 4 }).press("backspace");
+
+        this.keyboard.type("2,666");
+        assert.strictEqual(input.val(), "2,66");
+    } finally {
+        config({ decimalSeparator: oldDecimalSeparator });
+    }
+});
+
 QUnit.test("removing a stub in the end or begin of the text should lead to remove minus sign", function(assert) {
     this.instance.option({
         format: "$ #0.00;<<$ #0.00>>",
