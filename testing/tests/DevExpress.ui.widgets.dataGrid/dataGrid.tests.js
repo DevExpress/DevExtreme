@@ -12352,6 +12352,48 @@ QUnit.test("Push with reshape and repaintChangesOnly if scrolling mode is virtua
     assert.strictEqual($(dataGrid.getCellElement(1, 1)).text(), "updated", "second cell value is updated");
 });
 
+// T711198
+QUnit.test("Push insert with reshape and repaintChangesOnly if rowRenderingMode is virtual", function(assert) {
+    // arrange
+    var data = [
+        { id: 1, name: "test 1" },
+        { id: 2, name: "test 2" },
+        { id: 3, name: "test 3" },
+        { id: 4, name: "test 4" },
+        { id: 5, name: "test 5" }
+    ];
+
+    var dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: data
+            },
+            reshapeOnPush: true
+        }),
+        dataGrid = createDataGrid({
+            height: 50,
+            loadingTimeout: undefined,
+            repaintChangesOnly: true,
+            scrolling: {
+                rowRenderingMode: "virtual",
+                updateTimeout: 0
+            },
+            dataSource: dataSource,
+            columns: ["id", "name"]
+        });
+
+    this.clock.tick();
+
+    // act
+    dataSource.store().push([{ type: "insert", data: { id: 6, name: "test 6" } }]);
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 6, "one row is added");
+    assert.strictEqual(dataGrid.getVisibleRows()[5].key, 6, "added row key is correct");
+});
+
 QUnit.test("Push without reshape should not force load if scrolling mode is virtual", function(assert) {
     // arrange
     var data = [
