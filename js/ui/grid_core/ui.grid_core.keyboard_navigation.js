@@ -70,7 +70,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _isExcelNavigation: function() {
-        return !this._isRowEditMode() && this.option("excelNavigation");
+        return this._isCellEditMode() && this.option("excelNavigation");
     },
 
     _focusView: function(view, viewIndex) {
