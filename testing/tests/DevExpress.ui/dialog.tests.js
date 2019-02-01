@@ -240,3 +240,20 @@ QUnit.test("dialog should reset active element on showing", function(assert) {
         domUtils.resetActiveElement = originalResetActiveElement;
     }
 });
+
+QUnit.test("it should be possible to redefine popup option in the dialog", function(assert) {
+    dialog.custom({
+        title: "Test Title",
+        popupOptions: {
+            customOption: "Test",
+            title: "Popup title",
+            height: 300
+        }
+    }).show();
+
+    var popup = $(".dx-popup").dxPopup("instance");
+
+    assert.equal(popup.option("customOption"), "Test", "custom option is defined");
+    assert.equal(popup.option("title"), "Popup title", "user option is redefined");
+    assert.equal(popup.option("height"), 300, "default option is redefined");
+});
