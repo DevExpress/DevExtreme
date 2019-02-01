@@ -6,7 +6,9 @@ import DataGrid from "../data_grid/ui.data_grid";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
 const FIE_MANAGER_CLASS = "dx-filemanager";
+const FIE_MANAGER_CONTAINER_CLASS = FIE_MANAGER_CLASS + "-container";
 const FIE_MANAGER_DIRS_TREE_CLASS = FIE_MANAGER_CLASS + "-dirs-tree";
+const FIE_MANAGER_VIEW_SEPARATOR_CLASS = FIE_MANAGER_CLASS + "-view-separator";
 
 var FileManager = Widget.inherit({
 
@@ -16,22 +18,40 @@ var FileManager = Widget.inherit({
     _initMarkup: function() {
         this.callBase();
 
-        this.$element().addClass(FIE_MANAGER_CLASS);
-
-        this._filesTreeView = this._createComponent($("<div>"), TreeViewSearch, {
-            items: this.generateFakeFoldersData()
-        });
-        this._filesTreeView.$element().addClass(FIE_MANAGER_DIRS_TREE_CLASS);
-        this.$element().append(this._filesTreeView.$element());
-
-        this._filesView = this._createComponent($("<div>"), DataGrid, {
-            columns: [ "FileName" ],
-            dataSource: this.generateFakeFilesData()
-        });
-        this.$element().append(this._filesView.$element());
+        var $viewContainer = this._createViewContainer();
+        this.$element()
+            .append($viewContainer)
+            .addClass(FIE_MANAGER_CLASS);
     },
 
-    generateFakeFoldersData: function() {
+    _createViewContainer: function() {
+        var $container = $("<div>");
+        $container.addClass(FIE_MANAGER_CONTAINER_CLASS);
+
+        this._filesTreeView = this._createComponent($("<div>"), TreeViewSearch, {
+            items: this._generateFakeFoldersData()
+        });
+        this._filesTreeView.$element().addClass(FIE_MANAGER_DIRS_TREE_CLASS);
+        $container.append(this._filesTreeView.$element());
+
+        var $viewSeparator = $("<div>");
+        $viewSeparator.addClass(FIE_MANAGER_VIEW_SEPARATOR_CLASS);
+        $container.append($viewSeparator);
+
+        this._filesView = this._createComponent($("<div>"), DataGrid, {
+            hoverStateEnabled: true,
+            selection: {
+                mode: "single"
+            },
+            allowColumnResizing: true,
+            columns: [ "FileName" ],
+            dataSource: this._generateFakeFilesData()
+        });
+        $container.append(this._filesView.$element());
+
+        return $container;
+    },
+    _generateFakeFoldersData: function() {
         return [
             {
                 text: "Folder 1",
@@ -42,7 +62,7 @@ var FileManager = Widget.inherit({
             { text: "Folder 3" }
         ];
     },
-    generateFakeFilesData: function() {
+    _generateFakeFilesData: function() {
         return [
             { FileName: "FileName 1.cs" },
             { FileName: "FileName 2.cs" },
