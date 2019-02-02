@@ -15,8 +15,7 @@ function run_lint {
 
 function run_ts {
     npm i
-    npx gulp ts
-    npx gulp npm
+    npx gulp ts-check npm-dts-check
 }
 
 function run_test {

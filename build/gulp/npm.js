@@ -104,7 +104,7 @@ var widgetNameByPath = require("./ts").widgetNameByPath;
 var generateJQueryAugmentation = require("./ts").generateJQueryAugmentation;
 var getAugmentationOptionsPath = require("./ts").getAugmentationOptionsPath;
 
-gulp.task('npm-dts-generator', function() {
+gulp.task('npm-dts-generator', ['ts-sources'], function() {
     var tsModules = MODULES.map(function(moduleMeta) {
         var relPath = path.relative(path.dirname(moduleMeta.name), 'bundles/dx.all').replace(/\\/g, '/');
         if(!relPath.startsWith('../')) relPath = './' + relPath;
