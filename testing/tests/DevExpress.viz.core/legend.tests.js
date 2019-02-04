@@ -1,7 +1,7 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    legendModule = require("viz/components/legend");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import vizMocks from "../../helpers/vizMocks.js";
+import legendModule from "viz/components/legend";
 
 var Legend = legendModule.Legend;
 
@@ -99,7 +99,8 @@ var environment = {
             data.push({
                 id: i,
                 text: "Marker " + (i + 1),
-                states: { normal: { fill: "color-" + (i + 1) } }
+                states: { normal: { fill: "color-" + (i + 1) } },
+                visible: true
             });
         }
 
@@ -225,7 +226,8 @@ function getLegendData(count) {
             id: i,
             argument: "argument" + i,
             argumentIndex: "argumentIndex" + i,
-            states: states
+            states: states,
+            visible: true
         });
     }
 
@@ -311,17 +313,20 @@ QUnit.test('Create legend, hover fill is "none"', function(assert) {
         {
             text: 'First',
             id: 0,
-            states: { hover: states.hover, selection: states.selection, normal: { fill: '#00FF00' } }
+            states: { hover: states.hover, selection: states.selection, normal: { fill: '#00FF00' } },
+            visible: true
         },
         {
             text: 'Second',
             id: 1,
-            states: { hover: states.hover, selection: states.selection, normal: { fill: '#99FF99' } }
+            states: { hover: states.hover, selection: states.selection, normal: { fill: '#99FF99' } },
+            visible: true
         },
         {
             text: 'Third',
             id: 2,
-            states: { hover: states.hover, selection: states.selection, normal: { fill: 'blue' } }
+            states: { hover: states.hover, selection: states.selection, normal: { fill: 'blue' } },
+            visible: true
         }
     ];
     var legend = this.createSimpleLegend();
@@ -351,7 +356,8 @@ QUnit.test('Create legend, textOpacity is "undefined"', function(assert) {
             text: 'First',
             id: 0,
             states: { hover: states.hover, selection: states.selection, normal: { fill: '#00FF00' } },
-            textOpacity: undefined
+            textOpacity: undefined,
+            visible: true
         }
     ];
 
@@ -372,7 +378,8 @@ QUnit.test('Create legend, textOpacity less than font opacity', function(assert)
             text: 'First',
             id: 0,
             states: { hover: states.hover, selection: states.selection, normal: { fill: '#00FF00' } },
-            textOpacity: 0.3
+            textOpacity: 0.3,
+            visible: true
         }
     ];
     this.createAndDrawLegend();
@@ -389,15 +396,18 @@ QUnit.test('Create legend, selected fill is "none"', function(assert) {
     this.data = [{
         text: 'First',
         id: 0,
-        states: { hover: states.hover, selection: states.selection, normal: { fill: '#00FF00' } }
+        states: { hover: states.hover, selection: states.selection, normal: { fill: '#00FF00' } },
+        visible: true
     }, {
         text: 'Second',
         id: 1,
-        states: { hover: states.hover, selection: states.selection, normal: { fill: '#99FF99' } }
+        states: { hover: states.hover, selection: states.selection, normal: { fill: '#99FF99' } },
+        visible: true
     }, {
         text: 'Third',
         id: 2,
-        states: { hover: states.hover, selection: states.selection, normal: { fill: 'blue' } }
+        states: { hover: states.hover, selection: states.selection, normal: { fill: 'blue' } },
+        visible: true
     }];
     var legend = this.createSimpleLegend();
 
@@ -422,16 +432,20 @@ QUnit.test('Update', function(assert) {
     this.data = [{
         text: 'First',
         id: 0,
-        states: { hover: states.hover, selection: states.selection, normal: { fill: '#00FF00' } }
+        states: { hover: states.hover, selection: states.selection, normal: { fill: '#00FF00' } },
+        visible: true
     }];
     var legend = this.createSimpleLegend()
         .draw(200, 200)
         .update([{
-            text: 'newText', id: 0, states: {
+            text: 'newText',
+            id: 0,
+            states: {
                 hover: { fill: 'green1', hatching: { direction: 'right' } },
                 normal: { fill: 'none' },
                 selection: { fill: 'blue1', hatching: { direction: 'left' } }
-            }
+            },
+            visible: true
         }], this.options)
         .draw();
 
@@ -445,7 +459,12 @@ QUnit.test('Update', function(assert) {
 
 QUnit.test('Draw legend, orientation = "horizontal"', function(assert) {
     this.options.orientation = 'horizontal';
-    this.data = [{ text: 'First', id: 0, states: getDefaultStates() }];
+    this.data = [{
+        text: 'First',
+        id: 0,
+        states: getDefaultStates(),
+        visible: true
+    }];
 
     this.createSimpleLegend().draw(200, 200);
 
@@ -470,7 +489,11 @@ QUnit.test('Draw legend, orientation = "horizontal"', function(assert) {
 
 QUnit.test('Draw legend, orientation = "vertical"', function(assert) {
     this.options.orientation = 'vertical';
-    this.data = [{ text: 'First', id: 0, states: getDefaultStates() }];
+    this.data = [{
+        text: 'First',
+        id: 0, states: getDefaultStates(),
+        visible: true
+    }];
     this.createSimpleLegend().draw(200, 200);
 
     this.checkItems(assert, [{
@@ -494,7 +517,11 @@ QUnit.test('Draw legend, orientation = "vertical"', function(assert) {
 
 QUnit.test('Draw legend, itemTextPosition = "bottom"', function(assert) {
     this.options.itemTextPosition = 'bottom';
-    this.data = [{ text: 'First', id: 0, states: getDefaultStates() }];
+    this.data = [{
+        text: 'First',
+        id: 0, states: getDefaultStates(),
+        visible: true
+    }];
     var legend = this.createSimpleLegend();
 
     legend.draw(200, 200);
@@ -1016,7 +1043,13 @@ QUnit.test('Custom label title format', function(assert) {
 });
 
 QUnit.test('Draw legend with custom format label', function(assert) {
-    this.data = [{ text: 'First', id: 0, states: $.extend(true, getDefaultStates(), { normal: { fill: 'red' } }) }];
+    this.data = [{
+        text: 'First',
+        id: 0, states: $.extend(true, getDefaultStates(), {
+            normal: { fill: 'red' }
+        }),
+        visible: true
+    }];
     this.options.customizeText = function() { return this.seriesName + ':' + this.seriesIndex + ':' + this.seriesColor; };
     this.nameField = 'seriesName';
     this.indexField = 'seriesIndex';
@@ -1035,7 +1068,11 @@ QUnit.test('Border is not drawn, position = "inside", backgroundColor is not spe
             containerBackgroundColor: '#ffffff',
             position: 'inside'
         },
-        legendData = [{ text: 'First', id: 0, states: getDefaultStates() }];
+        legendData = [{
+            text: 'First', id: 0,
+            states: getDefaultStates(),
+            visible: true
+        }];
     this.data = legendData;
     this.options = getLegendOptions(options);
     var legend = this.createSimpleLegend();
@@ -1054,7 +1091,11 @@ QUnit.test('Border is not drawn, backgroundColor is specify', function(assert) {
             containerBackgroundColor: '#ffffff',
             backgroundColor: '#123456'
         },
-        legendData = [{ text: 'First', id: 0, states: getDefaultStates() }];
+        legendData = [{
+            text: 'First',
+            id: 0, states: getDefaultStates(),
+            visible: true
+        }];
     this.data = legendData;
     this.options = getLegendOptions(options);
     var legend = this.createSimpleLegend();
@@ -1077,7 +1118,12 @@ QUnit.test('Border is drawn', function(assert) {
                 dashStyle: 'dot'
             }
         },
-        legendData = [{ text: 'First', id: 0, states: getDefaultStates() }];
+        legendData = [{
+            text: 'First',
+            id: 0,
+            states: getDefaultStates(),
+            visible: true
+        }];
     this.data = legendData;
     this.options = getLegendOptions(options);
     var legend = this.createSimpleLegend();
@@ -1107,7 +1153,12 @@ QUnit.test('Border is drawn, position = "inside"', function(assert) {
             },
             position: 'inside'
         },
-        legendData = [{ text: 'First', id: 0, states: getDefaultStates() }];
+        legendData = [{
+            text: 'First',
+            id: 0,
+            states: getDefaultStates(),
+            visible: true
+        }];
     this.data = legendData;
     this.options = getLegendOptions(options);
     var legend = this.createSimpleLegend();
@@ -1142,15 +1193,18 @@ QUnit.test('Draw background rect.Legend with border', function(assert) {
     this.data = [{
         text: 'first item',
         id: 0,
-        states: states
+        states: states,
+        visible: true
     }, {
         text: 'second item',
         id: 1,
-        states: states
+        states: states,
+        visible: true
     }, {
         text: 'third item',
         id: 2,
-        states: states
+        states: states,
+        visible: true
     }];
     this.options = getLegendOptions(options);
     var legend = this.createSimpleLegend();
@@ -1196,15 +1250,18 @@ QUnit.test('Draw background rect.Legend without border', function(assert) {
     this.data = [{
         text: 'first item',
         id: 0,
-        states: states
+        states: states,
+        visible: true
     }, {
         text: 'second item',
         id: 1,
-        states: states
+        states: states,
+        visible: true
     }, {
         text: 'third item',
         id: 2,
-        states: states
+        states: states,
+        visible: true
     }];
     this.options = getLegendOptions(options);
     var legend = this.createSimpleLegend();
@@ -1291,15 +1348,18 @@ QUnit.test('Mapping indexes', function(assert) {
     this.data = [{
         text: 'first item',
         id: 11,
-        states: states
+        states: states,
+        visible: true
     }, {
         text: 'second item',
         id: 4,
-        states: states
+        states: states,
+        visible: true
     }, {
         text: 'third item',
         id: 7,
-        states: states
+        states: states,
+        visible: true
     }];
 
 
@@ -1429,15 +1489,18 @@ QUnit.test('Pass color & opacity to markers on create', function(assert) {
     this.data = [{
         text: 'text_0',
         id: 0,
-        states: $.extend(true, {}, states, { normal: { fill: 'color_0', opacity: 0.1 } })
+        states: $.extend(true, {}, states, { normal: { fill: 'color_0', opacity: 0.1 } }),
+        visible: true
     }, {
         text: 'text_1',
         id: 1,
-        states: $.extend(true, {}, states, { normal: { fill: 'color_1' } })
+        states: $.extend(true, {}, states, { normal: { fill: 'color_1' } }),
+        visible: true
     }, {
         text: 'text_2',
         id: 2,
-        states: $.extend(true, {}, states, { normal: { fill: 'color_2', opacity: 0.2 } })
+        states: $.extend(true, {}, states, { normal: { fill: 'color_2', opacity: 0.2 } }),
+        visible: true
     }];
     this.createSimpleLegend()
         .draw(200, 200);
@@ -1452,7 +1515,8 @@ QUnit.test('Pass color & opacity to markers on update', function(assert) {
         legendData = [{
             text: 'text_0',
             id: 0,
-            states: $.extend(true, {}, states, { normal: { opacity: 0.1, fill: 'color_0' } })
+            states: $.extend(true, {}, states, { normal: { opacity: 0.1, fill: 'color_0' } }),
+            visible: true
         }],
         legend = this.createSimpleLegend(legendData);
 
@@ -1461,7 +1525,8 @@ QUnit.test('Pass color & opacity to markers on update', function(assert) {
     legend.update([{
         text: 'text_0',
         id: 0,
-        states: $.extend(true, {}, states, { normal: { opacity: 0.5, fill: 'new_color_0' } })
+        states: $.extend(true, {}, states, { normal: { opacity: 0.5, fill: 'new_color_0' } }),
+        visible: true
     }], getLegendOptions());
 
     legend.draw();
@@ -1654,11 +1719,13 @@ QUnit.module('States', $.extend({}, environment, {
         this.data = [{
             text: 'first item',
             id: 0,
-            states: states
+            states: states,
+            visible: true
         }, {
             text: 'second item',
             id: 1,
-            states: states
+            states: states,
+            visible: true
         }];
         this.legend = this.createSimpleLegend()
             .draw(200, 200);
@@ -1874,6 +1941,49 @@ QUnit.test('Items in inverted order', function(assert) {
     $.each(this.data.reverse(), function(i, data) {
         assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: undefined }], String(i));
     });
+});
+
+QUnit.test('Customize order using customizeItems', function(assert) {
+    this.options.customizeItems = function(i) {
+        return i.reverse();
+    };
+    this.createAndDrawLegend();
+
+    var createMarker = this.createMarker;
+    $.each(this.data.reverse(), function(i, data) {
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: undefined }], String(i));
+    });
+});
+
+QUnit.test('Process items return nothing - get original items', function(assert) {
+    this.options.customizeItems = noop;
+    this.createAndDrawLegend();
+
+    var createMarker = this.createMarker;
+    $.each(this.data, function(i, data) {
+        assert.deepEqual(createMarker.getCall(i).returnValue.attr.getCall(0).args, [{ fill: data.states.normal.fill, opacity: undefined }], String(i));
+    });
+});
+
+QUnit.test('Do not render hidden items', function(assert) {
+    this.data[1].visible = false;
+    this.createAndDrawLegend();
+
+    var createMarker = this.createMarker;
+
+    assert.equal(createMarker.callCount, this.data.length - 1);
+});
+
+QUnit.test('Can hide all items', function(assert) {
+    this.data[1] = this.data.map(i => {
+        i.visible = false;
+        return i;
+    });
+    this.createAndDrawLegend();
+
+    var createMarker = this.createMarker;
+
+    assert.equal(createMarker.callCount, 0);
 });
 
 QUnit.test('markers centering(partial markers sizes).', function(assert) {

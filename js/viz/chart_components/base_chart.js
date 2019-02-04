@@ -888,9 +888,8 @@ var BaseChart = BaseWidget.inherit({
         return {
             legendData: {
                 text: item[this._legendItemTextField],
-                argument: item.argument,
                 id: item.index,
-                argumentIndex: item.argumentIndex
+                visible: true
             },
             getLegendStyles: item.getLegendStyles(),
             visible: item.isVisible()
