@@ -3353,7 +3353,7 @@ QUnit.test("a new overlay should create a new zindex on first showing", function
 
 QUnit.test("overlay should remove its zindex from the stack on dispose", function(assert) {
     var instance = new Overlay("#overlay", { visible: true });
-    instance._dispose();
+    instance.dispose();
     assert.strictEqual(zIndex.create(), 1501, "zindex has been removed");
 });
 

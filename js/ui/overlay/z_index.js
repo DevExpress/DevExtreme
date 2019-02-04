@@ -8,9 +8,9 @@ export const base = (ZIndex) => {
     return baseZIndex;
 };
 
-export const create = (baseIndex) => {
+export const create = (baseIndex = baseZIndex) => {
     const length = ZIndexStack.length;
-    const index = length ? ZIndexStack[length - 1] + 1 : (baseIndex || base()) + 1;
+    const index = (length ? ZIndexStack[length - 1] : baseIndex) + 1;
 
     ZIndexStack.push(index);
 
