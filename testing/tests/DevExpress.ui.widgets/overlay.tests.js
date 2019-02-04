@@ -3314,6 +3314,11 @@ QUnit.test("Overlay Base Zindex should return default ZIndex", function(assert) 
     assert.strictEqual(Overlay.baseZIndex(), 2000, "base zindex is correct");
 });
 
+QUnit.test("base zIndex can be defined as zero", function(assert) {
+    Overlay.baseZIndex(0);
+    assert.strictEqual(zIndex.create(), 1);
+});
+
 QUnit.test("create method should return the redefined base zindex when no opened overlays exists", function(assert) {
     Overlay.baseZIndex(2000);
     assert.strictEqual(zIndex.create(), 2001);
