@@ -910,6 +910,7 @@ registerTheme({
         },
         _circular: {
             scale: {
+                scaleDivisionFactor: 17,
                 orientation: OUTSIDE,
                 label: {
                     indentFromTick: 10
@@ -950,6 +951,7 @@ registerTheme({
         },
         _linear: {
             scale: {
+                scaleDivisionFactor: 25,
                 horizontalOrientation: RIGHT,
                 verticalOrientation: BOTTOM,
                 label: {

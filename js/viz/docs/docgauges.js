@@ -371,6 +371,12 @@ var dxCircularGauge = {
     */
     scale: {
         /**
+        * @name dxCircularGaugeOptions.scale.scaleDivisionFactor
+        * @type number
+        * @default 17
+        */
+        scaleDivisionFactor: 17,
+        /**
         * @name dxCircularGaugeOptions.scale.orientation
         * @type Enums.CircularGaugeElementOrientation
         * @default 'outside'
@@ -467,6 +473,12 @@ var dxLinearGauge = {
     * @type object
     */
     scale: {
+        /**
+        * @name dxLinearGaugeOptions.scale.scaleDivisionFactor
+        * @type number
+        * @default 25
+        */
+        scaleDivisionFactor: 25,
         /**
         * @name dxLinearGaugeOptions.scale.verticalOrientation
         * @type Enums.VerticalAlignment
