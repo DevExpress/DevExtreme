@@ -1,11 +1,11 @@
 import { ensureDefined } from "../../core/utils/common";
 
-let base_ZIndex = 1500;
+let baseZIndex = 1500;
 let ZIndexStack = [];
 
 export const base = (ZIndex) => {
-    base_ZIndex = ensureDefined(ZIndex, base_ZIndex);
-    return base_ZIndex;
+    baseZIndex = ensureDefined(ZIndex, baseZIndex);
+    return baseZIndex;
 };
 
 export const create = (baseIndex) => {
