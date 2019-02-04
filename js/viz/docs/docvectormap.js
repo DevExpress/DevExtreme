@@ -372,7 +372,7 @@ var dxVectorMap = {
         * @name dxVectorMapOptions.legends.customizeItems
         * @type function(items)
         * @type_function_param1 items:Array<VectorMapLegendItem>
-        * @type_function_return items:Array<VectorMapLegendItem>
+        * @type_function_return Array<VectorMapLegendItem>
         */
         customizeItems: undefined,
         /**

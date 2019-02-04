@@ -2028,7 +2028,7 @@ var dxPieChart = {
        * @name dxPieChartOptions.legend.customizeItems
        * @type function(items)
        * @type_function_param1 items:Array<PieChartLegendItem>
-       * @type_function_return items:Array<PieChartLegendItem>
+       * @type_function_return Array<PieChartLegendItem>
        */
        customizeItems: undefined
     },
@@ -3377,7 +3377,7 @@ var BaseChart = {
         * @name BaseChartOptions.legend.customizeItems
         * @type function(items)
         * @type_function_param1 items:Array<BaseChartLegendItem>
-        * @type_function_return items:Array<BaseChartLegendItem>
+        * @type_function_return Array<BaseChartLegendItem>
         */
         customizeItems: undefined
     },
