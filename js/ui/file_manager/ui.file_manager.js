@@ -14,6 +14,12 @@ const FIE_MANAGER_VIEW_SEPARATOR_CLASS = FIE_MANAGER_CLASS + "-view-separator";
 
 var FileManager = Widget.inherit({
 
+    _init: function() {
+        this.callBase();
+
+        this.provider = new OneDriveFileProvider();
+    },
+
     _initTemplates: function() {
     },
 
@@ -24,8 +30,6 @@ var FileManager = Widget.inherit({
         this.$element()
             .append($viewContainer)
             .addClass(FIE_MANAGER_CLASS);
-
-        this._getFolders();
     },
 
     _createViewContainer: function() {
@@ -33,7 +37,13 @@ var FileManager = Widget.inherit({
         $container.addClass(FIE_MANAGER_CONTAINER_CLASS);
 
         this._filesTreeView = this._createComponent($("<div>"), TreeViewSearch, {
-            items: this._generateFakeFoldersData()
+            // items: this._generateFakeFoldersData(),
+            dataStructure: "plain",
+            rootValue: "",
+            keyExpr: "relativeName",
+            parentIdExpr: "parentPath",
+            displayExpr: "name",
+            createChildren: this._onFilesTreeViewCreateChildren.bind(this),
         });
         this._filesTreeView.$element().addClass(FIE_MANAGER_DIRS_TREE_CLASS);
         $container.append(this._filesTreeView.$element());
@@ -55,9 +65,9 @@ var FileManager = Widget.inherit({
 
         return $container;
     },
-    _getFolders: function() {
-        var provider = new OneDriveFileProvider();
-        provider.getItems();
+    _onFilesTreeViewCreateChildren: function(parent) {
+        var path = parent ? parent.itemData.relativeName : "";
+        return this.provider.getFolders(path);
     },
     _generateFakeFoldersData: function() {
         return [
