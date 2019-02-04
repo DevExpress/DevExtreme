@@ -90,7 +90,7 @@ module.exports = {
             adaptColumnWidthByRatio: true,
             /**
              * @name GridBaseOptions.columns
-             * @type Array<GridBaseColumn>
+             * @type Array<GridBaseColumn, string>
              * @fires GridBaseOptions.onOptionChanged
              * @default undefined
              */
