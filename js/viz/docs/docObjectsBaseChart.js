@@ -251,9 +251,7 @@ var BaseLabel = {
 
 /**
 * @name BaseChartLegendItem
-* @publicName LegendItem
 * @type object
-* @hidden
 */
 var legendItem = {
   /**

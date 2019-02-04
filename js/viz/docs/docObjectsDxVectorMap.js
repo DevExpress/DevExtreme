@@ -93,9 +93,7 @@ var LayerElement = {
 
 /**
 * @name VectorMapLegendItem
-* @publicName LegendItem
 * @type object
-* @hidden
 */
 var legendItem = {
     /**

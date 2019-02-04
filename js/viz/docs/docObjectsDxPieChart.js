@@ -58,9 +58,7 @@ var pieChartSeriesObject = {
 
 /**
 * @name PieChartLegendItem
-* @publicName LegendItem
 * @type object
-* @hidden
 */
 var legendItem = {
   /**

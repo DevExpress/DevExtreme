@@ -63,24 +63,22 @@ var Item = {
 };
 
 /**
-* @name dxFunnelLegendItem
-* @publicName LegendItem
+* @name FunnelLegendItem
 * @type object
-* @hidden
 */
 var legendItem = {
     /**
-    * @name dxFunnelLegendItem.text
+    * @name FunnelLegendItem.text
     * @type string
     */
     text: undefined,
     /**
-    * @name dxFunnelLegendItem.item
+    * @name FunnelLegendItem.item
     * @type dxFunnelItem
     */
     item: undefined,
     /**
-    * @name dxFunnelLegendItem.visible
+    * @name FunnelLegendItem.visible
     * @type boolean
     */
     visible: true
