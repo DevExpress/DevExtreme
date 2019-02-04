@@ -32,7 +32,7 @@ var $ = require("../../core/renderer"),
     Resizable = require("../resizable"),
     EmptyTemplate = require("../widget/empty_template"),
     Deferred = require("../../core/utils/deferred").Deferred,
-    zIndexUtils = require("./z-index"),
+    zIndexUtils = require("./z_index"),
     getSwatchContainer = require("../widget/swatch_container");
 
 var OVERLAY_CLASS = "dx-overlay",
@@ -799,7 +799,7 @@ var Overlay = Widget.inherit({
 
         if(pushToStack) {
             if(index === -1) {
-                this._zIndex = zIndexUtils.createNewZIndex(this._zIndexInitValue());
+                this._zIndex = zIndexUtils.create(this._zIndexInitValue());
 
                 overlayStack.push(this);
             }
@@ -808,7 +808,7 @@ var Overlay = Widget.inherit({
             this._$content.css("zIndex", this._zIndex);
         } else if(index !== -1) {
             overlayStack.splice(index, 1);
-            zIndexUtils.removeZIndex(this._zIndex);
+            zIndexUtils.remove(this._zIndex);
         }
     },
 
@@ -1404,7 +1404,7 @@ var Overlay = Widget.inherit({
 
         this.callBase();
 
-        zIndexUtils.removeZIndex(this._zIndex);
+        zIndexUtils.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
     },
@@ -1571,7 +1571,7 @@ var Overlay = Widget.inherit({
 * @static
 */
 Overlay.baseZIndex = function(zIndex) {
-    return zIndexUtils.baseZIndex(zIndex);
+    return zIndexUtils.base(zIndex);
 };
 
 registerComponent("dxOverlay", Overlay);
