@@ -5,6 +5,8 @@ import registerComponent from "../../core/component_registrator";
 import DataGrid from "../data_grid/ui.data_grid";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
+import OneDriveFileProvider from "./ui.file_manager.file_provider.onedrive";
+
 const FIE_MANAGER_CLASS = "dx-filemanager";
 const FIE_MANAGER_CONTAINER_CLASS = FIE_MANAGER_CLASS + "-container";
 const FIE_MANAGER_DIRS_TREE_CLASS = FIE_MANAGER_CLASS + "-dirs-tree";
@@ -22,6 +24,8 @@ var FileManager = Widget.inherit({
         this.$element()
             .append($viewContainer)
             .addClass(FIE_MANAGER_CLASS);
+
+        this._getFolders();
     },
 
     _createViewContainer: function() {
@@ -50,6 +54,10 @@ var FileManager = Widget.inherit({
         $container.append(this._filesView.$element());
 
         return $container;
+    },
+    _getFolders: function() {
+        var provider = new OneDriveFileProvider();
+        provider.getItems();
     },
     _generateFakeFoldersData: function() {
         return [
