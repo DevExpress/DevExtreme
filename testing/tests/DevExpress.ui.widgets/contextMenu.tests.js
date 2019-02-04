@@ -413,6 +413,13 @@ QUnit.test("context menu's overlay should have flipfit position as native contex
     assert.equal(overlay.option("position").collision, "flipfit", "position is correct");
 });
 
+QUnit.test("overlay should have innerOverlay option", function(assert) {
+    new ContextMenu(this.$element, { items: [{ text: "item 1" }], visible: true });
+
+    var overlay = this.$element.find(".dx-overlay").dxOverlay("instance");
+    assert.ok(overlay.option("innerOverlay"));
+});
+
 QUnit.test("Document should be default target", function(assert) {
     var showingHandler = sinon.stub();
 
