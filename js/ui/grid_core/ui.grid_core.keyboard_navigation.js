@@ -1576,10 +1576,12 @@ module.exports = {
                         }
                         for(var i = columnIndex; i < cellElementsLength; ++i) {
                             $cell = $(cellElements[i]);
-                            if(keyboardNavigation._isCellValid($cell) && isCellElement($cell)) {
-                                $cell.attr("tabIndex", tabIndex);
-                                keyboardNavigation.setCellFocusType();
-                                break;
+                            if(!keyboardNavigation._isMasterDetailCell($cell)) {
+                                if(keyboardNavigation._isCellValid($cell) && isCellElement($cell)) {
+                                    $cell.attr("tabIndex", tabIndex);
+                                    keyboardNavigation.setCellFocusType();
+                                    break;
+                                }
                             }
                         }
                     }
