@@ -18,12 +18,7 @@ export const create = (baseIndex = baseZIndex) => {
 };
 
 export const remove = (zIndex) => {
-    for(let i = 0; i < zIndexStack.length; i++) {
-        if(zIndexStack[i] === zIndex) {
-            zIndexStack.splice(i, 1);
-            break;
-        }
-    }
+    zIndexStack.splice(zIndexStack.indexOf(zIndex), 1);
 };
 
 export const clearStack = () => {
