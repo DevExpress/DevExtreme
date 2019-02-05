@@ -711,6 +711,7 @@ declare module DevExpress {
         editorStylingMode?: 'outlined' | 'underlined' | 'filled';
         /** Specifies whether dates are parsed and serialized according to the ISO 8601 standard in all browsers. */
         forceIsoDateParsing?: boolean;
+        /** Specifies whether to convert string values to lowercase in filter and search requests to OData services. Applies to the following operations: "startswith", "endswith", "contains", and "notcontains". */
         oDataFilterToLower?: boolean;
         /** Specifies whether the widgets support a right-to-left representation. Available for individual widgets as well. */
         rtlEnabled?: boolean;
@@ -1206,6 +1207,7 @@ declare module DevExpress.data {
         entities?: any;
         /** Specifies a function that is executed when the ODataContext throws an error. */
         errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
+        /** Specifies whether to convert string values to lowercase in filter and search requests. Applies to the following operations: "startswith", "endswith", "contains", and "notcontains". */
         filterToLower?: boolean;
         /** Specifies whether data should be sent using JSONP. */
         jsonp?: boolean;
@@ -1235,6 +1237,7 @@ declare module DevExpress.data {
         errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
         /** Specifies the data field types. Accepts the following types: "String", "Int32", "Int64", "Boolean", "Single", "Decimal" and "Guid". */
         fieldTypes?: any;
+        /** Specifies whether to convert string values to lowercase in filter and search requests. Applies to the following operations: "startswith", "endswith", "contains", and "notcontains". */
         filterToLower?: boolean;
         /** Specifies whether data should be sent using JSONP. */
         jsonp?: boolean;
@@ -1944,7 +1947,7 @@ declare module DevExpress.ui {
         /** Specifies how the widget resizes columns. Applies only if allowColumnResizing is true. */
         columnResizingMode?: 'nextColumn' | 'widget';
         /** Overridden. */
-        columns?: Array<GridBaseColumn>;
+        columns?: Array<GridBaseColumn | string>;
         /** Specifies the width for all data columns. Has a lower priority than the column.width option. */
         columnWidth?: number;
         /** Specifies the origin of data for the widget. */
@@ -2262,10 +2265,10 @@ declare module DevExpress.ui {
     }
     export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
         /** An array of grid columns. */
-        columns?: Array<dxDataGridColumn>;
+        columns?: Array<dxDataGridColumn | string>;
         /** Specifies a function that customizes grid columns after they are created. */
         customizeColumns?: ((columns: Array<dxDataGridColumn>) => any);
-        /** Customizes data before export. You can use the exporting.customizeExcelCell function instead. */
+        /** Customizes data before export. You can use the export.customizeExcelCell function instead. */
         customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => any);
         /** Configures editing. */
         editing?: dxDataGridEditing;
@@ -4278,7 +4281,7 @@ declare module DevExpress.ui {
         /** Specifies whether all rows are expanded initially. */
         autoExpandAll?: boolean;
         /** Configures columns. */
-        columns?: Array<dxTreeListColumn>;
+        columns?: Array<dxTreeListColumn | string>;
         /** Customizes columns after they are created. */
         customizeColumns?: ((columns: Array<dxTreeListColumn>) => any);
         /** Notifies the widget of your data structure. */
@@ -4794,7 +4797,7 @@ declare module DevExpress.ui {
         /** Specifies a field name or a function that returns a field name or a value to be used for grouping column cells. */
         calculateGroupValue?: string | ((rowData: any) => any);
         /** An array of grid columns. */
-        columns?: Array<dxDataGridColumn>;
+        columns?: Array<dxDataGridColumn | string>;
         /** Specifies a custom template for group cells. */
         groupCellTemplate?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => any);
         /** Specifies the index of a column when grid records are grouped by the values of this column. */
@@ -5207,7 +5210,7 @@ declare module DevExpress.ui {
         /** Allows you to customize buttons in the editing column or create a custom command column. Applies only if the column's type is "buttons". */
         buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxTreeListColumnButton>;
         /** Configures columns. */
-        columns?: Array<dxTreeListColumn>;
+        columns?: Array<dxTreeListColumn | string>;
         /** Specifies the command column that this object customizes. */
         type?: 'adaptive' | 'buttons';
     }
@@ -6583,6 +6586,7 @@ declare module DevExpress.viz {
     export interface dxPieChartLegend extends BaseChartLegend {
         /** Specifies the text for a hint that appears when a user hovers the mouse pointer over a legend item. */
         customizeHint?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
+        customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>);
         /** Specifies a callback function that returns the text to be displayed by a legend item. */
         customizeText?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
         /** Specifies what chart elements to highlight when a corresponding item in the legend is hovered over. */
@@ -6979,6 +6983,7 @@ declare module DevExpress.viz {
         columnCount?: number;
         /** Specifies a blank space between legend columns in pixels. */
         columnItemSpacing?: number;
+        customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
         /** Specifies font options for the text displayed in the legend. */
         font?: Font;
         /** Specifies a legend's position on the chart. */
@@ -7933,7 +7938,7 @@ declare module DevExpress.viz {
         /** Configures funnel item labels. */
         label?: { font?: Font, position?: 'columns' | 'inside' | 'outside', horizontalOffset?: number, horizontalAlignment?: 'left' | 'right', format?: DevExpress.ui.format, connector?: { visible?: boolean, width?: number, color?: string, opacity?: number }, backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, visible?: boolean, showForZeroValues?: boolean, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string) };
         /** Configures the legend. */
-        legend?: { verticalAlignment?: 'bottom' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', orientation?: 'horizontal' | 'vertical', itemTextPosition?: 'bottom' | 'left' | 'right' | 'top', itemsAlignment?: 'center' | 'left' | 'right', font?: Font, visible?: boolean, margin?: number | { top?: number, bottom?: number, left?: number, right?: number }, markerSize?: number, backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number, customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string), customizeHint?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string) };
+        legend?: { verticalAlignment?: 'bottom' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', orientation?: 'horizontal' | 'vertical', itemTextPosition?: 'bottom' | 'left' | 'right' | 'top', itemsAlignment?: 'center' | 'left' | 'right', font?: Font, visible?: boolean, margin?: number | { top?: number, bottom?: number, left?: number, right?: number }, markerSize?: number, backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number, customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string), customizeHint?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>) };
         /** Specifies the ratio between the height of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is "dynamicHeight". */
         neckHeight?: number;
         /** Specifies the ratio between the width of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is "dynamicHeight". */
@@ -8168,6 +8173,7 @@ declare module DevExpress.viz {
         label?: dxCircularGaugeScaleLabel;
         /** Specifies the orientation of scale ticks. */
         orientation?: 'center' | 'inside' | 'outside';
+        scaleDivisionFactor?: number;
     }
     /** Specifies common options for scale labels. */
     export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
@@ -8208,6 +8214,7 @@ declare module DevExpress.viz {
         horizontalOrientation?: 'center' | 'left' | 'right';
         /** Specifies common options for scale labels. */
         label?: dxLinearGaugeScaleLabel;
+        scaleDivisionFactor?: number;
         /** Specifies the orientation of scale ticks. Applies only if the geometry.orientation option is "horizontal". */
         verticalOrientation?: 'bottom' | 'center' | 'top';
     }
@@ -8360,6 +8367,11 @@ declare module DevExpress.viz {
         /** Shows the point label and keeps it visible until the hide() method is called. */
         show(holdVisible: boolean): void;
     }
+    export interface BaseChartLegendItem {
+        series?: baseSeriesObject;
+        text?: string;
+        visible?: boolean;
+    }
     /** This section describes the Series object, which represents a series. */
     export class chartSeriesObject extends baseSeriesObject {
         /** Returns the name of the value axis of the series. */
@@ -8430,6 +8442,11 @@ declare module DevExpress.viz {
         /** Shows the funnel item's tooltip. */
         showTooltip(): void;
     }
+    export interface FunnelLegendItem {
+        item?: dxFunnelItem;
+        text?: string;
+        visible?: boolean;
+    }
     /** This section describes the Point object, which represents a series point. */
     export class piePointObject extends basePointObject {
         /** Gets the percentage value of the specific point. */
@@ -8447,6 +8464,13 @@ declare module DevExpress.viz {
     }
     /** This section describes the Series object, which represents a series. */
     export class pieChartSeriesObject extends baseSeriesObject {
+    }
+    export interface PieChartLegendItem {
+        argument?: string | Date | number;
+        argumentIndex?: number;
+        points?: Array<piePointObject>;
+        text?: any;
+        visible?: boolean;
     }
     /** This section describes the Series object, which represents a series. */
     export class polarChartSeriesObject extends baseSeriesObject {
@@ -8568,6 +8592,13 @@ declare module DevExpress.viz {
         selected(): boolean;
         /** Sets the selection state of the layer element. */
         selected(state: boolean): void;
+    }
+    export interface VectorMapLegendItem {
+        color?: string;
+        end?: number;
+        size?: number;
+        start?: number;
+        visible?: boolean;
     }
     /** Specifies options for the series of the PieChart widget. */
     export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
@@ -9067,12 +9098,12 @@ declare module DevExpress.viz {
         bounds?: Array<number>;
         /** Specifies the geographical coordinates of the center for a map. */
         center?: Array<number>;
-        /** Specifies the options of the control bar. */
+        /** Configures the control bar. */
         controlBar?: { enabled?: boolean, borderColor?: string, color?: string, margin?: number, horizontalAlignment?: 'center' | 'left' | 'right', verticalAlignment?: 'bottom' | 'top', opacity?: number };
         /** Specifies options for VectorMap widget layers. */
         layers?: Array<{ name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, type?: 'area' | 'line' | 'marker', elementType?: 'bubble' | 'dot' | 'image' | 'pie', borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: 'multiple' | 'none' | 'single', palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: { enabled?: boolean, dataField?: string, font?: Font } }> | { name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, type?: 'area' | 'line' | 'marker', elementType?: 'bubble' | 'dot' | 'image' | 'pie', borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: 'multiple' | 'none' | 'single', palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: { enabled?: boolean, dataField?: string, font?: Font } };
         /** Configures map legends. */
-        legends?: Array<{ source?: { layer?: string, grouping?: string }, customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), verticalAlignment?: 'bottom' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', orientation?: 'horizontal' | 'vertical', itemTextPosition?: 'bottom' | 'left' | 'right' | 'top', itemsAlignment?: 'center' | 'left' | 'right', font?: Font, visible?: boolean, margin?: number | { top?: number, bottom?: number, left?: number, right?: number }, markerSize?: number, markerColor?: string, markerShape?: 'circle' | 'square', backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number }>;
+        legends?: Array<{ source?: { layer?: string, grouping?: string }, customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>), verticalAlignment?: 'bottom' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', orientation?: 'horizontal' | 'vertical', itemTextPosition?: 'bottom' | 'left' | 'right' | 'top', itemsAlignment?: 'center' | 'left' | 'right', font?: Font, visible?: boolean, margin?: number | { top?: number, bottom?: number, left?: number, right?: number }, markerSize?: number, markerColor?: string, markerShape?: 'circle' | 'square', backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number }>;
         /** Specifies a map's maximum zoom factor. */
         maxZoomFactor?: number;
         /** A function that is executed each time the center coordinates are changed. */
