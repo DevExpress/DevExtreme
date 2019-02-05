@@ -231,8 +231,13 @@
  */
 
 /**
- * @typedef {string} Enums.VisualRangeUpdateMode
+ * @typedef {string} Enums.ArgumentAxisVisualRangeUpdateMode
  * @enum {'auto'|'keep'|'reset'|'shift'}
+ */
+
+/**
+ * @typedef {string} Enums.ValueAxisVisualRangeUpdateMode
+ * @enum {'auto'|'keep'|'reset'}
  */
 
 /**

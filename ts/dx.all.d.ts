@@ -6460,7 +6460,7 @@ declare module DevExpress.viz {
         /** Defines the axis' displayed range. Cannot be wider than the wholeRange. */
         visualRange?: VizRange | Array<number | string | Date>;
         /** Specifies how the axis's visual range should behave when chart data is updated. */
-        visualRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
+        visualRangeUpdateMode?: 'auto' | 'keep' | 'reset';
         /** Defines the range where the axis can be zoomed and panned. */
         wholeRange?: VizRange | Array<number | string | Date>;
     }

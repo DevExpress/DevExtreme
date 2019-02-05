@@ -1470,7 +1470,7 @@ var dxChart = {
         wholeRange: undefined,
         /**
         * @name dxChartOptions.argumentAxis.visualRangeUpdateMode
-        * @type Enums.VisualRangeUpdateMode
+        * @type Enums.ArgumentAxisVisualRangeUpdateMode
         * @default 'auto'
         */
         visualRangeUpdateMode: "auto",
@@ -1774,7 +1774,7 @@ var dxChart = {
         wholeRange: undefined,
         /**
         * @name dxChartOptions.valueAxis.visualRangeUpdateMode
-        * @type Enums.VisualRangeUpdateMode
+        * @type Enums.ValueAxisVisualRangeUpdateMode
         * @default 'auto'
         */
         visualRangeUpdateMode: "auto",

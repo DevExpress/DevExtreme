@@ -7,7 +7,7 @@
 var dxRangeSelector = {
     /**
     * @name dxRangeSelectorOptions.selectedRangeUpdateMode
-    * @type Enums.VisualRangeUpdateMode
+    * @type Enums.ArgumentAxisVisualRangeUpdateMode
     * @default "reset"
     */
     selectedRangeUpdateMode: "reset",
