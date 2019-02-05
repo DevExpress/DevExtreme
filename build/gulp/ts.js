@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var file = require('gulp-file');
 var concat = require('gulp-concat');
-var runSequence = require('run-sequence');
 var ts = require('gulp-typescript');
 
 var headerPipes = require('./header-pipes.js');
@@ -72,10 +71,4 @@ gulp.task('ts-check', ['ts-sources'], function() {
         }, ts.reporter.fullReporter()));
 });
 
-gulp.task('ts', function(callback) {
-    return runSequence(
-        'ts-vendor',
-        'ts-sources',
-        'ts-check',
-        callback);
-});
+gulp.task('ts', [ 'ts-vendor', 'ts-sources', 'ts-check' ]);

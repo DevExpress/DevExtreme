@@ -5083,6 +5083,36 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(this.gridView.component.editorFactoryController.focus(), "has overlay focus");
     });
 
+    QUnit.testInActiveWindow("Master-detail cell should not has tabindex", function(assert) {
+        // arrange
+        var masterDetailCell;
+
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            masterDetail: {
+                enabled: true,
+                autoExpandAll: true
+            },
+            tabIndex: 111
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+
+        this.option("focusedRowIndex", 1);
+        this.getView("rowsView").renderFocusState();
+        masterDetailCell = $(this.gridView.getView("rowsView").element().find(".dx-master-detail-cell").eq(0));
+
+        // assert
+        assert.notOk(masterDetailCell.attr("tabindex"), "master-detail cell has no tabindex");
+    });
+
     // T692137
     QUnit.testInActiveWindow("Focus should not be lost after several clicks on the same cell", function(assert) {
         // arrange

@@ -302,10 +302,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return text.replace(regExp, "");
     },
 
-    _truncateToPrecision: function(value, decimalSeparator, maxPrecision) {
+    _truncateToPrecision: function(value, maxPrecision) {
         if(typeUtils.isDefined(value)) {
             var strValue = value.toString(),
-                decimalSeparatorIndex = strValue.indexOf(decimalSeparator);
+                decimalSeparatorIndex = strValue.indexOf('.');
 
             if(strValue && decimalSeparatorIndex > -1) {
                 var parsedValue = parseFloat(strValue.substr(0, decimalSeparatorIndex + maxPrecision + 1));
@@ -340,7 +340,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var value = parsed === null ? this._parsedValue : parsed;
-        parsed = this._truncateToPrecision(value, decimalSeparator, maxPrecision);
+        parsed = this._truncateToPrecision(value, maxPrecision);
 
         return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
     },

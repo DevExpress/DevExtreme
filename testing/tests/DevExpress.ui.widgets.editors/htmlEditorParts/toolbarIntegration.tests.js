@@ -29,9 +29,14 @@ QUnit.module("Toolbar integration", {
     }
 }, () => {
     test("Apply simple format without focus", (assert) => {
+        const focusInStub = sinon.stub();
+        const focusOutStub = sinon.stub();
+
         $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
-            toolbar: { items: ["bold"] }
+            toolbar: { items: ["bold"] },
+            onFocusIn: focusInStub,
+            onFocusOut: focusOutStub
         });
 
         try {
@@ -42,7 +47,31 @@ QUnit.module("Toolbar integration", {
             assert.ok(false, "error on formatting");
         }
 
-        assert.ok(true);
+        assert.strictEqual(focusInStub.callCount, 1, "editor focused");
+        assert.strictEqual(focusOutStub.callCount, 0, "editor isn't blurred");
+    });
+
+    test("there is no extra focusout when applying toolbar formatting to the selected range", (assert) => {
+        const done = assert.async();
+        const focusInStub = sinon.stub();
+        const focusOutStub = sinon.stub();
+        const instance = $("#htmlEditor").dxHtmlEditor({
+            value: "<p>test</p>",
+            toolbar: { items: ["bold"] },
+            onValueChanged: (e) => {
+                assert.strictEqual(focusInStub.callCount, 1, "editor focused");
+                assert.strictEqual(focusOutStub.callCount, 0, "editor isn't blurred");
+                done();
+            },
+            onFocusIn: focusInStub,
+            onFocusOut: focusOutStub
+        })
+            .dxHtmlEditor("instance");
+
+        instance.setSelection(0, 2);
+        $("#htmlEditor")
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
     });
 
     test("Apply simple format with selection", (assert) => {
@@ -52,7 +81,7 @@ QUnit.module("Toolbar integration", {
             value: "<p>test</p>",
             toolbar: { items: ["bold"] },
             onValueChanged: (e) => {
-                assert.equal(e.value, expected, "markup contains an image");
+                assert.equal(e.value, expected, "markup contains a formatted text");
                 done();
             }
         })
