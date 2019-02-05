@@ -834,7 +834,6 @@ var Lookup = DropDownList.inherit({
         var position = translator.locate(popupContentParent);
 
         translator.move(popupContentParent, {
-            left: 0,
             top: position.top - popupOffsetY
         });
     },
