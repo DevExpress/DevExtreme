@@ -1,7 +1,7 @@
 import { ensureDefined } from "../../core/utils/common";
 
 let baseZIndex = 1500;
-let ZIndexStack = [];
+let zIndexStack = [];
 
 export const base = (ZIndex) => {
     baseZIndex = ensureDefined(ZIndex, baseZIndex);
@@ -9,23 +9,23 @@ export const base = (ZIndex) => {
 };
 
 export const create = (baseIndex = baseZIndex) => {
-    const length = ZIndexStack.length;
-    const index = (length ? ZIndexStack[length - 1] : baseIndex) + 1;
+    const length = zIndexStack.length;
+    const index = (length ? zIndexStack[length - 1] : baseIndex) + 1;
 
-    ZIndexStack.push(index);
+    zIndexStack.push(index);
 
     return index;
 };
 
 export const remove = (zIndex) => {
-    ZIndexStack.forEach((index, position) => {
-        if(index === zIndex) {
-            ZIndexStack.splice(position, 1);
-            return false;
+    for(let i = 0; i < zIndexStack.length; i++) {
+        if(zIndexStack[i] === zIndex) {
+            zIndexStack.splice(i, 1);
+            break;
         }
-    });
+    }
 };
 
 export const clearStack = () => {
-    ZIndexStack = [];
+    zIndexStack = [];
 };
