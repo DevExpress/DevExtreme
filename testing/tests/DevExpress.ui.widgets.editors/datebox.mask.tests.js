@@ -119,14 +119,18 @@ if(devices.real().deviceType === "desktop") {
         });
 
         QUnit.test("Day", (assert) => {
-            checkAndRemoveLimits(this.parts[4], { min: 1, max: 29 }, assert);
+            checkAndRemoveLimits(this.parts[4], { min: 1, max: 31 }, assert);
+
+            let date = new Date(2012, 1, 4, 15, 6);
+            this.parts[4].setter(date, 3);
+            assert.equal(date.getDate(), 3, "setter sets day");
+            delete this.parts[4].setter;
 
             assert.deepEqual(this.parts[4], {
                 index: 4,
                 isStub: false,
                 caret: { start: 14, end: 15 },
                 getter: "getDate",
-                setter: "setDate",
                 pattern: "d",
                 text: "2"
             });
@@ -137,7 +141,7 @@ if(devices.real().deviceType === "desktop") {
 
             let date = new Date(2012, 1, 4, 15, 6);
             this.parts[6].setter(date, 15);
-            assert.equal(date.getFullYear(), 2015, "setter sets AM");
+            assert.equal(date.getFullYear(), 2015, "setter sets year");
             delete this.parts[6].setter;
 
             assert.deepEqual(this.parts[6], {
@@ -615,7 +619,11 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(this.$input.val(), "Feb, 03", "select on typing");
 
             this.keyboard.type("1");
-            assert.equal(this.$input.val(), "Feb, 01", "don't accept out-of-limit values");
+            assert.equal(this.$input.val(), "Mar, 31", "current month overflow should increase month");
+
+            this.keyboard.press("enter");
+            this.keyboard.type("35");
+            assert.equal(this.$input.val(), "Mar, 05", "out-of-limit values should clear search value");
         });
 
         QUnit.test("Month", (assert) => {
