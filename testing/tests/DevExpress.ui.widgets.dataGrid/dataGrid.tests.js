@@ -3037,6 +3037,40 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
     assert.strictEqual($dataGrid.find(".dx-datagrid-headers").css("paddingRight"), "0px", "no headers right padding");
 });
 
+// T712073
+QUnit.test("Delete two added rows after selection", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers();
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+            width: 1000,
+            dataSource: [{ id: 1 }],
+            keyExpr: "id",
+            loadingTimeout: undefined,
+            editing: {
+                mode: 'batch',
+                allowAdding: true,
+                allowDeleting: true
+            }
+        }),
+        dataGrid = $dataGrid.dxDataGrid("instance");
+
+    // act
+    dataGrid.addRow();
+    dataGrid.addRow();
+    dataGrid.selectRows(1);
+
+    $dataGrid.find(".dx-link-delete").first().trigger("dxclick");
+    clock.tick();
+    $dataGrid.find(".dx-link-delete").first().trigger("dxclick");
+    clock.tick();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 1, "row count");
+    assert.strictEqual($dataGrid.find(".dx-data-row").length, 1, "visible data row count");
+
+    clock.restore();
+});
+
 QUnit.test("Disable rows hover", function(assert) {
     // arrange
     var $dataGrid = $("#dataGrid").dxDataGrid({
