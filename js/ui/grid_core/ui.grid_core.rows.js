@@ -9,7 +9,6 @@ import { extend } from "../../core/utils/extend";
 import { isEmpty } from "../../core/utils/string";
 import { getDefaultAlignment } from "../../core/utils/position";
 import { compileGetter } from "../../core/utils/data";
-import errors from "../widget/ui.errors";
 import { setEmptyText, getGroupRowSummaryText, getDisplayValue, formatValue, renderLoadPanel, renderNoDataText } from "./ui.grid_core.utils";
 import columnsView from "./ui.grid_core.columns_view";
 import Scrollable from "../scroll_view/ui.scrollable";
@@ -713,7 +712,7 @@ module.exports = {
 
                     keyExpr && rows.some(function(row) {
                         if(row.rowType === "data" && row.key === undefined) {
-                            that._dataController.dataErrorOccurred.fire(errors.Error("E1046", keyExpr));
+                            that._dataController.fireError("E1046", keyExpr);
                             return true;
                         }
                     });
