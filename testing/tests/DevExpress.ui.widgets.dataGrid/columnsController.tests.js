@@ -20,7 +20,6 @@ QUnit.testDone(function() {
 var processColumnsForCompare = function(columns, parameterNames, ignoreParameterNames) {
     var processedColumns = $.extend(true, [], columns);
     ignoreParameterNames = ignoreParameterNames || [];
-    ignoreParameterNames.push("id");
     $.each(processedColumns, function() {
         var propertyName;
         for(propertyName in this) {
@@ -42,7 +41,8 @@ var processColumnsForCompare = function(columns, parameterNames, ignoreParameter
                     "defaultFilterOperations",
                     "visibleIndex",
                     "serializationFormat",
-                    "resizedCallbacks"
+                    "resizedCallbacks",
+                    "headerId"
                 ].indexOf(propertyName) !== -1) {
                     delete this[propertyName];
                 }

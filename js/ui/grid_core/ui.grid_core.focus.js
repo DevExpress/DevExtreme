@@ -433,7 +433,7 @@ module.exports = {
 
                         if(e.changeType === "refresh") {
                             var prevPageIndex = this._prevPageIndex,
-                                reload = operationTypes.reload,
+                                reload = operationTypes && operationTypes.reload,
                                 isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
                                 paging = prevPageIndex !== undefined && prevPageIndex !== this.pageIndex();
 

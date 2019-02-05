@@ -6,7 +6,6 @@ var merge = require('merge-stream');
 var file = require('gulp-file');
 var path = require('path');
 var ts = require('gulp-typescript');
-var runSequence = require('run-sequence');
 var through = require('through2');
 var lazyPipe = require('lazypipe');
 
@@ -213,9 +212,4 @@ gulp.task('npm-dts-check', ['npm-dts-generator'], function() {
 
 gulp.task('npm-check', ['npm-dts-check']);
 
-gulp.task('npm', function(callback) {
-    return runSequence(
-        'npm-sources',
-        'npm-check',
-        callback);
-});
+gulp.task('npm', ['npm-sources', 'npm-check']);

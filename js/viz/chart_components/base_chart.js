@@ -60,7 +60,8 @@ var commonUtils = require("../../core/utils/common"),
         "resolveLabelOverlapping",
         "adjustOnZoom",
         "zoomingMode",
-        "scrollingMode"
+        "scrollingMode",
+        "stickyHovering"
     ];
 
 function checkHeightRollingStock(rollingStocks, stubCanvas) {
@@ -887,9 +888,8 @@ var BaseChart = BaseWidget.inherit({
         return {
             legendData: {
                 text: item[this._legendItemTextField],
-                argument: item.argument,
                 id: item.index,
-                argumentIndex: item.argumentIndex
+                visible: true
             },
             getLegendStyles: item.getLegendStyles(),
             visible: item.isVisible()
@@ -1264,6 +1264,7 @@ var BaseChart = BaseWidget.inherit({
                 changedStateSeriesCount++;
             }
         });
+        that._tracker.clearHover();
         that.series = [];
 
         changedStateSeriesCount > 0 && that._disposeSeriesFamilies();

@@ -154,7 +154,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var $cell = $(cell);
 
         if(options.rowType === "data") {
-            column.id && this.setAria("describedby", column.id, $cell);
+            column.headerId && this.setAria("describedby", column.headerId, $cell);
         }
 
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
@@ -644,6 +644,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             this.rowIndex = options.rowIndex = row.rowIndex;
             this.dataIndex = options.dataIndex = row.dataIndex;
             this.isExpanded = options.isExpanded = row.isExpanded;
+
+            if(options.row) {
+                options.row = row;
+            }
 
             watchers.forEach(function(watcher) {
                 watcher();

@@ -22,19 +22,44 @@ let DateBoxMask = DateBoxBase.inherit({
             return this.callBase(e);
         }
 
-        let that = this;
-
         return extend(this.callBase(e), {
-            del: that._revertPart.bind(that, FORWARD),
-            backspace: that._revertPart.bind(that, BACKWARD),
-            home: that._selectFirstPart.bind(that),
-            end: that._selectLastPart.bind(that),
-            escape: that._revertChanges.bind(that),
-            enter: that._enterHandler.bind(that),
-            leftArrow: that._selectNextPart.bind(that, BACKWARD),
-            rightArrow: that._selectNextPart.bind(that, FORWARD),
-            upArrow: that._partIncrease.bind(that, FORWARD),
-            downArrow: that._partIncrease.bind(that, BACKWARD)
+            del: (e) => {
+                this._revertPart(FORWARD);
+                this._isAllSelected() || e.preventDefault();
+            },
+            backspace: (e) => {
+                this._revertPart(BACKWARD);
+                this._isAllSelected() || e.preventDefault();
+            },
+            home: (e) => {
+                this._selectFirstPart();
+                e.preventDefault();
+            },
+            end: (e) => {
+                this._selectLastPart();
+                e.preventDefault();
+            },
+            escape: (e) => {
+                this._revertChanges();
+                e.preventDefault();
+            },
+            enter: this._enterHandler,
+            leftArrow: (e) => {
+                this._selectNextPart(BACKWARD);
+                e.preventDefault();
+            },
+            rightArrow: (e) => {
+                this._selectNextPart(FORWARD);
+                e.preventDefault();
+            },
+            upArrow: (e) => {
+                this._partIncrease(FORWARD);
+                e.preventDefault();
+            },
+            downArrow: (e) => {
+                this._partIncrease(BACKWARD);
+                e.preventDefault();
+            },
         });
     },
 
@@ -159,12 +184,12 @@ let DateBoxMask = DateBoxBase.inherit({
         this._searchValue = "";
     },
 
-    _revertPart: function(direction, e) {
+    _revertPart: function(direction) {
         if(!this._isAllSelected()) {
             const actual = this._getActivePartValue(this.option("emptyDateValue"));
             this._setActivePartValue(actual);
 
-            this._selectNextPart(direction, e);
+            this._selectNextPart(direction);
         }
         this._clearSearchValue();
     },
@@ -218,27 +243,27 @@ let DateBoxMask = DateBoxBase.inherit({
         });
     },
 
-    _selectLastPart(e) {
+    _selectLastPart() {
         if(this.option("text")) {
             this._activePartIndex = this._dateParts.length;
-            this._selectNextPart(BACKWARD, e);
+            this._selectNextPart(BACKWARD);
         }
     },
 
-    _selectFirstPart(e) {
+    _selectFirstPart() {
         if(this.option("text")) {
             this._activePartIndex = -1;
-            this._selectNextPart(FORWARD, e);
+            this._selectNextPart(FORWARD);
         }
     },
 
     _onMouseWheel(e) {
         if(this._useMaskBehavior()) {
-            this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD);
+            this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD, e);
         }
     },
 
-    _selectNextPart(step, e) {
+    _selectNextPart(step) {
         if(!this.option("text")) {
             return;
         }
@@ -247,7 +272,7 @@ let DateBoxMask = DateBoxBase.inherit({
         if(this._dateParts[index].isStub) {
             let isBoundaryIndex = index === 0 && step < 0 || index === this._dateParts.length - 1 && step > 0;
             if(!isBoundaryIndex) {
-                this._selectNextPart(step >= 0 ? step + 1 : step - 1, e);
+                this._selectNextPart(step >= 0 ? step + 1 : step - 1);
                 return;
             } else {
                 index = this._activePartIndex;
@@ -260,7 +285,6 @@ let DateBoxMask = DateBoxBase.inherit({
 
         this._activePartIndex = index;
         this._caret(this._getActivePartProp("caret"));
-        e && e.preventDefault();
     },
 
     _getActivePartLimits() {
@@ -354,10 +378,10 @@ let DateBoxMask = DateBoxBase.inherit({
             this._renderDateParts();
             this._maskValue = date;
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
-            this._selectNextPart(0, e);
-        } else {
-            e.preventDefault();
+            this._selectNextPart(0);
         }
+
+        e.preventDefault();
     },
 
     _isValueDirty() {
@@ -376,6 +400,7 @@ let DateBoxMask = DateBoxBase.inherit({
     _enterHandler(e) {
         this._fireChangeEvent();
         this._selectNextPart(FORWARD, e);
+        e.preventDefault();
     },
 
     _focusOutHandler(e) {

@@ -255,6 +255,19 @@ var dxFunnel = require("../core/base_widget").inherit({
         return this._items.slice();
     },
 
+    _getLegendData() {
+        return this._items.map(item => {
+
+            return {
+                id: item.id,
+                visible: true,
+                text: item.argument,
+                item: item,
+                states: item.states
+            };
+        });
+    },
+
     _getMinSize: function() {
         var adaptiveLayout = this._getOption("adaptiveLayout");
 

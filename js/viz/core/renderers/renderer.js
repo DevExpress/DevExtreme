@@ -1113,7 +1113,7 @@ SvgElement.prototype = {
         that._addFixIRICallback = function() {};
     },
 
-    dispose: function() {
+    _clearChildrenFuncIri: function() {
         var clearChildren = function(element) {
             var i;
 
@@ -1123,10 +1123,12 @@ SvgElement.prototype = {
             }
         };
 
-        removeFuncIriCallback(this.element._fixFuncIri);
         clearChildren(this.element);
+    },
 
-
+    dispose: function() {
+        removeFuncIriCallback(this.element._fixFuncIri);
+        this._clearChildrenFuncIri();
         this._getJQElement().remove();
         return this;
     },
@@ -1211,6 +1213,7 @@ SvgElement.prototype = {
     },
 
     clear: function() {
+        this._clearChildrenFuncIri();// T711457
         this._getJQElement().empty();
         return this;
     },
@@ -1476,7 +1479,7 @@ extend(TextSvgElement.prototype, {
 function updateIndexes(items, k) {
     var i,
         item;
-    for(i = k; !!(item = items[i]); ++i) {
+    for(i = k; (item = items[i]); ++i) {
         item._link.i = i;
     }
 }

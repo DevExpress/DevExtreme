@@ -1172,7 +1172,7 @@ var Scheduler = Widget.inherit({
                 break;
             case "views":
                 this._processCurrentView();
-                if(!!this._getCurrentViewOptions()) {
+                if(this._getCurrentViewOptions()) {
                     this.repaint();
                 } else {
                     this._header.option(name, value);
@@ -1677,7 +1677,7 @@ var Scheduler = Widget.inherit({
         }
 
         each(fields, (function(name, expr) {
-            if(!!expr) {
+            if(expr) {
 
                 var getter = dataCoreUtils.compileGetter(expr),
                     setter = dataCoreUtils.compileSetter(expr);

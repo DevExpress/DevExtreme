@@ -347,16 +347,15 @@ extend(legendPrototype, {
     },
 
     update: function(data, options) {
-        var that = this;
-
-        that._data = data;
+        const that = this;
+        options = that._options = parseOptions(options, that._textField) || {};
+        that._data = data && options.customizeItems && options.customizeItems(data.slice()) || data;
         that._boundingRect = {
             width: 0,
             height: 0,
             x: 0,
             y: 0
         };
-        that._options = parseOptions(options, that._textField);
 
         return that;
     },
@@ -366,7 +365,7 @@ extend(legendPrototype, {
         var that = this,
             options = that._options,
             renderer = that._renderer,
-            items = that._data;
+            items = that._getItemData();
 
         this._size = { width: width, height: height };
         that.erase();
@@ -378,7 +377,7 @@ extend(legendPrototype, {
         that._insideLegendGroup = renderer.g().append(that._legendGroup);
         that._createBackground();
         // TODO review pass or process states in legend
-        that._createItems(that._getItemData());
+        that._createItems(items);
 
         that._locateElements(options);
         that._finalUpdate(options);
@@ -452,12 +451,14 @@ extend(legendPrototype, {
     },
 
     _getItemData: function() {
-        var items = this._data;
+        let items = this._data || [];
+        const options = this._options || {};
         // For maps in dashboards
-        if(this._options.inverted) {
+        if(options.inverted) {
             items = items.slice().reverse();
         }
-        return items;
+
+        return items.filter(i => i.visible);
     },
 
     _finalUpdate: function(options) {
@@ -880,10 +881,10 @@ exports.plugin = {
             renderer: that._renderer,
             group: group,
             textField: "text",
-            getFormatObject: function(item) {
+            getFormatObject: function(data) {
                 return {
-                    item: item,
-                    text: item.argument
+                    item: data.item,
+                    text: data.text
                 };
             },
         });
@@ -918,7 +919,7 @@ exports.plugin = {
         },
 
         _createLegendItems: function() {
-            if(this._legend.update(this.getAllItems(), this._getOption("legend"))) {
+            if(this._legend.update(this._getLegendData(), this._getOption("legend"))) {
                 this._requestChange(["LAYOUT"]);
             }
         }

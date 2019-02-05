@@ -105,6 +105,11 @@ var createDataGrid = function(options) {
     return dataGrid;
 };
 
+var getFirstAccessibilityColumnIndex = function() {
+    var $headers = $(".dx-datagrid-headers");
+    return parseInt($headers.find("[id*=dx-col-]").eq(0).attr("id").replace("dx-col-", ""));
+};
+
 QUnit.test("Empty options", function(assert) {
     var dataGrid = createDataGrid({});
     assert.ok(dataGrid);
@@ -139,6 +144,30 @@ QUnit.test("columns option is not changed after initialization when columnAutoWi
 
 QUnit.test("formatValue for grouped column with calculateGroupValue", function(assert) {
     assert.strictEqual(gridCore.formatValue("2012", { format: "shortDate" }), "2012");
+});
+
+QUnit.test("Accessibility columns id should not set for columns editors (T710132)", function(assert) {
+    // arrange, act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            columns: ["field1", "field2"],
+            filterRow: { visible: true },
+            headerFilter: { visible: true },
+            searchPanel: { visible: true },
+            editing: { mode: "row", allowUpdating: true },
+            dataSource: [{ field1: "1", field2: "2" }]
+        });
+
+    clock.tick();
+
+    // act
+    dataGrid.editRow(0);
+    clock.tick();
+
+    // assert
+    assert.equal($(".dx-texteditor [id]").length, 0, "editors has no accessibility id");
+
+    clock.restore();
 });
 
 QUnit.test("commonColumnOptions", function(assert) {
@@ -202,7 +231,7 @@ QUnit.testInActiveWindow("Base accessibility structure (T640539)", function(asse
 
     $headers = $(".dx-datagrid-headers");
 
-    firstColumnIndex = parseInt($headers.find("[id*=dx-col-]").eq(0).attr("id").replace("dx-col-", ""));
+    firstColumnIndex = getFirstAccessibilityColumnIndex();
 
     assert.equal($(".dx-widget").attr("role"), "presentation");
 
@@ -258,7 +287,7 @@ QUnit.testInActiveWindow("Global column index should be unique for the different
 
     $headers = $(".dx-datagrid-headers");
 
-    firstColumnIndex = parseInt($headers.find("[id*=dx-col-]").eq(0).attr("id").replace("dx-col-", ""));
+    firstColumnIndex = getFirstAccessibilityColumnIndex();
 
     dataGrid.expandRow("1");
 
@@ -848,6 +877,48 @@ QUnit.test("Show contextMenu for hidden adaptive columns", function(assert) {
     assert.equal(dataGrid.columnOption("field3", "groupIndex"), 0, "Group by field3");
 
     clock.restore();
+});
+
+// T708072
+QUnit.test("Expand adaptive detail row after scrolling if scrolling mode is virtual", function(assert) {
+    var array = [];
+
+    for(var i = 0; i < 10; i++) {
+        array.push({ id: i, value: "text" + i });
+    }
+
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        width: 200,
+        height: 200,
+        dataSource: array,
+        keyExpr: "id",
+        columnHidingEnabled: true,
+        paging: {
+            pageSize: 2
+        },
+        scrolling: {
+            mode: "virtual"
+        },
+        loadingTimeout: undefined,
+        legacyRendering: true,
+        columns: [{
+            dataField: "value"
+        }, {
+            dataField: "hidden",
+            width: 10000
+        }],
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.expandAdaptiveDetailRow(0);
+    dataGrid.pageIndex(1);
+    dataGrid.getController("data").toggleExpandAdaptiveDetailRow(1);
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows()[1].rowType, "data", "row 1 type");
+    assert.strictEqual(dataGrid.getVisibleRows()[1].key, 1, "row 1 key");
+    assert.strictEqual(dataGrid.getVisibleRows()[2].rowType, "detailAdaptive", "row 2 type");
+    assert.strictEqual(dataGrid.getVisibleRows()[2].key, 1, "row 2 key");
 });
 
 // T315857
@@ -6778,6 +6849,46 @@ QUnit.test("Infinite scrolling should works correctly", function(assert) {
     assert.equal(dataGrid.$element().find(".dx-datagrid-bottom-load-panel").length, 0, "not bottom loading");
 });
 
+// T710048
+QUnit.test("Current row position should not be changed after expand if scrolling mode is infinite", function(assert) {
+    // arrange, act
+    var data = [];
+
+    for(var i = 0; i < 100; i++) {
+        data.push({ id: i + 1 });
+    }
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 400,
+        dataSource: data,
+        keyExpr: "id",
+        loadingTimeout: undefined,
+        scrolling: {
+            updateTimeout: 0,
+            useNative: false,
+            mode: "infinite",
+            rowRenderingMode: "virtual"
+        },
+        paging: {
+            pageSize: 50
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo(10000);
+
+    var ROW_KEY = 50;
+
+    var $row = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(ROW_KEY)));
+
+    var currentRowTop = $row.position().top;
+
+    dataGrid.expandRow(ROW_KEY);
+
+    // assert
+    $row = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(ROW_KEY)));
+    assert.equal($row.position().top, currentRowTop, "current row top is not changed");
+});
+
 QUnit.test("scroll position should not be changed after refresh", function(assert) {
     // arrange, act
     var data = [];
@@ -12350,6 +12461,48 @@ QUnit.test("Push with reshape and repaintChangesOnly if scrolling mode is virtua
     assert.ok($(dataGrid.getCellElement(1, 0)).is($firstCell), "first cell is not recreated");
     assert.notOk($(dataGrid.getCellElement(1, 1)).is($secondCell), "second cell is recreated");
     assert.strictEqual($(dataGrid.getCellElement(1, 1)).text(), "updated", "second cell value is updated");
+});
+
+// T711198
+QUnit.test("Push insert with reshape and repaintChangesOnly if rowRenderingMode is virtual", function(assert) {
+    // arrange
+    var data = [
+        { id: 1, name: "test 1" },
+        { id: 2, name: "test 2" },
+        { id: 3, name: "test 3" },
+        { id: 4, name: "test 4" },
+        { id: 5, name: "test 5" }
+    ];
+
+    var dataSource = new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: data
+            },
+            reshapeOnPush: true
+        }),
+        dataGrid = createDataGrid({
+            height: 50,
+            loadingTimeout: undefined,
+            repaintChangesOnly: true,
+            scrolling: {
+                rowRenderingMode: "virtual",
+                updateTimeout: 0
+            },
+            dataSource: dataSource,
+            columns: ["id", "name"]
+        });
+
+    this.clock.tick();
+
+    // act
+    dataSource.store().push([{ type: "insert", data: { id: 6, name: "test 6" } }]);
+    this.clock.tick();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows().length, 6, "one row is added");
+    assert.strictEqual(dataGrid.getVisibleRows()[5].key, 6, "added row key is correct");
 });
 
 QUnit.test("Push without reshape should not force load if scrolling mode is virtual", function(assert) {
