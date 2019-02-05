@@ -11913,6 +11913,30 @@ QUnit.test("cancelEditData after scrolling if scrolling mode is editing", functi
     assert.equal(testElement.find(".dx-edit-row").length, 0, "edit row is closed");
 });
 
+QUnit.test("DataGrid should show error message on adding row if dataSource is not specified (T711831)", function(assert) {
+    // arrange
+    var errorCode,
+        widgetName;
+
+    this.options.dataSource = undefined;
+
+    this.setupDataGrid();
+
+    this.rowsView.render($('#container'));
+    this.rowsView.resize();
+    this.getController("data").fireError = function() {
+        errorCode = arguments[0];
+        widgetName = arguments[1];
+    };
+
+    // act
+    this.addRow();
+
+    // assert
+    assert.equal(errorCode, "E1052", "error code");
+    assert.equal(widgetName, "dxDataGrid", "widget name");
+});
+
 QUnit.module('Edit Form', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
