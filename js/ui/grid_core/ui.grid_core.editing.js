@@ -731,6 +731,11 @@ var EditingController = modules.ViewController.inherit((function() {
                 editMode = getEditMode(that),
                 $firstCell;
 
+            if(!store) {
+                dataController.fireError("E1052", this.component.NAME);
+                return;
+            }
+
             if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
                 that.saveEditData();
             }
@@ -1603,7 +1608,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 columns;
 
             if(rowKey === undefined) {
-                that._dataController.dataErrorOccurred.fire(errors.Error("E1043"));
+                that._dataController.fireError("E1043");
             }
 
             if(options.column.setCellValue) {
