@@ -388,6 +388,27 @@ QUnit.test("getMarkup. Different colors in charts. No backgroundColor in result"
     assert.equal(markup, "<svg data-backgroundcolor=\"\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
 });
 
+QUnit.test("Combine widgets markups (combineMarkups), just widget", function(assert) {
+    var createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg></svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "backgroundColor") return "backgroundColor";
+                }
+            };
+        },
+        markupData = exportModule.combineMarkups(createWidget({ width: 10, height: 25 }));
+
+    assert.deepEqual(markupData, {
+        markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"25\" width=\"10\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
+            + "<g transform=\"translate(0,0)\" ></g>"
+            + "</svg>",
+        width: 10,
+        height: 25
+    });
+});
+
 QUnit.test("Combine widgets markups (combineMarkups), array of widgets - column", function(assert) {
     var createWidget = function(size) {
             return {
