@@ -6849,6 +6849,46 @@ QUnit.test("Infinite scrolling should works correctly", function(assert) {
     assert.equal(dataGrid.$element().find(".dx-datagrid-bottom-load-panel").length, 0, "not bottom loading");
 });
 
+// T710048
+QUnit.test("Current row position should not be changed after expand if scrolling mode is infinite", function(assert) {
+    // arrange, act
+    var data = [];
+
+    for(var i = 0; i < 100; i++) {
+        data.push({ id: i + 1 });
+    }
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        height: 400,
+        dataSource: data,
+        keyExpr: "id",
+        loadingTimeout: undefined,
+        scrolling: {
+            updateTimeout: 0,
+            useNative: false,
+            mode: "infinite",
+            rowRenderingMode: "virtual"
+        },
+        paging: {
+            pageSize: 50
+        }
+    }).dxDataGrid("instance");
+
+    // act
+    dataGrid.getScrollable().scrollTo(10000);
+
+    var ROW_KEY = 50;
+
+    var $row = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(ROW_KEY)));
+
+    var currentRowTop = $row.position().top;
+
+    dataGrid.expandRow(ROW_KEY);
+
+    // assert
+    $row = $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(ROW_KEY)));
+    assert.equal($row.position().top, currentRowTop, "current row top is not changed");
+});
+
 QUnit.test("scroll position should not be changed after refresh", function(assert) {
     // arrange, act
     var data = [];
