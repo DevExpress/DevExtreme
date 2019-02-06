@@ -519,37 +519,37 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var that = this,
             rowIndex = this.getVisibleRowIndex(),
             colIndex = this._focusedCellPosition.columnIndex,
-            editingCellHandler = function() {
-                var $input = that._getFocusedCell().find(".dx-texteditor-input").eq(0),
-                    keyDownEvent = eventUtils.createEvent(eventArgs, { type: "keydown", target: $input.get(0) }),
-                    keyPressEvent = eventUtils.createEvent(eventArgs, { type: "keypress", target: $input.get(0) }),
-                    inputEvent = eventUtils.createEvent(eventArgs, { type: "input", target: $input.get(0) });
-
-                eventsEngine.trigger($input, keyDownEvent);
-                if(!keyDownEvent.isDefaultPrevented()) {
-
-                    eventsEngine.trigger($input, keyPressEvent);
-                    if(!keyPressEvent.isDefaultPrevented()) {
-                        $input.val(that._beginEditingNavigationKey);
-                        eventsEngine.off($input, "focusout"); // for NumberBox to save entered symbol
-                        eventsEngine.on($input, "focusout", function() {
-                            eventsEngine.trigger($input, "change");
-                        });
-                        setTimeout(function() {
-                            eventsEngine.trigger($input, inputEvent);
-                        });
-                    }
-                }
-            },
             deferred = this._editingController.editCell(rowIndex, colIndex);
 
-        if(this._isEditingNavigationMode()) {
+        if(this._isExcelEditingStarted()) {
             if(deferred === true) {
-                editingCellHandler();
+                that._editingCellHandler(eventArgs);
             } else if(deferred && deferred.done) {
-                deferred.done(editingCellHandler);
+                deferred.done(() => that._editingCellHandler(eventArgs));
             }
         }
+    },
+    _editingCellHandler: function(eventArgs) {
+        var $input = this._getFocusedCell().find(".dx-texteditor-input").eq(0),
+            keyDownEvent = eventUtils.createEvent(eventArgs, { type: "keydown", target: $input.get(0) }),
+            keyPressEvent = eventUtils.createEvent(eventArgs, { type: "keypress", target: $input.get(0) }),
+            inputEvent = eventUtils.createEvent(eventArgs, { type: "input", target: $input.get(0) });
+
+        eventsEngine.trigger($input, keyDownEvent);
+        if(!keyDownEvent.isDefaultPrevented()) {
+            eventsEngine.trigger($input, keyPressEvent);
+            if(!keyPressEvent.isDefaultPrevented()) {
+                $input.val(this._beginEditingNavigationKey);
+                eventsEngine.off($input, "focusout"); // for NumberBox to save entered symbol
+                eventsEngine.on($input, "focusout", function() {
+                    eventsEngine.trigger($input, "change");
+                });
+                setTimeout(function() {
+                    eventsEngine.trigger($input, inputEvent);
+                });
+            }
+        }
+
     },
 
     _leftRightKeysHandler: function(eventArgs, isEditing) {
@@ -557,7 +557,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $event = eventArgs.originalEvent,
             $row = this._focusedView && this._focusedView.getRow(rowIndex),
             directionCode = this._getDirectionCodeByKey(eventArgs.keyName),
-            isEditingNavigationMode = this._isEditingNavigationMode(),
+            isEditingNavigationMode = this._isExcelEditingStarted(),
             allowNavigate = (!isEditing || isEditingNavigationMode) && isDataRow($row);
 
         if(allowNavigate) {
@@ -577,7 +577,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             rowHeight,
             isUpArrow = eventArgs.keyName === "upArrow",
             dataSource = this._dataController.dataSource(),
-            isEditingNavigationMode = this._isEditingNavigationMode(),
+            isEditingNavigationMode = this._isExcelEditingStarted(),
             allowNavigate = (!isEditing || isEditingNavigationMode) && $row && !isDetailRow($row);
 
         if(allowNavigate) {
@@ -836,7 +836,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         column = this._columnsController.getVisibleColumns()[this.getView("rowsView").getCellIndex($cell)];
         row = this._dataController.items()[this._getRowIndex($cell && $cell.parent())];
 
-        isEditingAllowed = (editingOptions.allowUpdating || row && row.inserted) && column.allowEditing;
+        isEditingAllowed = (editingOptions.allowUpdating || row && row.inserted) && column.allowEditing && !this._isExcelNavigation();
 
         if(!isEditingAllowed) {
             this._editingController.closeEditCell();
@@ -1063,7 +1063,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
-    _isEditingNavigationMode: function() {
+    _isExcelEditingStarted: function() {
         return this._isExcelNavigation() && isDefined(this._beginEditingNavigationKey);
     },
 
@@ -1726,41 +1726,35 @@ module.exports = {
                     }
                 },
 
-                _prepareCellEditorNavigation: function($cell) {
+                _editCellPrepared: function($cell) {
                     var keyboardController = this.getController("keyboardNavigation"),
-                        isEditingNavigationMode = keyboardController && keyboardController._isEditingNavigationMode();
+                        isEditingNavigationMode = keyboardController && keyboardController._isExcelEditingStarted();
 
                     if(isEditingNavigationMode) {
-                        var $editor = $cell.find(".dx-texteditor").eq(0),
-                            editorData = $editor.data && $editor.data(),
-                            editorName = editorData && editorData["dxComponents"][0],
-                            editorInstance = editorName && editorData[editorName],
-                            arrowDownKeyHandler,
-                            arrowUpKeyHandler;
+                        var editorInstance = this._getEditorInstance($cell);
 
                         if(isEditingNavigationMode && editorInstance) {
-                            arrowDownKeyHandler = editorInstance._supportedKeys()["downArrow"];
-                            arrowUpKeyHandler = editorInstance._supportedKeys()["upArrow"];
-                            editorInstance.registerKeyHandler("upArrow", e => {
-                                var $input = editorInstance._input();
-                                if(!$input || $input.attr("aria-expanded") === "true") {
-                                    return arrowUpKeyHandler && arrowUpKeyHandler.call(editorInstance, e);
-                                }
+                            ["downArrow", "upArrow"].forEach(function(keyName) {
+                                var originalKeyHandler = editorInstance._supportedKeys()[keyName];
+                                editorInstance.registerKeyHandler(keyName, e => {
+                                    var isDropDownOpened = editorInstance._input().attr("aria-expanded") === "true";
+                                    if(isDropDownOpened) {
+                                        return originalKeyHandler && originalKeyHandler.call(editorInstance, e);
+                                    }
+                                });
                             });
-                            editorInstance.registerKeyHandler("downArrow", e => {
-                                var $input = editorInstance._input();
-                                if(!$input || $input.attr("aria-expanded") === "true") {
-                                    return arrowDownKeyHandler && arrowDownKeyHandler.call(editorInstance, e);
-                                }
-                            });
+
                             editorInstance.registerKeyHandler("rightArrow", noop);
                             editorInstance.registerKeyHandler("leftArrow", noop);
-
-                            if(editorName === "dxDateBox") {
-                                editorInstance.registerKeyHandler("enter", noop);
-                            }
                         }
                     }
+                },
+                _getEditorInstance: function($cell) {
+                    var $editor = $cell.find(".dx-texteditor").eq(0),
+                        editorData = $editor.data && $editor.data(),
+                        editorName = editorData && editorData["dxComponents"][0];
+
+                    return editorName && editorData[editorName];
                 }
             }
         },

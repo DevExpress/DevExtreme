@@ -2555,7 +2555,7 @@ module.exports = {
                     }
 
                     if(isEditing) {
-                        this._prepareCellEditorNavigation($cell);
+                        this._editCellPrepared($cell);
                     }
 
                     var modifiedValues = parameters.row && (parameters.row.inserted ? parameters.row.values : parameters.row.modifiedValues);
@@ -2569,7 +2569,7 @@ module.exports = {
 
                     this.callBase.apply(this, arguments);
                 },
-                _prepareCellEditorNavigation: function($cell) { },
+                _editCellPrepared: function($cell) { },
                 _formItemPrepared: function() { },
                 _isFormItem: function(parameters) {
                     var isDetailRow = parameters.rowType === "detail" || parameters.rowType === "detailAdaptive",
