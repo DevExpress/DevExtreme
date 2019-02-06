@@ -45,8 +45,6 @@ QUnit.module("Toolbar integration", {
             $("#htmlEditor")
                 .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
                 .trigger("dxclick");
-
-            this.clock.tick();
         } catch(e) {
             assert.ok(false, "error on formatting");
         }
@@ -73,7 +71,6 @@ QUnit.module("Toolbar integration", {
             .dxHtmlEditor("instance");
 
         instance.setSelection(0, 2);
-        this.clock.tick();
 
         $("#htmlEditor")
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
@@ -94,7 +91,6 @@ QUnit.module("Toolbar integration", {
             .dxHtmlEditor("instance");
 
         instance.setSelection(0, 2);
-        this.clock.tick();
 
         $("#htmlEditor")
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
@@ -116,7 +112,6 @@ QUnit.module("Toolbar integration", {
         }).dxHtmlEditor("instance");
 
         instance.setSelection(0, 2);
-        this.clock.tick();
 
         $(`.${TOOLBAR_CLASS}`).on("dxclick", toolbarClickStub);
         $("#htmlEditor")
@@ -149,7 +144,6 @@ QUnit.module("Toolbar integration", {
         }).dxHtmlEditor("instance");
 
         instance.setSelection(0, 2);
-        this.clock.tick();
 
         $("#htmlEditor")
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
@@ -293,8 +287,6 @@ QUnit.module("Toolbar integration", {
         $(`.${LIST_ITEM_CLASS}`)
             .last()
             .trigger("dxclick");
-
-        this.clock.tick();
 
         const value = $formatWidget.dxSelectBox("option", "value");
 
