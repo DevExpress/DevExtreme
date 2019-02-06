@@ -928,7 +928,6 @@ QUnit.test("mergeDates must merge milliseconds when type is 'time'", function(as
 QUnit.module("dateView integration", {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers(new Date(2000, 0, 1).valueOf());
         this.originalInputType = support.inputType;
         support.inputType = function() {
             return false;
@@ -954,15 +953,17 @@ QUnit.module("dateView integration", {
         moduleConfig.afterEach.apply(this, arguments);
         support.inputType = this.originalInputType;
         fx.off = false;
-        this.clock.restore();
     }
 });
 
 QUnit.test("check DateView default config", function(assert) {
     const { value, minDate, maxDate } = this.dateView().option();
     const FIFTY_YEARS = uiDateUtils.ONE_YEAR * 50;
+    const defaultDate = new Date();
 
-    assert.strictEqual(value.valueOf(), this.clock.now, "default value is the current date");
+    defaultDate.setHours(0, 0, 0, 0);
+
+    assert.deepEqual(value, defaultDate, "default value is the current date");
     assert.deepEqual(minDate, new Date(1900, 0, 1), "default min date is 'January 1 1900'");
 
     this.clock.now += FIFTY_YEARS;
