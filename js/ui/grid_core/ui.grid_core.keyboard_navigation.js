@@ -499,7 +499,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
-    _startEditing: function(eventArgs) {
+    _startEditing: function(eventArgs, beginEditingKey) {
         var focusedCellPosition = this._focusedCellPosition,
             rowIndex = this.getVisibleRowIndex(),
             row = this._dataController.items()[rowIndex],
@@ -510,26 +510,29 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(this._isRowEditMode()) {
                 this._editingController.editRow(rowIndex);
             } else if(focusedCellPosition) {
-                this._startEditingCell(eventArgs);
+                this._startEditingCell(eventArgs, beginEditingKey);
             }
         }
     },
 
-    _startEditingCell: function(eventArgs) {
+    _startEditingCell: function(eventArgs, beginEditingKey) {
         var that = this,
             rowIndex = this.getVisibleRowIndex(),
             colIndex = this._focusedCellPosition.columnIndex,
-            deferred = this._editingController.editCell(rowIndex, colIndex);
+            deferred;
+
+        this._isBeginExcelEditing = isDefined(beginEditingKey);
+        deferred = this._editingController.editCell(rowIndex, colIndex);
 
         if(this._isExcelEditingStarted()) {
             if(deferred === true) {
-                that._editingCellHandler(eventArgs);
+                that._editingCellHandler(eventArgs, beginEditingKey);
             } else if(deferred && deferred.done) {
-                deferred.done(() => that._editingCellHandler(eventArgs));
+                deferred.done(() => that._editingCellHandler(eventArgs, beginEditingKey));
             }
         }
     },
-    _editingCellHandler: function(eventArgs) {
+    _editingCellHandler: function(eventArgs, beginEditingKey) {
         var $input = this._getFocusedCell().find(".dx-texteditor-input").eq(0),
             keyDownEvent = eventUtils.createEvent(eventArgs, { type: "keydown", target: $input.get(0) }),
             keyPressEvent = eventUtils.createEvent(eventArgs, { type: "keypress", target: $input.get(0) }),
@@ -539,7 +542,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         if(!keyDownEvent.isDefaultPrevented()) {
             eventsEngine.trigger($input, keyPressEvent);
             if(!keyPressEvent.isDefaultPrevented()) {
-                $input.val(this._beginEditingNavigationKey);
+                $input.val(beginEditingKey);
                 eventsEngine.off($input, "focusout"); // for NumberBox to save entered symbol
                 eventsEngine.on($input, "focusout", function() {
                     eventsEngine.trigger($input, "change");
@@ -1064,7 +1067,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _isExcelEditingStarted: function() {
-        return this._isExcelNavigation() && isDefined(this._beginEditingNavigationKey);
+        return this._isExcelNavigation() && this._isBeginExcelEditing;
     },
 
     _excelNavigationBeginEdit: function(originalEvent) {
@@ -1072,11 +1075,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
             return false;
         }
 
-        var key = originalEvent.key || String.fromCharCode(originalEvent.keyCode || originalEvent.which);
-
-        if(key && key.length === 1) {
-            this._beginEditingNavigationKey = key;
-            this._startEditing(originalEvent);
+        var beginEditingKey = originalEvent.key || String.fromCharCode(originalEvent.keyCode || originalEvent.which);
+        if(beginEditingKey && beginEditingKey.length === 1) {
+            this._startEditing(originalEvent, beginEditingKey);
         }
 
         return true;
@@ -1260,7 +1261,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 }
             });
 
-            that._beginEditingNavigationKey = null;
+            that._isBeginExcelEditing = false;
 
             that._focusedCellPosition = {};
 
@@ -1797,7 +1798,7 @@ module.exports = {
                 },
                 closeEditCell: function() {
                     this.callBase.apply(this, arguments);
-                    this.getController("keyboardNavigation")._beginEditingNavigationKey = null;
+                    this.getController("keyboardNavigation")._isBeginExcelEditing = false;
                 }
             },
             data: {
