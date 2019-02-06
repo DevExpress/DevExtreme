@@ -3,6 +3,7 @@ import Widget from "../widget/ui.widget";
 import registerComponent from "../../core/component_registrator";
 
 import DataGrid from "../data_grid/ui.data_grid";
+import CustomStore from "../../data/custom_store";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
 import OneDriveFileProvider from "./ui.file_manager.file_provider.onedrive";
@@ -17,7 +18,8 @@ var FileManager = Widget.inherit({
     _init: function() {
         this.callBase();
 
-        this.provider = new OneDriveFileProvider();
+        this._provider = new OneDriveFileProvider();
+        this._currentPath = "";
     },
 
     _initTemplates: function() {
@@ -37,13 +39,13 @@ var FileManager = Widget.inherit({
         $container.addClass(FIE_MANAGER_CONTAINER_CLASS);
 
         this._filesTreeView = this._createComponent($("<div>"), TreeViewSearch, {
-            // items: this._generateFakeFoldersData(),
             dataStructure: "plain",
             rootValue: "",
             keyExpr: "relativeName",
             parentIdExpr: "parentPath",
             displayExpr: "name",
             createChildren: this._onFilesTreeViewCreateChildren.bind(this),
+            onItemClick: this._onFilesTreeViewItemClick.bind(this)
         });
         this._filesTreeView.$element().addClass(FIE_MANAGER_DIRS_TREE_CLASS);
         $container.append(this._filesTreeView.$element());
@@ -58,17 +60,57 @@ var FileManager = Widget.inherit({
                 mode: "single"
             },
             allowColumnResizing: true,
-            columns: [ "FileName" ],
-            dataSource: this._generateFakeFilesData()
+            columns: [
+                {
+                    dataField: "name",
+                    minWidth: 200,
+                    width: "60%"
+                },
+                {
+                    dataField: "lastWriteTime",
+                    minWidth: 200,
+                    width: "20%"
+                },
+                {
+                    dataField: "length",
+                    minWidth: 100,
+                    width: "10%"
+                }
+            ]
         });
+        this._loadFilesToFilesView();
         $container.append(this._filesView.$element());
 
         return $container;
     },
+
     _onFilesTreeViewCreateChildren: function(parent) {
         var path = parent ? parent.itemData.relativeName : "";
-        return this.provider.getFolders(path);
+        return this._provider.getFolders(path);
     },
+
+    _onFilesTreeViewItemClick: function(e) {
+        var newPath = e.itemData.relativeName;
+        if(newPath !== this._currentPath) {
+            this._currentPath = newPath;
+            this._loadFilesToFilesView();
+        }
+    },
+
+    _loadFilesToFilesView: function() {
+        this._filesView.option("dataSource", {
+            "store": this._createFilesViewStore()
+        });
+    },
+
+    _createFilesViewStore: function() {
+        return new CustomStore({
+            load: function(loadOptions) {
+                return this._provider.getFiles(this._currentPath);
+            }.bind(this)
+        });
+    },
+
     _generateFakeFoldersData: function() {
         return [
             {

@@ -1,5 +1,5 @@
 import ajax from "../../core/utils/ajax";
-import deferredUtils from "../../core/utils/deferred";
+import { Deferred } from "../../core/utils/deferred";
 
 import FileManagerItem from "./ui.file_manager.items";
 import FileProvider from "./ui.file_manager.file_provider";
@@ -11,30 +11,37 @@ const DRIVE_API_URL = REST_API_URL + "v1.0/drive";
 const APP_ROOT_URL = DRIVE_API_URL + "/special/approot";
 
 var OneDriveFileProvider = FileProvider.inherit({
+
     ctor: function() {
         this._accessToken = "";
-        this.lastResult = null;
-        this.lastItems = null;
+        this._accessTokenPromise = null;
     },
 
     getFolders: function(path) {
         return this._getItems(path, true);
     },
-    _getItems: function(path, isFolder) {
-        const deferred = new deferredUtils.Deferred();
-        this._getAccessToken()
-            .then(function() {
-                return this._getItemsByPath(path);
-            }.bind(this))
-            .then(function() {
-                deferred.resolve(this._convertResultToItems(path, isFolder));
-            }.bind(this));
-        return deferred;
+
+    getFiles: function(path) {
+        return this._getItems(path, false);
     },
 
-    _getAccessToken: function() {
-        var deferred = new deferredUtils.Deferred();
-        var that = this;
+    _getItems: function(path, isFolder) {
+        return this._ensureAccessTokenAcquired()
+            .then(function() {
+                return this._getEntriesByPath(path);
+            }.bind(this))
+            .then(function(entries) {
+                return this._convertEntriesToItems(entries, path, isFolder);
+            }.bind(this));
+    },
+
+    _ensureAccessTokenAcquired: function() {
+        if(this._accessTokenPromise) {
+            return this._accessTokenPromise;
+        }
+
+        var deferred = new Deferred();
+
         if(this._accessToken) {
             deferred.resolve();
         } else {
@@ -42,43 +49,38 @@ var OneDriveFileProvider = FileProvider.inherit({
                 url: GET_ACCESS_TOKEN_URL,
                 dataType: "text"
             }).done(function(response) {
-                that._accessToken = response;
+                this._accessToken = response;
+                this._accessTokenPromise = null;
                 deferred.resolve();
-            });
+            }.bind(this));
         }
 
-        return deferred.promise();
+        this._accessTokenPromise = deferred.promise();
+        return this._accessTokenPromise;
     },
 
-    _getItemsByPath: function(path) {
-        var queryString = "?$select=" + REQUIRED_ITEM_FIELDS + "&$expand=children($select=" + REQUIRED_ITEM_FIELDS + ")";
+    _getEntriesByPath: function(path) {
         var itemPath = this._prepareItemRelativePath(path);
+        var queryString = "?$select=" + REQUIRED_ITEM_FIELDS + "&$expand=children($select=" + REQUIRED_ITEM_FIELDS + ")";
         var url = APP_ROOT_URL + itemPath + queryString;
-
-        var that = this;
-        var deferred = new deferredUtils.Deferred();
-        ajax.sendRequest({
+        return ajax.sendRequest({
             url: url,
             dataType: "json",
-            headers: { "Authorization": "Bearer " + this._accessToken },
-        }).done(function(response) {
-            that.lastResult = response;
-            deferred.resolve();
+            headers: { "Authorization": "Bearer " + this._accessToken }
         });
-
-        return deferred.promise();
     },
-    _convertResultToItems: function(path, isFolder) {
-        this.lastItems = [];
-        for(var entry, i = 0; entry = this.lastResult.children[i]; i++) {
+
+    _convertEntriesToItems: function(entries, path, isFolder) {
+        var result = [];
+        for(var entry, i = 0; entry = entries.children[i]; i++) {
             if(entry.hasOwnProperty("folder") === isFolder) {
                 var item = new FileManagerItem(path, entry.name);
                 item.length = entry.size;
                 item.lastWriteTime = entry.lastModifiedDateTime;
-                this.lastItems.push(item);
+                result.push(item);
             }
         }
-        return this.lastItems;
+        return result;
     },
 
     _prepareItemRelativePath: function(path) {
