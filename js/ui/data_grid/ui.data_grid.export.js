@@ -202,10 +202,7 @@ exports.DataProvider = Class.inherit({
     _convertFromGridGroupSummaryItems: function(gridGroupSummaryItems) {
         let result;
         if(isDefined(gridGroupSummaryItems) && gridGroupSummaryItems.length > 0) {
-            result = [];
-            for(let i = 0; i < gridGroupSummaryItems.length; i++) {
-                result.push({ value: gridGroupSummaryItems[i].value, name: gridGroupSummaryItems[i].name });
-            }
+            result = gridGroupSummaryItems.map(function(item) { return { value: item.value, name: item.name }; });
         }
         return result;
     },
