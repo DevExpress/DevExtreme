@@ -39,6 +39,7 @@ var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_CONTENT_CLASS = "dx-overlay-content",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     OVERLAY_MODAL_CLASS = "dx-overlay-modal",
+    INNER_OVERLAY_CLASS = "dx-inner-overlay",
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
 
     ANONYMOUS_TEMPLATE_NAME = "content",
@@ -349,6 +350,7 @@ var Overlay = Widget.inherit({
             onResizeStart: null,
             onResize: null,
             onResizeEnd: null,
+            innerOverlay: false,
 
             // NOTE: private options
 
@@ -442,6 +444,7 @@ var Overlay = Widget.inherit({
 
         this._$wrapper = $("<div>").addClass(OVERLAY_WRAPPER_CLASS);
         this._$content = $("<div>").addClass(OVERLAY_CONTENT_CLASS);
+        this._initInnerOverlayClass();
 
         var $element = this.$element();
         this._$wrapper.addClass($element.attr("class"));
@@ -463,6 +466,10 @@ var Overlay = Widget.inherit({
         this._initHideTopOverlayHandler(options.hideTopOverlayHandler);
 
         this.callBase(options);
+    },
+
+    _initInnerOverlayClass: function() {
+        this._$content.toggleClass(INNER_OVERLAY_CLASS, this.option("innerOverlay"));
     },
 
     _initTarget: function(target) {
@@ -545,7 +552,8 @@ var Overlay = Widget.inherit({
 
         var $container = this._$content,
             isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target),
-            outsideClick = isAttachedTarget && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
+            isInnerOverlay = $(e.target).closest("." + INNER_OVERLAY_CLASS).length,
+            outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
 
         if(outsideClick && closeOnOutsideClick) {
             if(this.option("shading")) {
@@ -1468,6 +1476,9 @@ var Overlay = Widget.inherit({
             case "container":
                 this._initContainer(value);
                 this._invalidate();
+                break;
+            case "innerOverlay":
+                this._initInnerOverlayClass();
                 break;
             case "deferRendering":
             case "contentTemplate":
