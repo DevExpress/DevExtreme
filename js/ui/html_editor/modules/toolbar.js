@@ -62,16 +62,8 @@ class ToolbarModule extends BaseModule {
 
             this.quill.on('editor-change', (eventName) => {
                 const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
-                clearTimeout(this._updateToolbarTimer);
 
-                if(isSelectionChanged) {
-                    this._updateToolbarTimer = setTimeout(() => {
-                        this._updateToolbar(isSelectionChanged);
-                    });
-                } else {
-                    this._updateToolbar();
-                }
-
+                this._updateToolbar(isSelectionChanged);
             });
         }
     }
@@ -285,7 +277,6 @@ class ToolbarModule extends BaseModule {
 
     clean() {
         this._toolbarWidgets.clear();
-        clearTimeout(this._updateToolbarTimer);
 
         this._$toolbarContainer
             .empty()
@@ -357,6 +348,8 @@ class ToolbarModule extends BaseModule {
     }
 
     _prepareSelectItemConfig(item) {
+        let value;
+
         return extend(true, {
             widget: "dxSelectBox",
             formatName: item.formatName,
@@ -365,9 +358,11 @@ class ToolbarModule extends BaseModule {
                 dataSource: item.formatValues,
                 placeholder: titleize(item.formatName),
                 onValueChanged: (e) => {
-                    if(!this._isReset) {
-                        this.quill.format(item.formatName, e.value, USER_ACTION);
-                    }
+                    value = e.value;
+                },
+                onItemClick: () => {
+                    this.quill.format(item.formatName, value, USER_ACTION);
+                    this.updateFormatWidgets(true);
                 }
             }
         }, item);
@@ -514,10 +509,10 @@ class ToolbarModule extends BaseModule {
             this._updateColorWidget(name, formats[name]);
         }
 
-        if(widget.option("value") === undefined) {
-            widget.$element().addClass(ACTIVE_FORMAT_CLASS);
+        if("value" in widget.option()) {
+            widget.option("value", formats[name]);
         } else {
-            this._setValueSilent(widget, formats[name]);
+            widget.$element().addClass(ACTIVE_FORMAT_CLASS);
         }
     }
 
@@ -566,12 +561,6 @@ class ToolbarModule extends BaseModule {
         return widgetName;
     }
 
-    _setValueSilent(widget, value) {
-        this._isReset = true;
-        widget.option("value", value);
-        this._isReset = false;
-    }
-
     _resetFormatWidgets() {
         this._toolbarWidgets.each((name, widget) => {
             this._resetFormatWidget(name, widget);
@@ -588,7 +577,7 @@ class ToolbarModule extends BaseModule {
             widget.option("disabled", true);
         }
         if(widget.NAME === "dxSelectBox") {
-            this._setValueSilent(widget, null);
+            widget.option("value", null);
         }
     }
 
