@@ -348,8 +348,6 @@ class ToolbarModule extends BaseModule {
     }
 
     _prepareSelectItemConfig(item) {
-        let value;
-
         return extend(true, {
             widget: "dxSelectBox",
             formatName: item.formatName,
@@ -358,11 +356,10 @@ class ToolbarModule extends BaseModule {
                 dataSource: item.formatValues,
                 placeholder: titleize(item.formatName),
                 onValueChanged: (e) => {
-                    value = e.value;
-                },
-                onItemClick: () => {
-                    this.quill.format(item.formatName, value, USER_ACTION);
-                    this.updateFormatWidgets(true);
+                    if(!this._isReset) {
+                        this.quill.format(item.formatName, e.value, USER_ACTION);
+                        this._setValueSilent(e.component, e.value);
+                    }
                 }
             }
         }, item);
@@ -510,7 +507,7 @@ class ToolbarModule extends BaseModule {
         }
 
         if("value" in widget.option()) {
-            widget.option("value", formats[name]);
+            this._setValueSilent(widget, formats[name]);
         } else {
             widget.$element().addClass(ACTIVE_FORMAT_CLASS);
         }
@@ -561,6 +558,12 @@ class ToolbarModule extends BaseModule {
         return widgetName;
     }
 
+    _setValueSilent(widget, value) {
+        this._isReset = true;
+        widget.option("value", value);
+        this._isReset = false;
+    }
+
     _resetFormatWidgets() {
         this._toolbarWidgets.each((name, widget) => {
             this._resetFormatWidget(name, widget);
@@ -577,7 +580,7 @@ class ToolbarModule extends BaseModule {
             widget.option("disabled", true);
         }
         if(widget.NAME === "dxSelectBox") {
-            widget.option("value", null);
+            this._setValueSilent(widget, null);
         }
     }
 
