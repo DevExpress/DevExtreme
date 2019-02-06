@@ -288,8 +288,8 @@ QUnit.module("Toolbar integration", {
             .last()
             .trigger("dxclick");
 
-        const value = $formatWidget.dxSelectBox("option", "value");
+        const value = $formatWidget.find(`.${INPUT_CLASS}`).val();
 
-        assert.equal(value, "11px", "SelectBox contain selected value");
+        assert.strictEqual(value, "11px", "SelectBox contain selected value");
     });
 });
