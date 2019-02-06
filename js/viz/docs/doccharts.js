@@ -2029,6 +2029,7 @@ var dxPieChart = {
        * @type function(items)
        * @type_function_param1 items:Array<PieChartLegendItem>
        * @type_function_return Array<PieChartLegendItem>
+       * @inheritdoc
        */
        customizeItems: undefined
     },
