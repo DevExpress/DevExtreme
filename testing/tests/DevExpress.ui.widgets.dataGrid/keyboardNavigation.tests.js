@@ -6683,4 +6683,277 @@ QUnit.module("Excel like navigation", {
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
         assert.notOk(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
     });
+
+    QUnit.testInActiveWindow("Editing navigation mode for a date cell if 'useMaskBehavior' is true if 'cell' edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                allowUpdating: true,
+                mode: "cell"
+            }
+        };
+
+        this.columns = [
+            { dataField: "name" },
+            { dataField: "date", dataType: "date",
+                editorOptions: {
+                    useMaskBehavior: true
+                }
+            },
+            { dataField: "room", dataType: "number" },
+            { dataField: "phone", dataType: "number" }
+        ];
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        this.focusCell(1, 1);
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // arrange, assert
+        var $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.equal($input.val(), "1/5/2006", "input value");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 2 }, "focusedCellPosition");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "2006/01/05", room: 1, phone: 666666 }, "row 1 data");
+
+        // act
+        this.triggerKeyDown("2");
+        this.clock.tick();
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "2006/01/05", room: 1, phone: 666666 }, "row 1 data");
+        assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "2009/02/08", room: 2, phone: 777777 }, "row 2 data");
+    });
+
+    QUnit.testInActiveWindow("Editing navigation mode for a date cell if 'useMaskBehavior' is true if 'batch' edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                allowUpdating: true,
+                mode: "batch"
+            }
+        };
+
+        this.columns = [
+            { dataField: "name" },
+            { dataField: "date", dataType: "date",
+                editorOptions: {
+                    useMaskBehavior: true
+                }
+            },
+            { dataField: "room", dataType: "number" },
+            { dataField: "phone", dataType: "number" }
+        ];
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        this.focusCell(1, 1);
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // arrange, assert
+        var $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.equal($input.val(), "1/5/2006", "input value");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 2 }, "focusedCellPosition");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "2006/01/05", room: 1, phone: 666666 }, "row 1 data");
+
+        // act
+        this.triggerKeyDown("2");
+        this.clock.tick();
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "2006/01/05", room: 1, phone: 666666 }, "row 1 data");
+        assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "2009/02/08", room: 2, phone: 777777 }, "row 2 data");
+    });
+
+    QUnit.testInActiveWindow("Editing navigation mode for a number cell if 'format' is set and 'cell' edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                allowUpdating: true,
+                mode: "cell"
+            }
+        };
+        this.columns = [
+            { dataField: "name" },
+            { dataField: "date", dataType: "date" },
+            {
+                dataField: "room",
+                dataType: "number",
+                editorOptions: { format: "#_0.00" }
+            },
+            { dataField: "phone", dataType: "number" }
+        ];
+
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(2, 1);
+        this.triggerKeyDown("2");
+        this.clock.tick();
+
+        // arrange, assert
+        var $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.equal($input.val(), "#_2.00", "input value");
+
+        // act
+        this.triggerKeyDown("downArrow");
+        this.clock.tick();
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // // arrange, assert
+        $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 2, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 2 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.equal($input.val(), "#_1.00", "input value");
+
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // // arrange, assert
+        $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 0, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 0 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.equal($input.val(), "#_1.00", "input value");
+
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "Alex", date: "01/02/2003", room: 1, phone: 555555 }, "row 0 data");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 2, phone: 666666 }, "row 1 data");
+        assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "07/08/2009", room: 1, phone: 777777 }, "row 2 data");
+    });
+
+    QUnit.testInActiveWindow("Editing navigation mode - arrow keys should operate with drop down", function(assert) {
+        // arrange
+        var rooms = [
+            { id: 0, name: "room0" },
+            { id: 1, name: "room1" },
+            { id: 2, name: "room2" },
+            { id: 3, name: "room3" },
+            { id: 222, name: "room222" }
+        ];
+
+        this.options = {
+            editing: {
+                allowUpdating: true,
+                mode: "batch"
+            }
+        };
+        this.columns = [
+            { dataField: "name" },
+            { dataField: "date", dataType: "date" },
+            {
+                dataField: "room",
+                dataType: "number",
+                lookup: {
+                    dataSource: rooms,
+                    valueExpr: "id",
+                    displayExpr: "name",
+                    searchExpr: "id"
+                }
+            },
+            { dataField: "phone", dataType: "number" }
+        ];
+
+        this.setupModule();
+        this.renderGridView();
+
+        // assert
+        assert.equal($(".dx-selectbox-popup").length, 0, "no drop down");
+
+        // act
+        this.focusCell(2, 1);
+        this.triggerKeyDown("2");
+        this.clock.tick(500);
+        keyboardMock($(":focus")[0]).keyDown("downArrow");
+        this.clock.tick();
+        // assert
+        assert.equal($(".dx-selectbox-popup").length, 1, "drop down created");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        keyboardMock($(":focus")[0]).keyDown("enter");
+
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        var $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 2 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 222, phone: 666666 }, "row 1 data");
+
+        // act
+        this.triggerKeyDown("1");
+        this.clock.tick(500);
+        keyboardMock($(":focus")[0]).keyDown("downArrow");
+        this.clock.tick();
+        keyboardMock($(":focus")[0]).keyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isEditingNavigationMode(), "Editing navigation mode");
+        assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "07/08/2009", room: 1, phone: 777777 }, "row 2 data");
+    });
 });
