@@ -12,20 +12,12 @@ export default class WidgetCollector {
     }
 
     getByName(widgetName) {
-        const { instance } = this._collection.find(({ name }) => {
-            if(widgetName === name) {
-                return true;
-            }
-        }) || {};
+        const { instance } = this._collection.find(({ name }) => widgetName === name) || {};
 
         return instance;
     }
 
     each(handler) {
-        this._collection.forEach(({ name, instance }) => {
-            if(instance) {
-                handler(name, instance);
-            }
-        });
+        this._collection.forEach(({ name, instance }) => instance && handler(name, instance));
     }
 }
