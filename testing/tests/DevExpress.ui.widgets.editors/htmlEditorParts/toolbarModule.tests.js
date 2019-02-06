@@ -715,10 +715,12 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         const toolbar = new Toolbar(this.quillMock, this.options);
 
         toolbar.updateFormatWidgets();
-        const $formatWidget = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
-        const value = $formatWidget.dxSelectBox("option", "value");
 
-        assert.equal(value, "10px", "SelectBox contain selected value");
+        const value = this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${TEXTEDITOR_INPUT_CLASS}`)
+            .val();
+
+        assert.strictEqual(value, "10px", "SelectBox contain selected value");
     });
 
 });
