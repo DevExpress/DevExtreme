@@ -6,7 +6,7 @@ import Toolbar from "../../toolbar";
 import "../../select_box";
 import "../../color_box/color_view";
 
-import WidgetCollector from "./widgetCollector";
+import WidgetCollector from "./widget_collector";
 import { each } from "../../../core/utils/iterator";
 import { isString, isObject, isDefined, isEmptyObject, isBoolean } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";

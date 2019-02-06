@@ -1,5 +1,3 @@
-import { each } from "../../../core/utils/iterator";
-
 export default class WidgetCollector {
     constructor() {
         this._collection = [];
@@ -14,20 +12,17 @@ export default class WidgetCollector {
     }
 
     getByName(widgetName) {
-        let widget;
-
-        each(this._collection, (index, { name, instance }) => {
+        const { instance } = this._collection.find(({ name }) => {
             if(widgetName === name) {
-                widget = instance;
-                return false;
+                return true;
             }
-        });
+        }) || {};
 
-        return widget;
+        return instance;
     }
 
     each(handler) {
-        each(this._collection, function(index, { name, instance }) {
+        this._collection.forEach(({ name, instance }) => {
             if(instance) {
                 handler(name, instance);
             }
