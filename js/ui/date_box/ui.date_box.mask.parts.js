@@ -14,8 +14,8 @@ const monthSetter = (date, value) => {
 
     date.setMonth(newValue - 1, 1);
 
-    let dayLimits = getLimits("dM", date),
-        newDay = fitIntoRange(day, dayLimits.min, dayLimits.max);
+    const { min, max } = getLimits("dM", date);
+    const newDay = fitIntoRange(day, min, max);
 
     date.setDate(newDay);
 };

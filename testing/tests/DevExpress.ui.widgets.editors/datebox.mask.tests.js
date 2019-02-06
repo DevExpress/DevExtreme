@@ -108,7 +108,7 @@ if(devices.real().deviceType === "desktop") {
             assert.equal(date.getMonth(), 0, "setter sets month");
             delete this.parts[2].setter;
 
-            assert.equal(this.parts[2].getter(date), 1, "getter gets moth");
+            assert.strictEqual(this.parts[2].getter(date), 1, "getter gets moth");
             delete this.parts[2].getter;
 
             assert.deepEqual(this.parts[2], {
@@ -125,7 +125,7 @@ if(devices.real().deviceType === "desktop") {
 
             let date = new Date(2012, 1, 4, 15, 6);
             this.parts[4].setter(date, 3);
-            assert.equal(date.getDate(), 3, "setter sets day");
+            assert.strictEqual(date.getDate(), 3, "setter sets day");
             delete this.parts[4].setter;
 
             assert.deepEqual(this.parts[4], {
