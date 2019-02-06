@@ -1826,6 +1826,28 @@ QUnit.test("T277051 - the 'e' letter entered in the center of text should not be
     assert.equal(numberBox.option("value"), 900000, "value is correct");
 });
 
+QUnit.test("Should ignore backspace/delete key down when the caret in the start/end of input (T713045)", (assert) => {
+    const $numberBox = $("#numberbox").dxNumberBox({
+        valueChangeEvent: "keyup",
+        format: "#,##0",
+        value: 1234
+    });
+    const $input = $numberBox.find(`.${INPUT_CLASS}`);
+    const keyboard = keyboardMock($input, true);
+
+    assert.strictEqual($input.val(), "1,234");
+
+    keyboard
+        .caret(5)
+        .press("delete");
+    assert.strictEqual($input.val(), "1,234");
+
+    keyboard
+        .caret(0)
+        .press("backspace");
+    assert.strictEqual($input.val(), "1,234");
+});
+
 QUnit.test("T303827: Delete last number in scientific notation with valueChangeEvent:'keyup'", function(assert) {
     var $numberBox = $("#numberbox").dxNumberBox({
         valueChangeEvent: 'keyup'
