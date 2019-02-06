@@ -88,5 +88,4 @@ var OneDriveFileProvider = FileProvider.inherit({
     }
 });
 
-
 module.exports = OneDriveFileProvider;

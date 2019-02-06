@@ -6,6 +6,7 @@ import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
+import DataFileProvider from "./ui.file_manager.file_provider.data";
 import OneDriveFileProvider from "./ui.file_manager.file_provider.onedrive";
 
 const FIE_MANAGER_CLASS = "dx-filemanager";
@@ -18,7 +19,9 @@ var FileManager = Widget.inherit({
     _init: function() {
         this.callBase();
 
-        this._provider = new OneDriveFileProvider();
+        // this._providerType = "data";
+        this._providerType = "onedrive";
+        this._provider = this._createFileProvider();
         this._currentPath = "";
     },
 
@@ -111,22 +114,59 @@ var FileManager = Widget.inherit({
         });
     },
 
-    _generateFakeFoldersData: function() {
+    _createFileProvider: function() {
+        switch(this._providerType) {
+            case "onedrive":
+                return new OneDriveFileProvider();
+            case "data":
+                return new DataFileProvider(this._generateFakeItemData());
+        }
+        return new OneDriveFileProvider();
+    },
+
+    _generateFakeItemData: function() {
         return [
             {
-                text: "Folder 1",
-                items: [
-                    { text: "Folder 1.1" },
-                    { text: "Folder 1.2" } ] },
-            { text: "Folder 2" },
-            { text: "Folder 3" }
-        ];
-    },
-    _generateFakeFilesData: function() {
-        return [
-            { FileName: "FileName 1.cs" },
-            { FileName: "FileName 2.cs" },
-            { FileName: "FileName 3.cs" }
+                name: "Folder 1",
+                isFolder: true,
+                children: [
+                    {
+                        name: "Folder 1.1",
+                        isFolder: true
+                    },
+                    {
+                        name: "Folder 1.2",
+                        isFolder: true
+                    },
+                    {
+                        name: "File 1-1.txt",
+                        isFolder: false
+                    },
+                    {
+                        name: "File 1-2.jpg",
+                        isFolder: false
+                    } ]
+            },
+            {
+                name: "Folder 2",
+                isFolder: true
+            },
+            {
+                name: "Folder 3",
+                isFolder: true
+            },
+            {
+                name: "File 1.txt",
+                isFolder: false
+            },
+            {
+                name: "File 2.jpg",
+                isFolder: false
+            },
+            {
+                name: "File 3.xml",
+                isFolder: false
+            }
         ];
     }
 
