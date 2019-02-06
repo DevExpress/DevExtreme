@@ -371,7 +371,7 @@ var dxCircularGauge = {
     */
     scale: {
         /**
-        * @name dxCircularGaugeOptions.scale.scaleDivisionFactor
+        * @name BaseGaugeOptions.scale.scaleDivisionFactor
         * @type number
         * @default 17
         */
@@ -477,6 +477,7 @@ var dxLinearGauge = {
         * @name dxLinearGaugeOptions.scale.scaleDivisionFactor
         * @type number
         * @default 25
+        * @inheritdoc
         */
         scaleDivisionFactor: 25,
         /**
