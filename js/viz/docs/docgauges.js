@@ -41,6 +41,12 @@ var BaseGauge = {
     */
     scale: {
         /**
+        * @name BaseGaugeOptions.scale.scaleDivisionFactor
+        * @type number
+        * @default 17
+        */
+        scaleDivisionFactor: 17,
+        /**
         * @name BaseGaugeOptions.scale.startValue
         * @type number
         * @default 0
@@ -370,12 +376,6 @@ var dxCircularGauge = {
     * @type object
     */
     scale: {
-        /**
-        * @name BaseGaugeOptions.scale.scaleDivisionFactor
-        * @type number
-        * @default 17
-        */
-        scaleDivisionFactor: 17,
         /**
         * @name dxCircularGaugeOptions.scale.orientation
         * @type Enums.CircularGaugeElementOrientation
