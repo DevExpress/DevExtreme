@@ -496,6 +496,9 @@ module.exports = {
                 _handleLoadError: function(e) {
                     this.dataErrorOccurred.fire(e);
                 },
+                fireError: function() {
+                    this.dataErrorOccurred.fire(errors.Error.apply(errors, arguments));
+                },
                 _setPagingOptions: function(dataSource) {
                     var pageIndex = this.option("paging.pageIndex"),
                         pageSize = this.option("paging.pageSize"),
