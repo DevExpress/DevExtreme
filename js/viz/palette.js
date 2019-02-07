@@ -126,7 +126,7 @@ export function currentPalette(name) {
 }
 
 export function getPalette(palette, parameters) {
-    const paletteInstance = Palette(palette, parameters);
+    const paletteInstance = createPalette(palette, parameters);
 
     if(_isArray(palette)) {
         return paletteInstance;
@@ -195,7 +195,7 @@ function RingBuf(buf) {
     };
 }
 
-function AlternateColors(palette, parameters) {
+function getAlternateColorsStrategy(palette, parameters) {
     var stepHighlight = parameters.useHighlight ? HIGHLIGHTING_STEP : 0,
         paletteSteps = new RingBuf([0, stepHighlight, -stepHighlight]),
         currentPalette = [];
@@ -232,7 +232,7 @@ function AlternateColors(palette, parameters) {
     };
 }
 
-function ExtrapolateColors(palette, parameters) {
+function getExtrapolateColorsStrategy(palette, parameters) {
     function convertColor(color, cycleIndex, cycleCount) {
         var hsl = new _Color(color).hsl,
             l = hsl.l / 100,
@@ -287,7 +287,7 @@ function ExtrapolateColors(palette, parameters) {
     };
 }
 
-function BlendColors(palette, parameters) {
+function getColorMixer(palette, parameters) {
     var paletteCount = palette.length,
         extendedPalette = [];
 
@@ -411,7 +411,7 @@ function BlendColors(palette, parameters) {
     };
 }
 
-export function Palette(palette, parameters, themeDefaultPalette) {
+export function createPalette(palette, parameters, themeDefaultPalette) {
     const paletteObj = {
         dispose() {
             this._extensionStrategy = null;
@@ -437,11 +437,11 @@ export function Palette(palette, parameters, themeDefaultPalette) {
         colors = normalizePalette(palette, { type: parameters.type || "simpleSet", themeDefault: themeDefaultPalette });
 
     if(extensionMode === "alternate") {
-        paletteObj._extensionStrategy = AlternateColors(colors, parameters);
+        paletteObj._extensionStrategy = getAlternateColorsStrategy(colors, parameters);
     } else if(extensionMode === "extrapolate") {
-        paletteObj._extensionStrategy = ExtrapolateColors(colors, parameters);
+        paletteObj._extensionStrategy = getExtrapolateColorsStrategy(colors, parameters);
     } else {
-        paletteObj._extensionStrategy = BlendColors(colors, parameters);
+        paletteObj._extensionStrategy = getColorMixer(colors, parameters);
     }
 
     paletteObj.reset();
@@ -472,7 +472,7 @@ function getLightness(color) {
     return color.r * 0.3 + color.g * 0.59 + color.b * 0.11;
 }
 
-export function DiscretePalette(source, size, themeDefaultPalette) {
+export function getDiscretePalette(source, size, themeDefaultPalette) {
     var palette = size > 0 ? createDiscreteColors(normalizePalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }), size) : [];
 
     return {
@@ -509,7 +509,7 @@ function createDiscreteColors(source, count) {
     return gradient;
 }
 
-export function GradientPalette(source, themeDefaultPalette) {
+export function getGradientPalette(source, themeDefaultPalette) {
     // TODO: Looks like some new set is going to be added
     var palette = normalizePalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }),
         color1 = new _Color(palette[0]),
