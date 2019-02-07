@@ -7,6 +7,7 @@ const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
 const TOOLBAR_FORMAT_WIDGET_CLASS = "dx-htmleditor-toolbar-format";
 const DROPDOWNMENU_CLASS = "dx-dropdownmenu-button";
+const DROPDOWNEDITOR_ICON_CLASS = "dx-dropdowneditor-icon";
 const BUTTON_CONTENT_CLASS = "dx-button-content";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
 const STATE_DISABLED_CLASS = "dx-state-disabled";
@@ -15,6 +16,7 @@ const INPUT_CLASS = "dx-texteditor-input";
 const DIALOG_CLASS = "dx-formdialog";
 const DIALOG_FORM_CLASS = "dx-formdialog-form";
 const BUTTON_CLASS = "dx-button";
+const LIST_ITEM_CLASS = "dx-list-item";
 
 const { test } = QUnit;
 
@@ -69,6 +71,7 @@ QUnit.module("Toolbar integration", {
             .dxHtmlEditor("instance");
 
         instance.setSelection(0, 2);
+
         $("#htmlEditor")
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
             .trigger("dxclick");
@@ -88,6 +91,7 @@ QUnit.module("Toolbar integration", {
             .dxHtmlEditor("instance");
 
         instance.setSelection(0, 2);
+
         $("#htmlEditor")
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
             .trigger("dxclick");
@@ -140,6 +144,7 @@ QUnit.module("Toolbar integration", {
         }).dxHtmlEditor("instance");
 
         instance.setSelection(0, 2);
+
         $("#htmlEditor")
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
             .trigger("dxclick");
@@ -266,5 +271,25 @@ QUnit.module("Toolbar integration", {
 
         editor.option("disabled", true);
         assert.ok($toolbar.hasClass(STATE_DISABLED_CLASS));
+    });
+
+    test("SelectBox should keep selected value after format applying", (assert) => {
+        $("#htmlEditor").dxHtmlEditor({
+            toolbar: { items: [{ formatName: "size", formatValues: ["10px", "11px"] }] }
+        }).dxHtmlEditor("instance");
+
+        const $formatWidget = $("#htmlEditor").find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+
+        $formatWidget
+            .find(`.${DROPDOWNEDITOR_ICON_CLASS}`)
+            .trigger("dxclick");
+
+        $(`.${LIST_ITEM_CLASS}`)
+            .last()
+            .trigger("dxclick");
+
+        const value = $formatWidget.find(`.${INPUT_CLASS}`).val();
+
+        assert.strictEqual(value, "11px", "SelectBox contain selected value");
     });
 });

@@ -6,6 +6,7 @@ import Toolbar from "../../toolbar";
 import "../../select_box";
 import "../../color_box/color_view";
 
+import WidgetCollector from "./widget_collector";
 import { each } from "../../../core/utils/iterator";
 import { isString, isObject, isDefined, isEmptyObject, isBoolean } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
@@ -53,7 +54,7 @@ class ToolbarModule extends BaseModule {
         super(quill, options);
 
         this._editorInstance = options.editorInstance;
-        this._formats = {};
+        this._toolbarWidgets = new WidgetCollector();
         this._formatHandlers = this._getFormatHandlers();
 
         if(isDefined(options.items)) {
@@ -62,10 +63,14 @@ class ToolbarModule extends BaseModule {
             this.quill.on('editor-change', (eventName) => {
                 const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
 
-                this.updateFormatWidgets(isSelectionChanged);
-                this.updateHistoryWidgets();
+                this._updateToolbar(isSelectionChanged);
             });
         }
+    }
+
+    _updateToolbar(isSelectionChanged) {
+        this.updateFormatWidgets(isSelectionChanged);
+        this.updateHistoryWidgets();
     }
 
     _getDefaultClickHandler(formatName) {
@@ -81,7 +86,7 @@ class ToolbarModule extends BaseModule {
     }
 
     _updateFormatWidget(formatName, isApplied, formats) {
-        const widget = this._formats[formatName];
+        const widget = this._toolbarWidgets.getByName(formatName);
 
         if(!widget) {
             return;
@@ -271,6 +276,8 @@ class ToolbarModule extends BaseModule {
     }
 
     clean() {
+        this._toolbarWidgets.clear();
+
         this._$toolbarContainer
             .empty()
             .removeClass(TOOLBAR_WRAPPER_CLASS);
@@ -351,6 +358,7 @@ class ToolbarModule extends BaseModule {
                 onValueChanged: (e) => {
                     if(!this._isReset) {
                         this.quill.format(item.formatName, e.value, USER_ACTION);
+                        this._setValueSilent(e.component, e.value);
                     }
                 }
             }
@@ -395,7 +403,7 @@ class ToolbarModule extends BaseModule {
                     if(item.formatName) {
                         e.component.$element().addClass(TOOLBAR_FORMAT_WIDGET_CLASS);
                         e.component.$element().toggleClass(`dx-${item.formatName.toLowerCase()}-format`, !!item.formatName);
-                        this._formats[item.formatName] = e.component;
+                        this._toolbarWidgets.add(item.formatName, e.component);
                     }
                 }
             }
@@ -454,8 +462,8 @@ class ToolbarModule extends BaseModule {
         const undoOps = historyModule.stack.undo;
         const redoOps = historyModule.stack.redo;
 
-        this._updateHistoryWidget(this._formats["undo"], undoOps);
-        this._updateHistoryWidget(this._formats["redo"], redoOps);
+        this._updateHistoryWidget(this._toolbarWidgets.getByName("undo"), undoOps);
+        this._updateHistoryWidget(this._toolbarWidgets.getByName("redo"), redoOps);
     }
 
     _updateHistoryWidget(widget, operations) {
@@ -481,7 +489,7 @@ class ToolbarModule extends BaseModule {
 
         for(const formatName in formats) {
             const widgetName = this._getFormatWidgetName(formatName, formats);
-            const formatWidget = this._formats[widgetName] || this._formats[formatName];
+            const formatWidget = this._toolbarWidgets.getByName(widgetName) || this._toolbarWidgets.getByName(formatName);
 
             if(!formatWidget) {
                 continue;
@@ -498,16 +506,17 @@ class ToolbarModule extends BaseModule {
             this._updateColorWidget(name, formats[name]);
         }
 
-        if(widget.option("value") === undefined) {
-            widget.$element().addClass(ACTIVE_FORMAT_CLASS);
-        } else {
+        if("value" in widget.option()) {
             this._setValueSilent(widget, formats[name]);
+        } else {
+            widget.$element().addClass(ACTIVE_FORMAT_CLASS);
         }
     }
 
     _toggleClearFormatting(hasFormats) {
-        if(this._formats.clear) {
-            this._formats.clear.option("disabled", !hasFormats);
+        const clearWidget = this._toolbarWidgets.getByName("clear");
+        if(clearWidget) {
+            clearWidget.option("disabled", !hasFormats);
         }
     }
 
@@ -516,7 +525,7 @@ class ToolbarModule extends BaseModule {
     }
 
     _updateColorWidget(formatName, color) {
-        const formatWidget = this._formats[formatName];
+        const formatWidget = this._toolbarWidgets.getByName(formatName);
         if(!formatWidget) {
             return;
         }
@@ -556,7 +565,7 @@ class ToolbarModule extends BaseModule {
     }
 
     _resetFormatWidgets() {
-        each(this._formats, (name, widget) => {
+        this._toolbarWidgets.each((name, widget) => {
             this._resetFormatWidget(name, widget);
         });
     }
@@ -577,7 +586,7 @@ class ToolbarModule extends BaseModule {
 
     addClickHandler(formatName, handler) {
         this._formatHandlers[formatName] = handler;
-        const formatWidget = this._formats[formatName];
+        const formatWidget = this._toolbarWidgets.getByName(formatName);
         if(formatWidget && formatWidget.NAME === "dxButton") {
             formatWidget.option("onClick", handler);
         }
