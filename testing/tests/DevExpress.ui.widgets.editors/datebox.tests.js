@@ -61,9 +61,7 @@ var currentDate = new Date(2015, 11, 31),
 
     STATE_FOCUSED_CLASS = "dx-state-focused",
 
-    widgetName = "dxDateBox",
-
-    TAB_KEY_CODE = 9;
+    widgetName = "dxDateBox";
 
 var getShortDate = function(date) {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
@@ -168,6 +166,16 @@ QUnit.test("simulated datepicker should not be draggable, T231481", function(ass
 QUnit.test("T204185 - dxDateBox input should be editable when pickerType is 'calendar'", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
             pickerType: "calendar"
+        }),
+        $input = $dateBox.find(".dx-texteditor-input");
+
+    assert.ok(!$input.prop("readOnly"), "correct readOnly value");
+});
+
+QUnit.test("readonly property should not be applied to the native picker", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+            pickerType: "native",
+            acceptCustomValue: false
         }),
         $input = $dateBox.find(".dx-texteditor-input");
 
@@ -617,7 +625,7 @@ QUnit.testInActiveWindow("set focus on 'tab' key from editor to overlay and inve
         $inputHourBox = instance._strategy._timeView._hourBox._input();
     assert.ok($hourBox.hasClass(STATE_FOCUSED_CLASS), "tab set focus to first input in overlay");
 
-    $($inputHourBox).trigger($.Event("keydown", { which: 9, shiftKey: true }));
+    $($inputHourBox).trigger($.Event("keydown", { key: "Tab", shiftKey: true }));
 
     assert.ok($dateBox.hasClass(STATE_FOCUSED_CLASS), "dateBox on focus reset focus to element");
 });
@@ -920,7 +928,6 @@ QUnit.test("mergeDates must merge milliseconds when type is 'time'", function(as
 QUnit.module("dateView integration", {
     beforeEach: function() {
         fx.off = true;
-
         this.originalInputType = support.inputType;
         support.inputType = function() {
             return false;
@@ -947,6 +954,20 @@ QUnit.module("dateView integration", {
         support.inputType = this.originalInputType;
         fx.off = false;
     }
+});
+
+QUnit.test("check DateView default config", function(assert) {
+    const { value, minDate, maxDate } = this.dateView().option();
+    const FIFTY_YEARS = uiDateUtils.ONE_YEAR * 50;
+    const defaultDate = new Date();
+
+    defaultDate.setHours(0, 0, 0, 0);
+
+    assert.deepEqual(value, defaultDate, "default value is the current date");
+    assert.deepEqual(minDate, new Date(1900, 0, 1), "default min date is 'January 1 1900'");
+
+    this.clock.now += FIFTY_YEARS;
+    assert.deepEqual(maxDate, new Date(), "default max date is current date + 50 years");
 });
 
 QUnit.test("dateView renders", function(assert) {
@@ -1851,7 +1872,7 @@ QUnit.test("Swiping must not close the calendar", function(assert) {
 });
 
 QUnit.test("Pressing escape must hide the calendar and clean focus", function(assert) {
-    var escapeKeyDown = $.Event("keydown", { which: 27 });
+    var escapeKeyDown = $.Event("keydown", { key: "Escape" });
     this.fixture.dateBox.option("focusStateEnabled", true);
     this.fixture.dateBox.open();
     $(this.fixture.dateBox._input()).trigger(escapeKeyDown);
@@ -1875,7 +1896,7 @@ QUnit.test("dateBox should not reposition the calendar icon in RTL mode", functi
     assert.strictEqual(iconRepositionCount, 0);
 });
 
-QUnit.test("dateBox must apply the wrapper class with appropriate picker typ\ to the drop-down overlay wrapper", function(assert) {
+QUnit.test("dateBox must apply the wrapper class with appropriate picker type to the drop-down overlay wrapper", function(assert) {
     var dateBox = this.fixture.dateBox;
     dateBox.open();
     assert.ok(this.fixture.dateBox._popup._wrapper().hasClass(DATEBOX_WRAPPER_CLASS + "-" + dateBox.option("pickerType")));
@@ -3369,10 +3390,10 @@ QUnit.test("apply contoured date on enter for date and datetime mode", function(
 
     var $input = this.$dateBox.find(".dx-texteditor-input");
 
-    $($input).trigger($.Event("keydown", { which: 38 }));
-    $($input).trigger($.Event("keydown", { which: 40 }));
-    $($input).trigger($.Event("keydown", { which: 38 }));
-    $($input).trigger($.Event("keydown", { which: 13 }));
+    $($input).trigger($.Event("keydown", { key: "ArrowUp" }));
+    $($input).trigger($.Event("keydown", { key: "ArrowDown" }));
+    $($input).trigger($.Event("keydown", { key: "ArrowUp" }));
+    $($input).trigger($.Event("keydown", { key: "Enter" }));
 
     assert.equal(this.dateBox.option("opened"), false, "popup is hidden");
 
@@ -3428,7 +3449,7 @@ QUnit.testInActiveWindow("onValueChanged fires after clearing and enter key pres
     $input.val("");
     this.dateBox.option("text", "");
 
-    $($input).trigger($.Event("keydown", { which: 13 }));
+    $($input).trigger($.Event("keydown", { key: "Enter" }));
 
     assert.equal(valueChanged.callCount, 2, "valueChanged is called");
 });
@@ -3479,7 +3500,7 @@ QUnit.testInActiveWindow("the 'shift+tab' key press leads to the cancel button f
     $input
         .focus()
         .trigger($.Event("keydown", {
-            which: TAB_KEY_CODE,
+            key: "Tab",
             shiftKey: true
         }));
 
@@ -3602,6 +3623,38 @@ QUnit.test("validation should be correct when max value is chosen (T266206)", fu
     assert.ok(dateBox.option("isValid"), "datebox is valid");
 });
 
+QUnit.test("datebox should create validation error if user set isValid = false", (assert) => {
+    const dateBox = $("#widthRootStyle").dxDateBox({
+        type: "datetime",
+        isValid: false,
+        value: null
+    }).dxDateBox("instance");
+
+    assert.notOk(dateBox.option("isValid"), "isValid = false does not change on widget init by value validation");
+
+    dateBox.option("value", new Date(2018, 1, 1));
+    assert.ok(dateBox.option("isValid"), "valid after valid value is setted");
+
+    dateBox.option("isValid", false);
+    assert.notOk(dateBox.option("isValid"), "set isValid = false by API");
+});
+
+QUnit.test("datebox should be invalid after out of range value was setted", (assert) => {
+    const dateBox = $("#widthRootStyle").dxDateBox({
+        type: "datetime",
+        min: new Date(2019, 1, 1),
+        value: null
+    }).dxDateBox("instance");
+
+    assert.ok(dateBox.option("isValid"), "widget is valid");
+
+    dateBox.option("value", new Date(2018, 0, 1));
+    assert.notOk(dateBox.option("isValid"), "widget is invalid");
+
+    dateBox.option("value", new Date(2019, 1, 2));
+    assert.ok(dateBox.option("isValid"), "widget is valid");
+});
+
 QUnit.test("widget is still valid after drop down is opened", function(assert) {
     var startDate = new Date(2015, 1, 1, 8, 12);
 
@@ -3630,7 +3683,7 @@ QUnit.test("widget is still valid after drop down is opened", function(assert) {
     assert.ok(dateBox.option("isValid"), "value is valid too");
 });
 
-QUnit.test("datebox with 'date' type should ignore time in min\max options", function(assert) {
+QUnit.test("datebox with 'date' type should ignore time in min/max options", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
         value: new Date(2015, 0, 31, 10),
         focusStateEnabled: true,

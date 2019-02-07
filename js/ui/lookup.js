@@ -31,7 +31,8 @@ var LOOKUP_CLASS = "dx-lookup",
     LOOKUP_POPOVER_MODE = "dx-lookup-popover-mode",
     LOOKUP_EMPTY_CLASS = "dx-lookup-empty",
     LOOKUP_POPUP_VALIDATION_MESSAGE = "dx-lookup-validation-message",
-    LOOKUP_POPUP_INVALID_CLASS = "dx-lookup-invalid";
+    LOOKUP_POPUP_INVALID_CLASS = "dx-lookup-invalid",
+    LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = "dx-popover-flipped-vertical";
 
 var POPUP_OPTION_MAP = {
     "popupWidth": "width",
@@ -816,7 +817,8 @@ var Lookup = DropDownList.inherit({
 
     _setPopupPosition: function() {
         var selectedIndex = this._list.option("selectedIndex");
-        if(selectedIndex === -1) return;
+        var flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
+        if(selectedIndex === -1 || flipped) return;
 
         var selectedListItem = $(this._list.element()).find("." + LIST_ITEM_SELECTED_CLASS),
             differenceOfHeights = (selectedListItem.height() - $(this.element()).height()) / 2,
@@ -834,7 +836,6 @@ var Lookup = DropDownList.inherit({
         var position = translator.locate(popupContentParent);
 
         translator.move(popupContentParent, {
-            left: 0,
             top: position.top - popupOffsetY
         });
     },

@@ -572,6 +572,76 @@ var Fixture = Class.inherit({
     });
 })("Validation - UI");
 
+(function() {
+    QUnit.module("Validation overlay options", {
+        beforeEach: function() {
+            this.fixture = new Fixture();
+        },
+        afterEach: function() {
+            this.fixture.teardown();
+        }
+    });
+
+    QUnit.test("it should be possible to redefine validation overlay options", function(assert) {
+        var $element = this.fixture.createOnlyElement();
+
+        new Editor($element, {
+            validationMessageMode: "always",
+            validationError: {
+                message: "Error message"
+            },
+            validationTooltipOptions: {
+                width: 200,
+                customOption: "Test"
+            },
+            isValid: false
+        });
+
+        var overlay = $element.find(".dx-invalid-message.dx-widget").dxOverlay("instance");
+
+        assert.equal(overlay.option("customOption"), "Test", "a custom option has been created");
+        assert.equal(overlay.option("width"), 200, "a default option has been redefined");
+    });
+
+    QUnit.test("editor's overlay options should be changed when validation overlay's options changed", function(assert) {
+        var $element = this.fixture.createOnlyElement(),
+            instance = new Editor($element, {
+                validationMessageMode: "always",
+                validationError: {
+                    message: "Error message"
+                },
+                isValid: false
+            });
+
+        assert.equal(instance.option("validationTooltipOptions.width"), "auto", "options are readable on init");
+
+        var overlay = instance._validationMessage;
+
+        overlay.option("width", 150);
+        assert.equal(instance.option("validationTooltipOptions.width"), 150, "option has ben changed");
+    });
+
+    QUnit.test("it should be possible to set validationTooltipOptions dynamically", function(assert) {
+        var $element = this.fixture.createOnlyElement(),
+            instance = new Editor($element, {
+                validationMessageMode: "always",
+                validationError: {
+                    message: "Error message"
+                },
+                isValid: false
+            }),
+            overlay = instance._validationMessage;
+
+        instance.option("validationTooltipOptions.width", 130);
+        assert.equal(overlay.option("width"), 130, "option has ben changed");
+
+        instance.option("validationTooltipOptions", { height: 50 });
+        assert.equal(overlay.option("height"), 50, "option has ben changed");
+        assert.equal(instance.option("validationTooltipOptions.width"), 130, "redefined object's fields was not changed");
+        assert.equal(instance.option("validationTooltipOptions.shading"), false, "default object's fields was not changed");
+    });
+})("Validation Events");
+
 
 (function() {
     QUnit.module("Validation Events", {

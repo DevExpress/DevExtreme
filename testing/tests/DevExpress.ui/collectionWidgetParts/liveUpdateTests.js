@@ -8,7 +8,7 @@ function generateData(count) {
         items.push({ id: i, text: "text " + i, index: i + 10 });
     }
     return items;
-};
+}
 
 const TestComponent = CollectionWidget.inherit({
 

@@ -1,18 +1,17 @@
-var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
-    DataExpressionMixin = require("./editor/ui.data_expression"),
-    commonUtils = require("../core/utils/common"),
-    map = require("../core/utils/iterator").map,
-    selectors = require("./widget/selectors"),
-    KeyboardProcessor = require("./widget/ui.keyboard_processor"),
-    deferredUtils = require("../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
-    grep = require("../core/utils/common").grep,
-    extend = require("../core/utils/extend").extend,
-    getElementMaxHeightByWindow = require("../ui/overlay/utils").getElementMaxHeightByWindow,
-    registerComponent = require("../core/component_registrator");
+import DropDownEditor from "./drop_down_editor/ui.drop_down_editor";
+import DataExpressionMixin from "./editor/ui.data_expression";
+import commonUtils from "../core/utils/common";
+import { map } from "../core/utils/iterator";
+import selectors from "./widget/selectors";
+import KeyboardProcessor from "./widget/ui.keyboard_processor";
+import { when, Deferred } from "../core/utils/deferred";
+import $ from "../core/renderer";
+import eventsEngine from "../events/core/events_engine";
+import { grep } from "../core/utils/common";
+import { extend } from "../core/utils/extend";
+import { getElementMaxHeightByWindow } from "../ui/overlay/utils";
+import registerComponent from "../core/component_registrator";
+import { normalizeKeyName } from "../events/utils";
 
 var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
     ANONYMOUS_TEMPLATE_NAME = "content";
@@ -86,7 +85,6 @@ var DropDownBox = DropDownEditor.inherit({
              * @type dxPopupOptions
              * @default {}
              */
-            dropDownOptions: {},
 
             /**
              * @name dxDropDownBoxOptions.fieldTemplate
@@ -244,7 +242,7 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _popupElementTabHandler: function(e) {
-        if(e.key !== "tab") return;
+        if(normalizeKeyName(e) !== "tab") return;
 
         var $firstTabbable = this._getTabbableElements().first().get(0),
             $lastTabbable = this._getTabbableElements().last().get(0),
@@ -264,11 +262,6 @@ var DropDownBox = DropDownEditor.inherit({
 
     _renderPopup: function(e) {
         this.callBase();
-        this._options.dropDownOptions = extend({}, this._popup.option());
-
-        this._popup.on("optionChanged", function(e) {
-            this.option("dropDownOptions" + "." + e.fullName, e.value);
-        }.bind(this));
 
         if(this.option("focusStateEnabled")) {
             this._popup._keyboardProcessor.push(new KeyboardProcessor({
@@ -291,30 +284,13 @@ var DropDownBox = DropDownEditor.inherit({
             maxHeight: function() {
                 return getElementMaxHeightByWindow(this.$element());
             }.bind(this)
-        }, this.option("dropDownOptions"));
+        });
     },
 
     _popupShownHandler: function() {
         this.callBase();
         var $firstElement = this._getTabbableElements().first();
         eventsEngine.trigger($firstElement, "focus");
-    },
-
-    _popupOptionChanged: function(args) {
-        var options = {};
-
-        if(args.name === args.fullName) {
-            options = args.value;
-        } else {
-            var option = args.fullName.split(".").pop();
-            options[option] = args.value;
-        }
-
-        this._setPopupOption(options);
-
-        if(Object.keys(options).indexOf("width") !== -1 && options["width"] === undefined) {
-            this._updatePopupWidth();
-        }
     },
 
     _setCollectionWidgetOption: commonUtils.noop,
@@ -325,9 +301,6 @@ var DropDownBox = DropDownEditor.inherit({
             case "width":
                 this.callBase(args);
                 this._updatePopupWidth();
-                break;
-            case "dropDownOptions":
-                this._popupOptionChanged(args);
                 break;
             case "dataSource":
                 this._renderInputValue();

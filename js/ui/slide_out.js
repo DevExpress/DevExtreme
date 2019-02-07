@@ -9,7 +9,8 @@ var $ = require("../core/renderer"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     List = require("./list"),
     ChildDefaultTemplate = require("./widget/child_default_template"),
-    EmptyTemplate = require("./widget/empty_template");
+    EmptyTemplate = require("./widget/empty_template"),
+    DataConverterMixin = require("./shared/grouped_data_converter_mixin").default;
 
 var SLIDEOUT_CLASS = "dx-slideout",
     SLIDEOUT_ITEM_CONTAINER_CLASS = "dx-slideout-item-container",
@@ -264,12 +265,11 @@ var SlideOut = CollectionWidget.inherit({
         this._list = this._createComponent($list, List, {
             itemTemplateProperty: "menuTemplate",
             selectionMode: this.option("selectionMode"),
-            selectedIndex: this.option("selectedIndex"),
             selectionRequired: this.option("selectionRequired"),
             indicateLoading: false,
             onItemClick: this._listItemClickHandler.bind(this),
             items: this.option("items"),
-            dataSource: this.option("dataSource"),
+            dataSource: this._dataSource,
             itemTemplate: this._getTemplateByOption("menuItemTemplate"),
             grouped: this.option("menuGrouped"),
             groupTemplate: this._getTemplateByOption("menuGroupTemplate"),
@@ -277,6 +277,12 @@ var SlideOut = CollectionWidget.inherit({
             onGroupRendered: this.option("onMenuGroupRendered"),
             onContentReady: this._updateSlideOutView.bind(this)
         });
+
+        this._list.option("selectedIndex", this.option("selectedIndex"));
+    },
+
+    _getGroupedOption: function() {
+        return this.option("menuGrouped");
     },
 
     _updateSlideOutView: function() {
@@ -459,7 +465,7 @@ var SlideOut = CollectionWidget.inherit({
     * @hidden
     * @inheritdoc
     */
-});
+}).include(DataConverterMixin);
 
 registerComponent("dxSlideOut", SlideOut);
 

@@ -108,7 +108,7 @@ var baseTrackerPrototype = {
             that.clearSelection();
             if(!noHoveredSeries) {
                 that._hideTooltip(that.pointAtShownTooltip);
-                that._clearHover();
+                that.clearHover();
             }
         }
     },
@@ -200,7 +200,7 @@ var baseTrackerPrototype = {
         that._hideTooltip(that.pointAtShownTooltip);
     },
 
-    _clearHover: function() {
+    clearHover: function() {
         this._resetHoveredArgument();
         this._releaseHoveredSeries();
         this._releaseHoveredPoint();
@@ -285,7 +285,7 @@ var baseTrackerPrototype = {
     },
 
     _pointerOut: function() {
-        this._clearHover();
+        this.clearHover();
         this._tooltip.isEnabled() && this._hideTooltip(this.pointAtShownTooltip);
     },
 
@@ -310,7 +310,7 @@ var baseTrackerPrototype = {
             }
             that._tooltip.isEnabled() && that._hideTooltip(that.pointAtShownTooltip);
         } else {
-            that._clearHover();
+            that.clearHover();
         }
     },
 
@@ -682,7 +682,7 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
         if(item) {
             that._hoverArgument(item.argument, item.argumentIndex);
         } else {
-            that._clearHover();
+            that.clearHover();
         }
     },
 

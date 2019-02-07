@@ -18,9 +18,11 @@ QUnit.test("exportLinkElement generate", function(assert) {
         return;
     }
 
-    var clock = sinon.useFakeTimers();
+    var clock = sinon.useFakeTimers(),
+        oldRevokeObjectURLTimeout = fileSaver._revokeObjectURLTimeout;
 
     try {
+        fileSaver._revokeObjectURLTimeout = 0;
         // act
         var clickHandler = function(e) {
                 $(e.target).attr('rel', 'clicked');
@@ -41,7 +43,54 @@ QUnit.test("exportLinkElement generate", function(assert) {
         assert.notOk($(testExportLink).parent().length, "link is removed");
         assert.ok(fileSaver._objectUrlRevoked, "objectURL is revoked");
     } finally {
+        fileSaver._revokeObjectURLTimeout = oldRevokeObjectURLTimeout;
         clock.restore();
+    }
+});
+
+QUnit.test("saveAs - check revokeObjectURL", function(assert) {
+    if(!typeUtils.isFunction(window.Blob)) {
+        assert.ok(true, "This browser doesn't support Blob function");
+        return;
+    }
+
+    if(typeUtils.isDefined(navigator.msSaveOrOpenBlob)) {
+        assert.ok(true, "This browser use msSaveOrOpenBlob for save blob");
+        return;
+    }
+
+    assert.timeout(1000);
+    var done = assert.async();
+    assert.expect(4);
+    assert.equal(fileSaver._revokeObjectURLTimeout, 30000, "default fileSaver._revokeObjectURLTimeout");
+
+    var oldRevokeObjectURLTimeout = fileSaver._revokeObjectURLTimeout;
+    try {
+        fileSaver._revokeObjectURLTimeout = 100;
+        fileSaver._objectUrlRevoked = false;
+
+        fileSaver.saveAs(
+            "test.xlsx", "EXCEL", new Blob([], { type: "test/plain" }), null,
+            function(e) {
+                $(e.target).attr('rel', 'clicked');
+                e.preventDefault();
+            });
+
+        assert.ok(!fileSaver._objectUrlRevoked, "objectURL is not revoked immediately");
+        setTimeout(
+            function() {
+                assert.ok(!fileSaver._objectUrlRevoked, "objectURL is not revoked immediately");
+            },
+            50);
+
+        setTimeout(
+            function() {
+                assert.ok(fileSaver._objectUrlRevoked, "objectURL is revoked after fileSaver._revokeObjectURLTimeout");
+                done();
+            },
+            150);
+    } finally {
+        fileSaver._revokeObjectURLTimeout = oldRevokeObjectURLTimeout;
     }
 });
 

@@ -4156,8 +4156,8 @@ QUnit.module("Keyboard navigation", {
         this.triggerFormItemClick(1);
 
         // act
-        var e = $.Event('keydown');
-        e.which = 9;
+        var e = $.Event("keydown");
+        e.key = "Tab";
         this.getActiveInputElement().trigger(e);
         this.clock.tick();
 
@@ -4188,7 +4188,7 @@ QUnit.module("Keyboard navigation", {
 
         // act
         var e = $.Event('keydown');
-        e.which = 9;
+        e.key = "Tab";
         this.getActiveInputElement().trigger(e);
 
         // assert
@@ -4215,7 +4215,7 @@ QUnit.module("Keyboard navigation", {
 
         // act
         var e = $.Event('keydown');
-        e.which = 9;
+        e.key = "Tab";
         this.getActiveInputElement().trigger(e);
 
         // assert
@@ -4231,7 +4231,7 @@ QUnit.module("Keyboard navigation", {
 
             // act
             var e = $.Event('keydown');
-            e.which = 9;
+            e.key = "Tab";
             e.shiftKey = true;
             this.getActiveInputElement().trigger(e);
 
@@ -4247,7 +4247,7 @@ QUnit.module("Keyboard navigation", {
 
             // act
             var e = $.Event('keydown');
-            e.which = 9;
+            e.key = "Tab";
             this.getActiveInputElement().trigger(e);
 
             // assert

@@ -4,7 +4,6 @@ import "ui/data_grid/ui.data_grid";
 
 import $ from "jquery";
 import typeUtils from "core/utils/type";
-import { toComparable } from "core/utils/data";
 import { excel as excelCreator } from "exporter";
 import exportTestsHelper from "./exportTestsHelper.js";
 
@@ -15,6 +14,8 @@ function assertStrictEqual(assert, value1, value2, message) {
         assert.ok(true);
     } else if(value1 instanceof Date && value2 instanceof Date) {
         assert.strictEqual(value1.getTime(), value2.getTime(), message);
+    } else if(value1 instanceof Array && value2 instanceof Array) {
+        assert.deepEqual(value1, value2, message);
     } else {
         assert.strictEqual(value1, value2, message);
     }
@@ -58,46 +59,54 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
         if(getExpectedArgs) {
             const expectedArgs = getExpectedArgs(e.component);
             assert.strictEqual(actualArgs.length, expectedArgs.length, "actualArgs.length");
-            for(let i = 0; i < actualArgs.length; i++) {
-                const actualArgsItem = actualArgs[i];
+            for(let i = 0; i < actualArgs.length && i < expectedArgs.length; i++) {
                 const expectedArgsItem = expectedArgs[i];
+                const actualArgsItem = actualArgs[i];
                 const gridCellSkipProperties = ["column", "row"];
 
-                if(expectedArgsItem.value !== "skip") {
-                    assertStrictEqual(assert, actualArgsItem.value, expectedArgsItem.value, `value, ${i}`);
-                }
+                assertStrictEqual(assert, actualArgsItem.value, expectedArgsItem.value, `value, ${i}`);
 
-                for(const propertyName in expectedArgsItem.gridCell) {
-                    if(gridCellSkipProperties.indexOf(propertyName) === -1) {
-                        assertStrictEqual(assert, actualArgsItem.gridCell[propertyName], expectedArgsItem.gridCell[propertyName], `gridCell[${propertyName}], ${i}`);
-                        gridCellSkipProperties.push(propertyName);
+                if(expectedArgsItem.hasOwnProperty("gridCell")) {
+                    if(expectedArgsItem.gridCell === undefined) {
+                        assert.strictEqual(actualArgsItem.gridCell, undefined, `gridCell, ${i}`);
+                    } else if(actualArgsItem.gridCell === undefined) {
+                        assert.notStrictEqual(actualArgsItem.gridCell, undefined, `gridCell, ${i}`);
+                    } else {
+                        for(const propertyName in expectedArgsItem.gridCell) {
+                            if(gridCellSkipProperties.indexOf(propertyName) === -1) {
+                                assertStrictEqual(assert, actualArgsItem.gridCell[propertyName], expectedArgsItem.gridCell[propertyName], `gridCell[${propertyName}], ${i}`);
+                                gridCellSkipProperties.push(propertyName);
+                            }
+                        }
+
+                        for(const actualPropertyName in actualArgsItem.gridCell) {
+                            if(gridCellSkipProperties.indexOf(actualPropertyName) === -1) {
+                                assertStrictEqual(assert, actualArgsItem.gridCell[actualPropertyName], expectedArgsItem.gridCell[actualPropertyName], `actual gridCell[${actualPropertyName}], ${i}`);
+                            }
+                        }
+
+                        const actualColumn = actualArgsItem.gridCell.column;
+                        const expectedColumn = expectedArgsItem.gridCell.column;
+                        if(expectedColumn === undefined) {
+                            assert.strictEqual(actualColumn, undefined, `actualColumn, ${i}`);
+                        } else if(actualColumn === undefined) {
+                            assert.notStrictEqual(actualColumn, undefined, `actualColumn, ${i}`);
+                        } else {
+                            assert.strictEqual(actualColumn.dataField, expectedColumn.dataField, `column.dataField, ${i}`);
+                            assert.strictEqual(actualColumn.dataType, expectedColumn.dataType, `column.dataType, ${i}`);
+                            assert.strictEqual(actualColumn.caption, expectedColumn.caption, `column.caption, ${i}`);
+                            assert.strictEqual(actualColumn.index, expectedColumn.index, `column.index, ${i}`);
+                        }
+
+                        const actualRow = actualArgsItem.gridCell.row;
+                        const expectedRow = expectedArgsItem.gridCell.row;
+                        assert.ok(typeUtils.isDefined(actualRow) && typeUtils.isDefined(expectedRow) || !typeUtils.isDefined(actualRow) && !typeUtils.isDefined(expectedRow),
+                            `actualRow === expectedRow, ${i}`);
+                        if(typeUtils.isDefined(actualRow) && typeUtils.isDefined(expectedRow)) {
+                            assert.strictEqual(actualRow.data, expectedRow.data, `row.data, ${i}`);
+                            assert.strictEqual(actualRow.rowType, expectedRow.rowType, `row.rowType, ${i}`);
+                        }
                     }
-                }
-
-                for(const actualPropertyName in actualArgsItem.gridCell) {
-                    if(gridCellSkipProperties.indexOf(actualPropertyName) === -1) {
-                        assert.strictEqual(toComparable(actualArgsItem.gridCell[actualPropertyName]), toComparable(expectedArgsItem.gridCell[actualPropertyName]), `actual gridCell[${actualPropertyName}], ${i}`);
-                    }
-                }
-
-                const actualColumn = actualArgsItem.gridCell.column;
-                const expectedColumn = expectedArgsItem.gridCell.column;
-                assert.ok(typeUtils.isDefined(actualColumn) && typeUtils.isDefined(expectedColumn) || !typeUtils.isDefined(actualColumn) && !typeUtils.isDefined(expectedColumn),
-                    `actualColumn === expectedColumn, ${i}`);
-                if(typeUtils.isDefined(actualColumn) && typeUtils.isDefined(expectedColumn)) {
-                    assert.strictEqual(actualColumn.dataField, expectedColumn.dataField, `column.dataField, ${i}`);
-                    assert.strictEqual(actualColumn.dataType, expectedColumn.dataType, `column.dataType, ${i}`);
-                    assert.strictEqual(actualColumn.caption, expectedColumn.caption, `column.caption, ${i}`);
-                    assert.strictEqual(actualColumn.index, expectedColumn.index, `column.index, ${i}`);
-                }
-
-                const actualRow = actualArgsItem.gridCell.row;
-                const expectedRow = expectedArgsItem.gridCell.row;
-                assert.ok(typeUtils.isDefined(actualRow) && typeUtils.isDefined(expectedRow) || !typeUtils.isDefined(actualRow) && !typeUtils.isDefined(expectedRow),
-                    `actualRow === expectedRow, ${i}`);
-                if(typeUtils.isDefined(actualRow) && typeUtils.isDefined(expectedRow)) {
-                    assert.strictEqual(actualRow.data, expectedRow.data, `row.data, ${i}`);
-                    assert.strictEqual(actualRow.rowType, expectedRow.rowType, `row.rowType, ${i}`);
                 }
             }
         }

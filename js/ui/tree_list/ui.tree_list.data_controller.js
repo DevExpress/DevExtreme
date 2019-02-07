@@ -1,9 +1,9 @@
-var extend = require("../../core/utils/extend").extend,
-    Deferred = require("../../core/utils/deferred").Deferred,
-    treeListCore = require("./ui.tree_list.core"),
-    equalByValue = require("../../core/utils/common").equalByValue,
-    dataSourceAdapterProvider = require("./ui.tree_list.data_source_adapter"),
-    dataControllerModule = require("../grid_core/ui.grid_core.data_controller");
+import { extend } from '../../core/utils/extend';
+import { Deferred } from '../../core/utils/deferred';
+import treeListCore from './ui.tree_list.core';
+import { equalByValue } from '../../core/utils/common';
+import dataSourceAdapterProvider from './ui.tree_list.data_source_adapter';
+import dataControllerModule from '../grid_core/ui.grid_core.data_controller';
 
 exports.DataController = dataControllerModule.controllers.data.inherit((function() {
     return {
@@ -22,13 +22,13 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             return level;
         },
 
-        _generateDataItem: function(node) {
+        _generateDataItem: function(node, options) {
             return {
                 rowType: "data",
                 node: node,
                 key: node.key,
                 data: node.data,
-                isExpanded: this.isRowExpanded(node.key),
+                isExpanded: this.isRowExpanded(node.key, options),
                 level: this._getNodeLevel(node)
             };
         },
@@ -92,8 +92,8 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
          * @param1 key:any
          * @return boolean
          */
-        isRowExpanded: function(key) {
-            return this._dataSource && this._dataSource.isRowExpanded(key);
+        isRowExpanded: function(key, cache) {
+            return this._dataSource && this._dataSource.isRowExpanded(key, cache);
         },
 
         /**

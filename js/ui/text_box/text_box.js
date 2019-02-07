@@ -11,7 +11,7 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils");
 
 var ua = navigator.userAgent,
-    ignoreCode = [8, 9, 13, 33, 34, 35, 36, 37, 38, 39, 40, 46],
+    ignoreKeys = ["backspace", "tab", "enter", "pageUp", "pageDown", "end", "home", "leftArrow", "rightArrow", "downArrow", "upArrow", "del"],
 
     TEXTBOX_CLASS = "dx-textbox",
     SEARCHBOX_CLASS = "dx-searchbox",
@@ -138,12 +138,12 @@ var TextBox = TextEditor.inherit({
         var maxLength = this.option("maxLength");
         if(maxLength) {
             var $input = $(e.target),
-                code = e.keyCode;
+                key = eventUtils.normalizeKeyName(e);
 
             this._cutOffExtraChar($input);
 
             return ($input.val().length < maxLength
-                    || inArray(code, ignoreCode) !== -1
+                    || inArray(key, ignoreKeys) !== -1
                     || window.getSelection().toString() !== "");
         } else {
             return true;

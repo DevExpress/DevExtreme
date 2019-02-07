@@ -40,26 +40,20 @@ var EVENTS_LIST = [
 ];
 
 var CONTROL_KEYS = [
-    "Tab",
-    "Enter",
-    "Shift",
-    "Control",
-    "Alt",
-    "Escape",
-    "PageUp",
-    "PageDown",
-    "End",
-    "Home",
-    "ArrowLeft",
-    "ArrowUp",
-    "ArrowRight",
-    "ArrowDown",
-    // IE9 fallback:
-    "Esc",
-    "Left",
-    "Up",
-    "Right",
-    "Down"
+    "tab",
+    "enter",
+    "shift",
+    "control",
+    "alt",
+    "escape",
+    "pageUp",
+    "pageDown",
+    "end",
+    "home",
+    "leftArrow",
+    "upArrow",
+    "rightArrow",
+    "downArrow",
 ];
 
 /**
@@ -684,7 +678,7 @@ var TextEditorBase = Editor.inherit({
             return;
         }
 
-        if(e.which === 13) {
+        if(eventUtils.normalizeKeyName(e) === "enter") {
             this._enterKeyAction({
                 event: e
             });
@@ -756,6 +750,7 @@ var TextEditorBase = Editor.inherit({
                 break;
             case "stylingMode":
                 this._renderStylingMode();
+                break;
             case "valueFormat":
                 this._invalidate();
                 break;

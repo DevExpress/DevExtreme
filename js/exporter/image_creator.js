@@ -216,7 +216,7 @@ function parseStyles(element, options) {
 }
 
 function parseUrl(urlString) {
-    var matches = urlString && urlString.match(/url\(.*\#(.*?)["']?\)/i);
+    var matches = urlString && urlString.match(/url\(.*#(.*?)["']?\)/i);
     return matches && matches[1];
 }
 
@@ -525,7 +525,7 @@ function asyncEach(array, callback, d = new Deferred()) {
 function drawCanvasElements(elements, context, parentOptions, shared) {
     return asyncEach(elements, function(element) {
         switch(element.tagName && element.tagName.toLowerCase()) {
-            case "g":
+            case "g": {
                 const options = extend({}, parentOptions, getElementOptions(element));
 
                 context.save();
@@ -533,9 +533,9 @@ function drawCanvasElements(elements, context, parentOptions, shared) {
                 transformElement(context, options);
                 clipElement(context, options, shared);
 
-                function onDone() {
+                const onDone = () => {
                     context.restore();
-                }
+                };
                 const d = drawCanvasElements(element.childNodes, context, options, shared);
 
                 if(isPromise(d)) {
@@ -544,7 +544,7 @@ function drawCanvasElements(elements, context, parentOptions, shared) {
                     onDone();
                 }
                 return d;
-
+            }
             case "defs":
                 return drawCanvasElements(element.childNodes, context, {}, shared);
             case "clippath":

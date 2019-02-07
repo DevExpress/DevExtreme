@@ -234,7 +234,7 @@ var numberLocalization = dependencyInjector({
     },
 
     getSign: function(text, format) {
-        if(text.replace(/[^0-9\-]/g, "").charAt(0) === "-") {
+        if(text.replace(/[^0-9-]/g, "").charAt(0) === "-") {
             return -1;
         }
         if(!format) {

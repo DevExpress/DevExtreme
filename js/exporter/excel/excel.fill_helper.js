@@ -57,7 +57,7 @@ const fillHelper = {
             result = {};
             if(source.patternFill !== undefined) {
                 result.patternFill = patternFillHelper.copy(source.patternFill);
-            };
+            }
         }
         return result;
     },

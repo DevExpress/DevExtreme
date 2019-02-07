@@ -667,7 +667,7 @@ QUnit.test('Highlight searchText for a cell template (T656969)', function(assert
     assert.equal(getNormalizeMarkup(cells.eq(2)), '1/01/2001', 'cell 2');
 });
 function getNormalizeMarkup($element) {
-    var quoteRE = new RegExp('\"', 'g'),
+    var quoteRE = new RegExp('"', 'g'),
         spanRE = new RegExp('span', 'gi');
     return $element.html().replace(quoteRE, '').replace(spanRE, "span");
 }
@@ -1269,7 +1269,7 @@ QUnit.test('Selection rows by space keydown on checkbox', function(assert) {
     rowsView.render(testElement);
     checkBoxes = testElement.find('.dx-checkbox');
     assert.equal(checkBoxes.length, 3);
-    checkBoxes.eq(1).trigger($.Event("keydown", { which: 32 }));
+    checkBoxes.eq(1).trigger($.Event("keydown", { key: " " }));
 
     // assert
     assert.equal(this.selectionOptions.changeItemSelectionCallsCount, 1);

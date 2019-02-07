@@ -1,5 +1,4 @@
-var $ = require("jquery"),
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
+var $ = require("jquery");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -12,8 +11,7 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
+var noop = require("core/utils/common").noop,
     errors = require("ui/widget/ui.errors"),
     translator = require("animation/translator"),
     dateLocalization = require("localization/date"),
@@ -4860,36 +4858,6 @@ QUnit.test("Appointment should have right position on timeline month view", func
 
     assert.roughEqual($appointment.position().top, $targetCell.position().top, 1.001, "appointment top is correct");
     assert.roughEqual($appointment.position().left, $targetCell.position().left, 1.001, "appointment left is correct");
-});
-
-QUnit.test("Rival appointments should have right position on timeline month view", function(assert) {
-    var data = [{
-        "id": "1",
-        "text": "Recurrence event",
-        "recurrenceRule": "FREQ=DAILY;INTERVAL=2;COUNT=2",
-        "startDate": new Date(2018, 11, 3, 9, 0),
-        "endDate": new Date(2018, 11, 1, 10, 30)
-    },
-    {
-        "id": "2",
-        "text": "Some event",
-        "startDate": new Date(2018, 11, 4, 9, 0),
-        "endDate": new Date(2018, 11, 4, 10, 29),
-    }];
-
-    this.createInstance({
-        dataSource: data,
-        views: ["timelineMonth"],
-        currentView: "timelineMonth",
-        currentDate: new Date(2018, 11, 3),
-        firstDayOfWeek: 0,
-        startDayHour: 8,
-        endDayHour: 20
-    });
-
-    this.instance.$element().find("." + APPOINTMENT_CLASS).each(function(index, appointment) {
-        assert.equal($(appointment).position().top, 0, "Appointment top is ok");
-    });
 });
 
 QUnit.test("Long appointment part should have right width on timeline month view", function(assert) {

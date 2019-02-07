@@ -1324,7 +1324,7 @@ Axis.prototype = {
 
         ticks = this._getTicks(range, incidentOccurred, false);
 
-        if(options.type === constants.discrete && options.dataType === "datetime" && !this._hasLabelFormat && ticks.ticks.length) {
+        if(!range.isEmpty() && options.type === constants.discrete && options.dataType === "datetime" && !this._hasLabelFormat && ticks.ticks.length) {
             options.label.format = formatHelper.getDateFormatByTicks(ticks.ticks);
         }
 
@@ -2124,9 +2124,9 @@ Axis.prototype = {
             box,
             indent = withIndents ? options.label.indentFromAxis + (options.tick.length * 0.5) : 0,
             tickInterval,
-            viewportRange;
+            viewportRange = that._getViewportRange();
 
-        if(!options.label.visible || !that._axisElementsGroup) {
+        if(viewportRange.isEmpty() || !options.label.visible || !that._axisElementsGroup) {
             return { height: widthAxis, width: widthAxis, x: 0, y: 0 };
         }
 
@@ -2134,11 +2134,11 @@ Axis.prototype = {
             ticks = convertTicksToValues(that._majorTicks);
         } else {
             this.updateCanvas(canvas);
-            ticks = that._createTicksAndLabelFormat(this._getViewportRange(), _noop);
+            ticks = that._createTicksAndLabelFormat(viewportRange, _noop);
             tickInterval = ticks.tickInterval;
             ticks = ticks.ticks;
         }
-        viewportRange = that._getViewportRange();
+
         maxText = ticks.reduce(function(prevLabel, tick, index) {
             var label = that.formatLabel(tick, options.label, viewportRange, undefined, tickInterval, ticks);
             if(prevLabel.length < label.length) {

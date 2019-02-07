@@ -619,7 +619,7 @@ var VirtualScrollingRowsViewExtender = (function() {
 
         _needUpdateRowHeight: function(itemsCount) {
             var that = this;
-            return that.callBase.apply(that, arguments) || (itemsCount > 0 && that.option("scrolling.mode") === SCROLLING_MODE_INFINITE);
+            return that.callBase.apply(that, arguments) || (itemsCount > 0 && that.option("scrolling.mode") === SCROLLING_MODE_INFINITE && that.option("scrolling.rowRenderingMode") !== SCROLLING_MODE_VIRTUAL);
         },
 
         _updateRowHeight: function() {
@@ -898,7 +898,7 @@ module.exports = {
 
                         if(rowsScrollController) {
                             var visibleItems = this._visibleItems;
-                            var isRefresh = change.changeType === "refresh";
+                            var isRefresh = change.changeType === "refresh" || change.isLiveUpdate;
 
                             if(change.changeType === "append" && change.items && !change.items.length) return;
 

@@ -3,7 +3,6 @@ var $ = require("jquery"),
     Overlay = require("ui/overlay"),
     devices = require("core/devices"),
     eventsEngine = require("events/core/events_engine"),
-    config = require("core/config"),
     support = require("core/utils/support"),
     fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),
@@ -27,8 +26,8 @@ var DROP_DOWN_EDITOR_BUTTON_ICON = "dx-dropdowneditor-icon",
     DROP_DOWN_EDITOR_OVERLAY = "dx-dropdowneditor-overlay",
     DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active";
 
-var TAB_KEY_CODE = 9,
-    ESC_KEY_CODE = 27;
+var TAB_KEY_CODE = "Tab",
+    ESC_KEY_CODE = "Escape";
 
 var beforeEach = function() {
     fx.off = true;
@@ -303,6 +302,63 @@ QUnit.test("field method returning overlay content", function(assert) {
     assert.ok($field.hasClass("dx-texteditor-input"), "field has class dx-texteditor-input");
 });
 
+QUnit.module("dropDownOptions");
+
+QUnit.test("dropDownOptions should work on init", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+        opened: true,
+        dropDownOptions: { customOption: "Test" }
+    }).dxDropDownEditor("instance");
+
+    assert.equal(instance._popup.option("customOption"), "Test", "Option has been passed to the popup");
+});
+
+QUnit.test("dropDownOptions should redefine built-in values", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+        opened: true,
+        dropDownOptions: { showTitle: true }
+    }).dxDropDownEditor("instance");
+
+    assert.strictEqual(instance._popup.option("showTitle"), true, "Option has been redefined");
+});
+
+QUnit.test("dropDownOptions should be prior than built-in public options", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+        opened: true,
+        showPopupTitle: false,
+        dropDownOptions: { showTitle: true }
+    }).dxDropDownEditor("instance");
+
+    assert.strictEqual(instance._popup.option("showTitle"), true, "Option has been redefined");
+});
+
+QUnit.test("dropDownOptions should be updated when popup option changed", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+            opened: true
+        }).dxDropDownEditor("instance"),
+        popup = instance._popup;
+
+    assert.equal(popup.option("width"), instance.option("dropDownOptions.width"), "dropDownOptions has been updated on init");
+
+    popup.option("width", 400);
+    assert.equal(instance.option("dropDownOptions.width"), 400, "dropDownOptions has been updated on popup's option changed");
+});
+
+QUnit.test("it should be possible to set part of the dropDownOptions without full object changing", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+            opened: true
+        }).dxDropDownEditor("instance"),
+        popup = instance._popup;
+
+    instance.option("dropDownOptions.width", 300);
+    assert.equal(popup.option("width"), 300, "popup's width has been changed");
+
+    instance.option("dropDownOptions", { height: 200 });
+    assert.equal(popup.option("width"), 300, "popup's width has not been changed");
+    assert.equal(popup.option("height"), 200, "popup's height has been changed");
+    assert.equal(instance.option("dropDownOptions.width"), 300, "dropDownOptions object has not been rewrited");
+});
+
 
 QUnit.module("focus policy");
 
@@ -463,8 +519,8 @@ QUnit.module("keyboard navigation", {
 });
 
 QUnit.test("control keys test", function(assert) {
-    var altDown = $.Event("keydown", { which: 40, altKey: true }),
-        altUp = $.Event("keydown", { which: 38, altKey: true });
+    var altDown = $.Event("keydown", { key: "ArrowDown", altKey: true }),
+        altUp = $.Event("keydown", { key: "ArrowUp", altKey: true });
 
     assert.ok(!this.dropDownEditor.option("opened"), "overlay is hidden on first show");
 
@@ -481,7 +537,7 @@ QUnit.test("control keys test", function(assert) {
 });
 
 QUnit.test("space/altDown key press on readOnly drop down doesn't toggle popup visibility", function(assert) {
-    var altDown = $.Event("keydown", { which: 40, altKey: true });
+    var altDown = $.Event("keydown", { key: "ArrowDown", altKey: true });
 
     this.dropDownEditor.option("readOnly", true);
 
@@ -573,7 +629,7 @@ QUnit.test("Keyboard navigation with field template", function(assert) {
         $(container).append($("<div>").dxTextBox({ value: data }));
     });
 
-    this.$rootElement.find(".dx-texteditor-input").trigger($.Event("keydown", { which: 40, altKey: true }));
+    this.$rootElement.find(".dx-texteditor-input").trigger($.Event("keydown", { key: "ArrowDown", altKey: true }));
     assert.ok(this.dropDownEditor.option("opened"), "overlay is visible on alt+down press");
 
     this.dropDownEditor.option("value", "123");
@@ -581,7 +637,7 @@ QUnit.test("Keyboard navigation with field template", function(assert) {
     keyboardMock(this.$rootElement.find(".dx-texteditor-input")).keyDown("esc");
     assert.ok(!this.dropDownEditor.option("opened"), "overlay is not visible on esc press after value changed");
 
-    this.$rootElement.find(".dx-texteditor-input").trigger($.Event("keydown", { which: 40, altKey: true }));
+    this.$rootElement.find(".dx-texteditor-input").trigger($.Event("keydown", { key: "ArrowDown", altKey: true }));
     assert.ok(this.dropDownEditor.option("opened"), "overlay is visible on esc press after value changed");
 });
 
@@ -638,7 +694,7 @@ QUnit.module("keyboard navigation inside popup", {
         this.$cancelButton = $popupWrapper.find(".dx-popup-cancel.dx-button");
 
         this.triggerKeyPress = function($element, keyCode, shiftKey) {
-            var eventConfig = { which: keyCode };
+            var eventConfig = { key: keyCode };
 
             if(shiftKey) {
                 eventConfig.shiftKey = shiftKey;
@@ -835,9 +891,16 @@ QUnit.test("events should be rendered for input after value is changed when fiel
 
     instance.option("value", 2);
 
-    $.each(events, function(_, event) {
-        $dropDownEditor.find("input").trigger(event.toLowerCase());
-        assert.equal(spies[event].callCount, 1, "the '" + event + "' event was fired after value change");
+    $.each(events, function(_, eventName) {
+        var params = {};
+
+        if(eventName.indexOf("Key") !== -1) {
+            params.key = "";
+        }
+
+        var event = $.Event(eventName.toLowerCase(), params);
+        $dropDownEditor.find("input").trigger(event);
+        assert.equal(spies[eventName].callCount, 1, "the '" + eventName + "' event was fired after value change");
     });
 });
 

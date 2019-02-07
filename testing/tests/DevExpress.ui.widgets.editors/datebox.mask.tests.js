@@ -603,6 +603,7 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
+
     module("Search", setupModule, () => {
         test("Time indication", (assert) => {
             this.instance.option("displayFormat", "a");

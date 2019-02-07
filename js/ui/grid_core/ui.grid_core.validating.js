@@ -36,7 +36,9 @@ var INVALIDATE_CLASS = "invalid",
     EDIT_MODE_POPUP = "popup",
     GROUP_CELL_CLASS = "dx-group-cell",
 
-    FORM_BASED_MODES = [EDIT_MODE_POPUP, EDIT_MODE_FORM];
+    FORM_BASED_MODES = [EDIT_MODE_POPUP, EDIT_MODE_FORM],
+
+    COMMAND_TRANSPARENT = "transparent";
 
 var ValidatingController = modules.Controller.inherit((function() {
     return {
@@ -185,7 +187,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                 columnsController,
                 showEditorAlways = column.showEditorAlways;
 
-            if(!column.validationRules || !Array.isArray(column.validationRules) || isDefined(column.command)) return;
+            if(!column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length || isDefined(column.command)) return;
 
             editIndex = editingController.getIndexByKey(parameters.key, editingController._editData);
 
@@ -539,197 +541,271 @@ module.exports = {
                     return this._editData[getIndexByKey(key, this._editData)];
                 }
             },
-            editorFactory: {
-                _showRevertButton: function($container, $targetElement) {
-                    if(!$targetElement || !$targetElement.length) {
-                        return;
-                    }
+            editorFactory: (function() {
+                var getWidthOfVisibleCells = function(that, element) {
+                    let rowIndex = $(element).closest("tr").index(),
+                        $cellElements = $(that._rowsView.getRowElement(rowIndex)).first().children().filter(":not(.dx-hidden-cell)");
 
-                    let $tooltipElement = $("<div>")
-                        .addClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
-                        .appendTo($container);
+                    return that._rowsView._getWidths($cellElements).reduce((w1, w2) => w1 + w2, 0);
+                };
 
-                    let tooltipOptions = {
-                        animation: null,
-                        visible: true,
-                        target: $targetElement,
-                        container: $container,
-                        closeOnOutsideClick: false,
-                        closeOnTargetScroll: false,
-                        boundary: this._rowsView.element(),
-                        contentTemplate: () => {
-                            let $buttonElement = $("<div>").addClass(REVERT_BUTTON_CLASS);
-                            let buttonOptions = {
-                                icon: "revert",
-                                hint: this.option("editing.texts.validationCancelChanges"),
-                                onClick: () => {
-                                    this._editingController.cancelEditData();
-                                }
-                            };
-                            return (new Button($buttonElement, buttonOptions)).$element();
-                        },
-                        position: {
-                            my: "left top",
-                            at: "right top",
-                            of: $targetElement,
-                            offset: "1 0",
-                            collision: "flip"
+                var getBoundaryNonFixedColumnsInfo = function(fixedColumns) {
+                    let firstNonFixedColumnIndex,
+                        lastNonFixedColumnIndex;
+
+                    fixedColumns.some((column, index) => {
+                        if(column.command === COMMAND_TRANSPARENT) {
+                            firstNonFixedColumnIndex = index === 0 ? -1 : index;
+                            lastNonFixedColumnIndex = index === fixedColumns.length - 1 ? -1 : index + column.colspan - 1;
+                            return true;
                         }
+                    });
+
+                    return {
+                        startColumnIndex: firstNonFixedColumnIndex,
+                        endColumnIndex: lastNonFixedColumnIndex
                     };
+                };
 
-                    return new Tooltip($tooltipElement, tooltipOptions);
-                },
+                return {
+                    _showRevertButton: function($container, $targetElement) {
+                        if(!$targetElement || !$targetElement.length) {
+                            return;
+                        }
 
-                _hideFixedGroupCell: function($cell, overlayOptions) {
-                    var nextRowOptions,
-                        $nextFixedRowElement,
-                        $groupCellElement,
-                        isFixedColumns = this._rowsView.isFixedColumns(),
-                        isFormEditMode = this._editingController.isFormEditMode();
+                        let $tooltipElement = $("<div>")
+                            .addClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
+                            .appendTo($container);
 
-                    if(isFixedColumns && !isFormEditMode) {
-                        nextRowOptions = $cell.closest(".dx-row").next().data("options");
-
-                        if(nextRowOptions && nextRowOptions.rowType === "group") {
-                            $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex)).last();
-                            $groupCellElement = $nextFixedRowElement.find("." + GROUP_CELL_CLASS);
-
-                            if($groupCellElement.length && $groupCellElement.get(0).style.visibility !== "hidden") {
-                                $groupCellElement.css("visibility", "hidden");
-
-                                overlayOptions.onDisposing = function() {
-                                    $groupCellElement.css("visibility", "");
+                        let tooltipOptions = {
+                            animation: null,
+                            visible: true,
+                            target: $targetElement,
+                            container: $container,
+                            closeOnOutsideClick: false,
+                            closeOnTargetScroll: false,
+                            contentTemplate: () => {
+                                let $buttonElement = $("<div>").addClass(REVERT_BUTTON_CLASS);
+                                let buttonOptions = {
+                                    icon: "revert",
+                                    hint: this.option("editing.texts.validationCancelChanges"),
+                                    onClick: () => {
+                                        this._editingController.cancelEditData();
+                                    }
                                 };
-                            }
-                        }
-                    }
-                },
+                                return (new Button($buttonElement, buttonOptions)).$element();
+                            },
+                            position: {
+                                my: "left top",
+                                at: "right top",
+                                of: $targetElement,
+                                offset: "1 0",
+                                collision: "flip",
+                                boundary: this._rowsView.element()
+                            },
+                            onPositioned: this._positionedHandler.bind(this)
+                        };
 
-                _showValidationMessage: function($cell, message, alignment, revertTooltip) {
-                    let needRepaint,
-                        $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
-                        isMaterial = themes.isMaterial(),
-                        overlayTarget = $highlightContainer.length && !isMaterial ? $highlightContainer : $cell,
-                        isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
-                        myPosition = isOverlayVisible ? "top right" : "top " + alignment,
-                        atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
+                        return new Tooltip($tooltipElement, tooltipOptions);
+                    },
 
-                    let $overlayElement = $("<div>")
-                        .addClass(INVALID_MESSAGE_CLASS)
-                        .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
-                        .addClass(this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
-                        .text(message)
-                        .appendTo($cell);
+                    _hideFixedGroupCell: function($cell, overlayOptions) {
+                        var nextRowOptions,
+                            $nextFixedRowElement,
+                            $groupCellElement,
+                            isFixedColumns = this._rowsView.isFixedColumns(),
+                            isFormEditMode = this._editingController.isFormEditMode();
 
-                    let overlayOptions = {
-                        target: overlayTarget,
-                        container: $cell,
-                        shading: false,
-                        width: 'auto',
-                        height: 'auto',
-                        visible: true,
-                        animation: false,
-                        propagateOutsideClick: true,
-                        closeOnOutsideClick: false,
-                        closeOnTargetScroll: false,
-                        position: {
-                            collision: "flip",
-                            boundary: this._rowsView.element(),
-                            boundaryOffset: "0 0",
-                            my: myPosition,
-                            at: atPosition
-                        },
-                        onPositioned: e => {
-                            if(!needRepaint) {
-                                needRepaint = this._rowsView.updateFreeSpaceRowHeight();
-                                if(needRepaint) {
-                                    e.component.repaint();
+                        if(isFixedColumns && !isFormEditMode) {
+                            nextRowOptions = $cell.closest(".dx-row").next().data("options");
+
+                            if(nextRowOptions && nextRowOptions.rowType === "group") {
+                                $nextFixedRowElement = $(this._rowsView.getRowElement(nextRowOptions.rowIndex)).last();
+                                $groupCellElement = $nextFixedRowElement.find("." + GROUP_CELL_CLASS);
+
+                                if($groupCellElement.length && $groupCellElement.get(0).style.visibility !== "hidden") {
+                                    $groupCellElement.css("visibility", "hidden");
+
+                                    overlayOptions.onDisposing = function() {
+                                        $groupCellElement.css("visibility", "");
+                                    };
                                 }
                             }
-
-                            this._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
                         }
-                    };
+                    },
 
-                    this._hideFixedGroupCell($cell, overlayOptions);
+                    _positionedHandler: function(e, isOverlayVisible) {
+                        if(!e.component.__skipPositionProcessing) {
+                            let isRevertButton = $(e.element).hasClass(this.addWidgetPrefix(REVERT_TOOLTIP_CLASS)),
+                                needRepaint = !isRevertButton && this._rowsView.updateFreeSpaceRowHeight(),
+                                normalizedPosition = this._normalizeValidationMessagePositionAndMaxWidth(e, isRevertButton, isOverlayVisible);
 
-                    new Overlay($overlayElement, overlayOptions);
-                },
+                            e.component.__skipPositionProcessing = !!(needRepaint || normalizedPosition);
 
-                _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {
-                    if(!$revertContent) return;
-
-                    var contentOffset = $content.offset(),
-                        revertContentOffset = $revertContent.offset();
-
-                    if(contentOffset.top === revertContentOffset.top && contentOffset.left + $content.width() > revertContentOffset.left) {
-                        var left = $revertContent.width() + PADDING_BETWEEN_TOOLTIPS;
-                        $content.css("left", revertContentOffset.left < $cell.offset().left ? -left : left);
-                    }
-                },
-
-                _getTooltipsSelector: function() {
-                    var invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS),
-                        revertTooltipClass = this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
-                    return ".dx-editor-cell ." + revertTooltipClass + ", .dx-editor-cell ." + invalidMessageClass + ", .dx-cell-modified ." + invalidMessageClass;
-                },
-
-                init: function() {
-                    this.callBase();
-                    this._editingController = this.getController("editing");
-                    this._rowsView = this.getView("rowsView");
-                },
-
-                loseFocus: function(skipValidator) {
-                    if(!skipValidator) {
-                        this.getController("validating").setValidator(null);
-                    }
-                    this.callBase();
-                },
-
-                focus: function($element, hideBorder) {
-                    var that = this,
-                        $focus = $element && $element.closest(that._getFocusCellSelector()),
-                        validator = $focus && ($focus.data("dxValidator") || $element.find("." + that.addWidgetPrefix(VALIDATOR_CLASS)).eq(0).data("dxValidator")),
-                        rowOptions = $focus && $focus.closest(".dx-row").data("options"),
-                        editData = rowOptions ? that.getController("editing").getEditDataByKey(rowOptions.key) : null,
-                        validationResult,
-                        $tooltips = $focus && $focus.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).find(that._getTooltipsSelector()),
-                        $cell = $focus && $focus.is("td") ? $focus : null,
-                        showValidationMessage = false,
-                        revertTooltip,
-                        column = $cell && that.getController("columns").getVisibleColumns()[$cell.index()];
-
-                    if(!arguments.length) return that.callBase();
-
-                    $tooltips && $tooltips.remove();
-
-                    if(validator) {
-                        that.getController("validating").setValidator(validator);
-
-                        if(validator.option("adapter").getValue() !== undefined) {
-                            validationResult = validator.validate();
-
-                            if(!validationResult.isValid) {
-                                hideBorder = true;
-                                showValidationMessage = true;
+                            if(normalizedPosition) {
+                                e.component.option(normalizedPosition);
+                            } else if(needRepaint) {
+                                e.component.repaint();
                             }
                         }
-                    }
+                    },
 
-                    if((validationResult && !validationResult.isValid) || (editData && editData.type === "update" && !that._editingController.isSaving())) {
-                        if(that._editingController.getEditMode() === EDIT_MODE_CELL) {
-                            revertTooltip = that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);
+                    _showValidationMessage: function($cell, message, alignment, revertTooltip) {
+                        let $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
+                            isMaterial = themes.isMaterial(),
+                            overlayTarget = $highlightContainer.length && !isMaterial ? $highlightContainer : $cell,
+                            isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
+                            myPosition = isOverlayVisible ? "top right" : "top " + alignment,
+                            atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
+
+                        let $overlayElement = $("<div>")
+                            .addClass(INVALID_MESSAGE_CLASS)
+                            .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
+                            .addClass(this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
+                            .text(message)
+                            .appendTo($cell);
+
+                        let overlayOptions = {
+                            target: overlayTarget,
+                            container: $cell,
+                            shading: false,
+                            width: 'auto',
+                            height: 'auto',
+                            visible: true,
+                            animation: false,
+                            propagateOutsideClick: true,
+                            closeOnOutsideClick: false,
+                            closeOnTargetScroll: false,
+                            position: {
+                                collision: "flip",
+                                boundary: this._rowsView.element(),
+                                boundaryOffset: "0 0",
+                                my: myPosition,
+                                at: atPosition
+                            },
+                            onPositioned: e => {
+                                this._positionedHandler(e, isOverlayVisible);
+                                this._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
+                            }
+                        };
+
+                        this._hideFixedGroupCell($cell, overlayOptions);
+
+                        new Overlay($overlayElement, overlayOptions);
+                    },
+
+                    _normalizeValidationMessagePositionAndMaxWidth: function(options, isRevertButton, isOverlayVisible) {
+                        let fixedColumns = this._columnsController.getFixedColumns();
+
+                        if(!fixedColumns || !fixedColumns.length) {
+                            return;
                         }
-                    }
-                    if(showValidationMessage && $cell && column && validationResult.brokenRule.message) {
-                        that._showValidationMessage($focus, validationResult.brokenRule.message, column.alignment, revertTooltip);
-                    }
 
-                    !hideBorder && that._rowsView.element() && that._rowsView.updateFreeSpaceRowHeight();
-                    return that.callBase($element, hideBorder);
-                }
-            }
+                        let position,
+                            visibleTableWidth = !isRevertButton && getWidthOfVisibleCells(this, options.element),
+                            $overlayContentElement = isRevertButton ? options.component.overlayContent() : options.component.$content(),
+                            validationMessageWidth = $overlayContentElement.outerWidth(true),
+                            needMaxWidth = !isRevertButton && validationMessageWidth > visibleTableWidth,
+                            columnIndex = this._rowsView.getCellIndex($(options.element).closest("td")),
+                            boundaryNonFixedColumnsInfo = getBoundaryNonFixedColumnsInfo(fixedColumns);
+
+                        if(!isRevertButton && (columnIndex === boundaryNonFixedColumnsInfo.startColumnIndex || needMaxWidth)) {
+                            position = {
+                                collision: "none flip",
+                                my: "top left",
+                                at: isOverlayVisible ? "top right" : "bottom left"
+                            };
+                        } else if(columnIndex === boundaryNonFixedColumnsInfo.endColumnIndex) {
+                            position = {
+                                collision: "none flip",
+                                my: "top right",
+                                at: isRevertButton || isOverlayVisible ? "top left" : "bottom right"
+                            };
+
+                            if(isRevertButton) {
+                                position.offset = "-1 0";
+                            }
+                        }
+
+                        return position && { position: position, maxWidth: needMaxWidth ? visibleTableWidth - 2 : undefined };
+                    },
+
+                    _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {
+                        if(!$revertContent) return;
+
+                        var contentOffset = $content.offset(),
+                            revertContentOffset = $revertContent.offset();
+
+                        if(contentOffset.top === revertContentOffset.top && contentOffset.left + $content.width() > revertContentOffset.left) {
+                            var left = $revertContent.width() + PADDING_BETWEEN_TOOLTIPS;
+                            $content.css("left", revertContentOffset.left < $cell.offset().left ? -left : left);
+                        }
+                    },
+
+                    _getTooltipsSelector: function() {
+                        var invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS),
+                            revertTooltipClass = this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
+                        return ".dx-editor-cell ." + revertTooltipClass + ", .dx-editor-cell ." + invalidMessageClass + ", .dx-cell-modified ." + invalidMessageClass;
+                    },
+
+                    init: function() {
+                        this.callBase();
+                        this._editingController = this.getController("editing");
+                        this._columnsController = this.getController("columns");
+                        this._rowsView = this.getView("rowsView");
+                    },
+
+                    loseFocus: function(skipValidator) {
+                        if(!skipValidator) {
+                            this.getController("validating").setValidator(null);
+                        }
+                        this.callBase();
+                    },
+
+                    focus: function($element, hideBorder) {
+                        var that = this,
+                            $focus = $element && $element.closest(that._getFocusCellSelector()),
+                            validator = $focus && ($focus.data("dxValidator") || $element.find("." + that.addWidgetPrefix(VALIDATOR_CLASS)).eq(0).data("dxValidator")),
+                            rowOptions = $focus && $focus.closest(".dx-row").data("options"),
+                            editData = rowOptions ? that.getController("editing").getEditDataByKey(rowOptions.key) : null,
+                            validationResult,
+                            $tooltips = $focus && $focus.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).find(that._getTooltipsSelector()),
+                            $cell = $focus && $focus.is("td") ? $focus : null,
+                            showValidationMessage = false,
+                            revertTooltip,
+                            column = $cell && that.getController("columns").getVisibleColumns()[$cell.index()];
+
+                        if(!arguments.length) return that.callBase();
+
+                        $tooltips && $tooltips.remove();
+
+                        if(validator) {
+                            that.getController("validating").setValidator(validator);
+
+                            if(validator.option("adapter").getValue() !== undefined) {
+                                validationResult = validator.validate();
+
+                                if(!validationResult.isValid) {
+                                    hideBorder = true;
+                                    showValidationMessage = true;
+                                }
+                            }
+                        }
+
+                        if((validationResult && !validationResult.isValid) || (editData && editData.type === "update" && !that._editingController.isSaving())) {
+                            if(that._editingController.getEditMode() === EDIT_MODE_CELL) {
+                                revertTooltip = that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);
+                            }
+                        }
+                        if(showValidationMessage && $cell && column && validationResult.brokenRule.message) {
+                            that._showValidationMessage($focus, validationResult.brokenRule.message, column.alignment, revertTooltip);
+                        }
+
+                        !hideBorder && that._rowsView.element() && that._rowsView.updateFreeSpaceRowHeight();
+                        return that.callBase($element, hideBorder);
+                    }
+                };
+            })()
         },
         views: {
             rowsView: {

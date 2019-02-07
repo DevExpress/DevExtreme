@@ -1113,7 +1113,7 @@ SvgElement.prototype = {
         that._addFixIRICallback = function() {};
     },
 
-    dispose: function() {
+    _clearChildrenFuncIri: function() {
         var clearChildren = function(element) {
             var i;
 
@@ -1123,10 +1123,12 @@ SvgElement.prototype = {
             }
         };
 
-        removeFuncIriCallback(this.element._fixFuncIri);
         clearChildren(this.element);
+    },
 
-
+    dispose: function() {
+        removeFuncIriCallback(this.element._fixFuncIri);
+        this._clearChildrenFuncIri();
         this._getJQElement().remove();
         return this;
     },
@@ -1193,7 +1195,7 @@ SvgElement.prototype = {
             items = link.to._links,
             i,
             next;
-        for(i = link.i + 1; (next = items[i]) && !next._link.is; ++i) { }
+        for(i = link.i + 1; (next = items[i]) && !next._link.is; ++i);
         this._insert(link.to, next);
         link.is = true;
         return this;
@@ -1211,6 +1213,7 @@ SvgElement.prototype = {
     },
 
     clear: function() {
+        this._clearChildrenFuncIri();// T711457
         this._getJQElement().empty();
         return this;
     },
@@ -1476,7 +1479,7 @@ extend(TextSvgElement.prototype, {
 function updateIndexes(items, k) {
     var i,
         item;
-    for(i = k; !!(item = items[i]); ++i) {
+    for(i = k; (item = items[i]); ++i) {
         item._link.i = i;
     }
 }
@@ -1487,9 +1490,9 @@ function linkItem(target, container) {
         i,
         item;
     if(key) {
-        for(i = 0; (item = items[i]) && item._link.name !== key; ++i) { }
+        for(i = 0; (item = items[i]) && item._link.name !== key; ++i);
         if(item) {
-            for(++i; (item = items[i]) && item._link.after === key; ++i) { }
+            for(++i; (item = items[i]) && item._link.after === key; ++i);
         }
     } else {
         i = items.length;
@@ -1501,7 +1504,7 @@ function linkItem(target, container) {
 function unlinkItem(target) {
     var i,
         items = target._link.to._links;
-    for(i = 0; items[i] !== target; ++i) { }
+    for(i = 0; items[i] !== target; ++i);
     items.splice(i, 1);
     updateIndexes(items, i);
 }

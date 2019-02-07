@@ -1086,7 +1086,7 @@ var dxChart = AdvancedChart.inherit({
 
     _parseVisualRangeOption(fullName, value) {
         const that = this;
-        const name = fullName.split(/[.\[]/)[0];
+        const name = fullName.split(/[.[]/)[0];
         const index = fullName.match(/\d+/g);
 
         if(fullName.indexOf("visualRange") > 0) {

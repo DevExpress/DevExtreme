@@ -438,7 +438,7 @@ var Menu = MenuBase.inherit({
             }).bind(this),
             height: "auto",
             closeOnOutsideClick: function(e) {
-                return !(!!$(e.target).closest("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).length);
+                return !($(e.target).closest("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).length);
             },
             position: {
                 collision: "flipfit",

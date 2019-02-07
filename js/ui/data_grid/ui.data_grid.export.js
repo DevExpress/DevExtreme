@@ -53,7 +53,7 @@ exports.DataProvider = Class.inherit({
         this._options = {
             columns: exportController._getColumns(this._initialColumnWidthsByColumnIndex),
             groupColumns: groupColumns,
-            items: !!exportController._selectionOnly ? exportController._getSelectedItems() : exportController._getAllItems(),
+            items: exportController._selectionOnly ? exportController._getSelectedItems() : exportController._getAllItems(),
             getVisibleIndex: exportController._columnsController.getVisibleIndex.bind(exportController._columnsController),
             isHeadersVisible: exportController.option("showColumnHeaders"),
             summaryTexts: exportController.option("summary.texts"),
@@ -199,6 +199,14 @@ exports.DataProvider = Class.inherit({
         });
     },
 
+    _convertFromGridGroupSummaryItems: function(gridGroupSummaryItems) {
+        let result;
+        if(isDefined(gridGroupSummaryItems) && gridGroupSummaryItems.length > 0) {
+            result = gridGroupSummaryItems.map(function(item) { return { value: item.value, name: item.name }; });
+        }
+        return result;
+    },
+
     getCellData: function(rowIndex, cellIndex) {
         const result = { cellSourceData: {}, value };
         var column,
@@ -231,22 +239,31 @@ exports.DataProvider = Class.inherit({
                         if(correctedCellIndex < itemValues.length) {
                             value = itemValues[correctedCellIndex];
                             if(isDefined(value)) {
+                                result.cellSourceData.value = value.value;
+                                result.cellSourceData.totalSummaryItemName = value.name;
                                 result.value = dataGridCore.getSummaryText(value, this._options.summaryTexts);
+                            } else {
+                                result.cellSourceData = undefined;
                             }
                         }
                         break;
                     case "group":
-                        result.cellSourceData.column = this._options.groupColumns[item.groupIndex];
                         if(cellIndex < 1) {
+                            result.cellSourceData.column = this._options.groupColumns[item.groupIndex];
+                            result.cellSourceData.value = item.key[item.groupIndex];
+                            result.cellSourceData.groupSummaryItems = this._convertFromGridGroupSummaryItems(item.summaryCells[0]);
                             result.value = this._getGroupValue(item);
                         } else {
                             summaryItems = item.values[correctedCellIndex];
                             if(Array.isArray(summaryItems)) {
+                                result.cellSourceData.groupSummaryItems = this._convertFromGridGroupSummaryItems(summaryItems);
                                 value = "";
                                 for(i = 0; i < summaryItems.length; i++) {
                                     value += (i > 0 ? " \n " : "") + dataGridCore.getSummaryText(summaryItems[i], this._options.summaryTexts);
                                 }
                                 result.value = value;
+                            } else {
+                                result.cellSourceData = undefined;
                             }
                         }
                         break;

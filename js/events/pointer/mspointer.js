@@ -1,18 +1,16 @@
 var BaseStrategy = require("./base"),
     Observer = require("./observer"),
-    windowUtils = require("../../core/utils/window"),
-    extend = require("../../core/utils/extend").extend,
-    onlyMSPointerSupport = !windowUtils.hasProperty("PointerEvent") && windowUtils.hasProperty("MSPointerEvent");
+    extend = require("../../core/utils/extend").extend;
 
 var eventMap = {
-    "dxpointerdown": onlyMSPointerSupport ? "MSPointerDown" : "pointerdown",
-    "dxpointermove": onlyMSPointerSupport ? "MSPointerMove" : "pointermove",
-    "dxpointerup": onlyMSPointerSupport ? "MSPointerUp" : "pointerup",
-    "dxpointercancel": onlyMSPointerSupport ? "MSPointerCancel" : "pointercancel",
-    "dxpointerover": onlyMSPointerSupport ? "MSPointerOver" : "pointerover",
-    "dxpointerout": onlyMSPointerSupport ? "MSPointerOut" : "pointerout",
-    "dxpointerenter": onlyMSPointerSupport ? "mouseenter" : "pointerenter",
-    "dxpointerleave": onlyMSPointerSupport ? "mouseleave" : "pointerleave"
+    "dxpointerdown": "pointerdown",
+    "dxpointermove": "pointermove",
+    "dxpointerup": "pointerup",
+    "dxpointercancel": "pointercancel",
+    "dxpointerover": "pointerover",
+    "dxpointerout": "pointerout",
+    "dxpointerenter": "pointerenter",
+    "dxpointerleave": "pointerleave"
 };
 
 var observer;

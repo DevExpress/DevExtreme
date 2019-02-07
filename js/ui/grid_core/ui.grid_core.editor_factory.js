@@ -5,7 +5,7 @@ import modules from "./ui.grid_core.modules";
 import clickEvent from "../../events/click";
 import pointerEvents from "../../events/pointer";
 import positionUtils from "../../animation/position";
-import { addNamespace, fireEvent } from "../../events/utils";
+import { addNamespace, fireEvent, normalizeKeyName } from "../../events/utils";
 import browser from "../../core/utils/browser";
 import { extend } from "../../core/utils/extend";
 import EditorFactoryMixin from "../shared/ui.editor_factory_mixin";
@@ -21,8 +21,7 @@ var EDITOR_INLINE_BLOCK = "dx-editor-inline-block",
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
     POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
     FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, tr[tabindex]:focus, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus",
-    DX_HIDDEN = "dx-hidden",
-    TAB_KEY = 9;
+    DX_HIDDEN = "dx-hidden";
 
 var EditorFactory = modules.ViewController.inherit({
     _getFocusedElement: function($dataGridElement) {
@@ -187,7 +186,7 @@ var EditorFactory = modules.ViewController.inherit({
         if($container) {
             // T179518
             eventsEngine.on($container, addNamespace("keydown", MODULE_NAMESPACE), function(e) {
-                if(e.which === TAB_KEY) {
+                if(normalizeKeyName(e) === "tab") {
                     that._updateFocusHandler(e);
                 }
             });

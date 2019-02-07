@@ -363,7 +363,6 @@ var interpretVerboseJsonFormat = function(obj) {
         return { error: Error("Malformed or unsupported JSON response received") };
     }
 
-    data = data;
     if(isDefined(data.results)) {
         data = data.results;
     }

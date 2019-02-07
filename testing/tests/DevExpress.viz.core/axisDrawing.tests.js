@@ -2037,6 +2037,33 @@ QUnit.test("Do not draw labels with empty range", function(assert) {
     assert.equal(this.renderer.stub("text").callCount, 0);
 });
 
+QUnit.test("Do not draw labels nor check format for discrete datetime axis with empty range", function(assert) {
+    // arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        argumentType: "datetime",
+        type: "discrete",
+        position: "bottom",
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: "left"
+        }
+    });
+
+    this.generatedTicks = [1];
+
+    this.translator.stub("translate").withArgs(1).returns(40);
+    this.axis.setBusinessRange({ });
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(this.renderer.stub("text").callCount, 0);
+});
+
 QUnit.test("Store data in label", function(assert) {
     // arrange
     this.createAxis();
@@ -2120,7 +2147,7 @@ QUnit.test("Without text, all variations. Do not draw labels", function(assert) 
                         return undefined;
                     case 3:
                         return "";
-                    case 1:
+                    case 4:
                         return "      ";
                 }
             }
@@ -4492,6 +4519,49 @@ QUnit.test("Do not draw date marker when axis type is discrete", function(assert
     this.translator.stub("translate").withArgs(date0).returns(10);
     this.translator.stub("translate").withArgs(date1).returns(50);
     this.translator.stub("translate").withArgs(date2).returns(90);
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.notOk(this.renderer.text.called);
+    assert.notOk(this.renderer.path.called);
+});
+
+QUnit.test("Do not draw date marker if business range is empty", function(assert) {
+    // arrange
+    var date0 = new Date(2011, 5, 25, 23, 21, 33, 123),
+        date1 = new Date(2011, 5, 26, 1, 21, 33, 123),
+        date2 = new Date(2011, 5, 26, 2, 21, 33, 123);
+
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        argumentType: "datetime",
+        type: "continuous",
+        position: "bottom",
+        marker: {
+            visible: true,
+            separatorHeight: 33,
+            textLeftIndent: 5,
+            textTopIndent: 11,
+            topIndent: 10,
+            color: "black",
+            width: 2,
+            opacity: 0.1,
+            label: {
+                font: {
+                    size: 12,
+                    color: "green"
+                }
+            }
+        }
+    });
+
+    this.axis.setBusinessRange({ });
+
+    this.generatedTicks = [date0, date1, date2];
+    this.generatedTickInterval = "hour";
 
     // act
     this.axis.draw(this.canvas);
@@ -8174,7 +8244,7 @@ QUnit.test("Axis has no visible labels nor outside constantLines - hideOuterElem
     assert.ok(!spy.called, "incidentOccurred is not called");
 });
 
-QUnit.test("Axis with empty - hideOuterElements does nothing", function(assert) {
+QUnit.test("Axis with empty range - hideOuterElements does nothing", function(assert) {
     var spy = sinon.spy();
 
     this.createAxis({ incidentOccurred: spy });

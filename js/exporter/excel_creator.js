@@ -59,7 +59,8 @@ var ExcelCreator = Class.inherit({
     _getCellIndex: function(rowIndex, cellIndex) {
         var sheetIndex = '',
             max = 26,
-            charCode;
+            charCode,
+            isCellIndexFound;
 
         if(this._maxIndex[0] < Number(rowIndex)) {
             this._maxIndex[0] = Number(rowIndex);
@@ -69,14 +70,14 @@ var ExcelCreator = Class.inherit({
             this._maxIndex[1] = Number(cellIndex);
         }
 
-        while(true) {
+        while(!isCellIndexFound) {
             charCode = 65 + ((cellIndex >= max) ? (cellIndex % max) : Math.ceil(cellIndex));
             sheetIndex = String.fromCharCode(charCode) + sheetIndex;
 
             if(cellIndex >= max) {
                 cellIndex = Math.floor(cellIndex / max) - 1;
             } else {
-                break;
+                isCellIndexFound = true;
             }
         }
 
@@ -286,7 +287,7 @@ var ExcelCreator = Class.inherit({
                             case VALID_TYPES.date:
                                 cellData.value = modifiedExcelCell.value;
                                 break;
-                            case VALID_TYPES.number:
+                            case VALID_TYPES.number: {
                                 let newValue = modifiedExcelCell.value;
                                 const excelDateValue = this._tryGetExcelDateValue(newValue);
                                 if(typeUtils.isDefined(excelDateValue)) {
@@ -294,6 +295,7 @@ var ExcelCreator = Class.inherit({
                                 }
                                 cellData.value = newValue;
                                 break;
+                            }
                             default:
                                 cellData.value = modifiedExcelCell.value;
                         }

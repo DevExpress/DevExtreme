@@ -2372,11 +2372,11 @@ QUnit.test("'enter'/'space' keys pressing on selectAll checkbox", function(asser
     this.clock.tick();
     assert.ok($selectAllCheckBox.hasClass("dx-state-focused"), "selectAll checkbox is focused");
 
-    $element.trigger($.Event("keydown", { which: 13 }));
+    $element.trigger($.Event("keydown", { key: "Enter" }));
 
     assert.ok($selectAllCheckBox.hasClass("dx-checkbox-checked"), "selectAll checkbox is checked");
 
-    $element.trigger($.Event("keydown", { which: 32 }));
+    $element.trigger($.Event("keydown", { key: " " }));
 
     assert.ok(!$selectAllCheckBox.hasClass("dx-checkbox-checked"), "selectAll checkbox isn't checked");
 });
@@ -2590,7 +2590,7 @@ QUnit.test("list should attach keyboard events even if focusStateEnabled is fals
         }).dxList("instance");
 
     instance.registerKeyHandler("enter", handler);
-    $element.trigger($.Event("keydown", { which: 13 }));
+    $element.trigger($.Event("keydown", { key: "Enter" }));
 
     assert.equal(handler.callCount, 1, "keyboardProcessor is attached");
 });
@@ -2616,7 +2616,7 @@ QUnit.testInActiveWindow("First list item should be focused on the 'tab' key pre
         $element.find("[tabIndex]:not(:focus)").first().focus();
     });
 
-    $element.trigger($.Event("keydown", { which: 9 }));
+    $element.trigger($.Event("keydown", { key: "Tab" }));
     this.clock.tick();
 
     $searchEditor = $element.children(".dx-list-search");
@@ -2704,6 +2704,41 @@ QUnit.test("Search when searchMode is specified", function(assert) {
     assert.deepEqual(instance.option("items"), [23], "items");
     assert.strictEqual(instance.option("searchValue"), "2", "search value");
     assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation");
+});
+
+QUnit.test("Search in items of grouped dataSource", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [{ key: "a", items: [{ name: "1" }] }, { key: "b", items: [{ name: "2" }] }],
+            grouped: true,
+            searchEnabled: true,
+            searchExpr: "name"
+        }),
+        instance = $element.dxList("instance"),
+        expectedValue = { key: "a", items: [{ name: "1", key: "a" }] };
+
+    assert.equal(instance.getDataSource().searchExpr(), "name", "dataSource has correct searchExpr");
+
+    instance.option("searchValue", "1");
+
+    assert.deepEqual(instance.option("items")[0], expectedValue, "items");
+});
+
+QUnit.test("Search in items of grouped dataSource with simple items", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [{ key: "a", items: ["1", "2"] }],
+            grouped: true,
+            searchEnabled: true
+        }),
+        instance = $element.dxList("instance"),
+        expectedItems = [{ key: "a", items: [ { text: "1", key: "a" }, { text: "2", key: "a" }] }],
+        expectedValue = { key: "a", items: [ { text: "1", key: "a" }] };
+
+    assert.deepEqual(instance.option("items"), expectedItems, "items have correct structure");
+    assert.equal(instance.getDataSource().searchExpr(), "text", "dataSource has correct searchExpr");
+
+    instance.option("searchValue", "1");
+
+    assert.deepEqual(instance.option("items")[0], expectedValue, "items");
 });
 
 // T582179

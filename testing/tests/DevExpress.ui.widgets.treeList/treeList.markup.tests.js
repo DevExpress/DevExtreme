@@ -1,8 +1,6 @@
-var $ = require("jquery");
-
-require("ui/tree_list");
-
-require("common.css!");
+import $ from 'jquery';
+import 'ui/tree_list';
+import 'common.css!';
 
 
 QUnit.testStart(function() {
