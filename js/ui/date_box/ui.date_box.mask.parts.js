@@ -14,8 +14,8 @@ const monthSetter = (date, value) => {
 
     date.setMonth(newValue - 1, 1);
 
-    let dayLimits = getLimits("d", date),
-        newDay = fitIntoRange(day, dayLimits.min, dayLimits.max);
+    const { min, max } = getLimits("dM", date);
+    const newDay = fitIntoRange(day, min, max);
 
     date.setDate(newDay);
 };
@@ -44,6 +44,15 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
         }
 
         date.setHours((hours + 12) % 24);
+    },
+    d: (date, value) => {
+        const lastDayInMonth = getLimits("dM", date).max;
+
+        if(value > lastDayInMonth) {
+            date.setMonth(date.getMonth() + 1);
+        }
+
+        date.setDate(value);
     },
     M: monthSetter,
     L: monthSetter,
@@ -102,7 +111,8 @@ const getLimits = (pattern, date) => {
         y: { min: 0, max: 9999 },
         M: { min: 1, max: 12 },
         L: { min: 1, max: 12 },
-        d: {
+        d: { min: 1, max: 31 },
+        dM: {
             min: 1,
             max: new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
         },
