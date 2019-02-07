@@ -1721,7 +1721,7 @@ var dxChart = {
             */
             value: undefined,
             /**
-            * @name dxChartOptions.argumentAxis.constantLines.displayBehindSeries
+            * @name dxChartOptions.valueAxis.constantLines.displayBehindSeries
             * @type boolean
             * @default false
             */
@@ -2777,7 +2777,7 @@ var dxPolarChart = {
             */
             value: undefined,
             /**
-            * @name dxChartOptions.argumentAxis.constantLines.displayBehindSeries
+            * @name dxPolarChartOptions.argumentAxis.constantLines.displayBehindSeries
             * @type boolean
             * @default false
             */
@@ -2966,7 +2966,7 @@ var dxPolarChart = {
             * @default false
             */
             /**
-            * @name dxChartOptions.argumentAxis.constantLines.displayBehindSeries
+            * @name dxPolarChartOptions.valueAxis.constantLines.displayBehindSeries
             * @type boolean
             * @default false
             */
