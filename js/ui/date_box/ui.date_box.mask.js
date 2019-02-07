@@ -116,8 +116,8 @@ let DateBoxMask = DateBoxBase.inherit({
             return this._formatPattern;
         }
 
-        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
-            isLDMLPattern = typeof format === "string" && (format.indexOf("0") >= 0 || format.indexOf("#") >= 0);
+        const format = this._strategy.getDisplayFormat(this.option("displayFormat"));
+        const isLDMLPattern = typeof format === "string" && !dateLocalization._getPatternByFormat(format);
 
         if(isLDMLPattern) {
             this._formatPattern = format;
@@ -138,14 +138,17 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _searchNumber(char) {
-        let limits = this._getActivePartLimits(),
-            maxSearchLength = String(limits.max).length;
+        const limits = this._getActivePartLimits();
+        const maxLimitLength = String(limits.max).length;
+        const formatLength = this._getActivePartProp("pattern").length;
 
-        this._searchValue = (this._searchValue + char).substr(-maxSearchLength);
+        this._searchValue = (this._searchValue + char).substr(-maxLimitLength);
 
         this._setActivePartValue(this._searchValue);
 
         if(this.option("advanceCaret")) {
+            const isShortFormat = formatLength === 1;
+            const maxSearchLength = (isShortFormat ? maxLimitLength : Math.min(formatLength, maxLimitLength));
             const isLengthExceeded = this._searchValue.length === maxSearchLength;
             const isValueOverflowed = parseInt(this._searchValue + "0") > limits.max;
 
