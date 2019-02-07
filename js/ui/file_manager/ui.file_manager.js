@@ -1,6 +1,7 @@
 import $ from "../../core/renderer";
 import Widget from "../widget/ui.widget";
 import registerComponent from "../../core/component_registrator";
+import { extend } from "../../core/utils/extend";
 
 import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
@@ -9,20 +10,16 @@ import TreeViewSearch from "../tree_view/ui.tree_view.search";
 import DataFileProvider from "./ui.file_manager.file_provider.data";
 import OneDriveFileProvider from "./ui.file_manager.file_provider.onedrive";
 
-const FIE_MANAGER_CLASS = "dx-filemanager";
-const FIE_MANAGER_CONTAINER_CLASS = FIE_MANAGER_CLASS + "-container";
-const FIE_MANAGER_DIRS_TREE_CLASS = FIE_MANAGER_CLASS + "-dirs-tree";
-const FIE_MANAGER_VIEW_SEPARATOR_CLASS = FIE_MANAGER_CLASS + "-view-separator";
+const FILE_MANAGER_CLASS = "dx-filemanager";
+const FILE_MANAGER_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-container";
+const FILE_MANAGER_DIRS_TREE_CLASS = FILE_MANAGER_CLASS + "-dirs-tree";
+const FILE_MANAGER_VIEW_SEPARATOR_CLASS = FILE_MANAGER_CLASS + "-view-separator";
+const FILE_MANAGER_FILES_VIEW_CLASS = FILE_MANAGER_CLASS + "-files-view";
 
 var FileManager = Widget.inherit({
 
     _init: function() {
         this.callBase();
-
-        // this._providerType = "data";
-        this._providerType = "onedrive";
-        this._provider = this._createFileProvider();
-        this._currentPath = "";
     },
 
     _initTemplates: function() {
@@ -31,16 +28,33 @@ var FileManager = Widget.inherit({
     _initMarkup: function() {
         this.callBase();
 
+        this._currentPath = "";
+        this._provider = this._createFileProvider();
+
         var $viewContainer = this._createViewContainer();
         this.$element()
             .append($viewContainer)
-            .addClass(FIE_MANAGER_CLASS);
+            .addClass(FILE_MANAGER_CLASS);
     },
 
     _createViewContainer: function() {
         var $container = $("<div>");
-        $container.addClass(FIE_MANAGER_CONTAINER_CLASS);
+        $container.addClass(FILE_MANAGER_CONTAINER_CLASS);
 
+        this._createFilesTreeView();
+        $container.append(this._filesTreeView.$element());
+
+        var $viewSeparator = $("<div>");
+        $viewSeparator.addClass(FILE_MANAGER_VIEW_SEPARATOR_CLASS);
+        $container.append($viewSeparator);
+
+        this._createFilesView();
+        $container.append(this._filesView.$element());
+
+        return $container;
+    },
+
+    _createFilesTreeView: function() {
         this._filesTreeView = this._createComponent($("<div>"), TreeViewSearch, {
             dataStructure: "plain",
             rootValue: "",
@@ -50,13 +64,10 @@ var FileManager = Widget.inherit({
             createChildren: this._onFilesTreeViewCreateChildren.bind(this),
             onItemClick: this._onFilesTreeViewItemClick.bind(this)
         });
-        this._filesTreeView.$element().addClass(FIE_MANAGER_DIRS_TREE_CLASS);
-        $container.append(this._filesTreeView.$element());
+        this._filesTreeView.$element().addClass(FILE_MANAGER_DIRS_TREE_CLASS);
+    },
 
-        var $viewSeparator = $("<div>");
-        $viewSeparator.addClass(FIE_MANAGER_VIEW_SEPARATOR_CLASS);
-        $container.append($viewSeparator);
-
+    _createFilesView: function() {
         this._filesView = this._createComponent($("<div>"), DataGrid, {
             hoverStateEnabled: true,
             selection: {
@@ -82,9 +93,7 @@ var FileManager = Widget.inherit({
             ]
         });
         this._loadFilesToFilesView();
-        $container.append(this._filesView.$element());
-
-        return $container;
+        this._filesView.$element().addClass(FILE_MANAGER_FILES_VIEW_CLASS);
     },
 
     _onFilesTreeViewCreateChildren: function(parent) {
@@ -115,59 +124,53 @@ var FileManager = Widget.inherit({
     },
 
     _createFileProvider: function() {
-        switch(this._providerType) {
+        var providerType = this.option("providerType");
+        switch(providerType) {
             case "onedrive":
-                return new OneDriveFileProvider();
+                return new OneDriveFileProvider(this.option("oneDrive"));
             case "data":
-                return new DataFileProvider(this._generateFakeItemData());
+            default:
+                return new DataFileProvider(this.option("jsonData"));
         }
-        return new OneDriveFileProvider();
     },
 
-    _generateFakeItemData: function() {
-        return [
-            {
-                name: "Folder 1",
-                isFolder: true,
-                children: [
-                    {
-                        name: "Folder 1.1",
-                        isFolder: true
-                    },
-                    {
-                        name: "Folder 1.2",
-                        isFolder: true
-                    },
-                    {
-                        name: "File 1-1.txt",
-                        isFolder: false
-                    },
-                    {
-                        name: "File 1-2.jpg",
-                        isFolder: false
-                    } ]
-            },
-            {
-                name: "Folder 2",
-                isFolder: true
-            },
-            {
-                name: "Folder 3",
-                isFolder: true
-            },
-            {
-                name: "File 1.txt",
-                isFolder: false
-            },
-            {
-                name: "File 2.jpg",
-                isFolder: false
-            },
-            {
-                name: "File 3.xml",
-                isFolder: false
-            }
-        ];
+    _getDefaultOptions: function() {
+        return extend(this.callBase(), {
+            /**
+            * @name dxFileManagerOptions.providerType
+            * @type string
+            * @default 'data'
+            */
+            providerType: "data",
+
+            /**
+                * @name dxFileManagerOptions.jsonData
+                * @type object
+                * @default null
+                */
+            jsonData: null,
+
+            /**
+                * @name dxFileManagerOptions.oneDrive
+                * @type object
+                * @default null
+                */
+            oneDrive: null
+        });
+    },
+
+    _optionChanged: function(args) {
+        var name = args.name;
+
+        switch(name) {
+            case "providerType":
+            case "jsonData":
+            case "oneDrive":
+                this.repaint();
+                break;
+            default:
+                this.callBase(args);
+        }
     }
 
 });

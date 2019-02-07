@@ -5,14 +5,16 @@ import FileManagerItem from "./ui.file_manager.items";
 import FileProvider from "./ui.file_manager.file_provider";
 
 const REQUIRED_ITEM_FIELDS = "id,name,folder,lastModifiedDateTime,size,parentReference";
-const GET_ACCESS_TOKEN_URL = "http://kovalev-10:81/OneDrive/AccessToken";
 const REST_API_URL = "https://graph.microsoft.com/";
 const DRIVE_API_URL = REST_API_URL + "v1.0/drive";
 const APP_ROOT_URL = DRIVE_API_URL + "/special/approot";
 
 var OneDriveFileProvider = FileProvider.inherit({
 
-    ctor: function() {
+    ctor: function(options) {
+        options = options || {};
+        this._getAccessTokenUrl = options.getAccessTokenUrl || "";
+
         this._accessToken = "";
         this._accessTokenPromise = null;
     },
@@ -46,7 +48,7 @@ var OneDriveFileProvider = FileProvider.inherit({
             deferred.resolve();
         } else {
             ajax.sendRequest({
-                url: GET_ACCESS_TOKEN_URL,
+                url: this._getAccessTokenUrl,
                 dataType: "text"
             }).done(function(response) {
                 this._accessToken = response;

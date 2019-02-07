@@ -4,7 +4,7 @@ import FileProvider from "./ui.file_manager.file_provider";
 var DataFileProvider = FileProvider.inherit({
 
     ctor: function(data) {
-        this._data = data;
+        this._data = data || [];
     },
 
     getFolders: function(path) {
