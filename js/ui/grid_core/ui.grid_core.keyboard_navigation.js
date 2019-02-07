@@ -1403,6 +1403,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         switch(args.name) {
             case "useKeyboard":
+            case "excelNavigation":
                 args.handled = true;
                 break;
             default:
@@ -1522,7 +1523,15 @@ var KeyboardNavigationController = core.ViewController.inherit({
 module.exports = {
     defaultOptions: function() {
         return {
-            useKeyboard: true
+            useKeyboard: true,
+
+            /**
+             * @name GridBaseOptions.excelNavigation
+             * @type boolean
+             * @default false
+             */
+            excelNavigation: false
+
             /**
              * @name GridBaseOptions.onKeyDown
              * @type function(e)
