@@ -82,7 +82,9 @@ function createChainExecutor() {
 
 function expand(target, name, expander) {
     var current = target[name];
-    if(current.add) {
+    if(!current) {
+        current = expander;
+    } else if(current.add) {
         current.add(expander);
     } else {
         current = createChainExecutor();

@@ -11,6 +11,19 @@ var BaseGauge = {
     * @default 'none'
     */
     containerBackgroundColor: 'none',
+
+    /**
+    * @name BaseGaugeOptions.loadingIndicator
+    * @inherits BaseWidget.LoadingIndicator
+    */
+    loadingIndicator: {
+        /**
+        * @name BaseGaugeOptions.loadingIndicator.enabled
+        * @type boolean
+        * @hidden
+        */
+        enabled: false
+    },
     /**
     * @name BaseGaugeOptions.animation
     * @type object

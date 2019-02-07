@@ -40,23 +40,25 @@ export default function createConstantLine(axis, options) {
 
             this.coord = axis._getConstantLinePos(parsedValue, canvas.start, canvas.end);
 
-            let group = axis._axisConstantLineGroups[labelPosition];
+            const rootGroup = options.displayBehindSeries ? axis._axisConstantLineGroups.under : axis._axisConstantLineGroups.above;
+            let group = rootGroup[labelPosition];
 
             if(!group) {
                 const side = axis._isHorizontal ? labelOptions.verticalAlignment : labelOptions.horizontalAlignment;
-                group = axis._axisConstantLineGroups[side];
+                group = rootGroup[side];
             }
 
             if(!isDefined(this.coord)) {
                 return this;
             }
 
-            this.line = axis._createConstantLine(this.coord, {
+            var path = axis._createConstantLine(this.coord, {
                 stroke: options.color,
                 "stroke-width": options.width,
                 dashStyle: options.dashStyle
-            }).append(axis._axisConstantLineGroups.inside);
+            });
 
+            this.line = path.append(rootGroup.inside);
             this.label = labelOptions.visible ? axis._drawConstantLineLabels(parsedValue, labelOptions, this.coord, group) : null;
 
             this.updatePosition();

@@ -64,7 +64,7 @@ var environment = {
     createAxis: function(options) {
         var stripsGroup = this.renderer.g(),
             labelAxesGroup = this.renderer.g(),
-            constantLinesGroup = this.renderer.g(),
+            constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup = this.renderer.g(),
             gridGroup = this.renderer.g(),
             scaleBreaksGroup = this.renderer.g();
@@ -139,7 +139,7 @@ QUnit.test("Create groups and append them to groups from options", function(asse
     var renderer = this.renderer,
         stripsGroup = this.renderer.g(),
         labelAxesGroup = this.renderer.g(),
-        constantLinesGroup = this.renderer.g(),
+        constantLinesGroup = { above: this.renderer.g(), under: this.renderer.g() },
         axesContainerGroup = this.renderer.g(),
         gridGroup = this.renderer.g();
 
@@ -165,10 +165,15 @@ QUnit.test("Create groups and append them to groups from options", function(asse
     assert.deepEqual(g.getCall(3).returnValue.append.getCall(0).args[0], g.getCall(0).returnValue, "_axisElementsGroup");
     assert.deepEqual(g.getCall(4).returnValue.append.getCall(0).args[0], g.getCall(0).returnValue, "_axisLineGroup");
     assert.deepEqual(g.getCall(5).returnValue.append.getCall(0).args[0], g.getCall(0).returnValue, "_axisTitleGroup");
-    assert.deepEqual(g.getCall(6).returnValue.append.getCall(0).args[0], constantLinesGroup, "_axisConstantLineGroups.insideGroup");
-    assert.deepEqual(g.getCall(7).returnValue.append.getCall(0).args[0], constantLinesGroup, "_axisConstantLineGroups.outsideGroup1");
-    assert.deepEqual(g.getCall(8).returnValue.append.getCall(0).args[0], constantLinesGroup, "_axisConstantLineGroups.outsideGroup2");
-    assert.deepEqual(g.getCall(9).returnValue.append.getCall(0).args[0], labelAxesGroup, "_axisStripLabelGroup");
+    // above
+    assert.deepEqual(g.getCall(6).returnValue.append.getCall(0).args[0], constantLinesGroup.above, "_axisConstantLineGroups.above.insideGroup");
+    assert.deepEqual(g.getCall(7).returnValue.append.getCall(0).args[0], constantLinesGroup.above, "_axisConstantLineGroups.above.outsideGroup1");
+    assert.deepEqual(g.getCall(8).returnValue.append.getCall(0).args[0], constantLinesGroup.above, "_axisConstantLineGroups.above.outsideGroup2");
+    // under
+    assert.deepEqual(g.getCall(9).returnValue.append.getCall(0).args[0], constantLinesGroup.under, "_axisConstantLineGroups.under.insideGroup");
+    assert.deepEqual(g.getCall(10).returnValue.append.getCall(0).args[0], constantLinesGroup.under, "_axisConstantLineGroups.under.outsideGroup1");
+    assert.deepEqual(g.getCall(11).returnValue.append.getCall(0).args[0], constantLinesGroup.under, "_axisConstantLineGroups.under.outsideGroup2");
+    assert.deepEqual(g.getCall(12).returnValue.append.getCall(0).args[0], labelAxesGroup, "_axisStripLabelGroup");
 });
 
 QUnit.test("Some groups are not passed - created groups are not appended", function(assert) {
@@ -2288,6 +2293,7 @@ QUnit.test("Horizontal axis.", function(assert) {
 
     // assert
     var insideGroup = this.renderer.g.getCall(6).returnValue;
+
     assert.equal(renderer.path.callCount, 3, "path");
     assert.deepEqual(renderer.path.getCall(0).args, [[40, 30, 40, 70], "line"], "args");
     assert.deepEqual(renderer.path.getCall(0).returnValue.attr.getCall(0).args[0], { dashStyle: "dot", stroke: "#111111", "stroke-width": 3 }, "attr");
@@ -2334,7 +2340,8 @@ QUnit.test("Vertical axis. Only outside constant lines are rendered", function(a
             width: 5,
             label: {
                 position: "outside"
-            }
+            },
+            position: "under"
         }]
     });
 
@@ -2565,6 +2572,52 @@ QUnit.test("With stub data", function(assert) {
     // assert
     assert.equal(renderer.stub("path").callCount, 0);
     assert.equal(renderer.stub("text").callCount, 0);
+});
+
+QUnit.test("Horizontal axis. First constant line have custom position and second by default", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        constantLines: [{
+            value: 1,
+            color: "#111111",
+            width: 3,
+            dashStyle: "dot",
+            displayBehindSeries: true,
+            label: {}
+        }, {
+            value: 2,
+            color: "#222222",
+            width: 4,
+            dashStyle: "dot",
+            label: {}
+        }]
+    });
+
+    this.translator.stub("translate").withArgs(1).returns(40);
+    this.translator.stub("translate").withArgs(2).returns(50);
+    this.axis.parser = function(value) {
+        return value;
+    };
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    var insideGroup = this.renderer.g.getCall(6).returnValue,
+        outsideGroup = this.renderer.g.getCall(9).returnValue;
+
+    assert.equal(renderer.path.callCount, 2, "path");
+    assert.deepEqual(renderer.path.getCall(0).args, [[40, 30, 40, 70], "line"], "args");
+    assert.deepEqual(renderer.path.getCall(0).returnValue.attr.getCall(0).args[0], { dashStyle: "dot", stroke: "#111111", "stroke-width": 3 }, "attr");
+    assert.deepEqual(renderer.path.getCall(0).returnValue.sharp.getCall(0).args[0], "h", "sharp");
+    assert.deepEqual(renderer.path.getCall(0).returnValue.append.getCall(0).args[0], outsideGroup);
+
+    assert.deepEqual(renderer.path.getCall(1).args, [[50, 30, 50, 70], "line"], "args");
+    assert.deepEqual(renderer.path.getCall(1).returnValue.attr.getCall(0).args[0], { dashStyle: "dot", stroke: "#222222", "stroke-width": 4 }, "attr");
+    assert.deepEqual(renderer.path.getCall(1).returnValue.sharp.getCall(0).args[0], "h", "sharp");
+    assert.deepEqual(renderer.path.getCall(1).returnValue.append.getCall(0).args[0], insideGroup);
 });
 
 QUnit.module("XY linear axis. Draw. Check constant line (outside) labels", environment);
@@ -6893,7 +6946,7 @@ QUnit.test("Styles and attributes", function(assert) {
         "font-weight": 700
     }, "css");
 
-    var group = this.renderer.g.getCall(9).returnValue;
+    var group = this.renderer.g.lastCall.returnValue;
     assert.deepEqual(renderer.text.getCall(0).returnValue.append.getCall(0).args[0], group);
     assert.deepEqual(renderer.text.getCall(1).returnValue.append.getCall(0).args[0], group);
 });
@@ -7877,6 +7930,62 @@ QUnit.test("Axis with constant lines with ouside labels", function(assert) {
     assert.strictEqual(margins.left, 20, "left");
     assert.strictEqual(margins.right, 20, "right");
     assert.strictEqual(margins.top, 10, "top");
+});
+
+QUnit.test("Axis with constant lines with ouside labels; One of them behind series", function(assert) {
+    // arrange
+    this.updateOptions({
+        title: "Title text",
+        argumentType: "datetime",
+        isHorizontal: true,
+        position: "bottom",
+        constantLines: [{
+            value: 0,
+            label: {
+                text: "text",
+                position: "outside",
+                visible: true,
+                verticalAlignment: "top"
+            },
+            displayBehindSeries: true
+
+        }, {
+            value: 0,
+            label: {
+                text: "text",
+                position: "outside",
+                visible: false
+            }
+        }]
+    });
+
+    this.translator.stub("translate").returns(50);
+    this.axis.parser = function() {
+        return 0;
+    };
+
+    this.axis.draw(this.canvas);
+
+    // constant line above series
+    this.renderer.g.getCall(7).returnValue.getBBox = sinon.stub().returns({ x: -10, y: 20, width: 120, height: 20 });
+    this.renderer.g.getCall(8).returnValue.getBBox = sinon.stub().returns({ x: 10, y: 80, width: 10, height: 30 });
+
+    // constant line under series
+    this.renderer.g.getCall(10).returnValue.getBBox = sinon.stub().returns({ x: -20, y: 30, width: 110, height: 30 });
+    this.renderer.g.getCall(11).returnValue.getBBox = sinon.stub().returns({ x: 20, y: 90, width: 20, height: 40 });
+
+    // act
+    var margins = this.axis.getMargins();
+
+    // assert
+    assert.strictEqual(margins.bottom, 60, "bottom");
+    assert.strictEqual(margins.left, 30, "left");
+    assert.strictEqual(margins.right, 20, "right");
+    assert.strictEqual(margins.top, 10, "top");
+
+    assert.ok(this.renderer.g.getCall(7).returnValue.getBBox.callCount > 0);
+    assert.ok(this.renderer.g.getCall(8).returnValue.getBBox.callCount > 0);
+    assert.ok(this.renderer.g.getCall(10).returnValue.getBBox.callCount > 0);
 });
 
 QUnit.test("Constant line with invisible label", function(assert) {
@@ -8976,7 +9085,7 @@ QUnit.test("Drawing scale breaks. Value axis. Elements creation.", function(asse
 
     this.axis.drawScaleBreaks();
 
-    elementsGroup = this.renderer.g.getCall(11).returnValue;
+    elementsGroup = this.renderer.g.lastCall.returnValue;
 
     // assert
     assert.strictEqual(this.renderer.path.callCount, 3);
@@ -9118,7 +9227,7 @@ QUnit.test("Apply cliprect for breaks", function(assert) {
     this.axis.drawScaleBreaks();
 
     // assert
-    assert.strictEqual(this.renderer.g.getCall(10).returnValue.attr.lastCall.args[0]["clip-path"], this.renderer.clipRect.lastCall.returnValue.id);
+    assert.strictEqual(this.renderer.g.getCall(13).returnValue.attr.lastCall.args[0]["clip-path"], this.renderer.clipRect.lastCall.returnValue.id);
 });
 
 QUnit.test("Apply cliprect for breaks. Rotated chart", function(assert) {
@@ -9170,7 +9279,7 @@ QUnit.test("Drawing scale breaks using drawScaleBreaks method", function(assert)
     // act
     this.axis.drawScaleBreaks();
 
-    elementsGroup = this.renderer.g.getCall(11).returnValue;
+    elementsGroup = this.renderer.g.lastCall.returnValue;
     // assert
     assert.strictEqual(this.renderer.path.callCount, 3);
     assert.strictEqual(this.renderer.path.getCall(0).returnValue.append.lastCall.args[0], elementsGroup);
@@ -9311,7 +9420,7 @@ QUnit.test("Create group for breaks", function(assert) {
     this.axis.drawScaleBreaks();
 
     // assert
-    var group = this.renderer.g.getCall(10).returnValue;
+    var group = this.renderer.g.getCall(13).returnValue;
     assert.strictEqual(group.append.lastCall.args[0], externalBreaksGroup);
     assert.strictEqual(group.attr.lastCall.args[0]["class"], "widget-axis-breaks");
 });
@@ -9335,7 +9444,7 @@ QUnit.test("Create group for breaks if shifted axis", function(assert) {
     this.axis.drawScaleBreaks();
 
     // assert
-    var additionGroup = this.renderer.g.getCall(11).returnValue;
+    var additionGroup = this.renderer.g.getCall(14).returnValue;
     assert.strictEqual(additionGroup.append.lastCall.args[0], externalBreaksGroup);
     assert.strictEqual(additionGroup.attr.lastCall.args[0]["clip-path"], this.renderer.clipRect.getCall(1).returnValue.id);
     assert.strictEqual(additionGroup.attr.lastCall.args[0]["class"], "widget-axis-breaks");
@@ -9383,7 +9492,7 @@ QUnit.test("Recreate group for breaks if shifted axis", function(assert) {
     this.axis.updateSize(this.canvas);
     this.axis.drawScaleBreaks();
 
-    var oldAdditionGroup = this.renderer.g.getCall(11).returnValue;
+    var oldAdditionGroup = this.renderer.g.getCall(13).returnValue;
     var oldAdditionClipRect = this.renderer.clipRect.getCall(1).returnValue;
 
     this.renderer.clipRect.reset();

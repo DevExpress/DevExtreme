@@ -1206,13 +1206,10 @@ module.exports = {
 
             that._axisShift = shiftGroup(options.position, that._axisGroup);
 
-            if(isHorizontal) {
-                shiftGroup("top", constantLinesGroups);
-                shiftGroup("bottom", constantLinesGroups);
-            } else {
-                shiftGroup("left", constantLinesGroups);
-                shiftGroup("right", constantLinesGroups);
-            }
+            (isHorizontal ? ["top", "bottom"] : ["left", "right"]).forEach(side => {
+                shiftGroup(side, constantLinesGroups.above);
+                shiftGroup(side, constantLinesGroups.under);
+            });
         }
     }
 };

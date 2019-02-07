@@ -62,7 +62,7 @@ var environment = {
         this.renderSettings = {
             stripsGroup: this.renderer.g(),
             labelAxesGroup: this.renderer.g(),
-            constantLinesGroup: this.renderer.g(),
+            constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup: this.renderer.g(),
             gridGroup: this.renderer.g(),
             renderer: this.renderer,
@@ -809,7 +809,7 @@ QUnit.test("create constant lines", function(assert) {
 
     assert.ok(this.renderer.path.getCall(0).returnValue.sharp.calledOnce);
 
-    assert.equal(this.renderer.path.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.constantLinesGroup.children[0], "Created element attached to the group");
+    assert.equal(this.renderer.path.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.constantLinesGroup.above.children[0], "Created element attached to the group");
 });
 
 QUnit.test("create constant lines with label", function(assert) {
@@ -818,7 +818,7 @@ QUnit.test("create constant lines with label", function(assert) {
     assert.ok(this.renderer.path.called);
     assert.ok(this.renderer.text.called);
     assert.deepEqual(this.renderer.text.getCall(0).args, ["10", 30, 52]);
-    assert.equal(this.renderer.text.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.constantLinesGroup.children[0], "Created element attached to the group");
+    assert.equal(this.renderer.text.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.constantLinesGroup.above.children[0], "Created element attached to the group");
 });
 
 QUnit.test("create constant lines with label, option 'startAngle' > 0", function(assert) {
@@ -958,7 +958,7 @@ QUnit.test("shift", function(assert) {
     var axis = this.createSimpleAxis(this.renderer);
     axis.shift({ right: 10, bottom: 30 });
 
-    var args = this.renderer.g.getCall(5).returnValue.attr.lastCall.args[0];
+    var args = this.renderer.g.getCall(6).returnValue.attr.lastCall.args[0];
     assert.equal(args.translateX, 10, "translateX");
     assert.equal(args.translateY, 30, "translateY");
 });
@@ -1090,7 +1090,7 @@ QUnit.test("create constant line", function(assert) {
     assert.equal(this.renderer.circle.getCall(0).returnValue.attr.firstCall.args[0].stroke, "green");
     assert.equal(this.renderer.circle.getCall(0).returnValue.attr.firstCall.args[0].dashStyle, undefined);
     assert.equal(this.renderer.circle.getCall(0).returnValue.attr.firstCall.args[0]["stroke-width"], undefined);
-    assert.equal(this.renderer.circle.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.constantLinesGroup.children[0]);
+    assert.equal(this.renderer.circle.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.constantLinesGroup.above.children[0]);
 });
 
 QUnit.test("create constant lines with label", function(assert) {
@@ -1099,7 +1099,7 @@ QUnit.test("create constant lines with label", function(assert) {
     assert.ok(this.renderer.circle.called);
     assert.equal(this.renderer.text.callCount, 1);
     assert.deepEqual(this.renderer.text.getCall(0).args, ["10", 20, 40]);
-    assert.equal(this.renderer.text.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.constantLinesGroup.children[0], "Created element attached to the group");
+    assert.equal(this.renderer.text.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.constantLinesGroup.above.children[0], "Created element attached to the group");
 });
 
 QUnit.test("axisDivisionMode is betweenLabels", function(assert) {
@@ -1230,7 +1230,7 @@ QUnit.test("create spider constant line", function(assert) {
     assert.equal(this.renderer.path.getCall(0).returnValue.attr.firstCall.args[0].stroke, "green");
     assert.equal(this.renderer.path.getCall(0).returnValue.attr.firstCall.args[0].dashStyle, undefined);
     assert.equal(this.renderer.path.getCall(0).returnValue.attr.firstCall.args[0]["stroke-width"], undefined);
-    assert.equal(this.renderer.path.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.constantLinesGroup.children[0], "Created element attached to the group");
+    assert.equal(this.renderer.path.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.constantLinesGroup.above.children[0], "Created element attached to the group");
 });
 
 QUnit.module("Label overlapping, circular axis", $.extend({}, environment, {
