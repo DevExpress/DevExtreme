@@ -49,9 +49,9 @@ var OneDriveFileProvider = FileProvider.inherit({
         } else {
             ajax.sendRequest({
                 url: this._getAccessTokenUrl,
-                dataType: "text"
+                dataType: "json"
             }).done(function(response) {
-                this._accessToken = response;
+                this._accessToken = response.token;
                 this._accessTokenPromise = null;
                 deferred.resolve();
             }.bind(this));

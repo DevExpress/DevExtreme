@@ -124,8 +124,8 @@ var FileManager = Widget.inherit({
     },
 
     _createFileProvider: function() {
-        var providerType = this.option("providerType");
-        switch(providerType) {
+        var fileSystemType = this.option("fileSystemType");
+        switch(fileSystemType) {
             case "onedrive":
                 return new OneDriveFileProvider(this.option("oneDrive"));
             case "data":
@@ -141,7 +141,7 @@ var FileManager = Widget.inherit({
             * @type string
             * @default 'data'
             */
-            providerType: "data",
+            fileSystemType: "data",
 
             /**
                 * @name dxFileManagerOptions.jsonData
