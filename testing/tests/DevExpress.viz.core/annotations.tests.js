@@ -72,5 +72,3 @@ QUnit.test("Do not draw annotation if cannot get coords", function(assert) {
     testCase({ x: 100, y: undefined }, "Only y is undefined");
     testCase({ x: undefined, y: 100 }, "Only x is undefined");
 });
-
-
