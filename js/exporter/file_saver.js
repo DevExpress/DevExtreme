@@ -29,6 +29,8 @@ var MIME_TYPES = exports.MIME_TYPES = {
 };
 
 exports.fileSaver = {
+    _revokeObjectURLTimeout: 30000,
+
     _getDataUri: function(format, data) {
         return "data:" + MIME_TYPES[format] + ";base64," + data;
     },
@@ -116,13 +118,14 @@ exports.fileSaver = {
 
             if(typeUtils.isDefined(URL)) {
                 var objectURL = URL.createObjectURL(data),
+                    revokeObjectURLTimeout = that._revokeObjectURLTimeout,
                     clickHandler = function(e) {
                         setTimeout(function() {
                             URL.revokeObjectURL(objectURL);
                             ///#DEBUG
                             that._objectUrlRevoked = true;
                             ///#ENDDEBUG
-                        });
+                        }, revokeObjectURLTimeout);
                         ///#DEBUG
                         typeUtils.isFunction(linkClick) && linkClick.apply(this, arguments);
                         ///#ENDDEBUG
@@ -143,7 +146,7 @@ exports.fileSaver = {
         if(forceProxy) {
             this._saveByProxy(proxyURL, fileName, format, data);
         } else if(typeUtils.isFunction(window.Blob)) {
-            this._saveBlobAs(fileName, format, data);
+            this._saveBlobAs(fileName, format, data, linkClick);
         } else {
             if(typeUtils.isDefined(proxyURL) && !typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) {
                 this._saveByProxy(proxyURL, fileName, format, data);
