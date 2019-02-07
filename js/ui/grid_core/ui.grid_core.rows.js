@@ -1,23 +1,20 @@
-var $ = require("../../core/renderer"),
-    windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
-    eventsEngine = require("../../events/core/events_engine"),
-    commonUtils = require("../../core/utils/common"),
-    styleUtils = require("../../core/utils/style"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    stringUtils = require("../../core/utils/string"),
-    getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
-    compileGetter = require("../../core/utils/data").compileGetter,
-    errors = require("../widget/ui.errors"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    columnsView = require("./ui.grid_core.columns_view"),
-    Scrollable = require("../scroll_view/ui.scrollable"),
-    removeEvent = require("../../core/remove_event"),
-    messageLocalization = require("../../localization/message"),
-    browser = require("../../core/utils/browser"),
-    isDefined = typeUtils.isDefined;
+import $ from "../../core/renderer";
+import { getWindow, hasWindow } from "../../core/utils/window";
+import eventsEngine from "../../events/core/events_engine";
+import { deferRender, deferUpdate } from "../../core/utils/common";
+import styleUtils from "../../core/utils/style";
+import { isDefined, isNumeric, isString } from "../../core/utils/type";
+import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import { isEmpty } from "../../core/utils/string";
+import { getDefaultAlignment } from "../../core/utils/position";
+import { compileGetter } from "../../core/utils/data";
+import { setEmptyText, getGroupRowSummaryText, getDisplayValue, formatValue, renderLoadPanel, renderNoDataText } from "./ui.grid_core.utils";
+import columnsView from "./ui.grid_core.columns_view";
+import Scrollable from "../scroll_view/ui.scrollable";
+import removeEvent from "../../core/remove_event";
+import messageLocalization from "../../localization/message";
+import browser from "../../core/utils/browser";
 
 var ROWS_VIEW_CLASS = "rowsview",
     CONTENT_CLASS = "content",
@@ -397,17 +394,22 @@ module.exports = {
             };
 
             var defaultCellTemplate = function($container, options) {
-                var isDataTextEmpty = stringUtils.isEmpty(options.text) && options.rowType === "data",
+                var isDataTextEmpty = isEmpty(options.text) && options.rowType === "data",
                     text = options.text,
                     container = $container.get(0);
 
                 if(isDataTextEmpty) {
-                    gridCoreUtils.setEmptyText($container);
+                    setEmptyText($container);
                 } else if(options.column.encodeHtml) {
                     container.textContent = text;
                 } else {
                     container.innerHTML = text;
                 }
+            };
+
+            var getScrollableBottomPadding = function(that) {
+                var scrollable = that.getScrollable();
+                return scrollable ? Math.ceil(parseFloat(scrollable.$content().css("paddingBottom"))) : 0;
             };
 
             return {
@@ -432,7 +434,7 @@ module.exports = {
                             container = $container.get(0);
 
                         if(options.summaryItems && options.summaryItems.length) {
-                            text += " " + gridCoreUtils.getGroupRowSummaryText(options.summaryItems, summaryTexts);
+                            text += " " + getGroupRowSummaryText(options.summaryItems, summaryTexts);
                         }
 
                         if(data) {
@@ -605,7 +607,7 @@ module.exports = {
                     that._scrollableContainer = that._scrollable && that._scrollable._$container;
                 },
 
-                _renderLoadPanel: gridCoreUtils.renderLoadPanel,
+                _renderLoadPanel: renderLoadPanel,
 
                 _renderContent: function(contentElement, tableElement) {
                     contentElement.replaceWith($("<div>")
@@ -710,7 +712,7 @@ module.exports = {
 
                     keyExpr && rows.some(function(row) {
                         if(row.rowType === "data" && row.key === undefined) {
-                            that._dataController.dataErrorOccurred.fire(errors.Error("E1046", keyExpr));
+                            that._dataController.fireError("E1046", keyExpr);
                             return true;
                         }
                     });
@@ -897,7 +899,7 @@ module.exports = {
                         $table = that.callBase(options),
                         resizeCompletedHandler = function() {
                             var scrollableInstance = that.getScrollable();
-                            if(scrollableInstance && that.element().closest(window.document).length) {
+                            if(scrollableInstance && that.element().closest(getWindow().document).length) {
                                 that.resizeCompleted.remove(resizeCompletedHandler);
                                 scrollableInstance._visibilityChanged(true);
                             }
@@ -954,7 +956,7 @@ module.exports = {
                         data = row.data,
                         summaryCells = row && row.summaryCells,
                         value = options.value,
-                        displayValue = gridCoreUtils.getDisplayValue(column, value, data, row.rowType),
+                        displayValue = getDisplayValue(column, value, data, row.rowType),
                         groupingTextsOptions,
                         scrollingMode;
 
@@ -967,7 +969,7 @@ module.exports = {
                     parameters.data = data;
                     parameters.rowType = row.rowType;
                     parameters.values = row.values;
-                    parameters.text = !column.command ? gridCoreUtils.formatValue(displayValue, column) : "";
+                    parameters.text = !column.command ? formatValue(displayValue, column) : "";
                     parameters.rowIndex = row.rowIndex;
                     parameters.summaryItems = summaryCells && summaryCells[options.columnIndex];
                     parameters.resized = column.resizedCallbacks;
@@ -993,9 +995,9 @@ module.exports = {
                     each($rows, function(rowIndex, row) {
                         if(!$(row).hasClass(GROUP_ROW_CLASS)) {
                             for(var i = 0; i < visibleColumns.length; i++) {
-                                if(typeUtils.isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
+                                if(isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
                                     $rows.eq(rowIndex).children().eq(i).css({ opacity: value });
-                                    if(!typeUtils.isNumeric(columnID)) {
+                                    if(!isNumeric(columnID)) {
                                         break;
                                     }
                                 }
@@ -1005,10 +1007,10 @@ module.exports = {
                 },
 
                 _getDevicePixelRatio: function() {
-                    return window.devicePixelRatio;
+                    return getWindow().devicePixelRatio;
                 },
 
-                renderNoDataText: gridCoreUtils.renderNoDataText,
+                renderNoDataText: renderNoDataText,
 
                 getCellOptions: function(rowIndex, columnIdentifier) {
                     var rowOptions = this._dataController.items()[rowIndex],
@@ -1016,7 +1018,7 @@ module.exports = {
                         column;
 
                     if(rowOptions) {
-                        if(typeUtils.isString(columnIdentifier)) {
+                        if(isString(columnIdentifier)) {
                             column = this._columnsController.columnOption(columnIdentifier);
                         } else {
                             column = this._columnsController.getVisibleColumns()[columnIdentifier];
@@ -1078,9 +1080,8 @@ module.exports = {
                                 that._updateLastRowBorder(isFreeSpaceRowVisible);
                             } else {
                                 freeSpaceRowElements.hide();
-                                commonUtils.deferUpdate(function() {
-                                    var scrollable = that.getScrollable(),
-                                        scrollablePadding = scrollable ? Math.ceil(parseFloat(scrollable.$content().css("paddingBottom"))) : 0, // T697699
+                                deferUpdate(function() {
+                                    var scrollablePadding = getScrollableBottomPadding(that), // T697699
                                         scrollbarWidth = that.getScrollbarWidth(true),
                                         elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth - scrollablePadding,
                                         contentHeight = contentElement.outerHeight(),
@@ -1092,13 +1093,13 @@ module.exports = {
                                         resultHeight = elementHeightWithoutScrollbar - rowsHeight - borderTopWidth - heightCorrection;
 
                                     if(showFreeSpaceRow) {
-                                        commonUtils.deferRender(function() {
+                                        deferRender(function() {
                                             freeSpaceRowElements.css("height", resultHeight);
                                             isFreeSpaceRowVisible = true;
                                             freeSpaceRowElements.show();
                                         });
                                     }
-                                    commonUtils.deferRender(function() {
+                                    deferRender(function() {
                                         that._updateLastRowBorder(isFreeSpaceRowVisible);
                                     });
                                 });
@@ -1185,6 +1186,7 @@ module.exports = {
                             scrollbarWidth = scrollableContainer.clientWidth ? scrollableContainer.offsetWidth - scrollableContainer.clientWidth : 0;
                         } else {
                             scrollbarWidth = scrollableContainer.clientHeight ? scrollableContainer.offsetHeight - scrollableContainer.clientHeight : 0;
+                            scrollbarWidth += getScrollableBottomPadding(this); // T703649
                         }
                     }
                     return scrollbarWidth > 0 ? scrollbarWidth : 0;
@@ -1239,11 +1241,11 @@ module.exports = {
 
                     that._fireColumnResizedCallbacks();
                     that._updateRowHeight();
-                    commonUtils.deferRender(function() {
+                    deferRender(function() {
                         that._renderScrollable();
                         that.renderNoDataText();
                         that.updateFreeSpaceRowHeight();
-                        commonUtils.deferUpdate(function() {
+                        deferUpdate(function() {
                             that._updateScrollable();
                         });
                     });
@@ -1282,7 +1284,7 @@ module.exports = {
                         $element = that.element(),
                         visibilityOptions;
 
-                    if(!windowUtils.hasWindow()) {
+                    if(!hasWindow()) {
                         return;
                     }
 

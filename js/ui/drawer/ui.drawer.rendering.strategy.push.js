@@ -35,6 +35,6 @@ class PushStrategy extends DrawerStrategy {
             }
         }
     }
-};
+}
 
 module.exports = PushStrategy;

@@ -40,21 +40,27 @@ module.exports = function(baseErrors, errors) {
     };
 
     var formatMessage = function(id, details) {
-        return stringUtils.format.apply(this, ["{0} - {1}. See:\n{2}", id, details, ERROR_URL + id]);
+        return stringUtils.format.apply(this, ["{0} - {1}. See:\n{2}", id, details, getErrorUrl(id)]);
     };
 
     var makeError = function(args) {
-        var id, details, message;
+        var id, details, message, url;
 
         id = args[0];
         args = args.slice(1);
         details = formatDetails(id, args);
+        url = getErrorUrl(id);
         message = formatMessage(id, details);
 
         return extend(new Error(message), {
             __id: id,
-            __details: details
+            __details: details,
+            url: url
         });
+    };
+
+    var getErrorUrl = function(id) {
+        return ERROR_URL + id;
     };
 
     return exports;

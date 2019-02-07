@@ -1,10 +1,12 @@
-var DataSourceAdapter = require("../grid_core/ui.grid_core.data_source_adapter");
+import DataSourceAdapter from "../grid_core/ui.grid_core.data_source_adapter";
+
+var dataSourceAdapterType = DataSourceAdapter;
 
 module.exports = {
     extend: function(extender) {
-        DataSourceAdapter = DataSourceAdapter.inherit(extender);
+        dataSourceAdapterType = dataSourceAdapterType.inherit(extender);
     },
     create: function(component) {
-        return new DataSourceAdapter(component);
+        return new dataSourceAdapterType(component);
     }
 };

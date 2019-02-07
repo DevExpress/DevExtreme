@@ -9,7 +9,7 @@ var $ = require("jquery"),
     domUtils = require("core/utils/dom"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
     devices = require("core/devices"),
-    Template = require("ui/widget/jquery.template"),
+    Template = require("ui/widget/template"),
     Overlay = require("ui/overlay"),
     pointerMock = require("../../helpers/pointerMock.js"),
     eventsEngine = require("events/core/events_engine"),
@@ -112,6 +112,7 @@ var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_CONTENT_CLASS = "dx-overlay-content",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     OVERLAY_MODAL_CLASS = "dx-overlay-modal",
+    INNER_OVERLAY_CLASS = "dx-inner-overlay",
 
     HOVER_STATE_CLASS = "dx-state-hover",
     DISABLED_STATE_CLASS = "dx-state-disabled",
@@ -137,6 +138,18 @@ QUnit.module("render", moduleConfig);
 QUnit.test("overlay class should be added to overlay", function(assert) {
     var $element = $("#overlay").dxOverlay();
     assert.ok($element.hasClass(OVERLAY_CLASS));
+});
+
+QUnit.test("inner overlay class should depend on innerOverlay option", function(assert) {
+    var overlay = $("#overlay").dxOverlay({
+            innerOverlay: true
+        }).dxOverlay("instance"),
+        $content = $(overlay.content());
+
+    assert.ok($content.hasClass(INNER_OVERLAY_CLASS));
+
+    overlay.option("innerOverlay", false);
+    assert.notOk($content.hasClass(INNER_OVERLAY_CLASS));
 });
 
 QUnit.test("content should be present when widget instance exists", function(assert) {
@@ -1486,6 +1499,23 @@ QUnit.test("overlay should not be hidden after click inside was present", functi
         .click();
 
     assert.equal(overlay.option("visible"), true, "overlay is not hidden");
+});
+
+QUnit.test("click in the inner overlay should not be an outside click", function(assert) {
+    var overlay1 = $("#overlay").dxOverlay({
+            closeOnOutsideClick: true,
+            visible: true
+        }).dxOverlay("instance"),
+        overlay2 = $("#overlay2").dxOverlay({
+            closeOnOutsideClick: true,
+            innerOverlay: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay("instance");
+
+    $(overlay2.content()).trigger("dxpointerdown");
+
+    assert.equal(overlay1.option("visible"), true, "Bottom overlay should not get outside click when inner overlay clicked");
 });
 
 // T494814
@@ -2910,8 +2940,8 @@ QUnit.test("overlay doesn't handle keyboard propagated events", function(assert)
 
 QUnit.module("focus policy", {
     beforeEach: function() {
-        this.tabEvent = $.Event("keydown", { keyCode: 9 });
-        this.shiftTabEvent = $.Event("keydown", { keyCode: 9, shiftKey: true });
+        this.tabEvent = $.Event("keydown", { key: "Tab" });
+        this.shiftTabEvent = $.Event("keydown", { key: "Tab", shiftKey: true });
 
         moduleConfig.beforeEach.apply(this, arguments);
     },

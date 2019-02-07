@@ -7,25 +7,22 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    ArrayStore = require("data/array_store"),
-    noop = require("core/utils/common").noop,
-    ODataStore = require("data/odata/store"),
-    devices = require("core/devices"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    invertFilterExpression = require("ui/grid_core/ui.grid_core.header_filter").invertFilterExpression,
-    dragEvents = require("events/drag"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController,
-    viewPortUtils = require("core/utils/view_port"),
-    fx = require("animation/fx");
+import $ from "jquery";
+import ArrayStore from "data/array_store";
+import { noop } from "core/utils/common";
+import ODataStore from "data/odata/store";
+import devices from "core/devices";
+import { DataSource } from "data/data_source/data_source";
+import { invertFilterExpression } from "ui/grid_core/ui.grid_core.header_filter";
+import dragEvents from "events/drag";
+import { setupDataGridModules, MockDataController, MockColumnsController } from "../../helpers/dataGridMocks.js";
+import viewPortUtils from "core/utils/view_port";
+import fx from "animation/fx";
 
 QUnit.module("Header Filter dataController", {
     beforeEach: function() {

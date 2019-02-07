@@ -1,12 +1,12 @@
-var $ = require("jquery"),
-    SpinButton = require("ui/number_box/number_box.spin"),
-    devices = require("core/devices"),
-    config = require("core/config"),
-    pointerMock = require("../../../helpers/pointerMock.js"),
-    keyboardMock = require("../../../helpers/keyboardMock.js");
+import $ from "jquery";
+import SpinButton from "ui/number_box/number_box.spin";
+import config from "core/config";
+import devices from "core/devices";
+import keyboardMock from "../../../helpers/keyboardMock.js";
+import pointerMock from "../../../helpers/pointerMock.js";
 
-require("ui/number_box"),
-require("ui/validator");
+import "ui/number_box";
+import "ui/validator";
 
 var NUMBERBOX_CLASS = "dx-numberbox",
     INVALID_CLASS = "dx-invalid",
@@ -453,6 +453,21 @@ QUnit.test("mousewheel action should not work in disabled state", function(asser
 
     mouse.wheel(10);
     assert.equal(numberBox.option("value"), 100.6, "value is not changed");
+});
+
+QUnit.test("mousewheel action should not work if widget is not focused", (assert) => {
+    const $numberBox = $("#numberbox").dxNumberBox({ value: 100 });
+    const numberBox = $numberBox.dxNumberBox("instance");
+    const input = $(".dx-texteditor-input", $numberBox).get(0);
+    const mouse = pointerMock(input).start();
+
+    mouse.wheel(10);
+    assert.strictEqual(numberBox.option("value"), 100);
+
+    input.focus();
+
+    mouse.wheel(10);
+    assert.notStrictEqual(numberBox.option("value"), 100);
 });
 
 QUnit.testInActiveWindow("input is not focused when spin buttons are clicked if useLargeSpinButtons = true", function(assert) {
@@ -1380,10 +1395,10 @@ QUnit.test("onValueChanged option should get jQuery event as a parameter when up
         keyboard = keyboardMock($input);
 
     keyboard.keyDown("up");
-    assert.equal(jQueryEvent.keyCode, 38, "jQuery event is defined when up key pressed");
+    assert.equal(jQueryEvent.key, "ArrowUp", "jQuery event is defined when up key pressed");
 
     keyboard.keyDown("down");
-    assert.equal(jQueryEvent.keyCode, 40, "jQuery event is defined when down key pressed");
+    assert.equal(jQueryEvent.key, "ArrowDown", "jQuery event is defined when down key pressed");
 });
 
 QUnit.module("regressions", {
@@ -1718,7 +1733,7 @@ QUnit.test("keypress with meta key should not be prevented", function(assert) {
     $input.on("keypress", function(e) {
         isKeyPressPrevented = e.isDefaultPrevented();
     });
-    keyboard.triggerEvent("keypress", { keyCode: 48, metaKey: true });
+    keyboard.triggerEvent("keypress", { key: "0", metaKey: true });
     assert.equal(isKeyPressPrevented, false, "keypress with meta is not prevented");
 });
 
@@ -1734,7 +1749,7 @@ QUnit.test("keypress with ctrl key should not be prevented", function(assert) {
     $input.on("keypress", function(e) {
         isKeyPressPrevented = e.isDefaultPrevented();
     });
-    keyboard.triggerEvent("keypress", { keyCode: 48, ctrlKey: true });
+    keyboard.triggerEvent("keypress", { key: "0", ctrlKey: true });
     assert.equal(isKeyPressPrevented, false, "keypress with meta is not prevented");
 });
 

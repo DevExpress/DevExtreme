@@ -54,6 +54,12 @@ var BaseGauge = {
     */
     scale: {
         /**
+        * @name BaseGaugeOptions.scale.scaleDivisionFactor
+        * @type number
+        * @default 17
+        */
+        scaleDivisionFactor: 17,
+        /**
         * @name BaseGaugeOptions.scale.startValue
         * @type number
         * @default 0
@@ -480,6 +486,13 @@ var dxLinearGauge = {
     * @type object
     */
     scale: {
+        /**
+        * @name dxLinearGaugeOptions.scale.scaleDivisionFactor
+        * @type number
+        * @default 25
+        * @inheritdoc
+        */
+        scaleDivisionFactor: 25,
         /**
         * @name dxLinearGaugeOptions.scale.verticalOrientation
         * @type Enums.VerticalAlignment

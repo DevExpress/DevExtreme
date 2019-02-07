@@ -19,6 +19,13 @@ QUnit.test("parse with escaped chars", function(assert) {
     assert.deepEqual(parser("Monday, 12. November 2018 um 14:15:16"), date, "parse correct date string");
 });
 
+QUnit.test("parse with escaped pattern chars", function(assert) {
+    var date = new Date(2018, 0, 1, 0, 0, 0),
+        parser = getDateParser("'dd' yyyy", dateParts);
+
+    assert.deepEqual(parser("dd 2018"), date, "parse correct date string");
+});
+
 QUnit.test("parse dd/MM/yyyy format", function(assert) {
     var parser = getDateParser("dd/MM/yyyy"),
         date = new Date(2017, 8, 22);
@@ -35,17 +42,9 @@ QUnit.test("parse dd/MM/yyyy format", function(assert) {
 QUnit.test("case insensitive date parsing for months", function(assert) {
     var parser = getDateParser("MMM", dateParts);
 
-    assert.deepEqual(parser("nov").getMonth(), 10, "small register");
-    assert.deepEqual(parser("Nov").getMonth(), 10, "normal register");
-    assert.deepEqual(parser("nOv").getMonth(), 10, "random register");
-});
-
-QUnit.test("case insensitive date parsing for days of week", function(assert) {
-    var parser = getDateParser("EEE", dateParts);
-
-    assert.deepEqual(parser("mon").getDay(), 1, "small register");
-    assert.deepEqual(parser("Mon").getDay(), 1, "normal register");
-    assert.deepEqual(parser("mOn").getDay(), 1, "random register");
+    assert.deepEqual(parser("nov").getMonth(), 10, "lower case");
+    assert.deepEqual(parser("Nov").getMonth(), 10, "capitalized");
+    assert.deepEqual(parser("nOv").getMonth(), 10, "mixed case");
 });
 
 QUnit.test("case insensitive date parsing for part of day", function(assert) {
@@ -313,6 +312,6 @@ QUnit.module("getRegExpInfo method");
 QUnit.test("getRegExpInfo should return correct pattern set when stub is in the end", function(assert) {
     var regExpInfo = getRegExpInfo("EEE, MMMM, dd, HH:mm:ss '(stub)'", dateParts);
     assert.deepEqual(regExpInfo.patterns, [
-        "EEE", ", ", "MMMM", ", ", "dd", ", ", "HH", ":", "mm", ":", "ss", " (stub)"
+        "EEE", "', '", "MMMM", "', '", "dd", "', '", "HH", "':'", "mm", "':'", "ss", "' (stub)'"
     ]);
 });

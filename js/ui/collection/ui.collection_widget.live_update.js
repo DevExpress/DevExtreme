@@ -64,6 +64,7 @@ export default CollectionWidget.inherit({
             let result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), this.keyOf.bind(this), this._isItemEquals);
             if(result) {
                 this._modifyByChanges(result, true);
+                this._renderEmptyMessage();
                 return true;
             } else {
                 this._refreshItemsCache();

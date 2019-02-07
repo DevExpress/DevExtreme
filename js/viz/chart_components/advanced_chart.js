@@ -65,6 +65,7 @@ var AdvancedChart = BaseChart.inherit({
     _reinitAxes: function() {
         this.panes = this._createPanes();
         this._populateAxes();
+        this._axesReinitialized = true;
     },
 
     _getCrosshairMargins: function() {
@@ -260,12 +261,13 @@ var AdvancedChart = BaseChart.inherit({
         this._scrollBar && this._scrollBarGroup.linkAppend(); // TODO: Must be appended in the same place where removed (chart)
     },
     _getLegendTargets: function() {
-        var that = this;
-        return _map(that.series, function(item) {
-            if(item.getOptions().showInLegend) {
-                return that._getLegendOptions(item);
+        return this.series.map(s => {
+            const item = this._getLegendOptions(s);
+            item.legendData.series = s;
+            if(!s.getOptions().showInLegend) {
+                item.legendData.visible = false;
             }
-            return null;
+            return item;
         });
     },
     _legendItemTextField: "name",
@@ -424,14 +426,15 @@ var AdvancedChart = BaseChart.inherit({
 
             if(!updatedAxis || updatedAxis && groupSeries.length && valueAxis === updatedAxis) {
                 valueAxis.setGroupSeries(groupSeries);
-                valueAxis.setBusinessRange(groupRange, undefined, that._argumentAxes[0]._lastVisualRangeUpdateMode);
+                valueAxis.setBusinessRange(groupRange, undefined, that._argumentAxes[0]._lastVisualRangeUpdateMode, that._axesReinitialized);
             }
         });
 
         if(!updatedAxis || updatedAxis && series.length) {
-            that._argumentAxes.forEach(a => a.setBusinessRange(argRange, that._groupsData.categories));
+            that._argumentAxes.forEach(a => a.setBusinessRange(argRange, that._groupsData.categories, undefined, that._axesReinitialized));
         }
 
+        that._axesReinitialized = false;
         that._populateMarginOptions();
     },
 

@@ -96,9 +96,6 @@ var dxPieChart = BaseChart.inherit({
         this.series.map(function(series) {
             var range = new rangeModule.Range();
             range.addRange(series.getRangeData().val);
-            if(!range.isDefined()) {
-                range.setStubData();
-            }
             series.getValueAxis().setBusinessRange(range);
             return range;
         });
@@ -130,10 +127,21 @@ var dxPieChart = BaseChart.inherit({
         this.callBase();
     },
 
+    _getLegendOptions: function(item) {
+        const legendItem = this.callBase(item);
+        const legendData = legendItem.legendData;
+
+        legendData.argument = item.argument;
+        legendData.argumentIndex = item.argumentIndex;
+
+        legendData.points = [item];
+
+        return legendItem;
+    },
+
     _getLegendTargets: function() {
-        var that = this,
-            itemsByArgument = {},
-            items = [];
+        const that = this;
+        const itemsByArgument = {};
 
         that.series.forEach(function(series) {
             series.getPoints().forEach(function(point) {
@@ -147,12 +155,17 @@ var dxPieChart = BaseChart.inherit({
             });
         });
 
+        const items = [];
         _each(itemsByArgument, function(_, points) {
             points.forEach(function(point, index) {
                 if(index === 0) {
                     items.push(that._getLegendOptions(point));
-                } else if(!items[items.length - 1].visible) {
-                    items[items.length - 1].visible = point.isVisible();
+                    return;
+                }
+                const item = items[items.length - 1];
+                item.legendData.points.push(point);
+                if(!item.visible) {
+                    item.visible = point.isVisible();
                 }
             });
         });

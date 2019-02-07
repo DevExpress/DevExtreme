@@ -1,14 +1,13 @@
-var $ = require("../../core/renderer"),
-    modules = require("./ui.grid_core.modules"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    isDefined = require("../../core/utils/type").isDefined,
-    isFunction = require("../../core/utils/type").isFunction,
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    eventsEngine = require("../../events/core/events_engine"),
-    Popup = require("../popup"),
-    TreeView = require("../tree_view"),
-    List = require("../list");
+import $ from "../../core/renderer";
+import modules from "./ui.grid_core.modules";
+import gridCoreUtils from "./ui.grid_core.utils";
+import { isDefined, isFunction } from "../../core/utils/type";
+import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
+import eventsEngine from "../../events/core/events_engine";
+import Popup from "../popup";
+import TreeView from "../tree_view";
+import List from "../list";
 
 var HEADER_FILTER_CLASS = "dx-header-filter",
     HEADER_FILTER_MENU_CLASS = "dx-header-filter-menu";

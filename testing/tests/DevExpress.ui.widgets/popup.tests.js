@@ -1,14 +1,14 @@
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    fx = require("animation/fx"),
-    viewPort = require("core/utils/view_port").value,
-    pointerMock = require("../../helpers/pointerMock.js"),
-    config = require("core/config"),
-    isRenderer = require("core/utils/type").isRenderer,
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js");
+import $ from "jquery";
+import devices from "core/devices";
+import fx from "animation/fx";
+import { value as viewPort } from "core/utils/view_port";
+import pointerMock from "../../helpers/pointerMock.js";
+import config from "core/config";
+import { isRenderer } from "core/utils/type";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
-require("common.css!");
-require("ui/popup");
+import "common.css!";
+import "ui/popup";
 
 QUnit.testStart(function() {
     var markup =
@@ -565,6 +565,100 @@ QUnit.test("width/height", function(assert) {
     assert.equal($overlayContent.outerHeight(), 567);
 });
 
+QUnit.test("popup height can be changed according to the content if height = auto", assert => {
+    const $content = $("<div>").attr("id", "content"),
+        popup = $("#popup").dxPopup({
+            visible: true,
+            showTitle: true,
+            title: "Information",
+            height: "auto",
+            contentTemplate: () => $content.append($("<div>").height(50)),
+            maxHeight: 400,
+            minHeight: 50
+        }).dxPopup("instance");
+
+    const $popup = $(popup.content()).parent(toSelector(OVERLAY_CONTENT_CLASS)).eq(0),
+        popupHeight = $popup.height();
+
+    $("<div>").height(50).appendTo($content);
+    assert.strictEqual($popup.height(), popupHeight + 50, "popup height has been changed");
+
+    $("<div>").height(450).appendTo($content);
+    assert.strictEqual($popup.height(), 400, "popup height has been changed, it is equal to the maxHeight");
+
+    $content.empty();
+    assert.strictEqual($popup.height(), 50, "popup height has been changed, it is equal to the minHeight");
+
+    popup.option("autoResizeEnabled", false);
+    $("<div>").height(450).appendTo($content);
+    assert.strictEqual($popup.height(), 50, "popup height does not change if autoResizeEnabled = false");
+});
+
+QUnit.test("popup height should support top and bottom toolbars if height = auto", assert => {
+    const $content = $("<div>").attr("id", "content"),
+        popup = $("#popup").dxPopup({
+            visible: true,
+            height: "auto",
+            showTitle: true,
+            title: "Information",
+            toolbarItems: [{ shortcut: "cancel" }],
+            contentTemplate: () => $content,
+            maxHeight: 300,
+            minHeight: 150
+        }).dxPopup("instance");
+
+    const $popup = popup.$content().parent(),
+        $popupContent = popup.$content(),
+        topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight(),
+        bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).innerHeight(),
+        popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
+
+    let popupContentHeight = $popupContent.innerHeight();
+
+    assert.strictEqual($popup.innerHeight(), 150, "popup has max height");
+    assert.strictEqual(popupContentHeight, 150 - topToolbarHeight - bottomToolbarHeight, "popup has minimum content height");
+
+    $("<div>").height(150).appendTo($content);
+    popupContentHeight = $popupContent.innerHeight();
+    assert.strictEqual(popupContentHeight, 150 + popupContentPadding, "popup has right height");
+
+    $("<div>").height(300).appendTo($content);
+    popupContentHeight = $popupContent.innerHeight();
+    assert.strictEqual($popup.innerHeight(), 300, "popup has max height");
+    assert.strictEqual(popupContentHeight, 300 - topToolbarHeight - bottomToolbarHeight, "popup has maximum content height");
+});
+
+QUnit.test("popup height should support any maxHeight and minHeight option values if height = auto", assert => {
+    const $content = $("<div>").attr("id", "content"),
+        popup = $("#popup").dxPopup({
+            visible: true,
+            height: "auto",
+            showTitle: true,
+            title: "Information",
+            contentTemplate: () => $content,
+            maxHeight: "90%",
+            minHeight: "50%"
+        }).dxPopup("instance");
+
+    const $popup = popup.$content().parent(),
+        windowHeight = $(window).innerHeight(),
+        $popupContent = popup.$content(),
+        topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight(),
+        popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
+
+    assert.roughEqual($popup.height(), windowHeight * 0.5, 1, "minimum popup height in percentages");
+
+    $("<div>").height(windowHeight).appendTo($content);
+    assert.roughEqual($popup.height(), windowHeight * 0.9, 1, "maximum popup height in percentages");
+
+    popup.option("maxHeight", "none");
+    assert.roughEqual($popup.height(), windowHeight + popupContentPadding + topToolbarHeight, 1, "popup maxHeight: none");
+
+    $content.empty();
+    popup.option("minHeight", "auto");
+    assert.strictEqual($popup.height(), $popup.find(toSelector(POPUP_TITLE_CLASS)).innerHeight() + popupContentPadding, "popup minHeight: auto");
+});
+
 QUnit.test("fullScreen", function(assert) {
     this.instance.option({
         fullScreen: true,
@@ -649,6 +743,20 @@ QUnit.test("shading should be synchronized with the option when popup goes from 
 
     assert.equal($popupWrapper.prop('style').width, "", "wrapper is collapsed by width");
     assert.equal($popupWrapper.prop('style').height, "", "wrapper is collapsed by height");
+});
+
+QUnit.test("percentage size should work when the 'shading' is disabled (T709788)", function(assert) {
+    this.instance.option({
+        shading: false,
+        width: "100%",
+        height: "100%",
+        visible: true
+    });
+
+    var popupWrapper = this.instance.$content().get(0);
+
+    assert.ok(popupWrapper.clientHeight > 100);
+    assert.ok(popupWrapper.clientWidth > 100);
 });
 
 QUnit.test("title", function(assert) {
@@ -998,8 +1106,6 @@ QUnit.module("rendering", {
         devices.current("desktop");
     }
 });
-
-var POPUP_BOTTOM_CLASS = "dx-popup-bottom";
 
 QUnit.test("anonymous content template rendering", function(assert) {
     var $popup = $("#popupWithAnonymousTmpl").dxPopup({

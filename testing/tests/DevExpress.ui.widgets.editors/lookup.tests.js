@@ -2285,8 +2285,8 @@ QUnit.test("list option bouncing", function(assert) {
 });
 
 QUnit.test("group options bouncing", function(assert) {
-    var dataSource = [{ key: "header", items: ["1", "2"] },
-            { key: "header", items: ["1", "2"] }],
+    var dataSource = [{ key: "header1", items: ["1", "2"] },
+            { key: "header2", items: ["1", "2"] }],
         $lookup = $("#lookupOptions").dxLookup({
             dataSource: dataSource,
             grouped: true,
@@ -2761,7 +2761,7 @@ QUnit.test("T320459 - the 'space' key press should prevent default behavior whil
     lookup._list.option("focusStateEnabled", true);
 
     $($popupInput).on("keydown", function(e) {
-        if(e.which === 32) {
+        if(e.key === " ") {
             event = e;
         }
     });
@@ -2785,7 +2785,7 @@ QUnit.test("T320459 - the 'space' key press on editor should prevent default beh
         event;
 
     $($input).on("keydown", function(e) {
-        if(e.which === 32) {
+        if(e.key === " ") {
             event = e;
         }
     });

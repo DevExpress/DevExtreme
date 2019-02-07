@@ -85,6 +85,10 @@ var ODataStore = Store.inherit({
          * @default false
          */
         /**
+         * @name ODataStoreOptions.filterToLower
+         * @type boolean
+         */
+        /**
          * @name ODataStoreOptions.deserializeDates
          * @type boolean
          */
@@ -196,6 +200,10 @@ var ODataStore = Store.inherit({
             url = loadOptions.urlOverride;
         } else {
             url = this._url;
+        }
+
+        if(isDefined(this._filterToLower)) {
+            queryOptions.filterToLower = this._filterToLower;
         }
 
         if(loadOptions.customQueryParams) {

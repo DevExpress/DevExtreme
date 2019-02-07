@@ -1,4 +1,4 @@
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.testStart(function() {
     var markup =
@@ -11,12 +11,11 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
+import "common.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
+import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
 
 QUnit.module("Error handling", {
     beforeEach: function() {
@@ -228,7 +227,7 @@ QUnit.test("Remove error row in rows view after cancel edit data", function(asse
 
     // assert
     assert.equal($testElement.find('tbody > tr').length, 6, "count rows");
-    var $errorRow = $testElement.find('.dx-datagrid-rowsview .dx-error-row');
+    $errorRow = $testElement.find('.dx-datagrid-rowsview .dx-error-row');
     assert.equal($errorRow.length, 1, "has error row");
     assert.strictEqual($errorRow.find("td").first().text(), "Test", "error message");
 

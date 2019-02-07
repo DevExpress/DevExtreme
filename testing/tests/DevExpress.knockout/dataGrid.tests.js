@@ -58,7 +58,7 @@ var processColumnsForCompare = function(columns, parameterNames) {
                     propertyName === 'defaultFilterOperations' ||
                     propertyName === 'visibleIndex' ||
                     propertyName === 'resizedCallbacks' ||
-                    propertyName === 'id') {
+                    propertyName === 'headerId') {
                     delete this[propertyName];
                 }
             }

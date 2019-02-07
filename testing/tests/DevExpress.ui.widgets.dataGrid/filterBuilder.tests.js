@@ -395,4 +395,26 @@ QUnit.module("Real dataGrid", {
         assert.equal($(".dx-popup-content .dx-filterbuilder").length, 1);
     });
 
+    // T707084
+    QUnit.test("The one negative condition is specified inside another", function(assert) {
+        // arrange, act
+        this.initDataGrid({
+            dataSource: [{ field: 1 }, { field: 2 }, { field: 3 }],
+            customizeColumns: function(columns) {
+            },
+            columns: [{
+                dataField: "field",
+                dataType: "number"
+            }],
+            filterPanel: { visible: true },
+            filterValue: ["!", ["!", ["field", "=", 1]]],
+            loadingTimeout: null
+        });
+
+        // act
+        this.dataGrid.option("filterBuilderPopup.visible", true);
+
+        // assert
+        assert.equal($(".dx-popup-content .dx-filterbuilder").length, 1);
+    });
 });

@@ -6,7 +6,7 @@ SystemJS.config({
 
 define(function(require) {
     var $ = require("jquery"),
-        Template = require("ui/widget/jquery.template"),
+        Template = require("ui/widget/template"),
         setTemplateEngine = require("ui/set_template_engine"),
         errors = require("core/errors");
 
@@ -139,7 +139,7 @@ define(function(require) {
     QUnit.test("custom user template engine for script template", function(assert) {
         setTemplateEngine(customUserTemplate);
 
-        var template = new Template($("<script type='text/html'>Text: <b>$text$</b><\/script>"));
+        var template = new Template($("<script type='text/html'>Text: <b>$text$</b></script>"));
         var container = $('<div>');
 
         // act

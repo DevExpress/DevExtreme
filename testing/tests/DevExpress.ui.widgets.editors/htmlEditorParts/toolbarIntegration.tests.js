@@ -1,6 +1,7 @@
 import $ from "jquery";
 
 import "ui/html_editor";
+import fx from "animation/fx";
 
 const TOOLBAR_CLASS = "dx-htmleditor-toolbar";
 const TOOLBAR_WRAPPER_CLASS = "dx-htmleditor-toolbar-wrapper";
@@ -9,21 +10,33 @@ const DROPDOWNMENU_CLASS = "dx-dropdownmenu-button";
 const BUTTON_CONTENT_CLASS = "dx-button-content";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
 const STATE_DISABLED_CLASS = "dx-state-disabled";
+const HEX_FIELD_CLASS = "dx-colorview-label-hex";
+const INPUT_CLASS = "dx-texteditor-input";
+const DIALOG_CLASS = "dx-formdialog";
+const DIALOG_FORM_CLASS = "dx-formdialog-form";
+const BUTTON_CLASS = "dx-button";
 
 const { test } = QUnit;
 
 QUnit.module("Toolbar integration", {
     beforeEach: () => {
         this.clock = sinon.useFakeTimers();
+        fx.off = true;
     },
     afterEach: () => {
         this.clock.restore();
+        fx.off = false;
     }
 }, () => {
     test("Apply simple format without focus", (assert) => {
+        const focusInStub = sinon.stub();
+        const focusOutStub = sinon.stub();
+
         $("#htmlEditor").dxHtmlEditor({
             value: "<p>test</p>",
-            toolbar: { items: ["bold"] }
+            toolbar: { items: ["bold"] },
+            onFocusIn: focusInStub,
+            onFocusOut: focusOutStub
         });
 
         try {
@@ -34,7 +47,31 @@ QUnit.module("Toolbar integration", {
             assert.ok(false, "error on formatting");
         }
 
-        assert.ok(true);
+        assert.strictEqual(focusInStub.callCount, 1, "editor focused");
+        assert.strictEqual(focusOutStub.callCount, 0, "editor isn't blurred");
+    });
+
+    test("there is no extra focusout when applying toolbar formatting to the selected range", (assert) => {
+        const done = assert.async();
+        const focusInStub = sinon.stub();
+        const focusOutStub = sinon.stub();
+        const instance = $("#htmlEditor").dxHtmlEditor({
+            value: "<p>test</p>",
+            toolbar: { items: ["bold"] },
+            onValueChanged: (e) => {
+                assert.strictEqual(focusInStub.callCount, 1, "editor focused");
+                assert.strictEqual(focusOutStub.callCount, 0, "editor isn't blurred");
+                done();
+            },
+            onFocusIn: focusInStub,
+            onFocusOut: focusOutStub
+        })
+            .dxHtmlEditor("instance");
+
+        instance.setSelection(0, 2);
+        $("#htmlEditor")
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
     });
 
     test("Apply simple format with selection", (assert) => {
@@ -44,7 +81,7 @@ QUnit.module("Toolbar integration", {
             value: "<p>test</p>",
             toolbar: { items: ["bold"] },
             onValueChanged: (e) => {
-                assert.equal(e.value, expected, "markup contains an image");
+                assert.equal(e.value, expected, "markup contains a formatted text");
                 done();
             }
         })
@@ -53,6 +90,74 @@ QUnit.module("Toolbar integration", {
         instance.setSelection(0, 2);
         $("#htmlEditor")
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+    });
+
+    test("Apply format via color dialog located in the adaptive menu", (assert) => {
+        const done = assert.async();
+        const toolbarClickStub = sinon.stub();
+        const expected = '<span style="color: rgb(250, 250, 250);">te</span>st';
+        const instance = $("#htmlEditor").dxHtmlEditor({
+            value: "<p>test</p>",
+            toolbar: { items: [{ formatName: "color", locateInMenu: "always" }] },
+            onValueChanged: (e) => {
+                assert.equal(e.value, expected, "color has been applied");
+                assert.equal(toolbarClickStub.callCount, 2, "Clicks on toolbar buttons should bubbling to the toolbar container");
+                done();
+            }
+        }).dxHtmlEditor("instance");
+
+        instance.setSelection(0, 2);
+
+        $(`.${TOOLBAR_CLASS}`).on("dxclick", toolbarClickStub);
+        $("#htmlEditor")
+            .find(`.dx-dropdownmenu-button`)
+            .trigger("dxclick");
+
+        $(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+
+        $(`.${HEX_FIELD_CLASS} .${INPUT_CLASS}`)
+            .val("fafafa")
+            .change();
+
+
+        $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
+            .first()
+            .trigger("dxclick");
+    });
+
+    test("Add a link via dialog", (assert) => {
+        const done = assert.async();
+        const expected = '<a href="http://test.com" target="_blank">te</a>st';
+        const instance = $("#htmlEditor").dxHtmlEditor({
+            value: "<p>test</p>",
+            toolbar: { items: ["link"] },
+            onValueChanged: (e) => {
+                assert.equal(e.value, expected, "link has been added");
+                done();
+            }
+        }).dxHtmlEditor("instance");
+
+        instance.setSelection(0, 2);
+        $("#htmlEditor")
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+
+        const $inputs = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`);
+        const linkText = $inputs
+            .last()
+            .val();
+
+        assert.strictEqual(linkText, "te", "Link test equal to the selected content");
+
+        $inputs
+            .first()
+            .val("http://test.com")
+            .change();
+
+        $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
+            .first()
             .trigger("dxclick");
     });
 

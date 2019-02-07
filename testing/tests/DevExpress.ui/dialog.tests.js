@@ -4,7 +4,8 @@ var $ = require("jquery"),
     domUtils = require("core/utils/dom"),
     devices = require("core/devices"),
     fx = require("animation/fx"),
-    config = require("core/config");
+    config = require("core/config"),
+    keyboardMock = require("../../helpers/keyboardMock.js");
 
 QUnit.module("dialog tests", {
     beforeEach: function() {
@@ -36,6 +37,18 @@ QUnit.module("dialog tests", {
     afterEach: function() {
         fx.off = false;
     }
+});
+
+QUnit.test("dialog show/hide by Escape (T686065)", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "desktop specific test");
+        return;
+    }
+
+    dialog.alert();
+    assert.ok(this.thereIsDialog());
+    keyboardMock(this.dialog().find(".dx-overlay-content").get(0)).keyDown("esc");
+    assert.ok(this.thereIsNoDialog());
 });
 
 QUnit.test("dialog show/hide", function(assert) {

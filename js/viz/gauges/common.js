@@ -171,12 +171,14 @@ exports.dxGauge = dxBaseGauge.inherit({
 
     _prepareScaleSettings: function() {
         var that = this,
-            scaleOptions = extend(true, {}, that._themeManager.theme("scale"), that.option("scale"));
+            userOptions = that.option("scale"),
+            scaleOptions = extend(true, {}, that._themeManager.theme("scale"), userOptions);
 
         scaleOptions.label.indentFromAxis = 0;
         scaleOptions.isHorizontal = !that._area.vertical;
-        scaleOptions.axisDivisionFactor = that._gridSpacingFactor;
-        scaleOptions.minorAxisDivisionFactor = DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
+        scaleOptions.forceUserTickInterval |= _isDefined(userOptions) && _isDefined(userOptions.tickInterval) && !_isDefined(userOptions.scaleDivisionFactor);
+        scaleOptions.axisDivisionFactor = scaleOptions.scaleDivisionFactor || that._gridSpacingFactor;
+        scaleOptions.minorAxisDivisionFactor = scaleOptions.minorScaleDivisionFactor || DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
         scaleOptions.numberMultipliers = DEFAULT_NUMBER_MULTIPLIERS;
         scaleOptions.tickOrientation = that._getTicksOrientation(scaleOptions);
         if(scaleOptions.label.useRangeColors) {

@@ -1,13 +1,14 @@
 import { isDefined } from "../../core/utils/type";
+import modules from "./ui.grid_core.modules";
+import utils from "../filter_builder/utils";
+import errors from "../widget/ui.errors";
+import gridCoreUtils from "./ui.grid_core.utils";
+import filterUtils from "../shared/filtering";
+import customOperations from "./ui.grid_core.filter_custom_operations";
 
-var modules = require("./ui.grid_core.modules"),
-    utils = require("../filter_builder/utils"),
-    errors = require("../widget/ui.errors"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    filterUtils = require("../shared/filtering"),
-    customOperations = require("./ui.grid_core.filter_custom_operations");
-
-var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"];
+var FILTER_ROW_OPERATIONS = ["=", "<>", "<", "<=", ">", ">=", "notcontains", "contains", "startswith", "endswith", "between"],
+    FILTER_TYPES_INCLUDE = "include",
+    FILTER_TYPES_EXCLUDE = "exclude";
 
 function getColumnIdentifier(column) {
     return column.dataField || column.name;
@@ -23,7 +24,7 @@ function checkForErrors(columns) {
 var FilterSyncController = modules.Controller.inherit((function() {
     var getEmptyFilterValues = function() {
         return {
-            filterType: "include",
+            filterType: FILTER_TYPES_INCLUDE,
             filterValues: undefined
         };
     };
@@ -51,11 +52,11 @@ var FilterSyncController = modules.Controller.inherit((function() {
         switch(selectedFilterOperation) {
             case "anyof":
             case "=":
-                filterType = "include";
+                filterType = FILTER_TYPES_INCLUDE;
                 break;
             case "noneof":
             case "<>":
-                filterType = "exclude";
+                filterType = FILTER_TYPES_EXCLUDE;
                 break;
             default: return getEmptyFilterValues();
         }
@@ -85,10 +86,10 @@ var FilterSyncController = modules.Controller.inherit((function() {
         if(!filterValues) return null;
 
         if(canSyncHeaderFilterWithFilterRow(column) && column.filterValues.length === 1 && !Array.isArray(filterValues[0])) {
-            column.filterType === "exclude" ? selectedOperation = "<>" : selectedOperation = "=";
+            column.filterType === FILTER_TYPES_EXCLUDE ? selectedOperation = "<>" : selectedOperation = "=";
             value = filterValues[0];
         } else {
-            column.filterType === "exclude" ? selectedOperation = "noneof" : selectedOperation = "anyof";
+            column.filterType === FILTER_TYPES_EXCLUDE ? selectedOperation = "noneof" : selectedOperation = "anyof";
             value = filterValues;
         }
         return [getColumnIdentifier(column), selectedOperation, value];
@@ -292,7 +293,11 @@ var DataControllerFilterSyncExtender = {
                     if(column && !filterSyncController._skipSyncColumnOptions) {
                         let propertyName = this._parseColumnPropertyName(args.fullName);
                         filterSyncController._skipSyncColumnOptions = true;
-                        if(["filterValues", "filterType"].indexOf(propertyName) > -1) {
+                        if("filterType" === propertyName) {
+                            if(FILTER_TYPES_EXCLUDE === args.value || FILTER_TYPES_EXCLUDE === args.previousValue) {
+                                filterSyncController.syncHeaderFilter(column);
+                            }
+                        } else if("filterValues" === propertyName) {
                             filterSyncController.syncHeaderFilter(column);
                         } else if(["filterValue", "selectedFilterOperation"].indexOf(propertyName) > -1) {
                             filterSyncController.syncFilterRow(column, column.filterValue);
@@ -300,6 +305,7 @@ var DataControllerFilterSyncExtender = {
                         filterSyncController._skipSyncColumnOptions = false;
                     }
                 }
+                this.callBase(args);
                 break;
             default:
                 this.callBase(args);

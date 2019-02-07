@@ -108,7 +108,7 @@ var baseTrackerPrototype = {
             that.clearSelection();
             if(!noHoveredSeries) {
                 that._hideTooltip(that.pointAtShownTooltip);
-                that._clearHover();
+                that.clearHover();
             }
         }
     },
@@ -200,7 +200,7 @@ var baseTrackerPrototype = {
         that._hideTooltip(that.pointAtShownTooltip);
     },
 
-    _clearHover: function() {
+    clearHover: function() {
         this._resetHoveredArgument();
         this._releaseHoveredSeries();
         this._releaseHoveredPoint();
@@ -285,7 +285,7 @@ var baseTrackerPrototype = {
     },
 
     _pointerOut: function() {
-        this._clearHover();
+        this.clearHover();
         this._tooltip.isEnabled() && this._hideTooltip(this.pointAtShownTooltip);
     },
 
@@ -310,7 +310,7 @@ var baseTrackerPrototype = {
             }
             that._tooltip.isEnabled() && that._hideTooltip(that.pointAtShownTooltip);
         } else {
-            that._clearHover();
+            that.clearHover();
         }
     },
 
@@ -402,6 +402,9 @@ var baseTrackerPrototype = {
 
         if(series && !point) {
             point = series.getNeighborPoint(x, y);
+            if(!that._stickyHovering && point && !point.coordsIn(x, y)) {
+                point = null;
+            }
             if(series !== that.hoveredSeries) {
                 that._setTimeout(function() {
                     that._setHoveredSeries(series);
@@ -422,11 +425,13 @@ var baseTrackerPrototype = {
                 that._pointerOnPoint(point, x, y, e);
             }
             return;
-        } else if(that._setStuckSeries(e, undefined, x, y)) {
+        } else if(that._setStuckSeries(e, undefined, x, y) && that._stickyHovering) {
             series = that._stuckSeries;
             point = series.getNeighborPoint(x, y);
             that._releaseHoveredSeries();
             point && point.getMarkerVisibility() && that._setHoveredPoint(point);
+        } else if(!that._stickyHovering) {
+            that._pointerOut();
         }
 
         that._pointerComplete(point, x, y);
@@ -500,14 +505,13 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
 
     update: function(options) {
         var that = this;
-        that._zoomingMode = _normalizeEnum(options.zoomingMode);
-        that._scrollingMode = _normalizeEnum(options.scrollingMode);
         baseTrackerPrototype.update.call(this, options);
         that._argumentAxis = options.argumentAxis || {};
         that._axisHoverEnabled = that._argumentAxis && _normalizeEnum(that._argumentAxis.getOptions().hoverMode) === ALL_ARGUMENT_POINTS_MODE;
         that._chart = options.chart;
         that._rotated = options.rotated;
         that._crosshair = options.crosshair;
+        that._stickyHovering = options.stickyHovering;
     },
 
     _getCanvas: function(x, y) {
@@ -682,7 +686,7 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
         if(item) {
             that._hoverArgument(item.argument, item.argumentIndex);
         } else {
-            that._clearHover();
+            that.clearHover();
         }
     },
 

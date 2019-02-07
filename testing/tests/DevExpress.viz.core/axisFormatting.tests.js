@@ -1,5 +1,6 @@
 import $ from "jquery";
 import translator2DModule from "viz/translators/translator2d";
+import { Range } from "viz/translators/range";
 import tickGeneratorModule from "viz/axes/tick_generator";
 import { Axis } from "viz/axes/base_axis";
 import vizMocks from "../../helpers/vizMocks.js";
@@ -52,7 +53,7 @@ var environment = {
         });
 
         this.translator = new StubTranslator();
-        this.translator.stub("getBusinessRange").returns({ });
+        this.translator.stub("getBusinessRange").returns(new Range());
         this.translator.stub("getCanvasVisibleArea").returns({ min: 0, max: 200 }); // for horizontal only
     },
     createAxis: function(options) {
@@ -239,11 +240,14 @@ QUnit.test("Label's hint - use auto formatter", function(assert) {
     // arrange
     var spy = sinon.spy();
     this.createAxis({
+        isHorizontal: true,
         label: {
             visible: true,
             customizeHint: spy
         }
     });
+
+    this.axis.setBusinessRange({ min: 1000, max: 2000 });
 
     this.generatedTicks = [1500];
     this.generatedTickInterval = 100;
@@ -967,6 +971,7 @@ QUnit.test("Currency format", function(assert) {
             visible: true
         }
     });
+    this.axis.setBusinessRange({ min: 0, max: 10 });
     this.generatedTicks = [0, 1, 2];
     this.translator.stub("translate").withArgs(1).returns(100);
     this.translator.stub("translate").withArgs(2).returns(100);
@@ -987,6 +992,7 @@ QUnit.test("Date format with custom", function(assert) {
             visible: true
         }
     });
+    this.axis.setBusinessRange({ min: new Date(2010, 1, 1), max: new Date(2010, 3, 1) });
     this.generatedTicks = [new Date(2010, 1, 1), new Date(2010, 2, 1), new Date(2010, 3, 1)];
     this.axis.draw(this.canvas);
 

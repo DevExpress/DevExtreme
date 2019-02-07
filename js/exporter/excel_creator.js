@@ -59,7 +59,8 @@ var ExcelCreator = Class.inherit({
     _getCellIndex: function(rowIndex, cellIndex) {
         var sheetIndex = '',
             max = 26,
-            charCode;
+            charCode,
+            isCellIndexFound;
 
         if(this._maxIndex[0] < Number(rowIndex)) {
             this._maxIndex[0] = Number(rowIndex);
@@ -69,14 +70,14 @@ var ExcelCreator = Class.inherit({
             this._maxIndex[1] = Number(cellIndex);
         }
 
-        while(true) {
+        while(!isCellIndexFound) {
             charCode = 65 + ((cellIndex >= max) ? (cellIndex % max) : Math.ceil(cellIndex));
             sheetIndex = String.fromCharCode(charCode) + sheetIndex;
 
             if(cellIndex >= max) {
                 cellIndex = Math.floor(cellIndex / max) - 1;
             } else {
-                break;
+                isCellIndexFound = true;
             }
         }
 
@@ -84,7 +85,25 @@ var ExcelCreator = Class.inherit({
     },
 
     _getDataType: function(dataType) {
-        return VALID_TYPES[dataType] || "s";
+        return VALID_TYPES[dataType] || VALID_TYPES.string;
+    },
+
+    _tryGetExcelCellDataType: function(object) {
+        if(typeUtils.isDefined(object)) {
+            if((typeof object === "number")) {
+                if(isFinite(object)) {
+                    return VALID_TYPES["number"];
+                } else {
+                    return VALID_TYPES["string"];
+                }
+            } else if(typeUtils.isString(object)) {
+                return VALID_TYPES["string"];
+            } else if(typeUtils.isDate(object)) {
+                return VALID_TYPES["number"];
+            } else if(typeUtils.isBoolean(object)) {
+                return VALID_TYPES["boolean"];
+            }
+        }
     },
 
     _formatObjectConverter: function(format, dataType) {
@@ -149,20 +168,20 @@ var ExcelCreator = Class.inherit({
             sourceValue,
             type = this._getDataType(dataProvider.getCellType(rowIndex, cellIndex));
 
-        if(type === "d" && !typeUtils.isDate(value)) {
-            type = "s";
+        if(type === VALID_TYPES.date && !typeUtils.isDate(value)) {
+            type = VALID_TYPES.string;
         }
 
         switch(type) {
-            case "s":
+            case VALID_TYPES.string:
                 sourceValue = value;
                 value = this._appendString(value);
                 break;
 
-            case "d":
+            case VALID_TYPES.date:
                 sourceValue = value;
                 value = this._tryGetExcelDateValue(value);
-                type = "n";
+                type = VALID_TYPES.number;
                 break;
         }
 
@@ -174,7 +193,7 @@ var ExcelCreator = Class.inherit({
         };
     },
 
-    _callCustomizeExcelCell: function({ dataProvider, value, dataType, style, sourceData }) {
+    _callCustomizeExcelCell: function({ dataProvider, value, style, sourceData }) {
         const styleCopy = ExcelFile.copyCellFormat(style);
 
         const args = {
@@ -220,7 +239,6 @@ var ExcelCreator = Class.inherit({
 
         return {
             value: args.value,
-            dataType: dataType,
             style: newStyle,
         };
     },
@@ -250,22 +268,26 @@ var ExcelCreator = Class.inherit({
                     const modifiedExcelCell = this._callCustomizeExcelCell({
                         dataProvider: dataProvider,
                         value: value,
-                        dataType: cellData.type,
                         style: that._styleArray[styleArrayIndex],
                         sourceData: cellData.cellSourceData,
                     });
 
-                    cellData.type = modifiedExcelCell.dataType;
                     if(modifiedExcelCell.value !== value) {
+                        if(typeof modifiedExcelCell.value !== typeof value || (typeof modifiedExcelCell.value === "number") && !isFinite(modifiedExcelCell.value)) {
+                            const cellDataType = this._tryGetExcelCellDataType(modifiedExcelCell.value);
+                            if(typeUtils.isDefined(cellDataType)) {
+                                cellData.type = cellDataType;
+                            }
+                        }
                         // 18.18.11 ST_CellType (Cell Type)
                         switch(cellData.type) {
-                            case 's':
+                            case VALID_TYPES.string:
                                 cellData.value = this._appendString(modifiedExcelCell.value);
                                 break;
-                            case 'd':
+                            case VALID_TYPES.date:
                                 cellData.value = modifiedExcelCell.value;
                                 break;
-                            case 'n':
+                            case VALID_TYPES.number: {
                                 let newValue = modifiedExcelCell.value;
                                 const excelDateValue = this._tryGetExcelDateValue(newValue);
                                 if(typeUtils.isDefined(excelDateValue)) {
@@ -273,6 +295,7 @@ var ExcelCreator = Class.inherit({
                                 }
                                 cellData.value = newValue;
                                 break;
+                            }
                             default:
                                 cellData.value = modifiedExcelCell.value;
                         }

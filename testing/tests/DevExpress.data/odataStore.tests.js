@@ -1423,7 +1423,7 @@ QUnit.test("Dates, on loading", function(assert) {
     ajaxMock.setup({
         url: "odata2.org",
         callback: function(bag) {
-            assert.equal(bag.data.$filter, "date eq datetime'1945-05-09T14:25:01.1'", "timezoneless iso8601 for second version");
+            assert.equal(bag.data.$filter, "date eq datetime'1945-05-09T14:25:01.001'", "timezoneless iso8601 for second version");
         }
     });
 
@@ -1431,7 +1431,7 @@ QUnit.test("Dates, on loading", function(assert) {
         url: "odata2.org/methodToGet",
         responseText: {},
         callback: function(bag) {
-            assert.equal(bag.data.date, "datetime'1945-05-09T14:25:01.1'", "timezoneless iso8601 for second version");
+            assert.equal(bag.data.date, "datetime'1945-05-09T14:25:01.001'", "timezoneless iso8601 for second version");
         }
     });
 
@@ -1439,21 +1439,22 @@ QUnit.test("Dates, on loading", function(assert) {
         url: "odata2.org/methodToInvoke*",
         responseText: {},
         callback: function(bag) {
-            assert.equal(decodeURIComponent(bag.url), "odata2.org/methodToInvoke?date=datetime'1945-05-09T14:25:01.1'");
+            assert.equal(decodeURIComponent(bag.url), "odata2.org/methodToInvoke?date=datetime'1945-05-09T14:25:01.001'");
         }
     });
 
+    // NOTE: OData 3 ABNF
     ajaxMock.setup({
         url: "odata3.org",
         callback: function(bag) {
-            assert.equal(bag.data.$filter, "date eq datetime'1945-05-09T14:25:01.1'", "timezoneless iso8601 for third version");
+            assert.equal(bag.data.$filter, "date eq datetime'1945-05-09T14:25:01.001'", "timezoneless iso8601 for third version");
         }
     });
 
     ajaxMock.setup({
         url: "odata4.org",
         callback: function(bag) {
-            assert.equal(bag.data.$filter, "date eq 1945-05-09T14:25:01.1Z", "timezoneful iso8601 for fourth version");
+            assert.equal(bag.data.$filter, "date eq 1945-05-09T14:25:01.001Z", "timezoneful iso8601 for fourth version");
         }
     });
 
@@ -1461,7 +1462,7 @@ QUnit.test("Dates, on loading", function(assert) {
         url: "odata4.org/function*",
         responseText: {},
         callback: function(bag) {
-            assert.equal(bag.url, "odata4.org/function(date=1945-05-09T14:25:01.1Z)", "timezoneful iso8601 for fourth version");
+            assert.equal(bag.url, "odata4.org/function(date=1945-05-09T14:25:01.001Z)", "timezoneful iso8601 for fourth version");
         }
     });
 
@@ -1469,7 +1470,7 @@ QUnit.test("Dates, on loading", function(assert) {
         url: "odata4.org/action",
         responseText: {},
         callback: function(bag) {
-            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1Z"}', "timezoneful iso8601 for fourth version");
+            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.001Z"}', "timezoneful iso8601 for fourth version");
         }
     });
 
@@ -1512,21 +1513,21 @@ QUnit.test("Dates, on inserting", function(assert) {
     ajaxMock.setup({
         url: "odata2.org",
         callback: function(bag) {
-            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1"}', "timezoneless iso8601 for second version");
+            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.001"}', "timezoneless iso8601 for second version");
         }
     });
 
     ajaxMock.setup({
         url: "odata3.org",
         callback: function(bag) {
-            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1Z"}', "timezoneful iso8601 for third version");
+            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.001Z"}', "timezoneful iso8601 for third version");
         }
     });
 
     ajaxMock.setup({
         url: "odata4.org",
         callback: function(bag) {
-            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1Z"}', "timezoneful iso8601 for fourth version");
+            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.001Z"}', "timezoneful iso8601 for fourth version");
         }
     });
 
@@ -1552,21 +1553,21 @@ QUnit.test("Dates, on updating", function(assert) {
     ajaxMock.setup({
         url: "odata2.org(1)",
         callback: function(bag) {
-            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1"}', "timezoneless iso8601 for second version");
+            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.001"}', "timezoneless iso8601 for second version");
         }
     });
 
     ajaxMock.setup({
         url: "odata3.org(1)",
         callback: function(bag) {
-            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1Z"}', "timezoneful iso8601 for third version");
+            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.001Z"}', "timezoneful iso8601 for third version");
         }
     });
 
     ajaxMock.setup({
         url: "odata4.org(1)",
         callback: function(bag) {
-            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1Z"}', "timezoneful iso8601 for fourth version");
+            assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.001Z"}', "timezoneful iso8601 for fourth version");
         }
     });
 
@@ -2281,7 +2282,7 @@ QUnit.test("array value for odata 4", function(assert) {
     var guid = "3f17117f-63b1-ee7d-2b64-a7f717177773";
 
     var value = [1, "'1", new Date(1945, 4, 9, 14, 25, 1, 1), new Guid(guid), new EdmLiteral("123L")],
-        expectedUrl = "odata4.org(customName=[1,'''1',1945-05-09T14:25:01.1Z," + guid + ",123L])";
+        expectedUrl = "odata4.org(customName=[1,'''1',1945-05-09T14:25:01.001Z," + guid + ",123L])";
 
     ajaxMock.setup({
         url: expectedUrl,
@@ -2496,6 +2497,105 @@ QUnit.test("withCredentials is set", function(assert) {
 
     new ODataStore({ url: "odata.org", withCredentials: true })
         .load();
+});
+
+QUnit.test("filterToLower equal false", function(assert) {
+    ajaxMock.setup({
+        url: "odata.org",
+        responseText: { d: { results: [] } },
+        callback: function(request) {
+            assert.equal(request.data.$filter, "substringof('O',B)");
+        }
+    });
+
+    new ODataStore({ url: "odata.org", filterToLower: false })
+        .load({ filter: ["B", "contains", "O"] });
+});
+
+QUnit.test("filterToLower equal false for ODataContext", function(assert) {
+    assert.expect(2);
+
+    var done = assert.async();
+
+    ajaxMock.setup({
+        url: "odata.org/name",
+        callback: function(bag) {
+            this.responseText = { value: [bag] };
+        }
+    });
+
+    var ctx = new ODataContext({
+        version: 4,
+        url: "odata.org",
+        filterToLower: false,
+        entities: {
+            "X": { name: "name", filterToLower: true },
+            "Y": { name: "name" }
+        }
+    });
+
+    var promises = [
+        ctx.X.load({ filter: ["B", "contains", "O"] })
+            .done(function(request) {
+                assert.equal(request[0].data.$filter, "contains(tolower(B),'o')");
+            }),
+
+        ctx.Y.load({ filter: ["B", "contains", "O"] })
+            .done(function(request) {
+                assert.equal(request[0].data.$filter, "contains(B,'O')");
+            })
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); })
+        .always(done);
+});
+
+QUnit.test("oDataFilterToLower equal false for ODataContext", function(assert) {
+    assert.expect(3);
+
+    var done = assert.async();
+
+    config({ oDataFilterToLower: false });
+
+    ajaxMock.setup({
+        url: "odata.org/name",
+        callback: function(bag) {
+            this.responseText = { value: [bag] };
+        }
+    });
+
+    var ctx = new ODataContext({
+        version: 4,
+        url: "odata.org",
+        filterToLower: true,
+        entities: {
+            "X": { name: "name" },
+            "Y": { name: "name", filterToLower: false },
+            "Z": { name: "name", filterToLower: true }
+        }
+    });
+
+    var promises = [
+        ctx.X.load({ filter: ["B", "contains", "O"] })
+            .done(function(request) {
+                assert.equal(request[0].data.$filter, "contains(tolower(B),'o')");
+            }),
+
+        ctx.Y.load({ filter: ["B", "contains", "O"] })
+            .done(function(request) {
+                assert.equal(request[0].data.$filter, "contains(B,'O')");
+            }),
+
+        ctx.Z.load({ filter: ["B", "contains", "O"] })
+            .done(function(request) {
+                assert.equal(request[0].data.$filter, "contains(tolower(B),'o')");
+            })
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); })
+        .always(done);
 });
 
 QUnit.test("verbose MIME specifier is used", function(assert) {

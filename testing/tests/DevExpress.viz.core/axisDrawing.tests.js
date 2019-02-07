@@ -1,6 +1,7 @@
 import $ from "jquery";
 import { ERROR_MESSAGES as dxErrors } from "viz/core/errors_warnings";
 import translator2DModule from "viz/translators/translator2d";
+import { Range } from "viz/translators/range";
 import tickGeneratorModule from "viz/axes/tick_generator";
 import { Axis } from "viz/axes/base_axis";
 import vizMocks from "../../helpers/vizMocks.js";
@@ -57,8 +58,8 @@ var environment = {
         });
 
         this.translator = new StubTranslator();
-        this.translator.stub("getBusinessRange").returns({ });
         this.translator.stub("getCanvasVisibleArea").returns({ min: 10, max: 90 }); // for horizontal only
+        this.translator.stub("getBusinessRange").returns(new Range());
     },
     createAxis: function(options) {
         var stripsGroup = this.renderer.g(),
@@ -2011,7 +2012,7 @@ QUnit.test("Labels with hints. Check callback's param", function(assert) {
     });
 });
 
-QUnit.test("Stub data. Do not draw labels", function(assert) {
+QUnit.test("Do not draw labels with empty range", function(assert) {
     // arrange
     this.createAxis();
     this.updateOptions({
@@ -2027,7 +2028,34 @@ QUnit.test("Stub data. Do not draw labels", function(assert) {
     this.generatedTicks = [1];
 
     this.translator.stub("translate").withArgs(1).returns(40);
-    this.axis.setBusinessRange({ stubData: true });
+    this.axis.setBusinessRange({ });
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.equal(this.renderer.stub("text").callCount, 0);
+});
+
+QUnit.test("Do not draw labels nor check format for discrete datetime axis with empty range", function(assert) {
+    // arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        argumentType: "datetime",
+        type: "discrete",
+        position: "bottom",
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: "left"
+        }
+    });
+
+    this.generatedTicks = [1];
+
+    this.translator.stub("translate").withArgs(1).returns(40);
+    this.axis.setBusinessRange({ });
 
     // act
     this.axis.draw(this.canvas);
@@ -2119,7 +2147,7 @@ QUnit.test("Without text, all variations. Do not draw labels", function(assert) 
                         return undefined;
                     case 3:
                         return "";
-                    case 1:
+                    case 4:
                         return "      ";
                 }
             }
@@ -2526,9 +2554,7 @@ QUnit.test("With stub data", function(assert) {
         }]
     });
 
-    this.axis.setBusinessRange({
-        stubData: true
-    });
+    this.axis.setBusinessRange({});
     this.translator.stub("translate").withArgs(1).returns(40);
     this.axis.parser = function(value) {
         return value;
@@ -4493,6 +4519,49 @@ QUnit.test("Do not draw date marker when axis type is discrete", function(assert
     this.translator.stub("translate").withArgs(date0).returns(10);
     this.translator.stub("translate").withArgs(date1).returns(50);
     this.translator.stub("translate").withArgs(date2).returns(90);
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.notOk(this.renderer.text.called);
+    assert.notOk(this.renderer.path.called);
+});
+
+QUnit.test("Do not draw date marker if business range is empty", function(assert) {
+    // arrange
+    var date0 = new Date(2011, 5, 25, 23, 21, 33, 123),
+        date1 = new Date(2011, 5, 26, 1, 21, 33, 123),
+        date2 = new Date(2011, 5, 26, 2, 21, 33, 123);
+
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        argumentType: "datetime",
+        type: "continuous",
+        position: "bottom",
+        marker: {
+            visible: true,
+            separatorHeight: 33,
+            textLeftIndent: 5,
+            textTopIndent: 11,
+            topIndent: 10,
+            color: "black",
+            width: 2,
+            opacity: 0.1,
+            label: {
+                font: {
+                    size: 12,
+                    color: "green"
+                }
+            }
+        }
+    });
+
+    this.axis.setBusinessRange({ });
+
+    this.generatedTicks = [date0, date1, date2];
+    this.generatedTickInterval = "hour";
 
     // act
     this.axis.draw(this.canvas);
@@ -6733,11 +6802,7 @@ QUnit.test("Stub data - do not create strips", function(assert) {
         }]
     });
 
-    this.axis.setBusinessRange({
-        stubData: true,
-        min: 0,
-        max: 10
-    });
+    this.axis.setBusinessRange({});
     this.translator.stub("translate").withArgs(2).returns(20);
     this.translator.stub("translate").withArgs(4).returns(40);
     this.axis.parser = function(value) {
@@ -8179,7 +8244,7 @@ QUnit.test("Axis has no visible labels nor outside constantLines - hideOuterElem
     assert.ok(!spy.called, "incidentOccurred is not called");
 });
 
-QUnit.test("Axis has stubData - hideOuterElements does nothing", function(assert) {
+QUnit.test("Axis with empty range - hideOuterElements does nothing", function(assert) {
     var spy = sinon.spy();
 
     this.createAxis({ incidentOccurred: spy });
@@ -8192,7 +8257,7 @@ QUnit.test("Axis has stubData - hideOuterElements does nothing", function(assert
             visible: true
         }
     });
-    this.axis.setBusinessRange({ stubData: true });
+    this.axis.setBusinessRange({ });
     this.axis.draw(this.canvas);
     this.renderer.g.getCall(3).returnValue.clear.reset();
 

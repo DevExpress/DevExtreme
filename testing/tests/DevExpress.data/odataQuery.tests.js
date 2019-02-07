@@ -1,10 +1,11 @@
-var $ = require("jquery"),
-    query = require("data/query"),
-    EdmLiteral = require("data/odata/utils").EdmLiteral,
-    ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js"),
-    ajaxMock = require("../../helpers/ajaxMock.js");
+import $ from "jquery";
+import { EdmLiteral } from "data/odata/utils";
+import query from "data/query";
+import config from "core/config";
+import ErrorHandlingHelper from "../../helpers/data.errorHandlingHelper.js";
+import ajaxMock from "../../helpers/ajaxMock.js";
 
-require("data/odata/query_adapter");
+import "data/odata/query_adapter";
 
 var MUST_NOT_REACH_MESSAGE = "Shouldn't reach this point";
 
@@ -338,7 +339,14 @@ QUnit.test("works", function(assert) {
         url: "odata.org",
         responseText: { d: { results: [] } },
         callback: function(bag) {
-            assert.equal(bag.data.$filter, "date eq datetime'1996-07-04T01:01:01.1'", "second version should transform date to datetime'YYYY-MM-DDThh:mm:ss[.mmm]' format");
+            var expected = [
+                "(date eq datetime'1996-07-04T01:01:01.001')",
+                "(date eq datetime'1996-07-04T01:01:01.010')",
+                "(date eq datetime'1996-07-04T01:01:01.100')",
+                "(date eq datetime'1996-07-04T01:01:01.123')"
+            ].join(" and ");
+
+            assert.equal(bag.data.$filter, expected, "second version should transform date to datetime'yyyy-mm-ddThh:mm[:ss[.fffffff]]' format");
         }
     });
 
@@ -346,17 +354,34 @@ QUnit.test("works", function(assert) {
         url: "odata4.org",
         responseText: { d: { results: [] } },
         callback: function(bag) {
-            assert.equal(bag.data.$filter, "date eq 1996-07-04T00:00:00Z", "fourth version should transform date to ISO8601 like format");
+            var expected = [
+                "(date eq 1996-07-04T01:01:01.001Z)",
+                "(date eq 1996-07-04T01:01:01.010Z)",
+                "(date eq 1996-07-04T01:01:01.100Z)",
+                "(date eq 1996-07-04T01:01:01.123Z)"
+            ].join(" and ");
+
+            assert.equal(bag.data.$filter, expected, "fourth version should transform date to ISO8601 like format");
         }
     });
 
     var promises = [
         QUERY("odata.org")
-            .filter(["date", new Date(1996, 6, 4, 1, 1, 1, 1)])
+            .filter([
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 1)],
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 10)],
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 100)],
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 123)]
+            ])
             .enumerate(),
 
         QUERY("odata4.org", { version: 4 })
-            .filter(["date", new Date(1996, 6, 4, 0, 0, 0, 0)])
+            .filter([
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 1)],
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 10)],
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 100)],
+                ["date", new Date(1996, 6, 4, 1, 1, 1, 123)]
+            ])
             .enumerate()
     ];
 
@@ -702,6 +727,67 @@ QUnit.test("string functions", function(assert) {
         .always(done);
 });
 
+QUnit.test("string functions with filterToLower equal false", function(assert) {
+    assert.expect(4);
+
+    var done = assert.async();
+
+    var check = function(operation, expectation) {
+        return QUERY("odata.org", { filterToLower: false })
+            .filter("f.p", operation, "Ab")
+            .enumerate()
+            .done(function(r) {
+                assert.equal(r[0].data["$filter"], expectation);
+            });
+    };
+
+    var promises = [
+        check("startsWith", "startswith(f/p,'Ab')"),
+        check("endsWith", "endswith(f/p,'Ab')"),
+        check("contains", "substringof('Ab',f/p)"),
+        check("notContains", "not substringof('Ab',f/p)")
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(done);
+});
+
+QUnit.test("string functions with global filterToLower equal false", function(assert) {
+    assert.expect(4);
+
+    var done = assert.async();
+
+    config({ oDataFilterToLower: false });
+
+    var check = function(operation, expectation) {
+        return QUERY("odata.org")
+            .filter("f.p", operation, "Ab")
+            .enumerate()
+            .done(function(r) {
+                assert.equal(r[0].data["$filter"], expectation);
+            });
+    };
+
+    var promises = [
+        check("startsWith", "startswith(f/p,'Ab')"),
+        check("endsWith", "endswith(f/p,'Ab')"),
+        check("contains", "substringof('Ab',f/p)"),
+        check("notContains", "not substringof('Ab',f/p)")
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(() => {
+            config({ oDataFilterToLower: true });
+            done();
+        });
+});
+
 QUnit.test("string functions (v4)", function(assert) {
     assert.expect(4);
 
@@ -728,6 +814,67 @@ QUnit.test("string functions (v4)", function(assert) {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .always(done);
+});
+
+QUnit.test("string functions (v4) with filterToLower equal false", function(assert) {
+    assert.expect(4);
+
+    var done = assert.async();
+
+    var check = function(operation, expectation) {
+        return QUERY("odata.org", { version: 4, filterToLower: false })
+            .filter("f.p", operation, "Ab")
+            .enumerate()
+            .done(function(r) {
+                assert.equal(r[0].data["$filter"], expectation);
+            });
+    };
+
+    var promises = [
+        check("startsWith", "startswith(f/p,'Ab')"),
+        check("endsWith", "endswith(f/p,'Ab')"),
+        check("contains", "contains(f/p,'Ab')"),
+        check("notContains", "not contains(f/p,'Ab')")
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(done);
+});
+
+QUnit.test("string functions (v4) with global filterToLower equal false", function(assert) {
+    assert.expect(4);
+
+    var done = assert.async();
+
+    config({ oDataFilterToLower: false });
+
+    var check = function(operation, expectation) {
+        return QUERY("odata.org", { version: 4 })
+            .filter("f.p", operation, "Ab")
+            .enumerate()
+            .done(function(r) {
+                assert.equal(r[0].data["$filter"], expectation);
+            });
+    };
+
+    var promises = [
+        check("startsWith", "startswith(f/p,'Ab')"),
+        check("endsWith", "endswith(f/p,'Ab')"),
+        check("contains", "contains(f/p,'Ab')"),
+        check("notContains", "not contains(f/p,'Ab')")
+    ];
+
+    $.when.apply($, promises)
+        .fail(function() {
+            assert.ok(false, MUST_NOT_REACH_MESSAGE);
+        })
+        .always(() => {
+            config({ oDataFilterToLower: true });
+            done();
+        });
 });
 
 QUnit.test("Explicit Edm literals (Q441230 case)", function(assert) {

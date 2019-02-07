@@ -1,8 +1,8 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    clickEvent = require("../../events/click"),
-    each = require("../../core/utils/iterator").each,
-    modules = require("./ui.grid_core.modules");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import clickEvent from "../../events/click";
+import { each } from "../../core/utils/iterator";
+import modules from "./ui.grid_core.modules";
 
 var ERROR_ROW_CLASS = "dx-error-row",
     ERROR_MESSAGE_CLASS = "dx-error-message",
@@ -17,11 +17,11 @@ var ErrorHandlingController = modules.ViewController.inherit({
         that._rowsView = that.getView("rowsView");
     },
 
-    _createErrorRow: function(message, $tableElements) {
+    _createErrorRow: function(error, $tableElements) {
         var that = this,
             $errorRow,
             $closeButton,
-            $errorMessage = $("<div>").addClass(ERROR_MESSAGE_CLASS).text(message);
+            $errorMessage = this._renderErrorMessage(error);
 
         if($tableElements) {
             $errorRow = $("<tr>").addClass(ERROR_ROW_CLASS);
@@ -54,7 +54,18 @@ var ErrorHandlingController = modules.ViewController.inherit({
         return $errorMessage;
     },
 
-    renderErrorRow: function(message, rowIndex, $popupContent) {
+    _renderErrorMessage: function(error) {
+        var message = error.url ? error.message.replace(error.url, "") : error.message || error,
+            $message = $("<div>").addClass(ERROR_MESSAGE_CLASS).text(message);
+
+        if(error.url) {
+            $("<a>").attr("href", error.url).text(error.url).appendTo($message);
+        }
+
+        return $message;
+    },
+
+    renderErrorRow: function(error, rowIndex, $popupContent) {
         var that = this,
             $row,
             $errorMessageElement,
@@ -65,7 +76,7 @@ var ErrorHandlingController = modules.ViewController.inherit({
 
         if($popupContent) {
             $popupContent.find("." + ERROR_MESSAGE_CLASS).remove();
-            $errorMessageElement = that._createErrorRow(message);
+            $errorMessageElement = that._createErrorRow(error);
             $popupContent.prepend($errorMessageElement);
             return $errorMessageElement;
         }
@@ -74,7 +85,7 @@ var ErrorHandlingController = modules.ViewController.inherit({
         $tableElements = $popupContent || viewElement.getTableElements();
 
         each($tableElements, function(_, tableElement) {
-            $errorMessageElement = that._createErrorRow(message, $tableElements);
+            $errorMessageElement = that._createErrorRow(error, $tableElements);
             $firstErrorRow = $firstErrorRow || $errorMessageElement;
 
             if(rowIndex >= 0) {
@@ -145,10 +156,8 @@ module.exports = {
                     that.callBase();
 
                     that.dataErrorOccurred.add(function(error, $popupContent) {
-                        var message = error && error.message || error;
-
                         if(that.option("errorRowEnabled")) {
-                            errorHandlingController.renderErrorRow(message, undefined, $popupContent);
+                            errorHandlingController.renderErrorRow(error, undefined, $popupContent);
                         }
                     });
                     that.changed.add(function() {

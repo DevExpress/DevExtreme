@@ -152,7 +152,7 @@ SlidersController.prototype = {
         sliders[0].cancelAnimation();
         sliders[1].cancelAnimation();
         that._shutter.stopAnimation();
-        if(that._params.translator.isEmptyValueRange()) {
+        if(that._params.translator.getBusinessRange().isEmpty()) {
             sliders[0]._setText(emptySliderMarkerText);
             sliders[1]._setText(emptySliderMarkerText);
             sliders[0]._value = sliders[1]._value = undefined;

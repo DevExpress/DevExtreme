@@ -1,15 +1,13 @@
-var $ = require("../../core/renderer"),
-    gridCore = require("./ui.data_grid.core"),
-    ExpandedGroupingHelper = require("./ui.data_grid.grouping.expanded").GroupingHelper,
-    CollapsedGroupingHelper = require("./ui.data_grid.grouping.collapsed").GroupingHelper,
-    messageLocalization = require("../../localization/message"),
-    dataSourceAdapter = require("./ui.data_grid.data_source_adapter"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    devices = require("../../core/devices"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+import $ from "../../core/renderer";
+import gridCore from "./ui.data_grid.core";
+import { GroupingHelper as ExpandedGroupingHelper } from "./ui.data_grid.grouping.expanded";
+import { GroupingHelper as CollapsedGroupingHelper } from "./ui.data_grid.grouping.collapsed";
+import messageLocalization from "../../localization/message";
+import dataSourceAdapter from "./ui.data_grid.data_source_adapter";
+import { isDefined, isString } from "../../core/utils/type";
+import { each } from "../../core/utils/iterator";
+import devices from "../../core/devices";
+import { when, Deferred } from "../../core/utils/deferred";
 
 var DATAGRID_GROUP_PANEL_CLASS = "dx-datagrid-group-panel",
     DATAGRID_GROUP_PANEL_MESSAGE_CLASS = "dx-group-panel-message",
@@ -26,9 +24,12 @@ var GroupingDataSourceAdapterExtender = (function() {
         },
         _initGroupingHelper: function(options) {
             var grouping = this._grouping,
-                remoteOperations = options ? options.remoteOperations : this.remoteOperations();
+                isAutoExpandAll = this.option("grouping.autoExpandAll"),
+                isFocusedRowEnabled = this.option("focusedRowEnabled"),
+                remoteOperations = options ? options.remoteOperations : this.remoteOperations(),
+                isODataRemoteOperations = remoteOperations.filtering && remoteOperations.sorting && remoteOperations.paging;
 
-            if(remoteOperations.filtering && remoteOperations.sorting && remoteOperations.paging && !remoteOperations.grouping) {
+            if(isODataRemoteOperations && !remoteOperations.grouping && (isAutoExpandAll || !isFocusedRowEnabled)) {
                 if(!grouping || grouping instanceof CollapsedGroupingHelper) {
                     this._grouping = new ExpandedGroupingHelper(this);
                 }
@@ -180,7 +181,7 @@ var GroupingDataControllerExtender = (function() {
             return items;
         },
         _processItem: function(item, options) {
-            if(typeUtils.isDefined(item.groupIndex) && typeUtils.isString(item.rowType) && item.rowType.indexOf("group") === 0) {
+            if(isDefined(item.groupIndex) && isString(item.rowType) && item.rowType.indexOf("group") === 0) {
                 item = this._processGroupItem(item, options);
                 options.dataIndex = 0;
             } else {
@@ -233,7 +234,7 @@ var GroupingDataControllerExtender = (function() {
                         if(item && "items" in item) {
                             options.data = item;
                             options.path.push(item.key);
-                            options.values.push(column && column.deserializeValue ? column.deserializeValue(item.key) : item.key);
+                            options.values.push(column && column.deserializeValue && !column.calculateDisplayValue ? column.deserializeValue(item.key) : item.key);
                             that._processGroupItems(item.items, groupsCount - 1, options);
                             options.data = undefined;
                             options.path.pop();
@@ -514,10 +515,10 @@ var GroupingHeaderPanelExtender = (function() {
 
             if(contextMenuEnabled && options.column) {
                 var column = options.column,
-                    isGroupingAllowed = typeUtils.isDefined(column.allowGrouping) ? column.allowGrouping : true;
+                    isGroupingAllowed = isDefined(column.allowGrouping) ? column.allowGrouping : true;
 
                 if(isGroupingAllowed) {
-                    var isColumnGrouped = typeUtils.isDefined(column.groupIndex) && column.groupIndex > -1,
+                    var isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1,
                         groupingTexts = that.option("grouping.texts"),
                         onItemClick = onGroupingMenuItemClick.bind(that, column);
 
@@ -611,9 +612,9 @@ var columnHeadersViewExtender = (function() {
             if(contextMenuEnabled && options.row && (options.row.rowType === "header" || options.row.rowType === "detailAdaptive")) {
                 var column = options.column;
 
-                if(!column.command && (!typeUtils.isDefined(column.allowGrouping) || column.allowGrouping)) {
+                if(!column.command && (!isDefined(column.allowGrouping) || column.allowGrouping)) {
                     var groupingTexts = that.option("grouping.texts"),
-                        isColumnGrouped = typeUtils.isDefined(column.groupIndex) && column.groupIndex > -1,
+                        isColumnGrouped = isDefined(column.groupIndex) && column.groupIndex > -1,
                         onItemClick = onGroupingMenuItemClick.bind(that, column);
 
                     items = items || [];

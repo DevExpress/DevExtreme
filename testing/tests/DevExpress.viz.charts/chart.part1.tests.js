@@ -51,6 +51,21 @@ QUnit.test("Updating layoutManager options", function(assert) {
     assert.deepEqual(layoutManager.setOptions.lastCall.args, [{ width: "someWidth", height: "someHeight" }]);
 });
 
+// T708642
+QUnit.test("Claer hover after series updating", function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
+
+    var options = { series: [{ name: "series1" }, { name: "series2" }] },
+        chart = this.createChart(options);
+
+    commons.getTrackerStub().stub("clearHover").reset();
+
+    chart.option(options);
+
+    assert.equal(commons.getTrackerStub().stub("clearHover").callCount, 1);
+});
+
 QUnit.test("Create Tracker.", function(assert) {
     this.themeManager.getOptions.withArgs("pointSelectionMode").returns("pointSelectionModeWithTheme");
     this.themeManager.getOptions.withArgs("seriesSelectionMode").returns("serieSelectionModeWithTheme");
@@ -61,8 +76,7 @@ QUnit.test("Create Tracker.", function(assert) {
             commonPaneSettings: {
                 border: { visible: true }
             },
-            zoomingMode: "zoomingModeValue",
-            scrollingMode: "scrollingModeValue",
+            stickyHovering: false,
             rotated: "rotated"
         }),
         trackerStub = trackerModule.ChartTracker;
@@ -82,8 +96,7 @@ QUnit.test("Create Tracker.", function(assert) {
     assert.equal(updateArg0.crosshair, chart._crosshair, "crosshair");
     assert.equal(updateArg0.chart, chart, "chart");
     assert.equal(updateArg0.rotated, "rotated", "rotated");
-    assert.equal(updateArg0.zoomingMode, "zoomingModeValue", "zoomingMode");
-    assert.equal(updateArg0.scrollingMode, "scrollingModeValue", "scrollingMode");
+    assert.strictEqual(updateArg0.stickyHovering, false, "stickyHovering");
     assert.equal(updateArg0.seriesSelectionMode, "serieSelectionModeWithTheme", "series selection mode");
     assert.equal(updateArg0.pointSelectionMode, "pointSelectionModeWithTheme", "point selection mode");
 
@@ -191,7 +204,6 @@ QUnit.test("Actions sequence with series on render chart", function(assert) {
     assert.ok(updateSeriesData.lastCall.calledBefore(argumentAxis.setBusinessRange.firstCall));
     assert.equal(argumentAxis.setBusinessRange.firstCall.args[0].min, 5);
     assert.equal(argumentAxis.setBusinessRange.firstCall.args[0].max, 20);
-    assert.strictEqual(argumentAxis.setBusinessRange.firstCall.args[0].isEstimatedRange, true);
     assert.deepEqual(argumentAxis.updateCanvas.firstCall.args[0], chart._canvas);
 
     assert.ok(stubSeries.createPoints.lastCall.calledAfter(argumentAxis.updateCanvas.firstCall));
@@ -199,27 +211,6 @@ QUnit.test("Actions sequence with series on render chart", function(assert) {
     assert.ok(argumentAxis.setBusinessRange.lastCall.calledAfter(stubSeries.createPoints.lastCall), "axis.setBusiness range should be after create points");
     assert.equal(argumentAxis.setBusinessRange.lastCall.args[0].min, 0);
     assert.equal(argumentAxis.setBusinessRange.lastCall.args[0].max, 30);
-    assert.ok(!argumentAxis.setBusinessRange.lastCall.args[0].isEstimatedRange);
-});
-
-QUnit.test("Set stub data for argument range if no data", function(assert) {
-    // arrange
-    var stubSeries = new MockSeries({});
-
-    chartMocks.seriesMockData.series.push(stubSeries);
-
-    stubSeries.getArgumentRange.returns({});
-
-    var chart = this.createChart({
-        series: [{ type: "line" }],
-        argumentAxis: {
-            argumentType: "datetime"
-        }
-    });
-    var argumentAxis = chart._argumentAxes[0];
-
-    assert.ok(argumentAxis.setBusinessRange.firstCall.args[0].min instanceof Date);
-    assert.ok(argumentAxis.setBusinessRange.firstCall.args[0].max instanceof Date);
 });
 
 QUnit.test("Recreate series points on zooming if aggregation is enabled", function(assert) {

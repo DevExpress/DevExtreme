@@ -11,7 +11,9 @@ import deferredUtils from "../../core/utils/deferred";
 import { isDefined } from "../../core/utils/type";
 import TreeView from "../tree_view";
 import Popup from "../popup";
+import { getElementMaxHeightByWindow } from "../overlay/utils";
 import EditorFactoryMixin from "../shared/ui.editor_factory_mixin";
+import { normalizeKeyName } from "../../events/utils";
 
 const FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_CLASS = FILTER_BUILDER_CLASS + "-group",
@@ -40,9 +42,9 @@ const FILTER_BUILDER_CLASS = "dx-filterbuilder",
     SOURCE = "filterBuilder",
     DISABLED_STATE_CLASS = "dx-state-disabled",
 
-    TAB_KEY = 9,
-    ENTER_KEY = 13,
-    ESCAPE_KEY = 27;
+    TAB_KEY = "tab",
+    ENTER_KEY = "enter",
+    ESCAPE_KEY = "escape";
 
 var ACTIONS = [{
         name: "onEditorPreparing",
@@ -130,12 +132,6 @@ var FilterBuilder = Widget.inherit({
               * @action
              */
             onEditorPrepared: null,
-
-            /**
-            * @name dxFilterBuilderOptions.onContentReady
-            * @hidden true
-            * @action
-            */
 
             /**
             * @name dxFilterBuilderField
@@ -550,9 +546,14 @@ var FilterBuilder = Widget.inherit({
 
     _updateFilter: function() {
         this._disableInvalidateForValue = true;
-        var value = extend(true, [], this._model);
-        this.option("value", utils.getNormalizedFilter(value));
+        var value = extend(true, [], this._model),
+            normalizedValue = utils.getNormalizedFilter(value),
+            oldValue = utils.getNormalizedFilter(this._getModel(this.option("value")));
+        if(JSON.stringify(oldValue) !== JSON.stringify(normalizedValue)) {
+            this.option("value", normalizedValue);
+        }
         this._disableInvalidateForValue = false;
+        this._fireContentReadyAction();
     },
 
     _init: function() {
@@ -571,8 +572,12 @@ var FilterBuilder = Widget.inherit({
         this._customOperations = utils.getMergedOperations(this.option("customOperations"), this.option("filterOperationDescriptions.between"));
     },
 
+    _getModel: function(value) {
+        return utils.convertToInnerStructure(value, this._customOperations);
+    },
+
     _initModel: function() {
-        this._model = utils.convertToInnerStructure(this.option("value"), this._customOperations);
+        this._model = this._getModel(this.option("value"));
     },
 
     _initActions: function() {
@@ -631,9 +636,7 @@ var FilterBuilder = Widget.inherit({
             this._createRemoveButton(() => {
                 utils.removeItem(parent, criteria);
                 $group.remove();
-                if(!utils.isEmptyGroup(criteria)) {
-                    this._updateFilter();
-                }
+                this._updateFilter();
             }).appendTo($groupItem);
         }
 
@@ -643,14 +646,13 @@ var FilterBuilder = Widget.inherit({
             var newGroup = utils.createEmptyGroup(this.option("defaultGroupOperation"));
             utils.addItem(newGroup, criteria);
             this._createGroupElement(newGroup, criteria, groupLevel + 1).appendTo($groupContent);
+            this._updateFilter();
         }, () => {
             var field = this.option("fields")[0],
                 newCondition = utils.createCondition(field, this._customOperations);
             utils.addItem(newCondition, criteria);
             this._createConditionElement(newCondition, criteria).appendTo($groupContent);
-            if(utils.isValidCondition(newCondition)) {
-                this._updateFilter();
-            }
+            this._updateFilter();
         }, groupLevel).appendTo($groupItem);
 
         return $group;
@@ -717,7 +719,7 @@ var FilterBuilder = Widget.inherit({
             onHiding: function(e) {
                 $button.removeClass(ACTIVE_CLASS);
             },
-            position: { my: position + " top", at: position + " bottom", offset: "0 1", of: $button },
+            position: { my: position + " top", at: position + " bottom", offset: "0 1", of: $button, collision: "flip" },
             animation: null,
             onHidden: function() {
                 removeMenu();
@@ -731,8 +733,10 @@ var FilterBuilder = Widget.inherit({
                 var treeViewElement = $(info.component.content()).find(".dx-treeview"),
                     treeView = treeViewElement.dxTreeView("instance");
                 eventsEngine.on(treeViewElement, "keyup keydown", function(e) {
-                    if((e.type === "keydown" && e.keyCode === TAB_KEY)
-                            || (e.type === "keyup" && (e.keyCode === ESCAPE_KEY || e.keyCode === ENTER_KEY))) {
+                    const keyName = normalizeKeyName(e);
+
+                    if((e.type === "keydown" && keyName === TAB_KEY)
+                            || (e.type === "keyup" && (keyName === ESCAPE_KEY || keyName === ENTER_KEY))) {
                         info.component.hide();
                         eventsEngine.trigger(options.menu.position.of, "focus");
                     }
@@ -773,7 +777,7 @@ var FilterBuilder = Widget.inherit({
                     onContentReady: function(e) {
                         e.component.selectItem(currentOperation);
                     },
-                    onItemClick: function(e) {
+                    onItemClick: (e) => {
                         if(currentOperation !== e.itemData) {
                             currentOperation = e.itemData;
                             utils.updateConditionByOperation(condition, currentOperation.value, that._customOperations);
@@ -787,7 +791,7 @@ var FilterBuilder = Widget.inherit({
                                 $valueButton.remove();
                             }
                             $operationButton.html(currentOperation.text);
-                            that._updateFilter();
+                            this._updateFilter();
                         }
                     },
                     cssClass: FILTER_BUILDER_FILTER_OPERATIONS_CLASS
@@ -825,19 +829,18 @@ var FilterBuilder = Widget.inherit({
                 dataStructure: "plain",
                 keyExpr: "dataField",
                 displayExpr: "caption",
-                onItemClick: function(e) {
+                onItemClick: (e) => {
                     if(item !== e.itemData) {
                         item = e.itemData;
                         condition[0] = item.dataField;
                         condition[2] = item.dataType === "object" ? null : "";
                         utils.updateConditionByOperation(condition, utils.getDefaultOperation(item), that._customOperations);
-
                         $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
                         that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
                         var caption = getFullCaption(item, e.component.option("items"));
                         $fieldButton.html(caption);
-                        that._updateFilter();
+                        this._updateFilter();
                     }
                 },
                 onContentReady: function(e) {
@@ -853,17 +856,14 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createConditionItem: function(condition, parent) {
-        var that = this,
-            $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
+        var $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
             fields = this._getNormalizedFields(),
             field = utils.getField(condition[0], fields);
 
-        this._createRemoveButton(function() {
+        this._createRemoveButton(() => {
             utils.removeItem(parent, condition);
             $item.remove();
-            if(utils.isValidCondition(condition)) {
-                that._updateFilter();
-            }
+            this._updateFilter();
         }).appendTo($item);
         this._createFieldButtonWithMenu(fields, condition, field).appendTo($item);
         this._createOperationAndValueButtons(condition, field, $item);
@@ -960,9 +960,7 @@ var FilterBuilder = Widget.inherit({
             item[2] = value;
         }
         callback();
-        if(areValuesDifferent) {
-            this._updateFilter();
-        }
+        this._updateFilter();
     },
 
     _addDocumentKeyUp: function($editor, handler) {
@@ -1000,7 +998,7 @@ var FilterBuilder = Widget.inherit({
             }
         });
 
-        return documentKeyUpHandler;
+        this._documentKeyUpHandler = documentKeyUpHandler;
     },
 
     _addDocumentClick: function($editor, closeEditorFunc) {
@@ -1013,7 +1011,7 @@ var FilterBuilder = Widget.inherit({
         };
         eventsEngine.on(document, "dxpointerdown", documentClickHandler);
 
-        return documentClickHandler;
+        this._documentClickHandler = documentClickHandler;
     },
 
     _isFocusOnEditorParts: function($editor, target) {
@@ -1022,16 +1020,22 @@ var FilterBuilder = Widget.inherit({
             || $(activeElement).closest(".dx-dropdowneditor-overlay").length;
     },
 
+    _removeEvents: function() {
+        const document = domAdapter.getDocument();
+        isDefined(this._documentKeyUpHandler) && eventsEngine.off(document, "keyup", this._documentKeyUpHandler);
+        isDefined(this._documentClickHandler) && eventsEngine.off(document, "dxpointerdown", this._documentClickHandler);
+    },
+
+    _dispose: function() {
+        this._removeEvents();
+        this.callBase();
+    },
+
     _createValueEditorWithEvents: function(item, field, $container) {
-        var document = domAdapter.getDocument(),
-            value = item[2],
-            removeEvents = function() {
-                eventsEngine.off(document, "keyup", documentKeyUpHandler);
-                eventsEngine.off(document, "dxpointerdown", documentClickHandler);
-            },
+        var value = item[2],
             createValueText = () => {
                 $container.empty();
-                removeEvents();
+                this._removeEvents();
                 return this._createValueText(item, field, $container);
             },
             closeEditor = () => {
@@ -1055,9 +1059,13 @@ var FilterBuilder = Widget.inherit({
         var $editor = this._createValueEditor($container, field, options);
         eventsEngine.trigger($editor.find("input").not(':hidden').eq(0), "focus");
 
-        var documentClickHandler = this._addDocumentClick($editor, closeEditor);
-        var documentKeyUpHandler = this._addDocumentKeyUp($editor, (e) => {
-            if(e.keyCode === TAB_KEY) {
+        this._removeEvents();
+
+        this._addDocumentClick($editor, closeEditor);
+        this._addDocumentKeyUp($editor, (e) => {
+            const keyName = normalizeKeyName(e);
+
+            if(keyName === TAB_KEY) {
                 if(this._isFocusOnEditorParts($editor)) {
                     return;
                 }
@@ -1068,15 +1076,16 @@ var FilterBuilder = Widget.inherit({
                     }
                 });
             }
-            if(e.keyCode === ESCAPE_KEY) {
+            if(keyName === ESCAPE_KEY) {
                 eventsEngine.trigger(createValueText(), "focus");
             }
-            if(e.keyCode === ENTER_KEY) {
+            if(keyName === ENTER_KEY) {
                 this._updateConditionValue(item, value, function() {
                     eventsEngine.trigger(createValueText(), "focus");
                 });
             }
         });
+        this._fireContentReadyAction();
     },
 
     _createValueButton: function(item, field) {
@@ -1123,6 +1132,9 @@ var FilterBuilder = Widget.inherit({
                 that._createComponent($menuContainer, TreeView, options.menu);
                 return $menuContainer;
             },
+            maxHeight: function() {
+                return getElementMaxHeightByWindow(options.menu.position.of);
+            },
             visible: true,
             focusStateEnabled: false,
             closeOnOutsideClick: true,
@@ -1137,7 +1149,7 @@ var FilterBuilder = Widget.inherit({
     _subscribeOnClickAndEnterKey: function($button, handler) {
         eventsEngine.on($button, "dxclick", handler);
         eventsEngine.on($button, "keyup", function(e) {
-            if(e.keyCode === ENTER_KEY) {
+            if(normalizeKeyName(e) === ENTER_KEY) {
                 handler(e);
             }
         });

@@ -10,21 +10,31 @@ import exportTestsHelper from "./exportTestsHelper.js";
 
 const dataGridExportTestsHelper = Object.create(exportTestsHelper);
 
-dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, getCustomizeExcelCellExpectedCells = undefined, fixedColumnWidth_100 = true } = {}) {
+function assertStrictEqual(assert, value1, value2, message) {
+    if(typeof value1 === "number" && typeof value2 === "number" && isNaN(value1) && isNaN(value2)) {
+        assert.ok(true);
+    } else if(value1 instanceof Date && value2 instanceof Date) {
+        assert.strictEqual(value1.getTime(), value2.getTime(), message);
+    } else {
+        assert.strictEqual(value1, value2, message);
+    }
+}
+
+dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = undefined, worksheet = undefined, sharedStrings = undefined, getExpectedArgs = undefined, fixedColumnWidth_100 = true } = {}) {
     const that = this;
     const done = assert.async();
-    const actualGridCells = [];
+    const actualArgs = [];
 
     options.loadingTimeout = undefined;
     options.export = options.export || {};
 
-    if(getCustomizeExcelCellExpectedCells) {
+    if(getExpectedArgs) {
         const oldCustomizeExcelCell = options.export.customizeExcelCell;
         options.export.customizeExcelCell = e => {
             if(oldCustomizeExcelCell) {
                 oldCustomizeExcelCell(e);
             }
-            actualGridCells.push(e.gridCell);
+            actualArgs.push(e);
         };
     }
 
@@ -45,42 +55,49 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
             assert.strictEqual(zipMock.folder(excelCreator.__internals.XL_FOLDER_NAME).file(excelCreator.__internals.SHAREDSTRING_FILE_NAME).content, sharedStrings, "sharedStrings");
         }
 
-        if(getCustomizeExcelCellExpectedCells) {
-            const expectedGridCells = getCustomizeExcelCellExpectedCells(e.component);
-            assert.strictEqual(actualGridCells.length, expectedGridCells.length, 'actualGridCells.length');
-            for(let i = 0; i < actualGridCells.length; i++) {
-                const actualGridCell = actualGridCells[i];
-                const expectedGridCell = expectedGridCells[i];
-                const skipProperties = ['column', 'row'];
+        if(getExpectedArgs) {
+            const expectedArgs = getExpectedArgs(e.component);
+            assert.strictEqual(actualArgs.length, expectedArgs.length, "actualArgs.length");
+            for(let i = 0; i < actualArgs.length; i++) {
+                const actualArgsItem = actualArgs[i];
+                const expectedArgsItem = expectedArgs[i];
+                const gridCellSkipProperties = ["column", "row"];
 
-                for(const propertyName in expectedGridCell) {
-                    if(skipProperties.indexOf(propertyName) === -1) {
-                        assert.strictEqual(toComparable(actualGridCell[propertyName]), toComparable(expectedGridCell[propertyName]), `gridCell[${propertyName}], ${i}`);
-                        skipProperties.push(propertyName);
+                if(expectedArgsItem.value !== "skip") {
+                    assertStrictEqual(assert, actualArgsItem.value, expectedArgsItem.value, `value, ${i}`);
+                }
+
+                for(const propertyName in expectedArgsItem.gridCell) {
+                    if(gridCellSkipProperties.indexOf(propertyName) === -1) {
+                        assertStrictEqual(assert, actualArgsItem.gridCell[propertyName], expectedArgsItem.gridCell[propertyName], `gridCell[${propertyName}], ${i}`);
+                        gridCellSkipProperties.push(propertyName);
                     }
                 }
-                for(const actualPropertyName in actualGridCell) {
-                    if(skipProperties.indexOf(actualPropertyName) === -1) {
-                        assert.strictEqual(toComparable(actualGridCell[actualPropertyName]), toComparable(expectedGridCell[actualPropertyName]), `actual gridCell[${actualPropertyName}], ${i}`);
+
+                for(const actualPropertyName in actualArgsItem.gridCell) {
+                    if(gridCellSkipProperties.indexOf(actualPropertyName) === -1) {
+                        assert.strictEqual(toComparable(actualArgsItem.gridCell[actualPropertyName]), toComparable(expectedArgsItem.gridCell[actualPropertyName]), `actual gridCell[${actualPropertyName}], ${i}`);
                     }
                 }
 
-                assert.ok(typeUtils.isDefined(actualGridCell.column) && typeUtils.isDefined(expectedGridCell.column) ||
-                    !typeUtils.isDefined(actualGridCell.column) && !typeUtils.isDefined(expectedGridCell.column),
-                `actualColumn === expectedColumn, ${i}`);
-                if(typeUtils.isDefined(actualGridCell.column) && typeUtils.isDefined(expectedGridCell.column)) {
-                    assert.strictEqual(actualGridCell.column.dataField, expectedGridCell.column.dataField, `column.dataField, ${i}`);
-                    assert.strictEqual(actualGridCell.column.dataType, expectedGridCell.column.dataType, `column.dataType, ${i}`);
-                    assert.strictEqual(actualGridCell.column.caption, expectedGridCell.column.caption, `column.caption, ${i}`);
-                    assert.strictEqual(actualGridCell.column.index, expectedGridCell.column.index, `column.index, ${i}`);
+                const actualColumn = actualArgsItem.gridCell.column;
+                const expectedColumn = expectedArgsItem.gridCell.column;
+                assert.ok(typeUtils.isDefined(actualColumn) && typeUtils.isDefined(expectedColumn) || !typeUtils.isDefined(actualColumn) && !typeUtils.isDefined(expectedColumn),
+                    `actualColumn === expectedColumn, ${i}`);
+                if(typeUtils.isDefined(actualColumn) && typeUtils.isDefined(expectedColumn)) {
+                    assert.strictEqual(actualColumn.dataField, expectedColumn.dataField, `column.dataField, ${i}`);
+                    assert.strictEqual(actualColumn.dataType, expectedColumn.dataType, `column.dataType, ${i}`);
+                    assert.strictEqual(actualColumn.caption, expectedColumn.caption, `column.caption, ${i}`);
+                    assert.strictEqual(actualColumn.index, expectedColumn.index, `column.index, ${i}`);
                 }
 
-                assert.ok(typeUtils.isDefined(actualGridCell.row) && typeUtils.isDefined(expectedGridCell.row) ||
-                    !typeUtils.isDefined(actualGridCell.row) && !typeUtils.isDefined(expectedGridCell.row),
-                `actualRow === expectedRow, ${i}`);
-                if(typeUtils.isDefined(actualGridCell.row) && typeUtils.isDefined(expectedGridCell.row)) {
-                    assert.strictEqual(actualGridCell.row.data, expectedGridCell.row.data, `row.data, ${i}`);
-                    assert.strictEqual(actualGridCell.row.rowType, expectedGridCell.row.rowType, `row.rowType, ${i}`);
+                const actualRow = actualArgsItem.gridCell.row;
+                const expectedRow = expectedArgsItem.gridCell.row;
+                assert.ok(typeUtils.isDefined(actualRow) && typeUtils.isDefined(expectedRow) || !typeUtils.isDefined(actualRow) && !typeUtils.isDefined(expectedRow),
+                    `actualRow === expectedRow, ${i}`);
+                if(typeUtils.isDefined(actualRow) && typeUtils.isDefined(expectedRow)) {
+                    assert.strictEqual(actualRow.data, expectedRow.data, `row.data, ${i}`);
+                    assert.strictEqual(actualRow.rowType, expectedRow.rowType, `row.rowType, ${i}`);
                 }
             }
         }
@@ -105,10 +122,6 @@ dataGridExportTestsHelper.runGeneralTest = function(assert, options, { styles = 
         };
     }
     dataGrid.exportToExcel();
-};
-
-dataGridExportTestsHelper.runCustomizeExcelCellTest = function(assert, gridOptions, getCustomizeExcelCellExpectedCells) {
-    dataGridExportTestsHelper.runGeneralTest(assert, gridOptions, { getCustomizeExcelCellExpectedCells });
 };
 
 export default dataGridExportTestsHelper;

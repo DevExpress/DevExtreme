@@ -79,7 +79,7 @@ const renderDateParts = (text, regExpInfo) => {
         start = end;
         end = start + result[i].length;
 
-        let pattern = regExpInfo.patterns[i - 1],
+        let pattern = regExpInfo.patterns[i - 1].replace(/^'|'$/g, ""),
             getter = getPatternGetter(pattern[0]);
 
         sections.push({
@@ -110,6 +110,8 @@ const getLimits = (pattern, date) => {
         H: { min: 0, max: 23 },
         h: { min: 0, max: 23 },
         m: { min: 0, max: 59 },
+        s: { min: 0, max: 59 },
+        S: { min: 0, max: 999 },
         a: { min: 0, max: 1 }
     };
 

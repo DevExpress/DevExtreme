@@ -10,14 +10,12 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
-require("ui/tree_list/ui.tree_list");
-
-var $ = require("jquery"),
-    fx = require("animation/fx"),
-    treeListMocks = require("../../helpers/treeListMocks.js"),
-    setupTreeListModules = treeListMocks.setupTreeListModules;
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/tree_list/ui.tree_list';
+import $ from 'jquery';
+import fx from 'animation/fx';
+import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
 fx.off = true;
 
@@ -701,6 +699,28 @@ QUnit.test("Add row when 'keyExpr' and 'parentIdExpr' options are specified as f
     assert.equal($rowElements.length, 2, "count data row");
     assert.ok($rowElements.first().hasClass("dx-row-inserted"), "insert row");
     assert.strictEqual(this.getVisibleRows()[0].data.parentId, 0, "parentId of an inserted row");
+});
+
+QUnit.test("TreeList should show error message on adding row if dataSource is not specified (T711831)", function(assert) {
+    // arrange
+    var errorCode,
+        widgetName;
+
+    this.options.dataSource = undefined;
+    this.setupTreeList();
+
+    this.rowsView.render($('#treeList'));
+    this.getController("data").fireError = function() {
+        errorCode = arguments[0];
+        widgetName = arguments[1];
+    };
+
+    // act
+    this.addRow();
+
+    // assert
+    assert.equal(errorCode, "E1052", "error code");
+    assert.equal(widgetName, "dxTreeList", "widget name");
 });
 
 QUnit.test("Set add button for a specific row", function(assert) {

@@ -10,8 +10,7 @@ QUnit.testStart(function() {
 require("common.css!");
 require("generic_light.css!");
 
-var $ = require("jquery"),
-    fx = require("animation/fx");
+var fx = require("animation/fx");
 
 require("ui/scheduler/ui.scheduler");
 

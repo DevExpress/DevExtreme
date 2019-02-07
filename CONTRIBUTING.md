@@ -2,11 +2,11 @@
 
 ## Issues and Feature Requests
 
-Important: **We do not provide customer support on GitHub.** 
+Important: **We do not provide customer support on GitHub.**
 
 Although we monitor issues reported on GitHub, we cannot guarantee to process them as soon and in the same manner as tickets submitted to the [Support Center](https://www.devexpress.com/sc).
 
-Our official bug tracker is the [Support Center](https://www.devexpress.com/sc). Please submit your questions, bug reports, and feature requests there.
+Our official bug tracker is the [Support Center](https://www.devexpress.com/sc). Please submit your questions, bug reports, and feature requests there if you have an active [commercial](https://js.devexpress.com/Licensing/#Commercial) license.
 
 If you find a security bug, please report it by sending an email to info@devexpress.com.
 

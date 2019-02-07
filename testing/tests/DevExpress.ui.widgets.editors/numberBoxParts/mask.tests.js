@@ -7,10 +7,9 @@ var $ = require("jquery"),
 
 require("ui/text_box/ui.text_editor");
 
-var INPUT_CLASS = "dx-texteditor-input",
-    PLACEHOLDER_CLASS = "dx-placeholder",
-    MINUS_KEY = 189,
-    NUMPAD_MINUS_KEYCODE = 109;
+var INPUT_CLASS = "dx-texteditor-input";
+var PLACEHOLDER_CLASS = "dx-placeholder";
+var IE_NUMPAD_MINUS_KEY = "Subtract";
 
 var moduleConfig = {
     beforeEach: function() {
@@ -188,28 +187,28 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
         value: 123.456
     });
 
-    this.keyboard.caret(3).keyDown(NUMPAD_MINUS_KEYCODE).input("-");
+    this.keyboard.caret(3).keyDown("-").input("-");
     assert.equal(this.input.val(), "-123.456", "value is correct");
     assert.equal(this.instance.option("value"), 123.456, "value should not be changed before valueChange event");
     assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret is correct");
     this.keyboard.change();
     assert.equal(this.instance.option("value"), -123.456, "value has been changed after valueChange event");
 
-    this.keyboard.keyDown(NUMPAD_MINUS_KEYCODE).input("-");
+    this.keyboard.keyDown("-").input("-");
     assert.equal(this.input.val(), "123.456", "value is correct");
     assert.equal(this.instance.option("value"), -123.456, "value should not be changed before valueChange event");
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is correct");
     this.keyboard.change();
     assert.equal(this.instance.option("value"), 123.456, "value has been changed after valueChange event");
 
-    this.keyboard.caret(3).keyDown(MINUS_KEY).input("-");
+    this.keyboard.caret(3).keyDown("-").input("-");
     assert.equal(this.input.val(), "-123.456", "value is correct");
     assert.equal(this.instance.option("value"), 123.456, "value should not be changed before valueChange event");
     assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret is correct");
     this.keyboard.change();
     assert.equal(this.instance.option("value"), -123.456, "value has been changed after valueChange event");
 
-    this.keyboard.keyDown(MINUS_KEY).input("-");
+    this.keyboard.keyDown("-").input("-");
     assert.equal(this.input.val(), "123.456", "value is correct");
     assert.equal(this.instance.option("value"), -123.456, "value should not be changed before valueChange event");
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is correct");
@@ -218,6 +217,9 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
 });
 
 QUnit.test("pressing numpad minus button should revert the number", function(assert) {
+    const isIE = browser.msie;
+    const keyName = isIE ? IE_NUMPAD_MINUS_KEY : "-";
+
     this.instance.option({
         format: "#.000",
         value: 123.456
@@ -225,11 +227,11 @@ QUnit.test("pressing numpad minus button should revert the number", function(ass
 
     this.keyboard
         .caret(3)
-        .keyDown(NUMPAD_MINUS_KEYCODE)
-        .keyPress(NUMPAD_MINUS_KEYCODE)
-        .keyUp(NUMPAD_MINUS_KEYCODE);
+        .keyDown(keyName)
+        .keyPress(keyName)
+        .keyUp(keyName);
 
-    if(!browser.msie) {
+    if(!isIE) {
         this.keyboard.input();
     }
 
@@ -256,11 +258,11 @@ QUnit.test("pressing '-' button should revert zero number", function(assert) {
         value: 0
     });
 
-    this.keyboard.keyDown(MINUS_KEY).input("-").change();
+    this.keyboard.keyDown("-").input("-").change();
     assert.equal(this.input.val(), "-0", "text is correct");
     assert.equal(1 / this.instance.option("value"), -Infinity, "value is negative");
 
-    this.keyboard.keyDown(MINUS_KEY).input("-").change();
+    this.keyboard.keyDown("-").input("-").change();
     assert.equal(this.input.val(), "0", "text is correct");
     assert.equal(1 / this.instance.option("value"), Infinity, "value is positive");
 });
@@ -271,11 +273,11 @@ QUnit.test("pressing '-' with different positive and negative parts", function(a
         value: 123
     });
 
-    this.keyboard.keyDown(MINUS_KEY).input("-").change();
+    this.keyboard.keyDown("-").input("-").change();
     assert.equal(this.input.val(), "($ 123)", "text is correct");
     assert.equal(this.instance.option("value"), -123, "value is negative");
 
-    this.keyboard.keyDown(MINUS_KEY).input("-").change();
+    this.keyboard.keyDown("-").input("-").change();
     assert.equal(this.input.val(), "$ 123", "text is correct");
     assert.equal(this.instance.option("value"), 123, "value is positive");
 });
@@ -284,7 +286,7 @@ QUnit.test("focusout after inverting sign should not lead to value changing", fu
     this.instance.option("value", -123);
 
     // note: keyboard mock keyDown send wrong key for '-' and can not be used here
-    this.input.trigger($.Event("keydown", { keyCode: MINUS_KEY, which: MINUS_KEY, key: "-" }));
+    this.input.trigger($.Event("keydown", { key: "-" }));
     this.keyboard.caret(3).input("-");
     this.keyboard.blur().change();
 
@@ -298,7 +300,7 @@ QUnit.test("pressing minus button should revert selected number", function(asser
         value: 0
     });
 
-    this.keyboard.caret({ start: 0, end: 5 }).keyDown(MINUS_KEY);
+    this.keyboard.caret({ start: 0, end: 5 }).keyDown("-");
     this.clock.tick();
 
     assert.equal(this.input.val(), "-$ 0.00", "text is correct");
@@ -311,7 +313,7 @@ QUnit.test("pressing '-' should keep selection", function(assert) {
         value: 123.456
     });
 
-    this.keyboard.caret({ start: 0, end: 5 }).keyDown(NUMPAD_MINUS_KEYCODE);
+    this.keyboard.caret({ start: 0, end: 5 }).keyDown("-");
     this.clock.tick();
     assert.equal(this.input.val(), "-123.5", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 1, end: 6 }, "caret is good");
@@ -322,7 +324,7 @@ QUnit.test("pressing '-' should keep selection", function(assert) {
     assert.equal(this.instance.option("value"), -5, "value has been changed after valueChange event");
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret is good");
 
-    this.keyboard.caret({ start: 0, end: 2 }).keyDown(MINUS_KEY);
+    this.keyboard.caret({ start: 0, end: 2 }).keyDown("-");
     this.clock.tick();
     assert.equal(this.input.val(), "5", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 1 }, "caret is good");
@@ -340,7 +342,7 @@ QUnit.test("pressing '-' correctly remove the selected part of previous value", 
         value: 123.4
     });
 
-    this.keyboard.caret({ start: 1, end: 3 }).keyDown(NUMPAD_MINUS_KEYCODE);
+    this.keyboard.caret({ start: 1, end: 3 }).keyDown("-");
     this.clock.tick();
     assert.equal(this.input.val(), "-123.4", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 4 }, "caret is good");
@@ -355,7 +357,7 @@ QUnit.test("NumberBox keeps correct selection after revert the sign", function(a
         value: 123.4
     });
 
-    this.keyboard.caret({ start: 1, end: 2 }).keyDown(NUMPAD_MINUS_KEYCODE);
+    this.keyboard.caret({ start: 1, end: 2 }).keyDown("-");
     this.clock.tick();
 
     assert.equal(this.input.val(), "<<123.4>>", "value is correct");
@@ -535,7 +537,7 @@ QUnit.test("invert sign should be prevented if minimum is larger than 0", functi
         value: 4
     });
 
-    this.keyboard.keyDown(MINUS_KEY);
+    this.keyboard.keyDown("-");
     assert.equal(this.input.val(), "4", "reverting was prevented");
 });
 
@@ -596,6 +598,66 @@ QUnit.test("boundary value should correctly apply after second try to set overfl
     assert.equal(this.instance.option("value"), 1, "value is adjusted to min");
 });
 
+QUnit.module("format: arabic digit shaping", {
+    beforeEach: function() {
+        moduleConfig.beforeEach.call(this);
+
+        var arabicDigits = "٠١٢٣٤٥٦٧٨٩";
+        var arabicSeparator = "٫";
+        var standardToArabicMock = function(text) {
+            return text.split("").map(function(sign) {
+                if(sign === ".") {
+                    return arabicSeparator;
+                }
+                return arabicDigits[sign] || sign;
+            }).join("");
+        };
+
+        var arabicToStandardMock = function(text) {
+            return text.split("").map(function(sign) {
+                if(sign === arabicSeparator) {
+                    return ".";
+                }
+                var standardSign = arabicDigits.indexOf(sign);
+                return standardSign < 0 ? sign : standardSign;
+            }).join("");
+        };
+
+        numberLocalization.inject({
+            format: function(number) {
+                return !isNaN(number) && standardToArabicMock(String(number));
+            },
+            parse: function(text) {
+                return text && parseFloat(arabicToStandardMock(text));
+            }
+        });
+    },
+
+    afterEach: function() {
+        moduleConfig.afterEach.call(this);
+        numberLocalization.resetInjection();
+    }
+});
+
+QUnit.test("mask should work with arabic digit shaping", function(assert) {
+    this.keyboard
+        .type("١٢٣٤٥")
+        .press("backspace")
+        .change();
+
+    assert.equal(this.input.val(), "١٢٣٤");
+    assert.equal(this.instance.option("value"), 1234);
+
+    this.keyboard.type("-");
+
+    assert.equal(this.input.val(), "-١٢٣٤", "arabic minus should work");
+});
+
+QUnit.test("getFormatPattern should return correct format with arabic digit shaping", function(assert) {
+    this.instance.option("format", "currency");
+    assert.equal(this.instance._getFormatPattern(), "#0.##############");
+});
+
 
 QUnit.module("format: text input", moduleConfig);
 
@@ -612,51 +674,6 @@ QUnit.test("clearing numberbox via keyboard should be possible if non required f
 
     assert.equal(this.input.val(), "", "text was cleared");
     assert.equal(this.instance.option("value"), null, "value is correct");
-});
-
-QUnit.test("mask should work with arabic digit shaping", function(assert) {
-    var arabicDigits = "٠١٢٣٤٥٦٧٨٩";
-    var arabicSeparator = "٫";
-
-    var standardToArabicMock = function(text) {
-        return text.split("").map(function(sign) {
-            if(sign === ".") {
-                return arabicSeparator;
-            }
-            return arabicDigits[sign] || sign;
-        }).join("");
-    };
-
-    var arabicToStandardMock = function(text) {
-        return text.split("").map(function(sign) {
-            if(sign === arabicSeparator) {
-                return ".";
-            }
-            var standardSign = arabicDigits.indexOf(sign);
-            return standardSign < 0 ? sign : standardSign;
-        }).join("");
-    };
-
-    numberLocalization.inject({
-        format: function(number) {
-            return number && standardToArabicMock(String(number));
-        },
-        parse: function(text) {
-            return text && parseFloat(arabicToStandardMock(text));
-        }
-    });
-
-    try {
-        this.keyboard
-            .type("١٢٣٤٥")
-            .press("backspace")
-            .change();
-
-        assert.equal(this.input.val(), "١٢٣٤");
-        assert.equal(this.instance.option("value"), 1234);
-    } finally {
-        numberLocalization.resetInjection();
-    }
 });
 
 QUnit.test("invalid chars should be prevented on keydown", function(assert) {
@@ -997,7 +1014,6 @@ QUnit.test("minus sign typed to the end of the incomplete value should revert si
     this.keyboard
         .caret(1)
         .type(".0")
-        .keyDown(MINUS_KEY)
         .type("-");
 
     assert.equal(this.input.val(), "-0", "value has been reformatted after incorrect sign");
@@ -1326,6 +1342,27 @@ QUnit.test("removing decimal separator if decimal separator is not default", fun
 
         assert.equal(this.input.val(), "1,00", "text is correct");
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is moved");
+    } finally {
+        config({ decimalSeparator: oldDecimalSeparator });
+    }
+});
+
+QUnit.test("should parse float numbers with the ',' separator", function(assert) {
+    const oldDecimalSeparator = config().decimalSeparator;
+    const input = this.input;
+
+    config({ decimalSeparator: "," });
+
+    this.instance.option({ format: "#.##" });
+
+    try {
+        this.keyboard.type("2,333");
+        assert.strictEqual(input.val(), "2,33");
+
+        this.keyboard.caret({ start: 0, end: 4 }).press("backspace");
+
+        this.keyboard.type("2,666");
+        assert.strictEqual(input.val(), "2,66");
     } finally {
         config({ decimalSeparator: oldDecimalSeparator });
     }
