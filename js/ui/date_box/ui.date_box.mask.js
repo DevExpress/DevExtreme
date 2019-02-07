@@ -9,6 +9,7 @@ import { getDatePartIndexByPosition, renderDateParts } from "./ui.date_box.mask.
 import dateLocalization from "../../localization/date";
 import { getRegExpInfo } from "../../localization/ldml/date.parser";
 import { getFormat } from "../../localization/ldml/date.format";
+import { isString } from "../../core/utils/type";
 import DateBoxBase from "./ui.date_box.base";
 
 const MASK_EVENT_NAMESPACE = "dateBoxMask",
@@ -117,7 +118,7 @@ let DateBoxMask = DateBoxBase.inherit({
         }
 
         const format = this._strategy.getDisplayFormat(this.option("displayFormat"));
-        const isLDMLPattern = typeof format === "string" && !dateLocalization._getPatternByFormat(format);
+        const isLDMLPattern = isString(format) && !dateLocalization._getPatternByFormat(format);
 
         if(isLDMLPattern) {
             this._formatPattern = format;
@@ -138,8 +139,8 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _searchNumber(char) {
-        const limits = this._getActivePartLimits();
-        const maxLimitLength = String(limits.max).length;
+        const { max } = this._getActivePartLimits();
+        const maxLimitLength = String(max).length;
         const formatLength = this._getActivePartProp("pattern").length;
 
         this._searchValue = (this._searchValue + char).substr(-maxLimitLength);
@@ -148,9 +149,9 @@ let DateBoxMask = DateBoxBase.inherit({
 
         if(this.option("advanceCaret")) {
             const isShortFormat = formatLength === 1;
-            const maxSearchLength = (isShortFormat ? maxLimitLength : Math.min(formatLength, maxLimitLength));
+            const maxSearchLength = isShortFormat ? maxLimitLength : Math.min(formatLength, maxLimitLength);
             const isLengthExceeded = this._searchValue.length === maxSearchLength;
-            const isValueOverflowed = parseInt(this._searchValue + "0") > limits.max;
+            const isValueOverflowed = parseInt(this._searchValue + "0") > max;
 
             if(isLengthExceeded || isValueOverflowed) {
                 this._selectNextPart(FORWARD);
