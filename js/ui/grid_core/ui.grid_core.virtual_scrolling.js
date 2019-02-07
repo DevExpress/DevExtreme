@@ -40,10 +40,6 @@ var isVirtualRowRendering = function(that) {
     }
 };
 
-var getBodies = function($table) {
-    return $table.children("tbody").not(".dx-header").not(".dx-footer");
-};
-
 var correctCount = function(items, count, fromEnd, isItemCountableFunc) {
     var countCorrection = (fromEnd ? 0 : 1);
     for(var i = 0; i < count + countCorrection; i++) {
@@ -265,6 +261,21 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
 })();
 
 var VirtualScrollingRowsViewExtender = (function() {
+    var removeEmptyRows = function($emptyRows, className) {
+        var rowCount,
+            $tBodies = $emptyRows.parent("." + className);
+
+        if($tBodies.length) {
+            $emptyRows = $tBodies;
+        }
+
+        rowCount = className === FREESPACE_CLASS ? $emptyRows.length - 1 : $emptyRows.length;
+
+        for(var i = 0; i < rowCount; i++) {
+            $emptyRows.eq(i).remove();
+        }
+    };
+
     return {
         init: function() {
             var that = this,
@@ -394,22 +405,23 @@ var VirtualScrollingRowsViewExtender = (function() {
         _updateContent: function(tableElement, change) {
             var that = this,
                 contentTable,
+                $freeSpaceRowElements,
                 contentElement = that._findContentElement(),
                 changeType = change && change.changeType;
 
             if(changeType === "append" || changeType === "prepend") {
                 contentTable = contentElement.children().first();
-                var $tBodies = getBodies(tableElement);
+                var $tBodies = that._getBodies(tableElement);
                 if(!that.option("legacyRendering") && $tBodies.length === 1) {
-                    getBodies(contentTable)[changeType === "append" ? "append" : "prepend"]($tBodies.children());
+                    that._getBodies(contentTable)[changeType === "append" ? "append" : "prepend"]($tBodies.children());
                 } else {
                     $tBodies[changeType === "append" ? "appendTo" : "prependTo"](contentTable);
                 }
+
                 tableElement.remove();
-                var $rowElements = that._getFreeSpaceRowElements(contentTable);
-                for(var i = 0; i < $rowElements.length - 1; i++) {
-                    $rowElements.eq(i).remove();
-                }
+                $freeSpaceRowElements = that._getFreeSpaceRowElements(contentTable);
+                removeEmptyRows($freeSpaceRowElements, FREESPACE_CLASS);
+
                 if(change.removeCount) {
                     that._removeRowsElements(contentTable, change.removeCount, changeType);
                 }
@@ -424,14 +436,11 @@ var VirtualScrollingRowsViewExtender = (function() {
         _addVirtualRow: function($table, isFixed, location, position) {
             if(!position) return;
 
-            var $virtualRow = this._createEmptyRow(isFixed).addClass(VIRTUAL_ROW_CLASS).css("height", position),
-                $bodies = getBodies($table);
+            var $virtualRow = this._createEmptyRow(VIRTUAL_ROW_CLASS, isFixed).css("height", position);
 
-            if(location === "top") {
-                $virtualRow.prependTo($bodies.first());
-            } else {
-                $virtualRow.appendTo($bodies.last());
-            }
+            $virtualRow = this._wrapEmptyRowIfNeed($table, $virtualRow, VIRTUAL_ROW_CLASS);
+
+            this._appendEmptyRow($table, $virtualRow, location);
         },
         _updateContentPosition: function(isRender) {
             var that = this,
@@ -450,9 +459,10 @@ var VirtualScrollingRowsViewExtender = (function() {
                 }
                 var top = dataController.getContentOffset("begin"),
                     bottom = dataController.getContentOffset("end"),
-                    $tables = that.getTableElements();
+                    $tables = that.getTableElements(),
+                    $virtualRows = $tables.children("tbody").children("." + VIRTUAL_ROW_CLASS);
 
-                $tables.children("tbody").children("." + VIRTUAL_ROW_CLASS).remove();
+                removeEmptyRows($virtualRows, VIRTUAL_ROW_CLASS);
 
                 $tables.each(function(index) {
                     var isFixed = index > 0;
