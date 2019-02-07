@@ -1501,7 +1501,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             focusedRowKey = this.option("focusedRowKey"),
             focusedRowIndex = this.option("focusedRowIndex");
 
-        if(focusedRowKey && this.option("focusedRowEnabled")) {
+        if(focusedRowKey !== undefined && this.option("focusedRowEnabled")) {
             dataController = this.getController("data");
             row = dataController.getVisibleRows()[focusedRowIndex - dataController.getRowIndexOffset()];
             this.executeAction("onFocusedRowChanged", {
