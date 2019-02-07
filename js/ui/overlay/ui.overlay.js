@@ -32,6 +32,7 @@ var $ = require("../../core/renderer"),
     Resizable = require("../resizable"),
     EmptyTemplate = require("../widget/empty_template"),
     Deferred = require("../../core/utils/deferred").Deferred,
+    zIndexPool = require("./z_index"),
     getSwatchContainer = require("../widget/swatch_container");
 
 var OVERLAY_CLASS = "dx-overlay",
@@ -47,8 +48,6 @@ var OVERLAY_CLASS = "dx-overlay",
     RTL_DIRECTION_CLASS = "dx-rtl",
 
     ACTIONS = ["onShowing", "onShown", "onHiding", "onHidden", "onPositioning", "onPositioned", "onResizeStart", "onResize", "onResizeEnd"],
-
-    FIRST_Z_INDEX = 1500,
 
     OVERLAY_STACK = [],
 
@@ -591,7 +590,7 @@ var Overlay = Widget.inherit({
     },
 
     _zIndexInitValue: function() {
-        return FIRST_Z_INDEX;
+        return Overlay.baseZIndex();
     },
 
     _toggleViewPortSubscription: function(toggle) {
@@ -808,8 +807,7 @@ var Overlay = Widget.inherit({
 
         if(pushToStack) {
             if(index === -1) {
-                var length = overlayStack.length;
-                this._zIndex = (length ? overlayStack[length - 1]._zIndex : this._zIndexInitValue()) + 1;
+                this._zIndex = zIndexPool.create(this._zIndexInitValue());
 
                 overlayStack.push(this);
             }
@@ -818,6 +816,7 @@ var Overlay = Widget.inherit({
             this._$content.css("zIndex", this._zIndex);
         } else if(index !== -1) {
             overlayStack.splice(index, 1);
+            zIndexPool.remove(this._zIndex);
         }
     },
 
@@ -1440,6 +1439,7 @@ var Overlay = Widget.inherit({
 
         this.callBase();
 
+        zIndexPool.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
     },
@@ -1609,7 +1609,7 @@ var Overlay = Widget.inherit({
 * @static
 */
 Overlay.baseZIndex = function(zIndex) {
-    FIRST_Z_INDEX = zIndex;
+    return zIndexPool.base(zIndex);
 };
 
 registerComponent("dxOverlay", Overlay);
