@@ -57,7 +57,7 @@ exports.FocusController = core.ViewController.inherit((function() {
                 (!isLocalIndex ? dataController.pageIndex(pageIndex) : new Deferred().resolve()).done(function(_) {
                     if(that._isValidFocusedRowIndex(index)) {
                         focusedRowKey = dataController.getKeyByRowIndex(index - dataController.getRowIndexOffset());
-                        if(isDefined(focusedRowKey) && !that.isRowFocused(focusedRowKey)) {
+                        if(focusedRowKey !== undefined && !that.isRowFocused(focusedRowKey)) {
                             that.option("focusedRowKey", focusedRowKey);
                         }
                     }
@@ -190,7 +190,6 @@ exports.FocusController = core.ViewController.inherit((function() {
             if(focusedRowKey !== undefined) {
                 return equalByValue(key, this.option("focusedRowKey"));
             }
-            return false;
         },
 
         updateFocusedRow: function(change) {
