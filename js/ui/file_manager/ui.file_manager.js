@@ -6,6 +6,7 @@ import { extend } from "../../core/utils/extend";
 import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
+import FileManagerToolbar from "./ui.file_manager.toolbar";
 
 import DataFileProvider from "./ui.file_manager.file_provider.data";
 import OneDriveFileProvider from "./ui.file_manager.file_provider.onedrive";
@@ -15,6 +16,7 @@ const FILE_MANAGER_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-container";
 const FILE_MANAGER_DIRS_TREE_CLASS = FILE_MANAGER_CLASS + "-dirs-tree";
 const FILE_MANAGER_VIEW_SEPARATOR_CLASS = FILE_MANAGER_CLASS + "-view-separator";
 const FILE_MANAGER_FILES_VIEW_CLASS = FILE_MANAGER_CLASS + "-files-view";
+const FILE_MANAGER_TOOLBAR_CLASS = FILE_MANAGER_CLASS + "-toolbar";
 
 var FileManager = Widget.inherit({
 
@@ -31,8 +33,12 @@ var FileManager = Widget.inherit({
         this._currentPath = "";
         this._provider = this._createFileProvider();
 
+        var toolbar = this._createComponent($("<div>"), FileManagerToolbar, { });
+        toolbar.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS);
+
         var $viewContainer = this._createViewContainer();
         this.$element()
+            .append(toolbar.$element())
             .append($viewContainer)
             .addClass(FILE_MANAGER_CLASS);
     },
