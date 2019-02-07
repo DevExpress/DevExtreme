@@ -174,14 +174,15 @@ module.exports = gridCore.Controller.inherit((function() {
         },
         _applyBatch: function(changes) {
             var keyInfo = this._getKeyInfo(),
+                dataSource = this._dataSource,
                 groupCount = gridCore.normalizeSortingInfo(this.group()).length;
 
             changes = changes.filter(function(change) {
-                return change.type !== "insert" || change.index !== undefined;
+                return !dataSource.paginate() || change.type !== "insert" || change.index !== undefined;
             });
 
             arrayUtils.applyBatch(keyInfo, this._items, changes, groupCount, true);
-            arrayUtils.applyBatch(keyInfo, this._dataSource.items(), changes, groupCount, true);
+            arrayUtils.applyBatch(keyInfo, dataSource.items(), changes, groupCount, true);
             changes.splice(0, changes.length);
         },
         _handlePush: function(changes) {
@@ -196,6 +197,10 @@ module.exports = gridCore.Controller.inherit((function() {
                 cachedStoreData = that._cachedStoreData,
                 cachedPagingData = that._cachedPagingData,
                 cachedPagesData = that._cachedPagesData;
+
+            if(options.storeLoadOptions.filter && !options.remoteOperations.filtering) {
+                options.remoteOperations = {};
+            }
 
             if(isReload) {
                 cachedStoreData = undefined;

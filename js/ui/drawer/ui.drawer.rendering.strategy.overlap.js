@@ -186,6 +186,6 @@ class OverlapStrategy extends DrawerStrategy {
     needOrderContent(position) {
         return position === "right" || position === "bottom";
     }
-};
+}
 
 module.exports = OverlapStrategy;

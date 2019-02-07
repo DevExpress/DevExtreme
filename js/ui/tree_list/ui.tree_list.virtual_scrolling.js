@@ -1,7 +1,7 @@
-var gridCore = require("./ui.tree_list.core"),
-    dataSourceAdapter = require("./ui.tree_list.data_source_adapter"),
-    virtualScrollingModule = require("../grid_core/ui.grid_core.virtual_scrolling"),
-    extend = require("../../core/utils/extend").extend;
+import gridCore from './ui.tree_list.core';
+import dataSourceAdapter from './ui.tree_list.data_source_adapter';
+import virtualScrollingModule from '../grid_core/ui.grid_core.virtual_scrolling';
+import { extend } from '../../core/utils/extend';
 
 var oldDefaultOptions = virtualScrollingModule.defaultOptions,
     originalDataControllerExtender = virtualScrollingModule.extenders.controllers.data,

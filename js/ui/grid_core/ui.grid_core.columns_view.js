@@ -89,10 +89,7 @@ var getWidthStyle = function(width) {
 };
 
 var setCellWidth = function(cell, column, width) {
-    cell.style.width = cell.style.maxWidth = width;
-    if(!column.command && column.width === "auto" && width === "") {
-        cell.style.width = "1px";
-    }
+    cell.style.width = cell.style.maxWidth = column.width === "auto" ? "" : width;
 };
 
 var copyAttributes = function(element, newElement) {
@@ -157,7 +154,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var $cell = $(cell);
 
         if(options.rowType === "data") {
-            column.id && this.setAria("describedby", column.id, $cell);
+            column.headerId && this.setAria("describedby", column.headerId, $cell);
         }
 
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
@@ -647,6 +644,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             this.rowIndex = options.rowIndex = row.rowIndex;
             this.dataIndex = options.dataIndex = row.dataIndex;
             this.isExpanded = options.isExpanded = row.isExpanded;
+
+            if(options.row) {
+                options.row = row;
+            }
 
             watchers.forEach(function(watcher) {
                 watcher();

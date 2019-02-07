@@ -39,6 +39,7 @@ var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_CONTENT_CLASS = "dx-overlay-content",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     OVERLAY_MODAL_CLASS = "dx-overlay-modal",
+    INNER_OVERLAY_CLASS = "dx-inner-overlay",
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
 
     ANONYMOUS_TEMPLATE_NAME = "content",
@@ -53,7 +54,7 @@ var OVERLAY_CLASS = "dx-overlay",
 
     DISABLED_STATE_CLASS = "dx-state-disabled",
 
-    TAB_KEY = 9,
+    TAB_KEY = "tab",
 
     POSITION_ALIASES = {
         "top": { my: "top center", at: "top center" },
@@ -349,6 +350,7 @@ var Overlay = Widget.inherit({
             onResizeStart: null,
             onResize: null,
             onResizeEnd: null,
+            innerOverlay: false,
 
             // NOTE: private options
 
@@ -442,6 +444,7 @@ var Overlay = Widget.inherit({
 
         this._$wrapper = $("<div>").addClass(OVERLAY_WRAPPER_CLASS);
         this._$content = $("<div>").addClass(OVERLAY_CONTENT_CLASS);
+        this._initInnerOverlayClass();
 
         var $element = this.$element();
         this._$wrapper.addClass($element.attr("class"));
@@ -463,6 +466,10 @@ var Overlay = Widget.inherit({
         this._initHideTopOverlayHandler(options.hideTopOverlayHandler);
 
         this.callBase(options);
+    },
+
+    _initInnerOverlayClass: function() {
+        this._$content.toggleClass(INNER_OVERLAY_CLASS, this.option("innerOverlay"));
     },
 
     _initTarget: function(target) {
@@ -545,7 +552,8 @@ var Overlay = Widget.inherit({
 
         var $container = this._$content,
             isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target),
-            outsideClick = isAttachedTarget && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
+            isInnerOverlay = $(e.target).closest("." + INNER_OVERLAY_CLASS).length,
+            outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
 
         if(outsideClick && closeOnOutsideClick) {
             if(this.option("shading")) {
@@ -746,7 +754,7 @@ var Overlay = Widget.inherit({
         if(animation) {
             startCallback = startCallback || animation.start || noop;
 
-            fx.animate(this._$content, extend({}, animation, {
+            fx.animate(this._getOuterElement(), extend({}, animation, {
                 start: startCallback,
                 complete: completeCallback
             }));
@@ -756,7 +764,7 @@ var Overlay = Widget.inherit({
     },
 
     _stopAnimation: function() {
-        fx.stop(this._$content, true);
+        fx.stop(this._getOuterElement(), true);
     },
 
     _renderVisibility: function(visible) {
@@ -861,7 +869,7 @@ var Overlay = Widget.inherit({
     },
 
     _tabKeyHandler: function(e) {
-        if(e.keyCode !== TAB_KEY || !this._isTopOverlay()) {
+        if(eventUtils.normalizeKeyName(e) !== TAB_KEY || !this._isTopOverlay()) {
             return;
         }
 
@@ -1156,9 +1164,10 @@ var Overlay = Widget.inherit({
     },
 
     _changePosition: function(offset) {
-        var position = translator.locate(this._$content);
+        const outerElement = this._getOuterElement();
+        const position = translator.locate(outerElement);
 
-        translator.move(this._$content, {
+        translator.move(outerElement, {
             left: position.left + offset.left,
             top: position.top + offset.top
         });
@@ -1282,10 +1291,30 @@ var Overlay = Widget.inherit({
         return getElement(container || positionOf);
     },
 
-    _renderDimensions: function() {
-        var content = this._$content.get(0);
+    _getOuterElement() {
+        const $content = this._$content;
+        const content = $content.get(0);
+        const isShading = this.option('shading');
+        const width = this._getOptionValue("width", content);
+        const height = this._getOptionValue("height", content);
 
-        this._$content.css({
+        const isPercentage = (size) => String(size).indexOf('%') !== -1;
+
+        const isPercentageWidth = isPercentage(width);
+        const isPercentageHeight = isPercentage(height);
+
+        const areWrapperAndContentSizeSame = !isShading;
+        const doesContentFitWrapper = isPercentageWidth && isPercentageHeight && areWrapperAndContentSizeSame;
+
+        return doesContentFitWrapper ? this._$wrapper : $content;
+    },
+
+    _renderDimensions: function() {
+        const $content = this._$content;
+        const content = $content.get(0);
+        const $outerElement = this._getOuterElement();
+
+        $outerElement.css({
             minWidth: this._getOptionValue("minWidth", content),
             maxWidth: this._getOptionValue("maxWidth", content),
             minHeight: this._getOptionValue("minHeight", content),
@@ -1293,6 +1322,10 @@ var Overlay = Widget.inherit({
             width: this._getOptionValue("width", content),
             height: this._getOptionValue("height", content)
         });
+
+        if($outerElement !== $content) {
+            $content.css({ width: "100%", height: "100%" });
+        }
     },
 
     _renderPosition: function() {
@@ -1304,14 +1337,16 @@ var Overlay = Widget.inherit({
                 left: fitIntoRange(0, -allowedOffsets.left, allowedOffsets.right)
             });
         } else {
+            const $outerElement = this._getOuterElement();
+
             this._renderOverlayBoundaryOffset();
 
-            translator.resetPosition(this._$content);
+            translator.resetPosition($outerElement);
 
             var position = this._transformStringPosition(this._position, POSITION_ALIASES),
-                resultPosition = positionUtils.setup(this._$content, position);
+                resultPosition = positionUtils.setup($outerElement, position);
 
-            forceRepaint(this._$content);
+            forceRepaint($outerElement);
 
             // TODO: hotfix for T338096
             this._actions.onPositioning();
@@ -1468,6 +1503,9 @@ var Overlay = Widget.inherit({
             case "container":
                 this._initContainer(value);
                 this._invalidate();
+                break;
+            case "innerOverlay":
+                this._initInnerOverlayClass();
                 break;
             case "deferRendering":
             case "contentTemplate":

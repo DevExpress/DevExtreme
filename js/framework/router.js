@@ -10,7 +10,7 @@ var JSON_URI_PREFIX = encodeURIComponent("json:");
 
 var Route = Class.inherit({
     _trimSeparators: function(str) {
-        return str.replace(/^[\/.]+|\/+$/g, "");
+        return str.replace(/^[/.]+|\/+$/g, "");
     },
     _escapeRe: function(str) {
         return str.replace(/[^-\w]/g, "\\$1");
@@ -41,7 +41,7 @@ var Route = Class.inherit({
         this._segments = [];
         this._separators = [];
 
-        this._pattern.replace(/[^\/]+/g, function(segment, index) {
+        this._pattern.replace(/[^/]+/g, function(segment, index) {
             that._segments.push(segment);
             if(index) {
                 that._separators.push(that._pattern.substr(index - 1, 1));
@@ -216,7 +216,7 @@ var Router = Class.inherit({
     },
 
     _trimSeparators: function(str) {
-        return str.replace(/^[\/.]+|\/+$/g, "");
+        return str.replace(/^[/.]+|\/+$/g, "");
     },
 
     _createRoute: function(pattern, defaults, constraints) {

@@ -17,6 +17,8 @@
 @MATERIAL_SLIDER_HANDLE_INNER_DISABLED_SIZE: 2px;
 @MATERIAL_SLIDER_WRAPPER_HEIGHT: 32px;
 @MATERIAL_SLIDER_TOOLTIP_WIDTH: 34px;
+@MATERIAL_SLIDER_TOOLTIP_POPUP_CONTENT_HORIZONTAL_PADDING: 3px;
+@MATERIAL_SLIDER_TOOLTIP_WIDTH_WITHOUT_PADDINGS: @MATERIAL_SLIDER_TOOLTIP_WIDTH - 2 * @MATERIAL_SLIDER_TOOLTIP_POPUP_CONTENT_HORIZONTAL_PADDING;
 @MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN: 5px;
 
 .dx-slider-wrapper {
@@ -87,11 +89,11 @@
             .dx-popup-content {
                 line-height: normal;
                 font-size: 10px;
-                max-width: @MATERIAL_SLIDER_TOOLTIP_WIDTH;
-                min-width: @MATERIAL_SLIDER_TOOLTIP_WIDTH;
-                width: @MATERIAL_SLIDER_TOOLTIP_WIDTH;
+                max-width: @MATERIAL_SLIDER_TOOLTIP_WIDTH_WITHOUT_PADDINGS;
+                min-width: @MATERIAL_SLIDER_TOOLTIP_WIDTH_WITHOUT_PADDINGS;
+                width: @MATERIAL_SLIDER_TOOLTIP_WIDTH_WITHOUT_PADDINGS;
                 text-overflow: ellipsis;
-                padding: @MATERIAL_SLIDER_TOOLTIP_WIDTH / 2 - @MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN - 1 3px 5px 3px;
+                padding: @MATERIAL_SLIDER_TOOLTIP_WIDTH / 2 - @MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN - 1 @MATERIAL_SLIDER_TOOLTIP_POPUP_CONTENT_HORIZONTAL_PADDING 5px;
                 color: @material-slider-tooltip-color;
                 position: relative;
 
@@ -179,6 +181,21 @@
         .dx-overlay-content {
             margin-top: -12px;
         }
+    }
+}
+
+.dx-invalid {
+    .dx-slider-handle:after {
+        background-color: @base-invalid-color;
+    }
+
+    .dx-slider-range-visible {
+        background-color: @base-invalid-color;
+        border-color: @base-invalid-color;
+    }
+
+    .dx-slider-bar {
+        background-color: fade(@base-invalid-color, 40%);
     }
 }
 

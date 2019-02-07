@@ -215,7 +215,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             changed: $.Callbacks(),
             loadingChanged: $.Callbacks(),
             pageChanged: $.Callbacks(),
-            dataSourceChanged: $.Callbacks()
+            dataSourceChanged: $.Callbacks(),
+            fireError: function() { },
         };
     };
 

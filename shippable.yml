@@ -5,6 +5,7 @@ env:
     - HEADLESS=true
   matrix:
     - TARGET=lint
+    - TARGET=ts
     - TARGET=test CONSTEL=misc
     - TARGET=test CONSTEL=ui
     - TARGET=test CONSTEL=ui.editors
@@ -22,7 +23,7 @@ build:
 
   pre_ci_boot:
     image_name: docker.io/devexpress/devextreme-build
-    image_tag: "18_2"
+    image_tag: "19_1"
     pull: true
 
   ci:

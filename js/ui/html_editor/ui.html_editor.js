@@ -17,6 +17,7 @@ import FormDialog from "./ui/formDialog";
 const HTML_EDITOR_CLASS = "dx-htmleditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
+const HTML_EDITOR_CONTENT_CLASS = "dx-htmleditor-content";
 
 const MARKDOWN_VALUE_TYPE = "markdown";
 
@@ -140,6 +141,10 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
 
         this._defaultTemplates[ANONYMOUS_TEMPLATE_NAME] = new EmptyTemplate(this);
+    },
+
+    _focusTarget: function() {
+        return this.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`);
     },
 
     _initMarkup: function() {
@@ -372,7 +377,7 @@ const HtmlEditor = Editor.inherit({
             case "toolbar":
                 this._invalidate();
                 break;
-            case "valueType":
+            case "valueType": {
                 this._prepareConverters();
                 const newValue = this._updateValueByType(args.value);
 
@@ -382,6 +387,7 @@ const HtmlEditor = Editor.inherit({
                     this.option("value", newValue);
                 }
                 break;
+            }
             case "readOnly":
             case "disabled":
                 this.callBase(args);

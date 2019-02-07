@@ -2449,7 +2449,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect.attr({ "clip-path": "DevExpress_34" });
 
         // assert
-        assert.strictEqual(rect.element.getAttribute("clip-path").replace(/\"/g, ""), "url(#DevExpress_34)");
+        assert.strictEqual(rect.element.getAttribute("clip-path").replace(/"/g, ""), "url(#DevExpress_34)");
     });
 
     QUnit.test("Set clip-path attribute. pathModified = true", function(assert) {
@@ -2464,7 +2464,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect.attr({ "clip-path": "DevExpress_34" });
 
         // assert
-        assert.strictEqual(rect.element.getAttribute("clip-path").replace(/\"/g, ""), "url(" + url + "#DevExpress_34)");
+        assert.strictEqual(rect.element.getAttribute("clip-path").replace(/"/g, ""), "url(" + url + "#DevExpress_34)");
     });
 
     QUnit.test("Set clip-path = null", function(assert) {
@@ -2491,7 +2491,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect.attr({ "filter": "DevExpress_34" });
 
         // assert
-        assert.strictEqual(rect.element.getAttribute("filter").replace(/\"/g, ""), "url(#DevExpress_34)");
+        assert.strictEqual(rect.element.getAttribute("filter").replace(/"/g, ""), "url(#DevExpress_34)");
     });
 
     QUnit.test("Set filter attribute. pathModified = true", function(assert) {
@@ -2506,7 +2506,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect.attr({ "filter": "DevExpress_34" });
 
         // assert
-        assert.strictEqual(rect.element.getAttribute("filter").replace(/\"/g, ""), "url(" + url + "#DevExpress_34)");
+        assert.strictEqual(rect.element.getAttribute("filter").replace(/"/g, ""), "url(" + url + "#DevExpress_34)");
     });
 
     QUnit.test("Set filter = null", function(assert) {
@@ -2533,7 +2533,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect.attr({ "fill": "DevExpress_34" });
 
         // assert
-        assert.strictEqual(rect.element.getAttribute("fill").replace(/\"/g, ""), "url(#DevExpress_34)");
+        assert.strictEqual(rect.element.getAttribute("fill").replace(/"/g, ""), "url(#DevExpress_34)");
     });
 
     QUnit.test("Set pattern as fill attribute. pathModified = true", function(assert) {
@@ -2548,7 +2548,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect.attr({ "fill": "DevExpress_34" });
 
         // assert
-        assert.strictEqual(rect.element.getAttribute("fill").replace(/\"/g, ""), "url(" + url + "#DevExpress_34)");
+        assert.strictEqual(rect.element.getAttribute("fill").replace(/"/g, ""), "url(" + url + "#DevExpress_34)");
     });
 
     QUnit.test("Set pattern as fill attribute = null", function(assert) {
@@ -2579,7 +2579,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         rect.attr({ "filter": "DevExpress_34" });
 
         // assert
-        assert.strictEqual(rect.element.getAttribute("filter").replace(/\"/g, ""), "url(" + url + "#DevExpress_34)");
+        assert.strictEqual(rect.element.getAttribute("filter").replace(/"/g, ""), "url(" + url + "#DevExpress_34)");
     });
 
     if("pushState" in history) {
@@ -2598,9 +2598,9 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.refreshPaths();
 
             // assert
-            assert.strictEqual(rectWithClip.element.getAttribute("clip-path").replace(/\"/g, ""), "url(#DevExpress_12)");
-            assert.strictEqual(rectWithPattern.element.getAttribute("fill").replace(/\"/g, ""), "url(#DevExpress_13)");
-            assert.strictEqual(rectWithFilter.element.getAttribute("filter").replace(/\"/g, ""), "url(#DevExpress_14)");
+            assert.strictEqual(rectWithClip.element.getAttribute("clip-path").replace(/"/g, ""), "url(#DevExpress_12)");
+            assert.strictEqual(rectWithPattern.element.getAttribute("fill").replace(/"/g, ""), "url(#DevExpress_13)");
+            assert.strictEqual(rectWithFilter.element.getAttribute("filter").replace(/"/g, ""), "url(#DevExpress_14)");
         });
 
         QUnit.test("FixPath API. pathModified = true", function(assert) {
@@ -2620,9 +2620,9 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.refreshPaths();
 
             // assert
-            assert.strictEqual(rectWithClip.element.getAttribute("clip-path").replace(/\"/g, ""), "url(" + newUrl + "#DevExpress_12)");
-            assert.strictEqual(rectWithPattern.element.getAttribute("fill").replace(/\"/g, ""), "url(" + newUrl + "#DevExpress_13)");
-            assert.strictEqual(rectWithFilter.element.getAttribute("filter").replace(/\"/g, ""), "url(" + newUrl + "#DevExpress_14)");
+            assert.strictEqual(rectWithClip.element.getAttribute("clip-path").replace(/"/g, ""), "url(" + newUrl + "#DevExpress_12)");
+            assert.strictEqual(rectWithPattern.element.getAttribute("fill").replace(/"/g, ""), "url(" + newUrl + "#DevExpress_13)");
+            assert.strictEqual(rectWithFilter.element.getAttribute("filter").replace(/"/g, ""), "url(" + newUrl + "#DevExpress_14)");
         });
 
         QUnit.test("FixPath API. do not change attribute if its value was funcIRI, but now it is not", function(assert) {
@@ -2664,6 +2664,31 @@ function checkDashStyle(assert, elem, result, style, value) {
 
             // assert
             assert.strictEqual(testElement.getAttribute("fill"), "url(" + oldUrl + "#DevExpress_12)");
+        });
+
+        // T711457
+        QUnit.test("No path refreshing when parent element was cleared", function(assert) {
+            // arrange
+            this.rendererStub.pathModified = true;
+
+            var parent = { element: document.createElement("div") },
+                svg = (new this.Element(this.rendererStub, "svg")).append(parent),
+                rootGroup = (new this.Element(this.rendererStub, "group")).attr({ fill: "DevExpress_12" }).append(svg),
+                rect1 = (new this.Element(this.rendererStub, "rect")).attr({ fill: "DevExpress_13" }).append(rootGroup),
+                href = window.location.href,
+                oldUrl = href.split("#")[0],
+                newUrl = href.split("?")[0] + "?testparam=2";
+
+            window.history.pushState("", document.title, newUrl);
+
+            rootGroup.clear();
+
+            // act
+            this.refreshPaths();
+
+            // assert
+            assert.strictEqual(rootGroup.element.getAttribute("fill"), "url(" + newUrl + "#DevExpress_12)");
+            assert.strictEqual(rect1.element.getAttribute("fill"), "url(" + oldUrl + "#DevExpress_13)");
         });
 
         QUnit.test("No path refreshing when parent element was disposed", function(assert) {

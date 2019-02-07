@@ -315,9 +315,11 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     _syncSelectionOptions: function(byOption) {
         byOption = byOption || this._chooseSelectOption();
 
+        var selectedItem, selectedIndex;
+
         switch(byOption) {
             case "selectedIndex":
-                var selectedItem = this._editStrategy.getItemDataByIndex(this.option("selectedIndex"));
+                selectedItem = this._editStrategy.getItemDataByIndex(this.option("selectedIndex"));
 
                 if(isDefined(selectedItem)) {
                     this._setOptionSilent("selectedItems", [selectedItem]);
@@ -332,7 +334,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
             case "selectedItems":
                 var selectedItems = this.option("selectedItems") || [];
-                var selectedIndex = this._editStrategy.getIndexByItemData(selectedItems[0]);
+                selectedIndex = this._editStrategy.getIndexByItemData(selectedItems[0]);
 
                 if(this.option("selectionRequired") && !indexExists(selectedIndex)) {
                     return this._syncSelectionOptions("selectedIndex");
@@ -344,8 +346,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 break;
 
             case "selectedItem":
-                var selectedItem = this.option("selectedItem");
-                var selectedIndex = this._editStrategy.getIndexByItemData(selectedItem);
+                selectedItem = this.option("selectedItem");
+                selectedIndex = this._editStrategy.getIndexByItemData(selectedItem);
 
                 if(this.option("selectionRequired") && !indexExists(selectedIndex)) {
                     return this._syncSelectionOptions("selectedIndex");

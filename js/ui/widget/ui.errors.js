@@ -214,6 +214,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1051: "HtmlEditor's valueType is \"{0}\", but the {0} converter was not imported.",
 
     /**
+    * @name ErrorsUIWidgets.E1052
+    */
+    E1052: '{0} should have the "dataSource" option specified',
+
+    /**
     * @name ErrorsUIWidgets.W1001
     */
     W1001: "The \"key\" option cannot be modified after initialization",

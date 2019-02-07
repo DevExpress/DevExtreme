@@ -9,10 +9,10 @@ import {
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS
 } from "./constants.js";
 
-const TAB_KEY = 9,
-    ENTER_KEY = 13,
-    ESCAPE_KEY = 27,
-    DOWN_ARROW_KEY = 40;
+const TAB_KEY = "Tab";
+const ENTER_KEY = "Enter";
+const ESCAPE_KEY = "Escape";
+const DOWN_ARROW_KEY = "ArrowDown";
 
 QUnit.module("Keyboard navigation", {
     beforeEach: function() {
@@ -22,10 +22,6 @@ QUnit.module("Keyboard navigation", {
             value: [["State", "=", ""]],
             fields: fields
         }).dxFilterBuilder("instance");
-
-        this.triggerEvent = function(element, eventType, keyCode) {
-            element.trigger($.Event(eventType, { keyCode: keyCode }));
-        };
 
         this.getValueButtonElement = function() {
             return this.container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
