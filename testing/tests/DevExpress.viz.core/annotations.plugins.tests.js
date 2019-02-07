@@ -119,6 +119,12 @@ QUnit.module("Lifecycle", environment, function() {
                 onDrawn: this.onDrawn,
                 annotations
             }).dxChart("instance");
+        },
+        getAnnotationsGroup() {
+            return this.renderer.g.getCalls().map(g => g.returnValue).filter(g => {
+                const attr = g.stub("attr").getCall(0);
+                return attr && attr.args[0].class === "dxc-annotations";
+            })[0];
         }
     });
 
@@ -157,12 +163,9 @@ QUnit.module("Lifecycle", environment, function() {
         };
         const chart = this.chart(annotationOptions);
 
-        const annotationsGroup = this.renderer.g.getCall(19).returnValue;
-        assert.equal(annotationsGroup.attr.getCall(0).args[0].class, "dxc-annotations");
-
         const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
         assert.equal(annotation.draw.callCount, 1);
-        assert.deepEqual(annotation.draw.getCall(0).args, [chart, annotationsGroup]);
+        assert.deepEqual(annotation.draw.getCall(0).args, [chart, this.getAnnotationsGroup()]);
     });
 
     QUnit.test("Draw annotations before onDrawn event", function(assert) {
@@ -203,8 +206,7 @@ QUnit.module("Lifecycle", environment, function() {
         assert.equal(this.createAnnotationStub.callCount, 1);
         assert.deepEqual(this.createAnnotationStub.getCall(0).args, [newAnnotationOptions]);
 
-        const annotationsGroup = this.renderer.g.getCall(19).returnValue;
-        assert.equal(annotationsGroup.attr.getCall(0).args[0].class, "dxc-annotations");
+        const annotationsGroup = this.getAnnotationsGroup();
 
         const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
         assert.equal(annotation.draw.callCount, 1);
