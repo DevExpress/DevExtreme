@@ -11,7 +11,6 @@ viz.exportFromMarkup = require("../../../viz/export").exportFromMarkup;
 viz.getMarkup = require("../../../viz/export").getMarkup;
 viz.exportWidgets = require("../../../viz/export").exportWidgets;
 viz.currentPalette = require("../../../viz/palette").currentPalette;
-viz.Palette = require("../../../viz/palette").Palette;
 viz.getPalette = require("../../../viz/palette").getPalette;
 viz.registerPalette = require("../../../viz/palette").registerPalette;
 viz.refreshTheme = require("../../../viz/themes").refreshTheme;

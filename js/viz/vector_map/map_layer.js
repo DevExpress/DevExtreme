@@ -543,7 +543,7 @@ strategiesByElementType[TYPE_MARKER] = {
             }
             if(count > 0) {
                 palette = context.params.themeManager.createPalette(context.settings.palette, { useHighlight: true, extensionMode: "alternate" });
-                values = palette.getColors(count);
+                values = palette.generateColors(count);
 
                 context.settings._colors = values;
                 context.grouping.color = { callback: _noop, field: "", partition: [], values: [] };

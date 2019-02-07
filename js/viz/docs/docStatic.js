@@ -118,16 +118,6 @@ var staticMethods = {
     */
     getMarkup: function() { },
     /**
-    * @name vizmethods.Palette
-    * @publicName Palette(palette, parameters)
-    * @param1 palette:string
-    * @param2 parameters:object
-    * @static
-    * @module viz/palette
-    * @export currentPalette
-    */
-    Palette: function() { },
-    /**
     * @name vizmethods.currentPalette
     * @publicName currentPalette()
     * @return string
@@ -148,7 +138,8 @@ var staticMethods = {
     /**
     * @name vizmethods.getPalette
     * @publicName getPalette(paletteName)
-    * @param1 paletteName:string
+    * @param1 palette:string
+    * @param1 parameters:object
     * @return object
     * @static
     * @module viz/palette

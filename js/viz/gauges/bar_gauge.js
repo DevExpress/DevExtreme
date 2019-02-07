@@ -211,7 +211,7 @@ var dxBarGauge = dxBaseGauge.inherit({
         context.textRadius = radius + that._textIndent;
         that._palette.reset();
         unitOffset = context.barSize + spacing;
-        colors = that._palette.getColors(_count);
+        colors = that._palette.generateColors(_count);
         for(i = 0; i < _count; ++i, radius -= unitOffset) {
             that._bars[i].arrange({
                 radius: radius,

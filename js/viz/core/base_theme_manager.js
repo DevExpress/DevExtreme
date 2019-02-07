@@ -89,15 +89,15 @@ exports.BaseThemeManager = Class.inherit({// TODO: test hack
     // TODO: May be we need some single method for all palettes?
 
     createPalette: function(palette, options) {
-        return new paletteModule.Palette(palette, options, this._defaultPalette);
+        return paletteModule.Palette(palette, options, this._defaultPalette);
     },
 
     createDiscretePalette: function(palette, count) {
-        return new paletteModule.DiscretePalette(palette, count, this._defaultPalette);
+        return paletteModule.DiscretePalette(palette, count, this._defaultPalette);
     },
 
     createGradientPalette: function(palette) {
-        return new paletteModule.GradientPalette(palette, this._defaultPalette);
+        return paletteModule.GradientPalette(palette, this._defaultPalette);
     },
 
     getAccentColor: function(palette) {

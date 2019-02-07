@@ -82,7 +82,7 @@ sinon.stub(axisModule, "Axis", function(parameters) {
 factory.ThemeManager = vizMocks.stubClass(ThemeManager, {
     theme: function() { return {}; },
     themeName: function() { return "theme-name"; },
-    createPalette: function(palette) { return new Palette(palette); },
+    createPalette: function(palette) { return Palette(palette); },
     setTheme: function() {
         vizMocks.forceThemeOptions(this);
     }

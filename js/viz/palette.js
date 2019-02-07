@@ -126,6 +126,16 @@ export function currentPalette(name) {
 }
 
 export function getPalette(palette, parameters) {
+    const paletteInstance = Palette(palette, parameters);
+
+    if(_isArray(palette)) {
+        return paletteInstance;
+    } else {
+        return extend(normalizePalette(palette, parameters), paletteInstance);
+    }
+}
+
+export function normalizePalette(palette, parameters) {
     parameters = parameters || {};
     palette = selectPaletteOnSeniority(palette, parameters.themeDefault);
 
@@ -141,8 +151,8 @@ export function getPalette(palette, parameters) {
             result = palettes[currentPalette()];
         }
     }
-    result = result || null;
-    return type ? result ? result[type].slice(0) : result : result;
+
+    return type ? result[type].slice(0) : result;
 }
 
 export function registerPalette(name, palette) {
@@ -167,7 +177,7 @@ export function registerPalette(name, palette) {
 }
 
 export function getAccentColor(palette, themeDefault) {
-    palette = getPalette(palette, { themeDefault });
+    palette = normalizePalette(palette, { themeDefault });
     return palette.accentColor || palette[0];
 }
 
@@ -205,7 +215,7 @@ function AlternateColors(palette, parameters) {
             return color;
         },
 
-        getColors: function(count) {
+        generateColors: function(count) {
             const colors = [];
             count = count || parameters.count;
             for(var i = 0; i < count; i++) {
@@ -264,7 +274,7 @@ function ExtrapolateColors(palette, parameters) {
             return color;
         },
 
-        getColors: function(count) {
+        generateColors: function(count) {
             const colors = [];
             count = count || parameters.count;
             for(let i = 0; i < count; i++) colors.push(this.getColor(i, count));
@@ -382,8 +392,8 @@ function BlendColors(palette, parameters) {
             return extendedPalette[index % count];
         },
 
-        getColors: function(count, repeat) {
-            count = count || parameters.count;
+        generateColors: function(count, repeat) {
+            count = count || parameters.count || paletteCount;
             if(repeat && count > paletteCount) {
                 let colors = extendPalette(paletteCount);
                 for(let i = 0; i < count - paletteCount; i++) {
@@ -391,7 +401,7 @@ function BlendColors(palette, parameters) {
                 }
                 return colors;
             } else {
-                return paletteCount > 0 ? extendPalette(count) : [];
+                return paletteCount > 0 ? extendPalette(count).slice(0, count) : [];
             }
         },
 
@@ -402,43 +412,42 @@ function BlendColors(palette, parameters) {
 }
 
 export function Palette(palette, parameters, themeDefaultPalette) {
+    const paletteObj = {
+        dispose() {
+            this._extensionStrategy = null;
+        },
+
+        getNextColor(count) {
+            return this._extensionStrategy.getColor(this._currentColor++, count);
+        },
+
+        generateColors(count, parameters) {
+            return this._extensionStrategy.generateColors(count, (parameters || {}).repeat);
+        },
+
+        reset() {
+            this._currentColor = 0;
+            this._extensionStrategy.reset();
+            return this;
+        }
+    };
     parameters = parameters || {};
 
     var extensionMode = (parameters.extensionMode || "").toLowerCase(),
-        colors = getPalette(palette, { type: parameters.type || "simpleSet", themeDefault: themeDefaultPalette });
+        colors = normalizePalette(palette, { type: parameters.type || "simpleSet", themeDefault: themeDefaultPalette });
 
     if(extensionMode === "alternate") {
-        this._extensionStrategy = AlternateColors(colors, parameters);
+        paletteObj._extensionStrategy = AlternateColors(colors, parameters);
     } else if(extensionMode === "extrapolate") {
-        this._extensionStrategy = ExtrapolateColors(colors, parameters);
+        paletteObj._extensionStrategy = ExtrapolateColors(colors, parameters);
     } else {
-        this._extensionStrategy = BlendColors(colors, parameters);
+        paletteObj._extensionStrategy = BlendColors(colors, parameters);
     }
 
-    this.reset();
+    paletteObj.reset();
+
+    return paletteObj;
 }
-
-Palette.prototype = {
-    constructor: Palette,
-
-    dispose: function() {
-        this._extensionStrategy = null;
-    },
-
-    getNextColor: function(count) {
-        return this._extensionStrategy.getColor(this._currentColor++, count);
-    },
-
-    getColors: function(count, parameters) {
-        return this._extensionStrategy.getColors(count, (parameters || {}).repeat);
-    },
-
-    reset: function() {
-        this._currentColor = 0;
-        this._extensionStrategy.reset();
-        return this;
-    }
-};
 
 function getAlteredPalette(originalPalette, step) {
     var palette = [],
@@ -464,9 +473,12 @@ function getLightness(color) {
 }
 
 export function DiscretePalette(source, size, themeDefaultPalette) {
-    var palette = size > 0 ? createDiscreteColors(getPalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }), size) : [];
-    this.getColor = function(index) {
-        return palette[index] || null;
+    var palette = size > 0 ? createDiscreteColors(normalizePalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }), size) : [];
+
+    return {
+        getColor: function(index) {
+            return palette[index] || null;
+        }
     };
 }
 
@@ -499,11 +511,14 @@ function createDiscreteColors(source, count) {
 
 export function GradientPalette(source, themeDefaultPalette) {
     // TODO: Looks like some new set is going to be added
-    var palette = getPalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }),
+    var palette = normalizePalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }),
         color1 = new _Color(palette[0]),
         color2 = new _Color(palette[1]);
-    this.getColor = function(ratio) {
-        return 0 <= ratio && ratio <= 1 ? color1.blend(color2, ratio).toHex() : null;
+
+    return {
+        getColor: function(ratio) {
+            return 0 <= ratio && ratio <= 1 ? color1.blend(color2, ratio).toHex() : null;
+        }
     };
 }
 

@@ -603,7 +603,7 @@ ValueIndicatorsSet.prototype = {
             colors = null;
         if(that._palette) {
             that._palette.reset();
-            colors = that._palette.getColors(count, { repeat: true });
+            colors = that._palette.generateColors(count, { repeat: true });
         }
         that._colorPalette = colors;
     },

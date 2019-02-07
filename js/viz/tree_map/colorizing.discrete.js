@@ -28,7 +28,7 @@ function getLeafsCount(root) {
 }
 
 function discreteLeafColorizer(palette) {
-    var colors = palette.getColors();
+    var colors = palette.generateColors();
 
     return function(node) {
         return colors[node.index];
