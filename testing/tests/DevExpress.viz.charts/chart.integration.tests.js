@@ -1599,9 +1599,9 @@ QUnit.test("dxChart groups and classes", function(assert) {
     assert.equal($container.find(".dxc-series-group").length, 1, "There is one series group");
     assert.equal($container.find(".dxc-labels-group").length, 1, "There is one labels group");
     assert.equal($container.find(".dxc-legend").length, 1, "There is one legend group");
-    assert.equal($container.find(".dxc-constant-lines-group").length, 1, "There is one constant line group");
-    assert.equal($container.find(".dxc-arg-constant-lines").length, 3, "There is one h-constant-lines group");
-    assert.equal($container.find(".dxc-val-constant-lines").length, 3, "There is one v-constant-lines group");
+    assert.equal($container.find(".dxc-constant-lines-group").length, 2, "There is one constant line group");
+    assert.equal($container.find(".dxc-arg-constant-lines").length, 6, "There is one h-constant-lines group");
+    assert.equal($container.find(".dxc-val-constant-lines").length, 6, "There is one v-constant-lines group");
 });
 
 QUnit.test("dxChart groups and classes after redraw", function(assert) {
@@ -1632,9 +1632,9 @@ QUnit.test("dxChart groups and classes after redraw", function(assert) {
     assert.equal($container.find(".dxc-series-group").length, 1, "There is one series group");
     assert.equal($container.find(".dxc-labels-group").length, 1, "There is one labels group");
     assert.equal($container.find(".dxc-legend").length, 1, "There is one legend group");
-    assert.equal($container.find(".dxc-constant-lines-group").length, 1, "There is one constant lines group");
-    assert.equal($container.find(".dxc-arg-constant-lines").length, 3, "There is one h-constant-lines group");
-    assert.equal($container.find(".dxc-val-constant-lines").length, 3, "There is one v-constant-line group");
+    assert.equal($container.find(".dxc-constant-lines-group").length, 2, "There is one constant lines group");
+    assert.equal($container.find(".dxc-arg-constant-lines").length, 6, "There is one h-constant-lines group");
+    assert.equal($container.find(".dxc-val-constant-lines").length, 6, "There is one v-constant-line group");
 });
 
 QUnit.test("Pie chart groups and classes after redraw", function(assert) {
@@ -1821,6 +1821,7 @@ var VALIDATE_GROUPS = [
     "dxc-axes-group",
     "dxc-strips-labels-group",
     "dxc-border",
+    "dxc-constant-lines-group",
     "dxc-series-group",
     "dxc-constant-lines-group",
     "dxc-scale-breaks",

@@ -594,7 +594,7 @@ Axis.prototype = {
         };
     },
 
-    _createAxisGroups: function() {
+    _createAxisConstantLineGroups: function() {
         var that = this,
             renderer = that._renderer,
             classSelector = that._axisCssPrefix,
@@ -603,6 +603,36 @@ Axis.prototype = {
             outsideGroup1,
             outsideGroup2;
 
+        insideGroup = renderer.g().attr({ "class": constantLinesClass });
+        outsideGroup1 = renderer.g().attr({ "class": constantLinesClass });
+        outsideGroup2 = renderer.g().attr({ "class": constantLinesClass });
+
+        return {
+            inside: insideGroup,
+            outside1: outsideGroup1,
+            left: outsideGroup1,
+            top: outsideGroup1,
+            outside2: outsideGroup2,
+            right: outsideGroup2,
+            bottom: outsideGroup2,
+            remove: function() {
+                this.inside.remove();
+                this.outside1.remove();
+                this.outside2.remove();
+            },
+            clear: function() {
+                this.inside.clear();
+                this.outside1.clear();
+                this.outside2.clear();
+            }
+        };
+    },
+
+    _createAxisGroups: function() {
+        var that = this,
+            renderer = that._renderer,
+            classSelector = that._axisCssPrefix;
+
         that._axisGroup = renderer.g().attr({ "class": classSelector + "axis" });
         that._axisStripGroup = renderer.g().attr({ "class": classSelector + "strips" });
         that._axisGridGroup = renderer.g().attr({ "class": classSelector + "grid" });
@@ -610,18 +640,9 @@ Axis.prototype = {
         that._axisLineGroup = renderer.g().attr({ "class": classSelector + "line" }).append(that._axisGroup);
         that._axisTitleGroup = renderer.g().attr({ "class": classSelector + "title" }).append(that._axisGroup);
 
-        insideGroup = renderer.g().attr({ "class": constantLinesClass });
-        outsideGroup1 = renderer.g().attr({ "class": constantLinesClass });
-        outsideGroup2 = renderer.g().attr({ "class": constantLinesClass });
-
         that._axisConstantLineGroups = {
-            inside: insideGroup,
-            outside1: outsideGroup1,
-            left: outsideGroup1,
-            top: outsideGroup1,
-            outside2: outsideGroup2,
-            right: outsideGroup2,
-            bottom: outsideGroup2
+            above: that._createAxisConstantLineGroups(),
+            under: that._createAxisConstantLineGroups(),
         };
 
         that._axisStripLabelGroup = renderer.g().attr({ "class": classSelector + "axis-labels" });
@@ -633,10 +654,8 @@ Axis.prototype = {
         that._axisGroup.remove();
         that._axisStripGroup.remove();
         that._axisStripLabelGroup.remove();
-        that._axisConstantLineGroups.inside.remove();
-        that._axisConstantLineGroups.outside1.remove();
-        that._axisConstantLineGroups.outside2.remove();
-
+        that._axisConstantLineGroups.above.remove();
+        that._axisConstantLineGroups.under.remove();
         that._axisGridGroup.remove();
 
         that._axisTitleGroup.clear();
@@ -645,9 +664,8 @@ Axis.prototype = {
         that._axisLineGroup && that._axisLineGroup.clear();
         that._axisStripGroup && that._axisStripGroup.clear();
         that._axisGridGroup && that._axisGridGroup.clear();
-        that._axisConstantLineGroups.inside.clear();
-        that._axisConstantLineGroups.outside1.clear();
-        that._axisConstantLineGroups.outside2.clear();
+        that._axisConstantLineGroups.above.clear();
+        that._axisConstantLineGroups.under.clear();
         that._axisStripLabelGroup && that._axisStripLabelGroup.clear();
     },
 
@@ -713,7 +731,11 @@ Axis.prototype = {
             cRight = canvas.width - canvas.right,
             cBottom = canvas.height - canvas.bottom,
             edgeMarginCorrection = _max(options.grid.visible && options.grid.width || 0, options.tick.visible && options.tick.width || 0),
-            boxes = [that._axisElementsGroup, that._axisConstantLineGroups.outside1, that._axisConstantLineGroups.outside2]
+            constantLineAboveSeries = that._axisConstantLineGroups.above,
+            constantLineUnderSeries = that._axisConstantLineGroups.under,
+            boxes = [that._axisElementsGroup,
+                constantLineAboveSeries.outside1, constantLineAboveSeries.outside2,
+                constantLineUnderSeries.outside1, constantLineUnderSeries.outside2]
                 .map(function(group) { return group && group.getBBox(); })
                 .concat((function(group) {
                     var box = group && group.getBBox();
@@ -1677,9 +1699,13 @@ Axis.prototype = {
         that._stripsGroup && that._axisStripGroup.append(that._stripsGroup);
 
         if(that._constantLinesGroup) {
-            that._axisConstantLineGroups.inside.append(that._constantLinesGroup);
-            that._axisConstantLineGroups.outside1.append(that._constantLinesGroup);
-            that._axisConstantLineGroups.outside2.append(that._constantLinesGroup);
+            that._axisConstantLineGroups.above.inside.append(that._constantLinesGroup.above);
+            that._axisConstantLineGroups.above.outside1.append(that._constantLinesGroup.above);
+            that._axisConstantLineGroups.above.outside2.append(that._constantLinesGroup.above);
+
+            that._axisConstantLineGroups.under.inside.append(that._constantLinesGroup.under);
+            that._axisConstantLineGroups.under.outside1.append(that._constantLinesGroup.under);
+            that._axisConstantLineGroups.under.outside2.append(that._constantLinesGroup.under);
         }
 
         that._measureTitle();
