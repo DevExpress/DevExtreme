@@ -1018,7 +1018,7 @@ if(devices.real().deviceType === "desktop") {
                 .type("15")
                 .press("enter");
 
-            assert.strictEqual(this.instance.option("value").getFullYear(), "1915", "year is correct");
+            assert.strictEqual(this.instance.option("value").getFullYear(), 1915, "year is correct");
 
             this.instance.option("value", new Date(2010, 10, 11));
             this.keyboard
@@ -1026,7 +1026,7 @@ if(devices.real().deviceType === "desktop") {
                 .type("14")
                 .press("enter");
 
-            assert.strictEqual(this.instance.option("value").getFullYear(), "2014", "year is correct");
+            assert.strictEqual(this.instance.option("value").getFullYear(), 2014, "year is correct");
         });
 
         test("Move caret to the next group after string length overflow", (assert) => {
