@@ -516,14 +516,13 @@ var Pager = Widget.inherit({
         if(that.option("showNavigationButtons") || that.option("lightModeEnabled")) {
             $button = $("<div>").addClass(PAGER_NAVIGATE_BUTTON);
 
-            var pointerUpTime = 0;
+            var pointerUpHappened = false;
 
             eventsEngine.on($button, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), function(e) {
-                var now = new Date();
                 if(e.type === "dxpointerup") {
-                    pointerUpTime = now;
-                } else if(now - pointerUpTime < 50) {
-                    pointerUpTime = 0;
+                    pointerUpHappened = true;
+                } else if(pointerUpHappened) {
+                    pointerUpHappened = false;
                     return;
                 }
 

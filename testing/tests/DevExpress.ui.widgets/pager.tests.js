@@ -702,44 +702,14 @@ QUnit.test("Pointer up and click on navigate button", function(assert) {
 
     $button = $(".dx-next-button");
 
-    var clock = sinon.useFakeTimers();
-
     // act
     $($button).trigger("dxpointerup");
-    clock.tick(10);
+    $($button).trigger("dxclick");
+
     $($button).trigger("dxclick");
 
     // assert
-    assert.deepEqual(nextPageCalls, ["next"]);
-
-    clock.restore();
-});
-
-QUnit.test("Click with delay after pointer up on navigate button", function(assert) {
-    var $pager = $("#container").dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }),
-        instance = $pager.dxPager("instance"),
-        $button,
-        nextPageCalls = [];
-
-    var clock = sinon.useFakeTimers();
-
-    instance.option("pageIndex", 8);
-    instance._nextPage = function(direction) {
-        nextPageCalls.push(direction);
-    };
-
-    $button = $(".dx-next-button");
-
-    // act
-    $($button).trigger("dxpointerup");
-    clock.tick(50);
-    $($button).trigger("dxclick");
-    $($button).trigger("dxclick");
-
-    // assert
-    assert.deepEqual(nextPageCalls, ["next", "next", "next"]);
-
-    clock.restore();
+    assert.deepEqual(nextPageCalls, ["next", "next"]);
 });
 
 QUnit.test("Prev button is disabled when first page is chosen ", function(assert) {
