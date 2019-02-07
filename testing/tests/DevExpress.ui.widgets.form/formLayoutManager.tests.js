@@ -273,9 +273,9 @@ QUnit.test("Change a layoutData object", function(assert) {
     assert.deepEqual($editors.eq(3).dxDateBox("instance").option("value"), new Date("1/1/2001"));
 });
 
-function triggerKeyUp($element, keyCode) {
+function triggerKeyUp($element, key) {
     var e = $.Event("keyup");
-    e.which = keyCode;
+    e.key = key;
     $($element.find("input").first()).trigger(e);
 }
 
@@ -297,7 +297,7 @@ QUnit.test("onEditorEnterKey", function(assert) {
 
     // act
     editor = layoutManager.getEditor("profession");
-    triggerKeyUp(editor.$element(), 13);
+    triggerKeyUp(editor.$element(), "Enter");
 
     // assert
     assert.notEqual(testArgs.component, undefined, "component");
@@ -308,7 +308,7 @@ QUnit.test("onEditorEnterKey", function(assert) {
 
     // act
     editor = layoutManager.getEditor("name");
-    triggerKeyUp(editor.$element(), 13);
+    triggerKeyUp(editor.$element(), "Enter");
 
     // assert
     assert.notEqual(testArgs.component, undefined, "component");

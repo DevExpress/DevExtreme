@@ -43,16 +43,6 @@ function checkCoords(rect, coords) {
         && y >= rect.y && y <= (rect.height + rect.y);
 }
 
-function getDragDirection(options, rotated) {
-    let anyArg = !options.argumentAxis.none,
-        anyVal = !options.valueAxis.none;
-
-    if(anyArg && anyVal) {
-        return "both";
-    }
-    return (rotated && anyArg || !rotated && anyVal) ? "vertical" : "horizontal";
-}
-
 module.exports = {
     name: "zoom_and_pan",
     init: function() {
@@ -353,7 +343,7 @@ module.exports = {
 
                 (!isTouch || !zoomAndPan.actionData.isNative) && preventDefaults(e);
                 if(actionData.action === "zoom") {
-                    function zoomAxes(axes, criteria, coordField, startCoords, curCoords, onlyAxisToNotify) {
+                    const zoomAxes = (axes, criteria, coordField, startCoords, curCoords, onlyAxisToNotify) => {
                         const curCoord = curCoords[coordField];
                         const startCoord = startCoords[coordField];
                         let zoomStarted = false;
@@ -372,7 +362,7 @@ module.exports = {
                             });
                         }
                         return zoomStarted;
-                    }
+                    };
 
                     const curCoords = getPointerCoord(actionData.curAxisRect, e);
                     const valueAxesZoomed = zoomAxes(chart._argumentAxes, options.argumentAxis.zoom, rotated ? "y" : "x", actionData.startCoords, curCoords, chart.getArgumentAxis());
@@ -465,8 +455,9 @@ module.exports = {
 
                         const coords = calcCenterForDrag(e);
                         let axesZoomed = false;
+                        let targetAxes;
                         if(options.valueAxis.zoom) {
-                            let targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), coords));
+                            targetAxes = chart._valueAxes.filter(axis => checkCoords(canvasToRect(axis.getCanvas()), coords));
 
                             if(targetAxes.length === 0) {
                                 const targetCanvas = chart._valueAxes.reduce((r, axis) => {
@@ -498,7 +489,7 @@ module.exports = {
 
                         if(axesZoomed) {
                             chart._requestChange(["VISUAL_RANGE"]);
-                            zoomAndPan.panningVisualRangeEnabled() && preventDefaults(e); // T249548
+                            zoomAndPan.panningVisualRangeEnabled(targetAxes) && preventDefaults(e); // T249548
                         }
                     });
                 }
@@ -514,7 +505,7 @@ module.exports = {
                 }
 
                 renderer.root
-                    .on(DRAG_START_EVENT_NAME, { direction: getDragDirection(options, rotated), immediate: true }, zoomAndPan.dragStartHandler)
+                    .on(DRAG_START_EVENT_NAME, { immediate: true }, zoomAndPan.dragStartHandler)
                     .on(DRAG_EVENT_NAME, zoomAndPan.dragHandler)
                     .on(DRAG_END_EVENT_NAME, zoomAndPan.dragEndHandler);
 
@@ -569,7 +560,10 @@ module.exports = {
                 renderer.root.css({ "touch-action": touchAction, "-ms-touch-action": touchAction });
             },
 
-            panningVisualRangeEnabled: function() {
+            panningVisualRangeEnabled: function(targetAxes) {
+                if(targetAxes && targetAxes.length) {
+                    return targetAxes.some(axis => !axis.isExtremePosition(false) || !axis.isExtremePosition(true));
+                }
                 const enablePanByValueAxis =
                     chart._valueAxes.some(axis => !axis.isExtremePosition(false) || !axis.isExtremePosition(true));
                 const enablePanByArgumentAxis =

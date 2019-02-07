@@ -97,12 +97,10 @@ QUnit.test('"Show" is raised on mouseover after delay', function(assert) {
     this.onTooltipShow = sinon.spy(function() { return true; });
 
     this.trigger('mouseover', element);
-    this.clock.tick(this.tracker.TOOLTIP_SHOW_DELAY);
 
     assert.strictEqual(this.onTooltipShow.callCount, 1);
     assert.strictEqual(this.onTooltipShow.firstCall.args[0], target, 'target');
     assert.strictEqual(this.onTooltipShow.firstCall.args[1], info, 'info');
-    assert.strictEqual(this.tracker._DEBUG_showTooltipTimeoutSet, 1, 'timeout is set 1 time');
 });
 
 QUnit.test('"Show" is not raised until mousemove occurs', function(assert) {
@@ -117,9 +115,7 @@ QUnit.test('"Show" is not raised until mousemove occurs', function(assert) {
     this.trigger('mousemove', element, 10, 20);
     this.trigger('mousemove', element, 30, 10);
     this.trigger('mousemove', element, 40, 5);
-    this.clock.tick(this.tracker.TOOLTIP_SHOW_DELAY);
 
-    assert.strictEqual(this.tracker._DEBUG_showTooltipTimeoutSet, 5, 'timeout is set 5 times');
     assert.strictEqual(this.onTooltipShow.callCount, 1);
 });
 
@@ -135,25 +131,8 @@ QUnit.test('"Show" is raised when small mousemove occurs', function(assert) {
     this.trigger('mousemove', element, 8, 1);
     this.trigger('mousemove', element, 4, 3);
     this.trigger('mousemove', element, 7, 5);
-    this.clock.tick(this.tracker.TOOLTIP_SHOW_DELAY);
 
-    assert.strictEqual(this.tracker._DEBUG_showTooltipTimeoutSet, 1, 'timeout is set 1 time');
     assert.strictEqual(this.onTooltipShow.callCount, 1);
-});
-
-QUnit.test('"Show" is not raised if mouseout occurs during delay', function(assert) {
-    var element = this.renderer.path([], "area");
-    this.tracker.attach(element);
-    this.onTooltipShow = sinon.spy(function() { return true; });
-    this.trigger('mouseover', element);
-
-    this.trigger('mouseout', element);
-    this.clock.tick(this.tracker.TOOLTIP_SHOW_DELAY);
-
-    assert.strictEqual(this.tracker._DEBUG_showTooltipTimeoutSet, 1, 'timeout is set 1 time');
-    assert.strictEqual(this.tracker._DEBUG_showTooltipTimeoutCleared, 1, 'timeout is cleared');
-
-    assert.strictEqual(this.onTooltipShow.callCount, 0);
 });
 
 QUnit.test('"Hide" is raised on mousewheel without delay', function(assert) {
@@ -162,7 +141,6 @@ QUnit.test('"Hide" is raised on mousewheel without delay', function(assert) {
     this.tracker.attach(element);
     this.onTooltipHide = sinon.spy(function() { return true; });
     this.trigger('mouseover', element);
-    this.clock.tick(this.tracker.TOOLTIP_SHOW_DELAY);
 
     that.trigger('dxmousewheel', element);
 
@@ -180,7 +158,6 @@ QUnit.test('"Hide" is raised on mouseout after delay', function(assert) {
     });
     this.onTooltipHide = sinon.spy(function() { return true; });
     this.trigger('mouseover', element);
-    this.clock.tick(this.tracker.TOOLTIP_SHOW_DELAY);
     this.clock.tick(this.tracker.TOOLTIP_HIDE_DELAY);
 
     assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutSet, 1, 'timeout is set');
@@ -204,16 +181,13 @@ QUnit.test('"Hide" is not raised if mouseover occurs after mouseout', function(a
     var that = this,
         element = this.renderer.path([], "area");
     this.tracker.attach(element);
-    this.onTooltipShow = sinon.spy(function() {
-        that.trigger('mouseout', element);
-        that.trigger('mouseover', element);
-        return true;
-    });
 
     this.onTooltipHide = sinon.spy(function() { return true; });
 
     this.trigger('mouseover', element);
-    this.clock.tick(this.tracker.TOOLTIP_SHOW_DELAY);
+    that.trigger('mouseout', element);
+    that.trigger('mouseover', element);
+
     this.clock.tick(this.tracker.TOOLTIP_HIDE_DELAY);
 
     assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutSet, 1, 'timeout is set');
@@ -223,7 +197,7 @@ QUnit.test('"Hide" is not raised if mouseover occurs after mouseout', function(a
 });
 
 QUnit.test('"Show" is raised after delay on mouseover on other element if tooltip is shown', function(assert) {
-    assert.expect(3);
+    assert.expect(2);
     var element1 = this.renderer.path([], "area"), target1 = {},
         element2 = this.renderer.path([], "area"), target2 = {};
     this.tracker.attach(element1, target1).attach(element2, target2);
@@ -234,16 +208,13 @@ QUnit.test('"Show" is raised after delay on mouseover on other element if toolti
 
         this.onTooltipShow = function(tar) {
             assert.strictEqual(tar, target2, 'target 2');
-            assert.strictEqual(this.tracker._DEBUG_showTooltipTimeoutSet, 2, 'timeout is set 2 times');
             return true;
         };
         return true;
     };
 
     this.trigger('mouseover', element1);
-    this.clock.tick(this.tracker.TOOLTIP_SHOW_DELAY);
     this.trigger('mouseover', element2);
-    this.clock.tick(this.tracker.TOOLTIP_SHOW_DELAY);
 });
 
 QUnit.test('"Hide" is raised after delay on mouseover then mouseout on other element if tooltip is shown', function(assert) {
@@ -251,39 +222,33 @@ QUnit.test('"Hide" is raised after delay on mouseover then mouseout on other ele
     var element1 = this.renderer.path([], "area"),
         element2 = this.renderer.path([], "area");
     this.tracker.attach(element1).attach(element2);
-    this.onTooltipShow = function(tar) {
-        this.trigger('mouseover', element2);
-        this.trigger('mouseout', element2);
-        return true;
-    };
     this.onTooltipHide = function() {
         assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutSet, 1, 'timeout is set');
     };
     this.trigger('mouseover', element1);
-    this.clock.tick(this.tracker.TOOLTIP_SHOW_DELAY);
+    this.trigger('mouseover', element2);
+    this.trigger('mouseout', element2);
     this.clock.tick(this.tracker.TOOLTIP_HIDE_DELAY);
 });
 
 QUnit.test('"Show" is not raised on mouseout then mouseover if tooltip is shown', function(assert) {
-    assert.expect(4);
+    assert.expect(3);
     var element = this.renderer.path([], "area");
     this.tracker.attach(element);
     this.onTooltipShow = function() {
-        this.trigger('mouseout', element);
-        this.trigger('mouseover', element);
         this.onTooltipShow = function() {
             assert.ok(false, 'This is not expected to happen!');
             return true;
         };
-        assert.strictEqual(this.tracker._DEBUG_showTooltipTimeoutSet, 2, 'show timeout is set 2 times');
-        assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutCleared, 1, 'show timeout is cleared');
-        assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutSet, 1, 'hide timeout is set');
-        assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutCleared, 1, 'hide timeout is cleared');
+
         return true;
     };
     this.trigger('mouseover', element);
-    this.clock.tick(this.tracker.TOOLTIP_SHOW_DELAY);
-    this.clock.tick(this.tracker.TOOLTIP_SHOW_DELAY);
+    this.trigger('mouseout', element);
+    this.trigger('mouseover', element);
+    assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutCleared, 1, 'show timeout is cleared');
+    assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutSet, 1, 'hide timeout is set');
+    assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutCleared, 1, 'hide timeout is cleared');
 });
 
 var tooltipTouchEnvironment = {
@@ -307,8 +272,8 @@ var tooltipTouchEnvironment = {
 
 QUnit.module('Tracker - tooltip touch events', tooltipTouchEnvironment);
 
-QUnit.test('"Show" is raised on touchstart after delay', function(assert) {
-    assert.expect(3);
+QUnit.test('"Show" is raised on touchstart', function(assert) {
+    assert.expect(2);
     var element = this.renderer.path([], "area"), target = {}, info = {};
     this.tracker.attach(element, target, info);
     element.element["gauge-data-target"] = target; // emulate data attachment
@@ -316,27 +281,10 @@ QUnit.test('"Show" is raised on touchstart after delay', function(assert) {
     this.onTooltipShow = function(tar, inf) {
         assert.strictEqual(tar, target, 'target');
         assert.strictEqual(inf, info, 'info');
-        assert.strictEqual(this.tracker._DEBUG_showTooltipTimeoutSet, 1, 'timeout is set 1 time');
         return true;
     };
 
     this.trigger('touchstart', element);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_SHOW_DELAY);
-});
-QUnit.test('"Show" is not raised if touchend occurs during delay', function(assert) {
-    assert.expect(2);
-    var element = this.renderer.path([], "area");
-    this.tracker.attach(element);
-    this.onTooltipShow = function() {
-        assert.ok(false, 'This is not expected to happen!');
-        return true;
-    };
-    this.trigger('touchstart', element);
-
-    this.triggerDocument('touchend', element);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_SHOW_DELAY);
-    assert.strictEqual(this.tracker._DEBUG_showTooltipTimeoutSet, 1, 'timeout is set');
-    assert.strictEqual(this.tracker._DEBUG_showTooltipTimeoutCleared, 1, 'timeout is cleared');
 });
 
 QUnit.test('"Hide" is raised on touchstart outside the element', function(assert) {
@@ -351,47 +299,7 @@ QUnit.test('"Hide" is raised on touchstart outside the element', function(assert
         assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutSet, 1, 'timeout is set');
     };
     this.trigger('touchstart', element);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_SHOW_DELAY);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_HIDE_DELAY);
-});
-
-QUnit.test('"Hide" is not raised if touchend occurs when tooltip is shown', function(assert) {
-    assert.expect(1);
-    var element = this.renderer.path([], "area");
-    this.tracker.attach(element);
-    this.onTooltipShow = function() {
-        this.triggerDocument('touchend');
-        assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutSet, 0, 'timeout is not set');
-        return true;
-    };
-    this.onTooltipHide = function() {
-        assert.ok(false, 'This is not expected to happen!');
-    };
-    this.trigger('touchstart', element);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_SHOW_DELAY);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_HIDE_DELAY);
-});
-
-QUnit.test('"Show" is raised after delay on touchstart on other element if tooltip is shown', function(assert) {
-    assert.expect(3);
-    var element1 = this.renderer.path([], "area"), target1 = {},
-        element2 = this.renderer.path([], "area"), target2 = {};
-    this.tracker.attach(element1, target1).attach(element2, target2);
-    element1.element["gauge-data-target"] = target1; // emulate data attachment
-    element2.element["gauge-data-target"] = target2; // emulate data attachment
-    this.onTooltipShow = function(tar) {
-        assert.strictEqual(tar, target1, 'target 1');
-        this.onTooltipShow = function(tar) {
-            assert.strictEqual(tar, target2, 'target 2');
-            assert.strictEqual(this.tracker._DEBUG_showTooltipTimeoutSet, 2, 'timeout is set 2 times');
-            return true;
-        };
-        return true;
-    };
-    this.trigger('touchstart', element1);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_SHOW_DELAY);
-    this.trigger('touchstart', element2);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_SHOW_DELAY);
+    this.clock.tick(this.tracker.TOOLTIP_HIDE_DELAY);
 });
 
 QUnit.test('"Hide" is raised after delay on touchstart then touchend on other element if tooltip is shown', function(assert) {
@@ -401,32 +309,16 @@ QUnit.test('"Hide" is raised after delay on touchstart then touchend on other el
     this.tracker.attach(element1, element2);
     element1.element["gauge-data-target"] = element2; // emulate data attachment
     this.onTooltipShow = function() {
+        this.onTooltipShow = function() {
+            this.triggerDocument('touchend');
+            return true;
+        };
         this.trigger('touchstart', element2);
-        this.triggerDocument('touchend');
         return true;
     };
     this.onTooltipHide = function() {
         assert.strictEqual(this.tracker._DEBUG_hideTooltipTimeoutSet, 1, 'timeout is set');
     };
     this.trigger('touchstart', element1);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_SHOW_DELAY);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_HIDE_DELAY);
-});
-
-QUnit.test('"Show" is not raised on touchstart if tooltip is shown', function(assert) {
-    assert.expect(1);
-    var element = this.renderer.path([], "area");
-    this.tracker.attach(element);
-    this.onTooltipShow = function() {
-        this.trigger('touchstart', element);
-        this.onTooltipShow = function() {
-            assert.ok(false, 'This is not expected to happen!');
-            return true;
-        };
-        assert.strictEqual(this.tracker._DEBUG_showTooltipTimeoutSet, 2, 'timeout is set 2 times');
-        return true;
-    };
-    this.trigger('touchstart', element);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_SHOW_DELAY);
-    this.clock.tick(this.tracker.TOOLTIP_TOUCH_SHOW_DELAY);
+    this.clock.tick(this.tracker.TOOLTIP_HIDE_DELAY);
 });

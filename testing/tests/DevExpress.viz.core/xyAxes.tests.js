@@ -627,15 +627,22 @@ QUnit.test("measure labels, several labels", function(assert) {
     assert.equal(this.renderer.text.args[0][0], "300", "text of the label");
 });
 
-QUnit.test("measure empty labels", function(assert) {
-    var axis = this.createSimpleAxis({ label: { customizeText: function(e) { return ""; } } });
+QUnit.test("measuring label on axis with empty range - do not render texts", function(assert) {
+    this.generatedTicks = [0, 1, 2];
+    this.range = {};
+    var axis = this.createSimpleAxis({ label: { visible: true }, valueType: "datetime" });
 
-    assert.deepEqual(axis.measureLabels(this.canvas), {
+    var measurements = axis.measureLabels(this.canvas);
+
+    // assert
+    assert.deepEqual(measurements, {
         width: 0,
         height: 0,
         x: 0,
         y: 0
-    }, "measurements");
+    });
+
+    assert.equal(this.renderer.stub("text").callCount, 0);
 });
 
 QUnit.test("IncidentOccured on measure labels", function(assert) {
@@ -704,7 +711,6 @@ QUnit.test("Datetime, custom format - use provided format", function(assert) {
 
     assert.strictEqual(this.renderer.text.getCall(0).args[0], "10");
 });
-
 
 QUnit.module("Label overlapping, 'hide' mode", overlappingEnvironment);
 

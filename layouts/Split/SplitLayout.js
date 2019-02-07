@@ -43,8 +43,8 @@
         APPBAR_TOUCH_AREA_HEIGHT = 50,
         APPBAR_TOUCH_THRESHOLD = 50,
         EVENTS_NAMESPACE = ".dxSplitLayout",
-        KEYCODE_WIN = 91,
-        KEYCODE_Z = 90,
+        KEYS_WIN = ["Meta", "Win", "OS"],
+        KEY_Z = "z",
         POINTER_DOWN_EVENT_NAME,
         POINTER_UP_EVENT_NAME,
         POINTER_MOVE_EVENT_NAME;
@@ -122,15 +122,17 @@
         },
 
         _keyDownHandler: function(e) {
-            if(e.keyCode === KEYCODE_WIN) {
+            if(KEYS_WIN.indexOf(e.key) !== -1) {
                 this._winKeyPressed = true;
             }
         },
 
         _keyUpHandler: function(e) {
-            if(this._winKeyPressed && (e.keyCode === KEYCODE_Z)) {
+            var char = e.key || String.fromCharCode(e.which);
+
+            if(this._winKeyPressed && (char.toLowerCase() === KEY_Z)) {
                 this._toggleAppBarState();
-            } else if(e.keyCode === KEYCODE_WIN) {
+            } else if(KEYS_WIN.indexOf(e.key) !== -1) {
                 this._winKeyPressed = false;
             }
         },

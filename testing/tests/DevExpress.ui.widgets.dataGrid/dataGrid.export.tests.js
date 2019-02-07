@@ -635,7 +635,7 @@ QUnit.test("Columns - date with format as function", function(assert) { // T5736
 
 QUnit.test("Columns - datetime", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count="1"><numFmt numFmtId="165" formatCode="[$-9]M\\/d\\/yyyy\, H:mm AM/PM" /></numFmts>' +
+        '<numFmts count="1"><numFmt numFmtId="165" formatCode="[$-9]M\\/d\\/yyyy, H:mm AM/PM" /></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="5">' +
         helper.STYLESHEET_STANDARDSTYLES +

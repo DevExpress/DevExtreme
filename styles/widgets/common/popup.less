@@ -21,6 +21,10 @@
         height: 100%;
         width: 100%;
     }
+
+    .dx-popup-content {
+        box-sizing: content-box;
+    }
 }
 
 .dx-popup-content {
@@ -29,6 +33,19 @@
 
     &.dx-dialog-content {
         padding: 0;
+    }
+
+    > .dx-treeview,
+    > .dx-scrollable,
+    > .dx-treeview > .dx-scrollable {
+        max-height: inherit;
+        min-height: inherit;
+
+        > .dx-scrollable-wrapper,
+        > .dx-scrollable-wrapper > .dx-scrollable-container {
+            max-height: inherit;
+            min-height: inherit;
+        }
     }
 }
 

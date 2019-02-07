@@ -39,18 +39,18 @@ function callViewsRenderCompleted(views) {
 }
 
 var KEYS = {
-    "tab": "9",
-    "enter": "13",
-    "escape": "27",
-    "pageUp": "33",
-    "pageDown": "34",
-    "leftArrow": "37",
-    "upArrow": "38",
-    "rightArrow": "39",
-    "downArrow": "40",
-    "space": "32",
-    "F": "70",
-    "A": "65"
+    "tab": "Tab",
+    "enter": "Enter",
+    "escape": "Escape",
+    "pageUp": "PageUp",
+    "pageDown": "PageDown",
+    "leftArrow": "ArrowLeft",
+    "upArrow": "ArrowUp",
+    "rightArrow": "ArrowRight",
+    "downArrow": "ArrowDown",
+    "space": " ",
+    "F": "F",
+    "A": "A"
 };
 
 function triggerKeyDown(key, ctrl, shift, target, result) {
@@ -65,7 +65,8 @@ function triggerKeyDown(key, ctrl, shift, target, result) {
         ctrl = ctrl.ctrl;
     }
     this.keyboardNavigationController._keyDownProcessor.process({
-        which: KEYS[key],
+        key: KEYS[key],
+        keyName: key,
         ctrlKey: ctrl,
         shiftKey: shift,
         altKey: alt,
@@ -724,7 +725,7 @@ QUnit.testInActiveWindow("Next cell is not focused when it is located in a comma
 
     // act
     navigationController._keyDownHandler({
-        key: "leftArrow",
+        keyName: "leftArrow",
         originalEvent: {
             preventDefault: commonUtils.noop,
             isDefaultPrevented: commonUtils.noop,
@@ -755,7 +756,7 @@ QUnit.testInActiveWindow("Next cell is not focused when it is located in a group
 
     // act
     navigationController._keyDownHandler({
-        key: "leftArrow",
+        keyName: "leftArrow",
         originalEvent: {
             preventDefault: commonUtils.noop,
             isDefaultPrevented: commonUtils.noop,
@@ -789,7 +790,7 @@ QUnit.testInActiveWindow("Down key is not worked when cell has position accordin
 
     // act
     navigationController._keyDownHandler({
-        key: "downArrow",
+        keyName: "downArrow",
         originalEvent: {
             preventDefault: commonUtils.noop,
             isDefaultPrevented: commonUtils.noop,
@@ -823,7 +824,7 @@ QUnit.testInActiveWindow("Up key is not worked when cell has position according 
 
     // act
     navigationController._keyDownHandler({
-        key: "upArrow",
+        keyName: "upArrow",
         originalEvent: {
             preventDefault: commonUtils.noop,
             isDefaultPrevented: commonUtils.noop,
@@ -1891,7 +1892,7 @@ QUnit.testInActiveWindow("Space in input", function(assert) {
     $("#container focus").first().focus();
 
 
-    var e = $.Event("keydown", { which: 32 /* space */ });
+    var e = $.Event("keydown", { key: " " });
     $("#container input").trigger(e);
 
     // assert
@@ -2456,7 +2457,7 @@ QUnit.testInActiveWindow("Close edit form after enter key", function(assert) {
     var $focusedEditor = testElement.find(".test .dx-texteditor.dx-state-focused input");
     assert.equal($focusedEditor.length, 1, "focused editor in edit from exists");
 
-    var e = $.Event("keydown", { which: 13 });
+    var e = $.Event("keydown", { key: "Enter" });
     $($focusedEditor).trigger(e);
     this.clock.tick();
 
@@ -2519,7 +2520,7 @@ QUnit.testInActiveWindow("Close edit form after esc key", function(assert) {
     var $focusedEditor = testElement.find(".test .dx-texteditor.dx-state-focused input");
     assert.equal($focusedEditor.length, 1, "focused editor in edit from exists");
 
-    var e = $.Event("keydown", { which: 27 });
+    var e = $.Event("keydown", { key: "Escape" });
     $($focusedEditor).trigger(e);
     this.clock.tick();
 
@@ -2553,7 +2554,7 @@ QUnit.test("Key down event - default key handler is canceled", function(assert) 
     };
 
     this.keyboardNavigationController._keyDownHandler({
-        key: "leftArrow",
+        keyName: "leftArrow",
         originalEvent: {
             isDefaultPrevented: commonUtils.noop,
             stopPropagation: commonUtils.noop
@@ -2591,7 +2592,7 @@ QUnit.test("Key down event", function(assert) {
         isLeftArrow = true;
     };
     this.keyboardNavigationController._keyDownHandler({
-        key: "leftArrow",
+        keyName: "leftArrow",
         originalEvent: {
             isDefaultPrevented: commonUtils.noop,
             stopPropagation: commonUtils.noop
@@ -2826,7 +2827,6 @@ if(device.deviceType === "desktop") {
 
     // T364106
     QUnit.testInActiveWindow("Reset focus after repaint on unregistered keydown handler", function(assert) {
-        var F8_KEYCODE = 119;
         var that = this;
 
         setupModules(this);
@@ -2853,14 +2853,14 @@ if(device.deviceType === "desktop") {
         var isRepaintCalled = false;
 
         $($container).on("keydown", function(e) {
-            if(e.which === F8_KEYCODE) {
+            if(e.key === "F8") {
                 that.gridView.render($container);
                 isRepaintCalled = true;
             }
         });
 
         // act
-        var e = $.Event("keydown", { which: F8_KEYCODE });
+        var e = $.Event("keydown", { key: "F8" });
         $($container.find(".dx-datagrid-rowsview")).trigger(e);
         this.clock.tick();
 
@@ -4728,12 +4728,12 @@ QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded p
     that.clock.tick();
 
     // act
-    $(that.rowsView.element()).trigger($.Event("keydown", { which: KEYS.upArrow }));
+    $(that.rowsView.element()).trigger($.Event("keydown", { key: KEYS.upArrow }));
     $(that.rowsView.getScrollable()._container()).trigger("scroll");
     that.clock.tick();
 
     // act
-    $(that.rowsView.element()).trigger($.Event("keydown", { which: KEYS.upArrow }));
+    $(that.rowsView.element()).trigger($.Event("keydown", { key: KEYS.upArrow }));
     that.clock.tick();
 
     // assert
@@ -5081,6 +5081,36 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(!$(rowsView.getCellElement(0, 0)).hasClass("dx-focused"), "expand cell is not focused");
         assert.ok($(rowsView.getCellElement(0, 1)).hasClass("dx-focused"), "cell(0, 1) is focused");
         assert.ok(this.gridView.component.editorFactoryController.focus(), "has overlay focus");
+    });
+
+    QUnit.testInActiveWindow("Master-detail cell should not has tabindex", function(assert) {
+        // arrange
+        var masterDetailCell;
+
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            masterDetail: {
+                enabled: true,
+                autoExpandAll: true
+            },
+            tabIndex: 111
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+
+        this.option("focusedRowIndex", 1);
+        this.getView("rowsView").renderFocusState();
+        masterDetailCell = $(this.gridView.getView("rowsView").element().find(".dx-master-detail-cell").eq(0));
+
+        // assert
+        assert.notOk(masterDetailCell.attr("tabindex"), "master-detail cell has no tabindex");
     });
 
     // T692137
@@ -5595,7 +5625,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
 
         that.clock.tick();
 
-        $input.trigger($.Event("keydown", { which: 13 }));
+        $input.trigger($.Event("keydown", { key: "Enter" }));
 
         that.clock.tick();
 
@@ -5648,7 +5678,6 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
     QUnit.test("The calculated column should be updated when Tab is pressed after editing", function(assert) {
         // arrange
         var that = this,
-            TAB_KEY = 9,
             $inputElement,
             countCallCalculateCellValue = 0,
             $testElement = $("#container");
@@ -5692,7 +5721,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         $inputElement.change();
         that.clock.tick();
         $inputElement = $testElement.find(".dx-texteditor-input").first();
-        $testElement.find(".dx-datagrid-rowsview").trigger($.Event("keydown", { which: TAB_KEY, target: $inputElement }));
+        $testElement.find(".dx-datagrid-rowsview").trigger($.Event("keydown", { key: "Tab", target: $inputElement }));
         that.clock.tick();
 
         // assert

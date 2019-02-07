@@ -64,6 +64,14 @@ QUnit.test("Header scrollable should update position if date scrollable position
     assert.equal(headerScrollable.scrollLeft(), 100, "Scroll position is OK");
 });
 
+QUnit.test("Header scrollable should have right scrolloByContent (T708008)", function(assert) {
+    var $element = this.instance.$element(),
+        headerScrollable = $element.find(".dx-scheduler-header-scrollable").dxScrollable("instance");
+
+    assert.strictEqual(headerScrollable.option("scrollByContent"), true, "scrolloByContent is OK");
+});
+
+
 QUnit.test("Header scrollable shouldn't update position if date scrollable position is changed to bottom", function(assert) {
     var $element = this.instance.$element(),
         headerScrollable = $element.find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
@@ -660,7 +668,7 @@ QUnit.test("Scheduler timeline month getPositionShift should return null shift",
         currentDate: new Date(2015, 9, 21)
     });
 
-    assert.deepEqual(this.instance.getPositionShift(), { top: 0, left: 0, cellPosition: 0 }, "First view date is OK");
+    assert.deepEqual(this.instance.getPositionShift(), { top: 0, left: 0, cellShift: 0 }, "First view date is OK");
 });
 
 QUnit.test("Scrollables should be updated after currentDate changing", function(assert) {

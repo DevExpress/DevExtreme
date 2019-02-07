@@ -4,7 +4,6 @@ import { each } from "../../core/utils/iterator";
 import { combineFilters } from "./ui.grid_core.utils";
 import { equalByValue } from "../../core/utils/common";
 import { isDefined } from "../../core/utils/type";
-import errors from "../widget/ui.errors";
 import { Deferred } from "../../core/utils/deferred";
 
 var ROW_FOCUSED_CLASS = "dx-row-focused",
@@ -433,7 +432,7 @@ module.exports = {
 
                         if(e.changeType === "refresh") {
                             var prevPageIndex = this._prevPageIndex,
-                                reload = operationTypes.reload,
+                                reload = operationTypes && operationTypes.reload,
                                 isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
                                 paging = prevPageIndex !== undefined && prevPageIndex !== this.pageIndex();
 
@@ -587,7 +586,7 @@ module.exports = {
                     if(this.option("focusedRowEnabled") && this.option("dataSource")) {
                         var store = this._dataController.store();
                         if(store && !store.key()) {
-                            this._dataController.dataErrorOccurred.fire(errors.Error("E1042", "Row focusing"));
+                            this._dataController.fireError("E1042", "Row focusing");
                         }
                     }
                 },

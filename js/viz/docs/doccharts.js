@@ -486,6 +486,12 @@ var dxChart = {
     */
     scrollingMode: 'none',
     /**
+    * @name dxChartOptions.stickyHovering
+    * @type boolean
+    * @default true
+    */
+    stickyHovering: true,
+    /**
     * @name dxChartOptions.useAggregation
     * @type boolean
     * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled
@@ -2029,7 +2035,15 @@ var dxPieChart = {
        * @type_function_param1_field3 pointColor:string
        * @type_function_return string
        */
-        customizeHint: undefined,
+       customizeHint: undefined,
+       /**
+       * @name dxPieChartOptions.legend.customizeItems
+       * @type function(items)
+       * @type_function_param1 items:Array<PieChartLegendItem>
+       * @type_function_return Array<PieChartLegendItem>
+       * @inheritdoc
+       */
+       customizeItems: undefined
     },
     /**
     * @name dxPieChartOptions.resolveLabelOverlapping
@@ -3383,7 +3397,14 @@ var BaseChart = {
         * @type number
         * @default 8
         */
-        rowItemSpacing: 8
+        rowItemSpacing: 8,
+        /**
+        * @name BaseChartOptions.legend.customizeItems
+        * @type function(items)
+        * @type_function_param1 items:Array<BaseChartLegendItem>
+        * @type_function_return Array<BaseChartLegendItem>
+        */
+        customizeItems: undefined
     },
     /**
     * @name BaseChartOptions.series

@@ -485,7 +485,7 @@ module.exports = {
                 }, viewport);
             }
 
-            if(!options.marker.visible || options.argumentType !== "datetime" || options.type === "discrete" || that._majorTicks.length <= 1) {
+            if(viewport.isEmpty() || !options.marker.visible || options.argumentType !== "datetime" || options.type === "discrete" || that._majorTicks.length <= 1) {
                 return [];
             }
 

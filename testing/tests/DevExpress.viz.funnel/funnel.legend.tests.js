@@ -39,8 +39,8 @@ QUnit.test("Creation", function(assert) {
             legend: { visible: true }
         }),
         legendCtorArgs = legendModule.Legend.lastCall.args[0],
-        item = funnel.getAllItems()[0],
-        formatObject = legendCtorArgs.getFormatObject(item),
+        legendData = funnel._getLegendData()[0],
+        formatObject = legendCtorArgs.getFormatObject(legendData),
         legendGroup = this.renderer.g.getCall(0).returnValue;
 
     assert.equal(legendGroup.attr.lastCall.args[0].class, "dxf-legend");
@@ -63,9 +63,11 @@ QUnit.test("Update", function(assert) {
         lastCallUpdate = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
 
     for(var i = 0; i < items.length; i++) {
-        assert.equal(lastCallUpdate[i].data.argument, items[i].data.argument);
+        assert.equal(lastCallUpdate[i].text, items[i].data.argument);
+        assert.equal(lastCallUpdate[i].item.data.argument, items[i].data.argument);
         assert.deepEqual(lastCallUpdate[i].states, items[i].states);
         assert.equal(lastCallUpdate[i].id, items[i].id);
+        assert.equal(lastCallUpdate[i].visible, true);
     }
 });
 
@@ -132,7 +134,7 @@ QUnit.test("Update items", function(assert) {
         lastCallUpdate = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
 
     for(var i = 0; i < items.length; i++) {
-        assert.deepEqual(lastCallUpdate[i].data.value, items[i].data.value);
+        assert.deepEqual(lastCallUpdate[i].item.data.value, items[i].data.value);
     }
 });
 

@@ -10,16 +10,12 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
-require("ui/tree_list/ui.tree_list");
-
-var $ = require("jquery"),
-    fx = require("animation/fx"),
-    treeListMocks = require("../../helpers/treeListMocks.js"),
-    MockDataController = treeListMocks.MockDataController,
-    MockColumnsController = treeListMocks.MockColumnsController,
-    setupTreeListModules = treeListMocks.setupTreeListModules;
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/tree_list/ui.tree_list';
+import $ from 'jquery';
+import fx from 'animation/fx';
+import { setupTreeListModules, MockColumnsController, MockDataController } from '../../helpers/treeListMocks.js';
 
 fx.off = true;
 

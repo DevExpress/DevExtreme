@@ -59,9 +59,9 @@ const POPUP_CLASS = "dx-selectbox-popup",
     PLACEHOLDER_CLASS = "dx-placeholder",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 
-const KEY_DOWN = 40,
-    KEY_ENTER = 13,
-    KEY_SPACE = 32;
+const KEY_DOWN = "ArrowDown";
+const KEY_ENTER = "Enter";
+const KEY_SPACE = " ";
 
 const TIME_TO_WAIT = 500;
 
@@ -1627,18 +1627,32 @@ QUnit.module("editing", moduleSetup, () => {
         assert.equal(prevented, 1, "defaults prevented on enter key when acceptCustomValue is true");
     });
 
-    QUnit.test("selectBox should restore old value after outside click if custom value is accepted", (assert) => {
+    QUnit.test("selectBox should save custom value after outside click", (assert) => {
+        const $element = $("#selectBox").dxSelectBox({
+                items: ["item 1", "item 2"],
+                acceptCustomValue: true
+            }),
+            $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        $input.val("custom");
+        $(document).trigger("dxpointerdown");
+
+        assert.equal($input.val(), "custom", "initial value");
+    });
+
+    QUnit.test("selectBox should restore initial value after press 'down' and outside click", (assert) => {
         const $element = $("#selectBox").dxSelectBox({
                 items: ["item 1", "item 2"],
                 value: "item 1",
-                acceptCustomValue: true,
-                opened: true
+                acceptCustomValue: true
             }),
             $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
             keyboard = keyboardMock($input);
 
-        keyboard.press("down");
-        $(document).trigger("dxpointerdown");
+        $element.dxSelectBox("instance").option("opened", true);
+        keyboard
+            .press("down")
+            .blur();
 
         assert.equal($input.val(), "item 1", "value has been reverted");
     });
@@ -3351,7 +3365,7 @@ QUnit.module("regressions", moduleSetup, () => {
             $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
         $input.click();
-        $($input).trigger("keyup", { which: 40 });
+        $($input).trigger("keyup", { key: KEY_DOWN });
     });
 
     QUnit.test("dataSource option", (assert) => {
@@ -3377,7 +3391,7 @@ QUnit.module("regressions", moduleSetup, () => {
         $input.click();
         this.clock.tick(TIME_TO_WAIT);
 
-        $($input).trigger("keyup", { which: 40 });
+        $($input).trigger("keyup", { key: KEY_DOWN });
         this.clock.tick(TIME_TO_WAIT);
 
         assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).length === 3);
@@ -4030,8 +4044,7 @@ QUnit.module("keyboard navigation", moduleSetup, () => {
             $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
             keyboard = keyboardMock($input);
 
-        const downKey = 40,
-            altDownEvent = $.Event("keydown", { which: downKey, altKey: true });
+        const altDownEvent = $.Event("keydown", { key: KEY_DOWN, altKey: true });
 
         $input
             .focus()
@@ -4452,6 +4465,42 @@ QUnit.module("acceptCustomValue mode", moduleSetup, () => {
         assert.equal($selectBox.dxSelectBox("option", "value"), "0", "0 value was be set");
     });
 
+    QUnit.test("custom value should be added on enter key when acceptCustomValue=true", (assert) => {
+        const onCustomItemCreating = sinon.stub().returns("Custom item");
+        const $selectBox = $("#selectBox").dxSelectBox({
+            acceptCustomValue: true,
+            items: ["1", "2", "3"],
+            opened: true,
+            onCustomItemCreating: onCustomItemCreating
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .type("0")
+            .press("enter");
+
+        assert.equal(onCustomItemCreating.callCount, 1, "action was called");
+    });
+
+    QUnit.test("custom value should be added on enter key when acceptCustomValue=true and dd is initially closed", (assert) => {
+        const onCustomItemCreating = sinon.stub().returns("Custom item");
+        const $selectBox = $("#selectBox").dxSelectBox({
+            acceptCustomValue: true,
+            items: ["1", "2", "3"],
+            opened: false,
+            onCustomItemCreating: onCustomItemCreating
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .type("0")
+            .press("enter");
+
+        assert.equal(onCustomItemCreating.callCount, 1, "action was called");
+    });
+
     QUnit.test("drop list should contain all items when input value is not empty", (assert) => {
         const $selectBox = $("#selectBox").dxSelectBox({
             acceptCustomValue: true,
@@ -4546,13 +4595,13 @@ QUnit.module("focus policy", {
             kb = keyboardMock($input);
 
         kb.type("a").press("esc");
-        $($input).trigger($.Event("keydown", { which: 40, altKey: true }));
+        $($input).trigger($.Event("keydown", { key: KEY_DOWN, altKey: true }));
         this.clock.tick(TIME_TO_WAIT);
         assert.equal($.trim($(toSelector(LIST_ITEM_CLASS)).text()), "a", "filter should not be cleared before focusout");
 
         $input.focusout();
         this.instance.option("opened", false);
-        $($input).trigger($.Event("keydown", { which: 40, altKey: true }));
+        $($input).trigger($.Event("keydown", { key: KEY_DOWN, altKey: true }));
         this.clock.tick(TIME_TO_WAIT);
         assert.equal($.trim($(toSelector(LIST_ITEM_CLASS)).text()), "abc", "no filtering");
     });

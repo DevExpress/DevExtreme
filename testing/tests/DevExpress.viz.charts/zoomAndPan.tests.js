@@ -15,7 +15,7 @@ const environment = {
         this.tooltipHiddenSpy = sinon.spy();
     },
     createChart: function(options) {
-        const chart = $("#chart").dxChart($.extend(true, {
+        const chart = $("#chart").dxChart($.extend(true, {}, {
             size: {
                 width: 800,
                 height: 600
@@ -2662,6 +2662,56 @@ QUnit.test("On pan", function(assert) {
     assert.equal(preventDefault.callCount, 3);
     assert.equal(stopPropagation.callCount, 3);
     assert.equal(this.trackerStopHandling.callCount, 3);
+});
+
+QUnit.test("Pan action in pane without zoom if another pane has a zoom", function(assert) {
+    const preventDefault = sinon.spy(),
+        stopPropagation = sinon.spy(),
+        chart = this.createChart({
+            dataSource: [{
+                arg: "a1",
+                val1: 4.1,
+                val2: 109
+            }, {
+                arg: "a2",
+                val1: 10,
+                val2: 104
+            }],
+            panes: [{
+                name: "topPane"
+            }, {
+                name: "bottomPane"
+            }],
+            zoomAndPan: {
+                valueAxis: "both",
+                allowMouseWheel: true
+            },
+            series: [{
+                pane: "topPane",
+                valueField: "val1"
+            }, {
+                valueField: "val2"
+            }],
+            valueAxis: [{
+                pane: "bottomPane",
+                name: "bottomAxis"
+            }, {
+                visualRange: {
+                    startValue: 4,
+                    endValue: 5
+                },
+                pane: "topPane",
+                name: "topAxis"
+            }]
+        });
+
+    // act
+    const $root = $(chart._renderer.root.element);
+    $root.trigger(new $.Event("dxmousewheel", { d: 10, pageX: 0, pageY: 350, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+
+    assert.equal(preventDefault.callCount, 0);
+    assert.equal(stopPropagation.callCount, 0);
+    assert.equal(this.trackerStopHandling.callCount, 0);
 });
 
 QUnit.test("Default behavior - no prevent. On panning by drag (goes to the edge)", function(assert) {

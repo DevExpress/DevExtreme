@@ -13,8 +13,8 @@ var getCaretBoundaries = function(text, format) {
 
     format = mockEscapedStubs(format);
 
-    var prefixStubLength = /^[^#0\.,]*/.exec(format)[0].length;
-    var postfixStubLength = /[^#0\.,]*$/.exec(format)[0].length;
+    var prefixStubLength = /^[^#0.,]*/.exec(format)[0].length;
+    var postfixStubLength = /[^#0.,]*$/.exec(format)[0].length;
 
     return {
         start: prefixStubLength,

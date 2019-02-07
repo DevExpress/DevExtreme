@@ -171,7 +171,7 @@ var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
     Element.prototype.matches = function(selector) {
         var selectorParts = selector.split(/\s|>/);
         var lastSelectorPart = selectorParts[selectorParts.length - 1];
-        if(/^\.[\w|\-]+$/.test(lastSelectorPart)) {
+        if(/^\.[\w|-]+$/.test(lastSelectorPart)) {
             lastSelectorPart = lastSelectorPart.substr(1);
             var index = this.className.indexOf(lastSelectorPart);
             var l = this.className[index + lastSelectorPart.length];

@@ -10,7 +10,7 @@ var NUMBER_SERIALIZATION_FORMAT = "number",
     DATE_SERIALIZATION_FORMAT = "yyyy/MM/dd",
     DATETIME_SERIALIZATION_FORMAT = "yyyy/MM/dd HH:mm:ss";
 
-var ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(:)?(\d{2}(?:\.(\d{1,3})\d*)?)?)?(Z|([\+\-])(\d{2})(:)?(\d{2})?)?$/;
+var ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(:)?(\d{2}(?:\.(\d{1,3})\d*)?)?)?(Z|([+-])(\d{2})(:)?(\d{2})?)?$/;
 var ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
 var ISO8601_PATTERN_PARTS = ["", "yyyy", "", "MM", "", "dd", "THH", "", "mm", "", "ss", ".SSS"];
 
@@ -71,7 +71,7 @@ var parseISO8601String = function(text) {
         },
         millisecond = parseMilliseconds(parts[11]);
 
-    if(!!parts[12]) {
+    if(parts[12]) {
         return new Date(Date.UTC(year, month, day, hour, minute, second, millisecond));
     }
 

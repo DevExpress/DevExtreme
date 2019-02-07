@@ -11641,6 +11641,16 @@ QUnit.module("Refresh changesOnly", {
             that.dataSource.load();
         };
 
+        that.setValue = function(rowIndex, columnId, value) {
+            var row = that.getVisibleRows()[rowIndex];
+            this.editingController.updateFieldValue({
+                row: row,
+                key: row.key,
+                data: row.data,
+                column: this.columnOption(columnId)
+            }, value, "", true);
+        };
+
     }, afterEach: teardownModule
 });
 
@@ -12095,6 +12105,39 @@ QUnit.test("edit cell should not be updated on data change", function(assert) {
     assert.deepEqual(changedArgs.columnIndices, [[2]], "only last column is updated");
 });
 
+// T710380
+QUnit.test("command column cell should not be updated after cell value change if setCellValue is defined", function(assert) {
+    this.setupModules();
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    this.columnOption("age", {
+        setCellValue: function(data, value) {
+            data.age = value;
+        }
+    });
+
+    this.options.repaintChangesOnly = true;
+    this.options.editing = { mode: "row", allowUpdating: true };
+    this.editRow(0);
+
+    // act
+    this.setValue(0, "age", 99);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(this.getVisibleColumns()[3].type, "buttons", "last column type is buttons");
+    assert.deepEqual(items[0].values, [1, "Alex", 99, null]);
+    assert.deepEqual(changedArgs.changeType, "update");
+    assert.deepEqual(changedArgs.changeTypes, ["update"]);
+    assert.deepEqual(changedArgs.rowIndices, [0]);
+    assert.deepEqual(changedArgs.columnIndices, [[2]], "only age column is updated");
+});
+
 QUnit.test("change dataSource item field", function(assert) {
     this.setupModules();
 
@@ -12244,8 +12287,31 @@ QUnit.test("insert one row without index using push", function(assert) {
     var items = this.dataController.items();
     assert.deepEqual(items.length, 3);
     assert.deepEqual(changedArgs.changeType, 'update');
-    assert.deepEqual(changedArgs.changeTypes, []);
+    assert.deepEqual(changedArgs.changeTypes, [], "item is not inserted");
     assert.deepEqual(changedArgs.rowIndices, []);
+});
+
+// T709020
+QUnit.test("insert one row without index using push if paging is disabled", function(assert) {
+    this.setupModules({ pushAggregationTimeout: 0, paginate: false });
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    this.options.repaintChangesOnly = true;
+
+    // act
+    this.dataSource.store().push([{ type: "insert", data: { id: 999, name: "Test", age: 99 } }]);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items.length, 4);
+    assert.deepEqual(changedArgs.changeType, 'update');
+    assert.deepEqual(changedArgs.changeTypes, ["insert"], "item is inserted");
+    assert.deepEqual(changedArgs.rowIndices, [3], "item is inserted to end");
 });
 
 QUnit.test("remove one row using push", function(assert) {

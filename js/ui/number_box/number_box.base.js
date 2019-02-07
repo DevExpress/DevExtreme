@@ -19,7 +19,7 @@ var WIDGET_CLASS = "dx-numberbox",
     SPIN_CONTAINER_CLASS = "dx-numberbox-spin-container",
     SPIN_TOUCH_FRIENDLY_CLASS = "dx-numberbox-spin-touch-friendly";
 
-var FIREFOX_CONTROL_KEYS = ["Tab", "Del", "Delete", "Backspace", "Left", "ArrowLeft", "Right", "ArrowRight", "Home", "End", "Enter"];
+var FIREFOX_CONTROL_KEYS = ["tab", "del", "backspace", "leftArrow", "rightArrow", "home", "end", "enter"];
 
 var NumberBoxBase = TextEditor.inherit({
 
@@ -198,13 +198,14 @@ var NumberBoxBase = TextEditor.inherit({
     _keyPressHandler: function(e) {
         this.callBase(e);
 
-        var ch = e.key || String.fromCharCode(e.which),
+        var char = eventUtils.getChar(e),
             validCharRegExp = /[\d.,eE\-+]|Subtract/, // Workaround for IE (T592690)
-            isInputCharValid = validCharRegExp.test(ch);
+            isInputCharValid = validCharRegExp.test(char);
 
         if(!isInputCharValid) {
+            var keyName = eventUtils.normalizeKeyName(e);
             // NOTE: Additional check for Firefox control keys
-            if(e.metaKey || e.ctrlKey || e.key && (inArray(e.key, FIREFOX_CONTROL_KEYS) >= 0)) {
+            if(e.metaKey || e.ctrlKey || keyName && (inArray(keyName, FIREFOX_CONTROL_KEYS) >= 0)) {
                 return;
             }
 
@@ -233,10 +234,6 @@ var NumberBoxBase = TextEditor.inherit({
         this.setAria("valuenow", value);
 
         this.option("text", this._input().val());
-    },
-
-    _renderValueEventName: function() {
-        return this.callBase() + " keypress";
     },
 
     _toggleDisabledState: function(value) {

@@ -419,23 +419,28 @@ _Translator2d.prototype = {
 
         const startPoint = canvasOptions.startPoint;
         const endPoint = canvasOptions.endPoint;
+        const isInverted = this.isInverted();
 
         let newStart = (startPoint + translate) / scale;
         let newEnd = (endPoint + translate) / scale;
 
         wholeRange = wholeRange || {};
-        const minPoint = this.to(this.isInverted() ? wholeRange.endValue : wholeRange.startValue);
-        const maxPoint = this.to(this.isInverted() ? wholeRange.startValue : wholeRange.endValue);
+        const minPoint = this.to(isInverted ? wholeRange.endValue : wholeRange.startValue);
+        const maxPoint = this.to(isInverted ? wholeRange.startValue : wholeRange.endValue);
 
+        let min;
+        let max;
 
         if(minPoint > newStart) {
             newEnd -= newStart - minPoint;
             newStart = minPoint;
+            min = isInverted ? wholeRange.endValue : wholeRange.startValue;
         }
 
         if(maxPoint < newEnd) {
             newStart -= newEnd - maxPoint;
             newEnd = maxPoint;
+            max = isInverted ? wholeRange.startValue : wholeRange.endValue;
         }
         if((maxPoint - minPoint) < (newEnd - newStart)) {
             newStart = minPoint;
@@ -446,8 +451,8 @@ _Translator2d.prototype = {
         scale = ((startPoint + translate) / newStart) || 1;
 
         return {
-            min: adjust(this.from(newStart, 1)),
-            max: adjust(this.from(newEnd, -1)),
+            min: isDefined(min) ? min : adjust(this.from(newStart, 1)),
+            max: isDefined(max) ? max : adjust(this.from(newEnd, -1)),
             translate: adjust(translate),
             scale: adjust(scale)
         };

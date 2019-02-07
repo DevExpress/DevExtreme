@@ -1037,10 +1037,9 @@ var dxChart = AdvancedChart.inherit({
             themeManager = that._themeManager;
         return _extend(this.callBase(), {
             chart: that,
-            zoomingMode: themeManager.getOptions("zoomingMode"),
-            scrollingMode: themeManager.getOptions("scrollingMode"),
             rotated: that._isRotated(),
-            crosshair: that._getCrosshairOptions().enabled ? that._crosshair : null
+            crosshair: that._getCrosshairOptions().enabled ? that._crosshair : null,
+            stickyHovering: themeManager.getOptions("stickyHovering")
         });
     },
 
@@ -1086,7 +1085,7 @@ var dxChart = AdvancedChart.inherit({
 
     _parseVisualRangeOption(fullName, value) {
         const that = this;
-        const name = fullName.split(/[.\[]/)[0];
+        const name = fullName.split(/[.[]/)[0];
         const index = fullName.match(/\d+/g);
 
         if(fullName.indexOf("visualRange") > 0) {

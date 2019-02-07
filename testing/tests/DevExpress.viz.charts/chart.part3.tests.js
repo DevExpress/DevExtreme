@@ -974,6 +974,7 @@ QUnit.test("Create Horizontal Legend with single named series, position = outsid
     assert.strictEqual(updateCall.args[1]._incidentOccurred, chart._incidentOccurred, "pass incidentOccurred function");
     assert.strictEqual(updateCall.args[0][0].text, "First series", "Correct text for series");
     assert.deepEqual(updateCall.args[0][0].states, { hover: undefined, selection: undefined, normal: {} }, "States");
+    assert.equal(updateCall.args[0][0].series, chart.getAllSeries()[0], "series");
 
     assert.strictEqual(legendCtorArgs.renderer, rendererModule.Renderer.lastCall.returnValue, "Correct renderer was passed to legend");
     assert.strictEqual(legendCtorArgs.backgroundClass, "dxc-border", "background class");
@@ -1072,6 +1073,44 @@ QUnit.test("Legend visible after zooming", function(assert) {
 
     assert.equal(this.layoutManager.layoutElements.callCount, 2);
     assert.deepEqual(this.layoutManager.layoutElements.lastCall.args[0], []);
+});
+
+QUnit.test("Set visible property in legend items", function(assert) {
+    // arrange
+    var stubSeries = new MockSeries({
+        name: "First series",
+        visible: false,
+        showInLegend: true
+    });
+
+    chartMocks.seriesMockData.series.push(stubSeries);
+
+    // act
+    this.createChart({ series: { type: "line" } });
+
+    // assert
+    var legend = commons.getLegendStub();
+
+    assert.strictEqual(legend.update.lastCall.args[0][0].visible, true);
+});
+
+QUnit.test("Set visible property false in legend item if showInLegend is false", function(assert) {
+    // arrange
+    var stubSeries = new MockSeries({
+        name: "First series",
+        visible: false,
+        showInLegend: false
+    });
+
+    chartMocks.seriesMockData.series.push(stubSeries);
+
+    // act
+    this.createChart({ series: { type: "line" } });
+
+    // assert
+    var legend = commons.getLegendStub();
+
+    assert.strictEqual(legend.update.lastCall.args[0][0].visible, false);
 });
 
 QUnit.module("dxChart Title", commons.environment);
