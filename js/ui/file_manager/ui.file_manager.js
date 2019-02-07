@@ -68,10 +68,12 @@ var FileManager = Widget.inherit({
     },
 
     _createFilesView: function() {
+        var selectionOptions = this.option("selection");
+
         this._filesView = this._createComponent($("<div>"), DataGrid, {
             hoverStateEnabled: true,
             selection: {
-                mode: "single"
+                mode: selectionOptions.mode
             },
             allowColumnResizing: true,
             columns: [
@@ -136,8 +138,12 @@ var FileManager = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+            selection: {
+                mode: "single"
+            },
+
             /**
-            * @name dxFileManagerOptions.providerType
+            * @name dxFileManagerOptions.fileSystemType
             * @type string
             * @default 'data'
             */
@@ -163,7 +169,7 @@ var FileManager = Widget.inherit({
         var name = args.name;
 
         switch(name) {
-            case "providerType":
+            case "fileSystemType":
             case "jsonData":
             case "oneDrive":
                 this.repaint();
@@ -171,6 +177,15 @@ var FileManager = Widget.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+
+    getCurrentFolderPath: function() {
+        return this._currentPath;
+    },
+
+    getSelectedItems: function() {
+        return this._filesView.getSelectedRowsData();
     }
 
 });

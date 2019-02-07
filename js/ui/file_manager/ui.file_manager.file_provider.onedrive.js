@@ -28,13 +28,10 @@ var OneDriveFileProvider = FileProvider.inherit({
     },
 
     _getItems: function(path, isFolder) {
+        var that = this;
         return this._ensureAccessTokenAcquired()
-            .then(function() {
-                return this._getEntriesByPath(path);
-            }.bind(this))
-            .then(function(entries) {
-                return this._convertEntriesToItems(entries, path, isFolder);
-            }.bind(this));
+            .then(() => { return that._getEntriesByPath(path); })
+            .then((entries) => { return that._convertEntriesToItems(entries, path, isFolder); });
     },
 
     _ensureAccessTokenAcquired: function() {
