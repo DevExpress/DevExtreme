@@ -35,6 +35,7 @@ export let createAnnotations = function(options) {
     return options.items.map(itemOptions => createAnnotation(itemOptions, options));
 };
 
+///#DEBUG
 export const __test_utils = {
     stub_createAnnotations(stub) {
         this.old_createAnnotations = createAnnotations;
@@ -44,6 +45,7 @@ export const __test_utils = {
         createAnnotations = this.old_createAnnotations;
     }
 };
+///#ENDDEBUG
 
 const chartPlugin = {
     name: "annotations_chart",
