@@ -2261,6 +2261,38 @@ QUnit.testInActiveWindow("onFocusedRowChanged event", function(assert) {
     assert.equal(focusedRowChangedCount, 1, "onFocusedRowChanged fires count");
 });
 
+QUnit.testInActiveWindow("onFocusedRowChanged event should fire if 'focusedRowKey' is not undefined", function(assert) {
+    // arrange, act
+    var focusedRowChangedCount = 0;
+
+    this.$element = function() {
+        return $("#container");
+    };
+    this.data = [
+        { id: 0, name: "Smith" },
+        { id: null, name: "Zeb" }
+    ];
+    this.columns = ["id", "name"];
+    this.options = {
+        loadingTimeout: 0,
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        focusedRowIndex: 0,
+        onFocusedRowChanged: () => ++focusedRowChangedCount
+    };
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    this.option("focusedRowIndex", 1);
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedRowChangedCount, 2, "onFocusedRowChanged fires count");
+});
+
 QUnit.testInActiveWindow("onFocusedCellChanged event", function(assert) {
     var rowsView,
         focusedCellChangedCount = 0;

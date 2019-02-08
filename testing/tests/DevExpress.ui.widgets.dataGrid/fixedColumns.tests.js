@@ -84,7 +84,7 @@ QUnit.module("Fixed columns", {
         };
 
         that.setupDataGrid = function(dataOptions) {
-            setupDataGridModules(that, ["data", "columns", "rows", "columnHeaders", "summary", "columnFixing", "grouping", "filterRow", "editorFactory", "masterDetail", "virtualScrolling", "errorHandling", "keyboardNavigation", "contextMenu"], {
+            setupDataGridModules(that, ["data", "columns", "rows", "columnHeaders", "summary", "columnFixing", "grouping", "filterRow", "editorFactory", "editing", "masterDetail", "virtualScrolling", "errorHandling", "keyboardNavigation", "contextMenu"], {
                 initViews: true,
                 controllers: {
                     columns: new MockColumnsController(that.columns),

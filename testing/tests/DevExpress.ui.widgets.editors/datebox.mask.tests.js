@@ -40,30 +40,30 @@ if(devices.real().deviceType === "desktop") {
     module("Rendering", setupModule, () => {
         test("Text option should depend on the input value", (assert) => {
             this.keyboard.press("up");
-            assert.equal(this.instance.option("text"), "November 10 2012", "text is correct");
+            assert.strictEqual(this.instance.option("text"), "November 10 2012", "text is correct");
         });
 
         test("Masks should be enabled when displayFormat is not specified", (assert) => {
             this.instance.option("displayFormat", undefined);
             this.keyboard.press("up");
-            assert.equal(this.instance.option("text"), "11/10/2012", "mask behavior works");
+            assert.strictEqual(this.instance.option("text"), "11/10/2012", "mask behavior works");
         });
 
         test("Masks should not be enabled when mode is not text", (assert) => {
             this.instance.option("mode", "date");
             this.keyboard.press("up");
-            assert.equal(this.instance.option("text"), "October 10 2012", "mask behavior does not work");
+            assert.strictEqual(this.instance.option("text"), "October 10 2012", "mask behavior does not work");
         });
 
         test("Rendering with non-ldml format", (assert) => {
             this.instance.option("displayFormat", "shortdate");
-            assert.equal(this.instance.option("text"), "10/10/2012", "format works");
+            assert.strictEqual(this.instance.option("text"), "10/10/2012", "format works");
         });
     });
 
     module("Date parts rendering", setupModule, () => {
         let checkAndRemoveAccessors = (part, stub, assert) => {
-            assert.equal(part.getter(), stub, "stub getter");
+            assert.strictEqual(part.getter(), stub, "stub getter");
             assert.deepEqual(part.setter, noop, "stub setter");
 
             delete part.setter;
@@ -79,7 +79,7 @@ if(devices.real().deviceType === "desktop") {
         };
 
         test("Check parts length", (assert) => {
-            assert.equal(this.parts.length, 13);
+            assert.strictEqual(this.parts.length, 13);
         });
 
         test("Day of week", (assert) => {
@@ -87,7 +87,7 @@ if(devices.real().deviceType === "desktop") {
 
             let date = new Date(2012, 1, 4, 15, 6);
             this.parts[0].setter(date, 2);
-            assert.equal(date.getDay(), 2, "setter sets day of week");
+            assert.strictEqual(date.getDay(), 2, "setter sets day of week");
             delete this.parts[0].setter;
 
             assert.deepEqual(this.parts[0], {
@@ -105,10 +105,10 @@ if(devices.real().deviceType === "desktop") {
 
             let date = new Date(2012, 2, 30);
             this.parts[2].setter(date, 1);
-            assert.equal(date.getMonth(), 0, "setter sets month");
+            assert.strictEqual(date.getMonth(), 0, "setter sets month");
             delete this.parts[2].setter;
 
-            assert.equal(this.parts[2].getter(date), 1, "getter gets moth");
+            assert.strictEqual(this.parts[2].getter(date), 1, "getter gets moth");
             delete this.parts[2].getter;
 
             assert.deepEqual(this.parts[2], {
@@ -121,14 +121,18 @@ if(devices.real().deviceType === "desktop") {
         });
 
         test("Day", (assert) => {
-            checkAndRemoveLimits(this.parts[4], { min: 1, max: 29 }, assert);
+            checkAndRemoveLimits(this.parts[4], { min: 1, max: 31 }, assert);
+
+            let date = new Date(2012, 1, 4, 15, 6);
+            this.parts[4].setter(date, 3);
+            assert.strictEqual(date.getDate(), 3, "setter sets day");
+            delete this.parts[4].setter;
 
             assert.deepEqual(this.parts[4], {
                 index: 4,
                 isStub: false,
                 caret: { start: 14, end: 15 },
                 getter: "getDate",
-                setter: "setDate",
                 pattern: "d",
                 text: "2"
             });
@@ -139,7 +143,7 @@ if(devices.real().deviceType === "desktop") {
 
             let date = new Date(2012, 1, 4, 15, 6);
             this.parts[6].setter(date, 15);
-            assert.equal(date.getFullYear(), 2015, "setter sets AM");
+            assert.strictEqual(date.getFullYear(), 2015, "setter sets year");
             delete this.parts[6].setter;
 
             assert.deepEqual(this.parts[6], {
@@ -222,11 +226,11 @@ if(devices.real().deviceType === "desktop") {
             let date = new Date(2012, 1, 4, 15, 6);
 
             let isPm = this.parts[12].getter(date);
-            assert.equal(isPm, 1, "getter returns PM");
+            assert.strictEqual(isPm, 1, "getter returns PM");
             delete this.parts[12].getter;
 
             this.parts[12].setter(date, 0);
-            assert.equal(date.getHours(), 3, "setter sets AM");
+            assert.strictEqual(date.getHours(), 3, "setter sets AM");
             delete this.parts[12].setter;
 
             assert.deepEqual(this.parts[12], {
@@ -277,7 +281,7 @@ if(devices.real().deviceType === "desktop") {
         test("Pattern stub", (assert) => {
             const parts = renderDateParts("dd 2016", dateParser.getRegExpInfo("'dd' yyyy", dateLocalization));
 
-            assert.equal(parts.length, 2, "there are 2 parts rendered");
+            assert.strictEqual(parts.length, 2, "there are 2 parts rendered");
             assert.ok(parts[0].isStub, "first part is the stub");
             assert.notOk(parts[1].isStub, "second part is not the stub");
         });
@@ -285,44 +289,44 @@ if(devices.real().deviceType === "desktop") {
 
     module("Date parts find", setupModule, () => {
         test("Find day of week", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 0), 0, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 3), 0, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 7), 0, "end position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 0), 0, "start position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 3), 0, "middle position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 7), 0, "end position of the group");
         });
 
         test("Find month", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 9), 2, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 10), 2, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 13), 2, "end position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 9), 2, "start position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 10), 2, "middle position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 13), 2, "end position of the group");
         });
 
         test("Find day", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 14), 4, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 15), 4, "end position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 14), 4, "start position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 15), 4, "end position of the group");
         });
 
         test("Find year", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 17), 6, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 19), 6, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 21), 6, "end position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 17), 6, "start position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 19), 6, "middle position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 21), 6, "end position of the group");
         });
 
         test("Find hours", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 22), 8, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 23), 8, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 24), 8, "end position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 22), 8, "start position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 23), 8, "middle position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 24), 8, "end position of the group");
         });
 
         test("Find minutes", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 25), 10, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 26), 10, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 27), 10, "end position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 25), 10, "start position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 26), 10, "middle position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 27), 10, "end position of the group");
         });
 
         test("Find time indicator", (assert) => {
-            assert.equal(getDatePartIndexByPosition(this.parts, 28), 12, "start position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 29), 12, "middle position of the group");
-            assert.equal(getDatePartIndexByPosition(this.parts, 30), 12, "end position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 28), 12, "start position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 29), 12, "middle position of the group");
+            assert.strictEqual(getDatePartIndexByPosition(this.parts, 30), 12, "end position of the group");
         });
     });
 
@@ -332,7 +336,7 @@ if(devices.real().deviceType === "desktop") {
             this.instance.registerKeyHandler("del", handler);
 
             this.keyboard.press("del");
-            assert.equal(handler.callCount, 1, "registerKeyHandler works");
+            assert.strictEqual(handler.callCount, 1, "registerKeyHandler works");
         });
 
         test("Right and left arrows should move the selection", (assert) => {
@@ -362,48 +366,48 @@ if(devices.real().deviceType === "desktop") {
                 { pattern: "mm", up: "08", down: "07" }
             ];
 
-            assert.equal(this.$input.val(), "October 10 2012", "initial value is correct");
+            assert.strictEqual(this.$input.val(), "October 10 2012", "initial value is correct");
 
             groups.forEach(function(group) {
                 this.instance.option("displayFormat", group.pattern);
 
                 this.keyboard.press("up");
-                assert.equal(this.$input.val(), group.up, "group '" + group.pattern + "' increased");
+                assert.strictEqual(this.$input.val(), group.up, "group '" + group.pattern + "' increased");
                 assert.ok(this.keyboard.event.isDefaultPrevented(), "event should be prevented to save text selection after the press");
 
                 this.keyboard.press("down");
-                assert.equal(this.$input.val(), group.down, "group '" + group.pattern + "' decreased");
+                assert.strictEqual(this.$input.val(), group.down, "group '" + group.pattern + "' decreased");
                 assert.ok(this.keyboard.event.isDefaultPrevented(), "event should be prevented to save text selection after the press");
             }.bind(this));
         });
 
         test("Month changing should adjust days to limits", (assert) => {
             this.instance.option("value", new Date(2018, 2, 30));
-            assert.equal(this.$input.val(), "March 30 2018", "initial text is correct");
+            assert.strictEqual(this.$input.val(), "March 30 2018", "initial text is correct");
 
             this.keyboard.press("down");
-            assert.equal(this.$input.val(), "February 28 2018", "text is correct");
+            assert.strictEqual(this.$input.val(), "February 28 2018", "text is correct");
         });
 
         test("Esc should restore the value", (assert) => {
             this.keyboard.press("up");
-            assert.equal(this.$input.val(), "November 10 2012", "text was changed");
-            assert.equal(this.instance.option("value").getMonth(), 9, "month did not changed in the value");
+            assert.strictEqual(this.$input.val(), "November 10 2012", "text was changed");
+            assert.strictEqual(this.instance.option("value").getMonth(), 9, "month did not changed in the value");
 
             this.keyboard.press("esc");
-            assert.equal(this.$input.val(), "October 10 2012", "text was reverted");
+            assert.strictEqual(this.$input.val(), "October 10 2012", "text was reverted");
         });
 
         test("Enter should commit the value", (assert) => {
             this.keyboard.press("up");
-            assert.equal(this.instance.option("value").getMonth(), 9, "month did not changed in the value");
+            assert.strictEqual(this.instance.option("value").getMonth(), 9, "month did not changed in the value");
 
             this.keyboard.press("enter");
-            assert.equal(this.instance.option("value").getMonth(), 10, "November 10 2012", "month was changed in the value");
+            assert.strictEqual(this.instance.option("value").getMonth(), 10, "November 10 2012", "month was changed in the value");
 
             this.keyboard.press("down");
-            assert.equal(this.$input.val(), "November 9 2012", "text was changed");
-            assert.equal(this.instance.option("value").getDate(), 10, "day did not changed in the value after commit");
+            assert.strictEqual(this.$input.val(), "November 9 2012", "text was changed");
+            assert.strictEqual(this.instance.option("value").getDate(), 10, "day did not changed in the value after commit");
         });
 
         test("Mask should not catch arrows on opened dateBox", (assert) => {
@@ -411,13 +415,13 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.press("up");
             this.keyboard.press("right");
             this.keyboard.press("down");
-            assert.equal(this.$input.val(), "October 10 2012", "text was not changed");
+            assert.strictEqual(this.$input.val(), "October 10 2012", "text was not changed");
         });
 
         test("Mask should catch char input on opened dateBox", (assert) => {
             this.instance.open();
             this.keyboard.type("3");
-            assert.equal(this.$input.val(), "March 10 2012", "text has been changed");
+            assert.strictEqual(this.$input.val(), "March 10 2012", "text has been changed");
         });
 
         test("alt+down should open dxDateBox", (assert) => {
@@ -427,19 +431,19 @@ if(devices.real().deviceType === "desktop") {
 
         test("delete should revert group to an empty date and go to the next part", (assert) => {
             this.keyboard.press("up");
-            assert.equal(this.instance.option("text"), "November 10 2012", "text has been changed");
+            assert.strictEqual(this.instance.option("text"), "November 10 2012", "text has been changed");
 
             this.keyboard.press("del");
 
-            assert.equal(this.instance.option("text"), "January 10 2012", "text is correct");
+            assert.strictEqual(this.instance.option("text"), "January 10 2012", "text is correct");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 10 }, "caret is good");
 
             this.keyboard.press("del");
-            assert.equal(this.instance.option("text"), "January 1 2012", "text is correct");
+            assert.strictEqual(this.instance.option("text"), "January 1 2012", "text is correct");
             assert.deepEqual(this.keyboard.caret(), { start: 10, end: 14 }, "caret is good");
 
             this.keyboard.press("del");
-            assert.equal(this.instance.option("text"), "January 1 2000", "text is correct");
+            assert.strictEqual(this.instance.option("text"), "January 1 2000", "text is correct");
             assert.deepEqual(this.keyboard.caret(), { start: 10, end: 14 }, "caret is good");
         });
 
@@ -451,7 +455,7 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.press("del");
             this.keyboard.type("44");
 
-            assert.equal(this.instance.option("text"), "10, 2044", "text is correct");
+            assert.strictEqual(this.instance.option("text"), "10, 2044", "text is correct");
         });
 
         test("search value should be cleared after part is reverted when all text is selected", (assert) => {
@@ -461,7 +465,7 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.press("del");
             this.keyboard.type("44");
 
-            assert.equal(this.instance.option("text"), "2044", "text is correct");
+            assert.strictEqual(this.instance.option("text"), "2044", "text is correct");
         });
 
         test("delete should revert a part when the value is null", (assert) => {
@@ -471,32 +475,32 @@ if(devices.real().deviceType === "desktop") {
             });
             this.keyboard.press("up");
 
-            assert.equal(this.instance.option("text"), "May 2015", "text has been rendered");
+            assert.strictEqual(this.instance.option("text"), "May 2015", "text has been rendered");
 
             this.keyboard.press("del");
-            assert.equal(this.instance.option("text"), "Jan 2015", "text has been reverted");
+            assert.strictEqual(this.instance.option("text"), "Jan 2015", "text has been reverted");
             assert.deepEqual(this.keyboard.caret(), { start: 4, end: 8 }, "next group is selected");
         });
 
         test("backspace should revert group to an empty date and go to the previous part", (assert) => {
             this.keyboard.press("right");
             this.keyboard.press("up");
-            assert.equal(this.instance.option("text"), "October 11 2012", "text has been changed");
+            assert.strictEqual(this.instance.option("text"), "October 11 2012", "text has been changed");
 
             this.keyboard.press("backspace");
 
-            assert.equal(this.instance.option("text"), "October 1 2012", "text is correct");
+            assert.strictEqual(this.instance.option("text"), "October 1 2012", "text is correct");
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "caret is good");
         });
 
         test("emptyDateValue option should work", (assert) => {
             this.instance.option("emptyDateValue", new Date(2015, 5, 4));
             this.keyboard.press("up");
-            assert.equal(this.instance.option("text"), "November 10 2012", "text has been changed");
+            assert.strictEqual(this.instance.option("text"), "November 10 2012", "text has been changed");
 
             this.keyboard.press("del");
 
-            assert.equal(this.instance.option("text"), "June 10 2012", "text is correct");
+            assert.strictEqual(this.instance.option("text"), "June 10 2012", "text is correct");
             assert.deepEqual(this.keyboard.caret(), { start: 5, end: 7 }, "caret is good");
         });
 
@@ -506,33 +510,33 @@ if(devices.real().deviceType === "desktop") {
                 .press("del")
                 .change();
 
-            assert.equal(this.instance.option("text"), "", "text has been changed");
-            assert.equal(this.instance.option("value"), null, "value has been cleared");
+            assert.strictEqual(this.instance.option("text"), "", "text has been changed");
+            assert.strictEqual(this.instance.option("value"), null, "value has been cleared");
         });
 
         test("focusout should clear search value", (assert) => {
             this.keyboard.type("1");
-            assert.equal(this.instance.option("text"), "January 10 2012", "text has been changed");
+            assert.strictEqual(this.instance.option("text"), "January 10 2012", "text has been changed");
 
             this.$input.trigger("focusout");
             this.keyboard.type("2");
-            assert.equal(this.instance.option("text"), "February 10 2012", "search value and position was cleared");
+            assert.strictEqual(this.instance.option("text"), "February 10 2012", "search value and position was cleared");
             assert.deepEqual(this.keyboard.caret(), { start: 9, end: 11 }, "first group has been filled again");
         });
 
         test("enter should clear search value", (assert) => {
             this.keyboard.type("1");
-            assert.equal(this.instance.option("text"), "January 10 2012", "text has been changed");
+            assert.strictEqual(this.instance.option("text"), "January 10 2012", "text has been changed");
 
             this.keyboard.press("enter");
             this.keyboard.type("2");
-            assert.equal(this.instance.option("text"), "January 2 2012", "search value was cleared");
+            assert.strictEqual(this.instance.option("text"), "January 2 2012", "search value was cleared");
             assert.deepEqual(this.keyboard.caret(), { start: 8, end: 9 }, "next group has been selected");
         });
 
         test("incorrect input should clear search value", (assert) => {
             this.keyboard.type("jqwed");
-            assert.equal(this.instance.option("text"), "December 10 2012", "text has been changed");
+            assert.strictEqual(this.instance.option("text"), "December 10 2012", "text has been changed");
         });
 
         test("first part should be active if select all parts and type new date", (assert) => {
@@ -559,6 +563,11 @@ if(devices.real().deviceType === "desktop") {
 
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "next group has been selected");
         });
+
+        test("keydown event shouldn't be prevented on 'Esc' key press", (assert) => {
+            this.keyboard.press("esc");
+            assert.notOk(this.keyboard.event.isDefaultPrevented(), "event should not be prevented");
+        });
     });
 
     module("Events", setupModule, () => {
@@ -573,18 +582,18 @@ if(devices.real().deviceType === "desktop") {
             this.$input.get(0).focus();
 
             this.pointer.wheel(10);
-            assert.equal(this.$input.val(), "November 10 2012", "increment works");
+            assert.strictEqual(this.$input.val(), "November 10 2012", "increment works");
 
             this.pointer.wheel(-10);
-            assert.equal(this.$input.val(), "October 10 2012", "decrement works");
+            assert.strictEqual(this.$input.val(), "October 10 2012", "decrement works");
         });
 
         test("it should not be possible to drag text in the editor", (assert) => {
             this.keyboard.type("3");
-            assert.equal(this.$input.val(), "March 10 2012", "text has been changed");
+            assert.strictEqual(this.$input.val(), "March 10 2012", "text has been changed");
 
             this.$input.trigger("drop");
-            assert.equal(this.$input.val(), "March 10 2012", "text has not reverted");
+            assert.strictEqual(this.$input.val(), "March 10 2012", "text has not reverted");
             assert.deepEqual(this.keyboard.caret(), { start: 6, end: 8 }, "caret is good");
         });
 
@@ -592,10 +601,10 @@ if(devices.real().deviceType === "desktop") {
             this.instance.option("value", null);
 
             this.keyboard.paste("123456");
-            assert.equal(this.$input.val(), "", "pasting incorrect value is not allowed");
+            assert.strictEqual(this.$input.val(), "", "pasting incorrect value is not allowed");
 
             this.keyboard.paste("November 10 2018");
-            assert.equal(this.$input.val(), "November 10 2018", "pasting correct value is allowed");
+            assert.strictEqual(this.$input.val(), "November 10 2018", "pasting correct value is allowed");
         });
     });
 
@@ -605,43 +614,43 @@ if(devices.real().deviceType === "desktop") {
             this.instance.option("displayFormat", "a");
 
             this.keyboard.type("a");
-            assert.equal(this.$input.val(), "AM", "select on typing");
+            assert.strictEqual(this.$input.val(), "AM", "select on typing");
 
             this.keyboard.type("p");
-            assert.equal(this.$input.val(), "PM", "revert incorrect changes");
+            assert.strictEqual(this.$input.val(), "PM", "revert incorrect changes");
         });
 
         test("Hour", (assert) => {
             this.instance.option("displayFormat", "hh");
 
             this.keyboard.type("31");
-            assert.equal(this.$input.val(), "01", "don't accept out-of-limit values");
+            assert.strictEqual(this.$input.val(), "01", "don't accept out-of-limit values");
 
             this.keyboard.type("2");
-            assert.equal(this.$input.val(), "12", "set new value");
+            assert.strictEqual(this.$input.val(), "12", "set new value");
         });
 
         test("Day of week", (assert) => {
             this.instance.option("displayFormat", "EEEE");
 
             this.keyboard.type("monda");
-            assert.equal(this.$input.val(), "Monday", "select on typing");
+            assert.strictEqual(this.$input.val(), "Monday", "select on typing");
 
             this.keyboard.type("s");
-            assert.equal(this.$input.val(), "Saturday", "revert incorrect changes");
+            assert.strictEqual(this.$input.val(), "Saturday", "revert incorrect changes");
         });
 
         test("Day of week by a number", (assert) => {
             this.instance.option("displayFormat", "EEEE");
 
             this.keyboard.type("0");
-            assert.equal(this.$input.val(), "Sunday", "week starts from the Sunday");
+            assert.strictEqual(this.$input.val(), "Sunday", "week starts from the Sunday");
 
             this.keyboard.type("6");
-            assert.equal(this.$input.val(), "Saturday", "week ends at the Saturday");
+            assert.strictEqual(this.$input.val(), "Saturday", "week ends at the Saturday");
 
             this.keyboard.type("7");
-            assert.equal(this.$input.val(), "Saturday", "out-of-limit values does not supported");
+            assert.strictEqual(this.$input.val(), "Saturday", "out-of-limit values does not supported");
         });
 
         test("Day", (assert) => {
@@ -652,66 +661,70 @@ if(devices.real().deviceType === "desktop") {
                 .press("right")
                 .type("3");
 
-            assert.equal(this.$input.val(), "Feb, 03", "select on typing");
+            assert.strictEqual(this.$input.val(), "Feb, 03", "select on typing");
 
             this.keyboard.type("1");
-            assert.equal(this.$input.val(), "Feb, 01", "don't accept out-of-limit values");
+            assert.strictEqual(this.$input.val(), "Mar, 31", "current month overflow should increase month");
+
+            this.keyboard.press("enter");
+            this.keyboard.type("35");
+            assert.strictEqual(this.$input.val(), "Mar, 05", "out-of-limit values should clear search value");
         });
 
         test("Month", (assert) => {
             this.instance.option("displayFormat", "MMMM");
 
             this.keyboard.type("janu");
-            assert.equal(this.$input.val(), "January", "select on typing");
+            assert.strictEqual(this.$input.val(), "January", "select on typing");
 
             this.clock.tick(1);
             this.keyboard.type("d");
-            assert.equal(this.$input.val(), "December", "revert incorrect chars");
+            assert.strictEqual(this.$input.val(), "December", "revert incorrect chars");
         });
 
         test("Short month", (assert) => {
             this.instance.option("displayFormat", "MMM");
 
             this.keyboard.type("jan");
-            assert.equal(this.$input.val(), "Jan", "select on typing");
+            assert.strictEqual(this.$input.val(), "Jan", "select on typing");
 
             this.keyboard.type("d");
-            assert.equal(this.$input.val(), "Dec", "revert incorrect chars");
+            assert.strictEqual(this.$input.val(), "Dec", "revert incorrect chars");
         });
 
         test("Month by a number", (assert) => {
             this.instance.option("displayFormat", "MMMM");
 
             this.keyboard.type("1");
-            assert.equal(this.$input.val(), "January");
+            assert.strictEqual(this.$input.val(), "January");
 
             this.keyboard.type("30");
-            assert.equal(this.$input.val(), "January");
+            assert.strictEqual(this.$input.val(), "January");
 
             this.keyboard.type("05");
-            assert.equal(this.$input.val(), "May");
+            assert.strictEqual(this.$input.val(), "May");
         });
 
         test("Year", (assert) => {
             this.instance.option("displayFormat", "yyyy");
 
             this.keyboard.type("1995");
-            assert.equal(this.$input.val(), "1995");
+            assert.strictEqual(this.$input.val(), "1995");
 
             this.keyboard.type("2");
-            assert.equal(this.$input.val(), "9952");
+            assert.strictEqual(this.$input.val(), "9952");
 
             this.keyboard.type("0");
-            assert.equal(this.$input.val(), "9520");
+            assert.strictEqual(this.$input.val(), "9520");
 
             this.keyboard.type("1");
-            assert.equal(this.$input.val(), "5201");
+            assert.strictEqual(this.$input.val(), "5201");
 
             this.keyboard.type("8");
-            assert.equal(this.$input.val(), "2018");
+            assert.strictEqual(this.$input.val(), "2018");
 
             this.keyboard.type("0000");
-            assert.equal(this.$input.val(), "0000");
+            assert.strictEqual(this.$input.val(), "0000");
         });
 
         test("Short Year", (assert) => {
@@ -724,17 +737,17 @@ if(devices.real().deviceType === "desktop") {
                 .type("21")
                 .press("enter");
 
-            assert.equal(this.instance.option("value").getFullYear(), 1921, "only 2 last digits of the year should be changed");
+            assert.strictEqual(this.instance.option("value").getFullYear(), 1921, "only 2 last digits of the year should be changed");
         });
 
         test("Hotkeys should not be handled by the search", (assert) => {
             this.instance.option("displayFormat", "EEEE");
 
             this.keyboard.keyDown("s", { altKey: true });
-            assert.equal(this.$input.val(), "Wednesday", "alt was not handled");
+            assert.strictEqual(this.$input.val(), "Wednesday", "alt was not handled");
 
             this.keyboard.keyDown("s", { ctrlKey: true });
-            assert.equal(this.$input.val(), "Wednesday", "ctrl was not handled");
+            assert.strictEqual(this.$input.val(), "Wednesday", "ctrl was not handled");
         });
 
         test("Typing a letter in the year section should not lead to an infinite loop", (assert) => {
@@ -744,7 +757,7 @@ if(devices.real().deviceType === "desktop") {
 
             try {
                 this.keyboard.type("s");
-                assert.equal(this.$input.val(), "2012", "year was not changed");
+                assert.strictEqual(this.$input.val(), "2012", "year was not changed");
             } catch(e) {
                 assert.notOk(true, "Infinite loop detected");
             }
@@ -760,15 +773,15 @@ if(devices.real().deviceType === "desktop") {
     }, () => {
         test("Current date should be rendered on first input", (assert) => {
             this.keyboard.type("1");
-            assert.equal(this.$input.val(), "January 14 2015", "first part was changed, other parts is from the current date");
+            assert.strictEqual(this.$input.val(), "January 14 2015", "first part was changed, other parts is from the current date");
         });
 
         test("Bluring the input after first input should update the value", (assert) => {
             this.keyboard.type("1");
             this.$input.trigger("focusout");
 
-            assert.equal(this.$input.val(), "January 14 2015", "text is correct");
-            assert.equal(this.instance.option("value").getMonth(), 0, "value is correct");
+            assert.strictEqual(this.$input.val(), "January 14 2015", "text is correct");
+            assert.strictEqual(this.instance.option("value").getMonth(), 0, "value is correct");
         });
 
         test("Clear button should work", (assert) => {
@@ -777,51 +790,51 @@ if(devices.real().deviceType === "desktop") {
                 value: new Date(2018, 6, 19)
             });
 
-            assert.equal(this.$input.val(), "July 19 2018", "initial value is correct");
+            assert.strictEqual(this.$input.val(), "July 19 2018", "initial value is correct");
 
             this.$element.find(".dx-clear-button-area").trigger("dxclick");
 
-            assert.equal(this.$input.val(), "", "text was cleared");
-            assert.equal(this.instance.option("value"), null, "value was cleared");
+            assert.strictEqual(this.$input.val(), "", "text was cleared");
+            assert.strictEqual(this.instance.option("value"), null, "value was cleared");
 
             this.$input.trigger("change");
 
-            assert.equal(this.$input.val(), "", "text is still cleared");
-            assert.equal(this.instance.option("value"), null, "value is still cleared");
+            assert.strictEqual(this.$input.val(), "", "text is still cleared");
+            assert.strictEqual(this.instance.option("value"), null, "value is still cleared");
 
             this.keyboard.type("1");
-            assert.equal(this.$input.val(), "January 14 2015", "text is correct after clearing");
+            assert.strictEqual(this.$input.val(), "January 14 2015", "text is correct after clearing");
         });
 
         test("Incorrect search on empty input should render current date", (assert) => {
             this.keyboard.type("qq");
 
-            assert.equal(this.$input.val(), "April 14 2015", "text is correct");
-            assert.equal(this.instance.option("value"), null, "value is correct");
+            assert.strictEqual(this.$input.val(), "April 14 2015", "text is correct");
+            assert.strictEqual(this.instance.option("value"), null, "value is correct");
         });
 
         test("focus and blur empty input should not change it's value", (assert) => {
             this.$input.trigger("focusin");
             this.$input.trigger("focusout");
 
-            assert.equal(this.$input.val(), "", "text is correct");
-            assert.equal(this.instance.option("value"), null, "value is correct");
+            assert.strictEqual(this.$input.val(), "", "text is correct");
+            assert.strictEqual(this.instance.option("value"), null, "value is correct");
         });
 
         test("focusing datebox by click should work", (assert) => {
             this.$input.trigger("dxclick");
             this.keyboard.type("2");
 
-            assert.equal(this.$input.val(), "February 14 2015", "text is correct");
-            assert.equal(this.instance.option("value"), null, "value is correct");
+            assert.strictEqual(this.$input.val(), "February 14 2015", "text is correct");
+            assert.strictEqual(this.instance.option("value"), null, "value is correct");
         });
 
         test("focusing datebox by mousewheel should work", (assert) => {
             this.pointer.wheel(10);
             this.keyboard.type("2");
 
-            assert.equal(this.$input.val(), "February 14 2015", "text is correct");
-            assert.equal(this.instance.option("value"), null, "value is correct");
+            assert.strictEqual(this.$input.val(), "February 14 2015", "text is correct");
+            assert.strictEqual(this.instance.option("value"), null, "value is correct");
         });
 
         test("moving between groups should work with empty dateBox", (assert) => {
@@ -831,8 +844,8 @@ if(devices.real().deviceType === "desktop") {
                 assert.ok(true, arrow + " key is good");
             });
 
-            assert.equal(this.$input.val(), "", "text is correct");
-            assert.equal(this.instance.option("value"), null, "value is correct");
+            assert.strictEqual(this.$input.val(), "", "text is correct");
+            assert.strictEqual(this.instance.option("value"), null, "value is correct");
         });
 
         test("Short Year should use current date", (assert) => {
@@ -844,7 +857,7 @@ if(devices.real().deviceType === "desktop") {
                 .type("21")
                 .press("enter");
 
-            assert.equal(this.instance.option("value").getFullYear(), dateStart + "21", "only 2 last digits of the year should be changed");
+            assert.strictEqual(this.instance.option("value").getFullYear(), parseInt(dateStart + "21"), "only 2 last digits of the year should be changed");
         });
 
         test("Click and leave empty datebox should not change the value", (assert) => {
@@ -854,7 +867,7 @@ if(devices.real().deviceType === "desktop") {
             this.keyboard.press("enter");
             this.$input.trigger("focusout");
 
-            assert.equal(this.$input.val(), "", "value is correct");
+            assert.strictEqual(this.$input.val(), "", "value is correct");
         });
 
         test("navigation keys should do nothing in an empty datebox", (assert) => {
@@ -890,7 +903,7 @@ if(devices.real().deviceType === "desktop") {
             assert.deepEqual(this.keyboard.caret(), { start: 9, end: 9 }, "caret is not changed");
 
             this.pointer.wheel(10);
-            assert.equal(this.$input.val(), "October 10 2012", "date is not changed on mouse wheel");
+            assert.strictEqual(this.$input.val(), "October 10 2012", "date is not changed on mouse wheel");
         });
 
         test("onValueChanged should have event", (assert) => {
@@ -902,11 +915,11 @@ if(devices.real().deviceType === "desktop") {
 
             this.keyboard.press("up").press("enter");
 
-            assert.equal(valueChangedHandler.callCount, 1, "handler has been called once");
-            assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "change", "event is correct");
+            assert.strictEqual(valueChangedHandler.callCount, 1, "handler has been called once");
+            assert.strictEqual(valueChangedHandler.getCall(0).args[0].event.type, "change", "event is correct");
 
             this.instance.option("value", new Date(2012, 4, 5));
-            assert.equal(valueChangedHandler.callCount, 2, "handler has been called twice");
+            assert.strictEqual(valueChangedHandler.callCount, 2, "handler has been called twice");
             assert.strictEqual(valueChangedHandler.getCall(1).args[0].event, undefined, "event has been cleared");
         });
 
@@ -916,8 +929,8 @@ if(devices.real().deviceType === "desktop") {
             });
 
             this.keyboard.press("right").press("enter");
-            assert.equal(this.$input.val(), "October 11 2012", "text is correct");
-            assert.equal(this.instance.option("value").getDate(), 11, "value is correct");
+            assert.strictEqual(this.$input.val(), "October 11 2012", "text is correct");
+            assert.strictEqual(this.instance.option("value").getDate(), 11, "value is correct");
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "caret is good");
         });
 
@@ -945,10 +958,10 @@ if(devices.real().deviceType === "desktop") {
             const regExpInfo = sinon.spy(dateParser, "getRegExpInfo");
 
             this.instance.option("displayFormat", "dd.MM");
-            assert.equal(regExpInfo.callCount, 1, "regexpInfo should be called when format changed");
+            assert.strictEqual(regExpInfo.callCount, 1, "regexpInfo should be called when format changed");
 
             this.instance.option("value", new Date(2018, 2, 5, 10, 15, 25));
-            assert.equal(regExpInfo.callCount, 1, "regexpInfo should not be called when value changed");
+            assert.strictEqual(regExpInfo.callCount, 1, "regexpInfo should not be called when value changed");
         });
     });
 
@@ -983,6 +996,50 @@ if(devices.real().deviceType === "desktop") {
 
             this.keyboard.type("38");
             assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved to month");
+        });
+
+        test("Move caret to the next group after format length overflow", (assert) => {
+            this.instance.option({
+                advanceCaret: true,
+                displayFormat: "yy MM"
+            });
+
+            this.keyboard.type("15");
+            assert.strictEqual(this.instance.option("text"), "15 10", "text is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved to month");
+        });
+
+        test("Don't move caret to next group when format length is less than limit length", (assert) => {
+            this.instance.option({
+                advanceCaret: true,
+                displayFormat: "y MM"
+            });
+
+            this.keyboard.type("2011");
+            assert.strictEqual(this.instance.option("text"), "2011 10", "text is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 5, end: 7 }, "caret was moved to month");
+        });
+
+        test("Typed year and value should be in the same century when short year format is used", (assert) => {
+            this.instance.option({
+                advanceCaret: true,
+                displayFormat: "yy MM",
+                value: new Date(1995, 10, 11)
+            });
+
+            this.keyboard
+                .type("15")
+                .press("enter");
+
+            assert.strictEqual(this.instance.option("value").getFullYear(), 1915, "year is correct");
+
+            this.instance.option("value", new Date(2010, 10, 11));
+            this.keyboard
+                .press("left")
+                .type("14")
+                .press("enter");
+
+            assert.strictEqual(this.instance.option("value").getFullYear(), 2014, "year is correct");
         });
 
         test("Move caret to the next group after string length overflow", (assert) => {

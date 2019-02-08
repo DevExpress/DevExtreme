@@ -1,11 +1,11 @@
-var $ = require("jquery"),
-    config = require("core/config"),
-    devices = require("core/devices"),
-    keyboardMock = require("../../../helpers/keyboardMock.js"),
-    numberLocalization = require("localization/number"),
-    browser = require("core/utils/browser");
+import $ from "jquery";
+import browser from "core/utils/browser";
+import config from "core/config";
+import devices from "core/devices";
+import keyboardMock from "../../../helpers/keyboardMock.js";
+import numberLocalization from "localization/number";
 
-require("ui/text_box/ui.text_editor");
+import "ui/text_box/ui.text_editor";
 
 var INPUT_CLASS = "dx-texteditor-input";
 var PLACEHOLDER_CLASS = "dx-placeholder";
@@ -400,6 +400,26 @@ QUnit.test("required digits should be replaced on input", function(assert) {
 
     this.keyboard.caret(2).type("45");
     assert.equal(this.input.val(), "1.45", "text is correct");
+});
+
+QUnit.test("should ignore backspace/delete key down when the caret in the start/end of input (T713045)", function(assert) {
+    this.instance.option({
+        valueChangeEvent: "keyup",
+        format: "#,##0",
+        value: 1234
+    });
+
+    assert.strictEqual(this.input.val(), "1,234");
+
+    this.keyboard
+        .caret(5)
+        .press("delete");
+    assert.strictEqual(this.input.val(), "1,234");
+
+    this.keyboard
+        .caret(0)
+        .press("backspace");
+    assert.strictEqual(this.input.val(), "1,234");
 });
 
 QUnit.test("removing required value should replace it to 0", function(assert) {
