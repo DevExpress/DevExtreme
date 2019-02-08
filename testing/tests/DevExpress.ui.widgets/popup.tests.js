@@ -745,20 +745,6 @@ QUnit.test("shading should be synchronized with the option when popup goes from 
     assert.equal($popupWrapper.prop('style').height, "", "wrapper is collapsed by height");
 });
 
-QUnit.test("percentage size should work when the 'shading' is disabled (T709788)", function(assert) {
-    this.instance.option({
-        shading: false,
-        width: "100%",
-        height: "100%",
-        visible: true
-    });
-
-    var popupWrapper = this.instance.$content().get(0);
-
-    assert.ok(popupWrapper.clientHeight > 100);
-    assert.ok(popupWrapper.clientWidth > 100);
-});
-
 QUnit.test("title", function(assert) {
     this.instance.option("visible", "true");
     this.instance.option("title", "new title");
