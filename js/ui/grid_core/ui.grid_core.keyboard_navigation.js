@@ -70,7 +70,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _isExcelNavigation: function() {
-        return this._isCellEditMode() && this.option("excelNavigation");
+        return this._isCellEditMode() && this.option("editing.excelLikeNavigation");
     },
 
     _focusView: function(view, viewIndex) {
@@ -1403,7 +1403,6 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         switch(args.name) {
             case "useKeyboard":
-            case "excelNavigation":
                 args.handled = true;
                 break;
             default:
@@ -1524,13 +1523,6 @@ module.exports = {
     defaultOptions: function() {
         return {
             useKeyboard: true,
-
-            /**
-             * @name GridBaseOptions.excelNavigation
-             * @type boolean
-             * @default false
-             */
-            excelNavigation: false
 
             /**
              * @name GridBaseOptions.onKeyDown
