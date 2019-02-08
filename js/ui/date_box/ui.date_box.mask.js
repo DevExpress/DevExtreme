@@ -39,10 +39,7 @@ let DateBoxMask = DateBoxBase.inherit({
                 this._selectLastPart();
                 e.preventDefault();
             },
-            escape: (e) => {
-                this._revertChanges();
-                e.preventDefault();
-            },
+            escape: this._revertChanges,
             enter: this._enterHandler,
             leftArrow: (e) => {
                 this._selectNextPart(BACKWARD);

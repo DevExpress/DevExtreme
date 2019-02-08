@@ -563,6 +563,11 @@ if(devices.real().deviceType === "desktop") {
 
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "next group has been selected");
         });
+
+        test("keydown event shouldn't be prevented on 'Esc' key press", (assert) => {
+            this.keyboard.press("esc");
+            assert.notOk(this.keyboard.event.isDefaultPrevented(), "event should not be prevented");
+        });
     });
 
     module("Events", setupModule, () => {
