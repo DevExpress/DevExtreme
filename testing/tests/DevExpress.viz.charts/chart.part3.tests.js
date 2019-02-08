@@ -880,7 +880,45 @@ QUnit.test("Panes check duplicate argument axis for each pane", function(assert)
     assert.deepEqual(axisOptions.label, {});
     assert.deepEqual(axisOptions.minorTick, {});
     assert.equal(axisOptions.title, "Title");
+});
 
+QUnit.test("Panes check main argument axis getter after panes changing on rotated chart (T712569)", function(assert) {
+    // arrange
+    var stubSeries1 = new MockSeries({}),
+        stubSeries2 = new MockSeries({});
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries2);
+
+    var chart = this.createChart({
+        rotated: true,
+        argumentAxis: {
+            categories: categories,
+            grid: {
+                visible: true
+            },
+            title: "Title"
+        },
+        panes: [
+            { name: "right" },
+            { name: "left" }
+        ],
+        series: [
+            { pane: "right" },
+            {}
+        ]
+    });
+
+    // act
+    chart.option({
+        panes: [
+            { name: "right" },
+            { name: "left" }
+        ]
+    });
+
+    // assert
+    assert.equal(chart._argumentAxes[0].pane, "left");
+    assert.equal(chart._argumentAxes[0], chart.getArgumentAxis());
 });
 
 QUnit.test("Title for Axes - initialization as String ", function(assert) {
