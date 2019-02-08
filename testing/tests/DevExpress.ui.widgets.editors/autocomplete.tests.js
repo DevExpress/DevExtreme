@@ -265,6 +265,38 @@ QUnit.testInActiveWindow("open/close actions", function(assert) {
     assert.equal(closeFired, 1, "close fired once");
 });
 
+QUnit.testInActiveWindow("should not open overlay if the focus has been lost (T712942)", function(assert) {
+    const done = assert.async();
+    let isOpenFired = false;
+
+    this.clock.restore();
+
+    this.instance.option({
+        value: null,
+        onOpened: () => isOpenFired = true,
+        searchTimeout: 10
+    });
+
+    this.keyboard.type("i");
+    this.instance.blur();
+
+    window.setTimeout(() => {
+        assert.notOk(isOpenFired);
+        assert.notOk(this.instance._isFocused());
+
+        this.instance.focus();
+        this.keyboard.press("backspace");
+        this.keyboard.type("i");
+        this.instance.blur();
+
+        window.setTimeout(() => {
+            assert.notOk(isOpenFired);
+            assert.notOk(this.instance._isFocused());
+            done();
+        }, 20);
+    }, 20);
+});
+
 QUnit.test("onEnterKey (T107163)", function(assert) {
     var enterKeyFired = 0;
 

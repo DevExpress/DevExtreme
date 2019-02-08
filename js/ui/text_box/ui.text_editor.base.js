@@ -305,6 +305,10 @@ var TextEditorBase = Editor.inherit({
         return this.$element().find(TEXTEDITOR_INPUT_SELECTOR).first();
     },
 
+    _isFocused: function() {
+        return focused(this._input()) || this.callBase();
+    },
+
     _inputWrapper: function() {
         return this.$element();
     },
@@ -565,7 +569,7 @@ var TextEditorBase = Editor.inherit({
         this._saveValueChangeEvent(e);
         this.reset();
 
-        !focused($input) && eventsEngine.trigger($input, "focus");
+        !this._isFocused() && eventsEngine.trigger($input, "focus");
         eventsEngine.trigger($input, "input");
     },
 
