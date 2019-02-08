@@ -1257,6 +1257,8 @@ dxChart.prototype._optionChangesMap["visualRange"] = "VISUAL_RANGE";
 
 dxChart.addPlugin(require("./chart_components/shutter_zoom"));
 dxChart.addPlugin(require("./chart_components/zoom_and_pan"));
+dxChart.addPlugin(require("./core/annotations").plugins.core);
+dxChart.addPlugin(require("./core/annotations").plugins.chart);
 
 registerComponent("dxChart", dxChart);
 module.exports = dxChart;

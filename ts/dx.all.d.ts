@@ -1958,6 +1958,7 @@ declare module DevExpress.ui {
         editing?: GridBaseEditing;
         /** Indicates whether to show the error row. */
         errorRowEnabled?: boolean;
+        excelNavigation?: boolean;
         /** Configures the integrated filter builder. */
         filterBuilder?: dxFilterBuilderOptions;
         /** Configures the popup in which the integrated filter builder is shown. */
@@ -5897,6 +5898,7 @@ declare module DevExpress.viz {
     interface BaseWidgetLoadingIndicator {
         /** Colors the background of the loading indicator. */
         backgroundColor?: string;
+        enabled?: boolean;
         /** Specifies font options for the loading indicator. */
         font?: Font;
         /** Specifies whether to show the loading indicator or not. */
@@ -6157,6 +6159,7 @@ declare module DevExpress.viz {
     }
     /** Declares a collection of constant lines belonging to the argument axis. */
     export interface dxChartArgumentAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
+        displayBehindSeries?: boolean;
         /** Specifies whether to extend the axis's default visual range to display the constant line. */
         extendAxis?: boolean;
         /** Configures the constant line label. */
@@ -6472,6 +6475,7 @@ declare module DevExpress.viz {
     }
     /** Declares a collection of constant lines belonging to the value axis. */
     export interface dxChartValueAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
+        displayBehindSeries?: boolean;
         /** Specifies whether to extend the axis's default visual range to display the constant line. */
         extendAxis?: boolean;
         /** Configures the constant line label. */
@@ -6691,6 +6695,7 @@ declare module DevExpress.viz {
     }
     /** Defines an array of the argument axis constant lines. */
     export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
+        displayBehindSeries?: boolean;
         /** Specifies whether to extend the axis to display the constant line. */
         extendAxis?: boolean;
         /** An object defining constant line label options. */
@@ -6881,6 +6886,7 @@ declare module DevExpress.viz {
     }
     /** Defines an array of the value axis constant lines. */
     export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
+        displayBehindSeries?: boolean;
         /** Specifies whether to extend the axis to display the constant line. */
         extendAxis?: boolean;
         /** An object defining constant line label options. */
@@ -8055,6 +8061,8 @@ declare module DevExpress.viz {
         animation?: BaseGaugeAnimation;
         /** Specifies the color of the parent page element. */
         containerBackgroundColor?: string;
+        /** Configures the loading indicator. */
+        loadingIndicator?: BaseGaugeLoadingIndicator;
         /** A function that is executed when a tooltip becomes hidden. */
         onTooltipHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /** A function that is executed when a tooltip appears. */
@@ -8078,6 +8086,9 @@ declare module DevExpress.viz {
         easing?: 'easeOutCubic' | 'linear';
         /** Indicates whether or not animation is enabled. */
         enabled?: boolean;
+    }
+    /** Configures the loading indicator. */
+    interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     }
     /** Specifies options of the gauge's range container. */
     interface BaseGaugeRangeContainer {
@@ -8108,6 +8119,7 @@ declare module DevExpress.viz {
         minorTick?: { color?: string, opacity?: number, length?: number, width?: number, visible?: boolean };
         /** Specifies an interval between minor ticks. */
         minorTickInterval?: number;
+        scaleDivisionFactor?: number;
         /** Specifies the start value for the scale of the gauge. */
         startValue?: number;
         /** Specifies options of the gauge's major ticks. */
@@ -8173,7 +8185,6 @@ declare module DevExpress.viz {
         label?: dxCircularGaugeScaleLabel;
         /** Specifies the orientation of scale ticks. */
         orientation?: 'center' | 'inside' | 'outside';
-        scaleDivisionFactor?: number;
     }
     /** Specifies common options for scale labels. */
     export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
@@ -8367,9 +8378,13 @@ declare module DevExpress.viz {
         /** Shows the point label and keeps it visible until the hide() method is called. */
         show(holdVisible: boolean): void;
     }
+    /** An object that provides information about a legend item in the Chart and PolarChart widgets. */
     export interface BaseChartLegendItem {
+        /** The series that the item represents on the legend. */
         series?: baseSeriesObject;
+        /** The text that the legend item displays. */
         text?: string;
+        /** Indicates and specifies whether the legend item is visible. */
         visible?: boolean;
     }
     /** This section describes the Series object, which represents a series. */
@@ -8442,9 +8457,13 @@ declare module DevExpress.viz {
         /** Shows the funnel item's tooltip. */
         showTooltip(): void;
     }
+    /** An object that provides information about a legend item in the Funnel widget. */
     export interface FunnelLegendItem {
+        /** The funnel item that the legend item represents. */
         item?: dxFunnelItem;
+        /** The text that the legend item displays. */
         text?: string;
+        /** Indicates and specifies whether the legend item is visible. */
         visible?: boolean;
     }
     /** This section describes the Point object, which represents a series point. */
@@ -8465,11 +8484,17 @@ declare module DevExpress.viz {
     /** This section describes the Series object, which represents a series. */
     export class pieChartSeriesObject extends baseSeriesObject {
     }
+    /** An object that provides information about a legend item in the PieChart widget. */
     export interface PieChartLegendItem {
+        /** The argument of the point(s) that the legend item represents. */
         argument?: string | Date | number;
+        /** The zero-based index of the legend item used to identify the item among other legend items with the same argument. */
         argumentIndex?: number;
+        /** An array of points that the legend item represents. Can contain more than one point only in a multi-series PieChart. */
         points?: Array<piePointObject>;
+        /** The text that the legend item displays. */
         text?: any;
+        /** Indicates and specifies whether the legend item is visible. */
         visible?: boolean;
     }
     /** This section describes the Series object, which represents a series. */
@@ -8593,11 +8618,17 @@ declare module DevExpress.viz {
         /** Sets the selection state of the layer element. */
         selected(state: boolean): void;
     }
+    /** An object that provides information about a legend item in the VectorMap widget. */
     export interface VectorMapLegendItem {
+        /** The color of the legend item's marker. */
         color?: string;
+        /** The end value of the group that the legend item indicates. */
         end?: number;
+        /** The diameter of the legend item's marker in pixels. */
         size?: number;
+        /** The start value of the group that the legend item indicates. */
         start?: number;
+        /** Indicates and specifies whether the legend item is visible. */
         visible?: boolean;
     }
     /** Specifies options for the series of the PieChart widget. */
