@@ -101,10 +101,10 @@ var environment = {
 
     },
     getBarsGroup: function() {
-        return this.renderer.g.getCall(1).returnValue;
+        return this.renderer.g.getCall(2).returnValue;
     },
     getTrackersGroup: function() {
-        return this.renderer.g.getCall(0).returnValue;
+        return this.renderer.g.getCall(1).returnValue;
     }
 };
 
@@ -940,12 +940,15 @@ QUnit.test('Too many bars', function(assert) {
     });
 
     var bars = StubBarWrapper.instances;
-    assert.strictEqual(bars.length, 5, 'count');
+    assert.strictEqual(bars.length, 8, 'count');
     assert.strictEqual(bars[0].stub('arrange').lastCall.args[0].radius, 50, 'bar 1');
     assert.strictEqual(bars[1].stub('arrange').lastCall.args[0].radius, 49, 'bar 2');
     assert.strictEqual(bars[2].stub('arrange').lastCall.args[0].radius, 48, 'bar 3');
     assert.strictEqual(bars[3].stub('arrange').lastCall.args[0].radius, 47, 'bar 4');
     assert.strictEqual(bars[4].stub('arrange').lastCall.args[0].radius, 46, 'bar 5');
+    assert.strictEqual(bars[5].stub('arrange').callCount, 0, 'bar 6');
+    assert.strictEqual(bars[6].stub('arrange').callCount, 0, 'bar 7');
+    assert.strictEqual(bars[7].stub('arrange').callCount, 0, 'bar 8');
 });
 
 QUnit.test('Calling drawn', function(assert) {
