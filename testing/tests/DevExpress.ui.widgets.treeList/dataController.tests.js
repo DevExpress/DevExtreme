@@ -1479,6 +1479,7 @@ QUnit.test("refresh after collapseRow when autoExpandAll", function(assert) {
     assert.strictEqual(items[0].isExpanded, false, "item 1 is not expanded");
 });
 
+/*
 QUnit.test("Initial load when dataSource has filter and filterMode is standard", function(assert) {
     // arrange, act
     var loadingArgs = [];
@@ -1513,8 +1514,9 @@ QUnit.test("Initial load when dataSource has filter and filterMode is standard",
     assert.equal(items[0].data.name, "Name 3", "item 1 name value");
     assert.equal(items[1].data.name, "Name 1", "item 2 name value");
 });
+*/
 
-QUnit.test("Initial load when dataSource has filter and filterMode is extended (default)", function(assert) {
+QUnit.test("Initial load when dataSource has filter and filterMode is withAncestors (default)", function(assert) {
     // arrange, act
     var loadingArgs = [];
 
@@ -1573,7 +1575,7 @@ QUnit.test("Initial load when dataSource has filter and filterMode is extended (
 });
 
 // T698573
-QUnit.test("Collapse node when dataSource has filter and filterMode is extended (default)", function(assert) {
+QUnit.test("Collapse node when dataSource has filter and filterMode is withAncestors (default)", function(assert) {
     // arrange, act
     var loadingArgs = [];
 
@@ -1640,7 +1642,7 @@ QUnit.test("Filter changing should expand nodes", function(assert) {
     assert.equal(this.dataController.items().length, 4, "count items");
 });
 
-QUnit.test("Initial load when dataSource has filter and filterMode is extended (default) when remoteOperations false", function(assert) {
+QUnit.test("Initial load when dataSource has filter and filterMode is withAncestors (default) when remoteOperations false", function(assert) {
     // arrange, act
     var loadingArgs = [];
 
@@ -1789,10 +1791,10 @@ QUnit.test("Initial load when expandNodesOnFiltering and no filter", function(as
     assert.equal(items.length, 3, "only first level items are visible");
 });
 
-QUnit.test("Initial load when expandNodesOnFiltering and dataSource has filter and filterMode is smart", function(assert) {
+QUnit.test("Initial load when expandNodesOnFiltering and dataSource has filter and filterMode is exactMatch", function(assert) {
     // arrange, act
     this.setupTreeList({
-        filterMode: "smart",
+        filterMode: "exactMatch",
         expandNodesOnFiltering: true,
         dataSource: {
             store: this.items,
@@ -1812,7 +1814,7 @@ QUnit.test("Initial load when expandNodesOnFiltering and dataSource has filter a
     assert.equal(items[2].level, 0, "item 3 level");
 });
 
-QUnit.test("Initial load dataSource has filter and filterMode smart is emulated using onNodesInitialized", function(assert) {
+QUnit.test("Initial load dataSource has filter and filterMode exactMatch is emulated using onNodesInitialized", function(assert) {
     // arrange, act
     var that = this;
     this.setupTreeList({
@@ -1846,10 +1848,10 @@ QUnit.test("Initial load dataSource has filter and filterMode smart is emulated 
     assert.equal(items[2].level, 0, "item 3 level");
 });
 
-QUnit.test("Initial load when expandNodesOnFiltering disabled and dataSource has filter and filterMode is smart", function(assert) {
+QUnit.test("Initial load when expandNodesOnFiltering disabled and dataSource has filter and filterMode is exactMatch", function(assert) {
     // arrange, act
     this.setupTreeList({
-        filterMode: "smart",
+        filterMode: "exactMatch",
         expandNodesOnFiltering: false,
         dataSource: {
             store: this.items,
@@ -1866,10 +1868,10 @@ QUnit.test("Initial load when expandNodesOnFiltering disabled and dataSource has
     assert.equal(items[1].level, 0, "item 2 level");
 });
 
-QUnit.test("Initial load when dataSource has filter and filterMode is smart and root nodes area hidden", function(assert) {
+QUnit.test("Initial load when dataSource has filter and filterMode is exactMatch and root nodes area hidden", function(assert) {
     // arrange, act
     this.setupTreeList({
-        filterMode: "smart",
+        filterMode: "exactMatch",
         expandNodesOnFiltering: true,
         dataSource: {
             store: {
@@ -1893,10 +1895,10 @@ QUnit.test("Initial load when dataSource has filter and filterMode is smart and 
     assert.equal(items[3].level, 0, "item 4 level");
 });
 
-QUnit.test("Initial load when filterMode is smart and remoteOperations is false", function(assert) {
+QUnit.test("Initial load when filterMode is exactMatch and remoteOperations is false", function(assert) {
     // arrange, act
     this.setupTreeList({
-        filterMode: "smart",
+        filterMode: "exactMatch",
         expandNodesOnFiltering: true,
         remoteOperations: false,
         dataSource: {
@@ -1917,7 +1919,7 @@ QUnit.test("Initial load when filterMode is smart and remoteOperations is false"
 });
 
 // T515374
-QUnit.test("Initial load when dataSource has filter whose length is more than available (filterMode is extended)", function(assert) {
+QUnit.test("Initial load when dataSource has filter whose length is more than available (filterMode is withAncestors)", function(assert) {
     // arrange, act
     var loadingArgs = [];
 
@@ -1977,7 +1979,7 @@ QUnit.test("Initial load when dataSource has filter whose length is more than av
 });
 
 // T515374
-QUnit.test("Initial load when dataSource has filter whose length is more than available when remoteOperations false (filterMode is extended)", function(assert) {
+QUnit.test("Initial load when dataSource has filter whose length is more than available when remoteOperations false (filterMode is withAncestors)", function(assert) {
     // arrange, act
     var loadingArgs = [];
 
@@ -2453,15 +2455,6 @@ QUnit.test("loadOptions.parendIds should be correct when expanding several nodes
 });
 
 QUnit.module("Filtering", { beforeEach: function() {
-    this.items = [
-        { id: 1, parentId: 0, name: "Name 3", age: 19 },
-        { id: 2, parentId: 0, name: "Name 1", age: 19 },
-        { id: 3, parentId: 0, name: "Name 2", age: 18 },
-        { id: 4, parentId: 1, name: "Name 6", age: 16 },
-        { id: 5, parentId: 1, name: "Name 5", age: 15 },
-        { id: 6, parentId: 1, name: "Name 4", age: 15 }
-    ];
-
     this.setupTreeList = function(options) {
         if(!("loadingTimeout" in options)) {
             options.loadingTimeout = null;
@@ -2495,4 +2488,108 @@ QUnit.test("Search should work correctly with hierarchical structure", function(
     assert.strictEqual(items.length, 2, "item count");
     assert.deepEqual(items[0].data, { "id": 1, "name": "Alex", "parentId": 0 }, "first item");
     assert.deepEqual(items[1].data, { "id": 2, "name": "Bob", "parentId": 1 }, "second item");
+});
+
+QUnit.test("Search when filterMode is 'fullBranch'", function(assert) {
+    // arrange, act
+    this.setupTreeList({
+        dataSource: [
+            { id: 1, parentId: 0, test: "Test 1" },
+            { id: 2, parentId: 0, test: "Test 2" },
+            { id: 3, parentId: 2, test: "Test 3" },
+            { id: 4, parentId: 3, test: "Test 4" },
+            { id: 5, parentId: 3, test: "Test 5" },
+            { id: 6, parentId: 0, test: "Test 6" }
+        ],
+        keyExpr: "id",
+        parentIdExpr: "parentId",
+        filterMode: "fullBranch",
+        expandNodesOnFiltering: true,
+        searchPanel: {
+            text: "Test 3"
+        }
+    });
+
+    // assert
+    var items = this.dataController.items();
+    assert.strictEqual(items.length, 2, "item count");
+    assert.deepEqual(items[0].data, { id: 2, parentId: 0, test: "Test 2" }, "first item");
+    assert.deepEqual(items[0].level, 0, "level of the first item");
+    assert.deepEqual(items[1].data, { id: 3, parentId: 2, test: "Test 3" }, "second item");
+    assert.deepEqual(items[1].level, 1, "level of the second item");
+    assert.deepEqual(items[1].level, 1, "level of the second item");
+    assert.ok(items[1].node.hasChildren, "second item has children");
+
+    // act
+    this.expandRow(3);
+
+    // assert
+    items = this.dataController.items();
+    assert.strictEqual(items.length, 4, "item count");
+    assert.deepEqual(this.option("expandedRowKeys"), [2, 3], "expandedRowKyes");
+    assert.deepEqual(items[0].data, { id: 2, parentId: 0, test: "Test 2" }, "first item");
+    assert.deepEqual(items[0].level, 0, "level of the first item");
+    assert.deepEqual(items[1].data, { id: 3, parentId: 2, test: "Test 3" }, "second item");
+    assert.deepEqual(items[1].level, 1, "level of the second item");
+    assert.deepEqual(items[1].level, 1, "level of the second item");
+    assert.ok(items[1].node.hasChildren, "second item has children");
+    assert.deepEqual(items[2].data, { id: 4, parentId: 3, test: "Test 4" }, "third item");
+    assert.deepEqual(items[2].level, 2, "level of the third item");
+    assert.deepEqual(items[3].data, { id: 5, parentId: 3, test: "Test 5" }, "fourth item");
+    assert.deepEqual(items[3].level, 2, "level of the fourth item");
+});
+
+QUnit.test("Search with filterMode is 'fullBranch' when remote data source", function(assert) {
+    // arrange
+    var store = new ArrayStore([
+        { id: 1, parentId: 0, test: "Test 1" },
+        { id: 2, parentId: 0, test: "Test 2" },
+        { id: 3, parentId: 2, test: "Test 3" },
+        { id: 4, parentId: 3, test: "Test 4" },
+        { id: 5, parentId: 3, test: "Test 5" },
+        { id: 6, parentId: 0, test: "Test 6" }
+    ]);
+
+    // act
+    this.setupTreeList({
+        dataSource: {
+            load: (loadOptions) => store.load(loadOptions)
+        },
+        remoteOperations: true,
+        keyExpr: "id",
+        parentIdExpr: "parentId",
+        filterMode: "fullBranch",
+        expandNodesOnFiltering: true,
+        searchPanel: {
+            text: "Test 3"
+        }
+    });
+
+    // assert
+    var items = this.dataController.items();
+    assert.strictEqual(items.length, 2, "item count");
+    assert.deepEqual(items[0].data, { id: 2, parentId: 0, test: "Test 2" }, "first item");
+    assert.deepEqual(items[0].level, 0, "level of the first item");
+    assert.deepEqual(items[1].data, { id: 3, parentId: 2, test: "Test 3" }, "second item");
+    assert.deepEqual(items[1].level, 1, "level of the second item");
+    assert.deepEqual(items[1].level, 1, "level of the second item");
+    assert.ok(items[1].node.hasChildren, "second item has children");
+
+    // act
+    this.expandRow(3);
+
+    // assert
+    items = this.dataController.items();
+    assert.strictEqual(items.length, 4, "item count");
+    assert.deepEqual(this.option("expandedRowKeys"), [2, 3], "expandedRowKyes");
+    assert.deepEqual(items[0].data, { id: 2, parentId: 0, test: "Test 2" }, "first item");
+    assert.deepEqual(items[0].level, 0, "level of the first item");
+    assert.deepEqual(items[1].data, { id: 3, parentId: 2, test: "Test 3" }, "second item");
+    assert.deepEqual(items[1].level, 1, "level of the second item");
+    assert.deepEqual(items[1].level, 1, "level of the second item");
+    assert.ok(items[1].node.hasChildren, "second item has children");
+    assert.deepEqual(items[2].data, { id: 4, parentId: 3, test: "Test 4" }, "third item");
+    assert.deepEqual(items[2].level, 2, "level of the third item");
+    assert.deepEqual(items[3].data, { id: 5, parentId: 3, test: "Test 5" }, "fourth item");
+    assert.deepEqual(items[3].level, 2, "level of the fourth item");
 });
