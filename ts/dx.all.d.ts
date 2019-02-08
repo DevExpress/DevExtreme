@@ -1958,7 +1958,6 @@ declare module DevExpress.ui {
         editing?: GridBaseEditing;
         /** Indicates whether to show the error row. */
         errorRowEnabled?: boolean;
-        excelNavigation?: boolean;
         /** Configures the integrated filter builder. */
         filterBuilder?: dxFilterBuilderOptions;
         /** Configures the popup in which the integrated filter builder is shown. */
@@ -2058,6 +2057,7 @@ declare module DevExpress.ui {
     }
     /** Overriden. */
     export interface GridBaseEditing {
+        excelLikeNavigation?: boolean;
         /** Configures the form. Used only if editing.mode is "form" or "popup". */
         form?: dxFormOptions;
         /** Specifies how a user edits data. */
