@@ -60,6 +60,6 @@
 * @type string
 */
 /**
-* @name ExcelDataGridCell.groupSummaryItems.name
+* @name ExcelDataGridCell.groupSummaryItems.value
 * @type any
 */
