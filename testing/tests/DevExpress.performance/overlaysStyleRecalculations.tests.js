@@ -45,7 +45,7 @@ QUnit.performanceTest("dxOverlay should be rendered with minimum count of relayo
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 8);
+    assert.measureStyleRecalculation(measureFunction, 7);
 });
 
 QUnit.performanceTest("showing dxOverlay should be with minimum count of relayouts", function(assert) {
@@ -59,7 +59,7 @@ QUnit.performanceTest("showing dxOverlay should be with minimum count of relayou
         overlay.show();
     };
 
-    assert.measureStyleRecalculation(measureFunction, 6);
+    assert.measureStyleRecalculation(measureFunction, 5);
 });
 
 QUnit.performanceTest("showing dxOverlay with shading should be with minimum count of relayouts", function(assert) {
@@ -73,7 +73,7 @@ QUnit.performanceTest("showing dxOverlay with shading should be with minimum cou
         overlay.show();
     };
 
-    assert.measureStyleRecalculation(measureFunction, 9);
+    assert.measureStyleRecalculation(measureFunction, 8);
 });
 
 QUnit.performanceTest("dxPopup should be rendered with minimum count of relayouts", function(assert) {
@@ -85,5 +85,5 @@ QUnit.performanceTest("dxPopup should be rendered with minimum count of relayout
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 14);
+    assert.measureStyleRecalculation(measureFunction, 12);
 });
