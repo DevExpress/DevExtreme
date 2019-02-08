@@ -1,811 +1,811 @@
 [
     {
-        "name": "animation/frame",
-        "exports": {
-            "cancel": { "path": "utils.cancelAnimationFrame" },
-            "request": { "path": "utils.requestAnimationFrame" }
-        }
+      "name": "animation/frame",
+      "exports": {
+        "cancel": { "path": "utils.cancelAnimationFrame" },
+        "request": { "path": "utils.requestAnimationFrame" }
+      }
     },
     {
-        "name": "animation/fx",
-        "exports": {
-            "default": { "path": "fx" }
-        }
+      "name": "animation/fx",
+      "exports": {
+        "default": { "path": "fx" }
+      }
     },
     {
-        "name": "animation/presets",
-        "exports": {
-            "default": { "path": "animationPresets" }
-        }
+      "name": "animation/presets",
+      "exports": {
+        "default": { "path": "animationPresets" }
+      }
     },
     {
-        "name": "animation/transition_executor",
-        "exports": {
-            "default": { "path": "TransitionExecutor" }
-        }
+      "name": "animation/transition_executor",
+      "exports": {
+        "default": { "path": "TransitionExecutor" }
+      }
     },
     {
-        "name": "core/config",
-        "exports": {
-            "default": { "path": "config" }
-        }
+      "name": "core/config",
+      "exports": {
+        "default": { "path": "config" }
+      }
     },
     {
-        "name": "core/devices",
-        "exports": {
-            "default": { "path": "devices" }
-        }
+      "name": "core/devices",
+      "exports": {
+        "default": { "path": "devices" }
+      }
     },
     {
-        "name": "core/dom_component",
-        "exports": {
-            "default": { "path": "DOMComponent" },
-            "Options": { "path": "DOMComponentOptions", "exportAs": "type" }
-        }
+      "name": "core/dom_component",
+      "exports": {
+        "default": { "path": "DOMComponent" },
+        "Options": { "path": "DOMComponentOptions", "exportAs": "type" }
+      }
     },
     {
-        "name": "core/element",
-        "exports": {
-            "dxElement": { "path": "core.dxElement", "exportAs": "type" }
-        }
+      "name": "core/element",
+      "exports": {
+        "dxElement": { "path": "core.dxElement", "exportAs": "type" }
+      }
     },
     {
-        "name": "core/guid",
-        "exports": {
-            "default": { "path": "data.Guid" }
-        }
+      "name": "core/guid",
+      "exports": {
+        "default": { "path": "data.Guid" }
+      }
     },
     {
-        "name": "data/array_store",
-        "exports": {
-            "default": { "path": "data.ArrayStore" }
-        }
+      "name": "data/array_store",
+      "exports": {
+        "default": { "path": "data.ArrayStore" }
+      }
     },
     {
-        "name": "data/custom_store",
-        "exports": {
-            "default": { "path": "data.CustomStore" }
-        }
+      "name": "data/custom_store",
+      "exports": {
+        "default": { "path": "data.CustomStore" }
+      }
     },
     {
-        "name": "data/data_source",
-        "exports": {
-            "default": { "path": "data.DataSource" }
-        }
+      "name": "data/data_source",
+      "exports": {
+        "default": { "path": "data.DataSource" }
+      }
     },
     {
-        "name": "data/endpoint_selector",
-        "exports": {
-            "default": { "path": "EndpointSelector" }
-        }
+      "name": "data/endpoint_selector",
+      "exports": {
+        "default": { "path": "EndpointSelector" }
+      }
     },
     {
-        "name": "data/errors",
-        "exports": {
-            "errorHandler": { "path": "data.errorHandler" }
-        }
+      "name": "data/errors",
+      "exports": {
+        "errorHandler": { "path": "data.errorHandler" }
+      }
     },
     {
-        "name": "data/load_options",
-        "exports": {
-            "LoadOptions": { "path": "data.LoadOptions", "exportAs": "type" }
-        }
+      "name": "data/load_options",
+      "exports": {
+        "LoadOptions": { "path": "data.LoadOptions", "exportAs": "type" }
+      }
     },
     {
-        "name": "data/local_store",
-        "exports": {
-            "default": { "path": "data.LocalStore" }
-        }
+      "name": "data/local_store",
+      "exports": {
+        "default": { "path": "data.LocalStore" }
+      }
     },
     {
-        "name": "data/odata/context",
-        "exports": {
-            "default": { "path": "data.ODataContext" }
-        }
+      "name": "data/odata/context",
+      "exports": {
+        "default": { "path": "data.ODataContext" }
+      }
     },
     {
-        "name": "data/odata/store",
-        "exports": {
-            "default": { "path": "data.ODataStore" }
-        }
+      "name": "data/odata/store",
+      "exports": {
+        "default": { "path": "data.ODataStore" }
+      }
     },
     {
-        "name": "data/odata/utils",
-        "exports": {
-            "EdmLiteral": { "path": "data.EdmLiteral" },
-            "keyConverters": { "path": "data.utils.odata.keyConverters" }
-        }
+      "name": "data/odata/utils",
+      "exports": {
+        "EdmLiteral": { "path": "data.EdmLiteral" },
+        "keyConverters": { "path": "data.utils.odata.keyConverters" }
+      }
     },
     {
-        "name": "data/query",
-        "exports": {
-            "default": { "path": "data.query" }
-        }
+      "name": "data/query",
+      "exports": {
+        "default": { "path": "data.query" }
+      }
     },
     {
-        "name": "data/utils",
-        "exports": {
-            "base64_encode": { "path": "data.base64_encode" }
-        }
+      "name": "data/utils",
+      "exports": {
+        "base64_encode": { "path": "data.base64_encode" }
+      }
     },
     {
-        "name": "events/click"
+      "name": "events/click"
     },
     {
-        "name": "events/contextmenu"
+      "name": "events/contextmenu"
     },
     {
-        "name": "events/dblclick"
+      "name": "events/dblclick"
     },
     {
-        "name": "events/drag"
+      "name": "events/drag"
     },
     {
-        "name": "events/hold"
+      "name": "events/hold"
     },
     {
-        "name": "events/hover"
+      "name": "events/hover"
     },
     {
-        "name": "events/pointer"
+      "name": "events/pointer"
     },
     {
-        "name": "events/swipe"
+      "name": "events/swipe"
     },
     {
-        "name": "events/transform"
+      "name": "events/transform"
     },
     {
-        "name": "events",
-        "exports": {
-            "on": { "path": "events.on" },
-            "one": { "path": "events.one" },
-            "off": { "path": "events.off" },
-            "trigger": { "path": "events.trigger" },
-            "triggerHandler": { "path": "events.triggerHandler" }
-        }
+      "name": "events",
+      "exports": {
+        "on": { "path": "events.on" },
+        "one": { "path": "events.one" },
+        "off": { "path": "events.off" },
+        "trigger": { "path": "events.trigger" },
+        "triggerHandler": { "path": "events.triggerHandler" }
+      }
     },
     {
-        "name": "framework/command",
-        "exports": {
-            "default": { "path": "framework.dxCommand" }
-        }
+      "name": "framework/command",
+      "exports": {
+        "default": { "path": "framework.dxCommand" }
+      }
     },
     {
-        "name": "framework/html/command_container"
+      "name": "framework/html/command_container"
     },
     {
-        "name": "framework/html/html_application",
-        "exports": {
-            "default": { "path": "framework.html.HtmlApplication" }
-        }
+      "name": "framework/html/html_application",
+      "exports": {
+        "default": { "path": "framework.html.HtmlApplication" }
+      }
     },
     {
-        "name": "framework/html/view_engine_components"
+      "name": "framework/html/view_engine_components"
     },
     {
-        "name": "framework/router",
-        "exports": {
-            "default": { "path": "framework.Router" }
-        }
+      "name": "framework/router",
+      "exports": {
+        "default": { "path": "framework.Router" }
+      }
     },
     {
-        "name": "framework/state_manager",
-        "exports": {
-            "default": { "path": "framework.StateManager" }
-        }
+      "name": "framework/state_manager",
+      "exports": {
+        "default": { "path": "framework.StateManager" }
+      }
     },
     {
-        "name": "integration/jquery"
+      "name": "integration/jquery"
     },
     {
-        "name": "framework/view_cache",
-        "exports": {
-            "default": { "path": "framework.ViewCache" }
-        }
+      "name": "framework/view_cache",
+      "exports": {
+        "default": { "path": "framework.ViewCache" }
+      }
     },
     {
-        "name": "localization",
-        "exports": {
-            "loadMessages": { "path": "localization.loadMessages" },
-            "formatMessage": { "path": "localization.formatMessage" },
-            "formatNumber": { "path": "localization.formatNumber" },
-            "parseNumber": { "path": "localization.parseNumber" },
-            "formatDate": { "path": "localization.formatDate" },
-            "parseDate": { "path": "localization.parseDate" },
-            "locale": { "path": "localization.locale" }
-        }
+      "name": "localization",
+      "exports": {
+        "loadMessages": { "path": "localization.loadMessages" },
+        "formatMessage": { "path": "localization.formatMessage" },
+        "formatNumber": { "path": "localization.formatNumber" },
+        "parseNumber": { "path": "localization.parseNumber" },
+        "formatDate": { "path": "localization.formatDate" },
+        "parseDate": { "path": "localization.parseDate" },
+        "locale": { "path": "localization.locale" }
+      }
     },
     {
-        "name": "mobile/hide_top_overlay",
-        "exports": {
-            "default": { "path": "hideTopOverlay" }
-        }
+      "name": "mobile/hide_top_overlay",
+      "exports": {
+        "default": { "path": "hideTopOverlay" }
+      }
     },
     {
-        "name": "mobile/init_mobile_viewport",
-        "exports": {
-            "default": { "path": "utils.initMobileViewport" }
-        }
+      "name": "mobile/init_mobile_viewport",
+      "exports": {
+        "default": { "path": "utils.initMobileViewport" }
+      }
     },
     {
-        "name": "mobile/process_hardware_back_button",
-        "exports": {
-            "default": { "path": "processHardwareBackButton" }
-        }
+      "name": "mobile/process_hardware_back_button",
+      "exports": {
+        "default": { "path": "processHardwareBackButton" }
+      }
     },
     {
-        "name": "ui/accordion",
-        "exports": {
-            "default": { "path": "ui.dxAccordion", "isWidget": true }
-        }
+      "name": "ui/accordion",
+      "exports": {
+        "default": { "path": "ui.dxAccordion", "isWidget": true }
+      }
     },
     {
-        "name": "ui/action_sheet",
-        "exports": {
-            "default": { "path": "ui.dxActionSheet", "isWidget": true }
-        }
+      "name": "ui/action_sheet",
+      "exports": {
+        "default": { "path": "ui.dxActionSheet", "isWidget": true }
+      }
     },
     {
-        "name": "ui/autocomplete",
-        "exports": {
-            "default": { "path": "ui.dxAutocomplete", "isWidget": true }
-        }
+      "name": "ui/autocomplete",
+      "exports": {
+        "default": { "path": "ui.dxAutocomplete", "isWidget": true }
+      }
     },
     {
-        "name": "ui/box",
-        "exports": {
-            "default": { "path": "ui.dxBox", "isWidget": true }
-        }
+      "name": "ui/box",
+      "exports": {
+        "default": { "path": "ui.dxBox", "isWidget": true }
+      }
     },
     {
-        "name": "ui/button",
-        "exports": {
-            "default": { "path": "ui.dxButton", "isWidget": true }
-        }
+      "name": "ui/button",
+      "exports": {
+        "default": { "path": "ui.dxButton", "isWidget": true }
+      }
     },
     {
-        "name": "ui/button_group",
-        "exports": {
-            "default": { "path": "ui.dxButtonGroup", "isWidget": true }
-        }
+      "name": "ui/button_group",
+      "exports": {
+        "default": { "path": "ui.dxButtonGroup", "isWidget": true }
+      }
     },
     {
-        "name": "ui/calendar",
-        "exports": {
-            "default": { "path": "ui.dxCalendar", "isWidget": true }
-        }
+      "name": "ui/calendar",
+      "exports": {
+        "default": { "path": "ui.dxCalendar", "isWidget": true }
+      }
     },
     {
-        "name": "ui/check_box",
-        "exports": {
-            "default": { "path": "ui.dxCheckBox", "isWidget": true }
-        }
+      "name": "ui/check_box",
+      "exports": {
+        "default": { "path": "ui.dxCheckBox", "isWidget": true }
+      }
     },
     {
-        "name": "ui/color_box",
-        "exports": {
-            "default": { "path": "ui.dxColorBox", "isWidget": true }
-        }
+      "name": "ui/color_box",
+      "exports": {
+        "default": { "path": "ui.dxColorBox", "isWidget": true }
+      }
     },
     {
-        "name": "ui/context_menu",
-        "exports": {
-            "default": { "path": "ui.dxContextMenu", "isWidget": true }
-        }
+      "name": "ui/context_menu",
+      "exports": {
+        "default": { "path": "ui.dxContextMenu", "isWidget": true }
+      }
     },
     {
-        "name": "ui/data_grid",
-        "exports": {
-            "default": { "path": "ui.dxDataGrid", "isWidget": true },
-            "Column": { "path": "ui.dxDataGridColumn", "exportAs": "type" }
-        }
+      "name": "ui/data_grid",
+      "exports": {
+        "default": { "path": "ui.dxDataGrid", "isWidget": true },
+        "Column": { "path": "ui.dxDataGridColumn", "exportAs": "type" }
+      }
     },
     {
-        "name": "ui/data_grid/ui.data_grid.base",
-        "isInternal": true,
-        "exports": {
-            "Column": { "path": "ui.GridBaseColumn", "exportAs": "type" }
-        }
+      "name": "ui/data_grid/ui.data_grid.base",
+      "isInternal": true,
+      "exports": {
+        "Column": { "path": "ui.GridBaseColumn", "exportAs": "type" }
+      }
     },
     {
-        "name": "ui/date_box",
-        "exports": {
-            "default": { "path": "ui.dxDateBox", "isWidget": true }
-        }
+      "name": "ui/date_box",
+      "exports": {
+        "default": { "path": "ui.dxDateBox", "isWidget": true }
+      }
     },
     {
-        "name": "ui/defer_rendering",
-        "exports": {
-            "default": { "path": "ui.dxDeferRendering", "isWidget": true }
-        }
+      "name": "ui/defer_rendering",
+      "exports": {
+        "default": { "path": "ui.dxDeferRendering", "isWidget": true }
+      }
     },
     {
-        "name": "ui/dialog",
-        "exports": {
-            "alert": { "path": "ui.dialog.alert" },
-            "confirm": { "path": "ui.dialog.confirm" },
-            "custom": { "path": "ui.dialog.custom" }
-        }
+      "name": "ui/dialog",
+      "exports": {
+        "alert": { "path": "ui.dialog.alert" },
+        "confirm": { "path": "ui.dialog.confirm" },
+        "custom": { "path": "ui.dialog.custom" }
+      }
     },
     {
-        "name": "ui/drawer",
-        "exports": {
-            "default": { "path": "ui.dxDrawer", "isWidget": true }
-        }
+      "name": "ui/drawer",
+      "exports": {
+        "default": { "path": "ui.dxDrawer", "isWidget": true }
+      }
     },
     {
-        "name": "ui/drop_down_box",
-        "exports": {
-            "default": { "path": "ui.dxDropDownBox", "isWidget": true }
-        }
+      "name": "ui/drop_down_box",
+      "exports": {
+        "default": { "path": "ui.dxDropDownBox", "isWidget": true }
+      }
     },
     {
-        "name": "ui/drop_down_editor/ui.drop_down_editor",
-        "isInternal": true,
-        "exports": {
-            "default": { "path": "ui.dxDropDownEditor" }
-        }
+      "name": "ui/drop_down_editor/ui.drop_down_editor",
+      "isInternal": true,
+      "exports": {
+        "default": { "path": "ui.dxDropDownEditor" }
+      }
     },
     {
-        "name": "ui/file_uploader",
-        "exports": {
-            "default": { "path": "ui.dxFileUploader", "isWidget": true }
-        }
+      "name": "ui/file_uploader",
+      "exports": {
+        "default": { "path": "ui.dxFileUploader", "isWidget": true }
+      }
     },
     {
-        "name": "ui/filter_builder",
-        "exports": {
-            "default": { "path": "ui.dxFilterBuilder", "isWidget": true }
-        }
+      "name": "ui/filter_builder",
+      "exports": {
+        "default": { "path": "ui.dxFilterBuilder", "isWidget": true }
+      }
     },
     {
-        "name": "ui/form",
-        "exports": {
-            "default": { "path": "ui.dxForm", "isWidget": true }
-        }
+      "name": "ui/form",
+      "exports": {
+        "default": { "path": "ui.dxForm", "isWidget": true }
+      }
     },
     {
-        "name": "ui/gallery",
-        "exports": {
-            "default": { "path": "ui.dxGallery", "isWidget": true }
-        }
+      "name": "ui/gallery",
+      "exports": {
+        "default": { "path": "ui.dxGallery", "isWidget": true }
+      }
     },
     {
-        "name": "ui/html_editor",
-        "exports": {
-            "default": { "path": "ui.dxHtmlEditor", "isWidget": true }
-        }
+      "name": "ui/html_editor",
+      "exports": {
+        "default": { "path": "ui.dxHtmlEditor", "isWidget": true }
+      }
     },
     {
-        "name": "ui/list",
-        "exports": {
-            "default": { "path": "ui.dxList", "isWidget": true }
-        }
+      "name": "ui/list",
+      "exports": {
+        "default": { "path": "ui.dxList", "isWidget": true }
+      }
     },
     {
-        "name": "ui/load_indicator",
-        "exports": {
-            "default": { "path": "ui.dxLoadIndicator", "isWidget": true }
-        }
+      "name": "ui/load_indicator",
+      "exports": {
+        "default": { "path": "ui.dxLoadIndicator", "isWidget": true }
+      }
     },
     {
-        "name": "ui/load_panel",
-        "exports": {
-            "default": { "path": "ui.dxLoadPanel", "isWidget": true }
-        }
+      "name": "ui/load_panel",
+      "exports": {
+        "default": { "path": "ui.dxLoadPanel", "isWidget": true }
+      }
     },
     {
-        "name": "ui/lookup",
-        "exports": {
-            "default": { "path": "ui.dxLookup", "isWidget": true }
-        }
+      "name": "ui/lookup",
+      "exports": {
+        "default": { "path": "ui.dxLookup", "isWidget": true }
+      }
     },
     {
-        "name": "ui/map",
-        "exports": {
-            "default": { "path": "ui.dxMap", "isWidget": true }
-        }
+      "name": "ui/map",
+      "exports": {
+        "default": { "path": "ui.dxMap", "isWidget": true }
+      }
     },
     {
-        "name": "ui/menu",
-        "exports": {
-            "default": { "path": "ui.dxMenu", "isWidget": true }
-        }
+      "name": "ui/menu",
+      "exports": {
+        "default": { "path": "ui.dxMenu", "isWidget": true }
+      }
     },
     {
-        "name": "ui/multi_view",
-        "exports": {
-            "default": { "path": "ui.dxMultiView", "isWidget": true }
-        }
+      "name": "ui/multi_view",
+      "exports": {
+        "default": { "path": "ui.dxMultiView", "isWidget": true }
+      }
     },
     {
-        "name": "ui/nav_bar",
-        "exports": {
-            "default": { "path": "ui.dxNavBar", "isWidget": true }
-        }
+      "name": "ui/nav_bar",
+      "exports": {
+        "default": { "path": "ui.dxNavBar", "isWidget": true }
+      }
     },
     {
-        "name": "ui/notify",
-        "exports": {
-            "default": { "path": "ui.notify" }
-        }
+      "name": "ui/notify",
+      "exports": {
+        "default": { "path": "ui.notify" }
+      }
     },
     {
-        "name": "ui/number_box",
-        "exports": {
-            "default": { "path": "ui.dxNumberBox", "isWidget": true }
-        }
+      "name": "ui/number_box",
+      "exports": {
+        "default": { "path": "ui.dxNumberBox", "isWidget": true }
+      }
     },
     {
-        "name": "ui/overlay",
-        "exports": {
-            "default": { "path": "ui.dxOverlay" },
-            "baseZIndex": { "path": "ui.dxOverlay.baseZIndex" }
-        }
+      "name": "ui/overlay",
+      "exports": {
+        "default": { "path": "ui.dxOverlay" },
+        "baseZIndex": { "path": "ui.dxOverlay.baseZIndex" }
+      }
     },
     {
-        "name": "ui/panorama",
-        "exports": {
-            "default": { "path": "ui.dxPanorama", "isWidget": true }
-        }
+      "name": "ui/panorama",
+      "exports": {
+        "default": { "path": "ui.dxPanorama", "isWidget": true }
+      }
     },
     {
-        "name": "ui/pivot",
-        "exports": {
-            "default": { "path": "ui.dxPivot", "isWidget": true }
-        }
+      "name": "ui/pivot",
+      "exports": {
+        "default": { "path": "ui.dxPivot", "isWidget": true }
+      }
     },
     {
-        "name": "ui/pivot_grid",
-        "exports": {
-            "default": { "path": "ui.dxPivotGrid", "isWidget": true }
-        }
+      "name": "ui/pivot_grid",
+      "exports": {
+        "default": { "path": "ui.dxPivotGrid", "isWidget": true }
+      }
     },
     {
-        "name": "ui/pivot_grid/data_source",
-        "exports": {
-            "default": { "path": "data.PivotGridDataSource" }
-        }
+      "name": "ui/pivot_grid/data_source",
+      "exports": {
+        "default": { "path": "data.PivotGridDataSource" }
+      }
     },
     {
-        "name": "ui/pivot_grid/xmla_store",
-        "exports": {
-            "default": { "path": "data.XmlaStore" }
-        }
+      "name": "ui/pivot_grid/xmla_store",
+      "exports": {
+        "default": { "path": "data.XmlaStore" }
+      }
     },
     {
-        "name": "ui/pivot_grid_field_chooser",
-        "exports": {
-            "default": { "path": "ui.dxPivotGridFieldChooser", "isWidget": true }
-        }
+      "name": "ui/pivot_grid_field_chooser",
+      "exports": {
+        "default": { "path": "ui.dxPivotGridFieldChooser", "isWidget": true }
+      }
     },
     {
-        "name": "ui/popover",
-        "exports": {
-            "default": { "path": "ui.dxPopover", "isWidget": true }
-        }
+      "name": "ui/popover",
+      "exports": {
+        "default": { "path": "ui.dxPopover", "isWidget": true }
+      }
     },
     {
-        "name": "ui/popup",
-        "exports": {
-            "default": { "path": "ui.dxPopup", "isWidget": true },
-            "ToolbarItem": { "path": "ui.dxPopupToolbarItem", "exportAs": "type" }
-        }
+      "name": "ui/popup",
+      "exports": {
+        "default": { "path": "ui.dxPopup", "isWidget": true },
+        "ToolbarItem": { "path": "ui.dxPopupToolbarItem", "exportAs": "type" }
+      }
     },
     {
-        "name": "ui/progress_bar",
-        "exports": {
-            "default": { "path": "ui.dxProgressBar", "isWidget": true }
-        }
+      "name": "ui/progress_bar",
+      "exports": {
+        "default": { "path": "ui.dxProgressBar", "isWidget": true }
+      }
     },
     {
-        "name": "ui/radio_group",
-        "exports": {
-            "default": { "path": "ui.dxRadioGroup", "isWidget": true }
-        }
+      "name": "ui/radio_group",
+      "exports": {
+        "default": { "path": "ui.dxRadioGroup", "isWidget": true }
+      }
     },
     {
-        "name": "ui/range_slider",
-        "exports": {
-            "default": { "path": "ui.dxRangeSlider", "isWidget": true }
-        }
+      "name": "ui/range_slider",
+      "exports": {
+        "default": { "path": "ui.dxRangeSlider", "isWidget": true }
+      }
     },
     {
-        "name": "ui/resizable",
-        "exports": {
-            "default": { "path": "ui.dxResizable", "isWidget": true }
-        }
+      "name": "ui/resizable",
+      "exports": {
+        "default": { "path": "ui.dxResizable", "isWidget": true }
+      }
     },
     {
-        "name": "ui/recurrence_editor",
-        "isInternal": true,
-        "exports": {
-            "default": { "path": "ui.dxRecurrenceEditor", "isWidget": true }
-        }
+      "name": "ui/recurrence_editor",
+      "isInternal": true,
+      "exports": {
+        "default": { "path": "ui.dxRecurrenceEditor", "isWidget": true }
+      }
     },
     {
-        "name": "ui/responsive_box",
-        "exports": {
-            "default": { "path": "ui.dxResponsiveBox", "isWidget": true }
-        }
+      "name": "ui/responsive_box",
+      "exports": {
+        "default": { "path": "ui.dxResponsiveBox", "isWidget": true }
+      }
     },
     {
-        "name": "ui/scheduler",
-        "exports": {
-            "default": { "path": "ui.dxScheduler", "isWidget": true }
-        }
+      "name": "ui/scheduler",
+      "exports": {
+        "default": { "path": "ui.dxScheduler", "isWidget": true }
+      }
     },
     {
-        "name": "ui/scroll_view",
-        "exports": {
-            "default": { "path": "ui.dxScrollView", "isWidget": true }
-        }
+      "name": "ui/scroll_view",
+      "exports": {
+        "default": { "path": "ui.dxScrollView", "isWidget": true }
+      }
     },
     {
-        "name": "ui/scroll_view/scrollable",
-        "exports": {
-            "Options": { "path": "ui.dxScrollableOptions", "exportAs": "type" }
-        }
+      "name": "ui/scroll_view/scrollable",
+      "exports": {
+        "Options": { "path": "ui.dxScrollableOptions", "exportAs": "type" }
+      }
     },
     {
-        "name": "ui/select_box",
-        "exports": {
-            "default": { "path": "ui.dxSelectBox", "isWidget": true }
-        }
+      "name": "ui/select_box",
+      "exports": {
+        "default": { "path": "ui.dxSelectBox", "isWidget": true }
+      }
     },
     {
-        "name": "ui/set_template_engine",
-        "exports": {
-            "default": { "path": "ui.setTemplateEngine" }
-        }
+      "name": "ui/set_template_engine",
+      "exports": {
+        "default": { "path": "ui.setTemplateEngine" }
+      }
     },
     {
-        "name": "ui/slide_out",
-        "exports": {
-            "default": { "path": "ui.dxSlideOut", "isWidget": true }
-        }
+      "name": "ui/slide_out",
+      "exports": {
+        "default": { "path": "ui.dxSlideOut", "isWidget": true }
+      }
     },
     {
-        "name": "ui/slide_out_view",
-        "exports": {
-            "default": { "path": "ui.dxSlideOutView", "isWidget": true }
-        }
+      "name": "ui/slide_out_view",
+      "exports": {
+        "default": { "path": "ui.dxSlideOutView", "isWidget": true }
+      }
     },
     {
-        "name": "ui/slider",
-        "exports": {
-            "default": { "path": "ui.dxSlider", "isWidget": true }
-        }
+      "name": "ui/slider",
+      "exports": {
+        "default": { "path": "ui.dxSlider", "isWidget": true }
+      }
     },
     {
-        "name": "ui/switch",
-        "exports": {
-            "default": { "path": "ui.dxSwitch", "isWidget": true }
-        }
+      "name": "ui/switch",
+      "exports": {
+        "default": { "path": "ui.dxSwitch", "isWidget": true }
+      }
     },
     {
-        "name": "ui/tab_panel",
-        "exports": {
-            "default": { "path": "ui.dxTabPanel", "isWidget": true }
-        }
+      "name": "ui/tab_panel",
+      "exports": {
+        "default": { "path": "ui.dxTabPanel", "isWidget": true }
+      }
     },
     {
-        "name": "ui/tabs",
-        "exports": {
-            "default": { "path": "ui.dxTabs", "isWidget": true }
-        }
+      "name": "ui/tabs",
+      "exports": {
+        "default": { "path": "ui.dxTabs", "isWidget": true }
+      }
     },
     {
-        "name": "ui/tag_box",
-        "exports": {
-            "default": { "path": "ui.dxTagBox", "isWidget": true }
-        }
+      "name": "ui/tag_box",
+      "exports": {
+        "default": { "path": "ui.dxTagBox", "isWidget": true }
+      }
     },
     {
-        "name": "ui/text_area",
-        "exports": {
-            "default": { "path": "ui.dxTextArea", "isWidget": true }
-        }
+      "name": "ui/text_area",
+      "exports": {
+        "default": { "path": "ui.dxTextArea", "isWidget": true }
+      }
     },
     {
-        "name": "ui/text_box",
-        "exports": {
-            "default": { "path": "ui.dxTextBox", "isWidget": true }
-        }
+      "name": "ui/text_box",
+      "exports": {
+        "default": { "path": "ui.dxTextBox", "isWidget": true }
+      }
     },
     {
-        "name": "ui/themes",
-        "exports": {
-            "default": { "path": "ui.themes" }
-        }
+      "name": "ui/themes",
+      "exports": {
+        "default": { "path": "ui.themes" }
+      }
     },
     {
-        "name": "ui/tile_view",
-        "exports": {
-            "default": { "path": "ui.dxTileView", "isWidget": true }
-        }
+      "name": "ui/tile_view",
+      "exports": {
+        "default": { "path": "ui.dxTileView", "isWidget": true }
+      }
     },
     {
-        "name": "ui/toast",
-        "exports": {
-            "default": { "path": "ui.dxToast", "isWidget": true }
-        }
+      "name": "ui/toast",
+      "exports": {
+        "default": { "path": "ui.dxToast", "isWidget": true }
+      }
     },
     {
-        "name": "ui/toolbar",
-        "exports": {
-            "default": { "path": "ui.dxToolbar", "isWidget": true }
-        }
+      "name": "ui/toolbar",
+      "exports": {
+        "default": { "path": "ui.dxToolbar", "isWidget": true }
+      }
     },
     {
-        "name": "ui/tooltip",
-        "exports": {
-            "default": { "path": "ui.dxTooltip", "isWidget": true }
-        }
+      "name": "ui/tooltip",
+      "exports": {
+        "default": { "path": "ui.dxTooltip", "isWidget": true }
+      }
     },
     {
-        "name": "ui/tree_list",
-        "exports": {
-            "default": { "path": "ui.dxTreeList", "isWidget": true }
-        }
+      "name": "ui/tree_list",
+      "exports": {
+        "default": { "path": "ui.dxTreeList", "isWidget": true }
+      }
     },
     {
-        "name": "ui/tree_view",
-        "exports": {
-            "default": { "path": "ui.dxTreeView", "isWidget": true }
-        }
+      "name": "ui/tree_view",
+      "exports": {
+        "default": { "path": "ui.dxTreeView", "isWidget": true }
+      }
     },
     {
-        "name": "ui/validation_engine",
-        "exports": {
-            "default": { "path": "validationEngine" }
-        }
+      "name": "ui/validation_engine",
+      "exports": {
+        "default": { "path": "validationEngine" }
+      }
     },
     {
-        "name": "ui/validation_group",
-        "exports": {
-            "default": { "path": "ui.dxValidationGroup", "isWidget": true }
-        }
+      "name": "ui/validation_group",
+      "exports": {
+        "default": { "path": "ui.dxValidationGroup", "isWidget": true }
+      }
     },
     {
-        "name": "ui/validation_summary",
-        "exports": {
-            "default": { "path": "ui.dxValidationSummary", "isWidget": true }
-        }
+      "name": "ui/validation_summary",
+      "exports": {
+        "default": { "path": "ui.dxValidationSummary", "isWidget": true }
+      }
     },
     {
-        "name": "ui/validator",
-        "exports": {
-            "default": { "path": "ui.dxValidator", "isWidget": true }
-        }
+      "name": "ui/validator",
+      "exports": {
+        "default": { "path": "ui.dxValidator", "isWidget": true }
+      }
     },
     {
-        "name": "ui/widget/template",
-        "exports": {
-            "Template": { "path": "ui.template", "exportAs": "type" }
-        }
+      "name": "ui/widget/template",
+      "exports": {
+        "Template": { "path": "ui.template", "exportAs": "type" }
+      }
     },
     {
-        "name": "utils",
-        "exports": {
-            "compileGetter": { "path": "data.utils.compileGetter" },
-            "compileSetter": { "path": "data.utils.compileSetter" }
-        }
+      "name": "utils",
+      "exports": {
+        "compileGetter": { "path": "data.utils.compileGetter" },
+        "compileSetter": { "path": "data.utils.compileSetter" }
+      }
     },
     {
-        "name": "viz/bar_gauge",
-        "exports": {
-            "default": { "path": "viz.dxBarGauge", "isWidget": true }
-        }
+      "name": "viz/bar_gauge",
+      "exports": {
+        "default": { "path": "viz.dxBarGauge", "isWidget": true }
+      }
     },
     {
-        "name": "viz/bullet",
-        "exports": {
-            "default": { "path": "viz.dxBullet", "isWidget": true }
-        }
+      "name": "viz/bullet",
+      "exports": {
+        "default": { "path": "viz.dxBullet", "isWidget": true }
+      }
     },
     {
-        "name": "viz/chart",
-        "exports": {
-            "default": { "path": "viz.dxChart", "isWidget": true }
-        }
+      "name": "viz/chart",
+      "exports": {
+        "default": { "path": "viz.dxChart", "isWidget": true }
+      }
     },
     {
-        "name": "viz/circular_gauge",
-        "exports": {
-            "default": { "path": "viz.dxCircularGauge", "isWidget": true }
-        }
+      "name": "viz/circular_gauge",
+      "exports": {
+        "default": { "path": "viz.dxCircularGauge", "isWidget": true }
+      }
     },
     {
-        "name": "viz/export",
-        "exports": {
-            "exportFromMarkup": { "path": "viz.exportFromMarkup" },
-            "getMarkup": { "path": "viz.getMarkup" },
-            "exportWidgets": { "path": "viz.exportWidgets" }
-        }
+      "name": "viz/export",
+      "exports": {
+        "exportFromMarkup": { "path": "viz.exportFromMarkup" },
+        "getMarkup": { "path": "viz.getMarkup" },
+        "exportWidgets": { "path": "viz.exportWidgets" }
+      }
     },
     {
-        "name": "viz/funnel",
-        "exports": {
-            "default": { "path": "viz.dxFunnel", "isWidget": true }
-        }
+      "name": "viz/funnel",
+      "exports": {
+        "default": { "path": "viz.dxFunnel", "isWidget": true }
+      }
     },
     {
-        "name": "viz/sankey",
-        "exports": {
-            "default": { "path": "viz.dxSankey", "isWidget": true }
-        }
+      "name": "viz/sankey",
+      "exports": {
+        "default": { "path": "viz.dxSankey", "isWidget": true }
+      }
     },
     {
-        "name": "viz/linear_gauge",
-        "exports": {
-            "default": { "path": "viz.dxLinearGauge", "isWidget": true }
-        }
+      "name": "viz/linear_gauge",
+      "exports": {
+        "default": { "path": "viz.dxLinearGauge", "isWidget": true }
+      }
     },
     {
-        "name": "viz/palette",
-        "exports": {
-            "currentPalette": { "path": "viz.currentPalette" },
-            "getPalette": { "path": "viz.getPalette" },
-            "registerPalette": { "path": "viz.registerPalette" }
-        }
+      "name": "viz/palette",
+      "exports": {
+        "currentPalette": { "path": "viz.currentPalette" },
+        "getPalette": { "path": "viz.getPalette" },
+        "registerPalette": { "path": "viz.registerPalette" }
+      }
     },
     {
-        "name": "viz/pie_chart",
-        "exports": {
-            "default": { "path": "viz.dxPieChart", "isWidget": true }
-        }
+      "name": "viz/pie_chart",
+      "exports": {
+        "default": { "path": "viz.dxPieChart", "isWidget": true }
+      }
     },
     {
-        "name": "viz/polar_chart",
-        "exports": {
-            "default": { "path": "viz.dxPolarChart", "isWidget": true }
-        }
+      "name": "viz/polar_chart",
+      "exports": {
+        "default": { "path": "viz.dxPolarChart", "isWidget": true }
+      }
     },
     {
-        "name": "viz/range_selector",
-        "exports": {
-            "default": { "path": "viz.dxRangeSelector", "isWidget": true }
-        }
+      "name": "viz/range_selector",
+      "exports": {
+        "default": { "path": "viz.dxRangeSelector", "isWidget": true }
+      }
     },
     {
-        "name": "viz/sparkline",
-        "exports": {
-            "default": { "path": "viz.dxSparkline", "isWidget": true }
-        }
+      "name": "viz/sparkline",
+      "exports": {
+        "default": { "path": "viz.dxSparkline", "isWidget": true }
+      }
     },
     {
-        "name": "viz/themes",
-        "exports": {
-            "currentTheme": { "path": "viz.currentTheme" },
-            "getTheme": { "path": "viz.getTheme" },
-            "refreshTheme": { "path": "viz.refreshTheme" },
-            "registerTheme": { "path": "viz.registerTheme" }
-        }
+      "name": "viz/themes",
+      "exports": {
+        "currentTheme": { "path": "viz.currentTheme" },
+        "getTheme": { "path": "viz.getTheme" },
+        "refreshTheme": { "path": "viz.refreshTheme" },
+        "registerTheme": { "path": "viz.registerTheme" }
+      }
     },
     {
-        "name": "viz/tree_map",
-        "exports": {
-            "default": { "path": "viz.dxTreeMap", "isWidget": true }
-        }
+      "name": "viz/tree_map",
+      "exports": {
+        "default": { "path": "viz.dxTreeMap", "isWidget": true }
+      }
     },
     {
-        "name": "viz/utils",
-        "exports": {
-            "refreshPaths": { "path": "viz.refreshPaths" }
-        }
+      "name": "viz/utils",
+      "exports": {
+        "refreshPaths": { "path": "viz.refreshPaths" }
+      }
     },
     {
-        "name": "viz/vector_map",
-        "exports": {
-            "default": { "path": "viz.dxVectorMap", "isWidget": true }
-        }
+      "name": "viz/vector_map",
+      "exports": {
+        "default": { "path": "viz.dxVectorMap", "isWidget": true }
+      }
     },
     {
-        "name": "viz/vector_map/projection",
-        "exports": {
-            "projection": { "path": "viz.map.projection" }
-        }
+      "name": "viz/vector_map/projection",
+      "exports": {
+        "projection": { "path": "viz.map.projection" }
+      }
     }
-];
+  ]
