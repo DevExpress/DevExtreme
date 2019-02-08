@@ -1,17 +1,17 @@
-var $ = require("jquery"),
-    Autocomplete = require("ui/autocomplete"),
-    devices = require("core/devices"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    fx = require("animation/fx"),
-    ArrayStore = require("data/array_store"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config");
+import $ from "jquery";
+import ArrayStore from "data/array_store";
+import Autocomplete from "ui/autocomplete";
+import config from "core/config";
+import devices from "core/devices";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import fx from "animation/fx";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import { isRenderer } from "core/utils/type";
 
-require("common.css!");
-require("ui/select_box");
+import "common.css!";
+import "ui/select_box";
 
 QUnit.testStart(function() {
     var markup =
