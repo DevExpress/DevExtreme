@@ -5775,7 +5775,9 @@ QUnit.module("Excel like navigation", {
                 store: this.data,
                 paginate: true
             },
-            excelNavigation: true
+            editing: {
+                excelLikeNavigation: true
+            }
         }, this.options);
 
         setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"], {
@@ -5796,27 +5798,27 @@ QUnit.module("Excel like navigation", {
         this.renderGridView();
 
         // assert
-        assert.ok(this.keyboardNavigationController._isExcelNavigation(), "excelNavigation if cell edit mode");
+        assert.ok(this.keyboardNavigationController._isExcelNavigation(), "excelLikeNavigation if cell edit mode");
 
         // act
         this.option("editing.mode", "batch");
         // assert
-        assert.ok(this.keyboardNavigationController._isExcelNavigation(), "excelNavigation if batch edit mode");
+        assert.ok(this.keyboardNavigationController._isExcelNavigation(), "excelLikeNavigation if batch edit mode");
 
         // act
         this.option("editing.mode", "row");
         // assert
-        assert.notOk(this.keyboardNavigationController._isExcelNavigation(), "excelNavigation if row edit mode");
+        assert.notOk(this.keyboardNavigationController._isExcelNavigation(), "excelLikeNavigation if row edit mode");
 
         // act
         this.option("editing.mode", "form");
         // assert
-        assert.notOk(this.keyboardNavigationController._isExcelNavigation(), "excelNavigation if form edit mode");
+        assert.notOk(this.keyboardNavigationController._isExcelNavigation(), "excelLikeNavigation if form edit mode");
 
         // act
         this.option("editing.mode", "popup");
         // assert
-        assert.notOk(this.keyboardNavigationController._isExcelNavigation(), "excelNavigation if popup edit mode");
+        assert.notOk(this.keyboardNavigationController._isExcelNavigation(), "excelLikeNavigation if popup edit mode");
     });
 
     testInDesktop("Excel editing for not editable 'allowEditing' is false", function(assert) {
@@ -5849,7 +5851,7 @@ QUnit.module("Excel like navigation", {
         assert.notOk(this.keyboardNavigationController._isExcelEditingStarted(), "Editing navigation mode");
     });
 
-    testInDesktop("Enter key if excelNavigation and cell edit mode", function(assert) {
+    testInDesktop("Enter key if excelLikeNavigation and cell edit mode", function(assert) {
         // arrange
         this.options = {
             editing: {
@@ -5882,7 +5884,7 @@ QUnit.module("Excel like navigation", {
         assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
     });
 
-    testInDesktop("Enter+Shift key if excelNavigation and cell edit mode", function(assert) {
+    testInDesktop("Enter+Shift key if excelLikeNavigation and cell edit mode", function(assert) {
         // arrange
         this.options = {
             editing: {
@@ -5919,7 +5921,7 @@ QUnit.module("Excel like navigation", {
         assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
     });
 
-    testInDesktop("Tab key if excelNavigation and cell edit mode", function(assert) {
+    testInDesktop("Tab key if excelLikeNavigation and cell edit mode", function(assert) {
         // arrange
         this.options = {
             editing: {
@@ -5948,7 +5950,7 @@ QUnit.module("Excel like navigation", {
         assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
     });
 
-    testInDesktop("Tab key if excelNavigation and batch edit mode", function(assert) {
+    testInDesktop("Tab key if excelLikeNavigation and batch edit mode", function(assert) {
         // arrange
         this.options = {
             editing: {
@@ -5977,7 +5979,7 @@ QUnit.module("Excel like navigation", {
         assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
     });
 
-    testInDesktop("Enter key if excelNavigation and batch edit mode", function(assert) {
+    testInDesktop("Enter key if excelLikeNavigation and batch edit mode", function(assert) {
         // arrange
         this.options = {
             editing: {
@@ -6010,7 +6012,7 @@ QUnit.module("Excel like navigation", {
         assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
     });
 
-    testInDesktop("Enter+Shift key if excelNavigation and batch edit mode", function(assert) {
+    testInDesktop("Enter+Shift key if excelLikeNavigation and batch edit mode", function(assert) {
         // arrange
         this.options = {
             editing: {
@@ -6047,7 +6049,7 @@ QUnit.module("Excel like navigation", {
         assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
     });
 
-    testInDesktop("Enter key for not changed editing cell if excelNavigation and cell edit mode", function(assert) {
+    testInDesktop("Enter key for not changed editing cell if excelLikeNavigation and cell edit mode", function(assert) {
         // arrange
         this.options = {
             editing: {
@@ -6074,7 +6076,7 @@ QUnit.module("Excel like navigation", {
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
     });
 
-    testInDesktop("Enter key for not changed editing cell if excelNavigation and batch edit mode", function(assert) {
+    testInDesktop("Enter key for not changed editing cell if excelLikeNavigation and batch edit mode", function(assert) {
         // arrange
         this.options = {
             editing: {
@@ -6100,7 +6102,7 @@ QUnit.module("Excel like navigation", {
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
     });
 
-    testInDesktop("Enter key for changed editing cell if excelNavigation and cell edit mode", function(assert) {
+    testInDesktop("Enter key for changed editing cell if excelLikeNavigation and cell edit mode", function(assert) {
         // arrange
         var $input;
 
@@ -6131,7 +6133,7 @@ QUnit.module("Excel like navigation", {
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
     });
 
-    testInDesktop("Enter key for changed editing cell if excelNavigation and batch edit mode", function(assert) {
+    testInDesktop("Enter key for changed editing cell if excelLikeNavigation and batch edit mode", function(assert) {
         // arrange
         var $input;
 
@@ -6162,7 +6164,7 @@ QUnit.module("Excel like navigation", {
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
     });
 
-    testInDesktop("F2 key if excelNavigation and cell edit mode", function(assert) {
+    testInDesktop("F2 key if excelLikeNavigation and cell edit mode", function(assert) {
         // arrange
         this.options = {
             editing: {
@@ -6207,7 +6209,7 @@ QUnit.module("Excel like navigation", {
         assert.equal($("td.dx-focused").length, 1, "one cell is focused");
     });
 
-    testInDesktop("F2 key if excelNavigation and batch edit mode", function(assert) {
+    testInDesktop("F2 key if excelLikeNavigation and batch edit mode", function(assert) {
         // arrange
         this.options = {
             editing: {
@@ -6252,14 +6254,14 @@ QUnit.module("Excel like navigation", {
         assert.equal($("td.dx-focused").length, 1, "one cell is focused");
     });
 
-    testInDesktop("F2 key if no excelNavigation", function(assert) {
+    testInDesktop("F2 key if no excelLikeNavigation", function(assert) {
         // arrange
         this.options = {
             editing: {
                 mode: "cell",
-                allowUpdating: true
+                allowUpdating: true,
+                excelLikeNavigation: false
             },
-            excelNavigation: false
         };
         this.setupModule();
         this.renderGridView();
@@ -6282,7 +6284,7 @@ QUnit.module("Excel like navigation", {
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
     });
 
-    testInDesktop("Begin edit by key press if excelNavigation", function(assert) {
+    testInDesktop("Begin edit by key press if excelLikeNavigation", function(assert) {
         // arrange
         var $editor;
 
@@ -6330,7 +6332,7 @@ QUnit.module("Excel like navigation", {
         assert.deepEqual(this.getController("data").items()[0].data, { name: "D", date: "01/02/2003", room: 0, phone: 555555 }, "data");
     });
 
-    testInDesktop("RightArrow key if excelNavigation and editing began by the key press", function(assert) {
+    testInDesktop("RightArrow key if excelLikeNavigation and editing began by the key press", function(assert) {
         // arrange
         var $editor;
 
@@ -6378,7 +6380,7 @@ QUnit.module("Excel like navigation", {
         assert.deepEqual(this.getController("data").items()[0].data, { name: "D", date: "01/02/2003", room: 0, phone: 555555 }, "data");
     });
 
-    testInDesktop("LeftArrow key if excelNavigation and editing began by the key press", function(assert) {
+    testInDesktop("LeftArrow key if excelLikeNavigation and editing began by the key press", function(assert) {
         // arrange
         var $editor;
 
@@ -6426,7 +6428,7 @@ QUnit.module("Excel like navigation", {
         assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 2, phone: 666666 }, "cell value");
     });
 
-    testInDesktop("UpArrow key if excelNavigation and editing began by the key press", function(assert) {
+    testInDesktop("UpArrow key if excelLikeNavigation and editing began by the key press", function(assert) {
         // arrange
         var $editor;
 
@@ -6474,7 +6476,7 @@ QUnit.module("Excel like navigation", {
         assert.deepEqual(this.getController("data").items()[1].data, { name: "D", date: "04/05/2006", room: 1, phone: 666666 }, "cell value");
     });
 
-    testInDesktop("DownArrow key if excelNavigation and editing began by the key press", function(assert) {
+    testInDesktop("DownArrow key if excelLikeNavigation and editing began by the key press", function(assert) {
         // arrange
         var $editor;
 
@@ -6522,7 +6524,7 @@ QUnit.module("Excel like navigation", {
         assert.deepEqual(this.getController("data").items()[1].data, { name: "D", date: "04/05/2006", room: 1, phone: 666666 }, "cell value");
     });
 
-    testInDesktop("DownArrow key if excelNavigation and editing began 2nd time by the key press", function(assert) {
+    testInDesktop("DownArrow key if excelLikeNavigation and editing began 2nd time by the key press", function(assert) {
         // arrange
         var $editor;
 
