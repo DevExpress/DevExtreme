@@ -2197,12 +2197,6 @@ module.exports = {
                  */
                 useIcons: false,
                 /**
-                 * @name GridBaseOptions.editing.excelLikeNavigation
-                 * @type boolean
-                 * @default false
-                 */
-                excelLikeNavigation: false,
-                /**
                  * @name dxDataGridOptions.editing.texts
                  * @type object
                  */

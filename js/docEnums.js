@@ -366,6 +366,16 @@
  */
 
 /**
+ * @typedef {string} Enums.GridEnterKeyAction
+ * @enum {'startEdit'|'moveFocus'}
+ */
+
+/**
+ * @typedef {string} Enums.GridEnterKeyDirection
+ * @enum {'none'|'column'|'row'}
+ */
+
+/**
  * @typedef {string} Enums.GridEditRefreshMode
  * @enum {'full'|'reshape'|'repaint'}
  */
