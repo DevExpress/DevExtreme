@@ -6,7 +6,6 @@ import arrayUtils from "../../data/array_utils";
 import { keysEqual } from "../../data/utils";
 import { when } from "../../core/utils/deferred";
 import { findChanges } from "../../core/utils/array_compare";
-import { stringify } from "../../core/utils/stringify";
 import { insertElement } from "../../core/dom_adapter";
 
 export default CollectionWidget.inherit({
@@ -57,7 +56,11 @@ export default CollectionWidget.inherit({
     },
 
     _isItemEquals: function(item1, item2) {
-        return stringify(item1) === stringify(item2);
+        try {
+            return JSON.stringify(item1) === JSON.stringify(item2);
+        } catch(e) {
+            return item1 === item2;
+        }
     },
 
     _partialRefresh: function() {
