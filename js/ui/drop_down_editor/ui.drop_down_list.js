@@ -742,8 +742,15 @@ var DropDownList = DropDownEditor.inherit({
             return;
         }
 
-        this.option("opened", this._shouldOpenPopup());
-        if(this.option("opened")) {
+        const shouldOpenPopup = this._shouldOpenPopup();
+
+        if(shouldOpenPopup && !this._isFocused()) {
+            return;
+        }
+
+        this.option("opened", shouldOpenPopup);
+
+        if(shouldOpenPopup) {
             this._dimensionChanged();
         }
     },
