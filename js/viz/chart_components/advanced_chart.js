@@ -186,7 +186,7 @@ var AdvancedChart = BaseChart.inherit({
         _each(axesBasis, (index, basis) => {
             let axis = basis.axis;
             if(basis.axis && isArgumentAxes) {
-                that._displayedArgumentAxisIndex = index;
+                basis.axis.isVirtual = basis.axis.pane !== paneWithNonVirtualAxis;
             } else if(basis.options) {
                 axis = that._createAxis(isArgumentAxes, basis.options,
                     isArgumentAxes ? basis.options.pane !== paneWithNonVirtualAxis : undefined,
@@ -438,7 +438,7 @@ var AdvancedChart = BaseChart.inherit({
     },
 
     getArgumentAxis: function() {
-        return (this._argumentAxes || [])[this._displayedArgumentAxisIndex];
+        return (this._argumentAxes || []).filter(a => !a.isVirtual)[0];
     },
 
     getValueAxis: function(name) {
@@ -521,10 +521,7 @@ var AdvancedChart = BaseChart.inherit({
         }, that._getAxisRenderingOptions(typeSelector));
         const axis = new axisModule.Axis(renderingSettings);
         axis.updateOptions(options);
-
-        if(!virtual && _isDefined(index)) {
-            that._displayedArgumentAxisIndex = index;
-        }
+        axis.isVirtual = virtual;
 
         return axis;
     },
@@ -533,7 +530,7 @@ var AdvancedChart = BaseChart.inherit({
 
     _getTrackerSettings: function() {
         return _extend(this.callBase(), {
-            argumentAxis: this._argumentAxes[this._displayedArgumentAxisIndex]
+            argumentAxis: this.getArgumentAxis()
         });
     },
 
