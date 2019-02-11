@@ -4293,6 +4293,7 @@ declare module DevExpress.ui {
         expandedRowKeys?: Array<any>;
         /** Specifies whether nodes appear expanded or collapsed after filtering is applied. */
         expandNodesOnFiltering?: boolean;
+        filterMode?: 'withAncestors' | 'exactMatch' | 'fullBranch';
         /** Specifies which data field defines whether the node has children. */
         hasItemsExpr?: string | Function;
         /** Specifies which data field contains nested items. Set this option when your data has a hierarchical structure. */
@@ -6590,6 +6591,7 @@ declare module DevExpress.viz {
     export interface dxPieChartLegend extends BaseChartLegend {
         /** Specifies the text for a hint that appears when a user hovers the mouse pointer over a legend item. */
         customizeHint?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
+        /** Allows you to change the order, text, and visibility of legend items. */
         customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>);
         /** Specifies a callback function that returns the text to be displayed by a legend item. */
         customizeText?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
@@ -6989,6 +6991,7 @@ declare module DevExpress.viz {
         columnCount?: number;
         /** Specifies a blank space between legend columns in pixels. */
         columnItemSpacing?: number;
+        /** Allows you to change the order, text, and visibility of legend items. */
         customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
         /** Specifies font options for the text displayed in the legend. */
         font?: Font;
