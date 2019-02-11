@@ -651,6 +651,10 @@ var Widget = DOMComponent.inherit({
         return $focusTarget.hasClass(FOCUSED_STATE_CLASS);
     },
 
+    _isFocused: function() {
+        return this._hasFocusClass();
+    },
+
     _attachKeyboardEvents: function() {
         var processor = this.option("_keyboardProcessor");
 
