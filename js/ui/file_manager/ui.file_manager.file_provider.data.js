@@ -15,6 +15,10 @@ var DataFileProvider = FileProvider.inherit({
         return this._getItems(path, false);
     },
 
+    renameItem: function(item, name) {
+        item.dataItem.name = name;
+    },
+
     _getItems: function(path, isFolder) {
         if(path === "") {
             return this._getItemsInternal(path, this._data, isFolder);
@@ -41,6 +45,7 @@ var DataFileProvider = FileProvider.inherit({
                 var item = new FileManagerItem(path, entry.name);
                 item.length = entry.length !== undefined ? entry.length : 0;
                 item.lastWriteTime = entry.lastWriteTime !== undefined ? entry.lastWriteTime : Date.now();
+                item.dataItem = entry; // TODO remove if do not need
                 result.push(item);
             }
         }

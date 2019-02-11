@@ -7,9 +7,13 @@ import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 import FileManagerToolbar from "./ui.file_manager.toolbar";
+import FileManagerEnterNameDialog from "./ui.file_manager.dialogs";
+import notify from "../notify";
 
 import DataFileProvider from "./ui.file_manager.file_provider.data";
 import OneDriveFileProvider from "./ui.file_manager.file_provider.onedrive";
+import WebAPIFileProvider from "./ui.file_manager.file_provider.webapi";
+import { Deferred } from "../../core/utils/deferred";
 
 const FILE_MANAGER_CLASS = "dx-filemanager";
 const FILE_MANAGER_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-container";
@@ -20,10 +24,6 @@ const FILE_MANAGER_TOOLBAR_CLASS = FILE_MANAGER_CLASS + "-toolbar";
 
 var FileManager = Widget.inherit({
 
-    _init: function() {
-        this.callBase();
-    },
-
     _initTemplates: function() {
     },
 
@@ -33,13 +33,22 @@ var FileManager = Widget.inherit({
         this._currentPath = "";
         this._provider = this._createFileProvider();
 
-        var toolbar = this._createComponent($("<div>"), FileManagerToolbar, { });
+        var toolbar = this._createComponent($("<div>"), FileManagerToolbar, {
+            "onItemClick": this._onToolbarItemClick.bind(this)
+        });
         toolbar.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS);
+
+        this._renameItemDialog = this._createComponent($("<div>"), FileManagerEnterNameDialog, {
+            title: "Rename",
+            buttonText: "Save",
+            onClosed: this._onDialogClosed.bind(this)
+        });
 
         var $viewContainer = this._createViewContainer();
         this.$element()
             .append(toolbar.$element())
             .append($viewContainer)
+            .append(this._renameItemDialog.$element())
             .addClass(FILE_MANAGER_CLASS);
     },
 
@@ -117,6 +126,55 @@ var FileManager = Widget.inherit({
         }
     },
 
+    _onToolbarItemClick: function(buttonName) {
+        this.executeCommand(buttonName);
+    },
+
+    _tryRename: function() {
+        var items = this.getSelectedItems();
+        if(items.length !== 1) return;
+
+        var item = items[0];
+
+        var that = this;
+        this._getNewName(item.name)
+            .then(result => { return that._provider.renameItem(item, result.name); })
+            .then(() => {
+                that._showSuccess("Item renamed");
+                that._loadFilesToFilesView();
+            },
+            error => { if(error) that._showError(error); });
+    },
+
+    _getNewName: function(oldName) {
+        this._dialogDeferred = new Deferred();
+        this._renameItemDialog.show(oldName);
+        return this._dialogDeferred.promise();
+    },
+
+    _onDialogClosed: function(result) {
+        if(result) {
+            this._dialogDeferred.resolve(result);
+        } else {
+            this._dialogDeferred.reject();
+        }
+    },
+
+    _showSuccess: function(message) {
+        this._showNotification(message, true);
+    },
+
+    _showError: function(error) {
+        this._showNotification(error, false);
+    },
+
+    _showNotification: function(message, isSuccess) {
+        notify({
+            message: message,
+            width: 450
+        }, isSuccess ? "success" : "error", 2000);
+    },
+
     _loadFilesToFilesView: function() {
         this._filesView.option("dataSource", {
             "store": this._createFilesViewStore()
@@ -134,6 +192,8 @@ var FileManager = Widget.inherit({
     _createFileProvider: function() {
         var fileSystemType = this.option("fileSystemType");
         switch(fileSystemType) {
+            case "webapi":
+                return new WebAPIFileProvider(this.option("webAPI"));
             case "onedrive":
                 return new OneDriveFileProvider(this.option("oneDrive"));
             case "data":
@@ -144,6 +204,11 @@ var FileManager = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+            /**
+            * @name dxFileManagerOptions.selection
+            * @type object
+            * @default {}
+            */
             selection: {
                 mode: "single"
             },
@@ -156,18 +221,36 @@ var FileManager = Widget.inherit({
             fileSystemType: "data",
 
             /**
-                * @name dxFileManagerOptions.jsonData
-                * @type object
-                * @default null
-                */
+            * @name dxFileManagerOptions.jsonData
+            * @type object
+            * @default null
+            */
             jsonData: null,
 
             /**
-                * @name dxFileManagerOptions.oneDrive
-                * @type object
-                * @default null
-                */
-            oneDrive: null
+            * @name dxFileManagerOptions.oneDrive
+            * @type object
+            * @default {}
+            */
+            oneDrive: {
+                getAccessTokenUrl: ""
+            },
+
+            /**
+            * @name dxFileManagerOptions.webAPI
+            * @type object
+            * @default {}
+            */
+            webAPI: {
+                loadUrl: "",
+                createUrl: "",
+                renameUrl: "",
+                deleteUrl: "",
+                moveUrl: "",
+                copyUrl: "",
+                downloadUrl: "",
+                uploadUrl: ""
+            }
         });
     },
 
@@ -185,6 +268,13 @@ var FileManager = Widget.inherit({
         }
     },
 
+    executeCommand: function(commandName) {
+        switch(commandName) {
+            case "rename":
+                this._tryRename();
+                break;
+        }
+    },
 
     getCurrentFolderPath: function() {
         return this._currentPath;

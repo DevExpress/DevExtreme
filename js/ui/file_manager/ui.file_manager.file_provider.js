@@ -8,6 +8,9 @@ var FileProvider = Class.inherit({
 
     getFiles: function(path) {
         return [];
+    },
+
+    renameItem: function(item, name) {
     }
 
 });
