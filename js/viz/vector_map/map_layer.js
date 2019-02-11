@@ -497,7 +497,7 @@ strategiesByElementType[TYPE_MARKER] = {
                 zeroSum = false;
 
             sum = values.reduce(function(total, item) {
-                return total + item || 0;
+                return total + (item || 0);
             }, 0);
 
             if(sum === 0) {
