@@ -1,7 +1,5 @@
 /* eslint-env node */
 
-var webpack = require('webpack');
-
 module.exports = {
     output: {
         sourcePrefix: '    ',
@@ -22,10 +20,5 @@ module.exports = {
         'quill': 'window.Quill',
         'turndown': 'window.TurndownService',
         'showdown': 'window.showdown'
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-            VERSION: JSON.stringify(require("./package.json").version)
-        })
-    ]
+    }
 };

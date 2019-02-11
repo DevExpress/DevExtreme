@@ -2,7 +2,7 @@ var argv = require('yargs')
     .default('uglify', false)
     .argv;
 
-var productVersion = readVersion(),
+var productVersion = require('../../package.json').version,
     packageVersion = productVersion;
 
 var dxBuildLabel = process.env.DEVEXTREME_DXBUILD_LABEL,
@@ -25,10 +25,6 @@ if(dxBuildLabel) {
         productVersion += '-dev';
         packageVersion += '-dev';
     }
-}
-
-function readVersion() {
-    return require('../../package.json').version;
 }
 
 module.exports = {
