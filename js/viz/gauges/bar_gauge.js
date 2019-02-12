@@ -346,9 +346,9 @@ var dxBarGauge = dxBaseGauge.inherit({
 
     _factory: objectUtils.clone(dxBaseGauge.prototype._factory),
 
-    _optionChangesOrder: dxBaseGauge.prototype._optionChangesOrder.concat(["VALUES", "NODES"]),
+    _optionChangesOrder: ["VALUES", "NODES"],
 
-    _initialChanges: ["VALUES"].concat(dxBaseGauge.prototype._optionChangesOrder),
+    _initialChanges: ["VALUES"],
 
     _change_NODES() {
         this._buildNodes();
