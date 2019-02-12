@@ -525,9 +525,6 @@ _extend(BarWrapper.prototype, {
     },
 
     endAnimation: function() {
-        if(!this._visible) {
-            return this;
-        }
         var that = this;
         if(that._delta !== undefined) {
             if(compareFloats(that._angle, that._start + that._delta)) {

@@ -107,6 +107,34 @@ QUnit.test("Change theme when loading indicator is shown", function(assert) {
     }
 });
 
+QUnit.test('Too many bars. Animation true', function(assert) {
+    this.create({
+        size: {
+            width: 10,
+            height: 10
+        },
+        animation: true,
+        values: [1, 2, 3, 4, 5, 6, 7, 8],
+        label: { visible: false }
+    });
+
+    assert.equal(this.renderer.arc.callCount, 16);
+});
+
+QUnit.test('Too many bars. Animation true', function(assert) {
+    this.create({
+        size: {
+            width: 10,
+            height: 10
+        },
+        animation: false,
+        values: [1, 2, 3, 4, 5, 6, 7, 8],
+        label: { visible: false }
+    });
+
+    assert.equal(this.renderer.arc.callCount, 16);
+});
+
 QUnit.module("Legend", {
     beforeEach() {
         this.renderer = new vizMocks.Renderer();
