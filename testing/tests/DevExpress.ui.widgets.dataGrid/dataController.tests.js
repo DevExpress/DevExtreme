@@ -13264,6 +13264,33 @@ QUnit.test("loadAll during data loading", function(assert) {
     assert.ok(!this.dataController.isLoading(), 'no loading');
 });
 
+// T713135
+QUnit.test("loadAll during custom loading", function(assert) {
+    var allItems;
+
+    this.setupDataGridModules({
+        dataSource: this.array,
+        paging: {
+            pageSize: 3
+        }
+    });
+
+    this.clock.tick();
+
+    // act
+    this.dataController.beginCustomLoading("test");
+    this.dataController.loadAll().done(function(items) {
+        allItems = items;
+    });
+    this.dataController.endCustomLoading();
+    this.clock.tick();
+
+    // assert
+    assert.equal(allItems.length, 5, "loaded all item count");
+    assert.equal(this.dataController.items().length, 3, 'items count');
+    assert.ok(!this.dataController.isLoading(), 'no loading');
+});
+
 QUnit.test("data loading during loadAll", function(assert) {
     var isLoadAllFailed,
         allItems;
