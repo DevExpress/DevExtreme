@@ -1008,7 +1008,9 @@ var EditingController = modules.ViewController.inherit((function() {
                         params = { data: data, cancel: false };
                         deferred = executeEditingAction("onRowInserting", params, function() {
                             return store.insert(params.data).done(function(data, key) {
-                                editData.key = key;
+                                if(typeUtils.isDefined(key)) {
+                                    editData.key = key;
+                                }
                             });
                         });
                         break;
