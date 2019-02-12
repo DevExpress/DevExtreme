@@ -3900,7 +3900,8 @@ QUnit.test("dxDateBox should validate value after change 'min' option", function
 QUnit.testInActiveWindow("DateBox should validate value after remove an invalid characters", function(assert) {
     const $element = $("#dateBox");
     const dateBox = $element.dxDateBox({
-        value: new Date(2015, 6, 18)
+        value: new Date(2015, 6, 18),
+        pickerType: "calendar"
     }).dxDateBox("instance");
     const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
     const keyboard = keyboardMock($input);
