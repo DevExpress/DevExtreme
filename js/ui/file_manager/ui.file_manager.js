@@ -183,6 +183,27 @@ var FileManager = Widget.inherit({
             error => { if(error) that._showError(error); });
     },
 
+    _tryDelete: function() {
+        var items = this._itemsViewAreaActive ? this.getSelectedItems() : [ this._currentFolder ];
+
+        if(items.length === 0) return;
+
+        var that = this;
+
+        new Deferred().resolve().promise()
+            .then(() => { return that._provider.deleteItems(items); })
+            .then(() => {
+                that._showSuccess("Items deleted");
+                if(that._itemsViewAreaActive) {
+                    that._loadFilesToFilesView();
+                } else {
+                    that._updateFilesTreeView();
+                }
+
+            },
+            error => { if(error) that._showError(error); });
+    },
+
     _getNewName: function(oldName) {
         this._dialogDeferred = new Deferred();
         var dialog = oldName ? this._renameItemDialog : this._createFolderDialog;
@@ -317,6 +338,9 @@ var FileManager = Widget.inherit({
                 break;
             case "create":
                 this._tryCreate();
+                break;
+            case "delete":
+                this._tryDelete();
                 break;
         }
     },

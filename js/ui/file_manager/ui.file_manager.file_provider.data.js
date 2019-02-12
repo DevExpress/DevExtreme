@@ -35,23 +35,48 @@ var DataFileProvider = FileProvider.inherit({
         array.push(newItem);
     },
 
+    deleteItems: function(items) {
+        for(var item, i = 0; item = items[i]; i++) {
+            this._deleteItem(item);
+        }
+    },
+
+    _deleteItem: function(item) {
+        var array = this._data;
+        if(item.parentPath !== "") {
+            var entry = this._findItem(item.parentPath);
+            array = entry.children;
+        }
+        var index = array.indexOf(item.dataItem);
+        array.splice(index, 1);
+    },
+
     _getItems: function(path, isFolder) {
         if(path === "") {
             return this._getItemsInternal(path, this._data, isFolder);
         }
 
+        var folderEntry = this._findItem(path);
+        var entries = folderEntry && folderEntry.children || [];
+        return this._getItemsInternal(path, entries, isFolder);
+    },
+
+    _findItem: function(path) {
+        if(path === "") return null;
+
+        var result = null;
         var data = this._data;
         var parts = path.split("/");
         for(var part, i = 0; part = parts[i]; i++) {
-            var folderEntry = data.filter(entry => { return entry.isFolder && entry.name === part; })[0];
-            if(folderEntry && folderEntry.children) {
-                data = folderEntry.children;
+            result = data.filter(entry => { return entry.isFolder && entry.name === part; })[0];
+            if(result && result.children) {
+                data = result.children;
             } else {
-                return [];
+                return null;
             }
         }
 
-        return this._getItemsInternal(path, data, isFolder);
+        return result;
     },
 
     _getItemsInternal: function(path, data, isFolder) {
