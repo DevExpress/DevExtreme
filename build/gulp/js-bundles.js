@@ -50,7 +50,7 @@ function muteWebPack() {
 }
 
 gulp.task('version-fix', ['transpile'], function() {
-    return gulp.src(context.TRANSPILED_PATH + '/' + versionPath, { base: './' })
+    return gulp.src(path.join(context.TRANSPILED_PATH, versionPath), { base: './' })
         .pipe(replace(/"\d\d\.\d.*?"/, `"${context.version.script}"`))
         .pipe(gulp.dest('./'));
 });
