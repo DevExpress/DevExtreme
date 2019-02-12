@@ -1,4 +1,4 @@
-var unique = require("../../core/utils").unique,
+const { unique, getAddFunction } = require("../../core/utils"),
     _isDefined = require("../../../core/utils/type").isDefined,
     noop = require("../../../core/utils/common").noop,
     DISCRETE = "discrete";
@@ -105,9 +105,21 @@ function isLineSeries(series) {
 
 function getViewportReducer(series) {
     var rangeCalculator = getRangeCalculator(series.valueAxisType),
-        viewport = series.getArgumentAxis() && series.getArgumentAxis().visualRange() || {},
+        axis = series.getArgumentAxis(),
+        viewport = axis && series.getArgumentAxis().visualRange() || {},
         viewportFilter,
         calculatePointBetweenPoints = isLineSeries(series) ? calculateRangeBetweenPoints : noop;
+
+    if(axis && axis.getMarginOptions().checkInterval) {
+        const range = series.getArgumentAxis().getTranslator().getBusinessRange();
+        const add = getAddFunction(range, false);
+        const interval = range.interval;
+
+        if(isFinite(interval)) {
+            viewport.startValue = add(viewport.startValue, interval, -1);
+            viewport.endValue = add(viewport.endValue, interval);
+        }
+    }
 
     viewportFilter = getViewPortFilter(viewport);
 

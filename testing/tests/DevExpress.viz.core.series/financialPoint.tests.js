@@ -58,13 +58,11 @@ QUnit.module("Point coordinates translation. Financial", {
     setTranslators: function() {
         var xTranslator = new MockTranslator({
                 translate: this.translateXData,
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 0, max: 200 }
+                failOnWrongData: true
             }),
             yTranslator = new MockTranslator({
                 translate: this.translateYData,
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 0, max: 210 }
+                failOnWrongData: true
             });
 
         this.translators = this.opt.rotated ? {
@@ -799,13 +797,11 @@ QUnit.module("Draw point. Candlestick", {
         this.translators = {
             arg: new MockTranslator({
                 translate: { 1: 11 },
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 0, max: 600 }
+                failOnWrongData: true
             }),
             val: new MockTranslator({
                 translate: { 1: 50, 2: 33, 3: 10, 4: 5 },
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 0, max: 800 }
+                failOnWrongData: true
             })
         };
         this.options = {
@@ -1205,13 +1201,11 @@ QUnit.module("Draw point. Stock", {
         this.translators = {
             arg: new MockTranslator({
                 translate: { 1: 11 },
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 0, max: 600 }
+                failOnWrongData: true
             }),
             val: new MockTranslator({
                 translate: { 1: 52, 2: 35, 3: 10, 4: 5 },
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 0, max: 800 }
+                failOnWrongData: true
             })
         };
         this.options = {
@@ -1866,13 +1860,11 @@ QUnit.module("Draw label", {
         this.translators = {
             arg: new MockTranslator({
                 translate: { 1: 11 },
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 0, max: 110 }
+                failOnWrongData: true
             }),
             val: new MockTranslator({
                 translate: { 1: 52, 2: 35, 3: 10, 4: 5 },
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 0, max: 210 }
+                failOnWrongData: true
             })
         };
         this.sinonFactory = sinon.stub(labelModule, "Label", function() {

@@ -629,9 +629,10 @@ QUnit.test("Vertical, tickOrientation right", function(assert) {
 
     this.generatedTicks = [1, 2, 3];
 
-    this.translator.stub("translate").withArgs(1).returns(30);
-    this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(70);
+    this.translator.stub("translate").returns(0);
+    this.translator.stub("translate").withArgs(1, 1, false).returns(30);
+    this.translator.stub("translate").withArgs(2, 1, false).returns(50);
+    this.translator.stub("translate").withArgs(3, 1, false).returns(70);
 
     // act
     this.axis.draw(this.canvas);
@@ -683,9 +684,10 @@ QUnit.test("Horizontal top, minor tick marks", function(assert) {
 
     this.generatedMinorTicks = [1, 2, 3];
 
-    this.translator.stub("translate").withArgs(1).returns(30);
-    this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(70);
+    this.translator.stub("translate").returns(0);
+    this.translator.stub("translate").withArgs(1, 1, false).returns(30);
+    this.translator.stub("translate").withArgs(2, 1, false).returns(50);
+    this.translator.stub("translate").withArgs(3, 1, false).returns(70);
 
     // act
     this.axis.draw(this.canvas);
@@ -790,8 +792,9 @@ QUnit.test("Categories. DiscreteAxisDivisionMode - crossLabels. Draw all grid li
 
     this.generatedTicks = categories;
 
+    this.translator.stub("translate").returns(0);
     categories.forEach(function(cat, i) {
-        this.translator.stub("translate").withArgs(cat).returns(10 + (i + 1) * 20 - 10);
+        this.translator.stub("translate").withArgs(cat, 0, false).returns(10 + (i + 1) * 20 - 10);
     }.bind(this));
 
     // act
@@ -803,58 +806,6 @@ QUnit.test("Categories. DiscreteAxisDivisionMode - crossLabels. Draw all grid li
     assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [40, 30 - 5, 40, 30 + 5], opacity: 1 });
     assert.deepEqual(path.getCall(2).returnValue.attr.getCall(1).args[0], { points: [60, 30 - 5, 60, 30 + 5], opacity: 1 });
     assert.deepEqual(path.getCall(3).returnValue.attr.getCall(1).args[0], { points: [80, 30 - 5, 80, 30 + 5], opacity: 1 });
-});
-
-QUnit.test("Check calls to translator. Major ticks. Non categories", function(assert) {
-    // arrange
-    this.createAxis();
-    this.updateOptions({
-        isHorizontal: true,
-        position: "bottom",
-        tick: {
-            visible: true
-        }
-    });
-
-    this.generatedTicks = [1, 2, 3];
-
-    this.translator.stub("translate").withArgs(1).returns(30);
-    this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(70);
-
-    // act
-    this.axis.draw(this.canvas);
-
-    assert.deepEqual(this.translator.translate.callCount, 10); // 3 for labels
-    assert.deepEqual(this.translator.translate.getCall(4).args, [1, 1, false]);
-    assert.deepEqual(this.translator.translate.getCall(6).args, [2, 1, false]);
-    assert.deepEqual(this.translator.translate.getCall(8).args, [3, 1, false]);
-});
-
-QUnit.test("Check calls to translator. Minor ticks", function(assert) {
-    // arrange
-    this.createAxis();
-    this.updateOptions({
-        isHorizontal: true,
-        position: "bottom",
-        minorTick: {
-            visible: true
-        }
-    });
-
-    this.generatedTicks = [1, 2, 3];
-
-    this.translator.stub("translate").withArgs(1).returns(30);
-    this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(70);
-
-    // act
-    this.axis.draw(this.canvas);
-
-    assert.deepEqual(this.translator.translate.callCount, 10); // 3 for labels
-    assert.deepEqual(this.translator.translate.getCall(4).args, [1, 1, false]);
-    assert.deepEqual(this.translator.translate.getCall(6).args, [2, 1, false]);
-    assert.deepEqual(this.translator.translate.getCall(8).args, [3, 1, false]);
 });
 
 QUnit.test("Check calls to translator. Major ticks. Categories, discreteAxisDivisionMode betweenLabels", function(assert) {
@@ -2036,8 +1987,9 @@ QUnit.test("Vertical right. Alignment not set - render as left", function(assert
 
     this.generatedTicks = [1, 2];
 
-    this.translator.stub("translate").withArgs(1).returns(40);
-    this.translator.stub("translate").withArgs(2).returns(60);
+    this.translator.stub("translate").returns(0);
+    this.translator.stub("translate").withArgs(1, undefined, false).returns(40);
+    this.translator.stub("translate").withArgs(2, undefined, false).returns(60);
 
     this.renderer.bBoxTemplate = (function() {
         var idx = 0;
@@ -2336,32 +2288,6 @@ QUnit.test("Text is 0. Draw label", function(assert) {
 
     // assert
     assert.deepEqual(renderer.text.getCall(0).args, ["0"]);
-});
-
-QUnit.test("Check calls to translator", function(assert) {
-    // arrange
-    this.createAxis();
-    this.updateOptions({
-        isHorizontal: true,
-        position: "bottom",
-        label: {
-            visible: true
-        }
-    });
-
-    this.generatedTicks = [1, 2, 3];
-
-    this.translator.stub("translate").withArgs(1).returns(30);
-    this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(70);
-
-    // act
-    this.axis.draw(this.canvas);
-
-    assert.deepEqual(this.translator.translate.callCount, 10);
-    assert.deepEqual(this.translator.translate.getCall(5).args, [1, undefined, false]);
-    assert.deepEqual(this.translator.translate.getCall(7).args, [2, undefined, false]);
-    assert.deepEqual(this.translator.translate.getCall(9).args, [3, undefined, false]);
 });
 
 QUnit.test("Labels are outside canvas (on zoom) - do not draw outside labels", function(assert) {
@@ -6350,9 +6276,9 @@ QUnit.test("Vertical. Top border visible. Top grid is NOT visible", function(ass
 
     this.generatedTicks = [1, 2, 3];
 
-    this.translator.stub("translate").withArgs(1).returns(10);
+    this.translator.stub("translate").withArgs(1).returns(30);
     this.translator.stub("translate").withArgs(2).returns(50);
-    this.translator.stub("translate").withArgs(3).returns(90);
+    this.translator.stub("translate").withArgs(3).returns(70);
 
     // act
     this.axis.draw(this.canvas, { visible: true, top: true, bottom: false });
@@ -6360,7 +6286,7 @@ QUnit.test("Vertical. Top border visible. Top grid is NOT visible", function(ass
     var path = this.renderer.path;
     assert.equal(path.callCount, 2);
     assert.deepEqual(path.getCall(0).args, [[10, 50, 90, 50], "line"]);
-    assert.deepEqual(path.getCall(1).args, [[10, 90, 90, 90], "line"]);
+    assert.deepEqual(path.getCall(1).args, [[10, 70, 90, 70], "line"]);
 });
 
 QUnit.test("Vertical. Bottom border visible. Bottom grid is NOT visible", function(assert) {

@@ -2,7 +2,7 @@ import $ from "jquery";
 import * as vizMocks from "../../helpers/vizMocks.js";
 import pointModule from "viz/series/points/base_point";
 import labelModule from "viz/series/points/label";
-import { MockTranslator } from "../../helpers/chartMocks.js";
+import { MockTranslator, MockAxis } from "../../helpers/chartMocks.js";
 import tooltipModule from "viz/core/tooltip";
 
 const originalLabel = labelModule.Label;
@@ -14,6 +14,16 @@ var createPoint = function(series, data, options) {
     point._getLabelCoordOfPosition = sinon.spy(point._getLabelCoordOfPosition);// check internal behavior
     return point;
 };
+
+function getMockAxisFunction(renderer, getTranslator, visibleArea) {
+    const axis = new MockAxis({ renderer: renderer || new vizMocks.Renderer({}) });
+
+    axis.getTranslator = getTranslator;
+    if(visibleArea) {
+        axis.getVisibleArea.returns(visibleArea);
+    }
+    return () => axis;
+}
 
 var environment = {
     beforeEach: function() {
@@ -32,8 +42,7 @@ var environment = {
             }),
             val: new MockTranslator({
                 translate: translateYData,
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 0, max: 210 }
+                failOnWrongData: true
             })
         };
         this.data = {
@@ -73,8 +82,8 @@ var environment = {
             getLabelVisibility: function() { return true; },
             _visibleArea: { minX: 0, maxX: 100, minY: 0, maxY: 210 },
             getVisibleArea: function() { return this._visibleArea; },
-            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
-            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; }
+            getValueAxis: getMockAxisFunction(this.renderer, () => this.translators.val),
+            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.translators.arg)
         };
     },
     afterEach: function() {
@@ -98,8 +107,8 @@ QUnit.module("Translation. Rangearea", {
             getLabelVisibility: function() {
                 return false;
             },
-            getValueAxis: function() { return { getTranslator: function() { return that.continuousTranslators.val; } }; },
-            getArgumentAxis: function() { return { getTranslator: function() { return that.continuousTranslators.arg; } }; },
+            getValueAxis: getMockAxisFunction(this.renderer, () => that.continuousTranslators.val),
+            getArgumentAxis: getMockAxisFunction(this.renderer, () => that.continuousTranslators.arg),
             getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 210 }; }
         };
         var translateXData = { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550, "default": 70 },
@@ -177,8 +186,7 @@ QUnit.test("RangeBar. getCoords returns false if minValue coord is null", functi
     this.opt.type = "rangebar";
 
     this.continuousTranslators.val = new MockTranslator({
-        translate: { 1: null, 5: 10 },
-        getCanvasVisibleArea: { min: 8, max: 600 }
+        translate: { 1: null, 5: 10 }
     });
 
     var pt = createPoint(this.series, { argument: 1, value: 5, minValue: 1 }, this.opt);
@@ -1671,12 +1679,10 @@ QUnit.module("Point visibility", {
         };
         this.translators = {
             arg: new MockTranslator({
-                translate: { "null": 0, 1: 11 },
-                getCanvasVisibleArea: { min: 0, max: 600 }
+                translate: { "null": 0, 1: 11 }
             }),
             val: new MockTranslator({
-                translate: { "null": 0, 1: 22 },
-                getCanvasVisibleArea: { min: 0, max: 800 }
+                translate: { "null": 0, 1: 22 }
             })
         };
         this.groups = {
@@ -2100,12 +2106,10 @@ QUnit.module("API", {
 
         this.translators = {
             arg: new MockTranslator({
-                translate: { "null": 0, 1: 11, 10: 111 },
-                getCanvasVisibleArea: { min: 0, max: 300 }
+                translate: { "null": 0, 1: 11, 10: 111 }
             }),
             val: new MockTranslator({
-                translate: { "null": 0, 1: 22, 10: 222 },
-                getCanvasVisibleArea: { min: 0, max: 300 }
+                translate: { "null": 0, 1: 22, 10: 222 }
             })
         };
     },
@@ -2239,7 +2243,6 @@ QUnit.test("CoordsIn. RangeArea. Rotated", function(assert) {
 
 QUnit.module("Check points in visible area", {
     beforeEach: function() {
-        var that = this;
         this.options = {
             widgetType: "chart",
             label: { visible: false },
@@ -2249,19 +2252,17 @@ QUnit.module("Check points in visible area", {
             name: "series",
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return false; },
-            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
-            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; }
+            getValueAxis: getMockAxisFunction(this.renderer, () => this.translators.val, [0, 210]),
+            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.translators.arg, [0, 100])
         };
         this.data = { argument: 1, value: 1, minValue: 1 };
 
         this.translators = {
             arg: new MockTranslator({
-                translate: { 1: 11, 2: 33 },
-                getCanvasVisibleArea: { min: 0, max: 100 }
+                translate: { 1: 11, 2: 33 }
             }),
             val: new MockTranslator({
-                translate: { 1: 22, 2: 44 },
-                getCanvasVisibleArea: { min: 0, max: 210 }
+                translate: { 1: 22, 2: 44 }
             })
         };
     }
@@ -2443,7 +2444,6 @@ QUnit.test("Points are at the end of value axis", function(assert) {
 
 QUnit.module("Point translators. Rangebar", {
     beforeEach: function() {
-        var that = this;
         this.opt = {
             widgetType: "chart",
             type: "rangebar",
@@ -2454,8 +2454,8 @@ QUnit.module("Point translators. Rangebar", {
             name: "series",
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return false; },
-            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
-            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+            getValueAxis: getMockAxisFunction(this.renderer, () => this.translators.val),
+            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.translators.arg),
             getVisibleArea: function() { return { minX: 0, maxX: 800, minY: 0, maxY: 800 }; }
         };
     },
@@ -2517,7 +2517,6 @@ QUnit.test("Translate when value = minValue. Rotated", function(assert) {
 
 QUnit.module("Point coordinates translation with correction on canvas visible area.", {
     beforeEach: function() {
-        var that = this;
         this.opt = {
             widgetType: "chart",
             type: "rangebar",
@@ -2528,8 +2527,8 @@ QUnit.module("Point coordinates translation with correction on canvas visible ar
             name: "series",
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return false; },
-            getValueAxis: function() { return { getTranslator: function() { return that.continuousTranslators.val; } }; },
-            getArgumentAxis: function() { return { getTranslator: function() { return that.continuousTranslators.arg; } }; },
+            getValueAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.val, [200, 300]),
+            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.arg, [100, 500]),
             getVisibleArea: function() { return { minX: 100, maxX: 500, minY: 200, maxY: 300 }; }
         };
         var translateXData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: 480, 7: 600, "canvas_position_default": 100 },
@@ -2538,13 +2537,11 @@ QUnit.module("Point coordinates translation with correction on canvas visible ar
         this.continuousTranslators = {
             arg: new MockTranslator({
                 translate: translateXData,
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 100, max: 500 }
+                failOnWrongData: true
             }),
             val: new MockTranslator({
                 translate: translateYData,
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 200, max: 300 }
+                failOnWrongData: true
             })
         };
     }
@@ -2650,7 +2647,6 @@ QUnit.test("Point is out of boundaries on the right", function(assert) {
 
 QUnit.module("Point coordinates translation with correction on canvas visible area. Rotated.", {
     beforeEach: function() {
-        var that = this;
         this.opt = {
             widgetType: "chart",
             type: "rangebar",
@@ -2662,8 +2658,8 @@ QUnit.module("Point coordinates translation with correction on canvas visible ar
             name: "series",
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return false; },
-            getValueAxis: function() { return { getTranslator: function() { return that.continuousTranslators.val; } }; },
-            getArgumentAxis: function() { return { getTranslator: function() { return that.continuousTranslators.arg; } }; },
+            getValueAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.val, [200, 300]),
+            getArgumentAxis: getMockAxisFunction(this.renderer, () => this.continuousTranslators.arg, [100, 500]),
             getVisibleArea: function() { return { minX: 200, maxX: 300, minY: 100, maxY: 500 }; }
         };
         var translateYData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: 480, 7: 600, "canvas_position_default": 100 },
@@ -2672,13 +2668,11 @@ QUnit.module("Point coordinates translation with correction on canvas visible ar
         this.continuousTranslators = {
             val: new MockTranslator({
                 translate: translateXData,
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 200, max: 300 }
+                failOnWrongData: true
             }),
             arg: new MockTranslator({
                 translate: translateYData,
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 100, max: 500 }
+                failOnWrongData: true
             })
         };
     }
@@ -3030,8 +3024,7 @@ QUnit.module("Draw Label. Range area", {
         this.renderer.bBoxTemplate = { x: 0, y: 40, height: 10, width: 20 };
         this.translators.arg = new MockTranslator({
             translate: { 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, "canvas_position_default": 300 },
-            failOnWrongData: true,
-            getCanvasVisibleArea: { min: 0, max: 200 }
+            failOnWrongData: true
         });
         this.options.visible = true;
         this.options.styles = { normal: { r: 0 }, hover: {} };
@@ -3495,8 +3488,7 @@ QUnit.module("Draw Label. Range bar", {
         this.renderer.bBoxTemplate = { x: 55, y: 40, height: 10, width: 20 };
         this.translators.arg = new MockTranslator({
             translate: { 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, "canvas_position_default": 300 },
-            failOnWrongData: true,
-            getCanvasVisibleArea: { min: 0, max: 110 }
+            failOnWrongData: true
         });
         this.series._visibleArea = { minX: 0, maxX: 110, minY: 0, maxY: 210 };
         this.options.type = "rangebar";

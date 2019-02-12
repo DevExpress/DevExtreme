@@ -84,14 +84,12 @@ var environment = {
 
         valAxis.getTranslator = sinon.spy(function() {
             return new MockTranslator({
-                translate: { 1: 100, 2: 200, 3: 300, 4: 400, "canvas_position_default": "defaultY" },
-                getCanvasVisibleArea: { min: 0, max: 500 }
+                translate: { 1: 100, 2: 200, 3: 300, 4: 400, "canvas_position_default": "defaultY" }
             });
         });
         argAxis.getTranslator = sinon.spy(function() {
             return new MockTranslator({
-                translate: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40, "canvas_position_default": "defaultX" },
-                getCanvasVisibleArea: { min: 0, max: 700 }
+                translate: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40, "canvas_position_default": "defaultX" }
             });
         });
 

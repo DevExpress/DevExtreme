@@ -264,15 +264,17 @@ _Translator2d.prototype = {
         const breaks = that._breaks;
         let length;
 
+        canvasOptions.startPadding = canvas.startPadding || 0;
+        canvasOptions.endPadding = canvas.endPadding || 0;
         if(that._options.isHorizontal) {
-            canvasOptions.startPoint = canvas.left;
+            canvasOptions.startPoint = canvas.left + canvasOptions.startPadding;
             length = canvas.width;
-            canvasOptions.endPoint = canvas.width - canvas.right;
+            canvasOptions.endPoint = canvas.width - canvas.right - canvasOptions.endPadding;
             canvasOptions.invert = businessRange.invert;
         } else {
-            canvasOptions.startPoint = canvas.top;
+            canvasOptions.startPoint = canvas.top + canvasOptions.startPadding;
             length = canvas.height;
-            canvasOptions.endPoint = canvas.height - canvas.bottom;
+            canvasOptions.endPoint = canvas.height - canvas.bottom - canvasOptions.endPadding;
             canvasOptions.invert = !businessRange.invert;// axis inverted because display drawn to bottom
         }
 
@@ -330,8 +332,8 @@ _Translator2d.prototype = {
     _calculateSpecialValues: function() {
         const that = this;
         const canvasOptions = that._canvasOptions;
-        const startPoint = canvasOptions.startPoint;
-        const endPoint = canvasOptions.endPoint;
+        const startPoint = canvasOptions.startPoint - canvasOptions.startPadding;
+        const endPoint = canvasOptions.endPoint + canvasOptions.endPadding;
         const range = that._businessRange;
         const minVisible = range.minVisible;
         const maxVisible = range.maxVisible;
@@ -400,9 +402,9 @@ _Translator2d.prototype = {
         return this.to(bp, direction);
     },
 
-    getInterval: function() {
+    getInterval: function(interval) {
         const canvasOptions = this._canvasOptions;
-        const interval = this._businessRange.interval;
+        interval = isDefined(interval) ? interval : this._businessRange.interval;
         if(interval) {
             return Math.round(canvasOptions.ratioOfCanvasRange * interval);
         }
@@ -450,9 +452,18 @@ _Translator2d.prototype = {
         translate = (endPoint - startPoint) * newStart / (newEnd - newStart) - startPoint;
         scale = ((startPoint + translate) / newStart) || 1;
 
+        min = isDefined(min) ? min : adjust(this.from(newStart, 1));
+        max = isDefined(max) ? max : adjust(this.from(newEnd, -1));
+        if(min > max) {
+            min = min > wholeRange.endValue ? wholeRange.endValue : min;
+            max = max < wholeRange.startValue ? wholeRange.startValue : max;
+        } else {
+            min = min < wholeRange.startValue ? wholeRange.startValue : min;
+            max = max > wholeRange.endValue ? wholeRange.endValue : max;
+        }
         return {
-            min: isDefined(min) ? min : adjust(this.from(newStart, 1)),
-            max: isDefined(max) ? max : adjust(this.from(newEnd, -1)),
+            min,
+            max,
             translate: adjust(translate),
             scale: adjust(scale)
         };
@@ -536,7 +547,6 @@ _Translator2d.prototype = {
         }
 
         bp = this._fromValue(bp);
-
         var that = this,
             canvasOptions = that._canvasOptions,
             breaks = that._breaks,
@@ -613,5 +623,9 @@ _Translator2d.prototype = {
 
     _toValue: function(value) {
         return value !== null ? Number(value) : null;
+    },
+
+    ratioOfCanvasRange() {
+        return this._canvasOptions.ratioOfCanvasRange;
     }
 };
