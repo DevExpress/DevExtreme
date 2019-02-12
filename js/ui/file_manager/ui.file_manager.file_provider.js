@@ -13,7 +13,16 @@ var FileProvider = Class.inherit({
     renameItem: function(item, name) {
     },
 
-    createFolder: function(folder, name) {
+    createFolder: function(parentFolder, name) {
+    },
+
+    deleteItems: function(items) {
+    },
+
+    moveItems: function(items, destinationFolder) {
+    },
+
+    copyItems: function(items, destinationFolder) {
     }
 
 });

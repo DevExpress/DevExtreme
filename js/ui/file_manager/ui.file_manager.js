@@ -285,7 +285,7 @@ var FileManager = Widget.inherit({
             */
             webAPI: {
                 loadUrl: "",
-                createUrl: "",
+                createFolderUrl: "",
                 renameUrl: "",
                 deleteUrl: "",
                 moveUrl: "",
