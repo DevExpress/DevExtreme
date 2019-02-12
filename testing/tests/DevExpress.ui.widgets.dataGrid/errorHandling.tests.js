@@ -265,13 +265,13 @@ QUnit.test("Repaint error row in rows view", function(assert) {
     $rowsView = $testElement.find(".dx-datagrid-rowsview");
     $table = $rowsView.find("table").first();
     assert.equal($rowsView.length, 1, "has rows view");
-    assert.equal($table.children("tbody").children("tr").length, 3, "count rows");
+    assert.equal($table.children("tbody").children("tr").length, 4, "count rows");
 
     // act
     that.errorHandlingController.renderErrorRow("Test", 1);
 
     // assert
-    assert.equal($table.children("tbody").children("tr").length, 4, "count rows");
+    assert.equal($table.children("tbody").children("tr").length, 5, "count rows");
     $errorRow = $table.children("tbody").children("tr").eq(2);
     assert.ok($errorRow.hasClass("dx-error-row"), "has error row");
     assert.strictEqual($errorRow.find("td").first().text(), "Test", "error message");
@@ -280,7 +280,7 @@ QUnit.test("Repaint error row in rows view", function(assert) {
     that.errorHandlingController.renderErrorRow("Test", 1);
 
     // assert
-    assert.equal($table.children("tbody").children("tr").length, 4, "count rows");
+    assert.equal($table.children("tbody").children("tr").length, 5, "count rows");
     $errorRow = $table.children("tbody").children("tr").eq(2);
     assert.ok($errorRow.hasClass("dx-error-row"), "has error row");
     assert.strictEqual($errorRow.find("td").first().text(), "Test", "error message");
