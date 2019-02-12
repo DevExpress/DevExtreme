@@ -1809,8 +1809,6 @@ QUnit.test("DateBox must immediately display 'value' passed via the constructor 
 });
 
 QUnit.test("DateBox must pass value to calendar correctly if value is empty string", function(assert) {
-
-
     this.reinitFixture({
         value: '',
         pickerType: 'calendar',
@@ -2002,6 +2000,29 @@ QUnit.test("should execute custom validator while validation state reevaluating"
 
     assert.notOk(dateBox.option("isValid"));
     assert.notStrictEqual(dateBox.option("text"), "");
+});
+
+QUnit.test("should rise validation event once after value is changed by calendar (T714599)", (assert) => {
+    let validationEventRiseCount = 0;
+    const dateBox = $("#dateBoxWithPicker")
+        .dxDateBox({
+            type: "datetime",
+            value: new Date(2015, 5, 9, 15, 54, 13),
+            opened: true
+        })
+        .dxValidator({
+            validationRules: [{
+                type: "custom",
+                validationCallback: () => validationEventRiseCount++
+            }]
+        })
+        .dxDateBox("instance");
+
+    $(".dx-calendar-cell").eq(0).trigger("dxclick");
+    $(".dx-popup-done.dx-button").trigger("dxclick");
+
+    assert.notOk(dateBox.option("opened"));
+    assert.strictEqual(validationEventRiseCount, 1);
 });
 
 QUnit.test("Editor should reevaluate validation state after change text to the current value", function(assert) {
