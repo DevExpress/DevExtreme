@@ -606,6 +606,7 @@ var DateBox = DropDownEditor.inherit({
             currentValue = this.dateOption("value");
 
         if(text === this._getDisplayedText(currentValue)) {
+            this._validateValue(currentValue);
             return;
         }
 
