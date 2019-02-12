@@ -19,6 +19,22 @@ var DataFileProvider = FileProvider.inherit({
         item.dataItem.name = name;
     },
 
+    createFolder: function(parentFolder, name) {
+        var parentItem = parentFolder.dataItem;
+        var newItem = {
+            name: name,
+            isFolder: true
+        };
+        var array = null;
+        if(!parentItem) {
+            array = this._data;
+        } else {
+            if(!parentItem.children) parentItem.children = [];
+            array = parentItem.children;
+        }
+        array.push(newItem);
+    },
+
     _getItems: function(path, isFolder) {
         if(path === "") {
             return this._getItemsInternal(path, this._data, isFolder);

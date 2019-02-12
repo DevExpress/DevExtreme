@@ -41,17 +41,15 @@ var FileManager = Widget.inherit({
         });
         toolbar.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS);
 
-        this._renameItemDialog = this._createComponent($("<div>"), FileManagerEnterNameDialog, {
-            title: "Rename",
-            buttonText: "Save",
-            onClosed: this._onDialogClosed.bind(this)
-        });
+        this._renameItemDialog = this._createEnterNameDialog("Rename", "Save");
+        this._createFolderDialog = this._createEnterNameDialog("Folder", "Create");
 
         var $viewContainer = this._createViewContainer();
         this.$element()
             .append(toolbar.$element())
             .append($viewContainer)
             .append(this._renameItemDialog.$element())
+            .append(this._createFolderDialog.$element())
             .addClass(FILE_MANAGER_CLASS);
     },
 
@@ -118,6 +116,14 @@ var FileManager = Widget.inherit({
         this._filesView.$element().on("click", function() { this._itemsViewAreaActive = true; }.bind(this));
     },
 
+    _createEnterNameDialog: function(title, buttonText) {
+        return this._createComponent($("<div>"), FileManagerEnterNameDialog, {
+            title: title,
+            buttonText: buttonText,
+            onClosed: this._onDialogClosed.bind(this)
+        });
+    },
+
     _onFilesTreeViewCreateChildren: function(parent) {
         var path = parent ? parent.itemData.relativeName : "";
         return this._provider.getFolders(path);
@@ -156,16 +162,31 @@ var FileManager = Widget.inherit({
                 if(that._itemsViewAreaActive) {
                     that._loadFilesToFilesView();
                 } else {
-                    that._filesTreeView.option("dataSource", []);
+                    that._updateFilesTreeView();
                 }
 
             },
             error => { if(error) that._showError(error); });
     },
 
+    _tryCreate: function() {
+        var item = this._currentFolder;
+
+        var that = this;
+        this._getNewName()
+            .then(result => { return that._provider.createFolder(item, result.name); })
+            .then(() => {
+                that._showSuccess("Folder created");
+                that._updateFilesTreeView();
+                that._itemsViewAreaActive = false;
+            },
+            error => { if(error) that._showError(error); });
+    },
+
     _getNewName: function(oldName) {
         this._dialogDeferred = new Deferred();
-        this._renameItemDialog.show(oldName);
+        var dialog = oldName ? this._renameItemDialog : this._createFolderDialog;
+        dialog.show(oldName);
         return this._dialogDeferred.promise();
     },
 
@@ -198,12 +219,8 @@ var FileManager = Widget.inherit({
         });
     },
 
-    _setItemsViewAreaActive: function(value) {
-        this._itemsViewAreaActive = value;
-    },
-
-    _getItemsViewAreaActive: function(area) {
-        return this._itemsViewAreaActive;
+    _updateFilesTreeView: function() {
+        this._filesTreeView.option("dataSource", []);
     },
 
     _createFilesViewStore: function() {
@@ -297,6 +314,9 @@ var FileManager = Widget.inherit({
         switch(commandName) {
             case "rename":
                 this._tryRename();
+                break;
+            case "create":
+                this._tryCreate();
                 break;
         }
     },
