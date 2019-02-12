@@ -250,7 +250,7 @@ var BaseRenderingStrategy = Class.inherit({
                     j: j,
                     top: item.top,
                     left: item.left,
-                    cellShift: item.cellShift,
+                    cellPosition: item.cellPosition,
                     isStart: true,
                     allDay: item.allDay,
                     __tmpIndex: __tmpIndex
@@ -263,7 +263,7 @@ var BaseRenderingStrategy = Class.inherit({
                     j: j,
                     top: item.top + item.height,
                     left: item.left + item.width,
-                    cellShift: item.cellShift,
+                    cellPosition: item.cellPosition,
                     isStart: false,
                     allDay: item.allDay,
                     __tmpIndex: __tmpIndex
