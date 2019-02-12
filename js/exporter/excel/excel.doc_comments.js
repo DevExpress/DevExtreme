@@ -47,3 +47,19 @@
 * @name ExcelDataGridCell.value
 * @type any
 */
+/**
+* @name ExcelDataGridCell.totalSummaryItemName
+* @type string
+*/
+/**
+* @name ExcelDataGridCell.groupSummaryItems
+* @type Array<Object>
+*/
+/**
+* @name ExcelDataGridCell.groupSummaryItems.name
+* @type string
+*/
+/**
+* @name ExcelDataGridCell.groupSummaryItems.value
+* @type any
+*/
