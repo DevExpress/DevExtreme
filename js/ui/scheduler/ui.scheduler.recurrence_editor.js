@@ -362,6 +362,8 @@ var RecurrenceEditor = Editor.inherit({
         this._recurrenceRule.makeRule("bymonth", "");
         this._recurrenceRule.makeRule("bymonthday", "");
         this._recurrenceRule.makeRule("byday", "");
+
+        this._recurrenceRule.makeRules(this.option("value"));
     },
 
     _clearRepeatOnLabel: function() {
