@@ -826,6 +826,65 @@ QUnit.test("Nodes should be expanded after refresh method is called at boot time
     }
 });
 
+// T713250
+QUnit.test("Initialize when data as classes with a hierarchical structure", function(assert) {
+    // arrange
+    function Person(id, items) {
+        this._id = id;
+        this._items = items;
+    }
+    Object.defineProperty(Person.prototype, "ID", {
+        configurable: true,
+        enumerable: false,
+        get: function() { return this._id; },
+        set: function(value) { this._id = value; }
+    });
+    Object.defineProperty(Person.prototype, "items", {
+        configurable: true,
+        enumerable: false,
+        get: function() { return this._items; },
+        set: function(value) { this._items = value; }
+    });
+
+    var dataSource = [
+        new Person(1, [
+            new Person(2, [
+                new Person(3),
+                new Person(4),
+                new Person(5),
+            ])
+        ])
+    ];
+
+    // act
+    this.applyOptions({
+        autoExpandAll: true,
+        dataSource: dataSource,
+        dataStructure: "tree",
+        keyExpr: "ID",
+        itemsExpr: "items"
+    });
+
+    // assert
+    var rows = this.getVisibleRows();
+    assert.strictEqual(rows.length, 5, "row count");
+
+    assert.strictEqual(rows[0].node.key, 1, "key of the first node");
+    assert.strictEqual(rows[0].node.level, 0, "level of the first node");
+
+    assert.strictEqual(rows[1].node.key, 2, "key of the second node");
+    assert.strictEqual(rows[1].node.level, 1, "level of the second node");
+
+    assert.strictEqual(rows[2].node.key, 3, "key of the third node");
+    assert.strictEqual(rows[2].node.level, 2, "level of the third node");
+
+    assert.strictEqual(rows[3].node.key, 4, "key of the fourth node");
+    assert.strictEqual(rows[3].node.level, 2, "level of the fourth node");
+
+    assert.strictEqual(rows[4].node.key, 5, "key of the fifth node");
+    assert.strictEqual(rows[4].node.level, 2, "level of the fifth node");
+});
+
 
 QUnit.module("Expand/Collapse nodes", { beforeEach: setupModule, afterEach: teardownModule });
 
