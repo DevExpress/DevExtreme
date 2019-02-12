@@ -1005,6 +1005,9 @@ registerTheme({
                 size: 16
             }
         },
+        legend: {
+            visible: false
+        },
         indicator: {
             hasPositiveMeaning: true,
             layout: {

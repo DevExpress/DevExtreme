@@ -101,10 +101,10 @@ var environment = {
 
     },
     getBarsGroup: function() {
-        return this.renderer.g.getCall(1).returnValue;
+        return this.renderer.g.getCall(2).returnValue;
     },
     getTrackersGroup: function() {
-        return this.renderer.g.getCall(0).returnValue;
+        return this.renderer.g.getCall(1).returnValue;
     }
 };
 
@@ -940,12 +940,35 @@ QUnit.test('Too many bars', function(assert) {
     });
 
     var bars = StubBarWrapper.instances;
-    assert.strictEqual(bars.length, 5, 'count');
+    assert.strictEqual(bars.length, 8, 'count');
     assert.strictEqual(bars[0].stub('arrange').lastCall.args[0].radius, 50, 'bar 1');
     assert.strictEqual(bars[1].stub('arrange').lastCall.args[0].radius, 49, 'bar 2');
     assert.strictEqual(bars[2].stub('arrange').lastCall.args[0].radius, 48, 'bar 3');
     assert.strictEqual(bars[3].stub('arrange').lastCall.args[0].radius, 47, 'bar 4');
     assert.strictEqual(bars[4].stub('arrange').lastCall.args[0].radius, 46, 'bar 5');
+    assert.strictEqual(bars[5].stub('arrange').callCount, 0, 'bar 6');
+    assert.strictEqual(bars[6].stub('arrange').callCount, 0, 'bar 7');
+    assert.strictEqual(bars[7].stub('arrange').callCount, 0, 'bar 8');
+    assert.strictEqual(bars[4].stub('hide').callCount, 0);
+    assert.strictEqual(bars[5].stub('hide').callCount, 1);
+    assert.strictEqual(bars[6].stub('hide').callCount, 1);
+    assert.strictEqual(bars[7].stub('hide').callCount, 1);
+});
+
+QUnit.test('Render all hidden bars after resize', function(assert) {
+    this.$container.width(100).height(100).dxBarGauge({
+        values: [1, 2, 3, 4, 5, 6, 7, 8],
+        relativeInnerRadius: 0.9,
+        label: { visible: false }
+    });
+
+    this.$container.width(1000).height(1000).dxBarGauge("render");
+
+    var bars = StubBarWrapper.instances;
+    assert.strictEqual(bars.length, 8, 'count');
+    assert.strictEqual(bars[5].stub('arrange').callCount, 1, 'bar 6');
+    assert.strictEqual(bars[6].stub('arrange').callCount, 1, 'bar 7');
+    assert.strictEqual(bars[7].stub('arrange').callCount, 1, 'bar 8');
 });
 
 QUnit.test('Calling drawn', function(assert) {
@@ -977,4 +1000,50 @@ QUnit.test('Calling drawn / no animation', function(assert) {
         assert.strictEqual(callback.callCount, 1);
         done();
     }, 10);
+});
+
+QUnit.module('Gauge in small container', $.extend({}, environment, {
+    getGauge: function(options) {
+        var gauge = this.$container.dxBarGauge(options).dxBarGauge('instance'),
+            group = this.renderer.g.lastCall.returnValue,
+            __animate = group.animate;
+        group.animate = function() {
+            __animate.apply(this, arguments);
+            arguments[1].complete();
+        };
+        return gauge;
+    }
+}));
+
+QUnit.test('Draw without animation in small container', function(assert) {
+    this.getGauge({
+        size: { width: 50, height: 50 },
+        values: [1, 2, 3, 4],
+        animation: false
+    });
+
+    assert.deepEqual(this.getTrackersGroup().children.length, 2);
+});
+
+QUnit.test('Draw with animation in small container', function(assert) {
+    this.getGauge({
+        size: { width: 50, height: 50 },
+        values: [1, 2, 3, 4],
+        animation: true
+    });
+
+    assert.deepEqual(this.getTrackersGroup().children.length, 2);
+});
+
+QUnit.test('Draw with animation in small container, change values', function(assert) {
+    var gauge = this.getGauge({
+        values: [1, 2, 3, 4],
+        animation: true
+    });
+
+    gauge.option("size", { width: 50, height: 50 });
+
+    gauge.values([5, 6, 7, 8]);
+
+    assert.deepEqual(this.getTrackersGroup().children.length, 2);
 });
