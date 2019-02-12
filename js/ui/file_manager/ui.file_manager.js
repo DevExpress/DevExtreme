@@ -5,7 +5,7 @@ import { extend } from "../../core/utils/extend";
 
 import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
-import TreeViewSearch from "../tree_view/ui.tree_view.search";
+import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 import FileManagerToolbar from "./ui.file_manager.toolbar";
 import FileManagerEnterNameDialog from "./ui.file_manager.dialogs";
 import notify from "../notify";
@@ -71,17 +71,12 @@ var FileManager = Widget.inherit({
     },
 
     _createFilesTreeView: function() {
-        this._filesTreeView = this._createComponent($("<div>"), TreeViewSearch, {
-            dataStructure: "plain",
-            rootValue: "",
-            keyExpr: "relativeName",
-            parentIdExpr: "parentPath",
-            displayExpr: "name",
-            createChildren: this._onFilesTreeViewCreateChildren.bind(this),
-            onItemClick: this._onFilesTreeViewItemClick.bind(this)
+        this._filesTreeView = this._createComponent($("<div>"), FileManagerFilesTreeView, {
+            provider: this._provider,
+            onCurrentFolderChanged: this._onFilesTreeViewCurrentFolderChanged.bind(this),
+            onClick: function() { this._itemsViewAreaActive = false; }.bind(this)
         });
         this._filesTreeView.$element().addClass(FILE_MANAGER_DIRS_TREE_CLASS);
-        this._filesTreeView.$element().on("click", function() { this._itemsViewAreaActive = false; }.bind(this));
     },
 
     _createFilesView: function() {
@@ -124,18 +119,10 @@ var FileManager = Widget.inherit({
         });
     },
 
-    _onFilesTreeViewCreateChildren: function(parent) {
-        var path = parent ? parent.itemData.relativeName : "";
-        return this._provider.getFolders(path);
-    },
-
-    _onFilesTreeViewItemClick: function(e) {
-        var newPath = e.itemData.relativeName;
-        if(newPath !== this._currentPath) {
-            this._currentPath = newPath;
-            this._currentFolder = e.itemData;
-            this._loadFilesToFilesView();
-        }
+    _onFilesTreeViewCurrentFolderChanged: function(e) {
+        this._currentPath = this._filesTreeView.getCurrentPath();
+        this._currentFolder = this._filesTreeView.getCurrentFolder();
+        this._loadFilesToFilesView();
     },
 
     _onToolbarItemClick: function(buttonName) {
@@ -241,7 +228,7 @@ var FileManager = Widget.inherit({
     },
 
     _updateFilesTreeView: function() {
-        this._filesTreeView.option("dataSource", []);
+        this._filesTreeView.refreshData();
     },
 
     _createFilesViewStore: function() {
