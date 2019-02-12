@@ -951,6 +951,22 @@ QUnit.test('Too many bars', function(assert) {
     assert.strictEqual(bars[7].stub('arrange').callCount, 0, 'bar 8');
 });
 
+QUnit.test('Render all hidden bars after resize', function(assert) {
+    this.$container.width(100).height(100).dxBarGauge({
+        values: [1, 2, 3, 4, 5, 6, 7, 8],
+        relativeInnerRadius: 0.9,
+        label: { visible: false }
+    });
+
+    this.$container.width(1000).height(1000).dxBarGauge("render");
+
+    var bars = StubBarWrapper.instances;
+    assert.strictEqual(bars.length, 8, 'count');
+    assert.strictEqual(bars[5].stub('arrange').callCount, 1, 'bar 6');
+    assert.strictEqual(bars[6].stub('arrange').callCount, 1, 'bar 7');
+    assert.strictEqual(bars[7].stub('arrange').callCount, 1, 'bar 8');
+});
+
 QUnit.test('Calling drawn', function(assert) {
     var callback = sinon.spy();
     this.$container.width(100).height(100).dxBarGauge({

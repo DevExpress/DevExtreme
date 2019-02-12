@@ -190,8 +190,7 @@ var dxBarGauge = dxBaseGauge.inherit({
             radius = that._outerRadius - that._innerRadius,
             context = that._context,
             spacing,
-            unitOffset,
-            i;
+            unitOffset;
 
         const count = that._bars.length;
 
@@ -204,11 +203,15 @@ var dxBarGauge = dxBaseGauge.inherit({
         context.textRadius = radius + that._textIndent;
         that._palette.reset();
         unitOffset = context.barSize + spacing;
-        that._bars = that._bars.filter((_, i) => i < _count);
-        for(i = 0; i < _count; ++i, radius -= unitOffset) {
+
+        for(let i = 0; i < _count; ++i, radius -= unitOffset) {
             that._bars[i].arrange({
                 radius: radius
             });
+        }
+
+        for(let i = _count; i < count; i++) {
+            that._bars[i].hide();
         }
 
         if(that._animationSettings && !that._noAnimation) {
@@ -219,7 +222,7 @@ var dxBarGauge = dxBaseGauge.inherit({
         that._endValueChanging();
     },
 
-    _setBarsCount: function(count) {
+    _setBarsCount: function() {
         var that = this;
 
         if(that._bars.length > 0) {
@@ -399,6 +402,7 @@ _extend(BarWrapper.prototype, {
         var that = this,
             context = that._context;
 
+        this._visible = true;
         context.tracker.attach(that._tracker, that, { index: that._index });
 
         that._background = context.renderer.arc().attr({ "stroke-linejoin": "round", fill: context.backgroundColor }).append(context.group);
@@ -467,12 +471,19 @@ _extend(BarWrapper.prototype, {
     },
 
     applyValue() {
+        if(!this._visible) {
+            return this;
+        }
         return this.setAngle(this._processValue(this.getValue()));
     },
 
     update({ color, value }) {
         this._color = color;
         this._value = value;
+    },
+
+    hide() {
+        this._visible = false;
     },
 
     getColor() {
@@ -484,6 +495,9 @@ _extend(BarWrapper.prototype, {
     },
 
     beginAnimation: function() {
+        if(!this._visible) {
+            return this;
+        }
         var that = this,
             angle = this._processValue(this.getValue());
         if(!compareFloats(that._angle, angle)) {
@@ -501,6 +515,9 @@ _extend(BarWrapper.prototype, {
     },
 
     animate: function(pos) {
+        if(!this._visible) {
+            return this;
+        }
         var that = this;
         that._angle = that._start + that._delta * pos;
         setAngles(that._settings, that._context.baseAngle, that._angle);
@@ -508,6 +525,9 @@ _extend(BarWrapper.prototype, {
     },
 
     endAnimation: function() {
+        if(!this._visible) {
+            return this;
+        }
         var that = this;
         if(that._delta !== undefined) {
             if(compareFloats(that._angle, that._start + that._delta)) {
