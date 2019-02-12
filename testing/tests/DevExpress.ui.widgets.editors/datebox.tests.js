@@ -2003,7 +2003,7 @@ QUnit.test("should execute custom validator while validation state reevaluating"
 });
 
 QUnit.test("should rise validation event once after value is changed by calendar (T714599)", (assert) => {
-    let validationEventRiseCount = 0;
+    const validationCallbackStub = sinon.stub().returns(false);
     const dateBox = $("#dateBoxWithPicker")
         .dxDateBox({
             type: "datetime",
@@ -2013,7 +2013,7 @@ QUnit.test("should rise validation event once after value is changed by calendar
         .dxValidator({
             validationRules: [{
                 type: "custom",
-                validationCallback: () => validationEventRiseCount++
+                validationCallback: validationCallbackStub
             }]
         })
         .dxDateBox("instance");
@@ -2022,7 +2022,7 @@ QUnit.test("should rise validation event once after value is changed by calendar
     $(".dx-popup-done.dx-button").trigger("dxclick");
 
     assert.notOk(dateBox.option("opened"));
-    assert.strictEqual(validationEventRiseCount, 1);
+    assert.ok(validationCallbackStub.calledOnce);
 });
 
 QUnit.test("Editor should reevaluate validation state after change text to the current value", function(assert) {
