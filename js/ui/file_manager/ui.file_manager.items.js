@@ -7,7 +7,7 @@ var FileManagerItem = Class.inherit({
         this.relativeName = this.parentPath ? this.parentPath + "/" + this.name : this.name;
 
         this.length = 0;
-        this.lastWriteTime = Date.now();
+        this.lastWriteTime = new Date();
     }
 });
 

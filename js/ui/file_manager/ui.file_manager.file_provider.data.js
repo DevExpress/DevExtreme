@@ -44,7 +44,7 @@ var DataFileProvider = FileProvider.inherit({
             if(entry.isFolder === isFolder) {
                 var item = new FileManagerItem(path, entry.name);
                 item.length = entry.length !== undefined ? entry.length : 0;
-                item.lastWriteTime = entry.lastWriteTime !== undefined ? entry.lastWriteTime : Date.now();
+                item.lastWriteTime = entry.lastWriteTime !== undefined ? entry.lastWriteTime : new Date();
                 item.dataItem = entry; // TODO remove if do not need
                 result.push(item);
             }

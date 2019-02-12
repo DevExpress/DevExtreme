@@ -10,6 +10,7 @@ import FileManagerToolbar from "./ui.file_manager.toolbar";
 import FileManagerEnterNameDialog from "./ui.file_manager.dialogs";
 import notify from "../notify";
 
+import FileManagerItem from "./ui.file_manager.items";
 import DataFileProvider from "./ui.file_manager.file_provider.data";
 import OneDriveFileProvider from "./ui.file_manager.file_provider.onedrive";
 import WebAPIFileProvider from "./ui.file_manager.file_provider.webapi";
@@ -31,7 +32,9 @@ var FileManager = Widget.inherit({
         this.callBase();
 
         this._currentPath = "";
+        this._currentFolder = new FileManagerItem("", "");
         this._provider = this._createFileProvider();
+        this._itemsViewAreaActive = false;
 
         var toolbar = this._createComponent($("<div>"), FileManagerToolbar, {
             "onItemClick": this._onToolbarItemClick.bind(this)
@@ -80,6 +83,7 @@ var FileManager = Widget.inherit({
             onItemClick: this._onFilesTreeViewItemClick.bind(this)
         });
         this._filesTreeView.$element().addClass(FILE_MANAGER_DIRS_TREE_CLASS);
+        this._filesTreeView.$element().on("click", function() { this._itemsViewAreaActive = false; }.bind(this));
     },
 
     _createFilesView: function() {
@@ -111,6 +115,7 @@ var FileManager = Widget.inherit({
         });
         this._loadFilesToFilesView();
         this._filesView.$element().addClass(FILE_MANAGER_FILES_VIEW_CLASS);
+        this._filesView.$element().on("click", function() { this._itemsViewAreaActive = true; }.bind(this));
     },
 
     _onFilesTreeViewCreateChildren: function(parent) {
@@ -122,6 +127,7 @@ var FileManager = Widget.inherit({
         var newPath = e.itemData.relativeName;
         if(newPath !== this._currentPath) {
             this._currentPath = newPath;
+            this._currentFolder = e.itemData;
             this._loadFilesToFilesView();
         }
     },
@@ -131,17 +137,28 @@ var FileManager = Widget.inherit({
     },
 
     _tryRename: function() {
-        var items = this.getSelectedItems();
-        if(items.length !== 1) return;
+        var item = null;
 
-        var item = items[0];
+        if(this._itemsViewAreaActive) {
+            var items = this.getSelectedItems();
+            if(items.length === 1) item = items[0];
+        } else {
+            item = this._currentFolder;
+        }
+
+        if(!item) return;
 
         var that = this;
         this._getNewName(item.name)
             .then(result => { return that._provider.renameItem(item, result.name); })
             .then(() => {
                 that._showSuccess("Item renamed");
-                that._loadFilesToFilesView();
+                if(that._itemsViewAreaActive) {
+                    that._loadFilesToFilesView();
+                } else {
+                    that._filesTreeView.option("dataSource", []);
+                }
+
             },
             error => { if(error) that._showError(error); });
     },
@@ -179,6 +196,14 @@ var FileManager = Widget.inherit({
         this._filesView.option("dataSource", {
             "store": this._createFilesViewStore()
         });
+    },
+
+    _setItemsViewAreaActive: function(value) {
+        this._itemsViewAreaActive = value;
+    },
+
+    _getItemsViewAreaActive: function(area) {
+        return this._itemsViewAreaActive;
     },
 
     _createFilesViewStore: function() {
