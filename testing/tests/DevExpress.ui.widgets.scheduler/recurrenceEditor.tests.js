@@ -708,7 +708,7 @@ QUnit.test("Recurrence editor should process values from repeat-on-editor correc
     dayEditor.option("value", 5);
     freqEditor.option("value", "YEARLY");
 
-    assert.equal(this.instance.option("value"), "FREQ=YEARLY;BYMONTHDAY=10;BYMONTH=3", "recurrence editor value is correct");
+    assert.equal(this.instance.option("value"), "FREQ=YEARLY;BYMONTHDAY=5;BYMONTH=3", "recurrence editor value is correct");
 });
 
 QUnit.test("It should not be possible to set incorrect day of month", function(assert) {

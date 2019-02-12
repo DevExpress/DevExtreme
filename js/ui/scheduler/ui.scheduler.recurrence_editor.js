@@ -768,6 +768,7 @@ var RecurrenceEditor = Editor.inherit({
         if(value === "YEARLY") {
             this._recurrenceRule.makeRule("bymonthday", this._dayOfMonthByRules());
             this._recurrenceRule.makeRule("bymonth", this._monthOfYearByRules());
+            this._recurrenceRule.makeRule("byday", "");
         }
     },
 
