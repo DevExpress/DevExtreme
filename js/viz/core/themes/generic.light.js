@@ -248,13 +248,15 @@ registerTheme({
         tick: {
             visible: false,
             width: 1,
-            length: 8
+            length: 8,
+            shift: 0
         },
         minorTick: {
             visible: false,
             width: 1,
             opacity: 0.3,
-            length: 8
+            length: 8,
+            shift: 0
         },
         stripStyle: {
             paddingLeftRight: 10,

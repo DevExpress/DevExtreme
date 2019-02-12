@@ -115,24 +115,24 @@ function createBoundaryTick(axis, renderer, isFirst) {
     );
 }
 
-function callAction(elements, action, actionArgument) {
-    (elements || []).forEach(e => e[action](actionArgument));
+function callAction(elements, action, actionArgument1, actionArgument2) {
+    (elements || []).forEach(e => e[action](actionArgument1, actionArgument2));
 }
 
 function initTickCoords(ticks) {
     callAction(ticks, "initCoords");
 }
 
-function drawTickMarks(ticks) {
-    callAction(ticks, "drawMark");
+function drawTickMarks(ticks, options) {
+    callAction(ticks, "drawMark", options);
 }
 
 function drawGrids(ticks, drawLine) {
     callAction(ticks, "drawGrid", drawLine);
 }
 
-function updateTicksPosition(ticks, animate) {
-    callAction(ticks, "updateTickPosition", animate);
+function updateTicksPosition(ticks, options, animate) {
+    callAction(ticks, "updateTickPosition", options, animate);
 }
 
 function updateGridsPosition(ticks, animate) {
@@ -1661,6 +1661,7 @@ Axis.prototype = {
 
     draw: function(canvas, borderOptions) {
         const that = this;
+        const options = this._options;
         that.borderOptions = borderOptions || { visible: false };
 
         that.createTicks(canvas);
@@ -1672,9 +1673,9 @@ Axis.prototype = {
 
         that._drawAxis();
         that._drawTitle();
-        drawTickMarks(that._majorTicks);
-        drawTickMarks(that._minorTicks);
-        drawTickMarks(that._boundaryTicks);
+        drawTickMarks(that._majorTicks, options.tick);
+        drawTickMarks(that._minorTicks, options.minorTick);
+        drawTickMarks(that._boundaryTicks, options.tick);
 
         const drawGridLine = that._getGridLineDrawer();
         drawGrids(that._majorTicks, drawGridLine);
@@ -1741,6 +1742,7 @@ Axis.prototype = {
         that._reinitTranslator(that._getViewportRange());
 
         const animationEnabled = !that._firstDrawing && animate;
+        const options = this._options;
 
         initTickCoords(that._majorTicks);
         initTickCoords(that._minorTicks);
@@ -1752,9 +1754,9 @@ Axis.prototype = {
 
         that._updateAxisElementPosition();
 
-        updateTicksPosition(that._majorTicks, animationEnabled);
-        updateTicksPosition(that._minorTicks, animationEnabled);
-        updateTicksPosition(that._boundaryTicks);
+        updateTicksPosition(that._majorTicks, options.tick, animationEnabled);
+        updateTicksPosition(that._minorTicks, options.minorTick, animationEnabled);
+        updateTicksPosition(that._boundaryTicks, options.tick);
 
         callAction(that._majorTicks, "updateLabelPosition", animationEnabled);
 
