@@ -18,15 +18,7 @@ var BUNDLE_CONFIG_SOURCES = [
     'js/bundles/modules/parts/aspnet.js'
 ];
 
-var versionPath = 'js/core/version.js';
-
-gulp.task('version', function() {
-    return gulp.src(versionPath, { base: './' })
-        .pipe(replace(/".*?"/, `"${context.version.product}"`))
-        .pipe(gulp.dest('./'));
-});
-
-gulp.task('bundler-config', ['version'], function() {
+gulp.task('bundler-config', function() {
     return gulp.src(BUNDLE_CONFIG_SOURCES)
         .pipe(replace(/[^]*BUNDLER_PARTS.*?$([^]*)^.*?BUNDLER_PARTS_END[^]*/gm, "$1"))
         .pipe(concat('dx.custom.js'))

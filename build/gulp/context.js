@@ -3,6 +3,7 @@ var argv = require('yargs')
     .argv;
 
 var productVersion = require('../../package.json').version,
+    scriptVersion = productVersion,
     packageVersion = productVersion;
 
 var dxBuildLabel = process.env.DEVEXTREME_DXBUILD_LABEL,
@@ -30,7 +31,8 @@ if(dxBuildLabel) {
 module.exports = {
     version: {
         product: productVersion,
-        package: packageVersion
+        package: packageVersion,
+        script: scriptVersion
     },
     uglify: argv.uglify,
     RESULT_JS_PATH: 'artifacts/js',
