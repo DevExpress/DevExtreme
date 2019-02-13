@@ -20,7 +20,7 @@ export const create = (baseIndex = baseZIndex) => {
 export const remove = (zIndex) => {
     const position = zIndexStack.indexOf(zIndex);
     if(position >= 0) {
-        zIndexStack.splice(zIndexStack.indexOf(zIndex), 1);
+        zIndexStack.splice(position, 1);
     }
 };
 
