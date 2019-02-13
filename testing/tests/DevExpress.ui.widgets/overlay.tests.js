@@ -3404,3 +3404,10 @@ QUnit.test("overlay should get next z-index if the first one has been created be
 
     assert.strictEqual(zIndex.create(), 1503, "new zindex is larger than overlay's");
 });
+
+QUnit.test("it should not be possible to remove unexisting zIndex", function(assert) {
+    const index = zIndex.create();
+    zIndex.remove(9999);
+
+    assert.strictEqual(zIndex.create(), index + 1, "the next index has been created");
+});
