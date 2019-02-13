@@ -1480,11 +1480,9 @@ Axis.prototype = {
         that._ticksToRemove = Object.keys(majorTicksByValues)
             .map(k => majorTicksByValues[k]).concat(oldMinorTicks.slice(that._minorTicks.length, oldMinorTicks.length));
 
-        const viewportRange = that._getViewportRange();
-
         that._correctedBreaks = ticks.breaks;
 
-        that._reinitTranslator(viewportRange);
+        that._reinitTranslator(that._getViewportRange());
     },
 
     _reinitTranslator: function(range) {
