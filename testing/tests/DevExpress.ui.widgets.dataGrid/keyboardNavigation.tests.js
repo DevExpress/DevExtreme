@@ -3157,6 +3157,56 @@ QUnit.testInActiveWindow("Move focus to first data cell after tab key on group r
     });
 });
 
+QUnit.testInActiveWindow("DataGrid should not edit group cells after tab navigation from the editing cell (T714142)", function(assert) {
+    // arrange
+    var $cell;
+
+    this.columns = [
+        { visible: true, command: "expand" },
+        { caption: 'Column 1', visible: true, dataField: "Column1", allowEditing: true },
+        { caption: 'Column 2', visible: true, dataField: "Column2", allowEditing: false }
+    ];
+
+    this.dataControllerOptions = {
+        pageCount: 10,
+        pageIndex: 0,
+        pageSize: 10,
+        items: [
+            { values: [null, 'test0', 'test1'], rowType: 'data', key: 0 },
+            { values: ['group 1'], rowType: 'group', key: ['group 1'], groupIndex: 0 },
+            { values: [null, 'test1', 'test2'], rowType: 'data', key: 1 },
+            { values: [null, 'test1', 'test2'], rowType: 'data', key: 2 }
+        ]
+    };
+
+    this.options = {
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        }
+    };
+
+    setupModules(this);
+
+    // act
+    this.gridView.render($("#container"));
+    this.editCell(0, 1);
+    this.clock.tick();
+
+    $cell = $("#container").find(".dx-data-row").eq(0).find("td:nth-child(2)").eq(0);
+
+    // assert
+    assert.ok(this.editingController.isEditing(), "is editing");
+
+    // act
+    this.triggerKeyDown("tab", false, false, $cell);
+    this.clock.tick();
+
+    // assert
+    assert.notOk(this.editingController.isEditing(), "is editing");
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 1, columnIndex: 1 });
+});
+
 QUnit.testInActiveWindow("Do not prevent default on 'shift+tab' if the current cell is the first", function(assert) {
     // arrange
     this.columns = [
