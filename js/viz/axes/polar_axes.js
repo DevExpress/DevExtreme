@@ -39,8 +39,25 @@ function getPolarQuarter(angle) {
 polarAxes = exports;
 
 circularAxes = polarAxes.circular = {
-    _applyMargins: function(dataRange) {
-        return dataRange;
+    _calculateValueMargins(ticks) {
+        let { minVisible, maxVisible } = this._getViewportRange();
+        if(ticks && ticks.length > 1) {
+            minVisible = minVisible < ticks[0].value ? minVisible : ticks[0].value;
+            maxVisible = minVisible > ticks[ticks.length - 1].value ? maxVisible : ticks[ticks.length - 1].value;
+        }
+
+        return {
+            minValue: minVisible,
+            maxValue: maxVisible
+        };
+    },
+
+    applyMargins() {
+        const margins = this._calculateValueMargins(this._majorTicks);
+
+        const br = this._translator.getBusinessRange();
+        br.addRange({ minVisible: margins.minValue, maxVisible: margins.maxValue });
+        this._translator.updateBusinessRange(br);
     },
 
     _getTranslatorOptions: function() {
@@ -440,6 +457,10 @@ polarAxes.circularSpider = _extend({}, circularAxes, {
 });
 
 polarAxes.linear = {
+    applyMargins: circularAxes.applyMargins,
+    _resetMargins() {
+        this._reinitTranslator(this._getViewportRange());
+    },
     _setVisualRange: _noop,
     _getStick: xyAxesLinear._getStick,
     _getSpiderCategoryOption: _noop,

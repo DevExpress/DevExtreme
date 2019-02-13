@@ -654,7 +654,7 @@ var EditingController = modules.ViewController.inherit((function() {
                         item.modified = true;
                         item.oldData = item.data;
                         item.data = createObjectWithChanges(item.data, data);
-                        item.modifiedValues = generateDataValues(data, columns);
+                        item.modifiedValues = generateDataValues(data, columns, true);
                         break;
                     case DATA_EDIT_DATA_REMOVE_TYPE:
                         if(editMode === EDIT_MODE_BATCH) {
@@ -730,6 +730,11 @@ var EditingController = modules.ViewController.inherit((function() {
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
                 editMode = getEditMode(that),
                 $firstCell;
+
+            if(!store) {
+                dataController.fireError("E1052", this.component.NAME);
+                return;
+            }
 
             if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
                 that.saveEditData();
@@ -1603,7 +1608,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 columns;
 
             if(rowKey === undefined) {
-                that._dataController.dataErrorOccurred.fire(errors.Error("E1043"));
+                that._dataController.fireError("E1043");
             }
 
             if(options.column.setCellValue) {
@@ -2192,6 +2197,12 @@ module.exports = {
                  */
                 useIcons: false,
                 /**
+                 * @name GridBaseOptions.editing.excelLikeNavigation
+                 * @type boolean
+                 * @default false
+                 */
+                excelLikeNavigation: false,
+                /**
                  * @name dxDataGridOptions.editing.texts
                  * @type object
                  */
@@ -2356,8 +2367,8 @@ module.exports = {
                         return;
                     }
 
-                    if(oldItem.rowType === newItem.rowType && isRowEditMode && editingController.isEditRow(rowIndex)) {
-                        return isLiveUpdate ? [] : undefined;
+                    if(oldItem.rowType === newItem.rowType && isRowEditMode && editingController.isEditRow(rowIndex) && isLiveUpdate) {
+                        return [];
                     }
 
                     return this.callBase.apply(this, arguments);
@@ -2554,6 +2565,10 @@ module.exports = {
                         }
                     }
 
+                    if(isEditing) {
+                        this._editCellPrepared($cell);
+                    }
+
                     var modifiedValues = parameters.row && (parameters.row.inserted ? parameters.row.values : parameters.row.modifiedValues);
 
                     if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
@@ -2565,6 +2580,7 @@ module.exports = {
 
                     this.callBase.apply(this, arguments);
                 },
+                _editCellPrepared: function($cell) { },
                 _formItemPrepared: function() { },
                 _isFormItem: function(parameters) {
                     var isDetailRow = parameters.rowType === "detail" || parameters.rowType === "detailAdaptive",

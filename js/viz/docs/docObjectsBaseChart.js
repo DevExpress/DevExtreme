@@ -248,3 +248,25 @@ var BaseLabel = {
     */
     isVisible: function() { }
 }
+
+/**
+* @name BaseChartLegendItem
+* @type object
+*/
+var legendItem = {
+  /**
+  * @name BaseChartLegendItem.text
+  * @type string
+  */
+  text: undefined,
+  /**
+  * @name BaseChartLegendItem.series
+  * @type baseSeriesObject
+  */
+  series: undefined,
+  /**
+  * @name BaseChartLegendItem.visible
+  * @type boolean
+  */
+  visible: true
+};

@@ -13,6 +13,11 @@ function run_lint {
     npm run lint
 }
 
+function run_ts {
+    npm i
+    npx gulp ts-check npm-dts-check
+}
+
 function run_test {
     local port=`node -e "console.log(require('./ports.json').qunit)"`
     local url="http://localhost:$port/run?notimers=true&nojquery=true"
@@ -83,6 +88,7 @@ echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
 case "$TARGET" in
     "lint") run_lint ;;
+    "ts") run_ts ;;
     "test") run_test ;;
 
     *)

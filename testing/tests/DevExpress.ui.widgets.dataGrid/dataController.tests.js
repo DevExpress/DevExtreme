@@ -11641,6 +11641,16 @@ QUnit.module("Refresh changesOnly", {
             that.dataSource.load();
         };
 
+        that.setValue = function(rowIndex, columnId, value) {
+            var row = that.getVisibleRows()[rowIndex];
+            this.editingController.updateFieldValue({
+                row: row,
+                key: row.key,
+                data: row.data,
+                column: this.columnOption(columnId)
+            }, value, "", true);
+        };
+
     }, afterEach: teardownModule
 });
 
@@ -12093,6 +12103,39 @@ QUnit.test("edit cell should not be updated on data change", function(assert) {
     assert.deepEqual(changedArgs.changeTypes, ["update"]);
     assert.deepEqual(changedArgs.rowIndices, [0]);
     assert.deepEqual(changedArgs.columnIndices, [[2]], "only last column is updated");
+});
+
+// T710380
+QUnit.test("command column cell should not be updated after cell value change if setCellValue is defined", function(assert) {
+    this.setupModules();
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    this.columnOption("age", {
+        setCellValue: function(data, value) {
+            data.age = value;
+        }
+    });
+
+    this.options.repaintChangesOnly = true;
+    this.options.editing = { mode: "row", allowUpdating: true };
+    this.editRow(0);
+
+    // act
+    this.setValue(0, "age", 99);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(this.getVisibleColumns()[3].type, "buttons", "last column type is buttons");
+    assert.deepEqual(items[0].values, [1, "Alex", 99, null]);
+    assert.deepEqual(changedArgs.changeType, "update");
+    assert.deepEqual(changedArgs.changeTypes, ["update"]);
+    assert.deepEqual(changedArgs.rowIndices, [0]);
+    assert.deepEqual(changedArgs.columnIndices, [[2]], "only age column is updated");
 });
 
 QUnit.test("change dataSource item field", function(assert) {
@@ -13217,6 +13260,33 @@ QUnit.test("loadAll during data loading", function(assert) {
 
     // assert
     assert.ok(isLoadAllFailed, "loadAll failed");
+    assert.equal(this.dataController.items().length, 3, 'items count');
+    assert.ok(!this.dataController.isLoading(), 'no loading');
+});
+
+// T713135
+QUnit.test("loadAll during custom loading", function(assert) {
+    var allItems;
+
+    this.setupDataGridModules({
+        dataSource: this.array,
+        paging: {
+            pageSize: 3
+        }
+    });
+
+    this.clock.tick();
+
+    // act
+    this.dataController.beginCustomLoading("test");
+    this.dataController.loadAll().done(function(items) {
+        allItems = items;
+    });
+    this.dataController.endCustomLoading();
+    this.clock.tick();
+
+    // assert
+    assert.equal(allItems.length, 5, "loaded all item count");
     assert.equal(this.dataController.items().length, 3, 'items count');
     assert.ok(!this.dataController.isLoading(), 'no loading');
 });

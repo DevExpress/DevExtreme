@@ -582,6 +582,13 @@ var dxFunnel = {
         * @type_function_return string
         */
         customizeHint: undefined,
+        /**
+        * @name dxFunnelOptions.legend.customizeItems
+        * @type function(items)
+        * @type_function_param1 items:Array<FunnelLegendItem>
+        * @type_function_return Array<FunnelLegendItem>
+        */
+        customizeItems: undefined
     },
    /**
     * @name dxFunnelOptions.tooltip

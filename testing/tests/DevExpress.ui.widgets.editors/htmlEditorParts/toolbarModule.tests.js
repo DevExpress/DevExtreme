@@ -707,6 +707,22 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.notOk($historyWidgets.eq(0).hasClass(DISABLED_STATE_CLASS), "Undo is enabled");
         assert.notOk($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), "Redo is enabled");
     });
+
+    test("SelectBox should display currently applied value", (assert) => {
+        this.quillMock.getFormat = () => { return { size: "10px" }; };
+        this.options.items = [{ formatName: "size", formatValues: ["10px", "11px"] }];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+
+        toolbar.updateFormatWidgets();
+
+        const value = this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${TEXTEDITOR_INPUT_CLASS}`)
+            .val();
+
+        assert.strictEqual(value, "10px", "SelectBox contain selected value");
+    });
+
 });
 
 QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {

@@ -343,9 +343,9 @@ extend(legendPrototype, {
     },
 
     update: function(data, options, themeManager) {
-        var that = this;
-
-        that._data = data;
+        const that = this;
+        options = that._options = parseOptions(options, that._textField) || {};
+        that._data = data && options.customizeItems && options.customizeItems(data.slice()) || data;
         that._boundingRect = {
             width: 0,
             height: 0,
@@ -353,8 +353,7 @@ extend(legendPrototype, {
             y: 0
         };
 
-        that._options = parseOptions(options, that._textField);
-        if(that.isExist() && !that._title) {
+        if(that._isVisible() && !that._title) {
             that._title = new title.Title({ renderer: that._renderer, cssClass: "dxc-title", root: that._legendGroup });
         }
 
@@ -363,19 +362,19 @@ extend(legendPrototype, {
         return that;
     },
 
-    isExist: function() {
-        return this._options && this._options.visible && this._data && this._data.length;
+    _isVisible: function() {
+        return this._options && this._options.visible;
     },
 
     draw: function(width, height) {
         // TODO check multiple groups creation
         const that = this,
+            items = that._getItemData(),
             options = that._options;
 
         that._size = { width: width, height: height };
         that.erase();
-
-        if(!that.isExist()) {
+        if(!(that._isVisible() && items && items.length)) {
             return that;
         }
 
@@ -389,7 +388,7 @@ extend(legendPrototype, {
 
         that._createBackground();
         // TODO review pass or process states in legend
-        that._createItems(that._getItemData());
+        that._createItems(items);
 
         that._locateElements(options);
         that._finalUpdate(options);
@@ -463,12 +462,14 @@ extend(legendPrototype, {
     },
 
     _getItemData: function() {
-        var items = this._data;
+        let items = this._data || [];
+        const options = this._options || {};
         // For maps in dashboards
-        if(this._options.inverted) {
+        if(options.inverted) {
             items = items.slice().reverse();
         }
-        return items;
+
+        return items.filter(i => i.visible);
     },
 
     _finalUpdate: function(options) {
@@ -976,10 +977,10 @@ exports.plugin = {
             renderer: that._renderer,
             group: group,
             textField: "text",
-            getFormatObject: function(item) {
+            getFormatObject: function(data) {
                 return {
-                    item: item,
-                    text: item.argument
+                    item: data.item,
+                    text: data.text
                 };
             },
         });

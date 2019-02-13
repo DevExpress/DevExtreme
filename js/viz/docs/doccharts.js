@@ -486,6 +486,12 @@ var dxChart = {
     */
     scrollingMode: 'none',
     /**
+    * @name dxChartOptions.stickyHovering
+    * @type boolean
+    * @default true
+    */
+    stickyHovering: true,
+    /**
     * @name dxChartOptions.useAggregation
     * @type boolean
     * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled
@@ -1008,7 +1014,13 @@ var dxChart = {
             * @type number
             * @default 8
             */
-            length: 8
+            length: 8,
+            /**
+            * @name dxChartOptions.commonAxisSettings.tick.shift
+            * @type number
+            * @default 0
+            */
+            shift: 0
         },
         /**
        * @name dxChartOptions.commonAxisSettings.minorTick
@@ -1045,6 +1057,12 @@ var dxChart = {
             * @default 8
             */
             length: 8,
+            /**
+            * @name dxChartOptions.commonAxisSettings.minorTick.shift
+            * @type number
+            * @default 0
+            */
+            shift: 0
         },
         /**
         * @name dxChartOptions.commonAxisSettings.title
@@ -1405,11 +1423,17 @@ var dxChart = {
             */
             value: undefined,
             /**
+            * @name dxChartOptions.argumentAxis.constantLines.displayBehindSeries
+            * @type boolean
+            * @default false
+            */
+            displayBehindSeries: false,
+            /**
             * @name dxChartOptions.argumentAxis.constantLines.extendAxis
             * @type boolean
             * @default false
             */
-            extendAxis: false,
+           extendAxis: false,
             /**
             * @name dxChartOptions.argumentAxis.constantLines.label
             * @type object
@@ -1708,6 +1732,12 @@ var dxChart = {
             * @default undefined
             */
             value: undefined,
+            /**
+            * @name dxChartOptions.valueAxis.constantLines.displayBehindSeries
+            * @type boolean
+            * @default false
+            */
+            displayBehindSeries: false,
             /**
             * @name dxChartOptions.valueAxis.constantLines.extendAxis
             * @type boolean
@@ -2017,7 +2047,15 @@ var dxPieChart = {
        * @type_function_param1_field3 pointColor:string
        * @type_function_return string
        */
-        customizeHint: undefined,
+       customizeHint: undefined,
+       /**
+       * @name dxPieChartOptions.legend.customizeItems
+       * @type function(items)
+       * @type_function_param1 items:Array<PieChartLegendItem>
+       * @type_function_return Array<PieChartLegendItem>
+       * @inheritdoc
+       */
+       customizeItems: undefined
     },
     /**
     * @name dxPieChartOptions.resolveLabelOverlapping
@@ -2751,6 +2789,12 @@ var dxPolarChart = {
             */
             value: undefined,
             /**
+            * @name dxPolarChartOptions.argumentAxis.constantLines.displayBehindSeries
+            * @type boolean
+            * @default false
+            */
+            displayBehindSeries: false,
+            /**
             * @name dxPolarChartOptions.argumentAxis.constantLines.extendAxis
             * @type boolean
             * @default false
@@ -2933,6 +2977,12 @@ var dxPolarChart = {
             * @type boolean
             * @default false
             */
+            /**
+            * @name dxPolarChartOptions.valueAxis.constantLines.displayBehindSeries
+            * @type boolean
+            * @default false
+            */
+            displayBehindSeries: false,
             extendAxis: false,
             /**
             * @name dxPolarChartOptions.valueAxis.constantLines.label
@@ -3359,7 +3409,14 @@ var BaseChart = {
         * @type number
         * @default 8
         */
-        rowItemSpacing: 8
+        rowItemSpacing: 8,
+        /**
+        * @name BaseChartOptions.legend.customizeItems
+        * @type function(items)
+        * @type_function_param1 items:Array<BaseChartLegendItem>
+        * @type_function_return Array<BaseChartLegendItem>
+        */
+        customizeItems: undefined
     },
     /**
     * @name BaseChartOptions.series

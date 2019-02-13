@@ -31,11 +31,7 @@ const CLICK_COORD_THRESHOLD_MOUSE = 5;
 const CLICK_COORD_THRESHOLD_TOUCH = 20;
 const DRAG_COORD_THRESHOLD_MOUSE = 5;
 const DRAG_COORD_THRESHOLD_TOUCH = 10;
-const FOCUS_ON_DELAY_MOUSE = 300;
-const FOCUS_OFF_DELAY_MOUSE = 300;
-const FOCUS_ON_DELAY_TOUCH = 300;
-const FOCUS_OFF_DELAY_TOUCH = 400;
-const FOCUS_COORD_THRESHOLD_MOUSE = 5;
+const FOCUS_OFF_DELAY = 100;
 const WHEEL_COOLDOWN = 50;
 const WHEEL_DIRECTION_COOLDOWN = 300;
 
@@ -279,13 +275,8 @@ Tracker.prototype = {
 
         if(isTouchEvent(event) !== isTouch) { return; }
 
-        that._focus.turnOff(isTouch ? FOCUS_OFF_DELAY_TOUCH : FOCUS_OFF_DELAY_MOUSE);
-        data && that._focus.turnOn(data, getEventCoords(event), isTouch ? FOCUS_ON_DELAY_TOUCH : FOCUS_ON_DELAY_MOUSE, isTouch);
-    },
-
-    _endFocus: function(event) {
-        if(!isTouchEvent(event)) { return; }
-        this._focus.cancelOn();
+        that._focus.turnOff();
+        data && that._focus.turnOn(data, getEventCoords(event));
     },
 
     _cancelFocus: function() {
@@ -337,7 +328,6 @@ Tracker.prototype = {
             that._endClick(event, data);
             that._endDrag(event, data);
             that._endZoom(event, data);
-            that._endFocus(event, data);
         };
 
         that._rootHandlers[EVENTS.wheel] = function(event) {
@@ -420,43 +410,31 @@ var Focus = function(fire) {
         _activeData = null,
         _data = null,
         _disabled = false,
-        _onTimer = null,
         _offTimer = null,
         _x,
         _y;
 
     that.dispose = function() {
-        clearTimeout(_onTimer);
         clearTimeout(_offTimer);
-        that.turnOn = that.turnOff = that.cancel = that.cancelOn = that.dispose = that = fire = _activeData = _data = _onTimer = _offTimer = null;
+        that.turnOn = that.turnOff = that.cancel = that.dispose = that = fire = _activeData = _data = _offTimer = null;
     };
-    that.turnOn = function(data, coords, timeout, forceTimeout) {
+    that.turnOn = function(data, coords) {
         if(data === _data && _disabled) { return; }
         _disabled = false;
         _data = data;
         if(_activeData) {
             _x = coords.x;
             _y = coords.y;
-            clearTimeout(_onTimer);
-            _onTimer = setTimeout(function() {
-                _onTimer = null;
-                if(_data === _activeData) {
-                    fire(EVENT_FOCUS_MOVE, { data: _data, x: _x, y: _y });
-                    onCheck(true);
-                } else {
-                    fire(EVENT_FOCUS_ON, { data: _data, x: _x, y: _y, done: onCheck });
-                }
-            }, forceTimeout ? timeout : 0);
-        } else {
-            if(!_onTimer || _abs(coords.x - _x) > FOCUS_COORD_THRESHOLD_MOUSE || _abs(coords.y - _y) > FOCUS_COORD_THRESHOLD_MOUSE || forceTimeout) {
-                _x = coords.x;
-                _y = coords.y;
-                clearTimeout(_onTimer);
-                _onTimer = setTimeout(function() {
-                    _onTimer = null;
-                    fire(EVENT_FOCUS_ON, { data: _data, x: _x, y: _y, done: onCheck });
-                }, timeout);
+            if(_data === _activeData) {
+                fire(EVENT_FOCUS_MOVE, { data: _data, x: _x, y: _y });
+                onCheck(true);
+            } else {
+                fire(EVENT_FOCUS_ON, { data: _data, x: _x, y: _y, done: onCheck });
             }
+        } else {
+            _x = coords.x;
+            _y = coords.y;
+            fire(EVENT_FOCUS_ON, { data: _data, x: _x, y: _y, done: onCheck });
         }
         function onCheck(result) {
             _disabled = !result;
@@ -467,29 +445,22 @@ var Focus = function(fire) {
             }
         }
     };
-    that.turnOff = function(timeout) {
-        clearTimeout(_onTimer);
-        _onTimer = null;
+    that.turnOff = function() {
         _data = null;
         if(_activeData && !_disabled) {
             _offTimer = _offTimer || setTimeout(function() {
                 _offTimer = null;
                 fire(EVENT_FOCUS_OFF, { data: _activeData });
                 _activeData = null;
-            }, timeout);
+            }, FOCUS_OFF_DELAY);
         }
     };
     that.cancel = function() {
-        clearTimeout(_onTimer);
         clearTimeout(_offTimer);
         if(_activeData) {
             fire(EVENT_FOCUS_OFF, { data: _activeData });
         }
-        _activeData = _data = _onTimer = _offTimer = null;
-    };
-    that.cancelOn = function() {
-        clearTimeout(_onTimer);
-        _onTimer = null;
+        _activeData = _data = _offTimer = null;
     };
 };
 

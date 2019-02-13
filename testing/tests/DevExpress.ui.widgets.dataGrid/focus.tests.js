@@ -2261,6 +2261,38 @@ QUnit.testInActiveWindow("onFocusedRowChanged event", function(assert) {
     assert.equal(focusedRowChangedCount, 1, "onFocusedRowChanged fires count");
 });
 
+QUnit.testInActiveWindow("onFocusedRowChanged event should fire if 'focusedRowKey' is not undefined", function(assert) {
+    // arrange, act
+    var focusedRowChangedCount = 0;
+
+    this.$element = function() {
+        return $("#container");
+    };
+    this.data = [
+        { id: 0, name: "Smith" },
+        { id: null, name: "Zeb" }
+    ];
+    this.columns = ["id", "name"];
+    this.options = {
+        loadingTimeout: 0,
+        keyExpr: "id",
+        focusedRowEnabled: true,
+        focusedRowIndex: 0,
+        onFocusedRowChanged: () => ++focusedRowChangedCount
+    };
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    this.option("focusedRowIndex", 1);
+    this.clock.tick();
+
+    // assert
+    assert.equal(focusedRowChangedCount, 2, "onFocusedRowChanged fires count");
+});
+
 QUnit.testInActiveWindow("onFocusedCellChanged event", function(assert) {
     var rowsView,
         focusedCellChangedCount = 0;
@@ -3892,4 +3924,28 @@ QUnit.testInActiveWindow("DataGrid should reset the focused row if focusedRowInd
     // assert
     assert.notOk($(rowsView.getRow(1)).hasClass("dx-row-focused"), "no focused row");
     assert.notOk(this.option("focusedRowKey"), "No focusedRowKey");
+});
+
+QUnit.testInActiveWindow("DataGrid should raise exception if focusedRowEnabled and dataSource has no operationTypes", function(assert) {
+    this.$element = () => $("#container");
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    this.getController("data")._dataSource.operationTypes = () => undefined;
+    try {
+        this.option("focusedRowKey", "Dan");
+    } catch(e) {
+        // assert
+        assert.ok(false, e);
+    }
+    // assert
+    assert.ok(true, "undefined operationTypes does not generate exception");
 });

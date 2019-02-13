@@ -60,7 +60,8 @@ var commonUtils = require("../../core/utils/common"),
         "resolveLabelOverlapping",
         "adjustOnZoom",
         "zoomingMode",
-        "scrollingMode"
+        "scrollingMode",
+        "stickyHovering"
     ];
 
 function checkHeightRollingStock(rollingStocks, stubCanvas) {
@@ -413,7 +414,30 @@ var BaseChart = BaseWidget.inherit({
     _createHtmlStructure: function() {
         var that = this,
             renderer = that._renderer,
-            root = renderer.root;
+            root = renderer.root,
+            createConstantLinesGroup = function() {
+                // TODO: Must be created in the same place where used (advanced chart)
+                return renderer.g().attr({ "class": "dxc-constant-lines-group" }).linkOn(root, "constant-lines");
+            };
+
+        that._constantLinesGroup = {
+            dispose: function() {
+                this.under.dispose();
+                this.above.dispose();
+            },
+            linkOff: function() {
+                this.under.linkOff();
+                this.above.linkOff();
+            },
+            clear: function() {
+                this.under.linkRemove().clear();
+                this.above.linkRemove().clear();
+            },
+            linkAppend: function() {
+                this.under.linkAppend();
+                this.above.linkAppend();
+            }
+        };
 
         that._backgroundRect = renderer.rect().attr({ fill: "gray", opacity: 0.0001 }).append(root);
         that._panesBackgroundGroup = renderer.g().attr({ "class": "dxc-background" }).append(root);
@@ -423,8 +447,9 @@ var BaseChart = BaseWidget.inherit({
         that._axesGroup = renderer.g().attr({ "class": "dxc-axes-group" }).linkOn(root, "axes"); // TODO: Must be created in the same place where used (advanced chart)
         that._labelAxesGroup = renderer.g().attr({ "class": "dxc-strips-labels-group" }).linkOn(root, "strips-labels"); // TODO: Must be created in the same place where used (advanced chart)
         that._panesBorderGroup = renderer.g().attr({ "class": "dxc-border" }).linkOn(root, "border"); // TODO: Must be created in the same place where used (chart)
+        that._constantLinesGroup.under = createConstantLinesGroup();
         that._seriesGroup = renderer.g().attr({ "class": "dxc-series-group" }).linkOn(root, "series");
-        that._constantLinesGroup = renderer.g().attr({ "class": "dxc-constant-lines-group" }).linkOn(root, "constant-lines"); // TODO: Must be created in the same place where used (advanced chart)
+        that._constantLinesGroup.above = createConstantLinesGroup();
         that._scaleBreaksGroup = renderer.g().attr({ "class": "dxc-scale-breaks" }).linkOn(root, "scale-breaks");
         that._labelsGroup = renderer.g().attr({ "class": "dxc-labels-group" }).linkOn(root, "labels");
         that._crosshairCursorGroup = renderer.g().attr({ "class": "dxc-crosshair-cursor" }).linkOn(root, "crosshair");
@@ -475,7 +500,9 @@ var BaseChart = BaseWidget.inherit({
         unlinkGroup("_stripsGroup");
         unlinkGroup("_gridGroup");
         unlinkGroup("_axesGroup");
+
         unlinkGroup("_constantLinesGroup");
+
         unlinkGroup("_labelAxesGroup");
         unlinkGroup("_panesBorderGroup");
         unlinkGroup("_seriesGroup");
@@ -492,7 +519,9 @@ var BaseChart = BaseWidget.inherit({
         disposeObject("_stripsGroup");
         disposeObject("_gridGroup");
         disposeObject("_axesGroup");
+
         disposeObject("_constantLinesGroup");
+
         disposeObject("_labelAxesGroup");
         disposeObject("_panesBorderGroup");
         disposeObject("_seriesGroup");
@@ -609,6 +638,7 @@ var BaseChart = BaseWidget.inherit({
         that._cleanGroups();
         const startTime = new Date();
         that._renderElements(drawOptions);
+
         that._lastRenderingTime = new Date() - startTime;
     },
 
@@ -729,9 +759,13 @@ var BaseChart = BaseWidget.inherit({
 
         that._clearCanvas();
 
+        that._renderExtraElements();
+
         that._drawn();
         that._renderCompleteHandler();
     },
+
+    _renderExtraElements() {},
 
     _clearCanvas: function() {
         // T207665, T336349, T503616
@@ -800,7 +834,7 @@ var BaseChart = BaseWidget.inherit({
         that._stripsGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._gridGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._axesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
-        that._constantLinesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
+        that._constantLinesGroup.above.clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._labelAxesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         // that._seriesGroup.linkRemove().clear();
         that._labelsGroup.linkRemove().clear();
@@ -887,9 +921,8 @@ var BaseChart = BaseWidget.inherit({
         return {
             legendData: {
                 text: item[this._legendItemTextField],
-                argument: item.argument,
                 id: item.index,
-                argumentIndex: item.argumentIndex
+                visible: true
             },
             getLegendStyles: item.getLegendStyles(),
             visible: item.isVisible()
@@ -1264,6 +1297,7 @@ var BaseChart = BaseWidget.inherit({
                 changedStateSeriesCount++;
             }
         });
+        that._tracker.clearHover();
         that.series = [];
 
         changedStateSeriesCount > 0 && that._disposeSeriesFamilies();

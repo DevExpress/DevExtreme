@@ -2666,6 +2666,31 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.strictEqual(testElement.getAttribute("fill"), "url(" + oldUrl + "#DevExpress_12)");
         });
 
+        // T711457
+        QUnit.test("No path refreshing when parent element was cleared", function(assert) {
+            // arrange
+            this.rendererStub.pathModified = true;
+
+            var parent = { element: document.createElement("div") },
+                svg = (new this.Element(this.rendererStub, "svg")).append(parent),
+                rootGroup = (new this.Element(this.rendererStub, "group")).attr({ fill: "DevExpress_12" }).append(svg),
+                rect1 = (new this.Element(this.rendererStub, "rect")).attr({ fill: "DevExpress_13" }).append(rootGroup),
+                href = window.location.href,
+                oldUrl = href.split("#")[0],
+                newUrl = href.split("?")[0] + "?testparam=2";
+
+            window.history.pushState("", document.title, newUrl);
+
+            rootGroup.clear();
+
+            // act
+            this.refreshPaths();
+
+            // assert
+            assert.strictEqual(rootGroup.element.getAttribute("fill"), "url(" + newUrl + "#DevExpress_12)");
+            assert.strictEqual(rect1.element.getAttribute("fill"), "url(" + oldUrl + "#DevExpress_13)");
+        });
+
         QUnit.test("No path refreshing when parent element was disposed", function(assert) {
             // arrange
             this.rendererStub.pathModified = true;

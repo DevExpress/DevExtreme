@@ -2,7 +2,8 @@ require("viz/tree_map/tree_map");
 
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
-    module = require("viz/core/loading_indicator");
+    module = require("viz/core/loading_indicator"),
+    DataSource = require("data/data_source/data_source").DataSource;
 
 $("#qunit-fixture").append('<div id="test-container" style="width: 600px; height: 400px;"></div>');
 
@@ -131,4 +132,52 @@ QUnit.test("Depends on theme", function(assert) {
     widget.option("theme", "test-theme");
 
     assert.strictEqual(this.loadingIndicator.setOptions.callCount, 1);
+});
+
+QUnit.test("Do not show loading indicator if data source loading and loadingIndicator is disabled", function(assert) {
+    this.createWidget({
+        dataSource: new DataSource({
+            store: []
+        }),
+        loadingIndicator: {
+            enabled: false
+        }
+    });
+
+    assert.equal(this.loadingIndicator.stub("show").callCount, 0);
+});
+
+QUnit.test("Show loading indicator if data source loading", function(assert) {
+    this.createWidget({
+        dataSource: new DataSource({
+            store: []
+        }),
+        loadingIndicator: {
+            enabled: true
+        }
+    });
+
+    assert.equal(this.loadingIndicator.show.callCount, 1);
+});
+
+QUnit.test("Show loading indicator on each loading of data", function(assert) {
+    var data = new DataSource({
+        store: []
+    });
+
+    this.createWidget({
+        dataSource: data,
+        loadingIndicator: {
+            enabled: true
+        }
+    });
+
+    this.loadingIndicator.show.reset();
+
+    var N = 10;
+    for(var i = 0; i < N; i++) {
+        data.load();
+    }
+
+    assert.equal(this.loadingIndicator.show.callCount, N);
 });

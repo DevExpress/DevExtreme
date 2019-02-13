@@ -11,6 +11,8 @@ import trackerModule from "viz/vector_map/tracker";
 import eventEmitterModule from "viz/vector_map/event_emitter";
 import animationFrame from "animation/frame";
 
+const FOCUS_OFF_DELAY = 100;
+
 $("#qunit-fixture").append('<div id="test-root"></div>');
 
 animationFrame.requestAnimationFrame = animationFrame.cancelAnimationFrame = noop;
@@ -506,14 +508,14 @@ QUnit.module('focus / mouse', $.extend({}, environment, {
 QUnit.test('focus is turned off then turned on on move over element with data', function(assert) {
     this.trigger('move', { x: 10, y: 20 });
 
-    assert.deepEqual(this.focus.turnOff.lastCall.args, [300], 'turn off');
-    assert.deepEqual(this.focus.turnOn.lastCall.args, ['test-data', { x: 10, y: 20 }, 300, false], 'turn on');
+    assert.strictEqual(this.focus.turnOff.callCount, 1, 'turn off');
+    assert.deepEqual(this.focus.turnOn.lastCall.args, ['test-data', { x: 10, y: 20 }], 'turn on');
 });
 
 QUnit.test('focus is turned off and not turned on on move over element without data', function(assert) {
     this.triggerNoData('move', {});
 
-    assert.deepEqual(this.focus.turnOff.lastCall.args, [300], 'turn off');
+    assert.strictEqual(this.focus.turnOff.callCount, 1, 'turn off');
     assert.strictEqual(this.focus.stub('turnOn').lastCall, null, 'turn on');
 });
 
@@ -546,21 +548,15 @@ $.each(['touch', 'MSPointer', 'pointer'], function(_, type) {
     QUnit.test('focus is turned off then turned on on start on element with data', function(assert) {
         this.trigger('start', { x: 10, y: 20 });
 
-        assert.deepEqual(this.focus.turnOff.lastCall.args, [400], 'turn off');
-        assert.deepEqual(this.focus.turnOn.lastCall.args, ['test-data', { x: 10, y: 20 }, 300, true], 'turn on');
+        assert.strictEqual(this.focus.turnOff.callCount, 1, 'turn off');
+        assert.deepEqual(this.focus.turnOn.lastCall.args, ['test-data', { x: 10, y: 20 }], 'turn on');
     });
 
     QUnit.test('focus is turned off and not turned on on start on element without data', function(assert) {
         this.triggerNoData('start', {});
 
-        assert.deepEqual(this.focus.turnOff.lastCall.args, [400], 'turn off');
+        assert.strictEqual(this.focus.turnOff.callCount, 2, 'turn off');
         assert.strictEqual(this.focus.stub('turnOn').lastCall, null, 'turn on');
-    });
-
-    QUnit.test('focus is canceled softly on end', function(assert) {
-        this.trigger('end', {});
-
-        assert.deepEqual(this.focus.cancelOn.lastCall.args, []);
     });
 
     QUnit.test('focus is canceled on start during dragging', function(assert) {
@@ -601,10 +597,6 @@ QUnit.module('Focus class', {
     afterEach: function() {
         this.focus.dispose();
         this.clock.restore();
-    },
-    tick: function(timeout) {
-        this.clock.tick(timeout || 0);
-        return this;
     }
 });
 
@@ -613,9 +605,8 @@ QUnit.test('instance type', function(assert) {
 });
 
 QUnit.test('turnOn', function(assert) {
-    this.focus.turnOn('data-1', { x: 10, y: 20 }, 150);
+    this.focus.turnOn('data-1', { x: 10, y: 20 });
 
-    this.tick(150);
     var arg = this.focusOn.lastCall.args[0];
     assert.strictEqual(typeof arg.done, 'function');
     delete arg.done;
@@ -623,80 +614,58 @@ QUnit.test('turnOn', function(assert) {
 });
 
 QUnit.test('turnOn then turnOn again', function(assert) {
-    this.focus.turnOn('data-1', { x: 10, y: 20 }, 150);
-    this.tick(100);
-    this.focus.turnOn('data-1', { x: 40, y: 60 }, 100);
+    this.focus.turnOn('data-1', { x: 10, y: 20 });
+    this.focus.turnOn('data-1', { x: 40, y: 60 });
 
-    this.tick(100);
     delete this.focusOn.lastCall.args[0].done;
     assert.deepEqual(this.focusOn.lastCall.args[0], { data: 'data-1', x: 40, y: 60 });
 });
 
-QUnit.test('turnOn then turnOn again / small move', function(assert) {
-    this.focus.turnOn('data-1', { x: 10, y: 20 }, 150);
-    this.tick(100);
-    this.focus.turnOn('data-1', { x: 12, y: 17 }, 100);
-
-    this.tick(50);
-    delete this.focusOn.lastCall.args[0].done;
-    assert.deepEqual(this.focusOn.lastCall.args[0], { data: 'data-1', x: 10, y: 20 });
-});
-
 QUnit.test('turnOn when on', function(assert) {
-    this.focus.turnOn('data-1', { x: 10, y: 20 }, 150);
-    this.tick(150);
+    this.focus.turnOn('data-1', { x: 10, y: 20 });
     this.focusOn.lastCall.args[0].done(true);
-    this.focus.turnOn('data-1', { x: 20, y: 40 }, 200);
+    this.focus.turnOn('data-1', { x: 20, y: 40 });
 
-    this.tick(0);
     assert.deepEqual(this.focusMove.lastCall.args[0], { data: 'data-1', x: 20, y: 40 });
 });
 
 QUnit.test('turnOn when off', function(assert) {
-    this.focus.turnOn('data-1', { x: 10, y: 20 }, 150);
-    this.tick(150);
+    this.focus.turnOn('data-1', { x: 10, y: 20 });
     this.focusOn.lastCall.args[0].done(false);
-    this.focus.turnOn('data-1', { x: 20, y: 40 }, 200);
+    this.focus.turnOn('data-1', { x: 20, y: 40 });
 
-    this.tick(200);
     assert.strictEqual(this.focusOn.callCount, 1);
     assert.strictEqual(this.focusMove.lastCall, null);
 });
 
 QUnit.test('turnOn / data is changed', function(assert) {
-    this.focus.turnOn('data-1', { x: 10, y: 20 }, 150);
-    this.tick(150);
+    this.focus.turnOn('data-1', { x: 10, y: 20 });
     this.focusOn.lastCall.args[0].done(true);
-    this.focus.turnOn('data-2', { x: 20, y: 30 }, 100);
+    this.focus.turnOn('data-2', { x: 20, y: 30 });
 
-    this.tick(0);
     delete this.focusOn.lastCall.args[0].done;
     assert.deepEqual(this.focusOn.lastCall.args[0], { data: 'data-2', x: 20, y: 30 });
 });
 
 QUnit.test('turnOff when on', function(assert) {
-    this.focus.turnOn('data-1', { x: 10, y: 20 }, 150);
-    this.tick(150);
+    this.focus.turnOn('data-1', { x: 10, y: 20 });
     this.focusOn.lastCall.args[0].done(true);
-    this.focus.turnOff(100);
+    this.focus.turnOff(FOCUS_OFF_DELAY);
 
-    this.tick(100);
+    this.clock.tick(FOCUS_OFF_DELAY);
     assert.deepEqual(this.focusOff.lastCall.args, [{ data: 'data-1' }]);
 });
 
 QUnit.test('turnOff when off', function(assert) {
-    this.focus.turnOn('data-1', { x: 10, y: 20 }, 150);
-    this.tick(150);
+    this.focus.turnOn('data-1', { x: 10, y: 20 });
     this.focusOn.lastCall.args[0].done(false);
-    this.focus.turnOff(100);
+    this.focus.turnOff(FOCUS_OFF_DELAY);
 
-    this.tick(100);
     assert.strictEqual(this.focusOff.lastCall, null);
 });
 
 QUnit.test('cancel when on', function(assert) {
-    this.focus.turnOn('data-1', { x: 10, y: 20 }, 150);
-    this.tick(150);
+    this.focus.turnOn('data-1', { x: 10, y: 20 });
     this.focusOn.lastCall.args[0].done(true);
     this.focus.cancel();
 
@@ -704,51 +673,35 @@ QUnit.test('cancel when on', function(assert) {
 });
 
 QUnit.test('cancel when off', function(assert) {
-    this.focus.turnOn('data-1', { x: 10, y: 20 }, 150);
-    this.tick(150);
+    this.focus.turnOn('data-1', { x: 10, y: 20 });
     this.focusOn.lastCall.args[0].done(false);
     this.focus.cancel();
 
     assert.strictEqual(this.focusOff.lastCall, null);
 });
 
-QUnit.test('cancelOn', function(assert) {
-    this.focus.turnOn('data-1', { x: 10, y: 20 }, 150);
-    this.tick(100);
-    this.focus.cancelOn();
-
-    this.tick(50);
-    assert.strictEqual(this.focusOn.lastCall, null);
-});
-
 QUnit.test('on disabled target then on other target then on initial target again', function(assert) {
-    this.focus.turnOn('data-1', {}, 50);
-    this.tick(50);
+    this.focus.turnOn('data-1', {});
     this.focusOn.lastCall.args[0].done(false);
 
-    this.focus.turnOff(100);
-    this.focus.turnOn('data-2', {}, 50);
-    this.tick(30);
+    this.focus.turnOff(FOCUS_OFF_DELAY);
+    this.focus.turnOn('data-2', {});
 
-    this.focus.turnOff(100);
-    this.focus.turnOn('data-1', {}, 50);
-    this.tick(0);
+    this.focus.turnOff(FOCUS_OFF_DELAY);
+    this.focus.turnOn('data-1', {});
 
     assert.strictEqual(this.focusMove.lastCall, null);
 });
 
 // T173037
 QUnit.test('Turn on then turn on disabled then cancel', function(assert) {
-    this.focus.turnOn('data-1', {}, 10);
+    this.focus.turnOn('data-1', {});
 
-    this.tick(10);
     this.focusOn.lastCall.args[0].done(true);
-    this.focus.turnOn('data-2', {}, 30);
+    this.focus.turnOn('data-2', {});
 
-    this.tick(5);
     this.focusOn.lastCall.args[0].done(false);
 
-    this.tick(5);
     this.focus.cancel();
 
     assert.deepEqual(this.focusOff.lastCall.args, [{ data: 'data-1' }]);

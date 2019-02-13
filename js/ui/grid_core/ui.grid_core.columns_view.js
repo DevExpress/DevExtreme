@@ -645,6 +645,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             this.dataIndex = options.dataIndex = row.dataIndex;
             this.isExpanded = options.isExpanded = row.isExpanded;
 
+            if(options.row) {
+                options.row = row;
+            }
+
             watchers.forEach(function(watcher) {
                 watcher();
             });

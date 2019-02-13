@@ -18,6 +18,7 @@ var createSeries = function(options, renderSettings, widgetType) {
     renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
     renderSettings.argumentAxis = renderSettings.argumentAxis || {
         getViewport: function() { return {}; },
+        getMarginOptions() { return {}; },
         visualRange: function() { },
         calculateInterval: function(a, b) { return Math.abs(a - b); },
         getAggregationInfo: function() {
@@ -2239,6 +2240,7 @@ QUnit.module("Zooming range data", {
             visualRange: function() {
                 return { startValue: viewPort[0], endValue: viewPort[1] };
             },
+            getMarginOptions() { return {}; },
             calculateInterval: function(a, b) {
                 return a - b;
             }
@@ -2351,7 +2353,8 @@ QUnit.module("Zooming range data. Simple", {
             },
             calculateInterval: function(a, b) {
                 return a - b;
-            }
+            },
+            getMarginOptions() { return {}; }
         };
         this.defaultOptions = {
             type: "line",
@@ -2559,7 +2562,8 @@ QUnit.module("Zooming range data. Bar/area", {
             },
             calculateInterval: function(a, b) {
                 return a - b;
-            }
+            },
+            getMarginOptions() { return {}; }
         };
         this.defaultOptions = {
             type: "area",
@@ -2657,6 +2661,41 @@ QUnit.test("Discrete data", function(assert) {
 
     assert.equal(rangeData.min, 0, "min Y");
     assert.equal(rangeData.max, 40, "max Y");
+});
+
+QUnit.test("Add interval if checkInterval in marginOptions", function(assert) {
+    const data = [
+        { arg: new Date(1), val: 10 },
+        { arg: new Date(2), val: 20 },
+        { arg: new Date(3), val: 30 },
+        { arg: new Date(4), val: 40 },
+        { arg: new Date(5), val: 50 },
+        { arg: new Date(6), val: 60 }];
+
+    this.argumentAxis.getTranslator = function() {
+        return {
+            getBusinessRange() {
+                return {
+                    interval: 1,
+                    dataType: "datetime"
+                };
+            }
+        };
+    };
+    this.argumentAxis.getMarginOptions = () => { return { checkInterval: true }; };
+
+    this.defaultOptions.showZero = false;
+    const series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
+
+    series.updateData(data);
+    series.createPoints();
+
+    this.zoom(new Date(3), new Date(4));
+
+    const rangeData = series.getViewport();
+
+    assert.equal(rangeData.min, 20, "min Visible Y");
+    assert.equal(rangeData.max, 50, "max Visible Y");
 });
 
 QUnit.module("Get points in viewport", {

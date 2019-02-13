@@ -90,18 +90,18 @@ module.exports = {
             adaptColumnWidthByRatio: true,
             /**
              * @name GridBaseOptions.columns
-             * @type Array<GridBaseColumn>
+             * @type Array<GridBaseColumn, string>
              * @fires GridBaseOptions.onOptionChanged
              * @default undefined
              */
             /**
              * @name dxDataGridOptions.columns
-             * @type Array<dxDataGridColumn>
+             * @type Array<dxDataGridColumn,string>
              * @default undefined
              */
             /**
              * @name dxTreeListOptions.columns
-             * @type Array<dxTreeListColumn>
+             * @type Array<dxTreeListColumn,string>
              * @default undefined
              */
 
@@ -138,12 +138,12 @@ module.exports = {
              */
             /**
              * @name dxDataGridColumn.columns
-             * @type Array<dxDataGridColumn>
+             * @type Array<dxDataGridColumn,string>
              * @default undefined
              */
             /**
              * @name dxTreeListColumn.columns
-             * @type Array<dxTreeListColumn>
+             * @type Array<dxTreeListColumn,string>
              * @default undefined
              */
             /**

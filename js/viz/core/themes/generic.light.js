@@ -266,13 +266,15 @@ registerTheme({
         tick: {
             visible: false,
             width: 1,
-            length: 8
+            length: 8,
+            shift: 0
         },
         minorTick: {
             visible: false,
             width: 1,
             opacity: 0.3,
-            length: 8
+            length: 8,
+            shift: 0
         },
         stripStyle: {
             paddingLeftRight: 10,
@@ -722,6 +724,7 @@ registerTheme({
         zoomingMode: NONE,
         scrollingMode: NONE,
         synchronizeMultiAxes: true,
+        stickyHovering: true,
         equalBarWidth: true,
         barGroupPadding: 0.3,
         minBubbleSize: 12,
@@ -927,6 +930,7 @@ registerTheme({
         },
         _circular: {
             scale: {
+                scaleDivisionFactor: 17,
                 orientation: OUTSIDE,
                 label: {
                     indentFromTick: 10
@@ -967,6 +971,7 @@ registerTheme({
         },
         _linear: {
             scale: {
+                scaleDivisionFactor: 25,
                 horizontalOrientation: RIGHT,
                 verticalOrientation: BOTTOM,
                 label: {
@@ -1017,6 +1022,9 @@ registerTheme({
             font: {
                 size: 16
             }
+        },
+        legend: {
+            visible: false
         },
         indicator: {
             hasPositiveMeaning: true,

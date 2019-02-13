@@ -17,15 +17,17 @@ var $ = require("../../core/renderer"),
     themes = require("../themes"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
-var SLIDER_CLASS = "dx-slider",
-    SLIDER_WRAPPER_CLASS = "dx-slider-wrapper",
-    SLIDER_HANDLE_SELECTOR = ".dx-slider-handle",
-    SLIDER_BAR_CLASS = "dx-slider-bar",
-    SLIDER_RANGE_CLASS = "dx-slider-range",
-    SLIDER_RANGE_VISIBLE_CLASS = "dx-slider-range-visible",
-    SLIDER_LABEL_CLASS = "dx-slider-label",
-    SLIDER_LABEL_POSITION_CLASS_PREFIX = "dx-slider-label-position-",
-    SLIDER_TOOLTIP_POSITION_CLASS_PREFIX = "dx-slider-tooltip-position-";
+var SLIDER_CLASS = "dx-slider";
+var SLIDER_WRAPPER_CLASS = "dx-slider-wrapper";
+var SLIDER_HANDLE_SELECTOR = ".dx-slider-handle";
+var SLIDER_BAR_CLASS = "dx-slider-bar";
+var SLIDER_RANGE_CLASS = "dx-slider-range";
+var SLIDER_RANGE_VISIBLE_CLASS = "dx-slider-range-visible";
+var SLIDER_LABEL_CLASS = "dx-slider-label";
+var SLIDER_LABEL_POSITION_CLASS_PREFIX = "dx-slider-label-position-";
+var SLIDER_TOOLTIP_POSITION_CLASS_PREFIX = "dx-slider-tooltip-position-";
+var INVALID_MESSAGE_VISIBLE_CLASS = "dx-invalid-message-visible";
+var SLIDER_VALIDATION_NAMESPACE = "Validation";
 
 /**
 * @name dxSliderBase
@@ -221,7 +223,11 @@ var Slider = TrackBar.inherit({
            */
             keyStep: 1,
 
-            useInkRipple: false
+            useInkRipple: false,
+
+            validationMessageOffset: themes.isMaterial() ? { h: 18, v: 0 } : { h: 7, v: 4 },
+
+            focusStateEnabled: true
 
             /**
             * @name dxSliderBaseOptions.name
@@ -230,6 +236,13 @@ var Slider = TrackBar.inherit({
             * @inheritdoc
             */
         });
+    },
+
+    _toggleValidationMessage: function(visible) {
+        if(!this.option("isValid")) {
+            this.$element()
+                .toggleClass(INVALID_MESSAGE_VISIBLE_CLASS, visible);
+        }
     },
 
     _defaultOptionsRules: function() {
@@ -269,6 +282,27 @@ var Slider = TrackBar.inherit({
         this._renderLabels();
         this._renderStartHandler();
         this._renderAriaMinAndMax();
+    },
+
+    _attachFocusEvents: function() {
+        this.callBase();
+
+        var namespace = this.NAME + SLIDER_VALIDATION_NAMESPACE;
+        var focusInEvent = eventUtils.addNamespace("focusin", namespace);
+        var focusOutEvent = eventUtils.addNamespace("focusout", namespace);
+
+        var $focusTarget = this._focusTarget();
+        eventsEngine.on($focusTarget, focusInEvent, this._toggleValidationMessage.bind(this, true));
+        eventsEngine.on($focusTarget, focusOutEvent, this._toggleValidationMessage.bind(this, false));
+    },
+
+    _detachFocusEvents: function() {
+        this.callBase();
+
+        var $focusTarget = this._focusTarget();
+
+        this._toggleValidationMessage(false);
+        eventsEngine.off($focusTarget, this.NAME + SLIDER_VALIDATION_NAMESPACE);
     },
 
     _render: function() {

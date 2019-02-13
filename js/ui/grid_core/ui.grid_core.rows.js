@@ -9,7 +9,6 @@ import { extend } from "../../core/utils/extend";
 import { isEmpty } from "../../core/utils/string";
 import { getDefaultAlignment } from "../../core/utils/position";
 import { compileGetter } from "../../core/utils/data";
-import errors from "../widget/ui.errors";
 import { setEmptyText, getGroupRowSummaryText, getDisplayValue, formatValue, renderLoadPanel, renderNoDataText } from "./ui.grid_core.utils";
 import columnsView from "./ui.grid_core.columns_view";
 import Scrollable from "../scroll_view/ui.scrollable";
@@ -30,6 +29,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     LAST_ROW_BORDER = "dx-last-row-border",
     EMPTY_CLASS = "dx-empty",
     ROW_INSERTED_ANIMATION_CLASS = "row-inserted-animation",
+    ROW_CLASS = "dx-row",
 
     LOADPANEL_HIDE_TIMEOUT = 200;
 
@@ -382,18 +382,6 @@ module.exports = {
     },
     views: {
         rowsView: columnsView.ColumnsView.inherit((function() {
-            var appendFreeSpaceRowTemplate = {
-                render: function(options) {
-                    var $tbody = options.container.find("tbody");
-
-                    if($tbody.length) {
-                        $tbody.last().append(options.content);
-                    } else {
-                        options.container.append(options.content);
-                    }
-                }
-            };
-
             var defaultCellTemplate = function($container, options) {
                 var isDataTextEmpty = isEmpty(options.text) && options.rowType === "data",
                     text = options.text,
@@ -683,13 +671,19 @@ module.exports = {
                     }
                 },
 
-                _createEmptyRow: function(isFixed) {
+                _getBodies: function(tableElement) {
+                    return $(tableElement).children("tbody").not(".dx-header").not(".dx-footer");
+                },
+
+                _createEmptyRow: function(className, isFixed) {
                     var that = this,
                         i,
                         $row = that._createRow(),
                         columns = isFixed ? this.getFixedColumns() : this.getColumns();
 
-                    $row.toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
+                    $row
+                        .addClass(className)
+                        .toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
 
                     for(i = 0; i < columns.length; i++) {
                         $row.append(that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns }));
@@ -700,10 +694,37 @@ module.exports = {
                     return $row;
                 },
 
-                _renderFreeSpaceRow: function(tableElement, options) {
-                    var freeSpaceRowElement = this._createEmptyRow().addClass(FREE_SPACE_CLASS);
+                _wrapEmptyRowIfNeed: function($table, $emptyRow, className) {
+                    var $tBodies = this._getBodies($table);
 
-                    this._appendRow(tableElement, freeSpaceRowElement, appendFreeSpaceRowTemplate);
+                    if($tBodies.filter("." + ROW_CLASS).length) {
+                        var $tbody = $("<tbody>").addClass(className);
+
+                        this.setAria("role", "presentation", $tbody);
+
+                        return $tbody.append($emptyRow);
+                    }
+
+                    return $emptyRow;
+                },
+
+                _appendEmptyRow: function($table, $emptyRow, location) {
+                    var $tBodies = this._getBodies($table),
+                        $container = $tBodies.length && !$emptyRow.is("tbody") ? $tBodies : $table;
+
+                    if(location === "top") {
+                        $container.first().prepend($emptyRow);
+                    } else {
+                        $container.last().append($emptyRow);
+                    }
+                },
+
+                _renderFreeSpaceRow: function($tableElement) {
+                    var $freeSpaceRowElement = this._createEmptyRow(FREE_SPACE_CLASS);
+
+                    $freeSpaceRowElement = this._wrapEmptyRowIfNeed($tableElement, $freeSpaceRowElement, FREE_SPACE_CLASS);
+
+                    this._appendEmptyRow($tableElement, $freeSpaceRowElement);
                 },
 
                 _checkRowKeys: function(options) {
@@ -713,7 +734,7 @@ module.exports = {
 
                     keyExpr && rows.some(function(row) {
                         if(row.rowType === "data" && row.key === undefined) {
-                            that._dataController.dataErrorOccurred.fire(errors.Error("E1046", keyExpr));
+                            that._dataController.fireError("E1046", keyExpr);
                             return true;
                         }
                     });

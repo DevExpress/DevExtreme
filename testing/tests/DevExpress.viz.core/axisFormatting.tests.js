@@ -61,7 +61,7 @@ var environment = {
             renderer: this.renderer,
             stripsGroup: this.renderer.g(),
             labelAxesGroup: this.renderer.g(),
-            constantLinesGroup: this.renderer.g(),
+            constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
             axesContainerGroup: this.renderer.g(),
             gridGroup: this.renderer.g(),
             axisType: "xyAxes",

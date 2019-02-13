@@ -880,7 +880,45 @@ QUnit.test("Panes check duplicate argument axis for each pane", function(assert)
     assert.deepEqual(axisOptions.label, {});
     assert.deepEqual(axisOptions.minorTick, {});
     assert.equal(axisOptions.title, "Title");
+});
 
+QUnit.test("Panes check main argument axis getter after panes changing on rotated chart (T712569)", function(assert) {
+    // arrange
+    var stubSeries1 = new MockSeries({}),
+        stubSeries2 = new MockSeries({});
+    chartMocks.seriesMockData.series.push(stubSeries1);
+    chartMocks.seriesMockData.series.push(stubSeries2);
+
+    var chart = this.createChart({
+        rotated: true,
+        argumentAxis: {
+            categories: categories,
+            grid: {
+                visible: true
+            },
+            title: "Title"
+        },
+        panes: [
+            { name: "right" },
+            { name: "left" }
+        ],
+        series: [
+            { pane: "right" },
+            {}
+        ]
+    });
+
+    // act
+    chart.option({
+        panes: [
+            { name: "right" },
+            { name: "left" }
+        ]
+    });
+
+    // assert
+    assert.equal(chart._argumentAxes[0].pane, "left");
+    assert.equal(chart._argumentAxes[0], chart.getArgumentAxis());
 });
 
 QUnit.test("Title for Axes - initialization as String ", function(assert) {
@@ -974,6 +1012,7 @@ QUnit.test("Create Horizontal Legend with single named series, position = outsid
     assert.strictEqual(updateCall.args[1]._incidentOccurred, chart._incidentOccurred, "pass incidentOccurred function");
     assert.strictEqual(updateCall.args[0][0].text, "First series", "Correct text for series");
     assert.deepEqual(updateCall.args[0][0].states, { hover: undefined, selection: undefined, normal: {} }, "States");
+    assert.equal(updateCall.args[0][0].series, chart.getAllSeries()[0], "series");
 
     assert.strictEqual(legendCtorArgs.renderer, rendererModule.Renderer.lastCall.returnValue, "Correct renderer was passed to legend");
     assert.strictEqual(legendCtorArgs.backgroundClass, "dxc-border", "background class");
@@ -1072,6 +1111,44 @@ QUnit.test("Legend visible after zooming", function(assert) {
 
     assert.equal(this.layoutManager.layoutElements.callCount, 2);
     assert.deepEqual(this.layoutManager.layoutElements.lastCall.args[0], []);
+});
+
+QUnit.test("Set visible property in legend items", function(assert) {
+    // arrange
+    var stubSeries = new MockSeries({
+        name: "First series",
+        visible: false,
+        showInLegend: true
+    });
+
+    chartMocks.seriesMockData.series.push(stubSeries);
+
+    // act
+    this.createChart({ series: { type: "line" } });
+
+    // assert
+    var legend = commons.getLegendStub();
+
+    assert.strictEqual(legend.update.lastCall.args[0][0].visible, true);
+});
+
+QUnit.test("Set visible property false in legend item if showInLegend is false", function(assert) {
+    // arrange
+    var stubSeries = new MockSeries({
+        name: "First series",
+        visible: false,
+        showInLegend: false
+    });
+
+    chartMocks.seriesMockData.series.push(stubSeries);
+
+    // act
+    this.createChart({ series: { type: "line" } });
+
+    // assert
+    var legend = commons.getLegendStub();
+
+    assert.strictEqual(legend.update.lastCall.args[0][0].visible, false);
 });
 
 QUnit.module("dxChart Title", commons.environment);

@@ -278,6 +278,7 @@ QUnit.test("Scale is rendered", function(assert) {
             width: 2
         },
         tickInterval: 4,
+        forceUserTickInterval: 1,
         tickOrientation: "center",
         startAngle: -910,
         endAngle: -1910,
@@ -1047,6 +1048,39 @@ QUnit.test("More ranges in range container (direct assignment)", function(assert
             { startValue: 35, endValue: 40, color: "magenta" }
         ]
     });
+});
+
+QUnit.test("Force the tickInterval option", function(assert) {
+    var gauge = this.createTestGauge({
+    });
+    var scale = axisModule.Axis.getCall(0).returnValue;
+
+    gauge.option({
+        scale: {
+            tickInterval: 0.5
+        }
+    });
+
+    assert.notOk(scale.updateOptions.getCall(0).args[0].forceUserTickInterval);
+    assert.ok(scale.updateOptions.getCall(1).args[0].forceUserTickInterval);
+    assert.equal(scale.updateOptions.getCall(1).args[0].tickInterval, 0.5);
+});
+
+QUnit.test("The axisDivisionFactor option has higher priority than the tickInterval option", function(assert) {
+    var gauge = this.createTestGauge({
+    });
+    var scale = axisModule.Axis.getCall(0).returnValue;
+
+    gauge.option({
+        scale: {
+            scaleDivisionFactor: 30,
+            tickInterval: 0.5
+        }
+    });
+
+    assert.notOk(scale.updateOptions.getCall(0).args[0].forceUserTickInterval);
+    assert.notOk(scale.updateOptions.getCall(1).args[0].forceUserTickInterval);
+    assert.equal(scale.updateOptions.getCall(1).args[0].axisDivisionFactor, 30);
 });
 
 //  B232788

@@ -949,3 +949,8 @@
  * @typedef {string} Enums.TreeListColumnButtonName
  * @enum {'add'|'cancel'|'delete'|'edit'|'save'|'undelete'}
  */
+
+/**
+ * @typedef {string} Enums.TreeListFilterMode
+ * @enum {'withAncestors'|'exactMatch'|'fullBranch'}
+ */

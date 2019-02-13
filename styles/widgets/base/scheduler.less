@@ -807,6 +807,12 @@
         // T656716
         float: left;
 
+        &.dx-scheduler-timeline-month:not(.dx-scheduler-agenda) {
+            .dx-scheduler-date-table-cell {
+                border-right: none;
+            }
+        }
+
         &.dx-scheduler-work-space-grouped:not(.dx-scheduler-agenda) {
             .dx-scheduler-all-day-title {
                 border-top: @SCHEDULER_BASE_BORDER;
@@ -814,7 +820,6 @@
 
             .dx-scheduler-date-table-cell {
                 border-left: @SCHEDULER_BASE_BORDER;
-                border-right: none;
             }
 
             .dx-scheduler-all-day-panel td {

@@ -38,10 +38,11 @@ import support from "core/utils/support";
 import browser from "core/utils/browser";
 import pointerMock from "../../helpers/pointerMock.js";
 import nativePointerMock from "../../helpers/nativePointerMock.js";
-import { setupDataGridModules, MockDataController, MockColumnsController, MockSelectionController, getCells } from "../../helpers/dataGridMocks.js";
+import { setupDataGridModules, MockDataController, MockColumnsController, MockSelectionController, getCells, generateItems } from "../../helpers/dataGridMocks.js";
 import numberLocalization from "localization/number";
 import virtualScrollingCore from "ui/grid_core/ui.grid_core.virtual_scrolling_core";
 import ODataStore from "data/odata/store";
+import ArrayStore from "data/array_store";
 
 var expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
@@ -5249,6 +5250,62 @@ QUnit.test("Group row with the custom position of the group cell", function(asse
     assert.ok($groupCellElements.eq(0).hasClass("dx-datagrid-group-space"), "first cell is empty");
     assert.ok($groupCellElements.eq(1).hasClass("dx-datagrid-expand"), "second cell is expandable");
     assert.ok($groupCellElements.eq(2).hasClass("dx-group-cell"), "third cell is group");
+});
+
+// T712541
+QUnit.test("Rows should be rendered properly on scrolling when virtual scrolling is enabled and a row template is used", function(assert) {
+    // arrange
+    var scrollable,
+        clock = sinon.useFakeTimers(),
+        $testElement = $('#container'),
+        store = new ArrayStore(generateItems(10000));
+
+    try {
+        this.options.columns = undefined;
+        this.options.remoteOperations = true;
+        this.options.dataSource = {
+            load: function(loadOptions) {
+                var d = $.Deferred();
+
+                setTimeout(() => {
+                    store.load(loadOptions).done((items) => {
+                        d.resolve({ data: items, totalCount: 10000 });
+                    });
+                }, 100);
+
+                return d.promise();
+            }
+        };
+        this.options.scrolling = {
+            mode: "virtual",
+            useNative: false,
+            removeInvisiblePages: true,
+            rowPageSize: 5,
+            rowRenderingMode: "standard"
+        };
+        this.options.rowTemplate = (_, options) => {
+            return $("<tbody>").addClass("dx-row").html("<tr><td colspan=5>" + options.data.id + "</td></tr>");
+        };
+
+        this.setupDataGridModules();
+        clock.tick(200);
+
+        this.rowsView.render($testElement);
+        this.rowsView.height(200);
+        this.rowsView.resize();
+
+        scrollable = this.rowsView._scrollable;
+        scrollable.scrollTo({ y: 2500 });
+        $(scrollable._container()).trigger("scroll");
+        clock.tick(500);
+
+        // assert
+        assert.strictEqual(this.pageIndex(), 3, "current pageIndex");
+        assert.strictEqual($testElement.find("tbody.dx-virtual-row").length, 2, "virtual tbody count");
+        assert.strictEqual($testElement.find("tbody").children(".dx-virtual-row").length, 2, "virtual row count");
+    } finally {
+        clock.restore();
+    }
 });
 
 

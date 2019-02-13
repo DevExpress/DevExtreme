@@ -1,11 +1,11 @@
-var $ = require("jquery"),
-    vizMocks = require("../../helpers/vizMocks.js"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    eventsConsts = require("viz/components/consts").events,
-    axisModule = require("viz/axes/base_axis"),
-    Crosshair = require("viz/chart_components/crosshair").Crosshair,
-    trackers = require("viz/chart_components/tracker"),
-    MockAxis = require("../../helpers/chartMocks.js").MockAxis;
+import $ from "jquery";
+import vizMocks from "../../helpers/vizMocks.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import { events as eventsConsts } from "viz/components/consts";
+import axisModule from "viz/axes/base_axis";
+import { Crosshair } from "viz/chart_components/crosshair";
+import trackers from "viz/chart_components/tracker";
+import { MockAxis } from "../../helpers/chartMocks.js";
 
 function getEvent(type, params) {
     $.Event(type, params);
@@ -131,8 +131,8 @@ function strictEqualForAllFields(assert, instance, etalon, message) {
     assert.equal(keysInInstance, keysInEtalon, "keys count");
 }
 
-QUnit.module("Root events", {
-    beforeEach: function() {
+const chartEnvironment = {
+    beforeEach() {
         var that = this;
 
         that.clock = sinon.useFakeTimers();
@@ -173,6 +173,7 @@ QUnit.module("Root events", {
             series: [that.series],
             crosshair: createCrosshair(),
             renderer: that.renderer,
+            stickyHovering: true,
             mainCanvas: {
                 left: 0,
                 right: 300,
@@ -181,21 +182,9 @@ QUnit.module("Root events", {
             },
             eventTrigger: sinon.stub()
         };
-
-        that.createTracker = function(options) {
-            var tracker = createTracker("dxChart", options);
-            return tracker;
-        };
-
-        that.tracker = that.createTracker(that.options);
-        that.updateTracker = function(series) {
-            that.tracker.updateSeries(series);
-            that.tracker.update(that.options);
-        };
-        that.options.tooltip.stub("hide").reset();
     },
 
-    afterEach: function() {
+    afterEach() {
         this.clock.restore();
 
         this.tracker.dispose && this.tracker.dispose();
@@ -213,8 +202,27 @@ QUnit.module("Root events", {
         this.canvases = null;
         this.options = null;
         this.tracker = null;
+    },
+
+    createTracker(options) {
+        var tracker = createTracker("dxChart", options);
+        options.tooltip.stub("hide").reset();
+        return tracker;
+    },
+
+    updateTracker(series) {
+        this.tracker.updateSeries(series);
+        this.tracker.update(this.options);
     }
-});
+};
+
+QUnit.module("Root events", $.extend({}, chartEnvironment, {
+    beforeEach() {
+        chartEnvironment.beforeEach.call(this);
+        this.tracker = this.createTracker(this.options);
+
+    }
+}));
 
 QUnit.test("Subscriptions on init", function(assert) {
     var rootElement = this.renderer.root;
@@ -1621,75 +1629,12 @@ QUnit.test("Stop current handling", function(assert) {
     assert.equal(this.options.crosshair.hide.callCount, 1, "crosshair hide");
 });
 
-QUnit.module("Update tracker", {
-    beforeEach: function() {
-        var that = this;
-
-        that.clock = sinon.useFakeTimers();
-        that.renderer = new vizMocks.Renderer();
-        that.renderer.draw();
-        that.series = createSeries();
-        that.legend = createLegend();
-
-        that.axis = createAxis();
-
-        that.axis.stub("coordsIn").returns(false);
-
-        that.seriesGroup = that.renderer.g();
-        that.seriesGroup.element["chart-data-series"] = that.series;
-
-        that.canvases = [{
-            left: 10,
-            right: 100,
-            top: 15,
-            bottom: 150
-        }];
-
-        that.options = {
-            seriesGroup: that.seriesGroup,
-            tooltipEnabled: that,
-            argumentAxis: that.axis,
-            tooltip: createTooltip(),
-            legend: that.legend,
-            canvases: that.canvases,
-            series: [that.series],
-            crosshair: sinon.createStubInstance(Crosshair),
-            renderer: that.renderer,
-            mainCanvas: {
-                left: 0,
-                right: 300,
-                top: 0,
-                bottom: 400
-            },
-            eventTrigger: sinon.stub()
-        };
-
-        that.createTracker = function(options) {
-            var tracker = createTracker("dxChart", options);
-            return tracker;
-        };
-        that.updateTracker = function(series) {
-            that.tracker.updateSeries(series);
-            that.tracker.update(that.options);
-        };
-        that.tracker = this.createTracker(that.options);
-        that.options.tooltip.stub("hide").reset();
-    },
-
-    afterEach: function() {
-        this.clock.restore();
-        this.tracker.dispose && this.tracker.dispose();
-        this.renderer.dispose();
-        this.renderer = null;
-        this.series = null;
-        this.legend = null;
-        this.axis = null;
-        $(this.seriesGroup.element).remove();
-        delete this.seriesGroup.element["chart-data-series"];
-        delete this.seriesGroup.element["chart-data-point"];
-        this.seriesGroup = this.canvases = this.options = this.tracker = null;
+QUnit.module("Update tracker", $.extend({}, chartEnvironment, {
+    beforeEach() {
+        chartEnvironment.beforeEach.call(this);
+        this.tracker = this.createTracker(this.options);
     }
-});
+}));
 
 QUnit.test("update with old series", function(assert) {
     // arrange
@@ -1939,6 +1884,15 @@ QUnit.test("repairTooltip", function(assert) {
     assert.ok(point.getTooltipParams.calledOnce);
 });
 
+QUnit.test("clearHover", function(assert) {
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
+    this.clock.tick(this.tracker.__trackerDelay);
+
+    this.tracker.clearHover();
+
+    assert.equal(this.series.clearHover.callCount, 1);
+});
+
 QUnit.test('Can be disposed', function(assert) {
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, pointers: [], target: this.seriesGroup.element }));
     this.renderer.root.off.reset();
@@ -1958,6 +1912,72 @@ QUnit.test('Can be disposed', function(assert) {
     assert.strictEqual(this.seriesGroup.off.callCount, 1);
     assert.strictEqual(this.seriesGroup.off.lastCall.args[0], ".dxChartTracker");
 
+});
+
+QUnit.module("Chart tracker with disabled sticked mode", $.extend({}, chartEnvironment, {
+    beforeEach() {
+        chartEnvironment.beforeEach.call(this);
+        this.options.stickyHovering = false;
+        this.tracker = this.createTracker(this.options);
+    }
+}));
+
+QUnit.test("dxpointermove on series", function(assert) {
+    // arrange
+    this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
+
+    // Act
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    this.clock.tick(this.tracker.__trackerDelay);
+
+    // Assert
+    assert.equal(this.series.hover.callCount, 1);
+
+    assert.equal(this.options.tooltip.stub("show").callCount, 0, "tooltip show");
+    assert.equal(this.options.crosshair.show.callCount, 0, "crosshair[0] moved");
+
+    assert.equal(this.point.stub("hover").callCount, 0);
+});
+
+QUnit.test("move on series between two point", function(assert) {
+    // arrange
+    this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
+    this.point.stub("getCrosshairData").withArgs(92, 45).returns({ x: 92, y: 45, xValue: 10, yValue: 20 });
+
+    // Act
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
+    this.clock.tick(this.tracker.__trackerDelay);
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 95, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
+
+    // Assert
+    assert.ok(this.series.hover.calledOnce);
+    assert.deepEqual(this.series.stub("updateHover").getCall(0).args, [97, 45], "updateHover args, first time");
+    assert.deepEqual(this.series.stub("updateHover").getCall(1).args, [92, 45], "updateHover args, second time");
+
+    assert.ok(!this.point.stub("hover").called);
+
+    assert.equal(this.options.tooltip.stub("show").callCount, 0, "tooltip show");
+
+    assert.equal(this.options.crosshair.show.callCount, 0, "crosshair[0] moved");
+});
+
+QUnit.test("dxpointermove over point", function(assert) {
+    // act
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element }));
+
+    // assert
+    assert.ok(!this.series.hover.called, "series was not hoveres");
+    assert.ok(this.point.hover.calledOnce, "point hovered");
+    assert.equal(this.options.tooltip.stub("show").callCount, 1, "tooltip show");
+});
+
+QUnit.test("Mouseout from point - unhover point", function(assert) {
+    this.series.getPointByCoord.withArgs(97, 45).returns(this.point);
+
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 90, pageY: 75 }));
+
+    assert.strictEqual(this.point.stub("clearHover").callCount, 1);
 });
 
 QUnit.module("Root events. Pie chart", {

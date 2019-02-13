@@ -20,3 +20,4 @@ import "./htmlEditorParts/variablesModule.tests.js";
 import "./htmlEditorParts/api.tests.js";
 import "./htmlEditorParts/formDialog.tests.js";
 import "./htmlEditorParts/paste.tests.js";
+import "./htmlEditorParts/events.tests.js";

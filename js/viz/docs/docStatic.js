@@ -58,6 +58,36 @@ var staticMethods = {
     */
     getTheme: function() { },
     /**
+    * @name vizmethods.exportWidgets
+    * @publicName exportWidgets(widgetInstances)
+    * @param1 widgetInstances:Array<Array<DOMComponent>>
+    * @static
+    * @module viz/export
+    * @export exportWidgets
+    */
+    exportWidgets: function() { },
+    /**
+    * @name vizmethods.exportWidgets
+    * @publicName exportWidgets(widgetInstances, options)
+    * @param1 widgetInstances:Array<Array<DOMComponent>>
+    * @param2 options:object
+    * @param2_field1 fileName:string
+    * @param2_field2 format:string
+    * @param2_field3 backgroundColor:string
+    * @param2_field4 margin:number
+    * @param2_field5 gridLayout:boolean
+    * @param2_field6 verticalAlignment:Enums.VerticalAlignment
+    * @param2_field7 horizontalAlignment:Enums.HorizontalAlignment
+    * @param2_field8 proxyUrl:string
+    * @param2_field9 onExporting:function(e)
+    * @param2_field10 onExported:function
+    * @param2_field11 onFileSaving:function(e)
+    * @static
+    * @module viz/export
+    * @export exportWidgets
+    */
+    exportWidgets: function() { },
+    /**
     * @name vizmethods.exportFromMarkup
     * @publicName exportFromMarkup(markup, options)
     * @param1 markup:string
