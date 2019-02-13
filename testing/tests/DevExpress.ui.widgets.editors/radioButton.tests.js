@@ -87,29 +87,26 @@ QUnit.test("state changes on space press", function(assert) {
 QUnit.module("validation");
 
 QUnit.test("The click should be processed before the validation message is shown (T570458)", (assert) => {
-    assert.expect(3);
-
-    let $radioButton = null;
-
-    const checkValidationMessageVisibility = (isVisible) => {
-        const message = $radioButton.find('.dx-invalid-message').get(0);
-        const isMessageVisible = !!message && message.clientHeight > 0;
-
-        assert.strictEqual(isMessageVisible, isVisible);
-    };
-
-    $radioButton = $("#radioButton")
-        .dxRadioButton({
-            value: false,
-            onValueChanged: () => checkValidationMessageVisibility(false)
-        }).dxValidator({
+    const $radioButton = $("#radioButton")
+        .dxRadioButton({ value: false })
+        .dxValidator({
             validationRules: [{ type: "required", message: "message" }]
         });
-
     const radioButton = $radioButton.dxRadioButton("instance");
+    const isValidationMessageInvisible = () => {
+        const message = $radioButton.find('.dx-invalid-message').get(0);
+
+        assert.ok(!message || message.clientHeight === 0);
+    };
 
     validateGroup();
     assert.notOk(radioButton.option("isValid"));
+
+    $radioButton.focus();
+    assert.notOk(radioButton.option("isValid"));
+    isValidationMessageInvisible();
+
     $radioButton.trigger("dxclick");
-    checkValidationMessageVisibility(false);
+    assert.ok(radioButton.option("isValid"));
+    isValidationMessageInvisible();
 });
