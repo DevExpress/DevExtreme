@@ -2007,6 +2007,7 @@ QUnit.test("should rise validation event once after value is changed by calendar
     const dateBox = $("#dateBoxWithPicker")
         .dxDateBox({
             type: "datetime",
+            pickerType: "calendar",
             value: new Date(2015, 5, 9, 15, 54, 13),
             opened: true
         })
