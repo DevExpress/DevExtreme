@@ -7,7 +7,7 @@ import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
 import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 import FileManagerToolbar from "./ui.file_manager.toolbar";
-import FileManagerEnterNameDialog from "./ui.file_manager.dialogs";
+import FileManagerNameEditorDialog from "./ui.file_manager.dialog.name_editor";
 import notify from "../notify";
 
 import FileManagerItem from "./ui.file_manager.items";
@@ -112,7 +112,7 @@ var FileManager = Widget.inherit({
     },
 
     _createEnterNameDialog: function(title, buttonText) {
-        return this._createComponent($("<div>"), FileManagerEnterNameDialog, {
+        return this._createComponent($("<div>"), FileManagerNameEditorDialog, {
             title: title,
             buttonText: buttonText,
             onClosed: this._onDialogClosed.bind(this)

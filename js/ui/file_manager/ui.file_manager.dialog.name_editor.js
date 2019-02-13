@@ -5,7 +5,7 @@ import Widget from "../widget/ui.widget";
 import TextBox from "../text_box";
 import Popup from "../popup";
 
-var FileManagerEnterNameDialog = Widget.inherit({
+var FileManagerNameEditorDialog = Widget.inherit({
 
     _initMarkup: function() {
         this._popup = this._createComponent($("<div>"), Popup, {
@@ -91,4 +91,4 @@ var FileManagerEnterNameDialog = Widget.inherit({
 
 });
 
-module.exports = FileManagerEnterNameDialog;
+module.exports = FileManagerNameEditorDialog;
