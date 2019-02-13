@@ -5320,6 +5320,14 @@ QUnit.test("Scheduler appointment popup should be opened correctly for recurrenc
 
     assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "Right checkBox was checked. Popup is correct");
     assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true, "Right checkBox was checked. Popup is correct");
+
+    this.instance.hideAppointmentPopup();
+    this.instance.showAppointmentPopup(tasks[0]);
+
+    form = this.instance.getAppointmentDetailsForm();
+    var recurrenceEditor = form.getEditor("recurrenceRule");
+
+    assert.equal(recurrenceEditor._$container.css("display"), "none", "Recurrence editor is hidden. Popup is correct");
 });
 
 QUnit.test("Scheduler shouldn't throw error at deferred appointment loading (T518327)", function(assert) {
