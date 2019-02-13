@@ -73,6 +73,12 @@
 }
 
 .dx-drawer-overlap {
+    .dx-drawer-panel-content{
+        overflow: visible;
+        right: auto;
+        left: auto;
+    }
+    
     &.dx-drawer-left,
     &.dx-drawer-right {
         .dx-drawer-wrapper {
@@ -87,16 +93,9 @@
         }
     }
 
-
     &.dx-drawer-right.dx-drawer-expand {
         .dx-overlay-content {
             right: 0px;
         }
     }
-}
-
-.dx-overlay-wrapper.dx-drawer-panel-content {
-    overflow: visible;
-    right: auto;
-    left: auto;
 }
