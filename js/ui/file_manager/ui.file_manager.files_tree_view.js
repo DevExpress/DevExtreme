@@ -7,8 +7,7 @@ import FileManagerItem from "./ui.file_manager.items";
 var FileManagerFilesTreeView = Widget.inherit({
 
     _initMarkup: function() {
-        this._currentPath = "";
-        this._currentFolder = new FileManagerItem("", "");
+        this._initCurrentPathState();
         this._provider = this.option("provider");
 
         this._filesTreeView = this._createComponent(this.$element(), TreeViewSearch, {
@@ -50,6 +49,11 @@ var FileManagerFilesTreeView = Widget.inherit({
         if(handler) handler();
     },
 
+    _initCurrentPathState: function() {
+        this._currentPath = "";
+        this._currentFolder = new FileManagerItem("", "");
+    },
+
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             provider: null,
@@ -60,6 +64,9 @@ var FileManagerFilesTreeView = Widget.inherit({
 
     refreshData: function() {
         this._filesTreeView.option("dataSource", []);
+        var currentFolderChanged = this.getCurrentPath() !== "";
+        this._initCurrentPathState();
+        if(currentFolderChanged) this._raiseCurrentFolderChanged();
     },
 
     getCurrentPath: function() {

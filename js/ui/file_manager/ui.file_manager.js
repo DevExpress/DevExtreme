@@ -8,9 +8,9 @@ import CustomStore from "../../data/custom_store";
 import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 import FileManagerToolbar from "./ui.file_manager.toolbar";
 import FileManagerNameEditorDialog from "./ui.file_manager.dialog.name_editor";
+import FileManagerFolderChooserDialog from "./ui.file_manager.dialog.folder_chooser";
 import notify from "../notify";
 
-import FileManagerItem from "./ui.file_manager.items";
 import DataFileProvider from "./ui.file_manager.file_provider.data";
 import OneDriveFileProvider from "./ui.file_manager.file_provider.onedrive";
 import WebAPIFileProvider from "./ui.file_manager.file_provider.webapi";
@@ -31,8 +31,6 @@ var FileManager = Widget.inherit({
     _initMarkup: function() {
         this.callBase();
 
-        this._currentPath = "";
-        this._currentFolder = new FileManagerItem("", "");
         this._provider = this._createFileProvider();
         this._itemsViewAreaActive = false;
 
@@ -43,6 +41,10 @@ var FileManager = Widget.inherit({
 
         this._renameItemDialog = this._createEnterNameDialog("Rename", "Save");
         this._createFolderDialog = this._createEnterNameDialog("Folder", "Create");
+        this._chooseFolderDialog = this._createComponent($("<div>"), FileManagerFolderChooserDialog, {
+            provider: this._provider,
+            onClosed: this._onDialogClosed.bind(this)
+        });
 
         var $viewContainer = this._createViewContainer();
         this.$element()
@@ -50,6 +52,7 @@ var FileManager = Widget.inherit({
             .append($viewContainer)
             .append(this._renameItemDialog.$element())
             .append(this._createFolderDialog.$element())
+            .append(this._chooseFolderDialog.$element())
             .addClass(FILE_MANAGER_CLASS);
     },
 
@@ -120,8 +123,6 @@ var FileManager = Widget.inherit({
     },
 
     _onFilesTreeViewCurrentFolderChanged: function(e) {
-        this._currentPath = this._filesTreeView.getCurrentPath();
-        this._currentFolder = this._filesTreeView.getCurrentFolder();
         this._loadFilesToFilesView();
     },
 
@@ -130,71 +131,82 @@ var FileManager = Widget.inherit({
     },
 
     _tryRename: function() {
-        var item = null;
-
-        if(this._itemsViewAreaActive) {
-            var items = this.getSelectedItems();
-            if(items.length === 1) item = items[0];
-        } else {
-            item = this._currentFolder;
-        }
+        var item = this._getSingleSelectedItem();
 
         if(!item) return;
 
         var that = this;
-        this._getNewName(item.name)
+        this._showDialog(this._renameItemDialog, item.name)
             .then(result => { return that._provider.renameItem(item, result.name); })
             .then(() => {
                 that._showSuccess("Item renamed");
-                if(that._itemsViewAreaActive) {
-                    that._loadFilesToFilesView();
-                } else {
-                    that._updateFilesTreeView();
-                }
-
+                that._refreshData();
             },
             error => { if(error) that._showError(error); });
     },
 
     _tryCreate: function() {
-        var item = this._currentFolder;
+        var item = this.getCurrentFolder();
+        this._itemsViewAreaActive = false;
 
         var that = this;
-        this._getNewName()
+        this._showDialog(this._createFolderDialog)
             .then(result => { return that._provider.createFolder(item, result.name); })
             .then(() => {
                 that._showSuccess("Folder created");
-                that._updateFilesTreeView();
-                that._itemsViewAreaActive = false;
+                that._refreshData();
             },
             error => { if(error) that._showError(error); });
     },
 
     _tryDelete: function() {
-        var items = this._itemsViewAreaActive ? this.getSelectedItems() : [ this._currentFolder ];
+        var items = this._getMultipleSelectedItems();
 
         if(items.length === 0) return;
 
         var that = this;
 
-        new Deferred().resolve().promise()
+        new Deferred().resolve().promise() // TODO show confirm-like dialog here
             .then(() => { return that._provider.deleteItems(items); })
             .then(() => {
                 that._showSuccess("Items deleted");
-                if(that._itemsViewAreaActive) {
-                    that._loadFilesToFilesView();
-                } else {
-                    that._updateFilesTreeView();
-                }
-
+                that._refreshData();
             },
             error => { if(error) that._showError(error); });
     },
 
-    _getNewName: function(oldName) {
+    _tryMove: function() {
+        var items = this._getMultipleSelectedItems();
+
+        if(items.length === 0) return;
+
+        var that = this;
+        this._showDialog(this._chooseFolderDialog)
+            .then(result => { return that._provider.moveItems(items, result.folder); })
+            .then(() => {
+                that._showSuccess("Items moved");
+                that._refreshData();
+            },
+            error => { if(error) that._showError(error); });
+    },
+
+    _getSingleSelectedItem: function() {
+        if(this._itemsViewAreaActive) {
+            var items = this.getSelectedItems();
+            if(items.length === 1) return items[0];
+        } else {
+            return this.getCurrentFolder();
+        }
+        return null;
+    },
+
+    _getMultipleSelectedItems: function() {
+        return this._itemsViewAreaActive ? this.getSelectedItems() : [ this.getCurrentFolder() ];
+    },
+
+    _showDialog: function(dialog, dialogArgument) {
         this._dialogDeferred = new Deferred();
-        var dialog = oldName ? this._renameItemDialog : this._createFolderDialog;
-        dialog.show(oldName);
+        dialog.show(dialogArgument);
         return this._dialogDeferred.promise();
     },
 
@@ -227,14 +239,18 @@ var FileManager = Widget.inherit({
         });
     },
 
-    _updateFilesTreeView: function() {
-        this._filesTreeView.refreshData();
+    _refreshData: function() {
+        if(this._itemsViewAreaActive) {
+            this._loadFilesToFilesView();
+        } else {
+            this._filesTreeView.refreshData();
+        }
     },
 
     _createFilesViewStore: function() {
         return new CustomStore({
             load: function(loadOptions) {
-                return this._provider.getFiles(this._currentPath);
+                return this._provider.getFiles(this.getCurrentFolderPath());
             }.bind(this)
         });
     },
@@ -329,11 +345,18 @@ var FileManager = Widget.inherit({
             case "delete":
                 this._tryDelete();
                 break;
+            case "move":
+                this._tryMove();
+                break;
         }
     },
 
     getCurrentFolderPath: function() {
-        return this._currentPath;
+        return this._filesTreeView.getCurrentPath();
+    },
+
+    getCurrentFolder: function() {
+        return this._filesTreeView.getCurrentFolder();
     },
 
     getSelectedItems: function() {

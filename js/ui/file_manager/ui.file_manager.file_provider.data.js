@@ -41,6 +41,16 @@ var DataFileProvider = FileProvider.inherit({
         }
     },
 
+    moveItems: function(items, destinationFolder) {
+        var destItem = this._findItem(destinationFolder.relativeName);
+        if(!destItem.children) destItem.children = [];
+
+        for(var item, i = 0; item = items[i]; i++) {
+            this._deleteItem(item);
+            destItem.children.push(item.dataItem);
+        }
+    },
+
     _deleteItem: function(item) {
         var array = this._data;
         if(item.parentPath !== "") {
@@ -69,8 +79,12 @@ var DataFileProvider = FileProvider.inherit({
         var parts = path.split("/");
         for(var part, i = 0; part = parts[i]; i++) {
             result = data.filter(entry => { return entry.isFolder && entry.name === part; })[0];
-            if(result && result.children) {
-                data = result.children;
+            if(result) {
+                if(result.children) {
+                    data = result.children;
+                } else if(i !== parts.length - 1) {
+                    return null;
+                }
             } else {
                 return null;
             }
