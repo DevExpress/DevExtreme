@@ -113,10 +113,10 @@ QUnit.test("The click should be processed before the validation message is shown
             validationRules: [{ type: "required", message: "message" }]
         });
     const checkbox = $checkbox.dxCheckBox("instance");
-    const isValidationMessageInvisible = () => {
-        const message = $checkbox.find('.dx-invalid-message').get(0);
+    const isValidationMessageVisible = () => {
+        const message = $checkbox.find(".dx-overlay-wrapper.dx-invalid-message").get(0);
 
-        assert.ok(!message || message.clientHeight === 0);
+        return message && window.getComputedStyle(message).visibility === "visible";
     };
 
     validateGroup();
@@ -124,11 +124,15 @@ QUnit.test("The click should be processed before the validation message is shown
 
     $checkbox.focus();
     assert.notOk(checkbox.option("isValid"));
-    isValidationMessageInvisible();
+    assert.notOk(isValidationMessageVisible());
 
     $checkbox.trigger("dxclick");
     assert.ok(checkbox.option("isValid"));
-    isValidationMessageInvisible();
+    assert.notOk(isValidationMessageVisible());
+
+    $checkbox.trigger("dxclick");
+    assert.notOk(checkbox.option("isValid"));
+    assert.ok(isValidationMessageVisible());
 });
 
 

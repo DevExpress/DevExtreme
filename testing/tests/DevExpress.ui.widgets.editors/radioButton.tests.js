@@ -2,6 +2,7 @@ import $ from "jquery";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import { validateGroup } from 'ui/validation_engine';
 
+import "common.css!";
 import "ui/radio_group/radio_button";
 import "ui/validator";
 
@@ -93,10 +94,10 @@ QUnit.test("The click should be processed before the validation message is shown
             validationRules: [{ type: "required", message: "message" }]
         });
     const radioButton = $radioButton.dxRadioButton("instance");
-    const isValidationMessageInvisible = () => {
-        const message = $radioButton.find('.dx-invalid-message').get(0);
+    const isValidationMessageVisible = () => {
+        const message = $radioButton.find(".dx-overlay-wrapper.dx-invalid-message").get(0);
 
-        assert.ok(!message || message.clientHeight === 0);
+        return message && window.getComputedStyle(message).visibility === "visible";
     };
 
     validateGroup();
@@ -104,9 +105,9 @@ QUnit.test("The click should be processed before the validation message is shown
 
     $radioButton.focus();
     assert.notOk(radioButton.option("isValid"));
-    isValidationMessageInvisible();
+    assert.notOk(isValidationMessageVisible());
 
     $radioButton.trigger("dxclick");
     assert.ok(radioButton.option("isValid"));
-    isValidationMessageInvisible();
+    assert.notOk(isValidationMessageVisible());
 });
