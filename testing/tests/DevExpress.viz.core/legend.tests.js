@@ -1239,7 +1239,7 @@ QUnit.test('Draw background rect.Legend without border', function(assert) {
         "fill": "red",
         x: -4,
         y: -7,
-        width: 20 + 2 * options.paddingLeftRight, // TODO: remove paddingLeftRight
+        width: 20 + 2 * options.paddingLeftRight,
         height: 10,
         opacity: undefined
     });
