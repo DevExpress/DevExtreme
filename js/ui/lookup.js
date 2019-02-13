@@ -1165,6 +1165,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _listItemClickHandler: function(e) {
+        this._saveValueChangeEvent(e.event);
         this._selectListItem(e.itemData, e.event.currentTarget);
     },
 
