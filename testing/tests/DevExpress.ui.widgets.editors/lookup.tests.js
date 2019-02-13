@@ -1409,9 +1409,10 @@ QUnit.test("onValueChanged argument should contains an event property after sele
 
     this.togglePopup();
 
-    const $firstItem = this.$list.find(".dx-list-item").first();
-
-    $($firstItem).trigger("dxclick");
+    this.$list
+        .find(".dx-list-item")
+        .first()
+        .trigger("dxclick");
 
     const { event } = valueChangedStub.lastCall.args[0];
 
