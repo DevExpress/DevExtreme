@@ -96,7 +96,7 @@ exports.title = "";
  * @param1_field2 messageHtml:String
  * @param1_field3 buttons:Array<dxButtonOptions>
  * @param1_field4 showTitle:boolean
- * @param1_field5 message:String
+ * @param1_field5 message:String:deprecated
  * @static
  * @module ui/dialog
  * @export custom
