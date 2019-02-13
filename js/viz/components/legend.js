@@ -847,7 +847,8 @@ extend(legendPrototype, {
 
         that._title && that._shiftTitle(that._boundingRect.widthWithoutMargins);
         that._markersGroup && that._shiftMarkers();
-        box = that._legendGroup.getBBox();
+
+        if(that._insideLegendGroup) box = that._legendGroup.getBBox();
 
         that._x1 = box.x;
         that._y1 = box.y;

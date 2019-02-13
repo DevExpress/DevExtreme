@@ -2102,6 +2102,8 @@ var titleEnvironment = $.extend({}, environment, {
                 }
             }
         });
+
+        this.data = [{ text: 'First', id: 0, states: getDefaultStates(), visible: true }];
     },
 
     checkTitle: function(assert, titleDescription) {
@@ -2141,8 +2143,6 @@ QUnit.test("Simple title; legend options by default", function(assert) {
         margin: 0
     };
 
-    this.data = [{ text: 'First', id: 0, states: getDefaultStates() }];
-
     this.createSimpleLegend().draw(200, 200);
 
     this.checkTitle(assert, {
@@ -2178,8 +2178,6 @@ QUnit.test("Simple title with subtitle; legend options by default", function(ass
             text: "Simple subtitle"
         }
     };
-
-    this.data = [{ text: 'First', id: 0, states: getDefaultStates() }];
 
     this.createSimpleLegend().draw(200, 200);
 
@@ -2220,7 +2218,6 @@ QUnit.test("Title width more than markers width; legend horizontalAlignment = 'c
     };
     this.options.horizontalAlignment = "center";
     this.titleLayout.width = 30;
-    this.data = [{ text: 'First', id: 0, states: getDefaultStates() }];
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
@@ -2249,7 +2246,6 @@ QUnit.test("Title width less than markers width; legend horizontalAlignment = 'c
     };
     this.options.horizontalAlignment = "center";
     this.titleLayout.width = 10;
-    this.data = [{ text: 'First', id: 0, states: getDefaultStates() }];
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
@@ -2276,7 +2272,6 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center' verticalAlignment
 
     this.options.horizontalAlignment = "center";
     this.titleLayout.width = 18;
-    this.data = [{ text: 'First', id: 0, states: getDefaultStates() }];
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
@@ -2300,7 +2295,6 @@ QUnit.test("Shift simple title; horizontalAlignment = 'right' verticalAlignment 
     };
 
     this.options.horizontalAlignment = "right";
-    this.data = [{ text: 'First', id: 0, states: getDefaultStates() }];
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
@@ -2325,7 +2319,6 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center'; border exist", f
     this.options.paddingLeftRight = 4;
     this.options.border.visible = true;
     this.titleLayout.width = 18;
-    this.data = [{ text: 'First', id: 0, states: getDefaultStates() }];
 
     var legend = this.createSimpleLegend();
     legend.draw(200, 200);
