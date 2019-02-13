@@ -926,10 +926,10 @@ QUnit.test("timeCellTemplate should contains the date field of data parameter in
     });
 
     assert.equal(resultDates.length, 4);
-    assert.deepEqual(resultDates[0], new Date(2016, 8, 5));
-    assert.deepEqual(resultDates[1], new Date(2016, 8, 5, 1));
-    assert.deepEqual(resultDates[2], new Date(2016, 8, 5, 2));
-    assert.deepEqual(resultDates[3], new Date(2016, 8, 5, 3));
+    assert.deepEqual(resultDates[0], new Date(2016, 8, 5), "date parameter for the first time cell");
+    assert.deepEqual(resultDates[1], new Date(2016, 8, 5, 1), "date parameter for the second time cell");
+    assert.deepEqual(resultDates[2], new Date(2016, 8, 5, 2), "date parameter for the third time cell");
+    assert.deepEqual(resultDates[3], new Date(2016, 8, 5, 3), "date parameter for the fourth time cell");
 });
 
 QUnit.test("timeCellTemplate should contains the date field of data parameter in Week view", function(assert) {
@@ -948,13 +948,13 @@ QUnit.test("timeCellTemplate should contains the date field of data parameter in
     });
 
     assert.equal(resultDates.length, 4);
-    assert.deepEqual(resultDates[0], new Date(2016, 8, 4));
-    assert.deepEqual(resultDates[1], new Date(2016, 8, 4, 1));
-    assert.deepEqual(resultDates[2], new Date(2016, 8, 4, 2));
-    assert.deepEqual(resultDates[3], new Date(2016, 8, 4, 3));
+    assert.deepEqual(resultDates[0], new Date(2016, 8, 4), "date parameter for the first time cell");
+    assert.deepEqual(resultDates[1], new Date(2016, 8, 4, 1), "date parameter for the second time cell");
+    assert.deepEqual(resultDates[2], new Date(2016, 8, 4, 2), "date parameter for the third time cell");
+    assert.deepEqual(resultDates[3], new Date(2016, 8, 4, 3), "date parameter for the fourth time cell");
 });
 
-QUnit.test("timeCellTemplate should contains the date field of data parameter in Week view", function(assert) {
+QUnit.test("timeCellTemplate should contains the date field of data parameter in workWeek view", function(assert) {
     var resultDates = [];
     this.createInstance({
         currentView: "workWeek",
@@ -970,10 +970,10 @@ QUnit.test("timeCellTemplate should contains the date field of data parameter in
     });
 
     assert.equal(resultDates.length, 4);
-    assert.deepEqual(resultDates[0], new Date(2016, 8, 5));
-    assert.deepEqual(resultDates[1], new Date(2016, 8, 5, 1));
-    assert.deepEqual(resultDates[2], new Date(2016, 8, 5, 2));
-    assert.deepEqual(resultDates[3], new Date(2016, 8, 5, 3));
+    assert.deepEqual(resultDates[0], new Date(2016, 8, 5), "date parameter for the first time cell");
+    assert.deepEqual(resultDates[1], new Date(2016, 8, 5, 1), "date parameter for the second time cell");
+    assert.deepEqual(resultDates[2], new Date(2016, 8, 5, 2), "date parameter for the third time cell");
+    assert.deepEqual(resultDates[3], new Date(2016, 8, 5, 3), "date parameter for the fourth time cell");
 });
 
 QUnit.test("resourceCellTemplate should have correct options", function(assert) {
