@@ -93,9 +93,10 @@ exports.title = "";
  * @return Object
  * @param1 options:object
  * @param1_field1 title:String
- * @param1_field2 message:String
+ * @param1_field2 messageHtml:String
  * @param1_field3 buttons:Array<dxButtonOptions>
  * @param1_field4 showTitle:boolean
+ * @param1_field5 message:String
  * @static
  * @module ui/dialog
  * @export custom
@@ -110,8 +111,10 @@ exports.custom = function(options) {
     var $element = $("<div>").addClass(DX_DIALOG_CLASSNAME)
         .appendTo(viewPortUtils.value());
 
+    var messageHtml = String('messageHtml' in options ? options.messageHtml : options.message);
+
     var $message = $("<div>").addClass(DX_DIALOG_MESSAGE_CLASSNAME)
-        .html(String(options.message));
+        .html(messageHtml);
 
     var popupToolbarItems = [];
 
@@ -236,21 +239,15 @@ exports.custom = function(options) {
 /**
  * @name ui.dialogmethods.alert
  * @publicName alert(message,title)
- * @param1 message:string
+ * @param1 messageHtml:string
  * @param2 title:string
  * @return Promise<void>
  * @static
  * @module ui/dialog
  * @export alert
  */
-exports.alert = function(message, title, showTitle) {
-    var options = isPlainObject(message)
-        ? message
-        : {
-            title: title,
-            message: message,
-            showTitle: showTitle
-        };
+exports.alert = function(messageHtml, title, showTitle) {
+    var options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle };
 
     return exports.custom(options).show();
 };
@@ -258,20 +255,20 @@ exports.alert = function(message, title, showTitle) {
 /**
  * @name ui.dialogmethods.confirm
  * @publicName confirm(message,title)
- * @param1 message:string
+ * @param1 messageHtml:string
  * @param2 title:string
  * @return Promise<boolean>
  * @static
  * @module ui/dialog
  * @export confirm
  */
-exports.confirm = function(message, title, showTitle) {
-    var options = isPlainObject(message)
-        ? message
+exports.confirm = function(messageHtml, title, showTitle) {
+    var options = isPlainObject(messageHtml)
+        ? messageHtml
         : {
-            title: title,
-            message: message,
-            showTitle: showTitle,
+            title,
+            messageHtml,
+            showTitle,
             buttons: [
                 { text: messageLocalization.format("Yes"), onClick: function() { return true; } },
                 { text: messageLocalization.format("No"), onClick: function() { return false; } }
