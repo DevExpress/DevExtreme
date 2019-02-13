@@ -1651,19 +1651,17 @@ Axis.prototype = {
             let minTickPadding = _max(invertMultiplier * (canvasStartEnd.start - firstTickPosition), 0);
             let maxTickPadding = _max(invertMultiplier * (lastTickPosition - canvasStartEnd.end), 0);
 
-            if(minTickPadding || maxTickPadding) {
+            if(minTickPadding > minPadding || maxTickPadding > maxPadding) {
                 const commonPadding = (maxTickPadding + minTickPadding);
-                if(commonPadding >= minPadding + maxPadding) {
-                    const coeff = getConvertIntervalCoefficient(commonPadding);
-                    if(minTickPadding >= minPadding) {
-                        minValue = ticks[0].value;
-                    }
-                    if(maxTickPadding >= maxPadding) {
-                        maxValue = ticks[length - 1].value;
-                    }
-                    minPadding = Math.ceil(_max(minTickPadding, minPadding) / coeff);
-                    maxPadding = Math.ceil(_max(maxTickPadding, maxPadding) / coeff);
+                const coeff = getConvertIntervalCoefficient(commonPadding);
+                if(minTickPadding >= minPadding) {
+                    minValue = ticks[0].value;
                 }
+                if(maxTickPadding >= maxPadding) {
+                    maxValue = ticks[length - 1].value;
+                }
+                minPadding = Math.ceil(_max(minTickPadding, minPadding) / coeff);
+                maxPadding = Math.ceil(_max(maxTickPadding, maxPadding) / coeff);
             }
         }
 
