@@ -846,7 +846,8 @@ extend(legendPrototype, {
 
         that._title && that._shiftTitle(that._boundingRect.widthWithoutMargins);
         that._markersGroup && that._shiftMarkers();
-        box = that._legendGroup.getBBox();
+
+        if(that._insideLegendGroup) box = that._legendGroup.getBBox();
 
         that._x1 = box.x;
         that._y1 = box.y;
@@ -1015,7 +1016,7 @@ exports.plugin = {
         },
 
         _createLegendItems: function() {
-            if(this._legend.update(this.getAllItems(), this._getOption("legend"), this._themeManager)) {
+            if(this._legend.update(this._getLegendData(), this._getOption("legend"), this._themeManager)) {
                 this._requestChange(["LAYOUT"]);
             }
         }

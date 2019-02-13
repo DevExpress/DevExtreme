@@ -550,7 +550,7 @@ function compareFloats(value1, value2) {
 
 dxBarGauge.prototype._factory.ThemeManager = BaseThemeManager.inherit({
     _themeSection: "barGauge",
-    _fontFields: ["label.font", "title.font", "tooltip.font", "loadingIndicator.font", "export.font", "legend.font"]
+    _fontFields: ["label.font", "title.font", "tooltip.font", "loadingIndicator.font", "export.font", "legend.font", "legend.title.font", "legend.title.subtitle.font"]
 });
 
 registerComponent("dxBarGauge", dxBarGauge);
