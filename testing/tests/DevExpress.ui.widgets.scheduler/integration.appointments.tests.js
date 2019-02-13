@@ -4860,6 +4860,65 @@ QUnit.test("Appointment should have right position on timeline month view", func
     assert.roughEqual($appointment.position().left, $targetCell.position().left, 1.001, "appointment left is correct");
 });
 
+QUnit.test("Rival appointments should have right position on timeline month view", function(assert) {
+    var data = [{
+        "id": "1",
+        "text": "Recurrence event",
+        "recurrenceRule": "FREQ=DAILY;INTERVAL=2;COUNT=2",
+        "startDate": new Date(2018, 11, 3, 9, 0),
+        "endDate": new Date(2018, 11, 1, 10, 30)
+    },
+    {
+        "id": "2",
+        "text": "Some event",
+        "startDate": new Date(2018, 11, 4, 9, 0),
+        "endDate": new Date(2018, 11, 4, 10, 29),
+    }];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2018, 11, 3),
+        firstDayOfWeek: 0,
+        startDayHour: 8,
+        endDayHour: 20
+    });
+
+    this.instance.$element().find("." + APPOINTMENT_CLASS).each(function(index, appointment) {
+        assert.equal($(appointment).position().top, 0, "Appointment top is ok");
+    });
+});
+
+QUnit.test("Rival long appointments should have right position on timeline month view", function(assert) {
+    var data = [{
+        "id": "1",
+        "text": "Long event",
+        "startDate": new Date(2018, 11, 1, 9, 0),
+        "endDate": new Date(2018, 11, 5, 10, 30)
+    },
+    {
+        "id": "2",
+        "text": "Some event",
+        "startDate": new Date(2018, 11, 4, 9, 0),
+        "endDate": new Date(2018, 11, 4, 10, 29),
+    }];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2018, 11, 3),
+        firstDayOfWeek: 0,
+        startDayHour: 8,
+        endDayHour: 20
+    });
+
+    var $secondAppointment = this.instance.$element().find("." + APPOINTMENT_CLASS).eq(1);
+
+    assert.equal($secondAppointment.position().top, 40, "Second appointment top is ok");
+});
+
 QUnit.test("Long appointment part should have right width on timeline month view", function(assert) {
     var appointment = {
         startDate: new Date(2016, 1, 25, 8, 0),

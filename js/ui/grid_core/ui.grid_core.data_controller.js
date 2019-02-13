@@ -1178,7 +1178,7 @@ module.exports = {
                                 d.resolve(that._processItems(data, "loadingAll"), options.extra && options.extra.summary);
                             }).fail(d.reject);
                         } else {
-                            if(!that.isLoading()) {
+                            if(!dataSource.isLoading()) {
                                 var loadOptions = extend({}, dataSource.loadOptions(), { isLoadingAll: true, requireTotalCount: false });
                                 dataSource.load(loadOptions).done(function(items, extra) {
                                     items = that._beforeProcessItems(items);

@@ -1,17 +1,17 @@
-var $ = require("jquery"),
-    Autocomplete = require("ui/autocomplete"),
-    devices = require("core/devices"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    fx = require("animation/fx"),
-    ArrayStore = require("data/array_store"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config");
+import $ from "jquery";
+import ArrayStore from "data/array_store";
+import Autocomplete from "ui/autocomplete";
+import config from "core/config";
+import devices from "core/devices";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import fx from "animation/fx";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import { isRenderer } from "core/utils/type";
 
-require("common.css!");
-require("ui/select_box");
+import "common.css!";
+import "ui/select_box";
 
 QUnit.testStart(function() {
     var markup =
@@ -263,6 +263,38 @@ QUnit.testInActiveWindow("open/close actions", function(assert) {
     this.keyboard.press("backspace");
     assert.equal(openFired, 1, "open fired once");
     assert.equal(closeFired, 1, "close fired once");
+});
+
+QUnit.testInActiveWindow("should not open overlay if the focus has been lost (T712942)", function(assert) {
+    const done = assert.async();
+    let isOpenFired = false;
+
+    this.clock.restore();
+
+    this.instance.option({
+        value: null,
+        onOpened: () => isOpenFired = true,
+        searchTimeout: 10
+    });
+
+    this.keyboard.type("i");
+    this.instance.blur();
+
+    window.setTimeout(() => {
+        assert.notOk(isOpenFired);
+        assert.notOk(this.instance._isFocused());
+
+        this.instance.focus();
+        this.keyboard.press("backspace");
+        this.keyboard.type("i");
+        this.instance.blur();
+
+        window.setTimeout(() => {
+            assert.notOk(isOpenFired);
+            assert.notOk(this.instance._isFocused());
+            done();
+        }, 20);
+    }, 20);
 });
 
 QUnit.test("onEnterKey (T107163)", function(assert) {

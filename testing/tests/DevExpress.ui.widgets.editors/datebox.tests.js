@@ -3897,6 +3897,29 @@ QUnit.test("dxDateBox should validate value after change 'min' option", function
     assert.ok(dateBox.option("isValid"), "datebox is valid");
 });
 
+QUnit.testInActiveWindow("DateBox should validate value after remove an invalid characters", function(assert) {
+    const $element = $("#dateBox");
+    const dateBox = $element.dxDateBox({
+        value: new Date(2015, 6, 18),
+        pickerType: "calendar"
+    }).dxDateBox("instance");
+    const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+    const keyboard = keyboardMock($input);
+
+    keyboard
+        .caret(dateBox.option("text").length - 1)
+        .type("d")
+        .press("enter");
+
+    assert.notOk(dateBox.option("isValid"));
+
+    keyboard
+        .press("backspace")
+        .press("enter");
+
+    assert.ok(dateBox.option("isValid"));
+});
+
 
 QUnit.module("DateBox number and string value support", {
     beforeEach: function() {

@@ -252,7 +252,7 @@ treeListCore.registerModule("data", {
             parentIdExpr: "parentId",
             /**
             * @name dxTreeListOptions.rootValue
-            * @type Object
+            * @type any
             * @default 0
             */
             rootValue: 0,
