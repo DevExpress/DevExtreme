@@ -864,7 +864,7 @@ var BaseChart = BaseWidget.inherit({
 
         legendOptions.containerBackgroundColor = themeManager.getOptions("containerBackgroundColor");
         legendOptions._incidentOccurred = that._incidentOccurred; // TODO: Why is `_` used?
-        that._legend.update(legendData, legendOptions, themeManager);
+        that._legend.update(legendData, legendOptions, themeManager.theme("legend").title);
     },
 
     _prepareDrawOptions: function(drawOptions) {

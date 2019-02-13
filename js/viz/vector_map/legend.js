@@ -73,7 +73,7 @@ Legend.prototype = _extend(require("../../core/utils/object").clone(_BaseLegend.
 
     _updateData: function(data) {
         this._options.defaultColor = data && data.defaultColor;
-        this.update(data ? buildData(data.partition, data.values, this._dataName) : [], this._options, this._params.themeManager);
+        this.update(data ? buildData(data.partition, data.values, this._dataName) : [], this._options, this._params.themeManager.theme("legend").title);
         this.updateLayout();
     },
 
@@ -90,7 +90,7 @@ Legend.prototype = _extend(require("../../core/utils/object").clone(_BaseLegend.
     // The `_root` should be appended or removed here but there is no way to check if core.Legend is actually enabled or not
     setOptions: function(options) {
         var that = this;
-        that.update(that._data, options, this._params.themeManager);
+        that.update(that._data, options, this._params.themeManager.theme("legend").title);
         that._unbindData();
         let source = options.source;
         that._bindData(source ? { category: source.layer, name: source.grouping } : unknownSource);

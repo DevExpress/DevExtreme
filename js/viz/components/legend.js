@@ -342,7 +342,7 @@ extend(legendPrototype, {
         return this._options;
     },
 
-    update: function(data, options, themeManager) {
+    update: function(data, options, themeManagerTitleOptions) {
         const that = this;
         options = that._options = parseOptions(options, that._textField) || {};
         that._data = data && options.customizeItems && options.customizeItems(data.slice()) || data;
@@ -357,7 +357,7 @@ extend(legendPrototype, {
             that._title = new title.Title({ renderer: that._renderer, cssClass: "dxc-title", root: that._legendGroup });
         }
 
-        that._title && themeManager && that._title.update(themeManager.theme("legend").title, that._options.title);
+        that._title && that._title.update(themeManagerTitleOptions, that._options.title);
 
         return that;
     },
@@ -1017,7 +1017,7 @@ exports.plugin = {
         },
 
         _createLegendItems: function() {
-            if(this._legend.update(this._getLegendData(), this._getOption("legend"), this._themeManager)) {
+            if(this._legend.update(this._getLegendData(), this._getOption("legend"), this._themeManager.theme("legend").title)) {
                 this._requestChange(["LAYOUT"]);
             }
         }

@@ -2,7 +2,8 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     vizMocks = require("../../helpers/vizMocks.js"),
     coreLegendModule = require("viz/components/legend"),
-    legendModule = require("viz/vector_map/legend");
+    legendModule = require("viz/vector_map/legend"),
+    ThemeManager = vizMocks.stubClass(require("viz/components/chart_theme_manager").ThemeManager);
 
 QUnit.module('Legend', {
     beforeEach: function() {
@@ -14,7 +15,11 @@ QUnit.module('Legend', {
         this.unbind = sinon.spy();
         this.notifyDirty = sinon.spy();
         this.notifyReady = sinon.spy();
+        this.themeManager = new ThemeManager();
 
+        this.themeManager.stub("theme").withArgs("legend").returns({
+            title: {}
+        });
         this.legend = new legendModule._TESTS_Legend({
             renderer: this.renderer,
             container: this.container,

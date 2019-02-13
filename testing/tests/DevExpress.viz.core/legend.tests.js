@@ -3,9 +3,7 @@ import { noop } from "core/utils/common";
 import vizMocks from "../../helpers/vizMocks.js";
 import legendModule from "viz/components/legend";
 import module from "viz/core/title";
-import { ThemeManager as OriginalThemeManager } from "viz/components/chart_theme_manager";
 
-const ThemeManager = vizMocks.stubClass(OriginalThemeManager);
 const Legend = legendModule.Legend;
 
 var environment = {
@@ -58,13 +56,7 @@ var environment = {
         }, this.data, this.options);
     },
     createLegend: function(settings, data, options) {
-        var themeManager,
-            hasTitle = this.options && (this.options.title || {}).text;
-        if(hasTitle) {
-            themeManager = this.themeManager;
-        }
-
-        this.legend = new Legend(settings).update(data, options, themeManager);
+        this.legend = new Legend(settings).update(data, options, this.themeManagerTitleOptions);
         return this.legend;
     },
     createAndDrawLegend: function() {
@@ -2088,21 +2080,18 @@ var titleEnvironment = $.extend({}, environment, {
             return that.title;
         };
 
-        that.themeManager = new ThemeManager();
-        that.themeManager.stub("theme").withArgs("legend").returns({
-            title: {
-                backgroundColor: "#ffffff",
+        that.themeManagerTitleOptions = {
+            backgroundColor: "#ffffff",
+            font: {
+                size: 28,
+                weight: 200
+            },
+            subtitle: {
                 font: {
-                    size: 28,
-                    weight: 200
-                },
-                subtitle: {
-                    font: {
-                        size: 16
-                    }
+                    size: 16
                 }
             }
-        });
+        };
 
         this.data = [{ text: 'First', id: 0, states: getDefaultStates(), visible: true }];
     },
