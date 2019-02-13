@@ -32,7 +32,7 @@ var DEBUG_BUNDLES = BUNDLES.concat([
     '/bundles/dx.custom.js'
 ]);
 
-var versionPath = 'core/version.js';
+var VERSION_FILE_PATH = 'core/version.js';
 
 function processBundles(bundles) {
     return bundles.map(function(bundle) {
@@ -50,7 +50,7 @@ function muteWebPack() {
 }
 
 gulp.task('version-fix', ['transpile'], function() {
-    return gulp.src(path.join(context.TRANSPILED_PATH, versionPath), { base: './' })
+    return gulp.src(path.join(context.TRANSPILED_PATH, VERSION_FILE_PATH), { base: './' })
         .pipe(replace(/"\d\d\.\d.*?"/, `"${context.version.script}"`))
         .pipe(gulp.dest('./'));
 });
