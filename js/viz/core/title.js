@@ -40,7 +40,7 @@ function validateMargin(margin) {
 
 function Title(params) {
     this._params = params;
-    this._group = params.renderer.g().attr({ "class": params.cssClass }).linkOn(params.renderer.root, { name: "title", after: "peripheral" });
+    this._group = params.renderer.g().attr({ "class": params.cssClass }).linkOn(params.root || params.renderer.root, { name: "title", after: "peripheral" });
     this._hasText = false;
 }
 
@@ -125,8 +125,13 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         };
     },
 
-    update: function(options) {
+    hasText: function() {
+        return this._hasText;
+    },
+
+    update: function(themeOptions, userOptions) {
         var that = this,
+            options = extend(true, {}, themeOptions, processTitleOptions(userOptions)),
             _hasText = hasText(options.text),
             isLayoutChanged = _hasText || _hasText !== that._hasText;
         if(_hasText) {
@@ -179,6 +184,10 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
 
     getLayoutOptions: function() {
         return this._boundingRect || null;
+    },
+
+    getTrueSize: function() {
+        return this._group ? this._group.getBBox() : null;
     },
 
     shift: function(x, y) {
@@ -248,6 +257,15 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         that._params.incidentOccurred("W2103");
         that._group.linkRemove();
         that._boundingRect.width = that._boundingRect.height = 0;
+    },
+
+    getOptions: function() {
+        return this._options;
+    },
+
+    changeLink: function(root) {
+        this._group.linkRemove();
+        this._group.linkOn(root, { name: "title", after: "peripheral" });
     }
     // BaseWidget_layout_implementation
 });
@@ -284,7 +302,7 @@ exports.plugin = {
         constructor.addChange({
             code: "TITLE",
             handler: function() {
-                if(this._title.update(extend(true, {}, this._themeManager.theme("title"), processTitleOptions(this.option("title"))))) {
+                if(this._title.update(this._themeManager.theme("title"), this.option("title"))) {
                     this._change(["LAYOUT"]);
                 }
             },

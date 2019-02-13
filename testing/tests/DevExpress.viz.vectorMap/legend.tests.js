@@ -14,6 +14,7 @@ QUnit.module('Legend', {
         this.unbind = sinon.spy();
         this.notifyDirty = sinon.spy();
         this.notifyReady = sinon.spy();
+
         this.legend = new legendModule._TESTS_Legend({
             renderer: this.renderer,
             container: this.container,
@@ -26,7 +27,8 @@ QUnit.module('Legend', {
                 unbind: this.unbind
             },
             notifyDirty: this.notifyDirty,
-            notifyReady: this.notifyReady
+            notifyReady: this.notifyReady,
+            themeManager: this.themeManager
         });
         this.updateLayout = this.legend.updateLayout = sinon.spy($.proxy(function() {
             this.legend.draw(50, 50);
@@ -43,6 +45,7 @@ QUnit.module('Legend', {
             border: {
                 visible: false
             },
+            title: {},
             position: 'outside',
             paddingLeftRight: 10,
             paddingTopBottom: 10,
@@ -164,7 +167,7 @@ QUnit.test('resize', function(assert) {
 
     this.legend.resize({ width: 300, height: 100 });
 
-    assert.strictEqual(this.renderer.g.callCount, 3, 'redrawn');
+    assert.strictEqual(this.renderer.g.callCount, 6, 'redrawn');
     assert.strictEqual(this.notifyDirty.callCount, 1, "notify dirty");
     assert.strictEqual(this.notifyReady.callCount, 1, "notify ready");
 });

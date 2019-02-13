@@ -28,7 +28,7 @@ function buildData(partition, values, field) {
 var Legend = function(parameters) {
     var that = this;
     that._params = parameters;
-    that._root = parameters.renderer.g().attr({ "class": "dxm-legend" }).linkOn(parameters.container, { name: "legend", after: "legend-base" }).linkAppend();
+    that._root = parameters.renderer.g().attr({ "class": "dxm-legend" }).linkOn(parameters.container, { name: "legend", after: "legend-base" }).enableLinks().linkAppend();
     parameters.layoutControl.addItem(that);
     _BaseLegend.call(that, {
         renderer: parameters.renderer,
@@ -72,7 +72,7 @@ Legend.prototype = _extend(require("../../core/utils/object").clone(_BaseLegend.
 
     _updateData: function(data) {
         this._options.defaultColor = data && data.defaultColor;
-        this.update(data ? buildData(data.partition, data.values, this._dataName) : [], this._options);
+        this.update(data ? buildData(data.partition, data.values, this._dataName) : [], this._options, this._params.themeManager);
         this.updateLayout();
     },
 
@@ -89,7 +89,7 @@ Legend.prototype = _extend(require("../../core/utils/object").clone(_BaseLegend.
     // The `_root` should be appended or removed here but there is no way to check if core.Legend is actually enabled or not
     setOptions: function(options) {
         var that = this;
-        that.update(that._data, options);
+        that.update(that._data, options, this._params.themeManager);
         that._unbindData();
         let source = options.source;
         that._bindData(source ? { category: source.layer, name: source.grouping } : unknownSource);
