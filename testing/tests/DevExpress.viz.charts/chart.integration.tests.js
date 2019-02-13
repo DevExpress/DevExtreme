@@ -2490,7 +2490,7 @@ QUnit.module("Multiple axes chart", $.extend({}, moduleSetup, {
             valueAxis: [{
                 name: "axis1",
                 pane: "pane1",
-                tickInterval: 20
+                tickInterval: 25
             }, {
                 name: "axis2",
                 pane: "pane1",
@@ -2551,7 +2551,7 @@ QUnit.test("Two axes syncronization with margins", function(assert) {
     var axis1 = chart.getValueAxis("axis1"),
         axis2 = chart.getValueAxis("axis2");
 
-    assert.deepEqual(axis1.getTicksValues().majorTicksValues, [0, 20, 40, 60, 80, 100, 120]);
+    assert.deepEqual(axis1.getTicksValues().majorTicksValues, [0, 25, 50, 75, 100, 125, 150]);
 
     this.compareTickCoords(assert, axis2._majorTicks.map(t => t.coords.y), axis1._majorTicks.map(t => t.coords.y));
 });
