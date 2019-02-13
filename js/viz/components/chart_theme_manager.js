@@ -9,7 +9,7 @@ var noop = require("../../core/utils/common").noop,
     FONT = "font",
     COMMON_AXIS_SETTINGS = "commonAxisSettings",
 
-    PIE_FONT_FIELDS = ["legend." + FONT, "title." + FONT, "title.subtitle." + FONT, "tooltip." + FONT, "loadingIndicator." + FONT, "export." + FONT, "commonSeriesSettings.label." + FONT],
+    PIE_FONT_FIELDS = ["legend." + FONT, "legend.title." + FONT, "legend.title.subtitle." + FONT, "title." + FONT, "title.subtitle." + FONT, "tooltip." + FONT, "loadingIndicator." + FONT, "export." + FONT, "commonSeriesSettings.label." + FONT],
     POLAR_FONT_FIELDS = PIE_FONT_FIELDS.concat([COMMON_AXIS_SETTINGS + ".label." + FONT, COMMON_AXIS_SETTINGS + ".title." + FONT]),
     CHART_FONT_FIELDS = POLAR_FONT_FIELDS.concat(["crosshair.label." + FONT]),
 
