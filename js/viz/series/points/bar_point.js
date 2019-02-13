@@ -245,6 +245,10 @@ module.exports = _extend({}, symbolPoint, {
         return coord;
     },
 
+    _getErrorBarBaseEdgeLength() {
+        return this._options.rotated ? this.height : this.width;
+    },
+
     _translateErrorBars: function(argVisibleArea) {
         symbolPoint._translateErrorBars.call(this);
         if(this._errorBarPos < argVisibleArea.min || this._errorBarPos > argVisibleArea.max) {

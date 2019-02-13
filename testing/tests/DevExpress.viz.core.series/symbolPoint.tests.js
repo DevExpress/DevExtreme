@@ -1524,6 +1524,45 @@ QUnit.test("Draw only highError for stdDeviation type of errorBar", function(ass
     assert.deepEqual(this.renderer.path.lastCall.args[0], [[7, 25, 15, 25], [11, 25, 11, 24.5]]);
 });
 
+QUnit.test("Draw error bar with relative edge length", function(assert) {
+    this.options.symbol = "circle";
+    this.options.errorBars = {
+        lineWidth: 3,
+        edgeLength: 0.5,
+        type: "stdDeviation",
+        color: "red",
+        displayMode: "high"
+    };
+    this.options.styles = { normal: { r: 6, "stroke-width": 4 }, hover: { r: 6, "stroke-width": 10 } };
+    var point = createPoint(this.series, { argument: 1, value: 1, lowError: 3, highError: 4 }, this.options);
+
+    point.translate();
+    point.draw(this.renderer, this.groups);
+
+    assert.strictEqual(this.renderer.stub("path").callCount, 1);
+    assert.deepEqual(this.renderer.path.lastCall.args[0], [[7, 25, 15, 25], [11, 25, 11, 24.5]]);
+});
+
+QUnit.test("Draw error bar with relative edge length. Invisible point", function(assert) {
+    this.options.symbol = "circle";
+    this.options.visible = false;
+    this.options.errorBars = {
+        lineWidth: 3,
+        edgeLength: 0.5,
+        type: "stdDeviation",
+        color: "red",
+        displayMode: "high"
+    };
+    this.options.styles = { normal: { r: 6, "stroke-width": 4 }, hover: { r: 6, "stroke-width": 10 } };
+    var point = createPoint(this.series, { argument: 1, value: 1, lowError: 3, highError: 4 }, this.options);
+
+    point.translate();
+    point.draw(this.renderer, this.groups);
+
+    assert.strictEqual(this.renderer.stub("path").callCount, 1);
+    assert.deepEqual(this.renderer.path.lastCall.args[0], [[11, 25, 11, 25], [11, 25, 11, 24.5]]);
+});
+
 QUnit.test("Draw point when errorBar has no coords", function(assert) {
     this.options.symbol = "circle";
     this.options.errorBars = {
