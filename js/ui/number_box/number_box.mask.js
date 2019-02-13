@@ -78,6 +78,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
         if(browser.msie) {
             this._waitForDblClick = true;
         }
+        if(this._caretTimeout) {
+            clearTimeout(this._caretTimeout);
+        }
         this._caretTimeout = setTimeout(function() {
             that._waitForDblClick = undefined;
             that._moveCaretToBoundary(MOVE_BACKWARD, e);
@@ -163,6 +166,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _keyboardHandler: function(e) {
+        if(browser.msie && this._waitForDblClick) {
+            this._waitForDblClick = false;
+            clearTimeout(this._caretTimeout);
+        }
+
         this._lastKey = number.convertDigits(eventUtils.getChar(e), true);
         this._lastKeyName = eventUtils.normalizeKeyName(e);
 
@@ -461,6 +469,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         eventsEngine.off(this._input(), "." + NUMBER_FORMATTER_NAMESPACE);
     },
 
+    _moveCaretToRightPositionAfterFormatting: function() {
+        this._caret(maskCaret.getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
+    },
+
     _attachFormatterEvents: function() {
         var $input = this._input();
 
@@ -474,10 +486,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
                     clearTimeout(this._caretTimeout);
                     this._caretTimeout = setTimeout(function() {
                         that._waitForDblClick = undefined;
-                        that._caret(maskCaret.getCaretInBoundaries(that._caret(), that._getInputVal(), that._getFormatPattern()));
+                        that._moveCaretToRightPositionAfterFormatting();
                     }, caretTimeoutDuration);
                 } else {
-                    that._caret(maskCaret.getCaretInBoundaries(that._caret(), that._getInputVal(), that._getFormatPattern()));
+                    that._moveCaretToRightPositionAfterFormatting();
                 }
             }
         }.bind(this));
