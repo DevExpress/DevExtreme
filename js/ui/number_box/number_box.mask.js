@@ -25,6 +25,8 @@ var ensureDefined = function(value, defaultValue) {
     return value === undefined ? defaultValue : value;
 };
 
+var caretTimeoutDuration = browser.msie ? 300 : 0;
+
 var NumberBoxMask = NumberBoxBase.inherit({
 
     _getDefaultOptions: function() {
@@ -72,12 +74,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
+        var that = this;
         if(browser.msie) {
-            clearTimeout(this._ieCaretTimeout);
-            this._ieCaretTimeout = setTimeout(this._moveCaretToBoundary.bind(this, MOVE_BACKWARD, e));
-        } else {
-            this._moveCaretToBoundary(MOVE_BACKWARD, e);
+            this._waitForDblClick = true;
         }
+        this._caretTimeout = setTimeout(function() {
+            that._waitForDblClick = undefined;
+            that._moveCaretToBoundary(MOVE_BACKWARD, e);
+        }, caretTimeoutDuration);
     },
 
     _focusOutHandler: function(e) {
@@ -461,8 +465,28 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var $input = this._input();
 
         eventsEngine.on($input, eventUtils.addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), function() {
-            this._caret(maskCaret.getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
+        eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), function(event) {
+            if(!this._waitForDblClick) {
+                var that = this;
+
+                if(browser.msie) {
+                    this._waitForDblClick = true;
+                    clearTimeout(this._caretTimeout);
+                    this._caretTimeout = setTimeout(function() {
+                        that._waitForDblClick = undefined;
+                        that._caret(maskCaret.getCaretInBoundaries(that._caret(), that._getInputVal(), that._getFormatPattern()));
+                    }, caretTimeoutDuration);
+                } else {
+                    that._caret(maskCaret.getCaretInBoundaries(that._caret(), that._getInputVal(), that._getFormatPattern()));
+                }
+            }
+        }.bind(this));
+
+        eventsEngine.on($input, "dblclick", function() {
+            if(this._waitForDblClick) {
+                clearTimeout(this._caretTimeout);
+                this._waitForDblClick = undefined;
+            }
         }.bind(this));
     },
 
@@ -542,8 +566,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
                 var caretInBoundaries = maskCaret.getCaretInBoundaries(caret, currentText, format);
 
                 if(browser.msie) {
-                    clearTimeout(this._ieCaretTimeout);
-                    this._ieCaretTimeout = setTimeout(this._caret.bind(this, caretInBoundaries));
+                    clearTimeout(this._caretTimeout);
+                    this._caretTimeout = setTimeout(this._caret.bind(this, caretInBoundaries));
                 } else {
                     this._caret(caretInBoundaries);
                 }
@@ -676,8 +700,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._lastKeyName;
         delete this._parsedValue;
         delete this._focusOutOccurs;
-        clearTimeout(this._ieCaretTimeout);
-        delete this._ieCaretTimeout;
+        clearTimeout(this._caretTimeout);
+        delete this._caretTimeout;
     },
 
     _clean: function() {
