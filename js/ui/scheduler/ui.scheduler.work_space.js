@@ -1434,6 +1434,7 @@ var SchedulerWorkSpace = Widget.inherit({
             rowClass: TIME_PANEL_ROW_CLASS,
             cellTemplate: this.option("timeCellTemplate"),
             getCellText: this._getTimeText.bind(this),
+            getCellDate: this._getTimeCellDate.bind(this),
             groupCount: this._getGroupCount(),
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined
         });
