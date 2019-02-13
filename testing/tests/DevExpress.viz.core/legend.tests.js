@@ -1,11 +1,12 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    vizMocks = require("../../helpers/vizMocks.js"),
-    ThemeManager = vizMocks.stubClass(require("viz/components/chart_theme_manager").ThemeManager),
-    module = require("viz/core/title"),
-    legendModule = require("viz/components/legend");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import vizMocks from "../../helpers/vizMocks.js";
+import legendModule from "viz/components/legend";
+import module from "viz/core/title";
+import { ThemeManager as OriginalThemeManager } from "viz/components/chart_theme_manager";
 
-var Legend = legendModule.Legend;
+const ThemeManager = vizMocks.stubClass(OriginalThemeManager);
+const Legend = legendModule.Legend;
 
 var environment = {
     beforeEach: function() {
@@ -1990,7 +1991,7 @@ QUnit.test('Do not render hidden items', function(assert) {
 });
 
 QUnit.test('Can hide all items', function(assert) {
-    this.data[1] = this.data.map(function(i) {
+    this.data[1] = this.data.map(i => {
         i.visible = false;
         return i;
     });
