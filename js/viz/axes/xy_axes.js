@@ -1043,8 +1043,6 @@ module.exports = {
         },
 
         areCoordsOutsideAxis: function(coords) {
-            // getCanvasVisibleArea takes into account inverted case
-            // var canvas = this._translator.getCanvasVisibleArea(),
             const coord = this._isHorizontal ? coords.x : coords.y;
 
             const visibleArea = this.getVisibleArea();
