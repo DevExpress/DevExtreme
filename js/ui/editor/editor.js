@@ -28,6 +28,11 @@ var READONLY_STATE_CLASS = "dx-state-readonly",
 * @hidden
 */
 var Editor = Widget.inherit({
+    ctor: function() {
+        this.showValidationMessageTimeout = null;
+
+        this.callBase.apply(this, arguments);
+    },
 
     _init: function() {
         this.callBase();
@@ -178,8 +183,12 @@ var Editor = Widget.inherit({
             // NOTE: Prevent the validation message from showing
             this._$validationMessage && this._$validationMessage.removeClass(INVALID_MESSAGE_AUTO);
 
+            clearTimeout(this.showValidationMessageTimeout);
+
             // NOTE: Show the validation message after a click changes the value
-            setTimeout(() => this._$validationMessage && this._$validationMessage.addClass(INVALID_MESSAGE_AUTO), 150);
+            this.showValidationMessageTimeout = setTimeout(
+                () => this._$validationMessage && this._$validationMessage.addClass(INVALID_MESSAGE_AUTO), 150
+            );
         }
 
         return this.callBase(e);
@@ -281,7 +290,9 @@ var Editor = Widget.inherit({
 
     _dispose: function() {
         var element = this.$element()[0];
+
         dataUtils.data(element, VALIDATION_TARGET, null);
+        clearTimeout(this.showValidationMessageTimeout);
         this.callBase();
     },
 
