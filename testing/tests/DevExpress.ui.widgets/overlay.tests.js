@@ -3400,7 +3400,7 @@ QUnit.test("overlay should get next z-index if the first one has been created be
     var overlay = new Overlay("#overlay", { visible: true }),
         content = $(overlay.content());
 
-    assert.strictEqual(getComputedStyle(content[0]).zIndex, "1502");
+    assert.strictEqual(String(getComputedStyle(content[0]).zIndex), "1502");
 
     assert.strictEqual(zIndex.create(), 1503, "new zindex is larger than overlay's");
 });

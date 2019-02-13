@@ -14,6 +14,8 @@ import { queryByOptions } from '../../data/store_helper';
 
 var DEFAULT_KEY_EXPRESSION = "id";
 
+var isFullBranchFilterMode = (that) => that.option("filterMode") === "fullBranch";
+
 var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
     var getChildKeys = function(that, keys) {
         var childKeys = [];
@@ -93,14 +95,18 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         _calculateHasItems: function(node, options) {
             var that = this,
                 parentIds = options.storeLoadOptions.parentIds,
-                hasItems;
+                hasItems,
+                isFullBranch = isFullBranchFilterMode(that);
 
             if(that._hasItemsGetter && (parentIds || !options.storeLoadOptions.filter)) {
                 hasItems = that._hasItemsGetter(node.data);
             }
+
             if(hasItems === undefined) {
-                if(!that._isChildrenLoaded[node.key] && options.remoteOperations.filtering && parentIds) {
+                if(!that._isChildrenLoaded[node.key] && options.remoteOperations.filtering && (parentIds || isFullBranch)) {
                     hasItems = true;
+                } else if(options.loadOptions.filter && !options.remoteOperations.filtering && isFullBranch) {
+                    hasItems = node.children.length;
                 } else {
                     hasItems = node.hasChildren;
                 }
@@ -184,7 +190,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 result = result || [];
 
                 for(var i = 0; i < data.length; i++) {
-                    item = extend({}, data[i]);
+                    item = gridCoreUtils.createObjectWithChanges(data[i]);
 
                     key = this._keyGetter(item);
                     if(key === undefined) {
@@ -273,12 +279,10 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _handleDataLoading: function(options) {
-            var combinedParentIdFilter,
-                parentIdsToLoad,
+            var parentIdsToLoad,
                 rootValue = this.option("rootValue"),
                 parentIdExpr = this.option("parentIdExpr"),
                 expandedRowKeys = this.option("expandedRowKeys"),
-                filterMode = this.option("filterMode"),
                 parentIds = options.storeLoadOptions.parentIds;
 
             if(parentIds) {
@@ -288,7 +292,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             this.callBase.apply(this, arguments);
 
             if(options.remoteOperations.filtering && !options.isCustomLoading) {
-                if(filterMode === "standard" || !options.storeLoadOptions.filter) {
+                if(isFullBranchFilterMode(this) && options.cachedStoreData || !options.storeLoadOptions.filter) {
                     parentIds = [rootValue].concat(expandedRowKeys).concat(parentIds || []);
                     parentIdsToLoad = options.data ? this._getParentIdsToLoad(parentIds) : parentIds;
 
@@ -297,10 +301,9 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                         options.data = undefined;
                         options.mergeStoreLoadData = true;
                     }
-                    options.storeLoadOptions.parentIds = parentIdsToLoad;
 
-                    combinedParentIdFilter = this._createIdFilter(parentIdExpr, parentIdsToLoad);
-                    options.storeLoadOptions.filter = gridCoreUtils.combineFilters([combinedParentIdFilter, options.storeLoadOptions.filter]);
+                    options.storeLoadOptions.parentIds = parentIdsToLoad;
+                    options.storeLoadOptions.filter = this._createIdFilter(parentIdExpr, parentIdsToLoad);
                 }
             }
         },
@@ -345,6 +348,13 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 maxFilterLengthInRequest = that.option("maxFilterLengthInRequest"),
                 loadOptions = isRemoteFiltering ? options.storeLoadOptions : options.loadOptions;
 
+            function concatLoadedData(loadedData) {
+                if(isRemoteFiltering) {
+                    that._cachedStoreData = loadedData.concat(that._cachedStoreData);
+                }
+                return data.concat(loadedData);
+            }
+
             if(!parentIds.length) {
                 return d.resolve(data);
             }
@@ -352,7 +362,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             var parentIdNodes = parentIds.map(id => this.getNodeByKey(id)).filter(node => node);
 
             if(parentIdNodes.length === parentIds.length) {
-                return that._loadParents(data.concat(parentIdNodes.map(node => node.data)), options);
+                return that._loadParents(concatLoadedData(parentIdNodes.map(node => node.data)), options);
             }
 
             filter = that._createIdFilter(that.getKeyExpr(), parentIds);
@@ -377,7 +387,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                     if(needLocalFiltering) {
                         loadedData = query(loadedData).filter(filter).toArray();
                     }
-                    that._loadParents(data.concat(loadedData), options).done(d.resolve).fail(d.reject);
+                    that._loadParents(concatLoadedData(loadedData), options).done(d.resolve).fail(d.reject);
                 } else {
                     d.resolve(data);
                 }
@@ -497,9 +507,12 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _fillNodes: function(nodes, options, expandedRowKeys, level) {
+            var isFullBranch = isFullBranchFilterMode(this);
+
             level = level || 0;
             for(var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
+
                 // node.hasChildren = false;
                 this._fillNodes(nodes[i].children, options, expandedRowKeys, level + 1);
 
@@ -507,7 +520,17 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 node.hasChildren = this._calculateHasItems(node, options);
 
                 if(node.visible && node.hasChildren && options.expandVisibleNodes) {
-                    expandedRowKeys.push(node.key);
+                    if(isFullBranch) {
+                        if(node.children.filter(node => node.visible).length) {
+                            expandedRowKeys.push(node.key);
+                        } else if(node.children.length) {
+                            treeListCore.foreachNodes(node.children, function(node) {
+                                node.visible = true;
+                            });
+                        }
+                    } else {
+                        expandedRowKeys.push(node.key);
+                    }
                 }
 
                 if(node.visible || node.hasChildren) {
@@ -558,9 +581,10 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 visibleItems;
 
             if(!options.isCustomLoading) {
-                if(filter && !options.storeLoadOptions.parentIds && filterMode !== "standard") {
+                if(filter && !options.storeLoadOptions.parentIds) {
                     var d = options.data = new Deferred();
-                    if(filterMode === "smart") {
+
+                    if(filterMode === "exactMatch") {
                         visibleItems = data;
                     }
                     return that._loadParents(data, options).done(function(data) {

@@ -24,6 +24,14 @@ const WAVED_LINE_TOP = 0;
 const WAVED_LINE_BOTTOM = 4;
 const WAVED_LINE_LENGTH = 24;
 
+const TICKS_CORRECTIONS = {
+    left: -1,
+    top: -1,
+    right: 0,
+    bottom: 0,
+    center: -0.5
+};
+
 function prepareDatesDifferences(datesDifferences, tickInterval) {
     var dateUnitInterval,
         i;
@@ -338,21 +346,25 @@ module.exports = {
             that._axisPosition = that._orthogonalPositions[position === "top" || position === "left" ? "start" : "end"];
         },
 
-        _getTickMarkPoints: function(coords, length) {
-            var isHorizontal = this._isHorizontal,
-                tickCorrection = {
-                    left: -1,
-                    top: -1,
-                    right: 0,
-                    bottom: 0,
-                    center: -0.5
-                }[this._options.tickOrientation || "center"];
+        _getTickMarkPoints: function(coords, length, tickOptions) {
+            const isHorizontal = this._isHorizontal;
+            const options = this._options;
+            var tickStartCoord;
 
+            if(isDefined(options.tickOrientation)) {
+                tickStartCoord = TICKS_CORRECTIONS[options.tickOrientation] * length;
+            } else {
+                let shift = tickOptions.shift || 0;
+                if(options.position === "left" || options.position === "top") {
+                    shift = -shift;
+                }
+                tickStartCoord = shift - length / 2;
+            }
             return [
-                coords.x + (isHorizontal ? 0 : tickCorrection * length),
-                coords.y + (isHorizontal ? tickCorrection * length : 0),
-                coords.x + (isHorizontal ? 0 : tickCorrection * length + length),
-                coords.y + (isHorizontal ? tickCorrection * length + length : 0)
+                coords.x + (isHorizontal ? 0 : tickStartCoord),
+                coords.y + (isHorizontal ? tickStartCoord : 0),
+                coords.x + (isHorizontal ? 0 : tickStartCoord + length),
+                coords.y + (isHorizontal ? tickStartCoord + length : 0)
             ];
         },
 
