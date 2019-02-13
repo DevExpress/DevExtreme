@@ -45,6 +45,7 @@ var FileManager = Widget.inherit({
             provider: this._provider,
             onClosed: this._onDialogClosed.bind(this)
         });
+        this._confirmationDialog = this._createConfirmationDialog();
 
         var $viewContainer = this._createViewContainer();
         this.$element()
@@ -122,6 +123,17 @@ var FileManager = Widget.inherit({
         });
     },
 
+    _createConfirmationDialog: function() {
+        var that = this;
+        return { // TODO implement this dialog
+            show: () => {
+                setTimeout(() => {
+                    that._onDialogClosed({});
+                });
+            }
+        };
+    },
+
     _onFilesTreeViewCurrentFolderChanged: function(e) {
         this._loadFilesToFilesView();
     },
@@ -135,28 +147,23 @@ var FileManager = Widget.inherit({
 
         if(!item) return;
 
-        var that = this;
-        this._showDialog(this._renameItemDialog, item.name)
-            .then(result => { return that._provider.renameItem(item, result.name); })
-            .then(() => {
-                that._showSuccess("Item renamed");
-                that._refreshData();
-            },
-            error => { if(error) that._showError(error); });
+        this._tryEditAction(
+            this._renameItemDialog,
+            result => { return this._provider.renameItem(item, result.name); },
+            "Item renamed",
+            item.name
+        );
     },
 
     _tryCreate: function() {
         var item = this.getCurrentFolder();
         this._itemsViewAreaActive = false;
 
-        var that = this;
-        this._showDialog(this._createFolderDialog)
-            .then(result => { return that._provider.createFolder(item, result.name); })
-            .then(() => {
-                that._showSuccess("Folder created");
-                that._refreshData();
-            },
-            error => { if(error) that._showError(error); });
+        this._tryEditAction(
+            this._createFolderDialog,
+            result => { return this._provider.createFolder(item, result.name); },
+            "Folder created"
+        );
     },
 
     _tryDelete: function() {
@@ -164,15 +171,11 @@ var FileManager = Widget.inherit({
 
         if(items.length === 0) return;
 
-        var that = this;
-
-        new Deferred().resolve().promise() // TODO show confirm-like dialog here
-            .then(() => { return that._provider.deleteItems(items); })
-            .then(() => {
-                that._showSuccess("Items deleted");
-                that._refreshData();
-            },
-            error => { if(error) that._showError(error); });
+        this._tryEditAction(
+            this._confirmationDialog,
+            result => { return this._provider.deleteItems(items); },
+            "Items deleted"
+        );
     },
 
     _tryMove: function() {
@@ -180,11 +183,20 @@ var FileManager = Widget.inherit({
 
         if(items.length === 0) return;
 
+        this._tryEditAction(
+            this._chooseFolderDialog,
+            result => { return this._provider.moveItems(items, result.folder); },
+            "Items moved"
+        );
+    },
+
+    _tryEditAction: function(dialog, action, message, dialogArgument) {
         var that = this;
-        this._showDialog(this._chooseFolderDialog)
-            .then(result => { return that._provider.moveItems(items, result.folder); })
+
+        this._showDialog(dialog, dialogArgument)
+            .then(action.bind(this))
             .then(() => {
-                that._showSuccess("Items moved");
+                that._showSuccess(message);
                 that._refreshData();
             },
             error => { if(error) that._showError(error); });
