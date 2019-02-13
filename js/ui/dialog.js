@@ -238,7 +238,7 @@ exports.custom = function(options) {
 
 /**
  * @name ui.dialogmethods.alert
- * @publicName alert(message,title)
+ * @publicName alert(messageHtml,title)
  * @param1 messageHtml:string
  * @param2 title:string
  * @return Promise<void>
@@ -254,7 +254,7 @@ exports.alert = function(messageHtml, title, showTitle) {
 
 /**
  * @name ui.dialogmethods.confirm
- * @publicName confirm(message,title)
+ * @publicName confirm(messageHtml,title)
  * @param1 messageHtml:string
  * @param2 title:string
  * @return Promise<boolean>
