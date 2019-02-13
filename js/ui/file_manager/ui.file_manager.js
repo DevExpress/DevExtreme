@@ -25,6 +25,18 @@ const FILE_MANAGER_TOOLBAR_CLASS = FILE_MANAGER_CLASS + "-toolbar";
 
 var FileManager = Widget.inherit({
 
+    _init: function() {
+        this._commands = {
+            rename: this._tryRename,
+            create: this._tryCreate,
+            delete: this._tryDelete,
+            move: this._tryMove,
+            copy: this._tryCopy
+        };
+
+        this.callBase();
+    },
+
     _initTemplates: function() {
     },
 
@@ -190,6 +202,18 @@ var FileManager = Widget.inherit({
         );
     },
 
+    _tryCopy: function() {
+        var items = this._getMultipleSelectedItems();
+
+        if(items.length === 0) return;
+
+        this._tryEditAction(
+            this._chooseFolderDialog,
+            result => { return this._provider.copyItems(items, result.folder); },
+            "Items copied"
+        );
+    },
+
     _tryEditAction: function(dialog, action, message, dialogArgument) {
         var that = this;
 
@@ -347,20 +371,9 @@ var FileManager = Widget.inherit({
     },
 
     executeCommand: function(commandName) {
-        switch(commandName) {
-            case "rename":
-                this._tryRename();
-                break;
-            case "create":
-                this._tryCreate();
-                break;
-            case "delete":
-                this._tryDelete();
-                break;
-            case "move":
-                this._tryMove();
-                break;
-        }
+        var action = this._commands[commandName];
+        if(!action) throw "Incorrect command name.";
+        action.call(this);
     },
 
     getCurrentFolderPath: function() {

@@ -20,20 +20,14 @@ var DataFileProvider = FileProvider.inherit({
     },
 
     createFolder: function(parentFolder, name) {
-        var parentItem = parentFolder.dataItem;
         var newItem = {
             name: name,
             isFolder: true
         };
-        var array = null;
-        if(!parentItem) {
-            array = this._data;
-        } else {
-            if(!parentItem.children) parentItem.children = [];
-            array = parentItem.children;
-        }
+        var array = this._getChildrenArray(parentFolder.dataItem);
         array.push(newItem);
     },
+
 
     deleteItems: function(items) {
         for(var item, i = 0; item = items[i]; i++) {
@@ -42,13 +36,34 @@ var DataFileProvider = FileProvider.inherit({
     },
 
     moveItems: function(items, destinationFolder) {
-        var destItem = this._findItem(destinationFolder.relativeName);
-        if(!destItem.children) destItem.children = [];
-
+        var array = this._getChildrenArray(destinationFolder.dataItem);
         for(var item, i = 0; item = items[i]; i++) {
             this._deleteItem(item);
-            destItem.children.push(item.dataItem);
+            array.push(item.dataItem);
         }
+    },
+
+    copyItems: function(items, destinationFolder) {
+        var array = this._getChildrenArray(destinationFolder.dataItem);
+        for(var item, i = 0; item = items[i]; i++) {
+            var copiedItem = this._createCopy(item.dataItem);
+            array.push(copiedItem);
+        }
+    },
+
+    _createCopy: function(dataItem) {
+        var result = {
+            name: dataItem.name,
+            isFolder: dataItem.isFolder
+        };
+        if(dataItem.children) {
+            result.children = [];
+            for(var childItem, i = 0; childItem = dataItem.children[i]; i++) {
+                var childCopy = this._createCopy(childItem);
+                result.children.push(childCopy);
+            }
+        }
+        return result;
     },
 
     _deleteItem: function(item) {
@@ -59,6 +74,17 @@ var DataFileProvider = FileProvider.inherit({
         }
         var index = array.indexOf(item.dataItem);
         array.splice(index, 1);
+    },
+
+    _getChildrenArray: function(dataItem) {
+        var array = null;
+        if(!dataItem) {
+            array = this._data;
+        } else {
+            if(!dataItem.children) dataItem.children = [];
+            array = dataItem.children;
+        }
+        return array;
     },
 
     _getItems: function(path, isFolder) {
