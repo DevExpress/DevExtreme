@@ -1,6 +1,6 @@
 import { smartFormatter as _format, formatRange } from "./smart_formatter";
 import vizUtils from "../core/utils";
-import { isDefined, isFunction, isNumeric, isPlainObject } from "../../core/utils/type";
+import { isDefined, isFunction, isPlainObject, isNumeric } from "../../core/utils/type";
 import constants from "./axes_constants";
 import { extend } from "../../core/utils/extend";
 import { inArray } from "../../core/utils/array";
@@ -44,6 +44,7 @@ const DEFAULT_AXIS_DIVISION_FACTOR = 50;
 const DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15;
 
 const SCROLL_THRESHOLD = 5;
+const MAX_MARGIN_VALUE = 0.8;
 
 const dateIntervals = {
     day: 86400000,
@@ -217,28 +218,6 @@ function getZoomBoundValue(optionValue, dataValue) {
     } else {
         return optionValue;
     }
-}
-
-function correctMarginExtremum(value, margins, maxMinDistance, roundingMethod) {
-    var dividerPower,
-        distancePower,
-        maxDivider;
-
-    if(!isNumeric(value) || value === 0) {
-        return value;
-    } else if(!margins.size && !margins.checkInterval) {
-        return adjust(value);
-    }
-
-    dividerPower = _math.floor(vizUtils.getAdjustedLog10(_abs(value)));
-    distancePower = _math.floor(vizUtils.getAdjustedLog10(_abs(maxMinDistance)));
-    dividerPower = (dividerPower >= distancePower ? distancePower : dividerPower) - 2;
-
-    if(dividerPower === 0) {
-        dividerPower = -1;
-    }
-    maxDivider = vizUtils.raiseTo(dividerPower, 10);
-    return adjust(roundingMethod(adjust(value / maxDivider)) * maxDivider);
 }
 
 function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, minTickInterval) {
@@ -1017,6 +996,8 @@ Axis.prototype = {
 
         !isDefined(result.min) && (result.min = result.minVisible);
         !isDefined(result.max) && (result.max = result.maxVisible);
+        result.addRange({}); // controlValuesByVisibleBounds
+
 
         return result;
     },
@@ -1205,7 +1186,8 @@ Axis.prototype = {
             that._seriesData.sortCategories(that.getCategoriesSorter());
         }
 
-        that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
+        that._seriesData.breaks =
+            that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
 
         that._translator.updateBusinessRange(that.adjustViewport(that._seriesData));
     },
@@ -1433,9 +1415,19 @@ Axis.prototype = {
         that._estimatedTickInterval = that._getTicks(that.adjustViewport(this._seriesData), _noop, true).tickInterval; // tickInterval calculation
         range = that._getViewportRange();
 
+        const margins = this._calculateValueMargins();
+
+        range.addRange({
+            minVisible: margins.minValue,
+            maxVisible: margins.maxValue,
+            isSpacedMargin: margins.isSpacedMargin,
+            checkMinDataVisibility: !this.isArgumentAxis && margins.checkInterval && !isDefined(options.min) && margins.minValue.valueOf() > 0,
+            checkMaxDataVisibility: !this.isArgumentAxis && margins.checkInterval && !isDefined(options.max) && margins.maxValue.valueOf() < 0
+        });
+
         ticks = that._createTicksAndLabelFormat(range);
 
-        boundaryTicks = that._getBoundaryTicks(ticks.ticks, range);
+        boundaryTicks = that._getBoundaryTicks(ticks.ticks, that._getViewportRange());
         if(options.showCustomBoundaryTicks && boundaryTicks.length) {
             that._boundaryTicks = [boundaryTicks[0]].map(createBoundaryTick(that, renderer, true));
             if(boundaryTicks.length > 1) {
@@ -1490,56 +1482,32 @@ Axis.prototype = {
 
         that._correctedBreaks = ticks.breaks;
 
-        that._reinitTranslator(range);
+        that._reinitTranslator(that._getViewportRange());
     },
 
     _reinitTranslator: function(range) {
         var that = this,
-            min = range.min,
-            max = range.max,
-            minVisible = range.minVisible,
-            maxVisible = range.maxVisible,
-            interval = range.interval,
-            ticks = that._majorTicks,
-            length = ticks.length,
             translator = that._translator;
+
+        range.breaks = that._correctedBreaks;
 
         if(that._isSynchronized) {
             return;
         }
-        if(that._options.type !== constants.discrete) {
-            if(length && !that._options.skipViewportExtending) {
-                if(that.allowToExtendVisualRange(false) && ticks[0].value < range.minVisible) {
-                    minVisible = ticks[0].value;
-                }
-                if(that.allowToExtendVisualRange(true) && length > 1 && ticks[length - 1].value > range.maxVisible) {
-                    maxVisible = ticks[length - 1].value;
-                }
-            }
 
-            interval = that._calculateRangeInterval(that.calculateInterval(maxVisible, minVisible), interval);
-
-            range.addRange({
-                minVisible: minVisible,
-                maxVisible: maxVisible,
-                interval: interval
-            });
-
-            if(isDefined(min) && isDefined(max) && min.valueOf() === max.valueOf()) {
-                range.min = range.max = min;
-            }
-        }
-
-        range.breaks = that._correctedBreaks;
         translator.updateBusinessRange(that.adjustViewport(range));
     },
 
     _getViewportRange() {
-        return this.adjustViewport(this._applyMargins(this._seriesData));
+        return this.adjustViewport(this._seriesData);
     },
 
     setMarginOptions: function(options) {
         this._marginOptions = options;
+    },
+
+    getMarginOptions() {
+        return isDefined(this._marginOptions) ? this._marginOptions : {};
     },
 
     allowToExtendVisualRange(isEnd) {
@@ -1548,7 +1516,7 @@ Axis.prototype = {
         return !this.isArgumentAxis || !isDefined(bound) && this.isExtremePosition(isEnd);
     },
 
-    _calculateRangeInterval: function(dataLength, interval) {
+    _calculateRangeInterval: function(interval) {
         var isDateTime = this._options.dataType === "datetime",
             minArgs = [],
             addToArgs = function(value) {
@@ -1578,79 +1546,193 @@ Axis.prototype = {
         return businessInterval;
     },
 
-    _applyMargins: function(dataRange) {
-        var that = this,
-            range = new Range(dataRange),
-            options = that._options,
-            margins = isDefined(that._marginOptions) ? that._marginOptions : {},
-            marginSize = margins.size,
-            marginValue = 0,
-            type = options.type,
-            valueMarginsEnabled = options.valueMarginsEnabled && type !== constants.discrete && type !== "semidiscrete",
-            minValueMargin = options.minValueMargin,
-            maxValueMargin = options.maxValueMargin,
-            add = vizUtils.getAddFunction(range, !that.isArgumentAxis),
-            minVisible = range.minVisible,
-            maxVisible = range.maxVisible,
-            interval = range.interval,
-            maxMinDistance = that.calculateInterval(maxVisible, minVisible) - (that._breaks || []).reduce(function(sum, b) {
-                return sum += that.calculateInterval(b.to, b.from);
-            }, 0),
-            isArgumentAxis = this.isArgumentAxis,
-            isBarValueAxis = !isArgumentAxis && margins.checkInterval,
-            marginSizeMultiplier;
+    _calculateValueMargins(ticks) {
+        const that = this;
+        const margins = that.getMarginOptions();
+        const marginSize = (margins.size || 0) / 2;
+        const options = that._options;
+        const dataRange = this._getViewportRange();
+        const viewPort = this.getViewport();
+        const screenDelta = that._getScreenDelta();
+        const isDiscrete = (options.type || "").indexOf(constants.discrete) !== -1;
+        const valueMarginsEnabled = options.valueMarginsEnabled && !isDiscrete;
 
-        function addMargin(value, margin, marginOption) {
-            if(!isDefined(marginOption) && !(margins.percentStick && _abs(value) === 1 && !isArgumentAxis)) {
-                value = add(value, margin);
-            }
-            return value;
+        const translator = that._translator;
+
+        const minValueMargin = options.minValueMargin;
+        const maxValueMargin = options.maxValueMargin;
+
+        let minPadding = 0;
+        let maxPadding = 0;
+        let interval = 0;
+        let rangeInterval;
+
+        if(dataRange.stubData || !screenDelta) {
+            return {
+                startPadding: 0,
+                endPadding: 0
+            };
         }
 
-        if(valueMarginsEnabled && !range.isEmpty()) {
+        function getConvertIntervalCoefficient(intervalInPx) {
+            const ratioOfCanvasRange = translator.ratioOfCanvasRange();
+            return ratioOfCanvasRange / (ratioOfCanvasRange * screenDelta / (intervalInPx + screenDelta));
+        }
+
+        if(that.isArgumentAxis && margins.checkInterval) {
+            rangeInterval = that._calculateRangeInterval(dataRange.interval);
+            if(isFinite(rangeInterval)) {
+                const pxInterval = translator.getInterval(rangeInterval);
+                interval = Math.ceil(pxInterval / (2 * getConvertIntervalCoefficient(pxInterval)));
+            } else {
+                rangeInterval = 0;
+            }
+        }
+
+        let minPercentPadding;
+        let maxPercentPadding;
+
+        const maxPaddingValue = (screenDelta * MAX_MARGIN_VALUE) / 2;
+
+        if(valueMarginsEnabled) {
             if(isDefined(minValueMargin)) {
-                minVisible = add(minVisible, -maxMinDistance * minValueMargin);
+                minPercentPadding = isFinite(minValueMargin) ? minValueMargin : 0;
+            } else {
+                minPadding = Math.max(marginSize, interval);
+                minPadding = Math.min(maxPaddingValue, minPadding);
             }
+
             if(isDefined(maxValueMargin)) {
-                maxVisible = add(maxVisible, maxMinDistance * maxValueMargin);
+                maxPercentPadding = isFinite(maxValueMargin) ? maxValueMargin : 0;
+            } else {
+                maxPadding = Math.max(marginSize, interval);
+                maxPadding = Math.min(maxPaddingValue, maxPadding);
             }
-
-            if(!isDefined(minValueMargin) || !isDefined(maxValueMargin)) {
-                if(isArgumentAxis && margins.checkInterval) {
-                    if(maxMinDistance === 0) {
-                        interval = 0;
-                    } else {
-                        interval = that._calculateRangeInterval(maxMinDistance, range.interval);
-                        marginValue = interval / 2;
-                    }
-                }
-
-                if(marginSize) {
-                    marginSizeMultiplier = 1 / ((that._getScreenDelta() / marginSize) - 1) / 2;
-                    marginValue = _max(marginValue, maxMinDistance * (marginSizeMultiplier > 1 ? marginSizeMultiplier / 10 : marginSizeMultiplier));
-                }
-
-                if(maxMinDistance !== 0) {
-                    minVisible = addMargin(minVisible, -marginValue, minValueMargin);
-                    maxVisible = addMargin(maxVisible, marginValue, maxValueMargin);
-                    maxMinDistance = maxVisible - minVisible;
-                    minVisible = correctMarginExtremum(minVisible, margins, maxMinDistance, _math.floor);
-                    maxVisible = correctMarginExtremum(maxVisible, margins, maxMinDistance, _math.ceil);
-                }
-            }
-
-            range.addRange({
-                minVisible: minVisible,
-                maxVisible: maxVisible,
-                interval: interval,
-                isSpacedMargin: marginValue !== 0,
-                checkMinDataVisibility: isBarValueAxis && !isDefined(options.min) && minVisible.valueOf() > 0,
-                checkMaxDataVisibility: isBarValueAxis && !isDefined(options.max) && maxVisible.valueOf() < 0
-            });
         }
 
-        return range;
+        const percentStick = margins.percentStick && !this.isArgumentAxis;
+
+        if(percentStick && _abs(dataRange.max) === 1) {
+            maxPercentPadding = maxPadding = 0;
+        }
+
+        if(percentStick && _abs(dataRange.min) === 1) {
+            minPercentPadding = minPadding = 0;
+        }
+
+        const canvasStartEnd = that._getCanvasStartEnd();
+
+        const commonMargin = 1 + (minPercentPadding || 0) + (maxPercentPadding || 0);
+        const screenDeltaWithMargins = ((screenDelta - minPadding - maxPadding) / commonMargin) || screenDelta;
+
+        if(minPercentPadding !== undefined || maxPercentPadding !== undefined) {
+            if(minPercentPadding !== undefined) {
+                minPadding = Math.ceil(screenDeltaWithMargins * minPercentPadding);
+            }
+            if(maxPercentPadding !== undefined) {
+                maxPadding = Math.ceil(screenDeltaWithMargins * maxPercentPadding);
+            }
+        }
+
+        let minValue;
+        let maxValue;
+
+        if(options.type !== constants.discrete &&
+            ticks && ticks.length > 1 &&
+            !options.skipViewportExtending &&
+            !viewPort.action &&
+            options.endOnTick !== false) {
+            const length = ticks.length;
+            const firstTickPosition = translator.translate(ticks[0].value);
+            const lastTickPosition = translator.translate(ticks[length - 1].value);
+
+            const invertMultiplier = firstTickPosition > lastTickPosition ? -1 : 1;
+
+            let minTickPadding = _max(invertMultiplier * (canvasStartEnd.start - firstTickPosition), 0);
+            let maxTickPadding = _max(invertMultiplier * (lastTickPosition - canvasStartEnd.end), 0);
+
+            if(minTickPadding || maxTickPadding) {
+                const commonPadding = (maxTickPadding + minTickPadding);
+                if(commonPadding >= minPadding + maxPadding) {
+                    const coeff = getConvertIntervalCoefficient(commonPadding);
+                    if(minTickPadding >= minPadding) {
+                        minValue = ticks[0].value;
+                    }
+                    if(maxTickPadding >= maxPadding) {
+                        maxValue = ticks[length - 1].value;
+                    }
+                    minPadding = Math.ceil(_max(minTickPadding, minPadding) / coeff);
+                    maxPadding = Math.ceil(_max(maxTickPadding, maxPadding) / coeff);
+                }
+            }
+        }
+
+        minPercentPadding = minPercentPadding === undefined ? minPadding / screenDeltaWithMargins : minPercentPadding;
+        maxPercentPadding = maxPercentPadding === undefined ? maxPadding / screenDeltaWithMargins : maxPercentPadding;
+
+        if(this._translator.isInverted()) {
+            minValue = isDefined(minValue) ? minValue : translator.from(canvasStartEnd.start + screenDelta * minPercentPadding);
+            maxValue = isDefined(maxValue) ? maxValue : translator.from(canvasStartEnd.end - screenDelta * maxPercentPadding);
+        } else {
+            minValue = isDefined(minValue) ? minValue : translator.from(canvasStartEnd.start - screenDelta * minPercentPadding);
+            maxValue = isDefined(maxValue) ? maxValue : translator.from(canvasStartEnd.end + screenDelta * maxPercentPadding);
+        }
+
+        function correctZeroLevel(minPoint, maxPoint) {
+            const minExpectedPadding = _abs(canvasStartEnd.start - minPoint);
+            const maxExpectedPadding = _abs(canvasStartEnd.end - maxPoint);
+
+            const coeff = getConvertIntervalCoefficient(minExpectedPadding + maxExpectedPadding);
+
+            minPadding = Math.ceil(minExpectedPadding / coeff);
+            maxPadding = Math.ceil(maxExpectedPadding / coeff);
+        }
+
+        if(!that.isArgumentAxis) {
+            if(minValue * dataRange.min <= 0 && minValue * dataRange.minVisible <= 0) {
+                correctZeroLevel(translator.translate(0), translator.translate(maxValue));
+                minValue = 0;
+            }
+
+            if(maxValue * dataRange.max <= 0 && maxValue * dataRange.maxVisible <= 0) {
+                correctZeroLevel(translator.translate(minValue), translator.translate(0));
+                maxValue = 0;
+            }
+        }
+        return {
+            startPadding: this._translator.isInverted() ? maxPadding : minPadding,
+            endPadding: this._translator.isInverted() ? minPadding : maxPadding,
+
+            minValue,
+            maxValue,
+
+            interval: rangeInterval,
+            isSpacedMargin: minPadding === maxPadding && minPadding !== 0
+        };
     },
+
+    applyMargins() {
+        if(this._isSynchronized) {
+            return;
+        }
+        const margins = this._calculateValueMargins(this._majorTicks);
+
+        const canvas = extend({}, this._canvas, {
+            startPadding: margins.startPadding,
+            endPadding: margins.endPadding
+        });
+
+        this._translator.updateCanvas(this._processCanvas(canvas));
+
+        if(isFinite(margins.interval)) {
+            const br = this._translator.getBusinessRange();
+            br.addRange({ interval: margins.interval });
+            this._translator.updateBusinessRange(br);
+        }
+
+    },
+
+    _resetMargins: _noop,
 
     _createConstantLines() {
         const constantLines = (this._options.constantLines || []).map(o => createConstantLine(this, o));
@@ -1664,7 +1746,11 @@ Axis.prototype = {
         const options = this._options;
         that.borderOptions = borderOptions || { visible: false };
 
+        that._resetMargins();
         that.createTicks(canvas);
+
+        that.applyMargins();
+
         that._clearAxisGroups();
 
         initTickCoords(that._majorTicks);
@@ -1740,6 +1826,7 @@ Axis.prototype = {
         var that = this;
         that.updateCanvas(canvas);
         that._reinitTranslator(that._getViewportRange());
+        that.applyMargins();
 
         const animationEnabled = !that._firstDrawing && animate;
         const options = this._options;
@@ -2123,7 +2210,7 @@ Axis.prototype = {
         const visualRange = this.visualRange();
         const visualRangePoint = isMax ? translator.translate(visualRange.endValue) : translator.translate(visualRange.startValue);
 
-        return Math.abs(visualRangePoint - extremePoint) < SCROLL_THRESHOLD;
+        return _abs(visualRangePoint - extremePoint) < SCROLL_THRESHOLD;
     },
 
     getViewport() {
@@ -2329,9 +2416,14 @@ Axis.prototype = {
         };
     },
 
+    getVisibleArea() {
+        const canvas = this._getCanvasStartEnd();
+        return [canvas.start, canvas.end].sort((a, b) => a - b);
+    },
+
     _getCanvasStartEnd: function() {
         var isHorizontal = this._isHorizontal,
-            canvas = this._canvas,
+            canvas = this._canvas || {},
             invert = this._translator.getBusinessRange().invert,
             coords = isHorizontal ? [canvas.left, canvas.width - canvas.right] : [canvas.height - canvas.bottom, canvas.top];
 
@@ -2348,7 +2440,7 @@ Axis.prototype = {
             canvas = that._getCanvasStartEnd(),
             breaks = that._breaks,
             breaksLength = breaks ? breaks.length : 0,
-            screenDelta = _math.abs(canvas.start - canvas.end);
+            screenDelta = _abs(canvas.start - canvas.end);
 
         return screenDelta - (breaksLength ? breaks[breaksLength - 1].cumulativeWidth : 0);
     },

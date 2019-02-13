@@ -157,9 +157,9 @@ module.exports = _extend({}, symbolPoint, {
         var rotated = this._options.rotated,
             coordSelector = !rotated ? "y" : "x",
             valueSelector = !rotated ? "height" : "width",
-            visibleArea = this._getValTranslator().getCanvasVisibleArea(),
-            minBound = visibleArea.min,
-            maxBound = visibleArea.max,
+            visibleArea = this.series.getValueAxis().getVisibleArea(),
+            minBound = visibleArea[0],
+            maxBound = visibleArea[1],
             delta = _round((topCoords[coordSelector] + topCoords[valueSelector] - bottomCoords[coordSelector]) / 2),
             coord1 = topCoords[coordSelector] - delta,
             coord2 = bottomCoords[coordSelector] + delta;
@@ -353,17 +353,17 @@ module.exports = _extend({}, symbolPoint, {
             visibleArgArea,
             visibleValArea;
 
-        visibleArgArea = that._getArgTranslator().getCanvasVisibleArea();
-        visibleValArea = that._getValTranslator().getCanvasVisibleArea();
+        visibleArgArea = that.series.getArgumentAxis().getVisibleArea();
+        visibleValArea = that.series.getValueAxis().getVisibleArea();
 
-        notVisibleByArg = (visibleArgArea.max < argument) || (visibleArgArea.min > argument);
-        notVisibleByVal = ((visibleValArea.min > minValue) && (visibleValArea.min > maxValue)) || ((visibleValArea.max < minValue) && (visibleValArea.max < maxValue));
+        notVisibleByArg = (visibleArgArea[1] < argument) || (visibleArgArea[0] > argument);
+        notVisibleByVal = ((visibleValArea[0] > minValue) && (visibleValArea[0] > maxValue)) || ((visibleValArea[1] < minValue) && (visibleValArea[1] < maxValue));
 
         if(notVisibleByArg || notVisibleByVal) {
             visibleTopMarker = visibleBottomMarker = visibleRangeArea = false;
         } else {
-            visibleTopMarker = ((visibleValArea.min <= minValue) && (visibleValArea.max > minValue));
-            visibleBottomMarker = ((visibleValArea.min < maxValue) && (visibleValArea.max >= maxValue));
+            visibleTopMarker = ((visibleValArea[0] <= minValue) && (visibleValArea[1] > minValue));
+            visibleBottomMarker = ((visibleValArea[0] < maxValue) && (visibleValArea[1] >= maxValue));
             if(rotated) {
                 tmp = visibleTopMarker;
                 visibleTopMarker = visibleBottomMarker;
