@@ -224,12 +224,10 @@ QUnit.module("Correct value", {
         var that = this;
         this.translators = {
             arg: new MockTranslator({
-                translate: { "-4": 96, 0: 100, 10: 110, 6: 106, 14: 114, 24: 124, "canvas_position_default": 100 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
+                translate: { "-4": 96, 0: 100, 10: 110, 6: 106, 14: 114, 24: 124, "canvas_position_default": 100 }
             }),
             val: new MockTranslator({
-                translate: { "-4": 196, 0: 200, 10: 210, 6: 206, 14: 214, 24: 224, "canvas_position_default": 200 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
+                translate: { "-4": 196, 0: 200, 10: 210, 6: 206, 14: 214, 24: 224, "canvas_position_default": 200 }
             })
         };
         this.options = {

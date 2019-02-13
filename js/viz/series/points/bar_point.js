@@ -247,7 +247,7 @@ module.exports = _extend({}, symbolPoint, {
 
     _translateErrorBars: function(argVisibleArea) {
         symbolPoint._translateErrorBars.call(this);
-        if(this._errorBarPos < argVisibleArea.min || this._errorBarPos > argVisibleArea.max) {
+        if(this._errorBarPos < argVisibleArea[0] || this._errorBarPos > argVisibleArea[1]) {
             this._errorBarPos = undefined;
         }
     },
@@ -262,8 +262,8 @@ module.exports = _extend({}, symbolPoint, {
             argIntervalName = rotated ? "height" : "width",
             argTranslator = that._getArgTranslator(),
             valTranslator = that._getValTranslator(),
-            argVisibleArea = argTranslator.getCanvasVisibleArea(),
-            valVisibleArea = valTranslator.getCanvasVisibleArea(),
+            argVisibleArea = that.series.getArgumentAxis().getVisibleArea(),
+            valVisibleArea = that.series.getValueAxis().getVisibleArea(),
             arg,
             val,
             minVal;
@@ -278,8 +278,8 @@ module.exports = _extend({}, symbolPoint, {
         that["v" + valAxis] = val;
         that["v" + argAxis] = arg + that[argIntervalName] / 2;
 
-        val = that._truncateCoord(val, valVisibleArea.min, valVisibleArea.max);
-        minVal = that._truncateCoord(minVal, valVisibleArea.min, valVisibleArea.max);
+        val = that._truncateCoord(val, valVisibleArea[0], valVisibleArea[1]);
+        minVal = that._truncateCoord(minVal, valVisibleArea[0], valVisibleArea[1]);
 
         that[valIntervalName] = _abs(val - minVal);
 
@@ -293,13 +293,13 @@ module.exports = _extend({}, symbolPoint, {
         that._translateErrorBars(argVisibleArea);
 
         if(that.inVisibleArea && that[argAxis] !== null) {
-            if(that[argAxis] < argVisibleArea.min) {
-                that[argIntervalName] = that[argIntervalName] - (argVisibleArea.min - that[argAxis]);
-                that[argAxis] = argVisibleArea.min;
+            if(that[argAxis] < argVisibleArea[0]) {
+                that[argIntervalName] = that[argIntervalName] - (argVisibleArea[0] - that[argAxis]);
+                that[argAxis] = argVisibleArea[0];
             }
 
-            if(that[argAxis] + that[argIntervalName] > argVisibleArea.max) {
-                that[argIntervalName] = argVisibleArea.max - that[argAxis];
+            if(that[argAxis] + that[argIntervalName] > argVisibleArea[1]) {
+                that[argIntervalName] = argVisibleArea[1] - that[argAxis];
             }
         }
     },
