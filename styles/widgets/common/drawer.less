@@ -75,10 +75,13 @@
 .dx-drawer-overlap {
     .dx-drawer-panel-content{
         overflow: visible;
-        right: auto;
-        left: auto;
+
+        &.dx-overlay-wrapper {
+            right: auto;
+            left: auto;
+        }
     }
-    
+
     &.dx-drawer-left,
     &.dx-drawer-right {
         .dx-drawer-wrapper {
@@ -92,6 +95,7 @@
             overflow-x: visible;
         }
     }
+
 
     &.dx-drawer-right.dx-drawer-expand {
         .dx-overlay-content {
