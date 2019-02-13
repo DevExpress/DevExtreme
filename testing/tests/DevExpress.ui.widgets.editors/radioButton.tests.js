@@ -1,7 +1,9 @@
-var $ = require("jquery"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import $ from "jquery";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import { validateGroup } from 'ui/validation_engine';
 
-require("ui/radio_group/radio_button");
+import "ui/radio_group/radio_button";
+import "ui/validator";
 
 QUnit.testStart(function() {
     var markup =
@@ -80,4 +82,34 @@ QUnit.test("state changes on space press", function(assert) {
     keyboard.keyDown("space");
 
     assert.equal(instance.option("value"), true, "value has been change successfully");
+});
+
+QUnit.module("validation");
+
+QUnit.test("The click should be processed before the validation message is shown (T570458)", (assert) => {
+    assert.expect(3);
+
+    let $radioButton = null;
+
+    const checkValidationMessageVisibility = (isVisible) => {
+        const message = $radioButton.find('.dx-invalid-message').get(0);
+        const isMessageVisible = !!message && message.clientHeight > 0;
+
+        assert.strictEqual(isMessageVisible, isVisible);
+    };
+
+    $radioButton = $("#radioButton")
+        .dxRadioButton({
+            value: false,
+            onValueChanged: () => checkValidationMessageVisibility(false)
+        }).dxValidator({
+            validationRules: [{ type: "required", message: "message" }]
+        });
+
+    const radioButton = $radioButton.dxRadioButton("instance");
+
+    validateGroup();
+    assert.notOk(radioButton.option("isValid"));
+    $radioButton.trigger("dxclick");
+    checkValidationMessageVisibility(false);
 });

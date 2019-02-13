@@ -1,8 +1,10 @@
-var $ = require("jquery"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import $ from "jquery";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import { validateGroup } from 'ui/validation_engine';
 
-require("common.css!");
-require("ui/check_box");
+import "common.css!";
+import "ui/check_box";
+import "ui/validator";
 
 QUnit.testStart(function() {
     var markup =
@@ -100,6 +102,36 @@ QUnit.test("onContentReady fired after setting the value", function(assert) {
             assert.ok($(e.element).hasClass(CHECKBOX_CLASS));
         }
     });
+});
+
+QUnit.module("validation");
+
+QUnit.test("The click should be processed before the validation message is shown (T570458)", (assert) => {
+    assert.expect(3);
+
+    let $checkbox = null;
+
+    const checkValidationMessageVisibility = (isVisible) => {
+        const message = $checkbox.find('.dx-invalid-message').get(0);
+        const isMessageVisible = !!message && message.clientHeight > 0;
+
+        assert.strictEqual(isMessageVisible, isVisible);
+    };
+
+    $checkbox = $("#checkbox")
+        .dxCheckBox({
+            value: false,
+            onValueChanged: () => checkValidationMessageVisibility(false)
+        }).dxValidator({
+            validationRules: [{ type: "required", message: "message" }]
+        });
+
+    const checkbox = $checkbox.dxCheckBox("instance");
+
+    validateGroup();
+    assert.notOk(checkbox.option("isValid"));
+    $checkbox.trigger("dxclick");
+    checkValidationMessageVisibility(false);
 });
 
 

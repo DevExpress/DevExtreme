@@ -175,10 +175,10 @@ var Editor = Widget.inherit({
         // NOTE: The click should be processed before the validation message is shown because
         // it can change the editor's value
         if(this._canValueBeChangedByClick() && isValidationMessageShownOnFocus) {
-            // Prevent the validation message from showing
+            // NOTE: Prevent the validation message from showing
             this._$validationMessage && this._$validationMessage.removeClass(INVALID_MESSAGE_AUTO);
 
-            // Show the validation message after a click changes the value
+            // NOTE: Show the validation message after a click changes the value
             setTimeout(() => this._$validationMessage && this._$validationMessage.addClass(INVALID_MESSAGE_AUTO), 150);
         }
 
