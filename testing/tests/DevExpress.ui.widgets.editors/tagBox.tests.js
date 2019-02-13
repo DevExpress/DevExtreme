@@ -4812,6 +4812,39 @@ QUnit.test("initial items value should be loaded and selected when valueExpr = t
     assert.deepEqual(list.option("selectedItems"), [{ id: 2, text: "item 2" }]);
 });
 
+QUnit.test("initial items value should be loaded and selected when valueExpr = this and dataSource.key and deferred datasource is used", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: function(loadOptions) {
+                    var d = $.Deferred();
+
+                    setTimeout(function() {
+                        d.resolve(loadOptions.filter ? [] : [{ id: 1, text: "item 1" }]);
+                    }, 500);
+
+                    return d.promise();
+                },
+                byKey: function() {
+                    var d = $.Deferred();
+
+                    setTimeout(function() {
+                        d.resolve({ id: 1, text: "item 1" });
+                    }, 500);
+
+                    return d.promise();
+                },
+                key: "id"
+            },
+            value: [{ id: 1, text: "item 1" }],
+            valueExpr: "this",
+            displayExpr: "text"
+        });
+
+    clock.tick(1000);
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "item 1");
+});
+
 QUnit.test("useSubmitBehavior option", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2],
