@@ -43,11 +43,6 @@ function resetStub(stub) {
 function createStubThemeManager() {
     var themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
 
-    themeManager.theme.withArgs("legend").returns({ title: {
-        font: {
-            size: 1
-        }
-    } });
     $.each(["loadingIndicator", "legend", "size", "title", "adaptiveLayout"], function(_, name) {
         themeManager.getOptions.withArgs(name).returns({});
     });
