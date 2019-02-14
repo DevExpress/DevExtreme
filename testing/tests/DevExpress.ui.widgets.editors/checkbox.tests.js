@@ -1,4 +1,5 @@
 import $ from "jquery";
+import devices from 'core/devices';
 import keyboardMock from "../../helpers/keyboardMock.js";
 import { validateGroup } from 'ui/validation_engine';
 
@@ -106,52 +107,54 @@ QUnit.test("onContentReady fired after setting the value", function(assert) {
 
 QUnit.module("validation");
 
-QUnit.test("The click should be processed before the validation message is shown (T570458)", (assert) => {
-    const $checkbox = $("#checkbox")
-        .dxCheckBox({})
-        .dxValidator({
-            validationRules: [{ type: "required", message: "message" }]
-        });
-    const checkbox = $checkbox.dxCheckBox("instance");
-    const isValidationMessageVisible = () => {
+if(devices.real().deviceType === "desktop") {
+    QUnit.test("the click should be processed before the validation message is shown (T570458)", (assert) => {
+        const $checkbox = $("#checkbox")
+            .dxCheckBox({})
+            .dxValidator({
+                validationRules: [{ type: "required", message: "message" }]
+            });
+        const checkbox = $checkbox.dxCheckBox("instance");
+        const isValidationMessageVisible = () => {
+            const message = $checkbox.find(".dx-overlay-wrapper.dx-invalid-message").get(0);
+
+            return message && window.getComputedStyle(message).visibility === "visible";
+        };
+
+        validateGroup();
+        assert.notOk(checkbox.option("isValid"));
+
+        $checkbox.focus();
+        assert.notOk(checkbox.option("isValid"));
+        assert.notOk(isValidationMessageVisible());
+
+        $checkbox.trigger("dxclick");
+        assert.ok(checkbox.option("isValid"));
+        assert.notOk(isValidationMessageVisible());
+
+        $checkbox.trigger("dxclick");
+        assert.notOk(checkbox.option("isValid"));
+        assert.ok(isValidationMessageVisible());
+    });
+
+    QUnit.test("should show validation message after focusing", (assert) => {
+        const clock = sinon.useFakeTimers();
+        const $checkbox = $("#checkbox")
+            .dxCheckBox({})
+            .dxValidator({
+                validationRules: [{ type: "required", message: "message" }]
+            });
+
+        validateGroup();
+        $checkbox.focus();
+        clock.tick(200);
+
         const message = $checkbox.find(".dx-overlay-wrapper.dx-invalid-message").get(0);
 
-        return message && window.getComputedStyle(message).visibility === "visible";
-    };
-
-    validateGroup();
-    assert.notOk(checkbox.option("isValid"));
-
-    $checkbox.focus();
-    assert.notOk(checkbox.option("isValid"));
-    assert.notOk(isValidationMessageVisible());
-
-    $checkbox.trigger("dxclick");
-    assert.ok(checkbox.option("isValid"));
-    assert.notOk(isValidationMessageVisible());
-
-    $checkbox.trigger("dxclick");
-    assert.notOk(checkbox.option("isValid"));
-    assert.ok(isValidationMessageVisible());
-});
-
-QUnit.test("should show validation message after focusing", (assert) => {
-    const clock = sinon.useFakeTimers();
-    const $checkbox = $("#checkbox")
-        .dxCheckBox({})
-        .dxValidator({
-            validationRules: [{ type: "required", message: "message" }]
-        });
-
-    validateGroup();
-    $checkbox.focus();
-    clock.tick(200);
-
-    const message = $checkbox.find(".dx-overlay-wrapper.dx-invalid-message").get(0);
-
-    assert.strictEqual(window.getComputedStyle(message).visibility, "visible");
-    clock.restore();
-});
+        assert.strictEqual(window.getComputedStyle(message).visibility, "visible");
+        clock.restore();
+    });
+}
 
 QUnit.module("options");
 
