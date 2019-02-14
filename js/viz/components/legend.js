@@ -380,15 +380,17 @@ extend(legendPrototype, {
         }
 
         that._insideLegendGroup = that._renderer.g().enableLinks().append(that._legendGroup);
-        that._markersGroup = that._renderer.g().attr({ "class": "dxc-markers" }).append(that._insideLegendGroup);
+        that._title.changeLink(that._insideLegendGroup);
+
+        that._createBackground();
+
         if(that._title.hasText()) {
-            const horizontalPadding = that._options.border.visible ? 2 * that._options.paddingLeftRight : 0;
-            that._title.changeLink(that._insideLegendGroup);
+            const horizontalPadding = that._background ? 2 * that._options.paddingLeftRight : 0;
             that._title.draw(width - horizontalPadding, height);
         }
 
-        that._createBackground();
         // TODO review pass or process states in legend
+        that._markersGroup = that._renderer.g().attr({ "class": "dxc-markers" }).append(that._insideLegendGroup);
         that._createItems(items);
 
         that._locateElements(options);
@@ -783,7 +785,7 @@ extend(legendPrototype, {
         const titleBox = this._getTitleBBox();
         const box = this._insideLegendGroup.getBBox();
 
-        const verticalPadding = this._options.border.visible ? 2 * this._options.paddingTopBottom : 0;
+        const verticalPadding = this._background ? 2 * this._options.paddingTopBottom : 0;
         const titleOptions = this._title.getOptions() || { margin: { top: 0, bottom: 0 } };
         const titleMargins = titleOptions.margin.top + titleOptions.margin.bottom;
 
@@ -865,7 +867,7 @@ extend(legendPrototype, {
         }
 
         const options = this._options,
-            paddingLeftRight = options.border.visible ? 2 * options.paddingLeftRight : 0,
+            paddingLeftRight = this._background ? 2 * options.paddingLeftRight : 0,
             titleOptions = title.getOptions(),
             width = boxWidth - paddingLeftRight,
             titleX = options.horizontalAlignment === CENTER ? titleBox.x + (width / 2) - (titleBox.width / 2) : titleBox.x;
