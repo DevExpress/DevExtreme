@@ -108,7 +108,7 @@ QUnit.module("validation");
 
 QUnit.test("The click should be processed before the validation message is shown (T570458)", (assert) => {
     const $checkbox = $("#checkbox")
-        .dxCheckBox({ value: false })
+        .dxCheckBox({})
         .dxValidator({
             validationRules: [{ type: "required", message: "message" }]
         });
@@ -135,6 +135,23 @@ QUnit.test("The click should be processed before the validation message is shown
     assert.ok(isValidationMessageVisible());
 });
 
+QUnit.test("should show validation message after focusing", (assert) => {
+    const clock = sinon.useFakeTimers();
+    const $checkbox = $("#checkbox")
+        .dxCheckBox({})
+        .dxValidator({
+            validationRules: [{ type: "required", message: "message" }]
+        });
+
+    validateGroup();
+    $checkbox.focus();
+    clock.tick(200);
+
+    const message = $checkbox.find(".dx-overlay-wrapper.dx-invalid-message").get(0);
+
+    assert.strictEqual(window.getComputedStyle(message).visibility, "visible");
+    clock.restore();
+});
 
 QUnit.module("options");
 

@@ -89,7 +89,7 @@ QUnit.module("validation");
 
 QUnit.test("The click should be processed before the validation message is shown (T570458)", (assert) => {
     const $radioButton = $("#radioButton")
-        .dxRadioButton({ value: false })
+        .dxRadioButton({})
         .dxValidator({
             validationRules: [{ type: "required", message: "message" }]
         });
@@ -110,4 +110,22 @@ QUnit.test("The click should be processed before the validation message is shown
     $radioButton.trigger("dxclick");
     assert.ok(radioButton.option("isValid"));
     assert.notOk(isValidationMessageVisible());
+});
+
+QUnit.test("should show validation message after focusing", (assert) => {
+    const clock = sinon.useFakeTimers();
+    const $radioButton = $("#radioButton")
+        .dxRadioButton({})
+        .dxValidator({
+            validationRules: [{ type: "required", message: "message" }]
+        });
+
+    validateGroup();
+    $radioButton.focus();
+    clock.tick(200);
+
+    const message = $radioButton.find(".dx-overlay-wrapper.dx-invalid-message").get(0);
+
+    assert.strictEqual(window.getComputedStyle(message).visibility, "visible");
+    clock.restore();
 });
