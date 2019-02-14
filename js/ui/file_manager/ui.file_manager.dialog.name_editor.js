@@ -30,7 +30,7 @@ var FileManagerNameEditorDialog = FileManagerDialogBase.inherit({
     },
 
     _getContentTemplate: function() {
-        this._nameTextBox = this._createComponent($("<div />"), TextBox, {
+        this._nameTextBox = this._createComponent($("<div>"), TextBox, {
             value: this._initialNameValue,
             placeholder: "Enter your new name"
         });

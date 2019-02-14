@@ -49,7 +49,7 @@ var FileManagerDialogBase = Widget.inherit({
     },
 
     _getContentTemplate: function() {
-        this._$contentElement = $("<div />");
+        this._$contentElement = $("<div>");
         this._$contentElement.addClass(FILE_MANAGER_DIALOG_CONTENT);
 
         var cssClass = this._getCssClass();
