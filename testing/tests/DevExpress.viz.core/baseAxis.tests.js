@@ -347,6 +347,17 @@ QUnit.test("getCategoriesSorter returns categoriesSortingMethod option value", f
     assert.equal(sort, "sorting method");
 });
 
+// T714928
+QUnit.test("categoriesSortingMethod returns 'categories' option when 'categoriesSortingMethod' option is not set", function(assert) {
+    this.updateOptions({
+        categories: ["1", "2"]
+    });
+
+    var sort = this.axis.getCategoriesSorter();
+
+    assert.deepEqual(sort, ["1", "2"]);
+});
+
 QUnit.module("Labels Settings", {
     beforeEach: function() {
         environment.beforeEach.call(this);
