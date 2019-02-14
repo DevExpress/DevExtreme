@@ -147,6 +147,18 @@ const HtmlEditor = Editor.inherit({
         return this.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`);
     },
 
+    _focusInHandler: function() {
+        this._toggleFocusClass(true, this.$element());
+
+        this.callBase.apply(this, arguments);
+    },
+
+    _focusOutHandler: function() {
+        this._toggleFocusClass(false, this.$element());
+
+        this.callBase.apply(this, arguments);
+    },
+
     _initMarkup: function() {
         this._$htmlContainer = $("<div>").addClass(QUILL_CONTAINER_CLASS);
 
