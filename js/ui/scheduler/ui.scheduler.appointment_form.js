@@ -192,7 +192,6 @@ var SchedulerAppointmentForm = {
                 }
             },
             {
-                dataField: "repeatOnOff",
                 editorType: "dxSwitch",
                 label: {
                     text: messageLocalization.format("dxScheduler-editorLabelRecurrence")
@@ -201,6 +200,8 @@ var SchedulerAppointmentForm = {
                     observer: schedulerInst,
                     onInitialized: function(args) {
                         var value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
+
+                        schedulerInst.fire("recurrenceEditorVisibilityChanged", value);
                         args.component.option("value", value);
                     },
                     onValueChanged: function(args) {
