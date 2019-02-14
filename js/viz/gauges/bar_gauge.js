@@ -381,14 +381,12 @@ var dxBarGauge = dxBaseGauge.inherit({
                     value: b.getValue(),
                     color: b.getColor()
                 },
-                text: this._formatValue(b.getValue(), formatOptions),
+                text: _formatValue(b.getValue(), formatOptions),
                 visible: true,
                 states: { normal: { fill: b.getColor() } }
             };
         });
-    },
-
-    _formatValue: _formatValue
+    }
 });
 
 var BarWrapper = function(index, context) {

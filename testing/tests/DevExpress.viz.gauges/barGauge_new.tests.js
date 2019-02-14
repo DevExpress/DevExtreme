@@ -259,38 +259,13 @@ QUnit.test("Format legend as labels", function(assert) {
                 type: "currency"
             }
         },
-        values: [10000, 5700],
-        legend: { visible: true },
-        palette: ["black", "green"]
+        values: [10000],
+        legend: { visible: true }
     });
 
     const passedItems = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
-    assert.equal(passedItems.length, 2);
-    assert.deepEqual(passedItems[0], {
-        id: 0,
-        text: "$10,000",
-        item: {
-            value: 10000,
-            color: "black"
-        },
-        states: {
-            normal: { fill: "black" }
-        },
-        visible: true
-    });
 
-    assert.deepEqual(passedItems[1], {
-        id: 1,
-        text: "$5,700",
-        item: {
-            value: 5700,
-            color: "green"
-        },
-        states: {
-            normal: { fill: "green" }
-        },
-        visible: true
-    });
+    assert.equal(passedItems[0].text, "$10,000");
 });
 
 QUnit.test("Format legend with custom type", function(assert) {
@@ -306,35 +281,11 @@ QUnit.test("Format legend with custom type", function(assert) {
                 type: "thousands"
             }
         },
-        values: [10000, 5700],
-        palette: ["black", "green"]
+        values: [5700]
     });
 
     const passedItems = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
-    assert.equal(passedItems.length, 2);
-    assert.deepEqual(passedItems[0], {
-        id: 0,
-        text: "10K",
-        item: {
-            value: 10000,
-            color: "black"
-        },
-        states: {
-            normal: { fill: "black" }
-        },
-        visible: true
-    });
 
-    assert.deepEqual(passedItems[1], {
-        id: 1,
-        text: "6K",
-        item: {
-            value: 5700,
-            color: "green"
-        },
-        states: {
-            normal: { fill: "green" }
-        },
-        visible: true
-    });
+
+    assert.deepEqual(passedItems[0].text, "6K");
 });
