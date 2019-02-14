@@ -600,7 +600,11 @@ var daysFromByDayRule = function(rule) {
     var result = [];
 
     if(rule["byday"]) {
-        result = rule["byday"].split(",");
+        if(Array.isArray(rule["byday"])) {
+            result = rule["byday"];
+        } else {
+            result = rule["byday"].split(",");
+        }
     }
 
     return result;
