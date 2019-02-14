@@ -2521,6 +2521,7 @@ QUnit.test("Synchronize two axes", function(assert) {
 
 QUnit.test("Two axes without syncronization", function(assert) {
     this.options.synchronizeMultiAxes = false;
+    this.options.valueAxis[0].tickInterval = 15;
     var chart = this.createChart(this.options);
 
     var axis1 = chart.getValueAxis("axis1"),
