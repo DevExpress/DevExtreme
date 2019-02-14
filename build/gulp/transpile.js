@@ -12,7 +12,7 @@ gulp.task('transpile', ['bundler-config'], function() {
         .pipe(gulp.dest(context.TRANSPILED_PATH));
 });
 
-gulp.task('transpile-watch', ['version-fix'], function() {
+gulp.task('transpile-watch', ['version-replace'], function() {
     return watch(SRC)
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH));

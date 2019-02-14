@@ -49,13 +49,13 @@ function processDevBundles(bundles) {
 function muteWebPack() {
 }
 
-gulp.task('version-fix', ['transpile'], function() {
+gulp.task('version-replace', ['transpile'], function() {
     return gulp.src(path.join(context.TRANSPILED_PATH, VERSION_FILE_PATH), { base: './' })
-        .pipe(replace(/"\d\d\.\d.*?"/, `"${context.version.script}"`))
+        .pipe(replace("%VERSION%", context.version.script))
         .pipe(gulp.dest('./'));
 });
 
-gulp.task('js-bundles-prod', ['version-fix'], function() {
+gulp.task('js-bundles-prod', ['version-replace'], function() {
     return gulp.src(processBundles(BUNDLES))
         .pipe(named())
         .pipe(webpackStream(webpackConfig, webpack, muteWebPack))
@@ -95,7 +95,7 @@ var createDebugBundlesStream = function(watch) {
 };
 
 
-gulp.task('js-bundles-debug', ['version-fix'], function() {
+gulp.task('js-bundles-debug', ['version-replace'], function() {
     return createDebugBundlesStream(false);
 });
 
