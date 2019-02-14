@@ -1730,7 +1730,11 @@ Axis.prototype = {
 
     },
 
-    _resetMargins: _noop,
+    _resetMargins: function() {
+        if(this._canvas) {
+            this._translator.updateCanvas(this._processCanvas(this._canvas));
+        }
+    },
 
     _createConstantLines() {
         const constantLines = (this._options.constantLines || []).map(o => createConstantLine(this, o));
