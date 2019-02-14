@@ -1268,7 +1268,7 @@ QUnit.test("Check customizeExcelCell(args): change horizontalAlignment depending
         '<row r="1" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A1" s="5" t="n"><v>1</v></c><c r="B1" s="3" t="n"><v>1</v></c></row>' +
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="3" t="n"><v>2</v></c><c r="B2" s="3" t="n"><v>2</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C2" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+        '</worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_EMPTY;
 
     helper.runGeneralTest(
@@ -1282,6 +1282,7 @@ QUnit.test("Check customizeExcelCell(args): change horizontalAlignment depending
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                ignoreExcelErrors: false,
                 customizeExcelCell: e => {
                     if(e.gridCell.rowType === 'data' && e.gridCell.column.dataField === 'data1' && e.gridCell.value === 1 && e.gridCell.data.data1 === 1) {
                         e.clearStyle();
@@ -2550,7 +2551,7 @@ QUnit.test("Change total summary cell value", function(assert) {
         '<row r="2" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A2" s="2" t="s" /><c r="B2" s="2" t="s"><v>1</v></c></row>' +
         '<row r="3" spans="1:2" outlineLevel="0" x14ac:dyDescent="0.25"><c r="A3" s="2" t="s" /><c r="B3" s="2" t="s"><v>3</v></c></row>' +
         '</sheetData>' +
-        '<ignoredErrors><ignoredError sqref="A1:C3" numberStoredAsText="1" /></ignoredErrors></worksheet>';
+        '</worksheet>';
     const sharedStrings = helper.SHARED_STRINGS_HEADER_XML + ' count="4" uniqueCount="4">' +
         '<si><t>Max: 1002</t></si>' +
         '<si><t>total1: 1002</t></si>' +
@@ -2575,6 +2576,7 @@ QUnit.test("Change total summary cell value", function(assert) {
             showColumnHeaders: false,
             export: {
                 enabled: true,
+                ignoreExcelErrors: false,
                 customizeExcelCell: e => {
                     if(e.gridCell !== undefined && e.gridCell.rowType === "totalFooter" && e.gridCell.column.dataField === "f2") {
                         e.value = e.gridCell.totalSummaryItemName + ": " + e.gridCell.value;
