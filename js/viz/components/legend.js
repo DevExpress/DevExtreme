@@ -331,6 +331,7 @@ var _Legend = exports.Legend = function(settings) {
     that._itemGroupClass = settings.itemGroupClass;
     that._textField = settings.textField;
     that._getCustomizeObject = settings.getFormatObject;
+    that._titleGroupClass = settings.titleGroupClass;
 };
 
 var legendPrototype = _Legend.prototype = clone(LayoutElement.prototype);
@@ -354,7 +355,7 @@ extend(legendPrototype, {
         };
 
         if(that.isVisible() && !that._title) {
-            that._title = new title.Title({ renderer: that._renderer, cssClass: "dxc-title", root: that._legendGroup });
+            that._title = new title.Title({ renderer: that._renderer, cssClass: that._titleGroupClass, root: that._legendGroup });
         }
 
         that._title && that._title.update(themeManagerTitleOptions, that._options.title);
@@ -390,7 +391,7 @@ extend(legendPrototype, {
         }
 
         // TODO review pass or process states in legend
-        that._markersGroup = that._renderer.g().attr({ "class": "dxc-markers" }).append(that._insideLegendGroup);
+        that._markersGroup = that._renderer.g().attr({ "class": that._itemGroupClass }).append(that._insideLegendGroup);
         that._createItems(items);
 
         that._locateElements(options);
@@ -980,6 +981,8 @@ exports.plugin = {
         that._legend = new exports.Legend({
             renderer: that._renderer,
             group: group,
+            itemGroupClass: this._rootClassPrefix + "-item",
+            titleGroupClass: this._rootClassPrefix + "-title",
             textField: "text",
             getFormatObject: function(data) {
                 return {

@@ -113,7 +113,7 @@ var environment = {
         var insideLegendGroup = this.renderer.g.secondCall.returnValue;
         for(var i = 0; i < insideLegendGroup.children.length; i++) {
             var child = insideLegendGroup.children[i];
-            if(child.attr.firstCall.args[0].class === "dxc-markers") {
+            if(child.attr.firstCall.args[0].class === "dxc-item") {
                 return child;
             }
         }
