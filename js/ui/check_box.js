@@ -108,6 +108,10 @@ var CheckBox = Editor.inherit({
         ]);
     },
 
+    _canValueBeChangedByClick: function() {
+        return true;
+    },
+
     _feedbackHideTimeout: CHECKBOX_FEEDBACK_HIDE_TIMEOUT,
 
     _initMarkup: function() {
