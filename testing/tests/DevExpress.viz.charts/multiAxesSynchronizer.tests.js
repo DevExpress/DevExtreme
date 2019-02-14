@@ -570,10 +570,10 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1, value = 0', func
             {
                 range: {
                     axisType: 'continuous',
-                    min: -1000,
-                    minVisible: -1000,
-                    max: 4800,
-                    maxVisible: 4800
+                    min: 0,
+                    minVisible: 0,
+                    max: 0,
+                    maxVisible: 0
                 },
                 tickValues: [0]
             }, {
@@ -648,37 +648,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1, synchronizedValu
                     maxVisible: 19000
                 },
                 tickValues: [0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000]
-            }
-        ],
-        syncIndexes: [[0, 1]]
-    });
-});
-
-QUnit.test('Synchronization for 2 axis if tickValues count = 1, value = 0, centralTick = 0', function(assert) {
-    checkAxesSynchronization(assert, {
-        axesOptions: [
-            { range: { min: 0, max: 0, axisType: 'continuous' }, tickValues: [0], tickInterval: 0 },
-            { range: { min: -10, max: 10, axisType: 'continuous' }, tickValues: [-10, 0, 10], tickInterval: 10 }
-        ],
-        axesOptionsAfterSync: [
-            {
-                range: {
-                    axisType: 'continuous',
-                    min: -10,
-                    minVisible: -10,
-                    max: 10,
-                    maxVisible: 10
-                },
-                tickValues: [0]
-            }, {
-                range: {
-                    axisType: 'continuous',
-                    min: -10,
-                    minVisible: -10,
-                    max: 10,
-                    maxVisible: 10
-                },
-                tickValues: [-10, 0, 10]
             }
         ],
         syncIndexes: [[0, 1]]
