@@ -76,6 +76,7 @@ var environment = {
             setupMocks.call(this);
             var that = this;
             that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
+            that.themeManager.theme.withArgs("legend").returns({ title: {} });
             $.each(["loadingIndicator", "legend", "size", "title", "adaptiveLayout"], function(_, name) {
                 that.themeManager.getOptions.withArgs(name).returns({});
             });
