@@ -218,9 +218,9 @@ var DateBox = DropDownEditor.inherit({
             /**
              * @name dxDateBoxOptions.applyButtonText
              * @type string
-             * @default "Done"
+             * @default "OK"
              */
-            applyButtonText: messageLocalization.format("Done"),
+            applyButtonText: messageLocalization.format("OK"),
 
             /**
              * @name dxDateBoxOptions.cancelButtonText
