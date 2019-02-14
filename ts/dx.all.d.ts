@@ -4293,7 +4293,7 @@ declare module DevExpress.ui {
         expandedRowKeys?: Array<any>;
         /** Specifies whether nodes appear expanded or collapsed after filtering is applied. */
         expandNodesOnFiltering?: boolean;
-        filterMode?: 'withAncestors' | 'exactMatch' | 'fullBranch';
+        filterMode?: 'exactMatch' | 'fullBranch' | 'withAncestors';
         /** Specifies which data field defines whether the node has children. */
         hasItemsExpr?: string | Function;
         /** Specifies which data field contains nested items. Set this option when your data has a hierarchical structure. */
@@ -4921,7 +4921,7 @@ declare module DevExpress.ui {
         itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies the currently selected value. May be an object if dataSource contains objects and valueExpr is not set. */
         value?: any;
-        /** Specifies which data field provides the widget's value. When this option is not set, the value is the entire data object. */
+        /** Specifies which data field provides unique values to the widget's value. When the data field is not set, the value is the entire data object. */
         valueExpr?: string | Function;
     }
     export class DataExpressionMixin {
@@ -5714,9 +5714,7 @@ declare module DevExpress.ui {
     export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | { type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime', precision?: number, currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date) };
     /** An object that serves as a namespace for methods displaying a message in an application/site. */
     export class dialog {
-        /** Creates an alert dialog message containing a single "OK" button. */
         static alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
-        /** Creates a confirm dialog that contains "Yes" and "No" buttons. */
         static confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
         /** Creates a dialog with custom buttons. */
         static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string }): any;
@@ -5753,8 +5751,10 @@ declare module DevExpress.exporter {
         column?: DevExpress.ui.dxDataGridColumn;
         /** The data object of the cell's row. */
         data?: any;
+        groupSummaryItems?: Array<{ name?: string, value?: any }>;
         /** The type of the cell's row. */
         rowType?: string;
+        totalSummaryItemName?: string;
         /** The cell's value. */
         value?: any;
     }
@@ -6244,7 +6244,7 @@ declare module DevExpress.viz {
         /** Configures the minor grid. */
         minorGrid?: { visible?: boolean, color?: string, width?: number, opacity?: number };
         /** Configures the appearance of minor axis ticks. */
-        minorTick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number };
+        minorTick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number, shift?: number };
         /** Controls the empty space between the minimum series points and the axis. Applies only to the axes of the "continuous" and "logarithmic" type. */
         minValueMargin?: number;
         /** Specifies how transparent the axis line should be. */
@@ -6254,7 +6254,7 @@ declare module DevExpress.viz {
         /** Configures the appearance of strips. */
         stripStyle?: dxChartCommonAxisSettingsStripStyle;
         /** Configures the appearance of major axis ticks. */
-        tick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number };
+        tick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number, shift?: number };
         /** Configures axis titles. */
         title?: dxChartCommonAxisSettingsTitle;
         /** Adds an empty space between the axis and the minimum and maximum series points. */
@@ -8122,6 +8122,7 @@ declare module DevExpress.viz {
         minorTick?: { color?: string, opacity?: number, length?: number, width?: number, visible?: boolean };
         /** Specifies an interval between minor ticks. */
         minorTickInterval?: number;
+        /** Specifies the minimum distance between two neighboring major ticks in pixels. */
         scaleDivisionFactor?: number;
         /** Specifies the start value for the scale of the gauge. */
         startValue?: number;
@@ -8228,6 +8229,7 @@ declare module DevExpress.viz {
         horizontalOrientation?: 'center' | 'left' | 'right';
         /** Specifies common options for scale labels. */
         label?: dxLinearGaugeScaleLabel;
+        /** Specifies the minimum distance between two neighboring major ticks in pixels. */
         scaleDivisionFactor?: number;
         /** Specifies the orientation of scale ticks. Applies only if the geometry.orientation option is "horizontal". */
         verticalOrientation?: 'bottom' | 'center' | 'top';
