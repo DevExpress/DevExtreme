@@ -80,7 +80,7 @@ function print(imageSrc, options) {
 
 function setPrint(imageSrc, options) {
     return function() {
-        const window = this.contentWindow;
+        let window = this.contentWindow;
         const img = window.document.createElement("img");
         window.document.body.appendChild(img);
 
@@ -88,9 +88,7 @@ function setPrint(imageSrc, options) {
         const origImageSrc = imageSrc;
         if(options.__test) {
             imageSrc = options.__test.imageSrc;
-            window.print = options.__test.mockPrint;
-            window.focus = options.__test.mockFocus;
-
+            window = options.__test.mockWindow;
         }
         ///#ENDDEBUG
 
