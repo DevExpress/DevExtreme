@@ -113,7 +113,7 @@ var environment = {
         var insideLegendGroup = this.renderer.g.secondCall.returnValue;
         for(var i = 0; i < insideLegendGroup.children.length; i++) {
             var child = insideLegendGroup.children[i];
-            if(child.attr.firstCall.args[0].class === "dxc-markers") {
+            if(child.attr.firstCall.args[0].class === "dxc-item") {
                 return child;
             }
         }
@@ -1093,7 +1093,7 @@ QUnit.test('Border is not drawn, position = "inside", backgroundColor is not spe
 
     assert.equal(legend._legendGroup.children.length, 1, 'inside group created, trackers was added');
     assert.equal(legend._markersGroup.children.length, legendData.length * 2, 'Series groups were added');
-    assert.equal(legend._insideLegendGroup.children[1].attr.firstCall.args[0].fill, '#ffffff', 'background color is white');
+    assert.equal(legend._insideLegendGroup.children[0].attr.firstCall.args[0].fill, '#ffffff', 'background color is white');
 });
 
 QUnit.test('Border is not drawn, backgroundColor is specify', function(assert) {
@@ -1115,7 +1115,7 @@ QUnit.test('Border is not drawn, backgroundColor is specify', function(assert) {
     assert.ok(legend._insideLegendGroup);
     assert.equal(legend._legendGroup.children.length, 1, 'inside group created');
     assert.equal(legend._markersGroup.children.length, legendData.length * 2, 'Series groups were added');
-    assert.equal(legend._insideLegendGroup.children[1].attr.firstCall.args[0].fill, '#123456', 'background color is specify');
+    assert.equal(legend._insideLegendGroup.children[0].attr.firstCall.args[0].fill, '#123456', 'background color is specify');
 });
 
 QUnit.test('Border is drawn', function(assert) {
@@ -1144,7 +1144,7 @@ QUnit.test('Border is drawn', function(assert) {
     assert.equal(legend._insideLegendGroup.children.length, 2, 'legend group must contain markers group and border group');
     assert.equal(legend._markersGroup.children.length, legendData.length * 2, 'Series groups were added');
 
-    var borderGroup = legend._insideLegendGroup.children[1];
+    var borderGroup = legend._insideLegendGroup.children[0];
     assert.equal(borderGroup.attr.firstCall.args[0].fill, 'none');
     assert.equal(borderGroup.attr.firstCall.args[0]['class'], 'dxc-border');
     assert.equal(borderGroup._stored_settings["stroke-width"], 1);
@@ -1180,7 +1180,7 @@ QUnit.test('Border is drawn, position = "inside"', function(assert) {
     assert.equal(legend._insideLegendGroup.children.length, 2, 'legend group must contain markers group and border group');
     assert.equal(legend._markersGroup.children.length, legendData.length * 2, 'Series groups were added');
 
-    var borderGroup = legend._insideLegendGroup.children[1];
+    var borderGroup = legend._insideLegendGroup.children[0];
     assert.equal(borderGroup.attr.firstCall.args[0].fill, '#ffffff');
     assert.equal(borderGroup.attr.firstCall.args[0]['class'], 'dxc-border');
     assert.equal(borderGroup._stored_settings["stroke-width"], 1);
@@ -1225,7 +1225,7 @@ QUnit.test('Draw background rect.Legend with border', function(assert) {
 
     legend.draw(200, 200);
 
-    var borderRect = legend._insideLegendGroup.children[1];
+    var borderRect = legend._insideLegendGroup.children[0];
 
     assert.deepEqual(borderRect._stored_settings, {
         'class': "dxc-border",
@@ -1282,7 +1282,7 @@ QUnit.test('Draw background rect.Legend without border', function(assert) {
 
     legend.draw(200, 200);
 
-    var borderRect = legend._insideLegendGroup.children[1];
+    var borderRect = legend._insideLegendGroup.children[0];
 
     assert.deepEqual(borderRect._stored_settings, {
         'class': "dxc-border",
@@ -1290,7 +1290,7 @@ QUnit.test('Draw background rect.Legend without border', function(assert) {
         x: -4,
         y: -7,
         width: 20 + 2 * options.paddingLeftRight,
-        height: 10,
+        height: 10 + 2 * options.paddingTopBottom,
         opacity: undefined
     });
 });
@@ -1845,6 +1845,23 @@ QUnit.test('Erasing', function(assert) {
     assert.deepEqual(this.renderer.g.getCall(1).returnValue.remove.lastCall.args, [], 'group is removed');
 });
 
+QUnit.test('Check groups order', function(assert) {
+    this.options.title = {
+        text: "title"
+    };
+    this.options.border.visible = true;
+
+    const legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    const titleGroup = this.renderer.g.firstCall.returnValue;
+    const markersGroup = this.findMarkersGroup();
+    const rect = this.renderer.rect.firstCall.returnValue;
+
+    assert.ok(rect.append.calledBefore(markersGroup.append));
+    assert.ok(rect.append.calledBefore(titleGroup.linkAppend));
+    assert.ok(titleGroup.linkAppend.calledBefore(markersGroup.append));
+});
+
 QUnit.module('Markers', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
@@ -2308,6 +2325,31 @@ QUnit.test("Shift simple title; horizontalAlignment = 'center'; border exist", f
     this.options.horizontalAlignment = "center";
     this.options.paddingLeftRight = 4;
     this.options.border.visible = true;
+    this.titleLayout.width = 18;
+
+    var legend = this.createSimpleLegend();
+    legend.draw(200, 200);
+    legend.shift(0, 0);
+
+    assert.equal(this.title.shift.callCount, 1, "method 'shift' must be called");
+    assert.deepEqual(this.title.shift.firstCall.args, [1, 8], "title must have moved");
+});
+
+QUnit.test("Shift simple title; horizontalAlignment = 'center'; legend position 'inside'", function(assert) {
+    this.options.title = {
+        text: "Simple title",
+        margin: {
+            left: 0,
+            right: 0,
+            top: 3,
+            bottom: 4
+        }
+    };
+
+    this.options.horizontalAlignment = "center";
+    this.options.paddingLeftRight = 4;
+    this.options.border.visible = false;
+    this.options.position = "inside";
     this.titleLayout.width = 18;
 
     var legend = this.createSimpleLegend();

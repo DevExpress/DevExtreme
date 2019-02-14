@@ -1730,7 +1730,11 @@ Axis.prototype = {
 
     },
 
-    _resetMargins: _noop,
+    _resetMargins: function() {
+        if(this._canvas) {
+            this._translator.updateCanvas(this._processCanvas(this._canvas));
+        }
+    },
 
     _createConstantLines() {
         const constantLines = (this._options.constantLines || []).map(o => createConstantLine(this, o));
@@ -2460,9 +2464,11 @@ Axis.prototype = {
     _visualRange: _noop,
 
     applyVisualRangeSetter: _noop,
-
+    // T642779,T714928
     getCategoriesSorter() {
-        return this._options.categoriesSortingMethod;
+        const categoriesSortingMethod = this._options.categoriesSortingMethod;
+
+        return isDefined(categoriesSortingMethod) ? categoriesSortingMethod : this._options.categories;
     },
 
     _getAdjustedBusinessRange() {

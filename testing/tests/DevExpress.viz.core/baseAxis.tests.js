@@ -362,6 +362,17 @@ QUnit.test("getCategoriesSorter returns categoriesSortingMethod option value", f
     assert.equal(sort, "sorting method");
 });
 
+// T714928
+QUnit.test("categoriesSortingMethod returns 'categories' option when 'categoriesSortingMethod' option is not set", function(assert) {
+    this.updateOptions({
+        categories: ["1", "2"]
+    });
+
+    var sort = this.axis.getCategoriesSorter();
+
+    assert.deepEqual(sort, ["1", "2"]);
+});
+
 QUnit.module("Labels Settings", {
     beforeEach: function() {
         environment.beforeEach.call(this);
@@ -2700,6 +2711,28 @@ QUnit.test("Do not apply tick margin if endOnTick false", function(assert) {
             minVisible: 90,
             maxVisible: 220
         }
+    });
+});
+
+QUnit.test("Apply correct margins on redraw without canvas", function(assert) {
+    this.generatedTicks = [80, 220];
+    const axis = this.createAxis(true, {
+        valueMarginsEnabled: true
+    });
+
+    axis.setBusinessRange({
+        min: 100,
+        max: 200
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.draw(this.canvas);
+
+    axis.draw();
+
+    assert.deepEqual(axis.getTranslator().getCanvasVisibleArea(), {
+        max: 457,
+        min: 243
     });
 });
 
