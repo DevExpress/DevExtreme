@@ -1,6 +1,6 @@
 import { debug } from "../../core/utils/console";
 import typeUtils from "../../core/utils/type";
-import { each as _each } from "../../core/utils/iterator";
+import { each } from "../../core/utils/iterator";
 import vizUtils from "../core/utils";
 import { adjust } from "../../core/utils/math";
 
@@ -372,7 +372,7 @@ function updateMinorTicks(axesInfo) {
 
 var multiAxesSynchronizer = {
     synchronize: function(valueAxes) {
-        _each(getValueAxesPerPanes(valueAxes), function(_, axes) {
+        each(getValueAxesPerPanes(valueAxes), function(_, axes) {
             var axesInfo,
                 paddings;
             if(axes.length > 1) {
