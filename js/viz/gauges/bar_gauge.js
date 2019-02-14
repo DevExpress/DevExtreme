@@ -362,6 +362,13 @@ var dxBarGauge = dxBaseGauge.inherit({
     _proxyData: [],
 
     _getLegendData() {
+        var formatOptions = {},
+            labelOptions = this.option("label");
+        if(this._options.legend && this._options.legend.format) {
+            formatOptions.format = this._options.legend.format;
+        } else {
+            formatOptions.format = labelOptions.format !== undefined ? labelOptions.format : this._defaultFormatOptions;
+        }
         return (this._bars || []).map(b => {
             return {
                 id: b._index,
@@ -369,12 +376,14 @@ var dxBarGauge = dxBaseGauge.inherit({
                     value: b.getValue(),
                     color: b.getColor()
                 },
-                text: b.getValue() + "",
+                text: this._formatValue(b.getValue(), formatOptions),
                 visible: true,
                 states: { normal: { fill: b.getColor() } }
             };
         });
-    }
+    },
+
+    _formatValue: _formatValue
 });
 
 var BarWrapper = function(index, context) {
