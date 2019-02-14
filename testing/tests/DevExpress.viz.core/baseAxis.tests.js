@@ -2703,6 +2703,28 @@ QUnit.test("Do not apply tick margin if endOnTick false", function(assert) {
     });
 });
 
+QUnit.test("Apply correct margins on redraw without canvas", function(assert) {
+    this.generatedTicks = [80, 220];
+    const axis = this.createAxis(true, {
+        valueMarginsEnabled: true
+    });
+
+    axis.setBusinessRange({
+        min: 100,
+        max: 200
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.draw(this.canvas);
+
+    axis.draw();
+
+    assert.deepEqual(axis.getTranslator().getCanvasVisibleArea(), {
+        max: 457,
+        min: 243
+    });
+});
+
 QUnit.module("Data margins calculations after zooming", dataMarginsEnvironment);
 
 QUnit.test("Argument axis - Apply margins on zoomed range", function(assert) {
