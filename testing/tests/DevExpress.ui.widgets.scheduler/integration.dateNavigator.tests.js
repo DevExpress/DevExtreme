@@ -33,8 +33,8 @@ QUnit.module("Integration: Date navigator with min and max values", moduleConfig
 
         assert.equal(instance.option("currentDate").valueOf(), INIT_CURRENT_DATE.valueOf(), "currentDate value equal with init currentDate");
         cases.forEach(testCase => {
-            assert.equal($previousButton.hasClass(DISABLED_CLASS_NAME), testCase.prevButtonDisable);
-            assert.equal($nextButton.hasClass(DISABLED_CLASS_NAME), testCase.nextButtonDisable);
+            assert.equal($previousButton.hasClass(DISABLED_CLASS_NAME), testCase.prevButtonDisable, "the previous button has the disabled CSS class");
+            assert.equal($nextButton.hasClass(DISABLED_CLASS_NAME), testCase.nextButtonDisable, "the next button has the disabled CSS class");
 
             if(testCase.trigger) {
                 $(testCase.trigger === "next" ? $nextButton : $previousButton).trigger("dxclick");
