@@ -28,6 +28,11 @@ var READONLY_STATE_CLASS = "dx-state-readonly",
 * @hidden
 */
 var Editor = Widget.inherit({
+    ctor: function() {
+        this.showValidationMessageTimeout = null;
+
+        this.callBase.apply(this, arguments);
+    },
 
     _init: function() {
         this.callBase();
@@ -178,6 +183,30 @@ var Editor = Widget.inherit({
         }.bind(this));
     },
 
+    _focusInHandler: function(e) {
+        const isValidationMessageShownOnFocus = this.option("validationMessageMode") === "auto";
+
+        // NOTE: The click should be processed before the validation message is shown because
+        // it can change the editor's value
+        if(this._canValueBeChangedByClick() && isValidationMessageShownOnFocus) {
+            // NOTE: Prevent the validation message from showing
+            this._$validationMessage && this._$validationMessage.removeClass(INVALID_MESSAGE_AUTO);
+
+            clearTimeout(this.showValidationMessageTimeout);
+
+            // NOTE: Show the validation message after a click changes the value
+            this.showValidationMessageTimeout = setTimeout(
+                () => this._$validationMessage && this._$validationMessage.addClass(INVALID_MESSAGE_AUTO), 150
+            );
+        }
+
+        return this.callBase(e);
+    },
+
+    _canValueBeChangedByClick: function() {
+        return false;
+    },
+
     _renderValidationState: function() {
         var isValid = this.option("isValid"),
             validationError = this.option("validationError"),
@@ -271,7 +300,9 @@ var Editor = Widget.inherit({
 
     _dispose: function() {
         var element = this.$element()[0];
+
         dataUtils.data(element, VALIDATION_TARGET, null);
+        clearTimeout(this.showValidationMessageTimeout);
         this.callBase();
     },
 
