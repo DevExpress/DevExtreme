@@ -69,8 +69,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return editMode === EDIT_MODE_CELL || editMode === EDIT_MODE_BATCH;
     },
 
-    _isExcelNavigation: function() {
-        return this._isCellEditMode() && this.option("editing.excelLikeNavigation");
+    _isFastEditingAllowed: function() {
+        return this._isCellEditMode() && this.option("keyboardNavigation.editOnKeyPress");
     },
 
     _focusView: function(view, viewIndex) {
@@ -219,6 +219,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(view) {
                 view.renderCompleted.add(function(e) {
                     var $element = view.element(),
+                        isFullUpdate = !e || e.changeType === "refresh",
+                        isFocusedViewCorrect = that._focusedView && that._focusedView.name === view.name,
+                        needUpdateFocus = false,
+                        isAppend = e && (e.changeType === "append" || e.changeType === "prepend"),
                         keyboardActionSelector = `.${ROW_CLASS} > td, .${ROW_CLASS}`;
 
                     eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
@@ -229,10 +233,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                     that._initKeyDownProcessor(that, $element, that._keyDownHandler);
 
-                    var isFullUpdate = !e || e.changeType === "refresh";
-
-                    if(that._focusedView && that._focusedView.name === view.name && (that._isNeedFocus || (that._isHiddenFocus && isFullUpdate))) {
-                        that._updateFocus();
+                    if(isFocusedViewCorrect) {
+                        needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
+                        needUpdateFocus && that._updateFocus();
                     }
                 });
             }
@@ -447,9 +450,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
             rowIndex = this.getVisibleRowIndex(),
             $row = this._focusedView && this._focusedView.getRow(rowIndex);
 
-        if(this._isExcelNavigation() && !isEditing && isDataRow($row)) {
+        if(!isEditing && isDataRow($row)) {
             this._startEditing();
         }
+    },
+
+    _allowEditingOnEnterKey: function() {
+        return this.option("keyboardNavigation.enterKeyAction") === "startEdit";
     },
 
     _enterKeyHandler: function(eventArgs, isEditing) {
@@ -468,15 +475,27 @@ var KeyboardNavigationController = core.ViewController.inherit({
             }
 
         } else {
-            if(isEditing) {
+            if(isEditing || !this._allowEditingOnEnterKey()) {
                 this._handleEnterKeyEditingCell(eventArgs.originalEvent);
-                var direction = eventArgs.shift ? "upArrow" : "downArrow";
-                if(this._isExcelNavigation()) {
+                var direction = this._getEnterKeyDirection(eventArgs);
+                if(direction) {
                     this._navigateNextCell(eventArgs.originalEvent, direction);
                 }
             } else {
                 this._startEditing(eventArgs);
             }
+        }
+    },
+
+    _getEnterKeyDirection: function(eventArgs) {
+        var enterKeyDirection = this.option("keyboardNavigation.enterKeyDirection"),
+            isShift = eventArgs.shift;
+
+        if(enterKeyDirection === "column") {
+            return isShift ? "upArrow" : "downArrow";
+        }
+        if(enterKeyDirection === "row") {
+            return isShift ? "previousInRow" : "nextInRow";
         }
     },
 
@@ -499,7 +518,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
-    _startEditing: function(eventArgs, beginEditingKey) {
+    _startEditing: function(eventArgs, fastEditingKey) {
         var focusedCellPosition = this._focusedCellPosition,
             rowIndex = this.getVisibleRowIndex(),
             row = this._dataController.items()[rowIndex],
@@ -510,29 +529,29 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(this._isRowEditMode()) {
                 this._editingController.editRow(rowIndex);
             } else if(focusedCellPosition) {
-                this._startEditingCell(eventArgs, beginEditingKey);
+                this._startEditingCell(eventArgs, fastEditingKey);
             }
         }
     },
 
-    _startEditingCell: function(eventArgs, beginEditingKey) {
+    _startEditingCell: function(eventArgs, fastEditingKey) {
         var that = this,
             rowIndex = this.getVisibleRowIndex(),
             colIndex = this._focusedCellPosition.columnIndex,
             deferred;
 
-        this._isBeginExcelEditing = isDefined(beginEditingKey);
+        this._fastEditingStarted = isDefined(fastEditingKey);
         deferred = this._editingController.editCell(rowIndex, colIndex);
 
-        if(this._isExcelEditingStarted()) {
+        if(this._isFastEditingStarted()) {
             if(deferred === true) {
-                that._editingCellHandler(eventArgs, beginEditingKey);
+                that._editingCellHandler(eventArgs, fastEditingKey);
             } else if(deferred && deferred.done) {
-                deferred.done(() => that._editingCellHandler(eventArgs, beginEditingKey));
+                deferred.done(() => that._editingCellHandler(eventArgs, fastEditingKey));
             }
         }
     },
-    _editingCellHandler: function(eventArgs, beginEditingKey) {
+    _editingCellHandler: function(eventArgs, fastEditingKey) {
         var $input = this._getFocusedCell().find(".dx-texteditor-input").eq(0),
             keyDownEvent = eventUtils.createEvent(eventArgs, { type: "keydown", target: $input.get(0) }),
             keyPressEvent = eventUtils.createEvent(eventArgs, { type: "keypress", target: $input.get(0) }),
@@ -542,7 +561,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         if(!keyDownEvent.isDefaultPrevented()) {
             eventsEngine.trigger($input, keyPressEvent);
             if(!keyPressEvent.isDefaultPrevented()) {
-                $input.val(beginEditingKey);
+                $input.val(fastEditingKey);
                 eventsEngine.off($input, "focusout"); // for NumberBox to save entered symbol
                 eventsEngine.on($input, "focusout", function() {
                     eventsEngine.trigger($input, "change");
@@ -560,7 +579,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $event = eventArgs.originalEvent,
             $row = this._focusedView && this._focusedView.getRow(rowIndex),
             directionCode = this._getDirectionCodeByKey(eventArgs.keyName),
-            isEditingNavigationMode = this._isExcelEditingStarted(),
+            isEditingNavigationMode = this._isFastEditingStarted(),
             allowNavigate = (!isEditing || isEditingNavigationMode) && isDataRow($row);
 
         if(allowNavigate) {
@@ -580,13 +599,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
             rowHeight,
             isUpArrow = eventArgs.keyName === "upArrow",
             dataSource = this._dataController.dataSource(),
-            isEditingNavigationMode = this._isExcelEditingStarted(),
+            isEditingNavigationMode = this._isFastEditingStarted(),
             allowNavigate = (!isEditing || isEditingNavigationMode) && $row && !isDetailRow($row);
 
         if(allowNavigate) {
-            if(isEditingNavigationMode) {
-                this._editingController.closeEditCell();
-            }
+            isEditingNavigationMode && this._editingController.closeEditCell();
             if(!this._navigateNextCell($event, eventArgs.keyName)) {
                 if(this._isVirtualScrolling() && isUpArrow && dataSource && !dataSource.isLoading()) {
                     rowHeight = $row.outerHeight();
@@ -746,7 +763,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 eventArgs.originalEvent.preventDefault();
             }
         } else {
-            this._excelNavigationBeginEdit(eventArgs.originalEvent);
+            this._beginFastEditing(eventArgs.originalEvent);
         }
     },
 
@@ -839,7 +856,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         column = this._columnsController.getVisibleColumns()[this.getView("rowsView").getCellIndex($cell)];
         row = this._dataController.items()[this._getRowIndex($cell && $cell.parent())];
 
-        if(column.allowEditing && !this._isExcelNavigation()) {
+        if(column.allowEditing) {
             let isDataRow = !row || row.rowType === "data";
             isEditingAllowed = editingOptions.allowUpdating ? isDataRow : row && row.inserted;
         }
@@ -1032,7 +1049,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     if(e.ctrl) {
                         this._ctrlAKeyHandler(e, isEditing);
                     } else {
-                        this._excelNavigationBeginEdit(e.originalEvent);
+                        this._beginFastEditing(e.originalEvent);
                     }
                     break;
                 case "tab":
@@ -1048,14 +1065,14 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     if(e.ctrl) {
                         this._ctrlFKeyHandler(e);
                     } else {
-                        this._excelNavigationBeginEdit(e.originalEvent);
+                        this._beginFastEditing(e.originalEvent);
                     }
                     break;
                 case "F2":
                     this._f2KeyHandler();
                     break;
                 default:
-                    if(!this._excelNavigationBeginEdit(e.originalEvent)) {
+                    if(!this._beginFastEditing(e.originalEvent)) {
                         this._isNeedFocus = false;
                         this._isNeedScroll = false;
                         needStopPropagation = false;
@@ -1069,18 +1086,18 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
-    _isExcelEditingStarted: function() {
-        return this._isExcelNavigation() && this._isBeginExcelEditing;
+    _isFastEditingStarted: function() {
+        return this._isFastEditingAllowed() && this._fastEditingStarted;
     },
 
-    _excelNavigationBeginEdit: function(originalEvent) {
-        if(!this._isExcelNavigation() || originalEvent.altKey || originalEvent.ctrlKey || this._editingController.isEditing()) {
+    _beginFastEditing: function(originalEvent) {
+        if(!this._isFastEditingAllowed() || originalEvent.altKey || originalEvent.ctrlKey || this._editingController.isEditing()) {
             return false;
         }
 
-        var beginEditingKey = originalEvent.key || String.fromCharCode(originalEvent.keyCode || originalEvent.which);
-        if(beginEditingKey && beginEditingKey.length === 1) {
-            this._startEditing(originalEvent, beginEditingKey);
+        var fastEditingKey = originalEvent.key || String.fromCharCode(originalEvent.keyCode || originalEvent.which);
+        if(fastEditingKey && fastEditingKey.length === 1) {
+            this._startEditing(originalEvent, fastEditingKey);
         }
 
         return true;
@@ -1264,7 +1281,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 }
             });
 
-            that._isBeginExcelEditing = false;
+            that._fastEditingStarted = false;
 
             that._focusedCellPosition = {};
 
@@ -1406,6 +1423,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         switch(args.name) {
             case "useKeyboard":
+            case "keyboardNavigation":
                 args.handled = true;
                 break;
             default:
@@ -1526,6 +1544,31 @@ module.exports = {
     defaultOptions: function() {
         return {
             useKeyboard: true,
+
+            /**
+             * @name GridBaseOptions.keyboardNavigation
+             * @type object
+             */
+            keyboardNavigation: {
+                /**
+                 * @name GridBaseOptions.keyboardNavigation.enterKeyAction
+                 * @type Enums.GridEnterKeyAction
+                 * @default "startEdit"
+                 */
+                enterKeyAction: "startEdit",
+                /**
+                 * @name GridBaseOptions.keyboardNavigation.enterKeyDirection
+                 * @type Enums.GridEnterKeyDirection
+                 * @default "none"
+                 */
+                enterKeyDirection: "none",
+                /**
+                 * @name GridBaseOptions.keyboardNavigation.editOnKeyPress
+                 * @type boolean
+                 * @default false
+                 */
+                editOnKeyPress: false
+            }
 
             /**
              * @name GridBaseOptions.onKeyDown
@@ -1733,7 +1776,7 @@ module.exports = {
 
                 _editCellPrepared: function($cell) {
                     var keyboardController = this.getController("keyboardNavigation"),
-                        isEditingNavigationMode = keyboardController && keyboardController._isExcelEditingStarted();
+                        isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
 
                     if(isEditingNavigationMode) {
                         var editorInstance = this._getEditorInstance($cell);
@@ -1802,7 +1845,7 @@ module.exports = {
                 },
                 closeEditCell: function() {
                     this.callBase.apply(this, arguments);
-                    this.getController("keyboardNavigation")._isBeginExcelEditing = false;
+                    this.getController("keyboardNavigation")._fastEditingStarted = false;
                 }
             },
             data: {
