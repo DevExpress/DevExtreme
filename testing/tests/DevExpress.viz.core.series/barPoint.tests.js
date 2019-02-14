@@ -914,6 +914,41 @@ QUnit.test("draw errorBar when argument out of the canvas", function(assert) {
     assert.deepEqual(this.renderer.path.lastCall.returnValue.append.lastCall.args, [this.errorBarGroup]);
 });
 
+QUnit.test("draw error bar with relative edgeLength", function(assert) {
+    this.options.errorBars = {
+        lineWidth: 3,
+        edgeLength: 0.2,
+        opacity: 1
+    };
+    var point = createPoint(this.series, { argument: 1, value: 1, lowError: 1, highError: 2 }, this.options);
+    point.width = 44;
+
+    point.translate();
+
+    point.draw(this.renderer, this.groups);
+
+    assert.ok(point.graphic);
+
+    assert.deepEqual(this.renderer.path.lastCall.args[0], [[129, 222, 137, 222], [133, 222, 133, 111], [137, 111, 129, 111]]);
+});
+
+QUnit.test("draw error bar with relative edgeLength. Rotated", function(assert) {
+    this.options.rotated = true;
+    this.options.errorBars = {
+        lineWidth: 3,
+        edgeLength: 0.2,
+        opacity: 1
+    };
+    var point = createPoint(this.series, { argument: 1, value: 1, lowError: 1, highError: 2 }, this.options);
+    point.height = 44;
+
+    point.translate();
+
+    point.draw(this.renderer, this.groups);
+
+    assert.deepEqual(this.renderer.path.lastCall.args[0], [[222, 137, 222, 129], [111, 133, 222, 133], [111, 129, 111, 137]]);
+});
+
 QUnit.test("Marker. animationEnabled", function(assert) {
     var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
 
