@@ -2898,7 +2898,7 @@ QUnit.test("Remove scale break if it less than tickInterval, logarithmic", funct
     assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].breaks, []);
 });
 
-QUnit.test("Pass correct range in translator when value margins are enabled. Margins are calculated using original breaks", function(assert) {
+QUnit.test("Update breaks in translator after tick calculation", function(assert) {
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
@@ -2916,31 +2916,37 @@ QUnit.test("Pass correct range in translator when value margins are enabled. Mar
     // act
     this.axis.createTicks(canvas(200));
 
-    assert.equal(this.translator.updateBusinessRange.lastCall.args[0].min, 35);
-    assert.equal(this.translator.updateBusinessRange.lastCall.args[0].max, 1030);
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].breaks, [{
+        from: 125,
+        to: 875,
+        cumulativeWidth: 0
+    }]);
 });
 
-QUnit.test("Use original scale breaks after recalculation ticks", function(assert) {
+QUnit.test("Pass corrected breaks on updateSize", function(assert) {
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
         type: "continuous",
-        valueMarginsEnabled: true,
         breakStyle: { width: 0 },
+        valueMarginsEnabled: true,
         minValueMargin: 0.1,
         maxValueMargin: 0.2,
-        breaks: [{ startValue: 100, endValue: 900 }]
+        breaks: [{ startValue: 100, endValue: 900 }],
+        endOnTick: false
     });
 
     this.axis.setBusinessRange(new Range({ min: 50, max: 1000 }));
-    this.axis.createTicks(canvas(200));
-    // act
-    this.axis.createTicks(canvas(200));
 
-    assert.equal(this.axis._tickInterval, 100, "interval");
+    this.axis.createTicks(canvas(200));
+    this.axis.draw();
+
+    // act
+    this.axis.updateSize(canvas(180));
+
     assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].breaks, [{
-        from: 150,
-        to: 850,
+        from: 125,
+        to: 875,
         cumulativeWidth: 0
     }]);
 });

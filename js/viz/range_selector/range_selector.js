@@ -611,6 +611,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
                     previousValue: convertVisualRangeObject(lastSelectedRange)
                 });
             },
+            axis: that._axis,
             translator: that._axis.getTranslator()
         });
 
@@ -1094,7 +1095,7 @@ AxisWrapper.prototype = {
     }
 };
 
-["setMarginOptions", "getFullTicks", "updateCanvas", "updateOptions", "getAggregationInfo", "getTranslator", "getVisualRangeLength"].forEach(methodName => {
+["setMarginOptions", "getFullTicks", "updateCanvas", "updateOptions", "getAggregationInfo", "getTranslator", "getVisualRangeLength", "getVisibleArea", "getMarginOptions"].forEach(methodName => {
     AxisWrapper.prototype[methodName] = function() {
         const axis = this._axis;
 

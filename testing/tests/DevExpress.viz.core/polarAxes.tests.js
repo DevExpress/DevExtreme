@@ -28,12 +28,12 @@ var environment = {
         this.renderer = new vizMocks.Renderer();
 
         this.tickGenerator = sinon.stub(tickGeneratorModule, "tickGenerator", function() {
-            return function() {
+            return sinon.spy(function() {
                 return {
                     ticks: that.generatedTicks || [],
                     minorTicks: []
                 };
-            };
+            });
         });
 
         this.options = {
@@ -425,6 +425,7 @@ QUnit.test("Linear axis. axisDivisionMode is betweenLabels, valueMarginsEnabled 
     this.renderSettings.axisType = "polarAxes";
     this.renderSettings.drawingType = "linear";
     this.createDrawnAxis({
+        endOnTick: false,
         discreteAxisDivisionMode: "betweenLabels",
         valueMarginsEnabled: false
     });
@@ -444,17 +445,18 @@ QUnit.test("Linear axis. axisDivisionMode is betweenLabels, valueMarginsEnabled 
         valueMarginsEnabled: true
     });
 
-    assert.equal(this.translator.translate.callCount, 8); // 4 for labels
-    assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 1]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 1]);
-    assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 1]);
-    assert.deepEqual(this.translator.translate.getCall(6).args, ["c4", 1]);
+    assert.equal(this.translator.translate.callCount, 10); // 2 for margin calculation + 4 for labels
+    assert.deepEqual(this.translator.translate.getCall(2).args, ["c1", 1]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ["c2", 1]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, ["c3", 1]);
+    assert.deepEqual(this.translator.translate.getCall(8).args, ["c4", 1]);
 });
 
 QUnit.test("Linear axis. axisDivisionMode is crossLabels, valueMarginsEnabled false", function(assert) {
     this.renderSettings.axisType = "polarAxes";
     this.renderSettings.drawingType = "linear";
     this.createDrawnAxis({
+        endOnTick: false,
         discreteAxisDivisionMode: "crossLabels",
         valueMarginsEnabled: false
     });
@@ -474,11 +476,11 @@ QUnit.test("Linear axis. axisDivisionMode is crossLabels, valueMarginsEnabled tr
         valueMarginsEnabled: true
     });
 
-    assert.equal(this.translator.translate.callCount, 8); // 4 for labels
-    assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 0]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 0]);
-    assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 0]);
-    assert.deepEqual(this.translator.translate.getCall(6).args, ["c4", 0]);
+    assert.equal(this.translator.translate.callCount, 10); // 2 for margin calculation + 4 for labels
+    assert.deepEqual(this.translator.translate.getCall(2).args, ["c1", 0]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ["c2", 0]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, ["c3", 0]);
+    assert.deepEqual(this.translator.translate.getCall(8).args, ["c4", 0]);
 });
 
 QUnit.test("Circular axis. axisDivisionMode is betweenLabels, valueMarginsEnabled false", function(assert) {
@@ -1063,7 +1065,10 @@ QUnit.test("discrete axis", function(assert) {
 });
 
 QUnit.test("create strips", function(assert) {
-    this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "red" }] });
+    this.createDrawnAxis({
+        endOnTick: false,
+        strips: [{ startValue: 10, endValue: 20, color: "red" }]
+    });
     assert.ok(this.renderer.arc.called);
     assert.deepEqual(this.renderer.arc.getCall(0).args, [20, 50, 10, 20, 0, 360]);
     assert.equal(this.renderer.arc.getCall(0).returnValue.attr.firstCall.args[0].fill, "red");
@@ -1103,7 +1108,12 @@ QUnit.test("create constant lines with label", function(assert) {
 });
 
 QUnit.test("axisDivisionMode is betweenLabels", function(assert) {
-    this.createDrawnAxis({ categories: ["one", "two", "three", "four", "five"], discreteAxisDivisionMode: "betweenLabels", tick: { visible: true }, label: { overlappingBehavior: "ignore" } });
+    this.createDrawnAxis({
+        categories: ["one", "two", "three", "four", "five"],
+        discreteAxisDivisionMode: "betweenLabels", tick: { visible: true },
+        label: { overlappingBehavior: "ignore" },
+        endOnTick: false
+    });
 
     assert.deepEqual(this.translator.translate.getCall(0).args[1], 1);
 });
@@ -2036,4 +2046,164 @@ QUnit.test("Set business range when period is set and argumentType is string", f
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
     assert.equal(businessRange.isEmpty(), true);
+});
+
+QUnit.module("Circular axis. Margins", $.extend({}, environment, {
+    beforeEach() {
+        environment.beforeEach.call(this);
+
+        translator2DModule.Translator2D.restore();
+        sinon.spy(translator2DModule, "Translator2D");
+
+        $.extend(this.renderSettings, {
+            axisType: "polarAxes",
+            drawingType: "circular",
+            isArgumentAxis: true
+        });
+    },
+
+    createAxis(options) {
+        this.axis = new Axis(this.renderSettings, {});
+
+        options = $.extend(true, {
+            label: {}
+        }, options);
+        this.axis.updateOptions(options);
+        this.axis.validate();
+
+        return this.axis;
+    }
+}));
+
+QUnit.test("Do not apply margings", function(assert) {
+    this.generatedTicks = [];
+    const axis = this.createAxis({
+        valueMarginsEnabled: true,
+        minValueMargin: 0.1,
+        maxValueMargin: 0.1
+    });
+
+    axis.setBusinessRange({
+        min: 0,
+        max: 100
+    });
+
+    axis.draw(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.axis.getTranslator().getBusinessRange();
+
+    assert.equal(min, 0);
+    assert.equal(max, 100);
+    assert.equal(minVisible, 0);
+    assert.equal(maxVisible, 100);
+
+    const tickGeneratorOptions = this.tickGenerator.lastCall.returnValue.lastCall.args[0];
+    assert.equal(tickGeneratorOptions.min, 0);
+    assert.equal(tickGeneratorOptions.max, 100);
+});
+
+QUnit.test("Extend business range to ticks", function(assert) {
+    this.generatedTicks = [-10, 200];
+    const axis = this.createAxis({
+        valueMarginsEnabled: false
+    });
+
+    axis.setBusinessRange({
+        min: 0,
+        max: 100
+    });
+
+    axis.draw(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.axis.getTranslator().getBusinessRange();
+
+    assert.equal(min, -10);
+    assert.equal(max, 200);
+    assert.equal(minVisible, -10);
+    assert.equal(maxVisible, 200);
+});
+
+QUnit.module("Linear axis. Margins", $.extend({}, environment, {
+    beforeEach() {
+        environment.beforeEach.call(this);
+
+        translator2DModule.Translator2D.restore();
+        sinon.spy(translator2DModule, "Translator2D");
+
+        $.extend(this.renderSettings, {
+            axisType: "polarAxes",
+            drawingType: "linear",
+            isArgumentAxis: true
+        });
+    },
+
+    createAxis(options) {
+        this.axis = new Axis(this.renderSettings, {});
+
+        options = $.extend(true, {
+            label: {}
+        }, options);
+        this.axis.updateOptions(options);
+        this.axis.validate();
+
+        return this.axis;
+    }
+}));
+
+QUnit.test("Apply margings to business range", function(assert) {
+    this.generatedTicks = [];
+    const axis = this.createAxis({
+        valueMarginsEnabled: true,
+        minValueMargin: 0.1,
+        maxValueMargin: 0.2
+    });
+
+    axis.setBusinessRange({
+        min: 0,
+        max: 100
+    });
+
+    axis.draw(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.axis.getTranslator().getBusinessRange();
+
+    assert.equal(min, -10);
+    assert.equal(max, 120);
+    assert.equal(minVisible, -10);
+    assert.equal(maxVisible, 120);
+
+    assert.equal(axis.getTranslator().canvasLength, 20);
+});
+
+QUnit.test("Do not apply margins two times", function(assert) {
+    this.generatedTicks = [];
+    const axis = this.createAxis({
+        valueMarginsEnabled: true,
+        minValueMargin: 0.1,
+        maxValueMargin: 0.2
+    });
+
+    axis.setBusinessRange({
+        min: 0,
+        max: 100
+    });
+
+    axis.draw(this.canvas);
+    this.tickGenerator.lastCall.returnValue.reset();
+
+    // act
+    axis.draw(this.canvas);
+
+    const { min, max, minVisible, maxVisible } = this.axis.getTranslator().getBusinessRange();
+
+    assert.equal(min, -10);
+    assert.equal(max, 120);
+    assert.equal(minVisible, -10);
+    assert.equal(maxVisible, 120);
+
+    assert.equal(axis.getTranslator().canvasLength, 20);
+
+    const tickGeneratorOptions = this.tickGenerator.lastCall.returnValue.lastCall.args[0];
+    assert.equal(tickGeneratorOptions.min, -10);
+    assert.equal(tickGeneratorOptions.max, 120);
 });

@@ -453,7 +453,7 @@ var BaseChart = BaseWidget.inherit({
         that._scaleBreaksGroup = renderer.g().attr({ "class": "dxc-scale-breaks" }).linkOn(root, "scale-breaks");
         that._labelsGroup = renderer.g().attr({ "class": "dxc-labels-group" }).linkOn(root, "labels");
         that._crosshairCursorGroup = renderer.g().attr({ "class": "dxc-crosshair-cursor" }).linkOn(root, "crosshair");
-        that._legendGroup = renderer.g().attr({ "class": "dxc-legend", "clip-path": that._getCanvasClipRectID() }).linkOn(root, "legend");
+        that._legendGroup = renderer.g().attr({ "class": "dxc-legend", "clip-path": that._getCanvasClipRectID() }).linkOn(root, "legend").linkAppend(root).enableLinks();
         that._scrollBarGroup = renderer.g().attr({ "class": "dxc-scroll-bar" }).linkOn(root, "scroll-bar");
     },
 
@@ -864,7 +864,7 @@ var BaseChart = BaseWidget.inherit({
 
         legendOptions.containerBackgroundColor = themeManager.getOptions("containerBackgroundColor");
         legendOptions._incidentOccurred = that._incidentOccurred; // TODO: Why is `_` used?
-        that._legend.update(legendData, legendOptions);
+        that._legend.update(legendData, legendOptions, themeManager.theme("legend").title);
     },
 
     _prepareDrawOptions: function(drawOptions) {

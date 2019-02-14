@@ -3,7 +3,11 @@ import { isObject } from "./type";
 var getKeyWrapper = function(item, getKey) {
     var key = getKey(item);
     if(isObject(key)) {
-        key = JSON.stringify(key);
+        try {
+            return JSON.stringify(key);
+        } catch(e) {
+            return key;
+        }
     }
     return key;
 };

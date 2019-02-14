@@ -44,7 +44,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 this._storedCoords = this.coords;
                 this._storedLabelsCoords = this.labelCoords;
             },
-            drawMark: function() {
+            drawMark: function(options) {
                 if(!tickOptions.visible || skippedCategory === value) {
                     return;
                 }
@@ -55,10 +55,10 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                 if(this.mark) {
                     this.mark.append(lineGroup);
-                    this.updateTickPosition();
+                    this.updateTickPosition(options);
                 } else {
                     this.mark = axis._createPathElement([], tickStyle).append(lineGroup);
-                    this.updateTickPosition();
+                    this.updateTickPosition(options);
                 }
             },
 
@@ -94,10 +94,10 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                 this.coords.angle && axis._rotateTick(lineElement, this.coords);
             },
 
-            updateTickPosition: function(animate) {
+            updateTickPosition: function(options, animate) {
                 this._updateLine(this.mark,
-                    { points: axis._getTickMarkPoints(tick.coords, tickOptions.length) },
-                    this._storedCoords && { points: axis._getTickMarkPoints(tick._storedCoords, tickOptions.length) },
+                    { points: axis._getTickMarkPoints(tick.coords, tickOptions.length, options) },
+                    this._storedCoords && { points: axis._getTickMarkPoints(tick._storedCoords, tickOptions.length, options) },
                     animate);
             },
             drawLabel: function(range) {

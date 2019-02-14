@@ -125,6 +125,7 @@ exports.environment = {
         setupMocks(that.$container);
         that.tooltip = new StubTooltip();
         that.themeManager = new ThemeManager();
+        that.themeManager.stub("theme").withArgs("legend").returns({ title: {} });
         that.themeManager.stub("getOptions").withArgs("rotated").returns(false);
         that.themeManager.getOptions.withArgs("panes").returns({ name: "default" });
         that.themeManager.getOptions.withArgs("containerBackgroundColor").returns("#ffffff");

@@ -374,6 +374,9 @@ QUnit.module("Update type of point", {
             getVisibleArea: function() { return { minX: 0, maxX: 700, minY: 0, maxY: 700 }; },
             getValueAxis: function() {
                 return {
+                    getVisibleArea() {
+                        return [];
+                    },
                     getTranslator: function() {
                         return new MockTranslator({
                             translate: { "null": 0, 1: 22 },
@@ -383,6 +386,9 @@ QUnit.module("Update type of point", {
             },
             getArgumentAxis: function() {
                 return {
+                    getVisibleArea() {
+                        return [];
+                    },
                     getTranslator: function() {
                         return new MockTranslator({
                             translate: { "null": 0, 1: 11 },

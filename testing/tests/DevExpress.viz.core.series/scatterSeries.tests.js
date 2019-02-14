@@ -4,7 +4,7 @@ import { noop } from "core/utils/common";
 import pointModule from "viz/series/points/base_point";
 import labelModule from "viz/series/points/label";
 import { Series } from "viz/series/base_series";
-import { insertMockFactory, MockAxis, MockTranslator, restoreMockFactory } from "../../helpers/chartMocks.js";
+import { insertMockFactory, MockAxis, restoreMockFactory } from "../../helpers/chartMocks.js";
 
 var createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
@@ -2418,16 +2418,8 @@ var checkTwoGroups = function(assert, series) {
                 rotated: false,
                 type: seriesType,
             });
-            this.series.getValueAxis().getTranslator = sinon.spy(function() {
-                return new MockTranslator({
-                    getCanvasVisibleArea: { min: 0, max: 500 }
-                });
-            });
-            this.series.getArgumentAxis().getTranslator = sinon.spy(function() {
-                return new MockTranslator({
-                    getCanvasVisibleArea: { min: 10, max: 530 }
-                });
-            });
+            this.series.getValueAxis().getVisibleArea.returns([0, 500]);
+            this.series.getArgumentAxis().getVisibleArea.returns([10, 530]);
             this.series.updateData(data);
             this.series.createPoints();
             this.series.draw();

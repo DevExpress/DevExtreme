@@ -44,6 +44,8 @@ function checkAxesSynchronization(assert, options) {
             var axis = new MockAxis({ renderer: new vizMocks.Renderer() });
             var translator = new translator2DModule.Translator2D({}, canvas);
             translator.updateBusinessRange(range);
+            var visibleArea = translator.getCanvasVisibleArea();
+            axis.getVisibleArea.returns([visibleArea.min, visibleArea.max]);
 
             axis.updateOptions({
                 mockRange: range,

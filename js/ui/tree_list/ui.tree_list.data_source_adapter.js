@@ -190,7 +190,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 result = result || [];
 
                 for(var i = 0; i < data.length; i++) {
-                    item = extend({}, data[i]);
+                    item = gridCoreUtils.createObjectWithChanges(data[i]);
 
                     key = this._keyGetter(item);
                     if(key === undefined) {

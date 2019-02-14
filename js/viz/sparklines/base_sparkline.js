@@ -57,8 +57,15 @@ function createAxis(isHorizontal) {
         update: function(range, canvas, options) {
             translator.update(range, canvas, options);
         },
+        getVisibleArea() {
+            const visibleArea = translator.getCanvasVisibleArea();
+            return [visibleArea.min, visibleArea.max];
+        },
         visualRange: _noop,
-        calculateInterval: _noop
+        calculateInterval: _noop,
+        getMarginOptions() {
+            return {};
+        }
     };
 }
 

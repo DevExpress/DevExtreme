@@ -952,5 +952,5 @@
 
 /**
  * @typedef {string} Enums.TreeListFilterMode
- * @enum {'withAncestors'|'exactMatch'|'fullBranch'}
+ * @enum {'exactMatch'|'fullBranch'|'withAncestors'}
  */

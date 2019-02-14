@@ -91,6 +91,7 @@ var environment = {
         that.$container = $("<div>").appendTo($("#chartContainer"));
         setupMocks(that.$container);
         that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
+        that.themeManager.theme.withArgs("legend").returns({ title: {} });
         that.themeManager.getOptions.withArgs("rotated").returns(false);
         that.themeManager.getOptions.withArgs("panes").returns({ name: "default" });
         that.themeManager.getOptions.withArgs("valueAxis").returnsArg(1);
