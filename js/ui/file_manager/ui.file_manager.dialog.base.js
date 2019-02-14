@@ -4,6 +4,8 @@ import { extend } from "../../core/utils/extend";
 import Widget from "../widget/ui.widget";
 import Popup from "../popup";
 
+const FILE_MANAGER_DIALOG_CONTENT = "dx-filemanager-dialog";
+
 var FileManagerDialogBase = Widget.inherit({
 
     _initMarkup: function() {
@@ -40,18 +42,30 @@ var FileManagerDialogBase = Widget.inherit({
     _getInternalOptions: function() {
         return {
             width: 340,
-            height: 180,
+            height: 200,
             title: "Title",
             buttonText: "ButtonText"
         };
     },
 
     _getContentTemplate: function() {
-        return $("<div />");
+        this._$contentElement = $("<div />");
+        this._$contentElement.addClass(FILE_MANAGER_DIALOG_CONTENT);
+
+        var cssClass = this._getCssClass();
+        if(cssClass) {
+            this._$contentElement.addClass(cssClass);
+        }
+
+        return this._$contentElement;
     },
 
     _getDialogResult: function() {
         return null;
+    },
+
+    _getCssClass: function() {
+        return "";
     },
 
     _onButtonClick: function() {

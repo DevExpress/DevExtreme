@@ -259,14 +259,16 @@ var FileManager = Widget.inherit({
     },
 
     _showError: function(error) {
-        this._showNotification(error, false);
+        var message = typeof error === "string" ? error : error.responseText;
+        if(!message) message = "General error";
+        this._showNotification(message, false);
     },
 
     _showNotification: function(message, isSuccess) {
         notify({
             message: message,
             width: 450
-        }, isSuccess ? "success" : "error", 2000);
+        }, isSuccess ? "success" : "error", 5000);
     },
 
     _loadFilesToFilesView: function() {

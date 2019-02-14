@@ -4,6 +4,8 @@ import { extend } from "../../core/utils/extend";
 import FileManagerDialogBase from "./ui.file_manager.dialog.base.js";
 import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 
+const FILE_MANAGER_DIALOG_FOLDER_CHOOSER = "dx-filemanager-dialog-folder-chooser";
+
 var FileManagerFolderChooserDialog = FileManagerDialogBase.inherit({
 
     show: function() {
@@ -16,7 +18,7 @@ var FileManagerFolderChooserDialog = FileManagerDialogBase.inherit({
     _getInternalOptions: function() {
         return extend(this.callBase(), {
             width: 400,
-            height: 340,
+            height: "80%",
             title: "Select Destination Folder",
             buttonText: "Select"
         });
@@ -34,6 +36,10 @@ var FileManagerFolderChooserDialog = FileManagerDialogBase.inherit({
 
     _getDialogResult: function() {
         return { folder: this._filesTreeView.getCurrentFolder() };
+    },
+
+    _getCssClass: function() {
+        return FILE_MANAGER_DIALOG_FOLDER_CHOOSER;
     },
 
     _getDefaultOptions: function() {

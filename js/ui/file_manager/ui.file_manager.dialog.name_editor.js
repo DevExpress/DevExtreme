@@ -4,6 +4,8 @@ import { extend } from "../../core/utils/extend";
 import TextBox from "../text_box";
 import FileManagerDialogBase from "./ui.file_manager.dialog.base.js";
 
+const FILE_MANAGER_DIALOG_NAME_EDITOR = "dx-filemanager-dialog-name-editor";
+
 var FileManagerNameEditorDialog = FileManagerDialogBase.inherit({
 
     show: function(name) {
@@ -41,6 +43,10 @@ var FileManagerNameEditorDialog = FileManagerDialogBase.inherit({
     _getDialogResult: function() {
         var nameValue = this._nameTextBox.option("value");
         return nameValue ? { name: nameValue } : null;
+    },
+
+    _getCssClass: function() {
+        return FILE_MANAGER_DIALOG_NAME_EDITOR;
     },
 
     _getDefaultOptions: function() {
