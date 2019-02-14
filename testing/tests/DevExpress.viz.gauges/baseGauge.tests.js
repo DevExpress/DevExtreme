@@ -306,7 +306,8 @@ QUnit.test("T305684. Title is single text", function(assert) {
     });
     vizMocks.forceThemeOptions(this.themeManager);
 
-    assert.deepEqual(this.title.update.getCall(0).args[0], { text: "Test", subtitle: {} });
+    assert.equal(this.title.update.getCall(0).args[1], "Test");
+    assert.strictEqual(this.title.update.getCall(0).args[0], this.themeManager.theme("title"));
 });
 
 QUnit.test("T305684. Subtitle is single text", function(assert) {
@@ -318,7 +319,8 @@ QUnit.test("T305684. Subtitle is single text", function(assert) {
     });
     vizMocks.forceThemeOptions(this.themeManager);
 
-    assert.deepEqual(this.title.update.getCall(0).args[0], { text: "Test", subtitle: { text: "Test2" } });
+    assert.deepEqual(this.title.update.getCall(0).args[1], { text: "Test", subtitle: "Test2" });
+    assert.strictEqual(this.title.update.getCall(0).args[0], this.themeManager.theme("title"));
 });
 
 QUnit.test("Title is not rendered when text is empty", function(assert) {

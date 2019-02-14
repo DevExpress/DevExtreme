@@ -66,6 +66,9 @@ QUnit.testStart(() => {
     <div id="drawer">\
         <div id="content">Test Content</div>\
     </div>\
+    <div id="outerDrawer">\
+        <div id="innerDrawer"></div>\
+    </div>\
     <div id="drawerContainer" style="width: 100px">\
         <div id="drawer2"></div>\
     </div>\
@@ -1704,6 +1707,23 @@ QUnit.module("Overlap mode", {
         assert.equal($content.position().top, 0, "content has correct top when minSize is set");
         assert.equal($panel.position().top, -100, "panel has correct top when minSize is set");
     });
+
+    QUnit.test("nested drawers. Inner drawer should have right overflow", assert => {
+        $("#outerDrawer").dxDrawer({
+            opened: true,
+            height: 400,
+        });
+
+        $("#innerDrawer").dxDrawer({
+            openedStateMode: "overlap",
+            opened: true,
+            height: 400,
+        });
+
+        assert.equal($("#innerDrawer").find(".dx-overlay").eq(0).css("overflow"), "visible", "Panel overlay is visible");
+        assert.equal($("#innerDrawer").find(".dx-overlay-wrapper").eq(0).css("overflow"), "visible", "Panel overlay wrapper is visible");
+    });
+
 });
 
 QUnit.module("Modes changing", {

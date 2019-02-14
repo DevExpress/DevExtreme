@@ -4,6 +4,8 @@
 @LIST_STYLE_OUTER_WIDTH: @LIST_STYLE_MARGIN + @LIST_STYLE_WIDTH;
 @MAX_INDENT: 9;
 
+@TRANSPARENT_BORDER: 1px solid transparent;
+
 .add-counter-reset(@counter, @start: 1) when (@counter >= @start) {
     .add-counter-reset(@counter - 1, @start);
     counter-reset+_: ~"list-@{counter}";
@@ -54,6 +56,7 @@
 .dx-htmleditor {
     display: flex;
     flex-direction: column;
+    border: @TRANSPARENT_BORDER;
 }
 
 .dx-quill-container {
@@ -276,12 +279,12 @@
 
 .dx-htmleditor-toolbar-separator {
     height: 100%;
-    border-left: 1px solid transparent;
+    border-left: @TRANSPARENT_BORDER;
 }
 
 .dx-htmleditor-toolbar-menu-separator {
     width: 100%;
-    border-top: 1px solid transparent;
+    border-top: @TRANSPARENT_BORDER;
 
     &::before {
         content: none;

@@ -128,7 +128,25 @@ registerTheme({
         columnCount: 0,
         rowCount: 0,
         columnItemSpacing: 20,
-        rowItemSpacing: 8
+        rowItemSpacing: 8,
+        title: {
+            backgroundColor: WHITE,
+            margin: {
+                left: 0,
+                bottom: 0,
+                right: 0,
+                top: 0
+            },
+            font: {
+                size: 28,
+                weight: 200
+            },
+            subtitle: {
+                font: {
+                    size: 16
+                }
+            }
+        }
     },
     "chart:common": {
         animation: {

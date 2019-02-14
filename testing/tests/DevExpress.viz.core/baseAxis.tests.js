@@ -2119,6 +2119,25 @@ QUnit.test("Apply only margins. if ticks go out of range but not behind margin",
     });
 });
 
+QUnit.test("Apply endOnTick if tick margin greater then margin", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            minValueMargin: 0.2,
+            maxValueMargin: 0.2
+        },
+        range: {
+            min: 100,
+            max: 200
+        },
+        ticks: [80, 222],
+        expectedRange: {
+            minVisible: 80,
+            maxVisible: 222
+        }
+    });
+});
+
 QUnit.test("Do not cut margin if it greater than tick margin", function(assert) {
     this.testMargins(assert, {
         options: {
