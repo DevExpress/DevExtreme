@@ -1982,6 +1982,7 @@ declare module DevExpress.ui {
         headerFilter?: { height?: number, visible?: boolean, width?: number, allowSearch?: boolean, searchTimeout?: number, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Specifies whether to highlight rows and cells whose data changed. */
         highlightChanges?: boolean;
+        keyboardNavigation?: { enterKeyAction?: 'startEdit' | 'moveFocus', enterKeyDirection?: 'none' | 'column' | 'row', editOnKeyPress?: boolean };
         /** Configures the load panel. */
         loadPanel?: { enabled?: boolean | 'auto', text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean, shading?: boolean, shadingColor?: string };
         /** Specifies text shown when the widget does not display any data. */
@@ -2057,7 +2058,6 @@ declare module DevExpress.ui {
     }
     /** Overriden. */
     export interface GridBaseEditing {
-        excelLikeNavigation?: boolean;
         /** Configures the form. Used only if editing.mode is "form" or "popup". */
         form?: dxFormOptions;
         /** Specifies how a user edits data. */
