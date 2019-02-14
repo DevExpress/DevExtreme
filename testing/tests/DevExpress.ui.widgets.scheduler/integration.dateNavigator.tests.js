@@ -59,6 +59,23 @@ QUnit.module("Integration: Date navigator with min and max values", moduleConfig
         ]);
     });
 
+    QUnit.test("The navigator switcher should be disabled only one side in Day view mode, if startDayHour property is set", function(assert) {
+        this.createInstance({
+            currentDate: INIT_CURRENT_DATE,
+            min: new Date(2017, 4, 25),
+            max: new Date(2017, 4, 27),
+            startDayHour: 9,
+            endDayHour: 19
+        });
+
+        testNavigatorButtonsState(assert, this.instance, [
+            { prevButtonDisable: true, nextButtonDisable: false, trigger: 'next' },
+            { prevButtonDisable: false, nextButtonDisable: false, trigger: 'next' },
+            { prevButtonDisable: false, nextButtonDisable: true, trigger: 'prev' },
+            { prevButtonDisable: false, nextButtonDisable: false, trigger: 'prev' }
+        ]);
+    });
+
     QUnit.test("The navigator switcher should be disabled only one side in Day view mode, if currentDate property equal max property value", function(assert) {
         this.createInstance({
             currentDate: INIT_CURRENT_DATE,
