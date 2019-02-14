@@ -41,6 +41,10 @@ var RadioButton = Editor.inherit({
         });
     },
 
+    _canValueBeChangedByClick: function() {
+        return true;
+    },
+
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
