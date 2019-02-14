@@ -343,8 +343,10 @@ QUnit.test('Print method - use export to prepare image, create hidden iFrame wit
         exportedStub = sinon.spy(),
         exportingStub = sinon.spy(),
         fileSavingStub = sinon.spy(),
-        print = sinon.spy(),
-        focus = sinon.spy(),
+        mockWindow = {
+            print: sinon.spy(),
+            focus: sinon.spy()
+        },
         widget = this.createWidget({
             "export": {
                 backgroundColor: "#ff0000",
@@ -355,8 +357,7 @@ QUnit.test('Print method - use export to prepare image, create hidden iFrame wit
                 __test: {
                     deferred: deferred,
                     imageSrc: "/testing/content/exporterTestsContent/test-image.png",
-                    mockPrint: print,
-                    mockFocus: focus,
+                    mockWindow: mockWindow,
                     checkAssertions: function() {
                         assert.equal(window.frames.length, 1);
                         var frame = window.frames[0].frameElement;
@@ -369,9 +370,9 @@ QUnit.test('Print method - use export to prepare image, create hidden iFrame wit
                         var image = body.childNodes[0];
                         assert.equal(image.getAttribute("src"), "/testing/content/exporterTestsContent/test-image.png");
 
-                        assert.equal(focus.callCount, 1); // Required for IE
-                        assert.equal(print.callCount, 1);
-                        assert.ok(focus.getCall(0).calledBefore(print.getCall(0)));
+                        assert.equal(mockWindow.focus.callCount, 1); // Required for IE
+                        assert.equal(mockWindow.print.callCount, 1);
+                        assert.ok(mockWindow.focus.getCall(0).calledBefore(mockWindow.print.getCall(0)));
                     }
                 }
             },
@@ -422,20 +423,21 @@ QUnit.test('Print method, error image loading - delete iFrame', function(assert)
     var done = assert.async();
     var deferred = new Deferred();
     var exportFunc = clientExporter.export,
-        print = sinon.spy(),
-        focus = sinon.spy(),
+        mockWindow = {
+            print: sinon.spy(),
+            focus: sinon.spy()
+        },
         widget = this.createWidget({
             "export": {
                 __test: {
                     deferred: deferred,
                     imageSrc: "wrong_image_url",
-                    mockPrint: print,
-                    mockFocus: focus,
+                    mockWindow: mockWindow,
                     checkAssertions: function() {
                         var image = window.frames[0].frameElement.contentDocument.body.childNodes[0];
                         assert.equal(image.getAttribute("src"), "wrong_image_url");
-                        assert.equal(focus.callCount, 0);
-                        assert.equal(print.callCount, 0);
+                        assert.equal(mockWindow.focus.callCount, 0);
+                        assert.equal(mockWindow.print.callCount, 0);
                     }
                 }
             }
