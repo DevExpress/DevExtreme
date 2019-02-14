@@ -362,13 +362,18 @@ var dxBarGauge = dxBaseGauge.inherit({
     _proxyData: [],
 
     _getLegendData() {
-        var formatOptions = {},
-            labelOptions = this.option("label");
-        if(this._options.legend && this._options.legend.format) {
-            formatOptions.format = this._options.legend.format;
+        var that = this,
+            formatOptions = {},
+            options = that._options,
+            labelFormatOptions = (options.label || {}).format,
+            legendFormatOptions = (options.legend || {}).format;
+
+        if(legendFormatOptions) {
+            formatOptions.format = legendFormatOptions;
         } else {
-            formatOptions.format = labelOptions.format !== undefined ? labelOptions.format : this._defaultFormatOptions;
+            formatOptions.format = labelFormatOptions || that._defaultFormatOptions;
         }
+
         return (this._bars || []).map(b => {
             return {
                 id: b._index,
