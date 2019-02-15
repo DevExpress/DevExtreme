@@ -3193,6 +3193,61 @@ QUnit.test("Collapse level", function(assert) {
     }
 });
 
+QUnit.test("Collapse group", function(assert) {
+    assert.expect(9);
+
+    this.testStore.load.returns($.Deferred().resolve(this.storeData));
+
+    const dataSource = createDataSource({
+        fields: [
+            { group: "group", area: "column", expanded: true },
+            { dataField: "ShipCity", area: "column", group: "group", groupIndex: 0 },
+            { dataField: "ShipVia", area: "row" },
+            { summaryType: 'count', area: "data" }
+        ],
+        store: this.testStore
+    });
+
+    dataSource.on("changed", assertFunction);
+
+    // act
+    dataSource.collapseAll(0);
+    // assert
+    function assertFunction() {
+        var data = this.getData();
+        assert.strictEqual(data.columns[0].value, "Brazil");
+        assert.ok(!data.columns[0].children);
+        assert.deepEqual(prepareLoadedData(data.columns[0].collapsedChildren), [{
+            index: 7,
+            value: "Campinas"
+        }, {
+            index: 8,
+            value: "Sao Paulo"
+        }]);
+
+        assert.strictEqual(data.columns[1].value, "Canada");
+        assert.ok(!data.columns[1].children);
+        assert.ok(!data.columns[1].collapsedChildren);
+
+        assert.strictEqual(data.columns[2].value, "USA");
+        assert.ok(!data.columns[2].children);
+        assert.deepEqual(prepareLoadedData(data.columns[2].collapsedChildren), [
+            {
+                index: 2,
+                value: "Boise"
+            },
+            {
+                index: 4,
+                value: "Butte"
+            },
+            {
+                index: 3,
+                value: "Elgin"
+            }
+        ]);
+    }
+});
+
 QUnit.test("Collapse level by field id", function(assert) {
     assert.expect(10);
 
