@@ -1,20 +1,18 @@
-var $ = require("jquery"),
-    DataSource = require("ui/pivot_grid/data_source"),
-    ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store"),
-    inflector = require("core/utils/inflector"),
-    summaryDisplayModes = require("ui/pivot_grid/ui.pivot_grid.summary_display_modes"),
-    xmlaStore = require("ui/pivot_grid/xmla_store/xmla_store"),
-    XmlaStore = xmlaStore.XmlaStore,
-    LocalStore = require("ui/pivot_grid/local_store").LocalStore,
-    RemoteStore = require("ui/pivot_grid/remote_store"),
-    pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
-    setFieldProperty = pivotGridUtils.setFieldProperty,
-    browser = require("core/utils/browser"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js");
+import $ from "jquery";
+import DataSource from "ui/pivot_grid/data_source";
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
+import inflector from "core/utils/inflector";
+import summaryDisplayModes from "ui/pivot_grid/ui.pivot_grid.summary_display_modes";
+import xmlaStore, { XmlaStore } from "ui/pivot_grid/xmla_store/xmla_store";
+import { LocalStore } from "ui/pivot_grid/local_store";
+import RemoteStore from "ui/pivot_grid/remote_store";
+import pivotGridUtils, { setFieldProperty } from "ui/pivot_grid/ui.pivot_grid.utils";
+import browser from "core/utils/browser";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 
-require("../../../testing/content/orders.js");
-require("bundles/dx.web");
+import "../../../testing/content/orders.js";
+import "bundles/dx.web";
 
 function createDataSource(options) {
     var dataSource = new DataSource(options);
@@ -3389,6 +3387,26 @@ QUnit.test("Expand level", function(assert) {
         caption: ""
     }]);
 
+});
+
+QUnit.test("Expand group", function(assert) {
+    this.testStore.load.returns($.Deferred());
+
+    const dataSource = createDataSource({
+        fields: [
+            { groupName: "group", area: "column" },
+            { dataField: "ShipCity", groupName: "group", groupIndex: 0 },
+            { dataField: "ShipVia", groupName: "group", groupIndex: 1 },
+            { dataField: "NotGroup", area: "column", expanded: false }
+        ],
+        store: this.testStore
+    });
+
+    // act
+    dataSource.expandAll(0);
+    // assert
+    var expandedValues = this.testStore.load.lastCall.args[0].columns.map(f => f.expanded);
+    assert.deepEqual(expandedValues, [true, true, false]);
 });
 
 QUnit.test("Expand level by fieldId", function(assert) {
