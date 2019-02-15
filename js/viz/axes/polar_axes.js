@@ -56,7 +56,7 @@ circularAxes = polarAxes.circular = {
         const margins = this._calculateValueMargins(this._majorTicks);
 
         const br = this._translator.getBusinessRange();
-        br.addRange({ minVisible: margins.minValue, maxVisible: margins.maxValue });
+        br.addRange({ minVisible: margins.minValue, maxVisible: margins.maxValue, interval: this._calculateRangeInterval(br.interval) });
         this._translator.updateBusinessRange(br);
     },
 
