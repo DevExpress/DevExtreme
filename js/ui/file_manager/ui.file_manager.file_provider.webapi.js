@@ -111,7 +111,7 @@ var WebAPIFileProvider = FileProvider.inherit({
         for(var entry, i = 0; entry = entries[i]; i++) {
             if(entry.isFolder === isFolder) {
                 var item = new FileManagerItem(path, entry.name);
-                item.length = entry.length || 0;
+                item.length = entry.size || 0;
                 item.lastWriteTime = entry.lastWriteTime;
                 result.push(item);
             }
