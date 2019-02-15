@@ -252,7 +252,7 @@ treeListCore.registerModule("data", {
             parentIdExpr: "parentId",
             /**
             * @name dxTreeListOptions.rootValue
-            * @type Object
+            * @type any
             * @default 0
             */
             rootValue: 0,
@@ -269,7 +269,12 @@ treeListCore.registerModule("data", {
             * @fires dxTreeListOptions.onOptionChanged
             */
             expandedRowKeys: [],
-            filterMode: "extended",
+            /**
+            * @name dxTreeListOptions.filterMode
+            * @type Enums.TreeListFilterMode
+            * @default "withAncestors"
+            */
+            filterMode: "withAncestors",
             /**
             * @name dxTreeListOptions.expandNodesOnFiltering
             * @type boolean

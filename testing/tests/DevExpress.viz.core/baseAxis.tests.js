@@ -260,6 +260,21 @@ QUnit.test("Get options", function(assert) {
     }, "Options should be correct");
 });
 
+QUnit.test("GetMarginOptions when they are not set", function(assert) {
+    this.updateOptions({});
+
+    assert.deepEqual(this.axis.getMarginOptions(), {});
+});
+
+QUnit.test("GetMarginOptions after setting", function(assert) {
+    this.updateOptions({});
+
+    const marginOptions = { checkInterval: true };
+    this.axis.setMarginOptions(marginOptions);
+
+    assert.equal(this.axis.getMarginOptions(), marginOptions);
+});
+
 QUnit.test("Set pane", function(assert) {
     this.updateOptions();
     this.axis.setPane("testPane");
@@ -345,6 +360,17 @@ QUnit.test("getCategoriesSorter returns categoriesSortingMethod option value", f
     var sort = this.axis.getCategoriesSorter();
 
     assert.equal(sort, "sorting method");
+});
+
+// T714928
+QUnit.test("categoriesSortingMethod returns 'categories' option when 'categoriesSortingMethod' option is not set", function(assert) {
+    this.updateOptions({
+        categories: ["1", "2"]
+    });
+
+    var sort = this.axis.getCategoriesSorter();
+
+    assert.deepEqual(sort, ["1", "2"]);
 });
 
 QUnit.module("Labels Settings", {
@@ -1170,12 +1196,9 @@ QUnit.test("Get visualRange. Only max is defined", function(assert) {
     assert.deepEqual(this.axis.visualRange(), { startValue: undefined, endValue: 5 });
 });
 
-QUnit.module("Data margins calculations", {
+const dataMarginsEnvironment = {
     beforeEach: function() {
-        var that = this;
-        sinon.stub(translator2DModule, "Translator2D", function() {
-            return that.translator;
-        });
+        sinon.spy(translator2DModule, "Translator2D");
 
         environment.beforeEach.call(this);
 
@@ -1213,6 +1236,7 @@ QUnit.module("Data margins calculations", {
                 visible: true
             }
         }, options));
+        axis.parser = v => v;
         return axis;
     },
     testMargins: function(assert, data) {
@@ -1222,31 +1246,51 @@ QUnit.module("Data margins calculations", {
         axis.setBusinessRange(data.range);
         axis.setMarginOptions(data.marginOptions || {});
 
-        this.translator.stub("updateBusinessRange").reset();
+        const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
-        axis.createTicks(this.canvas);
+        sinon.spy(translator, "updateBusinessRange");
 
-        assert.strictEqual(this.translator.stub("updateBusinessRange").callCount, data.zoom ? 2 : 1, "update range call count");
+        if(data.zoom) {
+            axis.handleZooming(data.zoom, undefined, undefined, "zoom");
+        }
 
-        var range = this.translator.stub("updateBusinessRange").lastCall.args[0],
-            value = data.options.dataType === "datetime" ?
-                function(v) { return v.getTime(); } :
-                function(v) { return v; };
+        axis.draw(this.canvas);
 
-        assert.equal(value(range.min), value(data.expectedRange.min), "min value");
-        assert.equal(value(range.max), value(data.expectedRange.max), "max value");
-        assert.equal(value(range.minVisible), value(data.expectedRange.minVisible), "minVisible value");
-        assert.equal(value(range.maxVisible), value(data.expectedRange.maxVisible), "maxVisible value");
-        "interval" in data.expectedRange && assert.equal(range.interval, data.expectedRange.interval, "interval");
-        "categories" in data.expectedRange && assert.deepEqual(range.categories, data.expectedRange.categories, "categorties");
+        var range = {
+            interval: translator.updateBusinessRange.lastCall.args[0].interval,
+            minVisible: translator.from(this.canvas.left),
+            maxVisible: translator.from(this.canvas.width - this.canvas.right),
+            categories: translator.updateBusinessRange.lastCall.args[0].categories
+        };
+        const expectedRange = data.expectedRange;
+
+        if(expectedRange) {
+            if("categories" in expectedRange) {
+                assert.deepEqual(range.categories, expectedRange.categories, "categorties");
+            } else {
+                "minVisible" in expectedRange && assert.roughEqual(translator.to(expectedRange.minVisible, -1), this.canvas.left, 1.01, "minVisible value");
+                "maxVisible" in expectedRange && assert.roughEqual(translator.to(data.expectedRange.maxVisible, +1), this.canvas.width - this.canvas.right, 1.01, "maxVisible value");
+            }
+
+            "interval" in data.expectedRange && assert.equal(range.interval, data.expectedRange.interval, "interval");
+        }
+
+        const expectedVisibleArea = data.expectedVisibleArea;
+
+        if(expectedVisibleArea) {
+            assert.deepEqual(translator.getCanvasVisibleArea(), expectedVisibleArea);
+        }
     }
-});
+};
+
+QUnit.module("Data margins calculations", dataMarginsEnvironment);
 
 QUnit.test("minValueMargin - apply margins to the min", function(assert) {
     this.testMargins(assert, {
         options: {
             valueMarginsEnabled: true,
-            minValueMargin: 0.1
+            minValueMargin: 0.2,
+            endOnTick: false
         },
         range: {
             min: 100,
@@ -1254,9 +1298,7 @@ QUnit.test("minValueMargin - apply margins to the min", function(assert) {
         },
         ticks: [100, 200],
         expectedRange: {
-            min: 90,
-            max: 200,
-            minVisible: 90,
+            minVisible: 80,
             maxVisible: 200
         }
     });
@@ -1281,12 +1323,9 @@ QUnit.test("Margins for one point (dateTime)", function(assert) {
             max: date
         },
         expectedRange: {
-            min: date,
-            max: date,
-            minVisible: date,
-            interval: 0,
-            maxVisible: date
-        }
+            interval: 0
+        },
+        expectedVisibleArea: { min: 200, max: 500 }
     });
 });
 
@@ -1318,16 +1357,39 @@ QUnit.test("minValueMargin and maxValueMargin - apply margins to the both sides"
             maxValueMargin: 0.2
         },
         range: {
-            min: 100,
-            max: 200
+            min: 1000,
+            max: 2000
         },
-        ticks: [100, 200],
+        ticks: [1100, 1800],
         expectedRange: {
-            min: 90,
-            max: 220,
-            minVisible: 90,
-            maxVisible: 220
+            minVisible: 900,
+            maxVisible: 2200
+        },
+        expectedVisibleArea: {
+            min: this.canvas.left + Math.ceil(300 / (1 + 0.1 + 0.2) * 0.1),
+            max: this.canvas.width - this.canvas.right - Math.ceil(300 / (1 + 0.1 + 0.2) * 0.2)
         }
+    });
+});
+
+QUnit.test("minValueMargin and maxValueMargin - apply margins to the both sides. inverted axis", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            minValueMargin: 0.1,
+            maxValueMargin: 0.2,
+            inverted: true
+        },
+        range: {
+            min: 1000,
+            max: 2000
+        },
+        ticks: [1100, 1800],
+        expectedVisibleArea: {
+            min: this.canvas.left + Math.ceil(300 / (1 + 0.1 + 0.2) * 0.2),
+            max: this.canvas.width - this.canvas.right - Math.ceil(300 / (1 + 0.1 + 0.2) * 0.1)
+        },
+        isArgumentAxis: true
     });
 });
 
@@ -1345,10 +1407,28 @@ QUnit.test("marginOptions.size - apply margins by size", function(assert) {
         },
         ticks: [100, 200],
         expectedRange: {
-            min: 75,
-            max: 225,
             minVisible: 75,
             maxVisible: 225
+        }
+    });
+});
+
+QUnit.test("marginOptions.size. Margin size greater than canvas length - apply max possible margin value", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            size: 1000
+        },
+        range: {
+            min: 100,
+            max: 200
+        },
+        ticks: [100, 200],
+        expectedVisibleArea: {
+            min: 275,
+            max: 350
         }
     });
 });
@@ -1368,8 +1448,6 @@ QUnit.test("marginOptions.checkInterval, range interval less than spacing factor
         },
         ticks: [100, 220],
         expectedRange: {
-            min: 95,
-            max: 225,
             minVisible: 95,
             maxVisible: 225,
             interval: 10
@@ -1393,8 +1471,6 @@ QUnit.test("marginOptions.checkInterval, range interval more than spacing factor
         },
         ticks: [100, 220],
         expectedRange: {
-            min: 85,
-            max: 235,
             minVisible: 85,
             maxVisible: 235,
             interval: 30
@@ -1418,8 +1494,6 @@ QUnit.test("marginOptions.checkInterval, no range interval (one point in series)
         },
         ticks: [100, 220],
         expectedRange: {
-            min: 90,
-            max: 230,
             minVisible: 90,
             maxVisible: 230,
             interval: 20
@@ -1465,7 +1539,7 @@ QUnit.test("margins calculation. Range interval with tickInterval + tickInterval
 
     this.tickGeneratorSpy = sinon.stub();
     this.tickGeneratorSpy.returns(getTickGeneratorReturns());
-    this.tickGeneratorSpy.onCall(1).returns(getTickGeneratorReturns(5));
+    this.tickGeneratorSpy.onCall(1).returns(getTickGeneratorReturns(10));
 
     this.testMargins(assert, {
         options: {
@@ -1481,11 +1555,9 @@ QUnit.test("margins calculation. Range interval with tickInterval + tickInterval
         },
         ticks: [100, 220],
         expectedRange: {
-            min: 95,
-            max: 225,
             minVisible: 95,
             maxVisible: 225,
-            interval: 5
+            interval: 10
         },
         isArgumentAxis: true
     });
@@ -1520,9 +1592,9 @@ QUnit.test("margins calculation. Range interval with tickInterval + tickInterval
         checkInterval: true
     });
 
-    axis.createTicks(this.canvas);
+    axis.draw(this.canvas);
 
-    assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 2 * 1000 * 3600 * 24, "interval");
+    assert.equal(axis.getTranslator().getBusinessRange().interval, 2 * 1000 * 3600 * 24, "interval");
 });
 
 QUnit.test("margins calculation. Work week calculation: interval > work week", function(assert) {
@@ -1554,9 +1626,9 @@ QUnit.test("margins calculation. Work week calculation: interval > work week", f
         checkInterval: true
     });
 
-    axis.createTicks(this.canvas);
+    axis.draw(this.canvas);
 
-    assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 5 * 1000 * 3600 * 24, "interval");
+    assert.equal(axis.getTranslator().getBusinessRange().interval, 5 * 1000 * 3600 * 24, "interval");
 });
 
 QUnit.test("margins calculation. Work week calculation: work week === interval ", function(assert) {
@@ -1588,9 +1660,9 @@ QUnit.test("margins calculation. Work week calculation: work week === interval "
         checkInterval: true
     });
 
-    axis.createTicks(this.canvas);
+    axis.draw(this.canvas);
 
-    assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 4 * 1000 * 3600 * 24, "interval");
+    assert.equal(axis.getTranslator().getBusinessRange().interval, 4 * 1000 * 3600 * 24, "interval");
 });
 
 QUnit.test("margins calculation. Work week calculation: interval < day ", function(assert) {
@@ -1622,9 +1694,9 @@ QUnit.test("margins calculation. Work week calculation: interval < day ", functi
         checkInterval: true
     });
 
-    axis.createTicks(this.canvas);
+    axis.draw(this.canvas);
 
-    assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 4 * 1000 * 3600, "interval");
+    assert.equal(axis.getTranslator().getBusinessRange().interval, 4 * 1000 * 3600, "interval");
 });
 
 QUnit.test("margins calculation. Work week calculation: weekend >= interval ", function(assert) {
@@ -1656,9 +1728,9 @@ QUnit.test("margins calculation. Work week calculation: weekend >= interval ", f
         checkInterval: true
     });
 
-    axis.createTicks(this.canvas);
+    axis.draw(this.canvas);
 
-    assert.equal(this.translator.stub("updateBusinessRange").lastCall.args[0].interval, 1 * 1000 * 3600 * 24, "interval");
+    assert.equal(axis.getTranslator().getBusinessRange().interval, 1 * 1000 * 3600 * 24, "interval");
 });
 
 QUnit.test("marginOptions.checkInterval on valueAxis - ignore interval", function(assert) {
@@ -1676,87 +1748,11 @@ QUnit.test("marginOptions.checkInterval on valueAxis - ignore interval", functio
         },
         ticks: [100, 220],
         expectedRange: {
-            min: 100,
-            max: 220,
             minVisible: 100,
             maxVisible: 220,
             interval: 10
         },
         isArgumentAxis: false
-    });
-});
-
-QUnit.test("marginOptions.checkInterval on argumentAxis - correctly apply margins for uneven boundaries", function(assert) {
-    this.testMargins(assert, {
-        options: {
-            valueMarginsEnabled: true
-        },
-        marginOptions: {
-            checkInterval: true
-        },
-        range: {
-            min: 102.3,
-            max: 20105.5,
-            interval: 897.7
-        },
-        ticks: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000],
-        expectedRange: {
-            min: -346.6,
-            max: 20600,
-            minVisible: -346.6,
-            maxVisible: 20600,
-            interval: 897.7
-        },
-        isArgumentAxis: true
-    });
-});
-
-QUnit.test("marginOptions.size on argumentAxis - correctly apply margins for uneven boundaries", function(assert) {
-    this.testMargins(assert, {
-        options: {
-            valueMarginsEnabled: true
-        },
-        marginOptions: {
-            size: 20
-        },
-        range: {
-            min: 1998,
-            max: 2005,
-            interval: 1
-        },
-        ticks: [1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005],
-        expectedRange: {
-            min: 1997.75,
-            max: 2005.25,
-            minVisible: 1997.75,
-            maxVisible: 2005.25,
-            interval: 1
-        },
-        isArgumentAxis: true
-    });
-});
-
-QUnit.test("marginOptions.size on argumentAxis - correctly apply margins for uneven boundaries (large interval)", function(assert) {
-    this.testMargins(assert, {
-        options: {
-            valueMarginsEnabled: true
-        },
-        marginOptions: {
-            size: 20
-        },
-        range: {
-            min: 1950,
-            max: 2050,
-            interval: 20
-        },
-        ticks: [1950, 1970, 1990, 2010, 2030, 2050],
-        expectedRange: {
-            min: 1946.4,
-            max: 2053.6,
-            minVisible: 1946.4,
-            maxVisible: 2053.6
-        },
-        isArgumentAxis: true
     });
 });
 
@@ -1776,8 +1772,6 @@ QUnit.test("marginOptions.checkInterval and marginOptions.size, size more than i
         },
         ticks: [100, 200],
         expectedRange: {
-            min: 75,
-            max: 225,
             minVisible: 75,
             maxVisible: 225,
             interval: 10
@@ -1802,8 +1796,6 @@ QUnit.test("marginOptions.checkInterval and marginOptions.size, size less than i
         },
         ticks: [100, 220],
         expectedRange: {
-            min: 85,
-            max: 235,
             minVisible: 85,
             maxVisible: 235,
             interval: 30
@@ -1827,9 +1819,7 @@ QUnit.test("marginOptions.size and marginOptions.percentStick, min != 1, max = 1
         },
         ticks: [0.4, 1],
         expectedRange: {
-            min: 0.25,
-            max: 1,
-            minVisible: 0.25,
+            minVisible: 0.28,
             maxVisible: 1
         },
         isArgumentAxis: false
@@ -1851,16 +1841,14 @@ QUnit.test("marginOptions.size and marginOptions.percentStick, min = -1 - do not
         },
         ticks: [-1, -0.4],
         expectedRange: {
-            min: -1,
-            max: -0.25,
             minVisible: -1,
-            maxVisible: -0.25
+            maxVisible: -0.28
         },
         isArgumentAxis: false
     });
 });
 
-QUnit.test("Argument axis, marginOptions.percentStick - doption does not take effect, margin is calculated", function(assert) {
+QUnit.test("Argument axis, marginOptions.percentStick - option does not take effect, margin is calculated", function(assert) {
     this.testMargins(assert, {
         options: {
             valueMarginsEnabled: true
@@ -1875,8 +1863,6 @@ QUnit.test("Argument axis, marginOptions.percentStick - doption does not take ef
         },
         ticks: [0.4, 1],
         expectedRange: {
-            min: 0.25,
-            max: 1.15,
             minVisible: 0.25,
             maxVisible: 1.15
         },
@@ -1899,10 +1885,12 @@ QUnit.test("Has minValueMargin and marginOptions - apply minValueMargin and calc
         },
         ticks: [100, 200],
         expectedRange: {
-            min: 90,
-            max: 225,
             minVisible: 90,
-            maxVisible: 225
+            maxVisible: 222
+        },
+        expectedVisibleArea: {
+            min: 223,
+            max: 450
         }
     });
 });
@@ -1922,10 +1910,12 @@ QUnit.test("minValueMargin NaN and marginOptions - treat NaN as 0, calculate max
         },
         ticks: [100, 200],
         expectedRange: {
-            min: 100,
-            max: 225,
             minVisible: 100,
-            maxVisible: 225
+            maxVisible: 220
+        },
+        expectedVisibleArea: {
+            min: this.canvas.left,
+            max: this.canvas.width - this.canvas.right - 50
         }
     });
 });
@@ -1945,11 +1935,10 @@ QUnit.test("Has maxValueMargin and marginOptions - apply maxValueMargin and calc
         },
         ticks: [100, 200],
         expectedRange: {
-            min: 75,
-            max: 210,
-            minVisible: 75,
+            minVisible: 78,
             maxVisible: 210
-        }
+        },
+        expectedVisibleArea: { min: 250, max: 477 }
     });
 });
 
@@ -1971,11 +1960,10 @@ QUnit.test("valueMarginsEnabled false - do not apply margins", function(assert) 
         },
         ticks: [100, 200],
         expectedRange: {
-            min: 100,
-            max: 200,
             minVisible: 100,
             maxVisible: 200
-        }, isArgumentAxis: true
+        },
+        isArgumentAxis: true
     });
 });
 
@@ -2046,7 +2034,7 @@ QUnit.test("Calculate ticks on range with margins", function(assert) {
         max: 200
     });
 
-    axis.createTicks(this.canvas);
+    axis.draw(this.canvas);
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0], {
         categories: undefined,
@@ -2055,6 +2043,32 @@ QUnit.test("Calculate ticks on range with margins", function(assert) {
         checkMinDataVisibility: false,
         max: 220,
         min: 90
+    });
+});
+
+QUnit.test("Axis pass margin options for calculate ticks", function(assert) {
+    var axis = this.createAxis(true, {
+        valueMarginsEnabled: true
+    });
+
+    axis.setMarginOptions({
+        size: 100
+    });
+
+    axis.setBusinessRange({
+        min: 100,
+        max: 200
+    });
+
+    axis.draw(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0], {
+        categories: undefined,
+        isSpacedMargin: true,
+        checkMaxDataVisibility: false,
+        checkMinDataVisibility: false,
+        max: 225,
+        min: 75
     });
 });
 
@@ -2072,10 +2086,85 @@ QUnit.test("Margins and endOnTick = true - extend range with margins to boundary
         },
         ticks: [80, 240],
         expectedRange: {
-            min: 80,
-            max: 240,
             minVisible: 80,
             maxVisible: 240
+        }
+    });
+});
+
+QUnit.test("Margins and endOnTick = true - extend range with margins to boundary ticks if value margins are disabled", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: false,
+            endOnTick: true // emulation, see returned ticks below
+        },
+        range: {
+            min: 100,
+            max: 200
+        },
+        ticks: [80, 240],
+        expectedRange: {
+            minVisible: 80,
+            maxVisible: 240
+        }
+    });
+});
+
+QUnit.test("Apply only margins. if ticks go out of range but not behind margin", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            minValueMargin: 0.2,
+            maxValueMargin: 0.2,
+            endOnTick: true // emulation, see returned ticks below
+        },
+        range: {
+            min: 100,
+            max: 200
+        },
+        ticks: [90, 210],
+        expectedRange: {
+            minVisible: 80,
+            maxVisible: 220
+        }
+    });
+});
+
+QUnit.test("Apply endOnTick if tick margin greater then margin", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            minValueMargin: 0.2,
+            maxValueMargin: 0.2
+        },
+        range: {
+            min: 100,
+            max: 200
+        },
+        ticks: [80, 222],
+        expectedRange: {
+            minVisible: 80,
+            maxVisible: 222
+        }
+    });
+});
+
+QUnit.test("Do not cut margin if it greater than tick margin", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            size: 10
+        },
+        range: {
+            min: -40,
+            max: 55
+        },
+        ticks: [-40, 60],
+        expectedRange: {
+            minVisible: -42,
+            maxVisible: 60
         }
     });
 });
@@ -2097,6 +2186,46 @@ QUnit.test("T170398. Correct zero level on value axis, min and max less than zer
             max: 120,
             minVisible: 0,
             maxVisible: 120
+        }
+    });
+});
+
+QUnit.test("Correct zero level on value axis, min and max greater than zero - margins can not go below zero", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            size: 30
+        },
+        range: {
+            min: 0,
+            max: 100
+        },
+        ticks: [10, 90],
+        expectedRange: {
+            minVisible: 0,
+            maxVisible: 106
+        }
+    });
+});
+
+QUnit.test("Correct zero level on value axis, min and max less than zero - margins can not go below zero", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            size: 30
+        },
+        range: {
+            min: -100,
+            max: 0
+        },
+        ticks: [-90, -10],
+        expectedRange: {
+            minVisible: -106,
+            maxVisible: 0
         }
     });
 });
@@ -2144,6 +2273,50 @@ QUnit.test("T170398. Do not correct zero level on argument axis", function(asser
     });
 });
 
+QUnit.test("Correct zero level with endOnTick", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            endOnTick: true
+        },
+        range: {
+            min: 0,
+            max: 51
+        },
+        marginOptions: {
+            size: 30
+        },
+        ticks: [-10, 60],
+        expectedRange: {
+            minVisible: 0,
+            maxVisible: 60
+        },
+        isArgumentAxis: false
+    });
+});
+
+QUnit.test("Correct zero level with endOnTick, all data in negative area", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            endOnTick: true
+        },
+        range: {
+            min: -51,
+            max: 0
+        },
+        marginOptions: {
+            size: 30
+        },
+        ticks: [-60, 10],
+        expectedRange: {
+            minVisible: -60,
+            maxVisible: 0
+        },
+        isArgumentAxis: false
+    });
+});
+
 QUnit.test("Do not calculate any margin for discrete axis", function(assert) {
     this.testMargins(assert, {
         options: {
@@ -2179,13 +2352,7 @@ QUnit.test("Do not calculate any margin for semidiscrete axis", function(assert)
             interval: 1
         },
         ticks: [0, 1, 2],
-        expectedRange: {
-            min: 0,
-            max: 2,
-            minVisible: 0,
-            maxVisible: 2,
-            interval: 1
-        },
+        expectedVisibleArea: { min: 200, max: 500 },
         isArgumentAxis: true
     });
 });
@@ -2260,8 +2427,6 @@ QUnit.test("Logarithmic axis. marginOptions.checkInterval - correctly apply marg
         },
         ticks: [10, 1000, 100000],
         expectedRange: {
-            min: 0.1,
-            max: 10000000,
             minVisible: 0.1,
             maxVisible: 10000000,
             interval: 4
@@ -2297,78 +2462,23 @@ QUnit.test("Logarithmic axis. marginOptions.size - correctly apply margins", fun
     });
 });
 
-QUnit.test("Logarithmic axis. Correctly apply margins for uneven boundaries", function(assert) {
-    this.testMargins(assert, {
-        options: {
-            type: "logarithmic",
-            logarithmBase: 10,
-            valueMarginsEnabled: true
-        },
-        range: {
-            min: 102.3,
-            max: 200105.5,
-            axisType: "logarithmic",
-            base: 10,
-            interval: 0.1
-        },
-        ticks: [1000, 100000],
-        expectedRange: {
-            min: 102.3,
-            max: 200105.5,
-            minVisible: 102.3,
-            maxVisible: 200105.5
-        },
-        isArgumentAxis: true
-    });
-});
-
-QUnit.test("Logarithmic axis. marginOptions.checkInterval - correctly apply margins for uneven boundaries", function(assert) {
-    this.testMargins(assert, {
-        options: {
-            type: "logarithmic",
-            logarithmBase: 10,
-            valueMarginsEnabled: true
-        },
-        marginOptions: {
-            checkInterval: true
-        },
-        range: {
-            min: 1.3,
-            max: 200105.5,
-            axisType: "logarithmic",
-            base: 10,
-            interval: 0.1
-        },
-        ticks: [10, 1000, 100000],
-        expectedRange: {
-            min: 1.15,
-            max: 225000,
-            minVisible: 1.15,
-            maxVisible: 225000
-        },
-        isArgumentAxis: true
-    });
-});
-
 QUnit.test("DateTime axis - calculate margins and provide correct data type", function(assert) {
     this.testMargins(assert, {
         options: {
             dataType: "datetime",
             valueMarginsEnabled: true,
             minValueMargin: 0.1,
-            maxValueMargin: 0.2
+            maxValueMargin: 0.1
         },
         range: {
-            min: new Date(100),
-            max: new Date(200),
+            min: new Date(1000000),
+            max: new Date(2000000),
             dataType: "datetime"
         },
-        ticks: [new Date(100), new Date(200)],
+        ticks: [new Date(1000000), new Date(2000000)],
         expectedRange: {
-            min: new Date(90),
-            max: new Date(220),
-            minVisible: new Date(90),
-            maxVisible: new Date(220)
+            minVisible: new Date(900000),
+            maxVisible: new Date(2100000)
         }
     });
 });
@@ -2411,7 +2521,6 @@ QUnit.test("updateSize - margins and interval are recalculated", function(assert
     });
 
     axis.draw(this.canvas);
-    this.translator.stub("updateBusinessRange").reset();
 
     axis.updateSize({
         top: 200,
@@ -2422,15 +2531,17 @@ QUnit.test("updateSize - margins and interval are recalculated", function(assert
         height: 400
     });
 
-    assert.strictEqual(this.translator.stub("updateBusinessRange").callCount, 1);
+    const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
-    var range = this.translator.stub("updateBusinessRange").lastCall.args[0];
+    var range = translator.getBusinessRange();
 
-    assert.equal(range.min, 75);
-    assert.equal(range.max, 225);
-    assert.equal(range.minVisible, 75);
-    assert.equal(range.maxVisible, 225);
+    assert.equal(range.min, 90);
+    assert.equal(range.max, 210);
+    assert.equal(range.minVisible, 90);
+    assert.equal(range.maxVisible, 210);
     assert.equal(range.interval, 30);
+
+    assert.deepEqual(translator.getCanvasVisibleArea(), { min: 250, max: 650 });
 });
 
 QUnit.test("updateSize, synchronized axis - do not recalculate margins/interval", function(assert) {
@@ -2455,7 +2566,8 @@ QUnit.test("updateSize, synchronized axis - do not recalculate margins/interval"
     axis.setTicks({});
     axis.draw();
 
-    this.translator.stub("updateBusinessRange").reset();
+    const translator = translator2DModule.Translator2D.lastCall.returnValue;
+    sinon.spy(translator, "updateBusinessRange");
 
     axis.updateSize({
         top: 200,
@@ -2467,7 +2579,8 @@ QUnit.test("updateSize, synchronized axis - do not recalculate margins/interval"
     });
 
     // assert
-    assert.equal(this.translator.stub("updateBusinessRange").callCount, 0);
+    assert.equal(translator.updateBusinessRange.callCount, 0);
+    assert.deepEqual(translator.getCanvasVisibleArea(), { min: 200, max: 700 });
 });
 
 QUnit.test("createTicks after synchronization (zoom chart) - recalculate margins/interval. T616166", function(assert) {
@@ -2504,12 +2617,58 @@ QUnit.test("createTicks after synchronization (zoom chart) - recalculate margins
     });
 
     // assert
-    var range = this.translator.stub("updateBusinessRange").lastCall.args[0];
-    assert.equal(range.min, 75);
-    assert.equal(range.minVisible, 75);
-    assert.equal(range.max, 225);
-    assert.equal(range.maxVisible, 225);
+    var range = translator2DModule.Translator2D.lastCall.returnValue.getBusinessRange();
+    assert.equal(range.min, 90);
+    assert.equal(range.minVisible, 90);
+    assert.equal(range.max, 210);
+    assert.equal(range.maxVisible, 210);
     assert.equal(range.interval, 30);
+
+    assert.deepEqual(translator2DModule.Translator2D.lastCall.returnValue.getCanvasVisibleArea(), { min: 200, max: 700 });
+});
+
+QUnit.test("Boundary ticks calculated without margins", function(assert) {
+    var axis = this.createAxis(true, {
+        valueMarginsEnabled: true,
+        showCustomBoundaryTicks: true
+    });
+
+    axis.setBusinessRange({
+        min: 100,
+        max: 200
+    });
+    axis.setMarginOptions({
+        size: 100
+    });
+
+    axis.draw(this.canvas);
+
+    assert.deepEqual(axis.getFullTicks(), [100, 200]);
+});
+
+QUnit.test("Pass paddings in translator via canvas", function(assert) {
+    var axis = this.createAxis(true, {
+        valueMarginsEnabled: true,
+        showCustomBoundaryTicks: true
+    });
+
+    const translator = translator2DModule.Translator2D.lastCall.returnValue;
+    sinon.spy(translator, "updateCanvas");
+
+    axis.setBusinessRange({
+        min: 100,
+        max: 200
+    });
+    axis.setMarginOptions({
+        size: 100
+    });
+
+    axis.draw(this.canvas);
+
+    assert.deepEqual(translator.updateCanvas.lastCall.args[0], $.extend({}, this.canvas, {
+        startPadding: 50,
+        endPadding: 50
+    }));
 });
 
 QUnit.test("Margins and skipViewportExtending = true - do not extend range with margins to boundary ticks", function(assert) {
@@ -2535,80 +2694,51 @@ QUnit.test("Margins and skipViewportExtending = true - do not extend range with 
     });
 });
 
-QUnit.module("Data margins calculations after zooming", {
-    beforeEach: function() {
-        var that = this;
-        sinon.stub(translator2DModule, "Translator2D", function() {
-            return that.translator;
-        });
-
-        environment.beforeEach.call(this);
-
-        this.canvas = {
-            top: 200,
-            bottom: 200,
-            left: 200,
-            right: 200,
-            width: 700,
-            height: 400
-        };
-    },
-    afterEach: function() {
-        translator2DModule.Translator2D.restore();
-        environment.afterEach.call(this);
-    },
-    createAxis: function(isArgumentAxis, options) {
-        var renderer = this.renderer,
-            axis = new Axis({
-                renderer: renderer,
-                stripsGroup: renderer.g(),
-                labelAxesGroup: renderer.g(),
-                constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
-                axesContainerGroup: renderer.g(),
-                gridGroup: renderer.g(),
-                isArgumentAxis: isArgumentAxis,
-                eventTrigger: () => { }
-            });
-
-        axis.parser = function(value) { return value; };
-
-        axis.updateOptions($.extend(true, {
-            type: "continuous",
-            dataType: "numeric",
-            isHorizontal: true,
-            label: {
-                visible: true
-            }
-        }, options));
-        axis.validate();
-
-        return axis;
-    },
-    testMargins: function(assert, data) {
-        var axis = this.createAxis(data.isArgumentAxis, data.options);
-
-        this.generatedTicks = data.ticks;
-        axis.setBusinessRange(data.range);
-        axis.setMarginOptions(data.marginOptions || {});
-
-        this.translator.stub("updateBusinessRange").reset();
-
-        axis.visualRange(data.zoom[0], data.zoom[1]);
-        axis.createTicks(this.canvas);
-
-        assert.strictEqual(this.translator.stub("updateBusinessRange").callCount, data.zoom ? 2 : 1);
-
-        var range = this.translator.stub("updateBusinessRange").lastCall.args[0];
-
-        assert.equal(range.min, data.expectedRange.min);
-        assert.equal(range.max, data.expectedRange.max);
-        assert.equal(range.minVisible, data.expectedRange.minVisible);
-        assert.equal(range.maxVisible, data.expectedRange.maxVisible);
-        "interval" in data.expectedRange && assert.equal(range.interval, data.expectedRange.interval);
-    }
+QUnit.test("Do not apply tick margin if endOnTick false", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            minValueMargin: 0.1,
+            maxValueMargin: 0.2,
+            endOnTick: false
+        },
+        range: {
+            min: 100,
+            max: 200
+        },
+        ticks: [80, 240],
+        expectedRange: {
+            minVisible: 90,
+            maxVisible: 220
+        }
+    });
 });
 
-QUnit.test("Argument axis - do not apply margins on zoomed range", function(assert) {
+QUnit.test("Apply correct margins on redraw without canvas", function(assert) {
+    this.generatedTicks = [80, 220];
+    const axis = this.createAxis(true, {
+        valueMarginsEnabled: true
+    });
+
+    axis.setBusinessRange({
+        min: 100,
+        max: 200
+    });
+    axis.updateCanvas(this.canvas);
+
+    axis.draw(this.canvas);
+
+    axis.draw();
+
+    assert.deepEqual(axis.getTranslator().getCanvasVisibleArea(), {
+        max: 457,
+        min: 243
+    });
+});
+
+QUnit.module("Data margins calculations after zooming", dataMarginsEnvironment);
+
+QUnit.test("Argument axis - Apply margins on zoomed range", function(assert) {
     this.testMargins(assert, {
         options: {
             valueMarginsEnabled: true,
@@ -2622,16 +2752,14 @@ QUnit.test("Argument axis - do not apply margins on zoomed range", function(asse
         ticks: [130, 170],
         zoom: [120, 180],
         expectedRange: {
-            min: 90,
-            max: 220,
-            minVisible: 120,
-            maxVisible: 180
+            minVisible: 114,
+            maxVisible: 192
         },
         isArgumentAxis: true
     });
 });
 
-QUnit.test("max zoom is not defined - apply min zoom without margin, max bound with margin", function(assert) {
+QUnit.test("max zoom is not defined - apply margins when only min is defined in visual range ", function(assert) {
     this.testMargins(assert, {
         options: {
             valueMarginsEnabled: true,
@@ -2645,16 +2773,14 @@ QUnit.test("max zoom is not defined - apply min zoom without margin, max bound w
         ticks: [130, 170],
         zoom: [120, undefined],
         expectedRange: {
-            min: 90,
-            max: 220,
-            minVisible: 120,
-            maxVisible: 220
+            minVisible: 112,
+            maxVisible: 216
         },
         isArgumentAxis: true
     });
 });
 
-QUnit.test("min zoom is not defined - apply max zoom without margin, min bound with margin", function(assert) {
+QUnit.test("min zoom is not defined - apply margins when only max is defined in visual range", function(assert) {
     this.testMargins(assert, {
         options: {
             valueMarginsEnabled: true,
@@ -2668,10 +2794,8 @@ QUnit.test("min zoom is not defined - apply max zoom without margin, min bound w
         ticks: [130, 170],
         zoom: [undefined, 180],
         expectedRange: {
-            min: 90,
-            max: 220,
-            minVisible: 90,
-            maxVisible: 180
+            minVisible: 92,
+            maxVisible: 196
         },
         isArgumentAxis: true
     });
@@ -2690,39 +2814,84 @@ QUnit.test("Argument axis - calculate correct interval by zoom data", function(a
             interval: 10
         },
         ticks: [150, 160],
-        zoom: [150, 162, true],
+        zoom: [150, 180],
         expectedRange: {
-            min: 90,
-            max: 220,
-            minVisible: 150,
-            maxVisible: 162,
+            minVisible: 147,
+            maxVisible: 186,
             interval: 10
         },
         isArgumentAxis: true
     });
 });
 
-QUnit.test("Argument axis, endOnTick = true - do not extend range to boundary ticks", function(assert) {
+QUnit.test("Argument axis, endOnTick = true - do not extend range to boundary ticks if zoom action", function(assert) {
     this.testMargins(assert, {
         options: {
             valueMarginsEnabled: true,
             minValueMargin: 0.1,
-            maxValueMargin: 0.2,
-            endOnTick: true // emulation, see returned ticks below
+            maxValueMargin: 0.2
         },
         range: {
             min: 100,
-            max: 200
+            max: 200,
+            interval: 10
         },
-        ticks: [130, 170],
-        zoom: [140, 160],
+        ticks: [150, 160],
+        zoom: {
+            startValue: 150,
+            endValue: 180
+        },
         expectedRange: {
-            min: 90,
-            max: 220,
-            minVisible: 140,
-            maxVisible: 160
+            minVisible: 147,
+            maxVisible: 186,
+            interval: 10
         },
         isArgumentAxis: true
+    });
+});
+
+
+QUnit.test("Do not correct zero level if min < 0", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            minValueMargin: 0.3,
+            maxValueMargin: 0.1
+        },
+        range: {
+            min: -100,
+            max: 200
+        },
+        zoom: {
+            startValue: 20,
+            endValue: 120
+        },
+        expectedRange: {
+            minVisible: -10,
+            maxVisible: 130
+        }
+    });
+});
+
+QUnit.test("Do not correct zero level if max > 0", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            minValueMargin: 0.1,
+            maxValueMargin: 0.3
+        },
+        range: {
+            min: -200,
+            max: 200
+        },
+        zoom: {
+            startValue: -120,
+            endValue: -20
+        },
+        expectedRange: {
+            minVisible: -130,
+            maxVisible: 10
+        }
     });
 });
 
@@ -3723,8 +3892,6 @@ QUnit.test("Keep", function(assert) {
 
     const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
 
-    assert.equal(businessRange.min, 200);
-    assert.equal(businessRange.max, 300);
     assert.equal(businessRange.minVisible, 10);
     assert.equal(businessRange.maxVisible, 40);
 });
@@ -3921,33 +4088,6 @@ QUnit.test("Auto. visualRange shows the end of data - shift", function(assert) {
     assert.equal(businessRange.max, 300);
     assert.equal(businessRange.minVisible, 295);
     assert.equal(businessRange.maxVisible, 300);
-});
-
-QUnit.test("Shift mode takes into account margings", function(assert) {
-    this.updateOptions({
-        visualRange: [115, 120],
-        valueMarginsEnabled: true,
-        maxValueMargin: 0.01
-    });
-    this.axis.validate();
-    this.axis.setBusinessRange({
-        min: 100,
-        max: 120
-    });
-
-    this.axis.setBusinessRange({
-        min: 0,
-        max: 300
-    });
-
-    this.axis.createTicks(this.canvas);
-
-    const businessRange = this.translator.updateBusinessRange.lastCall.args[0];
-
-    assert.equal(businessRange.min, 0);
-    assert.equal(businessRange.max, 303);
-    assert.equal(businessRange.minVisible, 298);
-    assert.equal(businessRange.maxVisible, 303);
 });
 
 QUnit.test("Auto. Discrete axis - keep if old categories are part of new categories", function(assert) {

@@ -56,7 +56,11 @@ export default CollectionWidget.inherit({
     },
 
     _isItemEquals: function(item1, item2) {
-        return JSON.stringify(item1) === JSON.stringify(item2);
+        try {
+            return JSON.stringify(item1) === JSON.stringify(item2);
+        } catch(e) {
+            return item1 === item2;
+        }
     },
 
     _partialRefresh: function() {
@@ -75,7 +79,11 @@ export default CollectionWidget.inherit({
 
     _refreshItemsCache: function() {
         if(this.option("repaintChangesOnly")) {
-            this._itemsCache = extend(true, [], this._editStrategy.itemsGetter());
+            try {
+                this._itemsCache = extend(true, [], this._editStrategy.itemsGetter());
+            } catch(e) {
+                this._itemsCache = extend([], this._editStrategy.itemsGetter());
+            }
         }
     },
 

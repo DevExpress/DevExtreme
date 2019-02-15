@@ -1982,6 +1982,7 @@ declare module DevExpress.ui {
         headerFilter?: { height?: number, visible?: boolean, width?: number, allowSearch?: boolean, searchTimeout?: number, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Specifies whether to highlight rows and cells whose data changed. */
         highlightChanges?: boolean;
+        keyboardNavigation?: { enterKeyAction?: 'startEdit' | 'moveFocus', enterKeyDirection?: 'none' | 'column' | 'row', editOnKeyPress?: boolean };
         /** Configures the load panel. */
         loadPanel?: { enabled?: boolean | 'auto', text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean, shading?: boolean, shadingColor?: string };
         /** Specifies text shown when the widget does not display any data. */
@@ -4292,6 +4293,7 @@ declare module DevExpress.ui {
         expandedRowKeys?: Array<any>;
         /** Specifies whether nodes appear expanded or collapsed after filtering is applied. */
         expandNodesOnFiltering?: boolean;
+        filterMode?: 'exactMatch' | 'fullBranch' | 'withAncestors';
         /** Specifies which data field defines whether the node has children. */
         hasItemsExpr?: string | Function;
         /** Specifies which data field contains nested items. Set this option when your data has a hierarchical structure. */
@@ -4919,7 +4921,7 @@ declare module DevExpress.ui {
         itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies the currently selected value. May be an object if dataSource contains objects and valueExpr is not set. */
         value?: any;
-        /** Specifies which data field provides the widget's value. When this option is not set, the value is the entire data object. */
+        /** Specifies which data field provides unique values to the widget's value. When the data field is not set, the value is the entire data object. */
         valueExpr?: string | Function;
     }
     export class DataExpressionMixin {
@@ -5712,12 +5714,10 @@ declare module DevExpress.ui {
     export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | { type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime', precision?: number, currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date) };
     /** An object that serves as a namespace for methods displaying a message in an application/site. */
     export class dialog {
-        /** Creates an alert dialog message containing a single "OK" button. */
-        static alert(message: string, title: string): Promise<void> & JQueryPromise<void>;
-        /** Creates a confirm dialog that contains "Yes" and "No" buttons. */
-        static confirm(message: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
+        static alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
+        static confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
         /** Creates a dialog with custom buttons. */
-        static custom(options: { title?: string, message?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean }): any;
+        static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string }): any;
     }
     /** An object that serves as a namespace for the methods that work with DevExtreme CSS Themes. */
     export class themes {
@@ -5751,8 +5751,10 @@ declare module DevExpress.exporter {
         column?: DevExpress.ui.dxDataGridColumn;
         /** The data object of the cell's row. */
         data?: any;
+        groupSummaryItems?: Array<{ name?: string, value?: any }>;
         /** The type of the cell's row. */
         rowType?: string;
+        totalSummaryItemName?: string;
         /** The cell's value. */
         value?: any;
     }
@@ -5897,6 +5899,7 @@ declare module DevExpress.viz {
     interface BaseWidgetLoadingIndicator {
         /** Colors the background of the loading indicator. */
         backgroundColor?: string;
+        enabled?: boolean;
         /** Specifies font options for the loading indicator. */
         font?: Font;
         /** Specifies whether to show the loading indicator or not. */
@@ -6157,6 +6160,7 @@ declare module DevExpress.viz {
     }
     /** Declares a collection of constant lines belonging to the argument axis. */
     export interface dxChartArgumentAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
+        displayBehindSeries?: boolean;
         /** Specifies whether to extend the axis's default visual range to display the constant line. */
         extendAxis?: boolean;
         /** Configures the constant line label. */
@@ -6240,7 +6244,7 @@ declare module DevExpress.viz {
         /** Configures the minor grid. */
         minorGrid?: { visible?: boolean, color?: string, width?: number, opacity?: number };
         /** Configures the appearance of minor axis ticks. */
-        minorTick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number };
+        minorTick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number, shift?: number };
         /** Controls the empty space between the minimum series points and the axis. Applies only to the axes of the "continuous" and "logarithmic" type. */
         minValueMargin?: number;
         /** Specifies how transparent the axis line should be. */
@@ -6250,7 +6254,7 @@ declare module DevExpress.viz {
         /** Configures the appearance of strips. */
         stripStyle?: dxChartCommonAxisSettingsStripStyle;
         /** Configures the appearance of major axis ticks. */
-        tick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number };
+        tick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number, shift?: number };
         /** Configures axis titles. */
         title?: dxChartCommonAxisSettingsTitle;
         /** Adds an empty space between the axis and the minimum and maximum series points. */
@@ -6472,6 +6476,7 @@ declare module DevExpress.viz {
     }
     /** Declares a collection of constant lines belonging to the value axis. */
     export interface dxChartValueAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
+        displayBehindSeries?: boolean;
         /** Specifies whether to extend the axis's default visual range to display the constant line. */
         extendAxis?: boolean;
         /** Configures the constant line label. */
@@ -6586,6 +6591,7 @@ declare module DevExpress.viz {
     export interface dxPieChartLegend extends BaseChartLegend {
         /** Specifies the text for a hint that appears when a user hovers the mouse pointer over a legend item. */
         customizeHint?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
+        /** Allows you to change the order, text, and visibility of legend items. */
         customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>);
         /** Specifies a callback function that returns the text to be displayed by a legend item. */
         customizeText?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
@@ -6691,6 +6697,7 @@ declare module DevExpress.viz {
     }
     /** Defines an array of the argument axis constant lines. */
     export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
+        displayBehindSeries?: boolean;
         /** Specifies whether to extend the axis to display the constant line. */
         extendAxis?: boolean;
         /** An object defining constant line label options. */
@@ -6881,6 +6888,7 @@ declare module DevExpress.viz {
     }
     /** Defines an array of the value axis constant lines. */
     export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
+        displayBehindSeries?: boolean;
         /** Specifies whether to extend the axis to display the constant line. */
         extendAxis?: boolean;
         /** An object defining constant line label options. */
@@ -6983,6 +6991,7 @@ declare module DevExpress.viz {
         columnCount?: number;
         /** Specifies a blank space between legend columns in pixels. */
         columnItemSpacing?: number;
+        /** Allows you to change the order, text, and visibility of legend items. */
         customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
         /** Specifies font options for the text displayed in the legend. */
         font?: Font;
@@ -8055,6 +8064,8 @@ declare module DevExpress.viz {
         animation?: BaseGaugeAnimation;
         /** Specifies the color of the parent page element. */
         containerBackgroundColor?: string;
+        /** Configures the loading indicator. */
+        loadingIndicator?: BaseGaugeLoadingIndicator;
         /** A function that is executed when a tooltip becomes hidden. */
         onTooltipHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /** A function that is executed when a tooltip appears. */
@@ -8078,6 +8089,9 @@ declare module DevExpress.viz {
         easing?: 'easeOutCubic' | 'linear';
         /** Indicates whether or not animation is enabled. */
         enabled?: boolean;
+    }
+    /** Configures the loading indicator. */
+    interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     }
     /** Specifies options of the gauge's range container. */
     interface BaseGaugeRangeContainer {
@@ -8108,6 +8122,8 @@ declare module DevExpress.viz {
         minorTick?: { color?: string, opacity?: number, length?: number, width?: number, visible?: boolean };
         /** Specifies an interval between minor ticks. */
         minorTickInterval?: number;
+        /** Specifies the minimum distance between two neighboring major ticks in pixels. */
+        scaleDivisionFactor?: number;
         /** Specifies the start value for the scale of the gauge. */
         startValue?: number;
         /** Specifies options of the gauge's major ticks. */
@@ -8173,7 +8189,6 @@ declare module DevExpress.viz {
         label?: dxCircularGaugeScaleLabel;
         /** Specifies the orientation of scale ticks. */
         orientation?: 'center' | 'inside' | 'outside';
-        scaleDivisionFactor?: number;
     }
     /** Specifies common options for scale labels. */
     export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
@@ -8214,6 +8229,7 @@ declare module DevExpress.viz {
         horizontalOrientation?: 'center' | 'left' | 'right';
         /** Specifies common options for scale labels. */
         label?: dxLinearGaugeScaleLabel;
+        /** Specifies the minimum distance between two neighboring major ticks in pixels. */
         scaleDivisionFactor?: number;
         /** Specifies the orientation of scale ticks. Applies only if the geometry.orientation option is "horizontal". */
         verticalOrientation?: 'bottom' | 'center' | 'top';
@@ -8367,9 +8383,13 @@ declare module DevExpress.viz {
         /** Shows the point label and keeps it visible until the hide() method is called. */
         show(holdVisible: boolean): void;
     }
+    /** An object that provides information about a legend item in the Chart and PolarChart widgets. */
     export interface BaseChartLegendItem {
+        /** The series that the item represents on the legend. */
         series?: baseSeriesObject;
+        /** The text that the legend item displays. */
         text?: string;
+        /** Indicates and specifies whether the legend item is visible. */
         visible?: boolean;
     }
     /** This section describes the Series object, which represents a series. */
@@ -8442,9 +8462,13 @@ declare module DevExpress.viz {
         /** Shows the funnel item's tooltip. */
         showTooltip(): void;
     }
+    /** An object that provides information about a legend item in the Funnel widget. */
     export interface FunnelLegendItem {
+        /** The funnel item that the legend item represents. */
         item?: dxFunnelItem;
+        /** The text that the legend item displays. */
         text?: string;
+        /** Indicates and specifies whether the legend item is visible. */
         visible?: boolean;
     }
     /** This section describes the Point object, which represents a series point. */
@@ -8465,11 +8489,17 @@ declare module DevExpress.viz {
     /** This section describes the Series object, which represents a series. */
     export class pieChartSeriesObject extends baseSeriesObject {
     }
+    /** An object that provides information about a legend item in the PieChart widget. */
     export interface PieChartLegendItem {
+        /** The argument of the point(s) that the legend item represents. */
         argument?: string | Date | number;
+        /** The zero-based index of the legend item used to identify the item among other legend items with the same argument. */
         argumentIndex?: number;
+        /** An array of points that the legend item represents. Can contain more than one point only in a multi-series PieChart. */
         points?: Array<piePointObject>;
+        /** The text that the legend item displays. */
         text?: any;
+        /** Indicates and specifies whether the legend item is visible. */
         visible?: boolean;
     }
     /** This section describes the Series object, which represents a series. */
@@ -8593,11 +8623,17 @@ declare module DevExpress.viz {
         /** Sets the selection state of the layer element. */
         selected(state: boolean): void;
     }
+    /** An object that provides information about a legend item in the VectorMap widget. */
     export interface VectorMapLegendItem {
+        /** The color of the legend item's marker. */
         color?: string;
+        /** The end value of the group that the legend item indicates. */
         end?: number;
+        /** The diameter of the legend item's marker in pixels. */
         size?: number;
+        /** The start value of the group that the legend item indicates. */
         start?: number;
+        /** Indicates and specifies whether the legend item is visible. */
         visible?: boolean;
     }
     /** Specifies options for the series of the PieChart widget. */

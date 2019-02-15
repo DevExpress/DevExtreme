@@ -366,6 +366,16 @@
  */
 
 /**
+ * @typedef {string} Enums.GridEnterKeyAction
+ * @enum {'startEdit'|'moveFocus'}
+ */
+
+/**
+ * @typedef {string} Enums.GridEnterKeyDirection
+ * @enum {'none'|'column'|'row'}
+ */
+
+/**
  * @typedef {string} Enums.GridEditRefreshMode
  * @enum {'full'|'reshape'|'repaint'}
  */
@@ -948,4 +958,9 @@
 /**
  * @typedef {string} Enums.TreeListColumnButtonName
  * @enum {'add'|'cancel'|'delete'|'edit'|'save'|'undelete'}
+ */
+
+/**
+ * @typedef {string} Enums.TreeListFilterMode
+ * @enum {'exactMatch'|'fullBranch'|'withAncestors'}
  */

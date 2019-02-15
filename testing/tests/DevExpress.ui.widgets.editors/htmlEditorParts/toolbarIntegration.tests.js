@@ -201,21 +201,23 @@ QUnit.module("Toolbar integration", {
 
     test("Editor should consider toolbar height", (assert => {
         const height = 100;
+        const $container = $("#htmlEditor");
         let markup = "";
 
         for(let i = 1; i < 50; i++) {
             markup += `<p>test ${i}</p>`;
         }
 
-        $("#htmlEditor").html(markup).dxHtmlEditor({
+        $container.html(markup).dxHtmlEditor({
             height: height,
             toolbar: { items: ["bold"] }
         });
 
-        const quillContainerHeight = $(`#htmlEditor .${QUILL_CONTAINER_CLASS}`).outerHeight();
-        const toolbarHeight = $(`#htmlEditor .${TOOLBAR_WRAPPER_CLASS}`).outerHeight();
+        const quillContainerHeight = $container.find(`.${QUILL_CONTAINER_CLASS}`).outerHeight();
+        const toolbarHeight = $container.find(`.${TOOLBAR_WRAPPER_CLASS}`).outerHeight();
+        const bordersWidth = parseInt($container.css("border-top-width")) + parseInt($container.css("border-bottom-width"));
 
-        assert.roughEqual(quillContainerHeight + toolbarHeight, height, 1, "Toolbar + editor equals to the predefined height");
+        assert.roughEqual(quillContainerHeight + toolbarHeight + bordersWidth, height, 1, "Toolbar + editor equals to the predefined height");
     }));
 
     test("Toolbar correctly disposed after repaint", (assert) => {

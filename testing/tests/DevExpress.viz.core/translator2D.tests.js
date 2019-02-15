@@ -124,6 +124,20 @@ QUnit.test('Create vertical translator', function(assert) {
     assert.equal(translator._canvasOptions.ratioOfCanvasRange, 4.125);
 });
 
+QUnit.test('Create vertical translator with paddings', function(assert) {
+    var range = $.extend({ minVisible: 10, maxVisible: 90, invert: true }, numericRange),
+        canvas = $.extend({ startPadding: 50, endPadding: 50 }, canvasTemplate),
+        translator;
+
+    translator = this.createTranslator(range, canvas, { isHorizontal: false });
+
+    assert.equal(translator._canvasOptions.startPoint, 60);
+    assert.equal(translator._canvasOptions.endPoint, 290);
+    assert.equal(translator._canvasOptions.invert, false);
+
+    assert.equal(translator._canvasOptions.canvasLength, 230);
+});
+
 QUnit.test('Create horizontal translator', function(assert) {
     var range = $.extend({ minVisible: 10, maxVisible: 90, invert: true }, numericRange),
         canvas = $.extend({}, canvasTemplate),
@@ -151,6 +165,20 @@ QUnit.test('Create horizontal translator', function(assert) {
     assert.equal(translator._canvasOptions.canvasLength, 510);
     assert.equal(translator._canvasOptions.rangeDoubleError, 0.01);
     assert.equal(translator._canvasOptions.ratioOfCanvasRange, 6.375);
+});
+
+QUnit.test('Create horizontal translator with paddings', function(assert) {
+    var range = $.extend({ minVisible: 10, maxVisible: 90, invert: true }, numericRange),
+        canvas = $.extend({ startPadding: 50, endPadding: 50 }, canvasTemplate),
+        translator;
+
+    translator = this.createTranslator(range, canvas, { isHorizontal: true });
+
+    assert.equal(translator._canvasOptions.startPoint, 120);
+    assert.equal(translator._canvasOptions.endPoint, 530);
+    assert.equal(translator._canvasOptions.invert, true);
+
+    assert.equal(translator._canvasOptions.canvasLength, 410);
 });
 
 QUnit.test('Create numeric translator', function(assert) {
@@ -2233,6 +2261,14 @@ QUnit.test("other values, direction vertical", function(assert) {
     assert.strictEqual(translator.translateSpecialCase('canvas_position_end'), 500, 'End position. Range is positive. Invert = true');
 });
 
+QUnit.test("canvas_position_start, canvas_position_end with paddings", function(assert) {
+    var translator = this.createTranslator({ min: 100, max: 1000, axisType: 'continuous', dataType: 'numeric', invert: undefined }, { isHorizontal: false });
+    translator.updateCanvas($.extend({ startPadding: 10, endPadding: 40 }, canvasTemplate));
+
+    assert.strictEqual(translator.translateSpecialCase('canvas_position_start'), 340, 'Start position. Range is positive. Invert = true');
+    assert.strictEqual(translator.translateSpecialCase('canvas_position_end'), 10, 'End position. Range is positive. Invert = true');
+});
+
 QUnit.test('All translators process special cases', function(assert) {
     var that = this;
     function checkTranslator(value, expected, message, range) {
@@ -2626,6 +2662,34 @@ QUnit.test("Scroll with whole range endless whole range with one side. Inverted"
         min: 120,
         scale: 1,
         translate: -10
+    });
+});
+
+QUnit.test("Do not go out from wholeRange. number with big precision", function(assert) {
+    const range = $.extend({ minVisible: 0.2152829, maxVisible: 9.96876, invert: false }, numericRange);
+    const canvas = { left: 6, right: 26, width: 400, startPadding: 54, endPadding: 54 };
+
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.deepEqual(translator.zoom(-2.745928338762212, 0.9739413680781759, { startValue: 10, endValue: 0 }), {
+        max: 10,
+        min: 0,
+        scale: -0.9737828,
+        translate: -372.58427
+    });
+});
+
+QUnit.test("Do not go out from wholeRange. number with big precision. Inverted", function(assert) {
+    const range = $.extend({ minVisible: 0.2152829, maxVisible: 9.96876, invert: true }, numericRange);
+    const canvas = { left: 6, right: 26, width: 400, startPadding: 54, endPadding: 54 };
+
+    const translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
+
+    assert.deepEqual(translator.zoom(-2.745928338762212, 0.9739413680781759, { startValue: 0, endValue: 10 }), {
+        max: 0,
+        min: 10,
+        scale: 0.9739414,
+        translate: -2.53746
     });
 });
 

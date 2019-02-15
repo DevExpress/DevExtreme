@@ -606,6 +606,7 @@ var DateBox = DropDownEditor.inherit({
             currentValue = this.dateOption("value");
 
         if(text === this._getDisplayedText(currentValue)) {
+            this._validateValue(currentValue);
             return;
         }
 
@@ -845,9 +846,13 @@ var DateBox = DropDownEditor.inherit({
     },
 
     dateValue: function(value, dxEvent) {
-        if(this._isValueChanged(value) && dxEvent) {
+        const isValueChanged = this._isValueChanged(value);
+
+        if(isValueChanged && dxEvent) {
             this._saveValueChangeEvent(dxEvent);
-        } else if(this._isTextChanged(value)) {
+        }
+
+        if(!isValueChanged && this._isTextChanged(value)) {
             this._updateValue(value);
         }
 

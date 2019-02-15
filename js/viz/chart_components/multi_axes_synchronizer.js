@@ -88,8 +88,8 @@ var populateAxesInfo = function(axes) {
             majorTicks = ticksValues.majorTicksValues,
             options = axis.getOptions(),
             businessRange = axis.getTranslator().getBusinessRange(),
-            minValue = businessRange.minVisible,
-            maxValue = businessRange.maxVisible,
+            visibleArea = axis.getVisibleArea(),
+
             axisInfo,
             tickInterval = axis._tickInterval,
             synchronizedValue = options.synchronizedValue;
@@ -101,6 +101,13 @@ var populateAxesInfo = function(axes) {
             !(businessRange.breaks && businessRange.breaks.length) &&
             axis.getViewport().action !== "zoom"
         ) {
+
+            axis.applyMargins();
+
+            const startValue = axis.getTranslator().from(visibleArea[0]);
+            const endValue = axis.getTranslator().from(visibleArea[1]);
+            let minValue = startValue < endValue ? startValue : endValue;
+            let maxValue = startValue < endValue ? endValue : startValue;
 
             if(minValue === maxValue && _isDefined(synchronizedValue)) {
                 tickInterval = _abs(majorTicks[0] - synchronizedValue) || 1;
@@ -273,10 +280,10 @@ var updateTickValuesIfSynchronizedValueUsed = function(axesInfo) {
                 tickValues.push(tick);
             }
         }
-        while(tickValues[0] < minValue) {
+        while(tickValues[0] + tickInterval / 10 < minValue) {
             tickValues.shift();
         }
-        while(tickValues[tickValues.length - 1] > maxValue) {
+        while(tickValues[tickValues.length - 1] - tickInterval / 10 > maxValue) {
             tickValues.pop();
         }
     });

@@ -563,6 +563,11 @@ if(devices.real().deviceType === "desktop") {
 
             assert.deepEqual(this.keyboard.caret(), { start: 0, end: 7 }, "next group has been selected");
         });
+
+        test("keydown event shouldn't be prevented on 'Esc' key press", (assert) => {
+            this.keyboard.press("esc");
+            assert.notOk(this.keyboard.event.isDefaultPrevented(), "event should not be prevented");
+        });
     });
 
     module("Events", setupModule, () => {
@@ -991,6 +996,50 @@ if(devices.real().deviceType === "desktop") {
 
             this.keyboard.type("38");
             assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved to month");
+        });
+
+        test("Move caret to the next group after format length overflow", (assert) => {
+            this.instance.option({
+                advanceCaret: true,
+                displayFormat: "yy MM"
+            });
+
+            this.keyboard.type("15");
+            assert.strictEqual(this.instance.option("text"), "15 10", "text is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, "caret was moved to month");
+        });
+
+        test("Don't move caret to next group when format length is less than limit length", (assert) => {
+            this.instance.option({
+                advanceCaret: true,
+                displayFormat: "y MM"
+            });
+
+            this.keyboard.type("2011");
+            assert.strictEqual(this.instance.option("text"), "2011 10", "text is correct");
+            assert.deepEqual(this.keyboard.caret(), { start: 5, end: 7 }, "caret was moved to month");
+        });
+
+        test("Typed year and value should be in the same century when short year format is used", (assert) => {
+            this.instance.option({
+                advanceCaret: true,
+                displayFormat: "yy MM",
+                value: new Date(1995, 10, 11)
+            });
+
+            this.keyboard
+                .type("15")
+                .press("enter");
+
+            assert.strictEqual(this.instance.option("value").getFullYear(), 1915, "year is correct");
+
+            this.instance.option("value", new Date(2010, 10, 11));
+            this.keyboard
+                .press("left")
+                .type("14")
+                .press("enter");
+
+            assert.strictEqual(this.instance.option("value").getFullYear(), 2014, "year is correct");
         });
 
         test("Move caret to the next group after string length overflow", (assert) => {

@@ -1809,8 +1809,6 @@ QUnit.test("DateBox must immediately display 'value' passed via the constructor 
 });
 
 QUnit.test("DateBox must pass value to calendar correctly if value is empty string", function(assert) {
-
-
     this.reinitFixture({
         value: '',
         pickerType: 'calendar',
@@ -2002,6 +2000,30 @@ QUnit.test("should execute custom validator while validation state reevaluating"
 
     assert.notOk(dateBox.option("isValid"));
     assert.notStrictEqual(dateBox.option("text"), "");
+});
+
+QUnit.test("should rise validation event once after value is changed by calendar (T714599)", (assert) => {
+    const validationCallbackStub = sinon.stub().returns(false);
+    const dateBox = $("#dateBoxWithPicker")
+        .dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            value: new Date(2015, 5, 9, 15, 54, 13),
+            opened: true
+        })
+        .dxValidator({
+            validationRules: [{
+                type: "custom",
+                validationCallback: validationCallbackStub
+            }]
+        })
+        .dxDateBox("instance");
+
+    $(".dx-calendar-cell").eq(0).trigger("dxclick");
+    $(".dx-popup-done.dx-button").trigger("dxclick");
+
+    assert.notOk(dateBox.option("opened"));
+    assert.ok(validationCallbackStub.calledOnce);
 });
 
 QUnit.test("Editor should reevaluate validation state after change text to the current value", function(assert) {
@@ -3895,6 +3917,29 @@ QUnit.test("dxDateBox should validate value after change 'min' option", function
     dateBox.option("min", new Date(2015, 6, 5));
 
     assert.ok(dateBox.option("isValid"), "datebox is valid");
+});
+
+QUnit.testInActiveWindow("DateBox should validate value after remove an invalid characters", function(assert) {
+    const $element = $("#dateBox");
+    const dateBox = $element.dxDateBox({
+        value: new Date(2015, 6, 18),
+        pickerType: "calendar"
+    }).dxDateBox("instance");
+    const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+    const keyboard = keyboardMock($input);
+
+    keyboard
+        .caret(dateBox.option("text").length - 1)
+        .type("d")
+        .press("enter");
+
+    assert.notOk(dateBox.option("isValid"));
+
+    keyboard
+        .press("backspace")
+        .press("enter");
+
+    assert.ok(dateBox.option("isValid"));
 });
 
 

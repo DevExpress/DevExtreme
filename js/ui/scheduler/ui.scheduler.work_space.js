@@ -1434,6 +1434,7 @@ var SchedulerWorkSpace = Widget.inherit({
             rowClass: TIME_PANEL_ROW_CLASS,
             cellTemplate: this.option("timeCellTemplate"),
             getCellText: this._getTimeText.bind(this),
+            getCellDate: this._getTimeCellDate.bind(this),
             groupCount: this._getGroupCount(),
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined
         });
@@ -2083,7 +2084,7 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         var coordinates = {
-            cellShift: position.left + shift.cellShift,
+            cellPosition: position.left + shift.cellPosition,
             top: position.top + shift.top,
             left: position.left + shift.left,
             rowIndex: position.rowIndex,
@@ -2121,7 +2122,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return {
             top: timeShift * this.getCellHeight(),
             left: 0,
-            cellShift: 0
+            cellPosition: 0
         };
     },
 

@@ -42,14 +42,6 @@ module.exports = {
         return screenFactorFunc(windowWidth);
     },
 
-    openWindow: function() {
-        if(this.hasProperty("open")) {
-            return windowObject.open();
-        }
-
-        return null;
-    },
-
     getNavigator: function() {
         return this.hasWindow() ? windowObject.navigator : {
             userAgent: ""

@@ -14,7 +14,6 @@ var BaseGauge = {
 
     /**
     * @name BaseGaugeOptions.loadingIndicator
-    * @inherits BaseWidget.LoadingIndicator
     */
     loadingIndicator: {
         /**

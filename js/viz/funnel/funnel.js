@@ -278,7 +278,7 @@ var dxFunnel = require("../core/base_widget").inherit({
 
 var ThemeManager = require("../core/base_theme_manager").BaseThemeManager.inherit({
     _themeSection: "funnel",
-    _fontFields: ["loadingIndicator.font", "title.font", "title.subtitle.font", "tooltip.font", "export.font", "legend.font", "label.font"]
+    _fontFields: ["loadingIndicator.font", "legend.title.font", "legend.title.subtitle.font", "title.font", "title.subtitle.font", "tooltip.font", "export.font", "legend.font", "label.font"]
 });
 
 require("../../core/component_registrator")("dxFunnel", dxFunnel);

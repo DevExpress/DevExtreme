@@ -88,7 +88,9 @@ var displayNames = [
     "(UTC+02:00) Kaliningrad",
     "(UTC+04:00) Port Louis",
     "(UTC+13:00) Samoa",
-    "(UTC+12:00) Fiji"
+    "(UTC+12:00) Fiji",
+    "(UTC+8:45) Eucla",
+    "(UTC+10:30) Lord Howe Island"
 ];
 var timezones = [{
     "id": "Africa/Bamako",
@@ -3498,8 +3500,21 @@ var timezones = [{
     "offsets": [-8, -7],
     "offsetIndices": "010101101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010",
     "untils": "-r0emw0|ast80|7x9g0|ast80|bmtus0|1tz2s0|2dyg0|b9gdg0|9cyk0|9d440|9cyk0|9d440|9cyk0|9d440|9cyk0|9d440|9px80|9d440|9cyk0|9d440|9cyk0|3lpg0|f4d80|64g40|clmk0|9d440|9px80|905g0|9px80|9d440|9cyk0|9d440|9cyk0|9d440|9cyk0|9d440|9cyk0|9d440|9px80|905g0|9px80|9d440|9cyk0|9d440|9cyk0|9d440|9cyk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|8a840|afuk0|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|6udg0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6udg0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6udg0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6udg0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6udg0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6udg0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|6hes0|c8nw0|Infinity"
-}
-];
+}, {
+    "id": "Australia/Eucla",
+    "title": "Eucla",
+    "winIndex": 100,
+    "offsets": [8.591111111111112, 8.75, 9.75],
+    "offsetIndices": "01212121212121212121",
+    "untils": "-12nxx74|b053ls|49s2c|cxfms0|4h180|9d440|9cyk0|ghf1g0|6hc00|4ir9c0|6hc00|40r400|5eg00|7p9hc0|5reo0|b5uo0|7x6o0|asw00|7x6o0|Infinity"
+}, {
+    "id": "Australia/Lord_Howe",
+    "title": "Eucla",
+    "winIndex": 101,
+    "offsets": [10.605555555555556, 10, 10.5, 11.5, 11],
+    "offsetIndices": "01232323232424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424",
+    "untils": "-133j6sk|18x8f0k|c8uu0|6u7w0|c8tg0|6h980|c8tg0|6h980|c8tg0|6h980|c8tg0|777y0|b5w20|7k6m0|biuq0|7k6m0|biuq0|777y0|biuq0|6ham0|c8s20|6ham0|c8s20|6ham0|c8s20|6u9a0|c8s20|6ham0|c8s20|6ham0|c8s20|7x5a0|asxe0|7x5a0|asxe0|7x5a0|asxe0|7x5a0|b5w20|7k6m0|7x820|asum0|b5w20|7x5a0|asxe0|7x5a0|asxe0|7x5a0|b5w20|7k6m0|b5w20|7x5a0|asxe0|7k6m0|b5w20|8a3y0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9q1e0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9q1e0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9pym0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9q1e0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9d2q0|9czy0|9q1e0|9czy0|9d2q0|9czy0|9d2q0|Infinity"
+}];
 
 module.exports = {
     displayNames: displayNames,

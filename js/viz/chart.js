@@ -624,7 +624,7 @@ var dxChart = AdvancedChart.inherit({
         }
 
         const businessRange = argumentAxis.getTranslator().getBusinessRange();
-        const zoomRange = that._argumentAxes[that._displayedArgumentAxisIndex].getViewport();
+        const zoomRange = argumentAxis.getViewport();
         let min = zoomRange ? zoomRange.min : 0;
         let max = zoomRange ? zoomRange.max : 0;
 
@@ -831,8 +831,8 @@ var dxChart = AdvancedChart.inherit({
     _createCrosshairCursor: function() {
         var that = this,
             options = that._themeManager.getOptions("crosshair") || {},
-            index = that._displayedArgumentAxisIndex,
-            axes = !that._isRotated() ? [[that._argumentAxes[index]], that._valueAxes] : [that._valueAxes, [that._argumentAxes[index]]],
+            argumentAxis = that.getArgumentAxis(),
+            axes = !that._isRotated() ? [[argumentAxis], that._valueAxes] : [that._valueAxes, [argumentAxis]],
             parameters = { canvas: that._getCommonCanvas(), panes: that._getPanesParameters(), axes: axes };
 
         if(!options || !options.enabled) {
@@ -1129,7 +1129,7 @@ var dxChart = AdvancedChart.inherit({
     resetVisualRange() {
         const that = this;
         that._argumentAxes.forEach(axis => {
-            axis.resetVisualRange(that._argumentAxes[that._displayedArgumentAxisIndex] !== axis);
+            axis.resetVisualRange(that.getArgumentAxis() !== axis);
         });
         that._valueAxes.forEach(axis => axis.resetVisualRange(false)); // T602156
 
@@ -1145,7 +1145,7 @@ var dxChart = AdvancedChart.inherit({
             }
 
             if(axis.isArgumentAxis) {
-                if(chart._argumentAxes.filter(a => a === axis)[0] !== chart._argumentAxes[chart._displayedArgumentAxisIndex]) {
+                if(axis !== chart.getArgumentAxis()) {
                     return;
                 }
                 chart._argumentAxes.filter(a => a !== axis).forEach(a => a.visualRange(visualRange, { start: true, end: true }));
@@ -1257,6 +1257,8 @@ dxChart.prototype._optionChangesMap["visualRange"] = "VISUAL_RANGE";
 
 dxChart.addPlugin(require("./chart_components/shutter_zoom"));
 dxChart.addPlugin(require("./chart_components/zoom_and_pan"));
+dxChart.addPlugin(require("./core/annotations").plugins.core);
+dxChart.addPlugin(require("./core/annotations").plugins.chart);
 
 registerComponent("dxChart", dxChart);
 module.exports = dxChart;

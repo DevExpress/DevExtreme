@@ -882,7 +882,7 @@ QUnit.test("shading height should change after iOS address bar resize (T653828)"
         }).dxOverlay("instance");
 
     $wrapper = $(overlay.$content().parent());
-    assert.strictEqual($wrapper.css("minHeight").replace("px", ""), window.innerHeight, "overlay wrapper has right min-height style");
+    assert.strictEqual($wrapper.css("minHeight").replace("px", ""), String(window.innerHeight), "overlay wrapper has right min-height style");
 });
 
 QUnit.test("shading color should be customized by option", function(assert) {
@@ -3398,9 +3398,16 @@ QUnit.test("overlay should get next z-index if the first one has been created be
     zIndex.create();
 
     var overlay = new Overlay("#overlay", { visible: true }),
-        content = overlay.content();
+        content = $(overlay.content());
 
-    assert.strictEqual(getComputedStyle(content).zIndex, "1502");
+    assert.strictEqual(String(getComputedStyle(content[0]).zIndex), "1502");
 
     assert.strictEqual(zIndex.create(), 1503, "new zindex is larger than overlay's");
+});
+
+QUnit.test("it should not be possible to remove unexisting zIndex", function(assert) {
+    const index = zIndex.create();
+    zIndex.remove(9999);
+
+    assert.strictEqual(zIndex.create(), index + 1, "the next index has been created");
 });
