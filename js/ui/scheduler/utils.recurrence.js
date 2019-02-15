@@ -759,7 +759,7 @@ var prepareDate = function(startDate, dateRules) {
 
         for(var field in current) {
             if(field === "byday") {
-                date.setDate(date.getDate() - date.getDay() + dateRules[i][field]);
+                date.setDate(date.getDate() - date.getDay() + current[field]);
                 needSetDefault = false;
                 break;
             }
