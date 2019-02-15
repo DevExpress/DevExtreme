@@ -1,4 +1,5 @@
 import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
 import Widget from "../widget/ui.widget";
 import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
@@ -124,7 +125,9 @@ var FileManager = Widget.inherit({
         });
         this._loadFilesToFilesView();
         this._filesView.$element().addClass(FILE_MANAGER_FILES_VIEW_CLASS);
-        this._filesView.$element().on("click", function() { this._itemsViewAreaActive = true; }.bind(this));
+
+        var onClickHandler = () => { this._itemsViewAreaActive = true; };
+        eventsEngine.on(this._filesView.$element(), "click", onClickHandler.bind(this));
     },
 
     _createEnterNameDialog: function(title, buttonText) {

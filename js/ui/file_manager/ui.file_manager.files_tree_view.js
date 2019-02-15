@@ -1,3 +1,5 @@
+import eventsEngine from "../../events/core/events_engine";
+
 import Widget from "../widget/ui.widget";
 import { extend } from "../../core/utils/extend";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
@@ -19,7 +21,7 @@ var FileManagerFilesTreeView = Widget.inherit({
             createChildren: this._onFilesTreeViewCreateChildren.bind(this),
             onItemClick: this._onFilesTreeViewItemClick.bind(this)
         });
-        this._filesTreeView.$element().on("click", this._raiseClick.bind(this));
+        eventsEngine.on(this._filesTreeView.$element(), "click", this._raiseClick.bind(this));
     },
 
     _onFilesTreeViewCreateChildren: function(parent) {

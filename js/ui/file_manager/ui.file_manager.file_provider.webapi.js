@@ -32,20 +32,20 @@ var WebAPIFileProvider = FileProvider.inherit({
     },
 
     deleteItems: function(items) {
-        return this._executeRequest(this._options.deleteUrl, { id: this._getItemsIds(items) });
+        return this._executeRequest(this._options.deleteUrl, { id: items[0].relativeName });
     },
 
     moveItems: function(items, destinationFolder) {
         return this._executeRequest(this._options.moveUrl, {
-            sourceId: this._getItemsIds(items),
-            destinationId: destinationFolder.relativeName
+            sourceId: items[0].relativeName,
+            destinationId: destinationFolder.relativeName + "/" + items[0].name
         });
     },
 
     copyItems: function(items, destinationFolder) {
         return this._executeRequest(this._options.copyUrl, {
-            sourceId: this._getItemsIds(items),
-            destinationId: destinationFolder.relativeName
+            sourceId: items[0].relativeName,
+            destinationId: destinationFolder.relativeName + "/" + items[0].name
         });
     },
 
