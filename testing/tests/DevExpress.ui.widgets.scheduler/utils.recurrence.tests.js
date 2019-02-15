@@ -116,6 +116,12 @@ QUnit.test('getDatesByRecurrence should handle strings with COUNT & BYDAY & DAIL
     assert.deepEqual(dates, [new Date(2018, 4, 14), new Date(2018, 4, 21), new Date(2018, 4, 28), new Date(2018, 5, 4), new Date(2018, 5, 11), new Date(2018, 5, 18), new Date(2018, 5, 25)], 'date are right');
 });
 
+QUnit.test('getDatesByRecurrence should handle strings with COUNT & BYDAY & WEEKLY & INTERVAL', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: "FREQ=WEEKLY;BYDAY=MO;INTERVAL=2;COUNT=2", start: new Date(2019, 2, 4, 9), min: new Date(2019, 2, 4, 10), max: new Date(2019, 6, 10) });
+
+    assert.deepEqual(dates, [new Date(2019, 2, 4, 9), new Date(2019, 2, 18, 9)], 'date are right');
+});
+
 QUnit.test('getDatesByRecurrence should handle strings with COUNT & BYMONTH', function(assert) {
     var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=2;COUNT=10', start: new Date(2017, 0, 1), min: new Date(2017, 0, 1), max: new Date(2017, 11, 20) });
 
