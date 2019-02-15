@@ -274,7 +274,7 @@ QUnit.test("Resize", function(assert) {
 });
 
 QUnit.test("palette", function(assert) {
-    sinon.spy(paletteModule, "Palette");
+    sinon.spy(paletteModule, "createPalette");
 
     stubAlgorithm.normalizeValues.returns([1, 1]);
     stubAlgorithm.getFigures.returns([
@@ -294,13 +294,14 @@ QUnit.test("palette", function(assert) {
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].fill, "red");
     assert.deepEqual(items[2].smartAttr.lastCall.args[0].fill, "#804000");
 
-    assert.deepEqual(paletteModule.Palette.lastCall.args[1], {
+    assert.deepEqual(paletteModule.createPalette.lastCall.args[1], {
+        count: 3,
         useHighlight: true,
         extensionMode: "blend"
     }, "useHighlight");
 
     // teardown
-    paletteModule.Palette.restore();
+    paletteModule.createPalette.restore();
 });
 
 QUnit.test("Funnel fires drawn event", function(assert) {
@@ -454,7 +455,7 @@ QUnit.test("Update inverted option", function(assert) {
 });
 
 QUnit.test("Update palette", function(assert) {
-    sinon.spy(paletteModule, "Palette");
+    sinon.spy(paletteModule, "createPalette");
 
     stubAlgorithm.normalizeValues.returns([1, 1]);
     stubAlgorithm.getFigures.returns([
