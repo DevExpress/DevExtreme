@@ -376,10 +376,11 @@ var dxBarGauge = dxBaseGauge.inherit({
 
         return (this._bars || []).map(b => {
             return {
-                id: b._index,
+                id: b.index,
                 item: {
                     value: b.getValue(),
-                    color: b.getColor()
+                    color: b.getColor(),
+                    index: b.index
                 },
                 text: _formatValue(b.getValue(), formatOptions),
                 visible: true,
@@ -393,7 +394,7 @@ var BarWrapper = function(index, context) {
     var that = this;
     that._context = context;
     that._tracker = context.renderer.arc().attr({ "stroke-linejoin": "round" });
-    that._index = index;
+    that.index = index;
 };
 
 _extend(BarWrapper.prototype, {
@@ -415,7 +416,7 @@ _extend(BarWrapper.prototype, {
             context = that._context;
 
         this._visible = true;
-        context.tracker.attach(that._tracker, that, { index: that._index });
+        context.tracker.attach(that._tracker, that, { index: that.index });
 
         that._background = context.renderer.arc().attr({ "stroke-linejoin": "round", fill: context.backgroundColor }).append(context.group);
         that._settings = that._settings || { x: context.x, y: context.y, startAngle: context.baseAngle, endAngle: context.baseAngle };
@@ -464,7 +465,7 @@ _extend(BarWrapper.prototype, {
         that._bar.attr(that._settings);
         that._tracker.attr(that._settings);
         if(that._context.textEnabled) {
-            var text = _formatValue(that._value, that._context.formatOptions, { index: that._index });
+            var text = _formatValue(that._value, that._context.formatOptions, { index: that.index });
             that._line.attr({ visibility: text === "" ? "hidden" : null });
             that._line.rotate(_convertAngleToRendererSpace(that._angle), that._context.x, that._context.y);
             cosSin = _getCosAndSin(that._angle);
