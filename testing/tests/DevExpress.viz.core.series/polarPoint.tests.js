@@ -163,6 +163,22 @@ QUnit.test("Draw point with errorBar", function(assert) {
     });
 });
 
+QUnit.test("Draw errorBar with relative edgeLength", function(assert) {
+    this.data = { argument: 1, value: 1, lowError: 3, highError: 4 };
+    createAndDrawPoint.call(this, {
+        type: "bar",
+        errorBars: {
+            color: "red",
+            lineWidth: 3,
+            edgeLength: 0.8,
+            opacity: 1
+        }
+    });
+
+    assert.strictEqual(this.renderer.path.callCount, 1);
+    assert.deepEqual(this.renderer.path.lastCall.args[0], [[100, 186, 100, 186], [100, 186, 100, 188], [100, 188, 100, 188]]);
+});
+
 QUnit.test("Draw error bar - show highError", function(assert) {
     this.data = { argument: 1, value: 1, lowError: 3, highError: 4 };
     createAndDrawPoint.call(this, {
