@@ -1409,14 +1409,19 @@ module.exports = Class.inherit((function() {
         },
 
         /**
-       * @name PivotGridDataSourceMethods.expandAll
-       * @publicName expandAll(id)
-       * @param1 id:number|string
-       */
+        * @name PivotGridDataSourceMethods.expandAll
+        * @publicName expandAll(id)
+        * @param1 id:number|string
+        */
         expandAll: function(id) {
             var field = this.field(id);
             if(field && field.area) {
                 field.expanded = true;
+                if(field && field.levels) {
+                    field.levels.forEach(f => {
+                        f.expanded = true;
+                    });
+                }
                 this.load();
             }
         },
