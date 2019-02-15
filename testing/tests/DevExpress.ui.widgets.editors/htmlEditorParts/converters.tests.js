@@ -4,22 +4,53 @@ import { getQuill } from "ui/html_editor/quill_importer";
 
 const { test } = QUnit;
 
-QUnit.module("Delta converter", () => {
+QUnit.module("Delta converter", {
+    beforeEach: () => {
+        const Quill = getQuill();
+        this.deltaConverter = new DeltaConverter();
+        this.quillInstance = new Quill(document.getElementById("htmlEditor"), {});
+        this.deltaConverter.setQuillInstance(this.quillInstance);
+    } }, () => {
     test("it convert an editor content to semantic HTML markup", (assert) => {
-        const deltaConverter = new DeltaConverter();
         const deltaOps = [{
             insert: 'test',
             attributes: {
                 bold: true
             }
         }];
-        const Quill = getQuill();
-        const quillInstance = new Quill(document.getElementById("htmlEditor"), {});
 
-        deltaConverter.setQuillInstance(quillInstance);
-        quillInstance.setContents(deltaOps);
+        this.quillInstance.setContents(deltaOps);
 
-        assert.equal(deltaConverter.toHtml(), "<strong>test</strong>", "It converts delta operations");
+        assert.strictEqual(this.deltaConverter.toHtml(), "<strong>test</strong>", "It converts delta operations");
+    });
+
+    test("it should respect more the one level indent between list items", (assert) => {
+        const deltaOps = [{
+            insert: "item1-1"
+        }, {
+            insert: "\n",
+            attributes: { list: "bullet" }
+        }, {
+            insert: "item3-1"
+        }, {
+            insert: "\n",
+            attributes: {
+                indent: 2,
+                list: "bullet"
+            }
+        }, {
+            insert: "item1-2"
+        }, {
+            insert: "\n",
+            attributes: {
+                list: "bullet"
+            }
+        }];
+        const expected = "<ul><li>item1-1<ul><ul><li>item3-1</li></ul></li></ul></li><li>item1-2</li></ul>";
+
+        this.quillInstance.setContents(deltaOps);
+
+        assert.strictEqual(this.deltaConverter.toHtml(), expected, "convert list with indent more the one step");
     });
 });
 
