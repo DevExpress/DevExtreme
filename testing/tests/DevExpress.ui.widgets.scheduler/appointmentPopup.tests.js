@@ -73,7 +73,6 @@ QUnit.test("showAppointmentPopup method with passed a recurrence appointment sho
     assert.equal(endDateBox.option("value").valueOf(), appointments[0].endDate.valueOf(), "Value in end dateBox valid");
 });
 
-
 QUnit.test("showAppointmentPopup should render a popup only once", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
 
@@ -323,7 +322,7 @@ QUnit.test("Popup should contain switch to turning on of recurrence editor", fun
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: "a" });
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff");
+        repeatOnEditor = repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
 
     assert.equal(repeatOnEditor.option("value"), false, "value is right");
 });
@@ -334,7 +333,7 @@ QUnit.test("RepeatOn switch should be turned on if recurrence rule was set on in
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff");
+        repeatOnEditor = repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
 
     assert.equal(repeatOnEditor.option("value"), true, "switch is turned on");
 });
@@ -344,7 +343,7 @@ QUnit.test("RepeatOn switch should change value if recurrence rule was changed",
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff");
+        repeatOnEditor = repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
 
     assert.equal(repeatOnEditor.option("value"), true, "switch is turned on");
 
@@ -373,7 +372,7 @@ QUnit.test("Recurrence editor container should be visible after turn on switch",
 
     assert.equal(recurrenceEditor._$container.css("display"), "none", "Container is not visible");
 
-    var repeatOnEditor = form.getEditor("repeatOnOff");
+    var repeatOnEditor = repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
     repeatOnEditor.option("value", true);
 
     assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
@@ -390,7 +389,7 @@ QUnit.test("Recurrence editor container should be visible after turn on switch, 
 
     assert.equal(recurrenceEditor._$container.css("display"), "none", "Container is not visible");
 
-    var repeatOnEditor = form.getEditor("repeatOnOff");
+    var repeatOnEditor = repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
     repeatOnEditor.option("value", true);
 
     assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
@@ -436,7 +435,7 @@ QUnit.test("Recurrence editor should have default value if repeatOnOff editor tu
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: "a" });
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff");
+        repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
 
     repeatOnEditor.option("value", true);
 
@@ -921,4 +920,28 @@ QUnit.test("Clicking on 'Repeat' label should toggle recurrence editor", functio
 
     editorLabel.trigger("dxclick");
     assert.ok($recurrenceEditorContainer.is(':hidden'), "Recurrence editor is hidden");
+});
+
+QUnit.test("Multiple showing appointment popup for recurrence appointments should work correctly", function(assert) {
+    this.instance.showAppointmentPopup({
+        text: "Appointment 1",
+        startDate: new Date(2017, 4, 1, 9, 30),
+        endDate: new Date(2017, 4, 1, 11)
+    });
+
+    this.instance.hideAppointmentPopup(true);
+    this.instance.option("recurrenceEditMode", "series");
+
+    this.instance.showAppointmentPopup({
+        text: "Appointment 2",
+        startDate: new Date(2017, 4, 1, 9, 30),
+        endDate: new Date(2017, 4, 1, 11),
+        recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10"
+    });
+
+    var popup = this.instance.getAppointmentPopup(),
+        $checkboxes = $(popup.$content()).find(".dx-checkbox");
+
+    assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "Right checkBox was checked");
+    assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true, "Right checkBox was checked");
 });

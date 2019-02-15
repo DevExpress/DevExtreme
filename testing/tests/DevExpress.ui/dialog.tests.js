@@ -16,7 +16,7 @@ QUnit.module("dialog tests", {
         fx.off = true;
 
         this.title = "Title here";
-        this.message = "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>";
+        this.messageHtml = "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>";
         this.dialog = function() {
             return $(".dx-dialog-wrapper");
         };
@@ -55,7 +55,7 @@ QUnit.test("dialog show/hide", function(assert) {
     var instance,
         options = {
             title: this.title,
-            message: this.message
+            messageHtml: this.messageHtml
         },
         result = "DialogResultValue";
 
@@ -94,20 +94,20 @@ QUnit.test("dialog content", function(assert) {
     var instance,
         options = {
             title: this.title,
-            message: this.message
+            messageHtml: this.messageHtml
         };
 
     instance = dialog.custom(options);
     instance.show();
 
     assert.equal(this.dialog().find(".dx-popup-title").text(), this.title, "Actual title is equal to expected.");
-    assert.equal((this.dialog().find(".dx-dialog-message").html() || "").toLowerCase(), this.message.toLowerCase(), "Actual message is equal to expected.");
+    assert.equal((this.dialog().find(".dx-dialog-message").html() || "").toLowerCase(), this.messageHtml.toLowerCase(), "Actual message is equal to expected.");
     instance.hide();
 
     assert.ok(this.thereIsNoDialog(), "Dialog is not shown.");
 
     options = {
-        message: this.message
+        messageHtml: this.messageHtml
     };
     assert.equal(instance.title, undefined, "dialog.title value isn't set.");
 
@@ -126,7 +126,7 @@ QUnit.test("dialog content without title", function(assert) {
     var instance,
         options = {
             title: this.title,
-            message: this.message,
+            messageHtml: this.messageHtml,
             showTitle: false
         };
 
@@ -142,7 +142,7 @@ QUnit.test("dialog buttons", function(assert) {
         expected = "ButtonReturnValue#2",
         options = {
             title: this.title,
-            message: this.message,
+            messageHtml: this.messageHtml,
             buttons: [{
                 text: "ButtonCaption#1",
                 onClick: function() {
@@ -177,7 +177,7 @@ QUnit.test("alert dialog", function(assert) {
     assert.ok(this.thereIsNoDialog(), "Dialog is not shown.");
 
     dialog.title = this.title;
-    dialog.alert(this.message);
+    dialog.alert(this.messageHtml);
 
     assert.ok(this.thereIsDialog(), "Dialog is shown.");
     assert.equal(this.dialog().find(".dx-popup-title").text(), this.title, "Dialog default title is used.");
@@ -198,7 +198,7 @@ QUnit.test("confirm dialog", function(assert) {
 
     assert.ok(this.thereIsNoDialog(), "Dialog is not shown.");
 
-    dialog.confirm(this.message, this.title).done(function(value) {
+    dialog.confirm(this.messageHtml, this.title).done(function(value) {
         actual = value;
     });
 
@@ -211,7 +211,7 @@ QUnit.test("confirm dialog", function(assert) {
 QUnit.test("dialog overlay content has 'dx-rtl' class when RTL is enabled", function(assert) {
     config({ rtlEnabled: true });
 
-    dialog.confirm(this.message, this.title);
+    dialog.confirm(this.messageHtml, this.title);
 
     assert.ok($('.dx-overlay-content').hasClass('dx-rtl'), "'dx-rlt' class is present");
 
@@ -222,7 +222,7 @@ QUnit.test("dialog should reset active element on showing", function(assert) {
     var instance,
         options = {
             title: "title",
-            message: "message"
+            messageHtml: "message"
         },
         resetActiveElementCalled = 0,
         originalResetActiveElement = domUtils.resetActiveElement;

@@ -65,7 +65,6 @@ QUnit.test("Work space should have correct currentDate option", function(assert)
     assert.deepEqual($element.find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance").option("currentDate"), new Date(2015, 1, 28), "Work space has a right currentDate option");
 });
 
-
 QUnit.test("Work space should have correct min option", function(assert) {
     this.createInstance({
         min: new Date(2015, 0, 28)
@@ -912,6 +911,71 @@ QUnit.test("timeCellTemplate should have correct options", function(assert) {
     assert.equal(templateOptions.text, "3:00 AM", "text options is ok");
 });
 
+QUnit.test("timeCellTemplate should contains the date field of data parameter in the Day view", function(assert) {
+    var resultDates = [];
+    this.createInstance({
+        currentView: "day",
+        views: ["day"],
+        currentDate: new Date(2016, 8, 5),
+        startDayHour: 0,
+        endDayHour: 4,
+        cellDuration: 60,
+        timeCellTemplate: function(itemData) {
+            resultDates.push(itemData.date);
+        }
+    });
+
+    assert.equal(resultDates.length, 4);
+    assert.deepEqual(resultDates[0], new Date(2016, 8, 5), "date parameter for the first time cell");
+    assert.deepEqual(resultDates[1], new Date(2016, 8, 5, 1), "date parameter for the second time cell");
+    assert.deepEqual(resultDates[2], new Date(2016, 8, 5, 2), "date parameter for the third time cell");
+    assert.deepEqual(resultDates[3], new Date(2016, 8, 5, 3), "date parameter for the fourth time cell");
+});
+
+QUnit.test("timeCellTemplate should contains the date field of data parameter in Week view", function(assert) {
+    var resultDates = [];
+    this.createInstance({
+        currentView: "week",
+        views: ["week"],
+        currentDate: new Date(2016, 8, 5),
+        firstDayOfWeek: 0,
+        startDayHour: 0,
+        endDayHour: 4,
+        cellDuration: 60,
+        timeCellTemplate: function(itemData) {
+            resultDates.push(itemData.date);
+        }
+    });
+
+    assert.equal(resultDates.length, 4);
+    assert.deepEqual(resultDates[0], new Date(2016, 8, 4), "date parameter for the first time cell");
+    assert.deepEqual(resultDates[1], new Date(2016, 8, 4, 1), "date parameter for the second time cell");
+    assert.deepEqual(resultDates[2], new Date(2016, 8, 4, 2), "date parameter for the third time cell");
+    assert.deepEqual(resultDates[3], new Date(2016, 8, 4, 3), "date parameter for the fourth time cell");
+});
+
+QUnit.test("timeCellTemplate should contains the date field of data parameter in workWeek view", function(assert) {
+    var resultDates = [];
+    this.createInstance({
+        currentView: "workWeek",
+        views: ["workWeek"],
+        currentDate: new Date(2016, 8, 5),
+        firstDayOfWeek: 0,
+        startDayHour: 0,
+        endDayHour: 4,
+        cellDuration: 60,
+        timeCellTemplate: function(itemData) {
+            resultDates.push(itemData.date);
+        }
+    });
+
+    assert.equal(resultDates.length, 4);
+    assert.deepEqual(resultDates[0], new Date(2016, 8, 5), "date parameter for the first time cell");
+    assert.deepEqual(resultDates[1], new Date(2016, 8, 5, 1), "date parameter for the second time cell");
+    assert.deepEqual(resultDates[2], new Date(2016, 8, 5, 2), "date parameter for the third time cell");
+    assert.deepEqual(resultDates[3], new Date(2016, 8, 5, 3), "date parameter for the fourth time cell");
+});
+
 QUnit.test("resourceCellTemplate should have correct options", function(assert) {
     var templateOptions;
 
@@ -1174,7 +1238,6 @@ QUnit.test("dateCellTemplate should have correct options in agenda view", functi
 
 });
 
-
 QUnit.test("Agenda has right arguments in resourceCellTemplate arguments", function(assert) {
     var params;
 
@@ -1211,7 +1274,6 @@ QUnit.test("Agenda has right arguments in resourceCellTemplate arguments", funct
 
     assert.deepEqual(params, { id: 1, text: "John", color: "#A2a" }, "Cell text is OK");
 });
-
 
 QUnit.test("workSpace recalculation after render cellTemplates", function(assert) {
     this.createInstance({

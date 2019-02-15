@@ -213,7 +213,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
         each(that._focusedViews, function(index, view) {
             if(view) {
                 view.renderCompleted.add(function(e) {
-                    var $element = view.element();
+                    var $element = view.element(),
+                        isFullUpdate = !e || e.changeType === "refresh",
+                        isFocusedViewCorrect = that._focusedView && that._focusedView.name === view.name,
+                        needUpdateFocus = false,
+                        isAppend = e && (e.changeType === "append" || e.changeType === "prepend");
+
                     eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
                     eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), "." + ROW_CLASS + " > td, ." + ROW_CLASS, {
                         viewIndex: index,
@@ -222,10 +227,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                     that._initKeyDownProcessor(that, $element, that._keyDownHandler);
 
-                    var isFullUpdate = !e || e.changeType === "refresh";
-
-                    if(that._focusedView && that._focusedView.name === view.name && (that._isNeedFocus || (that._isHiddenFocus && isFullUpdate))) {
-                        that._updateFocus();
+                    if(isFocusedViewCorrect) {
+                        needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
+                        needUpdateFocus && that._updateFocus();
                     }
                 });
             }
@@ -747,7 +751,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
         column = this._columnsController.getVisibleColumns()[this.getView("rowsView").getCellIndex($cell)];
         row = this._dataController.items()[this._getRowIndex($cell && $cell.parent())];
 
-        isEditingAllowed = (editingOptions.allowUpdating || row && row.inserted) && column.allowEditing;
+        if(column.allowEditing) {
+            let isDataRow = !row || row.rowType === "data";
+            isEditingAllowed = editingOptions.allowUpdating ? isDataRow : row && row.inserted;
+        }
 
         if(!isEditingAllowed) {
             this._editingController.closeEditCell();

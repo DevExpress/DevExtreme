@@ -3643,7 +3643,7 @@ QUnit.test("Recurrence repeat-end editor should be closed after reopening appoin
     this.instance.showAppointmentPopup(firstAppointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff"),
+        repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance"),
         repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
     repeatOnEditor.option("value", true);
@@ -3654,7 +3654,7 @@ QUnit.test("Recurrence repeat-end editor should be closed after reopening appoin
     this.instance.showAppointmentPopup(secondAppointment);
 
     form = this.instance.getAppointmentDetailsForm(),
-    repeatOnEditor = form.getEditor("repeatOnOff"),
+    repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance"),
     repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
     repeatOnEditor.option("value", true);
@@ -4860,6 +4860,65 @@ QUnit.test("Appointment should have right position on timeline month view", func
     assert.roughEqual($appointment.position().left, $targetCell.position().left, 1.001, "appointment left is correct");
 });
 
+QUnit.test("Rival appointments should have right position on timeline month view", function(assert) {
+    var data = [{
+        "id": "1",
+        "text": "Recurrence event",
+        "recurrenceRule": "FREQ=DAILY;INTERVAL=2;COUNT=2",
+        "startDate": new Date(2018, 11, 3, 9, 0),
+        "endDate": new Date(2018, 11, 1, 10, 30)
+    },
+    {
+        "id": "2",
+        "text": "Some event",
+        "startDate": new Date(2018, 11, 4, 9, 0),
+        "endDate": new Date(2018, 11, 4, 10, 29),
+    }];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2018, 11, 3),
+        firstDayOfWeek: 0,
+        startDayHour: 8,
+        endDayHour: 20
+    });
+
+    this.instance.$element().find("." + APPOINTMENT_CLASS).each(function(index, appointment) {
+        assert.equal($(appointment).position().top, 0, "Appointment top is ok");
+    });
+});
+
+QUnit.test("Rival long appointments should have right position on timeline month view", function(assert) {
+    var data = [{
+        "id": "1",
+        "text": "Long event",
+        "startDate": new Date(2018, 11, 1, 9, 0),
+        "endDate": new Date(2018, 11, 5, 10, 30)
+    },
+    {
+        "id": "2",
+        "text": "Some event",
+        "startDate": new Date(2018, 11, 4, 9, 0),
+        "endDate": new Date(2018, 11, 4, 10, 29),
+    }];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2018, 11, 3),
+        firstDayOfWeek: 0,
+        startDayHour: 8,
+        endDayHour: 20
+    });
+
+    var $secondAppointment = this.instance.$element().find("." + APPOINTMENT_CLASS).eq(1);
+
+    assert.equal($secondAppointment.position().top, 40, "Second appointment top is ok");
+});
+
 QUnit.test("Long appointment part should have right width on timeline month view", function(assert) {
     var appointment = {
         startDate: new Date(2016, 1, 25, 8, 0),
@@ -5246,6 +5305,88 @@ QUnit.test("Appointment startDate and endDate should have correct format in the 
 
     assert.equal(startDateEditor.option("type"), "datetime", "start date is correct");
     assert.equal(endDateEditor.option("type"), "datetime", "end date is correct");
+});
+
+QUnit.test("Scheduler appointment popup should be opened correctly for recurrence appointments after multiple opening(T710140)", function(assert) {
+    var tasks = [{
+        text: "Recurrence task",
+        start: new Date(2017, 2, 13),
+        end: new Date(2017, 2, 13, 0, 30),
+        recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10"
+    }];
+
+    this.createInstance({
+        dataSource: tasks,
+        currentDate: new Date(2017, 2, 13),
+        currentView: "month",
+        views: ["month"],
+        startDateExpr: "start",
+        endDateExpr: "end"
+    });
+    this.instance.showAppointmentPopup(tasks[0]);
+    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
+    var form = this.instance.getAppointmentDetailsForm(),
+        descriptionEditor = form.getEditor("description");
+
+    descriptionEditor.option("value", "Recurrence task 1");
+
+    this.instance.hideAppointmentPopup();
+    this.instance.showAppointmentPopup(tasks[0]);
+
+    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
+
+    var popup = this.instance.getAppointmentPopup(),
+        $checkboxes = $(popup.$content()).find(".dx-checkbox");
+
+    assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "Right checkBox was checked. Popup is correct");
+    assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true, "Right checkBox was checked. Popup is correct");
+});
+
+QUnit.test("Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)", function(assert) {
+    var tasks = [{
+        text: "Task",
+        start: new Date(2017, 2, 13),
+        end: new Date(2017, 2, 13, 0, 30)
+    }, {
+        text: "Recurrence task",
+        start: new Date(2017, 2, 13),
+        end: new Date(2017, 2, 13, 0, 30),
+        recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10"
+    }];
+
+    this.createInstance({
+        dataSource: tasks,
+        currentDate: new Date(2017, 2, 13),
+        currentView: "month",
+        views: ["month"],
+        startDateExpr: "start",
+        endDateExpr: "end"
+    });
+    this.instance.showAppointmentPopup(tasks[0]);
+
+    var form = this.instance.getAppointmentDetailsForm(),
+        descriptionEditor = form.getEditor("description");
+
+    descriptionEditor.option("value", "Task 1");
+
+    this.instance.hideAppointmentPopup();
+    this.instance.showAppointmentPopup(tasks[1]);
+
+    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
+
+    var popup = this.instance.getAppointmentPopup(),
+        $checkboxes = $(popup.$content()).find(".dx-checkbox");
+
+    assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "Right checkBox was checked. Popup is correct");
+    assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true, "Right checkBox was checked. Popup is correct");
+
+    this.instance.hideAppointmentPopup();
+    this.instance.showAppointmentPopup(tasks[0]);
+
+    form = this.instance.getAppointmentDetailsForm();
+    var recurrenceEditor = form.getEditor("recurrenceRule");
+
+    assert.equal(recurrenceEditor._$container.css("display"), "none", "Recurrence editor is hidden. Popup is correct");
 });
 
 QUnit.test("Scheduler shouldn't throw error at deferred appointment loading (T518327)", function(assert) {

@@ -1146,8 +1146,8 @@ var Scheduler = Widget.inherit({
             case "currentDate":
                 value = this._dateOption(name);
                 value = dateUtils.trimTime(new Date(value));
-                this._workSpace.option(name, value);
-                this._header.option(name, value);
+                this._workSpace.option(name, new Date(value));
+                this._header.option(name, new Date(value));
                 this._header.option("displayedDate", this._workSpace._getViewStartByOptions());
                 this._appointments.option("items", []);
                 this._filterAppointmentsByDate();

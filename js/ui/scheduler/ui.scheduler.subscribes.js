@@ -491,8 +491,8 @@ var subscribes = {
         }).bind(this));
     },
 
-    recurrenceEditorVisibilityChanged: function(options) {
-        this.recurrenceEditorVisibilityChanged(options.visible);
+    recurrenceEditorVisibilityChanged: function(visible) {
+        this.recurrenceEditorVisibilityChanged(visible);
     },
 
     getField: function(field, obj) {

@@ -1,5 +1,5 @@
 import { extend } from "../../core/utils/extend";
-import windowUtils from "../../core/utils/window";
+import { getWindow } from "../../core/utils/window";
 import { patchFontOptions } from "./utils";
 import clientExporter from "../../exporter";
 import messageLocalization from "../../localization/message";
@@ -7,7 +7,6 @@ import { isDefined } from "../../core/utils/type";
 import themeModule from "../themes";
 import hoverEvent from "../../events/hover";
 import pointerEvents from "../../events/pointer";
-import { Deferred } from "../../core/utils/deferred";
 
 const imageExporter = clientExporter.image;
 const svgExporter = clientExporter.svg;
@@ -68,25 +67,50 @@ function getCreatorFunc(format) {
     }
 }
 
-function print(data) {
-    const vizWindow = windowUtils.openWindow();
+function print(imageSrc, options) {
+    const document = getWindow().document;
+    const iFrame = document.createElement("iframe");
+    iFrame.onload = setPrint(imageSrc, options);
+    iFrame.style.visibility = "hidden";
+    iFrame.style.position = "fixed";
+    iFrame.style.right = "0";
+    iFrame.style.bottom = "0";
+    document.body.appendChild(iFrame);
+}
 
-    if(!vizWindow) {
-        return;
-    }
+function setPrint(imageSrc, options) {
+    return function() {
+        let window = this.contentWindow;
+        const img = window.document.createElement("img");
+        window.document.body.appendChild(img);
 
-    vizWindow.document.open();
-    vizWindow.document.write(data);
-    vizWindow.document.close();
+        ///#DEBUG
+        const origImageSrc = imageSrc;
+        if(options.__test) {
+            imageSrc = options.__test.imageSrc;
+            window = options.__test.mockWindow;
+        }
+        ///#ENDDEBUG
 
-    const result = new Deferred();
-    setTimeout(() => {
-        vizWindow.print();
-        vizWindow.close();
-        result.resolve();
-    }, 10);
+        const removeFrame = () => {
+            ///#DEBUG
+            options.__test && options.__test.checkAssertions();
+            ///#ENDDEBUG
+            this.parentElement.removeChild(this);
+            ///#DEBUG
+            options.__test && options.__test.deferred.resolve(origImageSrc);
+            ///#ENDDEBUG
+        };
 
-    return result;
+        img.addEventListener("load", () => {
+            window.focus();
+            window.print();
+            removeFrame();
+        });
+        img.addEventListener("error", removeFrame);
+
+        img.src = imageSrc;
+    };
 }
 
 function getItemAttributes(options, type, itemIndex) {
@@ -538,7 +562,10 @@ export const plugin = {
         print() {
             const menu = this._exportMenu;
             const options = getExportOptions(this, this._getOption("export") || {});
-            const result = new Deferred();
+
+            ///#DEBUG
+            options.__test = this._getOption("export").__test;
+            ///#ENDDEBUG
 
             options.exportingAction = null;
             options.exportedAction = null;
@@ -546,15 +573,13 @@ export const plugin = {
             options.format = "PNG";
             options.forceProxy = true;
             options.fileSavingAction = eventArgs => {
-                print(`<img src="data:image/png;base64,${eventArgs.data}"></img>`).done(result.resolve);
+                print(`data:image/png;base64,${eventArgs.data}`, { __test: options.__test });
                 eventArgs.cancel = true;
             };
 
             menu && menu.hide();
             clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format));
             menu && menu.show();
-
-            return result;
         }
     },
     customize(constructor) {
