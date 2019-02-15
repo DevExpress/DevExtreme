@@ -138,11 +138,7 @@ var staticMethods = {
     /**
     * @name vizmethods.getPalette
     * @publicName getPalette(paletteName)
-    * @param1 palette:string
-    * @param2 parameters:object
-    * @param2_field1 count:number
-    * @param2_field2 keepLastColorInEnd:boolean
-    * @param2_field3 type:string
+    * @param1 palette:string|Array<string>
     * @return object
     * @static
     * @module viz/palette

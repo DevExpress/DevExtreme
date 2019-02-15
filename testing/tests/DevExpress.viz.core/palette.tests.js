@@ -633,8 +633,8 @@ QUnit.test('Repeat colors', function(assert) {
 });
 
 QUnit.test('Generate all colors', function(assert) {
-    const p = getPalette("material", { count: 10 }),
-        colors = p.generateColors();
+    const p = getPalette("material"),
+        colors = p.generateColors(10);
 
     assert.deepEqual(colors, ["#1db2f5", "#f5564a", "#c69053", "#97c95c", "#cbc83e", "#ffc720", "#f57e4a", "#eb3573", "#c93996", "#a63db8"]);
 });
@@ -647,7 +647,7 @@ QUnit.test('Generate colors with custom palette', function(assert) {
 });
 
 QUnit.test('Iterate by colors', function(assert) {
-    const p = getPalette("material", { keepLastColorInEnd: true, count: 2 }),
+    const p = getPalette("material", { count: 2 }),
         colors = [];
 
     for(let i = 0; i < 5; i++) {
@@ -658,7 +658,7 @@ QUnit.test('Iterate by colors', function(assert) {
 });
 
 QUnit.test('Iterate by colors with custom palette', function(assert) {
-    const p = getPalette(['#d6e5f4', '#0f5ba3'], { keepLastColorInEnd: true, count: 3 }),
+    const p = getPalette(['#d6e5f4', '#0f5ba3'], { count: 3 }),
         colors = [];
 
     for(let i = 0; i < 6; i++) {

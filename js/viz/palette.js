@@ -125,7 +125,10 @@ export function currentPalette(name) {
     }
 }
 
-export function getPalette(palette, parameters) {
+export function getPalette(palette, parameters = {}) {
+    if(parameters.keepLastColorInEnd === undefined) {
+        parameters.keepLastColorInEnd = true;
+    }
     const paletteInstance = createPalette(palette, parameters);
 
     if(_isArray(palette)) {
