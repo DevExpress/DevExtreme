@@ -752,21 +752,11 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
 var prepareDate = function(startDate, dateRules) {
     var date = new Date(startDate);
 
-    var needSetDefault = true;
-
-    for(var i = 0, len = dateRules.length; i < len; i++) {
-        var current = dateRules[i];
-
-        for(var field in current) {
-            if(field === "byday") {
-                date.setDate(date.getDate() - date.getDay() + current[field]);
-                needSetDefault = false;
-                break;
-            }
-        }
+    if(dateRules.length && dateRules[0]["byday"]) {
+        date.setDate(date.getDate() - date.getDay() + dateRules[0]["byday"]);
+    } else {
+        date.setDate(1);
     }
-
-    needSetDefault && date.setDate(1);
 
     return date;
 };
