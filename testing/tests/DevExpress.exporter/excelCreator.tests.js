@@ -328,10 +328,11 @@ QUnit.test("colsArray generating", function(assert) {
 
 QUnit.test("Cell index generate", function(assert) {
     // assert, act
-    assert.strictEqual(this.excelCreator._getCellIndex(1, 3), "D1", "Simple letter index correct (\"D1\")");
-    assert.strictEqual(this.excelCreator._getCellIndex(1, 26), "AA1", "Two-digit letter index correct (\"AA1\")"); // T271869
-    assert.strictEqual(this.excelCreator._getCellIndex(121, 2132), "CDA121", "Multi letter index correct (\"DEA121\")");
-    assert.strictEqual(this.excelCreator._getCellIndex(99999999, 99999999), "HJUNYV99999999", "Long multi letter index correct (\"IKVOZV99999999\")");
+    assert.strictEqual(this.excelCreator._convertToExcelCellRef(0, 0), "A1");
+    assert.strictEqual(this.excelCreator._convertToExcelCellRef(1, 3), "D2");
+    assert.strictEqual(this.excelCreator._convertToExcelCellRef(1, 26), "AA2"); // T271869
+    assert.strictEqual(this.excelCreator._convertToExcelCellRef(121, 2132), "CDA122");
+    assert.strictEqual(this.excelCreator._convertToExcelCellRef(99999999, 99999999), "HJUNYV100000000");
 });
 
 QUnit.test("Cell type generate", function(assert) {
@@ -871,7 +872,7 @@ QUnit.test("xl\\worksheets\\sheet1.xml file content with AutoFilter", function(a
             // assert
             var $autoFilter = $(content).find("autoFilter");
             assert.strictEqual($autoFilter.parent()[0].tagName.toLowerCase(), "worksheet");
-            assert.strictEqual($autoFilter.attr("ref"), "A2:C3");
+            assert.strictEqual($autoFilter.attr("ref"), "A2:A3");
         } finally {
             done();
         }
