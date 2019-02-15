@@ -850,7 +850,7 @@ var TagBox = SelectBox.inherit({
             filteredValues[filteredItemValue] = filteredItem;
         }.bind(this));
 
-        const loadItemPromises = [];
+        var loadItemPromises = [];
 
         values.forEach(function(value, index) {
             var currentItem = filteredValues[isValueExprSpecified ? JSON.stringify(value) : value];
