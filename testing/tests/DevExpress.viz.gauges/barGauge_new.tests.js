@@ -192,7 +192,8 @@ QUnit.test("Create legend item", function(assert) {
         text: "1.0",
         item: {
             value: 1,
-            color: "black"
+            color: "black",
+            index: 0
         },
         states: {
             normal: { fill: "black" }
@@ -205,7 +206,8 @@ QUnit.test("Create legend item", function(assert) {
         text: "5.0",
         item: {
             value: 5,
-            color: "green"
+            color: "green",
+            index: 1
         },
         states: {
             normal: { fill: "green" }
@@ -230,7 +232,8 @@ QUnit.test("Update legend items", function(assert) {
         text: "10.0",
         item: {
             value: 10,
-            color: "black"
+            color: "black",
+            index: 0
         },
         states: {
             normal: { fill: "black" }
