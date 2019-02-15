@@ -4,7 +4,8 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     rendererModule = require("viz/core/renderers/renderer"),
     clientExporter = require("exporter"),
-    exportModule = require("viz/core/export");
+    exportModule = require("viz/core/export"),
+    Deferred = require("core/utils/deferred").Deferred;
 
 $("#qunit-fixture").append('<div id="test-container" style="width: 200px; height: 150px;"></div>');
 
@@ -334,36 +335,46 @@ QUnit.test("Depends on theme", function(assert) {
     assert.strictEqual(this.exportMenu.setOptions.callCount, 1);
 });
 
-QUnit.test('Print method', function(assert) {
-    // arrange
-    var docSpy = {
-            open: sinon.spy(),
-            write: sinon.spy(),
-            close: sinon.spy()
-        },
-        printSpy = sinon.stub(),
-        closeSpy = sinon.stub();
-
-    sinon.stub(window, "open", function() {
-        return {
-            document: docSpy,
-            print: printSpy,
-            close: closeSpy
-        };
-    });
-
+QUnit.test('Print method - use export to prepare image, create hidden iFrame with image, delete iFrame after printing', function(assert) {
+    assert.expect(28);
     var done = assert.async();
+    var deferred = new Deferred();
     var exportFunc = clientExporter.export,
         exportedStub = sinon.spy(),
         exportingStub = sinon.spy(),
         fileSavingStub = sinon.spy(),
+        mockWindow = {
+            print: sinon.spy(),
+            focus: sinon.spy()
+        },
         widget = this.createWidget({
             "export": {
                 backgroundColor: "#ff0000",
                 proxyUrl: "testProxy",
                 format: "JPEG",
                 forceProxy: false,
-                margin: 40
+                margin: 40,
+                __test: {
+                    deferred: deferred,
+                    imageSrc: "/testing/content/exporterTestsContent/test-image.png",
+                    mockWindow: mockWindow,
+                    checkAssertions: function() {
+                        assert.equal(window.frames.length, 1);
+                        var frame = window.frames[0].frameElement;
+                        assert.equal(frame.style.visibility, "hidden");
+                        assert.equal(frame.style.position, "fixed");
+                        assert.equal(frame.style.right, "0px");
+                        assert.equal(frame.style.bottom, "0px");
+
+                        var body = frame.contentDocument.body;
+                        var image = body.childNodes[0];
+                        assert.equal(image.getAttribute("src"), "/testing/content/exporterTestsContent/test-image.png");
+
+                        assert.equal(mockWindow.focus.callCount, 1); // Required for IE
+                        assert.equal(mockWindow.print.callCount, 1);
+                        assert.ok(mockWindow.focus.getCall(0).calledBefore(mockWindow.print.getCall(0)));
+                    }
+                }
             },
             onExporting: exportingStub,
             onExported: exportedStub,
@@ -371,14 +382,14 @@ QUnit.test('Print method', function(assert) {
         });
 
     // act
-    widget.print().done(checkPrinting);
+    widget.print();
 
     var that = this;
     var firstExportCall = exportFunc.getCall(0);
     var fileSavingEventArgs = { data: "imageData" };
     firstExportCall.args[1].fileSavingAction(fileSavingEventArgs);
 
-    function checkPrinting() {
+    deferred.done(function(imageSrc) {
         assert.ok(fileSavingEventArgs.cancel, "file should not be saved");
 
         assert.ok(exportFunc.callCount, 1, "export was called one time");
@@ -400,15 +411,47 @@ QUnit.test('Print method', function(assert) {
         assert.equal(exportedStub.callCount, 0, "exported event");
         assert.equal(fileSavingStub.callCount, 0, "file saving event");
 
-        assert.equal(docSpy.open.callCount, 1, "open doc");
-        assert.equal(docSpy.write.callCount, 1, "write doc");
-        assert.equal(docSpy.write.getCall(0).args[0], '<img src="data:image/png;base64,imageData"></img>', "write doc args");
-        assert.equal(printSpy.callCount, 1, "print doc");
-        assert.equal(closeSpy.callCount, 1, "close doc");
+        assert.equal(imageSrc, "data:image/png;base64,imageData");
 
-        window.open.restore();
+        assert.equal(window.frames.length, 0);
         done();
-    }
+    });
+});
+
+QUnit.test('Print method, error image loading - delete iFrame', function(assert) {
+    assert.expect(4);
+    var done = assert.async();
+    var deferred = new Deferred();
+    var exportFunc = clientExporter.export,
+        mockWindow = {
+            print: sinon.spy(),
+            focus: sinon.spy()
+        },
+        widget = this.createWidget({
+            "export": {
+                __test: {
+                    deferred: deferred,
+                    imageSrc: "wrong_image_url",
+                    mockWindow: mockWindow,
+                    checkAssertions: function() {
+                        var image = window.frames[0].frameElement.contentDocument.body.childNodes[0];
+                        assert.equal(image.getAttribute("src"), "wrong_image_url");
+                        assert.equal(mockWindow.focus.callCount, 0);
+                        assert.equal(mockWindow.print.callCount, 0);
+                    }
+                }
+            }
+        });
+
+    // act
+    widget.print();
+
+    exportFunc.getCall(0).args[1].fileSavingAction({ data: "imageData" });
+
+    deferred.done(function() {
+        assert.equal(window.frames.length, 0);
+        done();
+    });
 });
 
 QUnit.test("Export with right size after resize", function(assert) {

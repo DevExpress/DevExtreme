@@ -1627,10 +1627,10 @@ Axis.prototype = {
 
         if(minPercentPadding !== undefined || maxPercentPadding !== undefined) {
             if(minPercentPadding !== undefined) {
-                minPadding = Math.ceil(screenDeltaWithMargins * minPercentPadding);
+                minPadding = screenDeltaWithMargins * minPercentPadding;
             }
             if(maxPercentPadding !== undefined) {
-                maxPadding = Math.ceil(screenDeltaWithMargins * maxPercentPadding);
+                maxPadding = screenDeltaWithMargins * maxPercentPadding;
             }
         }
 
@@ -1660,8 +1660,8 @@ Axis.prototype = {
                 if(maxTickPadding >= maxPadding) {
                     maxValue = ticks[length - 1].value;
                 }
-                minPadding = Math.ceil(_max(minTickPadding, minPadding) / coeff);
-                maxPadding = Math.ceil(_max(maxTickPadding, maxPadding) / coeff);
+                minPadding = _max(minTickPadding, minPadding) / coeff;
+                maxPadding = _max(maxTickPadding, maxPadding) / coeff;
             }
         }
 
@@ -1682,8 +1682,8 @@ Axis.prototype = {
 
             const coeff = getConvertIntervalCoefficient(minExpectedPadding + maxExpectedPadding);
 
-            minPadding = Math.ceil(minExpectedPadding / coeff);
-            maxPadding = Math.ceil(maxExpectedPadding / coeff);
+            minPadding = minExpectedPadding / coeff;
+            maxPadding = maxExpectedPadding / coeff;
         }
 
         if(!that.isArgumentAxis) {
@@ -1730,7 +1730,11 @@ Axis.prototype = {
 
     },
 
-    _resetMargins: _noop,
+    _resetMargins: function() {
+        if(this._canvas) {
+            this._translator.updateCanvas(this._processCanvas(this._canvas));
+        }
+    },
 
     _createConstantLines() {
         const constantLines = (this._options.constantLines || []).map(o => createConstantLine(this, o));
@@ -2460,9 +2464,11 @@ Axis.prototype = {
     _visualRange: _noop,
 
     applyVisualRangeSetter: _noop,
-
+    // T642779,T714928
     getCategoriesSorter() {
-        return this._options.categoriesSortingMethod;
+        const categoriesSortingMethod = this._options.categoriesSortingMethod;
+
+        return isDefined(categoriesSortingMethod) ? categoriesSortingMethod : this._options.categories;
     },
 
     _getAdjustedBusinessRange() {

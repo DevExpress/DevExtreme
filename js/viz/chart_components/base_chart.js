@@ -851,6 +851,7 @@ var BaseChart = BaseWidget.inherit({
             group: that._legendGroup,
             backgroundClass: "dxc-border",
             itemGroupClass: "dxc-item",
+            titleGroupClass: "dxc-title",
             textField: legendSettings.textField,
             getFormatObject: legendSettings.getFormatObject
         });
