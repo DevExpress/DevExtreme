@@ -511,7 +511,8 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
 
             level = level || 0;
             for(var i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
+                var node = nodes[i],
+                    needToExpand = false;
 
                 // node.hasChildren = false;
                 this._fillNodes(nodes[i].children, options, expandedRowKeys, level + 1);
@@ -519,16 +520,19 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 node.level = level;
                 node.hasChildren = this._calculateHasItems(node, options);
 
-                if(node.visible && node.hasChildren && options.expandVisibleNodes) {
+                if(node.visible && node.hasChildren) {
                     if(isFullBranch) {
                         if(node.children.filter(node => node.visible).length) {
-                            expandedRowKeys.push(node.key);
+                            needToExpand = true;
                         } else if(node.children.length) {
                             treeListCore.foreachNodes(node.children, function(node) {
                                 node.visible = true;
                             });
                         }
                     } else {
+                        needToExpand = true;
+                    }
+                    if(options.expandVisibleNodes && needToExpand) {
                         expandedRowKeys.push(node.key);
                     }
                 }

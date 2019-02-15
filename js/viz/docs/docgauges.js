@@ -14,6 +14,7 @@ var BaseGauge = {
 
     /**
     * @name BaseGaugeOptions.loadingIndicator
+    * @type object
     */
     loadingIndicator: {
         /**
@@ -649,6 +650,13 @@ var dxBarGauge = {
     * @default '#e0e0e0'
     */
     backgroundColor: '#e0e0e0',
+    /**
+    * @name dxBarGaugeOptions.loadingIndicator
+    * @type object
+    * @inherits BaseGaugeOptions.loadingIndicator
+    * @inheritdoc
+    */
+    loadingIndicator: { },
     /**
     * @name dxBarGaugeOptions.barSpacing
     * @type number

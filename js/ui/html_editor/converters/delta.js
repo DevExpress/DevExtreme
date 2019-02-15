@@ -114,7 +114,9 @@ class DeltaConverter {
 
         if(indent > lastIndent) {
             listTypes.push(type);
-            return this._processIndentListMarkup(childItemArgs, restItemsArgs, tag);
+            const multiLevelTags = this._correctListMultiIndent(listTypes, type, tag, indent - lastIndent - 1);
+
+            return multiLevelTags + this._processIndentListMarkup(childItemArgs, restItemsArgs, tag);
         }
 
         if(indent === lastIndent) {
@@ -123,6 +125,18 @@ class DeltaConverter {
 
         const endTag = this._getListType(listTypes.pop());
         return this._processListMarkup([items, lastIndent - 1, listTypes], endTag);
+    }
+
+    _correctListMultiIndent(listTypes, type, tag, indent) {
+        let markup = "";
+
+        while(indent) {
+            markup += `<${tag}>`;
+            listTypes.push(type);
+            indent--;
+        }
+
+        return markup;
     }
 
     _processListMarkup(childItemArgs, tag) {
