@@ -280,98 +280,27 @@ QUnit.testStart(function() {
         assert.strictEqual(dataAccessors.setter.recurrenceRule, undefined, "setter for recurrenceRule is OK");
     });
 
-    QUnit.test("appointmentTemplate rendering args should be correct if displayedAppointmentDataField is specified", function(assert) {
-        var counter = 0;
-
+    QUnit.test("the targetedAppointmentData parameter appends to arguments of the appointment tooltip template for a recurrence rule", function(assert) {
         this.instance.option({
             dataSource: [{
-                startDate: new Date(2015, 4, 24, 9, 10),
-                endDate: new Date(2015, 4, 24, 11, 1),
+                startDate: new Date(2015, 4, 24, 9),
+                endDate: new Date(2015, 4, 24, 11),
                 allDay: true,
-                recurrenceRule: "FREQ=DAILY;COUNT=2",
+                recurrenceRule: "FREQ=DAILY;COUNT=3",
                 text: "Task 2"
             }],
             height: 600,
             currentDate: new Date(2015, 4, 24),
-            displayedAppointmentDataField: "Field",
             currentView: "month",
             views: ["month"],
-            appointmentTemplate: function(data) {
-                if(counter === 1) {
-                    assert.deepEqual(data.Field, {
-                        startDate: new Date(2015, 4, 25, 9, 10),
-                        endDate: new Date(2015, 4, 25, 11, 1),
-                        allDay: true,
-                        recurrenceRule: "FREQ=DAILY;COUNT=2",
-                        text: "Task 2"
-                    }, "occurence args is correct");
-                }
-                counter++;
-            }
-        });
-    });
-
-    QUnit.test("additional field should be applied in appointmentTemplate only for recurrence appointment", function(assert) {
-        this.instance.option({
-            dataSource: [{
-                startDate: new Date(2015, 4, 10, 9, 10),
-                endDate: new Date(2015, 4, 24, 11, 1),
-                allDay: true,
-                text: "Task 2"
-            }],
-            height: 600,
-            currentDate: new Date(2015, 4, 24),
-            displayedAppointmentDataField: "Field",
-            currentView: "month",
-            views: ["month"],
-            appointmentTemplate: function(data) {
-                assert.strictEqual(data.Field, undefined);
-            }
-        });
-    });
-
-    QUnit.test("additional field should be applied in appointmentTemplate only when displayedAppointmentDataField is set", function(assert) {
-        this.instance.option({
-            dataSource: [{
-                startDate: new Date(2015, 4, 24, 9, 10),
-                endDate: new Date(2015, 4, 24, 11, 1),
-                recurrenceRule: "FREQ=DAILY;COUNT=2",
-                allDay: true,
-                text: "Task 2"
-            }],
-            height: 600,
-            currentDate: new Date(2015, 4, 24),
-            displayedAppointmentDataField: null,
-            currentView: "month",
-            views: ["month"],
-            appointmentTemplate: function(data) {
-                assert.strictEqual(data.Field, undefined);
-            }
-        });
-    });
-
-    QUnit.test("appointmentTooltipTemplate rendering args should be correct if displayedAppointmentDataField is specified", function(assert) {
-        this.instance.option({
-            dataSource: [{
-                startDate: new Date(2015, 4, 24, 9, 10),
-                endDate: new Date(2015, 4, 24, 11, 1),
-                allDay: true,
-                recurrenceRule: "FREQ=DAILY;COUNT=2",
-                text: "Task 2"
-            }],
-            height: 600,
-            currentDate: new Date(2015, 4, 24),
-            displayedAppointmentDataField: "Field",
-            currentView: "month",
-            views: ["month"],
-            appointmentTooltipTemplate: function(data) {
-                assert.deepEqual(data.Field, {
-                    startDate: new Date(2015, 4, 25, 9, 10),
-                    endDate: new Date(2015, 4, 25, 11, 1),
+            appointmentTooltipTemplate: function(data, index, targetedAppointmentData) {
+                assert.deepEqual(targetedAppointmentData, {
                     allDay: true,
-                    recurrenceRule: "FREQ=DAILY;COUNT=2",
+                    endDate: new Date(2015, 4, 25, 11),
+                    recurrenceRule: "FREQ=DAILY;COUNT=3",
+                    startDate: new Date(2015, 4, 25, 9),
                     text: "Task 2"
-                }, "occurence args is correct");
+                });
             }
         });
 
@@ -379,33 +308,57 @@ QUnit.testStart(function() {
         this.clock.tick(300);
     });
 
-    QUnit.test("dropDownAppointmentTemplate rendering args should be correct if displayedAppointmentDataField is specified", function(assert) {
+    QUnit.test("the targetedAppointmentData parameter appends to arguments of the appointment tooltip template for a non-recurrence rule", function(assert) {
         this.instance.option({
             dataSource: [{
-                startDate: new Date(2015, 4, 24, 9, 10),
-                endDate: new Date(2015, 4, 24, 11, 1),
-                recurrenceRule: "FREQ=DAILY;COUNT=2",
-                allDay: true,
+                startDate: new Date(2015, 4, 24, 9),
+                endDate: new Date(2015, 4, 24, 11),
                 text: "Task 1"
-            }, {
-                startDate: new Date(2015, 4, 24, 9, 10),
-                endDate: new Date(2015, 4, 24, 11, 1),
-                allDay: true,
-                recurrenceRule: "FREQ=DAILY;COUNT=2",
-                text: "Task 2"
             }],
+            height: 600,
+            currentDate: new Date(2015, 4, 24),
+            currentView: "month",
+            views: ["month"],
+            appointmentTooltipTemplate: function(data, index, targetedAppointmentData) {
+                assert.deepEqual(targetedAppointmentData, {
+                    startDate: new Date(2015, 4, 24, 9),
+                    endDate: new Date(2015, 4, 24, 11),
+                    text: "Task 1"
+                });
+            }
+        });
+
+        $(this.instance.$element().find(".dx-scheduler-appointment").eq(0)).trigger("dxclick");
+        this.clock.tick(300);
+    });
+
+    QUnit.skip("the targetedAppointmentData parameter appends to arguments of the drop down appointment template for a recurrence rule", function(assert) {
+        var data = [{
+            startDate: new Date(2015, 4, 24, 9),
+            endDate: new Date(2015, 4, 24, 11),
+            recurrenceRule: "FREQ=DAILY;COUNT=3",
+            allDay: true,
+            text: "Task 1"
+        }, {
+            startDate: new Date(2015, 4, 24, 9),
+            endDate: new Date(2015, 4, 24, 11),
+            allDay: true,
+            recurrenceRule: "FREQ=DAILY;COUNT=2",
+            text: "Task 2"
+        }];
+
+        this.instance.option({
+            dataSource: data,
             maxAppointmentsPerCell: 1,
             currentDate: new Date(2015, 4, 24),
-            displayedAppointmentDataField: "Field",
             views: ["month"],
-            dropDownAppointmentTemplate: function(data) {
-                assert.deepEqual(data.Field.startDate, new Date(2015, 4, 25, 9, 10), "Start date of part is ok");
-                assert.deepEqual(data.Field.endDate, new Date(2015, 4, 25, 11, 1), "End date of part is ok");
+            dropDownAppointmentTemplate: function(appointmentData) {
+                assert.equal(data.indexOf(appointmentData), 0, "appointmentData is should be an instance");
             },
             currentView: "month"
         });
 
-        $(".dx-scheduler-dropdown-appointments").eq(1).dxDropDownMenu("instance").open();
+        $(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance").open();
     });
 
     QUnit.test("appointmentCollectorTemplate rendering args should be correct", function(assert) {
