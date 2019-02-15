@@ -1278,7 +1278,8 @@ const dataMarginsEnvironment = {
         const expectedVisibleArea = data.expectedVisibleArea;
 
         if(expectedVisibleArea) {
-            assert.deepEqual(translator.getCanvasVisibleArea(), expectedVisibleArea);
+            assert.equal(Math.round(translator.getCanvasVisibleArea().min), Math.round(expectedVisibleArea.min));
+            assert.equal(Math.round(translator.getCanvasVisibleArea().max), Math.round(expectedVisibleArea.max));
         }
     }
 };
@@ -1366,8 +1367,8 @@ QUnit.test("minValueMargin and maxValueMargin - apply margins to the both sides"
             maxVisible: 2200
         },
         expectedVisibleArea: {
-            min: this.canvas.left + Math.ceil(300 / (1 + 0.1 + 0.2) * 0.1),
-            max: this.canvas.width - this.canvas.right - Math.ceil(300 / (1 + 0.1 + 0.2) * 0.2)
+            min: this.canvas.left + 300 / (1 + 0.1 + 0.2) * 0.1,
+            max: this.canvas.width - this.canvas.right - 300 / (1 + 0.1 + 0.2) * 0.2
         }
     });
 });
@@ -1386,8 +1387,8 @@ QUnit.test("minValueMargin and maxValueMargin - apply margins to the both sides.
         },
         ticks: [1100, 1800],
         expectedVisibleArea: {
-            min: this.canvas.left + Math.ceil(300 / (1 + 0.1 + 0.2) * 0.2),
-            max: this.canvas.width - this.canvas.right - Math.ceil(300 / (1 + 0.1 + 0.2) * 0.1)
+            min: this.canvas.left + 300 / (1 + 0.1 + 0.2) * 0.2,
+            max: this.canvas.width - this.canvas.right - 300 / (1 + 0.1 + 0.2) * 0.1
         },
         isArgumentAxis: true
     });
@@ -2730,10 +2731,8 @@ QUnit.test("Apply correct margins on redraw without canvas", function(assert) {
 
     axis.draw();
 
-    assert.deepEqual(axis.getTranslator().getCanvasVisibleArea(), {
-        max: 457,
-        min: 243
-    });
+    assert.equal(axis.getTranslator().getCanvasVisibleArea().max.toFixed(2), "457.14");
+    assert.equal(axis.getTranslator().getCanvasVisibleArea().min.toFixed(2), "242.86");
 });
 
 QUnit.module("Data margins calculations after zooming", dataMarginsEnvironment);
