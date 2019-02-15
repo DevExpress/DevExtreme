@@ -31,7 +31,8 @@ var environment = {
             return sinon.spy(function() {
                 return {
                     ticks: that.generatedTicks || [],
-                    minorTicks: []
+                    minorTicks: [],
+                    tickInterval: that.generatedTickInterval
                 };
             });
         });
@@ -2110,17 +2111,40 @@ QUnit.test("Extend business range to ticks", function(assert) {
 
     axis.setBusinessRange({
         min: 0,
-        max: 100
+        max: 100,
+        interval: 10
     });
 
     axis.draw(this.canvas);
 
-    const { min, max, minVisible, maxVisible } = this.axis.getTranslator().getBusinessRange();
+    const { min, max, minVisible, maxVisible, interval } = this.axis.getTranslator().getBusinessRange();
 
     assert.equal(min, -10);
     assert.equal(max, 200);
     assert.equal(minVisible, -10);
     assert.equal(maxVisible, 200);
+    assert.equal(interval, 10);
+});
+
+QUnit.test("Pass interval to range", function(assert) {
+    this.generatedTicks = [-10, 200];
+    this.generatedTickInterval = 1;
+
+    const axis = this.createAxis({
+        valueMarginsEnabled: false
+    });
+
+    axis.setBusinessRange({
+        min: 0,
+        max: 100,
+        interval: 10
+    });
+
+    axis.draw(this.canvas);
+
+    const { interval } = this.axis.getTranslator().getBusinessRange();
+
+    assert.equal(interval, 1);
 });
 
 QUnit.module("Linear axis. Margins", $.extend({}, environment, {
