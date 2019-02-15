@@ -1627,10 +1627,10 @@ Axis.prototype = {
 
         if(minPercentPadding !== undefined || maxPercentPadding !== undefined) {
             if(minPercentPadding !== undefined) {
-                minPadding = Math.ceil(screenDeltaWithMargins * minPercentPadding);
+                minPadding = screenDeltaWithMargins * minPercentPadding;
             }
             if(maxPercentPadding !== undefined) {
-                maxPadding = Math.ceil(screenDeltaWithMargins * maxPercentPadding);
+                maxPadding = screenDeltaWithMargins * maxPercentPadding;
             }
         }
 
@@ -1660,8 +1660,8 @@ Axis.prototype = {
                 if(maxTickPadding >= maxPadding) {
                     maxValue = ticks[length - 1].value;
                 }
-                minPadding = Math.ceil(_max(minTickPadding, minPadding) / coeff);
-                maxPadding = Math.ceil(_max(maxTickPadding, maxPadding) / coeff);
+                minPadding = _max(minTickPadding, minPadding) / coeff;
+                maxPadding = _max(maxTickPadding, maxPadding) / coeff;
             }
         }
 
@@ -1682,8 +1682,8 @@ Axis.prototype = {
 
             const coeff = getConvertIntervalCoefficient(minExpectedPadding + maxExpectedPadding);
 
-            minPadding = Math.ceil(minExpectedPadding / coeff);
-            maxPadding = Math.ceil(maxExpectedPadding / coeff);
+            minPadding = minExpectedPadding / coeff;
+            maxPadding = maxExpectedPadding / coeff;
         }
 
         if(!that.isArgumentAxis) {
