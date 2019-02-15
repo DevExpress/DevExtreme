@@ -264,7 +264,6 @@ QUnit.test("Format legend as labels", function(assert) {
     });
 
     const passedItems = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
-
     assert.equal(passedItems[0].text, "$10,000");
 });
 
@@ -285,7 +284,5 @@ QUnit.test("Format legend with custom type", function(assert) {
     });
 
     const passedItems = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
-
-
     assert.deepEqual(passedItems[0].text, "6K");
 });
