@@ -362,6 +362,18 @@ var dxBarGauge = dxBaseGauge.inherit({
     _proxyData: [],
 
     _getLegendData() {
+        var that = this,
+            formatOptions = {},
+            options = that._options,
+            labelFormatOptions = (options.label || {}).format,
+            legendFormatOptions = (options.legend || {}).format;
+
+        if(legendFormatOptions) {
+            formatOptions.format = legendFormatOptions;
+        } else {
+            formatOptions.format = labelFormatOptions || that._defaultFormatOptions;
+        }
+
         return (this._bars || []).map(b => {
             return {
                 id: b._index,
@@ -369,7 +381,7 @@ var dxBarGauge = dxBaseGauge.inherit({
                     value: b.getValue(),
                     color: b.getColor()
                 },
-                text: b.getValue() + "",
+                text: _formatValue(b.getValue(), formatOptions),
                 visible: true,
                 states: { normal: { fill: b.getColor() } }
             };

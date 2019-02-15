@@ -189,7 +189,7 @@ QUnit.test("Create legend item", function(assert) {
     assert.equal(passedItems.length, 2);
     assert.deepEqual(passedItems[0], {
         id: 0,
-        text: "1",
+        text: "1.0",
         item: {
             value: 1,
             color: "black"
@@ -202,7 +202,7 @@ QUnit.test("Create legend item", function(assert) {
 
     assert.deepEqual(passedItems[1], {
         id: 1,
-        text: "5",
+        text: "5.0",
         item: {
             value: 5,
             color: "green"
@@ -227,7 +227,7 @@ QUnit.test("Update legend items", function(assert) {
     assert.equal(passedItems.length, 1);
     assert.deepEqual(passedItems[0], {
         id: 0,
-        text: "10",
+        text: "10.0",
         item: {
             value: 10,
             color: "black"
@@ -250,4 +250,39 @@ QUnit.test("Bar is rendered after layout legend", function(assert) {
     });
     const bar = this.renderer.g.getCall(4).returnValue.children[0];
     assert.equal(bar.attr.lastCall.args[0].outerRadius, 50);
+});
+
+QUnit.test("Format legend as labels", function(assert) {
+    this.createGauge({
+        label: {
+            format: {
+                type: "currency"
+            }
+        },
+        values: [10000],
+        legend: { visible: true }
+    });
+
+    const passedItems = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
+    assert.equal(passedItems[0].text, "$10,000");
+});
+
+QUnit.test("Format legend with custom type", function(assert) {
+    this.createGauge({
+        label: {
+            format: {
+                type: "currency"
+            }
+        },
+        legend: {
+            visible: true,
+            format: {
+                type: "thousands"
+            }
+        },
+        values: [5700]
+    });
+
+    const passedItems = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
+    assert.deepEqual(passedItems[0].text, "6K");
 });
