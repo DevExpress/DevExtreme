@@ -640,6 +640,49 @@ var Fixture = Class.inherit({
         assert.equal(instance.option("validationTooltipOptions.width"), 130, "redefined object's fields was not changed");
         assert.equal(instance.option("validationTooltipOptions.shading"), false, "default object's fields was not changed");
     });
+
+    QUnit.test("it should be possible to set null or undefined to the validationTooltipOptions", function(assert) {
+        var $element = this.fixture.createOnlyElement(),
+            instance = new Editor($element, {
+                validationMessageMode: "always",
+                validationError: {
+                    message: "Error message"
+                },
+                isValid: false
+            }),
+            overlay = instance._validationMessage;
+
+        instance.option("validationTooltipOptions.test", 130);
+        instance.option("validationTooltipOptions.test2", 120);
+        assert.strictEqual(overlay.option("test"), 130, "option has ben changed");
+        assert.strictEqual(overlay.option("test2"), 120, "option has ben changed");
+
+        instance.option("validationTooltipOptions", { test2: null, test: undefined });
+        assert.strictEqual(overlay.option("test"), undefined, "option has ben changed");
+        assert.strictEqual(overlay.option("test2"), null, "option has ben changed");
+    });
+
+    QUnit.test("default validation options should not be redefined on revalidation", function(assert) {
+        var $element = this.fixture.createOnlyElement(),
+            instance = new Editor($element, {
+                validationMessageMode: "always",
+                validationError: {
+                    message: "Error message"
+                },
+                isValid: false
+            });
+
+        instance.option({
+            isValid: true,
+            validationError: {
+                message: "New error message"
+            }
+        });
+        instance.option("isValid", false);
+
+        var overlay = instance._validationMessage;
+        assert.strictEqual($(overlay.content()).text(), "New error message");
+    });
 })("Validation Events");
 
 
