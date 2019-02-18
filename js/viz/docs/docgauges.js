@@ -657,7 +657,6 @@ var dxBarGauge = {
     loadingIndicator: {
         /**
         * @name dxBarGaugeOptions.loadingIndicator.enabled
-        * @type boolean
         * @hidden
         */
         enabled: false
