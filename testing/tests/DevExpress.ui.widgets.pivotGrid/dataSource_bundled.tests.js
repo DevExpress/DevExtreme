@@ -235,8 +235,22 @@ QUnit.test("Create store with load function and remote operations", function(ass
         }
     });
 
+    assert.notOk(dataSource.paginate(), "no paginate");
     assert.ok(dataSource.store() instanceof RemoteStore);
     assert.ok(dataSource.store()._dataSource.store() instanceof CustomStore);
+});
+
+QUnit.test("Create store with load function and paginate", function(assert) {
+    var dataSource = createDataSource({
+        paginate: true,
+        load: function() {
+            return [];
+        }
+    });
+
+    assert.ok(dataSource.paginate(), "paginate");
+    assert.ok(dataSource.store() instanceof RemoteStore, "PivotGrid store type is remote");
+    assert.ok(dataSource.store()._dataSource.store() instanceof CustomStore, "inner store type is custom");
 });
 
 QUnit.test("Create LocalStore with onChanged event", function(assert) {
@@ -1909,6 +1923,28 @@ QUnit.test("Change field by dataField", function(assert) {
         area: "row",
         areaIndex: 1
     });
+});
+
+QUnit.test("fieldChanged event", function(assert) {
+    var dataSource = createDataSource({
+        fields: [
+            { dataField: "[Product].[Category]", area: "column", areaIndex: 0 },
+            { dataField: "[Ship Date].[Calendar Year]", area: "row", areaIndex: 0 },
+            { dataField: "[Measures].[Customer Count]", caption: 'Count', area: "data", areaIndex: 0 }
+        ],
+        store: this.testStore
+    });
+
+    var fieldChangedStub = sinon.stub();
+
+    dataSource.on("fieldChanged", fieldChangedStub);
+
+    // act
+    dataSource.field("[Product].[Category]", { area: "row", areaIndex: 1 });
+
+    // assert
+    assert.strictEqual(fieldChangedStub.callCount, 1, "fieldChanged is called once");
+    assert.strictEqual(fieldChangedStub.lastCall.args[0], dataSource.field("[Product].[Category]"), "fieldChanged args");
 });
 
 QUnit.test("Change field by caption", function(assert) {
@@ -4037,6 +4073,38 @@ QUnit.test("Sort data", function(assert) {
         }, {
             index: 2,
             value: 1991
+        }
+    ]);
+});
+
+QUnit.test("Local sorting should not work if paginate", function(assert) {
+    var def = $.Deferred();
+    this.testStore.load.returns(def);
+
+    var dataSource = createDataSource({
+        paginate: true,
+        fields: [
+            { dataField: "ShipVia", area: "row", sortOrder: "asc" },
+
+            { dataField: "ShipCountry", area: "column" },
+            { dataField: "ShipCity", area: "column" },
+            { summaryType: 'count', area: "data" }
+        ],
+        store: this.testStore
+    });
+
+    def.resolve(this.storeData);
+
+    assert.deepEqual(prepareLoadedData(dataSource.getData().rows), [
+        {
+            index: 1,
+            value: 1991
+        }, {
+            index: 2,
+            value: 1991
+        }, {
+            index: 3,
+            value: 1985
         }
     ]);
 });

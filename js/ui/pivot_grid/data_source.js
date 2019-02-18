@@ -216,7 +216,7 @@ module.exports = Class.inherit((function() {
     };
 
     function createLocalOrRemoteStore(dataSourceOptions, notifyProgress) {
-        var StoreConstructor = dataSourceOptions.remoteOperations ? RemoteStore : localStore.LocalStore;
+        var StoreConstructor = (dataSourceOptions.remoteOperations || dataSourceOptions.paginate) ? RemoteStore : localStore.LocalStore;
 
         return new StoreConstructor(extend(DataSourceModule.normalizeDataSourceOptions(dataSourceOptions), {
             onChanged: null,
@@ -617,6 +617,12 @@ module.exports = Class.inherit((function() {
             * @type Enums.PivotGridStoreType
             */
             that._store = store;
+            /**
+            * @name PivotGridDataSourceOptions.paginate
+            * @type Boolean
+            * @default false
+            */
+            that._paginate = !!options.paginate;
             that._data = { rows: [], columns: [], values: [] };
             that._loadingCount = 0;
 
@@ -1010,6 +1016,7 @@ module.exports = Class.inherit((function() {
                 updateCalculatedFieldProperties(field, CALCULATED_PROPERTIES);
 
                 that._descriptions = that._createDescriptions(field);
+                that.fireEvent("fieldChanged", [field]);
             }
             return field;
         },
@@ -1290,6 +1297,9 @@ module.exports = Class.inherit((function() {
                 deferred.always(function() {
                     that.endLoading();
                 });
+
+                that.fireEvent("customizeStoreLoadOptions", [options]);
+
                 when(store.load(options)).done(function(data) {
                     if(options.path) {
                         that.applyPartialDataSource(options.area, options.path, data, deferred);
@@ -1307,9 +1317,13 @@ module.exports = Class.inherit((function() {
         _sort: function(descriptions, data, getAscOrder) {
             var store = this._store;
 
-            if(store) {
+            if(store && !this._paginate) {
                 sort(descriptions, data, getAscOrder);
             }
+        },
+
+        paginate: function() {
+            return this._paginate;
         },
 
         isEmpty: function() {

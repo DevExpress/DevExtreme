@@ -29,8 +29,9 @@ function getCustomArrayStore(data) {
                     group.selector = intervalField;
                 });
             }
-
-            arrayStore.load(loadOptions).done(function(data) {
+            var skip = loadOptions.skip;
+            var take = loadOptions.take;
+            arrayStore.load($.extend({}, loadOptions, { skip: null, take: null })).done(function(data) {
                 var path = [],
                     totalSummary = {
                         summary: null
@@ -58,6 +59,18 @@ function getCustomArrayStore(data) {
                         }
                     }
                 });
+
+                if(loadOptions.requireGroupCount && loadOptions.group) {
+                    totalSummary.groupCount = data.length;
+                }
+
+                if(skip) {
+                    data = data.slice(skip);
+                }
+
+                if(take) {
+                    data = data.slice(0, take);
+                }
 
                 d.resolve(data, totalSummary);
             });
@@ -94,7 +107,9 @@ var moduleConfig = {
             var d = this.store.load(options);
 
             d.done(function(data) {
-                pivotGridDataSource.sort(options, data);
+                if(!options.rowTake && !options.columnTake) {
+                    pivotGridDataSource.sort(options, data);
+                }
             });
 
             return d;
@@ -174,6 +189,42 @@ QUnit.test("Loading data without columns", function(assert) {
     });
 });
 
+QUnit.test("Loading data without columns if rowSkip and rowTake are defined", function(assert) {
+    this.load({
+        columns: [],
+        rows: [{ dataField: "ShipCity" }, { dataField: "ShipVia" }],
+        values: [{ summaryType: "count" }],
+        rowSkip: 10,
+        rowTake: 10
+    }).done(function(data) {
+        assert.ok(!data.rows[0].children, "row children was not loaded");
+        assert.equal(data.columns.length, 0, "columns should not be loaded");
+        assert.equal(data.rows.length, 70, "row count is correct");
+        assert.equal(data.rows[9].value, undefined, "row 9 value");
+        assert.equal(data.rows[10].value, "Bracke", "row 10 value");
+        assert.equal(data.rows[19].value, "Cork", "row 19 value");
+        assert.equal(data.rows[20].value, undefined, "row 20 value");
+    });
+});
+
+QUnit.test("Loading data without columns if rowSkip and rowTake and sortOrder in field are defined", function(assert) {
+    this.load({
+        columns: [],
+        rows: [{ dataField: "ShipCity", sortOrder: "desc" }, { dataField: "ShipVia" }],
+        values: [{ summaryType: "count" }],
+        rowSkip: 10,
+        rowTake: 10
+    }).done(function(data) {
+        assert.ok(!data.rows[0].children, "row children was not loaded");
+        assert.equal(data.columns.length, 0, "columns should not be loaded");
+        assert.equal(data.rows.length, 70, "row count is correct");
+        assert.equal(data.rows[9].value, undefined, "row 9 value");
+        assert.equal(data.rows[10].value, "Sevilla", "row 10 value");
+        assert.equal(data.rows[19].value, "Reggio Emilia", "row 19 value");
+        assert.equal(data.rows[20].value, undefined, "row 20 value");
+    });
+});
+
 QUnit.test("Loading data without rows", function(assert) {
     this.load({
         columns: [{ dataField: "ShipCity" }, { dataField: "ShipVia" }],
@@ -184,6 +235,23 @@ QUnit.test("Loading data without rows", function(assert) {
         assert.equal(data.columns.length, 70, "column count is correct");
         assert.equal(data.columns[0].value, "Aachen", "First column has correct name");
         assert.equal(data.columns[2].value, "Anchorage", "Second column has correct name");
+    });
+});
+
+QUnit.test("Loading data without rows if columnSkip and columnTake are defined", function(assert) {
+    this.load({
+        columns: [{ dataField: "ShipCity" }, { dataField: "ShipVia" }],
+        rows: [],
+        values: [{ summaryType: "count" }],
+        columnSkip: 10,
+        columnTake: 10
+    }).done(function(data) {
+        assert.ok(!data.columns[0].children, "column children was not loaded");
+        assert.equal(data.columns.length, 70, "column count is correct");
+        assert.equal(data.columns[9].value, undefined, "column 9 value");
+        assert.equal(data.columns[10].value, "Bracke", "column 10 value");
+        assert.equal(data.columns[19].value, "Cork", "column 19 value");
+        assert.equal(data.columns[20].value, undefined, "column 20 value");
     });
 });
 
@@ -214,6 +282,33 @@ QUnit.test("Loading data with columns and rows", function(assert) {
         assert.equal(data.rows[69].value, "Warszawa", "last row is correct");
 
         assert.strictEqual(data.values.length, 71, "values has data for 70 rows and grand total row");
+        assert.strictEqual(data.values[0].length, 22, "cell count in grand total row is correct");
+        assert.strictEqual(data.values[1].length, 10, "cell count in first row is correct");
+
+        assert.strictEqual(data.values[0][0].length, 1, "measures count in the grand total cell");
+        assert.strictEqual(data.values[1][9].length, 1, "measures count in the random cell");
+    });
+});
+
+QUnit.test("Loading data with columns and rows if rowTake and columnTake are defined", function(assert) {
+    this.load({
+        columns: [{ dataField: "ShipCountry" }],
+        rows: [{ dataField: "ShipCity" }],
+        values: [{ summaryType: "count" }],
+        rowSkip: 0,
+        rowTake: 10,
+        columnSkip: 0,
+        columnTake: 10
+    }).done(function(data) {
+        assert.equal(data.columns.length, 21, "columns count is correct");
+        assert.equal(data.columns[0].value, "Argentina", "first column is correct");
+        assert.equal(data.columns[20].value, "Venezuela", "last column is correct and loaded");
+
+        assert.equal(data.rows.length, 70, "rows count is correct");
+        assert.equal(data.rows[0].value, "Aachen", "first row is correct");
+        assert.equal(data.rows[69].value, undefined, "last row is not loaded");
+
+        assert.strictEqual(data.values.length, 11, "values has data for 10 loaded rows and grand total row");
         assert.strictEqual(data.values[0].length, 22, "cell count in grand total row is correct");
         assert.strictEqual(data.values[1].length, 10, "cell count in first row is correct");
 
