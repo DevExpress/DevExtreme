@@ -56,32 +56,37 @@ var ExcelCreator = Class.inherit({
         return typeUtils.isDefined(content) ? result + ">" + content + "</" + tagName + ">" : result + " />";
     },
 
-    _getCellIndex: function(rowIndex, cellIndex) {
-        var sheetIndex = '',
+    _convertToExcelCellRef: function(zeroBasedRowIndex, zeroBasedCellIndex) {
+        // pass (0, 0) to get 'A1'
+        var columnName = '',
             max = 26,
             charCode,
             isCellIndexFound;
 
-        if(this._maxIndex[0] < Number(rowIndex)) {
-            this._maxIndex[0] = Number(rowIndex);
-        }
-
-        if(this._maxIndex[1] < Number(cellIndex)) {
-            this._maxIndex[1] = Number(cellIndex);
-        }
-
         while(!isCellIndexFound) {
-            charCode = 65 + ((cellIndex >= max) ? (cellIndex % max) : Math.ceil(cellIndex));
-            sheetIndex = String.fromCharCode(charCode) + sheetIndex;
+            charCode = 65 + ((zeroBasedCellIndex >= max) ? (zeroBasedCellIndex % max) : Math.ceil(zeroBasedCellIndex));
+            columnName = String.fromCharCode(charCode) + columnName;
 
-            if(cellIndex >= max) {
-                cellIndex = Math.floor(cellIndex / max) - 1;
+            if(zeroBasedCellIndex >= max) {
+                zeroBasedCellIndex = Math.floor(zeroBasedCellIndex / max) - 1;
             } else {
                 isCellIndexFound = true;
             }
         }
 
-        return sheetIndex + rowIndex;
+        return columnName + (zeroBasedRowIndex + 1);
+    },
+
+    _convertToExcelCellRefAndTrackMaxIndex: function(rowIndex, cellIndex) {
+        if(this._maxRowIndex < Number(rowIndex)) {
+            this._maxRowIndex = Number(rowIndex);
+        }
+
+        if(this._maxColumnIndex < Number(cellIndex)) {
+            this._maxColumnIndex = Number(cellIndex);
+        }
+
+        return this._convertToExcelCellRef(rowIndex, cellIndex);
     },
 
     _getDataType: function(dataType) {
@@ -458,13 +463,14 @@ var ExcelCreator = Class.inherit({
             attributes.push({ name: "ySplit", value: frozenArea.y });
         }
 
-        attributes.push({ name: "topLeftCell", value: this._getCellIndex(frozenArea.y + 1, frozenArea.x) });
+        attributes.push({ name: "topLeftCell", value: this._convertToExcelCellRefAndTrackMaxIndex(frozenArea.y, frozenArea.x) });
 
         return this._getXMLTag("pane", attributes);
     },
 
     _getAutoFilterXML: function(maxCellIndex) {
         if(this._options.autoFilterEnabled) {
+            // 18.3.1.2 autoFilter (AutoFilter Settings)
             return "<autoFilter ref=\"A" + this._dataProvider.getHeaderRowCount() + ":" + maxCellIndex + "\" />";
         }
 
@@ -484,18 +490,25 @@ var ExcelCreator = Class.inherit({
             rowIndex,
             cellData,
             xmlCells,
-            maxCellIndex,
-            counter = 0,
+            rightBottomCellRef,
             xmlRows = [],
             rowsLength = this._cellsArray.length,
             cellsLength,
             colsLength = this._colsArray.length,
             rSpans = "1:" + colsLength,
             headerRowCount = this._dataProvider.getHeaderRowCount ? this._dataProvider.getHeaderRowCount() : 1,
-            xmlResult = [[WORKSHEET_HEADER_XML,
-                ((this._needSheetPr) ? GROUP_SHEET_PR_XML : SINGLE_SHEET_PR_XML), "<dimension ref=\"A1:", this._getCellIndex(this._maxIndex[0], this._maxIndex[1]) + "\"/><sheetViews><sheetView " +
-            (this._rtlEnabled ? "rightToLeft=\"1\" " : "") + "tabSelected=\"1\" workbookViewId=\"0\">" + this._getPaneXML() + "</sheetView></sheetViews><sheetFormatPr defaultRowHeight=\"15\" outlineLevelRow=\"",
-                ((this._dataProvider.getRowsCount() > 0) ? this._dataProvider.getGroupLevel(0) : 0), "\" x14ac:dyDescent=\"0.25\"/>"].join("")];
+            xmlResult = [WORKSHEET_HEADER_XML];
+
+        xmlResult.push((this._needSheetPr) ? GROUP_SHEET_PR_XML : SINGLE_SHEET_PR_XML);
+        xmlResult.push('<dimension ref="A1:C1"/>'); // 18.3.1.35 dimension (Worksheet Dimensions)
+        xmlResult.push('<sheetViews><sheetView ');
+        xmlResult.push(this._rtlEnabled ? 'rightToLeft="1" ' : '');
+        xmlResult.push('tabSelected="1" workbookViewId="0">');
+        xmlResult.push(this._getPaneXML());
+        xmlResult.push('</sheetView></sheetViews>');
+        xmlResult.push('<sheetFormatPr defaultRowHeight="15"');
+        xmlResult.push(' outlineLevelRow="' + ((this._dataProvider.getRowsCount() > 0) ? this._dataProvider.getGroupLevel(0) : 0) + '"');
+        xmlResult.push(' x14ac:dyDescent="0.25"/>');
 
         for(colIndex = 0; colIndex < colsLength; colIndex++) {
             this._colsArray[colIndex] = this._getXMLTag("col", [
@@ -516,7 +529,7 @@ var ExcelCreator = Class.inherit({
                 cellData = this._cellsArray[rowIndex][colIndex];
 
                 xmlCells.push(this._getXMLTag("c", [ // 18.3.1.4 c (Cell)
-                    { name: "r", value: this._getCellIndex(rowIndex + 1, colIndex) },
+                    { name: "r", value: this._convertToExcelCellRefAndTrackMaxIndex(rowIndex, colIndex) },
                     { name: "s", value: cellData.style },
                     { name: "t", value: cellData.type } // 18.18.11 ST_CellType (Cell Type)
                 ], (typeUtils.isDefined(cellData.value)) ? this._getXMLTag("v", [], cellData.value) : null));
@@ -532,19 +545,22 @@ var ExcelCreator = Class.inherit({
             ], xmlCells.join("")));
 
             this._cellsArray[rowIndex] = null;
-            if(counter++ > 10000) {
+            if(xmlRows.length > 10000) {
                 xmlResult.push(xmlRows.join(""));
                 xmlRows = [];
-                counter = 0;
             }
         }
 
         xmlResult.push(xmlRows.join(""));
         xmlRows = [];
 
-        maxCellIndex = this._getCellIndex(this._maxIndex[0], this._maxIndex[1]);
-        xmlResult.push("</sheetData>" + this._getAutoFilterXML(maxCellIndex) + this._generateMergingXML() + this._getIgnoredErrorsXML(maxCellIndex) + "</worksheet>");
-
+        rightBottomCellRef = this._convertToExcelCellRef(this._maxRowIndex, this._maxColumnIndex);
+        xmlResult.push(
+            "</sheetData>" +
+            this._getAutoFilterXML(rightBottomCellRef) +
+            this._generateMergingXML() +
+            this._getIgnoredErrorsXML(rightBottomCellRef) +
+            "</worksheet>");
 
         this._zip.folder(XL_FOLDER_NAME).folder(WORKSHEETS_FOLDER).file(WORKSHEET_FILE_NAME, xmlResult.join(""));
 
@@ -572,8 +588,8 @@ var ExcelCreator = Class.inherit({
                     var cellMerge = this._dataProvider.getCellMerging(rowIndex, cellIndex);
                     if(cellMerge.colspan || cellMerge.rowspan) {
                         mergeArray.push({
-                            start: this._getCellIndex(rowIndex + 1, cellIndex),
-                            end: this._getCellIndex(rowIndex + 1 + (cellMerge.rowspan || 0), cellIndex + (cellMerge.colspan || 0))
+                            start: this._convertToExcelCellRefAndTrackMaxIndex(rowIndex, cellIndex),
+                            end: this._convertToExcelCellRefAndTrackMaxIndex(rowIndex + (cellMerge.rowspan || 0), cellIndex + (cellMerge.colspan || 0))
                         });
                         for(k = rowIndex; k <= rowIndex + cellMerge.rowspan || 0; k++) {
                             for(l = cellIndex; l <= cellIndex + cellMerge.colspan || 0; l++) {
@@ -628,7 +644,8 @@ var ExcelCreator = Class.inherit({
     ctor: function(dataProvider, options) {
         this._rtlEnabled = options && !!options.rtlEnabled;
         this._options = options;
-        this._maxIndex = [1, 2];
+        this._maxRowIndex = 0;
+        this._maxColumnIndex = 0;
         this._stringArray = [];
         this._stringHash = {};
         this._styleArray = [];
