@@ -4862,7 +4862,7 @@ QUnit.module("performance", () => {
             dataSource: {
                 load
             },
-            value: Array(...{ length: 2000 }).map(Number.call, Number),
+            value: Array.apply(null, { length: 2000 }).map(Number.call, Number),
             valueExpr: "id",
             displayExpr: "text"
         });
@@ -4877,7 +4877,7 @@ QUnit.module("performance", () => {
             dataSource: {
                 load
             },
-            value: Array(...{ length: 2 }).map(Number.call, Number),
+            value: Array.apply(null, { length: 2 }).map(Number.call, Number),
             valueExpr: "id",
             displayExpr: "text"
         });
