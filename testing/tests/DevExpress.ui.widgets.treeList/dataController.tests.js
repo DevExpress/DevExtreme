@@ -2708,7 +2708,7 @@ QUnit.test("FullBranch mode. The order of nodes should not be changed after expa
     ]);
     /* eslint-enable */
 
-     this.setupTreeList({
+    this.setupTreeList({
         dataSource: {
             load: (loadOptions) => store.load(loadOptions)
         },
@@ -2722,20 +2722,20 @@ QUnit.test("FullBranch mode. The order of nodes should not be changed after expa
         }
     });
 
-     // act
+    // act
     this.expandRow(1);
 
-     // assert
+    // assert
     var items = this.dataController.items();
     assert.strictEqual(items.length, 3, "item count");
     assert.deepEqual(items[0].data, { id: 1, parentId: 0, test: "Test 1" }, "first item");
     assert.deepEqual(items[1].data, { id: 4, parentId: 1, test: "Test 3" }, "second item");
     assert.deepEqual(items[2].data, { id: 2, parentId: 1, test: "Test 2" }, "third item");
 
-     // act
+    // act
     this.expandRow(4);
 
-     // assert
+    // assert
     items = this.dataController.items();
     assert.strictEqual(items.length, 4, "item count");
     assert.deepEqual(items[0].data, { id: 1, parentId: 0, test: "Test 1" }, "first item");
