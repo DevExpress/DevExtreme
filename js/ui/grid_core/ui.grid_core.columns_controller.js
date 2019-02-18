@@ -1257,7 +1257,8 @@ module.exports = {
                     optionSetter,
                     columns,
                     changeType,
-                    fullOptionName;
+                    fullOptionName,
+                    initialColumn;
 
                 if(arguments.length === 3) {
                     return optionGetter(column, { functionsAsIs: true });
@@ -1291,12 +1292,12 @@ module.exports = {
                         // T346972
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
-                            column = that.getColumnByPath(fullOptionName, columns);
-                            if(isString(column)) {
-                                column = columns[columnIndex] = { dataField: column };
+                            initialColumn = that.getColumnByPath(fullOptionName, columns);
+                            if(isString(initialColumn)) {
+                                initialColumn = columns[columnIndex] = { dataField: initialColumn };
                             }
-                            if(column) {
-                                optionSetter(column, value, { functionsAsIs: true });
+                            if(initialColumn && checkUserStateColumn(initialColumn, column)) {
+                                optionSetter(initialColumn, value, { functionsAsIs: true });
                             }
                         }
                         updateColumnChanges(that, changeType, optionName, columnIndex);
@@ -1553,9 +1554,9 @@ module.exports = {
 
                     if(columnIndexes.length) {
                         if(columns) {
-                            column = columnIndexes.reduce(function(prevColumn, index) {
-                                return prevColumn ? prevColumn.columns[index] : columns[index];
-                            }, 0);
+                            column = columnIndexes.reduce(function(column, index) {
+                                return column && column.columns && column.columns[index];
+                            }, { columns: columns });
                         } else {
                             column = getColumnByIndexes(that, columnIndexes);
                         }
