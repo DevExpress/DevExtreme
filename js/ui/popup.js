@@ -564,6 +564,10 @@ var Popup = Overlay.inherit({
         return toolbarsItems;
     },
 
+    _getLocalizationKey(itemType) {
+        return itemType.toLowerCase() === "done" ? "OK" : camelize(itemType, true);
+    },
+
     _getToolbarItemByAlias: function(data) {
         var that = this,
             itemType = data.shortcut;
@@ -573,7 +577,7 @@ var Popup = Overlay.inherit({
         }
 
         var itemConfig = extend({
-            text: messageLocalization.format(camelize(itemType, true)),
+            text: messageLocalization.format(this._getLocalizationKey(itemType)),
             onClick: this._createToolbarItemAction(data.onClick),
             integrationOptions: {},
             type: that.option("useDefaultToolbarButtons") ? BUTTON_DEFAULT_TYPE : BUTTON_NORMAL_TYPE,
