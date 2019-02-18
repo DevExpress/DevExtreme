@@ -60,7 +60,8 @@ QUnit.module("Editing operations", moduleConfig, () => {
         var $cell = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS} > td`).eq(0);
         assert.equal($cell.text(), "File 1.txt", "has target file");
 
-        $cell.trigger("click");
+        $cell.trigger("dxclick");
+        this.$element.find(`.${internals.ITEMS_GRID_VIEW_CLASS}`).trigger("click");
         this.clock.tick(400);
 
         var $commandButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('Rename')`);
@@ -104,7 +105,9 @@ QUnit.module("Editing operations", moduleConfig, () => {
     });
 
     test("delete folder in folders area", (assert) => {
-        var $folderNode = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`).eq(0);
+        var $folderNodes = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
+        var initialCount = $folderNodes.length;
+        var $folderNode = $folderNodes.eq(0);
         assert.equal($folderNode.text(), "Folder 1", "has target folder");
 
         $folderNode.trigger("dxclick");
@@ -114,10 +117,31 @@ QUnit.module("Editing operations", moduleConfig, () => {
         $commandButton.trigger("dxclick");
         this.clock.tick(400);
 
-        var $folderNodes = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
-        assert.equal($folderNodes.length, 2, "folders count decreased");
+        $folderNodes = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
+        assert.equal($folderNodes.length, initialCount - 1, "folders count decreased");
         assert.ok($folderNodes.eq(0).text().indexOf("Folder 1") === -1, "first folder is not target folder");
         assert.ok($folderNodes.eq(1).text().indexOf("Folder 1") === -1, "second folder is not target folder");
+    });
+
+    test("delete file in items area", (assert) => {
+        var $rows = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS}`);
+        var initialCount = $rows.length;
+
+        var $cell = $rows.find("td").eq(0);
+        assert.equal($cell.text(), "File 1.txt", "has target file");
+
+        $cell.trigger("dxclick");
+        this.$element.find(`.${internals.ITEMS_GRID_VIEW_CLASS}`).trigger("click");
+        this.clock.tick(400);
+
+        var $commandButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('Delete')`);
+        $commandButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        $rows = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS}`);
+        assert.equal($rows.length, initialCount - 1, "files count decreased");
+        assert.ok($rows.eq(0).text().indexOf("File 1.txt") === -1, "first folder is not target folder");
+        assert.ok($rows.eq(1).text().indexOf("File 1.txt") === -1, "second folder is not target folder");
     });
 
 });
