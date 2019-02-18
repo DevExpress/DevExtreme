@@ -965,6 +965,18 @@ if(devices.real().deviceType === "desktop") {
         });
     });
 
+    module("Regression", () => {
+        QUnit.test("should paste text if value was not initialized (T715236)", (assert) => {
+            const $input = $("#dateBox")
+                .dxDateBox({ useMaskBehavior: true })
+                .dxDateBox("instance")
+                ._input();
+
+            keyboardMock($input).paste("2/15/2019");
+            assert.strictEqual($input.get(0).value, "2/15/2019");
+        });
+    });
+
     module("Advanced caret", setupModule, () => {
         test("Move caret to the next group", (assert) => {
             this.instance.option({
