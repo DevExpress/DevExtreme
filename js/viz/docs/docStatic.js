@@ -137,8 +137,10 @@ var staticMethods = {
     currentPalette: function() { },
     /**
     * @name vizmethods.getPalette
-    * @publicName getPalette(paletteName)
+    * @publicName getPalette(palette, parameters)
     * @param1 palette:string|Array<string>
+    * @param2 parameters:object
+    * @param2_field1 extensionMode:string
     * @return object
     * @static
     * @module viz/palette
@@ -198,4 +200,30 @@ var staticMethods = {
         * @static
         */
     }
+};
+
+/**
+ * @name Palette
+ * @type object
+ * @hidden
+ */
+var Palette = {
+    /**
+     * @name Palette.simpleSet
+     * @type Array<string>
+     */
+    /**
+     * @name Palette.indicatingSet
+     * @type Array<string>
+     */
+    /**
+     * @name Palette.gradientSet
+     * @type Array<string>
+     */
+    /**
+    * @name Palette.generateColors
+    * @publicName generateColors(count)
+    * @param1 count:number
+    */
+   generateColors: function() { }
 };
