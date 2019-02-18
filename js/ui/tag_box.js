@@ -850,30 +850,39 @@ var TagBox = SelectBox.inherit({
             filteredValues[filteredItemValue] = filteredItem;
         }.bind(this));
 
+        var loadItemPromises = [];
+
         values.forEach(function(value, index) {
             var currentItem = filteredValues[isValueExprSpecified ? JSON.stringify(value) : value];
 
             if(isValueExprSpecified && !isDefined(currentItem)) {
-                this._loadItem(value, cache).always((function(item) {
-                    this._createTagData(items, item, value, index);
-                }).bind(this));
+                loadItemPromises.push(this._loadItem(value, cache).always((function(item) {
+                    var newItem = this._createTagData(items, item, value, index);
+                    items.splice(index, 0, newItem);
+                }).bind(this)));
             } else {
-                this._createTagData(items, currentItem, value, index);
+                var newItem = this._createTagData(items, currentItem, value, index);
+                items.splice(index, 0, newItem);
             }
         }.bind(this));
 
-        return items;
+        var d = new Deferred();
+        when.apply(this, loadItemPromises).always(function() {
+            d.resolve(items);
+        });
+
+        return d.promise();
     },
 
     _createTagData: function(items, item, value, valueIndex) {
         if(isDefined(item)) {
             this._selectedItems.push(item);
-            items.splice(valueIndex, 0, item);
+            return item;
         } else {
             var selectedItem = this.option("selectedItem"),
                 customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
 
-            items.splice(valueIndex, 0, customItem);
+            return customItem;
         }
     },
 
@@ -886,7 +895,9 @@ var TagBox = SelectBox.inherit({
         this._getFilteredItems(values)
             .done(function(filteredItems) {
                 var items = this._createTagsData(values, filteredItems);
-                tagData.resolve(items);
+                items.always(function(data) {
+                    tagData.resolve(data);
+                });
             }.bind(this))
             .fail(tagData.reject.bind(this));
 
