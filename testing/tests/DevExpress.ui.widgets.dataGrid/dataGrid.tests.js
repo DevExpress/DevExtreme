@@ -13926,6 +13926,52 @@ QUnit.test("Pressing arrow keys inside editor of the internal grid does not call
     assert.notOk(preventDefaultCalled, "preventDefault is not called");
 });
 
+QUnit.test("Pressing symbol keys inside detail grid editor does not change master grid's focusedCellPosition", function(assert) {
+    // arrange
+    var keyboard,
+        $dateBoxInput;
+
+    this.dataGrid.option({
+        dataSource: {
+            store: {
+                type: "array",
+                data: [{ id: 0, value: "value 1", text: "Awesome" }],
+                key: "id"
+            }
+        },
+        masterDetail: {
+            enabled: true,
+            template: function(container, options) {
+                $("<div>")
+                    .addClass("internal-grid")
+                    .dxDataGrid({
+                        filterRow: {
+                            visible: true
+                        },
+                        columns: [{ dataField: "field1", filterValue: "test" }, "field2"],
+                        dataSource: [{ field1: "test1", field2: "test2" }]
+                    }).appendTo(container);
+            }
+        }
+    });
+    this.dataGrid.expandRow(0);
+    this.clock.tick();
+
+    // act
+    this.keyboardNavigationController._focusedCellPosition = { rowIndex: 0, columnIndex: 1 };
+    $dateBoxInput = $(this.dataGrid.$element()).find(".internal-grid .dx-datagrid-filter-row").find(".dx-texteditor-input").first();
+    $dateBoxInput.focus();
+    this.clock.tick();
+    keyboard = keyboardMock($dateBoxInput);
+
+    // act
+    keyboard.keyDown("1");
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 0, columnIndex: 1 }, "Master grid focusedCellPosition is not changed");
+});
+
 // T671532
 QUnit.testInActiveWindow("Change options do not throw an exception when an element outside the grid is focused", function(assert) {
     // arange
