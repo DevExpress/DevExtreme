@@ -141,7 +141,7 @@ var staticMethods = {
     * @param1 palette:string|Array<string>
     * @param2 parameters:object
     * @param2_field1 extensionMode:string
-    * @return object
+    * @return Palette
     * @static
     * @module viz/palette
     * @export getPalette
@@ -224,6 +224,7 @@ var Palette = {
     * @name Palette.generateColors
     * @publicName generateColors(count)
     * @param1 count:number
+    * @return Array<string>
     */
    generateColors: function() { }
 };
