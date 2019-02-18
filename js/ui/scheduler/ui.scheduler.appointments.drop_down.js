@@ -197,29 +197,20 @@ let dropDownAppointments = Class.inherit({
             settings = itemData.settings;
 
         eventsEngine.on($item, DRAG_START_EVENT_NAME, () => {
-            this._dragStartHandler($item, itemData, settings, $menu);
+            this._onAppointmentDragStart($item, itemData, settings, $menu);
         });
 
         eventsEngine.on($item, DRAG_UPDATE_EVENT_NAME, (e) => {
             DropDownMenu.getInstance($menu).close();
-            this._dragHandler(e, itemData.allDay);
+            this._onAppointmentDragUpdate(e, itemData.allDay);
         });
 
         eventsEngine.on($item, DRAG_END_EVENT_NAME, () => {
-            eventsEngine.trigger(this._$draggedItem, "dxdragend");
-            delete this._$draggedItem;
+            this._onAppointmentDragEnd(itemData);
         });
     },
 
-    _clearExcessFields: function(data) {
-        delete data.itemData;
-        delete data.itemIndex;
-        delete data.itemElement;
-
-        return data;
-    },
-
-    _dragStartHandler: function($item, itemData, settings, $menu, e) {
+    _onAppointmentDragStart: function($item, itemData, settings, $menu, e) {
         const appointmentInstance = this.instance.getAppointmentsInstance(),
             appointmentIndex = appointmentInstance.option("items").length;
 
@@ -242,20 +233,7 @@ let dropDownAppointments = Class.inherit({
         }
     },
 
-    _prepareDragItem: function($menu, $items, settings) {
-        this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, settings[0].startDate) : $items[0];
-
-        const menuPosition = translator.locate($menu);
-        this._startPosition = {
-            top: menuPosition.top,
-            left: menuPosition.left
-        };
-
-        translator.move(this._$draggedItem, this._startPosition);
-        eventsEngine.trigger(this._$draggedItem, "dxdragstart");
-    },
-
-    _dragHandler: function(e, allDay) {
+    _onAppointmentDragUpdate: function(e, allDay) {
         let coordinates = {
             left: this._startPosition.left + e.offset.x,
             top: this._startPosition.top + e.offset.y
@@ -273,6 +251,38 @@ let dropDownAppointments = Class.inherit({
         });
 
         translator.move(this._$draggedItem, coordinates);
+    },
+
+    _onAppointmentDragEnd: function(itemData) {
+        const appointments = this.instance.getAppointmentsInstance(),
+            newCellIndex = this.instance._workSpace.getDroppableCellIndex(),
+            oldCellIndex = this.instance._workSpace.getCellIndexByCoordinates(this._startPosition);
+
+        eventsEngine.trigger(this._$draggedItem, "dxdragend");
+        newCellIndex === oldCellIndex && appointments._clearItem({ itemData: itemData });
+
+        delete this._$draggedItem;
+    },
+
+    _clearExcessFields: function(data) {
+        delete data.itemData;
+        delete data.itemIndex;
+        delete data.itemElement;
+
+        return data;
+    },
+
+    _prepareDragItem: function($menu, $items, settings) {
+        this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, settings[0].startDate) : $items[0];
+
+        const menuPosition = translator.locate($menu);
+        this._startPosition = {
+            top: menuPosition.top,
+            left: menuPosition.left
+        };
+
+        translator.move(this._$draggedItem, this._startPosition);
+        eventsEngine.trigger(this._$draggedItem, "dxdragstart");
     },
 
     _getRecurrencePart: function(appointments, startDate) {
