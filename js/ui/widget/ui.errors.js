@@ -276,5 +276,5 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     /**
     * @name ErrorsUIWidgets.W1013
     */
-    W1013: "You are using potentially dangerous way to set dialog message. Make sure that you pass safe html code. We recommended to use \"messageHtml\" instead of deprecated \"message\" option"
+    W1013: "You are using potentially dangerous way to set dialog message. Make sure that you pass safe html code. We recommend to use \"messageHtml\" instead of deprecated \"message\" option"
 });
