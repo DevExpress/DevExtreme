@@ -159,9 +159,9 @@ var Lookup = DropDownList.inherit({
             /**
             * @name dxLookupOptions.applyButtonText
             * @type string
-            * @default "Done"
+            * @default "OK"
             */
-            applyButtonText: messageLocalization.format("Done"),
+            applyButtonText: messageLocalization.format("OK"),
 
             /**
              * @name dxLookupOptions.popupWidth
