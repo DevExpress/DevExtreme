@@ -1,100 +1,103 @@
-var $ = require("jquery"),
-    Editor = require("ui/editor/editor"),
-    Class = require("core/class"),
-    ValidationEngine = require("ui/validation_engine"),
-    hoverEvents = require("events/hover");
+import $ from "jquery";
+import Editor from "ui/editor/editor";
+import Class from "core/class";
+import ValidationEngine from "ui/validation_engine";
+import hoverEvents from "events/hover";
 
-require("common.css!");
+import "common.css!";
 
-var Fixture = Class.inherit({
-    createEditor: function(options) {
+const Fixture = Class.inherit({
+    createEditor(options) {
         this.$element = $("<div/>").appendTo("body");
-        var editor = new Editor(this.$element, options);
+        const editor = new Editor(this.$element, options);
 
         return editor;
     },
-    createOnlyElement: function(options) {
+    createOnlyElement(options) {
         this.$element = $("<div/>").appendTo("body");
 
         return this.$element;
     },
-    teardown: function() {
+    teardown() {
         this.$element.remove();
         ValidationEngine.initGroups();
     }
 });
 
-
-(function() {
-    QUnit.module("Editor", {
-        beforeEach: function() {
-            this.fixture = new Fixture();
-        },
-        afterEach: function() {
-            this.fixture.teardown();
-        }
-    });
-
-    QUnit.test("Editor can be instantiated", function(assert) {
-        var editor = this.fixture.createEditor();
+QUnit.module("Editor", {
+    beforeEach: () => {
+        this.fixture = new Fixture();
+    },
+    afterEach: () => {
+        this.fixture.teardown();
+    }
+}, () => {
+    QUnit.test("Editor can be instantiated", (assert) => {
+        const editor = this.fixture.createEditor();
         assert.ok(editor instanceof Editor);
     });
 
-    QUnit.test("rendering", function(assert) {
-        var editor = this.fixture.createEditor();
+    QUnit.test("rendering", (assert) => {
+        const editor = this.fixture.createEditor();
         assert.ok(editor);
     });
 
-    QUnit.test("'readOnly' option has 'false' value by default", function(assert) {
-        var editor = this.fixture.createEditor();
+    QUnit.test("'readOnly' option has 'false' value by default", (assert) => {
+        const editor = this.fixture.createEditor();
 
         assert.strictEqual(editor.option("readOnly"), false);
     });
 
-    QUnit.test("Changing the 'value' option invokes the onValueChanged and passes the old and new values as arguments", function(assert) {
-        var oldValue = "old",
-            newValue = "new",
-            onValueChanged = function(options) {
-                assert.strictEqual(options.previousValue, oldValue, "old value is ok");
-                assert.strictEqual(options.value, newValue, "new value is ok");
-            };
-        var editor = this.fixture.createEditor();
+    QUnit.test("Changing the 'value' option invokes the onValueChanged and passes the old and new values as arguments", (assert) => {
+        const oldValue = "old";
+        const newValue = "new";
+
+        const onValueChanged = options => {
+            assert.strictEqual(options.previousValue, oldValue, "old value is ok");
+            assert.strictEqual(options.value, newValue, "new value is ok");
+        };
+
+        const editor = this.fixture.createEditor();
 
         editor.option("value", oldValue);
         editor.option("onValueChanged", onValueChanged);
         editor.option("value", newValue);
     });
 
-    QUnit.test("Changing the 'value' option invokes the onValueChanged and passes the old and new values as arguments, 'readOnly' editor", function(assert) {
-        var oldValue = "old",
-            newValue = "new",
-            onValueChanged = function(options) {
-                assert.strictEqual(options.previousValue, oldValue, "old value is ok");
-                assert.strictEqual(options.value, newValue, "new value is ok");
-            };
-        var editor = this.fixture.createEditor({ readOnly: true });
+    QUnit.test("Changing the 'value' option invokes the onValueChanged and passes the old and new values as arguments, 'readOnly' editor", (assert) => {
+        const oldValue = "old";
+        const newValue = "new";
+
+        const onValueChanged = options => {
+            assert.strictEqual(options.previousValue, oldValue, "old value is ok");
+            assert.strictEqual(options.value, newValue, "new value is ok");
+        };
+
+        const editor = this.fixture.createEditor({ readOnly: true });
 
         editor.option("value", oldValue);
         editor.option("onValueChanged", onValueChanged);
         editor.option("value", newValue);
     });
 
-    QUnit.test("Changing the 'value' option invokes the onValueChanged and passes the old and new values as arguments, 'disabled' editor", function(assert) {
-        var oldValue = "old",
-            newValue = "new",
-            onValueChanged = function(options) {
-                assert.strictEqual(options.previousValue, oldValue, "old value is ok");
-                assert.strictEqual(options.value, newValue, "new value is ok");
-            };
-        var editor = this.fixture.createEditor({ disabled: true });
+    QUnit.test("Changing the 'value' option invokes the onValueChanged and passes the old and new values as arguments, 'disabled' editor", (assert) => {
+        const oldValue = "old";
+        const newValue = "new";
+
+        const onValueChanged = options => {
+            assert.strictEqual(options.previousValue, oldValue, "old value is ok");
+            assert.strictEqual(options.value, newValue, "new value is ok");
+        };
+
+        const editor = this.fixture.createEditor({ disabled: true });
 
         editor.option("value", oldValue);
         editor.option("onValueChanged", onValueChanged);
         editor.option("value", newValue);
     });
 
-    QUnit.test("keyboardProcessor is not defined for readOnly editor", function(assert) {
-        var editor = this.fixture.createEditor({ focusStateEnabled: true, readOnly: true });
+    QUnit.test("keyboardProcessor is not defined for readOnly editor", (assert) => {
+        const editor = this.fixture.createEditor({ focusStateEnabled: true, readOnly: true });
 
         assert.strictEqual(editor._keyboardProcessor, undefined, "keyboardProcessor is not defined after init");
 
@@ -103,50 +106,53 @@ var Fixture = Class.inherit({
         assert.ok(editor._keyboardProcessor, "keyboardProcessor is defined");
     });
 
-    QUnit.test("If _valueChangeEventInstance is present, the onValueChanged must receive it as a Event argument; and then _valueChangeEventInstance must be reset", function(assert) {
-        var newValue = "new",
-            _valueChangeEventInstance = "something",
-            onValueChanged = function(options) {
-                assert.strictEqual(options.event, _valueChangeEventInstance, "Event is ok");
-            };
+    QUnit.test("If _valueChangeEventInstance is present, the onValueChanged must receive it as a Event argument; and then _valueChangeEventInstance must be reset", (assert) => {
+        const newValue = "new";
+        const _valueChangeEventInstance = "something";
 
-        var editor = this.fixture.createEditor();
+        const onValueChanged = options => {
+            assert.strictEqual(options.event, _valueChangeEventInstance, "Event is ok");
+        };
+
+        const editor = this.fixture.createEditor();
         editor.option("onValueChanged", onValueChanged);
         editor._valueChangeEventInstance = _valueChangeEventInstance;
         editor.option("value", newValue);
         assert.strictEqual(editor._valueChangeEventInstance, undefined, "_valueChangeEventInstance is reset");
     });
 
-    QUnit.test("_suppressValueChangeAction should suppress invoking _suppressValueChangeAction", function(assert) {
+    QUnit.test("_suppressValueChangeAction should suppress invoking _suppressValueChangeAction", (assert) => {
         assert.expect(0);
 
-        var editor = this.fixture.createEditor();
+        const editor = this.fixture.createEditor();
         editor._suppressValueChangeAction();
-        editor.option("onValueChanged", function() {
+        editor.option("onValueChanged", () => {
             throw Error("failed");
         });
         editor.option("value", true);
     });
 
-    QUnit.test("_resumeValueChangeAction should resume invoking _suppressValueChangeAction", function(assert) {
-        var value = "value",
-            onValueChanged = function(options) {
-                assert.strictEqual(options.value, value);
-            };
+    QUnit.test("_resumeValueChangeAction should resume invoking _suppressValueChangeAction", (assert) => {
+        const value = "value";
+
+        const onValueChanged = options => {
+            assert.strictEqual(options.value, value);
+        };
+
         assert.expect(1);
 
-        var editor = this.fixture.createEditor();
+        const editor = this.fixture.createEditor();
         editor._suppressValueChangeAction();
         editor._resumeValueChangeAction();
         editor.option("onValueChanged", onValueChanged);
         editor.option("value", value);
     });
 
-    QUnit.test("onValueChanged should work correctly when it passed on onInitialized (T314007)", function(assert) {
-        var valueChangeCounter = 0;
-        var editor = this.fixture.createEditor({
-            onInitialized: function(e) {
-                e.component.option("onValueChanged", function() {
+    QUnit.test("onValueChanged should work correctly when it passed on onInitialized (T314007)", (assert) => {
+        let valueChangeCounter = 0;
+        const editor = this.fixture.createEditor({
+            onInitialized(e) {
+                e.component.option("onValueChanged", () => {
                     valueChangeCounter++;
                 });
             }
@@ -157,107 +163,107 @@ var Fixture = Class.inherit({
         assert.equal(valueChangeCounter, 1, "onValueChanged was fired");
     });
 
-    QUnit.test("Editor can be reset()", function(assert) {
-        var editor = this.fixture.createEditor({ value: "123" });
+    QUnit.test("Editor can be reset()", (assert) => {
+        const editor = this.fixture.createEditor({ value: "123" });
 
         editor.reset();
 
         assert.strictEqual(editor.option("value"), null);
     });
 
-    QUnit.test("T359215 - the hover class should be added on hover event if widget has read only state", function(assert) {
-        var editor = this.fixture.createEditor({
-                hoverStateEnabled: true,
-                readOnly: true
-            }),
-            $editor = editor.$element();
+    QUnit.test("T359215 - the hover class should be added on hover event if widget has read only state", (assert) => {
+        const editor = this.fixture.createEditor({
+            hoverStateEnabled: true,
+            readOnly: true
+        });
+
+        const $editor = editor.$element();
 
         $($editor).trigger(hoverEvents.start);
         assert.ok($editor.hasClass("dx-state-hover"), "there is hover class");
     });
-})("Editor");
+});
 
-(function() {
-    QUnit.module("the 'name' option", {
-        beforeEach: function() {
-            this.$element = $("<div>").appendTo("body");
-            this.EditorInheritor = Editor.inherit({
-                _initMarkup: function() {
-                    this._$submitElement = $("<input type='hidden'>").appendTo(this.$element());
-                    this.callBase();
-                },
-                _getSubmitElement: function() {
-                    return this._$submitElement;
-                }
-            });
-        },
-        afterEach: function() {
-            this.$element.remove();
-        }
-    });
-
-    QUnit.test("editor inheritor input should get the 'name' attribute with a correct value", function(assert) {
-        var expectedName = "some_name";
+QUnit.module("the 'name' option", {
+    beforeEach: () => {
+        this.$element = $("<div>").appendTo("body");
+        this.EditorInheritor = Editor.inherit({
+            _initMarkup() {
+                this._$submitElement = $("<input type='hidden'>").appendTo(this.$element());
+                this.callBase();
+            },
+            _getSubmitElement() {
+                return this._$submitElement;
+            }
+        });
+    },
+    afterEach: () => {
+        this.$element.remove();
+    }
+}, () => {
+    QUnit.test("editor inheritor input should get the 'name' attribute with a correct value", (assert) => {
+        const expectedName = "some_name";
 
         new this.EditorInheritor(this.$element, {
             name: expectedName
         });
 
-        var $input = this.$element.find("input[type='hidden']");
+        const $input = this.$element.find("input[type='hidden']");
         assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value");
     });
 
-    QUnit.test("editor inheritor input should get correct 'name' attribute after the 'name' option is changed", function(assert) {
-        var expectedName = "new_name",
-            instance = new this.EditorInheritor(this.$element, {
-                name: "initial_name"
-            }),
-            $input = this.$element.find("input[type='hidden']");
+    QUnit.test("editor inheritor input should get correct 'name' attribute after the 'name' option is changed", (assert) => {
+        const expectedName = "new_name";
+
+        const instance = new this.EditorInheritor(this.$element, {
+            name: "initial_name"
+        });
+
+        const $input = this.$element.find("input[type='hidden']");
 
         instance.option("name", expectedName);
         assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value ");
     });
 
-    QUnit.test("the 'name' attribute should not be rendered if name is an empty string", function(assert) {
+    QUnit.test("the 'name' attribute should not be rendered if name is an empty string", (assert) => {
         new this.EditorInheritor(this.$element);
 
-        var input = this.$element.find("input[type='hidden']").get(0);
+        const input = this.$element.find("input[type='hidden']").get(0);
         assert.notOk(input.hasAttribute("name"), "there should be no 'name' attribute for hidden input");
     });
 
-    QUnit.test("the 'name' attribute should be removed after name is changed to an empty string", function(assert) {
-        var instance = new this.EditorInheritor(this.$element, {
-                name: "some_name"
-            }),
-            input = this.$element.find("input[type='hidden']").get(0);
+    QUnit.test("the 'name' attribute should be removed after name is changed to an empty string", (assert) => {
+        const instance = new this.EditorInheritor(this.$element, {
+            name: "some_name"
+        });
+
+        const input = this.$element.find("input[type='hidden']").get(0);
 
         instance.option("name", "");
         assert.notOk(input.hasAttribute("name"), "there should be no 'name' attribute for hidden input");
     });
-})("the 'name' option");
+});
 
-(function() {
-    QUnit.module("Validation - UI", {
-        beforeEach: function() {
-            this.fixture = new Fixture();
-        },
-        afterEach: function() {
-            this.fixture.teardown();
-        }
-    });
+QUnit.module("Validation - UI", {
+    beforeEach: () => {
+        this.fixture = new Fixture();
+    },
+    afterEach: () => {
+        this.fixture.teardown();
+    }
+}, () => {
+    const INVALID_VALIDATION_CLASS = "dx-invalid";
 
-    var INVALID_VALIDATION_CLASS = "dx-invalid";
-
-    QUnit.test("Widget can be created as invalid", function(assert) {
+    QUnit.test("Widget can be created as invalid", (assert) => {
         // assign
-        var message = "That is very bad editor";
+        const message = "That is very bad editor";
 
         // act
-        var editor = this.fixture.createEditor({
+        const editor = this.fixture.createEditor({
             value: "",
             isValid: false,
             validationError: {
-                message: message
+                message
             }
         });
 
@@ -266,19 +272,19 @@ var Fixture = Class.inherit({
         assert.ok(editor.$element().hasClass(INVALID_VALIDATION_CLASS), "Editor main element should be marked as invalid");
     });
 
-
-    QUnit.test("Widget can be set in invalid state through options", function(assert) {
+    QUnit.test("Widget can be set in invalid state through options", (assert) => {
         // assign
-        var message = "That is very bad editor",
-            editor = this.fixture.createEditor({
-                value: ""
-            });
+        const message = "That is very bad editor";
+
+        const editor = this.fixture.createEditor({
+            value: ""
+        });
 
         // act
         editor.option({
             isValid: false,
             validationError: {
-                message: message
+                message
             }
         });
 
@@ -286,15 +292,14 @@ var Fixture = Class.inherit({
         assert.ok(editor.$element().hasClass(INVALID_VALIDATION_CLASS), "Editor main element should be marked as invalid");
     });
 
-
-    QUnit.test("Widget message should be created", function(assert) {
-        var message = "That is very bad editor",
-            editor = this.fixture.createEditor({});
+    QUnit.test("Widget message should be created", (assert) => {
+        const message = "That is very bad editor";
+        const editor = this.fixture.createEditor({});
 
         editor.option({
             isValid: false,
             validationError: {
-                message: message
+                message
             }
         });
 
@@ -305,18 +310,19 @@ var Fixture = Class.inherit({
         assert.equal(editor._$validationMessage.dxOverlay("instance").$content().text(), message, "Correct message should be set");
     });
 
-    QUnit.test("Widget message (tooltip) should be created and always shown", function(assert) {
+    QUnit.test("Widget message (tooltip) should be created and always shown", (assert) => {
         // assign
-        var message = "That is very bad editor",
-            editor = this.fixture.createEditor({
-                validationMessageMode: "always"
-            });
+        const message = "That is very bad editor";
+
+        const editor = this.fixture.createEditor({
+            validationMessageMode: "always"
+        });
 
         // act
         editor.option({
             isValid: false,
             validationError: {
-                message: message
+                message
             }
         });
 
@@ -327,18 +333,19 @@ var Fixture = Class.inherit({
         assert.ok(!editor._$validationMessage.hasClass("dx-invalid-message-auto"), "Tooltip should not be marked with auto");
     });
 
-    QUnit.test("Widget message (tooltip) should be created but never shown", function(assert) {
+    QUnit.test("Widget message (tooltip) should be created but never shown", (assert) => {
         // assign
-        var message = "That is very bad editor",
-            editor = this.fixture.createEditor({
-                validationMessageMode: "none"
-            });
+        const message = "That is very bad editor";
+
+        const editor = this.fixture.createEditor({
+            validationMessageMode: "none"
+        });
 
         // act
         editor.option({
             isValid: false,
             validationError: {
-                message: message
+                message
             }
         });
 
@@ -349,17 +356,18 @@ var Fixture = Class.inherit({
         assert.ok(!editor._$validationMessage.hasClass("dx-invalid-message-always"), "Tooltip should not be marked as always");
     });
 
-    QUnit.test("Widget message (tooltip) should be destroyed after editor become valid", function(assert) {
+    QUnit.test("Widget message (tooltip) should be destroyed after editor become valid", (assert) => {
         // assign
-        var message = "That is very bad editor",
-            editor = this.fixture.createEditor({
-                validationMessageMode: "always"
-            });
+        const message = "That is very bad editor";
+
+        const editor = this.fixture.createEditor({
+            validationMessageMode: "always"
+        });
 
         editor.option({
             isValid: false,
             validationError: {
-                message: message
+                message
             }
         });
 
@@ -370,13 +378,13 @@ var Fixture = Class.inherit({
         assert.ok(!editor._$validationMessage, "Tooltip should be destroyed; reference should be removed");
     });
 
-    QUnit.test("Validation message should flip if it is out of boundary validationBoundary", function(assert) {
-        var $parent = this.fixture.createOnlyElement().css({
+    QUnit.test("Validation message should flip if it is out of boundary validationBoundary", (assert) => {
+        const $parent = this.fixture.createOnlyElement().css({
             paddingTop: "100px"
         });
-        var $element = $("<div>").appendTo($parent);
+        const $element = $("<div>").appendTo($parent);
 
-        var editor = new Editor($element, {
+        const editor = new Editor($element, {
             validationMessageMode: "always",
             validationError: {
                 message: "Flip"
@@ -386,18 +394,18 @@ var Fixture = Class.inherit({
 
         // act
         editor.option({ isValid: false });
-        var $validationMessage = $element.find(".dx-overlay-content");
+        const $validationMessage = $element.find(".dx-overlay-content");
 
         // assert
         assert.ok($validationMessage.offset().top < $element.offset().top, "validation message was flipped");
     });
 
-    QUnit.test("Validation message should have the same with editor width", function(assert) {
-        var width = 100,
-            $element = this.fixture.createOnlyElement();
+    QUnit.test("Validation message should have the same with editor width", (assert) => {
+        const width = 100;
+        const $element = this.fixture.createOnlyElement();
 
         new Editor($element, {
-            width: width,
+            width,
             validationMessageMode: "always",
             validationError: {
                 message: "Flip"
@@ -405,29 +413,30 @@ var Fixture = Class.inherit({
             isValid: false
         });
 
-        var $validationMessage = $element.find(".dx-invalid-message");
+        const $validationMessage = $element.find(".dx-invalid-message");
         assert.equal($validationMessage.outerWidth(), width, "validation message width is correct");
     });
 
-    QUnit.test("Validation message should have the same with editor width after option change", function(assert) {
-        var width = 200,
-            $element = this.fixture.createOnlyElement(),
-            editor = new Editor($element, {
-                width: 100,
-                validationMessageMode: "always",
-                validationError: {
-                    message: "Flip"
-                },
-                isValid: false
-            });
+    QUnit.test("Validation message should have the same with editor width after option change", (assert) => {
+        const width = 200;
+        const $element = this.fixture.createOnlyElement();
+
+        const editor = new Editor($element, {
+            width: 100,
+            validationMessageMode: "always",
+            validationError: {
+                message: "Flip"
+            },
+            isValid: false
+        });
 
         editor.option("width", width);
-        var $validationMessage = $element.find(".dx-invalid-message");
+        const $validationMessage = $element.find(".dx-invalid-message");
         assert.equal($validationMessage.outerWidth(), width, "validation message width is correct");
     });
 
-    QUnit.test("Overlay content width should be less or equal message width", function(assert) {
-        var $element = this.fixture.createOnlyElement();
+    QUnit.test("Overlay content width should be less or equal message width", (assert) => {
+        const $element = this.fixture.createOnlyElement();
 
         new Editor($element, {
             width: 100,
@@ -438,14 +447,14 @@ var Fixture = Class.inherit({
             isValid: false
         });
 
-        var $validationMessage = $element.find(".dx-invalid-message"),
-            $content = $validationMessage.find(".dx-overlay-content");
+        const $validationMessage = $element.find(".dx-invalid-message");
+        const $content = $validationMessage.find(".dx-overlay-content");
 
         assert.ok($content.outerWidth() <= $validationMessage.outerWidth(), "validation message width is correct");
     });
 
-    QUnit.test("Validation message text should not be wrapped", function(assert) {
-        var $element = this.fixture.createOnlyElement();
+    QUnit.test("Validation message text should not be wrapped", (assert) => {
+        const $element = this.fixture.createOnlyElement();
 
         new Editor($element, {
             validationMessageMode: "always",
@@ -455,12 +464,12 @@ var Fixture = Class.inherit({
             isValid: false
         });
 
-        var $content = $element.find(".dx-invalid-message .dx-overlay-content");
+        const $content = $element.find(".dx-invalid-message .dx-overlay-content");
         assert.equal($content.css("whiteSpace"), "normal", "text is not wrapped");
     });
 
-    QUnit.test("Validation message should have correct width for small content", function(assert) {
-        var $element = this.fixture.createOnlyElement();
+    QUnit.test("Validation message should have correct width for small content", (assert) => {
+        const $element = this.fixture.createOnlyElement();
 
         new Editor($element, {
             width: 500,
@@ -471,14 +480,14 @@ var Fixture = Class.inherit({
             isValid: false
         });
 
-        var $content = $element.find(".dx-invalid-message .dx-overlay-content"),
-            contentWidth = $content.outerWidth();
+        const $content = $element.find(".dx-invalid-message .dx-overlay-content");
+        const contentWidth = $content.outerWidth();
 
         assert.equal($content.css("width", "auto").outerWidth(), contentWidth, "validation message width is correct");
     });
 
-    QUnit.test("T376114 - Validation message should have the 100px max height if the editor has smaller size", function(assert) {
-        var $element = this.fixture.createOnlyElement();
+    QUnit.test("T376114 - Validation message should have the 100px max height if the editor has smaller size", (assert) => {
+        const $element = this.fixture.createOnlyElement();
 
         new Editor($element, {
             width: 20,
@@ -489,13 +498,13 @@ var Fixture = Class.inherit({
             isValid: false
         });
 
-        var $content = $element.find(".dx-invalid-message .dx-overlay-content");
+        const $content = $element.find(".dx-invalid-message .dx-overlay-content");
 
         assert.equal($content.outerWidth(), 100, "the validation message width is correct");
     });
 
-    QUnit.test("Validation overlay should have the 'propagateOutsideClick' with true ", function(assert) {
-        var $element = this.fixture.createOnlyElement();
+    QUnit.test("Validation overlay should have the 'propagateOutsideClick' with true ", (assert) => {
+        const $element = this.fixture.createOnlyElement();
 
         new Editor($element, {
             validationMessageMode: "always",
@@ -508,8 +517,8 @@ var Fixture = Class.inherit({
         assert.equal($element.find(".dx-invalid-message.dx-widget").dxOverlay("option", "propagateOutsideClick"), true, "'propagateOutsideClick' option has correct value");
     });
 
-    QUnit.test("Validation overlay should not inherit templates from the editor", function(assert) {
-        var $element = this.fixture.createOnlyElement();
+    QUnit.test("Validation overlay should not inherit templates from the editor", (assert) => {
+        const $element = this.fixture.createOnlyElement();
 
         new Editor($element, {
             validationMessageMode: "always",
@@ -519,7 +528,7 @@ var Fixture = Class.inherit({
             integrationOptions: {
                 templates: {
                     content: {
-                        render: function() {
+                        render() {
                             $("div").attr("id", "editorContentTemplate");
                         }
                     }
@@ -531,14 +540,14 @@ var Fixture = Class.inherit({
         assert.equal($element.find(".dx-invalid-message.dx-widget #editorContentTemplate").length, 0, "overlay does not inherit templates from the editor");
     });
 
-    QUnit.test("Validation overlay should be render correctly in hidden area", function(assert) {
-        var $element = this.fixture.createOnlyElement();
-        var $hiddenDiv = $("<div>").css("display", "none");
+    QUnit.test("Validation overlay should be render correctly in hidden area", (assert) => {
+        const $element = this.fixture.createOnlyElement();
+        const $hiddenDiv = $("<div>").css("display", "none");
 
         $element.appendTo($hiddenDiv);
 
-        var validationMessage = "text is required";
-        var editor = new Editor($element, {
+        const validationMessage = "text is required";
+        const editor = new Editor($element, {
             validationMessageMode: "always",
             validationError: {
                 message: validationMessage
@@ -549,15 +558,15 @@ var Fixture = Class.inherit({
         assert.equal(editor._$validationMessage.text(), validationMessage, "validation overlay text was render correctly");
     });
 
-    QUnit.test("Validation overlay width after render in hidden area should be equal width in visible area", function(assert) {
-        var $element = this.fixture.createOnlyElement();
-        var $hiddenDiv = $("<div>").css("display", "none");
+    QUnit.test("Validation overlay width after render in hidden area should be equal width in visible area", (assert) => {
+        const $element = this.fixture.createOnlyElement();
+        const $hiddenDiv = $("<div>").css("display", "none");
 
         $element.appendTo($hiddenDiv);
         $hiddenDiv.appendTo("#qunit-fixture");
 
-        var validationMessage = "text";
-        var editor = new Editor($element, {
+        const validationMessage = "text";
+        const editor = new Editor($element, {
             validationMessageMode: "always",
             validationError: {
                 message: validationMessage
@@ -570,20 +579,18 @@ var Fixture = Class.inherit({
 
         assert.equal(editor._$validationMessage.outerWidth(), 305, "overlay width was set correctly");
     });
-})("Validation - UI");
+});
 
-(function() {
-    QUnit.module("Validation overlay options", {
-        beforeEach: function() {
-            this.fixture = new Fixture();
-        },
-        afterEach: function() {
-            this.fixture.teardown();
-        }
-    });
-
-    QUnit.test("it should be possible to redefine validation overlay options", function(assert) {
-        var $element = this.fixture.createOnlyElement();
+QUnit.module("Validation overlay options", {
+    beforeEach: () => {
+        this.fixture = new Fixture();
+    },
+    afterEach: () => {
+        this.fixture.teardown();
+    }
+}, () => {
+    QUnit.test("it should be possible to redefine validation overlay options", (assert) => {
+        const $element = this.fixture.createOnlyElement();
 
         new Editor($element, {
             validationMessageMode: "always",
@@ -597,40 +604,43 @@ var Fixture = Class.inherit({
             isValid: false
         });
 
-        var overlay = $element.find(".dx-invalid-message.dx-widget").dxOverlay("instance");
+        const overlay = $element.find(".dx-invalid-message.dx-widget").dxOverlay("instance");
 
         assert.equal(overlay.option("customOption"), "Test", "a custom option has been created");
         assert.equal(overlay.option("width"), 200, "a default option has been redefined");
     });
 
-    QUnit.test("editor's overlay options should be changed when validation overlay's options changed", function(assert) {
-        var $element = this.fixture.createOnlyElement(),
-            instance = new Editor($element, {
-                validationMessageMode: "always",
-                validationError: {
-                    message: "Error message"
-                },
-                isValid: false
-            });
+    QUnit.test("editor's overlay options should be changed when validation overlay's options changed", (assert) => {
+        const $element = this.fixture.createOnlyElement();
+
+        const instance = new Editor($element, {
+            validationMessageMode: "always",
+            validationError: {
+                message: "Error message"
+            },
+            isValid: false
+        });
 
         assert.equal(instance.option("validationTooltipOptions.width"), "auto", "options are readable on init");
 
-        var overlay = instance._validationMessage;
+        const overlay = instance._validationMessage;
 
         overlay.option("width", 150);
         assert.equal(instance.option("validationTooltipOptions.width"), 150, "option has ben changed");
     });
 
-    QUnit.test("it should be possible to set validationTooltipOptions dynamically", function(assert) {
-        var $element = this.fixture.createOnlyElement(),
-            instance = new Editor($element, {
-                validationMessageMode: "always",
-                validationError: {
-                    message: "Error message"
-                },
-                isValid: false
-            }),
-            overlay = instance._validationMessage;
+    QUnit.test("it should be possible to set validationTooltipOptions dynamically", (assert) => {
+        const $element = this.fixture.createOnlyElement();
+
+        const instance = new Editor($element, {
+            validationMessageMode: "always",
+            validationError: {
+                message: "Error message"
+            },
+            isValid: false
+        });
+
+        const overlay = instance._validationMessage;
 
         instance.option("validationTooltipOptions.width", 130);
         assert.equal(overlay.option("width"), 130, "option has ben changed");
@@ -640,24 +650,67 @@ var Fixture = Class.inherit({
         assert.equal(instance.option("validationTooltipOptions.width"), 130, "redefined object's fields was not changed");
         assert.equal(instance.option("validationTooltipOptions.shading"), false, "default object's fields was not changed");
     });
-})("Validation Events");
 
+    QUnit.test("it should be possible to set null or undefined to the validationTooltipOptions", (assert) => {
+        const $element = this.fixture.createOnlyElement();
 
-(function() {
-    QUnit.module("Validation Events", {
-        beforeEach: function() {
-            this.fixture = new Fixture();
-        },
-        afterEach: function() {
-            this.fixture.teardown();
-        }
+        const instance = new Editor($element, {
+            validationMessageMode: "always",
+            validationError: {
+                message: "Error message"
+            },
+            isValid: false
+        });
+
+        const overlay = instance._validationMessage;
+
+        instance.option("validationTooltipOptions.test", 130);
+        instance.option("validationTooltipOptions.test2", 120);
+        assert.strictEqual(overlay.option("test"), 130, "option has ben changed");
+        assert.strictEqual(overlay.option("test2"), 120, "option has ben changed");
+
+        instance.option("validationTooltipOptions", { test2: null, test: undefined });
+        assert.strictEqual(overlay.option("test"), undefined, "option has ben changed");
+        assert.strictEqual(overlay.option("test2"), null, "option has ben changed");
     });
 
-    QUnit.test("validationRequest event should fire on value change", function(assert) {
-        var value = "test123",
-            handler = sinon.stub();
+    QUnit.test("default validation options should not be redefined on revalidation", (assert) => {
+        const $element = this.fixture.createOnlyElement();
 
-        var editor = this.fixture.createEditor({
+        const instance = new Editor($element, {
+            validationMessageMode: "always",
+            validationError: {
+                message: "Error message"
+            },
+            isValid: false
+        });
+
+        instance.option({
+            isValid: true,
+            validationError: {
+                message: "New error message"
+            }
+        });
+        instance.option("isValid", false);
+
+        const overlay = instance._validationMessage;
+        assert.strictEqual($(overlay.content()).text(), "New error message");
+    });
+});
+
+QUnit.module("Validation Events", {
+    beforeEach: () => {
+        this.fixture = new Fixture();
+    },
+    afterEach: () => {
+        this.fixture.teardown();
+    }
+}, () => {
+    QUnit.test("validationRequest event should fire on value change", (assert) => {
+        const value = "test123";
+        const handler = sinon.stub();
+
+        const editor = this.fixture.createEditor({
             value: "xxx"
         });
 
@@ -666,18 +719,17 @@ var Fixture = Class.inherit({
         // act
         editor.option("value", value);
         // assert
-        var params = handler.getCall(0).args[0];
+        const params = handler.getCall(0).args[0];
         assert.ok(handler.calledOnce, "Validating handler should be called");
         assert.equal(params.value, value, "Correct value was passed");
         assert.equal(params.editor, editor, "Editor was passed");
     });
 
-    QUnit.test("T220137: validationRequest event should NOT fire on value change", function(assert) {
-        var nullValue = null,
-            handler = sinon.stub();
+    QUnit.test("T220137: validationRequest event should NOT fire on value change", (assert) => {
+        const nullValue = null;
+        const handler = sinon.stub();
 
-
-        var editor = this.fixture.createEditor({
+        const editor = this.fixture.createEditor({
             value: undefined
         });
 
@@ -688,31 +740,31 @@ var Fixture = Class.inherit({
         // assert
         assert.ok(!handler.called, "Validating handler should not be called");
     });
-})("Validation Events");
+});
 
 QUnit.module("aria accessibility", {
-    beforeEach: function() {
+    beforeEach: () => {
         this.fixture = new Fixture();
     },
-    afterEach: function() {
+    afterEach: () => {
         this.fixture.teardown();
     }
-});
+}, () => {
+    QUnit.test("readonly state", (assert) => {
+        const editor = this.fixture.createEditor({ readOnly: true });
 
-QUnit.test("readonly state", function(assert) {
-    var editor = this.fixture.createEditor({ readOnly: true });
+        assert.equal(editor.$element().attr("aria-readonly"), "true", "aria-readonly is correct");
 
-    assert.equal(editor.$element().attr("aria-readonly"), "true", "aria-readonly is correct");
+        editor.option("readOnly", false);
+        assert.equal(editor.$element().attr("aria-readonly"), undefined, "aria-readonly does not exist in not readonly state");
+    });
 
-    editor.option("readOnly", false);
-    assert.equal(editor.$element().attr("aria-readonly"), undefined, "aria-readonly does not exist in not readonly state");
-});
+    QUnit.test("invalid state", (assert) => {
+        const editor = this.fixture.createEditor({ isValid: false });
 
-QUnit.test("invalid state", function(assert) {
-    var editor = this.fixture.createEditor({ isValid: false });
+        assert.equal(editor.$element().attr("aria-invalid"), "true", "aria-invalid is correct");
 
-    assert.equal(editor.$element().attr("aria-invalid"), "true", "aria-invalid is correct");
-
-    editor.option("isValid", true);
-    assert.equal(editor.$element().attr("aria-invalid"), undefined, "aria-invalid does not exist in valid state");
+        editor.option("isValid", true);
+        assert.equal(editor.$element().attr("aria-invalid"), undefined, "aria-invalid does not exist in valid state");
+    });
 });
