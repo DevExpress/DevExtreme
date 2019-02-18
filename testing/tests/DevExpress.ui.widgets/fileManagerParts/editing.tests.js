@@ -39,8 +39,8 @@ QUnit.module("Editing operations", moduleConfig, () => {
         $folderNode.trigger("dxclick");
         this.clock.tick(400);
 
-        var $renameButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('Rename')`);
-        $renameButton.trigger("dxclick");
+        var $commandButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('Rename')`);
+        $commandButton.trigger("dxclick");
         this.clock.tick(400);
 
         var $input = $(`.${internals.DIALOG_CLASS} .${internals.TEXT_EDITOR_INPUT_CLASS}`);
@@ -48,8 +48,8 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         $input.val("TestFolder 1");
         $input.trigger("change");
-        var $saveButton = $(`.${internals.POPUP_BOTTOM_CLASS} .${internals.BUTTON_CLASS}:contains('Save')`);
-        $saveButton.trigger("dxclick");
+        var $okButton = $(`.${internals.POPUP_BOTTOM_CLASS} .${internals.BUTTON_CLASS}:contains('Save')`);
+        $okButton.trigger("dxclick");
         this.clock.tick(400);
 
         $folderNode = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`).eq(0);
@@ -63,8 +63,8 @@ QUnit.module("Editing operations", moduleConfig, () => {
         $cell.trigger("click");
         this.clock.tick(400);
 
-        var $renameButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('Rename')`);
-        $renameButton.trigger("dxclick");
+        var $commandButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('Rename')`);
+        $commandButton.trigger("dxclick");
         this.clock.tick(400);
 
         var $input = $(`.${internals.DIALOG_CLASS} .${internals.TEXT_EDITOR_INPUT_CLASS}`);
@@ -72,8 +72,8 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         $input.val("Testfile 11.txt");
         $input.trigger("change");
-        var $saveButton = $(`.${internals.POPUP_BOTTOM_CLASS} .${internals.BUTTON_CLASS}:contains('Save')`);
-        $saveButton.trigger("dxclick");
+        var $okButton = $(`.${internals.POPUP_BOTTOM_CLASS} .${internals.BUTTON_CLASS}:contains('Save')`);
+        $okButton.trigger("dxclick");
         this.clock.tick(400);
 
         $cell = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS} > td`).eq(0);
@@ -86,8 +86,8 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         assert.ok($row.hasClass(internals.SELECTION_CLASS), "file selected");
 
-        var $createButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('Create')`);
-        $createButton.trigger("dxclick");
+        var $commandButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('Create')`);
+        $commandButton.trigger("dxclick");
         this.clock.tick(400);
 
         var $input = $(`.${internals.DIALOG_CLASS} .${internals.TEXT_EDITOR_INPUT_CLASS}`);
@@ -95,12 +95,29 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         $input.val("Test 4");
         $input.trigger("change");
-        var $saveButton = $(`.${internals.POPUP_BOTTOM_CLASS} .${internals.BUTTON_CLASS}:contains('Create')`);
-        $saveButton.trigger("dxclick");
+        var $okButton = $(`.${internals.POPUP_BOTTOM_CLASS} .${internals.BUTTON_CLASS}:contains('Create')`);
+        $okButton.trigger("dxclick");
         this.clock.tick(400);
 
         var $folderNode = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`).eq(3);
         assert.equal($folderNode.text(), "Test 4", "folder created");
+    });
+
+    test("delete folder in folders area", (assert) => {
+        var $folderNode = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`).eq(0);
+        assert.equal($folderNode.text(), "Folder 1", "has target folder");
+
+        $folderNode.trigger("dxclick");
+        this.clock.tick(400);
+
+        var $commandButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('Delete')`);
+        $commandButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        var $folderNodes = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
+        assert.equal($folderNodes.length, 2, "folders count decreased");
+        assert.ok($folderNodes.eq(0).text().indexOf("Folder 1") === -1, "first folder is not target folder");
+        assert.ok($folderNodes.eq(1).text().indexOf("Folder 1") === -1, "second folder is not target folder");
     });
 
 });
