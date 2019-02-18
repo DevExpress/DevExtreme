@@ -6,6 +6,7 @@ window.internals = {
     WIDGET_CLASS: "dx-filemanager",
     TOOLBAR_CLASS: "dx-filemanager-toolbar",
     DIALOG_CLASS: "dx-filemanager-dialog",
+    GRID_DATA_ROW_CLASS: "dx-data-row",
     FOLDERS_TREE_VIEW_ITEM_CLASS: "dx-treeview-item",
     POPUP_BOTTOM_CLASS: "dx-popup-bottom",
     BUTTON_CLASS: "dx-button",
