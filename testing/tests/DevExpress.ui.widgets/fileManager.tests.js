@@ -10,7 +10,8 @@ window.internals = {
     FOLDERS_TREE_VIEW_ITEM_CLASS: "dx-treeview-item",
     POPUP_BOTTOM_CLASS: "dx-popup-bottom",
     BUTTON_CLASS: "dx-button",
-    TEXT_EDITOR_INPUT_CLASS: "dx-texteditor-input"
+    TEXT_EDITOR_INPUT_CLASS: "dx-texteditor-input",
+    SELECTION_CLASS: "dx-selection"
 };
 
 window.createTestFileSystem = () => {

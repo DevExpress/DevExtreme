@@ -80,4 +80,27 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.equal($cell.text(), "Testfile 11.txt", "file renamed");
     });
 
+    test("create folder in folders area from items area without folders", (assert) => {
+        var $row = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS}`).eq(0);
+        $row.trigger("dxclick");
+
+        assert.ok($row.hasClass(internals.SELECTION_CLASS), "file selected");
+
+        var $createButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('Create')`);
+        $createButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        var $input = $(`.${internals.DIALOG_CLASS} .${internals.TEXT_EDITOR_INPUT_CLASS}`);
+        assert.notOk($input.val(), "input has not value");
+
+        $input.val("Test 4");
+        $input.trigger("change");
+        var $saveButton = $(`.${internals.POPUP_BOTTOM_CLASS} .${internals.BUTTON_CLASS}:contains('Create')`);
+        $saveButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        var $folderNode = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`).eq(3);
+        assert.equal($folderNode.text(), "Test 4", "folder created");
+    });
+
 });
