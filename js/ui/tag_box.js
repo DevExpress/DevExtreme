@@ -638,7 +638,8 @@ var TagBox = SelectBox.inherit({
 
     _renderTypingEvent: function() {
         eventsEngine.on(this._input(), eventUtils.addNamespace("keydown", this.NAME), (function(e) {
-            if(!this._isControlKey(e.key) && this._isEditable()) {
+            var keyName = eventUtils.normalizeKeyName(e);
+            if(!this._isControlKey(keyName) && this._isEditable()) {
                 this._clearTagFocus();
             }
         }).bind(this));
@@ -654,7 +655,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderInputValueImpl: function() {
-        this._renderMultiSelect();
+        return this._renderMultiSelect();
     },
 
     _loadInputValue: function() {
@@ -729,14 +730,20 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderMultiSelect: function() {
+        var d = new Deferred();
+
         this._$tagsContainer = this.$element()
             .find("." + TEXTEDITOR_CONTAINER_CLASS)
             .addClass(TAGBOX_TAG_CONTAINER_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
-        this._renderTags();
-        this._popup && this._popup.refreshPosition();
+        this._renderTags().always((function() {
+            this._popup && this._popup.refreshPosition();
+            d.resolve();
+        }).bind(this));
+
+        return d.promise();
     },
 
     _listItemClickHandler: function(e) {
@@ -816,52 +823,70 @@ var TagBox = SelectBox.inherit({
         if(selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
-            var dataSourceFilter = this._dataSource.filter(),
-                filterExpr = creator.getCombinedFilter(this.option("valueExpr"), dataSourceFilter),
-                filterLength = encodeURI(JSON.stringify(filterExpr)).length,
-                resultFilter = filterLength > this.option("maxFilterLength") ? undefined : filterExpr;
+            var dataSourceFilter = this._dataSource.filter();
+            var filterExpr = creator.getCombinedFilter(this.option("valueExpr"), dataSourceFilter);
+            var filterLength = encodeURI(JSON.stringify(filterExpr)).length;
+            var filter = filterLength > this.option("maxFilterLength") ? undefined : filterExpr;
+            var loadOptions = this._dataSource.loadOptions();
+            var customQueryParams = loadOptions.customQueryParams;
 
-            this._dataSource.store().load({ filter: resultFilter }).done(function(items) {
+            this._dataSource.store().load({ filter, customQueryParams }).done(function(items) {
                 d.resolve(items.filter(clientFilterFunction));
             });
 
             return d.promise();
         }
-
     },
 
     _createTagsData: function(values, filteredItems) {
-        var items = [],
-            cache = {};
+        var items = [];
+        var cache = {};
+        var isValueExprSpecified = this._valueGetterExpr() === "this";
+        var filteredValues = {};
 
-        each(values, function(valueIndex, value) {
-            var item = filteredItems[valueIndex];
+        filteredItems.forEach(function(filteredItem) {
+            var filteredItemValue = isValueExprSpecified ? JSON.stringify(filteredItem) : this._valueGetter(filteredItem);
 
-            if(this._valueGetterExpr() === "this" && !isDefined(item)) {
-                this._loadItem(value, cache).always((function(item) {
-                    this._createTagData(items, item, value, valueIndex);
-                }).bind(this));
+            filteredValues[filteredItemValue] = filteredItem;
+        }.bind(this));
+
+        var loadItemPromises = [];
+
+        values.forEach(function(value, index) {
+            var currentItem = filteredValues[isValueExprSpecified ? JSON.stringify(value) : value];
+
+            if(isValueExprSpecified && !isDefined(currentItem)) {
+                loadItemPromises.push(this._loadItem(value, cache).always((function(item) {
+                    var newItem = this._createTagData(items, item, value, index);
+                    items.splice(index, 0, newItem);
+                }).bind(this)));
             } else {
-                this._createTagData(items, item, value, valueIndex);
+                var newItem = this._createTagData(items, currentItem, value, index);
+                items.splice(index, 0, newItem);
             }
         }.bind(this));
 
-        return items;
+        var d = new Deferred();
+        when.apply(this, loadItemPromises).always(function() {
+            d.resolve(items);
+        });
+
+        return d.promise();
     },
 
     _createTagData: function(items, item, value, valueIndex) {
         if(isDefined(item)) {
             this._selectedItems.push(item);
-            items.splice(valueIndex, 0, item);
+            return item;
         } else {
             var selectedItem = this.option("selectedItem"),
                 customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
 
-            items.splice(valueIndex, 0, customItem);
+            return customItem;
         }
     },
 
-    _loadTagData: function() {
+    _loadTagsData: function() {
         var values = this._getValue(),
             tagData = new Deferred();
 
@@ -870,7 +895,9 @@ var TagBox = SelectBox.inherit({
         this._getFilteredItems(values)
             .done(function(filteredItems) {
                 var items = this._createTagsData(values, filteredItems);
-                tagData.resolve(items);
+                items.always(function(data) {
+                    tagData.resolve(data);
+                });
             }.bind(this))
             .fail(tagData.reject.bind(this));
 
@@ -878,15 +905,20 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderTags: function() {
-        this._loadTagData().always((function(items) {
+        var d = new Deferred();
+
+        this._loadTagsData().always((function(items) {
             this._renderTagsCore(items);
+            this._renderEmptyState();
+
+            if(!this._preserveFocusedTag) {
+                this._clearTagFocus();
+            }
+
+            d.resolve();
         }).bind(this));
 
-        this._renderEmptyState();
-
-        if(!this._preserveFocusedTag) {
-            this._clearTagFocus();
-        }
+        return d.promise();
     },
 
     _renderTagsCore: function(items) {

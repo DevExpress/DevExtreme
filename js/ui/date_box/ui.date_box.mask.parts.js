@@ -1,5 +1,4 @@
-import { getPatternSetters, getRegExpInfo } from "../../localization/ldml/date.parser";
-import dateLocalization from "../../localization/date";
+import { getPatternSetters } from "../../localization/ldml/date.parser";
 import { extend } from "../../core/utils/extend";
 import { fitIntoRange } from "../../core/utils/math";
 import { noop } from "../../core/utils/common";
@@ -15,8 +14,8 @@ const monthSetter = (date, value) => {
 
     date.setMonth(newValue - 1, 1);
 
-    let dayLimits = getLimits("d", date),
-        newDay = fitIntoRange(day, dayLimits.min, dayLimits.max);
+    const { min, max } = getLimits("dM", date);
+    const newDay = fitIntoRange(day, min, max);
 
     date.setDate(newDay);
 };
@@ -46,6 +45,15 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
 
         date.setHours((hours + 12) % 24);
     },
+    d: (date, value) => {
+        const lastDayInMonth = getLimits("dM", date).max;
+
+        if(value > lastDayInMonth) {
+            date.setMonth(date.getMonth() + 1);
+        }
+
+        date.setDate(value);
+    },
     M: monthSetter,
     L: monthSetter,
     E: (date, value) => {
@@ -69,9 +77,8 @@ const getPatternGetter = (patternChar) => {
     return PATTERN_GETTERS[patternChar] || unsupportedCharGetter;
 };
 
-const renderDateParts = (text, format) => {
-    const regExpInfo = getRegExpInfo(format, dateLocalization),
-        result = regExpInfo.regexp.exec(text);
+const renderDateParts = (text, regExpInfo) => {
+    const result = regExpInfo.regexp.exec(text);
 
     let start = 0,
         end = 0,
@@ -81,7 +88,7 @@ const renderDateParts = (text, format) => {
         start = end;
         end = start + result[i].length;
 
-        let pattern = regExpInfo.patterns[i - 1],
+        let pattern = regExpInfo.patterns[i - 1].replace(/^'|'$/g, ""),
             getter = getPatternGetter(pattern[0]);
 
         sections.push({
@@ -104,7 +111,8 @@ const getLimits = (pattern, date) => {
         y: { min: 0, max: 9999 },
         M: { min: 1, max: 12 },
         L: { min: 1, max: 12 },
-        d: {
+        d: { min: 1, max: 31 },
+        dM: {
             min: 1,
             max: new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
         },
@@ -112,6 +120,8 @@ const getLimits = (pattern, date) => {
         H: { min: 0, max: 23 },
         h: { min: 0, max: 23 },
         m: { min: 0, max: 59 },
+        s: { min: 0, max: 59 },
+        S: { min: 0, max: 999 },
         a: { min: 0, max: 1 }
     };
 

@@ -2,6 +2,17 @@
     .dx-htmleditor-toolbar-wrapper:first-child {
         border-bottom: 1px solid @htmleditor-toolbar-border-color;
     }
+
+    border-color: @htmleditor-border-color;
+
+    &.dx-invalid {
+        border-color: @htmleditor-invalid-faded-border-color;
+        
+        &.dx-state-focused {
+            border-color: @htmleditor-invalid-border-color;
+        }
+    }
+
 }
 
 .dx-htmleditor-content {

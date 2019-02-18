@@ -1,6 +1,6 @@
-var $ = require("../../core/renderer"),
-    treeListCore = require("./ui.tree_list.core"),
-    rowsViewModule = require("../grid_core/ui.grid_core.rows");
+import $ from '../../core/renderer';
+import treeListCore from './ui.tree_list.core';
+import rowsViewModule from '../grid_core/ui.grid_core.rows';
 
 var TREELIST_TEXT_CONTENT = "dx-treelist-text-content",
     TREELIST_EXPAND_ICON_CONTAINER_CLASS = "dx-treelist-icon-container",

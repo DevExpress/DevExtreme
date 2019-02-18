@@ -7,21 +7,11 @@ import { Axis } from "viz/axes/base_axis";
 import { MockSeries } from "../../helpers/chartMocks.js";
 import { patchFontOptions } from "viz/core/utils";
 
-var Translator2D = translator2DModule.Translator2D,
-    TranslatorStubCtor = vizMocks.stubClass(Translator2D),
-    RangeStubCtor = vizMocks.stubClass(rangeModule.Range);
-
-function create2DTranslator(options) {
-    var translator = new TranslatorStubCtor();
-    translator.stub("translateSpecialCase");
-
-    translator.stub("getBusinessRange").returns({});
-
-    return translator;
-}
+var Translator2D = translator2DModule.Translator2D;
 
 function getStub2DTranslatorWithSettings() {
-    var translator = sinon.createStubInstance(Translator2D); translator.getBusinessRange.returns({ arg: { minVisible: 0, maxVisible: 10 }, val: { minVisible: 0, maxVisible: 10 } });
+    var translator = sinon.createStubInstance(Translator2D);
+    translator.getBusinessRange.returns(new rangeModule.Range({ min: 0, max: 10 }));
     return translator;
 }
 
@@ -44,11 +34,12 @@ var environment = {
             var that = this;
 
             this.renderer = new vizMocks.Renderer();
-            this.tickGeneratorSpy = sinon.spy(function() {
+            this.tickGeneratorSpy = sinon.spy(function(args) {
                 return {
                     ticks: that.generatedTicks || [],
                     minorTicks: that.generatedMinorTicks || [],
-                    tickInterval: that.generatedTickInterval
+                    tickInterval: that.generatedTickInterval,
+                    breaks: args.breaks
                 };
             });
             this.tickGenerator = sinon.stub(tickGeneratorModule, "tickGenerator", function() {
@@ -111,7 +102,7 @@ var environment = {
             this.renderSettings = {
                 stripsGroup: this.renderer.g(),
                 labelAxesGroup: this.renderer.g(),
-                constantLinesGroup: this.renderer.g(),
+                constantLinesGroup: { above: this.renderer.g(), under: this.renderer.g() },
                 axesContainerGroup: this.renderer.g(),
                 gridGroup: this.renderer.g(),
                 renderer: this.renderer,
@@ -120,9 +111,10 @@ var environment = {
                 incidentOccurred: this.incidentOccurred,
                 eventTrigger: () => { }
             };
-            this.range = new RangeStubCtor();
+            this.range = new rangeModule.Range();
             this.range.min = 0;
             this.range.max = 100;
+
             this.css = patchFontOptions(this.options.marker.label.font);
         },
         afterEach: function() {
@@ -159,8 +151,8 @@ var environment = {
     environment2DTranslator = $.extend({}, environment, {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
-            this.translator = create2DTranslator();
-            this.translator.stub("getCanvasVisibleArea").returns({ min: 0, max: 1000 });
+            this.translator = getStub2DTranslatorWithSettings();
+            this.translator.getCanvasVisibleArea.returns({ min: 0, max: 1000 });
 
             this.options.position = "bottom";
             this.options.label = {
@@ -175,6 +167,8 @@ var environment = {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
             var that = this;
+
+            this.canvas.left = this.canvas.right = 0;
 
             that.generatedTicks = [1, 3, 5, 7, 9];
 
@@ -417,7 +411,10 @@ QUnit.module("Semidiscrete axis", $.extend({}, environment, {
 }));
 
 QUnit.test("translates coordinates with tickInterval info", function(assert) {
-    this.createDrawnAxis({ type: "semidiscrete", tickInterval: 5 });
+    this.createDrawnAxis({
+        endOnTick: false,
+        type: "semidiscrete", tickInterval: 5
+    });
 
     assert.equal(this.translator.translate.callCount, 8); // 4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, [1, 0, 5]);
@@ -566,7 +563,7 @@ QUnit.test("getLabelsPosition. shifted axis in right position", function(assert)
 });
 
 QUnit.test("getLabelsPosition. With outer constantline label", function(assert) {
-    this.translator.stub("translate").withArgs(10).returns(50);
+    this.translator.translate.withArgs(10).returns(50);
     var axis = this.createDrawnAxis({
         position: "left",
         constantLines: [{
@@ -586,7 +583,7 @@ QUnit.test("getLabelsPosition. With outer constantline label", function(assert) 
 
 QUnit.test("measure labels, one label", function(assert) {
     var that = this;
-    that.translator.stub("translate").withArgs(0).returns({ y: 4 });
+    that.translator.translate.withArgs(0).returns({ y: 4 });
     var axis = this.createSimpleAxis({ label: { visible: true } });
 
     assert.deepEqual(axis.measureLabels(this.canvas), {
@@ -636,15 +633,22 @@ QUnit.test("measure labels, several labels", function(assert) {
     assert.equal(this.renderer.text.args[0][0], "300", "text of the label");
 });
 
-QUnit.test("measure empty labels", function(assert) {
-    var axis = this.createSimpleAxis({ label: { customizeText: function(e) { return ""; } } });
+QUnit.test("measuring label on axis with empty range - do not render texts", function(assert) {
+    this.generatedTicks = [0, 1, 2];
+    this.range = {};
+    var axis = this.createSimpleAxis({ label: { visible: true }, valueType: "datetime" });
 
-    assert.deepEqual(axis.measureLabels(this.canvas), {
+    var measurements = axis.measureLabels(this.canvas);
+
+    // assert
+    assert.deepEqual(measurements, {
         width: 0,
         height: 0,
         x: 0,
         y: 0
-    }, "measurements");
+    });
+
+    assert.equal(this.renderer.stub("text").callCount, 0);
 });
 
 QUnit.test("IncidentOccured on measure labels", function(assert) {
@@ -679,7 +683,9 @@ QUnit.test("Datetime, no custom format - use auto format based on estimated tick
         valueType: "datetime",
         label: {
             visible: true
-        }
+        },
+        min: new Date(2010, 7, 1),
+        max: new Date(2010, 9, 1)
     });
 
     axis.measureLabels(this.canvas);
@@ -702,14 +708,15 @@ QUnit.test("Datetime, custom format - use provided format", function(assert) {
             format: {
                 type: "day"
             }
-        }
+        },
+        min: new Date(2010, 7, 1),
+        max: new Date(2010, 9, 25)
     });
 
     axis.measureLabels(this.canvas);
 
     assert.strictEqual(this.renderer.text.getCall(0).args[0], "10");
 });
-
 
 QUnit.module("Label overlapping, 'hide' mode", overlappingEnvironment);
 
@@ -1064,7 +1071,7 @@ QUnit.test("vertical labels overlap but shouldn't rotate", function(assert) {
         assert.ok(!texts.getCall(i).returnValue.rotate.called);
     }
 
-    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, 16);
+    assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateX, -4);
     assert.equal(texts.getCall(0).returnValue.attr.lastCall.args[0].translateY, -5);
 });
 
@@ -2456,25 +2463,6 @@ QUnit.test("Estimate margin. Overlapping mode is rotate", function(assert) {
     assert.equal(margins.bottom, 35, "bottom margin");
 });
 
-QUnit.test("Estimate margin. Overlapping mode is rotate, drawing type is stagger", function(assert) {
-    this.generatedTicks = ["c1", "c2", "c3", "c4"];
-    var axis = this.createSimpleAxis({
-        isHorizontal: true,
-        label: {
-            visible: true,
-            indentFromAxis: 3,
-            overlappingBehavior: "rotate",
-            drawingType: "stagger",
-            staggeringSpacing: 10
-        }
-    });
-
-    var margins = axis.estimateMargins(this.canvas);
-
-    assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, "bottom margin");
-});
-
-
 QUnit.test("Estimate margin. Overlapping mode is stagger, drawing type is rotate", function(assert) {
     this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
@@ -2726,8 +2714,6 @@ QUnit.test("Constant line label is wider than label - get constant line label as
 });
 
 QUnit.test("Estimate margins does not include labels if stub data", function(assert) {
-    this.range.stubData = true;
-
     var customizeText = sinon.stub(),
         axis = this.createSimpleAxis({
             isHorizontal: true,
@@ -2838,11 +2824,11 @@ QUnit.test("All margins are zero", function(assert) {
     this.options.multipleAxesSpacing = 5;
     var axis = this.createDrawnAxis();
 
-    this.renderer.g.getCall(5).returnValue.attr.reset();
+    this.renderer.g.getCall(6).returnValue.attr.reset();
 
     axis.shift({ top: 0, bottom: 0, left: 0, right: 0 });
     // T548860
-    assert.deepEqual(this.renderer.g.getCall(5).returnValue.attr.lastCall.args[0], {
+    assert.deepEqual(this.renderer.g.getCall(6).returnValue.attr.lastCall.args[0], {
         translateX: 0
     });
 });
@@ -2862,7 +2848,7 @@ QUnit.test("Vertical axis position is left", function(assert) {
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(5).returnValue;
+    var axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, -50);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, undefined);
@@ -2875,7 +2861,7 @@ QUnit.test("Vertical axis with multipleAxesSpacing option", function(assert) {
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(5).returnValue;
+    var axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, -55);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, undefined);
@@ -2887,7 +2873,7 @@ QUnit.test("Vertical axis position is right", function(assert) {
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(5).returnValue;
+    var axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, 76);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, undefined);
@@ -2899,7 +2885,7 @@ QUnit.test("Horizontal axis position is top", function(assert) {
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(5).returnValue;
+    var axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, undefined);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, -64);
@@ -2911,7 +2897,7 @@ QUnit.test("Horizontal axis position is bottom", function(assert) {
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var axisGroup = this.renderer.g.getCall(5).returnValue;
+    var axisGroup = this.renderer.g.getCall(6).returnValue;
     assert.equal(axisGroup.attr.callCount, 2);
     assert.equal(axisGroup.attr.lastCall.args[0].translateX, undefined);
     assert.equal(axisGroup.attr.lastCall.args[0].translateY, 45);
@@ -2923,10 +2909,19 @@ QUnit.test("Horizontal axis. Shift outside constant line groups vertically", fun
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var topGroup = this.renderer.g.getCall(12).returnValue,
-        bottomGroup = this.renderer.g.getCall(13).returnValue;
-    assert.deepEqual(topGroup.attr.lastCall.args, [{ translateY: -(64 + 5) }]);
-    assert.deepEqual(bottomGroup.attr.lastCall.args, [{ translateY: 45 + 5 }]);
+    var groupAboveSeries = {
+            topGroup: this.renderer.g.getCall(13).returnValue,
+            bottomGroup: this.renderer.g.getCall(14).returnValue
+        },
+        groupUnderSeries = {
+            topGroup: this.renderer.g.getCall(16).returnValue,
+            bottomGroup: this.renderer.g.getCall(17).returnValue
+        };
+
+    assert.deepEqual(groupAboveSeries.topGroup.attr.lastCall.args, [{ translateY: -(64 + 5) }]);
+    assert.deepEqual(groupUnderSeries.topGroup.attr.lastCall.args, [{ translateY: -(64 + 5) }]);
+    assert.deepEqual(groupAboveSeries.bottomGroup.attr.lastCall.args, [{ translateY: 45 + 5 }]);
+    assert.deepEqual(groupUnderSeries.bottomGroup.attr.lastCall.args, [{ translateY: 45 + 5 }]);
 });
 
 QUnit.test("Vertical axis. Shift outside constant line groups horizontally", function(assert) {
@@ -2935,10 +2930,19 @@ QUnit.test("Vertical axis. Shift outside constant line groups horizontally", fun
     var axis = this.createDrawnAxis();
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
-    var leftGroup = this.renderer.g.getCall(12).returnValue,
-        rightGroup = this.renderer.g.getCall(13).returnValue;
-    assert.deepEqual(leftGroup.attr.lastCall.args, [{ translateX: -(50 + 5) }]);
-    assert.deepEqual(rightGroup.attr.lastCall.args, [{ translateX: 76 + 5 }]);
+    var groupAboveSeries = {
+            leftGroup: this.renderer.g.getCall(13).returnValue,
+            rightGroup: this.renderer.g.getCall(14).returnValue
+        },
+        groupUnderSeries = {
+            leftGroup: this.renderer.g.getCall(16).returnValue,
+            rightGroup: this.renderer.g.getCall(17).returnValue
+        };
+    assert.deepEqual(groupAboveSeries.leftGroup.attr.lastCall.args, [{ translateX: -(50 + 5) }]);
+    assert.deepEqual(groupUnderSeries.leftGroup.attr.lastCall.args, [{ translateX: -(50 + 5) }]);
+
+    assert.deepEqual(groupAboveSeries.rightGroup.attr.lastCall.args, [{ translateX: 76 + 5 }]);
+    assert.deepEqual(groupUnderSeries.rightGroup.attr.lastCall.args, [{ translateX: 76 + 5 }]);
 });
 
 QUnit.test("Inside constant line group is not shifted", function(assert) {
@@ -3149,12 +3153,12 @@ QUnit.test("Remove groups on disposing", function(assert) {
         max: 140
     }));
 
-    this.translator.getBusinessRange.returns({
+    this.translator.getBusinessRange.returns(new rangeModule.Range({
         breaks: [
             { startValue: 50, endValue: 100 },
             { startValue: 70, endValue: 150 }
         ]
-    });
+    }));
 
     axis.createTicks(this.canvas);
 
@@ -4098,69 +4102,240 @@ QUnit.test("Generate the breaks take into account the edge points that out of th
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 2, to: 30, cumulativeWidth: 0 }, { from: 30, to: 90, cumulativeWidth: 0 }]);
 });
 
-QUnit.module("Margins calculation with scale breaks", environment2DTranslator);
+QUnit.module("XY axes margin calculation", {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
 
-QUnit.test("Apply margins taking into account breakStyle.width", function(assert) {
-    var axis = this.createAxis(this.renderSettings, $.extend(true, this.options, {
-        valueMarginsEnabled: true,
-        breakStyle: { width: 50 },
-        breaks: [{
-            startValue: 100,
-            endValue: 900
-        }],
-        isHorizontal: true
-    }));
-    axis.validate();
-    axis.setBusinessRange({ min: 50, max: 1000 });
-    axis.setMarginOptions({ size: 100 });
+        translator2DModule.Translator2D.restore();
+        sinon.spy(translator2DModule, "Translator2D");
 
-    axis.createTicks({
-        top: 200,
-        bottom: 200,
-        left: 200,
-        right: 200,
-        width: 700,
-        height: 400
-    });
+        this.canvas = {
+            top: 200,
+            bottom: 200,
+            left: 200,
+            right: 200,
+            width: 700,
+            height: 400
+        };
+    },
+    afterEach: function() {
+        environment.afterEach.call(this);
+    },
+    createAxis: function(renderSettings, options) {
+        var axis = new Axis(renderSettings);
 
-    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0], {
-        categories: undefined,
-        isSpacedMargin: true,
-        checkMaxDataVisibility: undefined,
-        checkMinDataVisibility: undefined,
-        max: 1050,
-        min: 0
+        axis.updateOptions($.extend(true, {
+            type: "continuous",
+            dataType: "numeric",
+            isHorizontal: true,
+            label: {
+                visible: true
+            }
+        }, options));
+        axis.parser = v => v;
+        return axis;
+    },
+    testMargins: function(assert, data) {
+        this.renderSettings.isArgumentAxis = data.isArgumentAxis;
+        var axis = this.createAxis(this.renderSettings, data.options);
+
+        this.generatedTicks = data.ticks;
+        this.generatedBreaks = data.options.breaks;
+
+        axis.setBusinessRange(data.range);
+        axis.setMarginOptions(data.marginOptions || {});
+
+        const translator = translator2DModule.Translator2D.lastCall.returnValue;
+
+        sinon.spy(translator, "updateBusinessRange");
+
+        if(data.zoom) {
+            axis.visualRange(data.zoom);
+        }
+
+        if(data.series) {
+            axis.setGroupSeries(data.series);
+            axis.adjust();
+        }
+
+        axis.draw(this.canvas);
+
+        var range = {
+            interval: translator.updateBusinessRange.lastCall.args[0].interval,
+            minVisible: translator.from(this.canvas.left),
+            maxVisible: translator.from(this.canvas.width - this.canvas.right),
+            categories: translator.updateBusinessRange.lastCall.args[0].categories
+        };
+        const expectedRange = data.expectedRange;
+
+        if(expectedRange) {
+            if("categories" in expectedRange) {
+                assert.deepEqual(range.categories, expectedRange.categories, "categorties");
+            } else {
+                "minVisible" in expectedRange && assert.roughEqual(translator.to(expectedRange.minVisible, -1), this.canvas.left, 1.01, "minVisible value");
+                "maxVisible" in expectedRange && assert.roughEqual(translator.to(data.expectedRange.maxVisible, +1), this.canvas.width - this.canvas.right, 1.01, "maxVisible value");
+            }
+
+            "interval" in data.expectedRange && assert.equal(range.interval, data.expectedRange.interval, "interval");
+        }
+
+        const expectedVisibleArea = data.expectedVisibleArea;
+
+        if(expectedVisibleArea) {
+            assert.deepEqual(translator.getCanvasVisibleArea(), expectedVisibleArea);
+        }
+    }
+});
+
+QUnit.test("Size margins with scale breaks", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            skipViewportExtending: true,
+            breakStyle: { width: 50 },
+            breaks: [{
+                startValue: 100,
+                endValue: 900
+            }],
+            isHorizontal: true
+        },
+        marginOptions: {
+            size: 100
+        },
+        range: {
+            min: 0,
+            max: 1000
+        },
+        ticks: [],
+        expectedRange: {
+            minVisible: -250,
+            maxVisible: 1250
+        },
+        expectedVisibleArea: {
+            min: 250,
+            max: 450
+        },
+        isArgumentAxis: true
     });
 });
 
-QUnit.test("Apply margins taking into account breaks range size", function(assert) {
-    var axis = this.createAxis(this.renderSettings, $.extend(true, this.options, {
-        valueMarginsEnabled: true,
-        minValueMargin: 0.1,
-        maxValueMargin: 0.2,
-        breakStyle: { width: 0 },
-        breaks: [{ startValue: 110, endValue: 190 }],
-        isArgumentAxis: true
-    }));
-    axis.validate();
-    axis.setBusinessRange({ min: 100, max: 200 });
 
-    axis.createTicks({
-        top: 200,
-        bottom: 200,
-        left: 200,
-        right: 200,
-        width: 700,
-        height: 400
+QUnit.test("Interval margins with scale breaks", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            skipViewportExtending: true,
+            breakStyle: { width: 50 },
+            breaks: [{
+                startValue: 100,
+                endValue: 900
+            }],
+            isHorizontal: true
+        },
+        marginOptions: {
+            checkInterval: true
+        },
+        range: {
+            min: 0,
+            max: 1000,
+            interval: 55
+        },
+        ticks: [],
+        expectedRange: {
+            minVisible: -25,
+            maxVisible: 1025,
+            interval: 55
+        },
+        expectedVisibleArea: {
+            min: 208,
+            max: 492
+        },
+        isArgumentAxis: true
+    });
+});
+
+QUnit.test("Percent margins with scale breaks", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            skipViewportExtending: true,
+            breakStyle: { width: 50 },
+            breaks: [{
+                startValue: 100,
+                endValue: 900
+            }],
+            minValueMargin: 0.2,
+            maxValueMargin: 0.2,
+            isHorizontal: true
+        },
+        marginOptions: { },
+        range: {
+            min: 0,
+            max: 1000
+        },
+        ticks: [],
+        expectedRange: {
+            minVisible: -154,
+            maxVisible: 1154
+        },
+        isArgumentAxis: true
+    });
+});
+
+QUnit.test("Apply margin to series range when adjust", function(assert) {
+    const series = [new MockSeries({})];
+    series[0].getViewport.returns({
+        min: 120,
+        max: 180
     });
 
-    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0], {
-        categories: undefined,
-        isSpacedMargin: false,
-        checkMaxDataVisibility: undefined,
-        checkMinDataVisibility: undefined,
-        max: 204,
-        min: 98
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            minValueMargin: 0.1,
+            maxValueMargin: 0.1
+        },
+        marginOptions: { },
+        range: {
+            min: 100,
+            max: 200
+        },
+        ticks: [],
+        series,
+        expectedRange: {
+            minVisible: 114,
+            maxVisible: 186
+        },
+        isArgumentAxis: false
+    });
+});
+
+QUnit.test("Extend range to boundery ticks on adjust", function(assert) {
+    const series = [new MockSeries({})];
+    series[0].getViewport.returns({
+        min: 120,
+        max: 180
+    });
+
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true,
+            minValueMargin: 0.1,
+            maxValueMargin: 0.1,
+            endOnTick: true
+        },
+        marginOptions: { },
+        range: {
+            min: 100,
+            max: 200
+        },
+        ticks: [110, 190],
+        series,
+        expectedRange: {
+            minVisible: 110,
+            maxVisible: 190
+        },
+        isArgumentAxis: false
     });
 });
 
@@ -4215,11 +4390,11 @@ QUnit.test("Calculate common range from series on adjust", function(assert) {
     this.axis.setMarginOptions({});
 
     this.axis.adjust();
-    this.translator.stub("updateBusinessRange").reset();
+    this.translator.updateBusinessRange.reset();
 
     this.axis.createTicks(this.canvas);
 
-    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+    const { min, max, minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];
 
     assert.strictEqual(min, -100);
     assert.strictEqual(max, 100);
@@ -4249,11 +4424,11 @@ QUnit.test("Calculate common range from series on adjust. series with show zero"
     this.axis.setMarginOptions({});
 
     this.axis.adjust();
-    this.translator.stub("updateBusinessRange").reset();
+    this.translator.updateBusinessRange.reset();
 
     this.axis.createTicks(this.canvas);
 
-    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+    const { min, max, minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];
 
     assert.strictEqual(min, -100);
     assert.strictEqual(max, 100);
@@ -4328,11 +4503,11 @@ QUnit.test("Calculate common range from series on adjust when one series is not 
     this.axis.setMarginOptions({});
 
     this.axis.adjust();
-    this.translator.stub("updateBusinessRange").reset();
+    this.translator.updateBusinessRange.reset();
 
     this.axis.createTicks(this.canvas);
 
-    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+    const { min, max, minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];
 
     assert.strictEqual(min, -100);
     assert.strictEqual(max, 100);
@@ -4350,73 +4525,16 @@ QUnit.test("min and are undefined in common range", function(assert) {
     this.axis.setMarginOptions({});
 
     this.axis.adjust();
-    this.translator.stub("updateBusinessRange").reset();
+    this.translator.updateBusinessRange.reset();
 
     this.axis.createTicks(this.canvas);
 
-    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+    const { min, max, minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];
 
     assert.strictEqual(min, -100);
     assert.strictEqual(max, 100);
     assert.strictEqual(minVisible, -100);
     assert.strictEqual(maxVisible, 100);
-});
-
-QUnit.test("Apply margin to series range", function(assert) {
-    this.updateOptions({
-        valueMarginsEnabled: true,
-        minValueMargin: 0.1,
-        maxValueMargin: 0.2
-    });
-
-    this.series[0].getViewport.returns({
-        min: 120,
-        max: 180
-    });
-
-    this.axis.setBusinessRange({ min: 100, max: 200 });
-    this.axis.setMarginOptions({});
-
-    this.axis.adjust();
-    this.translator.stub("updateBusinessRange").reset();
-
-    this.axis.createTicks(this.canvas);
-
-    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
-
-    assert.strictEqual(min, 100);
-    assert.strictEqual(max, 200);
-    assert.strictEqual(minVisible, 114);
-    assert.strictEqual(maxVisible, 192);
-});
-
-QUnit.test("Extend range to boundery ticks on adjust", function(assert) {
-    this.updateOptions({
-        valueMarginsEnabled: false,
-        endOnTick: false
-    });
-
-    this.series[0].getViewport.returns({
-        min: 120,
-        max: 180
-    });
-
-    this.generatedTicks = [110, 190];
-
-    this.axis.setBusinessRange({ min: 100, max: 200 });
-    this.axis.setMarginOptions({});
-
-    this.axis.adjust();
-    this.translator.stub("updateBusinessRange").reset();
-
-    this.axis.createTicks(this.canvas);
-
-    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
-
-    assert.strictEqual(min, 100);
-    assert.strictEqual(max, 200);
-    assert.strictEqual(minVisible, 110);
-    assert.strictEqual(maxVisible, 190);
 });
 
 QUnit.test("Do not adjust axis if it has min/max", function(assert) {
@@ -4434,15 +4552,15 @@ QUnit.test("Do not adjust axis if it has min/max", function(assert) {
         max: 15
     });
 
-    this.axis.setBusinessRange({ min: -100, max: 100 });
+    this.axis.setBusinessRange({ min: -100, max: 100 }, undefined, undefined, true);
     this.axis.setMarginOptions({});
 
     this.axis.adjust();
-    this.translator.stub("updateBusinessRange").reset();
+    this.translator.updateBusinessRange.reset();
 
     this.axis.createTicks(this.canvas);
 
-    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+    const { min, max, minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];
 
     assert.strictEqual(min, -100);
     assert.strictEqual(max, 100);
@@ -4469,11 +4587,11 @@ QUnit.test("Do not adjust axis if it was zoomed", function(assert) {
     this.axis.visualRange(-20, 60);
 
     this.axis.adjust();
-    this.translator.stub("updateBusinessRange").reset();
+    this.translator.updateBusinessRange.reset();
 
     this.axis.createTicks(this.canvas);
 
-    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+    const { min, max, minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];
 
     assert.strictEqual(min, -100);
     assert.strictEqual(max, 100);
@@ -4502,11 +4620,11 @@ QUnit.test("Adjust axis after reset zoom", function(assert) {
     this.axis.resetVisualRange();
 
     this.axis.adjust();
-    this.translator.stub("updateBusinessRange").reset();
+    this.translator.updateBusinessRange.reset();
 
     this.axis.createTicks(this.canvas);
 
-    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+    const { min, max, minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];
 
     assert.strictEqual(min, -100);
     assert.strictEqual(max, 100);
@@ -4529,11 +4647,11 @@ QUnit.test("Adjusting with constant lines", function(assert) {
     this.axis.setMarginOptions({});
 
     this.axis.adjust();
-    this.translator.stub("updateBusinessRange").reset();
+    this.translator.updateBusinessRange.reset();
 
     this.axis.createTicks(this.canvas);
 
-    const { minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+    const { minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];
 
     assert.strictEqual(minVisible, 90);
     assert.strictEqual(maxVisible, 180);
@@ -4547,10 +4665,10 @@ QUnit.test("Update translator business range after adjust axis", function(assert
 
     this.axis.setBusinessRange({ min: 100, max: 200 });
 
-    this.translator.stub("updateBusinessRange").reset();
+    this.translator.updateBusinessRange.reset();
     this.axis.adjust();
 
-    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+    const { min, max, minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];
 
     assert.strictEqual(min, 100);
     assert.strictEqual(max, 200);
@@ -4570,10 +4688,10 @@ QUnit.test("Update discrete translator business range after adjust axis", functi
 
     this.axis.setBusinessRange({ min: "100", max: "200" });
 
-    this.translator.stub("updateBusinessRange").reset();
+    this.translator.updateBusinessRange.reset();
     this.axis.adjust();
 
-    const { min, max, minVisible, maxVisible } = this.translator.stub("updateBusinessRange").lastCall.args[0];
+    const { min, max, minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];
 
     assert.strictEqual(min, "100");
     assert.strictEqual(max, "200");

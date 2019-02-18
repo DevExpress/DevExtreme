@@ -3,7 +3,6 @@ var $ = require("jquery"),
     commons = require("./chartParts/commons.js"),
     scrollBarClassModule = require("viz/chart_components/scroll_bar"),
     trackerModule = require("viz/chart_components/tracker"),
-    Translator2D = require("viz/translators/translator2d").Translator2D,
     chartMocks = require("../../helpers/chartMocks.js"),
     MockSeries = chartMocks.MockSeries,
     categories = chartMocks.categories;
@@ -291,205 +290,6 @@ QUnit.test("Aggregation. One of the series without points", function(assert) {
     assert.strictEqual(series1.getValueAxis().adjust.callCount, 1);
 });
 
-QUnit.module("MultiAxis Synchronization", commons.environment);
-
-function getTickPositions(axis) {
-    var translator = new Translator2D(axis.setBusinessRange.lastCall.args[0], axis.updateSize.lastCall.args[0], {});
-    return axis.getTicksValues().majorTicksValues.map(function(value) {
-        return translator.translate(value);
-    });
-}
-
-QUnit.test("dxChart with two Series on one pane and different value axis", function(assert) {
-    // arrange
-    var stubSeries1 = new MockSeries({ range: { val: { min: 15, max: 80 } } }),
-        stubSeries2 = new MockSeries({ range: { val: { min: 1, max: 5 } } });
-
-    chartMocks.seriesMockData.series.push(stubSeries1);
-    chartMocks.seriesMockData.series.push(stubSeries2);
-    var axis1Ticks = [20, 40, 60, 80],
-        axis2Ticks = [1, 2, 3, 4, 5];
-    // act
-    var chart = this.createChart({
-        argumentAxis: {
-            categories: categories
-        },
-        panes: [{
-            name: "pane1"
-        }],
-        series: [{
-            pane: "pane1",
-            axis: "axis1",
-            range: { val: { min: 15, max: 80 } },
-            type: "line"
-        }, {
-            pane: "pane1",
-            axis: "axis2",
-            range: { val: { min: 1, max: 5 } },
-            type: "line"
-        }],
-        valueAxis: [{
-            name: "axis1",
-            pane: "pane1",
-            maxPadding: 0.3,
-            mockTickValues: axis1Ticks,
-            mockTickInterval: 20,
-            grid: {
-                visible: true
-            }
-        }, {
-            name: "axis2",
-            pane: "pane1",
-            maxPadding: 0.3,
-            mockTickValues: axis2Ticks,
-            mockTickInterval: 1,
-            grid: {
-                visible: true
-            }
-        }]
-    });
-    // assert
-    assert.ok(chart.series);
-    assert.equal(chart.series.length, 2);
-    assert.equal(chart._valueAxes.length, 2);
-    assert.deepEqual(chart._valueAxes[0].getTicksValues().majorTicksValues, [20, 40, 60, 80, 100]);
-    assert.deepEqual(chart._valueAxes[1].getTicksValues().majorTicksValues, [1, 2, 3, 4, 5]);
-
-    var tickPositionsAxis1 = getTickPositions(chart._valueAxes[0]);
-
-    var tickPositionsAxis2 = getTickPositions(chart._valueAxes[1]);
-
-    assert.equal(tickPositionsAxis1.length, 5);
-    assert.equal(tickPositionsAxis2.length, 5);
-    assert.deepEqual(tickPositionsAxis1, tickPositionsAxis2);
-});
-
-QUnit.test("dxChart with two Series on one pane and different value axis. synchronizeMultiAxes disabled", function(assert) {
-    // arrange
-    var stubSeries1 = new MockSeries({ range: { val: { min: 15, max: 80 } } }),
-        stubSeries2 = new MockSeries({ range: { val: { min: 1, max: 5 } } });
-
-    chartMocks.seriesMockData.series.push(stubSeries1);
-    chartMocks.seriesMockData.series.push(stubSeries2);
-    var axis1Ticks = [20, 40, 60, 80],
-        axis2Ticks = [1, 2, 3, 4, 5];
-    // act
-    var chart = this.createChart({
-        synchronizeMultiAxes: false,
-        argumentAxis: {
-            categories: categories
-        },
-        panes: [{
-            name: "pane1"
-        }],
-        series: [{
-            pane: "pane1",
-            axis: "axis1",
-            range: { val: { min: 15, max: 80 } },
-            type: "line"
-        }, {
-            pane: "pane1",
-            axis: "axis2",
-            range: { val: { min: 1, max: 5 } },
-            type: "line"
-        }],
-        valueAxis: [{
-            name: "axis1",
-            pane: "pane1",
-            maxPadding: 0.3,
-            mockTickValues: axis1Ticks,
-            mockTickInterval: 20,
-            grid: {
-                visible: true
-            }
-        }, {
-            name: "axis2",
-            pane: "pane1",
-            maxPadding: 0.3,
-            mockTickValues: axis2Ticks,
-            mockTickInterval: 1,
-            grid: {
-                visible: true
-            }
-        }]
-    });
-    // assert
-    assert.ok(chart.series);
-    assert.equal(chart.series.length, 2);
-    assert.equal(chart._valueAxes.length, 2);
-    assert.deepEqual(chart._valueAxes[0].getTicksValues().majorTicksValues, [20, 40, 60, 80]);
-    assert.deepEqual(chart._valueAxes[1].getTicksValues().majorTicksValues, [1, 2, 3, 4, 5]);
-
-    var tickPositionsAxis1 = getTickPositions(chart._valueAxes[0]),
-        tickPositionsAxis2 = getTickPositions(chart._valueAxes[1]);
-
-    assert.equal(tickPositionsAxis1.length, 4);
-    assert.equal(tickPositionsAxis2.length, 5);
-    assert.notDeepEqual(tickPositionsAxis1, tickPositionsAxis2);
-});
-
-QUnit.test("dxChart with two Series on one pane and different value axis. Rotated.", function(assert) {
-    // arrange
-    var stubSeries1 = new MockSeries({ range: { val: { min: 15, max: 80 } } }),
-        stubSeries2 = new MockSeries({ range: { val: { min: 1, max: 5 } } });
-
-    chartMocks.seriesMockData.series.push(stubSeries1);
-    chartMocks.seriesMockData.series.push(stubSeries2);
-    var axis1Ticks = [20, 40, 60, 80],
-        axis2Ticks = [1, 2, 3, 4, 5];
-    // act
-    var chart = this.createChart({
-        rotated: true,
-        argumentAxis: {
-            categories: categories
-        },
-        panes: [{
-            name: "pane1"
-        }],
-        series: [{
-            pane: "pane1",
-            axis: "axis1",
-            type: "line"
-        }, {
-            pane: "pane1",
-            axis: "axis2",
-            type: "line"
-        }],
-        valueAxis: [{
-            name: "axis1",
-            pane: "pane1",
-            maxPadding: 0.3,
-            mockTickValues: axis1Ticks,
-            mockTickInterval: 20,
-            grid: {
-                visible: true
-            }
-        }, {
-            name: "axis2",
-            pane: "pane1",
-            maxPadding: 0.3,
-            mockTickValues: axis2Ticks,
-            mockTickInterval: 1,
-            grid: {
-                visible: true
-            }
-        }]
-    });
-    // assert
-    assert.ok(chart.series);
-    assert.equal(chart.series.length, 2);
-    assert.equal(chart._valueAxes.length, 2);
-    assert.deepEqual(chart._valueAxes[0].getTicksValues().majorTicksValues, [20, 40, 60, 80, 100]);
-    assert.deepEqual(chart._valueAxes[1].getTicksValues().majorTicksValues, [1, 2, 3, 4, 5]);
-
-    var tickPositionsAxis1 = getTickPositions(chart._valueAxes[0]),
-        tickPositionsAxis2 = getTickPositions(chart._valueAxes[1]);
-
-    assert.equal(tickPositionsAxis1.length, 5);
-    assert.equal(tickPositionsAxis2.length, 5);
-    assert.deepEqual(tickPositionsAxis1, tickPositionsAxis2);
-});
-
 QUnit.module("Pane synchronization", commons.environment);
 
 QUnit.test("simple chart with two panes", function(assert) {
@@ -595,8 +395,11 @@ QUnit.test("chart with one empty pane", function(assert) {
     // assert
     assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0], chart._argumentAxes[1].setBusinessRange.lastCall.args[0]);
 
-    assert.equal(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].stubData, undefined, "bottom pane should not have value stubData");
-    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].stubData, undefined, "bottom pane should not have value stubData");
+    assert.equal(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
+    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
+
+    assert.equal(chart._argumentAxes[1].setBusinessRange.lastCall.args[0].isEmpty(), false);
+    assert.equal(chart._valueAxes[1].setBusinessRange.lastCall.args[0].isEmpty(), true);
 });
 
 QUnit.test("Rotated chart with one empty pane", function(assert) {
@@ -626,8 +429,11 @@ QUnit.test("Rotated chart with one empty pane", function(assert) {
     // assert
     assert.strictEqual(chart._argumentAxes[1].setBusinessRange.lastCall.args[0], chart._argumentAxes[0].setBusinessRange.lastCall.args[0], "all argument axes have same range");
 
-    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].stubData, undefined, "bottom pane should not have value stubData");
-    assert.equal(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].stubData, undefined, "bottom pane should not have argument stubData");
+    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
+    assert.equal(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].isEmpty(), false);
+
+    assert.equal(chart._valueAxes[1].setBusinessRange.lastCall.args[0].isEmpty(), true);
+    assert.equal(chart._argumentAxes[1].setBusinessRange.lastCall.args[0].isEmpty(), false);
 });
 
 QUnit.test("Update axis canvas. One pane", function(assert) {

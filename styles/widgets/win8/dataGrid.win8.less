@@ -270,7 +270,7 @@
 
 .dx-datagrid-column-chooser {
     .dx-overlay-content {
-        .box-shadow(0px 1px 3px rgba(0, 0, 0, 0.2));
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
 
         .dx-popup-content {
             margin: 0px;
@@ -282,7 +282,7 @@
                 border: @WIN8_DATAGRID_HEADERS_BORDER;
                 padding: @WIN8_DATAGRID_CELL_PADDING;
                 background-color: @WIN8_BASE_BACKGROUND;
-                .box-shadow(0px 1px 3px -1px rgba(0, 0, 0, 0.2));
+                box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.2);
             }
         }
 
@@ -296,7 +296,7 @@
 }
 
 .dx-datagrid-drag-header {
-    .box-shadow(@WIN8_DATAGRID_DRAG_HEADER_FIRST_SHADOW, @WIN8_DATAGRID_DRAG_HEADER_SECOND_SHADOW);
+    box-shadow: @WIN8_DATAGRID_DRAG_HEADER_FIRST_SHADOW, @WIN8_DATAGRID_DRAG_HEADER_SECOND_SHADOW;
     .dx-datagrid-header-text;
     padding: @WIN8_DATAGRID_CELL_PADDING;
     color: @WIN8_WHITE_COLOR;
@@ -325,7 +325,7 @@
 .dx-data-row.dx-state-hover {
     &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
         & > td:not(.dx-focused) {
-            .text-shadow(none);
+            text-shadow: none;
             background-color: @WIN8_DATAGRID_HOVER_BACKGROUND;
             color: @WIN8_DATAGRID_HOVER_COLOR;
 
@@ -336,7 +336,7 @@
 
         & > .dx-datagrid-readonly:not(.dx-focused) .dx-texteditor {
             .dx-texteditor-input {
-                .text-shadow(none);
+                text-shadow: none;
                 background-color: @WIN8_DATAGRID_HOVER_BACKGROUND;
                 color: @WIN8_DATAGRID_HOVER_COLOR;
             }
@@ -358,7 +358,7 @@
 
 .dx-datagrid-headers {
     color: @WIN8_DATAGRID_HEADERS_COLOR;
-    .touch-action(pinch-zoom);
+    touch-action: pinch-zoom;
 
     .dx-datagrid-table {
         .dx-row {
@@ -493,7 +493,7 @@
 
 .dx-datagrid-group-panel {
     margin-bottom: @WIN8_DATAGRID_HEADER_PANEL_MARGIN_BOTTOM;
-    .touch-action(pinch-zoom);
+    touch-action: pinch-zoom;
 
     .dx-group-panel-message {
         color: @WIN8_DATAGRID_HEADERS_COLOR;
@@ -591,7 +591,7 @@
     }
 
     .dx-selection.dx-row, .dx-selection.dx-row:hover {
-        .text-shadow(none);
+        text-shadow: none;
         color: @WIN8_DATAGRID_SELECTION_COLOR;
 
         & > td, & > tr > td {
@@ -641,7 +641,7 @@
 }
 
 .dx-datagrid-search-text {
-    .text-shadow(none);
+    text-shadow: none;
     color: @WIN8_DATAGRID_SEARCH_TEXT_COLOR;
     background-color: @WIN8_DATAGRID_SEARCH_TEXT_BACKGROUND;
 }

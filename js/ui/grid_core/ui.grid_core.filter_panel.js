@@ -1,16 +1,13 @@
+import $ from "../../core/renderer";
 import { isDefined } from "../../core/utils/type";
-
-var $ = require("../../core/renderer"),
-    modules = require("./ui.grid_core.modules"),
-    gridUtils = require("./ui.grid_core.utils"),
-    eventsEngine = require("../../events/core/events_engine"),
-    messageLocalization = require("../../localization/message"),
-    CheckBox = require("../check_box"),
-    utils = require("../filter_builder/utils"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
-    inflector = require("../../core/utils/inflector");
+import modules from "./ui.grid_core.modules";
+import gridUtils from "./ui.grid_core.utils";
+import eventsEngine from "../../events/core/events_engine";
+import messageLocalization from "../../localization/message";
+import CheckBox from "../check_box";
+import utils from "../filter_builder/utils";
+import { when, Deferred } from "../../core/utils/deferred";
+import inflector from "../../core/utils/inflector";
 
 var FILTER_PANEL_CLASS = "filter-panel",
     FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text",

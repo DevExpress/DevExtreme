@@ -1254,7 +1254,7 @@ QUnit.test("Text with big amount of spaces", function(assert) {
 QUnit.test("Stroke text", function(assert) {
     var that = this,
         done = assert.async(),
-        markup = testingMarkupStart + "<text x=\"50\" y=\"50\" text-anchor=\"start\" stroke-width=\"5\" style=\"fill:#222; font-family:\'Trebuchet MS\', Verdana; stroke: #F2f2f2; stroke-width: 5px;\"><tspan style=\"font-weight: bold; font-style: italic; \" stroke-opacity=\"0.7\">Age</tspan></text>" + testingMarkupEnd,
+        markup = testingMarkupStart + "<text x=\"50\" y=\"50\" text-anchor=\"start\" stroke-width=\"5\" style=\"fill:#222; font-family:'Trebuchet MS', Verdana; stroke: #F2f2f2; stroke-width: 5px;\"><tspan style=\"font-weight: bold; font-style: italic; \" stroke-opacity=\"0.7\">Age</tspan></text>" + testingMarkupEnd,
         imageBlob = getData(markup);
 
     assert.expect(14);

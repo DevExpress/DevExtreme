@@ -9,8 +9,8 @@
     text-align: center;
 
     &.dx-state-active {
-        .scale(0.96);
-        .transition-transform(100ms, linear);
+        transform: scale(0.96);
+        transition: transform 100ms linear;
     }
 }
 
@@ -27,6 +27,6 @@
 
 .dx-device-ios-6 {
     .dx-tile {
-        .backface-visibility(hidden);
+        backface-visibility: hidden;
     }
 }

@@ -230,7 +230,6 @@ export const createVerticalAxis = function createVerticalAxis(translatorData, or
 function createAxis(translatorData, orthogonalTranslatorData, allOptions, isHorizontal) {
     function createTranslator(data, options) {
         var useOriginalTranslator = options.useOriginalTranslator;
-        data.stubData = data.stubData || options.stubData;
         data.categories = data.categories || options.categories;
         data.maxVisible = data.maxVisible || options.max;
         data.minVisible = data.minVisible || options.min;
@@ -901,6 +900,10 @@ export const MockAxis = function(renderOptions) {
 
         setBusinessRange: sinon.stub(),
 
+        getZoomBounds: sinon.stub(),
+
+        setInitRange: sinon.stub(),
+
         setGroupSeries: sinon.stub(),
 
         restoreBusinessRange: sinon.stub(),
@@ -921,6 +924,7 @@ export const MockAxis = function(renderOptions) {
         getRangeData: function() {
             return this._options.mockRange || {};
         },
+        applyMargins: sinon.spy(),
         resetMock: function() {
             delete this.range;
             delete this.wasDrawn;
@@ -930,6 +934,7 @@ export const MockAxis = function(renderOptions) {
         },
         setPercentLabelFormat: sinon.stub(),
         resetAutoLabelFormat: sinon.stub(),
+        getVisibleArea: sinon.stub().returns([]),
         getTicksValues: function() {
             if(!this._minorTicks) {
                 this._minorTicks = $.map(this._options.mockMinorTicks || [], function(item) { return { value: item }; });
@@ -1004,6 +1009,7 @@ export const MockAxis = function(renderOptions) {
         getCategoriesSorter: function() {
             return this._options.categoriesSortingMethod;
         },
+        getMarginOptions: sinon.stub.returns({}),
         applyVisualRangeSetter: sinon.spy(),
         _setVisualRange: sinon.spy(),
         visualRange: sinon.spy(),

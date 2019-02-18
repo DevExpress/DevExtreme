@@ -10,14 +10,13 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
-require("ui/tree_list/ui.tree_list");
-
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    devices = require("core/devices"),
-    fx = require("animation/fx");
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/tree_list/ui.tree_list';
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import devices from 'core/devices';
+import fx from 'animation/fx';
 
 fx.off = true;
 
@@ -110,7 +109,7 @@ QUnit.test("Fixed column should be rendered in separate table", function(assert)
 QUnit.test("Resize columns", function(assert) {
     // arrange
     var treeList = createTreeList({
-            width: 470,
+            width: 400,
             allowColumnResizing: true,
             loadingTimeout: undefined,
             dataSource: [{ id: 1, firstName: "Dmitriy", lastName: "Semenov", room: 101, birthDay: "1992/08/06" }],
@@ -124,12 +123,12 @@ QUnit.test("Resize columns", function(assert) {
     resizeController = treeList.getController("columnsResizer");
     resizeController._isResizing = true;
     resizeController._targetPoint = { columnIndex: 1 };
-    resizeController._setupResizingInfo(-9830);
+    resizeController._setupResizingInfo(-9800);
     resizeController._moveSeparator({
         event: {
             data: resizeController,
             type: "mousemove",
-            pageX: -9780,
+            pageX: -9750,
             preventDefault: noop
         }
     });
@@ -274,14 +273,14 @@ QUnit.testInActiveWindow("Ctrl + left/right keys should collapse/expand row", fu
     this.clock.tick();
 
     // act
-    navigationController._keyDownHandler({ key: "rightArrow", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0) }) });
+    navigationController._keyDownHandler({ keyName: "rightArrow", key: "ArrowRight", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0) }) });
     this.clock.tick();
 
     // assert
     assert.ok(treeList.isRowExpanded(2), "second row is expanded");
 
     // act
-    navigationController._keyDownHandler({ key: "leftArrow", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0), ctrl: true }) });
+    navigationController._keyDownHandler({ keyName: "leftArrow", key: "ArrowLeft", ctrl: true, originalEvent: $.Event("keydown", { target: treeList.getCellElement(1, 0), ctrl: true }) });
     this.clock.tick();
 
     // assert
@@ -863,7 +862,7 @@ QUnit.test("Nodes should not be shifted after expanding node on last page", func
 
     try {
         scrollable.scrollTo({ y: 300 }); // scroll to the last page
-        $(scrollable._container()).trigger("scroll");
+        devices.real().deviceType !== "desktop" && $(scrollable._container()).trigger("scroll");
         clock.tick();
 
         topVisibleRowData = treeList.getTopVisibleRowData();

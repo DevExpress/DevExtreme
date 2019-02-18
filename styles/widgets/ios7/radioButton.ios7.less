@@ -13,13 +13,13 @@
             left: @IOS7_RADIONBUTTON_ICON_SIZE/4;
             top: @IOS7_RADIONBUTTON_ICON_SIZE/4;
             background: @IOS7_RADIOGROUP_BACKGROUND_COLOR;
-            .box-shadow(~"0 1px 1px rgba(0, 0, 0, 0.1)");
-            .border-radius(50%);
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
         }
 
         &:before {
             background: @IOS7_RADIOGROUP_CHECK_BACKGROUND_COLOR;
-            .box-shadow(none);
+            box-shadow: none;
         }
     }
 
@@ -30,8 +30,8 @@
         width: 100%;
         height: 100%;
         background-color: @IOS7_RADIOGROUP_BACKGROUND_COLOR;
-        .box-shadow(0 0 2px rgba(170,170,170,.6) inset);
-        .border-radius(50%);
+        box-shadow: 0 0 2px rgba(170,170,170,.6) inset;
+        border-radius: 50%;
     }
 
     .dx-state-disabled & {

@@ -55,7 +55,7 @@
     list-style-type: none;
     position: relative;
     .user-select(none);
-    .user-drag(none);
+    user-drag: none;
 
     a {
         text-decoration: none;
@@ -77,7 +77,7 @@
         height: @TREE_VIEW_ICON_SIZE;
         vertical-align: middle;
         margin-right: 5px;
-        .background-size(@TREE_VIEW_ICON_SIZE, @TREE_VIEW_ICON_SIZE);
+        background-size: @TREE_VIEW_ICON_SIZE @TREE_VIEW_ICON_SIZE;
     }
 
     .dx-treeview-item-content {

@@ -162,6 +162,13 @@ var Pivot = CollectionWidget.inherit({
             * @hidden
             * @inheritdoc
             */
+
+            /**
+             * @name dxPivotOptions.items
+             * @type Array<string, dxPivotItem, object>
+             * @fires dxPivotOptions.onOptionChanged
+             * @inheritdoc
+             */
         });
     },
 
@@ -206,22 +213,22 @@ var Pivot = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
         /**
-        * @name dxPivotItemTemplate
-        * @inherits CollectionWidgetItemTemplate
+        * @name dxPivotItem
+        * @inherits CollectionWidgetItem
         * @type object
         */
         /**
-        * @name dxPivotItemTemplate.titleTemplate
+        * @name dxPivotItem.titleTemplate
         * @type template|function
         * @type_function_return string|Node|jQuery
         */
         /**
-        * @name dxPivotItemTemplate.visible
+        * @name dxPivotItem.visible
         * @hidden
         * @inheritdoc
         */
         /**
-        * @name dxPivotItemTemplate.title
+        * @name dxPivotItem.title
         * @type String
         */
         this._defaultTemplates["content"] = new EmptyTemplate();

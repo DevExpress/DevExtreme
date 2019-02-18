@@ -11,8 +11,7 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    translator = require("animation/translator"),
+var translator = require("animation/translator"),
     Color = require("color"),
     fx = require("animation/fx"),
     dragEvents = require("events/drag"),

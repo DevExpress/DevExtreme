@@ -81,8 +81,8 @@
 .dx-button {
     &.dx-button-has-icon:not(.dx-button-has-text) {
         &:not(.dx-shape-standard) {
-            .border-radius(50%);
-            .box-shadow(none);
+            border-radius: 50%;
+            box-shadow: none;
         }
     }
 }
@@ -103,7 +103,7 @@
 ) {
     background-color: @background-color;
     color: @text-color;
-    .box-shadow(@shadow-color);
+    box-shadow: @shadow-color;
 
     .dx-icon {
         color: @icon-color;
@@ -111,22 +111,22 @@
 
     &.dx-state-hover {
         background-color: @hover-background-color;
-        .box-shadow(@hover-shadow-color);
+        box-shadow: @hover-shadow-color;
     }
 
     &.dx-state-focused {
         background-color: @focused-background-color;
-        .box-shadow(@focused-shadow-color);
+        box-shadow: @focused-shadow-color;
     }
 
     &.dx-state-active {
         background-color: @active-background-color;
-        .box-shadow(@active-shadow-color);
+        box-shadow: @active-shadow-color;
     }
 
     &.dx-state-disabled {
         background: @disabled-background-color;
-        .box-shadow(none);
+        box-shadow: none;
 
         .dx-icon {
             opacity: @button-disabled-icon-opacity;
@@ -146,7 +146,7 @@
     @button-bg, @button-color, @button-hover-bg,
     @button-focused-bg, @button-active-bg, @button-icon-color
 ) {
-    .border-radius(@button-border-radius);
+    border-radius: @button-border-radius;
 
     .dx-button-styling-variant(
         @button-bg,
@@ -197,7 +197,7 @@
 }
 
 .dx-button-styling-clear() {
-    .box-shadow(none);
+    box-shadow: none;
     background: transparent;
     border-color: transparent;
 }
@@ -258,7 +258,7 @@
 
     &.dx-button-back {
         .dx-button-flat-color-styling(@button-flat-color);
-        .border-radius(50%);
+        border-radius: 50%;
         .dx-button-onlyicon-sizing();
         .dx-button-text {
             display: none;

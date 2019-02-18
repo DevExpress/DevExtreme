@@ -294,6 +294,21 @@ QUnit.test('dxSparkline get TooltipFormatObject', function(assert) {
     }, {}]);
 });
 
+// T714171
+QUnit.test("sparkline tooltip format object. min/max values when all values are equal", function(assert) {
+    var sparkline = this.createSparkline({
+        dataSource: [0, 0, 0],
+        tooltip: {
+            enabled: true
+        }
+    });
+
+    sparkline._showTooltipCallback();
+
+    assert.strictEqual(sparkline._tooltip.show.lastCall.args[0].originalMinValue, 0);
+    assert.strictEqual(sparkline._tooltip.show.lastCall.args[0].originalMaxValue, 0);
+});
+
 QUnit.test('Default Tooltip text', function(assert) {
     var data = [4, 8, 6, 9, 5, 7, 8, 6, 8, 1, 2, 6, 23, 2, 8, 9, 4, 5, 6, -1, 12],
 

@@ -1,70 +1,162 @@
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
-    devices = require("../../core/devices"),
-    extend = require("../../core/utils/extend").extend,
-    registerComponent = require("../../core/component_registrator"),
-    Editor = require("../editor/editor"),
-    inkRipple = require("../widget/utils.ink_ripple"),
-    DataExpressionMixin = require("../editor/ui.data_expression"),
-    themes = require("../themes"),
-    CollectionWidget = require("../collection/ui.collection_widget.edit"),
-    ChildDefaultTemplate = require("../widget/child_default_template");
+import $ from "../../core/renderer";
+import { extend } from "../../core/utils/extend";
+import { isDefined } from "../../core/utils/type";
+import devices from "../../core/devices";
+import inkRipple from "../widget/utils.ink_ripple";
+import registerComponent from "../../core/component_registrator";
+import themes from "../themes";
+import ChildDefaultTemplate from "../widget/child_default_template";
+import CollectionWidget from "../collection/ui.collection_widget.edit";
+import DataExpressionMixin from "../editor/ui.data_expression";
+import Editor from "../editor/editor";
 
-var RADIO_GROUP_CLASS = "dx-radiogroup",
-    RADIO_GROUP_VERTICAL_CLASS = "dx-radiogroup-vertical",
-    RADIO_GROUP_HORIZONTAL_CLASS = "dx-radiogroup-horizontal",
+const RADIO_BUTTON_CHECKED_CLASS = "dx-radiobutton-checked",
     RADIO_BUTTON_CLASS = "dx-radiobutton",
+    RADIO_BUTTON_ICON_CHECKED_CLASS = "dx-radiobutton-icon-checked",
     RADIO_BUTTON_ICON_CLASS = "dx-radiobutton-icon",
     RADIO_BUTTON_ICON_DOT_CLASS = "dx-radiobutton-icon-dot",
+    RADIO_GROUP_HORIZONTAL_CLASS = "dx-radiogroup-horizontal",
+    RADIO_GROUP_VERTICAL_CLASS = "dx-radiogroup-vertical",
     RADIO_VALUE_CONTAINER_CLASS = "dx-radio-value-container",
-    RADIO_BUTTON_CHECKED_CLASS = "dx-radiobutton-checked",
-    RADIO_BUTTON_ICON_CHECKED_CLASS = "dx-radiobutton-icon-checked",
-    ITEM_DATA_KEY = "dxItemData",
+    RADIO_GROUP_CLASS = "dx-radiogroup",
+
     RADIO_FEEDBACK_HIDE_TIMEOUT = 100;
 
-var RadioCollection = CollectionWidget.inherit({
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), DataExpressionMixin._dataExpressionDefaultOptions(), {
+class RadioCollection extends CollectionWidget {
+    _focusTarget() {
+        return this.$element().parent();
+    }
+
+    _getDefaultOptions() {
+        const defaultOptions = super._getDefaultOptions();
+
+        return extend(defaultOptions, DataExpressionMixin._dataExpressionDefaultOptions(), {
             _itemAttributes: { role: "radio" }
         });
-    },
+    }
 
-    _supportedKeys: function() {
-        var parent = this.callBase();
+    _initMarkup() {
+        super._initMarkup();
+        this.itemElements().addClass(RADIO_BUTTON_CLASS);
+    }
+
+    _keyboardEventBindingTarget() {
+        return this._focusTarget();
+    }
+
+    _postprocessRenderItem(args) {
+        const { itemData: { html }, itemElement } = args;
+
+        if(!html) {
+            const $radio = $("<div>").addClass(RADIO_BUTTON_ICON_CLASS);
+
+            $("<div>").addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
+
+            const $radioContainer = $("<div>").append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
+
+            $(itemElement).prepend($radioContainer);
+        }
+
+        super._postprocessRenderItem(args);
+    }
+
+    _processSelectableItem($itemElement, isSelected) {
+        super._processSelectableItem($itemElement, isSelected);
+
+        $itemElement
+            .toggleClass(RADIO_BUTTON_CHECKED_CLASS, isSelected)
+            .find(`.${RADIO_BUTTON_ICON_CLASS}`)
+            .first()
+            .toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, isSelected);
+
+        this.setAria("checked", isSelected, $itemElement);
+    }
+
+    _refreshContent() {
+        this._prepareContent();
+        this._renderContent();
+    }
+
+    _supportedKeys() {
+        const parent = super._supportedKeys();
 
         return extend({}, parent, {
             enter: function(e) {
                 e.preventDefault();
+
                 return parent.enter.apply(this, arguments);
             },
 
             space: function(e) {
                 e.preventDefault();
+
                 return parent.space.apply(this, arguments);
             }
         });
-    },
-
-    _focusTarget: function() {
-        return this.$element().parent();
-    },
-
-    _keyboardEventBindingTarget: function() {
-        return this._focusTarget();
-    },
-
-    _refreshContent: function() {
-        this._prepareContent();
-        this._renderContent();
     }
-});
 
-var RadioGroup = Editor.inherit({
+    itemElements() {
+        const elements = super.itemElements();
 
-    _activeStateUnit: "." + RADIO_BUTTON_CLASS,
+        return elements.not(elements.find(this._itemSelector()));
+    }
+}
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), extend(DataExpressionMixin._dataExpressionDefaultOptions(), {
+class RadioGroup extends Editor {
+    _clean() {
+        delete this._inkRipple;
+        super._clean();
+    }
+
+    _dataSourceOptions() {
+        return { paginate: false };
+    }
+
+    _defaultOptionsRules() {
+        const defaultOptionsRules = super._defaultOptionsRules();
+
+        return defaultOptionsRules.concat([{
+            device: { tablet: true },
+            options: {
+                /**
+                 * @name dxRadioGroupOptions.layout
+                 * @default 'horizontal' @for tablets
+                 */
+                layout: "horizontal"
+            }
+        }, {
+            device: () => devices.real().deviceType === "desktop" && !devices.isSimulator(),
+            options: {
+                /**
+                * @name dxRadioGroupOptions.focusStateEnabled
+                * @type boolean
+                * @default true @for desktop
+                * @inheritdoc
+                */
+                focusStateEnabled: true
+            }
+        }, {
+            device: () => themes.isAndroid5(),
+            options: { useInkRipple: true }
+        }]);
+    }
+
+    _fireContentReadyAction(force) {
+        force && super._fireContentReadyAction();
+    }
+
+    _focusTarget() {
+        return this.$element().parent();
+    }
+
+    _getAriaTarget() {
+        return this.$element();
+    }
+
+    _getDefaultOptions() {
+        const defaultOptions = super._getDefaultOptions();
+
+        return extend(defaultOptions, extend(DataExpressionMixin._dataExpressionDefaultOptions(), {
 
             /**
              * @name dxRadioGroupOptions.hoverStateEnabled
@@ -104,263 +196,80 @@ var RadioGroup = Editor.inherit({
             * @inheritdoc
             */
         }));
-    },
+    }
 
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
-            {
-                device: { tablet: true },
-                options: {
-                    /**
-                     * @name dxRadioGroupOptions.layout
-                     * @default 'horizontal' @for tablets
-                     */
-                    layout: "horizontal"
-                }
-            },
-            {
-                device: function() {
-                    return devices.real().deviceType === "desktop" && !devices.isSimulator();
-                },
-                options: {
-                    /**
-                    * @name dxRadioGroupOptions.focusStateEnabled
-                    * @type boolean
-                    * @default true @for desktop
-                    * @inheritdoc
-                    */
-                    focusStateEnabled: true
-                }
-            },
-            {
-                device: function() {
-                    return themes.isAndroid5();
-                },
-                options: {
-                    useInkRipple: true
-                }
-            }
-        ]);
-    },
+    _getItemValue(item) {
+        return this._valueGetter ? this._valueGetter(item) : item.text;
+    }
 
-    _setOptionsByReference: function() {
-        this.callBase();
+    _getSelectedItemKeys(value = this.option("value")) {
+        return isDefined(value) ? [value] : [];
+    }
 
-        extend(this._optionsByReference, {
-            value: true
-        });
-    },
+    _getSubmitElement() {
+        return this._$submitElement;
+    }
 
-    _dataSourceOptions: function() {
-        return { paginate: false };
-    },
-
-    _init: function() {
-        this.callBase();
-        this._initDataExpressions();
+    _init() {
+        super._init();
+        this._activeStateUnit = `.${RADIO_BUTTON_CLASS}`;
         this._feedbackHideTimeout = RADIO_FEEDBACK_HIDE_TIMEOUT;
-    },
+        this._initDataExpressions();
+    }
 
-    _initTemplates: function() {
-        this.callBase();
-
-        this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
-    },
-
-    _focusTarget: function() {
-        return this.$element();
-    },
-
-    _initMarkup: function() {
+    _initMarkup() {
         this.$element().addClass(RADIO_GROUP_CLASS);
         this._renderSubmitElement();
         this.setAria("role", "radiogroup");
-
         this._renderRadios();
         this.option("useInkRipple") && this._renderInkRipple();
+        super._initMarkup();
+    }
 
-        this.callBase();
-    },
+    _initTemplates() {
+        super._initTemplates();
+        this._defaultTemplates["item"] = new ChildDefaultTemplate("item", this);
+    }
 
-    _render: function() {
-        this._renderLayout();
-        this.callBase();
-        this._updateItemsSize();
-    },
+    _itemClickHandler({ itemElement, event, itemData }) {
+        if(this.itemElements().is(itemElement)) {
+            const newValue = this._getItemValue(itemData);
 
-    _renderInkRipple: function() {
-        this._inkRipple = inkRipple.render({
-            waveSizeCoefficient: 3.3,
-            useHoldAnimation: false,
-            isCentered: true
-        });
-    },
-
-    _toggleActiveState: function($element, value, e) {
-        this.callBase.apply(this, arguments);
-
-        if(!this._inkRipple) {
-            return;
+            if(newValue !== this.option("value")) {
+                this._saveValueChangeEvent(event);
+                this.option("value", newValue);
+            }
         }
+    }
 
-        if(value) {
-            this._inkRipple.showWave({
-                element: $element.find("." + RADIO_BUTTON_ICON_CLASS),
-                event: e
-            });
-        } else {
-            this._inkRipple.hideWave({
-                element: $element.find("." + RADIO_BUTTON_ICON_CLASS),
-                event: e
-            });
-        }
-    },
+    _optionChanged(args) {
+        const { name, value } = args;
 
-    _renderFocusState: noop,
-
-    _renderRadios: function() {
-        var $radios = $("<div>").appendTo(this.$element());
-
-        this._radios = this._createComponent($radios, RadioCollection, {
-            dataSource: this._dataSource,
-            onItemRendered: this._itemRenderedHandler.bind(this),
-            onItemClick: this._itemClickHandler.bind(this),
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
-            scrollingEnabled: false,
-            focusStateEnabled: this.option("focusStateEnabled"),
-            accessKey: this.option("accessKey"),
-            tabIndex: this.option("tabIndex"),
-            noDataText: ""
-        });
-
-        this._setCollectionWidgetOption("onContentReady", this._contentReadyHandler.bind(this));
-        this._contentReadyHandler();
-    },
-
-    _renderSubmitElement: function() {
-        this._$submitElement = $("<input>")
-            .attr("type", "hidden")
-            .appendTo(this.$element());
-        this._setSubmitValue();
-    },
-
-    _setSubmitValue: function(value) {
-        value = value || this.option("value");
-
-        var submitValue = this.option("valueExpr") === "this" ? this._displayGetter(value) : value;
-        this._$submitElement.val(submitValue);
-    },
-
-    _getSubmitElement: function() {
-        return this._$submitElement;
-    },
-
-    _contentReadyHandler: function() {
-        this.itemElements().addClass(RADIO_BUTTON_CLASS);
-        this._refreshSelected();
-    },
-
-    _itemRenderedHandler: function(e) {
-        if(e.itemData.html) {
-            return;
-        }
-
-        var $radio,
-            $radioContainer;
-
-        $radio = $("<div>").addClass(RADIO_BUTTON_ICON_CLASS);
-        $("<div>").addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
-        $radioContainer = $("<div>").append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
-
-        $(e.itemElement).prepend($radioContainer);
-    },
-
-    _itemClickHandler: function(e) {
-        if(this.itemElements().is(e.itemElement)) {
-            this._saveValueChangeEvent(e.event);
-            this.option("value", this._getItemValue(e.itemData));
-        }
-    },
-
-    _getItemValue: function(item) {
-        return !!this._valueGetter ? this._valueGetter(item) : item.text;
-    },
-
-    itemElements: function() {
-        var result = this._radios.itemElements();
-        return result.not(result.find(this._radios._itemSelector()));
-    },
-
-    _renderLayout: function() {
-        var layout = this.option("layout");
-        this.$element().toggleClass(RADIO_GROUP_VERTICAL_CLASS, layout === "vertical");
-        this.$element().toggleClass(RADIO_GROUP_HORIZONTAL_CLASS, layout === "horizontal");
-    },
-
-    _refreshSelected: function() {
-        var selectedValue = this.option("value");
-
-        this.itemElements().each((function(_, item) {
-            var $item = $(item);
-            var itemValue = this._valueGetter($item.data(ITEM_DATA_KEY));
-            var isValueEquals = this._isValueEquals(itemValue, selectedValue);
-            $item
-                .toggleClass(RADIO_BUTTON_CHECKED_CLASS, isValueEquals)
-                .find("." + RADIO_BUTTON_ICON_CLASS)
-                .first()
-                .toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, isValueEquals);
-
-            this.setAria("checked", this._isValueEquals(itemValue, selectedValue), $item);
-        }).bind(this));
-    },
-
-    _updateItemsSize: function() {
-        if(this.option("layout") === "horizontal") {
-            this.itemElements().css("height", "auto");
-        } else {
-            var itemsCount = this.option("items").length;
-            this.itemElements().css("height", 100 / itemsCount + "%");
-        }
-    },
-
-    _getAriaTarget: function() {
-        return this.$element();
-    },
-
-    _setCollectionWidgetOption: function() {
-        this._setWidgetOption("_radios", arguments);
-    },
-
-    focus: function() {
-        this._radios && this._radios.focus();
-    },
-
-    _optionChanged: function(args) {
         this._dataExpressionOptionChanged(args);
 
-        switch(args.name) {
+        switch(name) {
             case "useInkRipple":
                 this._invalidate();
                 break;
             case "focusStateEnabled":
             case "accessKey":
             case "tabIndex":
-                this._setCollectionWidgetOption(args.name, args.value);
+                this._setCollectionWidgetOption(name, value);
                 break;
             case "disabled":
-                this.callBase(args);
-                this._setCollectionWidgetOption(args.name, args.value);
+                super._optionChanged(args);
+                this._setCollectionWidgetOption(name, value);
                 break;
             case "dataSource":
                 this._setCollectionWidgetOption("dataSource");
                 break;
             case "valueExpr":
-                this._refreshSelected();
+                this._setCollectionWidgetOption("keyExpr", this._getCollectionKeyExpr());
                 break;
             case "value":
-                this._refreshSelected();
-                this._setSubmitValue(args.value);
-                this.callBase(args);
+                this._setCollectionWidgetOption("selectedItemKeys", this._getSelectedItemKeys(value));
+                this._setSubmitValue(value);
+                super._optionChanged(args);
                 break;
             case "items":
             case "itemTemplate":
@@ -371,16 +280,113 @@ var RadioGroup = Editor.inherit({
                 this._updateItemsSize();
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
-    },
-
-    _clean: function() {
-        delete this._inkRipple;
-        this.callBase();
     }
 
-}).include(DataExpressionMixin);
+    _render() {
+        this._renderLayout();
+        super._render();
+        this._updateItemsSize();
+    }
+
+    _renderFocusState() {
+    }
+
+    _renderInkRipple() {
+        this._inkRipple = inkRipple.render({
+            waveSizeCoefficient: 3.3,
+            useHoldAnimation: false,
+            isCentered: true
+        });
+    }
+
+    _renderLayout() {
+        const layout = this.option("layout"),
+            $element = this.$element();
+
+        $element.toggleClass(RADIO_GROUP_VERTICAL_CLASS, layout === "vertical");
+        $element.toggleClass(RADIO_GROUP_HORIZONTAL_CLASS, layout === "horizontal");
+    }
+
+    _renderRadios() {
+        const $radios = $("<div>").appendTo(this.$element());
+
+        this._radios = this._createComponent($radios, RadioCollection, {
+            accessKey: this.option("accessKey"),
+            dataSource: this._dataSource,
+            focusStateEnabled: this.option("focusStateEnabled"),
+            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            keyExpr: this._getCollectionKeyExpr(),
+            noDataText: "",
+            onContentReady: () => this._fireContentReadyAction(true),
+            onItemClick: this._itemClickHandler.bind(this),
+            scrollingEnabled: false,
+            selectionByClick: false,
+            selectionMode: "single",
+            selectedItemKeys: this._getSelectedItemKeys(),
+            tabIndex: this.option("tabIndex")
+        });
+    }
+
+    _renderSubmitElement() {
+        this._$submitElement = $("<input>")
+            .attr("type", "hidden")
+            .appendTo(this.$element());
+
+        this._setSubmitValue();
+    }
+
+    _setOptionsByReference() {
+        super._setOptionsByReference();
+        extend(this._optionsByReference, { value: true });
+    }
+
+    _setSubmitValue(value) {
+        value = value || this.option("value");
+
+        const submitValue = this.option("valueExpr") === "this" ? this._displayGetter(value) : value;
+
+        this._$submitElement.val(submitValue);
+    }
+
+    _setCollectionWidgetOption() {
+        this._setWidgetOption("_radios", arguments);
+    }
+
+    _toggleActiveState($element, value, e) {
+        super._toggleActiveState($element, value, e);
+
+        if(this._inkRipple) {
+            const event = {
+                element: $element.find(`.${RADIO_BUTTON_ICON_CLASS}`),
+                event: e
+            };
+
+            value ? this._inkRipple.showWave(event) : this._inkRipple.hideWave(event);
+        }
+    }
+
+    _updateItemsSize() {
+        if(this.option("layout") === "horizontal") {
+            this.itemElements().css("height", "auto");
+        } else {
+            const itemsCount = this.option("items").length;
+
+            this.itemElements().css("height", 100 / itemsCount + "%");
+        }
+    }
+
+    focus() {
+        this._radios && this._radios.focus();
+    }
+
+    itemElements() {
+        return this._radios.itemElements();
+    }
+}
+
+RadioGroup.include(DataExpressionMixin);
 
 registerComponent("dxRadioGroup", RadioGroup);
 

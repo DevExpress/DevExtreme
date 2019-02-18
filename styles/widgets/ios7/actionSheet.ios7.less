@@ -1,6 +1,6 @@
 .dx-actionsheet-without-title {
     .dx-actionsheet-container {
-        .border-radius-custom(6px, 6px, 6px, 6px);
+        border-radius: 6px 6px 6px 6px;
     }
 }
 
@@ -16,7 +16,7 @@
         background: @IOS7_ACTIONSHEET_BACKGROUND;
         color: @IOS7_ACTIONSHEET_TITLE;
         font-size: 14px;
-        .border-radius-custom(6px, 6px, 0, 0);
+        border-radius: 6px 6px 0 0;
         font-weight: normal;
 
         &.dx-toolbar {
@@ -27,12 +27,12 @@
 
     .dx-popup-content {
         padding: 0;
-        .border-radius(0);
+        border-radius: 0;
     }
 
     .dx-actionsheet-cancel {
         margin: 0 0 8px 0;
-        .border-radius(6px);
+        border-radius: 6px;
         border-top: none;
         background: @IOS7_ACTIONSHEET_CANCEL_BACKGROUND;
 
@@ -81,7 +81,7 @@
 
 .dx-actionsheet-container {
     overflow: hidden;
-    .border-radius-custom(0, 0, 6px, 6px);
+    border-radius: 0 0 6px 6px;
     margin-bottom: 8px;
 
     .dx-popover-wrapper & {
@@ -89,7 +89,7 @@
     }
 
     .dx-button {
-        .border-radius-custom(0, 0, 0, 0);
+        border-radius: 0 0 0 0;
 
         &.dx-state-disabled .dx-button-text {
             color: @IOS7_ACTIONSHEET_BUTTON_DISABLE;

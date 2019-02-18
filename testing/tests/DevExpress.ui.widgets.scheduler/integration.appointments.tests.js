@@ -1,5 +1,4 @@
-var $ = require("jquery"),
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
+var $ = require("jquery");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -12,8 +11,7 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
+var noop = require("core/utils/common").noop,
     errors = require("ui/widget/ui.errors"),
     translator = require("animation/translator"),
     dateLocalization = require("localization/date"),
@@ -921,7 +919,7 @@ QUnit.test("Two vertical neighbor appointments should be placed correctly", func
 
     assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 100, 2.001, "Left position is OK");
-    assert.roughEqual(translator.locate($allDayAppts.eq(0)).left, 100, 2.001, "Left position is OK");
+    assert.roughEqual($allDayAppts.eq(0).position().left, 100, 2.001, "Left position is OK");
 
     assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - appointmentOffset, 1.001, "Width is OK");
     assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - appointmentOffset, 1.001, "Width is OK");
@@ -3645,7 +3643,7 @@ QUnit.test("Recurrence repeat-end editor should be closed after reopening appoin
     this.instance.showAppointmentPopup(firstAppointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff"),
+        repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance"),
         repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
     repeatOnEditor.option("value", true);
@@ -3656,7 +3654,7 @@ QUnit.test("Recurrence repeat-end editor should be closed after reopening appoin
     this.instance.showAppointmentPopup(secondAppointment);
 
     form = this.instance.getAppointmentDetailsForm(),
-    repeatOnEditor = form.getEditor("repeatOnOff"),
+    repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance"),
     repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
     repeatOnEditor.option("value", true);
@@ -4725,13 +4723,13 @@ QUnit.test("DropDown button should be rendered correctly when appointmentCollect
         height: 500,
         maxAppointmentsPerCell: "auto",
         appointmentCollectorTemplate: function(data) {
-            return "<div class='button-title'>Appointments count is " + data.appointmentsCount + "</div>";
+            return "<div class='button-title'>Appointment count is " + data.appointmentCount + "</div>";
         }
     });
 
     var $dropDown = $(".dx-scheduler-dropdown-appointments").eq(0);
 
-    assert.equal($dropDown.find(".button-title").text(), "Appointments count is 2", "Template is applied correctly");
+    assert.equal($dropDown.find(".button-title").text(), "Appointment count is 2", "Template is applied correctly");
 });
 
 QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {
@@ -4890,6 +4888,35 @@ QUnit.test("Rival appointments should have right position on timeline month view
     this.instance.$element().find("." + APPOINTMENT_CLASS).each(function(index, appointment) {
         assert.equal($(appointment).position().top, 0, "Appointment top is ok");
     });
+});
+
+QUnit.test("Rival long appointments should have right position on timeline month view", function(assert) {
+    var data = [{
+        "id": "1",
+        "text": "Long event",
+        "startDate": new Date(2018, 11, 1, 9, 0),
+        "endDate": new Date(2018, 11, 5, 10, 30)
+    },
+    {
+        "id": "2",
+        "text": "Some event",
+        "startDate": new Date(2018, 11, 4, 9, 0),
+        "endDate": new Date(2018, 11, 4, 10, 29),
+    }];
+
+    this.createInstance({
+        dataSource: data,
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        currentDate: new Date(2018, 11, 3),
+        firstDayOfWeek: 0,
+        startDayHour: 8,
+        endDayHour: 20
+    });
+
+    var $secondAppointment = this.instance.$element().find("." + APPOINTMENT_CLASS).eq(1);
+
+    assert.equal($secondAppointment.position().top, 40, "Second appointment top is ok");
 });
 
 QUnit.test("Long appointment part should have right width on timeline month view", function(assert) {
@@ -5280,6 +5307,88 @@ QUnit.test("Appointment startDate and endDate should have correct format in the 
     assert.equal(endDateEditor.option("type"), "datetime", "end date is correct");
 });
 
+QUnit.test("Scheduler appointment popup should be opened correctly for recurrence appointments after multiple opening(T710140)", function(assert) {
+    var tasks = [{
+        text: "Recurrence task",
+        start: new Date(2017, 2, 13),
+        end: new Date(2017, 2, 13, 0, 30),
+        recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10"
+    }];
+
+    this.createInstance({
+        dataSource: tasks,
+        currentDate: new Date(2017, 2, 13),
+        currentView: "month",
+        views: ["month"],
+        startDateExpr: "start",
+        endDateExpr: "end"
+    });
+    this.instance.showAppointmentPopup(tasks[0]);
+    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
+    var form = this.instance.getAppointmentDetailsForm(),
+        descriptionEditor = form.getEditor("description");
+
+    descriptionEditor.option("value", "Recurrence task 1");
+
+    this.instance.hideAppointmentPopup();
+    this.instance.showAppointmentPopup(tasks[0]);
+
+    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
+
+    var popup = this.instance.getAppointmentPopup(),
+        $checkboxes = $(popup.$content()).find(".dx-checkbox");
+
+    assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "Right checkBox was checked. Popup is correct");
+    assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true, "Right checkBox was checked. Popup is correct");
+});
+
+QUnit.test("Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)", function(assert) {
+    var tasks = [{
+        text: "Task",
+        start: new Date(2017, 2, 13),
+        end: new Date(2017, 2, 13, 0, 30)
+    }, {
+        text: "Recurrence task",
+        start: new Date(2017, 2, 13),
+        end: new Date(2017, 2, 13, 0, 30),
+        recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10"
+    }];
+
+    this.createInstance({
+        dataSource: tasks,
+        currentDate: new Date(2017, 2, 13),
+        currentView: "month",
+        views: ["month"],
+        startDateExpr: "start",
+        endDateExpr: "end"
+    });
+    this.instance.showAppointmentPopup(tasks[0]);
+
+    var form = this.instance.getAppointmentDetailsForm(),
+        descriptionEditor = form.getEditor("description");
+
+    descriptionEditor.option("value", "Task 1");
+
+    this.instance.hideAppointmentPopup();
+    this.instance.showAppointmentPopup(tasks[1]);
+
+    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
+
+    var popup = this.instance.getAppointmentPopup(),
+        $checkboxes = $(popup.$content()).find(".dx-checkbox");
+
+    assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "Right checkBox was checked. Popup is correct");
+    assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true, "Right checkBox was checked. Popup is correct");
+
+    this.instance.hideAppointmentPopup();
+    this.instance.showAppointmentPopup(tasks[0]);
+
+    form = this.instance.getAppointmentDetailsForm();
+    var recurrenceEditor = form.getEditor("recurrenceRule");
+
+    assert.equal(recurrenceEditor._$container.css("display"), "none", "Recurrence editor is hidden. Popup is correct");
+});
+
 QUnit.test("Scheduler shouldn't throw error at deferred appointment loading (T518327)", function(assert) {
     var data = [{ text: "Task 1", startDate: new Date(2017, 4, 22, 16), endDate: new Date(2017, 4, 24, 1) }];
 
@@ -5313,7 +5422,7 @@ QUnit.test("Exception should not be thrown on second details view opening if for
         currentDate: new Date(2017, 2, 13),
         currentView: "week",
         views: ["week"],
-        onAppointmentFormCreated: function(e) {
+        onAppointmentFormOpening: function(e) {
             e.form.option("items", []);
         }
     });
@@ -5340,7 +5449,7 @@ QUnit.test("FormData should be reset on saveChanges, dateSerializationFormat is 
         views: ["week"],
         startDateExpr: "StartDate",
         endDateExpr: "EndDate",
-        onAppointmentFormCreated: function(data) {
+        onAppointmentFormOpening: function(data) {
             var form = data.form,
                 startDate = data.appointmentData.StartDate,
                 endDate = data.appointmentData.EndDate;
@@ -5815,11 +5924,11 @@ QUnit.test("Rival allDay appointments from different groups should be rendered c
 
     assert.roughEqual($appointments.eq(0).position().top, 0, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).position().left, 314, 1, "correct left position of allDay appointment");
 
     assert.roughEqual($appointments.eq(1).position().top, 7 * cellHeight, 1.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(1).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.equal($appointments.eq(1).position().left, 314, "correct left position of allDay appointment");
+    assert.roughEqual($appointments.eq(1).position().left, 314, 1, "correct left position of allDay appointment");
 });
 
 QUnit.test("Rival allDay appointments from same groups should be rendered correctly in vertical grouped workspace Week", function(assert) {
@@ -5869,7 +5978,7 @@ QUnit.test("Rival allDay appointments from same groups should be rendered correc
 
     assert.roughEqual($appointments.eq(0).position().top, 0.5 * cellHeight, 2.5, "correct top position of allDay appointment");
     assert.roughEqual($appointments.eq(0).outerHeight(), 0.5 * cellHeight, 2, "correct size of allDay appointment");
-    assert.equal($appointments.eq(0).position().left, 314, "correct left position of allDay appointment");
+    assert.roughEqual($appointments.eq(0).position().left, 314, 1, "correct left position of allDay appointment");
 });
 
 QUnit.test("Rival appointments from one group should be rendered correctly in vertical grouped workspace Week", function(assert) {

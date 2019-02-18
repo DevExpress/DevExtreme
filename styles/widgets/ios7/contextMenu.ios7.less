@@ -11,8 +11,8 @@
 
     .dx-submenu > .dx-menu-items-container {
         background-color: @IOS7_MENU_POPUP_BACKGROUND;
-        .border-radius(@IOS7_MENU_POPUP_BORDER_RADIUS);
-        .box-shadow(0px 1px 11px 1px rgba(0, 0, 0, 0.15));
+        border-radius: @IOS7_MENU_POPUP_BORDER_RADIUS;
+        box-shadow: 0px 1px 11px 1px rgba(0, 0, 0, 0.15);
         margin-left: -5px;
     }
 
@@ -25,8 +25,8 @@
 
         &:first-child {
             & > .dx-menu-item {
-                .border-radius-top-left(@IOS7_MENU_POPUP_BORDER_RADIUS);
-                .border-radius-top-right(@IOS7_MENU_POPUP_BORDER_RADIUS);
+                border-top-left-radius: @IOS7_MENU_POPUP_BORDER_RADIUS;
+                border-top-right-radius: @IOS7_MENU_POPUP_BORDER_RADIUS;
             }
         }
 
@@ -35,8 +35,8 @@
 
             & > .dx-menu-item {
                 border-bottom: none;
-                .border-radius-bottom-left(@IOS7_MENU_POPUP_BORDER_RADIUS);
-                .border-radius-bottom-right(@IOS7_MENU_POPUP_BORDER_RADIUS);
+                border-bottom-left-radius: @IOS7_MENU_POPUP_BORDER_RADIUS;
+                border-bottom-right-radius: @IOS7_MENU_POPUP_BORDER_RADIUS;
             }
         }
     }

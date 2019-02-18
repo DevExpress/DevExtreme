@@ -61,3 +61,25 @@ var Item = {
     */
     showTooltip: function(){ }
 };
+
+/**
+* @name FunnelLegendItem
+* @type object
+*/
+var legendItem = {
+    /**
+    * @name FunnelLegendItem.text
+    * @type string
+    */
+    text: undefined,
+    /**
+    * @name FunnelLegendItem.item
+    * @type dxFunnelItem
+    */
+    item: undefined,
+    /**
+    * @name FunnelLegendItem.visible
+    * @type boolean
+    */
+    visible: true
+};

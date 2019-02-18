@@ -230,6 +230,21 @@ QUnit.module("Value", function(hook) {
         });
         assert.deepEqual(this.rangeSelector.getValue(), ["c", "d"]);
     });
+
+    QUnit.test("Value can't go out from scale", function(assert) {
+        this.rangeSelector.option({
+            scale:
+            {
+                startValue: 1,
+                endValue: 5
+            },
+            dataSource: [
+                { arg: 1, val: 1 },
+                { arg: 8, val: 8 }
+            ]
+        });
+        assert.deepEqual(this.rangeSelector.getValue(), [1, 5]);
+    });
 });
 
 QUnit.module("T465345, onOptionChanged", function(hook) {
@@ -434,6 +449,35 @@ QUnit.test("Range selector with aggregation", function(assert) {
     }).dxRangeSelector("instance");
 
     assert.deepEqual(rangeSelector.getValue(), [0, 2]);
+});
+
+QUnit.test("Range selector with aggregation when dataSource is set after widget creation", function(assert) {
+    var rangeSelector = $("#container").dxRangeSelector({
+        dataSource: [],
+        chart: {
+            series: [{
+                aggregation: {
+                    enabled: true
+                }
+            }]
+        },
+        scale: {
+            aggregationInterval: 10
+        }
+    }).dxRangeSelector("instance");
+
+    // act
+    rangeSelector.option({
+        dataSource: [
+            { arg: 53, val: 1 },
+            { arg: 63, val: 1 },
+            { arg: 73, val: 1 },
+            { arg: 83, val: 1 },
+            { arg: 93, val: 1 }
+        ]
+    });
+
+    assert.deepEqual(rangeSelector.getValue(), [50, 90]);
 });
 
 QUnit.module("selectedRangeUpdateMode", {

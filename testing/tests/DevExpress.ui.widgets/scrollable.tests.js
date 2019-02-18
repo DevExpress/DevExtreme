@@ -1,24 +1,24 @@
-var $ = require("jquery"),
-    browser = require("core/utils/browser"),
-    noop = require("core/utils/common").noop,
-    support = require("core/utils/support"),
-    styleUtils = require("core/utils/style"),
-    translator = require("animation/translator"),
-    animationFrame = require("animation/frame"),
-    domUtils = require("core/utils/dom"),
-    initMobileViewport = require("mobile/init_mobile_viewport"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    devices = require("core/devices"),
-    Scrollable = require("ui/scroll_view/ui.scrollable"),
-    simulatedStrategy = require("ui/scroll_view/ui.scrollable.simulated"),
-    Scrollbar = require("ui/scroll_view/ui.scrollbar"),
-    config = require("core/config"),
-    viewPort = require("core/utils/view_port").value,
-    pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    isRenderer = require("core/utils/type").isRenderer;
+import $ from "jquery";
+import browser from "core/utils/browser";
+import { noop } from "core/utils/common";
+import support from "core/utils/support";
+import styleUtils from "core/utils/style";
+import translator from "animation/translator";
+import animationFrame from "animation/frame";
+import domUtils from "core/utils/dom";
+import initMobileViewport from "mobile/init_mobile_viewport";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import devices from "core/devices";
+import Scrollable from "ui/scroll_view/ui.scrollable";
+import simulatedStrategy from "ui/scroll_view/ui.scrollable.simulated";
+import Scrollbar from "ui/scroll_view/ui.scrollbar";
+import config from "core/config";
+import { value as viewPort } from "core/utils/view_port";
+import pointerMock from "../../helpers/pointerMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import { isRenderer } from "core/utils/type";
 
-require("common.css!");
+import "common.css!";
 
 var SCROLLABLE_CLASS = "dx-scrollable",
     SCROLLABLE_CONTAINER_CLASS = "dx-scrollable-container",
@@ -196,6 +196,21 @@ QUnit.test("init option 'rtl' is true", function(assert) {
 
     instance.option("rtlEnabled", false);
     assert.ok(!$element.hasClass(RTL_CLASS));
+});
+
+QUnit.test("rtlEnabled scrolls to very right position when a width was changing via API", assert => {
+    const $scrollable = $("#scrollable")
+        .dxScrollable({
+            direction: "horizontal",
+            rtlEnabled: true,
+            useNative: true
+        });
+
+    const scrollable = $scrollable.dxScrollable("instance");
+    scrollable.option("width", 50);
+
+    const veryRightPosition = scrollable.$content().width() - $scrollable.width();
+    assert.equal(scrollable.scrollLeft(), veryRightPosition, "scrolled to very right position");
 });
 
 

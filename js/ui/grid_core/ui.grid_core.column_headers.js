@@ -1,10 +1,10 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    columnsView = require("./ui.grid_core.columns_view"),
-    isDefined = require("../../core/utils/type").isDefined,
-    each = require("../../core/utils/iterator").each,
-    messageLocalization = require("../../localization/message"),
-    extend = require("../../core/utils/extend").extend;
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import columnsView from "./ui.grid_core.columns_view";
+import messageLocalization from "../../localization/message";
+import { isDefined } from "../../core/utils/type";
+import { each } from "../../core/utils/iterator";
+import { extend } from "../../core/utils/extend";
 
 var CELL_CONTENT_CLASS = "text-content",
     HEADERS_CLASS = "headers",
@@ -150,7 +150,7 @@ module.exports = {
                     if(cellOptions.rowType === "header") {
                         this.setAria("role", "columnheader", $cell);
                         if(cellOptions.column && !cellOptions.column.command && !cellOptions.column.isBand) {
-                            $cell.attr("id", cellOptions.column.id);
+                            $cell.attr("id", cellOptions.column.headerId);
                             this.setAria("label",
                                 messageLocalization.format("dxDataGrid-ariaColumn") + " " + cellOptions.column.caption,
                                 $cell);

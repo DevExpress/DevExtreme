@@ -7,18 +7,16 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
+import "common.css!";
 
-require("ui/data_grid/ui.data_grid");
-require("data/odata/store");
+import "ui/data_grid/ui.data_grid";
+import "data/odata/store";
 
-var $ = require("jquery"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
-
-var DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store");
+import $ from "jquery";
+import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import CustomStore from "data/custom_store";
 
 var createDataSource = function(data, storeOptions, dataSourceOptions) {
     var arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data);
@@ -1475,6 +1473,26 @@ QUnit.test("selectRows with key as array of undefined", function(assert) {
     });
 });
 
+// T708122
+QUnit.test("selectAll when remote paging and local filtering", function(assert) {
+    this.applyOptions({
+        remoteOperations: { paging: true }
+    });
+
+    this.dataSource = createDataSource(this.array, {}, { pageSize: 5, filter: ["age", ">", 15] });
+    this.dataController.setDataSource(this.dataSource);
+    this.dataSource.load();
+
+    // act
+    this.selectionController.selectAll();
+
+    // assert
+    assert.strictEqual(this.getVisibleRows().length, 5, "visible row count");
+    assert.strictEqual(this.totalCount(), 6, "total count");
+    assert.strictEqual(this.getSelectedRowKeys().length, 6, "selected row count");
+    assert.strictEqual(this.selectionController.isSelectAll(), true, "isSelectAll");
+});
+
 QUnit.module("Selection without dataSource", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("getters", function(assert) {
@@ -1948,6 +1966,27 @@ QUnit.test("changeRowSelection with shift key after filtering", function(assert)
 
     // assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 6], "selectedRowKeys");
+});
+
+QUnit.test("changeRowSelection with shift key after partial refresh", function(assert) {
+    // arrange
+    var that = this;
+    this.applyOptions({
+        selection: {
+            mode: "multiple",
+            showCheckBoxesMode: "always"
+        },
+        onSelectionChanged: function(e) {
+            that.refresh(true);
+        }
+    });
+
+    // act
+    this.selectionController.changeItemSelection(1);
+    this.selectionController.changeItemSelection(3, { shift: true });
+
+    // assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 4, 3], "selectedRowKeys");
 });
 
 // T547950

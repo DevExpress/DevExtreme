@@ -39,8 +39,25 @@ function getPolarQuarter(angle) {
 polarAxes = exports;
 
 circularAxes = polarAxes.circular = {
-    _applyMargins: function(dataRange) {
-        return dataRange;
+    _calculateValueMargins(ticks) {
+        let { minVisible, maxVisible } = this._getViewportRange();
+        if(ticks && ticks.length > 1) {
+            minVisible = minVisible < ticks[0].value ? minVisible : ticks[0].value;
+            maxVisible = minVisible > ticks[ticks.length - 1].value ? maxVisible : ticks[ticks.length - 1].value;
+        }
+
+        return {
+            minValue: minVisible,
+            maxValue: maxVisible
+        };
+    },
+
+    applyMargins() {
+        const margins = this._calculateValueMargins(this._majorTicks);
+
+        const br = this._translator.getBusinessRange();
+        br.addRange({ minVisible: margins.minValue, maxVisible: margins.maxValue, interval: this._calculateRangeInterval(br.interval) });
+        this._translator.updateBusinessRange(br);
     },
 
     _getTranslatorOptions: function() {
@@ -78,11 +95,10 @@ circularAxes = polarAxes.circular = {
     },
 
     _processCanvas: function(canvas) {
-        var options = this._options;
         this._updateRadius(canvas);
         this._updateCenter(canvas);
 
-        return { left: 0, right: 0, width: _math.abs(options.endAngle - options.startAngle) };
+        return { left: 0, right: 0, width: this._getScreenDelta() };
     },
 
     _createAxisElement: function() {
@@ -205,9 +221,13 @@ circularAxes = polarAxes.circular = {
 
     _checkAlignmentConstantLineLabels: _noop,
 
+    _adjustDivisionFactor: function(val) {
+        return val * 180 / (this.getRadius() * Math.PI);
+    },
+
     _getScreenDelta: function() {
-        var angles = this.getAngles();
-        return _abs(angles[0] - angles[1]) * this.getRadius() * Math.PI / 180;
+        const angles = this.getAngles();
+        return _math.abs(angles[0] - angles[1]);
     },
 
     _getTickMarkPoints: function(coords, length) {
@@ -437,6 +457,10 @@ polarAxes.circularSpider = _extend({}, circularAxes, {
 });
 
 polarAxes.linear = {
+    applyMargins: circularAxes.applyMargins,
+    _resetMargins() {
+        this._reinitTranslator(this._getViewportRange());
+    },
     _setVisualRange: _noop,
     _getStick: xyAxesLinear._getStick,
     _getSpiderCategoryOption: _noop,

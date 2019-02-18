@@ -93,7 +93,6 @@ var $ = require("../core/renderer"),
     window = windowUtils.getWindow(),
     domAdapter = require("../core/dom_adapter"),
     isWindow = require("../core/utils/type").isWindow,
-    stringUtils = require("../core/utils/string"),
     extend = require("../core/utils/extend").extend,
 
     translator = require("./translator"),
@@ -126,7 +125,7 @@ var normalizeAlign = function(raw) {
 };
 
 var normalizeOffset = function(raw) {
-    return stringUtils.pairToObject(raw);
+    return commonUtils.pairToObject(raw);
 };
 
 var normalizeCollision = function(raw) {

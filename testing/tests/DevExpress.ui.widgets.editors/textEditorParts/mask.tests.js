@@ -295,9 +295,9 @@ QUnit.test("caret position is correct after typing stub and non-stub char", func
     var keyboard = keyboardMock($input, true);
 
     keyboard.caret(0)
-        .keyDown()
+        .keyDown("space")
         .keyPress("1")
-        .keyDown()
+        .keyDown("space")
         .keyPress("x");
 
     assert.equal(keyboard.caret().start, 3, "caret in correct position");
@@ -367,7 +367,7 @@ QUnit.test("keypress with meta key should not be prevented", function(assert) {
     $input.on("keypress", function(e) {
         isKeyPressPrevented = e.isDefaultPrevented();
     });
-    keyboard.triggerEvent("keypress", { keyCode: 86, metaKey: true });
+    keyboard.triggerEvent("keypress", { key: "v", metaKey: true });
     assert.equal(isKeyPressPrevented, false, "keypress with meta is not prevented");
 });
 
@@ -581,7 +581,7 @@ QUnit.test("all selected chars should be deleted on key press", function(assert)
         .type("x")
         .caret({ start: 0, end: 2 });
 
-    keyboard.keyDown().keyPress("x");
+    keyboard.keyDown("space").keyPress("x");
 
     assert.equal($input.val(), "x_", "printed only one char");
 });
@@ -1531,7 +1531,7 @@ QUnit.test("text argument has maskChar instead of spaces", function(assert) {
 
 QUnit.module("escape built-in rules");
 
-QUnit.test("built-in rules should be escaped with '\'", function(assert) {
+QUnit.test("built-in rules should be escaped with '\\'", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
         mask: '\\ll',
         value: 'a'
@@ -1723,7 +1723,7 @@ QUnit.test("mask should not be changed when readonly mode is enabled", function(
 
     var $input = $textEditor.find(".dx-texteditor-input");
     var event = $.Event("keypress");
-    event.which = 120;
+    event.key = "F9";
 
     $input.trigger(event);
 

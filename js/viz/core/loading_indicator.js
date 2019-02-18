@@ -145,6 +145,17 @@ exports.plugin = {
             }
         }
     },
+    extenders: {
+        _dataSourceLoadingChangedHandler(isLoading) {
+            if(isLoading && (this._options.loadingIndicator || {}).enabled) {
+                this._loadingIndicator.show();
+            }
+        },
+
+        _setContentSize() {
+            this._loadingIndicator.setSize(this._canvas);
+        }
+    },
     customize: function(constructor) {
         var proto = constructor.prototype;
 
@@ -156,11 +167,6 @@ exports.plugin = {
                 _dataSourceChangedHandler.apply(this, arguments);
             };
         }
-        var _setContentSize = proto._setContentSize;
-        proto._setContentSize = function() {
-            _setContentSize.apply(this, arguments);
-            this._loadingIndicator.setSize(this._canvas);
-        };
         constructor.addChange({
             code: "LOADING_INDICATOR",
             handler: function() {

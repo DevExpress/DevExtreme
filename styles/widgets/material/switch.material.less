@@ -52,8 +52,8 @@
     &.dx-state-active,
     &.dx-state-focused {
         .dx-switch-handle:before {
-            .box-shadow(@MATERIAL_SWITCH_SHADOW);
-            .border-radius(50%)
+            box-shadow: @MATERIAL_SWITCH_SHADOW;
+            border-radius: 50%;
         }
     }
 }
@@ -62,8 +62,8 @@
 .dx-switch {
     &.dx-state-readonly.dx-state-focused {
         .dx-switch-handle:before {
-            .box-shadow(@MATERIAL_SWITCH_SHADOW);
-            .border-radius(50%)
+            box-shadow: @MATERIAL_SWITCH_SHADOW;
+            border-radius: 50%;
         }
     }
 }
@@ -78,7 +78,7 @@
         content: '';
         width: 100%;
         height: 14px;
-        .border-radius(500px);
+        border-radius: 500px;
         background-color: @switch-bg;
         margin: 3px 0;
     }
@@ -120,8 +120,8 @@
     width: @MATERIAL_SWITCH_HEIGHT;
     height: @MATERIAL_SWITCH_HEIGHT;
     background-color: @switch-handle-off-bg;
-    .box-shadow(@MATERIAL_SWITCH_HANDLE_SHADOW);
-    .border-radius(@switch-handle-border-radius);
+    box-shadow: @MATERIAL_SWITCH_HANDLE_SHADOW;
+    border-radius: @switch-handle-border-radius;
 
     &:before {
         display: block;
@@ -129,8 +129,8 @@
         width: 100%;
         height: 100%;
         background-color: @switch-handle-off-bg;
-        .border-radius(@switch-handle-border-radius);
-        .transition(@MATERIAL_SWITCH_TRANSITION);
+        border-radius: @switch-handle-border-radius;
+        transition: @MATERIAL_SWITCH_TRANSITION;
     }
 }
 
@@ -146,8 +146,8 @@
     &.dx-state-active,
     &.dx-state-focused {
         .dx-switch-handle:before {
-            .box-shadow(@MATERIAL_ON_VALUE_SWITCH_SHADOW);
-            .border-radius(50%)
+            box-shadow: @MATERIAL_ON_VALUE_SWITCH_SHADOW;
+            border-radius: 50%;
         }
     }
 }

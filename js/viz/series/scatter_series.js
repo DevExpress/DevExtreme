@@ -652,14 +652,14 @@ exports.chart = _extend({}, baseScatterMethods, {
     _applyVisibleArea: function() {
         var that = this,
             rotated = that._options.rotated,
-            visibleX = (rotated ? that.getValueAxis() : that.getArgumentAxis()).getTranslator().getCanvasVisibleArea(),
-            visibleY = (rotated ? that.getArgumentAxis() : that.getValueAxis()).getTranslator().getCanvasVisibleArea();
+            visibleX = (rotated ? that.getValueAxis() : that.getArgumentAxis()).getVisibleArea(),
+            visibleY = (rotated ? that.getArgumentAxis() : that.getValueAxis()).getVisibleArea();
 
         that._visibleArea = {
-            minX: visibleX.min,
-            maxX: visibleX.max,
-            minY: visibleY.min,
-            maxY: visibleY.max
+            minX: visibleX[0],
+            maxX: visibleX[1],
+            minY: visibleY[0],
+            maxY: visibleY[1]
         };
     }
 });

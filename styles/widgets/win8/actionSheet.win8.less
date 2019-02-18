@@ -8,14 +8,14 @@
             background: transparent;
             color: @WIN8_BASE_TEXT;
             text-align: left;
-            .backface-visibility(hidden);
-            .transition-duration(100ms);
+            backface-visibility: hidden;
+            transition-duration: 100ms;
             .dx-theme-win8-typography.dx-font-s;
-            .transition-property(transform);
+            transition-property: transform;
             line-height: 1.7;
 
             &.dx-state-active {
-                .translate(2px, 2px);
+                transform: translate(2px, 2px);
             }
         }
 

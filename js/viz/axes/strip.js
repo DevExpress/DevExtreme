@@ -30,9 +30,7 @@ export default function createStrip(axis, options) {
         },
 
         draw() {
-            const range = axis._translator.getBusinessRange();
-
-            if(range.stubData) {
+            if(axis._translator.getBusinessRange().isEmpty()) {
                 return;
             }
 

@@ -10,8 +10,7 @@ QUnit.testStart(function() {
 require("common.css!");
 require("generic_light.css!");
 
-var $ = require("jquery"),
-    translator = require("animation/translator"),
+var translator = require("animation/translator"),
     fx = require("animation/fx"),
     DataSource = require("data/data_source/data_source").DataSource;
 

@@ -1329,7 +1329,7 @@ QUnit.module("Workspace Month markup", monthModuleConfig, () => {
         const firstDate = new Date(2015, 1, 23);
 
         $element.find(".dx-scheduler-date-table tr>td").each(function(index, cell) {
-            var index = Math.floor(index / 3);
+            index = Math.floor(index / 3);
 
             const date = new Date(firstDate);
             date.setDate(firstDate.getDate() + index);

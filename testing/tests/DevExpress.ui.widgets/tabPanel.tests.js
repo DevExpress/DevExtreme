@@ -668,4 +668,21 @@ QUnit.module("Live Update", {
         assert.strictEqual(tabPanel.option('items[0].visible'), false);
         assert.strictEqual(contentElement, $('#itemContent').get(0));
     });
+
+    // T704910
+    QUnit.test("Fix showing of 'No data to display' text after add first item", function(assert) {
+        this.data = [];
+        var tabPanel = this.createTabPanel(),
+            $tabPanelElement = tabPanel.$element();
+
+        assert.ok($tabPanelElement.find(".dx-empty-message").length);
+
+        this.data.push({
+            id: 2,
+            text: "2 Inserted",
+            content: "2 content"
+        });
+        tabPanel.option("items", this.data);
+        assert.notOk($tabPanelElement.find(".dx-empty-message").length);
+    });
 });

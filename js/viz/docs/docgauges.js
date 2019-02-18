@@ -11,6 +11,19 @@ var BaseGauge = {
     * @default 'none'
     */
     containerBackgroundColor: 'none',
+
+    /**
+    * @name BaseGaugeOptions.loadingIndicator
+    * @type object
+    */
+    loadingIndicator: {
+        /**
+        * @name BaseGaugeOptions.loadingIndicator.enabled
+        * @type boolean
+        * @hidden
+        */
+        enabled: false
+    },
     /**
     * @name BaseGaugeOptions.animation
     * @type object
@@ -40,6 +53,12 @@ var BaseGauge = {
     * @type object
     */
     scale: {
+        /**
+        * @name BaseGaugeOptions.scale.scaleDivisionFactor
+        * @type number
+        * @default 17
+        */
+        scaleDivisionFactor: 17,
         /**
         * @name BaseGaugeOptions.scale.startValue
         * @type number
@@ -468,6 +487,13 @@ var dxLinearGauge = {
     */
     scale: {
         /**
+        * @name dxLinearGaugeOptions.scale.scaleDivisionFactor
+        * @type number
+        * @default 25
+        * @inheritdoc
+        */
+        scaleDivisionFactor: 25,
+        /**
         * @name dxLinearGaugeOptions.scale.verticalOrientation
         * @type Enums.VerticalAlignment
         * @default 'bottom'
@@ -624,6 +650,13 @@ var dxBarGauge = {
     * @default '#e0e0e0'
     */
     backgroundColor: '#e0e0e0',
+    /**
+    * @name dxBarGaugeOptions.loadingIndicator
+    * @type object
+    * @inherits BaseGaugeOptions.loadingIndicator
+    * @inheritdoc
+    */
+    loadingIndicator: { },
     /**
     * @name dxBarGaugeOptions.barSpacing
     * @type number

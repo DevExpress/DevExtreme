@@ -34,7 +34,6 @@ const moduleConfig = {
     }
 };
 
-
 QUnit.module("render", moduleConfig, () => {
     QUnit.test("render", (assert) => {
         let $responsiveBox = $("#responsiveBox").dxResponsiveBox({
@@ -53,7 +52,6 @@ QUnit.module("render", moduleConfig, () => {
         this.updateScreenSize();
     });
 });
-
 
 QUnit.module("layouting", moduleConfig, () => {
     QUnit.test("grid without items", (assert) => {
@@ -429,6 +427,31 @@ QUnit.module("layouting", moduleConfig, () => {
         assert.equal($items.eq(1).css("flex-shrink"), 1, "flex-shrink style for first column");
         assert.equal($items.eq(2).css("flex-shrink"), 0, "flex-shrink style for second column");
     });
+
+    QUnit.test("Set the shrink option of row to box when the singleColumnMode is applied", (assert) => {
+        this.updateScreenSize(500);
+
+        const $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            _layoutStrategy: "flex",
+            rows: [{
+                shrink: 0, screen: "xs"
+            }, {
+                screen: "xs"
+            }, {}],
+            cols: [{}, {}],
+            singleColumnScreen: "xs",
+            items: [
+                { location: { row: 0, col: 0 } },
+                { location: { row: 1, col: 0 } },
+                { location: { row: 0, col: 0 } }
+            ]
+        });
+
+        const $items = $responsiveBox.find(`.${BOX_ITEM_CLASS}`);
+        assert.equal($items.eq(0).css("flex-shrink"), 0, "flex-shrink is applied for first row");
+        assert.equal($items.eq(1).css("flex-shrink"), 1, "flex-shrink is applied for second row");
+        assert.equal($items.eq(2).css("flex-shrink"), 1, "flex-shrink is applied for third row");
+    });
 });
 
 
@@ -446,7 +469,6 @@ QUnit.module("behavior", () => {
         assert.equal($responsiveBox.find(".test").get(0), $div.get(0), "item was not rerendered");
     });
 });
-
 
 QUnit.module("templates", () => {
     QUnit.test("custom item templates", (assert) => {
@@ -473,7 +495,6 @@ QUnit.module("templates", () => {
         assert.equal($.trim($responsiveBox.text()), "test", "item rendered");
     });
 });
-
 
 QUnit.module("template rendering", moduleConfig, () => {
     QUnit.test("template rendered when it set after creation", (assert) => {
@@ -516,7 +537,6 @@ QUnit.module("template rendering", moduleConfig, () => {
         assert.ok($responsiveBox.find(".dx-item .dx-widget").dxWidget("instance"), "widget is created");
     });
 });
-
 
 QUnit.module("collision", moduleConfig, () => {
     QUnit.test("item located at the same cell of another item", (assert) => {

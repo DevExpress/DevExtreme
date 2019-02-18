@@ -480,7 +480,7 @@ const Drawer = Widget.inherit({
         this._whenPanelRefreshed = new Deferred();
         this._strategy.renderPanel(this._getTemplate(this.option("template")), this._whenPanelRefreshed);
 
-        this._whenPanelRefreshed.always(() => {
+        hasWindow() && this._whenPanelRefreshed.always(() => {
             this._strategy.setPanelSize(this.option("revealMode") === "slide");
             this._renderPosition(this.option("opened"), false, true);
         });
@@ -515,6 +515,7 @@ const Drawer = Widget.inherit({
             case "position":
                 this._refreshPositionClass(args.previousValue);
                 this._invalidate();
+                break;
             case "contentTemplate":
             case "template":
                 this._invalidate();

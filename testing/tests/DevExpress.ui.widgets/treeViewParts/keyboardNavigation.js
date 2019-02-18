@@ -122,7 +122,7 @@ QUnit.test("'shift+home' key pressing extends selection up to the top-most node"
         $secondNodeCheckBox = $secondNode.find(".dx-checkbox").eq(0);
 
     $firstItem.trigger("dxpointerdown");
-    $treeView.trigger($.Event("keydown", { which: 36, shiftKey: true }));
+    $treeView.trigger($.Event("keydown", { key: "Home", shiftKey: true }));
 
     assert.ok($topNodeCheckBox.dxCheckBox("instance").option("value"), true, "top node was selected");
     assert.ok($secondNodeCheckBox.dxCheckBox("instance").option("value"), true, "node was selected");
@@ -137,7 +137,7 @@ QUnit.test("'shift+home' key pressing without checkBoxes", function(assert) {
         $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(2);
 
     $firstItem.trigger("dxpointerdown");
-    $treeView.trigger($.Event("keydown", { which: 36, shiftKey: true }));
+    $treeView.trigger($.Event("keydown", { key: "Home", shiftKey: true }));
 
     assert.equal($treeView.dxTreeView("instance").option("selectedIndex"), -1);
 }),
@@ -179,7 +179,7 @@ QUnit.test("'shift+end' key pressing extends selection up to the last node", fun
         $secondNodeCheckBox = $secondNode.find(".dx-checkbox").eq(0);
 
     $firstItem.trigger("dxpointerdown");
-    $treeView.trigger($.Event("keydown", { which: 35, shiftKey: true }));
+    $treeView.trigger($.Event("keydown", { key: "End", shiftKey: true }));
 
     assert.ok($lastNodeCheckBox.dxCheckBox("instance").option("value"), true, "last node was selected");
     assert.ok($secondNodeCheckBox.dxCheckBox("instance").option("value"), true, "node was selected");
@@ -194,7 +194,7 @@ QUnit.test("'shift+end' key pressing without checkBoxes", function(assert) {
         $firstItem = $treeView.find("." + internals.ITEM_CLASS).eq(0);
 
     $firstItem.trigger("dxpointerdown");
-    $treeView.trigger($.Event("keydown", { which: 35, shiftKey: true }));
+    $treeView.trigger($.Event("keydown", { key: "End", shiftKey: true }));
 
     assert.equal($treeView.dxTreeView("instance").option("selectedIndex"), -1);
 }),
@@ -252,7 +252,7 @@ QUnit.test("'shiftDown' key test", function(assert) {
         $checkBox = $treeView.find("." + internals.NODE_CLASS).eq(1).find(".dx-checkbox").eq(0);
 
     $item.trigger("dxpointerdown");
-    $treeView.trigger($.Event("keydown", { which: 40, shiftKey: true }));
+    $treeView.trigger($.Event("keydown", { key: "ArrowDown", shiftKey: true }));
 
     assert.equal($checkBox.dxCheckBox("instance").option("value"), true);
 }),
@@ -266,7 +266,7 @@ QUnit.test("'shiftDown' key test without checkBoxes", function(assert) {
         $item = $treeView.find("." + internals.ITEM_CLASS).eq(0);
 
     $item.trigger("dxpointerdown");
-    $treeView.trigger($.Event("keydown", { which: 40, shiftKey: true }));
+    $treeView.trigger($.Event("keydown", { key: "ArrowDown", shiftKey: true }));
 
     assert.equal($treeView.dxTreeView("instance").option("selectedIndex"), -1);
 }),
@@ -303,7 +303,7 @@ QUnit.test("'shiftUp' key test", function(assert) {
         $checkBox = $treeView.find("." + internals.NODE_CLASS).eq(0).find(".dx-checkbox").eq(0);
 
     $item.trigger("dxpointerdown");
-    $treeView.trigger($.Event("keydown", { which: 38, shiftKey: true }));
+    $treeView.trigger($.Event("keydown", { key: "ArrowUp", shiftKey: true }));
 
     assert.equal($checkBox.dxCheckBox("instance").option("value"), true);
 }),
@@ -317,7 +317,7 @@ QUnit.test("'shiftUp' key test without checkBoxes", function(assert) {
         $item = $treeView.find("." + internals.ITEM_CLASS).eq(1);
 
     $item.trigger("dxpointerdown");
-    $treeView.trigger($.Event("keydown", { which: 38, shiftKey: true }));
+    $treeView.trigger($.Event("keydown", { key: "ArrowUp", shiftKey: true }));
 
     assert.equal($treeView.dxTreeView("instance").option("selectedIndex"), -1);
 }),
@@ -457,7 +457,7 @@ QUnit.test("'asterisk' key test", function(assert) {
 
     $treeView.focusin();
     $parentItem.trigger("dxpointerdown");
-    $treeView.trigger($.Event("keydown", { which: 106 }));
+    $treeView.trigger($.Event("keydown", { key: "*" }));
 
     var $childNode = $treeView.find(".dx-treeview-node").eq(5);
 
@@ -489,7 +489,7 @@ QUnit.test("'minus' key test", function(assert) {
 
     $treeView.focusin();
     $parentItem.trigger("dxpointerdown");
-    $treeView.trigger($.Event("keydown", { which: 109 }));
+    $treeView.trigger($.Event("keydown", { key: "-" }));
 
     assert.ok(collapseFired, 2, "onItemCollapsed was fired desired number of times");
 }),
@@ -818,12 +818,12 @@ QUnit.testInActiveWindow("First list item should be focused on the 'tab' key pre
     this.clock.tick();
 
     $searchEditor.on("keydown", function(e) {
-        if(e.which === 9) {
+        if(e.key === "Tab") {
             $treeView.find("[tabIndex]:not(:focus)").first().focus();
         }
     });
 
-    $searchEditor.trigger($.Event("keydown", { which: 9 }));
+    $searchEditor.trigger($.Event("keydown", { key: "Tab" }));
     this.clock.tick();
 
     assert.ok($treeView.find("." + internals.NODE_CLASS).first().hasClass("dx-state-focused"), "first node is focused");

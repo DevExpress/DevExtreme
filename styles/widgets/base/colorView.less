@@ -1,14 +1,14 @@
 .dx-colorview-palette-handle {
-    .gradient-radial(~"transparent 5px, " @COLORVIEW_HANDLE_BORDER_COLOR ~"6px, " @COLORVIEW_HANDLE_COLOR ~"7px, " @COLORVIEW_HANDLE_COLOR ~"12px, " @COLORVIEW_HANDLE_BORDER_COLOR ~"13px");
-    .box-shadow(~"0 1px 1px 0" @COLORVIEW_HANDLE_BORDER_COLOR);
+    background: radial-gradient(transparent 5px, @COLORVIEW_HANDLE_BORDER_COLOR 6px, @COLORVIEW_HANDLE_COLOR 7px, @COLORVIEW_HANDLE_COLOR 12px, @COLORVIEW_HANDLE_BORDER_COLOR 13px);
+    box-shadow: 0 1px 1px 0 @COLORVIEW_HANDLE_BORDER_COLOR;
 }
 
 .dx-colorview-hue-scale-handle {
     border: 1px solid @COLORVIEW_HANDLE_BORDER_COLOR;
-    .box-shadow( ~"inset -5px 0px 0px 3px" @COLORVIEW_HANDLE_COLOR ~", inset 5px 0px 0px 3px" @COLORVIEW_HANDLE_COLOR ~", inset -6px 0px 1px 4px" @COLORVIEW_HANDLE_BORDER_COLOR ~", inset 6px 0px 1px 4px" @COLORVIEW_HANDLE_BORDER_COLOR );
+    box-shadow: inset -5px 0px 0px 3px @COLORVIEW_HANDLE_COLOR, inset 5px 0px 0px 3px @COLORVIEW_HANDLE_COLOR, inset -6px 0px 1px 4px @COLORVIEW_HANDLE_BORDER_COLOR, inset 6px 0px 1px 4px @COLORVIEW_HANDLE_BORDER_COLOR;
 }
 
 .dx-colorview-alpha-channel-handle {
     border: 1px solid @COLORVIEW_HANDLE_BORDER_COLOR;
-    .box-shadow( ~"  inset 0px -5px 0px 3px" @COLORVIEW_HANDLE_COLOR ~", inset 0px 5px 0px 3px" @COLORVIEW_HANDLE_COLOR ~", inset 0px -6px 1px 4px" @COLORVIEW_HANDLE_BORDER_COLOR ~", inset 0px 6px 1px 4px" @COLORVIEW_HANDLE_BORDER_COLOR );
+    box-shadow: inset 0px -5px 0px 3px @COLORVIEW_HANDLE_COLOR, inset 0px 5px 0px 3px @COLORVIEW_HANDLE_COLOR, inset 0px -6px 1px 4px @COLORVIEW_HANDLE_BORDER_COLOR, inset 0px 6px 1px 4px @COLORVIEW_HANDLE_BORDER_COLOR;
 }

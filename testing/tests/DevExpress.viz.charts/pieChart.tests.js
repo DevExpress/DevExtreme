@@ -76,6 +76,7 @@ var environment = {
             setupMocks.call(this);
             var that = this;
             that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
+            that.themeManager.theme.withArgs("legend").returns({ title: {} });
             $.each(["loadingIndicator", "legend", "size", "title", "adaptiveLayout"], function(_, name) {
                 that.themeManager.getOptions.withArgs(name).returns({});
             });
@@ -113,8 +114,7 @@ var environment = {
             that.createPieChart = function(options) {
                 var pieChart;
                 $.each(options || {}, function(k, v) {
-                    if(k === "valueAxis" || k === "argumentAxis" || k === "series" || k === "pieSegment") {
-                    } else if(k === "commonPaneSettings") {
+                    if(k === "commonPaneSettings") {
                         that.themeManager.getOptions.withArgs(k).returns($.extend(true, {
                             backgroundColor: "none",
                             border: {
@@ -126,7 +126,7 @@ var environment = {
                                 dashStyle: "solid"
                             }
                         }, v));
-                    } else {
+                    } else if(k !== "valueAxis" && k !== "argumentAxis" && k !== "series" && k !== "pieSegment") {
                         that.themeManager.getOptions.withArgs(k).returns(v);
                     }
                 });
@@ -695,8 +695,8 @@ var environment = {
     QUnit.module("Multi level pie chart", {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
-            this.mockSeries1 = new MockSeries({ points: this.stubPoints });
-            this.mockSeries2 = new MockSeries({ points: this.stubPoints });
+            this.mockSeries1 = new MockSeries({ range: { val: { min: 0, max: 10 } } }),
+            this.mockSeries2 = new MockSeries({ range: { val: { min: 0, max: 10 } } });
 
             var translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
 
@@ -978,7 +978,20 @@ var environment = {
         });
 
         var legend = commons.getLegendStub();
-        assert.deepEqual(legend.update.lastCall.args[0][0], {
+
+        const getLegendData = function(passedData) {
+            return {
+                id: passedData.id,
+                argument: passedData.argument,
+                text: passedData.text,
+                argumentIndex: passedData.argumentIndex,
+                textOpacity: passedData.textOpacity,
+                states: passedData.states,
+                visible: passedData.visible
+            };
+        };
+
+        assert.deepEqual(getLegendData(legend.update.lastCall.args[0][0]), {
             id: 0,
             argument: "First",
             text: "First",
@@ -988,18 +1001,21 @@ var environment = {
                 hover: undefined,
                 selection: undefined,
                 normal: { opacity: 0.3 }
-            }
+            },
+            visible: true
         }, "Legend opacity should be change");
-        assert.deepEqual(legend.update.lastCall.args[0][1], {
+        assert.deepEqual(getLegendData(legend.update.lastCall.args[0][1]), {
             id: 1,
             argument: "Second",
             argumentIndex: 0,
             text: "Second",
+            textOpacity: undefined,
             states: {
                 hover: undefined,
                 selection: undefined,
                 normal: {}
-            }
+            },
+            visible: true
         }, "Legend opacity should not be change");
     });
 
@@ -1023,11 +1039,16 @@ var environment = {
         assert.ok(chart.layoutManager.layoutElements.calledWith([commons.getTitleStub(), legend], chart._canvas), "layout");
         assert.ok(chart.layoutManager.applyPieChartSeriesLayout.calledOnce, "layout for pie is called once");
 
-        for(var i = 0; i < updateArgs[0].length; i++) {
-            assert.strictEqual(updateArgs[0][i].text, this.stubPoints[i].argument, "Legend item name for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].states, this.stubPoints[i].getLegendStyles(), "Legend states for " + i.toString());
-        }
+        assert.equal(updateArgs[0].length, 3);
+
+        var stubPoints = this.stubPoints;
+        updateArgs[0].forEach(function(args, i) {
+            assert.strictEqual(args.text, stubPoints[i].argument, "Legend item name for " + i.toString());
+            assert.deepEqual(args.states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
+            assert.deepEqual(args.states, stubPoints[i].getLegendStyles(), "Legend states for " + i.toString());
+            assert.equal(args.points.length, 1);
+            assert.equal(args.points[0], stubPoints[i]);
+        });
     });
 
     QUnit.test("Create Legend with two series", function(assert) {
@@ -1044,12 +1065,12 @@ var environment = {
         var updateArgs = commons.getLegendStub().stub("update").lastCall.args;
 
         assert.equal(updateArgs[0].length, 3, "update args");
-        for(var i = 0; i < updateArgs[0].length; i++) {
-            assert.strictEqual(updateArgs[0][i].text, points[i].argument, "Legend item name for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].states, points[i].getLegendStyles(), "Legend states for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].id, points[i].index, "Legend id for " + i.toString());
-        }
+        updateArgs[0].forEach(function(args, i) {
+            assert.strictEqual(args.text, points[i].argument, "Legend item name for " + i.toString());
+            assert.deepEqual(args.states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
+            assert.deepEqual(args.states, points[i].getLegendStyles(), "Legend states for " + i.toString());
+            assert.equal(args.points.length, 2);
+        });
     });
 
     QUnit.test("Create legend with two series, different arguments", function(assert) {

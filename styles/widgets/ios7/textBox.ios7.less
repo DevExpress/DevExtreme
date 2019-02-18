@@ -35,7 +35,7 @@
         height: @SEARCH_ICON_SIZE;
         background-image: @ICON_SEARCH_PATH;
         background-repeat: no-repeat;
-        .background-size-prop(contain);
+        background-size: contain;
     }
 
     .dx-texteditor-input {
@@ -46,10 +46,10 @@
     &.dx-state-focused {
         .dx-placeholder {
             text-align: left;
-            .transform(translate(@SEARCH_ICON_OFFSET / 2, 0));
+            transform: translate(@SEARCH_ICON_OFFSET / 2, 0);
 
             &:before {
-                .transform(translate(0, 0));
+                transform: translate(0, 0);
             }
         }
     }
@@ -72,8 +72,8 @@
 
 .ios-search-placeholder() {
     width: 100%;
-    .transform(translate(50%, 0));
-    .transition(transform @ANIMATION_DURATION ease);
+    transform: translate(50%, 0);
+    transition: transform @ANIMATION_DURATION ease;
 
     &:before {
         overflow: visible;
@@ -85,14 +85,14 @@
         padding-left: @SEARCH_ICON_SIZE + @SEARCH_ICON_OFFSET;
         min-height: @SEARCH_ICON_SIZE + @SEARCH_ICON_OFFSET;
         background-repeat: no-repeat;
-        .background-size(@SEARCH_ICON_SIZE, @SEARCH_ICON_SIZE);
-        .transform(translate(-50%, 0));
-        .transition(transform @ANIMATION_DURATION ease);
+        background-size: @SEARCH_ICON_SIZE @SEARCH_ICON_SIZE;
+        transform: translate(-50%, 0);
+        transition: transform @ANIMATION_DURATION ease;
     }
 }
 
 .ios-search-placeholder-rtl() {
-    .transform(translate(-50%, 0));
+    transform: translate(-50%, 0);
 
     &:before {
         display: inline-block;
@@ -100,7 +100,7 @@
         margin-right: @SEARCH_ICON_OFFSET / 2;
         margin-left: 0;
         padding-right: @SEARCH_ICON_SIZE + @SEARCH_ICON_OFFSET;
-        .transform(translate(50%, 0));
+        transform: translate(50%, 0);
     }
 }
 
@@ -115,10 +115,10 @@
         &.dx-state-focused {
             .dx-placeholder {
                 text-align: right;
-                .transform(translate(-@SEARCH_ICON_OFFSET / 2, 0));
+                transform: translate(-@SEARCH_ICON_OFFSET / 2, 0);
 
                 &:before {
-                    .transform(translate(0, 0));
+                    transform: translate(0, 0);
                 }
             }
         }

@@ -462,10 +462,12 @@ function getArgAxis(visibleArea, interval) {
         getTranslator: function() {
             return new MockTranslator({
                 interval: interval || 100,
-                getCanvasVisibleArea: visibleArea || { min: 0 },
                 translate: { 10: 311, 11: 312, 12: 313, 20: 222, 21: 310, 22: 223, 30: 114, 31: 112, 32: 218, 0: 315 },
                 from: { 0: 0, 10: 10 }
             });
+        },
+        getVisibleArea() {
+            return visibleArea && [visibleArea.min, visibleArea.max] || [];
         }
     };
 }
@@ -473,13 +475,11 @@ function getArgAxis(visibleArea, interval) {
 function getValAxes(name, visibleArea) {
     var val1Trans = new MockTranslator({
             interval: 100,
-            getCanvasVisibleArea: visibleArea || { min: 0 },
             translate: { 10: 311, 11: 312, 12: 313, 20: 222, 21: 310, 22: 223, 30: 114, 31: 112, 32: 218, 0: 315 },
             from: { 0: 0, 10: 10 }
         }),
         val2Trans = new MockTranslator({
             interval: 200,
-            getCanvasVisibleArea: visibleArea || { min: 0 },
             translate: { 20: 311, 21: 312, 22: 313, 30: 222, 31: 310, 32: 223, 40: 114, 41: 112, 42: 218, 0: 315 },
             from: { 0: 0, 10: 20 }
         });
@@ -491,11 +491,17 @@ function getValAxes(name, visibleArea) {
         axis1: {
             getTranslator: function() {
                 return val1Trans;
+            },
+            getVisibleArea() {
+                return visibleArea && [visibleArea.min, visibleArea.max] || [];
             }
         },
         axis2: {
             getTranslator: function() {
                 return val2Trans;
+            },
+            getVisibleArea() {
+                return visibleArea && [visibleArea.min, visibleArea.max] || [];
             }
         }
     }[name || "axis1"];

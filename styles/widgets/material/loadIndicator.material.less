@@ -6,14 +6,14 @@
 .dx-loadindicator-content {
     height: 100%;
     width: 100%;
-    .animation(content-rotation 1568ms linear infinite);
+    animation: content-rotation 1568ms linear infinite;
 }
 
 .dx-loadindicator-image {
     background-image: @loadindicator-background-image;
 
     .dx-loadindicator-content {
-        .animation(none);
+        animation: none;
     }
 }
 
@@ -21,7 +21,7 @@
     position: absolute;
     height: 100%;
     width: 100%;
-    .animation(icon-rotation 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both);
+    animation: icon-rotation 5332ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
 }
 
 .dx-loadindicator-segment {
@@ -37,8 +37,8 @@
     border-width: 0.12em;
     border-style: solid;
     border-bottom-color: transparent;
-    .animation(none);
-    .border-radius(50%);
+    animation: none;
+    border-radius: 50%;
 }
 
 .dx-loadindicator-segment2, .dx-loadindicator-segment0 {
@@ -56,8 +56,8 @@
 .dx-loadindicator-segment2 {
     .dx-loadindicator-segment-inner {
         border-right-color: transparent;
-        .transform(rotate(-129deg));
-        .animation(left-segment-rotation 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both);
+        transform: rotate(-129deg);
+        animation: left-segment-rotation 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
     }
 }
 
@@ -65,8 +65,8 @@
     .dx-loadindicator-segment-inner {
         left: -100%;
         border-left-color: transparent;
-        .transform(rotate(129deg));
-        .animation(right-segment-rotation 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both);
+        transform: rotate(129deg);
+        animation: right-segment-rotation 1333ms cubic-bezier(0.4, 0.0, 0.2, 1) infinite both;
     }
 }
 
@@ -77,7 +77,7 @@
     width: 10%;
     height: 100%;
     overflow: hidden;
-    .box-sizing(border-box);
+    box-sizing: border-box;
 
     .dx-loadindicator-segment-inner {
         width: 1000%;

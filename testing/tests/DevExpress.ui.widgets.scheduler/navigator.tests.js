@@ -26,6 +26,15 @@ QUnit.module("Navigator", {
     }
 });
 
+QUnit.test("customizeDateNavigatorText should have right context", function(assert) {
+    var date = new Date(2018, 11, 14, 9, 20);
+
+    this.instance.option("date", date);
+    this.instance.option("customizeDateNavigatorText", function() {
+        assert.deepEqual(this, window, "context is ok");
+    });
+});
+
 QUnit.test("Click on 'next' button should notify observer", function(assert) {
     var $element = this.instance.$element(),
         $button = $element.find(".dx-scheduler-navigator-next");

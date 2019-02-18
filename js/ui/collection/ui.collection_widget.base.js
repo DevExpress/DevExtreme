@@ -37,7 +37,7 @@ var COLLECTION_CLASS = "dx-collection",
     EMPTY_COLLECTION = "dx-empty-collection",
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
 
-    ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+([\w\.]+)$/;
+    ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+([\w.]+)$/;
 
 var FOCUS_UP = "up",
     FOCUS_DOWN = "down",
@@ -114,7 +114,7 @@ var CollectionWidget = Widget.inherit({
 
             /**
             * @name CollectionWidgetOptions.items
-            * @type Array<string, object>
+            * @type Array<string, CollectionWidgetItem, object>
             * @fires CollectionWidgetOptions.onOptionChanged
             */
             items: [],
@@ -201,16 +201,16 @@ var CollectionWidget = Widget.inherit({
 
             /**
             * @name CollectionWidgetOptions.dataSource
-            * @type string|Array<string,CollectionWidgetItemTemplate>|DataSource|DataSourceOptions
+            * @type string|Array<string,CollectionWidgetItem>|DataSource|DataSourceOptions
             * @default null
             */
             dataSource: null,
             /**
-            * @name CollectionWidgetItemTemplate
+            * @name CollectionWidgetItem
             * @type object
             */
             /**
-            * @name CollectionWidgetItemTemplate.template
+            * @name CollectionWidgetItem.template
             * @type template|function
             * @type_function_return string|Node|jQuery
             */
@@ -231,20 +231,20 @@ var CollectionWidget = Widget.inherit({
             visibleExpr: function(data) { return data ? data.visible : undefined; }
 
             /**
-            * @name CollectionWidgetItemTemplate.html
+            * @name CollectionWidgetItem.html
             * @type String
             */
             /**
-            * @name CollectionWidgetItemTemplate.text
+            * @name CollectionWidgetItem.text
             * @type String
             */
             /**
-            * @name CollectionWidgetItemTemplate.disabled
+            * @name CollectionWidgetItem.disabled
             * @type boolean
             * @default false
             */
             /**
-            * @name CollectionWidgetItemTemplate.visible
+            * @name CollectionWidgetItem.visible
             * @type boolean
             * @default true
             */

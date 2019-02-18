@@ -275,7 +275,7 @@
 
     .dx-@{widgetName}-column-chooser {
         .dx-overlay-content {
-            .box-shadow(0px 1px 3px rgba(0, 0, 0, 0.2));
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
 
             .dx-popup-content {
                 margin: 0px;
@@ -289,7 +289,7 @@
                     border: ~"@{@{widgetName}-headers-border}";
                     padding: @GRID_BASE_CELL_PADDING;
                     background-color: @WIN10_BACKGROUND_COLOR;
-                    .box-shadow(0px 1px 3px -1px rgba(0, 0, 0, 0.2));
+                    box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.2);
                 }
             }
 
@@ -317,7 +317,7 @@
     }
 
     .dx-@{widgetName}-drag-header {
-        .box-shadow(@GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @GRID_BASE_DRAG_HEADER_SECOND_SHADOW);
+        box-shadow: @GRID_BASE_DRAG_HEADER_FIRST_SHADOW, @GRID_BASE_DRAG_HEADER_SECOND_SHADOW;
         font-size: 12pt;
         padding: @GRID_BASE_CELL_PADDING;
         color: @WIN10_LIGHT_COLOR;
@@ -346,7 +346,7 @@
     .dx-data-row.dx-state-hover {
         &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
             & > td:not(.dx-focused) {
-                .text-shadow(none);
+                text-shadow: none;
                 background-color: ~"@{@{widgetName}-hover-background}";
                 color: ~"@{@{widgetName}-hover-color}";
 
@@ -357,7 +357,7 @@
 
             & > .dx-@{widgetName}-readonly:not(.dx-focused) .dx-texteditor {
                 .dx-texteditor-input {
-                    .text-shadow(none);
+                    text-shadow: none;
                     background-color: ~"@{@{widgetName}-hover-background}";
                     color: ~"@{@{widgetName}-hover-color}";
                 }
@@ -379,7 +379,7 @@
 
     .dx-@{widgetName}-headers {
         color: ~"@{@{widgetName}-headers-color}";
-        .touch-action(pinch-zoom);
+        touch-action: pinch-zoom;
 
         .dx-@{widgetName}-table {
             .dx-row {
@@ -561,7 +561,7 @@
         }
 
         .dx-selection.dx-row, .dx-selection.dx-row:hover {
-            .text-shadow(none);
+            text-shadow: none;
             color: ~"@{@{widgetName}-selection-color}";
 
             & > td, & > tr > td {
@@ -613,7 +613,7 @@
     }
 
     .dx-@{widgetName}-search-text {
-        .text-shadow(none);
+        text-shadow: none;
         color: ~"@{@{widgetName}-search-text-color}";
         background-color: ~"@{@{widgetName}-search-text-background}";
     }

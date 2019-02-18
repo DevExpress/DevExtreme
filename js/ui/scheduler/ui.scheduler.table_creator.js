@@ -78,7 +78,8 @@ var SchedulerTableCreator = {
                 if(options.cellTemplate && options.cellTemplate.render) {
                     var templateOptions = {
                         model: {
-                            text: options.getCellText ? options.getCellText(i, j) : ""
+                            text: options.getCellText ? options.getCellText(i, j) : "",
+                            date: options.getCellDate ? options.getCellDate(i) : undefined
                         },
                         container: getPublicElement($(td)),
                         index: i * options.cellCount + j

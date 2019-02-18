@@ -6,7 +6,7 @@
     z-index: @OVERLAY_ZINDEX;
 
     &, *, &:before, &:after, *:before, *:after {
-        .box-sizing(border-box);
+        box-sizing: border-box;
     }
 }
 
@@ -33,12 +33,12 @@
 
 .dx-device-android {
     .dx-overlay-content {
-        .backface-visibility(hidden);
+        backface-visibility: hidden;
     }
 
     .dx-scrollable-native {
         .dx-overlay-content {
-            .backface-visibility(visible);
+            backface-visibility: visible;
         }
     }
 }

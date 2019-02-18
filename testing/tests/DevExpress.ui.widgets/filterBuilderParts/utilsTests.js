@@ -166,6 +166,7 @@ QUnit.module("Utils", function() {
         assert.equal(utils.getGroupValue(["!", ["column", "operation", "value"]]), "!and");
         assert.equal(utils.getGroupValue([["column", "operation", "value"]]), "and");
         assert.equal(utils.getGroupValue([["column", "operation", "value"], ["column", "operation", "value"]]), "and");
+        assert.equal(utils.getGroupValue(["!", ["!", ["column", "operation", "value"]]]), "!and");
     });
 
     QUnit.test("getItems", function(assert) {
@@ -695,6 +696,27 @@ QUnit.module("Convert to inner structure", function() {
         ]);
     });
 
+    QUnit.test("from negative group with inner negative group", function(assert) {
+        var model = utils.convertToInnerStructure(["!", ["!", condition1]], []);
+        assert.deepEqual(model, [
+            "!",
+            [
+                [
+                    "!",
+                    [
+                        [
+                            "CompanyName",
+                            "=",
+                            "Super Mart of the West"
+                        ],
+                        "and"
+                    ]
+                ],
+                "and"
+            ]
+        ]);
+    });
+
     QUnit.test("with custom operation", function(assert) {
         var filter = ["State", "lastWeek"],
             model = utils.convertToInnerStructure(filter, [{ name: "lastWeek" }]);
@@ -845,6 +867,29 @@ QUnit.module("Filter normalization", function() {
 
         assert.deepEqual(group, [[condition1, "and", condition2], "and", [condition3, "and", condition2]]);
         assert.equal(group[2][0], condition3);
+    });
+
+    QUnit.test("get normalized filter from negative group with inner negative group", function(assert) {
+        var group = [
+            "!",
+            [
+                [
+                    "!",
+                    [
+                        [condition1, "and"],
+                        "and"
+                    ]
+                ],
+                "and"
+            ]
+        ];
+
+        group = utils.getNormalizedFilter(group);
+
+        assert.deepEqual(group, [
+            "!",
+            ["!", condition1]
+        ]);
     });
 });
 

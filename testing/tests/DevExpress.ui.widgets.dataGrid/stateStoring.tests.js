@@ -1,14 +1,12 @@
-var $ = require("jquery"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    ArrayStore = require("data/array_store"),
-    Promise = require("core/polyfills/promise"),
-    fx = require("animation/fx");
+import $ from "jquery";
+import { setupDataGridModules, MockDataController } from "../../helpers/dataGridMocks.js";
+import ArrayStore from "data/array_store";
+import Promise from "core/polyfills/promise";
+import fx from "animation/fx";
 
-require("ui/data_grid/ui.data_grid");
-require("common.css!");
-require("generic_light.css!");
+import "ui/data_grid/ui.data_grid";
+import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(function() {
     var markup = '<div id="container" class="dx-datagrid"></div>';
@@ -457,7 +455,7 @@ QUnit.module('State Storing with real controllers', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options, ignoreClockTick) {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'filterRow', 'headerFilter', 'search', 'pager', 'selection', 'virtualScrolling', 'focus', 'keyboardNavigation'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'editing', 'filterRow', 'headerFilter', 'search', 'pager', 'selection', 'virtualScrolling', 'focus', 'keyboardNavigation'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: options
@@ -720,6 +718,89 @@ QUnit.test('Not Load pageSize from state when scrolling mode is virtual', functi
         loadingTimeout: null,
         dataSource: {
             store: [{ id: 1 }, { id: 2 }, { id: 3 }]
+        }
+    });
+
+    // assert
+    assert.strictEqual(this.dataController.pageSize(), 20);
+    assert.strictEqual(this.dataController.items().length, 3);
+});
+
+QUnit.test('Load pageSize from state when scrolling mode is virtual and pager.visible, pager.showPageSizeSelector is set', function(assert) {
+    // arrange, act
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return { pageSize: 2 };
+            },
+            customSave: function() {
+            }
+        },
+        scrolling: { mode: "virtual" },
+        loadingTimeout: null,
+        dataSource: {
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }]
+        },
+        pager: {
+            visible: true,
+            showPageSizeSelector: true
+        }
+    });
+
+    // assert
+    assert.strictEqual(this.dataController.pageSize(), 2);
+    assert.strictEqual(this.dataController.items().length, 4);
+});
+
+QUnit.test('Load pageSize from state when scrolling mode is infinite and pager.visible, pager.showPageSizeSelector is set', function(assert) {
+    // arrange, act
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return { pageSize: 2 };
+            },
+            customSave: function() {
+            }
+        },
+        scrolling: { mode: "infinite" },
+        loadingTimeout: null,
+        dataSource: {
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }]
+        },
+        pager: {
+            visible: true,
+            showPageSizeSelector: true
+        }
+    });
+
+    // assert
+    assert.strictEqual(this.dataController.pageSize(), 2);
+    assert.strictEqual(this.dataController.items().length, 2);
+});
+
+QUnit.test('Not Load pageSize from state when scrolling mode is virtual and pager.visible is not set, pager.showPageSizeSelector is set', function(assert) {
+    // arrange, act
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return { pageSize: 2 };
+            },
+            customSave: function() {
+            }
+        },
+        scrolling: { mode: "infinite" },
+        loadingTimeout: null,
+        dataSource: {
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }]
+        },
+        pager: {
+            showPageSizeSelector: true
         }
     });
 

@@ -335,11 +335,9 @@ function adjustBubbleSeriesDimensions() {
     }
 
     var options = this._options,
-        argTranslator = series[0].getArgumentAxis().getTranslator(),
-        valTranslator = series[0].getValueAxis().getTranslator(),
-        visibleAreaX = argTranslator.getCanvasVisibleArea(),
-        visibleAreaY = valTranslator.getCanvasVisibleArea(),
-        min = _math.min((visibleAreaX.max - visibleAreaX.min), (visibleAreaY.max - visibleAreaY.min)),
+        visibleAreaX = series[0].getArgumentAxis().getVisibleArea(),
+        visibleAreaY = series[0].getValueAxis().getVisibleArea(),
+        min = _math.min((visibleAreaX[1] - visibleAreaX[0]), (visibleAreaY[1] - visibleAreaY[0])),
         minBubbleArea = _pow(options.minBubbleSize, 2),
         maxBubbleArea = _pow(min * options.maxBubbleSize, 2),
         equalBubbleSize = (min * options.maxBubbleSize + options.minBubbleSize) / 2,

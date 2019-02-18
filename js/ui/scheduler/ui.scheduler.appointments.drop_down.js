@@ -143,7 +143,7 @@ var dropDownAppointments = Class.inherit({
                 items: items.data,
                 buttonTemplate: new FunctionTemplate(function(options) {
                     var model = {
-                        appointmentsCount: items.data.length,
+                        appointmentCount: items.data.length,
                         isCompact: isCompact
                     };
 

@@ -1,6 +1,6 @@
-var treeListCore = require("./ui.tree_list.core"),
-    masterDetailModule = require("../grid_core/ui.grid_core.master_detail"),
-    extend = require("../../core/utils/extend").extend;
+import treeListCore from './ui.tree_list.core';
+import masterDetailModule from '../grid_core/ui.grid_core.master_detail';
+import { extend } from '../../core/utils/extend';
 
 treeListCore.registerModule("masterDetail", extend(true, {}, masterDetailModule, {
     extenders: {

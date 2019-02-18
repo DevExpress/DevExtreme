@@ -26,18 +26,18 @@
     height: @ANDROID5_PROGRESSBAR_HEIGHT;
     background-color: @ANDROID5_PROGRESSBAR_RANGE_COLOR;
     opacity: 1;
-    .animation(loader 1.5s infinite);
-    .animation-timing(cubic-bezier(.30, 1, .15, .80));
-    .animation-fill-mode();
+    animation: loader 1.5s infinite;
+    animation-timing-function: cubic-bezier(.30, 1, .15, .80);
+    animation-fill-mode: both;
 }
 
 .dx-progressbar-animating-segment-1 {
     opacity: 0;
-    .animation-delay(0.75s);
+    animation-delay: 0.75s;
 }
 
 .dx-progressbar-animating-segment-2 {
-    .animation-delay(0);
+    animation-delay: 0;
 }
 
 .dx-state-disabled {
@@ -59,38 +59,38 @@
     .dx-progressbar-animating-segment {
         left: auto;
         right: -10px;
-        .animation-name(loader-rtl);
-        .animation-duration(1.5s);
-        .animation-iteration-count(infinite);
-        .animation-timing(cubic-bezier(.30, 1, .15, .80));
-        .animation-fill-mode();
+        animation-name: loader-rtl;
+        animation-duration: 1.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: cubic-bezier(.30, 1, .15, .80);
+        animation-fill-mode: both;
     }
 
     .dx-progressbar-animating-segment-1 {
         opacity: 0;
-        .animation-delay(0.75s);
+        animation-delay: 0.75s;
     }
 
     .dx-progressbar-animating-segment-2 {
-        .animation-delay(0);
+        animation-delay: 0;
     }
 }
 
 @-webkit-keyframes loader {
     0% {
         left: -15%;
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     15% {
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     100% {
         left: 105%;
-        .scale(~"0.1, 1");
+        transform: scale(0.1, 1);
         opacity: 0.1;
     }
 }
@@ -98,18 +98,18 @@
 @-moz-keyframes loader {
     0% {
         left: -15%;
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     15% {
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     100% {
         left: 105%;
-        .scale(~"0.1, 1");
+        transform: scale(0.1, 1);
         opacity: 0.1;
     }
 }
@@ -117,18 +117,18 @@
 @keyframes loader {
     0% {
         left: -15%;
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     15% {
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     100% {
         left: 105%;
-        .scale(~"0.1, 1");
+        transform: scale(0.1, 1);
         opacity: 0.1;
     }
 }
@@ -136,18 +136,18 @@
 @-webkit-keyframes loader-rtl {
     0% {
         right: -15%;
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     15% {
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     100% {
         right: 105%;
-        .scale(~"0.1, 1");
+        transform: scale(0.1, 1);
         opacity: 0.1;
     }
 }
@@ -155,18 +155,18 @@
 @-moz-keyframes loader-rtl {
     0% {
         right: -15%;
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     15% {
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     100% {
         right: 105%;
-        .scale(~"0.1, 1");
+        transform: scale(0.1, 1);
         opacity: 0.1;
     }
 }
@@ -174,18 +174,18 @@
 @keyframes loader-rtl {
     0% {
         right: -15%;
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     15% {
-        .scale(1);
+        transform: scale(1);
         opacity: 1;
     }
 
     100% {
         right: 105%;
-        .scale(~"0.1, 1");
+        transform: scale(0.1, 1);
         opacity: 0.1;
     }
 }

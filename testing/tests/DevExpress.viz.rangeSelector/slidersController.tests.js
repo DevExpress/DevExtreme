@@ -21,6 +21,11 @@ var environment = {
             renderer: renderer,
             translator: this.translator,
             root: this.root,
+            axis: {
+                getVisibleArea: function() {
+                    return [900, 3100];
+                }
+            },
             trackersGroup: this.trackersGroup,
             updateSelectedRange: function(arg) {
                 notifications.push([arg.startValue, arg.endValue]);
@@ -184,7 +189,7 @@ QUnit.test("Slider text formatting", function(assert) {
 });
 
 QUnit.test("Slider text when no data", function(assert) {
-    this.translator.update({ stubData: true }, { left: 1000, width: 2000 }, { isHorizontal: true });
+    this.translator.update({ }, { left: 1000, width: 2000 }, { isHorizontal: true });
     this.update({
         sliderMarker: {
             format: "fixedPoint", precision: 3,
@@ -244,7 +249,7 @@ QUnit.test("Selected area cursor when range is full (categories)", function(asse
 });
 
 QUnit.test("Selected area cursor when range is full (no data)", function(assert) {
-    this.translator.update({ stubData: true }, { left: 1000, width: 3000 }, { isHorizontal: true });
+    this.translator.update({ }, { left: 1000, width: 3000 }, { isHorizontal: true });
     this.update();
 
     assert.deepEqual(this.selectedAreaTracker().attr.lastCall.args, [{ points: [1000, 15, 3000, 15, 3000, 25, 1000, 25] }], "position");
@@ -335,21 +340,21 @@ QUnit.test("Shutters", function(assert) {
     this.update({ sliderHandle: { width: 6 } });
     this.setRange(11, 15);
 
-    assert.deepEqual(this.shutter().animate.lastCall.args, [{ points: [[1000, 15, 1097, 15, 1097, 25, 1000, 25], [3000, 15, 1503, 15, 1503, 25, 3000, 25]] }, { duration: 250 }], "shutter");
+    assert.deepEqual(this.shutter().animate.lastCall.args, [{ points: [[900, 15, 1097, 15, 1097, 25, 900, 25], [3100, 15, 1503, 15, 1503, 25, 3100, 25]] }, { duration: 250 }], "shutter");
 });
 
 QUnit.test("Shutter near start", function(assert) {
     this.update({ sliderHandle: { width: 6 } });
     this.setRange(10, 11);
 
-    assert.deepEqual(this.shutter().animate.lastCall.args, [{ points: [[1000, 15, 1000, 15, 1000, 25, 1000, 25], [3000, 15, 1103, 15, 1103, 25, 3000, 25]] }, { duration: 250 }], "shutter");
+    assert.deepEqual(this.shutter().animate.lastCall.args, [{ points: [[900, 15, 997, 15, 997, 25, 900, 25], [3100, 15, 1103, 15, 1103, 25, 3100, 25]] }, { duration: 250 }], "shutter");
 });
 
 QUnit.test("Shutter near end", function(assert) {
     this.update({ sliderHandle: { width: 6 } });
     this.setRange(29, 30);
 
-    assert.deepEqual(this.shutter().animate.lastCall.args, [{ points: [[1000, 15, 2897, 15, 2897, 25, 1000, 25], [3000, 15, 3000, 15, 3000, 25, 3000, 25]] }, { duration: 250 }], "shutter");
+    assert.deepEqual(this.shutter().animate.lastCall.args, [{ points: [[900, 15, 2897, 15, 2897, 25, 900, 25], [3100, 15, 3003, 15, 3003, 25, 3100, 25]] }, { duration: 250 }], "shutter");
 });
 
 QUnit.test("Selected view", function(assert) {
@@ -363,7 +368,7 @@ QUnit.test("Elements are moved (not animated) if animation is disabled", functio
     this.update({ behavior: { animationEnabled: false } });
     this.setRange(11, 15);
 
-    assert.deepEqual(this.shutter().attr.lastCall.args, [{ points: [[1000, 15, 1098, 15, 1098, 25, 1000, 25], [3000, 15, 1502, 15, 1502, 25, 3000, 25]] }], "shutter");
+    assert.deepEqual(this.shutter().attr.lastCall.args, [{ points: [[900, 15, 1098, 15, 1098, 25, 900, 25], [3100, 15, 1502, 15, 1502, 25, 3100, 25]] }], "shutter");
     assert.deepEqual(this.sliderRoot(0).attr.lastCall.args, [{ translateX: 1100 }], "slider root 1");
     assert.deepEqual(this.sliderRoot(1).attr.lastCall.args, [{ translateX: 1500 }], "slider root 2");
 });
@@ -521,7 +526,7 @@ QUnit.test("'maxRange' is ignored", function(assert) {
 });
 
 QUnit.test("translator range is empty", function(assert) {
-    this.translator.update({ stubData: true }, { left: 1000, width: 3000 }, { isHorizontal: true });
+    this.translator.update({ }, { left: 1000, width: 3000 }, { isHorizontal: true });
     this.update();
 
     this.setRange(11, 12);

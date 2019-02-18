@@ -97,9 +97,7 @@ QUnit.test("no format value with empty data", function(assert) {
         }
     });
 
-    var range = this.axis.setBusinessRange.lastCall.args[0];
-    assert.strictEqual(range.min, 0, "min");
-    assert.strictEqual(range.max, 10, "max");
+    assert.equal(this.axis.setBusinessRange.lastCall.args[0].isEmpty(), true);
 });
 
 QUnit.test("rangeSelector info callback on small tick interval", function(assert) {
@@ -202,7 +200,6 @@ QUnit.test("Tracker creation", function(assert) {
 });
 
 QUnit.test("Tracker options", function(assert) {
-    this.translator.stub("isEmptyValueRange").returns(false);
     this.createWidget({
         behavior: {
             moveSelectedRangeByClick: "value-1",
@@ -275,12 +272,14 @@ QUnit.test("Update axis canvas before create series dataSorce", function(assert)
 
     var argumentAxis = spy.lastCall.args[0].argumentAxis;
 
-    assert.deepEqual(argumentAxis.getTranslator().update.firstCall.args, [{ stubData: true }, {
+    assert.deepEqual(argumentAxis.getTranslator().update.firstCall.args[0].isEmpty(), true);
+    assert.deepEqual(argumentAxis.getTranslator().update.firstCall.args[1], {
         height: 150,
         left: 0,
         top: 0,
         width: 300
-    }, { isHorizontal: true }]);
+    });
+    assert.deepEqual(argumentAxis.getTranslator().update.firstCall.args[2], { isHorizontal: true });
     assert.ok(argumentAxis.getTranslator().update.firstCall.calledBefore(spy.firstCall));
 });
 

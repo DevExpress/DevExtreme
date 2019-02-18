@@ -166,7 +166,7 @@ var getRegExpInfo = function(format, dateParts) {
 
     var addPreviousStub = function() {
         if(stubText) {
-            patterns.push(stubText);
+            patterns.push("'" + stubText + "'");
             regexpText += escapeRegExp(stubText) + ")";
             stubText = "";
         }
@@ -237,7 +237,11 @@ var setPatternPartFromNow = function(date, pattern, now) {
 
 var getShortPatterns = function(fullPatterns) {
     return fullPatterns.map(function(pattern) {
-        return pattern[0] === "H" ? "h" : pattern[0];
+        if(pattern[0] === "'") {
+            return "";
+        } else {
+            return pattern[0] === "H" ? "h" : pattern[0];
+        }
     });
 };
 
@@ -271,7 +275,9 @@ var getParser = function(format, dateParts) {
                 orderedFormatPatterns = getOrderedFormatPatterns(formatPatterns);
 
             orderedFormatPatterns.forEach(function(pattern, index) {
-                if(index < ORDERED_PATTERNS.length && index > maxPatternIndex) return;
+                if(!pattern || (index < ORDERED_PATTERNS.length && index > maxPatternIndex)) {
+                    return;
+                }
 
                 var patternIndex = formatPatterns.indexOf(pattern);
                 if(patternIndex >= 0) {

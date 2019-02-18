@@ -256,14 +256,14 @@ QUnit.test("All formats", function(assert) {
     assert.equal(parseDate("/Date(-777807300000+10)/"), new Date(1945, 4, 9, 14, 35, 0, 0).getTime());
 
     assert.equal(parseDate("1945-05-09T14:25:12"), new Date(1945, 4, 9, 14, 25, 12, 0).getTime());
-    assert.equal(parseDate("1945-05-09T14:25:12.1"), new Date(1945, 4, 9, 14, 25, 12, 1).getTime());
-    assert.equal(parseDate("1945-05-09T14:25:12.12"), new Date(1945, 4, 9, 14, 25, 12, 12).getTime());
+    assert.equal(parseDate("1945-05-09T14:25:12.1"), new Date(1945, 4, 9, 14, 25, 12, 100).getTime());
+    assert.equal(parseDate("1945-05-09T14:25:12.12"), new Date(1945, 4, 9, 14, 25, 12, 120).getTime());
     assert.equal(parseDate("1945-05-09T14:25:12.123"), new Date(1945, 4, 9, 14, 25, 12, 123).getTime());
     assert.equal(parseDate("1945-05-09T14:25:12.1234567"), new Date(1945, 4, 9, 14, 25, 12, 123).getTime());
 
     assert.equal(parseDate("1945-05-09T14:25:12Z"), new Date(1945, 4, 9, 14, 25, 12, 0).getTime());
-    assert.equal(parseDate("1945-05-09T14:25:12.1Z"), new Date(1945, 4, 9, 14, 25, 12, 1).getTime());
-    assert.equal(parseDate("1945-05-09T14:25:12.12Z"), new Date(1945, 4, 9, 14, 25, 12, 12).getTime());
+    assert.equal(parseDate("1945-05-09T14:25:12.1Z"), new Date(1945, 4, 9, 14, 25, 12, 100).getTime());
+    assert.equal(parseDate("1945-05-09T14:25:12.12Z"), new Date(1945, 4, 9, 14, 25, 12, 120).getTime());
     assert.equal(parseDate("1945-05-09T14:25:12.123Z"), new Date(1945, 4, 9, 14, 25, 12, 123).getTime());
     assert.equal(parseDate("1945-05-09T14:25:12.1234567Z"), new Date(1945, 4, 9, 14, 25, 12, 123).getTime());
 
@@ -331,7 +331,7 @@ QUnit.test("OData 3", function(assert) {
     assert.equal(singleResult.data.date.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());
 
     assert.equal(collectionResult.data[0].date.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());
-    assert.equal(collectionResult.data[1].date.getTime(), new Date(1945, 4, 9, 14, 25, 0, 73).getTime(), "with ms");
+    assert.equal(collectionResult.data[1].date.getTime(), new Date(1945, 4, 9, 14, 25, 0, 730).getTime(), "with ms");
 });
 
 QUnit.test("OData 4", function(assert) {
@@ -356,16 +356,26 @@ QUnit.test("OData 4", function(assert) {
     assert.equal(singleResult.data.date.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());
 
     assert.equal(collectionResult.data[0].date.getTime(), new Date(1945, 4, 9, 14, 25, 0, 0).getTime());
-    assert.equal(collectionResult.data[1].date.getTime(), new Date(1945, 4, 9, 14, 25, 0, 73).getTime(), "with ms");
+    assert.equal(collectionResult.data[1].date.getTime(), new Date(1945, 4, 9, 14, 25, 0, 730).getTime(), "with ms");
 });
 
 QUnit.test("T211239: ODataStore doesn't parse second fraction properly", function(assert) {
-    var r = interpretJsonFormat({
-        value: [
-            { date: "2015-01-30T08:35:46.1686789Z" }
-        ]
-    }, "success");
-    assert.equal(r.data[0].date.getTime(), new Date(2015, 0, 30, 8, 35, 46, 168).getTime());
+    var interpret = function(dateStr) { return interpretJsonFormat({ value: [{ date: dateStr }] }, "success"); };
+
+    var r1 = interpret("2015-01-30T08:35:46.1686789Z");
+    assert.equal(r1.data[0].date.getTime(), new Date(2015, 0, 30, 8, 35, 46, 168).getTime());
+
+    var r2 = interpret("2015-01-30T08:35:46.1Z");
+    assert.equal(r2.data[0].date.getTime(), new Date(2015, 0, 30, 8, 35, 46, 100).getTime());
+
+    var r3 = interpret("2015-01-30T08:35:46.01Z");
+    assert.equal(r3.data[0].date.getTime(), new Date(2015, 0, 30, 8, 35, 46, 10).getTime());
+
+    var r4 = interpret("2015-01-30T08:35:46.011Z");
+    assert.equal(r4.data[0].date.getTime(), new Date(2015, 0, 30, 8, 35, 46, 11).getTime());
+
+    var r5 = interpret("2015-01-30T08:35:46.001Z");
+    assert.equal(r5.data[0].date.getTime(), new Date(2015, 0, 30, 8, 35, 46, 1).getTime());
 });
 
 QUnit.test("T345624: The parseISO8601 function returns incorrect data for February 29 in a leap year", function(assert) {

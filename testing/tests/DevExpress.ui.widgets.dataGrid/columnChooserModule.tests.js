@@ -1,20 +1,16 @@
-window.includeThemesLinks();
+import "common.css!";
+import "generic_light.css!";
+import "ui/data_grid/ui.data_grid";
 
-require("common.css!");
-require("generic_light.css!");
-require("ui/data_grid/ui.data_grid");
+import $ from "jquery";
+import typeUtils from "core/utils/type";
+import devices from "core/devices";
+import themes from "ui/themes";
+import dataGridMocks from "../../helpers/dataGridMocks.js";
+import publicComponentUtils from "core/utils/public_component";
 
-var $ = require("jquery"),
-    typeUtils = require("core/utils/type"),
-    devices = require("core/devices"),
-    device = devices.real(),
-    themes = require("ui/themes"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    publicComponentUtils = require("core/utils/public_component");
+var device = devices.real();
 
-themes.current({
-    theme: "generic"
-});
 QUnit.testStart(function() {
     var markup =
         '<div id="container" class="dx-datagrid"></div>';
@@ -576,27 +572,25 @@ if(device.deviceType === "desktop") {
     });
 }
 
-if(device.deviceType !== "desktop") {
-    QUnit.test("Close and cancel buttons for mobile theme", function(assert) {
-        // arrange
-        var testElement = $("#container"),
-            currentThemes = themes.current(),
-            columnChooserView = this.columnChooserView;
+QUnit.test("Close and cancel buttons for mobile theme", function(assert) {
+    // arrange
+    var testElement = $("#container"),
+        origIsGeneric = themes.isGeneric,
+        columnChooserView = this.columnChooserView;
 
-        this.setTestElement(testElement);
+    this.setTestElement(testElement);
 
-        themes.current(themes.themeNameFromDevice(device));
+    themes.isGeneric = function() { return false; };
 
-        // act
-        this.renderColumnChooser();
-        columnChooserView._popupContainer.toggle(true);
+    // act
+    this.renderColumnChooser();
+    columnChooserView._popupContainer.toggle(true);
 
-        // assert
-        assert.ok(!$(".dx-closebutton").length, "close button is hidden");
-        assert.ok($(".dx-button-text").length, "cancel button is shown");
-        themes.current(currentThemes);
-    });
-}
+    // assert
+    assert.ok(!$(".dx-closebutton").length, "close button is hidden");
+    assert.ok($(".dx-button-text").length, "cancel button is shown");
+    themes.isGeneric = origIsGeneric;
+});
 
 
 QUnit.test("Close and cancel buttons for material theme", function(assert) {

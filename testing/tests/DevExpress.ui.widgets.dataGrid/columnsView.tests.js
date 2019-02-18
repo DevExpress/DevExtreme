@@ -1,19 +1,20 @@
-var $ = require("jquery");
-var dataUtils = require("core/element_data");
+import $ from "jquery";
+import dataUtils from "core/element_data";
 
 QUnit.testStart(function() {
     var markup = '<div><div id="container" class="dx-datagrid"></div></div>';
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("ui/data_grid/ui.data_grid");
+import "common.css!";
+import "ui/data_grid/ui.data_grid";
 
-var devices = require("core/devices"),
-    columnsView = require("ui/grid_core/ui.grid_core.columns_view"),
-    fx = require("animation/fx"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    MockColumnsController = dataGridMocks.MockColumnsController,
+import devices from "core/devices";
+import columnsView from "ui/grid_core/ui.grid_core.columns_view";
+import fx from "animation/fx";
+import dataGridMocks from "../../helpers/dataGridMocks.js";
+
+var MockColumnsController = dataGridMocks.MockColumnsController,
     setupDataGridModules = dataGridMocks.setupDataGridModules;
 
 

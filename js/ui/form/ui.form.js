@@ -1278,9 +1278,15 @@ var Form = Widget.inherit({
                         break;
                     } else if(fullName.search("validationRules") !== -1) {
                         var validator = dataUtils.data(instance.$element()[0], "dxValidator");
-
-                        validator && validator.option("validationRules", item.validationRules);
-                        break;
+                        if(validator) {
+                            var filterRequired = function(item) { return item.type === "required"; };
+                            var oldContainsRequired = (validator.option("validationRules") || []).some(filterRequired);
+                            var newContainsRequired = (item.validationRules || []).some(filterRequired);
+                            if(!oldContainsRequired && !newContainsRequired || oldContainsRequired && newContainsRequired) {
+                                validator.option("validationRules", item.validationRules);
+                                break;
+                            }
+                        }
                     }
                 }
 

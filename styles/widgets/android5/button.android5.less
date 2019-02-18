@@ -20,7 +20,7 @@
     color: @ANDROID5_BUTTON_TEXT;
     background-color: @ANDROID5_BUTTON_DISABLED_BACKGROUND;
     opacity: @ANDROID5_BUTTON_DISABLE_OPACITY;
-    .box-shadow(none);
+    box-shadow: none;
 }
 
 .dx-state-disabled {
@@ -34,7 +34,7 @@
     background-color: @ANDROID5_BUTTON_BACKGROUND;
     min-width: @ANDROID5_BUTTON_MIN_WIDTH;
     min-height: @ANDROID5_BUTTON_MIN_HEIGHT;
-    .border-radius(@ANDROID5_BUTTON_RADIUS);
+    border-radius: @ANDROID5_BUTTON_RADIUS;
     .shadow-transition();
     .shadow-z1();
 
@@ -66,7 +66,7 @@
     line-height: 0;
     min-height: @ANDROID5_BUTTON_MIN_HEIGHT;
     padding: @ANDROID5_TEXT_BUTTON_CONTENT_PADDING_VERTICAL @ANDROID5_BUTTON_CONTENT_PADDING_HORIZONTAL_RAISED;
-    .border-radius(@ANDROID5_BUTTON_RADIUS);
+    border-radius: @ANDROID5_BUTTON_RADIUS;
 }
 
 .dx-button-text {
@@ -85,7 +85,7 @@
 .dx-button-default {
     color: @ANDROID5_BUTTON_DEFAULT_TEXT;
     background-color: @ANDROID5_BUTTON_DEFAULT_BACKGROUND;
-    .box-shadow(@ANDROID5_BUTTON_CUSTOM_BOX_SHADOW);
+    box-shadow: @ANDROID5_BUTTON_CUSTOM_BOX_SHADOW;
 
     &.dx-state-hover,
     &.dx-state-focused {
@@ -100,7 +100,7 @@
 .dx-button-danger {
     color: @ANDROID5_BUTTON_DANGER_TEXT;
     background-color: @ANDROID5_BUTTON_DANGER_BACKGROUND;
-    .box-shadow(@ANDROID5_BUTTON_CUSTOM_BOX_SHADOW);
+    box-shadow: @ANDROID5_BUTTON_CUSTOM_BOX_SHADOW;
 
     &.dx-state-hover,
     &.dx-state-focused {
@@ -115,7 +115,7 @@
 .dx-button-success {
     color: @ANDROID5_BUTTON_SUCCESS_TEXT;
     background-color: @ANDROID5_BUTTON_SUCCESS_BACKGROUND;
-    .box-shadow(@ANDROID5_BUTTON_CUSTOM_BOX_SHADOW);
+    box-shadow: @ANDROID5_BUTTON_CUSTOM_BOX_SHADOW;
 
     &.dx-state-hover,
     &.dx-state-focused {
@@ -129,7 +129,7 @@
 
 .flat-button(@noHoverFocus) when (@noHoverFocus = true) {
     background-color: @ANDROID5_BUTTON_FLAT_BACKGROUND_COLOR;
-    .box-shadow(none);
+    box-shadow: none;
 
     .dx-button-content {
         padding-right: @ANDROID5_BUTTON_CONTENT_PADDING_HORIZONTAL;

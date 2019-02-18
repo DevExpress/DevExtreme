@@ -1,14 +1,12 @@
-var browser, focused;
+var focused;
 
 (function(root, factory) {
-    if(typeof define === 'function' && define.amd) {
+    if(typeof define === "function" && define.amd) {
         define(function(require, exports, module) {
-            browser = require("core/utils/browser");
             focused = require("ui/widget/selectors").focused;
             root.keyboardMock = module.exports = factory(require("jquery"));
         });
     } else {
-        browser = DevExpress.require("core/utils/browser");
         focused = DevExpress.require("ui/widget/selectors").focused;
         root.keyboardMock = factory(root.jQuery);
     }
@@ -51,8 +49,8 @@ var browser, focused;
             if(!input.setSelectionRange) {
                 var range = document.selection.createRange();
                 var rangeCopy = range.duplicate();
-                range.move('character', -input.value.length);
-                range.setEndPoint('EndToStart', rangeCopy);
+                range.move("character", -input.value.length);
+                range.setEndPoint("EndToStart", rangeCopy);
                 start = range.text.length;
                 end = start + rangeCopy.text.length;
             } else {
@@ -101,127 +99,46 @@ var browser, focused;
 
     var KEYS_MAPS = {
         SPECIAL_KEYS: {
-            'backspace': 8,
-            'tab': 9,
-            'enter': 13,
-            'capslock': 20,
-            'esc': 27,
-            'space': 32,
-            'pageup': 33,
-            'pagedown': 34,
-            'end': 35,
-            'home': 36,
-            'left': 37,
-            'up': 38,
-            'right': 39,
-            'down': 40,
-            'ins': 45,
-            'del': 46
-        },
-
-        KEY_VALUES_BY_CODE: {
-            8: "Backspace",
-            9: "Tab",
-            13: "Enter",
-            16: "Shift",
-            17: "Control",
-            18: "Alt",
-            27: "Escape",
-            32: " ",
-            33: "PageUp",
-            34: "PageDown",
-            35: "End",
-            36: "Home",
-            37: "ArrowLeft",
-            38: "ArrowUp",
-            39: "ArrowRight",
-            40: "ArrowDown",
-            45: "Insert",
-            46: "Delete",
-            109: "-",
-            173: "-",
-            189: "-"
-        },
-
-        CHAR_CODE_EXCEPTIONS: {
-            ".": 190
-        },
-
-        MODIFIERS: {
-            'shift': 16,
-            'ctrl': 17,
-            'alt': 18,
-            'meta': 91
-        },
-
-        MODIFIERS_MAP: {
-            'option': 'alt'
+            "backspace": "Backspace",
+            "tab": "Tab",
+            "enter": "Enter",
+            "esc": "Escape",
+            "space": " ",
+            "pageup": "PageUp",
+            "pagedown": "PageDown",
+            "end": "End",
+            "home": "Home",
+            "left": "ArrowLeft",
+            "up": "ArrowUp",
+            "right": "ArrowRight",
+            "down": "ArrowDown",
+            "ins": "Insert",
+            "del": "Delete"
         },
 
         SHIFT_MAP: {
-            '~': '`',
-            '!': '1',
-            '@': '2',
-            '#': '3',
-            '$': '4',
-            '%': '5',
-            '^': '6',
-            '&': '7',
-            '*': '8',
-            '(': '9',
-            ')': '0',
-            '_': '-',
-            '+': '=',
-            '{': '[',
-            '}': ']',
-            ':': ';',
-            '"': '\'',
-            '|': '\\',
-            '<': ',',
-            '>': '.',
-            '?': '/'
+            "~": "`",
+            "!": "1",
+            "@": "2",
+            "#": "3",
+            "$": "4",
+            "%": "5",
+            "^": "6",
+            "&": "7",
+            "*": "8",
+            "(": "9",
+            ")": "0",
+            "_": "-",
+            "+": "=",
+            "{": "[",
+            "}": "]",
+            ":": ";",
+            '"': "\"",
+            "|": "\\",
+            "<": ",",
+            ">": ".",
+            "?": "/"
         }
-    };
-
-    if(browser.msie) {
-        $.extend(KEYS_MAPS.KEY_VALUES_BY_CODE, {
-            109: "Subtract"
-        });
-    }
-
-    var isLetter = function(key) {
-        return key.length === 1 && (key >= 'a' && key <= 'z') || (key >= 'A' && key <= 'Z');
-    };
-
-    var getKeyCodeByChar = function(keyChar, toUpperCase) {
-        if(isLetter(keyChar) && toUpperCase) {
-            return keyChar.toUpperCase().charCodeAt(0);
-        }
-
-        return KEYS_MAPS.CHAR_CODE_EXCEPTIONS[keyChar] || keyChar.charCodeAt(0);
-    };
-
-    var keyHelper = function(key, toUpperCase) {
-        var isChar = key.length === 1,
-            sanitizedKey = isChar ? key : key.toLowerCase();
-
-        if(KEYS_MAPS.MODIFIERS_MAP[sanitizedKey]) {
-            sanitizedKey = KEYS_MAPS.MODIFIERS_MAP[sanitizedKey];
-        }
-
-        var keyCode = null,
-            modifierKeyCode = KEYS_MAPS.MODIFIERS[sanitizedKey],
-            specialKeyCode = KEYS_MAPS.SPECIAL_KEYS[sanitizedKey];
-
-        if(isChar) {
-            keyCode = getKeyCodeByChar(sanitizedKey, toUpperCase);
-        } else if(modifierKeyCode) {
-            keyCode = modifierKeyCode;
-        } else if(specialKeyCode) {
-            keyCode = specialKeyCode;
-        }
-
-        return keyCode;
     };
 
     var DEFAULT_OPTIONS = {
@@ -303,12 +220,12 @@ var browser, focused;
     };
 
     var shortcuts = {
-        'backspace': backspace,
-        'del': del,
-        'left': left,
-        'right': right,
-        'home': home,
-        'end': end
+        "backspace": backspace,
+        "del": del,
+        "left": left,
+        "right": right,
+        "home": home,
+        "end": end
     };
 
     var eventMock = function(type, options) {
@@ -336,27 +253,26 @@ var browser, focused;
 
             keyDown: function(rawKey, options) {
                 var isKeyCodeString = typeof rawKey === "string",
-                    keyCode = isKeyCodeString ? keyHelper(rawKey) : rawKey,
                     isCommandKey = rawKey && rawKey.length > 1 || !isKeyCodeString,
-                    key = isCommandKey && KEYS_MAPS.KEY_VALUES_BY_CODE[keyCode] ? KEYS_MAPS.KEY_VALUES_BY_CODE[keyCode] : rawKey;
+                    key = isCommandKey && KEYS_MAPS.SPECIAL_KEYS[rawKey] ? KEYS_MAPS.SPECIAL_KEYS[rawKey] : rawKey;
 
-                this.triggerEvent("keydown", $.extend({ keyCode: keyCode, which: keyCode, key: key }, options));
+
+                this.triggerEvent("keydown", $.extend({ key: key }, options));
                 return this;
             },
 
             keyPress: function(rawKey) {
                 var isKeyCodeString = typeof rawKey === "string",
-                    keyCode = isKeyCodeString ? keyHelper(rawKey) : rawKey,
                     isCommandKey = rawKey && rawKey.length > 1 || !isKeyCodeString,
-                    key = isCommandKey && KEYS_MAPS.KEY_VALUES_BY_CODE[keyCode] ? KEYS_MAPS.KEY_VALUES_BY_CODE[keyCode] : rawKey;
+                    key = isCommandKey && KEYS_MAPS.SPECIAL_KEYS[rawKey] ? KEYS_MAPS.SPECIAL_KEYS[rawKey] : rawKey;
 
-                this.triggerEvent("keypress", { keyCode: keyCode, charCode: keyCode, which: keyCode, key: key });
+                // key = rawKey;
+                this.triggerEvent("keypress", { key: key });
                 return this;
             },
 
-            input: function(key, inputType) {
-                key = typeof key === "string" ? keyHelper(key) : key;
-                var params = { keyCode: key, charCode: key, which: key };
+            input: function(data, inputType) {
+                var params = { data: data };
 
                 if(inputType) {
                     params.originalEvent = $.Event("input", { inputType: inputType });
@@ -368,11 +284,10 @@ var browser, focused;
 
             keyUp: function(rawKey) {
                 var isKeyCodeString = typeof rawKey === "string",
-                    keyCode = isKeyCodeString ? keyHelper(rawKey) : rawKey,
                     isCommandKey = rawKey && rawKey.length > 1 || !isKeyCodeString,
-                    key = isCommandKey && KEYS_MAPS.KEY_VALUES_BY_CODE[keyCode] ? KEYS_MAPS.KEY_VALUES_BY_CODE[keyCode] : rawKey;
+                    key = isCommandKey && KEYS_MAPS.SPECIAL_KEYS[rawKey] ? KEYS_MAPS.SPECIAL_KEYS[rawKey] : rawKey;
 
-                this.triggerEvent("keyup", { keyCode: keyCode, which: keyCode, key: key });
+                this.triggerEvent("keyup", { key: key });
                 return this;
             },
 
@@ -399,18 +314,18 @@ var browser, focused;
             press: function(keysString, actionCallback) {
                 this.focus();
 
-                // NOTE: we should separate symbol '+' that concats other keys and key '+' to support commands like the 'ctrl++'
-                var keys = keysString.replace(/^\+/g, 'plus').replace(/\+\+/g, '+plus').split('+');
+                // NOTE: we should separate symbol "+" that concats other keys and key "+" to support commands like the "ctrl++"
+                var keys = keysString.replace(/^\+/g, "plus").replace(/\+\+/g, "+plus").split("+");
 
                 $.map(keys, function(key, index) {
-                    keys[index] = key.replace('plus', '+');
+                    keys[index] = key.replace("plus", "+");
                 });
 
-                // NOTE: check 'shift' modifier in keys
+                // NOTE: check "shift" modifier in keys
                 for(var i = 0; i < keys.length; i++) {
                     var key = keys[i];
 
-                    if(key.toLowerCase() === 'shift') {
+                    if(key.toLowerCase() === "shift") {
                         var nextKey = keys[i + 1];
                         if(!nextKey) {
                             continue;
@@ -420,9 +335,9 @@ var browser, focused;
                         }
                     }
 
-                    if(KEYS_MAPS.SHIFT_MAP[key] && (!keys[i - 1] || keys[i - 1].toLowerCase() !== 'shift')) {
+                    if(KEYS_MAPS.SHIFT_MAP[key] && (!keys[i - 1] || keys[i - 1].toLowerCase() !== "shift")) {
                         keys[i] = KEYS_MAPS.SHIFT_MAP[key];
-                        keys.splice(i, 0, 'shift');
+                        keys.splice(i, 0, "shift");
                         i++;
                     }
                 }
@@ -431,23 +346,23 @@ var browser, focused;
                 var that = this;
 
                 $.each(keys, function(index, key) {
-                    var keyCode = this in KEYS_MAPS.SPECIAL_KEYS ? KEYS_MAPS.SPECIAL_KEYS[key] : key;
-                    that.keyDown(keyCode);
+                    var keyValue = key in KEYS_MAPS.SPECIAL_KEYS ? KEYS_MAPS.SPECIAL_KEYS[key] : key;
+
+                    that.keyDown(keyValue);
 
                     if(!that.event.isDefaultPrevented()) {
-                        that.keyPress(keyCode);
-
+                        that.keyPress(keyValue);
                         if(shortcuts[key]) {
                             var oldValue = $element.val();
                             shortcuts[key](element);
                             if($element.val() !== oldValue) {
-                                that.input(keyCode);
+                                that.input(keyValue);
                             }
                         }
                     }
 
                     if(!that.event.isDefaultPrevented()) {
-                        that.keyUp(keyCode);
+                        that.keyUp(keyValue);
                     }
                 });
 
@@ -491,5 +406,3 @@ var browser, focused;
         };
     };
 }));
-
-

@@ -44,6 +44,8 @@ function checkAxesSynchronization(assert, options) {
             var axis = new MockAxis({ renderer: new vizMocks.Renderer() });
             var translator = new translator2DModule.Translator2D({}, canvas);
             translator.updateBusinessRange(range);
+            var visibleArea = translator.getCanvasVisibleArea();
+            axis.getVisibleArea.returns([visibleArea.min, visibleArea.max]);
 
             axis.updateOptions({
                 mockRange: range,
@@ -60,7 +62,12 @@ function checkAxesSynchronization(assert, options) {
             return axis;
         };
         return $.map(axesOptions, function(axisOptions) {
-            return createAxis(axisOptions);
+            var axis = createAxis(axisOptions);
+            $.each(axisOptions.mockFunctions, function(func, wrapper) {
+                wrapper(axis[func]);
+            });
+
+            return axis;
         });
     };
 
@@ -190,32 +197,22 @@ QUnit.test('No synchronization for 2 axis in different panes', function(assert) 
     });
 });
 
-QUnit.test('No synchronization if all axes with stubData', function(assert) {
+QUnit.test('No synchronization if all axes with no data (stubData)', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
-            { range: { min: 0, max: 10, stubData: true, axisType: 'continuous' }, tickValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], tickInterval: 1 },
-            { range: { min: 15, max: 60, stubData: true, axisType: 'continuous' }, tickValues: [20, 30, 40, 50, 60], tickInterval: 10 }
+            { range: { axisType: 'continuous' }, tickValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], tickInterval: 1 },
+            { range: { axisType: 'continuous' }, tickValues: [20, 30, 40, 50, 60], tickInterval: 10 }
         ],
         axesOptionsAfterSync: [
             {
                 range: {
-                    axisType: 'continuous',
-                    min: 0,
-                    minVisible: 0,
-                    max: 10,
-                    maxVisible: 10,
-                    stubData: true
+                    axisType: 'continuous'
                 },
                 tickValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
             },
             {
                 range: {
-                    axisType: 'continuous',
-                    min: 15,
-                    minVisible: 15,
-                    max: 60,
-                    maxVisible: 60,
-                    stubData: true
+                    axisType: 'continuous'
                 },
                 tickValues: [20, 30, 40, 50, 60]
             }
@@ -285,6 +282,52 @@ QUnit.test('No synchronization for non-number tickValues', function(assert) {
             }
         ],
         syncIndexes: [[0], [1]]
+    });
+});
+
+// T684665
+QUnit.test("No syncronize axis if viewport have field 'action' with value 'zoom'", function(assert) {
+    var mockFunctions = {
+        getViewport: function(instance) { instance.returns({ action: "zoom" }); }
+    };
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            {
+                range: { min: 0, max: 10, axisType: 'continuous' },
+                tickValues: [2, 4, 6, 8],
+                tickInterval: 2,
+                mockFunctions: mockFunctions
+            },
+            {
+                range: { min: 15, max: 60, axisType: 'continuous' },
+                tickValues: [20, 30, 40, 50, 60],
+                tickInterval: 0,
+                mockFunctions: mockFunctions
+            }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 0,
+                    minVisible: 0,
+                    max: 10,
+                    maxVisible: 10
+                },
+                tickValues: [2, 4, 6, 8]
+
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 15,
+                    minVisible: 15,
+                    max: 60,
+                    maxVisible: 60
+                },
+                tickValues: [20, 30, 40, 50, 60]
+            }
+        ]
     });
 });
 
@@ -529,10 +572,10 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1, value = 0', func
             {
                 range: {
                     axisType: 'continuous',
-                    min: -1000,
-                    minVisible: -1000,
-                    max: 4800,
-                    maxVisible: 4800
+                    min: 0,
+                    minVisible: 0,
+                    max: 0,
+                    maxVisible: 0
                 },
                 tickValues: [0]
             }, {
@@ -607,37 +650,6 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1, synchronizedValu
                     maxVisible: 19000
                 },
                 tickValues: [0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000]
-            }
-        ],
-        syncIndexes: [[0, 1]]
-    });
-});
-
-QUnit.test('Synchronization for 2 axis if tickValues count = 1, value = 0, centralTick = 0', function(assert) {
-    checkAxesSynchronization(assert, {
-        axesOptions: [
-            { range: { min: 0, max: 0, axisType: 'continuous' }, tickValues: [0], tickInterval: 0 },
-            { range: { min: -10, max: 10, axisType: 'continuous' }, tickValues: [-10, 0, 10], tickInterval: 10 }
-        ],
-        axesOptionsAfterSync: [
-            {
-                range: {
-                    axisType: 'continuous',
-                    min: -10,
-                    minVisible: -10,
-                    max: 10,
-                    maxVisible: 10
-                },
-                tickValues: [0]
-            }, {
-                range: {
-                    axisType: 'continuous',
-                    min: -10,
-                    minVisible: -10,
-                    max: 10,
-                    maxVisible: 10
-                },
-                tickValues: [-10, 0, 10]
             }
         ],
         syncIndexes: [[0, 1]]
@@ -1125,22 +1137,17 @@ QUnit.test('Synchronization for 3 axis with different tickValues count. B254389'
 });
 
 // B231325
-QUnit.test('Synchronization for 3 axis when first with stubData', function(assert) {
+QUnit.test('Synchronization for 3 axis when first with no data (stubData)', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
-            { range: { min: 0, max: 10, stubData: true, axisType: 'continuous' }, tickValues: [0, 2, 4, 6, 8, 10], tickInterval: 2 },
+            { range: { axisType: 'continuous' }, tickValues: [0, 2, 4, 6, 8, 10], tickInterval: 2 },
             { range: { min: 2, max: 6, axisType: 'continuous' }, tickValues: [2, 4, 6, 8], tickInterval: 2 },
             { range: { min: 20, max: 50, axisType: 'continuous' }, tickValues: [20, 30, 40, 50, 60], tickInterval: 10 }
         ],
         axesOptionsAfterSync: [
             {
                 range: {
-                    axisType: 'continuous',
-                    min: 0,
-                    minVisible: 0,
-                    max: 10,
-                    maxVisible: 10,
-                    stubData: true
+                    axisType: 'continuous'
                 },
                 tickValues: [0, 2, 4, 6, 8, 10]
             },

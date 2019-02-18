@@ -1,14 +1,14 @@
 .dx-popup-title {
     padding: 10px;
     min-height: 19px;
-    .user-drag(none);
+    user-drag: none;
     .user-select(none);
     white-space: normal;
 }
 
 .dx-popup-draggable .dx-popup-title {
     cursor: move;
-    .touch-action(pinch-zoom);
+    touch-action: pinch-zoom;
 }
 
 .dx-overlay-content {
@@ -21,14 +21,31 @@
         height: 100%;
         width: 100%;
     }
+
+    .dx-popup-content {
+        box-sizing: content-box;
+    }
 }
 
 .dx-popup-content {
     padding: 10px;
-    .user-drag(none);
+    user-drag: none;
 
     &.dx-dialog-content {
         padding: 0;
+    }
+
+    > .dx-treeview,
+    > .dx-scrollable,
+    > .dx-treeview > .dx-scrollable {
+        max-height: inherit;
+        min-height: inherit;
+
+        > .dx-scrollable-wrapper,
+        > .dx-scrollable-wrapper > .dx-scrollable-container {
+            max-height: inherit;
+            min-height: inherit;
+        }
     }
 }
 

@@ -53,11 +53,12 @@ function queryByOptions(query, options, isCountQuery) {
 
     if(group) {
         group = normalizeSortingInfo(group);
+        group.keepInitialKeyOrder = !!options.group.keepInitialKeyOrder;
     }
 
     if(sort || group) {
         sort = normalizeSortingInfo(sort || []);
-        if(group) {
+        if(group && !group.keepInitialKeyOrder) {
             sort = arrangeSortingInfo(group, sort);
         }
         each(sort, function(index) {

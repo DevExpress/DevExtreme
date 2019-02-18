@@ -27,9 +27,9 @@
     min-width: @IOS7_SWITCH_WIDTH;
     width: 100%;
     height: @IOS7_SWITCH_HEIGHT;
-    .border-radius(@IOS7_SWITCH_RADIUS);
+    border-radius: @IOS7_SWITCH_RADIUS;
     background: @IOS7_SWITCH_OFF_BACKGROUND;
-    .transition(~"all .24s ease");
+    transition: all .24s ease;
 
     &:before {
         position: absolute;
@@ -39,9 +39,9 @@
         bottom: @IOS7_SWITCH_BORDER_WIDTH;
         left: @IOS7_SWITCH_BORDER_WIDTH;
         content: " ";
-        .border-radius(@IOS7_SWITCH_RADIUS);
+        border-radius: @IOS7_SWITCH_RADIUS;
         background: @IOS7_SWITCH_OFF_INNER_BACKGROUND;
-        .transition(~"all .24s ease");
+        transition: all .24s ease;
     }
 }
 
@@ -55,10 +55,10 @@
     left: 50%;
     margin-left: @IOS7_SWITCH_BORDER_WIDTH;
     bottom: @IOS7_SWITCH_BORDER_WIDTH;
-    .border-radius(@IOS7_SWITCH_RADIUS);
+    border-radius: @IOS7_SWITCH_RADIUS;
     background: @IOS7_SWITCH_HANDLE_BACKGROUND;
     box-shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 5px rgba(0,0,0,.2);
-    .transition(~"margin-left .24s ease 0s, left .24s ease 0s, width .14s ease .1s, transform .14s ease .1s");
+    transition: margin-left .24s ease 0s, left .24s ease 0s, width .14s ease .1s, transform .14s ease .1s;
 
     .dx-state-active & {
         width: @IOS7_SWITCH_ACTIVE_HANDLE_SIZE;
@@ -74,7 +74,7 @@
             right: 50%;
             bottom: 50%;
             left: 50%;
-            .transition(~"all .06s ease");
+            transition: all .06s ease;
         }
     }
 
@@ -82,7 +82,7 @@
         margin-left: 0 - @IOS7_SWITCH_BORDER_WIDTH;
 
         .dx-state-active& {
-            .translate(@IOS7_SWITCH_HANDLE_SIZE - @IOS7_SWITCH_ACTIVE_HANDLE_SIZE);
+            transform: translate(@IOS7_SWITCH_HANDLE_SIZE - @IOS7_SWITCH_ACTIVE_HANDLE_SIZE, 0);
         }
     }
 }
@@ -94,10 +94,10 @@
         left: auto;
         right: 50%;
         margin-right: -@IOS7_SWITCH_HANDLE_SIZE;
-        .transition(~"margin-right .24s ease 0s, right .24s ease 0s, width .14s ease .1s, transform .14s ease .1s");
+        transition: margin-right .24s ease 0s, right .24s ease 0s, width .14s ease .1s, transform .14s ease .1s;
 
         .dx-state-active& {
-            .translate(0);
+            transform: translate(0, 0);
         }
     }
 
@@ -107,7 +107,7 @@
             margin-right: 0 - @IOS7_SWITCH_BORDER_WIDTH - @IOS7_SWITCH_HANDLE_SIZE;
 
             .dx-state-active& {
-                .translate(@IOS7_SWITCH_ACTIVE_HANDLE_SIZE - @IOS7_SWITCH_HANDLE_SIZE);
+                transform: translate(@IOS7_SWITCH_ACTIVE_HANDLE_SIZE - @IOS7_SWITCH_HANDLE_SIZE, 0);
             }
         }
     }

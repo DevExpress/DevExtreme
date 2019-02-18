@@ -104,10 +104,13 @@ var LayoutManager = Widget.inherit({
     },
 
     _init: function() {
+        var layoutData = this.option("layoutData");
+
         this.callBase();
         this._itemWatchers = [];
         this._instanceStorage = new InstanceStorage();
-        this._initDataAndItems(this.option("layoutData"));
+        this._updateReferencedOptions(layoutData);
+        this._initDataAndItems(layoutData);
     },
 
     _dispose: function() {
@@ -443,7 +446,7 @@ var LayoutManager = Widget.inherit({
         }
 
         if(colCount === "auto") {
-            if(!!this._cashedColCount) {
+            if(this._cashedColCount) {
                 return this._cashedColCount;
             }
 
@@ -1049,6 +1052,20 @@ var LayoutManager = Widget.inherit({
         return Math.ceil(this._items.length / this._getColCount());
     },
 
+    _updateReferencedOptions: function(newLayoutData) {
+        var layoutData = this.option("layoutData");
+
+        if(typeUtils.isObject(layoutData)) {
+            Object.getOwnPropertyNames(layoutData)
+                .forEach(property => delete this._optionsByReference['layoutData.' + property]);
+        }
+
+        if(typeUtils.isObject(newLayoutData)) {
+            Object.getOwnPropertyNames(newLayoutData)
+                .forEach(property => this._optionsByReference['layoutData.' + property] = true);
+        }
+    },
+
     _optionChanged: function(args) {
         var that = this;
 
@@ -1065,6 +1082,8 @@ var LayoutManager = Widget.inherit({
                 this._invalidate();
                 break;
             case "layoutData":
+                this._updateReferencedOptions(args.value);
+
                 if(this.option("items")) {
                     if(!typeUtils.isEmptyObject(args.value)) {
                         this._instanceStorage.each(function(instance, item) {

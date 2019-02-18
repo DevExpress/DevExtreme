@@ -1,5 +1,6 @@
 var extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
+    Range = require("./range").Range,
     categoryTranslator = require("./category_translator"),
     intervalTranslator = require("./interval_translator"),
     datetimeTranslator = require("./datetime_translator"),
@@ -16,6 +17,16 @@ var extend = require("../../core/utils/extend").extend,
 
     addInterval = require("../../core/utils/date").addInterval;
 
+const dummyTranslator = {
+    to(value) {
+        const coord = this._canvasOptions.startPoint + (this._options.conversionValue ? value : Math.round(value));
+        return coord > this._canvasOptions.endPoint ? this._canvasOptions.endPoint : coord;
+    },
+    from(value) {
+        return value - this._canvasOptions.startPoint;
+    }
+};
+
 var validateCanvas = function(canvas) {
     each(CANVAS_PROP, function(_, prop) {
         canvas[prop] = parseInt(canvas[prop]) || 0;
@@ -31,6 +42,9 @@ var makeCategoriesToPoints = function(categories) {
 };
 
 var validateBusinessRange = function(businessRange) {
+    if(!(businessRange instanceof Range)) {
+        businessRange = new Range(businessRange);
+    }
     function validate(valueSelector, baseValueSelector) {
         if(!isDefined(businessRange[valueSelector]) && isDefined(businessRange[baseValueSelector])) {
             businessRange[valueSelector] = businessRange[baseValueSelector];
@@ -142,28 +156,32 @@ _Translator2d.prototype = {
             visibleCategories = vizUtils.getCategoriesInfo(categories, range.minVisible, range.maxVisible).categories,
             categoriesLength = visibleCategories.length;
 
-        switch(range.axisType) {
-            case "logarithmic":
-                script = logarithmicTranslator;
-                break;
-            case "semidiscrete":
-                script = intervalTranslator;
-                canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (addInterval(canvasOptions.rangeMaxVisible, options.interval) - canvasOptions.rangeMinVisible);
-                break;
-            case "discrete":
-                script = categoryTranslator;
-                that._categories = categories;
-                canvasOptions.interval = that._getDiscreteInterval(options.addSpiderCategory ? categoriesLength + 1 : categoriesLength, canvasOptions);
-                that._categoriesToPoints = makeCategoriesToPoints(categories, canvasOptions.invert);
-                if(categoriesLength) {
-                    canvasOptions.startPointIndex = that._categoriesToPoints[visibleCategories[0].valueOf()];
-                    that.visibleCategories = visibleCategories;
-                }
-                break;
-            default:
-                if(range.dataType === "datetime") {
-                    script = datetimeTranslator;
-                }
+        if(range.isEmpty()) {
+            script = dummyTranslator;
+        } else {
+            switch(range.axisType) {
+                case "logarithmic":
+                    script = logarithmicTranslator;
+                    break;
+                case "semidiscrete":
+                    script = intervalTranslator;
+                    canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (addInterval(canvasOptions.rangeMaxVisible, options.interval) - canvasOptions.rangeMinVisible);
+                    break;
+                case "discrete":
+                    script = categoryTranslator;
+                    that._categories = categories;
+                    canvasOptions.interval = that._getDiscreteInterval(options.addSpiderCategory ? categoriesLength + 1 : categoriesLength, canvasOptions);
+                    that._categoriesToPoints = makeCategoriesToPoints(categories, canvasOptions.invert);
+                    if(categoriesLength) {
+                        canvasOptions.startPointIndex = that._categoriesToPoints[visibleCategories[0].valueOf()];
+                        that.visibleCategories = visibleCategories;
+                    }
+                    break;
+                default:
+                    if(range.dataType === "datetime") {
+                        script = datetimeTranslator;
+                    }
+            }
         }
         (that._oldMethods || []).forEach(function(methodName) {
             delete that[methodName];
@@ -246,15 +264,17 @@ _Translator2d.prototype = {
         const breaks = that._breaks;
         let length;
 
+        canvasOptions.startPadding = canvas.startPadding || 0;
+        canvasOptions.endPadding = canvas.endPadding || 0;
         if(that._options.isHorizontal) {
-            canvasOptions.startPoint = canvas.left;
+            canvasOptions.startPoint = canvas.left + canvasOptions.startPadding;
             length = canvas.width;
-            canvasOptions.endPoint = canvas.width - canvas.right;
+            canvasOptions.endPoint = canvas.width - canvas.right - canvasOptions.endPadding;
             canvasOptions.invert = businessRange.invert;
         } else {
-            canvasOptions.startPoint = canvas.top;
+            canvasOptions.startPoint = canvas.top + canvasOptions.startPadding;
             length = canvas.height;
-            canvasOptions.endPoint = canvas.height - canvas.bottom;
+            canvasOptions.endPoint = canvas.height - canvas.bottom - canvasOptions.endPadding;
             canvasOptions.invert = !businessRange.invert;// axis inverted because display drawn to bottom
         }
 
@@ -312,8 +332,8 @@ _Translator2d.prototype = {
     _calculateSpecialValues: function() {
         const that = this;
         const canvasOptions = that._canvasOptions;
-        const startPoint = canvasOptions.startPoint;
-        const endPoint = canvasOptions.endPoint;
+        const startPoint = canvasOptions.startPoint - canvasOptions.startPadding;
+        const endPoint = canvasOptions.endPoint + canvasOptions.endPadding;
         const range = that._businessRange;
         const minVisible = range.minVisible;
         const maxVisible = range.maxVisible;
@@ -382,9 +402,9 @@ _Translator2d.prototype = {
         return this.to(bp, direction);
     },
 
-    getInterval: function() {
+    getInterval: function(interval) {
         const canvasOptions = this._canvasOptions;
-        const interval = this._businessRange.interval;
+        interval = isDefined(interval) ? interval : this._businessRange.interval;
         if(interval) {
             return Math.round(canvasOptions.ratioOfCanvasRange * interval);
         }
@@ -401,23 +421,28 @@ _Translator2d.prototype = {
 
         const startPoint = canvasOptions.startPoint;
         const endPoint = canvasOptions.endPoint;
+        const isInverted = this.isInverted();
 
         let newStart = (startPoint + translate) / scale;
         let newEnd = (endPoint + translate) / scale;
 
         wholeRange = wholeRange || {};
-        const minPoint = this.to(this.isInverted() ? wholeRange.endValue : wholeRange.startValue);
-        const maxPoint = this.to(this.isInverted() ? wholeRange.startValue : wholeRange.endValue);
+        const minPoint = this.to(isInverted ? wholeRange.endValue : wholeRange.startValue);
+        const maxPoint = this.to(isInverted ? wholeRange.startValue : wholeRange.endValue);
 
+        let min;
+        let max;
 
         if(minPoint > newStart) {
             newEnd -= newStart - minPoint;
             newStart = minPoint;
+            min = isInverted ? wholeRange.endValue : wholeRange.startValue;
         }
 
         if(maxPoint < newEnd) {
             newStart -= newEnd - maxPoint;
             newEnd = maxPoint;
+            max = isInverted ? wholeRange.startValue : wholeRange.endValue;
         }
         if((maxPoint - minPoint) < (newEnd - newStart)) {
             newStart = minPoint;
@@ -427,9 +452,18 @@ _Translator2d.prototype = {
         translate = (endPoint - startPoint) * newStart / (newEnd - newStart) - startPoint;
         scale = ((startPoint + translate) / newStart) || 1;
 
+        min = isDefined(min) ? min : adjust(this.from(newStart, 1));
+        max = isDefined(max) ? max : adjust(this.from(newEnd, -1));
+        if(min > max) {
+            min = min > wholeRange.endValue ? wholeRange.endValue : min;
+            max = max < wholeRange.startValue ? wholeRange.startValue : max;
+        } else {
+            min = min < wholeRange.startValue ? wholeRange.startValue : min;
+            max = max > wholeRange.endValue ? wholeRange.endValue : max;
+        }
         return {
-            min: adjust(this.from(newStart, 1)),
-            max: adjust(this.from(newEnd, -1)),
+            min,
+            max,
             translate: adjust(translate),
             scale: adjust(scale)
         };
@@ -513,7 +547,6 @@ _Translator2d.prototype = {
         }
 
         bp = this._fromValue(bp);
-
         var that = this,
             canvasOptions = that._canvasOptions,
             breaks = that._breaks,
@@ -572,11 +605,6 @@ _Translator2d.prototype = {
         return [this._toValue(this._canvasOptions.rangeMin), this._toValue(this._canvasOptions.rangeMax)];
     },
 
-    isEmptyValueRange: function() {
-        // "_businessRange.isDefined()" could be used but cannot be because of stub data
-        return this._businessRange.stubData;
-    },
-
     getScreenRange: function() {
         return [this._canvasOptions.startPoint, this._canvasOptions.endPoint];
     },
@@ -595,5 +623,9 @@ _Translator2d.prototype = {
 
     _toValue: function(value) {
         return value !== null ? Number(value) : null;
+    },
+
+    ratioOfCanvasRange() {
+        return this._canvasOptions.ratioOfCanvasRange;
     }
 };

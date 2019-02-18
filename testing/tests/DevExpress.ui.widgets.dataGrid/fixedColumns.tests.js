@@ -15,25 +15,26 @@ QUnit.testStart(function() {
 });
 
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-window.Hogan = require("../../../node_modules/hogan.js/dist/hogan-3.0.2.js");
+import hogan from "../../../node_modules/hogan.js/dist/hogan-3.0.2.js";
 
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    device = devices.real(),
-    setTemplateEngine = require("ui/set_template_engine"),
-    nativePointerMock = require("../../helpers/nativePointerMock.js"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    MockColumnsController = dataGridMocks.MockColumnsController,
-    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
-    expandCellTemplate = gridCoreUtils.getExpandCellTemplate(),
-    dataUtils = require("core/element_data");
+window.Hogan = hogan;
+
+import $ from "jquery";
+import browser from "core/utils/browser";
+import devices from "core/devices";
+import setTemplateEngine from "ui/set_template_engine";
+import nativePointerMock from "../../helpers/nativePointerMock.js";
+import { setupDataGridModules, MockDataController, MockColumnsController } from "../../helpers/dataGridMocks.js";
+import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
+import dataUtils from "core/element_data";
+
+var device = devices.real(),
+    expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
 
 var generateData = function(countItems) {
     var j = 1,
@@ -84,7 +85,7 @@ QUnit.module("Fixed columns", {
         };
 
         that.setupDataGrid = function(dataOptions) {
-            setupDataGridModules(that, ["data", "columns", "rows", "columnHeaders", "summary", "columnFixing", "grouping", "filterRow", "editorFactory", "masterDetail", "virtualScrolling", "errorHandling", "keyboardNavigation", "contextMenu"], {
+            setupDataGridModules(that, ["data", "columns", "rows", "columnHeaders", "summary", "columnFixing", "grouping", "filterRow", "editorFactory", "editing", "masterDetail", "virtualScrolling", "errorHandling", "keyboardNavigation", "contextMenu"], {
                 initViews: true,
                 controllers: {
                     columns: new MockColumnsController(that.columns),
@@ -1170,9 +1171,9 @@ QUnit.test("Synchronize rows for fixed table with master detail", function(asser
 
     assert.equal($table.find("tbody > tr").length, 4, "count rows");
     assert.equal($fixTable.find("tbody > tr").length, 4, "count fixed rows");
-    assert.ok($table.find("tbody > tr").first().outerHeight() === $fixTable.find("tbody > tr").first().outerHeight(), "height first row");
-    assert.ok($table.find("tbody > tr").eq(1).outerHeight() === $fixTable.find("tbody > tr").eq(1).outerHeight(), "height second row");
-    assert.roughEqual($table.find("tbody > tr").eq(2).outerHeight(), $fixTable.find("tbody > tr").eq(2).outerHeight(), 0.1, "height third row");
+    assert.ok($table.find("tbody > tr")[0].getBoundingClientRect().height === $fixTable.find("tbody > tr")[0].getBoundingClientRect().height, "height first row");
+    assert.ok($table.find("tbody > tr")[1].getBoundingClientRect().height === $fixTable.find("tbody > tr")[1].getBoundingClientRect().height, "height second row");
+    assert.roughEqual($table.find("tbody > tr")[2].getBoundingClientRect().height, $fixTable.find("tbody > tr")[2].getBoundingClientRect().height, 0.1, "height third row");
 });
 
 QUnit.test("Synchronize rows with floating-point height", function(assert) {
@@ -1941,8 +1942,43 @@ QUnit.testInActiveWindow("Scrolling to focused cell when it is fixed", function(
     that.rowsView.scrollChanged.add(scrollChanged);
     // act
     that.keyboardNavigationController.focus($cell);
-
 });
+
+if(browser.mozilla) {
+    QUnit.testInActiveWindow("Scrolling should performs with delay if FF and columnFixing.enabled", function(assert) {
+        // arrange
+        var that = this,
+            $cell,
+            $fixedTable,
+            done = assert.async(),
+            $testElement = $("#container");
+
+        that.clock.restore();
+        that.items = generateData(20);
+        that.options.scrolling = {
+            pushBackValue: 0 // for ios devices
+        };
+        that.setupDataGrid();
+        that.rowsView.render($testElement);
+        that.rowsView.height(100);
+        that.rowsView.resize();
+
+        $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+        $cell = $fixedTable.find("tbody > tr:not(.dx-freespace-row)").last().children().first();
+
+        var dateStart = new Date(),
+            scrollChanged = function(e) {
+                that.rowsView.scrollChanged.remove(scrollChanged);
+                assert.ok(new Date() - dateStart >= 60, "scrolling has delay");
+                done();
+            };
+
+        that.rowsView.scrollChanged.add(scrollChanged);
+
+        // act
+        that.keyboardNavigationController.focus($cell);
+    });
+}
 
 QUnit.test("getFixedColumnElements", function(assert) {
     // arrange

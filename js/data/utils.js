@@ -5,6 +5,7 @@ import { getWindow } from "../core/utils/window";
 import { map } from "../core/utils/iterator";
 import { toComparable } from "../core/utils/data";
 import { Deferred } from "../core/utils/deferred";
+import typeUtils from "../core/utils/type";
 
 var XHR_ERROR_UNLOAD = "DEVEXTREME_XHR_ERROR_UNLOAD";
 
@@ -149,7 +150,7 @@ function isDisjunctiveOperator(condition) {
 }
 
 function isConjunctiveOperator(condition) {
-    return /^(and|\&\&|\&)$/i.test(condition);
+    return /^(and|&&|&)$/i.test(condition);
 }
 
 var keysEqual = function(keyExpr, key1, key2) {
@@ -226,6 +227,26 @@ var isUnaryOperation = function(crit) {
     return crit[0] === "!" && Array.isArray(crit[1]);
 };
 
+var isGroupOperator = function(value) {
+    return value === "and" || value === "or";
+};
+
+var isGroupCriterion = function(crit) {
+    var first = crit[0],
+        second = crit[1];
+
+    if(Array.isArray(first)) {
+        return true;
+    }
+    if(typeUtils.isFunction(first)) {
+        if(Array.isArray(second) || typeUtils.isFunction(second) || isGroupOperator(second)) {
+            return true;
+        }
+    }
+
+    return false;
+};
+
 var trivialPromise = function() {
     var d = new Deferred();
     return d.resolve.apply(d, arguments).promise();
@@ -290,6 +311,7 @@ var utils = {
     processRequestResultLock: processRequestResultLock,
 
     isUnaryOperation: isUnaryOperation,
+    isGroupCriterion: isGroupCriterion,
 
     /**
     * @name Utils.base64_encode

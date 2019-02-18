@@ -392,11 +392,12 @@ Label.prototype = {
         }
         that._bBoxWithoutRotation = extend({}, bBox);
 
-        if(that._options.rotationAngle) {
-            that._insideGroup.rotate(that._options.rotationAngle, bBox.x + bBox.width / 2, bBox.y + bBox.height / 2);
-            // Angle is transformed from svg to right-handed cartesian space
-            bBox = _rotateBBox(bBox, [bBox.x + bBox.width / 2, bBox.y + bBox.height / 2], -that._options.rotationAngle);
-        }
+        const rotationAngle = that._options.rotationAngle || 0;
+
+        that._insideGroup.rotate(rotationAngle, bBox.x + bBox.width / 2, bBox.y + bBox.height / 2);
+        // Angle is transformed from svg to right-handed cartesian space
+        bBox = _rotateBBox(bBox, [bBox.x + bBox.width / 2, bBox.y + bBox.height / 2], -rotationAngle);
+
         that._bBox = bBox;
     },
 

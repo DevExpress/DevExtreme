@@ -6,15 +6,13 @@ var eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
 
     DEFAULT_LINE_SPACING = 2,
-    DEFAULT_EVENTS_DELAY = 200,
-    TOUCH_EVENTS_DELAY = 1000,
+    DEFAULT_EVENTS_DELAY = 100,
 
     eventUtils = require("../../events/utils"),
     wheelEvent = require("../../events/core/wheel"),
     baseThemeManagerModule = require("../core/base_theme_manager"),
     translator2DModule = require("../translators/translator2d"),
 
-    _abs = Math.abs,
     _extend = extend,
     _noop = require("../../core/utils/common").noop;
 
@@ -59,8 +57,15 @@ function createAxis(isHorizontal) {
         update: function(range, canvas, options) {
             translator.update(range, canvas, options);
         },
+        getVisibleArea() {
+            const visibleArea = translator.getCanvasVisibleArea();
+            return [visibleArea.min, visibleArea.max];
+        },
         visualRange: _noop,
-        calculateInterval: _noop
+        calculateInterval: _noop,
+        getMarginOptions() {
+            return {};
+        }
     };
 }
 
@@ -159,7 +164,6 @@ var BaseSparkline = BaseWidget.inherit({
         that._showTooltipCallback = function() {
             var tooltip;
 
-            that._showTooltipTimeout = null;
             if(!that._tooltipShown) {
                 that._tooltipShown = true;
                 tooltip = that._getTooltip();
@@ -193,7 +197,6 @@ var BaseSparkline = BaseWidget.inherit({
 
     _disposeTooltipEvents: function() {
         var that = this;
-        clearTimeout(that._showTooltipTimeout);
         clearTimeout(that._hideTooltipTimeout);
 
         that._tooltipTracker.off();
@@ -231,7 +234,7 @@ var mouseEvents = {
         widget._x = event.pageX;
         widget._y = event.pageY;
         widget._tooltipTracker.off(mouseMoveEvents).on(mouseMoveEvents, event.data);
-        widget._showTooltip(DEFAULT_EVENTS_DELAY);
+        widget._showTooltip();
     },
     "mouseout.sparkline-tooltip": function(event) {
         if(isPointerDownCalled) {
@@ -251,11 +254,9 @@ mouseWheelEvents[wheelEvent.name + ".sparkline-tooltip"] = function(event) {
 var mouseMoveEvents = {
     "mousemove.sparkline-tooltip": function(event) {
         var widget = event.data.widget;
-        if(widget._showTooltipTimeout && (_abs(widget._x - event.pageX) > 3 || _abs(widget._y - event.pageY) > 3)) {
-            widget._x = event.pageX;
-            widget._y = event.pageY;
-            widget._showTooltip(DEFAULT_EVENTS_DELAY);
-        }
+        widget._x = event.pageX;
+        widget._y = event.pageY;
+        widget._showTooltip();
     }
 };
 
@@ -266,7 +267,7 @@ var active_touch_tooltip_widget = null,
             widget._hideTooltip(DEFAULT_EVENTS_DELAY);
         }
         widget = active_touch_tooltip_widget = event.data.widget;
-        widget._showTooltip(TOUCH_EVENTS_DELAY);
+        widget._showTooltip();
         widget._touch = true;
     },
     touchStartDocumentProcessing = function() {
@@ -282,10 +283,8 @@ var active_touch_tooltip_widget = null,
     touchEndDocumentProcessing = function() {
         var widget = active_touch_tooltip_widget;
         if(widget) {
-            if(widget._showTooltipTimeout) {
-                widget._hideTooltip(DEFAULT_EVENTS_DELAY);
-                active_touch_tooltip_widget = null;
-            }
+            widget._hideTooltip(DEFAULT_EVENTS_DELAY);
+            active_touch_tooltip_widget = null;
         }
     },
     isPointerDownCalled = false;
@@ -344,7 +343,7 @@ BaseSparkline.prototype._setTooltipOptions = function() {
     }));
 };
 
-BaseSparkline.prototype._showTooltip = function(delay) {
+BaseSparkline.prototype._showTooltip = function() {
     var that = this;
 
     ///#DEBUG
@@ -352,11 +351,7 @@ BaseSparkline.prototype._showTooltip = function(delay) {
     ///#ENDDEBUG
     clearTimeout(that._hideTooltipTimeout);
     that._hideTooltipTimeout = null;
-    clearTimeout(that._showTooltipTimeout);
-    ///#DEBUG
-    ++that._DEBUG_showTooltipTimeoutSet;
-    ///#ENDDEBUG
-    that._showTooltipTimeout = setTimeout(that._showTooltipCallback, delay);
+    that._showTooltipCallback();
 };
 
 BaseSparkline.prototype._hideTooltip = function(delay) {
@@ -365,8 +360,6 @@ BaseSparkline.prototype._hideTooltip = function(delay) {
     ///#DEBUG
     ++that._DEBUG_clearShowTooltipTimeout;
     ///#ENDDEBUG
-    clearTimeout(that._showTooltipTimeout);
-    that._showTooltipTimeout = null;
     clearTimeout(that._hideTooltipTimeout);
     if(delay) {
         ///#DEBUG

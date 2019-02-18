@@ -1,9 +1,9 @@
-var $ = require("../../core/renderer"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    noop = require("../../core/utils/common").noop,
-    each = require("../../core/utils/iterator").each,
-    modules = require("./ui.grid_core.modules"),
-    ContextMenu = require("../context_menu");
+import $ from "../../core/renderer";
+import { getPublicElement } from "../../core/utils/dom";
+import { noop } from "../../core/utils/common";
+import { each } from "../../core/utils/iterator";
+import modules from "./ui.grid_core.modules";
+import ContextMenu from "../context_menu";
 
 var CONTEXT_MENU = "dx-context-menu",
 

@@ -1,5 +1,5 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop;
+import $ from "jquery";
+import { noop as noop } from "core/utils/common";
 
 QUnit.testStart(function() {
     var markup =
@@ -12,15 +12,14 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    ArrayStore = require("data/array_store"),
-    clientExporter = require("exporter");
+import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
+import ArrayStore from "data/array_store";
+import clientExporter from "exporter";
 
 QUnit.module("ExportController", {
     beforeEach: function() {
@@ -2870,10 +2869,11 @@ QUnit.test("Context menu is hidden when item with export selected is clicked", f
     assert.ok(!menuInstance.option("visible"), "menu is hidden");
 });
 
+import messageLocalization from "localization/message";
+
 // T364045: dxDataGrid - Export to Excel is not working when the Export button text is localized
 QUnit.test("Export to Excel button call`s exportTo when the button text is localized", function(assert) {
     // arrange
-    var messageLocalization = require("localization/message");
 
     messageLocalization.load({
         "en": {
@@ -3068,12 +3068,13 @@ QUnit.test("Customize a data and a columns before exporting", function(assert) {
     assert.equal(items[4].values[2], "3", "5 item of data");
 });
 
+import exportMixin from "ui/grid_core/ui.grid_core.export_mixin";
+
 // T399787
 QUnit.test("PrepareItems with extended Array prototypes", function(assert) {
     // arrange
     var resultItems,
-        items = [[{ test: "test" }], [{ test: "test" }]],
-        exportMixin = require("ui/grid_core/ui.grid_core.export_mixin");
+        items = [[{ test: "test" }], [{ test: "test" }]];
 
     items.test = function() { }; // As appending prototype method to array
 

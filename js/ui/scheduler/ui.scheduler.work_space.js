@@ -769,12 +769,17 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createHeaderScrollable: function() {
-        var dateTableScrollableOnScroll,
-            $headerScrollable = $("<div>")
-                .addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS)
-                .appendTo(this.$element());
+        var $headerScrollable = $("<div>")
+            .addClass(SCHEDULER_HEADER_SCROLLABLE_CLASS)
+            .appendTo(this.$element());
 
-        this._headerScrollable = this._createComponent($headerScrollable, Scrollable, {
+        this._headerScrollable = this._createComponent($headerScrollable, Scrollable, this._headerScrollableConfig());
+    },
+
+    _headerScrollableConfig: function() {
+        var dateTableScrollableOnScroll;
+
+        var config = {
             useKeyboard: false,
             showScrollbar: false,
             direction: "horizontal",
@@ -794,7 +799,9 @@ var SchedulerWorkSpace = Widget.inherit({
             onEnd: (function(e) {
                 this._dateTableScrollable.option("onScroll", dateTableScrollableOnScroll);
             }).bind(this)
-        });
+        };
+
+        return config;
     },
 
     _createSidebarScrollable: function() {
@@ -989,7 +996,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         for(var i = 0; i < data.length; i++) {
             var groups = data[i].groups,
-                groupIndex = groups ? this._getGroupIndexByResourceId(groups) : 0,
+                groupIndex = this.option("groups").length && groups ? this._getGroupIndexByResourceId(groups) : 0,
                 allDay = !!(data[i].allDay),
                 coordinates = this.getCoordinatesByDate(data[i].startDate, groupIndex, allDay),
                 $cell = this._getCellByCoordinates(coordinates, groupIndex);
@@ -1427,6 +1434,7 @@ var SchedulerWorkSpace = Widget.inherit({
             rowClass: TIME_PANEL_ROW_CLASS,
             cellTemplate: this.option("timeCellTemplate"),
             getCellText: this._getTimeText.bind(this),
+            getCellDate: this._getTimeCellDate.bind(this),
             groupCount: this._getGroupCount(),
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined
         });
@@ -1736,6 +1744,12 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$groupTable.empty();
         delete this._hiddenInterval;
         delete this._interval;
+    },
+
+    _clean: function() {
+        eventsEngine.off(domAdapter.getDocument(), SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+
+        this.callBase();
     },
 
     getWorkArea: function() {
@@ -2458,6 +2472,10 @@ var SchedulerWorkSpace = Widget.inherit({
             });
 
         return result;
+    },
+
+    getDateTableWidth: function() {
+        return this._$dateTable.get(0).getBoundingClientRect().width;
     },
 
     applyGroupButtonOffset: function() {

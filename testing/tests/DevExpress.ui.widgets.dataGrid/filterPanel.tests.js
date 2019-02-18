@@ -1,9 +1,9 @@
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
+import $ from "jquery";
+import { DataSource } from "data/data_source/data_source";
+import CustomStore from "data/custom_store";
+import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
 
 var FILTER_PANEL_CLASS = "dx-datagrid-filter-panel",
     FILTER_PANEL_TEXT_CLASS = FILTER_PANEL_CLASS + "-text",
@@ -251,6 +251,44 @@ QUnit.module("Filter Panel", {
         assert.expect(1);
         this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
             assert.equal(result, "[Field] Is any of('Text 1', 'Text 2')");
+        });
+    });
+
+    // T703158
+    QUnit.test("skip additional load in anyof", function(assert) {
+        var spy = sinon.spy();
+        // arrange
+        var filter = ["field", "anyof", [1, 2]];
+        this.initFilterPanelView({
+            filterValue: filter,
+            headerFilter: {
+                texts: {}
+            },
+            columns: [{
+                dataField: "field",
+                lookup: {
+                    dataSource: {
+                        store: new CustomStore({
+                            load: function() {
+                                spy();
+                                return [
+                                    { id: 1, text: "Text 1" },
+                                    { id: 2, text: "Text 2" }
+                                ];
+                            }
+                        })
+                    },
+                    valueExpr: "id",
+                    displayExpr: "text"
+                }
+            }]
+        });
+
+        // act
+        assert.expect(2);
+        this.filterPanelView.getFilterText(filter, this.filterSyncController.getCustomFilterOperations()).done(function(result) {
+            assert.equal(result, "[Field] Is any of('Text 1', 'Text 2')");
+            assert.equal(spy.callCount, 1);
         });
     });
 

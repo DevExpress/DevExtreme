@@ -10,17 +10,15 @@ QUnit.testStart(function() {
 });
 
 
-require("common.css!");
+import "common.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController,
-    dataUtils = require("core/element_data");
+import $ from "jquery";
+import { setupDataGridModules, MockDataController } from "../../helpers/dataGridMocks.js";
+import dataUtils from "core/element_data";
 
-var Pager = require("ui/pager");
+import Pager from "ui/pager";
 
 
 QUnit.module("Pager", {

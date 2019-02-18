@@ -1,11 +1,11 @@
-var gridCore = require("./ui.data_grid.core"),
-    focusModule = require("../grid_core/ui.grid_core.focus"),
-    Deferred = require("../../core/utils/deferred").Deferred,
-    isDefined = require("../../core/utils/type").isDefined,
-    equalByValue = require("../../core/utils/common").equalByValue,
-    createGroupFilter = require("./ui.data_grid.utils").createGroupFilter,
-    compileGetter = require("../../core/utils/data").compileGetter,
-    extend = require("../../core/utils/extend").extend;
+import gridCore from "./ui.data_grid.core";
+import focusModule from "../grid_core/ui.grid_core.focus";
+import { Deferred } from "../../core/utils/deferred";
+import { isDefined } from "../../core/utils/type";
+import { equalByValue } from "../../core/utils/common";
+import { createGroupFilter } from "./ui.data_grid.utils";
+import { compileGetter } from "../../core/utils/data";
+import { extend } from "../../core/utils/extend";
 
 var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991/* IE11 */;
 
@@ -93,7 +93,7 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
                     }).done(function(data) {
 
                         if(!data || data.length === 0 || !isDefined(data[0].key) || data[0].key === -1) {
-                            return deferred.promise();
+                            return deferred.resolve(-1).promise();
                         }
 
                         groupPath = that._getGroupPath(data[0]);
@@ -125,6 +125,11 @@ gridCore.registerModule("focus", extend(true, {}, focusModule, {
                         var count,
                             currentPageOffset,
                             groupContinuationCount;
+
+                        if(dataOffset < 0) {
+                            deferred.resolve(-1);
+                            return;
+                        }
 
                         currentPageOffset = (groupOffset % pageSize) || pageSize;
 

@@ -71,6 +71,8 @@ var ToolbarMenu = List.inherit({
             itemElement.addClass(TOOLBAR_HIDDEN_BUTTON_CLASS);
         }
 
+        itemElement.addClass(item.cssClass);
+
         return itemElement;
     },
 

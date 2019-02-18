@@ -217,6 +217,20 @@ QUnit.test("Draw(true) - draw label", function(assert) {
     assert.equal(label._point.correctLabelPosition.lastCall.args[0], label);
 });
 
+QUnit.test("Rotation angle can be reseted", function(assert) {
+    this.options.rotationAngle = 30;
+    var label = this.createLabel().draw(true);
+
+    this.options.rotationAngle = 0;
+
+    label.setOptions(this.options);
+
+    label.draw(true).shift(10, 10);
+
+    assert.deepEqual(label._insideGroup.rotate.lastCall.args, [0, 50, 45], "rotation");
+    assert.deepEqual(label.getBoundingRect(), { x: 10, y: 10, width: 20, height: 10 });
+});
+
 QUnit.test("Draw() - hide label", function(assert) {
     var label = this.createLabel().draw(true);
     label._point.correctLabelPosition.reset();

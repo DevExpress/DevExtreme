@@ -61,9 +61,13 @@ function getScrollBarWidth() {
         height: 200
     }).appendTo(container);
 
+    container.dxScrollable({ useNative: true });
+
+    var scrollBarWidth = container.width() - content.width();
+
     container.remove();
 
-    return container.width() - content.width();
+    return scrollBarWidth;
 }
 
 var moduleConfig = {
@@ -1923,6 +1927,10 @@ QUnit.test("Sorting by Summary context menu when sorting defined", function(asse
 });
 
 QUnit.test("Render to invisible container", function(assert) {
+    this.testOptions.scrolling = {
+        useNative: true
+    };
+
     var $pivotGridElement = $("#pivotGrid")
             .hide()
             .width(2000)

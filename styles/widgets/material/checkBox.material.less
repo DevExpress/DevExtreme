@@ -29,7 +29,7 @@
     &.dx-state-active {
         .dx-checkbox-icon:after {
             background-color: fade(@checkbox-border-color, 10%);
-            .scale(1);
+            transform: scale(1);
         }
     }
 
@@ -39,7 +39,7 @@
         &.dx-state-active {
             .dx-checkbox-icon:after {
                 background-color: fade(@checkbox-bg, 10%);
-                .scale(1);
+                transform: scale(1);
             }
         }
 
@@ -58,7 +58,7 @@
     &.dx-state-readonly.dx-state-focused {
         .dx-checkbox-icon:after {
             background-color: fade(@checkbox-border-color, 10%);
-            .scale(1);
+            transform: scale(1);
         }
     }
 }
@@ -67,7 +67,7 @@
     width: @MATERIAL_CHECKBOX_SIZE;
     height: @MATERIAL_CHECKBOX_SIZE;
     border: 2px solid @checkbox-border-color;
-    .border-radius(@checkbox-icon-border-radius);
+    border-radius: @checkbox-icon-border-radius;
 
     &:after {
         content: "";
@@ -81,8 +81,8 @@
         display: block;
         position: absolute;
         z-index: 1;
-        .scale(0.5);
-        .transition(@MATERIAL_CHECKBOX_RIPPLE_TRANSITION);
+        transform: scale(0.5);
+        transition: @MATERIAL_CHECKBOX_RIPPLE_TRANSITION;
     }
 
     &:before {
@@ -127,7 +127,7 @@
     &.dx-state-focused {
         .dx-checkbox-icon:after {
             background-color: fade(@checkbox-invalid-focused-border-color, 10%);
-            .scale(1);
+            transform: scale(1);
         }
     }
 }

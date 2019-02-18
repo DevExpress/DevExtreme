@@ -71,7 +71,7 @@
     &:before {
         .dx-texteditor-borders-position();
         z-index: 2;
-        .scale(0);
+        transform: scale(0);
     }
 
     &:after {
@@ -83,8 +83,8 @@
 
         &:before {
             border-bottom: 2px solid @texteditor-focused-border-color;
-            .scale(1);
-            .transition-transform(0.6s, cubic-bezier(0.4, 0, 0.02, 1));
+            transform: scale(1);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.02, 1);
         }
     }
 
@@ -248,7 +248,7 @@
     .dx-icon-clear {
         color: @texteditor-button-clear-icon-color;
         background-color: @texteditor-button-clear-icon-color-bg;
-        .border-radius(50%);
+        border-radius: 50%;
         .dx-texteditor-icon();
         .dx-icon-font-centered-sizing(@MATERIAL_TEXTEDITOR_CLEAR_ICON_SIZE);
     }

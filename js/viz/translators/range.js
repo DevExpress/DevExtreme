@@ -95,26 +95,8 @@ _Range.prototype = {
         return that;
     },
 
-    isDefined: function() {
-        return (_isDefined(this[minSelector]) && _isDefined(this[maxSelector]) || (this.categories && this.categories.length));
-    },
-
-    setStubData: function(dataType) {
-        var that = this,
-            year = new Date().getFullYear() - 1,
-            isDate = dataType === "datetime",
-            axisType = that[axisTypeSelector],
-            min = axisType === "logarithmic" ? 1 : 0;
-
-        if(axisType === "discrete") {
-            that.categories = isDate ? [new Date(year, 0, 1), new Date(year, 3, 1), new Date(year, 6, 1), new Date(year, 9, 1)] : ["0", "1", "2"];
-        } else {
-            that[minVisibleSelector] = that[minSelector] = isDate ? new Date(year, 0, 1) : min;
-            that[maxVisibleSelector] = that[maxSelector] = isDate ? new Date(year, 11, 31) : 10;
-        }
-        that.stubData = true;
-
-        return that;
+    isEmpty: function() {
+        return (!_isDefined(this[minSelector]) || !_isDefined(this[maxSelector])) && (!this.categories || this.categories.length === 0);
     },
 
     correctValueZeroLevel: function() {

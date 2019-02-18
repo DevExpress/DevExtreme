@@ -539,7 +539,7 @@
             if(!timerInfo || !timerInfo.callback) {
                 return false;
             }
-            var callback = String(timerInfo.callback).replace(/\s|\"use strict\";/g, "");
+            var callback = String(timerInfo.callback).replace(/\s|"use strict";/g, "");
 
             if(timerInfo.timerType === "animationFrames" &&
                 [

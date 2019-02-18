@@ -3,6 +3,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
+    inRange = require("../../core/utils/math").inRange,
     extend = require("../../core/utils/extend").extend,
     Button = require("../button"),
     Editor = require("../editor/editor"),
@@ -43,6 +44,13 @@ var CALENDAR_CLASS = "dx-calendar",
         "decade": 1,
         "century": 0
     };
+
+var ZOOM_LEVEL = {
+    MONTH: "month",
+    YEAR: "year",
+    DECADE: "decade",
+    CENTURY: "century"
+};
 
 var Calendar = Editor.inherit({
     _activeStateUnit: "." + CALENDAR_CELL_CLASS,
@@ -115,21 +123,21 @@ var Calendar = Editor.inherit({
             * @default 'month'
             * @fires dxCalendarOptions.onOptionChanged
             */
-            zoomLevel: "month",
+            zoomLevel: ZOOM_LEVEL.MONTH,
 
             /**
             * @name dxCalendarOptions.maxZoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'month'
             */
-            maxZoomLevel: "month",
+            maxZoomLevel: ZOOM_LEVEL.MONTH,
 
             /**
             * @name dxCalendarOptions.minZoomLevel
             * @type Enums.CalendarZoomLevel
             * @default 'century'
             */
-            minZoomLevel: "century",
+            minZoomLevel: ZOOM_LEVEL.CENTURY,
 
             /**
             * @name dxCalendarOptions.showTodayButton
@@ -346,48 +354,52 @@ var Calendar = Editor.inherit({
 
     _moveCurrentDate: function(offset, baseDate) {
         var currentDate = baseDate || new Date(this.option("currentDate")),
-            maxDate = this.option("max"),
-            minDate = this.option("min"),
+            maxDate = this._getMaxDate(),
+            minDate = this._getMinDate(),
             zoomLevel = this.option("zoomLevel"),
-            isAvailableDateFound = false,
-            newDate;
+            currentDateInRange = inRange(currentDate, minDate, maxDate),
+            dateForward = new Date(currentDate),
+            dateBackward = new Date(currentDate),
+            dateForwardInRange = currentDateInRange,
+            dateBackwardInRange = currentDateInRange;
 
-        while(!isAvailableDateFound) {
-            newDate = new Date(currentDate);
+        while((!offset && (dateForwardInRange || dateBackwardInRange)) || (offset && dateForwardInRange)) {
+            var step = offset || 1;
+
             switch(zoomLevel) {
-                case "month":
-                    newDate.setDate(currentDate.getDate() + offset);
+                case ZOOM_LEVEL.MONTH:
+                    dateForward.setDate(dateForward.getDate() + step);
+                    dateBackward.setDate(dateBackward.getDate() - step);
                     break;
-                case "year":
-                    newDate.setMonth(currentDate.getMonth() + offset);
+                case ZOOM_LEVEL.YEAR:
+                    dateForward.setMonth(dateForward.getMonth() + step);
+                    dateBackward.setMonth(dateBackward.getMonth() - step);
                     break;
-                case "decade":
-                    newDate.setFullYear(currentDate.getFullYear() + offset);
+                case ZOOM_LEVEL.DECADE:
+                    dateForward.setFullYear(dateForward.getFullYear() + step);
+                    dateBackward.setFullYear(dateBackward.getFullYear() - step);
                     break;
-                case "century":
-                    newDate.setFullYear(currentDate.getFullYear() + 10 * offset);
+                case ZOOM_LEVEL.CENTURY:
+                    dateForward.setFullYear(dateForward.getFullYear() + 10 * step);
+                    dateBackward.setFullYear(dateBackward.getFullYear() - 10 * step);
                     break;
             }
 
-            var offsetCorrection = 2 * offset / Math.abs(offset);
-
-            if(Math.abs(offset) > 1 && !dateUtils.sameView(zoomLevel, currentDate, newDate)) {
-                if(zoomLevel === "decade") {
-                    newDate.setFullYear(currentDate.getFullYear() + offset - offsetCorrection);
-                }
-                if(zoomLevel === "century") {
-                    newDate.setFullYear(currentDate.getFullYear() + 10 * (offset - offsetCorrection));
-                }
+            if(!this._view.isDateDisabled(dateForward)) {
+                currentDate = dateForward;
+                break;
             }
 
-            if(this._view.isDateDisabled(newDate) && newDate <= new Date(maxDate) && newDate >= new Date(minDate)) {
-                currentDate = newDate;
-            } else {
-                isAvailableDateFound = true;
+            if(!offset && !this._view.isDateDisabled(dateBackward)) {
+                currentDate = dateBackward;
+                break;
             }
+
+            dateBackwardInRange = inRange(dateBackward, minDate, maxDate);
+            dateForwardInRange = inRange(dateForward, minDate, maxDate);
         }
 
-        this.option("currentDate", newDate);
+        this.option("currentDate", currentDate);
     },
 
     _moveToClosestAvailableDate: function(baseDate, offset) {
@@ -505,17 +517,17 @@ var Calendar = Editor.inherit({
     _getViewsOffset: function(startDate, endDate) {
         var zoomLevel = this.option("zoomLevel");
 
-        if(zoomLevel === "month") {
+        if(zoomLevel === ZOOM_LEVEL.MONTH) {
             return this._getMonthsOffset(startDate, endDate);
         }
 
         var zoomCorrection;
 
         switch(zoomLevel) {
-            case "century":
+            case ZOOM_LEVEL.CENTURY:
                 zoomCorrection = 100;
                 break;
-            case "decade":
+            case ZOOM_LEVEL.DECADE:
                 zoomCorrection = 10;
                 break;
             default:
@@ -599,7 +611,7 @@ var Calendar = Editor.inherit({
         this._updateAriaId();
 
         if(this._view.isDateDisabled(this.option("currentDate"))) {
-            this._moveCurrentDate(1);
+            this._moveCurrentDate(0);
         }
 
     },

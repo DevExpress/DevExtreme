@@ -1,5 +1,4 @@
-var typeUtils = require("./type"),
-    commonUtils = require("./common");
+var typeUtils = require("./type");
 
 var encodeHtml = (function() {
     var encodeRegExp = [new RegExp("&", "g"), new RegExp('"', "g"), new RegExp("'", "g"), new RegExp("<", "g"), new RegExp(">", "g")];
@@ -14,23 +13,26 @@ var encodeHtml = (function() {
     };
 })();
 
-var pairToObject = function(raw) {
-    var pair = commonUtils.splitPair(raw),
-        h = parseInt(pair && pair[0], 10),
-        v = parseInt(pair && pair[1], 10);
 
-    if(!isFinite(h)) {
-        h = 0;
+var splitQuad = function(raw) {
+    switch(typeof raw) {
+        case "string":
+            return raw.split(/\s+/, 4);
+        case "object":
+            return [
+                raw.x || raw.h || raw.left,
+                raw.y || raw.v || raw.top,
+                raw.x || raw.h || raw.right,
+                raw.y || raw.v || raw.bottom];
+        case "number":
+            return [raw];
+        default:
+            return raw;
     }
-    if(!isFinite(v)) {
-        v = h;
-    }
-
-    return { h: h, v: v };
 };
 
 var quadToObject = function(raw) {
-    var quad = commonUtils.splitQuad(raw),
+    var quad = splitQuad(raw),
         left = parseInt(quad && quad[0], 10),
         top = parseInt(quad && quad[1], 10),
         right = parseInt(quad && quad[2], 10),
@@ -78,7 +80,7 @@ var stringFormat = function() {
 
 var replaceAll = (function() {
     var quote = function(str) {
-        return (str + "").replace(/([\+\*\?\\\.\[\^\]\$\(\)\{\}\><\|\=\!\:])/g, "\\$1");
+        return (str + "").replace(/([+*?.[^\]$(){}><|=!:])/g, "\\$1");
     };
 
     return function(text, searchToken, replacementToken) {
@@ -95,7 +97,6 @@ var isEmpty = (function() {
 })();
 
 exports.encodeHtml = encodeHtml;
-exports.pairToObject = pairToObject;
 exports.quadToObject = quadToObject;
 exports.format = stringFormat;
 exports.replaceAll = replaceAll;

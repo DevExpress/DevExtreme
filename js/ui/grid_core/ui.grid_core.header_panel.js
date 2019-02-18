@@ -1,9 +1,9 @@
-var $ = require("../../core/renderer"),
-    Toolbar = require("../toolbar"),
-    columnsView = require("./ui.grid_core.columns_view"),
-    noop = require("../../core/utils/common").noop,
-    isDefined = require("../../core/utils/type").isDefined,
-    domUtils = require("../../core/utils/dom");
+import $ from "../../core/renderer";
+import Toolbar from "../toolbar";
+import columnsView from "./ui.grid_core.columns_view";
+import { noop } from "../../core/utils/common";
+import { isDefined } from "../../core/utils/type";
+import { triggerResizeEvent } from "../../core/utils/dom";
 
 require("../drop_down_menu");
 var HEADER_PANEL_CLASS = "header-panel",
@@ -98,7 +98,7 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
 
     updateToolbarDimensions: function() {
         if(this._toolbar) {
-            domUtils.triggerResizeEvent(this.getHeaderPanel());
+            triggerResizeEvent(this.getHeaderPanel());
         }
     },
 

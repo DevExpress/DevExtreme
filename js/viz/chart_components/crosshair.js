@@ -162,7 +162,7 @@ Crosshair.prototype = {
             axes.forEach(function(axis) {
                 var position = axis.getOptions().position,
                     align;
-                if(axis.getTranslator().getBusinessRange().stubData) {
+                if(axis.getTranslator().getBusinessRange().isEmpty()) {
                     return;
                 }
 

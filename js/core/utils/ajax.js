@@ -163,6 +163,9 @@ var isCrossDomain = function(url) {
 
     try {
         urlAnchor.href = url;
+
+        // NOTE: IE11
+        // eslint-disable-next-line no-self-assign
         urlAnchor.href = urlAnchor.href;
 
         crossDomain = originAnchor.protocol + "//" + originAnchor.host !==

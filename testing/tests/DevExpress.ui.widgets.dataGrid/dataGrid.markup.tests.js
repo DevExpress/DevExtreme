@@ -1,9 +1,9 @@
-var $ = require("jquery"),
-    windowUtils = require("core/utils/window");
+import $ from "jquery";
+import windowUtils from "core/utils/window";
 
-require("ui/data_grid");
+import "ui/data_grid";
 
-require("common.css!");
+import "common.css!";
 
 
 QUnit.testStart(function() {

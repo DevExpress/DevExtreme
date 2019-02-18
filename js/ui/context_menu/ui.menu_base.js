@@ -43,7 +43,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
             /**
             * @name dxMenuBaseOptions.items
-            * @type Array<dxMenuBaseItemTemplate>
+            * @type Array<dxMenuBaseItem>
             */
             items: [],
 
@@ -187,13 +187,13 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             */
 
             /**
-            * @name dxMenuBaseItemTemplate
-            * @inherits CollectionWidgetItemTemplate
+            * @name dxMenuBaseItem
+            * @inherits CollectionWidgetItem
             * @type object
             */
 
             /**
-            * @name dxMenuBaseItemTemplate.beginGroup
+            * @name dxMenuBaseItem.beginGroup
             * @type Boolean
             */
 
@@ -208,48 +208,48 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             useInkRipple: false
 
             /**
-            * @name dxMenuBaseItemTemplate.html
+            * @name dxMenuBaseItem.html
             * @type String
             * @hidden
             */
             /**
-            * @name dxMenuBaseItemTemplate.disabled
+            * @name dxMenuBaseItem.disabled
             * @type boolean
             * @default false
             */
             /**
-            * @name dxMenuBaseItemTemplate.visible
+            * @name dxMenuBaseItem.visible
             * @type boolean
             * @default true
             */
             /**
-            * @name dxMenuBaseItemTemplate.icon
+            * @name dxMenuBaseItem.icon
             * @type String
             */
             /**
-            * @name dxMenuBaseItemTemplate.text
+            * @name dxMenuBaseItem.text
             * @type String
             */
             /**
-             * @name dxMenuBaseItemTemplate.html
+             * @name dxMenuBaseItem.html
              * @type String
              */
             /**
-            * @name dxMenuBaseItemTemplate.items
-            * @type Array<dxMenuBaseItemTemplate>
+            * @name dxMenuBaseItem.items
+            * @type Array<dxMenuBaseItem>
             */
             /**
-            * @name dxMenuBaseItemTemplate.selectable
+            * @name dxMenuBaseItem.selectable
             * @type boolean
             * @default false
             */
             /**
-            * @name dxMenuBaseItemTemplate.selected
+            * @name dxMenuBaseItem.selected
             * @type boolean
             * @default false
             */
             /**
-            * @name dxMenuBaseItemTemplate.closeMenuOnClick
+            * @name dxMenuBaseItem.closeMenuOnClick
             * @type boolean
             * @default true
             */
@@ -707,7 +707,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         return this._itemContainer().is(':empty');
     },
 
-    _syncSelectionOptions: commonUtils.noop,
+    _syncSelectionOptions: commonUtils.asyncNoop,
 
     _optionChanged: function(args) {
         if(this._cancelOptionChange === args.name) {

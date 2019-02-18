@@ -23,7 +23,7 @@ QUnit.module("API", moduleConfig, () => {
         const Bold = this.instance.getModule("formats/bold");
 
         assert.ok(Bold, "module is defined");
-        assert.equal(Bold.blotName, "bold", "we get correct blot");
+        assert.strictEqual(Bold.blotName, "bold", "we get correct blot");
     });
 
     test("get quill instance", (assert) => {
@@ -37,15 +37,15 @@ QUnit.module("API", moduleConfig, () => {
         this.instance.setSelection(1, 2);
         const selection = this.instance.getSelection();
 
-        assert.equal(selection.index, 1, "Correct index");
-        assert.equal(selection.length, 2, "Correct length");
+        assert.strictEqual(selection.index, 1, "Correct index");
+        assert.strictEqual(selection.length, 2, "Correct length");
     });
 
     test("format", (assert) => {
         this.instance.setSelection(1, 2);
         this.instance.format("bold", true);
 
-        assert.equal(this.instance.option("value"), "<p>T<strong>es</strong>t 1</p><p>Test 2</p><p>Test 3</p>", "format applied");
+        assert.strictEqual(this.instance.option("value"), "<p>T<strong>es</strong>t 1</p><p>Test 2</p><p>Test 3</p>", "format applied");
     });
 
     test("formatText", (assert) => {
@@ -55,7 +55,7 @@ QUnit.module("API", moduleConfig, () => {
             header: 1 // block format
         });
 
-        assert.equal(
+        assert.strictEqual(
             this.instance.option("value"), expected, "block format applies for the first line only");
     });
 
@@ -65,7 +65,7 @@ QUnit.module("API", moduleConfig, () => {
             header: 1 // block format
         });
 
-        assert.equal(this.instance.option("value"), "<h1>Test 1</h1><h1>Test 2</h1><p>Test 3</p>", "just block format applied");
+        assert.strictEqual(this.instance.option("value"), "<h1>Test 1</h1><h1>Test 2</h1><p>Test 3</p>", "just block format applied");
     });
 
     test("getFormat", (assert) => {
@@ -79,27 +79,27 @@ QUnit.module("API", moduleConfig, () => {
         this.instance.option("value", "<p><b>Test Test</b></p>");
         this.instance.removeFormat(1, 2);
 
-        assert.equal(this.instance.option("value"), "<strong>T</strong>es<strong>t Test</strong>", "remove format from specific range");
+        assert.strictEqual(this.instance.option("value"), "<strong>T</strong>es<strong>t Test</strong>", "remove format from specific range");
     });
 
     test("getLength", (assert) => {
         const length = this.instance.getLength();
         const LINE_WIDTH = 7; // 6 chars + the new line char
 
-        assert.equal(length, LINE_WIDTH * 3, "correct format");
+        assert.strictEqual(length, LINE_WIDTH * 3, "correct format");
     });
 
     test("delete", (assert) => {
         this.instance.delete(1, 7);
 
-        assert.equal(this.instance.option("value"), "<p>Test 2</p><p>Test 3</p>", "custom range removed");
+        assert.strictEqual(this.instance.option("value"), "<p>Test 2</p><p>Test 3</p>", "custom range removed");
     });
 
     test("insertText", (assert) => {
         this.instance.insertText(1, "one");
         this.instance.insertText(6, "two", { italic: true });
 
-        assert.equal(this.instance.option("value"), "<p>Tonees<em>two</em>t 1</p><p>Test 2</p><p>Test 3</p>", "insert simple and formatted text");
+        assert.strictEqual(this.instance.option("value"), "<p>Tonees<em>two</em>t 1</p><p>Test 2</p><p>Test 3</p>", "insert simple and formatted text");
     });
 
     test("insertEmbed", (assert) => {
@@ -107,7 +107,7 @@ QUnit.module("API", moduleConfig, () => {
             ' data-var-value="template"><span contenteditable="false">#template#</span></span>est 1</p><p>Test 2</p><p>Test 3</p>';
         this.instance.insertEmbed(1, "variable", { value: "template", escapeChar: "#" });
 
-        assert.equal(this.instance.option("value").replace(/\uFEFF/g, ""), expected, "insert embed");
+        assert.strictEqual(this.instance.option("value").replace(/\uFEFF/g, ""), expected, "insert embed");
     });
 
     test("undo/redo", (assert) => {
@@ -120,10 +120,10 @@ QUnit.module("API", moduleConfig, () => {
 
         this.instance.undo();
 
-        assert.equal(this.instance.option("value"), "<p>baTest 1</p><p>Test 2</p><p>Test 3</p>", "undo operation");
+        assert.strictEqual(this.instance.option("value"), "<p>baTest 1</p><p>Test 2</p><p>Test 3</p>", "undo operation");
 
         this.instance.redo();
-        assert.equal(this.instance.option("value"), "<p>cbaTest 1</p><p>Test 2</p><p>Test 3</p>", "redo operation");
+        assert.strictEqual(this.instance.option("value"), "<p>cbaTest 1</p><p>Test 2</p><p>Test 3</p>", "redo operation");
     });
 
     test("clearHistory", (assert) => {
@@ -137,7 +137,7 @@ QUnit.module("API", moduleConfig, () => {
         this.instance.clearHistory();
         this.instance.undo();
 
-        assert.equal(this.instance.option("value"), "<p>cbaTest 1</p><p>Test 2</p><p>Test 3</p>", "history is empty");
+        assert.strictEqual(this.instance.option("value"), "<p>cbaTest 1</p><p>Test 2</p><p>Test 3</p>", "history is empty");
     });
 
     test("registerModule", (assert) => {
@@ -156,7 +156,7 @@ QUnit.module("API", moduleConfig, () => {
         const testModule = this.instance.getQuillInstance().getModule("test");
 
         assert.ok(testModule);
-        assert.equal(testModule.getEditor(), this.instance);
+        assert.strictEqual(testModule.getEditor(), this.instance);
     });
 
     test("'focus' method should call the quill's focus", (assert) => {
@@ -165,5 +165,20 @@ QUnit.module("API", moduleConfig, () => {
         this.instance.focus();
 
         assert.ok(focusSpy.calledOnce, "Quill focus() should triggered on the editor's focus()");
+    });
+
+    test("change value via 'option' method should correctly update content", (assert) => {
+        const valueChangeStub = sinon.stub();
+        const updateContentSpy = sinon.spy(this.instance, "_updateHtmlContent");
+
+        this.instance.on("valueChanged", valueChangeStub);
+        this.instance.option("value", "<p>First row</p><p>Second row</p>");
+        this.clock.tick();
+        this.instance.option("value", "New text");
+        this.clock.tick();
+
+        assert.strictEqual(valueChangeStub.lastCall.args[0].value, "New text");
+        assert.strictEqual(updateContentSpy.callCount, 2, "value changed twice -> update content two times");
+        assert.strictEqual(updateContentSpy.lastCall.args[0], "New text", "Update content with the new value");
     });
 });

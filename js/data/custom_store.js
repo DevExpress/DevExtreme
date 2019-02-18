@@ -319,7 +319,7 @@ var CustomStore = Store.inherit({
          * @name CustomStoreOptions.load
          * @type function
          * @type_function_param1 options:LoadOptions
-         * @type_function_return Promise<any>
+         * @type_function_return Promise<any>|Array<any>
          */
         this._loadFunc = options[LOAD];
 

@@ -1,13 +1,13 @@
-var eventsEngine = require("../../events/core/events_engine"),
-    window = require("../../core/utils/window").getWindow(),
-    modules = require("./ui.grid_core.modules"),
-    errors = require("../widget/ui.errors"),
-    browser = require("../../core/utils/browser"),
-    sessionStorage = require("../../core/utils/storage").sessionStorage,
-    extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type"),
-    fromPromise = require("../../core/utils/deferred").fromPromise;
+import eventsEngine from "../../events/core/events_engine";
+import { getWindow } from "../../core/utils/window";
+import modules from "./ui.grid_core.modules";
+import errors from "../widget/ui.errors";
+import browser from "../../core/utils/browser";
+import { sessionStorage } from "../../core/utils/storage";
+import { extend } from "../../core/utils/extend";
+import { each } from "../../core/utils/iterator";
+import { isDefined, isPlainObject } from "../../core/utils/type";
+import { fromPromise } from "../../core/utils/deferred";
 
 var DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
 
@@ -15,7 +15,7 @@ var parseDates = function(state) {
     if(!state) return;
     each(state, function(key, value) {
         var date;
-        if(typeUtils.isPlainObject(value) || Array.isArray(value)) {
+        if(isPlainObject(value) || Array.isArray(value)) {
             parseDates(value);
         } else if(typeof value === "string") {
             date = DATE_REGEX.exec(value);
@@ -28,10 +28,10 @@ var parseDates = function(state) {
 
 exports.StateStoringController = modules.ViewController.inherit((function() {
     var getStorage = function(options) {
-        var storage = options.type === "sessionStorage" ? sessionStorage() : window.localStorage;
+        var storage = options.type === "sessionStorage" ? sessionStorage() : getWindow().localStorage;
 
         if(!storage) {
-            if(window.location.protocol === "file:" && browser.msie) {
+            if(getWindow().location.protocol === "file:" && browser.msie) {
                 throw new Error("E1038");
             } else {
                 throw new Error("E1007");
@@ -42,7 +42,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
     };
 
     var getUniqueStorageKey = function(options) {
-        return typeUtils.isDefined(options.storageKey) ? options.storageKey : "storage";
+        return isDefined(options.storageKey) ? options.storageKey : "storage";
     };
 
     return {
@@ -93,7 +93,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
                 }
             };
 
-            eventsEngine.on(window, "unload", that._windowUnloadHandler);
+            eventsEngine.on(getWindow(), "unload", that._windowUnloadHandler);
 
             return that;
         },
@@ -159,7 +159,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
 
         dispose: function() {
             clearTimeout(this._savingTimeoutID);
-            eventsEngine.off(window, "unload", this._windowUnloadHandler);
+            eventsEngine.off(getWindow(), "unload", this._windowUnloadHandler);
         }
     };
 })());

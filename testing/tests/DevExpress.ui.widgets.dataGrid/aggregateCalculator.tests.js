@@ -1,5 +1,5 @@
-var $ = require("jquery"),
-    AggregateCalculator = require("ui/data_grid/aggregate_calculator");
+import $ from "jquery";
+import AggregateCalculator from "ui/data_grid/aggregate_calculator";
 
 var customAggregator = {
     seed: 6,

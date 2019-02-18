@@ -16,12 +16,17 @@ var CALENDAR_EMPTY_CELL_CLASS = "dx-calendar-empty-cell",
     CALENDAR_SELECTED_DATE_CLASS = "dx-calendar-selected-date",
     CALENDAR_CONTOURED_DATE_CLASS = "dx-calendar-contoured-date",
 
-    UP_ARROW_KEY_CODE = 38,
-    DOWN_ARROW_KEY_CODE = 40;
+    UP_ARROW_KEY_CODE = "ArrowUp",
+    DOWN_ARROW_KEY_CODE = "ArrowDown";
 
 var getShortDate = function(date) {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
 };
+
+function triggerKeydown(key, $element) {
+    var e = $.Event("keydown", { key: key });
+    $element.find("table").trigger(e);
+}
 
 
 var FakeView = BaseView.inherit({
@@ -390,15 +395,14 @@ QUnit.test("monthView should not allow to select dates earlier than min and late
 
 QUnit.test("monthView should not allow to navigate to a date earlier than min and later than max via keyboard events", function(assert) {
     var $element = this.$element,
-        view = this.view,
-        trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.find("table").trigger(e); };
+        view = this.view;
 
     view.option("contouredDate", this.min);
-    trigger(UP_ARROW_KEY_CODE);
+    triggerKeydown(UP_ARROW_KEY_CODE, $element);
     assert.deepEqual(view.option("contouredDate"), this.min);
 
     view.option("contouredDate", this.max);
-    trigger(DOWN_ARROW_KEY_CODE);
+    triggerKeydown(DOWN_ARROW_KEY_CODE, $element);
     assert.deepEqual(view.option("contouredDate"), this.max);
 });
 
@@ -437,11 +441,10 @@ QUnit.test("monthView should not allow to select disabled dates via pointer even
 
 QUnit.test("monthView should not allow to navigate to a disabled date", function(assert) {
     var $element = this.$element,
-        view = this.view,
-        trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.find("table").trigger(e); };
+        view = this.view;
 
     view.option("contouredDate", new Date(2010, 10, 5));
-    trigger(UP_ARROW_KEY_CODE);
+    triggerKeydown(UP_ARROW_KEY_CODE, $element);
     assert.deepEqual(view.option("contouredDate"), new Date(2010, 10, 5));
 });
 
@@ -480,11 +483,10 @@ QUnit.test("monthView should not allow to select disabled dates via pointer even
 
 QUnit.test("monthView should not allow to navigate to a disabled date", function(assert) {
     var $element = this.$element,
-        view = this.view,
-        trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.find("table").trigger(e); };
+        view = this.view;
 
     view.option("contouredDate", new Date(2010, 10, 5));
-    trigger(UP_ARROW_KEY_CODE);
+    triggerKeydown(UP_ARROW_KEY_CODE, $element);
     assert.deepEqual(view.option("contouredDate"), new Date(2010, 10, 5));
 });
 
@@ -510,16 +512,15 @@ QUnit.module("YearView min/max", {
 
 QUnit.test("yearView should not allow to navigate to a date earlier than min and later than max via keyboard events", function(assert) {
     var $element = this.$element,
-        view = this.view,
-        trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.find("table").trigger(e); };
+        view = this.view;
 
     view.option("contouredDate", this.min);
-    trigger(UP_ARROW_KEY_CODE);
+    triggerKeydown(UP_ARROW_KEY_CODE, $element);
 
     assert.deepEqual(view.option("contouredDate"), this.min);
     view.option("contouredDate", this.max);
 
-    trigger(DOWN_ARROW_KEY_CODE);
+    triggerKeydown(DOWN_ARROW_KEY_CODE, $element);
     assert.deepEqual(view.option("contouredDate"), this.max);
 });
 
@@ -548,11 +549,10 @@ QUnit.module("YearView disabledDates", {
 
 QUnit.test("yearView should not allow to navigate to a disabled date via keyboard events", function(assert) {
     var $element = this.$element,
-        view = this.view,
-        trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.find("table").trigger(e); };
+        view = this.view;
 
     view.option("contouredDate", new Date(2015, 3, 15));
-    trigger(UP_ARROW_KEY_CODE);
+    triggerKeydown(UP_ARROW_KEY_CODE, $element);
 
     assert.deepEqual(view.option("contouredDate"), new Date(2015, 3, 15));
 });
@@ -580,15 +580,14 @@ QUnit.module("DecadeView min/max", {
 
 QUnit.test("decadeView should not allow to navigate to a date earlier than min and later than max via keyboard events", function(assert) {
     var $element = this.$element,
-        view = this.view,
-        trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.find("table").trigger(e); };
+        view = this.view;
 
     view.option("contouredDate", this.min);
-    trigger(UP_ARROW_KEY_CODE);
+    triggerKeydown(UP_ARROW_KEY_CODE, $element);
     assert.deepEqual(view.option("contouredDate"), this.min);
 
     view.option("contouredDate", this.max);
-    trigger(DOWN_ARROW_KEY_CODE);
+    triggerKeydown(DOWN_ARROW_KEY_CODE, $element);
 
     assert.deepEqual(view.option("contouredDate"), this.max);
 });
@@ -618,11 +617,10 @@ QUnit.module("DecadeView disabledDates", {
 
 QUnit.test("decadeView should not allow to navigate to a disabled date via keyboard events", function(assert) {
     var $element = this.$element,
-        view = this.view,
-        trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.find("table").trigger(e); };
+        view = this.view;
 
     view.option("contouredDate", Date(2015, 3, 15));
-    trigger(UP_ARROW_KEY_CODE);
+    triggerKeydown(UP_ARROW_KEY_CODE, $element);
     assert.deepEqual(view.option("contouredDate"), Date(2015, 3, 15));
 });
 
@@ -649,14 +647,13 @@ QUnit.module("CenturyView min/max", {
 
 QUnit.test("centuryView should not allow to navigate to a date earlier than min and later than max via keyboard events", function(assert) {
     var $element = this.$element,
-        view = this.view,
-        trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.find("table").trigger(e); };
+        view = this.view;
 
     view.option("contouredDate", this.min);
-    trigger(UP_ARROW_KEY_CODE);
+    triggerKeydown(UP_ARROW_KEY_CODE, $element);
     assert.deepEqual(view.option("contouredDate"), this.min);
     view.option("contouredDate", this.max);
-    trigger(DOWN_ARROW_KEY_CODE);
+    triggerKeydown(DOWN_ARROW_KEY_CODE, $element);
     assert.deepEqual(view.option("contouredDate"), this.max);
 });
 
@@ -685,11 +682,10 @@ QUnit.module("CenturyView disabledDates", {
 
 QUnit.test("centuryView should not allow to navigate to a disabled date via keyboard events", function(assert) {
     var $element = this.$element,
-        view = this.view,
-        trigger = function(which) { var e = $.Event("keydown", { which: which }); $element.find("table").trigger(e); };
+        view = this.view;
 
     view.option("contouredDate", new Date(2070, 0, 15));
-    trigger(38);
+    triggerKeydown(UP_ARROW_KEY_CODE, $element);
     assert.deepEqual(view.option("contouredDate"), new Date(2070, 0, 15));
 });
 

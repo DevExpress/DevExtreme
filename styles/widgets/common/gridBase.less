@@ -165,6 +165,14 @@
 
         .dx-error-row {
             .user-select(initial);
+
+            .dx-error-message {
+                user-select: text;
+
+                a {
+                    color: inherit;
+                }
+            }
         }
     }
 
@@ -185,12 +193,12 @@
                 .dx-column-chooser-item {
                     opacity: 0.5;
                     margin-bottom: 10px;
-                    .box-shadow(0px 1px 3px -1px rgba(0, 0, 0, 0.2));
+                    box-shadow: 0px 1px 3px -1px rgba(0, 0, 0, 0.2);
 
                     &.dx-@{widgetName}-drag-action {
                         opacity: 1;
                         cursor: pointer;
-                        .touch-action(pinch-zoom);
+                        touch-action: pinch-zoom;
                     }
                 }
             }
@@ -229,7 +237,7 @@
         cursor: pointer;
         z-index: 10000;
         // T105728
-        .box-sizing(content-box);
+        box-sizing: content-box;
 
         &.dx-drag-command-cell {
             padding: 0px;
@@ -414,6 +422,11 @@
 
                 .dx-@{widgetName}-invalid .dx-invalid-message.dx-overlay {
                     position: static;
+
+                    .dx-overlay-content {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
                 }
 
             .dx-editor-cell {
@@ -458,6 +471,7 @@
                 width: @GRID_COMMAND_EXPAND_COLUMN_WIDTH;
                 min-width: @GRID_COMMAND_EXPAND_COLUMN_WIDTH;
                 max-width: @GRID_COMMAND_EXPAND_COLUMN_WIDTH;
+                .user-select(none);
             }
         }
 
@@ -910,7 +924,7 @@
         &.dx-popover-wrapper {
             .dx-overlay-content {
                 border: none;
-                .box-shadow(none);
+                box-shadow: none;
 
                 .dx-popup-content {
                     padding: 0;

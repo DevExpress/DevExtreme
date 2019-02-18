@@ -75,8 +75,8 @@ var subscribes = {
             dates = resultDates;
         }
 
-        var itemResources = this._resourcesManager.getResourcesFromItem(appointmentData),
-            allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
+        var itemResources = this._resourcesManager.getResourcesFromItem(appointmentData);
+        allDay = this.appointmentTakesAllDay(appointmentData) && this._workSpace.supportAllDayRow();
 
         options.callback(this._getCoordinates(dates, itemResources, allDay));
     },
@@ -327,6 +327,14 @@ var subscribes = {
         return this.getWorkSpaceDateTableOffset();
     },
 
+    getDateTableWidth: function() {
+        return this._workSpace.getDateTableWidth();
+    },
+
+    getTimePanelWidth: function() {
+        return this._workSpace.getTimePanelWidth();
+    },
+
     correctAppointmentCoordinates: function(options) {
         var isAllDay = options.allDay,
             containerSign = options.isFixedContainer ? -1 : 1;
@@ -483,8 +491,8 @@ var subscribes = {
         }).bind(this));
     },
 
-    recurrenceEditorVisibilityChanged: function(options) {
-        this.recurrenceEditorVisibilityChanged(options.visible);
+    recurrenceEditorVisibilityChanged: function(visible) {
+        this.recurrenceEditorVisibilityChanged(visible);
     },
 
     getField: function(field, obj) {

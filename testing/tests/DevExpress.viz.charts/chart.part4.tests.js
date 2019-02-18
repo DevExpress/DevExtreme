@@ -1248,8 +1248,8 @@ QUnit.test("Three axis without names", function(assert) {
         chart = this.createChart({
             valueAxis: [{}, {}, {}],
 
-            incidentOccurred: function(message) {
-                message = message;
+            incidentOccurred: function(arg) {
+                message = arg;
             }
         });
 

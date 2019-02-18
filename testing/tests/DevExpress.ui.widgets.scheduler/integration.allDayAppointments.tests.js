@@ -11,8 +11,7 @@ require("common.css!");
 require("generic_light.css!");
 
 
-var $ = require("jquery"),
-    translator = require("animation/translator"),
+var translator = require("animation/translator"),
     dblclickEvent = require("events/dblclick"),
     fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),
@@ -201,7 +200,7 @@ QUnit.test("All-day appointment startDate should be correct after resize when st
     var cellWidth = $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
 
     var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-left").eq(0)).start();
-    pointer.dragStart().drag(-(cellWidth - 10), 0).dragEnd();
+    pointer.dragStart().drag(-cellWidth, 0).dragEnd();
 
     assert.deepEqual(this.instance.option("dataSource")[0].startDate, new Date(2015, 1, 9), "Start date is OK");
 });
@@ -407,8 +406,8 @@ QUnit.test("Height of allDay appointment should be correct, 3 appts in cell", fu
     assert.roughEqual($appointments.eq(1).outerHeight(), 25, 1.5, "Appointment has correct height");
     assert.roughEqual(firstPosition.top, 25, 1.5, "Appointment has correct top");
 
-    assert.equal($appointments.eq(2).outerWidth(), 15, "Compact appointment has correct width");
-    assert.equal($appointments.eq(2).outerHeight(), 15, "Compact appointment has correct height");
+    assert.roughEqual($appointments.eq(2).outerWidth(), 15, 1.1, "Compact appointment has correct width");
+    assert.roughEqual($appointments.eq(2).outerHeight(), 15, 1.1, "Compact appointment has correct height");
 });
 
 QUnit.test("allDayExpanded option of workspace should be updated after dragged off from the all day container", function(assert) {
@@ -1252,8 +1251,8 @@ QUnit.test("AllDay recurrent appointment should be rendered coorectly after chan
         cellHeight = $(this.instance.$element()).find(".dx-scheduler-all-day-table-cell").outerHeight(),
         cellWidth = $(this.instance.$element()).find(".dx-scheduler-all-day-table-cell").outerWidth();
 
-    assert.equal($appointment.outerWidth(), cellWidth, "Appointment width is OK");
-    assert.equal($appointment.outerHeight(), cellHeight, "Appointment height is OK");
+    assert.roughEqual($appointment.outerWidth(), 1.1, cellWidth, "Appointment width is OK");
+    assert.roughEqual($appointment.outerHeight(), 1.1, cellHeight, "Appointment height is OK");
 });
 
 QUnit.test("DblClick on appointment should call scheduler.showAppointmentPopup for allDay appointment on month view", function(assert) {

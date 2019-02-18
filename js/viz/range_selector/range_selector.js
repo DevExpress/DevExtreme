@@ -250,7 +250,8 @@ function updateTickIntervals(scaleOptions, screenDelta, incidentOccurred, range)
             allowDecimals: scaleOptions.allowDecimals,
             endOnTick: scaleOptions.endOnTick,
 
-            incidentOccurred: incidentOccurred
+            incidentOccurred: incidentOccurred,
+            rangeIsEmpty: range.isEmpty()
         })(
             {
                 min: min,
@@ -283,7 +284,6 @@ function updateTickIntervals(scaleOptions, screenDelta, incidentOccurred, range)
 function calculateTranslatorRange(seriesDataSource, scaleOptions) {
     var minValue, maxValue,
         inverted = false,
-        isEqualDates,
         startValue = scaleOptions.startValue,
         endValue = scaleOptions.endValue,
         categories,
@@ -348,13 +348,6 @@ function calculateTranslatorRange(seriesDataSource, scaleOptions) {
     });
     seriesDataSource && translatorRange.sortCategories(categories);
 
-    // Setting stub data is required only for axis.
-    if(!translatorRange.isDefined()) {
-        if(isEqualDates) {
-            scaleOptions.valueType = "numeric";
-        }
-        translatorRange.setStubData(scaleOptions.valueType);
-    }
     return translatorRange;
 }
 
@@ -389,7 +382,7 @@ function updateScaleOptions(scaleOptions, seriesDataSource, translatorRange, tic
         intervals,
         isDateTime = scaleOptions.valueType === DATETIME;
 
-    if(seriesDataSource && !seriesDataSource.isEmpty() && !translatorRange.stubData) {
+    if(seriesDataSource && !seriesDataSource.isEmpty() && !translatorRange.isEmpty()) {
         bounds = tickIntervalsInfo.bounds;
         translatorRange.addRange(bounds);
         scaleOptions.startValue = translatorRange.invert ? bounds.maxVisible : bounds.minVisible;
@@ -618,6 +611,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
                     previousValue: convertVisualRangeObject(lastSelectedRange)
                 });
             },
+            axis: that._axis,
             translator: that._axis.getTranslator()
         });
 
@@ -769,7 +763,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             x: rect[0], y: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
         });
 
-        that._axis.getTranslator().update({ stubData: true }, canvas, { isHorizontal: true });
+        that._axis.getTranslator().update(new rangeModule.Range(), canvas, { isHorizontal: true });
 
         that._updateContent({
             left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1]
@@ -841,7 +835,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
         updateScaleOptions(scaleOptions, seriesDataSource, argTranslatorRange, tickIntervalsInfo, getDateMarkerVisibilityChecker(canvas.width));
         updateTranslatorRangeInterval(argTranslatorRange, scaleOptions);
-        sliderMarkerOptions = that._prepareSliderMarkersOptions(scaleOptions, canvas.width, tickIntervalsInfo);
+        sliderMarkerOptions = that._prepareSliderMarkersOptions(scaleOptions, canvas.width, tickIntervalsInfo, argTranslatorRange);
         indents = calculateIndents(that._renderer, scaleOptions, sliderMarkerOptions, that.option("indent"), tickIntervalsInfo);
         rangeContainerCanvas = {
             left: canvas.left + indents.left,
@@ -888,7 +882,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
         that._requestChange(["SLIDER_SELECTION"]);
         that._isUpdating = false;
-        that._tracker.update(!that._axis.getTranslator().isEmptyValueRange(), behavior);
+        that._tracker.update(!that._axis.getTranslator().getBusinessRange().isEmpty(), behavior);
     },
 
     _createSeriesDataSource: function(chartOptions) {
@@ -929,7 +923,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         return seriesDataSource;
     },
 
-    _prepareSliderMarkersOptions: function(scaleOptions, screenDelta, tickIntervalsInfo) {
+    _prepareSliderMarkersOptions: function(scaleOptions, screenDelta, tickIntervalsInfo, argRange) {
         var that = this,
             minorTickInterval = tickIntervalsInfo.minorTickInterval,
             tickInterval = tickIntervalsInfo.tickInterval,
@@ -943,7 +937,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
         sliderMarkerOptions.borderColor = that._getOption(CONTAINER_BACKGROUND_COLOR, true);
 
-        if(!sliderMarkerOptions.format) {
+        if(!sliderMarkerOptions.format && !argRange.isEmpty()) {
             if(doNotSnap && _isNumber(scaleOptions.startValue)) {
                 sliderMarkerOptions.format = {
                     type: "fixedPoint",
@@ -1071,7 +1065,7 @@ AxisWrapper.prototype = {
         var axis = this._axis;
         axis.updateOptions(prepareAxisOptions(options, isCompactMode, canvas.height, canvas.height / 2 - Math.ceil(options.width / 2)));
         axis.validate();
-        axis.setBusinessRange(businessRange);
+        axis.setBusinessRange(businessRange, undefined, undefined, true);
         if(seriesDataSource !== undefined && seriesDataSource.isShowChart()) {
             axis.setMarginOptions(seriesDataSource.getMarginOptions(canvas));
         }
@@ -1101,7 +1095,7 @@ AxisWrapper.prototype = {
     }
 };
 
-["setMarginOptions", "getFullTicks", "updateCanvas", "updateOptions", "getAggregationInfo", "getTranslator", "getVisualRangeLength"].forEach(methodName => {
+["setMarginOptions", "getFullTicks", "updateCanvas", "updateOptions", "getAggregationInfo", "getTranslator", "getVisualRangeLength", "getVisibleArea", "getMarginOptions"].forEach(methodName => {
     AxisWrapper.prototype[methodName] = function() {
         const axis = this._axis;
 

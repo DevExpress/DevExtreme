@@ -2,7 +2,8 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     vizMocks = require("../../helpers/vizMocks.js"),
     coreLegendModule = require("viz/components/legend"),
-    legendModule = require("viz/vector_map/legend");
+    legendModule = require("viz/vector_map/legend"),
+    ThemeManager = vizMocks.stubClass(require("viz/components/chart_theme_manager").ThemeManager);
 
 QUnit.module('Legend', {
     beforeEach: function() {
@@ -14,6 +15,11 @@ QUnit.module('Legend', {
         this.unbind = sinon.spy();
         this.notifyDirty = sinon.spy();
         this.notifyReady = sinon.spy();
+        this.themeManager = new ThemeManager();
+
+        this.themeManager.stub("theme").withArgs("legend").returns({
+            title: {}
+        });
         this.legend = new legendModule._TESTS_Legend({
             renderer: this.renderer,
             container: this.container,
@@ -26,7 +32,8 @@ QUnit.module('Legend', {
                 unbind: this.unbind
             },
             notifyDirty: this.notifyDirty,
-            notifyReady: this.notifyReady
+            notifyReady: this.notifyReady,
+            themeManager: this.themeManager
         });
         this.updateLayout = this.legend.updateLayout = sinon.spy($.proxy(function() {
             this.legend.draw(50, 50);
@@ -43,6 +50,7 @@ QUnit.module('Legend', {
             border: {
                 visible: false
             },
+            title: {},
             position: 'outside',
             paddingLeftRight: 10,
             paddingTopBottom: 10,
@@ -136,9 +144,9 @@ QUnit.test('customizeText format object', function(assert) {
     this.updateData([10, 20, 30], [1, 2, 3, 4]);
 
     assert.strictEqual(spy.callCount, 3, "call count");
-    assert.deepEqual(spy.getCall(0).args, [{ start: 1, end: 2, index: 0, "test-field": 10, states: { normal: { fill: undefined } } }], "item 1");
-    assert.deepEqual(spy.getCall(1).args, [{ start: 2, end: 3, index: 1, "test-field": 20, states: { normal: { fill: undefined } } }], "item 2");
-    assert.deepEqual(spy.getCall(2).args, [{ start: 3, end: 4, index: 2, "test-field": 30, states: { normal: { fill: undefined } } }], "item 3");
+    assert.deepEqual(spy.getCall(0).args, [{ start: 1, end: 2, index: 0, visible: true, "test-field": 10, states: { normal: { fill: undefined } } }], "item 1");
+    assert.deepEqual(spy.getCall(1).args, [{ start: 2, end: 3, index: 1, visible: true, "test-field": 20, states: { normal: { fill: undefined } } }], "item 2");
+    assert.deepEqual(spy.getCall(2).args, [{ start: 3, end: 4, index: 2, visible: true, "test-field": 30, states: { normal: { fill: undefined } } }], "item 3");
 });
 
 QUnit.test('default marker shapes', function(assert) {
@@ -164,7 +172,7 @@ QUnit.test('resize', function(assert) {
 
     this.legend.resize({ width: 300, height: 100 });
 
-    assert.strictEqual(this.renderer.g.callCount, 3, 'redrawn');
+    assert.strictEqual(this.renderer.g.callCount, 6, 'redrawn');
     assert.strictEqual(this.notifyDirty.callCount, 1, "notify dirty");
     assert.strictEqual(this.notifyReady.callCount, 1, "notify ready");
 });

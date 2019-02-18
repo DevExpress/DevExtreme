@@ -1,4 +1,4 @@
-var $ = require("jquery");
+import $ from "jquery";
 
 QUnit.testStart(function() {
     var markup =
@@ -11,12 +11,11 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
+import "common.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
+import { setupDataGridModules } from "../../helpers/dataGridMocks.js";
 
 QUnit.module("Error handling", {
     beforeEach: function() {
@@ -228,7 +227,7 @@ QUnit.test("Remove error row in rows view after cancel edit data", function(asse
 
     // assert
     assert.equal($testElement.find('tbody > tr').length, 6, "count rows");
-    var $errorRow = $testElement.find('.dx-datagrid-rowsview .dx-error-row');
+    $errorRow = $testElement.find('.dx-datagrid-rowsview .dx-error-row');
     assert.equal($errorRow.length, 1, "has error row");
     assert.strictEqual($errorRow.find("td").first().text(), "Test", "error message");
 
@@ -266,13 +265,13 @@ QUnit.test("Repaint error row in rows view", function(assert) {
     $rowsView = $testElement.find(".dx-datagrid-rowsview");
     $table = $rowsView.find("table").first();
     assert.equal($rowsView.length, 1, "has rows view");
-    assert.equal($table.children("tbody").children("tr").length, 3, "count rows");
+    assert.equal($table.children("tbody").children("tr").length, 4, "count rows");
 
     // act
     that.errorHandlingController.renderErrorRow("Test", 1);
 
     // assert
-    assert.equal($table.children("tbody").children("tr").length, 4, "count rows");
+    assert.equal($table.children("tbody").children("tr").length, 5, "count rows");
     $errorRow = $table.children("tbody").children("tr").eq(2);
     assert.ok($errorRow.hasClass("dx-error-row"), "has error row");
     assert.strictEqual($errorRow.find("td").first().text(), "Test", "error message");
@@ -281,7 +280,7 @@ QUnit.test("Repaint error row in rows view", function(assert) {
     that.errorHandlingController.renderErrorRow("Test", 1);
 
     // assert
-    assert.equal($table.children("tbody").children("tr").length, 4, "count rows");
+    assert.equal($table.children("tbody").children("tr").length, 5, "count rows");
     $errorRow = $table.children("tbody").children("tr").eq(2);
     assert.ok($errorRow.hasClass("dx-error-row"), "has error row");
     assert.strictEqual($errorRow.find("td").first().text(), "Test", "error message");

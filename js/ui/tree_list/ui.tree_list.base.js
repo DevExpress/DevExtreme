@@ -1,25 +1,25 @@
-var registerComponent = require("../../core/component_registrator"),
-    commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
-    extend = require("../../core/utils/extend").extend,
-    Widget = require("../widget/ui.widget"),
-    treeListCore = require("./ui.tree_list.core"),
-    themes = require("../themes"),
-    callModuleItemsMethod = treeListCore.callModuleItemsMethod;
+import registerComponent from '../../core/component_registrator';
+import commonUtils from '../../core/utils/common';
+import typeUtils from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
+import Widget from '../widget/ui.widget';
+import treeListCore from './ui.tree_list.core';
+import themes from '../themes';
+var callModuleItemsMethod = treeListCore.callModuleItemsMethod;
 
 var DATAGRID_ROW_SELECTOR = ".dx-row",
     TREELIST_CLASS = "dx-treelist";
 
-require("./ui.tree_list.column_headers");
-require("./ui.tree_list.columns_controller");
-require("./ui.tree_list.data_controller");
-require("./ui.tree_list.sorting");
-require("./ui.tree_list.rows");
-require("./ui.tree_list.context_menu");
-require("./ui.tree_list.error_handling");
-require("./ui.tree_list.grid_view");
-require("./ui.tree_list.header_panel");
+import './ui.tree_list.column_headers';
+import './ui.tree_list.columns_controller';
+import './ui.tree_list.data_controller';
+import './ui.tree_list.sorting';
+import './ui.tree_list.rows';
+import './ui.tree_list.context_menu';
+import './ui.tree_list.error_handling';
+import './ui.tree_list.grid_view';
+import './ui.tree_list.header_panel';
 
 treeListCore.registerModulesOrder([
     "stateStoring",

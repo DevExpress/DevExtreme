@@ -1,12 +1,12 @@
-var $ = require("jquery"),
-    internals = require("ui/form/ui.form.layout_manager").__internals;
+import $ from "jquery";
+import { __internals as internals } from "ui/form/ui.form.layout_manager";
 
-require("ui/switch");
-require("ui/lookup");
-require("ui/text_area");
-require("ui/radio_group");
+import "ui/switch";
+import "ui/lookup";
+import "ui/text_area";
+import "ui/radio_group";
 
-require("common.css!");
+import "common.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -273,9 +273,9 @@ QUnit.test("Change a layoutData object", function(assert) {
     assert.deepEqual($editors.eq(3).dxDateBox("instance").option("value"), new Date("1/1/2001"));
 });
 
-function triggerKeyUp($element, keyCode) {
+function triggerKeyUp($element, key) {
     var e = $.Event("keyup");
-    e.which = keyCode;
+    e.key = key;
     $($element.find("input").first()).trigger(e);
 }
 
@@ -297,7 +297,7 @@ QUnit.test("onEditorEnterKey", function(assert) {
 
     // act
     editor = layoutManager.getEditor("profession");
-    triggerKeyUp(editor.$element(), 13);
+    triggerKeyUp(editor.$element(), "Enter");
 
     // assert
     assert.notEqual(testArgs.component, undefined, "component");
@@ -308,13 +308,42 @@ QUnit.test("onEditorEnterKey", function(assert) {
 
     // act
     editor = layoutManager.getEditor("name");
-    triggerKeyUp(editor.$element(), 13);
+    triggerKeyUp(editor.$element(), "Enter");
 
     // assert
     assert.notEqual(testArgs.component, undefined, "component");
     assert.notEqual(testArgs.element, undefined, "element");
     assert.notEqual(testArgs.event, undefined, "Event");
     assert.equal(testArgs.dataField, "name", "dataField");
+});
+
+QUnit.test("Should save layoutData properties by reference (T706177)", (assert) => {
+    const done = assert.async();
+
+    const items = [
+        { id: 1, name: "name1" },
+        { id: 2, name: "name2" }
+    ];
+
+    const layoutManager = $("#container").dxLayoutManager({
+        layoutData: { id: 1, field: items[0] },
+        items: [{
+            dataField: "field",
+            editorType: "dxSelectBox",
+            editorOptions: {
+                dataSource: items,
+                onValueChanged: ({ previousValue, value }) => {
+                    assert.deepEqual(previousValue, { id: 1, name: "name1" });
+                    assert.deepEqual(value, { id: 2, name: "name2" });
+                    done();
+                }
+            }
+        }]
+    }).dxLayoutManager("instance");
+
+    const editor = layoutManager.getEditor("field");
+
+    editor.option("value", items[1]);
 });
 
 

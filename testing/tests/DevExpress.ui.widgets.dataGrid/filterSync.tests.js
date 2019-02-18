@@ -310,6 +310,30 @@ QUnit.module("Sync with FilterValue", {
         assert.equal(this.columnOption("field", "filterValue"), 1);
         assert.equal(this.columnOption("field", "selectedFilterOperation"), "=");
     });
+
+    QUnit.test("skip sync when change filterType from undefined to 'include' and vice versa", function(assert) {
+        var spy = sinon.spy();
+        // arrange, act
+        this.setupDataGrid({
+            filterValue: ["field", "=", 2]
+        });
+
+        this.filterSyncController.syncHeaderFilter = spy;
+
+        this.dataController.optionChanged({ name: "columns", fullName: "columns[0].filterType", previousValue: "include", value: undefined });
+        // assert
+        assert.deepEqual(spy.callCount, 0);
+
+        // act
+        this.dataController.optionChanged({ name: "columns", fullName: "columns[0].filterType", previousValue: undefined, value: "include" });
+        // assert
+        assert.deepEqual(spy.callCount, 0);
+
+        // act
+        this.dataController.optionChanged({ name: "columns", fullName: "columns[0].filterType", previousValue: "include", value: "exclude" });
+        // assert
+        assert.deepEqual(spy.callCount, 1);
+    });
 });
 
 QUnit.module("getCombinedFilter", {

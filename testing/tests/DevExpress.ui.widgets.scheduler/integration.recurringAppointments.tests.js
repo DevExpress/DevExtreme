@@ -10,9 +10,7 @@ QUnit.testStart(function() {
 require("common.css!");
 require("generic_light.css!");
 
-
-var $ = require("jquery"),
-    dblclickEvent = require("events/dblclick"),
+var dblclickEvent = require("events/dblclick"),
     Color = require("color"),
     fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),
@@ -814,7 +812,7 @@ QUnit.test("Recurrence item in form should have a special css class", function(a
 
     assert.notOk($recurrenceItem.hasClass(openedRecurrenceItemClass));
 
-    form.getEditor("repeatOnOff").option("value", true);
+    form.$element().find(".dx-switch").eq(1).dxSwitch("instance").option("value", true);
     $recurrenceItem = form.$element().find("." + recurrenceItemClass);
 
     assert.ok($recurrenceItem.hasClass(openedRecurrenceItemClass));
@@ -834,7 +832,7 @@ QUnit.test("Recurrence editor should work correctly after toggling repeat and en
     this.instance.showAppointmentPopup(appointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff"),
+        repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance"),
         repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
     repeatOnEditor.option("value", true);
@@ -865,7 +863,7 @@ QUnit.test("Recurrence editor should work correctly after switch off the recurre
     this.instance.showAppointmentPopup(appointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff");
+        repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
 
     repeatOnEditor.option("value", false);
 
@@ -1073,6 +1071,33 @@ QUnit.test("Recurrence exception should be adjusted by scheduler timezone", func
     } finally {
         tzOffsetStub.restore();
     }
+});
+
+QUnit.test("T697037. Recurrence exception date should equal date of appointment, which excluded from recurrence", function(assert) {
+    this.createInstance({
+        dataSource: [ {
+            text: "Increase Price - North Region",
+            startDate: "2018-11-26T02:00:00Z",
+            endDate: "2018-11-26T02:15:00Z",
+            recurrenceRule: "FREQ=DAILY;COUNT=5",
+            recurrenceException: ""
+        }],
+        views: ["week"],
+        currentView: "week",
+        currentDate: new Date(2018, 10, 26),
+        dateSerializationFormat: "yyyy-MM-ddTHH:mm:ssZ",
+        timeZone: "Etc/UTC",
+        editing: true,
+        onAppointmentUpdating: function(e) {
+            assert.equal(e.newData.recurrenceException, "20181128T020000Z", "correct recurrence exception date");
+        }
+    });
+    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2),
+        pointer = pointerMock($appointment).start();
+
+    pointer.dragStart().drag(0, -30).dragEnd();
+
+    $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 });
 
 QUnit.test("Recurrence exception should be adjusted by scheduler timezone after deleting of the single appt", function(assert) {

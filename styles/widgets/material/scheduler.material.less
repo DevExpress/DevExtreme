@@ -370,7 +370,7 @@
     }
     .dx-overlay-content {
         border: none;
-        .box-shadow(0 7px 25px rgba(0, 0, 0, 0.25));
+        box-shadow: 0 7px 25px rgba(0, 0, 0, 0.25);
         .dx-popup-content.dx-scheduler-appointment-tooltip {
             width:  @MATERIAL_SCHEDULER_APPOINTMENT_TOOLTIP_WIDTH;
             padding: 0;
@@ -524,7 +524,7 @@
     z-index: 1;
 
     &.dx-button-has-icon:not(.dx-button-has-text) {
-        .border-radius(2px);
+        border-radius: 2px;
     }
 }
 
@@ -537,7 +537,7 @@
     padding-right: @MATERIAL_SCHEDULER_NAVIGATOR_HEIGHT + 14;
     z-index: 0;
     background-color: rgba(0,0,0,0.05);
-    .border-radius(@base-border-radius);
+    border-radius: @base-border-radius;
 
     .dx-rtl & {
         left: @MATERIAL_SCHEDULER_SWITCHER_LABEL_OFFSET;
@@ -667,7 +667,7 @@
     }
 
     &.dx-scheduler-focused-cell {
-        .box-shadow(none);
+        box-shadow: none;
     }
 }
 
@@ -780,17 +780,17 @@
             color: @scheduler-appointment-focus-color;
         }
 
-        .box-shadow(none);
+        box-shadow: none;
 
         &.dx-state-active,
         &.dx-resizable-resizing,
         &.dx-draggable-dragging,
         &.dx-state-hover,
         &.dx-state-hover.dx-resizable {
-            .box-shadow(none);
+            box-shadow: none;
         }
 
-        .border-radius(2px);
+        border-radius: 2px;
     }
 }
 

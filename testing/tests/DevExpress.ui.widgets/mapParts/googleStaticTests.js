@@ -33,7 +33,7 @@ var mapUrl = function(map) {
 };
 
 var backgroundUrl = function($element) {
-    return $element.css("backgroundImage").replace(/^url|[\(\"\"\)]/g, '');
+    return $element.css("backgroundImage").replace(/^url|[("")]/g, '');
 };
 
 QUnit.test("map ready action", function(assert) {

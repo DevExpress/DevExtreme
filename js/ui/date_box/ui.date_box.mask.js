@@ -5,10 +5,11 @@ import { extend } from "../../core/utils/extend";
 import { fitIntoRange } from "../../core/utils/math";
 import { inRange } from "../../core/utils/math";
 import eventsEngine from "../../events/core/events_engine";
-import wheelEvent from "../../events/core/wheel";
 import { getDatePartIndexByPosition, renderDateParts } from "./ui.date_box.mask.parts";
 import dateLocalization from "../../localization/date";
+import { getRegExpInfo } from "../../localization/ldml/date.parser";
 import { getFormat } from "../../localization/ldml/date.format";
+import { isString } from "../../core/utils/type";
 import DateBoxBase from "./ui.date_box.base";
 
 const MASK_EVENT_NAMESPACE = "dateBoxMask",
@@ -22,19 +23,41 @@ let DateBoxMask = DateBoxBase.inherit({
             return this.callBase(e);
         }
 
-        let that = this;
-
         return extend(this.callBase(e), {
-            del: that._revertPart.bind(that, FORWARD),
-            backspace: that._revertPart.bind(that, BACKWARD),
-            home: that._selectFirstPart.bind(that),
-            end: that._selectLastPart.bind(that),
-            escape: that._revertChanges.bind(that),
-            enter: that._enterHandler.bind(that),
-            leftArrow: that._selectNextPart.bind(that, BACKWARD),
-            rightArrow: that._selectNextPart.bind(that, FORWARD),
-            upArrow: that._partIncrease.bind(that, FORWARD),
-            downArrow: that._partIncrease.bind(that, BACKWARD)
+            del: (e) => {
+                this._revertPart(FORWARD);
+                this._isAllSelected() || e.preventDefault();
+            },
+            backspace: (e) => {
+                this._revertPart(BACKWARD);
+                this._isAllSelected() || e.preventDefault();
+            },
+            home: (e) => {
+                this._selectFirstPart();
+                e.preventDefault();
+            },
+            end: (e) => {
+                this._selectLastPart();
+                e.preventDefault();
+            },
+            escape: this._revertChanges,
+            enter: this._enterHandler,
+            leftArrow: (e) => {
+                this._selectNextPart(BACKWARD);
+                e.preventDefault();
+            },
+            rightArrow: (e) => {
+                this._selectNextPart(FORWARD);
+                e.preventDefault();
+            },
+            upArrow: (e) => {
+                this._partIncrease(FORWARD);
+                e.preventDefault();
+            },
+            downArrow: (e) => {
+                this._partIncrease(BACKWARD);
+                e.preventDefault();
+            },
         });
     },
 
@@ -87,16 +110,22 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _getFormatPattern() {
-        var format = this._strategy.getDisplayFormat(this.option("displayFormat")),
-            isLDMLPattern = typeof format === "string" && (format.indexOf("0") >= 0 || format.indexOf("#") >= 0);
+        if(this._formatPattern) {
+            return this._formatPattern;
+        }
+
+        const format = this._strategy.getDisplayFormat(this.option("displayFormat"));
+        const isLDMLPattern = isString(format) && !dateLocalization._getPatternByFormat(format);
 
         if(isLDMLPattern) {
-            return format;
+            this._formatPattern = format;
         } else {
-            return getFormat(function(value) {
+            this._formatPattern = getFormat(function(value) {
                 return dateLocalization.format(value, format);
             });
         }
+
+        return this._formatPattern;
     },
 
     _setNewDateIfEmpty() {
@@ -107,16 +136,19 @@ let DateBoxMask = DateBoxBase.inherit({
     },
 
     _searchNumber(char) {
-        let limits = this._getActivePartLimits(),
-            maxSearchLength = String(limits.max).length;
+        const { max } = this._getActivePartLimits();
+        const maxLimitLength = String(max).length;
+        const formatLength = this._getActivePartProp("pattern").length;
 
-        this._searchValue = (this._searchValue + char).substr(-maxSearchLength);
+        this._searchValue = (this._searchValue + char).substr(-maxLimitLength);
 
         this._setActivePartValue(this._searchValue);
 
         if(this.option("advanceCaret")) {
+            const isShortFormat = formatLength === 1;
+            const maxSearchLength = isShortFormat ? maxLimitLength : Math.min(formatLength, maxLimitLength);
             const isLengthExceeded = this._searchValue.length === maxSearchLength;
-            const isValueOverflowed = parseInt(this._searchValue + "0") > limits.max;
+            const isValueOverflowed = parseInt(this._searchValue + "0") > max;
 
             if(isLengthExceeded || isValueOverflowed) {
                 this._selectNextPart(FORWARD);
@@ -153,12 +185,12 @@ let DateBoxMask = DateBoxBase.inherit({
         this._searchValue = "";
     },
 
-    _revertPart: function(direction, e) {
+    _revertPart: function(direction) {
         if(!this._isAllSelected()) {
             const actual = this._getActivePartValue(this.option("emptyDateValue"));
             this._setActivePartValue(actual);
 
-            this._selectNextPart(direction, e);
+            this._selectNextPart(direction);
         }
         this._clearSearchValue();
     },
@@ -167,16 +199,21 @@ let DateBoxMask = DateBoxBase.inherit({
         return this.option("useMaskBehavior") && this.option("mode") === "text";
     },
 
+    _initMaskState() {
+        this._activePartIndex = 0;
+        this._formatPattern = null;
+        this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
+        this._loadMaskValue();
+    },
+
     _renderMask() {
         this.callBase();
         this._detachMaskEvents();
-        this._clearState();
+        this._clearMaskState();
 
         if(this._useMaskBehavior()) {
-            this._activePartIndex = 0;
             this._attachMaskEvents();
-
-            this._loadMaskValue();
+            this._initMaskState();
             this._renderDateParts();
         }
     },
@@ -189,7 +226,7 @@ let DateBoxMask = DateBoxBase.inherit({
         const text = this.option("text") || this._getDisplayedText(this._maskValue);
 
         if(text) {
-            this._dateParts = renderDateParts(text, this._getFormatPattern());
+            this._dateParts = renderDateParts(text, this._regExpInfo);
             this._selectNextPart(0);
         }
     },
@@ -205,28 +242,29 @@ let DateBoxMask = DateBoxBase.inherit({
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
             this._selectNextPart(0, e);
         });
-        eventsEngine.on(this._input(), eventsUtils.addNamespace(wheelEvent.name, MASK_EVENT_NAMESPACE), this._mouseWheelHandler.bind(this));
     },
 
-    _selectLastPart(e) {
+    _selectLastPart() {
         if(this.option("text")) {
             this._activePartIndex = this._dateParts.length;
-            this._selectNextPart(BACKWARD, e);
+            this._selectNextPart(BACKWARD);
         }
     },
 
-    _selectFirstPart(e) {
+    _selectFirstPart() {
         if(this.option("text")) {
             this._activePartIndex = -1;
-            this._selectNextPart(FORWARD, e);
+            this._selectNextPart(FORWARD);
         }
     },
 
-    _mouseWheelHandler(e) {
-        this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD, e);
+    _onMouseWheel(e) {
+        if(this._useMaskBehavior()) {
+            this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD, e);
+        }
     },
 
-    _selectNextPart(step, e) {
+    _selectNextPart(step) {
         if(!this.option("text")) {
             return;
         }
@@ -235,7 +273,7 @@ let DateBoxMask = DateBoxBase.inherit({
         if(this._dateParts[index].isStub) {
             let isBoundaryIndex = index === 0 && step < 0 || index === this._dateParts.length - 1 && step > 0;
             if(!isBoundaryIndex) {
-                this._selectNextPart(step >= 0 ? step + 1 : step - 1, e);
+                this._selectNextPart(step >= 0 ? step + 1 : step - 1);
                 return;
             } else {
                 index = this._activePartIndex;
@@ -248,7 +286,6 @@ let DateBoxMask = DateBoxBase.inherit({
 
         this._activePartIndex = index;
         this._caret(this._getActivePartProp("caret"));
-        e && e.preventDefault();
     },
 
     _getActivePartLimits() {
@@ -267,7 +304,7 @@ let DateBoxMask = DateBoxBase.inherit({
             limits = this._getActivePartLimits(),
             maxLimitLength = String(limits.max).length;
 
-        return ((zeroes && zeroes[0]) || "" + String(value)).substr(-maxLimitLength);
+        return ((zeroes && zeroes[0] || "") + String(value)).substr(-maxLimitLength);
     },
 
     _setActivePartValue(value, dateValue) {
@@ -315,7 +352,7 @@ let DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _partIncrease(step, e) {
+    _partIncrease(step) {
         this._setNewDateIfEmpty();
 
         let limits = this._getActivePartLimits(),
@@ -325,7 +362,6 @@ let DateBoxMask = DateBoxBase.inherit({
         newValue = newValue < limits.min ? limits.max : newValue;
 
         this._setActivePartValue(newValue);
-        e && e.preventDefault();
     },
 
     _maskClickHandler() {
@@ -343,10 +379,10 @@ let DateBoxMask = DateBoxBase.inherit({
             this._renderDateParts();
             this._maskValue = date;
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
-            this._selectNextPart(0, e);
-        } else {
-            e.preventDefault();
+            this._selectNextPart(0);
         }
+
+        e.preventDefault();
     },
 
     _isValueDirty() {
@@ -365,6 +401,7 @@ let DateBoxMask = DateBoxBase.inherit({
     _enterHandler(e) {
         this._fireChangeEvent();
         this._selectNextPart(FORWARD, e);
+        e.preventDefault();
     },
 
     _focusOutHandler(e) {
@@ -410,7 +447,7 @@ let DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _clearState() {
+    _clearMaskState() {
         this._clearSearchValue();
         delete this._dateParts;
         delete this._activePartIndex;
@@ -419,14 +456,14 @@ let DateBoxMask = DateBoxBase.inherit({
 
     reset() {
         this.callBase();
-        this._clearState();
+        this._clearMaskState();
         this._activePartIndex = 0;
     },
 
     _clean() {
         this.callBase();
         this._detachMaskEvents();
-        this._clearState();
+        this._clearMaskState();
     }
 });
 

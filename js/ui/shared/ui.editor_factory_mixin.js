@@ -8,7 +8,8 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     devices = require("../../core/devices"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
-    normalizeDataSourceOptions = require("../../data/data_source/data_source").normalizeDataSourceOptions;
+    normalizeDataSourceOptions = require("../../data/data_source/data_source").normalizeDataSourceOptions,
+    normalizeKeyName = require("../../events/utils").normalizeKeyName;
 
 require("../text_box");
 require("../number_box");
@@ -64,7 +65,7 @@ var EditorFactoryMixin = (function() {
                 }
             },
             onKeyDown: function(e) {
-                if(isEnterBug && e.event.keyCode === 13) {
+                if(isEnterBug && normalizeKeyName(e.event) === "enter") {
                     eventsEngine.trigger($(e.component._input()), "change");
                 }
             },
@@ -81,7 +82,7 @@ var EditorFactoryMixin = (function() {
                 options.setValue(args.value);
             },
             onKeyDown: function(e) {
-                if(checkEnterBug() && e.event.keyCode === 13) {
+                if(checkEnterBug() && normalizeKeyName(e.event) === "enter") {
                     e.component.blur();
                     e.component.focus();
                 }

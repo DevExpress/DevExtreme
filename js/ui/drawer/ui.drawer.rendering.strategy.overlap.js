@@ -5,6 +5,7 @@ import translator from "../../animation/translator";
 import Overlay from "../overlay";
 import typeUtils from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
+import { camelize } from "../../core/utils/inflector";
 
 class OverlapStrategy extends DrawerStrategy {
 
@@ -30,14 +31,13 @@ class OverlapStrategy extends DrawerStrategy {
                 this._fixOverlayPosition(e.component.$content());
             }).bind(this),
             contentTemplate: drawer.option("template"),
-            onContentReady: () => {
+            onContentReady: (args) => {
                 whenPanelRendered.resolve();
+                this._processOverlayZIndex(args.component.content());
             },
             visible: true,
             propagateOutsideClick: true
         });
-
-        this._processOverlayZIndex();
     }
 
     _fixOverlayPosition($overlayContent) {
@@ -113,9 +113,7 @@ class OverlapStrategy extends DrawerStrategy {
         const position = drawer.getDrawerPosition();
         const defaultAnimationConfig = this._defaultAnimationConfig();
 
-        if(drawer.isHorizontalDirection()) {
-            $content.css("paddingLeft", drawer.option("minSize") * drawer._getPositionCorrection());
-        }
+        $content.css("padding" + camelize(position, true), drawer.option("minSize"));
 
         $content.css("transform", "inherit");
 
@@ -178,8 +176,8 @@ class OverlapStrategy extends DrawerStrategy {
         return $(this.getDrawerInstance().getOverlay().content());
     }
 
-    _processOverlayZIndex() {
-        const styles = this.getPanelContent().get(0).style;
+    _processOverlayZIndex($element) {
+        const styles = $($element).get(0).style;
         const zIndex = styles.zIndex || 1;
 
         this.getDrawerInstance().setZIndex(zIndex);
@@ -188,6 +186,6 @@ class OverlapStrategy extends DrawerStrategy {
     needOrderContent(position) {
         return position === "right" || position === "bottom";
     }
-};
+}
 
 module.exports = OverlapStrategy;

@@ -152,7 +152,7 @@ SlidersController.prototype = {
         sliders[0].cancelAnimation();
         sliders[1].cancelAnimation();
         that._shutter.stopAnimation();
-        if(that._params.translator.isEmptyValueRange()) {
+        if(that._params.translator.getBusinessRange().isEmpty()) {
             sliders[0]._setText(emptySliderMarkerText);
             sliders[1]._setText(emptySliderMarkerText);
             sliders[0]._value = sliders[1]._value = undefined;
@@ -197,7 +197,7 @@ SlidersController.prototype = {
         if(that._isCompactMode) {
             points = [pos1 + Math.ceil(that._shutterOffset), (verticalRange[0] + verticalRange[1]) / 2, pos2 - Math.floor(that._shutterOffset), (verticalRange[0] + verticalRange[1]) / 2];
         } else {
-            screenRange = that._params.translator.getScreenRange();
+            screenRange = that._params.axis.getVisibleArea();
             points = [
                 buildRectPoints(screenRange[0], verticalRange[0], Math.max(pos1 - Math.floor(that._shutterOffset), screenRange[0]), verticalRange[1]),
                 buildRectPoints(screenRange[1], verticalRange[0], Math.min(pos2 + Math.ceil(that._shutterOffset), screenRange[1]), verticalRange[1])
@@ -229,8 +229,8 @@ SlidersController.prototype = {
             endValue: translator.isValid(visualRange.endValue) ? translator.getCorrectValue(visualRange.endValue, -1) : undefined,
             length: visualRange.length
         }, {
-            min: businessRange.min,
-            max: businessRange.max,
+            min: businessRange.minVisible,
+            max: businessRange.maxVisible,
             categories: businessRange.categories
         });
 

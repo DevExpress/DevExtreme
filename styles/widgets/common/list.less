@@ -105,7 +105,7 @@
     width: 8px;
     margin-left: -6px;
 
-    .rotate(135deg);
+    transform: rotate(135deg);
 
     border-width: 2px 0 0 2px;
     border-style: solid;
@@ -116,14 +116,14 @@
         margin-left: auto;
         margin-right: -6px;
 
-        .rotate(-45deg);
+        transform: rotate(-45deg);
     }
 }
 
 
 .dx-list-item-response-wait {
     opacity: 0.5;
-    .transition(~"opacity .2s linear");
+    transition: opacity .2s linear;
 }
 
 .dx-list-slide-menu-content {
@@ -148,12 +148,12 @@
     }
 
     .dx-icon-toggle-delete {
-        .transition(~"all .1s linear");
+        transition: all .1s linear;
     }
 
     .dx-list-select-checkbox {
         float: left;
-        .transition(~"all .1s linear");
+        transition: all .1s linear;
     }
 }
 
@@ -170,9 +170,9 @@
     .dx-list-reorder-handle {
         cursor: move;
         background-repeat: no-repeat;
-        .background-size(75%, 75%);
+        background-size: 75% 75%;
         background-position: center;
-        .touch-action(pinch-zoom);
+        touch-action: manipulation;
 
         .dx-state-disabled & {
             cursor: default;
@@ -253,7 +253,7 @@
 
 .dx-list-switchable-delete-ready {
     .dx-icon-toggle-delete {
-        .rotate(-90deg);
+        transform: rotate(-90deg);
     }
 }
 

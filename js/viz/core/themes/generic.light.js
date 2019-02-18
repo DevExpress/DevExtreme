@@ -128,7 +128,25 @@ registerTheme({
         columnCount: 0,
         rowCount: 0,
         columnItemSpacing: 20,
-        rowItemSpacing: 8
+        rowItemSpacing: 8,
+        title: {
+            backgroundColor: WHITE,
+            margin: {
+                left: 0,
+                bottom: 0,
+                right: 0,
+                top: 0
+            },
+            font: {
+                size: 28,
+                weight: 200
+            },
+            subtitle: {
+                font: {
+                    size: 16
+                }
+            }
+        }
     },
     "chart:common": {
         animation: {
@@ -248,13 +266,15 @@ registerTheme({
         tick: {
             visible: false,
             width: 1,
-            length: 8
+            length: 8,
+            shift: 0
         },
         minorTick: {
             visible: false,
             width: 1,
             opacity: 0.3,
-            length: 8
+            length: 8,
+            shift: 0
         },
         stripStyle: {
             paddingLeftRight: 10,
@@ -704,6 +724,7 @@ registerTheme({
         zoomingMode: NONE,
         scrollingMode: NONE,
         synchronizeMultiAxes: true,
+        stickyHovering: true,
         equalBarWidth: true,
         barGroupPadding: 0.3,
         minBubbleSize: 12,
@@ -909,6 +930,7 @@ registerTheme({
         },
         _circular: {
             scale: {
+                scaleDivisionFactor: 17,
                 orientation: OUTSIDE,
                 label: {
                     indentFromTick: 10
@@ -949,6 +971,7 @@ registerTheme({
         },
         _linear: {
             scale: {
+                scaleDivisionFactor: 25,
                 horizontalOrientation: RIGHT,
                 verticalOrientation: BOTTOM,
                 label: {
@@ -999,6 +1022,9 @@ registerTheme({
             font: {
                 size: 16
             }
+        },
+        legend: {
+            visible: false
         },
         indicator: {
             hasPositiveMeaning: true,

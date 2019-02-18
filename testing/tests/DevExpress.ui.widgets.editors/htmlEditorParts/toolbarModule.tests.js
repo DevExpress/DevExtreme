@@ -34,6 +34,7 @@ const COLOR_VIEW_HEX_FIELD_CLASS = "dx-colorview-label-hex";
 const TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input";
 const DROPDOWNEDITOR_ICON_CLASS = "dx-dropdowneditor-icon";
 const LIST_ITEM_CLASS = "dx-list-item";
+const BOX_ITEM_CONTENT_CLASS = "dx-box-item-content";
 
 const BOLD_FORMAT_CLASS = "dx-bold-format";
 const ITALIC_FORMAT_CLASS = "dx-italic-format";
@@ -71,6 +72,7 @@ const simpleModuleConfig = {
                 _createComponent: ($element, widget, options) => {
                     return new widget($element, options);
                 },
+                option: noop,
                 on: noop
             }
         };
@@ -117,6 +119,7 @@ const dialogModuleConfig = {
                     return new widget($element, options);
                 },
                 on: noop,
+                option: noop,
                 formDialogOption: this.formDialogOptionStub,
                 showFormDialog: (formConfig) => {
                     return this.formDialog.show(formConfig);
@@ -704,6 +707,22 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.notOk($historyWidgets.eq(0).hasClass(DISABLED_STATE_CLASS), "Undo is enabled");
         assert.notOk($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), "Redo is enabled");
     });
+
+    test("SelectBox should display currently applied value", (assert) => {
+        this.quillMock.getFormat = () => { return { size: "10px" }; };
+        this.options.items = [{ formatName: "size", formatValues: ["10px", "11px"] }];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+
+        toolbar.updateFormatWidgets();
+
+        const value = this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${TEXTEDITOR_INPUT_CLASS}`)
+            .val();
+
+        assert.strictEqual(value, "10px", "SelectBox contain selected value");
+    });
+
 });
 
 QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
@@ -717,10 +736,12 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
         const $form = $(`.${FORM_CLASS}`);
         const $colorView = $form.find(`.${COLORVIEW_CLASS}`);
         const $hexValueInput = $colorView.find(`.${COLOR_VIEW_HEX_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+        const $boxItemContent = $colorView.closest(`.${BOX_ITEM_CONTENT_CLASS}`);
 
-        assert.equal($form.length, 1, "Form shown");
-        assert.equal($colorView.length, 1, "Form contains ColorView");
-        assert.equal($hexValueInput.val(), "000000", "Base value");
+        assert.strictEqual($form.length, 1, "Form shown");
+        assert.strictEqual($colorView.length, 1, "Form contains ColorView");
+        assert.strictEqual($hexValueInput.val(), "000000", "Base value");
+        assert.strictEqual($boxItemContent.css("flexBasis"), "auto", "Box item content flex-basis is 'auto'");
     });
 
     test("show color dialog when formatted text selected", (assert) => {

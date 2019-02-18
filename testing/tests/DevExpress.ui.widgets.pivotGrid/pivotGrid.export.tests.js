@@ -198,7 +198,7 @@ QUnit.test("Export [string x string x number] with row grand totals", function(a
 
 QUnit.test("Export [string x string x number] with 'format: currency'", function(assert) {
     const styles = helper.STYLESHEET_HEADER_XML +
-        '<numFmts count=\"1\"><numFmt numFmtId=\"165\" formatCode=\"$#,##0_);\\($#,##0\\)\" /></numFmts>' +
+        '<numFmts count="1"><numFmt numFmtId="165" formatCode="$#,##0_);\\($#,##0\\)" /></numFmts>' +
         helper.BASE_STYLE_XML +
         '<cellXfs count="3">' +
         '<xf xfId="0" applyAlignment="1" fontId="0" applyNumberFormat="0" numFmtId="0"><alignment vertical="top" wrapText="0" horizontal="center" /></xf>' +

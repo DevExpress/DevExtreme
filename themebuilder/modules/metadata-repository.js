@@ -16,7 +16,7 @@ class MetadataRepository {
         }
 
         return result;
-    };
+    }
 
     init(themes) {
         let promises = [];
@@ -33,23 +33,23 @@ class MetadataRepository {
         });
 
         return Promise.all(promises);
-    };
+    }
 
     getData(theme) {
         if(!theme) return this.repositoryData;
         return this.repositoryData[theme.name + "-" + theme.colorScheme];
-    };
+    }
 
     updateData(data, theme) {
         data.forEach(item => {
             let dataItem = this.getDataItemByKey(item.key, theme);
             if(item) dataItem.Value = item.value;
         });
-    };
+    }
 
     getVersion() {
         return this.metadataLoader.version();
-    };
-};
+    }
+}
 
 module.exports = MetadataRepository;

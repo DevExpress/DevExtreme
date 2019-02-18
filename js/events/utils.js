@@ -1,12 +1,72 @@
-var $ = require("../core/renderer");
-var eventsEngine = require("./core/events_engine");
-var errors = require("../core/errors");
-var focused = require("../ui/widget/selectors").focused;
-var extend = require("../core/utils/extend").extend;
-var each = require("../core/utils/iterator").each;
+import $ from "../core/renderer";
+import eventsEngine from "./core/events_engine";
+import errors from "../core/errors";
+import { focused } from "../ui/widget/selectors";
+import { extend } from "../core/utils/extend";
+import { each } from "../core/utils/iterator";
 
-var eventSource = (function() {
-    var EVENT_SOURCES_REGEX = {
+const KEY_MAP = {
+    "backspace": "backspace",
+    "tab": "tab",
+    "enter": "enter",
+    "escape": "escape",
+    "pageup": "pageUp",
+    "pagedown": "pageDown",
+    "end": "end",
+    "home": "home",
+    "arrowleft": "leftArrow",
+    "arrowup": "upArrow",
+    "arrowright": "rightArrow",
+    "arrowdown": "downArrow",
+    "delete": "del",
+    " ": "space",
+    "f": "F",
+    "a": "A",
+    "*": "asterisk",
+    "-": "minus",
+    "alt": "alt",
+    "control": "control",
+    "shift": "shift",
+    // IE11:
+    "left": "leftArrow",
+    "up": "upArrow",
+    "right": "rightArrow",
+    "down": "downArrow",
+    "multiply": "asterisk",
+    "spacebar": "space",
+    "del": "del",
+    "subtract": "minus"
+};
+
+const LEGACY_KEY_CODES = {
+    // iOS 10.2 and lower didn't supports KeyboardEvent.key
+    "8": "backspace",
+    "9": "tab",
+    "13": "enter",
+    "27": "escape",
+    "33": "pageUp",
+    "34": "pageDown",
+    "35": "end",
+    "36": "home",
+    "37": "leftArrow",
+    "38": "upArrow",
+    "39": "rightArrow",
+    "40": "downArrow",
+    "46": "del",
+    "32": "space",
+    "70": "F",
+    "65": "A",
+    "106": "asterisk",
+    "109": "minus",
+    "189": "minus",
+    "173": "minus",
+    "16": "shift",
+    "17": "control",
+    "18": "alt"
+};
+
+const eventSource = (() => {
+    const EVENT_SOURCES_REGEX = {
         "dx": /^dx/i,
         "mouse": /(mouse|wheel)/i,
         "touch": /^touch/i,
@@ -14,8 +74,8 @@ var eventSource = (function() {
         "pointer": /^(ms)?pointer/i
     };
 
-    return function(e) {
-        var result = "other";
+    return (e) => {
+        let result = "other";
 
         each(EVENT_SOURCES_REGEX, function(key) {
             if(this.test(e.type)) {
@@ -29,40 +89,40 @@ var eventSource = (function() {
 })();
 
 
-var isDxEvent = function(e) {
+const isDxEvent = (e) => {
     return eventSource(e) === "dx";
 };
 
-var isNativeMouseEvent = function(e) {
+const isNativeMouseEvent = (e) => {
     return eventSource(e) === "mouse";
 };
 
-var isNativeTouchEvent = function(e) {
+const isNativeTouchEvent = (e) => {
     return eventSource(e) === "touch";
 };
 
-var isPointerEvent = function(e) {
+const isPointerEvent = (e) => {
     return eventSource(e) === "pointer";
 };
 
-var isMouseEvent = function(e) {
+const isMouseEvent = (e) => {
     return isNativeMouseEvent(e) || ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === "mouse");
 };
 
-var isTouchEvent = function(e) {
+const isTouchEvent = (e) => {
     return isNativeTouchEvent(e) || ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === "touch");
 };
 
-var isKeyboardEvent = function(e) {
+const isKeyboardEvent = (e) => {
     return eventSource(e) === "keyboard";
 };
 
-var isFakeClickEvent = function(e) {
+const isFakeClickEvent = (e) => {
     return e.screenX === 0 && !e.offsetX && e.pageX === 0;
 };
 
 
-var eventData = function(e) {
+const eventData = (e) => {
     return {
         x: e.pageX,
         y: e.pageY,
@@ -70,7 +130,7 @@ var eventData = function(e) {
     };
 };
 
-var eventDelta = function(from, to) {
+const eventDelta = function(from, to) {
     return {
         x: to.x - from.x,
         y: to.y - from.y,
@@ -79,7 +139,7 @@ var eventDelta = function(from, to) {
 };
 
 
-var hasTouches = function(e) {
+const hasTouches = (e) => {
     if(isNativeTouchEvent(e)) {
         return (e.originalEvent.touches || []).length;
     }
@@ -89,10 +149,10 @@ var hasTouches = function(e) {
     return 0;
 };
 
-var needSkipEvent = function(e) {
+const needSkipEvent = (e) => {
     // TODO: this checking used in swipeable first move handler. is it correct?
-    var $target = $(e.target);
-    var touchInInput = $target.is("input, textarea, select");
+    const $target = $(e.target);
+    const touchInInput = $target.is("input, textarea, select");
 
     if($target.is(".dx-skip-gesture-event *, .dx-skip-gesture-event")) {
         return true;
@@ -109,16 +169,16 @@ var needSkipEvent = function(e) {
 };
 
 
-var fixMethod = function(e) { return e; };
-var setEventFixMethod = function(func) {
+let fixMethod = (e) => { return e; };
+const setEventFixMethod = function(func) {
     fixMethod = func;
 };
-var copyEvent = function(originalEvent) {
+const copyEvent = function(originalEvent) {
     return fixMethod(eventsEngine.Event(originalEvent, originalEvent), originalEvent);
 };
 
-var createEvent = function(originalEvent, args) {
-    var event = copyEvent(originalEvent);
+const createEvent = function(originalEvent, args) {
+    let event = copyEvent(originalEvent);
 
     if(args) {
         extend(event, args);
@@ -127,14 +187,14 @@ var createEvent = function(originalEvent, args) {
     return event;
 };
 
-var fireEvent = function(props) {
-    var event = createEvent(props.originalEvent, props);
+const fireEvent = function(props) {
+    const event = createEvent(props.originalEvent, props);
     eventsEngine.trigger(props.delegateTarget || event.target, event);
     return event;
 };
 
 
-var addNamespace = function(eventNames, namespace) {
+const addNamespace = function(eventNames, namespace) {
     if(!namespace) {
         throw errors.Error("E0017");
     }
@@ -151,6 +211,27 @@ var addNamespace = function(eventNames, namespace) {
     });
 
     return eventNames.join(" ");
+};
+
+const normalizeKeyName = (event) => {
+    const isKeySupported = !!event.key;
+    let key = isKeySupported ? event.key : event.which;
+
+    if(!key) {
+        return;
+    }
+
+    if(isKeySupported) {
+        key = KEY_MAP[key.toLowerCase()] || key;
+    } else {
+        key = LEGACY_KEY_CODES[key] || String.fromCharCode(key);
+    }
+
+    return key;
+};
+
+const getChar = (event) => {
+    return event.key || String.fromCharCode(event.which);
 };
 
 
@@ -172,5 +253,8 @@ module.exports = {
     fireEvent: fireEvent,
 
     addNamespace: addNamespace,
-    setEventFixMethod: setEventFixMethod
+    setEventFixMethod: setEventFixMethod,
+
+    normalizeKeyName: normalizeKeyName,
+    getChar: getChar
 };

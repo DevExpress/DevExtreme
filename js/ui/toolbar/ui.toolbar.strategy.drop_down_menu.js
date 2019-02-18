@@ -37,6 +37,7 @@ var DropDownMenuStrategy = ToolbarStrategy.inherit({
         var that = this;
         return extend(this.callBase(), {
             deferRendering: true,
+            container: that._toolbar.element(),
             menuWidget: ToolbarMenu,
             onOptionChanged: function(e) {
                 if(e.name === "items") {

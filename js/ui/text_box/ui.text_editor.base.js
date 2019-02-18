@@ -40,26 +40,20 @@ var EVENTS_LIST = [
 ];
 
 var CONTROL_KEYS = [
-    "Tab",
-    "Enter",
-    "Shift",
-    "Control",
-    "Alt",
-    "Escape",
-    "PageUp",
-    "PageDown",
-    "End",
-    "Home",
-    "ArrowLeft",
-    "ArrowUp",
-    "ArrowRight",
-    "ArrowDown",
-    // IE9 fallback:
-    "Esc",
-    "Left",
-    "Up",
-    "Right",
-    "Down"
+    "tab",
+    "enter",
+    "shift",
+    "control",
+    "alt",
+    "escape",
+    "pageUp",
+    "pageDown",
+    "end",
+    "home",
+    "leftArrow",
+    "upArrow",
+    "rightArrow",
+    "downArrow",
 ];
 
 /**
@@ -309,6 +303,10 @@ var TextEditorBase = Editor.inherit({
 
     _input: function() {
         return this.$element().find(TEXTEDITOR_INPUT_SELECTOR).first();
+    },
+
+    _isFocused: function() {
+        return focused(this._input()) || this.callBase();
     },
 
     _inputWrapper: function() {
@@ -571,7 +569,7 @@ var TextEditorBase = Editor.inherit({
         this._saveValueChangeEvent(e);
         this.reset();
 
-        !focused($input) && eventsEngine.trigger($input, "focus");
+        !this._isFocused() && eventsEngine.trigger($input, "focus");
         eventsEngine.trigger($input, "input");
     },
 
@@ -684,7 +682,7 @@ var TextEditorBase = Editor.inherit({
             return;
         }
 
-        if(e.which === 13) {
+        if(eventUtils.normalizeKeyName(e) === "enter") {
             this._enterKeyAction({
                 event: e
             });
@@ -756,6 +754,7 @@ var TextEditorBase = Editor.inherit({
                 break;
             case "stylingMode":
                 this._renderStylingMode();
+                break;
             case "valueFormat":
                 this._invalidate();
                 break;

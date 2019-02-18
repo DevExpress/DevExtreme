@@ -1,6 +1,6 @@
-var isDefined = require("../../core/utils/type").isDefined,
-    treeListCore = require("./ui.tree_list.core"),
-    columnsControllerModule = require("../grid_core/ui.grid_core.columns_controller");
+import { isDefined } from '../../core/utils/type';
+import treeListCore from './ui.tree_list.core';
+import columnsControllerModule from '../grid_core/ui.grid_core.columns_controller';
 
 exports.ColumnsController = columnsControllerModule.controllers.columns.inherit((function() {
     return {

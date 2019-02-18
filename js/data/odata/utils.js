@@ -29,37 +29,40 @@ var hasDot = function(x) {
     return /\./.test(x);
 };
 
+var pad = function(text, length, right) {
+    text = String(text);
+    while(text.length < length) {
+        text = right ? (text + "0") : ("0" + text);
+    }
+    return text;
+};
+
 function formatISO8601(date, skipZeroTime, skipTimezone) {
     var bag = [];
-
-    var pad = function(n) {
-        if(n < 10) {
-            return "0".concat(n);
-        }
-        return String(n);
-    };
 
     var isZeroTime = function() {
         return date.getHours() + date.getMinutes() + date.getSeconds() + date.getMilliseconds() < 1;
     };
 
+    var padLeft2 = function(text) { return pad(text, 2); };
+
     bag.push(date.getFullYear());
     bag.push("-");
-    bag.push(pad(date.getMonth() + 1));
+    bag.push(padLeft2(date.getMonth() + 1));
     bag.push("-");
-    bag.push(pad(date.getDate()));
+    bag.push(padLeft2(date.getDate()));
 
     if(!(skipZeroTime && isZeroTime())) {
         bag.push("T");
-        bag.push(pad(date.getHours()));
+        bag.push(padLeft2(date.getHours()));
         bag.push(":");
-        bag.push(pad(date.getMinutes()));
+        bag.push(padLeft2(date.getMinutes()));
         bag.push(":");
-        bag.push(pad(date.getSeconds()));
+        bag.push(padLeft2(date.getSeconds()));
 
         if(date.getMilliseconds()) {
             bag.push(".");
-            bag.push(date.getMilliseconds());
+            bag.push(pad(date.getMilliseconds(), 3));
         }
 
         if(!skipTimezone) {
@@ -84,7 +87,10 @@ function parseISO8601(isoString) {
         result.setHours(Number(time[1]));
         result.setMinutes(Number(time[2]));
         result.setSeconds(Number(time[3]));
-        result.setMilliseconds(Number(String(time[4]).substr(0, 3)) || 0);
+
+        var fractional = (time[4] || "").slice(0, 3);
+        fractional = pad(fractional, 3, true);
+        result.setMilliseconds(Number(fractional));
     }
 
     return result;
@@ -357,7 +363,6 @@ var interpretVerboseJsonFormat = function(obj) {
         return { error: Error("Malformed or unsupported JSON response received") };
     }
 
-    data = data;
     if(isDefined(data.results)) {
         data = data.results;
     }

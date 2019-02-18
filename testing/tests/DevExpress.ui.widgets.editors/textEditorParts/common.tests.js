@@ -38,6 +38,17 @@ var moduleConfig = {
     }
 };
 
+function prepareEvent(eventName) {
+    var params = {},
+        name = eventName.toLowerCase();
+
+    if(name.indexOf("key") !== -1) {
+        params.key = "";
+    }
+
+    return $.Event(name, params);
+}
+
 
 QUnit.module("general");
 
@@ -573,9 +584,9 @@ QUnit.test("event handler callbacks", function(assert) {
 
     assert.equal(called, 0, "when start, testID = 0");
 
-    $.each(EVENTS, function(index, event) {
-        input.trigger(event.toLowerCase());
-        assert.equal(called, event.toLowerCase(), event + " event handler callback trigger");
+    $.each(EVENTS, function(index, eventName) {
+        input.trigger(prepareEvent(eventName));
+        assert.equal(called, eventName.toLowerCase(), eventName + " event handler callback trigger");
     });
 });
 
@@ -594,9 +605,9 @@ QUnit.test("events should be fired in readOnly state", function(assert) {
 
     this.element.dxTextEditor(options);
 
-    $.each(EVENTS, function(index, event) {
-        input.trigger(event.toLowerCase());
-        assert.equal(called, event.toLowerCase(), event + " event handler callback trigger");
+    $.each(EVENTS, function(index, eventName) {
+        input.trigger(prepareEvent(eventName));
+        assert.equal(called, eventName.toLowerCase(), eventName + " event handler callback trigger");
     });
 });
 
@@ -623,7 +634,8 @@ QUnit.test("editor should have actual value in the event handler when this event
 
     $.each(EVENTS, function(index, eventName) {
         input.val(index + 1);
-        input.trigger(eventName.toLowerCase());
+
+        input.trigger(prepareEvent(eventName));
     });
 });
 
@@ -818,7 +830,6 @@ QUnit.test("blur method", function(assert) {
 QUnit.test("onValueChanged fired only when value is changed", function(assert) {
     var textBox = this.instance;
     var $input = this.input;
-    var TAB_KEY = 9;
 
     var valueChangeCounter = 0;
     textBox.option({
@@ -828,7 +839,7 @@ QUnit.test("onValueChanged fired only when value is changed", function(assert) {
         }
     });
 
-    $input.trigger($.Event('keydown', { which: TAB_KEY }));
+    $input.trigger($.Event('keydown', { key: "Tab" }));
 
     assert.equal(valueChangeCounter, 0, "onValueChanged not fired");
 });
@@ -959,8 +970,8 @@ QUnit.test("event handlers are not set", function(assert) {
 
     this.element.dxTextEditor({});
 
-    $.each(EVENTS, function(index, event) {
-        input.trigger(event.toLowerCase());
+    $.each(EVENTS, function(index, eventName) {
+        input.trigger(prepareEvent(eventName));
     });
 });
 
@@ -1008,7 +1019,7 @@ QUnit.test("Enter key event raising (B238135)", function(assert) {
         onEnterKey: handler
     }).dxTextEditor("instance");
 
-    $("#texteditor input").trigger($.Event("keyup", { which: 13 }));
+    $("#texteditor input").trigger($.Event("keyup", { key: "Enter" }));
 
     assert.ok(handler.calledOnce, "event raised");
     assert.ok(handler.getCall(0).args[0].event, "event args have Event prop");
@@ -1027,7 +1038,7 @@ QUnit.test("Enter key event changing handler (B238135)", function(assert) {
         }
     });
 
-    var keyUpEvent = $.Event("keyup", { which: 13 });
+    var keyUpEvent = $.Event("keyup", { key: "Enter" });
 
     $("#texteditor input").trigger(keyUpEvent);
 
@@ -1055,7 +1066,7 @@ QUnit.test("Enter key action is not fired is widget is disposed", function(asser
     instance._disposed = true;
 
     try {
-        $input.trigger($.Event("keyup", { which: 13 }));
+        $input.trigger($.Event("keyup", { key: "Enter" }));
         assert.ok(!enterKeyStub.called, "enter key action should not be called");
         assert.ok(!keyUpStub.called, "key up action should not be called");
         assert.ok(!keyDownStub.called, "key down action should not be called");

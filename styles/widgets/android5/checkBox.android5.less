@@ -35,9 +35,9 @@
     width: @ANDROID5_CHECKBOX_SIZE;
     height: @ANDROID5_CHECKBOX_SIZE;
     border: 2px solid @ANDROID5_CHECKBOX_BACKGROUND;
-    .border-radius(@ANDROID5_CHECKBOX_BORDER_RADIUS);
+    border-radius: @ANDROID5_CHECKBOX_BORDER_RADIUS;
     background-color: transparent;
-    .transition(~"background-color .14s linear, border-color .14s linear");
+    transition: background-color .14s linear, border-color .14s linear;
 }
 
 .dx-checkbox-checked {
@@ -51,9 +51,9 @@
             border-bottom: 2px solid #fff;
             border-right: 2px solid #fff;
             position: absolute;
-            .rotate(45deg);
-            .animation(checkbox-icon-extension 140ms ease-out forwards);
-            .box-sizing(content-box);
+            transform: rotate(45deg);
+            animation: checkbox-icon-extension 140ms ease-out forwards;
+            box-sizing: content-box;
             width: 35%;
             height: 70%;
             top: -1px;
@@ -69,7 +69,7 @@
 .dx-checkbox-indeterminate {
     .dx-checkbox-icon {
         border-color: @ANDROID5_CHECKBOX_CHECKED_BACKGROUND;
-        .box-shadow(inset 0px 0px 0px 2px @ANDROID5_CHECKBOX_CHECKED_BACKGROUND);
+        box-shadow: inset 0px 0px 0px 2px @ANDROID5_CHECKBOX_CHECKED_BACKGROUND;
     }
 
     &.dx-state-focused, &.dx-state-active {
@@ -94,7 +94,7 @@
 
         &.dx-checkbox-indeterminate {
             .dx-checkbox-icon {
-                .box-shadow(inset 0px 0px 0px 2px @ANDROID5_CHECKBOX_DISABLED_BACKGROUND);
+                box-shadow: inset 0px 0px 0px 2px @ANDROID5_CHECKBOX_DISABLED_BACKGROUND;
             }
         }
     }

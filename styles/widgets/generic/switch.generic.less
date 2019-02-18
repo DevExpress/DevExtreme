@@ -78,7 +78,7 @@
     height: @GENERIC_SWITCH_HEIGHT;
     border: @GENERIC_SWITCH_BORDER_WEIGHT solid @switch-border-color;
     background: @switch-bg;
-    .border-radius(@switch-border-radius);
+    border-radius: @switch-border-radius;
 }
 
 .dx-switch-inner {
@@ -97,7 +97,7 @@
     font-size: @GENERIC_SWITCH_FONT_SIZE;
     font-weight: 600;
     .dx-overflow();
-    .box-sizing();
+    box-sizing: border-box;
 }
 
 .dx-switch-off {
@@ -117,7 +117,7 @@
     width: @GENERIC_SWITCH_HANDLE_WIDTH;
     height: @GENERIC_SWITCH_INNER_SIZE - @GENERIC_SWITCH_HANDLE_OFFSET*2;
     margin-top: @GENERIC_SWITCH_HANDLE_OFFSET;
-    .box-sizing();
+    box-sizing: border-box;
 
     &:before {
         display: block;
@@ -125,7 +125,7 @@
         width: 100%;
         height: 100%;
         background-color: @switch-handle-off-bg;
-        .border-radius(@switch-handle-border-radius);
+        border-radius: @switch-handle-border-radius;
     }
 }
 

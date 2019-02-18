@@ -6,15 +6,15 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     domUtils = require("core/utils/dom"),
     internals = require("ui/form/ui.form").__internals,
-    themes = require("ui/themes");
+    themes = require("ui/themes"),
+    device = require("core/devices").real();
 
 require("ui/text_area");
 
 require("common.css!");
 require("generic_light.css!");
 
-var INVALID_CLASS = "dx-invalid",
-    VALIDATION_SUMMARY_ITEM_CLASS = "dx-validationsummary-item";
+var INVALID_CLASS = "dx-invalid";
 
 QUnit.testStart(function() {
     var markup =
@@ -1394,6 +1394,43 @@ QUnit.test("Get button instance", function(assert) {
     assert.strictEqual(formInvalidateSpy.callCount, 0, "Invalidate does not called");
 });
 
+QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
+    ["option", "itemOption", "editor.option"].forEach(function(setOptionWay) {
+        var form = $("#form").dxForm({
+            items: [{
+                itemType: "button",
+                name: "button1",
+                buttonOptions: { icon: "icon1" }
+            }]
+        }).dxForm("instance");
+
+        if(device.deviceType === "desktop") {
+            $("#form").find(".dx-button").focus();
+            assert.ok($("#form").find(".dx-button").is(":focus"), "initial focus");
+        }
+
+        switch(setOptionWay) {
+            case "option":
+                form.option("items[0].buttonOptions.icon", "icon2");
+                break;
+            case "itemOption": {
+                const buttonOptions = form.itemOption("button1").buttonOptions;
+                buttonOptions.icon = "icon2";
+                form.itemOption("button1", "buttonOptions", buttonOptions);
+                break;
+            }
+            case "editor.option":
+                form.getButton("button1").option("icon", "icon2");
+                break;
+        }
+
+        assert.strictEqual(form.getButton("button1").option("icon"), "icon2");
+        if(device.deviceType === "desktop") {
+            assert.ok($("#form").find(".dx-button").is(":focus") === (setOptionWay !== "itemOption"), "final focus");
+        }
+    });
+});
+
 QUnit.test("Get editor instance", function(assert) {
     // arrange
     var $testContainer = $("#form");
@@ -1472,9 +1509,9 @@ QUnit.test("UpdateDimensions", function(assert) {
     assert.ok(isSizeUpdated);
 });
 
-function triggerKeyUp($element, keyCode) {
+function triggerKeyUp($element, key) {
     var e = $.Event("keyup");
-    e.which = keyCode;
+    e.key = key;
     $($element.find("input").first()).trigger(e);
 }
 
@@ -1496,7 +1533,7 @@ QUnit.test("Check component instance onEditorEnterKey", function(assert) {
 
     // act
     editor = form.getEditor("work");
-    triggerKeyUp(editor.$element(), 13);
+    triggerKeyUp(editor.$element(), "Enter");
 
     // assert
     assert.notEqual(testArgs.component, undefined, "component");
@@ -1876,225 +1913,6 @@ QUnit.test("'itemOption' should get a group item by the name option", function(a
         name: "simpleItem",
         dataField: "LastName"
     }], "has correct items");
-});
-
-function getID(form, dataField) {
-    return "dx_" + form.option("formID") + "_" + dataField;
-}
-
-QUnit.test("Validate via validation rules", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
-        formData: {
-            name: "",
-            lastName: "Kyle",
-            firstName: ""
-        },
-        customizeItem: function(item) {
-            if(item.dataField !== "lastName") {
-                item.validationRules = [{ type: "required" }];
-            }
-        }
-    }).dxForm("instance");
-
-    // act
-    form.validate();
-
-    // assert
-    var invalidSelector = "." + INVALID_CLASS;
-    assert.equal(form.$element().find(invalidSelector).length, 2, "invalid editors count");
-    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
-});
-
-QUnit.test("Validate with a custom validation group", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
-        validationGroup: "Custom validation group",
-        formData: {
-            name: "",
-            lastName: "Kyle",
-            firstName: ""
-        },
-        customizeItem: function(item) {
-            if(item.dataField !== "lastName") {
-                item.validationRules = [{ type: "required" }];
-            }
-        }
-    }).dxForm("instance");
-
-    // act
-    form.validate();
-
-    // assert
-    var invalidSelector = "." + INVALID_CLASS;
-    assert.equal(form.$element().find(invalidSelector).length, 2, "invalid editors count");
-    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
-});
-
-QUnit.test("Reset validation summary items when using a custom validation group", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
-        validationGroup: "Custom validation group",
-        showValidationSummary: true,
-        formData: {
-            name: "",
-            lastName: "John",
-            firstName: ""
-        },
-        customizeItem: function(item) {
-            if(item.dataField !== "lastName") {
-                item.validationRules = [{ type: "required" }];
-            }
-        }
-    }).dxForm("instance");
-
-    // act
-    form.validate();
-    form.resetValues();
-
-    // assert
-    var $invalidElements = form.$element().find("." + INVALID_CLASS),
-        $validationSummaryItems = form.$element().find("." + VALIDATION_SUMMARY_ITEM_CLASS);
-
-    assert.equal($invalidElements.length, 0, "There is no invalid elements");
-    assert.equal($validationSummaryItems.length, 0, "There is no validation summary items");
-});
-
-QUnit.test("Validate form when several forms are rendered", function(assert) {
-    // arrange
-    var form1 = $("#form").dxForm({
-            formData: {
-                name: "",
-                lastName: "Kyle",
-                firstName: ""
-            },
-            customizeItem: function(item) {
-                if(item.dataField !== "lastName") {
-                    item.validationRules = [{ type: "required" }];
-                }
-            }
-        }).dxForm("instance"),
-        form2 = $("#form2").dxForm({
-            formData: {
-                name2: "",
-                lastName2: "Man",
-                firstName2: ""
-            },
-            customizeItem: function(item) {
-                if(item.dataField !== "lastName") {
-                    item.validationRules = [{ type: "required" }];
-                }
-            }
-        }).dxForm("instance");
-
-    // act
-    form1.validate();
-
-    // assert
-    var invalidSelector = "." + INVALID_CLASS;
-    assert.equal(form1.$element().find(invalidSelector).length, 2, "invalid editors count");
-    assert.equal(form1.$element().find(invalidSelector + " [id=" + getID(form1, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form1.$element().find(invalidSelector + " [id=" + getID(form1, "firstName") + "]").length, 1, "invalid firstName editor");
-
-    assert.equal(form2.$element().find(invalidSelector).length, 0, "invalid editors count");
-    assert.equal(form2.$element().find(invalidSelector + " [id=" + getID(form2, "name2") + "]").length, 0, "invalid name editor");
-    assert.equal(form2.$element().find(invalidSelector + " [id=" + getID(form2, "firstName2") + "]").length, 0, "invalid firstName editor");
-});
-
-QUnit.test("Validate via 'isRequired' item option", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
-        formData: {
-            name: "",
-            lastName: "Kyle",
-            firstName: ""
-        },
-        customizeItem: function(item) {
-            if(item.dataField !== "lastName") {
-                item.isRequired = true;
-            }
-            if(item.dataField === "name") {
-                item.label = { text: "Middle name" };
-            }
-        }
-    }).dxForm("instance");
-
-    // act
-    form.validate();
-
-    // assert
-    var invalidSelector = "." + INVALID_CLASS;
-    assert.equal(form.$element().find(invalidSelector).length, 2, "invalid editors count");
-    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.$element().find(invalidSelector + "-message").first().text(), "Middle name is required", "Message contains the custom label name of validated field by default");
-    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
-    assert.equal(form.$element().find(".dx-invalid-message").last().text(), "First Name is required", "Message contains the name of validated field by default if label isn't defined");
-});
-
-QUnit.test("Validate via validationRules when rules and 'isRequired' item option are both defined", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
-        formData: {
-            name: "",
-            lastName: "Kyle",
-            firstName: ""
-        },
-        customizeItem: function(item) {
-            item.isRequired = true;
-            item.validationRules = [{ type: 'stringLength', max: 3 }];
-        }
-    }).dxForm("instance");
-
-    // act
-    form.validate();
-
-    // assert
-    var invalidSelector = "." + INVALID_CLASS;
-    assert.equal(form.$element().find(invalidSelector).length, 1, "invalid editors count");
-    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "lastName") + "]").length, 1, "invalid lastName editor");
-});
-
-QUnit.test("Reset validation summary when values are reset in form", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
-        formData: {
-            name: "",
-            lastName: "",
-            firstName: ""
-        },
-        showValidationSummary: true,
-        customizeItem: function(item) {
-            item.isRequired = true;
-        }
-    }).dxForm("instance");
-
-    // act
-    form.validate();
-    form.resetValues();
-
-    // assert
-    assert.equal($("." + VALIDATION_SUMMARY_ITEM_CLASS).length, 0, "validation summary items");
-});
-
-QUnit.test("Changing an validationRules options of an any item does not invalidate whole form (T673188)", function(assert) {
-    // arrange
-    var form = $("#form").dxForm({
-            formData: {
-                lastName: "Kyle",
-                count: 1
-            },
-            items: [
-                { dataField: "firstName", editorType: "dxTextBox" },
-                { dataField: "count", editorType: "dxTextBox", validationRules: [{ type: "range", max: 10 }] }
-            ]
-        }).dxForm("instance"),
-        formInvalidateSpy = sinon.spy(form, "_invalidate");
-
-    form.option("items[1].validationRules[0].max", 11);
-    assert.strictEqual(form.option("items[1].validationRules[0].max"), 11, "correct validationRule option");
-    assert.strictEqual(formInvalidateSpy.callCount, 0, "Invalidate does not called");
 });
 
 QUnit.test("Changing an editor/button options of an any item does not invalidate whole form (T311892, T681241)", function(assert) {

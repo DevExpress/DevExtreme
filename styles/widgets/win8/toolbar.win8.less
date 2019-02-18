@@ -96,10 +96,10 @@
     padding: @WIN8_TOOLBAR_BUTTON_PADDING;
 
     .dx-icon {
-        .box-sizing();
+        box-sizing: border-box;
         .dx-icon-sizing(@WIN8_TOOLBAR_BUTTON_ICON_SIZE, @WIN8_TOOLBAR_BUTTON_ICON_CONTAINER_SIZE, @WIN8_TOOLBAR_BUTTON_ICON_BORDER_WIDTH);
         border: 2px solid @WIN8_BASE_TEXT;
-        .border-radius(50%);
+        border-radius: 50%;
     }
 
     .dx-button-has-icon {
@@ -210,7 +210,7 @@
 }
 
 .dx-toolbar .dx-toolbar-button .dx-icon {
-    .box-sizing();
+    box-sizing: border-box;
 }
 
 .dx-toolbar-menu-section {

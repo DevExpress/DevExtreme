@@ -516,7 +516,16 @@ var Pager = Widget.inherit({
         if(that.option("showNavigationButtons") || that.option("lightModeEnabled")) {
             $button = $("<div>").addClass(PAGER_NAVIGATE_BUTTON);
 
+            var pointerUpHappened = false;
+
             eventsEngine.on($button, eventUtils.addNamespace([pointerEvents.up, clickEvent.name], that.Name + "Pages"), function(e) {
+                if(e.type === "dxpointerup") {
+                    pointerUpHappened = true;
+                } else if(pointerUpHappened) {
+                    pointerUpHappened = false;
+                    return;
+                }
+
                 clickAction({ event: e });
             });
 

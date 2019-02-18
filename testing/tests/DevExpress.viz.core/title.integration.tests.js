@@ -38,11 +38,12 @@ QUnit.test("Destruction", function(assert) {
 QUnit.test("Options and canvas", function(assert) {
     this.title.stub("layoutOptions").returns({ horizontalAlignment: "left", verticalAlignment: "top" });
     this.title.stub("measure").returns([100, 80]);
-    this.createWidget({
+    var widget = this.createWidget({
         title: "Hello"
     });
 
-    assert.strictEqual(this.title.update.lastCall.args[0].text, "Hello", "options");
+    assert.deepEqual(this.title.update.lastCall.args[0], widget._themeManager.theme("title"), "theme options");
+    assert.strictEqual(this.title.update.lastCall.args[1], "Hello", "user options");
     assert.deepEqual(this.title.measure.lastCall.args, [[600, 400]], "size");
 });
 
@@ -66,7 +67,7 @@ QUnit.test("title / size is changed", function(assert) {
 
     widget.option({ title: "new-title-options" });
 
-    assert.strictEqual(this.title.update.lastCall.args[0].text, "new-title-options", "options");
+    assert.strictEqual(this.title.update.lastCall.args[1], "new-title-options", "options");
     assert.strictEqual(this.title.measure.callCount, 1, "layout");
 });
 
@@ -81,6 +82,6 @@ QUnit.test("title / size is not changed", function(assert) {
 
     widget.option({ title: "new-title-options" });
 
-    assert.strictEqual(this.title.update.lastCall.args[0].text, "new-title-options", "options");
+    assert.strictEqual(this.title.update.lastCall.args[1], "new-title-options", "options");
     assert.strictEqual(this.title.measure.callCount, 0, "no layout");
 });

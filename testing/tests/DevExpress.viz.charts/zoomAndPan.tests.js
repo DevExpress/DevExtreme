@@ -15,7 +15,7 @@ const environment = {
         this.tooltipHiddenSpy = sinon.spy();
     },
     createChart: function(options) {
-        const chart = $("#chart").dxChart($.extend(true, {
+        const chart = $("#chart").dxChart($.extend(true, {}, {
             size: {
                 width: 800,
                 height: 600
@@ -402,6 +402,64 @@ QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert)
 
 QUnit.module("Wheel zooming", environment);
 
+QUnit.test("[T684665] Chart - zooming-out with multiple value axes leads to wrong axes synchronization", function(assert) {
+    const chart = this.createChart({
+        zoomAndPan: {
+            valueAxis: "both",
+            argumentAxis: "none",
+            dragToZoom: true
+        },
+        size: {
+            height: 500
+        },
+        scrollBar: { visible: true },
+        valueAxis: [
+            { name: "a1" },
+            { name: "a2" }
+        ],
+        panes: [
+            { name: "p2" }
+        ],
+        dataSource: Array.apply(null, Array(100)).map((_, i) => ({ arg: i, val1: Math.sin(i * 2), val2: Math.sin(i * 3 + 10) / 3 })),
+        series: [
+            { pane: "p2", axis: "a1", valueField: "val1" },
+            { pane: "p2", axis: "a2", valueField: "val2" }
+        ],
+        commonAxisSettings: {
+            label: { visible: true }
+        }
+    });
+
+    // act
+    this.pointer.start({ x: 10, y: 100 });
+    this.pointer.wheel(100);
+    this.pointer.wheel(-100);
+
+    const mainValue = 0;
+    const valueAxes = [chart.getValueAxis("a1"), chart.getValueAxis("a2")];
+    const labelsCoords = valueAxes.map((axis) => {
+        let tick = {};
+        for(let i = 0; i < axis._majorTicks.length; i++) {
+            if(axis._majorTicks[i].value === mainValue) {
+                tick = axis._majorTicks[i];
+                break;
+            }
+        }
+
+        const coords = tick.coords || {};
+
+        return [coords.x, coords.y];
+    });
+
+    const stubCoords = [undefined, undefined];
+
+    assert.equal(labelsCoords.length, 2);
+    assert.notDeepEqual(labelsCoords[0], stubCoords);
+    assert.notDeepEqual(labelsCoords[1], stubCoords);
+
+    assert.deepEqual(labelsCoords[0], labelsCoords[1]);
+});
+
 QUnit.test("Reject zoom-in by minVisualRangeLength option", function(assert) {
     const onZoomStart = sinon.spy(),
         onZoomEnd = sinon.spy(),
@@ -594,8 +652,10 @@ QUnit.test("zoom value axis", function(assert) {
     assert.equal(onZoomEnd.callCount, 1);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, valueAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 0.9, endValue: 4.2 });
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 1, endValue: 4 });
-    assert.equal(onZoomEnd.getCall(0).args[0].shift, -0.05);
+    const zoomEndRange = onZoomEnd.getCall(0).args[0].range;
+    assert.roughEqual(zoomEndRange.startValue, 1, 0.1);
+    assert.roughEqual(zoomEndRange.endValue, 4, 0.1);
+    assert.roughEqual(onZoomEnd.getCall(0).args[0].shift, -0.05, 0.01);
     assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1.1);
 });
 
@@ -644,6 +704,10 @@ QUnit.test("Multiaxes, zoom axes only in one pane", function(assert) {
                 valueAxis: "zoom",
                 allowMouseWheel: true
             },
+            commonAxisSettings: {
+                valueMarginsEnabled: false,
+                endOnTick: false
+            },
             panes: [
                 { name: "p1" },
                 { name: "p2" }
@@ -682,7 +746,7 @@ QUnit.test("Multiaxes, zoom axes only in one pane", function(assert) {
 
     assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis2);
     assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 1.8, endValue: 8.4 });
-    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 2, endValue: 8 });
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 2, endValue: 8 }, "axis 2 onZoomEnd range");
 });
 
 QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
@@ -729,7 +793,9 @@ QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
     assert.equal(onZoomEnd.callCount, 1);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, valueAxis3);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 5.8, endValue: 14.6 });
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 6, endValue: 14 });
+    const zoomEndRange = onZoomEnd.getCall(0).args[0].range;
+    assert.roughEqual(zoomEndRange.startValue, 6, 0.1);
+    assert.roughEqual(zoomEndRange.endValue, 14, 0.1);
 });
 
 QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert) {
@@ -782,6 +848,10 @@ QUnit.test("Mouse over value axis - zoom only value axes in one pane axes", func
                 argumentAxis: "zoom",
                 valueAxis: "zoom",
                 allowMouseWheel: true
+            },
+            commonAxisSettings: {
+                valueMarginsEnabled: false,
+                endOnTick: false
             },
             panes: [
                 { name: "p1" },
@@ -1426,6 +1496,62 @@ QUnit.test("With panKey pressed drag action zooms chart", function(assert) {
 });
 
 QUnit.module("Touch devices", environment);
+
+QUnit.test("[T684665] Chart - zooming-out with multiple value axes leads to wrong axes synchronization", function(assert) {
+    const chart = this.createChart({
+        zoomAndPan: {
+            valueAxis: "both",
+            argumentAxis: "none",
+            dragToZoom: true
+        },
+        scrollBar: { visible: true },
+        valueAxis: [
+            { name: "a1" },
+            { name: "a2" }
+        ],
+        panes: [
+            { name: "p2" }
+        ],
+        dataSource: Array.apply(null, Array(100)).map((_, i) => ({ arg: i, val1: Math.sin(i * 2), val2: Math.sin(i * 3 + 10) / 3 })),
+        series: [
+            { pane: "p2", axis: "a1", valueField: "val1" },
+            { pane: "p2", axis: "a2", valueField: "val2" }
+        ],
+        commonAxisSettings: {
+            label: { visible: true }
+        }
+    });
+
+    // act
+    const $root = $(chart._renderer.root.element);
+    $root.trigger($.Event("dxpointerdown", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 100, pageY: 100 }, { pointerId: 2, pageX: 150, pageY: 150 }] }));
+    $root.trigger($.Event("dxpointermove", { pointerType: "touch", pointers: [{ pointerId: 1, pageX: 100, pageY: 100 }, { pointerId: 2, pageX: 200, pageY: 200 }] }));
+    $root.trigger($.Event("dxpointerup", { pointerType: "touch", pointers: [] }));
+
+    const mainValue = 0;
+    const valueAxes = [chart.getValueAxis("a1"), chart.getValueAxis("a2")];
+    const labelsCoords = valueAxes.map((axis) => {
+        let tick = {};
+        for(let i = 0; i < axis._majorTicks.length; i++) {
+            if(axis._majorTicks[i].value === mainValue) {
+                tick = axis._majorTicks[i];
+                break;
+            }
+        }
+
+        const coords = tick.coords || {};
+
+        return [coords.x, coords.y];
+    });
+
+    const stubCoords = [undefined, undefined];
+
+    assert.equal(labelsCoords.length, 2);
+    assert.notDeepEqual(labelsCoords[0], stubCoords);
+    assert.notDeepEqual(labelsCoords[1], stubCoords);
+
+    assert.deepEqual(labelsCoords[0], labelsCoords[1]);
+});
 
 QUnit.test("Drag by touch pans chart, even if dragToZoom = true", function(assert) {
     const onZoomStart = sinon.spy(),
@@ -2308,6 +2434,12 @@ QUnit.test("Do nothing if no actions allowed", function(assert) {
                     endValue: 7
                 }
             },
+            valueAxis: {
+                visualRange: {
+                    startValue: 30,
+                    endValue: 70
+                }
+            },
             zoomAndPan: {
                 argumentAxis: "none",
                 valueAxis: "none",
@@ -2443,6 +2575,81 @@ QUnit.test("Reject API zoom-in both axes by default minVisualRangeLength option"
     assert.equal(onZoomEnd.getCall(1).args[0].zoomFactor, 1);
 });
 
+QUnit.module("Axes with empty range", environment);
+
+QUnit.test("Pan - do nothing", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy();
+    this.createChart({
+        dataSource: null,
+        argumentAxis: {},
+        valueAxis: {},
+        zoomAndPan: {
+            argumentAxis: "both",
+            valueAxis: "both"
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
+
+    // act
+    const e = this.pointer.start({ x: 100, y: 250, cancelable: true }).dragStart().lastEvent();
+
+    // assert
+    assert.strictEqual(e.cancel, true);
+    assert.strictEqual(e.originalEvent.cancel, true);
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+});
+
+QUnit.test("Mouse wheel - do nothing", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy();
+    this.createChart({
+        dataSource: null,
+        argumentAxis: {},
+        valueAxis: {},
+        zoomAndPan: {
+            argumentAxis: "both",
+            valueAxis: "both",
+            allowMouseWheel: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
+
+    // act
+    this.pointer.start({ x: 200, y: 250 }).wheel(10);
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+});
+
+QUnit.test("Shutter zoom - do nothing", function(assert) {
+    const onZoomStart = sinon.spy(),
+        onZoomEnd = sinon.spy();
+    this.createChart({
+        dataSource: null,
+        argumentAxis: {},
+        valueAxis: {},
+        zoomAndPan: {
+            valueAxis: "zoom",
+            argumentAxis: "zoom",
+            dragToZoom: true
+        },
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd
+    });
+
+    // act
+    this.pointer.start({ x: 200, y: 120 }).dragStart().drag(400, 240).dragEnd();
+
+    // assert
+    assert.equal(onZoomStart.callCount, 0);
+    assert.equal(onZoomEnd.callCount, 0);
+});
+
 QUnit.module("Prevent default behavior", environment);
 
 QUnit.test("On pan", function(assert) {
@@ -2470,6 +2677,56 @@ QUnit.test("On pan", function(assert) {
     assert.equal(preventDefault.callCount, 3);
     assert.equal(stopPropagation.callCount, 3);
     assert.equal(this.trackerStopHandling.callCount, 3);
+});
+
+QUnit.test("Pan action in pane without zoom if another pane has a zoom", function(assert) {
+    const preventDefault = sinon.spy(),
+        stopPropagation = sinon.spy(),
+        chart = this.createChart({
+            dataSource: [{
+                arg: "a1",
+                val1: 4.1,
+                val2: 109
+            }, {
+                arg: "a2",
+                val1: 10,
+                val2: 104
+            }],
+            panes: [{
+                name: "topPane"
+            }, {
+                name: "bottomPane"
+            }],
+            zoomAndPan: {
+                valueAxis: "both",
+                allowMouseWheel: true
+            },
+            series: [{
+                pane: "topPane",
+                valueField: "val1"
+            }, {
+                valueField: "val2"
+            }],
+            valueAxis: [{
+                pane: "bottomPane",
+                name: "bottomAxis"
+            }, {
+                visualRange: {
+                    startValue: 4,
+                    endValue: 5
+                },
+                pane: "topPane",
+                name: "topAxis"
+            }]
+        });
+
+    // act
+    const $root = $(chart._renderer.root.element);
+    $root.trigger(new $.Event("dxmousewheel", { d: 10, pageX: 0, pageY: 350, preventDefault: preventDefault, stopPropagation: stopPropagation }));
+
+    assert.equal(preventDefault.callCount, 0);
+    assert.equal(stopPropagation.callCount, 0);
+    assert.equal(this.trackerStopHandling.callCount, 0);
 });
 
 QUnit.test("Default behavior - no prevent. On panning by drag (goes to the edge)", function(assert) {

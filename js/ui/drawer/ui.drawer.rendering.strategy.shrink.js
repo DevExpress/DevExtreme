@@ -2,6 +2,7 @@ import { animation } from "./ui.drawer.rendering.strategy";
 import DrawerStrategy from "./ui.drawer.rendering.strategy";
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
+import { camelize } from "../../core/utils/inflector";
 
 class ShrinkStrategy extends DrawerStrategy {
     renderPosition(offset, animate) {
@@ -24,7 +25,7 @@ class ShrinkStrategy extends DrawerStrategy {
                 });
                 animation.margin(animationConfig);
             } else {
-                $panel.css("margin" + direction.charAt(0).toUpperCase() + direction.substr(1), panelOffset);
+                $panel.css("margin" + camelize(direction, true), panelOffset);
             }
         }
 
@@ -53,6 +54,6 @@ class ShrinkStrategy extends DrawerStrategy {
     needOrderContent(position, isRtl) {
         return (isRtl ? position === "left" : position === "right") || position === "bottom";
     }
-};
+}
 
 module.exports = ShrinkStrategy;

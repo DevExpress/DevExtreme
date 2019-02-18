@@ -1,4 +1,4 @@
-var isDefined = require("../../core/utils/type").isDefined;
+import { isDefined } from "../../core/utils/type";
 
 var SORT_CLASS = "dx-sort",
     SORT_NONE_CLASS = "dx-sort-none",

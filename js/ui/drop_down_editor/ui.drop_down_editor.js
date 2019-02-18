@@ -353,9 +353,9 @@ var DropDownEditor = TextBox.inherit({
 
     _renderTemplatedField: function(fieldTemplate, data) {
         var isFocused = focused(this._input());
-        this._resetFocus(isFocused);
-
         var $container = this._$container;
+
+        this._disposeKeyboardProcessor();
 
         $container.empty();
         this._$dropDownButton = null;
@@ -377,12 +377,6 @@ var DropDownEditor = TextBox.inherit({
             }
         });
     },
-
-    _resetFocus: function(isFocused) {
-        this._cleanFocusState();
-        isFocused && eventsEngine.trigger(this._input(), "focusout");
-    },
-
 
     _fieldRenderData: function() {
         return this.option("value");

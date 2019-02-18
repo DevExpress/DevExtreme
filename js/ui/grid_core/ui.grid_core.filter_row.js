@@ -1,14 +1,15 @@
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    iteratorUtils = require("../../core/utils/iterator"),
-    modules = require("./ui.grid_core.modules"),
-    gridCoreUtils = require("./ui.grid_core.utils"),
-    messageLocalization = require("../../localization/message"),
-    Editor = require("../editor/editor"),
-    Overlay = require("../overlay"),
-    Menu = require("../menu");
+import $ from "../../core/renderer";
+import eventsEngine from "../../events/core/events_engine";
+import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { normalizeKeyName } from "../../events/utils";
+import iteratorUtils from "../../core/utils/iterator";
+import modules from "./ui.grid_core.modules";
+import gridCoreUtils from "./ui.grid_core.utils";
+import messageLocalization from "../../localization/message";
+import Editor from "../editor/editor";
+import Overlay from "../overlay";
+import Menu from "../menu";
 
 var OPERATION_ICONS = {
     "=": "filter-operation-equals",
@@ -264,7 +265,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
                         var $prevElement = $cell.find("[tabindex]").not(e.target).first();
 
-                        if(e.which === 9 && e.shiftKey) {
+                        if(normalizeKeyName(e) === "tab" && e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
 
@@ -281,7 +282,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
                     eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
-                        if(e.which === 9 && !e.shiftKey) {
+                        if(normalizeKeyName(e) === "tab" && !e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
                             eventsEngine.trigger($cell.next().find("[tabindex]").first(), "focus");

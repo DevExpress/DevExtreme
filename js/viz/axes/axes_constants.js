@@ -11,14 +11,6 @@ module.exports = {
     bottom: "bottom",
     center: "center",
 
-    canvasPositionPrefix: "canvas_position_",
-    canvasPositionTop: "canvas_position_top",
-    canvasPositionBottom: "canvas_position_bottom",
-    canvasPositionLeft: "canvas_position_left",
-    canvasPositionRight: "canvas_position_right",
-    canvasPositionStart: "canvas_position_start",
-    canvasPositionEnd: "canvas_position_end",
-
     horizontal: "horizontal",
     vertical: "vertical",
 

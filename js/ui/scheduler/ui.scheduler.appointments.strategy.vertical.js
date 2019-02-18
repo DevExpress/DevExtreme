@@ -44,7 +44,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _getItemPosition: function(item) {
         var allDay = this.isAllDay(item),
-            isRecurring = !!item.recurrenceRule;
+            isRecurring = !!this.instance.fire("getField", "recurrenceRule", item);
 
         if(allDay) {
             return this.callBase(item);

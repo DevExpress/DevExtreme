@@ -145,7 +145,7 @@ var DateViewStrategy = DateBoxStrategy.inherit({
         return {
             value: this.dateBoxValue() || new Date(),
             type: this.dateBox.option("type"),
-            minDate: this.dateBox.dateOption("min") || new Date(1900, 1, 1),
+            minDate: this.dateBox.dateOption("min") || new Date(1900, 0, 1),
             maxDate: this.dateBox.dateOption("max") || new Date(Date.now() + 50 * dateUtils.ONE_YEAR),
             onDisposing: (function() {
                 this._widget = null;

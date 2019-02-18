@@ -80,7 +80,7 @@ const getThemeAndColorScheme = config => {
             console.log(`The base theme with name ${config.baseTheme} does not exist.`);
         }
     } else if(config.themeId) {
-        foundTheme = themes.find(t => t.themeId === config.themeId);
+        foundTheme = themes.find(t => t.themeId === parseInt(config.themeId));
         if(!foundTheme) {
             console.log(`The theme with ID ${config.themeId} does not exist.`);
         }

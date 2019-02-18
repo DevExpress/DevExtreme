@@ -1112,6 +1112,27 @@ QUnit.test("Arrange", function(assert) {
     assert.deepEqual(set.lastCall.args, ["test-name", "color", { partition: [], values: ["c1", "c2", "c3"] }], "data is set");
 });
 
+// T712894
+QUnit.test("Refresh. All values is zero", function(assert) {
+    var figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() };
+    this.context.settings = { dataField: "data-field" };
+
+    pointPieStrategy.refresh(this.context, figure, "test-data",
+        {
+            attribute: function() {
+                return this.values;
+            },
+            values: [0, 0, 0, 0]
+        },
+        { _colors: ["c1", "c2", "c3"], size: 8 });
+
+    assert.strictEqual(this.renderer.arc.callCount, 4, "count");
+    assert.deepEqual(this.renderer.arc.getCall(0).args, [0, 0, 0, 4, 90, 180], "arc 1 is created");
+    assert.deepEqual(this.renderer.arc.getCall(1).args, [0, 0, 0, 4, 180, 270], "arc 2 is created");
+    assert.deepEqual(this.renderer.arc.getCall(2).args, [0, 0, 0, 4, 270, 360], "arc 3 is created");
+    assert.deepEqual(this.renderer.arc.getCall(3).args, [0, 0, 0, 4, 360, 450], "arc 4 is created");
+});
+
 QUnit.module("Point image strategy", environment);
 
 QUnit.test("Types", function(assert) {

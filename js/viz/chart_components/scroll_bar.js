@@ -114,13 +114,17 @@ ScrollBar.prototype = {
     },
 
     init: function(range, stick) {
-        var that = this;
-        that._translateWithOffset = (range.axisType === "discrete" && !stick && 1) || 0;
+        const that = this;
+        const isDiscrete = range.axisType === "discrete";
+        that._translateWithOffset = (isDiscrete && !stick && 1) || 0;
         that._translator.update(extend({}, range, {
             minVisible: null,
             maxVisible: null,
             visibleCategories: null
-        }), that._canvas, { isHorizontal: !that._layoutOptions.vertical, stick: stick });
+        }, isDiscrete && {
+            min: null,
+            max: null
+        } || {}), that._canvas, { isHorizontal: !that._layoutOptions.vertical, stick: stick });
         return that;
     },
 

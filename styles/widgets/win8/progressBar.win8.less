@@ -20,10 +20,10 @@
     height: 5px;
     background-color: @WIN8_PROGRESSBAR_RANGE_COLOR;
     opacity: 0;
-    .border-radius(100%);
-    .animation(loader 4s infinite);
-    .animation-timing(cubic-bezier(0.030, 0.615, 0.995, 0.415));
-    .animation-fill-mode();
+    border-radius: 100%;
+    animation: loader 4s infinite;
+    animation-timing-function: cubic-bezier(0.030, 0.615, 0.995, 0.415);
+    animation-fill-mode: both;
 }
 
 .dx-state-disabled.dx-progressbar {
@@ -34,7 +34,7 @@
     }
 
     .dx-progressbar-animating-segment {
-        .animation(none);
+        animation: none;
         opacity: 1;
         background-color: @WIN8_PROGRESSBAR_DISABLED_STATE_RANGE_COLOR;
     }
@@ -65,32 +65,32 @@
     .dx-progressbar-animating-segment {
         left: auto;
         right: 0px;
-        .animation-name(loader-rtl);
-        .animation-duration(4s);
-        .animation-iteration-count(infinite);
-        .animation-timing(cubic-bezier(0.030, 0.615, 0.995, 0.415));
-        .animation-fill-mode();
+        animation-name: loader-rtl;
+        animation-duration: 4s;
+        animation-iteration-count: infinite;
+        animation-timing-function: cubic-bezier(0.030, 0.615, 0.995, 0.415);
+        animation-fill-mode: both;
     }
 }
 
 .dx-progressbar-animating-segment-1 {
-    .animation-delay(1s);
+    animation-delay: 1s;
 }
 
 .dx-progressbar-animating-segment-2 {
-    .animation-delay(0.8s);
+    animation-delay: 0.8s;
 }
 
 .dx-progressbar-animating-segment-3 {
-    .animation-delay(0.6s);
+    animation-delay: 0.6s;
 }
 
 .dx-progressbar-animating-segment-4 {
-    .animation-delay(0.4s);
+    animation-delay: 0.4s;
 }
 
 .dx-progressbar-animating-segment-5 {
-    .animation-delay(0.2s);
+    animation-delay: 0.2s;
 }
 
 @-webkit-keyframes loader {

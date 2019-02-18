@@ -43,7 +43,7 @@
             display: inline-block;
             vertical-align: top;
             padding: @PAGER_PADDINGS - 1px 13px;
-            .box-sizing(content-box);
+            box-sizing: content-box;
 
             &.dx-button-disable {
                 opacity: .3;
@@ -78,7 +78,8 @@
     .dx-pages, .dx-page-sizes {
         .dx-selection {
             cursor: inherit;
-            .text-shadow(none);
+            text-shadow: none;
+
         }
     }
 

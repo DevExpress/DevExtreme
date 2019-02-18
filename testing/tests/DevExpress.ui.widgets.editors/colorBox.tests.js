@@ -613,8 +613,8 @@ QUnit.test("enter key test on inputs", function(assert) {
     $popup.find(".dx-texteditor-input").each(function(_, itemInput) {
         var $itemInput = $(itemInput);
 
-        $($input).trigger($.Event("keydown", { which: 37 }));
-        $($itemInput).trigger($.Event("keydown", { which: 13 }));
+        $($input).trigger($.Event("keydown", { key: "ArrowLeft" }));
+        $($itemInput).trigger($.Event("keydown", { key: "Enter" }));
         assert.equal(instance.option("value"), "rgba(153, 73, 72, 1)", "value was changed correctly after press enter");
         assert.equal(instance.option("opened"), false, "overlay has been closed");
 

@@ -150,7 +150,7 @@
     left: 0px;
 
     &.dx-button {
-        .border-radius-custom(@calendar-navigator-border-radius, 0, 0, @calendar-navigator-border-radius);
+        border-radius: @calendar-navigator-border-radius 0 0 @calendar-navigator-border-radius;
 
         .dx-icon{
             color: @calendar-shevron-icon-color;
@@ -163,7 +163,7 @@
     right: 0px;
 
     &.dx-button {
-        .border-radius-custom(0, @calendar-navigator-border-radius, @calendar-navigator-border-radius, 0);
+        border-radius: 0 @calendar-navigator-border-radius @calendar-navigator-border-radius 0;
 
         .dx-icon{
             color: @calendar-shevron-icon-color;
@@ -202,7 +202,7 @@
     color: @calendar-color;
     font-size: @MATERIAL_CALENDAR_CELL_FONT_SIZE;
     width: 39px;
-    .border-radius(@calendar-cell-contoured-border-radius);
+    border-radius: @calendar-cell-contoured-border-radius;
 
     .dx-calendar-view-decade &,
     .dx-calendar-view-year & {

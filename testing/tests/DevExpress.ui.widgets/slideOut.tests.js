@@ -381,7 +381,7 @@ QUnit.test("First slideout item content should be loaded when deferred data sour
             }
         });
 
-        clock.tick(100);
+        clock.tick(200);
 
         assert.equal(this.$element.find(".dx-list-item-selected").text(), "Item 2", "item is selected");
         assert.equal(this.$element.find(".dx-slideout-item-content").text(), "Item 2", "content was loaded");

@@ -15,7 +15,28 @@
 .dx-slider {
     .dx-tooltip-wrapper {
         .dx-overlay-content {
-            .box-shadow(none);
+            box-shadow: none;
+        }
+    }
+
+    .dx-state-active {
+        &.dx-slider-handle {
+            border: 1px solid @slider-handle-border-color;
+            background: @slider-handle-active-bg;
+        }
+    }
+
+    .dx-state-focused{
+        &.dx-slider-handle:not(.dx-state-active) {
+            border: 1px solid @slider-handle-border-color;
+            background: @slider-handle-focused-bg;
+        }
+    }
+
+    .dx-state-hover {
+        &.dx-slider-handle:not(.dx-state-active) {
+            border: 1px solid @slider-handle-border-color;
+            background: @slider-handle-hover-bg;
         }
     }
 }
@@ -28,18 +49,18 @@
     margin: @GENERIC_SLIDER_HEIGHT/2 @GENERIC_SLIDER_WIDTH / 2;
     height: @GENERIC_SLIDER_TRACK_HEIGHT;
     background: @slider-bar-bg;
-    .border-radius(@GENERIC_SLIDER_RADIUS);
+    border-radius: @GENERIC_SLIDER_RADIUS;
 }
 
 .dx-slider-range {
     border: 1px solid transparent;
     height: @GENERIC_SLIDER_TRACK_HEIGHT - 2px;
-    .box-sizing(content-box);
+    box-sizing: content-box;
 
     &.dx-slider-range-visible {
         border: 1px solid @slider-range-border-color;
         background: @slider-range-bg;
-        .border-radius(@GENERIC_SLIDER_RADIUS);
+        border-radius: @GENERIC_SLIDER_RADIUS;
     }
 }
 
@@ -63,8 +84,8 @@
     height: @GENERIC_SLIDER_HEIGHT;
     border: 1px solid @slider-handle-border-color;
     background-color: @slider-handle-bg;
-    .border-radius(@slider-handle-border-radius);
-    .box-sizing(content-box);
+    border-radius: @slider-handle-border-radius;
+    box-sizing: content-box;
 }
 
 .dx-state-disabled .dx-slider,
@@ -76,24 +97,18 @@
     }
 }
 
-.dx-state-active {
-    &.dx-slider-handle {
-        border: 1px solid @slider-handle-border-color;
-        background: @slider-handle-active-bg;
+.dx-invalid {
+    .dx-slider-handle {
+        background-color: @base-invalid-color;
     }
-}
 
-.dx-state-focused{
-    &.dx-slider-handle:not(.dx-state-active) {
-        border: 1px solid @slider-handle-border-color;
-        background: @slider-handle-focused-bg;
+    .dx-slider-range-visible {
+        background-color: @base-invalid-color;
+        border-color: @base-invalid-color;
     }
-}
 
-.dx-state-hover {
-    &.dx-slider-handle:not(.dx-state-active) {
-        border: 1px solid @slider-handle-border-color;
-        background: @slider-handle-hover-bg;
+    .dx-slider-bar {
+        background-color: fade(@base-invalid-color, 40%);
     }
 }
 

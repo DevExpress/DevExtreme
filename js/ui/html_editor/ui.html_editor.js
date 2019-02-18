@@ -17,6 +17,7 @@ import FormDialog from "./ui/formDialog";
 const HTML_EDITOR_CLASS = "dx-htmleditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
+const HTML_EDITOR_CONTENT_CLASS = "dx-htmleditor-content";
 
 const MARKDOWN_VALUE_TYPE = "markdown";
 
@@ -99,7 +100,7 @@ const HtmlEditor = Editor.inherit({
 
             /**
             * @name dxHtmlEditorToolbarItem
-            * @inherits dxToolbarItemTemplate
+            * @inherits dxToolbarItem
             */
             /**
             * @name dxHtmlEditorToolbarItem.formatName
@@ -108,6 +109,11 @@ const HtmlEditor = Editor.inherit({
             /**
             * @name dxHtmlEditorToolbarItem.formatValues
             * @type Array<string,number,boolean>
+            */
+            /**
+            * @name dxHtmlEditorToolbarItem.location
+            * @default "before"
+            * @inheritdoc
             */
 
             /**
@@ -135,6 +141,22 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
 
         this._defaultTemplates[ANONYMOUS_TEMPLATE_NAME] = new EmptyTemplate(this);
+    },
+
+    _focusTarget: function() {
+        return this.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+    },
+
+    _focusInHandler: function() {
+        this._toggleFocusClass(true, this.$element());
+
+        this.callBase.apply(this, arguments);
+    },
+
+    _focusOutHandler: function() {
+        this._toggleFocusClass(false, this.$element());
+
+        this.callBase.apply(this, arguments);
     },
 
     _initMarkup: function() {
@@ -301,11 +323,13 @@ const HtmlEditor = Editor.inherit({
     _textChangeHandler: function(newDelta, oldDelta, source) {
         const htmlMarkup = this._deltaConverter.toHtml();
 
-        this._isEditorUpdating = true;
 
         const value = this._isMarkdownValue() ? this._updateValueByType(MARKDOWN_VALUE_TYPE, htmlMarkup) : htmlMarkup;
 
-        this.option("value", value);
+        if(this.option("value") !== value) {
+            this._isEditorUpdating = true;
+            this.option("value", value);
+        }
     },
 
     _updateValueByType: function(valueType, value) {
@@ -365,7 +389,7 @@ const HtmlEditor = Editor.inherit({
             case "toolbar":
                 this._invalidate();
                 break;
-            case "valueType":
+            case "valueType": {
                 this._prepareConverters();
                 const newValue = this._updateValueByType(args.value);
 
@@ -375,6 +399,7 @@ const HtmlEditor = Editor.inherit({
                     this.option("value", newValue);
                 }
                 break;
+            }
             case "readOnly":
             case "disabled":
                 this.callBase(args);

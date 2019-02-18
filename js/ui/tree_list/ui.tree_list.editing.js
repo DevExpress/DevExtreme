@@ -1,14 +1,13 @@
-require("./ui.tree_list.editor_factory");
-
-var $ = require("../../core/renderer"),
-    errors = require("../widget/ui.errors"),
-    isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    Deferred = require("../../core/utils/deferred").Deferred,
-    messageLocalization = require("../../localization/message"),
-    treeListCore = require("./ui.tree_list.core"),
-    gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
-    editingModule = require("../grid_core/ui.grid_core.editing");
+import './ui.tree_list.editor_factory';
+import $ from '../../core/renderer';
+import errors from '../widget/ui.errors';
+import { isDefined } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { Deferred } from '../../core/utils/deferred';
+import messageLocalization from '../../localization/message';
+import treeListCore from './ui.tree_list.core';
+import gridCoreUtils from '../grid_core/ui.grid_core.utils';
+import editingModule from '../grid_core/ui.grid_core.editing';
 
 var TREELIST_EXPAND_ICON_CONTAINER_CLASS = "dx-treelist-icon-container",
     SELECT_CHECKBOX_CLASS = "dx-select-checkbox",

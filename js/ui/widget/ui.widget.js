@@ -11,7 +11,7 @@ var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
     devices = require("../../core/devices"),
     DOMComponent = require("../../core/dom_component"),
-    Template = require("./jquery.template"),
+    Template = require("./template"),
     TemplateBase = require("./ui.template_base"),
     FunctionTemplate = require("./function_template"),
     EmptyTemplate = require("./empty_template"),
@@ -651,6 +651,10 @@ var Widget = DOMComponent.inherit({
         return $focusTarget.hasClass(FOCUSED_STATE_CLASS);
     },
 
+    _isFocused: function() {
+        return this._hasFocusClass();
+    },
+
     _attachKeyboardEvents: function() {
         var processor = this.option("_keyboardProcessor");
 
@@ -667,11 +671,12 @@ var Widget = DOMComponent.inherit({
     },
 
     _keyboardHandler: function(options) {
-        var e = options.originalEvent,
-            key = options.key;
+        var e = options.originalEvent;
+        var keyName = options.keyName;
+        var keyCode = options.which;
 
         var keys = this._supportedKeys(e),
-            func = keys[key];
+            func = keys[keyName] || keys[keyCode];
 
         if(func !== undefined) {
             var handler = func.bind(this);
@@ -694,6 +699,10 @@ var Widget = DOMComponent.inherit({
         this._toggleFocusClass(false);
         $element.removeAttr("tabIndex");
 
+        this._disposeKeyboardProcessor();
+    },
+
+    _disposeKeyboardProcessor() {
         if(this._keyboardProcessor) {
             this._keyboardProcessor.dispose();
             delete this._keyboardProcessor;

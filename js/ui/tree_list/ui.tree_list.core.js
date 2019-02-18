@@ -1,5 +1,5 @@
-var extend = require("../../core/utils/extend").extend,
-    modules = require("../grid_core/ui.grid_core.modules");
+import { extend } from '../../core/utils/extend';
+import modules from '../grid_core/ui.grid_core.modules';
 
 extend(exports, modules, {
     modules: [],

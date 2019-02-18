@@ -12,7 +12,6 @@ var $ = require("../../core/renderer"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     windowUtils = require("../../core/utils/window"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
     fx = require("../../animation/fx"),
     positionUtils = require("../../animation/position"),
     devices = require("../../core/devices"),
@@ -72,7 +71,7 @@ var ContextMenu = MenuBase.inherit((function() {
             return extend(this.callBase(), {
                 /**
                 * @name dxContextMenuOptions.items
-                * @type Array<dxContextMenuItemTemplate>
+                * @type Array<dxContextMenuItem>
                 * @inheritdoc
                 */
                 /**
@@ -201,14 +200,14 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @inheritdoc
                 */
                 /**
-                * @name dxContextMenuItemTemplate
-                * @inherits dxMenuBaseItemTemplate
+                * @name dxContextMenuItem
+                * @inherits dxMenuBaseItem
                 * @type object
                 * @inheritdoc
                 */
                 /**
-                * @name dxContextMenuItemTemplate.items
-                * @type Array<dxContextMenuItemTemplate>
+                * @name dxContextMenuItem.items
+                * @type Array<dxContextMenuItem>
                 * @inheritdoc
                 */
 
@@ -569,6 +568,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 overlayOptions = {
                     focusStateEnabled: this.option("focusStateEnabled"),
                     animation: overlayAnimation,
+                    innerOverlay: true,
                     closeOnOutsideClick: this._closeOnOutsideClickHandler.bind(this),
                     propagateOutsideClick: true,
                     closeOnTargetScroll: true,

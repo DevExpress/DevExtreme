@@ -1,5 +1,5 @@
 import { extend } from "../../core/utils/extend";
-import windowUtils from "../../core/utils/window";
+import { getWindow } from "../../core/utils/window";
 import { patchFontOptions } from "./utils";
 import clientExporter from "../../exporter";
 import messageLocalization from "../../localization/message";
@@ -7,7 +7,6 @@ import { isDefined } from "../../core/utils/type";
 import themeModule from "../themes";
 import hoverEvent from "../../events/hover";
 import pointerEvents from "../../events/pointer";
-import { Deferred } from "../../core/utils/deferred";
 
 const imageExporter = clientExporter.image;
 const svgExporter = clientExporter.svg;
@@ -68,25 +67,50 @@ function getCreatorFunc(format) {
     }
 }
 
-function print(data) {
-    const vizWindow = windowUtils.openWindow();
+function print(imageSrc, options) {
+    const document = getWindow().document;
+    const iFrame = document.createElement("iframe");
+    iFrame.onload = setPrint(imageSrc, options);
+    iFrame.style.visibility = "hidden";
+    iFrame.style.position = "fixed";
+    iFrame.style.right = "0";
+    iFrame.style.bottom = "0";
+    document.body.appendChild(iFrame);
+}
 
-    if(!vizWindow) {
-        return;
-    }
+function setPrint(imageSrc, options) {
+    return function() {
+        let window = this.contentWindow;
+        const img = window.document.createElement("img");
+        window.document.body.appendChild(img);
 
-    vizWindow.document.open();
-    vizWindow.document.write(data);
-    vizWindow.document.close();
+        ///#DEBUG
+        const origImageSrc = imageSrc;
+        if(options.__test) {
+            imageSrc = options.__test.imageSrc;
+            window = options.__test.mockWindow;
+        }
+        ///#ENDDEBUG
 
-    const result = new Deferred();
-    setTimeout(() => {
-        vizWindow.print();
-        vizWindow.close();
-        result.resolve();
-    }, 10);
+        const removeFrame = () => {
+            ///#DEBUG
+            options.__test && options.__test.checkAssertions();
+            ///#ENDDEBUG
+            this.parentElement.removeChild(this);
+            ///#DEBUG
+            options.__test && options.__test.deferred.resolve(origImageSrc);
+            ///#ENDDEBUG
+        };
 
-    return result;
+        img.addEventListener("load", () => {
+            window.focus();
+            window.print();
+            removeFrame();
+        });
+        img.addEventListener("error", removeFrame);
+
+        img.src = imageSrc;
+    };
 }
 
 function getItemAttributes(options, type, itemIndex) {
@@ -210,27 +234,89 @@ export const exportFromMarkup = function(markup, options) {
     clientExporter.export(markup, options, getCreatorFunc(options.format));
 };
 
-export const getMarkup = function(widgets) {
-    const svgArr = [];
-    let height = 0;
-    let width = 0;
-    const backgroundColors = [];
-    let backgroundColorStr = "";
+export const getMarkup = widgets => combineMarkups(widgets).markup;
 
-    widgets.forEach(widget => {
-        const size = widget.getSize(),
-            backgroundColor = widget.option("backgroundColor") || themeModule.getTheme(widget.option("theme")).backgroundColor;
-
-        backgroundColor && backgroundColors.indexOf(backgroundColor) === -1 && backgroundColors.push(backgroundColor);
-        svgArr.push(widget.svg().replace('<svg', '<g transform="translate(0,' + height + ')" ').replace('</svg>', '</g>'));
-        height += size.height;
-        width = Math.max(width, size.width);
+export const exportWidgets = function(widgets, options) {
+    options = options || {};
+    const markupInfo = exports.combineMarkups(widgets, {
+        gridLayout: options.gridLayout,
+        verticalAlignment: options.verticalAlignment,
+        horizontalAlignment: options.horizontalAlignment
     });
+    options.width = markupInfo.width;
+    options.height = markupInfo.height;
+    exportFromMarkup(markupInfo.markup, options);
+};
 
-    if(backgroundColors.length === 1) {
-        backgroundColorStr = 'data-backgroundcolor="' + backgroundColors[0] + '" ';
+export const combineMarkups = function(widgets, options = { }) {
+    if(!Array.isArray(widgets)) {
+        widgets = [[widgets]];
+    } else if(!Array.isArray(widgets[0])) {
+        widgets = widgets.map(item => [item]);
     }
-    return '<svg ' + backgroundColorStr + 'height="' + height + '" width="' + width + '" version="1.1" xmlns="http://www.w3.org/2000/svg">' + svgArr.join('') + '</svg>';
+
+    const compactView = !options.gridLayout;
+    const exportItems = widgets.reduce((r, row, rowIndex) => {
+        const rowInfo = row.reduce((r, item, colIndex) => {
+            const size = item.getSize();
+            const backgroundColor = item.option("backgroundColor") || themeModule.getTheme(item.option("theme")).backgroundColor;
+            backgroundColor && r.backgroundColors.indexOf(backgroundColor) === -1 && r.backgroundColors.push(backgroundColor);
+
+            r.hOffset = r.width;
+            r.width += size.width;
+            r.height = Math.max(r.height, size.height);
+            r.itemWidth = Math.max(r.itemWidth, size.width);
+            r.items.push({
+                markup: item.svg(),
+                width: size.width,
+                height: size.height,
+                c: colIndex,
+                r: rowIndex,
+                hOffset: r.hOffset
+            });
+
+            return r;
+        }, { items: [], height: 0, itemWidth: 0, hOffset: 0, width: 0, backgroundColors: r.backgroundColors });
+
+        r.rowOffsets.push(r.totalHeight);
+        r.rowHeights.push(rowInfo.height);
+        r.totalHeight += rowInfo.height;
+        r.items = r.items.concat(rowInfo.items);
+        r.itemWidth = Math.max(r.itemWidth, rowInfo.itemWidth);
+        r.maxItemLen = Math.max(r.maxItemLen, rowInfo.items.length);
+        r.totalWidth = compactView ? Math.max(r.totalWidth, rowInfo.width) : (r.maxItemLen * r.itemWidth);
+
+        return r;
+    }, { items: [], rowOffsets: [], rowHeights: [], itemWidth: 0, totalHeight: 0, maxItemLen: 0, totalWidth: 0, backgroundColors: [] });
+
+    const backgroundColor = `data-backgroundcolor="${exportItems.backgroundColors.length === 1 ? exportItems.backgroundColors[0] : '' }" `;
+    const getVOffset = item => {
+        const align = options.verticalAlignment;
+        const dy = exportItems.rowHeights[item.r] - item.height;
+
+        return exportItems.rowOffsets[item.r] + (align === "bottom" ? dy : align === "center" ? dy / 2 : 0);
+    };
+    const getHOffset = item => {
+        if(compactView) {
+            return item.hOffset;
+        }
+
+        const align = options.horizontalAlignment;
+        const colWidth = exportItems.itemWidth;
+        const dx = colWidth - item.width;
+
+        return item.c * colWidth + (align === "right" ? dx : align === "center" ? dx / 2 : 0);
+    };
+
+    const totalHeight = exportItems.totalHeight;
+    const totalWidth = exportItems.totalWidth;
+    return {
+        markup: '<svg ' + backgroundColor + 'height="' + totalHeight + '" width="' + totalWidth + '" version="1.1" xmlns="http://www.w3.org/2000/svg">'
+        + exportItems.items.map(item => item.markup.replace('<svg', '<g transform="translate(' + getHOffset(item) + ',' + getVOffset(item) + ')" ').replace('</svg>', '</g>')).join('')
+        + '</svg>',
+        width: totalWidth,
+        height: totalHeight
+    };
 };
 
 export const ExportMenu = function(params) {
@@ -538,7 +624,10 @@ export const plugin = {
         print() {
             const menu = this._exportMenu;
             const options = getExportOptions(this, this._getOption("export") || {});
-            const result = new Deferred();
+
+            ///#DEBUG
+            options.__test = this._getOption("export").__test;
+            ///#ENDDEBUG
 
             options.exportingAction = null;
             options.exportedAction = null;
@@ -546,15 +635,13 @@ export const plugin = {
             options.format = "PNG";
             options.forceProxy = true;
             options.fileSavingAction = eventArgs => {
-                print(`<img src="data:image/png;base64,${eventArgs.data}"></img>`).done(result.resolve);
+                print(`data:image/png;base64,${eventArgs.data}`, { __test: options.__test });
                 eventArgs.cancel = true;
             };
 
             menu && menu.hide();
             clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format));
             menu && menu.show();
-
-            return result;
         }
     },
     customize(constructor) {

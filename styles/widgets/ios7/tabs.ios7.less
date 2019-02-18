@@ -1,7 +1,7 @@
 .dx-tabs {
     border: 0;
     background: @IOS7_TABS_BACKGROUND;
-    .border-radius(6px);
+    border-radius: 6px;
 
     .dx-tabs-nav-button {
         width: 30px;
@@ -20,11 +20,11 @@
 .dx-tabs-nav-buttons {
     .dx-tab {
         &:first-child {
-            .border-radius(0);
+            border-radius: 0;
         }
 
         &:last-child {
-            .border-radius(0);
+            border-radius: 0;
         }
     }
 }
@@ -38,11 +38,11 @@
 }
 
 .dx-tabs-nav-button-left {
-    .border-radius-custom(6px, 0, 0, 6px);
+    border-radius: 6px 0 0 6px;
 }
 
 .dx-tabs-nav-button-right {
-    .border-radius-custom(0, 6px, 6px, 0);
+    border-radius:0 6px 6px 0;
 }
 
 .dx-tab {
@@ -63,12 +63,12 @@
     }
 
     &:first-child {
-        .border-radius-custom(6px, 0, 0, 6px);
+        border-radius: 6px 0 0 6px;
     }
 
     &:last-child {
         border-right: 1px solid @IOS7_TABS_TAB_BORDER;
-        .border-radius-custom(0, 6px, 6px, 0);
+        border-radius: 0 6px 6px 0;
     }
 }
 
@@ -114,11 +114,11 @@
 .dx-rtl .dx-tab {
     &:first-child {
         border-right: 1px solid @IOS7_TABS_TAB_BORDER;
-        .border-radius-custom(0, 6px, 6px, 0);
+        border-radius:0 6px 6px 0;
     }
 
     &:last-child {
         border-right: none;
-        .border-radius-custom(6px, 0, 0, 6px);
+        border-radius: 6px 0 0 6px;
     }
 }

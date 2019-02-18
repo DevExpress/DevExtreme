@@ -23,13 +23,13 @@ var DataExpressionMixin = extend(DataHelperMixin, {
         return {
             /**
             * @name DataExpressionMixinOptions.items
-            * @type Array<any>
+            * @type Array<CollectionWidgetItem, object>
             */
             items: [],
 
             /**
             * @name DataExpressionMixinOptions.dataSource
-            * @type string|Array<any>|DataSource|DataSourceOptions
+            * @type string|Array<CollectionWidgetItem, object>|DataSource|DataSourceOptions
             * @default null
             */
             dataSource: null,
@@ -217,6 +217,13 @@ var DataExpressionMixin = extend(DataHelperMixin, {
         this._setCollectionWidgetOption("itemTemplate", this._getTemplateByOption("itemTemplate"));
     },
 
+    _getCollectionKeyExpr: function() {
+        var valueExpr = this.option("valueExpr"),
+            isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== "this";
+
+        return isValueExprField ? valueExpr : null;
+    },
+
     _dataExpressionOptionChanged: function(args) {
         switch(args.name) {
             case "items":
@@ -239,32 +246,5 @@ var DataExpressionMixin = extend(DataHelperMixin, {
         }
     }
 });
-/**
-* @name DataExpressionMixinItemTemplate
-* @type object
-*/
-/**
-* @name DataExpressionMixinItemTemplate.disabled
-* @type boolean
-* @default false
-*/
-/**
-* @name DataExpressionMixinItemTemplate.visible
-* @type boolean
-* @default true
-*/
-/**
-* @name DataExpressionMixinItemTemplate.template
-* @type template
-*/
-
-/**
-* @name DataExpressionMixinItemTemplate.html
-* @type String
-*/
-/**
-* @name DataExpressionMixinItemTemplate.text
-* @type String
-*/
 
 module.exports = DataExpressionMixin;

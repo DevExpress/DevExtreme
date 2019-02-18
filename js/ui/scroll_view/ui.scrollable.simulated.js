@@ -45,14 +45,14 @@ var SCROLLABLE_SIMULATED = "dxSimulatedScrollable",
     BOUNCE_ACCELERATION_SUM = (1 - math.pow(ACCELERATION, BOUNCE_FRAMES)) / (1 - ACCELERATION);
 
 var KEY_CODES = {
-    PAGE_UP: 33,
-    PAGE_DOWN: 34,
-    END: 35,
-    HOME: 36,
-    LEFT: 37,
-    UP: 38,
-    RIGHT: 39,
-    DOWN: 40
+    PAGE_UP: "pageUp",
+    PAGE_DOWN: "pageDown",
+    END: "end",
+    HOME: "home",
+    LEFT: "leftArrow",
+    UP: "upArrow",
+    RIGHT: "rightArrow",
+    DOWN: "downArrow"
 };
 
 var InertiaAnimator = Animator.inherit({
@@ -727,7 +727,7 @@ var SimulatedStrategy = Class.inherit({
 
         var handled = true;
 
-        switch(e.keyCode) {
+        switch(eventUtils.normalizeKeyName(e)) {
             case KEY_CODES.DOWN:
                 this._scrollByLine({ y: 1 });
                 break;

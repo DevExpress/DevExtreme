@@ -29,17 +29,25 @@ var TOOLBAR_CLASS = "dx-toolbar",
 
 var ToolbarBase = AsyncCollectionWidget.inherit({
     compactMode: false,
+
     /**
-    * @name dxToolbarItemTemplate
-    * @inherits CollectionWidgetItemTemplate
+     * @name dxToolbarOptions.items
+     * @type Array<string, dxToolbarItem, object>
+     * @fires dxToolbarOptions.onOptionChanged
+     * @inheritdoc
+     */
+
+    /**
+    * @name dxToolbarItem
+    * @inherits CollectionWidgetItem
     * @type object
     */
     /**
-    * @name dxToolbarItemTemplate.widget
+    * @name dxToolbarItem.widget
     * @type Enums.ToolbarItemWidget
     */
     /**
-    * @name dxToolbarItemTemplate.options
+    * @name dxToolbarItem.options
     * @type object
     */
 
@@ -305,13 +313,14 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
 
     _renderItem: function(index, item, itemContainer, $after) {
         var location = item.location || "center",
-            container = itemContainer || this._$toolbarItemsContainer.find(".dx-toolbar-" + location),
+            container = itemContainer || this["_$" + location + "Section"],
             itemHasText = !!(item.text || item.html),
             itemElement = this.callBase(index, item, container, $after);
 
         itemElement
             .toggleClass(this._buttonClass(), !itemHasText)
-            .toggleClass(TOOLBAR_LABEL_CLASS, itemHasText);
+            .toggleClass(TOOLBAR_LABEL_CLASS, itemHasText)
+            .addClass(item.cssClass);
 
         return itemElement;
     },

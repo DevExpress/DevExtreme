@@ -26,14 +26,16 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
+import "common.css!";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    MockTablePositionViewController = dataGridMocks.MockTablePositionViewController,
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import fx from "animation/fx";
+import dataGridMocks from "../../helpers/dataGridMocks.js";
+
+var MockTablePositionViewController = dataGridMocks.MockTablePositionViewController,
     MockTrackerView = dataGridMocks.MockTrackerView,
     MockColumnsSeparatorView = dataGridMocks.MockColumnsSeparatorView,
     MockDraggingPanel = dataGridMocks.MockDraggingPanel,
@@ -41,23 +43,23 @@ var $ = require("jquery"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockDataController = dataGridMocks.MockDataController,
     MockColumnsController = dataGridMocks.MockColumnsController,
-    MockEditingController = dataGridMocks.MockEditingController,
-    fx = require("animation/fx");
+    MockEditingController = dataGridMocks.MockEditingController;
 
 
-var gridCore = require("ui/data_grid/ui.data_grid.core"),
-    dragEvents = require("events/drag"),
-    columnResizingReordering = require("ui/data_grid/ui.data_grid.columns_resizing_reordering"),
-    ColumnChooserView = require("ui/data_grid/ui.data_grid.column_chooser").ColumnChooserView,
-    ColumnHeadersView = require("ui/data_grid/ui.data_grid.column_headers").ColumnHeadersView,
-    ColumnsController = require("ui/grid_core/ui.grid_core.columns_controller").controllers.columns,
-    RowsView = require("ui/data_grid/ui.data_grid.rows").RowsView,
-    GroupingHeaderPanelExtender = require("ui/data_grid/ui.data_grid.grouping").GroupingHeaderPanelExtender,
-    HeaderPanel = require("ui/data_grid/ui.data_grid.header_panel").HeaderPanel,
-    domUtils = require("core/utils/dom"),
-    Action = require("core/action"),
-    devices = require("core/devices"),
-    publicComponentUtils = require("core/utils/public_component");
+import gridCore from "ui/data_grid/ui.data_grid.core";
+import dragEvents from "events/drag";
+import columnResizingReordering from "ui/data_grid/ui.data_grid.columns_resizing_reordering";
+import { ColumnChooserView } from "ui/data_grid/ui.data_grid.column_chooser";
+import { ColumnHeadersView } from "ui/data_grid/ui.data_grid.column_headers";
+import columnsModule from "ui/grid_core/ui.grid_core.columns_controller";
+var ColumnsController = columnsModule.controllers.columns;
+import { RowsView } from "ui/data_grid/ui.data_grid.rows";
+import { GroupingHeaderPanelExtender } from "ui/data_grid/ui.data_grid.grouping";
+import { HeaderPanel } from "ui/data_grid/ui.data_grid.header_panel";
+import domUtils from "core/utils/dom";
+import Action from "core/action";
+import devices from "core/devices";
+import publicComponentUtils from "core/utils/public_component";
 
 var TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
     callDragCounter: 0,
@@ -847,13 +849,15 @@ function getEvent(options) {
             };
 
             that.createColumnsResizerViewController = function(columns) {
+                var controller;
+
                 if(columns) {
                     that.component._controllers.columns = new MockColumnsController(columns, that.commonColumnSettings);
                 }
 
                 that.component._controllers.editing = new MockEditingController();
 
-                var controller = new columnResizingReordering.ColumnsResizerViewController(that.component);
+                that.resizeController = controller = new columnResizingReordering.ColumnsResizerViewController(that.component);
 
                 controller.init();
 
@@ -863,6 +867,9 @@ function getEvent(options) {
             };
 
             $('#container').css({ width: '300px' });
+        },
+        afterEach: function() {
+            this.resizeController && this.resizeController.dispose();
         }
     });
 
@@ -2925,7 +2932,7 @@ function getEvent(options) {
 
         // assert
         $headersContainer = $(resizeController._columnHeadersView.element());
-        separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find(".dx-header-row").first().height();
+        separatorOffsetTop = $headersContainer.offset().top + $headersContainer.find(".dx-header-row")[0].getBoundingClientRect().height;
         assert.strictEqual(this.component._controllers.columns.columnOption(2, "width"), 75, "width of the first banded column");
         assert.strictEqual($(resizeController._columnsSeparatorView.element()).offset().top, separatorOffsetTop, "separator offset top");
     });
@@ -5487,6 +5494,9 @@ function getEvent(options) {
             });
 
             that.controller = that.draggingHeaderController;
+        },
+        afterEach: function() {
+            this.dispose();
         }
     });
 
@@ -5965,7 +5975,7 @@ function getEvent(options) {
             opacityValue;
 
         this.controller._rowsView = {};
-        this.controller._columnHeadersView = { setRowsOpacity: noop };
+        this.controller._columnHeadersView = { setRowsOpacity: noop, getColumnElements: noop };
         this.controller._rowsView.setRowsOpacity = function(columnIndex, value) {
             columnIndexOpacity = columnIndex;
             opacityValue = value;
@@ -6034,7 +6044,7 @@ function getEvent(options) {
             testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = {};
+        that.controller._columnHeadersView = { getColumnElements: noop };
         that.controller._rowsView.setRowsOpacity = function() {
         };
         that.controller._columnHeadersView.element = function() {
@@ -6100,7 +6110,7 @@ function getEvent(options) {
             testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = { setRowsOpacity: noop };
+        that.controller._columnHeadersView = { setRowsOpacity: noop, getColumnElements: noop };
         that.controller._rowsView.setRowsOpacity = function() {
         };
         that.controller._columnHeadersView.element = function() {
@@ -6164,7 +6174,7 @@ function getEvent(options) {
             testElement = $('#container');
 
         that.controller._rowsView = {};
-        that.controller._columnHeadersView = {};
+        that.controller._columnHeadersView = { getColumnElements: noop };
         that.controller._rowsView.setRowsOpacity = function() {
         };
         that.controller._columnHeadersView.element = function() {

@@ -20,7 +20,7 @@
 
 .dx-button-mode-text {
     &.dx-button.dx-buttongroup-item {
-        .border-radius(@button-border-radius);
+        border-radius: @button-border-radius;
     }
 
     &.dx-buttongroup-first-item {
@@ -30,42 +30,52 @@
 
 .dx-button-mode-outlined, .dx-button-mode-contained {
     &.dx-button.dx-buttongroup-first-item {
-        .border-radius-top-left(@button-border-radius);
-        .border-radius-bottom-left(@button-border-radius);
+        border-top-left-radius: @button-border-radius;
+        border-bottom-left-radius: @button-border-radius;
     }
 
     &.dx-button.dx-buttongroup-last-item {
-        .border-radius-top-right(@button-border-radius);
-        .border-radius-bottom-right(@button-border-radius);
+        border-top-right-radius: @button-border-radius;
+        border-bottom-right-radius: @button-border-radius;
     }
 }
 
 .dx-buttongroup-item {
-    &.dx-button-mode-outlined {
-        &.dx-state-disabled {
-            opacity: 1;
-
-            .dx-button-content {
-                opacity: @button-disabled-icon-opacity;
+    &.dx-button {
+        &.dx-button-mode-outlined {
+            &.dx-state-disabled {
+                opacity: 1;
+    
+                .dx-button-content {
+                    opacity: @button-disabled-icon-opacity;
+                }
             }
         }
-    }
 
-    &.dx-item-selected {
-        background-color: @button-group-normal-selected-bg;
-
-        &.dx-button-success {
-            background-color: @button-group-success-selected-bg;
+        &.dx-state-focused {
+            background-color: fade(@button-normal-color, 4%);
         }
 
-        &.dx-button-default {
-            background-color: @button-group-default-selected-bg;
-            color: @button-group-normal-selected-color;
+        &.dx-state-hover {
+            background-color: fade(@button-normal-color, 4%);
         }
-
-        &.dx-button-danger {
-            background-color: @button-group-danger-selected-bg;
-            color: @button-group-danger-selected-color;
+    
+        &.dx-item-selected {
+            background-color: @button-group-normal-selected-bg;
+    
+            &.dx-button-success {
+                background-color: @button-group-success-selected-bg;
+            }
+    
+            &.dx-button-default {
+                background-color: @button-group-default-selected-bg;
+                color: @button-group-normal-selected-color;
+            }
+    
+            &.dx-button-danger {
+                background-color: @button-group-danger-selected-bg;
+                color: @button-group-danger-selected-color;
+            }
         }
     }
 }
@@ -73,11 +83,11 @@
 .dx-rtl {
     &.dx-button-mode-outlined, &.dx-button-mode-contained {
         &.dx-button.dx-buttongroup-first-item {
-            .border-radius-custom(0, @button-border-radius, @button-border-radius, 0);
+            border-radius: 0 @button-border-radius @button-border-radius 0;
         }
 
         &.dx-button.dx-buttongroup-last-item {
-            .border-radius-custom(@button-border-radius, 0, 0, @button-border-radius);
+            border-radius: @button-border-radius 0 0 @button-border-radius;
         }
     }
 

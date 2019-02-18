@@ -142,7 +142,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         return extend(this.callBase(), {
             /**
             * @name dxTreeViewOptions.items
-            * @type Array<dxTreeViewItemTemplate>
+            * @type Array<dxTreeViewItem>
             * @inheritdoc
             */
             /**
@@ -407,35 +407,35 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @inheritdoc
             */
             /**
-            * @name dxTreeViewItemTemplate
-            * @inherits CollectionWidgetItemTemplate
+            * @name dxTreeViewItem
+            * @inherits CollectionWidgetItem
             * @type object
             */
             /**
-            * @name dxTreeViewItemTemplate.selected
+            * @name dxTreeViewItem.selected
             * @type boolean
             * @default false
             */
             /**
-            * @name dxTreeViewItemTemplate.expanded
+            * @name dxTreeViewItem.expanded
             * @type boolean
             * @default false
             */
             /**
-            * @name dxTreeViewItemTemplate.icon
+            * @name dxTreeViewItem.icon
             * @type String
             */
             /**
-            * @name dxTreeViewItemTemplate.items
-            * @type Array<dxTreeViewItemTemplate>
+            * @name dxTreeViewItem.items
+            * @type Array<dxTreeViewItem>
             */
             /**
-            * @name dxTreeViewItemTemplate.parentId
+            * @name dxTreeViewItem.parentId
             * @type number|string
             * @default undefined
             */
             /**
-            * @name dxTreeViewItemTemplate.hasItems
+            * @name dxTreeViewItem.hasItems
             * @type boolean
             * @default undefined
             */
@@ -444,7 +444,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     // TODO: implement these functions
     _initSelectedItems: commonUtils.noop,
-    _syncSelectionOptions: commonUtils.noop,
+    _syncSelectionOptions: commonUtils.asyncNoop,
 
     _fireSelectionChanged: function() {
         var selectionChangePromise = this._selectionChangePromise;

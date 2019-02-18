@@ -56,7 +56,11 @@ export default CollectionWidget.inherit({
     },
 
     _isItemEquals: function(item1, item2) {
-        return JSON.stringify(item1) === JSON.stringify(item2);
+        try {
+            return JSON.stringify(item1) === JSON.stringify(item2);
+        } catch(e) {
+            return item1 === item2;
+        }
     },
 
     _partialRefresh: function() {
@@ -64,6 +68,7 @@ export default CollectionWidget.inherit({
             let result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), this.keyOf.bind(this), this._isItemEquals);
             if(result) {
                 this._modifyByChanges(result, true);
+                this._renderEmptyMessage();
                 return true;
             } else {
                 this._refreshItemsCache();
@@ -74,7 +79,11 @@ export default CollectionWidget.inherit({
 
     _refreshItemsCache: function() {
         if(this.option("repaintChangesOnly")) {
-            this._itemsCache = extend(true, [], this._editStrategy.itemsGetter());
+            try {
+                this._itemsCache = extend(true, [], this._editStrategy.itemsGetter());
+            } catch(e) {
+                this._itemsCache = extend([], this._editStrategy.itemsGetter());
+            }
         }
     },
 
@@ -131,6 +140,7 @@ export default CollectionWidget.inherit({
         changes.forEach(change => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
         this._renderedItemsCount = items.length;
         this._refreshItemsCache();
+        this._fireContentReadyAction();
     },
 
     _appendItemToContainer: function($container, $itemFrame, index) {

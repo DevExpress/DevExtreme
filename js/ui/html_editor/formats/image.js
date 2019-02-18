@@ -10,9 +10,9 @@ class ExtImage extends Image {
         let node = super.create(SRC);
 
         if(isObject(data)) {
-            function setAttribute(attr, value) {
+            const setAttribute = (attr, value) => {
                 data[attr] && node.setAttribute(attr, value);
-            }
+            };
 
             setAttribute("alt", data.alt);
             setAttribute("width", data.width);

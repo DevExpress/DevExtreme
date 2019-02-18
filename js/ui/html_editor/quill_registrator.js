@@ -71,6 +71,6 @@ class QuillRegistrator {
     getQuill() {
         return getQuill();
     }
-};
+}
 
 export default QuillRegistrator;

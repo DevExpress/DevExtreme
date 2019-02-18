@@ -9,7 +9,10 @@ var $ = require("jquery"),
     resizeCallbacks = require("core/utils/resize_callbacks"),
     Menu = require("ui/menu/ui.menu"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
-    fixtures = require("../../helpers/positionFixtures.js");
+    fixtures = require("../../helpers/positionFixtures.js"),
+    CustomStore = require("data/custom_store"),
+    ArrayStore = require("data/array_store"),
+    DataSource = require("data/data_source/data_source").DataSource;
 
 require("common.css!");
 
@@ -2000,7 +2003,7 @@ QUnit.test("onSubmenuHidden action should be transferred to the treeview", funct
 
 QUnit.test("Some menu options should be transferred to the treeview as is on init", function(assert) {
     var options = [
-            "rtlEnabled", "width", "accessKey", "activeStateEnabled", "animation", "dataSource",
+            "rtlEnabled", "width", "accessKey", "activeStateEnabled", "animation",
             "disabled", "displayExpr", "displayExpr", "focusStateEnabled", "hint", "hoverStateEnabled",
             "itemsExpr", "itemTemplate", "selectedExpr",
             "selectionMode", "tabIndex", "visible"
@@ -2026,7 +2029,7 @@ QUnit.test("Some menu options should be transferred to the treeview as is on ini
 
 QUnit.test("Some menu options should be transferred to the treeview as is on optionChanged", function(assert) {
     var options = [
-        "rtlEnabled", "width", "accessKey", "activeStateEnabled", "animation", "dataSource",
+        "rtlEnabled", "width", "accessKey", "activeStateEnabled", "animation",
         "disabled", "displayExpr", "displayExpr", "focusStateEnabled", "hint", "hoverStateEnabled",
         "itemsExpr", "itemTemplate", "selectedExpr",
         "selectionMode", "tabIndex", "visible"
@@ -2078,11 +2081,83 @@ QUnit.test("animationEnabled option should be true in the dxTreeView if animatio
     assert.strictEqual(treeview.option("animationEnabled"), false, "animation has been changed to disabled");
 });
 
+QUnit.test("Data of tree view doesn't load twice when uses the custom store", function(assert) {
+    var that = this,
+        dataLoadCounter = 0,
+        clock = sinon.useFakeTimers();
+
+    try {
+        new Menu(that.$element, {
+            dataSource: {
+                store: new CustomStore({
+                    load: function(loadOptions) {
+                        return $.Deferred(function(d) {
+                            setTimeout(function() {
+                                new ArrayStore(that.items).load(loadOptions).done(function() {
+                                    ++dataLoadCounter;
+                                    d.resolve.apply(d, arguments);
+                                });
+                            }, 300);
+                        }).promise();
+                    }
+                })
+            },
+            adaptivityEnabled: true
+        });
+
+        clock.tick(600);
+
+        assert.equal(dataLoadCounter, 2);
+    } finally {
+        clock.restore();
+    }
+});
+
+QUnit.test("Set new data source of menu to tree view", function(assert) {
+    testTreeViewDataSourceItems(assert, this.items, this.items);
+});
+
+QUnit.test("Set new data source to tree view when data source is changed via option", function(assert) {
+    var expectedItems = [
+        { text: "item4" },
+        { text: "item5" }
+    ];
+
+    testTreeViewDataSourceItems(assert, this.items, expectedItems, function(menu) {
+        menu.option("dataSource", expectedItems);
+    });
+});
+
+QUnit.test("Set new data source of menu to tree view when menu uses data source set as instance", function(assert) {
+    testTreeViewDataSourceItems(assert, new DataSource({ store: this.items }), this.items);
+});
+
+QUnit.test("Set new data source of menu to tree view when menu uses data source set as instance and it is changed via option", function(assert) {
+    var expectedItems = [
+        { text: "item4" },
+        { text: "item5" }
+    ];
+
+    testTreeViewDataSourceItems(assert, new DataSource({ store: this.items }), expectedItems, function(menu) {
+        menu.option("dataSource", new DataSource({ store: expectedItems }));
+    });
+});
+
+function testTreeViewDataSourceItems(assert, inputDataSource, expectedData, action) {
+    var menu = new Menu($("#menu"), {
+        dataSource: inputDataSource,
+        adaptivityEnabled: true
+    });
+
+    action && action(menu);
+
+    assert.deepEqual(menu._treeView.option("dataSource").items(), expectedData);
+}
 
 QUnit.module("adaptivity: behavior", {
     beforeEach: function() {
         $("#qunit-fixture").width(50);
-        this.$element = $("#menu"),
+        this.$element = $("#menu");
         this.items = [
             { text: "item1" },
             {

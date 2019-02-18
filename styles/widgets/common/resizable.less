@@ -68,7 +68,7 @@
     top: -@HANDLE_OFFSET;
 
     cursor: se-resize;
-    .border-radius-bottom-right(~"100%");
+    border-bottom-right-radius: 100%;
 }
 
 .dx-resizable-handle-corner-top-right {
@@ -76,7 +76,7 @@
     top: -@HANDLE_OFFSET;
 
     cursor: ne-resize;
-    .border-radius-bottom-left(~"100%");
+    border-bottom-left-radius: 100%;
 }
 
 :not(.dx-rtl){
@@ -88,7 +88,7 @@
         bottom: -@HANDLE_OFFSET;
 
         cursor: se-resize;
-        .border-radius-top-left(~"100%");
+        border-top-left-radius: 100%;
 
         background-position: @BOTTOM_CORNER_ICON_POSITION @BOTTOM_CORNER_ICON_POSITION;
     }
@@ -98,14 +98,14 @@
         bottom: -@HANDLE_OFFSET;
 
         cursor: ne-resize;
-        .border-radius-top-right(~"100%");
+        border-top-right-radius: 100%;
     }
 
 }
 
 .dx-rtl {
     .dx-resizable-handle-corner-bottom-left {
-        .rotate(90deg);
+        transform: rotate(90deg);
 
         width: @BOTTOM_CORNER_HANDLE_SIZE;
         height: @BOTTOM_CORNER_HANDLE_SIZE;
@@ -114,7 +114,7 @@
         bottom: -@HANDLE_OFFSET;
 
         cursor: ne-resize;
-        .border-radius-top-left(~"100%");
+        border-top-left-radius: 100%;
 
         background-position: @BOTTOM_CORNER_ICON_POSITION @BOTTOM_CORNER_ICON_POSITION;
     }
@@ -124,6 +124,6 @@
         bottom: -@HANDLE_OFFSET;
 
         cursor: se-resize;
-        .border-radius-top-left(~"100%");
+        border-top-left-radius: 100%;
     }
 }

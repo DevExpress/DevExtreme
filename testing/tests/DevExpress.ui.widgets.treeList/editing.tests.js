@@ -10,14 +10,12 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
-require("ui/tree_list/ui.tree_list");
-
-var $ = require("jquery"),
-    fx = require("animation/fx"),
-    treeListMocks = require("../../helpers/treeListMocks.js"),
-    setupTreeListModules = treeListMocks.setupTreeListModules;
+import 'common.css!';
+import 'generic_light.css!';
+import 'ui/tree_list/ui.tree_list';
+import $ from 'jquery';
+import fx from 'animation/fx';
+import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
 fx.off = true;
 
@@ -703,6 +701,28 @@ QUnit.test("Add row when 'keyExpr' and 'parentIdExpr' options are specified as f
     assert.strictEqual(this.getVisibleRows()[0].data.parentId, 0, "parentId of an inserted row");
 });
 
+QUnit.test("TreeList should show error message on adding row if dataSource is not specified (T711831)", function(assert) {
+    // arrange
+    var errorCode,
+        widgetName;
+
+    this.options.dataSource = undefined;
+    this.setupTreeList();
+
+    this.rowsView.render($('#treeList'));
+    this.getController("data").fireError = function() {
+        errorCode = arguments[0];
+        widgetName = arguments[1];
+    };
+
+    // act
+    this.addRow();
+
+    // assert
+    assert.equal(errorCode, "E1052", "error code");
+    assert.equal(widgetName, "dxTreeList", "widget name");
+});
+
 QUnit.test("Set add button for a specific row", function(assert) {
     // arrange
     var $rowElements,
@@ -812,4 +832,207 @@ QUnit.test("Selection should be updated correctly after deleting a nested node",
 
     // assert
     assert.strictEqual(this.isRowSelected(1), false, "first node is not selected");
+});
+
+["reshape", "repaint"].forEach(function(refreshMode) {
+    QUnit.module("Refresh mode " + refreshMode, { beforeEach: function() {
+        var that = this;
+
+        that.loadingCount = 0;
+
+        that.options = {
+            dataSource: {
+                store: {
+                    type: "array",
+                    onLoading: function() {
+                        that.loadingCount++;
+                    },
+                    data: [
+                        { id: 1, field1: 'test1', hasItems: true },
+                        { id: 2, parentId: 1, field1: 'test2', hasItems: false }
+                    ],
+                    key: "id"
+                }
+            },
+            remoteOperations: { filtering: true },
+            columns: [
+                { dataField: "id", allowEditing: true },
+                { dataField: "field1", allowEditing: true }
+            ],
+            keyExpr: "id",
+            parentIdExpr: "parentId",
+            hasItemsExpr: "hasItems",
+            expandedRowKeys: [],
+            editing: {
+                refreshMode: refreshMode,
+                mode: "row"
+            }
+        };
+
+        that.setupTreeList = function() {
+            setupTreeListModules(that, ["data", "columns", "rows", "editing"], {
+                initViews: true
+            });
+        };
+        this.clock = sinon.useFakeTimers();
+    }, afterEach: teardownModule });
+
+    QUnit.test("Insert row to leaf", function(assert) {
+        // arrange
+        this.setupTreeList();
+        this.expandRow(1);
+        this.loadingCount = 0;
+
+        // act
+        this.addRow(2);
+        this.clock.tick();
+        this.cellValue(2, "field1", "added");
+        this.saveEditData();
+
+        // assert
+        var rows = this.getVisibleRows();
+        assert.equal(this.loadingCount, 0, "loading count is not changed");
+        assert.equal(rows.length, 3, "row count");
+        assert.ok(rows[1].node.hasChildren, "row 1 node hasChildren");
+        assert.ok(rows[1].data.hasItems, "row 1 hasItems is updated");
+        assert.equal(rows[2].data.field1, "added", "row 2 data is updated");
+        assert.equal(rows[2].node.parent, rows[1].node, "row 2 node parent");
+    });
+
+    QUnit.test("Insert row to root", function(assert) {
+        // arrange
+        this.setupTreeList();
+        this.expandRow(1);
+        this.loadingCount = 0;
+
+        // act
+        this.addRow();
+        this.clock.tick();
+        this.cellValue(0, "field1", "added");
+        this.saveEditData();
+
+        // assert
+        var rows = this.getVisibleRows();
+        var insertIndex = refreshMode === "reshape" ? 2 : 0;
+        assert.equal(this.loadingCount, 0, "loading count is not changed");
+        assert.equal(rows.length, 3, "row count");
+        assert.equal(rows[insertIndex].data.field1, "added", "row 2 data is updated");
+        assert.equal(rows[insertIndex].node.parent, this.getRootNode(), "row 2 node parent");
+    });
+
+    QUnit.test("Remove leaf node", function(assert) {
+        // arrange
+        this.setupTreeList();
+        this.expandRow(1);
+        this.loadingCount = 0;
+
+        // act
+        this.removeRow(1);
+        this.clock.tick();
+        this.saveEditData();
+
+        // assert
+        var rows = this.getVisibleRows();
+        assert.strictEqual(this.loadingCount, 0, "loading count is not changed");
+        assert.strictEqual(rows.length, 1, "row count");
+        assert.strictEqual(rows[0].node.hasChildren, false, "row 0 node hasChildren");
+        assert.strictEqual(rows[0].data.hasItems, false, "row 0 hasItems");
+    });
+
+    QUnit.test("Remove node with children", function(assert) {
+        // arrange
+        this.setupTreeList();
+        this.expandRow(1);
+        this.getDataSource().store().insert({ id: 3, field1: "test3", hasItems: false });
+        this.refresh();
+        this.loadingCount = 0;
+
+        // act
+        this.removeRow(0);
+        this.clock.tick();
+        this.saveEditData();
+
+        // assert
+        var rows = this.getVisibleRows();
+        assert.strictEqual(this.loadingCount, 0, "loading count is not changed");
+        assert.strictEqual(rows.length, 1, "row count");
+        assert.strictEqual(rows[0].key, 3, "row 2 id");
+        assert.strictEqual(rows[0].node.hasChildren, false, "row 0 node hasChildren");
+        assert.strictEqual(rows[0].data.hasItems, false, "row 0 hasItems");
+    });
+
+    QUnit.test("Update node", function(assert) {
+        // arrange
+        this.setupTreeList();
+        this.expandRow(1);
+        this.loadingCount = 0;
+
+        // act
+        this.cellValue(1, "field1", "updated");
+        this.saveEditData();
+
+        // assert
+        var rows = this.getVisibleRows();
+        assert.strictEqual(this.loadingCount, 0, "loading count is not changed");
+        assert.strictEqual(rows.length, 2, "row count");
+        assert.strictEqual(rows[1].data.field1, "updated", "row 0 data is updated");
+        assert.deepEqual(rows[1].values, [2, "updated"], "row 0 values are updated");
+    });
+
+    QUnit.test("Push insert with index 0", function(assert) {
+        // arrange
+        this.setupTreeList();
+        this.expandRow(1);
+        this.loadingCount = 0;
+
+        // act
+        this.getDataSource().store().push([{ type: "insert", data: { id: 3, parentId: 1, field1: "test3", hasItems: false }, index: 0 }]);
+        this.clock.tick();
+
+        // assert
+        var rows = this.getVisibleRows();
+        assert.strictEqual(this.loadingCount, 0, "loading count is not changed");
+        assert.strictEqual(rows.length, 3, "row count");
+        assert.strictEqual(rows[0].node.children.length, 2, "row 0 children count");
+        assert.strictEqual(rows[1].data.field1, "test3", "row 2 data is updated");
+        assert.strictEqual(rows[1].node.parent, rows[0].node, "row 2 node parent");
+    });
+
+    QUnit.test("Push insert with index -1", function(assert) {
+        // arrange
+        this.setupTreeList();
+        this.expandRow(1);
+        this.loadingCount = 0;
+
+        // act
+        this.getDataSource().store().push([{ type: "insert", data: { id: 3, parentId: 1, field1: "test3", hasItems: false }, index: -1 }]);
+        this.clock.tick();
+
+        // assert
+        var rows = this.getVisibleRows();
+        assert.strictEqual(this.loadingCount, 0, "loading count is not changed");
+        assert.strictEqual(rows.length, 3, "row count");
+        assert.strictEqual(rows[0].node.children.length, 2, "row 0 children count");
+        assert.strictEqual(rows[2].data.field1, "test3", "row 2 data is updated");
+        assert.strictEqual(rows[2].node.parent, rows[0].node, "row 2 node parent");
+    });
+
+    QUnit.test("Push insert with index more then children count", function(assert) {
+        // arrange
+        this.setupTreeList();
+        this.expandRow(1);
+        this.loadingCount = 0;
+
+        // act
+        this.getDataSource().store().push([{ type: "insert", data: { id: 3, parentId: 1, field1: "test3", hasItems: false }, index: 10 }]);
+        this.clock.tick();
+
+        // assert
+        var rows = this.getVisibleRows();
+        assert.strictEqual(this.loadingCount, 0, "loading count is not changed");
+        assert.strictEqual(rows.length, 3, "row count");
+        assert.strictEqual(rows[0].node.children.length, 2, "row 0 children count");
+        assert.strictEqual(rows[2].data.field1, "test3", "row 2 data is updated");
+        assert.strictEqual(rows[2].node.parent, rows[0].node, "row 2 node parent");
+    });
 });

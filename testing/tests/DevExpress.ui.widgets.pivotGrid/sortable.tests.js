@@ -786,7 +786,7 @@ QUnit.test("dragging to empty group", function(assert) {
                                         </div>');
 
     $("#sortable").append('<div group="group2" class="group">\
-                                            <div class="test-container" style="height: 30px;">\</div>\
+                                            <div class="test-container" style="height: 30px;"></div>\
                                         </div>');
 
     var indicator,
@@ -990,13 +990,13 @@ QUnit.test("drag without source element", function(assert) {
 
 QUnit.test("Indicator should not be shown on dragging to the same item at another sortable", function(assert) {
     $("#sortable").css("display", "none");
-    $("<div id='sortable1'><div id='second-group' group='groupFilter' class='group horizontal' style='height: 150px'><div class='test-container'><div class='test-item'>1</div><div class='test-item'>2</div><div class='test-item'>3</div>\</div></div>")
+    $("<div id='sortable1'><div id='second-group' group='groupFilter' class='group horizontal' style='height: 150px'><div class='test-container'><div class='test-item'>1</div><div class='test-item'>2</div><div class='test-item'>3</div></div></div>")
         .insertAfter("#sortable")
         .css({
             width: "3000px",
             height: "200px"
         });
-    $("<div id='sortable2'><div id='second-group' group='groupFilter' class='group horizontal' style='height: 150px'><div class='test-container'><div class='test-item'>1</div><div class='test-item'>2</div><div class='test-item'>3</div>\</div></div>")
+    $("<div id='sortable2'><div id='second-group' group='groupFilter' class='group horizontal' style='height: 150px'><div class='test-container'><div class='test-item'>1</div><div class='test-item'>2</div><div class='test-item'>3</div></div></div>")
         .insertAfter("#sortable1")
         .css({
             width: "3000px",
@@ -1385,7 +1385,7 @@ QUnit.test("dragging between different sortables by groupFilter callback to non-
 });
 
 QUnit.test("dragging between different sortables positioned one on another", function(assert) {
-    $("<div id='sortable1'><div id='second-group' group='groupFilter' class='group horizontal' style='height: 150px'><div class='test-container'><div class='test-item'>1</div><div class='test-item'>2</div>\</div></div>")
+    $("<div id='sortable1'><div id='second-group' group='groupFilter' class='group horizontal' style='height: 150px'><div class='test-container'><div class='test-item'>1</div><div class='test-item'>2</div></div></div>")
         .insertAfter("#sortable")
         .css({
             position: "absolute",

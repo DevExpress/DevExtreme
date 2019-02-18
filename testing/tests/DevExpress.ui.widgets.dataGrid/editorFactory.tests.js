@@ -1,5 +1,5 @@
-var $ = require("jquery");
-var dataUtils = require("core/element_data");
+import $ from "jquery";
+import dataUtils from "core/element_data";
 
 QUnit.testStart(function() {
     var markup =
@@ -27,23 +27,20 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
+import "common.css!";
 
-require("ui/data_grid/ui.data_grid");
-require("ui/lookup");
-var TextArea = require("ui/text_area");
+import "ui/data_grid/ui.data_grid";
+import "ui/lookup";
+import TextArea from "ui/text_area";
 
-var executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    dateLocalization = require("localization/date"),
-    browser = require("core/utils/browser"),
-    devices = require("core/devices"),
-    SelectBox = require("ui/select_box"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    config = require("core/config"),
-    typeUtils = require("core/utils/type"),
-    MockColumnsController = dataGridMocks.MockColumnsController,
-    MockDataController = dataGridMocks.MockDataController,
-    setupDataGridModules = dataGridMocks.setupDataGridModules;
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import dateLocalization from "localization/date";
+import browser from "core/utils/browser";
+import devices from "core/devices";
+import SelectBox from "ui/select_box";
+import { MockColumnsController, MockDataController, setupDataGridModules } from "../../helpers/dataGridMocks.js";
+import config from "core/config";
+import typeUtils from "core/utils/type";
 
 var TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
 
@@ -123,7 +120,7 @@ QUnit.test('Text editor enter in ios (T344096)', function(assert) {
     // act
     $container.find("input").focus();
     $container.find("input").val('AB');
-    $container.find("input").trigger($.Event("keydown", { keyCode: 13 }));
+    $container.find("input").trigger($.Event("keydown", { key: "Enter" }));
 
     // assert
     assert.equal(valueChangeEvent, 'change', 'value change event for ios');
@@ -160,7 +157,7 @@ if(browser.msie) {
         // act
         $container.find("input").focus();
         $container.find("input").val("AB");
-        $container.find("input").trigger($.Event("keydown", { keyCode: 13 }));
+        $container.find("input").trigger($.Event("keydown", { key: "Enter" }));
 
         this.clock.tick();
 
@@ -200,7 +197,7 @@ if(browser.msie) {
         assert.ok(dateBox, 'dxTextBox created');
 
         // act
-        $container.find("input").trigger($.Event("keydown", { keyCode: 13 }));
+        $container.find("input").trigger($.Event("keydown", { key: "Enter" }));
 
         // assert
         assert.deepEqual(methods, ["blur", "focus"], "blur and focus called");
@@ -1340,7 +1337,7 @@ QUnit.test("Update focus on tab keydown", function(assert) {
         isFocused = true;
     };
 
-    testElement.trigger($.Event('keydown.dxDataGridEditorFactory', { which: 9 }));
+    testElement.trigger($.Event('keydown.dxDataGridEditorFactory', { key: "Tab" }));
     this.clock.tick();
 
     // assert

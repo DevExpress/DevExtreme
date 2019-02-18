@@ -8,7 +8,7 @@
     height: @GENERIC_BAR_HEIGHT;
     border: @GENERIC_PROGRESS_BAR_BORDER;
     background-color: @progressbar-bg;
-    .border-radius(@GENERIC_PROGRESSBAR_BORDER_RADIUS);
+    border-radius: @GENERIC_PROGRESSBAR_BORDER_RADIUS;
 }
 
 .dx-progressbar-range {
@@ -17,9 +17,9 @@
     background-color: @progressbar-range-bg;
     margin-top: -1px;
 
-    .box-sizing(content-box);
-    .border-radius-top-left(@GENERIC_PROGRESSBAR_BORDER_RADIUS);
-    .border-radius-bottom-left(@GENERIC_PROGRESSBAR_BORDER_RADIUS);
+    box-sizing: content-box;
+    border-top-left-radius: @GENERIC_PROGRESSBAR_BORDER_RADIUS;
+    border-bottom-left-radius: @GENERIC_PROGRESSBAR_BORDER_RADIUS;
 }
 
 .dx-progressbar-animating-container {
@@ -28,9 +28,9 @@
     background-size: @GENERIC_BACKGROUND_WIDTH 5px;
     border: @GENERIC_PROGRESS_BAR_BORDER;
 
-    .border-radius(@GENERIC_PROGRESSBAR_BORDER_RADIUS);
+    border-radius: @GENERIC_PROGRESSBAR_BORDER_RADIUS;
 
-    .animation(loader 2s linear infinite);
+    animation: loader 2s linear infinite;
     .gradient-linear(@GENERIC_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
     background-repeat: repeat;
 }
@@ -41,7 +41,7 @@
     }
 
     .dx-progressbar-animating-container {
-        .animation(none);
+        animation: none;
         background-position-x: @GENERIC_BACKGROUND_WIDTH / 2;
     }
 }
@@ -49,7 +49,7 @@
 .dx-rtl {
     .dx-progressbar, &.dx-progressbar {
         .dx-progressbar-animating-container {
-            .animation(loader-rtl 2s linear infinite);
+            animation: loader-rtl 2s linear infinite;
             .gradient-linear(@GENERIC_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
             background-repeat: repeat;
         }

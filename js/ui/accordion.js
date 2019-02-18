@@ -124,6 +124,13 @@ var Accordion = CollectionWidget.inherit({
             deferRendering: true,
 
             /**
+             * @name dxAccordionOptions.items
+             * @type Array<string, dxAccordionItem, object>
+             * @fires dxAccordionOptions.onOptionChanged
+             * @inheritdoc
+             */
+
+            /**
             * @name dxAccordionOptions.itemTemplate
             * @type template|function
             * @default "item"
@@ -193,16 +200,16 @@ var Accordion = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
         /**
-        * @name dxAccordionItemTemplate
-        * @inherits CollectionWidgetItemTemplate
+        * @name dxAccordionItem
+        * @inherits CollectionWidgetItem
         * @type object
         */
         /**
-        * @name dxAccordionItemTemplate.title
+        * @name dxAccordionItem.title
         * @type String
         */
         /**
-        * @name dxAccordionItemTemplate.icon
+        * @name dxAccordionItem.icon
         * @type String
         */
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
@@ -233,7 +240,6 @@ var Accordion = CollectionWidget.inherit({
     _render: function() {
         this.callBase();
         this._updateItemHeightsWrapper(true);
-        this._attachItemTitleClickAction();
     },
 
     _itemDataKey: function() {
@@ -288,6 +294,8 @@ var Accordion = CollectionWidget.inherit({
             defaultTemplateName: this.option("itemTitleTemplate")
         }));
 
+        this._attachItemTitleClickAction(itemTitle);
+
         var deferred = new Deferred();
         if(isDefined(this._deferredItems[args.index])) {
             this._deferredItems[args.index] = deferred;
@@ -305,12 +313,11 @@ var Accordion = CollectionWidget.inherit({
         })));
     },
 
-    _attachItemTitleClickAction: function() {
-        var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            titleContainers = this._itemContainer().find(" > ." + ACCORDION_ITEM_CLASS + " > ." + ACCORDION_ITEM_TITLE_CLASS);
+    _attachItemTitleClickAction: function(itemTitle) {
+        var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
-        eventsEngine.off(titleContainers, eventName);
-        eventsEngine.on(titleContainers, eventName, this._itemTitleClickHandler.bind(this));
+        eventsEngine.off(itemTitle, eventName);
+        eventsEngine.on(itemTitle, eventName, this._itemTitleClickHandler.bind(this));
     },
 
     _itemTitleClickHandler: function(e) {

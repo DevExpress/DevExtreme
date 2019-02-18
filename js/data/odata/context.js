@@ -55,6 +55,10 @@ var ODataContext = Class.inherit({
          * @default false
          */
         /**
+         * @name ODataContextOptions.filterToLower
+         * @type boolean
+         */
+        /**
          * @name ODataContextOptions.deserializeDates
          * @type boolean
          */

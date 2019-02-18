@@ -20,14 +20,14 @@ const each = (values, callback) => {
             if(callback.call(values[i], i, values[i]) === false) {
                 break;
             }
-     	}
+        }
     } else {
         for(const key in values) {
             if(callback.call(values[key], key, values[key]) === false) {
                 break;
             }
-     	}
- 	}
+        }
+    }
 
     return values;
 };

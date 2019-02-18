@@ -1,17 +1,17 @@
-var $ = require("jquery"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    ArrayStore = require("data/array_store"),
-    dateLocalization = require("localization/date"),
-    isFunction = require("core/utils/type").isFunction,
-    gridCore = require("ui/data_grid/ui.data_grid.core"),
-    dataSourceAdapter = require("ui/data_grid/ui.data_grid.data_source_adapter"),
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    config = require("core/config"),
-    errors = require("ui/widget/ui.errors"),
-    ajaxMock = require("../../helpers/ajaxMock.js");
+import $ from "jquery";
+import { DataSource } from "data/data_source/data_source";
+import ArrayStore from "data/array_store";
+import dateLocalization from "localization/date";
+import { isFunction } from "core/utils/type";
+import gridCore from "ui/data_grid/ui.data_grid.core";
+import dataSourceAdapter from "ui/data_grid/ui.data_grid.data_source_adapter";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import dataGridMocks from "../../helpers/dataGridMocks.js";
+import config from "core/config";
+import errors from "ui/widget/ui.errors";
+import ajaxMock from "../../helpers/ajaxMock.js";
 
-require("ui/data_grid/ui.data_grid");
+import "ui/data_grid/ui.data_grid";
 
 QUnit.testDone(function() {
     ajaxMock.clear();
@@ -20,7 +20,6 @@ QUnit.testDone(function() {
 var processColumnsForCompare = function(columns, parameterNames, ignoreParameterNames) {
     var processedColumns = $.extend(true, [], columns);
     ignoreParameterNames = ignoreParameterNames || [];
-    ignoreParameterNames.push("id");
     $.each(processedColumns, function() {
         var propertyName;
         for(propertyName in this) {
@@ -42,7 +41,8 @@ var processColumnsForCompare = function(columns, parameterNames, ignoreParameter
                     "defaultFilterOperations",
                     "visibleIndex",
                     "serializationFormat",
-                    "resizedCallbacks"
+                    "resizedCallbacks",
+                    "headerId"
                 ].indexOf(propertyName) !== -1) {
                     delete this[propertyName];
                 }
@@ -1475,6 +1475,8 @@ QUnit.test("Initialize Lookup column with paging", function(assert) {
     assert.equal(lookup.dataType, 'string', 'lookup type');
     assert.deepEqual(lookup.items, this.options.columns[1].lookup.dataSource.store, 'lookup items');
     assert.equal(lookup.calculateCellValue(1), 'Category 1', 'lookup calculateCellValue');
+    // T701148
+    assert.strictEqual(lookup.dataSource.store, this.options.columns[1].lookup.dataSource.store, 'lookup store array instance is not changed');
 });
 
 // T630253
@@ -8693,6 +8695,76 @@ QUnit.module("Customization of the command columns", {
         assert.strictEqual(fixedColumns[1].dataField, "TestField3", "grouped column");
         assert.strictEqual(fixedColumns[2].dataField, "TestField1", "fixed column");
         assert.strictEqual(fixedColumns[3].command, "transparent", "transparent column");
+    });
+
+    // T706399
+    QUnit.test("getFixedColumns when there is one grouped column with fixed false", function(assert) {
+        // arrange
+        this.applyOptions({
+            columnFixing: {
+                enabled: true
+            },
+            columns: [
+                { dataField: "TestField1", caption: "Custom Title 1", fixed: true },
+                { dataField: "TestField2", caption: "Custom Title 2", groupIndex: 0, fixed: false },
+                { dataField: "TestField3", caption: "Custom Title 3", fixed: false },
+                { dataField: "TestField4", caption: "Custom Title 4", fixed: false }
+            ]
+        });
+
+        // act
+        var fixedColumns = this.columnsController.getFixedColumns();
+
+        // assert
+        assert.strictEqual(fixedColumns.length, 3, "fixed column count");
+        assert.strictEqual(fixedColumns[0].dataField, "TestField2", "grouped column");
+        assert.strictEqual(fixedColumns[1].dataField, "TestField1", "fixed column");
+        assert.strictEqual(fixedColumns[2].command, "transparent", "transparent column");
+    });
+
+    // T703779
+    QUnit.test("getFixedColumns if masterDetail is enabled", function(assert) {
+        // arrange
+        this.applyOptions({
+            masterDetail: {
+                enabled: true
+            },
+            columns: [
+                { dataField: "TestField1", fixed: true },
+                { dataField: "TestField2" }
+            ]
+        });
+
+        // act
+        var fixedColumns = this.columnsController.getFixedColumns();
+
+        // assert
+        assert.strictEqual(fixedColumns.length, 3, "fixed column count");
+        assert.strictEqual(fixedColumns[0].type, "detailExpand", "detail expand column");
+        assert.strictEqual(fixedColumns[1].dataField, "TestField1", "fixed column");
+        assert.strictEqual(fixedColumns[2].command, "transparent", "transparent column");
+    });
+
+    QUnit.test("getFixedColumns if editing is enabled", function(assert) {
+        // arrange
+        this.applyOptions({
+            editing: {
+                allowUpdating: true
+            },
+            columns: [
+                { dataField: "TestField1", fixed: true },
+                { dataField: "TestField2" }
+            ]
+        });
+
+        // act
+        var fixedColumns = this.columnsController.getFixedColumns();
+
+        // assert
+        assert.strictEqual(fixedColumns.length, 3, "fixed column count");
+        assert.strictEqual(fixedColumns[0].dataField, "TestField1", "fixed column");
+        assert.strictEqual(fixedColumns[1].command, "transparent", "transparent column");
+        assert.strictEqual(fixedColumns[2].command, "edit", "edit column");
     });
 });
 

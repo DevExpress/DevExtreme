@@ -711,6 +711,8 @@ declare module DevExpress {
         editorStylingMode?: 'outlined' | 'underlined' | 'filled';
         /** Specifies whether dates are parsed and serialized according to the ISO 8601 standard in all browsers. */
         forceIsoDateParsing?: boolean;
+        /** Specifies whether to convert string values to lowercase in filter and search requests to OData services. Applies to the following operations: "startswith", "endswith", "contains", and "notcontains". */
+        oDataFilterToLower?: boolean;
         /** Specifies whether the widgets support a right-to-left representation. Available for individual widgets as well. */
         rtlEnabled?: boolean;
         /** The decimal separator that is used when submitting a value to the server. */
@@ -801,6 +803,21 @@ declare module DevExpress {
         /** Gets an endpoint with a specific key. */
         urlFor(key: string): string;
     }
+    /** Hides the last displayed overlay widget. */
+    export function hideTopOverlay(): boolean;
+    /** Processes the hardware back button click. */
+    export function processHardwareBackButton(): void;
+    /** An object that serves as a namespace for DevExtreme UI widgets as well as for methods implementing UI logic in DevExtreme sites/applications. */
+    export class ui {
+        /** Creates a toast message. */
+        static notify(message: string, type?: string, displayTime?: number): void;
+        /** Creates a toast message. */
+        static notify(options: any, type?: string, displayTime?: number): void;
+        /** Sets a template engine. */
+        static setTemplateEngine(templateEngineName: string): void;
+        /** Sets a custom template engine defined via custom compile and render functions. */
+        static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
+    }
     /** An object that serves as a namespace for the methods required to perform validation. */
     export class validationEngine {
         /** Gets the default validation group. */
@@ -822,21 +839,6 @@ declare module DevExpress {
         /** Validates a view model. */
         static validateModel(model: any): any;
     }
-    /** Hides the last displayed overlay widget. */
-    export function hideTopOverlay(): boolean;
-    /** Processes the hardware back button click. */
-    export function processHardwareBackButton(): void;
-    /** An object that serves as a namespace for DevExtreme UI widgets as well as for methods implementing UI logic in DevExtreme sites/applications. */
-    export class ui {
-        /** Creates a toast message. */
-        static notify(message: string, type?: string, displayTime?: number): void;
-        /** Creates a toast message. */
-        static notify(options: any, type?: string, displayTime?: number): void;
-        /** Sets a template engine. */
-        static setTemplateEngine(templateEngineName: string): void;
-        /** Sets a custom template engine defined via custom compile and render functions. */
-        static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
-    }
     /** An object that serves as a namespace for DevExtreme Data Visualization Widgets. */
     export class viz {
         /** Changes the current palette for all data visualization widgets on the page. */
@@ -849,6 +851,8 @@ declare module DevExpress {
         static currentTheme(theme: string): void;
         /** Allows you to export widgets using their SVG markup. */
         static exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number }): void;
+        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void;
+        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: string, backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function }): void;
         /** Gets the SVG markup of specific widgets for their subsequent export. */
         static getMarkup(widgetInstances: Array<DOMComponent>): string;
         /** Gets the color sets of a predefined or registered palette. */
@@ -990,7 +994,7 @@ declare module DevExpress.data {
         /** Specifies a custom implementation of the insert(values) method. */
         insert?: ((values: any) => Promise<any> | JQueryPromise<any>);
         /** Specifies a custom implementation of the load(options) method. */
-        load?: ((options: LoadOptions) => Promise<any> | JQueryPromise<any>);
+        load?: ((options: LoadOptions) => Promise<any> | JQueryPromise<any> | Array<any>);
         /** Specifies how data returned by the load function is treated. */
         loadMode?: 'processed' | 'raw';
         /** Specifies a custom implementation of the remove(key) method. */
@@ -1203,6 +1207,8 @@ declare module DevExpress.data {
         entities?: any;
         /** Specifies a function that is executed when the ODataContext throws an error. */
         errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
+        /** Specifies whether to convert string values to lowercase in filter and search requests. Applies to the following operations: "startswith", "endswith", "contains", and "notcontains". */
+        filterToLower?: boolean;
         /** Specifies whether data should be sent using JSONP. */
         jsonp?: boolean;
         /** Specifies the URL of an OData service. */
@@ -1231,6 +1237,8 @@ declare module DevExpress.data {
         errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
         /** Specifies the data field types. Accepts the following types: "String", "Int32", "Int64", "Boolean", "Single", "Decimal" and "Guid". */
         fieldTypes?: any;
+        /** Specifies whether to convert string values to lowercase in filter and search requests. Applies to the following operations: "startswith", "endswith", "contains", and "notcontains". */
+        filterToLower?: boolean;
         /** Specifies whether data should be sent using JSONP. */
         jsonp?: boolean;
         /** Specifies the type of the key property or properties. */
@@ -1448,34 +1456,6 @@ declare module DevExpress.core {
     }
     export type dxElement = Element & JQuery;
 }
-declare module DevExpress.exporter {
-    /** An object that configures the font in an Excel cell. */
-    export interface ExcelFont {
-        /** Specifies whether the text should be in bold. */
-        bold?: boolean;
-        /** The text's color in hexadecimal characters. */
-        color?: string;
-        /** Specifies whether the text should be in italic. */
-        italic?: boolean;
-        /** The name of the typeface that should be applied to the text. */
-        name?: string;
-        /** The font size specified in points (1/72 of an inch). */
-        size?: number;
-        /** The underline formatting style. */
-        underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
-    }
-    /** A DataGrid cell to be exported to Excel. */
-    export interface ExcelDataGridCell {
-        /** The configuration of the cell's column. */
-        column?: DevExpress.ui.dxDataGridColumn;
-        /** The data object of the cell's row. */
-        data?: any;
-        /** The type of the cell's row. */
-        rowType?: string;
-        /** The cell's value. */
-        value?: any;
-    }
-}
 declare module DevExpress.framework {
     /** @deprecated #include spa-deprecated-note */
     export type dxAction = ((e: { element?: JQuery, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string | any;
@@ -1631,90 +1611,6 @@ declare module DevExpress.framework {
         constructor(options?: dxContentOptions)
     }
 }
-declare module DevExpress.framework.html {
-    export interface HtmlApplicationOptions {
-        /** Specifies the animation presets that are used to animate different UI elements in the current application. */
-        animationSet?: any;
-        /** Specifies where the commands that are defined in the application's views must be displayed. */
-        commandMapping?: any;
-        /** Specifies whether or not view caching is disabled. */
-        disableViewCache?: boolean;
-        /** An array of layout controllers that should be used to show application views in the current navigation context. */
-        layoutSet?: string | Array<any>;
-        /** Specifies whether the current application must behave as a mobile or web application. */
-        mode?: 'mobileApp' | 'webSite';
-        /** Specifies the object that represents a root namespace of the application. */
-        namespace?: any;
-        /** Specifies application behavior when the user navigates to a root view. */
-        navigateToRootViewMode?: 'keepHistory' | 'resetHistory';
-        /** An array of dxCommand configuration objects used to define commands available from the application's global navigation. */
-        navigation?: Array<dxCommand | dxCommandOptions>;
-        /** A custom router to be used in the application. */
-        router?: any;
-        /** A state manager to be used in the application. */
-        stateManager?: any;
-        /** Specifies the storage to be used by the application's state manager to store the application state. */
-        stateStorage?: any;
-        /** Specifies the current version of application templates. */
-        templatesVersion?: string;
-        /** Indicates whether on not to use the title of the previously displayed view as text on the Back button. */
-        useViewTitleAsBackText?: boolean;
-        /** A custom view cache to be used in the application. */
-        viewCache?: any;
-        /** Specifies a limit for the views that can be cached. */
-        viewCacheSize?: number;
-        /** Specifies options for the viewport meta tag of a mobile browser. */
-        viewPort?: any;
-    }
-    /** @deprecated #include spa-deprecated-note */
-    export class HtmlApplication {
-        constructor(options?: HtmlApplicationOptions)
-        /** Provides access to the ViewCache object. */
-        viewCache: any;
-        /** Provides access to the Router object. */
-        router: any;
-        /** An array of dxCommand components that are created based on the application's navigation option value. */
-        navigation: Array<dxCommand>;
-        /** Provides access to the StateManager object. */
-        stateManager: any;
-        /** Navigates to the URI preceding the current one in the navigation history. */
-        back(): void;
-        /** Returns a Boolean value indicating whether or not backwards navigation is currently possible. */
-        canBack(): boolean;
-        /** Calls the clearState() method of the application's StateManager object. */
-        clearState(): void;
-        /** Creates global navigation commands. */
-        createNavigation(navigationConfig: Array<any>): void;
-        /** Returns an HTML template of the specified view. */
-        getViewTemplate(viewName: string): JQuery;
-        /** Returns a configuration object used to create a dxView component for a specified view. */
-        getViewTemplateInfo(viewName: string): any;
-        /** Adds a specified HTML template to a collection of view or layout templates. */
-        loadTemplates(source: string | JQuery): Promise<void> & JQueryPromise<void>;
-        /** Navigates to the specified URI. */
-        navigate(uri?: string | any): void;
-        /** Navigates to the specified URI. */
-        navigate(uri: string | any, options: { root?: boolean, target?: string, direction?: string, modal?: boolean }): void;
-        /** Detaches all event handlers from a single event. */
-        off(eventName: string): this;
-        /** Detaches a particular event handler from a single event. */
-        off(eventName: string, eventHandler: Function): this;
-        /** Subscribes to an event. */
-        on(eventName: string, eventHandler: Function): this;
-        /** Subscribes to events. */
-        on(events: any): this;
-        /** Renders navigation commands to the navigation command containers that are located in the layouts used in the application. */
-        renderNavigation(): void;
-        /** Calls the restoreState() method of the application's StateManager object. */
-        restoreState(): void;
-        /** Calls the saveState method of the application's StateManager object. */
-        saveState(): void;
-        /** Provides access to the object that defines the current context to be considered when choosing an appropriate template for a view. */
-        templateContext(): any;
-    }
-    export var layoutSets: Array<string>;
-    export var animationSets: any;
-}
 declare module DevExpress.ui {
     export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
         /** A number specifying the time in milliseconds spent on the animation of the expanding or collapsing of a panel. */
@@ -1729,6 +1625,8 @@ declare module DevExpress.ui {
         height?: number | string | (() => number | string);
         /** Specifies whether the widget changes its state when a user pauses on it. */
         hoverStateEnabled?: boolean;
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxAccordionItem | any>;
         /** Specifies a custom template for items. */
         itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies a custom template for item titles. */
@@ -1754,7 +1652,7 @@ declare module DevExpress.ui {
         updateDimensions(): Promise<void> & JQueryPromise<void>;
     }
     /** This section lists the data source fields that are used in a default template for Accordion items. */
-    export interface dxAccordionItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxAccordionItem extends CollectionWidgetItem {
         /** Specifies the icon to be displayed in the panel's title. */
         icon?: string;
         /** Specifies text displayed for the widget item title. */
@@ -1763,6 +1661,8 @@ declare module DevExpress.ui {
     export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
         /** The text displayed in the button that closes the action sheet. */
         cancelText?: string;
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxActionSheetItem | any>;
         /** A function that is executed when the Cancel button is clicked or tapped. */
         onCancelClick?: ((e: { component?: dxActionSheet, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any) | string;
         /** Specifies whether or not to display the Cancel button in action sheet. */
@@ -1790,7 +1690,7 @@ declare module DevExpress.ui {
         toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
     /** This section lists the data source fields that are used in a default template for action sheet items. */
-    export interface dxActionSheetItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxActionSheetItem extends CollectionWidgetItem {
         /** Specifies the icon to be displayed on the action sheet button. */
         icon?: string;
         /** A handler for the click event raised for the button representing the given action sheet button. */
@@ -1820,6 +1720,8 @@ declare module DevExpress.ui {
         crossAlign?: 'center' | 'end' | 'start' | 'stretch';
         /** Specifies the direction of item positioning in the widget. */
         direction?: 'col' | 'row';
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxBoxItem | any>;
     }
     /** The Box widget allows you to arrange various elements within it. Separate and adaptive, the Box widget acts as a building block for the layout. */
     export class dxBox extends CollectionWidget {
@@ -1827,7 +1729,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxBoxOptions)
     }
     /** This section lists the data source fields that are used in a default template for list items. */
-    export interface dxBoxItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxBoxItem extends CollectionWidgetItem {
         /** Specifies the base size of an item element along the main direction. */
         baseSize?: number | 'auto';
         /** Holds a Box configuration object for the item. */
@@ -1895,13 +1797,13 @@ declare module DevExpress.ui {
         /** Specifies how buttons in the group are styled. */
         stylingMode?: 'text' | 'outlined' | 'contained';
     }
-    /** The ButtonGroup is a widget that contains a set of toggle buttons, and can be used as a mode switcher. */
+    /** The ButtonGroup is a widget that contains a set of toggle buttons and can be used as a mode switcher. */
     export class dxButtonGroup extends Widget {
         constructor(element: Element, options?: dxButtonGroupOptions)
         constructor(element: JQuery, options?: dxButtonGroupOptions)
     }
     /** This section describes object fields that can be used in the default item template. */
-    export interface dxButtonGroupItem extends CollectionWidgetItemTemplate {
+    export interface dxButtonGroupItem extends CollectionWidgetItem {
         /** Specifies a text for the hint that appears when the button is hovered over or long-pressed. */
         hint?: string;
         /** Specifies the icon to be displayed on the button. */
@@ -1990,7 +1892,7 @@ declare module DevExpress.ui {
         /** Specifies whether to close the ContextMenu if a user clicks outside it. */
         closeOnOutsideClick?: boolean | ((event: event) => boolean);
         /** Holds an array of menu items. */
-        items?: Array<dxContextMenuItemTemplate>;
+        items?: Array<dxContextMenuItem>;
         /** A function that is executed after the ContextMenu is hidden. */
         onHidden?: ((e: { component?: dxContextMenu, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A function that is executed before the ContextMenu is hidden. */
@@ -2045,7 +1947,7 @@ declare module DevExpress.ui {
         /** Specifies how the widget resizes columns. Applies only if allowColumnResizing is true. */
         columnResizingMode?: 'nextColumn' | 'widget';
         /** Overridden. */
-        columns?: Array<GridBaseColumn>;
+        columns?: Array<GridBaseColumn | string>;
         /** Specifies the width for all data columns. Has a lower priority than the column.width option. */
         columnWidth?: number;
         /** Specifies the origin of data for the widget. */
@@ -2080,6 +1982,7 @@ declare module DevExpress.ui {
         headerFilter?: { height?: number, visible?: boolean, width?: number, allowSearch?: boolean, searchTimeout?: number, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Specifies whether to highlight rows and cells whose data changed. */
         highlightChanges?: boolean;
+        keyboardNavigation?: { enterKeyAction?: 'startEdit' | 'moveFocus', enterKeyDirection?: 'none' | 'column' | 'row', editOnKeyPress?: boolean };
         /** Configures the load panel. */
         loadPanel?: { enabled?: boolean | 'auto', text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean, shading?: boolean, shadingColor?: string };
         /** Specifies text shown when the widget does not display any data. */
@@ -2363,10 +2266,10 @@ declare module DevExpress.ui {
     }
     export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
         /** An array of grid columns. */
-        columns?: Array<dxDataGridColumn>;
+        columns?: Array<dxDataGridColumn | string>;
         /** Specifies a function that customizes grid columns after they are created. */
         customizeColumns?: ((columns: Array<dxDataGridColumn>) => any);
-        /** Customizes data before export. You can use the exporting.customizeExcelCell function instead. */
+        /** Customizes data before export. You can use the export.customizeExcelCell function instead. */
         customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => any);
         /** Configures editing. */
         editing?: dxDataGridEditing;
@@ -2846,6 +2749,8 @@ declare module DevExpress.ui {
         indicatorEnabled?: boolean;
         /** Specifies the width of an area used to display a single image. */
         initialItemWidth?: number;
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxGalleryItem | any>;
         /** A Boolean value specifying whether or not to scroll back to the first item after the last item is swiped. */
         loop?: boolean;
         /** The index of the currently active gallery item. */
@@ -2875,7 +2780,7 @@ declare module DevExpress.ui {
         prevItem(animation: boolean): Promise<void> & JQueryPromise<void>;
     }
     /** This section lists the data source fields that are used in a default template for gallery items. */
-    export interface dxGalleryItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxGalleryItem extends CollectionWidgetItem {
         /** Specifies the text passed to the alt attribute of the image markup element. */
         imageAlt?: string;
         /** Specifies the URL of the image displayed by the item. */
@@ -2965,6 +2870,8 @@ declare module DevExpress.ui {
         indicateLoading?: boolean;
         /** Specifies the way a user can delete items from the list. */
         itemDeleteMode?: 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxListItem | any>;
         /** Specifies the array of items for a context menu called for a list item. */
         menuItems?: Array<{ text?: string, action?: ((itemElement: DevExpress.core.dxElement, itemData: any) => any) }>;
         /** Specifies whether an item context menu is shown when a user holds or swipes an item. */
@@ -3189,7 +3096,7 @@ declare module DevExpress.ui {
         searchEnabled?: boolean;
         /** The text that is provided as a hint in the lookup's search bar. */
         searchPlaceholder?: string;
-        /** A Boolean value specifying whether or not the main screen is inactive while the lookup is active. */
+        /** Specifies whether to shade the container when the lookup is active. Applies only if usePopover is false. */
         shading?: boolean;
         /** Specifies whether to display the Cancel button in the lookup window. */
         showCancelButton?: boolean;
@@ -3276,7 +3183,7 @@ declare module DevExpress.ui {
         /** Specifies whether or not the submenu is hidden when the mouse pointer leaves it. */
         hideSubmenuOnMouseLeave?: boolean;
         /** Holds an array of menu items. */
-        items?: Array<dxMenuItemTemplate>;
+        items?: Array<dxMenuItem>;
         /** A function that is executed after a submenu is hidden. */
         onSubmenuHidden?: ((e: { component?: dxMenu, element?: DevExpress.core.dxElement, model?: any, rootItem?: DevExpress.core.dxElement }) => any);
         /** A function that is executed before a submenu is hidden. */
@@ -3304,6 +3211,8 @@ declare module DevExpress.ui {
         deferRendering?: boolean;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxMultiViewItem | any>;
         /** A Boolean value specifying whether or not to scroll back to the first item after the last item is swiped. */
         loop?: boolean;
         /** The index of the currently displayed item. */
@@ -3317,7 +3226,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxMultiViewOptions)
     }
     /** This section lists the data source fields that are used in a default template for multi-view items. */
-    export interface dxMultiViewItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxMultiViewItem extends CollectionWidgetItem {
     }
     export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
         /** Specifies whether or not an end-user can scroll tabs by swiping. */
@@ -3329,7 +3238,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxNavBarOptions)
     }
     /** This section lists the data source fields that are used in a default template for navbar items. */
-    export interface dxNavBarItemTemplate extends dxTabsItemTemplate {
+    export interface dxNavBarItem extends dxTabsItem {
         /** Specifies a badge text for the navbar item. */
         badge?: string;
     }
@@ -3391,7 +3300,7 @@ declare module DevExpress.ui {
         onShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Positions the widget. */
         position?: any;
-        /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
+        /** Specifies whether to shade the container when the widget is active. */
         shading?: boolean;
         /** Specifies the shading color. */
         shadingColor?: string;
@@ -3427,6 +3336,8 @@ declare module DevExpress.ui {
         backgroundImage?: { url?: string, width?: number, height?: number };
         /** Specifies whether or not the widget can be focused. */
         focusStateEnabled?: boolean;
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxPanoramaItem | any>;
         /** The index of the currently active panorama item. */
         selectedIndex?: number;
         /** Specifies the widget content title. */
@@ -3438,13 +3349,15 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxPanoramaOptions)
     }
     /** This section lists the data source fields that are used in a default template for panorama items. */
-    export interface dxPanoramaItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxPanoramaItem extends CollectionWidgetItem {
         /** The title of the panorama item. */
         title?: string;
     }
     export interface dxPivotOptions extends CollectionWidgetOptions<dxPivot> {
         /** Specifies a custom template for the widget content. Rendered only once - when the widget is created. */
         contentTemplate?: template | ((container: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxPivotItem | any>;
         /** Specifies a custom template for item titles. */
         itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** The index of the currently active pivot item. */
@@ -3458,7 +3371,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxPivotOptions)
     }
     /** This section lists the data source fields that are used in a default template for pivot items. */
-    export interface dxPivotItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxPivotItem extends CollectionWidgetItem {
         /** Specifies a name for a pivot item. */
         title?: string;
         /** A template used for rendering the item title. */
@@ -3585,7 +3498,7 @@ declare module DevExpress.ui {
         hideEvent?: { name?: string, delay?: number } | string;
         /** An object defining widget positioning options. */
         position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
-        /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
+        /** Specifies whether to shade the container when the widget is active. */
         shading?: boolean;
         /** Specifies options for displaying the widget. */
         showEvent?: { name?: string, delay?: number } | string;
@@ -3781,6 +3694,8 @@ declare module DevExpress.ui {
         cols?: Array<{ baseSize?: number | 'auto', shrink?: number, ratio?: number, screen?: string }>;
         /** Specifies the widget's height. */
         height?: number | string | (() => number | string);
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxResponsiveBoxItem | any>;
         /** Specifies the collection of rows for the grid used to position layout elements. */
         rows?: Array<{ baseSize?: number | 'auto', shrink?: number, ratio?: number, screen?: string }>;
         /** Specifies the function returning the size qualifier depending on the screen's width. */
@@ -3796,13 +3711,14 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxResponsiveBoxOptions)
     }
     /** This section lists the fields that are used in a default template for widget items. */
-    export interface dxResponsiveBoxItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxResponsiveBoxItem extends CollectionWidgetItem {
         /** Specifies the item location and size against the widget grid. */
         location?: { row?: number, col?: number, rowspan?: number, colspan?: number, screen?: string } | Array<{ row?: number, col?: number, rowspan?: number, colspan?: number, screen?: string }>;
     }
     export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
         /** Specifies the name of the data source item field whose value defines whether or not the corresponding appointment is an all-day appointment. */
         allDayExpr?: string;
+        /** Specifies an appointment collector's custom template. */
         appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies a custom template for appointments. */
         appointmentTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
@@ -3816,11 +3732,12 @@ declare module DevExpress.ui {
         currentDate?: Date | number | string;
         /** Specifies the currently displayed view. Accepts the view's name or type. */
         currentView?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+        /** Customizes the date navigator's text. */
         customizeDateNavigatorText?: ((info: { startDate?: Date, endDate?: Date, text?: string }) => string);
         /** Specifies a custom template for table cells. */
         dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies the origin of data for the widget. */
-        dataSource?: string | Array<dxSchedulerAppointmentTemplate> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        dataSource?: string | Array<dxSchedulerAppointment> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** Specifies a custom template for day scale items. */
         dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies the date-time values' serialization format. Use it only if you do not specify the dataSource at design time. */
@@ -3869,8 +3786,10 @@ declare module DevExpress.ui {
         onAppointmentDeleted?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
         /** A function that is executed before an appointment is deleted from the data source. */
         onAppointmentDeleting?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
-        /** A function that is executed before an appointment details form is opened. */
+        /** @deprecated Use the onAppointmentFormOpening option instead. */
         onAppointmentFormCreated?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
+        /** A function that is executed before an appointment details form is opened. */
+        onAppointmentFormOpening?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
         /** A function that is executed when an appointment is rendered. */
         onAppointmentRendered?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any, appointmentElement?: DevExpress.core.dxElement }) => any);
         /** A function that is executed after an appointment is updated in the data source. */
@@ -4007,6 +3926,8 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** Specifies a custom template for the widget content. Rendered only once - when the widget is created. */
         contentTemplate?: template | ((container: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxSlideOutItem | any>;
         /** A Boolean value specifying whether or not to display a grouped menu. */
         menuGrouped?: boolean;
         /** Specifies a custom template for group captions. */
@@ -4038,7 +3959,7 @@ declare module DevExpress.ui {
         toggleMenuVisibility(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
     /** This section lists the data source fields that are used in a default template for SlideOut items. */
-    export interface dxSlideOutItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxSlideOutItem extends CollectionWidgetItem {
         /** Specifies a template that should be used to render a menu item. */
         menuTemplate?: template | (() => string | Element | JQuery);
     }
@@ -4099,6 +4020,8 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** Specifies whether the widget changes its state when a user pauses on it. */
         hoverStateEnabled?: boolean;
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxTabsItem | any>;
         /** Specifies whether to repaint only those elements whose data changed. */
         repaintChangesOnly?: boolean;
         /** Specifies whether or not an end-user can scroll tabs by swiping. */
@@ -4109,7 +4032,7 @@ declare module DevExpress.ui {
         selectedItems?: Array<string | number | any>;
         /** Specifies whether the widget enables an end-user to select only a single item or multiple items. */
         selectionMode?: 'multiple' | 'single';
-        /** A Boolean value that specifies the availability of navigation buttons. */
+        /** Specifies whether navigation buttons should be available when tabs exceed the widget's width. */
         showNavButtons?: boolean;
     }
     /** The Tabs is a tab strip used to switch between pages or views. This widget is included in the TabPanel widget, but you can use the Tabs separately as well. */
@@ -4118,7 +4041,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxTabsOptions)
     }
     /** This section lists the data source fields that are used in a default template for tabs. */
-    export interface dxTabsItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxTabsItem extends CollectionWidgetItem {
         /** Specifies a badge text for the tab. */
         badge?: string;
         /** Specifies the icon to be displayed on the tab. */
@@ -4131,6 +4054,8 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** Specifies whether the widget changes its state when a user pauses on it. */
         hoverStateEnabled?: boolean;
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxTabPanelItem | any>;
         /** Specifies a custom template for item titles. */
         itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** A function that is executed when a tab is clicked or tapped. */
@@ -4145,7 +4070,7 @@ declare module DevExpress.ui {
         scrollByContent?: boolean;
         /** A Boolean indicating whether or not to add scrolling support for tabs in the title. */
         scrollingEnabled?: boolean;
-        /** A Boolean value that specifies the availability of navigation buttons. */
+        /** Specifies whether navigation buttons should be available when tabs exceed the widget's width. */
         showNavButtons?: boolean;
         /** A Boolean value specifying whether or not to allow users to change the selected index by swiping. */
         swipeEnabled?: boolean;
@@ -4156,7 +4081,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxTabPanelOptions)
     }
     /** This section lists the data source fields that are used in a default template for tab panel items. */
-    export interface dxTabPanelItemTemplate extends dxMultiViewItemTemplate {
+    export interface dxTabPanelItem extends dxMultiViewItem {
         /** Specifies a badge text for the tab. */
         badge?: string;
         /** Specifies the icon to be displayed in the tab's title. */
@@ -4244,6 +4169,8 @@ declare module DevExpress.ui {
         hoverStateEnabled?: boolean;
         /** Specifies the distance in pixels between adjacent tiles. */
         itemMargin?: number;
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxTileViewItem | any>;
         /** A Boolean value specifying whether or not to display a scrollbar. */
         showScrollbar?: boolean;
     }
@@ -4255,7 +4182,7 @@ declare module DevExpress.ui {
         scrollPosition(): number;
     }
     /** This section lists the data source fields that are used in a default template for tile view items. */
-    export interface dxTileViewItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxTileViewItem extends CollectionWidgetItem {
         /** Specifies a multiplier for the baseItemHeight option value (for the purpose of obtaining the actual item height). */
         heightRatio?: number;
         /** Specifies a multiplier for the baseItemWidth option value (for the purpose of obtaining the actual item width). */
@@ -4284,7 +4211,7 @@ declare module DevExpress.ui {
         minWidth?: number | string | (() => number | string);
         /** Positions the widget. */
         position?: positionConfig | string;
-        /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
+        /** Specifies whether to shade the container when the widget is active. */
         shading?: boolean;
         /** Specifies the Toast widget type. */
         type?: 'custom' | 'error' | 'info' | 'success' | 'warning';
@@ -4304,6 +4231,8 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxToastOptions)
     }
     export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
+        /** An array of items displayed by the widget. */
+        items?: Array<string | dxToolbarItem | any>;
         /** Specifies a custom template for menu items. */
         menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Informs the widget about its location in a view HTML markup. */
@@ -4315,7 +4244,9 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxToolbarOptions)
     }
     /** This section lists the data source fields that are used in a default template for toolbar items. */
-    export interface dxToolbarItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxToolbarItem extends CollectionWidgetItem {
+        /** Specifies a CSS class to be applied to the item. */
+        cssClass?: string;
         /** Specifies when to display an item in the toolbar's overflow menu. */
         locateInMenu?: 'always' | 'auto' | 'never';
         /** Specifies a location for the item on the toolbar. */
@@ -4351,7 +4282,7 @@ declare module DevExpress.ui {
         /** Specifies whether all rows are expanded initially. */
         autoExpandAll?: boolean;
         /** Configures columns. */
-        columns?: Array<dxTreeListColumn>;
+        columns?: Array<dxTreeListColumn | string>;
         /** Customizes columns after they are created. */
         customizeColumns?: ((columns: Array<dxTreeListColumn>) => any);
         /** Notifies the widget of your data structure. */
@@ -4362,6 +4293,7 @@ declare module DevExpress.ui {
         expandedRowKeys?: Array<any>;
         /** Specifies whether nodes appear expanded or collapsed after filtering is applied. */
         expandNodesOnFiltering?: boolean;
+        filterMode?: 'exactMatch' | 'fullBranch' | 'withAncestors';
         /** Specifies which data field defines whether the node has children. */
         hasItemsExpr?: string | Function;
         /** Specifies which data field contains nested items. Set this option when your data has a hierarchical structure. */
@@ -4490,7 +4422,7 @@ declare module DevExpress.ui {
     export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions<dxTreeView> {
         /** Specifies whether or not to animate item collapsing and expanding. */
         animationEnabled?: boolean;
-        /** Allows you to load nodes manually. */
+        /** Allows you to load nodes. Applies if the dataStructure is "plain" and the dataSource and items are undefined. */
         createChildren?: ((parentNode: dxTreeViewNode) => Promise<any> | JQueryPromise<any> | Array<any>);
         /** Specifies whether a nested or plain array is used as a data source. */
         dataStructure?: 'plain' | 'tree';
@@ -4505,7 +4437,7 @@ declare module DevExpress.ui {
         /** Specifies the name of the data source item field whose value defines whether or not the corresponding node includes child nodes. */
         hasItemsExpr?: string | Function;
         /** An array of items displayed by the widget. */
-        items?: Array<dxTreeViewItemTemplate>;
+        items?: Array<dxTreeViewItem>;
         /** A function that is executed when a collection item is clicked or tapped. */
         onItemClick?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, jQueryEvent?: JQueryEventObject, event?: event, node?: dxTreeViewNode }) => any);
         /** A function that is executed when a tree view item is collapsed. */
@@ -4595,6 +4527,7 @@ declare module DevExpress.ui {
     }
     /** A validation rule that demands that the validated field has a numeric value. */
     export interface NumericRule {
+        /** Specifies whether empty values are valid. */
         ignoreEmptyValue?: boolean;
         /** Specifies the message that is shown for end-users if the current rule is broken. */
         message?: string;
@@ -4603,6 +4536,7 @@ declare module DevExpress.ui {
     }
     /** A validation rule that demands the target value be within the specified value range (including the range's end points). */
     export interface RangeRule {
+        /** Specifies whether empty values are valid. */
         ignoreEmptyValue?: boolean;
         /** Specifies the maximum value allowed for the validated value. */
         max?: Date | number;
@@ -4617,6 +4551,7 @@ declare module DevExpress.ui {
     }
     /** A validation rule that demands the target value length be within the specified value range (including the range's end points). */
     export interface StringLengthRule {
+        /** Specifies whether empty values are valid. */
         ignoreEmptyValue?: boolean;
         /** Specifies the maximum length allowed for the validated value. */
         max?: number;
@@ -4631,6 +4566,7 @@ declare module DevExpress.ui {
     }
     /** A validation rule with custom validation logic. */
     export interface CustomRule {
+        /** Specifies whether empty values are valid. */
         ignoreEmptyValue?: boolean;
         /** Specifies the message that is shown for end-users if the current rule is broken. */
         message?: string;
@@ -4647,6 +4583,7 @@ declare module DevExpress.ui {
         comparisonTarget?: (() => any);
         /** Specifies the operator to be used for comparing the validated value with the target. */
         comparisonType?: '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
+        /** Specifies whether empty values are valid. */
         ignoreEmptyValue?: boolean;
         /** Specifies the message that is shown for end-users if the current rule is broken. */
         message?: string;
@@ -4657,6 +4594,7 @@ declare module DevExpress.ui {
     }
     /** A validation rule that demands that the validated field match a specified pattern. */
     export interface PatternRule {
+        /** Specifies whether empty values are valid. */
         ignoreEmptyValue?: boolean;
         /** Specifies the message that is shown for end-users if the current rule is broken. */
         message?: string;
@@ -4667,6 +4605,7 @@ declare module DevExpress.ui {
     }
     /** A validation rule that demands that the validated field match the Email pattern. */
     export interface EmailRule {
+        /** Specifies whether empty values are valid. */
         ignoreEmptyValue?: boolean;
         /** Specifies the message that is shown for end-users if the current rule is broken. */
         message?: string;
@@ -4747,11 +4686,11 @@ declare module DevExpress.ui {
     }
     export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOptions<T> {
         /** A data source used to fetch data to be displayed by the widget. */
-        dataSource?: string | Array<string | CollectionWidgetItemTemplate> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        dataSource?: string | Array<string | CollectionWidgetItem> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** The time period in milliseconds before the onItemHold event is raised. */
         itemHoldTimeout?: number;
         /** An array of items displayed by the widget. */
-        items?: Array<string | any>;
+        items?: Array<string | CollectionWidgetItem | any>;
         /** Specifies a custom template for items. */
         itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies which data field provides keys for widget items. */
@@ -4785,7 +4724,7 @@ declare module DevExpress.ui {
         getDataSource(): DevExpress.data.DataSource;
     }
     /** This section lists the data source fields that are used in a default item template. */
-    export interface CollectionWidgetItemTemplate {
+    export interface CollectionWidgetItem {
         /** Specifies whether or not a widget item must be displayed disabled. */
         disabled?: boolean;
         /** Specifies html code inserted into the widget item element. */
@@ -4798,9 +4737,9 @@ declare module DevExpress.ui {
         visible?: boolean;
     }
     /** This section lists the data source fields that are used in a default item template. */
-    export interface dxContextMenuItemTemplate extends dxMenuBaseItemTemplate {
+    export interface dxContextMenuItem extends dxMenuBaseItem {
         /** Holds an array of menu items. */
-        items?: Array<dxContextMenuItemTemplate>;
+        items?: Array<dxContextMenuItem>;
     }
     export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectionWidgetOptions<T> {
         /** A Boolean value specifying whether or not the widget changes its state when interacting with a user. */
@@ -4810,7 +4749,7 @@ declare module DevExpress.ui {
         /** Specifies the name of the CSS class to be applied to the root menu level and all submenus. */
         cssClass?: string;
         /** Holds an array of menu items. */
-        items?: Array<dxMenuBaseItemTemplate>;
+        items?: Array<dxMenuBaseItem>;
         /** Specifies whether or not an item becomes selected if a user clicks it. */
         selectByClick?: boolean;
         /** Specifies the selection mode supported by the menu. */
@@ -4828,7 +4767,7 @@ declare module DevExpress.ui {
         unselectItem(itemElement: Element): void;
     }
     /** This section lists the data source fields that are used in a default item template. */
-    export interface dxMenuBaseItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxMenuBaseItem extends CollectionWidgetItem {
         /** Specifies whether a group separator is displayed over the item. */
         beginGroup?: boolean;
         /** Specifies if a menu is closed when a user clicks the item. */
@@ -4838,7 +4777,7 @@ declare module DevExpress.ui {
         /** Specifies the menu item's icon. */
         icon?: string;
         /** Holds an array of menu items. */
-        items?: Array<dxMenuBaseItemTemplate>;
+        items?: Array<dxMenuBaseItem>;
         /** Specifies whether or not a user can select a menu item. */
         selectable?: boolean;
         /** Specifies whether or not the item is selected. */
@@ -4860,7 +4799,7 @@ declare module DevExpress.ui {
         /** Specifies a field name or a function that returns a field name or a value to be used for grouping column cells. */
         calculateGroupValue?: string | ((rowData: any) => any);
         /** An array of grid columns. */
-        columns?: Array<dxDataGridColumn>;
+        columns?: Array<dxDataGridColumn | string>;
         /** Specifies a custom template for group cells. */
         groupCellTemplate?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => any);
         /** Specifies the index of a column when grid records are grouped by the values of this column. */
@@ -4973,35 +4912,22 @@ declare module DevExpress.ui {
     }
     export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
         /** A data source used to fetch data the widget should display. */
-        dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        dataSource?: string | Array<CollectionWidgetItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** Specifies the name of the data source item field whose value is displayed by the widget. */
         displayExpr?: string | Function;
         /** An array of items displayed by the widget. */
-        items?: Array<any>;
+        items?: Array<CollectionWidgetItem | any>;
         /** Specifies a custom template for items. */
         itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies the currently selected value. May be an object if dataSource contains objects and valueExpr is not set. */
         value?: any;
-        /** Specifies which data field provides the widget's value. When this option is not set, the value is the entire data object. */
+        /** Specifies which data field provides unique values to the widget's value. When the data field is not set, the value is the entire data object. */
         valueExpr?: string | Function;
     }
     export class DataExpressionMixin {
         constructor(options?: DataExpressionMixinOptions)
         /** Gets the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
-    }
-    /** This section lists the data source fields that are used in a default item template. */
-    export interface DataExpressionMixinItemTemplate {
-        /** Specifies whether or not a widget item must be displayed disabled. */
-        disabled?: boolean;
-        /** Specifies html code inserted into the widget item element. */
-        html?: string;
-        /** Specifies an item template that should be used to render this item only. */
-        template?: template;
-        /** Specifies text displayed for the widget item. */
-        text?: string;
-        /** Specifies whether or not a widget item must be displayed. */
-        visible?: boolean;
     }
     /** The FilterBuilder's field structure. */
     export interface dxFilterBuilderField {
@@ -5286,7 +5212,7 @@ declare module DevExpress.ui {
         /** Allows you to customize buttons in the editing column or create a custom command column. Applies only if the column's type is "buttons". */
         buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxTreeListColumnButton>;
         /** Configures columns. */
-        columns?: Array<dxTreeListColumn>;
+        columns?: Array<dxTreeListColumn | string>;
         /** Specifies the command column that this object customizes. */
         type?: 'adaptive' | 'buttons';
     }
@@ -5391,12 +5317,14 @@ declare module DevExpress.ui {
         container?: string | Element | JQuery;
         items?: Array<dxHtmlEditorToolbarItem | string>;
     }
-    /** Configures toolbar controls which allow users to format text and execute commands. */
-    export interface dxHtmlEditorToolbarItem extends dxToolbarItemTemplate {
+    /** Configures toolbar controls. These controls allow users to format text and execute commands. */
+    export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
         /** Specifies the built-in control that this object customizes or a format with multiple choices. */
         formatName?: string;
         /** Specifies values for a format with multiple choices. Should be used with the formatName. */
         formatValues?: Array<string | number | boolean>;
+        /** Specifies a location for the item on the toolbar. */
+        location?: 'after' | 'before' | 'center';
     }
     export interface dxHtmlEditorVariables {
         /** Specifies a collection of variables available for a user. */
@@ -5405,7 +5333,7 @@ declare module DevExpress.ui {
         escapeChar?: string | Array<string>;
     }
     /** This section lists the data source fields that are used in a default template for list items. */
-    export interface dxListItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxListItem extends CollectionWidgetItem {
         /** Specifies the text of a badge displayed for the list item. */
         badge?: string;
         /** Specifies the list item's icon. */
@@ -5416,9 +5344,9 @@ declare module DevExpress.ui {
         showChevron?: boolean;
     }
     /** This section lists the data source fields that are used in a default item template. */
-    export interface dxMenuItemTemplate extends dxMenuBaseItemTemplate {
+    export interface dxMenuItem extends dxMenuBaseItem {
         /** Holds an array of menu items. */
-        items?: Array<dxMenuItemTemplate>;
+        items?: Array<dxMenuItem>;
     }
     /** An object containing information about the pivot grid cell. */
     export interface dxPivotGridPivotGridCell {
@@ -5477,7 +5405,7 @@ declare module DevExpress.ui {
         value(isCalculatedValue: boolean): any;
     }
     /** This section lists the fields that are used in a default template for scheduler appointments. */
-    export interface dxSchedulerAppointmentTemplate extends CollectionWidgetItemTemplate {
+    export interface dxSchedulerAppointment extends CollectionWidgetItem {
         /** Specifies whether the appointment lasts all day. */
         allDay?: boolean;
         /** Specifies a detail description of the appointment. */
@@ -5689,7 +5617,7 @@ declare module DevExpress.ui {
         visible?: boolean;
     }
     /** This section lists the data source fields that are used in a default item template. */
-    export interface dxTreeViewItemTemplate extends CollectionWidgetItemTemplate {
+    export interface dxTreeViewItem extends CollectionWidgetItem {
         /** Specifies whether or not the tree view item is displayed expanded. */
         expanded?: boolean;
         /** Specifies whether or not the tree view item has children. */
@@ -5697,7 +5625,7 @@ declare module DevExpress.ui {
         /** Specifies the tree view item's icon. */
         icon?: string;
         /** Holds an array of tree view items. */
-        items?: Array<dxTreeViewItemTemplate>;
+        items?: Array<dxTreeViewItem>;
         /** Holds the key of the parent item. */
         parentId?: number | string;
         /** Specifies whether or not the tree view item is displayed selected. */
@@ -5777,7 +5705,7 @@ declare module DevExpress.ui {
         focus(): void;
         /** Registers a handler to be executed when a user presses a specific key. */
         registerKeyHandler(key: string, handler: Function): void;
-        /** Repaints the widget. Call it if you made modifications that changed the widget's state to invalid. */
+        /** Repaints the widget without reloading data. Call it to update the widget's markup. */
         repaint(): void;
     }
     /** A template notation used to specify templates for widget elements. */
@@ -5786,12 +5714,10 @@ declare module DevExpress.ui {
     export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | { type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime', precision?: number, currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date) };
     /** An object that serves as a namespace for methods displaying a message in an application/site. */
     export class dialog {
-        /** Creates an alert dialog message containing a single "OK" button. */
-        static alert(message: string, title: string): Promise<void> & JQueryPromise<void>;
-        /** Creates a confirm dialog that contains "Yes" and "No" buttons. */
-        static confirm(message: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
+        static alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
+        static confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
         /** Creates a dialog with custom buttons. */
-        static custom(options: { title?: string, message?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean }): any;
+        static custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string }): any;
     }
     /** An object that serves as a namespace for the methods that work with DevExtreme CSS Themes. */
     export class themes {
@@ -5802,6 +5728,120 @@ declare module DevExpress.ui {
         /** Specifies a function to be executed after the theme is loaded. */
         static ready(callback: Function): void;
     }
+}
+declare module DevExpress.exporter {
+    /** An object that configures the font in an Excel cell. */
+    export interface ExcelFont {
+        /** Specifies whether the text should be in bold. */
+        bold?: boolean;
+        /** The text's color in hexadecimal characters. */
+        color?: string;
+        /** Specifies whether the text should be in italic. */
+        italic?: boolean;
+        /** The name of the typeface that should be applied to the text. */
+        name?: string;
+        /** The font size specified in points (1/72 of an inch). */
+        size?: number;
+        /** The underline formatting style. */
+        underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
+    }
+    /** A DataGrid cell to be exported to Excel. */
+    export interface ExcelDataGridCell {
+        /** The configuration of the cell's column. */
+        column?: DevExpress.ui.dxDataGridColumn;
+        /** The data object of the cell's row. */
+        data?: any;
+        groupSummaryItems?: Array<{ name?: string, value?: any }>;
+        /** The type of the cell's row. */
+        rowType?: string;
+        totalSummaryItemName?: string;
+        /** The cell's value. */
+        value?: any;
+    }
+}
+declare module DevExpress.framework.html {
+    export interface HtmlApplicationOptions {
+        /** Specifies the animation presets that are used to animate different UI elements in the current application. */
+        animationSet?: any;
+        /** Specifies where the commands that are defined in the application's views must be displayed. */
+        commandMapping?: any;
+        /** Specifies whether or not view caching is disabled. */
+        disableViewCache?: boolean;
+        /** An array of layout controllers that should be used to show application views in the current navigation context. */
+        layoutSet?: string | Array<any>;
+        /** Specifies whether the current application must behave as a mobile or web application. */
+        mode?: 'mobileApp' | 'webSite';
+        /** Specifies the object that represents a root namespace of the application. */
+        namespace?: any;
+        /** Specifies application behavior when the user navigates to a root view. */
+        navigateToRootViewMode?: 'keepHistory' | 'resetHistory';
+        /** An array of dxCommand configuration objects used to define commands available from the application's global navigation. */
+        navigation?: Array<dxCommand | dxCommandOptions>;
+        /** A custom router to be used in the application. */
+        router?: any;
+        /** A state manager to be used in the application. */
+        stateManager?: any;
+        /** Specifies the storage to be used by the application's state manager to store the application state. */
+        stateStorage?: any;
+        /** Specifies the current version of application templates. */
+        templatesVersion?: string;
+        /** Indicates whether on not to use the title of the previously displayed view as text on the Back button. */
+        useViewTitleAsBackText?: boolean;
+        /** A custom view cache to be used in the application. */
+        viewCache?: any;
+        /** Specifies a limit for the views that can be cached. */
+        viewCacheSize?: number;
+        /** Specifies options for the viewport meta tag of a mobile browser. */
+        viewPort?: any;
+    }
+    /** @deprecated #include spa-deprecated-note */
+    export class HtmlApplication {
+        constructor(options?: HtmlApplicationOptions)
+        /** Provides access to the ViewCache object. */
+        viewCache: any;
+        /** Provides access to the Router object. */
+        router: any;
+        /** An array of dxCommand components that are created based on the application's navigation option value. */
+        navigation: Array<dxCommand>;
+        /** Provides access to the StateManager object. */
+        stateManager: any;
+        /** Navigates to the URI preceding the current one in the navigation history. */
+        back(): void;
+        /** Returns a Boolean value indicating whether or not backwards navigation is currently possible. */
+        canBack(): boolean;
+        /** Calls the clearState() method of the application's StateManager object. */
+        clearState(): void;
+        /** Creates global navigation commands. */
+        createNavigation(navigationConfig: Array<any>): void;
+        /** Returns an HTML template of the specified view. */
+        getViewTemplate(viewName: string): JQuery;
+        /** Returns a configuration object used to create a dxView component for a specified view. */
+        getViewTemplateInfo(viewName: string): any;
+        /** Adds a specified HTML template to a collection of view or layout templates. */
+        loadTemplates(source: string | JQuery): Promise<void> & JQueryPromise<void>;
+        /** Navigates to the specified URI. */
+        navigate(uri?: string | any): void;
+        /** Navigates to the specified URI. */
+        navigate(uri: string | any, options: { root?: boolean, target?: string, direction?: string, modal?: boolean }): void;
+        /** Detaches all event handlers from a single event. */
+        off(eventName: string): this;
+        /** Detaches a particular event handler from a single event. */
+        off(eventName: string, eventHandler: Function): this;
+        /** Subscribes to an event. */
+        on(eventName: string, eventHandler: Function): this;
+        /** Subscribes to events. */
+        on(events: any): this;
+        /** Renders navigation commands to the navigation command containers that are located in the layouts used in the application. */
+        renderNavigation(): void;
+        /** Calls the restoreState() method of the application's StateManager object. */
+        restoreState(): void;
+        /** Calls the saveState method of the application's StateManager object. */
+        saveState(): void;
+        /** Provides access to the object that defines the current context to be considered when choosing an appropriate template for a view. */
+        templateContext(): any;
+    }
+    export var layoutSets: Array<string>;
+    export var animationSets: any;
 }
 declare module DevExpress.viz {
     export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
@@ -5859,6 +5899,7 @@ declare module DevExpress.viz {
     interface BaseWidgetLoadingIndicator {
         /** Colors the background of the loading indicator. */
         backgroundColor?: string;
+        enabled?: boolean;
         /** Specifies font options for the loading indicator. */
         font?: Font;
         /** Specifies whether to show the loading indicator or not. */
@@ -6042,6 +6083,7 @@ declare module DevExpress.viz {
         seriesSelectionMode?: 'multiple' | 'single';
         /** Defines options for the series template. */
         seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => ChartSeries) };
+        stickyHovering?: boolean;
         /** Indicates whether or not to synchronize value axes when they are displayed on a single pane. */
         synchronizeMultiAxes?: boolean;
         /** Configures tooltips. */
@@ -6118,6 +6160,7 @@ declare module DevExpress.viz {
     }
     /** Declares a collection of constant lines belonging to the argument axis. */
     export interface dxChartArgumentAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
+        displayBehindSeries?: boolean;
         /** Specifies whether to extend the axis's default visual range to display the constant line. */
         extendAxis?: boolean;
         /** Configures the constant line label. */
@@ -6201,7 +6244,7 @@ declare module DevExpress.viz {
         /** Configures the minor grid. */
         minorGrid?: { visible?: boolean, color?: string, width?: number, opacity?: number };
         /** Configures the appearance of minor axis ticks. */
-        minorTick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number };
+        minorTick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number, shift?: number };
         /** Controls the empty space between the minimum series points and the axis. Applies only to the axes of the "continuous" and "logarithmic" type. */
         minValueMargin?: number;
         /** Specifies how transparent the axis line should be. */
@@ -6211,7 +6254,7 @@ declare module DevExpress.viz {
         /** Configures the appearance of strips. */
         stripStyle?: dxChartCommonAxisSettingsStripStyle;
         /** Configures the appearance of major axis ticks. */
-        tick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number };
+        tick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number, shift?: number };
         /** Configures axis titles. */
         title?: dxChartCommonAxisSettingsTitle;
         /** Adds an empty space between the axis and the minimum and maximum series points. */
@@ -6426,12 +6469,14 @@ declare module DevExpress.viz {
         valueType?: 'datetime' | 'numeric' | 'string';
         /** Defines the axis' displayed range. Cannot be wider than the wholeRange. */
         visualRange?: VizRange | Array<number | string | Date>;
+        /** Specifies how the axis's visual range should behave when chart data is updated. */
         visualRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
         /** Defines the range where the axis can be zoomed and panned. */
         wholeRange?: VizRange | Array<number | string | Date>;
     }
     /** Declares a collection of constant lines belonging to the value axis. */
     export interface dxChartValueAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
+        displayBehindSeries?: boolean;
         /** Specifies whether to extend the axis's default visual range to display the constant line. */
         extendAxis?: boolean;
         /** Configures the constant line label. */
@@ -6546,6 +6591,8 @@ declare module DevExpress.viz {
     export interface dxPieChartLegend extends BaseChartLegend {
         /** Specifies the text for a hint that appears when a user hovers the mouse pointer over a legend item. */
         customizeHint?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
+        /** Allows you to change the order, text, and visibility of legend items. */
+        customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>);
         /** Specifies a callback function that returns the text to be displayed by a legend item. */
         customizeText?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
         /** Specifies what chart elements to highlight when a corresponding item in the legend is hovered over. */
@@ -6650,6 +6697,7 @@ declare module DevExpress.viz {
     }
     /** Defines an array of the argument axis constant lines. */
     export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
+        displayBehindSeries?: boolean;
         /** Specifies whether to extend the axis to display the constant line. */
         extendAxis?: boolean;
         /** An object defining constant line label options. */
@@ -6840,6 +6888,7 @@ declare module DevExpress.viz {
     }
     /** Defines an array of the value axis constant lines. */
     export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
+        displayBehindSeries?: boolean;
         /** Specifies whether to extend the axis to display the constant line. */
         extendAxis?: boolean;
         /** An object defining constant line label options. */
@@ -6942,6 +6991,8 @@ declare module DevExpress.viz {
         columnCount?: number;
         /** Specifies a blank space between legend columns in pixels. */
         columnItemSpacing?: number;
+        /** Allows you to change the order, text, and visibility of legend items. */
+        customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
         /** Specifies font options for the text displayed in the legend. */
         font?: Font;
         /** Specifies a legend's position on the chart. */
@@ -7896,7 +7947,7 @@ declare module DevExpress.viz {
         /** Configures funnel item labels. */
         label?: { font?: Font, position?: 'columns' | 'inside' | 'outside', horizontalOffset?: number, horizontalAlignment?: 'left' | 'right', format?: DevExpress.ui.format, connector?: { visible?: boolean, width?: number, color?: string, opacity?: number }, backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, visible?: boolean, showForZeroValues?: boolean, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string) };
         /** Configures the legend. */
-        legend?: { verticalAlignment?: 'bottom' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', orientation?: 'horizontal' | 'vertical', itemTextPosition?: 'bottom' | 'left' | 'right' | 'top', itemsAlignment?: 'center' | 'left' | 'right', font?: Font, visible?: boolean, margin?: number | { top?: number, bottom?: number, left?: number, right?: number }, markerSize?: number, backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number, customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string), customizeHint?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string) };
+        legend?: { verticalAlignment?: 'bottom' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', orientation?: 'horizontal' | 'vertical', itemTextPosition?: 'bottom' | 'left' | 'right' | 'top', itemsAlignment?: 'center' | 'left' | 'right', font?: Font, visible?: boolean, margin?: number | { top?: number, bottom?: number, left?: number, right?: number }, markerSize?: number, backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number, customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string), customizeHint?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>) };
         /** Specifies the ratio between the height of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is "dynamicHeight". */
         neckHeight?: number;
         /** Specifies the ratio between the width of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is "dynamicHeight". */
@@ -8013,6 +8064,8 @@ declare module DevExpress.viz {
         animation?: BaseGaugeAnimation;
         /** Specifies the color of the parent page element. */
         containerBackgroundColor?: string;
+        /** Configures the loading indicator. */
+        loadingIndicator?: BaseGaugeLoadingIndicator;
         /** A function that is executed when a tooltip becomes hidden. */
         onTooltipHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /** A function that is executed when a tooltip appears. */
@@ -8036,6 +8089,9 @@ declare module DevExpress.viz {
         easing?: 'easeOutCubic' | 'linear';
         /** Indicates whether or not animation is enabled. */
         enabled?: boolean;
+    }
+    /** Configures the loading indicator. */
+    interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     }
     /** Specifies options of the gauge's range container. */
     interface BaseGaugeRangeContainer {
@@ -8066,6 +8122,8 @@ declare module DevExpress.viz {
         minorTick?: { color?: string, opacity?: number, length?: number, width?: number, visible?: boolean };
         /** Specifies an interval between minor ticks. */
         minorTickInterval?: number;
+        /** Specifies the minimum distance between two neighboring major ticks in pixels. */
+        scaleDivisionFactor?: number;
         /** Specifies the start value for the scale of the gauge. */
         startValue?: number;
         /** Specifies options of the gauge's major ticks. */
@@ -8171,6 +8229,8 @@ declare module DevExpress.viz {
         horizontalOrientation?: 'center' | 'left' | 'right';
         /** Specifies common options for scale labels. */
         label?: dxLinearGaugeScaleLabel;
+        /** Specifies the minimum distance between two neighboring major ticks in pixels. */
+        scaleDivisionFactor?: number;
         /** Specifies the orientation of scale ticks. Applies only if the geometry.orientation option is "horizontal". */
         verticalOrientation?: 'bottom' | 'center' | 'top';
     }
@@ -8323,6 +8383,15 @@ declare module DevExpress.viz {
         /** Shows the point label and keeps it visible until the hide() method is called. */
         show(holdVisible: boolean): void;
     }
+    /** An object that provides information about a legend item in the Chart and PolarChart widgets. */
+    export interface BaseChartLegendItem {
+        /** The series that the item represents on the legend. */
+        series?: baseSeriesObject;
+        /** The text that the legend item displays. */
+        text?: string;
+        /** Indicates and specifies whether the legend item is visible. */
+        visible?: boolean;
+    }
     /** This section describes the Series object, which represents a series. */
     export class chartSeriesObject extends baseSeriesObject {
         /** Returns the name of the value axis of the series. */
@@ -8393,6 +8462,15 @@ declare module DevExpress.viz {
         /** Shows the funnel item's tooltip. */
         showTooltip(): void;
     }
+    /** An object that provides information about a legend item in the Funnel widget. */
+    export interface FunnelLegendItem {
+        /** The funnel item that the legend item represents. */
+        item?: dxFunnelItem;
+        /** The text that the legend item displays. */
+        text?: string;
+        /** Indicates and specifies whether the legend item is visible. */
+        visible?: boolean;
+    }
     /** This section describes the Point object, which represents a series point. */
     export class piePointObject extends basePointObject {
         /** Gets the percentage value of the specific point. */
@@ -8410,6 +8488,19 @@ declare module DevExpress.viz {
     }
     /** This section describes the Series object, which represents a series. */
     export class pieChartSeriesObject extends baseSeriesObject {
+    }
+    /** An object that provides information about a legend item in the PieChart widget. */
+    export interface PieChartLegendItem {
+        /** The argument of the point(s) that the legend item represents. */
+        argument?: string | Date | number;
+        /** The zero-based index of the legend item used to identify the item among other legend items with the same argument. */
+        argumentIndex?: number;
+        /** An array of points that the legend item represents. Can contain more than one point only in a multi-series PieChart. */
+        points?: Array<piePointObject>;
+        /** The text that the legend item displays. */
+        text?: any;
+        /** Indicates and specifies whether the legend item is visible. */
+        visible?: boolean;
     }
     /** This section describes the Series object, which represents a series. */
     export class polarChartSeriesObject extends baseSeriesObject {
@@ -8531,6 +8622,19 @@ declare module DevExpress.viz {
         selected(): boolean;
         /** Sets the selection state of the layer element. */
         selected(state: boolean): void;
+    }
+    /** An object that provides information about a legend item in the VectorMap widget. */
+    export interface VectorMapLegendItem {
+        /** The color of the legend item's marker. */
+        color?: string;
+        /** The end value of the group that the legend item indicates. */
+        end?: number;
+        /** The diameter of the legend item's marker in pixels. */
+        size?: number;
+        /** The start value of the group that the legend item indicates. */
+        start?: number;
+        /** Indicates and specifies whether the legend item is visible. */
+        visible?: boolean;
     }
     /** Specifies options for the series of the PieChart widget. */
     export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
@@ -9030,12 +9134,12 @@ declare module DevExpress.viz {
         bounds?: Array<number>;
         /** Specifies the geographical coordinates of the center for a map. */
         center?: Array<number>;
-        /** Specifies the options of the control bar. */
+        /** Configures the control bar. */
         controlBar?: { enabled?: boolean, borderColor?: string, color?: string, margin?: number, horizontalAlignment?: 'center' | 'left' | 'right', verticalAlignment?: 'bottom' | 'top', opacity?: number };
         /** Specifies options for VectorMap widget layers. */
         layers?: Array<{ name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, type?: 'area' | 'line' | 'marker', elementType?: 'bubble' | 'dot' | 'image' | 'pie', borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: 'multiple' | 'none' | 'single', palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: { enabled?: boolean, dataField?: string, font?: Font } }> | { name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, type?: 'area' | 'line' | 'marker', elementType?: 'bubble' | 'dot' | 'image' | 'pie', borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: 'multiple' | 'none' | 'single', palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: { enabled?: boolean, dataField?: string, font?: Font } };
         /** Configures map legends. */
-        legends?: Array<{ source?: { layer?: string, grouping?: string }, customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), verticalAlignment?: 'bottom' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', orientation?: 'horizontal' | 'vertical', itemTextPosition?: 'bottom' | 'left' | 'right' | 'top', itemsAlignment?: 'center' | 'left' | 'right', font?: Font, visible?: boolean, margin?: number | { top?: number, bottom?: number, left?: number, right?: number }, markerSize?: number, markerColor?: string, markerShape?: 'circle' | 'square', backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number }>;
+        legends?: Array<{ source?: { layer?: string, grouping?: string }, customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>), verticalAlignment?: 'bottom' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', orientation?: 'horizontal' | 'vertical', itemTextPosition?: 'bottom' | 'left' | 'right' | 'top', itemsAlignment?: 'center' | 'left' | 'right', font?: Font, visible?: boolean, margin?: number | { top?: number, bottom?: number, left?: number, right?: number }, markerSize?: number, markerColor?: string, markerShape?: 'circle' | 'square', backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number }>;
         /** Specifies a map's maximum zoom factor. */
         maxZoomFactor?: number;
         /** A function that is executed each time the center coordinates are changed. */

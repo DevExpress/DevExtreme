@@ -119,3 +119,71 @@ declare module DevExpress.viz {
         export type dxTreeMapTooltip = DevExpress.viz.dxTreeMapTooltip;
     }
 }
+
+declare module DevExpress.ui {
+    /** @deprecated Use DevExpress.ui.dxAccordionItem */
+    export type dxAccordionItemTemplate = DevExpress.ui.dxAccordionItem;
+
+    /** @deprecated Use DevExpress.ui.dxActionSheetItem */
+    export type dxActionSheetItemTemplate = DevExpress.ui.dxActionSheetItem;
+
+    /** @deprecated Use DevExpress.ui.dxBoxItem */
+    export type dxBoxItemTemplate = DevExpress.ui.dxBoxItem;
+
+    /** @deprecated Use DevExpress.ui.dxGalleryItem */
+    export type dxGalleryItemTemplate = DevExpress.ui.dxGalleryItem;
+
+    /** @deprecated Use DevExpress.ui.dxMultiViewItem */
+    export type dxMultiViewItemTemplate = DevExpress.ui.dxMultiViewItem;
+
+    /** @deprecated Use DevExpress.ui.dxNavBarItem */
+    export type dxNavBarItemTemplate = DevExpress.ui.dxNavBarItem;
+
+    /** @deprecated Use DevExpress.ui.dxPanoramaItem */
+    export type dxPanoramaItemTemplate = DevExpress.ui.dxPanoramaItem;
+
+    /** @deprecated Use DevExpress.ui.dxPivotItem */
+    export type dxPivotItemTemplate = DevExpress.ui.dxPivotItem;
+
+    /** @deprecated Use DevExpress.ui.dxResponsiveBoxItem */
+    export type dxResponsiveBoxItemTemplate = DevExpress.ui.dxResponsiveBoxItem;
+
+    /** @deprecated Use DevExpress.ui.dxSchedulerAppointment */
+    export type dxSchedulerAppointmentTemplate = DevExpress.ui.dxSchedulerAppointment;
+
+    /** @deprecated Use DevExpress.ui.dxSlideOutItem */
+    export type dxSlideOutItemTemplate = DevExpress.ui.dxSlideOutItem;
+
+    /** @deprecated Use DevExpress.ui.dxTabsItem */
+    export type dxTabsItemTemplate = DevExpress.ui.dxTabsItem;
+
+    /** @deprecated Use DevExpress.ui.dxTabPanelItem */
+    export type dxTabPanelItemTemplate = DevExpress.ui.dxTabPanelItem;
+
+    /** @deprecated Use DevExpress.ui.dxTileViewItem */
+    export type dxTileViewItemTemplate = DevExpress.ui.dxTileViewItem;
+
+    /** @deprecated Use DevExpress.ui.dxToolbarItem */
+    export type dxToolbarItemTemplate = DevExpress.ui.dxToolbarItem;
+
+    /** @deprecated Use DevExpress.ui.CollectionWidgetItem */
+    export type CollectionWidgetItemTemplate = DevExpress.ui.CollectionWidgetItem;
+
+    /** @deprecated Use DevExpress.ui.dxContextMenuItem */
+    export type dxContextMenuItemTemplate = DevExpress.ui.dxContextMenuItem;
+
+    /** @deprecated Use DevExpress.ui.dxMenuBaseItem */
+    export type dxMenuBaseItemTemplate = DevExpress.ui.dxMenuBaseItem;
+
+    /** @deprecated Use DevExpress.ui.CollectionWidgetItem */
+    export type DataExpressionMixinItemTemplate = DevExpress.ui.CollectionWidgetItem;
+
+    /** @deprecated Use DevExpress.ui.dxListItem */
+    export type dxListItemTemplate = DevExpress.ui.dxListItem;
+
+    /** @deprecated Use DevExpress.ui.dxMenuItem */
+    export type dxMenuItemTemplate = DevExpress.ui.dxMenuItem;
+
+    /** @deprecated Use DevExpress.ui.dxTreeViewItem */
+    export type dxTreeViewItemTemplate = DevExpress.ui.dxTreeViewItem;
+}

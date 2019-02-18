@@ -790,20 +790,20 @@ QUnit.module("keyboard navigation", {
         this.$alphaMarker = this.$element.find(".dx-colorview-alpha-channel-handle");
         this.$paletteMarker = this.$element.find(".dx-colorview-palette-handle");
 
-        this.ctrlLeft = $.Event("keydown", { which: 37, ctrlKey: true });
-        this.ctrlUp = $.Event("keydown", { which: 38, ctrlKey: true });
-        this.ctrlRight = $.Event("keydown", { which: 39, ctrlKey: true });
-        this.ctrlDown = $.Event("keydown", { which: 40, ctrlKey: true });
+        this.ctrlLeft = $.Event("keydown", { key: "ArrowLeft", ctrlKey: true });
+        this.ctrlUp = $.Event("keydown", { key: "ArrowUp", ctrlKey: true });
+        this.ctrlRight = $.Event("keydown", { key: "ArrowRight", ctrlKey: true });
+        this.ctrlDown = $.Event("keydown", { key: "ArrowDown", ctrlKey: true });
 
-        this.shiftLeft = $.Event("keydown", { which: 37, shiftKey: true });
-        this.shiftUp = $.Event("keydown", { which: 38, shiftKey: true });
-        this.shiftRight = $.Event("keydown", { which: 39, shiftKey: true });
-        this.shiftDown = $.Event("keydown", { which: 40, shiftKey: true });
+        this.shiftLeft = $.Event("keydown", { key: "ArrowLeft", shiftKey: true });
+        this.shiftUp = $.Event("keydown", { key: "ArrowUp", shiftKey: true });
+        this.shiftRight = $.Event("keydown", { key: "ArrowRight", shiftKey: true });
+        this.shiftDown = $.Event("keydown", { key: "ArrowDown", shiftKey: true });
 
-        this.ctrlShiftLeft = $.Event("keydown", { which: 37, ctrlKey: true, shiftKey: true });
-        this.ctrlShiftUp = $.Event("keydown", { which: 38, ctrlKey: true, shiftKey: true });
-        this.ctrlShiftRight = $.Event("keydown", { which: 39, ctrlKey: true, shiftKey: true });
-        this.ctrlShiftDown = $.Event("keydown", { which: 40, ctrlKey: true, shiftKey: true });
+        this.ctrlShiftLeft = $.Event("keydown", { key: "ArrowLeft", ctrlKey: true, shiftKey: true });
+        this.ctrlShiftUp = $.Event("keydown", { key: "ArrowUp", ctrlKey: true, shiftKey: true });
+        this.ctrlShiftRight = $.Event("keydown", { key: "ArrowRight", ctrlKey: true, shiftKey: true });
+        this.ctrlShiftDown = $.Event("keydown", { key: "ArrowDown", ctrlKey: true, shiftKey: true });
     },
     afterEach: function() {
         this.clock.restore();

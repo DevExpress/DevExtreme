@@ -255,6 +255,19 @@ var dxFunnel = require("../core/base_widget").inherit({
         return this._items.slice();
     },
 
+    _getLegendData() {
+        return this._items.map(item => {
+
+            return {
+                id: item.id,
+                visible: true,
+                text: item.argument,
+                item: item,
+                states: item.states
+            };
+        });
+    },
+
     _getMinSize: function() {
         var adaptiveLayout = this._getOption("adaptiveLayout");
 
@@ -264,7 +277,7 @@ var dxFunnel = require("../core/base_widget").inherit({
 
 var ThemeManager = require("../core/base_theme_manager").BaseThemeManager.inherit({
     _themeSection: "funnel",
-    _fontFields: ["loadingIndicator.font", "title.font", "title.subtitle.font", "tooltip.font", "export.font", "legend.font", "label.font"]
+    _fontFields: ["loadingIndicator.font", "legend.title.font", "legend.title.subtitle.font", "title.font", "title.subtitle.font", "tooltip.font", "export.font", "legend.font", "label.font"]
 });
 
 require("../../core/component_registrator")("dxFunnel", dxFunnel);

@@ -1,6 +1,6 @@
 QUnit.testStart(function() {
     var markup =
-        '<div>\
+        '<div class="dx-widget">\
             <div class="dx-datagrid">\
                 <div id="container"></div>\
                 <div id="container2"></div>\
@@ -9,21 +9,23 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("common.css!");
-require("generic_light.css!");
-require("ui/data_grid/ui.data_grid");
+import "common.css!";
+import "generic_light.css!";
+import "ui/data_grid/ui.data_grid";
 
-var $ = require("jquery"),
-    devices = require("core/devices"),
-    device = devices.real(),
-    noop = require("core/utils/common").noop,
-    dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity",
-    eventsEngine = require("events/core/events_engine"),
-    typeUtils = require("core/utils/type"),
-    config = require("core/config"),
-    renderer = require("core/renderer"),
-    themes = require("ui/themes");
+import $ from "jquery";
+import devices from "core/devices";
+import { noop as noop } from "core/utils/common";
+import dataGridMocks from "../../helpers/dataGridMocks.js";
+import eventsEngine from "events/core/events_engine";
+import typeUtils from "core/utils/type";
+import config from "core/config";
+import renderer from "core/renderer";
+import themes from "ui/themes";
+
+var device = devices.real();
+
+const CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity";
 
 function setupDataGrid(that, $dataGridContainer) {
     that.$element = function() {
@@ -269,7 +271,7 @@ QUnit.test("Hide the adaptive command column when it is located on a left side a
 
 QUnit.test("The last data column has correct width when 'columnAutoWidth' option is 'true'", function(assert) {
     // arrange
-    $(".dx-datagrid").width(275);
+    $(".dx-datagrid").width(265);
 
     this.columns = [
         { dataField: 'firstName', index: 0 },
@@ -298,7 +300,7 @@ QUnit.test("The last data column has correct width when 'columnAutoWidth' option
 // T402287
 QUnit.test("Hidden columns must have zero widths for virtual scrolling table", function(assert) {
     // arrange
-    $(".dx-datagrid").width(275);
+    $(".dx-datagrid").width(265);
 
     this.columns = [
         { dataField: 'firstName', index: 0 },
@@ -1586,7 +1588,7 @@ QUnit.test("Columns should hide consistently if they have minWidth", function(as
 
 QUnit.test("Columns should hide consistently if percentage width (T640539)", function(assert) {
     // arrange
-    $(".dx-datagrid").width(700);
+    $(".dx-datagrid").width(680);
 
     this.items = [
         { firstName: 'Blablablablablablablablablabla', lastName: "Psy", phone: "+1123456789" },
@@ -2711,7 +2713,7 @@ QUnit.test("Edit batch. Render editor of form's item when clicked on a text of i
 
 QUnit.test("Edit batch. Editor is rendered only one when click on text", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -2769,7 +2771,7 @@ QUnit.test("Edit batch. Editor is rendered only one when click on text", functio
 
 QUnit.test("Edit batch. Close edit mode for the form widget when a data is saved", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -2818,7 +2820,7 @@ QUnit.test("Edit batch. Close edit mode for the form widget when a data is saved
 
 QUnit.test("Edit batch. Close edit mode and cancel editing when click out the data grid", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -2868,7 +2870,7 @@ QUnit.test("Edit batch. Close edit mode and cancel editing when click out the da
 
 QUnit.test("Edit batch. Close edit mode for the form widget when a editing is canceled", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -2917,7 +2919,7 @@ QUnit.test("Edit batch. Close edit mode for the form widget when a editing is ca
 
 QUnit.test("Edit batch. Form's item is marked as modified", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -2971,7 +2973,7 @@ QUnit.test("Edit batch. Form's item is marked as modified", function(assert) {
 
 QUnit.test("Edit batch. Form's item is marked as modified for other adaptive row", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -3295,7 +3297,7 @@ QUnit.test("Edit cell. Render editor of form's item when clicked on a text of it
 
 QUnit.test("Edit cell. Editor is rendered only one when click on text", function(assert) {
     // arrange
-    $(".dx-datagrid").width(400);
+    $(".dx-datagrid").width(300);
 
     var dataSource = [
         { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", count: 0.2 },
@@ -4154,8 +4156,8 @@ QUnit.module("Keyboard navigation", {
         this.triggerFormItemClick(1);
 
         // act
-        var e = $.Event('keydown');
-        e.which = 9;
+        var e = $.Event("keydown");
+        e.key = "Tab";
         this.getActiveInputElement().trigger(e);
         this.clock.tick();
 
@@ -4186,7 +4188,7 @@ QUnit.module("Keyboard navigation", {
 
         // act
         var e = $.Event('keydown');
-        e.which = 9;
+        e.key = "Tab";
         this.getActiveInputElement().trigger(e);
 
         // assert
@@ -4213,7 +4215,7 @@ QUnit.module("Keyboard navigation", {
 
         // act
         var e = $.Event('keydown');
-        e.which = 9;
+        e.key = "Tab";
         this.getActiveInputElement().trigger(e);
 
         // assert
@@ -4229,7 +4231,7 @@ QUnit.module("Keyboard navigation", {
 
             // act
             var e = $.Event('keydown');
-            e.which = 9;
+            e.key = "Tab";
             e.shiftKey = true;
             this.getActiveInputElement().trigger(e);
 
@@ -4245,7 +4247,7 @@ QUnit.module("Keyboard navigation", {
 
             // act
             var e = $.Event('keydown');
-            e.which = 9;
+            e.key = "Tab";
             this.getActiveInputElement().trigger(e);
 
             // assert
