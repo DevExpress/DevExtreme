@@ -1,11 +1,12 @@
-var $ = require("jquery"),
-    dialog = require("ui/dialog"),
-    viewPort = require("core/utils/view_port").value,
-    domUtils = require("core/utils/dom"),
-    devices = require("core/devices"),
-    fx = require("animation/fx"),
-    config = require("core/config"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import $ from "jquery";
+import config from "core/config";
+import devices from "core/devices";
+import dialog from "ui/dialog";
+import domUtils from "core/utils/dom";
+import errors from "ui/widget/ui.errors";
+import fx from "animation/fx";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import { value as viewPort } from "core/utils/view_port";
 
 QUnit.module("dialog tests", {
     beforeEach: function() {
@@ -216,6 +217,20 @@ QUnit.test("dialog overlay content has 'dx-rtl' class when RTL is enabled", func
     assert.ok($('.dx-overlay-content').hasClass('dx-rtl'), "'dx-rlt' class is present");
 
     config({ rtlEnabled: false });
+});
+
+QUnit.test("should show 'W1013' warning if deprecated 'message' option is used", (assert) => {
+    const originalLog = errors.log;
+    let warning = null;
+
+    errors.log = (loggedWarning) => warning = loggedWarning;
+
+    try {
+        dialog.custom({ message: "message" });
+        assert.strictEqual(warning, "W1013");
+    } finally {
+        errors.log = originalLog;
+    }
 });
 
 QUnit.test("dialog should reset active element on showing", function(assert) {
