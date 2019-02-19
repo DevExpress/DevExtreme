@@ -282,6 +282,7 @@ const HtmlEditor = Editor.inherit({
             toolbar: this._getModuleConfigByOption("toolbar"),
             variables: this._getModuleConfigByOption("variables"),
             dropImage: this._getBaseModuleConfig(),
+            resizing: this._getBaseModuleConfig(),
             clipboard: {
                 matchVisual: false,
                 matchers: [
