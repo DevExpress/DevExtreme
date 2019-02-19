@@ -18,7 +18,7 @@ var GroupedStrategy = Class.inherit({
         return FIRST_GROUP_CELL_CLASS;
     },
 
-    getOffsetByAllDayPanel: function() {
+    _getOffsetByAllDayPanel: function() {
         return 0;
     },
 

@@ -2102,7 +2102,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getOffsetByAllDayPanel: function(groupIndex) {
-        return this._groupedStrategy.getOffsetByAllDayPanel(groupIndex);
+        return this._groupedStrategy._getOffsetByAllDayPanel(groupIndex);
     },
 
     isGroupedByDate: function() {
