@@ -166,20 +166,20 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         $folderNodes = this.$element.find(`.${internals.CONTAINER_CLASS} .${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
         assert.equal($folderNodes.length, initialCount - 1, "folders count decreased");
-        assert.ok($folderNodes.eq(0).text(), "Folder 2", "first folder is not target folder");
-        assert.ok($folderNodes.eq(1).text(), "Folder 3", "second folder is not target folder");
+        assert.equal($folderNodes.eq(0).text(), "Folder 2", "first folder is not target folder");
+        assert.equal($folderNodes.eq(1).text(), "Folder 3", "second folder is not target folder");
 
         var $folderToggles = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
         $folderToggles.eq(1).trigger("dxclick");
 
         $folderNodes = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
-        assert.ok($folderNodes.eq(2).text(), "Folder 1", "target folder moved");
+        assert.equal($folderNodes.eq(2).text(), "Folder 1", "target folder moved");
         $folderNodes.eq(2).trigger("dxclick");
         this.clock.tick(400);
 
         var $cells = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS} > td:first-child`);
-        assert.ok($cells.eq(0).text(), "File 1-1.txt", "file moved with target folder");
-        assert.ok($cells.eq(1).text(), "File 1-2.jpg", "file moved with target folder");
+        assert.equal($cells.eq(0).text(), "File 1-1.txt", "file moved with target folder");
+        assert.equal($cells.eq(1).text(), "File 1-2.jpg", "file moved with target folder");
     });
 
     test("copy folder in folders area", (assert) => {
@@ -204,20 +204,20 @@ QUnit.module("Editing operations", moduleConfig, () => {
 
         $folderNodes = this.$element.find(`.${internals.CONTAINER_CLASS} .${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
         assert.equal($folderNodes.length, initialCount, "folders count not changed");
-        assert.ok($folderNodes.eq(0).text(), "Folder 1", "first folder is target folder");
-        assert.ok($folderNodes.eq(1).text(), "Folder 2", "second folder is not target folder");
+        assert.equal($folderNodes.eq(0).text(), "Folder 1", "first folder is target folder");
+        assert.equal($folderNodes.eq(1).text(), "Folder 2", "second folder is not target folder");
 
         var $folderToggles = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
         $folderToggles.eq(2).trigger("dxclick");
 
         $folderNodes = this.$element.find(`.${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
-        assert.ok($folderNodes.eq(2).text(), "Folder 1", "target folder copied");
+        assert.equal($folderNodes.eq(3).text(), "Folder 1", "target folder copied");
         $folderNodes.eq(3).trigger("dxclick");
         this.clock.tick(400);
 
         var $cells = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS} > td:first-child`);
-        assert.ok($cells.eq(0).text(), "File 1-1.txt", "file copied with target folder");
-        assert.ok($cells.eq(1).text(), "File 1-2.jpg", "file copied with target folder");
+        assert.equal($cells.eq(0).text(), "File 1-1.txt", "file copied with target folder");
+        assert.equal($cells.eq(1).text(), "File 1-2.jpg", "file copied with target folder");
     });
 
     test("move file in items area", (assert) => {
@@ -251,7 +251,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         this.clock.tick(400);
 
         $cells = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS} > td:first-child`);
-        assert.ok($cells.eq(0).text(), "File 1.txt", "file moved to another folder");
+        assert.equal($cells.eq(0).text(), "File 1.txt", "file moved to another folder");
     });
 
     test("copy file in items area", (assert) => {
@@ -285,7 +285,7 @@ QUnit.module("Editing operations", moduleConfig, () => {
         this.clock.tick(400);
 
         $cells = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS} > td:first-child`);
-        assert.ok($cells.eq(0).text(), "File 1.txt", "file moved to another folder");
+        assert.equal($cells.eq(0).text(), "File 1.txt", "file moved to another folder");
     });
 
 });
