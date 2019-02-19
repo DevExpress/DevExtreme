@@ -62,9 +62,9 @@ let dropDownAppointments = Class.inherit({
             buttonWidth: buttonWidth
         }, options.isCompact);
 
-        when.apply(null, options.items.colors).done(() => {
+        when.apply(null, options.items.colors).done(function() {
             this._paintMenuButton($menu, options.buttonColor, arguments);
-        });
+        }.bind(this));
 
         this._applyInnerShadow($menu, options.buttonWidth);
 
@@ -87,7 +87,7 @@ let dropDownAppointments = Class.inherit({
         let paintButton = true,
             currentItemColor;
 
-        color && color.done((function(color) {
+        color && color.done(function(color) {
             if(itemsColors.length) {
                 currentItemColor = itemsColors[0];
 
@@ -100,7 +100,7 @@ let dropDownAppointments = Class.inherit({
                 }
             }
             color && paintButton && $menu.css("backgroundColor", color);
-        }).bind(this));
+        }.bind(this));
     },
 
     _applyInnerShadow: function($element) {
