@@ -150,7 +150,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
         _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var that = this;
 
-            if(!that.option("legacyRendering") && isVirtualMode(that) && !(operationTypes.reload) && operationTypes.skip && that._renderTime < that.option("scrolling.renderingThreshold")) {
+            if(!that.option("legacyRendering") && isVirtualMode(that) && !(operationTypes.reload || isReload) && operationTypes.skip && that._renderTime < that.option("scrolling.renderingThreshold")) {
                 options.delay = undefined;
             }
 
