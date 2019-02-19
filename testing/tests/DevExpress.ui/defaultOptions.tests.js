@@ -22,6 +22,7 @@ var $ = require("jquery"),
     FakeDialogComponent = require("ui/dialog").FakeDialogComponent,
     DropDownEditor = require("ui/drop_down_editor/ui.drop_down_editor"),
     DropDownBox = require("ui/drop_down_box"),
+    DropDownButton = require("ui/drop_down_button"),
     DropDownList = require("ui/drop_down_editor/ui.drop_down_list"),
     DropDownMenu = require("ui/drop_down_menu"),
     TextEditor = require("ui/text_box/ui.text_editor"),
@@ -365,6 +366,22 @@ testComponentDefaults(DropDownBox,
         valueChangeEvent: "change"
     }
 );
+
+testComponentDefaults(DropDownButton, {}, {
+    dataSource: null,
+    deferRendering: true,
+    value: null,
+    valueExpr: "this",
+    displayExpr: undefined,
+    showEvent: "click",
+    actionButtonIndex: 0,
+    showSelectedItem: true,
+    grouped: false,
+    itemTemplate: "item",
+    groupTemplate: "group",
+    buttonGroupOptions: {},
+    dropDownOptions: {}
+});
 
 testComponentDefaults(DropDownList,
     [
