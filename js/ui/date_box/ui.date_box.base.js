@@ -616,7 +616,7 @@ var DateBox = DropDownEditor.inherit({
             newValue = uiDateUtils.mergeDates(value, parsedDate, type),
             date = parsedDate && type === "time" ? newValue : parsedDate;
 
-        if(this._validateValueWithoutValidator(date)) {
+        if(this._applyInternalValidation(date)) {
             var displayedText = this._getDisplayedText(newValue);
 
             if(value && newValue && value.getTime() === newValue.getTime() && displayedText !== text) {
@@ -641,10 +641,10 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _validateValue: function(value) {
-        return this._validateValueWithoutValidator(value) && this._checkValueByValidator(value);
+        return this._applyInternalValidation(value) && this._checkValueByValidator(value);
     },
 
-    _validateValueWithoutValidator(value) {
+    _applyInternalValidation(value) {
         var text = this.option("text"),
             hasText = !!text && value !== null,
             isDate = !!value && typeUtils.isDate(value) && !isNaN(value.getTime()),
