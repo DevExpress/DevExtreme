@@ -75,14 +75,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var that = this;
-        if(browser.msie) {
-            this._waitForDblClick = true;
-        }
         if(this._caretTimeout) {
             clearTimeout(this._caretTimeout);
+            this._caretTimeout = null;
         }
         this._caretTimeout = setTimeout(function() {
-            that._waitForDblClick = undefined;
+            that._caretTimeout = undefined;
             that._moveCaretToBoundary(MOVE_BACKWARD, e);
         }, caretTimeoutDuration);
     },
@@ -166,9 +164,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _keyboardHandler: function(e) {
-        if(this._waitForDblClick) {
-            this._waitForDblClick = false;
+        if(this._caretTimeout) {
             clearTimeout(this._caretTimeout);
+            this._caretTimeout = null;
         }
 
         this._lastKey = number.convertDigits(eventUtils.getChar(e), true);
@@ -481,10 +479,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
             var that = this;
 
             if(browser.msie) {
-                this._waitForDblClick = true;
                 clearTimeout(this._caretTimeout);
                 this._caretTimeout = setTimeout(function() {
-                    that._waitForDblClick = undefined;
+                    that._caretTimeout = null;
                     that._moveCaretToRightPositionAfterFormatting();
                 }, caretTimeoutDuration);
             } else {
@@ -493,9 +490,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }.bind(this));
 
         eventsEngine.on($input, "dxdblclick", function() {
-            if(this._waitForDblClick) {
+            if(this._caretTimeout) {
                 clearTimeout(this._caretTimeout);
-                this._waitForDblClick = undefined;
+                this._caretTimeout = null;
             }
         }.bind(this));
     },
@@ -711,7 +708,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._parsedValue;
         delete this._focusOutOccurs;
         clearTimeout(this._caretTimeout);
-        this._waitForDblClick = undefined;
         delete this._caretTimeout;
     },
 
