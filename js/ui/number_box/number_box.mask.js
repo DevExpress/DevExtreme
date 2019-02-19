@@ -478,19 +478,17 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         eventsEngine.on($input, eventUtils.addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
         eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), function(event) {
-            if(!this._waitForDblClick) {
-                var that = this;
+            var that = this;
 
-                if(browser.msie) {
-                    this._waitForDblClick = true;
-                    clearTimeout(this._caretTimeout);
-                    this._caretTimeout = setTimeout(function() {
-                        that._waitForDblClick = undefined;
-                        that._moveCaretToRightPositionAfterFormatting();
-                    }, caretTimeoutDuration);
-                } else {
+            if(browser.msie) {
+                this._waitForDblClick = true;
+                clearTimeout(this._caretTimeout);
+                this._caretTimeout = setTimeout(function() {
+                    that._waitForDblClick = undefined;
                     that._moveCaretToRightPositionAfterFormatting();
-                }
+                }, caretTimeoutDuration);
+            } else {
+                that._moveCaretToRightPositionAfterFormatting();
             }
         }.bind(this));
 
@@ -713,6 +711,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._parsedValue;
         delete this._focusOutOccurs;
         clearTimeout(this._caretTimeout);
+        this._waitForDblClick = undefined;
         delete this._caretTimeout;
     },
 

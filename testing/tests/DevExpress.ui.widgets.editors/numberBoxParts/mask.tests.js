@@ -295,24 +295,34 @@ QUnit.test("focusout after inverting sign should not lead to value changing", fu
 });
 
 QUnit.test("pressing minus button should revert selected number", function(assert) {
+    if(!browser.msie) {
+        this.clock.restore();
+    }
+
     this.instance.option({
         format: "$ #0.00",
         value: 0
     });
 
+    this.clock.tick();
     this.keyboard.caret({ start: 0, end: 5 }).keyDown("-");
     this.clock.tick();
-
     assert.equal(this.input.val(), "-$ 0.00", "text is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 6 }, "caret is good");
 });
 
+
 QUnit.test("pressing '-' should keep selection", function(assert) {
+    if(!browser.msie) {
+        this.clock.restore();
+    }
+
     this.instance.option({
         format: "#0.#",
         value: 123.456
     });
 
+    this.clock.tick();
     this.keyboard.caret({ start: 0, end: 5 }).keyDown("-");
     this.clock.tick();
     assert.equal(this.input.val(), "-123.5", "value is correct");
@@ -337,11 +347,15 @@ QUnit.test("pressing '-' should keep selection", function(assert) {
 });
 
 QUnit.test("pressing '-' correctly remove the selected part of previous value", function(assert) {
+    if(!browser.msie) {
+        this.clock.restore();
+    }
     this.instance.option({
         format: "#0.#",
         value: 123.4
     });
 
+    this.clock.tick();
     this.keyboard.caret({ start: 1, end: 3 }).keyDown("-");
     this.clock.tick();
     assert.equal(this.input.val(), "-123.4", "value is correct");
@@ -352,10 +366,14 @@ QUnit.test("pressing '-' correctly remove the selected part of previous value", 
 });
 
 QUnit.test("NumberBox keeps correct selection after revert the sign", function(assert) {
+    if(!browser.msie) {
+        this.clock.restore();
+    }
     this.instance.option({
         format: "#0.#;<<#0.#>>",
         value: 123.4
     });
+    this.clock.tick();
 
     this.keyboard.caret({ start: 1, end: 2 }).keyDown("-");
     this.clock.tick();
@@ -1567,13 +1585,18 @@ QUnit.test("ctrl+a should have default behavior", function(assert) {
 });
 
 QUnit.test("moving caret to closest non stub on click - forward direction", function(assert) {
+    if(!browser.msie) {
+        this.clock.restore();
+    }
     this.instance.option({
         format: "$ #",
         value: 1
     });
 
     this.keyboard.caret(0);
+
     this.input.trigger("dxclick");
+    this.clock.tick(310);
 
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was adjusted");
 });
@@ -1586,6 +1609,7 @@ QUnit.test("moving caret to closest non stub on click - backward direction", fun
 
     this.keyboard.caret(2);
     this.input.trigger("dxclick");
+    this.clock.tick(310);
 
     assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret was adjusted");
 });
@@ -1651,7 +1675,7 @@ QUnit.testInActiveWindow("caret should be at start boundary on focusin", functio
     });
 
     this.input.focus();
-    this.clock.tick();
+    this.clock.tick(310);
 
     assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is right");
 });
