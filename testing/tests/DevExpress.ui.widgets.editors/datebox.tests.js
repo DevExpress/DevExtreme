@@ -3688,7 +3688,7 @@ QUnit.test("datebox should change validation state if value was changed by keybo
         }]
     });
     const dateBox = $dateBox.dxDateBox("instance");
-    const keyboard = keyboardMock($dateBox.find("input"));
+    const keyboard = keyboardMock($dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
 
     keyboard
         .type("10/10/2014")
