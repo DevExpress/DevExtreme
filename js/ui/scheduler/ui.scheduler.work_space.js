@@ -2090,11 +2090,15 @@ var SchedulerWorkSpace = Widget.inherit({
             rowIndex: position.rowIndex,
             cellIndex: position.cellIndex,
             hMax: horizontalHMax,
-            vMax: this._groupedStrategy.getVerticalMax(groupIndex),
+            vMax: this.getVerticalMax(groupIndex),
             groupIndex: groupIndex
         };
 
         return coordinates;
+    },
+
+    getVerticalMax: function(groupIndex) {
+        return this._groupedStrategy.getVerticalMax(groupIndex);
     },
 
     isGroupedByDate: function() {
