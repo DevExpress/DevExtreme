@@ -653,10 +653,14 @@ var dxBarGauge = {
     /**
     * @name dxBarGaugeOptions.loadingIndicator
     * @type object
-    * @inherits BaseGaugeOptions.loadingIndicator
-    * @inheritdoc
     */
-    loadingIndicator: { },
+    loadingIndicator: {
+        /**
+        * @name dxBarGaugeOptions.loadingIndicator.enabled
+        * @hidden
+        */
+        enabled: false
+    },
     /**
     * @name dxBarGaugeOptions.barSpacing
     * @type number
