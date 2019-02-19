@@ -147,11 +147,12 @@ var staticMethods = {
     getPalette: function() { },
     /**
     * @name vizmethods.generateColors
-    * @publicName generateColors(palette, options)
-    * @param1 palette:string|Array<string>
-    * @param2 options:object
-    * @param2_field1 extensionMode:string
-    * @param2_field2 baseColorSet:string
+    * @publicName generateColors(palette, count, options)
+    * @param1 palette:Enums.VizPalette|Array<string>
+    * @param2 count:number
+    * @param3 options:object
+    * @param3_field1 extensionMode:Enums.VizPaletteExtensionMode
+    * @param3_field2 baseColorSet:Enums.PaletteColorSet
     * @return Array<string>
     * @static
     * @module viz/palette
