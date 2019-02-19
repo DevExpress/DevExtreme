@@ -678,7 +678,13 @@ exports.DataController = Class.inherit((function() {
                     if(that._rowsScrollController.pageIndex() >= this.pageCount()) {
                         that._rowsScrollController.pageIndex(this.pageCount() - 1);
                     }
-                    return that._rowsScrollController.handleDataChanged(virtualScrollControllerChanged);
+                    return that._rowsScrollController.handleDataChanged(function() {
+                        if(that._dataSource.paginate()) {
+                            that._dataSource.load();
+                        } else {
+                            virtualScrollControllerChanged.apply(this, arguments);
+                        }
+                    });
                 }
             });
 
@@ -698,7 +704,13 @@ exports.DataController = Class.inherit((function() {
                         that._columnsScrollController.pageIndex(this.pageCount() - 1);
                     }
 
-                    return that._columnsScrollController.handleDataChanged(virtualScrollControllerChanged);
+                    return that._columnsScrollController.handleDataChanged(function() {
+                        if(that._dataSource.paginate()) {
+                            that._dataSource.load();
+                        } else {
+                            virtualScrollControllerChanged.apply(this, arguments);
+                        }
+                    });
                 }
 
             });
@@ -725,6 +737,24 @@ exports.DataController = Class.inherit((function() {
 
             that.changed && !that._lockChanged && that.changed.fire();
             that._changingDuration = new Date() - startChanging;
+        },
+
+        _handleCustomizeStoreLoadOptions: function(options) {
+            var rowsScrollController = this._rowsScrollController;
+            if(this._dataSource.paginate() && rowsScrollController) {
+                var rowPageSize = rowsScrollController._dataSource.pageSize();
+
+                options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
+                options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
+            }
+
+            var columnsScrollController = this._columnsScrollController;
+            if(this._dataSource.paginate() && columnsScrollController) {
+                var columnPageSize = columnsScrollController._dataSource.pageSize();
+
+                options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
+                options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
+            }
         },
 
         load: function() {
@@ -837,13 +867,14 @@ exports.DataController = Class.inherit((function() {
 
             that._expandValueChangingHandler = that._handleExpandValueChanging.bind(that);
             that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
-            that._progressChangedHandler = function(progress) {
-                that._handleProgressChanged(progress * 0.8);
-            };
             that._fieldsPreparedHandler = that._handleFieldsPrepared.bind(that);
+            that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
             that._changedHandler = function() {
                 that._update();
                 that.dataSourceChanged.fire();
+            };
+            that._progressChangedHandler = function(progress) {
+                that._handleProgressChanged(progress * 0.8);
             };
 
             dataSource.on("changed", that._changedHandler);
@@ -851,6 +882,7 @@ exports.DataController = Class.inherit((function() {
             dataSource.on("loadingChanged", that._loadingChangedHandler);
             dataSource.on("progressChanged", that._progressChangedHandler);
             dataSource.on("fieldsPrepared", that._fieldsPreparedHandler);
+            dataSource.on("customizeStoreLoadOptions", that._customizeStoreLoadOptionsHandler);
 
             return dataSource;
         },
@@ -937,7 +969,7 @@ exports.DataController = Class.inherit((function() {
                 that._columnsInfo = columnsInfo;
                 that._rowsInfo = rowsInfo;
 
-                if(that._rowsScrollController && that._columnsScrollController && that.changed) {
+                if(that._rowsScrollController && that._columnsScrollController && that.changed && !that._dataSource.paginate()) {
                     that._rowsScrollController.reset();
                     that._columnsScrollController.reset();
 
@@ -1085,6 +1117,8 @@ exports.DataController = Class.inherit((function() {
                 that._dataSource.off("expandValueChanging", that._expandValueChangingHandler);
                 that._dataSource.off("loadingChanged", that._loadingChangedHandler);
                 that._dataSource.off("progressChanged", that._progressChangedHandler);
+                that._dataSource.off("fieldsPrepared", that._fieldsPreparedHandler);
+                that._dataSource.off("customizeStoreLoadOptions", that._customizeStoreLoadOptionsHandler);
             } else {
                 that._dataSource.dispose();
             }

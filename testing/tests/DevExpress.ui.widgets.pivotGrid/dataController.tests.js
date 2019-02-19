@@ -1,4 +1,5 @@
 var $ = require("jquery"),
+    Class = require("core/class"),
     DataController = require("ui/pivot_grid/ui.pivot_grid.data_controller").DataController,
     virtualScrolling = require("ui/grid_core/ui.grid_core.virtual_scrolling_core"),
     stateStoring = require("ui/grid_core/ui.grid_core.state_storing_core"),
@@ -5874,3 +5875,246 @@ QUnit.module("StateStoring", {
     });
 
 }
+
+QUnit.module("Remote paging", {
+    beforeEach: function() {
+        var createItems = function(count, prefix, skip, take, desc) {
+            var items = [];
+
+            for(var i = 0; i < count; i++) {
+                var value = prefix + (desc ? count - i : i + 1);
+
+                if((skip && i < skip) || (take && i >= skip + take)) {
+                    items.push({});
+                } else {
+                    items.push({
+                        value: value,
+                        text: value,
+                        index: i + 1
+                    });
+                }
+            }
+            return items;
+        };
+
+        var createValues = function(rowCount, columnCount) {
+            var result = [];
+            for(var rowIndex = 0; rowIndex < rowCount + 1; rowIndex++) {
+                var row = [];
+                result.push(row);
+                for(var columnIndex = 0; columnIndex < columnCount + 1; columnIndex++) {
+                    row.push([ rowIndex * 10 + columnIndex ]);
+                }
+            }
+            return result;
+        };
+
+        var that = this;
+        this.loadArgs = [];
+
+        var MockStore = Class.inherit({
+            ctor: function(options) {
+                this._rowCount = options.rowCount;
+                this._columnCount = options.columnCount;
+            },
+            getFields: function() {
+                return $.Deferred().resolve([]);
+            },
+            load: function(loadOptions) {
+                that.loadArgs.push(loadOptions);
+                var rowCount = this._rowCount;
+                var columnCount = this._columnCount;
+
+                return $.Deferred().resolve({
+                    rows: createItems(rowCount, "row ", loadOptions.rowSkip, loadOptions.rowTake, loadOptions.rows[0].sortOrder === "desc"),
+                    columns: createItems(columnCount, "column ", loadOptions.columnSkip, loadOptions.columnTake, loadOptions.columns[0].sortOrder === "desc"),
+                    values: createValues(rowCount, columnCount),
+                    grandTotalRowIndex: 0,
+                    grandTotalColumnIndex: 0
+                });
+            }
+        });
+
+        this.component = {
+            option: function(name) {
+                if(name === "scrolling.mode") {
+                    return "virtual";
+                }
+            }
+        };
+
+        this.getOptions = function(options) {
+            return $.extend({
+                component: this.component
+            }, options || {});
+        };
+
+        this.createDataSource = function() {
+            return {
+                paginate: true,
+                store: new this.MockStore({
+                    rowCount: 10,
+                    columnCount: 10
+                }),
+                fields: [
+                    { area: "row" },
+                    { area: "column" },
+                    { area: "data" }
+                ]
+            };
+        };
+
+        this.setup = function(dataSourceOptions) {
+            var dataController = new DataController(this.getOptions({
+                dataSource: dataSourceOptions || this.createDataSource()
+            }));
+
+            dataController.columnPageSize(2);
+            dataController.rowPageSize(2);
+
+            this.loadArgs = [];
+
+            dataController.load();
+
+            return dataController;
+        };
+
+        this.MockStore = MockStore;
+        executeAsyncMock.setup();
+    },
+
+    afterEach: function() {
+        executeAsyncMock.teardown();
+    }
+});
+
+QUnit.test("first load", function(assert) {
+    var dataController = this.setup();
+
+    assert.strictEqual(this.loadArgs.length, 1, "one load");
+    assert.strictEqual(this.loadArgs[0].rows.length, 1, "load args rows");
+    assert.strictEqual(this.loadArgs[0].columns.length, 1, "load args columns");
+    assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
+    assert.strictEqual(this.loadArgs[0].rowTake, 2, "load args rowTake");
+    assert.strictEqual(this.loadArgs[0].columnTake, 2, "load args columnTake");
+
+    assert.deepEqual(dataController.getColumnsInfo(), [[
+        { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
+        { dataSourceIndex: 2, text: 'column 2', path: ['column 2'], type: 'D', isLast: true }
+    ]]);
+
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 2, text: 'row 2', path: ['row 2'], type: 'D', isLast: true }]
+    ]);
+
+    assert.deepEqual(prepareCellsInfo(dataController.getCellsInfo()), [
+        [
+            { columnType: "D", rowType: "D", text: "11" },
+            { columnType: "D", rowType: "D", text: "12" }
+        ],
+        [
+            { columnType: "D", rowType: "D", text: "21" },
+            { columnType: "D", rowType: "D", text: "22" }
+        ]
+    ]);
+});
+
+QUnit.test("load after scroll", function(assert) {
+    var dataController = this.setup();
+
+    this.loadArgs = [];
+
+    dataController.setViewportPosition(0, 4 * 20);
+
+    assert.strictEqual(this.loadArgs.length, 4, "one load");
+    assert.strictEqual(this.loadArgs[0].rows.length, 1, "load args rows");
+    assert.strictEqual(this.loadArgs[0].columns.length, 1, "load args columns");
+    assert.strictEqual(this.loadArgs[0].rowSkip, 4, "load args rowSkip");
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
+    assert.strictEqual(this.loadArgs[0].rowTake, 2, "load args rowTake");
+    assert.strictEqual(this.loadArgs[0].columnTake, 2, "load args columnTake");
+
+    assert.strictEqual(this.loadArgs[3].rowSkip, 4, "load args rowSkip");
+    assert.strictEqual(this.loadArgs[3].columnSkip, 0, "load args columnSkip");
+    assert.strictEqual(this.loadArgs[3].rowTake, 4, "load args rowTake");
+    assert.strictEqual(this.loadArgs[3].columnTake, 4, "load args columnTake");
+
+
+    assert.deepEqual(dataController.getColumnsInfo(), [[
+        { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
+        { dataSourceIndex: 2, text: 'column 2', path: ['column 2'], type: 'D', isLast: true },
+        { dataSourceIndex: 3, text: 'column 3', path: ['column 3'], type: 'D', isLast: true },
+        { dataSourceIndex: 4, text: 'column 4', path: ['column 4'], type: 'D', isLast: true },
+    ]]);
+
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [{ dataSourceIndex: 5, text: 'row 5', path: ['row 5'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 6, text: 'row 6', path: ['row 6'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 7, text: 'row 7', path: ['row 7'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 8, text: 'row 8', path: ['row 8'], type: 'D', isLast: true }],
+    ]);
+});
+
+QUnit.test("change sort order", function(assert) {
+    var dataController = this.setup();
+
+    this.loadArgs = [];
+
+    dataController.getDataSource().field(0, { sortOrder: "desc" });
+    dataController.getDataSource().load();
+
+    assert.strictEqual(this.loadArgs.length, 1, "one load");
+    assert.strictEqual(this.loadArgs[0].rows.length, 1, "load args rows");
+    assert.strictEqual(this.loadArgs[0].columns.length, 1, "load args columns");
+    assert.strictEqual(this.loadArgs[0].rowSkip, 0, "load args rowSkip");
+    assert.strictEqual(this.loadArgs[0].columnSkip, 0, "load args columnSkip");
+    assert.strictEqual(this.loadArgs[0].rowTake, 2, "load args rowTake");
+    assert.strictEqual(this.loadArgs[0].columnTake, 2, "load args columnTake");
+
+    assert.deepEqual(dataController.getColumnsInfo(), [[
+        { dataSourceIndex: 1, text: 'column 1', path: ['column 1'], type: 'D', isLast: true },
+        { dataSourceIndex: 2, text: 'column 2', path: ['column 2'], type: 'D', isLast: true },
+    ]]);
+
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [{ dataSourceIndex: 1, text: 'row 10', path: ['row 10'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 2, text: 'row 9', path: ['row 9'], type: 'D', isLast: true }]
+    ]);
+});
+
+QUnit.test("load with CustomStore", function(assert) {
+    var that = this;
+
+    var dataController = that.setup({
+        paginate: true,
+        fields: [{ dataField: "row", area: "row" }],
+        load: function(loadOptions) {
+            that.loadArgs.push(loadOptions);
+            return $.Deferred().resolve([{ key: "row 1" }, { key: "row 2" }], {
+                groupCount: 10
+            });
+        }
+    });
+
+    assert.strictEqual(this.loadArgs.length, 1, "one load");
+    assert.deepEqual(this.loadArgs[0], {
+        group: [{
+            desc: false,
+            groupInterval: undefined,
+            isExpanded: false,
+            selector: "row"
+        }],
+        groupSummary: [],
+        requireGroupCount: true,
+        skip: 0,
+        take: 2,
+        totalSummary: []
+    }, "load args");
+
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true }],
+        [{ dataSourceIndex: 2, text: 'row 2', path: ['row 2'], type: 'D', isLast: true }]
+    ]);
+});
