@@ -220,4 +220,38 @@ QUnit.module("Editing operations", moduleConfig, () => {
         assert.ok($cells.eq(1).text(), "File 1-2.jpg", "file copied with target folder");
     });
 
+    test("move file in items area", (assert) => {
+        var $cells = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS} > td:first-child`);
+        var initialCount = $cells.length;
+        var $cell = $cells.eq(0);
+        assert.equal($cell.text(), "File 1.txt", "has target file");
+
+        $cell.trigger("dxclick");
+        this.$element.find(`.${internals.ITEMS_GRID_VIEW_CLASS}`).trigger("click");
+        this.clock.tick(400);
+
+        var $commandButton = this.$element.find(`.${internals.TOOLBAR_CLASS} .${internals.BUTTON_CLASS}:contains('Move')`);
+        $commandButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        var $folderNodes = $(`.${internals.DIALOG_CLASS} .${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
+        $folderNodes.eq(2).trigger("dxclick");
+
+        var $okButton = $(`.${internals.POPUP_BOTTOM_CLASS} .${internals.BUTTON_CLASS}:contains('Select')`);
+        $okButton.trigger("dxclick");
+        this.clock.tick(400);
+
+        $cells = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS} > td:first-child`);
+        assert.equal($cells.length, initialCount - 1, "file count decreased");
+        assert.equal($cells.eq(0).text(), "File 2.jpg", "first file is not target file");
+        assert.equal($cells.eq(1).text(), "File 3.xml", "second file is not target file");
+
+        $folderNodes = this.$element.find(`.${internals.CONTAINER_CLASS} .${internals.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
+        $folderNodes.eq(2).trigger("dxclick");
+        this.clock.tick(400);
+
+        $cells = this.$element.find(`.${internals.GRID_DATA_ROW_CLASS} > td:first-child`);
+        assert.ok($cells.eq(0).text(), "File 1.txt", "file moved to another folder");
+    });
+
 });
