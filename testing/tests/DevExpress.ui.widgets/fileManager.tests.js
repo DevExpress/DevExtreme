@@ -93,3 +93,4 @@ QUnit.testStart(() => {
 });
 
 import "./fileManagerParts/editing.tests.js";
+import "./fileManagerParts/webAPIProvider.tests.js";
