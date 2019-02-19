@@ -22,6 +22,10 @@ var GroupedStrategy = Class.inherit({
         return 0;
     },
 
+    _getGroupTop: function() {
+        return 0;
+    },
+
     prepareCellIndexes: abstract,
     calculateCellIndex: abstract,
     getGroupIndex: abstract,

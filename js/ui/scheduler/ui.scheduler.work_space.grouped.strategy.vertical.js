@@ -92,6 +92,10 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
         return result;
     },
 
+    _getGroupTop: function(groupIndex) {
+        return this._workSpace.getMaxAllowedVerticalPosition()[groupIndex] - this._workSpace.getCellHeight() * this._workSpace._getRowCount();
+    },
+
     calculateTimeCellRepeatCount: function() {
         return this._workSpace._getGroupCount() || 1;
     },

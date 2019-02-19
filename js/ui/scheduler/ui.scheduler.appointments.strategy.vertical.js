@@ -107,7 +107,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         var tailHeight = appointmentGeometry.sourceAppointmentHeight - appointmentGeometry.reducedHeight,
             width = appointmentGeometry.width,
             result = [],
-            currentPartTop = 0,
+            currentPartTop = this.instance.fire("getGroupTop", appointmentSettings.groupIndex),
             offset = this.instance.fire("isGroupedByDate") ? this._defaultWidth * this.instance.fire("getGroupCount") : this._defaultWidth,
             left = appointmentSettings.left + offset;
 

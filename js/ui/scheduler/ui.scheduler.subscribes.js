@@ -470,6 +470,10 @@ var subscribes = {
         return this._workSpace._getOffsetByAllDayPanel(groupIndex);
     },
 
+    getGroupTop: function(groupIndex) {
+        return this._workSpace._getGroupTop(groupIndex);
+    },
+
     updateResizableArea: function() {
         var $allResizableElements = this.$element().find(".dx-scheduler-appointment.dx-resizable");
 
