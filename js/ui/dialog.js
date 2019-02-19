@@ -96,7 +96,7 @@ exports.title = "";
  * @param1_field2 messageHtml:String
  * @param1_field3 buttons:Array<dxButtonOptions>
  * @param1_field4 showTitle:boolean
- * @param1_field5 message:String:deprecated
+ * @param1_field5 message:String:deprecated(messageHtml)
  * @static
  * @module ui/dialog
  * @export custom
@@ -111,7 +111,14 @@ exports.custom = function(options) {
     var $element = $("<div>").addClass(DX_DIALOG_CLASSNAME)
         .appendTo(viewPortUtils.value());
 
-    var messageHtml = String('messageHtml' in options ? options.messageHtml : options.message);
+    var isMessageDefined = "message" in options;
+    var isMessageHtmlDefined = "messageHtml" in options;
+
+    if(isMessageDefined) {
+        errors.log("W1013");
+    }
+
+    var messageHtml = String(isMessageHtmlDefined ? options.messageHtml : options.message);
 
     var $message = $("<div>").addClass(DX_DIALOG_MESSAGE_CLASSNAME)
         .html(messageHtml);
