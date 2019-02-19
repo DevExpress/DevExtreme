@@ -857,6 +857,8 @@ declare module DevExpress {
         static getMarkup(widgetInstances: Array<DOMComponent>): string;
         /** Gets the color sets of a predefined or registered palette. */
         static getPalette(paletteName: string): any;
+        /** Generate colors */
+        static generateColors(palette: any, count: number, options: { extensionMode?: string, baseColorSet?: stirng }): Array<string>;
         /** Gets a predefined or registered theme's settings. */
         static getTheme(theme: string): any;
         /** The method to be called every time the active entry in the browser history is modified without reloading the current page. */

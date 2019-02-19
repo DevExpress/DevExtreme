@@ -125,20 +125,16 @@ export function currentPalette(name) {
     }
 }
 
-export function getPalette(palette, parameters = {}) {
-    if(parameters.keepLastColorInEnd === undefined) {
-        parameters.keepLastColorInEnd = true;
+export function generateColors(palette, count, options = {}) {
+    if(options.keepLastColorInEnd === undefined) {
+        options.keepLastColorInEnd === true;
     }
-    const paletteInstance = createPalette(palette, parameters);
 
-    if(_isArray(palette)) {
-        return paletteInstance;
-    } else {
-        return extend(normalizePalette(palette, parameters), paletteInstance);
-    }
+    options.type = options.baseColorSet;
+    return createPalette(palette, options).generateColors(count);
 }
 
-export function normalizePalette(palette, parameters) {
+export function getPalette(palette, parameters) {
     parameters = parameters || {};
     palette = selectPaletteOnSeniority(palette, parameters.themeDefault);
 
@@ -180,7 +176,7 @@ export function registerPalette(name, palette) {
 }
 
 export function getAccentColor(palette, themeDefault) {
-    palette = normalizePalette(palette, { themeDefault });
+    palette = getPalette(palette, { themeDefault });
     return palette.accentColor || palette[0];
 }
 
@@ -437,7 +433,7 @@ export function createPalette(palette, parameters, themeDefaultPalette) {
     parameters = parameters || {};
 
     var extensionMode = (parameters.extensionMode || "").toLowerCase(),
-        colors = normalizePalette(palette, { type: parameters.type || "simpleSet", themeDefault: themeDefaultPalette });
+        colors = getPalette(palette, { type: parameters.type || "simpleSet", themeDefault: themeDefaultPalette });
 
     if(extensionMode === "alternate") {
         paletteObj._extensionStrategy = getAlternateColorsStrategy(colors, parameters);
@@ -476,7 +472,7 @@ function getLightness(color) {
 }
 
 export function getDiscretePalette(source, size, themeDefaultPalette) {
-    var palette = size > 0 ? createDiscreteColors(normalizePalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }), size) : [];
+    var palette = size > 0 ? createDiscreteColors(getPalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }), size) : [];
 
     return {
         getColor: function(index) {
@@ -514,7 +510,7 @@ function createDiscreteColors(source, count) {
 
 export function getGradientPalette(source, themeDefaultPalette) {
     // TODO: Looks like some new set is going to be added
-    var palette = normalizePalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }),
+    var palette = getPalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }),
         color1 = new _Color(palette[0]),
         color2 = new _Color(palette[1]);
 

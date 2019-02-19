@@ -137,16 +137,27 @@ var staticMethods = {
     currentPalette: function() { },
     /**
     * @name vizmethods.getPalette
-    * @publicName getPalette(palette, parameters)
-    * @param1 palette:string|Array<string>
-    * @param2 parameters:object
-    * @param2_field1 extensionMode:string
-    * @return Palette
+    * @publicName getPalette(paletteName)
+    * @param1 paletteName:string
+    * @return object
     * @static
     * @module viz/palette
     * @export getPalette
     */
     getPalette: function() { },
+    /**
+    * @name vizmethods.generateColors
+    * @publicName generateColors(palette, options)
+    * @param1 palette:string|Array<string>
+    * @param2 options:object
+    * @param2_field1 extensionMode:string
+    * @param2_field2 baseColorSet:string
+    * @return Array<string>
+    * @static
+    * @module viz/palette
+    * @export generateColors
+    */
+   generateColors: function() { },    
     /**
     * @name vizmethods.registerPalette
     * @publicName registerPalette(paletteName, palette)
@@ -200,31 +211,4 @@ var staticMethods = {
         * @static
         */
     }
-};
-
-/**
- * @name Palette
- * @type object
- * @hidden
- */
-var Palette = {
-    /**
-     * @name Palette.simpleSet
-     * @type Array<string>
-     */
-    /**
-     * @name Palette.indicatingSet
-     * @type Array<string>
-     */
-    /**
-     * @name Palette.gradientSet
-     * @type Array<string>
-     */
-    /**
-    * @name Palette.generateColors
-    * @publicName generateColors(count)
-    * @param1 count:number
-    * @return Array<string>
-    */
-   generateColors: function() { }
 };

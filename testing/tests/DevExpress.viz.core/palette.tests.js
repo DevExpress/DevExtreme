@@ -1,14 +1,14 @@
 import $ from "jquery";
 import Color from "color";
-import { registerPalette, getPalette, normalizePalette, createPalette, getDiscretePalette, _DEBUG_palettes, currentPalette, getGradientPalette, getAccentColor } from "viz/palette";
+import { registerPalette, generateColors, getPalette, createPalette, getDiscretePalette, _DEBUG_palettes, currentPalette, getGradientPalette, getAccentColor } from "viz/palette";
 
 import errors from "core/errors";
 
 var environment = {
     beforeEach: function() {
         this.registerPalette = registerPalette;
+        this.generateColors = generateColors;
         this.getPalette = getPalette;
-        this.normalizePalette = normalizePalette;
         this.getAccentColor = getAccentColor;
         this.createPalette = createPalette;
         this.getDiscretePalette = getDiscretePalette;
@@ -102,7 +102,7 @@ QUnit.test('Register not valid palette over palette', function(assert) {
     });
 });
 
-QUnit.module('normalizePalette', environment);
+QUnit.module('getPalette', environment);
 
 QUnit.test('Get palette by name', function(assert) {
     this.registerPalette('Custom Palette', {
@@ -110,8 +110,8 @@ QUnit.test('Get palette by name', function(assert) {
         indicatingSet: ['d1', 'd2']
     });
 
-    assert.deepEqual(this.normalizePalette('custom PALETTE', {}).simpleSet, ['c1', 'c2', 'c3'], 'simpleSet');
-    assert.deepEqual(this.normalizePalette('Custom Palette', { type: 'indicatingSet' }), ['d1', 'd2'], 'indicatingSet');
+    assert.deepEqual(this.getPalette('custom PALETTE', {}).simpleSet, ['c1', 'c2', 'c3'], 'simpleSet');
+    assert.deepEqual(this.getPalette('Custom Palette', { type: 'indicatingSet' }), ['d1', 'd2'], 'indicatingSet');
 });
 
 QUnit.test('Get palette by unknown name', function(assert) {
@@ -120,8 +120,8 @@ QUnit.test('Get palette by unknown name', function(assert) {
         indicatingSet: ['d1', 'd2']
     });
 
-    assert.deepEqual(this.normalizePalette('Custom Palette 2', {}).simpleSet, this.palettes['material'].simpleSet, 'simpleSet');
-    assert.deepEqual(this.normalizePalette('Custom Palette 2', { type: 'indicatingSet' }), this.palettes['material'].indicatingSet, 'indicatingSet');
+    assert.deepEqual(this.getPalette('Custom Palette 2', {}).simpleSet, this.palettes['material'].simpleSet, 'simpleSet');
+    assert.deepEqual(this.getPalette('Custom Palette 2', { type: 'indicatingSet' }), this.palettes['material'].indicatingSet, 'indicatingSet');
 });
 
 QUnit.test('Get palette by name and theme', function(assert) {
@@ -134,12 +134,12 @@ QUnit.test('Get palette by name and theme', function(assert) {
         indicatingSet: ['f1', 'f2', 'f3']
     }, 'Super Theme');
 
-    assert.deepEqual(this.normalizePalette('Custom Palette').simpleSet, ['e1', 'e2', 'e3', 'e4'], 'simpleSet');
-    assert.deepEqual(this.normalizePalette('Custom Palette', { type: 'indicatingSet' }), ['f1', 'f2', 'f3'], 'indicatingSet');
+    assert.deepEqual(this.getPalette('Custom Palette').simpleSet, ['e1', 'e2', 'e3', 'e4'], 'simpleSet');
+    assert.deepEqual(this.getPalette('Custom Palette', { type: 'indicatingSet' }), ['f1', 'f2', 'f3'], 'indicatingSet');
 });
 
 QUnit.test('Get palette by array', function(assert) {
-    assert.deepEqual(this.normalizePalette(['a1', 'a2', 'a3']), ['a1', 'a2', 'a3']);
+    assert.deepEqual(this.getPalette(['a1', 'a2', 'a3']), ['a1', 'a2', 'a3']);
 });
 
 QUnit.module('getAccentColor', environment);
@@ -609,61 +609,28 @@ QUnit.test('Create palette with current case', function(assert) {
 
 });
 
-QUnit.module('getPalette', environment);
+QUnit.module('generateColors', environment);
 
 QUnit.test('Generate colors', function(assert) {
-    const p = getPalette("material"),
-        colors = p.generateColors(10);
+    const colors = generateColors("material", 10);
 
     assert.deepEqual(colors, ["#1db2f5", "#f5564a", "#c69053", "#97c95c", "#cbc83e", "#ffc720", "#f57e4a", "#eb3573", "#c93996", "#a63db8"]);
 });
 
 QUnit.test('Generate colors less than in the palette', function(assert) {
-    const p = getPalette("material"),
-        colors = p.generateColors(2);
+    const colors = generateColors("material", 2);
 
     assert.deepEqual(colors, ["#1db2f5", "#f5564a"]);
 });
 
 QUnit.test('Repeat colors', function(assert) {
-    const p = getPalette("material"),
-        colors = p.generateColors(10, { repeat: true });
+    const colors = generateColors("material", 10, { repeat: true });
 
     assert.deepEqual(colors, ["#1db2f5", "#f5564a", "#97c95c", "#ffc720", "#eb3573", "#a63db8", "#1db2f5", "#f5564a", "#97c95c", "#ffc720"]);
 });
 
-QUnit.test('Generate all colors', function(assert) {
-    const p = getPalette("material"),
-        colors = p.generateColors(10);
-
-    assert.deepEqual(colors, ["#1db2f5", "#f5564a", "#c69053", "#97c95c", "#cbc83e", "#ffc720", "#f57e4a", "#eb3573", "#c93996", "#a63db8"]);
-});
-
 QUnit.test('Generate colors with custom palette', function(assert) {
-    const p = getPalette(['#d6e5f4', '#0f5ba3'], { keepLastColorInEnd: true }),
-        colors = p.generateColors(10);
+    const colors = generateColors(['#d6e5f4', '#0f5ba3'], 10);
 
     assert.deepEqual(colors, ["#d6e5f4", "#c0d6eb", "#aac6e2", "#94b7d9", "#7ea8d0", "#6798c7", "#5189be", "#3b7ab5", "#256aac", "#0f5ba3"]);
-});
-
-QUnit.test('Iterate by colors', function(assert) {
-    const p = getPalette("material", { count: 2 }),
-        colors = [];
-
-    for(let i = 0; i < 5; i++) {
-        colors.push(p.getNextColor());
-    }
-
-    assert.deepEqual(colors, ["#1db2f5", "#f5564a", "#1db2f5", "#f5564a", "#1db2f5"]);
-});
-
-QUnit.test('Iterate by colors with custom palette', function(assert) {
-    const p = getPalette(['#d6e5f4', '#0f5ba3'], { count: 3 }),
-        colors = [];
-
-    for(let i = 0; i < 6; i++) {
-        colors.push(p.getNextColor());
-    }
-
-    assert.deepEqual(colors, ["#d6e5f4", "#73a0cc", "#0f5ba3", "#d6e5f4", "#73a0cc", "#0f5ba3"]);
 });
