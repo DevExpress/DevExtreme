@@ -901,6 +901,10 @@ var DataSource = Class.inherit({
         return this._operationManager.cancel(operationId);
     },
 
+    cancelAll: function() {
+        return this._operationManager.cancelAll();
+    },
+
     _addSearchOptions: function(storeLoadOptions) {
         if(this._disposed) {
             return;
