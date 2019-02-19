@@ -5,9 +5,11 @@ import "common.css!";
 window.internals = {
     WIDGET_CLASS: "dx-filemanager",
     TOOLBAR_CLASS: "dx-filemanager-toolbar",
+    CONTAINER_CLASS: "dx-filemanager-container",
     DIALOG_CLASS: "dx-filemanager-dialog",
     GRID_DATA_ROW_CLASS: "dx-data-row",
     FOLDERS_TREE_VIEW_ITEM_CLASS: "dx-treeview-item",
+    FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: "dx-treeview-toggle-item-visibility",
     ITEMS_GRID_VIEW_CLASS: "dx-filemanager-files-view",
     POPUP_BOTTOM_CLASS: "dx-popup-bottom",
     BUTTON_CLASS: "dx-button",
