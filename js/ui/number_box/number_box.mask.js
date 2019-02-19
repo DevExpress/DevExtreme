@@ -166,7 +166,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _keyboardHandler: function(e) {
-        if(browser.msie && this._waitForDblClick) {
+        if(this._waitForDblClick) {
             this._waitForDblClick = false;
             clearTimeout(this._caretTimeout);
         }
@@ -477,7 +477,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var $input = this._input();
 
         eventsEngine.on($input, eventUtils.addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), function(event) {
+        eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), function() {
             var that = this;
 
             if(browser.msie) {
@@ -492,7 +492,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             }
         }.bind(this));
 
-        eventsEngine.on($input, "dblclick", function() {
+        eventsEngine.on($input, "dxdblclick", function() {
             if(this._waitForDblClick) {
                 clearTimeout(this._caretTimeout);
                 this._waitForDblClick = undefined;

@@ -1596,8 +1596,11 @@ QUnit.test("moving caret to closest non stub on click - forward direction", func
     this.keyboard.caret(0);
 
     this.input.trigger("dxclick");
-    this.clock.tick(310);
+    if(browser.msie) {
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
+    }
 
+    this.clock.tick(310);
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was adjusted");
 });
 
@@ -1675,9 +1678,42 @@ QUnit.testInActiveWindow("caret should be at start boundary on focusin", functio
     });
 
     this.input.focus();
-    this.clock.tick(310);
+    if(browser.msie) {
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
+    }
 
+    this.clock.tick(310);
     assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is right");
+});
+
+QUnit.testInActiveWindow("caret should not to change position on focus after fast double click for ie", function(assert) {
+    if(!browser.msie) {
+        assert.expect(0);
+        return;
+    }
+    this.instance.option({
+        format: "#0.## kg",
+        value: 1.23
+    });
+
+    this.input.focus();
+
+    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
+
+    this.input.trigger("dxdblclick");
+    this.clock.tick(310);
+    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret is right after focus and dblclick");
+
+    this.input.trigger("focusout");
+    this.clock.tick();
+
+    this.keyboard.caret(0);
+    this.input.trigger("dxclick");
+    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
+
+    this.input.trigger("dxdblclick");
+    this.clock.tick(310);
+    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret is right after focus by click and dblclick");
 });
 
 QUnit.module("format: custom parser and formatter", moduleConfig);
