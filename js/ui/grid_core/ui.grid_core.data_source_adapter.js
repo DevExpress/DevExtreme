@@ -1,6 +1,6 @@
 import Callbacks from "../../core/utils/callbacks";
 import gridCore from "../data_grid/ui.data_grid.core";
-import commonUtils from "../../core/utils/common";
+import { executeAsync, getKeyHash } from "../../core/utils/common";
 import typeUtils from "../../core/utils/type";
 import { each } from "../../core/utils/iterator";
 import { extend } from "../../core/utils/extend";
@@ -44,7 +44,7 @@ module.exports = gridCore.Controller.inherit((function() {
 
     function executeTask(action, timeout) {
         if(typeUtils.isDefined(timeout)) {
-            commonUtils.executeAsync(action, timeout);
+            executeAsync(action, timeout);
         } else {
             action();
         }
@@ -168,6 +168,24 @@ module.exports = gridCore.Controller.inherit((function() {
             if(!fromStore) {
                 this._applyBatch(changes);
             }
+        },
+        getDataIndexGetter: function() {
+            if(!this._dataIndexGetter) {
+                var indexByKey;
+                var store = this.store();
+                this._dataIndexGetter = data => {
+                    var storeData = this._cachedStoreData || [];
+                    if(!indexByKey) {
+                        indexByKey = {};
+                        for(var i = 0; i < storeData.length; i++) {
+                            indexByKey[getKeyHash(store.keyOf(storeData[i]))] = i;
+                        }
+                    }
+                    return indexByKey[getKeyHash(store.keyOf(data))];
+                };
+            }
+
+            return this._dataIndexGetter;
         },
         _getKeyInfo: function() {
             return this.store();
