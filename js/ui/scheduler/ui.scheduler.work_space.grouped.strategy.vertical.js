@@ -78,7 +78,7 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
         var maxAllowedPosition = this._workSpace.getMaxAllowedVerticalPosition()[groupIndex];
 
         if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
-            maxAllowedPosition = maxAllowedPosition + this._workSpace.getCellHeight() * (groupIndex + 1);
+            maxAllowedPosition += this._workSpace.getCellHeight() * (groupIndex + 1);
         }
 
         return maxAllowedPosition;
