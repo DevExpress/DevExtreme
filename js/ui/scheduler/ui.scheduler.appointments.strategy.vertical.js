@@ -118,6 +118,8 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 tailHeight = minHeight;
             }
 
+            currentPartTop += this.instance.fire("getOffsetByAllDayPanel", appointmentSettings.groupIndex);
+
             result.push(extend(true, {}, appointmentSettings, {
                 top: currentPartTop,
                 left: left,

@@ -5920,7 +5920,7 @@ QUnit.test("Long appointments should be rendered correctly in vertical grouped w
     assert.roughEqual($appointments.eq(0).outerHeight(), cellHeight, 2, "correct size of appointment part");
     assert.roughEqual($appointments.eq(0).position().left, cellWidth + dateTableLeftOffset, 1.1, "correct left position of  appointment part");
 
-    assert.roughEqual($appointments.eq(1).position().top, 0, 1.5, "correct top position of appointment part");
+    assert.roughEqual($appointments.eq(1).position().top, cellHeight, 1.5, "correct top position of appointment part");
     assert.roughEqual($appointments.eq(1).outerHeight(), cellHeight * 2.5, 2, "correct size of appointment part");
     assert.roughEqual($appointments.eq(1).position().left, cellWidth * 2 + dateTableLeftOffset, 1.1, "correct left position of appointment part");
 });

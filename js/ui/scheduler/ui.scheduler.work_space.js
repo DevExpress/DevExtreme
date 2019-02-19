@@ -2101,6 +2101,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return this._groupedStrategy.getVerticalMax(groupIndex);
     },
 
+    _getOffsetByAllDayPanel: function(groupIndex) {
+        return this._groupedStrategy.getOffsetByAllDayPanel(groupIndex);
+    },
+
     isGroupedByDate: function() {
         return this.option("groupByDate") && this._isHorizontalGroupedWorkSpace();
     },

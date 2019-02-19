@@ -77,11 +77,19 @@ var VerticalGroupedStrategy = GroupedStrategy.inherit({
     getVerticalMax: function(groupIndex) {
         var maxAllowedPosition = this._workSpace.getMaxAllowedVerticalPosition()[groupIndex];
 
-        if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
-            maxAllowedPosition += this._workSpace.getCellHeight() * (groupIndex + 1);
-        }
+        maxAllowedPosition += this.getOffsetByAllDayPanel(groupIndex);
 
         return maxAllowedPosition;
+    },
+
+    getOffsetByAllDayPanel: function(groupIndex) {
+        var result = 0;
+
+        if(this._workSpace.supportAllDayRow() && this._workSpace.option("showAllDayPanel")) {
+            result = this._workSpace.getCellHeight() * (groupIndex + 1);
+        }
+
+        return result;
     },
 
     calculateTimeCellRepeatCount: function() {
