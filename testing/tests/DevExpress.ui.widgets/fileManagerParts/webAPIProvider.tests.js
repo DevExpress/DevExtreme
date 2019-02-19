@@ -87,4 +87,86 @@ QUnit.module("Web API Provider", moduleConfig, () => {
             });
     });
 
+    test("create folder test", (assert) => {
+        var done = assert.async();
+
+        ajaxMock.setup({
+            url: this.options.createFolderUrl + "?parentId=Root%2FFiles%2FDocuments&name=Test%201",
+            responseText: ""
+        });
+
+        var parentFolder = new FileManagerItem("Root/Files", "Documents");
+        this.provider.createFolder(parentFolder, "Test 1")
+            .done(result => {
+                assert.notOk(result, "folder created");
+                done();
+            });
+    });
+
+    test("rename item test", (assert) => {
+        var done = assert.async();
+
+        ajaxMock.setup({
+            url: this.options.renameUrl + "?id=Root%2FFiles%2FDocuments&newName=Test%201",
+            responseText: ""
+        });
+
+        var item = new FileManagerItem("Root/Files", "Documents");
+        this.provider.renameItem(item, "Test 1")
+            .done(result => {
+                assert.notOk(result, "item renamed");
+                done();
+            });
+    });
+
+    test("delete item test", (assert) => {
+        var done = assert.async();
+
+        ajaxMock.setup({
+            url: this.options.deleteUrl + "?id=Root%2FFiles%2FDocuments",
+            responseText: ""
+        });
+
+        var item = new FileManagerItem("Root/Files", "Documents");
+        this.provider.deleteItems([ item ])
+            .done(result => {
+                assert.notOk(result, "item deleted");
+                done();
+            });
+    });
+
+    test("move item test", (assert) => {
+        var done = assert.async();
+
+        ajaxMock.setup({
+            url: this.options.moveUrl + "?sourceId=Root%2FFiles%2FDocuments&destinationId=Root%2FFiles%2FImages%2FDocuments",
+            responseText: ""
+        });
+
+        var item = new FileManagerItem("Root/Files", "Documents");
+        var destinationFolder = new FileManagerItem("Root/Files", "Images");
+        this.provider.moveItems([ item ], destinationFolder)
+            .done(result => {
+                assert.notOk(result, "item moved");
+                done();
+            });
+    });
+
+    test("copy item test", (assert) => {
+        var done = assert.async();
+
+        ajaxMock.setup({
+            url: this.options.copyUrl + "?sourceId=Root%2FFiles%2FDocuments&destinationId=Root%2FFiles%2FImages%2FDocuments",
+            responseText: ""
+        });
+
+        var item = new FileManagerItem("Root/Files", "Documents");
+        var destinationFolder = new FileManagerItem("Root/Files", "Images");
+        this.provider.copyItems([ item ], destinationFolder)
+            .done(result => {
+                assert.notOk(result, "item copied");
+                done();
+            });
+    });
+
 });
