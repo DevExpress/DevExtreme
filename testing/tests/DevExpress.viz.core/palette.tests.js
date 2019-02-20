@@ -397,6 +397,12 @@ QUnit.test('Reset palette', function(assert) {
     assert.strictEqual(palette.getNextColor(), "red");
 });
 
+QUnit.test('Repeat colors', function(assert) {
+    const colors = createPalette("material").generateColors(10, { repeat: true, keepLastColorInEnd: false });
+
+    assert.deepEqual(colors, ["#1db2f5", "#f5564a", "#97c95c", "#ffc720", "#eb3573", "#a63db8", "#1db2f5", "#f5564a", "#97c95c", "#ffc720"]);
+});
+
 QUnit.module('DiscretePalette', $.extend({}, environment, {
     createColors: function(count) {
         var i = 0, step = Math.round(255 / count), r = 0, g = 32, b = 64, list = [], color;
@@ -621,12 +627,6 @@ QUnit.test('Generate colors less than in the palette', function(assert) {
     const colors = generateColors("material", 2);
 
     assert.deepEqual(colors, ["#1db2f5", "#f5564a"]);
-});
-
-QUnit.test('Repeat colors', function(assert) {
-    const colors = generateColors("material", 10, { repeat: true });
-
-    assert.deepEqual(colors, ["#1db2f5", "#f5564a", "#97c95c", "#ffc720", "#eb3573", "#a63db8", "#1db2f5", "#f5564a", "#97c95c", "#ffc720"]);
 });
 
 QUnit.test('Generate colors with custom palette', function(assert) {
