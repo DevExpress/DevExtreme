@@ -3593,6 +3593,26 @@ QUnit.test("datebox should be invalid after out of range value was setted", func
     assert.ok(dateBox.option("isValid"), "widget is valid");
 });
 
+QUnit.test("datebox should change validation state if value was changed by keyboard", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+        type: "date",
+        value: null,
+        pickerType: "calendar"
+    }).dxValidator({
+        validationRules: [{
+            type: "required"
+        }]
+    });
+    var dateBox = $dateBox.dxDateBox("instance");
+    var keyboard = keyboardMock($dateBox.find("." + TEXTEDITOR_INPUT_CLASS));
+
+    keyboard
+        .type("10/10/2014")
+        .change();
+
+    assert.ok(dateBox.option("isValid"), "widget is valid");
+});
+
 QUnit.test("widget is still valid after drop down is opened", function(assert) {
     var startDate = new Date(2015, 1, 1, 8, 12);
 
