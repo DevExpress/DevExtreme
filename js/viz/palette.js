@@ -125,7 +125,7 @@ export function currentPalette(name) {
     }
 }
 
-export function generateColors(palette, count, options = { keepLastColorInEnd: true }) {
+export function generateColors(palette, count, options = { keepLastColorInEnd: false }) {
     options.type = options.baseColorSet;
     options.extensionMode = options.paletteExtensionMode;
 

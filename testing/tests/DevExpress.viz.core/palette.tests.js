@@ -630,7 +630,13 @@ QUnit.test('Generate colors less than in the palette', function(assert) {
 });
 
 QUnit.test('Generate colors with custom palette', function(assert) {
-    const colors = generateColors(['#d6e5f4', '#0f5ba3'], 10);
+    const colors = generateColors(['#d6e5f4', '#0f5ba3'], 4);
 
-    assert.deepEqual(colors, ["#d6e5f4", "#c0d6eb", "#aac6e2", "#94b7d9", "#7ea8d0", "#6798c7", "#5189be", "#3b7ab5", "#256aac", "#0f5ba3"]);
+    assert.deepEqual(colors, ["#d6e5f4", "#73a0cc", "#0f5ba3", "#73a0cc"]);
+});
+
+QUnit.test('Generate colors with custom palette when last color must be in end', function(assert) {
+    const colors = generateColors(['#d6e5f4', '#0f5ba3'], 4, { paletteExtensionMode: "alternate" });
+
+    assert.deepEqual(colors, ["#d6e5f4", "#0f5ba3", "#d6e5f4", "#0f5ba3"]);
 });
