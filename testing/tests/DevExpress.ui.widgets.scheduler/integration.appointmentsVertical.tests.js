@@ -1243,7 +1243,171 @@ QUnit.test("Appointment inside vertical grouped view should have a right resizab
     assert.equal($appointment.dxResizable("instance").option("area").bottom, initialResizableAreaBottom);
 });
 
-QUnit.test("Long appointments should be rendered correctly in vertical grouped workspace Week, first group, howAllDayPanel = true (T714290)", function(assert) {
+QUnit.test("Appointment before startDayHour part should be rendered correctly in vertical grouped workspace Week, first group, showAllDayPanel = true", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                text: "1",
+                id: 1,
+                startDate: new Date(2018, 4, 21, 7),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            },
+            {
+                text: "2",
+                id: 2,
+                startDate: new Date(2018, 4, 21, 7),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            }
+        ],
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 16,
+        cellDuration: 60,
+        showAllDayPanel: true,
+        width: 2000
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+    assert.equal($appointments.length, 2, "two appointment parts are rendered");
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight(),
+        cellWidth = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerWidth(),
+        dateTableLeftOffset = 200;
+
+    assert.roughEqual($appointments.eq(0).position().top, cellHeight, 1.5, "correct top position of appointment part");
+    assert.roughEqual($appointments.eq(0).outerHeight(), cellHeight * 2.5, 2, "correct size of appointment part");
+    assert.roughEqual($appointments.eq(0).position().left, cellWidth + dateTableLeftOffset, 1.1, "correct left position of  appointment part");
+
+    assert.roughEqual($appointments.eq(1).position().top, cellHeight * 9, 1.5, "correct top position of appointment part");
+    assert.roughEqual($appointments.eq(1).outerHeight(), cellHeight * 2.5, 2, "correct size of appointment part");
+    assert.roughEqual($appointments.eq(1).position().left, cellWidth + dateTableLeftOffset, 1.1, "correct left position of appointment part");
+});
+
+QUnit.test("Appointment after endDayHour part should be rendered correctly in vertical grouped workspace Week, first group, showAllDayPanel = true", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                text: "1",
+                id: 1,
+                startDate: new Date(2018, 4, 21, 15),
+                endDate: new Date(2018, 4, 21, 17)
+            },
+            {
+                text: "2",
+                id: 2,
+                startDate: new Date(2018, 4, 21, 15),
+                endDate: new Date(2018, 4, 21, 17)
+            }
+        ],
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 16,
+        cellDuration: 60,
+        showAllDayPanel: true,
+        width: 2000
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+    assert.equal($appointments.length, 2, "two appointment parts are rendered");
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight(),
+        cellWidth = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerWidth(),
+        dateTableLeftOffset = 200;
+
+    assert.roughEqual($appointments.eq(0).position().top, cellHeight * 7, 1.5, "correct top position of appointment part");
+    assert.roughEqual($appointments.eq(0).outerHeight(), cellHeight, 2, "correct size of appointment part");
+    assert.roughEqual($appointments.eq(0).position().left, cellWidth + dateTableLeftOffset, 1.1, "correct left position of  appointment part");
+
+    assert.roughEqual($appointments.eq(1).position().top, cellHeight * 15, 1.5, "correct top position of appointment part");
+    assert.roughEqual($appointments.eq(1).outerHeight(), cellHeight, 2, "correct size of appointment part");
+    assert.roughEqual($appointments.eq(1).position().left, cellWidth + dateTableLeftOffset, 1.1, "correct left position of appointment part");
+});
+
+QUnit.test("Appointment starting on previous week should be rendered correctly in vertical grouped workspace Week, first group, showAllDayPanel = true", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                text: "1",
+                id: 1,
+                startDate: new Date(2018, 4, 19, 15),
+                endDate: new Date(2018, 4, 20, 11)
+            },
+            {
+                text: "2",
+                id: 2,
+                startDate: new Date(2018, 4, 19, 15),
+                endDate: new Date(2018, 4, 20, 11)
+            }
+        ],
+        views: [{
+            type: "week",
+            groupOrientation: "vertical"
+        }],
+        currentView: "week",
+        groups: ["id"],
+        resources: [
+            {
+                field: "id",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 16,
+        cellDuration: 60,
+        showAllDayPanel: true,
+        width: 2000
+    });
+
+    var $appointments = $(this.instance.$element()).find("." + APPOINTMENT_CLASS);
+    assert.equal($appointments.length, 2, "two appointment parts are rendered");
+
+    var cellHeight = $(this.instance.$element()).find("." + DATE_TABLE_CELL_CLASS).first().outerHeight(),
+        dateTableLeftOffset = 200;
+
+    assert.roughEqual($appointments.eq(0).position().top, cellHeight, 1.5, "correct top position of appointment part");
+    assert.roughEqual($appointments.eq(0).outerHeight(), cellHeight * 2, 2, "correct size of appointment part");
+    assert.roughEqual($appointments.eq(0).position().left, dateTableLeftOffset, 1.1, "correct left position of  appointment part");
+
+    assert.roughEqual($appointments.eq(1).position().top, cellHeight * 9, 1.5, "correct top position of appointment part");
+    assert.roughEqual($appointments.eq(1).outerHeight(), cellHeight * 2, 2, "correct size of appointment part");
+    assert.roughEqual($appointments.eq(1).position().left, dateTableLeftOffset, 1.1, "correct left position of appointment part");
+});
+
+QUnit.test("Long appointments should be rendered correctly in vertical grouped workspace Week, first group, showAllDayPanel = true (T714290)", function(assert) {
     this.createInstance({
         dataSource: [
             {
