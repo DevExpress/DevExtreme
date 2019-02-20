@@ -626,7 +626,7 @@ var DateBox = DropDownEditor.inherit({
             }
         }
 
-        this._checkValueByValidator(newValue);
+        this._applyCustomValidation(newValue);
     },
 
     _getDateByDefault: function() {
@@ -641,7 +641,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _validateValue: function(value) {
-        return this._applyInternalValidation(value) && this._checkValueByValidator(value);
+        return this._applyInternalValidation(value) && this._applyCustomValidation(value);
     },
 
     _applyInternalValidation(value) {
@@ -669,7 +669,7 @@ var DateBox = DropDownEditor.inherit({
         return isValid;
     },
 
-    _checkValueByValidator: function(value) {
+    _applyCustomValidation: function(value) {
         this.validationRequest.fire({
             editor: this,
             value
