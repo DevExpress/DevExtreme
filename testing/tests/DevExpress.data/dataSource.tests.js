@@ -820,6 +820,23 @@ QUnit.test("cancel works", function(assert) {
     assert.ok(!source.isLoading());
 });
 
+QUnit.test("cancelAll works", function(assert) {
+    var source = new DataSource({
+        load: function() {
+            return $.Deferred().promise();
+        }
+    });
+
+    var promise1 = source.load();
+    var promise2 = source.load();
+
+    source.cancelAll();
+
+    assert.ok(!source.isLoading());
+    assert.equal(promise1.state(), "rejected", "promise1 is rejected");
+    assert.equal(promise2.state(), "rejected", "promise2 is rejected");
+});
+
 QUnit.test("canceling on customizeStoreLoadOptions", function(assert) {
     var source = new DataSource({
         load: mustNotReach

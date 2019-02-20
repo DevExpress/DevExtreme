@@ -3427,6 +3427,7 @@ QUnit.test("scroll to second render page and expand row after expand row on the 
 QUnit.test("scroll to second render page and expand row after expand row on the first page and refresh", function(assert) {
     this.dataController.expandRow(1);
     this.dataController.refresh();
+    this.clock.tick();
     this.dataController.setViewportPosition(50);
     this.dataController.expandRow(5);
 
