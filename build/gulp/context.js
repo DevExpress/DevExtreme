@@ -1,9 +1,9 @@
-var fs = require('fs');
 var argv = require('yargs')
     .default('uglify', false)
     .argv;
 
-var productVersion = readVersion(),
+var productVersion = require('../../package.json').version,
+    scriptVersion = productVersion,
     packageVersion = productVersion;
 
 var dxBuildLabel = process.env.DEVEXTREME_DXBUILD_LABEL,
@@ -28,32 +28,11 @@ if(dxBuildLabel) {
     }
 }
 
-function readVersion() {
-    var packageVersion = require('../../package.json').version;
-
-    var SCRIPT_VERSION_FILE = 'js/core/version.js';
-    var scriptVersion = (function() {
-        var text = fs.readFileSync(SCRIPT_VERSION_FILE, 'utf8'),
-            match = text.match(/"(.+?)".+?DevExpress\.VERSION/);
-
-        if(!match) {
-            throw 'Version marker is corrupt in ' + SCRIPT_VERSION_FILE;
-        }
-
-        return match[1];
-    })();
-
-    if(packageVersion !== scriptVersion) {
-        throw 'Product version mismatch in ' + SCRIPT_VERSION_FILE;
-    }
-
-    return packageVersion;
-}
-
 module.exports = {
     version: {
         product: productVersion,
-        package: packageVersion
+        package: packageVersion,
+        script: scriptVersion
     },
     uglify: argv.uglify,
     RESULT_JS_PATH: 'artifacts/js',
