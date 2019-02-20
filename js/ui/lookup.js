@@ -1195,7 +1195,6 @@ var Lookup = DropDownList.inherit({
 
     _renderInputValue: function() {
         return this.callBase().always((function() {
-            this._renderField();
             this._refreshSelected();
             this._setSubmitValue();
         }).bind(this));
