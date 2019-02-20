@@ -266,19 +266,24 @@ var CollectionWidget = Widget.inherit({
         this._initItemsFromMarkup();
 
         this.callBase();
+        this._initDefaultItemTemplate();
+    },
 
+    _initDefaultItemTemplate: function() {
         this._defaultTemplates["item"] = new BindableTemplate((function($container, data) {
             if(isPlainObject(data)) {
                 this._prepareDefaultItemTemplate(data, $container);
             } else {
                 $container.text(String(data));
             }
-        }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"));
+        }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"), this._getFieldsMap());
     },
 
     _getBindableFields: function() {
         return ["text", "html"];
     },
+
+    _getFieldsMap: commonUtils.noop,
 
     _prepareDefaultItemTemplate: function(data, $container) {
         if(data.text) {

@@ -389,3 +389,13 @@ QUnit.test("list item markup should be correct, reordering decorator", function(
     assert.equal($handleContainer.length, 1, "container generated");
     assert.equal($handle.length, 1, "handle generated");
 });
+
+QUnit.test("displayExpr option should work", assert => {
+    var $list = $("#list").dxList({
+            items: [{ name: "Item 1", id: 1 }],
+            displayExpr: "name"
+        }),
+        $items = $list.find(toSelector(LIST_ITEM_CLASS));
+
+    assert.strictEqual($items.text(), "Item 1", "displayExpr works");
+});

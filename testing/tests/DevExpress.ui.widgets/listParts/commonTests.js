@@ -898,6 +898,18 @@ QUnit.test("onItemSwipe", function(assert) {
     swipeItem();
 });
 
+QUnit.test("displayExpr option change", function(assert) {
+    var instance = this.element.dxList({
+        items: [{ id: 1, name: "Item text", caption: "New item text" }],
+        displayExpr: "name"
+    }).dxList("instance");
+
+    assert.strictEqual(instance.itemElements().text(), "Item text", "displayExpr works");
+
+    instance.option("displayExpr", "caption");
+    assert.strictEqual(instance.itemElements().text(), "New item text", "item text was changed");
+});
+
 
 QUnit.test("dxList shouldn't show 'Loading' and 'No data' at the same time than dataSource option changed", function(assert) {
     var $list = $("#list").dxList({ pageLoadMode: "scrollBottom" }),
