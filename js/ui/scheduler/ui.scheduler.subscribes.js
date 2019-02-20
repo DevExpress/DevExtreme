@@ -764,7 +764,7 @@ var subscribes = {
 
         this._convertDatesByTimezoneBack(false, result);
 
-        if(typeUtils.isDefined(appointmentIndex)) {
+        if(!typeUtils.isDefined(appointmentIndex)) {
             appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
         }
 
