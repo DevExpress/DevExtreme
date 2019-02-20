@@ -59,36 +59,6 @@ QUnit.testStart(function() {
         afterEach: function() {
             this.clock.restore();
             fx.off = false;
-        },
-        checkAppointmentDataInTooltipTemplate: function(assert, dataSource, currentDate) {
-            this.instance.option({
-                dataSource: dataSource,
-                height: 600,
-                currentDate: currentDate,
-                currentView: "month",
-                views: ["month"],
-                appointmentTooltipTemplate: function(appointmentData) {
-                    assert.equal(dataSource.indexOf(appointmentData), 0, "appointment data contains in the data source");
-                }
-            });
-
-            $(this.instance.$element().find(".dx-scheduler-appointment").eq(0)).trigger("dxclick");
-            this.clock.tick(300);
-        },
-        checkItemDataInDropDownTemplate: function(assert, dataSource, currentDate) {
-            this.instance.option({
-                dataSource: dataSource,
-                height: 600,
-                maxAppointmentsPerCell: 1,
-                currentDate: currentDate,
-                currentView: "month",
-                views: ["month"],
-                dropDownAppointmentTemplate: function(itemData) {
-                    assert.ok(dataSource.indexOf(itemData) > -1, "appointment data contains in the data source");
-                }
-            });
-
-            $(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance").open();
         }
     });
 
@@ -108,7 +78,6 @@ QUnit.testStart(function() {
 
         assert.ok(true, "Widget works correctly");
     });
-
 
     QUnit.test("Scheduler shouldn't have paginate in default DataSource", function(assert) {
         this.instance.option({ dataSource: this.tasks });
@@ -310,93 +279,6 @@ QUnit.testStart(function() {
         assert.strictEqual(dataAccessors.setter.recurrenceRule, undefined, "setter for recurrenceRule is OK");
     });
 
-    QUnit.test("the targetedAppointmentData parameter appends to arguments of the appointment tooltip template for a recurrence rule", function(assert) {
-        this.instance.option({
-            dataSource: [{
-                startDate: new Date(2015, 4, 24, 9),
-                endDate: new Date(2015, 4, 24, 11),
-                allDay: true,
-                recurrenceRule: "FREQ=DAILY;COUNT=3",
-                text: "Task 2"
-            }],
-            height: 600,
-            currentDate: new Date(2015, 4, 24),
-            currentView: "month",
-            views: ["month"],
-            appointmentTooltipTemplate: function(data, index, targetedAppointmentData) {
-                assert.deepEqual(targetedAppointmentData, {
-                    allDay: true,
-                    endDate: new Date(2015, 4, 25, 11),
-                    recurrenceRule: "FREQ=DAILY;COUNT=3",
-                    startDate: new Date(2015, 4, 25, 9),
-                    text: "Task 2"
-                });
-            }
-        });
-
-        $(this.instance.$element().find(".dx-scheduler-appointment").eq(1)).trigger("dxclick");
-        this.clock.tick(300);
-    });
-
-    QUnit.test("the targetedAppointmentData parameter appends to arguments of the appointment tooltip template for a non-recurrence rule", function(assert) {
-        this.instance.option({
-            dataSource: [{
-                startDate: new Date(2015, 4, 24, 9),
-                endDate: new Date(2015, 4, 24, 11),
-                text: "Task 1"
-            }],
-            height: 600,
-            currentDate: new Date(2015, 4, 24),
-            currentView: "month",
-            views: ["month"],
-            appointmentTooltipTemplate: function(data, index, targetedAppointmentData) {
-                assert.deepEqual(targetedAppointmentData, {
-                    startDate: new Date(2015, 4, 24, 9),
-                    endDate: new Date(2015, 4, 24, 11),
-                    text: "Task 1"
-                });
-            }
-        });
-
-        $(this.instance.$element().find(".dx-scheduler-appointment").eq(0)).trigger("dxclick");
-        this.clock.tick(300);
-    });
-
-    QUnit.skip("the targetedAppointmentData parameter appends to arguments of the drop down appointment template for a recurrence rule", function(assert) {
-        var data = [{
-            startDate: new Date(2015, 4, 24, 9),
-            endDate: new Date(2015, 4, 24, 11),
-            recurrenceRule: "FREQ=DAILY;COUNT=3",
-            allDay: true,
-            text: "Task 1"
-        }, {
-            startDate: new Date(2015, 4, 24, 9),
-            endDate: new Date(2015, 4, 24, 11),
-            allDay: true,
-            recurrenceRule: "FREQ=DAILY;COUNT=2",
-            text: "Task 2"
-        }];
-
-        this.instance.option({
-            dataSource: data,
-            maxAppointmentsPerCell: 1,
-            currentDate: new Date(2015, 4, 24),
-            views: ["month"],
-            dropDownAppointmentTemplate: function(itemData, itemIndex, itemElement, targetedAppointmentData) {
-                assert.deepEqual(targetedAppointmentData, {
-                    endDate: new Date(2015, 4, 26, 9),
-                    recurrenceRule: "FREQ=DAILY;COUNT=3",
-                    startDate: new Date(2015, 4, 25, 9),
-                    allDay: true,
-                    text: "Task 1"
-                }, "appointmentData is should be an instance");
-            },
-            currentView: "month"
-        });
-
-        $(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance").open();
-    });
-
     QUnit.test("appointmentCollectorTemplate rendering args should be correct", function(assert) {
         this.instance.option({
             dataSource: [{
@@ -422,84 +304,6 @@ QUnit.testStart(function() {
             currentView: "month"
         });
     });
-
-    QUnit.test("The appointmentData argument of the appointment tooltip template is should be instance of the data source", function(assert) {
-        var dataSource = [{
-            startDate: new Date(2015, 4, 24, 9),
-            endDate: new Date(2015, 4, 24, 11),
-            allDay: true,
-            text: "Task 1"
-        }, {
-            startDate: new Date(2015, 4, 25),
-            endDate: new Date(2015, 4, 25),
-            allDay: true,
-            text: "Task 2"
-        }];
-
-        this.checkAppointmentDataInTooltipTemplate(assert, dataSource, new Date(2015, 4, 24));
-    });
-
-    QUnit.test("The appointmentData argument of the appointment tooltip template is should be instance of the data source for recurrence rule", function(assert) {
-        var dataSource = [{
-            startDate: new Date(2015, 4, 24, 9),
-            endDate: new Date(2015, 4, 24, 11),
-            recurrenceRule: "FREQ=DAILY;COUNT=3",
-            allDay: true,
-            text: "Task 1"
-        }, {
-            startDate: new Date(2015, 4, 24, 19),
-            endDate: new Date(2015, 4, 24, 31),
-            allDay: true,
-            recurrenceRule: "FREQ=DAILY;COUNT=2",
-            text: "Task 2"
-        }];
-
-        this.checkAppointmentDataInTooltipTemplate(assert, dataSource, new Date(2015, 4, 24));
-    });
-
-    QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source", function(assert) {
-        var dataSource = [{
-            startDate: new Date(2015, 4, 24, 9),
-            endDate: new Date(2015, 4, 24, 11),
-            allDay: true,
-            text: "Task 1"
-        }, {
-            startDate: new Date(2015, 4, 24, 15),
-            endDate: new Date(2015, 4, 24, 20),
-            allDay: true,
-            text: "Task 2"
-        }, {
-            startDate: new Date(2015, 4, 24, 45),
-            endDate: new Date(2015, 4, 24, 55),
-            allDay: true,
-            text: "Task 3"
-        }];
-        this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
-    });
-
-    QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule", function(assert) {
-        var dataSource = [{
-            startDate: new Date(2015, 4, 24, 9),
-            endDate: new Date(2015, 4, 24, 11),
-            recurrenceRule: "FREQ=DAILY;COUNT=3",
-            allDay: true,
-            text: "Task 1"
-        }, {
-            startDate: new Date(2015, 4, 24, 19),
-            endDate: new Date(2015, 4, 24, 31),
-            allDay: true,
-            recurrenceRule: "FREQ=DAILY;COUNT=2",
-            text: "Task 2"
-        }, {
-            startDate: new Date(2015, 4, 24, 24),
-            endDate: new Date(2015, 4, 24, 34),
-            allDay: true,
-            recurrenceRule: "FREQ=DAILY;COUNT=4",
-            text: "Task 3"
-        }];
-        this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
-    });
-
 })("Initialization");
 
 (function() {
