@@ -7498,6 +7498,36 @@ QUnit.test("dataSource change with selection", function(assert) {
     assert.equal(dataGrid.columnCount(), 3, "columnCount after change dataSource");
 });
 
+// T697860
+QUnit.test("dataSource change with grouping and columns should force one loading only", function(assert) {
+    // arrange, act
+    var loadingSpy = sinon.spy();
+
+    var options = {
+        dataSource: new DataSource([{ field1: 1 }]),
+        columns: ["field1"]
+    };
+
+    var dataGrid = createDataGrid(options);
+
+    this.clock.tick(0);
+
+    options.dataSource.store().on("loading", loadingSpy);
+
+    // act
+    options.dataSource = new DataSource([{ field1: 2 }]);
+    options.dataSource.store().on("loading", loadingSpy);
+    options.grouping = {};
+    options.paging = {};
+
+    dataGrid.option(options);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(loadingSpy.callCount, 1, "loading called once");
+    assert.deepEqual(dataGrid.getVisibleRows()[0].data, { field1: 2 }, "data is updated");
+});
+
 QUnit.test("Selection changed handler do not try to get dxCheckBox instance when selection mode is single (T237209)", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
