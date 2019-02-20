@@ -74,6 +74,21 @@ QUnit.module("Integration: Appointments", {
     afterEach: function() {
         fx.off = false;
         this.clock.restore();
+    },
+    checkItemDataInDropDownTemplate: function(assert, dataSource, currentDate) {
+        this.createInstance({
+            dataSource: dataSource,
+            height: 600,
+            maxAppointmentsPerCell: 1,
+            currentDate: currentDate,
+            currentView: "month",
+            views: ["month"],
+            dropDownAppointmentTemplate: function(itemData) {
+                assert.ok(dataSource.indexOf(itemData) > -1, "appointment data contains in the data source");
+            }
+        });
+
+        $(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance").open();
     }
 });
 
@@ -2822,7 +2837,6 @@ QUnit.test("DropDown appointments should not be duplicated when items option cha
     assert.equal(ddAppointments.length, 3, "There are 3 drop down appts");
 });
 
-
 QUnit.test("Recurrence appointment should be rendered correctly when currentDate was changed: month view", function(assert) {
     var appointment = {
         startDate: new Date(2015, 1, 14, 0),
@@ -3933,7 +3947,6 @@ QUnit.test("Appointment should be dragged correctly between the groups in vertic
     assert.deepEqual(appointmentData.id, 2, "Group is OK");
 });
 
-
 QUnit.test("Long appt parts should have correct coordinates if duration > week in vertical grouped workspace Month", function(assert) {
     this.createInstance({
         dataSource: [{
@@ -4085,3 +4098,45 @@ QUnit.test("Tail of long appointment should have a right position, groupByDate =
     assert.roughEqual($appointmentTail.position().left, $cell.position().left, 1.001, "Tail has a right position");
 });
 
+QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source", function(assert) {
+    var dataSource = [{
+        startDate: new Date(2015, 4, 24, 9),
+        endDate: new Date(2015, 4, 24, 11),
+        allDay: true,
+        text: "Task 1"
+    }, {
+        startDate: new Date(2015, 4, 24, 15),
+        endDate: new Date(2015, 4, 24, 20),
+        allDay: true,
+        text: "Task 2"
+    }, {
+        startDate: new Date(2015, 4, 24, 45),
+        endDate: new Date(2015, 4, 24, 55),
+        allDay: true,
+        text: "Task 3"
+    }];
+    this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+});
+
+QUnit.test("The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule", function(assert) {
+    var dataSource = [{
+        startDate: new Date(2015, 4, 24, 9),
+        endDate: new Date(2015, 4, 24, 11),
+        recurrenceRule: "FREQ=DAILY;COUNT=3",
+        allDay: true,
+        text: "Task 1"
+    }, {
+        startDate: new Date(2015, 4, 24, 19),
+        endDate: new Date(2015, 4, 24, 31),
+        allDay: true,
+        recurrenceRule: "FREQ=DAILY;COUNT=2",
+        text: "Task 2"
+    }, {
+        startDate: new Date(2015, 4, 24, 24),
+        endDate: new Date(2015, 4, 24, 34),
+        allDay: true,
+        recurrenceRule: "FREQ=DAILY;COUNT=4",
+        text: "Task 3"
+    }];
+    this.checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+});
