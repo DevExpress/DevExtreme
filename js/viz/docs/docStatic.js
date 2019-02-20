@@ -151,7 +151,7 @@ var staticMethods = {
     * @param1 palette:Enums.VizPalette|Array<string>
     * @param2 count:number
     * @param3 options:object
-    * @param3_field1 extensionMode:Enums.VizPaletteExtensionMode
+    * @param3_field1 paletteExtensionMode:Enums.VizPaletteExtensionMode
     * @param3_field2 baseColorSet:Enums.PaletteColorSet
     * @return Array<string>
     * @static
