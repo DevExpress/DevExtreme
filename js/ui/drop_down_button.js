@@ -11,12 +11,25 @@ import messageLocalization from "../localization/message";
 const DROP_DOWN_BUTTON_CLASS = "dx-dropdown-button";
 const DROP_DOWN_BUTTON_CONTENT = "dx-dropdown-button-content";
 
+/**
+ * @name dxDropDownButton
+ * @inherits Widget, DataExpressionMixin
+ * @module ui/drop_down_button
+ * @export default
+ */
+
 let DropDownButton = Widget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), DataExpressionMixin._dataExpressionDefaultOptions(), {
             deferRendering: true,
             showEvent: "click",
+
+            /**
+             * @name dxDropDownButtonOptions.actionButtonIndex
+             * @type number
+             * @default 0
+             */
             actionButtonIndex: 0,
             showSelectedItem: true,
             grouped: false,
