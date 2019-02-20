@@ -40,13 +40,10 @@ QUnit.test("root element must be decorated with DROP_DOWN_EDITOR_CLASS", functio
     assert.ok(this.rootElement.hasClass(DROP_DOWN_EDITOR_CLASS));
 });
 
-QUnit.test("dxDropDownEditor must have a button", function(assert) {
-    assert.ok(this.dropDownEditor._$dropDownButton);
-});
-
-QUnit.test("button must be decorated with DROP_DOWN_EDITOR_BUTTON_CLASS", function(assert) {
-    assert.strictEqual(this.rootElement.find("." + DROP_DOWN_EDITOR_BUTTON_CLASS)[0], this.dropDownEditor._$dropDownButton[0]);
-    assert.ok(this.dropDownEditor._$dropDownButton.hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS));
+QUnit.test("dxDropDownEditor must have a button which must be decorated with DROP_DOWN_EDITOR_BUTTON_CLASS", function(assert) {
+    var $dropDownButton = this.rootElement.find("." + DROP_DOWN_EDITOR_BUTTON_CLASS);
+    assert.strictEqual($dropDownButton.length, 1);
+    assert.ok($dropDownButton.hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS));
 });
 
 QUnit.test("input wrapper must be upper than button", function(assert) {
@@ -78,8 +75,8 @@ QUnit.test("correct buttons order after rendering", function(assert) {
         $buttons = $buttonsContainer.children();
 
     assert.equal($buttons.length, 2, "clear button and drop button were rendered");
-    assert.ok($buttons.eq(0).hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS), "drop button is the first one");
-    assert.ok($buttons.eq(1).hasClass("dx-clear-button-area"), "drop button is the first one");
+    assert.ok($buttons.eq(0).hasClass("dx-clear-button-area"), "clear button is the first one");
+    assert.ok($buttons.eq(1).hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS), "drop button is the second one");
 });
 
 QUnit.test("fieldTemplate as render", function(assert) {
