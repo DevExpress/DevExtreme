@@ -485,13 +485,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _createItemByTemplate: function(itemTemplate, renderArgs) {
-        var itemData = this.invoke("appendSingleAppointmentData", {
-            appointmentData: renderArgs.itemData,
-            index: renderArgs.index,
-            startDate: this._currentAppointmentSettings.startDate
-        });
         return itemTemplate.render({
-            model: itemData,
+            model: renderArgs.itemData,
             container: renderArgs.container,
             index: renderArgs.index
         });
