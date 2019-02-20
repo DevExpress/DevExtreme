@@ -22,13 +22,62 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
 </head>
 <body>
-    <div id="button"></div>
+    <div id="scheduler"></div>
     <script>
         $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
+            var data = [
+    {
+        text: "Website Re-Design Plan",
+        priorityId: 2,
+        startDate: new Date(2018, 4, 21, 9, 0),
+        endDate: new Date(2018, 4, 21, 16, 0)
+    }
+];
+
+
+var priorityData = [
+    {
+        text: "Low Priority",
+        id: 1,
+        color: "#1e90ff"
+    }, {
+        text: "High Priority",
+        id: 2,
+        color: "#ff9747"
+    }
+];
+           $("#scheduler").dxScheduler({
+        dataSource: data,
+        views: [{
+            type: "workWeek",
+            name: "Vertical Grouping",
+            groupOrientation: "vertical",
+            cellDuration: 60,
+            intervalCount: 2
+        }, {
+            type: "workWeek",
+            name: "Horizontal Grouping",
+            groupOrientation: "horizontal",
+            cellDuration: 30,
+            intervalCount: 2
+        }],
+        currentView: "Vertical Grouping",
+        crossScrollingEnabled: true,
+        currentDate: new Date(2018, 4, 21),
+        startDayHour: 9,
+        endDayHour: 16,
+        groups: ["priorityId"],
+        resources: [
+            { 
+                 fieldExpr: "priorityId", 
+                 allowMultiple: false, 
+                 dataSource: priorityData,
+                 label: "Priority"
+            }
+        ],
+        height: 700,
+        showCurrentTimeIndicator: false
+    });
         });
     </script>
 </body>
