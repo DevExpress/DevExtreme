@@ -8,6 +8,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     iteratorUtils = require("../../core/utils/iterator"),
+    isFunction = require("../../core/utils/type").isFunction,
     Action = require("../../core/action"),
     Guid = require("../../core/guid"),
     domUtils = require("../../core/utils/dom"),
@@ -270,13 +271,15 @@ var CollectionWidget = Widget.inherit({
     },
 
     _initDefaultItemTemplate: function() {
+        var fieldsMap = this._getFieldsMap();
         this._defaultTemplates["item"] = new BindableTemplate((function($container, data) {
             if(isPlainObject(data)) {
                 this._prepareDefaultItemTemplate(data, $container);
             } else {
+                data = (fieldsMap && isFunction(fieldsMap.text) && fieldsMap.text(data)) || data;
                 $container.text(String(data));
             }
-        }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"), this._getFieldsMap());
+        }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"), fieldsMap);
     },
 
     _getBindableFields: function() {
