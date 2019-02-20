@@ -127,7 +127,7 @@ export function currentPalette(name) {
 
 export function generateColors(palette, count, options = {}) {
     if(options.keepLastColorInEnd === undefined) {
-        options.keepLastColorInEnd === true;
+        options.keepLastColorInEnd = true;
     }
 
     options.type = options.baseColorSet;
