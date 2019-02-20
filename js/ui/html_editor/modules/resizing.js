@@ -1,35 +1,34 @@
 import $ from "../../../core/renderer";
 import eventsEngine from "../../../events/core/events_engine";
-import { extend } from "../../../core/utils/extend";
+import { name as ClickEvent } from "../../../events/click";
+import { addNamespace } from "../../../events/utils";
 import { move } from "../../../animation/translator";
 
 import Resizable from "../../resizable";
 
 const DX_RESIZE_FRAME = "dx-resize-frame";
+const NAMESPACE = "dxHtmlResizingModule";
+const KEYDOWN_EVENT = addNamespace("keydown", NAMESPACE);
+const SCROLL_EVENT = addNamespace("scroll", NAMESPACE);
 
 class ResizingModule {
-
-    _getDefaultOptions() {
-        return { };
-    }
-
     constructor(quill, options) {
         this.quill = quill;
         this.editorInstance = options.editorInstance;
 
-        this.options = extend({}, this._getDefaultOptions(), options);
-        eventsEngine.on(this.quill.root, "dxclick", this._clickHandler.bind(this));
-        eventsEngine.on(this.quill.root, "scroll", this._scrollHandler.bind(this));
+        eventsEngine.on(this.quill.root, addNamespace(ClickEvent, NAMESPACE), this._clickHandler.bind(this));
+        eventsEngine.on(this.quill.root, SCROLL_EVENT, this._scrollHandler.bind(this));
+
         this._createResizeFrame();
     }
 
     _clickHandler(e) {
         if(e.target.tagName.toUpperCase() === 'IMG') {
-            if(this._target === e.target) {
+            if(this._$target === e.target) {
                 return;
             }
 
-            this._target = e.target;
+            this._$target = e.target;
 
             this.updateFramePosition();
             this.showFrame();
@@ -39,52 +38,56 @@ class ResizingModule {
     }
 
     _scrollHandler(e) {
-        if(this._target) {
+        if(this._$target) {
             this.updateFramePosition();
         }
     }
 
     showFrame() {
-        this._resizeFrame.show();
-        eventsEngine.on(this.quill.root, "keydown", this.hideFrame.bind(this));
+        this._$resizeFrame.show();
+        eventsEngine.on(this.quill.root, KEYDOWN_EVENT, this.hideFrame.bind(this));
     }
 
     hideFrame() {
-        this._target = null;
-        this._resizeFrame.hide();
-        eventsEngine.off(this.quill.root, "keydown", this.hideFrame.bind(this));
+        this._$target = null;
+        this._$resizeFrame.hide();
+        eventsEngine.off(this.quill.root, KEYDOWN_EVENT);
     }
 
     updateFramePosition() {
-        const { height, width, offsetTop, offsetLeft } = this._target;
+        const { height, width, offsetTop, offsetLeft } = this._$target;
         const { scrollTop, scrollLeft } = this.quill.root;
 
-        this._resizeFrame
+        this._$resizeFrame
             .css({
                 height: height,
                 width: width,
-                top: offsetTop - parseInt(this._resizeFrame.css("borderTopWidth")) - scrollTop,
-                left: offsetLeft - parseInt(this._resizeFrame.css("borderLeftWidth")) - scrollLeft
+                top: offsetTop - parseInt(this._$resizeFrame.css("borderTopWidth")) - scrollTop,
+                left: offsetLeft - parseInt(this._$resizeFrame.css("borderLeftWidth")) - scrollLeft
             });
-        move(this._resizeFrame, { left: 0, top: 0 });
+        move(this._$resizeFrame, { left: 0, top: 0 });
     }
 
     _createResizeFrame() {
-        this._resizeFrame = $("<div>")
+        this._$resizeFrame = $("<div>")
             .addClass(DX_RESIZE_FRAME)
             .appendTo(this.editorInstance._getQuillContainer())
             .hide();
 
-        this.editorInstance._createComponent(this._resizeFrame, Resizable, {
+        this.editorInstance._createComponent(this._$resizeFrame, Resizable, {
             onResize: (e) => {
-                if(!this._target) {
+                if(!this._$target) {
                     return;
                 }
 
-                $(this._target).attr({ height: e.height, width: e.width });
+                $(this._$target).attr({ height: e.height, width: e.width });
                 this.updateFramePosition();
             }
         });
+    }
+
+    clean() {
+        eventsEngine.off(this.quill.root, NAMESPACE);
     }
 }
 
