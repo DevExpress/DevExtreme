@@ -23,6 +23,10 @@ var FileProvider = Class.inherit({
     },
 
     copyItems: function(items, destinationFolder) {
+    },
+
+    getUploadUrl: function(destinationFolder) {
+        return null;
     }
 
 });

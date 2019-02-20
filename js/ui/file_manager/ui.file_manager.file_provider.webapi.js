@@ -49,6 +49,15 @@ var WebAPIFileProvider = FileProvider.inherit({
         });
     },
 
+    getUploadUrl: function(destinationFolder) {
+        var url = this._options.uploadUrl;
+        if(destinationFolder) {
+            url += url.indexOf('?') > -1 ? "&" : "?";
+            url += "destinationId=" + destinationFolder;
+        }
+        return url;
+    },
+
     _getItems: function(path, isFolder) {
         var that = this;
         return this._getEntriesByPath(path)

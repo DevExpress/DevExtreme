@@ -10,6 +10,7 @@ import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 import FileManagerToolbar from "./ui.file_manager.toolbar";
 import FileManagerNameEditorDialog from "./ui.file_manager.dialog.name_editor";
 import FileManagerFolderChooserDialog from "./ui.file_manager.dialog.folder_chooser";
+import FileUploader from "../file_uploader";
 import notify from "../notify";
 
 import DataFileProvider from "./ui.file_manager.file_provider.data";
@@ -32,7 +33,8 @@ var FileManager = Widget.inherit({
             create: this._tryCreate,
             delete: this._tryDelete,
             move: this._tryMove,
-            copy: this._tryCopy
+            copy: this._tryCopy,
+            upload: this._tryUpload
         };
 
         this.callBase();
@@ -60,6 +62,8 @@ var FileManager = Widget.inherit({
         });
         this._confirmationDialog = this._createConfirmationDialog();
 
+        this._fileUploader = this._createFileUploader();
+
         var $viewContainer = this._createViewContainer();
         this.$element()
             .append(toolbar.$element())
@@ -67,7 +71,22 @@ var FileManager = Widget.inherit({
             .append(this._renameItemDialog.$element())
             .append(this._createFolderDialog.$element())
             .append(this._chooseFolderDialog.$element())
+            .append(this._fileUploader.$element())
             .addClass(FILE_MANAGER_CLASS);
+    },
+
+    _createFileUploader: function() {
+        var that = this;
+        return this._createComponent($("<div>"), FileUploader, {
+            name: "file",
+            onUploaded: function(xhr) {
+                that._showSuccess(xhr);
+                that._refreshData();
+            },
+            onUploadError: function(e) {
+                that._showError(e.request.responseText);
+            }
+        });
     },
 
     _createViewContainer: function() {
@@ -227,6 +246,13 @@ var FileManager = Widget.inherit({
                 that._refreshData();
             },
             error => { if(error) that._showError(error); });
+    },
+
+    _tryUpload: function() {
+        var destinationFolder = this.getCurrentFolder();
+        this._fileUploader.option("uploadUrl", this._provider.getUploadUrl(destinationFolder.relativeName));
+        this._fileUploader._isCustomClickEvent = true;
+        this._fileUploader._$fileInput.click();
     },
 
     _getSingleSelectedItem: function() {
