@@ -76,7 +76,7 @@
  */
 
 /**
- * @typedef {string} Enums.PaletteColorSet
+ * @typedef {string} Enums.VizPaletteColorSet
  * @enum {'simpleSet'|'indicatingSet'|'gradientSet'}
  */
 
