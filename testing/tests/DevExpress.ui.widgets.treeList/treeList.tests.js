@@ -1072,7 +1072,7 @@ QUnit.test("TreeList navigateTo", function(assert) {
 });
 
 // T697860
-QUnit.test("dataSource change with grouping and columns should force one loading only", function(assert) {
+QUnit.test("dataSource change with columns should force one loading only", function(assert) {
     var loadingSpy = sinon.spy();
 
     var options = {
