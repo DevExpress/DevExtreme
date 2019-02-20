@@ -579,6 +579,7 @@ var DropDownList = DropDownEditor.inherit({
             itemTemplate: this._getTemplateByOption("itemTemplate"),
             indicateLoading: false,
             keyExpr: this._getCollectionKeyExpr(),
+            displayExpr: this.option("displayExpr"),
             groupTemplate: this.option("groupTemplate"),
             tabIndex: null,
             onItemClick: this._listItemClickAction.bind(this),
