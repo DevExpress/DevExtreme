@@ -367,6 +367,10 @@ const HtmlEditor = Editor.inherit({
         this._formDialog = new FormDialog(this, userOptions);
     },
 
+    _getQuillContainer: function() {
+        return this._$htmlContainer;
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":

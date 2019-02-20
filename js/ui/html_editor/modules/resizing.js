@@ -15,13 +15,15 @@ class ResizingModule {
 
     constructor(quill, options) {
         this.quill = quill;
+        this.editorInstance = options.editorInstance;
 
         this.options = extend({}, this._getDefaultOptions(), options);
-        eventsEngine.on(this.quill.root, "dxclick", this.clickHandler.bind(this));
+        eventsEngine.on(this.quill.root, "dxclick", this._clickHandler.bind(this));
+        eventsEngine.on(this.quill.root, "scroll", this._scrollHandler.bind(this));
         this._createResizeFrame();
     }
 
-    clickHandler(e) {
+    _clickHandler(e) {
         if(e.target.tagName.toUpperCase() === 'IMG') {
             if(this._target === e.target) {
                 return;
@@ -33,6 +35,12 @@ class ResizingModule {
             this.showFrame();
         } else {
             this.hideFrame();
+        }
+    }
+
+    _scrollHandler(e) {
+        if(this._target) {
+            this.updateFramePosition();
         }
     }
 
@@ -48,36 +56,34 @@ class ResizingModule {
     }
 
     updateFramePosition() {
-        let imageRect = this._target.getBoundingClientRect();
+        const { height, width, offsetTop, offsetLeft } = this._target;
+        const { scrollTop, scrollLeft } = this.quill.root;
 
         this._resizeFrame
             .css({
-                height: imageRect.height,
-                width: imageRect.width,
-                top: imageRect.top - parseInt(this._resizeFrame.css("borderTopWidth")),
-                left: imageRect.left - parseInt(this._resizeFrame.css("borderLeftWidth"))
+                height: height,
+                width: width,
+                top: offsetTop - parseInt(this._resizeFrame.css("borderTopWidth")) - scrollTop,
+                left: offsetLeft - parseInt(this._resizeFrame.css("borderLeftWidth")) - scrollLeft
             });
         move(this._resizeFrame, { left: 0, top: 0 });
     }
 
     _createResizeFrame() {
-        let editorInstance = this.options.editorInstance,
-            $container = editorInstance.element();
-
         this._resizeFrame = $("<div>")
             .addClass(DX_RESIZE_FRAME)
-            .appendTo($container)
+            .appendTo(this.editorInstance._getQuillContainer())
             .hide();
 
-        editorInstance._createComponent(this._resizeFrame, Resizable, {
-            onResize: function(e) {
+        this.editorInstance._createComponent(this._resizeFrame, Resizable, {
+            onResize: (e) => {
                 if(!this._target) {
                     return;
                 }
 
                 $(this._target).attr({ height: e.height, width: e.width });
                 this.updateFramePosition();
-            }.bind(this)
+            }
         });
     }
 }
