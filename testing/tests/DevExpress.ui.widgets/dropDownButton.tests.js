@@ -3,7 +3,7 @@ import DropDownButton from "ui/drop_down_button";
 
 import "common.css!";
 
-const DROP_DOWN_BUTTON_CLASS = "dx-dropdown-button";
+const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
 
 QUnit.testStart(() => {
     const markup = '<div id="dropDownButton"></div>';

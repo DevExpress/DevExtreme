@@ -8,7 +8,7 @@ import DataExpressionMixin from "./editor/ui.data_expression";
 import { extend } from "../core/utils/extend";
 import messageLocalization from "../localization/message";
 
-const DROP_DOWN_BUTTON_CLASS = "dx-dropdown-button";
+const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
 const DROP_DOWN_BUTTON_CONTENT = "dx-dropdown-button-content";
 
 /**
@@ -91,9 +91,13 @@ let DropDownButton = Widget.inherit({
         }, this.option("dropDownOptions"));
     },
 
+    _getListSelectionMode: function() {
+        return this.option("showSelectedItem") ? "single" : "none";
+    },
+
     _listOptions() {
         return {
-            selectionMode: this.option("showSelectedItem") ? "single" : "none",
+            selectionMode: this._getListSelectionMode(),
             selectedItemKeys: [this.option("value")],
             grouped: this.option("grouped"),
             keyExpr: this._getCollectionKeyExpr(),
@@ -152,8 +156,27 @@ let DropDownButton = Widget.inherit({
     _optionChanged: function(args) {
         this._dataExpressionOptionChanged(args);
         switch(args.name) {
+            case "items":
+            case "dataSource":
+            case "valueExpr":
+            case "displayExpr":
+            case "itemTemplate":
+            case "showEvent":
+            case "actionButtonIndex":
+                break;
+            case "grouped":
+            case "noDataText":
+            case "groupTemplate":
+                this._setListOption(args.name, args.value);
+                break;
+            case "showSelectedItem":
+                this._setListOption("selectionMode", this._getListSelectionMode());
+                break;
+            case "deferRendering":
+                if(!args.value && !this._popup) this._renderPopup();
+                break;
             case "value":
-                this._setListOption("selectedItemKeys", args.value);
+                this._setListOption("selectedItemKeys", [args.value]);
                 this.option("showSelectedItem") && this._setActionButton(args.value);
                 break;
             default:
