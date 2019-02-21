@@ -731,6 +731,51 @@ var dxBarGauge = {
         }
     },
     /**
+    * @name dxBarGaugeOptions.legend
+    * @inherit BaseLegend
+    * @type object
+    */
+    legend: {
+        /**
+        * @name dxBarGaugeOptions.legend.itemTextFormat
+        * @extends CommonVizFormat
+        */
+        itemTextFormat: undefined,
+        /**
+        * @name BaseGaugeOptions.legend.visible
+        * @type boolean
+        * @inheritdoc
+        * @default false
+        */
+        visible: false,
+        /**
+        * @name BaseGaugeOptions.legend.customizeText
+        * @type function(arg)
+        * @type_function_param1 arg:object
+        * @type_function_param1_field1 item:BarInfo
+        * @type_function_param1_field2 text:string
+        * @type_function_return string
+        * @notUsedInTheme
+        */
+        customizeText: undefined,
+        /**
+        * @name BaseGaugeOptions.legend.customizeHint
+        * @type function(arg)
+        * @type_function_param1 arg:object
+        * @type_function_param1_field1 item:BarInfo
+        * @type_function_param1_field2 text:string
+        * @type_function_return string
+        */
+        customizeHint: undefined,
+        /**
+        * @name BaseGaugeOptions.legend.customizeItems
+        * @type function(items)
+        * @type_function_param1 items:Array<BarGaugeLegendItem>
+        * @type_function_return Array<BarGaugeLegendItem>
+        */
+        customizeItems: undefined
+    },
+    /**
     * @name dxBarGaugeOptions.resolveLabelOverlapping
     * @type Enums.BarGaugeResolveLabelOverlapping
     * @default 'hide'
@@ -797,4 +842,48 @@ var dxBarGauge = {
     * @action
     */
     onTooltipHidden: function() { }
+};
+
+/**
+* @name BarInfo
+* @type object
+*/
+var BarInfo = {
+    /**
+    * @name BarInfo.color
+    * @type string
+    */
+    color: "",
+    /**
+    * @name BarInfo.index
+    * @type number
+    */
+    index: 0,
+    /**
+    * @name BarInfo.value
+    * @type number
+    */
+    value: 0
+};
+
+/**
+* @name BarGaugeLegendItem
+* @type object
+*/
+var legendItem = {
+    /**
+    * @name BarGaugeLegendItem.text
+    * @type string
+    */
+    text: undefined,
+    /**
+    * @name BarGaugeLegendItem.item
+    * @type BarInfo
+    */
+    item: undefined,
+    /**
+    * @name BarGaugeLegendItem.visible
+    * @type boolean
+    */
+    visible: true
 };
