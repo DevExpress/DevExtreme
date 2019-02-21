@@ -45,7 +45,7 @@ QUnit.test("'getTargetedAppointmentData' should return correct data for recurren
     });
 
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
-    var targetedData = this.instance.fire("getTargetedAppointmentData", appointmentData, $appointments.eq(1), 1);
+    var targetedData = this.instance.fire("getTargetedAppointmentData", appointmentData, $appointments.eq(1));
 
     assert.equal(targetedData.startDate.getTime(), appointmentData.startDate.getTime() + 2 * 3600000, "Targeted startDate is OK");
     assert.equal(targetedData.endDate.getTime(), appointmentData.endDate.getTime() + 2 * 3600000, "Targeted endDate is OK");
