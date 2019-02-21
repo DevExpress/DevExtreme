@@ -977,10 +977,10 @@ QUnit.testStart(function() {
             $thirdGroupLastCell = $rows.eq(8).find("td").first(),
             $fourthGroupLastCell = $rows.eq(11).find("td").first();
 
-        assert.equal($firstGroupLastCell.position().top + $firstGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(0), "Max top is OK");
-        assert.equal($secondGroupLastCell.position().top + $secondGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(1), "Max top is OK");
-        assert.equal($thirdGroupLastCell.position().top + $thirdGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(2), "Max top is OK");
-        assert.equal($fourthGroupLastCell.position().top + $fourthGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(3), "Max top is OK");
+        assert.roughEqual($firstGroupLastCell.position().top + $firstGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(0), 1.1, "Max top is OK");
+        assert.roughEqual($secondGroupLastCell.position().top + $secondGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(1), 1.1, "Max top is OK");
+        assert.roughEqual($thirdGroupLastCell.position().top + $thirdGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(2), 1.1, "Max top is OK");
+        assert.roughEqual($fourthGroupLastCell.position().top + $fourthGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(3), 1.1, "Max top is OK");
     });
 
 })("Work Space Week");
