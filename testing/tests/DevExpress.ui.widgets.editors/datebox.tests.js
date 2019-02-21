@@ -3680,11 +3680,11 @@ QUnit.test("datebox should be invalid after out of range value was setted", (ass
 QUnit.test("datebox should change validation state if value was changed by keyboard", (assert) => {
     const $dateBox = $("#dateBox").dxDateBox({
         type: "date",
-        value: null
+        value: null,
+        pickerType: "calendar"
     }).dxValidator({
         validationRules: [{
-            type: "required",
-            message: "Date of birth is required"
+            type: "required"
         }]
     });
     const dateBox = $dateBox.dxDateBox("instance");
