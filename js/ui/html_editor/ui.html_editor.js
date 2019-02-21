@@ -83,6 +83,13 @@ const HtmlEditor = Editor.inherit({
             */
             variables: null,
 
+            /**
+            * @name dxHtmlEditorOptions.resizing
+            * @type dxHtmlEditorResizing
+            * @default null
+            */
+            resizing: null,
+
             formDialogOptions: null
 
             /**
@@ -129,6 +136,21 @@ const HtmlEditor = Editor.inherit({
             * @name dxHtmlEditorVariables.escapeChar
             * @type string|Array<string>
             * @default ""
+            */
+
+            /**
+            * @name dxHtmlEditorResizing
+            * @type object
+            */
+            /**
+            * @name dxHtmlEditorResizing.enabled
+            * @type boolean
+            * @default false
+            */
+            /**
+            * @name dxHtmlEditorResizing.allowedTargets
+            * @type Array<string>
+            * @default ["images"]
             */
         });
     },
