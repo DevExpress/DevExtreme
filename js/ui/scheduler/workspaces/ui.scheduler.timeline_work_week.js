@@ -1,6 +1,6 @@
-var registerComponent = require("../../core/component_registrator"),
+var registerComponent = require("../../../core/component_registrator"),
     SchedulerTimelineWeek = require("./ui.scheduler.timeline_week"),
-    dateUtils = require("../../core/utils/date"),
+    dateUtils = require("../../../core/utils/date"),
     toMs = dateUtils.dateToMilliseconds;
 
 var TIMELINE_CLASS = "dx-scheduler-timeline-work-week",

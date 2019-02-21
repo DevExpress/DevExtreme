@@ -1,11 +1,11 @@
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
-    extend = require("../../core/utils/extend").extend,
-    registerComponent = require("../../core/component_registrator"),
+var $ = require("../../../core/renderer"),
+    noop = require("../../../core/utils/common").noop,
+    extend = require("../../../core/utils/extend").extend,
+    registerComponent = require("../../../core/component_registrator"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space.indicator"),
-    dateUtils = require("../../core/utils/date"),
-    tableCreator = require("./ui.scheduler.table_creator"),
-    HorizontalShader = require("./ui.scheduler.current_time_shader.horizontal");
+    dateUtils = require("../../../core/utils/date"),
+    tableCreator = require("../ui.scheduler.table_creator"),
+    HorizontalShader = require("../ui.scheduler.current_time_shader.horizontal");
 
 var TIMELINE_CLASS = "dx-scheduler-timeline",
     GROUP_TABLE_CLASS = "dx-scheduler-group-table",
