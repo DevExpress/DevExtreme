@@ -1,10 +1,10 @@
-var $ = require("../../core/renderer"),
-    registerComponent = require("../../core/component_registrator"),
-    extend = require("../../core/utils/extend").extend,
-    publisherMixin = require("./ui.scheduler.publisher_mixin"),
-    messageLocalization = require("../../localization/message"),
-    Editor = require("../editor/editor"),
-    SelectBox = require("../select_box");
+var $ = require("../../../core/renderer"),
+    registerComponent = require("../../../core/component_registrator"),
+    extend = require("../../../core/utils/extend").extend,
+    publisherMixin = require("../ui.scheduler.publisher_mixin"),
+    messageLocalization = require("../../../localization/message"),
+    Editor = require("../../editor/editor"),
+    SelectBox = require("../../select_box");
 
 var TIMEZONE_EDITOR_CLASS = "dx-timezone-editor",
     TIMEZONE_DISPLAY_NAME_SELECTBOX_CLASS = "dx-timezone-display-name",
