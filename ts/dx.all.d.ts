@@ -2803,6 +2803,7 @@ declare module DevExpress.ui {
         valueType?: 'html' | 'markdown';
         /** Configures variables, which are placeholders to be replaced with actual values when processing text. */
         variables?: dxHtmlEditorVariables;
+        resizing?: dxHtmlEditorResizing;
     }
     /** [tags] ctp HtmlEditor is a WYSIWYG text editor build on top of Quill, designed to support HTML and Markdown output formats. HtmlEditor is at the Community Technology Preview (CTP) development stage. That means that the widget is available for testing, but its concept, design and behavior can be reconsidered and changed without notice. */
     export class dxHtmlEditor extends Editor {
@@ -5331,6 +5332,10 @@ declare module DevExpress.ui {
         dataSource?: string | Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** Specifies the special character(s) that should surround the variables. */
         escapeChar?: string | Array<string>;
+    }
+    export interface dxHtmlEditorResizing {
+        enabled?: boolean;
+        allowedTargets?: Array<string>;
     }
     /** This section lists the data source fields that are used in a default template for list items. */
     export interface dxListItem extends CollectionWidgetItem {
