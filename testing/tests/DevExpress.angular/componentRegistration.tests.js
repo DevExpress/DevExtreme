@@ -2446,7 +2446,7 @@ QUnit.test("all values should be correct displayed in collection widget (T425426
         .attr("ng-controller", "my-controller")
         .appendTo($container);
 
-    const $markup = $("<div dx-test-collection=\"{ items: [ 0, 1, null, '', undefined, {} ] }\"></div>").appendTo($controller);
+    const $markup = $("<div dx-test-collection=\"{ items: [ 0, 1, null, '', undefined, {}, false ] }\"></div>").appendTo($controller);
 
     this.testApp.controller("my-controller", () => { });
 
@@ -2454,10 +2454,11 @@ QUnit.test("all values should be correct displayed in collection widget (T425426
 
     assert.equal($markup.children().eq(0).text(), "0");
     assert.equal($markup.children().eq(1).text(), "1");
-    assert.equal($markup.children().eq(2).text(), "null");
+    assert.equal($markup.children().eq(2).text(), "");
     assert.equal($markup.children().eq(3).text(), "");
-    assert.equal($markup.children().eq(4).text(), "undefined");
+    assert.equal($markup.children().eq(4).text(), "");
     assert.equal($markup.children().eq(5).text(), "");
+    assert.equal($markup.children().eq(6).text(), "false");
 });
 
 QUnit.test("child collection widget should be rendered correctly when template provider is specified", assert => {
