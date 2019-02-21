@@ -1,5 +1,5 @@
 var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base"),
-    dateUtils = require("../../core/utils/date");
+    dateUtils = require("../../../core/utils/date");
 
 var MAX_APPOINTMENT_HEIGHT = 100,
     DEFAULT_APPOINTMENT_HEIGHT = 60,

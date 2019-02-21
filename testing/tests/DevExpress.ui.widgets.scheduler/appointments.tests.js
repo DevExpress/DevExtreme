@@ -2,8 +2,8 @@ var pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js");
 
 var $ = require("jquery"),
-    VerticalAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.vertical"),
-    HorizontalMonthAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal_month"),
+    VerticalAppointmentsStrategy = require("ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical"),
+    HorizontalMonthAppointmentsStrategy = require("ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month"),
     SchedulerAppointments = require("ui/scheduler/ui.scheduler.appointments"),
     dropDownAppointments = require("ui/scheduler/ui.scheduler.appointments.drop_down"),
     eventsEngine = require("events/core/events_engine"),
