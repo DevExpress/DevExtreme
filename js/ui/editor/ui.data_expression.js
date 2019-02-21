@@ -59,7 +59,8 @@ var DataExpressionMixin = extend(DataHelperMixin, {
 
             /**
             * @name DataExpressionMixinOptions.displayExpr
-            * @type string|function
+             * @type string|function(item)
+             * @type_function_param1 item:object
             * @default undefined
             */
             displayExpr: undefined
