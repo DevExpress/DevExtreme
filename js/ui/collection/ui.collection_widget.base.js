@@ -276,8 +276,10 @@ var CollectionWidget = Widget.inherit({
             if(isPlainObject(data)) {
                 this._prepareDefaultItemTemplate(data, $container);
             } else {
-                data = (fieldsMap && isFunction(fieldsMap.text) && fieldsMap.text(data)) || data;
-                $container.text(String(data));
+                if(fieldsMap && isFunction(fieldsMap.text)) {
+                    data = fieldsMap.text(data);
+                }
+                $container.text(String(commonUtils.ensureDefined(data, "")));
             }
         }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"), fieldsMap);
     },
