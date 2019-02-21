@@ -416,7 +416,8 @@ var Scheduler = Widget.inherit({
 
                 /**
                     * @name dxSchedulerOptions.resources.displayExpr
-                    * @type string|function
+                    * @type string|function(resource)
+                    * @type_function_param1 resource:object
                     * @default 'text'
                     */
 
