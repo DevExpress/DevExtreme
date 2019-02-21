@@ -681,3 +681,183 @@ var VizRange = {
  * @type number
  * @default 400
  */
+
+/**
+* @name BaseLegendOptions
+* @hidden
+* @type object
+*/
+var BaseLegendOptions = {
+    /**
+    * @name BaseLegendOptions.horizontalAlignment
+    * @type Enums.HorizontalAlignment
+    * @default 'right'
+    */
+    horizontalAlignment: 'right',
+    /**
+    * @name BaseLegendOptions.verticalAlignment
+    * @type Enums.VerticalEdge
+    * @default 'top'
+    */
+    verticalAlignment: 'top',
+
+    /**
+    * @name BaseLegendOptions.orientation
+    * @type Enums.Orientation
+    * @default undefined
+    */
+    orientation: undefined,
+    /**
+    * @name BaseLegendOptions.itemTextPosition
+    * @type Enums.Position
+    * @default undefined
+    */
+    itemTextPosition: undefined,
+
+    /**
+    * @name BaseLegendOptions.itemsAlignment
+    * @type Enums.HorizontalAlignment
+    * @default undefined
+    */
+    itemsAlignment: undefined,
+    /**
+    * @name BaseLegendOptions.font
+    * @type Font
+    * @default '#767676' @prop color
+    */
+    font: {
+        color: '#767676',
+        family: undefined,
+        weight: undefined,
+        size: undefined,
+        opacity: undefined
+    },
+    /**
+    * @name BaseLegendOptions.visible
+    * @type boolean
+    * @default true
+    */
+    visible: true,
+    /**
+    * @name BaseLegendOptions.margin
+    * @type number | object
+    * @default 10
+    */
+    margin: {
+        /**
+        * @name BaseLegendOptions.margin.top
+        * @type number
+        * @default 10
+        */
+        top: 10,
+        /**
+        * @name BaseLegendOptions.margin.bottom
+        * @type number
+        * @default 10
+        */
+        bottom: 10,
+        /**
+        * @name BaseLegendOptions.margin.left
+        * @type number
+        * @default 10
+        */
+        left: 10,
+        /**
+        * @name BaseLegendOptions.margin.right
+        * @type number
+        * @default 10
+        */
+        right: 10
+    },
+
+    /**
+    * @name BaseLegendOptions.markerSize
+    * @type number
+    * @default 20
+    */
+    markerSize: 20,
+    /**
+    * @name BaseLegendOptions.border
+    * @type object
+    */
+    border: {
+        /**
+        * @name BaseLegendOptions.border.visible
+        * @type boolean
+        * @default false
+        */
+        visible: false,
+        /**
+        * @name BaseLegendOptions.border.width
+        * @type number
+        * @default 1
+        */
+        width: 1,
+        /**
+        * @name BaseLegendOptions.border.color
+        * @type string
+        * @default '#d3d3d3'
+        */
+        color: '#d3d3d3',
+        /**
+        * @name BaseLegendOptions.border.cornerRadius
+        * @type number
+        * @default 0
+        */
+        cornerRadius: 0,
+        /**
+        * @name BaseLegendOptions.border.opacity
+        * @type number
+        * @default undefined
+        */
+        opacity: undefined,
+        /**
+        * @name BaseLegendOptions.border.dashStyle
+        * @type Enums.DashStyle
+        * @default 'solid'
+        */
+        dashStyle: 'solid'
+    },
+    /**
+    * @name BaseLegendOptions.backgroundColor
+    * @type string
+    * @default undefined
+    */
+    backgroundColor: undefined,
+    /**
+    * @name BaseLegendOptions.paddingLeftRight
+    * @type number
+    * @default 10
+    */
+    paddingLeftRight: 10,
+    /**
+    * @name BaseLegendOptions.paddingTopBottom
+    * @type number
+    * @default 10
+    */
+    paddingTopBottom: 10,
+    /**
+    * @name BaseLegendOptions.columnCount
+    * @type number
+    * @default 0
+    */
+    columnCount: 0,
+    /**
+    * @name BaseLegendOptions.rowCount
+    * @type number
+    * @default 0
+    */
+    rowCount: 0,
+    /**
+    * @name BaseLegendOptions.columnItemSpacing
+    * @type number
+    * @default 20
+    */
+    columnItemSpacing: 20,
+    /**
+    * @name BaseLegendOptions.rowItemSpacing
+    * @type number
+    * @default 8
+    */
+    rowItemSpacing: 8
+};

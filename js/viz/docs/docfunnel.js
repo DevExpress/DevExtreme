@@ -391,50 +391,17 @@ var dxFunnel = {
     },
     /**
     * @name dxFunnelOptions.legend
+    * @inherits BaseLegendOptions
     * @type object
     */
     legend: {
-        /**
-        * @name dxFunnelOptions.legend.verticalAlignment
-        * @type Enums.VerticalEdge
-        * @default 'top'
-        */
-        verticalAlignment: 'top',
-        /**
-        * @name dxFunnelOptions.legend.horizontalAlignment
-        * @type Enums.HorizontalAlignment
-        * @default 'right'
-        */
-        horizontalAlignment: 'right',
-        /**
-        * @name dxFunnelOptions.legend.orientation
-        * @type Enums.Orientation
-        * @default undefined
-        */
-        orientation: undefined,
-        /**
-        * @name dxFunnelOptions.legend.itemTextPosition
-        * @type Enums.Position
-        * @default undefined
-        */
-        itemTextPosition: undefined,
-        /**
-        * @name dxFunnelOptions.legend.itemsAlignment
-        * @type Enums.HorizontalAlignment
-        * @default undefined
-        */
-        itemsAlignment: undefined,
         /**
         * @name dxFunnelOptions.legend.font
         * @type Font
         * @default '#767676' @prop color
         */
         font: {
-            color: '#767676',
-            family: undefined,
-            weight: undefined,
-            size: undefined,
-            opacity: undefined
+            color: '#767676'
         },
         /**
         * @name dxFunnelOptions.legend.visible
@@ -442,127 +409,6 @@ var dxFunnel = {
         * @default false
         */
         visible: false,
-        /**
-        * @name dxFunnelOptions.legend.margin
-        * @type number | object
-        * @default 10
-        */
-        margin: {
-            /**
-            * @name dxFunnelOptions.legend.margin.top
-            * @type number
-            * @default 10
-            */
-            top: 10,
-            /**
-            * @name dxFunnelOptions.legend.margin.bottom
-            * @type number
-            * @default 10
-            */
-            bottom: 10,
-            /**
-            * @name dxFunnelOptions.legend.margin.left
-            * @type number
-            * @default 10
-            */
-            left: 10,
-            /**
-            * @name dxFunnelOptions.legend.margin.right
-            * @type number
-            * @default 10
-            */
-            right: 10
-        },
-        /**
-        * @name dxFunnelOptions.legend.markerSize
-        * @type number
-        * @default 20
-        */
-        markerSize: 20,
-        /**
-        * @name dxFunnelOptions.legend.backgroundColor
-        * @type string
-        * @default undefined
-        */
-        backgroundColor: undefined,
-        /**
-        * @name dxFunnelOptions.legend.border
-        * @type object
-        */
-        border: {
-            /**
-            * @name dxFunnelOptions.legend.border.visible
-            * @type boolean
-            * @default false
-            */
-            visible: false,
-            /**
-            * @name dxFunnelOptions.legend.border.width
-            * @type number
-            * @default 1
-            */
-            width: 1,
-            /**
-            * @name dxFunnelOptions.legend.border.color
-            * @type string
-            * @default '#d3d3d3'
-            */
-            color: '#d3d3d3',
-            /**
-            * @name dxFunnelOptions.legend.border.cornerRadius
-            * @type number
-            * @default 0
-            */
-            cornerRadius: 0,
-            /**
-            * @name dxFunnelOptions.legend.border.opacity
-            * @type number
-            * @default undefined
-            */
-            opacity: undefined,
-            /**
-            * @name dxFunnelOptions.legend.border.dashStyle
-            * @type Enums.DashStyle
-            * @default 'solid'
-            */
-            dashStyle: 'solid'
-        },
-        /**
-        * @name dxFunnelOptions.legend.paddingLeftRight
-        * @type number
-        * @default 10
-        */
-        paddingLeftRight: 10,
-        /**
-        * @name dxFunnelOptions.legend.paddingTopBottom
-        * @type number
-        * @default 10
-        */
-        paddingTopBottom: 10,
-        /**
-        * @name dxFunnelOptions.legend.columnCount
-        * @type number
-        * @default 0
-        */
-        columnCount: 0,
-        /**
-        * @name dxFunnelOptions.legend.rowCount
-        * @type number
-        * @default 0
-        */
-        rowCount: 0,
-        /**
-        * @name dxFunnelOptions.legend.columnItemSpacing
-        * @type number
-        * @default 20
-        */
-        columnItemSpacing: 20,
-        /**
-        * @name dxFunnelOptions.legend.rowItemSpacing
-        * @type number
-        * @default 8
-        */
-        rowItemSpacing: 8,
         /**
         * @name dxFunnelOptions.legend.customizeText
         * @type function(itemInfo)
