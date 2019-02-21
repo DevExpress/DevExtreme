@@ -46,7 +46,7 @@ class ResizingModule {
 
             this.updateFramePosition();
             this.showFrame();
-        } else {
+        } else if(this._$target) {
             this.hideFrame();
         }
     }
@@ -79,15 +79,21 @@ class ResizingModule {
     updateFramePosition() {
         const { height, width, offsetTop, offsetLeft } = this._$target;
         const { scrollTop, scrollLeft } = this.quill.root;
+        const borderWidth = this._getBorderWidth();
 
         this._$resizeFrame
             .css({
-                height: height + 2 * FRAME_PADDING,
-                width: width + 2 * FRAME_PADDING,
-                top: offsetTop - parseInt(this._$resizeFrame.css("borderTopWidth")) - scrollTop - FRAME_PADDING,
-                left: offsetLeft - parseInt(this._$resizeFrame.css("borderLeftWidth")) - scrollLeft - FRAME_PADDING
+                height: height,
+                width: width,
+                padding: FRAME_PADDING,
+                top: offsetTop - borderWidth - scrollTop - FRAME_PADDING,
+                left: offsetLeft - borderWidth - scrollLeft - FRAME_PADDING
             });
         move(this._$resizeFrame, { left: 0, top: 0 });
+    }
+
+    _getBorderWidth() {
+        return parseInt(this._$resizeFrame.css("borderTopWidth"));
     }
 
     _createResizeFrame() {
@@ -106,7 +112,12 @@ class ResizingModule {
                     return;
                 }
 
-                $(this._$target).attr({ height: e.height, width: e.width });
+                const correction = 2 * (FRAME_PADDING + this._getBorderWidth());
+
+                $(this._$target).attr({
+                    height: e.height - correction,
+                    width: e.width - correction
+                });
                 this.updateFramePosition();
             }
         });
@@ -123,7 +134,7 @@ class ResizingModule {
         if(option === "enabled") {
             this.enabled = value;
             value ? this._attachEvents() : this._detachEvents();
-        } else if(option === "allowedTargets") {
+        } else if(option === "allowedTargets" && Array.isArray(value)) {
             this.allowedTargets = value;
         }
     }
