@@ -30,7 +30,7 @@ var READONLY_STATE_CLASS = "dx-state-readonly",
 var Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
-
+        this._tooltipOptionsCache = {};
         this.callBase.apply(this, arguments);
     },
 
@@ -154,6 +154,7 @@ var Editor = Widget.inherit({
         this._setSubmitElementName(this.option("name"));
 
         this.callBase();
+        this._cacheTooltipOptions(this.option("validationTooltipOptions"));
         this._renderValidationState();
     },
 
@@ -207,6 +208,10 @@ var Editor = Widget.inherit({
         return false;
     },
 
+    _cacheTooltipOptions: function(validationTooltipOptions) {
+        this._tooltipOptionsCache = extend(this._tooltipOptionsCache, validationTooltipOptions);
+    },
+
     _renderValidationState: function() {
         var isValid = this.option("isValid"),
             validationError = this.option("validationError"),
@@ -245,7 +250,7 @@ var Editor = Widget.inherit({
                 visible: true,
                 propagateOutsideClick: true,
                 _checkParentVisibility: false
-            }, this.option("validationTooltipOptions")));
+            }, this._tooltipOptionsCache));
 
             this._$validationMessage
                 .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === "auto")
@@ -354,6 +359,7 @@ var Editor = Widget.inherit({
                 break;
             case "validationTooltipOptions":
                 this._setValidationTooltipOptions(this._getOptionsFromContainer(args));
+                this._cacheTooltipOptions(args.value);
                 break;
             case "readOnly":
                 this._toggleReadOnlyState();

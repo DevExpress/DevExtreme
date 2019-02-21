@@ -227,7 +227,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
         if(text) {
             this._dateParts = renderDateParts(text, this._regExpInfo);
-            this._selectNextPart(0);
+            this._selectNextPart();
         }
     },
 
@@ -238,9 +238,9 @@ let DateBoxMask = DateBoxBase.inherit({
     _attachMaskEvents() {
         eventsEngine.on(this._input(), eventsUtils.addNamespace("dxclick", MASK_EVENT_NAMESPACE), this._maskClickHandler.bind(this));
         eventsEngine.on(this._input(), eventsUtils.addNamespace("paste", MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this));
-        eventsEngine.on(this._input(), eventsUtils.addNamespace("drop", MASK_EVENT_NAMESPACE), (e) => {
+        eventsEngine.on(this._input(), eventsUtils.addNamespace("drop", MASK_EVENT_NAMESPACE), () => {
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
-            this._selectNextPart(0, e);
+            this._selectNextPart();
         });
     },
 
@@ -264,7 +264,7 @@ let DateBoxMask = DateBoxBase.inherit({
         }
     },
 
-    _selectNextPart(step) {
+    _selectNextPart(step = 0) {
         if(!this.option("text")) {
             return;
         }
@@ -376,10 +376,10 @@ let DateBoxMask = DateBoxBase.inherit({
         let date = dateLocalization.parse(newText, this._getFormatPattern());
 
         if(date) {
-            this._renderDateParts();
             this._maskValue = date;
             this._renderDisplayText(this._getDisplayedText(this._maskValue));
-            this._selectNextPart(0);
+            this._renderDateParts();
+            this._selectNextPart();
         }
 
         e.preventDefault();
@@ -400,7 +400,7 @@ let DateBoxMask = DateBoxBase.inherit({
 
     _enterHandler(e) {
         this._fireChangeEvent();
-        this._selectNextPart(FORWARD, e);
+        this._selectNextPart(FORWARD);
         e.preventDefault();
     },
 
