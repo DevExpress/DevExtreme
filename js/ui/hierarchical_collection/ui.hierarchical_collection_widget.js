@@ -33,8 +33,8 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
             /**
             * @name HierarchicalCollectionWidgetOptions.displayExpr
-             * @type string|function(item)
-             * @type_function_param1 item:object
+            * @type string|function(item)
+            * @type_function_param1 item:object
             * @default 'text'
             */
             displayExpr: "text",
