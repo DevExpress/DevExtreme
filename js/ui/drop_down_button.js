@@ -36,7 +36,7 @@ let DropDownButton = Widget.inherit({
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
             itemTemplate: "item",
             groupTemplate: "group",
-            displayExpr: "this",
+            displayExpr: undefined,
             valueExpr: "this"
         });
     },
@@ -98,7 +98,8 @@ let DropDownButton = Widget.inherit({
             grouped: this.option("grouped"),
             keyExpr: this._getCollectionKeyExpr(),
             noDataText: this.option("noDataText"),
-            itemTemplate: this._getTemplateByOption("itemTemplate"),
+            displayExpr: this.option("displayExpr"),
+            itemTemplate: this.option("itemTemplate"),
             tabIndex: null,
             dataSource: this._dataSource,
             onItemClick: (e) => {
@@ -142,6 +143,10 @@ let DropDownButton = Widget.inherit({
 
     _setListOption(name, value) {
         this._list && this._list.option(name, value);
+    },
+
+    _setCollectionWidgetOption: function() {
+        this._setListOption.apply(this, arguments);
     },
 
     _optionChanged: function(args) {
