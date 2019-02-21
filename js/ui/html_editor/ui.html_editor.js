@@ -282,7 +282,7 @@ const HtmlEditor = Editor.inherit({
             toolbar: this._getModuleConfigByOption("toolbar"),
             variables: this._getModuleConfigByOption("variables"),
             dropImage: this._getBaseModuleConfig(),
-            resizing: this._getBaseModuleConfig(),
+            resizing: this._getModuleConfigByOption("resizing"),
             clipboard: {
                 matchVisual: false,
                 matchers: [
@@ -412,6 +412,9 @@ const HtmlEditor = Editor.inherit({
                 break;
             case "formDialogOptions":
                 this._renderFormDialog();
+                break;
+            case "resizing":
+                this._quillInstance.getModule("resizing").option(args.name, args.value);
                 break;
             default:
                 this.callBase(args);

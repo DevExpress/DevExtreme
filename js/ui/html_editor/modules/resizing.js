@@ -6,24 +6,38 @@ import { move } from "../../../animation/translator";
 
 import Resizable from "../../resizable";
 
-const DX_RESIZE_FRAME = "dx-resize-frame";
-const NAMESPACE = "dxHtmlResizingModule";
-const KEYDOWN_EVENT = addNamespace("keydown", NAMESPACE);
-const SCROLL_EVENT = addNamespace("scroll", NAMESPACE);
+const DX_RESIZE_FRAME_CLASS = "dx-resize-frame";
+const MODULE_NAMESPACE = "dxHtmlResizingModule";
+
+const KEYDOWN_EVENT = addNamespace("keydown", MODULE_NAMESPACE);
+const SCROLL_EVENT = addNamespace("scroll", MODULE_NAMESPACE);
+
+const FRAME_PADDING = 1;
 
 class ResizingModule {
     constructor(quill, options) {
         this.quill = quill;
         this.editorInstance = options.editorInstance;
+        this.allowedTargets = options.allowedTargets || ["image"];
+        this.enabled = !!options.enabled;
 
-        eventsEngine.on(this.quill.root, addNamespace(ClickEvent, NAMESPACE), this._clickHandler.bind(this));
+        if(this.enabled) {
+            this._attachEvents();
+            this._createResizeFrame();
+        }
+    }
+
+    _attachEvents() {
+        eventsEngine.on(this.quill.root, addNamespace(ClickEvent, MODULE_NAMESPACE), this._clickHandler.bind(this));
         eventsEngine.on(this.quill.root, SCROLL_EVENT, this._scrollHandler.bind(this));
+    }
 
-        this._createResizeFrame();
+    _detachEvents() {
+        eventsEngine.off(this.quill.root, MODULE_NAMESPACE);
     }
 
     _clickHandler(e) {
-        if(e.target.tagName.toUpperCase() === 'IMG') {
+        if(this._isAllowedTarget(e.target)) {
             if(this._$target === e.target) {
                 return;
             }
@@ -43,6 +57,14 @@ class ResizingModule {
         }
     }
 
+    _isAllowedTarget(targetElement) {
+        return this._isImage(targetElement);
+    }
+
+    _isImage(targetElement) {
+        return this.allowedTargets.includes("image") && targetElement.tagName.toUpperCase() === "IMG";
+    }
+
     showFrame() {
         this._$resizeFrame.show();
         eventsEngine.on(this.quill.root, KEYDOWN_EVENT, this.hideFrame.bind(this));
@@ -60,17 +82,21 @@ class ResizingModule {
 
         this._$resizeFrame
             .css({
-                height: height,
-                width: width,
-                top: offsetTop - parseInt(this._$resizeFrame.css("borderTopWidth")) - scrollTop,
-                left: offsetLeft - parseInt(this._$resizeFrame.css("borderLeftWidth")) - scrollLeft
+                height: height + 2 * FRAME_PADDING,
+                width: width + 2 * FRAME_PADDING,
+                top: offsetTop - parseInt(this._$resizeFrame.css("borderTopWidth")) - scrollTop - FRAME_PADDING,
+                left: offsetLeft - parseInt(this._$resizeFrame.css("borderLeftWidth")) - scrollLeft - FRAME_PADDING
             });
         move(this._$resizeFrame, { left: 0, top: 0 });
     }
 
     _createResizeFrame() {
+        if(this._$resizeFrame) {
+            return;
+        }
+
         this._$resizeFrame = $("<div>")
-            .addClass(DX_RESIZE_FRAME)
+            .addClass(DX_RESIZE_FRAME_CLASS)
             .appendTo(this.editorInstance._getQuillContainer())
             .hide();
 
@@ -86,8 +112,26 @@ class ResizingModule {
         });
     }
 
+    option(option, value) {
+        if(option === "resizing") {
+            Object.entries(value).forEach((keyValueArray) => {
+                this.option(...keyValueArray);
+            });
+            return;
+        }
+
+        if(option === "enabled") {
+            this.enabled = value;
+            value ? this._attachEvents() : this._detachEvents();
+        } else if(option === "allowedTargets") {
+            this.allowedTargets = value;
+        }
+    }
+
     clean() {
-        eventsEngine.off(this.quill.root, NAMESPACE);
+        this._detachEvents();
+        this._$resizeFrame.remove();
+        this._$resizeFrame = undefined;
     }
 }
 
