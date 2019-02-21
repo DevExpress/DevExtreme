@@ -25,8 +25,6 @@ var ensureDefined = function(value, defaultValue) {
     return value === undefined ? defaultValue : value;
 };
 
-var caretTimeoutDuration = browser.msie ? 300 : 0;
-
 var NumberBoxMask = NumberBoxBase.inherit({
 
     _getDefaultOptions: function() {
@@ -75,16 +73,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var that = this;
-        if(this._caretTimeout) {
-            clearTimeout(this._caretTimeout);
-            this._caretTimeout = null;
-        }
-        this._focusInCaretTimeout = true;
+        var doesBrowserPreventDoubleClickSelectionIfCaretWasMoved = browser.msie;
+
+        this.clearCaretTimeout();
         this._caretTimeout = setTimeout(function() {
             that._caretTimeout = null;
-            that._focusInCaretTimeout = false;
             that._moveCaretToBoundary(MOVE_BACKWARD, e);
-        }, caretTimeoutDuration);
+        }, doesBrowserPreventDoubleClickSelectionIfCaretWasMoved ? 300 : 0);
     },
 
     _focusOutHandler: function(e) {
@@ -166,10 +161,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _keyboardHandler: function(e) {
-        if(this._caretTimeout) {
-            clearTimeout(this._caretTimeout);
-            this._caretTimeout = null;
-        }
+        this.clearCaretTimeout();
 
         this._lastKey = number.convertDigits(eventUtils.getChar(e), true);
         this._lastKeyName = eventUtils.normalizeKeyName(e);
@@ -469,38 +461,24 @@ var NumberBoxMask = NumberBoxBase.inherit({
         eventsEngine.off(this._input(), "." + NUMBER_FORMATTER_NAMESPACE);
     },
 
-    _moveCaretToRightPositionAfterFormatting: function() {
-        this._caret(maskCaret.getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
-    },
-
     _attachFormatterEvents: function() {
         var $input = this._input();
 
         eventsEngine.on($input, eventUtils.addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
         eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), function() {
-            var that = this;
-
-            if(this._caretTimeout) {
-                var focusInCaretTimeout = this._focusInCaretTimeout;
-                clearTimeout(this._caretTimeout);
-                this._caretTimeout = setTimeout(function() {
-                    that._caretTimeout = null;
-                    if(focusInCaretTimeout) {
-                        that._focusInCaretTimeout = false;
-                        that._moveCaretToBoundary(MOVE_BACKWARD);
-                    }
-                }, caretTimeoutDuration);
-            } else {
-                that._moveCaretToRightPositionAfterFormatting();
+            if(!this._caretTimeout) {
+                this._caret(maskCaret.getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
             }
         }.bind(this));
 
         eventsEngine.on($input, "dxdblclick", function() {
-            if(this._caretTimeout) {
-                clearTimeout(this._caretTimeout);
-                this._caretTimeout = null;
-            }
+            this.clearCaretTimeout();
         }.bind(this));
+    },
+
+    clearCaretTimeout: function() {
+        clearTimeout(this._caretTimeout);
+        this._caretTimeout = null;
     },
 
     _forceRefreshInputValue: function() {
