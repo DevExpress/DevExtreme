@@ -1585,20 +1585,16 @@ QUnit.test("ctrl+a should have default behavior", function(assert) {
 });
 
 QUnit.test("moving caret to closest non stub on click - forward direction", function(assert) {
-    if(!browser.msie) {
-        this.clock.restore();
-    }
     this.instance.option({
         format: "$ #",
         value: 1
     });
 
+    this.input.trigger("focusin");
+    this.clock.tick(310);
     this.keyboard.caret(0);
 
     this.input.trigger("dxclick");
-    if(browser.msie) {
-        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
-    }
 
     this.clock.tick(310);
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was adjusted");

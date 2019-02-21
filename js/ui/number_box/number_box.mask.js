@@ -79,8 +79,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
             clearTimeout(this._caretTimeout);
             this._caretTimeout = null;
         }
+        this._focusInCaretTimeout = true;
         this._caretTimeout = setTimeout(function() {
-            that._caretTimeout = undefined;
+            that._caretTimeout = null;
+            that._focusInCaretTimeout = false;
             that._moveCaretToBoundary(MOVE_BACKWARD, e);
         }, caretTimeoutDuration);
     },
@@ -137,7 +139,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _moveCaretToBoundary: function(direction, e) {
-        if(!this._useMaskBehavior() || e.shiftKey) {
+        if(!this._useMaskBehavior() || e && e.shiftKey) {
             return;
         }
 
@@ -478,11 +480,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
         eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), function() {
             var that = this;
 
-            if(browser.msie) {
+            if(this._caretTimeout) {
+                var focusInCaretTimeout = this._focusInCaretTimeout;
                 clearTimeout(this._caretTimeout);
                 this._caretTimeout = setTimeout(function() {
                     that._caretTimeout = null;
-                    that._moveCaretToRightPositionAfterFormatting();
+                    if(focusInCaretTimeout) {
+                        that._focusInCaretTimeout = false;
+                        that._moveCaretToBoundary(MOVE_BACKWARD);
+                    }
                 }, caretTimeoutDuration);
             } else {
                 that._moveCaretToRightPositionAfterFormatting();
