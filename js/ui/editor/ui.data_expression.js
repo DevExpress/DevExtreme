@@ -207,8 +207,8 @@ var DataExpressionMixin = extend(DataHelperMixin, {
     },
 
     _getCollectionKeyExpr: function() {
-        var valueExpr = this.option("valueExpr"),
-            isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== "this";
+        var valueExpr = this.option("valueExpr");
+        var isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== "this" || typeUtils.isFunction(valueExpr);
 
         return isValueExprField ? valueExpr : null;
     },

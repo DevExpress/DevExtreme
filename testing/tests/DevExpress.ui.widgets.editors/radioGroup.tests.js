@@ -269,6 +269,28 @@ QUnit.test("onValueChanged option should get jQuery event as a parameter", funct
 
 QUnit.module("valueExpr", moduleConfig);
 
+QUnit.test("value should be correct if valueExpr is a function", (assert) => {
+    const items = [
+        { text: "text1", value: true },
+        { text: "text2", value: false }
+    ];
+    const radioGroup = $("#radioGroup")
+        .dxRadioGroup({
+            dataSource: items,
+            valueExpr: (e) => e.value
+        })
+        .dxRadioGroup("instance");
+
+    assert.strictEqual(radioGroup.option("value"), null);
+    assert.strictEqual($(radioGroup.itemElements()).find(toSelector(RADIO_BUTTON_CHECKED_CLASS)).length, 0);
+
+    const itemElement = $(radioGroup.itemElements()).first();
+
+    itemElement.trigger("dxclick");
+    assert.strictEqual(radioGroup.option("value"), true);
+    assert.ok(itemElement.hasClass(RADIO_BUTTON_CHECKED_CLASS));
+});
+
 QUnit.test("value should be correct if valueExpr is a string", function(assert) {
     var items = [
         { number: 1, caption: "one" },
