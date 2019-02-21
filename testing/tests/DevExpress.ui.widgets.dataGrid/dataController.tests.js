@@ -611,7 +611,39 @@ QUnit.test("the number of visible items should be identical after expandAll/coll
     assert.equal(this.dataController.items().length, itemsCount, "There are no excess items");
 });
 
-QUnit.test("Using focusedRowEnabled should set sorting for the not sorted simple key column", function(assert) {
+QUnit.test("Using focusedRowEnabled should set sorting for the not sorted simple key column if remoteOperations enabled", function(assert) {
+    // arrange
+    var dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Dan', age: 25 },
+        { team: 'internal', name: 'Bob', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }],
+    { key: "name" },
+    {
+        pageSize: 2,
+        asyncLoadEnabled: false
+    });
+
+    this.applyOptions({
+        dataSource: dataSource,
+        focusedRowEnabled: true,
+        remoteOperations: true
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+    // assert
+    assert.equal(dataSource.items()[0].name, "Alex", "Item name is Alex");
+    assert.equal(dataSource.items()[1].name, "Alice", "Item name is Alice");
+    // act
+    dataSource.pageIndex(1);
+    dataSource.load();
+    // assert
+    assert.equal(dataSource.items()[0].name, "Bob", "Item2");
+    assert.equal(dataSource.items()[1].name, "Dan", "Item3");
+});
+
+QUnit.test("Using focusedRowEnabled should not set sorting for the not sorted simple key column if remoteOperations disabled", function(assert) {
     // arrange
     var dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
@@ -632,27 +664,29 @@ QUnit.test("Using focusedRowEnabled should set sorting for the not sorted simple
     // act
     this.dataController._refreshDataSource();
     // assert
-    assert.equal(dataSource.items()[0].name, "Alex", "Item name is Alex");
-    assert.equal(dataSource.items()[1].name, "Alice", "Item name is Alice");
+    assert.equal(dataSource.items()[0].name, "Alex", "Item0");
+    assert.equal(dataSource.items()[1].name, "Dan", "Item1");
     // act
     dataSource.pageIndex(1);
     dataSource.load();
-    assert.equal(dataSource.items()[0].name, "Bob", "Item name is Bob");
-    assert.equal(dataSource.items()[1].name, "Dan", "Item name is Dan");
+    // assert
+    assert.equal(dataSource.items()[0].name, "Bob", "Item2");
+    assert.equal(dataSource.items()[1].name, "Alice", "Item3");
 });
 
-QUnit.test("Using focusedRowEnabled should set sorting for the not sorted composite key columns", function(assert) {
+QUnit.test("Using focusedRowEnabled should not set sorting for the not sorted composite key columns", function(assert) {
     // arrange
     var dataSource = createDataSource([
-        { team: 'internal', name: 'Alex', age: 30 },
-        { team: 'internal', name: 'Dan', age: 25 },
-        { team: 'internal', name: 'Bob', age: 20 },
-        { team: 'public', name: 'Alice', age: 19 }],
-    { key: [ "name", "age" ] },
-    {
-        pageSize: 2,
-        asyncLoadEnabled: false
-    });
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Dan', age: 25 },
+            { team: 'internal', name: 'Bob', age: 20 },
+            { team: 'public', name: 'Alice', age: 19 }],
+        { key: [ "name", "age" ] },
+        {
+            pageSize: 2,
+            asyncLoadEnabled: false
+        }),
+        dataIndexGetter;
 
     this.applyOptions({
         dataSource: dataSource,
@@ -661,16 +695,18 @@ QUnit.test("Using focusedRowEnabled should set sorting for the not sorted compos
 
     // act
     this.dataController._refreshDataSource();
-    assert.deepEqual(this.dataController._columnsController.getSortDataSourceParameters(), [{ selector: "name", desc: false }, { selector: "age", desc: false }], "Sort parameters");
+    dataIndexGetter = this.dataController._dataSource.getDataIndexGetter();
+    this.dataController._dataSource.getDataIndexGetter();
+    assert.deepEqual(this.dataController._columnsController.getSortDataSourceParameters(), [{ desc: false, selector: dataIndexGetter }], "Sort parameters");
     // assert
-    assert.equal(dataSource.items()[0].name, "Alex", "Item name is Alex");
-    assert.equal(dataSource.items()[1].name, "Alice", "Item name is Alice");
+    assert.equal(dataSource.items()[0].name, "Alex", "Item0");
+    assert.equal(dataSource.items()[1].name, "Dan", "Item1");
     // act
     dataSource.pageIndex(1);
     dataSource.load();
     // assert
-    assert.equal(dataSource.items()[0].name, "Bob", "Item name is Bob");
-    assert.equal(dataSource.items()[1].name, "Dan", "Item name is Dan");
+    assert.equal(dataSource.items()[0].name, "Bob", "Item2");
+    assert.equal(dataSource.items()[1].name, "Alice", "Item3");
 });
 
 QUnit.test("Operation filter should generates correctly when sorting, remoteOperations, and the key column is not present", function(assert) {
