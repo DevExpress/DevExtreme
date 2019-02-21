@@ -379,6 +379,7 @@ var dxVectorMap = {
         /**
         * @name dxVectorMapOptions.legends.font
         * @type Font
+        * @inheritdoc
         * @default '#2b2b2b' @prop color
         */
         font: {
@@ -387,6 +388,7 @@ var dxVectorMap = {
         /**
         * @name dxVectorMapOptions.legends.markerSize
         * @type number
+        * @inheritdoc
         * @default 12
         */
         markerSize: 12,

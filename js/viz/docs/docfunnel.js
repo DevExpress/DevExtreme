@@ -398,6 +398,7 @@ var dxFunnel = {
         /**
         * @name dxFunnelOptions.legend.font
         * @type Font
+        * @inheritdoc
         * @default '#767676' @prop color
         */
         font: {
@@ -406,6 +407,7 @@ var dxFunnel = {
         /**
         * @name dxFunnelOptions.legend.visible
         * @type boolean
+        * @inheritdoc
         * @default false
         */
         visible: false,
