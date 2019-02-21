@@ -39,9 +39,9 @@ const moduleConfig = {
     }
 };
 
-const { test } = QUnit;
+const { test, module } = QUnit;
 
-QUnit.module("Resizing module", moduleConfig, () => {
+module("Resizing module", moduleConfig, () => {
     test("create module instance with default options", (assert) => {
         const resizingInstance = new Resizing(this.quillMock, this.options);
 
@@ -240,5 +240,23 @@ QUnit.module("Resizing module", moduleConfig, () => {
 
         assert.strictEqual(this.$image.height(), IMAGE_SIZE + 5, "Image height has been increased");
         assert.strictEqual(this.$image.width(), IMAGE_SIZE + 10, "Image width has been increased");
+    });
+
+    test("check frame position", (assert) => {
+        this.options.enabled = true;
+        new Resizing(this.quillMock, this.options);
+
+        this.$image.trigger(clickEvent);
+
+        const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
+        const frameTop = parseInt($resizeFrame.css("top"));
+        const frameLeft = parseInt($resizeFrame.css("left"));
+        const imageOffset = this.$image.offset();
+        const frameOffset = $resizeFrame.offset();
+
+        frameOffset.left -= frameLeft;
+        frameOffset.top -= frameTop;
+
+        assert.deepEqual(frameOffset, imageOffset, "Frame positioned correctly");
     });
 });

@@ -414,7 +414,11 @@ const HtmlEditor = Editor.inherit({
                 this._renderFormDialog();
                 break;
             case "resizing":
-                this._quillInstance.getModule("resizing").option(args.name, args.value);
+                if(!args.previousValue || !args.value) {
+                    this._invalidate();
+                } else {
+                    this._quillInstance.getModule("resizing").option(args.name, args.value);
+                }
                 break;
             default:
                 this.callBase(args);

@@ -22,3 +22,4 @@ import "./htmlEditorParts/formDialog.tests.js";
 import "./htmlEditorParts/paste.tests.js";
 import "./htmlEditorParts/events.tests.js";
 import "./htmlEditorParts/resizingModule.tests.js";
+import "./htmlEditorParts/resizingIntegration.tests.js";
