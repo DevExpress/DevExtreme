@@ -1682,7 +1682,7 @@ QUnit.testInActiveWindow("caret should be at start boundary on focusin", functio
     assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is right");
 });
 
-QUnit.testInActiveWindow("caret should not to change position on focus after fast double click for ie", function(assert) {
+QUnit.testInActiveWindow("caret should not change position on focus after fast double click for ie", function(assert) {
     if(!browser.msie) {
         assert.expect(0);
         return;
