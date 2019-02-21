@@ -8,6 +8,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     iteratorUtils = require("../../core/utils/iterator"),
+    isFunction = require("../../core/utils/type").isFunction,
     Action = require("../../core/action"),
     Guid = require("../../core/guid"),
     domUtils = require("../../core/utils/dom"),
@@ -266,19 +267,28 @@ var CollectionWidget = Widget.inherit({
         this._initItemsFromMarkup();
 
         this.callBase();
+        this._initDefaultItemTemplate();
+    },
 
+    _initDefaultItemTemplate: function() {
+        var fieldsMap = this._getFieldsMap();
         this._defaultTemplates["item"] = new BindableTemplate((function($container, data) {
             if(isPlainObject(data)) {
                 this._prepareDefaultItemTemplate(data, $container);
             } else {
-                $container.text(String(data));
+                if(fieldsMap && isFunction(fieldsMap.text)) {
+                    data = fieldsMap.text(data);
+                }
+                $container.text(String(commonUtils.ensureDefined(data, "")));
             }
-        }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"));
+        }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"), fieldsMap);
     },
 
     _getBindableFields: function() {
         return ["text", "html"];
     },
+
+    _getFieldsMap: commonUtils.noop,
 
     _prepareDefaultItemTemplate: function(data, $container) {
         if(data.text) {
