@@ -109,12 +109,12 @@ let dropDownAppointments = Class.inherit({
 
     _createAppointmentClickAction: function() {
         this._appointmentClickAction = this.instance._createActionByOption("onAppointmentClick", {
-            afterExecute: (function(e) {
+            afterExecute: function(e) {
                 var config = e.args[0];
                 config.event.stopPropagation();
 
                 this.instance.fire("showEditAppointmentPopup", { data: config.appointmentData });
-            }).bind(this)
+            }.bind(this)
         });
     },
     _createDropDownMenu: function(config, isCompact) {
@@ -164,17 +164,8 @@ let dropDownAppointments = Class.inherit({
 
     _createListItemTemplate: function(template) {
         return new FunctionTemplate((options) => {
-            const itemData = options.model,
-                startDate = itemData.settings ? itemData.settings[0].startDate : itemData.startDate;
-
-            const templateItemData = this.instance.fire("appendSingleAppointmentData", {
-                appointmentData: itemData,
-                index: options.index,
-                startDate: startDate
-            });
-
             return template.render({
-                model: templateItemData,
+                model: options.model,
                 index: options.index,
                 container: options.container
             });
