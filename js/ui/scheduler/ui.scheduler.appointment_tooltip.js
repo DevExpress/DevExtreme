@@ -33,10 +33,7 @@ var appointmentTooltip = {
 
         this._$tooltip = $("<div>").appendTo(instance.$element()).addClass(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
 
-        appointmentData = this.instance.fire("appendSingleAppointmentData", {
-            appointmentData: appointmentData,
-            singleAppointmentData: singleAppointmentData
-        });
+        var targetedAppointmentData = instance.fire("getTargetedAppointmentData", appointmentData, $appointment);
 
         this._tooltip = instance._createComponent(this._$tooltip, Tooltip, {
             visible: true,
@@ -45,6 +42,7 @@ var appointmentTooltip = {
             contentTemplate: new FunctionTemplate(function(options) {
                 return template.render({
                     model: appointmentData,
+                    targetedAppointmentData: targetedAppointmentData,
                     container: options.container
                 });
             }),

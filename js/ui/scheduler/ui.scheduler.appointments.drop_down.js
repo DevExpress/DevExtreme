@@ -119,10 +119,10 @@ var dropDownAppointments = Class.inherit({
                 config.event.stopPropagation();
 
                 this.instance.fire("showEditAppointmentPopup", { data: config.appointmentData });
-            }
-            ).bind(this)
+            }).bind(this)
         });
     },
+
     _createDropDownMenu: function(config, isCompact) {
         var $menu = config.$element,
             items = config.items,
@@ -163,17 +163,8 @@ var dropDownAppointments = Class.inherit({
                 activeStateEnabled: false,
                 focusStateEnabled: this.instance.option("focusStateEnabled"),
                 itemTemplate: new FunctionTemplate(function(options) {
-                    var itemData = options.model,
-                        startDate = itemData.settings ? itemData.settings[0].startDate : itemData.startDate;
-
-                    itemData = that.instance.fire("appendSingleAppointmentData", {
-                        appointmentData: itemData,
-                        index: options.index,
-                        startDate: startDate
-                    });
-
                     return template.render({
-                        model: itemData,
+                        model: options.model,
                         index: options.index,
                         container: options.container
                     });
@@ -186,7 +177,6 @@ var dropDownAppointments = Class.inherit({
                     var $item = args.itemElement,
                         itemData = args.itemData,
                         settings = itemData.settings;
-
 
                     eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, $item, itemData, settings, $menu));
 
@@ -218,7 +208,6 @@ var dropDownAppointments = Class.inherit({
 
         settings[0].isCompact = false;
         settings[0].virtual = false;
-
 
         var appointmentData = {
             itemData: itemData,

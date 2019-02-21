@@ -307,6 +307,7 @@ var subscribes = {
 
         return cellWidth;
     },
+
     getEndDate: function(appointmentData) {
         return this._getEndDate(appointmentData);
     },
@@ -466,6 +467,14 @@ var subscribes = {
         return result;
     },
 
+    getOffsetByAllDayPanel: function(groupIndex) {
+        return this._workSpace._getOffsetByAllDayPanel(groupIndex);
+    },
+
+    getGroupTop: function(groupIndex) {
+        return this._workSpace._getGroupTop(groupIndex);
+    },
+
     updateResizableArea: function() {
         var $allResizableElements = this.$element().find(".dx-scheduler-appointment.dx-resizable");
 
@@ -548,22 +557,6 @@ var subscribes = {
             resources: resources,
             allDay: allDay
         }, this._subscribes["convertDateByTimezone"].bind(this));
-    },
-
-    appendSingleAppointmentData: function(config) {
-        var appointmentData = config.appointmentData,
-            singleAppointmentData = config.singleAppointmentData;
-
-        var field = this.option("displayedAppointmentDataField"),
-            result = extend({}, appointmentData);
-
-        if(this._isAppointmentRecurrence(appointmentData) && typeUtils.isDefined(field)) {
-            singleAppointmentData = singleAppointmentData || this._subscribes["getTargetedAppointmentData"].call(this, appointmentData, undefined, config.index, config.startDate);
-
-            result[field] = singleAppointmentData;
-        }
-
-        return result;
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {
@@ -758,9 +751,10 @@ var subscribes = {
     },
 
     getTargetedAppointmentData: function(appointmentData, appointmentElement, appointmentIndex, startDate) {
-        var recurringData = this._getSingleAppointmentData(appointmentData, {
+        var $appointmentElement = $(appointmentElement),
+            recurringData = this._getSingleAppointmentData(appointmentData, {
                 skipDateCalculation: true,
-                $appointment: $(appointmentElement),
+                $appointment: $appointmentElement,
                 skipHoursProcessing: true,
                 startDate: startDate
             }),
@@ -769,6 +763,10 @@ var subscribes = {
         extend(true, result, appointmentData, recurringData);
 
         this._convertDatesByTimezoneBack(false, result);
+
+        if(!typeUtils.isDefined(appointmentIndex)) {
+            appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
+        }
 
         // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);
@@ -830,6 +828,5 @@ var subscribes = {
     getStartDayHour: function() {
         return this.option("startDayHour");
     }
-
 };
 module.exports = subscribes;

@@ -271,5 +271,10 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
      */
     W1011: "The \"keyExpr\" option is not applied when dataSource is not an array",
 
-    W1012: "The '{0}' key field is not found in data objects"
+    W1012: "The '{0}' key field is not found in data objects",
+
+    /**
+    * @name ErrorsUIWidgets.W1013
+    */
+    W1013: "The \"message\" field in the dialog component was renamed to \"messageHtml\". Change your code correspondingly. In addition, if you used HTML code in the message, make sure that it is secure"
 });

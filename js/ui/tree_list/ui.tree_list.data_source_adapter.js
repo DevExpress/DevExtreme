@@ -350,7 +350,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
 
             function concatLoadedData(loadedData) {
                 if(isRemoteFiltering) {
-                    that._cachedStoreData = loadedData.concat(that._cachedStoreData);
+                    that._cachedStoreData = that._cachedStoreData.concat(loadedData);
                 }
                 return data.concat(loadedData);
             }
