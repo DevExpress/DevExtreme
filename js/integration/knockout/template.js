@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     TemplateBase = require("../../ui/widget/ui.template_base"),
     domUtils = require("../../core/utils/dom"),
-    getNodeWithContext = require("./utils").getNodeWithContext;
+    getClosestNodeWithContext = require("./utils").getClosestNodeWithContext;
 
 var getParentContext = function(data) {
     var parentNode = domAdapter.createElement("div");
