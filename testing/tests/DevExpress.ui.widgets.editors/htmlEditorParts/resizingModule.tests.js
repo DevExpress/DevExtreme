@@ -10,13 +10,18 @@ const RESIZE_FRAME_CLASS = "dx-resize-frame";
 const RESIZABLE_HANDLE_RIGHT_CLASS = "dx-resizable-handle-right";
 const RESIZABLE_HANDLE_BOTTOM_CLASS = "dx-resizable-handle-bottom";
 
+const IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgZGT8DwABDQEDEkMQNQAAAABJRU5ErkJggg==";
 const IMAGE_SIZE = 100;
 const BORDER_PADDING_WIDTH = 2;
 
 const moduleConfig = {
     beforeEach: () => {
         this.$element = $("#htmlEditor").css({ position: "relative", margin: "10px" });
-        this.$image = $("<img>").attr({ width: IMAGE_SIZE, height: IMAGE_SIZE }).appendTo(this.$element);
+        this.$image = $("<img>").attr({
+            width: IMAGE_SIZE,
+            height: IMAGE_SIZE,
+            src: IMAGE
+        }).appendTo(this.$element);
         this.$div = $("<div>").appendTo(this.$element);
 
         this.quillMock = {
