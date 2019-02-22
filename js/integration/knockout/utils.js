@@ -10,4 +10,4 @@ const getClosestNodeWithContext = (node) => {
     return node;
 };
 
-module.exports.getClosestNodeWithContext  = getClosestNodeWithContext;
+module.exports.getClosestNodeWithContext = getClosestNodeWithContext;
