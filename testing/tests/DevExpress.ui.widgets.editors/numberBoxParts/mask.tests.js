@@ -304,7 +304,6 @@ QUnit.test("pressing minus button should revert selected number", function(asser
         value: 0
     });
 
-    this.clock.tick();
     this.keyboard.caret({ start: 0, end: 5 }).keyDown("-");
     this.clock.tick();
     assert.equal(this.input.val(), "-$ 0.00", "text is correct");
@@ -313,16 +312,11 @@ QUnit.test("pressing minus button should revert selected number", function(asser
 
 
 QUnit.test("pressing '-' should keep selection", function(assert) {
-    if(!browser.msie) {
-        this.clock.restore();
-    }
-
     this.instance.option({
         format: "#0.#",
         value: 123.456
     });
 
-    this.clock.tick();
     this.keyboard.caret({ start: 0, end: 5 }).keyDown("-");
     this.clock.tick();
     assert.equal(this.input.val(), "-123.5", "value is correct");
@@ -347,15 +341,11 @@ QUnit.test("pressing '-' should keep selection", function(assert) {
 });
 
 QUnit.test("pressing '-' correctly remove the selected part of previous value", function(assert) {
-    if(!browser.msie) {
-        this.clock.restore();
-    }
     this.instance.option({
         format: "#0.#",
         value: 123.4
     });
 
-    this.clock.tick();
     this.keyboard.caret({ start: 1, end: 3 }).keyDown("-");
     this.clock.tick();
     assert.equal(this.input.val(), "-123.4", "value is correct");
@@ -366,14 +356,10 @@ QUnit.test("pressing '-' correctly remove the selected part of previous value", 
 });
 
 QUnit.test("NumberBox keeps correct selection after revert the sign", function(assert) {
-    if(!browser.msie) {
-        this.clock.restore();
-    }
     this.instance.option({
         format: "#0.#;<<#0.#>>",
         value: 123.4
     });
-    this.clock.tick();
 
     this.keyboard.caret({ start: 1, end: 2 }).keyDown("-");
     this.clock.tick();
@@ -1591,12 +1577,12 @@ QUnit.test("moving caret to closest non stub on click - forward direction", func
     });
 
     this.input.trigger("focusin");
-    this.clock.tick(310);
+    this.clock.tick(300);
     this.keyboard.caret(0);
 
     this.input.trigger("dxclick");
 
-    this.clock.tick(310);
+    this.clock.tick(300);
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was adjusted");
 });
 
@@ -1608,7 +1594,7 @@ QUnit.test("moving caret to closest non stub on click - backward direction", fun
 
     this.keyboard.caret(2);
     this.input.trigger("dxclick");
-    this.clock.tick(310);
+    this.clock.tick(300);
 
     assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret was adjusted");
 });
@@ -1678,11 +1664,11 @@ QUnit.testInActiveWindow("caret should be at start boundary on focusin", functio
         assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
     }
 
-    this.clock.tick(310);
+    this.clock.tick(300);
     assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is right");
 });
 
-QUnit.testInActiveWindow("caret should not change position on focus after fast double click for ie", function(assert) {
+QUnit.testInActiveWindow("caret should not change position on focus after fast double click for IE", function(assert) {
     if(!browser.msie) {
         assert.expect(0);
         return;
@@ -1697,7 +1683,7 @@ QUnit.testInActiveWindow("caret should not change position on focus after fast d
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
 
     this.input.trigger("dxdblclick");
-    this.clock.tick(310);
+    this.clock.tick(300);
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret is right after focus and dblclick");
 
     this.input.trigger("focusout");
@@ -1708,7 +1694,7 @@ QUnit.testInActiveWindow("caret should not change position on focus after fast d
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
 
     this.input.trigger("dxdblclick");
-    this.clock.tick(310);
+    this.clock.tick(300);
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret is right after focus by click and dblclick");
 });
 
