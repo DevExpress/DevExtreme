@@ -391,7 +391,7 @@ var dxFunnel = {
     },
     /**
     * @name dxFunnelOptions.legend
-    * @inherits BaseLegendOptions
+    * @inherits BaseLegend
     * @type object
     */
     legend: {

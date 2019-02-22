@@ -3237,7 +3237,7 @@ var BaseChart = {
     paletteExtensionMode: 'blend',
     /**
     * @name BaseChartOptions.legend
-    * @inherits BaseLegendOptions
+    * @inherits BaseLegend
     * @type object
     */
     legend: {

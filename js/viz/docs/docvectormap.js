@@ -320,7 +320,7 @@ var dxVectorMap = {
     /**
     * @name dxVectorMapOptions.legends
     * @type Array<Object>
-    * @inherits BaseLegendOptions
+    * @inherits BaseLegend
     * @default undefined
     */
     legends: [{
