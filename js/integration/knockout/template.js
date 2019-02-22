@@ -3,7 +3,8 @@ var $ = require("../../core/renderer"),
     ko = require("knockout"),
     typeUtils = require("../../core/utils/type"),
     TemplateBase = require("../../ui/widget/ui.template_base"),
-    domUtils = require("../../core/utils/dom");
+    domUtils = require("../../core/utils/dom"),
+    getClosestNodeWithContext = require("./utils").getClosestNodeWithContext;
 
 var getParentContext = function(data) {
     var parentNode = domAdapter.createElement("div");
@@ -33,9 +34,9 @@ var KoTemplate = TemplateBase.inherit({
     _prepareDataForContainer: function(data, container) {
         if(container && container.length) {
             var containerElement = container.get(0);
-            var containerContext = ko.contextFor(containerElement);
-
-            data = data !== undefined ? data : ko.dataFor(containerElement) || {};
+            var node = getClosestNodeWithContext(containerElement);
+            var containerContext = ko.contextFor(node);
+            data = data !== undefined ? data : ko.dataFor(node) || {};
 
             if(containerContext) {
                 return (data === containerContext.$data)
