@@ -1,6 +1,6 @@
 import $ from "jquery";
 import SchedulerTimeline from "ui/scheduler/workspaces/ui.scheduler.timeline";
-import SchedulerTimelineDay from "ui/schedulerworkspaces//ui.scheduler.timeline_day";
+import SchedulerTimelineDay from "ui/scheduler/workspaces/ui.scheduler.timeline_day";
 import SchedulerTimelineWeek from "ui/scheduler/workspaces/ui.scheduler.timeline_week";
 import SchedulerTimelineWorkWeek from "ui/scheduler/workspaces/ui.scheduler.timeline_work_week";
 import SchedulerTimelineMonth from "ui/scheduler/workspaces/ui.scheduler.timeline_month";
