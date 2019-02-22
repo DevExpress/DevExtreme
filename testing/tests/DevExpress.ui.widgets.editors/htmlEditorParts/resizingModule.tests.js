@@ -6,9 +6,12 @@ import { name as clickEvent } from "events/click";
 import PointerMock from "../../../helpers/pointerMock.js";
 
 const RESIZE_FRAME_CLASS = "dx-resize-frame";
-const IMAGE_SIZE = 100;
+
 const RESIZABLE_HANDLE_RIGHT_CLASS = "dx-resizable-handle-right";
 const RESIZABLE_HANDLE_BOTTOM_CLASS = "dx-resizable-handle-bottom";
+
+const IMAGE_SIZE = 100;
+const BORDER_PADDING_WIDTH = 2;
 
 const moduleConfig = {
     beforeEach: () => {
@@ -125,12 +128,16 @@ module("Resizing module", moduleConfig, () => {
         this.attachSpies(resizingInstance);
         this.$image.trigger(clickEvent);
 
+        const frameClientRect = $resizeFrame
+            .get(0)
+            .getBoundingClientRect();
+
         assert.ok(resizingInstance._$target, "There is active target");
         assert.ok(this.updateFrameSpy.calledOnce, "Frame has been updated");
         assert.ok(this.showFrameSpy.calledOnce, "Frame has been shown");
         assert.ok($resizeFrame.is(":visible"), "Frame element is visible");
-        assert.strictEqual($resizeFrame.width(), IMAGE_SIZE, "Frame has a correct width");
-        assert.strictEqual($resizeFrame.height(), IMAGE_SIZE, "Frame has a correct height");
+        assert.strictEqual(frameClientRect.width, IMAGE_SIZE + BORDER_PADDING_WIDTH * 2, "Frame has a correct width");
+        assert.strictEqual(frameClientRect.height, IMAGE_SIZE + BORDER_PADDING_WIDTH * 2, "Frame has a correct height");
     });
 
     test("click on an div with enabled resizing", (assert) => {
@@ -238,8 +245,12 @@ module("Resizing module", moduleConfig, () => {
             .drag(0, 5)
             .dragEnd();
 
-        assert.strictEqual(this.$image.height(), IMAGE_SIZE + 5, "Image height has been increased");
-        assert.strictEqual(this.$image.width(), IMAGE_SIZE + 10, "Image width has been increased");
+        const imageClientRect = this.$image
+            .get(0)
+            .getBoundingClientRect();
+
+        assert.strictEqual(imageClientRect.height, IMAGE_SIZE + 5, "Image height has been increased");
+        assert.strictEqual(imageClientRect.width, IMAGE_SIZE + 10, "Image width has been increased");
     });
 
     test("check frame position", (assert) => {
@@ -248,15 +259,16 @@ module("Resizing module", moduleConfig, () => {
 
         this.$image.trigger(clickEvent);
 
-        const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
-        const frameTop = parseInt($resizeFrame.css("top"));
-        const frameLeft = parseInt($resizeFrame.css("left"));
-        const imageOffset = this.$image.offset();
-        const frameOffset = $resizeFrame.offset();
+        const frameClientRect = this.$element
+            .find(`.${RESIZE_FRAME_CLASS}`)
+            .get(0)
+            .getBoundingClientRect();
 
-        frameOffset.left -= frameLeft;
-        frameOffset.top -= frameTop;
+        const imageClientRect = this.$image
+            .get(0)
+            .getBoundingClientRect();
 
-        assert.deepEqual(frameOffset, imageOffset, "Frame positioned correctly");
+        assert.strictEqual(frameClientRect.left + BORDER_PADDING_WIDTH, imageClientRect.left, "Frame positioned correctly by the left");
+        assert.strictEqual(frameClientRect.top + BORDER_PADDING_WIDTH, imageClientRect.top, "Frame positioned correctly by the top");
     });
 });
