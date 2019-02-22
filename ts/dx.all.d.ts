@@ -853,6 +853,8 @@ declare module DevExpress {
         static exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number }): void;
         static exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void;
         static exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: string, backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function }): void;
+        static generateColors(palette: string, count: number, options: { paletteExtensionMode?: string, baseColorSet?: string }): Array<string>;
+        static generateColors(palette: Array<string>, count: number, options: { paletteExtensionMode?: string, baseColorSet?: string }): Array<string>;
         /** Gets the SVG markup of specific widgets for their subsequent export. */
         static getMarkup(widgetInstances: Array<DOMComponent>): string;
         /** Gets the color sets of a predefined or registered palette. */
