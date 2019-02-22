@@ -136,9 +136,6 @@ const ButtonGroup = Widget.inherit({
         const items = this.option("items");
         items && itemIndex === items.length - 1 && $item.addClass(BUTTON_GROUP_LAST_ITEM_CLASS);
 
-        const width = this.option("width");
-        isDefined(width) && $item.addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
-
         $item.addClass(SHAPE_STANDARD_CLASS);
     },
 
@@ -214,7 +211,11 @@ const ButtonGroup = Widget.inherit({
             tabIndex: this.option("tabIndex"),
             noDataText: "",
             selectionRequired: this.option("selectionMode") === "single",
-            onSelectionChanged: (e) => {
+            onItemRendered: e => {
+                const width = this.option("width");
+                isDefined(width) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
+            },
+            onSelectionChanged: e => {
                 this._syncSelectionOptions();
                 this._fireSelectionChangeEvent(e.addedItems, e.removedItems);
             }
