@@ -11,12 +11,12 @@ var SCHEDULER_DATE_TIME_SHADER_CLASS = "dx-scheduler-date-time-shader",
 require("common.css!");
 require("generic_light.css!");
 
-require("ui/scheduler/ui.scheduler.work_space_day");
-require("ui/scheduler/ui.scheduler.work_space_week");
-require("ui/scheduler/ui.scheduler.timeline_day"),
-require("ui/scheduler/ui.scheduler.timeline_week"),
-require("ui/scheduler/ui.scheduler.timeline_work_week"),
-require("ui/scheduler/ui.scheduler.timeline_month"),
+require("ui/scheduler/workspaces/ui.scheduler.work_space_day");
+require("ui/scheduler/workspaces/ui.scheduler.work_space_week");
+require("ui/scheduler/workspaces/ui.scheduler.timeline_day"),
+require("ui/scheduler/workspaces/ui.scheduler.timeline_week"),
+require("ui/scheduler/workspaces/ui.scheduler.timeline_work_week"),
+require("ui/scheduler/workspaces/ui.scheduler.timeline_month"),
 QUnit.testStart(function() {
     $("#qunit-fixture").html('</div><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space">');
 });

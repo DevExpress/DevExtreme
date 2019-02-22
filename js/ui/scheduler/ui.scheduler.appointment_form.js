@@ -7,7 +7,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine");
 
 require("./ui.scheduler.recurrence_editor");
-require("./ui.scheduler.timezone_editor");
+require("./timezones/ui.scheduler.timezone_editor");
 require("../text_area");
 require("../tag_box");
 

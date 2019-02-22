@@ -16,10 +16,10 @@ var $ = require("jquery"),
 require("common.css!");
 require("generic_light.css!");
 
-require("ui/scheduler/ui.scheduler.work_space_day");
-require("ui/scheduler/ui.scheduler.work_space_week");
-require("ui/scheduler/ui.scheduler.work_space_work_week");
-require("ui/scheduler/ui.scheduler.work_space_month");
+require("ui/scheduler/workspaces/ui.scheduler.work_space_day");
+require("ui/scheduler/workspaces/ui.scheduler.work_space_week");
+require("ui/scheduler/workspaces/ui.scheduler.work_space_work_week");
+require("ui/scheduler/workspaces/ui.scheduler.work_space_month");
 
 var CELL_CLASS = "dx-scheduler-date-table-cell",
     DROPPABLE_CELL_CLASS = "dx-scheduler-date-table-droppable-cell",
