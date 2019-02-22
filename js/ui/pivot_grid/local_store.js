@@ -121,7 +121,7 @@ exports.LocalStore = Class.inherit((function() {
 
         if(dimension) {
             dimensionValue = dimension.selector(options.data);
-            pathHash = pathHash !== undefined ? pathHash + "." + dimensionValue : dimensionValue + "";
+            pathHash = pathHash !== undefined ? pathHash + "/./" + dimensionValue : dimensionValue + "";
 
             hierarchyItem = addHierarchyItem(dimensionValue, children, pathHash, options.childrenHash);
 
@@ -176,7 +176,7 @@ exports.LocalStore = Class.inherit((function() {
         if(expandedPaths) {
             var hash = expandedPaths.hash = {};
             expandedPaths.forEach(function(path) {
-                var pathValue = path.map(function(value) { return value + ""; }).join(".");
+                var pathValue = path.map(function(value) { return value + ""; }).join("/./");
                 hash[pathValue] = true;
             });
         }
