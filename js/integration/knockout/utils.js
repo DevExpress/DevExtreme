@@ -1,7 +1,7 @@
 
 const ko = require("knockout");
 
-const getNodeWithContext = (node) => {
+const getClosestNodeWithContext = (node) => {
     var context = ko.contextFor(node);
     if(!context && node.parentNode) {
         return getNodeWithContext(node.parentNode);
