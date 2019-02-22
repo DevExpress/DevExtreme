@@ -1,13 +1,13 @@
 import $ from "jquery";
-import SchedulerTimeline from "ui/scheduler/ui.scheduler.timeline";
-import SchedulerTimelineDay from "ui/scheduler/ui.scheduler.timeline_day";
-import SchedulerTimelineWeek from "ui/scheduler/ui.scheduler.timeline_week";
-import SchedulerTimelineWorkWeek from "ui/scheduler/ui.scheduler.timeline_work_week";
-import SchedulerTimelineMonth from "ui/scheduler/ui.scheduler.timeline_month";
+import SchedulerTimeline from "ui/scheduler/workspaces/ui.scheduler.timeline";
+import SchedulerTimelineDay from "ui/scheduler/workspaces/ui.scheduler.timeline_day";
+import SchedulerTimelineWeek from "ui/scheduler/workspaces/ui.scheduler.timeline_week";
+import SchedulerTimelineWorkWeek from "ui/scheduler/workspaces/ui.scheduler.timeline_work_week";
+import SchedulerTimelineMonth from "ui/scheduler/workspaces/ui.scheduler.timeline_month";
 import dataUtils from "core/element_data";
 import dateLocalization from "localization/date";
-import SchedulerWorkSpaceVerticalStrategy from "ui/scheduler/ui.scheduler.work_space.grouped.strategy.vertical";
-import SchedulerWorkSpaceHorizontalStrategy from "ui/scheduler/ui.scheduler.work_space.grouped.strategy.horizontal";
+import SchedulerWorkSpaceVerticalStrategy from "ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.vertical";
+import SchedulerWorkSpaceHorizontalStrategy from "ui/scheduler/workspaces/ui.scheduler.work_space.grouped.strategy.horizontal";
 import SchedulerResourcesManager from "ui/scheduler/ui.scheduler.resource_manager";
 import "ui/scheduler/ui.scheduler";
 

@@ -1,6 +1,6 @@
 var HorizontalAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal"),
-    dateUtils = require("../../core/utils/date"),
-    query = require("../../data/query");
+    dateUtils = require("../../../core/utils/date"),
+    query = require("../../../data/query");
 
 var HOURS_IN_DAY = 24,
     MINUTES_IN_HOUR = 60,
