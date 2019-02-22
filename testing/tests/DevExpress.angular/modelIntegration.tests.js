@@ -1,13 +1,13 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    angular = require("angular"),
-    registerComponent = require("core/component_registrator"),
-    Widget = require("ui/widget/ui.widget"),
-    Editor = require("ui/editor/editor"),
-    inflector = require("core/utils/inflector");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import angular from "angular";
+import registerComponent from "core/component_registrator";
+import Widget from "ui/widget/ui.widget";
+import Editor from "ui/editor/editor";
+import inflector from "core/utils/inflector";
 
-require("ui/tag_box");
-require("integration/angular");
+import "ui/tag_box";
+import "integration/angular";
 
 var ignoreAngularBrowserDeferTimer = function(args) {
     return args.timerType === "timeouts" && (args.callback.toString().indexOf("delete pendingDeferIds[timeoutId];") > -1 || args.callback.toString().indexOf("delete F[c];e(a)}") > -1);
