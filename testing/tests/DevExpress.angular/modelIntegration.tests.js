@@ -9,12 +9,12 @@ import inflector from "core/utils/inflector";
 import "ui/tag_box";
 import "integration/angular";
 
-var ignoreAngularBrowserDeferTimer = function(args) {
+var ignoreAngularBrowserDeferTimer = args => {
     return args.timerType === "timeouts" && (args.callback.toString().indexOf("delete pendingDeferIds[timeoutId];") > -1 || args.callback.toString().indexOf("delete F[c];e(a)}") > -1);
 };
 
 QUnit.module("ngmodel editor integration", {
-    beforeEach: function() {
+    beforeEach() {
         this.app = angular.module("app", ["dx"]);
         this.$fixtureElement = $("<div/>").attr("ng-app", "testApp").appendTo("#qunit-fixture");
         this.$container = $("<div/>").appendTo(this.$fixtureElement);
@@ -25,7 +25,7 @@ QUnit.module("ngmodel editor integration", {
         registerComponent("dxEditor", Editor.inherit({}));
 
         var MultiEditor = Editor.inherit({
-            _setDefaultOptions: function() {
+            _setDefaultOptions() {
                 this.callBase();
 
                 this.option({
@@ -44,7 +44,7 @@ QUnit.module("ngmodel editor integration", {
 
         QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
     },
-    afterEach: function() {
+    afterEach() {
         this.$fixtureElement.remove();
 
         QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
@@ -57,7 +57,7 @@ QUnit.test("ngmodel should pass current value to editor at initialization", func
         .attr("ng-model", "value")
         .appendTo(this.$controller);
 
-    this.app.controller("my-controller", ["$scope", function($scope) {
+    this.app.controller("my-controller", ["$scope", $scope => {
         $scope.value = "test";
     }]);
 
@@ -72,7 +72,7 @@ QUnit.test("ng-model-controller should be pristine at initialization", function(
         .attr("ng-model", "value")
         .appendTo(this.$controller);
 
-    this.app.controller("my-controller", ["$scope", function($scope) {
+    this.app.controller("my-controller", ["$scope", $scope => {
         $scope.value = "test";
     }]);
 
@@ -87,14 +87,14 @@ QUnit.test("ngmodel should pass value to editor if it's changed at runtime", fun
         .attr("ng-model", "value")
         .appendTo(this.$controller);
 
-    this.app.controller("my-controller", ["$scope", function($scope) {
+    this.app.controller("my-controller", ["$scope", $scope => {
         $scope.value = "test";
     }]);
 
     angular.bootstrap(this.$container, ["app"]);
 
     var scope = $markup.scope();
-    scope.$apply(function() {
+    scope.$apply(() => {
         scope.value = "newTest";
     });
 
@@ -107,7 +107,7 @@ QUnit.test("ngmodel should pass value to editor if it's changed", function(asser
         .attr("ng-model", "value")
         .appendTo(this.$controller);
 
-    this.app.controller("my-controller", ["$scope", function($scope) {
+    this.app.controller("my-controller", ["$scope", $scope => {
         $scope.value = "test";
     }]);
 
@@ -115,7 +115,7 @@ QUnit.test("ngmodel should pass value to editor if it's changed", function(asser
 
     var scope = $markup.scope();
 
-    scope.$apply(function() {
+    scope.$apply(() => {
         scope.value = "newTest";
     });
 
@@ -128,14 +128,14 @@ QUnit.test("ngmodel should pass complex value to editor if it's changed at runti
         .attr("ng-model", "value")
         .appendTo(this.$controller);
 
-    this.app.controller("my-controller", ["$scope", function($scope) {
+    this.app.controller("my-controller", ["$scope", $scope => {
         $scope.value = [{ a: 'a' }, { a: 'a' }];
     }]);
 
     angular.bootstrap(this.$container, ["app"]);
 
     var scope = $markup.scope();
-    scope.$apply(function() {
+    scope.$apply(() => {
         scope.value[0].a = 'b';
     });
 
@@ -148,7 +148,7 @@ QUnit.test("watchers should be removed on disposing", function(assert) {
         .attr("ng-model", "value")
         .appendTo(this.$controller);
 
-    this.app.controller("my-controller", ["$scope", function($scope) {
+    this.app.controller("my-controller", ["$scope", $scope => {
         $scope.value = "test";
     }]);
 
@@ -167,7 +167,7 @@ QUnit.test("editor should pass value to ngmodel if it's changed at runtime", fun
         .attr("ng-model", "value")
         .appendTo(this.$controller);
 
-    this.app.controller("my-controller", ["$scope", function($scope) {
+    this.app.controller("my-controller", ["$scope", $scope => {
         $scope.value = "test";
     }]);
 
@@ -185,7 +185,7 @@ QUnit.test("changing value from editor should set ngmodel dirty", function(asser
         .attr("ng-model", "value")
         .appendTo(this.$controller);
 
-    this.app.controller("my-controller", ["$scope", function($scope) {
+    this.app.controller("my-controller", ["$scope", $scope => {
         $scope.value = "test";
     }]);
 
@@ -195,13 +195,13 @@ QUnit.test("changing value from editor should set ngmodel dirty", function(asser
     assert.equal($markup.controller("ngModel").$dirty, true, "model is dirty");
 });
 
-$.each(["dxTagBox"/* , "dxFileUploader" */], function(_, widgetName) {
+$.each(["dxTagBox"/* , "dxFileUploader" */], (_, widgetName) => {
     QUnit.test("ngmodel should be bound with values option for " + widgetName, function(assert) {
         var $markup = $("<div></div>")
             .attr(inflector.dasherize(widgetName), "{bindingOptions: {values: 'value'}}")
             .appendTo(this.$controller);
 
-        this.app.controller("my-controller", ["$scope", function($scope) {
+        this.app.controller("my-controller", ["$scope", $scope => {
             $scope.value = [1];
         }]);
 
@@ -209,7 +209,7 @@ $.each(["dxTagBox"/* , "dxFileUploader" */], function(_, widgetName) {
         assert.deepEqual($markup[widgetName]("option", "values"), [1], "value passed correctly");
 
         var scope = $markup.scope();
-        scope.$apply(function() {
+        scope.$apply(() => {
             scope.value = [1, 2];
         });
         assert.deepEqual($markup[widgetName]("option", "values"), [1, 2], "value passed correctly");
@@ -226,7 +226,7 @@ QUnit.test("ngmodel should not bind value option to widget", function(assert) {
         .attr("ng-model", "value")
         .appendTo(this.$controller);
 
-    this.app.controller("my-controller", ["$scope", function($scope) {
+    this.app.controller("my-controller", ["$scope", $scope => {
         $scope.value = "test";
     }]);
 
@@ -234,7 +234,7 @@ QUnit.test("ngmodel should not bind value option to widget", function(assert) {
     assert.equal($markup.dxWidget("option", "value"), undefined, "value passed correctly");
 
     var scope = $markup.scope();
-    scope.$apply(function() {
+    scope.$apply(() => {
         scope.value = "newTest";
     });
     assert.equal($markup.dxWidget("option", "value"), undefined, "value passed correctly");
@@ -256,7 +256,7 @@ QUnit.test("optionChanged should fired once when value is a plain object and use
 
     var spy = sinon.spy();
 
-    this.app.controller("my-controller", ["$scope", function($scope) {
+    this.app.controller("my-controller", ["$scope", $scope => {
         $scope.value = { value: 1 };
         $scope.optionChangedHandler = spy;
     }]);
@@ -275,9 +275,9 @@ QUnit.test("optionChanged should fired once when value is a plain object and use
 QUnit.test("editor without ng model should not fail", function(assert) {
     assert.expect(0);
 
-    this.app.config(function($provide) {
-        $provide.decorator("$exceptionHandler", ['$delegate', function($delegate) {
-            return function(exception, cause) {
+    this.app.config($provide => {
+        $provide.decorator("$exceptionHandler", ['$delegate', $delegate => {
+            return (exception, cause) => {
                 $delegate(exception, cause);
                 assert.ok(false, "error caught");
             };
@@ -301,7 +301,7 @@ QUnit.test("editor with ng model and bindingOptions should not fail (T540101)", 
         .attr("ng-model", "value")
         .appendTo(this.$controller);
 
-    this.app.controller("my-controller", ["$scope", function($scope) {
+    this.app.controller("my-controller", ["$scope", $scope => {
         $scope.value;
         $scope.editorOptions = {
             bindingOptions: {
