@@ -33,6 +33,11 @@ QUnit.module("ngmodel editor integration", {
                 });
             }
         });
+
+        class TestEditor extends Editor {}
+
+        registerComponent("dxTestEditor", TestEditor);
+
         registerComponent("dxMultiEditor", MultiEditor);
 
         registerComponent("dxWidget", Widget);
@@ -94,6 +99,27 @@ QUnit.test("ngmodel should pass value to editor if it's changed at runtime", fun
     });
 
     assert.equal($markup.dxEditor("option", "value"), "newTest", "value passed correctly");
+});
+
+QUnit.test("ngmodel should pass value to editor if it's changed", function(assert) {
+    var $markup = $("<div></div>")
+        .attr("dx-test-editor", "{}")
+        .attr("ng-model", "value")
+        .appendTo(this.$controller);
+
+    this.app.controller("my-controller", ["$scope", function($scope) {
+        $scope.value = "test";
+    }]);
+
+    angular.bootstrap(this.$container, ["app"]);
+
+    var scope = $markup.scope();
+
+    scope.$apply(function() {
+        scope.value = "newTest";
+    });
+
+    assert.equal($markup.dxTestEditor("option", "value"), "newTest", "value passed correctly");
 });
 
 QUnit.test("ngmodel should pass complex value to editor if it's changed at runtime", function(assert) {
