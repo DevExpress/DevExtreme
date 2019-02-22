@@ -747,12 +747,11 @@
                     }
                 }
                 & > td,
-                & > tr > td {
+                & > tr:last-child > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
                 }
                 &:not(.dx-row-lines) {
-                    & > td,
-                    & > tr > td {
+                    & > td, & > tr:first-child > td {
                         border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
                     }
                 }
