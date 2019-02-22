@@ -36,7 +36,7 @@ var KoTemplate = TemplateBase.inherit({
             var containerElement = container.get(0);
             var node = getClosestNodeWithContext(containerElement);
             var containerContext = ko.contextFor(node);
-            data = data !== undefined ? data : ko.dataFor(node) || {};
+            data = data === undefined ? ko.dataFor(node) : data || {};
 
             if(containerContext) {
                 return (data === containerContext.$data)
