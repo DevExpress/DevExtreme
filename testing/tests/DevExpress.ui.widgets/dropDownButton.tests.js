@@ -85,7 +85,7 @@ QUnit.module("list integration", {}, () => {
 
         assert.strictEqual($listItem.text(), "Item 1", "displayExpr works");
         assert.strictEqual(list.option("keyExpr"), "key", "valueExpr works");
-        // assert.strictEqual($listItem.find(".dx-icon-box").length, 1, "item icon works");
+        assert.strictEqual($listItem.find(".dx-icon-box").length, 1, "item icon works");
     });
 
     QUnit.test("some options should be transfered to the list", assert => {

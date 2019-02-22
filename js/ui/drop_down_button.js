@@ -20,7 +20,7 @@ const DROP_DOWN_BUTTON_CONTENT = "dx-dropdown-button-content";
 
 let DropDownButton = Widget.inherit({
 
-    _getDefaultOptions: function() {
+    _getDefaultOptions() {
         return extend(this.callBase(), DataExpressionMixin._dataExpressionDefaultOptions(), {
             deferRendering: true,
             showEvent: "click",
@@ -91,7 +91,7 @@ let DropDownButton = Widget.inherit({
         }, this.option("dropDownOptions"));
     },
 
-    _getListSelectionMode: function() {
+    _getListSelectionMode() {
         return this.option("showSelectedItem") ? "single" : "none";
     },
 
@@ -114,7 +114,6 @@ let DropDownButton = Widget.inherit({
     },
 
     _renderPopup() {
-        this._popup && this._popup.$element().remove();
         this._popup = this._createComponent($("<div>"), Popover, this._popupOptions());
         this.$element().append(this._popup.$element());
     },
@@ -149,11 +148,15 @@ let DropDownButton = Widget.inherit({
         this._list && this._list.option(name, value);
     },
 
-    _setCollectionWidgetOption: function() {
+    _setCollectionWidgetOption() {
         this._setListOption.apply(this, arguments);
     },
 
-    _optionChanged: function(args) {
+    _clean() {
+        this._popup && this._popup.$element().remove();
+    },
+
+    _optionChanged(args) {
         this._dataExpressionOptionChanged(args);
         switch(args.name) {
             case "items":
@@ -173,7 +176,9 @@ let DropDownButton = Widget.inherit({
                 this._setListOption("selectionMode", this._getListSelectionMode());
                 break;
             case "deferRendering":
-                if(!args.value && !this._popup) this._renderPopup();
+                if(!args.value && !this._popup) {
+                    this._renderPopup();
+                }
                 break;
             case "value":
                 this._setListOption("selectedItemKeys", [args.value]);
