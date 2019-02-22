@@ -3,7 +3,7 @@ require("generic_light.css!");
 
 var $ = require("jquery"),
     devices = require("core/devices"),
-    SchedulerTimezoneEditor = require("ui/scheduler/ui.scheduler.timezone_editor"),
+    SchedulerTimezoneEditor = require("ui/scheduler/timezones/ui.scheduler.timezone_editor"),
     fx = require("animation/fx"),
     DataSource = require("data/data_source/data_source").DataSource;
 

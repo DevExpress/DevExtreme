@@ -1,4 +1,4 @@
-var Class = require("../../core/class"),
+var Class = require("../../../core/class"),
     abstract = Class.abstract;
 
 var LAST_GROUP_CELL_CLASS = "dx-scheduler-last-group-cell",

@@ -9,7 +9,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     dateLocalization = require("../../localization/date"),
-    SchedulerTimezones = require("./ui.scheduler.timezones"),
+    SchedulerTimezones = require("./timezones/ui.scheduler.timezones"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
 var MINUTES_IN_HOUR = 60;
