@@ -368,6 +368,8 @@ var dxPieChart = BaseChart.inherit({
 
     _updateLegendPosition: _noop,
 
+    _applyPointMarkersAutoHiding: _noop,
+
     _renderTrackers: _noop,
 
     _trackerType: "PieTracker",

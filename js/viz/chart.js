@@ -12,6 +12,7 @@ var noop = require("../core/utils/common").noop,
     AdvancedChart = require("./chart_components/advanced_chart").AdvancedChart,
     scrollBarModule = require("./chart_components/scroll_bar"),
     crosshairModule = require("./chart_components/crosshair"),
+    rangeCalculator = require("./series/helpers/range_data_calculator"),
     rangeModule = require("./translators/range"),
     DEFAULT_PANE_NAME = "default",
     DEFAULT_PANES = [{
@@ -723,6 +724,119 @@ var dxChart = AdvancedChart.inherit({
     _renderScaleBreaks: function() {
         this._valueAxes.concat(this._argumentAxes).forEach(function(axis) {
             axis.drawScaleBreaks();
+        });
+    },
+
+    _applyPointMarkersAutoHiding() {
+        const that = this;
+        if(!that._themeManager.getOptions("autoHidePointMarkers")) {
+            that.series.forEach(s => s.autoHidePointMarkers = false);
+            return;
+        }
+
+        that.panes.forEach(pane => {
+            const series = that.series.filter(s => s.pane === pane.name && s.usePointsToDefineAutoHiding());
+            const argAxis = that.getArgumentAxis();
+            const argVisualRange = argAxis.visualRange();
+            const argTranslator = argAxis.getTranslator();
+            const argAxisType = argAxis.getOptions().type;
+            const argViewPortFilter = rangeCalculator.getViewPortFilter(argVisualRange || {});
+            let points = [];
+            const overloadedSeries = {};
+
+            series.forEach(s => {
+                const valAxis = s.getValueAxis();
+                const valVisualRange = valAxis.visualRange();
+                const valTranslator = valAxis.getTranslator();
+                const seriesIndex = that.series.indexOf(s);
+                const valViewPortFilter = rangeCalculator.getViewPortFilter(valVisualRange || {});
+
+                overloadedSeries[seriesIndex] = {};
+                series.forEach(sr => overloadedSeries[seriesIndex][that.series.indexOf(sr)] = 0);
+                const seriesPoints = [];
+
+                s.getPoints().filter(p => {
+                    return p.getOptions().visible && argViewPortFilter(p.argument) &&
+                        (valViewPortFilter(p.getMinValue(true)) || valViewPortFilter(p.getMaxValue(true)));
+                }).forEach(p => {
+                    const tp = {
+                        seriesIndex: seriesIndex,
+                        argument: p.argument,
+                        value: p.getMaxValue(true),
+                        size: p.bubbleSize || p.getOptions().size
+                    };
+                    if(p.getMinValue(true) !== p.getMaxValue(true)) {
+                        const mp = _extend({}, tp);
+                        mp.value = p.getMinValue(true);
+                        mp.x = argTranslator.to(mp.argument, 1);
+                        mp.y = valTranslator.to(mp.value, 1);
+                        seriesPoints.push(mp);
+                    }
+                    tp.x = argTranslator.to(tp.argument, 1);
+                    tp.y = valTranslator.to(tp.value, 1);
+                    seriesPoints.push(tp);
+                });
+
+                overloadedSeries[seriesIndex].pointsCount = seriesPoints.length;
+                overloadedSeries[seriesIndex].total = 0;
+                points = points.concat(seriesPoints);
+            });
+
+            const sortingCallback = argAxisType === "discrete" ?
+                (p1, p2) => argVisualRange.categories.indexOf(p1.argument) - argVisualRange.categories.indexOf(p2.argument) :
+                (p1, p2) => p1.argument - p2.argument;
+            points.sort(sortingCallback);
+
+            for(let i = 0; i < points.length; i++) {
+                const curPoint = points[i];
+                const size = curPoint.size;
+                const distance = i + 1 > points.length - i - 1 ? i + 1 : points.length - i;
+                if(_isDefined(curPoint.x) && _isDefined(curPoint.y)) {
+                    for(let j = 1; j < distance; j++) {
+                        const prevPoint = points[i - j];
+                        const nextPoint = points[i + j];
+                        const prev_x = _isDefined(prevPoint) ? prevPoint.x : null;
+                        const prev_y = _isDefined(prevPoint) ? prevPoint.y : null;
+                        const next_x = _isDefined(nextPoint) ? nextPoint.x : null;
+                        const next_y = _isDefined(nextPoint) ? nextPoint.y : null;
+
+                        if((!_isDefined(prev_x) || Math.abs(curPoint.x - prev_x) >= size) && (!_isDefined(next_x) || Math.abs(curPoint.x - next_x) >= size)) {
+                            break;
+                        } else {
+                            if(_isDefined(prev_x) && _isDefined(prev_y) && Math.sqrt(Math.pow(curPoint.x - prev_x, 2) + Math.pow(curPoint.y - prev_y, 2)) < size) {
+                                overloadedSeries[curPoint.seriesIndex][prevPoint.seriesIndex]++;
+                                overloadedSeries[curPoint.seriesIndex].total++;
+                            }
+                            if(_isDefined(next_x) && _isDefined(next_y) && Math.sqrt(Math.pow(curPoint.x - next_x, 2) + Math.pow(curPoint.y - next_y, 2)) < size) {
+                                overloadedSeries[curPoint.seriesIndex][nextPoint.seriesIndex]++;
+                                overloadedSeries[curPoint.seriesIndex].total++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            series.forEach(s => {
+                const seriesIndex = that.series.indexOf(s);
+                s.autoHidePointMarkers = false;
+                if(s.autoHidePointMarkersEnabled() && (argAxisType === "discrete" || overloadedSeries[seriesIndex].pointsCount > argAxis.getTicksValues().majorTicksValues.length)) {
+                    for(let index in overloadedSeries[seriesIndex]) {
+                        const i = parseInt(index);
+                        if(isNaN(i)) {
+                            continue;
+                        }
+                        if(i === seriesIndex) {
+                            if(overloadedSeries[i][i] >= overloadedSeries[i].pointsCount) {
+                                s.autoHidePointMarkers = true;
+                                break;
+                            }
+                        } else if(overloadedSeries[seriesIndex].total >= overloadedSeries[seriesIndex].pointsCount * 2) {
+                            s.autoHidePointMarkers = true;
+                            break;
+                        }
+                    }
+                }
+            });
         });
     },
 
