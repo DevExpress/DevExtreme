@@ -562,7 +562,7 @@ module.exports = {
 
                     when(this._columnsController.refresh(true)).always(function() {
                         if(dataSource) {
-                            that._operationId = dataSource.load().done(result.resolve).fail(result.reject).operationId;
+                            dataSource.load().done(result.resolve).fail(result.reject);
                         } else {
                             result.resolve();
                         }
@@ -1112,7 +1112,7 @@ module.exports = {
                         oldDataSource.loadError.remove(that._loadErrorHandler);
                         oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
                         oldDataSource.changing.remove(that._changingHandler);
-                        oldDataSource.cancel(that._operationId);
+                        oldDataSource.cancelAll();
                         oldDataSource.dispose(that._isSharedDataSource);
                     }
 

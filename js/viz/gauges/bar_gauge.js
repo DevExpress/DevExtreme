@@ -190,7 +190,9 @@ var dxBarGauge = dxBaseGauge.inherit({
             radius = that._outerRadius - that._innerRadius,
             context = that._context,
             spacing,
-            unitOffset;
+            colors,
+            unitOffset,
+            i;
 
         const count = that._bars.length;
 
@@ -203,10 +205,11 @@ var dxBarGauge = dxBaseGauge.inherit({
         context.textRadius = radius + that._textIndent;
         that._palette.reset();
         unitOffset = context.barSize + spacing;
-
-        for(let i = 0; i < _count; ++i, radius -= unitOffset) {
+        colors = that._palette.generateColors(_count);
+        for(i = 0; i < _count; ++i, radius -= unitOffset) {
             that._bars[i].arrange({
-                radius: radius
+                radius: radius,
+                color: colors[i]
             });
         }
 

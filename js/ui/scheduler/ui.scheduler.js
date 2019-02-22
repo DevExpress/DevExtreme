@@ -152,6 +152,7 @@ var Scheduler = Widget.inherit({
                 * @default "appointmentTooltip"
                 * @type_function_param1 appointmentData:object
                 * @type_function_param2 contentElement:dxElement
+                * @type_function_param3 targetedAppointmentData:object
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -416,7 +417,8 @@ var Scheduler = Widget.inherit({
 
                 /**
                     * @name dxSchedulerOptions.resources.displayExpr
-                    * @type string|function
+                    * @type string|function(resource)
+                    * @type_function_param1 resource:object
                     * @default 'text'
                     */
 
@@ -889,7 +891,6 @@ var Scheduler = Widget.inherit({
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
             allowMultipleCellSelection: true,
-            displayedAppointmentDataField: null,
 
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: "bottom",
@@ -1349,8 +1350,6 @@ var Scheduler = Widget.inherit({
             case "dateSerializationFormat":
                 break;
             case "maxAppointmentsPerCell":
-                break;
-            case "displayedAppointmentDataField":
                 break;
             case "startDateExpr":
             case "endDateExpr":
@@ -2624,6 +2623,14 @@ var Scheduler = Widget.inherit({
 
     _needUpdateAppointmentData: function($appointment) {
         return $appointment.hasClass("dx-scheduler-appointment-compact") || $appointment.hasClass("dx-scheduler-appointment-recurrence");
+    },
+
+    _getNormalizedTemplateArgs: function(options) {
+        var args = this.callBase(options);
+        if("targetedAppointmentData" in options) {
+            args.push(options.targetedAppointmentData);
+        }
+        return args;
     },
 
     subscribe: function(subject, action) {

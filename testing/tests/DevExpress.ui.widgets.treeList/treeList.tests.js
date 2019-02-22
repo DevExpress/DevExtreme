@@ -17,6 +17,8 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import fx from 'animation/fx';
+import { DataSource } from "data/data_source/data_source";
+
 
 fx.off = true;
 
@@ -1067,4 +1069,41 @@ QUnit.test("TreeList navigateTo", function(assert) {
     // assert
     assert.equal(treeList.pageIndex(), 1, "page is changed");
     assert.ok(treeList.getRowIndexByKey(12) >= 0, "key is visible");
+});
+
+// T697860
+QUnit.test("dataSource change with columns should force one loading only", function(assert) {
+    var loadingSpy = sinon.spy();
+
+    var options = {
+        dataSource: new DataSource({
+            load: function() {
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve([{ id: 1 }, { id: 2 }, { id: 3 }]);
+                });
+
+                return d;
+            }
+        }),
+        paging: {
+            pageSize: 2
+        },
+        columns: ["id"]
+    };
+
+    var treeList = createTreeList(options);
+
+    this.clock.tick(0);
+
+    options.dataSource.store().on("loading", loadingSpy);
+
+    // act
+    treeList.option(options);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(loadingSpy.callCount, 1, "loading called once");
+    assert.equal(treeList.getVisibleRows().length, 3, "visible row count");
 });

@@ -76,6 +76,11 @@
  */
 
 /**
+ * @typedef {string} Enums.VizPaletteColorSet
+ * @enum {'simpleSet'|'indicatingSet'|'gradientSet'}
+ */
+
+/**
  * @typedef {string} Enums.CircularGaugeElementOrientation
  * @enum {'center'|'inside'|'outside'}
  */

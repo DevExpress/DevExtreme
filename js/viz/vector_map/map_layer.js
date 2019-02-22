@@ -548,11 +548,9 @@ strategiesByElementType[TYPE_MARKER] = {
                 }
             }
             if(count > 0) {
-                values = [];
                 palette = context.params.themeManager.createPalette(context.settings.palette, { useHighlight: true, extensionMode: "alternate" });
-                for(i = 0; i < count; ++i) {
-                    values.push(palette.getNextColor());
-                }
+                values = palette.generateColors(count);
+
                 context.settings._colors = values;
                 context.grouping.color = { callback: _noop, field: "", partition: [], values: [] };
                 context.params.dataExchanger.set(context.name, "color", { partition: [], values: values });

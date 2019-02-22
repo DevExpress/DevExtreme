@@ -7498,6 +7498,36 @@ QUnit.test("dataSource change with selection", function(assert) {
     assert.equal(dataGrid.columnCount(), 3, "columnCount after change dataSource");
 });
 
+// T697860
+QUnit.test("dataSource change with grouping and columns should force one loading only", function(assert) {
+    // arrange, act
+    var loadingSpy = sinon.spy();
+
+    var options = {
+        dataSource: new DataSource([{ field1: 1 }]),
+        columns: ["field1"]
+    };
+
+    var dataGrid = createDataGrid(options);
+
+    this.clock.tick(0);
+
+    options.dataSource.store().on("loading", loadingSpy);
+
+    // act
+    options.dataSource = new DataSource([{ field1: 2 }]);
+    options.dataSource.store().on("loading", loadingSpy);
+    options.grouping = {};
+    options.paging = {};
+
+    dataGrid.option(options);
+    this.clock.tick(0);
+
+    // assert
+    assert.equal(loadingSpy.callCount, 1, "loading called once");
+    assert.deepEqual(dataGrid.getVisibleRows()[0].data, { field1: 2 }, "data is updated");
+});
+
 QUnit.test("Selection changed handler do not try to get dxCheckBox instance when selection mode is single (T237209)", function(assert) {
     // arrange, act
     var dataGrid = createDataGrid({
@@ -13924,6 +13954,52 @@ QUnit.test("Pressing arrow keys inside editor of the internal grid does not call
 
     // assert
     assert.notOk(preventDefaultCalled, "preventDefault is not called");
+});
+
+QUnit.test("Pressing symbol keys inside detail grid editor does not change master grid's focusedCellPosition", function(assert) {
+    // arrange
+    var keyboard,
+        $dateBoxInput;
+
+    this.dataGrid.option({
+        dataSource: {
+            store: {
+                type: "array",
+                data: [{ id: 0, value: "value 1", text: "Awesome" }],
+                key: "id"
+            }
+        },
+        masterDetail: {
+            enabled: true,
+            template: function(container, options) {
+                $("<div>")
+                    .addClass("internal-grid")
+                    .dxDataGrid({
+                        filterRow: {
+                            visible: true
+                        },
+                        columns: [{ dataField: "field1", filterValue: "test" }, "field2"],
+                        dataSource: [{ field1: "test1", field2: "test2" }]
+                    }).appendTo(container);
+            }
+        }
+    });
+    this.dataGrid.expandRow(0);
+    this.clock.tick();
+
+    // act
+    this.keyboardNavigationController._focusedCellPosition = { rowIndex: 0, columnIndex: 1 };
+    $dateBoxInput = $(this.dataGrid.$element()).find(".internal-grid .dx-datagrid-filter-row").find(".dx-texteditor-input").first();
+    $dateBoxInput.focus();
+    this.clock.tick();
+    keyboard = keyboardMock($dateBoxInput);
+
+    // act
+    keyboard.keyDown("1");
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 0, columnIndex: 1 }, "Master grid focusedCellPosition is not changed");
 });
 
 // T671532

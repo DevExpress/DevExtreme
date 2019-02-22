@@ -268,7 +268,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _parse: function(text, format) {
         var formatOption = this.option("format"),
-            isCustomParser = typeUtils.isFunction(formatOption.formatter),
+            isCustomParser = typeUtils.isFunction(formatOption.parser),
             parser = isCustomParser ? formatOption.parser : number.parse;
 
         return parser(text, format);

@@ -396,17 +396,25 @@ module.exports = {
             columns: {
                 getSortDataSourceParameters: function() {
                     var result = this.callBase.apply(this, arguments),
-                        store = this.getController("data").store(),
-                        key = store && store.key();
+                        dataController = this.getController("data"),
+                        dataSource = dataController._dataSource,
+                        store = dataController.store(),
+                        key = store && store.key(),
+                        remoteOperations = dataSource && dataSource.remoteOperations() || {},
+                        isLocalOperations = Object.keys(remoteOperations).every(operationName => !remoteOperations[operationName]);
 
                     if(this.option("focusedRowEnabled") && key) {
                         key = Array.isArray(key) ? key : [key];
                         var notSortedKeys = key.filter(key => !this.columnOption(key, "sortOrder"));
 
-                        notSortedKeys.forEach(notSortedKey => {
+                        if(notSortedKeys.length) {
                             result = result || [];
-                            result.push({ selector: notSortedKey, desc: false });
-                        });
+                            if(isLocalOperations) {
+                                result.push({ selector: dataSource.getDataIndexGetter(), desc: false });
+                            } else {
+                                notSortedKeys.forEach(notSortedKey => result.push({ selector: notSortedKey, desc: false }));
+                            }
+                        }
                     }
 
                     return result;

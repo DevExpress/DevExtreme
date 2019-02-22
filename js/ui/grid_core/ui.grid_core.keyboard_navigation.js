@@ -286,7 +286,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _updateFocusedCellPosition: function($cell, direction) {
         var position = this._getCellPosition($cell, direction);
         if(position) {
-            this.setFocusedCellPosition(position.rowIndex, position.columnIndex);
+            if(!$cell.length || position.rowIndex >= 0 && position.columnIndex >= 0) {
+                this.setFocusedCellPosition(position.rowIndex, position.columnIndex);
+            }
         }
     },
     _getCellPosition: function($cell, direction) {
@@ -1012,14 +1014,15 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _keyDownHandler: function(e) {
         var isEditing = this._editingController.isEditing(),
             needStopPropagation = true,
+            originalEvent = e.originalEvent,
             args = {
                 handled: false,
-                event: e.originalEvent
+                event: originalEvent
             };
 
         this.executeAction("onKeyDown", args);
 
-        if(e.originalEvent.isDefaultPrevented()) {
+        if(originalEvent.isDefaultPrevented()) {
             return;
         }
 
@@ -1081,7 +1084,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             }
 
             if(needStopPropagation) {
-                e.originalEvent.stopPropagation();
+                originalEvent.stopPropagation();
             }
         }
     },
