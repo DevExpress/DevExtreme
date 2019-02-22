@@ -748,8 +748,13 @@
                 }
                 & > td,
                 & > tr > td {
-                    border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
                     border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                }
+                &:not(.dx-row-lines) {
+                    & > td,
+                    & > tr > td {
+                        border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                    }
                 }
             }
 
@@ -784,8 +789,7 @@
                     color: ~"@{@{widgetName}-base-color}";
                 }
             }
-            &:not(.dx-row-lines),
-            &:not(.dx-row-focused) {
+            &:not(.dx-row-lines):not(.dx-row-focused) {
                 & > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                     border-top: 1px solid ~"@{@{widgetName}-selection-bg}";
