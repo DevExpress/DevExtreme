@@ -2,14 +2,16 @@ import $ from "../core/renderer";
 import Widget from "./widget/ui.widget";
 import registerComponent from "../core/component_registrator";
 import ButtonGroup from "./button_group";
-import Popover from "./popover";
+import Popup from "./popup";
 import List from "./list";
 import DataExpressionMixin from "./editor/ui.data_expression";
 import { extend } from "../core/utils/extend";
 import messageLocalization from "../localization/message";
 
 const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
-const DROP_DOWN_BUTTON_CONTENT = "dx-dropdown-button-content";
+const DROP_DOWN_BUTTON_CONTENT = "dx-dropdownbutton-content";
+const DROP_DOWN_BUTTON_ACTION_CLASS = "dx-dropdownbutton-action";
+const DROP_DOWN_BUTTON_TOGGLE_CLASS = "dx-dropdownbutton-toggle";
 
 /**
  * @name dxDropDownButton
@@ -24,13 +26,6 @@ let DropDownButton = Widget.inherit({
         return extend(this.callBase(), DataExpressionMixin._dataExpressionDefaultOptions(), {
             deferRendering: true,
             showEvent: "click",
-
-            /**
-             * @name dxDropDownButtonOptions.actionButtonIndex
-             * @type number
-             * @default 0
-             */
-            actionButtonIndex: 0,
             showSelectedItem: true,
             grouped: false,
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
@@ -55,14 +50,17 @@ let DropDownButton = Widget.inherit({
     },
 
     _buttonGroupOptions() {
-        return extend({
+        return extend(true, {
             items: [
-                { icon: "default" },
                 {
-                    icon: "chevrondown",
-                    onClick: () => {
-                        this.toggle();
-                    }
+                    icon: "default",
+                    elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
+                },
+                {
+                    icon: "spindown",
+                    width: 24,
+                    elementAttr: { class: DROP_DOWN_BUTTON_TOGGLE_CLASS },
+                    onClick: this.toggle.bind(this)
                 }
             ],
             stylingMode: "outlined",
@@ -73,20 +71,30 @@ let DropDownButton = Widget.inherit({
     _popupOptions() {
         return extend({
             deferRendering: this.option("deferRendering"),
-            target: this._buttonGroup.element(),
             minWidth: 130,
             closeOnOutsideClick: true,
+            showTitle: false,
+            animation: {
+                show: { type: "fade", duration: 0, from: 0, to: 1 },
+                hide: { type: "fade", duration: 400, from: 1, to: 0 }
+            },
+            width: "auto",
+            height: "auto",
+            shading: false,
             position: {
                 collision: "flipfit",
                 my: "top right",
-                at: "bottom right"
+                at: "bottom right",
+                offset: {
+                    y: -1
+                }
             },
             arrowPosition: "end",
             contentTemplate: (content) => {
-                $(content).addClass(DROP_DOWN_BUTTON_CONTENT);
-                this._list && this._list.$element().remove();
+                const $content = $(content);
+                $content.addClass(DROP_DOWN_BUTTON_CONTENT);
                 this._list = this._createComponent($("<div>"), List, this._listOptions());
-                $(content).append(this._list.$element());
+                $content.append(this._list.$element());
             }
         }, this.option("dropDownOptions"));
     },
@@ -114,7 +122,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _renderPopup() {
-        this._popup = this._createComponent($("<div>"), Popover, this._popupOptions());
+        this._popup = this._createComponent($("<div>"), Popup, this._popupOptions());
         this.$element().append(this._popup.$element());
     },
 
@@ -153,6 +161,7 @@ let DropDownButton = Widget.inherit({
     },
 
     _clean() {
+        this._list && this._list.$element().remove();
         this._popup && this._popup.$element().remove();
     },
 
