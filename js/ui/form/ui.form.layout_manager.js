@@ -1067,8 +1067,6 @@ var LayoutManager = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        var that = this;
-
         if(args.fullName.search("layoutData.") === 0) {
             return;
         }
@@ -1087,10 +1085,10 @@ var LayoutManager = Widget.inherit({
                 if(this.option("items")) {
                     if(!typeUtils.isEmptyObject(args.value)) {
                         this._instanceStorage.each(function(instance, item) {
-                            var name = that._getName(item);
+                            var dataField = item.dataField;
 
-                            if(name) {
-                                var valueGetter = dataUtils.compileGetter(name),
+                            if(dataField) {
+                                var valueGetter = dataUtils.compileGetter(dataField),
                                     dataValue = valueGetter(args.value);
 
                                 if(dataValue === undefined) {
