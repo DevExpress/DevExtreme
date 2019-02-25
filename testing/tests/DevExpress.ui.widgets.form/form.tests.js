@@ -169,6 +169,30 @@ QUnit.test("Change editor value after formOption is changed and items is defined
     }, "FormData is up to date");
 });
 
+QUnit.test("Reset editor value after formData changing only if dataField is defined", function(assert) {
+    // arrange
+    var $testContainer = $("#form"),
+        form;
+
+    form = $testContainer.dxForm({
+        formData: { pirateName: "Blackbeard", type: "captain", isSought: "Test", gender: "Male" },
+        items: [{ dataField: "gender" }, { dataField: "pirateName" }, { dataField: "type" }, { name: "isSought", editorType: "dxTextBox" }]
+    }).dxForm("instance");
+
+    // act
+    form.getEditor("isSought").option("value", "Changed");
+    form.getEditor("gender").option("value", "Female");
+
+    form.option("formData", {
+        pirateName: "John Morgan",
+        type: "captain"
+    });
+
+    // assert
+    assert.equal(form.getEditor("isSought").option("value"), "Changed", "'isSought' editor wasn't reseted");
+    assert.equal(form.getEditor("gender").option("value"), "", "'gender' editor was reseted");
+});
+
 QUnit.test("Invalid field name when item is defined not as string and not as object", function(assert) {
     // arrange, act
     var form = $("#form").dxForm({

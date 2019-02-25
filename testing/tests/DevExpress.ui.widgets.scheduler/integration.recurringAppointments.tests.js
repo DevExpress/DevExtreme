@@ -832,7 +832,7 @@ QUnit.test("Recurrence editor should work correctly after toggling repeat and en
     this.instance.showAppointmentPopup(appointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance"),
+        repeatOnEditor = form.getEditor("repeatOnOff"),
         repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
     repeatOnEditor.option("value", true);
@@ -863,7 +863,7 @@ QUnit.test("Recurrence editor should work correctly after switch off the recurre
     this.instance.showAppointmentPopup(appointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
+        repeatOnEditor = form.getEditor("repeatOnOff");
 
     repeatOnEditor.option("value", false);
 

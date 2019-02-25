@@ -614,7 +614,7 @@ QUnit.test("Recurrence repeat-end editor should be closed after reopening appoin
     this.instance.showAppointmentPopup(firstAppointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance"),
+        repeatOnEditor = form.getEditor("repeatOnOff"),
         repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
     repeatOnEditor.option("value", true);
@@ -625,7 +625,7 @@ QUnit.test("Recurrence repeat-end editor should be closed after reopening appoin
     this.instance.showAppointmentPopup(secondAppointment);
 
     form = this.instance.getAppointmentDetailsForm(),
-    repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance"),
+    repeatOnEditor = form.getEditor("repeatOnOff"),
     repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
 
     repeatOnEditor.option("value", true);
