@@ -23,10 +23,6 @@ var RADIO_GROUP_CLASS = "dx-radiogroup",
     RADIO_BUTTON_CHECKED_CLASS = "dx-radiobutton-checked",
     FOCUSED_CLASS = "dx-state-focused";
 
-var toSelector = function(cssClass) {
-    return "." + cssClass;
-};
-
 var moduleConfig = {
     beforeEach: function() {
         executeAsyncMock.setup();
@@ -282,7 +278,7 @@ QUnit.test("value should be correct if valueExpr is a function", (assert) => {
         .dxRadioGroup("instance");
 
     assert.strictEqual(radioGroup.option("value"), null);
-    assert.strictEqual($(radioGroup.itemElements()).find(toSelector(RADIO_BUTTON_CHECKED_CLASS)).length, 0);
+    assert.strictEqual($(radioGroup.itemElements()).find(`.${RADIO_BUTTON_CHECKED_CLASS}`).length, 0);
 
     const itemElement = $(radioGroup.itemElements()).first();
 
@@ -322,7 +318,7 @@ QUnit.test("value should be correct if valueExpr is a string", function(assert) 
     radioGroup.option("valueExpr", "caption");
     assert.equal(radioGroup.option("value"), 2);
 
-    assert.equal($(radioGroup.itemElements()).find(toSelector(RADIO_BUTTON_CHECKED_CLASS)).length, 0, "no items selected");
+    assert.equal($(radioGroup.itemElements()).find(`.${RADIO_BUTTON_CHECKED_CLASS}`).length, 0, "no items selected");
 });
 
 
