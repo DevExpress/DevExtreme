@@ -67,7 +67,8 @@ var BaseRangeContainer = BaseElement.inherit({
         });
 
         _each(list, function(_, item) {
-            item.color = (_isString(item.color) && item.color) || palette.getNextColor() || 'none';
+            var paletteColor = palette.getNextColor();
+            item.color = (_isString(item.color) && item.color) || paletteColor || 'none';
             item.className = 'dxg-range dxg-range-' + item.classIndex;
             delete item.classIndex;
         });
