@@ -720,6 +720,7 @@ registerTheme({
             width: 10
         },
         adjustOnZoom: true,
+        autoHidePointMarkers: true,
         rotated: false,
         zoomingMode: NONE,
         scrollingMode: NONE,

@@ -245,6 +245,12 @@ var dxChart = {
     */
     adjustOnZoom: true,
     /**
+    * @name dxChartOptions.autoHidePointMarkers
+    * @type boolean
+    * @default true
+    */
+    autoHidePointMarkers: true,
+    /**
     * @name dxChartOptions.rotated
     * @type boolean
     * @default false

@@ -36,6 +36,10 @@ function getTangentPoint(point, prevPoint, centerPoint, tan, nextStepAngle) {
 }
 
 var lineMethods = {
+    autoHidePointMarkersEnabled() {
+        return true;
+    },
+
     _applyGroupSettings: function(style, settings, group) {
         var that = this;
         settings = _extend(settings, style);

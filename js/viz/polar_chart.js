@@ -109,6 +109,8 @@ var dxPolarChart = AdvancedChart.inherit({
 
     _updateLegendPosition: _noop,
 
+    _applyPointMarkersAutoHiding: _noop,
+
     _createScrollBar: _noop,
 
     _applyClipRects: _noop,
