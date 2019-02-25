@@ -788,14 +788,19 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
     setScrollerSpacing: function(vWidth, hWidth) {
         var that = this,
-            styles;
+            useNativeScrolling,
+            styles = { marginBottom: 0 },
+            $fixedContent = that.element().children("." + this.addWidgetPrefix(CONTENT_FIXED_CLASS));
 
-        var $fixedContent = that.element().children("." + this.addWidgetPrefix(CONTENT_FIXED_CLASS));
-        if($fixedContent.length) {
-            styles = that.option("rtlEnabled") ? { marginLeft: vWidth } : { marginRight: vWidth };
+        if($fixedContent.length && that._fixedTableElement) {
+            $fixedContent.css(styles);
+            that._fixedTableElement.css(styles);
+
+            styles[that.option("rtlEnabled") ? "marginLeft" : "marginRight"] = vWidth;
             styles.marginBottom = hWidth;
 
-            $fixedContent.css(styles);
+            useNativeScrolling = that._scrollable && that._scrollable.option("useNative");
+            (useNativeScrolling ? $fixedContent : that._fixedTableElement).css(styles);
         }
     },
 
