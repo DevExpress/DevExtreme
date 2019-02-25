@@ -630,23 +630,6 @@ QUnit.test("valueExpr should not be passed to the list if it is 'this'", functio
     assert.equal(list.option("keyExpr"), null, "keyExpr is correct");
 });
 
-QUnit.test("valueExpr should not be passed to the list if it is the function", function(assert) {
-    // note: selection can not work with this and function as keyExpr.
-    // Allowing of this breaks the case when store key is specified and deferred datasource is used
-    $("#dropDownList").dxDropDownList({
-        dataSource: [{ id: 1, text: "Item 1" }],
-        displayExpr: 'text',
-        valueExpr: function(item) {
-            return item && item.id;
-        },
-        opened: true
-    });
-
-    var list = $(".dx-list").dxList("instance");
-
-    assert.equal(list.option("keyExpr"), null, "keyExpr is correct");
-});
-
 QUnit.test("valueExpr should be passed to the list's keyExpr option", function(assert) {
     var dropDownList = $("#dropDownList").dxDropDownList({
         dataSource: [{ id: 1, text: "Item 1" }],
@@ -664,9 +647,6 @@ QUnit.test("valueExpr should be passed to the list's keyExpr option", function(a
 
     dropDownList.option("valueExpr", "text");
     assert.equal(list.option("keyExpr"), "text", "keyExpr should be passed on optionChanged");
-
-    dropDownList.option("valueExpr", function() {});
-    assert.equal(list.option("keyExpr"), null, "keyExpr should be cleared when valueExpr was changed to function");
 });
 
 QUnit.test("value option should be case-sensitive", function(assert) {
