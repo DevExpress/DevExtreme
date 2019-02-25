@@ -1695,6 +1695,33 @@ QUnit.test("filter data", function(assert) {
     assert.deepEqual(filterExpr, ["OrderID", ">", 10249]);
 });
 
+
+QUnit.test("T717466. Header item contains . symbol in value", function(assert) {
+    this.store = new LocalStore({
+        store: {
+            type: 'array',
+            data: [
+                { "a1": 0, "a2": 333, "v": 0 },
+                { "a1": 0.333, "a2": 1765, "v": 0 },
+            ]
+        }
+    });
+
+    this.store.load({
+        rows: [
+            { "dataField": "a1", "expanded": true },
+            { "dataField": "a2" }
+        ],
+        values: [{
+            "dataField": "v", "summaryType": "sum"
+        }]
+    }).done(function(result) {
+        assert.equal(result.rows.length, 2);
+        assert.equal(result.rows[0].children.length, 1);
+        assert.equal(result.rows[0].children[0].value, 333);
+    });
+});
+
 QUnit.module("DrillDown", {
     beforeEach: function() {
         moduleConfig.beforeEach.apply(this, arguments);
