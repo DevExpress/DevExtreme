@@ -1292,30 +1292,39 @@ QUnit.test("Align labels when layout is changed when small window size by defaul
     assert.equal($("." + internals.HIDDEN_LABEL_CLASS).length, 0, "hidden labels count");
 });
 
-QUnit.test("showRequiredMark and showOptionalMark field aligned", (assert) => {
+QUnit.test("required mark aligned", (assert) => {
     let $testContainer = $("#form").dxForm({
         requiredMark: "!",
-        optionalMark: "optMark",
-        showOptionalMark: true,
         items: [{
             dataField: "name",
             isRequired: true
-        }, "position"]
+        }]
     });
 
-    let $labelsContent = $testContainer.find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
+    let $labelsContent = $testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`),
+        $requiredLabel = $labelsContent.find(`.${internals.FIELD_ITEM_LABEL_TEXT_CLASS}`),
+        $requiredMark = $labelsContent.find(`.${internals.FIELD_ITEM_REQUIRED_MARK_CLASS}`);
 
     $labelsContent.width(200);
 
-    let $requiredLabel = $labelsContent.eq(0).find("." + internals.FIELD_ITEM_LABEL_TEXT_CLASS),
-        $optionalLabel = $labelsContent.eq(1).find("." + internals.FIELD_ITEM_LABEL_TEXT_CLASS),
-        $requiredMark = $labelsContent.eq(0).find("." + internals.FIELD_ITEM_REQUIRED_MARK_CLASS),
-        $optionalMark = $labelsContent.eq(1).find("." + internals.FIELD_ITEM_OPTIONAL_MARK_CLASS);
-
     assert.equal($labelsContent.offset().left + $requiredLabel.width(), $requiredMark.offset().left, "position of requared mark is right");
-    assert.equal($labelsContent.offset().left + $optionalLabel.width(), $optionalMark.offset().left, "position of optional mark is right");
-
     assert.ok($requiredLabel.position().left < $requiredMark.position().left, "required mark should be after of the text");
+});
+
+QUnit.test("optional mark aligned", (assert) => {
+    let $testContainer = $("#form").dxForm({
+        optionalMark: "optMark",
+        showOptionalMark: true,
+        items: ["position"]
+    });
+
+    let $labelsContent = $testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`),
+        $optionalLabel = $labelsContent.find(`.${internals.FIELD_ITEM_LABEL_TEXT_CLASS}`),
+        $optionalMark = $labelsContent.find(`.${internals.FIELD_ITEM_OPTIONAL_MARK_CLASS}`);
+
+    $labelsContent.width(200);
+
+    assert.equal($labelsContent.offset().left + $optionalLabel.width(), $optionalMark.offset().left, "position of optional mark is right");
     assert.ok($optionalLabel.position().left < $optionalMark.position().left, "optional mark should be after of the text");
 });
 
@@ -2450,30 +2459,41 @@ QUnit.test("Form redraw layout when colCount is 'auto' and an calculated colCoun
 
 QUnit.module("Form when rtlEnabled is true");
 
-QUnit.test("showRequiredMark and showOptionalMark field aligned when rtlEnabled option is set to true", (assert) => {
+QUnit.test("required mark aligned when rtlEnabled option is set to true", (assert) => {
     let $testContainer = $("#form").dxForm({
         requiredMark: "!",
-        optionalMark: "optMark",
-        showOptionalMark: true,
         rtlEnabled: true,
         items: [{
             dataField: "name",
             isRequired: true
-        }, "position"]
+        }]
     });
 
-    let $labelsContent = $testContainer.find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS),
-        $requiredLabel = $labelsContent.eq(0).find("." + internals.FIELD_ITEM_LABEL_TEXT_CLASS),
-        $optionalLabel = $labelsContent.eq(1).find("." + internals.FIELD_ITEM_LABEL_TEXT_CLASS),
-        $requiredMark = $labelsContent.eq(0).find("." + internals.FIELD_ITEM_REQUIRED_MARK_CLASS),
-        $optionalMark = $labelsContent.eq(1).find("." + internals.FIELD_ITEM_OPTIONAL_MARK_CLASS);
+    let $labelsContent = $testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`),
+        $requiredLabel = $labelsContent.find(`.${internals.FIELD_ITEM_LABEL_TEXT_CLASS}`),
+        $requiredMark = $labelsContent.find(`.${internals.FIELD_ITEM_REQUIRED_MARK_CLASS}`);
 
     $labelsContent.width(200);
 
     assert.notEqual($labelsContent.offset().left, $requiredMark.offset().left, "position of requared mark is right");
-    assert.notEqual($labelsContent.offset().left, $optionalMark.offset().left, "position of optional mark is right");
-
     assert.ok($requiredLabel.position().left > $requiredMark.position().left, "required mark should be before of the text");
+});
+
+QUnit.test("optional mark aligned when rtlEnabled option is set to true", (assert) => {
+    let $testContainer = $("#form").dxForm({
+        optionalMark: "optMark",
+        showOptionalMark: true,
+        rtlEnabled: true,
+        items: ["position"]
+    });
+
+    let $labelsContent = $testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`),
+        $optionalLabel = $labelsContent.find(`.${internals.FIELD_ITEM_LABEL_TEXT_CLASS}`),
+        $optionalMark = $labelsContent.find(`.${internals.FIELD_ITEM_OPTIONAL_MARK_CLASS}`);
+
+    $labelsContent.width(200);
+
+    assert.notEqual($labelsContent.offset().left, $optionalMark.offset().left, "position of optional mark is right");
     assert.ok($optionalLabel.position().left > $optionalMark.position().left, "optional mark should be before of the text");
 });
 
