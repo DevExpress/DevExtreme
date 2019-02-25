@@ -486,6 +486,10 @@ QUnit.test('palette is shorter than ranges when paletteExtensionMode is alternat
     this.checkColors(assert, [null, null, null, null, null], ['p1', 'p2'], ['p1', 'p2', 'p1', 'p2'], "alternate");
 });
 
+QUnit.test("First range with color", function(assert) {
+    this.checkColors(assert, ["#679ec5", null], null, ['#679ec5', '#ffc720']);
+});
+
 QUnit.test('palette is shorter than ranges when paletteExtensionMode is blend', function(assert) {
     this.checkColors(assert, [null, null, null, null, null], ["green", "red"], ["green", "#406000", "#804000", "#bf2000", "red"]);
 });
