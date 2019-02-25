@@ -1,16 +1,17 @@
-var labelModule = require("../series/points/label"),
-    _normalizeEnum = require("../core/utils").normalizeEnum,
-    extend = require("../../core/utils/extend").extend,
-    noop = require("../../core/utils/common").noop,
-    OUTSIDE_POSITION = "outside",
-    INSIDE_POSITION = "inside",
-    OUTSIDE_LABEL_INDENT = 5,
-    COLUMNS_LABEL_INDENT = 20,
-    CONNECTOR_INDENT = 4,
-    PREVENT_EMPTY_PIXEL_OFFSET = 1;
+import labelModule from "../series/points/label";
+import { normalizeEnum } from "../core/utils";
+import { extend } from "../../core/utils/extend";
+import { noop } from "../../core/utils/common";
+
+const OUTSIDE_POSITION = "outside";
+const INSIDE_POSITION = "inside";
+const OUTSIDE_LABEL_INDENT = 5;
+const COLUMNS_LABEL_INDENT = 20;
+const CONNECTOR_INDENT = 4;
+const PREVENT_EMPTY_PIXEL_OFFSET = 1;
 
 function getLabelIndent(pos) {
-    pos = _normalizeEnum(pos);
+    pos = normalizeEnum(pos);
     if(pos === OUTSIDE_POSITION) {
         return OUTSIDE_LABEL_INDENT;
     } else if(pos === INSIDE_POSITION) {
@@ -20,7 +21,7 @@ function getLabelIndent(pos) {
 }
 
 function isOutsidePosition(pos) {
-    pos = _normalizeEnum(pos);
+    pos = normalizeEnum(pos);
     return pos === OUTSIDE_POSITION || pos !== INSIDE_POSITION;
 }
 
@@ -90,7 +91,7 @@ function getConnectorStrategy(options, inverted) {
                 x1 = x + bBox.width,
                 y1 = y + bBox.height;
 
-            return [[x, y], [x1, y], [x1, y1], [x, y1]];
+            return [...Array(y1 - y)].map((_, i) => [x, y + i]).concat([...Array(y1 - y)].map((_, i) => [x1, y + i]));
         },
 
         isHorizontal: function() { return true; },
@@ -122,7 +123,7 @@ function getLabelOptions(labelOptions, defaultColor, defaultTextAlignment) {
             opacity: labelConnector.opacity
         };
 
-    labelFont.color = (opt.backgroundColor === "none" && _normalizeEnum(labelFont.color) === "#ffffff" && opt.position !== "inside") ? defaultColor : labelFont.color;
+    labelFont.color = (opt.backgroundColor === "none" && normalizeEnum(labelFont.color) === "#ffffff" && opt.position !== "inside") ? defaultColor : labelFont.color;
 
     return {
         format: opt.format,
@@ -154,6 +155,25 @@ function correctLabelPosition(pos, bBox, rect) {
     return pos;
 }
 
+function removeEmptySpace(labels, requiredSpace, startPoint) {
+    labels.reduce((requiredSpace, label, index, labels) => {
+        const prevLabel = labels[index + 1];
+        if(requiredSpace > 0) {
+            const bBox = label.getBoundingRect();
+            const point = prevLabel ? prevLabel.getBoundingRect().y + prevLabel.getBoundingRect().height : startPoint;
+            const emptySpace = bBox.y - point;
+            const shift = Math.min(emptySpace, requiredSpace);
+
+            labels.slice(0, index + 1).forEach((label) => {
+                const bBox = label.getBoundingRect();
+                label.shift(bBox.x, bBox.y - shift);
+            });
+            requiredSpace -= shift;
+        }
+        return requiredSpace;
+    }, requiredSpace);
+}
+
 exports.plugin = {
     name: "lables",
     init: noop,
@@ -177,6 +197,9 @@ exports.plugin = {
             this._labelRect = rect.slice();
 
             if(!this._labels.length || !isOutsidePosition(options.position)) {
+                if(normalizeEnum(this._getOption("resolveLabelOverlapping", true) !== "none")) {
+                    this._labels.forEach(l => !l.isVisible() && l.draw(true));
+                }
                 return;
             }
 
@@ -224,7 +247,7 @@ exports.plugin = {
                 textAlignment;
 
             if(isOutsidePosition(options.position)) {
-                if(_normalizeEnum(options.position) === OUTSIDE_POSITION) {
+                if(normalizeEnum(options.position) === OUTSIDE_POSITION) {
                     getCoords = options.horizontalAlignment === "left" ? getOutsideLeftLabelPosition : getOutsideRightLabelPosition;
                 } else {
                     textAlignment = this._defaultLabelTextAlignment();
@@ -263,9 +286,58 @@ exports.plugin = {
                 label.setFigureToDrawConnector(coords);
                 label.shift(pos.x, pos.y);
             });
+
+            that._resolveLabelOverlapping();
         }
     },
     members: {
+        _resolveLabelOverlapping() {
+            const that = this;
+            const resolveLabelOverlapping = normalizeEnum(that._getOption("resolveLabelOverlapping", true));
+
+            if(resolveLabelOverlapping === "hide") {
+                that._labels.reduce((height, label) => {
+                    if(label.getBoundingRect().y < height) {
+                        label.hide();
+                    } else {
+                        height = label.getBoundingRect().y + label.getBoundingRect().height;
+                    }
+                    return height;
+                }, 0);
+            } else if(resolveLabelOverlapping === "shift") {
+                const maxHeight = this._labelRect[3];
+
+                that._labels.reduce(([height, emptySpace], label, index, labels) => {
+                    const bBox = label.getBoundingRect();
+                    let y = bBox.y;
+
+                    if(bBox.y < height) {
+                        label.shift(bBox.x, height);
+                        y = height;
+                    }
+
+                    if(y - height > 0) {
+                        emptySpace += y - height;
+                    }
+
+                    if(y + bBox.height > maxHeight) {
+                        if(emptySpace && emptySpace > y + bBox.height - maxHeight) {
+                            removeEmptySpace(labels.slice(0, index).reverse(), y + bBox.height - maxHeight, that._labelRect[1]);
+                            emptySpace -= y + bBox.height - maxHeight;
+                            label.shift(bBox.x, y - (y + bBox.height - maxHeight));
+                            height = y - (y + bBox.height - maxHeight) + bBox.height;
+                        } else {
+                            label.hide();
+                        }
+                    } else {
+                        height = y + bBox.height;
+                    }
+
+                    return [height, emptySpace];
+                }, [this._labelRect[1], 0]);
+            }
+        },
+
         _defaultLabelTextAlignment: function() {
             return this._getOption("rtlEnabled", true) ? "right" : "left";
         },
@@ -335,15 +407,17 @@ exports.plugin = {
             return data;
         });
 
-        constructor.addChange({
-            code: "LABEL",
-            handler: function() {
-                this._createLabels();
-                this._requestChange(["LAYOUT"]);
-            },
-            isThemeDependent: true,
-            isOptionChange: true,
-            option: "label"
+        ["label", "resolveLabelOverlapping"].forEach(optionName => {
+            constructor.addChange({
+                code: optionName.toUpperCase(),
+                handler: function() {
+                    this._createLabels();
+                    this._requestChange(["LAYOUT"]);
+                },
+                isThemeDependent: true,
+                isOptionChange: true,
+                option: optionName
+            });
         });
     }
 };

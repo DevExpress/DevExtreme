@@ -1560,6 +1560,7 @@ registerTheme({
         algorithm: "dynamicSlope",
         neckWidth: 0,
         neckHeight: 0,
+        resolveLabelOverlapping: "shift",
         label: {
             visible: true,
             horizontalAlignment: RIGHT,

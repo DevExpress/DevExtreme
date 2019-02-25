@@ -176,6 +176,11 @@
  */
 
 /**
+ * @typedef {string} Enums.FunnelResolveLabelOverlapping
+ * @enum {'hide'|'none'|'shift'}
+ */
+
+/**
  * @typedef {string} Enums.ChartElementSelectionMode
  * @enum {'multiple'|'single'}
  */
