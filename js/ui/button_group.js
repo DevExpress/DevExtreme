@@ -189,7 +189,8 @@ const ButtonGroup = Widget.inherit({
             focusStateEnabled: false,
             stylingMode: this.option("stylingMode"),
             hoverStateEnabled: this.option("hoverStateEnabled"),
-            activeStateEnabled: this.option("activeStateEnabled")
+            activeStateEnabled: this.option("activeStateEnabled"),
+            onClick: null
         };
     },
 
