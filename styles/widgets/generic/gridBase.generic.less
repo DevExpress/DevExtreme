@@ -162,8 +162,13 @@
             }
         }
 
-        .dx-row > td {
-            padding: @GENERIC_GRID_BASE_CELL_PADDING;
+        .dx-row {
+            & > td {
+                padding: @GENERIC_GRID_BASE_CELL_PADDING;
+            }
+            & > td.dx-command-adaptive {
+                padding: @GENERIC_GRID_BASE_CELL_PADDING - 2px @GENERIC_GRID_BASE_CELL_PADDING;
+            }
         }
 
         .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
