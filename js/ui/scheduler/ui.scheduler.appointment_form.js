@@ -192,6 +192,7 @@ var SchedulerAppointmentForm = {
                 }
             },
             {
+                name: "repeatOnOff",
                 editorType: "dxSwitch",
                 label: {
                     text: messageLocalization.format("dxScheduler-editorLabelRecurrence")

@@ -322,7 +322,7 @@ QUnit.test("Popup should contain switch to turning on of recurrence editor", fun
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: "a" });
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
+        repeatOnEditor = form.getEditor("repeatOnOff");
 
     assert.equal(repeatOnEditor.option("value"), false, "value is right");
 });
@@ -333,7 +333,7 @@ QUnit.test("RepeatOn switch should be turned on if recurrence rule was set on in
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
+        repeatOnEditor = form.getEditor("repeatOnOff");
 
     assert.equal(repeatOnEditor.option("value"), true, "switch is turned on");
 });
@@ -343,7 +343,7 @@ QUnit.test("RepeatOn switch should change value if recurrence rule was changed",
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
+        repeatOnEditor = form.getEditor("repeatOnOff");
 
     assert.equal(repeatOnEditor.option("value"), true, "switch is turned on");
 
@@ -372,7 +372,7 @@ QUnit.test("Recurrence editor container should be visible after turn on switch",
 
     assert.equal(recurrenceEditor._$container.css("display"), "none", "Container is not visible");
 
-    var repeatOnEditor = repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
+    var repeatOnEditor = form.getEditor("repeatOnOff");
     repeatOnEditor.option("value", true);
 
     assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
@@ -389,7 +389,7 @@ QUnit.test("Recurrence editor container should be visible after turn on switch, 
 
     assert.equal(recurrenceEditor._$container.css("display"), "none", "Container is not visible");
 
-    var repeatOnEditor = repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
+    var repeatOnEditor = form.getEditor("repeatOnOff");
     repeatOnEditor.option("value", true);
 
     assert.notEqual(recurrenceEditor._$container.css("display"), "none", "Container is visible");
@@ -435,7 +435,7 @@ QUnit.test("Recurrence editor should have default value if repeatOnOff editor tu
     this.instance.showAppointmentPopup({ startDate: new Date(2018, 5, 18), endDate: Date(2018, 5, 18), text: "a" });
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.$element().find(".dx-switch").eq(1).dxSwitch("instance");
+        repeatOnEditor = form.getEditor("repeatOnOff");
 
     repeatOnEditor.option("value", true);
 
