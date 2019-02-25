@@ -6035,6 +6035,7 @@ declare module DevExpress.viz {
         adjustOnZoom?: boolean;
         /** Configures the argument axis. */
         argumentAxis?: dxChartArgumentAxis;
+        autoHidePointMarkers?: boolean;
         /** Controls the padding and consequently the width of a group of bars with the same argument using relative units. Ignored if the barGroupWidth option is set. */
         barGroupPadding?: number;
         /** Specifies a fixed width for groups of bars with the same argument, measured in pixels. Takes precedence over the barGroupPadding option. */
