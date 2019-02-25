@@ -10,6 +10,7 @@ import "ui/text_box/ui.text_editor";
 var INPUT_CLASS = "dx-texteditor-input";
 var PLACEHOLDER_CLASS = "dx-placeholder";
 var IE_NUMPAD_MINUS_KEY = "Subtract";
+var CARET_TIMEOUT_DURATION = browser.msie ? 300 : 0; // IE prevent browser text selection on double click if caret was moved
 
 var moduleConfig = {
     beforeEach: function() {
@@ -1577,12 +1578,12 @@ QUnit.test("moving caret to closest non stub on click - forward direction", func
     });
 
     this.input.trigger("focusin");
-    this.clock.tick(300);
+    this.clock.tick(CARET_TIMEOUT_DURATION);
     this.keyboard.caret(0);
 
     this.input.trigger("dxclick");
 
-    this.clock.tick(300);
+    this.clock.tick(CARET_TIMEOUT_DURATION);
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was adjusted");
 });
 
@@ -1594,7 +1595,7 @@ QUnit.test("moving caret to closest non stub on click - backward direction", fun
 
     this.keyboard.caret(2);
     this.input.trigger("dxclick");
-    this.clock.tick(300);
+    this.clock.tick(CARET_TIMEOUT_DURATION);
 
     assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret was adjusted");
 });
@@ -1664,7 +1665,7 @@ QUnit.testInActiveWindow("caret should be at start boundary on focusin", functio
         assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
     }
 
-    this.clock.tick(300);
+    this.clock.tick(CARET_TIMEOUT_DURATION);
     assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is right");
 });
 
@@ -1683,7 +1684,7 @@ QUnit.testInActiveWindow("caret should not change position on focus after fast d
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
 
     this.input.trigger("dxdblclick");
-    this.clock.tick(300);
+    this.clock.tick(CARET_TIMEOUT_DURATION);
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret is right after focus and dblclick");
 
     this.input.trigger("focusout");
@@ -1694,7 +1695,7 @@ QUnit.testInActiveWindow("caret should not change position on focus after fast d
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
 
     this.input.trigger("dxdblclick");
-    this.clock.tick(300);
+    this.clock.tick(CARET_TIMEOUT_DURATION);
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret is right after focus by click and dblclick");
 });
 
