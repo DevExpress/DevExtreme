@@ -1,5 +1,6 @@
 import ajax from "../../core/utils/ajax";
 import { Deferred } from "../../core/utils/deferred";
+import { noop } from "../../core/utils/common";
 
 import FileManagerItem from "./ui.file_manager.items";
 import FileProvider from "./ui.file_manager.file_provider";
@@ -25,6 +26,32 @@ var OneDriveFileProvider = FileProvider.inherit({
 
     getFiles: function(path) {
         return this._getItems(path, false);
+    },
+
+    initiateFileUpload: function(uploadInfo) {
+        var folderPath = uploadInfo.destinationFolder.relativeName;
+        var fileName = uploadInfo.file.name;
+        var customData = uploadInfo.customData;
+
+        return this._ensureAccessTokenAcquired()
+            .then(() => { return this._createFile(folderPath, fileName); })
+            .then(entry => {
+                return this._initiateUploadSession(entry.id)
+                    .done(info => { customData.uploadUrl = info.uploadUrl; });
+            });
+    },
+
+    uploadFileChunk: function(uploadInfo, chunk) {
+        return this._uploadFileChunk(uploadInfo.customData.uploadUrl, chunk.blob, chunk.size,
+            uploadInfo.uploadedBytesCount, uploadInfo.file.size);
+    },
+
+    finalizeFileUpload: function(uploadInfo) {
+
+    },
+
+    abortFileUpload: function(uploadInfo) {
+        // TODO implement this
     },
 
     _getItems: function(path, isFolder) {
@@ -65,7 +92,65 @@ var OneDriveFileProvider = FileProvider.inherit({
         return ajax.sendRequest({
             url: url,
             dataType: "json",
+            cache: false,
             headers: { "Authorization": "Bearer " + this._accessToken }
+        });
+    },
+
+    _uploadFileChunk: function(uploadUrl, chunkBlob, chunkSize, uploadedSize, totalSize) {
+        var chunkEndPosition = uploadedSize + chunkSize - 1;
+        var contentRange = `bytes ${uploadedSize}-${chunkEndPosition}/${totalSize}`;
+        return ajax.sendRequest({
+            url: uploadUrl,
+            method: "PUT",
+            dataType: "json",
+            data: chunkBlob,
+            upload: {
+                onprogress: noop,
+                onloadstart: noop,
+                onabort: noop
+            },
+            cache: false,
+            headers: {
+                "Authorization": "Bearer " + this._accessToken,
+                "Content-Range": contentRange
+            }
+        });
+    },
+
+    _initiateUploadSession: function(fileId) {
+        var url = `${DRIVE_API_URL}/items/${fileId}/createUploadSession`;
+        return ajax.sendRequest({
+            url: url,
+            method: "POST",
+            dataType: "json",
+            cache: false,
+            headers: { "Authorization": "Bearer " + this._accessToken }
+        });
+    },
+
+    _createFile: function(folderPath, objectName) {
+        var itemPath = this._prepareItemRelativePath(folderPath);
+        var queryString = "?$select=" + REQUIRED_ITEM_FIELDS;
+        var url = APP_ROOT_URL + itemPath + "/children" + queryString;
+
+        var params = {
+            "name": objectName,
+            "file": { },
+            "@microsoft.graph.conflictBehavior": "rename"
+        };
+        var data = JSON.stringify(params);
+
+        return ajax.sendRequest({
+            url: url,
+            method: "POST",
+            dataType: "json",
+            data: data,
+            cache: false,
+            headers: {
+                "Authorization": "Bearer " + this._accessToken,
+                "Content-Type": "application/json"
+            }
         });
     },
 

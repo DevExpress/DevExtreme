@@ -3,6 +3,7 @@ import eventsEngine from "../../events/core/events_engine";
 import Widget from "../widget/ui.widget";
 import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
+import { Deferred, when } from "../../core/utils/deferred";
 
 import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
@@ -10,13 +11,12 @@ import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 import FileManagerToolbar from "./ui.file_manager.toolbar";
 import FileManagerNameEditorDialog from "./ui.file_manager.dialog.name_editor";
 import FileManagerFolderChooserDialog from "./ui.file_manager.dialog.folder_chooser";
-import FileUploader from "../file_uploader";
+import FileManagerFileUploader from "./ui.file_manager.file_uploader";
 import notify from "../notify";
 
 import DataFileProvider from "./ui.file_manager.file_provider.data";
 import OneDriveFileProvider from "./ui.file_manager.file_provider.onedrive";
 import WebAPIFileProvider from "./ui.file_manager.file_provider.webapi";
-import { Deferred } from "../../core/utils/deferred";
 
 const FILE_MANAGER_CLASS = "dx-filemanager";
 const FILE_MANAGER_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-container";
@@ -77,16 +77,43 @@ var FileManager = Widget.inherit({
 
     _createFileUploader: function() {
         var that = this;
-        return this._createComponent($("<div>"), FileUploader, {
-            name: "file",
-            onUploaded: function(xhr) {
-                that._showSuccess(xhr);
+        return this._createComponent($("<div>"), FileManagerFileUploader, {
+            onGetController: this._getFileUploaderController.bind(this),
+            onFilesUploaded: function(result) {
+                that._showSuccess("Files uploaded");
                 that._refreshData();
             },
-            onUploadError: function(e) {
-                that._showError(e.request.responseText);
+            onErrorOccurred: function(e) {
+                var errorText = that._getErrorText(e.error);
+                var message = `Upload failed for the '${e.fileName}' file: ${errorText}`;
+                that._showError(message);
             }
         });
+    },
+
+    _getFileUploaderController: function() {
+        var destinationFolder = this.getCurrentFolder();
+        var that = this;
+        return {
+            chunkSize: this._provider.getFileUploadChunkSize(),
+
+            initiateUpload: function(state) {
+                state.destinationFolder = destinationFolder;
+                return when(that._provider.initiateFileUpload(state));
+            },
+
+            uploadChunk: function(state, chunk) {
+                return when(that._provider.uploadFileChunk(state, chunk));
+            },
+
+            finalizeUpload: function(state) {
+                return when(that._provider.finalizeFileUpload(state));
+            },
+
+            abortUpload: function(state) {
+                return when(that._provider.abortFileUpload(state));
+            }
+        };
     },
 
     _createViewContainer: function() {
@@ -249,10 +276,7 @@ var FileManager = Widget.inherit({
     },
 
     _tryUpload: function() {
-        var destinationFolder = this.getCurrentFolder();
-        this._fileUploader.option("uploadUrl", this._provider.getUploadUrl(destinationFolder.relativeName));
-        this._fileUploader._isCustomClickEvent = true;
-        this._fileUploader._$fileInput.click();
+        this._fileUploader.tryUpload();
     },
 
     _getSingleSelectedItem: function() {
@@ -288,9 +312,13 @@ var FileManager = Widget.inherit({
     },
 
     _showError: function(error) {
-        var message = typeof error === "string" ? error : error.responseText;
-        if(!message) message = "General error";
+        var message = this._getErrorText(error);
         this._showNotification(message, false);
+    },
+
+    _getErrorText: function(error) {
+        var result = typeof error === "string" ? error : error.responseText;
+        return result || "General error";
     },
 
     _showNotification: function(message, isSuccess) {
