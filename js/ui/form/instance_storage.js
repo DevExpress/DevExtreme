@@ -1,63 +1,71 @@
 import Guid from "../../core/guid";
 import { each } from "../../core/utils/iterator";
 
-export default class InstanceStorage {
+export default class FormItemsRunTimeInfo {
     constructor() {
-        this._storage = {};
+        this._map = {};
     }
 
-    _find(condition) {
-        var resultInstance;
+    _findWidgetInstance(condition) {
+        var result;
 
-        each(this._storage, function(guid, { instance, item }) {
+        each(this._map, function(guid, { widgetInstance, item }) {
             if(condition(item)) {
-                resultInstance = instance;
+                result = widgetInstance;
 
                 return false;
             }
         });
 
-        return resultInstance;
+        return result;
     }
 
     clear() {
-        this._storage = {};
+        this._map = {};
     }
 
-    add(item, instance, guid) {
+    add(item, widgetInstance, guid, $itemContainer) {
         guid = guid || new Guid();
-        this._storage[guid] = { item, instance };
+        this._map[guid] = { item, widgetInstance, $itemContainer };
 
         return guid;
     }
 
-    extend(instanceStorage) {
-        instanceStorage.each((instance, item, guid) => {
-            if(this._storage[guid]) {
-                this._storage[guid].instance = instance;
+    addItemsOrExtendFrom(itemsRunTimeInfo) {
+        itemsRunTimeInfo.each((key, itemRunTimeInfo) => {
+            if(this._map[key]) {
+                this._map[key].widgetInstance = itemRunTimeInfo.widgetInstance;
+                this._map[key].$itemContainer = itemRunTimeInfo.$itemContainer;
             } else {
-                this.add(item, instance, guid);
+                this.add(itemRunTimeInfo.item, itemRunTimeInfo.widgetInstance, key, itemRunTimeInfo.$itemContainer);
             }
         });
     }
 
-    findByItem(item) {
-        return this._find(storedItem => storedItem === item);
+    findWidgetInstanceByItem(item) {
+        return this._findWidgetInstance(storedItem => storedItem === item);
     }
 
-    findByName(name) {
-        return this._find(item => name === item.name);
+    findWidgetInstanceByName(name) {
+        return this._findWidgetInstance(item => name === item.name);
     }
 
-    findByDataField(dataField) {
-        return this._find(item => dataField === item.dataField);
+    findWidgetInstanceByDataField(dataField) {
+        return this._findWidgetInstance(item => dataField === item.dataField);
+    }
+
+    findItemContainerByItem(item) {
+        for(let key in this._map) {
+            if(this._map[key].item === item) {
+                return this._map[key].$itemContainer;
+            }
+        }
+        return null;
     }
 
     each(handler) {
-        each(this._storage, function(guid, { instance, item }) {
-            if(instance) {
-                handler(instance, item, guid);
-            }
+        each(this._map, function(key, itemRunTimeInfo) {
+            handler(key, itemRunTimeInfo);
         });
     }
 }
