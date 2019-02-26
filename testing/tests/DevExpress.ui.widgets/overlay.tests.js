@@ -1,24 +1,28 @@
-var $ = require("jquery"),
-    fx = require("animation/fx"),
-    translator = require("animation/translator"),
-    viewPort = require("core/utils/view_port").value,
-    config = require("core/config"),
-    typeUtils = require("core/utils/type"),
-    hideTopOverlayCallback = require("mobile/hide_top_overlay").hideCallback,
-    positionUtils = require("animation/position"),
-    domUtils = require("core/utils/dom"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    devices = require("core/devices"),
-    Template = require("ui/widget/template"),
-    Overlay = require("ui/overlay"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    eventsEngine = require("events/core/events_engine"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    zIndex = require("ui/overlay/z_index"),
-    selectors = require("ui/widget/selectors");
+import $ from "jquery";
+import fx from "animation/fx";
+import translator from "animation/translator";
+import { value } from "core/utils/view_port";
+import config from "core/config";
+import typeUtils from "core/utils/type";
+import { hideCallback } from "mobile/hide_top_overlay";
+import positionUtils from "animation/position";
+import domUtils from "core/utils/dom";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import devices from "core/devices";
+import Template from "ui/widget/template";
+import Overlay from "ui/overlay";
+import pointerMock from "../../helpers/pointerMock.js";
+import eventsEngine from "events/core/events_engine";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import * as zIndex from "ui/overlay/z_index";
+import selectors from "ui/widget/selectors";
+import swatch from "ui/widget/swatch_container";
 
-require("common.css!");
-require("ui/scroll_view/ui.scrollable");
+const viewPort = value;
+const hideTopOverlayCallback = hideCallback;
+
+import "common.css!";
+import "ui/scroll_view/ui.scrollable";
 
 QUnit.testStart(function() {
     var markup =
@@ -319,6 +323,18 @@ QUnit.test("Color swatches - overlay should be rendered on the child of viewport
     assert.ok(overlayContainer.hasClass("dx-swatch-my-color_scheme1"), "overlay's container has right class");
     assert.ok(overlayContainer.parent().hasClass("dx-viewport"), "overlay's container is the viewport's child");
 });
+
+QUnit.test("Overlay does not fail if swatch is undefined (render before documentReady, T713615)", function(assert) {
+    const stub = sinon.stub(swatch, "getSwatchContainer", () => {
+        stub.restore();
+        return undefined;
+    });
+
+    var container = $("#container");
+    container.dxOverlay({ visible: true }).dxOverlay("instance");
+    assert.expect(0);
+});
+
 
 QUnit.module("option", moduleConfig);
 
