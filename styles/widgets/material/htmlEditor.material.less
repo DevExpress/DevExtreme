@@ -75,3 +75,23 @@
 .dx-htmleditor-toolbar-menu-separator {
     border-top-color: @htmleditor-toolbar-border-color;
 }
+
+.dx-resize-frame {
+    border-color: @htmleditor-resize-frame-border-color;
+}
+
+.dx-resizable-handle-corner-top-right,
+.dx-resizable-handle-corner-top-left,
+.dx-resizable-handle-corner-bottom-right,
+.dx-resizable-handle-corner-bottom-left {
+    background-color: @htmleditor-resize-handle-bg;
+}
+
+.dx-resizable-handle-top,
+.dx-resizable-handle-left,
+.dx-resizable-handle-right,
+.dx-resizable-handle-bottom {
+    &::after {
+        background-color: @htmleditor-resize-handle-bg;
+    }
+}
