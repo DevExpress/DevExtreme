@@ -9,6 +9,7 @@ var PI_DIV_180 = Math.PI / 180,
     objectUtils = require("../../core/utils/object"),
     commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
+    _normalizeEnum = require("../core/utils").normalizeEnum,
 
     baseGaugeModule = require("./base_gauge"),
     dxBaseGauge = baseGaugeModule.dxBaseGauge,
@@ -245,12 +246,11 @@ var dxBarGauge = dxBaseGauge.inherit({
     _checkOverlap: function() {
         const that = this,
             bars = that._bars,
-            overlapStrategy = (that._options.label || {}).overlappingBehavior;
+            overlapStrategy = _normalizeEnum(that._getOption("label").overlappingBehavior);
 
         if(overlapStrategy === "none") {
             return;
         }
-
 
         const sortedBars = bars.concat().sort((a, b) => a.getValue() - b.getValue());
 

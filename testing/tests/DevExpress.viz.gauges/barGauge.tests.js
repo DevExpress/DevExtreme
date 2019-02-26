@@ -1080,8 +1080,12 @@ QUnit.module("Label overlapping behavior", function(hooks) {
         });
 
         var elements = environment.getBarsGroup.call(this).children;
-        var labels = elements.filter(element => element.typeOfNode === "text");
-        var lines = elements.filter(element => element.typeOfNode === "path");
+        var labels = $.grep(elements, function(element) {
+            if(element.typeOfNode === "text") return element;
+        });
+        var lines = $.grep(elements, function(element) {
+            if(element.typeOfNode === "path") return element;
+        });
 
         assert.equal(labels.length, 2, "labels count should be correct value");
         assert.equal(lines.length, 2, "lines and lables should be same count");
@@ -1137,8 +1141,12 @@ QUnit.module("Label overlapping behavior", function(hooks) {
         });
 
         var elements = environment.getBarsGroup.call(this).children;
-        var labels = elements.filter(element => element.typeOfNode === "text");
-        var lines = elements.filter(element => element.typeOfNode === "path");
+        var labels = $.grep(elements, function(element) {
+            if(element.typeOfNode === "text") return element;
+        });
+        var lines = $.grep(elements, function(element) {
+            if(element.typeOfNode === "path") return element;
+        });
 
         assert.equal(labels.length, 4, "labels count should be correct value");
         assert.equal(lines.length, 4, "lines and lables should be same count");
@@ -1177,8 +1185,12 @@ QUnit.module("Label overlapping behavior", function(hooks) {
 
         environment.getBarsGroup.call(that).animationComplete = function() {
             var elements = environment.getBarsGroup.call(that).children;
-            var labels = elements.filter(element => element.typeOfNode === "text");
-            var lines = elements.filter(element => element.typeOfNode === "path");
+            var labels = $.grep(elements, function(element) {
+                if(element.typeOfNode === "text") return element;
+            });
+            var lines = $.grep(elements, function(element) {
+                if(element.typeOfNode === "path") return element;
+            });
 
             assert.equal(labels.length, 2, "labels count should be correct value");
             assert.equal(lines.length, 2, "lines and lables should be same count");
@@ -1238,8 +1250,12 @@ QUnit.module("Label overlapping behavior", function(hooks) {
 
         environment.getBarsGroup.call(that).animationComplete = function() {
             var elements = environment.getBarsGroup.call(that).children;
-            var labels = elements.filter(element => element.typeOfNode === "text");
-            var lines = elements.filter(element => element.typeOfNode === "path");
+            var labels = $.grep(elements, function(element) {
+                if(element.typeOfNode === "text") return element;
+            });
+            var lines = $.grep(elements, function(element) {
+                if(element.typeOfNode === "path") return element;
+            });
 
             assert.equal(labels.length, 4, "labels count should be correct value");
             assert.equal(lines.length, 4, "lines and lables should be same count");
