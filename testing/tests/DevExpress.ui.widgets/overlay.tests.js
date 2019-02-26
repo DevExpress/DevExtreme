@@ -1,10 +1,10 @@
 import $ from "jquery";
 import fx from "animation/fx";
 import translator from "animation/translator";
-import { value } from "core/utils/view_port";
+import { value as viewPort } from "core/utils/view_port";
 import config from "core/config";
 import typeUtils from "core/utils/type";
-import { hideCallback } from "mobile/hide_top_overlay";
+import { hideCallback as hideTopOverlayCallback } from "mobile/hide_top_overlay";
 import positionUtils from "animation/position";
 import domUtils from "core/utils/dom";
 import resizeCallbacks from "core/utils/resize_callbacks";
@@ -17,9 +17,6 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import * as zIndex from "ui/overlay/z_index";
 import selectors from "ui/widget/selectors";
 import swatch from "ui/widget/swatch_container";
-
-const viewPort = value;
-const hideTopOverlayCallback = hideCallback;
 
 import "common.css!";
 import "ui/scroll_view/ui.scrollable";
@@ -330,7 +327,7 @@ QUnit.test("Overlay does not fail if swatch is undefined (render before document
         return undefined;
     });
 
-    var container = $("#container");
+    const container = $("#container");
     container.dxOverlay({ visible: true }).dxOverlay("instance");
     assert.expect(0);
 });
