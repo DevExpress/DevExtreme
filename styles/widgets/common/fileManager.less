@@ -24,13 +24,30 @@
         background-color: #aad3f3;
     }
 
-    .dx-filemanager-fileuploader {
+    .dx-filemanager-fileuploader .dx-filemanager-fileuploader-fileinput {
         display: none;
     }
 
 }
 
-.dx-filemanager-dialog.dx-filemanager-dialog-folder-chooser {
+.dx-filemanager-dialog.dx-filemanager-dialog-folder-chooser,
+.dx-filemanager-progresspanel {
     height: 100%;
     overflow: auto;
+}
+
+.dx-filemanager-progresspanel {
+    box-sizing: border-box;
+    padding: 5px;
+
+    .dx-filemanager-progressbox {
+        float: left;
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .dx-filemanager-progressbox-cancel-button {
+        margin-top: 5px;
+        float: right;
+    }
 }

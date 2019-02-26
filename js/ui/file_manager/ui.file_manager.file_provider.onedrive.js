@@ -46,12 +46,9 @@ var OneDriveFileProvider = FileProvider.inherit({
             uploadInfo.uploadedBytesCount, uploadInfo.file.size);
     },
 
-    finalizeFileUpload: function(uploadInfo) {
-
-    },
-
     abortFileUpload: function(uploadInfo) {
-        // TODO implement this
+        return this._ensureAccessTokenAcquired()
+            .then(() => this._cancelUploadSession(uploadInfo.customData.uploadUrl));
     },
 
     _getItems: function(path, isFolder) {
@@ -150,6 +147,18 @@ var OneDriveFileProvider = FileProvider.inherit({
             headers: {
                 "Authorization": "Bearer " + this._accessToken,
                 "Content-Type": "application/json"
+            }
+        });
+    },
+
+    _cancelUploadSession: function(uploadUrl) {
+        return ajax.sendRequest({
+            url: uploadUrl,
+            method: "DELETE",
+            dataType: "json",
+            cache: false,
+            headers: {
+                "Authorization": "Bearer " + this._accessToken
             }
         });
     },
