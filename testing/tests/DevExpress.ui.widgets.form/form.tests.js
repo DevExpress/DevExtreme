@@ -1,18 +1,18 @@
-var $ = require("jquery"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    responsiveBoxScreenMock = require("../../helpers/responsiveBoxScreenMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    typeUtils = require("core/utils/type"),
-    browser = require("core/utils/browser"),
-    domUtils = require("core/utils/dom"),
-    internals = require("ui/form/ui.form").__internals,
-    themes = require("ui/themes"),
-    device = require("core/devices").real();
+import $ from "jquery";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import typeUtils from "core/utils/type";
+import browser from "core/utils/browser";
+import domUtils from "core/utils/dom";
+import { __internals as internals } from "ui/form/ui.form";
+import themes from "ui/themes";
+import device from "core/devices";
 
-require("ui/text_area");
+import "ui/text_area";
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
 var INVALID_CLASS = "dx-invalid";
 
@@ -1331,7 +1331,7 @@ QUnit.test("required mark aligned", (assert) => {
 
     $labelsContent.width(200);
 
-    assert.equal($labelsContent.offset().left + $requiredLabel.width(), $requiredMark.offset().left, "position of requared mark is right");
+    assert.roughEqual($labelsContent.offset().left + $requiredLabel.width(), $requiredMark.offset().left, 0.5, "position of requared mark is right");
     assert.ok($requiredLabel.position().left < $requiredMark.position().left, "required mark should be after of the text");
 });
 
@@ -1348,7 +1348,7 @@ QUnit.test("optional mark aligned", (assert) => {
 
     $labelsContent.width(200);
 
-    assert.equal($labelsContent.offset().left + $optionalLabel.width(), $optionalMark.offset().left, "position of optional mark is right");
+    assert.roughEqual($labelsContent.offset().left + $optionalLabel.width(), $optionalMark.offset().left, 0.5, "position of optional mark is right");
     assert.ok($optionalLabel.position().left < $optionalMark.position().left, "optional mark should be after of the text");
 });
 
@@ -1464,7 +1464,7 @@ QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
             }]
         }).dxForm("instance");
 
-        if(device.deviceType === "desktop") {
+        if(device.real().deviceType === "desktop") {
             $("#form").find(".dx-button").focus();
             assert.ok($("#form").find(".dx-button").is(":focus"), "initial focus");
         }
@@ -1485,7 +1485,7 @@ QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
         }
 
         assert.strictEqual(form.getButton("button1").option("icon"), "icon2");
-        if(device.deviceType === "desktop") {
+        if(device.real().deviceType === "desktop") {
             assert.ok($("#form").find(".dx-button").is(":focus") === (setOptionWay !== "itemOption"), "final focus");
         }
     });
