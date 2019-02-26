@@ -96,6 +96,11 @@
  */
 
 /**
+ * @typedef {string} Enums.BarGaugeLabelOverlappingBehavior
+ * @enum {'hide'|'none'}
+ */
+
+/**
  * @typedef {string} Enums.OverlappingBehavior
  * @enum {'rotate'|'stagger'|'none'|'hide'}
  */
