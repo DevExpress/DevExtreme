@@ -1067,8 +1067,6 @@ var LayoutManager = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        var that = this;
-
         if(args.fullName.search("layoutData.") === 0) {
             return;
         }
