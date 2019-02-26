@@ -1,7 +1,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
-    FormItemsRunTimeInfo = require("./instance_storage").default,
+    FormItemsRunTimeInfo = require("./ui.form.items_runtime_info").default,
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
     domUtils = require("../../core/utils/dom"),
