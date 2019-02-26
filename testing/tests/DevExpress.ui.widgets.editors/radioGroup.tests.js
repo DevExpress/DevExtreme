@@ -3,6 +3,7 @@ import devices from "core/devices";
 import errors from "ui/widget/ui.errors";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
+import { DataSource } from "data/data_source/data_source";
 
 import "ui/radio_group";
 
@@ -498,5 +499,31 @@ module("focus policy", moduleConfig, () => {
 
         instance.focus();
         assert.ok($radioGroup.hasClass("dx-state-focused"), "widget got focused class");
+    });
+});
+
+module("option changed", () => {
+    test("items from the getDataSource method are wrong when the dataSource option is changed", assert => {
+        const instance = getInstance(
+            createRadioGroup({
+                dataSource: [1, 2, 3]
+            })
+        );
+
+        instance.option("dataSource", [4, 5, 6]);
+
+        assert.deepEqual(instance.getDataSource().items(), [4, 5, 6], "items from data source");
+    });
+
+    test("items from the getDataSource method are wrong when the dataSource option is changed if uses an instance of dataSource", assert => {
+        const instance = getInstance(
+            createRadioGroup({
+                dataSource: new DataSource({ store: [1, 2, 3] })
+            })
+        );
+
+        instance.option("dataSource", [4, 5, 6]);
+
+        assert.deepEqual(instance.getDataSource().items(), [4, 5, 6], "items from data source");
     });
 });
