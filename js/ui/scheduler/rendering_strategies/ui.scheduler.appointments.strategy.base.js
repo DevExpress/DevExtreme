@@ -1,11 +1,11 @@
-var noop = require("../../core/utils/common").noop,
-    Class = require("../../core/class"),
-    extend = require("../../core/utils/extend").extend,
-    errors = require("../widget/ui.errors"),
-    dateUtils = require("../../core/utils/date"),
-    isNumeric = require("../../core/utils/type").isNumeric,
-    typeUtils = require("../../core/utils/type"),
-    themes = require("../themes");
+var noop = require("../../../core/utils/common").noop,
+    Class = require("../../../core/class"),
+    extend = require("../../../core/utils/extend").extend,
+    errors = require("../../widget/ui.errors"),
+    dateUtils = require("../../../core/utils/date"),
+    isNumeric = require("../../../core/utils/type").isNumeric,
+    typeUtils = require("../../../core/utils/type"),
+    themes = require("../../themes");
 
 var toMs = dateUtils.dateToMilliseconds;
 

@@ -1,8 +1,8 @@
 var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base"),
-    extend = require("../../core/utils/extend").extend,
-    isNumeric = require("../../core/utils/type").isNumeric,
-    devices = require("../../core/devices"),
-    dateUtils = require("../../core/utils/date");
+    extend = require("../../../core/utils/extend").extend,
+    isNumeric = require("../../../core/utils/type").isNumeric,
+    devices = require("../../../core/devices"),
+    dateUtils = require("../../../core/utils/date");
 
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,

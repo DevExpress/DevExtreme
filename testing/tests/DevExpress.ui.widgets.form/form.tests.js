@@ -1,18 +1,18 @@
-var $ = require("jquery"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    responsiveBoxScreenMock = require("../../helpers/responsiveBoxScreenMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    typeUtils = require("core/utils/type"),
-    browser = require("core/utils/browser"),
-    domUtils = require("core/utils/dom"),
-    internals = require("ui/form/ui.form").__internals,
-    themes = require("ui/themes"),
-    device = require("core/devices").real();
+import $ from "jquery";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import responsiveBoxScreenMock from "../../helpers/responsiveBoxScreenMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import typeUtils from "core/utils/type";
+import browser from "core/utils/browser";
+import domUtils from "core/utils/dom";
+import { __internals as internals } from "ui/form/ui.form";
+import themes from "ui/themes";
+import device from "core/devices";
 
-require("ui/text_area");
+import "ui/text_area";
 
-require("common.css!");
-require("generic_light.css!");
+import "common.css!";
+import "generic_light.css!";
 
 var INVALID_CLASS = "dx-invalid";
 
@@ -167,6 +167,30 @@ QUnit.test("Change editor value after formOption is changed and items is defined
         type: "captain",
         isSought: false
     }, "FormData is up to date");
+});
+
+QUnit.test("Reset editor value after formData changing only if dataField is defined", function(assert) {
+    // arrange
+    var $testContainer = $("#form"),
+        form;
+
+    form = $testContainer.dxForm({
+        formData: { pirateName: "Blackbeard", type: "captain", isSought: "Test", gender: "Male" },
+        items: [{ dataField: "gender" }, { dataField: "pirateName" }, { dataField: "type" }, { name: "isSought", editorType: "dxTextBox" }]
+    }).dxForm("instance");
+
+    // act
+    form.getEditor("isSought").option("value", "Changed");
+    form.getEditor("gender").option("value", "Female");
+
+    form.option("formData", {
+        pirateName: "John Morgan",
+        type: "captain"
+    });
+
+    // assert
+    assert.equal(form.getEditor("isSought").option("value"), "Changed", "'isSought' editor wasn't reseted");
+    assert.equal(form.getEditor("gender").option("value"), "", "'gender' editor was reseted");
 });
 
 QUnit.test("Invalid field name when item is defined not as string and not as object", function(assert) {
@@ -1292,6 +1316,42 @@ QUnit.test("Align labels when layout is changed when small window size by defaul
     assert.equal($("." + internals.HIDDEN_LABEL_CLASS).length, 0, "hidden labels count");
 });
 
+QUnit.test("required mark aligned", (assert) => {
+    let $testContainer = $("#form").dxForm({
+        requiredMark: "!",
+        items: [{
+            dataField: "name",
+            isRequired: true
+        }]
+    });
+
+    let $labelsContent = $testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`),
+        $requiredLabel = $labelsContent.find(`.${internals.FIELD_ITEM_LABEL_TEXT_CLASS}`),
+        $requiredMark = $labelsContent.find(`.${internals.FIELD_ITEM_REQUIRED_MARK_CLASS}`);
+
+    $labelsContent.width(200);
+
+    assert.roughEqual($labelsContent.offset().left + $requiredLabel.width(), $requiredMark.offset().left, 0.5, "position of requared mark is right");
+    assert.ok($requiredLabel.position().left < $requiredMark.position().left, "required mark should be after of the text");
+});
+
+QUnit.test("optional mark aligned", (assert) => {
+    let $testContainer = $("#form").dxForm({
+        optionalMark: "optMark",
+        showOptionalMark: true,
+        items: ["position"]
+    });
+
+    let $labelsContent = $testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`),
+        $optionalLabel = $labelsContent.find(`.${internals.FIELD_ITEM_LABEL_TEXT_CLASS}`),
+        $optionalMark = $labelsContent.find(`.${internals.FIELD_ITEM_OPTIONAL_MARK_CLASS}`);
+
+    $labelsContent.width(200);
+
+    assert.roughEqual($labelsContent.offset().left + $optionalLabel.width(), $optionalMark.offset().left, 0.5, "position of optional mark is right");
+    assert.ok($optionalLabel.position().left < $optionalMark.position().left, "optional mark should be after of the text");
+});
+
 
 QUnit.module("Public API", {
     beforeEach: function() {
@@ -1404,7 +1464,7 @@ QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
             }]
         }).dxForm("instance");
 
-        if(device.deviceType === "desktop") {
+        if(device.real().deviceType === "desktop") {
             $("#form").find(".dx-button").focus();
             assert.ok($("#form").find(".dx-button").is(":focus"), "initial focus");
         }
@@ -1425,7 +1485,7 @@ QUnit.testInActiveWindow("Change 'Button.icon'", function(assert) {
         }
 
         assert.strictEqual(form.getButton("button1").option("icon"), "icon2");
-        if(device.deviceType === "desktop") {
+        if(device.real().deviceType === "desktop") {
             assert.ok($("#form").find(".dx-button").is(":focus") === (setOptionWay !== "itemOption"), "final focus");
         }
     });
@@ -2421,6 +2481,45 @@ QUnit.test("Form redraw layout when colCount is 'auto' and an calculated colCoun
     assert.equal(refreshSpy.callCount, 1, "form has been redraw layout");
 });
 
+QUnit.module("Form when rtlEnabled is true");
+
+QUnit.test("required mark aligned when rtlEnabled option is set to true", (assert) => {
+    let $testContainer = $("#form").dxForm({
+        requiredMark: "!",
+        rtlEnabled: true,
+        items: [{
+            dataField: "name",
+            isRequired: true
+        }]
+    });
+
+    let $labelsContent = $testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`),
+        $requiredLabel = $labelsContent.find(`.${internals.FIELD_ITEM_LABEL_TEXT_CLASS}`),
+        $requiredMark = $labelsContent.find(`.${internals.FIELD_ITEM_REQUIRED_MARK_CLASS}`);
+
+    $labelsContent.width(200);
+
+    assert.notEqual($labelsContent.offset().left, $requiredMark.offset().left, "position of requared mark is right");
+    assert.ok($requiredLabel.position().left > $requiredMark.position().left, "required mark should be before of the text");
+});
+
+QUnit.test("optional mark aligned when rtlEnabled option is set to true", (assert) => {
+    let $testContainer = $("#form").dxForm({
+        optionalMark: "optMark",
+        showOptionalMark: true,
+        rtlEnabled: true,
+        items: ["position"]
+    });
+
+    let $labelsContent = $testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`),
+        $optionalLabel = $labelsContent.find(`.${internals.FIELD_ITEM_LABEL_TEXT_CLASS}`),
+        $optionalMark = $labelsContent.find(`.${internals.FIELD_ITEM_OPTIONAL_MARK_CLASS}`);
+
+    $labelsContent.width(200);
+
+    assert.notEqual($labelsContent.offset().left, $optionalMark.offset().left, "position of optional mark is right");
+    assert.ok($optionalLabel.position().left > $optionalMark.position().left, "optional mark should be before of the text");
+});
 
 QUnit.module("Events");
 

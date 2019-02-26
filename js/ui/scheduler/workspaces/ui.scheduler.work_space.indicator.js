@@ -1,9 +1,9 @@
-var $ = require("../../core/renderer"),
+var $ = require("../../../core/renderer"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space"),
-    registerComponent = require("../../core/component_registrator"),
-    dateUtils = require("../../core/utils/date"),
-    extend = require("../../core/utils/extend").extend,
-    windowUtils = require("../../core/utils/window"),
+    registerComponent = require("../../../core/component_registrator"),
+    dateUtils = require("../../../core/utils/date"),
+    extend = require("../../../core/utils/extend").extend,
+    windowUtils = require("../../../core/utils/window"),
     toMs = dateUtils.dateToMilliseconds;
 
 var SCHEDULER_DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",

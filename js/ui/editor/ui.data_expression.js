@@ -1,10 +1,8 @@
-var $ = require("../../core/renderer"),
-    variableWrapper = require("../../core/utils/variable_wrapper"),
+var variableWrapper = require("../../core/utils/variable_wrapper"),
     dataCoreUtils = require("../../core/utils/data"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
-    FunctionTemplate = require("../widget/function_template"),
     DataHelperMixin = require("../../data_helper"),
     DataSourceModule = require("../../data/data_source/data_source"),
     ArrayStore = require("../../data/array_store"),
@@ -61,7 +59,8 @@ var DataExpressionMixin = extend(DataHelperMixin, {
 
             /**
             * @name DataExpressionMixinOptions.displayExpr
-            * @type string|function
+            * @type string|function(item)
+            * @type_function_param1 item:object
             * @default undefined
             */
             displayExpr: undefined
@@ -201,16 +200,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
         return dataCoreUtils.toComparable(value1, true) === dataCoreUtils.toComparable(value2, true);
     },
 
-    _initDynamicTemplates: function() {
-        if(this._displayGetterExpr()) {
-            this._originalItemTemplate = this._defaultTemplates["item"];
-            this._defaultTemplates["item"] = new FunctionTemplate((function(options) {
-                return $('<div>').text(this._displayGetter(options.model)).html();
-            }).bind(this));
-        } else if(this._originalItemTemplate) {
-            this._defaultTemplates["item"] = this._originalItemTemplate;
-        }
-    },
+    _initDynamicTemplates: commonUtils.noop,
 
     _setCollectionWidgetItemTemplate: function() {
         this._initDynamicTemplates();
@@ -218,8 +208,8 @@ var DataExpressionMixin = extend(DataHelperMixin, {
     },
 
     _getCollectionKeyExpr: function() {
-        var valueExpr = this.option("valueExpr"),
-            isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== "this";
+        var valueExpr = this.option("valueExpr");
+        var isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== "this" || typeUtils.isFunction(valueExpr);
 
         return isValueExprField ? valueExpr : null;
     },

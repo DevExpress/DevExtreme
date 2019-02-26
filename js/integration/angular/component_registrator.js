@@ -499,7 +499,7 @@ ComponentBuilder = ComponentBuilder.inherit({
     },
 
     _isNgModelRequired() {
-        return this._componentClass.subclassOf(Editor) && this._ngModel;
+        return (this._componentClass.subclassOf(Editor) || this._componentClass.prototype instanceof Editor) && this._ngModel;
     },
 
     _initComponentBindings(...args) {

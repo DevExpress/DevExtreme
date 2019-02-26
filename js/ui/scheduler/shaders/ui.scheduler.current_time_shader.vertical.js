@@ -1,4 +1,4 @@
-var $ = require("../../core/renderer"),
+var $ = require("../../../core/renderer"),
     Shader = require("./ui.scheduler.current_time_shader");
 
 var DATE_TIME_SHADER_ALL_DAY_CLASS = "dx-scheduler-date-time-shader-all-day",

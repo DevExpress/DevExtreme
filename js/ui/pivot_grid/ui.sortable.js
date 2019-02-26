@@ -8,7 +8,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     DOMComponent = require("../../core/dom_component"),
     dragEvents = require("../../events/drag"),
-    getSwatchContainer = require("../widget/swatch_container");
+    getSwatchContainer = require("../widget/swatch_container").getSwatchContainer;
 
 var SORTABLE_NAMESPACE = "dxSortable",
     SORTABLE_CLASS = "dx-sortable",

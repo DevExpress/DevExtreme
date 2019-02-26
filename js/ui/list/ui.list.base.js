@@ -129,6 +129,14 @@ var ListBase = CollectionWidget.inherit({
             */
 
             /**
+             * @name dxListOptions.displayExpr
+             * @type string|function(item)
+             * @type_function_param1 item:object
+             * @default undefined
+             */
+            displayExpr: undefined,
+
+            /**
              * @name dxListOptions.hoverStateEnabled
              * @type boolean
              * @default true
@@ -586,6 +594,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _init: function() {
+        this._compileDisplayGetter();
         this.callBase();
         this._$container = this.$element();
 
@@ -881,6 +890,17 @@ var ListBase = CollectionWidget.inherit({
         this._inkRipple = inkRipple.render();
     },
 
+    _compileDisplayGetter: function() {
+        var displayExpr = this.option("displayExpr");
+        this._displayGetter = displayExpr ? compileGetter(this.option("displayExpr")) : undefined;
+    },
+
+    _getFieldsMap: function() {
+        if(this._displayGetter) {
+            return { text: this._displayGetter };
+        }
+    },
+
     _toggleActiveState: function($element, value, e) {
         this.callBase.apply(this, arguments);
         var that = this;
@@ -1079,6 +1099,11 @@ var ListBase = CollectionWidget.inherit({
             case "pageLoadMode":
                 this._toggleNextButton(args.value);
                 this._initScrollView();
+                break;
+            case "displayExpr":
+                this._compileDisplayGetter();
+                this._initDefaultItemTemplate();
+                this._invalidate();
                 break;
             case "dataSource":
                 this.callBase(args);
