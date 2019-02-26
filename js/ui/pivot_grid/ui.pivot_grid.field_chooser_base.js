@@ -67,6 +67,7 @@ function getMainGroupField(dataSource, sourceField) {
 }
 
 function getStringState(state) {
+    state = state || {};
     return JSON.stringify([state.fields, state.columnExpandedPaths, state.rowExpandedPaths]);
 }
 
@@ -115,11 +116,12 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                 if(this._skipStateChange || !this._dataSource) {
                     break;
                 }
-                if(getStringState(this._dataSource.state()) === getStringState(args.value)) {
+
+                if(this.option("applyChangesMode") === "instantly" && getStringState(this._dataSource.state()) !== getStringState(args.value)) {
+                    this._dataSource.state(args.value);
+                } else {
                     this._clean(true);
                     this._renderComponent();
-                } else {
-                    this._dataSource.state(args.value);
                 }
                 break;
             case "headerFilter":
