@@ -1021,7 +1021,8 @@ registerTheme({
             connectorWidth: 2,
             font: {
                 size: 16
-            }
+            },
+            overlappingBehavior: "hide"
         },
         legend: {
             visible: false
