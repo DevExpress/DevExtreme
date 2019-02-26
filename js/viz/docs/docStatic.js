@@ -72,7 +72,7 @@ var staticMethods = {
     * @param1 widgetInstances:Array<Array<DOMComponent>>
     * @param2 options:object
     * @param2_field1 fileName:string
-    * @param2_field2 format:string
+    * @param2_field2 format:Enums.ExportFormat
     * @param2_field3 backgroundColor:string
     * @param2_field4 margin:number
     * @param2_field5 gridLayout:boolean
