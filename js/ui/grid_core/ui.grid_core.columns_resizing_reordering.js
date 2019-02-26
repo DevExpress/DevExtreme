@@ -11,7 +11,7 @@ import dragEvents from "../../events/drag";
 import modules from "./ui.grid_core.modules";
 import gridCoreUtils from "./ui.grid_core.utils";
 import fx from "../../animation/fx";
-import getSwatchContainer from "../widget/swatch_container";
+import { getSwatchContainer } from "../widget/swatch_container";
 
 var COLUMNS_SEPARATOR_CLASS = "columns-separator",
     COLUMNS_SEPARATOR_TRANSPARENT = "columns-separator-transparent",
