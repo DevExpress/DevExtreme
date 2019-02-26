@@ -236,11 +236,17 @@
             }
         }
 
-        .dx-row > td {
-            padding-top: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
-            padding-bottom: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
-            font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
-            line-height: @MATERIAL_GRID_BASE_CELL_LINE_HEIGHT;
+        .dx-row {
+            & > td {
+                padding-top: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
+                padding-bottom: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING;
+                font-size: @MATERIAL_GRID_BASE_CELL_FONT_SIZE;
+                line-height: @MATERIAL_GRID_BASE_CELL_LINE_HEIGHT;
+            }
+            & > td.dx-command-adaptive {
+                padding-top: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING - 2px;
+                padding-bottom: @MATERIAL_GRID_BASE_CELL_VERTICAL_PADDING - 2px;
+            }
         }
 
         .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
