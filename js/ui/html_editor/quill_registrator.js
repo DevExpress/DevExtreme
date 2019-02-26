@@ -17,6 +17,7 @@ class QuillRegistrator {
         const Toolbar = require("./modules/toolbar").default;
         const DropImage = require("./modules/dropImage").default;
         const Variables = require("./modules/variables").default;
+        const Resizing = require("./modules/resizing").default;
 
         const DirectionStyle = quill.import("attributors/style/direction");
 
@@ -32,6 +33,7 @@ class QuillRegistrator {
             "modules/toolbar": Toolbar,
             "modules/dropImage": DropImage,
             "modules/variables": Variables,
+            "modules/resizing": Resizing,
 
             "themes/basic": BaseTheme
         },
