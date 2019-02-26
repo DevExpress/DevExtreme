@@ -9,13 +9,7 @@ import "ui/radio_group";
 const { testStart, module, test, testInActiveWindow } = QUnit;
 
 testStart(() => {
-    const markup = `
-        <div id="radioGroup"></div>
-        <div id="radioGroup2"></div>
-        <div id="widget"></div>
-        <div id="widthRootStyle" style="width: 300px;"></div>`;
-
-    $("#qunit-fixture").html(markup);
+    $("#qunit-fixture").html(`<div id="radioGroup"></div>`);
 });
 
 const RADIO_GROUP_CLASS = "dx-radiogroup";
@@ -36,11 +30,14 @@ const moduleConfig = {
     }
 };
 
+const createRadioGroup = options => $("#radioGroup").dxRadioGroup(options);
+const getInstance = $element => $element.dxRadioGroup("instance");
+
 module("nested radio group", moduleConfig, () => {
     test("T680199 - click on nested radio group in template should not affect on contaier parent radio group", assert => {
         let $nestedRadioGroup;
 
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
             items: [{
                 template: function(itemData, itemIndex, element) {
                     $nestedRadioGroup = $("<div/>").dxRadioGroup({
@@ -54,12 +51,12 @@ module("nested radio group", moduleConfig, () => {
             }]
         });
 
-        const parentRadioGroup = $radioGroup.dxRadioGroup("instance");
+        const parentRadioGroup = getInstance($radioGroup);
         const parentItemElement = $(parentRadioGroup.itemElements()).first();
         parentItemElement.trigger("dxclick");
         assert.ok(parentItemElement.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of parent radio group is checked");
 
-        const nestedRadioGroup = $nestedRadioGroup.dxRadioGroup("instance");
+        const nestedRadioGroup = getInstance($nestedRadioGroup);
         const nestedItemElement = $(nestedRadioGroup.itemElements()).first();
         nestedItemElement.trigger("dxclick");
         assert.ok(nestedItemElement.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item of nested radio group is checked");
@@ -71,7 +68,7 @@ module("nested radio group", moduleConfig, () => {
         let $nestedRadioGroup1,
             $nestedRadioGroup2;
 
-        $("#radioGroup").dxRadioGroup({
+        createRadioGroup({
             items: [{
                 template: function(itemData, itemIndex, element) {
                     $nestedRadioGroup1 = $("<div/>").dxRadioGroup({
@@ -85,8 +82,8 @@ module("nested radio group", moduleConfig, () => {
             }]
         });
 
-        const nestedRadioGroup1 = $nestedRadioGroup1.dxRadioGroup("instance");
-        const nestedRadioGroup2 = $nestedRadioGroup2.dxRadioGroup("instance");
+        const nestedRadioGroup1 = getInstance($nestedRadioGroup1);
+        const nestedRadioGroup2 = getInstance($nestedRadioGroup2);
 
         const firstNestedItemElement1 = $(nestedRadioGroup1.itemElements()).first();
         firstNestedItemElement1.trigger("dxclick");
@@ -101,7 +98,7 @@ module("buttons group rendering", () => {
     test("onContentReady fired after the widget is fully ready", assert => {
         assert.expect(2);
 
-        $("#radioGroup").dxRadioGroup({
+        createRadioGroup({
             items: [
                 { text: "0" }
             ],
@@ -114,10 +111,12 @@ module("buttons group rendering", () => {
 
     test("onContentReady should rise after changing dataSource (T697809)", assert => {
         const onContentReadyHandler = sinon.stub(),
-            instance = $("#radioGroup").dxRadioGroup({
-                dataSource: ["str1", "str2", "str3"],
-                onContentReady: onContentReadyHandler
-            }).dxRadioGroup("instance");
+            instance = getInstance(
+                createRadioGroup({
+                    dataSource: ["str1", "str2", "str3"],
+                    onContentReady: onContentReadyHandler
+                })
+            );
 
         assert.ok(onContentReadyHandler.calledOnce);
         instance.option("dataSource", [1, 2, 3]);
@@ -127,7 +126,7 @@ module("buttons group rendering", () => {
 
 module("layout", moduleConfig, () => {
     test("should be generated proper class with vertical layout", assert => {
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
             layout: "vertical"
         });
 
@@ -135,7 +134,7 @@ module("layout", moduleConfig, () => {
     });
 
     test("should be generated proper class with horizontal layout", assert => {
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
             layout: "horizontal"
         });
 
@@ -143,11 +142,11 @@ module("layout", moduleConfig, () => {
     });
 
     test("should be generated proper class when layout is changed", assert => {
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
             layout: "horizontal"
         });
 
-        $radioGroup.dxRadioGroup("instance").option("layout", "vertical");
+        getInstance($radioGroup).option("layout", "vertical");
 
         assert.ok($radioGroup.hasClass(RADIO_GROUP_VERTICAL_CLASS), "class set correctly");
     });
@@ -155,8 +154,8 @@ module("layout", moduleConfig, () => {
     test("On the tablet radio group must use a horizontal layout", assert => {
         devices.current("iPad");
 
-        const $radioGroup = $("#radioGroup").dxRadioGroup(),
-            isHorizontalLayout = $radioGroup.dxRadioGroup("instance").option("layout") === "horizontal";
+        const $radioGroup = createRadioGroup(),
+            isHorizontalLayout = getInstance($radioGroup).option("layout") === "horizontal";
 
         assert.ok(isHorizontalLayout, "radio group on tablet have horizontal layout");
     });
@@ -164,11 +163,11 @@ module("layout", moduleConfig, () => {
 
 module("hidden input", () => {
     test("the hidden input should get correct value on widget value change", assert => {
-        const $element = $("#radioGroup").dxRadioGroup({
+        const $element = createRadioGroup({
                 items: [1, 2, 3],
                 value: 2
             }),
-            instance = $element.dxRadioGroup("instance"),
+            instance = getInstance($element),
             $input = $element.find("input");
 
         instance.option("value", 1);
@@ -180,12 +179,12 @@ module("value", moduleConfig, () => {
     test("should not throw an error when the value is \"null\" or \"undefine\"", assert => {
         const errorLogStub = sinon.stub(errors, "log");
 
-        $("#radioGroup").dxRadioGroup({
+        createRadioGroup({
             items: ['item1', 'item2', 'item3'],
             value: void 0
         });
 
-        $("#radioGroup").dxRadioGroup({
+        createRadioGroup({
             items: ['item1', 'item2', 'item3'],
             value: null
         });
@@ -198,18 +197,22 @@ module("value", moduleConfig, () => {
         let radioGroupInstance = null;
         const isItemChecked = index => radioGroupInstance.itemElements().eq(index).hasClass(RADIO_BUTTON_CHECKED_CLASS);
 
-        radioGroupInstance = $("#radioGroup").dxRadioGroup({
-            items: ['item1', 'item2', 'item3']
-        }).dxRadioGroup('instance');
+        radioGroupInstance = getInstance(
+            createRadioGroup({
+                items: ['item1', 'item2', 'item3']
+            })
+        );
 
         assert.notOk(isItemChecked(0));
         assert.notOk(isItemChecked(1));
         assert.notOk(isItemChecked(2));
 
-        radioGroupInstance = $("#radioGroup").dxRadioGroup({
-            items: ['item1', 'item2', 'item3'],
-            value: 'item2'
-        }).dxRadioGroup('instance');
+        radioGroupInstance = getInstance(
+            createRadioGroup({
+                items: ['item1', 'item2', 'item3'],
+                value: 'item2'
+            })
+        );
 
         assert.notOk(isItemChecked(0));
         assert.ok(isItemChecked(1));
@@ -218,11 +221,11 @@ module("value", moduleConfig, () => {
 
     test("repaint of widget shouldn't reset value option", assert => {
         const items = [{ text: "0" }, { text: "1" }];
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
                 items: items,
                 value: items[1]
             }),
-            radioGroup = $radioGroup.dxRadioGroup("instance");
+            radioGroup = getInstance($radioGroup);
 
         radioGroup.repaint();
         assert.strictEqual(radioGroup.option("value"), items[1]);
@@ -232,13 +235,13 @@ module("value", moduleConfig, () => {
         assert.expect(1);
 
         let value;
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
             items: [1, 2, 3],
             onValueChanged: function(e) {
                 value = e.value;
             }
         });
-        const radioGroup = $radioGroup.dxRadioGroup("instance");
+        const radioGroup = getInstance($radioGroup);
 
         $(radioGroup.itemElements()).first().trigger("dxclick");
 
@@ -247,13 +250,13 @@ module("value", moduleConfig, () => {
 
     test("onValueChanged option should get jQuery event as a parameter", assert => {
         let jQueryEvent,
-            $radioGroup = $("#radioGroup").dxRadioGroup({
+            $radioGroup = createRadioGroup({
                 items: [1, 2, 3],
                 onValueChanged: function(e) {
                     jQueryEvent = e.event;
                 }
             }),
-            radioGroup = $radioGroup.dxRadioGroup("instance");
+            radioGroup = getInstance($radioGroup);
 
         $(radioGroup.itemElements()).first().trigger("dxclick");
         assert.ok(jQueryEvent, "jQuery event is defined when click used");
@@ -270,8 +273,8 @@ module("valueExpr", moduleConfig, () => {
             { number: 2, caption: "two" }
         ];
 
-        const radioGroup = $("#radioGroup")
-            .dxRadioGroup({
+        const radioGroup = getInstance(
+            createRadioGroup({
                 dataSource: items,
                 valueExpr: "number",
                 value: 2,
@@ -279,7 +282,7 @@ module("valueExpr", moduleConfig, () => {
                     return item.caption;
                 }
             })
-            .dxRadioGroup("instance");
+        );
 
         let $secondItem = $(radioGroup.itemElements()).eq(1);
 
@@ -301,7 +304,7 @@ module("valueExpr", moduleConfig, () => {
 
 module("widget sizing render", moduleConfig, () => {
     test("change width", assert => {
-        const $element = $("#widget").dxRadioGroup({
+        const $element = createRadioGroup({
                 items: [
                     { text: "0" },
                     { text: "1" },
@@ -309,7 +312,7 @@ module("widget sizing render", moduleConfig, () => {
                     { text: "3" }
                 ]
             }),
-            instance = $element.dxRadioGroup("instance"),
+            instance = getInstance($element),
             customWidth = 400;
 
         instance.option("width", customWidth);
@@ -323,11 +326,11 @@ module("keyboard navigation", moduleConfig, () => {
         assert.expect(3);
 
         const items = [{ text: "0" }, { text: "1" }, { text: "2" }, { text: "3" }],
-            $element = $("#widget").dxRadioGroup({
+            $element = createRadioGroup({
                 focusStateEnabled: true,
                 items: items
             }),
-            instance = $element.dxRadioGroup("instance"),
+            instance = getInstance($element),
             keyboard = keyboardMock($element);
 
         $element.focusin();
@@ -344,7 +347,7 @@ module("keyboard navigation", moduleConfig, () => {
 
     test("control keys should be prevented", assert => {
         const items = [{ text: "0" }, { text: "1" }];
-        const $element = $("#widget").dxRadioGroup({
+        const $element = createRadioGroup({
             focusStateEnabled: true,
             items: items
         });
@@ -371,7 +374,7 @@ module("keyboard navigation", moduleConfig, () => {
 
     test("keyboard navigation does not work in disabled widget", assert => {
         const items = [{ text: "0" }, { text: "1" }, { text: "2" }, { text: "3" }],
-            $element = $("#widget").dxRadioGroup({
+            $element = createRadioGroup({
                 focusStateEnabled: true,
                 items: items,
                 disabled: true
@@ -382,7 +385,7 @@ module("keyboard navigation", moduleConfig, () => {
 
     test("radio group items should not have tabIndex(T674238)", assert => {
         const items = [{ text: "0" }, { text: "1" }],
-            $element = $("#widget").dxRadioGroup({
+            $element = createRadioGroup({
                 focusStateEnabled: true,
                 items: items
             });
@@ -397,11 +400,11 @@ module("focus policy", moduleConfig, () => {
     test("focused-state set up on radio group after focusing on any item", assert => {
         assert.expect(2);
 
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
                 items: [1, 2, 3],
                 focusStateEnabled: true
             }),
-            radioGroup = $radioGroup.dxRadioGroup("instance"),
+            radioGroup = getInstance($radioGroup),
             $firstRButton = $(radioGroup.itemElements()).first();
 
         assert.ok(!$radioGroup.hasClass(FOCUSED_CLASS), "radio group is not focused");
@@ -415,11 +418,11 @@ module("focus policy", moduleConfig, () => {
     test("radioGroup item has not dx-state-focused class after radioGroup lose focus", assert => {
         assert.expect(2);
 
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
                 items: [1, 2, 3],
                 focusStateEnabled: true
             }),
-            radioGroup = $radioGroup.dxRadioGroup("instance"),
+            radioGroup = getInstance($radioGroup),
             $firstRButton = $(radioGroup.itemElements()).first();
 
         $radioGroup.focusin();
@@ -435,11 +438,11 @@ module("focus policy", moduleConfig, () => {
     test("radioGroup item has not dx-state-focused class after radioGroup lose focus", assert => {
         assert.expect(2);
 
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
                 items: [1, 2, 3],
                 focusStateEnabled: true
             }),
-            radioGroup = $radioGroup.dxRadioGroup("instance"),
+            radioGroup = getInstance($radioGroup),
             $firstRButton = $(radioGroup.itemElements()).first();
 
         assert.ok(!$firstRButton.hasClass(FOCUSED_CLASS));
@@ -450,7 +453,7 @@ module("focus policy", moduleConfig, () => {
     });
 
     test("radioGroup element should get 'dx-state-focused' class", assert => {
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
             items: [1, 2, 3],
             focusStateEnabled: true
         });
@@ -461,12 +464,12 @@ module("focus policy", moduleConfig, () => {
     });
 
     test("option 'accessKey' has effect", assert => {
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
                 items: [1, 2, 3],
                 focusStateEnabled: true,
                 accessKey: "k"
             }),
-            instance = $radioGroup.dxRadioGroup("instance");
+            instance = getInstance($radioGroup);
 
         assert.equal($radioGroup.attr("accessKey"), "k", "access key is correct");
 
@@ -475,12 +478,12 @@ module("focus policy", moduleConfig, () => {
     });
 
     test("option 'tabIndex' has effect", assert => {
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
                 items: [1, 2, 3],
                 focusStateEnabled: true,
                 tabIndex: 4
             }),
-            instance = $radioGroup.dxRadioGroup("instance");
+            instance = getInstance($radioGroup);
 
         assert.equal($radioGroup.attr("tabIndex"), 4, "tab index is correct");
         instance.option("tabIndex", 7);
@@ -488,10 +491,10 @@ module("focus policy", moduleConfig, () => {
     });
 
     testInActiveWindow("the 'focus()' method should set focused class to widget", assert => {
-        const $radioGroup = $("#radioGroup").dxRadioGroup({
+        const $radioGroup = createRadioGroup({
             focusStateEnabled: true
         });
-        const instance = $radioGroup.dxRadioGroup("instance");
+        const instance = getInstance($radioGroup);
 
         instance.focus();
         assert.ok($radioGroup.hasClass("dx-state-focused"), "widget got focused class");
