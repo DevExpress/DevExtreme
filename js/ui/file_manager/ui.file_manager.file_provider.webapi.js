@@ -1,7 +1,14 @@
 import ajax from "../../core/utils/ajax";
+import { noop } from "../../core/utils/common";
+import Guid from "../../core/guid";
+import windowUtils from "../../core/utils/window";
 
 import FileManagerItem from "./ui.file_manager.items";
 import FileProvider from "./ui.file_manager.file_provider";
+
+const window = windowUtils.getWindow();
+const FILE_CHUNK_BLOB_NAME = "chunk";
+const FILE_CHUNK_META_DATA_NAME = "chunkMetadata";
 
 var WebAPIFileProvider = FileProvider.inherit({
 
@@ -49,13 +56,42 @@ var WebAPIFileProvider = FileProvider.inherit({
         });
     },
 
-    getUploadUrl: function(destinationFolder) {
-        var url = this._options.uploadUrl;
-        if(destinationFolder) {
-            url += url.indexOf('?') > -1 ? "&" : "?";
-            url += "destinationId=" + destinationFolder;
-        }
-        return url;
+    initiateFileUpload: function(uploadInfo) {
+        uploadInfo.customData.uploadId = new Guid();
+    },
+
+    uploadFileChunk: function(uploadInfo, chunk) {
+        var params = {
+            destinationId: uploadInfo.destinationFolder.relativeName
+        };
+        var url = this._options.uploadChunkUrl + "?" + this._getQueryString(params);
+
+        var formData = new window.FormData();
+        formData.append(FILE_CHUNK_BLOB_NAME, chunk.blob);
+        formData.append(FILE_CHUNK_META_DATA_NAME, JSON.stringify({
+            UploadId: uploadInfo.customData.uploadId,
+            FileName: uploadInfo.file.name,
+            Index: chunk.index,
+            TotalCount: uploadInfo.totalChunkCount,
+            FileSize: uploadInfo.file.size
+        }));
+
+        return ajax.sendRequest({
+            url: url,
+            method: "POST",
+            dataType: "text",
+            data: formData,
+            upload: {
+                onprogress: noop,
+                onloadstart: noop,
+                onabort: noop
+            },
+            cache: false
+        });
+    },
+
+    abortFileUpload: function(uploadInfo) {
+        return this._executeRequest(this._options.abortUploadUrl, { uploadId: uploadInfo.customData.uploadId });
     },
 
     _getItems: function(path, isFolder) {
@@ -78,7 +114,8 @@ var WebAPIFileProvider = FileProvider.inherit({
         var dataType = jsonResult ? "json" : "text";
         return ajax.sendRequest({
             url: finalUrl,
-            dataType: dataType
+            dataType: dataType,
+            cache: false
         });
     },
 

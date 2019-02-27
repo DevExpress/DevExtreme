@@ -231,10 +231,13 @@ var FileManagerUploadSession = Class.inherit({
     },
 
     _createUploadingState: function(file) {
+        var chunkCount = Math.ceil(file.size / this._controller.chunkSize);
+
         return {
             file: file,
             uploadedBytesCount: 0,
             uploadedChunksCount: 0,
+            totalChunkCount: chunkCount,
             customData: {}
         };
     },

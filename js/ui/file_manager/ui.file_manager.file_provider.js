@@ -43,10 +43,6 @@ var FileProvider = Class.inherit({
 
     },
 
-    getUploadUrl: function(destinationFolder) {
-        return null;
-    },
-
     getFileUploadChunkSize: function() {
         return DEFAULT_FILE_UPLOAD_CHUNK_SIZE;
     }

@@ -410,7 +410,8 @@ var FileManager = Widget.inherit({
                 moveUrl: "",
                 copyUrl: "",
                 downloadUrl: "",
-                uploadUrl: ""
+                uploadChunkUrl: "",
+                abortUploadUrl: ""
             }
         });
     },
