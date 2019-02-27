@@ -354,6 +354,20 @@ QUnit.test("popup should be placed into container specified in the 'container' o
     assert.strictEqual($content.closest($container).length, 1, "Popover content located into desired container");
 });
 
+QUnit.test("popup should be placed into new container after changing the 'container' option", (assert) => {
+    const $container = $("#dropDownMenuSecond");
+    const $dropDownMenu = $container.dxDropDownMenu({
+        opened: true
+    });
+
+    $dropDownMenu.dxDropDownMenu("option", "container", $container);
+
+    const popoverInstance = $dropDownMenu.find(".dx-popup").dxPopover("instance");
+    const $content = $(popoverInstance.content());
+
+    assert.strictEqual($content.closest($container).length, 1, "Popover content located into desired container");
+});
+
 
 QUnit.module("KO cases", {
     beforeEach: function() {
