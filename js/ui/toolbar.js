@@ -53,7 +53,9 @@ var Toolbar = ToolbarBase.inherit({
             * @acceptValues 'actionSheet'|'listTop'|'listBottom'|'dropDownMenu'
             * @hidden
             */
-            submenuType: "dropDownMenu"
+            submenuType: "dropDownMenu",
+
+            menuContainer: undefined,
 
             /**
             * @name dxToolbarItem.location
@@ -398,6 +400,9 @@ var Toolbar = ToolbarBase.inherit({
             case "onItemClick":
                 this._changeMenuOption(name, value);
                 this.callBase.apply(this, arguments);
+                break;
+            case "menuContainer":
+                this._changeMenuOption("container", value);
                 break;
             default:
                 this.callBase.apply(this, arguments);
