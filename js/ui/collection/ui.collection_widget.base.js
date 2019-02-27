@@ -21,6 +21,7 @@ var $ = require("../../core/renderer"),
     selectors = require("../widget/selectors"),
     messageLocalization = require("../../localization/message"),
     holdEvent = require("../../events/hold"),
+    compileGetter = require("../../core/utils/data").compileGetter,
     clickEvent = require("../../events/click"),
     contextMenuEvent = require("../../events/contextmenu"),
     BindableTemplate = require("../widget/bindable_template");
@@ -228,6 +229,7 @@ var CollectionWidget = Widget.inherit({
             */
             focusedElement: null,
 
+            displayExpr: undefined,
             disabledExpr: function(data) { return data ? data.disabled : undefined; },
             visibleExpr: function(data) { return data ? data.visible : undefined; }
 
@@ -257,10 +259,16 @@ var CollectionWidget = Widget.inherit({
     },
 
     _init: function() {
+        this._compileDisplayGetter();
         this.callBase();
 
         this._cleanRenderedItems();
         this._refreshDataSource();
+    },
+
+    _compileDisplayGetter: function() {
+        var displayExpr = this.option("displayExpr");
+        this._displayGetter = displayExpr ? compileGetter(this.option("displayExpr")) : undefined;
     },
 
     _initTemplates: function() {
@@ -288,7 +296,11 @@ var CollectionWidget = Widget.inherit({
         return ["text", "html"];
     },
 
-    _getFieldsMap: commonUtils.noop,
+    _getFieldsMap: function() {
+        if(this._displayGetter) {
+            return { text: this._displayGetter };
+        }
+    },
 
     _prepareDefaultItemTemplate: function(data, $container) {
         if(data.text) {
@@ -589,6 +601,11 @@ var CollectionWidget = Widget.inherit({
             case "focusedElement":
                 this._removeFocusedItem(args.previousValue);
                 this._setFocusedItem($(args.value));
+                break;
+            case "displayExpr":
+                this._compileDisplayGetter();
+                this._initDefaultItemTemplate();
+                this._invalidate();
                 break;
             case "visibleExpr":
             case "disabledExpr":
