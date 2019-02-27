@@ -321,6 +321,20 @@ module("valueExpr", moduleConfig, () => {
         assert.strictEqual(radioGroup.option("value"), true);
         assert.ok(itemElement.hasClass(RADIO_BUTTON_CHECKED_CLASS));
     });
+
+    test("displayExpr option should work", assert => {
+        const radioGroup = getInstance(
+            createRadioGroup({
+                dataSource: [{ id: 1, name: "Item 1" }],
+                valueExpr: "id",
+                displayExpr: "name",
+                value: 1
+            })
+        );
+        const $item = $(radioGroup.itemElements()).eq(0);
+
+        assert.strictEqual($item.text(), "Item 1", "displayExpr works");
+    });
 });
 
 module("widget sizing render", moduleConfig, () => {
