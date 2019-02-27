@@ -4,6 +4,7 @@
 @LIST_STYLE_OUTER_WIDTH: @LIST_STYLE_MARGIN + @LIST_STYLE_WIDTH;
 @MAX_INDENT: 9;
 @RESIZE_HANDLE_SIZE: 11px;
+@TOUCH_RESIZE_HANDLE_SIZE: 15px;
 
 @TRANSPARENT_BORDER: 1px solid transparent;
 
@@ -304,29 +305,50 @@
 .dx-resizable-handle-corner-bottom-right,
 .dx-resizable-handle-corner-bottom-left {
     border: 1px solid white;
-    width: 11px;
-    height: 11px;
+    width: @RESIZE_HANDLE_SIZE;
+    height: @RESIZE_HANDLE_SIZE;
     border-radius: 0;
+
+    .dx-touch-device & {
+        width: @TOUCH_RESIZE_HANDLE_SIZE;
+        height: @TOUCH_RESIZE_HANDLE_SIZE;
+    }
 }
 
 .dx-resizable-handle-corner-top-right,
 .dx-resizable-handle-corner-bottom-right {
     right: -@RESIZE_HANDLE_SIZE / 2;
+
+    .dx-touch-device & {
+        right: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+    }
 }
 
 .dx-resizable-handle-corner-top-left,
 .dx-resizable-handle-corner-bottom-left {
     left: -@RESIZE_HANDLE_SIZE / 2;
+
+    .dx-touch-device & {
+        left: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+    }
 }
 
 .dx-resizable-handle-corner-top-right,
 .dx-resizable-handle-corner-top-left {
     top: -@RESIZE_HANDLE_SIZE / 2;
+
+    .dx-touch-device & {
+        top: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+    }
 }
 
 .dx-resizable-handle-corner-bottom-right,
 .dx-resizable-handle-corner-bottom-left {
     bottom: -@RESIZE_HANDLE_SIZE / 2;
+
+    .dx-touch-device & {
+        bottom: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+    }
 }
 
 .dx-resizable-handle-right,
@@ -339,35 +361,64 @@
         width: @RESIZE_HANDLE_SIZE;
         height: @RESIZE_HANDLE_SIZE;
         border: 1px solid white;
+
+        .dx-touch-device & {
+            width: @TOUCH_RESIZE_HANDLE_SIZE;
+            height: @TOUCH_RESIZE_HANDLE_SIZE;
+        }
     }
 }
 
 .dx-resizable-handle-right,
 .dx-resizable-handle-left {
     &::after {
-        top: calc(50% - (@RESIZE_HANDLE_SIZE / 2));
+        top: calc(~"50% - "@RESIZE_HANDLE_SIZE / 2);
+
+        .dx-touch-device & {
+            top: calc(~"50% - "@TOUCH_RESIZE_HANDLE_SIZE / 2);
+        }
     }
 }
 
 .dx-resizable-handle-top,
 .dx-resizable-handle-bottom {
     &::after {
-        left: calc(50% - (@RESIZE_HANDLE_SIZE / 2));
+        left: calc(~"50% - "@RESIZE_HANDLE_SIZE / 2);
+
+        .dx-touch-device & {
+            left: calc(~"50% - "@TOUCH_RESIZE_HANDLE_SIZE / 2);
+        }
     }
 }
 
 .dx-resizable-handle-right::after {
     right: -@RESIZE_HANDLE_SIZE / 2;
+
+    .dx-touch-device & {
+        right: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+    }
 }
 
 .dx-resizable-handle-left::after {
     left: -@RESIZE_HANDLE_SIZE / 2;
+
+    .dx-touch-device & {
+        left: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+    }
 }
 
 .dx-resizable-handle-top::after {
     top: -@RESIZE_HANDLE_SIZE / 2;
+
+    .dx-touch-device & {
+        top: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+    }
 }
 
 .dx-resizable-handle-bottom::after {
     bottom: -@RESIZE_HANDLE_SIZE / 2;
+
+    .dx-touch-device & {
+        bottom: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+    }
 }
