@@ -72,20 +72,20 @@ const HtmlEditor = Editor.inherit({
             placeholder: "",
             /**
             * @name dxHtmlEditorOptions.toolbar
-            * @type dxHtmlEditorToolbar
+            * @type object
             * @default null
             */
             toolbar: null,
             /**
             * @name dxHtmlEditorOptions.variables
-            * @type dxHtmlEditorVariables
+            * @type object
             * @default null
             */
             variables: null,
 
             /**
             * @name dxHtmlEditorOptions.resizing
-            * @type dxHtmlEditorResizing
+            * @type object
             * @default null
             */
             resizing: null,
@@ -93,15 +93,11 @@ const HtmlEditor = Editor.inherit({
             formDialogOptions: null
 
             /**
-            * @name dxHtmlEditorToolbar
-            * @type object
-            */
-            /**
-            * @name dxHtmlEditorToolbar.container
+            * @name dxHtmlEditorOptions.toolbar.container
             * @type string|Node|jQuery
             */
             /**
-            * @name dxHtmlEditorToolbar.items
+            * @name dxHtmlEditorOptions.toolbar.items
             * @type Array<dxHtmlEditorToolbarItem,string>
             */
 
@@ -124,31 +120,23 @@ const HtmlEditor = Editor.inherit({
             */
 
             /**
-            * @name dxHtmlEditorVariables
-            * @type object
-            */
-            /**
-            * @name dxHtmlEditorVariables.dataSource
+            * @name dxHtmlEditorOptions.variables.dataSource
             * @type string|Array<string>|DataSource|DataSourceOptions
             * @default null
             */
             /**
-            * @name dxHtmlEditorVariables.escapeChar
+            * @name dxHtmlEditorOptions.variables.escapeChar
             * @type string|Array<string>
             * @default ""
             */
 
             /**
-            * @name dxHtmlEditorResizing
-            * @type object
-            */
-            /**
-            * @name dxHtmlEditorResizing.enabled
+            * @name dxHtmlEditorOptions.resizing.enabled
             * @type boolean
             * @default false
             */
             /**
-            * @name dxHtmlEditorResizing.allowedTargets
+            * @name dxHtmlEditorOptions.resizing.allowedTargets
             * @type Array<string>
             * @default ["images"]
             */
