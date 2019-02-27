@@ -1193,11 +1193,10 @@ var Scheduler = Widget.inherit({
                     itemTemplate: this._getAppointmentTemplate("appointmentTemplate")
                 });
 
-                this._updateHeader();
-
                 this._postponeResourceLoading().done((resources) => {
                     this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
                     this._refreshWorkSpace(resources);
+                    this._updateHeader();
                     this._filterAppointmentsByDate();
                     this._appointments.option("allowAllDayResize", value !== "day");
                 });
