@@ -1219,6 +1219,21 @@ QUnit.test("Shift. Hide item if empty space is not enough", function(assert) {
     assert.equal(labels[2].stub("hide").callCount, 1);
 });
 
+QUnit.test("Shift overlapped labels. Inverted", function(assert) {
+    const labels = this.testOverlapping([
+        { x: 1, y: 0, height: 15 },
+        { x: 2, y: 14, height: 15 },
+        { x: 3, y: 15, height: 15 }
+    ].reverse(), {
+        resolveLabelOverlapping: "shift",
+        inverted: true
+    });
+    assert.equal(labels[2].stub("shift").callCount, 1);
+    assert.equal(labels[1].stub("shift").callCount, 2);
+    assert.deepEqual(labels[1].stub("shift").lastCall.args, [2, 15]);
+    assert.equal(labels[0].stub("shift").callCount, 2);
+    assert.deepEqual(labels[0].stub("shift").lastCall.args, [3, 30]);
+});
 
 QUnit.test("Redraw hidden labels on resize", function(assert) {
     const labels = this.testOverlapping([

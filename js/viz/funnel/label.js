@@ -294,9 +294,10 @@ exports.plugin = {
         _resolveLabelOverlapping() {
             const that = this;
             const resolveLabelOverlapping = normalizeEnum(that._getOption("resolveLabelOverlapping", true));
+            const labels = this._getOption("inverted", true) ? that._labels.slice().reverse() : that._labels;
 
             if(resolveLabelOverlapping === "hide") {
-                that._labels.reduce((height, label) => {
+                labels.reduce((height, label) => {
                     if(label.getBoundingRect().y < height) {
                         label.hide();
                     } else {
@@ -307,7 +308,7 @@ exports.plugin = {
             } else if(resolveLabelOverlapping === "shift") {
                 const maxHeight = this._labelRect[3];
 
-                that._labels.reduce(([height, emptySpace], label, index, labels) => {
+                labels.reduce(([height, emptySpace], label, index, labels) => {
                     const bBox = label.getBoundingRect();
                     let y = bBox.y;
 
