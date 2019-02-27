@@ -62,7 +62,7 @@ class ResizingModule {
     }
 
     _isImage(targetElement) {
-        return this.allowedTargets.includes("image") && targetElement.tagName.toUpperCase() === "IMG";
+        return this.allowedTargets.indexOf("image") !== -1 && targetElement.tagName.toUpperCase() === "IMG";
     }
 
     showFrame() {
@@ -125,9 +125,7 @@ class ResizingModule {
 
     option(option, value) {
         if(option === "resizing") {
-            Object.entries(value).forEach((keyValueArray) => {
-                this.option(...keyValueArray);
-            });
+            Object.keys(value).forEach((optionName) => this.option(optionName, value[optionName]));
             return;
         }
 
