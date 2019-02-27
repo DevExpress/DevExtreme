@@ -74,13 +74,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        var that = this;
-
         this.clearCaretTimeout();
         this._caretTimeout = setTimeout(function() {
-            that._caretTimeout = null;
-            that._moveCaretToBoundaryEventHandler(MOVE_BACKWARD, e);
-        }, CARET_TIMEOUT_DURATION);
+            this._caretTimeout = null;
+            this._moveCaretToBoundaryEventHandler(MOVE_BACKWARD, e);
+        }.bind(this), CARET_TIMEOUT_DURATION);
     },
 
     _focusOutHandler: function(e) {
@@ -470,12 +468,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         eventsEngine.on($input, eventUtils.addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
         eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), function() {
-            var that = this;
-
             if(!this._caretTimeout) {
                 this._caretTimeout = setTimeout(function() {
-                    that._caret(maskCaret.getCaretInBoundaries(that._caret(), that._getInputVal(), that._getFormatPattern()));
-                }, CARET_TIMEOUT_DURATION);
+                    this._caret(maskCaret.getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
+                }.bind(this), CARET_TIMEOUT_DURATION);
             }
         }.bind(this));
 
