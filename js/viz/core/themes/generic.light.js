@@ -1017,13 +1017,13 @@ registerTheme({
         backgroundColor: "#e0e0e0",
         relativeInnerRadius: 0.3,
         barSpacing: 4,
+        resolveLabelOverlapping: "hide",
         label: {
             indent: 20,
             connectorWidth: 2,
             font: {
                 size: 16
-            },
-            overlappingBehavior: "hide"
+            }
         },
         legend: {
             visible: false

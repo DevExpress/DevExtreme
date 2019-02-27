@@ -728,14 +728,14 @@ var dxBarGauge = {
             family: undefined,
             weight: 400,
             opacity: 1
-        },
-        /**
-        * @name dxBarGaugeOptions.label.overlappingBehavior
-        * @type Enums.BarGaugeLabelOverlappingBehavior
-        * @default 'hide'
-        */
-        overlappingBehavior: "hide"
+        }
     },
+    /**
+    * @name dxBarGaugeOptions.resolveLabelOverlapping
+    * @type Enums.BarGaugeResolveLabelOverlapping
+    * @default 'hide'
+    */
+    resolveLabelOverlapping: "hide",
     /**
     * @name dxBarGaugeOptions.startValue
     * @type number

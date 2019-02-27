@@ -249,7 +249,7 @@ var dxBarGauge = dxBaseGauge.inherit({
     _checkOverlap: function() {
         const that = this,
             bars = that._bars,
-            overlapStrategy = _normalizeEnum(that._getOption("label").overlappingBehavior);
+            overlapStrategy = _normalizeEnum(that._getOption("resolveLabelOverlapping", true));
 
         if(overlapStrategy === "none") {
             return;
