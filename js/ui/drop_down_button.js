@@ -82,6 +82,7 @@ let DropDownButton = Widget.inherit({
             height: "auto",
             shading: false,
             position: {
+                of: this._buttonGroup.element(),
                 collision: "flipfit",
                 my: "top right",
                 at: "bottom right",
@@ -137,11 +138,10 @@ let DropDownButton = Widget.inherit({
     },
 
     _setActionButton(key) {
-        const actionButtonIndex = this.option("actionButtonIndex");
         this._getItemByKey(key).done((itemData) => {
             let optionObject = {};
-            optionObject["items[" + actionButtonIndex + "].text"] = this._displayGetter(itemData);
-            optionObject["items[" + actionButtonIndex + "].icon"] = itemData.icon;
+            optionObject["items[0].text"] = this._displayGetter(itemData);
+            optionObject["items[0].icon"] = itemData.icon;
 
             this._buttonGroup.option(optionObject);
         });

@@ -46,7 +46,6 @@ QUnit.module("markup", {
 
         assert.strictEqual(popup.NAME, "dxPopup", "popup has been rendered");
         assert.strictEqual(getList(dropDownButton).NAME, "dxList", "list has been rendered");
-        assert.strictEqual(popup.option("target"), getButtonGroup(dropDownButton).element(), "popup has correct target");
         assert.ok(popup.option("closeOnOutsideClick"), "popup should be closed on outside click");
     });
 });
@@ -97,7 +96,37 @@ QUnit.module("popup integration", {
     }
 }, () => {
     QUnit.test("popup content should have special class", assert => {
-        assert.ok(this.popup.content().hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
+        assert.ok($(this.popup.content()).hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
+    });
+
+    QUnit.test("popup shoild have correct options after rendering", assert => {
+        const buttonGroupElement = getButtonGroup(this.instance).element();
+        const options = {
+            deferRendering: this.instance.option("deferRendering"),
+            minWidth: 130,
+            closeOnOutsideClick: true,
+            showTitle: false,
+            animation: {
+                show: { type: "fade", duration: 0, from: 0, to: 1 },
+                hide: { type: "fade", duration: 400, from: 1, to: 0 }
+            },
+            width: "auto",
+            height: "auto",
+            shading: false,
+            position: {
+                of: buttonGroupElement,
+                collision: "flipfit",
+                my: "top right",
+                at: "bottom right",
+                offset: {
+                    y: -1
+                }
+            }
+        };
+
+        for(let name in options) {
+            assert.deepEqual(this.popup.option(name), options[name], "option " + name + " is correct");
+        }
     });
 });
 
