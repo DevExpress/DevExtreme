@@ -824,6 +824,41 @@ QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert)
     });
 });
 
+QUnit.test("Multiple panes. Cancel argument mousewheel zooming on zoomStart", function(assert) {
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        panes: [
+            { name: "p1" },
+            { name: "p2" }
+        ],
+        series: [
+            { pane: "p1" },
+            { pane: "p2" }
+        ],
+        zoomAndPan: {
+            argumentAxis: "both"
+        },
+        onZoomStart(e) {
+            e.cancel = true;
+        }
+    });
+
+    // act
+    this.pointer.start({ x: 200, y: 250 }).wheel(10);
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 3, endValue: 7 });
+    });
+});
+
 QUnit.module("Wheel zooming. Mouse on axis", environment);
 
 QUnit.test("Mouse over value axis - zoom only value axes in one pane axes", function(assert) {
@@ -1284,6 +1319,42 @@ QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert)
 
     chart._argumentAxes.forEach(axis => {
         assert.deepEqual(axis.visualRange(), { startValue: 4, endValue: 8 });
+    });
+});
+
+QUnit.test("Multiple panes. Cancel zooming on zoomStart", function(assert) {
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 2,
+                endValue: 10
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: "zoom",
+            dragToZoom: true
+        },
+        panes: [
+            { name: "p1" },
+            { name: "p2" }
+        ],
+        series: [
+            { pane: "p1" },
+            { pane: "p2" }
+        ],
+        onZoomStart(e) {
+            e.cancel = true;
+        }
+    });
+
+    // act
+    this.pointer.start({ x: 200, y: 250 }).dragStart().drag(400, 50).dragEnd();
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 2, endValue: 10 });
     });
 });
 
