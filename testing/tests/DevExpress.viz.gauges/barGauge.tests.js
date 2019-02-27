@@ -263,10 +263,7 @@ QUnit.module('Positioning', $.extend({}, environment, {
 }));
 
 function checkPositioning(name, options, callback) {
-    if(options.label !== null) {
-        options.label = options.label || {};
-        $.extend(options.label, { overlappingBehavior: "none" });
-    }
+    options.resolveLabelOverlapping = "none";
     QUnit.test(name, function(assert) {
         this.$container.dxBarGauge($.extend({}, options, { animation: false }));
         callback.apply(this, arguments);
@@ -507,9 +504,7 @@ QUnit.test('Values are changed', function(assert) {
     var done = assert.async(),
         gauge = this.$container.dxBarGauge({
             values: [10, 20, 30],
-            label: {
-                overlappingBehavior: "none"
-            }
+            resolveLabelOverlapping: "none"
         }).dxBarGauge('instance');
     var group = this.getBarsGroup();
     group.animationComplete = $.proxy(function() {
@@ -542,9 +537,7 @@ QUnit.test('Some values are not changed', function(assert) {
     var done = assert.async(),
         gauge = this.$container.dxBarGauge({
             values: [10, 20, 30],
-            label: {
-                overlappingBehavior: "none"
-            }
+            resolveLabelOverlapping: "none"
         }).dxBarGauge('instance');
     var group = this.getBarsGroup();
     group.animationComplete = $.proxy(function() {
@@ -1071,9 +1064,7 @@ QUnit.module("Label overlapping behavior", function(hooks) {
     QUnit.test("None", function(assert) {
         this.$container.dxBarGauge({
             values: [19, 20],
-            label: {
-                overlappingBehavior: "none"
-            },
+            resolveLabelOverlapping: "none",
             animation: {
                 enabled: false
             }
@@ -1132,9 +1123,7 @@ QUnit.module("Label overlapping behavior", function(hooks) {
 
         this.$container.dxBarGauge({
             values: [19, 20, 39, 40],
-            label: {
-                overlappingBehavior: "hide"
-            },
+            resolveLabelOverlapping: "hide",
             animation: {
                 enabled: false
             }
@@ -1177,9 +1166,7 @@ QUnit.module("Label overlapping behavior", function(hooks) {
         var that = this;
         this.$container.dxBarGauge({
             values: [19, 20],
-            label: {
-                overlappingBehavior: "none"
-            },
+            resolveLabelOverlapping: "none",
             animation: true
         });
 
@@ -1242,9 +1229,7 @@ QUnit.module("Label overlapping behavior", function(hooks) {
 
         this.$container.dxBarGauge({
             values: [19, 20, 39, 40],
-            label: {
-                overlappingBehavior: "hide"
-            },
+            resolveLabelOverlapping: "hide",
             animation: true
         });
 

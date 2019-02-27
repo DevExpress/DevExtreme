@@ -96,7 +96,7 @@
  */
 
 /**
- * @typedef {string} Enums.BarGaugeLabelOverlappingBehavior
+ * @typedef {string} Enums.BarGaugeResolveLabelOverlapping
  * @enum {'hide'|'none'}
  */
 
