@@ -303,6 +303,19 @@ QUnit.test("value should be correct if valueExpr is a string", function(assert) 
     assert.equal($(radioGroup.itemElements()).find(toSelector(RADIO_BUTTON_CHECKED_CLASS)).length, 0, "no items selected");
 });
 
+QUnit.test("displayExpr option should work", function(assert) {
+    var radioGroup = $("#radioGroup")
+        .dxRadioGroup({
+            dataSource: [{ id: 1, name: "Item 1" }],
+            valueExpr: "id",
+            displayExpr: "name",
+            value: 1
+        }).dxRadioGroup("instance");
+    var $item = $(radioGroup.itemElements()).eq(0);
+
+    assert.strictEqual($item.text(), "Item 1", "displayExpr works");
+});
+
 
 QUnit.module("widget sizing render", moduleConfig);
 

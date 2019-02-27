@@ -1967,3 +1967,14 @@ QUnit.test("template should be rendered correctly with html & text", function(as
     assert.ok($span.length);
     assert.equal($content.text(), "test");
 });
+
+QUnit.test("displayExpr option should work", assert => {
+    var $element = $("#cmp"),
+        instance = new TestWidget($element, {
+            dataSource: [{ name: "Item 1" }],
+            displayExpr: "name"
+        }),
+        $item = $(instance.itemElements()).eq(0);
+
+    assert.strictEqual($item.text(), "Item 1", "displayExpr works");
+});

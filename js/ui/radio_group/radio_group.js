@@ -313,6 +313,7 @@ class RadioGroup extends Editor {
         const $radios = $("<div>").appendTo(this.$element());
 
         this._radios = this._createComponent($radios, RadioCollection, {
+            displayExpr: this.option("displayExpr"),
             accessKey: this.option("accessKey"),
             dataSource: this._dataSource,
             focusStateEnabled: this.option("focusStateEnabled"),
