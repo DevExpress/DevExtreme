@@ -1284,7 +1284,7 @@ var Form = Widget.inherit({
                                 break;
                             }
                         }
-                    } else if(fullName.endsWith("cssClass") && $itemContainer) {
+                    } else if($itemContainer && fullName.substring(fullName.length - 8, fullName.length) === "cssClass") {
                         $itemContainer.removeClass(args.previousValue).addClass(args.value);
                         break;
                     }
