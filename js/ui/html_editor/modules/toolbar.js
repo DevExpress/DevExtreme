@@ -245,17 +245,17 @@ class ToolbarModule extends BaseModule {
 
     _renderToolbar() {
         const container = this.options.container || this._getContainer();
-        const $toolbar = $("<div>")
+
+        this._$toolbar = $("<div>")
             .addClass(TOOLBAR_CLASS)
             .appendTo(container);
-
         this._$toolbarContainer = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
 
-        eventsEngine.on($toolbar, addNamespace("mousedown", this._editorInstance.NAME), (e) => {
+        eventsEngine.on(this._$toolbar, addNamespace("mousedown", this._editorInstance.NAME), (e) => {
             e.preventDefault();
         });
 
-        this.toolbarInstance = this._editorInstance._createComponent($toolbar, Toolbar, this.toolbarConfig);
+        this.toolbarInstance = this._editorInstance._createComponent(this._$toolbar, Toolbar, this.toolbarConfig);
 
         this._editorInstance.on("optionChanged", ({ name }) => {
             if(name === "readOnly" || name === "disabled") {
@@ -267,7 +267,8 @@ class ToolbarModule extends BaseModule {
     get toolbarConfig() {
         return {
             dataSource: this._prepareToolbarItems(),
-            disabled: this.isInteractionDisabled
+            disabled: this.isInteractionDisabled,
+            menuContainer: this._$toolbar
         };
     }
 
