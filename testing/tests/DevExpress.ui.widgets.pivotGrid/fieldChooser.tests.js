@@ -2310,12 +2310,14 @@ QUnit.test("cancel changes on dataSource change", function(assert) {
 
 QUnit.test("state option change", function(assert) {
     // arrange
-    this.setup({ fields: [{ index: 0, dataField: "Field1", area: 'row', allowSorting: true }] });
-    var startState = this.fieldChooser.getDataSource().state();
+    this.setup({ fields: [{ index: 0, dataField: "Field1", area: 'row', allowSorting: true, sortOrder: "asc" }] });
+    var dataSource = this.fieldChooser.getDataSource();
+    var startState = dataSource.state();
 
     // act
     var $sortIndicator = this.$container.find(".dx-area-fields[group=row] .dx-sort");
     $sortIndicator.parent().trigger("dxclick");
+    this.fieldChooser.applyChanges();
 
     this.fieldChooser.option("state", startState);
     this.clock.tick(500);
@@ -2323,4 +2325,6 @@ QUnit.test("state option change", function(assert) {
     // assert
     $sortIndicator = this.$container.find(".dx-area-fields[group=row] .dx-sort");
     assert.ok($sortIndicator.hasClass("dx-sort-up"), "state is changed");
+    // T717364
+    assert.strictEqual(dataSource.field(0).sortOrder, "desc", "field sort order is not changed after state change");
 });
