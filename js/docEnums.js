@@ -96,6 +96,11 @@
  */
 
 /**
+ * @typedef {string} Enums.BarGaugeLabelOverlappingBehavior
+ * @enum {'hide'|'none'}
+ */
+
+/**
  * @typedef {string} Enums.OverlappingBehavior
  * @enum {'rotate'|'stagger'|'none'|'hide'}
  */
@@ -967,5 +972,5 @@
 
 /**
  * @typedef {string} Enums.TreeListFilterMode
- * @enum {'exactMatch'|'fullBranch'|'withAncestors'}
+ * @enum {'fullBranch'|'matchOnly'|'withAncestors'}
  */

@@ -33,7 +33,7 @@ var $ = require("../../core/renderer"),
     EmptyTemplate = require("../widget/empty_template"),
     Deferred = require("../../core/utils/deferred").Deferred,
     zIndexPool = require("./z_index"),
-    getSwatchContainer = require("../widget/swatch_container");
+    swatch = require("../widget/swatch_container");
 
 var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_WRAPPER_CLASS = "dx-overlay-wrapper",
@@ -1207,9 +1207,9 @@ var Overlay = Widget.inherit({
     _attachWrapperToContainer: function() {
         var $element = this.$element();
         var containerDefined = this.option("container") !== undefined;
-        var renderContainer = containerDefined ? this._$container : getSwatchContainer($element);
+        var renderContainer = containerDefined ? this._$container : swatch.getSwatchContainer($element);
 
-        if(renderContainer[0] === $element.parent()[0]) {
+        if(renderContainer && renderContainer[0] === $element.parent()[0]) {
             renderContainer = $element;
         }
 

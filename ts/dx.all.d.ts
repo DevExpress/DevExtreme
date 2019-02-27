@@ -2918,6 +2918,7 @@ declare module DevExpress.ui {
         onFocusOut?: ((e: { component?: dxHtmlEditor, element?: DevExpress.core.dxElement, model?: any, event?: event }) => any);
         /** Specifies the text displayed when the input field is empty. */
         placeholder?: string;
+        resizing?: dxHtmlEditorResizing;
         /** Configures the widget's toolbar. */
         toolbar?: dxHtmlEditorToolbar;
         /** Specifies in which markup language the value is stored. */
@@ -2979,6 +2980,7 @@ declare module DevExpress.ui {
         bounceEnabled?: boolean;
         /** Specifies whether or not an end-user can collapse groups. */
         collapsibleGroups?: boolean;
+        /** Specifies the data field whose values should be displayed. Defaults to "text" when the data source contains objects. */
         displayExpr?: string | ((item: any) => any);
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
@@ -4416,7 +4418,7 @@ declare module DevExpress.ui {
         /** Specifies whether nodes appear expanded or collapsed after filtering is applied. */
         expandNodesOnFiltering?: boolean;
         /** Specifies whether filter and search results should include only matching rows or their ancestors and/or descendants as well. */
-        filterMode?: 'exactMatch' | 'fullBranch' | 'withAncestors';
+        filterMode?: 'fullBranch' | 'matchOnly' | 'withAncestors';
         /** Specifies which data field defines whether the node has children. */
         hasItemsExpr?: string | Function;
         /** Specifies which data field contains nested items. Set this option when your data has a hierarchical structure. */
@@ -5036,7 +5038,7 @@ declare module DevExpress.ui {
     export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
         /** A data source used to fetch data the widget should display. */
         dataSource?: string | Array<CollectionWidgetItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
-        /** Specifies the name of the data source item field whose value is displayed by the widget. */
+        /** Specifies the data field whose values should be displayed. */
         displayExpr?: string | ((item: any) => any);
         /** An array of items displayed by the widget. */
         items?: Array<CollectionWidgetItem | any>;
@@ -5417,7 +5419,7 @@ declare module DevExpress.ui {
     export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionWidget> extends CollectionWidgetOptions<T> {
         /** Specifies the name of the data source item field whose value defines whether or not the corresponding widget item is disabled. */
         disabledExpr?: string | Function;
-        /** Specifies the name of the data source item field whose value is displayed by the widget. */
+        /** Specifies the data field whose values should be displayed. */
         displayExpr?: string | ((item: any) => any);
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
@@ -5454,6 +5456,10 @@ declare module DevExpress.ui {
         dataSource?: string | Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** Specifies the special character(s) that should surround the variables. */
         escapeChar?: string | Array<string>;
+    }
+    export interface dxHtmlEditorResizing {
+        allowedTargets?: Array<string>;
+        enabled?: boolean;
     }
     /** This section lists the data source fields that are used in a default template for list items. */
     export interface dxListItem extends CollectionWidgetItem {

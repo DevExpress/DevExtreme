@@ -278,9 +278,11 @@ class ToolbarModule extends BaseModule {
     clean() {
         this._toolbarWidgets.clear();
 
-        this._$toolbarContainer
-            .empty()
-            .removeClass(TOOLBAR_WRAPPER_CLASS);
+        if(this._$toolbarContainer) {
+            this._$toolbarContainer
+                .empty()
+                .removeClass(TOOLBAR_WRAPPER_CLASS);
+        }
     }
 
     _getContainer() {

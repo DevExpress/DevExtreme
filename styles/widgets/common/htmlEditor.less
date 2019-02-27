@@ -67,6 +67,7 @@
     min-height: 1px;
     margin: 0px;
     position: relative;
+    overflow: hidden;
 }
 
 .ql-clipboard {
@@ -289,4 +290,10 @@
     &::before {
         content: none;
     }
+}
+
+.dx-resize-frame {
+    position: absolute;
+    box-sizing: content-box;
+    border: 1px dotted lightslategrey;
 }

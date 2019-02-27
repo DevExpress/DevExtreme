@@ -17,10 +17,11 @@ var $ = require("jquery"),
 
 $('<div id="test-container">').appendTo("#qunit-fixture");
 
+var renderer;
 QUnit.begin(function() {
     rendererModule.Renderer = sinon.spy(function() {
         var test = currentTest();
-        test.renderer = new vizMocks.Renderer();
+        test.renderer = renderer || new vizMocks.Renderer();
         test.renderer.g = sinon.spy(function() {
             var group = new vizMocks.Element();
             group.animate = function(settings, options) {
@@ -262,6 +263,10 @@ QUnit.module('Positioning', $.extend({}, environment, {
 }));
 
 function checkPositioning(name, options, callback) {
+    if(options.label !== null) {
+        options.label = options.label || {};
+        $.extend(options.label, { overlappingBehavior: "none" });
+    }
     QUnit.test(name, function(assert) {
         this.$container.dxBarGauge($.extend({}, options, { animation: false }));
         callback.apply(this, arguments);
@@ -501,7 +506,10 @@ QUnit.test('background is moved properly when container is resized', function(as
 QUnit.test('Values are changed', function(assert) {
     var done = assert.async(),
         gauge = this.$container.dxBarGauge({
-            values: [10, 20, 30]
+            values: [10, 20, 30],
+            label: {
+                overlappingBehavior: "none"
+            }
         }).dxBarGauge('instance');
     var group = this.getBarsGroup();
     group.animationComplete = $.proxy(function() {
@@ -533,7 +541,10 @@ QUnit.test('Values are changed', function(assert) {
 QUnit.test('Some values are not changed', function(assert) {
     var done = assert.async(),
         gauge = this.$container.dxBarGauge({
-            values: [10, 20, 30]
+            values: [10, 20, 30],
+            label: {
+                overlappingBehavior: "none"
+            }
         }).dxBarGauge('instance');
     var group = this.getBarsGroup();
     group.animationComplete = $.proxy(function() {
@@ -1046,4 +1057,450 @@ QUnit.test('Draw with animation in small container, change values', function(ass
     gauge.values([5, 6, 7, 8]);
 
     assert.deepEqual(this.getTrackersGroup().children.length, 2);
+});
+
+QUnit.module("Label overlapping behavior", function(hooks) {
+    hooks.beforeEach(function() {
+        environment.beforeEach.apply(this, arguments);
+    });
+
+    hooks.afterEach(function() {
+        environment.afterEach.apply(this, arguments);
+    });
+
+    QUnit.test("None", function(assert) {
+        this.$container.dxBarGauge({
+            values: [19, 20],
+            label: {
+                overlappingBehavior: "none"
+            },
+            animation: {
+                enabled: false
+            }
+        });
+
+        var elements = environment.getBarsGroup.call(this).children;
+        var labels = $.grep(elements, function(element) {
+            if(element.typeOfNode === "text") return element;
+        });
+        var lines = $.grep(elements, function(element) {
+            if(element.typeOfNode === "path") return element;
+        });
+
+        assert.equal(labels.length, 2, "labels count should be correct value");
+        assert.equal(lines.length, 2, "lines and lables should be same count");
+
+        var firstLabelArgs = labels[0].attr.lastCall.args[0];
+        assert.strictEqual(firstLabelArgs.text, "19.0", "first label should have correct text");
+        assert.strictEqual(firstLabelArgs.visibility, null, "first label should be visible");
+        assert.strictEqual(lines[0].attr.lastCall.args[0].visibility, null, "first line should be visible");
+
+        var lastLabelArgs = labels[1].attr.lastCall.args[0];
+        assert.strictEqual(lastLabelArgs.text, "20.0", "last label should have correct text");
+        assert.strictEqual(lastLabelArgs.visibility, null, "last label should be visible");
+        assert.strictEqual(lines[1].attr.lastCall.args[0].visibility, null, "last line should be visible");
+    });
+
+    QUnit.test("Hide", function(assert) {
+        var bBoxes = [
+                // render test
+                { x: 0, y: 0, width: 10, height: 10 },
+
+                // compare last label with third label
+                { x: 27, y: 29, width: 10, height: 10 },
+                { x: 20, y: 20, width: 10, height: 10 },
+
+                // compare third label with second label
+                { x: 20, y: 20, width: 10, height: 10 },
+                { x: 3, y: 5, width: 10, height: 10 },
+
+                // compare second label with first label
+                { x: 3, y: 5, width: 10, height: 10 },
+                { x: 0, y: 0, width: 10, height: 10 }
+            ],
+            i = 0;
+        renderer = new vizMocks.Renderer();
+        renderer.bBoxTemplate = function() {
+            var bBox = bBoxes[i];
+            i++;
+            if(i >= bBoxes.length) {
+                i = 0;
+            }
+
+            return bBox;
+        };
+
+        this.$container.dxBarGauge({
+            values: [19, 20, 39, 40],
+            label: {
+                overlappingBehavior: "hide"
+            },
+            animation: {
+                enabled: false
+            }
+        });
+
+        var elements = environment.getBarsGroup.call(this).children;
+        var labels = $.grep(elements, function(element) {
+            if(element.typeOfNode === "text") return element;
+        });
+        var lines = $.grep(elements, function(element) {
+            if(element.typeOfNode === "path") return element;
+        });
+
+        assert.equal(labels.length, 4, "labels count should be correct value");
+        assert.equal(lines.length, 4, "lines and lables should be same count");
+
+        var firstLabelSettings = labels[0]._stored_settings;
+        assert.strictEqual(firstLabelSettings.text, "19.0", "first label should have correct text");
+        assert.strictEqual(firstLabelSettings.visibility, null, "first label should be visible");
+        assert.strictEqual(lines[0]._stored_settings.visibility, null, "first line should be visible");
+
+        var secondLabelSettings = labels[1]._stored_settings;
+        assert.strictEqual(secondLabelSettings.text, "20.0", "second label should have correct text");
+        assert.equal(secondLabelSettings.visibility, "hidden", "second label should be hidden");
+        assert.strictEqual(lines[1]._stored_settings.visibility, "hidden", "second line should be hidden");
+
+        var thirdLabelSettings = labels[2]._stored_settings;
+        assert.strictEqual(thirdLabelSettings.text, "39.0", "third label should have correct text");
+        assert.strictEqual(thirdLabelSettings.visibility, null, "third label should be visible");
+        assert.strictEqual(lines[2]._stored_settings.visibility, null, "third line should be visible");
+
+        var lastLabelSettings = labels[3]._stored_settings;
+        assert.strictEqual(lastLabelSettings.text, "40.0", "last label should have correct text");
+        assert.equal(lastLabelSettings.visibility, "hidden", "last label should be hidden");
+        assert.strictEqual(lines[3]._stored_settings.visibility, "hidden", "third line should be hidden");
+    });
+
+    QUnit.test("[with animation] None", function(assert) {
+        var done = assert.async();
+        var that = this;
+        this.$container.dxBarGauge({
+            values: [19, 20],
+            label: {
+                overlappingBehavior: "none"
+            },
+            animation: true
+        });
+
+        environment.getBarsGroup.call(that).animationComplete = function() {
+            var elements = environment.getBarsGroup.call(that).children;
+            var labels = $.grep(elements, function(element) {
+                if(element.typeOfNode === "text") return element;
+            });
+            var lines = $.grep(elements, function(element) {
+                if(element.typeOfNode === "path") return element;
+            });
+
+            assert.equal(labels.length, 2, "labels count should be correct value");
+            assert.equal(lines.length, 2, "lines and lables should be same count");
+
+            var firstLabelArgs = labels[0].attr.lastCall.args[0];
+            assert.strictEqual(firstLabelArgs.text, "19.0", "first label should have correct text");
+            assert.strictEqual(firstLabelArgs.visibility, null, "first label should be visible");
+            assert.strictEqual(lines[0].attr.lastCall.args[0].visibility, null, "first line should be visible");
+
+            var lastLabelArgs = labels[1].attr.lastCall.args[0];
+            assert.strictEqual(lastLabelArgs.text, "20.0", "last label should have correct text");
+            assert.strictEqual(lastLabelArgs.visibility, null, "last label should be visible");
+            assert.strictEqual(lines[1].attr.lastCall.args[0].visibility, null, "last line should be visible");
+
+            done();
+        };
+    });
+
+    QUnit.test("[with animation] Hide", function(assert) {
+        var done = assert.async();
+        var that = this;
+        var bBoxes = [
+                // render test
+                { x: 0, y: 0, width: 10, height: 10 },
+
+                // compare last label with third label
+                { x: 27, y: 29, width: 10, height: 10 },
+                { x: 20, y: 20, width: 10, height: 10 },
+
+                // compare third label with second label
+                { x: 20, y: 20, width: 10, height: 10 },
+                { x: 3, y: 5, width: 10, height: 10 },
+
+                // compare second label with first label
+                { x: 3, y: 5, width: 10, height: 10 },
+                { x: 0, y: 0, width: 10, height: 10 }
+            ],
+            i = 0;
+        renderer = new vizMocks.Renderer();
+        renderer.bBoxTemplate = function() {
+            var bBox = bBoxes[i];
+            i++;
+            if(i >= bBoxes.length) {
+                i = 0;
+            }
+
+            return bBox;
+        };
+
+        this.$container.dxBarGauge({
+            values: [19, 20, 39, 40],
+            label: {
+                overlappingBehavior: "hide"
+            },
+            animation: true
+        });
+
+        environment.getBarsGroup.call(that).animationComplete = function() {
+            var elements = environment.getBarsGroup.call(that).children;
+            var labels = $.grep(elements, function(element) {
+                if(element.typeOfNode === "text") return element;
+            });
+            var lines = $.grep(elements, function(element) {
+                if(element.typeOfNode === "path") return element;
+            });
+
+            assert.equal(labels.length, 4, "labels count should be correct value");
+            assert.equal(lines.length, 4, "lines and lables should be same count");
+
+            var firstLabelSettings = labels[0]._stored_settings;
+            assert.strictEqual(firstLabelSettings.text, "19.0", "first label should have correct text");
+            assert.strictEqual(firstLabelSettings.visibility, null, "first label should be visible");
+            assert.strictEqual(lines[0]._stored_settings.visibility, null, "first line should be visible");
+
+            var secondLabelSettings = labels[1]._stored_settings;
+            assert.strictEqual(secondLabelSettings.text, "20.0", "second label should have correct text");
+            assert.equal(secondLabelSettings.visibility, "hidden", "second label should be hidden");
+            assert.strictEqual(lines[1]._stored_settings.visibility, "hidden", "second line should be hidden");
+
+            var thirdLabelSettings = labels[2]._stored_settings;
+            assert.strictEqual(thirdLabelSettings.text, "39.0", "third label should have correct text");
+            assert.strictEqual(thirdLabelSettings.visibility, null, "third label should be visible");
+            assert.strictEqual(lines[2]._stored_settings.visibility, null, "third line should be visible");
+
+            var lastLabelSettings = labels[3]._stored_settings;
+            assert.strictEqual(lastLabelSettings.text, "40.0", "last label should have correct text");
+            assert.equal(lastLabelSettings.visibility, "hidden", "last label should be hidden");
+            assert.strictEqual(lines[3]._stored_settings.visibility, "hidden", "third line should be hidden");
+
+            done();
+        };
+    });
+
+});
+
+QUnit.module("Checking intersection of labels", function() {
+    QUnit.test("Other bar matches with current bar", function(assert) {
+        var coords = {
+            topLeft: {
+                x: 0,
+                y: 0
+            },
+            bottomRight: {
+                x: 10,
+                y: 10
+            }
+        };
+        var currentBar = new BarWrapper(0, {
+            renderer: new vizMocks.Renderer()
+        });
+
+        currentBar.calculateLabelCoords = function() { return coords; };
+
+        var otherBar = new BarWrapper(1, {
+            renderer: new vizMocks.Renderer()
+        });
+
+        otherBar.calculateLabelCoords = function() { return coords; };
+
+        assert.ok(currentBar.checkIntersect(otherBar), "current bar crossed with other");
+    });
+
+    QUnit.test("Other bar shift on right and top of current bar", function(assert) {
+        var currentBar = new BarWrapper(0, {
+            renderer: new vizMocks.Renderer()
+        });
+
+        currentBar.calculateLabelCoords = function() {
+            return {
+                topLeft: {
+                    x: 0,
+                    y: 0
+                },
+                bottomRight: {
+                    x: 10,
+                    y: 10
+                }
+            };
+        };
+
+        var otherBar = new BarWrapper(1, {
+            renderer: new vizMocks.Renderer()
+        });
+
+        otherBar.calculateLabelCoords = function() {
+            return {
+                topLeft: {
+                    x: 7,
+                    y: 5
+                },
+                bottomRight: {
+                    x: 10,
+                    y: 10
+                }
+            };
+        };
+
+        assert.ok(currentBar.checkIntersect(otherBar), "current bar crossed with other");
+    });
+
+    QUnit.test("Other bar shift on left and top of current bar", function(assert) {
+        var currentBar = new BarWrapper(0, {
+            renderer: new vizMocks.Renderer()
+        });
+
+        currentBar.calculateLabelCoords = function() {
+            return {
+                topLeft: {
+                    x: 0,
+                    y: 0
+                },
+                bottomRight: {
+                    x: 10,
+                    y: 10
+                }
+            };
+        };
+
+        var otherBar = new BarWrapper(1, {
+            renderer: new vizMocks.Renderer()
+        });
+
+        otherBar.calculateLabelCoords = function() {
+            return {
+                topLeft: {
+                    x: -7,
+                    y: 9
+                },
+                bottomRight: {
+                    x: 10,
+                    y: 10
+                }
+            };
+        };
+
+        assert.ok(currentBar.checkIntersect(otherBar), "current bar crossed with other");
+    });
+
+    QUnit.test("Other bar shift on right and bottom of current bar", function(assert) {
+        var currentBar = new BarWrapper(0, {
+            renderer: new vizMocks.Renderer()
+        });
+
+        currentBar.calculateLabelCoords = function() {
+            return {
+                topLeft: {
+                    x: 0,
+                    y: 0
+                },
+                bottomRight: {
+                    x: 10,
+                    y: 10
+                }
+            };
+        };
+
+        var otherBar = new BarWrapper(1, {
+            renderer: new vizMocks.Renderer()
+        });
+
+        otherBar.calculateLabelCoords = function() {
+            return {
+                topLeft: {
+                    x: 5,
+                    y: -4
+                },
+                bottomRight: {
+                    x: 10,
+                    y: 10
+                }
+            };
+        };
+
+        assert.ok(currentBar.checkIntersect(otherBar), "current bar crossed with other");
+    });
+
+    QUnit.test("Other bar shift on left and bottom of current bar", function(assert) {
+        var currentBar = new BarWrapper(0, {
+            renderer: new vizMocks.Renderer()
+        });
+
+        currentBar.calculateLabelCoords = function() {
+            return {
+                topLeft: {
+                    x: 0,
+                    y: 0
+                },
+                bottomRight: {
+                    x: 10,
+                    y: 10
+                }
+            };
+        };
+
+        var otherBar = new BarWrapper(1, {
+            renderer: new vizMocks.Renderer()
+        });
+
+        otherBar.calculateLabelCoords = function() {
+            return {
+                topLeft: {
+                    x: -9,
+                    y: -5
+                },
+                bottomRight: {
+                    x: 10,
+                    y: 10
+                }
+            };
+        };
+
+        assert.ok(currentBar.checkIntersect(otherBar), "current bar crossed with other");
+    });
+
+    QUnit.test("Current bar doesn't crossed with other bar", function(assert) {
+        var currentBar = new BarWrapper(0, {
+            renderer: new vizMocks.Renderer()
+        });
+
+        currentBar.calculateLabelCoords = function() {
+            return {
+                topLeft: {
+                    x: 0,
+                    y: 0
+                },
+                bottomRight: {
+                    x: 10,
+                    y: 10
+                }
+            };
+        };
+
+        var otherBar = new BarWrapper(1, {
+            renderer: new vizMocks.Renderer()
+        });
+
+        otherBar.calculateLabelCoords = function() {
+            return {
+                topLeft: {
+                    x: 10,
+                    y: 15
+                },
+                bottomRight: {
+                    x: 15,
+                    y: 20
+                }
+            };
+        };
+
+        assert.ok(!currentBar.checkIntersect(otherBar), "current bar doesn't intersect with other");
+    });
+
 });

@@ -1190,6 +1190,10 @@ Series.prototype = {
         return this._stackName;
     },
 
+    getBarOverlapGroup: function() {
+        return this._options.barOverlapGroup;
+    },
+
     getPointByCoord: function(x, y) {
         var point = this.getNeighborPoint(x, y);
         return point && point.coordsIn(x, y) ? point : null;

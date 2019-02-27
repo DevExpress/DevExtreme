@@ -588,7 +588,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 if(filter && !options.storeLoadOptions.parentIds) {
                     var d = options.data = new Deferred();
 
-                    if(filterMode === "exactMatch") {
+                    if(filterMode === "matchOnly") {
                         visibleItems = data;
                     }
                     return that._loadParents(data, options).done(function(data) {

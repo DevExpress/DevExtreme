@@ -162,8 +162,13 @@
             }
         }
 
-        .dx-row > td {
-            padding: @GENERIC_GRID_BASE_CELL_PADDING;
+        .dx-row {
+            & > td {
+                padding: @GENERIC_GRID_BASE_CELL_PADDING;
+            }
+            & > td.dx-command-adaptive {
+                padding: @GENERIC_GRID_BASE_CELL_PADDING - 2px @GENERIC_GRID_BASE_CELL_PADDING;
+            }
         }
 
         .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
@@ -747,9 +752,13 @@
                     }
                 }
                 & > td,
-                & > tr > td {
-                    border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                & > tr:last-child > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                }
+                &:not(.dx-row-lines) {
+                    & > td, & > tr:first-child > td {
+                        border-top: 1px solid ~"@{@{widgetName}-focused-border-color}";
+                    }
                 }
             }
 
@@ -784,8 +793,7 @@
                     color: ~"@{@{widgetName}-base-color}";
                 }
             }
-            &:not(.dx-row-lines),
-            &:not(.dx-row-focused) {
+            &:not(.dx-row-lines):not(.dx-row-focused) {
                 & > td {
                     border-bottom: 1px solid ~"@{@{widgetName}-selection-bg}";
                     border-top: 1px solid ~"@{@{widgetName}-selection-bg}";

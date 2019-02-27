@@ -133,17 +133,17 @@ registerTheme({
             backgroundColor: WHITE,
             margin: {
                 left: 0,
-                bottom: 0,
+                bottom: 14,
                 right: 0,
                 top: 0
             },
             font: {
-                size: 28,
+                size: 18,
                 weight: 200
             },
             subtitle: {
                 font: {
-                    size: 16
+                    size: 14
                 }
             }
         }
@@ -1022,7 +1022,8 @@ registerTheme({
             connectorWidth: 2,
             font: {
                 size: 16
-            }
+            },
+            overlappingBehavior: "hide"
         },
         legend: {
             visible: false
