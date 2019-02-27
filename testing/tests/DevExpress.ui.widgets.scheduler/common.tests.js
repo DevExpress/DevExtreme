@@ -1728,6 +1728,37 @@ QUnit.testStart(function() {
         assert.equal(navigator.option("date").getMonth(), 10, "navigator has correct date");
     });
 
+    QUnit.test("currentView option changing should work correctly, when intervalCount on month view", function(assert) {
+        this.createInstance({
+            currentView: "day",
+            currentDate: new Date(2017, 4, 1),
+            views: [ {
+                name: "3 Days",
+                type: "day",
+                intervalCount: 3,
+                startDate: new Date(2017, 3, 30)
+            }, {
+                name: "2 Months",
+                type: "month",
+                intervalCount: 2
+            }]
+        });
+
+        this.instance.option("currentView", "month");
+        var workSpaceWeek = this.instance.getWorkSpace(),
+            header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.equal(workSpaceWeek.option("intervalCount"), 2, "workspace has correct count");
+        assert.equal(header.option("intervalCount"), 2, "header has correct count");
+        assert.equal(navigator.option("intervalCount"), 2, "navigator has correct count");
+
+        assert.deepEqual(workSpaceWeek.option("startDate"), null, "workspace has correct startDate");
+        assert.deepEqual(header.option("displayedDate"), new Date(2017, 4, 1), "header has correct displayedDate");
+        assert.deepEqual(header.option("currentDate"), new Date(2017, 4, 1), "header has correct displayedDate");
+        assert.equal(navigator.option("date").getMonth(), 4, "navigator has correct date");
+    });
+
     QUnit.test("maxAppointmentsPerCell should have correct default", function(assert) {
         this.createInstance({
             currentView: "Week",
