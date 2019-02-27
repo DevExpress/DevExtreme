@@ -40,7 +40,7 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "bootstrap": "^4.1.2",
+    "bootstrap": ">=4.3.1",
     "cldr-core": "latest",
     "cldrjs": "^0.5.0",
     "del": "^2.2.2",
