@@ -43,6 +43,22 @@ function checkCoords(rect, coords) {
         && y >= rect.y && y <= (rect.height + rect.y);
 }
 
+function sortAxes(axes, onlyAxisToNotify) {
+    if(onlyAxisToNotify) {
+        axes = axes.sort((a, b) => {
+            if(a === onlyAxisToNotify) {
+                return -1;
+            }
+            if(b === onlyAxisToNotify) {
+                return 1;
+            }
+            return 0;
+        });
+    }
+
+    return axes;
+}
+
 module.exports = {
     name: "zoom_and_pan",
     init: function() {
@@ -50,9 +66,13 @@ module.exports = {
             renderer = this._renderer;
 
         function cancelEvent(e) {
-            if(e.cancelable) {
+            if(e.originalEvent) {
+                cancelEvent(e.originalEvent);
+            }
+            try {
                 e.cancel = true;
-                e.originalEvent && (e.originalEvent.cancel = true);
+            } catch(e) {
+                return;
             }
         }
 
@@ -344,11 +364,12 @@ module.exports = {
                 (!isTouch || !zoomAndPan.actionData.isNative) && preventDefaults(e);
                 if(actionData.action === "zoom") {
                     const zoomAxes = (axes, criteria, coordField, startCoords, curCoords, onlyAxisToNotify) => {
+                        axes = sortAxes(axes, onlyAxisToNotify);
                         const curCoord = curCoords[coordField];
                         const startCoord = startCoords[coordField];
                         let zoomStarted = false;
-                        if(_abs(curCoord - startCoord) > MIN_DRAG_DELTA) {
-                            criteria && axes.forEach(axis => {
+                        if(criteria && _abs(curCoord - startCoord) > MIN_DRAG_DELTA) {
+                            axes.some(axis => {
                                 const tr = axis.getTranslator();
                                 if(tr.getBusinessRange().isEmpty()) {
                                     return;
@@ -357,16 +378,17 @@ module.exports = {
                                 const range = [tr.from(startCoord), tr.from(curCoord)];
                                 const isMinZoom = axis.isZoomingLowerLimitOvercome(actionData.action, tr.getMinScale(true), range);
 
-                                axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, actionData.action);
+                                const result = axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, actionData.action);
                                 isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
+                                return onlyAxisToNotify && result.isPrevented;
                             });
                         }
                         return zoomStarted;
                     };
 
                     const curCoords = getPointerCoord(actionData.curAxisRect, e);
-                    const valueAxesZoomed = zoomAxes(chart._argumentAxes, options.argumentAxis.zoom, rotated ? "y" : "x", actionData.startCoords, curCoords, chart.getArgumentAxis());
-                    const argumentAxesZoomed = zoomAxes(actionData.valueAxes, options.valueAxis.zoom, rotated ? "x" : "y", actionData.startCoords, curCoords);
+                    const argumentAxesZoomed = zoomAxes(chart._argumentAxes, options.argumentAxis.zoom, rotated ? "y" : "x", actionData.startCoords, curCoords, chart.getArgumentAxis());
+                    const valueAxesZoomed = zoomAxes(actionData.valueAxes, options.valueAxis.zoom, rotated ? "x" : "y", actionData.startCoords, curCoords);
 
                     if(valueAxesZoomed || argumentAxesZoomed) {
                         chart._requestChange(["VISUAL_RANGE"]);
@@ -434,8 +456,9 @@ module.exports = {
                 if((options.argumentAxis.zoom || options.valueAxis.zoom) && options.allowMouseWheel) {
                     renderer.root.on(wheelEvent + EVENTS_NS, function(e) {
                         function zoomAxes(axes, coord, delta, onlyAxisToNotify) {
+                            axes = sortAxes(axes, onlyAxisToNotify);
                             let zoomStarted = false;
-                            axes.forEach(axis => {
+                            axes.some(axis => {
                                 const translator = axis.getTranslator();
                                 if(translator.getBusinessRange().isEmpty()) {
                                     return;
@@ -446,8 +469,9 @@ module.exports = {
                                 const range = { startValue: zoom.min, endValue: zoom.max };
                                 const isMinZoom = axis.isZoomingLowerLimitOvercome("zoom", scale, range);
 
-                                axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, "zoom");
+                                const result = axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, "zoom");
                                 isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
+                                return onlyAxisToNotify && result.isPrevented;
                             });
 
                             return !!zoomStarted;
