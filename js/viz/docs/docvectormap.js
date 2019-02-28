@@ -320,6 +320,7 @@ var dxVectorMap = {
     /**
     * @name dxVectorMapOptions.legends
     * @type Array<Object>
+    * @inherits BaseLegend
     * @default undefined
     */
     legends: [{
@@ -376,87 +377,18 @@ var dxVectorMap = {
         */
         customizeItems: undefined,
         /**
-        * @name dxVectorMapOptions.legends.verticalAlignment
-        * @type Enums.VerticalEdge
-        * @default 'bottom'
-        */
-        verticalAlignment: 'bottom',
-        /**
-        * @name dxVectorMapOptions.legends.horizontalAlignment
-        * @type Enums.HorizontalAlignment
-        * @default 'right'
-        */
-        horizontalAlignment: 'right',
-        /**
-        * @name dxVectorMapOptions.legends.orientation
-        * @type Enums.Orientation
-        * @default undefined
-        */
-        orientation: undefined,
-        /**
-        * @name dxVectorMapOptions.legends.itemTextPosition
-        * @type Enums.Position
-        * @default undefined
-        */
-        itemTextPosition: undefined,
-        /**
-        * @name dxVectorMapOptions.legends.itemsAlignment
-        * @type Enums.HorizontalAlignment
-        * @default undefined
-        */
-        itemsAlignment: undefined,
-        /**
         * @name dxVectorMapOptions.legends.font
         * @type Font
+        * @inheritdoc
         * @default '#2b2b2b' @prop color
         */
         font: {
-            color: '#2b2b2b',
-            family: undefined,
-            weight: undefined,
-            size: 12,
-            opacity: undefined
-        },
-        /**
-        * @name dxVectorMapOptions.legends.visible
-        * @type boolean
-        * @default true
-        */
-        visible: true,
-        /**
-        * @name dxVectorMapOptions.legends.margin
-        * @type number|object
-        * @default 10
-        */
-        margin: {
-            /**
-            * @name dxVectorMapOptions.legends.margin.top
-            * @type number
-            * @default 10
-            */
-            top: 10,
-            /**
-            * @name dxVectorMapOptions.legends.margin.bottom
-            * @type number
-            * @default 10
-            */
-            bottom: 10,
-            /**
-            * @name dxVectorMapOptions.legends.margin.left
-            * @type number
-            * @default 10
-            */
-            left: 10,
-            /**
-            * @name dxVectorMapOptions.legends.margin.right
-            * @type number
-            * @default 10
-            */
-            right: 10
+            color: '#2b2b2b'
         },
         /**
         * @name dxVectorMapOptions.legends.markerSize
         * @type number
+        * @inheritdoc
         * @default 12
         */
         markerSize: 12,
@@ -471,91 +403,7 @@ var dxVectorMap = {
         * @type Enums.VectorMapMarkerShape
         * @default "square"
         */
-        markerShape: "square",
-        /**
-        * @name dxVectorMapOptions.legends.backgroundColor
-        * @type string
-        * @default undefined
-        */
-        backgroundColor: undefined,
-        /**
-        * @name dxVectorMapOptions.legends.border
-        * @type object
-        */
-        border: {
-            /**
-            * @name dxVectorMapOptions.legends.border.visible
-            * @type boolean
-            * @default false
-            */
-            visible: false,
-            /**
-            * @name dxVectorMapOptions.legends.border.width
-            * @type number
-            * @default 1
-            */
-            width: 1,
-            /**
-            * @name dxVectorMapOptions.legends.border.color
-            * @type string
-            * @default '#d3d3d3'
-            */
-            color: '#d3d3d3',
-            /**
-            * @name dxVectorMapOptions.legends.border.cornerRadius
-            * @type number
-            * @default 0
-            */
-            cornerRadius: 0,
-            /**
-            * @name dxVectorMapOptions.legends.border.opacity
-            * @type number
-            * @default undefined
-            */
-            opacity: undefined,
-            /**
-            * @name dxVectorMapOptions.legends.border.dashStyle
-            * @type Enums.DashStyle
-            * @default 'solid'
-            */
-            dashStyle: 'solid'
-        },
-        /**
-        * @name dxVectorMapOptions.legends.paddingLeftRight
-        * @type number
-        * @default 10
-        */
-        paddingLeftRight: 10,
-        /**
-        * @name dxVectorMapOptions.legends.paddingTopBottom
-        * @type number
-        * @default 10
-        */
-        paddingTopBottom: 10,
-        /**
-        * @name dxVectorMapOptions.legends.columnCount
-        * @type number
-        * @default 0
-        */
-        columnCount: 0,
-        /**
-        * @name dxVectorMapOptions.legends.rowCount
-        * @type number
-        * @default 0
-        */
-        rowCount: 0,
-        /**
-        * @name dxVectorMapOptions.legends.columnItemSpacing
-        * @type number
-        * @default 20
-        */
-        columnItemSpacing: 20,
-        /**
-        * @name dxVectorMapOptions.legends.rowItemSpacing
-        * @type number
-        * @default 8
-        */
-        rowItemSpacing: 8
+        markerShape: "square"
     }],
     /**
     * @name dxVectorMapOptions.projection
