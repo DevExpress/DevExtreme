@@ -2806,9 +2806,13 @@ QUnit.test('The "Cancel" button of the Editing form should be clicked once to cl
 
     that.editRow(0);
 
-    // act
+    // assert
     var $editElement = testElement.find('.dx-edit-row');
-    assert.equal($editElement.length, 1);
+    assert.strictEqual($editElement.length, 2);
+    assert.ok($editElement.first().is("tbody"), "wrapping element");
+    assert.ok($editElement.last().is("tr"), "wrapped element");
+
+    // act
     that.cancelEditData();
 
     // assert
@@ -13000,6 +13004,64 @@ QUnit.test("Switch editing modes between popup and form", function(assert) {
     } finally {
         fx.off = false;
     }
+});
+
+QUnit.test("Add row when row as tbody", function(assert) {
+    this.setupModules(this);
+
+    var that = this,
+        $rowElements,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing.form = {
+        colCount: 4
+    };
+    that.options.rowTemplate = function(container, options) {
+        $("<tbody class=\"dx-row dx-data-row\"><tr><td></td></tr></tbody>").appendTo(container);
+    };
+    rowsView.render($testElement);
+
+    // assert
+    $rowElements = $testElement.find("tbody.dx-row");
+    assert.strictEqual($rowElements.length, 7, "row count");
+
+    // act
+    that.addRow();
+
+    // assert
+    $rowElements = $testElement.find("tbody.dx-row");
+    assert.strictEqual($rowElements.length, 8, "row count");
+    assert.ok($rowElements.eq(0).hasClass("dx-edit-row dx-row-inserted dx-datagrid-edit-form"), "detail form row");
+});
+
+QUnit.test("Edit row when row as tbody", function(assert) {
+    this.setupModules(this);
+
+    var that = this,
+        $rowElements,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing.form = {
+        colCount: 4
+    };
+    that.options.rowTemplate = function(container, options) {
+        $("<tbody class=\"dx-row dx-data-row\"><tr><td></td></tr></tbody>").appendTo(container);
+    };
+    rowsView.render($testElement);
+
+    // assert
+    $rowElements = $testElement.find("tbody.dx-row");
+    assert.strictEqual($rowElements.length, 7, "row count");
+
+    // act
+    that.editRow(0);
+
+    // assert
+    $rowElements = $testElement.find("tbody.dx-row");
+    assert.strictEqual($rowElements.length, 7, "row count");
+    assert.ok($rowElements.eq(0).hasClass("dx-edit-row dx-datagrid-edit-form"), "detail form row");
 });
 
 
