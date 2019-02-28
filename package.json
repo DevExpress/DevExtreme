@@ -80,6 +80,7 @@
     "pre-commit": "^1.2.2",
     "qunitjs": "^2.0.1",
     "run-sequence": "^1.1.5",
+    "string-replace-loader": "^2.1.1",
     "systemjs": "<=0.19.41",
     "systemjs-plugin-babel": "0.0.25",
     "systemjs-plugin-css": "0.1.33",
