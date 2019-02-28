@@ -16,6 +16,16 @@ var chartSeriesObject = {
     */
     pane: null,
     /**
+    * @name chartSeriesObjectFields.stack
+    * @type string
+    */
+    stack: null,
+    /**
+    * @name chartSeriesObjectFields.barOverlapGroup
+    * @type string
+    */
+    barOverlapGroup: null,    
+    /**
     * @name chartSeriesObjectMethods.getArgumentAxis
     * @publicName getArgumentAxis()
     * @return chartAxisObject

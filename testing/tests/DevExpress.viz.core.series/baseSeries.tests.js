@@ -263,6 +263,20 @@ QUnit.test("Tag", function(assert) {
     assert.deepEqual(series.tag, tag);
 });
 
+QUnit.test("Stack", function(assert) {
+    var series = createSeries({ type: "bar", stack: "s1" });
+
+    assert.ok(series, "series should be exist");
+    assert.equal(series.stack, "s1", "series should have a stack field");
+});
+
+QUnit.test("BarOverlapGroup", function(assert) {
+    var series = createSeries({ type: "bar", barOverlapGroup: "g1" });
+
+    assert.ok(series, "series should be exist");
+    assert.equal(series.barOverlapGroup, "g1", "series should have a barOverlapGroup field");
+});
+
 QUnit.test("isStacked. stackedline", function(assert) {
     var series = createSeries({
         type: "stackedline"
