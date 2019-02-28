@@ -1,6 +1,7 @@
 import $ from "jquery";
 import "ui/button";
 import "ui/button_group";
+import eventsEngine from "events/core/events_engine";
 import "common.css!";
 
 const BUTTON_CLASS = "dx-button",
@@ -139,6 +140,40 @@ QUnit.module("option changed", {
         assert.equal(buttonGroup.$element().width(), 500, "button group width");
         assert.ok($items.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "first item when button group has width");
         assert.ok($items.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "second item when button group has width");
+    });
+
+    QUnit.test("it should be possible to set full set of options for each button", assert => {
+        const $element = $("#widget").dxButtonGroup({
+            items: [{ text: "button 1", width: 24, elementAttr: { class: "test" }, customOption: "Test option" }]
+        });
+        const buttonsSelector = `.${BUTTON_CLASS}`;
+        let button = $element.find(buttonsSelector).eq(0).dxButton("instance");
+
+        assert.strictEqual(button.option("width"), 24, "width is correct");
+        assert.ok(button.$element().hasClass("test"), "elementAttr is correct");
+        assert.strictEqual(button.option("customOption"), "Test option", "all options should be passed to the button");
+    });
+
+    QUnit.test("default options should not be redefined", assert => {
+        const $element = $("#widget").dxButtonGroup({
+            items: [{ text: "Test", focusStateEnabled: true }]
+        });
+        const buttonsSelector = `.${BUTTON_CLASS}`;
+        const button = $element.find(buttonsSelector).eq(0).dxButton("instance");
+
+        assert.strictEqual(button.option("focusStateEnabled"), false, "focusStateEnabled has not been redefined");
+    });
+
+    QUnit.test("onClick can be redefined", assert => {
+        const handler = sinon.spy();
+        const $element = $("#widget").dxButtonGroup({
+            items: [{ text: "Test", onClick: handler }]
+        });
+        const buttonsSelector = `.${BUTTON_CLASS}`;
+        const button = $element.find(buttonsSelector).eq(0);
+
+        eventsEngine.trigger(button, "dxclick");
+        assert.strictEqual(handler.callCount, 1, "handler has been called");
     });
 
     QUnit.test("change the stylingMode option", function(assert) {
