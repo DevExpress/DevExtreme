@@ -602,12 +602,8 @@ ValueIndicatorsSet.prototype = {
         var that = this,
             colors = null;
         if(that._palette) {
-            colors = [];
             that._palette.reset();
-            var i = 0;
-            for(; i < count; ++i) {
-                colors.push(that._palette.getNextColor());
-            }
+            colors = that._palette.generateColors(count, { repeat: true });
         }
         that._colorPalette = colors;
     },

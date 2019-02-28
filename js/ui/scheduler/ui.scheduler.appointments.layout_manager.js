@@ -1,11 +1,11 @@
 var Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
     each = require("../../core/utils/iterator").each,
-    VerticalAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.vertical"),
-    HorizontalAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal"),
-    HorizontalMonthLineAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month_line"),
-    HorizontalMonthAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month"),
-    AgendaAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.agenda");
+    VerticalAppointmentsStrategy = require("./rendering_strategies/ui.scheduler.appointments.strategy.vertical"),
+    HorizontalAppointmentsStrategy = require("./rendering_strategies/ui.scheduler.appointments.strategy.horizontal"),
+    HorizontalMonthLineAppointmentsStrategy = require("./rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line"),
+    HorizontalMonthAppointmentsStrategy = require("./rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month"),
+    AgendaAppointmentsStrategy = require("./rendering_strategies/ui.scheduler.appointments.strategy.agenda");
 
 var RENDERING_STRATEGIES = {
     "horizontal": HorizontalAppointmentsStrategy,

@@ -20,5 +20,5 @@ const getSwatchContainer = element => {
     return viewportSwatchContainer;
 };
 
-module.exports = getSwatchContainer;
+module.exports = { getSwatchContainer: getSwatchContainer };
 

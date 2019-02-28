@@ -18,8 +18,8 @@ var DISPLAY_NAMES = ["(UTC+03:00) Nairobi", "(UTC) Monrovia, Reykjavik"];
 
 var NO_TZ = require("localization/message").format("dxScheduler-noTimezoneTitle");
 
-var TimezoneEditor = require("ui/scheduler/ui.scheduler.timezone_editor"),
-    SchedulerTimezones = require("ui/scheduler/ui.scheduler.timezones");
+var TimezoneEditor = require("ui/scheduler/timezones/ui.scheduler.timezone_editor"),
+    SchedulerTimezones = require("ui/scheduler/timezones/ui.scheduler.timezones");
 
 sinon.stub(SchedulerTimezones, "getTimezones").returns(TIMEZONES);
 sinon.stub(SchedulerTimezones, "getDisplayNames").returns(DISPLAY_NAMES);

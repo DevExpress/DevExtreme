@@ -76,6 +76,11 @@
  */
 
 /**
+ * @typedef {string} Enums.VizPaletteColorSet
+ * @enum {'simpleSet'|'indicatingSet'|'gradientSet'}
+ */
+
+/**
  * @typedef {string} Enums.CircularGaugeElementOrientation
  * @enum {'center'|'inside'|'outside'}
  */
@@ -87,6 +92,11 @@
 
 /**
  * @typedef {string} Enums.ScaleLabelOverlappingBehavior
+ * @enum {'hide'|'none'}
+ */
+
+/**
+ * @typedef {string} Enums.BarGaugeResolveLabelOverlapping
  * @enum {'hide'|'none'}
  */
 
@@ -173,6 +183,11 @@
 /**
  * @typedef {string} Enums.ChartResolveLabelOverlapping
  * @enum {'hide'|'none'|'stack'}
+ */
+
+/**
+ * @typedef {string} Enums.FunnelResolveLabelOverlapping
+ * @enum {'hide'|'none'|'shift'}
  */
 
 /**
@@ -962,5 +977,5 @@
 
 /**
  * @typedef {string} Enums.TreeListFilterMode
- * @enum {'exactMatch'|'fullBranch'|'withAncestors'}
+ * @enum {'fullBranch'|'matchOnly'|'withAncestors'}
  */

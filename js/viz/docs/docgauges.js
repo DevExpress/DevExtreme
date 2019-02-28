@@ -653,10 +653,14 @@ var dxBarGauge = {
     /**
     * @name dxBarGaugeOptions.loadingIndicator
     * @type object
-    * @inherits BaseGaugeOptions.loadingIndicator
-    * @inheritdoc
     */
-    loadingIndicator: { },
+    loadingIndicator: {
+        /**
+        * @name dxBarGaugeOptions.loadingIndicator.enabled
+        * @hidden
+        */
+        enabled: false
+    },
     /**
     * @name dxBarGaugeOptions.barSpacing
     * @type number
@@ -726,6 +730,12 @@ var dxBarGauge = {
             opacity: 1
         }
     },
+    /**
+    * @name dxBarGaugeOptions.resolveLabelOverlapping
+    * @type Enums.BarGaugeResolveLabelOverlapping
+    * @default 'hide'
+    */
+    resolveLabelOverlapping: "hide",
     /**
     * @name dxBarGaugeOptions.startValue
     * @type number

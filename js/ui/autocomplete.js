@@ -246,6 +246,7 @@ var Autocomplete = DropDownList.inherit({
                 break;
             case "valueExpr":
                 this._compileDisplayGetter();
+                this._setListOption("displayExpr", this._displayGetterExpr());
                 this.callBase(args);
                 break;
             default:

@@ -59,7 +59,11 @@ seriesNS.mixins = {
     polar: {}
 };
 
-seriesNS.mixins.chart.scatter = scatterSeries.chart;
+seriesNS.mixins.chart.scatter = _extend({}, scatterSeries.chart, {
+    usePointsToDefineAutoHiding() {
+        return true;
+    }
+});
 seriesNS.mixins.polar.scatter = scatterSeries.polar;
 
 _extend(seriesNS.mixins.pie, pieSeries);
@@ -403,6 +407,14 @@ Series.prototype = {
         var aggregation = this.getOptions().aggregation;
 
         return aggregation && aggregation.enabled;
+    },
+
+    autoHidePointMarkersEnabled() {
+        return false;
+    },
+
+    usePointsToDefineAutoHiding() {
+        return this.autoHidePointMarkersEnabled();
     },
 
     createPoints(useAllAggregatedPoints) {
@@ -1178,6 +1190,10 @@ Series.prototype = {
         return this._stackName;
     },
 
+    getBarOverlapGroup: function() {
+        return this._options.barOverlapGroup;
+    },
+
     getPointByCoord: function(x, y) {
         var point = this.getNeighborPoint(x, y);
         return point && point.coordsIn(x, y) ? point : null;
@@ -1189,5 +1205,13 @@ Series.prototype = {
 
     getArgumentAxis: function() {
         return this._argumentAxis;
+    },
+
+    getMarkersGroup() {
+        return this._markersGroup;
+    },
+
+    getRenderer() {
+        return this._renderer;
     }
 };

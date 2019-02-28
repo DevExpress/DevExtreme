@@ -64,36 +64,6 @@ function getValueForArgument(point, extraPoint, x) {
     }
 }
 
-function getViewPortFilter(viewport) {
-    if(viewport.categories) {
-        const dictionary = viewport.categories.reduce((result, category) => {
-            result[category.valueOf()] = true;
-            return result;
-        }, {});
-        return function(argument) {
-            return dictionary[argument.valueOf()];
-        };
-    }
-    if(!_isDefined(viewport.startValue) && !_isDefined(viewport.endValue)) {
-        return function() {
-            return true;
-        };
-    }
-    if(!_isDefined(viewport.endValue)) {
-        return function(argument) {
-            return argument >= viewport.startValue;
-        };
-    }
-    if(!_isDefined(viewport.startValue)) {
-        return function(argument) {
-            return argument <= viewport.endValue;
-        };
-    }
-    return function(argument) {
-        return argument >= viewport.startValue && argument <= viewport.endValue;
-    };
-}
-
 function calculateRangeBetweenPoints(rangeCalculator, range, point, prevPoint, bound) {
     var value = getValueForArgument(point, prevPoint, bound);
     rangeCalculator(range, value, value);
@@ -121,7 +91,7 @@ function getViewportReducer(series) {
         }
     }
 
-    viewportFilter = getViewPortFilter(viewport);
+    viewportFilter = module.exports.getViewPortFilter(viewport);
 
     return function(range, point, index, points) {
         var argument = point.argument;
@@ -149,6 +119,36 @@ function getViewportReducer(series) {
 }
 
 module.exports = {
+    getViewPortFilter(viewport) {
+        if(viewport.categories) {
+            const dictionary = viewport.categories.reduce((result, category) => {
+                result[category.valueOf()] = true;
+                return result;
+            }, {});
+            return function(argument) {
+                return dictionary[argument.valueOf()];
+            };
+        }
+        if(!_isDefined(viewport.startValue) && !_isDefined(viewport.endValue)) {
+            return function() {
+                return true;
+            };
+        }
+        if(!_isDefined(viewport.endValue)) {
+            return function(argument) {
+                return argument >= viewport.startValue;
+            };
+        }
+        if(!_isDefined(viewport.startValue)) {
+            return function(argument) {
+                return argument <= viewport.endValue;
+            };
+        }
+        return function(argument) {
+            return argument >= viewport.startValue && argument <= viewport.endValue;
+        };
+    },
+
     getArgumentRange: function(series) {
         var data = series._data || [],
             range = {};
@@ -231,9 +231,9 @@ module.exports = {
     },
 
     getPointsInViewPort: function(series) {
-        var argumentViewPortFilter = getViewPortFilter(series.getArgumentAxis().visualRange() || {}),
+        var argumentViewPortFilter = this.getViewPortFilter(series.getArgumentAxis().visualRange() || {}),
             valueViewPort = series.getValueAxis().visualRange() || {},
-            valueViewPortFilter = getViewPortFilter(valueViewPort),
+            valueViewPortFilter = this.getViewPortFilter(valueViewPort),
             points = series.getPoints(),
             addValue = function(values, point, isEdge) {
                 var minValue = point.getMinValue(),

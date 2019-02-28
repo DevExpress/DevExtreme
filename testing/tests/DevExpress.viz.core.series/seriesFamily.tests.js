@@ -531,7 +531,6 @@ var checkSeries = function(assert, series, expectedWidth, expectedOffset) {
     assert.ok(points, "Points were passed");
     assert.ok(points.length, "There are some points");
     $.each(points, function(i, point) {
-
         assert.ok(point.coordinatesCorrected, "Point [" + i.toString() + "] has mark about corrected coordinates");
         assert.ok(point.coordinatesCorrection, "Point [" + i.toString() + "] has right coordinates");
 
@@ -818,9 +817,9 @@ QUnit.test("Set three series, barPadding is specified", function(assert) {
 
     createSeriesFamily("bar", series);
 
-    checkSeries(assert, series1, 19, -26);
+    checkSeries(assert, series1, 19, -25);
     checkSeries(assert, series2, 12, 0);
-    checkSeries(assert, series3, 23, 23);
+    checkSeries(assert, series3, 23, 25);
 });
 
 QUnit.test("Set two series, barPadding more than 1", function(assert) {
@@ -852,8 +851,8 @@ QUnit.test("Set two series, barPadding is 1", function(assert) {
 
     createSeriesFamily("bar", series);
 
-    checkSeries(assert, series1, 1, -35.5);
-    checkSeries(assert, series2, 1, 35.5);
+    checkSeries(assert, series1, 1, -19.5);
+    checkSeries(assert, series2, 1, 19.5);
 });
 
 QUnit.test("Set three series, barWidth is specified", function(assert) {
@@ -864,9 +863,100 @@ QUnit.test("Set three series, barWidth is specified", function(assert) {
 
     createSeriesFamily("bar", series);
 
-    checkSeries(assert, series1, 5, -33);
+    checkSeries(assert, series1, 5, -25);
     checkSeries(assert, series2, 10, 0);
-    checkSeries(assert, series3, 15, 28);
+    checkSeries(assert, series3, 15, 25);
+});
+
+QUnit.test("Set three series, all of them in one group", function(assert) {
+    var mixedPoints1 = pointsForStacking.mixedPoints1(),
+        mixedPoints2 = pointsForStacking.mixedPoints3(),
+        mixedPoints3 = pointsForStacking.mixedPoints3(),
+        series1 = createSeries({
+            points: mixedPoints1,
+            barOverlapGroup: "first"
+        }),
+        series2 = createSeries({
+            points: mixedPoints2,
+            barOverlapGroup: "first"
+        }),
+        series3 = createSeries({
+            points: mixedPoints3,
+            barOverlapGroup: "first"
+        }),
+        series = [series1, series2, series3],
+        expectedWidth = 70,
+        expectedOffset = 0;
+
+    createSeriesFamily("bar", series);
+
+    checkSeries(assert, series1, expectedWidth, -expectedOffset);
+    checkSeries(assert, series2, expectedWidth, 0);
+    checkSeries(assert, series3, expectedWidth, expectedOffset);
+
+    checkStackedPoints(assert, mixedPoints1);
+    checkStackedPoints(assert, mixedPoints2);
+    checkStackedPoints(assert, mixedPoints3);
+});
+
+
+QUnit.test("Set three series, tw0 of them in one group, and last in another group", function(assert) {
+    var mixedPoints1 = pointsForStacking.mixedPoints1(),
+        mixedPoints2 = pointsForStacking.mixedPoints3(),
+        mixedPoints3 = pointsForStacking.mixedPoints3(),
+        series1 = createSeries({
+            points: mixedPoints1,
+            barOverlapGroup: "g1"
+        }),
+        series2 = createSeries({
+            points: mixedPoints2,
+            barOverlapGroup: "g1"
+        }),
+        series3 = createSeries({
+            points: mixedPoints3,
+            barOverlapGroup: "g2"
+        }),
+        series = [series1, series2, series3];
+
+    createSeriesFamily("bar", series);
+
+    checkSeries(assert, series1, 32, -19.5);
+    checkSeries(assert, series2, 32, -19.5);
+    checkSeries(assert, series3, 32, 19.5);
+
+    checkStackedPoints(assert, mixedPoints1);
+    checkStackedPoints(assert, mixedPoints2);
+    checkStackedPoints(assert, mixedPoints3);
+});
+
+QUnit.test("Set three series, two of them in one group, and last in another group, and one series have custom barWidth", function(assert) {
+    var mixedPoints1 = pointsForStacking.mixedPoints1(),
+        mixedPoints2 = pointsForStacking.mixedPoints3(),
+        mixedPoints3 = pointsForStacking.mixedPoints3(),
+        series1 = createSeries({
+            points: mixedPoints1,
+            barOverlapGroup: "g1",
+            barWidth: 10
+        }),
+        series2 = createSeries({
+            points: mixedPoints2,
+            barOverlapGroup: "g1"
+        }),
+        series3 = createSeries({
+            points: mixedPoints3,
+            barOverlapGroup: "g2"
+        }),
+        series = [series1, series2, series3];
+
+    createSeriesFamily("bar", series);
+
+    checkSeries(assert, series1, 10, -19.5);
+    checkSeries(assert, series2, 32, -19.5);
+    checkSeries(assert, series3, 32, 19.5);
+
+    checkStackedPoints(assert, mixedPoints1);
+    checkStackedPoints(assert, mixedPoints2);
+    checkStackedPoints(assert, mixedPoints3);
 });
 
 QUnit.test("Set three series, barWidth more than maximum possible width - should be equal to maximum possible width", function(assert) {
@@ -877,9 +967,9 @@ QUnit.test("Set three series, barWidth more than maximum possible width - should
 
     createSeriesFamily("bar", series);
 
-    checkSeries(assert, series1, 23, -24);
+    checkSeries(assert, series1, 23, -25);
     checkSeries(assert, series2, 23, 0);
-    checkSeries(assert, series3, 23, 24);
+    checkSeries(assert, series3, 23, 25);
 });
 
 QUnit.test("Set one series, barGroupPadding less than 0, bars width should be 70% from interval", function(assert) {
@@ -1295,8 +1385,11 @@ QUnit.test("Set three series - custom min size is not specify ", function(assert
         series3 = createSeries({
             points: points3
         }),
-        series = [series1, series2, series3],
-        family = createSeriesFamily("bar", series);
+        series = [series1, series2, series3];
+
+    [points1, points2, points3].forEach(points => points.forEach(point => point.series = { type: "bar" }));
+
+    var family = createSeriesFamily("bar", series);
 
     checkStackedPointHeight(assert, family.series[0], 5, 6, 7, 0, 0, 0);
     checkStackedPointHeight(assert, family.series[1], 2, 3, 4, 0, 0, 0);

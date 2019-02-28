@@ -9,7 +9,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     dateLocalization = require("../../localization/date"),
-    SchedulerTimezones = require("./ui.scheduler.timezones"),
+    SchedulerTimezones = require("./timezones/ui.scheduler.timezones"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
 var MINUTES_IN_HOUR = 60;
@@ -307,6 +307,7 @@ var subscribes = {
 
         return cellWidth;
     },
+
     getEndDate: function(appointmentData) {
         return this._getEndDate(appointmentData);
     },
@@ -460,10 +461,18 @@ var subscribes = {
         };
 
         if(config.itemData) {
-            result.targetedAppointmentData = this.fire("getTargetedAppointmentData", config.itemData, config.itemElement, config.itemIndex);
+            result.targetedAppointmentData = this.fire("getTargetedAppointmentData", config.itemData, config.itemElement);
         }
 
         return result;
+    },
+
+    getOffsetByAllDayPanel: function(groupIndex) {
+        return this._workSpace._getOffsetByAllDayPanel(groupIndex);
+    },
+
+    getGroupTop: function(groupIndex) {
+        return this._workSpace._getGroupTop(groupIndex);
     },
 
     updateResizableArea: function() {
@@ -548,22 +557,6 @@ var subscribes = {
             resources: resources,
             allDay: allDay
         }, this._subscribes["convertDateByTimezone"].bind(this));
-    },
-
-    appendSingleAppointmentData: function(config) {
-        var appointmentData = config.appointmentData,
-            singleAppointmentData = config.singleAppointmentData;
-
-        var field = this.option("displayedAppointmentDataField"),
-            result = extend({}, appointmentData);
-
-        if(this._isAppointmentRecurrence(appointmentData) && typeUtils.isDefined(field)) {
-            singleAppointmentData = singleAppointmentData || this._subscribes["getTargetedAppointmentData"].call(this, appointmentData, undefined, config.index, config.startDate);
-
-            result[field] = singleAppointmentData;
-        }
-
-        return result;
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {
@@ -757,12 +750,13 @@ var subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, appointmentIndex, startDate) {
-        var recurringData = this._getSingleAppointmentData(appointmentData, {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement) {
+        var $appointmentElement = $(appointmentElement),
+            appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey()),
+            recurringData = this._getSingleAppointmentData(appointmentData, {
                 skipDateCalculation: true,
-                $appointment: $(appointmentElement),
-                skipHoursProcessing: true,
-                startDate: startDate
+                $appointment: $appointmentElement,
+                skipHoursProcessing: true
             }),
             result = {};
 
@@ -830,6 +824,5 @@ var subscribes = {
     getStartDayHour: function() {
         return this.option("startDayHour");
     }
-
 };
 module.exports = subscribes;

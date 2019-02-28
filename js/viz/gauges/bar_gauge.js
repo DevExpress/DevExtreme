@@ -9,6 +9,7 @@ var PI_DIV_180 = Math.PI / 180,
     objectUtils = require("../../core/utils/object"),
     commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
+    _normalizeEnum = require("../core/utils").normalizeEnum,
 
     baseGaugeModule = require("./base_gauge"),
     dxBaseGauge = baseGaugeModule.dxBaseGauge,
@@ -52,12 +53,8 @@ var dxBarGauge = dxBaseGauge.inherit({
             }
         };
         that._animateComplete = function() {
-            var bars = that._bars,
-                i,
-                ii;
-            for(i = 0, ii = bars.length; i < ii; ++i) {
-                bars[i].endAnimation();
-            }
+            that._bars.forEach(bar => bar.endAnimation());
+            that._checkOverlap();
         };
     },
 
@@ -190,7 +187,9 @@ var dxBarGauge = dxBaseGauge.inherit({
             radius = that._outerRadius - that._innerRadius,
             context = that._context,
             spacing,
-            unitOffset;
+            colors,
+            unitOffset,
+            i;
 
         const count = that._bars.length;
 
@@ -203,10 +202,11 @@ var dxBarGauge = dxBaseGauge.inherit({
         context.textRadius = radius + that._textIndent;
         that._palette.reset();
         unitOffset = context.barSize + spacing;
-
-        for(let i = 0; i < _count; ++i, radius -= unitOffset) {
+        colors = that._palette.generateColors(_count);
+        for(i = 0; i < _count; ++i, radius -= unitOffset) {
             that._bars[i].arrange({
-                radius: radius
+                radius: radius,
+                color: colors[i]
             });
         }
 
@@ -242,11 +242,34 @@ var dxBarGauge = dxBaseGauge.inherit({
     },
 
     _updateBars: function() {
-        var that = this,
-            i,
-            ii;
-        for(i = 0, ii = that._bars.length; i < ii; ++i) {
-            that._bars[i].applyValue();
+        this._bars.forEach(bar => bar.applyValue());
+        this._checkOverlap();
+    },
+
+    _checkOverlap: function() {
+        const that = this,
+            bars = that._bars,
+            overlapStrategy = _normalizeEnum(that._getOption("resolveLabelOverlapping", true));
+
+        if(overlapStrategy === "none") {
+            return;
+        }
+
+        const sortedBars = bars.concat().sort((a, b) => a.getValue() - b.getValue());
+
+        let currentIndex = 0;
+        let nextIndex = 1;
+        while(currentIndex < sortedBars.length && nextIndex < sortedBars.length) {
+            const current = sortedBars[currentIndex];
+            const next = sortedBars[nextIndex];
+
+            if(current.checkIntersect(next)) {
+                next.hideLabel();
+                nextIndex++;
+            } else {
+                currentIndex = nextIndex;
+                nextIndex = currentIndex + 1;
+            }
         }
     },
 
@@ -477,6 +500,43 @@ _extend(BarWrapper.prototype, {
             });
         }
         return that;
+    },
+
+    hideLabel: function() {
+        this._text.attr({ visibility: "hidden" });
+        this._line.attr({ visibility: "hidden" });
+    },
+
+    checkIntersect: function(anotherBar) {
+        const coords = this.calculateLabelCoords();
+        const anotherCoords = anotherBar.calculateLabelCoords();
+
+        if(!coords || !anotherCoords) {
+            return false;
+        }
+
+        const width = Math.max(0, Math.min(coords.bottomRight.x, anotherCoords.bottomRight.x) - Math.max(coords.topLeft.x, anotherCoords.topLeft.x));
+        const height = Math.max(0, Math.min(coords.bottomRight.y, anotherCoords.bottomRight.y) - Math.max(coords.topLeft.y, anotherCoords.topLeft.y));
+
+        return (width * height) !== 0;
+    },
+
+    calculateLabelCoords: function() {
+        if(!this._text) {
+            return;
+        }
+
+        const box = this._text.getBBox();
+        return {
+            topLeft: {
+                x: box.x,
+                y: box.y
+            },
+            bottomRight: {
+                x: box.x + box.width,
+                y: box.y + box.height
+            }
+        };
     },
 
     _processValue: function(value) {

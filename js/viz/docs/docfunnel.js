@@ -256,7 +256,12 @@ var dxFunnel = {
             }
         }
     },
-
+    /**
+    * @name dxFunnelOptions.resolveLabelOverlapping
+    * @type Enums.FunnelResolveLabelOverlapping
+    * @default "shift"
+    */
+    resolveLabelOverlapping: "shift",
     /**
     * @name dxFunnelOptions.label
     * @type object

@@ -1,8 +1,8 @@
 var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base"),
-    extend = require("../../core/utils/extend").extend,
-    isNumeric = require("../../core/utils/type").isNumeric,
-    devices = require("../../core/devices"),
-    dateUtils = require("../../core/utils/date");
+    extend = require("../../../core/utils/extend").extend,
+    isNumeric = require("../../../core/utils/type").isNumeric,
+    devices = require("../../../core/devices"),
+    dateUtils = require("../../../core/utils/date");
 
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     WEEK_APPOINTMENT_MOBILE_OFFSET = 50,
@@ -107,7 +107,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         var tailHeight = appointmentGeometry.sourceAppointmentHeight - appointmentGeometry.reducedHeight,
             width = appointmentGeometry.width,
             result = [],
-            currentPartTop = 0,
+            currentPartTop = this.instance.fire("getGroupTop", appointmentSettings.groupIndex),
             offset = this.instance.fire("isGroupedByDate") ? this._defaultWidth * this.instance.fire("getGroupCount") : this._defaultWidth,
             left = appointmentSettings.left + offset;
 
@@ -117,6 +117,8 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             if(tailHeight < minHeight) {
                 tailHeight = minHeight;
             }
+
+            currentPartTop += this.instance.fire("getOffsetByAllDayPanel", appointmentSettings.groupIndex);
 
             result.push(extend(true, {}, appointmentSettings, {
                 top: currentPartTop,

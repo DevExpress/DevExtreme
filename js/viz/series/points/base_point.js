@@ -154,7 +154,7 @@ Point.prototype = {
 
     draw: function(renderer, groups, animationEnabled, firstDrawing) {
         var that = this;
-        if(that._needDeletingOnDraw) {
+        if(that._needDeletingOnDraw || (that.series.autoHidePointMarkers && !that.isSelected())) {
             that.deleteMarker();
             that._needDeletingOnDraw = false;
         }
@@ -164,7 +164,7 @@ Point.prototype = {
         }
 
         if(!that._hasGraphic()) {
-            that.getMarkerVisibility() && that._drawMarker(renderer, groups.markers, animationEnabled, firstDrawing);
+            that.getMarkerVisibility() && !that.series.autoHidePointMarkers && that._drawMarker(renderer, groups.markers, animationEnabled, firstDrawing);
         } else {
             that._updateMarker(animationEnabled, this._getStyle(), groups.markers);
         }
@@ -205,13 +205,20 @@ Point.prototype = {
         var style = this._getViewStyle();
         var that = this;
         that._currentStyle = style;
+        if(!that.graphic && that.series.autoHidePointMarkers && (style === SELECTION || style === HOVER)) {
+            that._drawMarker(that.series.getRenderer(), that.series.getMarkersGroup());
+        }
         if(that.graphic) {
-            if(style === "normal") {
-                that.clearMarker();
+            if(that.series.autoHidePointMarkers && style !== SELECTION && style !== HOVER) {
+                that.deleteMarker();
             } else {
-                that.graphic.toForeground();
+                if(style === "normal") {
+                    that.clearMarker();
+                } else {
+                    that.graphic.toForeground();
+                }
+                that._updateMarker(true, that._styles[style], undefined, legendCallback);
             }
-            that._updateMarker(true, that._styles[style], undefined, legendCallback);
         }
     },
 
