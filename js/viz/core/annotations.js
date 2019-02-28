@@ -1,4 +1,6 @@
 import { isDefined } from "../../core/utils/type";
+import { extend } from "../../core/utils/extend";
+import { patchFontOptions } from "./utils";
 
 function coreAnnotation(type, options, draw) {
     return {
@@ -23,6 +25,12 @@ function simpleAnnotation(options) {
     });
 }
 
+function labelAnnotation(options) {
+    return coreAnnotation("label", options, function({ x, y }, widget, group) {
+        widget._renderer.text(options.label.text, x, y).css(patchFontOptions(options.label.font)).append(group);
+    });
+}
+
 function imageAnnotation(options) {
     const { width, height, url } = options.image;
     return coreAnnotation("image", options, function({ x, y }, widget, group) {
@@ -30,10 +38,16 @@ function imageAnnotation(options) {
     });
 }
 
+function mergeOptions(itemOptions, commonOptions, key) {
+    return extend(true, {}, itemOptions, { [key]: commonOptions }, { [key]: itemOptions[key] });
+}
+
 function createAnnotation(itemOptions, commonOptions) {
     // Choose annotation type and merge common and individual options
     if(isDefined(itemOptions.image)) {
-        return imageAnnotation(itemOptions);
+        return imageAnnotation(mergeOptions(itemOptions, commonOptions.imageOptions, "image"));
+    } else if(isDefined(itemOptions.label)) {
+        return labelAnnotation(mergeOptions(itemOptions, commonOptions.labelOptions, "label"));
     } else {
         return simpleAnnotation(itemOptions);
     }
@@ -100,7 +114,7 @@ const corePlugin = {
             this._annotations.items = [];
 
             // TODO test theme
-            const options = this._themeManager.getOptions("annotations");
+            const options = this._getOption("annotations");
 
             if(!options || !options.items) {
                 return;
@@ -121,7 +135,8 @@ const corePlugin = {
             isOptionChange: true,
             option: "annotations"
         });
-    }
+    },
+    fontFields: ["annotations.labelOptions.font"]
 };
 
 export const plugins = {
