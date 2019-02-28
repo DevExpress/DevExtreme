@@ -22,6 +22,7 @@ import { when, Deferred, fromPromise } from "../../core/utils/deferred";
 import commonUtils from "../../core/utils/common";
 import iconUtils from "../../core/utils/icon";
 import Scrollable from "../scroll_view/ui.scrollable";
+import deferredUtils from "../../core/utils/deferred";
 
 var EDIT_FORM_CLASS = "edit-form",
     EDIT_FORM_ITEM_CLASS = "edit-form-item",
@@ -999,8 +1000,9 @@ var EditingController = modules.ViewController.inherit((function() {
                         commonUtils.deferRender(function() {
                             that._repaintEditCell(column, oldColumn, oldEditRowIndex);
                         });
+                    } else {
+                        that.closeEditCell();
                     }
-
                 });
             }
             return false;
@@ -1554,9 +1556,11 @@ var EditingController = modules.ViewController.inherit((function() {
             var that = this,
                 editMode = getEditMode(that),
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
-                dataController = that._dataController;
+                dataController = that._dataController,
+                result = deferredUtils.when();
 
             if(!isRowEditMode(that)) {
+                result = deferredUtils.Deferred();
                 setTimeout(function() {
                     if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
                         that.saveEditData().done(function() {
@@ -1576,8 +1580,10 @@ var EditingController = modules.ViewController.inherit((function() {
                             rowIndices: rowIndices
                         });
                     }
+                    result.resolve();
                 });
             }
+            return result.promise();
         },
 
         update: function(changeType) {

@@ -1657,6 +1657,14 @@ module.exports = {
 
                     return $cell;
                 },
+                closeEditCell: function() {
+                    let d = this.callBase();
+                    d.done(() => {
+                        let keyboardNavigation = this.getController("keyboardNavigation"),
+                            $focusedCell = keyboardNavigation._getFocusedCell();
+                        $focusedCell && keyboardNavigation._focus($focusedCell, true);
+                    });
+                },
                 init: function() {
                     this.callBase();
                     this._keyboardNavigationController = this.getController("keyboardNavigation");
