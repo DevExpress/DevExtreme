@@ -298,127 +298,127 @@
     position: absolute;
     box-sizing: content-box;
     border: 1px dashed lightslategrey;
-}
 
-.dx-resizable-handle-corner-top-right,
-.dx-resizable-handle-corner-top-left,
-.dx-resizable-handle-corner-bottom-right,
-.dx-resizable-handle-corner-bottom-left {
-    border: 1px solid white;
-    width: @RESIZE_HANDLE_SIZE;
-    height: @RESIZE_HANDLE_SIZE;
-    border-radius: 0;
-
-    .dx-touch-device & {
-        width: @TOUCH_RESIZE_HANDLE_SIZE;
-        height: @TOUCH_RESIZE_HANDLE_SIZE;
-    }
-}
-
-.dx-resizable-handle-corner-top-right,
-.dx-resizable-handle-corner-bottom-right {
-    right: -@RESIZE_HANDLE_SIZE / 2;
-
-    .dx-touch-device & {
-        right: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
-    }
-}
-
-.dx-resizable-handle-corner-top-left,
-.dx-resizable-handle-corner-bottom-left {
-    left: -@RESIZE_HANDLE_SIZE / 2;
-
-    .dx-touch-device & {
-        left: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
-    }
-}
-
-.dx-resizable-handle-corner-top-right,
-.dx-resizable-handle-corner-top-left {
-    top: -@RESIZE_HANDLE_SIZE / 2;
-
-    .dx-touch-device & {
-        top: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
-    }
-}
-
-.dx-resizable-handle-corner-bottom-right,
-.dx-resizable-handle-corner-bottom-left {
-    bottom: -@RESIZE_HANDLE_SIZE / 2;
-
-    .dx-touch-device & {
-        bottom: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
-    }
-}
-
-.dx-resizable-handle-right,
-.dx-resizable-handle-left,
-.dx-resizable-handle-top,
-.dx-resizable-handle-bottom {
-    &::after {
-        content: "";
-        position: absolute;
+    .dx-resizable-handle-corner-top-right,
+    .dx-resizable-handle-corner-top-left,
+    .dx-resizable-handle-corner-bottom-right,
+    .dx-resizable-handle-corner-bottom-left {
+        border: 1px solid white;
         width: @RESIZE_HANDLE_SIZE;
         height: @RESIZE_HANDLE_SIZE;
-        border: 1px solid white;
+        border-radius: 0;
 
-        .dx-touch-device & {
+        .dx-touch-device& {
             width: @TOUCH_RESIZE_HANDLE_SIZE;
             height: @TOUCH_RESIZE_HANDLE_SIZE;
         }
     }
-}
 
-.dx-resizable-handle-right,
-.dx-resizable-handle-left {
-    &::after {
-        top: calc(~"50% - "@RESIZE_HANDLE_SIZE / 2);
+    .dx-resizable-handle-corner-top-right,
+    .dx-resizable-handle-corner-bottom-right {
+        right: -@RESIZE_HANDLE_SIZE / 2;
 
-        .dx-touch-device & {
-            top: calc(~"50% - "@TOUCH_RESIZE_HANDLE_SIZE / 2);
+        .dx-touch-device& {
+            right: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
         }
     }
-}
 
-.dx-resizable-handle-top,
-.dx-resizable-handle-bottom {
-    &::after {
-        left: calc(~"50% - "@RESIZE_HANDLE_SIZE / 2);
+    .dx-resizable-handle-corner-top-left,
+    .dx-resizable-handle-corner-bottom-left {
+        left: -@RESIZE_HANDLE_SIZE / 2;
 
-        .dx-touch-device & {
-            left: calc(~"50% - "@TOUCH_RESIZE_HANDLE_SIZE / 2);
+        .dx-touch-device& {
+            left: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
         }
     }
-}
 
-.dx-resizable-handle-right::after {
-    right: -@RESIZE_HANDLE_SIZE / 2;
+    .dx-resizable-handle-corner-top-right,
+    .dx-resizable-handle-corner-top-left {
+        top: -@RESIZE_HANDLE_SIZE / 2;
 
-    .dx-touch-device & {
-        right: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+        .dx-touch-device& {
+            top: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+        }
     }
-}
 
-.dx-resizable-handle-left::after {
-    left: -@RESIZE_HANDLE_SIZE / 2;
+    .dx-resizable-handle-corner-bottom-right,
+    .dx-resizable-handle-corner-bottom-left {
+        bottom: -@RESIZE_HANDLE_SIZE / 2;
 
-    .dx-touch-device & {
-        left: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+        .dx-touch-device& {
+            bottom: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+        }
     }
-}
 
-.dx-resizable-handle-top::after {
-    top: -@RESIZE_HANDLE_SIZE / 2;
+    .dx-resizable-handle-right,
+    .dx-resizable-handle-left,
+    .dx-resizable-handle-top,
+    .dx-resizable-handle-bottom {
+        &::after {
+            content: "";
+            position: absolute;
+            width: @RESIZE_HANDLE_SIZE;
+            height: @RESIZE_HANDLE_SIZE;
+            border: 1px solid white;
 
-    .dx-touch-device & {
-        top: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+            .dx-touch-device& {
+                width: @TOUCH_RESIZE_HANDLE_SIZE;
+                height: @TOUCH_RESIZE_HANDLE_SIZE;
+            }
+        }
     }
-}
 
-.dx-resizable-handle-bottom::after {
-    bottom: -@RESIZE_HANDLE_SIZE / 2;
+    .dx-resizable-handle-right,
+    .dx-resizable-handle-left {
+        &::after {
+            top: calc(~"50% - "@RESIZE_HANDLE_SIZE / 2);
 
-    .dx-touch-device & {
-        bottom: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+            .dx-touch-device& {
+                top: calc(~"50% - "@TOUCH_RESIZE_HANDLE_SIZE / 2);
+            }
+        }
+    }
+
+    .dx-resizable-handle-top,
+    .dx-resizable-handle-bottom {
+        &::after {
+            left: calc(~"50% - "@RESIZE_HANDLE_SIZE / 2);
+
+            .dx-touch-device& {
+                left: calc(~"50% - "@TOUCH_RESIZE_HANDLE_SIZE / 2);
+            }
+        }
+    }
+
+    .dx-resizable-handle-right::after {
+        right: -@RESIZE_HANDLE_SIZE / 2;
+
+        .dx-touch-device& {
+            right: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+        }
+    }
+
+    .dx-resizable-handle-left::after {
+        left: -@RESIZE_HANDLE_SIZE / 2;
+
+        .dx-touch-device& {
+            left: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+        }
+    }
+
+    .dx-resizable-handle-top::after {
+        top: -@RESIZE_HANDLE_SIZE / 2;
+
+        .dx-touch-device& {
+            top: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+        }
+    }
+
+    .dx-resizable-handle-bottom::after {
+        bottom: -@RESIZE_HANDLE_SIZE / 2;
+
+        .dx-touch-device& {
+            bottom: -@TOUCH_RESIZE_HANDLE_SIZE / 2;
+        }
     }
 }
