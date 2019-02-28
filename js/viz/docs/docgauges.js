@@ -752,7 +752,7 @@ var dxBarGauge = {
         * @name BaseGaugeOptions.legend.customizeText
         * @type function(arg)
         * @type_function_param1 arg:object
-        * @type_function_param1_field1 item:BarInfo
+        * @type_function_param1_field1 item:BarGaugeBarInfo
         * @type_function_param1_field2 text:string
         * @type_function_return string
         * @notUsedInTheme
@@ -762,7 +762,7 @@ var dxBarGauge = {
         * @name BaseGaugeOptions.legend.customizeHint
         * @type function(arg)
         * @type_function_param1 arg:object
-        * @type_function_param1_field1 item:BarInfo
+        * @type_function_param1_field1 item:BarGaugeBarInfo
         * @type_function_param1_field2 text:string
         * @type_function_return string
         */
@@ -845,22 +845,22 @@ var dxBarGauge = {
 };
 
 /**
-* @name BarInfo
+* @name BarGaugeBarInfo
 * @type object
 */
-var BarInfo = {
+var BarGaugeBarInfo = {
     /**
-    * @name BarInfo.color
+    * @name BarGaugeBarInfo.color
     * @type string
     */
     color: "",
     /**
-    * @name BarInfo.index
+    * @name BarGaugeBarInfo.index
     * @type number
     */
     index: 0,
     /**
-    * @name BarInfo.value
+    * @name BarGaugeBarInfo.value
     * @type number
     */
     value: 0
@@ -878,7 +878,7 @@ var legendItem = {
     text: undefined,
     /**
     * @name BarGaugeLegendItem.item
-    * @type BarInfo
+    * @type BarGaugeBarInfo
     */
     item: undefined,
     /**
