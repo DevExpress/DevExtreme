@@ -3,10 +3,11 @@ import eventsEngine from "../../../events/core/events_engine";
 import { name as ClickEvent } from "../../../events/click";
 import { addNamespace } from "../../../events/utils";
 import { move } from "../../../animation/translator";
-
+import devices from "../../../core/devices";
 import Resizable from "../../resizable";
 
 const DX_RESIZE_FRAME_CLASS = "dx-resize-frame";
+const DX_TOUCH_DEVICE_CLASS = "dx-touch-device";
 const MODULE_NAMESPACE = "dxHtmlResizingModule";
 
 const KEYDOWN_EVENT = addNamespace("keydown", MODULE_NAMESPACE);
@@ -101,8 +102,11 @@ class ResizingModule {
             return;
         }
 
+        const { deviceType } = devices.current();
+
         this._$resizeFrame = $("<div>")
             .addClass(DX_RESIZE_FRAME_CLASS)
+            .toggleClass(DX_TOUCH_DEVICE_CLASS, deviceType !== "desktop")
             .appendTo(this.editorInstance._getQuillContainer())
             .hide();
 
