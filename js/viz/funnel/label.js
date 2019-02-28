@@ -87,11 +87,10 @@ function getConnectorStrategy(options, inverted) {
         getFigureCenter: getFigureCenter,
         prepareLabelPoints: function(bBox) {
             var x = bBox.x + connectorIndent,
-                y = bBox.y + verticalCorrection,
-                x1 = x + bBox.width,
-                y1 = y + bBox.height;
+                y = bBox.y,
+                x1 = x + bBox.width;
 
-            return [...Array(y1 - y)].map((_, i) => [x, y + i]).concat([...Array(y1 - y)].map((_, i) => [x1, y + i]));
+            return [...Array(bBox.height + 1)].map((_, i) => [x, y + i]).concat([...Array(bBox.height + 1)].map((_, i) => [x1, y + i]));
         },
 
         isHorizontal: function() { return true; },
@@ -101,7 +100,7 @@ function getConnectorStrategy(options, inverted) {
         },
 
         adjustPoints: function(points) {
-            return points;
+            return points.map(Math.round);
         }
     };
 }
