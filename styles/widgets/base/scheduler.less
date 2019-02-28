@@ -68,6 +68,7 @@
 
 @SCHEDULER_RECURRENCE_ICON_OFFSET: 7px;
 @SCHEDULER_REDUCED_ICON_OFFSET: 5px;
+@SCHEDULER_RECURRENCE_ICON_OFFSET: 20px;
 @SCHEDULER_APPOINTMENT_DETAILS_FORM_HORIZONTAL_OFFSET: 20px;
 
 @SCHEDULER_AGENDA_APPOINTMENT_FONT_SIZE: 16px;
@@ -1048,9 +1049,9 @@
             display: none;
         }
 
-        .dx-scheduler-appointment-reduced {
+        .dx-scheduler-appointment-reduced.dx-scheduler-appointment-head {
             .dx-scheduler-appointment-recurrence-icon {
-                right: 20px;
+                right: @SCHEDULER_RECURRENCE_ICON_OFFSET;
             }
         }
     }
@@ -1882,7 +1883,7 @@
         .dx-scheduler-appointment-head {
             .dx-scheduler-appointment-recurrence-icon {
                 top: calc(~'35% - 3px');
-                right: 20px;
+                right: @SCHEDULER_RECURRENCE_ICON_OFFSET;
             }
         }
     }
@@ -1943,7 +1944,7 @@
         position: absolute;
         background-repeat: no-repeat;
         top: 3px;
-        right: @SCHEDULER_RECURRENCE_ICON_OFFSET;
+        right: @SCHEDULER_REDUCED_ICON_OFFSET;
         display: none;
 
         &.dx-icon-repeat {
@@ -2707,9 +2708,9 @@
         }
 
 
-        .dx-scheduler-appointment-reduced {
+        .dx-scheduler-appointment-reduced.dx-scheduler-appointment-head {
             .dx-scheduler-appointment-recurrence-icon {
-                left: 20px;
+                left: @SCHEDULER_RECURRENCE_ICON_OFFSET;
                 right: auto;
             }
         }
