@@ -732,7 +732,7 @@ var dxBarGauge = {
     },
     /**
     * @name dxBarGaugeOptions.legend
-    * @inherit BaseLegend
+    * @inherits BaseLegend
     * @type object
     */
     legend: {
