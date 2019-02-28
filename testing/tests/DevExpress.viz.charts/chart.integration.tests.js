@@ -1525,6 +1525,90 @@ QUnit.test("reject selection after options updating", function(assert) {
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[0].isSelected(), false);
 });
 
+QUnit.module("Auto hide point markers", $.extend({}, moduleSetup, {
+    beforeEach: function() {
+        moduleSetup.beforeEach.call(this);
+        var dataSource = [];
+        for(var i = 0; i < 500000; i += 250) {
+            dataSource.push({
+                x: i,
+                y: Math.random() * 10 - Math.random() * 5
+            });
+        }
+
+        this.options = {
+            dataSource: dataSource,
+            zoomAndPan: {
+                argumentAxis: "both"
+            },
+            argumentAxis: {
+                visualRange: [30000, 400000]
+            },
+            series: [{
+                argumentField: "x",
+                valueField: "y",
+                point: { size: 14 }
+            }]
+        };
+    },
+    createChart: function(options) {
+        return moduleSetup.createChart.call(this, $.extend(true, {}, this.options, options));
+    }
+}));
+
+QUnit.test("auto switching point markers visibility", function(assert) {
+    var chart = this.createChart({});
+
+    assert.notOk(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+
+    chart.getArgumentAxis().visualRange([200000, 205300]);
+
+    assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+
+    chart.getArgumentAxis().visualRange([30000, 400000]);
+    chart.option("autoHidePointMarkers", false);
+
+    assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+});
+
+QUnit.test("auto switching point markers visibility is disabled for non-line/area series", function(assert) {
+    var chart = this.createChart({
+        series: [{ type: "bar" }]
+    });
+
+    assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+});
+
+QUnit.test("show hovered point (points are hidden automatically)", function(assert) {
+    var chart = this.createChart({});
+
+    var point = chart.getAllSeries()[0].getVisiblePoints()[0];
+    point.hover();
+
+    assert.ok(point.graphic);
+
+    chart.getAllSeries()[0].getVisiblePoints()[1].hover();
+
+    assert.notOk(point.graphic);
+});
+
+QUnit.test("show selected point (points are hidden automatically)", function(assert) {
+    var chart = this.createChart({});
+
+    var point = chart.getAllSeries()[0].getVisiblePoints()[0];
+    point.select();
+
+    assert.ok(point.graphic);
+
+    chart.getArgumentAxis().visualRange([40000, 410000]);
+
+    assert.ok(point.graphic);
+
+    chart.getAllSeries()[0].getVisiblePoints()[0].select();
+
+    assert.notOk(point.graphic);
+});
+
 QUnit.module("B237847. Groups and classes", moduleSetup);
 
 QUnit.test("dxChart groups and classes", function(assert) {

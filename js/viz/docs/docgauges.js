@@ -14,6 +14,7 @@ var BaseGauge = {
 
     /**
     * @name BaseGaugeOptions.loadingIndicator
+    * @type object
     */
     loadingIndicator: {
         /**
@@ -650,6 +651,17 @@ var dxBarGauge = {
     */
     backgroundColor: '#e0e0e0',
     /**
+    * @name dxBarGaugeOptions.loadingIndicator
+    * @type object
+    */
+    loadingIndicator: {
+        /**
+        * @name dxBarGaugeOptions.loadingIndicator.enabled
+        * @hidden
+        */
+        enabled: false
+    },
+    /**
     * @name dxBarGaugeOptions.barSpacing
     * @type number
     * @default 4
@@ -719,6 +731,57 @@ var dxBarGauge = {
         }
     },
     /**
+    * @name dxBarGaugeOptions.legend
+    * @inherits BaseLegend
+    * @type object
+    */
+    legend: {
+        /**
+        * @name dxBarGaugeOptions.legend.itemTextFormat
+        * @extends CommonVizFormat
+        */
+        itemTextFormat: undefined,
+        /**
+        * @name dxBarGaugeOptions.legend.visible
+        * @type boolean
+        * @inheritdoc
+        * @default false
+        */
+        visible: false,
+        /**
+        * @name dxBarGaugeOptions.legend.customizeText
+        * @type function(arg)
+        * @type_function_param1 arg:object
+        * @type_function_param1_field1 item:BarGaugeBarInfo
+        * @type_function_param1_field2 text:string
+        * @type_function_return string
+        * @notUsedInTheme
+        */
+        customizeText: undefined,
+        /**
+        * @name dxBarGaugeOptions.legend.customizeHint
+        * @type function(arg)
+        * @type_function_param1 arg:object
+        * @type_function_param1_field1 item:BarGaugeBarInfo
+        * @type_function_param1_field2 text:string
+        * @type_function_return string
+        */
+        customizeHint: undefined,
+        /**
+        * @name dxBarGaugeOptions.legend.customizeItems
+        * @type function(items)
+        * @type_function_param1 items:Array<BarGaugeLegendItem>
+        * @type_function_return Array<BarGaugeLegendItem>
+        */
+        customizeItems: undefined
+    },
+    /**
+    * @name dxBarGaugeOptions.resolveLabelOverlapping
+    * @type Enums.BarGaugeResolveLabelOverlapping
+    * @default 'hide'
+    */
+    resolveLabelOverlapping: "hide",
+    /**
     * @name dxBarGaugeOptions.startValue
     * @type number
     * @default 0
@@ -779,4 +842,48 @@ var dxBarGauge = {
     * @action
     */
     onTooltipHidden: function() { }
+};
+
+/**
+* @name BarGaugeBarInfo
+* @type object
+*/
+var BarGaugeBarInfo = {
+    /**
+    * @name BarGaugeBarInfo.color
+    * @type string
+    */
+    color: "",
+    /**
+    * @name BarGaugeBarInfo.index
+    * @type number
+    */
+    index: 0,
+    /**
+    * @name BarGaugeBarInfo.value
+    * @type number
+    */
+    value: 0
+};
+
+/**
+* @name BarGaugeLegendItem
+* @type object
+*/
+var legendItem = {
+    /**
+    * @name BarGaugeLegendItem.text
+    * @type string
+    */
+    text: undefined,
+    /**
+    * @name BarGaugeLegendItem.item
+    * @type BarGaugeBarInfo
+    */
+    item: undefined,
+    /**
+    * @name BarGaugeLegendItem.visible
+    * @type boolean
+    */
+    visible: true
 };

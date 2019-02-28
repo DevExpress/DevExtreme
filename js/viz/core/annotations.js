@@ -1,34 +1,42 @@
 import { isDefined } from "../../core/utils/type";
 
-function coreAnnotation(options) {
+function coreAnnotation(type, options, draw) {
     return {
+        _type: type,
         name: options.name,
         x: options.x,
         y: options.y,
         value: options.value,
         argument: options.argument,
-        axis: options.axis
+        axis: options.axis,
+        draw: function(widget, group) {
+            const { x, y } = widget._getAnnotationCoords(this);
+
+            isDefined(x) && isDefined(y) && draw({ x, y }, widget, group);
+        }
     };
 }
 
 function simpleAnnotation(options) {
-    const annotation = coreAnnotation(options);
-    annotation._type = "simple";
+    return coreAnnotation("simple", options, function({ x, y }, widget, group) {
+        widget._renderer.circle(x, y, 5).attr({ fill: "red" }).append(group);
+    });
+}
 
-    annotation.draw = function(widget, group) {
-        const { x, y } = widget._getAnnotationCoords(annotation);
-
-        if(isDefined(x) && isDefined(y)) {
-            widget._renderer.circle(x, y, 5).attr({ fill: "red" }).append(group);
-        }
-    };
-
-    return annotation;
+function imageAnnotation(options) {
+    const { width, height, url } = options.image;
+    return coreAnnotation("image", options, function({ x, y }, widget, group) {
+        widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, "center").append(group);
+    });
 }
 
 function createAnnotation(itemOptions, commonOptions) {
     // Choose annotation type and merge common and individual options
-    return simpleAnnotation(itemOptions);
+    if(isDefined(itemOptions.image)) {
+        return imageAnnotation(itemOptions);
+    } else {
+        return simpleAnnotation(itemOptions);
+    }
 }
 
 export let createAnnotations = function(options) {

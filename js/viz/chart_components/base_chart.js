@@ -707,6 +707,7 @@ var BaseChart = BaseWidget.inherit({
 
         that._updateTracker(trackerCanvases);
         that._updateLegendPosition(drawOptions, isLegendInside);
+        that._applyPointMarkersAutoHiding();
         that._renderSeries(drawOptions, isRotated, isLegendInside);
 
         that._renderer.unlock();
@@ -999,6 +1000,7 @@ var BaseChart = BaseWidget.inherit({
 
         rotated: "ROTATED",
 
+        autoHidePointMarkers: "REFRESH_SERIES_REINIT",
         customizePoint: "REFRESH_SERIES_REINIT",
         customizeLabel: "REFRESH_SERIES_REINIT",
 

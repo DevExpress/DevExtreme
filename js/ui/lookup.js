@@ -159,9 +159,9 @@ var Lookup = DropDownList.inherit({
             /**
             * @name dxLookupOptions.applyButtonText
             * @type string
-            * @default "Done"
+            * @default "OK"
             */
-            applyButtonText: messageLocalization.format("Done"),
+            applyButtonText: messageLocalization.format("OK"),
 
             /**
              * @name dxLookupOptions.popupWidth
@@ -1195,7 +1195,6 @@ var Lookup = DropDownList.inherit({
 
     _renderInputValue: function() {
         return this.callBase().always((function() {
-            this._renderField();
             this._refreshSelected();
             this._setSubmitValue();
         }).bind(this));

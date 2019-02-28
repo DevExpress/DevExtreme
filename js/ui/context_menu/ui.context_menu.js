@@ -907,7 +907,6 @@ var ContextMenu = MenuBase.inherit((function() {
                     break;
                 case "target":
                     args.previousValue && this._detachShowContextMenuEvents(args.previousValue);
-                    this.option("position").of = null;
                     this._invalidate();
                     break;
                 case "closeOnOutsideClick":

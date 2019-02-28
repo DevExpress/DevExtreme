@@ -23,21 +23,21 @@ var $ = require("../../core/renderer"),
     FunctionTemplate = require("../widget/function_template"),
     appointmentTooltip = require("./ui.scheduler.appointment_tooltip"),
     SchedulerHeader = require("./ui.scheduler.header"),
-    SchedulerWorkSpaceDay = require("./ui.scheduler.work_space_day"),
-    SchedulerWorkSpaceWeek = require("./ui.scheduler.work_space_week"),
-    SchedulerWorkSpaceWorkWeek = require("./ui.scheduler.work_space_work_week"),
-    SchedulerWorkSpaceMonth = require("./ui.scheduler.work_space_month"),
-    SchedulerTimelineDay = require("./ui.scheduler.timeline_day"),
-    SchedulerTimelineWeek = require("./ui.scheduler.timeline_week"),
-    SchedulerTimelineWorkWeek = require("./ui.scheduler.timeline_work_week"),
-    SchedulerTimelineMonth = require("./ui.scheduler.timeline_month"),
-    SchedulerAgenda = require("./ui.scheduler.agenda"),
+    SchedulerWorkSpaceDay = require("./workspaces/ui.scheduler.work_space_day"),
+    SchedulerWorkSpaceWeek = require("./workspaces/ui.scheduler.work_space_week"),
+    SchedulerWorkSpaceWorkWeek = require("./workspaces/ui.scheduler.work_space_work_week"),
+    SchedulerWorkSpaceMonth = require("./workspaces/ui.scheduler.work_space_month"),
+    SchedulerTimelineDay = require("./workspaces/ui.scheduler.timeline_day"),
+    SchedulerTimelineWeek = require("./workspaces/ui.scheduler.timeline_week"),
+    SchedulerTimelineWorkWeek = require("./workspaces/ui.scheduler.timeline_work_week"),
+    SchedulerTimelineMonth = require("./workspaces/ui.scheduler.timeline_month"),
+    SchedulerAgenda = require("./workspaces/ui.scheduler.agenda"),
     SchedulerResourceManager = require("./ui.scheduler.resource_manager"),
     SchedulerAppointmentModel = require("./ui.scheduler.appointment_model"),
     SchedulerAppointments = require("./ui.scheduler.appointments"),
     SchedulerLayoutManager = require("./ui.scheduler.appointments.layout_manager"),
     DropDownAppointments = require("./ui.scheduler.appointments.drop_down"),
-    SchedulerTimezones = require("./ui.scheduler.timezones"),
+    SchedulerTimezones = require("./timezones/ui.scheduler.timezones"),
     AsyncTemplateMixin = require("../shared/async_template_mixin"),
     DataHelperMixin = require("../../data_helper"),
     loading = require("./ui.loading"),
@@ -152,6 +152,7 @@ var Scheduler = Widget.inherit({
                 * @default "appointmentTooltip"
                 * @type_function_param1 appointmentData:object
                 * @type_function_param2 contentElement:dxElement
+                * @type_function_param3 targetedAppointmentData:object
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -416,7 +417,8 @@ var Scheduler = Widget.inherit({
 
                 /**
                     * @name dxSchedulerOptions.resources.displayExpr
-                    * @type string|function
+                    * @type string|function(resource)
+                    * @type_function_param1 resource:object
                     * @default 'text'
                     */
 
@@ -889,7 +891,6 @@ var Scheduler = Widget.inherit({
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
             allowMultipleCellSelection: true,
-            displayedAppointmentDataField: null,
 
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: "bottom",
@@ -1192,11 +1193,10 @@ var Scheduler = Widget.inherit({
                     itemTemplate: this._getAppointmentTemplate("appointmentTemplate")
                 });
 
-                this._updateHeader();
-
                 this._postponeResourceLoading().done((resources) => {
                     this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
                     this._refreshWorkSpace(resources);
+                    this._updateHeader();
                     this._filterAppointmentsByDate();
                     this._appointments.option("allowAllDayResize", value !== "day");
                 });
@@ -1349,8 +1349,6 @@ var Scheduler = Widget.inherit({
             case "dateSerializationFormat":
                 break;
             case "maxAppointmentsPerCell":
-                break;
-            case "displayedAppointmentDataField":
                 break;
             case "startDateExpr":
             case "endDateExpr":
@@ -2624,6 +2622,14 @@ var Scheduler = Widget.inherit({
 
     _needUpdateAppointmentData: function($appointment) {
         return $appointment.hasClass("dx-scheduler-appointment-compact") || $appointment.hasClass("dx-scheduler-appointment-recurrence");
+    },
+
+    _getNormalizedTemplateArgs: function(options) {
+        var args = this.callBase(options);
+        if("targetedAppointmentData" in options) {
+            args.push(options.targetedAppointmentData);
+        }
+        return args;
     },
 
     subscribe: function(subject, action) {

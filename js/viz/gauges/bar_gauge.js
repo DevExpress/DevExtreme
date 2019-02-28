@@ -9,6 +9,7 @@ var PI_DIV_180 = Math.PI / 180,
     objectUtils = require("../../core/utils/object"),
     commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
+    _normalizeEnum = require("../core/utils").normalizeEnum,
 
     baseGaugeModule = require("./base_gauge"),
     dxBaseGauge = baseGaugeModule.dxBaseGauge,
@@ -52,12 +53,8 @@ var dxBarGauge = dxBaseGauge.inherit({
             }
         };
         that._animateComplete = function() {
-            var bars = that._bars,
-                i,
-                ii;
-            for(i = 0, ii = bars.length; i < ii; ++i) {
-                bars[i].endAnimation();
-            }
+            that._bars.forEach(bar => bar.endAnimation());
+            that._checkOverlap();
         };
     },
 
@@ -190,7 +187,9 @@ var dxBarGauge = dxBaseGauge.inherit({
             radius = that._outerRadius - that._innerRadius,
             context = that._context,
             spacing,
-            unitOffset;
+            colors,
+            unitOffset,
+            i;
 
         const count = that._bars.length;
 
@@ -203,10 +202,11 @@ var dxBarGauge = dxBaseGauge.inherit({
         context.textRadius = radius + that._textIndent;
         that._palette.reset();
         unitOffset = context.barSize + spacing;
-
-        for(let i = 0; i < _count; ++i, radius -= unitOffset) {
+        colors = that._palette.generateColors(_count);
+        for(i = 0; i < _count; ++i, radius -= unitOffset) {
             that._bars[i].arrange({
-                radius: radius
+                radius: radius,
+                color: colors[i]
             });
         }
 
@@ -242,11 +242,34 @@ var dxBarGauge = dxBaseGauge.inherit({
     },
 
     _updateBars: function() {
-        var that = this,
-            i,
-            ii;
-        for(i = 0, ii = that._bars.length; i < ii; ++i) {
-            that._bars[i].applyValue();
+        this._bars.forEach(bar => bar.applyValue());
+        this._checkOverlap();
+    },
+
+    _checkOverlap: function() {
+        const that = this,
+            bars = that._bars,
+            overlapStrategy = _normalizeEnum(that._getOption("resolveLabelOverlapping", true));
+
+        if(overlapStrategy === "none") {
+            return;
+        }
+
+        const sortedBars = bars.concat().sort((a, b) => a.getValue() - b.getValue());
+
+        let currentIndex = 0;
+        let nextIndex = 1;
+        while(currentIndex < sortedBars.length && nextIndex < sortedBars.length) {
+            const current = sortedBars[currentIndex];
+            const next = sortedBars[nextIndex];
+
+            if(current.checkIntersect(next)) {
+                next.hideLabel();
+                nextIndex++;
+            } else {
+                currentIndex = nextIndex;
+                nextIndex = currentIndex + 1;
+            }
         }
     },
 
@@ -366,7 +389,7 @@ var dxBarGauge = dxBaseGauge.inherit({
             formatOptions = {},
             options = that._options,
             labelFormatOptions = (options.label || {}).format,
-            legendFormatOptions = (options.legend || {}).format;
+            legendFormatOptions = (options.legend || {}).itemTextFormat;
 
         if(legendFormatOptions) {
             formatOptions.format = legendFormatOptions;
@@ -376,10 +399,11 @@ var dxBarGauge = dxBaseGauge.inherit({
 
         return (this._bars || []).map(b => {
             return {
-                id: b._index,
+                id: b.index,
                 item: {
                     value: b.getValue(),
-                    color: b.getColor()
+                    color: b.getColor(),
+                    index: b.index
                 },
                 text: _formatValue(b.getValue(), formatOptions),
                 visible: true,
@@ -393,7 +417,7 @@ var BarWrapper = function(index, context) {
     var that = this;
     that._context = context;
     that._tracker = context.renderer.arc().attr({ "stroke-linejoin": "round" });
-    that._index = index;
+    that.index = index;
 };
 
 _extend(BarWrapper.prototype, {
@@ -415,7 +439,7 @@ _extend(BarWrapper.prototype, {
             context = that._context;
 
         this._visible = true;
-        context.tracker.attach(that._tracker, that, { index: that._index });
+        context.tracker.attach(that._tracker, that, { index: that.index });
 
         that._background = context.renderer.arc().attr({ "stroke-linejoin": "round", fill: context.backgroundColor }).append(context.group);
         that._settings = that._settings || { x: context.x, y: context.y, startAngle: context.baseAngle, endAngle: context.baseAngle };
@@ -464,7 +488,7 @@ _extend(BarWrapper.prototype, {
         that._bar.attr(that._settings);
         that._tracker.attr(that._settings);
         if(that._context.textEnabled) {
-            var text = _formatValue(that._value, that._context.formatOptions, { index: that._index });
+            var text = _formatValue(that._value, that._context.formatOptions, { index: that.index });
             that._line.attr({ visibility: text === "" ? "hidden" : null });
             that._line.rotate(_convertAngleToRendererSpace(that._angle), that._context.x, that._context.y);
             cosSin = _getCosAndSin(that._angle);
@@ -476,6 +500,43 @@ _extend(BarWrapper.prototype, {
             });
         }
         return that;
+    },
+
+    hideLabel: function() {
+        this._text.attr({ visibility: "hidden" });
+        this._line.attr({ visibility: "hidden" });
+    },
+
+    checkIntersect: function(anotherBar) {
+        const coords = this.calculateLabelCoords();
+        const anotherCoords = anotherBar.calculateLabelCoords();
+
+        if(!coords || !anotherCoords) {
+            return false;
+        }
+
+        const width = Math.max(0, Math.min(coords.bottomRight.x, anotherCoords.bottomRight.x) - Math.max(coords.topLeft.x, anotherCoords.topLeft.x));
+        const height = Math.max(0, Math.min(coords.bottomRight.y, anotherCoords.bottomRight.y) - Math.max(coords.topLeft.y, anotherCoords.topLeft.y));
+
+        return (width * height) !== 0;
+    },
+
+    calculateLabelCoords: function() {
+        if(!this._text) {
+            return;
+        }
+
+        const box = this._text.getBBox();
+        return {
+            topLeft: {
+                x: box.x,
+                y: box.y
+            },
+            bottomRight: {
+                x: box.x + box.width,
+                y: box.y + box.height
+            }
+        };
     },
 
     _processValue: function(value) {

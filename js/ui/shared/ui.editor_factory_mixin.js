@@ -104,7 +104,7 @@ var EditorFactoryMixin = (function() {
 
         config.value = toString(options.value);
         config.valueChangeEvent += (isSearching ? " keyup search" : "");
-        config.mode = isSearching ? "search" : "text";
+        config.mode = config.mode || (isSearching ? "search" : "text");
 
         options.editorName = "dxTextBox";
         options.editorOptions = config;

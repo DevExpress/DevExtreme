@@ -216,7 +216,7 @@ module.exports = Class.inherit((function() {
     };
 
     function createLocalOrRemoteStore(dataSourceOptions, notifyProgress) {
-        var StoreConstructor = dataSourceOptions.remoteOperations ? RemoteStore : localStore.LocalStore;
+        var StoreConstructor = (dataSourceOptions.remoteOperations || dataSourceOptions.paginate) ? RemoteStore : localStore.LocalStore;
 
         return new StoreConstructor(extend(DataSourceModule.normalizeDataSourceOptions(dataSourceOptions), {
             onChanged: null,
@@ -617,6 +617,12 @@ module.exports = Class.inherit((function() {
             * @type Enums.PivotGridStoreType
             */
             that._store = store;
+            /**
+            * @name PivotGridDataSourceOptions.paginate
+            * @type Boolean
+            * @default false
+            */
+            that._paginate = !!options.paginate;
             that._data = { rows: [], columns: [], values: [] };
             that._loadingCount = 0;
 
@@ -1010,6 +1016,7 @@ module.exports = Class.inherit((function() {
                 updateCalculatedFieldProperties(field, CALCULATED_PROPERTIES);
 
                 that._descriptions = that._createDescriptions(field);
+                that.fireEvent("fieldChanged", [field]);
             }
             return field;
         },
@@ -1290,6 +1297,9 @@ module.exports = Class.inherit((function() {
                 deferred.always(function() {
                     that.endLoading();
                 });
+
+                that.fireEvent("customizeStoreLoadOptions", [options]);
+
                 when(store.load(options)).done(function(data) {
                     if(options.path) {
                         that.applyPartialDataSource(options.area, options.path, data, deferred);
@@ -1307,9 +1317,13 @@ module.exports = Class.inherit((function() {
         _sort: function(descriptions, data, getAscOrder) {
             var store = this._store;
 
-            if(store) {
+            if(store && !this._paginate) {
                 sort(descriptions, data, getAscOrder);
             }
+        },
+
+        paginate: function() {
+            return this._paginate;
         },
 
         isEmpty: function() {
@@ -1391,14 +1405,22 @@ module.exports = Class.inherit((function() {
         collapseAll: function(id) {
             var dataChanged = false,
                 field = this.field(id) || {},
-                areaOffset = inArray(field, this.getAreaFields(field.area));
+                areaOffsets = [inArray(field, this.getAreaFields(field.area))];
 
             field.expanded = false;
+            if(field && field.levels) {
+                areaOffsets = [];
+                field.levels.forEach(f => {
+                    areaOffsets.push(inArray(f, this.getAreaFields(field.area)));
+                    f.expanded = false;
+                });
+            }
+
             foreachTree(this._data[field.area + "s"], function(items) {
                 var item = items[0],
                     path = createPath(items);
 
-                if(item && item.children && areaOffset === path.length - 1) {
+                if(item && item.children && areaOffsets.indexOf(path.length - 1) !== -1) {
                     item.collapsedChildren = item.children;
                     delete item.children;
                     dataChanged = true;
@@ -1409,14 +1431,19 @@ module.exports = Class.inherit((function() {
         },
 
         /**
-       * @name PivotGridDataSourceMethods.expandAll
-       * @publicName expandAll(id)
-       * @param1 id:number|string
-       */
+        * @name PivotGridDataSourceMethods.expandAll
+        * @publicName expandAll(id)
+        * @param1 id:number|string
+        */
         expandAll: function(id) {
             var field = this.field(id);
             if(field && field.area) {
                 field.expanded = true;
+                if(field && field.levels) {
+                    field.levels.forEach(f => {
+                        f.expanded = true;
+                    });
+                }
                 this.load();
             }
         },

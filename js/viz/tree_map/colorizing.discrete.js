@@ -2,6 +2,7 @@ function discreteColorizer(options, themeManager, root) {
     var palette = themeManager.createPalette(options.palette, {
         useHighlight: true,
         extensionMode: options.paletteExtensionMode,
+        count: options.colorizeGroups ? getNodesCount(root) : getLeafsCount(root)
     });
 
     return (options.colorizeGroups ? discreteGroupColorizer : discreteLeafColorizer)(palette, root);
@@ -26,14 +27,8 @@ function getLeafsCount(root) {
     return count;
 }
 
-function discreteLeafColorizer(palette, root) {
-    var colors = [],
-        count = getLeafsCount(root),
-        i;
-
-    for(i = 0; i < count; ++i) {
-        colors.push(palette.getNextColor(count));
-    }
+function discreteLeafColorizer(palette) {
+    var colors = palette.generateColors();
 
     return function(node) {
         return colors[node.index];
@@ -62,7 +57,6 @@ function prepareDiscreteGroupColors(palette, root) {
         allNodes = root.nodes.slice(),
         i,
         ii = allNodes.length,
-        count = getNodesCount(root),
         node;
 
     for(i = 0; i < ii; ++i) {
@@ -71,7 +65,7 @@ function prepareDiscreteGroupColors(palette, root) {
             allNodes = allNodes.concat(node.nodes);
             ii = allNodes.length;
         } else if(!colors[node.parent._id]) {
-            colors[node.parent._id] = palette.getNextColor(count);
+            colors[node.parent._id] = palette.getNextColor();
         }
     }
     return colors;

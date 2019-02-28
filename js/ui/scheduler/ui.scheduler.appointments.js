@@ -396,7 +396,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             action({
                 appointmentElement: itemElement,
                 appointmentData: itemData,
-                targetedAppointmentData: this.invoke("getTargetedAppointmentData", itemData, itemElement, index)
+                targetedAppointmentData: this.invoke("getTargetedAppointmentData", itemData, itemElement)
             });
         }
         delete this._currentAppointmentSettings;
@@ -485,13 +485,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _createItemByTemplate: function(itemTemplate, renderArgs) {
-        var itemData = this.invoke("appendSingleAppointmentData", {
-            appointmentData: renderArgs.itemData,
-            index: renderArgs.index,
-            startDate: this._currentAppointmentSettings.startDate
-        });
         return itemTemplate.render({
-            model: itemData,
+            model: renderArgs.itemData,
             container: renderArgs.container,
             index: renderArgs.index
         });

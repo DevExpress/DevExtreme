@@ -218,9 +218,9 @@ var DateBox = DropDownEditor.inherit({
             /**
              * @name dxDateBoxOptions.applyButtonText
              * @type string
-             * @default "Done"
+             * @default "OK"
              */
-            applyButtonText: messageLocalization.format("Done"),
+            applyButtonText: messageLocalization.format("OK"),
 
             /**
              * @name dxDateBoxOptions.cancelButtonText
@@ -616,7 +616,7 @@ var DateBox = DropDownEditor.inherit({
             newValue = uiDateUtils.mergeDates(value, parsedDate, type),
             date = parsedDate && type === "time" ? newValue : parsedDate;
 
-        if(this._validateValue(date)) {
+        if(this._applyInternalValidation(date)) {
             var displayedText = this._getDisplayedText(newValue);
 
             if(value && newValue && value.getTime() === newValue.getTime() && displayedText !== text) {
@@ -626,10 +626,7 @@ var DateBox = DropDownEditor.inherit({
             }
         }
 
-        this.validationRequest.fire({
-            value: newValue,
-            editor: this
-        });
+        this._applyCustomValidation(newValue);
     },
 
     _getDateByDefault: function() {
@@ -644,6 +641,10 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _validateValue: function(value) {
+        return this._applyInternalValidation(value) && this._applyCustomValidation(value);
+    },
+
+    _applyInternalValidation(value) {
         var text = this.option("text"),
             hasText = !!text && value !== null,
             isDate = !!value && typeUtils.isDate(value) && !isNaN(value.getTime()),
@@ -665,9 +666,13 @@ var DateBox = DropDownEditor.inherit({
             }
         });
 
+        return isValid;
+    },
+
+    _applyCustomValidation: function(value) {
         this.validationRequest.fire({
             editor: this,
-            value: value
+            value
         });
 
         return this.option("isValid");

@@ -36,11 +36,7 @@ var BaseRangeContainer = BaseElement.inherit({
             ranges = [],
             backgroundRanges = [{ start: totalStart, end: totalEnd }],
             threshold = _abs(totalDelta) / 1E4,
-            palette = that._themeManager.createPalette(options.palette, {
-                type: 'indicatingSet',
-                extensionMode: options.paletteExtensionMode,
-                keepLastColorInEnd: true
-            }),
+            palette,
             backgroundColor = _isString(options.backgroundColor) ? options.backgroundColor : 'none',
             width = options.width || {},
             startWidth = _Number(width > 0 ? width : width.start),
@@ -62,12 +58,21 @@ var BaseRangeContainer = BaseElement.inherit({
             }
             return result;
         }, []);
-        _each(list, function(i, item) {
-            var paletteColor = palette.getNextColor(list.length);
+
+        palette = that._themeManager.createPalette(options.palette, {
+            type: 'indicatingSet',
+            extensionMode: options.paletteExtensionMode,
+            keepLastColorInEnd: true,
+            count: list.length
+        });
+
+        _each(list, function(_, item) {
+            var paletteColor = palette.getNextColor();
             item.color = (_isString(item.color) && item.color) || paletteColor || 'none';
             item.className = 'dxg-range dxg-range-' + item.classIndex;
             delete item.classIndex;
         });
+
         _each(list, function(_, item) {
             var i, ii,
                 sub,

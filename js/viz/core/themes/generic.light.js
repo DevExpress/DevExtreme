@@ -133,17 +133,17 @@ registerTheme({
             backgroundColor: WHITE,
             margin: {
                 left: 0,
-                bottom: 0,
+                bottom: 14,
                 right: 0,
                 top: 0
             },
             font: {
-                size: 28,
+                size: 18,
                 weight: 200
             },
             subtitle: {
                 font: {
-                    size: 16
+                    size: 14
                 }
             }
         }
@@ -720,6 +720,7 @@ registerTheme({
             width: 10
         },
         adjustOnZoom: true,
+        autoHidePointMarkers: true,
         rotated: false,
         zoomingMode: NONE,
         scrollingMode: NONE,
@@ -1016,6 +1017,7 @@ registerTheme({
         backgroundColor: "#e0e0e0",
         relativeInnerRadius: 0.3,
         barSpacing: 4,
+        resolveLabelOverlapping: "hide",
         label: {
             indent: 20,
             connectorWidth: 2,
@@ -1560,6 +1562,7 @@ registerTheme({
         algorithm: "dynamicSlope",
         neckWidth: 0,
         neckHeight: 0,
+        resolveLabelOverlapping: "shift",
         label: {
             visible: true,
             horizontalAlignment: RIGHT,

@@ -15,7 +15,7 @@ var DateViewStrategy = DateBoxStrategy.inherit({
     getDefaultOptions: function() {
         return extend(this.callBase(), {
             openOnFieldClick: true,
-            applyButtonText: messageLocalization.format("Done")
+            applyButtonText: messageLocalization.format("OK")
         });
     },
 

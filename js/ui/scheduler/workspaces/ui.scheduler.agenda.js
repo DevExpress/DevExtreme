@@ -1,13 +1,13 @@
-var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
-    noop = require("../../core/utils/common").noop,
-    each = require("../../core/utils/iterator").each,
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    registerComponent = require("../../core/component_registrator"),
+var $ = require("../../../core/renderer"),
+    domAdapter = require("../../../core/dom_adapter"),
+    noop = require("../../../core/utils/common").noop,
+    each = require("../../../core/utils/iterator").each,
+    getPublicElement = require("../../../core/utils/dom").getPublicElement,
+    registerComponent = require("../../../core/component_registrator"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space"),
-    extend = require("../../core/utils/extend").extend,
-    dateLocalization = require("../../localization/date"),
-    tableCreator = require("./ui.scheduler.table_creator");
+    extend = require("../../../core/utils/extend").extend,
+    dateLocalization = require("../../../localization/date"),
+    tableCreator = require("../ui.scheduler.table_creator");
 
 var AGENDA_CLASS = "dx-scheduler-agenda",
     AGENDA_DATE_CLASS = "dx-scheduler-agenda-date",

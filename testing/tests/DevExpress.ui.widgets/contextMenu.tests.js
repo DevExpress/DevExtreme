@@ -1298,6 +1298,28 @@ QUnit.module("Public api", moduleConfig, () => {
         assert.ok(instance.itemsContainer().hasClass("dx-overlay-content"));
         assert.ok(instance.itemsContainer().hasClass(DX_CONTEXT_MENU_CLASS));
     });
+
+    QUnit.test("Overlay's position should be correct when the target option is changed", (assert) => {
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 1 }],
+        });
+
+        instance.option("target", "#menuTarget");
+
+        const $target = $("#menuTarget");
+        $target
+            .trigger($.Event("dxcontextmenu", {
+                pageX: 120,
+                pageY: 50
+            }));
+
+        const position = instance._overlay.option("position");
+        assert.equal(position.at, "top left", "at of overlay position");
+        assert.equal(position.my, "top left", "my of overlay position");
+        assert.equal(position.of.pageX, 120, "pageX of overlay position");
+        assert.equal(position.of.pageY, 50, "pageX of overlay position");
+        assert.equal(position.of.target, $target.get(0), "target of overlay position");
+    });
 });
 
 QUnit.module("Behavior", moduleConfig, () => {

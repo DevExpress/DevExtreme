@@ -1,9 +1,9 @@
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
-    registerComponent = require("../../core/component_registrator"),
+var $ = require("../../../core/renderer"),
+    noop = require("../../../core/utils/common").noop,
+    registerComponent = require("../../../core/component_registrator"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space.indicator"),
-    dateUtils = require("../../core/utils/date"),
-    dateLocalization = require("../../localization/date");
+    dateUtils = require("../../../core/utils/date"),
+    dateLocalization = require("../../../localization/date");
 
 var MONTH_CLASS = "dx-scheduler-work-space-month",
 

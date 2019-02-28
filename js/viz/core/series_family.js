@@ -45,7 +45,6 @@ function correctStackCoordinates(series, currentStacks, arg, stack, parameters, 
         if(isDefined(barPadding) || isDefined(barWidth)) {
             extraParameters = calculateParams(barsArea, currentStacks.length, 1 - barPadding, barWidth);
             width = extraParameters.width;
-            offset = getOffset(stackIndex, extraParameters);
         }
 
         correctPointCoordinates(points, width, offset);
@@ -63,8 +62,9 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
         barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
 
     series.forEach(function(s, i) {
-        var stackName = s.getStackName && s.getStackName() || i.toString(),
+        var stackName = s.getStackName() || s.getBarOverlapGroup() || i.toString(),
             argument;
+
         for(argument in s.pointsByArgument) {
             if(allArguments.indexOf(argument.valueOf()) === -1) {
                 allArguments.push(argument.valueOf());
@@ -174,7 +174,7 @@ function adjustStackedSeriesValues() {
         lastSeriesInStack = {};
 
     series.forEach(function(singleSeries) {
-        var stackName = singleSeries.getStackName(),
+        var stackName = singleSeries.getStackName() || singleSeries.getBarOverlapGroup(),
             hole = false;
 
         singleSeries._prevSeries = lastSeriesInStack[stackName];
@@ -186,6 +186,7 @@ function adjustStackedSeriesValues() {
             var value = point.initialValue,
                 argument = point.argument.valueOf(),
                 stacks = (value >= 0) ? stackKeepers.positive : stackKeepers.negative,
+                isNotBarSeries = singleSeries.type !== "bar",
                 currentStack;
 
             if(negativesAsZeroes && value < 0) {
@@ -198,11 +199,11 @@ function adjustStackedSeriesValues() {
             currentStack = stacks[stackName];
 
             if(currentStack[argument]) {
-                point.correctValue(currentStack[argument]);
+                if(isNotBarSeries) point.correctValue(currentStack[argument]);
                 currentStack[argument] += value;
             } else {
                 currentStack[argument] = value;
-                point.resetCorrection();
+                if(isNotBarSeries) point.resetCorrection();
             }
             if(!point.hasValue()) {
                 var prevPoint = points[index - 1];
@@ -231,11 +232,12 @@ function adjustStackedSeriesValues() {
             point._skipSetRightHole = null;
         });
     });
+
     that._stackKeepers = stackKeepers;
     series.forEach(function(singleSeries) {
         singleSeries.getPoints().forEach(function(point) {
             var argument = point.argument.valueOf(),
-                stackName = singleSeries.getStackName(),
+                stackName = singleSeries.getStackName() || singleSeries.getBarOverlapGroup(),
                 absTotal = getAbsStackSumByArg(stackKeepers, stackName, argument),
                 total = getStackSumByArg(stackKeepers, stackName, argument);
 
@@ -389,6 +391,7 @@ function SeriesFamily(options) {
         case "bar":
             that.adjustSeriesDimensions = adjustBarSeriesDimensions;
             that.updateSeriesValues = updateBarSeriesValues;
+            that.adjustSeriesValues = adjustStackedSeriesValues;
             break;
         case "rangebar":
             that.adjustSeriesDimensions = adjustBarSeriesDimensions;

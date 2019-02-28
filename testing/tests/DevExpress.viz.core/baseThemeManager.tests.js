@@ -33,15 +33,15 @@ var environment = {
         this.themeManager = new BaseThemeManager();
         this.callback = sinon.spy();
         this.themeManager.setCallback(this.callback);
-        this.Palette = sinon.stub(paletteModule, "Palette");
-        this.DiscretePalette = sinon.stub(paletteModule, "DiscretePalette");
+        this.createPalette = sinon.stub(paletteModule, "createPalette");
+        this.getDiscretePalette = sinon.stub(paletteModule, "getDiscretePalette");
         this.getAccentColor = sinon.stub(paletteModule, "getAccentColor");
     },
 
     afterEach: function() {
         this.themeManager.dispose();
-        this.Palette.restore();
-        this.DiscretePalette.restore();
+        this.createPalette.restore();
+        this.getDiscretePalette.restore();
         this.getAccentColor.restore();
     }
 };
@@ -401,10 +401,10 @@ QUnit.test("Create palette", function(assert) {
 
     var palette = this.themeManager.createPalette('paletteName', { palette: 'options' });
 
-    assert.ok(this.Palette.calledOnce);
-    assert.ok(this.Palette.firstCall.calledWithNew);
-    assert.strictEqual(palette, this.Palette.firstCall.returnValue);
-    assert.deepEqual(this.Palette.firstCall.args, ['paletteName', { palette: 'options' }, undefined]);
+    assert.ok(this.createPalette.calledOnce);
+    assert.ok(this.createPalette.firstCall.calledWithNew);
+    assert.strictEqual(palette, this.createPalette.firstCall.returnValue);
+    assert.deepEqual(this.createPalette.firstCall.args, ['paletteName', { palette: 'options' }, undefined]);
 });
 
 QUnit.test("Create discrete palette", function(assert) {
@@ -412,10 +412,10 @@ QUnit.test("Create discrete palette", function(assert) {
 
     var palette = this.themeManager.createDiscretePalette('paletteName', 13);
 
-    assert.ok(this.DiscretePalette.calledOnce);
-    assert.ok(this.DiscretePalette.firstCall.calledWithNew);
-    assert.strictEqual(palette, this.DiscretePalette.firstCall.returnValue);
-    assert.deepEqual(this.DiscretePalette.firstCall.args, ['paletteName', 13, undefined]);
+    assert.ok(this.getDiscretePalette.calledOnce);
+    assert.ok(this.getDiscretePalette.firstCall.calledWithNew);
+    assert.strictEqual(palette, this.getDiscretePalette.firstCall.returnValue);
+    assert.deepEqual(this.getDiscretePalette.firstCall.args, ['paletteName', 13, undefined]);
 });
 
 QUnit.test("Create gradient palette", function(assert) {
@@ -431,10 +431,10 @@ QUnit.test("Create palette. With default palette", function(assert) {
 
     var palette = this.themeManager.createPalette(undefined, { palette: 'options' });
 
-    assert.ok(this.Palette.calledOnce);
-    assert.ok(this.Palette.firstCall.calledWithNew);
-    assert.strictEqual(palette, this.Palette.firstCall.returnValue);
-    assert.deepEqual(this.Palette.firstCall.args, [undefined, { palette: 'options' }, 'some-default-palette']);
+    assert.ok(this.createPalette.calledOnce);
+    assert.ok(this.createPalette.firstCall.calledWithNew);
+    assert.strictEqual(palette, this.createPalette.firstCall.returnValue);
+    assert.deepEqual(this.createPalette.firstCall.args, [undefined, { palette: 'options' }, 'some-default-palette']);
 });
 
 QUnit.test("Create discrete palette. With default palette", function(assert) {
@@ -442,10 +442,10 @@ QUnit.test("Create discrete palette. With default palette", function(assert) {
 
     var palette = this.themeManager.createDiscretePalette(undefined, 13);
 
-    assert.ok(this.DiscretePalette.calledOnce);
-    assert.ok(this.DiscretePalette.firstCall.calledWithNew);
-    assert.strictEqual(palette, this.DiscretePalette.firstCall.returnValue);
-    assert.deepEqual(this.DiscretePalette.firstCall.args, [undefined, 13, 'some-default-palette']);
+    assert.ok(this.getDiscretePalette.calledOnce);
+    assert.ok(this.getDiscretePalette.firstCall.calledWithNew);
+    assert.strictEqual(palette, this.getDiscretePalette.firstCall.returnValue);
+    assert.deepEqual(this.getDiscretePalette.firstCall.args, [undefined, 13, 'some-default-palette']);
 });
 
 QUnit.test("Create gradient palette. With default palette", function(assert) {
@@ -461,10 +461,10 @@ QUnit.test("Create palette. Palette and default palette", function(assert) {
 
     var palette = this.themeManager.createPalette('paletteName', { palette: 'options' });
 
-    assert.ok(this.Palette.calledOnce);
-    assert.ok(this.Palette.firstCall.calledWithNew);
-    assert.strictEqual(palette, this.Palette.firstCall.returnValue);
-    assert.deepEqual(this.Palette.firstCall.args, ['paletteName', { palette: 'options' }, "some-default-palette"]);
+    assert.ok(this.createPalette.calledOnce);
+    assert.ok(this.createPalette.firstCall.calledWithNew);
+    assert.strictEqual(palette, this.createPalette.firstCall.returnValue);
+    assert.deepEqual(this.createPalette.firstCall.args, ['paletteName', { palette: 'options' }, "some-default-palette"]);
 });
 
 QUnit.test("Create discrete palette. Palette and default palette", function(assert) {
@@ -472,10 +472,10 @@ QUnit.test("Create discrete palette. Palette and default palette", function(asse
 
     var palette = this.themeManager.createDiscretePalette('paletteName', 13);
 
-    assert.ok(this.DiscretePalette.calledOnce);
-    assert.ok(this.DiscretePalette.firstCall.calledWithNew);
-    assert.strictEqual(palette, this.DiscretePalette.firstCall.returnValue);
-    assert.deepEqual(this.DiscretePalette.firstCall.args, ['paletteName', 13, "some-default-palette"]);
+    assert.ok(this.getDiscretePalette.calledOnce);
+    assert.ok(this.getDiscretePalette.firstCall.calledWithNew);
+    assert.strictEqual(palette, this.getDiscretePalette.firstCall.returnValue);
+    assert.deepEqual(this.getDiscretePalette.firstCall.args, ['paletteName', 13, "some-default-palette"]);
 });
 
 QUnit.test("Get palette's accent color", function(assert) {

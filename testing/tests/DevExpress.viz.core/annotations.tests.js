@@ -21,6 +21,12 @@ QUnit.test("Simple annotation", function(assert) {
     assert.equal(annotation._type, "simple");
 });
 
+QUnit.test("Image annotation", function(assert) {
+    const annotation = createAnnotations({ items: [{ x: 0, y: 0, image: { url: "some_url" } }] })[0];
+
+    assert.equal(annotation._type, "image");
+});
+
 QUnit.module("Simple annotation", environment);
 
 QUnit.test("Draws a circle inside provided group", function(assert) {
@@ -71,4 +77,23 @@ QUnit.test("Do not draw annotation if cannot get coords", function(assert) {
     testCase({ x: null, y: null }, "Both values are null");
     testCase({ x: 100, y: undefined }, "Only y is undefined");
     testCase({ x: undefined, y: 100 }, "Only x is undefined");
+});
+
+QUnit.module("Image annotation", environment);
+
+QUnit.test("Draw image inside provided group", function(assert) {
+    const annotation = createAnnotations({ items: [{ x: 0, y: 0, image: { url: "some_url" } }] })[0];
+
+    annotation.draw(this.widget, this.group);
+
+    assert.equal(this.renderer.image.callCount, 1);
+    assert.deepEqual(this.renderer.image.firstCall.returnValue.append.firstCall.args, [this.group]);
+});
+
+QUnit.test("Image params", function(assert) {
+    const annotation = createAnnotations({ items: [{ x: 10, y: 20, image: { url: "some_url", width: 10, height: 10 } }] })[0];
+
+    annotation.draw(this.widget, this.group);
+
+    assert.deepEqual(this.renderer.image.firstCall.args, [95, 195, 10, 10, "some_url", "center"]);
 });

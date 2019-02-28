@@ -111,6 +111,13 @@ var commonSeries = {
     */
     stack: 'default',
     /**
+    * @name dxChartSeriesTypes.CommonSeries.barOverlapGroup
+    * @type string
+    * @default undefined
+    * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.RangeBarSeries
+    */
+   barOverlapGroup: undefined,
+    /**
     * @name dxChartSeriesTypes.CommonSeries.pane
     * @type string
     * @default 'default'

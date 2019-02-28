@@ -566,7 +566,7 @@ QUnit.test("Resize", function(assert) {
 });
 
 QUnit.test("Palette", function(assert) {
-    sinon.spy(paletteModule, "Palette");
+    sinon.spy(paletteModule, "createPalette");
 
     createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
@@ -580,13 +580,14 @@ QUnit.test("Palette", function(assert) {
     assert.deepEqual(nodes[1].smartAttr.lastCall.args[0].fill, "red");
     assert.deepEqual(nodes[2].smartAttr.lastCall.args[0].fill, "#804000");
 
-    assert.deepEqual(paletteModule.Palette.lastCall.args[1], {
+    assert.deepEqual(paletteModule.createPalette.lastCall.args[1], {
+        count: 3,
         useHighlight: true,
         extensionMode: "blend"
     }, "useHighlight");
 
     // teardown
-    paletteModule.Palette.restore();
+    paletteModule.createPalette.restore();
 });
 
 QUnit.test("Sankey fires drawn event", function(assert) {
@@ -745,7 +746,7 @@ QUnit.test("Update color of links", function(assert) {
 });
 
 QUnit.test("Update palette", function(assert) {
-    sinon.spy(paletteModule, "Palette");
+    sinon.spy(paletteModule, "createPalette");
 
     var sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
