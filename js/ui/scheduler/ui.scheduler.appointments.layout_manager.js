@@ -51,7 +51,7 @@ class AppointmentLayoutManager {
 
         this._positionMap = this._renderingStrategyInstance.createTaskPositionMap(items);
 
-        return this._createAppointmentsMapCore(items, this._positionMap);
+        return this._createAppointmentsMapCore(items || [], this._positionMap);
     }
 
     _createAppointmentsMapCore(list, positionMap) {
