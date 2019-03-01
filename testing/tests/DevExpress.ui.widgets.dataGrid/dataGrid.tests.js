@@ -921,58 +921,6 @@ QUnit.test("Expand adaptive detail row after scrolling if scrolling mode is virt
     assert.strictEqual(dataGrid.getVisibleRows()[2].key, 1, "row 2 key");
 });
 
-// T717716
-QUnit.test("Edit row after scrolling if scrolling mode is virtual and dataSource is remote", function(assert) {
-    var done = assert.async();
-    var dataGrid = $("#dataGrid").dxDataGrid({
-        height: 200,
-        dataSource: {
-            key: "id",
-            load: function(options) {
-                var d = $.Deferred();
-                setTimeout(() => {
-                    var items = Array.apply(null, Array(options.take)).map((_, i) => {
-                        return { id: i + 1 + options.skip };
-                    });
-                    d.resolve(items, { totalCount: 20 });
-                });
-
-                return d;
-            }
-        },
-        loadingTimeout: undefined,
-        remoteOperations: true,
-        scrolling: {
-            timeout: 0,
-            mode: "virtual",
-            useNative: false,
-            updateTimeout: 0
-        },
-        paging: {
-            pageSize: 5
-        },
-        editing: {
-            allowUpdating: true
-        }
-    }).dxDataGrid("instance");
-
-    setTimeout(function() {
-        // act
-        dataGrid.getScrollable().scrollToElement(dataGrid.getRowElement(dataGrid.getRowIndexByKey(10)));
-
-        setTimeout(function() {
-            // act
-            $(dataGrid.getRowElement(dataGrid.getRowIndexByKey(10))).find(".dx-link-edit").trigger("dxclick");
-
-            setTimeout(function() {
-                // assert
-                assert.strictEqual(dataGrid.getVisibleRows()[dataGrid.getRowIndexByKey(10)].isEditing, true, "editing is stated for correct row");
-                done();
-            }, 400);
-        });
-    }, 100);
-});
-
 // T315857
 QUnit.test("Editing should work with classes as data objects", function(assert) {
     // arrange
