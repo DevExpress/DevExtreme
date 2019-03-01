@@ -943,8 +943,10 @@ QUnit.test("Edit row after scrolling if scrolling mode is virtual and dataSource
         loadingTimeout: undefined,
         remoteOperations: true,
         scrolling: {
+            timeout: 0,
             mode: "virtual",
-            useNative: false
+            useNative: false,
+            updateTimeout: 0
         },
         paging: {
             pageSize: 5
