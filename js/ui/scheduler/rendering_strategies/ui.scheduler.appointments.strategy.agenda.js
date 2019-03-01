@@ -1,7 +1,7 @@
-var noop = require("../../core/utils/common").noop,
-    dateUtils = require("../../core/utils/date"),
-    each = require("../../core/utils/iterator").each,
-    arrayUtils = require("../../core/utils/array"),
+var noop = require("../../../core/utils/common").noop,
+    dateUtils = require("../../../core/utils/date"),
+    each = require("../../../core/utils/iterator").each,
+    arrayUtils = require("../../../core/utils/array"),
     BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base");
 
 var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({

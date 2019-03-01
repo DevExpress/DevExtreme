@@ -22,6 +22,7 @@ QUnit.testStart(function() {
 
 
 import "common.css!";
+import "generic_light.css!";
 
 import "ui/data_grid/ui.data_grid";
 
@@ -637,9 +638,9 @@ function createGridView(options, userOptions) {
         var pagerView = gridView.getView('pagerView');
 
         // B232626
-        assert.strictEqual(Math.round(columnsHeaderViewContainer.height() + rowsViewViewContainer.height() + pagerView.getHeight()), 100);
-        assert.notStrictEqual(columnsHeaderViewContainer.height(), 0);
-        assert.notStrictEqual(rowsViewViewContainer.height(), 0);
+        assert.strictEqual(Math.round(columnsHeaderViewContainer[0].offsetHeight + rowsViewViewContainer[0].offsetHeight + pagerView.getHeight()), 100);
+        assert.notStrictEqual(columnsHeaderViewContainer[0].offsetHeight, 0);
+        assert.notStrictEqual(rowsViewViewContainer[0].offsetHeight, 0);
         assert.notStrictEqual(pagerView.getHeight(), 0);
     });
 
@@ -667,7 +668,7 @@ function createGridView(options, userOptions) {
 
         var rowsViewViewContainer = gridView.getView("rowsView").element();
 
-        assert.strictEqual(rowsViewViewContainer.height(), 100);
+        assert.strictEqual(rowsViewViewContainer[0].offsetHeight, 100);
     });
 
     QUnit.test('RowsView height calculation when data not loaded and allRowsCount defined', function(assert) {
@@ -694,7 +695,7 @@ function createGridView(options, userOptions) {
 
         var rowsViewViewContainer = gridView.getView("rowsView").element();
 
-        assert.strictEqual(rowsViewViewContainer.height(), 100);
+        assert.strictEqual(rowsViewViewContainer[0].offsetHeight, 100);
     });
 
     QUnit.test('RowsView height calculation when no data and loadIndicator is not visible', function(assert) {
@@ -721,7 +722,7 @@ function createGridView(options, userOptions) {
 
         var rowsViewViewContainer = gridView.getView("rowsView").element();
 
-        assert.strictEqual(rowsViewViewContainer.height(), 100);
+        assert.strictEqual(rowsViewViewContainer[0].offsetHeight, 100);
     });
 
     QUnit.test('Scroller shown after inserting items', function(assert) {
@@ -1886,7 +1887,7 @@ function createGridView(options, userOptions) {
                 })
             },
             gridView = this.createGridView(defaultOptions, { columnAutoWidth: true }),
-            $testElement = $("<div />").width(560).appendTo($("#container")),
+            $testElement = $("<div />").width(500).appendTo($("#container")),
             $colElements;
 
         // act
@@ -2018,6 +2019,43 @@ function createGridView(options, userOptions) {
             assert.ok(parseFloat(fixedContent.css("marginBottom")) > 0, "margin bottom in fixed content");
             fixedContent = testElement.find(".dx-datagrid-headers").children(".dx-datagrid-content-fixed");
             assert.ok(parseFloat(fixedContent.css("paddingRight")) > 0, "padding right in fixed content");
+        });
+
+        // T716971
+        QUnit.test("Draw grid view with a simulated scrolling when scrolling.showScrollbar is 'always'", function(assert) {
+            // arrange
+            this.defaultOptions.columnsController = new MockColumnsController([
+                { caption: 'Column 1', width: 100, fixed: true },
+                { caption: 'Column 2', width: 100 },
+                { caption: 'Column 3', width: 100 },
+                { caption: 'Column 4', width: 100, fixed: true }]);
+            this.defaultOptions.dataController.items = function() {
+                return [{ values: [1, 2, 'test 1', 15], rowType: "data" },
+                    { values: [3, 4, 'test 2', 16], rowType: "data" },
+                    { values: [5, 6, 'test 3', 17], rowType: "data" },
+                    { values: [7, 8, 'test 4', 18], rowType: "data" },
+                    { values: [9, 10, 'test 5', 19], rowType: "data" },
+                    { values: [11, 12, 'test 6', 20], rowType: "data" },
+                    { values: [13, 14, 'test 7', 21], rowType: "data" }];
+            };
+
+            var gridView = this.createGridView(this.defaultOptions, {
+                    scrolling: {
+                        showScrollbar: "always",
+                        useNative: false
+                    }
+                }),
+                $fixedContent,
+                $testElement = $('#container').width(300).height(200);
+
+            // act
+            gridView.render($testElement);
+            gridView.update();
+
+            // assert
+            $fixedContent = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed");
+            assert.strictEqual(parseFloat($fixedContent.css("marginBottom")), 0, "margin bottom in fixed content");
+            assert.ok(parseFloat($fixedContent.find("table").first().css("marginBottom")) > 0, "margin bottom in fixed table");
         });
     }
 

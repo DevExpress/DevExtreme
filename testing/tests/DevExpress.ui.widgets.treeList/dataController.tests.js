@@ -1850,10 +1850,10 @@ QUnit.test("Initial load when expandNodesOnFiltering and no filter", function(as
     assert.equal(items.length, 3, "only first level items are visible");
 });
 
-QUnit.test("Initial load when expandNodesOnFiltering and dataSource has filter and filterMode is exactMatch", function(assert) {
+QUnit.test("Initial load when expandNodesOnFiltering and dataSource has filter and filterMode is matchOnly", function(assert) {
     // arrange, act
     this.setupTreeList({
-        filterMode: "exactMatch",
+        filterMode: "matchOnly",
         expandNodesOnFiltering: true,
         dataSource: {
             store: this.items,
@@ -1873,7 +1873,7 @@ QUnit.test("Initial load when expandNodesOnFiltering and dataSource has filter a
     assert.equal(items[2].level, 0, "item 3 level");
 });
 
-QUnit.test("Initial load dataSource has filter and filterMode exactMatch is emulated using onNodesInitialized", function(assert) {
+QUnit.test("Initial load dataSource has filter and filterMode matchOnly is emulated using onNodesInitialized", function(assert) {
     // arrange, act
     var that = this;
     this.setupTreeList({
@@ -1907,10 +1907,10 @@ QUnit.test("Initial load dataSource has filter and filterMode exactMatch is emul
     assert.equal(items[2].level, 0, "item 3 level");
 });
 
-QUnit.test("Initial load when expandNodesOnFiltering disabled and dataSource has filter and filterMode is exactMatch", function(assert) {
+QUnit.test("Initial load when expandNodesOnFiltering disabled and dataSource has filter and filterMode is matchOnly", function(assert) {
     // arrange, act
     this.setupTreeList({
-        filterMode: "exactMatch",
+        filterMode: "matchOnly",
         expandNodesOnFiltering: false,
         dataSource: {
             store: this.items,
@@ -1927,10 +1927,10 @@ QUnit.test("Initial load when expandNodesOnFiltering disabled and dataSource has
     assert.equal(items[1].level, 0, "item 2 level");
 });
 
-QUnit.test("Initial load when dataSource has filter and filterMode is exactMatch and root nodes area hidden", function(assert) {
+QUnit.test("Initial load when dataSource has filter and filterMode is matchOnly and root nodes area hidden", function(assert) {
     // arrange, act
     this.setupTreeList({
-        filterMode: "exactMatch",
+        filterMode: "matchOnly",
         expandNodesOnFiltering: true,
         dataSource: {
             store: {
@@ -1954,10 +1954,10 @@ QUnit.test("Initial load when dataSource has filter and filterMode is exactMatch
     assert.equal(items[3].level, 0, "item 4 level");
 });
 
-QUnit.test("Initial load when filterMode is exactMatch and remoteOperations is false", function(assert) {
+QUnit.test("Initial load when filterMode is matchOnly and remoteOperations is false", function(assert) {
     // arrange, act
     this.setupTreeList({
-        filterMode: "exactMatch",
+        filterMode: "matchOnly",
         expandNodesOnFiltering: true,
         remoteOperations: false,
         dataSource: {

@@ -245,6 +245,12 @@ var dxChart = {
     */
     adjustOnZoom: true,
     /**
+    * @name dxChartOptions.autoHidePointMarkers
+    * @type boolean
+    * @default true
+    */
+    autoHidePointMarkers: true,
+    /**
     * @name dxChartOptions.rotated
     * @type boolean
     * @default false
@@ -3237,179 +3243,10 @@ var BaseChart = {
     paletteExtensionMode: 'blend',
     /**
     * @name BaseChartOptions.legend
+    * @inherits BaseLegend
     * @type object
     */
     legend: {
-
-        /**
-        * @name BaseChartOptions.legend.verticalAlignment
-        * @type Enums.VerticalEdge
-        * @default 'top'
-        */
-        verticalAlignment: 'top',
-        /**
-        * @name BaseChartOptions.legend.horizontalAlignment
-        * @type Enums.HorizontalAlignment
-        * @default 'right'
-        */
-        horizontalAlignment: 'right',
-        /**
-        * @name BaseChartOptions.legend.orientation
-        * @type Enums.Orientation
-        * @default undefined
-        */
-        orientation: undefined,
-        /**
-        * @name BaseChartOptions.legend.itemTextPosition
-        * @type Enums.Position
-        * @default undefined
-        */
-        itemTextPosition: undefined,
-        /**
-        * @name BaseChartOptions.legend.itemsAlignment
-        * @type Enums.HorizontalAlignment
-        * @default undefined
-        */
-        itemsAlignment: undefined,
-        /**
-        * @name BaseChartOptions.legend.font
-        * @type Font
-        * @default '#767676' @prop color
-        */
-        font: {
-            color: '#767676',
-            family: undefined,
-            weight: undefined,
-            size: undefined,
-            opacity: undefined
-        },
-        /**
-        * @name BaseChartOptions.legend.visible
-        * @type boolean
-        * @default true
-        */
-        visible: true,
-        /**
-        * @name BaseChartOptions.legend.margin
-        * @type number | object
-        * @default 10
-        */
-        margin: {
-            /**
-            * @name BaseChartOptions.legend.margin.top
-            * @type number
-            * @default 10
-            */
-            top: 10,
-            /**
-            * @name BaseChartOptions.legend.margin.bottom
-            * @type number
-            * @default 10
-            */
-            bottom: 10,
-            /**
-            * @name BaseChartOptions.legend.margin.left
-            * @type number
-            * @default 10
-            */
-            left: 10,
-            /**
-            * @name BaseChartOptions.legend.margin.right
-            * @type number
-            * @default 10
-            */
-            right: 10
-        },
-        /**
-        * @name BaseChartOptions.legend.markerSize
-        * @type number
-        * @default 20
-        */
-        markerSize: 20,
-        /**
-        * @name BaseChartOptions.legend.backgroundColor
-        * @type string
-        * @default undefined
-        */
-        backgroundColor: undefined,
-        /**
-        * @name BaseChartOptions.legend.border
-        * @type object
-        */
-        border: {
-            /**
-            * @name BaseChartOptions.legend.border.visible
-            * @type boolean
-            * @default false
-            */
-            visible: false,
-            /**
-            * @name BaseChartOptions.legend.border.width
-            * @type number
-            * @default 1
-            */
-            width: 1,
-            /**
-            * @name BaseChartOptions.legend.border.color
-            * @type string
-            * @default '#d3d3d3'
-            */
-            color: '#d3d3d3',
-            /**
-            * @name BaseChartOptions.legend.border.cornerRadius
-            * @type number
-            * @default 0
-            */
-            cornerRadius: 0,
-            /**
-            * @name BaseChartOptions.legend.border.opacity
-            * @type number
-            * @default undefined
-            */
-            opacity: undefined,
-            /**
-            * @name BaseChartOptions.legend.border.dashStyle
-            * @type Enums.DashStyle
-            * @default 'solid'
-            */
-            dashStyle: 'solid'
-        },
-        /**
-        * @name BaseChartOptions.legend.paddingLeftRight
-        * @type number
-        * @default 10
-        */
-        paddingLeftRight: 10,
-        /**
-        * @name BaseChartOptions.legend.paddingTopBottom
-        * @type number
-        * @default 10
-        */
-        paddingTopBottom: 10,
-        /**
-        * @name BaseChartOptions.legend.columnCount
-        * @type number
-        * @default 0
-        */
-        columnCount: 0,
-        /**
-        * @name BaseChartOptions.legend.rowCount
-        * @type number
-        * @default 0
-        */
-        rowCount: 0,
-        /**
-        * @name BaseChartOptions.legend.columnItemSpacing
-        * @type number
-        * @default 20
-        */
-        columnItemSpacing: 20,
-        /**
-        * @name BaseChartOptions.legend.rowItemSpacing
-        * @type number
-        * @default 8
-        */
-        rowItemSpacing: 8,
         /**
         * @name BaseChartOptions.legend.customizeItems
         * @type function(items)

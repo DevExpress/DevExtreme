@@ -8,7 +8,7 @@ var $ = require("jquery"),
     objectUtils = require("core/utils/object"),
     vizMocks = require("../../helpers/vizMocks.js"),
     dxGauge = require("viz/gauges/common").dxGauge,
-    Palette = require("viz/palette").Palette,
+    createPalette = require("viz/palette").createPalette,
     axisModule = require("viz/axes/base_axis"),
     loadingIndicatorModule = require("viz/core/loading_indicator"),
     tooltipModule = require("viz/core/tooltip"),
@@ -82,7 +82,7 @@ sinon.stub(axisModule, "Axis", function(parameters) {
 factory.ThemeManager = vizMocks.stubClass(ThemeManager, {
     theme: function() { return {}; },
     themeName: function() { return "theme-name"; },
-    createPalette: function(palette) { return new Palette(palette); },
+    createPalette: function(palette) { return createPalette(palette); },
     setTheme: function() {
         vizMocks.forceThemeOptions(this);
     }

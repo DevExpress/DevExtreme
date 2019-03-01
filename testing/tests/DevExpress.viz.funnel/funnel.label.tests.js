@@ -1,9 +1,7 @@
-var $ = require("jquery"),
-    common = require("./commonParts/common.js"),
-    labelModule = require("viz/series/points/label"),
-    createFunnel = common.createFunnel,
-    stubAlgorithm = common.stubAlgorithm,
-    labelEnvironment = require("./commonParts/label.js").labelEnvironment;
+import $ from "jquery";
+import { createFunnel, stubAlgorithm } from "./commonParts/common.js";
+import labelModule from "viz/series/points/label";
+import { labelEnvironment } from "./commonParts/label.js";
 
 QUnit.module("Initialization", labelEnvironment);
 
@@ -607,10 +605,12 @@ QUnit.test("Connector strategy", function(assert) {
     assert.deepEqual(connectorStrategy.prepareLabelPoints({
         x: 10,
         y: 15,
-        height: 20,
+        height: 5,
         width: 40
-    }), [[ 6, 15 ], [ 46, 15 ], [ 46, 35 ], [ 6, 35 ]], "prepareLabelPoints");
+    }), [[6, 15], [6, 16], [6, 17], [6, 18], [6, 19], [6, 20], [46, 15], [46, 16], [46, 17], [46, 18], [46, 19], [46, 20]], "prepareLabelPoints");
     assert.equal(connectorStrategy.isLabelInside(), false, "isLabelInside");
+
+    assert.deepEqual(connectorStrategy.adjustPoints([1.2, 1, 1.8]), [1, 1, 2]);
 });
 
 QUnit.test("Connector strategy. left horizontalAlignment", function(assert) {
@@ -640,9 +640,9 @@ QUnit.test("Connector strategy. left horizontalAlignment", function(assert) {
     assert.deepEqual(connectorStrategy.prepareLabelPoints({
         x: 10,
         y: 15,
-        height: 20,
+        height: 2,
         width: 40
-    }), [ [ 14, 15 ], [ 54, 15 ], [ 54, 35 ], [ 14, 35 ]], "prepareLabelPoints");
+    }), [[14, 15], [14, 16], [14, 17], [54, 15], [54, 16], [54, 17]], "prepareLabelPoints");
 });
 
 
@@ -673,9 +673,9 @@ QUnit.test("Connector strategy. inverted", function(assert) {
     assert.deepEqual(connectorStrategy.prepareLabelPoints({
         x: 10,
         y: 15,
-        height: 20,
+        height: 2,
         width: 40
-    }), 	[ [ 14, 14 ], [ 54, 14 ], [ 54, 34 ], [ 14, 34 ]], "prepareLabelPoints");
+    }), [[14, 15], [14, 16], [14, 17], [54, 15], [54, 16], [54, 17]], "prepareLabelPoints");
 });
 
 QUnit.test("Place labels and connector, item border width > 0, horizontalAlignment is left", function(assert) {
@@ -1084,4 +1084,219 @@ QUnit.test("Correct label pos if label out from top", function(assert) {
     var label = labelModule.Label.getCall(0).returnValue;
 
     assert.equal(label.shift.lastCall.args[1], 40);
+});
+
+QUnit.module("Resolve labels overlapping", $.extend({}, labelEnvironment, {
+    testOverlapping(labelBoxes, options) {
+        stubAlgorithm.getFigures.returns(labelBoxes.map(() => [0, 0]));
+        this.labelBoxes = labelBoxes;
+
+        this.funnel = createFunnel($.extend({
+            algorithm: "stub",
+            dataSource: labelBoxes.map(() => { return { value: 1 }; }),
+            valueField: "value",
+            resolveLabelOverlapping: "hide",
+            label: {
+                visible: true,
+                horizontalAlignment: "left",
+                position: "columns"
+            }
+        }, options || {}));
+
+        return labelModule.Label.getCalls().map(c => c.returnValue);
+    }
+}));
+
+QUnit.test("Do not hide not overlapped labels. Hide mode", function(assert) {
+    const labels = this.testOverlapping([
+        { y: 0, height: 15 },
+        { y: 15, height: 15 }
+    ], {
+        resolveLabelOverlapping: "hide"
+    });
+    assert.equal(labels[0].stub("hide").callCount, 0);
+    assert.equal(labels[1].stub("hide").callCount, 0);
+});
+
+QUnit.test("Hide overlapped labels", function(assert) {
+    const labels = this.testOverlapping([
+        { y: 0, height: 15 },
+        { y: 14, height: 15 },
+        { y: 15, height: 15 }
+    ], {
+        resolveLabelOverlapping: "hide"
+    });
+    assert.equal(labels[0].stub("hide").callCount, 0);
+    assert.equal(labels[1].stub("hide").callCount, 1);
+    assert.equal(labels[2].stub("hide").callCount, 0);
+});
+
+QUnit.test("Shift overlapped labels", function(assert) {
+    const labels = this.testOverlapping([
+        { x: 1, y: 0, height: 15 },
+        { x: 2, y: 14, height: 15 },
+        { x: 3, y: 15, height: 15 }
+    ], {
+        resolveLabelOverlapping: "shift"
+    });
+    assert.equal(labels[0].stub("shift").callCount, 1);
+    assert.equal(labels[1].stub("shift").callCount, 2);
+    assert.deepEqual(labels[1].stub("shift").lastCall.args, [2, 15]);
+    assert.equal(labels[2].stub("shift").callCount, 2);
+    assert.deepEqual(labels[2].stub("shift").lastCall.args, [3, 30]);
+});
+
+QUnit.test("Shift. Hide label if it shoul be shifted out of canvas", function(assert) {
+    const labels = this.testOverlapping([
+        { x: 1, y: 0, height: 15 },
+        { x: 2, y: 14, height: 30 },
+        { x: 3, y: 15, height: 15 }
+    ], {
+        resolveLabelOverlapping: "shift",
+        size: { height: 50 }
+    });
+    assert.equal(labels[0].stub("shift").callCount, 1);
+    assert.equal(labels[0].stub("hide").callCount, 0);
+
+    assert.equal(labels[1].stub("shift").callCount, 2);
+    assert.deepEqual(labels[1].stub("shift").lastCall.args, [2, 15]);
+    assert.equal(labels[1].stub("hide").callCount, 0);
+
+    assert.equal(labels[2].stub("hide").callCount, 1);
+});
+
+QUnit.test("Shift. Do not hide last label if there is empty space", function(assert) {
+    const labels = this.testOverlapping([
+        { x: 1, y: 0, height: 15 },
+        { x: 2, y: 75, height: 20 },
+        { x: 3, y: 75, height: 15 }
+    ], {
+        resolveLabelOverlapping: "shift",
+        size: { height: 100 }
+    });
+    assert.equal(labels[0].stub("shift").callCount, 1);
+    assert.equal(labels[0].stub("hide").callCount, 0);
+
+    assert.equal(labels[1].stub("shift").callCount, 2);
+    assert.deepEqual(labels[1].stub("shift").lastCall.args, [2, 65]);
+    assert.equal(labels[1].stub("hide").callCount, 0);
+
+    assert.equal(labels[2].stub("shift").callCount, 3);
+    assert.deepEqual(labels[2].stub("shift").lastCall.args, [3, 85]);
+    assert.equal(labels[2].stub("hide").callCount, 0);
+});
+
+QUnit.test("Shift up all items after empty space", function(assert) {
+    const labels = this.testOverlapping([
+        { x: 1, y: 0, height: 15 },
+        { x: 2, y: 55, height: 20 },
+        { x: 2, y: 75, height: 20 },
+        { x: 3, y: 75, height: 15 }
+    ], {
+        resolveLabelOverlapping: "shift",
+        size: { height: 100 }
+    });
+
+    assert.equal(labels[0].stub("shift").callCount, 1);
+    assert.deepEqual(labels[1].stub("shift").lastCall.args, [2, 45]);
+    assert.deepEqual(labels[2].stub("shift").lastCall.args, [2, 65]);
+    assert.deepEqual(labels[3].stub("shift").lastCall.args, [3, 85]);
+});
+
+QUnit.test("Shift. Hide item if empty space is not enough", function(assert) {
+    const labels = this.testOverlapping([
+        { x: 1, y: 0, height: 66 },
+        { x: 2, y: 75, height: 20 },
+        { x: 3, y: 75, height: 15 }
+    ], {
+        resolveLabelOverlapping: "shift",
+        size: { height: 100 }
+    });
+    assert.equal(labels[0].stub("shift").callCount, 1);
+    assert.equal(labels[0].stub("hide").callCount, 0);
+
+    assert.equal(labels[1].stub("shift").callCount, 1);
+    assert.equal(labels[1].stub("hide").callCount, 0);
+
+    assert.equal(labels[2].stub("hide").callCount, 1);
+});
+
+QUnit.test("Shift overlapped labels. Inverted", function(assert) {
+    const labels = this.testOverlapping([
+        { x: 1, y: 0, height: 15 },
+        { x: 2, y: 14, height: 15 },
+        { x: 3, y: 15, height: 15 }
+    ].reverse(), {
+        resolveLabelOverlapping: "shift",
+        inverted: true
+    });
+    assert.equal(labels[2].stub("shift").callCount, 1);
+    assert.equal(labels[1].stub("shift").callCount, 2);
+    assert.deepEqual(labels[1].stub("shift").lastCall.args, [2, 15]);
+    assert.equal(labels[0].stub("shift").callCount, 2);
+    assert.deepEqual(labels[0].stub("shift").lastCall.args, [3, 30]);
+});
+
+QUnit.test("Redraw hidden labels on resize", function(assert) {
+    const labels = this.testOverlapping([
+        { y: 0, height: 15 },
+        { y: 14, height: 15 },
+        { y: 15, height: 15 }
+    ], {
+        size: {
+            height: 300
+        },
+        resolveLabelOverlapping: "hide",
+        label: {
+            position: "inside"
+        }
+    });
+
+    labels.forEach((l, i) => {
+        l.stub("isVisible").returns(i !== 1);
+        l.draw.reset();
+    });
+
+    this.funnel.option({
+        size: {
+            height: 500
+        }
+    });
+
+    assert.ok(!labels[0].draw.called);
+    assert.ok(labels[1].draw.called);
+    assert.strictEqual(labels[1].draw.lastCall.args[0], true);
+    assert.ok(!labels[2].draw.called);
+});
+
+QUnit.test("change resolveLabelOverlapping option", function(assert) {
+    stubAlgorithm.getFigures.returns([
+        [0, 0, 1, 0, 1, 0.5, 0, 0.5]
+    ]);
+
+    var funnel = createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 1 }],
+        valueField: "value",
+        resolveLabelOverlapping: "hide",
+        label: {
+            visible: true,
+            position: "outside",
+            horizontalOffset: 15,
+            verticalOffset: 30
+        }
+    });
+
+    this.labelGroup().clear.reset();
+    labelModule.Label.reset();
+
+    funnel.option({
+        resolveLabelOverlapping: "shift",
+    });
+
+    assert.equal(this.labelGroup().clear.callCount, 1);
+    assert.equal(labelModule.Label.callCount, 1);
+
+    const label = labelModule.Label.getCall(0).returnValue;
+    assert.ok(label.shift.called);
 });

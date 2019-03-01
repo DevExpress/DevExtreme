@@ -279,7 +279,7 @@ QUnit.test("Format legend with custom type", function(assert) {
         },
         legend: {
             visible: true,
-            format: {
+            itemTextFormat: {
                 type: "thousands"
             }
         },

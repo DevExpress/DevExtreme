@@ -1,17 +1,17 @@
-var $ = require("jquery"),
-    common = require("./common.js"),
-    labelModule = require("viz/series/points/label"),
-    vizMocks = require("../../../helpers/vizMocks.js"),
-    environment = common.environment,
-    stubAlgorithm = common.stubAlgorithm,
-    Label = labelModule.Label,
-    stubLabel = vizMocks.stubClass(Label),
-    labels = require("viz/funnel/label");
+import $ from "jquery";
+import { environment, stubAlgorithm } from "./common.js";
+import labelModule from "viz/series/points/label";
+import vizMocks from "../../../helpers/vizMocks.js";
 
-var dxFunnel = require("viz/funnel/funnel");
+const Label = labelModule.Label;
+const stubLabel = vizMocks.stubClass(Label);
+import labels from "viz/funnel/label";
+
+import dxFunnel from "viz/funnel/funnel";
+
 dxFunnel.addPlugin(labels.plugin);
 
-exports.labelEnvironment = $.extend({}, environment, {
+export const labelEnvironment = $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
         this.labelGroupNumber = 1;
@@ -20,20 +20,20 @@ exports.labelEnvironment = $.extend({}, environment, {
 
         stubAlgorithm.getFigures.returns([[0, 0, 1, 1]]);
 
-        var labelBoxes = [
-                {
-                    height: 10,
-                    width: 100
-                }, {
-                    height: 10,
-                    width: 45
-                }
-            ],
-            labelBoxesIndex = 0;
+        this.labelBoxes = [
+            {
+                height: 10,
+                width: 100
+            }, {
+                height: 10,
+                width: 45
+            }
+        ];
+        let labelBoxesIndex = 0;
 
-        sinon.stub(labelModule, "Label", function() {
+        sinon.stub(labelModule, "Label", ()=> {
             var stub = new stubLabel();
-            stub.stub("getBoundingRect").returns(labelBoxes[(labelBoxesIndex++) % labelBoxes.length]);
+            stub.stub("getBoundingRect").returns(this.labelBoxes[(labelBoxesIndex++) % this.labelBoxes.length]);
             return stub;
         });
 

@@ -1,10 +1,10 @@
 require("common.css!");
 require("generic_light.css!");
-require("ui/scheduler/ui.scheduler.timeline");
-require("ui/scheduler/ui.scheduler.timeline_day");
-require("ui/scheduler/ui.scheduler.timeline_week");
-require("ui/scheduler/ui.scheduler.timeline_work_week");
-require("ui/scheduler/ui.scheduler.timeline_month");
+require("ui/scheduler/workspaces/ui.scheduler.timeline");
+require("ui/scheduler/workspaces/ui.scheduler.timeline_day");
+require("ui/scheduler/workspaces/ui.scheduler.timeline_week");
+require("ui/scheduler/workspaces/ui.scheduler.timeline_work_week");
+require("ui/scheduler/workspaces/ui.scheduler.timeline_month");
 
 var pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js");

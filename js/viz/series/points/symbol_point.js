@@ -683,9 +683,9 @@ module.exports = {
         return (x >= this.x - trackerRadius) && (x <= this.x + trackerRadius) && (y >= this.y - trackerRadius) && (y <= this.y + trackerRadius);
     },
 
-    getMinValue: function() {
+    getMinValue: function(noErrorBar) {
         var errorBarOptions = this._options.errorBars;
-        if(errorBarOptions) {
+        if(errorBarOptions && !noErrorBar) {
             var displayMode = errorBarOptions.displayMode,
                 lowValue = displayMode === "high" ? this.value : this.lowError,
                 highValue = displayMode === "low" ? this.value : this.highError;
@@ -696,9 +696,9 @@ module.exports = {
         }
     },
 
-    getMaxValue: function() {
+    getMaxValue: function(noErrorBar) {
         var errorBarOptions = this._options.errorBars;
-        if(errorBarOptions) {
+        if(errorBarOptions && !noErrorBar) {
             var displayMode = errorBarOptions.displayMode,
                 lowValue = displayMode === "high" ? this.value : this.lowError,
                 highValue = displayMode === "low" ? this.value : this.highError;

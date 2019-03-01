@@ -757,6 +757,7 @@
     "exports": {
       "currentPalette": { "path": "viz.currentPalette" },
       "getPalette": { "path": "viz.getPalette" },
+      "generateColors": { "path": "viz.generateColors" },
       "registerPalette": { "path": "viz.registerPalette" }
     }
   },

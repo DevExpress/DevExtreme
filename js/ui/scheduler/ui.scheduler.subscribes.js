@@ -9,7 +9,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     dateLocalization = require("../../localization/date"),
-    SchedulerTimezones = require("./ui.scheduler.timezones"),
+    SchedulerTimezones = require("./timezones/ui.scheduler.timezones"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
 var MINUTES_IN_HOUR = 60;
@@ -461,7 +461,7 @@ var subscribes = {
         };
 
         if(config.itemData) {
-            result.targetedAppointmentData = this.fire("getTargetedAppointmentData", config.itemData, config.itemElement, config.itemIndex);
+            result.targetedAppointmentData = this.fire("getTargetedAppointmentData", config.itemData, config.itemElement);
         }
 
         return result;
@@ -750,23 +750,19 @@ var subscribes = {
         return SchedulerTimezones.getTimezonesIdsByDisplayName(displayName);
     },
 
-    getTargetedAppointmentData: function(appointmentData, appointmentElement, appointmentIndex, startDate) {
+    getTargetedAppointmentData: function(appointmentData, appointmentElement) {
         var $appointmentElement = $(appointmentElement),
+            appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey()),
             recurringData = this._getSingleAppointmentData(appointmentData, {
                 skipDateCalculation: true,
                 $appointment: $appointmentElement,
-                skipHoursProcessing: true,
-                startDate: startDate
+                skipHoursProcessing: true
             }),
             result = {};
 
         extend(true, result, appointmentData, recurringData);
 
         this._convertDatesByTimezoneBack(false, result);
-
-        if(!typeUtils.isDefined(appointmentIndex)) {
-            appointmentIndex = $appointmentElement.data(this._appointments._itemIndexKey());
-        }
 
         // TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         appointmentElement && this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);

@@ -520,6 +520,9 @@ var DropDownMenu = Widget.inherit({
             case "popupPosition":
             case "closeOnClick":
                 break;
+            case "container":
+                this._popup && this._popup.option(args.name, args.value);
+                break;
             default:
                 this.callBase(args);
         }

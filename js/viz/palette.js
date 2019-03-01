@@ -125,6 +125,13 @@ export function currentPalette(name) {
     }
 }
 
+export function generateColors(palette, count, options = { keepLastColorInEnd: false }) {
+    options.type = options.baseColorSet;
+    options.extensionMode = options.paletteExtensionMode;
+
+    return createPalette(palette, options).generateColors(count);
+}
+
 export function getPalette(palette, parameters) {
     parameters = parameters || {};
     palette = selectPaletteOnSeniority(palette, parameters.themeDefault);
@@ -141,8 +148,8 @@ export function getPalette(palette, parameters) {
             result = palettes[currentPalette()];
         }
     }
-    result = result || null;
-    return type ? result ? result[type].slice(0) : result : result;
+
+    return type ? result[type].slice(0) : result;
 }
 
 export function registerPalette(name, palette) {
@@ -185,7 +192,7 @@ function RingBuf(buf) {
     };
 }
 
-function AlternateColors(palette, parameters) {
+function getAlternateColorsStrategy(palette, parameters) {
     var stepHighlight = parameters.useHighlight ? HIGHLIGHTING_STEP : 0,
         paletteSteps = new RingBuf([0, stepHighlight, -stepHighlight]),
         currentPalette = [];
@@ -205,6 +212,16 @@ function AlternateColors(palette, parameters) {
             return color;
         },
 
+        generateColors: function(count) {
+            const colors = [];
+            count = count || parameters.count;
+            for(var i = 0; i < count; i++) {
+                colors.push(this.getColor(i));
+            }
+
+            return colors;
+        },
+
         reset: function() {
             paletteSteps.reset();
             reset();
@@ -212,7 +229,7 @@ function AlternateColors(palette, parameters) {
     };
 }
 
-function ExtrapolateColors(palette) {
+function getExtrapolateColorsStrategy(palette, parameters) {
     function convertColor(color, cycleIndex, cycleCount) {
         var hsl = new _Color(color).hsl,
             l = hsl.l / 100,
@@ -254,13 +271,20 @@ function ExtrapolateColors(palette) {
             return color;
         },
 
+        generateColors: function(count) {
+            const colors = [];
+            count = count || parameters.count;
+            for(let i = 0; i < count; i++) colors.push(this.getColor(i, count));
+            return colors;
+        },
+
         reset: function() {
 
         }
     };
 }
 
-function BlendColors(palette, parameters) {
+function getColorMixer(palette, parameters) {
     var paletteCount = palette.length,
         extendedPalette = [];
 
@@ -356,7 +380,7 @@ function BlendColors(palette, parameters) {
 
     return {
         getColor: function(index, count) {
-            count = count || paletteCount;
+            count = count || parameters.count || paletteCount;
 
             if(extendedPalette.length !== count) {
                 extendedPalette = extendPalette(count);
@@ -365,46 +389,62 @@ function BlendColors(palette, parameters) {
             return extendedPalette[index % count];
         },
 
+        generateColors: function(count, repeat) {
+            count = count || parameters.count || paletteCount;
+            if(repeat && count > paletteCount) {
+                let colors = extendPalette(paletteCount);
+                for(let i = 0; i < count - paletteCount; i++) {
+                    colors.push(colors[i]);
+                }
+                return colors;
+            } else {
+                return paletteCount > 0 ? extendPalette(count).slice(0, count) : [];
+            }
+        },
+
         reset: function() {
 
         }
     };
 }
 
-export function Palette(palette, parameters, themeDefaultPalette) {
+export function createPalette(palette, parameters, themeDefaultPalette) {
+    const paletteObj = {
+        dispose() {
+            this._extensionStrategy = null;
+        },
+
+        getNextColor(count) {
+            return this._extensionStrategy.getColor(this._currentColor++, count);
+        },
+
+        generateColors(count, parameters) {
+            return this._extensionStrategy.generateColors(count, (parameters || {}).repeat);
+        },
+
+        reset() {
+            this._currentColor = 0;
+            this._extensionStrategy.reset();
+            return this;
+        }
+    };
     parameters = parameters || {};
 
     var extensionMode = (parameters.extensionMode || "").toLowerCase(),
         colors = getPalette(palette, { type: parameters.type || "simpleSet", themeDefault: themeDefaultPalette });
 
     if(extensionMode === "alternate") {
-        this._extensionStrategy = AlternateColors(colors, parameters);
+        paletteObj._extensionStrategy = getAlternateColorsStrategy(colors, parameters);
     } else if(extensionMode === "extrapolate") {
-        this._extensionStrategy = ExtrapolateColors(colors);
+        paletteObj._extensionStrategy = getExtrapolateColorsStrategy(colors, parameters);
     } else {
-        this._extensionStrategy = BlendColors(colors, parameters);
+        paletteObj._extensionStrategy = getColorMixer(colors, parameters);
     }
 
-    this.reset();
+    paletteObj.reset();
+
+    return paletteObj;
 }
-
-Palette.prototype = {
-    constructor: Palette,
-
-    dispose: function() {
-        this._extensionStrategy = null;
-    },
-
-    getNextColor: function(count) {
-        return this._extensionStrategy.getColor(this._currentColor++, count);
-    },
-
-    reset: function() {
-        this._currentColor = 0;
-        this._extensionStrategy.reset();
-        return this;
-    }
-};
 
 function getAlteredPalette(originalPalette, step) {
     var palette = [],
@@ -429,10 +469,13 @@ function getLightness(color) {
     return color.r * 0.3 + color.g * 0.59 + color.b * 0.11;
 }
 
-export function DiscretePalette(source, size, themeDefaultPalette) {
+export function getDiscretePalette(source, size, themeDefaultPalette) {
     var palette = size > 0 ? createDiscreteColors(getPalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }), size) : [];
-    this.getColor = function(index) {
-        return palette[index] || null;
+
+    return {
+        getColor: function(index) {
+            return palette[index] || null;
+        }
     };
 }
 
@@ -463,13 +506,16 @@ function createDiscreteColors(source, count) {
     return gradient;
 }
 
-export function GradientPalette(source, themeDefaultPalette) {
+export function getGradientPalette(source, themeDefaultPalette) {
     // TODO: Looks like some new set is going to be added
     var palette = getPalette(source, { type: "gradientSet", themeDefault: themeDefaultPalette }),
         color1 = new _Color(palette[0]),
         color2 = new _Color(palette[1]);
-    this.getColor = function(ratio) {
-        return 0 <= ratio && ratio <= 1 ? color1.blend(color2, ratio).toHex() : null;
+
+    return {
+        getColor: function(ratio) {
+            return 0 <= ratio && ratio <= 1 ? color1.blend(color2, ratio).toHex() : null;
+        }
     };
 }
 
