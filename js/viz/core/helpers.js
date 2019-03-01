@@ -144,6 +144,7 @@ exports.replaceInherit = isServerSide
         widget.inherit = function() {
             var proto = this.prototype,
                 plugins = proto._plugins,
+                fontFields = proto._fontFields,
                 eventsMap = proto._eventsMap,
                 initialChanges = proto._initialChanges,
                 themeDependentChanges = proto._themeDependentChanges,
@@ -155,6 +156,7 @@ exports.replaceInherit = isServerSide
 
             proto = result.prototype;
             proto._plugins = combineLists(plugins, proto._plugins);
+            proto._fontFields = combineLists(fontFields, proto._fontFields);
             proto._eventsMap = combineMaps(eventsMap, proto._eventsMap);
             proto._initialChanges = combineLists(initialChanges, proto._initialChanges);
             proto._themeDependentChanges = combineLists(themeDependentChanges, proto._themeDependentChanges);
@@ -167,6 +169,7 @@ exports.replaceInherit = isServerSide
             return result;
         };
         widget.prototype._plugins = [];
+        widget.prototype._fontFields = [];
         widget.addChange = addChange;
         widget.addPlugin = addPlugin;
     };

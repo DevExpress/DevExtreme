@@ -34,7 +34,7 @@ var dxBarGauge = dxBaseGauge.inherit({
 
     _themeSection: "barGauge",
 
-    _fontFields: ["label.font", "title.font", "tooltip.font", "loadingIndicator.font", "export.font", "legend.font", "legend.title.font", "legend.title.subtitle.font"],
+    _fontFields: ["label.font", "legend.font", "legend.title.font", "legend.title.subtitle.font"],
 
     _initCore: function() {
         var that = this;

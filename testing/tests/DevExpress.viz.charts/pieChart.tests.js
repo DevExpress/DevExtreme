@@ -235,7 +235,17 @@ var environment = {
         var chart = this.createPieChart({});
 
         assert.equal(this.createThemeManager.callCount, 1);
-        assert.deepEqual(this.createThemeManager.lastCall.args, [{ options: chart._options, themeSection: "pie", fontFields: undefined }]);
+        assert.deepEqual(this.createThemeManager.lastCall.args, [{ options: chart._options, themeSection: "pie", fontFields: [
+            "legend.font",
+            "legend.title.font",
+            "legend.title.subtitle.font",
+            "title.font",
+            "title.subtitle.font",
+            "tooltip.font",
+            "loadingIndicator.font",
+            "export.font",
+            "commonSeriesSettings.label.font"
+        ] }]);
     });
 
     QUnit.test("Creation layoutManager with options", function(assert) {

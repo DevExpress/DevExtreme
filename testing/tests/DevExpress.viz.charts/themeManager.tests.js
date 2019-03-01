@@ -6,7 +6,11 @@ var $ = require("jquery"),
     themeModule = require("viz/themes");
 
 function createThemeManager(options, themeGroupName) {
-    return new themeManagerModule.ThemeManager({ themeSection: themeGroupName || "chart", options: options, fontFields: [] });
+    return new themeManagerModule.ThemeManager({
+        themeSection: themeGroupName || "chart",
+        options: options,
+        fontFields: options.fontFields || []
+    });
 }
 
 (function series() {
@@ -15,7 +19,7 @@ function createThemeManager(options, themeGroupName) {
         cache: themeModule.widgetsCache,
 
         create: function() {
-            return createThemeManager();
+            return createThemeManager({});
         }
     });
 
@@ -39,7 +43,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('First series theme - default', function(assert) {
         // arrange
-        var themeManager = createThemeManager({});
+        var themeManager = createThemeManager({ fontFields: ["commonSeriesSettings.label.font"] });
         themeManager.setTheme({});
         // act
         var theme = themeManager.getOptions("series", {
@@ -134,7 +138,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('First series theme - area', function(assert) {
         // arrange
-        var themeManager = createThemeManager({});
+        var themeManager = createThemeManager({ fontFields: ["commonSeriesSettings.label.font"] });
         themeManager.setTheme({});
         // act
         var theme = themeManager.getOptions("series", {
@@ -271,7 +275,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('First series theme', function(assert) {
         // arrange
-        var themeManager = createThemeManager({});
+        var themeManager = createThemeManager({ fontFields: ["commonSeriesSettings.label.font"] });
         themeManager.setTheme({});
         // act
         var theme = themeManager.getOptions("series", {});
@@ -537,7 +541,7 @@ function createThemeManager(options, themeGroupName) {
 
     QUnit.test('Modify custom color', function(assert) {
         // arrange
-        var themeManager = createThemeManager(),
+        var themeManager = createThemeManager({}),
             customColor = '#777777';
         themeManager.setTheme({});
         // act
@@ -1802,7 +1806,7 @@ function createThemeManager(options, themeGroupName) {
     });
 
     QUnit.test("Process crosshair label font options", function(assert) {
-        var themeManager = createThemeManager(this.getOptions({ crosshair: {} }));
+        var themeManager = createThemeManager(this.getOptions({ crosshair: {}, fontFields: ["crosshair.label.font"] }));
         themeManager.setTheme("getOptionsTheme");
 
         assert.deepEqual(themeManager.getOptions("crosshair").label.font, {

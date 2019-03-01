@@ -36,7 +36,7 @@ function getThemePart(theme, path) {
 
 exports.BaseThemeManager = Class.inherit({// TODO: test hack
     ctor: function(options) {
-        this._themeSection = options && options.themeSection;
+        this._themeSection = options.themeSection;
         this._fontFields = options.fontFields || [];
         _addCacheItem(this);
     },

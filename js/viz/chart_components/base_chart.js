@@ -62,7 +62,9 @@ var commonUtils = require("../../core/utils/common"),
         "zoomingMode",
         "scrollingMode",
         "stickyHovering"
-    ];
+    ],
+
+    FONT = "font";
 
 function checkHeightRollingStock(rollingStocks, stubCanvas) {
     var canvasSize = stubCanvas.end - stubCanvas.start,
@@ -333,6 +335,8 @@ var BaseChart = BaseWidget.inherit({
         onZoomStart: { name: "zoomStart" },
         onZoomEnd: { name: "zoomEnd" }
     },
+
+    _fontFields: ["legend." + FONT, "legend.title." + FONT, "legend.title.subtitle." + FONT, "title." + FONT, "title.subtitle." + FONT, "tooltip." + FONT, "loadingIndicator." + FONT, "export." + FONT, "commonSeriesSettings.label." + FONT],
 
     _rootClassPrefix: "dxc",
 
