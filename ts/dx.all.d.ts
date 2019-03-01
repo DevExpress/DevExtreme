@@ -4690,7 +4690,7 @@ declare module DevExpress.ui {
     }
     /** A validation rule with custom validation logic. */
     export interface CustomRule {
-        /** Specifies whether empty values are valid. */
+        /** Specifies whether the validationCallback should be called for null and undefined values. */
         ignoreEmptyValue?: boolean;
         /** Specifies the message that is shown for end-users if the current rule is broken. */
         message?: string;
@@ -6032,6 +6032,25 @@ declare module DevExpress.viz {
         /** Specifies font weight. Accepts values from 100 to 900 in increments of 100. Higher values increase boldness. */
         weight?: number;
     }
+    export interface BaseLegend {
+        backgroundColor?: string;
+        border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' };
+        columnCount?: number;
+        columnItemSpacing?: number;
+        font?: Font;
+        horizontalAlignment?: 'center' | 'left' | 'right';
+        itemsAlignment?: 'center' | 'left' | 'right';
+        itemTextPosition?: 'bottom' | 'left' | 'right' | 'top';
+        margin?: number | { top?: number, bottom?: number, left?: number, right?: number };
+        markerSize?: number;
+        orientation?: 'horizontal' | 'vertical';
+        paddingLeftRight?: number;
+        paddingTopBottom?: number;
+        rowCount?: number;
+        rowItemSpacing?: number;
+        verticalAlignment?: 'bottom' | 'top';
+        visible?: boolean;
+    }
     export interface dxChartOptions extends BaseChartOptions<dxChart> {
         /** Specifies whether to adjust the value axis's visualRange when the argument axis is being zoomed or panned. */
         adjustOnZoom?: boolean;
@@ -7000,43 +7019,9 @@ declare module DevExpress.viz {
         width?: number;
     }
     /** Specifies options of the legend. */
-    interface BaseChartLegend {
-        /** Specifies a color for the legend's background. */
-        backgroundColor?: string;
-        /** Specifies legend border options. */
-        border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' };
-        /** Specifies how many columns it takes to arrange legend items. */
-        columnCount?: number;
-        /** Specifies a blank space between legend columns in pixels. */
-        columnItemSpacing?: number;
+    interface BaseChartLegend extends BaseLegend {
         /** Allows you to change the order, text, and visibility of legend items. */
         customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
-        /** Specifies font options for the text displayed in the legend. */
-        font?: Font;
-        /** Specifies a legend's position on the chart. */
-        horizontalAlignment?: 'center' | 'left' | 'right';
-        /** Specifies the alignment of legend items. */
-        itemsAlignment?: 'center' | 'left' | 'right';
-        /** Specifies the position of text relative to the item marker. */
-        itemTextPosition?: 'bottom' | 'left' | 'right' | 'top';
-        /** Specifies the distance between the legend and surrounding widget elements or container borders in pixels. */
-        margin?: number | { top?: number, bottom?: number, left?: number, right?: number };
-        /** Specifies the size of item markers in the legend in pixels. */
-        markerSize?: number;
-        /** Specifies whether to place legend items horizontally or vertically. */
-        orientation?: 'horizontal' | 'vertical';
-        /** Specifies a blank space between a legend's left/right boundaries and the inner item boundaries in pixels. */
-        paddingLeftRight?: number;
-        /** Specifies a blank space between a legend's top/bottom boundaries and the inner item boundaries in pixels. */
-        paddingTopBottom?: number;
-        /** Specifies how many rows it takes to arrange legend items. */
-        rowCount?: number;
-        /** Specifies a blank space between legend rows in pixels. */
-        rowItemSpacing?: number;
-        /** Specifies a legend's position on the chart. */
-        verticalAlignment?: 'bottom' | 'top';
-        /** Specifies the visibility state of the chart's legend. */
-        visible?: boolean;
     }
     /** Configures tooltips. */
     interface BaseChartTooltip extends BaseWidgetTooltip {
@@ -7966,7 +7951,7 @@ declare module DevExpress.viz {
         /** Configures funnel item labels. */
         label?: { font?: Font, position?: 'columns' | 'inside' | 'outside', horizontalOffset?: number, horizontalAlignment?: 'left' | 'right', format?: DevExpress.ui.format, connector?: { visible?: boolean, width?: number, color?: string, opacity?: number }, backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, visible?: boolean, showForZeroValues?: boolean, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string) };
         /** Configures the legend. */
-        legend?: { verticalAlignment?: 'bottom' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', orientation?: 'horizontal' | 'vertical', itemTextPosition?: 'bottom' | 'left' | 'right' | 'top', itemsAlignment?: 'center' | 'left' | 'right', font?: Font, visible?: boolean, margin?: number | { top?: number, bottom?: number, left?: number, right?: number }, markerSize?: number, backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number, customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string), customizeHint?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string), customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>) };
+        legend?: dxFunnelLegend;
         /** Specifies the ratio between the height of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is "dynamicHeight". */
         neckHeight?: number;
         /** Specifies the ratio between the width of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is "dynamicHeight". */
@@ -7992,6 +7977,16 @@ declare module DevExpress.viz {
         tooltip?: dxFunnelTooltip;
         /** Specifies which data source field provides values for funnel items. The value defines a funnel item's area. */
         valueField?: string;
+    }
+    /** Configures the legend. */
+    export interface dxFunnelLegend extends BaseLegend {
+        /** Specifies the hint that appears when a user hovers the mouse pointer over a legend item. */
+        customizeHint?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string);
+        /** Allows you to change the order, text, and visibility of legend items. */
+        customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>);
+        /** Customizes the text displayed by legend items. */
+        customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string);
+        visible?: boolean;
     }
     /** Configures tooltips - small pop-up rectangles that display information about a data-visualizing widget element being pressed or hovered over with the mouse pointer. */
     export interface dxFunnelTooltip extends BaseWidgetTooltip {
@@ -8278,6 +8273,7 @@ declare module DevExpress.viz {
         geometry?: { startAngle?: number, endAngle?: number };
         /** Specifies the options of the labels that accompany gauge bars. */
         label?: { visible?: boolean, indent?: number, connectorWidth?: number, connectorColor?: string, format?: DevExpress.ui.format, customizeText?: ((barValue: { value?: number, valueText?: string }) => string), font?: Font };
+        legend?: dxBarGaugeLegend;
         /** Configures the loading indicator. */
         loadingIndicator?: dxBarGaugeLoadingIndicator;
         /** A function that is executed when a tooltip becomes hidden. */
@@ -8298,6 +8294,13 @@ declare module DevExpress.viz {
         /** Specifies the array of values to be indicated on a bar gauge. */
         values?: Array<number>;
     }
+    export interface dxBarGaugeLegend extends BaseLegend {
+        customizeHint?: ((arg: { item?: BarGaugeBarInfo, text?: string }) => string);
+        customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>);
+        customizeText?: ((arg: { item?: BarGaugeBarInfo, text?: string }) => string);
+        itemTextFormat?: DevExpress.ui.format;
+        visible?: boolean;
+    }
     /** Configures the loading indicator. */
     export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     }
@@ -8314,6 +8317,16 @@ declare module DevExpress.viz {
         values(): Array<number>;
         /** Updates all the values. */
         values(values: Array<number>): void;
+    }
+    export interface BarGaugeBarInfo {
+        color?: string;
+        index?: number;
+        value?: number;
+    }
+    export interface BarGaugeLegendItem {
+        item?: BarGaugeBarInfo;
+        text?: string;
+        visible?: boolean;
     }
     /** This section describes the Series object, which represents a series. */
     export class baseSeriesObject {
@@ -9164,7 +9177,7 @@ declare module DevExpress.viz {
         /** Specifies options for VectorMap widget layers. */
         layers?: Array<{ name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, type?: 'area' | 'line' | 'marker', elementType?: 'bubble' | 'dot' | 'image' | 'pie', borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: 'multiple' | 'none' | 'single', palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: { enabled?: boolean, dataField?: string, font?: Font } }> | { name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, type?: 'area' | 'line' | 'marker', elementType?: 'bubble' | 'dot' | 'image' | 'pie', borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: 'multiple' | 'none' | 'single', palette?: Array<string> | 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: { enabled?: boolean, dataField?: string, font?: Font } };
         /** Configures map legends. */
-        legends?: Array<{ source?: { layer?: string, grouping?: string }, customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>), verticalAlignment?: 'bottom' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', orientation?: 'horizontal' | 'vertical', itemTextPosition?: 'bottom' | 'left' | 'right' | 'top', itemsAlignment?: 'center' | 'left' | 'right', font?: Font, visible?: boolean, margin?: number | { top?: number, bottom?: number, left?: number, right?: number }, markerSize?: number, markerColor?: string, markerShape?: 'circle' | 'square', backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' }, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number }>;
+        legends?: Array<dxVectorMapLegends>;
         /** Specifies a map's maximum zoom factor. */
         maxZoomFactor?: number;
         /** A function that is executed each time the center coordinates are changed. */
@@ -9193,6 +9206,23 @@ declare module DevExpress.viz {
         zoomFactor?: number;
         /** Disables the zooming capability. */
         zoomingEnabled?: boolean;
+    }
+    /** Configures map legends. */
+    export interface dxVectorMapLegends extends BaseLegend {
+        /** Specifies text for a hint that appears when a user hovers the mouse pointer over the text of a legend item. */
+        customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
+        /** Allows you to change the order and visibility of legend items. */
+        customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>);
+        /** Specifies text for legend items. */
+        customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
+        font?: Font;
+        /** Specifies the color of item markers in the legend. The specified color applied only when the legend uses 'size' source. */
+        markerColor?: string;
+        /** Specifies the shape of item markers. */
+        markerShape?: 'circle' | 'square';
+        markerSize?: number;
+        /** Specifies the source of data for the legend. */
+        source?: { layer?: string, grouping?: string };
     }
     /** Configures tooltips. */
     export interface dxVectorMapTooltip extends BaseWidgetTooltip {
