@@ -5087,6 +5087,39 @@ QUnit.test("Show master detail with rowTemplate", function(assert) {
     assert.equal($rowElements.eq(1).find(".test-detail").length, 1, "master detail template is rendered");
 });
 
+// T718316
+QUnit.test("Show master detail when row as tbody", function(assert) {
+    // arrange
+    var $testElement = $("#container"),
+        $rowElements;
+
+    this.options.masterDetail = {
+        enabled: true,
+        template: function(container, options) {
+            $("<div>").addClass("test-detail").text(options.key).appendTo(container);
+        }
+    };
+    this.options.rowTemplate = function(container, options) {
+        $("<tbody class=\"dx-row dx-data-row\"><tr><td>+</td><td>" + options.data.name + "</td><td>" + options.data.age + "</td></tr></tbody>").appendTo(container);
+    };
+
+    this.setupDataGridModules();
+    this.rowsView.render($testElement);
+
+    // assert
+    $rowElements = $testElement.find("tbody.dx-row");
+    assert.strictEqual($rowElements.length, 8, "row count");
+
+    // act
+    this.expandRow(this.getKeyByRowIndex(0));
+
+    // assert
+    $rowElements = $testElement.find("tbody.dx-row");
+    assert.strictEqual($rowElements.length, 9, "row count");
+    assert.ok($rowElements.eq(0).hasClass("dx-data-row"), "data row");
+    assert.ok($rowElements.eq(1).hasClass("dx-master-detail-row"), "master detail row");
+});
+
 QUnit.test('Do not hide noData block placed inside the masterDetail template', function(assert) {
     // arrange
     var container = $('#container'),
