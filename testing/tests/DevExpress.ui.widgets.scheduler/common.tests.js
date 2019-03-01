@@ -1704,12 +1704,12 @@ QUnit.testStart(function() {
                 type: "day",
                 name: "day",
                 intervalCount: 3,
-                startDate: new Date(2019, 1, 11)
+                startDate: new Date(2019, 1, 12)
             }, {
                 type: "week",
                 name: "Week",
                 intervalCount: 2,
-                startDate: new Date(2019, 1, 11)
+                startDate: new Date(2019, 1, 12)
             }]
         });
 
@@ -1722,8 +1722,8 @@ QUnit.testStart(function() {
         assert.equal(header.option("intervalCount"), 2, "header has correct count");
         assert.equal(navigator.option("intervalCount"), 2, "navigator has correct count");
 
-        assert.deepEqual(workSpaceWeek.option("startDate"), new Date(2019, 1, 11), "workspace has correct startDate");
-        assert.deepEqual(header.option("displayedDate"), new Date(2019, 1, 11), "header has correct displayedDate");
+        assert.deepEqual(workSpaceWeek.option("startDate"), new Date(2019, 1, 12), "workspace has correct startDate");
+        assert.deepEqual(header.option("displayedDate"), new Date(2019, 1, 10), "header has correct displayedDate");
         assert.deepEqual(header.option("currentDate"), new Date(2019, 1, 23), "header has correct displayedDate");
         assert.equal(navigator.option("date").getMonth(), 1, "navigator has correct date");
     });
