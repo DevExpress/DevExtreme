@@ -79,7 +79,7 @@ class AppointmentLayoutManager {
         return updatedData === data || this.instance.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);
     }
 
-    _hasChangesInSettings(settingList, oldSettingList, isAgenda) {
+    _hasChangesInSettings(settingList, oldSettingList) {
         if(settingList.length !== oldSettingList.length) {
             return true;
         }
@@ -88,7 +88,7 @@ class AppointmentLayoutManager {
             const newSettings = settingList[i],
                 oldSettings = oldSettingList[i];
 
-            if(!isAgenda && oldSettings) {
+            if(oldSettings) { // exclude property sortedIndex for comparison in commonUtils.equalByValue
                 oldSettings.sortedIndex = newSettings.sortedIndex;
             }
 
@@ -119,16 +119,14 @@ class AppointmentLayoutManager {
     }
 
     getRepaintedAppointments(appointmentList, oldAppointmentList) {
-        if(oldAppointmentList.length === 0) {
+        if(oldAppointmentList.length === 0 || this.renderingStrategy === "agenda") {
             return appointmentList;
         }
-
-        const isAgenda = this.renderingStrategy === "agenda";
 
         for(const appointment of appointmentList) {
             const oldAppointment = this._getEqualAppointmentFromList(appointment, oldAppointmentList);
             if(oldAppointment) {
-                appointment.needRepaint = this._hasChangesInData(appointment.itemData) || this._hasChangesInSettings(appointment.settings, oldAppointment.settings, isAgenda);
+                appointment.needRepaint = this._hasChangesInData(appointment.itemData) || this._hasChangesInSettings(appointment.settings, oldAppointment.settings);
             }
         }
 
