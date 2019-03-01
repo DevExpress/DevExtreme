@@ -149,20 +149,21 @@ QUnit.module("rendering box item", () => {
     QUnit.test("callstack should not grow when nesting is growing", (assert) => {
         const originalBox = Box;
         let deep = 0;
-        registerComponent(
-            "dxBox",
-            Box.inherit({
-                _render: function() {
-                    deep++;
-                    this.callBase.apply(this, arguments);
-                },
-                _renderItem: function() {
-                    const currentDeep = deep;
-                    this.callBase.apply(this, arguments);
-                    assert.equal(deep, currentDeep, "deep is normal");
-                }
-            })
-        );
+
+        class TestBox extends Box {
+            _render() {
+                deep++;
+                super._render.apply(this, arguments);
+            }
+
+            _renderItem() {
+                const currentDeep = deep;
+                super._renderItem.apply(this, arguments);
+                assert.equal(deep, currentDeep, "deep is normal");
+            }
+        }
+
+        registerComponent("dxBox", TestBox);
         try {
             $("#box").dxBox({
                 items: [{
