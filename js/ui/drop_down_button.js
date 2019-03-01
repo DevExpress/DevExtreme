@@ -213,7 +213,6 @@ let DropDownButton = Widget.inherit({
             case "displayExpr":
             case "itemTemplate":
             case "showEvent":
-            case "actionButtonIndex":
             case "showSelectedItem":
                 break;
             case "grouped":

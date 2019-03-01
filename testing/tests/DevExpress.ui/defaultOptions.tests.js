@@ -374,7 +374,6 @@ testComponentDefaults(DropDownButton, {}, {
     valueExpr: "this",
     displayExpr: undefined,
     showEvent: "click",
-    actionButtonIndex: 0,
     showSelectedItem: true,
     grouped: false,
     itemTemplate: "item",
