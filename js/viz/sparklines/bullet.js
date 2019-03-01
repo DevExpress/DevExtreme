@@ -21,6 +21,8 @@ var dxBullet = BaseSparkline.inherit({
 
     _widgetType: "bullet",
 
+    _themeSection: "bullet",
+
     _defaultSize: {
         width: DEFAULT_CANVAS_WIDTH,
         height: DEFAULT_CANVAS_HEIGHT,

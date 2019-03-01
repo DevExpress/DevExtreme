@@ -51,9 +51,10 @@ var dxTreeMap = require("../core/base_widget").inherit({
         return { width: 400, height: 400 };
     },
 
-    _createThemeManager: function() {
-        return new ThemeManager();
-    },
+    _themeSection: "treeMap",
+
+    _fontFields: ["tile.label.font", "group.label.font",
+        "loadingIndicator.font", "title.font", "title.subtitle.font", "tooltip.font", "export.font"],
 
     _init: function() {
         var that = this;
@@ -601,12 +602,6 @@ function layoutTextNode(node, params) {
         );
     }
 }
-
-var ThemeManager = require("../core/base_theme_manager").BaseThemeManager.inherit({
-    _themeSection: "treeMap",
-    _fontFields: ["tile.label.font", "group.label.font",
-        "loadingIndicator.font", "title.font", "title.subtitle.font", "tooltip.font", "export.font"]
-});
 
 require("../../core/component_registrator")("dxTreeMap", dxTreeMap);
 

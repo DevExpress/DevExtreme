@@ -20,18 +20,17 @@ var noop = require("../../core/utils/common").noop,
     };
 
 var ThemeManager = BaseThemeManager.inherit((function() {
-    var ctor = function(options, themeGroupName) {
+    var ctor = function(params) {
         var that = this;
 
         that.callBase.apply(that, arguments);
 
-        options = options || {};
+        var options = params.options || {};
         that._userOptions = options;
         that._mergeAxisTitleOptions = [];
         that._multiPieColors = {};
-        that._themeSection = themeGroupName;
 
-        that._fontFields = chartToFontFieldsMap[themeGroupName];
+        that._fontFields = that._fontFields.concat(chartToFontFieldsMap[that._themeSection]);
 
         // This is required because chart calls "_getOption" during "_init" stage
         // TODO: Remove it when chart stops doing that

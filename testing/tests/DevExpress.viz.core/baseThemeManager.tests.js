@@ -30,7 +30,7 @@ themeModule.registerTheme({
 var environment = {
     beforeEach: function() {
         themeModule.currentTheme(currentTheme);
-        this.themeManager = new BaseThemeManager();
+        this.themeManager = new BaseThemeManager({ fontFields: [] });
         this.callback = sinon.spy();
         this.themeManager.setCallback(this.callback);
         this.createPalette = sinon.stub(paletteModule, "createPalette");
@@ -47,10 +47,6 @@ var environment = {
 };
 
 QUnit.module("Common", environment);
-
-QUnit.test("instance type", function(assert) {
-    assert.ok(this.themeManager instanceof BaseThemeManager);
-});
 
 QUnit.test("set theme", function(assert) {
     this.themeManager.setTheme("custom");
@@ -95,7 +91,7 @@ QUnit.module("Cache", {
     cache: themeModule.widgetsCache,
 
     create: function() {
-        return new BaseThemeManager();
+        return new BaseThemeManager({});
     }
 });
 
@@ -367,7 +363,8 @@ QUnit.test('theme getter', function(assert) {
 
 QUnit.test('initializeFont via font fields', function(assert) {
     // act
-    this.themeManager._fontFields = ['testLabel1.font', 'testObject2.testLabel2.font'];
+    this.themeManager = new BaseThemeManager({ fontFields: ['testLabel1.font', 'testObject2.testLabel2.font'] });
+    this.themeManager.setCallback(this.callback);
     this.themeManager.setTheme({
         testLabel1: {
             font: {

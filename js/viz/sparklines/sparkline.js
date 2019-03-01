@@ -147,6 +147,8 @@ var dxSparkline = BaseSparkline.inherit({
 
     _widgetType: "sparkline",
 
+    _themeSection: "sparkline",
+
     _defaultSize: {
         width: DEFAULT_CANVAS_WIDTH,
         height: DEFAULT_CANVAS_HEIGHT

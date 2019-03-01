@@ -11,7 +11,7 @@ var seriesModule = require("../series/base_series"),
     SeriesDataSource;
 
 var createThemeManager = function(chartOptions) {
-    return new ChartThemeManager(chartOptions, 'rangeSelector.chart');
+    return new ChartThemeManager({ options: chartOptions, themeSection: "rangeSelector.chart" });
 };
 
 var processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, maxBubbleSize, barOptions, negativesAsZeroes) {

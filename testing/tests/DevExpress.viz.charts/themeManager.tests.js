@@ -6,7 +6,7 @@ var $ = require("jquery"),
     themeModule = require("viz/themes");
 
 function createThemeManager(options, themeGroupName) {
-    return new themeManagerModule.ThemeManager(options, themeGroupName || "chart");
+    return new themeManagerModule.ThemeManager({ themeSection: themeGroupName || "chart", options: options, fontFields: [] });
 }
 
 (function series() {

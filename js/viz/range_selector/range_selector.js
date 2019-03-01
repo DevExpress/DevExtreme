@@ -19,7 +19,6 @@ var registerComponent = require("../../core/component_registrator"),
     trackerModule = require("./tracker"),
     rangeViewModule = require("./range_view"),
     seriesDataSourceModule = require("./series_data_source"),
-    themeManagerModule = require("./theme_manager"),
     tickGeneratorModule = require("../axes/tick_generator"),
     parseValue = vizUtils.getVizRangeObject,
     convertVisualRangeObject = vizUtils.convertVisualRangeObject,
@@ -559,6 +558,10 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
     _themeDependentChanges: ["MOSTLY_TOTAL"],
 
+    _themeSection: "rangeSelector",
+
+    _fontFields: ["scale.label.font", "sliderMarker.font", "loadingIndicator.font", "export.font", "title.font", "title.subtitle.font"],
+
     _initCore: function() {
         var that = this,
             renderer = that._renderer,
@@ -631,10 +634,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         this._axis.dispose();
         this._slidersController.dispose();
         this._tracker.dispose();
-    },
-
-    _createThemeManager: function() {
-        return new themeManagerModule.ThemeManager();
     },
 
     _applySize: function(rect) {
