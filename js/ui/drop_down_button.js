@@ -6,6 +6,9 @@ import Popup from "./popup";
 import List from "./list";
 import DataExpressionMixin from "./editor/ui.data_expression";
 import { extend } from "../core/utils/extend";
+import { Deferred } from "../core/utils/deferred";
+import { isPlainObject } from "../core/utils/type";
+import { ensureDefined } from "../core/utils/common";
 import messageLocalization from "../localization/message";
 
 const DROP_DOWN_BUTTON_CLASS = "dx-dropdownbutton";
@@ -39,6 +42,7 @@ let DropDownButton = Widget.inherit({
     _init() {
         this.callBase();
         this._initDataExpressions();
+        this._createItemClickAction();
     },
 
     _initMarkup() {
@@ -47,6 +51,19 @@ let DropDownButton = Widget.inherit({
         if(!this.option("deferRendering")) {
             this._renderPopup();
         }
+        this._renderValue();
+    },
+
+    _createItemClickAction() {
+        this._itemClickAction = this._createActionByOption("onItemClick");
+    },
+
+    _fireItemClickAction(e) {
+        return this._itemClickAction({
+            event: e.event,
+            itemElement: e.itemElement,
+            itemData: this._actionItem || e.itemData
+        });
     },
 
     _buttonGroupOptions() {
@@ -54,6 +71,7 @@ let DropDownButton = Widget.inherit({
             items: [
                 {
                     icon: "default",
+                    onClick: this._fireItemClickAction.bind(this),
                     elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
                 },
                 {
@@ -100,13 +118,9 @@ let DropDownButton = Widget.inherit({
         }, this.option("dropDownOptions"));
     },
 
-    _getListSelectionMode() {
-        return this.option("showSelectedItem") ? "single" : "none";
-    },
-
     _listOptions() {
         return {
-            selectionMode: this._getListSelectionMode(),
+            selectionMode: "single",
             selectedItemKeys: [this.option("value")],
             grouped: this.option("grouped"),
             keyExpr: this._getCollectionKeyExpr(),
@@ -117,7 +131,10 @@ let DropDownButton = Widget.inherit({
             dataSource: this._dataSource,
             onItemClick: (e) => {
                 this.option("value", this._valueGetter(e.itemData));
-                this.toggle(false);
+                const actionResult = this._fireItemClickAction(e);
+                if(actionResult !== false) {
+                    this.toggle(false);
+                }
             }
         };
     },
@@ -133,18 +150,40 @@ let DropDownButton = Widget.inherit({
         this.$element().append(this._buttonGroup.$element());
     },
 
-    _getItemByKey(key) {
-        return this._dataSource.store().byKey(key);
+    _renderValue(value = this.option("value")) {
+        this._loadItemByKey(value)
+            .done((itemData) => {
+                this._actionItem = itemData;
+                if(this.option("showSelectedItem")) {
+                    this._setActionButton(itemData);
+                }
+            })
+            .fail(() => {
+                this._actionItem = value;
+                if(this.option("showSelectedItem")) {
+                    this._setActionButton(value);
+                }
+            });
     },
 
-    _setActionButton(key) {
-        this._getItemByKey(key).done((itemData) => {
-            let optionObject = {};
-            optionObject["items[0].text"] = this._displayGetter(itemData);
-            optionObject["items[0].icon"] = itemData.icon;
+    _loadItemByKey(key) {
+        if(isPlainObject(key)) {
+            return new Deferred().resolve(key).promise();
+        }
 
-            this._buttonGroup.option(optionObject);
-        });
+        if(this._list) {
+            this._setListOption("selectedItemKeys", [key]);
+            return new Deferred().resolve(this._list.option("selectedItem")).promise();
+        } else {
+            return this._loadValue(key);
+        }
+    },
+
+    _setActionButton(itemData) {
+        const displayedValue = String(ensureDefined(this._displayGetter(itemData), ""));
+
+        this._buttonGroup.option("items[0].text", displayedValue);
+        this._buttonGroup.option("items[0].icon", itemData && itemData.icon);
     },
 
     toggle(visible) {
@@ -175,14 +214,15 @@ let DropDownButton = Widget.inherit({
             case "itemTemplate":
             case "showEvent":
             case "actionButtonIndex":
+            case "showSelectedItem":
                 break;
             case "grouped":
             case "noDataText":
             case "groupTemplate":
                 this._setListOption(args.name, args.value);
                 break;
-            case "showSelectedItem":
-                this._setListOption("selectionMode", this._getListSelectionMode());
+            case "onItemClick":
+                this._createItemClickAction();
                 break;
             case "deferRendering":
                 if(!args.value && !this._popup) {
@@ -190,8 +230,7 @@ let DropDownButton = Widget.inherit({
                 }
                 break;
             case "value":
-                this._setListOption("selectedItemKeys", [args.value]);
-                this.option("showSelectedItem") && this._setActionButton(args.value);
+                this._renderValue(args.value);
                 break;
             default:
                 this.callBase(args);
