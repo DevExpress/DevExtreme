@@ -546,6 +546,23 @@ QUnit.test("clear button should save valueChangeEvent", function(assert) {
     assert.equal(valueChangedHandler.getCall(0).args[0].event.type, "dxclick", "event is correct");
 });
 
+QUnit.test("clearButton should clear the text even if the value was not changed", function(assert) {
+    var $element = $("#numberbox").dxNumberBox({
+            showClearButton: true,
+            value: null
+        }),
+        $input = $element.find(".dx-texteditor-input"),
+        kb = keyboardMock($input);
+
+    assert.strictEqual($input.val(), "", "value was cleared");
+
+    kb.type("123");
+    var $clearButton = $element.find(".dx-clear-button-area");
+    $clearButton.trigger("dxclick");
+
+    assert.strictEqual($input.val(), "", "value is still cleared");
+});
+
 QUnit.test("T220209 - the 'valueFormat' option", function(assert) {
     var $numberBox = $("#numberbox").dxNumberBox({
         value: 5,
