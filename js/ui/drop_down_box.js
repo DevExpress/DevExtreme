@@ -96,13 +96,6 @@ var DropDownBox = DropDownEditor.inherit({
              */
 
             /**
-             * @name dxDropDownBoxOptions.maxLength
-             * @type string|number
-             * @default null
-             * @hidden
-             */
-
-            /**
             * @name dxDropDownBoxOptions.onContentReady
             * @hidden true
             * @action
