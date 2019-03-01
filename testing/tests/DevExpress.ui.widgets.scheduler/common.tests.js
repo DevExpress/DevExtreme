@@ -1699,17 +1699,17 @@ QUnit.testStart(function() {
     QUnit.test("currentView option changing should work correctly, when intervalCount & startDate is set", function(assert) {
         this.createInstance({
             currentView: "day",
-            currentDate: new Date(2017, 10, 25),
+            currentDate: new Date(2019, 1, 23),
             views: [{
                 type: "day",
                 name: "day",
                 intervalCount: 3,
-                startDate: new Date(2017, 1, 1)
+                startDate: new Date(2019, 0, 1)
             }, {
                 type: "week",
                 name: "Week",
                 intervalCount: 2,
-                startDate: new Date(2017, 10, 1)
+                startDate: new Date(2019, 0, 30)
             }]
         });
 
@@ -1722,10 +1722,10 @@ QUnit.testStart(function() {
         assert.equal(header.option("intervalCount"), 2, "header has correct count");
         assert.equal(navigator.option("intervalCount"), 2, "navigator has correct count");
 
-        assert.deepEqual(workSpaceWeek.option("startDate"), new Date(2017, 10, 1), "workspace has correct startDate");
-        assert.deepEqual(header.option("displayedDate"), new Date(2017, 10, 12), "header has correct displayedDate");
-        assert.deepEqual(header.option("currentDate"), new Date(2017, 10, 25), "header has correct displayedDate");
-        assert.equal(navigator.option("date").getMonth(), 10, "navigator has correct date");
+        assert.deepEqual(workSpaceWeek.option("startDate"), new Date(2019, 0, 30), "workspace has correct startDate");
+        assert.deepEqual(header.option("displayedDate"), new Date(2019, 1, 10), "header has correct displayedDate");
+        assert.deepEqual(header.option("currentDate"), new Date(2019, 1, 23), "header has correct displayedDate");
+        assert.equal(navigator.option("date").getMonth(), 1, "navigator has correct date");
     });
 
     QUnit.test("currentView option changing should work correctly, when intervalCount on month view", function(assert) {
