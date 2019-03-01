@@ -206,7 +206,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             if(item && item.needRepaint === false) {
                 this._processRenderedAppointment(item);
             }
-            if(item && item.needRepaint === true) {
+            if(item && (!typeUtils.isDefined(item.needRepaint) || item.needRepaint === true)) {
                 item.needRepaint = false;
                 this._clearItem(item);
                 this._renderItem(i, item);

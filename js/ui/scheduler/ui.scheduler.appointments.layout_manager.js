@@ -1,4 +1,3 @@
-import Class from "../../core/class";
 import commonUtils from "../../core/utils/common";
 import VerticalAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.vertical";
 import HorizontalAppointmentsStrategy from "./rendering_strategies/ui.scheduler.appointments.strategy.horizontal";
@@ -14,32 +13,31 @@ const RENDERING_STRATEGIES = {
     "agenda": AgendaAppointmentsStrategy
 };
 
-const AppointmentLayoutManager = Class.inherit({
-    ctor: function(instance, renderingStrategy) {
+class AppointmentLayoutManager {
+    constructor(instance, renderingStrategy) {
         this.instance = instance;
-
         renderingStrategy && this.initRenderingStrategy(renderingStrategy);
-    },
+    }
 
-    getCellDimensions: function(options) {
+    getCellDimensions(options) {
         if(this.instance._workSpace) {
             options.callback(this.instance._workSpace.getCellWidth(), this.instance._workSpace.getCellHeight(), this.instance._workSpace.getAllDayHeight());
         }
-    },
+    }
 
-    getGroupOrientation: function(options) {
+    getGroupOrientation(options) {
         if(this.instance._workSpace) {
             options.callback(this.instance._workSpace._getRealGroupOrientation());
         }
-    },
+    }
 
-    initRenderingStrategy: function(renderingStrategy) {
-        var Strategy = RENDERING_STRATEGIES[renderingStrategy];
+    initRenderingStrategy(renderingStrategy) {
+        const Strategy = RENDERING_STRATEGIES[renderingStrategy];
         this._renderingStrategyInstance = new Strategy(this.instance);
         this.renderingStrategy = renderingStrategy;
-    },
+    }
 
-    createAppointmentsMap: function(items) {
+    createAppointmentsMap(items) {
         this.getCellDimensions({
             callback: (width, height, allDayHeight) => {
                 this.instance._cellWidth = width;
@@ -52,10 +50,11 @@ const AppointmentLayoutManager = Class.inherit({
         });
 
         this._positionMap = this._renderingStrategyInstance.createTaskPositionMap(items);
-        return this._createAppointmentsMapCore(items, this._positionMap);
-    },
 
-    _createAppointmentsMapCore: function(list, positionMap) {
+        return this._createAppointmentsMapCore(items, this._positionMap);
+    }
+
+    _createAppointmentsMapCore(list, positionMap) {
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
                 delete data.settings;
@@ -73,14 +72,14 @@ const AppointmentLayoutManager = Class.inherit({
                 needRemove: false
             };
         });
-    },
+    }
 
-    _hasChangesInData: function(data) {
+    _hasChangesInData(data) {
         const updatedData = this.instance.getUpdatedAppointment();
         return updatedData === data || this.instance.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);
-    },
+    }
 
-    _hasChangesInSettings: function(settingList, oldSettingList, isAgenda) {
+    _hasChangesInSettings(settingList, oldSettingList, isAgenda) {
         if(settingList.length !== oldSettingList.length) {
             return true;
         }
@@ -97,13 +96,15 @@ const AppointmentLayoutManager = Class.inherit({
                 return true;
             }
         }
-    },
 
-    _getEqualAppointmentFromList: function(appointment, list) {
+        return false;
+    }
+
+    _getEqualAppointmentFromList(appointment, list) {
         return list.find(item => item.itemData === appointment.itemData);
-    },
+    }
 
-    _getDeletedAppointments: function(appointmentList, oldAppointmentList) {
+    _getDeletedAppointments(appointmentList, oldAppointmentList) {
         const result = [];
 
         for(const oldAppointment of oldAppointmentList) {
@@ -115,9 +116,9 @@ const AppointmentLayoutManager = Class.inherit({
         }
 
         return result;
-    },
+    }
 
-    getRepaintedAppointments: function(appointmentList, oldAppointmentList) {
+    getRepaintedAppointments(appointmentList, oldAppointmentList) {
         if(oldAppointmentList.length === 0) {
             return appointmentList;
         }
@@ -132,11 +133,11 @@ const AppointmentLayoutManager = Class.inherit({
         }
 
         return appointmentList.concat(this._getDeletedAppointments(appointmentList, oldAppointmentList));
-    },
+    }
 
-    getRenderingStrategyInstance: function() {
+    getRenderingStrategyInstance() {
         return this._renderingStrategyInstance;
     }
-});
+}
 
 module.exports = AppointmentLayoutManager;
