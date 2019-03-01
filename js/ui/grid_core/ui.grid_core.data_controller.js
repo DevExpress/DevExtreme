@@ -641,7 +641,7 @@ module.exports = {
                         that._applyChangeUpdate(change);
                     } else if(that.items().length && change.repaintChangesOnly && change.changeType === "refresh") {
                         that._applyChangesOnly(change);
-                    } else {
+                    } else if(change.changeType === "refresh") {
                         that._applyChangeFull(change);
                     }
                 },
