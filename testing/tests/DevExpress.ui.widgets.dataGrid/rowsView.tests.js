@@ -5108,14 +5108,14 @@ QUnit.test("Show master detail when row as tbody", function(assert) {
 
     // assert
     $rowElements = $testElement.find("tbody.dx-row");
-    assert.strictEqual($rowElements.length, 7, "row count");
+    assert.strictEqual($rowElements.length, 8, "row count");
 
     // act
     this.expandRow(this.getKeyByRowIndex(0));
 
     // assert
     $rowElements = $testElement.find("tbody.dx-row");
-    assert.strictEqual($rowElements.length, 8, "row count");
+    assert.strictEqual($rowElements.length, 9, "row count");
     assert.ok($rowElements.eq(0).hasClass("dx-data-row"), "data row");
     assert.ok($rowElements.eq(1).hasClass("dx-master-detail-row"), "master detail row");
 });

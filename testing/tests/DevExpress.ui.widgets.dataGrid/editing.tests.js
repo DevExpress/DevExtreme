@@ -13024,14 +13024,14 @@ QUnit.test("Add row when row as tbody", function(assert) {
 
     // assert
     $rowElements = $testElement.find("tbody.dx-row");
-    assert.strictEqual($rowElements.length, 7, "row count");
+    assert.strictEqual($rowElements.length, 8, "row count");
 
     // act
     that.addRow();
 
     // assert
     $rowElements = $testElement.find("tbody.dx-row");
-    assert.strictEqual($rowElements.length, 8, "row count");
+    assert.strictEqual($rowElements.length, 9, "row count");
     assert.ok($rowElements.eq(0).hasClass("dx-edit-row dx-row-inserted dx-datagrid-edit-form"), "detail form row");
 });
 
@@ -13053,14 +13053,14 @@ QUnit.test("Edit row when row as tbody", function(assert) {
 
     // assert
     $rowElements = $testElement.find("tbody.dx-row");
-    assert.strictEqual($rowElements.length, 7, "row count");
+    assert.strictEqual($rowElements.length, 8, "row count");
 
     // act
     that.editRow(0);
 
     // assert
     $rowElements = $testElement.find("tbody.dx-row");
-    assert.strictEqual($rowElements.length, 7, "row count");
+    assert.strictEqual($rowElements.length, 8, "row count");
     assert.ok($rowElements.eq(0).hasClass("dx-edit-row dx-datagrid-edit-form"), "detail form row");
 });
 

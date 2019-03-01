@@ -2027,7 +2027,7 @@ QUnit.test("Expand adaptive row when row as tbody", function(assert) {
     this.clock.tick();
 
     $rowElements = $testElement.find("tbody.dx-row");
-    assert.strictEqual($rowElements.length, 2, "row count");
+    assert.strictEqual($rowElements.length, 3, "row count");
 
     // act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
@@ -2035,7 +2035,7 @@ QUnit.test("Expand adaptive row when row as tbody", function(assert) {
 
     // assert
     $rowElements = $testElement.find("tbody.dx-row");
-    assert.strictEqual($rowElements.length, 3, "row count");
+    assert.strictEqual($rowElements.length, 4, "row count");
     assert.ok($rowElements.eq(0).hasClass("dx-data-row"), "data row");
     assert.ok($rowElements.eq(1).hasClass("dx-adaptive-detail-row"), "adaptive detail row");
 });
