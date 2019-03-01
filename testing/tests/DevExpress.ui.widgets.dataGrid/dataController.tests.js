@@ -3389,6 +3389,19 @@ var setupVirtualRenderingModule = function() {
     });
 };
 
+// T717716
+QUnit.test("rows should not be recreated on pageIndex event", function(assert) {
+    var rows = this.getVisibleRows(),
+        firstRow = rows[0];
+
+    // act
+    this.dataController.dataSource().changed.fire({ changeType: "pageIndex" });
+
+    // assert
+    assert.strictEqual(this.getVisibleRows(), rows, "rows are not changed");
+    assert.strictEqual(this.getVisibleRows()[0], firstRow, "first row is not changed");
+});
+
 var teardownVirtualRenderingModule = function() {
     this.dispose();
     this.clock.restore();
