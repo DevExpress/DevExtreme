@@ -104,7 +104,7 @@
         }
 
         .dx-rtl.dx-editor-underlined&,
-        .dx-rtl .dx-editor-underlined&, {
+        .dx-rtl .dx-editor-underlined& {
             padding-right: 0;
         }
     }
@@ -154,6 +154,12 @@
             .dx-editor-filled& {
                 background-color: @dropdowneditor-filled-button-hover-bg;
             }
+        }
+    }
+
+    &:not(.dx-state-readonly) {
+        .dx-texteditor-buttons-container {
+            display: block;
         }
     }
 }
