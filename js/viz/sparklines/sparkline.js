@@ -145,8 +145,6 @@ var dxSparkline = BaseSparkline.inherit({
 
     _rootClass: "dxsl-sparkline",
 
-    _widgetType: "sparkline",
-
     _themeSection: "sparkline",
 
     _defaultSize: {
