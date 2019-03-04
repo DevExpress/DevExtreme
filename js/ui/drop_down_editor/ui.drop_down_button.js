@@ -23,14 +23,14 @@ export default class ClearButton extends ActionButton {
 
     _create() {
         const { editor } = this;
-        const $element = $("<div>").addClass(DROP_DOWN_EDITOR_BUTTON_CLASS);
+        const $element = $("<div>");
         const options = this._getOptions();
 
         this._addToContainer($element);
 
         const instance = editor._createComponent($element, Button, options);
 
-        $element.removeClass("dx-button");
+        this._legacyRender(editor.$element(), $element, options.visible);
 
         return {
             $element,
@@ -61,16 +61,26 @@ export default class ClearButton extends ActionButton {
         return editor.option("showDropDownButton");
     }
 
+    // TODO: get rid of it
+    _legacyRender($editor, $element, isVisible) {
+        $editor.toggleClass(DROP_DOWN_EDITOR_BUTTON_VISIBLE, isVisible);
+
+        if($element) {
+            $element.removeClass("dx-button");
+            $element.addClass(DROP_DOWN_EDITOR_BUTTON_CLASS);
+        }
+    }
+
     update() {
-        super.update();
+        const shouldUpdate = super.update();
 
-        const { editor, instance } = this;
-        const $editor = editor.$element();
-        const options = this._getOptions();
+        if(shouldUpdate) {
+            const { editor, instance } = this;
+            const $editor = editor.$element();
+            const options = this._getOptions();
 
-        instance && instance.option(options);
-
-        // TODO: remove it
-        $editor.toggleClass(DROP_DOWN_EDITOR_BUTTON_VISIBLE, options.visible);
+            instance && instance.option(options);
+            this._legacyRender($editor, instance && instance.$element(), options.visible);
+        }
     }
 }

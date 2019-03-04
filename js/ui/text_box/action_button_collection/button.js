@@ -70,5 +70,7 @@ export default class ActionButton {
         if(this._shouldRender()) {
             this.render();
         }
+
+        return !!this.instance;
     }
 }

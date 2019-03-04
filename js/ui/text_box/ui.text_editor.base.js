@@ -62,6 +62,9 @@ var TextEditorBase = Editor.inherit({
     ctor: function() {
         this._buttonCollection = new ActionButtonCollection(this, this._getDefaultButtons());
 
+        this.$beforeButtonsContainer = null;
+        this.$afterButtonsContainer = null;
+
         this.callBase.apply(this, arguments);
     },
 
@@ -389,13 +392,15 @@ var TextEditorBase = Editor.inherit({
             .addClass(TEXTEDITOR_CONTAINER_CLASS)
             .appendTo(this.$element());
 
-        this._buttonCollection.renderBeforeButtons(buttons, $testEditorContainer);
+        this.$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, $testEditorContainer);
         $testEditorContainer.append(this._createInput());
-        this._buttonCollection.renderAfterButtons(buttons, $testEditorContainer);
+        this.$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, $testEditorContainer);
     },
 
     _clean() {
         this._buttonCollection.clean();
+        this.$beforeButtonsContainer = null;
+        this.$afterButtonsContainer = null;
         this.callBase();
     },
 

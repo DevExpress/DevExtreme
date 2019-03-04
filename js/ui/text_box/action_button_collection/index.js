@@ -43,7 +43,7 @@ export default class ActionButtonCollection {
             }
         });
 
-        if(!$buttonsContainer.length) {
+        if(!$buttonsContainer.children().length) {
             $buttonsContainer.remove();
 
             return null;

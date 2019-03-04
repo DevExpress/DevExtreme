@@ -49,6 +49,11 @@ export default class ClearButton extends ActionButton {
         );
     }
 
+    // TODO: get rid of it
+    _legacyRender($editor, isVisible) {
+        $editor.toggleClass(TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS, isVisible);
+    }
+
     update(rendered = false) {
         !rendered && super.update();
 
@@ -57,8 +62,6 @@ export default class ClearButton extends ActionButton {
         const isVisible = this._isVisible();
 
         instance && instance.toggleClass(STATE_INVISIBLE_CLASS, !isVisible);
-
-        // TODO: remove it
-        $editor.toggleClass(TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS, isVisible);
+        this._legacyRender($editor, isVisible);
     }
 }

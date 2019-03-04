@@ -49,6 +49,8 @@ export default class SpinButtons extends ActionButton {
         editor._createComponent($spinUp, SpinButton, extend({ direction: "up" }, options));
         editor._createComponent($spinDown, SpinButton, extend({ direction: "down" }, options));
 
+        this._legacyRender(editor.$element(), this._isTouchFriendly(), options.visible);
+
         return {
             instance: $spinContainer,
             $element: $spinContainer
@@ -72,15 +74,26 @@ export default class SpinButtons extends ActionButton {
         return editor.option("showSpinButtons");
     }
 
+    _isTouchFriendly() {
+        const { editor } = this;
+
+        return editor.option("showSpinButtons") && editor.option("useLargeSpinButtons");
+    }
+
+    // TODO: get rid of it
+    _legacyRender($editor, isTouchFriendly, isVisible) {
+        $editor.toggleClass(SPIN_TOUCH_FRIENDLY_CLASS, isTouchFriendly);
+        $editor.toggleClass(SPIN_CLASS, isVisible);
+    }
+
     update() {
-        super.update();
+        const shouldUpdate = super.update();
 
-        const { editor, instance } = this;
-        const $editor = editor.$element();
-        const isVisible = this._isVisible();
-        const isTouchFriendly = editor.option("showSpinButtons") && editor.option("useLargeSpinButtons");
-
-        if(instance) {
+        if(shouldUpdate) {
+            const { editor, instance } = this;
+            const $editor = editor.$element();
+            const isVisible = this._isVisible();
+            const isTouchFriendly = this._isTouchFriendly();
             const $spinButtons = instance.children();
             const spinUp = SpinButton.getInstance($spinButtons.eq(0));
             const spinDown = SpinButton.getInstance($spinButtons.eq(1));
@@ -88,10 +101,8 @@ export default class SpinButtons extends ActionButton {
 
             spinUp.option(options);
             spinDown.option(options);
-        }
 
-        // TODO: remove
-        $editor.toggleClass(SPIN_TOUCH_FRIENDLY_CLASS, isTouchFriendly);
-        $editor.toggleClass(SPIN_CLASS, isVisible);
+            this._legacyRender($editor, isTouchFriendly, isVisible);
+        }
     }
 }
