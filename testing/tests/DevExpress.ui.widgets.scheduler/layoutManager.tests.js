@@ -152,7 +152,7 @@ QUnit.module("Render layout", moduleOptions, function() {
     this.markAppointments = () => document.querySelectorAll(APPOINTMENT_CLASS_NAME).forEach(element => element.dataset.mark = 'true');
 
     this.getUnmarkedAppointments = () => {
-        return Array.from(document.querySelectorAll(APPOINTMENT_CLASS_NAME)).filter(element => !!element.dataset.mark === true);
+        return Array.from(document.querySelectorAll(APPOINTMENT_CLASS_NAME)).filter(element => !!element.dataset.mark === false);
     };
 
     QUnit.test("Scheduler should render only necessary appointments", function(assert) {
