@@ -96,11 +96,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
         eventsEngine.trigger($focusedElement, "focus");
     },
 
-    _updateFocus: function() {
+    _updateFocus: function(editingCanceled) {
         var that = this;
         setTimeout(function() {
             var $cell = that._getFocusedCell(),
-                $cellEditingCell = that._isCellEditMode() ? $cell : undefined;
+                $cellEditingCell = that._isCellEditMode() && $cell;
 
             if($cell && !(that._isMasterDetailCell($cell) && !that._isRowEditMode())) {
                 if(that._hasSkipRow($cell.parent())) {
@@ -109,7 +109,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 if($cell && $cell.length > 0) {
                     if($cell.is("td") || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         if(that.getController("editorFactory").focus() || $cellEditingCell) {
-                            that._focus($cell);
+                            let args = that._fireFocusChangingEvents(null, $cell, true, !editingCanceled);
+                            $cell = args.$newCellElement;
+                            that._focus($cell, !args.isHighlighted);
                         } else if(that._isHiddenFocus) {
                             that._focus($cell, true);
                         }
@@ -188,7 +190,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(this._allowRowUpdating() && isCellEditMode && column && column.allowEditing) {
                 this._isHiddenFocus = false;
             } else {
-                var isInteractiveTarget = $(event.target).not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR),
+                let $target = event && $(event.target),
+                    isInteractiveTarget = $target && $target.not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR),
                     isDisabled = !args.isHighlighted || isInteractiveTarget;
                 this._focus($cell, isDisabled, isInteractiveTarget);
             }
@@ -1851,6 +1854,12 @@ module.exports = {
                     }
 
                     return $cell;
+                },
+                _processCanceledEditingCell: function() {
+                    this.closeEditCell().done(() => {
+                        let keyboardNavigation = this.getController("keyboardNavigation");
+                        keyboardNavigation._updateFocus(true);
+                    });
                 },
                 init: function() {
                     this.callBase();

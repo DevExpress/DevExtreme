@@ -999,12 +999,15 @@ var EditingController = modules.ViewController.inherit((function() {
                         commonUtils.deferRender(function() {
                             that._repaintEditCell(column, oldColumn, oldEditRowIndex);
                         });
+                    } else {
+                        that._processCanceledEditingCell();
                     }
-
                 });
             }
             return false;
         },
+
+        _processCanceledEditingCell: function() { },
 
         _prepareEditCell: function(params, item, editColumnIndex, editRowIndex) {
             var that = this;
