@@ -88,7 +88,7 @@ class AppointmentLayoutManager {
             const newSettings = settingList[i],
                 oldSettings = oldSettingList[i];
 
-            if(oldSettings) { // exclude property sortedIndex for comparison in commonUtils.equalByValue
+            if(oldSettings) { // exclude sortedIndex property for comparison in commonUtils.equalByValue
                 oldSettings.sortedIndex = newSettings.sortedIndex;
             }
 
@@ -129,7 +129,6 @@ class AppointmentLayoutManager {
                 appointment.needRepaint = this._hasChangesInData(appointment.itemData) || this._hasChangesInSettings(appointment.settings, oldAppointment.settings);
             }
         }
-
         return appointmentList.concat(this._getDeletedAppointments(appointmentList, oldAppointmentList));
     }
 
