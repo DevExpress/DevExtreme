@@ -91,6 +91,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return this._getCellCountInDay() * this.option("intervalCount");
     },
 
+    getGroupTableWidth: function() {
+        return this._$sidebarTable && this._$sidebarTable.outerWidth();
+    },
+
     _getTotalRowCount: function(groupCount) {
         if(this._isHorizontalGroupedWorkSpace()) {
             return this._getRowCount();
@@ -337,7 +341,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _setTableSizes: function() {
-        this.callBase();
         var cellHeight = DATE_TABLE_CELL_HEIGHT,
             minHeight = this._getWorkSpaceMinHeight(),
             $groupCells = this._$sidebarTable
@@ -348,8 +351,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             height = minHeight;
         }
 
-        this._$sidebarTable.height(height);
-        this._$dateTable.height(height);
+        this._$sidebarTable.outerHeight(height);
+        this._$dateTable.outerHeight(height);
+
+        this.callBase();
     },
 
     _getWorkSpaceMinHeight: function() {
