@@ -8,7 +8,8 @@ var $ = require("jquery"),
     dxPieChart = require("viz/pie_chart"),
     dxPolarChart = require("viz/polar_chart"),
     baseChartModule = require("viz/chart_components/base_chart"),
-    setupSeriesFamily = require("../../helpers/chartMocks.js").setupSeriesFamily;
+    setupSeriesFamily = require("../../helpers/chartMocks.js").setupSeriesFamily,
+    pointerMock = require("../../helpers/pointerMock.js");
 
 setupSeriesFamily();
 QUnit.testStart(function() {
@@ -2477,6 +2478,32 @@ QUnit.test("Recalculate argument range data from all visible series", function(a
     assert.equal(argRange.min, 2);
     assert.equal(argRange.max, 3);
     assert.equal(argRange.isEmpty(), false);
+});
+
+QUnit.test("T720002, T719994. Change hovered series at runtime should not throw exception", function(assert) {
+    var clock = sinon.useFakeTimers();
+    try {
+        var chart = this.createChart({
+                dataSource: [
+                    { arg: 1, val: 400 }
+                ],
+                size: {
+                    width: 400,
+                    height: 400
+                },
+                series: [{}, {}]
+            }),
+            rootOffset = chart._renderer.getRootOffset();
+
+        pointerMock($(".dxc-trackers > path").eq(1)).start().move(rootOffset.left + 100, rootOffset.top + 100);
+        clock.tick(100);
+
+        chart.option({ series: [{}] });
+
+        assert.equal(chart.getAllSeries().length, 1);
+    } finally {
+        clock.restore();
+    }
 });
 
 // T688232

@@ -1258,13 +1258,15 @@ var BaseChart = BaseWidget.inherit({
             }
         });
 
+        that._tracker.clearHover();
+
         _reverseEach(that.series, (index, series) => {
             if(!seriesBasis.some(s => series === s.series)) {
                 that._disposeSeries(index);
                 changedStateSeriesCount++;
             }
         });
-        that._tracker.clearHover();
+
         that.series = [];
 
         changedStateSeriesCount > 0 && that._disposeSeriesFamilies();
