@@ -78,21 +78,18 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
     });
 
     allArguments.forEach(function(arg) {
-        var currentStacks = [],
-            parameters;
-
-        for(let i = 0; i < commonStacks.length; i++) {
-            let stack = commonStacks[i];
+        const currentStacks = commonStacks.reduce((stacks, stack) => {
             if(isStackExist(seriesInStacks[stack], arg, options.equalBarWidth)) {
-                currentStacks.push(stack);
+                stacks.push(stack);
             }
-        }
 
-        parameters = calculateParams(barsArea, currentStacks.length, barWidth);
-        for(let i = 0; i < commonStacks.length; i++) {
-            let stack = commonStacks[i];
+            return stacks;
+        }, []);
+
+        const parameters = calculateParams(barsArea, currentStacks.length, barWidth);
+        commonStacks.forEach(stack => {
             correctStackCoordinates(seriesInStacks[stack], currentStacks, arg, stack, parameters, barsArea, seriesStackIndexCallback);
-        }
+        });
     });
 }
 
