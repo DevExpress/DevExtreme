@@ -45,6 +45,7 @@ function correctStackCoordinates(series, currentStacks, arg, stack, parameters, 
         if(isDefined(barPadding) || isDefined(barWidth)) {
             extraParameters = calculateParams(barsArea, currentStacks.length, 1 - barPadding, barWidth);
             width = extraParameters.width;
+            offset = getOffset(stackIndex, extraParameters);
         }
 
         correctPointCoordinates(points, width, offset);
