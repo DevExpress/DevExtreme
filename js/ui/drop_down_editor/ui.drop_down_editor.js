@@ -279,7 +279,7 @@ var DropDownEditor = TextBox.inherit({
         this.callBase();
         this._initVisibilityActions();
         this._initPopupInitializedAction();
-        this._dropDownOptionsCache = {};
+        this._clearDropDownOptionsCache();
         this._cacheDropDownOptions(this.option("dropDownOptions"));
     },
 
@@ -661,6 +661,10 @@ var DropDownEditor = TextBox.inherit({
         var isOutsideClick = !isInputClicked && !isDropDownButtonClicked;
 
         return isOutsideClick;
+    },
+
+    _clearDropDownOptionsCache: function() {
+        this._dropDownOptionsCache = {};
     },
 
     _clean: function() {
