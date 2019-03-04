@@ -1001,12 +1001,14 @@ var EditingController = modules.ViewController.inherit((function() {
                             that._repaintEditCell(column, oldColumn, oldEditRowIndex);
                         });
                     } else {
-                        that.closeEditCell();
+                        that._processCanceledEditingCell();
                     }
                 });
             }
             return false;
         },
+
+        _processCanceledEditingCell: function() { },
 
         _prepareEditCell: function(params, item, editColumnIndex, editRowIndex) {
             var that = this;
