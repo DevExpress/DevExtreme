@@ -529,7 +529,12 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     reset: function() {
-        this.option("value", null);
+        if(this.option("value") === null) {
+            this.option("text", "");
+            this._renderValue();
+        } else {
+            this.option("value", null);
+        }
     },
 
     _clean: function() {

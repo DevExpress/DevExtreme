@@ -10,6 +10,7 @@ import "ui/text_box/ui.text_editor";
 var INPUT_CLASS = "dx-texteditor-input";
 var PLACEHOLDER_CLASS = "dx-placeholder";
 var IE_NUMPAD_MINUS_KEY = "Subtract";
+var CARET_TIMEOUT_DURATION = browser.msie ? 300 : 0; // IE prevent browser text selection on double click if caret was moved
 
 var moduleConfig = {
     beforeEach: function() {
@@ -295,6 +296,10 @@ QUnit.test("focusout after inverting sign should not lead to value changing", fu
 });
 
 QUnit.test("pressing minus button should revert selected number", function(assert) {
+    if(!browser.msie) {
+        this.clock.restore();
+    }
+
     this.instance.option({
         format: "$ #0.00",
         value: 0
@@ -302,10 +307,10 @@ QUnit.test("pressing minus button should revert selected number", function(asser
 
     this.keyboard.caret({ start: 0, end: 5 }).keyDown("-");
     this.clock.tick();
-
     assert.equal(this.input.val(), "-$ 0.00", "text is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 6 }, "caret is good");
 });
+
 
 QUnit.test("pressing '-' should keep selection", function(assert) {
     this.instance.option({
@@ -1572,9 +1577,13 @@ QUnit.test("moving caret to closest non stub on click - forward direction", func
         value: 1
     });
 
+    this.input.trigger("focusin");
+    this.clock.tick(CARET_TIMEOUT_DURATION);
     this.keyboard.caret(0);
+
     this.input.trigger("dxclick");
 
+    this.clock.tick(CARET_TIMEOUT_DURATION);
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was adjusted");
 });
 
@@ -1586,6 +1595,7 @@ QUnit.test("moving caret to closest non stub on click - backward direction", fun
 
     this.keyboard.caret(2);
     this.input.trigger("dxclick");
+    this.clock.tick(CARET_TIMEOUT_DURATION);
 
     assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret was adjusted");
 });
@@ -1651,9 +1661,42 @@ QUnit.testInActiveWindow("caret should be at start boundary on focusin", functio
     });
 
     this.input.focus();
+    if(browser.msie) {
+        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
+    }
+
+    this.clock.tick(CARET_TIMEOUT_DURATION);
+    assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is right");
+});
+
+QUnit.testInActiveWindow("caret should not change position on focus after fast double click for IE", function(assert) {
+    if(!browser.msie) {
+        assert.expect(0);
+        return;
+    }
+    this.instance.option({
+        format: "#0.## kg",
+        value: 1.23
+    });
+
+    this.input.focus();
+
+    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
+
+    this.input.trigger("dxdblclick");
+    this.clock.tick(CARET_TIMEOUT_DURATION);
+    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret is right after focus and dblclick");
+
+    this.input.trigger("focusout");
     this.clock.tick();
 
-    assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is right");
+    this.keyboard.caret(0);
+    this.input.trigger("dxclick");
+    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
+
+    this.input.trigger("dxdblclick");
+    this.clock.tick(CARET_TIMEOUT_DURATION);
+    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret is right after focus by click and dblclick");
 });
 
 QUnit.module("format: custom parser and formatter", moduleConfig);

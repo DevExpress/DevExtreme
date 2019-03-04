@@ -389,7 +389,7 @@ var dxBarGauge = dxBaseGauge.inherit({
             formatOptions = {},
             options = that._options,
             labelFormatOptions = (options.label || {}).format,
-            legendFormatOptions = (options.legend || {}).format;
+            legendFormatOptions = (options.legend || {}).itemTextFormat;
 
         if(legendFormatOptions) {
             formatOptions.format = legendFormatOptions;

@@ -607,8 +607,10 @@ QUnit.test("Connector strategy", function(assert) {
         y: 15,
         height: 5,
         width: 40
-    }), [[6, 15], [6, 16], [6, 17], [6, 18], [6, 19], [46, 15], [46, 16], [46, 17], [46, 18], [46, 19]], "prepareLabelPoints");
+    }), [[6, 15], [6, 16], [6, 17], [6, 18], [6, 19], [6, 20], [46, 15], [46, 16], [46, 17], [46, 18], [46, 19], [46, 20]], "prepareLabelPoints");
     assert.equal(connectorStrategy.isLabelInside(), false, "isLabelInside");
+
+    assert.deepEqual(connectorStrategy.adjustPoints([1.2, 1, 1.8]), [1, 1, 2]);
 });
 
 QUnit.test("Connector strategy. left horizontalAlignment", function(assert) {
@@ -640,7 +642,7 @@ QUnit.test("Connector strategy. left horizontalAlignment", function(assert) {
         y: 15,
         height: 2,
         width: 40
-    }), [[14, 15], [14, 16], [54, 15], [54, 16]], "prepareLabelPoints");
+    }), [[14, 15], [14, 16], [14, 17], [54, 15], [54, 16], [54, 17]], "prepareLabelPoints");
 });
 
 
@@ -673,7 +675,7 @@ QUnit.test("Connector strategy. inverted", function(assert) {
         y: 15,
         height: 2,
         width: 40
-    }), [[14, 14], [14, 15], [54, 14], [54, 15]], "prepareLabelPoints");
+    }), [[14, 15], [14, 16], [14, 17], [54, 15], [54, 16], [54, 17]], "prepareLabelPoints");
 });
 
 QUnit.test("Place labels and connector, item border width > 0, horizontalAlignment is left", function(assert) {

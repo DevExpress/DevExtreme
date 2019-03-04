@@ -21,6 +21,8 @@ var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     NUMPUD_MINUS_KEY_IE = "Subtract",
     INPUT_EVENT = "input";
 
+var CARET_TIMEOUT_DURATION = browser.msie ? 300 : 0; // If we move caret before the second click, IE can prevent browser text selection on double click
+
 var ensureDefined = function(value, defaultValue) {
     return value === undefined ? defaultValue : value;
 };
@@ -58,9 +60,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
             backspace: that._removeHandler.bind(that),
             leftArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
             rightArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
-            home: that._moveCaretToBoundary.bind(that, MOVE_FORWARD),
+            home: that._moveCaretToBoundaryEventHandler.bind(that, MOVE_FORWARD),
             enter: that._updateFormattedValue.bind(that),
-            end: that._moveCaretToBoundary.bind(that, MOVE_BACKWARD)
+            end: that._moveCaretToBoundaryEventHandler.bind(that, MOVE_BACKWARD)
         });
     },
 
@@ -72,12 +74,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        if(browser.msie) {
-            clearTimeout(this._ieCaretTimeout);
-            this._ieCaretTimeout = setTimeout(this._moveCaretToBoundary.bind(this, MOVE_BACKWARD, e));
-        } else {
-            this._moveCaretToBoundary(MOVE_BACKWARD, e);
-        }
+        this.clearCaretTimeout();
+        this._caretTimeout = setTimeout(function() {
+            this._caretTimeout = null;
+            this._moveCaretToBoundaryEventHandler(MOVE_BACKWARD, e);
+        }.bind(this), CARET_TIMEOUT_DURATION);
     },
 
     _focusOutHandler: function(e) {
@@ -131,16 +132,19 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
     },
 
-    _moveCaretToBoundary: function(direction, e) {
-        if(!this._useMaskBehavior() || e.shiftKey) {
-            return;
-        }
-
+    _moveCaretToBoundary: function(direction) {
         var boundaries = maskCaret.getCaretBoundaries(this._getInputVal(), this._getFormatPattern()),
             newCaret = maskCaret.getCaretWithOffset(direction === MOVE_FORWARD ? boundaries.start : boundaries.end, 0);
 
         this._caret(newCaret);
+    },
 
+    _moveCaretToBoundaryEventHandler: function(direction, e) {
+        if(!this._useMaskBehavior() || e && e.shiftKey) {
+            return;
+        }
+
+        this._moveCaretToBoundary(direction);
         e && e.preventDefault();
     },
 
@@ -159,6 +163,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _keyboardHandler: function(e) {
+        this.clearCaretTimeout();
+
         this._lastKey = number.convertDigits(eventUtils.getChar(e), true);
         this._lastKeyName = eventUtils.normalizeKeyName(e);
 
@@ -462,8 +468,21 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         eventsEngine.on($input, eventUtils.addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
         eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), function() {
-            this._caret(maskCaret.getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
+            if(!this._caretTimeout) {
+                this._caretTimeout = setTimeout(function() {
+                    this._caret(maskCaret.getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
+                }.bind(this), CARET_TIMEOUT_DURATION);
+            }
         }.bind(this));
+
+        eventsEngine.on($input, "dxdblclick", function() {
+            this.clearCaretTimeout();
+        }.bind(this));
+    },
+
+    clearCaretTimeout: function() {
+        clearTimeout(this._caretTimeout);
+        this._caretTimeout = null;
     },
 
     _forceRefreshInputValue: function() {
@@ -542,8 +561,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
                 var caretInBoundaries = maskCaret.getCaretInBoundaries(caret, currentText, format);
 
                 if(browser.msie) {
-                    clearTimeout(this._ieCaretTimeout);
-                    this._ieCaretTimeout = setTimeout(this._caret.bind(this, caretInBoundaries));
+                    clearTimeout(this._caretTimeout);
+                    this._caretTimeout = setTimeout(this._caret.bind(this, caretInBoundaries));
                 } else {
                     this._caret(caretInBoundaries);
                 }
@@ -676,8 +695,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._lastKeyName;
         delete this._parsedValue;
         delete this._focusOutOccurs;
-        clearTimeout(this._ieCaretTimeout);
-        delete this._ieCaretTimeout;
+        clearTimeout(this._caretTimeout);
+        delete this._caretTimeout;
     },
 
     _clean: function() {
