@@ -58,7 +58,6 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
         seriesInStacks = {},
         barWidth = options.barWidth,
         barGroupWidth = options.barGroupWidth,
-        stack,
         interval = series[0] && series[0].getArgumentAxis().getTranslator().getInterval(),
         barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
 
@@ -79,19 +78,18 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
     });
 
     allArguments.forEach(function(arg) {
-        var currentStacks = [],
-            parameters;
-
-        for(stack in seriesInStacks) {
+        const currentStacks = commonStacks.reduce((stacks, stack) => {
             if(isStackExist(seriesInStacks[stack], arg, options.equalBarWidth)) {
-                currentStacks.push(stack);
+                stacks.push(stack);
             }
-        }
 
-        parameters = calculateParams(barsArea, currentStacks.length, barWidth);
-        for(stack in seriesInStacks) {
+            return stacks;
+        }, []);
+
+        const parameters = calculateParams(barsArea, currentStacks.length, barWidth);
+        commonStacks.forEach(stack => {
             correctStackCoordinates(seriesInStacks[stack], currentStacks, arg, stack, parameters, barsArea, seriesStackIndexCallback);
-        }
+        });
     });
 }
 
