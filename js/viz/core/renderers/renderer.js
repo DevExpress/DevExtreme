@@ -55,6 +55,8 @@ var KEY_TEXT = "text",
 
     DEFAULT_FONT_SIZE = 12;
 
+const ELLIPSIS = "...";
+
 var objectCreate = (function() {
     if(!Object.create) {
         return function(proto) {
@@ -786,7 +788,7 @@ function applyEllipsis(maxWidth) {
 
     restoreText.call(that);
 
-    ellipsis = that.renderer.text("...").attr(that._styles).append(that.renderer.root);
+    ellipsis = that.renderer.text(ELLIPSIS).attr(that._styles).append(that.renderer.root);
     ellipsisWidth = ellipsis.getBBox().width;
     if(that._getElementBBox().width > maxWidth) {
         if(maxWidth - ellipsisWidth < 0) {
@@ -817,6 +819,48 @@ function applyEllipsis(maxWidth) {
     that._hasEllipsis = hasEllipsis;
 
     return hasEllipsis;
+}
+
+function setMaxWidth(maxWidth, options = {}) {
+    var that = this,
+        lines,
+        textChanged = false,
+        ellipsis,
+        ellipsisWidth,
+        ellipsisMaxWidth = maxWidth;
+
+    restoreText.call(that);
+
+    ellipsis = that.renderer.text(ELLIPSIS).attr(that._styles).append(that.renderer.root);
+    ellipsisWidth = ellipsis.getBBox().width;
+    if(that._getElementBBox().width > maxWidth) {
+        if(maxWidth - ellipsisWidth < 0) {
+            ellipsisMaxWidth = 0;
+        } else {
+            ellipsisMaxWidth -= ellipsisWidth;
+        }
+
+        lines = applyOverflowRules(that.element, that._texts, maxWidth, ellipsisMaxWidth, options);
+
+        this._texts = lines.reduce((texts, line) => {
+            return texts.concat(line.parts);
+        }, []).filter(t => t.value !== "").map(t => {
+            t.tspan.parentNode.appendChild(t.tspan);
+            return t;
+        });
+
+        textChanged = true;
+        if(this._texts.length) {
+            locateTextNodes(this);
+        } else {
+            this.element.textContent = "";
+        }
+    }
+
+    ellipsis.remove();
+    that._hasEllipsis = textChanged;
+
+    return textChanged;
 }
 
 function getIndexForEllipsis(text, maxWidth, startBox, endBox) {
@@ -864,9 +908,151 @@ function prepareLines(element, texts, maxWidth) {
     return lines;
 }
 
-function setNewText(text, index) {
-    var newText = text.value.substr(0, index) + "...";
-    text.tspan.textContent = newText;
+function getSpaceBreakIndex(text, maxWidth) {
+    const initialIndices = text.startBox > 0 ? [0] : [];
+    const spaceIndices = text.value.split("").reduce((indices, char, index) => {
+        if(char === " ") {
+            indices.push(index);
+        }
+        return indices;
+    }, initialIndices);
+
+    let spaceIndex = 0;
+    while(spaceIndices[spaceIndex + 1] !== undefined && (text.startBox + text.tspan.getSubStringLength(0, spaceIndices[spaceIndex + 1]) < maxWidth)) {
+        spaceIndex++;
+    }
+
+    return spaceIndices[spaceIndex];
+}
+
+function getWordBreakIndex(text, maxWidth) {
+    for(let i = 0; i < text.value.length - 1; i++) {
+        if(text.startBox + text.tspan.getSubStringLength(0, i + 1) > maxWidth) {
+            return i;
+        }
+    }
+}
+
+function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
+    const wholeText = text.value;
+    let breakIndex;
+    if(options.wordWrap !== "none") {
+        breakIndex = options.wordWrap === "normal" ? getSpaceBreakIndex(text, maxWidth) : getWordBreakIndex(text, maxWidth);
+    }
+
+    let restLines = [];
+    let restText;
+
+    if(isFinite(breakIndex)) {
+        setNewText(text, breakIndex, "");
+
+        const newTextOffset = wholeText[breakIndex] === " " ? 1 : 0;
+
+        const restString = wholeText.slice(breakIndex + newTextOffset);
+        if(restString.length) {
+            const restTspan = text.tspan.cloneNode();
+            restTspan.removeAttribute("y");
+            restTspan.removeAttribute("x");
+
+            restTspan.textContent = restString;
+
+            text.tspan.parentNode.appendChild(restTspan);
+
+            restText = extend(extend({}, text), {
+                value: restString,
+                startBox: 0,
+                height: 0,
+                tspan: restTspan,
+                endBox: restTspan.getSubStringLength(0, restString.length)
+            });
+
+            restText.stroke && (text.stroke.textContent = restString);
+
+            if(restText.endBox > maxWidth) {
+                restLines = wordWrap(restText, maxWidth, ellipsisMaxWidth, options);
+                if(!restLines.length) {
+                    return [];
+                }
+            }
+        }
+    }
+
+    if(text.value.length) {
+        if(options.overflow === "ellipsis" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
+            for(let i = text.value.length - 1; i >= 1; i--) {
+                if(text.startBox + text.tspan.getSubStringLength(0, i) < ellipsisMaxWidth) {
+                    setNewText(text, i, ELLIPSIS);
+                    break;
+                }
+            }
+        }
+
+        if(options.overflow === "hide" && text.tspan.getSubStringLength(0, text.value.length) > maxWidth) {
+            return [];
+        }
+    } else {
+        text.tspan.parentNode.removeChild(text.tspan);
+    }
+
+    const parts = [];
+
+    if(restText) {
+        parts.push(restText);
+    }
+
+    return [{ commonLength: wholeText.length, parts }].concat(restLines);
+}
+
+
+function applyOverflowRules(element, texts, maxWidth, ellipsisMaxWidth, options) {
+    if(!texts) {
+        const textValue = element.textContent;
+        const text = { value: textValue, height: 0, line: 0 };
+        element.textContent = "";
+        createTspans([text], element, "tspan");
+
+        texts = [text];
+    }
+    return texts.reduce(([lines, startBox, endBox, stop, lineNumber], text) => {
+        const line = lines[lines.length - 1];
+        if(stop) {
+            return [lines, startBox, endBox, stop];
+        }
+        if(!line || text.line !== lineNumber) {
+            text.startBox = startBox = 0;
+            lines.push({ commonLength: text.value.length, parts: [text] });
+        } else {
+            text.startBox = startBox;
+            if(startBox > ellipsisMaxWidth && options.wordWrap === "none" && options.overflow === "ellipsis") {
+                text.tspan.parentNode.removeChild(text.tspan);
+                return [lines, startBox, endBox, stop, lineNumber];
+            }
+            line.parts.push(text);
+
+            line.commonLength += text.value.length;
+        }
+        text.endBox = endBox = startBox + text.tspan.getSubStringLength(0, text.value.length);
+
+        startBox = endBox;
+
+        if(endBox > maxWidth) {
+            const wordWrapLines = wordWrap(text, maxWidth, ellipsisMaxWidth, options);
+            if(!wordWrapLines.length) {
+                lines = [];
+                stop = true;
+            } else {
+                lines = lines.concat(wordWrapLines.filter(l => l.parts.length > 0));
+            }
+        }
+
+        return [lines, startBox, endBox, stop, text.line];
+    }, [[], 0, 0, false, 0])[0];
+
+}
+
+function setNewText(text, index, insertString = ELLIPSIS) {
+    var newText = text.value.substr(0, index) + insertString;
+    text.value = text.tspan.textContent = newText;
     text.stroke && (text.stroke.textContent = newText);
 }
 
@@ -1471,8 +1657,9 @@ extend(TextSvgElement.prototype, {
     constructor: TextSvgElement,
     attr: textAttr,
     css: textCss,
-    applyEllipsis: applyEllipsis,
-    restoreText: restoreText
+    applyEllipsis,
+    setMaxWidth,
+    restoreText
 });
 // TextSvgElement
 
