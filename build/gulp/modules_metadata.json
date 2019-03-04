@@ -341,6 +341,15 @@
     }
   },
   {
+    "name": "ui/drop_down_button",
+    "exports": {
+      "default": {
+        "path": "ui.dxDropDownButton",
+        "isWidget": true
+      }
+    }
+  },
+  {
     "name": "ui/drop_down_editor/ui.drop_down_editor",
     "isInternal": true,
     "exports": {
