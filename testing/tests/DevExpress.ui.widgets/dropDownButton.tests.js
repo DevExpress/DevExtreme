@@ -29,7 +29,7 @@ const getButtonGroup = (instance) => {
 };
 
 const getActionButton = (instance) => {
-    return instance.$element().find("." + DROP_DOWN_BUTTON_ACTION_CLASS);
+    return instance.$element().find(`.${DROP_DOWN_BUTTON_ACTION_CLASS}`);
 };
 
 QUnit.module("markup", {
