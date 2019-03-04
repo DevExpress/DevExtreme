@@ -279,15 +279,15 @@ QUnit.test("the 'getCellIndexByCoordinates' method should return right coordinat
 
     var cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15 + 0.656, top: cellHeight * 2 - 0.656 });
 
-    assert.equal(cellIndex, 63, "Cell index is OK");
+    assert.equal(cellIndex, 62, "Cell index is OK");
 
     cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth + 0.656, top: cellHeight - 0.656 });
 
-    assert.equal(cellIndex, 1, "Cell index is OK");
+    assert.equal(cellIndex, 0, "Cell index is OK");
 
     cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth + 0.656, top: cellHeight + 0.656 });
 
-    assert.equal(cellIndex, 49, "Cell index is OK");
+    assert.equal(cellIndex, 48, "Cell index is OK");
 });
 
 QUnit.test("Timeline should not have time panel offset", function(assert) {
@@ -658,9 +658,16 @@ QUnit.test("Get visible bounds for timelineWeek, rtl mode", function(assert) {
 
 QUnit.module("Timeline Month", {
     beforeEach: function() {
-        this.instance = $("#scheduler-timeline").dxSchedulerTimelineMonth({ currentDate: new Date(2015, 9, 16), showCurrentTimeIndicator: false }).dxSchedulerTimelineMonth("instance");
+        this.instance = $("#scheduler-timeline").dxSchedulerTimelineMonth({ currentDate: new Date(2015, 9, 16), showCurrentTimeIndicator: false, shadeUntilCurrentTime: false }).dxSchedulerTimelineMonth("instance");
         stubInvokeMethod(this.instance);
     }
+});
+
+QUnit.test("timeline should have correct group table width (T718364)", function(assert) {
+    this.instance.option("crossScrollingEnabled", true);
+    this.instance.option("groups", [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }, { id: 3, text: "c" }, { id: 4, text: "d" }] }]);
+
+    assert.equal(this.instance.getGroupTableWidth(), 100, "Group table width is OK");
 });
 
 QUnit.test("Scheduler timeline month getPositionShift should return null shift", function(assert) {
