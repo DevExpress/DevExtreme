@@ -900,7 +900,7 @@ QUnit.test("Set three series, all of them in one group", function(assert) {
 });
 
 
-QUnit.test("Set three series, tw0 of them in one group, and last in another group", function(assert) {
+QUnit.test("Set three series, two of them in one group, and last in another group", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints3(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
@@ -927,6 +927,29 @@ QUnit.test("Set three series, tw0 of them in one group, and last in another grou
     checkStackedPoints(assert, mixedPoints1);
     checkStackedPoints(assert, mixedPoints2);
     checkStackedPoints(assert, mixedPoints3);
+});
+
+QUnit.test("Check bars order when barOverlapGroup is set", function(assert) {
+    var mixedPoints1 = pointsForStacking.mixedPoints1(),
+        mixedPoints2 = pointsForStacking.mixedPoints2(),
+        mixedPoints3 = pointsForStacking.mixedPoints3(),
+        series1 = createSeries({
+            points: mixedPoints1,
+            barOverlapGroup: "g1"
+        }),
+        series2 = createSeries({
+            points: mixedPoints2
+        }),
+        series3 = createSeries({
+            points: mixedPoints3
+        }),
+        series = [series1, series2, series3];
+
+    createSeriesFamily("bar", series);
+
+    checkSeries(assert, series1, 20, -25);
+    checkSeries(assert, series2, 20, 0);
+    checkSeries(assert, series3, 20, 25);
 });
 
 QUnit.test("Set three series, two of them in one group, and last in another group, and one series have custom barWidth", function(assert) {
