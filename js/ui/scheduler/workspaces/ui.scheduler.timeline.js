@@ -351,8 +351,8 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             height = minHeight;
         }
 
-        this._$sidebarTable.outerHeight(height);
-        this._$dateTable.outerHeight(height);
+        this._$sidebarTable.height(height);
+        this._$dateTable.height(height);
 
         this.callBase();
     },
