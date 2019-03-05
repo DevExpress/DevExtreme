@@ -367,7 +367,7 @@ var TextEditorBase = Editor.inherit({
 
         this._renderInput();
         this._renderInputType();
-        this._renderPlaceholderMarkup();
+        this._renderPlaceholder();
 
         this._renderProps();
 
@@ -539,7 +539,7 @@ var TextEditorBase = Editor.inherit({
 
         var $input = this._input(),
             placeholderText = this.option("placeholder"),
-            $placeholder = this._$placeholder = $('<div>')
+            $placeholder = this._$placeholder = $("<div>")
                 .attr("data-dx_placeholder", placeholderText);
 
         $placeholder.insertAfter($input);
