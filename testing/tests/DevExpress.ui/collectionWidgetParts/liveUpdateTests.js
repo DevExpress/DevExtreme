@@ -92,6 +92,14 @@ export const run = function() {
             assert.equal(this.onItemDeletingSpy.callCount, 1);
         });
 
+        QUnit.test("fire dxremove event after push 'remove'", function(assert) {
+            const removeSpy = sinon.spy();
+            $(".dx-item").on("dxremove", removeSpy);
+            this.store.push([{ type: "remove", key: 0 }]);
+
+            assert.equal(removeSpy.callCount, 1, "should trigger dxremove event");
+        });
+
         QUnit.test("refresh correct index after reload", function(assert) {
             this.store.push([{ type: "insert", data: { id: 200, text: "text " + 200, index: 0 }, index: 0 }]);
             assert.equal(this.items().length, 3);
