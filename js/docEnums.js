@@ -977,5 +977,5 @@
 
 /**
  * @typedef {string} Enums.TreeListFilterMode
- * @enum {'fullBranch'|'matchOnly'|'withAncestors'}
+ * @enum {'fullBranch'|'withAncestors'}
  */
