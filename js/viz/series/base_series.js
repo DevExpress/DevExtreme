@@ -320,6 +320,10 @@ Series.prototype = {
 
         that._visible = newOptions.visible;
         that.isUpdated = true;
+
+        that.stack = newOptions.stack;
+        that.barOverlapGroup = newOptions.barOverlapGroup;
+
         that._createGroups();
     },
 

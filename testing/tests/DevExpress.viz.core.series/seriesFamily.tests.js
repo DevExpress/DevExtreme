@@ -817,9 +817,9 @@ QUnit.test("Set three series, barPadding is specified", function(assert) {
 
     createSeriesFamily("bar", series);
 
-    checkSeries(assert, series1, 19, -25);
+    checkSeries(assert, series1, 19, -26);
     checkSeries(assert, series2, 12, 0);
-    checkSeries(assert, series3, 23, 25);
+    checkSeries(assert, series3, 23, 23);
 });
 
 QUnit.test("Set two series, barPadding more than 1", function(assert) {
@@ -851,8 +851,8 @@ QUnit.test("Set two series, barPadding is 1", function(assert) {
 
     createSeriesFamily("bar", series);
 
-    checkSeries(assert, series1, 1, -19.5);
-    checkSeries(assert, series2, 1, 19.5);
+    checkSeries(assert, series1, 1, -35.5);
+    checkSeries(assert, series2, 1, 35.5);
 });
 
 QUnit.test("Set three series, barWidth is specified", function(assert) {
@@ -863,9 +863,9 @@ QUnit.test("Set three series, barWidth is specified", function(assert) {
 
     createSeriesFamily("bar", series);
 
-    checkSeries(assert, series1, 5, -25);
+    checkSeries(assert, series1, 5, -33);
     checkSeries(assert, series2, 10, 0);
-    checkSeries(assert, series3, 15, 25);
+    checkSeries(assert, series3, 15, 28);
 });
 
 QUnit.test("Set three series, all of them in one group", function(assert) {
@@ -900,7 +900,7 @@ QUnit.test("Set three series, all of them in one group", function(assert) {
 });
 
 
-QUnit.test("Set three series, tw0 of them in one group, and last in another group", function(assert) {
+QUnit.test("Set three series, two of them in one group, and last in another group", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints3(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
@@ -929,34 +929,63 @@ QUnit.test("Set three series, tw0 of them in one group, and last in another grou
     checkStackedPoints(assert, mixedPoints3);
 });
 
-QUnit.test("Set three series, two of them in one group, and last in another group, and one series have custom barWidth", function(assert) {
+QUnit.test("Check bars order when barOverlapGroup is set", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
-        mixedPoints2 = pointsForStacking.mixedPoints3(),
+        mixedPoints2 = pointsForStacking.mixedPoints2(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
         series1 = createSeries({
             points: mixedPoints1,
-            barOverlapGroup: "g1",
-            barWidth: 10
-        }),
-        series2 = createSeries({
-            points: mixedPoints2,
             barOverlapGroup: "g1"
         }),
+        series2 = createSeries({
+            points: mixedPoints2
+        }),
         series3 = createSeries({
-            points: mixedPoints3,
-            barOverlapGroup: "g2"
+            points: mixedPoints3
         }),
         series = [series1, series2, series3];
 
     createSeriesFamily("bar", series);
 
-    checkSeries(assert, series1, 10, -19.5);
-    checkSeries(assert, series2, 32, -19.5);
-    checkSeries(assert, series3, 32, 19.5);
+    checkSeries(assert, series1, 20, -25);
+    checkSeries(assert, series2, 20, 0);
+    checkSeries(assert, series3, 20, 25);
+});
+
+QUnit.test("Set four series, two of them in one group, and last in another group, and one series have custom barWidth", function(assert) {
+    var mixedPoints1 = pointsForStacking.mixedPoints1(),
+        mixedPoints2 = pointsForStacking.mixedPoints2(),
+        mixedPoints3 = pointsForStacking.mixedPoints3(),
+        mixedPoints4 = pointsForStacking.mixedPoints4(),
+        series1 = createSeries({
+            points: mixedPoints1,
+        }),
+        series2 = createSeries({
+            points: mixedPoints2,
+            barOverlapGroup: "g1",
+            barWidth: 10
+        }),
+        series3 = createSeries({
+            points: mixedPoints3,
+            barOverlapGroup: "g1"
+        }),
+        series4 = createSeries({
+            points: mixedPoints4,
+            barOverlapGroup: "g2"
+        }),
+        series = [series1, series2, series3, series4];
+
+    createSeriesFamily("bar", series);
+
+    checkSeries(assert, series1, 20, -25);
+    checkSeries(assert, series2, 10, 0);
+    checkSeries(assert, series3, 20, 0);
+    checkSeries(assert, series4, 20, 25);
 
     checkStackedPoints(assert, mixedPoints1);
     checkStackedPoints(assert, mixedPoints2);
     checkStackedPoints(assert, mixedPoints3);
+    checkStackedPoints(assert, mixedPoints4);
 });
 
 QUnit.test("Set three series, barWidth more than maximum possible width - should be equal to maximum possible width", function(assert) {
@@ -967,9 +996,9 @@ QUnit.test("Set three series, barWidth more than maximum possible width - should
 
     createSeriesFamily("bar", series);
 
-    checkSeries(assert, series1, 23, -25);
+    checkSeries(assert, series1, 23, -24);
     checkSeries(assert, series2, 23, 0);
-    checkSeries(assert, series3, 23, 25);
+    checkSeries(assert, series3, 23, 24);
 });
 
 QUnit.test("Set one series, barGroupPadding less than 0, bars width should be 70% from interval", function(assert) {
