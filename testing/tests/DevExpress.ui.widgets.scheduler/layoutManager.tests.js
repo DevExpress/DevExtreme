@@ -54,6 +54,24 @@ const moduleOptions = {
 const renderLayoutModuleOptions = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+
+        this.createInstance = (view, dataSource, options) => {
+            this.instance = $("#scheduler").dxScheduler($.extend(options, {
+                views: ["week", "month"],
+                currentView: view,
+                dataSource: dataSource,
+                currentDate: new Date(2017, 4, 25),
+                startDayHour: 9,
+                height: 600,
+                editing: true,
+            })).dxScheduler("instance");
+        };
+
+        this.markAppointments = () => document.querySelectorAll(APPOINTMENT_CLASS_NAME).forEach(element => element.dataset.mark = 'true');
+
+        this.getUnmarkedAppointments = () => {
+            return Array.from(document.querySelectorAll(APPOINTMENT_CLASS_NAME)).filter(element => !!element.dataset.mark === false);
+        };
     },
     afterEach: function() {
         this.clock.restore();
@@ -146,27 +164,9 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
         });
     };
 
-    this.createInstance = options => {
-        this.instance = $("#scheduler").dxScheduler($.extend(options, { editing: true, maxAppointmentsPerCell: null })).dxScheduler("instance");
-    };
-
-    this.markAppointments = () => document.querySelectorAll(APPOINTMENT_CLASS_NAME).forEach(element => element.dataset.mark = 'true');
-
-    this.getUnmarkedAppointments = () => {
-        return Array.from(document.querySelectorAll(APPOINTMENT_CLASS_NAME)).filter(element => !!element.dataset.mark === false);
-    };
-
     QUnit.test("Scheduler should render appointments only for appointments that need redraw", function(assert) {
         const dataSource = this.createDataSource();
-
-        this.createInstance({
-            views: ["week"],
-            currentView: "week",
-            dataSource: dataSource,
-            currentDate: new Date(2017, 4, 25),
-            startDayHour: 9,
-            height: 600
-        });
+        this.createInstance("week", dataSource);
 
         this.markAppointments();
         dataSource.store().push([
@@ -194,15 +194,7 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
 
     QUnit.test("Scheduler should render only necessary appointments in crossing appointments case", function(assert) {
         const dataSource = this.createDataSource();
-
-        this.createInstance({
-            views: ["week"],
-            currentView: "week",
-            dataSource: dataSource,
-            currentDate: new Date(2017, 4, 25),
-            startDayHour: 9,
-            height: 600
-        });
+        this.createInstance("week", dataSource);
 
         this.markAppointments();
         dataSource.store().push([{ type: "insert", data: {
@@ -218,35 +210,26 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
         dataSource.store().push([{ type: "insert", data: {
             id: 15,
             text: "Fake_key_15",
-            startDate: defaultData[0].startDate,
-            endDate: defaultData[0].endDate
+            startDate: defaultData[1].startDate,
+            endDate: defaultData[1].endDate
         } }]);
         dataSource.load();
-        assert.equal(3, this.getUnmarkedAppointments().length, "Should rendered inserted appointment and 2 updated appointment");
+        assert.equal(2, this.getUnmarkedAppointments().length, "Should rendered inserted appointment and 2 updated appointment");
 
         this.markAppointments();
         dataSource.store().remove(15);
         dataSource.load();
-        assert.equal(2, this.getUnmarkedAppointments().length, "Should rendered only two updated appointments");
+        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only two updated appointments");
     });
 
     QUnit.test("Scheduler should throw onAppointmentRendered event only for appointments that need redraw", function(assert) {
         const dataSource = this.createDataSource();
-
         const fakeHandler = {
             onAppointmentRendered: () => { }
         };
         const renderedStub = sinon.stub(fakeHandler, "onAppointmentRendered");
 
-        this.createInstance({
-            views: ["week"],
-            currentView: "week",
-            dataSource: dataSource,
-            currentDate: new Date(2017, 4, 25),
-            startDayHour: 9,
-            height: 600,
-            onAppointmentRendered: fakeHandler.onAppointmentRendered
-        });
+        this.createInstance("week", dataSource, { onAppointmentRendered: fakeHandler.onAppointmentRendered });
 
         renderedStub.reset();
         dataSource.store().push([{ type: "insert", data: {
@@ -284,15 +267,7 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
 
     QUnit.test("Scheduler should render appointments only for appointments that need redraw in Month view", function(assert) {
         const dataSource = this.createDataSource();
-
-        this.createInstance({
-            views: ["month"],
-            currentView: "month",
-            dataSource: dataSource,
-            currentDate: new Date(2017, 4, 25),
-            startDayHour: 9,
-            height: 600
-        });
+        this.createInstance("month", dataSource);
 
         this.markAppointments();
         dataSource.store().push([
@@ -317,7 +292,23 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
         dataSource.load();
 
         // TODO: in future this case should be optimized - redraw in this case can escape
-        assert.equal(1, this.getUnmarkedAppointments().length, "Html element should removed and should not redrawing another appointments");
+        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only one appointment");
+    });
+
+    QUnit.test("Scheduler should render appointments only for appointments that need redraw. Use scheduler API", function(assert) {
+        this.createInstance("week", defaultData);
+
+        this.markAppointments();
+        this.instance.updateAppointment(defaultData[0], { text: "updated" });
+        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only one appointment");
+
+        this.markAppointments();
+        this.instance.updateAppointment(defaultData[9], { text: "updated" });
+        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only one appointment from intersecting appointments");
+
+        this.markAppointments();
+        this.instance.deleteAppointment(defaultData[0]);
+        assert.equal(0, this.getUnmarkedAppointments().length, "Nothing should be redrawing");
     });
 });
 
