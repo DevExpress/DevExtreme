@@ -242,9 +242,9 @@ var environment = {
             "title.font",
             "title.subtitle.font",
             "tooltip.font",
-            "loadingIndicator.font",
             "commonSeriesSettings.label.font",
-            "export.font"
+            "export.font",
+            "loadingIndicator.font"
         ] }]);
     });
 

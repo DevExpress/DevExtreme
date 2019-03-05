@@ -336,7 +336,7 @@ var BaseChart = BaseWidget.inherit({
         onZoomEnd: { name: "zoomEnd" }
     },
 
-    _fontFields: ["legend." + FONT, "legend.title." + FONT, "legend.title.subtitle." + FONT, "title." + FONT, "title.subtitle." + FONT, "tooltip." + FONT, "loadingIndicator." + FONT, "commonSeriesSettings.label." + FONT],
+    _fontFields: ["legend." + FONT, "legend.title." + FONT, "legend.title.subtitle." + FONT, "title." + FONT, "title.subtitle." + FONT, "tooltip." + FONT, "commonSeriesSettings.label." + FONT],
 
     _rootClassPrefix: "dxc",
 
