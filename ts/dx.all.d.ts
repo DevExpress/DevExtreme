@@ -4432,7 +4432,7 @@ declare module DevExpress.ui {
         /** Specifies whether nodes appear expanded or collapsed after filtering is applied. */
         expandNodesOnFiltering?: boolean;
         /** Specifies whether filter and search results should include only matching rows or their ancestors and/or descendants as well. */
-        filterMode?: 'fullBranch' | 'matchOnly' | 'withAncestors';
+        filterMode?: 'fullBranch' | 'withAncestors';
         /** Specifies which data field defines whether the node has children. */
         hasItemsExpr?: string | Function;
         /** Specifies which data field contains nested items. Set this option when your data has a hierarchical structure. */
