@@ -57,6 +57,10 @@ exports.dxGauge = dxBaseGauge.inherit({
         that._initScale();
     },
 
+    _fontFields: [
+        'scale.label.font', 'valueIndicators.rangebar.text.font', 'valueIndicators.textcloud.text.font', "indicator.text.font"
+    ],
+
     _initScale: function() {
         var that = this;
 

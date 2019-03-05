@@ -310,5 +310,6 @@ exports.plugin = {
             option: "title",
             isOptionChange: true
         });
-    }
+    },
+    fontFields: ["title.font", "title.subtitle.font"]
 };

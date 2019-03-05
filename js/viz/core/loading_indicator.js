@@ -187,5 +187,6 @@ exports.plugin = {
                 this._fulfillLoadingIndicatorHiding();
             }
         };
-    }
+    },
+    fontFields: ["loadingIndicator.font"]
 };

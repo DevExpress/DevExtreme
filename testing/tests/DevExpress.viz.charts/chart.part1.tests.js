@@ -30,7 +30,20 @@ QUnit.test("Theme manager with no settings", function(assert) {
     var chart = this.createChart({});
 
     assert.equal(this.createThemeManager.callCount, 1);
-    assert.deepEqual(this.createThemeManager.lastCall.args, [chart._options, "chart"]);
+    assert.deepEqual(this.createThemeManager.lastCall.args, [{ themeSection: "chart", options: chart._options, fontFields: [
+        "legend.font",
+        "legend.title.font",
+        "legend.title.subtitle.font",
+        "commonSeriesSettings.label.font",
+        "export.font",
+        "title.font",
+        "title.subtitle.font",
+        "tooltip.font",
+        "loadingIndicator.font",
+        "commonAxisSettings.label.font",
+        "commonAxisSettings.title.font",
+        "crosshair.label.font"
+    ] }]);
 });
 
 QUnit.test("Creation layoutManager with options", function(assert) {

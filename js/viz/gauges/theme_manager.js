@@ -3,11 +3,11 @@ var extend = require("../../core/utils/extend").extend,
     BaseThemeManager = require("../core/base_theme_manager").BaseThemeManager;
 
 var ThemeManager = BaseThemeManager.inherit({
-    _themeSection: 'gauge',
-    _fontFields: [
-        'scale.label.font', 'valueIndicators.rangebar.text.font', 'valueIndicators.textcloud.text.font',
-        'title.font', 'title.subtitle.font', 'tooltip.font', 'indicator.text.font', 'loadingIndicator.font', "export.font"
-    ],
+    ctor(options) {
+        this.callBase.apply(this, arguments);
+        this._subTheme = options.subTheme;
+    },
+
     _initializeTheme: function() {
         var that = this,
             subTheme;
@@ -19,4 +19,4 @@ var ThemeManager = BaseThemeManager.inherit({
     }
 });
 
-module.exports = ThemeManager;
+module.exports = { ThemeManager };
