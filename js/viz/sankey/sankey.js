@@ -71,9 +71,9 @@ var dxSankey = require("../core/base_widget").inherit({
         return { width: 400, height: 400 };
     },
 
-    _createThemeManager: function() {
-        return new ThemeManager();
-    },
+    _themeSection: "sankey",
+
+    _fontFields: ["label.font"],
 
     _optionChangesOrder: ["DATA_SOURCE"],
 
@@ -417,11 +417,6 @@ var dxSankey = require("../core/base_widget").inherit({
     getAllLinks: function() {
         return this._links.slice();
     }
-});
-
-var ThemeManager = require("../core/base_theme_manager").BaseThemeManager.inherit({
-    _themeSection: "sankey",
-    _fontFields: ["loadingIndicator.font", "export.font", "label.font", "title.font", "tooltip.font", "title.subtitle.font"]
 });
 
 require("../../core/component_registrator")("dxSankey", dxSankey);

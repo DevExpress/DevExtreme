@@ -1,16 +1,15 @@
 var noop = require("core/utils/common").noop,
     themeModule = require("viz/themes"),
-    ThemeManager = require("viz/gauges/theme_manager");
+    ThemeManager = require("viz/gauges/theme_manager").ThemeManager;
 
-QUnit.module('ThemeManager');
-
-QUnit.test('Instance type', function(assert) {
-    var themeManager = new ThemeManager();
-    assert.ok(themeManager instanceof ThemeManager);
+QUnit.module('ThemeManager', {
+    createThemeManager: function() {
+        return new ThemeManager({ themeSection: "gauge" });
+    }
 });
 
 QUnit.test('Theme - generic', function(assert) {
-    var themeManager = new ThemeManager();
+    var themeManager = this.createThemeManager();
     themeManager.setCallback(noop);
     themeManager.setTheme();
     var theme = themeManager.theme();
@@ -27,7 +26,7 @@ QUnit.test('Theme - generic', function(assert) {
 });
 
 QUnit.test('Theme - generic-dark', function(assert) {
-    var themeManager = new ThemeManager();
+    var themeManager = this.createThemeManager();
     themeManager.setCallback(noop);
     themeManager.setTheme('generic.dark');
     var theme = themeManager.theme();
@@ -54,7 +53,7 @@ QUnit.test('Subtheme', function(assert) {
             }
         }
     });
-    var themeManager = new ThemeManager();
+    var themeManager = this.createThemeManager();
     themeManager.setCallback(noop);
     themeManager._subTheme = '#circular';
     themeManager.setTheme('my-theme');

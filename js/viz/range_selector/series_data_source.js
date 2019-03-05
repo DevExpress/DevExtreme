@@ -11,7 +11,11 @@ var seriesModule = require("../series/base_series"),
     SeriesDataSource;
 
 var createThemeManager = function(chartOptions) {
-    return new ChartThemeManager(chartOptions, 'rangeSelector.chart');
+    return new ChartThemeManager({
+        options: chartOptions,
+        themeSection: "rangeSelector.chart",
+        fontFields: ["commonSeriesSettings.label.font"]
+    });
 };
 
 var processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, maxBubbleSize, barOptions, negativesAsZeroes) {
@@ -49,7 +53,6 @@ SeriesDataSource = function(options) {
         topIndent,
         bottomIndent;
 
-    themeManager._fontFields = ["commonSeriesSettings.label.font"];
     themeManager.setTheme(options.chart.theme);
     topIndent = themeManager.getOptions('topIndent');
     bottomIndent = themeManager.getOptions('bottomIndent');

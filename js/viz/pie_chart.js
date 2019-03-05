@@ -42,7 +42,7 @@ function correctPercentValue(value) {
 }
 
 var dxPieChart = BaseChart.inherit({
-    _chartType: "pie",
+    _themeSection: "pie",
 
     _layoutManagerOptions: function() {
         return _extend(true, {}, this.callBase(), {

@@ -1,6 +1,6 @@
 /* global createTestContainer */
 
-var themeManagerModule = require("viz/range_selector/theme_manager"),
+var themeManagerModule = require("viz/core/base_theme_manager"),
     rangeViewModule = require("viz/range_selector/range_view"),
     slidersControllerModule = require("viz/range_selector/sliders_controller"),
     trackerModule = require("viz/range_selector/tracker"),
@@ -11,7 +11,7 @@ var themeManagerModule = require("viz/range_selector/theme_manager"),
     rendererModule = require("viz/core/renderers/renderer"),
     vizMocks = require("../../../helpers/vizMocks.js"),
 
-    StubThemeManager = vizMocks.stubClass(themeManagerModule.ThemeManager),
+    StubThemeManager = vizMocks.stubClass(themeManagerModule.BaseThemeManager),
     StubRangeView = vizMocks.stubClass(rangeViewModule.RangeView),
     StubSlidersController = vizMocks.stubClass(slidersControllerModule.SlidersController, {
         getSelectedRange: function() {
@@ -73,7 +73,7 @@ exports.environment = {
         this.seriesDataSource = new StubSeriesDataSource();
 
         rendererModule.Renderer = returnValue(this.renderer);
-        themeManagerModule.ThemeManager = returnValue(this.themeManager);
+        themeManagerModule.BaseThemeManager = returnValue(this.themeManager);
         rangeViewModule.RangeView = returnValue(this.rangeView);
         slidersControllerModule.SlidersController = returnValue(this.slidersController);
         trackerModule.Tracker = returnValue(this.tracker);

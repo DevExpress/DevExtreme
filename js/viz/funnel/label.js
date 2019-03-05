@@ -419,5 +419,6 @@ exports.plugin = {
                 option: optionName
             });
         });
-    }
+    },
+    fontFields: ["label.font"]
 };

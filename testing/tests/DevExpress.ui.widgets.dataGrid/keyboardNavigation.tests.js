@@ -3169,7 +3169,7 @@ QUnit.testInActiveWindow("Move focus to first data cell after tab key on group r
     });
 });
 
-QUnit.testInActiveWindow("DataGrid should not edit group cells after tab navigation from the editing cell (T714142)", function(assert) {
+QUnit.testInActiveWindow("DataGrid should skip group rows after tab navigation from the editing cell (T714142, T715092)", function(assert) {
     // arrange
     var $cell;
 
@@ -3215,8 +3215,8 @@ QUnit.testInActiveWindow("DataGrid should not edit group cells after tab navigat
     this.clock.tick();
 
     // assert
-    assert.notOk(this.editingController.isEditing(), "is editing");
-    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 1, columnIndex: 1 });
+    assert.ok(this.editingController.isEditing(), "is editing");
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 2, columnIndex: 1 });
 });
 
 QUnit.testInActiveWindow("Do not prevent default on 'shift+tab' if the current cell is the first", function(assert) {
