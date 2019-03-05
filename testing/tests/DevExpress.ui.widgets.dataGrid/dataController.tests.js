@@ -11914,6 +11914,34 @@ QUnit.test("reorder items", function(assert) {
     assert.strictEqual(changedArgs.repaintChangesOnly, true);
 });
 
+// T720721, T720597
+QUnit.test("grouping if repaintChangesOnly", function(assert) {
+    this.options = {
+        grouping: {
+            autoExpandAll: true
+        },
+        repaintChangesOnly: true
+    };
+
+    this.setupModules();
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    // act
+    this.columnOption("id", "groupIndex", 0);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items.length, 6);
+    assert.deepEqual(items[0].rowType, "group");
+    assert.deepEqual(changedArgs.changeType, "refresh", "full refresh is occured");
+    assert.strictEqual(changedArgs.repaintChangesOnly, false);
+});
+
 QUnit.test("full refresh after partial", function(assert) {
     this.setupModules();
 
