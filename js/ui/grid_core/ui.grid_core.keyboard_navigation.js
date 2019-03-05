@@ -361,16 +361,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _isCellValid: function($cell) {
         if(isDefined($cell)) {
             var rowsView = this.getView("rowsView"),
+                $row = $cell.parent(),
                 visibleColumns = this._columnsController.getVisibleColumns(),
-                visibleRowIndex = rowsView.getRowIndex($cell.parent()),
                 columnIndex = rowsView.getCellIndex($cell),
                 column = visibleColumns[columnIndex],
                 visibleColumnCount = this._getVisibleColumnCount(),
                 editingController = this._editingController,
-                editMode = editingController && editingController.getEditMode(),
-                isEditingCurrentRow = editingController && (editMode === EDIT_MODE_ROW ? editingController.isEditRow(visibleRowIndex) : editingController.isEditing()),
-                $row = $cell.parent(),
-                isMasterDetailRow = isDetailRow($cell.parent()),
+                isMasterDetailRow = isDetailRow($row),
                 isShowWhenGrouped = column && column.showWhenGrouped,
                 isDataCell = column && !$cell.hasClass(COMMAND_EXPAND_CLASS) && isDataRow($row),
                 isValidGroupSpaceColumn = function() {
@@ -382,9 +379,22 @@ var KeyboardNavigationController = core.ViewController.inherit({
             }
 
             if(visibleColumnCount > columnIndex && isValidGroupSpaceColumn()) {
-                var isExpandColumn = column.command === "expand";
+                let rowItems = this._dataController.items(),
+                    visibleRowIndex = rowsView.getRowIndex($row),
+                    row = rowItems[visibleRowIndex],
+                    isCellEditing = editingController && this._isCellEditMode() && editingController.isEditing(),
+                    isRowEditingInCurrentRow = editingController && editingController.isEditRow(visibleRowIndex),
+                    isEditing = isRowEditingInCurrentRow || isCellEditing;
 
-                return (column && !column.command && (!isEditingCurrentRow || column.allowEditing)) || !isEditingCurrentRow && isExpandColumn;
+                if(column.command) {
+                    return !isEditing && column.command === "expand";
+                }
+
+                if(isCellEditing && row.rowType !== "data") {
+                    return false;
+                }
+
+                return !isEditing || column.allowEditing;
             }
         }
     },
