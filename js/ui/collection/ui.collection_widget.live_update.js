@@ -136,7 +136,15 @@ export default CollectionWidget.inherit({
 
     _modifyByChanges: function(changes, isPartialRefresh) {
         let items = this._editStrategy.itemsGetter(),
-            keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) };
+            keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) },
+            dataSource = this._dataSource,
+            paginate = dataSource && dataSource.paginate(),
+            group = dataSource && dataSource.group();
+
+        if(paginate || group) {
+            changes = changes.filter(item => item.type === "update");
+        }
+
         changes.forEach(change => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
         this._renderedItemsCount = items.length;
         this._refreshItemsCache();
