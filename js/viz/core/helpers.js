@@ -97,6 +97,7 @@ function expand(target, name, expander) {
 function addPlugin(plugin) {
     var proto = this.prototype;
     proto._plugins.push(plugin);
+    plugin.fontFields && proto._fontFields.push.apply(proto._fontFields, plugin.fontFields);
     if(plugin.members) {
         _extend(this.prototype, plugin.members);
     }

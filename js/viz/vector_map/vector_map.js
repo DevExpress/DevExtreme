@@ -41,7 +41,7 @@ var dxVectorMap = require("../core/base_widget").inherit({
     _fontFields: [
         "layer:area.label.font",
         "layer:marker:dot.label.font", "layer:marker:bubble.label.font", "layer:marker:pie.label.font", "layer:marker:image.label.font",
-        "tooltip.font", "legend.font", "title.font", "title.subtitle.font", "loadingIndicator.font", "export.font", "legend.title.font", "legend.title.subtitle.font"
+        "tooltip.font", "legend.font", "title.font", "title.subtitle.font", "loadingIndicator.font", "legend.title.font", "legend.title.subtitle.font"
     ],
 
     _initLayerCollection: function(dataKey) {

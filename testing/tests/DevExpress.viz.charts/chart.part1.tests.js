@@ -38,8 +38,8 @@ QUnit.test("Theme manager with no settings", function(assert) {
         "title.subtitle.font",
         "tooltip.font",
         "loadingIndicator.font",
-        "export.font",
         "commonSeriesSettings.label.font",
+        "export.font",
         "commonAxisSettings.label.font",
         "commonAxisSettings.title.font",
         "crosshair.label.font"

@@ -243,8 +243,8 @@ var environment = {
             "title.subtitle.font",
             "tooltip.font",
             "loadingIndicator.font",
-            "export.font",
-            "commonSeriesSettings.label.font"
+            "commonSeriesSettings.label.font",
+            "export.font"
         ] }]);
     });
 
