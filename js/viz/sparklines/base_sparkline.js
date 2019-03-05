@@ -140,8 +140,6 @@ var BaseSparkline = BaseWidget.inherit({
         return _extend(true, {}, this._themeManager.theme(), this.option());
     },
 
-    _fontFields: ["tooltip.font"],
-
     _getTooltipCoords: function() {
         var canvas = this._canvas,
             rootOffset = this._renderer.getRootOffset();

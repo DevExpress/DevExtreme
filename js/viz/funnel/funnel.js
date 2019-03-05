@@ -44,7 +44,7 @@ var dxFunnel = require("../core/base_widget").inherit({
 
     _themeSection: "funnel",
 
-    _fontFields: ["legend.title.font", "legend.title.subtitle.font", "tooltip.font", "legend.font", "label.font"],
+    _fontFields: ["legend.title.font", "legend.title.subtitle.font", "legend.font", "label.font"],
 
     _optionChangesOrder: ["DATA_SOURCE"],
 

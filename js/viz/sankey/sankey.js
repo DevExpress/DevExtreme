@@ -73,7 +73,7 @@ var dxSankey = require("../core/base_widget").inherit({
 
     _themeSection: "sankey",
 
-    _fontFields: ["label.font", "tooltip.font"],
+    _fontFields: ["label.font"],
 
     _optionChangesOrder: ["DATA_SOURCE"],
 
