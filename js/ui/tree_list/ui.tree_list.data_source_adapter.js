@@ -9,7 +9,7 @@ import gridCoreUtils from '../grid_core/ui.grid_core.utils';
 import ArrayStore from '../../data/array_store';
 import query from '../../data/query';
 import DataSourceAdapter from '../grid_core/ui.grid_core.data_source_adapter';
-import { Deferred } from '../../core/utils/deferred';
+import { Deferred, when } from '../../core/utils/deferred';
 import { queryByOptions } from '../../data/store_helper';
 
 var DEFAULT_KEY_EXPRESSION = "id";
@@ -346,9 +346,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 keyExpr,
                 filterLength,
                 needLocalFiltering,
-                infoToLoad = that._generateInfoToLoad(data, needChildren),
-                keys = infoToLoad.keys,
-                keyMap = infoToLoad.keyMap,
+                { keys, keyMap } = that._generateInfoToLoad(data, needChildren),
                 d = new Deferred(),
                 isRemoteFiltering = options.remoteOperations.filtering,
                 maxFilterLengthInRequest = that.option("maxFilterLengthInRequest"),
@@ -416,13 +414,11 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         },
 
         _loadChildrenIfNeed: function(data, options) {
-            var d = new Deferred();
-
             if(isFullBranchFilterMode(this)) {
                 return this._loadParentsOrChildren(data, options, true);
             }
 
-            return d.resolve(data);
+            return when(data);
         },
 
         _updateHasItemsMap: function(options) {
