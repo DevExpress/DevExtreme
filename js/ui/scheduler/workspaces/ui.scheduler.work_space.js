@@ -1789,7 +1789,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getGroupTableWidth: function() {
-        return this._$groupTable && this._$groupTable.outerWidth();
+        if(this._$groupTable) {
+            return this._$groupTable.outerWidth();
+        } else {
+            return 0;
+        }
     },
 
     getWorkSpaceLeftOffset: function() {
