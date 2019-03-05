@@ -1,24 +1,36 @@
-import config from "../config";
-import { each } from "./iterator";
-import { isDefined } from "./type";
-import { orderEach } from "./object";
+var isDefined = require("./type").isDefined,
+    each = require("./iterator").each,
+    objectUtils = require("./object"),
+    config = require("../config");
 
-export const isEmpty = (entity) => Array.isArray(entity) && !entity.length;
-export const wrapToArray = (entity) => Array.isArray(entity) ? entity : [entity];
+var isEmpty = function(entity) {
+    return Array.isArray(entity) && !entity.length;
+};
 
-export function intersection(a, b) {
-    if(!Array.isArray(a) || a.length === 0 || !Array.isArray(b) || b.length === 0) {
+var wrapToArray = function(entity) {
+    return Array.isArray(entity) ? entity : [entity];
+};
+
+var intersection = function(a, b) {
+    if(!Array.isArray(a) || a.length === 0 ||
+       !Array.isArray(b) || b.length === 0) {
         return [];
     }
 
-    const result = [];
+    var result = [];
 
-    each(a, (_, value) => inArray(value, b) !== -1 && result.push(value));
+    each(a, function(_, value) {
+        var index = inArray(value, b);
+
+        if(index !== -1) {
+            result.push(value);
+        }
+    });
 
     return result;
-}
+};
 
-export function removeDuplicates(from, what) {
+var removeDuplicates = function(from, what) {
     if(!Array.isArray(from) || from.length === 0) {
         return [];
     }
@@ -27,21 +39,26 @@ export function removeDuplicates(from, what) {
         return from.slice();
     }
 
-    const result = [];
+    var result = [];
 
-    each(from, (_, value) => inArray(value, what) === -1 && result.push(value));
+    each(from, function(_, value) {
+        var index = inArray(value, what);
+
+        if(index === -1) {
+            result.push(value);
+        }
+    });
 
     return result;
-}
+};
 
-export function normalizeIndexes(items, indexParameterName, currentItem, needIndexCallback) {
-    const useLegacyVisibleIndex = config().useLegacyVisibleIndex;
-    const indexedItems = {};
-    let parameterIndex = 0;
+var normalizeIndexes = function(items, indexParameterName, currentItem, needIndexCallback) {
+    var indexedItems = {},
+        parameterIndex = 0,
+        useLegacyVisibleIndex = config().useLegacyVisibleIndex;
 
-    each(items, (index, item) => {
+    each(items, function(index, item) {
         index = item[indexParameterName];
-
         if(index >= 0) {
             indexedItems[index] = indexedItems[index] || [];
 
@@ -69,7 +86,7 @@ export function normalizeIndexes(items, indexParameterName, currentItem, needInd
 
     parameterIndex = 0;
 
-    orderEach(indexedItems, function(index, items) {
+    objectUtils.orderEach(indexedItems, function(index, items) {
         each(items, function() {
             if(index >= 0) {
                 this[indexParameterName] = parameterIndex++;
@@ -86,30 +103,38 @@ export function normalizeIndexes(items, indexParameterName, currentItem, needInd
     }
 
     return parameterIndex;
-}
+};
 
-export function inArray(value, object) {
+var inArray = function(value, object) {
     if(!object) {
         return -1;
     }
-
-    const array = Array.isArray(object) ? object : object.toArray();
+    var array = Array.isArray(object) ? object : object.toArray();
 
     return array.indexOf(value);
-}
+};
 
-export function merge(array1, array2) {
-    for(let i = 0; i < array2.length; i++) {
+var merge = function(array1, array2) {
+    for(var i = 0; i < array2.length; i++) {
         array1[array1.length] = array2[i];
     }
 
     return array1;
-}
+};
 
-export function find(array, condition) {
-    for(let i = 0; i < array.length; i++) {
+var find = function(array, condition) {
+    for(var i = 0; i < array.length; i++) {
         if(condition(array[i])) {
             return array[i];
         }
     }
-}
+};
+
+exports.isEmpty = isEmpty;
+exports.wrapToArray = wrapToArray;
+exports.intersection = intersection;
+exports.removeDuplicates = removeDuplicates;
+exports.normalizeIndexes = normalizeIndexes;
+exports.inArray = inArray;
+exports.merge = merge;
+exports.find = find;
