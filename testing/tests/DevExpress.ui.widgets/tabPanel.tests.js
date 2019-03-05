@@ -601,19 +601,12 @@ QUnit.module("Live Update", {
 }, () => {
     QUnit.test("remove item", function(assert) {
         let tabPanel = this.createTabPanel();
-        let removeCount = 0;
-        const templateWrapper = ".dx-template-wrapper.dx-item-content.dx-tab-content";
-
-        $(templateWrapper).on("dxremove", () => {
-            removeCount++;
-        });
 
         this.data.pop();
         tabPanel.option("items", this.data);
 
         assert.equal(this.itemRenderedSpy.callCount, 0, "items are not refreshed after remove");
         assert.equal(this.itemDeletedSpy.callCount, 1, "removed items count");
-        assert.equal(removeCount, 1, "should trigger dxremove event");
         assert.deepEqual(this.itemDeletedSpy.firstCall.args[0].itemData.text, "1", "check removed item");
     });
 
