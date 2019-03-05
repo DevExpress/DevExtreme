@@ -1684,8 +1684,6 @@ QUnit.testInActiveWindow("caret should not change position on focus after fast d
     this.input.focus();
     this.keyboard.caret(0);
 
-    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
-
     this.input.trigger("dxdblclick");
     this.clock.tick(CARET_TIMEOUT_DURATION);
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret is right after focus and dblclick");
