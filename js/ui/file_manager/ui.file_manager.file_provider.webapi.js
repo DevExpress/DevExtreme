@@ -39,21 +39,21 @@ var WebAPIFileProvider = FileProvider.inherit({
     },
 
     deleteItems: function(items) {
-        return this._executeRequest(this._options.deleteUrl, { id: items[0].relativeName });
+        return items.map(item => this._executeRequest(this._options.deleteUrl, { id: item.relativeName }));
     },
 
     moveItems: function(items, destinationFolder) {
-        return this._executeRequest(this._options.moveUrl, {
-            sourceId: items[0].relativeName,
-            destinationId: destinationFolder.relativeName + "/" + items[0].name
-        });
+        return items.map(item => this._executeRequest(this._options.moveUrl, {
+            sourceId: item.relativeName,
+            destinationId: destinationFolder.relativeName
+        }));
     },
 
     copyItems: function(items, destinationFolder) {
-        return this._executeRequest(this._options.copyUrl, {
-            sourceId: items[0].relativeName,
-            destinationId: destinationFolder.relativeName + "/" + items[0].name
-        });
+        return items.map(item => this._executeRequest(this._options.copyUrl, {
+            sourceId: item.relativeName,
+            destinationId: destinationFolder.relativeName
+        }));
     },
 
     initiateFileUpload: function(uploadInfo) {

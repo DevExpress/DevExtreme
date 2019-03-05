@@ -7,6 +7,7 @@ import { Deferred, when } from "../../core/utils/deferred";
 
 import DataGrid from "../data_grid/ui.data_grid";
 import CustomStore from "../../data/custom_store";
+import whenSome from "./ui.file_manager.common";
 import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 import FileManagerToolbar from "./ui.file_manager.toolbar";
 import FileManagerNameEditorDialog from "./ui.file_manager.dialog.name_editor";
@@ -81,7 +82,7 @@ var FileManager = Widget.inherit({
             onGetController: this._getFileUploaderController.bind(this),
             onFilesUploaded: function(result) {
                 that._showSuccess("Files uploaded");
-                that._refreshData();
+                that._loadFilesToFilesView();
             },
             onErrorOccurred: function(e) {
                 var errorText = that._getErrorText(e.error);
@@ -210,8 +211,9 @@ var FileManager = Widget.inherit({
 
         this._tryEditAction(
             this._renameItemDialog,
-            result => { return this._provider.renameItem(item, result.name); },
+            result => this._provider.renameItem(item, result.name),
             "Item renamed",
+            info => `Rename operation failed for the ${item.name} item`,
             item.name
         );
     },
@@ -222,8 +224,9 @@ var FileManager = Widget.inherit({
 
         this._tryEditAction(
             this._createFolderDialog,
-            result => { return this._provider.createFolder(item, result.name); },
-            "Folder created"
+            result => this._provider.createFolder(item, result.name),
+            "Folder created",
+            info => `Create folder operation failed for the ${item.name} parent folder`
         );
     },
 
@@ -234,8 +237,9 @@ var FileManager = Widget.inherit({
 
         this._tryEditAction(
             this._confirmationDialog,
-            result => { return this._provider.deleteItems(items); },
-            "Items deleted"
+            result => this._provider.deleteItems(items),
+            "Items deleted",
+            info => `Delete operation failed for the ${items[info.index].name} item`
         );
     },
 
@@ -246,8 +250,9 @@ var FileManager = Widget.inherit({
 
         this._tryEditAction(
             this._chooseFolderDialog,
-            result => { return this._provider.moveItems(items, result.folder); },
-            "Items moved"
+            result => this._provider.moveItems(items, result.folder),
+            "Items moved",
+            info => `Move operation failed for the ${items[info.index].name} item`
         );
     },
 
@@ -258,21 +263,23 @@ var FileManager = Widget.inherit({
 
         this._tryEditAction(
             this._chooseFolderDialog,
-            result => { return this._provider.copyItems(items, result.folder); },
-            "Items copied"
+            result => this._provider.copyItems(items, result.folder),
+            "Items copied",
+            info => `Copy operation failed for the ${items[info.index].name} item`
         );
     },
 
-    _tryEditAction: function(dialog, action, message, dialogArgument) {
-        var that = this;
-
+    _tryEditAction: function(dialog, editAction, successMessage, errorMessageAction, dialogArgument) {
         this._showDialog(dialog, dialogArgument)
-            .then(action.bind(this))
-            .then(() => {
-                that._showSuccess(message);
-                that._refreshData();
-            },
-            error => { if(error) that._showError(error); });
+            .then(editAction.bind(this))
+            .then(result => {
+                whenSome(result,
+                    () => {
+                        this._showSuccess(successMessage);
+                        this._refreshData();
+                    },
+                    info => this._showError(errorMessageAction(info) + ": " + this._getErrorText(info.error)));
+            });
     },
 
     _tryUpload: function() {
