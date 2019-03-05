@@ -92,7 +92,11 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     getGroupTableWidth: function() {
-        return this._$sidebarTable && this._$sidebarTable.outerWidth();
+        if(this._$sidebarTable) {
+            return this._$sidebarTable.outerWidth();
+        } else {
+            return 0;
+        }
     },
 
     _getTotalRowCount: function(groupCount) {
