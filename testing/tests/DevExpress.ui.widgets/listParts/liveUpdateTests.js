@@ -74,6 +74,17 @@ QUnit.module("live update", {
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemIndex, pushData[0].index, "check added index");
     });
 
+    QUnit.test("insert item to specific position if paginate", function(assert) {
+        var store = this.createList().getDataSource({ dataSource: { paginate: true } }).store();
+
+        var pushData = [{ type: "insert", data: { a: "Item 2 Inserted", id: 2 }, index: 1 }];
+        store.push(pushData);
+
+        assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, "check added item");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemIndex, pushData[0].index, "check added index");
+    });
+
     QUnit.test("insert item to specific position and update", function(assert) {
         var list = this.createList(),
             store = list.getDataSource().store();
