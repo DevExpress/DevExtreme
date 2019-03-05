@@ -342,14 +342,22 @@ var DropDownEditor = TextBox.inherit({
         }
     },
 
+    _getFieldTemplate: function() {
+        return this.option("fieldTemplate") && this._getTemplateByOption("fieldTemplate");
+    },
+
     _renderField: function() {
-        var fieldTemplate = this._getTemplateByOption("fieldTemplate");
+        const fieldTemplate = this._getFieldTemplate();
 
-        if(!(fieldTemplate && this.option("fieldTemplate"))) {
-            return;
+        fieldTemplate && this._renderTemplatedField(fieldTemplate, this._fieldRenderData());
+    },
+
+    _renderPlaceholder: function() {
+        const hasFieldTemplate = !!this._getFieldTemplate();
+
+        if(!hasFieldTemplate) {
+            this.callBase();
         }
-
-        this._renderTemplatedField(fieldTemplate, this._fieldRenderData());
     },
 
     _renderTemplatedField: function(fieldTemplate, data) {

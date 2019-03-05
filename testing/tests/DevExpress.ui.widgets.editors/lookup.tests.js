@@ -1976,22 +1976,6 @@ QUnit.test("'showCancelButton' option should affect on Cancel button rendering",
     assert.equal($popupWrapper.find(".dx-popup-cancel.dx-button").length, 0, "Apply button is not rendered");
 });
 
-QUnit.test("Placeholder should be rendered if fieldTemplate defined with 'input'", function(assert) {
-    var placeholderText = "Placeholder here...";
-
-    var $element = $("#lookupWithFieldTemplate").dxLookup({
-        fieldTemplate: function(data, element) {
-            assert.equal(isRenderer(element), !!config().useJQuery, "element is correct");
-
-            $(element).append($("<div>").dxTextBox({}));
-        },
-        placeholder: placeholderText
-    });
-
-    assert.ok($element.find(".dx-placeholder").length, "placeholder was rendered");
-    assert.equal($element.find(".dx-placeholder").eq(0).attr("DATA-DX_PLACEHOLDER"), placeholderText, "placeholder text was rendered");
-});
-
 QUnit.test("search wrapper should not be rendered if the 'searchEnabled' option is false", function(assert) {
     var instance = $("#lookup").dxLookup({
         searchEnabled: false,
