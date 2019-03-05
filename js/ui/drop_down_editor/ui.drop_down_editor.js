@@ -346,12 +346,6 @@ var DropDownEditor = TextBox.inherit({
         }
     },
 
-    _shouldRenderFieldTemplate: function() {
-        var fieldTemplate = this._getTemplateByOption("fieldTemplate");
-
-        return fieldTemplate && this.option("fieldTemplate");
-    },
-
     _getFieldTemplate: function() {
         return this.option("fieldTemplate") && this._getTemplateByOption("fieldTemplate");
     },
