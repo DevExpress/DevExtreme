@@ -142,7 +142,7 @@ export default CollectionWidget.inherit({
             group = dataSource && dataSource.group();
 
         if(paginate || group) {
-            changes = changes.filter(item => item.type === "update");
+            changes = changes.filter(item => item.type !== "insert" || item.index !== undefined);
         }
 
         changes.forEach(change => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
