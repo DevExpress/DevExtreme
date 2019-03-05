@@ -503,12 +503,12 @@ QUnit.module("basics", {}, () => {
             showSpinButtons: true,
             showClearButton: true
         });
-
         const $buttons = $element.find(".dx-texteditor-buttons-container").children();
 
-        assert.ok($buttons.eq(0).hasClass("dx-numberbox-spin-container"), "spin buttons are the first");
-        assert.ok($buttons.eq(1).hasClass("dx-clear-button-area"), "clear button is the second");
+        assert.ok($buttons.eq(0).hasClass("dx-clear-button-area"), "clear button is the first");
+        assert.ok($buttons.eq(1).hasClass("dx-numberbox-spin-container"), "spin buttons are the second");
     });
+
 
     QUnit.test("correct order of buttons when clear button option is set after rendering", assert => {
         const $element = $("#numberbox").dxNumberBox({
@@ -521,8 +521,8 @@ QUnit.module("basics", {}, () => {
 
         const $buttons = $element.find(".dx-texteditor-buttons-container").children();
 
-        assert.ok($buttons.eq(0).hasClass("dx-numberbox-spin-container"), "spin buttons are the first");
-        assert.ok($buttons.eq(1).hasClass("dx-clear-button-area"), "clear button is the second");
+        assert.ok($buttons.eq(0).hasClass("dx-clear-button-area"), "clear button is the first");
+        assert.ok($buttons.eq(1).hasClass("dx-numberbox-spin-container"), "spin buttons are the second");
     });
 
     QUnit.test("correct order of buttons when spin buttons option is set after rendering", assert => {
@@ -535,9 +535,8 @@ QUnit.module("basics", {}, () => {
         instance.option("showSpinButtons", true);
 
         const $buttons = $element.find(".dx-texteditor-buttons-container").children();
-
-        assert.ok($buttons.eq(0).hasClass("dx-numberbox-spin-container"), "spin buttons are the first");
-        assert.ok($buttons.eq(1).hasClass("dx-clear-button-area"), "clear button is the second");
+        assert.ok($buttons.eq(0).hasClass("dx-clear-button-area"), "clear button is the first");
+        assert.ok($buttons.eq(1).hasClass("dx-numberbox-spin-container"), "spin buttons are the second");
     });
 
     QUnit.test("clear button should save valueChangeEvent", assert => {
@@ -1111,7 +1110,7 @@ QUnit.module("options changed callbacks", {
     });
 
     QUnit.test("showSpinButtons", assert => {
-        assert.expect(6);
+        assert.expect(5);
 
         assert.ok(!this.element.hasClass(SPIN_CLASS), "on default spin classes aren't applied");
         let $spinContainer = this.element.find("." + SPIN_CONTAINER_CLASS);
@@ -1125,7 +1124,6 @@ QUnit.module("options changed callbacks", {
         this.instance.option("showSpinButtons", false);
         assert.ok(!this.element.hasClass(SPIN_CLASS), "spin classes aren't applied");
         $spinContainer = this.element.find("." + SPIN_CONTAINER_CLASS);
-        assert.ok(!$spinContainer.length, "spins aren't added");
     });
 
     QUnit.test("spin edit handling", assert => {

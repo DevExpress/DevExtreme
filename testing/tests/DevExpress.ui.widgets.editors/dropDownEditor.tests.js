@@ -101,13 +101,17 @@ QUnit.test("clicking the input must not close the dropdown", function(assert) {
 
 QUnit.test("clicking the button must correctly close the dropdown", function(assert) {
     this.dropDownEditor.open();
-    pointerMock(this.dropDownEditor._$dropDownButton).click();
+
+    var $dropDownButton = this.dropDownEditor.$element().find("." + DROP_DOWN_EDITOR_BUTTON_CLASS);
+    pointerMock($dropDownButton).click();
     assert.ok(!this.dropDownEditor.option("opened"));
 });
 
 QUnit.test("clicking the button descendants must also correctly close the dropdown", function(assert) {
     this.dropDownEditor.open();
-    pointerMock(this.dropDownEditor._$dropDownButton.find("." + DROP_DOWN_EDITOR_BUTTON_ICON)).click();
+
+    var $dropDownButton = this.dropDownEditor.$element().find("." + DROP_DOWN_EDITOR_BUTTON_CLASS);
+    pointerMock($dropDownButton.find("." + DROP_DOWN_EDITOR_BUTTON_ICON)).click();
     assert.ok(!this.dropDownEditor.option("opened"));
 });
 
@@ -142,13 +146,15 @@ QUnit.test("overlay get correct open and close", function(assert) {
 
 QUnit.test("when a drop down editor is disabled, it should not be possible to show the drop down by clicking the drop down button", function(assert) {
     this.dropDownEditor.option("disabled", true);
-    pointerMock(this.dropDownEditor._$dropDownButton).click();
+    var $dropDownButton = this.dropDownEditor.$element().find("." + DROP_DOWN_EDITOR_BUTTON_CLASS);
+    pointerMock($dropDownButton).click();
     assert.ok(!this.dropDownEditor._popup);
 });
 
 QUnit.test("when a drop down editor is readonly, it should not be possible to show the drop down by clicking the drop down button", function(assert) {
     this.dropDownEditor.option("readOnly", true);
-    pointerMock(this.dropDownEditor._$dropDownButton).click();
+    var $dropDownButton = this.dropDownEditor.$element().find("." + DROP_DOWN_EDITOR_BUTTON_CLASS);
+    pointerMock($dropDownButton).click();
     assert.ok(!this.dropDownEditor._popup);
 });
 
@@ -168,7 +174,8 @@ QUnit.test("in design mode, it should not be possible to show the drop down by c
     config({ designMode: true });
     try {
         this.reinitFixture();
-        pointerMock(this.dropDownEditor._$dropDownButton).click();
+        var $dropDownButton = this.dropDownEditor.$element().find("." + DROP_DOWN_EDITOR_BUTTON_CLASS);
+        pointerMock($dropDownButton).click();
         assert.ok(!this.dropDownEditor._popup);
     } finally {
         config({ designMode: false });
@@ -182,8 +189,8 @@ QUnit.test("correct buttons order after option change", function(assert) {
         $buttons = $buttonsContainer.children();
 
     assert.equal($buttons.length, 2, "clear button and drop button were rendered");
-    assert.ok($buttons.eq(0).hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS), "drop button is the first one");
-    assert.ok($buttons.eq(1).hasClass("dx-clear-button-area"), "drop button is the second one");
+    assert.ok($buttons.eq(0).hasClass("dx-clear-button-area"), "clear button is the first one");
+    assert.ok($buttons.eq(1).hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS), "drop button is the second one");
 });
 
 QUnit.test("Validation: onShown validation message handler should change", function(assert) {
