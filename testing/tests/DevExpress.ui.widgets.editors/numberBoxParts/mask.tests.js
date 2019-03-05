@@ -1581,7 +1581,7 @@ QUnit.test("moving caret to closest non stub on click - forward direction", func
     this.input.focus();
     this.clock.tick(CARET_TIMEOUT_DURATION);
 
-    this.inputElement.selectionStart = this.inputElement.selectionEnd = 0; // this.keyboard.caret(0) trigger excess focusin event with JQuery
+    this.keyboard.caret(0);
     this.input.trigger("dxclick");
 
     this.clock.tick(CARET_TIMEOUT_DURATION);
@@ -1691,7 +1691,7 @@ QUnit.testInActiveWindow("caret should not change position on focus after fast d
     this.input.trigger("focusout");
     this.clock.tick();
 
-    this.inputElement.selectionStart = this.inputElement.selectionEnd = 0; // this.keyboard.caret(0) trigger excess focusin event with JQuery
+    this.inputElement.selectionStart = this.inputElement.selectionEnd = 0; // this.keyboard.caret(0) trigger excess focusin event
     this.input.trigger("dxclick");
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
 
