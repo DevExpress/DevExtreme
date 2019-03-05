@@ -176,6 +176,7 @@ namespace StyleCompiler
                 "loadPanel",
                 "autocomplete",
                 "dropDownMenu",
+                "dropDownButton",
                 "selectBox",
                 "tagBox",
                 "radioButton",

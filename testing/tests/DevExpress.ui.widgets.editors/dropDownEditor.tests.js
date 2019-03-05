@@ -359,6 +359,19 @@ QUnit.test("it should be possible to set part of the dropDownOptions without ful
     assert.equal(instance.option("dropDownOptions.width"), 300, "dropDownOptions object has not been rewrited");
 });
 
+QUnit.test("dropdownOptions should not be cleared after repaint", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+        dropDownOptions: {
+            container: "#dropDownEditorLazy"
+        },
+        opened: true
+    }).dxDropDownEditor("instance");
+
+    assert.strictEqual(instance.option("dropDownOptions.container"), "#dropDownEditorLazy", "option is correct");
+
+    instance.repaint();
+    assert.strictEqual(instance.option("dropDownOptions.container"), "#dropDownEditorLazy", "option is correct");
+});
 
 QUnit.module("focus policy");
 

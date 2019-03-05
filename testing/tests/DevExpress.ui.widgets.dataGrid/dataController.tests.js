@@ -3389,6 +3389,19 @@ var setupVirtualRenderingModule = function() {
     });
 };
 
+// T717716
+QUnit.test("rows should not be recreated on pageIndex event", function(assert) {
+    var rows = this.getVisibleRows(),
+        firstRow = rows[0];
+
+    // act
+    this.dataController.dataSource().changed.fire({ changeType: "pageIndex" });
+
+    // assert
+    assert.strictEqual(this.getVisibleRows(), rows, "rows are not changed");
+    assert.strictEqual(this.getVisibleRows()[0], firstRow, "first row is not changed");
+});
+
 var teardownVirtualRenderingModule = function() {
     this.dispose();
     this.clock.restore();
@@ -9231,6 +9244,78 @@ QUnit.test("total custom summary by selection", function(assert) {
         }]]
     }]);
     assert.ok(!this.dataController.isLoading());
+});
+
+// T719655
+QUnit.test("refresh group custom summary by selection if data is grouped to one group", function(assert) {
+    var that = this;
+    this.options = {
+        keyExpr: "id",
+        dataSource: [
+            { id: 1, name: 'Alex', age: 19 },
+            { id: 2, name: 'Alex', age: 23 },
+            { id: 3, name: 'Alex', age: 25 }
+        ],
+        grouping: {
+            autoExpandAll: true
+        },
+        columns: ["id", { dataField: "name", groupIndex: 0 }, "age"],
+        summary: {
+            groupItems: [{
+                name: 'SelectedAvgAge',
+                showInColumn: 'age',
+                showInGroupFooter: true,
+                summaryType: 'custom'
+            }],
+            calculateCustomSummary: function(options) {
+                if(options.name === 'SelectedAvgAge') {
+                    if(options.summaryProcess === 'start') {
+                        options.totalValue = [0, 0];
+                    }
+                    if(options.summaryProcess === 'calculate') {
+                        if(options.component.isRowSelected(options.value.id)) {
+                            options.totalValue = [options.totalValue[0] + options.value.age, options.totalValue[1] + 1];
+                        }
+                    }
+                    if(options.summaryProcess === 'finalize') {
+                        options.totalValue = options.totalValue[0] / options.totalValue[1];
+                    }
+                }
+            }
+        },
+        onSelectionChanged: function(e) {
+            that.refresh(true);
+        },
+        selectedRowKeys: [1]
+    };
+
+    setupDataGridModules(this, ['data', 'columns', 'selection', 'summary', 'grouping']);
+    this.clock.tick();
+
+    var changedSpy = sinon.spy();
+    this.dataController.changed.add(changedSpy);
+
+    // act
+    this.selectRows([1, 2]);
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(changedSpy.callCount, 2);
+    assert.deepEqual(changedSpy.getCall(0).args[0].changeType, "updateSelection");
+    assert.deepEqual(changedSpy.getCall(1).args[0].changeType, "update");
+    assert.deepEqual(changedSpy.getCall(1).args[0].rowIndices, [4]);
+    assert.deepEqual(changedSpy.getCall(1).args[0].columnIndices, [undefined]);
+
+    assert.deepEqual(this.dataController.items().length, 5);
+    assert.deepEqual(this.dataController.items()[4].rowType, "groupFooter");
+    assert.deepEqual(this.dataController.items()[4].key, ["Alex"]);
+    assert.deepEqual(this.dataController.items()[4].summaryCells, [[], [], [{
+        name: 'SelectedAvgAge',
+        value: (19 + 23) / 2,
+        showInColumn: 'age',
+        showInGroupFooter: true,
+        summaryType: 'custom'
+    }]]);
 });
 
 QUnit.test("Several total summary items in different column", function(assert) {
