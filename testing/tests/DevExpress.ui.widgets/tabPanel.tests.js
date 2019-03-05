@@ -44,7 +44,7 @@ QUnit.module("rendering", {
     }
 });
 
-QUnit.test("container should consider tabs height", assert => {
+QUnit.test("container should consider tabs height", (assert) => {
     const $tabPanel = $("#tabPanel").dxTabPanel({
         items: [{ text: "test" }]
     });
@@ -55,7 +55,7 @@ QUnit.test("container should consider tabs height", assert => {
     assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.1, "margin correct");
 });
 
-QUnit.test("container should consider tabs height for async datasource", assert => {
+QUnit.test("container should consider tabs height for async datasource", (assert) => {
     const clock = sinon.useFakeTimers();
     const $tabPanel = $("#tabPanel").dxTabPanel({
         dataSource: {
@@ -78,7 +78,7 @@ QUnit.test("container should consider tabs height for async datasource", assert 
     assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.1, "margin correct");
 });
 
-QUnit.test("container should consider tabs height for async templates", assert => {
+QUnit.test("container should consider tabs height for async templates", (assert) => {
     const clock = sinon.useFakeTimers();
     const $tabPanel = $("#tabPanel").hide().dxTabPanel({
         items: [{ text: "test" }],
@@ -94,7 +94,7 @@ QUnit.test("container should consider tabs height for async templates", assert =
     assert.roughEqual(parseFloat($container.css("margin-top")), -$tabs.outerHeight(), 0.1, "margin correct");
 });
 
-QUnit.test("container should consider tabs height when it rendered in hiding area", assert => {
+QUnit.test("container should consider tabs height when it rendered in hiding area", (assert) => {
     const $tabPanel = $("<div>").dxTabPanel({
         items: [{ text: "test" }]
     });
@@ -313,7 +313,7 @@ QUnit.test("'onItemHold' and 'onTitleHold' options test", function(assert) {
     this.tabWidgetMouse.up();
 });
 
-QUnit.test("click on tab should be handled correctly when the 'deferRendering' option is true", assert => {
+QUnit.test("click on tab should be handled correctly when the 'deferRendering' option is true", (assert) => {
     const items = [
         { text: "Greg", title: "Name" },
         { text: "31", title: "Age" },
@@ -438,7 +438,7 @@ QUnit.module("focus policy", {
     }
 });
 
-QUnit.test("focusing empty tab should not cause infinite loop", assert => {
+QUnit.test("focusing empty tab should not cause infinite loop", (assert) => {
     assert.expect(0);
 
     const tabPanel = new TabPanel($("<div>").appendTo("#qunit-fixture"), {
@@ -447,7 +447,7 @@ QUnit.test("focusing empty tab should not cause infinite loop", assert => {
     tabPanel.focus();
 });
 
-QUnit.test("click on dxTabPanel should not scroll page to the tabs", assert => {
+QUnit.test("click on dxTabPanel should not scroll page to the tabs", (assert) => {
     const $tabPanel = $("<div>").appendTo("#qunit-fixture");
 
     const tabPanel = new TabPanel($tabPanel, {
@@ -535,7 +535,7 @@ QUnit.testInActiveWindow("tabs focusedElement lose focused class", function(asse
 
 QUnit.module("aria accessibility");
 
-QUnit.test("active tab should have aria-controls attribute pointing to active multiview item", assert => {
+QUnit.test("active tab should have aria-controls attribute pointing to active multiview item", (assert) => {
     const $element = $("#tabPanel").dxTabPanel({
         focusStateEnabled: true,
         items: [1, 2],
@@ -560,7 +560,7 @@ QUnit.test("active tab should have aria-controls attribute pointing to active mu
 
 QUnit.module("dataSource integration");
 
-QUnit.test("dataSource loading should be fired once", assert => {
+QUnit.test("dataSource loading should be fired once", (assert) => {
     const deferred = $.Deferred();
     let dataSourceLoadCalled = 0;
 
@@ -665,7 +665,7 @@ QUnit.module("Live Update", {
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, "2 Inserted", "check added item");
     });
 
-    QUnit.test("should not rerender items if the badge/disabled/visible changed", assert => {
+    QUnit.test("should not rerender items if the badge/disabled/visible changed", (assert) => {
         const tabPanel = $("#tabPanel").dxTabPanel({
             items: [{ title: "title" }],
             itemTemplate() { return $("<div id='itemContent'>"); }
