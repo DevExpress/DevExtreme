@@ -12,7 +12,7 @@ var dxBaseGauge = BaseWidget.inherit({
 
     _themeSection: 'gauge',
 
-    _fontFields: ["title.font", "title.subtitle.font", "tooltip.font"],
+    _fontFields: ["tooltip.font"],
 
     _createThemeManager: function() {
         return new themeManagerModule.ThemeManager(this._getThemeManagerOptions());

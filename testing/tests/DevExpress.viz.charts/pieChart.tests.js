@@ -239,11 +239,11 @@ var environment = {
             "legend.font",
             "legend.title.font",
             "legend.title.subtitle.font",
-            "title.font",
-            "title.subtitle.font",
             "tooltip.font",
             "commonSeriesSettings.label.font",
             "export.font",
+            "title.font",
+            "title.subtitle.font",
             "loadingIndicator.font"
         ] }]);
     });

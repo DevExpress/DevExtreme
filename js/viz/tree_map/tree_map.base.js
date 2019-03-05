@@ -53,7 +53,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
 
     _themeSection: "treeMap",
 
-    _fontFields: ["tile.label.font", "group.label.font", "title.font", "title.subtitle.font", "tooltip.font"],
+    _fontFields: ["tile.label.font", "group.label.font", "tooltip.font"],
 
     _init: function() {
         var that = this;

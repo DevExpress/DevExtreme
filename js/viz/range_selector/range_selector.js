@@ -560,7 +560,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
     _themeSection: "rangeSelector",
 
-    _fontFields: ["scale.label.font", "sliderMarker.font", "title.font", "title.subtitle.font"],
+    _fontFields: ["scale.label.font", "sliderMarker.font"],
 
     _initCore: function() {
         var that = this,
