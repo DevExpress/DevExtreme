@@ -1,4 +1,5 @@
 import $ from "../../../core/renderer";
+import { find } from "../../../core/utils/array";
 
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container";
 
@@ -10,7 +11,7 @@ export default class ActionButtonCollection {
     }
 
     _createButton(buttonName) {
-        const defaultButtonInfo = this.defaultButtonsInfo.find(({ name }) => name === buttonName);
+        const defaultButtonInfo = find(this.defaultButtonsInfo, ({ name }) => name === buttonName);
 
         if(!defaultButtonInfo) {
             throw "Can't create custom action button";
@@ -34,7 +35,7 @@ export default class ActionButtonCollection {
         }
 
         buttons.forEach(buttonName => {
-            let button = this.buttons.find(({ name }) => name === buttonName);
+            let button = find(this.buttons, ({ name }) => name === buttonName);
 
             button = button || this._createButton(buttonName);
 
@@ -58,7 +59,7 @@ export default class ActionButtonCollection {
     }
 
     getButton(buttonName) {
-        const button = this.buttons.find(({ name }) => name === buttonName);
+        const button = find(this.buttons, ({ name }) => name === buttonName);
 
         if(!button) {
             throw "Cannot find button with this name";
