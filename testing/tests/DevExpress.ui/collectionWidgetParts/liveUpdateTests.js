@@ -93,14 +93,11 @@ export const run = function() {
         });
 
         QUnit.test("fire dxremove event after push 'remove'", function(assert) {
-            let removeCount = 0;
-            assert.equal(this.onItemDeletingSpy.callCount, 0);
-            $(".dx-item").on("dxremove", () => {
-                removeCount++;
-            });
+            const removeSpy = sinon.spy();
+            $(".dx-item").on("dxremove", removeSpy);
             this.store.push([{ type: "remove", key: 0 }]);
 
-            assert.equal(removeCount, 1, "should trigger dxremove event");
+            assert.equal(removeSpy.callCount, 1, "should trigger dxremove event");
         });
 
         QUnit.test("refresh correct index after reload", function(assert) {
