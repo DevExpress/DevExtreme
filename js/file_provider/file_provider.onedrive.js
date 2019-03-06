@@ -1,9 +1,8 @@
-import ajax from "../../core/utils/ajax";
-import { Deferred } from "../../core/utils/deferred";
-import { noop } from "../../core/utils/common";
+import ajax from "../core/utils/ajax";
+import { Deferred } from "../core/utils/deferred";
+import { noop } from "../core/utils/common";
 
-import FileManagerItem from "./ui.file_manager.items";
-import FileProvider from "./ui.file_manager.file_provider";
+import { FileProvider, FileManagerItem } from "./file_provider";
 
 const REQUIRED_ITEM_FIELDS = "id,name,folder,lastModifiedDateTime,size,parentReference";
 const REST_API_URL = "https://graph.microsoft.com/";

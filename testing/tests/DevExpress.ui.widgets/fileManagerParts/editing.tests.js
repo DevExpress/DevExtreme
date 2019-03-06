@@ -15,8 +15,7 @@ const moduleConfig = {
         fx.off = true;
 
         $("#fileManager").dxFileManager({
-            fileSystemType: "data",
-            jsonData: fileSystem
+            fileSystemStore: fileSystem
         });
 
         this.clock.tick(400);

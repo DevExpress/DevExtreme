@@ -1,4 +1,4 @@
-import Class from "../../core/class";
+import Class from "../core/class";
 
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
@@ -49,4 +49,16 @@ var FileProvider = Class.inherit({
 
 });
 
-module.exports = FileProvider;
+var FileManagerItem = Class.inherit({
+    ctor: function(parentPath, name) {
+        this.parentPath = parentPath;
+        this.name = name;
+        this.relativeName = this.parentPath ? this.parentPath + "/" + this.name : this.name;
+
+        this.length = 0;
+        this.lastWriteTime = new Date();
+    }
+});
+
+module.exports.FileProvider = FileProvider;
+module.exports.FileManagerItem = FileManagerItem;

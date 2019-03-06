@@ -1,5 +1,6 @@
 var DevExpress = require("./core");
 require("./data");
+require("./file_providers");
 
 /// BUNDLER_PARTS
 /* UI core (dx.module-core.js) */

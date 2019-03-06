@@ -1,7 +1,6 @@
-import FileManagerItem from "./ui.file_manager.items";
-import FileProvider from "./ui.file_manager.file_provider";
+import { FileProvider, FileManagerItem } from "./file_provider";
 
-var DataFileProvider = FileProvider.inherit({
+var ArrayFileProvider = FileProvider.inherit({
 
     ctor: function(data) {
         this._data = data || [];
@@ -135,4 +134,4 @@ var DataFileProvider = FileProvider.inherit({
 
 });
 
-module.exports = DataFileProvider;
+module.exports = ArrayFileProvider;

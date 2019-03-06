@@ -1,10 +1,9 @@
-import ajax from "../../core/utils/ajax";
-import { noop } from "../../core/utils/common";
-import Guid from "../../core/guid";
-import windowUtils from "../../core/utils/window";
+import ajax from "../core/utils/ajax";
+import { noop } from "../core/utils/common";
+import Guid from "../core/guid";
+import windowUtils from "../core/utils/window";
 
-import FileManagerItem from "./ui.file_manager.items";
-import FileProvider from "./ui.file_manager.file_provider";
+import { FileProvider, FileManagerItem } from "./file_provider";
 
 const window = windowUtils.getWindow();
 const FILE_CHUNK_BLOB_NAME = "chunk";

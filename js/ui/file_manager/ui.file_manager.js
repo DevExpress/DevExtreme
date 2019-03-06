@@ -15,9 +15,10 @@ import FileManagerFolderChooserDialog from "./ui.file_manager.dialog.folder_choo
 import FileManagerFileUploader from "./ui.file_manager.file_uploader";
 import notify from "../notify";
 
-import DataFileProvider from "./ui.file_manager.file_provider.data";
-import OneDriveFileProvider from "./ui.file_manager.file_provider.onedrive";
-import WebAPIFileProvider from "./ui.file_manager.file_provider.webapi";
+import { FileProvider } from "../../file_provider/file_provider";
+import ArrayFileProvider from "../../file_provider/file_provider.array";
+import OneDriveFileProvider from "../../file_provider/file_provider.onedrive";
+import WebAPIFileProvider from "../../file_provider/file_provider.webapi";
 
 const FILE_MANAGER_CLASS = "dx-filemanager";
 const FILE_MANAGER_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-container";
@@ -47,7 +48,7 @@ var FileManager = Widget.inherit({
     _initMarkup: function() {
         this.callBase();
 
-        this._provider = this._createFileProvider();
+        this._provider = this._getFileProvider();
         this._itemsViewAreaActive = false;
 
         var toolbar = this._createComponent($("<div>"), FileManagerToolbar, {
@@ -357,17 +358,31 @@ var FileManager = Widget.inherit({
         });
     },
 
-    _createFileProvider: function() {
-        var fileSystemType = this.option("fileSystemType");
-        switch(fileSystemType) {
-            case "webapi":
-                return new WebAPIFileProvider(this.option("webAPI"));
-            case "onedrive":
-                return new OneDriveFileProvider(this.option("oneDrive"));
-            case "data":
-            default:
-                return new DataFileProvider(this.option("jsonData"));
+    _getFileProvider: function() {
+        var fileSystemStore = this.option("fileSystemStore");
+
+        if(!fileSystemStore) {
+            fileSystemStore = [];
         }
+
+        if(Array.isArray(fileSystemStore)) {
+            return new ArrayFileProvider(fileSystemStore);
+        }
+
+        if(fileSystemStore instanceof FileProvider) {
+            return fileSystemStore;
+        }
+
+        if(fileSystemStore.type) {
+            switch(fileSystemStore.type) {
+                case "webapi":
+                    return new WebAPIFileProvider(fileSystemStore);
+                case "onedrive":
+                    return new OneDriveFileProvider(fileSystemStore);
+            }
+        }
+
+        return new ArrayFileProvider([]);
     },
 
     _getDefaultOptions: function() {
@@ -382,44 +397,11 @@ var FileManager = Widget.inherit({
             },
 
             /**
-            * @name dxFileManagerOptions.fileSystemType
-            * @type string
-            * @default 'data'
-            */
-            fileSystemType: "data",
-
-            /**
-            * @name dxFileManagerOptions.jsonData
+            * @name dxFileManagerOptions.fileSystemStore
             * @type object
             * @default null
             */
-            jsonData: null,
-
-            /**
-            * @name dxFileManagerOptions.oneDrive
-            * @type object
-            * @default {}
-            */
-            oneDrive: {
-                getAccessTokenUrl: ""
-            },
-
-            /**
-            * @name dxFileManagerOptions.webAPI
-            * @type object
-            * @default {}
-            */
-            webAPI: {
-                loadUrl: "",
-                createFolderUrl: "",
-                renameUrl: "",
-                deleteUrl: "",
-                moveUrl: "",
-                copyUrl: "",
-                downloadUrl: "",
-                uploadChunkUrl: "",
-                abortUploadUrl: ""
-            }
+            fileSystemStore: null
         });
     },
 
@@ -427,9 +409,7 @@ var FileManager = Widget.inherit({
         var name = args.name;
 
         switch(name) {
-            case "fileSystemType":
-            case "jsonData":
-            case "oneDrive":
+            case "fileSystemStore":
                 this.repaint();
                 break;
             default:

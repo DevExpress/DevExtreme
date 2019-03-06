@@ -1,6 +1,7 @@
 import "ui/file_manager";
-import FileManagerItem from "ui/file_manager/ui.file_manager.items";
-import WebAPIFileProvider from "ui/file_manager/ui.file_manager.file_provider.webapi";
+import { FileManagerItem } from "file_provider/file_provider";
+
+import WebAPIFileProvider from "file_provider/file_provider.webapi";
 import ajaxMock from "../../../helpers/ajaxMock.js";
 
 const { test } = QUnit;
