@@ -12,7 +12,7 @@ function getExcelJS() {
 
 function requestExcelJS() {
     const window = getWindow();
-    const excel = window && window.ExcelJS;
+    const excel = window && window.ExcelJS || require("exceljs");
 
     if(!excel) {
         throw Errors.Error("E1041", "ExcelJS");
