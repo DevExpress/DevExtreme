@@ -32,6 +32,16 @@ let DropDownButton = Widget.inherit({
             showSelectedItem: true,
             grouped: false,
             noDataText: formatMessage("dxCollectionWidget-noDataText"),
+
+            /**
+             * @name dxDropDownButtonOptions.itemTemplate
+             * @type template|function
+             * @default "item"
+             * @type_function_param1 itemData:object
+             * @type_function_param2 itemIndex:number
+             * @type_function_param3 itemElement:dxElement
+             * @type_function_return string|Node|jQuery
+             */
             itemTemplate: "item",
             groupTemplate: "group",
             displayExpr: undefined,
