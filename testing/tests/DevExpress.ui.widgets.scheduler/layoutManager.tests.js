@@ -57,7 +57,7 @@ const renderLayoutModuleOptions = {
 
         this.createInstance = (view, dataSource, options) => {
             this.instance = $("#scheduler").dxScheduler($.extend(options, {
-                views: ["week", "month"],
+                views: ["week", "month", "agenda"],
                 currentView: view,
                 dataSource: dataSource,
                 currentDate: new Date(2017, 4, 25),
@@ -72,6 +72,8 @@ const renderLayoutModuleOptions = {
         this.getUnmarkedAppointments = () => {
             return Array.from(document.querySelectorAll(APPOINTMENT_CLASS_NAME)).filter(element => !!element.dataset.mark === false);
         };
+
+        this.getAppointments = () => document.querySelectorAll(APPOINTMENT_CLASS_NAME);
     },
     afterEach: function() {
         this.clock.restore();
@@ -309,6 +311,30 @@ QUnit.module("Render layout", renderLayoutModuleOptions, function() {
         this.markAppointments();
         this.instance.deleteAppointment(defaultData[0]);
         assert.equal(0, this.getUnmarkedAppointments().length, "Nothing should be redrawing");
+    });
+
+    QUnit.test("Scheduler should render all appointments in Agenda view case", function(assert) {
+        const dataSource = this.createDataSource();
+        this.createInstance("agenda", dataSource);
+
+        this.markAppointments();
+        dataSource.store().push([
+            { type: "update", key: 8, data: { text: "updated-1" } },
+            { type: "update", key: 10, data: { text: "updated-2" } }
+        ]);
+        dataSource.load();
+        assert.equal(this.getAppointments().length, this.getUnmarkedAppointments().length, "Should rendered all appointments");
+
+        this.markAppointments();
+        dataSource.store().push([{ type: "insert", data: {
+            id: 15,
+            text: "Fake",
+            startDate: new Date(2017, 4, 27, 15, 30),
+            endDate: new Date(2017, 4, 27, 16, 30)
+        } }]);
+        dataSource.load();
+
+        assert.equal(this.getAppointments().length, this.getUnmarkedAppointments().length, "Should rendered all appointments");
     });
 });
 
