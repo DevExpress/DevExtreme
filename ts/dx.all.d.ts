@@ -124,6 +124,13 @@ interface JQuery {
     dxDropDownBox(options: DevExpress.ui.dxDropDownBoxOptions): JQuery;
 }
 interface JQuery {
+    dxDropDownButton(): JQuery;
+    dxDropDownButton(options: "instance"): DevExpress.ui.dxDropDownButton;
+    dxDropDownButton(options: string): any;
+    dxDropDownButton(options: string, ...params: any[]): any;
+    dxDropDownButton(options: DevExpress.ui.dxDropDownButtonOptions): JQuery;
+}
+interface JQuery {
     dxFileUploader(): JQuery;
     dxFileUploader(options: "instance"): DevExpress.ui.dxFileUploader;
     dxFileUploader(options: string): any;
@@ -2719,6 +2726,18 @@ declare module DevExpress.ui {
     export class dxDropDownBox extends dxDropDownEditor {
         constructor(element: Element, options?: dxDropDownBoxOptions)
         constructor(element: JQuery, options?: dxDropDownBoxOptions)
+        /** @name DataHelperMixin.getDataSource() */
+        getDataSource(): DevExpress.data.DataSource;
+    }
+    /** @name dxDropDownButton.Options */
+    export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>, DataExpressionMixinOptions<dxDropDownButton> {
+        /** @name dxDropDownButton.Options.itemTemplate */
+        itemTemplate?: template | ((itemData: any, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+    }
+    /** @name dxDropDownButton */
+    export class dxDropDownButton extends Widget {
+        constructor(element: Element, options?: dxDropDownButtonOptions)
+        constructor(element: JQuery, options?: dxDropDownButtonOptions)
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
     }

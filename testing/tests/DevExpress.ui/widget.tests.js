@@ -1,102 +1,99 @@
-var $ = require("jquery"),
-    Widget = require("ui/widget/ui.widget"),
-    registerComponent = require("core/component_registrator"),
-    devices = require("core/devices"),
-    TemplateBase = require("ui/widget/ui.template_base"),
-    Template = require("ui/widget/template"),
-    DataHelperMixin = require("data_helper"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    config = require("core/config"),
-    dataUtils = require("core/element_data");
+import $ from "jquery";
+import Widget from "ui/widget/ui.widget";
+import registerComponent from "core/component_registrator";
+import devices from "core/devices";
+import { extend } from "core/utils/extend";
+import TemplateBase from "ui/widget/ui.template_base";
+import Template from "ui/widget/template";
+import DataHelperMixin from "data_helper";
+import { DataSource } from "data/data_source/data_source";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import config from "core/config";
+import dataUtils from "core/element_data";
 
-require("common.css!");
+import "common.css!";
 
-(function() {
+const ACTIVE_STATE_CLASS = "dx-state-active";
+const DISABLED_STATE_CLASS = "dx-state-disabled";
+const HOVER_STATE_CLASS = "dx-state-hover";
+const FOCUSED_STATE_CLASS = "dx-state-focused";
+const FEEDBACK_SHOW_TIMEOUT = 30;
+const FEEDBACK_HIDE_TIMEOUT = 400;
+const RTL_CLASS = "dx-rtl";
 
-    var ACTIVE_STATE_CLASS = "dx-state-active",
-        DISABLED_STATE_CLASS = "dx-state-disabled",
-        HOVER_STATE_CLASS = "dx-state-hover",
-        FOCUSED_STATE_CLASS = "dx-state-focused",
-        FEEDBACK_SHOW_TIMEOUT = 30,
-        FEEDBACK_HIDE_TIMEOUT = 400,
-        RTL_CLASS = "dx-rtl";
+const DxWidget = Widget.inherit({});
+registerComponent("dxWidget", DxWidget);
 
-    var DxWidget = Widget.inherit({});
-    registerComponent("dxWidget", DxWidget);
-
-
-    QUnit.testStart(function() {
-        var markup = '\
+QUnit.testStart(() => {
+    const markup = '\
 <div id="widget"></div>\
 <div id="another"></div>\
 <div id="parentWrapper">\
-    <div id="wrappedWidget"></div>\
+<div id="wrappedWidget"></div>\
 </div>\
 <div id="widthRootStyle" style="width: 300px;"></div>\
 <div id="widthRootStylePercent" style="width: 50%;"></div>\
 \
 <div id="container">\
-    <div data-options="dxTemplate: { name: \'item\' }">item template content</div>\
-    <div data-options="dxTemplate: { name: \'group\' }">group template content</div>\
-    <table data-options="dxTemplate: { name: \'rowItem\' }"><tr><td>item template content</td></tr></table>\
+<div data-options="dxTemplate: { name: \'item\' }">item template content</div>\
+<div data-options="dxTemplate: { name: \'group\' }">group template content</div>\
+<table data-options="dxTemplate: { name: \'rowItem\' }"><tr><td>item template content</td></tr></table>\
 </div>\
 \
 <div id="container2">\
-    <div data-options="dxTemplate: { name: \'item\' }">item template content</div>\
-    <div data-options="dxTemplate: { name: \'group\' }">group template content</div>\
+<div data-options="dxTemplate: { name: \'item\' }">item template content</div>\
+<div data-options="dxTemplate: { name: \'group\' }">group template content</div>\
 </div>\
 \
 <div id="externalContainer">\
-    <div data-options="dxTemplate: { name: \'item1\' }">template content</div>\
-    <div data-options="dxTemplate: { name: \'group2\' }">template content</div>\
+<div data-options="dxTemplate: { name: \'item1\' }">template content</div>\
+<div data-options="dxTemplate: { name: \'group2\' }">template content</div>\
 </div>\
 \
 <div id="jQueryContainerWidget">\
-    <div id="innerWidget"></div>\
+<div id="innerWidget"></div>\
 </div>\
 \
 <div id="platformSpecificContainer">\
-    <div data-options="dxTemplate: { name: \'item\', platform: \'generic\' }">generic</div>\
-    <div data-options="dxTemplate: { name: \'item\', platform: \'ios\' }">ios</div>\
-    <div data-options="dxTemplate: { name: \'item\' }">common</div>\
+<div data-options="dxTemplate: { name: \'item\', platform: \'generic\' }">generic</div>\
+<div data-options="dxTemplate: { name: \'item\', platform: \'ios\' }">ios</div>\
+<div data-options="dxTemplate: { name: \'item\' }">common</div>\
 </div>\
 \
 <div id="platformSpecificContainer2">\
-    <div data-options="dxTemplate: { name: \'item\', platform: \'ios\' }">ios</div>\
-    <div data-options="dxTemplate: { name: \'item\', platform: \'ios\' }">ios2</div>\
+<div data-options="dxTemplate: { name: \'item\', platform: \'ios\' }">ios</div>\
+<div data-options="dxTemplate: { name: \'item\', platform: \'ios\' }">ios2</div>\
 </div>\
 \
 <script type="text/html" id="scriptTemplate">\
-    <div class="myTemplate"></div>\
+<div class="myTemplate"></div>\
 </script>\
 \
 <div id="widgetWithScriptInTemplate">\
-    Text\
-    <script></script>\
+Text\
+<script></script>\
 </div>';
 
-        $("#qunit-fixture").html(markup);
-    });
+    $("#qunit-fixture").html(markup);
+});
 
-    QUnit.module("render");
+QUnit.module("render", {}, () => {
+    QUnit.test("visibility change handling works optimally", (assert) => {
+        let hidingFired = 0;
+        let shownFired = 0;
 
-    QUnit.test("visibility change handling works optimally", function(assert) {
-        var hidingFired = 0;
-        var shownFired = 0;
-
-        var visibilityChanged = function(visible) {
+        const visibilityChanged = visible => {
             visible ? shownFired++ : hidingFired++;
         };
 
-        var TestWidget = Widget.inherit({
+        const TestWidget = Widget.inherit({
             NAME: "TestWidget1",
             _visibilityChanged: visibilityChanged
         });
 
-        var $element = $("#widget");
-        var component = new TestWidget($element, { visible: false });
+        const $element = $("#widget");
+        const component = new TestWidget($element, { visible: false });
 
         assert.equal(hidingFired, 0, "hidden is not fired initially");
         assert.equal(shownFired, 0, "shown is not fired initially");
@@ -127,9 +124,9 @@ require("common.css!");
         assert.equal(hidingFired, 1, "hidden is not fired if visible was changed after hiding");
     });
 
-    QUnit.test("option 'hoverStateEnabled' - default", function(assert) {
-        var element = $("#widget").dxWidget(),
-            instance = element.dxWidget("instance");
+    QUnit.test("option 'hoverStateEnabled' - default", (assert) => {
+        const element = $("#widget").dxWidget();
+        const instance = element.dxWidget("instance");
 
         element.trigger("dxhoverstart");
         assert.ok(!instance.option("hoverStateEnabled"));
@@ -140,9 +137,9 @@ require("common.css!");
         assert.ok(element.hasClass(HOVER_STATE_CLASS));
     });
 
-    QUnit.test("option 'hoverStateEnabled' when disabled", function(assert) {
-        var element = $("#widget").dxWidget({ hoverStateEnabled: true, disabled: true }),
-            instance = element.dxWidget("instance");
+    QUnit.test("option 'hoverStateEnabled' when disabled", (assert) => {
+        const element = $("#widget").dxWidget({ hoverStateEnabled: true, disabled: true });
+        const instance = element.dxWidget("instance");
 
         element.trigger("dxhoverstart");
         assert.ok(!element.hasClass(HOVER_STATE_CLASS));
@@ -161,18 +158,19 @@ require("common.css!");
         assert.ok(!element.hasClass(HOVER_STATE_CLASS));
     });
 
-    QUnit.test("option onFocusIn/onFocusOut", function(assert) {
-        var focusInHandled = false,
-            focusOutHandled = false,
-            $element = $("#widget").dxWidget({
-                focusStateEnabled: true,
-                onFocusIn: function() {
-                    focusInHandled = true;
-                },
-                onFocusOut: function() {
-                    focusOutHandled = true;
-                }
-            });
+    QUnit.test("option onFocusIn/onFocusOut", (assert) => {
+        let focusInHandled = false;
+        let focusOutHandled = false;
+
+        const $element = $("#widget").dxWidget({
+            focusStateEnabled: true,
+            onFocusIn() {
+                focusInHandled = true;
+            },
+            onFocusOut() {
+                focusOutHandled = true;
+            }
+        });
 
         $element.focusin();
         assert.ok(focusInHandled, "focusIn action was fired");
@@ -181,15 +179,16 @@ require("common.css!");
         assert.ok(focusOutHandled, "focusOut action was fired");
     });
 
-    QUnit.test("focusout should fired even in disabled container", function(assert) {
-        var focusOutHandled = false,
-            $container = $("<div>").appendTo("#qunit-fixture"),
-            $element = $("<div>").appendTo($container).dxWidget({
-                focusStateEnabled: true,
-                onFocusOut: function() {
-                    focusOutHandled = true;
-                }
-            });
+    QUnit.test("focusout should fired even in disabled container", (assert) => {
+        let focusOutHandled = false;
+        const $container = $("<div>").appendTo("#qunit-fixture");
+
+        const $element = $("<div>").appendTo($container).dxWidget({
+            focusStateEnabled: true,
+            onFocusOut() {
+                focusOutHandled = true;
+            }
+        });
 
         $element.focusin();
         $container.addClass("dx-state-disabled");
@@ -197,13 +196,13 @@ require("common.css!");
         assert.ok(focusOutHandled, "focusOut action was fired");
     });
 
-    QUnit.test("widget has class dx-state-hover when child widget lose cursor", function(assert) {
-        var parentElement = $("#jQueryContainerWidget").dxWidget(),
-            parentInstance = parentElement.dxWidget("instance");
+    QUnit.test("widget has class dx-state-hover when child widget lose cursor", (assert) => {
+        const parentElement = $("#jQueryContainerWidget").dxWidget();
+        const parentInstance = parentElement.dxWidget("instance");
         parentInstance.option("hoverStateEnabled", true);
 
-        var childElement = $("<div>").appendTo($("#jQueryContainerWidget")).dxWidget(),
-            childInstance = childElement.dxWidget("instance");
+        const childElement = $("<div>").appendTo($("#jQueryContainerWidget")).dxWidget();
+        const childInstance = childElement.dxWidget("instance");
         childInstance.option("hoverStateEnabled", true);
 
         parentElement.trigger("dxhoverstart");
@@ -215,12 +214,11 @@ require("common.css!");
         childElement.trigger("dxhoverend");
         assert.ok(!childElement.hasClass(HOVER_STATE_CLASS));
         assert.ok(parentElement.hasClass(HOVER_STATE_CLASS));
-
     });
 
-    QUnit.test("options 'width'&'height'", function(assert) {
-        var element = $("#widget").dxWidget(),
-            instance = element.dxWidget("instance");
+    QUnit.test("options 'width'&'height'", (assert) => {
+        const element = $("#widget").dxWidget();
+        const instance = element.dxWidget("instance");
 
         assert.strictEqual(instance.option("width"), undefined);
         assert.strictEqual(instance.option("height"), undefined);
@@ -234,8 +232,8 @@ require("common.css!");
         assert.equal(element.height(), 50);
     });
 
-    QUnit.test("set dimensions on create", function(assert) {
-        var element = $("#widget").dxWidget({
+    QUnit.test("set dimensions on create", (assert) => {
+        const element = $("#widget").dxWidget({
             width: 50,
             height: 50
         });
@@ -244,14 +242,15 @@ require("common.css!");
         assert.equal(element.height(), 50);
     });
 
-    QUnit.test("check that width include borders, paddings", function(assert) {
-        var element = $("#widget")
-                .css({
-                    border: "1px solid red",
-                    padding: "3px"
-                })
-                .dxWidget(),
-            instance = element.dxWidget("instance");
+    QUnit.test("check that width include borders, paddings", (assert) => {
+        const element = $("#widget")
+            .css({
+                border: "1px solid red",
+                padding: "3px"
+            })
+            .dxWidget();
+
+        const instance = element.dxWidget("instance");
 
         instance.option("width", 100);
         instance.option("height", 150);
@@ -259,15 +258,15 @@ require("common.css!");
         assert.equal(element.outerHeight(), 150);
     });
 
-    QUnit.test("set dimensions in percent, parent element have dimensions", function(assert) {
+    QUnit.test("set dimensions in percent, parent element have dimensions", (assert) => {
         $("#parentWrapper").css({
             width: 400,
             height: 200
         });
 
-        var element = $("#wrappedWidget").dxWidget(),
-            instance = element.dxWidget("instance"),
-            $parentElement = $("#parentWrapper");
+        const element = $("#wrappedWidget").dxWidget();
+        const instance = element.dxWidget("instance");
+        const $parentElement = $("#parentWrapper");
 
         instance.option("width", "50%");
         instance.option("height", "40%");
@@ -275,23 +274,27 @@ require("common.css!");
         assert.equal(element.outerHeight(), $parentElement.height() * 0.4);
     });
 
-    QUnit.test("set dimensions as function", function(assert) {
-        var element = $("#widget").dxWidget(),
-            instance = element.dxWidget("instance");
+    QUnit.test("set dimensions as function", (assert) => {
+        const element = $("#widget").dxWidget();
+        const instance = element.dxWidget("instance");
 
-        instance.option("width", function() { return 50; });
-        instance.option("height", function() { return 100; });
+        instance.option("width", () => {
+            return 50;
+        });
+        instance.option("height", () => {
+            return 100;
+        });
         assert.equal(element.outerWidth(), 50);
         assert.equal(element.outerHeight(), 100);
     });
 
-    QUnit.test("'disabled' option has 'false' value by default", function(assert) {
-        var instance = $("#widget").dxWidget().dxWidget("instance");
+    QUnit.test("'disabled' option has 'false' value by default", (assert) => {
+        const instance = $("#widget").dxWidget().dxWidget("instance");
         assert.strictEqual(instance.option("disabled"), false);
     });
 
-    QUnit.test("accessKey option", function(assert) {
-        var $widget = $("#widget").dxWidget({
+    QUnit.test("accessKey option", (assert) => {
+        const $widget = $("#widget").dxWidget({
             focusStateEnabled: true,
             accessKey: "y"
         });
@@ -299,19 +302,20 @@ require("common.css!");
         assert.equal($widget.attr("accesskey"), "y", "widget element has accesskey attribute");
     });
 
-    QUnit.test("accessKey option changed", function(assert) {
-        var $widget = $("#widget").dxWidget({
-                focusStateEnabled: true,
-                accessKey: "y"
-            }),
-            instance = $widget.dxWidget("instance");
+    QUnit.test("accessKey option changed", (assert) => {
+        const $widget = $("#widget").dxWidget({
+            focusStateEnabled: true,
+            accessKey: "y"
+        });
+
+        const instance = $widget.dxWidget("instance");
 
         instance.option("accessKey", "g");
         assert.equal($widget.attr("accesskey"), "g", "widget option has been changed successfully");
     });
 
-    QUnit.testInActiveWindow("widget focusing when accessKey pressed", function(assert) {
-        var $widget = $("#widget").dxWidget({
+    QUnit.testInActiveWindow("widget focusing when accessKey pressed", (assert) => {
+        const $widget = $("#widget").dxWidget({
             focusStateEnabled: true,
             accessKey: "y"
         });
@@ -320,14 +324,15 @@ require("common.css!");
         assert.ok($widget.hasClass("dx-state-focused"), "widget has been focused");
     });
 
-    QUnit.test("press on accessKey does not fire click event", function(assert) {
-        var $widget = $("#widget").dxWidget({
-                focusStateEnabled: true,
-                accessKey: "y"
-            }),
-            isImmediatePropagationStopped = true;
+    QUnit.test("press on accessKey does not fire click event", (assert) => {
+        const $widget = $("#widget").dxWidget({
+            focusStateEnabled: true,
+            accessKey: "y"
+        });
 
-        $widget.on("dxclick", function(e) {
+        let isImmediatePropagationStopped = true;
+
+        $widget.on("dxclick", e => {
             isImmediatePropagationStopped = false;
         });
 
@@ -336,16 +341,16 @@ require("common.css!");
         assert.ok(isImmediatePropagationStopped, "click event's immediate propagation stopped on accessKey");
     });
 
-    QUnit.test("dxWidget on a custom node is a block DOM node", function(assert) {
-        var $element = $("<custom-node/>").appendTo("#qunit-fixture");
+    QUnit.test("dxWidget on a custom node is a block DOM node", (assert) => {
+        const $element = $("<custom-node/>").appendTo("#qunit-fixture");
         new DxWidget($element);
 
         assert.equal($element.css("display"), "block");
     });
 
-    QUnit.test("option 'rtl'", function(assert) {
-        var $element = $("#widget").dxWidget(),
-            instance = $element.dxWidget("instance");
+    QUnit.test("option 'rtl'", (assert) => {
+        const $element = $("#widget").dxWidget();
+        const instance = $element.dxWidget("instance");
 
         assert.ok(!$element.hasClass(RTL_CLASS));
 
@@ -353,9 +358,9 @@ require("common.css!");
         assert.ok($element.hasClass(RTL_CLASS));
     });
 
-    QUnit.test("init option 'rtl' is true", function(assert) {
-        var $element = $("#widget").dxWidget({ rtlEnabled: true }),
-            instance = $element.dxWidget("instance");
+    QUnit.test("init option 'rtl' is true", (assert) => {
+        const $element = $("#widget").dxWidget({ rtlEnabled: true });
+        const instance = $element.dxWidget("instance");
 
         assert.ok($element.hasClass(RTL_CLASS));
 
@@ -363,47 +368,46 @@ require("common.css!");
         assert.ok(!$element.hasClass(RTL_CLASS));
     });
 
-    QUnit.test("'hint' option has 'undefined' value by default", function(assert) {
-        var instance = $("#widget").dxWidget().dxWidget("instance");
+    QUnit.test("'hint' option has 'undefined' value by default", (assert) => {
+        const instance = $("#widget").dxWidget().dxWidget("instance");
         assert.equal(instance.option("hint"), undefined);
     });
+});
 
-    QUnit.module("API", {
-        beforeEach: function() {
-            this.clock = sinon.useFakeTimers();
-        },
+QUnit.module("API", {
+    beforeEach: () => {
+        this.clock = sinon.useFakeTimers();
+    },
 
-        afterEach: function() {
-            this.clock.restore();
-        }
-    });
-
-    QUnit.test("'repaint' method refreshes widget by default", function(assert) {
-        var NewWidget = Widget.inherit({
+    afterEach: () => {
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test("'repaint' method refreshes widget by default", (assert) => {
+        const NewWidget = Widget.inherit({
             NAME: "Widget",
 
-            _render: function() {
+            _render() {
                 this.$element().append("<div></div>");
             }
         });
 
-        var element = $("#widget"),
-            instance = new NewWidget("#widget");
+        const element = $("#widget");
+        const instance = new NewWidget("#widget");
 
         assert.ok($.isFunction(instance.repaint));
 
-        var children = element.children();
+        const children = element.children();
 
         instance.repaint();
         assert.ok(!children.is(element.children()));
     });
 
-    QUnit.testInActiveWindow("'focus' method focus widget", function(assert) {
-        var $element = $("#widget").dxWidget({ focusStateEnabled: true }),
-            instance = $element.dxWidget("instance");
-
-        var $anotherElement = $("#another").dxWidget({ focusStateEnabled: true }),
-            anotherInstance = $anotherElement.dxWidget("instance");
+    QUnit.testInActiveWindow("'focus' method focus widget", (assert) => {
+        const $element = $("#widget").dxWidget({ focusStateEnabled: true });
+        const instance = $element.dxWidget("instance");
+        const $anotherElement = $("#another").dxWidget({ focusStateEnabled: true });
+        const anotherInstance = $anotherElement.dxWidget("instance");
 
         assert.ok($.isFunction(instance.focus), "focus method exist");
 
@@ -414,47 +418,47 @@ require("common.css!");
         assert.ok($element.hasClass(FOCUSED_STATE_CLASS), "'focus' method focus another widget");
         assert.ok(!$anotherElement.hasClass(FOCUSED_STATE_CLASS), "'focus' blur focus from another widget");
     });
+});
 
-    QUnit.module("actions");
+QUnit.module("actions", {}, () => {
+    QUnit.test("onOptionChanged should be triggered when widget is disabled", (assert) => {
+        const $element = $("#widget").dxWidget({
+            disabled: true,
+            onOptionChanged() {
+                assert.ok(true);
+            }
+        });
 
-    QUnit.test("onOptionChanged should be triggered when widget is disabled", function(assert) {
-        var $element = $("#widget").dxWidget({
-                disabled: true,
-                onOptionChanged: function() {
-                    assert.ok(true);
-                }
-            }),
-            instance = $element.dxWidget("instance");
+        const instance = $element.dxWidget("instance");
 
         instance.option("option1", true);
     });
 
-    QUnit.test("onDisposing should be triggered when widget is disabled", function(assert) {
-        var $element = $("#widget").dxWidget({
+    QUnit.test("onDisposing should be triggered when widget is disabled", (assert) => {
+        const $element = $("#widget").dxWidget({
             disabled: true,
-            onDisposing: function() {
+            onDisposing() {
                 assert.ok(true);
             }
         });
 
         $element.remove();
     });
+});
 
-
-    QUnit.module("ui feedback", {
-        beforeEach: function() {
-            this.element = $("#widget");
-            this.mouse = pointerMock(this.element);
-            this.clock = sinon.useFakeTimers();
-        },
-        afterEach: function() {
-            this.clock.restore();
-        }
-    });
-
-    QUnit.test("option activeStateEnabled", function(assert) {
-        var element = this.element.dxWidget({ activeStateEnabled: true }),
-            instance = element.dxWidget("instance");
+QUnit.module("ui feedback", {
+    beforeEach: () => {
+        this.element = $("#widget");
+        this.mouse = pointerMock(this.element);
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: () => {
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test("option activeStateEnabled", (assert) => {
+        const element = this.element.dxWidget({ activeStateEnabled: true });
+        const instance = element.dxWidget("instance");
         assert.ok(!element.hasClass(ACTIVE_STATE_CLASS));
 
         this.mouse.active();
@@ -462,7 +466,6 @@ require("common.css!");
 
         this.mouse.inactive();
         assert.ok(!element.hasClass(ACTIVE_STATE_CLASS));
-
 
         instance.option("activeStateEnabled", true);
         assert.ok(!element.hasClass(ACTIVE_STATE_CLASS));
@@ -474,9 +477,9 @@ require("common.css!");
         assert.ok(!element.hasClass(ACTIVE_STATE_CLASS));
     });
 
-    QUnit.test("active state should be cleared after repaint", function(assert) {
-        var element = this.element.dxWidget({ activeStateEnabled: true }),
-            instance = element.dxWidget("instance");
+    QUnit.test("active state should be cleared after repaint", (assert) => {
+        const element = this.element.dxWidget({ activeStateEnabled: true });
+        const instance = element.dxWidget("instance");
 
         this.mouse.active();
 
@@ -485,8 +488,8 @@ require("common.css!");
         assert.notOk(element.hasClass(ACTIVE_STATE_CLASS));
     });
 
-    QUnit.test("widget with ui feedback support, disabled state", function(assert) {
-        var el = this.element.dxWidget({
+    QUnit.test("widget with ui feedback support, disabled state", (assert) => {
+        const el = this.element.dxWidget({
             activeStateEnabled: true,
             disabled: true
         });
@@ -502,12 +505,13 @@ require("common.css!");
         assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
     });
 
-    QUnit.test("widget with ui feedback support, disabled option changing", function(assert) {
-        var el = this.element.dxWidget({
-                activeStateEnabled: true,
-                disabled: true
-            }),
-            instance = el.dxWidget("instance");
+    QUnit.test("widget with ui feedback support, disabled option changing", (assert) => {
+        const el = this.element.dxWidget({
+            activeStateEnabled: true,
+            disabled: true
+        });
+
+        const instance = el.dxWidget("instance");
 
         instance.option("disabled", false);
         assert.ok(!el.hasClass(DISABLED_STATE_CLASS));
@@ -532,16 +536,15 @@ require("common.css!");
         assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
     });
 
-    QUnit.test("widget with ui feedback support, disabled option changing after mousedown", function(assert) {
-        var el = this.element.dxWidget({ activeStateEnabled: true }),
-            instance = el.dxWidget("instance");
+    QUnit.test("widget with ui feedback support, disabled option changing after mousedown", (assert) => {
+        const el = this.element.dxWidget({ activeStateEnabled: true });
+        const instance = el.dxWidget("instance");
 
         this.mouse.start("touch").down();
         instance.option("disabled", true);
         this.clock.tick(FEEDBACK_SHOW_TIMEOUT);
         assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
         assert.ok(el.hasClass(DISABLED_STATE_CLASS));
-
 
         this.mouse.up();
         this.clock.tick(FEEDBACK_HIDE_TIMEOUT);
@@ -559,12 +562,11 @@ require("common.css!");
         this.clock.tick(FEEDBACK_HIDE_TIMEOUT);
         assert.ok(!el.hasClass(DISABLED_STATE_CLASS));
         assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-
     });
 
-    QUnit.test("remove hover state on mouse down", function(assert) {
-        var element = this.element.dxWidget({ hoverStateEnabled: true, activeStateEnabled: true }),
-            instance = element.dxWidget("instance");
+    QUnit.test("remove hover state on mouse down", (assert) => {
+        const element = this.element.dxWidget({ hoverStateEnabled: true, activeStateEnabled: true });
+        const instance = element.dxWidget("instance");
 
         element.trigger("dxhoverstart");
         this.mouse.active();
@@ -582,10 +584,10 @@ require("common.css!");
         assert.ok(!element.hasClass(DISABLED_STATE_CLASS));
     });
 
-    QUnit.test("activeElement should be reset after widget dispose", function(assert) {
+    QUnit.test("activeElement should be reset after widget dispose", (assert) => {
         assert.expect(0);
 
-        var el = this.element.dxWidget({ activeStateEnabled: true });
+        let el = this.element.dxWidget({ activeStateEnabled: true });
         this.mouse.start().down();
         this.clock.tick(FEEDBACK_SHOW_TIMEOUT);
         el.remove();
@@ -597,14 +599,15 @@ require("common.css!");
         this.clock.tick(FEEDBACK_HIDE_TIMEOUT);
     });
 
-    QUnit.test("feedback should be disabled in design mode", function(assert) {
+    QUnit.test("feedback should be disabled in design mode", (assert) => {
         config({ designMode: true });
 
         try {
-            var el = this.element.dxWidget({
-                    activeStateEnabled: true
-                }),
-                instance = el.dxWidget("instance");
+            const el = this.element.dxWidget({
+                activeStateEnabled: true
+            });
+
+            const instance = el.dxWidget("instance");
 
             this.mouse.active();
             assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
@@ -619,17 +622,17 @@ require("common.css!");
 
             this.mouse.inactive();
             assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-
         } finally {
             config({ designMode: false });
         }
     });
 
-    QUnit.test("set disabled of one widget doesn't turn off the feedback of another active element", function(assert) {
-        var activeEl = this.element.dxWidget({ activeStateEnabled: true }),
-            disablingEl = $("<div />")
-                .appendTo("#qunit-fixture")
-                .dxWidget({ activeStateEnabled: true });
+    QUnit.test("set disabled of one widget doesn't turn off the feedback of another active element", (assert) => {
+        const activeEl = this.element.dxWidget({ activeStateEnabled: true });
+
+        const disablingEl = $("<div />")
+            .appendTo("#qunit-fixture")
+            .dxWidget({ activeStateEnabled: true });
 
         this.mouse.active();
         assert.equal(activeEl.hasClass(ACTIVE_STATE_CLASS), true);
@@ -641,12 +644,12 @@ require("common.css!");
         assert.equal(activeEl.hasClass(ACTIVE_STATE_CLASS), false);
     });
 
-    QUnit.test("disabled state does not works correctly during click (B233180)", function(assert) {
-        var clicked = 0;
+    QUnit.test("disabled state does not works correctly during click (B233180)", (assert) => {
+        let clicked = 0;
 
-        var element = $("#slider").dxWidget({
+        const element = $("#slider").dxWidget({
             disabled: true,
-            clickAction: function() {
+            clickAction() {
                 clicked++;
             }
         });
@@ -655,8 +658,8 @@ require("common.css!");
         assert.equal(clicked, 0);
     });
 
-    QUnit.test("hover state on dxhoverstart/dxhoverend", function(assert) {
-        var element = $("#widget").dxWidget({ hoverStateEnabled: true });
+    QUnit.test("hover state on dxhoverstart/dxhoverend", (assert) => {
+        const element = $("#widget").dxWidget({ hoverStateEnabled: true });
 
         assert.ok(!element.hasClass(HOVER_STATE_CLASS), "element has not class dx-hover-state");
 
@@ -667,8 +670,8 @@ require("common.css!");
         assert.ok(!element.hasClass(HOVER_STATE_CLASS), "element has not class dx-hover-state after dxhoverend");
     });
 
-    QUnit.test("hover state with option hoverStateEnabled - false", function(assert) {
-        var element = $("#widget").dxWidget({ hoverStateEnabled: false });
+    QUnit.test("hover state with option hoverStateEnabled - false", (assert) => {
+        const element = $("#widget").dxWidget({ hoverStateEnabled: false });
 
         assert.ok(!element.hasClass(HOVER_STATE_CLASS), "element has not hover class");
 
@@ -676,9 +679,9 @@ require("common.css!");
         assert.ok(!element.hasClass(HOVER_STATE_CLASS), "element has not hover class after hover");
     });
 
-    QUnit.test("hover state with option hoverStateEnabled - true/false", function(assert) {
-        var element = $("#widget").dxWidget({ hoverStateEnabled: true }),
-            instance = element.dxWidget("instance");
+    QUnit.test("hover state with option hoverStateEnabled - true/false", (assert) => {
+        const element = $("#widget").dxWidget({ hoverStateEnabled: true });
+        const instance = element.dxWidget("instance");
 
         assert.ok(!element.hasClass(HOVER_STATE_CLASS));
 
@@ -689,16 +692,16 @@ require("common.css!");
         assert.ok(!element.hasClass(HOVER_STATE_CLASS), "element has not hover after change hoverStateEnabled to false");
     });
 
-    QUnit.test("hover state on dxhoverstart/dxhoverend on nested elements by _activeStateUnit", function(assert) {
+    QUnit.test("hover state on dxhoverstart/dxhoverend on nested elements by _activeStateUnit", (assert) => {
         if(!devices.real().generic) {
             assert.ok(true, "hover, triggered by dxpointerenter, does not work on mobile devices");
             return;
         }
 
-        var element = $("#widget").dxWidget({ hoverStateEnabled: false }),
-            instance = element.dxWidget("instance"),
-            item1 = $("<div>").addClass("widget-item-hover"),
-            item2 = $("<div>").addClass("widget-item-hover");
+        const element = $("#widget").dxWidget({ hoverStateEnabled: false });
+        const instance = element.dxWidget("instance");
+        const item1 = $("<div>").addClass("widget-item-hover");
+        const item2 = $("<div>").addClass("widget-item-hover");
 
         instance.$element()
             .append(item1)
@@ -718,49 +721,48 @@ require("common.css!");
         assert.equal(item2.hasClass(HOVER_STATE_CLASS), true, "second element has hovered class after hover");
     });
 
-    QUnit.test("allow to use widget CSS classes (T145015)", function(assert) {
+    QUnit.test("allow to use widget CSS classes (T145015)", (assert) => {
         assert.expect(0);
 
-        var element = $("#widget").addClass("dx-test");
+        const element = $("#widget").addClass("dx-test");
         element
             .trigger("dxpointerdown")
             .trigger("dxpointerup")
             .trigger("dxclick");
     });
+});
 
-    QUnit.module("widget sizing render");
-
-    QUnit.test("constructor", function(assert) {
-        var $element = $("#widget").dxWidget({ width: 1234 }),
-            instance = $element.dxWidget("instance");
+QUnit.module("widget sizing render", {}, () => {
+    QUnit.test("constructor", (assert) => {
+        const $element = $("#widget").dxWidget({ width: 1234 });
+        const instance = $element.dxWidget("instance");
 
         assert.strictEqual(instance.option("width"), 1234);
         assert.strictEqual($element.outerWidth(), 1234, "outer width of the element must be equal to custom width");
     });
 
-    QUnit.test("root with custom percent width and option", function(assert) {
-        var $element = $("#widthRootStylePercent").dxWidget({ width: "70%" });
+    QUnit.test("root with custom percent width and option", (assert) => {
+        const $element = $("#widthRootStylePercent").dxWidget({ width: "70%" });
 
         assert.strictEqual($element[0].style.width, "70%");
     });
 
-    QUnit.test("change width", function(assert) {
-        var $element = $("#widget").dxWidget(),
-            instance = $element.dxWidget("instance"),
-            customWidth = 1234;
+    QUnit.test("change width", (assert) => {
+        const $element = $("#widget").dxWidget();
+        const instance = $element.dxWidget("instance");
+        const customWidth = 1234;
 
         instance.option("width", customWidth);
 
         assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
     });
+});
 
-
-    QUnit.module("templates support");
-
-    var TestContainer = Widget.inherit({
+QUnit.module("templates support", {}, () => {
+    const TestContainer = Widget.inherit({
         NAME: "TestContainer",
 
-        _renderContentImpl: function() {
+        _renderContentImpl() {
             if(this.option("integrationOptions.templates").template) {
                 this.option("integrationOptions.templates").template.render({ container: this.$element() });
             }
@@ -769,39 +771,38 @@ require("common.css!");
 
     registerComponent("TestContainer", TestContainer);
 
-    QUnit.test("internal template collection", function(assert) {
-        var testContainer = new TestContainer("#container", {}),
-            templateCollection = testContainer.option("integrationOptions.templates");
+    QUnit.test("internal template collection", (assert) => {
+        const testContainer = new TestContainer("#container", {});
+        const templateCollection = testContainer.option("integrationOptions.templates");
 
         assert.ok(templateCollection["item"] instanceof Template);
         assert.ok(templateCollection["group"] instanceof Template);
     });
 
-    QUnit.test("internal template as name (string)", function(assert) {
-        var testContainer = new TestContainer("#container", { template1: "item", template2: "group" }),
-            templateCollection = testContainer.option("integrationOptions.templates");
-
+    QUnit.test("internal template as name (string)", (assert) => {
+        const testContainer = new TestContainer("#container", { template1: "item", template2: "group" });
+        const templateCollection = testContainer.option("integrationOptions.templates");
 
         assert.strictEqual(testContainer._getTemplateByOption("template1"), templateCollection["item"]);
         assert.strictEqual(testContainer._getTemplateByOption("template2"), templateCollection["group"]);
     });
 
     // T312012
-    QUnit.test("internal row template as name (string)", function(assert) {
-        var testContainer = new TestContainer("#container", { rowTemplate: "rowItem" });
+    QUnit.test("internal row template as name (string)", (assert) => {
+        const testContainer = new TestContainer("#container", { rowTemplate: "rowItem" });
 
-        var $row = testContainer._getTemplateByOption("rowTemplate").render();
+        const $row = testContainer._getTemplateByOption("rowTemplate").render();
         assert.strictEqual($row.length, 1, "one element is rendered");
         assert.strictEqual($row[0].tagName, "TR", "tr is rendered"); // T484419
         assert.strictEqual($row.html(), "<td>item template content</td>", "tr contains td with content");
     });
 
-    QUnit.test("internal template as function returning name", function(assert) {
-        var testContainer = new TestContainer("#container", {
-            template1: function() {
+    QUnit.test("internal template as function returning name", (assert) => {
+        const testContainer = new TestContainer("#container", {
+            template1() {
                 return "item";
             },
-            template2: function() {
+            template2() {
                 return "group";
             }
         });
@@ -810,52 +811,56 @@ require("common.css!");
         assert.strictEqual(testContainer._getTemplateByOption("template2").render().text(), "group template content");
     });
 
-    QUnit.test("external template as DOM Element", function(assert) {
-        var testContainer = new TestContainer("#container", {
+    QUnit.test("external template as DOM Element", (assert) => {
+        const testContainer = new TestContainer("#container", {
             template: $("[data-options*=dxTemplate]").get(0)
         });
 
         assert.ok(testContainer._getTemplateByOption("template") instanceof Template);
     });
 
-    QUnit.test("external template as jQuery", function(assert) {
-        var testContainer = new TestContainer("#container", {
+    QUnit.test("external template as jQuery", (assert) => {
+        const testContainer = new TestContainer("#container", {
             template: $("[data-options*=dxTemplate]")
         });
 
         assert.ok(testContainer._getTemplateByOption("template") instanceof Template);
     });
 
-    QUnit.test("external template as script element", function(assert) {
-        var testContainer = new TestContainer("#container", {
-                template: $("#scriptTemplate")
-            }),
-            template = testContainer._getTemplateByOption("template");
+    QUnit.test("external template as script element", (assert) => {
+        const testContainer = new TestContainer("#container", {
+            template: $("#scriptTemplate")
+        });
+
+        const template = testContainer._getTemplateByOption("template");
 
         assert.ok(template instanceof Template);
         assert.ok(template.render().is(".myTemplate"));
     });
 
-    QUnit.test("external custom template should call onRendered method without templatesRenderAsynchronously", function(assert) {
-        var templateRenderer = function() {
-                return this.name;
-            },
-            onRenderedHandler = sinon.spy(),
-            testContainer = new TestContainer("#container", {
-                templatesRenderAsynchronously: false,
-                integrationOptions: {
-                    templates: {
-                        "testTemplate": {
-                            name: "TestTemplate",
-                            render: templateRenderer
-                        }
-                    }
-                },
-                template: "testTemplate"
-            }),
-            template = testContainer._getTemplateByOption("template");
+    QUnit.test("external custom template should call onRendered method without templatesRenderAsynchronously", (assert) => {
+        const templateRenderer = function() {
+            return this.name;
+        };
 
-        var renderResult = template.render({ onRendered: onRenderedHandler });
+        const onRenderedHandler = sinon.spy();
+
+        const testContainer = new TestContainer("#container", {
+            templatesRenderAsynchronously: false,
+            integrationOptions: {
+                templates: {
+                    "testTemplate": {
+                        name: "TestTemplate",
+                        render: templateRenderer
+                    }
+                }
+            },
+            template: "testTemplate"
+        });
+
+        const template = testContainer._getTemplateByOption("template");
+
+        const renderResult = template.render({ onRendered: onRenderedHandler });
 
         assert.equal(template.name, "TestTemplate", "template is correct");
         assert.equal(renderResult, "TestTemplate", "render method should have correct context");
@@ -864,79 +869,94 @@ require("common.css!");
         assert.equal(testContainer.option("integrationOptions.templates").testTemplate.render, templateRenderer, "template renderer is preserved");
     });
 
-    QUnit.test("external custom template should call onRendered method without templatesRenderAsynchronously (template.render exists)", function(assert) {
-        var onRenderedHandler = sinon.spy(),
-            testContainer = new TestContainer("#container", {
-                templatesRenderAsynchronously: false,
-                template: {
-                    render: function() { return 'template result'; }
-                }
-            }),
-            template = testContainer._getTemplateByOption("template");
+    QUnit.test("external custom template should call onRendered method without templatesRenderAsynchronously (template.render exists)", (assert) => {
+        const onRenderedHandler = sinon.spy();
 
-        var renderResult = template.render({ onRendered: onRenderedHandler });
+        const testContainer = new TestContainer("#container", {
+            templatesRenderAsynchronously: false,
+            template: {
+                render() {
+                    return 'template result';
+                }
+            }
+        });
+
+        const template = testContainer._getTemplateByOption("template");
+
+        const renderResult = template.render({ onRendered: onRenderedHandler });
 
         assert.equal(renderResult, "template result", "render method should have correct context");
         assert.equal(onRenderedHandler.callCount, 1, "onRendered has been called");
     });
 
-    QUnit.test("shared external template as script element", function(assert) {
-        var testContainer1 = new TestContainer("#container", {
-                template: $("#scriptTemplate")
-            }),
-            template1 = testContainer1._getTemplateByOption("template");
+    QUnit.test("shared external template as script element", (assert) => {
+        const testContainer1 = new TestContainer("#container", {
+            template: $("#scriptTemplate")
+        });
+
+        const template1 = testContainer1._getTemplateByOption("template");
 
         assert.ok(template1 instanceof Template);
         assert.ok(template1.render().is(".myTemplate"));
 
-        var testContainer2 = new TestContainer("#container2", {
-                template: $("#scriptTemplate")
-            }),
-            template2 = testContainer2._getTemplateByOption("template");
+        const testContainer2 = new TestContainer("#container2", {
+            template: $("#scriptTemplate")
+        });
+
+        const template2 = testContainer2._getTemplateByOption("template");
 
         assert.ok(template2 instanceof Template);
         assert.ok(template2.render().is(".myTemplate"));
     });
 
-    QUnit.test("external template as function returning element", function(assert) {
-        var testContainer = new TestContainer("#container", {
-                template: function() {
-                    return $("#scriptTemplate");
-                }
-            }),
-            template = testContainer._getTemplateByOption("template");
+    QUnit.test("external template as function returning element", (assert) => {
+        const testContainer = new TestContainer("#container", {
+            template() {
+                return $("#scriptTemplate");
+            }
+        });
+
+        const template = testContainer._getTemplateByOption("template");
 
         assert.ok(template instanceof TemplateBase);
         assert.ok(template.render().is(".myTemplate"));
     });
 
-    QUnit.test("named template should be cut", function(assert) {
+    QUnit.test("named template should be cut", (assert) => {
         new TestContainer("#container", {});
 
-        assert.equal($("#container").contents().filter(function(_, el) { return el.nodeType === 1; }).length, 0);
+        assert.equal($("#container").contents().filter((_, el) => {
+            return el.nodeType === 1;
+        }).length, 0);
     });
 
-    QUnit.test("anonymous template should be cut even if it contain script tag", function(assert) {
+    QUnit.test("anonymous template should be cut even if it contain script tag", (assert) => {
         new TestContainer("#widgetWithScriptInTemplate", {});
 
-        assert.equal($("#widgetWithScriptInTemplate").contents().filter(function(_, el) { return el.nodeType === 1; }).length, 1);
+        assert.equal($("#widgetWithScriptInTemplate").contents().filter((_, el) => {
+            return el.nodeType === 1;
+        }).length, 1);
     });
 
-    QUnit.test("shared template as Template instance", function(assert) {
-        var template = new Template(),
-            testContainer = new TestContainer("#container", { myTemplate: template });
+    QUnit.test("shared template as Template instance", (assert) => {
+        const template = new Template();
+        const testContainer = new TestContainer("#container", { myTemplate: template });
         assert.strictEqual(testContainer._getTemplateByOption("myTemplate"), template);
     });
 
-    QUnit.test("shared template as Template interface", function(assert) {
-        var renderHandler = sinon.spy();
-        var template = {
-                render: renderHandler
-            },
-            fakeTemplate = {
-                fakeRender: function() { }
-            },
-            testContainer;
+    QUnit.test("shared template as Template interface", (assert) => {
+        const renderHandler = sinon.spy();
+
+        const template = {
+            render: renderHandler
+        };
+
+        const fakeTemplate = {
+            fakeRender() {
+            }
+        };
+
+        let testContainer;
 
         testContainer = new TestContainer("#container", { myTemplate: template });
         testContainer._getTemplateByOption("myTemplate").render();
@@ -946,26 +966,27 @@ require("common.css!");
         assert.notDeepEqual(testContainer._getTemplateByOption("myTemplate"), fakeTemplate);
     });
 
-    QUnit.test("template should not be rendered if function return null or undefined", function(assert) {
-        var testContainer = new TestContainer("#container", {
-                nullTemplate: function() {
-                    return null;
-                },
-                undefinedTemplate: function() {
-                    return;
-                }
-            }),
-            nullTemplate = testContainer._getTemplateByOption("nullTemplate"),
-            undefinedTemplate = testContainer._getTemplateByOption("undefinedTemplate");
+    QUnit.test("template should not be rendered if function return null or undefined", (assert) => {
+        const testContainer = new TestContainer("#container", {
+            nullTemplate() {
+                return null;
+            },
+            undefinedTemplate() {
+                return;
+            }
+        });
+
+        const nullTemplate = testContainer._getTemplateByOption("nullTemplate");
+        const undefinedTemplate = testContainer._getTemplateByOption("undefinedTemplate");
 
         assert.equal(nullTemplate.render().length, 0, "null template not rendered");
         assert.equal(undefinedTemplate.render().length, 0, "undefined template not rendered");
     });
 
-    QUnit.test("dynamically created with function template should be removed after rendering", function(assert) {
+    QUnit.test("dynamically created with function template should be removed after rendering", (assert) => {
         try {
-            var text = "some text template",
-                disposed = false;
+            const text = "some text template";
+            let disposed = false;
 
             Template.prototype.dispose = function() {
                 if($.trim(this.render({ model: {}, container: $("<div>") }).text()) === text) {
@@ -973,12 +994,13 @@ require("common.css!");
                 }
             };
 
-            var testContainer = new TestContainer("#container", {
-                    template: function() {
-                        return text;
-                    }
-                }),
-                template = testContainer._getTemplateByOption("template");
+            const testContainer = new TestContainer("#container", {
+                template() {
+                    return text;
+                }
+            });
+
+            const template = testContainer._getTemplateByOption("template");
 
             template.render({ model: {}, container: $("<div>") });
 
@@ -988,24 +1010,25 @@ require("common.css!");
         }
     });
 
-    QUnit.test("dynamically created with function template should not be removed after rendering if it has another owner", function(assert) {
+    QUnit.test("dynamically created with function template should not be removed after rendering if it has another owner", (assert) => {
         try {
-            var text = "some text template",
-                disposed = false;
+            const text = "some text template";
+            let disposed = false;
 
-            Template.prototype.dispose = function() {
+            Template.prototype.dispose = () => {
                 if($.trim(this.render({ model: {}, container: $("<div>") }).text()) === text) {
                     disposed = true;
                 }
             };
 
-            var testContainer = new TestContainer("#container", {
-                    ownedTemplate: text,
-                    template: function() {
-                        return testContainer._getTemplateByOption("ownedTemplate");
-                    }
-                }),
-                template = testContainer._getTemplateByOption("template");
+            const testContainer = new TestContainer("#container", {
+                ownedTemplate: text,
+                template() {
+                    return testContainer._getTemplateByOption("ownedTemplate");
+                }
+            });
+
+            const template = testContainer._getTemplateByOption("template");
 
             template.render({ model: {}, container: $("<div>") });
 
@@ -1015,16 +1038,17 @@ require("common.css!");
         }
     });
 
-    $.each({ string: "custom text", element: $("<span>") }, function(name, data) {
-        QUnit.test("dynamically created from " + name + " template should be removed after rendering", function(assert) {
-            var disposed = false;
+    $.each({ string: "custom text", element: $("<span>") }, (name, data) => {
+        QUnit.test("dynamically created from " + name + " template should be removed after rendering", (assert) => {
+            let disposed = false;
 
-            var testContainer = new TestContainer("#container", {
-                    template: data
-                }),
-                template = testContainer._getTemplateByOption("template");
+            const testContainer = new TestContainer("#container", {
+                template: data
+            });
 
-            template.dispose = function() {
+            const template = testContainer._getTemplateByOption("template");
+
+            template.dispose = () => {
                 disposed = true;
             };
 
@@ -1034,54 +1058,55 @@ require("common.css!");
         });
     });
 
-    $.each({ node: document.createElement("span"), jquery: $("<span>") }, function(name, element) {
+    $.each({ node: document.createElement("span"), jquery: $("<span>") }, (name, element) => {
         if(name === "jquery") {
             element = element.get(0);
         }
 
-        QUnit.test("dynamically created " + name + " template should save data associated with it", function(assert) {
+        QUnit.test("dynamically created " + name + " template should save data associated with it", (assert) => {
             dataUtils.data(element, "key", "value");
-            var testContainer = new TestContainer("#container", {
-                    template: function() {
-                        return element;
-                    }
-                }),
-                template = testContainer._getTemplateByOption("template");
+
+            const testContainer = new TestContainer("#container", {
+                template() {
+                    return element;
+                }
+            });
+
+            const template = testContainer._getTemplateByOption("template");
 
             assert.equal(template.render().data("key"), "value", "data was not removed");
         });
     });
+});
 
+QUnit.module("templates caching", {
+    beforeEach: () => {
+        this.compileCalled = 0;
+        this.integrationOptions = {
+            createTemplate: source => {
+                this.compileCalled++;
+                return {
+                    render() {
+                        return source.contents();
+                    }
+                };
+            }
+        };
+        this.TestContainer = Widget.inherit({
+            NAME: "TestContainer",
 
-    QUnit.module("templates caching", {
-        beforeEach: function() {
-            this.compileCalled = 0;
-            this.integrationOptions = {
-                createTemplate: function(source) {
-                    this.compileCalled++;
-                    return {
-                        render: function() {
-                            return source.contents();
-                        }
-                    };
-                }.bind(this)
-            };
-            this.TestContainer = Widget.inherit({
-                NAME: "TestContainer",
+            _renderContentImpl() {
+                this._getTemplateByOption("template")
+                    .render({ container: this.$element() });
+            }
+        });
 
-                _renderContentImpl: function() {
-                    this._getTemplateByOption("template")
-                        .render({ container: this.$element() });
-                }
-            });
-
-            $("<script id='external-template' type='text/html'>template string</script>")
-                .appendTo("#qunit-fixture");
-        }
-    });
-
-    QUnit.test("template defined by jquery should be cached", function(assert) {
-        var testContainer = new this.TestContainer($("<div>").appendTo("#qunit-fixture"), {
+        $("<script id='external-template' type='text/html'>template string</script>")
+            .appendTo("#qunit-fixture");
+    }
+}, () => {
+    QUnit.test("template defined by jquery should be cached", (assert) => {
+        const testContainer = new this.TestContainer($("<div>").appendTo("#qunit-fixture"), {
             integrationOptions: this.integrationOptions,
             template: $("#external-template")
         });
@@ -1090,8 +1115,8 @@ require("common.css!");
         assert.equal(this.compileCalled, 1);
     });
 
-    QUnit.test("template defined by string should be cached", function(assert) {
-        var testContainer = new this.TestContainer($("<div>").appendTo("#qunit-fixture"), {
+    QUnit.test("template defined by string should be cached", (assert) => {
+        const testContainer = new this.TestContainer($("<div>").appendTo("#qunit-fixture"), {
             integrationOptions: this.integrationOptions,
             template: "#external-template"
         });
@@ -1099,105 +1124,92 @@ require("common.css!");
 
         assert.equal(this.compileCalled, 1);
     });
+});
 
+QUnit.module("platform specific templates", {
+    beforeEach: () => {
+        const TestContainerWidget = Widget.inherit({
+            NAME: "TestContainerWidget",
 
-    QUnit.module("platform specific templates", {
-        beforeEach: function() {
-            var TestContainerWidget = Widget.inherit({
-                NAME: "TestContainerWidget",
-
-                _renderContentImpl: function() {
-                    if(this.option("integrationOptions.templates")["item"]) {
-                        this.option("integrationOptions.templates")["item"].render({ container: this.$element() });
-                    }
+            _renderContentImpl() {
+                if(this.option("integrationOptions.templates")["item"]) {
+                    this.option("integrationOptions.templates")["item"].render({ container: this.$element() });
                 }
-            });
+            }
+        });
 
-            registerComponent("TestContainerWidget", TestContainerWidget);
-            this.currentDevice = devices.current();
-        },
+        registerComponent("TestContainerWidget", TestContainerWidget);
+        this.currentDevice = devices.current();
+    },
 
-        afterEach: function() {
-            delete $.fn["TestContainerWidget"];
-            devices.current(this.currentDevice);
-        }
-    });
-
-    QUnit.test("init template depends on platform", function(assert) {
+    afterEach: () => {
+        delete $.fn["TestContainerWidget"];
+        devices.current(this.currentDevice);
+    }
+}, () => {
+    QUnit.test("init template depends on platform", (assert) => {
         devices.current({ platform: "ios" });
-        var $testContainer = $("#platformSpecificContainer").TestContainerWidget();
+        const $testContainer = $("#platformSpecificContainer").TestContainerWidget();
         assert.equal($testContainer.children().eq(0).text(), "ios", "correct template was chosen");
     });
 
-    QUnit.test("search best template", function(assert) {
+    QUnit.test("search best template", (assert) => {
         devices.current({ platform: "win" });
-        var $testContainer = $("#platformSpecificContainer").TestContainerWidget();
+        const $testContainer = $("#platformSpecificContainer").TestContainerWidget();
         assert.equal($testContainer.children().eq(0).text(), "common", "best template was chosen");
     });
 
-    QUnit.test("container widget without best template", function(assert) {
+    QUnit.test("container widget without best template", (assert) => {
         devices.current({ platform: "win" });
-        var $testContainer = $("#platformSpecificContainer2").TestContainerWidget(),
-            instance = $testContainer.TestContainerWidget("instance");
+        const $testContainer = $("#platformSpecificContainer2").TestContainerWidget();
+        const instance = $testContainer.TestContainerWidget("instance");
 
         assert.equal(instance.option("integrationOptions.templates")["item"], undefined, "could not find template for selected platform");
     });
 
-    QUnit.test("several best templates for widget", function(assert) {
+    QUnit.test("several best templates for widget", (assert) => {
         devices.current({ platform: "ios" });
-        var $testContainer = $("#platformSpecificContainer2").TestContainerWidget();
+        const $testContainer = $("#platformSpecificContainer2").TestContainerWidget();
         assert.equal($testContainer.children().eq(0).text(), "ios", "choose first best template");
     });
+});
 
+QUnit.module("template support regressions", {
+    beforeEach: () => {
+        const TestContainer = Widget.inherit({
+            NAME: "TestContainer",
 
-    QUnit.module("template support regressions", {
-        beforeEach: function() {
-            var TestContainer = Widget.inherit({
-                NAME: "TestContainer",
-
-                _renderContentImpl: function() {
-                    if(this.option("integrationOptions.templates").template) {
-                        this.option("integrationOptions.templates").template.render({ container: this.$element() });
-                    }
+            _renderContentImpl() {
+                if(this.option("integrationOptions.templates").template) {
+                    this.option("integrationOptions.templates").template.render({ container: this.$element() });
                 }
-            });
+            }
+        });
 
-            var TestWidget = Widget.inherit({
-                NAME: "TestWidget",
+        const TestWidget = Widget.inherit({
+            NAME: "TestWidget",
 
-                _render: function() {
-                    this.callBase();
-                    this.$element().text("test");
-                }
-            });
+            _render() {
+                this.callBase();
+                this.$element().text("test");
+            }
+        });
 
-            // var CompositeWidget = Widget.inherit({
-            //     NAME: "TestContainer",
+        registerComponent("TestContainer", TestContainer);
+        registerComponent("TestWidget", TestWidget);
+    },
 
-            //     _renderContentImpl: function() {
-            //         var $element = $("<div>").appendTo(this.element());
-            //         this.childWidget = new TestWidget($element, {});
-            //     }
-
-            // });
-
-            registerComponent("TestContainer", TestContainer);
-            registerComponent("TestWidget", TestWidget);
-            // registerComponent("CompositeWidget", TestWidget);
-        },
-
-        afterEach: function() {
-            delete $.fn["TestContainer"];
-            delete $.fn["TestWidget"];
-        }
-    });
-
-    QUnit.test("B235090 - Unable to render container widget content (jQuery plug-in scenario)", function(assert) {
+    afterEach: () => {
+        delete $.fn["TestContainer"];
+        delete $.fn["TestWidget"];
+    }
+}, () => {
+    QUnit.test("B235090 - Unable to render container widget content (jQuery plug-in scenario)", (assert) => {
         assert.expect(2);
 
-        var $testContainer = $("#jQueryContainerWidget");
+        const $testContainer = $("#jQueryContainerWidget");
         $testContainer.TestContainer({
-            onContentReady: function() {
+            onContentReady() {
                 $("#innerWidget").TestWidget({});
                 assert.equal($testContainer.children().length, 1);
                 assert.equal($testContainer.children().eq(0).text(), "test");
@@ -1205,7 +1217,7 @@ require("common.css!");
         });
     });
 
-    QUnit.test("container widget should ignore unknown data-options params (B253554)", function(assert) {
+    QUnit.test("container widget should ignore unknown data-options params (B253554)", (assert) => {
         assert.expect(0);
 
         $.each([
@@ -1217,8 +1229,8 @@ require("common.css!");
             "<div data-options=\"dxTest : {title: 'View2' }, dxTemplate:  {  name:  'content'}\" >123</div>",
             "<div data-options=\"dxTest : {title: 'View2' }, dxtemplate:  {  name:  'content'}\" >123</div>",
             "<div data-options=\"dxTest : {title: 'View2', dxTemplate:  {  name:  'content'} } \" >123</div>"
-        ], function() {
-            var $element;
+        ], () => {
+            let $element;
             try {
                 $element = $("<div></div>")
                     .append(this)
@@ -1229,21 +1241,20 @@ require("common.css!");
             }
         });
     });
+});
 
-
-    QUnit.module("keyboard navigation");
-
-    QUnit.test("widget obtaining focus after click on its inner element (T242395)", function(assert) {
+QUnit.module("keyboard navigation", {}, () => {
+    QUnit.test("widget obtaining focus after click on its inner element (T242395)", (assert) => {
         assert.expect(1);
 
-        var $element = $("#widget").dxWidget({ focusStateEnabled: true }),
-            isPrevented = false;
+        const $element = $("#widget").dxWidget({ focusStateEnabled: true });
+        let isPrevented = false;
 
         $element.append($("<div>", { style: "width: 10px; height: 10px;" }));
 
         if(document["onbeforeactivate"] !== undefined) {
-            var $inner = $element.find("div").eq(0);
-            $element.on("beforeactivate", function(e) {
+            const $inner = $element.find("div").eq(0);
+            $element.on("beforeactivate", e => {
                 isPrevented = e.isDefaultPrevented();
             });
             $inner.trigger("beforeactivate");
@@ -1254,28 +1265,30 @@ require("common.css!");
         }
     });
 
-    QUnit.test("supported keys should have an event as a parameter", function(assert) {
-        var supportedKeysHandler = sinon.stub().returns({
-                "a": function() {
-                }
-            }),
-            TestWidget = Widget.inherit({
-                NAME: "TestWidget",
-                _supportedKeys: supportedKeysHandler
-            }),
-            $element = $("#widget");
+    QUnit.test("supported keys should have an event as a parameter", (assert) => {
+        const supportedKeysHandler = sinon.stub().returns({
+            "a": () => {
+            }
+        });
+
+        const TestWidget = Widget.inherit({
+            NAME: "TestWidget",
+            _supportedKeys: supportedKeysHandler
+        });
+
+        const $element = $("#widget");
 
         new TestWidget($element, { focusStateEnabled: true });
 
-        var kb = keyboardMock($element);
+        const kb = keyboardMock($element);
         kb.press("a");
 
         assert.equal(supportedKeysHandler.callCount, 1, "supportedKeys was called");
         assert.equal(supportedKeysHandler.getCall(0).args[0].type, "keydown", "event is correct");
     });
 
-    QUnit.test("focus state", function(assert) {
-        var $element = $("#widget").dxWidget({ focusStateEnabled: true });
+    QUnit.test("focus state", (assert) => {
+        const $element = $("#widget").dxWidget({ focusStateEnabled: true });
 
         assert.equal($element.hasClass(FOCUSED_STATE_CLASS), false, "element has not dx-state-focus class");
         assert.equal($element.attr("tabindex"), 0, "element has tabindex after focus");
@@ -1284,9 +1297,9 @@ require("common.css!");
         assert.equal($element.hasClass(FOCUSED_STATE_CLASS), true, "element has dx-state-focus class after focus");
     });
 
-    QUnit.test("tabIndex option", function(assert) {
-        var $element = $("#widget").dxWidget({ focusStateEnabled: true, tabIndex: 3 }),
-            instance = $element.dxWidget("instance");
+    QUnit.test("tabIndex option", (assert) => {
+        const $element = $("#widget").dxWidget({ focusStateEnabled: true, tabIndex: 3 });
+        const instance = $element.dxWidget("instance");
 
         assert.equal($element.attr("tabindex"), 3, "element has right tabindex");
         instance.option("tabIndex", -1);
@@ -1294,9 +1307,9 @@ require("common.css!");
         assert.equal($element.attr("tabindex"), -1, "element has right tabindex after change");
     });
 
-    QUnit.test("focus state option changed", function(assert) {
-        var $element = $("#widget").dxWidget({ focusStateEnabled: true }),
-            instance = $element.dxWidget("instance");
+    QUnit.test("focus state option changed", (assert) => {
+        const $element = $("#widget").dxWidget({ focusStateEnabled: true });
+        const instance = $element.dxWidget("instance");
 
         $element.trigger("focusin");
         instance.option("focusStateEnabled", false);
@@ -1307,12 +1320,13 @@ require("common.css!");
         assert.equal($element.hasClass(FOCUSED_STATE_CLASS), true, "element has not dx-state-focus class after focus");
     });
 
-    QUnit.test("focus in disabled state", function(assert) {
-        var $element = $("#widget").dxWidget({
-                focusStateEnabled: true,
-                disabled: true
-            }),
-            instance = $element.dxWidget("instance");
+    QUnit.test("focus in disabled state", (assert) => {
+        const $element = $("#widget").dxWidget({
+            focusStateEnabled: true,
+            disabled: true
+        });
+
+        const instance = $element.dxWidget("instance");
 
         assert.equal($element.hasClass(FOCUSED_STATE_CLASS), false, "element has not dx-state-focus class");
 
@@ -1326,14 +1340,15 @@ require("common.css!");
         assert.equal($element.hasClass(FOCUSED_STATE_CLASS), true, "element has dx-state-focus class after focus");
     });
 
-    QUnit.test("registerKeyHandler function add key handler to widget", function(assert) {
-        var $element = $("#widget").dxWidget({ focusStateEnabled: true }),
-            widget = $element.dxWidget("instance"),
-            keyboard = keyboardMock($element),
-            handlerFired = 0,
-            handler = function() {
-                handlerFired++;
-            };
+    QUnit.test("registerKeyHandler function add key handler to widget", (assert) => {
+        const $element = $("#widget").dxWidget({ focusStateEnabled: true });
+        const widget = $element.dxWidget("instance");
+        const keyboard = keyboardMock($element);
+        let handlerFired = 0;
+
+        const handler = () => {
+            handlerFired++;
+        };
 
         widget.registerKeyHandler("tab", handler);
         keyboard.keyDown("tab");
@@ -1341,146 +1356,208 @@ require("common.css!");
         assert.equal(handlerFired, 1, "new handler fired");
     });
 
-    QUnit.test("registerKeyHandler can attach a key handler to widget by a key code", function(assert) {
-        var $element = $("#widget").dxWidget({ focusStateEnabled: true }),
-            widget = $element.dxWidget("instance"),
-            handler = sinon.stub();
+    QUnit.test("registerKeyHandler can attach a key handler to widget by a key code", (assert) => {
+        const $element = $("#widget").dxWidget({ focusStateEnabled: true });
+        const widget = $element.dxWidget("instance");
+        const handler = sinon.stub();
 
         widget.registerKeyHandler("113", handler);
 
-        var event = $.Event('keydown', { which: 113, key: "F2" });
+        const event = $.Event('keydown', { which: 113, key: "F2" });
         $element.trigger(event);
 
         assert.equal(handler.callCount, 1, "new handler fired");
     });
+});
 
+QUnit.module("isReady", {}, () => {
+    QUnit.test("widget is ready after rendering", (assert) => {
 
-    (function() {
+        let isReadyOnInit;
 
-        QUnit.module("isReady");
+        registerComponent("dxWidget", Widget.inherit({
 
-        QUnit.test("widget is ready after rendering", function(assert) {
+            _init() {
+                this.callBase();
+                isReadyOnInit = this.isReady();
+            }
 
-            var isReadyOnInit;
+        }));
 
-            registerComponent("dxWidget", Widget.inherit({
+        const $widget = $("#widget").dxWidget();
 
-                _init: function() {
-                    this.callBase();
-                    isReadyOnInit = this.isReady();
-                }
+        assert.equal(isReadyOnInit, false, "widget is not ready on init");
+        assert.equal($widget.dxWidget("isReady"), true, "widget is ready after render");
 
-            }));
+    });
+});
 
-            var $widget = $("#widget").dxWidget();
+QUnit.module("dataHelperMixin", {}, () => {
+    QUnit.test("dataSource disposing should remove only widget handlers preserving existing handlers (T213769)", (assert) => {
+        const TestWidget = Widget.inherit({
+            NAME: "TestWidget",
 
-            assert.equal(isReadyOnInit, false, "widget is not ready on init");
-            assert.equal($widget.dxWidget("isReady"), true, "widget is ready after render");
+            _setDefaultOptions() {
+                this.callBase();
 
+                this.option({
+                    dataSource: null
+                });
+            },
+
+            _init() {
+                this.callBase();
+                this._refreshDataSource();
+            }
+
+        }).include(DataHelperMixin);
+
+        const dataSource = new DataSource({ store: [] });
+        const changeHandler = () => {
+        };
+        const loadErrorHandler = () => {
+        };
+        const loadingChangedHandler = () => {
+        };
+
+        dataSource.on("changed", changeHandler);
+        dataSource.on("loadError", loadErrorHandler);
+        dataSource.on("loadingChanged", loadingChangedHandler);
+
+        new TestWidget("#widget", {
+            dataSource
         });
 
-    })();
+        $("#widget").remove();
 
+        const events = dataSource._eventsStrategy._events;
+        assert.ok(events.changed.has(changeHandler), "external 'change' handler still attached");
+        assert.ok(events.loadError.has(loadErrorHandler), "external 'loadError' handler still attached");
+        assert.ok(events.loadingChanged.has(loadingChangedHandler), "external 'loadingChanged' handler still attached");
+    });
+});
 
-    (function() {
+QUnit.module("aria accessibility", {}, () => {
+    QUnit.test("aria-disabled", (assert) => {
+        const $element = $("#widget").dxWidget({ disabled: true });
+        const instance = $element.dxWidget("instance");
 
-        QUnit.module("dataHelperMixin");
+        assert.equal($element.attr("aria-disabled"), "true", "attribute test on init");
 
-        QUnit.test("dataSource disposing should remove only widget handlers preserving existing handlers (T213769)", function(assert) {
-            var TestWidget = Widget.inherit({
-                NAME: "TestWidget",
+        instance.option("disabled", false);
+        assert.equal($element.attr("aria-disabled"), undefined, "attribute test on option change");
+    });
 
-                _setDefaultOptions: function() {
-                    this.callBase();
+    QUnit.test("aria-hidden", (assert) => {
+        const $element = $("#widget").dxWidget({ visible: false });
+        const instance = $element.dxWidget("instance");
 
-                    this.option({
-                        dataSource: null
-                    });
-                },
+        assert.equal($element.attr("aria-hidden"), "true", "attribute test on init");
 
-                _init: function() {
-                    this.callBase();
-                    this._refreshDataSource();
-                }
+        instance.option("visible", true);
+        assert.equal($element.attr("aria-hidden"), undefined, "attribute test on option change");
+    });
 
-            }).include(DataHelperMixin);
+    QUnit.test("setAria function", (assert) => {
+        const $element = $("#widget").dxWidget();
+        const instance = $element.dxWidget("instance");
+        const $customTarget = $("<div>");
 
-            var dataSource = new DataSource({ store: [] });
-            var changeHandler = function() { };
-            var loadErrorHandler = function() { };
-            var loadingChangedHandler = function() { };
+        instance.setAria("test", "test value 1");
+        assert.equal($element.attr("aria-test"), "test value 1", "2 arguments should set aria-attribute to the aria target");
 
-            dataSource.on("changed", changeHandler);
-            dataSource.on("loadError", loadErrorHandler);
-            dataSource.on("loadingChanged", loadingChangedHandler);
+        instance.setAria("test", "test value 2", $customTarget);
+        assert.equal($customTarget.attr("aria-test"), "test value 2", "3 arguments should set aria-attribute to the custom target");
 
-            new TestWidget("#widget", {
-                dataSource: dataSource
-            });
+        instance.setAria("role", "test role");
+        assert.equal($element.attr("role"), "test role", "role should not add aria- prefix");
 
-            $("#widget").remove();
+        instance.setAria("id", "test id");
+        assert.equal($element.attr("id"), "test id", "id should not add aria- prefix");
 
-            var events = dataSource._eventsStrategy._events;
-            assert.ok(events.changed.has(changeHandler), "external 'change' handler still attached");
-            assert.ok(events.loadError.has(loadErrorHandler), "external 'loadError' handler still attached");
-            assert.ok(events.loadingChanged.has(loadingChangedHandler), "external 'loadingChanged' handler still attached");
+        instance.setAria({
+            role: "testing role",
+            id: "testing id",
+            label: "testing label"
+        });
+        assert.equal($element.attr("role"), "testing role", "multiple attribute role");
+        assert.equal($element.attr("id"), "testing id", "multiple attribute id");
+        assert.equal($element.attr("aria-label"), "testing label", "multiple attribute aria-label");
+
+        instance.setAria({ "test": "test" }, $customTarget);
+        assert.equal($customTarget.attr("aria-test"), "test", "custom target with object");
+    });
+});
+
+QUnit.module("inner options cache", {}, () => {
+    const TestWidget = Widget.inherit({
+        NAME: "TestWidget",
+
+        _init() {
+            this.callBase();
+            this._initInnerOptionCache("innerComponentOptions");
+        },
+
+        _renderInnerWidget() {
+            return this._createComponent($("<div>"), Widget, extend({
+                defaultOption: "Test"
+            }, this._getInnerOptionsCache("innerComponentOptions")));
+        },
+
+        _render() {
+            this.callBase();
+            this.innerComponent = this._renderInnerWidget();
+            this._bindInnerWidgetOptions(this.innerComponent, "innerComponentOptions");
+        },
+
+        _optionChanged(args) {
+            switch(args.name) {
+                case "innerComponentOptions":
+                    this.innerComponent.option(args.value);
+                    this._cacheInnerOptions("innerComponentOptions", args.value);
+                    break;
+                default:
+                    this.callBase(args);
+            }
+        }
+    });
+
+    QUnit.test("a user can redefine inner component options", (assert) => {
+        const widget = new TestWidget("#widget", {
+            innerComponentOptions: {
+                someOption: "Test",
+                defaultOption: "New"
+            }
         });
 
-    })();
+        assert.strictEqual(widget.innerComponent.option("someOption"), "Test", "option has been passed");
+        assert.strictEqual(widget.innerComponent.option("defaultOption"), "New", "default option has been redefined");
+    });
 
+    QUnit.test("two way binding should work with inner component options", (assert) => {
+        const widget = new TestWidget("#widget", {});
 
-    (function() {
-        QUnit.module("aria accessibility");
+        assert.strictEqual(widget.option("innerComponentOptions.defaultOption"), "Test", "inner component options has been loaded");
 
-        QUnit.test("aria-disabled", function(assert) {
-            var $element = $("#widget").dxWidget({ disabled: true }),
-                instance = $element.dxWidget("instance");
+        widget.innerComponent.option("newOption", "Test");
+        assert.strictEqual(widget.option("innerComponentOptions.newOption"), "Test", "option has been passed to the main widget");
 
-            assert.equal($element.attr("aria-disabled"), "true", "attribute test on init");
+        widget.option("innerComponentOptions", { newOption: "Test 2" });
+        assert.strictEqual(widget.innerComponent.option("newOption"), "Test 2", "option has been passed to the inner widget");
+        assert.strictEqual(widget.innerComponent.option("defaultOption"), "Test", "default option should not be redefined");
+    });
 
-            instance.option("disabled", false);
-            assert.equal($element.attr("aria-disabled"), undefined, "attribute test on option change");
+    QUnit.test("inner component options should not be losed on dispose", (assert) => {
+        const widget = new TestWidget("#widget", {
+            innerComponentOptions: {
+                someOption: "Test",
+                defaultOption: "New"
+            }
         });
 
-        QUnit.test("aria-hidden", function(assert) {
-            var $element = $("#widget").dxWidget({ visible: false }),
-                instance = $element.dxWidget("instance");
+        widget.repaint();
 
-            assert.equal($element.attr("aria-hidden"), "true", "attribute test on init");
-
-            instance.option("visible", true);
-            assert.equal($element.attr("aria-hidden"), undefined, "attribute test on option change");
-        });
-
-        QUnit.test("setAria function", function(assert) {
-            var $element = $("#widget").dxWidget(),
-                instance = $element.dxWidget("instance"),
-                $customTarget = $("<div>");
-
-            instance.setAria("test", "test value 1");
-            assert.equal($element.attr("aria-test"), "test value 1", "2 arguments should set aria-attribute to the aria target");
-
-            instance.setAria("test", "test value 2", $customTarget);
-            assert.equal($customTarget.attr("aria-test"), "test value 2", "3 arguments should set aria-attribute to the custom target");
-
-            instance.setAria("role", "test role");
-            assert.equal($element.attr("role"), "test role", "role should not add aria- prefix");
-
-            instance.setAria("id", "test id");
-            assert.equal($element.attr("id"), "test id", "id should not add aria- prefix");
-
-            instance.setAria({
-                role: "testing role",
-                id: "testing id",
-                label: "testing label"
-            });
-            assert.equal($element.attr("role"), "testing role", "multiple attribute role");
-            assert.equal($element.attr("id"), "testing id", "multiple attribute id");
-            assert.equal($element.attr("aria-label"), "testing label", "multiple attribute aria-label");
-
-            instance.setAria({ "test": "test" }, $customTarget);
-            assert.equal($customTarget.attr("aria-test"), "test", "custom target with object");
-
-        });
-    })();
-})();
+        assert.strictEqual(widget.innerComponent.option("someOption"), "Test", "option has been passed");
+        assert.strictEqual(widget.innerComponent.option("defaultOption"), "New", "default option has been redefined");
+    });
+});
