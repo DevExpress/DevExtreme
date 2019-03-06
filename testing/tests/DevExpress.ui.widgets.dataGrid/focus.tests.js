@@ -3949,3 +3949,28 @@ QUnit.testInActiveWindow("DataGrid should raise exception if focusedRowEnabled a
     // assert
     assert.ok(true, "undefined operationTypes does not generate exception");
 });
+
+QUnit.testInActiveWindow("DataGrid should restore focused row by index after row removed", function(assert) {
+    this.$element = () => $("#container");
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowKey: "Alex",
+        editing: {
+            allowDeleting: true,
+            texts: { confirmDeleteMessage: "" }
+        }
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    this.removeRow(0);
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.option("focusedRowKey"), "Dan", "focusedRowKey was changed to the next row");
+});

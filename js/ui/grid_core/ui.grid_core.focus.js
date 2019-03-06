@@ -158,23 +158,27 @@ exports.FocusController = core.ViewController.inherit((function() {
 
         _focusRowByKeyOrIndex: function() {
             var focusedRowKey = this.option("focusedRowKey"),
-                focusedRowIndex = this.option("focusedRowIndex"),
+                currentFocusedRowIndex = this.option("focusedRowIndex"),
                 keyboardController = this.getController("keyboardNavigation"),
                 dataController = this.getController("data");
 
             if(focusedRowKey !== undefined) {
-                focusedRowIndex = dataController.getRowIndexByKey(focusedRowKey);
-                if(focusedRowIndex >= 0) {
+                let visibleRowIndex = dataController.getRowIndexByKey(focusedRowKey);
+                if(visibleRowIndex >= 0) {
                     if(keyboardController._isVirtualScrolling()) {
-                        focusedRowIndex += dataController.getRowIndexOffset();
+                        currentFocusedRowIndex = visibleRowIndex + dataController.getRowIndexOffset();
                     }
-                    keyboardController.setFocusedRowIndex(focusedRowIndex);
+                    keyboardController.setFocusedRowIndex(currentFocusedRowIndex);
                     this._triggerUpdateFocusedRow(focusedRowKey);
                 } else {
-                    this.navigateToRow(focusedRowKey);
+                    this.navigateToRow(focusedRowKey).done(pageIndex => {
+                        if(currentFocusedRowIndex >= 0 && pageIndex < 0) {
+                            this._focusRowByIndex();
+                        }
+                    });
                 }
             } else {
-                this.getController("focus")._focusRowByIndex(focusedRowIndex);
+                this.getController("focus")._focusRowByIndex(currentFocusedRowIndex);
             }
         },
 
