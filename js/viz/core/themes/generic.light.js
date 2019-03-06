@@ -690,6 +690,9 @@ registerTheme({
             constantLines: []
         },
         annotations: {
+            imageOptions: {
+                location: "full"
+            },
             labelOptions: {
                 font: {}
             }

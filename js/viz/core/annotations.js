@@ -32,9 +32,9 @@ function labelAnnotation(options) {
 }
 
 function imageAnnotation(options) {
-    const { width, height, url } = options.image;
+    const { width, height, url, location } = options.image;
     return coreAnnotation("image", options, function({ x, y }, widget, group) {
-        widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, "center").append(group);
+        widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, location).append(group);
     });
 }
 
