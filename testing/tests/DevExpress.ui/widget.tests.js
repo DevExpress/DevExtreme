@@ -2,6 +2,7 @@ var $ = require("jquery"),
     Widget = require("ui/widget/ui.widget"),
     registerComponent = require("core/component_registrator"),
     devices = require("core/devices"),
+    extend = require("core/utils/extend").extend,
     TemplateBase = require("ui/widget/ui.template_base"),
     Template = require("ui/widget/template"),
     DataHelperMixin = require("data_helper"),
@@ -1481,6 +1482,81 @@ require("common.css!");
             instance.setAria({ "test": "test" }, $customTarget);
             assert.equal($customTarget.attr("aria-test"), "test", "custom target with object");
 
+        });
+    })();
+
+    (function() {
+        var TestWidget = Widget.inherit({
+            NAME: "TestWidget",
+
+            _init: function() {
+                this.callBase();
+                this._initInnerOptionCache("innerComponentOptions");
+            },
+
+            _renderInnerWidget: function() {
+                return this._createComponent($("<div>"), Widget, extend({
+                    defaultOption: "Test"
+                }, this._getInnerOptionsCache("innerComponentOptions")));
+            },
+
+            _render: function() {
+                this.callBase();
+                this.innerComponent = this._renderInnerWidget();
+                this._bindInnerWidgetOptions(this.innerComponent, "innerComponentOptions");
+            },
+
+            _optionChanged: function(args) {
+                switch(args.name) {
+                    case "innerComponentOptions":
+                        this.innerComponent.option(args.value);
+                        this._cacheInnerOptions("innerComponentOptions", args.value);
+                        break;
+                    default:
+                        this.callBase(args);
+                }
+            }
+        });
+
+        QUnit.module("inner options cache");
+
+        QUnit.test("a user can redefine inner component options", function(assert) {
+            var widget = new TestWidget("#widget", {
+                innerComponentOptions: {
+                    someOption: "Test",
+                    defaultOption: "New"
+                }
+            });
+
+            assert.strictEqual(widget.innerComponent.option("someOption"), "Test", "option has been passed");
+            assert.strictEqual(widget.innerComponent.option("defaultOption"), "New", "default option has been redefined");
+        });
+
+        QUnit.test("two way binding should work with inner component options", (assert) => {
+            var widget = new TestWidget("#widget", {});
+
+            assert.strictEqual(widget.option("innerComponentOptions.defaultOption"), "Test", "inner component options has been loaded");
+
+            widget.innerComponent.option("newOption", "Test");
+            assert.strictEqual(widget.option("innerComponentOptions.newOption"), "Test", "option has been passed to the main widget");
+
+            widget.option("innerComponentOptions", { newOption: "Test 2" });
+            assert.strictEqual(widget.innerComponent.option("newOption"), "Test 2", "option has been passed to the inner widget");
+            assert.strictEqual(widget.innerComponent.option("defaultOption"), "Test", "default option should not be redefined");
+        });
+
+        QUnit.test("inner component options should not be losed on dispose", (assert) => {
+            var widget = new TestWidget("#widget", {
+                innerComponentOptions: {
+                    someOption: "Test",
+                    defaultOption: "New"
+                }
+            });
+
+            widget.repaint();
+
+            assert.strictEqual(widget.innerComponent.option("someOption"), "Test", "option has been passed");
+            assert.strictEqual(widget.innerComponent.option("defaultOption"), "New", "default option has been redefined");
         });
     })();
 })();
