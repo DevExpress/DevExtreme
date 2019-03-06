@@ -376,8 +376,8 @@ var DropDownEditor = TextBox.inherit({
         this._disposeKeyboardProcessor();
 
         // NOTE: to prevent buttons disposition
-        this.$beforeButtonsContainer && this.$beforeButtonsContainer[0].parentNode.removeChild(this.$beforeButtonsContainer[0]);
-        this.$afterButtonsContainer && this.$afterButtonsContainer[0].parentNode.removeChild(this.$afterButtonsContainer[0]);
+        this._$beforeButtonsContainer && this._$beforeButtonsContainer[0].parentNode.removeChild(this._$beforeButtonsContainer[0]);
+        this._$afterButtonsContainer && this._$afterButtonsContainer[0].parentNode.removeChild(this._$afterButtonsContainer[0]);
 
         $container.empty();
 
@@ -397,8 +397,8 @@ var DropDownEditor = TextBox.inherit({
             }
         });
 
-        $container.prepend(this.$beforeButtonsContainer);
-        $container.append(this.$afterButtonsContainer);
+        $container.prepend(this._$beforeButtonsContainer);
+        $container.append(this._$afterButtonsContainer);
     },
 
     _fieldRenderData: function() {

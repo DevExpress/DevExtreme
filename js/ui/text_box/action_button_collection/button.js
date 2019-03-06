@@ -1,14 +1,14 @@
 import $ from "../../../core/renderer";
 
 export default class ActionButton {
-    constructor(name, editor, { location = "after" }) {
+    constructor(name, editor, options) {
         this.instance = null;
 
         this.$container = null;
         this.$placeMarker = null;
         this.editor = editor;
-        this.location = location;
         this.name = name;
+        this.options = options;
     }
 
     _addPlaceMarker($container) {

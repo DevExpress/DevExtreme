@@ -54,17 +54,27 @@ var CONTROL_KEYS = [
     "downArrow",
 ];
 
+function checkButtonsOptionType(buttons) {
+    if(isDefined(buttons) && !Array.isArray(buttons)) {
+        throw new TypeError("'buttons' option must be an array");
+    }
+}
+
 /**
 * @name dxTextEditor
 * @inherits Editor
 * @hidden
 */
 var TextEditorBase = Editor.inherit({
-    ctor: function() {
+    ctor: function(_, options) {
+        if(options) {
+            checkButtonsOptionType(options.buttons);
+        }
+
         this._buttonCollection = new ActionButtonCollection(this, this._getDefaultButtons());
 
-        this.$beforeButtonsContainer = null;
-        this.$afterButtonsContainer = null;
+        this._$beforeButtonsContainer = null;
+        this._$afterButtonsContainer = null;
 
         this.callBase.apply(this, arguments);
     },
@@ -393,15 +403,15 @@ var TextEditorBase = Editor.inherit({
             .addClass(TEXTEDITOR_CONTAINER_CLASS)
             .appendTo(this.$element());
 
-        this.$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, $testEditorContainer);
+        this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, $testEditorContainer);
         $testEditorContainer.append(this._createInput());
-        this.$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, $testEditorContainer);
+        this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, $testEditorContainer);
     },
 
     _clean() {
         this._buttonCollection.clean();
-        this.$beforeButtonsContainer = null;
-        this.$afterButtonsContainer = null;
+        this._$beforeButtonsContainer = null;
+        this._$afterButtonsContainer = null;
         this.callBase();
     },
 
@@ -757,9 +767,12 @@ var TextEditorBase = Editor.inherit({
                 this._renderStylingMode();
                 break;
             case "valueFormat":
-            case "buttons":
+            case "buttons": {
+                checkButtonsOptionType(args.value);
+
                 this._invalidate();
                 break;
+            }
             default:
                 this.callBase(args);
         }
