@@ -19,7 +19,7 @@ const { test } = QUnit;
 
 QUnit.module("API", moduleConfig, () => {
     test("Testing test", (assert) => {
-        assert.ok(false, "Test fail");
+        assert.ok(true, "Test 1");
     });
 
 });
