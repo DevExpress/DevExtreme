@@ -51,7 +51,7 @@
     <script>
         $(function() {
             $("#dataGrid").dxDataGrid({
-                dataSource: employees,
+                dataSource: ["1", "2", "3"],
                 showBorders: true,
                 showColumnHeaders: true,
                 export: {
@@ -75,34 +75,34 @@
                 groupPanel: {
                     visible: true
                 },
-                columns: [
-                    {
-                        dataField: "Prefix",
-                        caption: "Title",
-                        width: 60
-                    }, 
-                    "FirstName",
-                    "LastName", 
-                    "City",
-                    "State", 
-                    {
-                        dataField: "Position",
-                        width: 130
-                    }, {
-                        dataField: "BirthDate",
-                        dataType: "date",
-                        width: 100
-                    }, {
-                        dataField: "HireDate",
-                        dataType: "date",
-                        width: 100
-                    },
-                    {
-                        dataField: "SaleAmount",
-                        alighment: "right",
-                        format: "currency"    
-                    }    
-                ],
+                // columns: [
+                //     {
+                //         dataField: "Prefix",
+                //         caption: "Title",
+                //         width: 60
+                //     }, 
+                //     "FirstName",
+                //     "LastName", 
+                //     "City",
+                //     "State", 
+                //     {
+                //         dataField: "Position",
+                //         width: 130
+                //     }, {
+                //         dataField: "BirthDate",
+                //         dataType: "date",
+                //         width: 100
+                //     }, {
+                //         dataField: "HireDate",
+                //         dataType: "date",
+                //         width: 100
+                //     },
+                //     {
+                //         dataField: "SaleAmount",
+                //         alighment: "right",
+                //         format: "currency"    
+                //     }    
+                // ],
                 onCellPrepared: e => {
                     if(e.rowType === 'data') {
                         if(e.data.SaleAmount > 15000) {
