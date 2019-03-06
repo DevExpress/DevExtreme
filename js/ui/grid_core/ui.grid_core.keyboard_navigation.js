@@ -1864,10 +1864,6 @@ module.exports = {
                 init: function() {
                     this.callBase();
                     this._keyboardNavigationController = this.getController("keyboardNavigation");
-                },
-                closeEditCell: function() {
-                    this.callBase.apply(this, arguments);
-                    this.getController("keyboardNavigation")._fastEditingStarted = false;
                 }
             },
             data: {
