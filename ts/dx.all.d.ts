@@ -2659,7 +2659,7 @@ declare module DevExpress.ui {
     }
     export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>, DataExpressionMixinOptions<dxDropDownButton> {
         /** Specifies a custom template for items. */
-        itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        itemTemplate?: template | ((itemData: any, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     export class dxDropDownButton extends Widget {
         constructor(element: Element, options?: dxDropDownButtonOptions)
