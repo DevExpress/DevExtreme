@@ -21,6 +21,7 @@ var moduleConfig = {
         });
         this.clock = sinon.useFakeTimers();
         this.input = this.$element.find(".dx-texteditor-input");
+        this.inputElement = this.input.get(0);
         this.instance = this.$element.dxNumberBox("instance");
         this.keyboard = keyboardMock(this.input, true);
     },
@@ -1577,10 +1578,10 @@ QUnit.test("moving caret to closest non stub on click - forward direction", func
         value: 1
     });
 
-    this.input.trigger("focusin");
+    this.input.focus();
     this.clock.tick(CARET_TIMEOUT_DURATION);
-    this.keyboard.caret(0);
 
+    this.keyboard.caret(0);
     this.input.trigger("dxclick");
 
     this.clock.tick(CARET_TIMEOUT_DURATION);
@@ -1662,7 +1663,8 @@ QUnit.testInActiveWindow("caret should be at start boundary on focusin", functio
 
     this.input.focus();
     if(browser.msie) {
-        assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
+        let currentCaret = this.keyboard.caret();
+        assert.ok(currentCaret.start !== 6 && currentCaret.end !== 6, "caret position during timeout, it has different values for IE11 and Edge");
     }
 
     this.clock.tick(CARET_TIMEOUT_DURATION);
@@ -1680,8 +1682,7 @@ QUnit.testInActiveWindow("caret should not change position on focus after fast d
     });
 
     this.input.focus();
-
-    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
+    this.keyboard.caret(0);
 
     this.input.trigger("dxdblclick");
     this.clock.tick(CARET_TIMEOUT_DURATION);
@@ -1690,7 +1691,7 @@ QUnit.testInActiveWindow("caret should not change position on focus after fast d
     this.input.trigger("focusout");
     this.clock.tick();
 
-    this.keyboard.caret(0);
+    this.inputElement.selectionStart = this.inputElement.selectionEnd = 0; // this.keyboard.caret(0) trigger excess focusin event
     this.input.trigger("dxclick");
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret position during timeout");
 
