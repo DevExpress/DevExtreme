@@ -1,11 +1,10 @@
-import ExcelExport from "exporter";
 import { getExcelJS } from "exporter/exceljs/exceljs_importer";
-
+import clientExport from "exporter";
 
 const moduleConfig = {
     beforeEach: () => {
         this.clock = sinon.useFakeTimers();
-        this.excelExport = ExcelExport;
+        this.excelExport = clientExport.excelJS.excelExport;
 
         const ExcelJS = getExcelJS();
 
@@ -19,10 +18,8 @@ const moduleConfig = {
 const { test } = QUnit;
 
 QUnit.module("API", moduleConfig, () => {
-
     test("Testing test", (assert) => {
-
-
+        
         assert.ok(false, "Test fail");
     });
 
