@@ -4542,7 +4542,7 @@ declare module DevExpress.ui {
         /** @name dxTreeList.Options.expandNodesOnFiltering */
         expandNodesOnFiltering?: boolean;
         /** @name dxTreeList.Options.filterMode */
-        filterMode?: 'fullBranch' | 'matchOnly' | 'withAncestors';
+        filterMode?: 'fullBranch' | 'withAncestors';
         /** @name dxTreeList.Options.hasItemsExpr */
         hasItemsExpr?: string | Function;
         /** @name dxTreeList.Options.itemsExpr */
@@ -5813,6 +5813,8 @@ declare module DevExpress.ui {
     }
     /** @name dxTextEditor.Options */
     export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
+        /** @name dxTextEditor.Options.buttons */
+        buttons?: Array<string>;
         /** @name dxTextEditor.Options.focusStateEnabled */
         focusStateEnabled?: boolean;
         /** @name dxTextEditor.Options.hoverStateEnabled */
