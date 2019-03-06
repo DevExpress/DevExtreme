@@ -166,43 +166,7 @@
     }
   },
   {
-    "name": "framework/command",
-    "exports": {
-      "default": { "path": "framework.dxCommand" }
-    }
-  },
-  {
-    "name": "framework/html/command_container"
-  },
-  {
-    "name": "framework/html/html_application",
-    "exports": {
-      "default": { "path": "framework.html.HtmlApplication" }
-    }
-  },
-  {
-    "name": "framework/html/view_engine_components"
-  },
-  {
-    "name": "framework/router",
-    "exports": {
-      "default": { "path": "framework.Router" }
-    }
-  },
-  {
-    "name": "framework/state_manager",
-    "exports": {
-      "default": { "path": "framework.StateManager" }
-    }
-  },
-  {
     "name": "integration/jquery"
-  },
-  {
-    "name": "framework/view_cache",
-    "exports": {
-      "default": { "path": "framework.ViewCache" }
-    }
   },
   {
     "name": "localization",
