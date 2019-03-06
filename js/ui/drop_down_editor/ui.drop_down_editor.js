@@ -279,8 +279,7 @@ var DropDownEditor = TextBox.inherit({
         this.callBase();
         this._initVisibilityActions();
         this._initPopupInitializedAction();
-        this._clearDropDownOptionsCache();
-        this._cacheDropDownOptions(this.option("dropDownOptions"));
+        this._initInnerOptionCache("dropDownOptions");
     },
 
     _initVisibilityActions: function() {
@@ -542,12 +541,8 @@ var DropDownEditor = TextBox.inherit({
         this._renderPopupContent();
     },
 
-    _cacheDropDownOptions: function(dropDownOptions) {
-        this._dropDownOptionsCache = extend(this._dropDownOptionsCache, dropDownOptions);
-    },
-
     _renderPopup: function() {
-        this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this._dropDownOptionsCache));
+        this._popup = this._createComponent(this._$popup, Popup, extend(this._popupConfig(), this._getInnerOptionsCache("dropDownOptions")));
 
         this._popup.on({
             "showing": this._popupShowingHandler.bind(this),
@@ -669,10 +664,6 @@ var DropDownEditor = TextBox.inherit({
         var isOutsideClick = !isInputClicked && !isDropDownButtonClicked;
 
         return isOutsideClick;
-    },
-
-    _clearDropDownOptionsCache: function() {
-        this._dropDownOptionsCache = {};
     },
 
     _clean: function() {
@@ -830,7 +821,7 @@ var DropDownEditor = TextBox.inherit({
                 break;
             case "dropDownOptions":
                 this._popupOptionChanged(args);
-                this._cacheDropDownOptions(args.value);
+                this._cacheInnerOptions("dropDownOptions", args.value);
                 break;
             case "popupPosition":
             case "deferRendering":
