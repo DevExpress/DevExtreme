@@ -689,6 +689,11 @@ registerTheme({
             },
             constantLines: []
         },
+        annotations: {
+            labelOptions: {
+                font: {}
+            }
+        },
         argumentAxis: {
             endOnTick: false,
             workWeek: [1, 2, 3, 4, 5]

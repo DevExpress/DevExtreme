@@ -27,6 +27,12 @@ QUnit.test("Image annotation", function(assert) {
     assert.equal(annotation._type, "image");
 });
 
+QUnit.test("Label annptation", function(assert) {
+    const annotation = createAnnotations({ items: [{ x: 0, y: 0, label: {} }] })[0];
+
+    assert.equal(annotation._type, "label");
+});
+
 QUnit.module("Simple annotation", environment);
 
 QUnit.test("Draws a circle inside provided group", function(assert) {
@@ -96,4 +102,48 @@ QUnit.test("Image params", function(assert) {
     annotation.draw(this.widget, this.group);
 
     assert.deepEqual(this.renderer.image.firstCall.args, [95, 195, 10, 10, "some_url", "center"]);
+});
+
+QUnit.test("Merge common and partial options", function(assert) {
+    const annotation = createAnnotations({ imageOptions: { height: 10 }, items: [{ x: 10, y: 20, image: { url: "some_url", width: 10 } }] })[0];
+
+    annotation.draw(this.widget, this.group);
+
+    assert.deepEqual(this.renderer.image.firstCall.args, [95, 195, 10, 10, "some_url", "center"]);
+});
+
+QUnit.module("Text annotaion", environment);
+
+QUnit.test("Draw text inside provided group", function(assert) {
+    const annotation = createAnnotations({ items: [{ x: 0, y: 0, label: { text: "some text" } }] })[0];
+
+    annotation.draw(this.widget, this.group);
+
+    assert.strictEqual(this.renderer.text.callCount, 1);
+    assert.deepEqual(this.renderer.text.firstCall.returnValue.append.firstCall.args, [this.group]);
+});
+
+QUnit.test("Label params", function(assert) {
+    const annotation = createAnnotations({ items: [{ x: 0, y: 0, label: { text: "some text", font: { size: 20 } } }] })[0];
+
+    annotation.draw(this.widget, this.group);
+
+    assert.deepEqual(this.renderer.text.firstCall.args, ["some text", 100, 200]);
+    assert.deepEqual(this.renderer.text.firstCall.returnValue.css.firstCall.args, [{ "font-size": 20 }]);
+});
+
+QUnit.test("Merge common and partial options", function(assert) {
+    const annotation = createAnnotations({
+        labelOptions: { font: { color: "red" } }, items: [{
+            x: 0, y: 0,
+            label: {
+                text: "some text",
+                font: { size: 20 }
+            }
+        }]
+    })[0];
+
+    annotation.draw(this.widget, this.group);
+
+    assert.deepEqual(this.renderer.text.firstCall.returnValue.css.firstCall.args, [{ "font-size": 20, "fill": "red" }]);
 });
