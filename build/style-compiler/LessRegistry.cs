@@ -13,6 +13,7 @@ namespace StyleCompiler
             PUBLIC_NAME_DEFAULT = "DevExtreme";
 
         public const string
+            MODULE_FRAMEWORK = "framework",
             MODULE_WIDGETS_BASE = "widgets-base";
 
         public const string
@@ -78,7 +79,7 @@ namespace StyleCompiler
                 CSS_DISTRIBUTION_SPA,
                 new CssDistributionInfo {
                     LicenseInfo = EULA_DEVEXTREME,
-                    Modules = new string[0],
+                    Modules = new[] { MODULE_FRAMEWORK },
                     UseCommonPostfix = false
                 }
             }
@@ -233,6 +234,19 @@ namespace StyleCompiler
         }
 
         static readonly Dictionary<string, ModuleInfo> Modules = new Dictionary<string, ModuleInfo> {
+            {
+                MODULE_FRAMEWORK,
+                new ModuleInfo {
+                    PublicName = PUBLIC_NAME_DEFAULT + " (Single Page App Framework)",
+                    LicenseInfo = EULA_DEVEXTREME,
+                    StyleInfo = new ModuleStyleInfo {
+                        LessRoot = "framework",
+                        CommonLessFiles = new[] {
+                            "framework.less"
+                        }
+                    }
+                }
+            },
             {
                 MODULE_WIDGETS_BASE,
                 new ModuleInfo {
