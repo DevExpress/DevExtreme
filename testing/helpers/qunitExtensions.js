@@ -124,33 +124,6 @@
         }
     }
 
-    function ensureCacheBuster(url) {
-        if(url.indexOf("DX_HTTP_CACHE") < 0 && /DX_HTTP_CACHE=(\w+)/.test(document.location.search)) {
-            url = url + (url.indexOf("?") < 0 ? "?" : "&") + "DX_HTTP_CACHE=" + RegExp.$1;
-        }
-
-        return url;
-    }
-
-    function appendLinkToHead(rel, type, path) {
-        jQuery("head").append('<link rel="' + rel + '" type="' + type + '" href="' + ensureCacheBuster(path) + '"></link>');
-    }
-
-    window.includeLayout = function(name) {
-        var paths = getLayoutPaths(name);
-        appendLinkToHead("stylesheet", "text/css", paths.toStyle);
-        appendLinkToHead("dx-template", "text/html", paths.toTemplate);
-    };
-
-    var getLayoutPaths = window.getLayoutPaths = function(name) {
-        var path = window.ROOT_URL + "layouts/" + name + "/" + name + "Layout";
-        return {
-            toStyle: path + ".css",
-            toScript: path + ".js",
-            toTemplate: path + ".html"
-        };
-    };
-
     window.createTestContainer = function(parent, css) {
         function dashCase(str) {
             return str.replace(/[A-Z](?:(?=[^A-Z])|[A-Z]*(?=[A-Z][^A-Z]|$))/g, function(s, i) {
