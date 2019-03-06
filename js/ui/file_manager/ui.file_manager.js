@@ -17,6 +17,7 @@ import notify from "../notify";
 
 import { FileProvider } from "../../file_provider/file_provider";
 import ArrayFileProvider from "../../file_provider/file_provider.array";
+import AjaxFileProvider from "../../file_provider/file_provider.ajax";
 import OneDriveFileProvider from "../../file_provider/file_provider.onedrive";
 import WebAPIFileProvider from "../../file_provider/file_provider.webapi";
 
@@ -367,6 +368,10 @@ var FileManager = Widget.inherit({
 
         if(Array.isArray(fileSystemStore)) {
             return new ArrayFileProvider(fileSystemStore);
+        }
+
+        if(typeof fileSystemStore === "string") {
+            return new AjaxFileProvider({ url: fileSystemStore });
         }
 
         if(fileSystemStore instanceof FileProvider) {
