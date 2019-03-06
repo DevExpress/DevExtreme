@@ -42,7 +42,8 @@ QUnit.test("Theme manager with no settings", function(assert) {
         "loadingIndicator.font",
         "commonAxisSettings.label.font",
         "commonAxisSettings.title.font",
-        "crosshair.label.font"
+        "crosshair.label.font",
+        "annotations.labelOptions.font"
     ] }]);
 });
 
