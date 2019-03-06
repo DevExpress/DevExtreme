@@ -124,7 +124,7 @@
 
                     worksheet.getCell("C1").value = "My header";
 
-                    var position = DevExpress.clientExporter.excelExport.excelExport(e.component, worksheet, 
+                    var position = DevExpress.clientExporter.excelJS.excelExport(e.component, worksheet, 
                     {startCell: "B2", customizeExcelCell: function (options, worksheet, cell){
                         cell.value = options.gridCell.value + "1";
                         cell.font = { bold: true };

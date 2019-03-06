@@ -38,7 +38,7 @@ exports.export = function(data, options, getData) {
     }
 };
 
-exports.excelExport = excelExport;
+exports.excelJS = excelExport;
 exports.fileSaver = fileSaver;
 exports.excel = {
     creator: excelCreator.ExcelCreator,
