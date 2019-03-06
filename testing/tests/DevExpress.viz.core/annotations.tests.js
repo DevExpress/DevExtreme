@@ -97,11 +97,11 @@ QUnit.test("Draw image inside provided group", function(assert) {
 });
 
 QUnit.test("Image params", function(assert) {
-    const annotation = createAnnotations({ items: [{ x: 10, y: 20, image: { url: "some_url", width: 10, height: 10 } }] })[0];
+    const annotation = createAnnotations({ items: [{ x: 10, y: 20, image: { url: "some_url", width: 10, height: 10, location: "some_location" } }] })[0];
 
     annotation.draw(this.widget, this.group);
 
-    assert.deepEqual(this.renderer.image.firstCall.args, [95, 195, 10, 10, "some_url", "center"]);
+    assert.deepEqual(this.renderer.image.firstCall.args, [95, 195, 10, 10, "some_url", "some_location"]);
 });
 
 QUnit.test("Merge common and partial options", function(assert) {
@@ -109,7 +109,7 @@ QUnit.test("Merge common and partial options", function(assert) {
 
     annotation.draw(this.widget, this.group);
 
-    assert.deepEqual(this.renderer.image.firstCall.args, [95, 195, 10, 10, "some_url", "center"]);
+    assert.deepEqual(this.renderer.image.firstCall.args, [95, 195, 10, 10, "some_url", undefined]);
 });
 
 QUnit.module("Text annotaion", environment);
