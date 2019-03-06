@@ -271,7 +271,7 @@ class ToolbarModule extends BaseModule {
             { dataField: "src", label: { text: format(DIALOG_IMAGE_FIELD_URL) } },
             { dataField: "width", label: { text: format(DIALOG_IMAGE_FIELD_WIDTH) } },
             { dataField: "height", label: { text: format(DIALOG_IMAGE_FIELD_HEIGHT) } },
-            { dataField: "alt", label: { text: format(DIALOG_IMAGE_FIELD_ALT) } },
+            { dataField: "alt", label: { text: format(DIALOG_IMAGE_FIELD_ALT) } }
         ];
     }
 
