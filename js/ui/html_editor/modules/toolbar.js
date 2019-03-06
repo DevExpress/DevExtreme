@@ -162,7 +162,7 @@ class ToolbarModule extends BaseModule {
 
             const promise = this._editorInstance.showFormDialog({
                 formData: formData,
-                items: this._getLinkFormItems()
+                items: this._linkFormItems
             });
 
             promise.done((formData) => {
@@ -174,7 +174,7 @@ class ToolbarModule extends BaseModule {
 
                     length && this.quill.deleteText(index, length, SILENT_ACTION);
                     this.quill.insertText(index, text, "link", formData, USER_ACTION);
-                    this.quill.setSelection(index + text.length, 0);
+                    this.quill.setSelection(index + text.length, 0, USER_ACTION);
 
                 } else {
                     this.quill.format("link", formData, USER_ACTION);
@@ -187,7 +187,7 @@ class ToolbarModule extends BaseModule {
         };
     }
 
-    _getLinkFormItems() {
+    get _linkFormItems() {
         return [
             { dataField: "href", label: { text: format(DIALOG_LINK_FIELD_URL) } },
             { dataField: "text", label: { text: format(DIALOG_LINK_FIELD_TEXT) } },
@@ -206,41 +206,73 @@ class ToolbarModule extends BaseModule {
     _prepareImageHandler() {
         return () => {
             const formData = this.quill.getFormat();
-            const isUpdateDialog = formData.hasOwnProperty("src");
-            const selection = this.quill.getSelection();
-            const pasteIndex = selection && selection.index || this.quill.getLength();
+            const isUpdateDialog = formData.hasOwnProperty("imageSrc");
+            const defaultIndex = this._defaultPasteIndex;
+
+            if(isUpdateDialog) {
+                const { imageSrc } = this.quill.getFormat(defaultIndex - 1, 1);
+
+                formData.src = formData.imageSrc;
+                delete formData.imageSrc;
+
+                if(!imageSrc || defaultIndex === 0) {
+                    this.quill.setSelection(defaultIndex + 1, 0, SILENT_ACTION);
+                }
+            }
+
+            const formatIndex = this._embedFormatIndex;
 
             this._editorInstance.formDialogOption("title", format(DIALOG_IMAGE_CAPTION));
 
-            const formItems = [
-                { dataField: "src", label: { text: format(DIALOG_IMAGE_FIELD_URL) } },
-                { dataField: "width", label: { text: format(DIALOG_IMAGE_FIELD_WIDTH) } },
-                { dataField: "height", label: { text: format(DIALOG_IMAGE_FIELD_HEIGHT) } },
-                { dataField: "alt", label: { text: format(DIALOG_IMAGE_FIELD_ALT) } },
-            ];
-
             const promise = this._editorInstance.showFormDialog({
                 formData: formData,
-                items: formItems
+                items: this._imageFormItems
             });
 
             promise
                 .done((formData) => {
+                    let index = defaultIndex;
+
                     if(isUpdateDialog) {
-                        const formatIndex = selection && !selection.length && selection.index - 1 || pasteIndex;
-                        this.quill.formatText(formatIndex, 1, {
-                            width: formData.width,
-                            height: formData.height,
-                            alt: formData.alt
-                        }, USER_ACTION);
-                    } else {
-                        this.quill.insertEmbed(pasteIndex, "extendedImage", formData, USER_ACTION);
+                        index = formatIndex;
+                        this.quill.deleteText(index, 1, SILENT_ACTION);
                     }
+
+                    this.quill.insertEmbed(index, "extendedImage", formData, USER_ACTION);
+                    this.quill.setSelection(index + 1, 0, USER_ACTION);
                 })
                 .always(() => {
                     this.quill.focus();
                 });
         };
+    }
+
+    get _embedFormatIndex() {
+        const selection = this.quill.getSelection();
+
+        if(selection) {
+            if(selection.length) {
+                return selection.index;
+            } else {
+                return selection.index - 1;
+            }
+        } else {
+            return this.quill.getLength();
+        }
+    }
+
+    get _defaultPasteIndex() {
+        const selection = this.quill.getSelection();
+        return selection && selection.index || this.quill.getLength();
+    }
+
+    get _imageFormItems() {
+        return [
+            { dataField: "src", label: { text: format(DIALOG_IMAGE_FIELD_URL) } },
+            { dataField: "width", label: { text: format(DIALOG_IMAGE_FIELD_WIDTH) } },
+            { dataField: "height", label: { text: format(DIALOG_IMAGE_FIELD_HEIGHT) } },
+            { dataField: "alt", label: { text: format(DIALOG_IMAGE_FIELD_ALT) } },
+        ];
     }
 
     _renderToolbar() {
@@ -553,6 +585,9 @@ class ToolbarModule extends BaseModule {
                 break;
             case "script":
                 widgetName = formats[formatName] + formatName;
+                break;
+            case "imageSrc":
+                widgetName = "image";
                 break;
             default:
                 widgetName = formatName;
