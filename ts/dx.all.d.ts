@@ -2110,6 +2110,7 @@ declare module DevExpress.ui {
         headerFilter?: { height?: number, visible?: boolean, width?: number, allowSearch?: boolean, searchTimeout?: number, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Specifies whether to highlight rows and cells whose data changed. */
         highlightChanges?: boolean;
+        /** Configures keyboard navigation. */
         keyboardNavigation?: { enterKeyAction?: 'startEdit' | 'moveFocus', enterKeyDirection?: 'none' | 'column' | 'row', editOnKeyPress?: boolean };
         /** Configures the load panel. */
         loadPanel?: { enabled?: boolean | 'auto', text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean, shading?: boolean, shadingColor?: string };
@@ -2664,6 +2665,7 @@ declare module DevExpress.ui {
     export class dxDropDownButton extends Widget {
         constructor(element: Element, options?: dxDropDownButtonOptions)
         constructor(element: JQuery, options?: dxDropDownButtonOptions)
+        /** Gets the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
     }
     export interface dxDropDownMenuOptions extends WidgetOptions<dxDropDownMenu> {
@@ -3697,7 +3699,7 @@ declare module DevExpress.ui {
         title?: string;
         /** Specifies a custom template for the widget title. Does not apply if the title is defined. */
         titleTemplate?: template | ((titleElement: DevExpress.core.dxElement) => string | Element | JQuery);
-        /** Specifies items displayed on the top or bottom toolbar of the popup window. */
+        /** Configures toolbar items. */
         toolbarItems?: Array<dxPopupToolbarItem>;
         /** Specifies the widget's width in pixels. */
         width?: number | string | (() => number | string);
@@ -3709,7 +3711,7 @@ declare module DevExpress.ui {
         /** An object that defines the animation options used when the widget is being shown. */
         show?: animationConfig;
     }
-    /** Specifies items displayed on the top or bottom toolbar of the popup window. */
+    /** Configures toolbar items. */
     export interface dxPopupToolbarItem {
         /** Specifies whether or not a toolbar item must be displayed disabled. */
         disabled?: boolean;
@@ -5674,6 +5676,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxSliderBaseOptions)
     }
     export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
+        buttons?: Array<string>;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
         /** Specifies whether the widget changes its state when a user pauses on it. */
@@ -6049,22 +6052,39 @@ declare module DevExpress.viz {
         weight?: number;
     }
     export interface BaseLegend {
+        /** Colors the legend's background. */
         backgroundColor?: string;
+        /** Configures the legend's border. */
         border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid' };
+        /** Arranges legend items into several columns. */
         columnCount?: number;
+        /** Specifies an empty space between item columns in pixels. */
         columnItemSpacing?: number;
+        /** Specifies the legend items' font options. */
         font?: Font;
+        /** Along with verticalAlignment, specifies the legend's position. */
         horizontalAlignment?: 'center' | 'left' | 'right';
+        /** Aligns items in the last column or row (depending on the legend's orientation). Applies when legend items are not divided into columns or rows equally. */
         itemsAlignment?: 'center' | 'left' | 'right';
+        /** Specifies the text's position relative to the marker in a legend item. */
         itemTextPosition?: 'bottom' | 'left' | 'right' | 'top';
+        /** Generates an empty space, measured in pixels, around the legend. */
         margin?: number | { top?: number, bottom?: number, left?: number, right?: number };
+        /** Specifies the marker's size in a legend item in pixels. */
         markerSize?: number;
+        /** Arranges legend items vertically (in a column) or horizontally (in a row). The default value is "horizontal" if the legend.horizontalAlignment is "center". Otherwise, it is "vertical". */
         orientation?: 'horizontal' | 'vertical';
+        /** Generates an empty space, measured in pixels, between the legend's left/right border and its items. */
         paddingLeftRight?: number;
+        /** Generates an empty space, measured in pixels, between the legend's top/bottom border and its items. */
         paddingTopBottom?: number;
+        /** Arranges legend items in several rows. */
         rowCount?: number;
+        /** Specifies an empty space between item rows in pixels. */
         rowItemSpacing?: number;
+        /** Along with horizontalAlignment, specifies the legend's position. */
         verticalAlignment?: 'bottom' | 'top';
+        /** Specifies the legend's visibility. */
         visible?: boolean;
     }
     export interface dxChartOptions extends BaseChartOptions<dxChart> {
@@ -8002,6 +8022,7 @@ declare module DevExpress.viz {
         customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>);
         /** Customizes the text displayed by legend items. */
         customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string);
+        /** Specifies the legend's visibility. */
         visible?: boolean;
     }
     /** Configures tooltips - small pop-up rectangles that display information about a data-visualizing widget element being pressed or hovered over with the mouse pointer. */
@@ -8289,6 +8310,7 @@ declare module DevExpress.viz {
         geometry?: { startAngle?: number, endAngle?: number };
         /** Specifies the options of the labels that accompany gauge bars. */
         label?: { visible?: boolean, indent?: number, connectorWidth?: number, connectorColor?: string, format?: DevExpress.ui.format, customizeText?: ((barValue: { value?: number, valueText?: string }) => string), font?: Font };
+        /** Configures the legend. */
         legend?: dxBarGaugeLegend;
         /** Configures the loading indicator. */
         loadingIndicator?: dxBarGaugeLoadingIndicator;
@@ -8310,11 +8332,17 @@ declare module DevExpress.viz {
         /** Specifies the array of values to be indicated on a bar gauge. */
         values?: Array<number>;
     }
+    /** Configures the legend. */
     export interface dxBarGaugeLegend extends BaseLegend {
+        /** Specifies the hint that appears when a user hovers the mouse pointer over a legend item. */
         customizeHint?: ((arg: { item?: BarGaugeBarInfo, text?: string }) => string);
+        /** Allows you to change the order, text, and visibility of legend items. */
         customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>);
+        /** Customizes the text displayed by legend items. */
         customizeText?: ((arg: { item?: BarGaugeBarInfo, text?: string }) => string);
+        /** Formats the item text before it is displayed. Accepts only numeric formats. When unspecified, it inherits the label's format. */
         itemTextFormat?: DevExpress.ui.format;
+        /** Specifies the legend's visibility. */
         visible?: boolean;
     }
     /** Configures the loading indicator. */
@@ -8334,14 +8362,22 @@ declare module DevExpress.viz {
         /** Updates all the values. */
         values(values: Array<number>): void;
     }
+    /** An object that provides information about a bar in the BarGauge widget. */
     export interface BarGaugeBarInfo {
+        /** The bar's hexadecimal color code. */
         color?: string;
+        /** The bar's zero-based index. Bars closest to the gauge's center have higher indexes. */
         index?: number;
+        /** The bar's value. */
         value?: number;
     }
+    /** An object that provides information about a legend item in the BarGauge widget. */
     export interface BarGaugeLegendItem {
+        /** The bar that the legend item represents. */
         item?: BarGaugeBarInfo;
+        /** The text that the legend item displays. */
         text?: string;
+        /** Indicates and specifies whether the legend item is visible. */
         visible?: boolean;
     }
     /** This section describes the Series object, which represents a series. */
@@ -8452,6 +8488,8 @@ declare module DevExpress.viz {
         axis: string;
         /** Returns the name of the series pane. */
         pane: string;
+        stack: string;
+        barOverlapGroup: string;
         /** Gets the argument axis to which the series belongs. */
         getArgumentAxis(): chartAxisObject;
         /** Gets the value axis to which the series belongs. */
@@ -9231,11 +9269,13 @@ declare module DevExpress.viz {
         customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>);
         /** Specifies text for legend items. */
         customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
+        /** Specifies the legend items' font options. */
         font?: Font;
         /** Specifies the color of item markers in the legend. The specified color applied only when the legend uses 'size' source. */
         markerColor?: string;
         /** Specifies the shape of item markers. */
         markerShape?: 'circle' | 'square';
+        /** Specifies the marker's size in a legend item in pixels. */
         markerSize?: number;
         /** Specifies the source of data for the legend. */
         source?: { layer?: string, grouping?: string };
