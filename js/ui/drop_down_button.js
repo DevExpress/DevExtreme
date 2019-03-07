@@ -86,8 +86,10 @@ let DropDownButton = Widget.inherit({
 
         let selectedItem = this.option("selectedItem");
 
-        if(!isPlainObject(selectedItem)) {
-            selectedItem = { text: String(ensureDefined(this._displayGetter(selectedItem), "")) };
+        if(isPlainObject(selectedItem)) {
+            selectedItem.text = String(ensureDefined(this._displayGetter(selectedItem), ""));
+        } else {
+            selectedItem = { text: String(ensureDefined(selectedItem, "")) };
         }
 
         return extend(selectedItem, defaultConfig);
@@ -153,7 +155,7 @@ let DropDownButton = Widget.inherit({
             tabIndex: null,
             dataSource: this._dataSource,
             onItemClick: (e) => {
-                this.option("value", this._valueGetter(e.itemData));
+                this.option("selectedItem", e.itemData);
                 const actionResult = this._fireItemClickAction(e);
                 if(actionResult !== false) {
                     this.toggle(false);
@@ -185,6 +187,13 @@ let DropDownButton = Widget.inherit({
         this._list && this._list.option(name, value);
     },
 
+    _selectItem(itemData) {
+        this._setListOption("selectedItemKeys", [this._valueGetter(itemData)]);
+        if(this.option("showSelectedItem")) {
+            this._buttonGroup.option("items[0]", this._actionButtonConfig());
+        }
+    },
+
     _setCollectionWidgetOption() {
         this._setListOption.apply(this, arguments);
     },
@@ -207,8 +216,8 @@ let DropDownButton = Widget.inherit({
             case "showSelectedItem":
                 break;
             case "buttonGroupOptions":
-                this._buttonGroup.option(args.value);
-                this._cacheInnerOptions("buttonGroupOptions", args.value);
+                this._buttonGroup.option(value);
+                this._cacheInnerOptions("buttonGroupOptions", value);
                 break;
             case "grouped":
             case "noDataText":
@@ -216,8 +225,7 @@ let DropDownButton = Widget.inherit({
                 this._setListOption(name, value);
                 break;
             case "selectedItem":
-                this._setListOption("selectedItemKeys", [this._valueGetter(value)]);
-                this._buttonGroup.option("items[0]", this._actionButtonConfig());
+                this._selectItem(value);
                 break;
             case "onItemClick":
                 this._createItemClickAction();

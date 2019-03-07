@@ -221,7 +221,7 @@ QUnit.module("common use cases", {
                 { id: 1, file: "vs.exe", name: "Trial for Visual Studio", icon: "box" },
                 { id: 2, file: "all.exe", name: "Trial for all platforms", icon: "user" }
             ],
-            selectedItem: { file: "common.exe", text: "Download DevExtreme Trial", icon: "group" }
+            selectedItem: { file: "common.exe", name: "Download DevExtreme Trial", icon: "group" }
         });
         this.list = getList(this.dropDownButton);
         this.listItems = this.list.itemElements();
@@ -270,7 +270,12 @@ QUnit.module("data expressions", {
 }, () => {
     QUnit.test("displayExpr is required when items are objects", (assert) => {
         this.dropDownButton.option("displayExpr", undefined);
-        this.dropDownButton.option("value", 2);
+        this.dropDownButton.option("selectedItem", {
+            id: 1,
+            file: "vs.exe",
+            name: "Trial for Visual Studio",
+            icon: "box"
+        });
 
         assert.strictEqual(getActionButton(this.dropDownButton).text(), String({}));
     });
@@ -280,7 +285,12 @@ QUnit.module("data expressions", {
             return itemData.name + "!";
         });
 
-        this.dropDownButton.option("value", 2);
+        this.dropDownButton.option("selectedItem", {
+            id: 2,
+            file: "all.exe",
+            name: "Trial for all platforms",
+            icon: "user"
+        });
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "Trial for all platforms!", "displayExpr works");
     });
 
