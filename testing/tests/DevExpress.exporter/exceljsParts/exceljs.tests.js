@@ -1,6 +1,6 @@
 import $ from "jquery";
 import { getExcelJS } from "exporter/exceljs/exceljs_importer";
-import clientExport from "exporter";
+import { exportDataGrid } from "exporter/exceljs/excelExport";
 
 import "ui/data_grid/ui.data_grid";
 import "common.css!";
@@ -12,21 +12,18 @@ QUnit.testStart(() => {
     $("#qunit-fixture").html(markup);
 });
 
+const ExcelJS = getExcelJS();
+
 const moduleConfig = {
     beforeEach: () => {
-        this.clock = sinon.useFakeTimers();
-        this.excelExport = clientExport.excelJS.excelExport;
-        this.saveAs = clientExport.fileSaver.saveAs;
+        this.exportDataGrid = exportDataGrid;
 
         this.initDataGrid = (options) => {
             this.dataGrid = $("#dataGrid").dxDataGrid($.extend({}, options)).dxDataGrid("instance");
             return this.dataGrid;
         };
 
-        const ExcelJS = getExcelJS();
-
-        this.ExcelJSWorkbook = new ExcelJS.Workbook();
-
+        this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
     },
     afterEach: () => {
         this.dataGrid.dispose();
@@ -41,23 +38,20 @@ QUnit.module("API", moduleConfig, () => {
 
     test("Empty grid", (assert) => {
         let dataGrid = this.initDataGrid();
-        let worksheet = this.ExcelJSWorkbook.addWorksheet('Test sheet');
 
-        this.excelExport(dataGrid, worksheet, {});
+        this.exportDataGrid(dataGrid, this.worksheet);
 
-        assert.equal(worksheet.rowCount, 0, "worksheet must stay empty ");
+        assert.equal(this.worksheet.rowCount, 0);
     });
 
-    test("Grid with simple dataSource", (assert) => {
+    test("Grid with one column", (assert) => {
         let instance = this.initDataGrid(
             { dataSource: ["1", "2", "3"] }
         );
 
-        let worksheet = this.ExcelJSWorkbook.addWorksheet('Test sheet');
+        this.exportDataGrid(instance, this.worksheet);
 
-        this.excelExport(instance, worksheet, {});
-
-        assert.equal(worksheet.rowCount, 4, "worksheet should be have 4 rows");
+        assert.equal(this.worksheet.rowCount, 4);
     });
 
 });

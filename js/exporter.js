@@ -2,7 +2,7 @@ var fileSaver = require("./exporter/file_saver").fileSaver,
     excelCreator = require("./exporter/excel_creator"),
     imageCreator = require("./exporter/image_creator"),
     svgCreator = require("./exporter/svg_creator"),
-    excelExport = require("./exporter/exceljs/excelExport").default,
+    excelExport = require("./exporter/exceljs/excelExport"),
     _isFunction = require("./core/utils/type").isFunction;
 
 exports.export = function(data, options, getData) {
