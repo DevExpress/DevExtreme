@@ -609,9 +609,11 @@ var EditingController = modules.ViewController.inherit((function() {
                 i,
                 key,
                 item,
-                editData = that._editData;
+                editData;
 
             that.update(changeType);
+
+            editData = that._editData;
             for(i = 0; i < editData.length; i++) {
                 key = editData[i].key;
                 item = that._generateNewItem(key);
