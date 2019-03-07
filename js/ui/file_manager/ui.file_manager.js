@@ -6,6 +6,7 @@ import { extend } from "../../core/utils/extend";
 import { Deferred, when } from "../../core/utils/deferred";
 
 import DataGrid from "../data_grid/ui.data_grid";
+import Button from "../button";
 import CustomStore from "../../data/custom_store";
 import whenSome from "./ui.file_manager.common";
 import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
@@ -27,6 +28,7 @@ const FILE_MANAGER_DIRS_TREE_CLASS = FILE_MANAGER_CLASS + "-dirs-tree";
 const FILE_MANAGER_VIEW_SEPARATOR_CLASS = FILE_MANAGER_CLASS + "-view-separator";
 const FILE_MANAGER_FILES_VIEW_CLASS = FILE_MANAGER_CLASS + "-files-view";
 const FILE_MANAGER_TOOLBAR_CLASS = FILE_MANAGER_CLASS + "-toolbar";
+const FILE_MANAGER_FILE_ACTIONS_BUTTON = FILE_MANAGER_CLASS + "-file-actions-button";
 
 var FileManager = Widget.inherit({
 
@@ -148,6 +150,7 @@ var FileManager = Widget.inherit({
     _createFilesView: function() {
         var selectionOptions = this.option("selection");
 
+        var that = this;
         this._filesView = this._createComponent($("<div>"), DataGrid, {
             hoverStateEnabled: true,
             selection: {
@@ -158,7 +161,18 @@ var FileManager = Widget.inherit({
                 {
                     dataField: "name",
                     minWidth: 200,
-                    width: "60%"
+                    width: "60%",
+                    cellTemplate: function(container, options) {
+                        var button = that._createComponent($("<div>"), Button, {
+                            text: "&vellip;",
+                            template: function(e) {
+                                return $("<i />").html("&vellip;");
+                            }
+                        });
+                        button.$element().addClass(FILE_MANAGER_FILE_ACTIONS_BUTTON);
+
+                        container.append(options.data.name, button.$element());
+                    }
                 },
                 {
                     dataField: "lastWriteTime",

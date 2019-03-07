@@ -28,6 +28,26 @@
         display: none;
     }
 
+    .dx-filemanager-file-actions-button {
+       visibility: hidden;
+       float: right;
+       border: none;
+       background-color: transparent;
+
+       .dx-button-content {
+            padding: 10px 7px;
+       }
+       
+       i {
+           font-style: normal;
+       }
+    }
+
+    .dx-row.dx-selection .dx-filemanager-file-actions-button,
+    .dx-row.dx-state-hover .dx-filemanager-file-actions-button {
+        visibility: visible;
+    }
+
 }
 
 .dx-filemanager-dialog.dx-filemanager-dialog-folder-chooser,
