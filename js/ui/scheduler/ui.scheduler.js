@@ -2924,12 +2924,8 @@ var Scheduler = Widget.inherit({
                 };
             } else {
                 getGroups = function() {
-                    // var apptPosition = $(appointmentElement).position();
-                    // TODO: test
-                    var apptSettings = this.getLayoutManager()._positionMap[appointmentIndex];
-                    const apptPosition = { left: apptSettings[0].left, top: apptSettings[0].top };
-                    // TODO
-                    return workSpace.getCellDataByCoordinates(apptPosition).groups;
+                    const setting = appointmentElement.data("dxAppointmentSettings");
+                    return workSpace.getCellDataByCoordinates({ left: setting.left, top: setting.top }).groups;
                 };
 
                 setResourceCallback = function(field, value) {

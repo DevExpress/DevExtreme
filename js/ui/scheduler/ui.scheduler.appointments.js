@@ -518,6 +518,18 @@ var SchedulerAppointments = CollectionWidget.inherit({
         }
     },
 
+    _renderItemFrame: function(index, itemData, $container, $itemToReplace) {
+        const result = this.callBase(index, itemData, $container, $itemToReplace);
+        result.data("dxAppointmentSettings", this._currentAppointmentSettings);
+        return result;
+    },
+
+    _getItemContent: function($itemFrame) {
+        $itemFrame.data("dxAppointmentSettings", this._currentAppointmentSettings);
+        const $itemContent = this.callBase($itemFrame);
+        return $itemContent;
+    },
+
     _createItemByTemplate: function(itemTemplate, renderArgs) {
         return itemTemplate.render({
             model: renderArgs.itemData,
