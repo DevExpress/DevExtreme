@@ -1513,8 +1513,7 @@ QUnit.module("inner options cache", {}, () => {
         _optionChanged(args) {
             switch(args.name) {
                 case "innerComponentOptions":
-                    this.innerComponent.option(args.value);
-                    this._cacheInnerOptions("innerComponentOptions", args.value);
+                    this._innerOptionChanged(this.innerComponent, args);
                     break;
                 default:
                     this.callBase(args);

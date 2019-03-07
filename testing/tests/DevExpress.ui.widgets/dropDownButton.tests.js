@@ -1,5 +1,6 @@
 import $ from "jquery";
 import DropDownButton from "ui/drop_down_button";
+import typeUtils from "core/utils/type";
 import eventsEngine from "events/core/events_engine";
 
 import "common.css!";
@@ -255,6 +256,55 @@ QUnit.module("common use cases", {
     });
 });
 
+QUnit.module("public methods", {
+    beforeEach: () => {
+        this.dropDownButton = new DropDownButton("#dropDownButton", {
+            items: ["Item 1", "Item 2", "Item 3"],
+            deferRendering: false
+        });
+    }
+}, () => {
+    QUnit.test("toggle method", (assert) => {
+        const popup = getPopup(this.dropDownButton);
+        assert.strictEqual(popup.option("visible"), false, "popup is closed");
+
+        this.dropDownButton.toggle(true);
+        assert.strictEqual(popup.option("visible"), true, "popup is opened");
+
+        this.dropDownButton.toggle(true);
+        assert.strictEqual(popup.option("visible"), true, "popup is still opened");
+
+        this.dropDownButton.toggle(false);
+        assert.strictEqual(popup.option("visible"), false, "popup is closed");
+
+        this.dropDownButton.toggle();
+        assert.strictEqual(popup.option("visible"), true, "popup visibility is inverted");
+
+        const togglePromise = this.dropDownButton.toggle();
+        assert.strictEqual(popup.option("visible"), false, "popup visibility is inverted");
+        assert.ok(typeUtils.isPromise(togglePromise), "toggle should return promise");
+    });
+
+    QUnit.test("open method", (assert) => {
+        const popup = getPopup(this.dropDownButton);
+        assert.strictEqual(popup.option("visible"), false, "popup is closed");
+
+        const openPromise = this.dropDownButton.open();
+        assert.strictEqual(popup.option("visible"), true, "popup is opened");
+        assert.ok(typeUtils.isPromise(openPromise), "open should return promise");
+    });
+
+    QUnit.test("close method", (assert) => {
+        this.dropDownButton.option("dropDownOptions.visible", true);
+        const popup = getPopup(this.dropDownButton);
+        assert.strictEqual(popup.option("visible"), true, "popup is opened");
+
+        const closePromise = this.dropDownButton.close();
+        assert.strictEqual(popup.option("visible"), false, "popup is closed");
+        assert.ok(typeUtils.isPromise(closePromise), "close should return promise");
+    });
+});
+
 QUnit.module("data expressions", {
     beforeEach: () => {
         this.dropDownButton = new DropDownButton("#dropDownButton", {
@@ -337,5 +387,67 @@ QUnit.module("data expressions", {
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), "false", "value is correct");
+    });
+});
+
+QUnit.module("deferred datasource", {
+    beforeEach: () => {
+        this.items = [
+            { id: 1, name: "Left", icon: "alignleft" },
+            { id: 4, name: "Right", icon: "alignright" },
+            { id: 2, name: "Center", icon: "aligncenter" },
+            { id: 3, name: "Justify", icon: "alignjustify" }
+        ];
+        this.clock = sinon.useFakeTimers();
+        this.dataSourceConfig = {
+            load: () => {
+                const d = $.Deferred();
+                setTimeout(() => {
+                    d.resolve(this.items.slice());
+                }, 500);
+                return d.promise();
+            },
+            byKey: (key) => {
+                const d = $.Deferred();
+                setTimeout(() => {
+                    const item = $.grep(this.items, (item) => {
+                        return item.id === key;
+                    });
+                    d.resolve(item);
+                }, 200);
+
+                return d.promise();
+            }
+        };
+    },
+    afterEach: () => {
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test("displayExpr should work with deferred datasource", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            displayExpr: "name",
+            dataSource: this.dataSourceConfig,
+        });
+
+        dropDownButton.open();
+        this.clock.tick(500);
+
+        const list = getList(dropDownButton);
+        const $item = list.itemElements().eq(0);
+
+        assert.strictEqual($item.text(), "Left", "text is correct");
+    });
+
+    QUnit.test("incomplete selected item should work", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            dataSource: this.dataSourceConfig,
+            keyExpr: "id",
+            displayExpr: "name",
+            selectedItem: { id: 2 }
+        });
+
+        this.clock.tick(200);
+        assert.strictEqual(getActionButton(dropDownButton).text(), "Center", "value is correct");
     });
 });

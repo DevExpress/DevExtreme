@@ -83,7 +83,8 @@ let DropDownButton = Widget.inherit({
 
             grouped: false,
             groupTemplate: "group",
-            buttonGroupOptions: {}
+            buttonGroupOptions: {},
+            dropDownOptions: {}
         });
     },
 
@@ -93,6 +94,7 @@ let DropDownButton = Widget.inherit({
         this._compileKeyGetter();
         this._compileDisplayGetter();
         this._initInnerOptionCache("buttonGroupOptions");
+        this._initInnerOptionCache("dropDownOptions");
     },
 
     _compileKeyGetter() {
@@ -185,7 +187,7 @@ let DropDownButton = Widget.inherit({
                 this._list = this._createComponent($("<div>"), List, this._listOptions());
                 $content.append(this._list.$element());
             }
-        }, this.option("dropDownOptions"));
+        }, this._getInnerOptionsCache("dropDownOptions"));
     },
 
     _listOptions() {
@@ -213,6 +215,7 @@ let DropDownButton = Widget.inherit({
     _renderPopup() {
         this._popup = this._createComponent($("<div>"), Popup, this._popupOptions());
         this.$element().append(this._popup.$element());
+        this._bindInnerWidgetOptions(this._popup, "dropDownOptions");
     },
 
     _renderButtonGroup() {
@@ -224,9 +227,33 @@ let DropDownButton = Widget.inherit({
         this._bindInnerWidgetOptions(this._buttonGroup, "buttonGroupOptions");
     },
 
+    /**
+     * @name dxDropDownButton.toggle
+     * @publicName toggle(visibility)
+     * @param1 visibility:boolean
+     * @return Promise<void>
+     */
     toggle(visible) {
         this._popup || this._renderPopup();
-        this._popup.toggle(visible);
+        return this._popup.toggle(visible);
+    },
+
+    /**
+     * @name dxDropDownButton.open
+     * @publicName open()
+     * @return Promise<void>
+     */
+    open() {
+        return this.toggle(true);
+    },
+
+    /**
+     * @name dxDropDownButton.close
+     * @publicName close()
+     * @return Promise<void>
+     */
+    close() {
+        return this.toggle(false);
     },
 
     _setListOption(name, value) {
@@ -261,8 +288,10 @@ let DropDownButton = Widget.inherit({
                 this._compileKeyGetter();
                 break;
             case "buttonGroupOptions":
-                this._buttonGroup.option(value);
-                this._cacheInnerOptions("buttonGroupOptions", value);
+                this._innerOptionChanged(this._buttonGroup, args);
+                break;
+            case "dropDownOptions":
+                this._innerOptionChanged(this._popup, args);
                 break;
             case "grouped":
             case "noDataText":
