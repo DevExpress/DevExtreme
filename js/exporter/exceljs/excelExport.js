@@ -1,7 +1,6 @@
 import { getExcelJS } from "../exceljs/exceljs_importer";
 import { isDefined } from "../../core/utils/type";
 
-
 function exportDataGrid(dataGrid, worksheet, options) {
     if(!isDefined(getExcelJS())) { return; }
 
@@ -12,25 +11,30 @@ function exportDataGrid(dataGrid, worksheet, options) {
         bottom: 0
     };
 
-    let columns = dataGrid.getVisibleColumns();
-    var headerRow = worksheet.getRow(0);
+    if(dataGrid.option("showColumnHeaders") !== false) {
+        let columns = dataGrid.getVisibleColumns();
+        var headerRow = worksheet.addRow();
 
-    for(let i = 0; i < columns.length; i++) {
-        let cell = headerRow.getCell(i + 1);
-        cell.value = columns[i].caption;
+        for(let i = 0; i < columns.length; i++) {
+            let cell = headerRow.getCell(i + 1);
+            cell.value = columns[i].caption;
+            worksheet.getColumn(i + 1).width = columns[i].width;
+        }
     }
 
-    // component.getController("data").loadAll().then(
-    //     function(allItems) {
-    //         for(let i = 0; i < allItems.length; i++) {
-    //             var dataRow = worksheet.addRow();
-    //             for(let j = 0; j < allItems[i].values.length; j++) {
-    //                 let cell = dataRow.getCell(j + 1);
-    //                 cell.value = allItems[i].values[j];
-    //             }
-    //         }
-    //     }
-    // );
+    let dataSource = dataGrid.getDataSource();
+    if(dataSource) {
+        let allItems = dataSource._items;
+
+        for(let i = 0; i < allItems.length; i++) {
+            worksheet.addRow().getCell(1).value = allItems[i];
+            // for(let j = 0; j < allItems[i].length; j++) {
+            //     let cell = dataRow.getCell(j + 1);
+            //     cell.value = allItems[i].values[j];
+            // }
+        }
+    }
+
 
     return position;
 }

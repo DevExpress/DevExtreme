@@ -13,11 +13,12 @@ QUnit.testStart(() => {
 });
 
 const ExcelJS = getExcelJS();
+const { test } = QUnit;
 
 const moduleConfig = {
     beforeEach: () => {
         this.exportDataGrid = exportDataGrid;
-
+        this.clock = sinon.useFakeTimers();
         this.initDataGrid = (options) => {
             this.dataGrid = $("#dataGrid").dxDataGrid($.extend({}, options)).dxDataGrid("instance");
             return this.dataGrid;
@@ -31,9 +32,6 @@ const moduleConfig = {
     }
 };
 
-const { test } = QUnit;
-
-
 QUnit.module("API", moduleConfig, () => {
 
     test("Empty grid", (assert) => {
@@ -41,17 +39,133 @@ QUnit.module("API", moduleConfig, () => {
 
         this.exportDataGrid(dataGrid, this.worksheet);
 
-        assert.equal(this.worksheet.rowCount, 0);
+        assert.equal(this.worksheet.actualRowCount, 0);
     });
 
     test("Grid with one column", (assert) => {
-        let instance = this.initDataGrid(
-            { dataSource: ["1", "2", "3"] }
-        );
+        var dataGrid = this.initDataGrid({
+            dataSource: [ "1", "2", "3"]
+        });
+        this.clock.tick(100);
 
-        this.exportDataGrid(instance, this.worksheet);
+        this.exportDataGrid(dataGrid, this.worksheet);
 
-        assert.equal(this.worksheet.rowCount, 4);
+        assert.equal(this.worksheet.actualColumnCount, 1);
+        assert.equal(this.worksheet.actualRowCount, 4);
+    });
+
+    test("Grid have 5 columns", (assert) => {
+        var dataGrid = this.initDataGrid({
+            columns: [{ dataField: 'Column 1' }, { dataField: 'Column 2' }, { dataField: 'Column 3' }, { dataField: 'Column 4' }, { dataField: 'Column 5' }]
+        });
+
+        this.exportDataGrid(dataGrid, this.worksheet);
+
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.actualColumnCount, 5);
+    });
+
+    test("Columns - show column headers & 'column.visible: false'", (assert) => {
+        var dataGrid = this.initDataGrid({
+            columns: [
+                { dataField: 'Column 1', visible: false },
+                { dataField: 'Column 2' }
+            ]
+        });
+
+        this.exportDataGrid(dataGrid, this.worksheet);
+
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.actualColumnCount, 1);
+    });
+
+    test("Columns - with fixed width", (assert) => {
+        var dataGrid = this.initDataGrid({
+            columns: [
+                { dataField: 'Column 1', width: 100 },
+                { dataField: 'Column 2', width: 200 },
+                { dataField: 'Column 3' }
+            ]
+        });
+
+        this.exportDataGrid(dataGrid, this.worksheet);
+
+        assert.equal(this.worksheet.getColumn(1).width, 100);
+        assert.equal(this.worksheet.getColumn(2).width, 200);
+    });
+
+    test("Columns - hide column headers", (assert) => {
+        var dataGrid = this.initDataGrid({
+            columns: [
+                { dataField: 'f1', width: 100 },
+                { dataField: 'f2', width: 200 }
+            ],
+            dataSource: [ { f1: 13, f2: 31 } ],
+            showColumnHeaders: false
+        });
+        this.clock.tick(100);
+        this.exportDataGrid(dataGrid, this.worksheet);
+
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.actualColumnCount, 1);
+        assert.equal(this.worksheet.getCell("A1").value, 13);
+        assert.equal(this.worksheet.getCell("A2").value, 31);
+    });
+
+    test("Columns - hide column headers  & mixed visibleIndex", (assert) => {
+        var dataGrid = this.initDataGrid({
+            columns: [
+                { dataField: 'f1', visibleIndex: 2, width: 100 },
+                { dataField: 'f2', visibleIndex: 0, width: 200 },
+                { dataField: 'f3', visibleIndex: 1, width: 50 }
+            ],
+            dataSource: [ { f1: 1, f2: 2, f3: 3 } ],
+            showColumnHeaders: false
+        });
+        this.clock.tick(100);
+        this.exportDataGrid(dataGrid, this.worksheet);
+
+        assert.equal(this.worksheet.getColumn(1).width, 200);
+        assert.equal(this.worksheet.getCell("A1").value, 13);
+        assert.equal(this.worksheet.getColumn(2).width, 50);
+        assert.equal(this.worksheet.getCell("A2").value, 31);
+        assert.equal(this.worksheet.getColumn(3).width, 100);
+        assert.equal(this.worksheet.getCell("A3").value, 31);
+    });
+
+    test("Columns - hide column headers  & mixed visibleIndex", (assert) => {
+        var dataGrid = this.initDataGrid({
+            columns: [
+                { dataField: 'f1', allowExporting: false },
+                { dataField: 'f2' }
+            ],
+            dataSource: [ { f1: 1, f2: 2, f3: 3 } ],
+            showColumnHeaders: false
+        });
+        this.clock.tick(100);
+        this.exportDataGrid(dataGrid, this.worksheet);
+
+        assert.equal(this.worksheet.actualRowCount, 1);
+        assert.equal(this.worksheet.actualColumnCount, 1);
+        assert.equal(this.worksheet.getCell("A1").value, 2);
+    });
+
+    test("Columns - 1 header column with excelFilterEnabled", (assert) => {
+        var dataGrid = this.initDataGrid({
+            columns: ["f1"],
+            dataSource: [],
+            showColumnHeaders: true,
+            export: {
+                excelFilterEnabled: true
+            }
+        });
+        this.clock.tick(100);
+        this.exportDataGrid(dataGrid, this.worksheet);
+
+        assert.equal(this.worksheet.getCell("A1").value, 'F1');
+        assert.equal(this.worksheet.autoFilter.from, { row: 1, column: 1 });
+        assert.equal(this.worksheet.autoFilter.to, { row: 1, column: this.worksheet.actualColumnCount });
+        assert.equal(this.worksheet.views, [ { state: 'frozen', ySplit: 1 } ]);
     });
 
 });
