@@ -2924,7 +2924,7 @@ var Scheduler = Widget.inherit({
                 };
             } else {
                 getGroups = function() {
-                    const setting = appointmentElement.data("dxAppointmentSettings");
+                    const setting = $(appointmentElement).data("dxAppointmentSettings");
                     return workSpace.getCellDataByCoordinates({ left: setting.left, top: setting.top }).groups;
                 };
 
