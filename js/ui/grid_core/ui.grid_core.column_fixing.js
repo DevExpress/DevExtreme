@@ -277,11 +277,10 @@ var baseFixedColumns = {
     getColumnWidths: function() {
         var that = this,
             fixedWidths,
-            fixedColumns,
-            result = that.callBase();
-
-        if(that.option("legacyRendering") && that._fixedTableElement && result.length) {
+            result = that.callBase(),
             fixedColumns = that.getFixedColumns();
+
+        if(that._fixedTableElement && result.length) {
             fixedWidths = that.callBase(that._fixedTableElement);
         }
 
@@ -536,14 +535,11 @@ var ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     getColumnWidths: function() {
         var that = this,
             fixedWidths,
-            fixedColumns,
-            $fixedColumnElements,
-            result = that.callBase();
-
-        if(that.option("legacyRendering") && that._fixedTableElement) {
+            result = that.callBase(),
+            $fixedColumnElements = that.getFixedColumnElements(),
             fixedColumns = that.getFixedColumns();
-            $fixedColumnElements = that.getFixedColumnElements();
 
+        if(that._fixedTableElement) {
             if($fixedColumnElements && $fixedColumnElements.length) {
                 fixedWidths = that._getWidths($fixedColumnElements);
             } else {
