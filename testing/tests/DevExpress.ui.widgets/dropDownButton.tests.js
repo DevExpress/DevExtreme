@@ -156,13 +156,13 @@ QUnit.module("list integration", {}, () => {
         const $listItem = list.itemElements();
 
         assert.strictEqual($listItem.text(), "Item 1", "displayExpr works");
-        assert.strictEqual(list.option("keyExpr"), null, "valueExpr is 'this'");
+        assert.strictEqual(list.option("keyExpr"), "this", "keyExpr is 'this'");
     });
 
     QUnit.test("data expressions should work with dropDownButton", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton", {
             items: [{ key: 1, name: "Item 1", icon: "box" }],
-            valueExpr: "key",
+            keyExpr: "key",
             displayExpr: "name",
             deferRendering: false
         });
@@ -171,7 +171,7 @@ QUnit.module("list integration", {}, () => {
         const $listItem = list.itemElements();
 
         assert.strictEqual($listItem.text(), "Item 1", "displayExpr works");
-        assert.strictEqual(list.option("keyExpr"), "key", "valueExpr works");
+        assert.strictEqual(list.option("keyExpr"), "key", "keyExpr works");
         assert.strictEqual($listItem.find(".dx-icon-box").length, 1, "item icon works");
     });
 
@@ -195,7 +195,7 @@ QUnit.module("list integration", {}, () => {
         const dropDownButton = new DropDownButton("#dropDownButton", {
             items: [{ key: 1, name: "Item 1" }, { key: 2, name: "Item 2" }],
             deferRendering: false,
-            valueExpr: "key",
+            keyExpr: "key",
             displayExpr: "name",
             selectedItem: { key: 2 }
         });
@@ -214,7 +214,7 @@ QUnit.module("common use cases", {
         this.dropDownButton = new DropDownButton("#dropDownButton", {
             showSelectedItem: false,
             deferRendering: false,
-            valueExpr: "id",
+            keyExpr: "id",
             displayExpr: "name",
             onItemClick: this.itemClickHandler,
             items: [
@@ -262,7 +262,7 @@ QUnit.module("data expressions", {
                 { id: 1, file: "vs.exe", name: "Trial for Visual Studio", icon: "box" },
                 { id: 2, file: "all.exe", name: "Trial for all platforms", icon: "user" }
             ],
-            valueExpr: "id",
+            keyExpr: "id",
             showSelectedItem: true,
             deferRendering: false
         });

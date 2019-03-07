@@ -4,6 +4,7 @@ import registerComponent from "../core/component_registrator";
 import ButtonGroup from "./button_group";
 import Popup from "./popup";
 import List from "./list";
+import dataCoreUtils from "../core/utils/data";
 import DataExpressionMixin from "./editor/ui.data_expression";
 import { extend } from "../core/utils/extend";
 import { isPlainObject } from "../core/utils/type";
@@ -26,11 +27,6 @@ let DropDownButton = Widget.inherit({
 
     _getDefaultOptions() {
         return extend(this.callBase(), DataExpressionMixin._dataExpressionDefaultOptions(), {
-            deferRendering: true,
-            showEvent: "click",
-            showSelectedItem: true,
-            grouped: false,
-            noDataText: formatMessage("dxCollectionWidget-noDataText"),
 
             /**
              * @name dxDropDownButtonOptions.itemTemplate
@@ -42,20 +38,69 @@ let DropDownButton = Widget.inherit({
              */
             itemTemplate: "item",
 
+            /**
+             * @name dxDropDownButtonOptions.keyExpr
+             * @type string|function
+             * @default 'this'
+             * @type_function_param1 itemData:object
+             */
+            keyExpr: "this",
+
+            /**
+             * @name dxDropDownButtonOptions.displayExpr
+             * @type string|function
+             * @default 'this'
+             * @type_function_param1 itemData:object
+             */
+            displayExpr: "this",
+
+            /**
+             * @name dxDropDownButtonOptions.selectedItem
+             * @type string|object
+             * @default null
+             */
             selectedItem: null,
 
+            /**
+             * @name dxDropDownButtonOptions.deferRendering
+             * @inheritDoc
+             */
+            deferRendering: true,
+
+            /**
+             * @name dxDropDownButtonOptions.noDataText
+             * @type string
+             * @default 'No data to display'
+             */
+            noDataText: formatMessage("dxCollectionWidget-noDataText"),
+
+            /**
+             * @name dxDropDownButtonOptions.showSelectedItem
+             * @type boolean
+             * @default true
+             */
+            showSelectedItem: true,
+
+            grouped: false,
             groupTemplate: "group",
-            displayExpr: undefined,
-            valueExpr: "this",
             buttonGroupOptions: {}
         });
     },
 
     _init() {
         this.callBase();
-        this._initDataExpressions();
         this._createItemClickAction();
+        this._compileKeyGetter();
+        this._compileDisplayGetter();
         this._initInnerOptionCache("buttonGroupOptions");
+    },
+
+    _compileKeyGetter() {
+        this._keyGetter = dataCoreUtils.compileGetter(this.option("keyExpr"));
+    },
+
+    _compileDisplayGetter() {
+        this._displayGetter = dataCoreUtils.compileGetter(this.option("displayExpr"));
     },
 
     _initMarkup() {
@@ -146,14 +191,15 @@ let DropDownButton = Widget.inherit({
     _listOptions() {
         return {
             selectionMode: "single",
-            selectedItemKeys: [this._valueGetter(this.option("selectedItem"))],
+            selectedItemKeys: [this._keyGetter(this.option("selectedItem"))],
             grouped: this.option("grouped"),
-            keyExpr: this._getCollectionKeyExpr(),
+            keyExpr: this.option("keyExpr"),
             noDataText: this.option("noDataText"),
             displayExpr: this.option("displayExpr"),
             itemTemplate: this.option("itemTemplate"),
             tabIndex: null,
-            dataSource: this._dataSource,
+            items: this.option("items"),
+            dataSource: this.option("dataSource"),
             onItemClick: (e) => {
                 this.option("selectedItem", e.itemData);
                 const actionResult = this._fireItemClickAction(e);
@@ -188,14 +234,10 @@ let DropDownButton = Widget.inherit({
     },
 
     _selectItem(itemData) {
-        this._setListOption("selectedItemKeys", [this._valueGetter(itemData)]);
+        this._setListOption("selectedItemKeys", [this._keyGetter(itemData)]);
         if(this.option("showSelectedItem")) {
             this._buttonGroup.option("items[0]", this._actionButtonConfig());
         }
-    },
-
-    _setCollectionWidgetOption() {
-        this._setListOption.apply(this, arguments);
     },
 
     _clean() {
@@ -205,15 +247,18 @@ let DropDownButton = Widget.inherit({
 
     _optionChanged(args) {
         const { name, value } = args;
-        this._dataExpressionOptionChanged(args);
         switch(args.name) {
             case "items":
             case "dataSource":
-            case "valueExpr":
-            case "displayExpr":
             case "itemTemplate":
             case "showEvent":
             case "showSelectedItem":
+                break;
+            case "displayExpr":
+                this._compileDisplayGetter();
+                break;
+            case "keyExpr":
+                this._compileKeyGetter();
                 break;
             case "buttonGroupOptions":
                 this._buttonGroup.option(value);
@@ -239,7 +284,7 @@ let DropDownButton = Widget.inherit({
                 this.callBase(args);
         }
     }
-}).include(DataExpressionMixin);
+});
 
 registerComponent("dxDropDownButton", DropDownButton);
 module.exports = DropDownButton;
