@@ -57,6 +57,7 @@
     "gulp-header": "^1.7.1",
     "gulp-if": "^2.0.0",
     "gulp-jsbeautifier": "^2.0.3",
+    "gulp-json-editor": "^2.5.1",
     "gulp-ll": "^1.0.4",
     "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.1.0",
@@ -84,6 +85,7 @@
     "pre-commit": "^1.2.2",
     "qunitjs": "^2.0.1",
     "run-sequence": "^1.1.5",
+    "shelljs": "^0.8.3",
     "string-replace-loader": "^2.1.1",
     "systemjs": "<=0.19.41",
     "systemjs-plugin-babel": "0.0.25",
@@ -110,7 +112,8 @@
     "build-themes": "gulp style-compiler-themes",
     "build-themebuilder-assets": "gulp style-compiler-tb-assets",
     "dev": "gulp dev",
-    "test-env": "node testing/launch"
+    "test-env": "node testing/launch",
+    "update-ts": "node ./build/update-ts.js"
   },
   "browserslist": [
     "last 2 versions",
@@ -118,5 +121,8 @@
     "ie > 10",
     "> 1%"
   ],
-  "pre-commit": "lint-staged"
+  "pre-commit": [
+    "lint-staged",
+    "update-ts"
+  ]
 }
