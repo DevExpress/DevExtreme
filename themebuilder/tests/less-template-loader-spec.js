@@ -554,4 +554,34 @@ describe("LessTemplateLoader", () => {
 `);
         });
     });
+
+    it("compileLess should add prefixes for some css properties according to browsers (T718724)", () => {
+        const packageJson = require("../package.json");
+        packageJson.browserslist = ["ie <= 10"];
+
+        const config = {
+            isBootstrap: false,
+            lessCompiler: lessCompiler,
+            outColorScheme: "my-custom"
+        };
+
+        const less = `@base-bg: #fff;@base-font-family:'default';@base-text-color:#0f0;
+        div { flex: 2; }`;
+
+        const metadataVariables = {};
+
+        metadata.forEach(metaItem => {
+            metadataVariables[metaItem.Key.replace("@", "")] = metaItem.Key;
+        });
+
+        const lessTemplateLoader = new LessTemplateLoader(config);
+        lessTemplateLoader._makeInfoHeader = emptyHeader;
+        return lessTemplateLoader.compileLess(less, {}, metadataVariables).then(data => {
+            assert.equal(data.css, `div {
+  -ms-flex: 2;
+      flex: 2;
+}
+`);
+        });
+    });
 });
