@@ -421,12 +421,6 @@ var TagBox = SelectBox.inherit({
             */
 
             /**
-            * @name dxTagBoxOptions.maxLength
-            * @hidden
-            * @inheritdoc
-            */
-
-            /**
             * @name dxTagBoxOptions.onCopy
             * @hidden
             * @action

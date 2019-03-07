@@ -91,11 +91,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
         eventsEngine.trigger($focusedElement, "focus");
     },
 
-    _updateFocus: function() {
+    _updateFocus: function(editingCanceled) {
         var that = this;
         setTimeout(function() {
             var $cell = that._getFocusedCell(),
-                $cellEditingCell = that._isCellEditMode() ? $cell : undefined;
+                $cellEditingCell = that._isCellEditMode() && $cell;
 
             if($cell && !(that._isMasterDetailCell($cell) && !that._isRowEditMode())) {
                 if(that._hasSkipRow($cell.parent())) {
@@ -104,7 +104,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 if($cell && $cell.length > 0) {
                     if($cell.is("td") || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         if(that.getController("editorFactory").focus() || $cellEditingCell) {
-                            that._focus($cell);
+                            let args = that._fireFocusChangingEvents(null, $cell, true, !editingCanceled);
+                            $cell = args.$newCellElement;
+                            that._focus($cell, !args.isHighlighted);
                         } else if(that._isHiddenFocus) {
                             that._focus($cell, true);
                         }
@@ -183,7 +185,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(this._allowRowUpdating() && isCellEditMode && column && column.allowEditing) {
                 this._isHiddenFocus = false;
             } else {
-                var isInteractiveTarget = $(event.target).not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR),
+                let $target = event && $(event.target),
+                    isInteractiveTarget = $target && $target.not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR),
                     isDisabled = !args.isHighlighted || isInteractiveTarget;
                 this._focus($cell, isDisabled, isInteractiveTarget);
             }
@@ -361,16 +364,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _isCellValid: function($cell) {
         if(isDefined($cell)) {
             var rowsView = this.getView("rowsView"),
+                $row = $cell.parent(),
                 visibleColumns = this._columnsController.getVisibleColumns(),
-                visibleRowIndex = rowsView.getRowIndex($cell.parent()),
                 columnIndex = rowsView.getCellIndex($cell),
                 column = visibleColumns[columnIndex],
                 visibleColumnCount = this._getVisibleColumnCount(),
                 editingController = this._editingController,
-                editMode = editingController && editingController.getEditMode(),
-                isEditingCurrentRow = editingController && (editMode === EDIT_MODE_ROW ? editingController.isEditRow(visibleRowIndex) : editingController.isEditing()),
-                $row = $cell.parent(),
-                isMasterDetailRow = isDetailRow($cell.parent()),
+                isMasterDetailRow = isDetailRow($row),
                 isShowWhenGrouped = column && column.showWhenGrouped,
                 isDataCell = column && !$cell.hasClass(COMMAND_EXPAND_CLASS) && isDataRow($row),
                 isValidGroupSpaceColumn = function() {
@@ -382,9 +382,22 @@ var KeyboardNavigationController = core.ViewController.inherit({
             }
 
             if(visibleColumnCount > columnIndex && isValidGroupSpaceColumn()) {
-                var isExpandColumn = column.command === "expand";
+                let rowItems = this._dataController.items(),
+                    visibleRowIndex = rowsView.getRowIndex($row),
+                    row = rowItems[visibleRowIndex],
+                    isCellEditing = editingController && this._isCellEditMode() && editingController.isEditing(),
+                    isRowEditingInCurrentRow = editingController && editingController.isEditRow(visibleRowIndex),
+                    isEditing = isRowEditingInCurrentRow || isCellEditing;
 
-                return (column && !column.command && (!isEditingCurrentRow || column.allowEditing)) || !isEditingCurrentRow && isExpandColumn;
+                if(column.command) {
+                    return !isEditing && column.command === "expand";
+                }
+
+                if(isCellEditing && row.rowType !== "data") {
+                    return false;
+                }
+
+                return !isEditing || column.allowEditing;
             }
         }
     },
@@ -1646,6 +1659,12 @@ module.exports = {
                     }
 
                     return $cell;
+                },
+                _processCanceledEditingCell: function() {
+                    this.closeEditCell().done(() => {
+                        let keyboardNavigation = this.getController("keyboardNavigation");
+                        keyboardNavigation._updateFocus(true);
+                    });
                 },
                 init: function() {
                     this.callBase();

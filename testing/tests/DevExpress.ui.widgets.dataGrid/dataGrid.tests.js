@@ -3246,6 +3246,43 @@ QUnit.test("Focused row should be visible in virtual scrolling mode", function(a
     clock.restore();
 });
 
+QUnit.test("DataGrid should not scroll back to the focusedRow after paging if virtual scrolling", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers(),
+        isReady,
+        data = [
+            { name: "Alex", phone: "111111", room: 6 },
+            { name: "Dan", phone: "2222222", room: 5 },
+            { name: "Ben", phone: "333333", room: 4 },
+            { name: "Sean", phone: "4545454", room: 3 },
+            { name: "Smith", phone: "555555", room: 2 },
+            { name: "Zeb", phone: "6666666", room: 1 }
+        ],
+        dataGrid = $("#dataGrid").dxDataGrid({
+            height: 60,
+            dataSource: data,
+            keyExpr: "name",
+            focusedRowEnabled: true,
+            focusedRowIndex: 0,
+            scrolling: { mode: "virtual" },
+            paging: { pageSize: 2 },
+            onContentReady: function(e) {
+                if(!isReady) {
+                    // act
+                    e.component.pageIndex(1);
+                    isReady = true;
+                }
+            }
+        }).dxDataGrid("instance");
+
+    clock.tick();
+
+    // assert
+    assert.equal(dataGrid.pageIndex(), 1, "pageIndex");
+
+    clock.restore();
+});
+
 QUnit.test("Focused row should be visible in infinite scrolling mode", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers(),
@@ -12046,6 +12083,47 @@ QUnit.test("Change dataSource array during state loading", function(assert) {
 
     // assert
     assert.strictEqual(dataGrid.getVisibleRows()[1].data.detail, "updated", "row 1 data is updated");
+});
+
+// T720597
+QUnit.test("Grouping and ungrouping", function(assert) {
+    // arrange
+    var dataGrid = createDataGrid({
+        dataSource: [
+            { id: 1, col1: "1 1", col2: "1 2", col3: "1 3" },
+            { id: 2, col1: "2 1", col2: "2 2", col3: "2 3" },
+            { id: 3, col1: "3 1", col2: "3 2", col3: "3 3" }
+        ],
+        loadingTimeout: undefined,
+        paging: {
+            pageSize: 2
+        },
+        repaintChangesOnly: true,
+        scrolling: {
+            mode: 'virtual'
+        },
+        columns: [
+            { dataField: "col1", showWhenGrouped: true },
+            { dataField: "col2", showWhenGrouped: true },
+            { dataField: "col3", showWhenGrouped: true }
+        ],
+        summary: {
+            groupItems: [{
+                column: 'Col1',
+                summaryType: 'count'
+            }]
+        }
+    });
+
+    // act
+    dataGrid.columnOption("col1", "groupIndex", 0);
+    dataGrid.columnOption("col2", "groupIndex", 1);
+    dataGrid.columnOption("col1", "groupIndex", undefined);
+
+    // assert
+    assert.strictEqual($(dataGrid.element()).find(".dx-datagrid-headers td").length, 4, "header cell count is correct");
+    assert.strictEqual($(dataGrid.getRowElement(0)).children().length, 2, "data cell count for first group row is correct");
+    assert.strictEqual($(dataGrid.getRowElement(1)).children().length, 4, "data cell count for second data row is correct");
 });
 
 QUnit.test("Using watch in cellPrepared event for editor if repaintChangesOnly", function(assert) {
