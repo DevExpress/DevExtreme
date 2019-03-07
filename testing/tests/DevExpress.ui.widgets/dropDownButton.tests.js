@@ -37,16 +37,16 @@ QUnit.module("markup", {
         this.instance = new DropDownButton("#dropDownButton", {});
     }
 }, () => {
-    QUnit.test("element should have dropDownButton class", assert => {
+    QUnit.test("element should have dropDownButton class", (assert) => {
         assert.ok(this.instance.$element().hasClass(DROP_DOWN_BUTTON_CLASS), "class is ok");
     });
 
-    QUnit.test("popup and list should not be rendered if deferRendering is true", assert => {
+    QUnit.test("popup and list should not be rendered if deferRendering is true", (assert) => {
         assert.strictEqual(getPopup(this.instance), undefined, "popup should be lazy rendered");
         assert.strictEqual(getList(this.instance), undefined, "list should be lazy rendered");
     });
 
-    QUnit.test("popup and list should be rendered on init when deferRendering is false", assert => {
+    QUnit.test("popup and list should be rendered on init when deferRendering is false", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", { deferRendering: false });
         const popup = getPopup(dropDownButton);
 
@@ -57,7 +57,7 @@ QUnit.module("markup", {
 });
 
 QUnit.module("button group integration", {}, () => {
-    QUnit.test("element should have buttonGroup inside", assert => {
+    QUnit.test("element should have buttonGroup inside", (assert) => {
         const instance = new DropDownButton("#dropDownButton", {});
         const buttonGroup = getButtonGroup(instance);
         assert.strictEqual(buttonGroup.NAME, "dxButtonGroup", "buttonGroup rendered");
@@ -66,29 +66,39 @@ QUnit.module("button group integration", {}, () => {
 
         const buttonGroupItems = buttonGroup.option("items");
         assert.strictEqual(buttonGroupItems.length, 2, "2 buttons are rendered");
-        assert.strictEqual(buttonGroupItems[0].icon, null, "empty icon is correct");
+        assert.strictEqual(buttonGroupItems[0].icon, undefined, "empty icon is correct");
         assert.strictEqual(buttonGroupItems[1].icon, "spindown", "dropdown icon is correct");
     });
 
-    QUnit.test("it should be possible to redefine one item using buttonGroupOptions", assert => {
-        const clickHandler = sinon.spy();
-        const instance = new DropDownButton("#dropDownButton", {
-            buttonGroupOptions: {
-                items: [{}, { onClick: clickHandler }]
-            }
-        });
-        const toggleButton = instance.$element().find(".dx-button").eq(1);
-
-        eventsEngine.trigger(toggleButton, "dxclick");
-        assert.strictEqual(clickHandler.callCount, 1, "handler has been redefined");
-        assert.strictEqual(toggleButton.find(".dx-icon-spindown").length, 1, "icon has not been redefined");
-    });
-
-    QUnit.test("action and toggle button should have special class", assert => {
+    QUnit.test("action and toggle button should have special class", (assert) => {
         const instance = new DropDownButton("#dropDownButton", {});
 
         assert.ok(instance.$element().find(".dx-button").eq(0).hasClass(DROP_DOWN_BUTTON_ACTION_CLASS));
         assert.ok(instance.$element().find(".dx-button").eq(1).hasClass(DROP_DOWN_BUTTON_TOGGLE_CLASS));
+    });
+
+    QUnit.test("a user can redefine buttonGroupOptions", (assert) => {
+        const instance = new DropDownButton("#dropDownButton", {
+            showSelectedItem: false,
+            buttonGroupOptions: {
+                items: [{ text: "Test" }],
+                someOption: "Test"
+            }
+        });
+
+        const buttonGroup = getButtonGroup(instance);
+        assert.strictEqual(buttonGroup.option("items[0].text"), "Test", "text of the first item is correct");
+        assert.strictEqual(buttonGroup.option("items[0].icon"), undefined, "icon of the first item is correct");
+        assert.strictEqual(buttonGroup.option("items[1]"), undefined, "second item is not exist");
+
+        instance.option("buttonGroupOptions.items[0]", { text: "Test 2" });
+        assert.strictEqual(buttonGroup.option("items[0].text"), "Test 2", "text of the first item is correct");
+    });
+
+    QUnit.test("a user can read buttonGroupOptions", (assert) => {
+        const instance = new DropDownButton("#dropDownButton", {});
+
+        assert.strictEqual(instance.option("buttonGroupOptions.stylingMode"), "outlined", "option is correct");
     });
 });
 
@@ -101,11 +111,11 @@ QUnit.module("popup integration", {
         this.popup = getPopup(this.instance);
     }
 }, () => {
-    QUnit.test("popup content should have special class", assert => {
+    QUnit.test("popup content should have special class", (assert) => {
         assert.ok($(this.popup.content()).hasClass(DROP_DOWN_BUTTON_CONTENT), "popup has special class");
     });
 
-    QUnit.test("popup shoild have correct options after rendering", assert => {
+    QUnit.test("popup should have correct options after rendering", (assert) => {
         const buttonGroupElement = getButtonGroup(this.instance).element();
         const options = {
             deferRendering: this.instance.option("deferRendering"),
@@ -137,7 +147,7 @@ QUnit.module("popup integration", {
 });
 
 QUnit.module("list integration", {}, () => {
-    QUnit.test("list should be displayed correctly without data expressions", assert => {
+    QUnit.test("list should be displayed correctly without data expressions", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton", {
             items: ["Item 1"],
             deferRendering: false
@@ -149,7 +159,7 @@ QUnit.module("list integration", {}, () => {
         assert.strictEqual(list.option("keyExpr"), null, "valueExpr is 'this'");
     });
 
-    QUnit.test("data expressions should work with dropDownButton", assert => {
+    QUnit.test("data expressions should work with dropDownButton", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton", {
             items: [{ key: 1, name: "Item 1", icon: "box" }],
             valueExpr: "key",
@@ -165,7 +175,7 @@ QUnit.module("list integration", {}, () => {
         assert.strictEqual($listItem.find(".dx-icon-box").length, 1, "item icon works");
     });
 
-    QUnit.test("some options should be transfered to the list", assert => {
+    QUnit.test("some options should be transfered to the list", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton", {
             items: [{ key: 1, name: "Item 1", icon: "box" }],
             deferRendering: false,
@@ -181,19 +191,19 @@ QUnit.module("list integration", {}, () => {
         assert.strictEqual(list.option("selectionMode"), "single", "selectionMode is always single. The widget uses selectedItems to prevent extra dataSource loads");
     });
 
-    QUnit.test("list selection should depend on value option", assert => {
+    QUnit.test("list selection should depend on selectedItem option", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton", {
             items: [{ key: 1, name: "Item 1" }, { key: 2, name: "Item 2" }],
             deferRendering: false,
             valueExpr: "key",
             displayExpr: "name",
-            value: 2
+            selectedItem: { key: 2 }
         });
 
         const list = getList(dropDownButton);
         assert.deepEqual(list.option("selectedItemKeys"), [2], "selection is correct");
 
-        dropDownButton.option("value", 1);
+        dropDownButton.option("selectedItem", { key: 1 });
         assert.deepEqual(list.option("selectedItemKeys"), [1], "selection is correct");
     });
 });
@@ -211,15 +221,13 @@ QUnit.module("common use cases", {
                 { id: 1, file: "vs.exe", name: "Trial for Visual Studio", icon: "box" },
                 { id: 2, file: "all.exe", name: "Trial for all platforms", icon: "user" }
             ],
-            buttonGroupOptions: {
-                items: [{ file: "common.exe", text: "Download DevExtreme Trial", icon: "group" }]
-            }
+            selectedItem: { file: "common.exe", text: "Download DevExtreme Trial", icon: "group" }
         });
         this.list = getList(this.dropDownButton);
         this.listItems = this.list.itemElements();
     }
 }, () => {
-    QUnit.test("it should be possible to set non-datasource action button", assert => {
+    QUnit.test("it should be possible to set non-datasource action button", (assert) => {
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "Download DevExtreme Trial", "initial text is correct");
 
         eventsEngine.trigger(this.listItems.eq(0), "dxclick");
@@ -230,13 +238,13 @@ QUnit.module("common use cases", {
         assert.notOk(getPopup(this.dropDownButton).option("visible"), "popup is hidden");
     });
 
-    QUnit.test("custom item should be redefined after selection if showSelectedItem is true", assert => {
+    QUnit.test("custom item should be redefined after selection if showSelectedItem is true", (assert) => {
         this.dropDownButton.option("showSelectedItem", true);
         eventsEngine.trigger(this.listItems.eq(0), "dxclick");
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "Trial for Visual Studio", "action button has been changed");
     });
 
-    QUnit.test("prevent default behavior for the itemClick action", assert => {
+    QUnit.test("prevent default behavior for the itemClick action", (assert) => {
         const clickHandler = sinon.stub().returns(false);
         this.dropDownButton.option("onItemClick", clickHandler);
 
@@ -260,14 +268,14 @@ QUnit.module("data expressions", {
         });
     }
 }, () => {
-    QUnit.test("displayExpr is required when items are objects", assert => {
+    QUnit.test("displayExpr is required when items are objects", (assert) => {
         this.dropDownButton.option("displayExpr", undefined);
         this.dropDownButton.option("value", 2);
 
         assert.strictEqual(getActionButton(this.dropDownButton).text(), String({}));
     });
 
-    QUnit.test("displayExpr as function should work", assert => {
+    QUnit.test("displayExpr as function should work", (assert) => {
         this.dropDownButton.option("displayExpr", (itemData) => {
             return itemData.name + "!";
         });
@@ -276,46 +284,46 @@ QUnit.module("data expressions", {
         assert.strictEqual(getActionButton(this.dropDownButton).text(), "Trial for all platforms!", "displayExpr works");
     });
 
-    QUnit.test("null value should be displayed as an empty string", assert => {
+    QUnit.test("null value should be displayed as an empty string", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: ["Item 1", "Item 2", "Item 3"],
-            value: null
+            selectedItem: null
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), "", "value is correct");
     });
 
-    QUnit.test("undefined value should be displayed as an empty string", assert => {
+    QUnit.test("undefined value should be displayed as an empty string", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: ["Item 1", "Item 2", "Item 3"],
-            value: undefined
+            selectedItem: undefined
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), "", "value is correct");
     });
 
-    QUnit.test("primitive items can be used without data expressions", assert => {
+    QUnit.test("primitive items can be used without data expressions", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: ["Item 1", "Item 2", "Item 3"],
-            value: "Item 1"
+            selectedItem: "Item 1"
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), "Item 1", "value is correct");
     });
 
-    QUnit.test("numbers can be used without data expressions", assert => {
+    QUnit.test("numbers can be used without data expressions", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [0, 1, 2],
-            value: 0
+            selectedItem: 0
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), "0", "value is correct");
     });
 
-    QUnit.test("booleans can be used without data expressions", assert => {
+    QUnit.test("booleans can be used without data expressions", (assert) => {
         const dropDownButton = new DropDownButton("#dropDownButton2", {
             items: [true, false],
-            value: false
+            selectedItem: false
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), "false", "value is correct");
