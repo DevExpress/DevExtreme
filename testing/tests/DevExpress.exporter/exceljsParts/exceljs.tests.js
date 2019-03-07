@@ -47,9 +47,9 @@ QUnit.module("API", moduleConfig, () => {
             dataSource: [ "1", "2", "3"]
         });
         this.clock.tick(100);
-
         this.exportDataGrid(dataGrid, this.worksheet);
 
+        this.clock.tick(100);
         assert.equal(this.worksheet.actualColumnCount, 1);
         assert.equal(this.worksheet.actualRowCount, 4);
     });
@@ -103,13 +103,15 @@ QUnit.module("API", moduleConfig, () => {
             dataSource: [ { f1: 13, f2: 31 } ],
             showColumnHeaders: false
         });
+
         this.clock.tick(100);
         this.exportDataGrid(dataGrid, this.worksheet);
+        this.clock.tick(100);
 
         assert.equal(this.worksheet.actualRowCount, 1);
-        assert.equal(this.worksheet.actualColumnCount, 1);
+        assert.equal(this.worksheet.actualColumnCount, 2);
         assert.equal(this.worksheet.getCell("A1").value, 13);
-        assert.equal(this.worksheet.getCell("A2").value, 31);
+        assert.equal(this.worksheet.getCell("B1").value, 31);
     });
 
     test("Columns - hide column headers  & mixed visibleIndex", (assert) => {
@@ -119,18 +121,19 @@ QUnit.module("API", moduleConfig, () => {
                 { dataField: 'f2', visibleIndex: 0, width: 200 },
                 { dataField: 'f3', visibleIndex: 1, width: 50 }
             ],
-            dataSource: [ { f1: 1, f2: 2, f3: 3 } ],
+            dataSource: [ { f1: 13, f2: 24, f3: 35 } ],
             showColumnHeaders: false
         });
         this.clock.tick(100);
         this.exportDataGrid(dataGrid, this.worksheet);
+        this.clock.tick(100);
 
         assert.equal(this.worksheet.getColumn(1).width, 200);
-        assert.equal(this.worksheet.getCell("A1").value, 13);
+        assert.equal(this.worksheet.getCell("A1").value, 24);
         assert.equal(this.worksheet.getColumn(2).width, 50);
-        assert.equal(this.worksheet.getCell("A2").value, 31);
+        assert.equal(this.worksheet.getCell("B1").value, 35);
         assert.equal(this.worksheet.getColumn(3).width, 100);
-        assert.equal(this.worksheet.getCell("A3").value, 31);
+        assert.equal(this.worksheet.getCell("C1").value, 13);
     });
 
     test("Columns - hide column headers  & mixed visibleIndex", (assert) => {
@@ -139,11 +142,12 @@ QUnit.module("API", moduleConfig, () => {
                 { dataField: 'f1', allowExporting: false },
                 { dataField: 'f2' }
             ],
-            dataSource: [ { f1: 1, f2: 2, f3: 3 } ],
+            dataSource: [ { f1: 1, f2: 2 } ],
             showColumnHeaders: false
         });
         this.clock.tick(100);
         this.exportDataGrid(dataGrid, this.worksheet);
+        this.clock.tick(100);
 
         assert.equal(this.worksheet.actualRowCount, 1);
         assert.equal(this.worksheet.actualColumnCount, 1);
@@ -161,11 +165,12 @@ QUnit.module("API", moduleConfig, () => {
         });
         this.clock.tick(100);
         this.exportDataGrid(dataGrid, this.worksheet);
+        this.clock.tick(100);
 
         assert.equal(this.worksheet.getCell("A1").value, 'F1');
-        assert.equal(this.worksheet.autoFilter.from, { row: 1, column: 1 });
-        assert.equal(this.worksheet.autoFilter.to, { row: 1, column: this.worksheet.actualColumnCount });
-        assert.equal(this.worksheet.views, [ { state: 'frozen', ySplit: 1 } ]);
+        assert.equal(JSON.stringify(this.worksheet.autoFilter.from), JSON.stringify({ row: 1, column: 1 }));
+        assert.equal(JSON.stringify(this.worksheet.autoFilter.to), JSON.stringify({ row: 1, column: this.worksheet.actualColumnCount }));
+        assert.equal(JSON.stringify(this.worksheet.views), JSON.stringify([ { state: 'frozen', ySplit: 1 } ]));
     });
 
 });
