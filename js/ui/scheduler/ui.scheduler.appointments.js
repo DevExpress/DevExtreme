@@ -196,6 +196,9 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _isRepaintAll: function(appointments) {
+        if(this.invoke("isCurrentViewAgenda")) {
+            return false;
+        }
         for(let appointment of appointments) {
             if(!this._isRepaintAppointment(appointment)) {
                 return false;
