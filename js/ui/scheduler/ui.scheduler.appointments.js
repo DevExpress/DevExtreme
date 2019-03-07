@@ -187,8 +187,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
         }
     },
 
-    _isAllDay: function(item) {
-        return item.settings.length && item.settings[0].allDay || false;
+    _isAllDayAppointment: function(appointment) {
+        return appointment.settings.length && appointment.settings[0].allDay || false;
     },
 
     _isRepaintAppointment: function(appointment) {
@@ -242,7 +242,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         !appointments.length && this._cleanItemContainer();
 
         appointments.forEach((appointment, index) => {
-            const container = this._isAllDay(appointment) ? allDayFragment : commonFragment;
+            const container = this._isAllDayAppointment(appointment) ? allDayFragment : commonFragment;
             this._onEachAppointment(appointment, index, container, isRepaintAll);
         });
 
