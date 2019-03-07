@@ -1,9 +1,8 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
-const replace = require('gulp-replace');
+const jsonEditor = require('gulp-json-editor');
 const merge = require('merge-stream');
 const context = require('./context.js');
-const packageJson = require('../../themebuilder/package.json');
 const browsersList = require('../../package.json').browserslist;
 const packagePath = context.RESULT_NPM_PATH + '/devextreme-themebuilder';
 
@@ -32,8 +31,10 @@ gulp.task('themebuilder-npm', () => {
             .pipe(gulp.dest(packagePath + '/modules')),
 
         gulp.src('themebuilder/package.json')
-            .pipe(replace(packageJson.version, context.version.package))
-            .pipe(replace(packageJson.browserslist, JSON.stringify(browsersList)))
+            .pipe(jsonEditor({
+                version: context.version.package,
+                browserslist: browsersList
+            }))
             .pipe(gulp.dest(packagePath))
     );
 });
