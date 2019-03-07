@@ -11382,6 +11382,37 @@ QUnit.test("Reset pageIndex on clear state", function(assert) {
     assert.equal(dataGrid.pageIndex(), 0, "pageIndex");
 });
 
+// T721065
+QUnit.test("Change pageIndex and pageSize via state if scrolling mode is virtual", function(assert) {
+    var dataGrid = createDataGrid({
+        height: 200,
+        columns: ["test"],
+        dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+        paging: {
+            pageSize: 5,
+            pageIndex: 1
+        },
+        scrolling: {
+            mode: "virtual"
+        },
+        pager: {
+            visible: true,
+            showPageSizeSelector: true,
+            allowedPageSizes: [2, 5]
+        }
+    });
+
+    this.clock.tick();
+
+    // act
+    dataGrid.state({ pageIndex: 0, pageSize: 2 });
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.pageIndex(), 0, "pageIndex");
+    assert.equal(dataGrid.pageSize(), 2, "pageSize");
+});
+
 // T414555
 QUnit.test("Apply state when search text and grouping are changed", function(assert) {
     var loadingCount = 0,
