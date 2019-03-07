@@ -191,9 +191,13 @@ var SchedulerAppointments = CollectionWidget.inherit({
         return item.settings.length && item.settings[0].allDay || false;
     },
 
+    _isRepaintAppointment: function(appointment) {
+        return !typeUtils.isDefined(appointment.needRepaint) || appointment.needRepaint === true;
+    },
+
     _isRepaintAll: function(appointments) {
         for(let appointment of appointments) {
-            if(!appointment.needRepaint) {
+            if(!this._isRepaintAppointment(appointment)) {
                 return false;
             }
         }
@@ -216,7 +220,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             this._processRenderedAppointment(appointment);
         }
 
-        if((!typeUtils.isDefined(appointment.needRepaint) || appointment.needRepaint === true)) {
+        if(this._isRepaintAppointment(appointment)) {
             appointment.needRepaint = false;
             !isRepaintAll && this._clearItem(appointment);
 
