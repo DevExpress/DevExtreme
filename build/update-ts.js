@@ -6,7 +6,4 @@ if(!shell.which(TOOL_COMMAND)) {
     shell.exit(0);
 }
 
-if(shell.exec(TOOL_COMMAND).code > 0) {
-    shell.exit(1);
-}
-
+shell.exit(shell.exec(TOOL_COMMAND).code);

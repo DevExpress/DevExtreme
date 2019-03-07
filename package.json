@@ -112,7 +112,7 @@
     "build-themebuilder-assets": "gulp style-compiler-tb-assets",
     "dev": "gulp dev",
     "test-env": "node testing/launch",
-    "generate-dts": "node ./build/generate-dts.js"
+    "update-ts": "node ./build/update-ts.js"
   },
   "browserslist": [
     "last 2 versions",
@@ -122,6 +122,6 @@
   ],
   "pre-commit": [
     "lint-staged",
-    "generate-dts"
+    "update-ts"
   ]
 }
