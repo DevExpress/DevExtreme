@@ -1,6 +1,6 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
-const jsonEditor = require("gulp-json-editor");
+const jsonEditor = require('gulp-json-editor');
 const merge = require('merge-stream');
 const context = require('./context.js');
 const browsersList = require('../../package.json').browserslist;
