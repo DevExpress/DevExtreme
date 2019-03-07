@@ -530,12 +530,12 @@
 * @group list
 * @paletteColorOpacity .25
 */
-@list-item-selected-bg: darken(@base-bg, 10%);
+@list-item-selected-bg: @base-select-bg;
 
 @list-item-focused-selected-bg: fade(@base-focus-bg, 70%);
 @list-focused-bg: @base-focus-bg;
 @list-item-color: @base-text-color;
-@list-item-hover-color: @list-item-color;
+@list-item-hover-color: @base-hover-color;
 @list-item-selected-color: @base-select-color;
 @list-item-focus-color: @base-focus-color;
 @list-item-active-color: @base-inverted-text-color;

@@ -22,6 +22,7 @@
 @base-hover-color: @base-accent;
 @base-focus-color: @base-accent;
 @base-shadow-color: transparent;
+@base-select-color: @base-text-color;
 
 @base-default: #52BBE7;
 @base-success: #71C35E;
@@ -64,13 +65,6 @@
 @VALIDATION_SUMMARY_COLOR: @base-invalid-color;
 
 @validation-overlay-border-radius: @base-border-radius;
-
-/**
-* @name 20. Selected state text color
-* @type color
-* @group base.common
-*/
-@base-selected-text-color: @base-inverted-text-color;
 
 @datagrid-row-hovered-color: @base-text-color;
 /**
@@ -587,6 +581,7 @@
 @selectbox-shadow-color: @base-shadow-color;
 
 // Tabs
+@tabs-tab-color: @base-text-color;
 /**
 * @name 45. Bottom layer background color
 * @type color
@@ -667,6 +662,10 @@
 */
 @navbar-tab-selected-bg: #fff - @base-bg;
 @navbar-tab-focused-border-color: @base-focus-color;
+
+@navbar-tab-bg: @base-bg;
+@navbar-tab-color: @base-text-color;
+@navbar-tab-selected-color: @base-text-color;
 
 // Scrollable
 

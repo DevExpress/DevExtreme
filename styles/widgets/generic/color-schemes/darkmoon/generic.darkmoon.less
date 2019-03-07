@@ -105,7 +105,7 @@
 @base-shadow-color: @base-inverted-bg;
 
 @base-select-color: @base-text-color;
-@base-select-bg: darken(@base-bg, 10%);
+@base-select-bg: lighten(@base-bg, 10%);
 
 /**
 * @name 100. Focused state text color
@@ -541,7 +541,7 @@
 * @group list
 * @paletteColorOpacity .25
 */
-@list-item-selected-bg: lighten(@base-bg, 10%);
+@list-item-selected-bg: @base-select-bg;
 @list-item-focused-selected-bg: #46c7b6;
 @list-focused-bg: @base-focus-bg;
 @list-item-color: @base-text-color;

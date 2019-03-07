@@ -30,14 +30,6 @@
 @base-icon-color: #99a1a8;
 
 /**
-* @name 50. Spin icon color
-* @type color
-* @group base.typography
-* @paletteColorOpacity 1
-*/
-@base-spin-icon-color: #99a1a8;
-
-/**
 * @name 10. Accent color
 * @type color
 * @group base.common
@@ -724,13 +716,19 @@
 @dropdowneditor-filled-button-invalid-hover-bg: fade(@texteditor-invalid-focused-border-color, 20%);
 @dropdowneditor-filled-button-invalid-active-bg: fade(@texteditor-invalid-focused-border-color, 30%);
 @dropdowneditor-button-active-border-color: transparent;
-@dropdowneditor-icon-color: @base-icon-color;
+
 /**
-* @name 100. Spin active icon color
+* @name 80. Spin icon color
 * @type color
 * @group editors.texteditors
 */
-@dropdowneditor-icon-active-color: @base-spin-icon-color;
+@dropdowneditor-icon-color: @base-icon-color;
+/**
+* @name 90. Spin active icon color
+* @type color
+* @group editors.texteditors
+*/
+@dropdowneditor-icon-active-color: @base-icon-color;
 @dropdowneditor-icon-border-radius: @base-border-radius-small;
 
 // Lookup
@@ -1142,7 +1140,13 @@
 * @group datagrid
 */
 @datagrid-search-color: @base-inverted-text-color;
-@datagrid-spin-icon-color: @base-spin-icon-color;
+
+/**
+* @name 125. Spin icon color
+* @type color
+* @group datagrid
+*/
+@datagrid-spin-icon-color: @base-icon-color;
 
 /**
 * @name 110. Highlighted text background color
@@ -1240,8 +1244,8 @@
 @treelist-master-detail-cell-bg: darken(@treelist-base-background-color, 2%);
 
 @treelist-search-color: @datagrid-search-color;
-@treelist-spin-icon-color: @base-spin-icon-color;
-@treelist-selection-spin-icon-color: @base-spin-icon-color;
+@treelist-spin-icon-color: @base-icon-color;
+@treelist-selection-spin-icon-color: @base-icon-color;
 @treelist-search-bg: @datagrid-search-bg;
 
 @treelist-row-error-color: @datagrid-row-error-color;
@@ -1322,7 +1326,13 @@
 @PIVOTGRID_HIERARCHY_IMAGE: url(images/widgets/generic/color-schemes/light/grid/hierarchy.png);
 
 @PIVOTGRID_POSITION_INDICATOR_COLOR: gray;
-@pivotgrid-spin-icon-color: @base-spin-icon-color;
+
+/**
+* @name 50. Spin icon color
+* @type color
+* @group pivotgrid
+*/
+@pivotgrid-spin-icon-color: @base-icon-color;
 
 //
 // dxScheduler
@@ -1587,7 +1597,13 @@
 @numberbox-spin-hover-bg: darken(@button-normal-bg, 10%);
 @numberbox-spin-container-border-radius: @base-border-radius;
 @numberbox-spin-icon-border-radius: @base-border-radius-small;
-@numberbox-spin-icon-color: @base-spin-icon-color;
+
+/**
+* @name 10. Spin icon color
+* @type color
+* @group editors.numberbox
+*/
+@numberbox-spin-icon-color: @base-icon-color;
 
 // TileView
 /**
@@ -1620,7 +1636,13 @@
 @treeview-border-color: @base-border-color;
 @treeview-item-selected-color: @treeview-color;
 @treeview-item-selected-bg: darken(@base-bg, 10%);
-@treeview-spin-icon-color: @base-spin-icon-color;
+
+/**
+* @name 20. Spin icon color
+* @type color
+* @group navigations.treeview
+*/
+@treeview-spin-icon-color: @base-icon-color;
 
 // TimeView
 @timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/clock-bg.svg');
