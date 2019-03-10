@@ -23,6 +23,8 @@ import CollectionWidget from "../collection/ui.collection_widget.edit";
 import Draggable from "../draggable";
 import { Deferred } from "../../core/utils/deferred";
 
+const APPOINTMENT_SETTINGS_NAME = "dxAppointmentSettings";
+
 const COMPONENT_CLASS = "dx-scheduler-scrollable-appointments",
     APPOINTMENT_ITEM_CLASS = "dx-scheduler-appointment",
     APPOINTMENT_TITLE_CLASS = "dx-scheduler-appointment-title",
@@ -514,18 +516,12 @@ var SchedulerAppointments = CollectionWidget.inherit({
         for(let setting of item.settings) {
             this._currentAppointmentSettings = setting;
             const $item = this.callBase(index, itemData, container);
-            $item.data("dxAppointmentSettings", setting);
+            $item.data(APPOINTMENT_SETTINGS_NAME, setting);
         }
     },
 
-    _renderItemFrame: function(index, itemData, $container, $itemToReplace) {
-        const result = this.callBase(index, itemData, $container, $itemToReplace);
-        result.data("dxAppointmentSettings", this._currentAppointmentSettings);
-        return result;
-    },
-
     _getItemContent: function($itemFrame) {
-        $itemFrame.data("dxAppointmentSettings", this._currentAppointmentSettings);
+        $itemFrame.data(APPOINTMENT_SETTINGS_NAME, this._currentAppointmentSettings);
         const $itemContent = this.callBase($itemFrame);
         return $itemContent;
     },
@@ -554,6 +550,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderAppointment: function($appointment, settings) {
+        $appointment.data(APPOINTMENT_SETTINGS_NAME, settings);
+
         this._applyResourceDataAttr($appointment);
         var data = this._getItemData($appointment),
             geometry = this.invoke("getAppointmentGeometry", settings),
