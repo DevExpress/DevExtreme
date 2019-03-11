@@ -1,6 +1,6 @@
 import $ from "jquery";
 import { getExcelJS } from "exporter/exceljs/exceljs_importer";
-import { exportDataGrid } from "exporter/exceljs/excelExport";
+import { exportDataGrid } from "exporter/exceljs/exportDataGrid";
 
 import "ui/data_grid/ui.data_grid";
 import "common.css!";

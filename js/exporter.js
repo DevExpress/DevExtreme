@@ -2,7 +2,7 @@ var fileSaver = require("./exporter/file_saver").fileSaver,
     excelCreator = require("./exporter/excel_creator"),
     imageCreator = require("./exporter/image_creator"),
     svgCreator = require("./exporter/svg_creator"),
-    excelExport = require("./exporter/exceljs/excelExport"),
+    exportDataGrid = require("./exporter/exceljs/exportDataGrid"),
     _isFunction = require("./core/utils/type").isFunction;
 
 exports.export = function(data, options, getData) {
@@ -38,7 +38,7 @@ exports.export = function(data, options, getData) {
     }
 };
 
-exports.excelJS = excelExport;
+exports.excelJS = exportDataGrid;
 exports.fileSaver = fileSaver;
 exports.excel = {
     creator: excelCreator.ExcelCreator,

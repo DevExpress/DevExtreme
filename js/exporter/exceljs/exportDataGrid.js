@@ -1,4 +1,4 @@
-import { getExcelJS } from "../exceljs/exceljs_importer";
+import { getExcelJS } from "./exceljs_importer";
 import { isDefined } from "../../core/utils/type";
 
 
