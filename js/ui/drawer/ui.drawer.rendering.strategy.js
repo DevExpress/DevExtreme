@@ -110,17 +110,7 @@ class DrawerStrategy {
         const drawer = this.getDrawerInstance();
         const revealMode = drawer.option("revealMode");
 
-        this._contentAnimation = new Deferred();
-        this._panelAnimation = new Deferred();
-        this._shaderAnimation = new Deferred();
-
-        drawer._animations.push(this._contentAnimation, this._panelAnimation, this._shaderAnimation);
-
-        if(animate) {
-            when.apply($, drawer._animations).done(() => {
-                drawer._animationCompleteHandler();
-            });
-        }
+        this.prepareAnimationDeferreds(animate);
 
         let config = this.getPositionRenderingConfig(offset);
 
@@ -133,6 +123,22 @@ class DrawerStrategy {
             if(revealMode === "expand") {
                 this.expandPositionRendering(config, offset, animate);
             }
+        }
+    }
+
+    prepareAnimationDeferreds(animate) {
+        const drawer = this.getDrawerInstance();
+
+        this._contentAnimation = new Deferred();
+        this._panelAnimation = new Deferred();
+        this._shaderAnimation = new Deferred();
+
+        drawer._animations.push(this._contentAnimation, this._panelAnimation, this._shaderAnimation);
+
+        if(animate) {
+            when.apply($, drawer._animations).done(() => {
+                drawer._animationCompleteHandler();
+            });
         }
     }
 
