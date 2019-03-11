@@ -3145,7 +3145,7 @@ QUnit.testInActiveWindow("Move focus to first data cell after tab key on group r
     });
 });
 
-QUnit.testInActiveWindow("DataGrid should not edit group cells after tab navigation from the editing cell (T714142)", function(assert) {
+QUnit.testInActiveWindow("DataGrid should skip group rows after tab navigation from the editing cell (T714142, T715092)", function(assert) {
     // arrange
     var $cell;
 
@@ -3191,8 +3191,8 @@ QUnit.testInActiveWindow("DataGrid should not edit group cells after tab navigat
     this.clock.tick();
 
     // assert
-    assert.notOk(this.editingController.isEditing(), "is editing");
-    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 1, columnIndex: 1 });
+    assert.ok(this.editingController.isEditing(), "is editing");
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 2, columnIndex: 1 });
 });
 
 QUnit.testInActiveWindow("Do not prevent default on 'shift+tab' if the current cell is the first", function(assert) {
@@ -5133,7 +5133,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
             }
         }, this.options);
 
-        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"], {
+        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "focus", "keyboardNavigation", "validating", "masterDetail"], {
             initViews: true
         });
     },
@@ -5267,6 +5267,60 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         // assert
         assert.ok(!keyboardNavigationController._isHiddenFocus, "not hidden focus");
         assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "cell has no .dx-cell-focus-disabled");
+        assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
+    });
+
+    QUnit.testInActiveWindow("DataGrid should not moved back to the edited cell if the next clicked cell canceled editing process", function(assert) {
+        // arrange
+        var keyboardNavigationController,
+            focusedCellChangingFiresCount = 0,
+            focusedCellChangedFiresCount = 0,
+            $cell;
+
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            editing: { mode: 'cell', allowUpdating: true },
+            onEditingStart: function(e) {
+                e.cancel = e.data.name === "Alex";
+            },
+            onFocusedCellChanging: e => {
+                ++focusedCellChangingFiresCount;
+            },
+            onFocusedCellChanged: e => {
+                ++focusedCellChangedFiresCount;
+            },
+        };
+
+        this.setupModule();
+
+        // act
+        this.gridView.render($("#container"));
+        keyboardNavigationController = this.gridView.component.keyboardNavigationController;
+        $cell = $(this.rowsView.element().find(".dx-row").eq(1).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+        this.editCell(1, 1);
+        this.clock.tick();
+
+        // assert
+        assert.equal(focusedCellChangingFiresCount, 1, "onFocusedCellChanging fires count");
+        assert.equal(focusedCellChangedFiresCount, 1, "onFocusedCellChanged fires count");
+
+        // act
+        $cell = $(this.rowsView.element().find(".dx-row").eq(0).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+        this.editCell(0, 1);
+        this.clock.tick();
+
+        // assert
+        assert.equal(focusedCellChangingFiresCount, 2, "onFocusedCellChanging fires count");
+        assert.equal(focusedCellChangedFiresCount, 2, "onFocusedCellChanged fires count");
+        assert.ok(keyboardNavigationController._isHiddenFocus, "hidden focus");
+        assert.notOk(keyboardNavigationController._editingController.isEditing(), "Is editing");
+        assert.equal(this.rowsView.element().find("input").length, 0, "input");
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 

@@ -2761,6 +2761,7 @@ module.exports = {
                 setUserState: function(state) {
                     var that = this,
                         commonColumnSettings,
+                        dataSource = that._dataSource,
                         ignoreColumnOptionNames = that.option("stateStoring.ignoreColumnOptionNames");
 
                     if(!ignoreColumnOptionNames) {
@@ -2779,6 +2780,12 @@ module.exports = {
                     that._columnsUserState = state;
                     that._ignoreColumnOptionNames = ignoreColumnOptionNames;
                     that._hasUserState = !!state;
+
+                    if(dataSource) {
+                        dataSource.sort(null);
+                        dataSource.group(null);
+                    }
+
                     updateColumnChanges(that, "filtering");
                     that.init();
                 },

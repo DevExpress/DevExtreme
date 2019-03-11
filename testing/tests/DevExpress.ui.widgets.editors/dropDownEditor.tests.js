@@ -1,16 +1,16 @@
-var $ = require("jquery"),
-    DropDownEditor = require("ui/drop_down_editor/ui.drop_down_editor"),
-    Overlay = require("ui/overlay"),
-    devices = require("core/devices"),
-    eventsEngine = require("events/core/events_engine"),
-    support = require("core/utils/support"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config");
+import $ from "jquery";
+import config from "core/config";
+import devices from "core/devices";
+import eventsEngine from "events/core/events_engine";
+import fx from "animation/fx";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import support from "core/utils/support";
+import DropDownEditor from "ui/drop_down_editor/ui.drop_down_editor";
+import Overlay from "ui/overlay";
+import { isRenderer } from "core/utils/type";
 
-require("common.css!");
+import "common.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -359,6 +359,19 @@ QUnit.test("it should be possible to set part of the dropDownOptions without ful
     assert.equal(instance.option("dropDownOptions.width"), 300, "dropDownOptions object has not been rewrited");
 });
 
+QUnit.test("dropdownOptions should not be cleared after repaint", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+        dropDownOptions: {
+            container: "#dropDownEditorLazy"
+        },
+        opened: true
+    }).dxDropDownEditor("instance");
+
+    assert.strictEqual(instance.option("dropDownOptions.container"), "#dropDownEditorLazy", "option is correct");
+
+    instance.repaint();
+    assert.strictEqual(instance.option("dropDownOptions.container"), "#dropDownEditorLazy", "option is correct");
+});
 
 QUnit.module("focus policy");
 
@@ -807,6 +820,19 @@ QUnit.test("popup is rendered only when open editor when deferRendering is true"
 
 
 QUnit.module("Templates");
+
+QUnit.test("should not render placeholder if the fieldTemplate is used", (assert) => {
+    const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+        items: [0, 1, 2, 3, 4, 5],
+        placeholder: "placeholder",
+        fieldTemplate: () => $("<div>").dxTextBox({ placeholder: "placeholder" })
+    });
+    const $placeholder = $dropDownEditor.find(".dx-placeholder");
+
+    assert.strictEqual($placeholder.length, 1, "has only one placeholder");
+    assert.strictEqual($placeholder.closest(".dx-textbox").length, 1, "is textbox's placeholder");
+});
+
 
 QUnit.test("contentTemplate as render", function(assert) {
     $("#dropDownEditorLazy").dxDropDownEditor({

@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "18.2.6",
+  "version": "18.2.7",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
@@ -40,7 +40,7 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-preset-env": "^1.6.1",
-    "bootstrap": "^4.1.2",
+    "bootstrap": "^4.3.1",
     "cldr-core": "latest",
     "cldrjs": "^0.5.0",
     "del": "^2.2.2",
@@ -57,6 +57,7 @@
     "gulp-header": "^1.7.1",
     "gulp-if": "^2.0.0",
     "gulp-jsbeautifier": "^2.0.3",
+    "gulp-json-editor": "^2.5.1",
     "gulp-ll": "^1.0.4",
     "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.1.0",

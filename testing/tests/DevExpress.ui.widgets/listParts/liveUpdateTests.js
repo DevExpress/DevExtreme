@@ -8,7 +8,7 @@ QUnit.module("live update", {
         this.itemRenderedSpy = sinon.spy();
         this.itemDeletedSpy = sinon.spy();
         this.createList = (options) => {
-            return $("#templated-list").dxList($.extend({
+            return $("#templated-list").dxList($.extend(true, {
                 dataSource: {
                     paginate: false,
                     pushAggregationTimeout: 0,
@@ -45,8 +45,37 @@ QUnit.module("live update", {
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, "check added item");
     });
 
+    QUnit.test("insert item should not work if paginate", function(assert) {
+        var store = this.createList({ dataSource: { paginate: true } }).getDataSource().store();
+
+        var pushData = [{ type: "insert", data: { a: "Item 2 Inserted", id: 2 } }];
+        store.push(pushData);
+
+        assert.equal(this.itemRenderedSpy.callCount, 0, "item is not inserted after push");
+    });
+
+    QUnit.test("insert item should not work if grouping", function(assert) {
+        var store = this.createList({ dataSource: { group: "a" } }).getDataSource().store();
+
+        var pushData = [{ type: "insert", data: { a: "Item 2 Inserted", id: 2 } }];
+        store.push(pushData);
+
+        assert.equal(this.itemRenderedSpy.callCount, 0, "item is inserted after push");
+    });
+
     QUnit.test("insert item to specific position", function(assert) {
         var store = this.createList().getDataSource().store();
+
+        var pushData = [{ type: "insert", data: { a: "Item 2 Inserted", id: 2 }, index: 1 }];
+        store.push(pushData);
+
+        assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, "check added item");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemIndex, pushData[0].index, "check added index");
+    });
+
+    QUnit.test("insert item to specific position if paginate", function(assert) {
+        var store = this.createList().getDataSource({ dataSource: { paginate: true } }).store();
 
         var pushData = [{ type: "insert", data: { a: "Item 2 Inserted", id: 2 }, index: 1 }];
         store.push(pushData);
@@ -483,7 +512,8 @@ QUnit.module("live update", {
             dataSource: {
                 paginate: false,
                 pushAggregationTimeout: 0,
-                load: () => [{ id: 1, text: "text 1" }]
+                load: () => [{ id: 1, text: "text 1" }],
+                key: null
             },
         }).getDataSource().store();
 
@@ -504,7 +534,8 @@ QUnit.module("live update", {
             dataSource: {
                 paginate: false,
                 pushAggregationTimeout: 0,
-                load: () => items
+                load: () => items,
+                key: null
             }
         }).getDataSource().store();
 

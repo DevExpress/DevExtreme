@@ -30,13 +30,13 @@ var READONLY_STATE_CLASS = "dx-state-readonly",
 var Editor = Widget.inherit({
     ctor: function() {
         this.showValidationMessageTimeout = null;
-        this._tooltipOptionsCache = {};
         this.callBase.apply(this, arguments);
     },
 
     _init: function() {
         this.callBase();
         this.validationRequest = Callbacks();
+        this._initInnerOptionCache("validationTooltipOptions");
 
         var $element = this.$element();
 
@@ -154,7 +154,6 @@ var Editor = Widget.inherit({
         this._setSubmitElementName(this.option("name"));
 
         this.callBase();
-        this._cacheTooltipOptions(this.option("validationTooltipOptions"));
         this._renderValidationState();
     },
 
@@ -175,13 +174,6 @@ var Editor = Widget.inherit({
 
     _saveValueChangeEvent: function(e) {
         this._valueChangeEventInstance = e;
-    },
-
-    _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
-        this._options[optionsContainer] = extend({}, innerWidget.option());
-        innerWidget.on("optionChanged", function(e) {
-            this._options[optionsContainer] = extend({}, e.component.option());
-        }.bind(this));
     },
 
     _focusInHandler: function(e) {
@@ -206,10 +198,6 @@ var Editor = Widget.inherit({
 
     _canValueBeChangedByClick: function() {
         return false;
-    },
-
-    _cacheTooltipOptions: function(validationTooltipOptions) {
-        this._tooltipOptionsCache = extend(this._tooltipOptionsCache, validationTooltipOptions);
     },
 
     _renderValidationState: function() {
@@ -250,7 +238,7 @@ var Editor = Widget.inherit({
                 visible: true,
                 propagateOutsideClick: true,
                 _checkParentVisibility: false
-            }, this._tooltipOptionsCache));
+            }, this._getInnerOptionsCache("validationTooltipOptions")));
 
             this._$validationMessage
                 .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === "auto")
@@ -359,7 +347,7 @@ var Editor = Widget.inherit({
                 break;
             case "validationTooltipOptions":
                 this._setValidationTooltipOptions(this._getOptionsFromContainer(args));
-                this._cacheTooltipOptions(args.value);
+                this._cacheInnerOptions("validationTooltipOptions", args.value);
                 break;
             case "readOnly":
                 this._toggleReadOnlyState();
