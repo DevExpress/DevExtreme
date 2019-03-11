@@ -1,5 +1,7 @@
 import $ from "jquery";
 import Lookup from "ui/lookup";
+import CustomStore from "data/custom_store";
+import { Deferred } from "core/utils/deferred";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import fx from "animation/fx";
 
@@ -86,7 +88,7 @@ module("Lookup", {
             },
             dataSource: {
                 byKey: function(key) {
-                    const d = $.Deferred();
+                    const d = new Deferred();
                     setTimeout(function() {
                         d.resolve(key);
                     }, 0);
@@ -113,6 +115,31 @@ module("Lookup", {
         });
 
         assert.ok(fieldTemplateStub.calledOnce, "field template called once");
+    });
+
+    test("value should be rendered correctly when async data source has been used", (assert) => {
+        const dataSource = new CustomStore({
+            load: () => {
+                return ["first name", "last name", "age"];
+            },
+            byKey: (key) => {
+                const d = new Deferred();
+                setTimeout(() => {
+                    d.resolve(key);
+                }, 0);
+                return d.promise();
+            }
+        });
+        const value = "last name";
+
+        this.element.dxLookup({
+            dataSource: dataSource,
+            value: value
+        });
+
+        this.clock.tick(0);
+
+        assert.equal(this.element.find(`.${LOOKUP_FIELD_CLASS}`).text(), value, "Field text is correct");
     });
 });
 

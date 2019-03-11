@@ -574,7 +574,7 @@ var DateBox = DropDownEditor.inherit({
         this._$submitElement.val(submitValue);
 
         this._strategy.renderValue();
-        this.callBase();
+        return this.callBase();
     },
 
     _getDisplayedText: function(value) {

@@ -372,7 +372,7 @@ var TextEditorMask = TextEditorBase.inherit({
                 this._$hiddenElement.val(!stringUtils.isEmpty(value) ? hiddenElementValue : "");
             }
         }
-        this.callBase();
+        return this.callBase();
     },
 
     _valueChangeEventHandler: function(e) {

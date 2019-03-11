@@ -9,7 +9,8 @@ var $ = require("../../core/renderer"),
     TextEditor = require("../text_box/ui.text_editor"),
     eventUtils = require("../../events/utils"),
     SpinButtons = require("./number_box.spins").default,
-    messageLocalization = require("../../localization/message");
+    messageLocalization = require("../../localization/message"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var math = Math;
 
@@ -232,6 +233,8 @@ var NumberBoxBase = TextEditor.inherit({
         this.setAria("valuenow", value);
         this.option("text", this._input().val());
         this._updateButtons();
+
+        return new Deferred().resolve();
     },
 
     _forceValueRender: function() {
