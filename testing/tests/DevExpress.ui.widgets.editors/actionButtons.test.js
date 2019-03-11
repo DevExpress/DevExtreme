@@ -148,7 +148,7 @@ module("rendering", () => {
         }
 
         QUnit.test("should not render 'clear' button if showClearButton is false", function(assert) {
-            const $textBox = $("<div>").appendTo("#qunit-fixture").dxTextBox({
+            const $textBox = $("<div>").dxTextBox({
                 showClearButton: false,
                 buttons: ["clear"],
                 value: "text"
