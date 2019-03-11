@@ -718,8 +718,10 @@ QUnit.test("Close submenu when the page is scrolled", function(assert) {
     submenu = getSubMenuInstance($item2);
     assert.ok(submenu.option("visible"), "submenu was opened");
 
-    $(document).trigger("scroll");
-    assert.notOk(submenu.option("visible"), "submenu was closed");
+    if(isDeviceDesktop(assert)) {
+        $(document).trigger("scroll");
+        assert.notOk(submenu.option("visible"), "submenu was closed");
+    }
 });
 
 QUnit.test("Don't hide submenu when cancel is true", function(assert) {
