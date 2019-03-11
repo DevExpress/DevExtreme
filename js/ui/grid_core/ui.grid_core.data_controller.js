@@ -296,7 +296,7 @@ module.exports = {
                         case "paging":
                             dataSource = that.dataSource();
                             if(dataSource && that._setPagingOptions(dataSource)) {
-                                dataSource.load();
+                                dataSource.load().done(that.pageChanged.fire.bind(that.pageChanged));
                             }
                             handled();
                             break;
