@@ -2093,48 +2093,4 @@ function createGridView(options, userOptions) {
         assert.notOk($colElements.eq(1).attr("style"), "width of the second col");
         assert.strictEqual($colElements.eq(2).attr("style"), "width: 100px;", "width of the third col");
     });
-
-    // T719132
-    QUnit.test("The fixed column width should not be changed after expanding a detail row", function(assert) {
-        // arrange
-        var gridView = this.createGridView({}, {
-                columnAutoWidth: true,
-                keyExpr: "id",
-                dataSource: [{ id: 0, field1: "test1", field2: "test2", field3: "test3" }],
-                columns: [
-                    {
-                        dataField: "field1", fixed: true, allowFixing: true
-                    },
-                    {
-                        dataField: "field2", allowFixing: true
-                    },
-                    {
-                        dataField: "field3", allowFixing: true
-                    }
-                ],
-                masterDetail: {
-                    enabled: true,
-                    template: function() {
-                        return $("<div/>").text("Test").width(1000);
-                    }
-                },
-            }),
-            fixedColumnWidth,
-            $testElement = $('#container').width(500);
-
-        gridView.render($testElement);
-        gridView.update();
-        gridView.resize();
-
-        fixedColumnWidth = $(this.getCellElement(0, 1)).width();
-
-        // act
-        this.expandRow(0);
-        gridView.update();
-        gridView.resize();
-
-        // assert
-        assert.ok($testElement.find(".dx-master-detail-row").length > 0, "has master detail");
-        assert.strictEqual(fixedColumnWidth, $(this.getCellElement(0, 1)).width(), "fixed column width isn't changed");
-    });
 }());

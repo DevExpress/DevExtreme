@@ -393,6 +393,29 @@ QUnit.module("onValueChanged event", function(assert) {
 
         assert.strictEqual(eventHandler.callCount, 0);
     });
+
+    // T717643
+    QUnit.test("Do not rise valueChanged handler on change scale range", function(assert) {
+        // arrange
+        var eventHandler = sinon.stub();
+        var rangeSelector = $("#container").dxRangeSelector({
+            scale: {
+                startValue: 0,
+                endValue: 40000000
+            },
+            onValueChanged: eventHandler
+        }).dxRangeSelector("instance");
+
+
+        rangeSelector.option("scale.endValue", 25000);
+        eventHandler.reset();
+
+        // act
+        rangeSelector.option("scale.endValue", 40000000);
+
+        // assert
+        assert.strictEqual(eventHandler.callCount, 0);
+    });
 });
 
 QUnit.module("Begin/end update functionality", function() {
