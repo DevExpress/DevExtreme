@@ -707,6 +707,21 @@ QUnit.test("Hide submenu when click on another item", function(assert) {
     assert.ok(submenu.option("visible"), "item 11 was shown");
 });
 
+QUnit.test("Close submenu when the page is scrolled", function(assert) {
+    var options = { showFirstSubmenuMode: "onClick", items: [{ text: "item 1", items: [{ text: "item 11" }] }, { text: "item 2", items: [{ text: "item 21" }] }] },
+        menu = createMenu(options),
+        $items = $(menu.element).find("." + DX_MENU_ITEM_CLASS),
+        $item2 = $items.eq(1),
+        submenu;
+
+    $($item2).trigger("dxclick");
+    submenu = getSubMenuInstance($item2);
+    assert.ok(submenu.option("visible"), "submenu was opened");
+
+    $(document).trigger("scroll");
+    assert.notOk(submenu.option("visible"), "submenu was closed");
+});
+
 QUnit.test("Don't hide submenu when cancel is true", function(assert) {
     var i = 0,
         options = {
