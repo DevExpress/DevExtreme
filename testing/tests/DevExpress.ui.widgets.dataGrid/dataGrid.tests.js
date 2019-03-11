@@ -2935,6 +2935,23 @@ QUnit.test("width should not be applied if minWidth greater than width", functio
     }
 });
 
+// T720298
+QUnit.test("percent width should not be applied if minWidth greater than width", function(assert) {
+    $("#container").width(200);
+    // arrange
+    $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{ dataField: "first", width: "10%", minWidth: 50 }, "second"]
+    });
+
+    // act
+    var $cols = $("#dataGrid colgroup").eq(0).children("col");
+    assert.strictEqual($cols.length, 2);
+    assert.strictEqual($cols[0].style.width, "50px", "min-width is applied");
+    assert.strictEqual($cols[1].style.width, "auto");
+});
+
 // T516187
 QUnit.test("width should be auto if minWidth is assigned to another column", function(assert) {
     $("#container").width(200);
