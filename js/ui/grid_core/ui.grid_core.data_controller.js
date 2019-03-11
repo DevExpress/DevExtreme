@@ -940,7 +940,7 @@ module.exports = {
                     } else if(isDataChanged) {
                         var operationTypes = that.dataSource().operationTypes();
 
-                        change.repaintChangesOnly = operationTypes && !operationTypes.grouping && that.option("repaintChangesOnly");
+                        change.repaintChangesOnly = operationTypes && !operationTypes.grouping && !operationTypes.filtering && that.option("repaintChangesOnly");
                         change.isDataChanged = true;
                         if(operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding)) {
                             change.needUpdateDimensions = true;
