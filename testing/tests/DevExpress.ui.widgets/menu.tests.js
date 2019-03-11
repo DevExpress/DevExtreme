@@ -12,6 +12,7 @@ var $ = require("jquery"),
     fixtures = require("../../helpers/positionFixtures.js"),
     CustomStore = require("data/custom_store"),
     ArrayStore = require("data/array_store"),
+    eventsEngine = require("events/core/events_engine"),
     DataSource = require("data/data_source/data_source").DataSource;
 
 require("common.css!");
@@ -719,7 +720,7 @@ QUnit.test("Close submenu when the page is scrolled", function(assert) {
     assert.ok(submenu.option("visible"), "submenu was opened");
 
     if(isDeviceDesktop(assert)) {
-        $(document).trigger("scroll");
+        eventsEngine.trigger($(document), "scroll");
         assert.notOk(submenu.option("visible"), "submenu was closed");
     }
 });
