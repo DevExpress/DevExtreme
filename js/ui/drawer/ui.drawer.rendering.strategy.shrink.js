@@ -7,38 +7,33 @@ import { camelize } from "../../core/utils/inflector";
 class ShrinkStrategy extends DrawerStrategy {
 
     slidePositionRendering(config, offset, animate) {
-        const panelOffset = this._getPanelOffset(offset);
         if(animate) {
-
             let animationConfig = extend(config.defaultAnimationConfig, {
                 $element: config.$panel,
-                margin: panelOffset,
+                margin: config.panelOffset,
                 duration: config.drawer.option("animationDuration"),
                 direction: config.direction
             });
             animation.margin(animationConfig);
         } else {
-            config.$panel.css("margin" + camelize(config.direction, true), panelOffset);
+            config.$panel.css("margin" + camelize(config.direction, true), config.panelOffset);
         }
     }
 
     expandPositionRendering(config, offset, animate) {
-        const size = this._getPanelSize(offset);
-
-        let animationConfig = extend(config.defaultAnimationConfig, {
-            $element: config.$panel,
-            size: size,
-            duration: config.drawer.option("animationDuration"),
-            direction: config.direction
-        });
-
         if(animate) {
+            let animationConfig = extend(config.defaultAnimationConfig, {
+                $element: config.$panel,
+                size: config.size,
+                duration: config.drawer.option("animationDuration"),
+                direction: config.direction
+            });
             animation.size(animationConfig);
         } else {
             if(config.drawer.isHorizontalDirection()) {
-                $(config.$panel).css("width", size);
+                $(config.$panel).css("width", config.size);
             } else {
-                $(config.$panel).css("height", size);
+                $(config.$panel).css("height", config.size);
             }
         }
     }

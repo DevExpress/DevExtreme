@@ -9,8 +9,7 @@ class PushStrategy extends DrawerStrategy {
     }
 
     defaultPositionRendering(config, offset, animate) {
-        const maxSize = this._getPanelSize(true);
-        $(config.drawer.content()).css(config.drawer.isHorizontalDirection() ? "width" : "height", maxSize);
+        $(config.drawer.content()).css(config.drawer.isHorizontalDirection() ? "width" : "height", config.maxSize);
 
         const contentPosition = this._getPanelSize(offset) * config.drawer._getPositionCorrection();
 
