@@ -82,18 +82,39 @@ var TextEditorBase = Editor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
+            * @name dxActionButton
+            * @type object
+            */
+            /**
+            * @name dxActionButton.name
+            * @type string
+            * @default undefined
+            */
+            /**
+            /**
+            * @name dxActionButton.location
+            * @type Enums.ActionButtonLocation
+            * @default 'after'
+            */
+            /**
+            * @name dxActionButton.options
+            * @type object
+            * @default undefined
+            */
+
+            /**
+            * @name dxTextEditorOptions.buttons
+            * @type Array<string,dxActionButton>
+            * @default undefined
+            */
+            buttons: void 0,
+
+            /**
             * @name dxTextEditorOptions.value
             * @type any
             * @default ""
             */
             value: "",
-
-            /**
-            * @name dxTextEditorOptions.buttons
-            * @type Array<string>
-            * @default undefined
-            */
-            buttons: void 0,
 
             /**
             * @name dxTextEditorOptions.spellcheck
@@ -330,10 +351,6 @@ var TextEditorBase = Editor.inherit({
 
     _isClearButtonVisible: function() {
         return this.option("showClearButton") && !this.option("readOnly");
-    },
-
-    getButton(name) {
-        return this._buttonCollection.getButton(name);
     },
 
     _input: function() {
@@ -795,6 +812,16 @@ var TextEditorBase = Editor.inherit({
         } catch(e) {
             input.prop("type", "text");
         }
+    },
+
+    /**
+    * @name dxTextEditorMethods.getButton
+    * @publicName getButton(name)
+    * @param1 name:string
+    * @return any
+    */
+    getButton(name) {
+        return this._buttonCollection.getButton(name);
     },
 
     /**

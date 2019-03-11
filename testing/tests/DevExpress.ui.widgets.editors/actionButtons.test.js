@@ -183,7 +183,7 @@ module("rendering", () => {
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 2);
-            // TODO: assert.strictEqual(getButtonPlaceHolders($after).length, 2);
+            // TODO: Stage3: assert.strictEqual(getButtonPlaceHolders($after).length, 2);
             assert.strictEqual(getButtonPlaceHolders($after).length, 1);
 
             numberBox.option({ text: "Some text", showSpinButtons: true });
@@ -233,7 +233,7 @@ module("rendering", () => {
 
             assert.notOk($before.length);
             assert.strictEqual($after.length, 2);
-            // TODO: assert.strictEqual(getButtonPlaceHolders($after).length, 2);
+            // TODO: Stage3: assert.strictEqual(getButtonPlaceHolders($after).length, 2);
             assert.strictEqual(getButtonPlaceHolders($after).length, 1);
 
             selectBox.option({ text: "Some text", showDropDownButton: true });
