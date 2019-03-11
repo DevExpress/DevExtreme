@@ -11410,6 +11410,41 @@ QUnit.test("Change position of the inserted row when virtual scrolling", functio
     assert.ok(items[0].inserted, "insert item");
 });
 
+QUnit.test("DataGrid should close editing row on changing page via scrolling mode is virtual", function(assert) {
+    // arrange
+    var testElement = $('#container');
+
+    this.options.scrolling = {
+        mode: "virtual",
+        useNative: false
+    };
+
+    this.options.dataSource = generateDataSource(100, 2);
+
+    this.setupDataGrid();
+    this.rowsView.render(testElement);
+    this.rowsView.height(130);
+    this.rowsView.resize();
+
+    // assert
+    assert.equal(this.dataController.pageIndex(), 0, "page index");
+
+    // arrange
+    this.addRow();
+    this.clock.tick();
+    for(let i = 1; i < 100; ++i) {
+        this.rowsView.scrollTo({ y: 30 * i });
+        this.clock.tick();
+    }
+    for(let i = 99; i >= 0; --i) {
+        this.rowsView.scrollTo({ y: 30 * i });
+        this.clock.tick();
+    }
+
+    // assert
+    assert.notOk(this.getController("editing").isEditing(), "Is editing");
+});
+
 // T258714
 QUnit.test("Edit row after the virtual scrolling when there is inserted row", function(assert) {
     // arrange

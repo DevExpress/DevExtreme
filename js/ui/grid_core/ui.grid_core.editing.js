@@ -1593,7 +1593,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 dataController = that._dataController;
 
             if(dataController && that._pageIndex !== dataController.pageIndex()) {
-                if(changeType === "refresh") {
+                if(changeType === "refresh" || changeType === "append" || changeType === "prepend") {
                     that.refresh();
                 }
                 that._pageIndex = dataController.pageIndex();
