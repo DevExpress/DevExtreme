@@ -3571,6 +3571,32 @@ QUnit.test("Small appointment should have hidden content information but visible
     assert.equal($appointmentRecurringIcon.css("display"), "none", "Appointment recurring icon isn't visible");
 });
 
+QUnit.test("Recurrence icon position should be correct (T718691)", function(assert) {
+    var data = [{
+        text: "Book Flights to San Fran for Sales Trip",
+        startDate: new Date(2017, 4, 29, 12, 0),
+        endDate: new Date(2017, 5, 5, 13, 0),
+        allDay: true,
+        recurrenceRule: "FREQ=WEEKLY;BYDAY=TU;COUNT=10"
+    }];
+    this.createInstance({
+        dataSource: data,
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2017, 4, 25),
+        startDayHour: 9,
+        height: 600
+    });
+
+    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment"),
+        $appointmentContent = $appointment.find(".dx-scheduler-appointment-content"),
+        $appointmentRecurringIcon = $appointmentContent.find(".dx-scheduler-appointment-recurrence-icon");
+
+    assert.equal($appointmentRecurringIcon.eq(0).css("right"), "20px", "Icon position is OK");
+    assert.equal($appointmentRecurringIcon.eq(1).css("right"), "5px", "Icon position is OK");
+    assert.equal($appointmentRecurringIcon.eq(2).css("right"), "5px", "Icon position is OK");
+});
+
 QUnit.test("Appointment startDate should be preprocessed before position calculating", function(assert) {
     this.createInstance({
         dataSource: [{ "text": "a", "allDay": true, "startDate": "2017-03-13T09:05:00Z", "endDate": "2017-03-20T09:05:00Z" }],

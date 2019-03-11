@@ -339,7 +339,9 @@ function axisAnimationEnabled(drawOptions, series) {
 // utilities used in axes rendering
 
 var dxChart = AdvancedChart.inherit({
-    _chartType: "chart",
+    _themeSection: "chart",
+
+    _fontFields: ["crosshair.label.font" ],
 
     _setDeprecatedOptions: function() {
         this.callBase.apply(this, arguments);

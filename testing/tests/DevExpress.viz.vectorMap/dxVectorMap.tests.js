@@ -5,7 +5,6 @@ var $ = require("jquery"),
     controlBarModule = require("viz/vector_map/control_bar"),
     gestureHandlerModule = require("viz/vector_map/gesture_handler"),
     trackerModule = require("viz/vector_map/tracker"),
-    themeManagerModule = require("viz/vector_map/theme_manager"),
     dataExchangerModule = require("viz/vector_map/data_exchanger"),
     legendModule = require("viz/vector_map/legend"),
     layoutModule = require("viz/vector_map/layout"),
@@ -101,19 +100,6 @@ QUnit.test('Projection', function(assert) {
 
     assert.strictEqual(typeof spy.lastCall.args[0].centerChanged, "function", "centerChanged");
     assert.strictEqual(typeof spy.lastCall.args[0].zoomChanged, "function", "zoomChanged");
-});
-
-QUnit.test("ThemeManager", function(assert) {
-    var spy1 = sinon.spy(themeManagerModule, "ThemeManager"),
-        spy2 = sinon.spy(this.themeManager, "setTheme");
-
-    this.createMap({
-        theme: "option",
-        rtlEnabled: "rtlEnabledOption"
-    });
-
-    assert.deepEqual(spy1.lastCall.args, [], "created");
-    assert.deepEqual(spy2.lastCall.args, ["option", "rtlEnabledOption"], "setTheme is called");
 });
 
 QUnit.test("DataExchanger", function(assert) {

@@ -2743,3 +2743,47 @@ QUnit.test("FullBranch mode. The order of nodes should not be changed after expa
     assert.deepEqual(items[2].data, { id: 5, parentId: 4, test: "Test 4" }, "third item");
     assert.deepEqual(items[3].data, { id: 2, parentId: 1, test: "Test 2" }, "fourth item");
 });
+
+QUnit.test("FullBranch mode. Children of filtered nodes should not be collapsed after sorting", function(assert) {
+    // arrange
+    /* eslint-disable */
+    var store = new ArrayStore([
+        { id: 1, parentId: 0, test: "Test 1" },
+            { id: 2, parentId: 1, test: "Test 2" },
+                { id: 3, parentId: 2, test: "Test 3" },
+                { id: 4, parentId: 2, test: "Test 4", hasChildren: false }
+    ]);
+    /* eslint-enable */
+
+    this.setupTreeList({
+        dataSource: {
+            load: (loadOptions) => store.load(loadOptions)
+        },
+        keyExpr: "id",
+        parentIdExpr: "parentId",
+        hasItemsExpr: "hasChildren",
+        filterMode: "fullBranch",
+        expandNodesOnFiltering: true,
+        remoteOperations: true,
+        searchPanel: {
+            text: "Test 2"
+        }
+    });
+
+    this.expandRow(2);
+
+    // assert
+    var items = this.dataController.items();
+    assert.strictEqual(items.length, 4, "item count");
+
+    // act
+    this.columnOption("test", "sortOrder", "asc");
+
+    // assert
+    items = this.dataController.items();
+    assert.strictEqual(items.length, 4, "item count");
+    assert.strictEqual(items[0].node.hasChildren, true, "hasChildren of the first node");
+    assert.strictEqual(items[1].node.hasChildren, true, "hasChildren of the second node");
+    assert.strictEqual(items[2].node.hasChildren, true, "hasChildren of the third node");
+    assert.strictEqual(items[3].node.hasChildren, false, "hasChildren of the fourth node");
+});

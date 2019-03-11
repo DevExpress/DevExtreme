@@ -14,8 +14,6 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-require("spa.css!");
-
 require("common.css!");
 require("generic_light.css!");
 

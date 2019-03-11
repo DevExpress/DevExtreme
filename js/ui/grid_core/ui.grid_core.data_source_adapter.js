@@ -76,6 +76,7 @@ module.exports = gridCore.Controller.inherit((function() {
             that._hasLastPage = false;
             that._currentTotalCount = 0;
             that._cachedPagesData = createEmptyPagesData();
+            that._lastOperationTypes = {};
 
 
             that.changed = Callbacks();
@@ -351,7 +352,9 @@ module.exports = gridCore.Controller.inherit((function() {
 
             if(options.lastLoadOptions) {
                 this._lastLoadOptions = options.lastLoadOptions;
-                this._operationTypes = options.operationTypes;
+                Object.keys(options.operationTypes).forEach(operationType => {
+                    this._lastOperationTypes[operationType] = this._lastOperationTypes[operationType] || options.operationTypes[operationType];
+                });
             }
 
             if(localPaging) {
@@ -457,9 +460,12 @@ module.exports = gridCore.Controller.inherit((function() {
             }
 
             if(!isLoading) {
-                this.component._optionCache = {};
-                this.changed.fire(args);
-                this.component._optionCache = undefined;
+                that._operationTypes = that._lastOperationTypes;
+                that._lastOperationTypes = {};
+
+                that.component._optionCache = {};
+                that.changed.fire(args);
+                that.component._optionCache = undefined;
             }
         },
         _scheduleCustomLoadCallbacks: function(deferred) {

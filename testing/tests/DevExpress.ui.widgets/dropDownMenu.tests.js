@@ -511,6 +511,21 @@ QUnit.test("popupHeight/popupWidth test", function(assert) {
     assert.equal(popover.option("width"), 50, "popover width is right");
 });
 
+QUnit.test("autoResizeEnabled test", function(assert) {
+    var $dropDownMenu = $("#dropDownMenu").dxDropDownMenu({
+        popupAutoResizeEnabled: true,
+        opened: true
+    });
+
+    var popover = $dropDownMenu.find(".dx-popover").dxPopover("instance");
+
+    assert.equal(popover.option("autoResizeEnabled"), true, "popover autoResizeEnabled is right");
+
+    $dropDownMenu.dxDropDownMenu("option", "popupAutoResizeEnabled", false);
+
+    assert.equal(popover.option("autoResizeEnabled"), false, "popover autoResizeEnabled is right");
+});
+
 QUnit.test("maxHeight test", function(assert) {
     var $dropDownMenu = $("#dropDownMenu").dxDropDownMenu({
         popupMaxHeight: 300,

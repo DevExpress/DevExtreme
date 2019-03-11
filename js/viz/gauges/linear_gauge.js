@@ -10,8 +10,7 @@ var _each = require("../../core/utils/iterator").each,
     _normalizeEnum = require("../core/utils").normalizeEnum,
     linearIndicatorsModule = require("./linear_indicators"),
     createIndicatorCreator = require("./common").createIndicatorCreator,
-    LinearRangeContainer = require("./linear_range_container"),
-    ThemeManager = require("./theme_manager");
+    LinearRangeContainer = require("./linear_range_container");
 
 var dxLinearGauge = dxGauge.inherit({
     _rootClass: 'dxg-linear-gauge',
@@ -28,6 +27,13 @@ var dxLinearGauge = dxGauge.inherit({
 
     _getTicksOrientation: function(scaleOptions) {
         return scaleOptions.isHorizontal ? scaleOptions.verticalOrientation : scaleOptions.horizontalOrientation;
+    },
+
+    _getThemeManagerOptions() {
+        let options = this.callBase.apply(this, arguments);
+
+        options.subTheme = "_linear";
+        return options;
     },
 
     _updateScaleTickIndent: function(scaleOptions) {
@@ -235,9 +241,6 @@ indicators["rangebar"] = linearIndicatorsModule["rangebar"];
 
 dxLinearGauge.prototype._factory.RangeContainer = LinearRangeContainer;
 
-dxLinearGauge.prototype._factory.ThemeManager = ThemeManager.inherit({
-    _subTheme: "_linear"
-});
 
 registerComponent("dxLinearGauge", dxLinearGauge);
 

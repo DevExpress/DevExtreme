@@ -5,7 +5,7 @@ var $ = require("jquery"),
     CircularRangeContainer = require("viz/gauges/circular_range_container"),
     LinearRangeContainer = require("viz/gauges/linear_range_container"),
     Translator1D = require("viz/translators/translator1d").Translator1D,
-    ThemeManager = require("viz/gauges/theme_manager");
+    themeManagerModule = require("viz/gauges/theme_manager");
 
 var TestRangeContainer = BaseRangeContainer.inherit({
     _processOptions: function() {
@@ -28,7 +28,7 @@ var environment = {
         this.renderer = new vizMocks.Renderer();
         this.container = new vizMocks.Element();
         this.translator = new Translator1D();
-        this.themeManager = new ThemeManager();
+        this.themeManager = new themeManagerModule.ThemeManager({});
         sinon.stub(this.themeManager, "createPalette", this.themeManager.createPalette);
         this.rangeContainer = new TestRangeContainer({
             renderer: this.renderer,

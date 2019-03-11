@@ -1383,6 +1383,40 @@ QUnit.test("grouping with paginate. Collapse group when CustomStore used", funct
     }]);
 });
 
+// T720420
+QUnit.test("grouping with paginate. Collapse group and paging when ODataStore used", function(assert) {
+    var arrayStore = new ArrayStore(this.array);
+
+    var source = this.createDataSource({
+        pageSize: 2,
+        group: "field2",
+        store: new CustomStore({
+            load: function(options) {
+                var d = $.Deferred();
+                $.when(arrayStore.load(options), arrayStore.totalCount(options)).done(function(items, totalCount) {
+                    d.resolve(items, { totalCount: totalCount });
+                });
+                return d;
+            }
+        })
+    });
+
+    source.load();
+
+    // act
+    source.changeRowExpand([2]);
+    source.load();
+    source.pageIndex(1);
+    source.load();
+
+    // assert
+    assert.equal(source.pageIndex(), 1);
+    assert.equal(source.totalItemsCount(), 3);
+    assert.deepEqual(source.items(), [{
+        key: 4, items: [{ field1: 2, field2: 4, field3: 6 }]
+    }]);
+});
+
 QUnit.test("grouping with paginate. Collapse group when dataSource has filter", function(assert) {
     var source = this.createDataSource({
         store: [

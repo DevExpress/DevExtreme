@@ -11,7 +11,6 @@ var _isFinite = isFinite,
     circularIndicatorsModule = require("./circular_indicators"),
     createIndicatorCreator = require("./common").createIndicatorCreator,
     CircularRangeContainer = require("./circular_range_container"),
-    ThemeManager = require("./theme_manager"),
 
     _abs = Math.abs,
     _max = Math.max,
@@ -55,6 +54,13 @@ var dxCircularGauge = dxGauge.inherit({
     _scaleTypes: {
         type: "polarAxes",
         drawingType: "circular"
+    },
+
+    _getThemeManagerOptions() {
+        let options = this.callBase.apply(this, arguments);
+
+        options.subTheme = "_circular";
+        return options;
     },
 
     _updateScaleTickIndent: function(scaleOptions) {
@@ -286,10 +292,6 @@ indicators["textcloud"] = circularIndicatorsModule["textcloud"];
 indicators["rangebar"] = circularIndicatorsModule["rangebar"];
 
 dxCircularGauge.prototype._factory.RangeContainer = CircularRangeContainer;
-
-dxCircularGauge.prototype._factory.ThemeManager = ThemeManager.inherit({
-    _subTheme: "_circular"
-});
 
 registerComponent("dxCircularGauge", dxCircularGauge);
 

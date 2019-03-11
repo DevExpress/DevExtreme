@@ -16,7 +16,7 @@ var $ = require("jquery"),
     translator1DModule = require("viz/translators/translator1d"),
     rendererModule = require("viz/core/renderers/renderer"),
     stubRange = vizMocks.stubClass(rangeModule.Range),
-    ThemeManager = require("viz/gauges/theme_manager");
+    themeManagerModule = require("viz/gauges/theme_manager");
 
 $('<div id="test-container">').appendTo("#qunit-fixture");
 
@@ -79,7 +79,7 @@ sinon.stub(axisModule, "Axis", function(parameters) {
     return new vizMocks.Axis(parameters);
 });
 
-factory.ThemeManager = vizMocks.stubClass(ThemeManager, {
+themeManagerModule.ThemeManager = vizMocks.stubClass(themeManagerModule.ThemeManager, {
     theme: function() { return {}; },
     themeName: function() { return "theme-name"; },
     createPalette: function(palette) { return createPalette(palette); },

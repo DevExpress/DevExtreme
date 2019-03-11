@@ -296,7 +296,7 @@ module.exports = {
                         case "paging":
                             dataSource = that.dataSource();
                             if(dataSource && that._setPagingOptions(dataSource)) {
-                                dataSource.load();
+                                dataSource.load().done(that.pageChanged.fire.bind(that.pageChanged));
                             }
                             handled();
                             break;
@@ -641,7 +641,7 @@ module.exports = {
                         that._applyChangeUpdate(change);
                     } else if(that.items().length && change.repaintChangesOnly && change.changeType === "refresh") {
                         that._applyChangesOnly(change);
-                    } else {
+                    } else if(change.changeType === "refresh") {
                         that._applyChangeFull(change);
                     }
                 },
@@ -751,7 +751,7 @@ module.exports = {
                     return false;
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group") {
+                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group" && newItem.rowType !== "groupFooter") {
                         var columnIndices = [];
 
                         for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
@@ -792,7 +792,7 @@ module.exports = {
                             return false;
                         }
 
-                        if(item1.rowType === "group") {
+                        if(item1.rowType === "group" || item1.rowType === "groupFooter") {
                             if(item1.isExpanded !== item2.isExpanded || JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
                                 return false;
                             }
@@ -940,7 +940,7 @@ module.exports = {
                     } else if(isDataChanged) {
                         var operationTypes = that.dataSource().operationTypes();
 
-                        change.repaintChangesOnly = operationTypes && that.option("repaintChangesOnly");
+                        change.repaintChangesOnly = operationTypes && !operationTypes.grouping && !operationTypes.filtering && that.option("repaintChangesOnly");
                         change.isDataChanged = true;
                         if(operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding)) {
                             change.needUpdateDimensions = true;

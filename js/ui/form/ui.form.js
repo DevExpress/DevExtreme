@@ -17,7 +17,7 @@ var $ = require("../../core/renderer"),
     windowUtils = require("../../core/utils/window"),
     ValidationEngine = require("../validation_engine"),
     LayoutManager = require("./ui.form.layout_manager"),
-    InstanceStorage = require("./instance_storage").default,
+    FormItemsRunTimeInfo = require("./ui.form.items_runtime_info").default,
     TabPanel = require("../tab_panel"),
     Scrollable = require("../scroll_view/ui.scrollable"),
     Deferred = require("../../core/utils/deferred").Deferred,
@@ -50,7 +50,7 @@ var Form = Widget.inherit({
         this.callBase();
 
         this._cachedColCountOptions = [];
-        this._instanceStorage = new InstanceStorage();
+        this._itemsRunTimeInfo = new FormItemsRunTimeInfo();
         this._groupsColCount = [];
 
         this._attachSyncSubscriptions();
@@ -837,7 +837,7 @@ var Form = Widget.inherit({
     },
 
     _clearCachedInstances: function() {
-        this._instanceStorage.clear();
+        this._itemsRunTimeInfo.clear();
         this._cachedLayoutManagers = [];
     },
 
@@ -887,43 +887,39 @@ var Form = Widget.inherit({
         }
     },
 
-    _prepareItems: function(items, isTabbed) {
+    _prepareItems: function(items, parentIsTabbedItem) {
         if(items) {
-            var that = this,
-                extendedItems = [],
-                i,
-                item,
-                clonedItem;
+            var result = [];
 
-            for(i = 0; i < items.length; i++) {
-                item = items[i];
-                clonedItem = typeUtils.isObject(item) ? extend({}, item) : item;
+            for(var i = 0; i < items.length; i++) {
+                var item = items[i];
+                var guid = this._itemsRunTimeInfo.add(item);
 
-                var guid = this._instanceStorage.add(item);
+                if(typeUtils.isObject(item)) {
+                    var itemCopy = extend({}, item);
+                    itemCopy.guid = guid;
+                    this._tryPrepareGroupItem(itemCopy);
+                    this._tryPrepareTabbedItem(itemCopy);
+                    this._tryPrepareItemTemplate(itemCopy);
 
-                if(typeUtils.isObject(clonedItem)) {
-                    clonedItem.guid = guid;
-                }
-
-                that._prepareGroupItem(clonedItem);
-                that._prepareTabbedItem(clonedItem);
-                that._prepareItemTemplate(clonedItem);
-
-                if(typeUtils.isObject(clonedItem)) {
-                    if(isTabbed) {
-                        clonedItem.cssItemClass = FIELD_ITEM_TAB_CLASS;
+                    if(parentIsTabbedItem) {
+                        itemCopy.cssItemClass = FIELD_ITEM_TAB_CLASS;
                     }
-                    clonedItem.items = this._prepareItems(clonedItem.items, isTabbed);
-                }
 
-                extendedItems.push(clonedItem);
+                    if(itemCopy.items) {
+                        itemCopy.items = this._prepareItems(itemCopy.items, parentIsTabbedItem);
+                    }
+                    result.push(itemCopy);
+                } else {
+                    result.push(item);
+                }
             }
 
-            return extendedItems;
+            return result;
         }
     },
 
-    _prepareGroupItem: function(item) {
+    _tryPrepareGroupItem: function(item) {
         if(item.itemType === "group") {
             item.alignItemLabels = utils.ensureDefined(item.alignItemLabels, true);
 
@@ -935,14 +931,14 @@ var Form = Widget.inherit({
         }
     },
 
-    _prepareTabbedItem: function(item) {
+    _tryPrepareTabbedItem: function(item) {
         if(item.itemType === "tabbed") {
             item.template = this._itemTabbedTemplate.bind(this, item);
             item.tabs = this._prepareItems(item.tabs, true);
         }
     },
 
-    _prepareItemTemplate: function(item) {
+    _tryPrepareItemTemplate: function(item) {
         if(item.template) {
             item.template = this._getTemplate(item.template);
         }
@@ -1124,7 +1120,7 @@ var Form = Widget.inherit({
         return extend(baseConfig, {
             items: items,
             onContentReady: function(args) {
-                that._instanceStorage.extend(args.component._instanceStorage);
+                that._itemsRunTimeInfo.addItemsOrExtendFrom(args.component._itemsRunTimeInfo);
                 options.onContentReady && options.onContentReady(args);
             },
             colCount: options.colCount,
@@ -1266,7 +1262,8 @@ var Form = Widget.inherit({
             case "items":
                 var itemPath = this._getItemPath(nameParts),
                     item = this.option(itemPath),
-                    instance = this._instanceStorage.findByItem(item),
+                    instance = this._itemsRunTimeInfo.findWidgetInstanceByItem(item),
+                    $itemContainer = this._itemsRunTimeInfo.findItemContainerByItem(item),
                     fullName = args.fullName;
 
                 if(instance) {
@@ -1287,6 +1284,9 @@ var Form = Widget.inherit({
                                 break;
                             }
                         }
+                    } else if($itemContainer && fullName.substring(fullName.length - 8, fullName.length) === "cssClass") {
+                        $itemContainer.removeClass(args.previousValue).addClass(args.value);
+                        break;
                     }
                 }
 
@@ -1555,12 +1555,10 @@ var Form = Widget.inherit({
             validationGroupConfig = ValidationEngine.getGroupConfig(validationGroup);
 
         validationGroupConfig && validationGroupConfig.reset();
-        this._instanceStorage.each(function(instance, item) {
-            var isButton = item.itemType === "button";
-
-            if(!isButton) {
-                instance.reset();
-                instance.option("isValid", true);
+        this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
+            if(typeUtils.isDefined(itemRunTimeInfo.widgetInstance) && typeUtils.isDefined(itemRunTimeInfo.item) && itemRunTimeInfo.item.itemType !== "button") {
+                itemRunTimeInfo.widgetInstance.reset();
+                itemRunTimeInfo.widgetInstance.option("isValid", true);
             }
         });
     },
@@ -1580,8 +1578,10 @@ var Form = Widget.inherit({
 
     registerKeyHandler: function(key, handler) {
         this.callBase(key, handler);
-        this._instanceStorage.each(function(instance) {
-            instance.registerKeyHandler(key, handler);
+        this._itemsRunTimeInfo.each(function(_, itemRunTimeInfo) {
+            if(typeUtils.isDefined(itemRunTimeInfo.widgetInstance)) {
+                itemRunTimeInfo.widgetInstance.registerKeyHandler(key, handler);
+            }
         });
     },
 
@@ -1625,7 +1625,7 @@ var Form = Widget.inherit({
      * @return any
      */
     getEditor: function(dataField) {
-        return this._instanceStorage.findByDataField(dataField) || this._instanceStorage.findByName(dataField);
+        return this._itemsRunTimeInfo.findWidgetInstanceByDataField(dataField) || this._itemsRunTimeInfo.findWidgetInstanceByName(dataField);
     },
 
     /**
@@ -1635,7 +1635,7 @@ var Form = Widget.inherit({
      * @return any
      */
     getButton: function(name) {
-        return this._instanceStorage.findByName(name);
+        return this._itemsRunTimeInfo.findWidgetInstanceByName(name);
     },
 
     /**

@@ -11,7 +11,8 @@ var $ = require("../../core/renderer"),
     Editor = require("../editor/editor"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
-    clickEvent = require("../../events/click"),
+    ClearButton = require("./ui.text_editor.clear").default,
+    ActionButtonCollection = require("./action_button_collection/index").default,
     config = require("../../core/config");
 
 var TEXTEDITOR_CLASS = "dx-texteditor",
@@ -20,10 +21,6 @@ var TEXTEDITOR_CLASS = "dx-texteditor",
     TEXTEDITOR_CONTAINER_CLASS = "dx-texteditor-container",
     TEXTEDITOR_BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container",
     TEXTEDITOR_PLACEHOLDER_CLASS = "dx-placeholder",
-    TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS = "dx-show-clear-button",
-    TEXTEDITOR_ICON_CLASS = "dx-icon",
-    TEXTEDITOR_CLEAR_ICON_CLASS = "dx-icon-clear",
-    TEXTEDITOR_CLEAR_BUTTON_CLASS = "dx-clear-button-area",
     TEXTEDITOR_EMPTY_INPUT_CLASS = "dx-texteditor-empty",
     TEXTEDITOR_STYLING_MODE_PREFIX = "dx-editor-",
     ALLOWED_STYLE_CLASSES = [
@@ -62,6 +59,14 @@ var CONTROL_KEYS = [
 * @hidden
 */
 var TextEditorBase = Editor.inherit({
+    ctor: function() {
+        this._buttonCollection = new ActionButtonCollection(this, this._getDefaultButtons());
+
+        this.$beforeButtonsContainer = null;
+        this.$afterButtonsContainer = null;
+
+        this.callBase.apply(this, arguments);
+    },
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -71,6 +76,13 @@ var TextEditorBase = Editor.inherit({
             * @default ""
             */
             value: "",
+
+            /**
+            * @name dxTextEditorOptions.buttons
+            * @type Array<string>
+            * @default undefined
+            */
+            buttons: void 0,
 
             /**
             * @name dxTextEditorOptions.spellcheck
@@ -301,6 +313,18 @@ var TextEditorBase = Editor.inherit({
         ]);
     },
 
+    _getDefaultButtons: function() {
+        return [{ name: "clear", Ctor: ClearButton }];
+    },
+
+    _isClearButtonVisible: function() {
+        return this.option("showClearButton") && !this.option("readOnly");
+    },
+
+    getButton(name) {
+        return this._buttonCollection.getButton(name);
+    },
+
     _input: function() {
         return this.$element().find(TEXTEDITOR_INPUT_SELECTOR).first();
     },
@@ -343,7 +367,7 @@ var TextEditorBase = Editor.inherit({
 
         this._renderInput();
         this._renderInputType();
-        this._renderPlaceholderMarkup();
+        this._renderPlaceholder();
 
         this._renderProps();
 
@@ -363,10 +387,21 @@ var TextEditorBase = Editor.inherit({
     },
 
     _renderInput: function() {
-        $("<div>").addClass(TEXTEDITOR_CONTAINER_CLASS)
-            .append(this._createInput())
-            .append($("<div>").addClass(TEXTEDITOR_BUTTONS_CONTAINER_CLASS))
+        const buttons = this.option("buttons");
+        const $testEditorContainer = $("<div>")
+            .addClass(TEXTEDITOR_CONTAINER_CLASS)
             .appendTo(this.$element());
+
+        this.$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, $testEditorContainer);
+        $testEditorContainer.append(this._createInput());
+        this.$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, $testEditorContainer);
+    },
+
+    _clean() {
+        this._buttonCollection.clean();
+        this.$beforeButtonsContainer = null;
+        this.$afterButtonsContainer = null;
+        this.callBase();
     },
 
     _createInput: function() {
@@ -387,9 +422,12 @@ var TextEditorBase = Editor.inherit({
             .css("minHeight", this.option("height") ? "0" : "");
     },
 
+    _updateButtons: function(names) {
+        this._buttonCollection.updateButtons(names);
+    },
+
     _renderValue: function() {
         this._renderInputValue();
-        this._renderInputAddons();
     },
 
     _renderInputValue: function(value) {
@@ -501,7 +539,7 @@ var TextEditorBase = Editor.inherit({
 
         var $input = this._input(),
             placeholderText = this.option("placeholder"),
-            $placeholder = this._$placeholder = $('<div>')
+            $placeholder = this._$placeholder = $("<div>")
                 .attr("data-dx_placeholder", placeholderText);
 
         $placeholder.insertAfter($input);
@@ -520,46 +558,6 @@ var TextEditorBase = Editor.inherit({
 
     _placeholder: function() {
         return this._$placeholder || $();
-    },
-
-    _renderInputAddons: function() {
-        this._renderClearButton();
-    },
-
-    _renderClearButton: function() {
-        var clearButtonVisibility = this._clearButtonVisibility();
-
-        this.$element().toggleClass(TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS, clearButtonVisibility);
-
-        if(clearButtonVisibility) {
-            if(!this._$clearButton || this._$clearButton && !this._$clearButton.closest(this.$element()).length) {
-                this._$clearButton = this._createClearButton();
-            }
-            this._$clearButton.prependTo(this._buttonsContainer());
-        }
-
-        if(this._$clearButton) {
-            this._$clearButton.toggleClass(STATE_INVISIBLE_CLASS, !clearButtonVisibility);
-        }
-    },
-
-    _clearButtonVisibility: function() {
-        return this.option("showClearButton") && !this.option("readOnly");
-    },
-
-    _createClearButton: function() {
-        var $clearButton = $("<span>")
-            .addClass(TEXTEDITOR_CLEAR_BUTTON_CLASS)
-            .append($("<span>").addClass(TEXTEDITOR_ICON_CLASS).addClass(TEXTEDITOR_CLEAR_ICON_CLASS));
-
-        eventsEngine.on($clearButton, eventUtils.addNamespace(pointerEvents.down, this.NAME), function(e) {
-            if(e.pointerType === "mouse") {
-                e.preventDefault();
-            }
-        });
-        eventsEngine.on($clearButton, eventUtils.addNamespace(clickEvent.name, this.NAME), this._clearValueHandler.bind(this));
-
-        return $clearButton;
     },
 
     _clearValueHandler: function(e) {
@@ -683,9 +681,7 @@ var TextEditorBase = Editor.inherit({
         }
 
         if(eventUtils.normalizeKeyName(e) === "enter") {
-            this._enterKeyAction({
-                event: e
-            });
+            this._enterKeyAction({ event: e });
         }
     },
 
@@ -720,10 +716,6 @@ var TextEditorBase = Editor.inherit({
             case "onValueChanged":
                 this._createValueChangeAction();
                 break;
-            case "readOnly":
-                this.callBase(args);
-                this._renderInputAddons();
-                break;
             case "focusStateEnabled":
                 this.callBase(args);
                 this._toggleTabIndex();
@@ -740,8 +732,13 @@ var TextEditorBase = Editor.inherit({
             case "placeholder":
                 this._renderPlaceholder();
                 break;
+            case "readOnly":
+            case "disabled":
+                this._updateButtons();
+                this.callBase(args);
+                break;
             case "showClearButton":
-                this._renderInputAddons();
+                this._updateButtons(["clear"]);
                 break;
             case "text":
                 break;
@@ -756,6 +753,7 @@ var TextEditorBase = Editor.inherit({
                 this._renderStylingMode();
                 break;
             case "valueFormat":
+            case "buttons":
                 this._invalidate();
                 break;
             default:

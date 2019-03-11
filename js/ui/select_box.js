@@ -1,5 +1,4 @@
 var $ = require("../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
     isDefined = typeUtils.isDefined,
@@ -14,14 +13,11 @@ var $ = require("../core/renderer"),
     inkRipple = require("./widget/utils.ink_ripple"),
     messageLocalization = require("../localization/message"),
     registerComponent = require("../core/component_registrator"),
-    eventUtils = require("../events/utils"),
     dataQuery = require("../data/query"),
     DropDownList = require("./drop_down_editor/ui.drop_down_list"),
-    themes = require("./themes"),
-    clickEvent = require("../events/click");
+    themes = require("./themes");
 
 var DISABLED_STATE_SELECTOR = ".dx-state-disabled",
-
     SELECTBOX_CLASS = "dx-selectbox",
     SELECTBOX_POPUP_CLASS = "dx-selectbox-popup",
     SELECTBOX_CONTAINER_CLASS = "dx-selectbox-container",
@@ -436,7 +432,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _renderInputValueImpl: function() {
-        this._renderInputAddons();
+        this._renderField();
 
         return new Deferred().resolve();
     },
@@ -541,7 +537,7 @@ var SelectBox = DropDownList.inherit({
             return;
         }
 
-        this._renderInputAddons();
+        this._renderField();
     },
 
     _getSelectionChangeHandler: function() {
@@ -811,13 +807,10 @@ var SelectBox = DropDownList.inherit({
         this._renderDisplayText(this._displayGetter(item));
     },
 
-    _createClearButton: function() {
-        var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
-        var $clearButton = this.callBase();
+    _clearValueHandler: function(e) {
+        this.callBase(e);
 
-        eventsEngine.on($clearButton, eventName, function() { return false; });
-
-        return $clearButton;
+        return false;
     },
 
     _wasSearch: function(value) {

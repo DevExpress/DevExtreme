@@ -4,13 +4,16 @@ var _Number = Number,
     translator1DModule = require("../translators/translator1d"),
     _extend = extend,
     BaseWidget = require("../core/base_widget"),
+    themeManagerModule = require("./theme_manager"),
     Tracker = require("./tracker");
 
 var dxBaseGauge = BaseWidget.inherit({
     _rootClassPrefix: "dxg",
 
+    _themeSection: 'gauge',
+
     _createThemeManager: function() {
-        return new this._factory.ThemeManager();
+        return new themeManagerModule.ThemeManager(this._getThemeManagerOptions());
     },
 
     _initCore: function() {
