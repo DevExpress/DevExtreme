@@ -107,17 +107,56 @@ class DrawerStrategy {
     }
 
     renderPosition(offset, animate) {
+        const drawer = this.getDrawerInstance();
+        const revealMode = drawer.option("revealMode");
+
         this._contentAnimation = new Deferred();
         this._panelAnimation = new Deferred();
         this._shaderAnimation = new Deferred();
 
-        this._drawer._animations.push(this._contentAnimation, this._panelAnimation, this._shaderAnimation);
+        drawer._animations.push(this._contentAnimation, this._panelAnimation, this._shaderAnimation);
 
         if(animate) {
-            when.apply($, this._drawer._animations).done(() => {
-                this._drawer._animationCompleteHandler();
+            when.apply($, drawer._animations).done(() => {
+                drawer._animationCompleteHandler();
             });
         }
+
+        let config = this.getPositionRenderingConfig(offset);
+
+        if(this.useDefaultAnimation()) {
+            this.defaultPositionRendering(config, offset, animate);
+        } else {
+            if(revealMode === "slide") {
+                this.slidePositionRendering(config, offset, animate);
+            }
+            if(revealMode === "expand") {
+                this.expandPositionRendering(config, offset, animate);
+            }
+        }
+    }
+
+    getPositionRenderingConfig(offset) {
+        const drawer = this.getDrawerInstance();
+
+        const direction = drawer.getDrawerPosition();
+        const $panel = $(drawer.content());
+        const defaultAnimationConfig = this._defaultAnimationConfig();
+        const size = this._getPanelSize(offset);
+        const $content = $(drawer.viewContent());
+
+        return {
+            direction: direction,
+            $panel: $panel,
+            $content: $content,
+            defaultAnimationConfig: defaultAnimationConfig,
+            size: size,
+            drawer: drawer
+        };
+    }
+
+    useDefaultAnimation() {
+        return false;
     }
 
     _elementsAnimationCompleteHandler() {

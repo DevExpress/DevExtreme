@@ -102,71 +102,68 @@ class OverlapStrategy extends DrawerStrategy {
         }
     }
 
-    renderPosition(offset, animate) {
-        super.renderPosition(offset, animate);
-
-        const drawer = this.getDrawerInstance();
-
-        this._initialPosition = drawer.getOverlay().$content().position();
-
-        const $content = $(drawer.viewContent());
-        const position = drawer.getDrawerPosition();
-        const defaultAnimationConfig = this._defaultAnimationConfig();
-
+    setupContent($content, position, drawer) {
         $content.css("padding" + camelize(position, true), drawer.option("minSize"));
 
         $content.css("transform", "inherit");
+    }
 
-        if(drawer.option("revealMode") === "slide") {
-            const $panel = $(drawer.content());
+    slidePositionRendering(config, offset, animate) {
+        this._initialPosition = config.drawer.getOverlay().$content().position();
+        const position = config.drawer.getDrawerPosition();
 
-            const panelOffset = this._getPanelOffset(offset) * drawer._getPositionCorrection();
+        this.setupContent(config.$content, position, config.drawer);
 
-            if(animate) {
-                let animationConfig = extend(defaultAnimationConfig, {
-                    $element: $panel,
-                    position: panelOffset,
-                    duration: drawer.option("animationDuration"),
-                    direction: position,
-                });
+        const panelOffset = this._getPanelOffset(offset) * config.drawer._getPositionCorrection();
 
-                animation.moveTo(animationConfig);
-            } else {
-
-                if(drawer.isHorizontalDirection()) {
-                    translator.move($panel, { left: panelOffset });
-                } else {
-                    translator.move($panel, { top: panelOffset });
-                }
-            }
-        }
-
-        if(drawer.option("revealMode") === "expand") {
-            const $panelOverlayContent = drawer.getOverlay().$content();
-            const size = this._getPanelSize(offset);
-            const marginTop = drawer.getRealPanelHeight() - size;
-
-            translator.move($panelOverlayContent, { left: 0 });
-
-            let animationConfig = extend(defaultAnimationConfig, {
-                $element: $panelOverlayContent,
-                size: size,
-                duration: drawer.option("animationDuration"),
+        if(animate) {
+            let animationConfig = extend(config.defaultAnimationConfig, {
+                $element: config.$panel,
+                position: panelOffset,
+                duration: config.drawer.option("animationDuration"),
                 direction: position,
-                marginTop: marginTop,
             });
 
-            if(animate) {
-                animation.size(animationConfig);
-            } else {
-                if(drawer.isHorizontalDirection()) {
-                    $($panelOverlayContent).css("width", size);
-                } else {
-                    $($panelOverlayContent).css("height", size);
+            animation.moveTo(animationConfig);
+        } else {
 
-                    if(position === "bottom") {
-                        $($panelOverlayContent).css("marginTop", marginTop);
-                    }
+            if(config.drawer.isHorizontalDirection()) {
+                translator.move(config.$panel, { left: panelOffset });
+            } else {
+                translator.move(config.$panel, { top: panelOffset });
+            }
+        }
+    }
+
+    expandPositionRendering(config, offset, animate) {
+        this._initialPosition = config.drawer.getOverlay().$content().position();
+        const position = config.drawer.getDrawerPosition();
+
+        this.setupContent(config.$content, position, config.drawer);
+
+        const $panelOverlayContent = config.drawer.getOverlay().$content();
+        const marginTop = config.drawer.getRealPanelHeight() - config.size;
+
+        translator.move($panelOverlayContent, { left: 0 });
+
+        let animationConfig = extend(config.defaultAnimationConfig, {
+            $element: $panelOverlayContent,
+            size: config.size,
+            duration: config.drawer.option("animationDuration"),
+            direction: position,
+            marginTop: marginTop,
+        });
+
+        if(animate) {
+            animation.size(animationConfig);
+        } else {
+            if(config.drawer.isHorizontalDirection()) {
+                $($panelOverlayContent).css("width", config.size);
+            } else {
+                $($panelOverlayContent).css("height", config.size);
+
+                if(position === "bottom") {
+                    $($panelOverlayContent).css("marginTop", marginTop);
                 }
             }
         }

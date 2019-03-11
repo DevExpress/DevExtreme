@@ -4,23 +4,22 @@ import $ from "../../core/renderer";
 import translator from "../../animation/translator";
 
 class PushStrategy extends DrawerStrategy {
-    renderPosition(offset, animate) {
-        super.renderPosition(offset, animate);
+    useDefaultAnimation() {
+        return true;
+    }
 
-        const drawer = this.getDrawerInstance();
-        const $content = $(drawer.viewContent());
+    defaultPositionRendering(config, offset, animate) {
         const maxSize = this._getPanelSize(true);
+        $(config.drawer.content()).css(config.drawer.isHorizontalDirection() ? "width" : "height", maxSize);
 
-        $(drawer.content()).css(drawer.isHorizontalDirection() ? "width" : "height", maxSize);
-
-        const contentPosition = this._getPanelSize(offset) * drawer._getPositionCorrection();
+        const contentPosition = this._getPanelSize(offset) * config.drawer._getPositionCorrection();
 
         if(animate) {
             let animationConfig = {
-                $element: $content,
+                $element: config.$content,
                 position: contentPosition,
-                direction: drawer.getDrawerPosition(),
-                duration: drawer.option("animationDuration"),
+                direction: config.drawer.getDrawerPosition(),
+                duration: config.drawer.option("animationDuration"),
                 complete: () => {
                     this._elementsAnimationCompleteHandler();
                 }
@@ -28,10 +27,10 @@ class PushStrategy extends DrawerStrategy {
 
             animation.moveTo(animationConfig);
         } else {
-            if(drawer.isHorizontalDirection()) {
-                translator.move($content, { left: contentPosition });
+            if(config.drawer.isHorizontalDirection()) {
+                translator.move(config.$content, { left: contentPosition });
             } else {
-                translator.move($content, { top: contentPosition });
+                translator.move(config.$content, { top: contentPosition });
             }
         }
     }
