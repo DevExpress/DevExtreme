@@ -1,4 +1,3 @@
-import "spa.css!";
 import $ from "jquery";
 import helper from '../../helpers/pivotGridExportTestsHelper.js';
 

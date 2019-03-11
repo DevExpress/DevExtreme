@@ -2311,8 +2311,8 @@ declare module DevExpress.ui {
         getVisibleColumns(headerLevel: number): Array<dxDataGridColumn>;
         /** @name dxDataGrid.getVisibleRows() */
         getVisibleRows(): Array<dxDataGridRowObject>;
-        /** @name dxDataGrid.insertRow() */
         /** @deprecated */
+        /** @name dxDataGrid.insertRow() */
         insertRow(): void;
         /** @name dxDataGrid.isRowExpanded(key) */
         isRowExpanded(key: any): boolean;
@@ -2320,8 +2320,8 @@ declare module DevExpress.ui {
         isRowSelected(data: any): boolean;
         /** @name GridBase.isRowSelected(key) */
         isRowSelected(key: any): boolean;
-        /** @name dxDataGrid.removeRow(rowIndex) */
         /** @deprecated */
+        /** @name dxDataGrid.removeRow(rowIndex) */
         removeRow(rowIndex: number): void;
         /** @name dxDataGrid.totalCount() */
         totalCount(): number;
@@ -2350,13 +2350,13 @@ declare module DevExpress.ui {
         invalidDateMessage?: string;
         /** @name dxDateBox.Options.max */
         max?: Date | number | string;
-        /** @name dxDateBox.Options.maxZoomLevel */
         /** @deprecated */
+        /** @name dxDateBox.Options.maxZoomLevel */
         maxZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /** @name dxDateBox.Options.min */
         min?: Date | number | string;
-        /** @name dxDateBox.Options.minZoomLevel */
         /** @deprecated */
+        /** @name dxDateBox.Options.minZoomLevel */
         minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /** @name dxDateBox.Options.pickerType */
         pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
@@ -3309,8 +3309,8 @@ declare module DevExpress.ui {
         /** @name dxPanorama.Options.title */
         title?: string;
     }
-    /** @name dxPanorama */
     /** @deprecated */
+    /** @name dxPanorama */
     export class dxPanorama extends CollectionWidget {
         constructor(element: Element, options?: dxPanoramaOptions)
         constructor(element: JQuery, options?: dxPanoramaOptions)
@@ -3333,8 +3333,8 @@ declare module DevExpress.ui {
         /** @name dxPivot.Options.swipeEnabled */
         swipeEnabled?: boolean;
     }
-    /** @name dxPivot */
     /** @deprecated */
+    /** @name dxPivot */
     export class dxPivot extends CollectionWidget {
         constructor(element: Element, options?: dxPivotOptions)
         constructor(element: JQuery, options?: dxPivotOptions)
@@ -3766,8 +3766,8 @@ declare module DevExpress.ui {
         onAppointmentDeleted?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
         /** @name dxScheduler.Options.onAppointmentDeleting */
         onAppointmentDeleting?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
-        /** @name dxScheduler.Options.onAppointmentFormCreated */
         /** @deprecated */
+        /** @name dxScheduler.Options.onAppointmentFormCreated */
         onAppointmentFormCreated?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
         /** @name dxScheduler.Options.onAppointmentFormOpening */
         onAppointmentFormOpening?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
@@ -3986,11 +3986,11 @@ declare module DevExpress.ui {
         hoverStateEnabled?: boolean;
         /** @name dxSwitch.Options.name */
         name?: string;
+        /** @deprecated */
         /** @name dxSwitch.Options.offText */
-        /** @deprecated */
         offText?: string;
-        /** @name dxSwitch.Options.onText */
         /** @deprecated */
+        /** @name dxSwitch.Options.onText */
         onText?: string;
         /** @name dxSwitch.Options.switchedOffText */
         switchedOffText?: string;
@@ -4397,8 +4397,8 @@ declare module DevExpress.ui {
         getRootNode(): dxTreeListNode;
         /** @name dxTreeList.getSelectedRowKeys() */
         getSelectedRowKeys(): Array<any>;
-        /** @name dxTreeList.getSelectedRowKeys(leavesOnly) */
         /** @deprecated */
+        /** @name dxTreeList.getSelectedRowKeys(leavesOnly) */
         getSelectedRowKeys(leavesOnly: boolean): Array<any>;
         /** @name dxTreeList.getSelectedRowKeys(mode) */
         getSelectedRowKeys(mode: string): Array<any>;
@@ -5094,8 +5094,8 @@ declare module DevExpress.ui {
     }
     /** @name dxFormButtonItem */
     export interface dxFormButtonItem {
-        /** @name dxFormButtonItem.alignment */
         /** @deprecated */
+        /** @name dxFormButtonItem.alignment */
         alignment?: 'center' | 'left' | 'right';
         /** @name dxFormButtonItem.buttonOptions */
         buttonOptions?: dxButtonOptions;
@@ -5996,8 +5996,8 @@ declare module DevExpress.viz {
         barGroupPadding?: number;
         /** @name dxChart.Options.barGroupWidth */
         barGroupWidth?: number;
-        /** @name dxChart.Options.barWidth */
         /** @deprecated */
+        /** @name dxChart.Options.barWidth */
         barWidth?: number;
         /** @name dxChart.Options.commonAxisSettings */
         commonAxisSettings?: dxChartCommonAxisSettings;
@@ -6013,8 +6013,8 @@ declare module DevExpress.viz {
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) };
         /** @name dxChart.Options.defaultPane */
         defaultPane?: string;
-        /** @name dxChart.Options.equalBarWidth */
         /** @deprecated */
+        /** @name dxChart.Options.equalBarWidth */
         equalBarWidth?: boolean;
         /** @name dxChart.Options.legend */
         legend?: dxChartLegend;
@@ -6046,8 +6046,8 @@ declare module DevExpress.viz {
         rotated?: boolean;
         /** @name dxChart.Options.scrollBar */
         scrollBar?: { visible?: boolean, offset?: number, color?: string, width?: number, opacity?: number, position?: 'bottom' | 'left' | 'right' | 'top' };
-        /** @name dxChart.Options.scrollingMode */
         /** @deprecated */
+        /** @name dxChart.Options.scrollingMode */
         scrollingMode?: 'all' | 'mouse' | 'none' | 'touch';
         /** @name dxChart.Options.series */
         series?: ChartSeries | Array<ChartSeries>;
@@ -6061,15 +6061,15 @@ declare module DevExpress.viz {
         synchronizeMultiAxes?: boolean;
         /** @name dxChart.Options.tooltip */
         tooltip?: dxChartTooltip;
-        /** @name dxChart.Options.useAggregation */
         /** @deprecated */
+        /** @name dxChart.Options.useAggregation */
         useAggregation?: boolean;
         /** @name dxChart.Options.valueAxis */
         valueAxis?: dxChartValueAxis | Array<dxChartValueAxis>;
         /** @name dxChart.Options.zoomAndPan */
         zoomAndPan?: { valueAxis?: 'both' | 'none' | 'pan' | 'zoom', argumentAxis?: 'both' | 'none' | 'pan' | 'zoom', dragToZoom?: boolean, dragBoxStyle?: { color?: string, opacity?: number }, panKey?: 'alt' | 'ctrl' | 'meta' | 'shift', allowMouseWheel?: boolean, allowTouchGestures?: boolean };
-        /** @name dxChart.Options.zoomingMode */
         /** @deprecated */
+        /** @name dxChart.Options.zoomingMode */
         zoomingMode?: 'all' | 'mouse' | 'none' | 'touch';
     }
     /** @name dxChart.Options.argumentAxis */
@@ -6100,11 +6100,11 @@ declare module DevExpress.viz {
         label?: dxChartArgumentAxisLabel;
         /** @name dxChart.Options.argumentAxis.logarithmBase */
         logarithmBase?: number;
+        /** @deprecated */
         /** @name dxChart.Options.argumentAxis.max */
-        /** @deprecated */
         max?: number | Date | string;
-        /** @name dxChart.Options.argumentAxis.min */
         /** @deprecated */
+        /** @name dxChart.Options.argumentAxis.min */
         min?: number | Date | string;
         /** @name dxChart.Options.argumentAxis.minorTickCount */
         minorTickCount?: number;
@@ -6411,13 +6411,13 @@ declare module DevExpress.viz {
         label?: dxChartValueAxisLabel;
         /** @name dxChart.Options.valueAxis.logarithmBase */
         logarithmBase?: number;
-        /** @name dxChart.Options.valueAxis.max */
         /** @deprecated */
+        /** @name dxChart.Options.valueAxis.max */
         max?: number | Date | string;
         /** @name dxChart.Options.valueAxis.maxAutoBreakCount */
         maxAutoBreakCount?: number;
-        /** @name dxChart.Options.valueAxis.min */
         /** @deprecated */
+        /** @name dxChart.Options.valueAxis.min */
         min?: number | Date | string;
         /** @name dxChart.Options.valueAxis.minorTickCount */
         minorTickCount?: number;
@@ -6595,8 +6595,8 @@ declare module DevExpress.viz {
         barGroupPadding?: number;
         /** @name dxPolarChart.Options.barGroupWidth */
         barGroupWidth?: number;
-        /** @name dxPolarChart.Options.barWidth */
         /** @deprecated */
+        /** @name dxPolarChart.Options.barWidth */
         barWidth?: number;
         /** @name dxPolarChart.Options.commonAxisSettings */
         commonAxisSettings?: dxPolarChartCommonAxisSettings;
@@ -6606,8 +6606,8 @@ declare module DevExpress.viz {
         containerBackgroundColor?: string;
         /** @name dxPolarChart.Options.dataPrepareSettings */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) };
-        /** @name dxPolarChart.Options.equalBarWidth */
         /** @deprecated */
+        /** @name dxPolarChart.Options.equalBarWidth */
         equalBarWidth?: boolean;
         /** @name dxPolarChart.Options.legend */
         legend?: dxPolarChartLegend;

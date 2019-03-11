@@ -219,6 +219,11 @@ SlidersController.prototype = {
         const that = this;
         const translator = that._params.translator;
         const businessRange = translator.getBusinessRange();
+        const compare = businessRange.axisType === "discrete" ? function(a, b) {
+            return a < b;
+        } : function(a, b) {
+            return a <= b;
+        };
 
         let { startValue, endValue } = vizUtils.adjustVisualRange({
             dataType: businessRange.dataType,
@@ -236,7 +241,7 @@ SlidersController.prototype = {
 
         startValue = isNumeric(startValue) ? adjust(startValue) : startValue;
         endValue = isNumeric(endValue) ? adjust(endValue) : endValue;
-        const values = translator.to(startValue, -1) < translator.to(endValue, +1) ? [startValue, endValue] : [endValue, startValue];
+        const values = compare(translator.to(startValue, -1), translator.to(endValue, +1)) ? [startValue, endValue] : [endValue, startValue];
         that._sliders[0].setDisplayValue(values[0]);
         that._sliders[1].setDisplayValue(values[1]);
         that._sliders[0]._position = translator.to(values[0], -1);

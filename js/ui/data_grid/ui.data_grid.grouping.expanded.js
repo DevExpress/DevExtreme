@@ -291,6 +291,10 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                 appendCollapsedPath(data[i].items, path.slice(1), groups.slice(1), collapsedGroup, offset);
             }
 
+            if(options.collapsedItemsCount && options.extra && options.extra.totalCount >= 0) {
+                options.extra.totalCount += options.collapsedItemsCount;
+            }
+
             callBase(options);
 
             if(groupCount) {
@@ -307,9 +311,6 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
                     processGroupItems(that, data, [], options.skip, options.skipFirstItem, options.take);
                 }
                 options.data = data;
-                if(options.collapsedItemsCount && options.extra && options.extra.totalCount >= 0) {
-                    options.extra.totalCount += options.collapsedItemsCount;
-                }
             }
         },
         isGroupItemCountable: function(item) {

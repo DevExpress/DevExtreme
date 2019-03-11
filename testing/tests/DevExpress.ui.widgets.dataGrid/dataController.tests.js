@@ -12027,6 +12027,33 @@ QUnit.test("grouping if repaintChangesOnly", function(assert) {
     assert.strictEqual(changedArgs.repaintChangesOnly, false);
 });
 
+// T721235
+QUnit.test("search if repaintChangesOnly", function(assert) {
+    this.options = {
+        repaintChangesOnly: true,
+        searchPanel: {}
+    };
+
+    this.setupModules();
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    // act
+    this.option("searchPanel.text", "Bob");
+    this.dataController.optionChanged({ name: "searchPanel", fullName: "searchPanel.text" });
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items.length, 1);
+    assert.deepEqual(items[0].data.name, "Bob");
+    assert.deepEqual(changedArgs.changeType, "refresh", "full refresh is occured");
+    assert.strictEqual(changedArgs.repaintChangesOnly, false);
+});
+
 QUnit.test("full refresh after partial", function(assert) {
     this.setupModules();
 
@@ -12478,7 +12505,15 @@ QUnit.test("remove one row using push", function(assert) {
 });
 
 QUnit.test("update one cell using push with reshapeOnPush", function(assert) {
-    this.setupModules({ reshapeOnPush: true, pushAggregationTimeout: 0, filter: ["age", ">=", 18] });
+    this.options = {
+        columns: [{ dataField: "age", dataType: "number" }]
+    };
+
+    this.setupModules({
+        reshapeOnPush: true,
+        pushAggregationTimeout: 1,
+        filter: ["age", ">=", 18]
+    });
 
     var changedArgs;
 
@@ -12490,6 +12525,7 @@ QUnit.test("update one cell using push with reshapeOnPush", function(assert) {
 
     // act
     this.dataSource.store().push([{ type: "update", key: 1, data: { age: 15 } }]);
+    this.clock.tick(1);
 
     // assert
     var items = this.dataController.items();

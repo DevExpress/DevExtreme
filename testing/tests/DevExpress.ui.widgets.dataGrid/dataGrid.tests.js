@@ -6030,6 +6030,36 @@ QUnit.test("Raise error if key field is missed", function(assert) {
     clock.restore();
 });
 
+// T719938
+QUnit.test("No error after adding row and virtual scrolling", function(assert) {
+    // act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            height: 50,
+            paging: { pageSize: 2 },
+            scrolling: { mode: "virtual" },
+            columns: ["id"],
+            keyExpr: "id",
+            dataSource: [...Array(10)].map((_, i) => { return { id: i + 1 }; })
+        });
+
+    clock.tick();
+    dataGrid.addRow();
+    clock.tick();
+    dataGrid.pageIndex(1);
+    clock.tick();
+    dataGrid.pageIndex(2);
+    clock.tick();
+    dataGrid.pageIndex(3);
+    clock.tick();
+    dataGrid.pageIndex(0);
+    clock.tick();
+
+    // assert
+    assert.strictEqual($($(dataGrid.$element()).find(".dx-error-row")).length, 0, "no errors");
+    clock.restore();
+});
+
 QUnit.test("Not raise error if key field is null", function(assert) {
     // act
     var clock = sinon.useFakeTimers(),
@@ -11314,6 +11344,51 @@ QUnit.test("Change state when lookup column exists and remote data is used", fun
     assert.equal($firstCell.text(), "Test 1", "Lookup text is correct");
 });
 
+// T721368
+QUnit.test("Reset sorting and grouping state when lookup column exists and remote data is used", function(assert) {
+    var createRemoteDataSource = function(data) {
+        return {
+            key: "id",
+            load: function() {
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve(data);
+                }, 0);
+
+                return d.promise();
+            }
+        };
+    };
+
+    var dataGrid = createDataGrid({
+        columns: [{
+            dataField: "id",
+            lookup: {
+                dataSource: createRemoteDataSource([{ id: 1, text: "Test 1" }]),
+                valueExpr: "id",
+                displayExpr: "text"
+            }
+        }, "field1", "field2"],
+        dataSource: [{ id: 1 }]
+    });
+
+    // act
+    this.clock.tick(0);
+
+    dataGrid.columnOption("field1", "sortOrder", "asc");
+    dataGrid.columnOption("field2", "groupIndex", 0);
+    this.clock.tick(0);
+
+    // act
+    dataGrid.state({});
+    this.clock.tick(0);
+
+    // assert
+    assert.strictEqual(dataGrid.columnOption("field1", "sortOrder"), undefined, "sorting is reseted");
+    assert.strictEqual(dataGrid.columnOption("field2", "groupIndex"), undefined, "grouping is reseted");
+});
+
 QUnit.test("Clear state when initial options is defined in dataSource", function(assert) {
     var dataGrid = createDataGrid({
         columnChooser: { enabled: true },
@@ -11380,6 +11455,37 @@ QUnit.test("Reset pageIndex on clear state", function(assert) {
 
     // assert
     assert.equal(dataGrid.pageIndex(), 0, "pageIndex");
+});
+
+// T721065
+QUnit.test("Change pageIndex and pageSize via state if scrolling mode is virtual", function(assert) {
+    var dataGrid = createDataGrid({
+        height: 200,
+        columns: ["test"],
+        dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+        paging: {
+            pageSize: 5,
+            pageIndex: 1
+        },
+        scrolling: {
+            mode: "virtual"
+        },
+        pager: {
+            visible: true,
+            showPageSizeSelector: true,
+            allowedPageSizes: [2, 5]
+        }
+    });
+
+    this.clock.tick();
+
+    // act
+    dataGrid.state({ pageIndex: 0, pageSize: 2 });
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.pageIndex(), 0, "pageIndex");
+    assert.equal(dataGrid.pageSize(), 2, "pageSize");
 });
 
 // T414555

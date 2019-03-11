@@ -296,7 +296,7 @@ module.exports = {
                         case "paging":
                             dataSource = that.dataSource();
                             if(dataSource && that._setPagingOptions(dataSource)) {
-                                dataSource.load();
+                                dataSource.load().done(that.pageChanged.fire.bind(that.pageChanged));
                             }
                             handled();
                             break;
@@ -940,7 +940,7 @@ module.exports = {
                     } else if(isDataChanged) {
                         var operationTypes = that.dataSource().operationTypes();
 
-                        change.repaintChangesOnly = operationTypes && !operationTypes.grouping && that.option("repaintChangesOnly");
+                        change.repaintChangesOnly = operationTypes && !operationTypes.grouping && !operationTypes.filtering && that.option("repaintChangesOnly");
                         change.isDataChanged = true;
                         if(operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding)) {
                             change.needUpdateDimensions = true;
