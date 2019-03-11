@@ -139,23 +139,12 @@ class DrawerStrategy {
     getPositionRenderingConfig(offset) {
         const drawer = this.getDrawerInstance();
 
-        const direction = drawer.getDrawerPosition();
-        const $panel = $(drawer.content());
-        const panelOffset = this._getPanelOffset(offset);
-        const defaultAnimationConfig = this._defaultAnimationConfig();
-        const size = this._getPanelSize(offset);
-        const maxSize = this._getPanelSize(true);
-        const $content = $(drawer.viewContent());
-
         return {
-            direction: direction,
-            $panel: $panel,
-            $content: $content,
-            defaultAnimationConfig: defaultAnimationConfig,
-            size: size,
-            maxSize: maxSize,
-            drawer: drawer,
-            panelOffset: panelOffset
+            direction: drawer.getDrawerPosition(),
+            $panel: $(drawer.content()),
+            $content: $(drawer.viewContent()),
+            defaultAnimationConfig: this._defaultAnimationConfig(),
+            size: this._getPanelSize(offset)
         };
     }
 

@@ -2,6 +2,7 @@ import { animation } from "./ui.drawer.rendering.strategy";
 import DrawerStrategy from "./ui.drawer.rendering.strategy";
 import $ from "../../core/renderer";
 import translator from "../../animation/translator";
+import { extend } from "../../core/utils/extend";
 
 class PushStrategy extends DrawerStrategy {
     useDefaultAnimation() {
@@ -9,16 +10,16 @@ class PushStrategy extends DrawerStrategy {
     }
 
     defaultPositionRendering(config, offset, animate) {
-        $(config.drawer.content()).css(config.drawer.isHorizontalDirection() ? "width" : "height", config.maxSize);
+        const drawer = this.getDrawerInstance();
 
-        const contentPosition = this._getPanelSize(offset) * config.drawer._getPositionCorrection();
+        $(drawer.content()).css(drawer.isHorizontalDirection() ? "width" : "height", config.maxSize);
 
         if(animate) {
             let animationConfig = {
                 $element: config.$content,
-                position: contentPosition,
-                direction: config.drawer.getDrawerPosition(),
-                duration: config.drawer.option("animationDuration"),
+                position: config.contentPosition,
+                direction: drawer.getDrawerPosition(),
+                duration: drawer.option("animationDuration"),
                 complete: () => {
                     this._elementsAnimationCompleteHandler();
                 }
@@ -26,12 +27,19 @@ class PushStrategy extends DrawerStrategy {
 
             animation.moveTo(animationConfig);
         } else {
-            if(config.drawer.isHorizontalDirection()) {
-                translator.move(config.$content, { left: contentPosition });
+            if(drawer.isHorizontalDirection()) {
+                translator.move(config.$content, { left: config.contentPosition });
             } else {
-                translator.move(config.$content, { top: contentPosition });
+                translator.move(config.$content, { top: config.contentPosition });
             }
         }
+    }
+
+    getPositionRenderingConfig(offset) {
+        return extend(super.getPositionRenderingConfig(offset), {
+            contentPosition: this._getPanelSize(offset) * this.getDrawerInstance()._getPositionCorrection(),
+            maxSize: this._getPanelSize(true)
+        });
     }
 }
 

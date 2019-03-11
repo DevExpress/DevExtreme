@@ -102,71 +102,82 @@ class OverlapStrategy extends DrawerStrategy {
         }
     }
 
-    setupContent($content, position, drawer) {
-        $content.css("padding" + camelize(position, true), drawer.option("minSize"));
+    setupContent($content, position) {
+        const drawer = this.getDrawerInstance();
 
+        $content.css("padding" + camelize(position, true), drawer.option("minSize"));
         $content.css("transform", "inherit");
     }
 
     slidePositionRendering(config, offset, animate) {
-        this._initialPosition = config.drawer.getOverlay().$content().position();
-        const position = config.drawer.getDrawerPosition();
+        const drawer = this.getDrawerInstance();
+
+        this._initialPosition = drawer.getOverlay().$content().position();
+        const position = drawer.getDrawerPosition();
 
         this.setupContent(config.$content, position, config.drawer);
-
-        const panelOffset = this._getPanelOffset(offset) * config.drawer._getPositionCorrection();
 
         if(animate) {
             let animationConfig = extend(config.defaultAnimationConfig, {
                 $element: config.$panel,
-                position: panelOffset,
-                duration: config.drawer.option("animationDuration"),
+                position: config.panelOffset,
+                duration: drawer.option("animationDuration"),
                 direction: position,
             });
 
             animation.moveTo(animationConfig);
         } else {
 
-            if(config.drawer.isHorizontalDirection()) {
-                translator.move(config.$panel, { left: panelOffset });
+            if(drawer.isHorizontalDirection()) {
+                translator.move(config.$panel, { left: config.panelOffset });
             } else {
-                translator.move(config.$panel, { top: panelOffset });
+                translator.move(config.$panel, { top: config.panelOffset });
             }
         }
     }
 
     expandPositionRendering(config, offset, animate) {
-        this._initialPosition = config.drawer.getOverlay().$content().position();
-        const position = config.drawer.getDrawerPosition();
+        const drawer = this.getDrawerInstance();
 
-        this.setupContent(config.$content, position, config.drawer);
+        this._initialPosition = drawer.getOverlay().$content().position();
+        const position = drawer.getDrawerPosition();
 
-        const $panelOverlayContent = config.drawer.getOverlay().$content();
-        const marginTop = config.drawer.getRealPanelHeight() - config.size;
+        this.setupContent(config.$content, position);
 
-        translator.move($panelOverlayContent, { left: 0 });
+        translator.move(config.$panelOverlayContent, { left: 0 });
 
         let animationConfig = extend(config.defaultAnimationConfig, {
-            $element: $panelOverlayContent,
+            $element: config.$panelOverlayContent,
             size: config.size,
-            duration: config.drawer.option("animationDuration"),
+            duration: drawer.option("animationDuration"),
             direction: position,
-            marginTop: marginTop,
+            marginTop: config.marginTop,
         });
 
         if(animate) {
             animation.size(animationConfig);
         } else {
-            if(config.drawer.isHorizontalDirection()) {
-                $($panelOverlayContent).css("width", config.size);
+            if(drawer.isHorizontalDirection()) {
+                $(config.$panelOverlayContent).css("width", config.size);
             } else {
-                $($panelOverlayContent).css("height", config.size);
+                $(config.$panelOverlayContent).css("height", config.size);
 
                 if(position === "bottom") {
-                    $($panelOverlayContent).css("marginTop", marginTop);
+                    $(config.$panelOverlayContent).css("marginTop", config.marginTop);
                 }
             }
         }
+    }
+
+    getPositionRenderingConfig(offset) {
+        const drawer = this.getDrawerInstance();
+        const config = super.getPositionRenderingConfig(offset);
+
+        return extend(config, {
+            panelOffset: this._getPanelOffset(offset) * this.getDrawerInstance()._getPositionCorrection(),
+            $panelOverlayContent: drawer.getOverlay().$content(),
+            marginTop: drawer.getRealPanelHeight() - config.size
+        });
     }
 
     getPanelContent() {
