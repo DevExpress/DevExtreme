@@ -1,6 +1,5 @@
 import $ from "jquery";
 import Lookup from "ui/lookup";
-import CustomStore from "data/custom_store";
 import { Deferred } from "core/utils/deferred";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import fx from "animation/fx";
@@ -118,22 +117,21 @@ module("Lookup", {
     });
 
     test("value should be rendered correctly when async data source has been used", (assert) => {
-        const dataSource = new CustomStore({
-            load: () => {
-                return ["first name", "last name", "age"];
-            },
-            byKey: (key) => {
-                const d = new Deferred();
-                setTimeout(() => {
-                    d.resolve(key);
-                }, 0);
-                return d.promise();
-            }
-        });
         const value = "last name";
 
         this.element.dxLookup({
-            dataSource: dataSource,
+            dataSource: {
+                load: () => {
+                    return ["first name", "last name", "age"];
+                },
+                byKey: (key) => {
+                    const d = new Deferred();
+                    setTimeout(() => {
+                        d.resolve(key);
+                    }, 0);
+                    return d.promise();
+                }
+            },
             value: value
         });
 
