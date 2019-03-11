@@ -6030,6 +6030,36 @@ QUnit.test("Raise error if key field is missed", function(assert) {
     clock.restore();
 });
 
+// T719938
+QUnit.test("No error after adding row and virtual scrolling", function(assert) {
+    // act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            height: 50,
+            paging: { pageSize: 2 },
+            scrolling: { mode: "virtual" },
+            columns: ["id"],
+            keyExpr: "id",
+            dataSource: [...Array(10)].map((_, i) => { return { id: i + 1 }; })
+        });
+
+    clock.tick();
+    dataGrid.addRow();
+    clock.tick();
+    dataGrid.pageIndex(1);
+    clock.tick();
+    dataGrid.pageIndex(2);
+    clock.tick();
+    dataGrid.pageIndex(3);
+    clock.tick();
+    dataGrid.pageIndex(0);
+    clock.tick();
+
+    // assert
+    assert.strictEqual($($(dataGrid.$element()).find(".dx-error-row")).length, 0, "no errors");
+    clock.restore();
+});
+
 QUnit.test("Not raise error if key field is null", function(assert) {
     // act
     var clock = sinon.useFakeTimers(),
