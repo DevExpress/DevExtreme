@@ -366,7 +366,7 @@ var DropDownEditor = TextBox.inherit({
     _renderValue: function() {
         const promise = this.callBase();
 
-        promise.then(this._renderField.bind(this));
+        promise.always(this._renderField.bind(this));
     },
 
     _renderTemplatedField: function(fieldTemplate, data) {
