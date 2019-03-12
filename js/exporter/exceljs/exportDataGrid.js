@@ -33,7 +33,7 @@ function exportDataGrid(dataGrid, worksheet, options) {
         worksheet.views = [{ state: 'frozen', ySplit: 1 }];
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         dataGrid.getController("data").loadAll().then((items) => {
             for(let i = 0; i < items.length; i++) {
                 var dataRow = worksheet.addRow();

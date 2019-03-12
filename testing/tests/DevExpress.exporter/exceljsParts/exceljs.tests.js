@@ -1,10 +1,17 @@
 import $ from "jquery";
+import DataGrid from "ui/data_grid/ui.data_grid";
+
 import { getExcelJS } from "exporter/exceljs/exceljs_importer";
 import { exportDataGrid } from "exporter/exceljs/exportDataGrid";
 
-import "ui/data_grid/ui.data_grid";
 import "common.css!";
 import "generic_light.css!";
+
+DataGrid.defaultOptions({
+    options: {
+        loadingTimeout: 0
+    }
+});
 
 QUnit.testStart(() => {
     let markup = '<div id="dataGrid"></div>';
@@ -226,4 +233,171 @@ QUnit.module("API", moduleConfig, () => {
         assert.equal(JSON.stringify(this.worksheet.views), JSON.stringify([ { state: 'frozen', ySplit: 1 } ]));
     });
 
+    QUnit.test("Data - 2 column & 2 rows", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: [{ f1: "1", f2: "2" }]
+        }).dxDataGrid("instance");
+
+        this.clock.tick();
+
+        this.exportDataGrid(dataGrid, this.worksheet).then(() => {
+            assert.equal(this.worksheet.actualColumnCount, 2);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, "1");
+            assert.deepEqual(this.worksheet.getCell("B2").value, "2");
+            done();
+        });
+
+        this.clock.tick();
+    });
+
+    QUnit.test("Data - columns.dataType: string", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{
+                dataField: "f1",
+                dataType: "string"
+            }],
+            dataSource: [{ f1: "1" }]
+        }).dxDataGrid("instance");
+
+        this.clock.tick();
+
+        this.exportDataGrid(dataGrid, this.worksheet).then(() => {
+            assert.equal(this.worksheet.actualColumnCount, 1);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, "1");
+            assert.equal(typeof this.worksheet.getCell("A2").value, "string");
+            done();
+        });
+
+        this.clock.tick();
+    });
+
+    QUnit.test("Data - columns.dataType: number", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{
+                dataField: "f1",
+                dataType: "number"
+            }],
+            dataSource: [{ f1: 1 }]
+        }).dxDataGrid("instance");
+
+        this.clock.tick();
+
+        this.exportDataGrid(dataGrid, this.worksheet).then(() => {
+            assert.equal(this.worksheet.actualColumnCount, 1);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, 1);
+            assert.equal(typeof this.worksheet.getCell("A2").value, "number");
+            done();
+        });
+
+        this.clock.tick();
+    });
+
+    QUnit.test("Data - columns.dataType: boolean", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{
+                dataField: "f1",
+                dataType: "boolean"
+            }],
+            dataSource: [{ f1: true }]
+        }).dxDataGrid("instance");
+
+        this.clock.tick();
+
+        this.exportDataGrid(dataGrid, this.worksheet).then(() => {
+            assert.equal(this.worksheet.actualColumnCount, 1);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, true);
+            assert.equal(typeof this.worksheet.getCell("A2").value, "boolean");
+            done();
+        });
+
+        this.clock.tick();
+    });
+
+    QUnit.test("Data - columns.dataType: object", (assert) => {
+        const done = assert.async();
+
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{
+                dataField: "f1",
+                dataType: "object"
+            }],
+            dataSource: [{ f1: { value: 1 } }]
+        }).dxDataGrid("instance");
+
+        this.clock.tick();
+
+        this.exportDataGrid(dataGrid, this.worksheet).then(() => {
+            assert.equal(this.worksheet.actualColumnCount, 1);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, { value: 1 });
+            assert.equal(typeof this.worksheet.getCell("A2").value, "object");
+            done();
+        });
+
+        this.clock.tick();
+    });
+
+    // QUnit.test("Data - columns.dataType: date", (assert) => {
+    //     const done = assert.async();
+    //     const date = new Date(2019, 3, 12);
+
+    //     let dataGrid = $("#dataGrid").dxDataGrid({
+    //         columns: [{
+    //             dataField: "f1",
+    //             dataType: "date"
+    //         }],
+    //         dataSource: [{ f1: date }]
+    //     }).dxDataGrid("instance");
+
+    //     this.clock.tick();
+
+    //     this.exportDataGrid(dataGrid, this.worksheet).then(() => {
+    //         assert.equal(this.worksheet.actualColumnCount, 1);
+    //         assert.equal(this.worksheet.actualRowCount, 2);
+    //         assert.deepEqual(this.worksheet.getCell("A2").value, date);
+    //         assert.deepEqual(this.worksheet.getCell("A2").text, "4/12/2019");
+    //         assert.equal(this.worksheet.getCell("A2").type, ExcelJS.ValueType.Date);
+    //         done();
+    //     });
+
+    //     this.clock.tick();
+    // });
+
+    // QUnit.test("Data - columns.dataType: dateTime", (assert) => {
+    //     const done = assert.async();
+    //     const dateTime = new DateTime(2019, 3, 12, 12, 15);
+
+    //     let dataGrid = $("#dataGrid").dxDataGrid({
+    //         columns: [{
+    //             dataField: "f1",
+    //             dataType: "date"
+    //         }],
+    //         dataSource: [{ f1: dateTime }]
+    //     }).dxDataGrid("instance");
+
+    //     this.clock.tick();
+
+    //     this.exportDataGrid(dataGrid, this.worksheet).then(() => {
+    //         assert.equal(this.worksheet.actualColumnCount, 1);
+    //         assert.equal(this.worksheet.actualRowCount, 2);
+    //         assert.deepEqual(this.worksheet.getCell("A2").value, dateTime);
+    //         assert.deepEqual(this.worksheet.getCell("A2").text, "4/12/2019 12:15:00 PM");
+    //         assert.equal(this.worksheet.getCell("A2").type, ExcelJS.ValueType.dateTime);
+    //         done();
+    //     });
+
+    //     this.clock.tick();
+    // });
 });
