@@ -2924,8 +2924,8 @@ var Scheduler = Widget.inherit({
                 };
             } else {
                 getGroups = function() {
-                    var apptPosition = $(appointmentElement).position();
-                    return workSpace.getCellDataByCoordinates(apptPosition).groups;
+                    var setting = $(appointmentElement).data("dxAppointmentSettings") || {}; // TODO: in the future, necessary refactor the engine of determining groups
+                    return workSpace.getCellDataByCoordinates({ left: setting.left, top: setting.top }).groups;
                 };
 
                 setResourceCallback = function(field, value) {
