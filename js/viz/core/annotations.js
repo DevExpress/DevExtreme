@@ -1,6 +1,12 @@
 import { isDefined } from "../../core/utils/type";
+import { Tooltip } from "../core/tooltip";
+import { extend } from "../../core/utils/extend";
+import { events } from "../components/consts";
 
-function coreAnnotation(type, options, draw) {
+const EVENTS_NS = ".annotations";
+const MOVE_EVENT = events["mousemove"] + EVENTS_NS;
+
+function coreAnnotation(type, options, draw, tooltip) {
     return {
         _type: type,
         name: options.name,
@@ -9,38 +15,63 @@ function coreAnnotation(type, options, draw) {
         value: options.value,
         argument: options.argument,
         axis: options.axis,
+        _options: options,
         draw: function(widget, group) {
-            const { x, y } = widget._getAnnotationCoords(this);
-
-            isDefined(x) && isDefined(y) && draw({ x, y }, widget, group);
-        }
+            this.coords = widget._getAnnotationCoords(this);
+            const { x, y } = this.coords;
+            isDefined(x) && isDefined(y) && draw.call(this, { x, y }, widget, group, this._options.image);
+        },
+        getOptions() {
+            return this._options;
+        },
+        getTooltipFormatObject() {
+            return extend({}, this._options);
+        },
+        isVisible() {
+            return true;
+        },
+        getTooltipParams() {
+            const { x, y } = this.coords;
+            return {
+                x,
+                y,
+                offset: 0
+            };
+        },
+        clearHover() {},
+        getMarkerVisibility() {
+            return true;
+        },
+        tooltip() {
+            return tooltip;
+        },
+        hover() {}
     };
 }
 
-function simpleAnnotation(options) {
-    return coreAnnotation("simple", options, function({ x, y }, widget, group) {
-        widget._renderer.circle(x, y, 5).attr({ fill: "red" }).append(group);
-    });
+function drawSimpleAnnotation({ x, y }, widget, group) {
+    widget._renderer.circle(x, y, 5).attr({ fill: "red" }).data({ "annotation-data": this }).append(group);
 }
 
-function imageAnnotation(options) {
-    const { width, height, url } = options.image;
-    return coreAnnotation("image", options, function({ x, y }, widget, group) {
-        widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, "center").append(group);
-    });
+function drawImageAnnotation({ x, y }, widget, group, { width, height, url }) {
+    widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, "center").data({ "annotation-data": this }).append(group);
 }
 
-function createAnnotation(itemOptions, commonOptions) {
+function createAnnotation(itemOptions, tooltip) {
     // Choose annotation type and merge common and individual options
+    let draw = drawSimpleAnnotation;
+    let type = "simple";
+
     if(isDefined(itemOptions.image)) {
-        return imageAnnotation(itemOptions);
-    } else {
-        return simpleAnnotation(itemOptions);
+        draw = drawImageAnnotation;
+        type = "image";
     }
+
+    return coreAnnotation(type, itemOptions, draw, tooltip);
 }
 
-export let createAnnotations = function(options) {
-    return options.items.map(itemOptions => createAnnotation(itemOptions, options));
+export let createAnnotations = function(options, tooltip) {
+    return options.items.map(itemOptions => createAnnotation(itemOptions, tooltip));
 };
 
 ///#DEBUG
@@ -61,6 +92,7 @@ const chartPlugin = {
     dispose() {},
     members: {
         _getAnnotationCoords(annotation) {
+            // debugger;
             let x = annotation.x;
             let y = annotation.y;
             const argument = annotation.argument;
@@ -106,7 +138,44 @@ const corePlugin = {
                 return;
             }
 
-            this._annotations.items = createAnnotations(options);
+            const tooltip = new Tooltip({
+                cssClass: "dxc-tooltip",
+                eventTrigger: this._eventTrigger,
+                widgetRoot: this.element(),
+            });
+
+            tooltip.setRendererOptions(this._getRendererOptions());
+            const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"), { enabled: false });
+            if(options.customizeTooltip) {
+                tooltipOptions.customizeTooltip = options.customizeTooltip;
+                tooltipOptions.enabled = true;
+            }
+            tooltip.update(tooltipOptions);
+            this._annotations.items = createAnnotations(options, tooltip);
+
+            this._renderer.root.on(MOVE_EVENT, ({ target }) => {
+                const point = target["annotation-data"];
+                if(!point) {
+                    tooltip.hide();
+
+                    return;
+                }
+
+                this.hideTooltip();
+                this.clearHover();
+
+                const tooltipFormatObject = point.getTooltipFormatObject(tooltip);
+                if(!point.isVisible()) {
+                    return;
+                }
+
+                const coords = point.getTooltipParams(tooltip.getLocation()),
+                    rootOffset = this._renderer.getRootOffset();
+                coords.x += rootOffset.left;
+                coords.y += rootOffset.top;
+
+                tooltip.show(tooltipFormatObject, coords, { target: point });
+            });
         },
         _getAnnotationCoords() { return {}; }
     },
@@ -121,6 +190,7 @@ const corePlugin = {
             isOptionChange: true,
             option: "annotations"
         });
+        // constructor.addPlugin(require("./tooltip").plugin);
     }
 };
 

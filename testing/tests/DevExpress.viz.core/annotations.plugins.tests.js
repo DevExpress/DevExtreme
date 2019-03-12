@@ -150,7 +150,7 @@ QUnit.module("Lifecycle", environment, function() {
         this.chart(annotationOptions);
 
         assert.equal(this.createAnnotationStub.callCount, 1);
-        assert.deepEqual(this.createAnnotationStub.getCall(0).args, [annotationOptions]);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[0], annotationOptions);
     });
 
     QUnit.test("Pass widget instance and group to annotations.draw method", function(assert) {
@@ -204,7 +204,7 @@ QUnit.module("Lifecycle", environment, function() {
 
         // assert
         assert.equal(this.createAnnotationStub.callCount, 1);
-        assert.deepEqual(this.createAnnotationStub.getCall(0).args, [newAnnotationOptions]);
+        assert.deepEqual(this.createAnnotationStub.getCall(0).args[0], newAnnotationOptions);
 
         const annotationsGroup = this.getAnnotationsGroup();
 
