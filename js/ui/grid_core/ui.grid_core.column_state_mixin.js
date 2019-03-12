@@ -77,7 +77,7 @@ module.exports = {
             $cell,
             i;
 
-        if(!$cells || !$cells.length) return;
+        if(!$cells || !$cells.length || columns.length !== $cells.length) return;
 
         for(i = 0; i < columns.length; i++) {
             $cell = $cells.eq(i);
