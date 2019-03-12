@@ -1,5 +1,5 @@
 import $ from "../../core/renderer";
-import array from "../../core/class";
+import array from "../../core/utils/array";
 import recurrenceUtils from "./utils.recurrence";
 import typeUtils from "../../core/utils/type";
 import dateUtils from "../../core/utils/date";
@@ -19,7 +19,7 @@ const subscribes = {
     isCurrentViewAgenda: function() {
         return this.option("currentView") === "agenda";
     },
-  
+
     currentViewUpdated: function(currentView) {
         this.option("currentView", currentView);
     },
@@ -58,7 +58,6 @@ const subscribes = {
         if(!dates.length) {
             dates.push(startDate);
         } else {
-
             dates.map((date) => {
                 return dateUtils.trimDateByStartDayHour(date, this._getCurrentViewOption("startDayHour"));
             });
