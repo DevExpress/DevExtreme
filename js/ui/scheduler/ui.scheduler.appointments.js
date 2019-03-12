@@ -438,7 +438,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             action({
                 appointmentElement: itemElement,
                 appointmentData: itemData,
-                targetedAppointmentData: this.invoke("getTargetedAppointmentData", itemData, itemElement)
+                targetedAppointmentData: this.invoke("getTargetedAppointmentData", itemData, itemElement, index)
             });
         }
         delete this._currentAppointmentSettings;
