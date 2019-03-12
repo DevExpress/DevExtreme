@@ -19,7 +19,7 @@ function exportDataGrid(dataGrid, worksheet, options) {
         }
     }
 
-    if(dataGrid.option().export.excelFilterEnabled === true) {
+    if(options && options.excelFilterEnabled === true) {
         worksheet.autoFilter = {
             from: {
                 row: 1,
@@ -33,16 +33,17 @@ function exportDataGrid(dataGrid, worksheet, options) {
         worksheet.views = [{ state: 'frozen', ySplit: 1 }];
     }
 
-    dataGrid.getController("data").loadAll().then((items) => {
-        for(let i = 0; i < items.length; i++) {
-            var dataRow = worksheet.addRow();
-            for(let j = 0; j < items[i].values.length; j++) {
-                dataRow.getCell(j + 1).value = items[i].values[j];
+    return new Promise((resolve, reject) => {
+        dataGrid.getController("data").loadAll().then((items) => {
+            for(let i = 0; i < items.length; i++) {
+                var dataRow = worksheet.addRow();
+                for(let j = 0; j < items[i].values.length; j++) {
+                    dataRow.getCell(j + 1).value = items[i].values[j];
+                }
             }
-        }
+            resolve(result);
+        });
     });
-
-    return result;
 }
 
 export { exportDataGrid };
