@@ -706,14 +706,6 @@ QUnit.test("getEndViewDate should return correct value", function(assert) {
     assert.deepEqual(this.instance.getEndViewDate(), new Date(2018, 3, 30, 17, 59), "End view date is OK");
 });
 
-QUnit.test("getEndViewDate should return correct value, DST date (T720694)", function(assert) {
-    this.instance.option({
-        currentDate: new Date(2019, 2, 5)
-    });
-
-    assert.deepEqual(this.instance.getEndViewDate(), new Date(2019, 3, 31, 23, 59), "End view date is OK");
-});
-
 QUnit.module("Timeline Keyboard Navigation", {
     beforeEach: function() {
         this.instance = $("#scheduler-timeline").dxSchedulerTimelineMonth({
