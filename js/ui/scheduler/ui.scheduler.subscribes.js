@@ -53,6 +53,11 @@ var subscribes = {
 
         if(!dates.length) {
             dates.push(startDate);
+        } else {
+            for(var i = 0; i < dates.length; i++) {
+                dateUtils.trimDateByStartDayHour(dates[i], this._getCurrentViewOption("startDayHour"));
+                // dates[i] = renderingStrategy.startDate(dates[i]);
+            }
         }
 
         if(renderingStrategy.needSeparateAppointment(allDay)) {
@@ -60,7 +65,7 @@ var subscribes = {
                 longParts = [],
                 resultDates = [];
 
-            for(var i = 0; i < datesLength; i++) {
+            for(i = 0; i < datesLength; i++) {
                 var endDateOfPart = renderingStrategy.endDate(appointmentData, {
                     startDate: dates[i]
                 }, !!recurrenceRule);
@@ -422,11 +427,7 @@ var subscribes = {
             updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));
         }
 
-        var startTime = dateUtils.dateTimeFromDecimal(startDayHour);
-
-        if(updatedStartDate.getHours() === startTime.hours && updatedStartDate.getMinutes() < startTime.minutes || updatedStartDate.getHours() < startTime.hours) {
-            updatedStartDate.setHours(startTime.hours, startTime.minutes, 0, 0);
-        }
+        dateUtils.trimDateByStartDayHour(updatedStartDate, startDayHour);
 
         options.callback(updatedStartDate);
     },
