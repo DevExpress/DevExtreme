@@ -1371,8 +1371,10 @@ module.exports = {
             };
 
             var getFixedPosition = function(that, column) {
+                var rtlEnabled = that.option("rtlEnabled");
+
                 if(column.command && !isCustomCommandColumn(that, column) || !column.fixedPosition) {
-                    return "left";
+                    return rtlEnabled ? "right" : "left";
                 }
 
                 return column.fixedPosition;

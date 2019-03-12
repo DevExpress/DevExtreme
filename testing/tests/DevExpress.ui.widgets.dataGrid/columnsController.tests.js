@@ -8378,6 +8378,34 @@ QUnit.test("No exceptions on an attempt to manipulate columns at runtime", funct
     }
 });
 
+// T721413
+QUnit.test("getFixedColumns in rtl mode when there are fixed and grouped columns", function(assert) {
+    // arrange, act
+    this.applyOptions({
+        columnFixing: {
+            enabled: true
+        },
+        rtlEnabled: true,
+        columns: [
+            { dataField: "TestField1", caption: "Column 1", fixed: true, fixedPosition: "right" },
+            { dataField: "TestField2", caption: "Column 2", groupIndex: 0 },
+            {
+                caption: "Band Column 1", columns: [
+                    { dataField: "TestField3", caption: "Column 3" },
+                    { dataField: "TestField4", caption: "Column 4" }
+                ]
+            }
+        ]
+    });
+
+    // assert
+    var fixedColumns = this.columnsController.getFixedColumns();
+    assert.strictEqual(fixedColumns.length, 3, "count fixed column");
+    assert.strictEqual(fixedColumns[0].command, "expand", "expand column");
+    assert.strictEqual(fixedColumns[1].caption, "Column 1", "fixed column");
+    assert.strictEqual(fixedColumns[2].command, "transparent", "transparent column");
+});
+
 
 QUnit.module("onOptionChanged", {
     beforeEach: function() {
