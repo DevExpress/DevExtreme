@@ -201,7 +201,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
         if(this.invoke("isCurrentViewAgenda")) {
             return false;
         }
-        for(let appointment of appointments) {
+        for(let i = 0; i < appointments.length; i++) {
+            const appointment = appointments[i];
             if(!this._isRepaintAppointment(appointment)) {
                 return false;
             }
@@ -437,7 +438,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             action({
                 appointmentElement: itemElement,
                 appointmentData: itemData,
-                targetedAppointmentData: this.invoke("getTargetedAppointmentData", itemData, itemElement)
+                targetedAppointmentData: this.invoke("getTargetedAppointmentData", itemData, itemElement, index)
             });
         }
         delete this._currentAppointmentSettings;
@@ -513,7 +514,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _renderItem: function(index, item, container) {
         const itemData = item.itemData;
 
-        for(let setting of item.settings) {
+        for(let i = 0; i < item.settings.length; i++) {
+            const setting = item.settings[i];
             this._currentAppointmentSettings = setting;
             const $item = this.callBase(index, itemData, container);
             $item.data(APPOINTMENT_SETTINGS_NAME, setting);

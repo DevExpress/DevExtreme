@@ -86,6 +86,7 @@ module("Basic markup", () => {
     test("renderValue should return a promise that resolves after render input value", (assert) => {
         assert.expect(1);
 
+        const done = assert.async();
         const deferred = new Deferred();
         const editor = $("#texteditor").dxTextEditor({
             value: "test"
@@ -99,6 +100,7 @@ module("Basic markup", () => {
 
         promise.then(() => {
             assert.ok("Value has been rendered");
+            done();
         });
 
         deferred.resolve();
