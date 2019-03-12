@@ -17,7 +17,7 @@
   "devDependencies": {
     "@types/jquery": "^2.0.34",
     "angular": "1.7.0",
-    "bootstrap": "^3.4.0",
+    "bootstrap": "^3.4.1",
     "cldr-core": "latest",
     "del": "^2.2.2",
     "eslint": "^3.12.2",
