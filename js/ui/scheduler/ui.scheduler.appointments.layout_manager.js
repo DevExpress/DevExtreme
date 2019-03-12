@@ -101,13 +101,20 @@ class AppointmentLayoutManager {
     }
 
     _getEqualAppointmentFromList(appointment, list) {
-        return list.find(item => item.itemData === appointment.itemData);
+        for(let i = 0; i < list.length; i++) {
+            const item = list[i];
+            if(item.itemData === appointment.itemData) {
+                return item;
+            }
+        }
+        return null;
     }
 
     _getDeletedAppointments(appointmentList, oldAppointmentList) {
         const result = [];
 
-        for(const oldAppointment of oldAppointmentList) {
+        for(let i = 0; i < oldAppointmentList.length; i++) {
+            const oldAppointment = oldAppointmentList[i];
             const appointment = this._getEqualAppointmentFromList(oldAppointment, appointmentList);
             if(!appointment) {
                 oldAppointment.needRemove = true;
@@ -123,7 +130,8 @@ class AppointmentLayoutManager {
             return appointmentList;
         }
 
-        for(const appointment of appointmentList) {
+        for(let i = 0; i < appointmentList.length; i++) {
+            const appointment = appointmentList[i];
             const oldAppointment = this._getEqualAppointmentFromList(appointment, oldAppointmentList);
             if(oldAppointment) {
                 appointment.needRepaint = this._hasChangesInData(appointment.itemData) || this._hasChangesInSettings(appointment.settings, oldAppointment.settings);
