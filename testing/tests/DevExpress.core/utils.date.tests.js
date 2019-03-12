@@ -521,6 +521,14 @@ QUnit.test("trimming time of date", function(assert) {
     assert.deepEqual(dateUtils.trimTime(date), new Date(2015, 7, 16), "Date is correct after time trimming");
 });
 
+QUnit.test("trimming date by startDayHour", function(assert) {
+    var date = new Date(2015, 7, 16, 8, 30);
+
+    dateUtils.trimDateByStartDayHour(date, 9.5);
+
+    assert.deepEqual(date, new Date(2015, 7, 16, 9, 30), "Date is correct after time trimming");
+});
+
 QUnit.module('Quarter number for different months');
 
 QUnit.test('quarter 1', function(assert) {
