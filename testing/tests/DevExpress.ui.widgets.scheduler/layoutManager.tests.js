@@ -63,6 +63,7 @@ const renderLayoutModuleOptions = {
                 currentDate: new Date(2017, 4, 25),
                 startDayHour: 9,
                 height: 600,
+                width: 1300,
                 editing: true,
             })).dxScheduler("instance");
         };
