@@ -68,13 +68,17 @@ const renderLayoutModuleOptions = {
             })).dxScheduler("instance");
         };
 
-        this.markAppointments = () => document.querySelectorAll(APPOINTMENT_CLASS_NAME).forEach(element => element.dataset.mark = 'true');
-
-        this.getUnmarkedAppointments = () => {
-            return Array.from(document.querySelectorAll(APPOINTMENT_CLASS_NAME)).filter(element => !!element.dataset.mark === false);
+        this.markAppointments = function() {
+            $(APPOINTMENT_CLASS_NAME).data("mark", true);
         };
 
-        this.getAppointments = () => document.querySelectorAll(APPOINTMENT_CLASS_NAME);
+        this.getUnmarkedAppointments = function() {
+            return $(APPOINTMENT_CLASS_NAME).filter(function() {
+                return !!$(this).data("mark") === false;
+            });
+        };
+
+        this.getAppointments = function() { return document.querySelectorAll(APPOINTMENT_CLASS_NAME); };
     },
     afterEach: function() {
         this.clock.restore();
