@@ -2316,9 +2316,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     calculateEndViewDate: function(dateOfLastViewCell) {
-        var endDateOfLastViewCell = new Date(dateOfLastViewCell.getTime() + this.getCellDuration());
-
-        return endDateOfLastViewCell;
+        return new Date(dateOfLastViewCell.getTime() + this.getCellDuration());
     },
 
     _adjustEndViewDateByDaylightDiff: function(startDate, endDate) {
