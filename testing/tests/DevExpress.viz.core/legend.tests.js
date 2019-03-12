@@ -298,7 +298,9 @@ QUnit.test('Draw with Title', function(assert) {
     this.createAndDrawLegend(200, 200);
 
     for(var i = 0; i < this.data.length; i++) {
-        assert.equal(this.renderer.text.getCall(i).returnValue.setTitle.firstCall.args[0], this.data[i].text + " " + this.data[i].states.normal.fill + " " + this.data[i].id, 'Text element for series ' + i);
+        var expectedValue = this.data[i].text + " " + this.data[i].states.normal.fill + " " + this.data[i].id;
+        assert.equal(this.renderer.text.getCall(i).returnValue.setTitle.firstCall.args[0], expectedValue, 'Text element for series ' + i);
+        assert.equal(this.renderer.rect.getCall(i).returnValue.setTitle.firstCall.args[0], expectedValue, 'Hint on marker element for series ' + i);
     }
 });
 
