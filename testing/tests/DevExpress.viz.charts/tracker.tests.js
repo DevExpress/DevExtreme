@@ -617,7 +617,7 @@ QUnit.test("mouseout from point", function(assert) {
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 90, pageY: 75 }));
 
-    assert.strictEqual(this.point.stub("clearHover").callCount, 1); // why is should be 0 ?
+    assert.strictEqual(this.point.stub("clearHover").callCount, 0);
 });
 
 QUnit.test("mouseout from series to point another series", function(assert) {

@@ -165,10 +165,6 @@ const corePlugin = {
                 this.clearHover();
 
                 const tooltipFormatObject = point.getTooltipFormatObject(tooltip);
-                if(!point.isVisible()) {
-                    return;
-                }
-
                 const coords = point.getTooltipParams(tooltip.getLocation()),
                     rootOffset = this._renderer.getRootOffset();
                 coords.x += rootOffset.left;

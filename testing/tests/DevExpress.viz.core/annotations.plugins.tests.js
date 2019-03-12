@@ -2,6 +2,7 @@ import $ from "jquery";
 import { __test_utils } from "viz/core/annotations";
 import rendererModule from "viz/core/renderers/renderer";
 import vizMocks from "../../helpers/vizMocks.js";
+import TooltipModule from "viz/core/tooltip";
 
 import "viz/chart";
 
@@ -94,6 +95,13 @@ QUnit.module("Lifecycle", environment, function() {
     QUnit.module("Chart plugin", {
         beforeEach() {
             this.onDrawn = sinon.spy();
+
+            /* TooltipModule.Tooltip = (options) => {
+                this.tooltip = new vizMocks.Tooltip(options);
+                this.tooltip.show = sinon.spy();
+
+                return this.tooltip;
+            };*/
         },
         chart(annotations) {
             return $('<div>').appendTo("#qunit-fixture").dxChart({
@@ -212,5 +220,135 @@ QUnit.module("Lifecycle", environment, function() {
         assert.equal(annotation.draw.callCount, 1);
         assert.deepEqual(annotation.draw.getCall(0).args, [chart, annotationsGroup]);
         assert.ok(annotation.draw.lastCall.calledAfter(annotationsGroup.clear.lastCall));
+    });
+});
+
+QUnit.module("Tooltip", function(hooks) {
+    hooks.beforeEach(() => {
+        environment.beforeEach.apply(this, arguments);
+        TooltipModule.Tooltip = (options) => {
+            this.tooltip = new vizMocks.Tooltip(options);
+            this.tooltip.show = sinon.spy();
+
+            return this.tooltip;
+        };
+    });
+
+    hooks.afterEach(function() {
+        environment.afterEach.apply(this, arguments);
+    });
+
+    function createChart(annotations) {
+        return $('<div>').appendTo("#qunit-fixture").dxChart({
+            size: {
+                width: 100,
+                height: 100
+            },
+            legend: { visible: false },
+            dataSource: [],
+            series: [],
+            commonAxisSettings: {
+                grid: { visible: false },
+                label: { visible: false }
+            },
+            synchronizeMultiAxes: false,
+            valueAxis: [
+                { name: "a1", visualRange: [100, 200] },
+                { name: "a2", visualRange: [200, 300] }
+            ],
+            argumentAxis: {
+                visualRange: [0, 100]
+            },
+            annotations
+        }).dxChart("instance");
+    }
+
+    QUnit.test("Create", assert => {
+        const annotationOptions = {
+            some: "options",
+            items: [
+                { x: 100, y: 200, },
+                { value: 1, argument: 2 }
+            ]
+        };
+
+        createChart(annotationOptions);
+
+        assert.equal(this.createAnnotationStub.callCount, 1);
+        const tooltip = this.createAnnotationStub.getCall(0).args[1];
+
+        assert.equal(tooltip, this.tooltip, "second argument should be a Tooltip");
+        assert.equal(tooltip.ctorArgs[0].cssClass, "dxc-tooltip", "tooltip should be have right css class");
+        assert.equal(tooltip.setRendererOptions.callCount, 1, "tooltip.setRendererOptions should be called");
+        assert.equal(tooltip.update.callCount, 1, "tooltip.update should be called");
+    });
+
+    QUnit.test("Show", assert => {
+        const annotationOptions = {
+            some: "options",
+            items: [
+                { x: 100, y: 200, },
+                { value: 1, argument: 2 }
+            ]
+        };
+
+        const chart = createChart(annotationOptions);
+
+        const tooltipFormatObject = { format: "tooltip for annotation" };
+        const point = {
+            getTooltipFormatObject: sinon.spy(() => tooltipFormatObject),
+            getTooltipParams: sinon.spy(() => { return { x: 1, y: 1 }; })
+        };
+
+        chart.hideTooltip = sinon.spy();
+        chart.clearHover = sinon.spy();
+
+        assert.equal(this.createAnnotationStub.callCount, 1);
+        const tooltip = this.createAnnotationStub.getCall(0).args[1];
+
+        assert.equal(this.renderer.root.on.lastCall.args[0], "mousemove.annotations", "renderer root should be subscribe on mousemove");
+        this.renderer.root.on.lastCall.args[1]({ target: { "annotation-data": point } });
+
+        assert.equal(chart.hideTooltip.callCount, 1);
+        assert.equal(chart.clearHover.callCount, 1);
+        assert.equal(tooltip.show.callCount, 1);
+
+        assert.equal(tooltip.show.firstCall.args[0], tooltipFormatObject);
+        assert.deepEqual(tooltip.show.firstCall.args[1], { x: 4, y: 6 });
+        assert.equal(tooltip.show.firstCall.args[2].target, point);
+    });
+
+    QUnit.test("Hide", assert => {
+        const annotationOptions = {
+            some: "options",
+            items: [
+                { x: 100, y: 200, },
+                { value: 1, argument: 2 }
+            ]
+        };
+
+        const chart = createChart(annotationOptions);
+
+        const tooltipFormatObject = { format: "tooltip for annotation" };
+        const point = {
+            getTooltipFormatObject: sinon.spy(() => tooltipFormatObject),
+            getTooltipParams: sinon.spy(() => { return { x: 1, y: 1 }; })
+        };
+
+        chart.hideTooltip = sinon.spy();
+        chart.clearHover = sinon.spy();
+
+        assert.equal(this.createAnnotationStub.callCount, 1);
+        const tooltip = this.createAnnotationStub.getCall(0).args[1];
+
+        assert.equal(this.renderer.root.on.lastCall.args[0], "mousemove.annotations", "renderer root should be subscribe on mousemove");
+        this.renderer.root.on.lastCall.args[1]({ target: { "series-data": point } });
+
+        assert.equal(tooltip.hide.callCount, 1);
+
+        assert.equal(chart.hideTooltip.callCount, 0);
+        assert.equal(chart.clearHover.callCount, 0);
+
+        assert.equal(tooltip.show.callCount, 0);
     });
 });
