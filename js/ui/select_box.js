@@ -405,6 +405,8 @@ var SelectBox = DropDownList.inherit({
     _renderValue: function() {
         this._renderInputValue();
         this._setSubmitValue();
+
+        return new Deferred().resolve();
     },
 
     _setSubmitValue: function() {

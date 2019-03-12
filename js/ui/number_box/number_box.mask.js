@@ -632,7 +632,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             this._setTextByParsedValue();
         }
 
-        this.callBase();
+        return this.callBase();
     },
 
     _adjustParsedValue: function() {

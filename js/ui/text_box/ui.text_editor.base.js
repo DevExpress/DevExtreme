@@ -13,7 +13,8 @@ var $ = require("../../core/renderer"),
     pointerEvents = require("../../events/pointer"),
     ClearButton = require("./ui.text_editor.clear").default,
     ActionButtonCollection = require("./action_button_collection/index").default,
-    config = require("../../core/config");
+    config = require("../../core/config"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var TEXTEDITOR_CLASS = "dx-texteditor",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
@@ -427,7 +428,8 @@ var TextEditorBase = Editor.inherit({
     },
 
     _renderValue: function() {
-        this._renderInputValue();
+        var renderInputPromise = this._renderInputValue();
+        return renderInputPromise.promise();
     },
 
     _renderInputValue: function(value) {
@@ -452,6 +454,8 @@ var TextEditorBase = Editor.inherit({
         } else {
             this._toggleEmptinessEventHandler();
         }
+
+        return new Deferred().resolve();
     },
 
     _renderDisplayText: function(text) {
