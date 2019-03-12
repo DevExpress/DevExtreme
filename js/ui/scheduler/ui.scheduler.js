@@ -1657,7 +1657,7 @@ var Scheduler = Widget.inherit({
 
     _getAppointmentsToRepaint: function() {
         var appointments = this._layoutManager.createAppointmentsMap(this._filteredItems);
-        return this._layoutManager.markRepaintedAppointments(appointments, this.getAppointmentsInstance().option("items"));
+        return this._layoutManager.getRepaintedAppointments(appointments, this.getAppointmentsInstance().option("items"));
     },
 
     _initExpressions: function(fields) {
