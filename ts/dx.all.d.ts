@@ -1665,7 +1665,7 @@ declare module DevExpress.ui {
         /** @name dxButton.Options.icon */
         icon?: string;
         /** @name dxButton.Options.onClick */
-        onClick?: ((e: { component?: dxButton, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, validationGroup?: any }) => any) | string;
+        onClick?: (e: { component?: dxButton, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, validationGroup?: any }) => any;
         /** @name dxButton.Options.stylingMode */
         stylingMode?: 'text' | 'outlined' | 'contained';
         /** @name dxButton.Options.template */
