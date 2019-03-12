@@ -739,25 +739,19 @@ exports.DataController = Class.inherit((function() {
             that._changingDuration = new Date() - startChanging;
         },
 
-        _correctSkipsTakes: function(rowIndex, rowSkip, rowSpan, levels, skips, takes) {
-            var endIndex = rowSpan ? rowIndex + rowSpan - 1 : rowIndex;
-            skips[levels.length] = skips[levels.length] || 0;
-            takes[levels.length] = takes[levels.length] || 0;
-            if(endIndex < rowSkip) {
-                skips[levels.length]++;
-            } else {
-                takes[levels.length]++;
-            }
-        },
-
-        _calculatePagingForExpandedPaths: function(options, skips, takes, rowExpandedSkips, rowExpandedTakes) {
+        _processPagingForExpandedPaths: function(options, storeLoadOptions) {
             var rows = this._rowsInfo,
                 rowCount = Math.min(options.rowSkip + options.rowTake, rows.length),
                 rowExpandedPaths = options.rowExpandedPaths,
+                skips = [],
+                takes = [],
                 levels = [],
                 expandedPathIndexes = {},
                 i, j,
                 path;
+
+            var rowExpandedSkips = rowExpandedPaths.map(() => 0);
+            var rowExpandedTakes = rowExpandedPaths.map(() => 0);
 
             rowExpandedPaths.forEach((path, index) => {
                 expandedPathIndexes[path] = index;
@@ -769,7 +763,14 @@ exports.DataController = Class.inherit((function() {
                     var cell = rows[i][j];
 
                     if(cell.type === "D") {
-                        this._correctSkipsTakes(i, options.rowSkip, cell.rowspan, levels, skips, takes);
+                        var endIndex = cell.rowspan ? i + cell.rowspan - 1 : i;
+                        skips[levels.length] = skips[levels.length] || 0;
+                        takes[levels.length] = takes[levels.length] || 0;
+                        if(endIndex < options.rowSkip) {
+                            skips[levels.length]++;
+                        } else {
+                            takes[levels.length]++;
+                        }
 
                         path = cell.path || path;
                         var expandIndex = path && path.length > 1 ? expandedPathIndexes[path.slice(0, path.length - 1)] : -1;
@@ -786,27 +787,12 @@ exports.DataController = Class.inherit((function() {
                 }
                 levels = levels.map(level => level - 1).filter(level => level > 0);
             }
-        },
-
-        _processPagingForExpandedPaths: function(options, storeLoadOptions) {
-            var rowExpandedPaths = options.rowExpandedPaths,
-                rowExpandedSkips = rowExpandedPaths.map(() => 0),
-                rowExpandedTakes = rowExpandedPaths.map(() => 0),
-                skips = [],
-                takes = [];
-
-            this._calculatePagingForExpandedPaths(options, skips, takes, rowExpandedSkips, rowExpandedTakes);
-            this._savePagingForExpandedPaths(options, storeLoadOptions, skips[0], takes[0], rowExpandedSkips, rowExpandedTakes);
-        },
-
-        _savePagingForExpandedPaths: function(options, storeLoadOptions, skip, take, rowExpandedSkips, rowExpandedTakes) {
-            var rowExpandedPaths = options.rowExpandedPaths;
 
             options.rowExpandedPaths = [];
-            options.rowSkip = skip !== undefined ? skip : options.rowSkip;
-            options.rowTake = take !== undefined ? take : options.rowTake;
+            options.rowSkip = skips[0] !== undefined ? skips[0] : options.rowSkip;
+            options.rowTake = takes[0] !== undefined ? takes[0] : options.rowTake;
 
-            for(var i = 0; i < rowExpandedPaths.length; i++) {
+            for(i = 0; i < rowExpandedPaths.length; i++) {
                 if(rowExpandedTakes[i]) {
                     storeLoadOptions.push(extend({}, options, {
                         area: "row",
@@ -838,13 +824,12 @@ exports.DataController = Class.inherit((function() {
             }
 
             var columnsScrollController = this._columnsScrollController;
-
             if(this._dataSource.paginate() && columnsScrollController) {
                 var columnPageSize = columnsScrollController._dataSource.pageSize();
 
                 if(options.headerName === "columns") {
                     options.columnSkip = 0;
-                    options.columnTake = columnPageSize;
+                    options.rowTake = columnPageSize;
                 } else {
                     options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
                     options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;

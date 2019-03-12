@@ -1404,6 +1404,7 @@ module.exports = Class.inherit((function() {
                 delete headerItem.children;
                 that._update();
                 if(that.paginate()) {
+                    // TODO remove
                     that.load();
                 }
                 return true;
