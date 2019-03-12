@@ -173,6 +173,8 @@ QUnit.module("skip mousewheel event test", () => {
         return needSkip;
     };
 
+    const checkSkippedMouseWheelEvent = ($container, selector) => needSkipMouseWheel($container.find(selector).first());
+
     testInActiveWindow("needSkipEvent returns true for number input wheel", assert => {
         if(!/webkit/i.exec(navigator.userAgent)) {
             assert.ok(true, "this test run only in webkit");
@@ -238,6 +240,49 @@ QUnit.module("skip mousewheel event test", () => {
             assert.ok(needSkipMouseWheel(element));
         } finally {
             element.remove();
+        }
+    });
+
+    testInActiveWindow("needSkipEvent returns true for contentEditable element", assert => {
+        let $element;
+        try {
+            $element = $(`
+                <div contenteditable="true">
+                    <h>Test</h>
+                    <div class="text">
+                        <b>Bold</b>
+                    </div>
+                </div>
+            `)
+                .appendTo("#qunit-fixture")
+                .trigger("focus");
+
+            assert.ok(checkSkippedMouseWheelEvent($element, "h"), "event is skipped for the h tag");
+            assert.ok(checkSkippedMouseWheelEvent($element, ".text"), "event is skipped for the element with the 'text' class name");
+            assert.ok(checkSkippedMouseWheelEvent($element, "b"), "event is skipped for the b tag");
+        } catch(e) {
+            $element.remove();
+        }
+    });
+
+    testInActiveWindow("needSkipEvent returns false for the contentEditable element when this element is not focused", assert => {
+        let $element;
+        try {
+            $element = $(`
+                <div contenteditable="true">
+                    <h>Test</h>
+                    <div class="text">
+                        <b>Bold</b>
+                    </div>
+                </div>
+            `)
+                .appendTo("#qunit-fixture");
+
+            assert.notOk(checkSkippedMouseWheelEvent($element, "h"), "event is skipped for the h tag");
+            assert.notOk(checkSkippedMouseWheelEvent($element, ".text"), "event is skipped for the element with the 'text' class name");
+            assert.notOk(checkSkippedMouseWheelEvent($element, "b"), "event is skipped for the b tag");
+        } catch(e) {
+            $element.remove();
         }
     });
 });

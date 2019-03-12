@@ -113,10 +113,6 @@ const isTouchEvent = (e) => {
     return isNativeTouchEvent(e) || ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === "touch");
 };
 
-const isKeyboardEvent = (e) => {
-    return eventSource(e) === "keyboard";
-};
-
 const isFakeClickEvent = (e) => {
     return e.screenX === 0 && !e.offsetX && e.pageX === 0;
 };
@@ -151,14 +147,16 @@ const hasTouches = (e) => {
 
 const needSkipEvent = (e) => {
     // TODO: this checking used in swipeable first move handler. is it correct?
-    const $target = $(e.target);
+    const target = e.target;
+    const $target = $(target);
     const touchInInput = $target.is("input, textarea, select");
 
     if($target.is(".dx-skip-gesture-event *, .dx-skip-gesture-event")) {
         return true;
     }
     if(e.type === 'dxmousewheel') {
-        return $target.is("input[type='number'], textarea, select") && $target.is(':focus');
+        const isContentEditableFocused = target.isContentEditable && $target.closest("div[contenteditable='true']").is(':focus');
+        return $target.is("input[type='number'], textarea, select") && $target.is(':focus') || isContentEditableFocused;
     }
     if(isMouseEvent(e)) {
         return touchInInput || e.which > 1; // only left mouse button
@@ -240,7 +238,6 @@ module.exports = {
     isPointerEvent: isPointerEvent,
     isMouseEvent: isMouseEvent,
     isTouchEvent: isTouchEvent,
-    isKeyboardEvent: isKeyboardEvent,
 
     isFakeClickEvent: isFakeClickEvent,
 
