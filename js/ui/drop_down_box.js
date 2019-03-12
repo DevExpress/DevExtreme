@@ -179,7 +179,7 @@ var DropDownBox = DropDownEditor.inherit({
 
         if(!this._dataSource) {
             callBase(values);
-            return;
+            return new Deferred().resolve();
         }
 
         var currentValue = this._getCurrentValue(),
@@ -194,13 +194,13 @@ var DropDownBox = DropDownEditor.inherit({
             }).bind(this));
         }).bind(this));
 
-        when.apply(this, itemLoadDeferreds).always((function() {
-            this.option("displayValue", values);
-            callBase(values.length && values);
-        }).bind(this))
+        return when
+            .apply(this, itemLoadDeferreds)
+            .always((function() {
+                this.option("displayValue", values);
+                callBase(values.length && values);
+            }).bind(this))
             .fail(callBase);
-
-        return itemLoadDeferreds;
     },
 
     _loadItem: function(value) {

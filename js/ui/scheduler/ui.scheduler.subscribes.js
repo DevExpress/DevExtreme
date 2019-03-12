@@ -16,6 +16,10 @@ const MINUTES_IN_HOUR = 60;
 const toMs = dateUtils.dateToMilliseconds;
 
 const subscribes = {
+    isCurrentViewAgenda: function() {
+        return this.option("currentView") === "agenda";
+    },
+  
     currentViewUpdated: function(currentView) {
         this.option("currentView", currentView);
     },
