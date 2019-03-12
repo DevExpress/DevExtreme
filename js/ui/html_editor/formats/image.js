@@ -23,7 +23,7 @@ class ExtImage extends Image {
     }
 
     static formats(domNode) {
-        var formats = super.formats(domNode);
+        let formats = super.formats(domNode);
 
         formats["imageSrc"] = domNode.getAttribute("src");
 
