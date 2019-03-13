@@ -85,6 +85,25 @@ QUnit.test("Do not draw annotation if cannot get coords", function(assert) {
     testCase({ x: undefined, y: 100 }, "Only x is undefined");
 });
 
+QUnit.test("Get tooltip params", function(assert) {
+    const annotation = createAnnotations({ items: [{ x: 0, y: 0 }] })[0];
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    assert.deepEqual(annotation.getTooltipParams(), { x: 100, y: 200 });
+});
+
+QUnit.test("Get tooltip format object", function(assert) {
+    const options = { items: [{ x: 0, y: 0, opt_1: "opt_1" }] };
+    const annotation = createAnnotations(options)[0];
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    assert.deepEqual(annotation.getTooltipFormatObject(), options.items[0]);
+});
+
 QUnit.module("Image annotation", environment);
 
 QUnit.test("Draw image inside provided group", function(assert) {
