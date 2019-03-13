@@ -38,7 +38,7 @@ QUnit.module("API", moduleConfig, () => {
     QUnit.test("Empty grid", (assert) => {
         let dataGrid = $("#dataGrid").dxDataGrid({}).dxDataGrid("instance");
 
-        this.exportDataGrid(dataGrid, this.worksheet);
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
 
         assert.equal(this.worksheet.actualRowCount, 0);
     });
@@ -49,7 +49,7 @@ QUnit.module("API", moduleConfig, () => {
         }).dxDataGrid("instance");
 
         this.clock.tick(100);
-        this.exportDataGrid(dataGrid, this.worksheet);
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
         this.clock.tick(100);
 
         assert.equal(this.worksheet.actualColumnCount, 1);
@@ -64,7 +64,7 @@ QUnit.module("API", moduleConfig, () => {
         }).dxDataGrid("instance");
 
         this.clock.tick(100);
-        this.exportDataGrid(dataGrid, this.worksheet);
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
         this.clock.tick(100);
 
         assert.equal(this.worksheet.actualColumnCount, 0);
@@ -77,7 +77,7 @@ QUnit.module("API", moduleConfig, () => {
         }).dxDataGrid("instance");
 
         this.clock.tick(100);
-        this.exportDataGrid(dataGrid, this.worksheet);
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
         this.clock.tick(100);
 
         assert.equal(this.worksheet.actualColumnCount, 2);
@@ -91,7 +91,7 @@ QUnit.module("API", moduleConfig, () => {
             columns: [ { caption: "f1", visible: false }]
         }).dxDataGrid("instance");
 
-        this.exportDataGrid(dataGrid, this.worksheet);
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
 
         assert.equal(this.worksheet.actualColumnCount, 0);
         assert.equal(this.worksheet.actualRowCount, 0);
@@ -102,7 +102,7 @@ QUnit.module("API", moduleConfig, () => {
             columns: [ { caption: "f1" }, { caption: "f2", visible: false }]
         }).dxDataGrid("instance");
 
-        this.exportDataGrid(dataGrid, this.worksheet);
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
 
         assert.equal(this.worksheet.actualColumnCount, 1);
         assert.equal(this.worksheet.actualRowCount, 1);
@@ -114,7 +114,7 @@ QUnit.module("API", moduleConfig, () => {
             columns: [ { caption: "f1", visible: false }, { caption: "f2" }]
         }).dxDataGrid("instance");
 
-        this.exportDataGrid(dataGrid, this.worksheet);
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
 
         assert.equal(this.worksheet.actualColumnCount, 1);
         assert.equal(this.worksheet.actualRowCount, 1);
@@ -131,7 +131,7 @@ QUnit.module("API", moduleConfig, () => {
         }).dxDataGrid("instance");
 
         this.clock.tick(100);
-        this.exportDataGrid(dataGrid, this.worksheet);
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
         this.clock.tick(100);
 
         assert.equal(this.worksheet.actualColumnCount, 3);
@@ -151,7 +151,7 @@ QUnit.module("API", moduleConfig, () => {
         }).dxDataGrid("instance");
 
         this.clock.tick(100);
-        this.exportDataGrid(dataGrid, this.worksheet);
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
         this.clock.tick(100);
 
         assert.equal(this.worksheet.actualColumnCount, 2);
@@ -170,7 +170,7 @@ QUnit.module("API", moduleConfig, () => {
         }).dxDataGrid("instance");
 
         this.clock.tick(100);
-        this.exportDataGrid(dataGrid, this.worksheet);
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
         this.clock.tick(100);
 
         assert.equal(this.worksheet.actualColumnCount, 2);
@@ -189,7 +189,7 @@ QUnit.module("API", moduleConfig, () => {
         }).dxDataGrid("instance");
 
         this.clock.tick(100);
-        this.exportDataGrid(dataGrid, this.worksheet);
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
         this.clock.tick(100);
 
         assert.equal(this.worksheet.actualColumnCount, 2);
@@ -204,7 +204,7 @@ QUnit.module("API", moduleConfig, () => {
         }).dxDataGrid("instance");
 
         this.clock.tick(100);
-        this.exportDataGrid(dataGrid, this.worksheet, { excelFilterEnabled: true });
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet, excelFilterEnabled: true });
         this.clock.tick(100);
 
         assert.equal(this.worksheet.actualColumnCount, 2);
@@ -221,7 +221,7 @@ QUnit.module("API", moduleConfig, () => {
             columns: [{ caption: "f1", visible: false }, { caption: "f2" }]
         }).dxDataGrid("instance");
 
-        this.exportDataGrid(dataGrid, this.worksheet, { excelFilterEnabled: true });
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet, excelFilterEnabled: true });
         this.clock.tick(100);
 
         assert.equal(this.worksheet.actualColumnCount, 1);
@@ -242,7 +242,7 @@ QUnit.module("API", moduleConfig, () => {
 
         this.clock.tick();
 
-        this.exportDataGrid(dataGrid, this.worksheet).then(() => {
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
             assert.equal(this.worksheet.actualColumnCount, 2);
             assert.equal(this.worksheet.actualRowCount, 2);
             assert.deepEqual(this.worksheet.getCell("A2").value, "1");
@@ -266,7 +266,7 @@ QUnit.module("API", moduleConfig, () => {
 
         this.clock.tick();
 
-        this.exportDataGrid(dataGrid, this.worksheet).then(() => {
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
             assert.equal(this.worksheet.actualColumnCount, 1);
             assert.equal(this.worksheet.actualRowCount, 2);
             assert.deepEqual(this.worksheet.getCell("A2").value, "1");
@@ -290,7 +290,7 @@ QUnit.module("API", moduleConfig, () => {
 
         this.clock.tick();
 
-        this.exportDataGrid(dataGrid, this.worksheet).then(() => {
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
             assert.equal(this.worksheet.actualColumnCount, 1);
             assert.equal(this.worksheet.actualRowCount, 2);
             assert.deepEqual(this.worksheet.getCell("A2").value, 1);
@@ -314,7 +314,7 @@ QUnit.module("API", moduleConfig, () => {
 
         this.clock.tick();
 
-        this.exportDataGrid(dataGrid, this.worksheet).then(() => {
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
             assert.equal(this.worksheet.actualColumnCount, 1);
             assert.equal(this.worksheet.actualRowCount, 2);
             assert.deepEqual(this.worksheet.getCell("A2").value, true);
@@ -325,79 +325,53 @@ QUnit.module("API", moduleConfig, () => {
         this.clock.tick();
     });
 
-    QUnit.test("Data - columns.dataType: object", (assert) => {
+    QUnit.test("Data - columns.dataType: date", (assert) => {
         const done = assert.async();
+        const date = new Date(2019, 3, 12);
 
         let dataGrid = $("#dataGrid").dxDataGrid({
             columns: [{
                 dataField: "f1",
-                dataType: "object"
+                dataType: "date"
             }],
-            dataSource: [{ f1: { value: 1 } }]
+            dataSource: [{ f1: date }]
         }).dxDataGrid("instance");
 
         this.clock.tick();
 
-        this.exportDataGrid(dataGrid, this.worksheet).then(() => {
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
             assert.equal(this.worksheet.actualColumnCount, 1);
             assert.equal(this.worksheet.actualRowCount, 2);
-            assert.deepEqual(this.worksheet.getCell("A2").value, { value: 1 });
-            assert.equal(typeof this.worksheet.getCell("A2").value, "object");
+            assert.deepEqual(this.worksheet.getCell("A2").value, date);
+            assert.equal(this.worksheet.getCell("A2").type, ExcelJS.ValueType.Date);
             done();
         });
 
         this.clock.tick();
     });
 
-    // QUnit.test("Data - columns.dataType: date", (assert) => {
-    //     const done = assert.async();
-    //     const date = new Date(2019, 3, 12);
+    QUnit.test("Data - columns.dataType: dateTime", (assert) => {
+        const done = assert.async();
+        const dateTime = new Date(2019, 3, 12, 12, 15);
 
-    //     let dataGrid = $("#dataGrid").dxDataGrid({
-    //         columns: [{
-    //             dataField: "f1",
-    //             dataType: "date"
-    //         }],
-    //         dataSource: [{ f1: date }]
-    //     }).dxDataGrid("instance");
+        let dataGrid = $("#dataGrid").dxDataGrid({
+            columns: [{
+                dataField: "f1",
+                dataType: "datetime"
+            }],
+            dataSource: [{ f1: dateTime }]
+        }).dxDataGrid("instance");
 
-    //     this.clock.tick();
+        this.clock.tick();
 
-    //     this.exportDataGrid(dataGrid, this.worksheet).then(() => {
-    //         assert.equal(this.worksheet.actualColumnCount, 1);
-    //         assert.equal(this.worksheet.actualRowCount, 2);
-    //         assert.deepEqual(this.worksheet.getCell("A2").value, date);
-    //         assert.deepEqual(this.worksheet.getCell("A2").text, "4/12/2019");
-    //         assert.equal(this.worksheet.getCell("A2").type, ExcelJS.ValueType.Date);
-    //         done();
-    //     });
+        this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
+            assert.equal(this.worksheet.actualColumnCount, 1);
+            assert.equal(this.worksheet.actualRowCount, 2);
+            assert.deepEqual(this.worksheet.getCell("A2").value, dateTime);
+            assert.equal(this.worksheet.getCell("A2").type, ExcelJS.ValueType.Date);
+            done();
+        });
 
-    //     this.clock.tick();
-    // });
-
-    // QUnit.test("Data - columns.dataType: dateTime", (assert) => {
-    //     const done = assert.async();
-    //     const dateTime = new DateTime(2019, 3, 12, 12, 15);
-
-    //     let dataGrid = $("#dataGrid").dxDataGrid({
-    //         columns: [{
-    //             dataField: "f1",
-    //             dataType: "date"
-    //         }],
-    //         dataSource: [{ f1: dateTime }]
-    //     }).dxDataGrid("instance");
-
-    //     this.clock.tick();
-
-    //     this.exportDataGrid(dataGrid, this.worksheet).then(() => {
-    //         assert.equal(this.worksheet.actualColumnCount, 1);
-    //         assert.equal(this.worksheet.actualRowCount, 2);
-    //         assert.deepEqual(this.worksheet.getCell("A2").value, dateTime);
-    //         assert.deepEqual(this.worksheet.getCell("A2").text, "4/12/2019 12:15:00 PM");
-    //         assert.equal(this.worksheet.getCell("A2").type, ExcelJS.ValueType.dateTime);
-    //         done();
-    //     });
-
-    //     this.clock.tick();
-    // });
+        this.clock.tick();
+    });
 });

@@ -1,4 +1,5 @@
-function exportDataGrid(dataGrid, worksheet, options) {
+function exportDataGrid(options) {
+    let { dataGrid, worksheet } = options;
 
     let result = {
         top: 0,
