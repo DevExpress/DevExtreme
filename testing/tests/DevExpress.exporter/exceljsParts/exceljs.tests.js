@@ -177,7 +177,7 @@ QUnit.module("API", moduleConfig, () => {
         }).dxDataGrid("instance");
 
         this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet });
-  
+
         assert.equal(this.worksheet.actualColumnCount, 2);
         assert.equal(this.worksheet.actualRowCount, 1);
         assert.equal(this.worksheet.getCell("A1").value, "f2");
