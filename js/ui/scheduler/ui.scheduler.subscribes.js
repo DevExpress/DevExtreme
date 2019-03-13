@@ -7,7 +7,7 @@ import { each } from "../../core/utils/iterator";
 import translator from "../../animation/translator";
 import { grep } from "../../core/utils/common";
 import { extend } from "../../core/utils/extend";
-import inArray from "../../core/utils/array";
+import { inArray } from "../../core/utils/array";
 import dateLocalization from "../../localization/date";
 import SchedulerTimezones from "./timezones/ui.scheduler.timezones";
 import { Deferred } from "../../core/utils/deferred";
