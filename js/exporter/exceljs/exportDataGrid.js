@@ -1,11 +1,9 @@
 function exportDataGrid(options) {
-    let { dataGrid, worksheet } = options;
+    let { dataGrid, worksheet, topLeftCell } = options;
 
     let result = {
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0
+        from: { row: topLeftCell.row, column: topLeftCell.column },
+        to: { row: 0, column: 0 }
     };
 
     let columns = dataGrid.getVisibleColumns().filter((item)=>{
