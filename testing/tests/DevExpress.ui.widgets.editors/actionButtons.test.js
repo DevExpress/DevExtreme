@@ -669,7 +669,9 @@ module("collection updating", () => {
             const { $before, $after } = getActionButtons($textBox);
 
             assert.strictEqual($before.length, 1);
-            assert.strictEqual($after.length, 0);
+            assert.ok($before.eq(0).text(), "custom");
+            assert.strictEqual($after.length, 1);
+            assert.ok(isClearButton($after.eq(0)));
         });
 
         test("it is able to reorder buttons", (assert) => {
