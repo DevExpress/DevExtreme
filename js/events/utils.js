@@ -113,6 +113,10 @@ const isTouchEvent = (e) => {
     return isNativeTouchEvent(e) || ((isPointerEvent(e) || isDxEvent(e)) && e.pointerType === "touch");
 };
 
+const isKeyboardEvent = (e) => {
+    return eventSource(e) === "keyboard";
+};
+
 const isFakeClickEvent = (e) => {
     return e.screenX === 0 && !e.offsetX && e.pageX === 0;
 };
@@ -239,6 +243,7 @@ module.exports = {
     isPointerEvent: isPointerEvent,
     isMouseEvent: isMouseEvent,
     isTouchEvent: isTouchEvent,
+    isKeyboardEvent: isKeyboardEvent,
 
     isFakeClickEvent: isFakeClickEvent,
 
