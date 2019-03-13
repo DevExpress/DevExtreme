@@ -274,13 +274,9 @@ QUnit.module("Tooltip", function(hooks) {
 
         createChart(annotationOptions);
 
-        assert.equal(this.createAnnotationStub.callCount, 1);
-        const tooltip = this.createAnnotationStub.getCall(0).args[1];
-
-        assert.equal(tooltip, this.tooltip, "second argument should be a Tooltip");
-        assert.equal(tooltip.ctorArgs[0].cssClass, "dxc-tooltip", "tooltip should be have right css class");
-        assert.equal(tooltip.setRendererOptions.callCount, 1, "tooltip.setRendererOptions should be called");
-        assert.equal(tooltip.update.callCount, 1, "tooltip.update should be called");
+        assert.equal(this.tooltip.ctorArgs[0].cssClass, "dxc-tooltip", "tooltip should be have right css class");
+        assert.equal(this.tooltip.setRendererOptions.callCount, 1, "tooltip.setRendererOptions should be called");
+        assert.equal(this.tooltip.update.callCount, 1, "tooltip.update should be called");
     });
 
     QUnit.test("Show", assert => {
@@ -303,8 +299,7 @@ QUnit.module("Tooltip", function(hooks) {
         chart.hideTooltip = sinon.spy();
         chart.clearHover = sinon.spy();
 
-        assert.equal(this.createAnnotationStub.callCount, 1);
-        const tooltip = this.createAnnotationStub.getCall(0).args[1];
+        const tooltip = this.tooltip;
 
         assert.equal(this.renderer.root.on.lastCall.args[0], "mousemove.annotations", "renderer root should be subscribe on mousemove");
         this.renderer.root.on.lastCall.args[1]({ target: { "annotation-data": point } });
@@ -338,10 +333,8 @@ QUnit.module("Tooltip", function(hooks) {
         chart.hideTooltip = sinon.spy();
         chart.clearHover = sinon.spy();
 
-        assert.equal(this.createAnnotationStub.callCount, 1);
-        const tooltip = this.createAnnotationStub.getCall(0).args[1];
+        const tooltip = this.tooltip;
 
-        assert.equal(this.renderer.root.on.lastCall.args[0], "mousemove.annotations", "renderer root should be subscribe on mousemove");
         this.renderer.root.on.lastCall.args[1]({ target: { "series-data": point } });
 
         assert.equal(tooltip.hide.callCount, 1);
@@ -350,5 +343,21 @@ QUnit.module("Tooltip", function(hooks) {
         assert.equal(chart.clearHover.callCount, 0);
 
         assert.equal(tooltip.show.callCount, 0);
+    });
+
+    QUnit.test("Dispose", assert => {
+        const annotationOptions = {
+            some: "options",
+            items: [
+                { x: 100, y: 200, },
+                { value: 1, argument: 2 }
+            ]
+        };
+
+        const chart = createChart(annotationOptions);
+        chart.dispose();
+
+        assert.equal(this.tooltip.dispose.callCount, 1);
+        assert.equal(this.renderer.root.off.getCall(3).args[0], "mousemove.annotations");
     });
 });

@@ -6,7 +6,7 @@ import { events } from "../components/consts";
 const EVENTS_NS = ".annotations";
 const MOVE_EVENT = events["mousemove"] + EVENTS_NS;
 
-function coreAnnotation(type, options, draw, tooltip) {
+function coreAnnotation(type, options, draw) {
     return {
         _type: type,
         name: options.name,
@@ -21,31 +21,13 @@ function coreAnnotation(type, options, draw, tooltip) {
             const { x, y } = this.coords;
             isDefined(x) && isDefined(y) && draw.call(this, { x, y }, widget, group, this._options.image);
         },
-        getOptions() {
-            return this._options;
-        },
         getTooltipFormatObject() {
             return extend({}, this._options);
         },
-        isVisible() {
-            return true;
-        },
         getTooltipParams() {
             const { x, y } = this.coords;
-            return {
-                x,
-                y,
-                offset: 0
-            };
-        },
-        clearHover() {},
-        getMarkerVisibility() {
-            return true;
-        },
-        tooltip() {
-            return tooltip;
-        },
-        hover() {}
+            return { x, y };
+        }
     };
 }
 
@@ -57,7 +39,7 @@ function drawImageAnnotation({ x, y }, widget, group, { width, height, url }) {
     widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, "center").data({ "annotation-data": this }).append(group);
 }
 
-function createAnnotation(itemOptions, tooltip) {
+function createAnnotation(itemOptions) {
     // Choose annotation type and merge common and individual options
     let draw = drawSimpleAnnotation;
     let type = "simple";
@@ -67,11 +49,11 @@ function createAnnotation(itemOptions, tooltip) {
         type = "image";
     }
 
-    return coreAnnotation(type, itemOptions, draw, tooltip);
+    return coreAnnotation(type, itemOptions, draw);
 }
 
-export let createAnnotations = function(options, tooltip) {
-    return options.items.map(itemOptions => createAnnotation(itemOptions, tooltip));
+export let createAnnotations = function(options) {
+    return options.items.map(itemOptions => createAnnotation(itemOptions));
 };
 
 ///#DEBUG
@@ -107,6 +89,24 @@ const chartPlugin = {
                 y = axis && axis.getTranslator().translate(value);
             }
             return { x, y };
+        },
+        _onMouseMove({ target }) {
+            const annotation = target["annotation-data"];
+            if(!annotation) {
+                this._annotations.tooltip.hide();
+                return;
+            }
+
+            this.hideTooltip();
+            this.clearHover();
+
+            const tooltipFormatObject = annotation.getTooltipFormatObject(this._annotations.tooltip);
+            const coords = annotation.getTooltipParams(this._annotations.tooltip.getLocation()),
+                rootOffset = this._renderer.getRootOffset();
+            coords.x += rootOffset.left;
+            coords.y += rootOffset.top;
+
+            this._annotations.tooltip.show(tooltipFormatObject, coords, { target: annotation });
         }
     }
 };
@@ -117,6 +117,8 @@ const corePlugin = {
     },
     dispose() {
         this._annotationsGroup.linkRemove().linkOff();
+        this._renderer.root.off(MOVE_EVENT);
+        this._annotations.tooltip && this._annotations.tooltip.dispose();
     },
     extenders: {
         _createHtmlStructure() {
@@ -138,40 +140,22 @@ const corePlugin = {
                 return;
             }
 
-            const tooltip = new Tooltip({
+            this._annotations.tooltip = new Tooltip({
                 cssClass: "dxc-tooltip",
                 eventTrigger: this._eventTrigger,
                 widgetRoot: this.element(),
             });
 
-            tooltip.setRendererOptions(this._getRendererOptions());
+            this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
             const tooltipOptions = extend({}, this._themeManager.getOptions("tooltip"), { enabled: false });
             if(options.customizeTooltip) {
                 tooltipOptions.customizeTooltip = options.customizeTooltip;
                 tooltipOptions.enabled = true;
             }
-            tooltip.update(tooltipOptions);
-            this._annotations.items = createAnnotations(options, tooltip);
+            this._annotations.tooltip.update(tooltipOptions);
 
-            this._renderer.root.on(MOVE_EVENT, ({ target }) => {
-                const point = target["annotation-data"];
-                if(!point) {
-                    tooltip.hide();
-
-                    return;
-                }
-
-                this.hideTooltip();
-                this.clearHover();
-
-                const tooltipFormatObject = point.getTooltipFormatObject(tooltip);
-                const coords = point.getTooltipParams(tooltip.getLocation()),
-                    rootOffset = this._renderer.getRootOffset();
-                coords.x += rootOffset.left;
-                coords.y += rootOffset.top;
-
-                tooltip.show(tooltipFormatObject, coords, { target: point });
-            });
+            this._annotations.items = createAnnotations(options);
+            this._renderer.root.on(MOVE_EVENT, this._onMouseMove.bind(this));
         },
         _getAnnotationCoords() { return {}; }
     },
@@ -186,7 +170,6 @@ const corePlugin = {
             isOptionChange: true,
             option: "annotations"
         });
-        // constructor.addPlugin(require("./tooltip").plugin);
     }
 };
 
