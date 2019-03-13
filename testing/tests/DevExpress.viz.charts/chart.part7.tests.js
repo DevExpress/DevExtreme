@@ -774,7 +774,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         // act
         chart.clearSelection();
         // assert
-        assert.ok(commons.getTrackerStub().stub("clearSelection"), "Selection should be cleared through tracker");
+        assert.ok(commons.getTrackerStub().stub("clearSelection").called, "Selection should be cleared through tracker");
     });
 
     QUnit.test("dxChart - get all series", function(assert) {
@@ -880,7 +880,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
         chart.hideTooltip();
 
-        assert.ok(commons.getTrackerStub().stub("_hideTooltip"), "tracker hide tooltip was called");
+        assert.ok(commons.getTrackerStub().stub("_hideTooltip").called, "tracker hide tooltip was called");
     });
 
     QUnit.test("dxChart - clear hover", function(assert) {
@@ -888,7 +888,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
         chart.clearHover();
 
-        assert.ok(commons.getTrackerStub().stub("clearHover"), "tracker clear hover was called");
+        assert.ok(commons.getTrackerStub().stub("clearHover").called, "tracker clear hover was called");
     });
 
     QUnit.test("dxChart - render", function(assert) {
