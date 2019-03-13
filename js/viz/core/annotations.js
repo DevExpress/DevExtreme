@@ -88,7 +88,6 @@ const chartPlugin = {
     dispose() {},
     members: {
         _getAnnotationCoords(annotation) {
-            // debugger;
             let x = annotation.x;
             let y = annotation.y;
             const argument = annotation.argument;

@@ -95,13 +95,6 @@ QUnit.module("Lifecycle", environment, function() {
     QUnit.module("Chart plugin", {
         beforeEach() {
             this.onDrawn = sinon.spy();
-
-            /* TooltipModule.Tooltip = (options) => {
-                this.tooltip = new vizMocks.Tooltip(options);
-                this.tooltip.show = sinon.spy();
-
-                return this.tooltip;
-            };*/
         },
         chart(annotations) {
             return $('<div>').appendTo("#qunit-fixture").dxChart({
