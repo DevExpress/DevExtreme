@@ -2935,6 +2935,23 @@ QUnit.test("width should not be applied if minWidth greater than width", functio
     }
 });
 
+// T720298
+QUnit.test("percent width should not be applied if minWidth greater than width", function(assert) {
+    $("#container").width(200);
+    // arrange
+    $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{ dataField: "first", width: "10%", minWidth: 50 }, "second"]
+    });
+
+    // act
+    var $cols = $("#dataGrid colgroup").eq(0).children("col");
+    assert.strictEqual($cols.length, 2);
+    assert.strictEqual($cols[0].style.width, "50px", "min-width is applied");
+    assert.strictEqual($cols[1].style.width, "auto");
+});
+
 // T516187
 QUnit.test("width should be auto if minWidth is assigned to another column", function(assert) {
     $("#container").width(200);
@@ -7754,6 +7771,40 @@ QUnit.test("columns change", function(assert) {
     assert.equal(tableElement.find("td").length, 2);
     // T196532
     assert.equal(loadingCount, 1, "one load only");
+});
+
+// T722785
+QUnit.test("columns change with changed column visibility if sorting is applied", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        dataSource: [{}],
+        columns: ['FirstName', {
+            dataField: 'LastName',
+            visible: false
+        }]
+    });
+
+    this.clock.tick();
+
+    dataGrid.columnOption("FirstName", "sortOrder", "asc");
+    this.clock.tick();
+
+    // act
+    dataGrid.option({
+        dataSource: [{}],
+        columns: ['FirstName', {
+            dataField: 'LastName',
+            visible: true
+        }]
+    });
+    this.clock.tick();
+
+    // assert
+    assert.equal(dataGrid.getVisibleColumns().length, 2, "two visible columns");
+    assert.equal(dataGrid.getVisibleColumns()[0].sortOrder, "asc", "sortOrder for first column");
+    assert.equal($(dataGrid.element()).find(".dx-header-row .dx-sort-up").length, 1, "one sort indicator is shown");
+    assert.equal($(dataGrid.element()).find(".dx-header-row").children().length, 2, "two header cells");
+    assert.equal($(dataGrid.element()).find(".dx-data-row").children().length, 2, "two data cells");
 });
 
 // T365730
