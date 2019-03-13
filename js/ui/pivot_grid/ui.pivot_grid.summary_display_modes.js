@@ -350,6 +350,9 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     */
 
     field: function(area) {
+        if(area === "data") {
+            return this._descriptions.values[this._fieldIndex];
+        }
         var path = this._getPath(area),
             descriptions = this._getDimension(area),
             field = descriptions[path.length - 2];
