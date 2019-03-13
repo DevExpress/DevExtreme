@@ -1,5 +1,5 @@
 function exportDataGrid(options) {
-    let { dataGrid, worksheet, topLeftCell } = options;
+    let { dataGrid, worksheet, topLeftCell = { row: 0, column: 0 } } = options;
 
     let result = {
         from: { row: topLeftCell.row, column: topLeftCell.column },
