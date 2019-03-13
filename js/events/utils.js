@@ -151,14 +151,17 @@ const hasTouches = (e) => {
 
 const needSkipEvent = (e) => {
     // TODO: this checking used in swipeable first move handler. is it correct?
-    const $target = $(e.target);
+    const target = e.target;
+    const $target = $(target);
     const touchInInput = $target.is("input, textarea, select");
 
     if($target.is(".dx-skip-gesture-event *, .dx-skip-gesture-event")) {
         return true;
     }
     if(e.type === 'dxmousewheel') {
-        return $target.is("input[type='number'], textarea, select") && $target.is(':focus');
+        const isContentEditableFocused = target.isContentEditable && $target.closest("div[contenteditable='true']").is(':focus');
+        const isInputFocused = $target.is("input[type='number'], textarea, select") && $target.is(':focus');
+        return isInputFocused || isContentEditableFocused;
     }
     if(isMouseEvent(e)) {
         return touchInInput || e.which > 1; // only left mouse button
