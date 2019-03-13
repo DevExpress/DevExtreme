@@ -883,6 +883,14 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(commons.getTrackerStub().stub("_hideTooltip"), "tracker hide tooltip was called");
     });
 
+    QUnit.test("dxChart - clear hover", function(assert) {
+        var chart = this.createChart({});
+
+        chart.clearHover();
+
+        assert.ok(commons.getTrackerStub().stub("clearHover"), "tracker clear hover was called");
+    });
+
     QUnit.test("dxChart - render", function(assert) {
         // arrange
         var chart = commons.createChartInstance({}, this.$container),

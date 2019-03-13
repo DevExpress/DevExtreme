@@ -4,8 +4,8 @@ import { extend } from "../../core/utils/extend";
 import { events } from "../components/consts";
 import { patchFontOptions } from "./utils";
 
-const EVENTS_NS = ".annotations";
-const MOVE_EVENT = events["mousemove"] + EVENTS_NS;
+const MOVE_EVENT = events["mousemove"] + ".annotations";
+const ANNOTATION_DATA = "annotation-data";
 
 function coreAnnotation(type, options, draw) {
     return {
@@ -34,20 +34,20 @@ function coreAnnotation(type, options, draw) {
 
 function simpleAnnotation(options) {
     return coreAnnotation("simple", options, function({ x, y }, widget, group) {
-        widget._renderer.circle(x, y, 5).attr({ fill: "red" }).data({ "annotation-data": this }).append(group);
+        widget._renderer.circle(x, y, 5).attr({ fill: "red" }).data({ [ANNOTATION_DATA]: this }).append(group);
     });
 }
 
 function labelAnnotation(options) {
     return coreAnnotation("label", options, function({ x, y }, widget, group) {
-        widget._renderer.text(options.label.text, x, y).data({ "annotation-data": this }).css(patchFontOptions(options.label.font)).append(group);
+        widget._renderer.text(options.label.text, x, y).data({ [ANNOTATION_DATA]: this }).css(patchFontOptions(options.label.font)).append(group);
     });
 }
 
 function imageAnnotation(options) {
     const { width, height, url, location } = options.image;
     return coreAnnotation("image", options, function({ x, y }, widget, group) {
-        widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, location).data({ "annotation-data": this }).append(group);
+        widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, location).data({ [ANNOTATION_DATA]: this }).append(group);
     });
 }
 
@@ -104,7 +104,7 @@ const chartPlugin = {
             return { x, y };
         },
         _onMouseMove({ target }) {
-            const annotation = target["annotation-data"];
+            const annotation = target[ANNOTATION_DATA];
             if(!annotation) {
                 this._annotations.tooltip.hide();
                 return;
