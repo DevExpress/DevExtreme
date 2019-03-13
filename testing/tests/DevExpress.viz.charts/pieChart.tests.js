@@ -235,8 +235,17 @@ var environment = {
         var chart = this.createPieChart({});
 
         assert.equal(this.createThemeManager.callCount, 1);
-        assert.deepEqual(this.createThemeManager.lastCall.args[0], chart._options);
-        assert.equal(this.createThemeManager.lastCall.args[1], "pie", "valid theme path passed");
+        assert.deepEqual(this.createThemeManager.lastCall.args, [{ options: chart._options, themeSection: "pie", fontFields: [
+            "legend.font",
+            "legend.title.font",
+            "legend.title.subtitle.font",
+            "commonSeriesSettings.label.font",
+            "export.font",
+            "title.font",
+            "title.subtitle.font",
+            "tooltip.font",
+            "loadingIndicator.font"
+        ] }]);
     });
 
     QUnit.test("Creation layoutManager with options", function(assert) {

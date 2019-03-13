@@ -821,7 +821,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         this._simulateOptionChange(changingOption);
         this._itemEventHandler($item, "onItemDeleted", deletedActionArgs, {
             beforeExecute: function() {
-                $item.detach();
+                $item.remove();
             },
             excludeValidators: ["disabled", "readOnly"]
         });

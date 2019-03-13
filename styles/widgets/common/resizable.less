@@ -1,8 +1,6 @@
 @HANDLE_OFFSET: 0px;
 @ONE_SIDE_HANDLE_SIZE: 3px + @HANDLE_OFFSET;
 @TWO_SIDE_HANDLE_SIZE: 6px + @HANDLE_OFFSET;
-@BOTTOM_CORNER_ICON_POSITION: 20px;
-@BOTTOM_CORNER_HANDLE_SIZE: @BOTTOM_CORNER_ICON_POSITION + @HANDLE_OFFSET;
 
 .dx-resizable {
     display: block;
@@ -57,73 +55,41 @@
 }
 
 .dx-resizable-handle-corner-bottom-left,
+.dx-resizable-handle-corner-bottom-right,
 .dx-resizable-handle-corner-top-left,
 .dx-resizable-handle-corner-top-right {
     width: @TWO_SIDE_HANDLE_SIZE;
     height: @TWO_SIDE_HANDLE_SIZE;
 }
 
-.dx-resizable-handle-corner-top-left {
-    left: -@HANDLE_OFFSET;
-    top: -@HANDLE_OFFSET;
-
+.dx-resizable-handle-corner-top-left,
+.dx-resizable-handle-corner-bottom-right {
     cursor: se-resize;
+}
+
+.dx-resizable-handle-corner-top-right,
+.dx-resizable-handle-corner-bottom-left {
+    cursor: ne-resize;
+}
+
+.dx-resizable-handle-corner-top-left,
+.dx-resizable-handle-corner-bottom-left {
+    left: -@HANDLE_OFFSET;
     border-bottom-right-radius: 100%;
 }
 
-.dx-resizable-handle-corner-top-right {
+.dx-resizable-handle-corner-top-right,
+.dx-resizable-handle-corner-bottom-right {
     right: -@HANDLE_OFFSET;
-    top: -@HANDLE_OFFSET;
-
-    cursor: ne-resize;
     border-bottom-left-radius: 100%;
 }
 
-:not(.dx-rtl){
-    & > .dx-resizable-handle-corner-bottom-right {
-        width: @BOTTOM_CORNER_HANDLE_SIZE;
-        height: @BOTTOM_CORNER_HANDLE_SIZE;
-
-        right: -@HANDLE_OFFSET;
-        bottom: -@HANDLE_OFFSET;
-
-        cursor: se-resize;
-        border-top-left-radius: 100%;
-
-        background-position: @BOTTOM_CORNER_ICON_POSITION @BOTTOM_CORNER_ICON_POSITION;
-    }
-
-    & > .dx-resizable-handle-corner-bottom-left {
-        left: -@HANDLE_OFFSET;
-        bottom: -@HANDLE_OFFSET;
-
-        cursor: ne-resize;
-        border-top-right-radius: 100%;
-    }
-
+.dx-resizable-handle-corner-top-left,
+.dx-resizable-handle-corner-top-right {
+    top: -@HANDLE_OFFSET;
 }
 
-.dx-rtl {
-    .dx-resizable-handle-corner-bottom-left {
-        transform: rotate(90deg);
-
-        width: @BOTTOM_CORNER_HANDLE_SIZE;
-        height: @BOTTOM_CORNER_HANDLE_SIZE;
-
-        left: -@HANDLE_OFFSET;
-        bottom: -@HANDLE_OFFSET;
-
-        cursor: ne-resize;
-        border-top-left-radius: 100%;
-
-        background-position: @BOTTOM_CORNER_ICON_POSITION @BOTTOM_CORNER_ICON_POSITION;
-    }
-
-    .dx-resizable-handle-corner-bottom-right {
-        right: -@HANDLE_OFFSET;
-        bottom: -@HANDLE_OFFSET;
-
-        cursor: se-resize;
-        border-top-left-radius: 100%;
-    }
+.dx-resizable-handle-corner-bottom-left,
+.dx-resizable-handle-corner-bottom-right {
+    bottom: -@HANDLE_OFFSET;
 }

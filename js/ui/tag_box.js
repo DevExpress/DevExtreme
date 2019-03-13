@@ -421,12 +421,6 @@ var TagBox = SelectBox.inherit({
             */
 
             /**
-            * @name dxTagBoxOptions.maxLength
-            * @hidden
-            * @inheritdoc
-            */
-
-            /**
             * @name dxTagBoxOptions.onCopy
             * @hidden
             * @action
@@ -922,7 +916,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderTagsCore: function(items) {
-        this._renderInputAddons();
+        this._renderField();
 
         this.option("selectedItems", this._selectedItems.slice());
         this._cleanTags();

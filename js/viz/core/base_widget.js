@@ -8,6 +8,7 @@ var noop = require("../../core/utils/common").noop,
     _stringFormat = require("../../core/utils/string").format,
     _isObject = require("../../core/utils/type").isObject,
     extend = require("../../core/utils/extend").extend,
+    themeManagerModule = require("../core/base_theme_manager"),
 
     _floor = Math.floor,
     DOMComponent = require("../../core/dom_component"),
@@ -186,6 +187,17 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         that._initCore();
         linkTarget && linkTarget.linkAfter();
         that._change(that._initialChanges);
+    },
+
+    _createThemeManager() {
+        return new themeManagerModule.BaseThemeManager(this._getThemeManagerOptions());
+    },
+
+    _getThemeManagerOptions() {
+        return {
+            themeSection: this._themeSection,
+            fontFields: this._fontFields
+        };
     },
 
     _initialChanges: ["LAYOUT", "RESIZE_HANDLER", "THEME", "DISABLED"],

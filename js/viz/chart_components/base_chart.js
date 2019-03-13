@@ -62,7 +62,9 @@ var commonUtils = require("../../core/utils/common"),
         "zoomingMode",
         "scrollingMode",
         "stickyHovering"
-    ];
+    ],
+
+    FONT = "font";
 
 function checkHeightRollingStock(rollingStocks, stubCanvas) {
     var canvasSize = stubCanvas.end - stubCanvas.start,
@@ -334,6 +336,8 @@ var BaseChart = BaseWidget.inherit({
         onZoomEnd: { name: "zoomEnd" }
     },
 
+    _fontFields: ["legend." + FONT, "legend.title." + FONT, "legend.title.subtitle." + FONT, "commonSeriesSettings.label." + FONT],
+
     _rootClassPrefix: "dxc",
 
     _rootClass: "dxc-chart",
@@ -342,11 +346,18 @@ var BaseChart = BaseWidget.inherit({
 
     _themeDependentChanges: ["REFRESH_SERIES_REINIT"],
 
-    _createThemeManager: function() {
-        var option = this.option(),
-            themeManager = new chartThemeManagerModule.ThemeManager(option, this._chartType);
+    _getThemeManagerOptions() {
+        var themeOptions = this.callBase.apply(this, arguments);
 
-        themeManager.setTheme(option.theme, option.rtlEnabled);
+        themeOptions.options = this.option();
+        return themeOptions;
+    },
+
+    _createThemeManager: function() {
+        var chartOption = this.option(),
+            themeManager = new chartThemeManagerModule.ThemeManager(this._getThemeManagerOptions());
+
+        themeManager.setTheme(chartOption.theme, chartOption.rtlEnabled);
         return themeManager;
     },
 
@@ -1294,13 +1305,15 @@ var BaseChart = BaseWidget.inherit({
             }
         });
 
+        that._tracker.clearHover();
+
         _reverseEach(that.series, (index, series) => {
             if(!seriesBasis.some(s => series === s.series)) {
                 that._disposeSeries(index);
                 changedStateSeriesCount++;
             }
         });
-        that._tracker.clearHover();
+
         that.series = [];
 
         changedStateSeriesCount > 0 && that._disposeSeriesFamilies();

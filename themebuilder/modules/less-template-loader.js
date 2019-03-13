@@ -1,6 +1,7 @@
+const LessPluginAutoPrefix = require("less-plugin-autoprefix");
+
 const BOOTSTRAP_SCSS_PATH = "bootstrap/scss/";
 const THEMEBUILDER_LESS_PATH = "devextreme-themebuilder/data/less/";
-
 const SWATCH_SELECTOR_PREFIX = ".dx-swatch-";
 
 const createModifyVars = modifyVars => {
@@ -126,6 +127,7 @@ class LessTemplateLoader {
 
     compileLess(less, modifyVars, metadata) {
         return new Promise((resolve, reject) => {
+            const browsersList = require("../package.json").browserslist;
             let compiledMetadata = {};
             let options = {};
 
@@ -136,19 +138,22 @@ class LessTemplateLoader {
 
             let customOptions = {
                 modifyVars: modifyVars,
-                plugins: [{
-                    install: (_, pluginManager) => {
-                        pluginManager.addPostProcessor(new LessFontPlugin(this.options));
+                plugins: [
+                    new LessPluginAutoPrefix({ browsers: browsersList }),
+                    {
+                        install: (_, pluginManager) => {
+                            pluginManager.addPostProcessor(new LessFontPlugin(this.options));
+                        }
+                    }, {
+                        install: (_, pluginManager) => {
+                            pluginManager.addPreProcessor(new LessMetadataPreCompilerPlugin(metadata, this.swatchSelector, modifyVars));
+                        }
+                    }, {
+                        install: (_, pluginManager) => {
+                            pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(compiledMetadata, this.swatchSelector, this.outColorScheme));
+                        }
                     }
-                }, {
-                    install: (_, pluginManager) => {
-                        pluginManager.addPreProcessor(new LessMetadataPreCompilerPlugin(metadata, this.swatchSelector, modifyVars));
-                    }
-                }, {
-                    install: (_, pluginManager) => {
-                        pluginManager.addPostProcessor(new LessMetadataPostCompilerPlugin(compiledMetadata, this.swatchSelector, this.outColorScheme));
-                    }
-                }]
+                ]
             };
 
             Object.assign(options, customOptions);

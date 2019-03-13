@@ -115,18 +115,19 @@
                     "xy", // XY-diagram
                     "vm", // view-model
 
-                    "amd",        // AMD modules
+                    "amd",          // AMD modules
                     "bing",
-                    "cldr",       // Unicode CLDR Project
-                    "cwd",        // current working directory
-                    "edm",        // Entity Data Model
-                    "eol",        // end of line
-                    "etag",       // HTTP header
-                    "eula",       // EULA
-                    "jsrender",   // JsRender template engine
-                    "hsl",        // HSL color
-                    "hsv",        // HSV color
-                    "iana",       // IANA (time-zone database)
+                    "browserslist", // auto-prefixer browsers list
+                    "cldr",         // Unicode CLDR Project
+                    "cwd",          // current working directory
+                    "edm",          // Entity Data Model
+                    "eol",          // end of line
+                    "etag",         // HTTP header
+                    "eula",         // EULA
+                    "jsrender",     // JsRender template engine
+                    "hsl",          // HSL color
+                    "hsv",          // HSV color
+                    "iana",         // IANA (time-zone database)
                     "ie",
                     "ie11",
                     "ios",

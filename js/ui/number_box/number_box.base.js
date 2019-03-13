@@ -8,17 +8,13 @@ var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
     TextEditor = require("../text_box/ui.text_editor"),
     eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
-    SpinButton = require("./number_box.spin"),
-    messageLocalization = require("../../localization/message");
+    SpinButtons = require("./number_box.spins").default,
+    messageLocalization = require("../../localization/message"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var math = Math;
 
-var WIDGET_CLASS = "dx-numberbox",
-    SPIN_CLASS = "dx-numberbox-spin",
-    SPIN_CONTAINER_CLASS = "dx-numberbox-spin-container",
-    SPIN_TOUCH_FRIENDLY_CLASS = "dx-numberbox-spin-touch-friendly";
-
+var WIDGET_CLASS = "dx-numberbox";
 var FIREFOX_CONTROL_KEYS = ["tab", "del", "backspace", "leftArrow", "rightArrow", "home", "end", "enter"];
 
 var NumberBoxBase = TextEditor.inherit({
@@ -143,6 +139,10 @@ var NumberBoxBase = TextEditor.inherit({
         });
     },
 
+    _getDefaultButtons: function() {
+        return this.callBase().concat([{ name: "spins", Ctor: SpinButtons }]);
+    },
+
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
@@ -230,22 +230,11 @@ var NumberBoxBase = TextEditor.inherit({
 
         var value = this.option("value");
 
-        this._renderInputAddons();
         this.setAria("valuenow", value);
-
         this.option("text", this._input().val());
-    },
+        this._updateButtons();
 
-    _toggleDisabledState: function(value) {
-        if(this._$spinUp) {
-            SpinButton.getInstance(this._$spinUp).option("disabled", value);
-        }
-
-        if(this._$spinDown) {
-            SpinButton.getInstance(this._$spinDown).option("disabled", value);
-        }
-
-        this.callBase.apply(this, arguments);
+        return new Deferred().resolve();
     },
 
     _forceValueRender: function() {
@@ -273,60 +262,6 @@ var NumberBoxBase = TextEditor.inherit({
             "valuemin": this.option("min") || "undefined",
             "valuemax": this.option("max") || "undefined"
         });
-    },
-
-    _renderInputAddons: function() {
-        this.callBase();
-        this._renderSpinButtons();
-    },
-
-    _renderSpinButtons: function() {
-        var spinButtonsVisible = this.option("showSpinButtons");
-
-        this.$element().toggleClass(SPIN_CLASS, spinButtonsVisible);
-        this._toggleTouchFriendlyClass();
-
-        if(!spinButtonsVisible) {
-            this._$spinContainer && this._$spinContainer.remove();
-            this._$spinContainer = null;
-            return;
-        }
-
-        if(!this._$spinContainer) {
-            this._$spinContainer = this._createSpinButtons();
-        }
-
-        this._$spinContainer.prependTo(this._buttonsContainer());
-    },
-
-    _toggleTouchFriendlyClass: function() {
-        this.$element().toggleClass(SPIN_TOUCH_FRIENDLY_CLASS, this.option("showSpinButtons") && this.option("useLargeSpinButtons"));
-    },
-
-    _createSpinButtons: function() {
-        var eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
-        var pointerDownAction = this._createAction(this._spinButtonsPointerDownHandler.bind(this));
-
-        var $spinContainer = $("<div>").addClass(SPIN_CONTAINER_CLASS);
-
-        eventsEngine.off($spinContainer, eventName);
-        eventsEngine.on($spinContainer, eventName, function(e) {
-            pointerDownAction({ event: e });
-        });
-
-        this._$spinUp = $("<div>").appendTo($spinContainer);
-        this._createComponent(this._$spinUp, SpinButton, {
-            direction: "up",
-            onChange: this._spinUpChangeHandler.bind(this)
-        });
-
-        this._$spinDown = $("<div>").appendTo($spinContainer);
-        this._createComponent(this._$spinDown, SpinButton, {
-            direction: "down",
-            onChange: this._spinDownChangeHandler.bind(this)
-        });
-
-        return $spinContainer;
     },
 
     _spinButtonsPointerDownHandler: function() {
@@ -529,14 +464,12 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     reset: function() {
-        this.option("value", null);
-    },
-
-    _clean: function() {
-        delete this._$spinContainer;
-        delete this._$spinUp;
-        delete this._$spinDown;
-        this.callBase();
+        if(this.option("value") === null) {
+            this.option("text", "");
+            this._renderValue();
+        } else {
+            this.option("value", null);
+        }
     },
 
     _optionChanged: function(args) {
@@ -556,10 +489,8 @@ var NumberBoxBase = TextEditor.inherit({
                 this.option("value", this._parseValue(this.option("value")));
                 break;
             case "showSpinButtons":
-                this._renderInputAddons();
-                break;
             case "useLargeSpinButtons":
-                this._toggleTouchFriendlyClass();
+                this._updateButtons(["spins"]);
                 break;
             case "invalidValueMessage":
                 break;

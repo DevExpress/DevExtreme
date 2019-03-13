@@ -2,6 +2,7 @@ import { isDefined } from "../../core/utils/type";
 import { Tooltip } from "../core/tooltip";
 import { extend } from "../../core/utils/extend";
 import { events } from "../components/consts";
+import { patchFontOptions } from "./utils";
 
 const EVENTS_NS = ".annotations";
 const MOVE_EVENT = events["mousemove"] + EVENTS_NS;
@@ -31,29 +32,42 @@ function coreAnnotation(type, options, draw) {
     };
 }
 
-function drawSimpleAnnotation({ x, y }, widget, group) {
-    widget._renderer.circle(x, y, 5).attr({ fill: "red" }).data({ "annotation-data": this }).append(group);
+function simpleAnnotation(options) {
+    return coreAnnotation("simple", options, function({ x, y }, widget, group) {
+        widget._renderer.circle(x, y, 5).attr({ fill: "red" }).data({ "annotation-data": this }).append(group);
+    });
 }
 
-function drawImageAnnotation({ x, y }, widget, group, { width, height, url }) {
-    widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, "center").data({ "annotation-data": this }).append(group);
+function labelAnnotation(options) {
+    return coreAnnotation("label", options, function({ x, y }, widget, group) {
+        widget._renderer.text(options.label.text, x, y).data({ "annotation-data": this }).css(patchFontOptions(options.label.font)).append(group);
+    });
 }
 
-function createAnnotation(itemOptions) {
+function imageAnnotation(options) {
+    const { width, height, url, location } = options.image;
+    return coreAnnotation("image", options, function({ x, y }, widget, group) {
+        widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, location).data({ "annotation-data": this }).append(group);
+    });
+}
+
+function mergeOptions(itemOptions, commonOptions, key) {
+    return extend(true, {}, itemOptions, { [key]: commonOptions }, { [key]: itemOptions[key] });
+}
+
+function createAnnotation(itemOptions, commonOptions) {
     // Choose annotation type and merge common and individual options
-    let draw = drawSimpleAnnotation;
-    let type = "simple";
-
     if(isDefined(itemOptions.image)) {
-        draw = drawImageAnnotation;
-        type = "image";
+        return imageAnnotation(mergeOptions(itemOptions, commonOptions.imageOptions, "image"));
+    } else if(isDefined(itemOptions.label)) {
+        return labelAnnotation(mergeOptions(itemOptions, commonOptions.labelOptions, "label"));
+    } else {
+        return simpleAnnotation(itemOptions);
     }
-
-    return coreAnnotation(type, itemOptions, draw);
 }
 
 export let createAnnotations = function(options) {
-    return options.items.map(itemOptions => createAnnotation(itemOptions));
+    return options.items.map(itemOptions => createAnnotation(itemOptions, options));
 };
 
 ///#DEBUG
@@ -134,7 +148,7 @@ const corePlugin = {
             this._annotations.items = [];
 
             // TODO test theme
-            const options = this._themeManager.getOptions("annotations");
+            const options = this._getOption("annotations");
 
             if(!options || !options.items) {
                 return;
@@ -170,7 +184,8 @@ const corePlugin = {
             isOptionChange: true,
             option: "annotations"
         });
-    }
+    },
+    fontFields: ["annotations.labelOptions.font"]
 };
 
 export const plugins = {

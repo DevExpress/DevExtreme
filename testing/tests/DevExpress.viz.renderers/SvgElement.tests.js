@@ -4704,7 +4704,7 @@ function checkDashStyle(assert, elem, result, style, value) {
 })();
 
 (function TextSvgElement_functionality() {
-    QUnit.module("TextSvgElement", {
+    var textEnvironment = {
         beforeEach: function() {
             var rendererNS = rendererModule;
 
@@ -4809,7 +4809,9 @@ function checkDashStyle(assert, elem, result, style, value) {
                 });
             }
         }
-    });
+    };
+
+    QUnit.module("TextSvgElement", textEnvironment);
 
     QUnit.test("Create text", function(assert) {
         // act
@@ -5728,41 +5730,254 @@ function checkDashStyle(assert, elem, result, style, value) {
 
             assert.strictEqual(hasEllipsis, false);
         });
-    }
 
-    QUnit.test("security of renderer", function(assert) {
-        var withoutClosingTags = this.createText().attr({ text: "text >with <angle brackets > without closing", x: 20, y: 30 }),
-            withClosing = this.createText().attr({ text: "text <with>angle brackets </with >closing", x: 20, y: 30 }),
-            withSimpleMarkup = this.createText().attr({ text: "text with markup1<a class=\"className\"></a>", x: 20, y: 30 }),
-            withSimpleStyleTag = this.createText().attr({ text: '<b href="mref" src="s" onerror="(function(){})()" style="font-size:11px;" >aa</b>', x: 20, y: 30 }),
-            attrWithSpace = this.createText().attr({ text: "<img onerror  =  'function(){}' />" }),
-            mixedQuotes = this.createText().attr({ text: "<b href=\"mref\" src=\"s\" onerror='(function(){})()' >aa</b>", x: 20, y: 30 }),
-            mixedQuotesWithStyle1 = this.createText().attr({
-                text: '<b style="font-size:11px;fill:#767676;font-family:\'Segoe UI\', \'Helvetica Neue\'font-weight:400;cursor:default;" >aa</b>', x: 20, y: 30
-            }),
-            mixedQuotesWithStyle2 = this.createText().attr({
-                text: '<b style=\'font-size:11px;fill:#767676;font-family:"Segoe UI", "Helvetica Neue"font-weight:400;cursor:default;\' src=\'ms\' >aa</b>', x: 20, y: 30
-            }),
-            mixedQuotesWithStyle3 = this.createText().attr({
-                text: "<b style='font-size:11px;fill:#767676;font-family:\"Segoe UI\"; cursor:default;' href='mref'> </b>", x: 20, y: 30
-            }),
-            mixedQuotesWithStyle4 = this.createText().attr({
-                text: "<b src='e' style='font-size:11px;fill:#767676;font-family:\"Segoe UI\", \"Helvetica Neue\";font-weight:400;cursor:default;' >aa</b>", x: 20, y: 30
-            }),
-            withoutQuotes = this.createText().attr({
-                text: "<video src=1 style='font-size:11px;' onerror=alert(1)> </video>", x: 20, y: 30
+
+        QUnit.test("security of renderer", function(assert) {
+            var withoutClosingTags = this.createText().attr({ text: "text >with <angle brackets > without closing", x: 20, y: 30 }),
+                withClosing = this.createText().attr({ text: "text <with>angle brackets </with >closing", x: 20, y: 30 }),
+                withSimpleMarkup = this.createText().attr({ text: "text with markup1<a class=\"className\"></a>", x: 20, y: 30 }),
+                withSimpleStyleTag = this.createText().attr({ text: '<b href="mref" src="s" onerror="(function(){})()" style="font-size:11px;" >aa</b>', x: 20, y: 30 }),
+                attrWithSpace = this.createText().attr({ text: "<img onerror  =  'function(){}' />" }),
+                mixedQuotes = this.createText().attr({ text: "<b href=\"mref\" src=\"s\" onerror='(function(){})()' >aa</b>", x: 20, y: 30 }),
+                mixedQuotesWithStyle1 = this.createText().attr({
+                    text: '<b style="font-size:11px;fill:#767676;font-family:\'Segoe UI\', \'Helvetica Neue\'font-weight:400;cursor:default;" >aa</b>', x: 20, y: 30
+                }),
+                mixedQuotesWithStyle2 = this.createText().attr({
+                    text: '<b style=\'font-size:11px;fill:#767676;font-family:"Segoe UI", "Helvetica Neue"font-weight:400;cursor:default;\' src=\'ms\' >aa</b>', x: 20, y: 30
+                }),
+                mixedQuotesWithStyle3 = this.createText().attr({
+                    text: "<b style='font-size:11px;fill:#767676;font-family:\"Segoe UI\"; cursor:default;' href='mref'> </b>", x: 20, y: 30
+                }),
+                mixedQuotesWithStyle4 = this.createText().attr({
+                    text: "<b src='e' style='font-size:11px;fill:#767676;font-family:\"Segoe UI\", \"Helvetica Neue\";font-weight:400;cursor:default;' >aa</b>", x: 20, y: 30
+                }),
+                withoutQuotes = this.createText().attr({
+                    text: "<video src=1 style='font-size:11px;' onerror=alert(1)> </video>", x: 20, y: 30
+                });
+
+            assert.strictEqual(withoutClosingTags.DEBUG_parsedHtml, "text >with <angle > without closing");
+            assert.strictEqual(withClosing.DEBUG_parsedHtml, "text <with>angle brackets </with >closing");
+            assert.strictEqual(withSimpleMarkup.DEBUG_parsedHtml, "text with markup1<a class=\"className\"></a>");
+            assert.strictEqual(withSimpleStyleTag.DEBUG_parsedHtml, '<b style="font-size:11px;" >aa</b>');
+            assert.strictEqual(attrWithSpace.DEBUG_parsedHtml, "<img />");
+            assert.strictEqual(mixedQuotes.DEBUG_parsedHtml, "<b >aa</b>");
+            assert.strictEqual(mixedQuotesWithStyle1.DEBUG_parsedHtml, "<b style=\"font-size:11px;fill:#767676;font-family:'Segoe UI', 'Helvetica Neue'font-weight:400;cursor:default;\" >aa</b>");
+            assert.strictEqual(mixedQuotesWithStyle2.DEBUG_parsedHtml, '<b style=\'font-size:11px;fill:#767676;font-family:"Segoe UI", "Helvetica Neue"font-weight:400;cursor:default;\' >aa</b>');
+            assert.strictEqual(mixedQuotesWithStyle3.DEBUG_parsedHtml, "<b style='font-size:11px;fill:#767676;font-family:\"Segoe UI\"; cursor:default;' > </b>");
+            assert.strictEqual(mixedQuotesWithStyle4.DEBUG_parsedHtml, "<b style='font-size:11px;fill:#767676;font-family:\"Segoe UI\", \"Helvetica Neue\";font-weight:400;cursor:default;' >aa</b>");
+            assert.strictEqual(withoutQuotes.DEBUG_parsedHtml, "<video style='font-size:11px;' > </video>");
+        });
+
+        QUnit.module("TextSvgElement. Apply text overflow rules", textEnvironment);
+
+        QUnit.test("WordWrap normal", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "<b>There is test text for checking ellipsis with single line<b>" }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "normal"
             });
 
-        assert.strictEqual(withoutClosingTags.DEBUG_parsedHtml, "text >with <angle > without closing");
-        assert.strictEqual(withClosing.DEBUG_parsedHtml, "text <with>angle brackets </with >closing");
-        assert.strictEqual(withSimpleMarkup.DEBUG_parsedHtml, "text with markup1<a class=\"className\"></a>");
-        assert.strictEqual(withSimpleStyleTag.DEBUG_parsedHtml, '<b style="font-size:11px;" >aa</b>');
-        assert.strictEqual(attrWithSpace.DEBUG_parsedHtml, "<img />");
-        assert.strictEqual(mixedQuotes.DEBUG_parsedHtml, "<b >aa</b>");
-        assert.strictEqual(mixedQuotesWithStyle1.DEBUG_parsedHtml, "<b style=\"font-size:11px;fill:#767676;font-family:'Segoe UI', 'Helvetica Neue'font-weight:400;cursor:default;\" >aa</b>");
-        assert.strictEqual(mixedQuotesWithStyle2.DEBUG_parsedHtml, '<b style=\'font-size:11px;fill:#767676;font-family:"Segoe UI", "Helvetica Neue"font-weight:400;cursor:default;\' >aa</b>');
-        assert.strictEqual(mixedQuotesWithStyle3.DEBUG_parsedHtml, "<b style='font-size:11px;fill:#767676;font-family:\"Segoe UI\"; cursor:default;' > </b>");
-        assert.strictEqual(mixedQuotesWithStyle4.DEBUG_parsedHtml, "<b style='font-size:11px;fill:#767676;font-family:\"Segoe UI\", \"Helvetica Neue\";font-weight:400;cursor:default;' >aa</b>");
-        assert.strictEqual(withoutQuotes.DEBUG_parsedHtml, "<video style='font-size:11px;' > </video>");
-    });
+            assert.strictEqual(result, true);
+
+            this.checkTspans(assert, text, [
+                { x: 35, y: 100, text: "There is test" },
+                { x: 35, dy: 12, text: "text for" },
+                { x: 35, dy: 12, text: "checking" },
+                { x: 35, dy: 12, text: "ellipsis with" },
+                { x: 35, dy: 12, text: "single line" }
+            ], { x: 35, y: 100 });
+
+            assert.ok(text.getBBox().width <= 110);
+        });
+
+        QUnit.test("WordWrap normal. Single long word", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "<b>longlonglonglonglong<b>" }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "normal",
+                overflow: "clip"
+            });
+
+            assert.strictEqual(result, true);
+
+            this.checkTspans(assert, text, [
+                { x: 35, y: 100, text: "longlonglonglonglong" },
+            ], { x: 35, y: 100 });
+
+            // TO-DO clip rect
+        });
+
+        QUnit.test("Single line. wordWrap word-break", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "<b>longlonglonglonglonglonglong<b>" }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "word-break"
+            });
+
+            assert.strictEqual(result, true);
+
+            assert.equal(text.element.textContent, "longlonglonglonglonglonglong");
+            assert.equal(text.element.childNodes.length, 2);
+
+            assert.ok(text.getBBox().width <= 110);
+        });
+
+        QUnit.test("Single line. wordWrap normal. overflow clip", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "<b>long longlonglonglonglonglong long<b>" }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "normal",
+                overflow: "clip"
+            });
+
+            assert.strictEqual(result, true);
+
+            this.checkTspans(assert, text, [
+                { x: 35, y: 100, text: "long" },
+                { x: 35, dy: 12, text: "longlonglonglonglonglong" },
+                { x: 35, dy: 12, text: "long" }
+            ], { x: 35, y: 100 });
+
+            assert.ok(text.getBBox().width > 110);
+
+            // TO-DO clip rect
+        });
+
+        QUnit.test("wordWrap normal. overflow ellipsis", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "<b>long longlonglonglonglonglong long<b>" }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "normal",
+                overflow: "ellipsis"
+            });
+
+            assert.strictEqual(result, true);
+
+            assert.ok(text.element.childNodes[1].textContent.indexOf("...") !== -1);
+
+            assert.ok(text.getBBox().width <= 110);
+        });
+
+        QUnit.test("wordWrap normal. overflow hide", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "<b>long longlonglonglonglonglong long<b>" }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "normal",
+                overflow: "hide"
+            });
+
+            assert.strictEqual(result, true);
+            assert.equal(text.getBBox().width, 0);
+        });
+
+        QUnit.test("wordWrap normal. Simple text", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "There is test text for checking ellipsis with single line" }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "normal"
+            });
+
+            assert.strictEqual(result, true);
+
+            this.checkTspans(assert, text, [
+                { x: 35, y: 100, text: "There is test text" },
+                { x: 35, dy: 12, text: "for checking" },
+                { x: 35, dy: 12, text: "ellipsis with" },
+                { x: 35, dy: 12, text: "single line" }
+            ], { x: 35, y: 100 });
+
+            assert.ok(text.getBBox().width <= 110);
+        });
+
+        QUnit.test("Single line. wordWrap none", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "<b>longlonglonglonglonglonglong<b>" }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "none",
+                overflow: "ellipsis"
+            });
+
+            assert.strictEqual(result, true);
+
+            assert.ok(text.element.textContent.indexOf("...") > 0);
+            assert.equal(text.element.childNodes.length, 1);
+
+            assert.ok(text.getBBox().width <= 110);
+        });
+
+        QUnit.test("Complex text. wordWrap normal", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "There <b>is</b> test <b>text for</b> <br/>checking <b>ellipsis</b> with single <i>line</i>" }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "normal",
+                overflow: "ellipsis"
+            });
+
+            assert.strictEqual(result, true);
+
+            this.checkTspans(assert, text, [
+                { x: 35, y: 100, text: "There " },
+                { x: null, y: null, text: "is" },
+                { x: null, y: null, text: " test " },
+                { x: null, y: null, text: "text" },
+                { x: 35, dy: 12, text: "for" },
+                { x: 35, dy: 12, text: "checking " },
+                { x: null, y: null, text: "ellipsis" },
+                { x: 35, dy: 12, text: "with single " },
+                { x: 35, dy: 12, text: "line" },
+
+            ], { x: 35, y: 100 });
+
+            assert.equal(text.element.childNodes[4].style.fontWeight, "bold");
+            assert.equal(text.element.childNodes[5].style.fontWeight, "");
+        });
+
+        QUnit.test("Complex text. wordWrap: none, overflow: ellipsis - remove test next to ellipsis", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "longlonglonglonglong <b>longlonglonglonglong</b>" }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "none",
+                overflow: "ellipsis"
+            });
+
+            assert.strictEqual(result, true);
+
+            assert.equal(text.element.childNodes.length, 1);
+        });
+
+        QUnit.test("Complex text. wordWrap: normal, overflow: ellipsis - wrap word", function(assert) {
+            var text = this.createText().append(this.svg).attr({ x: 35, y: 100, fill: "black", stroke: "black", text: "longlonglonglonglong <b>longlonglonglonglong</b>" }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "normal",
+                overflow: "ellipsis"
+            });
+
+            assert.strictEqual(result, true);
+
+            assert.equal(text.element.childNodes.length, 2);
+        });
+    }
 })();

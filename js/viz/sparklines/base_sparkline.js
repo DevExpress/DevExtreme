@@ -10,7 +10,6 @@ var eventsEngine = require("../../events/core/events_engine"),
 
     eventUtils = require("../../events/utils"),
     wheelEvent = require("../../events/core/wheel"),
-    baseThemeManagerModule = require("../core/base_theme_manager"),
     translator2DModule = require("../translators/translator2d"),
 
     _extend = extend,
@@ -139,13 +138,6 @@ var BaseSparkline = BaseWidget.inherit({
 
     _prepareOptions: function() {
         return _extend(true, {}, this._themeManager.theme(), this.option());
-    },
-
-    _createThemeManager: function() {
-        var themeManager = new baseThemeManagerModule.BaseThemeManager();
-        themeManager._themeSection = this._widgetType;
-        themeManager._fontFields = ["tooltip.font"];
-        return themeManager;
     },
 
     _getTooltipCoords: function() {

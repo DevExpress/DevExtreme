@@ -623,6 +623,8 @@
 @htmleditor-danger-format-active-bg: darken(@button-danger-bg, 10%);
 @htmleditor-success-format-active-bg: darken(@button-success-bg, 10%);
 @htmleditor-variable-bg: fade(@base-accent, 15%);
+@htmleditor-resize-frame-border-color: @base-accent;
+@htmleditor-resize-handle-bg: @base-accent;
 
 // List
 /**
@@ -1999,51 +2001,6 @@
 @scrollbar-button-vertical-increment-bg: url(images/widgets/material/color-schemes/dark/scrollable/scrollbar-vertical-arrow-down.png) no-repeat;
 @colorbox-preview-empty-bg: url(images/widgets/material/color-schemes/dark/colorbox/nocolor.png);
 @loadindicator-background-image: url(images/widgets/material/color-schemes/dark/loader64.gif);
-
-
-// SPA
-
-// Desktop
-
-@desktop-layout-main-menu-bg: @base-accent;
-
-/**
-* @name 10. Toolbar major color
-* @type color
-* @group layouts.desktop
-*/
-@desktop-layout-menu-color: lighten(@base-text-color, 73.8%);
-@desktop-layout-menu-selected-bg: @tabs-tab-bg;
-
-/**
-* @name 10. Toolbar item hover background color
-* @type color
-* @group layouts.desktop
-*/
-@desktop-layout-menu-hover-bg: lighten(@desktop-layout-main-menu-bg, 15%);
-
- /**
- * @name 10. Toolbar border color
- * @type color
- * @group layouts.desktop
- */
-@desktop-layout-toolbar-border-color: @base-border-color;
-
-/**
-* @name 10. Copyright text color
-* @type color
-* @group layouts.desktop
-*/
-@desktop-layout-copyright-color: lighten(@base-text-color, 30.5%);
-
-// Master-detail
-
-/**
-* @name 10. Splitter color
-* @type color
-* @group layouts.split
-*/
-@desktop-splitlayout-border-color: @desktop-layout-toolbar-border-color;
 
 // Fieldset
 

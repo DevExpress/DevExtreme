@@ -1789,7 +1789,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getGroupTableWidth: function() {
-        return this._$groupTable && this._$groupTable.outerWidth();
+        return this._$groupTable ? this._$groupTable.outerWidth() : 0;
     },
 
     getWorkSpaceLeftOffset: function() {
@@ -2310,11 +2310,19 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getEndViewDate: function() {
         var dateOfLastViewCell = this.getDateOfLastViewCell(),
-            endDateOfLastViewCell = new Date(dateOfLastViewCell.getTime() + this.getCellDuration());
+            endDateOfLastViewCell = this.calculateEndViewDate(dateOfLastViewCell);
 
-        var daylightDiff = this.invoke("getDaylightOffset", dateOfLastViewCell, endDateOfLastViewCell) * toMs("minute") || 0;
+        return this._adjustEndViewDateByDaylightDiff(dateOfLastViewCell, endDateOfLastViewCell);
+    },
 
-        endDateOfLastViewCell = new Date(endDateOfLastViewCell.getTime() - daylightDiff);
+    calculateEndViewDate: function(dateOfLastViewCell) {
+        return new Date(dateOfLastViewCell.getTime() + this.getCellDuration());
+    },
+
+    _adjustEndViewDateByDaylightDiff: function(startDate, endDate) {
+        var daylightDiff = this.invoke("getDaylightOffset", startDate, endDate) * toMs("minute") || 0;
+
+        var endDateOfLastViewCell = new Date(endDate.getTime() - daylightDiff);
 
         return new Date(endDateOfLastViewCell.getTime() - toMs("minute"));
     },

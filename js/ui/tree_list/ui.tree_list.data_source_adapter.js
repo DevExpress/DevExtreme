@@ -9,7 +9,7 @@ import gridCoreUtils from '../grid_core/ui.grid_core.utils';
 import ArrayStore from '../../data/array_store';
 import query from '../../data/query';
 import DataSourceAdapter from '../grid_core/ui.grid_core.data_source_adapter';
-import { Deferred } from '../../core/utils/deferred';
+import { Deferred, when } from '../../core/utils/deferred';
 import { queryByOptions } from '../../data/store_helper';
 
 var DEFAULT_KEY_EXPRESSION = "id";
@@ -98,7 +98,7 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 hasItems,
                 isFullBranch = isFullBranchFilterMode(that);
 
-            if(that._hasItemsGetter && (parentIds || !options.storeLoadOptions.filter)) {
+            if(that._hasItemsGetter && (parentIds || !options.storeLoadOptions.filter || isFullBranch)) {
                 hasItems = that._hasItemsGetter(node.data);
             }
 
@@ -308,41 +308,45 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             }
         },
 
-        _generateParentInfoToLoad: function(data) {
+        _generateInfoToLoad: function(data, needChildren) {
             var that = this,
+                key,
                 keyMap = {},
-                parentIdMap = {},
-                parentIds = [],
+                resultKeyMap = {},
+                resultKeys = [],
+                needToLoad,
                 rootValue = that.option("rootValue"),
                 i;
 
             for(i = 0; i < data.length; i++) {
-                keyMap[that._keyGetter(data[i])] = true;
+                key = needChildren ? that._parentIdGetter(data[i]) : that._keyGetter(data[i]);
+                keyMap[key] = true;
             }
 
             for(i = 0; i < data.length; i++) {
-                var parentId = that._parentIdGetter(data[i]);
-                if(!parentIdMap[parentId] && !keyMap[parentId] && parentId !== rootValue) {
-                    parentIdMap[parentId] = true;
-                    parentIds.push(parentId);
+                key = needChildren ? that._keyGetter(data[i]) : that._parentIdGetter(data[i]);
+                needToLoad = needChildren ? that.isRowExpanded(key) : key !== rootValue;
+
+                if(!keyMap[key] && !resultKeyMap[key] && needToLoad) {
+                    resultKeyMap[key] = true;
+                    resultKeys.push(key);
                 }
             }
 
             return {
-                parentIdMap: parentIdMap,
-                parentIds: parentIds
+                keyMap: resultKeyMap,
+                keys: resultKeys
             };
         },
 
-        _loadParents: function(data, options) {
+        _loadParentsOrChildren: function(data, options, needChildren) {
             var that = this,
                 store,
                 filter,
+                keyExpr,
                 filterLength,
                 needLocalFiltering,
-                parentInfo = that._generateParentInfoToLoad(data),
-                parentIds = parentInfo.parentIds,
-                parentIdMap = parentInfo.parentIdMap,
+                { keys, keyMap } = that._generateInfoToLoad(data, needChildren),
                 d = new Deferred(),
                 isRemoteFiltering = options.remoteOperations.filtering,
                 maxFilterLengthInRequest = that.option("maxFilterLengthInRequest"),
@@ -355,22 +359,31 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 return data.concat(loadedData);
             }
 
-            if(!parentIds.length) {
+            if(!keys.length) {
                 return d.resolve(data);
             }
 
-            var parentIdNodes = parentIds.map(id => this.getNodeByKey(id)).filter(node => node);
+            var cachedNodes = keys.map(id => this.getNodeByKey(id)).filter(node => node);
 
-            if(parentIdNodes.length === parentIds.length) {
-                return that._loadParents(concatLoadedData(parentIdNodes.map(node => node.data)), options);
+            if(cachedNodes.length === keys.length) {
+                if(needChildren) {
+                    cachedNodes = cachedNodes.reduce((result, node) => {
+                        return result.concat(node.children);
+                    }, []);
+                }
+
+                if(cachedNodes.length) {
+                    return that._loadParentsOrChildren(concatLoadedData(cachedNodes.map(node => node.data)), options, needChildren);
+                }
             }
 
-            filter = that._createIdFilter(that.getKeyExpr(), parentIds);
+            keyExpr = needChildren ? that.option("parentIdExpr") : that.getKeyExpr();
+            filter = that._createIdFilter(keyExpr, keys);
             filterLength = encodeURI(JSON.stringify(filter)).length;
 
             if(filterLength > maxFilterLengthInRequest) {
                 filter = function(itemData) {
-                    return parentIdMap[that._keyGetter(itemData)];
+                    return keyMap[that._keyGetter(itemData)];
                 };
 
                 needLocalFiltering = isRemoteFiltering;
@@ -387,13 +400,25 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                     if(needLocalFiltering) {
                         loadedData = query(loadedData).filter(filter).toArray();
                     }
-                    that._loadParents(concatLoadedData(loadedData), options).done(d.resolve).fail(d.reject);
+                    that._loadParentsOrChildren(concatLoadedData(loadedData), options, needChildren).done(d.resolve).fail(d.reject);
                 } else {
                     d.resolve(data);
                 }
             }).fail(d.reject);
 
             return d;
+        },
+
+        _loadParents: function(data, options) {
+            return this._loadParentsOrChildren(data, options);
+        },
+
+        _loadChildrenIfNeed: function(data, options) {
+            if(isFullBranchFilterMode(this)) {
+                return this._loadParentsOrChildren(data, options, true);
+            }
+
+            return when(data);
         },
 
         _updateHasItemsMap: function(options) {
@@ -592,10 +617,12 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                         visibleItems = data;
                     }
                     return that._loadParents(data, options).done(function(data) {
-                        options.data = data;
-                        that._processTreeStructure(options, visibleItems);
-                        callBase.call(that, options);
-                        d.resolve(options.data);
+                        that._loadChildrenIfNeed(data, options).done((data) => {
+                            options.data = data;
+                            that._processTreeStructure(options, visibleItems);
+                            callBase.call(that, options);
+                            d.resolve(options.data);
+                        });
                     }).fail(d.reject);
                 } else {
                     that._processTreeStructure(options);

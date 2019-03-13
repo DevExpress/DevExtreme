@@ -241,6 +241,31 @@ var Widget = DOMComponent.inherit({
         this._extractAnonymousTemplate();
     },
 
+    _clearInnerOptionCache: function(optionContainer) {
+        this[optionContainer + "Cache"] = {};
+    },
+
+    _cacheInnerOptions: function(optionContainer, optionValue) {
+        var cacheName = optionContainer + "Cache";
+        this[cacheName] = extend(this[cacheName], optionValue);
+    },
+
+    _getInnerOptionsCache: function(optionContainer) {
+        return this[optionContainer + "Cache"];
+    },
+
+    _initInnerOptionCache: function(optionContainer) {
+        this._clearInnerOptionCache(optionContainer);
+        this._cacheInnerOptions(optionContainer, this.option(optionContainer));
+    },
+
+    _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
+        this._options[optionsContainer] = extend({}, innerWidget.option());
+        innerWidget.on("optionChanged", function(e) {
+            this._options[optionsContainer] = extend({}, e.component.option());
+        }.bind(this));
+    },
+
     _extractTemplates: function() {
         var templates = this.option("integrationOptions.templates"),
             templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);

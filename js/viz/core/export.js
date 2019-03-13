@@ -662,5 +662,6 @@ export const plugin = {
         proto._optionChangesMap.onExporting = "EXPORT";
         proto._optionChangesMap.onExported = "EXPORT";
         proto._optionChangesMap.onFileSaving = "EXPORT";
-    }
+    },
+    fontFields: ["export.font"]
 };

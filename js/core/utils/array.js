@@ -122,6 +122,14 @@ var merge = function(array1, array2) {
     return array1;
 };
 
+var find = function(array, condition) {
+    for(var i = 0; i < array.length; i++) {
+        if(condition(array[i])) {
+            return array[i];
+        }
+    }
+};
+
 exports.isEmpty = isEmpty;
 exports.wrapToArray = wrapToArray;
 exports.intersection = intersection;
@@ -129,3 +137,4 @@ exports.removeDuplicates = removeDuplicates;
 exports.normalizeIndexes = normalizeIndexes;
 exports.inArray = inArray;
 exports.merge = merge;
+exports.find = find;

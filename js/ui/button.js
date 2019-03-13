@@ -72,7 +72,7 @@ var Button = Widget.inherit({
 
             /**
             * @name dxButtonOptions.onClick
-            * @type function(e)|string
+            * @type function(e)
             * @extends Action
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)

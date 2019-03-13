@@ -1,6 +1,7 @@
 import $ from "jquery";
 
 import Resizing from "ui/html_editor/modules/resizing";
+import devices from "core/devices";
 import { name as clickEvent } from "events/click";
 
 import PointerMock from "../../../helpers/pointerMock.js";
@@ -9,6 +10,7 @@ const RESIZE_FRAME_CLASS = "dx-resize-frame";
 
 const RESIZABLE_HANDLE_RIGHT_CLASS = "dx-resizable-handle-right";
 const RESIZABLE_HANDLE_BOTTOM_CLASS = "dx-resizable-handle-bottom";
+const DX_TOUCH_DEVICE_CLASS = "dx-touch-device";
 
 const IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYGWNgZGT8DwABDQEDEkMQNQAAAABJRU5ErkJggg==";
 const IMAGE_SIZE = 100;
@@ -275,5 +277,33 @@ module("Resizing module", moduleConfig, () => {
 
         assert.strictEqual(frameClientRect.left + BORDER_PADDING_WIDTH, imageClientRect.left, "Frame positioned correctly by the left");
         assert.strictEqual(frameClientRect.top + BORDER_PADDING_WIDTH, imageClientRect.top, "Frame positioned correctly by the top");
+    });
+
+    test("resize frame should have specific class on mobile devices", (assert) => {
+        const currentDevice = devices.current();
+
+        devices.current("iPad");
+        this.options.enabled = true;
+        new Resizing(this.quillMock, this.options);
+
+        const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
+
+        assert.ok($resizeFrame.hasClass(DX_TOUCH_DEVICE_CLASS), "frame has specific class");
+
+        devices.current(currentDevice);
+    });
+
+    test("resize frame shouldn't have specific class on desktop", (assert) => {
+        const currentDevice = devices.current();
+
+        devices.current("desktop");
+        this.options.enabled = true;
+        new Resizing(this.quillMock, this.options);
+
+        const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
+
+        assert.notOk($resizeFrame.hasClass(DX_TOUCH_DEVICE_CLASS), "frame doesn't have specific class");
+
+        devices.current(currentDevice);
     });
 });

@@ -1,17 +1,14 @@
 /* global currentTest, createTestContainer */
 
 var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
     vizMocks = require("../../helpers/vizMocks.js"),
     tooltipModule = require("viz/core/tooltip"),
     BaseWidget = require("viz/core/base_widget"),
     rendererModule = require("viz/core/renderers/renderer"),
-    baseThemeManagerModule = require("viz/core/base_theme_manager"),
     dataValidatorModule = require("viz/components/data_validator"),
     translator2DModule = require("viz/translators/translator2d"),
     seriesModule = require("viz/series/base_series"),
-    dataSourceModule = require("data/data_source/data_source"),
-    themeModule = require("viz/themes");
+    dataSourceModule = require("data/data_source/data_source");
 
 require("viz/sparkline");
 
@@ -638,170 +635,7 @@ QUnit.begin(function() {
         assert.equal(valTranslator.update.lastCall.args[0].maxVisible, 1);
     });
 
-    QUnit.module('Prepare series options', $.extend({}, environment, {
-        getExpectedTheme: function(widget, options) {
-            var themeManager = new baseThemeManagerModule.BaseThemeManager();
-            themeManager.setCallback(noop);
-            themeManager._themeSection = "sparkline";
-            themeManager._fontFields = ["tooltip.font"];
-            themeManager.setTheme(options ? options.theme : null);
-            var expected = $.extend(true, {}, themeManager.theme(), options);
-            $.each(["defaultOptionsRules", "onIncidentOccurred", "onInitialized", "onDisposing", "onOptionChanged", "rtlEnabled", "disabled", "elementAttr", "integrationOptions"], function(_, name) {
-                expected[name] = widget._allOptions[name];
-            });
-            delete expected.size;
-            return expected;
-        },
-        beforeEach: function() {
-            environment.beforeEach.apply(this, arguments);
-        },
-        afterEach: function() {
-            environment.afterEach.apply(this, arguments);
-        }
-    }));
-
-    QUnit.test('Prepare all options when all options are defined', function(assert) {
-        var options = {
-                dataSource: [1],
-                type: 'line',
-                lineColor: 'deepskyblue',
-                lineWidth: 2,
-                areaOpacity: 0.2,
-                size: {
-                    width: 250,
-                    height: 30
-                },
-                margin: {
-                    top: 1,
-                    bottom: 2,
-                    left: 3,
-                    right: 4
-                },
-                argumentField: 'arg',
-                valueField: 'val',
-                showFirstLast: true,
-                showMinMax: true,
-                minColor: 'orangered',
-                maxColor: 'black',
-                firstLastColor: 'gold',
-                pointSize: 4,
-                pointSymbol: 'cross',
-                pointColor: 'pink',
-                winlossThreshold: 5,
-                barPositiveColor: 'blue',
-                barNegativeColor: 'yellow',
-                winColor: 'pink',
-                lossColor: 'green',
-                tooltip: {
-                    paddingLeftRight: 14,
-                    paddingTopBottom: 10,
-                    arrowLength: 10,
-                    enabled: false,
-                    format: 'fixedPoint',
-                    precision: 2,
-                    color: 'gold',
-                    opacity: 0.9,
-                    border: {
-                        color: "#aaaaaa",
-                        opacity: 0.3,
-                        width: 2,
-                        dashStyle: 'dash',
-                        visible: true
-                    },
-                    font: {
-                        color: 'blue',
-                        family: 'Segoe UI',
-                        opacity: 0.5,
-                        size: 14,
-                        weight: 400
-                    },
-                    shadow: {
-                        blur: 2,
-                        color: "#000000",
-                        offsetX: 0,
-                        offsetY: 4,
-                        opacity: 0.4
-                    }
-                }
-            },
-            sparkline = this.createSparkline(options);
-
-        delete sparkline._allOptions.size;
-        assert.deepEqual(sparkline._allOptions, this.getExpectedTheme(sparkline, options), 'All sparkline options should be correct');
-        assert.equal(seriesModule.Series.lastCall.args[1].widgetType, "chart");
-    });
-
-    QUnit.test('Prepare all options when all options are not defined', function(assert) {
-        var sparkline = this.createSparkline({});
-
-        delete sparkline._allOptions.size;
-        assert.deepEqual(sparkline._allOptions, this.getExpectedTheme(sparkline, {}), 'All sparkline options should be correct');
-    });
-
-    QUnit.test('Prepare options when theme is object', function(assert) {
-        var sparkline = this.createSparkline({
-            dataSource: [9],
-            theme: {
-                minColor: 'orange'
-            },
-            maxColor: 'blue'
-        });
-
-        delete sparkline._allOptions.size;
-        assert.deepEqual(sparkline._allOptions, this.getExpectedTheme(sparkline, {
-            dataSource: [9],
-            theme: {
-                minColor: 'orange'
-            },
-            maxColor: 'blue'
-        }), 'All sparkline options should be correct');
-    });
-
-    QUnit.test('Customize default theme', function(assert) {
-        var myTheme = {
-            name: 'myTheme',
-            sparkline: {
-                maxColor: 'yellow'
-            }
-        };
-        themeModule.registerTheme(myTheme, 'default');
-
-        var sparkline = this.createSparkline({
-            theme: 'myTheme'
-        });
-
-        delete sparkline._allOptions.size;
-        assert.deepEqual(sparkline._allOptions, this.getExpectedTheme(sparkline, {
-            theme: 'myTheme'
-        }), 'All options should be correct');
-    });
-
-    QUnit.test('Implement custom theme', function(assert) {
-        var myTheme = {
-            name: 'myTheme',
-            sparkline: {
-                maxColor: 'yellow'
-            }
-        };
-
-        themeModule.registerTheme(myTheme);
-
-        var sparkline = this.createSparkline({
-            theme: 'myTheme'
-        });
-
-        delete sparkline._allOptions.size;
-        assert.deepEqual(sparkline._allOptions, this.getExpectedTheme(sparkline, { theme: 'myTheme' }), 'All options should be correct');
-    });
-
-    QUnit.test('Dark theme', function(assert) {
-        var sparkline = this.createSparkline({
-            theme: 'generic.dark'
-        });
-
-        delete sparkline._allOptions.size;
-        assert.deepEqual(sparkline._allOptions, this.getExpectedTheme(sparkline, { theme: 'generic.dark' }), 'All options should be correct');
-    });
+    QUnit.module('Prepare series options', environment);
 
     QUnit.test('Prepare series options when type is incorrect', function(assert) {
         this.createSparkline({ type: 'abc' });

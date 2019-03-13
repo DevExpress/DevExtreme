@@ -16,7 +16,10 @@ var extend = require("../../core/utils/extend").extend,
     _extend = extend,
     vizUtils = require("../core/utils"),
     _map = vizUtils.map,
-    mergeMarginOptions = vizUtils.mergeMarginOptions;
+    mergeMarginOptions = vizUtils.mergeMarginOptions,
+
+    FONT = "font",
+    COMMON_AXIS_SETTINGS = "commonAxisSettings";
 
 function prepareAxis(axisOptions) {
     return _isArray(axisOptions) ? axisOptions.length === 0 ? [{}] : axisOptions : [axisOptions];
@@ -45,6 +48,8 @@ var AdvancedChart = BaseChart.inherit({
             "equalBarWidth": { since: "18.1", message: "Use the 'commonSeriesSettings.ignoreEmptyPoints' or 'series.ignoreEmptyPoints' option instead" }
         });
     },
+
+    _fontFields: [COMMON_AXIS_SETTINGS + ".label." + FONT, COMMON_AXIS_SETTINGS + ".title." + FONT],
 
     _dispose: function() {
         var that = this,

@@ -5,50 +5,45 @@ import { extend } from "../../core/utils/extend";
 import { camelize } from "../../core/utils/inflector";
 
 class ShrinkStrategy extends DrawerStrategy {
-    renderPosition(offset, animate) {
-        super.renderPosition(offset, animate);
 
-        const drawer = this.getDrawerInstance();
-        const direction = drawer.getDrawerPosition();
-        const $panel = $(drawer.content());
-        const defaultAnimationConfig = this._defaultAnimationConfig();
-
-        if(drawer.option("revealMode") === "slide") {
-            const panelOffset = this._getPanelOffset(offset);
-            if(animate) {
-
-                let animationConfig = extend(defaultAnimationConfig, {
-                    $element: $panel,
-                    margin: panelOffset,
-                    duration: drawer.option("animationDuration"),
-                    direction: direction
-                });
-                animation.margin(animationConfig);
-            } else {
-                $panel.css("margin" + camelize(direction, true), panelOffset);
-            }
-        }
-
-        if(drawer.option("revealMode") === "expand") {
-            const size = this._getPanelSize(offset);
-
-            let animationConfig = extend(defaultAnimationConfig, {
-                $element: $panel,
-                size: size,
-                duration: drawer.option("animationDuration"),
-                direction: direction
+    slidePositionRendering(config, offset, animate) {
+        if(animate) {
+            let animationConfig = extend(config.defaultAnimationConfig, {
+                $element: config.$panel,
+                margin: config.panelOffset,
+                duration: this.getDrawerInstance().option("animationDuration"),
+                direction: config.direction
             });
+            animation.margin(animationConfig);
+        } else {
+            config.$panel.css("margin" + camelize(config.direction, true), config.panelOffset);
+        }
+    }
 
-            if(animate) {
-                animation.size(animationConfig);
+    expandPositionRendering(config, offset, animate) {
+        const drawer = this.getDrawerInstance();
+
+        if(animate) {
+            let animationConfig = extend(config.defaultAnimationConfig, {
+                $element: config.$panel,
+                size: config.size,
+                duration: drawer.option("animationDuration"),
+                direction: config.direction
+            });
+            animation.size(animationConfig);
+        } else {
+            if(drawer.isHorizontalDirection()) {
+                $(config.$panel).css("width", config.size);
             } else {
-                if(drawer.isHorizontalDirection()) {
-                    $($panel).css("width", size);
-                } else {
-                    $($panel).css("height", size);
-                }
+                $(config.$panel).css("height", config.size);
             }
         }
+    }
+
+    getPositionRenderingConfig(offset) {
+        return extend(super.getPositionRenderingConfig(offset), {
+            panelOffset: this._getPanelOffset(offset)
+        });
     }
 
     needOrderContent(position, isRtl) {

@@ -17,7 +17,6 @@ var PI_DIV_180 = Math.PI / 180,
     _formatValue = baseGaugeModule.formatValue,
     _compareArrays = baseGaugeModule.compareArrays,
     dxCircularGauge = require("./circular_gauge"),
-    BaseThemeManager = require("../core/base_theme_manager").BaseThemeManager,
     _isArray = Array.isArray,
     vizUtils = require("../core/utils"),
     _convertAngleToRendererSpace = vizUtils.convertAngleToRendererSpace,
@@ -32,6 +31,10 @@ var PI_DIV_180 = Math.PI / 180,
 
 var dxBarGauge = dxBaseGauge.inherit({
     _rootClass: "dxbg-bar-gauge",
+
+    _themeSection: "barGauge",
+
+    _fontFields: ["label.font", "legend.font", "legend.title.font", "legend.title.subtitle.font"],
 
     _initCore: function() {
         var that = this;
@@ -389,7 +392,7 @@ var dxBarGauge = dxBaseGauge.inherit({
             formatOptions = {},
             options = that._options,
             labelFormatOptions = (options.label || {}).format,
-            legendFormatOptions = (options.legend || {}).format;
+            legendFormatOptions = (options.legend || {}).itemTextFormat;
 
         if(legendFormatOptions) {
             formatOptions.format = legendFormatOptions;
@@ -620,11 +623,6 @@ function setAngles(target, angle1, angle2) {
 function compareFloats(value1, value2) {
     return _abs(value1 - value2) < 0.0001;
 }
-
-dxBarGauge.prototype._factory.ThemeManager = BaseThemeManager.inherit({
-    _themeSection: "barGauge",
-    _fontFields: ["label.font", "title.font", "tooltip.font", "loadingIndicator.font", "export.font", "legend.font", "legend.title.font", "legend.title.subtitle.font"]
-});
 
 registerComponent("dxBarGauge", dxBarGauge);
 
