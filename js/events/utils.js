@@ -156,7 +156,8 @@ const needSkipEvent = (e) => {
     }
     if(e.type === 'dxmousewheel') {
         const isContentEditableFocused = target.isContentEditable && $target.closest("div[contenteditable='true']").is(':focus');
-        return $target.is("input[type='number'], textarea, select") && $target.is(':focus') || isContentEditableFocused;
+        const isInputFocused = $target.is("input[type='number'], textarea, select") && $target.is(':focus');
+        return isInputFocused || isContentEditableFocused;
     }
     if(isMouseEvent(e)) {
         return touchInInput || e.which > 1; // only left mouse button
