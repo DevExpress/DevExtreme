@@ -1,20 +1,21 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
-import Widget from "../widget/ui.widget";
-import registerComponent from "../../core/component_registrator";
 import { extend } from "../../core/utils/extend";
 import { Deferred, when } from "../../core/utils/deferred";
+import typeUtils from "../../core/utils/type";
 
-import DataGrid from "../data_grid/ui.data_grid";
-import Button from "../button";
-import CustomStore from "../../data/custom_store";
+import registerComponent from "../../core/component_registrator";
+import Widget from "../widget/ui.widget";
+import notify from "../notify";
+
 import whenSome from "./ui.file_manager.common";
 import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
+import FileManagerDetailsItemList from "./ui.file_manager.item_list.details";
+import FileManagerThumbnailsItemList from "./ui.file_manager.item_list.thumbnails";
 import FileManagerToolbar from "./ui.file_manager.toolbar";
 import FileManagerNameEditorDialog from "./ui.file_manager.dialog.name_editor";
 import FileManagerFolderChooserDialog from "./ui.file_manager.dialog.folder_chooser";
 import FileManagerFileUploader from "./ui.file_manager.file_uploader";
-import notify from "../notify";
 
 import { FileProvider } from "../../file_provider/file_provider";
 import ArrayFileProvider from "../../file_provider/file_provider.array";
@@ -26,9 +27,8 @@ const FILE_MANAGER_CLASS = "dx-filemanager";
 const FILE_MANAGER_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-container";
 const FILE_MANAGER_DIRS_TREE_CLASS = FILE_MANAGER_CLASS + "-dirs-tree";
 const FILE_MANAGER_VIEW_SEPARATOR_CLASS = FILE_MANAGER_CLASS + "-view-separator";
-const FILE_MANAGER_FILES_VIEW_CLASS = FILE_MANAGER_CLASS + "-files-view";
 const FILE_MANAGER_TOOLBAR_CLASS = FILE_MANAGER_CLASS + "-toolbar";
-const FILE_MANAGER_FILE_ACTIONS_BUTTON = FILE_MANAGER_CLASS + "-file-actions-button";
+const FILE_MANAGER_INACTIVE_AREA_CLASS = FILE_MANAGER_CLASS + "-inactive-area";
 
 var FileManager = Widget.inherit({
 
@@ -39,7 +39,9 @@ var FileManager = Widget.inherit({
             delete: this._tryDelete,
             move: this._tryMove,
             copy: this._tryCopy,
-            upload: this._tryUpload
+            upload: this._tryUpload,
+            thumbnails: () => this._switchView("thumbnails"),
+            details: () => this._switchView("details")
         };
 
         this.callBase();
@@ -52,7 +54,6 @@ var FileManager = Widget.inherit({
         this.callBase();
 
         this._provider = this._getFileProvider();
-        this._itemsViewAreaActive = false;
 
         var toolbar = this._createComponent($("<div>"), FileManagerToolbar, {
             "onItemClick": this._onToolbarItemClick.bind(this)
@@ -69,15 +70,17 @@ var FileManager = Widget.inherit({
 
         this._fileUploader = this._createFileUploader();
 
-        var $viewContainer = this._createViewContainer();
+        this._$viewContainer = this._createViewContainer();
         this.$element()
             .append(toolbar.$element())
-            .append($viewContainer)
+            .append(this._$viewContainer)
             .append(this._renameItemDialog.$element())
             .append(this._createFolderDialog.$element())
             .append(this._chooseFolderDialog.$element())
             .append(this._fileUploader.$element())
             .addClass(FILE_MANAGER_CLASS);
+
+        this._setItemsViewAreaActive(false);
     },
 
     _createFileUploader: function() {
@@ -86,7 +89,7 @@ var FileManager = Widget.inherit({
             onGetController: this._getFileUploaderController.bind(this),
             onFilesUploaded: function(result) {
                 that._showSuccess("Files uploaded");
-                that._loadFilesToFilesView();
+                that._loadItemListData();
             },
             onErrorOccurred: function(e) {
                 var errorText = that._getErrorText(e.error);
@@ -132,8 +135,8 @@ var FileManager = Widget.inherit({
         $viewSeparator.addClass(FILE_MANAGER_VIEW_SEPARATOR_CLASS);
         $container.append($viewSeparator);
 
-        this._createFilesView();
-        $container.append(this._filesView.$element());
+        this._createItemList();
+        $container.append(this._itemList.$element());
 
         return $container;
     },
@@ -142,55 +145,27 @@ var FileManager = Widget.inherit({
         this._filesTreeView = this._createComponent($("<div>"), FileManagerFilesTreeView, {
             provider: this._provider,
             onCurrentFolderChanged: this._onFilesTreeViewCurrentFolderChanged.bind(this),
-            onClick: function() { this._itemsViewAreaActive = false; }.bind(this)
+            onClick: () => this._setItemsViewAreaActive(false)
         });
         this._filesTreeView.$element().addClass(FILE_MANAGER_DIRS_TREE_CLASS);
     },
 
-    _createFilesView: function() {
+    _createItemList: function(viewMode) {
+        var itemListOptions = this.option("itemList");
         var selectionOptions = this.option("selection");
 
-        var that = this;
-        this._filesView = this._createComponent($("<div>"), DataGrid, {
-            hoverStateEnabled: true,
-            selection: {
-                mode: selectionOptions.mode
-            },
-            allowColumnResizing: true,
-            columns: [
-                {
-                    dataField: "name",
-                    minWidth: 200,
-                    width: "60%",
-                    cellTemplate: function(container, options) {
-                        var button = that._createComponent($("<div>"), Button, {
-                            text: "&vellip;",
-                            template: function(e) {
-                                return $("<i />").html("&vellip;");
-                            }
-                        });
-                        button.$element().addClass(FILE_MANAGER_FILE_ACTIONS_BUTTON);
+        var options = {
+            selectionMode: selectionOptions.mode,
+            onGetItems: this._getItemListItems.bind(this),
+            onError: this._showError.bind(this),
+            getItemThumbnail: this._getItemThumbnail.bind(this)
+        };
 
-                        container.append(options.data.name, button.$element());
-                    }
-                },
-                {
-                    dataField: "lastWriteTime",
-                    minWidth: 200,
-                    width: "20%"
-                },
-                {
-                    dataField: "length",
-                    minWidth: 100,
-                    width: "10%"
-                }
-            ]
-        });
-        this._loadFilesToFilesView();
-        this._filesView.$element().addClass(FILE_MANAGER_FILES_VIEW_CLASS);
+        viewMode = viewMode || itemListOptions.mode;
+        var widgetClass = viewMode === "thumbnails" ? FileManagerThumbnailsItemList : FileManagerDetailsItemList;
+        this._itemList = this._createComponent($("<div>"), widgetClass, options);
 
-        var onClickHandler = () => { this._itemsViewAreaActive = true; };
-        eventsEngine.on(this._filesView.$element(), "click", onClickHandler.bind(this));
+        eventsEngine.on(this._itemList.$element(), "click", this._onItemListClick.bind(this));
     },
 
     _createEnterNameDialog: function(title, buttonText) {
@@ -213,11 +188,38 @@ var FileManager = Widget.inherit({
     },
 
     _onFilesTreeViewCurrentFolderChanged: function(e) {
-        this._loadFilesToFilesView();
+        this._loadItemListData();
     },
 
     _onToolbarItemClick: function(buttonName) {
         this.executeCommand(buttonName);
+    },
+
+    _setItemsViewAreaActive: function(active) {
+        if(this._itemsViewAreaActive === active) return;
+
+        this._itemsViewAreaActive = active;
+
+        var $activeArea = null;
+        var $inactiveArea = null;
+        if(active) {
+            $activeArea = this._itemList.$element();
+            $inactiveArea = this._filesTreeView.$element();
+        } else {
+            $activeArea = this._filesTreeView.$element();
+            $inactiveArea = this._itemList.$element();
+        }
+
+        $activeArea.removeClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
+        $inactiveArea.addClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
+    },
+
+    _switchView: function(viewMode) {
+        this._itemList.dispose();
+        this._itemList.$element().remove();
+
+        this._createItemList(viewMode);
+        this._$viewContainer.append(this._itemList.$element());
     },
 
     _tryRename: function() {
@@ -236,7 +238,7 @@ var FileManager = Widget.inherit({
 
     _tryCreate: function() {
         var item = this.getCurrentFolder();
-        this._itemsViewAreaActive = false;
+        this._setItemsViewAreaActive(false);
 
         this._tryEditAction(
             this._createFolderDialog,
@@ -351,26 +353,24 @@ var FileManager = Widget.inherit({
         }, isSuccess ? "success" : "error", 5000);
     },
 
-    _loadFilesToFilesView: function() {
-        this._filesView.option("dataSource", {
-            "store": this._createFilesViewStore()
-        });
+    _loadItemListData: function() {
+        this._itemList.refreshData();
     },
 
     _refreshData: function() {
         if(this._itemsViewAreaActive) {
-            this._loadFilesToFilesView();
+            this._loadItemListData();
         } else {
             this._filesTreeView.refreshData();
         }
     },
 
-    _createFilesViewStore: function() {
-        return new CustomStore({
-            load: function(loadOptions) {
-                return this._provider.getFiles(this.getCurrentFolderPath());
-            }.bind(this)
-        });
+    _getItemListItems: function() {
+        return this._provider.getFiles(this.getCurrentFolderPath());
+    },
+
+    _onItemListClick: function() {
+        this._setItemsViewAreaActive(true);
     },
 
     _getFileProvider: function() {
@@ -404,8 +404,20 @@ var FileManager = Widget.inherit({
         return new ArrayFileProvider([]);
     },
 
+    _getItemThumbnail: function(item) {
+        var func = this.option("customThumbnail");
+        return typeUtils.isFunction(func) ? func(item) : item.thumbnailUrl;
+    },
+
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
+            /**
+            * @name dxFileManagerOptions.fileSystemStore
+            * @type object
+            * @default null
+            */
+            fileSystemStore: null,
+
             /**
             * @name dxFileManagerOptions.selection
             * @type object
@@ -416,11 +428,21 @@ var FileManager = Widget.inherit({
             },
 
             /**
-            * @name dxFileManagerOptions.fileSystemStore
+            * @name dxFileManagerOptions.itemList
             * @type object
             * @default null
             */
-            fileSystemStore: null
+            itemList: {
+                mode: "details"
+            },
+
+            /**
+            * @name dxTreeViewOptions.customThumbnail
+            * @type function
+            * @type_function_param1 item:dxFileManagerItem
+            * @type_function_return string
+            */
+            customThumbnail: null
         });
     },
 
@@ -430,6 +452,8 @@ var FileManager = Widget.inherit({
         switch(name) {
             case "fileSystemStore":
                 this.repaint();
+                break;
+            case "customThumbnail":
                 break;
             default:
                 this.callBase(args);
@@ -451,7 +475,7 @@ var FileManager = Widget.inherit({
     },
 
     getSelectedItems: function() {
-        return this._filesView.getSelectedRowsData();
+        return this._itemList.getSelectedItems();
     }
 
 });

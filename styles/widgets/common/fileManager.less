@@ -1,4 +1,7 @@
 .dx-filemanager {
+    display: flex;
+    flex-direction: column;
+    
     .dx-filemanager-toolbar {
         display: flex;
     }
@@ -6,6 +9,7 @@
     .dx-filemanager-container {
         display: flex;
         display: -webkit-flex;
+        height: 100%;
     }
 
     .dx-filemanager-dirs-tree {
@@ -47,7 +51,71 @@
     .dx-row.dx-state-hover .dx-filemanager-file-actions-button {
         visibility: visible;
     }
+    
+    .dx-filemanager-thumbnails {
+        width: 100%;
+        height: 100%;
 
+        &.dx-filemanager-inactive-area .dx-filemanager-thumbnails-view-port .dx-filemanager-thumbnails-item.dx-filemanager-item-selected {
+            color: #333;
+            background-color: #E6E6E6;
+        }
+
+        .dx-filemanager-thumbnails-view-port {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            box-sizing: border-box;
+            padding: 5px;
+
+            .dx-filemanager-thumbnails-item {
+                float: left;
+                text-align: center;
+                cursor: pointer;
+                white-space: nowrap;
+                width: 100px;
+                height: 100px;
+                border: 1px dashed transparent;
+                margin: 5px;
+                box-sizing: border-box;
+
+                &.dx-filemanager-item-selected {
+                    background-color: #337AB7;
+                    color: white;
+                }
+                &.dx-filemanager-item-focused {
+                    border-color: black;
+                }
+                
+                .dx-filemanager-thumbnails-item-content {
+                    overflow: hidden;
+                    padding: 13px 0 10px;
+
+                    .dx-filemanager-thumbnails-item-thumbnail {
+                        border: 0;
+                        width: 48px;
+                        height: 48px;
+                    }
+
+                    .dx-filemanager-thumbnails-item-spacer {
+                        border: 0;
+                        padding: 0;
+                        margin: 0;
+                        height: 10px;
+                        visibility: hidden;
+                    }
+
+                    .dx-filemanager-thumbnails-item-name {
+                        overflow: hidden;
+                        width: 100%;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .dx-filemanager-dialog.dx-filemanager-dialog-folder-chooser,

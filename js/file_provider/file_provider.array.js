@@ -125,6 +125,7 @@ var ArrayFileProvider = FileProvider.inherit({
                 var item = new FileManagerItem(path, entry.name);
                 item.length = entry.length !== undefined ? entry.length : 0;
                 item.lastWriteTime = entry.lastWriteTime !== undefined ? entry.lastWriteTime : new Date();
+                item.thumbnailUrl = entry.thumbnailUrl;
                 item.dataItem = entry; // TODO remove if do not need
                 result.push(item);
             }

@@ -14,6 +14,8 @@ var FileManagerToolbar = Widget.inherit({
         var deleteButton = this._createButton("Delete", "delete");
         var downloadButton = this._createButton("Download", "download");
         var uploadButton = this._createButton("Upload file...", "upload");
+        var thumbnailsButton = this._createButton("Thumbnails", "thumbnails");
+        var detailsButton = this._createButton("Details", "details");
 
         this.$element()
             .append(
@@ -23,7 +25,9 @@ var FileManagerToolbar = Widget.inherit({
                 copyButton.$element(),
                 deleteButton.$element(),
                 downloadButton.$element(),
-                uploadButton.$element()
+                uploadButton.$element(),
+                thumbnailsButton.$element(),
+                detailsButton.$element()
             );
     },
 
