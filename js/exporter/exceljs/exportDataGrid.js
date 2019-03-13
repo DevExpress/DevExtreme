@@ -6,9 +6,7 @@ function exportDataGrid(options) {
         to: { row: 0, column: 0 }
     };
 
-    let columns = dataGrid.getVisibleColumns().filter((item)=>{
-        return item.allowExporting;
-    });
+    let columns = dataGrid.getVisibleColumns().filter(item => item.allowExporting);
 
     if(dataGrid.option("showColumnHeaders") !== false) {
         let headerRow = worksheet.addRow();
