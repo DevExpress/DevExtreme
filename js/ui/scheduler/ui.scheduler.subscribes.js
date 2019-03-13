@@ -58,8 +58,8 @@ const subscribes = {
         if(!dates.length) {
             dates.push(startDate);
         } else {
-            dates.map((date) => {
-                return dateUtils.trimDateByStartDayHour(date, this._getCurrentViewOption("startDayHour"));
+            dates = dates.map((date) => {
+                return dateUtils.roundDateByStartDayHour(date, this._getCurrentViewOption("startDayHour"));
             });
         }
 
@@ -430,7 +430,7 @@ const subscribes = {
             updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));
         }
 
-        dateUtils.trimDateByStartDayHour(updatedStartDate, startDayHour);
+        dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
 
         options.callback(updatedStartDate);
     },
