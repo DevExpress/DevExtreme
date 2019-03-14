@@ -430,7 +430,7 @@ const subscribes = {
             updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));
         }
 
-        dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
+        updatedStartDate = dateUtils.roundDateByStartDayHour(updatedStartDate, startDayHour);
 
         options.callback(updatedStartDate);
     },
