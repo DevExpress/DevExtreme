@@ -498,20 +498,17 @@ _extend(BarWrapper.prototype, {
             var indent = context.textIndent,
                 radius = context.textRadius + indent,
                 x = context.x + radius * cosSin.cos,
-                y = context.y - radius * cosSin.sin,
+                y = context.y - radius * cosSin.sin - context.textY,
                 halfWidth = context.textWidth * 0.5,
-                textHeight = context.textHeight,
-                textY = context.textY;
+                textHeight = context.textHeight;
 
             if(_abs(x - context.x) > indent) {
-                (x < context.x) && (x -= halfWidth);
-                (x > context.x) && (x += halfWidth);
+                x += (x < context.x) ? -halfWidth : halfWidth;
             }
             if(_abs(y - context.y) <= indent) {
-                y -= textY + textHeight * 0.5;
-            } else {
-                (y < context.y) && (y -= textY + textHeight);
-                (y > context.y) && (y -= textY);
+                y -= textHeight * 0.5;
+            } else if(y < context.y) {
+                y -= textHeight;
             }
 
             var text = _formatValue(that._value, context.formatOptions, { index: that.index }),
