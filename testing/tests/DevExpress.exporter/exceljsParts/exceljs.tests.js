@@ -1,17 +1,11 @@
 import $ from "jquery";
-import DataGrid from "ui/data_grid/ui.data_grid";
-
 import { getExcelJS } from "exporter/exceljs/exceljs_importer";
 import { exportDataGrid } from "exporter/exceljs/exportDataGrid";
 
+import "ui/data_grid/ui.data_grid";
+
 import "common.css!";
 import "generic_light.css!";
-
-DataGrid.defaultOptions({
-    options: {
-        loadingTimeout: 0
-    }
-});
 
 QUnit.testStart(() => {
     let markup = '<div id="dataGrid"></div>';
@@ -24,12 +18,10 @@ const ExcelJS = getExcelJS();
 const moduleConfig = {
     beforeEach: () => {
         this.exportDataGrid = exportDataGrid;
-        this.clock = sinon.useFakeTimers();
 
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
     },
     afterEach: () => {
-        this.clock.restore();
     }
 };
 
@@ -80,7 +72,7 @@ QUnit.module("API", moduleConfig, () => {
         assert.equal(this.worksheet.getCell("B1").value, 'f2');
     });
 
-    QUnit.test("Header - visible: false, { caption: f1, visible: false }", (assert) => {
+    QUnit.test("Header - column.visible, { caption: f1, visible: false }", (assert) => {
         let dataGrid = $("#dataGrid").dxDataGrid({
             columns: [ { caption: "f1", visible: false }]
         }).dxDataGrid("instance");
@@ -91,7 +83,7 @@ QUnit.module("API", moduleConfig, () => {
         assert.equal(this.worksheet.actualRowCount, 0);
     });
 
-    QUnit.test("Header - visible: false, { caption: f1 }, { caption: f2, visible: false }", (assert) => {
+    QUnit.test("Header - column.visible, { caption: f1 }, { caption: f2, visible: false }", (assert) => {
         let dataGrid = $("#dataGrid").dxDataGrid({
             columns: [ { caption: "f1" }, { caption: "f2", visible: false }]
         }).dxDataGrid("instance");
@@ -103,7 +95,7 @@ QUnit.module("API", moduleConfig, () => {
         assert.equal(this.worksheet.getCell("A1").value, 'f1');
     });
 
-    QUnit.test("Header - visible: false, { caption: f1, visible: false }, { caption: f2 }", (assert) => {
+    QUnit.test("Header - column.visible, { caption: f1, visible: false }, { caption: f2 }", (assert) => {
         let dataGrid = $("#dataGrid").dxDataGrid({
             columns: [ { caption: "f1", visible: false }, { caption: "f2" }]
         }).dxDataGrid("instance");
@@ -219,11 +211,10 @@ QUnit.module("API", moduleConfig, () => {
     QUnit.test("Data - 2 column & 2 rows", (assert) => {
         const done = assert.async();
 
-        let dataGrid = $("#dataGrid").dxDataGrid({
-            dataSource: [{ f1: "1", f2: "2" }]
+        var dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: [{ f1: "1", f2: "2" }],
+            loadingTimeout: undefined
         }).dxDataGrid("instance");
-
-        this.clock.tick();
 
         this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
             assert.equal(this.worksheet.actualColumnCount, 2);
@@ -232,8 +223,6 @@ QUnit.module("API", moduleConfig, () => {
             assert.deepEqual(this.worksheet.getCell("B2").value, "2");
             done();
         });
-
-        this.clock.tick();
     });
 
     QUnit.test("Data - columns.dataType: string", (assert) => {
@@ -244,10 +233,9 @@ QUnit.module("API", moduleConfig, () => {
                 dataField: "f1",
                 dataType: "string"
             }],
-            dataSource: [{ f1: "1" }]
+            dataSource: [{ f1: "1" }],
+            loadingTimeout: undefined
         }).dxDataGrid("instance");
-
-        this.clock.tick();
 
         this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
             assert.equal(this.worksheet.actualColumnCount, 1);
@@ -256,8 +244,6 @@ QUnit.module("API", moduleConfig, () => {
             assert.equal(typeof this.worksheet.getCell("A2").value, "string");
             done();
         });
-
-        this.clock.tick();
     });
 
     QUnit.test("Data - columns.dataType: number", (assert) => {
@@ -268,10 +254,9 @@ QUnit.module("API", moduleConfig, () => {
                 dataField: "f1",
                 dataType: "number"
             }],
-            dataSource: [{ f1: 1 }]
+            dataSource: [{ f1: 1 }],
+            loadingTimeout: undefined
         }).dxDataGrid("instance");
-
-        this.clock.tick();
 
         this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
             assert.equal(this.worksheet.actualColumnCount, 1);
@@ -280,8 +265,6 @@ QUnit.module("API", moduleConfig, () => {
             assert.equal(typeof this.worksheet.getCell("A2").value, "number");
             done();
         });
-
-        this.clock.tick();
     });
 
     QUnit.test("Data - columns.dataType: boolean", (assert) => {
@@ -292,10 +275,9 @@ QUnit.module("API", moduleConfig, () => {
                 dataField: "f1",
                 dataType: "boolean"
             }],
-            dataSource: [{ f1: true }]
+            dataSource: [{ f1: true }],
+            loadingTimeout: undefined
         }).dxDataGrid("instance");
-
-        this.clock.tick();
 
         this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
             assert.equal(this.worksheet.actualColumnCount, 1);
@@ -304,8 +286,6 @@ QUnit.module("API", moduleConfig, () => {
             assert.equal(typeof this.worksheet.getCell("A2").value, "boolean");
             done();
         });
-
-        this.clock.tick();
     });
 
     QUnit.test("Data - columns.dataType: date", (assert) => {
@@ -317,10 +297,9 @@ QUnit.module("API", moduleConfig, () => {
                 dataField: "f1",
                 dataType: "date"
             }],
-            dataSource: [{ f1: date }]
+            dataSource: [{ f1: date }],
+            loadingTimeout: undefined
         }).dxDataGrid("instance");
-
-        this.clock.tick();
 
         this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
             assert.equal(this.worksheet.actualColumnCount, 1);
@@ -329,8 +308,6 @@ QUnit.module("API", moduleConfig, () => {
             assert.equal(this.worksheet.getCell("A2").type, ExcelJS.ValueType.Date);
             done();
         });
-
-        this.clock.tick();
     });
 
     QUnit.test("Data - columns.dataType: dateTime", (assert) => {
@@ -342,10 +319,9 @@ QUnit.module("API", moduleConfig, () => {
                 dataField: "f1",
                 dataType: "datetime"
             }],
-            dataSource: [{ f1: dateTime }]
+            dataSource: [{ f1: dateTime }],
+            loadingTimeout: undefined
         }).dxDataGrid("instance");
-
-        this.clock.tick();
 
         this.exportDataGrid({ dataGrid: dataGrid, worksheet: this.worksheet }).then(() => {
             assert.equal(this.worksheet.actualColumnCount, 1);
@@ -354,7 +330,5 @@ QUnit.module("API", moduleConfig, () => {
             assert.equal(this.worksheet.getCell("A2").type, ExcelJS.ValueType.Date);
             done();
         });
-
-        this.clock.tick();
     });
 });
