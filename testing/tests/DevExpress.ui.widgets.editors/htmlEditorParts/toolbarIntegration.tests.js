@@ -303,7 +303,7 @@ QUnit.module("Toolbar integration", {
         assert.strictEqual(value, "11px", "SelectBox contain selected value");
     });
 
-    function prepareImageUpdateTest(caretPosition, selectionLength) {
+    function prepareImageUpdateTest(context, caretPosition, selectionLength) {
         return (assert) => {
             const done = assert.async();
             const $container = $("#htmlEditor");
@@ -317,7 +317,13 @@ QUnit.module("Toolbar integration", {
                 }
             }).dxHtmlEditor("instance");
 
-            instance.setSelection(caretPosition, selectionLength);
+            instance.focus();
+
+            setTimeout(() => {
+                instance.setSelection(caretPosition, selectionLength);
+            }, 100);
+
+            context.clock.tick(100);
             $container
                 .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
                 .trigger("dxclick");
@@ -331,13 +337,13 @@ QUnit.module("Toolbar integration", {
         };
     }
 
-    test("image should be correctly updated after change a source and caret placed after", prepareImageUpdateTest(1, 0));
+    test("image should be correctly updated after change a source and caret placed after", prepareImageUpdateTest(this, 1, 0));
 
-    test("image should be correctly updated after change a source and caret placed before an image", prepareImageUpdateTest(0, 0));
+    test("image should be correctly updated after change a source and caret placed before an image", prepareImageUpdateTest(this, 0, 0));
 
-    test("selected image should be correctly updated after change a source and caret placed after", prepareImageUpdateTest(1, 1));
+    test("selected image should be correctly updated after change a source and caret placed after", prepareImageUpdateTest(this, 1, 1));
 
-    test("selected image should be correctly updated after change a source and caret placed before an image", prepareImageUpdateTest(0, 1));
+    test("selected image should be correctly updated after change a source and caret placed before an image", prepareImageUpdateTest(this, 0, 1));
 
     test("image should be correctly updated after change a source and caret placed between two images", (assert) => {
         const done = assert.async();
@@ -357,7 +363,14 @@ QUnit.module("Toolbar integration", {
             }
         }).dxHtmlEditor("instance");
 
-        instance.setSelection(1, 0);
+        instance.focus();
+
+        setTimeout(() => {
+            instance.setSelection(1, 0);
+        }, 100);
+
+        this.clock.tick(100);
+
         $container
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
             .trigger("dxclick");
