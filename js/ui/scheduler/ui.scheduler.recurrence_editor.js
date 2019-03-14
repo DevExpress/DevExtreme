@@ -183,6 +183,7 @@ var RecurrenceEditor = Editor.inherit({
             this._handleDefaults();
         }
 
+        this.option("visible", !!this.option("value"));
         this._renderContainerVisibility(this.option("value"));
     },
 
