@@ -1269,6 +1269,61 @@ QUnit.module("Label overlapping behavior", function(hooks) {
         };
     });
 
+    QUnit.test("Change mode. None -> Hide", function(assert) {
+        this.$container.dxBarGauge({
+            values: [19, 20],
+            resolveLabelOverlapping: "none",
+            animation: {
+                enabled: false
+            }
+        });
+
+        var bBoxes = [
+                // render test
+                { x: 0, y: 0, width: 10, height: 10 },
+
+                // compare second label with first label
+                { x: 3, y: 5, width: 10, height: 10 },
+                { x: 0, y: 0, width: 10, height: 10 }
+            ],
+            i = 0;
+        renderer = new vizMocks.Renderer();
+        renderer.bBoxTemplate = function() {
+            var bBox = bBoxes[i];
+            i++;
+            if(i >= bBoxes.length) {
+                i = 0;
+            }
+
+            return bBox;
+        };
+
+        this.$container.dxBarGauge({
+            resolveLabelOverlapping: "hide"
+        });
+
+        var elements = environment.getBarsGroup.call(this).children;
+        var labels = $.grep(elements, function(element) {
+            if(element.typeOfNode === "text") return element;
+        });
+        var lines = $.grep(elements, function(element) {
+            if(element.typeOfNode === "path") return element;
+        });
+
+        assert.equal(labels.length, 2, "labels count should be correct value");
+        assert.equal(lines.length, 2, "lines and lables should be same count");
+
+        var firstLabelSettings = labels[0]._stored_settings;
+        assert.strictEqual(firstLabelSettings.text, "19.0", "first label should have correct text");
+        assert.strictEqual(firstLabelSettings.visibility, null, "first label should be visible");
+        assert.strictEqual(lines[0]._stored_settings.visibility, null, "first line should be visible");
+
+        var secondLabelSettings = labels[1]._stored_settings;
+        assert.strictEqual(secondLabelSettings.text, "20.0", "second label should have correct text");
+        assert.equal(secondLabelSettings.visibility, "hidden", "second label should be hidden");
+        assert.strictEqual(lines[1]._stored_settings.visibility, "hidden", "second line should be hidden");
+    });
+
 });
 
 QUnit.module("Checking intersection of labels", function() {

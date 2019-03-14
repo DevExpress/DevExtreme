@@ -361,6 +361,7 @@ var dxBarGauge = dxBaseGauge.inherit({
         relativeInnerRadius: "MOSTLY_TOTAL",
         barSpacing: "MOSTLY_TOTAL",
         label: "MOSTLY_TOTAL",
+        resolveLabelOverlapping: "MOSTLY_TOTAL",
         palette: "MOSTLY_TOTAL",
         paletteExtensionMode: "MOSTLY_TOTAL",
         values: "VALUES"
