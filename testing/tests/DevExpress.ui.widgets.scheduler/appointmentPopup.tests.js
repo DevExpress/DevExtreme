@@ -922,6 +922,41 @@ QUnit.test("Clicking on 'Repeat' label should toggle recurrence editor", functio
     assert.ok($recurrenceEditorContainer.is(':hidden'), "Recurrence editor is hidden");
 });
 
+QUnit.test("Clicking on 'Repeat' label should toggle recurrence editor, when recurrence part is opening (T722522) ", function(assert) {
+    var data = new DataSource({
+        store: [{
+            startDate: new Date(2017, 4, 25, 10),
+            endDate: new Date(2017, 4, 25, 12),
+            recurrenceRule: "FREQ=DAILY"
+        }]
+    });
+
+    this.instance.option({
+        startDayHour: 9,
+        view: ["week"],
+        currentView: "week",
+        dataSource: data,
+        currentDate: new Date(2017, 4, 25)
+    });
+
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment").eq(1);
+    $($appointment).trigger("dxdblclick");
+    $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
+
+    var popup = this.instance.getAppointmentPopup(),
+        editorLabel = $(popup.$content()).find(".dx-scheduler-recurrence-switch-item .dx-field-item-label");
+
+    editorLabel.trigger("dxclick");
+
+    var $popupContent = $(".dx-scheduler-appointment-popup .dx-popup-content"),
+        $recurrenceEditorContainer = $popupContent.find(".dx-recurrence-editor-container").eq(0);
+
+    assert.ok($recurrenceEditorContainer.is(':visible'), "Recurrence editor is visible");
+
+    editorLabel.trigger("dxclick");
+    assert.ok($recurrenceEditorContainer.is(':hidden'), "Recurrence editor is hidden");
+});
+
 QUnit.test("Multiple showing appointment popup for recurrence appointments should work correctly", function(assert) {
     this.instance.showAppointmentPopup({
         text: "Appointment 1",
