@@ -8,16 +8,12 @@ const USER_ACTION = "user";
 
 class MentionModule extends PopupModule {
     _getDefaultOptions() {
-        let baseConfig = super._getDefaultOptions();
-
-        const getDisplayExpr = function() {
-            return this.options.displayExpr;
-        }.bind(this);
+        const baseConfig = super._getDefaultOptions();
 
         return extend(baseConfig, {
-            mentionChar: "@",
-            itemTemplate: function(itemData) {
-                return itemData[getDisplayExpr()];
+            marker: "@",
+            itemTemplate: (itemData) => {
+                return this._valueGetter(itemData);
             },
             valueExpr: "this",
             displayExpr: "this"
@@ -40,7 +36,7 @@ class MentionModule extends PopupModule {
     }
 
     _getListConfig(options) {
-        let baseConfig = super._getListConfig(options);
+        const baseConfig = super._getListConfig(options);
 
         return extend(baseConfig, {
             itemTemplate: this.options.itemTemplate
@@ -48,19 +44,19 @@ class MentionModule extends PopupModule {
     }
 
     insertEmbedContent(selectionChangedEvent) {
-        const mentionCharLength = this.options.mentionChar.length;
+        const markerLength = this.options.marker.length;
         const caretPosition = this.getPosition();
-        const startIndex = Math.max(0, caretPosition - mentionCharLength);
+        const startIndex = Math.max(0, caretPosition - markerLength);
         const selectedItem = selectionChangedEvent.component.option("selectedItem");
 
-        let value = {
+        const value = {
             value: this._valueGetter(selectedItem),
             id: this._idGetter(selectedItem),
-            mentionChar: this.options.mentionChar
+            marker: this.options.marker
         };
 
         setTimeout(function() {
-            this.quill.deleteText(startIndex, mentionCharLength);
+            this.quill.deleteText(startIndex, markerLength);
             this.quill.insertEmbed(startIndex, "mention", value);
 
             this.quill.setSelection(startIndex + 1);
@@ -81,18 +77,17 @@ class MentionModule extends PopupModule {
             return;
         }
 
-        const mentionIndex = insertOperation.indexOf(this.options.mentionChar);
+        const mentionIndex = insertOperation.indexOf(this.options.marker);
 
         if(mentionIndex !== -1) {
             this.savePosition(caret.index);
-            this._popover.option("position", this._popoverPosition);
-            this._popover.show();
+            this._popup.option("position", this._popupPosition);
+            this._popup.show();
         }
     }
 
-    get _popoverPosition() {
-        const { index } = this.getPosition();
-        const mentionBounds = this.quill.getBounds(index);
+    get _popupPosition() {
+        const mentionBounds = this.quill.getBounds(this.getPosition() - 1);
         const rootRect = this.quill.root.getBoundingClientRect();
 
         return {
@@ -101,11 +96,11 @@ class MentionModule extends PopupModule {
                 h: mentionBounds.left,
                 v: mentionBounds.bottom - rootRect.height
             },
-            my: "top center",
+            my: "top left",
             at: "bottom left",
             collision: {
                 y: "flip",
-                x: "none"
+                x: "flipfit"
             }
         };
     }

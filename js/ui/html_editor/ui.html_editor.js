@@ -89,6 +89,7 @@ const HtmlEditor = Editor.inherit({
             * @default null
             */
             resizing: null,
+            mention: null,
 
             formDialogOptions: null
 
@@ -305,6 +306,7 @@ const HtmlEditor = Editor.inherit({
             variables: this._getModuleConfigByOption("variables"),
             dropImage: this._getBaseModuleConfig(),
             resizing: this._getModuleConfigByOption("resizing"),
+            mention: this._getModuleConfigByOption("mention"),
             clipboard: {
                 matchVisual: false,
                 matchers: [
@@ -414,6 +416,7 @@ const HtmlEditor = Editor.inherit({
             case "placeholder":
             case "variables":
             case "toolbar":
+            case "mention":
                 this._invalidate();
                 break;
             case "valueType": {

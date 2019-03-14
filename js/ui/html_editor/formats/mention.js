@@ -5,28 +5,31 @@ const quill = getQuill();
 const Embed = quill.import("blots/embed");
 import $ from "../../../core/renderer";
 
-const MENTION_DATA_KEY = "MENTION_DATA";
-
 const MENTION_CLASS = "dx-mention";
 
 class Mention extends Embed {
     static create(data) {
-        let node = super.create(),
-            $mentionChar = $("<span>"),
-            $node = $(node);
+        const node = super.create();
+        const $marker = $("<span>");
+        const $node = $(node);
 
-        $mentionChar.text(data.mentionChar);
+        $marker.text(data.marker);
         $node
             .attr("spellcheck", false)
-            .append($mentionChar)
-            .append(data.value)
-            .data(MENTION_DATA_KEY, data);
+            .append($marker)
+            .append(data.value);
+
+        node.dataset.marker = data.marker;
+        node.dataset.mentionValue = data.value;
 
         return node;
     }
 
     static value(node) {
-        return $(node).data(MENTION_DATA_KEY);
+        return {
+            marker: node.dataset.marker,
+            value: node.dataset.mentionValue
+        };
     }
 }
 
