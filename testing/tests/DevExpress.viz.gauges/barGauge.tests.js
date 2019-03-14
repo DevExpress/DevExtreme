@@ -284,7 +284,7 @@ checkPositioning('default', {
     this.checkBars(assert, { x: 200, y: 174, startAngle: -45, endAngle: 225 }, [[144, 113], [109, 78], [74, 43]], [[225, 198], [225, 117], [225, 9]]);
     this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 },
         [[113, -108], [78, -27], [43, 81]],
-        [[33, 220], [120, 16], [374, 140]],
+        [[34, 223], [116, 16], [372, 136]],
         ['10.0', '40.0', '80.0']);
 });
 
@@ -372,7 +372,7 @@ checkPositioning('labels indent', {
     this.checkBars(assert, { x: 200, y: 174, startAngle: -45, endAngle: 225 }, [[124, 83], [79, 37]], [[225, 139], [225, -15]]);
     this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 },
         [[82.5, -49], [37, 105]],
-        [[68, 55], [370, 212]],
+        [[67, 54], [368, 215]],
         ['32.0', '89.0']);
 });
 
@@ -386,7 +386,7 @@ checkPositioning('labels indent - out of range', {
     this.checkBars(assert, { x: 200, y: 174, startAngle: -45, endAngle: 225 }, [[82, 55], [51, 24]], [[225, 139], [225, -15]]);
     this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 },
         [[55, -49], [24, 105]],
-        [[68, 55], [370, 212]],
+        [[67, 54], [368, 210]],
         ['32.0', '89.0']);
 });
 
@@ -400,7 +400,7 @@ checkPositioning('value is equal to base value / with labels', {
     this.checkBars(assert, { x: 200, y: 174, startAngle: -45, endAngle: 225 }, [[124, 83], [79, 37]], [[144, 144], [144, 117]]);
     this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 },
         [[82.5, -54], [37, -27]],
-        [[58, 67], [120, 16]],
+        [[57, 66], [116, 16]],
         ['30.0', '40.0']);
 });
 
@@ -413,7 +413,7 @@ checkPositioning('connector width', {
     this.checkBars(assert, { x: 200, y: 174, startAngle: -45, endAngle: 225 }, [[144, 96], [92, 43]], [[225, 185], [225, 147]]);
     this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 3 },
         [[95.5, -94], [43, -57]],
-        [[25, 180], [53, 74]],
+        [[27, 180], [53, 72]],
         ['15.0', '29.0']);
 });
 
@@ -443,7 +443,7 @@ checkPositioning('single value', {
     values: 50
 }, function(assert) {
     this.checkBars(assert, { x: 200, y: 174, startAngle: -45, endAngle: 225 }, [[144, 43]], [[225, 90]]);
-    this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 }, [[43, 0]], [[200, -3]], ['50.0']);
+    this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 }, [[43, 0]], [[200, -2]], ['50.0']);
 });
 
 QUnit.test('no values', function(assert) {
@@ -560,6 +560,33 @@ QUnit.test('Some values are not changed', function(assert) {
             done();
         }, this);
     }, this);
+});
+
+QUnit.test('labels on almost straight lines (delta less than indent)', function(assert) {
+    this.$container.dxBarGauge({
+        animation: false,
+        values: [16, 51, 83]
+    });
+
+    this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 },
+        [[113, -92], [78, 3], [43, 89]],
+        [[26, 172], [208, -2], [374, 164]],
+        ['16.0', '51.0', '83.0']);
+});
+
+QUnit.test('labels straight lines (indent = 0)', function(assert) {
+    this.$container.dxBarGauge({
+        animation: false,
+        startValue: 0,
+        endValue: 120,
+        values: [60 - 0.01, 60, 100 - 0.01, 100],
+        label: { indent: 0 }
+    });
+
+    this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 },
+        [[138.25, 0], [108.5, 0], [78.75, 90], [49, 90]],
+        [[190, -2], [200, -2], [374, 174 - 12], [374, 174 - 7]],
+        ['60.0', '60.0', '100.0', '100.0']);
 });
 
 QUnit.module('Colors', $.extend({}, environment, {
