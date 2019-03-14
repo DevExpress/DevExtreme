@@ -207,7 +207,6 @@ namespace StyleCompiler
                 "timeView",
                 "scheduler",
                 "form",
-                "spa",
                 "filterBuilder",
                 "recurrenceEditor",
                 "drawer",

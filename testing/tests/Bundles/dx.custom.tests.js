@@ -8,7 +8,6 @@ QUnit.test("DevExpress namespaces", function(assert) {
     var namespaces = [
         "Color", // from core
 
-        "framework",
         "data",
         "ui",
         "events"
@@ -27,7 +26,6 @@ require("./bundlesParts/events.tests.js");
 require("./bundlesParts/data.tests.js");
 require("./bundlesParts/data.odata.tests.js");
 require("./bundlesParts/animation.tests.js");
-require("./bundlesParts/framework.tests.js");
 require("./bundlesParts/widgets-base.tests.js");
 require("./bundlesParts/widgets-web.tests.js");
 require("./bundlesParts/widgets-mobile.tests.js");

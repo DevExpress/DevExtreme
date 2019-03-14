@@ -1522,273 +1522,6 @@ declare module DevExpress.exporter {
         value?: any;
     }
 }
-declare module DevExpress.framework {
-    /** @name dxAction */
-    /** @deprecated */
-    export type dxAction = ((e: { element?: JQuery, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string | any;
-    /** @name dxCommand.Options */
-    export interface dxCommandOptions extends DOMComponentOptions<dxCommand> {
-        /** @name dxCommand.Options.disabled */
-        disabled?: boolean;
-        /** @name dxCommand.Options.icon */
-        icon?: string;
-        /** @name dxCommand.Options.iconSrc */
-        /** @deprecated */
-        iconSrc?: any;
-        /** @name dxCommand.Options.id */
-        id?: string;
-        /** @name dxCommand.Options.onExecute */
-        onExecute?: ((e: { component?: dxCommand, element?: DevExpress.core.dxElement, model?: any }) => any) | string | any;
-        /** @name dxCommand.Options.renderStage */
-        renderStage?: 'onViewShown' | 'onViewRendering';
-        /** @name dxCommand.Options.title */
-        title?: string;
-        /** @name dxCommand.Options.type */
-        type?: string;
-        /** @name dxCommand.Options.visible */
-        visible?: boolean;
-    }
-    /** @name dxCommand */
-    /** @deprecated */
-    export class dxCommand extends DOMComponent {
-        constructor(element: Element | JQuery, options?: dxCommandOptions);
-        constructor(options: dxCommandOptions);
-        /** @name dxCommand.execute() */
-        execute(): void;
-    }
-    /** @name Router */
-    /** @deprecated */
-    export class Router {
-        /** @name Router.format(obj) */
-        format(obj: any): string;
-        /** @name Router.parse(uri) */
-        parse(uri: string): any;
-        /** @name Router.register(pattern, defaults, constraints) */
-        register(pattern: string, defaults?: any, constraints?: any): void;
-    }
-    /** @name StateManager.Options */
-    export interface StateManagerOptions {
-        /** @name StateManager.Options.storage */
-        storage?: any;
-    }
-    /** @name StateManager */
-    /** @deprecated */
-    export class StateManager {
-        constructor(options?: StateManagerOptions)
-        /** @name StateManager.addStateSource(stateSource) */
-        addStateSource(stateSource: any): void;
-        /** @name StateManager.clearState() */
-        clearState(): void;
-        /** @name StateManager.removeStateSource(stateSource) */
-        removeStateSource(stateSource: any): void;
-        /** @name StateManager.restoreState() */
-        restoreState(): void;
-        /** @name StateManager.saveState() */
-        saveState(): void;
-    }
-    /** @name ViewCache */
-    /** @deprecated */
-    export class ViewCache {
-        /** @name ViewCache.clear() */
-        clear(): void;
-        /** @name ViewCache.getView(key) */
-        getView(key: string): any;
-        /** @name ViewCache.hasView(key) */
-        hasView(key: string): boolean;
-        /** @name EventsMixin.off(eventName) */
-        off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
-        on(events: any): this;
-        /** @name ViewCache.removeView(key) */
-        removeView(key: string): any;
-        /** @name ViewCache.setView(key, viewInfo) */
-        setView(key: string, viewInfo: any): void;
-    }
-    /** @name dxCommandContainer.Options */
-    export interface dxCommandContainerOptions {
-        /** @name dxCommandContainer.Options.id */
-        id?: string;
-    }
-    /** @name dxCommandContainer */
-    /** @deprecated */
-    export class dxCommandContainer {
-        constructor(options?: dxCommandContainerOptions)
-    }
-    /** @name dxView.Options */
-    export interface dxViewOptions {
-        /** @name dxView.Options.disableCache */
-        disableCache?: boolean;
-        /** @name dxView.Options.modal */
-        modal?: boolean;
-        /** @name dxView.Options.name */
-        name?: string;
-        /** @name dxView.Options.orientation */
-        orientation?: 'portrait' | 'landscape';
-        /** @name dxView.Options.pane */
-        pane?: 'master' | 'detail';
-        /** @name dxView.Options.title */
-        title?: string;
-    }
-    /** @name dxView */
-    /** @deprecated */
-    export class dxView {
-        constructor(options?: dxViewOptions)
-    }
-    /** @name dxLayout.Options */
-    export interface dxLayoutOptions {
-        /** @name dxLayout.Options.name */
-        name?: string;
-    }
-    /** @name dxLayout */
-    /** @deprecated */
-    export class dxLayout {
-        constructor(options?: dxLayoutOptions)
-    }
-    /** @name dxViewPlaceholder.Options */
-    export interface dxViewPlaceholderOptions {
-        /** @name dxViewPlaceholder.Options.viewName */
-        viewName?: string;
-    }
-    /** @name dxViewPlaceholder */
-    /** @deprecated */
-    export class dxViewPlaceholder {
-        constructor(options?: dxViewPlaceholderOptions)
-    }
-    /** @name dxTransition.Options */
-    export interface dxTransitionOptions {
-        /** @name dxTransition.Options.animation */
-        animation?: string;
-        /** @name dxTransition.Options.name */
-        name?: string;
-        /** @name dxTransition.Options.type */
-        /** @deprecated */
-        type?: 'slide' | 'fade' | 'overflow';
-    }
-    /** @name dxTransition */
-    /** @deprecated */
-    export class dxTransition {
-        constructor(options?: dxTransitionOptions)
-    }
-    /** @name dxContentPlaceholder.Options */
-    export interface dxContentPlaceholderOptions {
-        /** @name dxContentPlaceholder.Options.animation */
-        animation?: string;
-        /** @name dxContentPlaceholder.Options.contentCssPosition */
-        contentCssPosition?: 'absolute' | 'static';
-        /** @name dxContentPlaceholder.Options.name */
-        name?: string;
-        /** @name dxContentPlaceholder.Options.transition */
-        /** @deprecated */
-        transition?: 'none' | 'slide' | 'fade' | 'overflow';
-    }
-    /** @name dxContentPlaceholder */
-    /** @deprecated */
-    export class dxContentPlaceholder {
-        constructor(options?: dxContentPlaceholderOptions)
-    }
-    /** @name dxContent.Options */
-    export interface dxContentOptions {
-        /** @name dxContent.Options.targetPlaceholder */
-        targetPlaceholder?: string;
-    }
-    /** @name dxContent */
-    /** @deprecated */
-    export class dxContent {
-        constructor(options?: dxContentOptions)
-    }
-}
-declare module DevExpress.framework.html {
-    /** @name HtmlApplication.Options */
-    export interface HtmlApplicationOptions {
-        /** @name HtmlApplication.Options.animationSet */
-        animationSet?: any;
-        /** @name HtmlApplication.Options.commandMapping */
-        commandMapping?: any;
-        /** @name HtmlApplication.Options.disableViewCache */
-        disableViewCache?: boolean;
-        /** @name HtmlApplication.Options.layoutSet */
-        layoutSet?: string | Array<any>;
-        /** @name HtmlApplication.Options.mode */
-        mode?: 'mobileApp' | 'webSite';
-        /** @name HtmlApplication.Options.namespace */
-        namespace?: any;
-        /** @name HtmlApplication.Options.navigateToRootViewMode */
-        navigateToRootViewMode?: 'keepHistory' | 'resetHistory';
-        /** @name HtmlApplication.Options.navigation */
-        navigation?: Array<dxCommand | dxCommandOptions>;
-        /** @name HtmlApplication.Options.router */
-        router?: any;
-        /** @name HtmlApplication.Options.stateManager */
-        stateManager?: any;
-        /** @name HtmlApplication.Options.stateStorage */
-        stateStorage?: any;
-        /** @name HtmlApplication.Options.templatesVersion */
-        templatesVersion?: string;
-        /** @name HtmlApplication.Options.useViewTitleAsBackText */
-        useViewTitleAsBackText?: boolean;
-        /** @name HtmlApplication.Options.viewCache */
-        viewCache?: any;
-        /** @name HtmlApplication.Options.viewCacheSize */
-        viewCacheSize?: number;
-        /** @name HtmlApplication.Options.viewPort */
-        viewPort?: any;
-    }
-    /** @name HtmlApplication */
-    /** @deprecated */
-    export class HtmlApplication {
-        constructor(options?: HtmlApplicationOptions)
-        /** @name HtmlApplication.viewCache */
-        viewCache: any;
-        /** @name HtmlApplication.router */
-        router: any;
-        /** @name HtmlApplication.navigation */
-        navigation: Array<dxCommand>;
-        /** @name HtmlApplication.stateManager */
-        stateManager: any;
-        /** @name HtmlApplication.back() */
-        back(): void;
-        /** @name HtmlApplication.canBack() */
-        canBack(): boolean;
-        /** @name HtmlApplication.clearState() */
-        clearState(): void;
-        /** @name HtmlApplication.createNavigation(navigationConfig) */
-        createNavigation(navigationConfig: Array<any>): void;
-        /** @name HtmlApplication.getViewTemplate(viewName) */
-        getViewTemplate(viewName: string): JQuery;
-        /** @name HtmlApplication.getViewTemplateInfo(viewName) */
-        getViewTemplateInfo(viewName: string): any;
-        /** @name HtmlApplication.loadTemplates(source) */
-        loadTemplates(source: string | JQuery): Promise<void> & JQueryPromise<void>;
-        /** @name HtmlApplication.navigate(uri) */
-        navigate(uri?: string | any): void;
-        /** @name HtmlApplication.navigate(uri, options) */
-        navigate(uri: string | any, options: { root?: boolean, target?: string, direction?: string, modal?: boolean }): void;
-        /** @name EventsMixin.off(eventName) */
-        off(eventName: string): this;
-        /** @name EventsMixin.off(eventName, eventHandler) */
-        off(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(eventName, eventHandler) */
-        on(eventName: string, eventHandler: Function): this;
-        /** @name EventsMixin.on(events) */
-        on(events: any): this;
-        /** @name HtmlApplication.renderNavigation() */
-        renderNavigation(): void;
-        /** @name HtmlApplication.restoreState() */
-        restoreState(): void;
-        /** @name HtmlApplication.saveState() */
-        saveState(): void;
-        /** @name HtmlApplication.templateContext() */
-        templateContext(): any;
-    }
-    /** @name layoutSets */
-    export var layoutSets: Array<string>;
-    /** @name animationSets */
-    export var animationSets: any;
-}
 declare module DevExpress.ui {
     /** @name dxAccordion.Options */
     export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
@@ -1932,7 +1665,7 @@ declare module DevExpress.ui {
         /** @name dxButton.Options.icon */
         icon?: string;
         /** @name dxButton.Options.onClick */
-        onClick?: ((e: { component?: dxButton, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, validationGroup?: any }) => any) | string;
+        onClick?: ((e: { component?: dxButton, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, validationGroup?: any }) => any);
         /** @name dxButton.Options.stylingMode */
         stylingMode?: 'text' | 'outlined' | 'contained';
         /** @name dxButton.Options.template */
@@ -2578,8 +2311,8 @@ declare module DevExpress.ui {
         getVisibleColumns(headerLevel: number): Array<dxDataGridColumn>;
         /** @name dxDataGrid.getVisibleRows() */
         getVisibleRows(): Array<dxDataGridRowObject>;
-        /** @name dxDataGrid.insertRow() */
         /** @deprecated */
+        /** @name dxDataGrid.insertRow() */
         insertRow(): void;
         /** @name dxDataGrid.isRowExpanded(key) */
         isRowExpanded(key: any): boolean;
@@ -2587,8 +2320,8 @@ declare module DevExpress.ui {
         isRowSelected(data: any): boolean;
         /** @name GridBase.isRowSelected(key) */
         isRowSelected(key: any): boolean;
-        /** @name dxDataGrid.removeRow(rowIndex) */
         /** @deprecated */
+        /** @name dxDataGrid.removeRow(rowIndex) */
         removeRow(rowIndex: number): void;
         /** @name dxDataGrid.totalCount() */
         totalCount(): number;
@@ -2617,13 +2350,13 @@ declare module DevExpress.ui {
         invalidDateMessage?: string;
         /** @name dxDateBox.Options.max */
         max?: Date | number | string;
-        /** @name dxDateBox.Options.maxZoomLevel */
         /** @deprecated */
+        /** @name dxDateBox.Options.maxZoomLevel */
         maxZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /** @name dxDateBox.Options.min */
         min?: Date | number | string;
-        /** @name dxDateBox.Options.minZoomLevel */
         /** @deprecated */
+        /** @name dxDateBox.Options.minZoomLevel */
         minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /** @name dxDateBox.Options.pickerType */
         pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
@@ -3576,8 +3309,8 @@ declare module DevExpress.ui {
         /** @name dxPanorama.Options.title */
         title?: string;
     }
-    /** @name dxPanorama */
     /** @deprecated */
+    /** @name dxPanorama */
     export class dxPanorama extends CollectionWidget {
         constructor(element: Element, options?: dxPanoramaOptions)
         constructor(element: JQuery, options?: dxPanoramaOptions)
@@ -3600,8 +3333,8 @@ declare module DevExpress.ui {
         /** @name dxPivot.Options.swipeEnabled */
         swipeEnabled?: boolean;
     }
-    /** @name dxPivot */
     /** @deprecated */
+    /** @name dxPivot */
     export class dxPivot extends CollectionWidget {
         constructor(element: Element, options?: dxPivotOptions)
         constructor(element: JQuery, options?: dxPivotOptions)
@@ -4033,8 +3766,8 @@ declare module DevExpress.ui {
         onAppointmentDeleted?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
         /** @name dxScheduler.Options.onAppointmentDeleting */
         onAppointmentDeleting?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
-        /** @name dxScheduler.Options.onAppointmentFormCreated */
         /** @deprecated */
+        /** @name dxScheduler.Options.onAppointmentFormCreated */
         onAppointmentFormCreated?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
         /** @name dxScheduler.Options.onAppointmentFormOpening */
         onAppointmentFormOpening?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm }) => any);
@@ -4253,11 +3986,11 @@ declare module DevExpress.ui {
         hoverStateEnabled?: boolean;
         /** @name dxSwitch.Options.name */
         name?: string;
+        /** @deprecated */
         /** @name dxSwitch.Options.offText */
-        /** @deprecated */
         offText?: string;
-        /** @name dxSwitch.Options.onText */
         /** @deprecated */
+        /** @name dxSwitch.Options.onText */
         onText?: string;
         /** @name dxSwitch.Options.switchedOffText */
         switchedOffText?: string;
@@ -4664,8 +4397,8 @@ declare module DevExpress.ui {
         getRootNode(): dxTreeListNode;
         /** @name dxTreeList.getSelectedRowKeys() */
         getSelectedRowKeys(): Array<any>;
-        /** @name dxTreeList.getSelectedRowKeys(leavesOnly) */
         /** @deprecated */
+        /** @name dxTreeList.getSelectedRowKeys(leavesOnly) */
         getSelectedRowKeys(leavesOnly: boolean): Array<any>;
         /** @name dxTreeList.getSelectedRowKeys(mode) */
         getSelectedRowKeys(mode: string): Array<any>;
@@ -5361,8 +5094,8 @@ declare module DevExpress.ui {
     }
     /** @name dxFormButtonItem */
     export interface dxFormButtonItem {
-        /** @name dxFormButtonItem.alignment */
         /** @deprecated */
+        /** @name dxFormButtonItem.alignment */
         alignment?: 'center' | 'left' | 'right';
         /** @name dxFormButtonItem.buttonOptions */
         buttonOptions?: dxButtonOptions;
@@ -6263,8 +5996,8 @@ declare module DevExpress.viz {
         barGroupPadding?: number;
         /** @name dxChart.Options.barGroupWidth */
         barGroupWidth?: number;
-        /** @name dxChart.Options.barWidth */
         /** @deprecated */
+        /** @name dxChart.Options.barWidth */
         barWidth?: number;
         /** @name dxChart.Options.commonAxisSettings */
         commonAxisSettings?: dxChartCommonAxisSettings;
@@ -6280,8 +6013,8 @@ declare module DevExpress.viz {
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) };
         /** @name dxChart.Options.defaultPane */
         defaultPane?: string;
-        /** @name dxChart.Options.equalBarWidth */
         /** @deprecated */
+        /** @name dxChart.Options.equalBarWidth */
         equalBarWidth?: boolean;
         /** @name dxChart.Options.legend */
         legend?: dxChartLegend;
@@ -6313,8 +6046,8 @@ declare module DevExpress.viz {
         rotated?: boolean;
         /** @name dxChart.Options.scrollBar */
         scrollBar?: { visible?: boolean, offset?: number, color?: string, width?: number, opacity?: number, position?: 'bottom' | 'left' | 'right' | 'top' };
-        /** @name dxChart.Options.scrollingMode */
         /** @deprecated */
+        /** @name dxChart.Options.scrollingMode */
         scrollingMode?: 'all' | 'mouse' | 'none' | 'touch';
         /** @name dxChart.Options.series */
         series?: ChartSeries | Array<ChartSeries>;
@@ -6328,15 +6061,15 @@ declare module DevExpress.viz {
         synchronizeMultiAxes?: boolean;
         /** @name dxChart.Options.tooltip */
         tooltip?: dxChartTooltip;
-        /** @name dxChart.Options.useAggregation */
         /** @deprecated */
+        /** @name dxChart.Options.useAggregation */
         useAggregation?: boolean;
         /** @name dxChart.Options.valueAxis */
         valueAxis?: dxChartValueAxis | Array<dxChartValueAxis>;
         /** @name dxChart.Options.zoomAndPan */
         zoomAndPan?: { valueAxis?: 'both' | 'none' | 'pan' | 'zoom', argumentAxis?: 'both' | 'none' | 'pan' | 'zoom', dragToZoom?: boolean, dragBoxStyle?: { color?: string, opacity?: number }, panKey?: 'alt' | 'ctrl' | 'meta' | 'shift', allowMouseWheel?: boolean, allowTouchGestures?: boolean };
-        /** @name dxChart.Options.zoomingMode */
         /** @deprecated */
+        /** @name dxChart.Options.zoomingMode */
         zoomingMode?: 'all' | 'mouse' | 'none' | 'touch';
     }
     /** @name dxChart.Options.argumentAxis */
@@ -6367,11 +6100,11 @@ declare module DevExpress.viz {
         label?: dxChartArgumentAxisLabel;
         /** @name dxChart.Options.argumentAxis.logarithmBase */
         logarithmBase?: number;
+        /** @deprecated */
         /** @name dxChart.Options.argumentAxis.max */
-        /** @deprecated */
         max?: number | Date | string;
-        /** @name dxChart.Options.argumentAxis.min */
         /** @deprecated */
+        /** @name dxChart.Options.argumentAxis.min */
         min?: number | Date | string;
         /** @name dxChart.Options.argumentAxis.minorTickCount */
         minorTickCount?: number;
@@ -6678,13 +6411,13 @@ declare module DevExpress.viz {
         label?: dxChartValueAxisLabel;
         /** @name dxChart.Options.valueAxis.logarithmBase */
         logarithmBase?: number;
-        /** @name dxChart.Options.valueAxis.max */
         /** @deprecated */
+        /** @name dxChart.Options.valueAxis.max */
         max?: number | Date | string;
         /** @name dxChart.Options.valueAxis.maxAutoBreakCount */
         maxAutoBreakCount?: number;
-        /** @name dxChart.Options.valueAxis.min */
         /** @deprecated */
+        /** @name dxChart.Options.valueAxis.min */
         min?: number | Date | string;
         /** @name dxChart.Options.valueAxis.minorTickCount */
         minorTickCount?: number;
@@ -6862,8 +6595,8 @@ declare module DevExpress.viz {
         barGroupPadding?: number;
         /** @name dxPolarChart.Options.barGroupWidth */
         barGroupWidth?: number;
-        /** @name dxPolarChart.Options.barWidth */
         /** @deprecated */
+        /** @name dxPolarChart.Options.barWidth */
         barWidth?: number;
         /** @name dxPolarChart.Options.commonAxisSettings */
         commonAxisSettings?: dxPolarChartCommonAxisSettings;
@@ -6873,8 +6606,8 @@ declare module DevExpress.viz {
         containerBackgroundColor?: string;
         /** @name dxPolarChart.Options.dataPrepareSettings */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) };
-        /** @name dxPolarChart.Options.equalBarWidth */
         /** @deprecated */
+        /** @name dxPolarChart.Options.equalBarWidth */
         equalBarWidth?: boolean;
         /** @name dxPolarChart.Options.legend */
         legend?: dxPolarChartLegend;

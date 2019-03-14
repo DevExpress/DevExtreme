@@ -40,6 +40,7 @@ const Drawer = Widget.inherit({
             /**
             * @name dxDrawerOptions.opened
             * @type boolean
+            * @fires dxDrawerOptions.onOptionChanged
             * @default false
             */
             opened: false,

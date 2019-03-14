@@ -1383,6 +1383,10 @@ var BaseChart = BaseWidget.inherit({
         this._tracker._hideTooltip();
     },
 
+    clearHover() {
+        this._tracker.clearHover();
+    },
+
     render: function(renderOptions) {
         var that = this;
         that.__renderOptions = renderOptions;

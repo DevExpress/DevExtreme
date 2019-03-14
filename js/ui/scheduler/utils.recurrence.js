@@ -319,7 +319,7 @@ var pushToResult = function(iteration, iterationResult, currentDate, i, config, 
 
 var checkDate = function(currentDate, i, config, verifiedField) {
     if(!dateIsRecurrenceException(currentDate, config.exception)) {
-        var duration = dateUtils.sameDate(currentDate, config.recurrenceEndDate) ? config.recurrenceEndDate.getTime() - currentDate.getTime() : config.duration;
+        var duration = dateUtils.sameDate(currentDate, config.recurrenceEndDate) && config.recurrenceEndDate.getTime() > currentDate.getTime() ? config.recurrenceEndDate.getTime() - currentDate.getTime() : config.duration;
 
         if(currentDate.getTime() >= config.recurrenceStartDate.getTime() && (currentDate.getTime() + duration) > config.min.getTime()) {
             return verifiedField || checkDateByRule(currentDate, [config.dateRules[i]], config.rule["wkst"]);

@@ -4,10 +4,6 @@
 
 var DevExpress = require("../../../bundles/modules/core");
 
-/* Framework (dx.module-framework.js) */
-
-DevExpress.framework = require("../../../bundles/modules/framework");
-
 /* Integrations (dx.module-core.js) */
 
 require("../../../integration/jquery");
