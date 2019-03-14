@@ -35,33 +35,38 @@ exports.FocusController = core.ViewController.inherit((function() {
         },
 
         _focusRowByIndex: function(index) {
-            var that = this,
-                dataController,
-                isVirtualScrolling,
-                focusedRowKey,
-                isLocalIndex,
-                pageIndex;
-
-            if(!this.option("focusedRowEnabled")) return;
+            if(!this.option("focusedRowEnabled")) {
+                return;
+            }
 
             index = index !== undefined ? index : this.option("focusedRowIndex");
 
             if(index < 0) {
                 this._resetFocusedRow();
             } else {
-                dataController = this.getController("data");
-                isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling();
-                pageIndex = Math.floor(index / dataController.pageSize());
-                isLocalIndex = !isVirtualScrolling || dataController.pageIndex() === pageIndex;
-
-                (!isLocalIndex ? dataController.pageIndex(pageIndex) : new Deferred().resolve()).done(function(_) {
-                    if(that._isValidFocusedRowIndex(index)) {
-                        focusedRowKey = dataController.getKeyByRowIndex(index - dataController.getRowIndexOffset());
-                        if(focusedRowKey !== undefined && !that.isRowFocused(focusedRowKey)) {
-                            that.option("focusedRowKey", focusedRowKey);
+                this._focusRowByIndexCore(index);
+            }
+        },
+        _focusRowByIndexCore: function(index) {
+            let dataController = this.getController("data"),
+                isVirtualScrolling = this.getController("keyboardNavigation")._isVirtualScrolling(),
+                pageIndex = Math.floor(index / dataController.pageSize()),
+                visibleRowsCount = dataController.getVisibleRows().length,
+                visiblePagesCount = Math.ceil(visibleRowsCount / dataController.pageSize()),
+                isLocalIndex = !isVirtualScrolling || visiblePagesCount > pageIndex,
+                setKeyByIndex = () => {
+                    if(this._isValidFocusedRowIndex(index)) {
+                        let focusedRowKey = dataController.getKeyByRowIndex(index - dataController.getRowIndexOffset());
+                        if(focusedRowKey !== undefined && !this.isRowFocused(focusedRowKey)) {
+                            this.option("focusedRowKey", focusedRowKey);
                         }
                     }
-                });
+                };
+
+            if(!isLocalIndex) {
+                dataController.pageIndex(pageIndex).done(() => setKeyByIndex());
+            } else {
+                setKeyByIndex();
             }
         },
 
