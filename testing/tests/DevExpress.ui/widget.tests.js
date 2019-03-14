@@ -1559,4 +1559,19 @@ QUnit.module("inner options cache", {}, () => {
         assert.strictEqual(widget.innerComponent.option("someOption"), "Test", "option has been passed");
         assert.strictEqual(widget.innerComponent.option("defaultOption"), "New", "default option has been redefined");
     });
+
+    QUnit.test("the exception should not be shown when the inner component is not exist yet", (assert) => {
+        const widget = new TestWidget("#widget", {
+            innerComponentOptions: {
+                someOption: "Test",
+                defaultOption: "New"
+            }
+        });
+
+        delete widget.innerComponent;
+        widget.option("innerComponentOptions.someOption", "Test2");
+        widget.repaint();
+
+        assert.strictEqual(widget.innerComponent.option("someOption"), "Test2", "option is correct");
+    });
 });

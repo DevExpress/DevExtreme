@@ -265,7 +265,7 @@ var Widget = DOMComponent.inherit({
 
     _innerOptionChanged: function(innerWidget, args) {
         var options = this._getOptionsFromContainer(args);
-        innerWidget.option(options);
+        innerWidget && innerWidget.option(options);
         this._cacheInnerOptions(args.name, options);
     },
 

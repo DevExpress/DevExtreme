@@ -99,9 +99,8 @@ let DropDownButton = Widget.inherit({
              * @type function(e)|string
              * @extends Action
              * @type_function_param1 e:object
-             * @type_function_param1_field4 event:event
-             * @type_function_param1_field5 oldSelectedItem:object
-             * @type_function_param1_field6 selectedItem:object
+             * @type_function_param1_field4 oldSelectedItem:object
+             * @type_function_param1_field5 selectedItem:object
              * @action
              */
             onSelectionChanged: null,
@@ -120,10 +119,16 @@ let DropDownButton = Widget.inherit({
              */
             dataSource: null,
 
+            /**
+             * @name dxDropDownButtonOptions.dropDownOptions
+             * @type dxPopupOptions
+             * @default {}
+             */
+            dropDownOptions: {},
+
             grouped: false,
             groupTemplate: "group",
             buttonGroupOptions: {},
-            dropDownOptions: {}
         });
     },
 
@@ -393,6 +398,12 @@ let DropDownButton = Widget.inherit({
                 break;
             case "onItemClick":
                 this._createItemClickAction();
+                break;
+            case "onActionButtonClick":
+                this._createActionClickAction();
+                break;
+            case "onSelectionChanged":
+                this._createSelectionChangedAction();
                 break;
             case "deferRendering":
                 if(!value && !this._popup) {

@@ -451,3 +451,98 @@ QUnit.module("deferred datasource", {
         assert.strictEqual(getActionButton(dropDownButton).text(), "Center", "value is correct");
     });
 });
+
+QUnit.module("events", {}, () => {
+    QUnit.test("onItemClick event", (assert) => {
+        const handler = sinon.spy();
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            items: [1, 2, 3],
+            onItemClick: handler
+        });
+
+        dropDownButton.open();
+        const $item = getList(dropDownButton).itemElements().eq(0);
+
+        eventsEngine.trigger($item, "dxclick");
+        const e = handler.getCall(0).args[0];
+
+        assert.strictEqual(handler.callCount, 1, "handler was called");
+        assert.strictEqual(e.component, dropDownButton, "component is correct");
+        assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
+        assert.strictEqual(e.event.type, "dxclick", "event is correct");
+        assert.strictEqual(e.itemData, 1, "itemData is correct");
+        assert.strictEqual(e.itemElement, $item.get(0), "itemElement is correct");
+        assert.strictEqual(e.itemIndex, undefined, "itemIndex was removed");
+    });
+
+    QUnit.test("onItemClick event change", (assert) => {
+        const handler = sinon.spy();
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            items: [1, 2, 3]
+        });
+
+        dropDownButton.open();
+        dropDownButton.option("onItemClick", handler);
+
+        const $item = getList(dropDownButton).itemElements().eq(0);
+        eventsEngine.trigger($item, "dxclick");
+
+        assert.strictEqual(handler.callCount, 1, "handler was called");
+    });
+
+    QUnit.test("onActionButtonClick event", (assert) => {
+        const handler = sinon.spy();
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            items: [1, 2, 3],
+            selectedItem: 2,
+            onActionButtonClick: handler
+        });
+
+        const $actionButton = getActionButton(dropDownButton);
+
+        eventsEngine.trigger($actionButton, "dxclick");
+        const e = handler.getCall(0).args[0];
+
+        assert.strictEqual(handler.callCount, 1, "handler was called");
+        assert.strictEqual(e.component, dropDownButton, "component is correct");
+        assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
+        assert.strictEqual(e.event.type, "dxclick", "event is correct");
+        assert.strictEqual(e.selectedItem, 2, "itemData is correct");
+    });
+
+    QUnit.test("onActionButtonClick event change", (assert) => {
+        const handler = sinon.spy();
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            items: [1, 2, 3],
+            selectedItem: 2
+        });
+
+        dropDownButton.option("onActionButtonClick", handler);
+        const $actionButton = getActionButton(dropDownButton);
+
+        eventsEngine.trigger($actionButton, "dxclick");
+
+        assert.strictEqual(handler.callCount, 1, "handler was called");
+    });
+
+    QUnit.test("onSelectionChanged event", (assert) => {
+        const handler = sinon.spy();
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            items: [1, 2, 3],
+            selectedItem: 2,
+            onSelectionChanged: handler
+        });
+
+        dropDownButton.open();
+        const $item = getList(dropDownButton).itemElements().eq(0);
+
+        eventsEngine.trigger($item, "dxclick");
+        const e = handler.getCall(0).args[0];
+
+        assert.strictEqual(handler.callCount, 1, "handler was called");
+        assert.strictEqual(e.component, dropDownButton, "component is correct");
+        assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
+        assert.strictEqual(e.oldSelectedItem, 2, "oldSelectedItem is correct");
+        assert.strictEqual(e.selectedItem, 1, "selectedItem is correct");
+    });
+});
