@@ -79,12 +79,13 @@ var FilterMaker = Class.inherit({
     }
 });
 
-var compareDateWithStartDayHour = function(startDate, endDate, startDayHour, allDay) {
+var compareDateWithStartDayHour = function(startDate, endDate, startDayHour, allDay, severalDays) {
     var startTime = dateUtils.dateTimeFromDecimal(startDayHour);
 
     var result = (startDate.getHours() >= startTime.hours && startDate.getMinutes() >= startTime.minutes) ||
                 (endDate.getHours() === startTime.hours && endDate.getMinutes() > startTime.minutes) ||
                 (endDate.getHours() > startTime.hours) ||
+                severalDays ||
                 allDay;
 
     return result;
@@ -232,6 +233,7 @@ var AppointmentModel = Class.inherit({
                 startDate = new Date(dataAccessors.getter.startDate(appointment)),
                 endDate = new Date(dataAccessors.getter.endDate(appointment)),
                 appointmentTakesAllDay = that.appointmentTakesAllDay(appointment, startDayHour, endDayHour),
+                appointmentTakesSeveralDays = that.appointmentTakesSeveralDays(appointment),
                 isAllDay = dataAccessors.getter.allDay(appointment),
                 useRecurrence = typeUtils.isDefined(dataAccessors.getter.recurrenceRule),
                 recurrenceRule;
@@ -265,7 +267,7 @@ var AppointmentModel = Class.inherit({
                 comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
 
             if(result && startDayHour !== undefined) {
-                result = compareDateWithStartDayHour(comparableStartDate, comparableEndDate, startDayHour, appointmentTakesAllDay);
+                result = compareDateWithStartDayHour(comparableStartDate, comparableEndDate, startDayHour, appointmentTakesAllDay, appointmentTakesSeveralDays);
             }
 
             if(result && endDayHour !== undefined) {
