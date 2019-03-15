@@ -6305,6 +6305,8 @@ declare module DevExpress.viz {
     }
     /** @name dxChart.Options.commonAxisSettings.title */
     export interface dxChartCommonAxisSettingsTitle {
+        /** @name dxChart.Options.commonAxisSettings.title.alignment */
+        alignment?: 'center' | 'left' | 'right';
         /** @name dxChart.Options.commonAxisSettings.title.font */
         font?: Font;
         /** @name dxChart.Options.commonAxisSettings.title.margin */
