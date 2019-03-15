@@ -43,7 +43,7 @@ module.exports = {
     },
 
     getInterval: function() {
-        return Math.round(this._canvasOptions.ratioOfCanvasRange * (this._businessRange.interval || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)));
+        return Math.round(this._canvasOptions.ratioOfCanvasRange * (isFinite(this._businessRange.interval) && this._businessRange.interval || Math.abs(this._canvasOptions.rangeMax - this._canvasOptions.rangeMin)));
     },
 
     zoom: function() { },
