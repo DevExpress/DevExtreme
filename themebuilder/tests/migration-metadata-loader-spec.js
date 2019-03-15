@@ -36,7 +36,7 @@ describe("Migration metadataLoader", () => {
         mock("../data/migration-metadata/migration-metadata", migrationData);
     });
 
-    it("Loadmetadata", () => {
+    it("Load metadata", () => {
         const metadataLoader = new MetadataLoader();
         return metadataLoader.load("generic", "light").then(data => {
             assert.deepEqual(data, expectedMetadata, "add missing constants works");
