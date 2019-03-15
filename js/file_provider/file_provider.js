@@ -57,6 +57,9 @@ var FileManagerItem = Class.inherit({
 
         this.length = 0;
         this.lastWriteTime = new Date();
+
+        this.thumbnailUrl = "";
+        this.tooltipText = "";
     }
 });
 

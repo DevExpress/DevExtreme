@@ -1,7 +1,7 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 
-import FileManagerDialogBase from "./ui.file_manager.dialog.base.js";
+import FileManagerDialogBase from "./ui.file_manager.dialog.js";
 import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 
 const FILE_MANAGER_DIALOG_FOLDER_CHOOSER = "dx-filemanager-dialog-folder-chooser";

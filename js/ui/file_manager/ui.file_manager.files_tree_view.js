@@ -30,10 +30,14 @@ var FileManagerFilesTreeView = Widget.inherit({
     },
 
     _onFilesTreeViewItemClick: function(e) {
-        var newPath = e.itemData.relativeName;
+        this._changeCurrentFolder(e.itemData);
+    },
+
+    _changeCurrentFolder: function(folder) {
+        var newPath = folder.relativeName;
         if(newPath !== this._currentPath) {
             this._currentPath = newPath;
-            this._currentFolder = e.itemData;
+            this._currentFolder = folder;
             this._raiseCurrentFolderChanged();
         }
     },
@@ -53,7 +57,8 @@ var FileManagerFilesTreeView = Widget.inherit({
 
     _initCurrentPathState: function() {
         this._currentPath = "";
-        this._currentFolder = new FileManagerItem("", "");
+        this._rootFolder = new FileManagerItem("", "");
+        this._currentFolder = this._rootFolder;
     },
 
     _getDefaultOptions: function() {
@@ -69,6 +74,20 @@ var FileManagerFilesTreeView = Widget.inherit({
         var currentFolderChanged = this.getCurrentPath() !== "";
         this._initCurrentPathState();
         if(currentFolderChanged) this._raiseCurrentFolderChanged();
+    },
+
+    setCurrentPath: function(path) {
+        var $node = null;
+        var folder = this._rootFolder;
+
+        if(path) {
+            var node = this._filesTreeView._dataAdapter.getNodeByKey(path);
+            $node = this._filesTreeView._getNodeElement(node);
+            folder = node.internalFields.item;
+        }
+
+        this._filesTreeView.option("focusedElement", $node);
+        this._changeCurrentFolder(folder);
     },
 
     getCurrentPath: function() {

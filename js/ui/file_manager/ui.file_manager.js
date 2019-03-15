@@ -1,21 +1,18 @@
 import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import { extend } from "../../core/utils/extend";
-import { Deferred, when } from "../../core/utils/deferred";
 import typeUtils from "../../core/utils/type";
 
 import registerComponent from "../../core/component_registrator";
 import Widget from "../widget/ui.widget";
 import notify from "../notify";
 
-import whenSome from "./ui.file_manager.common";
 import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 import FileManagerDetailsItemList from "./ui.file_manager.item_list.details";
 import FileManagerThumbnailsItemList from "./ui.file_manager.item_list.thumbnails";
 import FileManagerToolbar from "./ui.file_manager.toolbar";
-import FileManagerNameEditorDialog from "./ui.file_manager.dialog.name_editor";
-import FileManagerFolderChooserDialog from "./ui.file_manager.dialog.folder_chooser";
-import FileManagerFileUploader from "./ui.file_manager.file_uploader";
+import FileManagerEditingControl from "./ui.file_manager.editing";
+import FileManagerBreadcrumbs from "./ui.file_manager.breadcrumbs";
 
 import { FileProvider } from "../../file_provider/file_provider";
 import ArrayFileProvider from "../../file_provider/file_provider.array";
@@ -29,17 +26,13 @@ const FILE_MANAGER_DIRS_TREE_CLASS = FILE_MANAGER_CLASS + "-dirs-tree";
 const FILE_MANAGER_VIEW_SEPARATOR_CLASS = FILE_MANAGER_CLASS + "-view-separator";
 const FILE_MANAGER_TOOLBAR_CLASS = FILE_MANAGER_CLASS + "-toolbar";
 const FILE_MANAGER_INACTIVE_AREA_CLASS = FILE_MANAGER_CLASS + "-inactive-area";
+const FILE_MANAGER_EDITING_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-editing-container";
+const FILE_MANAGER_ITEMS_PANEL_CLASS = FILE_MANAGER_CLASS + "-items-panel";
 
 var FileManager = Widget.inherit({
 
     _init: function() {
         this._commands = {
-            rename: this._tryRename,
-            create: this._tryCreate,
-            delete: this._tryDelete,
-            move: this._tryMove,
-            copy: this._tryCopy,
-            upload: this._tryUpload,
             thumbnails: () => this._switchView("thumbnails"),
             details: () => this._switchView("details")
         };
@@ -60,68 +53,33 @@ var FileManager = Widget.inherit({
         });
         toolbar.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS);
 
-        this._renameItemDialog = this._createEnterNameDialog("Rename", "Save");
-        this._createFolderDialog = this._createEnterNameDialog("Folder", "Create");
-        this._chooseFolderDialog = this._createComponent($("<div>"), FileManagerFolderChooserDialog, {
-            provider: this._provider,
-            onClosed: this._onDialogClosed.bind(this)
-        });
-        this._confirmationDialog = this._createConfirmationDialog();
-
-        this._fileUploader = this._createFileUploader();
+        this._createEditing();
 
         this._$viewContainer = this._createViewContainer();
         this.$element()
             .append(toolbar.$element())
             .append(this._$viewContainer)
-            .append(this._renameItemDialog.$element())
-            .append(this._createFolderDialog.$element())
-            .append(this._chooseFolderDialog.$element())
-            .append(this._fileUploader.$element())
+            .append(this._editing.$element())
             .addClass(FILE_MANAGER_CLASS);
 
         this._setItemsViewAreaActive(false);
     },
 
-    _createFileUploader: function() {
-        var that = this;
-        return this._createComponent($("<div>"), FileManagerFileUploader, {
-            onGetController: this._getFileUploaderController.bind(this),
-            onFilesUploaded: function(result) {
-                that._showSuccess("Files uploaded");
-                that._loadItemListData();
+    _createEditing: function() {
+        this._editing = this._createComponent($("<div>"), FileManagerEditingControl, {
+            model: {
+                provider: this._provider,
+                getCurrentFolder: this.getCurrentFolder.bind(this),
+                getSingleSelectedItem: this._getSingleSelectedItem.bind(this),
+                getMultipleSelectedItems: this._getMultipleSelectedItems.bind(this)
             },
-            onErrorOccurred: function(e) {
-                var errorText = that._getErrorText(e.error);
-                var message = `Upload failed for the '${e.fileName}' file: ${errorText}`;
-                that._showError(message);
-            }
+            onSuccess: (message, updateOnlyFiles) => {
+                this._showSuccess(message);
+                this._refreshData(updateOnlyFiles);
+            },
+            onError: (title, details) => this._showError(title + ": " + this._getErrorText(details))
         });
-    },
-
-    _getFileUploaderController: function() {
-        var destinationFolder = this.getCurrentFolder();
-        var that = this;
-        return {
-            chunkSize: this._provider.getFileUploadChunkSize(),
-
-            initiateUpload: function(state) {
-                state.destinationFolder = destinationFolder;
-                return when(that._provider.initiateFileUpload(state));
-            },
-
-            uploadChunk: function(state, chunk) {
-                return when(that._provider.uploadFileChunk(state, chunk));
-            },
-
-            finalizeUpload: function(state) {
-                return when(that._provider.finalizeFileUpload(state));
-            },
-
-            abortUpload: function(state) {
-                return when(that._provider.abortFileUpload(state));
-            }
-        };
+        this._editing.$element().addClass(FILE_MANAGER_EDITING_CONTAINER_CLASS);
     },
 
     _createViewContainer: function() {
@@ -135,8 +93,16 @@ var FileManager = Widget.inherit({
         $viewSeparator.addClass(FILE_MANAGER_VIEW_SEPARATOR_CLASS);
         $container.append($viewSeparator);
 
+        this._createBreadcrumbs();
         this._createItemList();
-        $container.append(this._itemList.$element());
+
+        var $itemsPanel = $("<div>").addClass(FILE_MANAGER_ITEMS_PANEL_CLASS);
+        $itemsPanel.append(
+            this._breadcrumbs.$element(),
+            this._itemList.$element()
+        );
+
+        $container.append($itemsPanel);
 
         return $container;
     },
@@ -168,27 +134,16 @@ var FileManager = Widget.inherit({
         eventsEngine.on(this._itemList.$element(), "click", this._onItemListClick.bind(this));
     },
 
-    _createEnterNameDialog: function(title, buttonText) {
-        return this._createComponent($("<div>"), FileManagerNameEditorDialog, {
-            title: title,
-            buttonText: buttonText,
-            onClosed: this._onDialogClosed.bind(this)
+    _createBreadcrumbs: function() {
+        this._breadcrumbs = this._createComponent($("<div>"), FileManagerBreadcrumbs, {
+            path: "",
+            onPathChanged: path => this.setCurrentPath(path)
         });
-    },
-
-    _createConfirmationDialog: function() {
-        var that = this;
-        return { // TODO implement this dialog
-            show: () => {
-                setTimeout(() => {
-                    that._onDialogClosed({});
-                });
-            }
-        };
     },
 
     _onFilesTreeViewCurrentFolderChanged: function(e) {
         this._loadItemListData();
+        this._breadcrumbs.option("path", this.getCurrentFolderPath());
     },
 
     _onToolbarItemClick: function(buttonName) {
@@ -222,88 +177,6 @@ var FileManager = Widget.inherit({
         this._$viewContainer.append(this._itemList.$element());
     },
 
-    _tryRename: function() {
-        var item = this._getSingleSelectedItem();
-
-        if(!item) return;
-
-        this._tryEditAction(
-            this._renameItemDialog,
-            result => this._provider.renameItem(item, result.name),
-            "Item renamed",
-            info => `Rename operation failed for the ${item.name} item`,
-            item.name
-        );
-    },
-
-    _tryCreate: function() {
-        var item = this.getCurrentFolder();
-        this._setItemsViewAreaActive(false);
-
-        this._tryEditAction(
-            this._createFolderDialog,
-            result => this._provider.createFolder(item, result.name),
-            "Folder created",
-            info => `Create folder operation failed for the ${item.name} parent folder`
-        );
-    },
-
-    _tryDelete: function() {
-        var items = this._getMultipleSelectedItems();
-
-        if(items.length === 0) return;
-
-        this._tryEditAction(
-            this._confirmationDialog,
-            result => this._provider.deleteItems(items),
-            "Items deleted",
-            info => `Delete operation failed for the ${items[info.index].name} item`
-        );
-    },
-
-    _tryMove: function() {
-        var items = this._getMultipleSelectedItems();
-
-        if(items.length === 0) return;
-
-        this._tryEditAction(
-            this._chooseFolderDialog,
-            result => this._provider.moveItems(items, result.folder),
-            "Items moved",
-            info => `Move operation failed for the ${items[info.index].name} item`
-        );
-    },
-
-    _tryCopy: function() {
-        var items = this._getMultipleSelectedItems();
-
-        if(items.length === 0) return;
-
-        this._tryEditAction(
-            this._chooseFolderDialog,
-            result => this._provider.copyItems(items, result.folder),
-            "Items copied",
-            info => `Copy operation failed for the ${items[info.index].name} item`
-        );
-    },
-
-    _tryEditAction: function(dialog, editAction, successMessage, errorMessageAction, dialogArgument) {
-        this._showDialog(dialog, dialogArgument)
-            .then(editAction.bind(this))
-            .then(result => {
-                whenSome(result,
-                    () => {
-                        this._showSuccess(successMessage);
-                        this._refreshData();
-                    },
-                    info => this._showError(errorMessageAction(info) + ": " + this._getErrorText(info.error)));
-            });
-    },
-
-    _tryUpload: function() {
-        this._fileUploader.tryUpload();
-    },
-
     _getSingleSelectedItem: function() {
         if(this._itemsViewAreaActive) {
             var items = this.getSelectedItems();
@@ -316,20 +189,6 @@ var FileManager = Widget.inherit({
 
     _getMultipleSelectedItems: function() {
         return this._itemsViewAreaActive ? this.getSelectedItems() : [ this.getCurrentFolder() ];
-    },
-
-    _showDialog: function(dialog, dialogArgument) {
-        this._dialogDeferred = new Deferred();
-        dialog.show(dialogArgument);
-        return this._dialogDeferred.promise();
-    },
-
-    _onDialogClosed: function(result) {
-        if(result) {
-            this._dialogDeferred.resolve(result);
-        } else {
-            this._dialogDeferred.reject();
-        }
     },
 
     _showSuccess: function(message) {
@@ -357,8 +216,8 @@ var FileManager = Widget.inherit({
         this._itemList.refreshData();
     },
 
-    _refreshData: function() {
-        if(this._itemsViewAreaActive) {
+    _refreshData: function(onlyItems) {
+        if(onlyItems || this._itemsViewAreaActive) {
             this._loadItemListData();
         } else {
             this._filesTreeView.refreshData();
@@ -461,9 +320,16 @@ var FileManager = Widget.inherit({
     },
 
     executeCommand: function(commandName) {
+        var done = this._editing.executeCommand(commandName);
+        if(done) return;
+
         var action = this._commands[commandName];
         if(!action) throw "Incorrect command name.";
         action.call(this);
+    },
+
+    setCurrentPath: function(path) {
+        this._filesTreeView.setCurrentPath(path);
     },
 
     getCurrentFolderPath: function() {

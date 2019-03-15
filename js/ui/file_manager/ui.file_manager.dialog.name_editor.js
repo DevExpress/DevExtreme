@@ -2,7 +2,7 @@ import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 
 import TextBox from "../text_box";
-import FileManagerDialogBase from "./ui.file_manager.dialog.base.js";
+import FileManagerDialogBase from "./ui.file_manager.dialog.js";
 
 const FILE_MANAGER_DIALOG_NAME_EDITOR = "dx-filemanager-dialog-name-editor";
 

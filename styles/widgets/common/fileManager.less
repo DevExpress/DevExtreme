@@ -28,6 +28,12 @@
         background-color: #aad3f3;
     }
 
+    .dx-filemanager-editing-container {
+        position: absolute;
+        top: -5000px;
+        left: -5000px;
+    }
+    
     .dx-filemanager-fileuploader .dx-filemanager-fileuploader-fileinput {
         display: none;
     }
@@ -52,9 +58,17 @@
         visibility: visible;
     }
     
+    .dx-filemanager-items-panel {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
     .dx-filemanager-thumbnails {
         width: 100%;
         height: 100%;
+        overflow: hidden;
 
         &.dx-filemanager-inactive-area .dx-filemanager-thumbnails-view-port .dx-filemanager-thumbnails-item.dx-filemanager-item-selected {
             color: #333;
