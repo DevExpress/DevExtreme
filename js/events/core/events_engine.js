@@ -180,7 +180,7 @@ var getHandlersController = function(element, eventName) {
             if(shouldAddNativeListener) {
                 eventData.nativeHandler = getNativeHandler(eventName);
 
-                if(forcePassiveFalseEventNames.includes(eventName)) {
+                if(forcePassiveFalseEventNames.indexOf(eventName) > -1) {
                     nativeListenerOptions = {
                         passive: false
                     };
