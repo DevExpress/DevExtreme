@@ -26,6 +26,8 @@ var ROWS_VIEW_CLASS = "rowsview",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
 
+    FAST_EDITING_DELETE_KEY = "delete",
+
     INTERACTIVE_ELEMENTS_SELECTOR = "input:not([type='hidden']), textarea, a, [tabindex]",
 
     VIEWS = ["rowsView"],
@@ -562,11 +564,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(deferred === true) {
                 that._editingCellHandler(eventArgs, fastEditingKey);
             } else if(deferred && deferred.done) {
-                deferred.done(() => that._editingCellHandler(eventArgs, fastEditingKey));
+                let editorValue = fastEditingKey !== FAST_EDITING_DELETE_KEY ? fastEditingKey : "";
+                deferred.done(() => that._editingCellHandler(eventArgs, editorValue));
             }
         }
     },
-    _editingCellHandler: function(eventArgs, fastEditingKey) {
+    _editingCellHandler: function(eventArgs, editorValue) {
         var $input = this._getFocusedCell().find(".dx-texteditor-input").eq(0),
             keyDownEvent = eventUtils.createEvent(eventArgs, { type: "keydown", target: $input.get(0) }),
             keyPressEvent = eventUtils.createEvent(eventArgs, { type: "keypress", target: $input.get(0) }),
@@ -576,7 +579,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         if(!keyDownEvent.isDefaultPrevented()) {
             eventsEngine.trigger($input, keyPressEvent);
             if(!keyPressEvent.isDefaultPrevented()) {
-                $input.val(fastEditingKey);
+                $input.val(editorValue);
                 eventsEngine.off($input, "focusout"); // for NumberBox to save entered symbol
                 eventsEngine.on($input, "focusout", function() {
                     eventsEngine.trigger($input, "change");
@@ -1050,17 +1053,21 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 case "rightArrow":
                     this._leftRightKeysHandler(e, isEditing);
                     break;
+
                 case "upArrow":
                 case "downArrow":
                     this._upDownKeysHandler(e, isEditing);
                     break;
+
                 case "pageUp":
                 case "pageDown":
                     this._pageUpDownKeyHandler(e);
                     break;
+
                 case "space":
                     this._spaceKeyHandler(e, isEditing);
                     break;
+
                 case "A":
                     if(e.ctrl) {
                         this._ctrlAKeyHandler(e, isEditing);
@@ -1068,15 +1075,19 @@ var KeyboardNavigationController = core.ViewController.inherit({
                         this._beginFastEditing(e.originalEvent);
                     }
                     break;
+
                 case "tab":
                     this._tabKeyHandler(e, isEditing);
                     break;
+
                 case "enter":
                     this._enterKeyHandler(e, isEditing);
                     break;
+
                 case "escape":
                     this._escapeKeyHandler(e, isEditing);
                     break;
+
                 case "F":
                     if(e.ctrl) {
                         this._ctrlFKeyHandler(e);
@@ -1084,9 +1095,18 @@ var KeyboardNavigationController = core.ViewController.inherit({
                         this._beginFastEditing(e.originalEvent);
                     }
                     break;
+
                 case "F2":
                     this._f2KeyHandler();
                     break;
+
+                case "del":
+                case "backspace":
+                    if(this._isFastEditingAllowed() && !this._isFastEditingStarted()) {
+                        this._beginFastEditing(e.originalEvent, true);
+                    }
+                    break;
+
                 default:
                     if(!this._beginFastEditing(e.originalEvent)) {
                         this._isNeedFocus = false;
@@ -1106,14 +1126,21 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return this._isFastEditingAllowed() && this._fastEditingStarted;
     },
 
-    _beginFastEditing: function(originalEvent) {
+    _beginFastEditing: function(originalEvent, isDeleting) {
         if(!this._isFastEditingAllowed() || originalEvent.altKey || originalEvent.ctrlKey || this._editingController.isEditing()) {
             return false;
         }
 
-        var fastEditingKey = originalEvent.key || String.fromCharCode(originalEvent.keyCode || originalEvent.which);
-        if(fastEditingKey && fastEditingKey.length === 1) {
-            this._startEditing(originalEvent, fastEditingKey);
+        if(isDeleting) {
+            this._startEditing(originalEvent, FAST_EDITING_DELETE_KEY);
+        } else {
+            let key = originalEvent.key,
+                keyCode = originalEvent.keyCode || originalEvent.which,
+                fastEditingKey = key || keyCode && String.fromCharCode(keyCode);
+
+            if(fastEditingKey && (fastEditingKey.length === 1 || fastEditingKey === FAST_EDITING_DELETE_KEY)) {
+                this._startEditing(originalEvent, fastEditingKey);
+            }
         }
 
         return true;
