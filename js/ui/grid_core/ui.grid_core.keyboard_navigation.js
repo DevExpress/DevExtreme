@@ -25,6 +25,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
+    DATEBOX_WIDGET_NAME = "dxDateBox",
 
     INTERACTIVE_ELEMENTS_SELECTOR = "input:not([type='hidden']), textarea, a, [tabindex]",
 
@@ -1792,24 +1793,26 @@ module.exports = {
 
                 _editCellPrepared: function($cell) {
                     var keyboardController = this.getController("keyboardNavigation"),
-                        isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
+                        isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted(),
+                        editorInstance = isEditingNavigationMode && this._getEditorInstance($cell);
 
-                    if(isEditingNavigationMode) {
-                        var editorInstance = this._getEditorInstance($cell);
-
-                        if(isEditingNavigationMode && editorInstance) {
-                            ["downArrow", "upArrow"].forEach(function(keyName) {
-                                var originalKeyHandler = editorInstance._supportedKeys()[keyName];
-                                editorInstance.registerKeyHandler(keyName, e => {
-                                    var isDropDownOpened = editorInstance._input().attr("aria-expanded") === "true";
-                                    if(isDropDownOpened) {
-                                        return originalKeyHandler && originalKeyHandler.call(editorInstance, e);
-                                    }
-                                });
+                    if(editorInstance) {
+                        ["downArrow", "upArrow"].forEach(function(keyName) {
+                            let originalKeyHandler = editorInstance._supportedKeys()[keyName];
+                            editorInstance.registerKeyHandler(keyName, e => {
+                                let isDropDownOpened = editorInstance._input().attr("aria-expanded") === "true";
+                                if(isDropDownOpened) {
+                                    return originalKeyHandler && originalKeyHandler.call(editorInstance, e);
+                                }
                             });
+                        });
 
-                            editorInstance.registerKeyHandler("rightArrow", noop);
-                            editorInstance.registerKeyHandler("leftArrow", noop);
+                        editorInstance.registerKeyHandler("leftArrow", noop);
+                        editorInstance.registerKeyHandler("rightArrow", noop);
+
+                        let isDateBoxWithMask = editorInstance.NAME === DATEBOX_WIDGET_NAME && editorInstance.option("useMaskBehavior");
+                        if(isDateBoxWithMask) {
+                            editorInstance.registerKeyHandler("enter", noop);
                         }
                     }
                 },
