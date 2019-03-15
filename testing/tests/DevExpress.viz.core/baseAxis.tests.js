@@ -1270,7 +1270,7 @@ QUnit.test("minValueMargin - apply margins to the min", function(assert) {
     });
 });
 
-// T603177
+// T603177, T724328
 QUnit.test("Margins for one point (dateTime)", function(assert) {
     var date = new Date('2018/05/02');
 
@@ -1292,7 +1292,7 @@ QUnit.test("Margins for one point (dateTime)", function(assert) {
             min: date,
             max: date,
             minVisible: date,
-            interval: 0,
+            interval: Infinity,
             maxVisible: date
         }
     });
