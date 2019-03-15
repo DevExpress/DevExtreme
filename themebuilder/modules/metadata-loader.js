@@ -11,11 +11,9 @@ class MetadataLoader {
             let metadata = this.fullMetadata[theme + "_" + colorScheme.replace("-", "_") + "_metadata"];
 
             if(semver.gte(this.version(), "18.2.8") && this.migrationMetadata[theme]) {
-                for(let i = 0; i < this.migrationMetadata[theme].length; i++) {
-                    metadata.push(
-                        { "Key": this.migrationMetadata[theme][i] }
-                    );
-                }
+                this.migrationMetadata[theme].forEach(value => {
+                    metadata.push({ "Key": value });
+                });
             }
 
             resolve(metadata);
