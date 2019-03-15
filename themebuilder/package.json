@@ -24,6 +24,7 @@
     "mocha": "^5.2.0",
     "mock-require": "^3.0.2",
     "less": "^3.9.0",
-    "node-sass": "^4.9.3"
+    "node-sass": "^4.9.3",
+    "semver": "^5.6.0"
   }
 }
