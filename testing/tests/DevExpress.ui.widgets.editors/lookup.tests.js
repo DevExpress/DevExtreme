@@ -67,7 +67,6 @@ var OVERLAY_SHADER_CLASS = "dx-overlay-shader",
 
     LOOKUP_SEARCH_WRAPPER_CLASS = "dx-lookup-search-wrapper",
     LOOKUP_FIELD_CLASS = "dx-lookup-field",
-    LOOKUP_POPUP_INVALID_CLASS = "dx-lookup-invalid",
 
     FOCUSED_CLASS = "dx-state-focused";
 
@@ -2954,60 +2953,6 @@ QUnit.test("popup title collapse if empty title option (B232073)", function(asse
 
     var $popupTitle = $(popup._wrapper()).find(".dx-popup-title");
     assert.ok($popupTitle.height() > 0);
-});
-
-QUnit.test("Lookup-specific validation message should be rendered in lookup's popup", function(assert) {
-    var $element = $("#widget").dxLookup(),
-        instance = $element.dxLookup("instance");
-
-    instance.option("usePopover", false);
-
-    $($element.find("." + LOOKUP_FIELD_CLASS)).trigger("dxclick");
-    var $popup = $(".dx-popup-wrapper");
-    var $popupValidationMessage = $popup.find(".dx-lookup-validation-message");
-
-    assert.ok($popupValidationMessage.length, "Validation message should be rendered in popup mode");
-});
-
-QUnit.test("Lookup-specific validation message should NOT be rendered in popover", function(assert) {
-    var $element = $("#widget").dxLookup(),
-        instance = $element.dxLookup("instance");
-
-    instance.option("usePopover", true);
-
-    $($element.find("." + LOOKUP_FIELD_CLASS)).trigger("dxclick");
-
-    if(instance._popup.NAME === "dxPopup") {
-        assert.ok(true, "Looks like we are running on real device and usage of Popup is forced by code. Stopping test case.");
-        return;
-    }
-
-    var $popup = $(".dx-popup-wrapper");
-    var $popupValidationMessage = $popup.find(".dx-lookup-validation-message");
-
-    assert.ok(!$popupValidationMessage.length, "Validation message should not be rendered in popover mode");
-});
-
-QUnit.test("popup should also get 'invalid' class", function(assert) {
-    var $element = $("#widget").dxLookup({
-            usePopover: false
-        }),
-        instance = $element.dxLookup("instance");
-
-    instance.open();
-
-    var $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
-    assert.ok(!$popupContent.hasClass(LOOKUP_POPUP_INVALID_CLASS), "popup content doesn't have invalid class");
-
-    instance.close();
-    instance.option({
-        validationError: { message: "Some error happened" },
-        isValid: false
-    });
-    instance.open();
-
-    $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
-    assert.ok($popupContent.hasClass(LOOKUP_POPUP_INVALID_CLASS), "popup content has invalid class");
 });
 
 
