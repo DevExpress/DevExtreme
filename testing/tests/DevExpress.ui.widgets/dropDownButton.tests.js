@@ -545,4 +545,30 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(e.oldSelectedItem, 2, "oldSelectedItem is correct");
         assert.strictEqual(e.selectedItem, 1, "selectedItem is correct");
     });
+
+    QUnit.test("onSelectionChanged event with data expressions", (assert) => {
+        const handler = sinon.spy();
+        const items = [{ id: 1, text: "Item 1" }, { id: 2, text: "Item 2" }];
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            items: items,
+            keyExpr: "id",
+            displayExpr: "text",
+            selectedItem: { id: 2 },
+            onSelectionChanged: handler
+        });
+
+        dropDownButton.open();
+        const $item = getList(dropDownButton).itemElements().eq(0);
+
+        eventsEngine.trigger($item, "dxclick");
+        const e = handler.getCall(0).args[0];
+
+        assert.strictEqual(handler.callCount, 1, "handler was called");
+        assert.strictEqual(e.component, dropDownButton, "component is correct");
+        assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
+        assert.deepEqual(e.oldSelectedItem, items[1], "oldSelectedItem is correct");
+        assert.deepEqual(e.selectedItem, items[0], "selectedItem is correct");
+        assert.strictEqual(e.selectedItem.onClick, undefined, "onClick should not be added to the selectedItem");
+        assert.strictEqual(e.oldSelectedItem.onClick, undefined, "onClick should not be added to the oldSelectedItem");
+    });
 });

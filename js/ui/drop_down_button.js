@@ -132,6 +132,14 @@ let DropDownButton = Widget.inherit({
         });
     },
 
+    _setOptionsByReference() {
+        this.callBase();
+
+        extend(this._optionsByReference, {
+            selectedItem: true
+        });
+    },
+
     _init() {
         this.callBase();
         this._createItemClickAction();
@@ -203,6 +211,17 @@ let DropDownButton = Widget.inherit({
         this._itemClickAction = this._createActionByOption("onItemClick");
     },
 
+    _fireSelectionChangedAction(args) {
+        const { previousValue, value } = args;
+
+        if(this._keyGetter(previousValue) !== this._keyGetter(value)) {
+            this._selectionChangedAction({
+                oldSelectedItem: previousValue,
+                selectedItem: value
+            });
+        }
+    },
+
     _fireItemClickAction({ event, itemElement, itemData }) {
         return this._itemClickAction({
             event,
@@ -230,7 +249,7 @@ let DropDownButton = Widget.inherit({
             selectedItem = { text: String(ensureDefined(selectedItem, "")) };
         }
 
-        return extend(selectedItem, defaultConfig);
+        return extend({}, selectedItem, defaultConfig);
     },
 
     _buttonGroupOptions() {
@@ -369,7 +388,6 @@ let DropDownButton = Widget.inherit({
             case "items":
             case "dataSource":
             case "itemTemplate":
-            case "showEvent":
             case "showSelectedItem":
                 break;
             case "displayExpr":
@@ -391,10 +409,7 @@ let DropDownButton = Widget.inherit({
                 break;
             case "selectedItem":
                 this._selectItem(value);
-                this._selectionChangedAction({
-                    oldSelectedItem: args.previousValue,
-                    selectedItem: value
-                });
+                this._fireSelectionChangedAction(args);
                 break;
             case "onItemClick":
                 this._createItemClickAction();
