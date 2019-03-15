@@ -1700,6 +1700,23 @@ QUnit.testInActiveWindow("caret should not change position on focus after fast d
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret is right after focus by click and dblclick");
 });
 
+QUnit.testInActiveWindow("numberbox should not prevent all value selection after focus by keyboard navigation for IE", function(assert) {
+    if(!browser.msie) {
+        assert.expect(0);
+        return;
+    }
+    this.instance.option({
+        format: "#0.## kg",
+        value: 1.23
+    });
+
+    this.input.focus();
+    this.keyboard.caret({ start: 0, end: 4 });
+    this.clock.tick(CARET_TIMEOUT_DURATION);
+
+    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 4 }, "all numberbox value is selected");
+});
+
 QUnit.module("format: custom parser and formatter", moduleConfig);
 
 QUnit.test("custom parser and formatter should work", function(assert) {
