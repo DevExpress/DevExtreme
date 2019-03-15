@@ -263,7 +263,7 @@ let DropDownButton = Widget.inherit({
                     icon: "spindown",
                     width: 24,
                     elementAttr: { class: DROP_DOWN_BUTTON_TOGGLE_CLASS },
-                    onClick: this.toggle.bind(this)
+                    onClick: this.toggle.bind(this, undefined)
                 }
             ],
             stylingMode: "outlined",

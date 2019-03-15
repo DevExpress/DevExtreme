@@ -33,6 +33,10 @@ const getActionButton = (instance) => {
     return instance.$element().find(`.${DROP_DOWN_BUTTON_ACTION_CLASS}`);
 };
 
+const getToggleButton = (instance) => {
+    return instance.$element().find(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`);
+};
+
 QUnit.module("markup", {
     beforeEach: () => {
         this.instance = new DropDownButton("#dropDownButton", {});
@@ -85,6 +89,18 @@ QUnit.module("button group integration", {}, () => {
         assert.strictEqual(buttonGroupItems.length, 2, "2 buttons are rendered");
         assert.strictEqual(buttonGroupItems[0].icon, undefined, "empty icon is correct");
         assert.strictEqual(buttonGroupItems[1].icon, "spindown", "dropdown icon is correct");
+        assert.strictEqual(buttonGroupItems[1].width, 24, "button width match the design");
+    });
+
+    QUnit.test("toggle button should toggle the widget", (assert) => {
+        const instance = new DropDownButton("#dropDownButton", {});
+        const $toggleButton = getToggleButton(instance);
+
+        eventsEngine.trigger($toggleButton, "dxclick");
+        assert.strictEqual(instance.option("dropDownOptions.visible"), true, "the widget is opened");
+
+        eventsEngine.trigger($toggleButton, "dxclick");
+        assert.strictEqual(instance.option("dropDownOptions.visible"), false, "the widget is closed");
     });
 
     QUnit.test("action and toggle button should have special class", (assert) => {
@@ -160,6 +176,28 @@ QUnit.module("popup integration", {
         for(let name in options) {
             assert.deepEqual(this.popup.option(name), options[name], "option " + name + " is correct");
         }
+    });
+
+    QUnit.test("a user can redefine dropdown options", (assert) => {
+        const instance = new DropDownButton("#dropDownButton2", {
+            deferRendering: false,
+            dropDownOptions: {
+                visible: true,
+                someOption: "Test"
+            }
+        });
+
+        const popup = getPopup(instance);
+        assert.strictEqual(popup.option("visible"), true, "set an option");
+
+        instance.option("dropDownOptions", {
+            customOption: "Test 2"
+        });
+        assert.strictEqual(popup.option("customOption"), "Test 2", "custom option is correct");
+        assert.strictEqual(popup.option("visible"), true, "visible was not rewrited");
+
+        instance.repaint();
+        assert.strictEqual(getPopup(instance).option("visible"), true, "options have been stored after the repaint");
     });
 });
 
@@ -483,12 +521,12 @@ QUnit.module("events", {}, () => {
         const e = handler.getCall(0).args[0];
 
         assert.strictEqual(handler.callCount, 1, "handler was called");
+        assert.strictEqual(Object.keys(e).length, 5, "event has 5 properties");
         assert.strictEqual(e.component, dropDownButton, "component is correct");
         assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
         assert.strictEqual(e.event.type, "dxclick", "event is correct");
         assert.strictEqual(e.itemData, 1, "itemData is correct");
         assert.strictEqual(e.itemElement, $item.get(0), "itemElement is correct");
-        assert.strictEqual(e.itemIndex, undefined, "itemIndex was removed");
     });
 
     QUnit.test("onItemClick event change", (assert) => {
@@ -520,6 +558,7 @@ QUnit.module("events", {}, () => {
         const e = handler.getCall(0).args[0];
 
         assert.strictEqual(handler.callCount, 1, "handler was called");
+        assert.strictEqual(Object.keys(e).length, 4, "event has 4 properties");
         assert.strictEqual(e.component, dropDownButton, "component is correct");
         assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
         assert.strictEqual(e.event.type, "dxclick", "event is correct");
@@ -556,6 +595,7 @@ QUnit.module("events", {}, () => {
         const e = handler.getCall(0).args[0];
 
         assert.strictEqual(handler.callCount, 1, "handler was called");
+        assert.strictEqual(Object.keys(e).length, 4, "event has 4 properties");
         assert.strictEqual(e.component, dropDownButton, "component is correct");
         assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
         assert.strictEqual(e.oldSelectedItem, 2, "oldSelectedItem is correct");
@@ -580,11 +620,10 @@ QUnit.module("events", {}, () => {
         const e = handler.getCall(0).args[0];
 
         assert.strictEqual(handler.callCount, 1, "handler was called");
+        assert.strictEqual(Object.keys(e).length, 4, "event has 4 properties");
         assert.strictEqual(e.component, dropDownButton, "component is correct");
         assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
         assert.deepEqual(e.oldSelectedItem, items[1], "oldSelectedItem is correct");
         assert.deepEqual(e.selectedItem, items[0], "selectedItem is correct");
-        assert.strictEqual(e.selectedItem.onClick, undefined, "onClick should not be added to the selectedItem");
-        assert.strictEqual(e.oldSelectedItem.onClick, undefined, "onClick should not be added to the oldSelectedItem");
     });
 });
