@@ -244,7 +244,10 @@ let DropDownButton = Widget.inherit({
         let selectedItem = this.option("selectedItem");
 
         if(isPlainObject(selectedItem)) {
-            selectedItem.text = String(ensureDefined(this._displayGetter(selectedItem), ""));
+            const displayValue = this._displayGetter(selectedItem);
+            if(!isPlainObject(displayValue)) {
+                selectedItem.text = String(ensureDefined(displayValue, ""));
+            }
         } else {
             selectedItem = { text: String(ensureDefined(selectedItem, "")) };
         }

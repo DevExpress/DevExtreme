@@ -55,6 +55,22 @@ QUnit.module("markup", {
         assert.strictEqual(getList(dropDownButton).NAME, "dxList", "list has been rendered");
         assert.ok(popup.option("closeOnOutsideClick"), "popup should be closed on outside click");
     });
+
+    QUnit.test("it should be possible to render the widget without a text", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            deferRendering: false,
+            items: [{ icon: "box" }, { icon: "user" }],
+            keyExpr: "icon",
+            displayExpr: "",
+            selectedItem: { icon: "user" }
+        });
+
+        const $actionButtonText = getActionButton(dropDownButton).text();
+        const $listItemText = getList(dropDownButton).itemElements().eq(0).text();
+
+        assert.strictEqual($actionButtonText, "", "action button text is empty");
+        assert.strictEqual($listItemText, "", "item text is empty");
+    });
 });
 
 QUnit.module("button group integration", {}, () => {
@@ -327,7 +343,7 @@ QUnit.module("data expressions", {
             icon: "box"
         });
 
-        assert.strictEqual(getActionButton(this.dropDownButton).text(), String({}));
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), "");
     });
 
     QUnit.test("displayExpr as function should work", (assert) => {
