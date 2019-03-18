@@ -9131,6 +9131,38 @@ QUnit.test("add row if dataSource is not defined", function(assert) {
     assert.strictEqual(dataGrid.getVisibleRows().length, 0, "no visible rows");
 });
 
+// T722161
+QUnit.test("add row after scrolling if rowRendringMode is virtual", function(assert) {
+    var array = [];
+    for(var i = 1; i <= 20; i++) {
+        array.push({ id: i, text: "text" + i });
+    }
+    // arrange, act
+    var dataGrid = createDataGrid({
+        height: 200,
+        dataSource: array,
+        keyExpr: "id",
+        loadingTimeout: undefined,
+        paging: {
+            pageSize: 10
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual"
+        },
+        columns: ["id", "text"]
+    });
+
+    // act
+    dataGrid.pageIndex(1);
+    dataGrid.addRow();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows()[0].key, 6, "first visible row key");
+    assert.ok(dataGrid.getVisibleRows()[5].inserted, "inserted row exists");
+    assert.deepEqual(dataGrid.getVisibleRows()[5].values, [undefined, undefined], "inserted row values");
+});
+
 QUnit.test("add row without return key", function(assert) {
     // arrange, act
     var array = [{ id: 1, name: "Test 1" }];
