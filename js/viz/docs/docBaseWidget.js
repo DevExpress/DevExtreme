@@ -872,12 +872,6 @@ var BaseLegend = {
         */
         verticalAlignment: 'top',
         /**
-        * @name BaseLegend.title.horizontalAlignment
-        * @type Enums.HorizontalAlignment
-        * @default 'center'
-        */
-        horizontalAlignment: 'center',
-        /**
         * @name BaseLegend.title.text
         * @type string
         * @default null
