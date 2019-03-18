@@ -7,6 +7,7 @@ var $ = require("../core/renderer"),
     eventUtils = require("../events/utils"),
     extend = require("../core/utils/extend").extend,
     isPlainObject = require("../core/utils/type").isPlainObject,
+    iteratorUtils = require("../core/utils/iterator"),
     pointerEvents = require("../events/pointer"),
     TabsItem = require("./tabs/item"),
     themes = require("./themes"),
@@ -19,6 +20,7 @@ var $ = require("../core/renderer"),
 var TABS_CLASS = "dx-tabs",
     TABS_WRAPPER_CLASS = "dx-tabs-wrapper",
     TABS_EXPANDED_CLASS = "dx-tabs-expanded",
+    TABS_STRETCHED_CLASS = "dx-tabs-stretched",
     TABS_SCROLLABLE_CLASS = "dx-tabs-scrollable",
     TABS_NAV_BUTTONS_CLASS = "dx-tabs-nav-buttons",
 
@@ -265,8 +267,8 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _renderScrolling: function() {
-        this.$element().removeClass(TABS_EXPANDED_CLASS);
-        this.$element().removeClass(OVERFLOW_HIDDEN_CLASS);
+        let removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
+        this.$element().removeClass(removeClasses.join(" "));
 
         if(this._allowScrolling()) {
             if(!this._scrollable) {
@@ -280,17 +282,44 @@ var Tabs = CollectionWidget.inherit({
             if(this.option("rtlEnabled")) {
                 this._scrollable.scrollTo({ left: this._scrollable.scrollWidth() - this._scrollable.clientWidth() });
             }
+
             this._scrollToItem(this.option("selectedItem"));
         }
 
         if(!this._allowScrolling()) {
             this._cleanScrolling();
+            this._updateStretchedState();
 
             this.$element()
                 .removeClass(TABS_NAV_BUTTONS_CLASS)
                 .addClass(TABS_EXPANDED_CLASS);
         }
     },
+
+    _updateStretchedState: function() {
+        let $visibleItems = this._getVisibleItems(),
+            elementWidth = this.$element().width(),
+            maxTabWidth = this._getMaxTabWidth($visibleItems);
+
+        if(maxTabWidth > elementWidth / $visibleItems.length) {
+            this.$element().addClass(TABS_STRETCHED_CLASS);
+        }
+    },
+
+    _getMaxTabWidth: function(items) {
+        let result = 0;
+
+        if(items) {
+            iteratorUtils.each(items, (_, item) => {
+                let outerWidth = $(item).outerWidth();
+
+                if(outerWidth > result) result = outerWidth;
+            });
+        }
+
+        return result;
+    },
+
 
     _cleanNavButtons: function() {
         if(!this._leftButton || !this._rightButton) return;
