@@ -444,6 +444,32 @@ QUnit.module("functionality", moduleSetup, () => {
         assert.equal(listItems.length, 0, "items is not yet loaded");
     });
 
+    QUnit.test("Items list should be empty after dataSource reseting", (assert) => {
+        var data = ["one", "two"];
+
+        const selectBox = $("#selectBox").dxSelectBox({
+            dataSource: data,
+            searchEnabled: true
+        }).dxSelectBox("instance");
+
+        assert.deepEqual(selectBox._list.option("items"), data);
+
+        const $input = selectBox.$element().find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input)
+            .focus()
+            .type("one")
+            .change();
+
+        this.clock.tick(500);
+        selectBox.option("opened", false);
+        selectBox.option("dataSource", null);
+        $("#selectBox .dx-dropdowneditor-button").trigger("dxclick");
+        this.clock.tick(500);
+
+        assert.deepEqual(selectBox._list.option("items"), []);
+    });
+
     QUnit.test("list item obtained focus only after press on control key", (assert) => {
         if(devices.real().platform !== "generic") {
             assert.ok(true, "test does not actual for mobile devices");
