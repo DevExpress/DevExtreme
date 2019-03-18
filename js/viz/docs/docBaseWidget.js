@@ -859,5 +859,95 @@ var BaseLegend = {
     * @type number
     * @default 8
     */
-    rowItemSpacing: 8
+    rowItemSpacing: 8,
+    /**
+    * @name BaseLegend.title
+    * @type object|string
+    */
+    title: {
+        /**
+        * @name BaseLegend.title.verticalAlignment
+        * @type Enums.VerticalEdge
+        * @default 'top'
+        */
+        verticalAlignment: 'top',
+        /**
+        * @name BaseLegend.title.horizontalAlignment
+        * @type Enums.HorizontalAlignment
+        * @default 'center'
+        */
+        horizontalAlignment: 'center',
+        /**
+        * @name BaseLegend.title.text
+        * @type string
+        * @default null
+        */
+        text: null,
+        /**
+        * @name BaseLegend.title.margin
+        * @type object
+        */
+        margin: {
+            /**
+            * @name BaseLegend.title.margin.top
+            * @type number
+            * @default 0
+            */
+            top: 0,
+            /**
+            * @name BaseLegend.title.margin.bottom
+            * @type number
+            * @default 14
+            */
+            bottom: 14
+        },
+        /**
+        * @name BaseLegend.title.font
+        * @type Font
+        * @default '#232323' @prop color
+        * @default 18 @prop size
+        * @default 200 @prop weight
+        * @extends CommonVizLightFontFamily
+        */
+        font: {
+            family: undefined,
+            weight: 200,
+            color: '#232323',
+            size: 18,
+            opacity: undefined
+        },
+        /**
+        * @name BaseLegend.title.placeholderSize
+        * @type number
+        * @default undefined
+        */
+        placeholderSize: undefined,
+        /**
+        * @name BaseLegend.title.subtitle
+        * @type object|string
+        */
+        subtitle: {
+            /**
+            * @name BaseLegend.title.subtitle.text
+            * @type string
+            * @default null
+            */
+            text: null,
+            /**
+            * @name BaseLegend.title.subtitle.font
+            * @type Font
+            * @default '#232323' @prop color
+            * @default 14 @prop size
+            * @default 200 @prop weight
+            * @extends CommonVizLightFontFamily
+            */
+            font: {
+                family: undefined,
+                weight: 200,
+                color: '#232323',
+                size: 14,
+                opacity: undefined
+            }
+        }
+    }    
 };
