@@ -373,10 +373,13 @@ var Component = Class.inherit({
                     };
 
                 that._optionChangedCallbacks.fireWith(that, [extend(that._defaultActionArgs(), args)]);
-                that._optionChangedAction(extend({}, args));
 
-                if(!that._disposed) {
-                    that._optionChanged(args);
+                if(this._cancelOptionChange !== args.name) {
+                    that._optionChangedAction(extend({}, args));
+
+                    if(!that._disposed) {
+                        that._optionChanged(args);
+                    }
                 }
             }
         }
@@ -659,9 +662,7 @@ var Component = Class.inherit({
 
             setOptionValue(that, name, value);
 
-            if(that._cancelOptionChange !== name) {
-                that._notifyOptionChanged(name, value, previousValue);
-            }
+            that._notifyOptionChanged(name, value, previousValue);
         };
 
         return function(options, value) {
