@@ -20,7 +20,7 @@ var FileManagerDetailsItemList = FileManagerItemListBase.inherit({
         var selectionMode = this.option("selectionMode");
 
         var that = this;
-        this._filesView = this._createComponent(this.$element(), DataGrid, {
+        this._filesView = this._createComponent("<div>", DataGrid, {
             hoverStateEnabled: true,
             selection: {
                 mode: selectionMode
@@ -55,6 +55,7 @@ var FileManagerDetailsItemList = FileManagerItemListBase.inherit({
                 }
             ]
         });
+        this.$element().append(this._filesView.$element());
 
         this._loadFilesViewData();
     },
