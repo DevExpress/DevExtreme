@@ -1495,7 +1495,7 @@ Axis.prototype = {
                 }
             }
 
-            interval = that._calculateRangeInterval(that.calculateInterval(maxVisible, minVisible), interval);
+            interval = that._calculateRangeInterval(interval);
 
             range.addRange({
                 minVisible: minVisible,
@@ -1526,7 +1526,7 @@ Axis.prototype = {
         return !this.isArgumentAxis || !isDefined(bound) && this.isExtremePosition(isEnd);
     },
 
-    _calculateRangeInterval: function(dataLength, interval) {
+    _calculateRangeInterval: function(interval) {
         var isDateTime = this._options.dataType === "datetime",
             minArgs = [],
             addToArgs = function(value) {
@@ -1595,10 +1595,8 @@ Axis.prototype = {
 
             if(!isDefined(minValueMargin) || !isDefined(maxValueMargin)) {
                 if(isArgumentAxis && margins.checkInterval) {
-                    if(maxMinDistance === 0) {
-                        interval = 0;
-                    } else {
-                        interval = that._calculateRangeInterval(maxMinDistance, range.interval);
+                    if(maxMinDistance !== 0) {
+                        interval = that._calculateRangeInterval(range.interval);
                         marginValue = interval / 2;
                     }
                 }
