@@ -96,13 +96,13 @@ var FileManager = Widget.inherit({
         this._createBreadcrumbs();
         this._createItemList();
 
-        var $itemsPanel = $("<div>").addClass(FILE_MANAGER_ITEMS_PANEL_CLASS);
-        $itemsPanel.append(
+        this._$itemsPanel = $("<div>").addClass(FILE_MANAGER_ITEMS_PANEL_CLASS);
+        this._$itemsPanel.append(
             this._breadcrumbs.$element(),
             this._itemList.$element()
         );
 
-        $container.append($itemsPanel);
+        $container.append(this._$itemsPanel);
 
         return $container;
     },
@@ -174,7 +174,7 @@ var FileManager = Widget.inherit({
         this._itemList.$element().remove();
 
         this._createItemList(viewMode);
-        this._$viewContainer.append(this._itemList.$element());
+        this._$itemsPanel.append(this._itemList.$element());
     },
 
     _getSingleSelectedItem: function() {
