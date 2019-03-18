@@ -230,9 +230,9 @@ let DropDownButton = Widget.inherit({
 
     _actionButtonConfig() {
         const defaultConfig = {
-            onClick: (e) => {
+            onClick: ({ event }) => {
                 this._actionClickAction({
-                    event: e.event,
+                    event: event,
                     selectedItem: this.option("selectedItem")
                 });
             },
