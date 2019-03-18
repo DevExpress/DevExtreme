@@ -67,19 +67,19 @@
 
     &.dx-invalid {
         border-bottom-color: @base-invalid-faded-border-color;
-    
+
         .dx-lookup-arrow:after {
             .dx-invalid-material-badge();
             right: @MATERIAL_BASE_ICON_SIZE;
         }
-    
+
         &.dx-rtl, .dx-rtl &  {
             .dx-lookup-arrow:after {
                 left: @MATERIAL_BASE_ICON_SIZE;
                 right: auto;
             }
         }
-    }    
+    }
 }
 
 .dx-lookup-field {
@@ -127,21 +127,6 @@
     }
 }
 
-.dx-lookup-validation-message {
-    font-size: @MATERIAL_LOOKUP_INVALID_MESSAGE_FONT_SIZE;
-    line-height: @MATERIAL_LOOKUP_INVALID_MESSAGE_FONT_SIZE;
-    padding: @MATERIAL_LOOKUP_INVALID_MESSAGE_PADDING_TOP @MATERIAL_LOOKUP_INVALID_MESSAGE_PADDING_HORIZONTAL @MATERIAL_LOOKUP_INVALID_MESSAGE_PADDING_BOTTOM;
-    margin-bottom: @MATERIAL_LOOKUP_INVALID_MESSAGE_MARGIN_BOTTOM;
-    margin-left: -@MATERIAL_LOOKUP_INVALID_MESSAGE_PADDING_HORIZONTAL;
-    border-bottom: 1px solid @overlay-border-color;
-    color: @lookup-validation-message-color;
-
-    .dx-rtl & {
-        margin-right: -@MATERIAL_LOOKUP_INVALID_MESSAGE_PADDING_HORIZONTAL;
-        margin-left: 0;
-    }
-}
-
 .dx-lookup-popup-search .dx-list {
     height: calc(~'100% - '@MATERIAL_LOOKUP_LIST_TOP);
 }
@@ -149,24 +134,4 @@
 .dx-lookup-search-wrapper {
     padding: @MATERIAL_LOOKUP_POPUP_CONTENT_PADDING;
     padding-bottom: @MATERIAL_LOOKUP_POPUP_CONTENT_PADDING - 6px;
-}
-
-.dx-popup-content {
-    &.dx-lookup-invalid {
-        padding-top: 0;
-
-        .dx-lookup-validation-message {
-            display: inline-block;
-        }
-
-        .dx-list {
-            top: @MATERIAL_LOOKUP_INVALID_MESSAGE_FONT_SIZE + @MATERIAL_LOOKUP_INVALID_MESSAGE_PADDING_TOP + @MATERIAL_LOOKUP_INVALID_MESSAGE_PADDING_BOTTOM + 1px;
-        }
-
-        .dx-lookup-popup-search & {
-            .dx-list {
-                top: @MATERIAL_LOOKUP_LIST_TOP + @MATERIAL_LOOKUP_INVALID_MESSAGE_FONT_SIZE + @MATERIAL_LOOKUP_INVALID_MESSAGE_PADDING_TOP + @MATERIAL_LOOKUP_INVALID_MESSAGE_PADDING_BOTTOM + 1px;
-            }
-        }
-    }
 }
