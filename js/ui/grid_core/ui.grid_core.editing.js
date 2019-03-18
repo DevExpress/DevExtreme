@@ -680,14 +680,15 @@ var EditingController = modules.ViewController.inherit((function() {
         _initNewRow: function(options, insertKey) {
             this.executeAction("onInitNewRow", options);
 
-            var rows = this._dataController.items(),
+            var dataController = this._dataController,
+                rows = dataController.items(),
                 row = rows[insertKey.rowIndex];
 
             if(row && (!row.isEditing && row.rowType === "detail" || row.rowType === "detailAdaptive")) {
                 insertKey.rowIndex++;
             }
 
-            insertKey.dataRowIndex = rows.filter(function(row, index) {
+            insertKey.dataRowIndex = dataController.getRowIndexDelta() + rows.filter(function(row, index) {
                 return index < insertKey.rowIndex && (row.rowType === "data" || row.rowType === "group");
             }).length;
         },
