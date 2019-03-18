@@ -5979,6 +5979,8 @@ declare module DevExpress.viz {
         rowCount?: number;
         /** @name BaseLegend.rowItemSpacing */
         rowItemSpacing?: number;
+        /** @name BaseLegend.title */
+        title?: { verticalAlignment?: 'bottom' | 'top', text?: string, margin?: { top?: number, bottom?: number }, font?: Font, placeholderSize?: number, subtitle?: { text?: string, font?: Font } | string } | string;
         /** @name BaseLegend.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
         /** @name BaseLegend.visible */
@@ -6305,6 +6307,8 @@ declare module DevExpress.viz {
     }
     /** @name dxChart.Options.commonAxisSettings.title */
     export interface dxChartCommonAxisSettingsTitle {
+        /** @name dxChart.Options.commonAxisSettings.title.alignment */
+        alignment?: 'center' | 'left' | 'right';
         /** @name dxChart.Options.commonAxisSettings.title.font */
         font?: Font;
         /** @name dxChart.Options.commonAxisSettings.title.margin */
