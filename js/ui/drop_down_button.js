@@ -174,7 +174,8 @@ let DropDownButton = Widget.inherit({
         this.$element().addClass(DROP_DOWN_BUTTON_CLASS);
         this._renderButtonGroup();
         this._loadSelectedItem().done((selectedItem) => {
-            this.option("selectedItem", selectedItem);
+            this.option().selectedItem = selectedItem;
+            this._showSelectedItem();
         });
         if(!this.option("deferRendering")) {
             this._renderPopup();
@@ -212,12 +213,10 @@ let DropDownButton = Widget.inherit({
     },
 
     _fireSelectionChangedAction({ previousValue, value }) {
-        if(this._keyGetter(previousValue) !== this._keyGetter(value)) {
-            this._selectionChangedAction({
-                oldSelectedItem: previousValue,
-                selectedItem: value
-            });
-        }
+        this._selectionChangedAction({
+            oldSelectedItem: previousValue,
+            selectedItem: value
+        });
     },
 
     _fireItemClickAction({ event, itemElement, itemData }) {
@@ -371,8 +370,7 @@ let DropDownButton = Widget.inherit({
         this._list && this._list.option(name, value);
     },
 
-    _selectItem(itemData) {
-        this._setListOption("selectedItemKeys", [this._keyGetter(itemData)]);
+    _showSelectedItem() {
         if(this.option("showSelectedItem")) {
             this._buttonGroup.option("items[0]", this._actionButtonConfig());
         }
@@ -409,8 +407,14 @@ let DropDownButton = Widget.inherit({
                 this._setListOption(name, value);
                 break;
             case "selectedItem":
-                this._selectItem(value);
-                this._fireSelectionChangedAction(args);
+                this._setListOption("selectedItemKeys", [this._keyGetter(value)]);
+                this._loadSelectedItem().done((selectedItem) => {
+                    this.option().selectedItem = selectedItem;
+                    if(this._keyGetter(args.previousValue) !== this._keyGetter(value)) {
+                        this._showSelectedItem();
+                        this._fireSelectionChangedAction(args);
+                    }
+                });
                 break;
             case "onItemClick":
                 this._createItemClickAction();

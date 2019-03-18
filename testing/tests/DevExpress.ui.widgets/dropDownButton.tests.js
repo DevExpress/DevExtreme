@@ -504,6 +504,19 @@ QUnit.module("deferred datasource", {
         this.clock.tick(200);
         assert.strictEqual(getActionButton(dropDownButton).text(), "Center", "value is correct");
     });
+
+    QUnit.test("select an item via api", (assert) => {
+        const dropDownButton = new DropDownButton("#dropDownButton2", {
+            deferRendering: false,
+            keyExpr: "id",
+            displayExpr: "text",
+            items: [{ id: 1, text: "Item 1" }, { id: 2, text: "Item 2" }]
+        });
+        dropDownButton.option("selectedItem", { id: 2 });
+        this.clock.tick();
+        assert.strictEqual(getActionButton(dropDownButton).text(), "Item 2", "action button has been changed");
+        assert.strictEqual(getList(dropDownButton).option("selectedItemKeys")[0], 2, "selectedItemKeys is correct");
+    });
 });
 
 QUnit.module("events", {}, () => {
