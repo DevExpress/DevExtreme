@@ -61,12 +61,10 @@
         "dxFileUploader-uploaded": "Μεταφορτώθηκε",
         "dxFileUploader-readyToUpload": "Έτοιμο προς μεταφόρτωση",
         "dxFileUploader-uploadFailedMessage": "Η μεταφόρτωση απέτυχε",
-        "dxFileUploader-invalidFileExtension": "Ο τυπος του αρχείου δεν είναι επιτρεπτός",
-        "dxFileUploader-invalidMaxFileSize": "Το αρχείο είναι πολύ μεγάλο",
-        "dxFileUploader-invalidMinFileSize": "Το αρχειο είναι πολυ μικρό",
 
         "dxRangeSlider-ariaFrom": "Από",
         "dxRangeSlider-ariaTill": "Εώς",
+ 
         "dxSwitch-switchedOnText": "ON",
         "dxSwitch-switchedOffText": "OFF",
 
@@ -268,19 +266,5 @@
         "dxFilterBuilder-filterOperationBetween": "Είναι ανάμεσα",
         "dxFilterBuilder-filterOperationAnyOf": "Είναι κάποιο από αυτά",
         "dxFilterBuilder-filterOperationNoneOf": "Δεν είναι τίποτα από αυτά",
-
-        "dxHtmlEditor-dialogColorCaption": "Αλλαγή χρώματος γραμματοσειράς",
-        "dxHtmlEditor-dialogBackgroundCaption": "Αλλαγή χρώματος φόντου",
-        "dxHtmlEditor-dialogLinkCaption": "Προσθήκη συνδέσμου",
-        "dxHtmlEditor-dialogLinkUrlField": "URL",
-        "dxHtmlEditor-dialogLinkTextField": "Κείμενο",
-        "dxHtmlEditor-dialogLinkTargetField": "Ανοίξτε το σύνδεσμο σε νέο παράθυρο",
-        "dxHtmlEditor-dialogImageCaption": "Προσθέστε εικόνα",
-        "dxHtmlEditor-dialogImageUrlField": "URL",
-        "dxHtmlEditor-dialogImageAltField": "Εναλλακτικό κείμενο",
-        "dxHtmlEditor-dialogImageWidthField": "Πλάτος (px)",
-        "dxHtmlEditor-dialogImageHeightField": "Υψος (px)",
-        "dxHtmlEditor-heading": "Επικεφαλίδα",
-        "dxHtmlEditor-normalText": "Κανονικό κείμενο"
     }
 }
