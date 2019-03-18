@@ -659,7 +659,7 @@ var Component = Class.inherit({
 
             setOptionValue(that, name, value);
 
-            if(this._cancelOptionChange !== name) {
+            if(that._cancelOptionChange !== name) {
                 that._notifyOptionChanged(name, value, previousValue);
             }
         };

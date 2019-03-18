@@ -127,6 +127,19 @@ QUnit.test("options api - 'option' method", function(assert) {
     assert.equal(instance.option("opt2"), "mass2");
 });
 
+QUnit.test("setOptionSilently method", (assert) => {
+    var optionChangedHandler = sinon.spy(),
+        instance = new TestComponent({
+            opt2: "custom",
+            onOptionChanged: optionChangedHandler
+        });
+
+    instance._setOptionSilent("opt2", "new custom");
+
+    assert.strictEqual(instance.option("opt2"), "new custom", "option has been setted");
+    assert.strictEqual(optionChangedHandler.callCount, 0, "optionChanged event has not been rised");
+});
+
 QUnit.test("options api - 'onOptionChanged' action", function(assert) {
     var actionChangeLog = [],
         eventChangeLog = [],
