@@ -4,7 +4,7 @@ import registerComponent from "../core/component_registrator";
 import ButtonGroup from "./button_group";
 import Popup from "./popup";
 import List from "./list";
-import dataCoreUtils from "../core/utils/data";
+import { compileGetter } from "../core/utils/data";
 import DataHelperMixin from "../data_helper";
 import { DataSource } from "../data/data_source/data_source";
 import ArrayStore from "../data/array_store";
@@ -163,11 +163,11 @@ let DropDownButton = Widget.inherit({
     },
 
     _compileKeyGetter() {
-        this._keyGetter = dataCoreUtils.compileGetter(this.option("keyExpr"));
+        this._keyGetter = compileGetter(this.option("keyExpr"));
     },
 
     _compileDisplayGetter() {
-        this._displayGetter = dataCoreUtils.compileGetter(this.option("displayExpr"));
+        this._displayGetter = compileGetter(this.option("displayExpr"));
     },
 
     _initMarkup() {
@@ -211,9 +211,7 @@ let DropDownButton = Widget.inherit({
         this._itemClickAction = this._createActionByOption("onItemClick");
     },
 
-    _fireSelectionChangedAction(args) {
-        const { previousValue, value } = args;
-
+    _fireSelectionChangedAction({ previousValue, value }) {
         if(this._keyGetter(previousValue) !== this._keyGetter(value)) {
             this._selectionChangedAction({
                 oldSelectedItem: previousValue,

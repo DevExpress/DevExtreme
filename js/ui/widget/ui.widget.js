@@ -250,14 +250,14 @@ var Widget = DOMComponent.inherit({
         this[cacheName] = extend(this[cacheName], optionValue);
     },
 
-    _getOptionsFromContainer: function(args) {
+    _getOptionsFromContainer: function({ name, fullName, value }) {
         var options = {};
 
-        if(args.name === args.fullName) {
-            options = args.value;
+        if(name === fullName) {
+            options = value;
         } else {
-            var option = args.fullName.split(".").pop();
-            options[option] = args.value;
+            var option = fullName.split(".").pop();
+            options[option] = value;
         }
 
         return options;
