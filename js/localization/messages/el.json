@@ -265,6 +265,6 @@
         "dxFilterBuilder-filterOperationIsNotBlank": "Δεν είναι κενό",
         "dxFilterBuilder-filterOperationBetween": "Είναι ανάμεσα",
         "dxFilterBuilder-filterOperationAnyOf": "Είναι κάποιο από αυτά",
-        "dxFilterBuilder-filterOperationNoneOf": "Δεν είναι τίποτα από αυτά",
+        "dxFilterBuilder-filterOperationNoneOf": "Δεν είναι τίποτα από αυτά"
     }
 }
