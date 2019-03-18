@@ -5526,6 +5526,46 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "rowIndex");
     });
 
+    QUnit.testInActiveWindow("Focus should not update after refresh()", function(assert) {
+        // arrange
+        var that = this;
+        that.$element = function() {
+            return $("#container");
+        };
+        that.data = [
+            { name: "Alex", phone: "555555", room: 0 },
+            { name: "Dan1", phone: "666666", room: 1 },
+            { name: "Dan2", phone: "777777", room: 2 },
+            { name: "Dan3", phone: "888888", room: 3 }
+        ];
+
+        that.options = {
+            paging: {
+                pageSize: 2, enabled: true
+            }
+        };
+
+        that.setupModule();
+
+        // act
+        that.gridView.render($("#container"));
+
+        var $cell = $(that.rowsView.element().find(".dx-row").eq(1).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+        this.refresh();
+
+        this.clock.tick();
+
+        // assert
+        $cell = that.rowsView.element().find(".dx-row").eq(1).find("td").eq(1);
+        assert.equal($cell.attr("tabIndex"), undefined);
+        assert.notOk($cell.is(":focus"), "focus");
+        assert.notOk($cell.hasClass("dx-cell-focus-disabled"));
+        assert.ok(this.keyboardNavigationController._focusedCellPosition, "focusedCellPosition");
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "cellIndex");
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "rowIndex");
+    });
+
     QUnit.testInActiveWindow("freespace cells should not have a focus", function(assert) {
         // arrange
         var that = this;
