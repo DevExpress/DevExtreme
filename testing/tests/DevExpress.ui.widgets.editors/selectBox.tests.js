@@ -445,27 +445,27 @@ QUnit.module("functionality", moduleSetup, () => {
     });
 
     QUnit.test("Items list should be empty after dataSource reseting", (assert) => {
-        var data = ["one", "two"];
-
-        const selectBox = $("#selectBox").dxSelectBox({
+        const data = ["one", "two"];
+        const $element = $("#selectBox");
+        const selectBox = $element.dxSelectBox({
             dataSource: data,
+            searchTimeout: 0,
             searchEnabled: true
         }).dxSelectBox("instance");
 
         assert.deepEqual(selectBox._list.option("items"), data);
 
-        const $input = selectBox.$element().find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
         keyboardMock($input)
             .focus()
             .type("one")
             .change();
 
-        this.clock.tick(500);
+        this.clock.tick();
         selectBox.option("opened", false);
         selectBox.option("dataSource", null);
-        $("#selectBox .dx-dropdowneditor-button").trigger("dxclick");
-        this.clock.tick(500);
+        $element.find(`.${DX_DROP_DOWN_BUTTON}`).trigger("dxclick");
 
         assert.deepEqual(selectBox._list.option("items"), []);
     });
