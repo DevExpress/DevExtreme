@@ -1,7 +1,7 @@
 /* global DevExpress */
 
 import extendUtils from "./utils/extend";
-import errors from "core/errors";
+import errors from "./errors";
 
 /**
 * @name globalConfig
