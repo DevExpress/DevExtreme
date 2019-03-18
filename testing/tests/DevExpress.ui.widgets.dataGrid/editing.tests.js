@@ -2761,6 +2761,29 @@ QUnit.testInActiveWindow("Focus overlay should not be shown in batch editing mod
     assert.notOk($testElement.find(".dx-datagrid-focus-overlay").is(":visible"), "not visible focus overlay");
 });
 
+// T713844
+QUnit.test("Set editor mode via editorOptions", function(assert) {
+    // arrange
+    var that = this,
+        textEditor,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'batch'
+    };
+    that.columns[0].editorOptions = { mode: "password" };
+    rowsView.render($testElement);
+
+    // act
+    $testElement.find('td').first().trigger('dxclick');
+
+    // assert
+    textEditor = $testElement.find('td').first().find(".dx-texteditor").first().dxTextBox("instance");
+    assert.strictEqual(textEditor.option("mode"), "password", "editor mode");
+});
+
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
