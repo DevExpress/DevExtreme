@@ -910,14 +910,14 @@ QUnit.test('GetInterval', function(assert) {
     assert.equal(translator.getInterval(), 21);
 });
 
-QUnit.test('GetInterval when interval is 0', function(assert) {
-    var translator = this.createTranslator({ min: 200, max: 700, interval: 0 });
+QUnit.test('GetInterval when interval is not finite', function(assert) {
+    var translator = this.createTranslator({ min: 200, max: 700, interval: Infinity });
 
     assert.equal(translator.getInterval(), 1000);
 });
 
-QUnit.test('GetInterval when interval is 0, because max is equal min', function(assert) {
-    var translator = this.createTranslator({ min: 200, max: 200, interval: 0 });
+QUnit.test('GetInterval when interval is not finite, because max is equal min', function(assert) {
+    var translator = this.createTranslator({ min: 200, max: 200, interval: Infinity });
 
     assert.equal(translator.getInterval(), 1000);
 });
@@ -1043,8 +1043,8 @@ QUnit.test('GetInterval', function(assert) {
     assert.equal(translator.getInterval(), 42);
 });
 
-QUnit.test('GetInterval when interval is 0', function(assert) {
-    var translator = this.createTranslator({ min: new Date(2012, 8, 1), max: new Date(2012, 8, 3), interval: 0 });
+QUnit.test('GetInterval when interval is not finite', function(assert) {
+    var translator = this.createTranslator({ min: new Date(2012, 8, 1), max: new Date(2012, 8, 3), interval: Infinity });
 
     assert.equal(translator.getInterval(), 1000);
 });
@@ -2107,8 +2107,8 @@ QUnit.test('GetInterval', function(assert) {
     assert.equal(translator.getInterval(), 80);
 });
 
-QUnit.test('GetInterval when interval is 0', function(assert) {
-    var translator = this.createTranslator({ min: 10, max: 30, interval: 0 });
+QUnit.test('GetInterval when interval is not finite', function(assert) {
+    var translator = this.createTranslator({ min: 10, max: 30, interval: Infinity });
 
     assert.equal(translator.getInterval(), 800);
 });

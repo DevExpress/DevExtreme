@@ -533,6 +533,17 @@ var dateTimeFromDecimal = function(number) {
     };
 };
 
+var roundDateByStartDayHour = function(date, startDayHour) {
+    var startTime = this.dateTimeFromDecimal(startDayHour),
+        result = new Date(date);
+
+    if(date.getHours() === startTime.hours && date.getMinutes() < startTime.minutes || date.getHours() < startTime.hours) {
+        result.setHours(startTime.hours, startTime.minutes, 0, 0);
+    }
+
+    return result;
+};
+
 var normalizeDate = function(date, min, max) {
     var normalizedDate = date;
 
@@ -615,6 +626,7 @@ var dateUtils = {
     correctDateWithUnitBeginning: correctDateWithUnitBeginning,
     trimTime: trimTime,
     dateTimeFromDecimal: dateTimeFromDecimal,
+    roundDateByStartDayHour: roundDateByStartDayHour,
 
     addDateInterval: addDateInterval,
     addInterval: addInterval,

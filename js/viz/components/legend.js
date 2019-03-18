@@ -428,7 +428,7 @@ extend(legendPrototype, {
 
             bBox = getSizeItem(options, markerSize, labelBBox);
             maxBBoxHeight = _max(maxBBoxHeight, bBox.height);
-            that._createHint(dataItem, label);
+            that._createHint(dataItem, label, marker);
 
             return {
                 label: label,
@@ -512,11 +512,12 @@ extend(legendPrototype, {
             .append(group);
     },
 
-    _createHint: function(data, label) {
+    _createHint: function(data, label, marker) {
         var labelFormatObject = this._getCustomizeObject(data),
             text = this._options.customizeHint.call(labelFormatObject, labelFormatObject);
         if(_isDefined(text) && text !== "") {
             label.setTitle(text);
+            marker.setTitle(text);
         }
     },
 

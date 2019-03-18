@@ -403,7 +403,7 @@ _Translator2d.prototype = {
     getInterval: function() {
         const canvasOptions = this._canvasOptions;
         const interval = this._businessRange.interval;
-        if(interval) {
+        if(isFinite(interval)) {
             return Math.round(canvasOptions.ratioOfCanvasRange * interval);
         }
 
