@@ -504,6 +504,12 @@ var Component = Class.inherit({
         return deprecatedOptions.hasOwnProperty(name);
     },
 
+    _setOptionSilent: function(name, value) {
+        this._cancelOptionChange = name;
+        this.option(name, value);
+        this._cancelOptionChange = false;
+    },
+
     /**
      * @name componentmethods.option
      * @publicName option()
@@ -652,7 +658,10 @@ var Component = Class.inherit({
             }
 
             setOptionValue(that, name, value);
-            that._notifyOptionChanged(name, value, previousValue);
+
+            if(this._cancelOptionChange !== name) {
+                that._notifyOptionChanged(name, value, previousValue);
+            }
         };
 
         return function(options, value) {

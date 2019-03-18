@@ -887,10 +887,6 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _optionChanged: function(args) {
-            if(this._cancelOptionChange === args.name) {
-                return;
-            }
-
             if(inArray(args.name, ACTIONS) > -1) {
                 this._initActions();
                 return;

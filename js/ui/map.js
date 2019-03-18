@@ -460,10 +460,6 @@ var Map = Widget.inherit({
     _optionChanged: function(args) {
         var name = args.name;
 
-        if(this._cancelOptionChange) {
-            return;
-        }
-
         var changeBag = this._optionChangeBag;
         this._optionChangeBag = null;
 
