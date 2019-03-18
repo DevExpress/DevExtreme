@@ -84,7 +84,7 @@ QUnit.module("DropImage module", moduleConfig, () => {
         clock.restore();
     });
 
-    test("Do not encode pasted image", (assert) => {
+    test("Do not encode pasted image with URL", (assert) => {
         new DropImageMock(this.quillMock, this.options);
 
         const textFile = createBlobFile("test", 80, "text/html");
