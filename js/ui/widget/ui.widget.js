@@ -321,8 +321,7 @@ var Widget = DOMComponent.inherit({
                     isTextNode = element.nodeType === TEXT_NODE,
                     isEmptyText = $(element).text().trim().length < 1;
 
-                const isEmptyElement = (isTextNode && isEmptyText) || isCommentNode;
-                return !isEmptyElement;
+                return !(isTextNode && isEmptyText) && !isCommentNode;
             }),
             onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
