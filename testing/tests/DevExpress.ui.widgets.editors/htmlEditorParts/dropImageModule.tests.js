@@ -65,7 +65,12 @@ QUnit.module("DropImage module", moduleConfig, () => {
         const clock = sinon.useFakeTimers();
         new DropImageMock(this.quillMock, this.options);
 
-        const event = $.Event($.Event("paste", { clipboardData: { items: [this.file] } }));
+        const event = $.Event($.Event("paste", {
+            clipboardData: {
+                items: [this.file],
+                getData: (type) => type === "text/html" ? false : true
+            }
+        }));
         this.$element.trigger(event);
         clock.tick();
 
@@ -77,6 +82,22 @@ QUnit.module("DropImage module", moduleConfig, () => {
         }
 
         clock.restore();
+    });
+
+    test("Do not encode pasted image with URL", (assert) => {
+        new DropImageMock(this.quillMock, this.options);
+
+        const textFile = createBlobFile("test", 80, "text/html");
+        const event = $.Event($.Event("paste", {
+            clipboardData: {
+                items: [this.file, textFile],
+                getData: (type) => type === "text/html" ? true : false
+            }
+        }));
+        this.$element.trigger(event);
+
+        assert.notOk(event.isDefaultPrevented(), "Doesn't prevent default behavior");
+        assert.equal(this.insertEmbedStub.callCount, 0, "File isn't inserted");
     });
 
     test("dragover event", (assert) => {

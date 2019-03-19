@@ -36,11 +36,18 @@ class DropImageModule extends BaseModule {
         }
     }
 
-    _pasteHandler(e) {
-        const data = e.originalEvent.clipboardData;
-        const hasDataItems = data && data.items && data.items.length;
-        if(hasDataItems) {
-            this._getImage(data.items, (imageData) => {
+    _pasteHandler({ originalEvent }) {
+        const { clipboardData } = originalEvent;
+
+        if(!clipboardData) {
+            return;
+        }
+
+        const hasDataItems = clipboardData.items && clipboardData.items.length;
+        const isHtmlData = clipboardData.getData("text/html");
+
+        if(!isHtmlData && hasDataItems) {
+            this._getImage(clipboardData.items, (imageData) => {
                 if(browser.mozilla) {
                     return;
                 }
@@ -66,8 +73,8 @@ class DropImageModule extends BaseModule {
             }
 
             const reader = new window.FileReader();
-            reader.onload = (e) => {
-                callback(e.target.result);
+            reader.onload = ({ target }) => {
+                callback(target.result);
             };
 
             const readableFile = file.getAsFile ? file.getAsFile() : file;

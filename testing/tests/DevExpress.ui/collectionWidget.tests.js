@@ -55,36 +55,36 @@ const TestComponent = CollectionWidget.inherit({
 });
 
 QUnit.testStart(() => {
-    const markup = '\
-        <div id="cmp"></div>\
-        \
-        <div id="cmp-with-template">\
-            <div data-options="dxTemplate : { name: \'testTemplate\' } ">\
-                First Template\
-            </div>\
-        </div>\
-        \
-        <div id="cmp-with-zero-template">\
-            <div data-options="dxTemplate: {name: \'0\'}">zero</div>\
-        </div>\
-        \
-        <script type="text/html" id="externalTemplate">\
-            Test\
-        </script>\
-        \
-        <script type="text/html" id="externalTemplateNoRootElement">\
-            Outer text <div>Test</div>\
-        </script>\
-        \
-        <div id="container-with-jq-template">\
-            <div data-options="dxTemplate : { name: \'firstTemplate\' } ">\
-                First Template\
-            </div>\
-            <div data-options="dxTemplate : { name: \'secondTemplate\' } ">\
-                Second Template\
-            </div>\
-        </div>\
-    ';
+    const markup = `
+        <div id="cmp"></div>
+        
+        <div id="cmp-with-template">
+            <div data-options="dxTemplate : { name: 'testTemplate' } ">
+                First Template
+            </div>
+        </div>
+        
+        <div id="cmp-with-zero-template">
+            <div data-options="dxTemplate: { name: '0' }">zero</div>
+        </div>
+        
+        <script type="text/html" id="externalTemplate">
+            Test
+        </script>
+        
+        <script type="text/html" id="externalTemplateNoRootElement">
+            Outer text <div>Test</div>
+        </script>
+        
+        <div id="container-with-jq-template">
+            <div data-options="dxTemplate : { name: 'firstTemplate' } ">
+                First Template
+            </div>
+            <div data-options="dxTemplate : { name: 'secondTemplate' } ">
+                Second Template
+            </div>
+        </div>
+    `;
 
     $("#qunit-fixture").html(markup);
 });
@@ -1096,6 +1096,25 @@ QUnit.module("items via markup", {
         const $innerItem = window.test = $("<div>").attr("data-options", dxItemString).text("test");
         $innerItem.appendTo($element);
         const component = new TestComponent("#cmp", {});
+
+        assert.equal(component.option("items").length, 1, "item was added");
+        assert.equal($innerItem.attr("data-options"), dxItemString, "item was not changed");
+    });
+
+    QUnit.test("dxItem with custom parser", assert => {
+        const originalParser = config().optionsParser;
+        config({ optionsParser: JSON.parse });
+        const $element = $("#cmp");
+        const dxItemString = `{ "dxItem": {} }`;
+
+        const $innerItem = window.test = $("<div>").attr("data-options", dxItemString).text("test");
+        $innerItem.appendTo($element);
+        let component;
+        try {
+            component = new TestComponent("#cmp", {});
+        } finally {
+            config({ optionsParser: originalParser });
+        }
 
         assert.equal(component.option("items").length, 1, "item was added");
         assert.equal($innerItem.attr("data-options"), dxItemString, "item was not changed");

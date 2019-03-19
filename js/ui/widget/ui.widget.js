@@ -267,9 +267,7 @@ var Widget = DOMComponent.inherit({
     },
 
     _extractTemplates: function() {
-        var templates = this.option("integrationOptions.templates"),
-            templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
-
+        var templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
         var templatesMap = {};
 
         templateElements.each(function(_, template) {
@@ -291,9 +289,14 @@ var Widget = DOMComponent.inherit({
         each(templatesMap, (function(templateName, value) {
             var deviceTemplate = this._findTemplateByDevice(value);
             if(deviceTemplate) {
-                templates[templateName] = this._createTemplate(deviceTemplate);
+                this._saveTemplate(templateName, deviceTemplate);
             }
         }).bind(this));
+    },
+
+    _saveTemplate: function(name, template) {
+        var templates = this.option("integrationOptions.templates");
+        templates[name] = this._createTemplate(template);
     },
 
     _findTemplateByDevice: function(templates) {
