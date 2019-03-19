@@ -429,10 +429,13 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _getRealColumnWidth: function(width, groupWidth) {
-        if(groupWidth === undefined) {
-            groupWidth = this._rowsView.contentWidth();
+        if(!isPercentWidth(width)) {
+            return parseFloat(width);
         }
-        return isPercentWidth(width) ? (parseFloat(width) * groupWidth / 100) : parseFloat(width);
+
+        groupWidth = groupWidth || this._rowsView.contentWidth();
+
+        return parseFloat(width) * groupWidth / 100;
     },
 
     _getTotalWidth: function(widths, groupWidth) {

@@ -535,7 +535,7 @@ QUnit.test("bar with odd width. Vertical connector", function(assert) {
     label.shift(916, 366);
 
     assert.ok(connector);
-    assert.deepEqual(connector._stored_settings.points, [926, 400, 926, 375]);
+    assert.deepEqual(connector._stored_settings.points, [927, 400, 927, 375]);
 });
 
 QUnit.test("bar with odd height. Horizontal connector", function(assert) {
@@ -543,7 +543,7 @@ QUnit.test("bar with odd height. Horizontal connector", function(assert) {
 
     label.shift(161, 343);
 
-    assert.deepEqual(label._connector._stored_settings.points, [151, 343, 161, 343]);
+    assert.deepEqual(label._connector._stored_settings.points, [151, 344, 161, 344]);
 });
 
 QUnit.test("bar. Horizontal connector. Central point. Connector to the left side", function(assert) {
@@ -551,7 +551,7 @@ QUnit.test("bar. Horizontal connector. Central point. Connector to the left side
 
     label.shift(161, 343);
 
-    assert.deepEqual(label._connector._stored_settings.points, [151, 353, 161, 353]);
+    assert.deepEqual(label._connector._stored_settings.points, [151, 354, 161, 354]);
 });
 
 QUnit.test("bar. Horizontal connector. Central point. Connector to the right side", function(assert) {
@@ -559,7 +559,7 @@ QUnit.test("bar. Horizontal connector. Central point. Connector to the right sid
 
     label.shift(-161, 343);
 
-    assert.deepEqual(label._connector._stored_settings.points, [-141, 353, -152, 353]);
+    assert.deepEqual(label._connector._stored_settings.points, [-141, 354, -152, 354]);
 });
 
 QUnit.test("Inside", function(assert) {
@@ -711,6 +711,74 @@ QUnit.test("Use external connector strategy", function(assert) {
     label.shift(100, 50);
 
     assert.deepEqual(this.getConnectorElement()._stored_settings.points, [10, 10, 100, 55]);
+});
+
+QUnit.test("Label and point not on one line. Label on top", function(assert) {
+    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 20, height: 5 }, { x: 32, y: 50, width: 4, height: 10 });
+
+    label.shift(20, 20);
+
+    assert.deepEqual(label._connector._stored_settings.points, [34, 50, 34, 24]);
+});
+
+QUnit.test("Label and point not on one line. Label on bottom", function(assert) {
+    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 20, height: 5 }, { x: 32, y: 0, width: 4, height: 10 });
+
+    label.shift(20, 20);
+
+    assert.deepEqual(label._connector._stored_settings.points, [34, 10, 34, 20]);
+});
+
+QUnit.test("Label and point not on one line. Label on left", function(assert) {
+    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 5, height: 20 }, { x: 35, y: 25, width: 20, height: 4 });
+
+    label.shift(20, 20);
+
+    assert.deepEqual(label._connector._stored_settings.points, [35, 27, 24, 27]);
+});
+
+QUnit.test("Label and point not on one line. Label on right", function(assert) {
+    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 5, height: 20 }, { x: 0, y: 25, width: 10, height: 4 });
+
+    label.shift(20, 20);
+
+    assert.deepEqual(label._connector._stored_settings.points, [10, 27, 20, 27]);
+});
+
+QUnit.test("Label and point not on one line. Rotated. Label on top", function(assert) {
+    this.options.rotationAngle = 45;
+    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 20, height: 5 }, { x: 32, y: 50, width: 4, height: 10 });
+
+    label.shift(20, 20);
+
+    assert.deepEqual(label._connector._stored_settings.points, [34, 50, 34, 34]);
+});
+
+QUnit.test("Label and point not on one line. Rotated. Label on bottom", function(assert) {
+    this.options.rotationAngle = 45;
+    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 20, height: 5 }, { x: 32, y: 0, width: 4, height: 10 });
+
+    label.shift(20, 20);
+
+    assert.deepEqual(label._connector._stored_settings.points, [34, 10, 34, 34]);
+});
+
+QUnit.test("Label and point not on one line. Rotated. Label on left", function(assert) {
+    this.options.rotationAngle = 45;
+    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 5, height: 20 }, { x: 35, y: 25, width: 20, height: 4 });
+
+    label.shift(20, 20);
+
+    assert.deepEqual(label._connector._stored_settings.points, [35, 27, 27, 27]);
+});
+
+QUnit.test("Label and point not on one line. Rotated. Label on right", function(assert) {
+    this.options.rotationAngle = 45;
+    var label = this.createLabelWithBBox({ x: 20, y: 20, width: 5, height: 20 }, { x: 0, y: 25, width: 10, height: 4 });
+
+    label.shift(20, 20);
+
+    assert.deepEqual(label._connector._stored_settings.points, [10, 27, 27, 27]);
 });
 
 QUnit.module("Connector. Pie strategy", $.extend({}, environment, {
