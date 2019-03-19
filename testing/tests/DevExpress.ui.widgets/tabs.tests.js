@@ -4,8 +4,8 @@ import holdEvent from "events/hold";
 import config from "core/config";
 import pointerMock from "../../helpers/pointerMock.js";
 import { DataSource } from "data/data_source/data_source";
+import Tabs from "ui/tabs";
 
-import "ui/tabs";
 import "common.css!";
 
 QUnit.testStart(function() {
@@ -36,6 +36,7 @@ var TABS_ITEM_CLASS = "dx-tab",
     TAB_SELECTED_CLASS = "dx-tab-selected",
     TABS_SCROLLABLE_CLASS = "dx-tabs-scrollable",
     TABS_WRAPPER_CLASS = "dx-tabs-wrapper",
+    TABS_STRETCHED_CLASS = "dx-tabs-stretched",
     TABS_NAV_BUTTON_CLASS = "dx-tabs-nav-button",
     TABS_NAV_BUTTONS_CLASS = "dx-tabs-nav-buttons",
     TABS_LEFT_NAV_BUTTON_CLASS = "dx-tabs-nav-button-left",
@@ -316,6 +317,54 @@ QUnit.test("Tabs in multiple mode", function(assert) {
     pointerMock($tab).click();
 
     assert.equal(instance.option("selectedItems").length, 2, "selected two items in multiple mode");
+});
+
+QUnit.test("tabs should be have expanded class when width of all tabs is less than the container", function(assert) {
+    var $container = $("<div width='300px'>");
+
+    try {
+        var $element = $("<div>").appendTo($container).dxTabs({
+            items: [
+                { text: "user" }
+            ],
+            scrollingEnabled: true,
+            showNavButtons: true,
+            width: '100%'
+        });
+
+        $container.appendTo("#qunit-fixture");
+        domUtils.triggerShownEvent($container);
+
+        assert.equal($element.hasClass(Tabs.getTabsExpandedClass), true, "expanded class was added");
+    } finally {
+        $container.remove();
+    }
+});
+
+QUnit.test("tab with large text should be stretched and text should be visible", function(assert) {
+    var $container = $("<div>");
+    $container.width(250);
+
+    try {
+        var $element = $("<div>").appendTo($container).dxTabs({
+            items: [
+                { text: "text" },
+                { text: "very large text for tab" },
+                { text: "text" }
+            ],
+            scrollingEnabled: true,
+            showNavButtons: true,
+            width: '100%'
+        });
+
+        $container.appendTo("#qunit-fixture");
+        domUtils.triggerShownEvent($container);
+
+        assert.equal($element.hasClass(TABS_STRETCHED_CLASS), true, "stretched class was added");
+        assert.ok($element.find(toSelector(TABS_ITEM_CLASS)).eq(1).width() > 100, "tab was stretched");
+    } finally {
+        $container.remove();
+    }
 });
 
 
