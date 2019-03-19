@@ -1,15 +1,14 @@
 import $ from "jquery";
 
 import PopupModule from "ui/html_editor/modules/popup";
-import fx from "animation/fx";
 
 const POPUP_CLASS = "dx-popup";
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 
 const moduleConfig = {
     beforeEach: () => {
-        fx.off = true;
         this.$element = $("#htmlEditor");
+        this.clock = sinon.useFakeTimers();
 
         this.options = {
             editorInstance: {
@@ -23,7 +22,7 @@ const moduleConfig = {
         };
     },
     afterEach: () => {
-        fx.off = false;
+        this.clock.restore();
     }
 };
 
@@ -49,7 +48,7 @@ QUnit.module("Popup module", moduleConfig, () => {
         const insertEmbedContent = sinon.spy(popupModule, "insertEmbedContent");
 
         popupModule.showPopup();
-
+        this.clock.tick();
         const $suggestionList = $(`.${SUGGESTION_LIST_CLASS}`);
 
         assert.ok($suggestionList.is(":visible"), "list is visible");
@@ -57,7 +56,7 @@ QUnit.module("Popup module", moduleConfig, () => {
         assert.ok(insertEmbedContent.notCalled, "ok");
 
         $suggestionList.find(".dx-list-item").first().trigger("dxclick");
-
+        this.clock.tick(500);
         assert.ok(insertEmbedContent.calledOnce, "ok");
         assert.notOk($suggestionList.is(":visible"), "list isn't visible");
     });
