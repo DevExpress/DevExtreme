@@ -267,7 +267,7 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _renderScrolling: function() {
-        let removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
+        var removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
         this.$element().removeClass(removeClasses.join(" "));
 
         if(this._allowScrolling()) {
@@ -296,7 +296,7 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _updateStretchedState: function() {
-        let $visibleItems = this._getVisibleItems(),
+        var $visibleItems = this._getVisibleItems(),
             elementWidth = this.$element().width(),
             maxTabWidth = this._getMaxTabWidth($visibleItems);
 
@@ -306,7 +306,7 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _getMaxTabWidth: function(items) {
-        let itemsWidth = [];
+        var itemsWidth = [];
 
         iteratorUtils.each(items, (_, item) => {
             itemsWidth.push($(item).outerWidth());

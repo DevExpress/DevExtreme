@@ -335,7 +335,7 @@ QUnit.test("tabs should be have expanded class when width of all tabs is less th
         $container.appendTo("#qunit-fixture");
         domUtils.triggerShownEvent($container);
 
-        assert.equal($element.hasClass(Tabs.getTabsExpandedClass), true, "expanded class was added");
+        assert.ok($element.hasClass(Tabs.getTabsExpandedClass), "expanded class was added");
     } finally {
         $container.remove();
     }
@@ -352,7 +352,6 @@ QUnit.test("tab with large text should be stretched and text should be visible",
                 { text: "very large text for tab" },
                 { text: "text" }
             ],
-            scrollingEnabled: true,
             showNavButtons: true,
             width: '100%'
         });
@@ -360,7 +359,7 @@ QUnit.test("tab with large text should be stretched and text should be visible",
         $container.appendTo("#qunit-fixture");
         domUtils.triggerShownEvent($container);
 
-        assert.equal($element.hasClass(TABS_STRETCHED_CLASS), true, "stretched class was added");
+        assert.ok($element.hasClass(TABS_STRETCHED_CLASS), "stretched class was added");
         assert.ok($element.find(toSelector(TABS_ITEM_CLASS)).eq(1).width() > 100, "tab was stretched");
     } finally {
         $container.remove();
