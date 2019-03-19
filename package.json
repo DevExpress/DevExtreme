@@ -30,7 +30,8 @@
     "jszip": "^2.0.0 || ^3.0.0",
     "quill": "^1.3.6",
     "showdown": "^1.8.6",
-    "turndown": "^5.0.1"
+    "turndown": "^5.0.1",
+    "exceljs": "^1.7.0"
   },
   "devDependencies": {
     "@types/jquery": "^2.0.34",
