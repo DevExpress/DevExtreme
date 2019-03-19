@@ -1,10 +1,11 @@
 import $ from "jquery";
 
 import MentionFormat from "ui/html_editor/formats/mention";
-import Mention from "ui/html_editor/modules/mention";
+import Mentions from "ui/html_editor/modules/mentions";
 import { noop } from "core/utils/common";
 
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
+const LIST_ITEM_CLASS = "dx-list-item";
 
 const INSERT_DEFAULT_MENTION_DELTA = { ops: [{ insert: "@" }] };
 const INSERT_HASH_MENTION_DELTA = { ops: [{ insert: "#" }] };
@@ -114,14 +115,14 @@ QUnit.module("Mention format", () => {
     });
 });
 
-QUnit.module("Mention module", moduleConfig, () => {
+QUnit.module("Mentions module", moduleConfig, () => {
     test("insert mention after click on item", (assert) => {
-        const mention = new Mention(this.quillMock, this.options);
+        const mention = new Mentions(this.quillMock, this.options);
 
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
 
-        $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().trigger("dxclick");
+        $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).first().trigger("dxclick");
 
         this.clock.tick();
 
@@ -137,11 +138,11 @@ QUnit.module("Mention module", moduleConfig, () => {
     });
 
     test("Display and value expression with complex data", (assert) => {
-        const mention = new Mention(this.quillMock, this.complexDataOptions);
+        const mention = new Mentions(this.quillMock, this.complexDataOptions);
 
         mention.savePosition(0);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
-        $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().trigger("dxclick");
+        $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).first().trigger("dxclick");
 
         this.clock.tick();
 
@@ -157,11 +158,11 @@ QUnit.module("Mention module", moduleConfig, () => {
     });
 
     test("Insert embed content should remove marker before insert a mention and restore the selection", (assert) => {
-        const mention = new Mention(this.quillMock, this.complexDataOptions);
+        const mention = new Mentions(this.quillMock, this.complexDataOptions);
 
         mention.savePosition(2);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
-        $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().trigger("dxclick");
+        $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).first().trigger("dxclick");
         this.clock.tick();
 
         assert.deepEqual(this.log, [{
@@ -185,7 +186,7 @@ QUnit.module("Mention module", moduleConfig, () => {
     test("changing text by user should trigger checkMentionRequest", (assert) => {
         this.quillMock.getSelection = () => { return { index: 1, length: 0 }; };
 
-        const mention = new Mention(this.quillMock, this.complexDataOptions);
+        const mention = new Mentions(this.quillMock, this.complexDataOptions);
         const mentionRequestSpy = sinon.spy(mention, "checkMentionRequest");
         const showPopupSpy = sinon.spy(mention._popup, "show");
 
@@ -207,12 +208,12 @@ QUnit.module("Mention module", moduleConfig, () => {
     });
 
     test("display expression should be used in the suggestion list", (assert) => {
-        const mention = new Mention(this.quillMock, this.complexDataOptions);
+        const mention = new Mentions(this.quillMock, this.complexDataOptions);
 
         mention.savePosition(2);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
 
-        const itemText = $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().text();
+        const itemText = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).first().text();
 
         assert.strictEqual(itemText, "Alex manager");
     });
@@ -222,22 +223,22 @@ QUnit.module("Mention module", moduleConfig, () => {
             $(element).text(`${item.name}@`);
         };
 
-        const mention = new Mention(this.quillMock, this.complexDataOptions);
+        const mention = new Mentions(this.quillMock, this.complexDataOptions);
         mention.savePosition(2);
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
 
-        const itemText = $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().text();
+        const itemText = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).first().text();
         assert.strictEqual(itemText, "Alex@");
     });
 
     test("several markers using", (assert) => {
         const usersCount = this.severalMarkerOptions.mentions[0].dataSource.length;
         const issueCount = this.severalMarkerOptions.mentions[1].dataSource.length;
-        const mention = new Mention(this.quillMock, this.severalMarkerOptions);
+        const mention = new Mentions(this.quillMock, this.severalMarkerOptions);
 
         mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
 
-        let $items = $(`.${SUGGESTION_LIST_CLASS} .dx-item`);
+        let $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
 
         assert.strictEqual($items.length, usersCount, "List of users");
 
@@ -256,7 +257,7 @@ QUnit.module("Mention module", moduleConfig, () => {
 
         mention.onTextChange(INSERT_HASH_MENTION_DELTA, {}, "user");
 
-        $items = $(`.${SUGGESTION_LIST_CLASS} .dx-item`);
+        $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
 
         assert.strictEqual($items.length, issueCount, "List of issues");
 

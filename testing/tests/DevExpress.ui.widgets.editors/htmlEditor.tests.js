@@ -24,3 +24,4 @@ import "./htmlEditorParts/events.tests.js";
 import "./htmlEditorParts/resizingModule.tests.js";
 import "./htmlEditorParts/resizingIntegration.tests.js";
 import "./htmlEditorParts/mentionModule.tests.js";
+import "./htmlEditorParts/mentionIntegration.tests.js";

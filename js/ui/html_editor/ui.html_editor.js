@@ -89,7 +89,7 @@ const HtmlEditor = Editor.inherit({
             * @default null
             */
             resizing: null,
-            mention: null,
+            mentions: null,
 
             formDialogOptions: null
 

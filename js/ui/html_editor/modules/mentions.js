@@ -67,7 +67,7 @@ class MentionModule extends PopupModule {
         };
 
         setTimeout(function() {
-            this.quill.deleteText(startIndex, markerLength);
+            this.quill.deleteText(startIndex, markerLength, "silent");
             this.quill.insertEmbed(startIndex, "mention", value);
 
             this.quill.setSelection(startIndex + 1);
@@ -108,7 +108,8 @@ class MentionModule extends PopupModule {
     }
 
     get _popupPosition() {
-        const mentionBounds = this.quill.getBounds(this.getPosition() - 1);
+        const position = this.getPosition();
+        const mentionBounds = this.quill.getBounds(position ? position - 1 : position);
         const rootRect = this.quill.root.getBoundingClientRect();
 
         return {
