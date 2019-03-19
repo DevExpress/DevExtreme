@@ -1,5 +1,4 @@
 var $ = require("../core/renderer"),
-    window = require("../core/utils/window").getWindow(),
     eventsEngine = require("../events/core/events_engine"),
     Promise = require("../core/polyfills/promise"),
     fromPromise = require("../core/utils/deferred").fromPromise,
@@ -14,7 +13,6 @@ var $ = require("../core/renderer"),
     isNumeric = require("../core/utils/type").isNumeric,
     eventUtils = require("../events/utils"),
     pointerEvents = require("../events/pointer"),
-    config = require("../core/config"),
     wrapToArray = require("../core/utils/array").wrapToArray;
 
 // NOTE external urls must have protocol explicitly specified (because inside Cordova package the protocol is "file:")
@@ -410,7 +408,7 @@ var Map = Widget.inherit({
 
     _cancelEvent: function(e) {
         var cancelByProvider = this._provider && this._provider.isEventsCanceled() && !this.option("disabled");
-        if(!(config.designMode) && cancelByProvider) {
+        if(cancelByProvider) {
             e.stopPropagation();
         }
     },
@@ -433,10 +431,9 @@ var Map = Widget.inherit({
     },
 
     _renderShield: function() {
-        var $shield,
-            DevExpress = window.DevExpress;
+        var $shield;
 
-        if(DevExpress && DevExpress.designMode || this.option("disabled")) {
+        if(this.option("disabled")) {
             $shield = $("<div>").addClass(MAP_SHIELD_CLASS);
             this.$element().append($shield);
         } else {

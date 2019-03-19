@@ -3,7 +3,6 @@ var $ = require("jquery"),
     translator = require("animation/translator"),
     PivotTabs = require("ui/pivot/ui.pivot_tabs"),
     animation = require("ui/pivot/ui.pivot_tabs").animation,
-    config = require("core/config"),
     pointerMock = require("../../helpers/pointerMock.js");
 
 require("common.css!");
@@ -217,45 +216,6 @@ QUnit.test("ghost item should be rendered", function(assert) {
 
     assert.ok($ghostItem.length, "ghost item generated");
     assert.equal($ghostItem.css("opacity"), 0, "ghost item is hidden");
-});
-
-
-QUnit.module("design mode", {
-    beforeEach: function() {
-        config({ designMode: true });
-
-        fx.off = true;
-    },
-    afterEach: function() {
-        config({ designMode: false });
-
-        fx.off = false;
-    }
-});
-
-QUnit.test("swipe should be rejected", function(assert) {
-    var $pivotTabs = new PivotTabs($("#pivottabs"), {
-        items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }],
-        selectedIndex: 0
-    }).$element();
-
-    var pointer = pointerMock($pivotTabs);
-
-    var startEvent = pointer.start().swipeStart().lastEvent();
-    assert.ok(startEvent.cancel, "index should not change because swipe was rejected");
-});
-
-QUnit.test("tab click should be rejected", function(assert) {
-    var pivotTabs = new PivotTabs($("#pivottabs"), {
-            items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }],
-            selectedIndex: 0
-        }),
-        $pivotTabs = pivotTabs.$element();
-
-    var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS));
-
-    pointerMock($items.eq(1)).click();
-    assert.strictEqual(pivotTabs.option("selectedIndex"), 0, "index should not change");
 });
 
 

@@ -170,8 +170,8 @@ var EditorFactory = modules.ViewController.inherit({
     },
 
     init: function() {
-        this.createAction("onEditorPreparing", { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
-        this.createAction("onEditorPrepared", { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
+        this.createAction("onEditorPreparing", { excludeValidators: ["disabled", "readOnly"], category: "rendering" });
+        this.createAction("onEditorPrepared", { excludeValidators: ["disabled", "readOnly"], category: "rendering" });
 
         this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
         eventsEngine.on(domAdapter.getDocument(), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);

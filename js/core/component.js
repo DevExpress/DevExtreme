@@ -265,11 +265,11 @@ var Component = Class.inherit({
     },
 
     _createOptionChangedAction: function() {
-        this._optionChangedAction = this._createActionByOption("onOptionChanged", { excludeValidators: ["disabled", "readOnly", "designMode"] });
+        this._optionChangedAction = this._createActionByOption("onOptionChanged", { excludeValidators: ["disabled", "readOnly"] });
     },
 
     _createDisposingAction: function() {
-        this._disposingAction = this._createActionByOption("onDisposing", { excludeValidators: ["disabled", "readOnly", "designMode"] });
+        this._disposingAction = this._createActionByOption("onDisposing", { excludeValidators: ["disabled", "readOnly"] });
     },
 
     _optionChanged: function(args) {
@@ -325,7 +325,7 @@ var Component = Class.inherit({
                 } finally {
                     this._initializing = false;
                     this._updateLockCount++;
-                    this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly", "designMode"] })();
+                    this._createActionByOption("onInitialized", { excludeValidators: ["disabled", "readOnly"] })();
                     this._updateLockCount--;
                     this._initialized = true;
                 }

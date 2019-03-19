@@ -496,7 +496,7 @@ var Popup = Overlay.inherit({
     _createTitleRenderAction: function() {
         return (this._titleRenderAction = this._createActionByOption("onTitleRendered", {
             element: this.element(),
-            excludeValidators: ["designMode", "disabled", "readOnly"]
+            excludeValidators: ["disabled", "readOnly"]
         }));
     },
 

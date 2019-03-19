@@ -1026,7 +1026,7 @@ var CollectionWidget = Widget.inherit({
     _createItemRenderAction: function() {
         return (this._itemRenderAction = this._createActionByOption("onItemRendered", {
             element: this.element(),
-            excludeValidators: ["designMode", "disabled", "readOnly"],
+            excludeValidators: ["disabled", "readOnly"],
             category: "rendering"
         }));
     },
