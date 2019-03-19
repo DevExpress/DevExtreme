@@ -7,6 +7,7 @@ var $ = require("../core/renderer"),
     eventUtils = require("../events/utils"),
     extend = require("../core/utils/extend").extend,
     isPlainObject = require("../core/utils/type").isPlainObject,
+    iteratorUtils = require("../core/utils/iterator"),
     pointerEvents = require("../events/pointer"),
     TabsItem = require("./tabs/item"),
     themes = require("./themes"),
@@ -306,7 +307,11 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _getMaxTabWidth: function(items) {
-        const itemsWidth = items.map((_, item) => $(item).outerWidth());
+        let itemsWidth = [];
+
+        iteratorUtils.each(items, (_, item) => {
+            itemsWidth.push($(item).outerWidth());
+        });
 
         return Math.max.apply(null, itemsWidth);
     },
