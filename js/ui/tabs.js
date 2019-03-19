@@ -7,7 +7,6 @@ var $ = require("../core/renderer"),
     eventUtils = require("../events/utils"),
     extend = require("../core/utils/extend").extend,
     isPlainObject = require("../core/utils/type").isPlainObject,
-    iteratorUtils = require("../core/utils/iterator"),
     pointerEvents = require("../events/pointer"),
     TabsItem = require("./tabs/item"),
     themes = require("./themes"),
@@ -301,23 +300,15 @@ var Tabs = CollectionWidget.inherit({
             elementWidth = this.$element().width(),
             maxTabWidth = this._getMaxTabWidth($visibleItems);
 
-        if(maxTabWidth > elementWidth / $visibleItems.length) {
+        if(maxTabWidth > Math.floor(elementWidth / $visibleItems.length)) {
             this.$element().addClass(TABS_STRETCHED_CLASS);
         }
     },
 
     _getMaxTabWidth: function(items) {
-        let result = 0;
+        const itemsWidth = items.map((_, item) => $(item).outerWidth());
 
-        if(items) {
-            iteratorUtils.each(items, (_, item) => {
-                let outerWidth = $(item).outerWidth();
-
-                if(outerWidth > result) result = outerWidth;
-            });
-        }
-
-        return result;
+        return Math.max.apply(null, itemsWidth);
     },
 
 
