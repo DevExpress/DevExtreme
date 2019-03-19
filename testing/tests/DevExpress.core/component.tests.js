@@ -127,17 +127,15 @@ QUnit.module("default", {}, () => {
     });
 
     QUnit.test("setOptionSilently method", (assert) => {
-        const optionChangedHandler = sinon.spy();
-
         const instance = new TestComponent({
-            opt2: "custom",
-            onOptionChanged: optionChangedHandler
+            opt2: "custom"
         });
 
         instance._setOptionSilent("opt2", "new custom");
 
-        assert.strictEqual(instance.option("opt2"), "new custom", "option has been setted");
-        assert.strictEqual(optionChangedHandler.callCount, 0, "optionChanged event has not been rised");
+        assert.strictEqual(instance.option("opt2"), "new custom", "option has been changed");
+        const log = instance._getTraceLogByMethod("_optionChanged");
+        assert.strictEqual(log.length, 0, "optionChanged method has not been called");
     });
 
     QUnit.test("options api - 'onOptionChanged' action", (assert) => {

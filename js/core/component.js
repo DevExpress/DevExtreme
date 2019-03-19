@@ -374,12 +374,10 @@ var Component = Class.inherit({
 
                 that._optionChangedCallbacks.fireWith(that, [extend(that._defaultActionArgs(), args)]);
 
-                if(this._cancelOptionChange !== args.name) {
-                    that._optionChangedAction(extend({}, args));
+                that._optionChangedAction(extend({}, args));
 
-                    if(!that._disposed) {
-                        that._optionChanged(args);
-                    }
+                if(!that._disposed && this._cancelOptionChange !== args.name) {
+                    that._optionChanged(args);
                 }
             }
         }
