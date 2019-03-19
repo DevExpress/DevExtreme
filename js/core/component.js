@@ -373,7 +373,6 @@ var Component = Class.inherit({
                     };
 
                 that._optionChangedCallbacks.fireWith(that, [extend(that._defaultActionArgs(), args)]);
-
                 that._optionChangedAction(extend({}, args));
 
                 if(!that._disposed && this._cancelOptionChange !== args.name) {
@@ -659,7 +658,6 @@ var Component = Class.inherit({
             }
 
             setOptionValue(that, name, value);
-
             that._notifyOptionChanged(name, value, previousValue);
         };
 
