@@ -1,6 +1,8 @@
+var $ = require("jquery");
 var eventsEngine = require("events/core/events_engine");
 var keyboardMock = require("../../helpers/keyboardMock.js");
 var registerEvent = require("events/core/event_registrator");
+var compareVersion = require("core/utils/version").compare;
 
 QUnit.module("base");
 
@@ -305,6 +307,11 @@ QUnit.test("Should not fire event when relatedTarget is children of a target", f
 });
 
 QUnit.test("On/trigger/off event listeners", function(assert) {
+    if(compareVersion($.fn.jquery, [1], 1) === 0) {
+        assert.expect(0);
+        return;
+    }
+
     var eventNames = ["mouseover", "mouseout", "pointerover", "pointerout"].concat(eventsEngine.forcePassiveFalseEventNames),
         div = document.createElement("div"),
         callbackIsCalled;
