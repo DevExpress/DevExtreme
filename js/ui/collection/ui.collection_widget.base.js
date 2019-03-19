@@ -337,11 +337,13 @@ var CollectionWidget = Widget.inherit({
 
     _prepareItemTemplate: function($item) {
         var templateId = ITEM_TEMPLATE_ID_PREFIX + new Guid();
-        var templateOptions = "dxTemplate: { name: \"" + templateId + "\" }";
+        var $template = $item
+            .detach()
+            .clone()
+            .removeAttr("data-options")
+            .addClass(TEMPLATE_WRAPPER_CLASS);
 
-        $item.detach().clone()
-            .attr("data-options", templateOptions)
-            .data("options", templateOptions).appendTo(this.$element());
+        this._saveTemplate(templateId, $template);
 
         return templateId;
     },
