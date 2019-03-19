@@ -2598,6 +2598,8 @@ QUnit.test("Do not shrink axis on zooming - only draw axes in old canvas (T62444
     assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
 });
 
+QUnit.module("Animation", environment);
+
 QUnit.test("Pass animate true flag to the updateSize method", function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();
@@ -2683,4 +2685,56 @@ QUnit.test("Pass animate false flag to the updateSize method if points limit is 
     // assert
     assert.deepEqual(argAxis.updateSize.lastCall.args[1], true);
     assert.deepEqual(valAxis.updateSize.lastCall.args[1], true);
+});
+
+QUnit.test("Do not stop all current animations if no adaptive layout", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs();
+
+    argAxis.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 15 });
+    valAxis.getMargins.returns({ left: 7, top: 0, right: 0, bottom: 0 });
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        size: { width: 220, height: 110 },
+        adaptiveLayout: { width: 50, height: 50 },
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    var valAxisStub = this.axisStub.getCall(1).returnValue;
+    assert.equal(valAxisStub.updateSize.callCount, 1);
+
+    assert.equal(this.renderer.stopAllAnimations.callCount, 2);
+
+    assert.ok(this.renderer.stopAllAnimations.getCall(0).calledBefore(valAxisStub.updateSize.getCall(0)));
+    assert.ok(this.renderer.stopAllAnimations.getCall(1).calledBefore(valAxisStub.updateSize.getCall(0)));
+});
+
+QUnit.test("Stop all current animations on adaptive layout", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs();
+
+    argAxis.getMargins.returns({ left: 0, top: 0, right: 0, bottom: 15 });
+    valAxis.getMargins.returns({ left: 7, top: 0, right: 0, bottom: 0 });
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        size: { width: 220, height: 110 },
+        adaptiveLayout: { width: 50, height: 100 },
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    var valAxisStub = this.axisStub.getCall(1).returnValue;
+    assert.equal(valAxisStub.updateSize.callCount, 4);
+
+    assert.equal(this.renderer.stopAllAnimations.callCount, 3);
+
+    assert.ok(this.renderer.stopAllAnimations.getCall(2).calledAfter(valAxisStub.updateSize.getCall(1)));
+    assert.ok(this.renderer.stopAllAnimations.getCall(2).calledBefore(valAxisStub.updateSize.getCall(2)));
 });

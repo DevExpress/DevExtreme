@@ -1,8 +1,5 @@
 @WIN8_LOOKUP_HEIGHT: 34px;
 @WIN8_LOOKUP_LIST_MARGIN_AFTER: 8px;
-@WIN8_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE: 14px;
-@WIN8_LOOKUP_VALIDATION_MESSAGE_PADDING_HORIZONTAL: 10px;
-@WIN8_LOOKUP_VALIDATION_MESSAGE_PADDING_VERTICAL: 12px;
 @WIN8_LOOKUP_POPUP_ITEMS_VERTICAL_OFFSET: 30px;
 
 .dx-lookup {
@@ -133,33 +130,6 @@
     color: @WIN8_LOOKUP_ARROW_ICON_COLOR;
 }
 
-.dx-lookup-validation-message {
-    background-color: @WIN8_INVALID_COLOR;
-    color: white;
-    font-size: @WIN8_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE;
-    line-height: @WIN8_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE;
-    padding: @WIN8_LOOKUP_VALIDATION_MESSAGE_PADDING_VERTICAL @WIN8_LOOKUP_VALIDATION_MESSAGE_PADDING_HORIZONTAL;
-    display: inline-block;
-    margin-left: -@WIN8_LOOKUP_VALIDATION_MESSAGE_PADDING_HORIZONTAL;
-
-    .dx-rtl & {
-        margin-right: -@WIN8_LOOKUP_VALIDATION_MESSAGE_PADDING_HORIZONTAL;
-        margin-left: 0;
-    }
-}
-
 .dx-popup-content {
     padding: 0;
-
-    &.dx-lookup-invalid {
-        padding-top: 0;
-
-        .dx-lookup-validation-message {
-            display: inline-block;
-        }
-
-        .dx-popup-title + & {
-            padding-top: @WIN8_LOOKUP_POPUP_ITEMS_VERTICAL_OFFSET;
-        }
-    }
 }
