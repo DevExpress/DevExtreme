@@ -525,13 +525,36 @@ var ResizingController = modules.ViewController.inherit({
         }
         return true;
     },
+    _setScrollerSpacingCore: function(hasHeight) {
+        var that = this,
+            vScrollbarWidth = hasHeight ? that._rowsView.getScrollbarWidth() : 0,
+            hScrollbarWidth = that._rowsView.getScrollbarWidth(true);
+
+        commonUtils.deferRender(function() {
+            that._columnHeadersView && that._columnHeadersView.setScrollerSpacing(vScrollbarWidth);
+            that._footerView && that._footerView.setScrollerSpacing(vScrollbarWidth);
+            that._rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
+        });
+    },
+    _setScrollerSpacing: function(hasHeight) {
+        var that = this,
+            scrollable = that._rowsView.getScrollable();
+
+        if(!scrollable && hasHeight) {
+            commonUtils.deferRender(() => {
+                commonUtils.deferUpdate(() => {
+                    that._setScrollerSpacingCore(hasHeight);
+                });
+            });
+        } else {
+            that._setScrollerSpacingCore(hasHeight);
+        }
+    },
     _updateDimensionsCore: function() {
         var that = this,
             hasHeight,
             dataController = that._dataController,
             rowsView = that._rowsView,
-            columnHeadersView = that._columnHeadersView,
-            footerView = that._footerView,
             $rootElement = that.component.$element(),
             groupElement = $rootElement.children().get(0),
             rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || $rootElement.height()),
@@ -564,15 +587,7 @@ var ResizingController = modules.ViewController.inherit({
             }
             commonUtils.deferUpdate(function() {
                 that._updateLastSizes($rootElement);
-
-                var vScrollbarWidth = hasHeight ? rowsView.getScrollbarWidth() : 0;
-                var hScrollbarWidth = rowsView.getScrollbarWidth(true);
-
-                commonUtils.deferRender(function() {
-                    columnHeadersView && columnHeadersView.setScrollerSpacing(vScrollbarWidth);
-                    footerView && footerView.setScrollerSpacing(vScrollbarWidth);
-                    rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
-                });
+                that._setScrollerSpacing(hasHeight);
 
                 each(VIEW_NAMES, function(index, viewName) {
                     var view = that.getView(viewName);
