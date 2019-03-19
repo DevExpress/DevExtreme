@@ -23,10 +23,7 @@ var NATIVE_EVENTS_TO_TRIGGER = {
     "focusout": "blur"
 };
 var NO_BUBBLE_EVENTS = ["blur", "focusout", "focus", "focusin", "load"];
-var passiveListenerEvents = {
-    eventName: "dxpointermove",
-    nativeEventName: "touchmove"
-};
+var forcePassiveFalseEventNames = ["touchmove", "wheel", "mousewheel"]; // "touchstart"?
 
 var matchesSafe = function(target, selector) {
     return !isWindow(target) && target.nodeName !== "#document" && matches(target, selector);
@@ -178,7 +175,7 @@ var getHandlersController = function(element, eventName) {
             if(shouldAddNativeListener) {
                 eventData.nativeHandler = getNativeHandler(eventName);
 
-                if(eventName === passiveListenerEvents.nativeEventName) {
+                if(forcePassiveFalseEventNames.indexOf(eventName) > -1) {
                     nativeListenerOptions = {
                         passive: false
                     };
@@ -598,7 +595,7 @@ eventsEngine.subscribeGlobal = function() {
     }));
 };
 
-eventsEngine.passiveListenerEvents = passiveListenerEvents;
+eventsEngine.forcePassiveFalseEventNames = forcePassiveFalseEventNames;
 
 ///#DEBUG
 eventsEngine.elementDataMap = elementDataMap;
