@@ -5,13 +5,13 @@ import { extend } from "../../../core/utils/extend";
 import PopupModule from "./popup";
 
 const USER_ACTION = "user";
+const DEFAULT_MARKER = "@";
 
 class MentionModule extends PopupModule {
     _getDefaultOptions() {
         const baseConfig = super._getDefaultOptions();
 
         return extend(baseConfig, {
-            marker: "@",
             itemTemplate: (itemData) => {
                 return this._valueGetter(itemData);
             },
@@ -22,6 +22,17 @@ class MentionModule extends PopupModule {
 
     constructor(quill, options) {
         super(quill, options);
+
+        this._mentions = {};
+
+        options.mentions.forEach((item) => {
+            if(!item.marker) {
+                item.marker = DEFAULT_MARKER;
+            }
+
+            this._mentions[item.marker] = extend({}, this._getDefaultOptions(), item);
+        });
+
         this.quill.on("text-change", this.onTextChange.bind(this));
     }
 
@@ -44,7 +55,7 @@ class MentionModule extends PopupModule {
     }
 
     insertEmbedContent(selectionChangedEvent) {
-        const markerLength = this.options.marker.length;
+        const markerLength = this._activeMarker.marker.length;
         const caretPosition = this.getPosition();
         const startIndex = Math.max(0, caretPosition - markerLength);
         const selectedItem = selectionChangedEvent.component.option("selectedItem");
@@ -52,7 +63,7 @@ class MentionModule extends PopupModule {
         const value = {
             value: this._valueGetter(selectedItem),
             id: this._idGetter(selectedItem),
-            marker: this.options.marker
+            marker: this._activeMarker.marker
         };
 
         setTimeout(function() {
@@ -77,13 +88,23 @@ class MentionModule extends PopupModule {
             return;
         }
 
-        const mentionIndex = insertOperation.indexOf(this.options.marker);
+        this._activeMarker = this._mentions[insertOperation];
 
-        if(mentionIndex !== -1) {
+        if(this._activeMarker) {
+            this._updateList(this._activeMarker);
             this.savePosition(caret.index);
             this._popup.option("position", this._popupPosition);
             this._popup.show();
         }
+    }
+
+    _updateList({ dataSource, displayExpr, valueExpr, itemTemplate }) {
+        this.compileGetters({ displayExpr, valueExpr });
+        this._list.option({
+            dataSource,
+            displayExpr,
+            itemTemplate,
+        });
     }
 
     get _popupPosition() {

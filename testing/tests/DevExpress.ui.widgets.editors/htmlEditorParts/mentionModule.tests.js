@@ -6,6 +6,10 @@ import { noop } from "core/utils/common";
 
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 
+const INSERT_DEFAULT_MENTION_DELTA = { ops: [{ insert: "@" }] };
+const INSERT_HASH_MENTION_DELTA = { ops: [{ insert: "#" }] };
+const INSERT_TEXT_DELTA = { ops: [{ insert: "Text" }] };
+
 const moduleConfig = {
     beforeEach: () => {
         this.clock = sinon.useFakeTimers();
@@ -22,7 +26,7 @@ const moduleConfig = {
             getBounds: () => { return { left: 0, bottom: 0 }; },
             root: this.$element.get(0),
             getModule: noop,
-            getSelection: noop,
+            getSelection: () => { return { index: 1, length: 0 }; },
             setSelection: (index) => { this.log.push({ operation: "setSelection", index }); },
             getFormat: noop,
             on: noop,
@@ -31,7 +35,9 @@ const moduleConfig = {
         };
 
         this.options = {
-            dataSource: ["Alex", "John", "Freddy", "Sam"],
+            mentions: [{
+                dataSource: ["Alex", "John", "Freddy", "Sam"]
+            }],
             editorInstance: {
                 $element: () => {
                     return this.$element;
@@ -42,18 +48,30 @@ const moduleConfig = {
             }
         };
 
-        this.complexDataOption = {
-            dataSource: [{
-                name: "Alex",
-                position: "manager"
-            }, {
-                name: "John",
-                position: "it"
+        this.complexDataOptions = {
+            mentions: [{
+                dataSource: [{
+                    name: "Alex",
+                    position: "manager"
+                }, {
+                    name: "John",
+                    position: "it"
+                }],
+                valueExpr: "name",
+                displayExpr: ({ name, position }) => {
+                    return `${name} ${position}`;
+                }
             }],
-            valueExpr: "name",
-            displayExpr: ({ name, position }) => {
-                return `${name} ${position}`;
-            },
+            editorInstance: this.options.editorInstance
+        };
+
+        this.severalMarkerOptions = {
+            mentions: [{
+                dataSource: ["Alex", "John", "Stew", "Lola", "Nancy"]
+            }, {
+                dataSource: [4421, 5422, 2245, 6632],
+                marker: "#"
+            }],
             editorInstance: this.options.editorInstance
         };
     },
@@ -101,7 +119,8 @@ QUnit.module("Mention module", moduleConfig, () => {
         const mention = new Mention(this.quillMock, this.options);
 
         mention.savePosition(0);
-        mention.showPopup();
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
+
         $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().trigger("dxclick");
 
         this.clock.tick();
@@ -118,10 +137,10 @@ QUnit.module("Mention module", moduleConfig, () => {
     });
 
     test("Display and value expression with complex data", (assert) => {
-        const mention = new Mention(this.quillMock, this.complexDataOption);
+        const mention = new Mention(this.quillMock, this.complexDataOptions);
 
         mention.savePosition(0);
-        mention.showPopup();
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
         $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().trigger("dxclick");
 
         this.clock.tick();
@@ -138,27 +157,27 @@ QUnit.module("Mention module", moduleConfig, () => {
     });
 
     test("Insert embed content should remove marker before insert a mention and restore the selection", (assert) => {
-        const mention = new Mention(this.quillMock, this.complexDataOption);
+        const mention = new Mention(this.quillMock, this.complexDataOptions);
 
         mention.savePosition(2);
-        mention.showPopup();
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
         $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().trigger("dxclick");
         this.clock.tick();
 
         assert.deepEqual(this.log, [{
-            index: 1, // go to start of typing and remove the marker
+            index: 0, // go to start of typing and remove the marker
             length: 1,
             operation: "deleteText"
         }, {
             format: "mention", // insert the mention to the current position
-            position: 1,
+            position: 0,
             value: {
                 marker: "@",
                 id: "Alex",
                 value: "Alex manager"
             }
         }, {
-            index: 2, // restore selection
+            index: 1, // restore selection
             operation: "setSelection"
         }]);
     });
@@ -166,34 +185,32 @@ QUnit.module("Mention module", moduleConfig, () => {
     test("changing text by user should trigger checkMentionRequest", (assert) => {
         this.quillMock.getSelection = () => { return { index: 1, length: 0 }; };
 
-        const insertMentionDelta = { ops: [{ insert: "@" }] };
-        const insertTextDelta = { ops: [{ insert: "Text" }] };
-        const mention = new Mention(this.quillMock, this.complexDataOption);
+        const mention = new Mention(this.quillMock, this.complexDataOptions);
         const mentionRequestSpy = sinon.spy(mention, "checkMentionRequest");
         const showPopupSpy = sinon.spy(mention._popup, "show");
 
 
-        mention.onTextChange(insertMentionDelta, {}, "API");
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "API");
 
         assert.ok(mentionRequestSpy.notCalled, "Ignore changing text by API");
         assert.ok(showPopupSpy.notCalled, "Popup isn't shown");
 
-        mention.onTextChange(insertTextDelta, {}, "user");
+        mention.onTextChange(INSERT_TEXT_DELTA, {}, "user");
 
         assert.ok(mentionRequestSpy.calledOnce, "trigger mention request");
         assert.ok(showPopupSpy.notCalled, "Popup isn't shown because text doesn't contain a marker");
 
-        mention.onTextChange(insertMentionDelta, {}, "user");
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
 
         assert.ok(mentionRequestSpy.calledTwice, "trigger mention request");
         assert.ok(showPopupSpy.calledOnce, "Show popup with suggestion list");
     });
 
     test("display expression should be used in the suggestion list", (assert) => {
-        const mention = new Mention(this.quillMock, this.complexDataOption);
+        const mention = new Mention(this.quillMock, this.complexDataOptions);
 
         mention.savePosition(2);
-        mention.showPopup();
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
 
         const itemText = $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().text();
 
@@ -201,15 +218,59 @@ QUnit.module("Mention module", moduleConfig, () => {
     });
 
     test("item template", (assert) => {
-        this.complexDataOption.itemTemplate = (item, index, element) => {
+        this.complexDataOptions.mentions[0].itemTemplate = (item, index, element) => {
             $(element).text(`${item.name}@`);
         };
 
-        const mention = new Mention(this.quillMock, this.complexDataOption);
+        const mention = new Mention(this.quillMock, this.complexDataOptions);
         mention.savePosition(2);
-        mention.showPopup();
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
 
         const itemText = $(`.${SUGGESTION_LIST_CLASS} .dx-item`).first().text();
         assert.strictEqual(itemText, "Alex@");
+    });
+
+    test("several markers using", (assert) => {
+        const usersCount = this.severalMarkerOptions.mentions[0].dataSource.length;
+        const issueCount = this.severalMarkerOptions.mentions[1].dataSource.length;
+        const mention = new Mention(this.quillMock, this.severalMarkerOptions);
+
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
+
+        let $items = $(`.${SUGGESTION_LIST_CLASS} .dx-item`);
+
+        assert.strictEqual($items.length, usersCount, "List of users");
+
+        $items.first().trigger("dxclick");
+        this.clock.tick();
+
+        assert.deepEqual(this.log[1], {
+            format: "mention",
+            position: 0,
+            value: {
+                marker: "@",
+                id: "Alex",
+                value: "Alex"
+            }
+        }, "insert user mention");
+
+        mention.onTextChange(INSERT_HASH_MENTION_DELTA, {}, "user");
+
+        $items = $(`.${SUGGESTION_LIST_CLASS} .dx-item`);
+
+        assert.strictEqual($items.length, issueCount, "List of issues");
+
+        $items.first().trigger("dxclick");
+        this.clock.tick();
+
+        assert.deepEqual(this.log[4], {
+            format: "mention",
+            position: 0,
+            value: {
+                marker: "#",
+                id: 4421,
+                value: 4421
+            }
+        }, "insert issue mention");
     });
 });

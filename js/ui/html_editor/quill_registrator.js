@@ -37,7 +37,7 @@ class QuillRegistrator {
             "modules/dropImage": DropImage,
             "modules/variables": Variables,
             "modules/resizing": Resizing,
-            "modules/mention": MentionModule,
+            "modules/mentions": MentionModule,
 
             "themes/basic": BaseTheme
         },
