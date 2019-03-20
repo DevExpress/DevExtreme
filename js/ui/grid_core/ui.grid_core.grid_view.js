@@ -349,7 +349,7 @@ var ResizingController = modules.ViewController.inherit({
                     }
                 }
             }
-            if(that._getRealColumnWidth(width) < minWidth && !isHiddenColumn) {
+            if(minWidth && that._getRealColumnWidth(width) < minWidth && !isHiddenColumn) {
                 resultWidths[index] = minWidth;
                 isColumnWidthsCorrected = true;
                 i = -1;
