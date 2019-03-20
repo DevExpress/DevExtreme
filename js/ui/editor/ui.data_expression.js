@@ -15,7 +15,7 @@ var variableWrapper = require("../../core/utils/variable_wrapper"),
 * @export default
 * @hidden
 */
-var DataExpressionMixin = extend(DataHelperMixin, {
+var DataExpressionMixin = extend({}, DataHelperMixin, {
 
     _dataExpressionDefaultOptions: function() {
         return {

@@ -250,6 +250,25 @@ var Widget = DOMComponent.inherit({
         this[cacheName] = extend(this[cacheName], optionValue);
     },
 
+    _getOptionsFromContainer: function({ name, fullName, value }) {
+        var options = {};
+
+        if(name === fullName) {
+            options = value;
+        } else {
+            var option = fullName.split(".").pop();
+            options[option] = value;
+        }
+
+        return options;
+    },
+
+    _innerOptionChanged: function(innerWidget, args) {
+        var options = this._getOptionsFromContainer(args);
+        innerWidget && innerWidget.option(options);
+        this._cacheInnerOptions(args.name, options);
+    },
+
     _getInnerOptionsCache: function(optionContainer) {
         return this[optionContainer + "Cache"];
     },
