@@ -6221,6 +6221,34 @@ QUnit.test("Load panel is not rendered for ArrayStore", function(assert) {
     assert.ok(!$loadPanel.length, "load panel is visible");
 });
 
+// T723562
+QUnit.test("Load panel should not be visible after load error and resize", function(assert) {
+    var loadResult = $.Deferred(),
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            dataSource: {
+                load: function() {
+                    return loadResult;
+                }
+            }
+        });
+
+    clock.tick(500);
+
+    var $loadPanel = $($(dataGrid.$element()).find(".dx-loadpanel"));
+    assert.ok($loadPanel.is(":visible"), "load panel is visible");
+
+    // act
+    loadResult.reject("load error");
+    clock.tick(500);
+    dataGrid.updateDimensions();
+
+    // assert
+    assert.ok(!$loadPanel.is(":visible"), "load panel is not visible");
+
+    clock.restore();
+});
+
 // T389866
 QUnit.test("Collapse the group row of the grid, nested in the master detail", function(assert) {
     // arrange

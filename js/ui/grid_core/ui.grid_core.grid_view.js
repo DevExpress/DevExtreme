@@ -562,7 +562,7 @@ var ResizingController = modules.ViewController.inherit({
             }
 
             if(!dataController.isLoaded()) {
-                rowsView.setLoading(true);
+                rowsView.setLoading(dataController.isLoading());
                 return;
             }
             commonUtils.deferUpdate(function() {
