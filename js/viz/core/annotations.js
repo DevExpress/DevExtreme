@@ -7,9 +7,8 @@ import { patchFontOptions } from "./utils";
 const MOVE_EVENT = events["mousemove"] + ".annotations";
 const ANNOTATION_DATA = "annotation-data";
 
-function coreAnnotation(type, options, draw) {
+function coreAnnotation(options, draw) {
     return {
-        _type: type,
         name: options.name,
         x: options.x,
         y: options.y,
@@ -32,21 +31,15 @@ function coreAnnotation(type, options, draw) {
     };
 }
 
-function simpleAnnotation(options) {
-    return coreAnnotation("simple", options, function({ x, y }, widget, group) {
-        widget._renderer.circle(x, y, 5).attr({ fill: "red" }).data({ [ANNOTATION_DATA]: this }).append(group);
-    });
-}
-
 function labelAnnotation(options) {
-    return coreAnnotation("label", options, function({ x, y }, widget, group) {
+    return coreAnnotation(options, function({ x, y }, widget, group) {
         widget._renderer.text(options.label.text, x, y).data({ [ANNOTATION_DATA]: this }).css(patchFontOptions(options.label.font)).append(group);
     });
 }
 
 function imageAnnotation(options) {
     const { width, height, url, location } = options.image;
-    return coreAnnotation("image", options, function({ x, y }, widget, group) {
+    return coreAnnotation(options, function({ x, y }, widget, group) {
         widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, location).data({ [ANNOTATION_DATA]: this }).append(group);
     });
 }
@@ -61,8 +54,6 @@ function createAnnotation(itemOptions, commonOptions) {
         return imageAnnotation(mergeOptions(itemOptions, commonOptions.imageOptions, "image"));
     } else if(isDefined(itemOptions.label)) {
         return labelAnnotation(mergeOptions(itemOptions, commonOptions.labelOptions, "label"));
-    } else {
-        return simpleAnnotation(itemOptions);
     }
 }
 
