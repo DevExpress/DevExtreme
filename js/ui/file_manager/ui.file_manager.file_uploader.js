@@ -145,8 +145,8 @@ var FileManagerUploadSession = Class.inherit({
         }
 
         var result = [];
-        for(var file, i = 0; file = files[i]; i++) {
-            var deferred = this._uploadFile(file, progressInfo);
+        for(var i = 0; i < files.length; i++) {
+            var deferred = this._uploadFile(files[i], progressInfo);
             result.push(deferred);
         }
 

@@ -25,14 +25,14 @@ var ArrayFileProvider = FileProvider.inherit({
 
 
     deleteItems: function(items) {
-        for(var item, i = 0; item = items[i]; i++) {
+        for(let item of items) {
             this._deleteItem(item);
         }
     },
 
     moveItems: function(items, destinationFolder) {
         var array = this._getChildrenArray(destinationFolder.dataItem);
-        for(var item, i = 0; item = items[i]; i++) {
+        for(let item of items) {
             this._deleteItem(item);
             array.push(item.dataItem);
         }
@@ -40,7 +40,7 @@ var ArrayFileProvider = FileProvider.inherit({
 
     copyItems: function(items, destinationFolder) {
         var array = this._getChildrenArray(destinationFolder.dataItem);
-        for(var item, i = 0; item = items[i]; i++) {
+        for(let item of items) {
             var copiedItem = this._createCopy(item.dataItem);
             array.push(copiedItem);
         }
@@ -53,7 +53,7 @@ var ArrayFileProvider = FileProvider.inherit({
         };
         if(dataItem.children) {
             result.children = [];
-            for(var childItem, i = 0; childItem = dataItem.children[i]; i++) {
+            for(let childItem of dataItem.children) {
                 var childCopy = this._createCopy(childItem);
                 result.children.push(childCopy);
             }
@@ -98,7 +98,8 @@ var ArrayFileProvider = FileProvider.inherit({
         var result = null;
         var data = this._data;
         var parts = path.split("/");
-        for(var part, i = 0; part = parts[i]; i++) {
+        for(var i = 0; i < parts.length; i++) {
+            var part = parts[i];
             result = data.filter(entry => { return entry.isFolder && entry.name === part; })[0];
             if(result) {
                 if(result.children) {
@@ -117,7 +118,7 @@ var ArrayFileProvider = FileProvider.inherit({
     _getItemsInternal: function(path, data, itemType) {
         var useFolders = itemType === "folder";
         var result = [];
-        for(var entry, i = 0; entry = data[i]; i++) {
+        for(let entry of data) {
             var isFolder = !!entry.isFolder;
             if(!itemType || isFolder === useFolders) {
                 var item = new FileManagerItem(path, entry.name, isFolder);

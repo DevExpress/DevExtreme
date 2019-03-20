@@ -372,6 +372,8 @@ var FileManager = Widget.inherit({
 
         switch(name) {
             case "fileSystemStore":
+            case "selection":
+            case "itemList":
                 this.repaint();
                 break;
             case "customThumbnail":

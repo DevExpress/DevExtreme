@@ -117,7 +117,7 @@ var WebAPIFileProvider = FileProvider.inherit({
         var pairs = [];
 
         var keys = Object.keys(params);
-        for(var key, i = 0; key = keys[i]; i++) {
+        for(let key of keys) {
             var value = params[key];
 
             if(value === undefined) continue;
@@ -136,7 +136,7 @@ var WebAPIFileProvider = FileProvider.inherit({
     },
 
     _processQueryStringArrayParam: function(key, array, pairs) {
-        for(var item, i = 0; item = array[i]; i++) {
+        for(let item of array) {
             var pair = this._getQueryStringPair(key, item);
             pairs.push(pair);
         }
@@ -149,7 +149,7 @@ var WebAPIFileProvider = FileProvider.inherit({
     _convertEntriesToItems: function(entries, path, itemType) {
         var useFolders = itemType === "folder";
         var result = [];
-        for(var entry, i = 0; entry = entries[i]; i++) {
+        for(let entry of entries) {
             var isFolder = !!entry.isFolder;
             if(!itemType || isFolder === useFolders) {
                 var item = new FileManagerItem(path, entry.name, isFolder);

@@ -48,7 +48,7 @@ var FileManagerFilesTreeView = Widget.inherit({
     },
 
     _applyIconsToItems: function(items) {
-        for(var i = 0, item; item = items[i]; i++) {
+        for(let item of items) {
             item.icon = "folder";
         }
     },
@@ -81,7 +81,7 @@ var FileManagerFilesTreeView = Widget.inherit({
         var currentPath = "";
         var parts = path.split(PATH_SEPARATOR);
 
-        for(var part, i = 0; part = parts[i]; i++) {
+        for(let part of parts) {
 
             if(currentPath) {
                 currentPath += PATH_SEPARATOR;

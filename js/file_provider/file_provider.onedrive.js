@@ -160,7 +160,7 @@ var OneDriveFileProvider = FileProvider.inherit({
     _convertEntriesToItems: function(entries, path, itemType) {
         var useFolders = itemType === "folder";
         var result = [];
-        for(var entry, i = 0; entry = entries.children[i]; i++) {
+        for(let entry of entries.children) {
             var isFolder = entry.hasOwnProperty("folder");
             if(!itemType || isFolder === useFolders) {
                 var item = new FileManagerItem(path, entry.name, isFolder);

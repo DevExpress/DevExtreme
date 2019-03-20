@@ -285,7 +285,9 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
     _renderItems: function(items) {
         this._$itemListContainer.empty();
 
-        for(var item, i = 0; item = items[i]; i++) {
+        for(var i = 0; i < items.length; i++) {
+            var item = items[i];
+
             item._state = {
                 index: i,
                 selected: false,
@@ -394,7 +396,7 @@ var SingleSelectionController = Class.inherit({
     },
 
     _setAllItemsSelectedState: function(selected, exceptedItems) {
-        for(var item, i = 0; item = this._items[i]; i++) {
+        for(let item of this._items) {
 
             if(exceptedItems && exceptedItems.indexOf(item) !== -1) continue;
 
