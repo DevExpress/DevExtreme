@@ -54,11 +54,11 @@ class MentionModule extends PopupModule {
         });
     }
 
-    insertEmbedContent(selectionChangedEvent) {
+    insertEmbedContent() {
         const markerLength = this._activeMarker.marker.length;
         const caretPosition = this.getPosition();
         const startIndex = Math.max(0, caretPosition - markerLength);
-        const selectedItem = selectionChangedEvent.component.option("selectedItem");
+        const selectedItem = this._list.option("selectedItem");
 
         const value = {
             value: this._valueGetter(selectedItem),
@@ -69,7 +69,6 @@ class MentionModule extends PopupModule {
         setTimeout(function() {
             this.quill.deleteText(startIndex, markerLength, "silent");
             this.quill.insertEmbed(startIndex, "mention", value);
-
             this.quill.setSelection(startIndex + 1);
         }.bind(this));
     }
