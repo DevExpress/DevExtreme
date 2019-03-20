@@ -4,7 +4,6 @@ var $ = require("jquery"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     vizUtils = require("viz/core/utils"),
     titleModule = require("viz/core/title"),
-    headerBlockModule = require("viz/chart_components/header_block"),
     exportModule = require("viz/core/export"),
     tooltipModule = require("viz/core/tooltip"),
     rendererModule = require("viz/core/renderers/renderer"),
@@ -36,11 +35,6 @@ rendererModule.Renderer = function(parameters) {
     return new vizMocks.Renderer(parameters);
 };
 
-var HeaderBlock = vizMocks.stubClass(headerBlockModule.HeaderBlock);
-headerBlockModule.HeaderBlock = sinon.spy(function() {
-    return new HeaderBlock();
-});
-
 var ExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
 exportModule.ExportMenu = sinon.spy(function() {
     return new ExportMenu();
@@ -63,18 +57,6 @@ legendModule.Legend = sinon.spy(function(parameters) {
 
 function getLegendStub() {
     return legendModule.Legend.lastCall.returnValue;
-}
-
-function getTitleStub() {
-    return titleModule.Title.lastCall.returnValue;
-}
-
-function getHeaderBlockStub() {
-    return headerBlockModule.HeaderBlock.lastCall.returnValue;
-}
-
-function getExportMenuStub() {
-    return exportModule.ExportMenu.lastCall.returnValue;
 }
 
 trackerModule.ChartTracker = sinon.spy(function(parameters) {
@@ -159,11 +141,6 @@ var environment = {
             return that.themeManager;
         });
         this.layoutManager = new LayoutManager();
-        this.layoutManager
-            .stub("needMoreSpaceForPanesCanvas")
-            .returns(true);
-        this.layoutManager
-            .stub("placeDrawnElements");
         this.layoutManager.layoutElements = sinon.spy(function() {
             arguments[2] && arguments[2]();
         });
@@ -172,7 +149,7 @@ var environment = {
             var layoutManager = new LayoutManager();
             layoutManager
                 .stub("needMoreSpaceForPanesCanvas")
-                .returns(true);
+                .returns({ width: 10, height: 10 });
             layoutManager
                 .stub("placeDrawnElements");
             layoutManager.layoutElements = sinon.spy(function() {
@@ -219,8 +196,6 @@ var environment = {
         exportModule.ExportMenu.reset();
 
         titleModule.Title.reset();
-
-        headerBlockModule.HeaderBlock.reset();
     }
 };
 
@@ -261,187 +236,11 @@ var environment = {
         assert.deepEqual(layoutManagerForLegend.layoutElements.getCall(0).args[1], rect, "rect for layout manager");
         assert.deepEqual(layoutManagerForLegend.layoutElements.getCall(0).args[3][0], { canvas: rect }, "canvas for layout manager");
 
-        var legendData = legend.update.getCall(0).args[0];
+        var legendData = legend.update.lastCall.args[0];
 
         assert.ok(legendData, "Series were passed to legend");
         assert.deepEqual(legendData[0].states, { hover: undefined, selection: undefined, normal: {} }, "Legend item color");
         assert.strictEqual(legendData[0].text, "First series");
-    });
-
-    QUnit.module("Layout elements and header block", {
-        beforeEach: function() {
-            environment.beforeEach.apply(this, arguments);
-            chartMocks.seriesMockData.series.push(new MockSeries());
-        },
-        afterEach: environment.afterEach
-    });
-
-    QUnit.test("Export enabled, title not on top, legend not on top. Header block contains only export", function(assert) {
-        var chart = this.createChart({
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" },
-            legend: {
-                verticalAlignment: "bottom",
-                position: "outside"
-            },
-            title: {
-                text: "test title",
-                verticalAlignment: "bottom",
-                subtitle: {}
-            },
-            "export": {
-                enabled: true
-            }
-        });
-
-        var headerBlock = getHeaderBlockStub();
-
-        assert.deepEqual(headerBlock.update.lastCall.args, [[getExportMenuStub()], chart.DEBUG_canvas]);
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [headerBlock, getTitleStub(), getLegendStub()]);
-    });
-
-    QUnit.test("Export enabled, title not on top, legend on top but not horizontal. Header block contains only export", function(assert) {
-        var chart = this.createChart({
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" },
-            legend: {
-                verticalAlignment: "top",
-                position: "outside"
-            },
-            title: {
-                text: "test title",
-                verticalAlignment: "bottom"
-            },
-            "export": {
-                enabled: true
-            }
-        });
-
-        var headerBlock = getHeaderBlockStub();
-
-        assert.deepEqual(headerBlock.update.lastCall.args, [[getExportMenuStub()], chart.DEBUG_canvas]);
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [headerBlock, getTitleStub(), getLegendStub()]);
-    });
-
-    QUnit.test("Export enabled, title not on top, legend on top but inside. Header block contains only export", function(assert) {
-        var chart = this.createChart({
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" },
-            legend: {
-                verticalAlignment: "top",
-                orientation: "horizontal",
-                position: "inside"
-            },
-            title: {
-                text: "test title",
-                verticalAlignment: "bottom"
-            },
-            "export": {
-                enabled: true
-            }
-        });
-
-        var headerBlock = getHeaderBlockStub();
-
-        assert.deepEqual(headerBlock.update.lastCall.args, [[getExportMenuStub()], chart.DEBUG_canvas]);
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [headerBlock, getTitleStub()]);
-    });
-
-    QUnit.test("Export enabled, title not on top, legend on top. Header block contains export and legend", function(assert) {
-        var chart = this.createChart({
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" },
-            legend: {
-                verticalAlignment: "top",
-                orientation: "horizontal",
-                position: "outside"
-            },
-            title: {
-                text: "test title",
-                verticalAlignment: "bottom"
-            },
-            "export": {
-                enabled: true
-            }
-        });
-
-        var headerBlock = getHeaderBlockStub();
-
-        assert.deepEqual(headerBlock.update.lastCall.args, [[getExportMenuStub(), getLegendStub()], chart.DEBUG_canvas]);
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [headerBlock, getTitleStub()]);
-    });
-
-    QUnit.test("Export enabled, title on top, legend not on top. Header block contains export and title", function(assert) {
-        this.titleVerticalAlignment = "top";
-        var chart = this.createChart({
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" },
-            legend: {
-                verticalAlignment: "bottom",
-                orientation: "horizontal",
-                position: "outside"
-            },
-            title: {
-                text: "test title",
-                verticalAlignment: "top"
-            },
-            "export": {
-                enabled: true
-            }
-        });
-
-        var headerBlock = getHeaderBlockStub();
-
-        assert.deepEqual(headerBlock.update.lastCall.args, [[getExportMenuStub(), getTitleStub()], chart.DEBUG_canvas]);
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [headerBlock, getLegendStub()]);
-    });
-
-    QUnit.test("Export enabled, title on top, legend on top. Header block contains export and title", function(assert) {
-        this.titleVerticalAlignment = "top";
-        var chart = this.createChart({
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" },
-            legend: {
-                verticalAlignment: "top",
-                orientation: "horizontal",
-                position: "outside"
-            },
-            title: {
-                text: "test title",
-                verticalAlignment: "top"
-            },
-            "export": {
-                enabled: true
-            }
-        });
-
-        var headerBlock = getHeaderBlockStub();
-
-        assert.deepEqual(headerBlock.update.lastCall.args, [[getExportMenuStub(), getTitleStub()], chart.DEBUG_canvas]);
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [headerBlock, getLegendStub()]);
-    });
-
-    QUnit.test("Export disabled, title on top, legend on top. Header block is empty and not in layout", function(assert) {
-        this.titleVerticalAlignment = "top";
-        var chart = this.createChart({
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" },
-            legend: {
-                verticalAlignment: "top",
-                orientation: "horizontal",
-                position: "outside"
-            },
-            title: {
-                text: "test title",
-                verticalAlignment: "top"
-            },
-            "export": {
-                enabled: false
-            }
-        });
-
-        assert.strictEqual(getHeaderBlockStub().stub("update").callCount, 0);
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [getTitleStub(), getLegendStub()]);
     });
 
     QUnit.module("Adaptive layout", {
@@ -894,6 +693,7 @@ var environment = {
 
         this.$container.height(200);
         // act
+
         chart.refresh();
         // assert
         assert.equal(chart._renderer.stub("resize").callCount, 1);
@@ -1257,8 +1057,6 @@ var environment = {
         !firstDraw && assert.ok(chart._panesClipRects.base[0].attr.calledOnce, "Pane clip rectangle should be updated");
         firstDraw && assert.ok(!chart._panesClipRects.base[0].attr.calledOnce, "Pane clip rectangle should not be updated");
 
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [getHeaderBlockStub(), getTitleStub(), getLegendStub()], "legend and title layouted");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
         assert.deepEqual(chart.layoutManager.needMoreSpaceForPanesCanvas.lastCall.args, [chart.panes, chart._themeManager.getOptions("rotated")], "check free space");
 
         assert.strictEqual(vizUtils.updatePanesCanvases.callCount, 2, "updatePanesCanvases");
@@ -1370,9 +1168,6 @@ var environment = {
         assert.equal(businessRange.min, 1, "Correct val min");
         assert.equal(businessRange.max, 5, "Correct val max");
 
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [getHeaderBlockStub(), getTitleStub(), getLegendStub()], "legend and title layouted");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
-
         assert.strictEqual(vizUtils.updatePanesCanvases.callCount, 2, "updatePanesCanvases - call count");
         assert.deepEqual(vizUtils.updatePanesCanvases.getCall(0).args, [chart.panes, chart.DEBUG_canvas, chart._themeManager.getOptions("rotated")], "updatePanesCanvases - 1");
         assert.deepEqual(vizUtils.updatePanesCanvases.getCall(1).args, [chart.panes, chart.DEBUG_canvas, chart._themeManager.getOptions("rotated")], "updatePanesCanvases - 2");
@@ -1437,9 +1232,6 @@ var environment = {
         assert.equal(businessRange.min, 1, "Correct val min");
         assert.equal(businessRange.max, 5, "Correct val max");
 
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [getHeaderBlockStub(), getTitleStub(), getLegendStub()], "legend and title layouted");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
-
         assert.strictEqual(vizUtils.updatePanesCanvases.callCount, 2, "updatePanesCanvases - call count");
         assert.deepEqual(vizUtils.updatePanesCanvases.getCall(0).args, [chart.panes, chart.DEBUG_canvas, chart._themeManager.getOptions("rotated")], "updatePanesCanvases - 1");
         assert.deepEqual(vizUtils.updatePanesCanvases.getCall(1).args, [chart.panes, chart.DEBUG_canvas, chart._themeManager.getOptions("rotated")], "updatePanesCanvases - 2");
@@ -1485,7 +1277,6 @@ var environment = {
         assert.equal(chart.series.length, 1);
 
         assert.ok(!chart._renderer.stub("resize").called, "Canvas should not be recreated");
-        assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [], "legend and title layouted");
         assert.ok(chart._argumentAxes[0].wasDrawn, "Horizontal axis was drawn");
         assert.ok(chart._valueAxes[0].wasDrawn, "Vertical axis was drawn");
         assert.ok(chart.series[0].wasDrawn, "Series was drawn");
