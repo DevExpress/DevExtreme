@@ -121,7 +121,8 @@ var FileManagerEditingControl = Widget.inherit({
 
     _tryCreate: function() {
         var item = this._model.getCurrentFolder();
-        this._setItemsViewAreaActive(false);
+        var onCreatingHandler = this.option("onCreating");
+        onCreatingHandler();
 
         this._tryEditAction(
             this._createFolderDialog,
@@ -207,7 +208,8 @@ var FileManagerEditingControl = Widget.inherit({
                 getMultipleSelectedItems: null
             },
             onSuccess: null,
-            onError: null
+            onError: null,
+            onCreating: null
         });
     },
 

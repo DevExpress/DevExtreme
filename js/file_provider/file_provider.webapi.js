@@ -44,7 +44,7 @@ var WebAPIFileProvider = FileProvider.inherit({
     moveItems: function(items, destinationFolder) {
         return items.map(item => this._executeRequest(this._options.moveUrl, {
             sourceId: item.relativeName,
-            destinationId: destinationFolder.relativeName
+            destinationId: destinationFolder.relativeName + "/" + item.name
         }));
     },
 

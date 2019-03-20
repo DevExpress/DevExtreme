@@ -77,7 +77,8 @@ var FileManager = Widget.inherit({
                 this._showSuccess(message);
                 this._refreshData(updateOnlyFiles);
             },
-            onError: (title, details) => this._showError(title + ": " + this._getErrorText(details))
+            onError: (title, details) => this._showError(title + ": " + this._getErrorText(details)),
+            onCreating: () => this._setItemsViewAreaActive(false)
         });
         this._editing.$element().addClass(FILE_MANAGER_EDITING_CONTAINER_CLASS);
     },

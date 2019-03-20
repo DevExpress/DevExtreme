@@ -3,6 +3,7 @@ import { FileManagerItem } from "file_provider/file_provider";
 
 import WebAPIFileProvider from "file_provider/file_provider.webapi";
 import ajaxMock from "../../../helpers/ajaxMock.js";
+import { when } from "core/utils/deferred";
 
 const { test } = QUnit;
 
@@ -129,7 +130,8 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         });
 
         var item = new FileManagerItem("Root/Files", "Documents");
-        this.provider.deleteItems([ item ])
+        var deferreds = this.provider.deleteItems([ item ]);
+        when.apply(null, deferreds)
             .done(result => {
                 assert.notOk(result, "item deleted");
                 done();
@@ -146,7 +148,8 @@ QUnit.module("Web API Provider", moduleConfig, () => {
 
         var item = new FileManagerItem("Root/Files", "Documents");
         var destinationFolder = new FileManagerItem("Root/Files", "Images");
-        this.provider.moveItems([ item ], destinationFolder)
+        var deferreds = this.provider.moveItems([ item ], destinationFolder);
+        when.apply(null, deferreds)
             .done(result => {
                 assert.notOk(result, "item moved");
                 done();
@@ -157,13 +160,14 @@ QUnit.module("Web API Provider", moduleConfig, () => {
         var done = assert.async();
 
         ajaxMock.setup({
-            url: this.options.copyUrl + "?sourceId=Root%2FFiles%2FDocuments&destinationId=Root%2FFiles%2FImages%2FDocuments",
+            url: this.options.copyUrl + "?sourceId=Root%2FFiles%2FDocuments&destinationId=Root%2FFiles%2FImages",
             responseText: ""
         });
 
         var item = new FileManagerItem("Root/Files", "Documents");
         var destinationFolder = new FileManagerItem("Root/Files", "Images");
-        this.provider.copyItems([ item ], destinationFolder)
+        var deferreds = this.provider.copyItems([ item ], destinationFolder);
+        when.apply(null, deferreds)
             .done(result => {
                 assert.notOk(result, "item copied");
                 done();
