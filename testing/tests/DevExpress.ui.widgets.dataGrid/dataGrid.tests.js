@@ -3263,7 +3263,7 @@ QUnit.test("Focused row should be visible in virtual scrolling mode", function(a
     clock.restore();
 });
 
-QUnit.test("DataGrid should not scroll back to the focusedRow after paging if virtual scrolling", function(assert) {
+QUnit.test("DataGrid should not scroll back to the focusedRow after paging if virtual scrolling (T718905, T719205)", function(assert) {
     // arrange
     var clock = sinon.useFakeTimers(),
         isReady,
