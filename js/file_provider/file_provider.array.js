@@ -6,12 +6,8 @@ var ArrayFileProvider = FileProvider.inherit({
         this._data = data || [];
     },
 
-    getFolders: function(path) {
-        return this._getItems(path, true);
-    },
-
-    getFiles: function(path) {
-        return this._getItems(path, false);
+    getItems: function(path, itemType) {
+        return this._getItems(path, itemType);
     },
 
     renameItem: function(item, name) {
@@ -86,14 +82,14 @@ var ArrayFileProvider = FileProvider.inherit({
         return array;
     },
 
-    _getItems: function(path, isFolder) {
+    _getItems: function(path, itemType) {
         if(path === "") {
-            return this._getItemsInternal(path, this._data, isFolder);
+            return this._getItemsInternal(path, this._data, itemType);
         }
 
         var folderEntry = this._findItem(path);
         var entries = folderEntry && folderEntry.children || [];
-        return this._getItemsInternal(path, entries, isFolder);
+        return this._getItemsInternal(path, entries, itemType);
     },
 
     _findItem: function(path) {
@@ -118,14 +114,16 @@ var ArrayFileProvider = FileProvider.inherit({
         return result;
     },
 
-    _getItemsInternal: function(path, data, isFolder) {
+    _getItemsInternal: function(path, data, itemType) {
+        var useFolders = itemType === "folder";
         var result = [];
         for(var entry, i = 0; entry = data[i]; i++) {
-            if(entry.isFolder === isFolder) {
-                var item = new FileManagerItem(path, entry.name);
+            var isFolder = !!entry.isFolder;
+            if(!itemType || isFolder === useFolders) {
+                var item = new FileManagerItem(path, entry.name, isFolder);
                 item.length = entry.length !== undefined ? entry.length : 0;
                 item.lastWriteTime = entry.lastWriteTime !== undefined ? entry.lastWriteTime : new Date();
-                item.thumbnailUrl = entry.thumbnailUrl;
+                item.thumbnail = entry.thumbnail;
                 item.dataItem = entry; // TODO remove if do not need
                 result.push(item);
             }

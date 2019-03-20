@@ -33,6 +33,7 @@ var FileManager = Widget.inherit({
 
     _init: function() {
         this._commands = {
+            open: () => this._tryOpen(),
             thumbnails: () => this._switchView("thumbnails"),
             details: () => this._switchView("details")
         };
@@ -69,6 +70,7 @@ var FileManager = Widget.inherit({
         this._editing = this._createComponent($("<div>"), FileManagerEditingControl, {
             model: {
                 provider: this._provider,
+                getFolders: this._getFilesTreeViewItems.bind(this),
                 getCurrentFolder: this.getCurrentFolder.bind(this),
                 getSingleSelectedItem: this._getSingleSelectedItem.bind(this),
                 getMultipleSelectedItems: this._getMultipleSelectedItems.bind(this)
@@ -110,7 +112,7 @@ var FileManager = Widget.inherit({
 
     _createFilesTreeView: function() {
         this._filesTreeView = this._createComponent($("<div>"), FileManagerFilesTreeView, {
-            provider: this._provider,
+            getItems: this._getFilesTreeViewItems.bind(this),
             onCurrentFolderChanged: this._onFilesTreeViewCurrentFolderChanged.bind(this),
             onClick: () => this._setItemsViewAreaActive(false)
         });
@@ -125,6 +127,7 @@ var FileManager = Widget.inherit({
             selectionMode: selectionOptions.mode,
             onGetItems: this._getItemListItems.bind(this),
             onError: this._showError.bind(this),
+            onSelectedItemOpened: item => this._tryOpen(item),
             getItemThumbnail: this._getItemThumbnail.bind(this)
         };
 
@@ -168,6 +171,18 @@ var FileManager = Widget.inherit({
 
         $activeArea.removeClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
         $inactiveArea.addClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
+    },
+
+    _tryOpen: function(item) {
+        if(!item) {
+            var items = this.getSelectedItems();
+            if(items.length > 0) {
+                item = items[0];
+            }
+        }
+        if(!item || !item.isFolder) return;
+
+        this.setCurrentPath(item.relativeName);
     },
 
     _switchView: function(viewMode) {
@@ -225,8 +240,16 @@ var FileManager = Widget.inherit({
         }
     },
 
+    _getFilesTreeViewItems: function(parent) {
+        var path = parent ? parent.relativeName : "";
+        return this._provider.getFolders(path);
+    },
+
     _getItemListItems: function() {
-        return this._provider.getFiles(this.getCurrentFolderPath());
+        var path = this.getCurrentFolderPath();
+        var showFolders = this.option("itemList").showFolders;
+        var itemType = showFolders ? "" : "file";
+        return this._provider.getItems(path, itemType);
     },
 
     _onItemListClick: function() {
@@ -266,7 +289,44 @@ var FileManager = Widget.inherit({
 
     _getItemThumbnail: function(item) {
         var func = this.option("customThumbnail");
-        return typeUtils.isFunction(func) ? func(item) : item.thumbnailUrl;
+        var thumbnail = typeUtils.isFunction(func) ? func(item) : item.thumbnail;
+        return thumbnail || this._getPredefinedThumbnail(item);
+    },
+
+    _getPredefinedThumbnail: function(item) {
+        if(item.isFolder) {
+            return "folder";
+        }
+
+        var extension = item.getExtension();
+        switch(extension) {
+            case ".txt":
+                return "doc"; // TODO change icon
+            case ".rtf":
+            case ".doc":
+            case ".docx":
+            case ".odt":
+                return "doc";
+            case ".xls":
+            case ".xlsx":
+            case ".ods":
+                return "exportxlsx";
+            case ".ppt":
+            case ".pptx":
+            case ".odp":
+                return "doc"; // TODO change icon
+            case ".pdf":
+                return "exportpdf";
+            case ".png":
+            case ".gif":
+            case ".jpg":
+            case ".jpeg":
+            case ".ico":
+            case ".bmp":
+                return "image";
+            default:
+                return "doc"; // TODO change icon
+        }
     },
 
     _getDefaultOptions: function() {
@@ -293,7 +353,8 @@ var FileManager = Widget.inherit({
             * @default null
             */
             itemList: {
-                mode: "details"
+                mode: "details",
+                showFolders: true
             },
 
             /**

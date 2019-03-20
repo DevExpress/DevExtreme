@@ -7,8 +7,8 @@ import { when } from "core/utils/deferred";
 
 const { test } = QUnit;
 
-const createFileManagerItem = (parentPath, name, lastWriteTimeString, length) => {
-    var result = new FileManagerItem(parentPath, name);
+const createFileManagerItem = (parentPath, name, isFolder, lastWriteTimeString, length) => {
+    var result = new FileManagerItem(parentPath, name, isFolder);
     result.lastWriteTime = lastWriteTimeString; // TODO make conversion to 'Date' type
     result.length = length;
     return result;
@@ -25,11 +25,11 @@ const itemData = [
 ];
 
 const fileManagerItems = [
-    createFileManagerItem("Root/Files", "Documents", "2019-02-14T07:44:15.4265625Z", 0),
-    createFileManagerItem("Root/Files", "Images", "2019-02-14T07:44:15.4885105Z", 0),
-    createFileManagerItem("Root/Files", "Music", "2019-02-14T07:44:15.4964648Z", 0),
-    createFileManagerItem("Root/Files", "Description.rtf", "2017-02-09T09:38:46.3772529Z", 1),
-    createFileManagerItem("Root/Files", "Article.txt", "2017-02-09T09:38:46.3772529Z", 1)
+    createFileManagerItem("Root/Files", "Documents", true, "2019-02-14T07:44:15.4265625Z", 0),
+    createFileManagerItem("Root/Files", "Images", true, "2019-02-14T07:44:15.4885105Z", 0),
+    createFileManagerItem("Root/Files", "Music", true, "2019-02-14T07:44:15.4964648Z", 0),
+    createFileManagerItem("Root/Files", "Description.rtf", false, "2017-02-09T09:38:46.3772529Z", 1),
+    createFileManagerItem("Root/Files", "Article.txt", false, "2017-02-09T09:38:46.3772529Z", 1)
 ];
 
 const fileManagerFolders = fileManagerItems.slice(0, FOLDER_COUNT);

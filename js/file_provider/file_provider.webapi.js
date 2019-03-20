@@ -15,12 +15,8 @@ var WebAPIFileProvider = FileProvider.inherit({
         this._options = options;
     },
 
-    getFolders: function(path) {
-        return this._getItems(path, true);
-    },
-
-    getFiles: function(path) {
-        return this._getItems(path, false);
+    getItems: function(path, itemType) {
+        return this._getItems(path, itemType);
     },
 
     renameItem: function(item, name) {
@@ -93,10 +89,9 @@ var WebAPIFileProvider = FileProvider.inherit({
         return this._executeRequest(this._options.abortUploadUrl, { uploadId: uploadInfo.customData.uploadId });
     },
 
-    _getItems: function(path, isFolder) {
-        var that = this;
+    _getItems: function(path, itemType) {
         return this._getEntriesByPath(path)
-            .then(entries => { return that._convertEntriesToItems(entries, path, isFolder); });
+            .then(entries => this._convertEntriesToItems(entries, path, itemType));
     },
 
     _getItemsIds: function(items) {
@@ -151,11 +146,13 @@ var WebAPIFileProvider = FileProvider.inherit({
         return encodeURIComponent(key) + "=" + encodeURIComponent(value);
     },
 
-    _convertEntriesToItems: function(entries, path, isFolder) {
+    _convertEntriesToItems: function(entries, path, itemType) {
+        var useFolders = itemType === "folder";
         var result = [];
         for(var entry, i = 0; entry = entries[i]; i++) {
-            if(entry.isFolder === isFolder) {
-                var item = new FileManagerItem(path, entry.name);
+            var isFolder = !!entry.isFolder;
+            if(!itemType || isFolder === useFolders) {
+                var item = new FileManagerItem(path, entry.name, isFolder);
                 item.length = entry.size || 0;
                 item.lastWriteTime = entry.lastWriteTime;
                 result.push(item);

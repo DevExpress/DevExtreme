@@ -15,7 +15,10 @@ const moduleConfig = {
         fx.off = true;
 
         $("#fileManager").dxFileManager({
-            fileSystemStore: fileSystem
+            fileSystemStore: fileSystem,
+            itemList: {
+                showFolders: false
+            }
         });
 
         this.clock.tick(400);

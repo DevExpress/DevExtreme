@@ -26,7 +26,7 @@ var FileManagerFolderChooserDialog = FileManagerDialogBase.inherit({
 
     _getContentTemplate: function() {
         this._filesTreeView = this._createComponent($("<div>"), FileManagerFilesTreeView, {
-            provider: this.option("provider")
+            getItems: this.option("getItems")
         });
 
         return this.callBase().append(
@@ -44,7 +44,7 @@ var FileManagerFolderChooserDialog = FileManagerDialogBase.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            provider: null
+            getItems: null
         });
     }
 

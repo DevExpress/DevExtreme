@@ -1,7 +1,10 @@
 import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { when } from "../../core/utils/deferred";
+import iconUtils from "../../core/utils/icon";
 import Class from "../../core/class";
+import dblclickEvent from "../../events/double_click";
+import eventUtils from "../../events/utils";
 import eventsEngine from "../../events/core/events_engine";
 
 import FileManagerItemListBase from "./ui.file_manager.item_list";
@@ -16,6 +19,7 @@ const FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS = "dx-filemanager-thumbnails-ite
 const FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS = "dx-filemanager-thumbnails-item-name";
 const FILE_MANAGER_ITEM_SELECTED_CLASS = "dx-filemanager-item-selected";
 const FILE_MANAGER_ITEM_FOCUSED_CLASS = "dx-filemanager-item-focused";
+const THUMBNAIL_ITEM_OPEN_EVENT_NAMESPACE = "dxFileManager_open";
 
 var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
 
@@ -40,7 +44,10 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS);
         this.$element().append(this._$viewPort);
 
-        eventsEngine.on(this.$element(), "click", this._onClick.bind(this));
+        var dblClickEventName = eventUtils.addNamespace(dblclickEvent.name, THUMBNAIL_ITEM_OPEN_EVENT_NAMESPACE);
+        var itemSelector = `.${FILE_MANAGER_THUMBNAILS_ITEM_CLASS}`;
+        eventsEngine.on(this.$element(), "click", itemSelector, this._onClick.bind(this));
+        eventsEngine.on(this.$element(), dblClickEventName, itemSelector, this._onDblClick.bind(this));
 
         this._loadItems();
     },
@@ -82,6 +89,10 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
             space: function(e) {
                 this._beforeKeyProcessing(e);
                 this._selectionController.invertFocusedItemSelection();
+            },
+            enter: function(e) {
+                this._beforeKeyProcessing(e);
+                this.tryOpen();
             },
             A: function(e) {
                 this._beforeKeyProcessing(e);
@@ -136,11 +147,16 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
     },
 
     _onClick: function(e) {
-        var $item = $(e.target).closest(`.${FILE_MANAGER_THUMBNAILS_ITEM_CLASS}`);
-        if($item.length) {
-            var index = $item.data("index");
-            this._selectItemByIndex(index, false, e);
-        }
+        var $item = $(e.currentTarget);
+        var index = $item.data("index");
+        this._selectItemByIndex(index, false, e);
+    },
+
+    _onDblClick: function(e) {
+        var $item = $(e.currentTarget);
+        var index = $item.data("index");
+        var item = this._items[index];
+        this._raiseSelectedItemOpened(item);
     },
 
     _scrollToItem: function(item) {
@@ -286,8 +302,8 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
 
         var $itemContent = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS);
 
-        var $itemThumbnail = $("<img>").addClass(FILE_MANAGER_THUMBNAILS_ITEM__THUMBNAIL_CLASS)
-            .attr("src", this._getItemThumbnail(item));
+        var $itemThumbnail = iconUtils.getImageContainer(this._getItemThumbnail(item))
+            .addClass(FILE_MANAGER_THUMBNAILS_ITEM__THUMBNAIL_CLASS);
 
         eventsEngine.on($itemThumbnail, "dragstart", this._disableDragging);
 
@@ -323,6 +339,13 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
 
     refreshData: function() {
         this._loadItems();
+    },
+
+    tryOpen: function() {
+        var item = this._getFocusedItem();
+        if(item) {
+            this._raiseSelectedItemOpened(item);
+        }
     },
 
     getSelectedItems: function() {

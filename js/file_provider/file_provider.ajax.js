@@ -10,12 +10,8 @@ var AjaxFileProvider = FileProvider.inherit({
         this._provider = null;
     },
 
-    getFolders: function(path) {
-        return this._doActionAfterDataAcquired(() => this._provider.getFolders(path));
-    },
-
-    getFiles: function(path) {
-        return this._doActionAfterDataAcquired(() => this._provider.getFiles(path));
+    getItems: function(path, itemType) {
+        return this._doActionAfterDataAcquired(() => this._provider.getItems(path, itemType));
     },
 
     renameItem: function(item, name) {

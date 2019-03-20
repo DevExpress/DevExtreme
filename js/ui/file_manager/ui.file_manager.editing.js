@@ -34,6 +34,7 @@ var FileManagerEditingControl = Widget.inherit({
         this._createFolderDialog = this._createEnterNameDialog("Folder", "Create");
         this._chooseFolderDialog = this._createComponent($("<div>"), FileManagerFolderChooserDialog, {
             provider: this._provider,
+            getItems: this._model.getFolders,
             onClosed: this._onDialogClosed.bind(this)
         });
         this._confirmationDialog = this._createConfirmationDialog();
@@ -203,6 +204,7 @@ var FileManagerEditingControl = Widget.inherit({
         return extend(this.callBase(), {
             model: {
                 provider: null,
+                getFolders: null,
                 getCurrentFolder: null,
                 getSingleSelectedItem: null,
                 getMultipleSelectedItems: null

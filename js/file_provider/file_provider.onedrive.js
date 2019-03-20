@@ -19,12 +19,8 @@ var OneDriveFileProvider = FileProvider.inherit({
         this._accessTokenPromise = null;
     },
 
-    getFolders: function(path) {
-        return this._getItems(path, true);
-    },
-
-    getFiles: function(path) {
-        return this._getItems(path, false);
+    getItems: function(path, itemType) {
+        return this._getItems(path, itemType);
     },
 
     initiateFileUpload: function(uploadInfo) {
@@ -50,11 +46,10 @@ var OneDriveFileProvider = FileProvider.inherit({
             .then(() => this._cancelUploadSession(uploadInfo.customData.uploadUrl));
     },
 
-    _getItems: function(path, isFolder) {
-        var that = this;
+    _getItems: function(path, itemType) {
         return this._ensureAccessTokenAcquired()
-            .then(() => { return that._getEntriesByPath(path); })
-            .then((entries) => { return that._convertEntriesToItems(entries, path, isFolder); });
+            .then(() => this._getEntriesByPath(path))
+            .then(entries => this._convertEntriesToItems(entries, path, itemType));
     },
 
     _ensureAccessTokenAcquired: function() {
@@ -162,11 +157,13 @@ var OneDriveFileProvider = FileProvider.inherit({
         });
     },
 
-    _convertEntriesToItems: function(entries, path, isFolder) {
+    _convertEntriesToItems: function(entries, path, itemType) {
+        var useFolders = itemType === "folder";
         var result = [];
         for(var entry, i = 0; entry = entries.children[i]; i++) {
-            if(entry.hasOwnProperty("folder") === isFolder) {
-                var item = new FileManagerItem(path, entry.name);
+            var isFolder = entry.hasOwnProperty("folder");
+            if(!itemType || isFolder === useFolders) {
+                var item = new FileManagerItem(path, entry.name, isFolder);
                 item.length = entry.size;
                 item.lastWriteTime = entry.lastModifiedDateTime;
                 result.push(item);

@@ -15,6 +15,7 @@ var FileManagerItemListBase = Widget.inherit({
             selectionMode: "single",
             onGetItems: null,
             onError: null,
+            onSelectedItemOpened: null,
             getItemThumbnail: null
         });
     },
@@ -25,8 +26,17 @@ var FileManagerItemListBase = Widget.inherit({
     },
 
     _raiseOnError: function(error) {
-        var handler = this.option("onError");
-        handler(error);
+        this._raiseEvent("Error", error);
+    },
+
+    _raiseSelectedItemOpened: function(item) {
+        this._raiseEvent("SelectedItemOpened", item);
+    },
+
+    _raiseEvent: function(eventName, arg) {
+        var fullEventName = "on" + eventName;
+        var handler = this.option(fullEventName);
+        handler(arg);
     },
 
     _getItemThumbnail: function(item) {

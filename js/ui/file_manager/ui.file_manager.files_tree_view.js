@@ -1,4 +1,5 @@
 import eventsEngine from "../../events/core/events_engine";
+import { Deferred, when } from "../../core/utils/deferred";
 
 import Widget from "../widget/ui.widget";
 import { extend } from "../../core/utils/extend";
@@ -6,11 +7,12 @@ import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
 import { FileManagerItem } from "../../file_provider/file_provider";
 
+const PATH_SEPARATOR = "/";
+
 var FileManagerFilesTreeView = Widget.inherit({
 
     _initMarkup: function() {
         this._initCurrentPathState();
-        this._provider = this.option("provider");
 
         this._filesTreeView = this._createComponent(this.$element(), TreeViewSearch, {
             dataStructure: "plain",
@@ -19,14 +21,17 @@ var FileManagerFilesTreeView = Widget.inherit({
             parentIdExpr: "parentPath",
             displayExpr: "name",
             createChildren: this._onFilesTreeViewCreateChildren.bind(this),
-            onItemClick: this._onFilesTreeViewItemClick.bind(this)
+            onItemClick: this._onFilesTreeViewItemClick.bind(this),
+            onItemExpanded: this._onFilesTreeViewItemExpanded.bind(this)
         });
         eventsEngine.on(this._filesTreeView.$element(), "click", this._raiseClick.bind(this));
     },
 
     _onFilesTreeViewCreateChildren: function(parent) {
-        var path = parent ? parent.itemData.relativeName : "";
-        return this._provider.getFolders(path);
+        var parentItem = parent ? parent.itemData : null;
+        var itemsGetter = this.option("getItems");
+        var itemsResult = itemsGetter(parentItem);
+        return when(itemsResult).done(items => this._applyIconsToItems(items));
     },
 
     _onFilesTreeViewItemClick: function(e) {
@@ -39,6 +44,12 @@ var FileManagerFilesTreeView = Widget.inherit({
             this._currentPath = newPath;
             this._currentFolder = folder;
             this._raiseCurrentFolderChanged();
+        }
+    },
+
+    _applyIconsToItems: function(items) {
+        for(var i = 0, item; item = items[i]; i++) {
+            item.icon = "folder";
         }
     },
 
@@ -59,11 +70,59 @@ var FileManagerFilesTreeView = Widget.inherit({
         this._currentPath = "";
         this._rootFolder = new FileManagerItem("", "");
         this._currentFolder = this._rootFolder;
+        this._loadMap = {};
+    },
+
+    _ensurePathExpanded: function(path) {
+        var result = new Deferred().resolve().promise();
+
+        if(!path) return result;
+
+        var currentPath = "";
+        var parts = path.split(PATH_SEPARATOR);
+
+        for(var part, i = 0; part = parts[i]; i++) {
+
+            if(currentPath) {
+                currentPath += PATH_SEPARATOR;
+            }
+
+            currentPath += part;
+            var getExpandFunc = p => (() => this._expandLoadedPath(p));
+            result = result.then(getExpandFunc(currentPath));
+
+        }
+
+        return result;
+    },
+
+    _expandLoadedPath: function(path) {
+        var node = this._filesTreeView._dataAdapter.getNodeByKey(path);
+        if(!node.expanded) {
+            var deferred = this._loadMap[path];
+            if(!deferred) {
+                deferred = new Deferred();
+                this._loadMap[path] = deferred;
+                this._filesTreeView.expandItem(path);
+            }
+            return deferred.promise();
+        } else {
+            return new Deferred().resolve().promise();
+        }
+    },
+
+    _onFilesTreeViewItemExpanded: function(e) {
+        var path = e.itemData ? e.itemData.relativeName : "";
+        var deferred = this._loadMap[path];
+        if(deferred) {
+            this._loadMap[path] = null;
+            deferred.resolve();
+        }
     },
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            provider: null,
+            getItems: null,
             onCurrentFolderChanged: null,
             onClick: null
         });
@@ -71,12 +130,22 @@ var FileManagerFilesTreeView = Widget.inherit({
 
     refreshData: function() {
         this._filesTreeView.option("dataSource", []);
+
         var currentFolderChanged = this.getCurrentPath() !== "";
+
         this._initCurrentPathState();
-        if(currentFolderChanged) this._raiseCurrentFolderChanged();
+
+        if(currentFolderChanged) {
+            this._raiseCurrentFolderChanged();
+        }
     },
 
     setCurrentPath: function(path) {
+        this._ensurePathExpanded(path)
+            .then(() => this._setCurrentLoadedPath(path));
+    },
+
+    _setCurrentLoadedPath: function(path) {
         var $node = null;
         var folder = this._rootFolder;
 
