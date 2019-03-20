@@ -66,4 +66,3 @@ module.exports = {
     TRANSPILED_PATH: 'artifacts/transpiled',
     EULA_URL: 'https://js.devexpress.com/Licensing/'
 };
-
