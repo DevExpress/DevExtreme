@@ -37,6 +37,7 @@ import { MockColumnsController, MockDataController, setupDataGridModules, getCel
 import domUtils from "core/utils/dom";
 import browser from "core/utils/browser";
 import typeUtils from "core/utils/type";
+import commonUtils from "core/utils/common";
 import config from "core/config";
 import errors from "ui/widget/ui.errors";
 import devices from "core/devices";
@@ -13772,6 +13773,35 @@ QUnit.test("No exceptions on editing data when validationRules and editCellTempl
     } finally {
         fx.off = false;
         errors.log.restore();
+    }
+});
+
+// T721896
+QUnit.test("Validator should be rendered if deferUpdate is used in editCellTemplate", function(assert) {
+    // arrange
+    this.columns[0].editCellTemplate = function(container, options) {
+        // deferUpdate is called in template in devextreme-react
+        commonUtils.deferUpdate(() => {
+            $("<div>").appendTo(container).dxTextBox({
+                value: options.value
+            });
+        });
+    };
+
+    this.setupModules(this);
+    this.renderRowsView();
+    fx.off = true;
+
+    try {
+        // act
+        this.editRow(0);
+
+        // assert
+        this.preparePopupHelpers();
+        var $popupContent = this.getEditPopupContent();
+        assert.equal($popupContent.find(".dx-validator").length, 2, "two validators are rendered");
+    } finally {
+        fx.off = false;
     }
 });
 
