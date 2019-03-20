@@ -1428,7 +1428,7 @@ const Scheduler = Widget.inherit({
         }
 
         this._appointments.option(editingConfig);
-        this._compactAppointments.repaintExisting(this.$element());
+        this._dropDownAppointments.repaintExisting(this.$element());
     },
 
     _isAgenda: function() {
