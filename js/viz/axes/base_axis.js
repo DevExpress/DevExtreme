@@ -1795,8 +1795,28 @@ Axis.prototype = {
             that._axisConstantLineGroups.under.outside2.append(that._constantLinesGroup.under);
         }
 
-        that._measureTitle();
         measureLabels(that._majorTicks);
+        let textWidth;
+        if(that._isHorizontal) {
+            textWidth = that.getTranslator().getInterval(that._calculateRangeInterval());
+        } else {
+            textWidth = options.placeholderSize;
+        }
+
+        const displayMode = that._validateDisplayMode(options.label.displayMode);
+        const overlappingMode = that._validateOverlappingMode(options.label.overlappingBehavior, displayMode);
+        const wordWrapMode = options.label.wordWrap;
+
+        if(wordWrapMode !== "none" && displayMode !== "rotate" && overlappingMode !== "rotate" && overlappingMode !== "auto" && textWidth) {
+            if(that._majorTicks.some(tick => tick.labelBBox.width > textWidth)) {
+                that._majorTicks.forEach(tick => {
+                    tick.label.setMaxWidth(textWidth, options.label);
+                });
+                measureLabels(that._majorTicks);
+            }
+        }
+
+        that._measureTitle();
         measureLabels(that._outsideConstantLines);
         measureLabels(that._insideConstantLines);
         measureLabels(that._strips);

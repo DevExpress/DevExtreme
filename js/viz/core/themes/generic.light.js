@@ -634,7 +634,9 @@ registerTheme({
             label: {
                 displayMode: "standard",
                 overlappingBehavior: "hide",
-                indentFromAxis: 10
+                indentFromAxis: 10,
+                wordWrap: "normal",
+                overflow: "none"
             },
             title: {
                 font: {
