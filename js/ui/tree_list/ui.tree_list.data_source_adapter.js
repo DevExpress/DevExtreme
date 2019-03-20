@@ -555,10 +555,12 @@ var DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 callBase = that.callBase,
                 filter = options.storeLoadOptions.filter || options.loadOptions.filter,
                 filterMode = that.option("filterMode"),
-                visibleItems;
+                visibleItems,
+                parentIds = options.storeLoadOptions.parentIds,
+                needLoadParents = filter && (!parentIds || !parentIds.length) && filterMode !== "standard";
 
             if(!options.isCustomLoading) {
-                if(filter && !options.storeLoadOptions.parentIds && filterMode !== "standard") {
+                if(needLoadParents) {
                     var d = options.data = new Deferred();
                     if(filterMode === "smart") {
                         visibleItems = data;
