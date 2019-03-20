@@ -42,6 +42,9 @@ const VENDORS = [
         path: '/quill/dist/quill.js'
     },
     {
+        path: '/exceljs/dist/exceljs.js'
+    },
+    {
         path: '/showdown/dist/showdown.js'
     },
     {

@@ -1665,7 +1665,7 @@ declare module DevExpress.ui {
         /** @name dxButton.Options.icon */
         icon?: string;
         /** @name dxButton.Options.onClick */
-        onClick?: (e: { component?: dxButton, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, validationGroup?: any }) => any;
+        onClick?: ((e: { component?: dxButton, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, validationGroup?: any }) => any);
         /** @name dxButton.Options.stylingMode */
         stylingMode?: 'text' | 'outlined' | 'contained';
         /** @name dxButton.Options.template */
@@ -5979,6 +5979,8 @@ declare module DevExpress.viz {
         rowCount?: number;
         /** @name BaseLegend.rowItemSpacing */
         rowItemSpacing?: number;
+        /** @name BaseLegend.title */
+        title?: { verticalAlignment?: 'bottom' | 'top', text?: string, margin?: { top?: number, bottom?: number }, font?: Font, placeholderSize?: number, subtitle?: { text?: string, font?: Font } | string } | string;
         /** @name BaseLegend.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
         /** @name BaseLegend.visible */
@@ -6305,6 +6307,8 @@ declare module DevExpress.viz {
     }
     /** @name dxChart.Options.commonAxisSettings.title */
     export interface dxChartCommonAxisSettingsTitle {
+        /** @name dxChart.Options.commonAxisSettings.title.alignment */
+        alignment?: 'center' | 'left' | 'right';
         /** @name dxChart.Options.commonAxisSettings.title.font */
         font?: Font;
         /** @name dxChart.Options.commonAxisSettings.title.margin */

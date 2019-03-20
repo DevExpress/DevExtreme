@@ -13,66 +13,13 @@ const environment = {
     }
 };
 
-QUnit.module("Detect annotation type");
-
-QUnit.test("Simple annotation", function(assert) {
-    const annotation = createAnnotations({ items: [{ x: 0, y: 0 }] })[0];
-
-    assert.equal(annotation._type, "simple");
-});
-
-QUnit.test("Image annotation", function(assert) {
-    const annotation = createAnnotations({ items: [{ x: 0, y: 0, image: { url: "some_url" } }] })[0];
-
-    assert.equal(annotation._type, "image");
-});
-
-QUnit.test("Label annptation", function(assert) {
-    const annotation = createAnnotations({ items: [{ x: 0, y: 0, label: {} }] })[0];
-
-    assert.equal(annotation._type, "label");
-});
-
-QUnit.module("Simple annotation", environment);
-
-QUnit.test("Draws a circle inside provided group", function(assert) {
-    const annotation = createAnnotations({ items: [{ x: 0, y: 0 }] })[0];
-
-    annotation.draw(this.widget, this.group);
-
-    // assert
-    assert.equal(this.renderer.circle.callCount, 1);
-
-    const circle = this.renderer.circle.getCall(0).returnValue;
-    assert.deepEqual(circle.append.getCall(0).args, [this.group]);
-});
-
-QUnit.test("Get coords from widget", function(assert) {
-    const annotation = createAnnotations({ items: [{ x: 0, y: 0 }] })[0];
-
-    annotation.draw(this.widget, this.group);
-
-    // assert
-    assert.equal(this.widget._getAnnotationCoords.callCount, 1);
-    assert.deepEqual(this.widget._getAnnotationCoords.getCall(0).args, [annotation]);
-    assert.deepEqual(this.renderer.circle.getCall(0).args, [100, 200, 5]);
-});
-
-QUnit.test("Get coords on every draw call", function(assert) {
-    const annotation = createAnnotations({ items: [{ x: 0, y: 0 }] })[0];
-
-    annotation.draw(this.widget, this.group);
-    annotation.draw(this.widget, this.group);
-
-    // assert
-    assert.equal(this.widget._getAnnotationCoords.callCount, 2);
-});
+QUnit.module("Image annotation", environment);
 
 QUnit.test("Do not draw annotation if cannot get coords", function(assert) {
     const testCase = (coords, message) => {
         this.widget._getAnnotationCoords.returns(coords);
 
-        const annotation = createAnnotations({ items: [{ some: "options" }] })[0];
+        const annotation = createAnnotations({ items: [{ image: { url: "some_url" } }] })[0];
 
         annotation.draw(this.widget, this.group);
 
@@ -85,7 +32,24 @@ QUnit.test("Do not draw annotation if cannot get coords", function(assert) {
     testCase({ x: undefined, y: 100 }, "Only x is undefined");
 });
 
-QUnit.module("Image annotation", environment);
+QUnit.test("Get tooltip params", function(assert) {
+    const annotation = createAnnotations({ items: [{ x: 0, y: 0, image: { url: "some_url" } }] })[0];
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    assert.deepEqual(annotation.getTooltipParams(), { x: 100, y: 200 });
+});
+
+QUnit.test("Get tooltip format object", function(assert) {
+    const options = { items: [{ x: 0, y: 0, opt_1: "opt_1", image: { url: "some_url" } }] };
+    const annotation = createAnnotations(options)[0];
+
+    annotation.draw(this.widget, this.group);
+
+    // assert
+    assert.deepEqual(annotation.getTooltipFormatObject(), options.items[0]);
+});
 
 QUnit.test("Draw image inside provided group", function(assert) {
     const annotation = createAnnotations({ items: [{ x: 0, y: 0, image: { url: "some_url" } }] })[0];

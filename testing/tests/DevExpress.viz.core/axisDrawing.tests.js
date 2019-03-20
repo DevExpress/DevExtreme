@@ -3604,7 +3604,8 @@ QUnit.test("Horizontal top", function(assert) {
                 weight: 200,
                 size: 10,
                 family: "Tahoma"
-            }
+            },
+            alignment: "center"
         }
     });
 
@@ -3675,7 +3676,8 @@ QUnit.test("Vertical left", function(assert) {
                 weight: 200,
                 size: 10,
                 family: "Tahoma"
-            }
+            },
+            alignment: "center"
         }
     });
 
@@ -3708,7 +3710,8 @@ QUnit.test("Vertical right", function(assert) {
                 weight: 200,
                 size: 10,
                 family: "Tahoma"
-            }
+            },
+            alignment: "center"
         }
     });
 
@@ -3799,7 +3802,8 @@ QUnit.test("Vertical. Inverted", function(assert) {
                 weight: 200,
                 size: 10,
                 family: "Tahoma"
-            }
+            },
+            alignment: "center"
         }
     });
     this.axis.setBusinessRange({ invert: true });
@@ -3815,6 +3819,144 @@ QUnit.test("Vertical. Inverted", function(assert) {
     assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(1).args[0], {
         translateX: 10 - 5 - (2 + 6)
     }, "Text args");
+});
+
+QUnit.test("Horizontal. alignment = left", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "bottom",
+        title: {
+            text: "Title text",
+            alignment: "left"
+        }
+    });
+
+    this.renderer.bBoxTemplate = { x: 1, y: 2, width: 12, height: 6 };
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.deepEqual(renderer.text.getCall(0).args, ["Title text", 10, 70]);
+    assert.equal(renderer.text.getCall(0).returnValue.attr.firstCall.args[0].align, "left");
+});
+
+QUnit.test("Horizontal. alignment = right", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "bottom",
+        title: {
+            text: "Title text",
+            alignment: "right"
+        }
+    });
+
+    this.renderer.bBoxTemplate = { x: 1, y: 2, width: 12, height: 6 };
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.deepEqual(renderer.text.getCall(0).args, ["Title text", 90, 70]);
+    assert.equal(renderer.text.getCall(0).returnValue.attr.firstCall.args[0].align, "right");
+});
+
+QUnit.test("Vertical left. alignment = left", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        position: "left",
+        title: {
+            text: "Title text",
+            alignment: "left"
+        }
+    });
+
+    this.renderer.bBoxTemplate = { x: 2, y: 1, width: 6, height: 12 };
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.deepEqual(renderer.text.getCall(0).args, ["Title text", 10, 70]);
+    assert.equal(renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, "left");
+});
+
+QUnit.test("Vertical left. alignment = right", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        position: "left",
+        title: {
+            text: "Title text",
+            alignment: "right"
+        }
+    });
+
+    this.renderer.bBoxTemplate = { x: 2, y: 1, width: 6, height: 12 };
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.deepEqual(renderer.text.getCall(0).args, ["Title text", 10, 30]);
+    assert.equal(renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, "right");
+});
+
+QUnit.test("Vertical right. alignment = left", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        position: "right",
+        title: {
+            text: "Title text",
+            alignment: "left"
+        }
+    });
+
+    this.renderer.bBoxTemplate = { x: 2, y: 1, width: 6, height: 12 };
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.deepEqual(renderer.text.getCall(0).args, ["Title text", 90, 30]);
+    assert.equal(renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, "left");
+});
+
+QUnit.test("Vertical right. alignment = right", function(assert) {
+    // arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        position: "right",
+        title: {
+            text: "Title text",
+            alignment: "right"
+        }
+    });
+
+    this.renderer.bBoxTemplate = { x: 2, y: 1, width: 6, height: 12 };
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.deepEqual(renderer.text.getCall(0).args, ["Title text", 90, 70]);
+    assert.equal(renderer.text.getCall(0).returnValue.attr.getCall(0).args[0].align, "right");
 });
 
 QUnit.module("XY linear axis. Draw. Date marker", environment);

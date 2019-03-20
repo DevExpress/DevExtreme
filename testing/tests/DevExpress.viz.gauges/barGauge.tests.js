@@ -286,7 +286,7 @@ checkPositioning('default', {
     this.checkBars(assert, { x: 200, y: 174, startAngle: -45, endAngle: 225 }, [[144, 113], [109, 78], [74, 43]], [[225, 198], [225, 117], [225, 9]]);
     this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 },
         [[113, -108], [78, -27], [43, 81]],
-        [[33, 220], [120, 16], [374, 140]],
+        [[34, 223], [116, 16], [372, 136]],
         ['10.0', '40.0', '80.0']);
 });
 
@@ -374,7 +374,7 @@ checkPositioning('labels indent', {
     this.checkBars(assert, { x: 200, y: 174, startAngle: -45, endAngle: 225 }, [[124, 83], [79, 37]], [[225, 139], [225, -15]]);
     this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 },
         [[82.5, -49], [37, 105]],
-        [[68, 55], [370, 212]],
+        [[67, 54], [368, 215]],
         ['32.0', '89.0']);
 });
 
@@ -388,7 +388,7 @@ checkPositioning('labels indent - out of range', {
     this.checkBars(assert, { x: 200, y: 174, startAngle: -45, endAngle: 225 }, [[82, 55], [51, 24]], [[225, 139], [225, -15]]);
     this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 },
         [[55, -49], [24, 105]],
-        [[68, 55], [370, 212]],
+        [[67, 54], [368, 210]],
         ['32.0', '89.0']);
 });
 
@@ -402,7 +402,7 @@ checkPositioning('value is equal to base value / with labels', {
     this.checkBars(assert, { x: 200, y: 174, startAngle: -45, endAngle: 225 }, [[124, 83], [79, 37]], [[144, 144], [144, 117]]);
     this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 },
         [[82.5, -54], [37, -27]],
-        [[58, 67], [120, 16]],
+        [[57, 66], [116, 16]],
         ['30.0', '40.0']);
 });
 
@@ -415,7 +415,7 @@ checkPositioning('connector width', {
     this.checkBars(assert, { x: 200, y: 174, startAngle: -45, endAngle: 225 }, [[144, 96], [92, 43]], [[225, 185], [225, 147]]);
     this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 3 },
         [[95.5, -94], [43, -57]],
-        [[25, 180], [53, 74]],
+        [[27, 180], [53, 72]],
         ['15.0', '29.0']);
 });
 
@@ -445,7 +445,7 @@ checkPositioning('single value', {
     values: 50
 }, function(assert) {
     this.checkBars(assert, { x: 200, y: 174, startAngle: -45, endAngle: 225 }, [[144, 43]], [[225, 90]]);
-    this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 }, [[43, 0]], [[200, -3]], ['50.0']);
+    this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 }, [[43, 0]], [[200, -2]], ['50.0']);
 });
 
 QUnit.test('no values', function(assert) {
@@ -564,6 +564,33 @@ QUnit.test('Some values are not changed', function(assert) {
             done();
         }, this);
     }, this);
+});
+
+QUnit.test('labels on almost straight lines (delta less than indent)', function(assert) {
+    this.$container.dxBarGauge({
+        animation: false,
+        values: [16, 51, 83]
+    });
+
+    this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 },
+        [[113, -92], [78, 3], [43, 89]],
+        [[26, 172], [208, -2], [374, 164]],
+        ['16.0', '51.0', '83.0']);
+});
+
+QUnit.test('labels straight lines (indent = 0)', function(assert) {
+    this.$container.dxBarGauge({
+        animation: false,
+        startValue: 0,
+        endValue: 120,
+        values: [60 - 0.01, 60, 100 - 0.01, 100],
+        label: { indent: 0 }
+    });
+
+    this.checkTexts(assert, { x: 200, y: 174, textRadius: 164, lineWidth: 2 },
+        [[138.25, 0], [108.5, 0], [78.75, 90], [49, 90]],
+        [[190, -2], [200, -2], [374, 174 - 12], [374, 174 - 7]],
+        ['60.0', '60.0', '100.0', '100.0']);
 });
 
 QUnit.module('Colors', $.extend({}, environment, {
@@ -1267,6 +1294,61 @@ QUnit.module("Label overlapping behavior", function(hooks) {
 
             done();
         };
+    });
+
+    QUnit.test("Change mode. None -> Hide", function(assert) {
+        this.$container.dxBarGauge({
+            values: [19, 20],
+            resolveLabelOverlapping: "none",
+            animation: {
+                enabled: false
+            }
+        });
+
+        var bBoxes = [
+                // render test
+                { x: 0, y: 0, width: 10, height: 10 },
+
+                // compare second label with first label
+                { x: 3, y: 5, width: 10, height: 10 },
+                { x: 0, y: 0, width: 10, height: 10 }
+            ],
+            i = 0;
+        renderer = new vizMocks.Renderer();
+        renderer.bBoxTemplate = function() {
+            var bBox = bBoxes[i];
+            i++;
+            if(i >= bBoxes.length) {
+                i = 0;
+            }
+
+            return bBox;
+        };
+
+        this.$container.dxBarGauge({
+            resolveLabelOverlapping: "hide"
+        });
+
+        var elements = environment.getBarsGroup.call(this).children;
+        var labels = $.grep(elements, function(element) {
+            if(element.typeOfNode === "text") return element;
+        });
+        var lines = $.grep(elements, function(element) {
+            if(element.typeOfNode === "path") return element;
+        });
+
+        assert.equal(labels.length, 2, "labels count should be correct value");
+        assert.equal(lines.length, 2, "lines and lables should be same count");
+
+        var firstLabelSettings = labels[0]._stored_settings;
+        assert.strictEqual(firstLabelSettings.text, "19.0", "first label should have correct text");
+        assert.strictEqual(firstLabelSettings.visibility, null, "first label should be visible");
+        assert.strictEqual(lines[0]._stored_settings.visibility, null, "first line should be visible");
+
+        var secondLabelSettings = labels[1]._stored_settings;
+        assert.strictEqual(secondLabelSettings.text, "20.0", "second label should have correct text");
+        assert.equal(secondLabelSettings.visibility, "hidden", "second label should be hidden");
+        assert.strictEqual(lines[1]._stored_settings.visibility, "hidden", "second line should be hidden");
     });
 
 });

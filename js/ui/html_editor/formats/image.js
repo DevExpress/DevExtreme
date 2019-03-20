@@ -24,14 +24,18 @@ class ExtImage extends Image {
 
     static formats(domNode) {
         let formats = super.formats(domNode);
-        const src = domNode.getAttribute("src");
 
-        if(src) {
-            formats["src"] = src;
-        }
+        formats["imageSrc"] = domNode.getAttribute("src");
 
-        if(domNode.style["float"]) {
-            formats["float"] = domNode.style["float"];
+        return formats;
+    }
+
+    formats() {
+        const formats = super.formats();
+        const floatValue = this.domNode.style["float"];
+
+        if(floatValue) {
+            formats["float"] = floatValue;
         }
 
         return formats;

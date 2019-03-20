@@ -5874,6 +5874,36 @@ QUnit.test("contentReady should not be raised on row click if focusedRowEnabled"
     assert.strictEqual(dataGrid.option("focusedRowKey"), 1, "focusedRowKey is assigned");
 });
 
+QUnit.test("Click by the first row on the next page should focus it without grid refresh if scrolling.mode is virtual and focusedRowEnabled is true (T722879)", function(assert) {
+    var dataGrid = createDataGrid({
+            focusedRowEnabled: true,
+            loadingTimeout: undefined,
+            keyExpr: "name",
+            dataSource: [
+                { name: "Alex", phone: "555555", room: 1 },
+                { name: "Ben", phone: "2244556", room: 2 },
+                { name: "Dan", phone: "553355", room: 3 }
+            ],
+            paging: { pageSize: 2 },
+            scrolling: { mode: "virtual" }
+        }),
+        rowsView = dataGrid.getView("rowsView"),
+        $lastRow = rowsView.getRow(2),
+        dataSource = dataGrid.getController("data").dataSource();
+
+    sinon.spy(dataSource, "load");
+
+    // act
+    $(dataGrid.getCellElement(2, 1)).trigger("dxpointerdown");
+
+    // assert
+    assert.equal(dataGrid.option("focusedRowIndex"), 2, "focusedRowIndex");
+    assert.equal($lastRow.attr("tabindex"), 0, "Row 2 tabindex");
+    assert.ok($lastRow.hasClass("dx-cell-focus-disabled"), "Row 2 has .dx-cell-focus-disabled");
+    assert.equal($lastRow.find("td").eq(0).attr("tabindex"), undefined);
+    assert.equal(dataSource.load.callCount, 0);
+});
+
 // T691574
 QUnit.test("refresh and height change should not break layout if rowRenderingMode is virtual", function(assert) {
     function generateData(count) {
@@ -6189,6 +6219,34 @@ QUnit.test("Load panel is not rendered for ArrayStore", function(assert) {
     // assert
     var $loadPanel = $($(dataGrid.$element()).find(".dx-loadpanel"));
     assert.ok(!$loadPanel.length, "load panel is visible");
+});
+
+// T723562
+QUnit.test("Load panel should not be visible after load error and resize", function(assert) {
+    var loadResult = $.Deferred(),
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            dataSource: {
+                load: function() {
+                    return loadResult;
+                }
+            }
+        });
+
+    clock.tick(500);
+
+    var $loadPanel = $($(dataGrid.$element()).find(".dx-loadpanel"));
+    assert.ok($loadPanel.is(":visible"), "load panel is visible");
+
+    // act
+    loadResult.reject("load error");
+    clock.tick(500);
+    dataGrid.updateDimensions();
+
+    // assert
+    assert.ok(!$loadPanel.is(":visible"), "load panel is not visible");
+
+    clock.restore();
 });
 
 // T389866
@@ -9180,6 +9238,39 @@ QUnit.test("add row if dataSource is not defined", function(assert) {
 
     // assert
     assert.strictEqual(dataGrid.getVisibleRows().length, 0, "no visible rows");
+});
+
+// T722161
+QUnit.test("add row after scrolling if rowRendringMode is virtual", function(assert) {
+    var array = [];
+    for(var i = 1; i <= 20; i++) {
+        array.push({ id: i, text: "text" + i });
+    }
+    // arrange, act
+    var dataGrid = createDataGrid({
+        height: 200,
+        dataSource: array,
+        keyExpr: "id",
+        loadingTimeout: undefined,
+        paging: {
+            pageSize: 10
+        },
+        scrolling: {
+            mode: "virtual",
+            rowRenderingMode: "virtual",
+            useNative: false
+        },
+        columns: ["id", "text"]
+    });
+
+    // act
+    dataGrid.pageIndex(1);
+    dataGrid.addRow();
+
+    // assert
+    assert.strictEqual(dataGrid.getVisibleRows()[0].key, 6, "first visible row key");
+    assert.ok(dataGrid.getVisibleRows()[5].inserted, "inserted row exists");
+    assert.deepEqual(dataGrid.getVisibleRows()[5].values, [undefined, undefined], "inserted row values");
 });
 
 QUnit.test("add row without return key", function(assert) {

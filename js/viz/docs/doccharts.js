@@ -1093,7 +1093,13 @@ var dxChart = {
             * @type number
             * @default 6
             */
-            margin: 6
+            margin: 6,
+            /**
+            * @name dxChartOptions.commonAxisSettings.title.alignment
+            * @type Enums.HorizontalAlignment
+            * @default 'center'
+            */
+            alignment: 'center'
         },
         /**
         * @name dxChartOptions.commonAxisSettings.stripStyle
