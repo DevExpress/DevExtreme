@@ -428,6 +428,7 @@ var TextEditorBase = Editor.inherit({
             .appendTo($textEditorContainer);
         this._$textEditorInputContainer.append(this._createInput());
         this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, $textEditorContainer);
+        this._updateButtonsStyling();
     },
 
     _clean() {
@@ -457,6 +458,21 @@ var TextEditorBase = Editor.inherit({
 
     _updateButtons: function(names) {
         this._buttonCollection.updateButtons(names);
+    },
+
+    _updateButtonsStyling: function(editorStylingMode) {
+        var that = this;
+
+        if(!editorStylingMode) {
+            editorStylingMode = this.option("stylingMode");
+        }
+
+        each(this.option("buttons"), function(_, buttonOptions) {
+            if(buttonOptions.options && !buttonOptions.options.stylingMode) {
+                var buttonInstance = that.getButton(buttonOptions.name);
+                buttonInstance.option("stylingMode", editorStylingMode === "underlined" ? "text" : "contained");
+            }
+        });
     },
 
     _renderValue: function() {
@@ -787,6 +803,7 @@ var TextEditorBase = Editor.inherit({
                 break;
             case "stylingMode":
                 this._renderStylingMode();
+                this._updateButtonsStyling(args.value);
                 break;
             case "valueFormat":
             case "buttons": {

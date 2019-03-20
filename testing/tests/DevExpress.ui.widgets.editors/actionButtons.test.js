@@ -759,6 +759,28 @@ module("collection updating", () => {
             assert.ok($after.eq(0).is(":hidden"));
         });
 
+        test("custom button should have 'text' styling mode by default if editor has stylingMode = 'underlined'", (assert) => {
+            const $textBox = $("<div>").dxTextBox({
+                showClearButton: false,
+                stylingMode: "underlined",
+                value: "text",
+                buttons: [{
+                    name: "custom",
+                    location: "after",
+                    options: {
+                        text: "custom"
+                    }
+                }]
+            });
+            const textBox = $textBox.dxTextBox("instance");
+            let customButton = textBox.getButton("custom");
+
+            assert.strictEqual(customButton.option("stylingMode"), "text");
+
+            textBox.option("stylingMode", "filled");
+            customButton = textBox.getButton("custom");
+            assert.notOk(customButton.option("stylingMode") === "text");
+        });
     });
 
     module("numberBox", () => {
