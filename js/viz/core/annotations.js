@@ -32,16 +32,22 @@ function coreAnnotation(options, draw) {
     };
 }
 
+function applyClipPath(elem, widget, pane) {
+    isDefined(pane) && elem.attr({ "clip-path": widget._getElementsClipRectID(pane) });
+}
+
 function labelAnnotation(options) {
     return coreAnnotation(options, function({ x, y }, widget, group) {
-        widget._renderer.text(options.label.text, x, y).data({ [ANNOTATION_DATA]: this }).css(patchFontOptions(options.label.font)).append(group);
+        const text = widget._renderer.text(options.label.text, x, y).data({ [ANNOTATION_DATA]: this }).css(patchFontOptions(options.label.font)).append(group);
+        applyClipPath(text, widget, this._pane);
     });
 }
 
 function imageAnnotation(options) {
     const { width, height, url, location } = options.image;
     return coreAnnotation(options, function({ x, y }, widget, group) {
-        widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, location).data({ [ANNOTATION_DATA]: this }).append(group);
+        const image = widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, location).data({ [ANNOTATION_DATA]: this }).append(group);
+        applyClipPath(image, widget, this._pane);
     });
 }
 

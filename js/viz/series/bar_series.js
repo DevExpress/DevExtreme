@@ -155,7 +155,7 @@ exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
         const minCoordName = !this._options.rotated ? "minY" : "minX";
         const sizeName = !isOpposite ? "width" : "height";
         const oppositeCoordName = !isOpposite ? "vy" : "vx";
-        const points = this.getVisiblePoints();
+        const points = this.getPoints();
 
         for(let i = 0; i < points.length; i++) {
             const p = points[i];
