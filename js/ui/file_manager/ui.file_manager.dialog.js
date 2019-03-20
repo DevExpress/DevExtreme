@@ -9,7 +9,7 @@ const FILE_MANAGER_DIALOG_CONTENT = "dx-filemanager-dialog";
 var FileManagerDialogBase = Widget.inherit({
 
     _initMarkup: function() {
-        var options = this._getInternalOptions();
+        const options = this._getDialogOptions();
 
         this._popup = this._createComponent(this.$element(), Popup, {
             width: options.width,
@@ -18,7 +18,7 @@ var FileManagerDialogBase = Widget.inherit({
             title: options.title,
             visible: false,
             closeOnOutsideClick: true,
-            contentTemplate: this._getContentTemplate.bind(this),
+            contentTemplate: this._createContentTemplate.bind(this),
             toolbarItems: [
                 {
                     widget: "dxButton",
@@ -39,7 +39,7 @@ var FileManagerDialogBase = Widget.inherit({
         this._popup.show();
     },
 
-    _getInternalOptions: function() {
+    _getDialogOptions: function() {
         return {
             width: 340,
             height: 200,
@@ -48,16 +48,15 @@ var FileManagerDialogBase = Widget.inherit({
         };
     },
 
-    _getContentTemplate: function() {
-        this._$contentElement = $("<div>");
-        this._$contentElement.addClass(FILE_MANAGER_DIALOG_CONTENT);
+    _createContentTemplate: function(element) {
+        this._$contentElement = $("<div>")
+            .appendTo(element)
+            .addClass(FILE_MANAGER_DIALOG_CONTENT);
 
-        var cssClass = this._getCssClass();
+        const cssClass = this._getCssClass();
         if(cssClass) {
             this._$contentElement.addClass(cssClass);
         }
-
-        return this._$contentElement;
     },
 
     _getDialogResult: function() {
@@ -69,7 +68,7 @@ var FileManagerDialogBase = Widget.inherit({
     },
 
     _onButtonClick: function() {
-        var result = this._getDialogResult();
+        const result = this._getDialogResult();
         if(result) {
             this._dialogResult = result;
             this._popup.hide();
@@ -77,7 +76,7 @@ var FileManagerDialogBase = Widget.inherit({
     },
 
     _onPopupHidden: function() {
-        var closedHandler = this.option("onClosed");
+        const closedHandler = this.option("onClosed");
         if(closedHandler) closedHandler(this._dialogResult);
     },
 

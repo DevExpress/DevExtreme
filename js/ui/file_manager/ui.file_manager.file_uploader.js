@@ -23,11 +23,12 @@ var FileManagerFileUploader = Widget.inherit({
 
     _initMarkup: function() {
         this._progressPanel = this._createComponent($("<div>"), FileManagerUploadProgressPanel, {});
-        this.$element().append(this._progressPanel.$element());
+
+        this.$element()
+            .addClass(FILE_MANAGER_FILE_UPLOADER_CLASS)
+            .append(this._progressPanel.$element());
 
         this._renderFileInput();
-
-        this.$element().addClass(FILE_MANAGER_FILE_UPLOADER_CLASS);
 
         this.callBase();
     },
@@ -52,7 +53,9 @@ var FileManagerFileUploader = Widget.inherit({
 
     _onFileInputChange: function() {
         var files = this._$fileInput.prop("files");
-        if(files.length === 0) return;
+        if(files.length === 0) {
+            return;
+        }
 
         eventsEngine.off(this._$fileInput, "change");
         eventsEngine.off(this._$fileInput, "click");
@@ -68,7 +71,9 @@ var FileManagerFileUploader = Widget.inherit({
     },
 
     _uploadFiles: function(files) {
-        if(files.length === 0) return;
+        if(files.length === 0) {
+            return;
+        }
 
         var progressBoxTitle = `Uploading ${files.length} files`;
         var progressBox = this._progressPanel.addProgressBox(progressBoxTitle, null);
@@ -234,7 +239,7 @@ var FileManagerUploadSession = Class.inherit({
         var chunkCount = Math.ceil(file.size / this._controller.chunkSize);
 
         return {
-            file: file,
+            file,
             uploadedBytesCount: 0,
             uploadedChunksCount: 0,
             totalChunkCount: chunkCount,

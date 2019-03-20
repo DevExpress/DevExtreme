@@ -15,7 +15,7 @@ var FileManagerFolderChooserDialog = FileManagerDialogBase.inherit({
         this.callBase();
     },
 
-    _getInternalOptions: function() {
+    _getDialogOptions: function() {
         return extend(this.callBase(), {
             width: 400,
             height: "80%",
@@ -24,14 +24,14 @@ var FileManagerFolderChooserDialog = FileManagerDialogBase.inherit({
         });
     },
 
-    _getContentTemplate: function() {
+    _createContentTemplate: function(element) {
+        this.callBase(element);
+
         this._filesTreeView = this._createComponent($("<div>"), FileManagerFilesTreeView, {
             getItems: this.option("getItems")
         });
 
-        return this.callBase().append(
-            this._filesTreeView.$element()
-        );
+        this._$contentElement.append(this._filesTreeView.$element());
     },
 
     _getDialogResult: function() {

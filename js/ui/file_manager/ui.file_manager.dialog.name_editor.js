@@ -20,7 +20,7 @@ var FileManagerNameEditorDialog = FileManagerDialogBase.inherit({
         this.callBase();
     },
 
-    _getInternalOptions: function() {
+    _getDialogOptions: function() {
         return extend(this.callBase(), {
             width: 340,
             height: 180,
@@ -29,15 +29,15 @@ var FileManagerNameEditorDialog = FileManagerDialogBase.inherit({
         });
     },
 
-    _getContentTemplate: function() {
+    _createContentTemplate: function(element) {
+        this.callBase(element);
+
         this._nameTextBox = this._createComponent($("<div>"), TextBox, {
             value: this._initialNameValue,
             placeholder: "Enter your new name"
         });
 
-        return this.callBase().append(
-            this._nameTextBox.$element()
-        );
+        this._$contentElement.append(this._nameTextBox.$element());
     },
 
     _getDialogResult: function() {
