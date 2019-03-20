@@ -540,7 +540,7 @@ var ResizingController = modules.ViewController.inherit({
         var that = this,
             scrollable = that._rowsView.getScrollable();
 
-        if(!scrollable && hasHeight) {
+        if(!scrollable && hasHeight) { // T722415
             commonUtils.deferRender(() => {
                 commonUtils.deferUpdate(() => {
                     that._setScrollerSpacingCore(hasHeight);
