@@ -1,6 +1,7 @@
 import $ from "jquery";
 import { getExcelJS } from "exporter/exceljs/exceljs_importer";
-import { exportDataGrid, checkAssignPolyfill } from "exporter/exceljs/exportDataGrid";
+import { exportDataGrid } from "exporter/exceljs/exportDataGrid";
+import browser from "core/utils/browser";
 
 import "ui/data_grid/ui.data_grid";
 
@@ -8,8 +9,6 @@ import "common.css!";
 import "generic_light.css!";
 
 QUnit.testStart(() => {
-    checkAssignPolyfill();
-
     let markup = '<div id="dataGrid"></div>';
 
     $("#qunit-fixture").html(markup);
@@ -28,6 +27,9 @@ const moduleConfig = {
 };
 
 QUnit.module("API", moduleConfig, () => {
+    if(browser.msie && parseInt(browser.version) <= 11) {
+        return;
+    }
 
     QUnit.test("Empty grid", (assert) => {
         let dataGrid = $("#dataGrid").dxDataGrid({}).dxDataGrid("instance");
