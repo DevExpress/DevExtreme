@@ -1,6 +1,19 @@
-var $ = require("jquery"),
-    themes = require("ui/themes"),
-    dateSerialization = require("core/utils/date_serialization");
+import $ from "jquery";
+import themes from "ui/themes";
+import dateSerialization from "core/utils/date_serialization";
+import Tooltip from "ui/tooltip";
+import tooltip from "ui/tooltip/ui.tooltip";
+import resizeCallbacks from "core/utils/resize_callbacks";
+import fx from "animation/fx";
+import dateLocalization from "localization/date";
+import messageLocalization from "localization/message";
+import { DataSource } from "data/data_source/data_source";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import dataUtils from "core/element_data";
+
+import "common.css!";
+import "generic_light.css!";
+import "ui/scheduler/ui.scheduler";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html(
@@ -8,23 +21,6 @@ QUnit.testStart(function() {
             <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
             </div>');
 });
-
-require("common.css!");
-require("generic_light.css!");
-
-
-var Tooltip = require("ui/tooltip"),
-    tooltip = require("ui/tooltip/ui.tooltip"),
-    resizeCallbacks = require("core/utils/resize_callbacks"),
-    fx = require("animation/fx"),
-    dateLocalization = require("localization/date"),
-    messageLocalization = require("localization/message"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    appointmentTooltip = require("ui/scheduler/ui.scheduler.appointment_tooltip"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    dataUtils = require("core/element_data");
-
-require("ui/scheduler/ui.scheduler");
 
 function getDeltaTz(schedulerTz, date) {
     var defaultTz = date.getTimezoneOffset() * 60000;
@@ -777,13 +773,13 @@ QUnit.test("Tooltip for the same appointment should not be rendered twice if it 
         $appt2 = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1);
 
     this.instance.showAppointmentTooltip(appt1, $appt1);
-    var tooltip = appointmentTooltip._tooltip;
+    var tooltip = this.instance._appointmentTooltip.tooltip;
     this.instance.showAppointmentTooltip(appt1, $appt1);
 
-    assert.equal(tooltip, appointmentTooltip._tooltip);
+    assert.equal(tooltip, this.instance._appointmentTooltip.tooltip);
 
     this.instance.showAppointmentTooltip(appt2, $appt2);
-    assert.notEqual(tooltip, appointmentTooltip._tooltip);
+    assert.notEqual(tooltip, this.instance._appointmentTooltip.tooltip);
 });
 
 QUnit.test("Appointment tooltip should be hidden after immediately delete key pressing", function(assert) {

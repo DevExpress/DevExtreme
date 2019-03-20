@@ -1,12 +1,11 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    DropDownAppointments = require("ui/scheduler/ui.scheduler.appointments.drop_down"),
-    Widget = require("ui/widget/ui.widget"),
-    Color = require("color"),
-    fx = require("animation/fx");
-
-require("common.css!");
-require("generic_light.css!");
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import Widget from "ui/widget/ui.widget";
+import Color from "color";
+import fx from "animation/fx";
+import { CompactAppointmentsDesktopStrategy } from "ui/scheduler/compact_strategies/compactAppointmentsDesktopStrategy";
+import "common.css!";
+import "generic_light.css!";
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="ddAppointments"></div>');
@@ -73,7 +72,7 @@ QUnit.module("Common", {
 
         this.renderDropDownAppointmentsContainer = function(items, options) {
             items = items || { data: [{ text: "a", startDate: new Date(2015, 1, 1) }], colors: [] };
-            return $(new DropDownAppointments().render($.extend(options, {
+            return $(new CompactAppointmentsDesktopStrategy().render($.extend(options, {
                 $container: $("#ddAppointments"),
                 coordinates: { top: 0, left: 0 },
                 items: items,
@@ -358,7 +357,7 @@ QUnit.test("the 'repaintExisting' should repaint dropdown menus", function(asser
     var dropDownMenu = $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance"),
         repaintStub = sinon.stub(dropDownMenu, "repaint");
 
-    new DropDownAppointments().repaintExisting($("#ddAppointments"));
+    new CompactAppointmentsDesktopStrategy().repaintExisting($("#ddAppointments"));
 
     assert.ok(repaintStub.calledOnce, "Menu is repainted");
 });

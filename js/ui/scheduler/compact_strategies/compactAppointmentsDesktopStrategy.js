@@ -70,7 +70,7 @@ export class CompactAppointmentsDesktopStrategy extends CompactAppointmentsStrat
 
     repaintExisting($container) {
         const appointmentsSelector = ["", DROPDOWN_APPOINTMENTS_CLASS, "dx-dropdownmenu"].join(".");
-        $container.find(appointmentsSelector).each(() => DropDownMenu.getInstance(this).repaint());
+        $container.find(appointmentsSelector).each((count, element) => DropDownMenu.getInstance(element).repaint());
     }
 
     _paintMenuButton($menu, color, itemsColors) {

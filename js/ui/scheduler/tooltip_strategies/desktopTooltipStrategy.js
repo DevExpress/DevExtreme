@@ -20,7 +20,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
             visible: true,
             target: item.$appointment,
             rtlEnabled: this.scheduler.option("rtlEnabled"),
-            contentTemplate: this._renderTemplate(item.data, item.currentData, item.targetedData, item.$appointment),
+            contentTemplate: this._renderTemplate(item.data, item.currentData, item.$appointment),
             position: {
                 my: "bottom",
                 at: "top",

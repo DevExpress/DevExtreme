@@ -26,14 +26,14 @@ export class TooltipStrategyBase {
         return this.scheduler.fire("getTargetedAppointmentData", data, $appointment);
     }
 
-    _renderTemplate(data, currentData, targetedData, $appointment) {
+    _renderTemplate(data, currentData, $appointment) {
         this._createTemplate(data, currentData, $appointment);
         const template = this.scheduler._getAppointmentTemplate("appointmentTooltipTemplate");
 
         return new FunctionTemplate(options => {
             return template.render({
                 model: data,
-                targetedAppointmentData: targetedData,
+                targetedAppointmentData: this._getTargetData(data, $appointment),
                 container: options.container
             });
         });
@@ -113,7 +113,7 @@ export class TooltipStrategyBase {
         return $content;
     }
 
-    _getFormatType(isAllDay, startDate, endDate) {
+    _getFormatType(startDate, endDate, isAllDay) {
         if(isAllDay) {
             return "DATE";
         }
@@ -129,7 +129,7 @@ export class TooltipStrategyBase {
         this.scheduler.fire("formatDates", {
             startDate: startDate,
             endDate: endDate,
-            formatType: this._getFormatType(isAllDay),
+            formatType: this._getFormatType(startDate, endDate, isAllDay),
             callback: value => { result = value; }
         });
 
