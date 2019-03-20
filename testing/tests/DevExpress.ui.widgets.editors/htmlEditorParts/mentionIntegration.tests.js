@@ -60,7 +60,7 @@ module("Mentions integration", {
             const { bottom, left } = getSelection().getRangeAt(0).getBoundingClientRect();
             const overlayPosition = $(`.${SUGGESTION_LIST_CLASS}`).closest(`.${OVERLAY_CONTENT_CLASS}`).position();
 
-            assert.strictEqual(overlayPosition.top, bottom, "popup top position equals to bottom position of marker");
+            assert.roughEqual(overlayPosition.top, bottom, 1.2, "popup top position equals to bottom position of marker");
             assert.strictEqual(overlayPosition.left, left, "popup left position equals to left position of marker");
             $fixture.css("left", fixtureLeft);
             done();
