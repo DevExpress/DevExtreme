@@ -216,6 +216,21 @@ var baseScatterMethods = {
         return errorBarOptions && this._errorBarsEnabled() && errorBarOptions.displayMode !== "none" && (isErrorBarTypeCorrect(_normalizeEnum(errorBarOptions.type)) || (_isDefined(errorBarOptions.lowValueField) || _isDefined(errorBarOptions.highValueField)));
     },
 
+    groupPointsByCoords(rotated) {
+        const cat = [];
+
+        _each(this.getVisiblePoints(), function(_, p) {
+            var pointCoord = parseInt(rotated ? p.vy : p.vx);
+            if(!cat[pointCoord]) {
+                cat[pointCoord] = p;
+            } else {
+                Array.isArray(cat[pointCoord]) ? cat[pointCoord].push(p) : (cat[pointCoord] = [cat[pointCoord], p]);
+            }
+        });
+
+        return cat;
+    },
+
     _createErrorBarGroup: function(animationEnabled) {
         var that = this,
             errorBarOptions = that._options.valueErrorBar,
@@ -581,8 +596,7 @@ exports.chart = _extend({}, baseScatterMethods, {
             trackers,
             trackersGroup,
             segments = that._segments || [],
-            rotated = that._options.rotated,
-            cat = [];
+            rotated = that._options.rotated;
 
         if(!that.isVisible()) {
             return;
@@ -606,15 +620,105 @@ exports.chart = _extend({}, baseScatterMethods, {
             });
         }
 
-        that._trackersTranslator = cat;
-        _each(that.getVisiblePoints(), function(_, p) {
-            var pointCoord = parseInt(rotated ? p.vy : p.vx);
-            if(!cat[pointCoord]) {
-                cat[pointCoord] = p;
+        that._trackersTranslator = that.groupPointsByCoords(rotated);
+    },
+
+    checkSeriesViewportCoord(axis, coord) {
+        if(this._points.length === 0) {
+            return false;
+        }
+        const range = axis.isArgumentAxis ? this.getArgumentRange() : this.getViewport();
+        const min = axis.getTranslator().translate(range.categories ? range.categories[0] : range.min);
+        const max = axis.getTranslator().translate(range.categories ? range.categories[range.categories.length - 1] : range.max);
+        const rotated = this.getOptions().rotated;
+        const inverted = axis.getOptions().inverted;
+
+        return (axis.isArgumentAxis && (!rotated && !inverted || rotated && inverted) ||
+            !axis.isArgumentAxis && (rotated && !inverted || !rotated && inverted)) ?
+            coord >= min && coord <= max : coord >= max && coord <= min;
+    },
+
+    checkAxisVisibleAreaCoord(isArgument, coord) {
+        const axis = isArgument ? this.getArgumentAxis() : this.getValueAxis();
+        const visibleArea = axis.getVisibleArea();
+
+        return _isDefined(coord) && visibleArea[0] <= coord && visibleArea[1] >= coord;
+    },
+
+    getSeriesPairCoord(coord, isArgument) {
+        const that = this;
+        let oppositeCoord;
+        const nearestPoints = this.getNearestPointsByCoord(coord, isArgument);
+        const needValueCoord = isArgument && !that._options.rotated || !isArgument && that._options.rotated;
+
+        for(let i = 0; i < nearestPoints.length; i++) {
+            const p = nearestPoints[i];
+            const k = (p[1].vy - p[0].vy) / (p[1].vx - p[0].vx);
+            const b = p[0].vy - p[0].vx * k;
+            let tmpCoord;
+
+            if(p[1].vx - p[0].vx === 0) {
+                tmpCoord = needValueCoord ? p[0].vy : p[0].vx;
             } else {
-                Array.isArray(cat[pointCoord]) ? cat[pointCoord].push(p) : (cat[pointCoord] = [cat[pointCoord], p]);
+                tmpCoord = needValueCoord ? k * coord + b : (coord - b) / k;
             }
-        });
+
+            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
+                oppositeCoord = tmpCoord;
+                break;
+            }
+        }
+
+        return oppositeCoord;
+    },
+
+    getNearestPointsByCoord(coord, isArgument) {
+        const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
+        const points = this.getVisiblePoints();
+        const allPoints = this.getPoints();
+        const nearestPoints = [];
+        const coordName = isOpposite ? "vy" : "vx";
+        let point;
+        let pPoint;
+        let nPoint;
+
+        if(this.isVisible() && allPoints.length > 0) {
+            if(allPoints.length > 1) {
+                if(points.length === 0) {
+                    points.push(allPoints.filter((p, i) => {
+                        const np = allPoints[i + 1];
+                        return np && (p[coordName] <= coord && np[coordName] >= coord || p[coordName] >= coord && np[coordName] <= coord);
+                    })[0]);
+                }
+
+                for(let i = 0; i < points.length; i++) {
+                    point = points[i];
+                    pPoint = points[i - 1];
+                    nPoint = points[i + 1];
+
+                    if(i === 0) {
+                        pPoint = allPoints[allPoints.indexOf(point) - 1];
+                    }
+                    if(i === points.length - 1) {
+                        nPoint = allPoints[allPoints.indexOf(point) + 1];
+                    }
+
+                    if(nPoint && (point[coordName] <= coord && nPoint[coordName] >= coord || point[coordName] >= coord && nPoint[coordName] <= coord)) {
+                        nearestPoints.push([point, nPoint]);
+                        i++;
+                    }
+                    if(pPoint && (point[coordName] >= coord && pPoint[coordName] <= coord || point[coordName] <= coord && pPoint[coordName] >= coord)) {
+                        nearestPoints.push([pPoint, point]);
+                    }
+                }
+            } else {
+                if(allPoints[0][coordName] === coord) {
+                    nearestPoints.push([allPoints[0], allPoints[0]]);
+                }
+            }
+        }
+
+        return nearestPoints;
     },
 
     getNeighborPoint: function(x, y) {

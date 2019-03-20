@@ -22,8 +22,8 @@ const environment = {
 
 QUnit.module("Coordinates calculation", function() {
     QUnit.module("Chart plugin", {
-        chart() {
-            return $('<div>').appendTo("#qunit-fixture").dxChart({
+        chart(options) {
+            return $('<div>').appendTo("#qunit-fixture").dxChart($.extend({
                 size: {
                     width: 100,
                     height: 100
@@ -43,7 +43,7 @@ QUnit.module("Coordinates calculation", function() {
                 argumentAxis: {
                     visualRange: [0, 100]
                 }
-            }).dxChart("instance");
+            }, options)).dxChart("instance");
         }
     });
 
@@ -77,17 +77,512 @@ QUnit.module("Coordinates calculation", function() {
         assert.deepEqual(coords, { x: 50, y: 10 });
     });
 
-    QUnit.test("Return null/undefined values if they cannot be calculated", function(assert) {
-        const testCase = (options, message) => {
-            const { x, y } = this.chart()._getAnnotationCoords(options);
+    QUnit.test("Check coords. Get y coord from axis", function(assert) {
+        const testCase = (options, coords, message) => {
+            const { x, y } = this.chart({
+                size: {
+                    width: 100,
+                    height: 210
+                },
+                panes: [ { name: "p1" }, { name: "p2" }],
+                defaultPane: "p1",
+                valueAxis: [
+                    { name: "a1", visualRange: [100, 200], pane: "p1" },
+                    { name: "a2", visualRange: [200, 300], pane: "p2" }
+                ],
+            })._getAnnotationCoords(options);
 
-            assert.ok(x === null || x === undefined || y === null || y === undefined, message);
+            assert.deepEqual({ x, y }, coords, message);
         };
 
-        testCase({}, "No coords at all");
-        testCase({ x: 0, value: "wrong_value" }, "Can't translate value");
-        testCase({ y: 0, argument: "wrong_argument" }, "Can't translate argument");
-        testCase({ x: 0, value: 100, axis: "wrong_axis" }, "Can't value axis");
+        testCase({ x: 50 }, { x: 50, y: 100 }, "Can't find by x");
+        testCase({ argument: 40 }, { x: 40, y: 100 }, "Can't find by argument");
+        testCase({ x: 30, value: 20 }, { x: 30, y: 180 }, "Can't find by x and value");
+        testCase({ argument: 50, value: 150 }, { x: 50, y: 50 }, "Can't find by argument and value");
+        testCase({ argument: 10, axis: "a2" }, { x: 10, y: 210 }, "Can't find by argument and axis");
+        testCase({ x: 0, value: 250, axis: "a2" }, { x: 0, y: 160 }, "Can't find by x, value and axis");
+    });
+
+    QUnit.test("Check coords. Get x coord from axis", function(assert) {
+        const testCase = (options, coords, message) => {
+            const { x, y } = this.chart({
+                size: {
+                    width: 100,
+                    height: 210
+                },
+                panes: [{ name: "p1" }, { name: "p2" }],
+                defaultPane: "p1",
+                valueAxis: [
+                    { name: "a1", visualRange: [100, 200], pane: "p1" },
+                    { name: "a2", visualRange: [200, 300], pane: "p2", position: "right" }
+                ],
+            })._getAnnotationCoords(options);
+
+            assert.deepEqual({ x, y }, coords, message);
+        };
+
+        testCase({ y: 50 }, { x: 0, y: 50 }, "Can't find by y");
+        testCase({ value: 150 }, { x: 0, y: 50 }, "Can't find by value");
+        testCase({ argument: 50, y: 50 }, { x: 50, y: 50 }, "Can't find by x and argument");
+        testCase({ value: 250, axis: "a2" }, { x: 100, y: 160 }, "Can't find by value and axis");
+        testCase({ argument: 50, value: 270, axis: "a2" }, { x: 50, y: 140 }, "Can't find by value, argument and axis");
+    });
+
+    QUnit.test("Check coords. Get y coord from series", function(assert) {
+        const testCase = (options, annotation_options, coord, type, inverted, message) => {
+            const annotation_coords = this.chart($.extend({
+                dataSource: [{ arg: 0, val: 100 },
+                    { arg: 50, val: 200 },
+                    { arg: 100, val: 100 }
+                ],
+                valueAxis: [
+                    { name: "a1", visualRange: [100, 200], inverted }
+                ],
+                series: [{ name: "s1", type }]
+            }, options))._getAnnotationCoords(annotation_options);
+
+            assert.roughEqual(annotation_coords.y, coord, 1, message);
+        };
+
+        const otherSource = [{ arg: 0, val: 150 },
+            { arg: 50, val: 200 },
+            { arg: 100, val: 150 }
+        ];
+
+        const bubbleSource = [{ arg: 0, val: 150, size: 20 },
+            { arg: 50, val: 200, size: 60 },
+            { arg: 100, val: 150, size: 40 }
+        ];
+
+        const financialSource = [{ date: 10, low: 120, high: 180, open: 140, close: 160 },
+            { date: 50, low: 140, high: 200, open: 160, close: 180 },
+            { date: 90, low: 100, high: 160, open: 120, close: 140 }
+        ];
+
+        const someSeriesSource = [{ arg: 0, val1: 110, val2: 130, val3: 120 },
+            { arg: 50, val1: 140, val2: 170, val3: 150 },
+            { arg: 100, val1: 180, val2: 200, val3: 160 }
+        ];
+
+        const stackedSource = [{ arg: 0, val1: 110, val2: 20, val3: 20 },
+            { arg: 50, val1: 120, val2: 30, val3: 30 },
+            { arg: 100, val1: 130, val2: 20, val3: 20 }
+        ];
+
+        const getSeriesOptions = (type) => {
+            return [{ name: "s1", valueField: "val1", type },
+                { name: "s2", valueField: "val2", type },
+                { name: "s3", valueField: "val3", type }];
+        };
+
+        // line, x
+        testCase({}, { x: 30, series: "s1" }, 50, "line", false, "Line. Can't find by x");
+        testCase({}, { x: 70, series: "s1" }, 50, "line", true, "Line. Can't find by x (inverted)");
+        testCase({ rotated: true }, { x: 50, series: "s1" }, 70, "line", false, "Line. Can't find by x (rotated)");
+        testCase({ rotated: true }, { x: 50, series: "s1" }, 70, "line", true, "Line. Can't find by x (inverted, rotated)");
+
+        // line, argument
+        testCase({}, { argument: 25, series: "s1" }, 50, "line", false, "Line. Can't find by argument");
+        testCase({}, { argument: 75, series: "s1" }, 50, "line", true, "Line. Can't find by argument (inverted)");
+
+        // area, x
+        testCase({}, { x: 30, series: "s1" }, 40, "area", false, "Area. Can't find by x");
+        testCase({}, { x: 70, series: "s1" }, 60, "area", true, "Area. Can't find by x (inverted)");
+        testCase({ rotated: true }, { x: 50, series: "s1" }, 75, "area", false, "Area. Can't find by x (rotated)");
+        testCase({ rotated: true }, { x: 50, series: "s1" }, 75, "area", true, "Area. Can't find by x (inverted, rotated)");
+
+        // area, argument
+        testCase({}, { argument: 25, series: "s1" }, 50, "area", false, "Can't find by argument");
+        testCase({}, { argument: 75, series: "s1" }, 50, "area", true, "Can't find by argument (inverted)");
+
+        // stepline, x
+        testCase({ dataSource: otherSource }, { x: 70, series: "s1" }, 25, "stepline", false, "Stepline. Can't find by x");
+        testCase({ dataSource: otherSource }, { x: 70, series: "s1" }, 75, "stepline", true, "Stepline. Can't find by x (inverted)");
+        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 90, "stepline", false, "Stepline. Can't find by x (rotated)");
+        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 90, "stepline", true, "Stepline. Can't find by x (inverted, rotated)");
+
+        // stepline, argument
+        testCase({ dataSource: otherSource }, { argument: 25, series: "s1" }, 50, "stepline", false, "Stepline. Can't find by argument");
+        testCase({ dataSource: otherSource }, { argument: 75, series: "s1" }, 75, "stepline", true, "Stepline. Can't find by argument (inverted)");
+
+        // steparea, x
+        testCase({ dataSource: otherSource }, { x: 70, series: "s1" }, 0, "steparea", false, "Steparea. Can't find by x");
+        testCase({ dataSource: otherSource }, { x: 30, series: "s1" }, 50, "steparea", true, "Steparea. Can't find by x (inverted)");
+        testCase({
+            dataSource: otherSource,
+            rotated: true,
+            argumentAxis: {
+                visualRange: [0, 100],
+                inverted: true
+            }
+        }, { x: 70, series: "s1" }, 0, "steparea", false, "Steparea. Can't find by x (rotated)");
+        testCase({
+            dataSource: otherSource,
+            rotated: true,
+            argumentAxis: {
+                visualRange: [0, 100],
+                inverted: true
+            }
+        }, { x: 30, series: "s1" }, 0, "steparea", true, "Steparea. Can't find by x (inverted, rotated)");
+
+        // steparea, argument
+        testCase({ dataSource: otherSource }, { argument: 25, series: "s1" }, 50, "steparea", false, "Steparea. Can't find by argument");
+        testCase({ dataSource: otherSource }, { argument: 75, series: "s1" }, 100, "steparea", true, "Steparea. Can't find by argument (inverted)");
+
+        // spline, x
+        testCase({}, { x: 75, series: "s1" }, 46, "spline", false, "Spline. Can't find by x");
+        testCase({}, { x: 25, series: "s1" }, 54, "spline", true, "Spline. Can't find by x (inverted)");
+        testCase({ rotated: true }, { x: 50, series: "s1" }, 77.5, "spline", false, "Spline. Can't find by x (rotated)");
+        testCase({ rotated: true }, { x: 50, series: "s1" }, 77.5, "spline", true, "Spline. Can't find by x (inverted, rotated)");
+
+        // spline, argument
+        testCase({}, { argument: 40, series: "s1" }, 27.5, "spline", false, "Spline. Can't find by argument");
+        testCase({}, { argument: 40, series: "s1" }, 72.5, "spline", true, "Spline. Can't find by argument (inverted)");
+
+        // splineArea, x
+        testCase({}, { x: 71, series: "s1" }, 20, "splineArea", false, "SplineArea. Can't find by x");
+        testCase({}, { x: 29, series: "s1" }, 80, "splineArea", true, "SplineArea. Can't find by x (inverted)");
+        testCase({ rotated: true }, { x: 71, series: "s1" }, 75.5, "splineArea", false, "SplineArea. Can't find by x (rotated)");
+        testCase({ rotated: true }, { x: 29, series: "s1" }, 75.5, "splineArea", true, "SplineArea. Can't find by x (inverted, rotated)");
+
+        // splineArea, argument
+        testCase({}, { argument: 32, series: "s1" }, 15, "splineArea", false, "SplineArea. Can't find by argument");
+        testCase({}, { argument: 32, series: "s1" }, 85, "splineArea", true, "SplineArea. Can't find by argument (inverted)");
+
+        // bar, x
+        testCase({ dataSource: otherSource }, { x: 75, series: "s1" }, 50, "bar", false, "Bar. Can't find by x");
+        testCase({ dataSource: otherSource }, { x: 25, series: "s1" }, 50, "bar", true, "Bar. Can't find by x (inverted)");
+        testCase({ dataSource: otherSource, rotated: true }, { x: 75, series: "s1" }, 50, "bar", false, "Bar. Can't find by x (rotated)");
+        testCase({ dataSource: otherSource, rotated: true }, { x: 75, series: "s1" }, 82.5, "bar", true, "Bar. Can't find by x (inverted, rotated)");
+
+        // bar, argument
+        testCase({ dataSource: otherSource }, { argument: 10, series: "s1" }, 50, "bar", false, "Bar. Can't find by argument");
+        testCase({ dataSource: otherSource }, { argument: 50, series: "s1" }, 100, "bar", true, "Bar. Can't find by argument (inverted)");
+
+        // side-by-side bar, x
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { x: 75, series: "s1" }, 20, null, false, "Side-by-side Bar. Can't find by x");
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { x: 18, series: "s2" }, 30, null, true, "Side-by-side Bar. Can't find by x (inverted)");
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar"), rotated: true }, { x: 41, series: "s3" }, 42, null, false, "Side-by-side Bar. Can't find by x (rotated)");
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar"), rotated: true }, { x: 55, series: "s1" }, 25, null, true, "Side-by-side Bar. Can't find by x (inverted, rotated)");
+
+        // side-by-side bar, argument
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { argument: 0, series: "s2" }, 70, null, false, "Side-by-side Bar. Can't find by argument");
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { argument: 60, series: "s3" }, 50, null, true, "Side-by-side Bar. Can't find by argument (inverted)");
+
+        // scatter
+        testCase({ dataSource: otherSource }, { x: 90, series: "s1" }, 50, "scatter", false, "Scatter. Can't find by x");
+        testCase({ dataSource: otherSource, rotated: true }, { x: 50, series: "s1" }, 90, "scatter", false, "Scatter. Can't find by x (rotated)");
+        testCase({ dataSource: otherSource }, { argument: 50, series: "s1" }, 25, "scatter", false, "Scatter. Can't find by argument");
+
+        // bubble
+        testCase({ dataSource: bubbleSource }, { x: 92, series: "s1" }, 50, "bubble", false, "Bubble. Can't find by x");
+        testCase({ dataSource: bubbleSource, rotated: true }, { x: 50, series: "s1" }, 90, "bubble", false, "Bubble. Can't find by x (rotated)");
+        testCase({ dataSource: bubbleSource }, { argument: 48, series: "s1" }, 25, "bubble", false, "Bubble. Can't find by argument");
+
+        // financial, x
+        testCase({ dataSource: financialSource }, { x: 50, series: "s1" }, 40, "candlestick", false, "Candlestick. Can't find by x");
+        testCase({ dataSource: financialSource }, { x: 20, series: "s1" }, 50, "candlestick", true, "Candlestick. Can't find by x (inverted)");
+        testCase({ dataSource: financialSource, rotated: true }, { x: 50, series: "s1" }, 85, "candlestick", false, "Candlestick. Can't find by x (rotated)");
+        testCase({ dataSource: financialSource, rotated: true }, { x: 65, series: "s1" }, 15, "candlestick", true, "Candlestick. Can't find by x (inverted, rotated)");
+
+        // financial, argument
+        testCase({ dataSource: financialSource }, { argument: 10, series: "s1" }, 50, "stock", false, "Stock. Can't find by argument");
+        testCase({ dataSource: financialSource }, { argument: 90, series: "s1" }, 40, "stock", true, "Stok. Can't find by argument (inverted)");
+
+        // range, x
+        testCase({ dataSource: someSeriesSource }, { x: 50, series: "s1" }, 30, "rangeArea", false, "RangeArea. Can't find by x");
+        testCase({ dataSource: someSeriesSource }, { x: 20, series: "s1" }, 46, "rangeArea", true, "RangeArea. Can't find by x (inverted)");
+        testCase({ dataSource: someSeriesSource, rotated: true }, { x: 50, series: "s1" }, 75, "rangeArea", false, "RangeArea. Can't find by x (rotated)");
+        testCase({ dataSource: someSeriesSource, rotated: true }, { x: 40, series: "s1" }, 62.5, "rangeArea", true, "RangeArea. Can't find by x (inverted, rotated)");
+
+        // range, argument
+        testCase({ dataSource: someSeriesSource }, { argument: 10, series: "s1" }, 70, "rangeBar", false, "RangeBar. Can't find by argument");
+        testCase({ dataSource: someSeriesSource }, { argument: 10, series: "s1" }, 30, "rangeBar", true, "RangeBar. Can't find by argument (inverted)");
+
+        // stackedbar, x
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedBar") }, { x: 50, series: "s3" }, 20, null, false, "StackedBar. Can't find by x");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedBar") }, { x: 20, series: "s2" }, 30, null, true, "StackedBar. Can't find by x (inverted)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedBar"), rotated: true }, { x: 30, series: "s1" }, 16.5, null, false, "StackedBar. Can't find by x (rotated)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedBar"), rotated: true }, { x: 70, series: "s1" }, 16.5, null, true, "StackedBar. Can't find by x (inverted, rotated)");
+
+        // stackedbar, argument
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedBar") }, { argument: 90, series: "s2" }, 50, null, false, "StackedBar. Can't find by argument");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedBar") }, { argument: 90, series: "s3" }, 70, null, true, "StackedBar. Can't find by argument (inverted)");
+
+        // stackedArea, x
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedArea") }, { x: 50, series: "s3" }, 20, null, false, "StackedArea. Can't find by x");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedArea") }, { x: 20, series: "s2" }, 38, null, true, "StackedArea. Can't find by x (inverted)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedArea"), rotated: true }, { x: 65, series: "s3" }, 75, null, false, "StackedArea. Can't find by x (rotated)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedArea"), rotated: true }, { x: 80, series: "s1" }, 50, null, true, "StackedArea. Can't find by x (inverted, rotated)");
+
+        // stackedArea, argument
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedArea") }, { argument: 90, series: "s2" }, 50, null, false, "StackedArea. Can't find by argument");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedArea") }, { argument: 90, series: "s3" }, 72, null, true, "StackedArea. Can't find by argument (inverted)");
+
+        // stackedLine, x
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedLine") }, { x: 50, series: "s3" }, 35, null, false, "StackedLine. Can't find by x");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedLine") }, { x: 20, series: "s2" }, 42.5, null, true, "StackedLine. Can't find by x (inverted)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedLine"), rotated: true }, { x: 60, series: "s3" }, 50, null, false, "StackedLine. Can't find by x (rotated)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedLine"), rotated: true }, { x: 60, series: "s1" }, 50, null, true, "StackedLine. Can't find by x (inverted, rotated)");
+
+        // stackedLine, argument
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedLine") }, { argument: 90, series: "s2" }, 50, null, false, "StackedLine. Can't find by argument");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedLine") }, { argument: 90, series: "s3" }, 61, null, true, "StackedLine. Can't find by argument (inverted)");
+
+        // stackedSpline, x
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSpline") }, { x: 50, series: "s3" }, 35, null, false, "StackedSpline. Can't find by x");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSpline") }, { x: 23, series: "s2" }, 45, null, true, "StackedSpline. Can't find by x (inverted)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSpline"), rotated: true }, { x: 60, series: "s3" }, 50, null, false, "StackedSpline. Can't find by x (rotated)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSpline"), rotated: true }, { x: 60, series: "s1" }, 50, null, true, "StackedSpline. Can't find by x (inverted, rotated)");
+
+        // stackedSpline, argument
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSpline") }, { argument: 90, series: "s2" }, 50, null, false, "StackedSpline. Can't find by argument");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSpline") }, { argument: 90, series: "s3" }, 61, null, true, "StackedSpline. Can't find by argument (inverted)");
+
+        // stackedSplineArea, x
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSplineArea") }, { x: 50, series: "s3" }, 20, null, false, "StackedSplineArea. Can't find by x");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSplineArea") }, { x: 77, series: "s2" }, 50, null, true, "StackedSplineArea. Can't find by x (inverted)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSplineArea"), rotated: true }, { x: 75, series: "s3" }, 69, null, false, "StackedSplineArea. Can't find by x (rotated)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSplineArea"), rotated: true }, { x: 83, series: "s1" }, 65, null, true, "StackedSplineArea. Can't find by x (inverted, rotated)");
+
+        // stackedSplineArea, argument
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSplineArea") }, { argument: 90, series: "s2" }, 50, null, false, "StackedSplineArea. Can't find by argument");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSplineArea") }, { argument: 90, series: "s1" }, 28, null, true, "StackedSplineArea. Can't find by argument (inverted)");
+    });
+
+    QUnit.test("Check coords. Get x coord from series", function(assert) {
+        const testCase = (options, annotation_options, coord, type, inverted, message) => {
+            const annotation_coords = this.chart($.extend({
+                dataSource: [{ arg: 0, val: 100 },
+                    { arg: 50, val: 200 },
+                    { arg: 100, val: 100 }
+                ],
+                valueAxis: [
+                    { name: "a1", visualRange: [100, 200], inverted }
+                ],
+                series: [{ name: "s1", type }]
+            }, options))._getAnnotationCoords(annotation_options);
+
+            assert.roughEqual(annotation_coords.x, coord, 1, message);
+        };
+
+        const otherSource = [{ arg: 0, val: 150 },
+            { arg: 50, val: 200 },
+            { arg: 100, val: 150 }
+        ];
+
+        const bubbleSource = [{ arg: 0, val: 150, size: 20 },
+            { arg: 50, val: 200, size: 60 },
+            { arg: 100, val: 150, size: 40 }
+        ];
+
+        const financialSource = [{ date: 10, low: 120, high: 180, open: 140, close: 160 },
+            { date: 50, low: 140, high: 200, open: 160, close: 180 },
+            { date: 90, low: 100, high: 160, open: 120, close: 140 }
+        ];
+
+        const someSeriesSource = [{ arg: 0, val1: 110, val2: 130, val3: 120 },
+            { arg: 50, val1: 140, val2: 170, val3: 150 },
+            { arg: 100, val1: 180, val2: 200, val3: 160 }
+        ];
+
+        const stackedSource = [{ arg: 0, val1: 110, val2: 20, val3: 20 },
+            { arg: 50, val1: 120, val2: 30, val3: 30 },
+            { arg: 100, val1: 130, val2: 20, val3: 20 }
+        ];
+
+        const getSeriesOptions = (type) => {
+            return [{ name: "s1", valueField: "val1", type },
+                { name: "s2", valueField: "val2", type },
+                { name: "s3", valueField: "val3", type }];
+        };
+
+        // line, y
+        testCase({}, { y: 30, series: "s1" }, 46, "line", false, "Line. Can't find by y");
+        testCase({}, { y: 70, series: "s1" }, 46, "line", true, "Line. Can't find by y (inverted)");
+        testCase({ rotated: true }, { y: 50, series: "s1" }, 67, "line", false, "Line. Can't find by y (rotated)");
+        testCase({ rotated: true }, { y: 50, series: "s1" }, 33, "line", true, "Line. Can't find by y (inverted, rotated)");
+
+        // line, value
+        testCase({}, { value: 130, series: "s1" }, 22, "line", false, "Line. Can't find by value");
+        testCase({}, { value: 180, series: "s1" }, 42, "line", true, "Line. Can't find by value (inverted)");
+
+        // area, y
+        testCase({}, { y: 30, series: "s1" }, 35, "area", false, "Area. Can't find by y");
+        testCase({}, { y: 70, series: "s1" }, 35, "area", true, "Area. Can't find by y (inverted)");
+        testCase({ rotated: true }, { y: 50, series: "s1" }, 100, "area", false, "Area. Can't find by y (rotated)");
+        testCase({ rotated: true }, { y: 50, series: "s1" }, 0, "area", true, "Area. Can't find by y (inverted, rotated)");
+
+        // area, value
+        testCase({}, { value: 130, series: "s1" }, 15, "area", false, "Can't find by value");
+        testCase({}, { value: 170, series: "s1" }, 35, "area", true, "Can't find by value (inverted)");
+
+        // stepline, y
+        testCase({ dataSource: otherSource }, { y: 30, series: "s1" }, 50, "stepline", false, "Stepline. Can't find by y");
+        testCase({ dataSource: otherSource }, { y: 70, series: "s1" }, 50, "stepline", true, "Stepline. Can't find by y (inverted)");
+        testCase({ dataSource: otherSource, rotated: true }, { y: 50, series: "s1" }, 67, "stepline", false, "Stepline. Can't find by y (rotated)");
+        testCase({ dataSource: otherSource, rotated: true }, { y: 50, series: "s1" }, 33, "stepline", true, "Stepline. Can't find by y (inverted, rotated)");
+
+        // stepline, value
+        testCase({ dataSource: otherSource }, { value: 160, series: "s1" }, 50, "stepline", false, "Stepline. Can't find by value");
+        testCase({ dataSource: otherSource }, { value: 170, series: "s1" }, 50, "stepline", true, "Stepline. Can't find by value (inverted)");
+
+        // steparea, y
+        testCase({ dataSource: otherSource }, { y: 30, series: "s1" }, 50, "steparea", false, "Steparea. Can't find by y");
+        testCase({ dataSource: otherSource }, { y: 70, series: "s1" }, 50, "steparea", true, "Steparea. Can't find by y (inverted)");
+        testCase({
+            dataSource: otherSource,
+            rotated: true,
+            argumentAxis: {
+                visualRange: [0, 100],
+                inverted: true
+            }
+        }, { y: 70, series: "s1" }, 50, "steparea", false, "Steparea. Can't find by y (rotated)");
+        testCase({
+            dataSource: otherSource,
+            rotated: true,
+            argumentAxis: {
+                visualRange: [0, 100],
+                inverted: true
+            }
+        }, { y: 30, series: "s1" }, 0, "steparea", true, "Steparea. Can't find by y (inverted, rotated)");
+
+        // steparea, value
+        testCase({ dataSource: otherSource }, { value: 155, series: "s1" }, 50, "steparea", false, "Steparea. Can't find by value");
+        testCase({ dataSource: otherSource }, { value: 175, series: "s1" }, 50, "steparea", true, "Steparea. Can't find by value (inverted)");
+
+        // spline, y
+        testCase({}, { y: 25, series: "s1" }, 50, "spline", false, "Spline. Can't find by y");
+        testCase({}, { y: 50, series: "s1" }, 22.5, "spline", true, "Spline. Can't find by y (inverted)");
+        testCase({ rotated: true }, { y: 50, series: "s1" }, 67, "spline", false, "Spline. Can't find by y (rotated)");
+        testCase({ rotated: true }, { y: 50, series: "s1" }, 33, "spline", true, "Spline. Can't find by y (inverted, rotated)");
+
+        // spline, value
+        testCase({}, { value: 150, series: "s1" }, 22.5, "spline", false, "Spline. Can't find by value");
+        testCase({}, { value: 200, series: "s1" }, 50, "spline", true, "Spline. Can't find by value (inverted)");
+
+        // splineArea, y
+        testCase({}, { y: 30, series: "s1" }, 24, "splineArea", false, "SplineArea. Can't find by y");
+        testCase({}, { y: 70, series: "s1" }, 24, "splineArea", true, "SplineArea. Can't find by y (inverted)");
+        testCase({ rotated: true }, { y: 71, series: "s1" }, 80, "splineArea", false, "SplineArea. Can't find by y (rotated)");
+        testCase({ rotated: true }, { y: 29, series: "s1" }, 20, "splineArea", true, "SplineArea. Can't find by y (inverted, rotated)");
+
+        // splineArea, value
+        testCase({}, { value: 150, series: "s1" }, 15, "splineArea", false, "SplineArea. Can't find by value");
+        testCase({}, { value: 190, series: "s1" }, 35.5, "splineArea", true, "SplineArea. Can't find by value (inverted)");
+
+        // bar, y
+        testCase({ dataSource: otherSource }, { y: 75, series: "s1" }, 16.5, "bar", false, "Bar. Can't find by y");
+        testCase({ dataSource: otherSource }, { y: 25, series: "s1" }, 16.5, "bar", true, "Bar. Can't find by y (inverted)");
+        testCase({ dataSource: otherSource, rotated: true }, { y: 75, series: "s1" }, 50, "bar", false, "Bar. Can't find by y (rotated)");
+        testCase({ dataSource: otherSource, rotated: true }, { y: 90, series: "s1" }, 50, "bar", true, "Bar. Can't find by y (inverted, rotated)");
+
+        // bar, value
+        testCase({ dataSource: otherSource }, { value: 120, series: "s1" }, 16.5, "bar", false, "Bar. Can't find by value");
+        testCase({ dataSource: otherSource }, { value: 190, series: "s1" }, 50, "bar", true, "Bar. Can't find by value (inverted)");
+
+        // side-by-side bar, y
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { y: 75, series: "s1" }, 42, null, false, "Side-by-side Bar. Can't find by y");
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { y: 25, series: "s2" }, 16.5, null, true, "Side-by-side Bar. Can't find by y (inverted)");
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar"), rotated: true }, { y: 75, series: "s3" }, 20, null, false, "Side-by-side Bar. Can't find by y (rotated)");
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar"), rotated: true }, { y: 55, series: "s1" }, 60, null, true, "Side-by-side Bar. Can't find by y (inverted, rotated)");
+
+        // side-by-side bar, value
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { value: 120, series: "s2" }, 16.5, null, false, "Side-by-side Bar. Can't find by value");
+        testCase({ dataSource: someSeriesSource, series: getSeriesOptions("bar") }, { value: 160, series: "s3" }, 91, null, true, "Side-by-side Bar. Can't find by value (inverted)");
+
+        // scatter
+        testCase({ dataSource: otherSource }, { y: 50, series: "s1" }, 10, "scatter", false, "Scatter. Can't find by y");
+        testCase({ dataSource: otherSource, rotated: true }, { y: 50, series: "s1" }, 67, "scatter", false, "Scatter. Can't find by y (rotated)");
+        testCase({ dataSource: otherSource }, { value: 150, series: "s1" }, 10, "scatter", false, "Scatter. Can't find by value");
+
+        // bubble
+        testCase({ dataSource: bubbleSource }, { y: 52, series: "s1" }, 10, "bubble", false, "Bubble. Can't find by y");
+        testCase({ dataSource: bubbleSource, rotated: true }, { y: 50, series: "s1" }, 67, "bubble", false, "Bubble. Can't find by y (rotated)");
+        testCase({ dataSource: bubbleSource }, { value: 148, series: "s1" }, 10, "bubble", false, "Bubble. Can't find by value");
+
+        // financial, y
+        testCase({ dataSource: financialSource }, { y: 30, series: "s1" }, 50, "candlestick", false, "Candlestick. Can't find by y");
+        testCase({ dataSource: financialSource }, { y: 70, series: "s1" }, 50, "candlestick", true, "Candlestick. Can't find by y (inverted)");
+        testCase({ dataSource: financialSource, rotated: true }, { y: 50, series: "s1" }, 56.5, "candlestick", false, "Candlestick. Can't find by y (rotated)");
+        testCase({ dataSource: financialSource, rotated: true }, { y: 80, series: "s1" }, 50, "candlestick", true, "Candlestick. Can't find by y (inverted, rotated)");
+
+        // financial, value
+        testCase({ dataSource: financialSource }, { value: 130, series: "s1" }, 15, "stock", false, "Stock. Can't find by value");
+        testCase({ dataSource: financialSource }, { value: 190, series: "s1" }, 50, "stock", true, "Stok. Can't find by value (inverted)");
+
+        // range, y
+        testCase({ dataSource: someSeriesSource }, { y: 50, series: "s1" }, 25, "rangeArea", false, "RangeArea. Can't find by y");
+        testCase({ dataSource: someSeriesSource }, { y: 70, series: "s1" }, 50, "rangeArea", true, "RangeArea. Can't find by y (inverted)");
+        testCase({ dataSource: someSeriesSource, rotated: true }, { y: 50, series: "s1" }, 70, "rangeArea", false, "RangeArea. Can't find by y (rotated)");
+        testCase({ dataSource: someSeriesSource, rotated: true }, { y: 40, series: "s1" }, 24, "rangeArea", true, "RangeArea. Can't find by y (inverted, rotated)");
+
+        // range, value
+        testCase({ dataSource: someSeriesSource }, { value: 160, series: "s1" }, 49.5, "rangeBar", false, "RangeBar. Can't find by value");
+        testCase({ dataSource: someSeriesSource }, { value: 130, series: "s1" }, 16.5, "rangeBar", true, "RangeBar. Can't find by value (inverted)");
+
+        // stackedbar, y
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedBar") }, { y: 50, series: "s3" }, 16.5, null, false, "StackedBar. Can't find by y");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedBar") }, { y: 20, series: "s2" }, 16.5, null, true, "StackedBar. Can't find by y (inverted)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedBar"), rotated: true }, { y: 50, series: "s1" }, 20, null, false, "StackedBar. Can't find by y (rotated)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedBar"), rotated: true }, { y: 85, series: "s1" }, 90, null, true, "StackedBar. Can't find by y (inverted, rotated)");
+
+        // stackedbar, value
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedBar") }, { value: 140, series: "s2" }, 50, null, false, "StackedBar. Can't find by value");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedBar") }, { value: 160, series: "s3" }, 49.5, null, true, "StackedBar. Can't find by value (inverted)");
+
+        // stackedArea, y
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedArea") }, { y: 35, series: "s3" }, 25, null, false, "StackedArea. Can't find by y");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedArea") }, { y: 35, series: "s2" }, 12.5, null, true, "StackedArea. Can't find by y (inverted)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedArea"), rotated: true }, { y: 65, series: "s3" }, 71, null, false, "StackedArea. Can't find by y (rotated)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedArea"), rotated: true }, { y: 80, series: "s1" }, 86, null, true, "StackedArea. Can't find by y (inverted, rotated)");
+
+        // stackedArea, value
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedArea") }, { value: 150, series: "s2" }, 50, null, false, "StackedArea. Can't find by value");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedArea") }, { value: 180, series: "s3" }, 50, null, true, "StackedArea. Can't find by value (inverted)");
+
+        // stackedLine, y
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedLine") }, { y: 50, series: "s3" }, 10, null, false, "StackedLine. Can't find by y");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedLine") }, { y: 45, series: "s2" }, 30, null, true, "StackedLine. Can't find by y (inverted)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedLine"), rotated: true }, { y: 60, series: "s3" }, 57.5, null, false, "StackedLine. Can't find by y (rotated)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedLine"), rotated: true }, { y: 60, series: "s1" }, 60.75, null, true, "StackedLine. Can't find by y (inverted, rotated)");
+
+        // stackedLine, value
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedLine") }, { value: 150, series: "s2" }, 50, null, false, "StackedLine. Can't find by value");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedLine") }, { value: 168, series: "s3" }, 34, null, true, "StackedLine. Can't find by value (inverted)");
+
+        // stackedSpline, y
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSpline") }, { y: 50, series: "s3" }, 10, null, false, "StackedSpline. Can't find by y");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSpline") }, { y: 45, series: "s2" }, 22.5, null, true, "StackedSpline. Can't find by y (inverted)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSpline"), rotated: true }, { y: 47, series: "s3" }, 60, null, false, "StackedSpline. Can't find by y (rotated)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSpline"), rotated: true }, { y: 60, series: "s1" }, 60.75, null, true, "StackedSpline. Can't find by y (inverted, rotated)");
+
+        // stackedSpline, value
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSpline") }, { value: 140, series: "s2" }, 22.5, null, false, "StackedSpline. Can't find by value");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSpline") }, { value: 165, series: "s3" }, 23.5, null, true, "StackedSpline. Can't find by value (inverted)");
+
+        // stackedSplineArea, y
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSplineArea") }, { y: 29, series: "s3" }, 24, null, false, "StackedSplineArea. Can't find by y");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSplineArea") }, { y: 47, series: "s2" }, 32, null, true, "StackedSplineArea. Can't find by y (inverted)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSplineArea"), rotated: true }, { y: 79, series: "s3" }, 69, null, false, "StackedSplineArea. Can't find by y (rotated)");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSplineArea"), rotated: true }, { y: 83, series: "s1" }, 86.6, null, true, "StackedSplineArea. Can't find by y (inverted, rotated)");
+
+        // stackedSplineArea, value
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSplineArea") }, { value: 150, series: "s2" }, 50, null, false, "StackedSplineArea. Can't find by value");
+        testCase({ dataSource: stackedSource, series: getSeriesOptions("stackedSplineArea") }, { value: 115, series: "s1" }, 25, null, true, "StackedSplineArea. Can't find by value (inverted)");
+    });
+
+    QUnit.test("Return null/undefined values if they cannot be calculated", function(assert) {
+        const testCase = (options, coords, message) => {
+            const { x, y } = this.chart()._getAnnotationCoords(options);
+
+            assert.deepEqual({ x, y }, coords, message);
+        };
+
+        testCase({}, { x: undefined, y: undefined }, "No coords at all");
+        testCase({ x: 0, value: "wrong_value" }, { x: 0, y: null }, "Can't translate value");
+        testCase({ y: 0, argument: "wrong_argument" }, { x: null, y: 0 }, "Can't translate argument");
+        testCase({ x: 0, value: 100, axis: "wrong_axis" }, { x: 0, y: undefined }, "Can't value axis");
     });
 });
 
