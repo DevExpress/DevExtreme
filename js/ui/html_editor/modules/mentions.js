@@ -109,16 +109,15 @@ class MentionModule extends PopupModule {
     get _popupPosition() {
         const position = this.getPosition();
         const mentionBounds = this.quill.getBounds(position ? position - 1 : position);
-        const rootRect = this.quill.root.getBoundingClientRect();
 
         return {
             of: this.quill.root,
             offset: {
                 h: mentionBounds.left,
-                v: mentionBounds.bottom - rootRect.height
+                v: mentionBounds.bottom
             },
             my: "top left",
-            at: "bottom left",
+            at: "top left",
             collision: {
                 y: "flip",
                 x: "flipfit"
