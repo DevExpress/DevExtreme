@@ -287,7 +287,8 @@ var Tabs = CollectionWidget.inherit({
 
         if(!this._allowScrolling()) {
             this._cleanScrolling();
-            this._updateStretchedState();
+
+            this._canStretchItems() && this.$element().addClass(TABS_STRETCHED_CLASS);
 
             this.$element()
                 .removeClass(TABS_NAV_BUTTONS_CLASS)
@@ -295,21 +296,23 @@ var Tabs = CollectionWidget.inherit({
         }
     },
 
-    _updateStretchedState: function() {
+    _canStretchItems: function() {
         var $visibleItems = this._getVisibleItems(),
             elementWidth = this.$element().width(),
             maxTabWidth = this._getMaxTabWidth($visibleItems);
 
-        if(maxTabWidth > Math.floor(elementWidth / $visibleItems.length)) {
-            this.$element().addClass(TABS_STRETCHED_CLASS);
+        if(maxTabWidth > elementWidth / $visibleItems.length) {
+            return true;
         }
+
+        return false;
     },
 
     _getMaxTabWidth: function(items) {
         var itemsWidth = [];
 
         iteratorUtils.each(items, (_, item) => {
-            itemsWidth.push($(item).outerWidth());
+            itemsWidth.push($(item).outerWidth(true));
         });
 
         return Math.max.apply(null, itemsWidth);

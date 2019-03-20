@@ -360,7 +360,34 @@ QUnit.test("tab with large text should be stretched and text should be visible",
         domUtils.triggerShownEvent($container);
 
         assert.ok($element.hasClass(TABS_STRETCHED_CLASS), "stretched class was added");
-        assert.ok($element.find(toSelector(TABS_ITEM_CLASS)).eq(1).width() > 100, "tab was stretched");
+
+        assert.ok($element.find(toSelector(TABS_ITEM_CLASS)).eq(1).width() > 100, "tabs was stretched");
+    } finally {
+        $container.remove();
+    }
+});
+
+QUnit.test("tabs with usual text length have fixed width", function(assert) {
+    var $container = $("<div>");
+    $container.width(300);
+
+    try {
+        var $element = $("<div>").appendTo($container).dxTabs({
+            items: [
+                { text: "text1" },
+                { text: "text2" }
+            ],
+            showNavButtons: true,
+            width: '100%'
+        });
+
+        $container.appendTo("#qunit-fixture");
+        domUtils.triggerShownEvent($container);
+
+        assert.ok(!$element.hasClass(TABS_STRETCHED_CLASS), "stretched class wasn't added");
+
+        var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
+        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
     } finally {
         $container.remove();
     }
