@@ -539,7 +539,7 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
         assert.strictEqual(e.event.type, "dxclick", "event is correct");
         assert.strictEqual(e.itemData, 1, "itemData is correct");
-        assert.strictEqual(e.itemElement, $item.get(0), "itemElement is correct");
+        assert.strictEqual($(e.itemElement).get(0), $item.get(0), "itemElement is correct");
     });
 
     QUnit.test("onItemClick event change", (assert) => {
