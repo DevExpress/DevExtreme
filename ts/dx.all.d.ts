@@ -2463,16 +2463,45 @@ declare module DevExpress.ui {
         getDataSource(): DevExpress.data.DataSource;
     }
     /** @name dxDropDownButton.Options */
-    export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>, DataExpressionMixinOptions<dxDropDownButton> {
+    export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
+        /** @name dxDropDownButton.Options.dataSource */
+        dataSource?: string | Array<CollectionWidgetItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
+        /** @name dxDropDownButton.Options.deferRendering */
+        deferRendering?: any;
+        /** @name dxDropDownButton.Options.displayExpr */
+        displayExpr?: string | ((itemData: any) => any);
+        /** @name dxDropDownButton.Options.dropDownOptions */
+        dropDownOptions?: dxPopupOptions;
+        /** @name dxDropDownButton.Options.items */
+        items?: Array<CollectionWidgetItem | any>;
         /** @name dxDropDownButton.Options.itemTemplate */
         itemTemplate?: template | ((itemData: any, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** @name dxDropDownButton.Options.keyExpr */
+        keyExpr?: string | ((itemData: any) => any);
+        /** @name dxDropDownButton.Options.noDataText */
+        noDataText?: string;
+        /** @name dxDropDownButton.Options.onActionButtonClick */
+        onActionButtonClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: event, selectedItem?: any }) => any) | string;
+        /** @name dxDropDownButton.Options.onSelectionChanged */
+        onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, oldSelectedItem?: any, selectedItem?: any }) => any) | string;
+        /** @name dxDropDownButton.Options.selectedItem */
+        selectedItem?: string | any;
+        /** @name dxDropDownButton.Options.showSelectedItem */
+        showSelectedItem?: boolean;
     }
     /** @name dxDropDownButton */
     export class dxDropDownButton extends Widget {
         constructor(element: Element, options?: dxDropDownButtonOptions)
         constructor(element: JQuery, options?: dxDropDownButtonOptions)
-        /** @name DataHelperMixin.getDataSource() */
-        getDataSource(): DevExpress.data.DataSource;
+
+        /** @name dxDropDownButton.close() */
+        close(): Promise<void> & JQueryPromise<void>;
+
+        /** @name dxDropDownButton.open() */
+        open(): Promise<void> & JQueryPromise<void>;
+
+        /** @name dxDropDownButton.toggle(visibility) */
+        toggle(visibility: boolean): Promise<void> & JQueryPromise<void>;
     }
     /** @name dxDropDownMenu.Options */
     export interface dxDropDownMenuOptions extends WidgetOptions<dxDropDownMenu> {
