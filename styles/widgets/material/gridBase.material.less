@@ -323,39 +323,31 @@
 
         .dx-dropdowneditor-button-visible.dx-dropdowneditor {
             &.dx-show-clear-button {
-                .dx-texteditor-input {
-                    padding-right: @MATERIAL_STANDARD_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-                }
-
                 &.dx-invalid {
                     .dx-texteditor-input {
-                        padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
+                        padding-right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
                     }
 
                     &.dx-rtl .dx-texteditor-input {
                         padding-right: 0;
-                        padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @MATERIAL_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
+                        padding-left: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
                     }
                 }
             }
 
             &.dx-invalid {
                 .dx-texteditor-input {
-                    padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
+                    padding-right: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
                 }
 
                 &.dx-rtl .dx-texteditor-input {
                     padding-right: 0;
-                    padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
+                    padding-left: @MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
                 }
             }
 
-            .dx-texteditor-input {
-                padding-right: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
-            }
             &.dx-rtl .dx-texteditor-input {
                 padding-right: 0;
-                padding-left: @MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
             }
         }
 
@@ -406,14 +398,6 @@
 
             &:after, &:before {
                 content: none;
-            }
-
-            &.dx-numberbox-spin .dx-texteditor-input {
-                padding-right: @MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH;
-            }
-
-            &.dx-numberbox-spin-touch-friendly .dx-texteditor-input {
-                padding-right: @MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
             }
 
             &.dx-rtl, .dx-rtl & {

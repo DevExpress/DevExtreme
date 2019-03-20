@@ -45,7 +45,14 @@
 .dx-texteditor-buttons-container {
     display: flex;
     width: auto;
-    height: 100%;
+    flex-grow: 0;
+    flex-basis: content;
+}
+
+.dx-texteditor-input-container {
+    display: flex;
+    flex-grow: 1;
+    position: relative;
 }
 
 .dx-texteditor-input {
@@ -103,17 +110,6 @@
         text-align: right;
         left: auto;
         right: 0;
-    }
-
-    .dx-clear-button-area {
-        float: left;
-        right: auto;
-        left: 0;
-    }
-
-    .dx-texteditor-buttons-container {
-        left: 0;
-        right: auto;
     }
 }
 

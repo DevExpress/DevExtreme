@@ -19,6 +19,7 @@
 .dx-texteditor-icon() {
     position: absolute;
     top: 50%;
+    margin-top: -@GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE/2;
     .dx-icon-sizing(@GENERIC_TEXTEDITOR_ICON_SIZE, @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
 }
 
@@ -110,15 +111,6 @@
 }
 
 .dx-show-clear-button {
-    .dx-texteditor-input {
-        padding-right: @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
-        .dx-rtl &,
-        .dx-rtl& {
-            padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
-            padding-left: @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
-        }
-    }
-
     .dx-clear-button-area {
         width: @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
         right: 0;

@@ -36,17 +36,6 @@
 }
 
 .dx-numberbox-spin {
-    &.dx-show-clear-button {
-        .dx-texteditor-input {
-            padding-right: @SPIN_BUTTON_AREA_WIDTH + @CLEAR_ICON_SIZE + 2 * @CLEAR_ICON_RIGHT;
-        }
-
-        &.dx-numberbox-spin-touch-friendly {
-            .dx-texteditor-input {
-                padding-right: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @CLEAR_ICON_SIZE + 2 * @CLEAR_ICON_RIGHT;
-            }
-        }
-    }
     .validation-icon-position(@SPIN_BUTTON_AREA_WIDTH);
 
     &.dx-show-clear-button:not(.dx-texteditor-empty) {
@@ -59,17 +48,5 @@
 
     &.dx-show-clear-button:not(.dx-texteditor-empty) {
         .validation-icon-position(@TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT);
-    }
-}
-.dx-rtl {
-    .dx-numberbox,
-    &.dx-numberbox {
-        &.dx-numberbox-spin-touch-friendly.dx-show-clear-button .dx-texteditor-input {
-            padding-left: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @CLEAR_ICON_SIZE + 2 * @CLEAR_ICON_RIGHT;
-        }
-
-        &.dx-numberbox-spin.dx-show-clear-button .dx-texteditor-input {
-            padding-left: @SPIN_BUTTON_AREA_WIDTH + @CLEAR_ICON_SIZE + 2 * @CLEAR_ICON_RIGHT;
-        }
     }
 }

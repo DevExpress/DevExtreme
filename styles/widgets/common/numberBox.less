@@ -1,6 +1,5 @@
 @SPIN_CONTAINER_WIDTH: 22px;
 @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 64px;
-@SPIN_WIDTH: 6px;
 
 .dx-numberbox {
     position: relative;
@@ -17,10 +16,6 @@
     }
 }
 
-.dx-numberbox-spin .dx-texteditor-input {
-    padding-right: @SPIN_CONTAINER_WIDTH + @SPIN_WIDTH;
-}
-
 .dx-numberbox-spin-container {
     width: @SPIN_CONTAINER_WIDTH;
     height: 100%;
@@ -35,10 +30,6 @@
 }
 
 .dx-numberbox-spin-touch-friendly {
-    .dx-texteditor-input {
-        padding-right: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @SPIN_WIDTH;
-    }
-
     .dx-numberbox-spin-container {
         width: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
     }
@@ -64,20 +55,9 @@
 }
 
 
-.dx-rtl {
-    .dx-numberbox-spin-container {
-        right: auto;
-        left: 0;
-    }
-
-    .dx-numberbox-spin,
-    &.dx-numberbox-spin {
-        .dx-texteditor-input {
-            padding-left: @SPIN_CONTAINER_WIDTH + @SPIN_WIDTH;
-        }
-    }
-
-    &.dx-numberbox-spin-touch-friendly .dx-texteditor-input {
-        padding-left: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @SPIN_WIDTH;
-    }
-}
+// .dx-rtl {
+//     .dx-numberbox-spin-container {
+//         right: auto;
+//         left: 0;
+//     }
+// }

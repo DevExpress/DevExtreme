@@ -212,3 +212,13 @@
 .dx-button-normal, .dx-button-back {
     .dx-button-special-hover(@button-special-hover);
 }
+
+.dx-texteditor-buttons-container {
+    > .dx-button {
+        margin: 1px;
+        > .dx-button-content {
+            padding-top: @GENERIC_BASE_INLINE_WIDGET_TOP_PADDING - @GENERIC_BUTTON_BORDER_WEIGHT - 1px;
+            padding-bottom: @GENERIC_BASE_INLINE_WIDGET_BOTTOM_PADDING - @GENERIC_BUTTON_BORDER_WEIGHT - 1px;
+        }
+    }
+}

@@ -665,11 +665,13 @@ module("collection updating", () => {
             });
             const textBox = $textBox.dxTextBox("instance");
 
+            textBox.option("buttons[1].options.text", "custom2");
             textBox.option("buttons[1].location", "before");
+
             const { $before, $after } = getActionButtons($textBox);
 
             assert.strictEqual($before.length, 1);
-            assert.ok($before.eq(0).text(), "custom");
+            assert.strictEqual($before.eq(0).text(), "custom2");
             assert.strictEqual($after.length, 1);
             assert.ok(isClearButton($after.eq(0)));
         });

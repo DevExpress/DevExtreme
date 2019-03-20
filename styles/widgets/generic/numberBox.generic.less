@@ -34,11 +34,6 @@
     border-radius: @numberbox-spin-icon-border-radius;
 }
 
-.dx-numberbox-spin.dx-show-clear-button .dx-texteditor-input {
-    padding-right: @GENERIC_NUMBERBOX_SPIN_CONTAINER_WIDTH + @GENERIC_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH;
-}
-
-
 .dx-numberbox-spin-button {
     background-color: @texteditor-bg;
     padding: @GENERIC_NUMBERBOX_SPIN_PADDING;
@@ -91,10 +86,6 @@
         border-left: none;
     }
 
-    &.dx-show-clear-button .dx-texteditor-input {
-        padding-right: @GENERIC_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @GENERIC_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH;
-    }
-
     .dx-numberbox-spin-up-icon,.dx-numberbox-spin-down-icon{
         background-position: center;
     }
@@ -107,19 +98,9 @@
         .dx-numberbox-spin-container {
             border-right: none;
         }
-
-        &.dx-show-clear-button .dx-texteditor-input {
-            padding-left: @GENERIC_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @GENERIC_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH;
-        }
     }
 
     &.dx-numberbox-spin {
-        &.dx-show-clear-button {
-            .dx-texteditor-input {
-                padding-left: @GENERIC_NUMBERBOX_SPIN_CONTAINER_WIDTH + @GENERIC_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH;
-            }
-        }
-
         .dx-texteditor-input {
             padding-right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
         }

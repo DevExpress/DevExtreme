@@ -81,12 +81,8 @@
 }
 
 .dx-show-clear-button {
-    .dx-texteditor-input {
-        padding-right: @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT * 2;
-    }
-
     &:not(.dx-texteditor-empty) {
-        .validation-icon-position(@CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT);
+        .validation-icon-position();
     }
 }
 
