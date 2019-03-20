@@ -4,11 +4,10 @@ import dataCoreUtils from "core/utils/data";
 import typeUtils from "core/utils/type";
 import Widget from "ui/widget/ui.widget";
 import fx from "animation/fx";
+import "ui/scheduler/ui.scheduler";
 
 const compileGetter = dataCoreUtils.compileGetter;
 const compileSetter = dataCoreUtils.compileSetter;
-
-require("ui/scheduler/ui.scheduler");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-appointments"></div>\
