@@ -1,16 +1,16 @@
-import $ from "../../core/renderer";
-import Class from "../../core/class";
-import translator from "../../animation/translator";
-import typeUtils from "../../core/utils/type";
-import dragEvents from "../../events/drag";
-import eventUtils from "../../events/utils";
-import eventsEngine from "../../events/core/events_engine";
-import Button from "../button";
-import DropDownMenu from "../drop_down_menu";
-import FunctionTemplate from "../widget/function_template";
-import messageLocalization from "../../localization/message";
-import { extendFromObject } from "../../core/utils/extend";
-import deferredUtils from "../../core/utils/deferred";
+import $ from "../../../core/renderer";
+import { CompactAppointmentsStrategyBase } from "./compactAppointmentsStrategyBase";
+import translator from "../../../animation/translator";
+import typeUtils from "../../../core/utils/type";
+import dragEvents from "../../../events/drag";
+import eventUtils from "../../../events/utils";
+import eventsEngine from "../../../events/core/events_engine";
+import Button from "../../button";
+import DropDownMenu from "../../drop_down_menu";
+import FunctionTemplate from "../../widget/function_template";
+import messageLocalization from "../../../localization/message";
+import { extendFromObject } from "../../../core/utils/extend";
+import deferredUtils from "../../../core/utils/deferred";
 const when = deferredUtils.when;
 
 const OFFSET = 5,
@@ -37,29 +37,25 @@ const SIDE_BORDER_COLOR_STYLES = {
     "bottom": "borderBottomColor"
 };
 
-let dropDownAppointments = Class.inherit({
-    render: function(options, instance) {
-        this.instance = instance;
-        let coordinates = options.coordinates,
-            items = options.items,
-            buttonWidth = options.buttonWidth,
-            offset = 0;
+export class CompactAppointmentsDesktopStrategy extends CompactAppointmentsStrategyBase {
+    renderCore(options) {
+        let offset = 0;
 
         const $menu = $("<div>").addClass(DROPDOWN_APPOINTMENTS_CLASS)
             .appendTo(options.$container);
 
         if(options.isCompact) {
             $menu.addClass(COMPACT_DROPDOWN_APPOINTMENTS_CLASS);
-            offset = this.instance.fire("getCellWidth") - buttonWidth - OFFSET;
+            offset = this.instance.fire("getCellWidth") - options.buttonWidth - OFFSET;
         }
 
         this._createAppointmentClickAction();
 
         this._createDropDownMenu({
             $element: $menu,
-            items: items,
+            items: options.items,
             itemTemplate: options.itemTemplate,
-            buttonWidth: buttonWidth
+            buttonWidth: options.buttonWidth
         }, options.isCompact);
 
         when.apply(null, options.items.colors).done(function() {
@@ -67,23 +63,17 @@ let dropDownAppointments = Class.inherit({
         }.bind(this));
 
         this._applyInnerShadow($menu, options.buttonWidth);
-
-        translator.move($menu, {
-            top: coordinates.top,
-            left: coordinates.left + offset
-        });
+        this.setPosition($menu, { top: options.coordinates.top, left: options.coordinates.left + offset });
 
         return $menu;
-    },
+    }
 
-    repaintExisting: function($container) {
-        var appointmentsSelector = ["", DROPDOWN_APPOINTMENTS_CLASS, "dx-dropdownmenu"].join(".");
-        $container.find(appointmentsSelector).each(function() {
-            DropDownMenu.getInstance(this).repaint();
-        });
-    },
+    repaintExisting($container) {
+        const appointmentsSelector = ["", DROPDOWN_APPOINTMENTS_CLASS, "dx-dropdownmenu"].join(".");
+        $container.find(appointmentsSelector).each(() => DropDownMenu.getInstance(this).repaint());
+    }
 
-    _paintMenuButton: function($menu, color, itemsColors) {
+    _paintMenuButton($menu, color, itemsColors) {
         let paintButton = true,
             currentItemColor;
 
@@ -101,13 +91,13 @@ let dropDownAppointments = Class.inherit({
             }
             color && paintButton && $menu.css("backgroundColor", color);
         }.bind(this));
-    },
+    }
 
-    _applyInnerShadow: function($element) {
+    _applyInnerShadow($element) {
         $element.css("boxShadow", "inset " + $element.get(0).getBoundingClientRect().width + "px 0 0 0 rgba(0, 0, 0, 0.3)");
-    },
+    }
 
-    _createAppointmentClickAction: function() {
+    _createAppointmentClickAction() {
         this._appointmentClickAction = this.instance._createActionByOption("onAppointmentClick", {
             afterExecute: function(e) {
                 var config = e.args[0];
@@ -116,8 +106,9 @@ let dropDownAppointments = Class.inherit({
                 this.instance.fire("showEditAppointmentPopup", { data: config.appointmentData });
             }.bind(this)
         });
-    },
-    _createDropDownMenu: function(config, isCompact) {
+    }
+
+    _createDropDownMenu(config, isCompact) {
         const $menu = config.$element,
             items = config.items;
 
@@ -146,9 +137,9 @@ let dropDownAppointments = Class.inherit({
                 }.bind(this)
             });
         }
-    },
+    }
 
-    _createListButtonTemplate: function(template, items, isCompact) {
+    _createListButtonTemplate(template, items, isCompact) {
         return new FunctionTemplate(function(options) {
             var model = {
                 appointmentCount: items.data.length,
@@ -160,9 +151,9 @@ let dropDownAppointments = Class.inherit({
                 container: options.container
             });
         });
-    },
+    }
 
-    _createListItemTemplate: function(template) {
+    _createListItemTemplate(template) {
         return new FunctionTemplate((options) => {
             return template.render({
                 model: options.model,
@@ -170,15 +161,15 @@ let dropDownAppointments = Class.inherit({
                 container: options.container
             });
         });
-    },
+    }
 
-    _onListItemClick: function(args) {
+    _onListItemClick(args) {
         const mappedData = this.instance.fire("mapAppointmentFields", args),
             result = extendFromObject(mappedData, args, false);
         this._appointmentClickAction(this._clearExcessFields(result));
-    },
+    }
 
-    _onListItemRenderedCore: function(args, $menu) {
+    _onListItemRenderedCore(args, $menu) {
         if(!this.instance._allowDragging()) {
             return;
         }
@@ -199,9 +190,9 @@ let dropDownAppointments = Class.inherit({
         eventsEngine.on($item, DRAG_END_EVENT_NAME, () => {
             this._onAppointmentDragEnd(itemData);
         });
-    },
+    }
 
-    _onAppointmentDragStart: function($item, itemData, settings, $menu, e) {
+    _onAppointmentDragStart($item, itemData, settings, $menu, e) {
         const appointmentInstance = this.instance.getAppointmentsInstance(),
             appointmentIndex = appointmentInstance.option("items").length;
 
@@ -222,9 +213,9 @@ let dropDownAppointments = Class.inherit({
         if($items.length > 0) {
             this._prepareDragItem($menu, $items, appointmentData.settings);
         }
-    },
+    }
 
-    _onAppointmentDragUpdate: function(e, allDay) {
+    _onAppointmentDragUpdate(e, allDay) {
         let coordinates = {
             left: this._startPosition.left + e.offset.x,
             top: this._startPosition.top + e.offset.y
@@ -242,9 +233,9 @@ let dropDownAppointments = Class.inherit({
         });
 
         translator.move(this._$draggedItem, coordinates);
-    },
+    }
 
-    _onAppointmentDragEnd: function(itemData) {
+    _onAppointmentDragEnd(itemData) {
         const appointments = this.instance.getAppointmentsInstance(),
             newCellIndex = this.instance._workSpace.getDroppableCellIndex(),
             oldCellIndex = this.instance._workSpace.getCellIndexByCoordinates(this._startPosition);
@@ -253,17 +244,17 @@ let dropDownAppointments = Class.inherit({
         newCellIndex === oldCellIndex && appointments._clearItem({ itemData: itemData });
 
         delete this._$draggedItem;
-    },
+    }
 
-    _clearExcessFields: function(data) {
+    _clearExcessFields(data) {
         delete data.itemData;
         delete data.itemIndex;
         delete data.itemElement;
 
         return data;
-    },
+    }
 
-    _prepareDragItem: function($menu, $items, settings) {
+    _prepareDragItem($menu, $items, settings) {
         this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, settings[0].startDate) : $items[0];
 
         const menuPosition = translator.locate($menu);
@@ -274,9 +265,9 @@ let dropDownAppointments = Class.inherit({
 
         translator.move(this._$draggedItem, this._startPosition);
         eventsEngine.trigger(this._$draggedItem, "dxdragstart");
-    },
+    }
 
-    _getRecurrencePart: function(appointments, startDate) {
+    _getRecurrencePart(appointments, startDate) {
         var result;
         for(var i = 0; i < appointments.length; i++) {
             var $appointment = appointments[i],
@@ -286,29 +277,29 @@ let dropDownAppointments = Class.inherit({
             }
         }
         return result;
-    },
+    }
 
-    _initDynamicTemplate: function(items) {
+    _initDynamicTemplate(items) {
         this.instance._defaultTemplates["dropDownAppointment"] = new FunctionTemplate((options) => {
             return this._createDropDownAppointmentTemplate(options.model, $(options.container), items.colors[options.index]);
         });
-    },
+    }
 
-    _initDynamicButtonTemplate: function(count, isCompact) {
+    _initDynamicButtonTemplate(count, isCompact) {
         this.instance._defaultTemplates["appointmentCollector"] = new FunctionTemplate((options) => {
             return this._createButtonTemplate(count, $(options.container), isCompact);
         });
-    },
+    }
 
-    _createButtonTemplate: function(appointmentCount, element, isCompact) {
+    _createButtonTemplate(appointmentCount, element, isCompact) {
         const text = isCompact ? appointmentCount : messageLocalization.getFormatter("dxScheduler-moreAppointments")(appointmentCount);
 
         return element
             .append([$("<span>").text(text)])
             .addClass(DROPDOWN_APPOINTMENTS_CONTENT_CLASS);
-    },
+    }
 
-    _createDropDownAppointmentTemplate: function(appointmentData, appointmentElement, color) {
+    _createDropDownAppointmentTemplate(appointmentData, appointmentElement, color) {
         var dateString = "",
             appointmentMarkup = [],
             borderSide = "left",
@@ -327,7 +318,7 @@ let dropDownAppointments = Class.inherit({
             appointmentElement.css(SIDE_BORDER_COLOR_STYLES[borderSide], color);
         });
 
-        var startDate = this.instance.fire("getField", "startDate", appointmentData),
+        let startDate = this.instance.fire("getField", "startDate", appointmentData),
             endDate = this.instance.fire("getField", "endDate", appointmentData),
             startDateTimeZone = this.instance.fire("getField", "startDateTimeZone", appointmentData),
             endDateTimeZone = this.instance.fire("getField", "endDateTimeZone", appointmentData);
@@ -356,9 +347,9 @@ let dropDownAppointments = Class.inherit({
         appointmentElement.append(appointmentMarkup);
 
         return appointmentElement;
-    },
+    }
 
-    _createButtons: function(appointmentData) {
+    _createButtons(appointmentData) {
         let editing = this.instance.option("editing"),
             allowDeleting = false;
 
@@ -392,6 +383,4 @@ let dropDownAppointments = Class.inherit({
 
         return $container;
     }
-});
-
-module.exports = dropDownAppointments;
+}
