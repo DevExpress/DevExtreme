@@ -142,6 +142,17 @@ QUnit.test("selectedIndex option test", function(assert) {
     assert.equal(this.tabWidgetInstance.option("selectedIndex"), 1, "option <selectedIndex> of nested tabs widget successfully changed");
 });
 
+QUnit.test("width option test", function(assert) {
+    assert.expect(2);
+
+    assert.equal(this.tabWidgetInstance.option("width"), undefined, "option <width> as default is undefined");
+
+    this.tabPanelInstance.option("width", 100);
+
+    assert.equal(this.tabWidgetInstance.option("width"), 100, "option <width> of nested tabs widget successfully changed");
+
+});
+
 QUnit.test("selectedItem option test", function(assert) {
     assert.expect(2);
 

@@ -318,6 +318,46 @@ QUnit.test("Tabs in multiple mode", function(assert) {
     assert.equal(instance.option("selectedItems").length, 2, "selected two items in multiple mode");
 });
 
+QUnit.test("dimensionChanged should be called when width was changed", function(assert) {
+    assert.expect(2);
+
+    var $element = $("#widget").dxTabs({
+            items: [
+                { text: "user" },
+                { text: "analytics" }
+            ], width: 300,
+            showNavButtons: true,
+            scrollingEnabled: true
+        }),
+        instance = $element.dxTabs("instance");
+
+    var dimensionChangedStub = sinon.stub(instance, "_dimensionChanged");
+    instance.option("width", 200);
+
+    assert.equal(instance.option("width"), 200, "width option was changed");
+    assert.equal(dimensionChangedStub.callCount, 1, "dimentionChanged was called");
+});
+
+QUnit.test("Tabs should be rerender with nav buttons when width was changed", function(assert) {
+    var $element = $("#widget").dxTabs({
+            items: [
+                { text: "user" },
+                { text: "analytics" },
+                { text: "customers" },
+                { text: "search" },
+                { text: "favorites" }
+            ], width: 500,
+            showNavButtons: true,
+            scrollingEnabled: true
+        }),
+        instance = $element.dxTabs("instance");
+
+    instance.option("width", 200);
+
+    assert.equal(instance.option("width"), 200, "width option was changed");
+    assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons was rendered");
+});
+
 
 QUnit.module("horizontal scrolling");
 

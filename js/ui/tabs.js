@@ -490,6 +490,10 @@ var Tabs = CollectionWidget.inherit({
             case "scrollByContent":
                 this._scrollable && this._scrollable.option(args.name, args.value);
                 break;
+            case "width":
+                this.callBase(args);
+                this._dimensionChanged();
+                break;
             case "selectionMode":
                 this._renderMultiple();
                 this.callBase(args);

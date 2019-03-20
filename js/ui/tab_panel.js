@@ -397,6 +397,10 @@ var TabPanel = MultiView.inherit({
             case "showNavButtons":
                 this._setTabsOption(fullName, value);
                 break;
+            case "width":
+                this._setTabsOption(fullName, value);
+                this.callBase(args);
+                break;
             case "focusedElement":
                 var id = value ? $(value).index() : value;
                 var newItem = value ? this._tabs._itemElements().eq(id) : value;
