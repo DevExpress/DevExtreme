@@ -9229,7 +9229,8 @@ QUnit.test("add row after scrolling if rowRendringMode is virtual", function(ass
         },
         scrolling: {
             mode: "virtual",
-            rowRenderingMode: "virtual"
+            rowRenderingMode: "virtual",
+            useNative: false
         },
         columns: ["id", "text"]
     });
