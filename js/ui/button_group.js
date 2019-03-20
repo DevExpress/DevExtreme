@@ -136,9 +136,6 @@ const ButtonGroup = Widget.inherit({
         const items = this.option("items");
         items && itemIndex === items.length - 1 && $item.addClass(BUTTON_GROUP_LAST_ITEM_CLASS);
 
-        const width = this.option("width");
-        isDefined(width) && $item.addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
-
         $item.addClass(SHAPE_STANDARD_CLASS);
     },
 
@@ -167,9 +164,9 @@ const ButtonGroup = Widget.inherit({
          * @name dxButtonGroupItem.html
          * @hidden
          */
-        this._defaultTemplates["item"] = new BindableTemplate((($container, data) => {
+        this._defaultTemplates["item"] = new BindableTemplate((($container, data, model) => {
             this._prepareItemStyles($container);
-            this._createComponent($container, Button, extend({}, data, this._getBasicButtonOptions()));
+            this._createComponent($container, Button, extend({}, model, data, this._getBasicButtonOptions()));
         }), ["text", "type", "icon", "disabled", "visible", "hint"], this.option("integrationOptions.watchMethod"));
     },
 
@@ -192,7 +189,8 @@ const ButtonGroup = Widget.inherit({
             focusStateEnabled: false,
             stylingMode: this.option("stylingMode"),
             hoverStateEnabled: this.option("hoverStateEnabled"),
-            activeStateEnabled: this.option("activeStateEnabled")
+            activeStateEnabled: this.option("activeStateEnabled"),
+            onClick: null
         };
     },
 
@@ -214,7 +212,11 @@ const ButtonGroup = Widget.inherit({
             tabIndex: this.option("tabIndex"),
             noDataText: "",
             selectionRequired: this.option("selectionMode") === "single",
-            onSelectionChanged: (e) => {
+            onItemRendered: e => {
+                const width = this.option("width");
+                isDefined(width) && $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
+            },
+            onSelectionChanged: e => {
                 this._syncSelectionOptions();
                 this._fireSelectionChangeEvent(e.addedItems, e.removedItems);
             }
@@ -231,17 +233,7 @@ const ButtonGroup = Widget.inherit({
         this._setOptionSilent("selectedItemKeys", this._buttonsCollection.option("selectedItemKeys"));
     },
 
-    _setOptionSilent: function(name, value) {
-        this._cancelOptionChange = name;
-        this.option(name, value);
-        this._cancelOptionChange = false;
-    },
-
     _optionChanged(args) {
-        if(this._cancelOptionChange === args.name) {
-            return;
-        }
-
         switch(args.name) {
             case "stylingMode":
             case "selectionMode":

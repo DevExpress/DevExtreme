@@ -433,6 +433,10 @@ module.exports = {
         return { visibility: "visible" };
     },
 
+    _getErrorBarBaseEdgeLength() {
+        return this.getPointRadius() * 2;
+    },
+
     _drawErrorBar: function(renderer, group) {
         if(!this._options.errorBars) {
             return;
@@ -448,9 +452,16 @@ module.exports = {
             displayMode = _normalizeEnum(errorBarOptions.displayMode),
             isHighDisplayMode = displayMode === "high",
             isLowDisplayMode = displayMode === "low",
-            edgeLength = _floor(parseInt(errorBarOptions.edgeLength) / 2),
             highErrorOnly = (isHighDisplayMode || !_isDefined(low)) && (_isDefined(high) && !isLowDisplayMode),
             lowErrorOnly = (isLowDisplayMode || !_isDefined(high)) && (_isDefined(low) && !isHighDisplayMode);
+
+        let edgeLength = errorBarOptions.edgeLength;
+
+        if(edgeLength <= 1 && edgeLength > 0) {
+            edgeLength = this._getErrorBarBaseEdgeLength() * errorBarOptions.edgeLength;
+        }
+
+        edgeLength = _floor(parseInt(edgeLength) / 2);
 
         highErrorOnly && (low = that._baseErrorBarPos);
         lowErrorOnly && (high = that._baseErrorBarPos);
@@ -672,9 +683,9 @@ module.exports = {
         return (x >= this.x - trackerRadius) && (x <= this.x + trackerRadius) && (y >= this.y - trackerRadius) && (y <= this.y + trackerRadius);
     },
 
-    getMinValue: function() {
+    getMinValue: function(noErrorBar) {
         var errorBarOptions = this._options.errorBars;
-        if(errorBarOptions) {
+        if(errorBarOptions && !noErrorBar) {
             var displayMode = errorBarOptions.displayMode,
                 lowValue = displayMode === "high" ? this.value : this.lowError,
                 highValue = displayMode === "low" ? this.value : this.highError;
@@ -685,9 +696,9 @@ module.exports = {
         }
     },
 
-    getMaxValue: function() {
+    getMaxValue: function(noErrorBar) {
         var errorBarOptions = this._options.errorBars;
-        if(errorBarOptions) {
+        if(errorBarOptions && !noErrorBar) {
             var displayMode = errorBarOptions.displayMode,
                 lowValue = displayMode === "high" ? this.value : this.lowError,
                 highValue = displayMode === "low" ? this.value : this.highError;
@@ -696,6 +707,5 @@ module.exports = {
         } else {
             return this.value;
         }
-
-    },
+    }
 };

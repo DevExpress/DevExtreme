@@ -60,8 +60,11 @@ var commonUtils = require("../../core/utils/common"),
         "resolveLabelOverlapping",
         "adjustOnZoom",
         "zoomingMode",
-        "scrollingMode"
-    ];
+        "scrollingMode",
+        "stickyHovering"
+    ],
+
+    FONT = "font";
 
 function checkHeightRollingStock(rollingStocks, stubCanvas) {
     var canvasSize = stubCanvas.end - stubCanvas.start,
@@ -333,6 +336,8 @@ var BaseChart = BaseWidget.inherit({
         onZoomEnd: { name: "zoomEnd" }
     },
 
+    _fontFields: ["legend." + FONT, "legend.title." + FONT, "legend.title.subtitle." + FONT, "commonSeriesSettings.label." + FONT],
+
     _rootClassPrefix: "dxc",
 
     _rootClass: "dxc-chart",
@@ -341,11 +346,18 @@ var BaseChart = BaseWidget.inherit({
 
     _themeDependentChanges: ["REFRESH_SERIES_REINIT"],
 
-    _createThemeManager: function() {
-        var option = this.option(),
-            themeManager = new chartThemeManagerModule.ThemeManager(option, this._chartType);
+    _getThemeManagerOptions() {
+        var themeOptions = this.callBase.apply(this, arguments);
 
-        themeManager.setTheme(option.theme, option.rtlEnabled);
+        themeOptions.options = this.option();
+        return themeOptions;
+    },
+
+    _createThemeManager: function() {
+        var chartOption = this.option(),
+            themeManager = new chartThemeManagerModule.ThemeManager(this._getThemeManagerOptions());
+
+        themeManager.setTheme(chartOption.theme, chartOption.rtlEnabled);
         return themeManager;
     },
 
@@ -413,7 +425,30 @@ var BaseChart = BaseWidget.inherit({
     _createHtmlStructure: function() {
         var that = this,
             renderer = that._renderer,
-            root = renderer.root;
+            root = renderer.root,
+            createConstantLinesGroup = function() {
+                // TODO: Must be created in the same place where used (advanced chart)
+                return renderer.g().attr({ "class": "dxc-constant-lines-group" }).linkOn(root, "constant-lines");
+            };
+
+        that._constantLinesGroup = {
+            dispose: function() {
+                this.under.dispose();
+                this.above.dispose();
+            },
+            linkOff: function() {
+                this.under.linkOff();
+                this.above.linkOff();
+            },
+            clear: function() {
+                this.under.linkRemove().clear();
+                this.above.linkRemove().clear();
+            },
+            linkAppend: function() {
+                this.under.linkAppend();
+                this.above.linkAppend();
+            }
+        };
 
         that._backgroundRect = renderer.rect().attr({ fill: "gray", opacity: 0.0001 }).append(root);
         that._panesBackgroundGroup = renderer.g().attr({ "class": "dxc-background" }).append(root);
@@ -423,12 +458,13 @@ var BaseChart = BaseWidget.inherit({
         that._axesGroup = renderer.g().attr({ "class": "dxc-axes-group" }).linkOn(root, "axes"); // TODO: Must be created in the same place where used (advanced chart)
         that._labelAxesGroup = renderer.g().attr({ "class": "dxc-strips-labels-group" }).linkOn(root, "strips-labels"); // TODO: Must be created in the same place where used (advanced chart)
         that._panesBorderGroup = renderer.g().attr({ "class": "dxc-border" }).linkOn(root, "border"); // TODO: Must be created in the same place where used (chart)
+        that._constantLinesGroup.under = createConstantLinesGroup();
         that._seriesGroup = renderer.g().attr({ "class": "dxc-series-group" }).linkOn(root, "series");
-        that._constantLinesGroup = renderer.g().attr({ "class": "dxc-constant-lines-group" }).linkOn(root, "constant-lines"); // TODO: Must be created in the same place where used (advanced chart)
+        that._constantLinesGroup.above = createConstantLinesGroup();
         that._scaleBreaksGroup = renderer.g().attr({ "class": "dxc-scale-breaks" }).linkOn(root, "scale-breaks");
         that._labelsGroup = renderer.g().attr({ "class": "dxc-labels-group" }).linkOn(root, "labels");
         that._crosshairCursorGroup = renderer.g().attr({ "class": "dxc-crosshair-cursor" }).linkOn(root, "crosshair");
-        that._legendGroup = renderer.g().attr({ "class": "dxc-legend", "clip-path": that._getCanvasClipRectID() }).linkOn(root, "legend");
+        that._legendGroup = renderer.g().attr({ "class": "dxc-legend", "clip-path": that._getCanvasClipRectID() }).linkOn(root, "legend").linkAppend(root).enableLinks();
         that._scrollBarGroup = renderer.g().attr({ "class": "dxc-scroll-bar" }).linkOn(root, "scroll-bar");
     },
 
@@ -475,7 +511,9 @@ var BaseChart = BaseWidget.inherit({
         unlinkGroup("_stripsGroup");
         unlinkGroup("_gridGroup");
         unlinkGroup("_axesGroup");
+
         unlinkGroup("_constantLinesGroup");
+
         unlinkGroup("_labelAxesGroup");
         unlinkGroup("_panesBorderGroup");
         unlinkGroup("_seriesGroup");
@@ -492,7 +530,9 @@ var BaseChart = BaseWidget.inherit({
         disposeObject("_stripsGroup");
         disposeObject("_gridGroup");
         disposeObject("_axesGroup");
+
         disposeObject("_constantLinesGroup");
+
         disposeObject("_labelAxesGroup");
         disposeObject("_panesBorderGroup");
         disposeObject("_seriesGroup");
@@ -609,6 +649,7 @@ var BaseChart = BaseWidget.inherit({
         that._cleanGroups();
         const startTime = new Date();
         that._renderElements(drawOptions);
+
         that._lastRenderingTime = new Date() - startTime;
     },
 
@@ -677,6 +718,7 @@ var BaseChart = BaseWidget.inherit({
 
         that._updateTracker(trackerCanvases);
         that._updateLegendPosition(drawOptions, isLegendInside);
+        that._applyPointMarkersAutoHiding();
         that._renderSeries(drawOptions, isRotated, isLegendInside);
 
         that._renderer.unlock();
@@ -729,9 +771,13 @@ var BaseChart = BaseWidget.inherit({
 
         that._clearCanvas();
 
+        that._renderExtraElements();
+
         that._drawn();
         that._renderCompleteHandler();
     },
+
+    _renderExtraElements() {},
 
     _clearCanvas: function() {
         // T207665, T336349, T503616
@@ -800,7 +846,7 @@ var BaseChart = BaseWidget.inherit({
         that._stripsGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._gridGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._axesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
-        that._constantLinesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
+        that._constantLinesGroup.above.clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._labelAxesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         // that._seriesGroup.linkRemove().clear();
         that._labelsGroup.linkRemove().clear();
@@ -817,6 +863,7 @@ var BaseChart = BaseWidget.inherit({
             group: that._legendGroup,
             backgroundClass: "dxc-border",
             itemGroupClass: "dxc-item",
+            titleGroupClass: "dxc-title",
             textField: legendSettings.textField,
             getFormatObject: legendSettings.getFormatObject
         });
@@ -830,7 +877,7 @@ var BaseChart = BaseWidget.inherit({
 
         legendOptions.containerBackgroundColor = themeManager.getOptions("containerBackgroundColor");
         legendOptions._incidentOccurred = that._incidentOccurred; // TODO: Why is `_` used?
-        that._legend.update(legendData, legendOptions);
+        that._legend.update(legendData, legendOptions, themeManager.theme("legend").title);
     },
 
     _prepareDrawOptions: function(drawOptions) {
@@ -887,9 +934,8 @@ var BaseChart = BaseWidget.inherit({
         return {
             legendData: {
                 text: item[this._legendItemTextField],
-                argument: item.argument,
                 id: item.index,
-                argumentIndex: item.argumentIndex
+                visible: true
             },
             getLegendStyles: item.getLegendStyles(),
             visible: item.isVisible()
@@ -965,6 +1011,7 @@ var BaseChart = BaseWidget.inherit({
 
         rotated: "ROTATED",
 
+        autoHidePointMarkers: "REFRESH_SERIES_REINIT",
         customizePoint: "REFRESH_SERIES_REINIT",
         customizeLabel: "REFRESH_SERIES_REINIT",
 
@@ -1258,12 +1305,15 @@ var BaseChart = BaseWidget.inherit({
             }
         });
 
+        that._tracker.clearHover();
+
         _reverseEach(that.series, (index, series) => {
             if(!seriesBasis.some(s => series === s.series)) {
                 that._disposeSeries(index);
                 changedStateSeriesCount++;
             }
         });
+
         that.series = [];
 
         changedStateSeriesCount > 0 && that._disposeSeriesFamilies();
@@ -1331,6 +1381,10 @@ var BaseChart = BaseWidget.inherit({
 
     hideTooltip: function() {
         this._tracker._hideTooltip();
+    },
+
+    clearHover() {
+        this._tracker.clearHover();
     },
 
     render: function(renderOptions) {

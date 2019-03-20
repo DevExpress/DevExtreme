@@ -32,13 +32,15 @@ var $ = require("../../core/renderer"),
     Resizable = require("../resizable"),
     EmptyTemplate = require("../widget/empty_template"),
     Deferred = require("../../core/utils/deferred").Deferred,
-    getSwatchContainer = require("../widget/swatch_container");
+    zIndexPool = require("./z_index"),
+    swatch = require("../widget/swatch_container");
 
 var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_WRAPPER_CLASS = "dx-overlay-wrapper",
     OVERLAY_CONTENT_CLASS = "dx-overlay-content",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     OVERLAY_MODAL_CLASS = "dx-overlay-modal",
+    INNER_OVERLAY_CLASS = "dx-inner-overlay",
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
 
     ANONYMOUS_TEMPLATE_NAME = "content",
@@ -46,8 +48,6 @@ var OVERLAY_CLASS = "dx-overlay",
     RTL_DIRECTION_CLASS = "dx-rtl",
 
     ACTIONS = ["onShowing", "onShown", "onHiding", "onHidden", "onPositioning", "onPositioned", "onResizeStart", "onResize", "onResizeEnd"],
-
-    FIRST_Z_INDEX = 1500,
 
     OVERLAY_STACK = [],
 
@@ -349,6 +349,7 @@ var Overlay = Widget.inherit({
             onResizeStart: null,
             onResize: null,
             onResizeEnd: null,
+            innerOverlay: false,
 
             // NOTE: private options
 
@@ -442,6 +443,7 @@ var Overlay = Widget.inherit({
 
         this._$wrapper = $("<div>").addClass(OVERLAY_WRAPPER_CLASS);
         this._$content = $("<div>").addClass(OVERLAY_CONTENT_CLASS);
+        this._initInnerOverlayClass();
 
         var $element = this.$element();
         this._$wrapper.addClass($element.attr("class"));
@@ -463,6 +465,10 @@ var Overlay = Widget.inherit({
         this._initHideTopOverlayHandler(options.hideTopOverlayHandler);
 
         this.callBase(options);
+    },
+
+    _initInnerOverlayClass: function() {
+        this._$content.toggleClass(INNER_OVERLAY_CLASS, this.option("innerOverlay"));
     },
 
     _initTarget: function(target) {
@@ -545,7 +551,8 @@ var Overlay = Widget.inherit({
 
         var $container = this._$content,
             isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target),
-            outsideClick = isAttachedTarget && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
+            isInnerOverlay = $(e.target).closest("." + INNER_OVERLAY_CLASS).length,
+            outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
 
         if(outsideClick && closeOnOutsideClick) {
             if(this.option("shading")) {
@@ -583,7 +590,7 @@ var Overlay = Widget.inherit({
     },
 
     _zIndexInitValue: function() {
-        return FIRST_Z_INDEX;
+        return Overlay.baseZIndex();
     },
 
     _toggleViewPortSubscription: function(toggle) {
@@ -800,8 +807,7 @@ var Overlay = Widget.inherit({
 
         if(pushToStack) {
             if(index === -1) {
-                var length = overlayStack.length;
-                this._zIndex = (length ? overlayStack[length - 1]._zIndex : this._zIndexInitValue()) + 1;
+                this._zIndex = zIndexPool.create(this._zIndexInitValue());
 
                 overlayStack.push(this);
             }
@@ -810,6 +816,7 @@ var Overlay = Widget.inherit({
             this._$content.css("zIndex", this._zIndex);
         } else if(index !== -1) {
             overlayStack.splice(index, 1);
+            zIndexPool.remove(this._zIndex);
         }
     },
 
@@ -1200,9 +1207,9 @@ var Overlay = Widget.inherit({
     _attachWrapperToContainer: function() {
         var $element = this.$element();
         var containerDefined = this.option("container") !== undefined;
-        var renderContainer = containerDefined ? this._$container : getSwatchContainer($element);
+        var renderContainer = containerDefined ? this._$container : swatch.getSwatchContainer($element);
 
-        if(renderContainer[0] === $element.parent()[0]) {
+        if(renderContainer && renderContainer[0] === $element.parent()[0]) {
             renderContainer = $element;
         }
 
@@ -1405,6 +1412,7 @@ var Overlay = Widget.inherit({
 
         this.callBase();
 
+        zIndexPool.remove(this._zIndex);
         this._$wrapper.remove();
         this._$content.remove();
     },
@@ -1468,6 +1476,9 @@ var Overlay = Widget.inherit({
             case "container":
                 this._initContainer(value);
                 this._invalidate();
+                break;
+            case "innerOverlay":
+                this._initInnerOverlayClass();
                 break;
             case "deferRendering":
             case "contentTemplate":
@@ -1571,7 +1582,7 @@ var Overlay = Widget.inherit({
 * @static
 */
 Overlay.baseZIndex = function(zIndex) {
-    FIRST_Z_INDEX = zIndex;
+    return zIndexPool.base(zIndex);
 };
 
 registerComponent("dxOverlay", Overlay);

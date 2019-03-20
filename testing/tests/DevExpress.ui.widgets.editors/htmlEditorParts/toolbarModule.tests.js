@@ -45,6 +45,7 @@ const BACKGROUND_FORMAT_CLASS = "dx-background-format";
 const ORDEREDLIST_FORMAT_CLASS = "dx-orderedlist-format";
 const BULLETLIST_FORMAT_CLASS = "dx-bulletlist-format";
 const CLEAR_FORMAT_CLASS = "dx-clear-format";
+const IMAGE_FORMAT_CLASS = "dx-image-format";
 
 
 const simpleModuleConfig = {
@@ -104,6 +105,7 @@ const dialogModuleConfig = {
             off: noop,
             focus: this.focusStub,
             getSelection: noop,
+            setSelection: (index, length) => { this.log.push({ setSelection: [index, length] }); },
             getFormat: () => { return {}; },
             getLength: () => { return 1; }
         };
@@ -707,6 +709,33 @@ QUnit.module("Active formats", simpleModuleConfig, () => {
         assert.notOk($historyWidgets.eq(0).hasClass(DISABLED_STATE_CLASS), "Undo is enabled");
         assert.notOk($historyWidgets.eq(1).hasClass(DISABLED_STATE_CLASS), "Redo is enabled");
     });
+
+    test("SelectBox should display currently applied value", (assert) => {
+        this.quillMock.getFormat = () => { return { size: "10px" }; };
+        this.options.items = [{ formatName: "size", formatValues: ["10px", "11px"] }];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+
+        toolbar.updateFormatWidgets();
+
+        const value = this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS} .${TEXTEDITOR_INPUT_CLASS}`)
+            .val();
+
+        assert.strictEqual(value, "10px", "SelectBox contain selected value");
+    });
+
+    test("Image format", (assert) => {
+        this.quillMock.getFormat = () => { return { imageSrc: "testImage" }; };
+        this.options.items = ["image", "background", "bold"];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateFormatWidgets();
+        const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+
+        assert.equal($activeFormats.length, 1, "single button is active");
+        assert.ok($activeFormats.hasClass(IMAGE_FORMAT_CLASS), "it's an image button");
+    });
 });
 
 QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
@@ -891,6 +920,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
 
     test("change an image formatting", (assert) => {
         this.options.items = ["image"];
+        this.quillMock.getSelection = () => { return { index: 1, length: 0 }; };
         new Toolbar(this.quillMock, this.options);
         this.$element
             .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
@@ -915,7 +945,7 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
             .change()
             .press("enter");
 
-        assert.deepEqual(this.log, [{
+        assert.deepEqual(this.log[0], {
             index: 1,
             type: "extendedImage",
             value: {
@@ -924,7 +954,32 @@ QUnit.module("Toolbar dialogs", dialogModuleConfig, () => {
                 src: "http://test.com/test.jpg",
                 width: "100"
             }
-        }], "expected insert new image config");
+        }, "expected insert new image config");
+
+        assert.deepEqual(this.log[1], {
+            setSelection: [2, 0]
+        }, "caret position has been updated");
+    });
+
+    test("caret position after update an image with selection", (assert) => {
+        this.options.items = ["image"];
+        this.quillMock.getSelection = () => { return { index: 4, length: 2 }; };
+        this.quillMock.getFormat = () => { return { extendedImage: "oldImage" }; };
+        new Toolbar(this.quillMock, this.options);
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger("dxclick");
+
+        const $src = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`).first();
+
+        keyboardMock($src)
+            .type("http://test.com/test.jpg")
+            .change()
+            .press("enter");
+
+        assert.deepEqual(this.log[1], {
+            setSelection: [5, 0]
+        }, "caret position has been correctly updated");
     });
 
     test("show link dialog", (assert) => {

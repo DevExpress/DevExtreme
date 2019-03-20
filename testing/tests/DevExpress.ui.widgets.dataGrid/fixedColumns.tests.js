@@ -25,6 +25,7 @@ import hogan from "../../../node_modules/hogan.js/dist/hogan-3.0.2.js";
 window.Hogan = hogan;
 
 import $ from "jquery";
+import browser from "core/utils/browser";
 import devices from "core/devices";
 import setTemplateEngine from "ui/set_template_engine";
 import nativePointerMock from "../../helpers/nativePointerMock.js";
@@ -84,7 +85,7 @@ QUnit.module("Fixed columns", {
         };
 
         that.setupDataGrid = function(dataOptions) {
-            setupDataGridModules(that, ["data", "columns", "rows", "columnHeaders", "summary", "columnFixing", "grouping", "filterRow", "editorFactory", "masterDetail", "virtualScrolling", "errorHandling", "keyboardNavigation", "contextMenu"], {
+            setupDataGridModules(that, ["data", "columns", "rows", "columnHeaders", "summary", "columnFixing", "grouping", "filterRow", "editorFactory", "editing", "masterDetail", "virtualScrolling", "errorHandling", "keyboardNavigation", "contextMenu"], {
                 initViews: true,
                 controllers: {
                     columns: new MockColumnsController(that.columns),
@@ -1941,8 +1942,43 @@ QUnit.testInActiveWindow("Scrolling to focused cell when it is fixed", function(
     that.rowsView.scrollChanged.add(scrollChanged);
     // act
     that.keyboardNavigationController.focus($cell);
-
 });
+
+if(browser.mozilla) {
+    QUnit.testInActiveWindow("Scrolling should performs with delay if FF and columnFixing.enabled", function(assert) {
+        // arrange
+        var that = this,
+            $cell,
+            $fixedTable,
+            done = assert.async(),
+            $testElement = $("#container");
+
+        that.clock.restore();
+        that.items = generateData(20);
+        that.options.scrolling = {
+            pushBackValue: 0 // for ios devices
+        };
+        that.setupDataGrid();
+        that.rowsView.render($testElement);
+        that.rowsView.height(100);
+        that.rowsView.resize();
+
+        $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+        $cell = $fixedTable.find("tbody > tr:not(.dx-freespace-row)").last().children().first();
+
+        var dateStart = new Date(),
+            scrollChanged = function(e) {
+                that.rowsView.scrollChanged.remove(scrollChanged);
+                assert.ok(new Date() - dateStart >= 60, "scrolling has delay");
+                done();
+            };
+
+        that.rowsView.scrollChanged.add(scrollChanged);
+
+        // act
+        that.keyboardNavigationController.focus($cell);
+    });
+}
 
 QUnit.test("getFixedColumnElements", function(assert) {
     // arrange

@@ -181,11 +181,11 @@ QUnit.test("done button is located after cancel button in non-win8 device", func
         instance = $popup.dxPopup("instance"),
         $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
 
-    assert.equal($popupBottom.text(), "CancelDone", "buttons order is correct");
+    assert.equal($popupBottom.text(), "CancelOK", "buttons order is correct");
 
     instance.option("toolbarItems", [{ shortcut: "cancel" }, { shortcut: "done" }]);
     $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
-    assert.equal($popupBottom.text(), "CancelDone", "buttons order is correct");
+    assert.equal($popupBottom.text(), "CancelOK", "buttons order is correct");
 });
 
 QUnit.test("done button is located before cancel button in win10", function(assert) {
@@ -199,11 +199,11 @@ QUnit.test("done button is located before cancel button in win10", function(asse
         instance = $popup.dxPopup("instance"),
         $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
 
-    assert.equal($popupBottom.text(), "DoneCancel", "buttons order is correct");
+    assert.equal($popupBottom.text(), "OKCancel", "buttons order is correct");
 
     instance.option("toolbarItems", [{ shortcut: "done" }, { shortcut: "cancel" }]);
     $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
-    assert.equal($popupBottom.text(), "DoneCancel", "buttons order is correct");
+    assert.equal($popupBottom.text(), "OKCancel", "buttons order is correct");
 });
 
 QUnit.test("buttons should be rendered correctly after toolbar was repainted", function(assert) {

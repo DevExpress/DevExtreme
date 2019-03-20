@@ -171,6 +171,19 @@ QUnit.module("default", {
         assert.ok($buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH));
     });
 
+    QUnit.test("add css class to item with a template when the width is defined", function(assert) {
+        const $buttonGroup = $("#widget").dxButtonGroup({
+            items: [{ text: "item 1" }, { text: "item 2" }],
+            itemTemplate: () => "<div/>",
+            width: 500
+        });
+
+        const $buttons = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
+
+        assert.ok($buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH));
+        assert.ok($buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH));
+    });
+
     QUnit.test("stylingMode", function(assert) {
         const $buttonGroup = $("#widget").dxButtonGroup({
             items: [{ text: "item 1" }, { text: "item 2" }],

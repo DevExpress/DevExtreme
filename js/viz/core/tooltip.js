@@ -515,5 +515,6 @@ exports.plugin = {
             isOptionChange: true,
             option: "tooltip"
         });
-    }
+    },
+    fontFields: ["tooltip.font"]
 };

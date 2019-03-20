@@ -413,12 +413,17 @@
 @gallery-navbutton-border-radius: @base-border-radius - 4px;
 
 // HtmlEditor
+@htmleditor-border-color: @base-border-color;
+@htmleditor-invalid-border-color: @base-invalid-color;
+@htmleditor-invalid-faded-border-color: @base-invalid-faded-border-color;
 @htmleditor-toolbar-border-color: @base-border-color;
 @htmleditor-normal-format-active-bg: @base-bg;
 @htmleditor-default-format-active-bg: @base-default;
 @htmleditor-danger-format-active-bg: @base-danger;
 @htmleditor-success-format-active-bg: @base-success;
 @htmleditor-variable-bg: fade(@base-accent, 15%);
+@htmleditor-resize-frame-border-color: @base-accent;
+@htmleditor-resize-handle-bg: @base-accent;
 
 // List
 /**
@@ -572,7 +577,6 @@
 // Lookup
 
 @lookup-icon-color: @base-icon-color;
-@lookup-validation-message-color: @base-invalid-color;
 
 // Selectbox
 /**
@@ -1639,22 +1643,6 @@
 @scrollbar-button-vertical-increment-bg: url(images/widgets/generic/color-schemes/contrast/scrollable/scrollbar-vertical-arrow-down.png) no-repeat;
 @colorbox-preview-empty-bg: url(images/widgets/generic/color-schemes/contrast/colorbox/nocolor.png);
 @calendar-cell-empty-bg: url(images/widgets/generic/color-schemes/contrast/calendar/empty-cell.png) center center no-repeat;
-
-// SPA
-// Desktop
-
-@desktop-layout-main-menu-bg: @base-inverted-bg;
-
-@desktop-layout-menu-color: @base-text-color;
-@desktop-layout-menu-selected-bg: @base-inverted-bg;
-
-@desktop-layout-toolbar-border-color: @base-border-color;
-@desktop-layout-menu-hover-bg: @base-accent;
-@desktop-layout-copyright-color: @base-text-color;
-
-// Master-detail
-
-@desktop-splitlayout-border-color: @base-border-color;
 
 // Fieldset
 

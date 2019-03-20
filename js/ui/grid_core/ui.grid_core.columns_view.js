@@ -154,7 +154,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var $cell = $(cell);
 
         if(options.rowType === "data") {
-            column.id && this.setAria("describedby", column.id, $cell);
+            column.headerId && this.setAria("describedby", column.headerId, $cell);
         }
 
         if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
@@ -442,6 +442,24 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return false;
     },
 
+    _getBodies: function(tableElement) {
+        return $(tableElement).children("tbody").not(".dx-header").not(".dx-footer");
+    },
+
+    _wrapRowIfNeed: function($table, $row) {
+        var $tBodies = this.option("rowTemplate") && this._getBodies(this._tableElement || $table);
+
+        if($tBodies && $tBodies.filter("." + ROW_CLASS).length) {
+            var $tbody = $("<tbody>").addClass($row.attr("class"));
+
+            this.setAria("role", "presentation", $tbody);
+
+            return $tbody.append($row);
+        }
+
+        return $row;
+    },
+
     _appendRow: function($table, $row, appendTemplate) {
         appendTemplate = appendTemplate || appendElementTemplate;
         appendTemplate.render({ content: $row, container: $table });
@@ -493,21 +511,23 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _renderRow: function($table, options) {
         var that = this,
-            $row;
+            $row,
+            $wrappedRow;
 
         if(!options.columnIndices) {
             options.row.cells = [];
         }
 
         $row = that._createRow(options.row);
+        $wrappedRow = that._wrapRowIfNeed($table, $row);
 
         that._renderCells($row, options);
-        that._appendRow($table, $row);
+        that._appendRow($table, $wrappedRow);
         var rowOptions = extend({ columns: options.columns }, options.row);
 
         that._addWatchMethod(rowOptions, options.row);
 
-        that._rowPrepared($row, rowOptions);
+        that._rowPrepared($wrappedRow, rowOptions);
     },
 
     _renderCells: function($row, options) {
@@ -644,6 +664,10 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             this.rowIndex = options.rowIndex = row.rowIndex;
             this.dataIndex = options.dataIndex = row.dataIndex;
             this.isExpanded = options.isExpanded = row.isExpanded;
+
+            if(options.row) {
+                options.row = row;
+            }
 
             watchers.forEach(function(watcher) {
                 watcher();
@@ -1017,7 +1041,14 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _getRowElements: function(tableElement) {
         tableElement = tableElement || this._getTableElement();
-        return tableElement && tableElement.find("> tbody > " + "." + ROW_CLASS + ", > tbody." + ROW_CLASS + ", > ." + ROW_CLASS) || $();
+
+        if(tableElement) {
+            var tBodies = this.option("rowTemplate") && tableElement.find("> tbody." + ROW_CLASS);
+
+            return tBodies && tBodies.length ? tBodies : tableElement.find("> tbody > " + "." + ROW_CLASS + ", > ." + ROW_CLASS);
+        }
+
+        return $();
     },
 
     getRowIndex: function($row) {

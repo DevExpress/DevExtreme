@@ -41,6 +41,7 @@ const TOOLBAR_MENU_SECTION_CLASS = "dx-toolbar-menu-section";
 const LIST_ITEM_CLASS = "dx-list-item";
 
 const DROP_DOWN_MENU_CLASS = "dx-dropdownmenu";
+const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = "dx-dropdownmenu-popup-wrapper";
 
 QUnit.module("render", {
     beforeEach: function() {
@@ -1521,7 +1522,7 @@ QUnit.test("add a custom CSS to item of menu", function(assert) {
     assert.equal($("." + TOOLBAR_MENU_SECTION_CLASS + " ." + LIST_ITEM_CLASS + ".test").length, 1, "item with the custom CSS");
 });
 
-QUnit.test("dropDown should use Toolbar element as default container", (assert) => {
+QUnit.test("dropDown should use default container", (assert) => {
     const $element = $("#widget").dxToolbar({
         items: [
             {
@@ -1532,11 +1533,50 @@ QUnit.test("dropDown should use Toolbar element as default container", (assert) 
         ]
     });
 
-    const dropDown = $element.find(`.${DROP_DOWN_MENU_CLASS}`).dxDropDownMenu("instance");
-    const $container = dropDown.option("container");
+    $element.find(`.${DROP_DOWN_MENU_CLASS}`).trigger("dxclick");
 
-    assert.ok($element.is($container), "Toolbar's container is default container for the dropDownMenu");
+    assert.strictEqual($element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 0, "Toolbar's container isn't contains a dropDown list");
 });
+
+QUnit.test("init Toolbar with new menuContainer", (assert) => {
+    const $element = $("#widget");
+
+    $element.dxToolbar({
+        menuContainer: $element,
+        items: [
+            {
+                location: "before",
+                locateInMenu: "always",
+                cssClass: "test"
+            }
+        ]
+    });
+
+    $element.find(`.${DROP_DOWN_MENU_CLASS}`).trigger("dxclick");
+
+    assert.strictEqual($element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, "Toolbar's container contains a dropDown list");
+});
+
+QUnit.test("change Toolbar menuContainer", (assert) => {
+    const $element = $("#widget");
+
+    const instance = $element.dxToolbar({
+        items: [
+            {
+                location: "before",
+                locateInMenu: "always",
+                cssClass: "test"
+            }
+        ]
+    }).dxToolbar("instance");
+
+    instance.option("menuContainer", $element);
+
+    $element.find(`.${DROP_DOWN_MENU_CLASS}`).trigger("dxclick");
+
+    assert.strictEqual($element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, "Toolbar's container contains a dropDown list");
+});
+
 
 QUnit.module("default template", {
     prepareItemTest: function(data) {

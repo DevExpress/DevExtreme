@@ -35,7 +35,9 @@ function getThemePart(theme, path) {
 }
 
 exports.BaseThemeManager = Class.inherit({// TODO: test hack
-    ctor: function() {
+    ctor: function(options) {
+        this._themeSection = options.themeSection;
+        this._fontFields = options.fontFields || [];
         _addCacheItem(this);
     },
 
@@ -89,15 +91,15 @@ exports.BaseThemeManager = Class.inherit({// TODO: test hack
     // TODO: May be we need some single method for all palettes?
 
     createPalette: function(palette, options) {
-        return new paletteModule.Palette(palette, options, this._defaultPalette);
+        return paletteModule.createPalette(palette, options, this._defaultPalette);
     },
 
     createDiscretePalette: function(palette, count) {
-        return new paletteModule.DiscretePalette(palette, count, this._defaultPalette);
+        return paletteModule.getDiscretePalette(palette, count, this._defaultPalette);
     },
 
     createGradientPalette: function(palette) {
-        return new paletteModule.GradientPalette(palette, this._defaultPalette);
+        return paletteModule.getGradientPalette(palette, this._defaultPalette);
     },
 
     getAccentColor: function(palette) {

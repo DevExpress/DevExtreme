@@ -9,6 +9,7 @@ var PI_DIV_180 = Math.PI / 180,
     objectUtils = require("../../core/utils/object"),
     commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
+    _normalizeEnum = require("../core/utils").normalizeEnum,
 
     baseGaugeModule = require("./base_gauge"),
     dxBaseGauge = baseGaugeModule.dxBaseGauge,
@@ -16,7 +17,6 @@ var PI_DIV_180 = Math.PI / 180,
     _formatValue = baseGaugeModule.formatValue,
     _compareArrays = baseGaugeModule.compareArrays,
     dxCircularGauge = require("./circular_gauge"),
-    BaseThemeManager = require("../core/base_theme_manager").BaseThemeManager,
     _isArray = Array.isArray,
     vizUtils = require("../core/utils"),
     _convertAngleToRendererSpace = vizUtils.convertAngleToRendererSpace,
@@ -31,6 +31,10 @@ var PI_DIV_180 = Math.PI / 180,
 
 var dxBarGauge = dxBaseGauge.inherit({
     _rootClass: "dxbg-bar-gauge",
+
+    _themeSection: "barGauge",
+
+    _fontFields: ["label.font", "legend.font", "legend.title.font", "legend.title.subtitle.font"],
 
     _initCore: function() {
         var that = this;
@@ -52,12 +56,8 @@ var dxBarGauge = dxBaseGauge.inherit({
             }
         };
         that._animateComplete = function() {
-            var bars = that._bars,
-                i,
-                ii;
-            for(i = 0, ii = bars.length; i < ii; ++i) {
-                bars[i].endAnimation();
-            }
+            that._bars.forEach(bar => bar.endAnimation());
+            that._checkOverlap();
         };
     },
 
@@ -104,15 +104,11 @@ var dxBarGauge = dxBaseGauge.inherit({
     },
 
     _cleanContent: function() {
-        var that = this,
-            i,
-            ii;
+        var that = this;
+
         that._barsGroup.linkRemove();
         that._animationSettings && that._barsGroup.stopAnimation();
-        for(i = 0, ii = that._bars ? that._bars.length : 0; i < ii; ++i) {
-            that._bars[i].dispose();
-        }
-        that._palette = that._bars = null;
+        that._barsGroup.clear();
     },
 
     _renderContent: function() {
@@ -143,7 +139,7 @@ var dxBarGauge = dxBaseGauge.inherit({
             bBox = text.getBBox();
             text.remove();
 
-            context.textVerticalOffset = -bBox.y - bBox.height / 2;
+            context.textY = bBox.y;
             context.textWidth = bBox.width;
             context.textHeight = bBox.height;
         }
@@ -168,10 +164,6 @@ var dxBarGauge = dxBaseGauge.inherit({
             radius,
             area = that._area;
 
-        that._palette = that._themeManager.createPalette(options.palette, {
-            useHighlight: true,
-            extensionMode: options.paletteExtensionMode
-        });
         relativeInnerRadius = options.relativeInnerRadius > 0 && options.relativeInnerRadius < 1 ? _Number(options.relativeInnerRadius) : 0.1;
         radius = area.radius;
         if(that._context.textEnabled) { //  B253614
@@ -189,50 +181,54 @@ var dxBarGauge = dxBaseGauge.inherit({
             endAngle: area.endCoord,
             baseAngle: that._translator.translate(that._baseValue)
         });
-        that._bars = [];
-        that._updateValues(that.option(OPTION_VALUES));
+
+        that._arrangeBars();
     },
 
-    _arrangeBars: function(count) {
+    _arrangeBars: function() {
         var that = this,
             radius = that._outerRadius - that._innerRadius,
             context = that._context,
             spacing,
-            _count,
+            colors,
             unitOffset,
             i;
 
+        const count = that._bars.length;
+
+        that._beginValueChanging();
         context.barSize = count > 0 ? _max((radius - (count - 1) * that._barSpacing) / count, 1) : 0;
         spacing = count > 1 ? _max(_min((radius - count * context.barSize) / (count - 1), that._barSpacing), 0) : 0;
-        _count = _min(_floor((radius + spacing) / context.barSize), count);
-        that._setBarsCount(_count);
+        const _count = _min(_floor((radius + spacing) / context.barSize), count);
+        that._setBarsCount(count);
         radius = that._outerRadius;
-        context.textRadius = radius + that._textIndent;
+        context.textRadius = radius;
+        context.textIndent = that._textIndent;
         that._palette.reset();
         unitOffset = context.barSize + spacing;
+        colors = that._palette.generateColors(_count);
         for(i = 0; i < _count; ++i, radius -= unitOffset) {
             that._bars[i].arrange({
                 radius: radius,
-                color: that._palette.getNextColor(_count)
+                color: colors[i]
             });
         }
+
+        for(let i = _count; i < count; i++) {
+            that._bars[i].hide();
+        }
+
+        if(that._animationSettings && !that._noAnimation) {
+            that._animateBars();
+        } else {
+            that._updateBars();
+        }
+        that._endValueChanging();
     },
 
-    _setBarsCount: function(count) {
-        var that = this,
-            i,
-            ii;
+    _setBarsCount: function() {
+        var that = this;
 
-        if(that._bars.length > count) {
-            for(i = count, ii = that._bars.length; i < ii; ++i) {
-                that._bars[i].dispose();
-            }
-            that._bars.splice(count, ii - count);
-        } else if(that._bars.length < count) {
-            for(i = that._bars.length, ii = count; i < ii; ++i) {
-                that._bars.push(new BarWrapper(i, that._context));
-            }
-        }
         if(that._bars.length > 0) {
             if(that._dummyBackground) {
                 that._dummyBackground.dispose();
@@ -240,34 +236,95 @@ var dxBarGauge = dxBaseGauge.inherit({
             }
         } else {
             if(!that._dummyBackground) {
-                that._dummyBackground = that._renderer.arc().attr({ "stroke-linejoin": "round" }).append(that._barsGroup);
+                that._dummyBackground = that._renderer.arc().attr({ "stroke-linejoin": "round" });
             }
             that._dummyBackground.attr({ //  Because of vizMocks
                 x: that._context.x, y: that._context.y, outerRadius: that._outerRadius, innerRadius: that._innerRadius,
                 startAngle: that._context.endAngle, endAngle: that._context.startAngle, fill: that._context.backgroundColor
-            });
+            }).append(that._barsGroup);
         }
     },
 
-    _updateBars: function(values) {
-        var that = this,
-            i,
-            ii;
-        for(i = 0, ii = that._bars.length; i < ii; ++i) {
-            that._bars[i].setValue(values[i]);
+    _updateBars: function() {
+        this._bars.forEach(bar => bar.applyValue());
+        this._checkOverlap();
+    },
+
+    _checkOverlap: function() {
+        const that = this,
+            bars = that._bars,
+            overlapStrategy = _normalizeEnum(that._getOption("resolveLabelOverlapping", true));
+
+        if(overlapStrategy === "none") {
+            return;
+        }
+
+        const sortedBars = bars.concat().sort((a, b) => a.getValue() - b.getValue());
+
+        let currentIndex = 0;
+        let nextIndex = 1;
+        while(currentIndex < sortedBars.length && nextIndex < sortedBars.length) {
+            const current = sortedBars[currentIndex];
+            const next = sortedBars[nextIndex];
+
+            if(current.checkIntersect(next)) {
+                next.hideLabel();
+                nextIndex++;
+            } else {
+                currentIndex = nextIndex;
+                nextIndex = currentIndex + 1;
+            }
         }
     },
 
-    _animateBars: function(values) {
+    _animateBars: function() {
         var that = this,
             i,
             ii = that._bars.length;
         if(ii > 0) {
             for(i = 0; i < ii; ++i) {
-                that._bars[i].beginAnimation(values[i]);
+                that._bars[i].beginAnimation();
             }
             that._barsGroup.animate({ _: 0 }, that._animationSettings);
         }
+    },
+
+    _buildNodes() {
+        const that = this;
+        const options = that._options;
+
+        that._palette = that._themeManager.createPalette(options.palette, {
+            useHighlight: true,
+            extensionMode: options.paletteExtensionMode
+        });
+
+        that._palette.reset();
+
+        that._bars = that._bars || [];
+
+        that._animationSettings && that._barsGroup.stopAnimation();
+
+        const barValues = that._values.filter(_isFinite);
+        const count = barValues.length;
+
+        if(that._bars.length > count) {
+            let ii = that._bars.length;
+            for(let i = count; i < ii; ++i) {
+                that._bars[i].dispose();
+            }
+            that._bars.splice(count, ii - count);
+        } else if(that._bars.length < count) {
+            for(let i = that._bars.length; i < count; ++i) {
+                that._bars.push(new BarWrapper(i, that._context));
+            }
+        }
+
+        that._bars.forEach((bar, index) => {
+            bar.update({
+                color: that._palette.getNextColor(count),
+                value: barValues[index]
+            });
+        });
     },
 
     _updateValues: function(values) {
@@ -275,32 +332,20 @@ var dxBarGauge = dxBaseGauge.inherit({
             list = (_isArray(values) && values) || (_isFinite(values) && [values]) || [],
             i,
             ii = list.length,
-            value,
-            barValues = [];
+            value;
         that._values.length = ii;
         for(i = 0; i < ii; ++i) {
             value = list[i];
             that._values[i] = value = _Number(_isFinite(value) ? value : that._values[i]);
-            if(_isFinite(value)) {
-                barValues.push(value);
-            }
         }
-        that._animationSettings && that._barsGroup.stopAnimation();
-        that._beginValueChanging();
-        if(that._bars) {
-            that._arrangeBars(barValues.length);
-            if(that._animationSettings && !that._noAnimation) {
-                that._animateBars(barValues);
-            } else {
-                that._updateBars(barValues);
-            }
-        }
+
         if(!that._resizing) {
             if(!_compareArrays(that._values, that.option(OPTION_VALUES))) {
                 that.option(OPTION_VALUES, that._values);
             }
         }
-        that._endValueChanging();
+
+        this._change(["NODES"]);
     },
 
     values: function(arg) {
@@ -317,34 +362,67 @@ var dxBarGauge = dxBaseGauge.inherit({
         relativeInnerRadius: "MOSTLY_TOTAL",
         barSpacing: "MOSTLY_TOTAL",
         label: "MOSTLY_TOTAL",
+        resolveLabelOverlapping: "MOSTLY_TOTAL",
         palette: "MOSTLY_TOTAL",
         paletteExtensionMode: "MOSTLY_TOTAL",
         values: "VALUES"
     },
 
-    _customChangesOrder: ["VALUES"],
-
     _change_VALUES: function() {
         this._updateValues(this.option(OPTION_VALUES));
     },
 
-    _factory: objectUtils.clone(dxBaseGauge.prototype._factory)
+    _factory: objectUtils.clone(dxBaseGauge.prototype._factory),
+
+    _optionChangesOrder: ["VALUES", "NODES"],
+
+    _initialChanges: ["VALUES"],
+
+    _change_NODES() {
+        this._buildNodes();
+    },
+
+    _change_MOSTLY_TOTAL: function() {
+        this._change(["NODES"]);
+        this.callBase();
+    },
+
+    _proxyData: [],
+
+    _getLegendData() {
+        var that = this,
+            formatOptions = {},
+            options = that._options,
+            labelFormatOptions = (options.label || {}).format,
+            legendFormatOptions = (options.legend || {}).itemTextFormat;
+
+        if(legendFormatOptions) {
+            formatOptions.format = legendFormatOptions;
+        } else {
+            formatOptions.format = labelFormatOptions || that._defaultFormatOptions;
+        }
+
+        return (this._bars || []).map(b => {
+            return {
+                id: b.index,
+                item: {
+                    value: b.getValue(),
+                    color: b.getColor(),
+                    index: b.index
+                },
+                text: _formatValue(b.getValue(), formatOptions),
+                visible: true,
+                states: { normal: { fill: b.getColor() } }
+            };
+        });
+    }
 });
 
 var BarWrapper = function(index, context) {
     var that = this;
     that._context = context;
-    that._background = context.renderer.arc().attr({ "stroke-linejoin": "round", fill: context.backgroundColor }).append(context.group);
-    that._bar = context.renderer.arc().attr({ "stroke-linejoin": "round" }).append(context.group);
-    if(context.textEnabled) {
-        that._line = context.renderer.path([], "line").attr({ "stroke-width": context.lineWidth }).append(context.group);
-        that._text = context.renderer.text().css(context.fontStyles).attr(context.textOptions).append(context.group);
-    }
     that._tracker = context.renderer.arc().attr({ "stroke-linejoin": "round" });
-    context.tracker.attach(that._tracker, that, { index: index });
-    that._index = index;
-    that._angle = context.baseAngle;
-    that._settings = { x: context.x, y: context.y, startAngle: context.baseAngle, endAngle: context.baseAngle };
+    that.index = index;
 };
 
 _extend(BarWrapper.prototype, {
@@ -365,16 +443,31 @@ _extend(BarWrapper.prototype, {
         var that = this,
             context = that._context;
 
+        this._visible = true;
+        context.tracker.attach(that._tracker, that, { index: that.index });
+
+        that._background = context.renderer.arc().attr({ "stroke-linejoin": "round", fill: context.backgroundColor }).append(context.group);
+        that._settings = that._settings || { x: context.x, y: context.y, startAngle: context.baseAngle, endAngle: context.baseAngle };
+
+        that._bar = context.renderer.arc().attr(_extend({ "stroke-linejoin": "round" }, that._settings)).append(context.group);
+        if(context.textEnabled) {
+            that._line = context.renderer.path([], "line").attr({ "stroke-width": context.lineWidth }).append(context.group);
+            that._text = context.renderer.text().css(context.fontStyles).attr(context.textOptions).append(context.group);
+        }
+
+        that._angle = isFinite(that._angle) ? that._angle : context.baseAngle;
+
         that._settings.outerRadius = options.radius;
         that._settings.innerRadius = options.radius - context.barSize;
-        that._background.attr(_extend({}, that._settings, { startAngle: context.endAngle, endAngle: context.startAngle }));
-        that._bar.attr(that._settings);
+        that._settings.x = context.x;
+        that._settings.y = context.y;
+
+        that._background.attr(_extend({}, that._settings, { startAngle: context.endAngle, endAngle: context.startAngle, fill: that._context.backgroundColor }));
+        that._bar.attr({ x: context.x, y: context.y, outerRadius: that._settings.outerRadius, innerRadius: that._settings.innerRadius, fill: that._color });
         that._tracker.attr(that._settings);
-        that._color = options.color;
-        that._bar.attr({ fill: options.color });
         if(context.textEnabled) {
-            that._line.attr({ points: [context.x, context.y - that._settings.innerRadius, context.x, context.y - context.textRadius], stroke: context.lineColor || options.color }).sharp();
-            that._text.css({ fill: context.textColor || options.color });
+            that._line.attr({ points: [context.x, context.y - that._settings.innerRadius, context.x, context.y - context.textRadius - context.textIndent], stroke: context.lineColor || that._color }).sharp();
+            that._text.css({ fill: context.textColor || that._color });
         }
         return that;
     },
@@ -393,38 +486,119 @@ _extend(BarWrapper.prototype, {
 
     setAngle: function(angle) {
         var that = this,
+            context = that._context,
+            settings = that._settings,
             cosSin;
 
         that._angle = angle;
-        setAngles(that._settings, that._context.baseAngle, that._angle);
-        that._bar.attr(that._settings);
-        that._tracker.attr(that._settings);
-        if(that._context.textEnabled) {
-            var text = _formatValue(that._value, that._context.formatOptions, { index: that._index });
-            that._line.attr({ visibility: text === "" ? "hidden" : null });
-            that._line.rotate(_convertAngleToRendererSpace(that._angle), that._context.x, that._context.y);
-            cosSin = _getCosAndSin(that._angle);
+        setAngles(settings, context.baseAngle, angle);
+        that._bar.attr(settings);
+        that._tracker.attr(settings);
+        if(context.textEnabled) {
+            cosSin = _getCosAndSin(angle);
+            var indent = context.textIndent,
+                radius = context.textRadius + indent,
+                x = context.x + radius * cosSin.cos,
+                y = context.y - radius * cosSin.sin,
+                halfWidth = context.textWidth * 0.5,
+                textHeight = context.textHeight,
+                textY = context.textY;
+
+            if(_abs(x - context.x) > indent) {
+                x += (x < context.x) ? -halfWidth : halfWidth;
+            }
+            if(_abs(y - context.y) <= indent) {
+                y -= textY + textHeight * 0.5;
+            } else {
+                y -= (y < context.y) ? textY + textHeight : textY;
+            }
+
+            var text = _formatValue(that._value, context.formatOptions, { index: that.index }),
+                visibility = text === "" ? "hidden" : null;
             that._text.attr({
                 text: text,
-                x: that._context.x + (that._context.textRadius + that._context.textWidth * 0.6) * cosSin.cos,
-                y: that._context.y - (that._context.textRadius + that._context.textHeight * 0.6) * cosSin.sin + that._context.textVerticalOffset
+                x: x,
+                y: y,
+                visibility: visibility
             });
+
+            that._line.attr({ visibility: visibility });
+            that._line.rotate(_convertAngleToRendererSpace(angle), context.x, context.y);
         }
         return that;
     },
 
+    hideLabel: function() {
+        this._text.attr({ visibility: "hidden" });
+        this._line.attr({ visibility: "hidden" });
+    },
+
+    checkIntersect: function(anotherBar) {
+        const coords = this.calculateLabelCoords();
+        const anotherCoords = anotherBar.calculateLabelCoords();
+
+        if(!coords || !anotherCoords) {
+            return false;
+        }
+
+        const width = Math.max(0, Math.min(coords.bottomRight.x, anotherCoords.bottomRight.x) - Math.max(coords.topLeft.x, anotherCoords.topLeft.x));
+        const height = Math.max(0, Math.min(coords.bottomRight.y, anotherCoords.bottomRight.y) - Math.max(coords.topLeft.y, anotherCoords.topLeft.y));
+
+        return (width * height) !== 0;
+    },
+
+    calculateLabelCoords: function() {
+        if(!this._text) {
+            return;
+        }
+
+        const box = this._text.getBBox();
+        return {
+            topLeft: {
+                x: box.x,
+                y: box.y
+            },
+            bottomRight: {
+                x: box.x + box.width,
+                y: box.y + box.height
+            }
+        };
+    },
+
     _processValue: function(value) {
-        this._value = this._context.translator.adjust(value);
-        return this._context.translator.translate(this._value);
+        return this._context.translator.translate(this._context.translator.adjust(value));
     },
 
-    setValue: function(value) {
-        return this.setAngle(this._processValue(value));
+    applyValue() {
+        if(!this._visible) {
+            return this;
+        }
+        return this.setAngle(this._processValue(this.getValue()));
     },
 
-    beginAnimation: function(value) {
+    update({ color, value }) {
+        this._color = color;
+        this._value = value;
+    },
+
+    hide() {
+        this._visible = false;
+    },
+
+    getColor() {
+        return this._color;
+    },
+
+    getValue() {
+        return this._value;
+    },
+
+    beginAnimation: function() {
+        if(!this._visible) {
+            return this;
+        }
         var that = this,
-            angle = this._processValue(value);
+            angle = this._processValue(this.getValue());
         if(!compareFloats(that._angle, angle)) {
             that._start = that._angle;
             that._delta = angle - that._angle;
@@ -440,6 +614,9 @@ _extend(BarWrapper.prototype, {
     },
 
     animate: function(pos) {
+        if(!this._visible) {
+            return this;
+        }
         var that = this;
         that._angle = that._start + that._delta * pos;
         setAngles(that._settings, that._context.baseAngle, that._angle);
@@ -451,10 +628,6 @@ _extend(BarWrapper.prototype, {
         if(that._delta !== undefined) {
             if(compareFloats(that._angle, that._start + that._delta)) {
                 that._tracker.attr({ visibility: null });
-                if(that._context.textEnabled) {
-                    that._line.attr({ visibility: null });
-                    that._text.attr({ visibility: null });
-                }
                 that.setAngle(that._angle);
             }
         } else {
@@ -474,14 +647,11 @@ function compareFloats(value1, value2) {
     return _abs(value1 - value2) < 0.0001;
 }
 
-dxBarGauge.prototype._factory.ThemeManager = BaseThemeManager.inherit({
-    _themeSection: "barGauge",
-    _fontFields: ["label.font", "title.font", "tooltip.font", "loadingIndicator.font", "export.font"]
-});
-
 registerComponent("dxBarGauge", dxBarGauge);
 
 exports.dxBarGauge = dxBarGauge;
+
+dxBarGauge.addPlugin(require("../components/legend").plugin);
 
 ///#DEBUG
 var __BarWrapper = BarWrapper;

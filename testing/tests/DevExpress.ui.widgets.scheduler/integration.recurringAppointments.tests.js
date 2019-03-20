@@ -812,7 +812,7 @@ QUnit.test("Recurrence item in form should have a special css class", function(a
 
     assert.notOk($recurrenceItem.hasClass(openedRecurrenceItemClass));
 
-    form.getEditor("repeatOnOff").option("value", true);
+    form.$element().find(".dx-switch").eq(1).dxSwitch("instance").option("value", true);
     $recurrenceItem = form.$element().find("." + recurrenceItemClass);
 
     assert.ok($recurrenceItem.hasClass(openedRecurrenceItemClass));
@@ -991,6 +991,61 @@ QUnit.test("The second appointment in recurring series in Week view should have 
         cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").outerWidth();
 
     assert.roughEqual($appointments.eq(1).outerWidth(), cellWidth * 2, 1.001, "2d appt has correct width");
+});
+
+QUnit.test("The second appointment in recurring series in Week view should be rendered correctly", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                startDate: new Date(2019, 9, 20, 8, 30),
+                endDate: new Date(2019, 9, 21, 8, 29),
+                recurrenceRule: "FREQ=DAILY;COUNT=2",
+                text: "Test2"
+            }
+        ],
+        views: ["week"],
+        currentView: "week",
+        currentDate: new Date(2019, 9, 26),
+        startDayHour: 9,
+        height: 600
+    });
+
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
+        $dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+
+    assert.equal($appointments.length, 2, "Two appointments are rendered");
+    assert.equal($dropDown.length, 0, "There is no dropDown appointment");
+});
+
+QUnit.test("The second weekend appointment in recurring series in Week view should be rendered correctly", function(assert) {
+    this.createInstance({
+        dataSource: [
+            {
+                startDate: new Date(2019, 9, 26, 8, 30),
+                endDate: new Date(2019, 9, 27, 8, 29),
+                recurrenceRule: "FREQ=DAILY;COUNT=2"
+            },
+        ],
+        views: ["week"],
+        currentView: "week",
+        currentDate: new Date(2019, 9, 26),
+        startDayHour: 9,
+        height: 600
+    });
+
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
+        $dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+
+    assert.equal($appointments.length, 1, "One appointment is rendered");
+    assert.equal($dropDown.length, 0, "There is no dropDown appointment");
+
+    this.instance.option("currentDate", new Date(2019, 9, 26));
+
+    $appointments = this.instance.$element().find(".dx-scheduler-appointment");
+    $dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments");
+
+    assert.equal($appointments.length, 1, "One appointment is rendered");
+    assert.equal($dropDown.length, 0, "There is no dropDown appointment");
 });
 
 QUnit.test("Reduced reccuring appt should have right left position in first column in Month view", function(assert) {

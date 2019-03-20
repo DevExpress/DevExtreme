@@ -57,6 +57,10 @@ exports.dxGauge = dxBaseGauge.inherit({
         that._initScale();
     },
 
+    _fontFields: [
+        'scale.label.font', 'valueIndicators.rangebar.text.font', 'valueIndicators.textcloud.text.font', "indicator.text.font"
+    ],
+
     _initScale: function() {
         var that = this;
 
@@ -171,12 +175,14 @@ exports.dxGauge = dxBaseGauge.inherit({
 
     _prepareScaleSettings: function() {
         var that = this,
-            scaleOptions = extend(true, {}, that._themeManager.theme("scale"), that.option("scale"));
+            userOptions = that.option("scale"),
+            scaleOptions = extend(true, {}, that._themeManager.theme("scale"), userOptions);
 
         scaleOptions.label.indentFromAxis = 0;
         scaleOptions.isHorizontal = !that._area.vertical;
-        scaleOptions.axisDivisionFactor = that._gridSpacingFactor;
-        scaleOptions.minorAxisDivisionFactor = DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
+        scaleOptions.forceUserTickInterval |= _isDefined(userOptions) && _isDefined(userOptions.tickInterval) && !_isDefined(userOptions.scaleDivisionFactor);
+        scaleOptions.axisDivisionFactor = scaleOptions.scaleDivisionFactor || that._gridSpacingFactor;
+        scaleOptions.minorAxisDivisionFactor = scaleOptions.minorScaleDivisionFactor || DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
         scaleOptions.numberMultipliers = DEFAULT_NUMBER_MULTIPLIERS;
         scaleOptions.tickOrientation = that._getTicksOrientation(scaleOptions);
         if(scaleOptions.label.useRangeColors) {
@@ -600,12 +606,8 @@ ValueIndicatorsSet.prototype = {
         var that = this,
             colors = null;
         if(that._palette) {
-            colors = [];
             that._palette.reset();
-            var i = 0;
-            for(; i < count; ++i) {
-                colors.push(that._palette.getNextColor());
-            }
+            colors = that._palette.generateColors(count, { repeat: true });
         }
         that._colorPalette = colors;
     },

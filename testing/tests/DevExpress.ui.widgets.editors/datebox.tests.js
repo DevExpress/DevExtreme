@@ -928,7 +928,6 @@ QUnit.test("mergeDates must merge milliseconds when type is 'time'", function(as
 QUnit.module("dateView integration", {
     beforeEach: function() {
         fx.off = true;
-
         this.originalInputType = support.inputType;
         support.inputType = function() {
             return false;
@@ -955,6 +954,20 @@ QUnit.module("dateView integration", {
         support.inputType = this.originalInputType;
         fx.off = false;
     }
+});
+
+QUnit.test("check DateView default config", function(assert) {
+    const { value, minDate, maxDate } = this.dateView().option();
+    const FIFTY_YEARS = uiDateUtils.ONE_YEAR * 50;
+    const defaultDate = new Date();
+
+    defaultDate.setHours(0, 0, 0, 0);
+
+    assert.deepEqual(value, defaultDate, "default value is the current date");
+    assert.deepEqual(minDate, new Date(1900, 0, 1), "default min date is 'January 1 1900'");
+
+    this.clock.now += FIFTY_YEARS;
+    assert.deepEqual(maxDate, new Date(), "default max date is current date + 50 years");
 });
 
 QUnit.test("dateView renders", function(assert) {
@@ -1796,8 +1809,6 @@ QUnit.test("DateBox must immediately display 'value' passed via the constructor 
 });
 
 QUnit.test("DateBox must pass value to calendar correctly if value is empty string", function(assert) {
-
-
     this.reinitFixture({
         value: '',
         pickerType: 'calendar',
@@ -1989,6 +2000,30 @@ QUnit.test("should execute custom validator while validation state reevaluating"
 
     assert.notOk(dateBox.option("isValid"));
     assert.notStrictEqual(dateBox.option("text"), "");
+});
+
+QUnit.test("should rise validation event once after value is changed by calendar (T714599)", (assert) => {
+    const validationCallbackStub = sinon.stub().returns(false);
+    const dateBox = $("#dateBoxWithPicker")
+        .dxDateBox({
+            type: "datetime",
+            pickerType: "calendar",
+            value: new Date(2015, 5, 9, 15, 54, 13),
+            opened: true
+        })
+        .dxValidator({
+            validationRules: [{
+                type: "custom",
+                validationCallback: validationCallbackStub
+            }]
+        })
+        .dxDateBox("instance");
+
+    $(".dx-calendar-cell").eq(0).trigger("dxclick");
+    $(".dx-popup-done.dx-button").trigger("dxclick");
+
+    assert.notOk(dateBox.option("opened"));
+    assert.ok(validationCallbackStub.calledOnce);
 });
 
 QUnit.test("Editor should reevaluate validation state after change text to the current value", function(assert) {
@@ -3642,6 +3677,26 @@ QUnit.test("datebox should be invalid after out of range value was setted", (ass
     assert.ok(dateBox.option("isValid"), "widget is valid");
 });
 
+QUnit.test("datebox should change validation state if value was changed by keyboard", (assert) => {
+    const $dateBox = $("#dateBox").dxDateBox({
+        type: "date",
+        value: null,
+        pickerType: "calendar"
+    }).dxValidator({
+        validationRules: [{
+            type: "required"
+        }]
+    });
+    const dateBox = $dateBox.dxDateBox("instance");
+    const keyboard = keyboardMock($dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
+
+    keyboard
+        .type("10/10/2014")
+        .change();
+
+    assert.ok(dateBox.option("isValid"), "widget is valid");
+});
+
 QUnit.test("widget is still valid after drop down is opened", function(assert) {
     var startDate = new Date(2015, 1, 1, 8, 12);
 
@@ -3882,6 +3937,29 @@ QUnit.test("dxDateBox should validate value after change 'min' option", function
     dateBox.option("min", new Date(2015, 6, 5));
 
     assert.ok(dateBox.option("isValid"), "datebox is valid");
+});
+
+QUnit.testInActiveWindow("DateBox should validate value after remove an invalid characters", function(assert) {
+    const $element = $("#dateBox");
+    const dateBox = $element.dxDateBox({
+        value: new Date(2015, 6, 18),
+        pickerType: "calendar"
+    }).dxDateBox("instance");
+    const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+    const keyboard = keyboardMock($input);
+
+    keyboard
+        .caret(dateBox.option("text").length - 1)
+        .type("d")
+        .press("enter");
+
+    assert.notOk(dateBox.option("isValid"));
+
+    keyboard
+        .press("backspace")
+        .press("enter");
+
+    assert.ok(dateBox.option("isValid"));
 });
 
 

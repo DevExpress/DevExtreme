@@ -10,8 +10,10 @@ viz.currentTheme = require("../../../viz/themes").currentTheme;
 viz.registerTheme = require("../../../viz/themes").registerTheme;
 viz.exportFromMarkup = require("../../../viz/export").exportFromMarkup;
 viz.getMarkup = require("../../../viz/export").getMarkup;
+viz.exportWidgets = require("../../../viz/export").exportWidgets;
 viz.currentPalette = require("../../../viz/palette").currentPalette;
 viz.getPalette = require("../../../viz/palette").getPalette;
+viz.generateColors = require("../../../viz/palette").generateColors;
 viz.registerPalette = require("../../../viz/palette").registerPalette;
 viz.refreshTheme = require("../../../viz/themes").refreshTheme;
 

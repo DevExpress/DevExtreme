@@ -486,8 +486,6 @@ strategiesByElementType[TYPE_MARKER] = {
 
         refresh: function(ctx, figure, data, proxy, settings) {
             var values = getDataValue(proxy, ctx.settings.dataField) || [],
-                i,
-                ii = values.length || 0,
                 colors = settings._colors,
                 sum = 0,
                 pie = figure.pie,
@@ -495,15 +493,23 @@ strategiesByElementType[TYPE_MARKER] = {
                 dataKey = ctx.dataKey,
                 r = (settings.size > 0 ? _Number(settings.size) : 0) / 2,
                 start = 90,
-                end = start;
-            for(i = 0; i < ii; ++i) {
-                sum += values[i] || 0;
+                end = start,
+                zeroSum = false;
+
+            sum = values.reduce(function(total, item) {
+                return total + (item || 0);
+            }, 0);
+
+            if(sum === 0) {
+                zeroSum = true;
+                sum = 360 / values.length;
             }
-            for(i = 0; i < ii; ++i) {
+
+            values.forEach(function(item, i) {
                 start = end;
-                end += (values[i] || 0) / sum * 360;
+                end += zeroSum ? sum : (item || 0) / sum * 360;
                 renderer.arc(0, 0, 0, r, start, end).attr({ "stroke-linejoin": "round", fill: colors[i] }).data(dataKey, data).append(pie);
-            }
+            });
             figure.border.attr({ r: r });
         },
 
@@ -542,11 +548,9 @@ strategiesByElementType[TYPE_MARKER] = {
                 }
             }
             if(count > 0) {
-                values = [];
                 palette = context.params.themeManager.createPalette(context.settings.palette, { useHighlight: true, extensionMode: "alternate" });
-                for(i = 0; i < count; ++i) {
-                    values.push(palette.getNextColor());
-                }
+                values = palette.generateColors(count);
+
                 context.settings._colors = values;
                 context.grouping.color = { callback: _noop, field: "", partition: [], values: [] };
                 context.params.dataExchanger.set(context.name, "color", { partition: [], values: values });

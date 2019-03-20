@@ -23,21 +23,21 @@ var $ = require("../../core/renderer"),
     FunctionTemplate = require("../widget/function_template"),
     appointmentTooltip = require("./ui.scheduler.appointment_tooltip"),
     SchedulerHeader = require("./ui.scheduler.header"),
-    SchedulerWorkSpaceDay = require("./ui.scheduler.work_space_day"),
-    SchedulerWorkSpaceWeek = require("./ui.scheduler.work_space_week"),
-    SchedulerWorkSpaceWorkWeek = require("./ui.scheduler.work_space_work_week"),
-    SchedulerWorkSpaceMonth = require("./ui.scheduler.work_space_month"),
-    SchedulerTimelineDay = require("./ui.scheduler.timeline_day"),
-    SchedulerTimelineWeek = require("./ui.scheduler.timeline_week"),
-    SchedulerTimelineWorkWeek = require("./ui.scheduler.timeline_work_week"),
-    SchedulerTimelineMonth = require("./ui.scheduler.timeline_month"),
-    SchedulerAgenda = require("./ui.scheduler.agenda"),
+    SchedulerWorkSpaceDay = require("./workspaces/ui.scheduler.work_space_day"),
+    SchedulerWorkSpaceWeek = require("./workspaces/ui.scheduler.work_space_week"),
+    SchedulerWorkSpaceWorkWeek = require("./workspaces/ui.scheduler.work_space_work_week"),
+    SchedulerWorkSpaceMonth = require("./workspaces/ui.scheduler.work_space_month"),
+    SchedulerTimelineDay = require("./workspaces/ui.scheduler.timeline_day"),
+    SchedulerTimelineWeek = require("./workspaces/ui.scheduler.timeline_week"),
+    SchedulerTimelineWorkWeek = require("./workspaces/ui.scheduler.timeline_work_week"),
+    SchedulerTimelineMonth = require("./workspaces/ui.scheduler.timeline_month"),
+    SchedulerAgenda = require("./workspaces/ui.scheduler.agenda"),
     SchedulerResourceManager = require("./ui.scheduler.resource_manager"),
     SchedulerAppointmentModel = require("./ui.scheduler.appointment_model"),
     SchedulerAppointments = require("./ui.scheduler.appointments"),
     SchedulerLayoutManager = require("./ui.scheduler.appointments.layout_manager"),
     DropDownAppointments = require("./ui.scheduler.appointments.drop_down"),
-    SchedulerTimezones = require("./ui.scheduler.timezones"),
+    SchedulerTimezones = require("./timezones/ui.scheduler.timezones"),
     AsyncTemplateMixin = require("../shared/async_template_mixin"),
     DataHelperMixin = require("../../data_helper"),
     loading = require("./ui.loading"),
@@ -152,6 +152,7 @@ var Scheduler = Widget.inherit({
                 * @default "appointmentTooltip"
                 * @type_function_param1 appointmentData:object
                 * @type_function_param2 contentElement:dxElement
+                * @type_function_param3 targetedAppointmentData:object
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -416,7 +417,8 @@ var Scheduler = Widget.inherit({
 
                 /**
                     * @name dxSchedulerOptions.resources.displayExpr
-                    * @type string|function
+                    * @type string|function(resource)
+                    * @type_function_param1 resource:object
                     * @default 'text'
                     */
 
@@ -889,7 +891,6 @@ var Scheduler = Widget.inherit({
             noDataText: messageLocalization.format("dxCollectionWidget-noDataText"),
 
             allowMultipleCellSelection: true,
-            displayedAppointmentDataField: null,
 
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: "bottom",
@@ -1146,8 +1147,8 @@ var Scheduler = Widget.inherit({
             case "currentDate":
                 value = this._dateOption(name);
                 value = dateUtils.trimTime(new Date(value));
-                this._workSpace.option(name, value);
-                this._header.option(name, value);
+                this._workSpace.option(name, new Date(value));
+                this._header.option(name, new Date(value));
                 this._header.option("displayedDate", this._workSpace._getViewStartByOptions());
                 this._appointments.option("items", []);
                 this._filterAppointmentsByDate();
@@ -1172,7 +1173,7 @@ var Scheduler = Widget.inherit({
                 break;
             case "views":
                 this._processCurrentView();
-                if(!!this._getCurrentViewOptions()) {
+                if(this._getCurrentViewOptions()) {
                     this.repaint();
                 } else {
                     this._header.option(name, value);
@@ -1192,11 +1193,10 @@ var Scheduler = Widget.inherit({
                     itemTemplate: this._getAppointmentTemplate("appointmentTemplate")
                 });
 
-                this._updateHeader();
-
                 this._postponeResourceLoading().done((resources) => {
                     this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
                     this._refreshWorkSpace(resources);
+                    this._updateHeader();
                     this._filterAppointmentsByDate();
                     this._appointments.option("allowAllDayResize", value !== "day");
                 });
@@ -1349,8 +1349,6 @@ var Scheduler = Widget.inherit({
             case "dateSerializationFormat":
                 break;
             case "maxAppointmentsPerCell":
-                break;
-            case "displayedAppointmentDataField":
                 break;
             case "startDateExpr":
             case "endDateExpr":
@@ -1659,7 +1657,7 @@ var Scheduler = Widget.inherit({
 
     _getAppointmentsToRepaint: function() {
         var appointments = this._layoutManager.createAppointmentsMap(this._filteredItems);
-        return this._layoutManager.markRepaintedAppointments(appointments, this.getAppointmentsInstance().option("items"));
+        return this._layoutManager.getRepaintedAppointments(appointments, this.getAppointmentsInstance().option("items"));
     },
 
     _initExpressions: function(fields) {
@@ -1677,7 +1675,7 @@ var Scheduler = Widget.inherit({
         }
 
         each(fields, (function(name, expr) {
-            if(!!expr) {
+            if(expr) {
 
                 var getter = dataCoreUtils.compileGetter(expr),
                     setter = dataCoreUtils.compileSetter(expr);
@@ -2626,6 +2624,14 @@ var Scheduler = Widget.inherit({
         return $appointment.hasClass("dx-scheduler-appointment-compact") || $appointment.hasClass("dx-scheduler-appointment-recurrence");
     },
 
+    _getNormalizedTemplateArgs: function(options) {
+        var args = this.callBase(options);
+        if("targetedAppointmentData" in options) {
+            args.push(options.targetedAppointmentData);
+        }
+        return args;
+    },
+
     subscribe: function(subject, action) {
         this._subscribes[subject] = subscribes[subject] = action;
     },
@@ -2918,8 +2924,8 @@ var Scheduler = Widget.inherit({
                 };
             } else {
                 getGroups = function() {
-                    var apptPosition = $(appointmentElement).position();
-                    return workSpace.getCellDataByCoordinates(apptPosition).groups;
+                    var setting = $(appointmentElement).data("dxAppointmentSettings") || {}; // TODO: in the future, necessary refactor the engine of determining groups
+                    return workSpace.getCellDataByCoordinates({ left: setting.left, top: setting.top }).groups;
                 };
 
                 setResourceCallback = function(field, value) {

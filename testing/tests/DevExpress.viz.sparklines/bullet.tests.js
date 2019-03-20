@@ -1,14 +1,11 @@
 /* global currentTest, createTestContainer */
 
 var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
     vizMocks = require("../../helpers/vizMocks.js"),
     rendererModule = require("viz/core/renderers/renderer"),
     translator2DModule = require("viz/translators/translator2d"),
     tooltipModule = require("viz/core/tooltip"),
-    BaseWidget = require("viz/core/base_widget"),
-    BaseThemeManager = require("viz/core/base_theme_manager").BaseThemeManager,
-    themeModule = require("viz/themes");
+    BaseWidget = require("viz/core/base_widget");
 
 require("viz/bullet");
 
@@ -243,139 +240,7 @@ QUnit.test('Create range when all value are negative', function(assert) {
     assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
 });
 
-QUnit.module('Prepare options', $.extend({}, environment, {
-    getExpectedTheme: function(widget, options) {
-        var themeManager = new BaseThemeManager();
-        themeManager.setCallback(noop);
-        themeManager._themeSection = "bullet";
-        themeManager._fontFields = ["tooltip.font"];
-        themeManager.setTheme(options ? options.theme : null);
-        var expected = $.extend(true, {}, themeManager.theme(), options);
-        $.each(["defaultOptionsRules", "onIncidentOccurred", "onInitialized", "onDisposing", "onOptionChanged", "rtlEnabled", "startScaleValue", "endScaleValue", "target", "value", "disabled", "elementAttr", "integrationOptions"], function(_, name) {
-            expected[name] = widget._allOptions[name];
-        });
-        delete expected.size;
-        return expected;
-    }
-}));
-
-QUnit.test('Prepare options when all options are default', function(assert) {
-    var bullet = this.createBullet({});
-
-    delete bullet._allOptions.size;
-    assert.deepEqual(bullet._allOptions, this.getExpectedTheme(bullet), 'All options should be default');
-});
-
-QUnit.test('Prepare options when all options are custom', function(assert) {
-    var options = {
-            defaultOptionsRules: null,
-            onOptionChanged: null,
-            onDisposing: null,
-            theme: 'default',
-            disabled: false,
-            rtlEnabled: false,
-            size: {
-                width: 300,
-                height: 40
-            },
-            margin: {
-                top: 1,
-                bottom: 2,
-                left: 3,
-                right: 4
-            },
-            value: 15,
-            target: 7,
-            targetColor: '#FF0000',
-            targetWidth: 2,
-            showTarget: true,
-            showZeroLevel: true,
-            startScaleValue: 1,
-            endScaleValue: 20,
-            color: '#00AA00',
-            inverted: true,
-            tooltip: {
-                paddingLeftRight: 14,
-                paddingTopBottom: 10,
-                arrowLength: 10,
-                enabled: false, // false
-                text: 'test',
-                format: 'fixedPoint', // 'currency', 'fixedPoint', 'decimal', 'exponential', 'largeNumber', 'thousands', 'millions', 'billions', 'trillions'
-                precision: 2,
-                color: '#FF00FF',
-                opacity: 1,
-                border: {
-                    color: "white",
-                    dashStyle: 'dash',
-                    width: 1,
-                    opacity: 0.1,
-                    visible: false
-                },
-                font: {
-                    color: '#FFFAAA',
-                    family: 'Verdana',
-                    opacity: 0.5,
-                    size: 14,
-                    weight: 300
-                },
-                shadow: {
-                    blur: 2,
-                    color: "#000000",
-                    offsetX: 0,
-                    offsetY: 4,
-                    opacity: 0.4
-                }
-            }
-        },
-        bullet = this.createBullet(options);
-
-    delete bullet._allOptions.size;
-    assert.deepEqual(bullet._allOptions, this.getExpectedTheme(bullet, options), 'Custom options should be correct');
-});
-
-QUnit.test('Prepare options when theme is object', function(assert) {
-    var bullet = this.createBullet({ theme: { color: 'yellow' } });
-
-    delete bullet._allOptions.size;
-    assert.deepEqual(bullet._allOptions, this.getExpectedTheme(bullet, { theme: { color: 'yellow' } }), 'Custom options should be correct');
-});
-
-QUnit.test('Customize default theme', function(assert) {
-    var myTheme = {
-        name: 'myTheme',
-        bullet: {
-            color: 'yellow'
-        }
-    };
-
-    themeModule.registerTheme(myTheme, 'default');
-    var bullet = this.createBullet({ theme: 'myTheme' });
-
-    delete bullet._allOptions.size;
-    assert.deepEqual(bullet._allOptions, this.getExpectedTheme(bullet, { theme: 'myTheme' }), 'Custom options should be correct');
-});
-
-QUnit.test('Implement custom theme', function(assert) {
-    var myTheme = {
-        name: 'myTheme',
-        bullet: {
-            color: 'yellow'
-        }
-    };
-
-    themeModule.registerTheme(myTheme);
-    var bullet = this.createBullet({ theme: 'myTheme' });
-
-    delete bullet._allOptions.size;
-    assert.deepEqual(bullet._allOptions, this.getExpectedTheme(bullet, { theme: 'myTheme' }), 'Custom options should be correct');
-});
-
-QUnit.test('Dark theme', function(assert) {
-    var bullet = this.createBullet({ theme: 'generic.dark' });
-
-    delete bullet._allOptions.size;
-    assert.deepEqual(bullet._allOptions, this.getExpectedTheme(bullet, { theme: 'generic.dark' }), 'Custom options should be correct');
-});
+QUnit.module('Prepare options', environment);
 
 QUnit.test('Prepare options whe max level is undefined', function(assert) {
     var bullet = this.createBullet({ value: 10, target: 25 });

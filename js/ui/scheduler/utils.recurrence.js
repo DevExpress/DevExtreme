@@ -319,7 +319,7 @@ var pushToResult = function(iteration, iterationResult, currentDate, i, config, 
 
 var checkDate = function(currentDate, i, config, verifiedField) {
     if(!dateIsRecurrenceException(currentDate, config.exception)) {
-        var duration = dateUtils.sameDate(currentDate, config.recurrenceEndDate) ? config.recurrenceEndDate.getTime() - currentDate.getTime() : config.duration;
+        var duration = dateUtils.sameDate(currentDate, config.recurrenceEndDate) && config.recurrenceEndDate.getTime() > currentDate.getTime() ? config.recurrenceEndDate.getTime() - currentDate.getTime() : config.duration;
 
         if(currentDate.getTime() >= config.recurrenceStartDate.getTime() && (currentDate.getTime() + duration) > config.min.getTime()) {
             return verifiedField || checkDateByRule(currentDate, [config.dateRules[i]], config.rule["wkst"]);
@@ -600,7 +600,11 @@ var daysFromByDayRule = function(rule) {
     var result = [];
 
     if(rule["byday"]) {
-        result = rule["byday"].split(",");
+        if(Array.isArray(rule["byday"])) {
+            result = rule["byday"];
+        } else {
+            result = rule["byday"].split(",");
+        }
     }
 
     return result;
@@ -709,7 +713,7 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
     var result = [],
         count = rule.count,
         counter = 0,
-        date = new Date(startDate.setDate(1));
+        date = prepareDate(startDate, dateRules);
 
     while(counter < count) {
         var dates = getDatesByRules(dateRules, date, rule);
@@ -743,6 +747,18 @@ var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) 
     }
 
     return result;
+};
+
+var prepareDate = function(startDate, dateRules) {
+    var date = new Date(startDate);
+
+    if(dateRules.length && dateRules[0]["byday"]) {
+        date.setDate(date.getDate() - date.getDay() + dateRules[0]["byday"]);
+    } else {
+        date.setDate(1);
+    }
+
+    return date;
 };
 
 var checkDateByRule = function(date, rules, weekStart) {

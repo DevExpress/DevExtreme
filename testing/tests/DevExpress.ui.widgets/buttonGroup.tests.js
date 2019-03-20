@@ -1,11 +1,14 @@
 import $ from "jquery";
 import "ui/button";
 import "ui/button_group";
+import eventsEngine from "events/core/events_engine";
 import "common.css!";
 
 const BUTTON_CLASS = "dx-button",
-    DX_ITEM_SELECTED_CLASS = "dx-item-selected",
-    BUTTON_GROUP_ITEM_HAS_WIDTH = "dx-buttongroup-item-has-width";
+    BUTTON_GROUP_CLASS = "dx-buttongroup",
+    BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + "-item",
+    BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_CLASS + "-item-has-width",
+    DX_ITEM_SELECTED_CLASS = "dx-item-selected";
 
 QUnit.testStart(() => {
     const markup = `
@@ -16,12 +19,15 @@ QUnit.testStart(() => {
 });
 
 QUnit.module("option changed", {
-    beforeEach() {
-        this.$buttonGroup = $("#buttonGroup").dxButtonGroup({
+    createButtonGroup(options) {
+        options = options || {
             items: [{ text: "button 1" }, { text: "button 2" }]
-        });
-
-        this.buttonGroup = this.$buttonGroup.dxButtonGroup("instance");
+        };
+        return $("#buttonGroup").dxButtonGroup(options).dxButtonGroup("instance");
+    },
+    beforeEach() {
+        this.buttonGroup = this.createButtonGroup();
+        this.$buttonGroup = this.buttonGroup.$element();
     }
 }, () => {
     QUnit.test("change hover state for all buttons", function(assert) {
@@ -120,6 +126,54 @@ QUnit.module("option changed", {
         assert.equal(this.$buttonGroup.width(), 500, "button group width");
         assert.ok(buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "first item when button group has width");
         assert.ok(buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "second item when button group has width");
+    });
+
+    QUnit.test("change the width option when item has template", function(assert) {
+        const buttonGroup = this.createButtonGroup({
+            items: [{ text: "button 1" }, { text: "button 2" }],
+            itemTemplate: () => "<div/>",
+        });
+
+        buttonGroup.option("width", 500);
+
+        let $items = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
+        assert.equal(buttonGroup.$element().width(), 500, "button group width");
+        assert.ok($items.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "first item when button group has width");
+        assert.ok($items.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), "second item when button group has width");
+    });
+
+    QUnit.test("it should be possible to set full set of options for each button", assert => {
+        const $element = $("#widget").dxButtonGroup({
+            items: [{ text: "button 1", width: 24, elementAttr: { class: "test" }, customOption: "Test option" }]
+        });
+        const buttonsSelector = `.${BUTTON_CLASS}`;
+        let button = $element.find(buttonsSelector).eq(0).dxButton("instance");
+
+        assert.strictEqual(button.option("width"), 24, "width is correct");
+        assert.ok(button.$element().hasClass("test"), "elementAttr is correct");
+        assert.strictEqual(button.option("customOption"), "Test option", "all options should be passed to the button");
+    });
+
+    QUnit.test("default options should not be redefined", assert => {
+        const $element = $("#widget").dxButtonGroup({
+            items: [{ text: "Test", focusStateEnabled: true }]
+        });
+        const buttonsSelector = `.${BUTTON_CLASS}`;
+        const button = $element.find(buttonsSelector).eq(0).dxButton("instance");
+
+        assert.strictEqual(button.option("focusStateEnabled"), false, "focusStateEnabled has not been redefined");
+    });
+
+    QUnit.test("onClick can be redefined", assert => {
+        const handler = sinon.spy();
+        const $element = $("#widget").dxButtonGroup({
+            items: [{ text: "Test", onClick: handler }]
+        });
+        const buttonsSelector = `.${BUTTON_CLASS}`;
+        const button = $element.find(buttonsSelector).eq(0);
+
+        eventsEngine.trigger(button, "dxclick");
+        assert.strictEqual(handler.callCount, 1, "handler has been called");
     });
 
     QUnit.test("change the stylingMode option", function(assert) {

@@ -648,6 +648,7 @@ gridCore.registerModule("summary", {
                             if(data && data.items && options.isGroupFooterVisible && (options.collectContinuationItems || !data.isContinuationOnNextPage)) {
                                 result.push({
                                     rowType: DATAGRID_GROUP_FOOTER_ROW_TYPE,
+                                    key: options.path.slice(),
                                     data: data,
                                     groupIndex: options.path.length - 1,
                                     values: []

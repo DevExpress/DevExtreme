@@ -182,6 +182,9 @@ var RecurrenceEditor = Editor.inherit({
         if(!isDefined(this.option("value"))) {
             this._handleDefaults();
         }
+
+        this.option("visible", !!this.option("value"));
+        this._renderContainerVisibility(this.option("value"));
     },
 
     _renderContainerVisibility: function(value) {
@@ -354,12 +357,6 @@ var RecurrenceEditor = Editor.inherit({
 
             delete this._$repeatOnYear;
         }
-    },
-
-    _clearRepeatOnEditorValues: function() {
-        this._recurrenceRule.makeRule("bymonth", "");
-        this._recurrenceRule.makeRule("bymonthday", "");
-        this._recurrenceRule.makeRule("byday", "");
     },
 
     _clearRepeatOnLabel: function() {
@@ -741,10 +738,6 @@ var RecurrenceEditor = Editor.inherit({
         var value = args.component.option("value"),
             field = args.component.option("field");
 
-        if(field === "freq") {
-            this._clearRepeatOnEditorValues();
-        }
-
         this._recurrenceRule.makeRule(field, value);
 
         this._makeRepeatOnRule(field, value);
@@ -752,21 +745,31 @@ var RecurrenceEditor = Editor.inherit({
     },
 
     _makeRepeatOnRule: function(field, value) {
-        if(field !== "freq" || value === "DAILY") {
+        if(field !== "freq") {
             return;
         }
 
+        if(value === "DAILY") {
+            this._recurrenceRule.makeRule("byday", "");
+            this._recurrenceRule.makeRule("bymonth", "");
+            this._recurrenceRule.makeRule("bymonthday", "");
+        }
         if(value === "WEEKLY") {
             this._recurrenceRule.makeRule("byday", this._daysOfWeekByRules());
+            this._recurrenceRule.makeRule("bymonth", "");
+            this._recurrenceRule.makeRule("bymonthday", "");
         }
 
         if(value === "MONTHLY") {
             this._recurrenceRule.makeRule("bymonthday", this._dayOfMonthByRules());
+            this._recurrenceRule.makeRule("bymonth", "");
+            this._recurrenceRule.makeRule("byday", "");
         }
 
         if(value === "YEARLY") {
             this._recurrenceRule.makeRule("bymonthday", this._dayOfMonthByRules());
             this._recurrenceRule.makeRule("bymonth", this._monthOfYearByRules());
+            this._recurrenceRule.makeRule("byday", "");
         }
     },
 
@@ -813,13 +816,14 @@ var RecurrenceEditor = Editor.inherit({
     },
 
     _changeEditorsValues: function(rules) {
+        this._changeCheckBoxesValue(!!rules["byday"]);
+
         this._freqEditor.option("value", rules.freq);
         this._changeRepeatTypeLabel();
         this._intervalEditor.option("value", rules.interval);
 
         this._changeRepeatCountValue();
         this._changeRepeatUntilValue();
-        this._changeCheckBoxesValue(!!rules["byday"]);
 
         this._changeDayOfMonthValue();
         this._changeMonthOfYearValue();

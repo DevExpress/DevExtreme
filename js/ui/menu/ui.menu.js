@@ -438,7 +438,7 @@ var Menu = MenuBase.inherit({
             }).bind(this),
             height: "auto",
             closeOnOutsideClick: function(e) {
-                return !(!!$(e.target).closest("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).length);
+                return !($(e.target).closest("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).length);
             },
             position: {
                 collision: "flipfit",
@@ -996,10 +996,6 @@ var Menu = MenuBase.inherit({
     },
 
     _optionChanged: function(args) {
-        if(this._cancelOptionChange === args.name) {
-            return;
-        }
-
         switch(args.name) {
             case "orientation":
             case "submenuDirection":

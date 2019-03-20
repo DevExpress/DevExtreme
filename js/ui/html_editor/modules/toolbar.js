@@ -6,6 +6,7 @@ import Toolbar from "../../toolbar";
 import "../../select_box";
 import "../../color_box/color_view";
 
+import WidgetCollector from "./widget_collector";
 import { each } from "../../../core/utils/iterator";
 import { isString, isObject, isDefined, isEmptyObject, isBoolean } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
@@ -53,7 +54,7 @@ class ToolbarModule extends BaseModule {
         super(quill, options);
 
         this._editorInstance = options.editorInstance;
-        this._formats = {};
+        this._toolbarWidgets = new WidgetCollector();
         this._formatHandlers = this._getFormatHandlers();
 
         if(isDefined(options.items)) {
@@ -62,10 +63,14 @@ class ToolbarModule extends BaseModule {
             this.quill.on('editor-change', (eventName) => {
                 const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
 
-                this.updateFormatWidgets(isSelectionChanged);
-                this.updateHistoryWidgets();
+                this._updateToolbar(isSelectionChanged);
             });
         }
+    }
+
+    _updateToolbar(isSelectionChanged) {
+        this.updateFormatWidgets(isSelectionChanged);
+        this.updateHistoryWidgets();
     }
 
     _getDefaultClickHandler(formatName) {
@@ -81,7 +86,7 @@ class ToolbarModule extends BaseModule {
     }
 
     _updateFormatWidget(formatName, isApplied, formats) {
-        const widget = this._formats[formatName];
+        const widget = this._toolbarWidgets.getByName(formatName);
 
         if(!widget) {
             return;
@@ -157,7 +162,7 @@ class ToolbarModule extends BaseModule {
 
             const promise = this._editorInstance.showFormDialog({
                 formData: formData,
-                items: this._getLinkFormItems()
+                items: this._linkFormItems
             });
 
             promise.done((formData) => {
@@ -169,7 +174,7 @@ class ToolbarModule extends BaseModule {
 
                     length && this.quill.deleteText(index, length, SILENT_ACTION);
                     this.quill.insertText(index, text, "link", formData, USER_ACTION);
-                    this.quill.setSelection(index + text.length, 0);
+                    this.quill.setSelection(index + text.length, 0, USER_ACTION);
 
                 } else {
                     this.quill.format("link", formData, USER_ACTION);
@@ -182,7 +187,7 @@ class ToolbarModule extends BaseModule {
         };
     }
 
-    _getLinkFormItems() {
+    get _linkFormItems() {
         return [
             { dataField: "href", label: { text: format(DIALOG_LINK_FIELD_URL) } },
             { dataField: "text", label: { text: format(DIALOG_LINK_FIELD_TEXT) } },
@@ -201,36 +206,40 @@ class ToolbarModule extends BaseModule {
     _prepareImageHandler() {
         return () => {
             const formData = this.quill.getFormat();
-            const isUpdateDialog = formData.hasOwnProperty("src");
-            const selection = this.quill.getSelection();
-            const pasteIndex = selection && selection.index || this.quill.getLength();
+            const isUpdateDialog = formData.hasOwnProperty("imageSrc");
+            const defaultIndex = this._defaultPasteIndex;
+
+            if(isUpdateDialog) {
+                const { imageSrc } = this.quill.getFormat(defaultIndex - 1, 1);
+
+                formData.src = formData.imageSrc;
+                delete formData.imageSrc;
+
+                if(!imageSrc || defaultIndex === 0) {
+                    this.quill.setSelection(defaultIndex + 1, 0, SILENT_ACTION);
+                }
+            }
+
+            const formatIndex = this._embedFormatIndex;
 
             this._editorInstance.formDialogOption("title", format(DIALOG_IMAGE_CAPTION));
 
-            const formItems = [
-                { dataField: "src", label: { text: format(DIALOG_IMAGE_FIELD_URL) } },
-                { dataField: "width", label: { text: format(DIALOG_IMAGE_FIELD_WIDTH) } },
-                { dataField: "height", label: { text: format(DIALOG_IMAGE_FIELD_HEIGHT) } },
-                { dataField: "alt", label: { text: format(DIALOG_IMAGE_FIELD_ALT) } },
-            ];
-
             const promise = this._editorInstance.showFormDialog({
                 formData: formData,
-                items: formItems
+                items: this._imageFormItems
             });
 
             promise
                 .done((formData) => {
+                    let index = defaultIndex;
+
                     if(isUpdateDialog) {
-                        const formatIndex = selection && !selection.length && selection.index - 1 || pasteIndex;
-                        this.quill.formatText(formatIndex, 1, {
-                            width: formData.width,
-                            height: formData.height,
-                            alt: formData.alt
-                        }, USER_ACTION);
-                    } else {
-                        this.quill.insertEmbed(pasteIndex, "extendedImage", formData, USER_ACTION);
+                        index = formatIndex;
+                        this.quill.deleteText(index, 1, SILENT_ACTION);
                     }
+
+                    this.quill.insertEmbed(index, "extendedImage", formData, USER_ACTION);
+                    this.quill.setSelection(index + 1, 0, USER_ACTION);
                 })
                 .always(() => {
                     this.quill.focus();
@@ -238,19 +247,47 @@ class ToolbarModule extends BaseModule {
         };
     }
 
+    get _embedFormatIndex() {
+        const selection = this.quill.getSelection();
+
+        if(selection) {
+            if(selection.length) {
+                return selection.index;
+            } else {
+                return selection.index - 1;
+            }
+        } else {
+            return this.quill.getLength();
+        }
+    }
+
+    get _defaultPasteIndex() {
+        const selection = this.quill.getSelection();
+        return selection && selection.index || this.quill.getLength();
+    }
+
+    get _imageFormItems() {
+        return [
+            { dataField: "src", label: { text: format(DIALOG_IMAGE_FIELD_URL) } },
+            { dataField: "width", label: { text: format(DIALOG_IMAGE_FIELD_WIDTH) } },
+            { dataField: "height", label: { text: format(DIALOG_IMAGE_FIELD_HEIGHT) } },
+            { dataField: "alt", label: { text: format(DIALOG_IMAGE_FIELD_ALT) } }
+        ];
+    }
+
     _renderToolbar() {
         const container = this.options.container || this._getContainer();
-        const $toolbar = $("<div>")
+
+        this._$toolbar = $("<div>")
             .addClass(TOOLBAR_CLASS)
             .appendTo(container);
-
         this._$toolbarContainer = $(container).addClass(TOOLBAR_WRAPPER_CLASS);
 
-        eventsEngine.on($toolbar, addNamespace("mousedown", this._editorInstance.NAME), (e) => {
+        eventsEngine.on(this._$toolbar, addNamespace("mousedown", this._editorInstance.NAME), (e) => {
             e.preventDefault();
         });
 
-        this.toolbarInstance = this._editorInstance._createComponent($toolbar, Toolbar, this.toolbarConfig);
+        this.toolbarInstance = this._editorInstance._createComponent(this._$toolbar, Toolbar, this.toolbarConfig);
 
         this._editorInstance.on("optionChanged", ({ name }) => {
             if(name === "readOnly" || name === "disabled") {
@@ -262,7 +299,8 @@ class ToolbarModule extends BaseModule {
     get toolbarConfig() {
         return {
             dataSource: this._prepareToolbarItems(),
-            disabled: this.isInteractionDisabled
+            disabled: this.isInteractionDisabled,
+            menuContainer: this._$toolbar
         };
     }
 
@@ -271,9 +309,13 @@ class ToolbarModule extends BaseModule {
     }
 
     clean() {
-        this._$toolbarContainer
-            .empty()
-            .removeClass(TOOLBAR_WRAPPER_CLASS);
+        this._toolbarWidgets.clear();
+
+        if(this._$toolbarContainer) {
+            this._$toolbarContainer
+                .empty()
+                .removeClass(TOOLBAR_WRAPPER_CLASS);
+        }
     }
 
     _getContainer() {
@@ -351,6 +393,7 @@ class ToolbarModule extends BaseModule {
                 onValueChanged: (e) => {
                     if(!this._isReset) {
                         this.quill.format(item.formatName, e.value, USER_ACTION);
+                        this._setValueSilent(e.component, e.value);
                     }
                 }
             }
@@ -395,7 +438,7 @@ class ToolbarModule extends BaseModule {
                     if(item.formatName) {
                         e.component.$element().addClass(TOOLBAR_FORMAT_WIDGET_CLASS);
                         e.component.$element().toggleClass(`dx-${item.formatName.toLowerCase()}-format`, !!item.formatName);
-                        this._formats[item.formatName] = e.component;
+                        this._toolbarWidgets.add(item.formatName, e.component);
                     }
                 }
             }
@@ -454,8 +497,8 @@ class ToolbarModule extends BaseModule {
         const undoOps = historyModule.stack.undo;
         const redoOps = historyModule.stack.redo;
 
-        this._updateHistoryWidget(this._formats["undo"], undoOps);
-        this._updateHistoryWidget(this._formats["redo"], redoOps);
+        this._updateHistoryWidget(this._toolbarWidgets.getByName("undo"), undoOps);
+        this._updateHistoryWidget(this._toolbarWidgets.getByName("redo"), redoOps);
     }
 
     _updateHistoryWidget(widget, operations) {
@@ -481,7 +524,7 @@ class ToolbarModule extends BaseModule {
 
         for(const formatName in formats) {
             const widgetName = this._getFormatWidgetName(formatName, formats);
-            const formatWidget = this._formats[widgetName] || this._formats[formatName];
+            const formatWidget = this._toolbarWidgets.getByName(widgetName) || this._toolbarWidgets.getByName(formatName);
 
             if(!formatWidget) {
                 continue;
@@ -498,16 +541,17 @@ class ToolbarModule extends BaseModule {
             this._updateColorWidget(name, formats[name]);
         }
 
-        if(widget.option("value") === undefined) {
-            widget.$element().addClass(ACTIVE_FORMAT_CLASS);
-        } else {
+        if("value" in widget.option()) {
             this._setValueSilent(widget, formats[name]);
+        } else {
+            widget.$element().addClass(ACTIVE_FORMAT_CLASS);
         }
     }
 
     _toggleClearFormatting(hasFormats) {
-        if(this._formats.clear) {
-            this._formats.clear.option("disabled", !hasFormats);
+        const clearWidget = this._toolbarWidgets.getByName("clear");
+        if(clearWidget) {
+            clearWidget.option("disabled", !hasFormats);
         }
     }
 
@@ -516,7 +560,7 @@ class ToolbarModule extends BaseModule {
     }
 
     _updateColorWidget(formatName, color) {
-        const formatWidget = this._formats[formatName];
+        const formatWidget = this._toolbarWidgets.getByName(formatName);
         if(!formatWidget) {
             return;
         }
@@ -542,6 +586,9 @@ class ToolbarModule extends BaseModule {
             case "script":
                 widgetName = formats[formatName] + formatName;
                 break;
+            case "imageSrc":
+                widgetName = "image";
+                break;
             default:
                 widgetName = formatName;
         }
@@ -556,7 +603,7 @@ class ToolbarModule extends BaseModule {
     }
 
     _resetFormatWidgets() {
-        each(this._formats, (name, widget) => {
+        this._toolbarWidgets.each((name, widget) => {
             this._resetFormatWidget(name, widget);
         });
     }
@@ -577,7 +624,7 @@ class ToolbarModule extends BaseModule {
 
     addClickHandler(formatName, handler) {
         this._formatHandlers[formatName] = handler;
-        const formatWidget = this._formats[formatName];
+        const formatWidget = this._toolbarWidgets.getByName(formatName);
         if(formatWidget && formatWidget.NAME === "dxButton") {
             formatWidget.option("onClick", handler);
         }

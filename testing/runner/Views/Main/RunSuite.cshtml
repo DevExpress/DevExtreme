@@ -2,11 +2,9 @@
 @{
     var isNoJQueryTest = Model.ScriptVirtualPath.Contains("nojquery");
     var isServerSideTest = Model.ScriptVirtualPath.Contains("DevExpress.serverSide");
-    var isFrameworkTest = Model.ScriptVirtualPath.Contains("DevExpress.framework");
     var isSelfSufficientTest  = Model.ScriptVirtualPath.Contains("_bundled")
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
-        || isFrameworkTest
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
 
     string GetJQueryUrl() {
@@ -174,6 +172,7 @@
                     'angular': '@Url.Content("~/artifacts/js/angular.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
                     'quill': '@Url.Content("~/artifacts/js/quill.js")',
+                    'exceljs': '@Url.Content("~/artifacts/js/exceljs.js")',
                     'turndown': '@Url.Content("~/artifacts/js/turndown.browser.umd.js")',
                     'showdown': '@Url.Content("~/artifacts/js/showdown.js")',
 
@@ -181,7 +180,6 @@
                     'style-compiler-test-server': '@Model.StyleCompilerTestServerUrl',
 
                     'common.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=&common=true',
-                    'spa.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=spa&common=true',
 
                     'generic_light.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=&t=generic&cs=light&ss=default',
                     'android5_light.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=&t=android5&cs=light',
@@ -232,7 +230,6 @@
                 SystemJS.config({
                     map: {
                         'common.css': '@Url.Content("~/artifacts/css/dx.common.css")',
-                        'spa.css': '@Url.Content("~/artifacts/css/dx.spa.css")',
 
                         'generic_light.css': '@Url.Content("~/artifacts/css/dx.light.css")',
                         'android5_light.css': '@Url.Content("~/artifacts/css/dx.android5.light.css")',
@@ -275,10 +272,6 @@
                 isOldJQuery = !!@Json.Serialize(Model.JQueryVersion);
 
             if(@Json.Serialize(isServerSideTest) && (isNotWebkitBrowser || isOldJQuery)) {
-                return;
-            }
-
-            if(@Json.Serialize(isFrameworkTest) && @Json.Serialize(Model.JQueryVersion) === "1") {
                 return;
             }
 

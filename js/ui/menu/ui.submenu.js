@@ -42,7 +42,6 @@ var Submenu = ContextMenu.inherit({
 
     _getOverlayOptions: function() {
         return extend(this.callBase(), {
-            closeOnTargetScroll: false,
             onPositioned: this._overlayPositionedActionHandler.bind(this)
         });
     },

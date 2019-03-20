@@ -8,6 +8,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     iteratorUtils = require("../../core/utils/iterator"),
+    isFunction = require("../../core/utils/type").isFunction,
     Action = require("../../core/action"),
     Guid = require("../../core/guid"),
     domUtils = require("../../core/utils/dom"),
@@ -20,6 +21,7 @@ var $ = require("../../core/renderer"),
     selectors = require("../widget/selectors"),
     messageLocalization = require("../../localization/message"),
     holdEvent = require("../../events/hold"),
+    compileGetter = require("../../core/utils/data").compileGetter,
     clickEvent = require("../../events/click"),
     contextMenuEvent = require("../../events/contextmenu"),
     BindableTemplate = require("../widget/bindable_template");
@@ -227,6 +229,7 @@ var CollectionWidget = Widget.inherit({
             */
             focusedElement: null,
 
+            displayExpr: undefined,
             disabledExpr: function(data) { return data ? data.disabled : undefined; },
             visibleExpr: function(data) { return data ? data.visible : undefined; }
 
@@ -256,28 +259,47 @@ var CollectionWidget = Widget.inherit({
     },
 
     _init: function() {
+        this._compileDisplayGetter();
         this.callBase();
 
         this._cleanRenderedItems();
         this._refreshDataSource();
     },
 
+    _compileDisplayGetter: function() {
+        var displayExpr = this.option("displayExpr");
+        this._displayGetter = displayExpr ? compileGetter(this.option("displayExpr")) : undefined;
+    },
+
     _initTemplates: function() {
         this._initItemsFromMarkup();
 
         this.callBase();
+        this._initDefaultItemTemplate();
+    },
 
+    _initDefaultItemTemplate: function() {
+        var fieldsMap = this._getFieldsMap();
         this._defaultTemplates["item"] = new BindableTemplate((function($container, data) {
             if(isPlainObject(data)) {
                 this._prepareDefaultItemTemplate(data, $container);
             } else {
-                $container.text(String(data));
+                if(fieldsMap && isFunction(fieldsMap.text)) {
+                    data = fieldsMap.text(data);
+                }
+                $container.text(String(commonUtils.ensureDefined(data, "")));
             }
-        }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"));
+        }).bind(this), this._getBindableFields(), this.option("integrationOptions.watchMethod"), fieldsMap);
     },
 
     _getBindableFields: function() {
         return ["text", "html"];
+    },
+
+    _getFieldsMap: function() {
+        if(this._displayGetter) {
+            return { text: this._displayGetter };
+        }
     },
 
     _prepareDefaultItemTemplate: function(data, $container) {
@@ -315,11 +337,13 @@ var CollectionWidget = Widget.inherit({
 
     _prepareItemTemplate: function($item) {
         var templateId = ITEM_TEMPLATE_ID_PREFIX + new Guid();
-        var templateOptions = "dxTemplate: { name: \"" + templateId + "\" }";
+        var $template = $item
+            .detach()
+            .clone()
+            .removeAttr("data-options")
+            .addClass(TEMPLATE_WRAPPER_CLASS);
 
-        $item.detach().clone()
-            .attr("data-options", templateOptions)
-            .data("options", templateOptions).appendTo(this.$element());
+        this._saveTemplate(templateId, $template);
 
         return templateId;
     },
@@ -579,6 +603,11 @@ var CollectionWidget = Widget.inherit({
             case "focusedElement":
                 this._removeFocusedItem(args.previousValue);
                 this._setFocusedItem($(args.value));
+                break;
+            case "displayExpr":
+                this._compileDisplayGetter();
+                this._initDefaultItemTemplate();
+                this._invalidate();
                 break;
             case "visibleExpr":
             case "disabledExpr":

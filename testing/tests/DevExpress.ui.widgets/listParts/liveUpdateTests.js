@@ -8,7 +8,7 @@ QUnit.module("live update", {
         this.itemRenderedSpy = sinon.spy();
         this.itemDeletedSpy = sinon.spy();
         this.createList = (options) => {
-            return $("#templated-list").dxList($.extend({
+            return $("#templated-list").dxList($.extend(true, {
                 dataSource: {
                     paginate: false,
                     pushAggregationTimeout: 0,
@@ -45,8 +45,37 @@ QUnit.module("live update", {
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, "check added item");
     });
 
+    QUnit.test("insert item should not work if paginate", function(assert) {
+        var store = this.createList({ dataSource: { paginate: true } }).getDataSource().store();
+
+        var pushData = [{ type: "insert", data: { a: "Item 2 Inserted", id: 2 } }];
+        store.push(pushData);
+
+        assert.equal(this.itemRenderedSpy.callCount, 0, "item is not inserted after push");
+    });
+
+    QUnit.test("insert item should not work if grouping", function(assert) {
+        var store = this.createList({ dataSource: { group: "a" } }).getDataSource().store();
+
+        var pushData = [{ type: "insert", data: { a: "Item 2 Inserted", id: 2 } }];
+        store.push(pushData);
+
+        assert.equal(this.itemRenderedSpy.callCount, 0, "item is inserted after push");
+    });
+
     QUnit.test("insert item to specific position", function(assert) {
         var store = this.createList().getDataSource().store();
+
+        var pushData = [{ type: "insert", data: { a: "Item 2 Inserted", id: 2 }, index: 1 }];
+        store.push(pushData);
+
+        assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after push");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, "check added item");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemIndex, pushData[0].index, "check added index");
+    });
+
+    QUnit.test("insert item to specific position if paginate", function(assert) {
+        var store = this.createList().getDataSource({ dataSource: { paginate: true } }).store();
 
         var pushData = [{ type: "insert", data: { a: "Item 2 Inserted", id: 2 }, index: 1 }];
         store.push(pushData);
@@ -219,6 +248,27 @@ QUnit.module("live update", {
         }).getDataSource();
 
         data[0].a = "Item Updated";
+        dataSource.load();
+
+        assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after reload");
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.a, "Item Updated", "check updated item");
+    });
+
+    QUnit.test("repaintChangesOnly, update field in circular item", function(assert) {
+        var data = [{ a: "Item 0", id: 0 }, { a: "Item 1", id: 1 }];
+
+        data[0].ref = data[0];
+        data[1].ref = data[1];
+
+        var dataSource = this.createList({
+            dataSource: {
+                load: () => data,
+                key: "id"
+            },
+            repaintChangesOnly: true
+        }).getDataSource();
+
+        data[0] = $.extend({}, data[0], { a: "Item Updated" });
         dataSource.load();
 
         assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after reload");
@@ -454,6 +504,43 @@ QUnit.module("live update", {
 
         assert.equal(this.itemRenderedSpy.callCount, 1, "only one item is updated after reload");
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.a, "Item Updated", "check updated item");
+    });
+
+    QUnit.test("repaintChangesOnly, circular item is inserted if there is no key", function(assert) {
+        var store = this.createList({
+            repaintChangesOnly: true,
+            dataSource: {
+                paginate: false,
+                pushAggregationTimeout: 0,
+                load: () => [{ id: 1, text: "text 1" }],
+                key: null
+            },
+        }).getDataSource().store();
+
+        var circularItem = { id: 200, text: "text " + 200 };
+        circularItem.child = circularItem;
+        store.push([{ type: "insert", data: circularItem, index: 0 }]);
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, circularItem, "check inserted item");
+    });
+
+    QUnit.test("repaintChangesOnly, circular item is updated if there is no key", function(assert) {
+        var items = [{ a: "Item 0", id: 0 }, { a: "Item 1", id: 1 }];
+
+        items[0].ref = items[0];
+        items[1].ref = items[1];
+
+        var store = this.createList({
+            repaintChangesOnly: true,
+            dataSource: {
+                paginate: false,
+                pushAggregationTimeout: 0,
+                load: () => items,
+                key: null
+            }
+        }).getDataSource().store();
+
+        store.push([{ type: "update", key: items[1], data: { a: "Updated" }, index: 0 }]);
+        assert.equal(this.itemRenderedSpy.firstCall.args[0].itemData.a, "Updated", "check updated item");
     });
 
     QUnit.test("onContentReady called after push", function(assert) {

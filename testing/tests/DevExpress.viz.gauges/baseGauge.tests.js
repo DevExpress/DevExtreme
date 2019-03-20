@@ -13,7 +13,8 @@ var $ = require("jquery"),
     rendererModule = require("viz/core/renderers/renderer"),
     tooltipModule = require("viz/core/tooltip"),
     translator1DModule = require("viz/translators/translator1d"),
-    ThemeManager = require("viz/gauges/theme_manager"),
+    themeManagerModule = require("viz/gauges/theme_manager"),
+    ThemeManager = themeManagerModule.ThemeManager,
     Tracker = require("viz/gauges/tracker");
 
 registerComponent("dxBaseGauge", dxBaseGauge);
@@ -50,6 +51,10 @@ rendererModule.Renderer = sinon.spy(function() {
     return currentTest().renderer;
 });
 
+themeManagerModule.ThemeManager = sinon.spy(function() {
+    return currentTest().themeManager;
+});
+
 tooltipModule.Tooltip = function(parameters) {
     currentTest().tooltip = new StubTooltip(parameters);
     return currentTest().tooltip;
@@ -60,10 +65,6 @@ titleModule.Title = function() {
 };
 
 $.extend(factory, {
-    ThemeManager: sinon.spy(function() {
-        return currentTest().themeManager;
-    }),
-
     createTranslator: sinon.spy(function() {
         return currentTest().translator;
     }),
@@ -120,8 +121,7 @@ var environment = {
         });
 
         rendererModule.Renderer.reset();
-
-        factory.ThemeManager.reset();
+        themeManagerModule.ThemeManager.reset();
         factory.createTranslator.reset();
         factory.createTracker.reset();
     },
@@ -149,7 +149,7 @@ QUnit.test("Components creation", function(assert) {
     });
 
     assert.deepEqual(factory.createTranslator.lastCall.args, [], "translator");
-    assert.deepEqual(factory.ThemeManager.lastCall.args, [], "theme manager");
+    assert.deepEqual(this.themeManager.ctorArgs, [], "theme manager");
     assert.deepEqual(factory.createTracker.lastCall.args, [{ renderer: this.renderer, container: this.renderer.root }], "tracker");
     // assert.deepEqual(factory.createLayoutManager.lastCall.args, [], "layout manager");
 
@@ -164,7 +164,6 @@ QUnit.test("Components disposing", function(assert) {
     this.$container.remove();
 
     assert.ok(this.renderer.dispose.called, "renderer"); // Should it be tester here?
-    assert.deepEqual(this.themeManager.stub("dispose").lastCall.args, [], "theme manager");
     assert.deepEqual(this.tracker.stub("dispose").lastCall.args, [], "tracker");
     assert.deepEqual(this.title.stub("dispose").lastCall.args, [], "title");
 });
@@ -306,7 +305,8 @@ QUnit.test("T305684. Title is single text", function(assert) {
     });
     vizMocks.forceThemeOptions(this.themeManager);
 
-    assert.deepEqual(this.title.update.getCall(0).args[0], { text: "Test", subtitle: {} });
+    assert.equal(this.title.update.getCall(0).args[1], "Test");
+    assert.strictEqual(this.title.update.getCall(0).args[0], this.themeManager.theme("title"));
 });
 
 QUnit.test("T305684. Subtitle is single text", function(assert) {
@@ -318,7 +318,8 @@ QUnit.test("T305684. Subtitle is single text", function(assert) {
     });
     vizMocks.forceThemeOptions(this.themeManager);
 
-    assert.deepEqual(this.title.update.getCall(0).args[0], { text: "Test", subtitle: { text: "Test2" } });
+    assert.deepEqual(this.title.update.getCall(0).args[1], { text: "Test", subtitle: "Test2" });
+    assert.strictEqual(this.title.update.getCall(0).args[0], this.themeManager.theme("title"));
 });
 
 QUnit.test("Title is not rendered when text is empty", function(assert) {

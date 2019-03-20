@@ -90,7 +90,7 @@ var DataAdapter = Class.inherit({
                 return;
             }
 
-            if(!!node.internalFields[property]) {
+            if(node.internalFields[property]) {
                 if(property === EXPANDED || that.options.multipleSelection) {
                     array.push(node.internalFields.key);
                 } else {

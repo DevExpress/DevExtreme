@@ -4,34 +4,18 @@ var noop = require("../../core/utils/common").noop,
     BaseThemeManager = require("../core/base_theme_manager").BaseThemeManager,
     _isString = typeUtils.isString,
     _isDefined = typeUtils.isDefined,
-    _normalizeEnum = require("../core/utils").normalizeEnum,
-
-    FONT = "font",
-    COMMON_AXIS_SETTINGS = "commonAxisSettings",
-
-    PIE_FONT_FIELDS = ["legend." + FONT, "title." + FONT, "title.subtitle." + FONT, "tooltip." + FONT, "loadingIndicator." + FONT, "export." + FONT, "commonSeriesSettings.label." + FONT],
-    POLAR_FONT_FIELDS = PIE_FONT_FIELDS.concat([COMMON_AXIS_SETTINGS + ".label." + FONT, COMMON_AXIS_SETTINGS + ".title." + FONT]),
-    CHART_FONT_FIELDS = POLAR_FONT_FIELDS.concat(["crosshair.label." + FONT]),
-
-    chartToFontFieldsMap = {
-        pie: PIE_FONT_FIELDS,
-        chart: CHART_FONT_FIELDS,
-        polar: POLAR_FONT_FIELDS
-    };
+    _normalizeEnum = require("../core/utils").normalizeEnum;
 
 var ThemeManager = BaseThemeManager.inherit((function() {
-    var ctor = function(options, themeGroupName) {
+    var ctor = function(params) {
         var that = this;
 
         that.callBase.apply(that, arguments);
 
-        options = options || {};
+        var options = params.options || {};
         that._userOptions = options;
         that._mergeAxisTitleOptions = [];
         that._multiPieColors = {};
-        that._themeSection = themeGroupName;
-
-        that._fontFields = chartToFontFieldsMap[themeGroupName];
 
         // This is required because chart calls "_getOption" during "_init" stage
         // TODO: Remove it when chart stops doing that

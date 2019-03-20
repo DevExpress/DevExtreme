@@ -688,6 +688,30 @@ QUnit.test("Pointer up on navigate button", function(assert) {
     assert.equal(currentDirection, "prev");
 });
 
+// T712224
+QUnit.test("Pointer up and click on navigate button", function(assert) {
+    var $pager = $("#container").dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }),
+        instance = $pager.dxPager("instance"),
+        $button,
+        nextPageCalls = [];
+
+    instance.option("pageIndex", 8);
+    instance._nextPage = function(direction) {
+        nextPageCalls.push(direction);
+    };
+
+    $button = $(".dx-next-button");
+
+    // act
+    $($button).trigger("dxpointerup");
+    $($button).trigger("dxclick");
+
+    $($button).trigger("dxclick");
+
+    // assert
+    assert.deepEqual(nextPageCalls, ["next", "next"]);
+});
+
 QUnit.test("Prev button is disabled when first page is chosen ", function(assert) {
     var $pager = $("#container").dxPager({ maxPagesCount: 8, pageCount: 10, pageSizes: [5, 10, 20], showNavigationButtons: true }),
         isPageChanged,

@@ -1085,8 +1085,8 @@ QUnit.test("Set state", function(assert) {
 });
 
 QUnit.test("Arrange", function(assert) {
-    var getNextColor = sinon.stub(),
-        createPalette = sinon.stub().returns({ getNextColor: getNextColor }),
+    var generateColors = sinon.stub(),
+        createPalette = sinon.stub().returns({ generateColors: generateColors }),
         set = sinon.spy();
     this.context.name = "test-name";
     this.context.grouping = {};
@@ -1094,9 +1094,8 @@ QUnit.test("Arrange", function(assert) {
         themeManager: { createPalette: createPalette },
         dataExchanger: { set: set }
     };
-    getNextColor.onCall(0).returns("c1");
-    getNextColor.onCall(1).returns("c2");
-    getNextColor.onCall(2).returns("c3");
+
+    generateColors.returns(["c1", "c2", "c3"]);
     this.context.settings = { palette: "test-palette" };
 
     pointPieStrategy.arrange(this.context, [
@@ -1106,10 +1105,31 @@ QUnit.test("Arrange", function(assert) {
     ]);
 
     assert.deepEqual(createPalette.lastCall.args, ["test-palette", { useHighlight: true, extensionMode: "alternate" }], "palette");
-    assert.strictEqual(getNextColor.callCount, 3, "get color");
+    assert.strictEqual(generateColors.callCount, 1, "generate colors");
     assert.deepEqual(this.context.settings._colors, ["c1", "c2", "c3"], "colors");
     assert.deepEqual(this.context.grouping, { color: { callback: noop, field: "", partition: [], values: [] } }, "grouping");
     assert.deepEqual(set.lastCall.args, ["test-name", "color", { partition: [], values: ["c1", "c2", "c3"] }], "data is set");
+});
+
+// T712894
+QUnit.test("Refresh. All values is zero", function(assert) {
+    var figure = { pie: new vizMocks.Element(), border: new vizMocks.Element() };
+    this.context.settings = { dataField: "data-field" };
+
+    pointPieStrategy.refresh(this.context, figure, "test-data",
+        {
+            attribute: function() {
+                return this.values;
+            },
+            values: [0, 0, 0, 0]
+        },
+        { _colors: ["c1", "c2", "c3"], size: 8 });
+
+    assert.strictEqual(this.renderer.arc.callCount, 4, "count");
+    assert.deepEqual(this.renderer.arc.getCall(0).args, [0, 0, 0, 4, 90, 180], "arc 1 is created");
+    assert.deepEqual(this.renderer.arc.getCall(1).args, [0, 0, 0, 4, 180, 270], "arc 2 is created");
+    assert.deepEqual(this.renderer.arc.getCall(2).args, [0, 0, 0, 4, 270, 360], "arc 3 is created");
+    assert.deepEqual(this.renderer.arc.getCall(3).args, [0, 0, 0, 4, 360, 450], "arc 4 is created");
 });
 
 QUnit.module("Point image strategy", environment);

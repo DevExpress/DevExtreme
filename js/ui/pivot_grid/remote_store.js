@@ -7,13 +7,14 @@ import { when, Deferred } from "../../core/utils/deferred";
 import pivotGridUtils, { getFiltersByPath } from "./ui.pivot_grid.utils";
 import { deserializeDate } from "../../core/utils/date_serialization";
 
-function createGroupingOptions(dimensionOptions) {
+function createGroupingOptions(dimensionOptions, useSortOrder) {
     var groupingOptions = [];
 
     each(dimensionOptions, function(index, dimensionOption) {
         groupingOptions.push({
             selector: dimensionOption.dataField,
             groupInterval: dimensionOption.groupInterval,
+            desc: useSortOrder && dimensionOption.sortOrder === "desc",
             isExpanded: index < dimensionOptions.length - 1
         });
     });
@@ -138,15 +139,25 @@ function mergeFilters(filter1, filter2) {
     return mergedFilter;
 }
 
-function createLoadOptions(options, externalFilterExpr) {
+function createLoadOptions(options, externalFilterExpr, hasRows) {
     var filterExpressions = createFilterExpressions(options.filters),
-        groupingOptions = createGroupingOptions(options.rows).concat(createGroupingOptions(options.columns)),
+        groupingOptions = createGroupingOptions(options.rows, options.rowTake).concat(createGroupingOptions(options.columns, options.columnTake)),
         loadOptions = {
             groupSummary: [],
             totalSummary: [],
             group: groupingOptions.length ? groupingOptions : undefined,
             take: groupingOptions.length ? undefined : 1
         };
+
+    if(options.rows.length && options.rowTake) {
+        loadOptions.skip = options.rowSkip;
+        loadOptions.take = options.rowTake;
+        loadOptions.requireGroupCount = true;
+    } else if(options.columns.length && options.columnTake && !hasRows) {
+        loadOptions.skip = options.columnSkip;
+        loadOptions.take = options.columnTake;
+        loadOptions.requireGroupCount = true;
+    }
 
     if(externalFilterExpr) {
         filterExpressions = mergeFilters(filterExpressions, externalFilterExpr);
@@ -174,13 +185,13 @@ function forEachGroup(data, callback, level) {
     data = data || [];
     level = level || 0;
 
-    each(data, function(_, group) {
+    for(let i = 0; i < data.length; i++) {
+        let group = data[i];
         callback(group, level);
-
-        if(group.items && group.items.length) {
+        if(group && group.items && group.items.length) {
             forEachGroup(group.items, callback, level + 1);
         }
-    });
+    }
 }
 
 function setValue(valuesArray, value, rowIndex, columnIndex, dataIndex) {
@@ -213,6 +224,12 @@ function parseResult(data, total, descriptions, result) {
         each(total.summary, function(index, summary) {
             setValue(result.values, summary, result.grandTotalRowIndex, result.grandTotalColumnIndex, index);
         });
+    }
+
+    if(total && total.groupCount >= 0) {
+        var skip = descriptions.rows.length ? descriptions.rowSkip : descriptions.columnSkip;
+        data = [...Array(skip)].concat(data);
+        data.length = total.groupCount;
     }
 
     function getItem(dataItem, dimensionName, path, level, field) {
@@ -262,23 +279,29 @@ function parseResult(data, total, descriptions, result) {
         }
 
         if(level >= descriptions.rows.length) {
-            columnPath[columnLevel] = item.key + "";
-
-            columnItem = getItem(item, "column", columnPath, columnLevel, descriptions.columns[columnPath.length - 1]);
-            rowItem = rowHash[rowPath.slice(0, rowLevel + 1).join("/")];
+            if(item) {
+                columnPath[columnLevel] = item.key + "";
+                columnItem = getItem(item, "column", columnPath, columnLevel, descriptions.columns[columnPath.length - 1]);
+                rowItem = rowHash[rowPath.slice(0, rowLevel + 1).join("/")];
+            } else {
+                result.columns.push({});
+            }
         } else {
-            rowPath[rowLevel] = item.key + "";
-            rowItem = getItem(item, "row", rowPath, rowLevel);
-            columnItem = columnHash[columnPath.slice(0, columnLevel + 1).join("/")];
+            if(item) {
+                rowPath[rowLevel] = item.key + "";
+                rowItem = getItem(item, "row", rowPath, rowLevel);
+                columnItem = columnHash[columnPath.slice(0, columnLevel + 1).join("/")];
+            } else {
+                result.rows.push({});
+            }
         }
 
         var currentRowIndex = rowItem && rowItem.index || result.grandTotalRowIndex,
             currentColumnIndex = columnItem && columnItem.index || result.grandTotalColumnIndex;
 
-        each(item.summary || [], function(i, summary) {
+        each(item && item.summary || [], function(i, summary) {
             setValue(result.values, summary, currentRowIndex, currentColumnIndex, i);
         });
-
     });
 
     return result;
@@ -476,7 +499,7 @@ module.exports = Class.inherit((function() {
 
             each(requestsData, function(_, dataItem) {
                 deferreds.push(that._store.load(
-                    createLoadOptions(dataItem, that.filter())
+                    createLoadOptions(dataItem, that.filter(), options.rows.length)
                 ));
             });
 

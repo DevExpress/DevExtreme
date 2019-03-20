@@ -402,12 +402,15 @@ QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert)
 
 QUnit.module("Wheel zooming", environment);
 
-QUnit.test("[T684665] Chart - zooming-out with multiple value axes leads to wrong axes synchronisation", function(assert) {
+QUnit.test("[T684665] Chart - zooming-out with multiple value axes leads to wrong axes synchronization", function(assert) {
     const chart = this.createChart({
         zoomAndPan: {
             valueAxis: "both",
             argumentAxis: "none",
             dragToZoom: true
+        },
+        size: {
+            height: 500
         },
         scrollBar: { visible: true },
         valueAxis: [
@@ -649,8 +652,10 @@ QUnit.test("zoom value axis", function(assert) {
     assert.equal(onZoomEnd.callCount, 1);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, valueAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 0.9, endValue: 4.2 });
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 1, endValue: 4 });
-    assert.equal(onZoomEnd.getCall(0).args[0].shift, -0.05);
+    const zoomEndRange = onZoomEnd.getCall(0).args[0].range;
+    assert.roughEqual(zoomEndRange.startValue, 1, 0.1);
+    assert.roughEqual(zoomEndRange.endValue, 4, 0.1);
+    assert.roughEqual(onZoomEnd.getCall(0).args[0].shift, -0.05, 0.01);
     assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1.1);
 });
 
@@ -699,6 +704,10 @@ QUnit.test("Multiaxes, zoom axes only in one pane", function(assert) {
                 valueAxis: "zoom",
                 allowMouseWheel: true
             },
+            commonAxisSettings: {
+                valueMarginsEnabled: false,
+                endOnTick: false
+            },
             panes: [
                 { name: "p1" },
                 { name: "p2" }
@@ -737,7 +746,7 @@ QUnit.test("Multiaxes, zoom axes only in one pane", function(assert) {
 
     assert.equal(onZoomEnd.getCall(1).args[0].axis, valueAxis2);
     assert.deepEqual(onZoomEnd.getCall(1).args[0].previousRange, { startValue: 1.8, endValue: 8.4 });
-    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 2, endValue: 8 });
+    assert.deepEqual(onZoomEnd.getCall(1).args[0].range, { startValue: 2, endValue: 8 }, "axis 2 onZoomEnd range");
 });
 
 QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
@@ -784,7 +793,9 @@ QUnit.test("Multiaxes, zoom axes only in one pane. Rotated", function(assert) {
     assert.equal(onZoomEnd.callCount, 1);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, valueAxis3);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, { startValue: 5.8, endValue: 14.6 });
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 6, endValue: 14 });
+    const zoomEndRange = onZoomEnd.getCall(0).args[0].range;
+    assert.roughEqual(zoomEndRange.startValue, 6, 0.1);
+    assert.roughEqual(zoomEndRange.endValue, 14, 0.1);
 });
 
 QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert) {
@@ -824,6 +835,41 @@ QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert)
     });
 });
 
+QUnit.test("Multiple panes. Cancel argument mousewheel zooming on zoomStart", function(assert) {
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 3,
+                endValue: 7
+            }
+        },
+        panes: [
+            { name: "p1" },
+            { name: "p2" }
+        ],
+        series: [
+            { pane: "p1" },
+            { pane: "p2" }
+        ],
+        zoomAndPan: {
+            argumentAxis: "both"
+        },
+        onZoomStart(e) {
+            e.cancel = true;
+        }
+    });
+
+    // act
+    this.pointer.start({ x: 200, y: 250 }).wheel(10);
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 3, endValue: 7 });
+    });
+});
+
 QUnit.module("Wheel zooming. Mouse on axis", environment);
 
 QUnit.test("Mouse over value axis - zoom only value axes in one pane axes", function(assert) {
@@ -837,6 +883,10 @@ QUnit.test("Mouse over value axis - zoom only value axes in one pane axes", func
                 argumentAxis: "zoom",
                 valueAxis: "zoom",
                 allowMouseWheel: true
+            },
+            commonAxisSettings: {
+                valueMarginsEnabled: false,
+                endOnTick: false
             },
             panes: [
                 { name: "p1" },
@@ -1287,6 +1337,42 @@ QUnit.test("Multiple panes. Check argument axes visual ranges", function(assert)
     });
 });
 
+QUnit.test("Multiple panes. Cancel zooming on zoomStart", function(assert) {
+    const chart = this.createChart({
+        size: {
+            height: 610
+        },
+        argumentAxis: {
+            visualRange: {
+                startValue: 2,
+                endValue: 10
+            }
+        },
+        zoomAndPan: {
+            argumentAxis: "zoom",
+            dragToZoom: true
+        },
+        panes: [
+            { name: "p1" },
+            { name: "p2" }
+        ],
+        series: [
+            { pane: "p1" },
+            { pane: "p2" }
+        ],
+        onZoomStart(e) {
+            e.cancel = true;
+        }
+    });
+
+    // act
+    this.pointer.start({ x: 200, y: 250 }).dragStart().drag(400, 50).dragEnd();
+
+    chart._argumentAxes.forEach(axis => {
+        assert.deepEqual(axis.visualRange(), { startValue: 2, endValue: 10 });
+    });
+});
+
 QUnit.module("Shutter zoom. Test shutter rendering", environment);
 
 QUnit.test("Zoom argument axis", function(assert) {
@@ -1482,7 +1568,7 @@ QUnit.test("With panKey pressed drag action zooms chart", function(assert) {
 
 QUnit.module("Touch devices", environment);
 
-QUnit.test("[T684665] Chart - zooming-out with multiple value axes leads to wrong axes synchronisation", function(assert) {
+QUnit.test("[T684665] Chart - zooming-out with multiple value axes leads to wrong axes synchronization", function(assert) {
     const chart = this.createChart({
         zoomAndPan: {
             valueAxis: "both",

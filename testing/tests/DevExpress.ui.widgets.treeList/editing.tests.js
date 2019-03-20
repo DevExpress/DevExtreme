@@ -701,6 +701,28 @@ QUnit.test("Add row when 'keyExpr' and 'parentIdExpr' options are specified as f
     assert.strictEqual(this.getVisibleRows()[0].data.parentId, 0, "parentId of an inserted row");
 });
 
+QUnit.test("TreeList should show error message on adding row if dataSource is not specified (T711831)", function(assert) {
+    // arrange
+    var errorCode,
+        widgetName;
+
+    this.options.dataSource = undefined;
+    this.setupTreeList();
+
+    this.rowsView.render($('#treeList'));
+    this.getController("data").fireError = function() {
+        errorCode = arguments[0];
+        widgetName = arguments[1];
+    };
+
+    // act
+    this.addRow();
+
+    // assert
+    assert.equal(errorCode, "E1052", "error code");
+    assert.equal(widgetName, "dxTreeList", "widget name");
+});
+
 QUnit.test("Set add button for a specific row", function(assert) {
     // arrange
     var $rowElements,

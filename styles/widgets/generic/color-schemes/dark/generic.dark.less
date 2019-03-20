@@ -628,12 +628,17 @@
 @gallery-navbutton-border-radius: @base-border-radius - 4px;
 
 // HtmlEditor
+@htmleditor-border-color: @base-border-color;
+@htmleditor-invalid-border-color: @base-invalid-color;
+@htmleditor-invalid-faded-border-color: @base-invalid-faded-border-color;
 @htmleditor-toolbar-border-color: @base-border-color;
 @htmleditor-normal-format-active-bg: lighten(@base-element-bg, 10%);
 @htmleditor-default-format-active-bg: darken(@base-accent, 10%);
 @htmleditor-danger-format-active-bg: darken(@base-danger, 10%);
 @htmleditor-success-format-active-bg: darken(@base-success, 10%);
 @htmleditor-variable-bg: fade(@base-accent, 15%);
+@htmleditor-resize-frame-border-color: @base-accent;
+@htmleditor-resize-handle-bg: @base-accent;
 
 // List
 /**
@@ -815,7 +820,6 @@
 // Lookup
 
 @lookup-icon-color: @base-icon-color;
-@lookup-validation-message-color: @base-invalid-color;
 
 // Selectbox
 /**
@@ -2118,49 +2122,6 @@
 @colorbox-preview-empty-bg: url(images/widgets/generic/color-schemes/dark/colorbox/nocolor.png);
 
 @calendar-cell-empty-bg: url(images/widgets/generic/color-schemes/dark/calendar/empty-cell.png) center center no-repeat;
-
-// SPA
-
-// Desktop
-
-@desktop-layout-main-menu-bg: @base-accent;
-/**
-* @name 10. Toolbar major color
-* @type color
-* @group layouts.desktop
-*/
-@desktop-layout-menu-color: darken(@base-text-color, 73.8%);
-@desktop-layout-menu-selected-bg: lighten(@base-bg, 6.3%);
-
-/**
-* @name 10. Toolbar item hover background color
-* @type color
-* @group layouts.desktop
-*/
-@desktop-layout-menu-hover-bg: darken(@desktop-layout-main-menu-bg, 10%);
-
-/**
- * @name 10. Toolbar border color
- * @type color
- * @group layouts.desktop
- */
-@desktop-layout-toolbar-border-color: lighten(@base-border-color, 2.7%);
-
-/**
-* @name 10. Copyright text color
-* @type color
-* @group layouts.desktop
-*/
-@desktop-layout-copyright-color: darken(@base-text-color, 30.5%);
-
-// Master-detail
-
-/**
-* @name 10. Splitter color
-* @type color
-* @group layouts.split
-*/
-@desktop-splitlayout-border-color: @desktop-layout-toolbar-border-color;
 
 // Fieldset
 

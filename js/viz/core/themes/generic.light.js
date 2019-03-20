@@ -128,7 +128,25 @@ registerTheme({
         columnCount: 0,
         rowCount: 0,
         columnItemSpacing: 20,
-        rowItemSpacing: 8
+        rowItemSpacing: 8,
+        title: {
+            backgroundColor: WHITE,
+            margin: {
+                left: 0,
+                bottom: 14,
+                right: 0,
+                top: 0
+            },
+            font: {
+                size: 18,
+                weight: 200
+            },
+            subtitle: {
+                font: {
+                    size: 14
+                }
+            }
+        }
     },
     "chart:common": {
         animation: {
@@ -248,13 +266,15 @@ registerTheme({
         tick: {
             visible: false,
             width: 1,
-            length: 8
+            length: 8,
+            shift: 0
         },
         minorTick: {
             visible: false,
             width: 1,
             opacity: 0.3,
-            length: 8
+            length: 8,
+            shift: 0
         },
         stripStyle: {
             paddingLeftRight: 10,
@@ -620,7 +640,8 @@ registerTheme({
                 font: {
                     size: 16
                 },
-                margin: 6
+                margin: 6,
+                alignment: CENTER
             },
             constantLineStyle: {
                 paddingLeftRight: 10,
@@ -669,6 +690,14 @@ registerTheme({
             },
             constantLines: []
         },
+        annotations: {
+            imageOptions: {
+                location: "full"
+            },
+            labelOptions: {
+                font: {}
+            }
+        },
         argumentAxis: {
             endOnTick: false,
             workWeek: [1, 2, 3, 4, 5]
@@ -700,10 +729,12 @@ registerTheme({
             width: 10
         },
         adjustOnZoom: true,
+        autoHidePointMarkers: true,
         rotated: false,
         zoomingMode: NONE,
         scrollingMode: NONE,
         synchronizeMultiAxes: true,
+        stickyHovering: true,
         equalBarWidth: true,
         barGroupPadding: 0.3,
         minBubbleSize: 12,
@@ -909,6 +940,7 @@ registerTheme({
         },
         _circular: {
             scale: {
+                scaleDivisionFactor: 17,
                 orientation: OUTSIDE,
                 label: {
                     indentFromTick: 10
@@ -949,6 +981,7 @@ registerTheme({
         },
         _linear: {
             scale: {
+                scaleDivisionFactor: 25,
                 horizontalOrientation: RIGHT,
                 verticalOrientation: BOTTOM,
                 label: {
@@ -993,12 +1026,16 @@ registerTheme({
         backgroundColor: "#e0e0e0",
         relativeInnerRadius: 0.3,
         barSpacing: 4,
+        resolveLabelOverlapping: "hide",
         label: {
             indent: 20,
             connectorWidth: 2,
             font: {
                 size: 16
             }
+        },
+        legend: {
+            visible: false
         },
         indicator: {
             hasPositiveMeaning: true,
@@ -1022,7 +1059,7 @@ registerTheme({
             showCustomBoundaryTicks: true,
             label: {
                 overlappingBehavior: "hide",
-                alignment: "center",
+                alignment: CENTER,
                 visible: true,
                 topIndent: 7,
                 font: {
@@ -1534,6 +1571,7 @@ registerTheme({
         algorithm: "dynamicSlope",
         neckWidth: 0,
         neckHeight: 0,
+        resolveLabelOverlapping: "shift",
         label: {
             visible: true,
             horizontalAlignment: RIGHT,
@@ -1565,7 +1603,7 @@ registerTheme({
         targetField: 'target',
         weightField: 'weight',
         hoverEnabled: true,
-        alignment: "center",
+        alignment: CENTER,
         adaptiveLayout: {
             width: 80,
             height: 80,

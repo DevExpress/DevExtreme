@@ -71,9 +71,9 @@ var dxSankey = require("../core/base_widget").inherit({
         return { width: 400, height: 400 };
     },
 
-    _createThemeManager: function() {
-        return new ThemeManager();
-    },
+    _themeSection: "sankey",
+
+    _fontFields: ["label.font"],
 
     _optionChangesOrder: ["DATA_SOURCE"],
 
@@ -262,10 +262,6 @@ var dxSankey = require("../core/base_widget").inherit({
             nodeOptions = that._getOption('node'),
             sortData = that._getOption('sortData'),
             layoutBuilder = that._getOption('layoutBuilder', true) || defaultLayoutBuilder,
-            palette = that._themeManager.createPalette(that._getOption("palette", true), {
-                useHighlight: true,
-                extensionMode: that._getOption("paletteExtensionMode", true)
-            }),
             rect = {
                 x: availableRect[0],
                 y: availableRect[1],
@@ -288,7 +284,12 @@ var dxSankey = require("../core/base_widget").inherit({
                 linkOptions = that._getOption("link"),
                 totalNodesNum = layout.nodes
                     .map((item) => { return item.length; })
-                    .reduce((previousValue, currentValue) => { return previousValue + currentValue; }, 0);
+                    .reduce((previousValue, currentValue) => { return previousValue + currentValue; }, 0),
+                palette = that._themeManager.createPalette(that._getOption("palette", true), {
+                    useHighlight: true,
+                    extensionMode: that._getOption("paletteExtensionMode", true),
+                    count: totalNodesNum
+                });
 
             that._nodes = [];
             that._links = [];
@@ -300,7 +301,7 @@ var dxSankey = require("../core/base_widget").inherit({
 
             layout.nodes.forEach((cascadeNodes) => {
                 cascadeNodes.forEach((node) => {
-                    var color = nodeOptions.color || palette.getNextColor(totalNodesNum),
+                    var color = nodeOptions.color || palette.getNextColor(),
                         nodeItem = new Node(that, {
                             id: nodeIdx,
                             color: color,
@@ -416,11 +417,6 @@ var dxSankey = require("../core/base_widget").inherit({
     getAllLinks: function() {
         return this._links.slice();
     }
-});
-
-var ThemeManager = require("../core/base_theme_manager").BaseThemeManager.inherit({
-    _themeSection: "sankey",
-    _fontFields: ["loadingIndicator.font", "export.font", "label.font", "title.font", "tooltip.font", "title.subtitle.font"]
 });
 
 require("../../core/component_registrator")("dxSankey", dxSankey);

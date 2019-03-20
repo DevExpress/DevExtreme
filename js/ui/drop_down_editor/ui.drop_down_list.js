@@ -579,6 +579,7 @@ var DropDownList = DropDownEditor.inherit({
             itemTemplate: this._getTemplateByOption("itemTemplate"),
             indicateLoading: false,
             keyExpr: this._getCollectionKeyExpr(),
+            displayExpr: this._displayGetterExpr(),
             groupTemplate: this.option("groupTemplate"),
             tabIndex: null,
             onItemClick: this._listItemClickAction.bind(this),
@@ -742,8 +743,15 @@ var DropDownList = DropDownEditor.inherit({
             return;
         }
 
-        this.option("opened", this._shouldOpenPopup());
-        if(this.option("opened")) {
+        const shouldOpenPopup = this._shouldOpenPopup();
+
+        if(shouldOpenPopup && !this._isFocused()) {
+            return;
+        }
+
+        this.option("opened", shouldOpenPopup);
+
+        if(shouldOpenPopup) {
             this._dimensionChanged();
         }
     },
@@ -854,6 +862,7 @@ var DropDownList = DropDownEditor.inherit({
                 break;
             case "displayExpr":
                 this._renderValue();
+                this._setListOption("displayExpr", this._displayGetterExpr());
                 break;
             case "searchMode":
                 this._validateSearchMode();

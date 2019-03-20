@@ -76,6 +76,11 @@
  */
 
 /**
+ * @typedef {string} Enums.VizPaletteColorSet
+ * @enum {'simpleSet'|'indicatingSet'|'gradientSet'}
+ */
+
+/**
  * @typedef {string} Enums.CircularGaugeElementOrientation
  * @enum {'center'|'inside'|'outside'}
  */
@@ -87,6 +92,11 @@
 
 /**
  * @typedef {string} Enums.ScaleLabelOverlappingBehavior
+ * @enum {'hide'|'none'}
+ */
+
+/**
+ * @typedef {string} Enums.BarGaugeResolveLabelOverlapping
  * @enum {'hide'|'none'}
  */
 
@@ -173,6 +183,11 @@
 /**
  * @typedef {string} Enums.ChartResolveLabelOverlapping
  * @enum {'hide'|'none'|'stack'}
+ */
+
+/**
+ * @typedef {string} Enums.FunnelResolveLabelOverlapping
+ * @enum {'hide'|'none'|'shift'}
  */
 
 /**
@@ -363,6 +378,16 @@
 /**
  * @typedef {string} Enums.GridEditMode
  * @enum {'batch'|'cell'|'row'|'form'|'popup'}
+ */
+
+/**
+ * @typedef {string} Enums.GridEnterKeyAction
+ * @enum {'startEdit'|'moveFocus'}
+ */
+
+/**
+ * @typedef {string} Enums.GridEnterKeyDirection
+ * @enum {'none'|'column'|'row'}
  */
 
 /**
@@ -948,4 +973,9 @@
 /**
  * @typedef {string} Enums.TreeListColumnButtonName
  * @enum {'add'|'cancel'|'delete'|'edit'|'save'|'undelete'}
+ */
+
+/**
+ * @typedef {string} Enums.TreeListFilterMode
+ * @enum {'fullBranch'|'withAncestors'}
  */

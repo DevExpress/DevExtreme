@@ -662,6 +662,22 @@ module.exports = {
                         this.getController("selection").focusedItemIndex(-1);
                     }
                 },
+
+                _applyChange: function(change) {
+                    if(change && change.changeType === "updateSelection") {
+                        change.items.forEach((item, index) => {
+                            var currentItem = this._items[index];
+                            if(currentItem) {
+                                currentItem.isSelected = item.isSelected;
+                                currentItem.values = item.values;
+                            }
+                        });
+                        return;
+                    }
+
+                    return this.callBase.apply(this, arguments);
+                },
+
                 _endUpdateCore: function() {
                     var changes = this._changes;
                     var isUpdateSelection = changes.length > 1 && changes.every(change => change.changeType === "updateSelection");

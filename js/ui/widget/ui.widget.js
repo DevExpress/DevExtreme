@@ -241,10 +241,52 @@ var Widget = DOMComponent.inherit({
         this._extractAnonymousTemplate();
     },
 
-    _extractTemplates: function() {
-        var templates = this.option("integrationOptions.templates"),
-            templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
+    _clearInnerOptionCache: function(optionContainer) {
+        this[optionContainer + "Cache"] = {};
+    },
 
+    _cacheInnerOptions: function(optionContainer, optionValue) {
+        var cacheName = optionContainer + "Cache";
+        this[cacheName] = extend(this[cacheName], optionValue);
+    },
+
+    _getOptionsFromContainer: function({ name, fullName, value }) {
+        var options = {};
+
+        if(name === fullName) {
+            options = value;
+        } else {
+            var option = fullName.split(".").pop();
+            options[option] = value;
+        }
+
+        return options;
+    },
+
+    _innerOptionChanged: function(innerWidget, args) {
+        var options = this._getOptionsFromContainer(args);
+        innerWidget && innerWidget.option(options);
+        this._cacheInnerOptions(args.name, options);
+    },
+
+    _getInnerOptionsCache: function(optionContainer) {
+        return this[optionContainer + "Cache"];
+    },
+
+    _initInnerOptionCache: function(optionContainer) {
+        this._clearInnerOptionCache(optionContainer);
+        this._cacheInnerOptions(optionContainer, this.option(optionContainer));
+    },
+
+    _bindInnerWidgetOptions: function(innerWidget, optionsContainer) {
+        this._options[optionsContainer] = extend({}, innerWidget.option());
+        innerWidget.on("optionChanged", function(e) {
+            this._options[optionsContainer] = extend({}, e.component.option());
+        }.bind(this));
+    },
+
+    _extractTemplates: function() {
+        var templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
         var templatesMap = {};
 
         templateElements.each(function(_, template) {
@@ -266,9 +308,14 @@ var Widget = DOMComponent.inherit({
         each(templatesMap, (function(templateName, value) {
             var deviceTemplate = this._findTemplateByDevice(value);
             if(deviceTemplate) {
-                templates[templateName] = this._createTemplate(deviceTemplate);
+                this._saveTemplate(templateName, deviceTemplate);
             }
         }).bind(this));
+    },
+
+    _saveTemplate: function(name, template) {
+        var templates = this.option("integrationOptions.templates");
+        templates[name] = this._createTemplate(template);
     },
 
     _findTemplateByDevice: function(templates) {
@@ -649,6 +696,10 @@ var Widget = DOMComponent.inherit({
     _hasFocusClass: function(element) {
         var $focusTarget = $(element || this._focusTarget());
         return $focusTarget.hasClass(FOCUSED_STATE_CLASS);
+    },
+
+    _isFocused: function() {
+        return this._hasFocusClass();
     },
 
     _attachKeyboardEvents: function() {

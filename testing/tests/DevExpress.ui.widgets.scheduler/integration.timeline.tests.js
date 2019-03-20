@@ -131,6 +131,19 @@ QUnit.test("Scheduler should update scroll position if appointment is not visibl
     }
 });
 
+QUnit.test("getEndViewDate should return correct value on timelineMonth view DST date (T720694)", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2019, 2, 5),
+        views: ["timelineMonth"],
+        currentView: "timelineMonth",
+        dataSource: []
+    });
+
+    var workSpace = this.instance.getWorkSpace();
+
+    assert.deepEqual(workSpace.getEndViewDate(), new Date(2019, 2, 31, 23, 59), "End view date is OK");
+});
+
 QUnit.test("Scheduler should not update scroll position if appointment is visible, timeline month view ", function(assert) {
     this.createInstance({
         firstDayOfWeek: 1,

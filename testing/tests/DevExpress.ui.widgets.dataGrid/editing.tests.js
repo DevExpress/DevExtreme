@@ -37,6 +37,7 @@ import { MockColumnsController, MockDataController, setupDataGridModules, getCel
 import domUtils from "core/utils/dom";
 import browser from "core/utils/browser";
 import typeUtils from "core/utils/type";
+import commonUtils from "core/utils/common";
 import config from "core/config";
 import errors from "ui/widget/ui.errors";
 import devices from "core/devices";
@@ -2549,6 +2550,29 @@ QUnit.testInActiveWindow("Focus overlay should not be shown in batch editing mod
     assert.notOk($testElement.find(".dx-datagrid-focus-overlay").is(":visible"), "not visible focus overlay");
 });
 
+// T713844
+QUnit.test("Set editor mode via editorOptions", function(assert) {
+    // arrange
+    var that = this,
+        textEditor,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'batch'
+    };
+    that.columns[0].editorOptions = { mode: "password" };
+    rowsView.render($testElement);
+
+    // act
+    $testElement.find('td').first().trigger('dxclick');
+
+    // assert
+    textEditor = $testElement.find('td').first().find(".dx-texteditor").first().dxTextBox("instance");
+    assert.strictEqual(textEditor.option("mode"), "password", "editor mode");
+});
+
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -2783,9 +2807,13 @@ QUnit.test('The "Cancel" button of the Editing form should be clicked once to cl
 
     that.editRow(0);
 
-    // act
+    // assert
     var $editElement = testElement.find('.dx-edit-row');
-    assert.equal($editElement.length, 1);
+    assert.strictEqual($editElement.length, 2);
+    assert.ok($editElement.first().is("tbody"), "wrapping element");
+    assert.ok($editElement.last().is("tr"), "wrapped element");
+
+    // act
     that.cancelEditData();
 
     // assert
@@ -11913,6 +11941,30 @@ QUnit.test("cancelEditData after scrolling if scrolling mode is editing", functi
     assert.equal(testElement.find(".dx-edit-row").length, 0, "edit row is closed");
 });
 
+QUnit.test("DataGrid should show error message on adding row if dataSource is not specified (T711831)", function(assert) {
+    // arrange
+    var errorCode,
+        widgetName;
+
+    this.options.dataSource = undefined;
+
+    this.setupDataGrid();
+
+    this.rowsView.render($('#container'));
+    this.rowsView.resize();
+    this.getController("data").fireError = function() {
+        errorCode = arguments[0];
+        widgetName = arguments[1];
+    };
+
+    // act
+    this.addRow();
+
+    // assert
+    assert.equal(errorCode, "E1052", "error code");
+    assert.equal(widgetName, "dxDataGrid", "widget name");
+});
+
 QUnit.module('Edit Form', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -12955,6 +13007,64 @@ QUnit.test("Switch editing modes between popup and form", function(assert) {
     }
 });
 
+QUnit.test("Add row when row as tbody", function(assert) {
+    this.setupModules(this);
+
+    var that = this,
+        $rowElements,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing.form = {
+        colCount: 4
+    };
+    that.options.rowTemplate = function(container, options) {
+        $("<tbody class=\"dx-row dx-data-row\"><tr><td></td></tr></tbody>").appendTo(container);
+    };
+    rowsView.render($testElement);
+
+    // assert
+    $rowElements = $testElement.find("tbody.dx-row");
+    assert.strictEqual($rowElements.length, 8, "row count");
+
+    // act
+    that.addRow();
+
+    // assert
+    $rowElements = $testElement.find("tbody.dx-row");
+    assert.strictEqual($rowElements.length, 9, "row count");
+    assert.ok($rowElements.eq(0).hasClass("dx-edit-row dx-row-inserted dx-datagrid-edit-form"), "detail form row");
+});
+
+QUnit.test("Edit row when row as tbody", function(assert) {
+    this.setupModules(this);
+
+    var that = this,
+        $rowElements,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing.form = {
+        colCount: 4
+    };
+    that.options.rowTemplate = function(container, options) {
+        $("<tbody class=\"dx-row dx-data-row\"><tr><td></td></tr></tbody>").appendTo(container);
+    };
+    rowsView.render($testElement);
+
+    // assert
+    $rowElements = $testElement.find("tbody.dx-row");
+    assert.strictEqual($rowElements.length, 8, "row count");
+
+    // act
+    that.editRow(0);
+
+    // assert
+    $rowElements = $testElement.find("tbody.dx-row");
+    assert.strictEqual($rowElements.length, 8, "row count");
+    assert.ok($rowElements.eq(0).hasClass("dx-edit-row dx-datagrid-edit-form"), "detail form row");
+});
+
 
 QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {
@@ -13663,6 +13773,35 @@ QUnit.test("No exceptions on editing data when validationRules and editCellTempl
     } finally {
         fx.off = false;
         errors.log.restore();
+    }
+});
+
+// T721896
+QUnit.test("Validator should be rendered if deferUpdate is used in editCellTemplate", function(assert) {
+    // arrange
+    this.columns[0].editCellTemplate = function(container, options) {
+        // deferUpdate is called in template in devextreme-react
+        commonUtils.deferUpdate(() => {
+            $("<div>").appendTo(container).dxTextBox({
+                value: options.value
+            });
+        });
+    };
+
+    this.setupModules(this);
+    this.renderRowsView();
+    fx.off = true;
+
+    try {
+        // act
+        this.editRow(0);
+
+        // assert
+        this.preparePopupHelpers();
+        var $popupContent = this.getEditPopupContent();
+        assert.equal($popupContent.find(".dx-validator").length, 2, "two validators are rendered");
+    } finally {
+        fx.off = false;
     }
 });
 

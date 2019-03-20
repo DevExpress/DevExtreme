@@ -360,7 +360,7 @@ var ColorBox = DropDownEditor.inherit({
     _renderValue: function() {
         var value = this.option("value");
         this.option("text", this.option("editAlphaChannel") ? colorUtils.makeRgba(value) : value);
-        this.callBase();
+        return this.callBase();
     },
 
     _resetInputValue: function() {

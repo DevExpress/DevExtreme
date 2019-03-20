@@ -56,7 +56,11 @@ export default CollectionWidget.inherit({
     },
 
     _isItemEquals: function(item1, item2) {
-        return JSON.stringify(item1) === JSON.stringify(item2);
+        try {
+            return JSON.stringify(item1) === JSON.stringify(item2);
+        } catch(e) {
+            return item1 === item2;
+        }
     },
 
     _partialRefresh: function() {
@@ -75,7 +79,11 @@ export default CollectionWidget.inherit({
 
     _refreshItemsCache: function() {
         if(this.option("repaintChangesOnly")) {
-            this._itemsCache = extend(true, [], this._editStrategy.itemsGetter());
+            try {
+                this._itemsCache = extend(true, [], this._editStrategy.itemsGetter());
+            } catch(e) {
+                this._itemsCache = extend([], this._editStrategy.itemsGetter());
+            }
         }
     },
 
@@ -128,7 +136,15 @@ export default CollectionWidget.inherit({
 
     _modifyByChanges: function(changes, isPartialRefresh) {
         let items = this._editStrategy.itemsGetter(),
-            keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) };
+            keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) },
+            dataSource = this._dataSource,
+            paginate = dataSource && dataSource.paginate(),
+            group = dataSource && dataSource.group();
+
+        if(paginate || group) {
+            changes = changes.filter(item => item.type !== "insert" || item.index !== undefined);
+        }
+
         changes.forEach(change => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
         this._renderedItemsCount = items.length;
         this._refreshItemsCache();

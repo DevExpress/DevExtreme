@@ -444,6 +444,32 @@ QUnit.module("functionality", moduleSetup, () => {
         assert.equal(listItems.length, 0, "items is not yet loaded");
     });
 
+    QUnit.test("Items list should be empty after dataSource reseting", (assert) => {
+        const data = ["one", "two"];
+        const $element = $("#selectBox");
+        const selectBox = $element.dxSelectBox({
+            dataSource: data,
+            searchTimeout: 0,
+            searchEnabled: true
+        }).dxSelectBox("instance");
+
+        assert.deepEqual(selectBox._list.option("items"), data);
+
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input)
+            .focus()
+            .type("one")
+            .change();
+
+        this.clock.tick();
+        selectBox.option("opened", false);
+        selectBox.option("dataSource", null);
+        $element.find(`.${DX_DROP_DOWN_BUTTON}`).trigger("dxclick");
+
+        assert.deepEqual(selectBox._list.option("items"), []);
+    });
+
     QUnit.test("list item obtained focus only after press on control key", (assert) => {
         if(devices.real().platform !== "generic") {
             assert.ok(true, "test does not actual for mobile devices");
@@ -1627,18 +1653,32 @@ QUnit.module("editing", moduleSetup, () => {
         assert.equal(prevented, 1, "defaults prevented on enter key when acceptCustomValue is true");
     });
 
-    QUnit.test("selectBox should restore old value after outside click if custom value is accepted", (assert) => {
+    QUnit.test("selectBox should save custom value after outside click", (assert) => {
+        const $element = $("#selectBox").dxSelectBox({
+                items: ["item 1", "item 2"],
+                acceptCustomValue: true
+            }),
+            $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        $input.val("custom");
+        $(document).trigger("dxpointerdown");
+
+        assert.equal($input.val(), "custom", "initial value");
+    });
+
+    QUnit.test("selectBox should restore initial value after press 'down' and outside click", (assert) => {
         const $element = $("#selectBox").dxSelectBox({
                 items: ["item 1", "item 2"],
                 value: "item 1",
-                acceptCustomValue: true,
-                opened: true
+                acceptCustomValue: true
             }),
             $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS)),
             keyboard = keyboardMock($input);
 
-        keyboard.press("down");
-        $(document).trigger("dxpointerdown");
+        $element.dxSelectBox("instance").option("opened", true);
+        keyboard
+            .press("down")
+            .blur();
 
         assert.equal($input.val(), "item 1", "value has been reverted");
     });
@@ -4449,6 +4489,42 @@ QUnit.module("acceptCustomValue mode", moduleSetup, () => {
             .change();
 
         assert.equal($selectBox.dxSelectBox("option", "value"), "0", "0 value was be set");
+    });
+
+    QUnit.test("custom value should be added on enter key when acceptCustomValue=true", (assert) => {
+        const onCustomItemCreating = sinon.stub().returns("Custom item");
+        const $selectBox = $("#selectBox").dxSelectBox({
+            acceptCustomValue: true,
+            items: ["1", "2", "3"],
+            opened: true,
+            onCustomItemCreating: onCustomItemCreating
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .type("0")
+            .press("enter");
+
+        assert.equal(onCustomItemCreating.callCount, 1, "action was called");
+    });
+
+    QUnit.test("custom value should be added on enter key when acceptCustomValue=true and dd is initially closed", (assert) => {
+        const onCustomItemCreating = sinon.stub().returns("Custom item");
+        const $selectBox = $("#selectBox").dxSelectBox({
+            acceptCustomValue: true,
+            items: ["1", "2", "3"],
+            opened: false,
+            onCustomItemCreating: onCustomItemCreating
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .type("0")
+            .press("enter");
+
+        assert.equal(onCustomItemCreating.callCount, 1, "action was called");
     });
 
     QUnit.test("drop list should contain all items when input value is not empty", (assert) => {

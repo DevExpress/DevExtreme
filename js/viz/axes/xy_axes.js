@@ -24,6 +24,14 @@ const WAVED_LINE_TOP = 0;
 const WAVED_LINE_BOTTOM = 4;
 const WAVED_LINE_LENGTH = 24;
 
+const TICKS_CORRECTIONS = {
+    left: -1,
+    top: -1,
+    right: 0,
+    bottom: 0,
+    center: -0.5
+};
+
 function prepareDatesDifferences(datesDifferences, tickInterval) {
     var dateUnitInterval,
         i;
@@ -338,35 +346,44 @@ module.exports = {
             that._axisPosition = that._orthogonalPositions[position === "top" || position === "left" ? "start" : "end"];
         },
 
-        _getTickMarkPoints: function(coords, length) {
-            var isHorizontal = this._isHorizontal,
-                tickCorrection = {
-                    left: -1,
-                    top: -1,
-                    right: 0,
-                    bottom: 0,
-                    center: -0.5
-                }[this._options.tickOrientation || "center"];
+        _getTickMarkPoints: function(coords, length, tickOptions) {
+            const isHorizontal = this._isHorizontal;
+            const options = this._options;
+            var tickStartCoord;
 
+            if(isDefined(options.tickOrientation)) {
+                tickStartCoord = TICKS_CORRECTIONS[options.tickOrientation] * length;
+            } else {
+                let shift = tickOptions.shift || 0;
+                if(options.position === "left" || options.position === "top") {
+                    shift = -shift;
+                }
+                tickStartCoord = shift - length / 2;
+            }
             return [
-                coords.x + (isHorizontal ? 0 : tickCorrection * length),
-                coords.y + (isHorizontal ? tickCorrection * length : 0),
-                coords.x + (isHorizontal ? 0 : tickCorrection * length + length),
-                coords.y + (isHorizontal ? tickCorrection * length + length : 0)
+                coords.x + (isHorizontal ? 0 : tickStartCoord),
+                coords.y + (isHorizontal ? tickStartCoord : 0),
+                coords.x + (isHorizontal ? 0 : tickStartCoord + length),
+                coords.y + (isHorizontal ? tickStartCoord + length : 0)
             ];
         },
 
         _getTitleCoords: function() {
             var that = this,
+                horizontal = that._isHorizontal,
                 x = that._axisPosition,
                 y = that._axisPosition,
+                align = that._options.title.alignment,
                 canvas = that._getCanvasStartEnd(),
-                center = canvas.start + (canvas.end - canvas.start) / 2;
+                fromStartToEnd = horizontal || that._options.position === LEFT,
+                canvasStart = fromStartToEnd ? canvas.start : canvas.end,
+                canvasEnd = fromStartToEnd ? canvas.end : canvas.start,
+                coord = align === LEFT ? canvasStart : align === RIGHT ? canvasEnd : (canvas.start + (canvas.end - canvas.start) / 2);
 
-            if(that._isHorizontal) {
-                x = center;
+            if(horizontal) {
+                x = coord;
             } else {
-                y = center;
+                y = coord;
             }
             return { x: x, y: y };
         },
@@ -374,7 +391,7 @@ module.exports = {
         _drawTitleText: function(group, coords) {
             var options = this._options,
                 titleOptions = options.title,
-                attrs = { opacity: titleOptions.opacity, align: "center" };
+                attrs = { opacity: titleOptions.opacity, align: titleOptions.alignment };
 
             if(!titleOptions.text || !group) {
                 return;
@@ -1031,11 +1048,10 @@ module.exports = {
         },
 
         areCoordsOutsideAxis: function(coords) {
-            // getCanvasVisibleArea takes into account inverted case
-            var canvas = this._translator.getCanvasVisibleArea(),
-                coord = this._isHorizontal ? coords.x : coords.y;
+            const coord = this._isHorizontal ? coords.x : coords.y;
 
-            if(coord < canvas.min || coord > canvas.max) {
+            const visibleArea = this.getVisibleArea();
+            if(coord < visibleArea[0] || coord > visibleArea[1]) {
                 return true;
             }
             return false;
@@ -1206,13 +1222,10 @@ module.exports = {
 
             that._axisShift = shiftGroup(options.position, that._axisGroup);
 
-            if(isHorizontal) {
-                shiftGroup("top", constantLinesGroups);
-                shiftGroup("bottom", constantLinesGroups);
-            } else {
-                shiftGroup("left", constantLinesGroups);
-                shiftGroup("right", constantLinesGroups);
-            }
+            (isHorizontal ? ["top", "bottom"] : ["left", "right"]).forEach(side => {
+                shiftGroup(side, constantLinesGroups.above);
+                shiftGroup(side, constantLinesGroups.under);
+            });
         }
     }
 };

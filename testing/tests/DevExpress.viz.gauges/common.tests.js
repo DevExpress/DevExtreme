@@ -8,7 +8,7 @@ var $ = require("jquery"),
     objectUtils = require("core/utils/object"),
     vizMocks = require("../../helpers/vizMocks.js"),
     dxGauge = require("viz/gauges/common").dxGauge,
-    Palette = require("viz/palette").Palette,
+    createPalette = require("viz/palette").createPalette,
     axisModule = require("viz/axes/base_axis"),
     loadingIndicatorModule = require("viz/core/loading_indicator"),
     tooltipModule = require("viz/core/tooltip"),
@@ -16,7 +16,7 @@ var $ = require("jquery"),
     translator1DModule = require("viz/translators/translator1d"),
     rendererModule = require("viz/core/renderers/renderer"),
     stubRange = vizMocks.stubClass(rangeModule.Range),
-    ThemeManager = require("viz/gauges/theme_manager");
+    themeManagerModule = require("viz/gauges/theme_manager");
 
 $('<div id="test-container">').appendTo("#qunit-fixture");
 
@@ -79,10 +79,10 @@ sinon.stub(axisModule, "Axis", function(parameters) {
     return new vizMocks.Axis(parameters);
 });
 
-factory.ThemeManager = vizMocks.stubClass(ThemeManager, {
+themeManagerModule.ThemeManager = vizMocks.stubClass(themeManagerModule.ThemeManager, {
     theme: function() { return {}; },
     themeName: function() { return "theme-name"; },
-    createPalette: function(palette) { return new Palette(palette); },
+    createPalette: function(palette) { return createPalette(palette); },
     setTheme: function() {
         vizMocks.forceThemeOptions(this);
     }
@@ -278,6 +278,7 @@ QUnit.test("Scale is rendered", function(assert) {
             width: 2
         },
         tickInterval: 4,
+        forceUserTickInterval: 1,
         tickOrientation: "center",
         startAngle: -910,
         endAngle: -1910,
@@ -1047,6 +1048,39 @@ QUnit.test("More ranges in range container (direct assignment)", function(assert
             { startValue: 35, endValue: 40, color: "magenta" }
         ]
     });
+});
+
+QUnit.test("Force the tickInterval option", function(assert) {
+    var gauge = this.createTestGauge({
+    });
+    var scale = axisModule.Axis.getCall(0).returnValue;
+
+    gauge.option({
+        scale: {
+            tickInterval: 0.5
+        }
+    });
+
+    assert.notOk(scale.updateOptions.getCall(0).args[0].forceUserTickInterval);
+    assert.ok(scale.updateOptions.getCall(1).args[0].forceUserTickInterval);
+    assert.equal(scale.updateOptions.getCall(1).args[0].tickInterval, 0.5);
+});
+
+QUnit.test("The axisDivisionFactor option has higher priority than the tickInterval option", function(assert) {
+    var gauge = this.createTestGauge({
+    });
+    var scale = axisModule.Axis.getCall(0).returnValue;
+
+    gauge.option({
+        scale: {
+            scaleDivisionFactor: 30,
+            tickInterval: 0.5
+        }
+    });
+
+    assert.notOk(scale.updateOptions.getCall(0).args[0].forceUserTickInterval);
+    assert.notOk(scale.updateOptions.getCall(1).args[0].forceUserTickInterval);
+    assert.equal(scale.updateOptions.getCall(1).args[0].axisDivisionFactor, 30);
 });
 
 //  B232788

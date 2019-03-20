@@ -17,6 +17,7 @@ import FormDialog from "./ui/formDialog";
 const HTML_EDITOR_CLASS = "dx-htmleditor";
 const QUILL_CONTAINER_CLASS = "dx-quill-container";
 const HTML_EDITOR_SUBMIT_ELEMENT_CLASS = "dx-htmleditor-submit-element";
+const HTML_EDITOR_CONTENT_CLASS = "dx-htmleditor-content";
 
 const MARKDOWN_VALUE_TYPE = "markdown";
 
@@ -82,6 +83,13 @@ const HtmlEditor = Editor.inherit({
             */
             variables: null,
 
+            /**
+            * @name dxHtmlEditorOptions.resizing
+            * @type dxHtmlEditorResizing
+            * @default null
+            */
+            resizing: null,
+
             formDialogOptions: null
 
             /**
@@ -129,6 +137,21 @@ const HtmlEditor = Editor.inherit({
             * @type string|Array<string>
             * @default ""
             */
+
+            /**
+            * @name dxHtmlEditorResizing
+            * @type object
+            */
+            /**
+            * @name dxHtmlEditorResizing.enabled
+            * @type boolean
+            * @default false
+            */
+            /**
+            * @name dxHtmlEditorResizing.allowedTargets
+            * @type Array<string>
+            * @default ["images"]
+            */
         });
     },
 
@@ -140,6 +163,22 @@ const HtmlEditor = Editor.inherit({
         this.callBase();
 
         this._defaultTemplates[ANONYMOUS_TEMPLATE_NAME] = new EmptyTemplate(this);
+    },
+
+    _focusTarget: function() {
+        return this.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+    },
+
+    _focusInHandler: function() {
+        this._toggleFocusClass(true, this.$element());
+
+        this.callBase.apply(this, arguments);
+    },
+
+    _focusOutHandler: function() {
+        this._toggleFocusClass(false, this.$element());
+
+        this.callBase.apply(this, arguments);
     },
 
     _initMarkup: function() {
@@ -265,6 +304,7 @@ const HtmlEditor = Editor.inherit({
             toolbar: this._getModuleConfigByOption("toolbar"),
             variables: this._getModuleConfigByOption("variables"),
             dropImage: this._getBaseModuleConfig(),
+            resizing: this._getModuleConfigByOption("resizing"),
             clipboard: {
                 matchVisual: false,
                 matchers: [
@@ -349,6 +389,10 @@ const HtmlEditor = Editor.inherit({
         this._formDialog = new FormDialog(this, userOptions);
     },
 
+    _getQuillContainer: function() {
+        return this._$htmlContainer;
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":
@@ -390,6 +434,13 @@ const HtmlEditor = Editor.inherit({
                 break;
             case "formDialogOptions":
                 this._renderFormDialog();
+                break;
+            case "resizing":
+                if(!args.previousValue || !args.value) {
+                    this._invalidate();
+                } else {
+                    this._quillInstance.getModule("resizing").option(args.name, args.value);
+                }
                 break;
             default:
                 this.callBase(args);

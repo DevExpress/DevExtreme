@@ -339,61 +339,192 @@ QUnit.test("Enabled options is false", function(assert) {
     assert.equal(this.renderer.stub("text").callCount, 0, "No texts");
 });
 
-QUnit.module("API", {
-    beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
-        this.incidentOccurred = sinon.spy();
+QUnit.module("API. Markup manipulations");
 
-        sinon.stub(clientExporter, "export");
-        this.options = {
-            printingEnabled: true,
-            formats: ["JPEG"],
-            enabled: true,
-            font: {},
-
-            button: {
-                "default": {
-                    color: "#707070",
-                    borderColor: "#b6b6b6",
-                    backgroundColor: "#f5f5f5"
-                },
-                hover: {
-                    color: "#333",
-                    borderColor: "#bebebe",
-                    backgroundColor: "#e6e6e6"
-                },
-                focus: {
-                    color: "#000",
-                    borderColor: "#9d9d9d",
-                    backgroundColor: "#e6e6e6"
-                },
-                active: {
-                    color: "#333",
-                    borderColor: "#9d9d9d",
-                    backgroundColor: "#d4d4d4"
+QUnit.test("getMarkup method", function(assert) {
+    var createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg </svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "backgroundColor") return "backgroundColor";
                 }
-            },
-            exportOptions: {
-                width: 100,
-                height: 200
-            }
-        };
+            };
+        },
+        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+
+    assert.equal(markup, "<svg data-backgroundcolor=\"backgroundColor\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+});
+
+QUnit.test("getMarkup. BackgroundColor in theme", function(assert) {
+    var createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg </svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "theme") return "someTheme.light";
+                }
+            };
+        },
+        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+
+    assert.equal(markup, "<svg data-backgroundcolor=\"some_theme_color\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+});
+
+QUnit.test("getMarkup. Different colors in charts. No backgroundColor in result", function(assert) {
+    var colors = ["color_1", "color_2"],
+        i = 0,
+        createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg </svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "backgroundColor") return colors[i++];
+                }
+            };
+        },
+        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+
+    assert.equal(markup, "<svg data-backgroundcolor=\"\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+});
+
+QUnit.test("Combine widgets markups (combineMarkups), just widget", function(assert) {
+    var createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg></svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "backgroundColor") return "backgroundColor";
+                }
+            };
+        },
+        markupData = exportModule.combineMarkups(createWidget({ width: 10, height: 25 }));
+
+    assert.deepEqual(markupData, {
+        markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"25\" width=\"10\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
+            + "<g transform=\"translate(0,0)\" ></g>"
+            + "</svg>",
+        width: 10,
+        height: 25
+    });
+});
+
+QUnit.test("Combine widgets markups (combineMarkups), array of widgets - column", function(assert) {
+    var createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg></svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "backgroundColor") return "backgroundColor";
+                }
+            };
+        },
+        markupData = exportModule.combineMarkups([createWidget({ width: 10, height: 25 }), createWidget({ width: 15, height: 15 })]);
+
+    assert.deepEqual(markupData, {
+        markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
+            + "<g transform=\"translate(0,0)\" ></g>"
+            + "<g transform=\"translate(0,25)\" ></g>"
+            + "</svg>",
+        width: 15,
+        height: 40
+    });
+});
+
+QUnit.test("Combine widgets markups (combineMarkups), array of arrays of widgets - nested arrays are rows", function(assert) {
+    var createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg></svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "backgroundColor") return "backgroundColor";
+                }
+            };
+        },
+        markupData = exportModule.combineMarkups([
+            [createWidget({ width: 10, height: 25 }), createWidget({ width: 15, height: 15 })],
+            [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
+        ]);
+
+    assert.deepEqual(markupData, {
+        markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"60\" width=\"30\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
+            + "<g transform=\"translate(0,0)\" ></g><g transform=\"translate(10,0)\" ></g>"
+            + "<g transform=\"translate(0,25)\" ></g><g transform=\"translate(20,25)\" ></g>"
+            + "</svg>",
+        width: 30,
+        height: 60
+    });
+});
+
+QUnit.test("Combine widgets markups (combineMarkups) in grid layout with center-center alignments", function(assert) {
+    var createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg></svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "backgroundColor") return "backgroundColor";
+                }
+            };
+        },
+        markupData = exportModule.combineMarkups([
+            [createWidget({ width: 10, height: 25 }), createWidget({ width: 16, height: 15 })],
+            [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
+        ], {
+            gridLayout: true,
+            verticalAlignment: "center",
+            horizontalAlignment: "center"
+        });
+
+    assert.deepEqual(markupData, {
+        markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"60\" width=\"40\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
+            + "<g transform=\"translate(5,0)\" ></g><g transform=\"translate(22,5)\" ></g>"
+            + "<g transform=\"translate(0,35)\" ></g><g transform=\"translate(25,25)\" ></g>"
+            + "</svg>",
+        width: 40,
+        height: 60
+    });
+});
+
+QUnit.test("Combine widgets markups (combineMarkups) in grid layout with bottom-right alignments", function(assert) {
+    var createWidget = function(size) {
+            return {
+                svg: sinon.stub().returns("<svg></svg>"),
+                getSize: sinon.stub().returns(size),
+                option: function(param) {
+                    if(param === "backgroundColor") return "backgroundColor";
+                }
+            };
+        },
+        markupData = exportModule.combineMarkups([
+            [createWidget({ width: 10, height: 25 }), createWidget({ width: 16, height: 15 })],
+            [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
+        ], {
+            gridLayout: true,
+            verticalAlignment: "bottom",
+            horizontalAlignment: "right"
+        });
+
+    assert.deepEqual(markupData, {
+        markup: "<svg data-backgroundcolor=\"backgroundColor\" height=\"60\" width=\"40\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">"
+            + "<g transform=\"translate(10,0)\" ></g><g transform=\"translate(24,10)\" ></g>"
+            + "<g transform=\"translate(0,45)\" ></g><g transform=\"translate(30,25)\" ></g>"
+            + "</svg>",
+        width: 40,
+        height: 60
+    });
+});
+
+QUnit.module("API. Export methods", {
+    beforeEach: function() {
+        sinon.stub(clientExporter, "export");
+        sinon.stub(exportModule, "combineMarkups");
         this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, "toDataURL");
         this.toDataURLStub.returnsArg(0);
-        this.srcCurrentTheme = themeModule.currentTheme();
     },
     afterEach: function() {
         clientExporter.export.restore();
+        exportModule.combineMarkups.restore();
         this.toDataURLStub.restore();
-        themeModule.currentTheme(this.srcCurrentTheme);
-    },
-    createExportMenu: function() {
-        var exportMenu = new exportModule.ExportMenu({
-            renderer: this.renderer,
-            incidentOccurred: this.incidentOccurred
-        });
-        exportMenu.setOptions(this.options);
-        return exportMenu;
     }
 });
 
@@ -532,51 +663,148 @@ QUnit.test("exportFromMarkup. backgroundColor from markup", function(assert) {
     }, "Export options");
 });
 
-QUnit.test("getMarkup method", function(assert) {
-    var createWidget = function(size) {
-            return {
-                svg: sinon.stub().returns("<svg </svg>"),
-                getSize: sinon.stub().returns(size),
-                option: function(param) {
-                    if(param === "backgroundColor") return "backgroundColor";
-                }
-            };
-        },
-        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+QUnit.test("exportWidgets method. Defaults", function(assert) {
+    // arrange
+    exportModule.combineMarkups.returns({ markup: "testMarkup", width: 600, height: 400 });
 
-    assert.equal(markup, "<svg data-backgroundcolor=\"backgroundColor\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+    // act
+    exportModule.exportWidgets([{ widget1: true }, { widget2: true }]);
+
+    // assert
+    assert.deepEqual(exportModule.combineMarkups.getCall(0).args, [
+        [{ widget1: true }, { widget2: true }],
+        {
+            gridLayout: undefined,
+            verticalAlignment: undefined,
+            horizontalAlignment: undefined
+        }
+    ]);
+    assert.equal(clientExporter.export.callCount, 1, "Export was called");
+    assert.deepEqual(clientExporter.export.getCall(0).args[0], "testMarkup", "Export data");
+    assert.deepEqual(clientExporter.export.getCall(0).args[1], {
+        format: "PNG",
+        fileName: "file",
+        width: 600,
+        height: 400,
+        margin: 10,
+        fileSavingAction: undefined,
+        exportingAction: undefined,
+        exportedAction: undefined,
+        backgroundColor: undefined
+    }, "Export options");
 });
 
-QUnit.test("getMarkup. BackgroundColor in theme", function(assert) {
-    var createWidget = function(size) {
-            return {
-                svg: sinon.stub().returns("<svg </svg>"),
-                getSize: sinon.stub().returns(size),
-                option: function(param) {
-                    if(param === "theme") return "someTheme.light";
-                }
-            };
-        },
-        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+QUnit.test("exportWidgets method. Set options. Size options are ignored", function(assert) {
+    // arrange
+    var options = {
+        format: "jpeg",
+        fileName: "file1",
+        proxyUrl: "testUrl",
+        width: 1000,
+        height: 2000,
+        margin: 0,
+        backgroundColor: "#00ff00",
+        onFileSaving: "file saving callback",
+        onExporting: "exporting callback",
+        onExported: "exported callback",
+        forceProxy: true,
+        gridLayout: true,
+        verticalAlignment: "bottom",
+        horizontalAlignment: "right"
+    };
+    exportModule.combineMarkups.returns({ markup: "testMarkup", width: 600, height: 400 });
 
-    assert.equal(markup, "<svg data-backgroundcolor=\"some_theme_color\" height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+    // act
+    exportModule.exportWidgets([{ widget1: true }, { widget2: true }], options);
+
+    // assert
+    assert.deepEqual(exportModule.combineMarkups.getCall(0).args, [
+        [{ widget1: true }, { widget2: true }],
+        {
+            gridLayout: true,
+            verticalAlignment: "bottom",
+            horizontalAlignment: "right"
+        }
+    ]);
+    assert.equal(clientExporter.export.callCount, 1, "Export was called");
+    assert.deepEqual(clientExporter.export.getCall(0).args[0], "testMarkup", "Export data");
+    assert.deepEqual(clientExporter.export.getCall(0).args[1], {
+        format: "JPEG",
+        fileName: "file1",
+        proxyUrl: "testUrl",
+        width: 600,
+        height: 400,
+        margin: 0,
+        forceProxy: true,
+        backgroundColor: "#00ff00",
+        onFileSaving: "file saving callback",
+        onExporting: "exporting callback",
+        onExported: "exported callback",
+        fileSavingAction: "file saving callback",
+        exportingAction: "exporting callback",
+        exportedAction: "exported callback",
+        gridLayout: true,
+        verticalAlignment: "bottom",
+        horizontalAlignment: "right"
+    }, "Export options");
 });
 
-QUnit.test("getMarkup. Different colors in charts. No backgroundColor in result", function(assert) {
-    var colors = ["color_1", "color_2"],
-        i = 0,
-        createWidget = function(size) {
-            return {
-                svg: sinon.stub().returns("<svg </svg>"),
-                getSize: sinon.stub().returns(size),
-                option: function(param) {
-                    if(param === "backgroundColor") return colors[i++];
-                }
-            };
-        },
-        markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+QUnit.module("API", {
+    beforeEach: function() {
+        this.renderer = new vizMocks.Renderer();
+        this.incidentOccurred = sinon.spy();
 
-    assert.equal(markup, "<svg height=\"40\" width=\"15\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"><g transform=\"translate(0,0)\"  </g><g transform=\"translate(0,25)\"  </g></svg>");
+        sinon.stub(clientExporter, "export");
+        this.options = {
+            printingEnabled: true,
+            formats: ["JPEG"],
+            enabled: true,
+            font: {},
+
+            button: {
+                "default": {
+                    color: "#707070",
+                    borderColor: "#b6b6b6",
+                    backgroundColor: "#f5f5f5"
+                },
+                hover: {
+                    color: "#333",
+                    borderColor: "#bebebe",
+                    backgroundColor: "#e6e6e6"
+                },
+                focus: {
+                    color: "#000",
+                    borderColor: "#9d9d9d",
+                    backgroundColor: "#e6e6e6"
+                },
+                active: {
+                    color: "#333",
+                    borderColor: "#9d9d9d",
+                    backgroundColor: "#d4d4d4"
+                }
+            },
+            exportOptions: {
+                width: 100,
+                height: 200
+            }
+        };
+        this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, "toDataURL");
+        this.toDataURLStub.returnsArg(0);
+        this.srcCurrentTheme = themeModule.currentTheme();
+    },
+    afterEach: function() {
+        clientExporter.export.restore();
+        this.toDataURLStub.restore();
+        themeModule.currentTheme(this.srcCurrentTheme);
+    },
+    createExportMenu: function() {
+        var exportMenu = new exportModule.ExportMenu({
+            renderer: this.renderer,
+            incidentOccurred: this.incidentOccurred
+        });
+        exportMenu.setOptions(this.options);
+        return exportMenu;
+    }
 });
 
 QUnit.test("Get layout options", function(assert) {

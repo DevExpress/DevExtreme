@@ -42,7 +42,6 @@
     }
 
     .dx-icon {
-        color: @button-icon-color;
         .dx-icon-sizing(@ICON_SIZE);
         .dx-icon-margin(@ICON_MARGIN);
     }
@@ -84,12 +83,6 @@
             border-radius: 50%;
             box-shadow: none;
         }
-    }
-}
-
-&.dx-button-has-icon:not(.dx-button-has-text) {
-    .dx-icon {
-        color: @button-flat-color;
     }
 }
 
@@ -262,9 +255,6 @@
         .dx-button-onlyicon-sizing();
         .dx-button-text {
             display: none;
-        }
-        .dx-icon {
-            color: @button-flat-color;
         }
     }
 }

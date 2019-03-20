@@ -11,6 +11,14 @@ module.exports = Object.assign({
             use: {
                 loader: 'babel-loader'
             }
+        },
+        {
+            test: /version\.js$/,
+            loader: 'string-replace-loader',
+            options: {
+                search: '%VERSION%',
+                replace: require('../package.json').version,
+            }
         }]
     }
 }, baseConfig);

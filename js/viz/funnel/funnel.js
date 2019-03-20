@@ -42,9 +42,9 @@ var dxFunnel = require("../core/base_widget").inherit({
         return { width: 400, height: 400 };
     },
 
-    _createThemeManager: function() {
-        return new ThemeManager();
-    },
+    _themeSection: "funnel",
+
+    _fontFields: ["legend.title.font", "legend.title.subtitle.font", "legend.font"],
 
     _optionChangesOrder: ["DATA_SOURCE"],
 
@@ -214,14 +214,15 @@ var dxFunnel = require("../core/base_widget").inherit({
     _buildNodes: function() {
         var that = this,
             data = that._getData(),
-            palette = that._themeManager.createPalette(that._getOption("palette", true), {
-                useHighlight: true,
-                extensionMode: that._getOption("paletteExtensionMode", true)
-            }),
             algorithm = tiling.getAlgorithm(that._getOption("algorithm", true)),
             percents = algorithm.normalizeValues(data),
             itemOptions = that._getOption("item"),
-            figures = algorithm.getFigures(percents, that._getOption("neckWidth", true), that._getOption("neckHeight", true));
+            figures = algorithm.getFigures(percents, that._getOption("neckWidth", true), that._getOption("neckHeight", true)),
+            palette = that._themeManager.createPalette(that._getOption("palette", true), {
+                useHighlight: true,
+                extensionMode: that._getOption("paletteExtensionMode", true),
+                count: figures.length
+            });
 
         that._items = figures.map(function(figure, index) {
             var curData = data[index],
@@ -230,7 +231,7 @@ var dxFunnel = require("../core/base_widget").inherit({
                     data: curData,
                     percent: percents[index],
                     id: index,
-                    color: curData.color || palette.getNextColor(figures.length),
+                    color: curData.color || palette.getNextColor(),
                     itemOptions: itemOptions
                 });
 
@@ -255,6 +256,19 @@ var dxFunnel = require("../core/base_widget").inherit({
         return this._items.slice();
     },
 
+    _getLegendData() {
+        return this._items.map(item => {
+
+            return {
+                id: item.id,
+                visible: true,
+                text: item.argument,
+                item: item,
+                states: item.states
+            };
+        });
+    },
+
     _getMinSize: function() {
         var adaptiveLayout = this._getOption("adaptiveLayout");
 
@@ -262,10 +276,6 @@ var dxFunnel = require("../core/base_widget").inherit({
     }
 });
 
-var ThemeManager = require("../core/base_theme_manager").BaseThemeManager.inherit({
-    _themeSection: "funnel",
-    _fontFields: ["loadingIndicator.font", "title.font", "title.subtitle.font", "tooltip.font", "export.font", "legend.font", "label.font"]
-});
 
 require("../../core/component_registrator")("dxFunnel", dxFunnel);
 module.exports = dxFunnel;

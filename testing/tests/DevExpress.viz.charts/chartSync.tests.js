@@ -91,6 +91,7 @@ var environment = {
         that.$container = $("<div>").appendTo($("#chartContainer"));
         setupMocks(that.$container);
         that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
+        that.themeManager.theme.withArgs("legend").returns({ title: {} });
         that.themeManager.getOptions.withArgs("rotated").returns(false);
         that.themeManager.getOptions.withArgs("panes").returns({ name: "default" });
         that.themeManager.getOptions.withArgs("valueAxis").returnsArg(1);
@@ -1276,7 +1277,8 @@ var environment = {
         assert.ok(chart._labelAxesGroup.linkAppend.called, "Label axes group should be added to root");
         assert.ok(chart._panesBorderGroup.linkAppend.called, "Panes border group should be added to root");
         assert.ok(chart._stripsGroup.linkAppend.called, "Strips group should be added to root");
-        assert.ok(chart._constantLinesGroup.linkAppend.called, "Constant lines group should be added to root");
+        assert.ok(chart._constantLinesGroup.above.linkAppend.called, "Constant lines group should be added to root");
+        assert.ok(chart._constantLinesGroup.under.linkAppend.called, "Constant lines group should be added to root");
         assert.ok(chart._legendGroup.linkAppend.called, "Legend group should be appended to root");
         assert.ok(chart._crosshairCursorGroup.linkRemove.called, "crosshair group should be detached");
         assert.ok(chart._crosshairCursorGroup.stub("clear").called, "crosshair should be cleared");
@@ -1740,6 +1742,7 @@ var environment = {
         assert.strictEqual(chart._legendGroup, null, "legend gorup is null");
         assert.ok(chart._stripsGroupDisposed, "_stripsGroup");
         assert.strictEqual(chart._stripsGroup, null, "strips group is null");
+
         assert.ok(chart._constantLinesGroupDisposed, "_constantLinesGroup");
         assert.strictEqual(chart._constantLinesGroup, null, "constant lines group is null");
         assert.ok(chart._axesGroupDisposed, "_axesGroup");
@@ -1833,9 +1836,14 @@ function resetMocksInChart(chart) {
     chart._stripsGroup.stub("linkAppend").reset();
     chart._stripsGroup.stub("linkRemove").reset();
     chart._stripsGroup.stub("clear").reset();
-    chart._constantLinesGroup.stub("linkAppend").reset();
-    chart._constantLinesGroup.stub("linkRemove").reset();
-    chart._constantLinesGroup.stub("clear").reset();
+    chart._constantLinesGroup.above.stub("linkAppend").reset();
+    chart._constantLinesGroup.above.stub("linkRemove").reset();
+    chart._constantLinesGroup.above.stub("clear").reset();
+
+    chart._constantLinesGroup.under.stub("linkAppend").reset();
+    chart._constantLinesGroup.under.stub("linkRemove").reset();
+    chart._constantLinesGroup.under.stub("clear").reset();
+
     chart._axesGroup.stub("linkAppend").reset();
     chart._axesGroup.stub("linkRemove").reset();
     chart._axesGroup.stub("clear").reset();

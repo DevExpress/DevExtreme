@@ -22,7 +22,6 @@ require('./build/gulp/themebuilder-npm');
 require('./build/gulp/aspnet');
 require('./build/gulp/vendor');
 require('./build/gulp/ts');
-require('./build/gulp/layouts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
 require('./build/gulp/transpile');
@@ -38,8 +37,7 @@ function gulpDefault(callback) {
             'vectormap',
             'aspnet',
             'vendor',
-            'ts',
-            'layouts'
+            'ts'
         ],
         'style-compiler-themes',
         'style-compiler-tb-assets',

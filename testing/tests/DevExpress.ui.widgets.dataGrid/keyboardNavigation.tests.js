@@ -7,7 +7,6 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-
 import "common.css!";
 import "generic_light.css!";
 
@@ -32,6 +31,12 @@ var device = devices.real();
 
 var CLICK_EVENT = eventUtils.addNamespace("dxpointerdown", "dxDataGridKeyboardNavigation");
 
+function testInDesktop(name, testFunc) {
+    if(device.deviceType === "desktop") {
+        QUnit.testInActiveWindow(name, testFunc);
+    }
+}
+
 function callViewsRenderCompleted(views) {
     $.each(views, function(key, view) {
         view.renderCompleted.fire();
@@ -50,7 +55,11 @@ var KEYS = {
     "downArrow": "ArrowDown",
     "space": " ",
     "F": "F",
-    "A": "A"
+    "A": "A",
+    "D": "D",
+    "1": "1",
+    "2": "2",
+    "F2": "F2"
 };
 
 function triggerKeyDown(key, ctrl, shift, target, result) {
@@ -71,6 +80,7 @@ function triggerKeyDown(key, ctrl, shift, target, result) {
         shiftKey: shift,
         altKey: alt,
         target: target && target[0] || target,
+        type: "keydown",
         preventDefault: function() {
             result.preventDefault = true;
         },
@@ -83,6 +93,12 @@ function triggerKeyDown(key, ctrl, shift, target, result) {
     });
 
     return result;
+}
+
+function focusCell(columnIndex, rowIndex) {
+    var $element0 = this.rowsView.element(),
+        $row = $($element0.find(".dx-row")[rowIndex]);
+    $($row.find("td")[columnIndex]).trigger(CLICK_EVENT);
 }
 
 QUnit.module("Keyboard navigation", {
@@ -166,7 +182,9 @@ QUnit.module("Keyboard navigation", {
             };
 
         that.options = {
-            useKeyboard: true
+            useKeyboard: true,
+            editing: {
+            }
         };
 
         that.component = {
@@ -994,8 +1012,13 @@ function setupModules(that, modulesOptions) {
 
     that.options = $.extend(true, { tabIndex: 0 }, that.options, {
         useKeyboard: true,
+        keyboardNavigation: {
+            enterKeyAction: "startEdit",
+            enterKeyDirection: "none",
+            editOnKeyPress: false
+        },
+        editing: { },
         showColumnHeaders: true,
-        editing: {}
     });
 
     that.$element = function() {
@@ -1052,11 +1075,7 @@ QUnit.module("Keyboard keys", {
         var that = this;
 
         that.triggerKeyDown = triggerKeyDown;
-
-        that.focusCell = function(columnIndex, rowIndex) {
-            var $row = $(this.rowsView.element().find(".dx-row")[rowIndex]);
-            $($row.find("td")[columnIndex]).trigger(CLICK_EVENT);
-        };
+        that.focusCell = focusCell;
 
         that.focusFirstCell = function() {
             that.focusCell(0, 0);
@@ -1338,6 +1357,11 @@ QUnit.testInActiveWindow("Update focus when row is editing with form_T306378", f
 
     this.options = {
         useKeyboard: true,
+        keyboardNavigation: {
+            enterKeyAction: "startEdit",
+            enterKeyDirection: "none",
+            editOnKeyPress: false
+        },
         showColumnHeaders: true,
         dataSource: [{ name: 1 }, { name: 2 }],
         editing: {
@@ -3145,6 +3169,56 @@ QUnit.testInActiveWindow("Move focus to first data cell after tab key on group r
     });
 });
 
+QUnit.testInActiveWindow("DataGrid should skip group rows after tab navigation from the editing cell (T714142, T715092)", function(assert) {
+    // arrange
+    var $cell;
+
+    this.columns = [
+        { visible: true, command: "expand" },
+        { caption: 'Column 1', visible: true, dataField: "Column1", allowEditing: true },
+        { caption: 'Column 2', visible: true, dataField: "Column2", allowEditing: false }
+    ];
+
+    this.dataControllerOptions = {
+        pageCount: 10,
+        pageIndex: 0,
+        pageSize: 10,
+        items: [
+            { values: [null, 'test0', 'test1'], rowType: 'data', key: 0 },
+            { values: ['group 1'], rowType: 'group', key: ['group 1'], groupIndex: 0 },
+            { values: [null, 'test1', 'test2'], rowType: 'data', key: 1 },
+            { values: [null, 'test1', 'test2'], rowType: 'data', key: 2 }
+        ]
+    };
+
+    this.options = {
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        }
+    };
+
+    setupModules(this);
+
+    // act
+    this.gridView.render($("#container"));
+    this.editCell(0, 1);
+    this.clock.tick();
+
+    $cell = $("#container").find(".dx-data-row").eq(0).find("td:nth-child(2)").eq(0);
+
+    // assert
+    assert.ok(this.editingController.isEditing(), "is editing");
+
+    // act
+    this.triggerKeyDown("tab", false, false, $cell);
+    this.clock.tick();
+
+    // assert
+    assert.ok(this.editingController.isEditing(), "is editing");
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { rowIndex: 2, columnIndex: 1 });
+});
+
 QUnit.testInActiveWindow("Do not prevent default on 'shift+tab' if the current cell is the first", function(assert) {
     // arrange
     this.columns = [
@@ -3226,7 +3300,6 @@ QUnit.testInActiveWindow("Do not prevent default on 'tab' if the current cell is
 
     var $lastCell = this.rowsView.element().find(".dx-row").filter(":visible").last().find("td").last();
 
-    this.focusCell($lastCell);
     this.keyboardNavigationController._focusedCellPosition = { rowIndex: 1, columnIndex: 1 };
 
     // act
@@ -3303,7 +3376,6 @@ QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current 
 
     var $lastCell = this.rowsView.element().find(".dx-row").filter(":visible").last().find("td").eq(1);
 
-    // this.focusCell($lastCell);
     this.keyboardNavigationController._focusedCellPosition = { rowIndex: 1, columnIndex: 1 };
 
     // act
@@ -4703,6 +4775,58 @@ QUnit.testInActiveWindow("Down arrow key should work correctly after page down k
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 4 }, "focused position");
 });
 
+QUnit.testInActiveWindow("DataGrid should not scroll back to the focused editing cell after append rows in virtual scrolling (T715091)", function(assert) {
+    // arrange
+    var $cell;
+
+    this.dataControllerOptions = {
+        pageCount: 4,
+        pageIndex: 0,
+        pageSize: 2,
+        items: [
+            { values: ["test11", "test21", "test31", "test41"], rowType: "data", key: 0 },
+            { values: ["test12", "test22", "test32", "test42"], rowType: "data", key: 1 },
+            { values: ["test13", "test23", "test33", "test43"], rowType: "data", key: 2 },
+            { values: ["test14", "test24", "test34", "test44"], rowType: "data", key: 3 },
+            { values: ["test15", "test25", "test35", "test45"], rowType: "data", key: 4 },
+            { values: ["test16", "test26", "test36", "test46"], rowType: "data", key: 5 },
+            { values: ["test17", "test27", "test37", "test47"], rowType: "data", key: 6 },
+            { values: ["test18", "test28", "test38", "test48"], rowType: "data", key: 7 },
+            { values: ["test19", "test29", "test39", "test49"], rowType: "data", key: 8 }
+        ]
+    };
+
+    setupModules(this);
+    this.options.scrolling = { mode: "virtual" };
+    this.options.editing = {
+        allowUpdating: true,
+        mode: "cell"
+    };
+
+    this.gridView.render($("#container"));
+    this.rowsView.height(70);
+    this.rowsView.resize();
+
+    this.focusFirstCell();
+    this.clock.tick();
+    this.editCell(0, 0);
+    this.clock.tick();
+
+    // act
+    $cell = $(this.getCellElement(0, 0));
+    this.triggerKeyDown("tab", false, false, $cell);
+    this.keyboardNavigationController._updateFocus = function() {
+        // assert
+        assert.ok(false, "keyboardNavigation._updateFocus should not be called");
+    };
+    this.clock.tick();
+    this.dataController.changed.fire({ changeType: "append" });
+    this.clock.tick();
+
+    // assert
+    assert.ok(true, "keyboardNavigation._updateFocus was not called");
+});
+
 // T680076
 QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded page when virtual scrolling is enabled", function(assert) {
     // arrange
@@ -4724,16 +4848,17 @@ QUnit.testInActiveWindow("Up arrow key should work after moving to an unloaded p
     that.rowsView.height(400);
     that.rowsView.resize();
 
-    that.focusCell(0, 1); // focus the first cell of the first data row
+    this.focusCell(0, 1); // focus the first cell of the first data row
     that.clock.tick();
 
     // act
-    $(that.rowsView.element()).trigger($.Event("keydown", { key: KEYS.upArrow }));
+
+    this.triggerKeyDown("upArrow");
     $(that.rowsView.getScrollable()._container()).trigger("scroll");
     that.clock.tick();
 
     // act
-    $(that.rowsView.element()).trigger($.Event("keydown", { key: KEYS.upArrow }));
+    this.triggerKeyDown("upArrow");
     that.clock.tick();
 
     // assert
@@ -5010,6 +5135,7 @@ QUnit.test("Apply custom tabIndex to rows view on click", function(assert) {
 QUnit.module("Keyboard navigation with real dataController and columnsController", {
     setupModule: function() {
         this.triggerKeyDown = triggerKeyDown;
+        this.focusCell = focusCell;
         this.data = this.data || [
             { name: "Alex", phone: "555555", room: 1 },
             { name: "Dan", phone: "553355", room: 2 }
@@ -5031,7 +5157,7 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
             }
         }, this.options);
 
-        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"], {
+        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "focus", "keyboardNavigation", "validating", "masterDetail"], {
             initViews: true
         });
     },
@@ -5081,6 +5207,36 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(!$(rowsView.getCellElement(0, 0)).hasClass("dx-focused"), "expand cell is not focused");
         assert.ok($(rowsView.getCellElement(0, 1)).hasClass("dx-focused"), "cell(0, 1) is focused");
         assert.ok(this.gridView.component.editorFactoryController.focus(), "has overlay focus");
+    });
+
+    QUnit.testInActiveWindow("Master-detail cell should not has tabindex", function(assert) {
+        // arrange
+        var masterDetailCell;
+
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            masterDetail: {
+                enabled: true,
+                autoExpandAll: true
+            },
+            tabIndex: 111
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+        this.clock.tick();
+
+
+        this.option("focusedRowIndex", 1);
+        this.getView("rowsView").renderFocusState();
+        masterDetailCell = $(this.gridView.getView("rowsView").element().find(".dx-master-detail-cell").eq(0));
+
+        // assert
+        assert.notOk(masterDetailCell.attr("tabindex"), "master-detail cell has no tabindex");
     });
 
     // T692137
@@ -5135,6 +5291,60 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         // assert
         assert.ok(!keyboardNavigationController._isHiddenFocus, "not hidden focus");
         assert.notOk($cell.hasClass("dx-cell-focus-disabled"), "cell has no .dx-cell-focus-disabled");
+        assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
+    });
+
+    QUnit.testInActiveWindow("DataGrid should not moved back to the edited cell if the next clicked cell canceled editing process", function(assert) {
+        // arrange
+        var keyboardNavigationController,
+            focusedCellChangingFiresCount = 0,
+            focusedCellChangedFiresCount = 0,
+            $cell;
+
+        this.$element = function() {
+            return $("#container");
+        };
+
+        this.options = {
+            useKeyboard: true,
+            editing: { mode: 'cell', allowUpdating: true },
+            onEditingStart: function(e) {
+                e.cancel = e.data.name === "Alex";
+            },
+            onFocusedCellChanging: e => {
+                ++focusedCellChangingFiresCount;
+            },
+            onFocusedCellChanged: e => {
+                ++focusedCellChangedFiresCount;
+            },
+        };
+
+        this.setupModule();
+
+        // act
+        this.gridView.render($("#container"));
+        keyboardNavigationController = this.gridView.component.keyboardNavigationController;
+        $cell = $(this.rowsView.element().find(".dx-row").eq(1).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+        this.editCell(1, 1);
+        this.clock.tick();
+
+        // assert
+        assert.equal(focusedCellChangingFiresCount, 1, "onFocusedCellChanging fires count");
+        assert.equal(focusedCellChangedFiresCount, 1, "onFocusedCellChanged fires count");
+
+        // act
+        $cell = $(this.rowsView.element().find(".dx-row").eq(0).find("td").eq(1));
+        $cell.trigger(CLICK_EVENT);
+        this.editCell(0, 1);
+        this.clock.tick();
+
+        // assert
+        assert.equal(focusedCellChangingFiresCount, 2, "onFocusedCellChanging fires count");
+        assert.equal(focusedCellChangedFiresCount, 2, "onFocusedCellChanged fires count");
+        assert.ok(keyboardNavigationController._isHiddenFocus, "hidden focus");
+        assert.notOk(keyboardNavigationController._editingController.isEditing(), "Is editing");
+        assert.equal(this.rowsView.element().find("input").length, 0, "input");
         assert.notOk($cell.hasClass("dx-focused"), "cell has .dx-focused");
     });
 
@@ -5698,5 +5908,1712 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(countCallCalculateCellValue, "calculateCellValue is called");
         assert.strictEqual($testElement.find(".dx-datagrid-rowsview td").eq(2).text(), "Bob John", "text of the third column of the first row");
         assert.ok(that.editingController.isEditCell(1, 0), "the first cell of the second row is editable");
+    });
+});
+
+QUnit.module("Excel like navigation", {
+    setupModule: function() {
+        this.$element = () => $("#container");
+        this.renderGridView = () => this.gridView.render($("#container"));
+        this.triggerKeyDown = triggerKeyDown;
+        this.focusCell = focusCell;
+        this.focusFirstCell = () => this.focusCell(0, 0);
+
+        this.data = this.data || [
+            { name: "Alex", date: "01/02/2003", room: 0, phone: 555555 },
+            { name: "Dan1", date: "04/05/2006", room: 1, phone: 666666 },
+            { name: "Dan2", date: "07/08/2009", room: 2, phone: 777777 },
+            { name: "Dan3", date: "10/11/2012", room: 3, phone: 888888 }
+        ];
+        this.columns = this.columns || [
+            { dataField: "name" },
+            { dataField: "date", dataType: "date" },
+            { dataField: "room", dataType: "number" },
+            { dataField: "phone", dataType: "number" }
+        ];
+        this.options = $.extend(true, {
+            useKeyboard: true,
+            keyboardNavigation: {
+                enterKeyAction: "startEdit",
+                enterKeyDirection: "none",
+                editOnKeyPress: false
+            },
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            columns: this.columns,
+            dataSource: this.data,
+            editing: {
+                allowUpdating: true
+            }
+        }, this.options);
+
+        setupDataGridModules(this,
+            ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "validating", "masterDetail"],
+            { initViews: true }
+        );
+    },
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    testInDesktop("Editing by char for not editable column", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "batch",
+                fastEditingMode: true
+            }
+        };
+
+        this.columns = [
+            "name",
+            {
+                dataField: "date",
+                allowEditing: false
+            },
+            "room"
+        ];
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        this.focusCell(1, 1);
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // assert
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is editing by char key");
+    });
+
+    testInDesktop("Enter key if 'enterKeyAction' is 'moveFocus'", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell",
+            },
+            keyboardNavigation: {
+                enterKeyAction: 'moveFocus'
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is not in editing mode");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+    });
+
+    testInDesktop("Enter key if 'enterKeyDirection' is 'column' and cell edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "column"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+        assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
+    });
+
+    testInDesktop("Enter+Shift key if 'enterKeyDirection' is 'column' and cell edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "column"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 1, "row is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
+
+        // act
+        this.triggerKeyDown("enter", undefined, true);
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+        assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
+    });
+
+    testInDesktop("Enter key if 'enterKeyDirection' is row and cell edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "row"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+        assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
+    });
+
+    testInDesktop("Enter key if 'enterKeyDirection' is row, rtlEnabled and cell edit mode", function(assert) {
+        // arrange
+        this.options = {
+            rtlEnabled: true,
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "row"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+        assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
+    });
+
+    testInDesktop("Enter+Shift key if 'enterKeyDirection' is row and cell edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell",
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "row"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
+
+        // act
+        this.triggerKeyDown("enter", undefined, true);
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+        assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
+    });
+
+    testInDesktop("Enter+Shift key if 'enterKeyDirection' is row, rtlEnabled and cell edit mode", function(assert) {
+        // arrange
+        this.options = {
+            rtlEnabled: true,
+            editing: {
+                mode: "cell",
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "row"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
+
+        // act
+        this.triggerKeyDown("enter", undefined, true);
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+        assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
+    });
+
+    testInDesktop("Enter key if 'enterKeyDirection' is 'column' and batch edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "batch"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "column"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+        assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
+    });
+
+    testInDesktop("Enter+Shift key if 'enterKeyDirection' is 'column' and batch edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "batch"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "column"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 1, "row is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
+
+        // act
+        this.triggerKeyDown("enter", undefined, true);
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+        assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
+    });
+
+    testInDesktop("Enter key if 'enterKeyDirection' is row and batch edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "batch"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "row"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+        assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
+    });
+
+    testInDesktop("Enter+Shift key if 'enterKeyDirection' is row and batch edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "batch",
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "row"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
+
+        // act
+        this.triggerKeyDown("enter", undefined, true);
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+        assert.ok(!this.keyboardNavigationController._isEditingCompleted, "editing is completed");
+    });
+
+    testInDesktop("Enter key for not changed editing cell if 'editOnKeyPress' and cell edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        this.focusFirstCell();
+        this.editCell(0, 0);
+
+        // assert
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is editing began by char key");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is editing began by char key");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+    });
+
+    testInDesktop("Enter key for not changed editing cell if 'editOnKeyPress' and batch edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "batch",
+                allowUpdating: true
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        this.focusFirstCell();
+        this.editCell(0, 0);
+
+        // assert
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is editing began by char key");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is editing began by char key");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+    });
+
+    testInDesktop("Enter key for changed editing cell if 'editOnKeyPress' and cell edit mode", function(assert) {
+        // arrange
+        var $input;
+
+        this.options = {
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.editCell(0, 0);
+
+        // assert
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Editing navigation mode");
+
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        $input.val('Test');
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Editing navigation mode");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+    });
+
+    testInDesktop("Enter key for changed editing cell if 'editOnKeyPress' and batch edit mode", function(assert) {
+        // arrange
+        var $input;
+
+        this.options = {
+            editing: {
+                mode: "batch",
+                allowUpdating: true,
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.editCell(0, 0);
+
+        // assert
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Editing navigation mode");
+
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        $input.val('Test');
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Editing navigation mode");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+    });
+
+    testInDesktop("F2 key and cell edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("F2");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is editing by char key");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+
+        // act
+        this.triggerKeyDown("F2");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is editing by char key");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+    });
+
+    testInDesktop("F2 key and batch edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "batch"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+        this.triggerKeyDown("F2");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is editing by char key");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+
+        // act
+        this.triggerKeyDown("F2");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, 0, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is editing by char key");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.equal($("td[tabIndex]").attr("tabIndex"), 0, "tabIndex of cell");
+        assert.equal($("td.dx-focused").length, 1, "one cell is focused");
+    });
+
+    testInDesktop("'editOnKeyPress', 'enterKeyDirection' is column and cell edit mode", function(assert) {
+        // arrange
+        var $editor;
+
+        this.options = {
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "column",
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+
+        // act
+        this.triggerKeyDown("D");
+        this.clock.tick();
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 1, "editor");
+        assert.equal(this.editingController._editRowIndex, 0, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Is begin editing by char key");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "Alex", date: "01/02/2003", room: 0, phone: 555555 }, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "Alex", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 0, "no editor");
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is begin editing by char key");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "D", date: "01/02/2003", room: 0, phone: 555555 }, "data");
+    });
+
+    testInDesktop("'editOnKeyPress', 'enterKeyDirection' is row and cell edit mode", function(assert) {
+        // arrange
+        var $editor;
+
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "row",
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+
+        // act
+        this.triggerKeyDown("D");
+        this.clock.tick();
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 1, "editor");
+        assert.equal(this.editingController._editRowIndex, 0, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Is begin editing by char key");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "Alex", date: "01/02/2003", room: 0, phone: 555555 }, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "Alex", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 0, "no editor");
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is begin editing by char key");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "D", date: "01/02/2003", room: 0, phone: 555555 }, "data");
+    });
+
+    testInDesktop("'editOnKeyPress', 'enterKeyDirection' is column and batch edit mode", function(assert) {
+        // arrange
+        var $editor;
+
+        this.options = {
+            editing: {
+                mode: "batch",
+                allowUpdating: true
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "column",
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+
+        // act
+        this.triggerKeyDown("D");
+        this.clock.tick();
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 1, "editor");
+        assert.equal(this.editingController._editRowIndex, 0, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Is begin editing by char key");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "Alex", date: "01/02/2003", room: 0, phone: 555555 }, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "Alex", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 0, "no editor");
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is begin editing by char key");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "D", date: "01/02/2003", room: 0, phone: 555555 }, "data");
+    });
+
+    testInDesktop("'editOnKeyPress', 'enterKeyDirection' is 'row' and batch edit mode", function(assert) {
+        // arrange
+        var $editor;
+
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "row",
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+
+        // act
+        this.triggerKeyDown("D");
+        this.clock.tick();
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 1, "editor");
+        assert.equal(this.editingController._editRowIndex, 0, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Is begin editing by char key");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "Alex", date: "01/02/2003", room: 0, phone: 555555 }, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "Alex", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 0, "no editor");
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is begin editing by char key");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "D", date: "01/02/2003", room: 0, phone: 555555 }, "data");
+    });
+
+    testInDesktop("'editOnKeyPress', 'enterKeyDirection' is row, 'rtlEnabled' and cell edit mode", function(assert) {
+        // arrange
+        var $editor;
+
+        this.options = {
+            rtlEnabled: true,
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "row",
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+
+        // act
+        this.triggerKeyDown("D");
+        this.clock.tick();
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 1, "editor");
+        assert.equal(this.editingController._editRowIndex, 0, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Is begin editing by char key");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "Alex", date: "01/02/2003", room: 0, phone: 555555 }, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "Alex", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 0, "no editor");
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Is begin editing by char key");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "D", date: "01/02/2003", room: 0, phone: 555555 }, "data");
+    });
+
+    testInDesktop("Do not begin editing by char key if 'editOnKeyPress' is false", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+
+        // act
+        this.triggerKeyDown("D");
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "row is editing");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Editing navigation mode");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+    });
+
+    testInDesktop("RightArrow key if 'keyboardNavigation.editOnKeyPress' and editing has began by key press", function(assert) {
+        // arrange
+        var $editor;
+
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusFirstCell();
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+
+        // act
+        this.triggerKeyDown("D");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 1, "editor");
+        assert.equal(this.editingController._editRowIndex, 0, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "Alex", date: "01/02/2003", room: 0, phone: 555555 }, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "Alex", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
+
+        // act
+        this.triggerKeyDown("rightArrow");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 0, "no editor");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 0 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Editing navigation mode");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "D", date: "01/02/2003", room: 0, phone: 555555 }, "data");
+    });
+
+    testInDesktop("LeftArrow key if 'keyboardNavigation.editOnKeyPress' and editing has began by key press", function(assert) {
+        // arrange
+        var $editor;
+
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(2, 1);
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+
+        // act
+        this.triggerKeyDown("2");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 1, "editor");
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 1, phone: 666666 }, "data");
+        assert.equal($editor.dxNumberBox("instance").option("value"), "1", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "2", "input value");
+
+        // act
+        this.triggerKeyDown("leftArrow");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 0, "no editor");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 2, phone: 666666 }, "cell value");
+    });
+
+    testInDesktop("UpArrow key if 'keyboardNavigation.editOnKeyPress' and editing has began by key press", function(assert) {
+        // arrange
+        var $editor;
+
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(0, 1);
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+
+        // act
+        this.triggerKeyDown("D");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 1, "editor");
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 1, phone: 666666 }, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "Dan1", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
+
+        // act
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 0, "no editor");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "D", date: "04/05/2006", room: 1, phone: 666666 }, "cell value");
+    });
+
+    testInDesktop("DownArrow key if 'keyboardNavigation.editOnKeyPress' and editing has began by key press", function(assert) {
+        // arrange
+        var $editor;
+
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(0, 1);
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+
+        // act
+        this.triggerKeyDown("D");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 1, "editor");
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 1, phone: 666666 }, "data");
+        assert.equal($editor.dxTextBox("instance").option("value"), "Dan1", "editor value");
+        assert.equal($editor.find(".dx-texteditor-input").val(), "D", "input value");
+
+        // act
+        this.triggerKeyDown("downArrow");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 0, "no editor");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 2 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "D", date: "04/05/2006", room: 1, phone: 666666 }, "cell value");
+    });
+
+    testInDesktop("DownArrow key if 'keyboardNavigation.editOnKeyPress' and editing began 2nd time by the key press", function(assert) {
+        // arrange
+        var $editor;
+
+        // act
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(0, 1);
+
+        // assert
+        assert.equal(this.editingController._editRowIndex, -1, "cell is editing");
+
+        // act
+        this.triggerKeyDown("D");
+        this.clock.tick();
+
+        $editor = $(".dx-texteditor").eq(0);
+
+        // assert
+        assert.equal($editor.length, 1, "editor");
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+
+        // act
+        this.triggerKeyDown("downArrow");
+        this.clock.tick();
+        this.triggerKeyDown("A");
+        this.clock.tick();
+
+        // arrange, assert
+        $editor = $(".dx-texteditor").eq(0);
+        assert.equal($editor.length, 1, "editor");
+        assert.equal(this.editingController._editRowIndex, 2, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 2 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+
+        this.triggerKeyDown("downArrow");
+        this.clock.tick();
+
+        // arrange, assert
+        $editor = $(".dx-texteditor").eq(0);
+        assert.equal($editor.length, 0, "no editor");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 3 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "D", date: "04/05/2006", room: 1, phone: 666666 }, "row 1 data");
+        assert.deepEqual(this.getController("data").items()[2].data, { name: "A", date: "07/08/2009", room: 2, phone: 777777 }, "row 2 data");
+    });
+
+    testInDesktop("Editing navigation mode for a number cell if 'keyboardNavigation.editOnKeyPress' and Up/Down arrow keys", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(2, 1);
+        this.triggerKeyDown("2");
+        this.clock.tick();
+
+        // arrange, assert
+        var $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 1, phone: 666666 }, "row 1 data");
+        assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "07/08/2009", room: 2, phone: 777777 }, "row 2 data");
+        assert.equal($input.val(), "2", "input value");
+
+        // act
+        this.triggerKeyDown("downArrow");
+        this.clock.tick();
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // // arrange, assert
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 2, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 2 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 2, phone: 666666 }, "row 1 data");
+        assert.equal($input.val(), "1", "input value");
+
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "07/08/2009", room: 1, phone: 777777 }, "row 2 data");
+    });
+
+    testInDesktop("Editing navigation mode for a number cell if 'keyboardNavigation.editOnKeyPress' and Left/Right arrow keys exit", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(2, 1);
+        this.triggerKeyDown("2");
+        this.clock.tick();
+
+        // arrange, assert
+        var $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.equal($input.val(), "2", "input value");
+
+        // act
+        this.triggerKeyDown("rightArrow");
+        this.clock.tick();
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // // arrange, assert
+        $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 3, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.equal($input.val(), "1", "input value");
+
+        this.triggerKeyDown("leftArrow");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+    });
+
+    testInDesktop("Editing navigation mode for a date cell if 'keyboardNavigation.editOnKeyPress' and Up/Down arrow keys", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(1, 1);
+        this.triggerKeyDown("2");
+        this.clock.tick();
+
+        // arrange, assert
+        var $input = $(".dx-texteditor-input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.equal($input.val(), "2", "input value");
+
+        // act
+        this.triggerKeyDown("downArrow");
+        this.clock.tick();
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-texteditor-input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 2, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 2 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.equal($input.val(), "1", "input value");
+
+        // act
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-numberbox .dx-texteditor-container input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+    });
+
+    testInDesktop("Editing navigation mode for a date cell if 'keyboardNavigation.editOnKeyPress' and Left/Right arrow keys exit", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                editOnKeyPress: true
+            }
+        };
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        this.focusCell(1, 1);
+        this.triggerKeyDown("2");
+        this.clock.tick();
+
+        // arrange, assert
+        var $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.equal($input.val(), "2", "input value");
+
+        // act
+        this.triggerKeyDown("rightArrow");
+        this.clock.tick();
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // // arrange, assert
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.equal($input.val(), "1", "input value");
+
+        this.triggerKeyDown("leftArrow");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+    });
+
+    testInDesktop("Editing navigation mode for a date cell if 'useMaskBehavior', 'keyboardNavigation.editOnKeyPress' are set and 'cell' edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "column",
+                editOnKeyPress: true
+            }
+        };
+
+        this.columns = [
+            { dataField: "name" },
+            { dataField: "date", dataType: "date",
+                editorOptions: {
+                    useMaskBehavior: true
+                }
+            },
+            { dataField: "room", dataType: "number" },
+            { dataField: "phone", dataType: "number" }
+        ];
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        this.focusCell(1, 1);
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // arrange, assert
+        var $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.equal($input.val(), "1/5/2006", "input value");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 2 }, "focusedCellPosition");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "2006/01/05", room: 1, phone: 666666 }, "row 1 data");
+
+        // act
+        this.triggerKeyDown("2");
+        this.clock.tick();
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "2006/01/05", room: 1, phone: 666666 }, "row 1 data");
+        assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "2009/02/08", room: 2, phone: 777777 }, "row 2 data");
+    });
+
+    testInDesktop("Editing navigation mode for a date cell if 'useMaskBehavior', 'keyboardNavigation.editOnKeyPress' are set and 'batch' edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "batch"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "column",
+                editOnKeyPress: true
+            }
+        };
+
+        this.columns = [
+            { dataField: "name" },
+            { dataField: "date", dataType: "date",
+                editorOptions: {
+                    useMaskBehavior: true
+                }
+            },
+            { dataField: "room", dataType: "number" },
+            { dataField: "phone", dataType: "number" }
+        ];
+
+        this.setupModule();
+        this.gridView.render($("#container"));
+
+        // act
+        this.focusCell(1, 1);
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // arrange, assert
+        var $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.equal($input.val(), "1/5/2006", "input value");
+
+        // act
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 2 }, "focusedCellPosition");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "2006/01/05", room: 1, phone: 666666 }, "row 1 data");
+
+        // act
+        this.triggerKeyDown("2");
+        this.clock.tick();
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+
+        $input = $(".dx-row .dx-texteditor-input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 1, rowIndex: 1 }, "focusedCellPosition");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "2006/01/05", room: 1, phone: 666666 }, "row 1 data");
+        assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "2009/02/08", room: 2, phone: 777777 }, "row 2 data");
+    });
+
+    testInDesktop("Editing navigation mode for a number cell if 'format', 'keyboardNavigation.editOnKeyPress' are set and 'cell' edit mode", function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: "cell"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "column",
+                editOnKeyPress: true
+            }
+        };
+        this.columns = [
+            { dataField: "name" },
+            { dataField: "date", dataType: "date" },
+            {
+                dataField: "room",
+                dataType: "number",
+                editorOptions: { format: "#_0.00" }
+            },
+            { dataField: "phone", dataType: "number" }
+        ];
+
+        this.setupModule();
+        this.renderGridView();
+
+        // act
+        this.focusCell(2, 1);
+        this.triggerKeyDown("2");
+        this.clock.tick();
+
+        // arrange, assert
+        var $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 1, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.equal($input.val(), "#_2.00", "input value");
+
+        // act
+        this.triggerKeyDown("downArrow");
+        this.clock.tick();
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // // arrange, assert
+        $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 2, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 2 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.equal($input.val(), "#_1.00", "input value");
+
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+        this.triggerKeyDown("1");
+        this.clock.tick();
+
+        // // arrange, assert
+        $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal(this.editingController._editRowIndex, 0, "cell is editing");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 0 }, "focusedCellPosition");
+        assert.ok(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.equal($input.val(), "#_1.00", "input value");
+
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[0].data, { name: "Alex", date: "01/02/2003", room: 1, phone: 555555 }, "row 0 data");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 2, phone: 666666 }, "row 1 data");
+        assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "07/08/2009", room: 1, phone: 777777 }, "row 2 data");
+    });
+
+    testInDesktop("Editing navigation mode - arrow keys should operate with drop down if it is expanded", function(assert) {
+        // arrange
+        var rooms = [
+            { id: 0, name: "room0" },
+            { id: 1, name: "room1" },
+            { id: 2, name: "room2" },
+            { id: 3, name: "room3" },
+            { id: 222, name: "room222" }
+        ];
+
+        this.options = {
+            editing: {
+                mode: "batch"
+            },
+            keyboardNavigation: {
+                enterKeyDirection: "column",
+                editOnKeyPress: true
+            }
+        };
+        this.columns = [
+            { dataField: "name" },
+            { dataField: "date", dataType: "date" },
+            {
+                dataField: "room",
+                dataType: "number",
+                lookup: {
+                    dataSource: rooms,
+                    valueExpr: "id",
+                    displayExpr: "name",
+                    searchExpr: "id"
+                }
+            },
+            { dataField: "phone", dataType: "number" }
+        ];
+
+        this.setupModule();
+        this.renderGridView();
+
+        // assert
+        assert.equal($(".dx-selectbox-popup").length, 0, "no drop down");
+
+        // act
+        this.focusCell(2, 1);
+        this.triggerKeyDown("2");
+        this.clock.tick(500);
+        keyboardMock($(":focus")[0]).keyDown("downArrow");
+        this.clock.tick();
+        // assert
+        assert.equal($(".dx-selectbox-popup").length, 1, "drop down created");
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        keyboardMock($(":focus")[0]).keyDown("enter");
+
+        this.triggerKeyDown("enter");
+        this.clock.tick();
+
+        var $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 2 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[1].data, { name: "Dan1", date: "04/05/2006", room: 222, phone: 666666 }, "row 1 data");
+
+        // act
+        this.triggerKeyDown("1");
+        this.clock.tick(500);
+        keyboardMock($(":focus")[0]).keyDown("downArrow");
+        this.clock.tick();
+        keyboardMock($(":focus")[0]).keyDown("enter");
+        this.clock.tick();
+        this.triggerKeyDown("upArrow");
+        this.clock.tick();
+
+        // arrange, assert
+        $input = $(".dx-row .dx-texteditor-container input").eq(0);
+        assert.equal($input.length, 0, "input");
+        assert.notOk(this.keyboardNavigationController._isEditing);
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 2, rowIndex: 1 }, "focusedCellPosition");
+        assert.notOk(this.keyboardNavigationController._isFastEditingStarted(), "Fast editing mode");
+        assert.deepEqual(this.getController("data").items()[2].data, { name: "Dan2", date: "07/08/2009", room: 1, phone: 777777 }, "row 2 data");
     });
 });

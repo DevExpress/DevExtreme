@@ -184,6 +184,21 @@
     }
 }
 
+.dx-invalid {
+    .dx-slider-handle:after {
+        background-color: @base-invalid-color;
+    }
+
+    .dx-slider-range-visible {
+        background-color: @base-invalid-color;
+        border-color: @base-invalid-color;
+    }
+
+    .dx-slider-bar {
+        background-color: fade(@base-invalid-color, 40%);
+    }
+}
+
 .dx-rtl {
     .dx-slider-handle {
         margin-left: -@MATERIAL_SLIDER_HANDLE_SIZE / 2;

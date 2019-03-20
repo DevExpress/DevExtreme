@@ -76,6 +76,7 @@ var environment = {
             setupMocks.call(this);
             var that = this;
             that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
+            that.themeManager.theme.withArgs("legend").returns({ title: {} });
             $.each(["loadingIndicator", "legend", "size", "title", "adaptiveLayout"], function(_, name) {
                 that.themeManager.getOptions.withArgs(name).returns({});
             });
@@ -234,8 +235,17 @@ var environment = {
         var chart = this.createPieChart({});
 
         assert.equal(this.createThemeManager.callCount, 1);
-        assert.deepEqual(this.createThemeManager.lastCall.args[0], chart._options);
-        assert.equal(this.createThemeManager.lastCall.args[1], "pie", "valid theme path passed");
+        assert.deepEqual(this.createThemeManager.lastCall.args, [{ options: chart._options, themeSection: "pie", fontFields: [
+            "legend.font",
+            "legend.title.font",
+            "legend.title.subtitle.font",
+            "commonSeriesSettings.label.font",
+            "export.font",
+            "title.font",
+            "title.subtitle.font",
+            "tooltip.font",
+            "loadingIndicator.font"
+        ] }]);
     });
 
     QUnit.test("Creation layoutManager with options", function(assert) {
@@ -977,7 +987,20 @@ var environment = {
         });
 
         var legend = commons.getLegendStub();
-        assert.deepEqual(legend.update.lastCall.args[0][0], {
+
+        const getLegendData = function(passedData) {
+            return {
+                id: passedData.id,
+                argument: passedData.argument,
+                text: passedData.text,
+                argumentIndex: passedData.argumentIndex,
+                textOpacity: passedData.textOpacity,
+                states: passedData.states,
+                visible: passedData.visible
+            };
+        };
+
+        assert.deepEqual(getLegendData(legend.update.lastCall.args[0][0]), {
             id: 0,
             argument: "First",
             text: "First",
@@ -987,18 +1010,21 @@ var environment = {
                 hover: undefined,
                 selection: undefined,
                 normal: { opacity: 0.3 }
-            }
+            },
+            visible: true
         }, "Legend opacity should be change");
-        assert.deepEqual(legend.update.lastCall.args[0][1], {
+        assert.deepEqual(getLegendData(legend.update.lastCall.args[0][1]), {
             id: 1,
             argument: "Second",
             argumentIndex: 0,
             text: "Second",
+            textOpacity: undefined,
             states: {
                 hover: undefined,
                 selection: undefined,
                 normal: {}
-            }
+            },
+            visible: true
         }, "Legend opacity should not be change");
     });
 
@@ -1022,11 +1048,16 @@ var environment = {
         assert.ok(chart.layoutManager.layoutElements.calledWith([commons.getTitleStub(), legend], chart._canvas), "layout");
         assert.ok(chart.layoutManager.applyPieChartSeriesLayout.calledOnce, "layout for pie is called once");
 
-        for(var i = 0; i < updateArgs[0].length; i++) {
-            assert.strictEqual(updateArgs[0][i].text, this.stubPoints[i].argument, "Legend item name for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].states, this.stubPoints[i].getLegendStyles(), "Legend states for " + i.toString());
-        }
+        assert.equal(updateArgs[0].length, 3);
+
+        var stubPoints = this.stubPoints;
+        updateArgs[0].forEach(function(args, i) {
+            assert.strictEqual(args.text, stubPoints[i].argument, "Legend item name for " + i.toString());
+            assert.deepEqual(args.states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
+            assert.deepEqual(args.states, stubPoints[i].getLegendStyles(), "Legend states for " + i.toString());
+            assert.equal(args.points.length, 1);
+            assert.equal(args.points[0], stubPoints[i]);
+        });
     });
 
     QUnit.test("Create Legend with two series", function(assert) {
@@ -1043,12 +1074,12 @@ var environment = {
         var updateArgs = commons.getLegendStub().stub("update").lastCall.args;
 
         assert.equal(updateArgs[0].length, 3, "update args");
-        for(var i = 0; i < updateArgs[0].length; i++) {
-            assert.strictEqual(updateArgs[0][i].text, points[i].argument, "Legend item name for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].states, points[i].getLegendStyles(), "Legend states for " + i.toString());
-            assert.deepEqual(updateArgs[0][i].id, points[i].index, "Legend id for " + i.toString());
-        }
+        updateArgs[0].forEach(function(args, i) {
+            assert.strictEqual(args.text, points[i].argument, "Legend item name for " + i.toString());
+            assert.deepEqual(args.states, { hover: undefined, selection: undefined, normal: {} }, "Legend states for " + i.toString());
+            assert.deepEqual(args.states, points[i].getLegendStyles(), "Legend states for " + i.toString());
+            assert.equal(args.points.length, 2);
+        });
     });
 
     QUnit.test("Create legend with two series, different arguments", function(assert) {

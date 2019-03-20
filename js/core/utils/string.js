@@ -80,7 +80,7 @@ var stringFormat = function() {
 
 var replaceAll = (function() {
     var quote = function(str) {
-        return (str + "").replace(/([\+\*\?\\\.\[\^\]\$\(\)\{\}\><\|\=\!\:])/g, "\\$1");
+        return (str + "").replace(/([+*?.[^\]$(){}><|=!:])/g, "\\$1");
     };
 
     return function(text, searchToken, replacementToken) {

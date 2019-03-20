@@ -1,7 +1,11 @@
-var $ = require("jquery"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+import $ from "jquery";
+import devices from 'core/devices';
+import keyboardMock from "../../helpers/keyboardMock.js";
+import { validateGroup } from 'ui/validation_engine';
 
-require("ui/radio_group/radio_button");
+import "common.css!";
+import "ui/radio_group/radio_button";
+import "ui/validator";
 
 QUnit.testStart(function() {
     var markup =
@@ -81,3 +85,50 @@ QUnit.test("state changes on space press", function(assert) {
 
     assert.equal(instance.option("value"), true, "value has been change successfully");
 });
+
+QUnit.module("validation");
+
+if(devices.real().deviceType === "desktop") {
+    QUnit.test("the click should be processed before the validation message is shown (T570458)", (assert) => {
+        const $radioButton = $("#radioButton")
+            .dxRadioButton({})
+            .dxValidator({
+                validationRules: [{ type: "required", message: "message" }]
+            });
+        const radioButton = $radioButton.dxRadioButton("instance");
+        const isValidationMessageVisible = () => {
+            const message = $radioButton.find(".dx-overlay-wrapper.dx-invalid-message").get(0);
+
+            return message && window.getComputedStyle(message).visibility === "visible";
+        };
+
+        validateGroup();
+        assert.notOk(radioButton.option("isValid"));
+
+        $radioButton.focus();
+        assert.notOk(radioButton.option("isValid"));
+        assert.notOk(isValidationMessageVisible());
+
+        $radioButton.trigger("dxclick");
+        assert.ok(radioButton.option("isValid"));
+        assert.notOk(isValidationMessageVisible());
+    });
+
+    QUnit.test("should show validation message after focusing", (assert) => {
+        const clock = sinon.useFakeTimers();
+        const $radioButton = $("#radioButton")
+            .dxRadioButton({})
+            .dxValidator({
+                validationRules: [{ type: "required", message: "message" }]
+            });
+
+        validateGroup();
+        $radioButton.focus();
+        clock.tick(200);
+
+        const message = $radioButton.find(".dx-overlay-wrapper.dx-invalid-message").get(0);
+
+        assert.strictEqual(window.getComputedStyle(message).visibility, "visible");
+        clock.restore();
+    });
+}

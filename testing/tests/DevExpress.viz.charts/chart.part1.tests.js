@@ -30,7 +30,21 @@ QUnit.test("Theme manager with no settings", function(assert) {
     var chart = this.createChart({});
 
     assert.equal(this.createThemeManager.callCount, 1);
-    assert.deepEqual(this.createThemeManager.lastCall.args, [chart._options, "chart"]);
+    assert.deepEqual(this.createThemeManager.lastCall.args, [{ themeSection: "chart", options: chart._options, fontFields: [
+        "legend.font",
+        "legend.title.font",
+        "legend.title.subtitle.font",
+        "commonSeriesSettings.label.font",
+        "export.font",
+        "title.font",
+        "title.subtitle.font",
+        "tooltip.font",
+        "loadingIndicator.font",
+        "commonAxisSettings.label.font",
+        "commonAxisSettings.title.font",
+        "crosshair.label.font",
+        "annotations.labelOptions.font"
+    ] }]);
 });
 
 QUnit.test("Creation layoutManager with options", function(assert) {
@@ -51,6 +65,21 @@ QUnit.test("Updating layoutManager options", function(assert) {
     assert.deepEqual(layoutManager.setOptions.lastCall.args, [{ width: "someWidth", height: "someHeight" }]);
 });
 
+// T708642
+QUnit.test("Claer hover after series updating", function(assert) {
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
+    chartMocks.seriesMockData.series.push(new MockSeries({}));
+
+    var options = { series: [{ name: "series1" }, { name: "series2" }] },
+        chart = this.createChart(options);
+
+    commons.getTrackerStub().stub("clearHover").reset();
+
+    chart.option(options);
+
+    assert.equal(commons.getTrackerStub().stub("clearHover").callCount, 1);
+});
+
 QUnit.test("Create Tracker.", function(assert) {
     this.themeManager.getOptions.withArgs("pointSelectionMode").returns("pointSelectionModeWithTheme");
     this.themeManager.getOptions.withArgs("seriesSelectionMode").returns("serieSelectionModeWithTheme");
@@ -61,8 +90,7 @@ QUnit.test("Create Tracker.", function(assert) {
             commonPaneSettings: {
                 border: { visible: true }
             },
-            zoomingMode: "zoomingModeValue",
-            scrollingMode: "scrollingModeValue",
+            stickyHovering: false,
             rotated: "rotated"
         }),
         trackerStub = trackerModule.ChartTracker;
@@ -82,8 +110,7 @@ QUnit.test("Create Tracker.", function(assert) {
     assert.equal(updateArg0.crosshair, chart._crosshair, "crosshair");
     assert.equal(updateArg0.chart, chart, "chart");
     assert.equal(updateArg0.rotated, "rotated", "rotated");
-    assert.equal(updateArg0.zoomingMode, "zoomingModeValue", "zoomingMode");
-    assert.equal(updateArg0.scrollingMode, "scrollingModeValue", "scrollingMode");
+    assert.strictEqual(updateArg0.stickyHovering, false, "stickyHovering");
     assert.equal(updateArg0.seriesSelectionMode, "serieSelectionModeWithTheme", "series selection mode");
     assert.equal(updateArg0.pointSelectionMode, "pointSelectionModeWithTheme", "point selection mode");
 

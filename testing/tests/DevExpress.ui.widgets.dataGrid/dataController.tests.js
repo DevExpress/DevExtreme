@@ -611,7 +611,39 @@ QUnit.test("the number of visible items should be identical after expandAll/coll
     assert.equal(this.dataController.items().length, itemsCount, "There are no excess items");
 });
 
-QUnit.test("Using focusedRowEnabled should set sorting for the not sorted simple key column", function(assert) {
+QUnit.test("Using focusedRowEnabled should set sorting for the not sorted simple key column if remoteOperations enabled", function(assert) {
+    // arrange
+    var dataSource = createDataSource([
+        { team: 'internal', name: 'Alex', age: 30 },
+        { team: 'internal', name: 'Dan', age: 25 },
+        { team: 'internal', name: 'Bob', age: 20 },
+        { team: 'public', name: 'Alice', age: 19 }],
+    { key: "name" },
+    {
+        pageSize: 2,
+        asyncLoadEnabled: false
+    });
+
+    this.applyOptions({
+        dataSource: dataSource,
+        focusedRowEnabled: true,
+        remoteOperations: true
+    });
+
+    // act
+    this.dataController._refreshDataSource();
+    // assert
+    assert.equal(dataSource.items()[0].name, "Alex", "Item name is Alex");
+    assert.equal(dataSource.items()[1].name, "Alice", "Item name is Alice");
+    // act
+    dataSource.pageIndex(1);
+    dataSource.load();
+    // assert
+    assert.equal(dataSource.items()[0].name, "Bob", "Item2");
+    assert.equal(dataSource.items()[1].name, "Dan", "Item3");
+});
+
+QUnit.test("Using focusedRowEnabled should not set sorting for the not sorted simple key column if remoteOperations disabled", function(assert) {
     // arrange
     var dataSource = createDataSource([
         { team: 'internal', name: 'Alex', age: 30 },
@@ -632,27 +664,29 @@ QUnit.test("Using focusedRowEnabled should set sorting for the not sorted simple
     // act
     this.dataController._refreshDataSource();
     // assert
-    assert.equal(dataSource.items()[0].name, "Alex", "Item name is Alex");
-    assert.equal(dataSource.items()[1].name, "Alice", "Item name is Alice");
+    assert.equal(dataSource.items()[0].name, "Alex", "Item0");
+    assert.equal(dataSource.items()[1].name, "Dan", "Item1");
     // act
     dataSource.pageIndex(1);
     dataSource.load();
-    assert.equal(dataSource.items()[0].name, "Bob", "Item name is Bob");
-    assert.equal(dataSource.items()[1].name, "Dan", "Item name is Dan");
+    // assert
+    assert.equal(dataSource.items()[0].name, "Bob", "Item2");
+    assert.equal(dataSource.items()[1].name, "Alice", "Item3");
 });
 
-QUnit.test("Using focusedRowEnabled should set sorting for the not sorted composite key columns", function(assert) {
+QUnit.test("Using focusedRowEnabled should not set sorting for the not sorted composite key columns", function(assert) {
     // arrange
     var dataSource = createDataSource([
-        { team: 'internal', name: 'Alex', age: 30 },
-        { team: 'internal', name: 'Dan', age: 25 },
-        { team: 'internal', name: 'Bob', age: 20 },
-        { team: 'public', name: 'Alice', age: 19 }],
-    { key: [ "name", "age" ] },
-    {
-        pageSize: 2,
-        asyncLoadEnabled: false
-    });
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Dan', age: 25 },
+            { team: 'internal', name: 'Bob', age: 20 },
+            { team: 'public', name: 'Alice', age: 19 }],
+        { key: [ "name", "age" ] },
+        {
+            pageSize: 2,
+            asyncLoadEnabled: false
+        }),
+        dataIndexGetter;
 
     this.applyOptions({
         dataSource: dataSource,
@@ -661,16 +695,18 @@ QUnit.test("Using focusedRowEnabled should set sorting for the not sorted compos
 
     // act
     this.dataController._refreshDataSource();
-    assert.deepEqual(this.dataController._columnsController.getSortDataSourceParameters(), [{ selector: "name", desc: false }, { selector: "age", desc: false }], "Sort parameters");
+    dataIndexGetter = this.dataController._dataSource.getDataIndexGetter();
+    this.dataController._dataSource.getDataIndexGetter();
+    assert.deepEqual(this.dataController._columnsController.getSortDataSourceParameters(), [{ desc: false, selector: dataIndexGetter }], "Sort parameters");
     // assert
-    assert.equal(dataSource.items()[0].name, "Alex", "Item name is Alex");
-    assert.equal(dataSource.items()[1].name, "Alice", "Item name is Alice");
+    assert.equal(dataSource.items()[0].name, "Alex", "Item0");
+    assert.equal(dataSource.items()[1].name, "Dan", "Item1");
     // act
     dataSource.pageIndex(1);
     dataSource.load();
     // assert
-    assert.equal(dataSource.items()[0].name, "Bob", "Item name is Bob");
-    assert.equal(dataSource.items()[1].name, "Dan", "Item name is Dan");
+    assert.equal(dataSource.items()[0].name, "Bob", "Item2");
+    assert.equal(dataSource.items()[1].name, "Alice", "Item3");
 });
 
 QUnit.test("Operation filter should generates correctly when sorting, remoteOperations, and the key column is not present", function(assert) {
@@ -3353,6 +3389,19 @@ var setupVirtualRenderingModule = function() {
     });
 };
 
+// T717716
+QUnit.test("rows should not be recreated on pageIndex event", function(assert) {
+    var rows = this.getVisibleRows(),
+        firstRow = rows[0];
+
+    // act
+    this.dataController.dataSource().changed.fire({ changeType: "pageIndex" });
+
+    // assert
+    assert.strictEqual(this.getVisibleRows(), rows, "rows are not changed");
+    assert.strictEqual(this.getVisibleRows()[0], firstRow, "first row is not changed");
+});
+
 var teardownVirtualRenderingModule = function() {
     this.dispose();
     this.clock.restore();
@@ -3427,6 +3476,7 @@ QUnit.test("scroll to second render page and expand row after expand row on the 
 QUnit.test("scroll to second render page and expand row after expand row on the first page and refresh", function(assert) {
     this.dataController.expandRow(1);
     this.dataController.refresh();
+    this.clock.tick();
     this.dataController.setViewportPosition(50);
     this.dataController.expandRow(5);
 
@@ -9196,6 +9246,78 @@ QUnit.test("total custom summary by selection", function(assert) {
     assert.ok(!this.dataController.isLoading());
 });
 
+// T719655
+QUnit.test("refresh group custom summary by selection if data is grouped to one group", function(assert) {
+    var that = this;
+    this.options = {
+        keyExpr: "id",
+        dataSource: [
+            { id: 1, name: 'Alex', age: 19 },
+            { id: 2, name: 'Alex', age: 23 },
+            { id: 3, name: 'Alex', age: 25 }
+        ],
+        grouping: {
+            autoExpandAll: true
+        },
+        columns: ["id", { dataField: "name", groupIndex: 0 }, "age"],
+        summary: {
+            groupItems: [{
+                name: 'SelectedAvgAge',
+                showInColumn: 'age',
+                showInGroupFooter: true,
+                summaryType: 'custom'
+            }],
+            calculateCustomSummary: function(options) {
+                if(options.name === 'SelectedAvgAge') {
+                    if(options.summaryProcess === 'start') {
+                        options.totalValue = [0, 0];
+                    }
+                    if(options.summaryProcess === 'calculate') {
+                        if(options.component.isRowSelected(options.value.id)) {
+                            options.totalValue = [options.totalValue[0] + options.value.age, options.totalValue[1] + 1];
+                        }
+                    }
+                    if(options.summaryProcess === 'finalize') {
+                        options.totalValue = options.totalValue[0] / options.totalValue[1];
+                    }
+                }
+            }
+        },
+        onSelectionChanged: function(e) {
+            that.refresh(true);
+        },
+        selectedRowKeys: [1]
+    };
+
+    setupDataGridModules(this, ['data', 'columns', 'selection', 'summary', 'grouping']);
+    this.clock.tick();
+
+    var changedSpy = sinon.spy();
+    this.dataController.changed.add(changedSpy);
+
+    // act
+    this.selectRows([1, 2]);
+    this.clock.tick();
+
+    // assert
+    assert.deepEqual(changedSpy.callCount, 2);
+    assert.deepEqual(changedSpy.getCall(0).args[0].changeType, "updateSelection");
+    assert.deepEqual(changedSpy.getCall(1).args[0].changeType, "update");
+    assert.deepEqual(changedSpy.getCall(1).args[0].rowIndices, [4]);
+    assert.deepEqual(changedSpy.getCall(1).args[0].columnIndices, [undefined]);
+
+    assert.deepEqual(this.dataController.items().length, 5);
+    assert.deepEqual(this.dataController.items()[4].rowType, "groupFooter");
+    assert.deepEqual(this.dataController.items()[4].key, ["Alex"]);
+    assert.deepEqual(this.dataController.items()[4].summaryCells, [[], [], [{
+        name: 'SelectedAvgAge',
+        value: (19 + 23) / 2,
+        showInColumn: 'age',
+        showInGroupFooter: true,
+        summaryType: 'custom'
+    }]]);
+});
+
 QUnit.test("Several total summary items in different column", function(assert) {
     this.options = {
         dataSource: [
@@ -11641,6 +11763,16 @@ QUnit.module("Refresh changesOnly", {
             that.dataSource.load();
         };
 
+        that.setValue = function(rowIndex, columnId, value) {
+            var row = that.getVisibleRows()[rowIndex];
+            this.editingController.updateFieldValue({
+                row: row,
+                key: row.key,
+                data: row.data,
+                column: this.columnOption(columnId)
+            }, value, "", true);
+        };
+
     }, afterEach: teardownModule
 });
 
@@ -11865,6 +11997,61 @@ QUnit.test("reorder items", function(assert) {
     assert.deepEqual(items[2].values, [1, "Alex", 30]);
     assert.deepEqual(changedArgs.changeType, "refresh", "full refresh is occured");
     assert.strictEqual(changedArgs.repaintChangesOnly, true);
+});
+
+// T720721, T720597
+QUnit.test("grouping if repaintChangesOnly", function(assert) {
+    this.options = {
+        grouping: {
+            autoExpandAll: true
+        },
+        repaintChangesOnly: true
+    };
+
+    this.setupModules();
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    // act
+    this.columnOption("id", "groupIndex", 0);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items.length, 6);
+    assert.deepEqual(items[0].rowType, "group");
+    assert.deepEqual(changedArgs.changeType, "refresh", "full refresh is occured");
+    assert.strictEqual(changedArgs.repaintChangesOnly, false);
+});
+
+// T721235
+QUnit.test("search if repaintChangesOnly", function(assert) {
+    this.options = {
+        repaintChangesOnly: true,
+        searchPanel: {}
+    };
+
+    this.setupModules();
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    // act
+    this.option("searchPanel.text", "Bob");
+    this.dataController.optionChanged({ name: "searchPanel", fullName: "searchPanel.text" });
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(items.length, 1);
+    assert.deepEqual(items[0].data.name, "Bob");
+    assert.deepEqual(changedArgs.changeType, "refresh", "full refresh is occured");
+    assert.strictEqual(changedArgs.repaintChangesOnly, false);
 });
 
 QUnit.test("full refresh after partial", function(assert) {
@@ -12095,6 +12282,39 @@ QUnit.test("edit cell should not be updated on data change", function(assert) {
     assert.deepEqual(changedArgs.columnIndices, [[2]], "only last column is updated");
 });
 
+// T710380
+QUnit.test("command column cell should not be updated after cell value change if setCellValue is defined", function(assert) {
+    this.setupModules();
+
+    var changedArgs;
+
+    this.dataController.changed.add(function(args) {
+        changedArgs = args;
+    });
+
+    this.columnOption("age", {
+        setCellValue: function(data, value) {
+            data.age = value;
+        }
+    });
+
+    this.options.repaintChangesOnly = true;
+    this.options.editing = { mode: "row", allowUpdating: true };
+    this.editRow(0);
+
+    // act
+    this.setValue(0, "age", 99);
+
+    // assert
+    var items = this.dataController.items();
+    assert.deepEqual(this.getVisibleColumns()[3].type, "buttons", "last column type is buttons");
+    assert.deepEqual(items[0].values, [1, "Alex", 99, null]);
+    assert.deepEqual(changedArgs.changeType, "update");
+    assert.deepEqual(changedArgs.changeTypes, ["update"]);
+    assert.deepEqual(changedArgs.rowIndices, [0]);
+    assert.deepEqual(changedArgs.columnIndices, [[2]], "only age column is updated");
+});
+
 QUnit.test("change dataSource item field", function(assert) {
     this.setupModules();
 
@@ -12285,7 +12505,15 @@ QUnit.test("remove one row using push", function(assert) {
 });
 
 QUnit.test("update one cell using push with reshapeOnPush", function(assert) {
-    this.setupModules({ reshapeOnPush: true, pushAggregationTimeout: 0, filter: ["age", ">=", 18] });
+    this.options = {
+        columns: [{ dataField: "age", dataType: "number" }]
+    };
+
+    this.setupModules({
+        reshapeOnPush: true,
+        pushAggregationTimeout: 1,
+        filter: ["age", ">=", 18]
+    });
 
     var changedArgs;
 
@@ -12297,6 +12525,7 @@ QUnit.test("update one cell using push with reshapeOnPush", function(assert) {
 
     // act
     this.dataSource.store().push([{ type: "update", key: 1, data: { age: 15 } }]);
+    this.clock.tick(1);
 
     // assert
     var items = this.dataController.items();
@@ -13217,6 +13446,33 @@ QUnit.test("loadAll during data loading", function(assert) {
 
     // assert
     assert.ok(isLoadAllFailed, "loadAll failed");
+    assert.equal(this.dataController.items().length, 3, 'items count');
+    assert.ok(!this.dataController.isLoading(), 'no loading');
+});
+
+// T713135
+QUnit.test("loadAll during custom loading", function(assert) {
+    var allItems;
+
+    this.setupDataGridModules({
+        dataSource: this.array,
+        paging: {
+            pageSize: 3
+        }
+    });
+
+    this.clock.tick();
+
+    // act
+    this.dataController.beginCustomLoading("test");
+    this.dataController.loadAll().done(function(items) {
+        allItems = items;
+    });
+    this.dataController.endCustomLoading();
+    this.clock.tick();
+
+    // assert
+    assert.equal(allItems.length, 5, "loaded all item count");
     assert.equal(this.dataController.items().length, 3, 'items count');
     assert.ok(!this.dataController.isLoading(), 'no loading');
 });

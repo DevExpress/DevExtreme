@@ -16,7 +16,10 @@ var extend = require("../../core/utils/extend").extend,
     _extend = extend,
     vizUtils = require("../core/utils"),
     _map = vizUtils.map,
-    mergeMarginOptions = vizUtils.mergeMarginOptions;
+    mergeMarginOptions = vizUtils.mergeMarginOptions,
+
+    FONT = "font",
+    COMMON_AXIS_SETTINGS = "commonAxisSettings";
 
 function prepareAxis(axisOptions) {
     return _isArray(axisOptions) ? axisOptions.length === 0 ? [{}] : axisOptions : [axisOptions];
@@ -45,6 +48,8 @@ var AdvancedChart = BaseChart.inherit({
             "equalBarWidth": { since: "18.1", message: "Use the 'commonSeriesSettings.ignoreEmptyPoints' or 'series.ignoreEmptyPoints' option instead" }
         });
     },
+
+    _fontFields: [COMMON_AXIS_SETTINGS + ".label." + FONT, COMMON_AXIS_SETTINGS + ".title." + FONT],
 
     _dispose: function() {
         var that = this,
@@ -186,7 +191,7 @@ var AdvancedChart = BaseChart.inherit({
         _each(axesBasis, (index, basis) => {
             let axis = basis.axis;
             if(basis.axis && isArgumentAxes) {
-                that._displayedArgumentAxisIndex = index;
+                basis.axis.isVirtual = basis.axis.pane !== paneWithNonVirtualAxis;
             } else if(basis.options) {
                 axis = that._createAxis(isArgumentAxes, basis.options,
                     isArgumentAxes ? basis.options.pane !== paneWithNonVirtualAxis : undefined,
@@ -261,12 +266,13 @@ var AdvancedChart = BaseChart.inherit({
         this._scrollBar && this._scrollBarGroup.linkAppend(); // TODO: Must be appended in the same place where removed (chart)
     },
     _getLegendTargets: function() {
-        var that = this;
-        return _map(that.series, function(item) {
-            if(item.getOptions().showInLegend) {
-                return that._getLegendOptions(item);
+        return this.series.map(s => {
+            const item = this._getLegendOptions(s);
+            item.legendData.series = s;
+            if(!s.getOptions().showInLegend) {
+                item.legendData.visible = false;
             }
-            return null;
+            return item;
         });
     },
     _legendItemTextField: "name",
@@ -438,7 +444,7 @@ var AdvancedChart = BaseChart.inherit({
     },
 
     getArgumentAxis: function() {
-        return (this._argumentAxes || [])[this._displayedArgumentAxisIndex];
+        return (this._argumentAxes || []).filter(a => !a.isVirtual)[0];
     },
 
     getValueAxis: function(name) {
@@ -521,10 +527,7 @@ var AdvancedChart = BaseChart.inherit({
         }, that._getAxisRenderingOptions(typeSelector));
         const axis = new axisModule.Axis(renderingSettings);
         axis.updateOptions(options);
-
-        if(!virtual && _isDefined(index)) {
-            that._displayedArgumentAxisIndex = index;
-        }
+        axis.isVirtual = virtual;
 
         return axis;
     },
@@ -533,7 +536,7 @@ var AdvancedChart = BaseChart.inherit({
 
     _getTrackerSettings: function() {
         return _extend(this.callBase(), {
-            argumentAxis: this._argumentAxes[this._displayedArgumentAxisIndex]
+            argumentAxis: this.getArgumentAxis()
         });
     },
 

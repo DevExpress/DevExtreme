@@ -22,6 +22,7 @@ import { when, Deferred, fromPromise } from "../../core/utils/deferred";
 import commonUtils from "../../core/utils/common";
 import iconUtils from "../../core/utils/icon";
 import Scrollable from "../scroll_view/ui.scrollable";
+import deferredUtils from "../../core/utils/deferred";
 
 var EDIT_FORM_CLASS = "edit-form",
     EDIT_FORM_ITEM_CLASS = "edit-form-item",
@@ -608,9 +609,11 @@ var EditingController = modules.ViewController.inherit((function() {
                 i,
                 key,
                 item,
-                editData = that._editData;
+                editData;
 
             that.update(changeType);
+
+            editData = that._editData;
             for(i = 0; i < editData.length; i++) {
                 key = editData[i].key;
                 item = that._generateNewItem(key);
@@ -654,7 +657,7 @@ var EditingController = modules.ViewController.inherit((function() {
                         item.modified = true;
                         item.oldData = item.data;
                         item.data = createObjectWithChanges(item.data, data);
-                        item.modifiedValues = generateDataValues(data, columns);
+                        item.modifiedValues = generateDataValues(data, columns, true);
                         break;
                     case DATA_EDIT_DATA_REMOVE_TYPE:
                         if(editMode === EDIT_MODE_BATCH) {
@@ -679,14 +682,15 @@ var EditingController = modules.ViewController.inherit((function() {
         _initNewRow: function(options, insertKey) {
             this.executeAction("onInitNewRow", options);
 
-            var rows = this._dataController.items(),
+            var dataController = this._dataController,
+                rows = dataController.items(),
                 row = rows[insertKey.rowIndex];
 
             if(row && (!row.isEditing && row.rowType === "detail" || row.rowType === "detailAdaptive")) {
                 insertKey.rowIndex++;
             }
 
-            insertKey.dataRowIndex = rows.filter(function(row, index) {
+            insertKey.dataRowIndex = dataController.getRowIndexDelta() + rows.filter(function(row, index) {
                 return index < insertKey.rowIndex && (row.rowType === "data" || row.rowType === "group");
             }).length;
         },
@@ -730,6 +734,11 @@ var EditingController = modules.ViewController.inherit((function() {
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
                 editMode = getEditMode(that),
                 $firstCell;
+
+            if(!store) {
+                dataController.fireError("E1052", this.component.NAME);
+                return;
+            }
 
             if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
                 that.saveEditData();
@@ -994,12 +1003,15 @@ var EditingController = modules.ViewController.inherit((function() {
                         commonUtils.deferRender(function() {
                             that._repaintEditCell(column, oldColumn, oldEditRowIndex);
                         });
+                    } else {
+                        that._processCanceledEditingCell();
                     }
-
                 });
             }
             return false;
         },
+
+        _processCanceledEditingCell: function() { },
 
         _prepareEditCell: function(params, item, editColumnIndex, editRowIndex) {
             var that = this;
@@ -1549,9 +1561,11 @@ var EditingController = modules.ViewController.inherit((function() {
             var that = this,
                 editMode = getEditMode(that),
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
-                dataController = that._dataController;
+                dataController = that._dataController,
+                result = deferredUtils.when();
 
             if(!isRowEditMode(that)) {
+                result = deferredUtils.Deferred();
                 setTimeout(function() {
                     if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
                         that.saveEditData().done(function() {
@@ -1571,8 +1585,10 @@ var EditingController = modules.ViewController.inherit((function() {
                             rowIndices: rowIndices
                         });
                     }
+                    result.resolve();
                 });
             }
+            return result.promise();
         },
 
         update: function(changeType) {
@@ -1603,7 +1619,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 columns;
 
             if(rowKey === undefined) {
-                that._dataController.dataErrorOccurred.fire(errors.Error("E1043"));
+                that._dataController.fireError("E1043");
             }
 
             if(options.column.setCellValue) {
@@ -2356,8 +2372,8 @@ module.exports = {
                         return;
                     }
 
-                    if(oldItem.rowType === newItem.rowType && isRowEditMode && editingController.isEditRow(rowIndex)) {
-                        return isLiveUpdate ? [] : undefined;
+                    if(oldItem.rowType === newItem.rowType && isRowEditMode && editingController.isEditRow(rowIndex) && isLiveUpdate) {
+                        return [];
                     }
 
                     return this.callBase.apply(this, arguments);
@@ -2554,6 +2570,10 @@ module.exports = {
                         }
                     }
 
+                    if(isEditing) {
+                        this._editCellPrepared($cell);
+                    }
+
                     var modifiedValues = parameters.row && (parameters.row.inserted ? parameters.row.values : parameters.row.modifiedValues);
 
                     if(modifiedValues && modifiedValues[columnIndex] !== undefined && parameters.column && !isCommandCell && parameters.column.setCellValue) {
@@ -2565,6 +2585,7 @@ module.exports = {
 
                     this.callBase.apply(this, arguments);
                 },
+                _editCellPrepared: function($cell) { },
                 _formItemPrepared: function() { },
                 _isFormItem: function(parameters) {
                     var isDetailRow = parameters.rowType === "detail" || parameters.rowType === "detailAdaptive",

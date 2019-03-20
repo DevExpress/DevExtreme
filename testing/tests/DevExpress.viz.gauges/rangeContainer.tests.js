@@ -5,7 +5,7 @@ var $ = require("jquery"),
     CircularRangeContainer = require("viz/gauges/circular_range_container"),
     LinearRangeContainer = require("viz/gauges/linear_range_container"),
     Translator1D = require("viz/translators/translator1d").Translator1D,
-    ThemeManager = require("viz/gauges/theme_manager");
+    themeManagerModule = require("viz/gauges/theme_manager");
 
 var TestRangeContainer = BaseRangeContainer.inherit({
     _processOptions: function() {
@@ -28,7 +28,7 @@ var environment = {
         this.renderer = new vizMocks.Renderer();
         this.container = new vizMocks.Element();
         this.translator = new Translator1D();
-        this.themeManager = new ThemeManager();
+        this.themeManager = new themeManagerModule.ThemeManager({});
         sinon.stub(this.themeManager, "createPalette", this.themeManager.createPalette);
         this.rangeContainer = new TestRangeContainer({
             renderer: this.renderer,
@@ -462,7 +462,7 @@ QUnit.module('BaseRangeContainer - palette', $.extend({}, environment, {
         assert.strictEqual(list[list.length - 1].range.color, 'none', 'background color');
 
         assert.strictEqual(this.themeManager.createPalette.callCount, 1);
-        assert.deepEqual(this.themeManager.createPalette.firstCall.args, [palette, { type: 'indicatingSet', keepLastColorInEnd: true, extensionMode: paletteExtensionMode }]);
+        assert.deepEqual(this.themeManager.createPalette.firstCall.args, [palette, { type: 'indicatingSet', keepLastColorInEnd: true, extensionMode: paletteExtensionMode, count: ranges.length }]);
     }
 }));
 
@@ -484,6 +484,10 @@ QUnit.test('palette, no colors', function(assert) {
 
 QUnit.test('palette is shorter than ranges when paletteExtensionMode is alternate', function(assert) {
     this.checkColors(assert, [null, null, null, null, null], ['p1', 'p2'], ['p1', 'p2', 'p1', 'p2'], "alternate");
+});
+
+QUnit.test("First range with color", function(assert) {
+    this.checkColors(assert, ["#679ec5", null], null, ['#679ec5', '#ffc720']);
 });
 
 QUnit.test('palette is shorter than ranges when paletteExtensionMode is blend', function(assert) {

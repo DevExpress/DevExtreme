@@ -6,6 +6,7 @@ import gridCoreUtils from "../grid_core/ui.grid_core.utils";
 import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
 import { each } from "../../core/utils/iterator";
+import browser from "../../core/utils/browser";
 
 var CONTENT_CLASS = "content",
     CONTENT_FIXED_CLASS = "content-fixed",
@@ -583,7 +584,8 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             scrollable,
             scrollTop,
             contentClass = that.addWidgetPrefix(CONTENT_CLASS),
-            element = that.element();
+            element = that.element(),
+            scrollDelay = browser.mozilla ? 60 : 0;
 
         if(element && that._isFixedTableRendering) {
             $content = element.children("." + contentClass);
@@ -597,7 +599,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                     that._fixedScrollTimeout = setTimeout(function() {
                         scrollTop = $(e.target).scrollTop();
                         scrollable.scrollTo({ y: scrollTop });
-                    });
+                    }, scrollDelay);
                 });
                 eventsEngine.on($content, wheelEvent.name, function(e) {
                     if(scrollable) {
@@ -786,14 +788,19 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
     setScrollerSpacing: function(vWidth, hWidth) {
         var that = this,
-            styles;
+            useNativeScrolling,
+            styles = { marginBottom: 0 },
+            $fixedContent = that.element().children("." + this.addWidgetPrefix(CONTENT_FIXED_CLASS));
 
-        var $fixedContent = that.element().children("." + this.addWidgetPrefix(CONTENT_FIXED_CLASS));
-        if($fixedContent.length) {
-            styles = that.option("rtlEnabled") ? { marginLeft: vWidth } : { marginRight: vWidth };
+        if($fixedContent.length && that._fixedTableElement) {
+            $fixedContent.css(styles);
+            that._fixedTableElement.css(styles);
+
+            styles[that.option("rtlEnabled") ? "marginLeft" : "marginRight"] = vWidth;
             styles.marginBottom = hWidth;
 
-            $fixedContent.css(styles);
+            useNativeScrolling = that._scrollable && that._scrollable.option("useNative");
+            (useNativeScrolling ? $fixedContent : that._fixedTableElement).css(styles);
         }
     },
 

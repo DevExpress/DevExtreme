@@ -295,7 +295,7 @@
 
 // Button
 
-@button-icon-color: @base-icon-color;
+@button-icon-color: @base-text-color;
 @button-inverted-icon-color: @base-inverted-icon-color;
 
 @button-border-radius: @base-border-radius;
@@ -614,12 +614,17 @@
 @gallery-navbutton-active-color: @base-accent;
 
 // HtmlEditor
+@htmleditor-border-color: @base-border-color;
+@htmleditor-invalid-border-color: @base-invalid-color;
+@htmleditor-invalid-faded-border-color: @base-invalid-faded-border-color;
 @htmleditor-toolbar-border-color: @base-border-color;
 @htmleditor-normal-format-active-bg: darken(@button-normal-bg, 10%);
 @htmleditor-default-format-active-bg: darken(@button-default-bg, 10%);
 @htmleditor-danger-format-active-bg: darken(@button-danger-bg, 10%);
 @htmleditor-success-format-active-bg: darken(@button-success-bg, 10%);
 @htmleditor-variable-bg: fade(@base-accent, 15%);
+@htmleditor-resize-frame-border-color: @base-accent;
+@htmleditor-resize-handle-bg: @base-accent;
 
 // List
 /**
@@ -756,7 +761,6 @@
 // Lookup
 
 @lookup-icon-color: @base-icon-color;
-@lookup-validation-message-color: @base-invalid-color;
 
 // Selectbox
 /**
@@ -1996,51 +2000,6 @@
 @scrollbar-button-vertical-increment-bg: url(images/widgets/material/color-schemes/dark/scrollable/scrollbar-vertical-arrow-down.png) no-repeat;
 @colorbox-preview-empty-bg: url(images/widgets/material/color-schemes/dark/colorbox/nocolor.png);
 @loadindicator-background-image: url(images/widgets/material/color-schemes/dark/loader64.gif);
-
-
-// SPA
-
-// Desktop
-
-@desktop-layout-main-menu-bg: @base-accent;
-
-/**
-* @name 10. Toolbar major color
-* @type color
-* @group layouts.desktop
-*/
-@desktop-layout-menu-color: lighten(@base-text-color, 73.8%);
-@desktop-layout-menu-selected-bg: @tabs-tab-bg;
-
-/**
-* @name 10. Toolbar item hover background color
-* @type color
-* @group layouts.desktop
-*/
-@desktop-layout-menu-hover-bg: lighten(@desktop-layout-main-menu-bg, 15%);
-
- /**
- * @name 10. Toolbar border color
- * @type color
- * @group layouts.desktop
- */
-@desktop-layout-toolbar-border-color: @base-border-color;
-
-/**
-* @name 10. Copyright text color
-* @type color
-* @group layouts.desktop
-*/
-@desktop-layout-copyright-color: lighten(@base-text-color, 30.5%);
-
-// Master-detail
-
-/**
-* @name 10. Splitter color
-* @type color
-* @group layouts.split
-*/
-@desktop-splitlayout-border-color: @desktop-layout-toolbar-border-color;
 
 // Fieldset
 

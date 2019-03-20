@@ -21,6 +21,7 @@ QUnit.module("RangeSelector", {
         var renderer = this.renderer = new vizMocks.Renderer();
         rendererModule.Renderer = function() { return renderer; };
         this.axis = new StubAxis();
+        this.axis.stub("getVisibleArea").returns([]);
         sinon.stub(axisModule, "Axis", function() {
             return that.axis;
         });

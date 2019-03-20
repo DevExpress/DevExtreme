@@ -58,13 +58,13 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
         seriesInStacks = {},
         barWidth = options.barWidth,
         barGroupWidth = options.barGroupWidth,
-        stack,
         interval = series[0] && series[0].getArgumentAxis().getTranslator().getInterval(),
         barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
 
     series.forEach(function(s, i) {
-        var stackName = s.getStackName && s.getStackName() || i.toString(),
+        var stackName = s.getStackName() || s.getBarOverlapGroup() || i.toString(),
             argument;
+
         for(argument in s.pointsByArgument) {
             if(allArguments.indexOf(argument.valueOf()) === -1) {
                 allArguments.push(argument.valueOf());
@@ -78,19 +78,18 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
     });
 
     allArguments.forEach(function(arg) {
-        var currentStacks = [],
-            parameters;
-
-        for(stack in seriesInStacks) {
+        const currentStacks = commonStacks.reduce((stacks, stack) => {
             if(isStackExist(seriesInStacks[stack], arg, options.equalBarWidth)) {
-                currentStacks.push(stack);
+                stacks.push(stack);
             }
-        }
 
-        parameters = calculateParams(barsArea, currentStacks.length, barWidth);
-        for(stack in seriesInStacks) {
+            return stacks;
+        }, []);
+
+        const parameters = calculateParams(barsArea, currentStacks.length, barWidth);
+        commonStacks.forEach(stack => {
             correctStackCoordinates(seriesInStacks[stack], currentStacks, arg, stack, parameters, barsArea, seriesStackIndexCallback);
-        }
+        });
     });
 }
 
@@ -174,7 +173,7 @@ function adjustStackedSeriesValues() {
         lastSeriesInStack = {};
 
     series.forEach(function(singleSeries) {
-        var stackName = singleSeries.getStackName(),
+        var stackName = singleSeries.getStackName() || singleSeries.getBarOverlapGroup(),
             hole = false;
 
         singleSeries._prevSeries = lastSeriesInStack[stackName];
@@ -186,6 +185,7 @@ function adjustStackedSeriesValues() {
             var value = point.initialValue,
                 argument = point.argument.valueOf(),
                 stacks = (value >= 0) ? stackKeepers.positive : stackKeepers.negative,
+                isNotBarSeries = singleSeries.type !== "bar",
                 currentStack;
 
             if(negativesAsZeroes && value < 0) {
@@ -198,11 +198,11 @@ function adjustStackedSeriesValues() {
             currentStack = stacks[stackName];
 
             if(currentStack[argument]) {
-                point.correctValue(currentStack[argument]);
+                if(isNotBarSeries) point.correctValue(currentStack[argument]);
                 currentStack[argument] += value;
             } else {
                 currentStack[argument] = value;
-                point.resetCorrection();
+                if(isNotBarSeries) point.resetCorrection();
             }
             if(!point.hasValue()) {
                 var prevPoint = points[index - 1];
@@ -231,11 +231,12 @@ function adjustStackedSeriesValues() {
             point._skipSetRightHole = null;
         });
     });
+
     that._stackKeepers = stackKeepers;
     series.forEach(function(singleSeries) {
         singleSeries.getPoints().forEach(function(point) {
             var argument = point.argument.valueOf(),
-                stackName = singleSeries.getStackName(),
+                stackName = singleSeries.getStackName() || singleSeries.getBarOverlapGroup(),
                 absTotal = getAbsStackSumByArg(stackKeepers, stackName, argument),
                 total = getStackSumByArg(stackKeepers, stackName, argument);
 
@@ -333,11 +334,9 @@ function adjustBubbleSeriesDimensions() {
     }
 
     var options = this._options,
-        argTranslator = series[0].getArgumentAxis().getTranslator(),
-        valTranslator = series[0].getValueAxis().getTranslator(),
-        visibleAreaX = argTranslator.getCanvasVisibleArea(),
-        visibleAreaY = valTranslator.getCanvasVisibleArea(),
-        min = _math.min((visibleAreaX.max - visibleAreaX.min), (visibleAreaY.max - visibleAreaY.min)),
+        visibleAreaX = series[0].getArgumentAxis().getVisibleArea(),
+        visibleAreaY = series[0].getValueAxis().getVisibleArea(),
+        min = _math.min((visibleAreaX[1] - visibleAreaX[0]), (visibleAreaY[1] - visibleAreaY[0])),
         minBubbleArea = _pow(options.minBubbleSize, 2),
         maxBubbleArea = _pow(min * options.maxBubbleSize, 2),
         equalBubbleSize = (min * options.maxBubbleSize + options.minBubbleSize) / 2,
@@ -391,6 +390,7 @@ function SeriesFamily(options) {
         case "bar":
             that.adjustSeriesDimensions = adjustBarSeriesDimensions;
             that.updateSeriesValues = updateBarSeriesValues;
+            that.adjustSeriesValues = adjustStackedSeriesValues;
             break;
         case "rangebar":
             that.adjustSeriesDimensions = adjustBarSeriesDimensions;

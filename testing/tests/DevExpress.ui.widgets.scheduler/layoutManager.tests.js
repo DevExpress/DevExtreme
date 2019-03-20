@@ -1,33 +1,37 @@
-require("common.css!");
-require("generic_light.css!");
-require("ui/scheduler/ui.scheduler");
+import "common.css!";
+import "generic_light.css!";
+import "ui/scheduler/ui.scheduler";
 
-var $ = require("jquery"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    translator = require("animation/translator"),
-    SchedulerLayoutManager = require("ui/scheduler/ui.scheduler.appointments.layout_manager"),
-    BaseAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.base"),
-    VerticalAppointmentStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.vertical"),
-    HorizontalAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal"),
-    HorizontalMonthLineAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal_month_line"),
-    Color = require("color"),
-    dataUtils = require("core/element_data"),
-    devices = require("core/devices"),
-    CustomStore = require("data/custom_store");
+import $ from "jquery";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import translator from "animation/translator";
+import { DataSource } from "data/data_source/data_source";
 
-var APPOINTMENT_DEFAULT_OFFSET = 25,
+import SchedulerLayoutManager from "ui/scheduler/ui.scheduler.appointments.layout_manager";
+import BaseAppointmentsStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.base";
+import VerticalAppointmentStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.vertical";
+import HorizontalAppointmentsStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal";
+import HorizontalMonthLineAppointmentsStrategy from "ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month_line";
+import Color from "color";
+import dataUtils from "core/element_data";
+import devices from "core/devices";
+import CustomStore from "data/custom_store";
+
+const APPOINTMENT_DEFAULT_OFFSET = 25,
     APPOINTMENT_MOBILE_OFFSET = 50;
 
-function getOffset() {
+const APPOINTMENT_CLASS_NAME = ".dx-scheduler-appointment";
+
+const getOffset = () => {
     if(devices.current().deviceType !== "desktop") {
         return APPOINTMENT_MOBILE_OFFSET;
     } else {
         return APPOINTMENT_DEFAULT_OFFSET;
     }
-}
+};
 
-var checkAppointmentUpdatedCallbackArgs = function(assert, actual, expected) {
+const checkAppointmentUpdatedCallbackArgs = (assert, actual, expected) => {
     assert.deepEqual(actual.old, expected.old, "Old data is OK");
     assert.deepEqual(actual.updated, expected.updated, "New data is OK");
     assert.deepEqual(actual.$appointment.get(0), expected.$appointment.get(0), "Appointment element is OK");
@@ -37,9 +41,9 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler"></div>');
 });
 
-var moduleOptions = {
+const moduleOptions = {
     beforeEach: function() {
-        this.createInstance = function(options) {
+        this.createInstance = options => {
             this.instance = $("#scheduler").dxScheduler($.extend(options, { editing: true, maxAppointmentsPerCell: null })).dxScheduler("instance");
         };
     },
@@ -47,6 +51,297 @@ var moduleOptions = {
     }
 };
 
+const renderLayoutModuleOptions = {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        this.createInstance = (view, dataSource, options) => {
+            this.instance = $("#scheduler").dxScheduler($.extend(options, {
+                views: ["week", "month", "agenda"],
+                currentView: view,
+                dataSource: dataSource,
+                currentDate: new Date(2017, 4, 25),
+                startDayHour: 9,
+                height: 600,
+                width: 1300,
+                editing: true,
+            })).dxScheduler("instance");
+        };
+
+        this.markAppointments = function() {
+            $(APPOINTMENT_CLASS_NAME).data("mark", true);
+        };
+
+        this.getUnmarkedAppointments = function() {
+            return $(APPOINTMENT_CLASS_NAME).filter(function() {
+                return !!$(this).data("mark") === false;
+            });
+        };
+
+        this.getAppointments = function() { return document.querySelectorAll(APPOINTMENT_CLASS_NAME); };
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+};
+
+
+QUnit.module("Render layout", renderLayoutModuleOptions, function() {
+    const defaultData = [
+        {
+            id: 0,
+            text: "Website Re-Design Plan",
+            startDate: new Date(2017, 4, 21, 9, 30),
+            endDate: new Date(2017, 4, 21, 11, 30)
+        }, {
+            id: 1,
+            text: "Install New Database",
+            startDate: new Date(2017, 4, 21, 12, 45),
+            endDate: new Date(2017, 4, 21, 13, 15)
+        }, {
+            id: 2,
+            text: "Book Flights to San Fran for Sales Trip",
+            startDate: new Date(2017, 4, 22, 12, 0),
+            endDate: new Date(2017, 4, 22, 13, 0),
+        }, {
+            id: 3,
+            text: "Install New Router in Dev Room",
+            startDate: new Date(2017, 4, 22, 14, 30),
+            endDate: new Date(2017, 4, 22, 15, 30)
+        }, {
+            id: 4,
+            text: "Approve Personal Computer Upgrade Plan",
+            startDate: new Date(2017, 4, 23, 10, 0),
+            endDate: new Date(2017, 4, 23, 11, 0)
+        }, {
+            id: 5,
+            text: "Final Budget Review",
+            startDate: new Date(2017, 4, 23, 12, 0),
+            endDate: new Date(2017, 4, 23, 13, 35)
+        }, {
+            id: 6,
+            text: "Install New Database",
+            startDate: new Date(2017, 4, 24, 9, 45),
+            endDate: new Date(2017, 4, 24, 11, 15)
+        }, {
+            id: 7,
+            text: "Upgrade Personal Computers",
+            startDate: new Date(2017, 4, 24, 15, 15),
+            endDate: new Date(2017, 4, 24, 16, 30)
+        }, {
+            id: 8,
+            text: "Customer Workshop",
+            startDate: new Date(2017, 4, 25, 11, 0),
+            endDate: new Date(2017, 4, 25, 12, 0),
+        }, {
+            id: 9,
+            text: "Prepare 2015 Marketing Plan",
+            startDate: new Date(2017, 4, 25, 11, 0),
+            endDate: new Date(2017, 4, 25, 13, 30)
+        }, {
+            id: 10,
+            text: "Create Icons for Website",
+            startDate: new Date(2017, 4, 26, 10, 0),
+            endDate: new Date(2017, 4, 26, 11, 30)
+        }, {
+            id: 11,
+            text: "Upgrade Server Hardware",
+            startDate: new Date(2017, 4, 26, 14, 30),
+            endDate: new Date(2017, 4, 26, 16, 0)
+        }, {
+            id: 12,
+            text: "Submit New Website Design",
+            startDate: new Date(2017, 4, 27, 16, 30),
+            endDate: new Date(2017, 4, 27, 18, 0)
+        }, {
+            id: 13,
+            text: "Launch New Website",
+            startDate: new Date(2017, 4, 27, 12, 20),
+            endDate: new Date(2017, 4, 27, 14, 0)
+        }
+    ];
+
+    this.createDataSource = (list = defaultData) => {
+        return new DataSource({
+            store: {
+                type: "array",
+                key: "id",
+                data: [...list]
+            }
+        });
+    };
+
+    QUnit.test("Scheduler should render appointments only for appointments that need redraw", function(assert) {
+        const dataSource = this.createDataSource();
+        this.createInstance("week", dataSource);
+
+        this.markAppointments();
+        dataSource.store().push([
+            { type: "update", key: 0, data: { text: "updated-1" } },
+            { type: "update", key: 1, data: { text: "updated-2" } }
+        ]);
+        dataSource.load();
+        assert.equal(2, this.getUnmarkedAppointments().length, "Should rendered only two updated appointments");
+
+        this.markAppointments();
+        dataSource.store().push([{ type: "insert", data: {
+            id: 15,
+            text: "Fake",
+            startDate: new Date(2017, 4, 27, 15, 30),
+            endDate: new Date(2017, 4, 27, 16, 30)
+        } }]);
+        dataSource.load();
+        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only inserted appointment");
+
+        this.markAppointments();
+        dataSource.store().remove(0);
+        dataSource.load();
+        assert.equal(0, this.getUnmarkedAppointments().length, "Html element should removed and should not redrawing another appointments");
+    });
+
+    QUnit.test("Scheduler should render only necessary appointments in crossing appointments case", function(assert) {
+        const dataSource = this.createDataSource();
+        this.createInstance("week", dataSource);
+
+        this.markAppointments();
+        dataSource.store().push([{ type: "insert", data: {
+            id: 14,
+            text: "Fake_key_14",
+            startDate: defaultData[0].startDate,
+            endDate: defaultData[0].endDate
+        } }]);
+        dataSource.load();
+        assert.equal(2, this.getUnmarkedAppointments().length, "Should rendered inserted appointment and update appointment");
+
+        this.markAppointments();
+        dataSource.store().push([{ type: "insert", data: {
+            id: 15,
+            text: "Fake_key_15",
+            startDate: defaultData[1].startDate,
+            endDate: defaultData[1].endDate
+        } }]);
+        dataSource.load();
+        assert.equal(2, this.getUnmarkedAppointments().length, "Should rendered inserted appointment and 2 updated appointment");
+
+        this.markAppointments();
+        dataSource.store().remove(15);
+        dataSource.load();
+        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only two updated appointments");
+    });
+
+    QUnit.test("Scheduler should throw onAppointmentRendered event only for appointments that need redraw", function(assert) {
+        const dataSource = this.createDataSource();
+        const fakeHandler = {
+            onAppointmentRendered: () => { }
+        };
+        const renderedStub = sinon.stub(fakeHandler, "onAppointmentRendered");
+
+        this.createInstance("week", dataSource, { onAppointmentRendered: fakeHandler.onAppointmentRendered });
+
+        renderedStub.reset();
+        dataSource.store().push([{ type: "insert", data: {
+            id: 14,
+            text: "Fake_key_14",
+            startDate: new Date(2017, 4, 21, 15, 0),
+            endDate: new Date(2017, 4, 21, 15, 30),
+        } }]);
+        dataSource.load();
+        assert.equal(renderedStub.callCount, 1, "Should throw one call onAppointmentRendered event");
+
+        renderedStub.reset();
+        dataSource.store().remove(14);
+        dataSource.load();
+        assert.equal(renderedStub.callCount, 0, "Should not throw onAppointmentRendered event");
+
+        renderedStub.reset();
+        dataSource.store().push([{ type: "insert", data: {
+            id: 15,
+            text: "Fake_key_15",
+            startDate: defaultData[0].startDate,
+            endDate: defaultData[0].endDate
+        } }]);
+        dataSource.load();
+        assert.equal(renderedStub.callCount, 2, "Should throw two call onAppointmentRendered event");
+
+        renderedStub.reset();
+        dataSource.store().push([
+            { type: "update", key: 0, data: { text: "updated-1" } },
+        ]);
+        dataSource.load();
+
+        assert.equal(renderedStub.callCount, 1, "Should throw one call onAppointmentRendered event");
+    });
+
+    QUnit.test("Scheduler should render appointments only for appointments that need redraw in Month view", function(assert) {
+        const dataSource = this.createDataSource();
+        this.createInstance("month", dataSource);
+
+        this.markAppointments();
+        dataSource.store().push([
+            { type: "update", key: 0, data: { text: "updated-1" } },
+            { type: "update", key: 1, data: { text: "updated-2" } }
+        ]);
+        dataSource.load();
+        assert.equal(2, this.getUnmarkedAppointments().length, "Should rendered only two updated appointments");
+
+        this.markAppointments();
+        dataSource.store().push([{ type: "insert", data: {
+            id: 15,
+            text: "Fake",
+            startDate: new Date(2017, 4, 28, 15, 30),
+            endDate: new Date(2017, 4, 28, 16, 30)
+        } }]);
+        dataSource.load();
+        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only inserted appointment");
+
+        this.markAppointments();
+        dataSource.store().remove(0);
+        dataSource.load();
+
+        // TODO: in future this case should be optimized - redraw in this case can escape
+        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only one appointment");
+    });
+
+    QUnit.test("Scheduler should render appointments only for appointments that need redraw. Use scheduler API", function(assert) {
+        this.createInstance("week", defaultData);
+
+        this.markAppointments();
+        this.instance.updateAppointment(defaultData[0], { text: "updated" });
+        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only one appointment");
+
+        this.markAppointments();
+        this.instance.updateAppointment(defaultData[9], { text: "updated" });
+        assert.equal(1, this.getUnmarkedAppointments().length, "Should rendered only one appointment from intersecting appointments");
+
+        this.markAppointments();
+        this.instance.deleteAppointment(defaultData[0]);
+        assert.equal(0, this.getUnmarkedAppointments().length, "Nothing should be redrawing");
+    });
+
+    QUnit.test("Scheduler should render all appointments in Agenda view case", function(assert) {
+        const dataSource = this.createDataSource();
+        this.createInstance("agenda", dataSource);
+
+        this.markAppointments();
+        dataSource.store().push([
+            { type: "update", key: 8, data: { text: "updated-1" } },
+            { type: "update", key: 10, data: { text: "updated-2" } }
+        ]);
+        dataSource.load();
+        assert.equal(this.getAppointments().length, this.getUnmarkedAppointments().length, "Should rendered all appointments");
+
+        this.markAppointments();
+        dataSource.store().push([{ type: "insert", data: {
+            id: 15,
+            text: "Fake",
+            startDate: new Date(2017, 4, 27, 15, 30),
+            endDate: new Date(2017, 4, 27, 16, 30)
+        } }]);
+        dataSource.load();
+
+        assert.equal(this.getAppointments().length, this.getUnmarkedAppointments().length, "Should rendered all appointments");
+    });
+});
 
 QUnit.module("LayoutManager", moduleOptions);
 

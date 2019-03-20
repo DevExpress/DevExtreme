@@ -1,16 +1,16 @@
-var $ = require("jquery"),
-    DropDownEditor = require("ui/drop_down_editor/ui.drop_down_editor"),
-    Overlay = require("ui/overlay"),
-    devices = require("core/devices"),
-    eventsEngine = require("events/core/events_engine"),
-    support = require("core/utils/support"),
-    fx = require("animation/fx"),
-    pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config");
+import $ from "jquery";
+import config from "core/config";
+import devices from "core/devices";
+import eventsEngine from "events/core/events_engine";
+import fx from "animation/fx";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import support from "core/utils/support";
+import DropDownEditor from "ui/drop_down_editor/ui.drop_down_editor";
+import Overlay from "ui/overlay";
+import { isRenderer } from "core/utils/type";
 
-require("common.css!");
+import "common.css!";
 
 QUnit.testStart(function() {
     var markup =
@@ -101,13 +101,17 @@ QUnit.test("clicking the input must not close the dropdown", function(assert) {
 
 QUnit.test("clicking the button must correctly close the dropdown", function(assert) {
     this.dropDownEditor.open();
-    pointerMock(this.dropDownEditor._$dropDownButton).click();
+
+    var $dropDownButton = this.dropDownEditor.$element().find("." + DROP_DOWN_EDITOR_BUTTON_CLASS);
+    pointerMock($dropDownButton).click();
     assert.ok(!this.dropDownEditor.option("opened"));
 });
 
 QUnit.test("clicking the button descendants must also correctly close the dropdown", function(assert) {
     this.dropDownEditor.open();
-    pointerMock(this.dropDownEditor._$dropDownButton.find("." + DROP_DOWN_EDITOR_BUTTON_ICON)).click();
+
+    var $dropDownButton = this.dropDownEditor.$element().find("." + DROP_DOWN_EDITOR_BUTTON_CLASS);
+    pointerMock($dropDownButton.find("." + DROP_DOWN_EDITOR_BUTTON_ICON)).click();
     assert.ok(!this.dropDownEditor.option("opened"));
 });
 
@@ -142,13 +146,15 @@ QUnit.test("overlay get correct open and close", function(assert) {
 
 QUnit.test("when a drop down editor is disabled, it should not be possible to show the drop down by clicking the drop down button", function(assert) {
     this.dropDownEditor.option("disabled", true);
-    pointerMock(this.dropDownEditor._$dropDownButton).click();
+    var $dropDownButton = this.dropDownEditor.$element().find("." + DROP_DOWN_EDITOR_BUTTON_CLASS);
+    pointerMock($dropDownButton).click();
     assert.ok(!this.dropDownEditor._popup);
 });
 
 QUnit.test("when a drop down editor is readonly, it should not be possible to show the drop down by clicking the drop down button", function(assert) {
     this.dropDownEditor.option("readOnly", true);
-    pointerMock(this.dropDownEditor._$dropDownButton).click();
+    var $dropDownButton = this.dropDownEditor.$element().find("." + DROP_DOWN_EDITOR_BUTTON_CLASS);
+    pointerMock($dropDownButton).click();
     assert.ok(!this.dropDownEditor._popup);
 });
 
@@ -168,7 +174,8 @@ QUnit.test("in design mode, it should not be possible to show the drop down by c
     config({ designMode: true });
     try {
         this.reinitFixture();
-        pointerMock(this.dropDownEditor._$dropDownButton).click();
+        var $dropDownButton = this.dropDownEditor.$element().find("." + DROP_DOWN_EDITOR_BUTTON_CLASS);
+        pointerMock($dropDownButton).click();
         assert.ok(!this.dropDownEditor._popup);
     } finally {
         config({ designMode: false });
@@ -182,8 +189,8 @@ QUnit.test("correct buttons order after option change", function(assert) {
         $buttons = $buttonsContainer.children();
 
     assert.equal($buttons.length, 2, "clear button and drop button were rendered");
-    assert.ok($buttons.eq(0).hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS), "drop button is the first one");
-    assert.ok($buttons.eq(1).hasClass("dx-clear-button-area"), "drop button is the second one");
+    assert.ok($buttons.eq(0).hasClass("dx-clear-button-area"), "clear button is the first one");
+    assert.ok($buttons.eq(1).hasClass(DROP_DOWN_EDITOR_BUTTON_CLASS), "drop button is the second one");
 });
 
 QUnit.test("Validation: onShown validation message handler should change", function(assert) {
@@ -302,6 +309,76 @@ QUnit.test("field method returning overlay content", function(assert) {
     assert.ok($field.hasClass("dx-texteditor-input"), "field has class dx-texteditor-input");
 });
 
+QUnit.module("dropDownOptions");
+
+QUnit.test("dropDownOptions should work on init", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+        opened: true,
+        dropDownOptions: { customOption: "Test" }
+    }).dxDropDownEditor("instance");
+
+    assert.equal(instance._popup.option("customOption"), "Test", "Option has been passed to the popup");
+});
+
+QUnit.test("dropDownOptions should redefine built-in values", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+        opened: true,
+        dropDownOptions: { showTitle: true }
+    }).dxDropDownEditor("instance");
+
+    assert.strictEqual(instance._popup.option("showTitle"), true, "Option has been redefined");
+});
+
+QUnit.test("dropDownOptions should be prior than built-in public options", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+        opened: true,
+        showPopupTitle: false,
+        dropDownOptions: { showTitle: true }
+    }).dxDropDownEditor("instance");
+
+    assert.strictEqual(instance._popup.option("showTitle"), true, "Option has been redefined");
+});
+
+QUnit.test("dropDownOptions should be updated when popup option changed", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+            opened: true
+        }).dxDropDownEditor("instance"),
+        popup = instance._popup;
+
+    assert.equal(popup.option("width"), instance.option("dropDownOptions.width"), "dropDownOptions has been updated on init");
+
+    popup.option("width", 400);
+    assert.equal(instance.option("dropDownOptions.width"), 400, "dropDownOptions has been updated on popup's option changed");
+});
+
+QUnit.test("it should be possible to set part of the dropDownOptions without full object changing", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+            opened: true
+        }).dxDropDownEditor("instance"),
+        popup = instance._popup;
+
+    instance.option("dropDownOptions.width", 300);
+    assert.equal(popup.option("width"), 300, "popup's width has been changed");
+
+    instance.option("dropDownOptions", { height: 200 });
+    assert.equal(popup.option("width"), 300, "popup's width has not been changed");
+    assert.equal(popup.option("height"), 200, "popup's height has been changed");
+    assert.equal(instance.option("dropDownOptions.width"), 300, "dropDownOptions object has not been rewrited");
+});
+
+QUnit.test("dropdownOptions should not be cleared after repaint", function(assert) {
+    var instance = $("#dropDownEditorLazy").dxDropDownEditor({
+        dropDownOptions: {
+            container: "#dropDownEditorLazy"
+        },
+        opened: true
+    }).dxDropDownEditor("instance");
+
+    assert.strictEqual(instance.option("dropDownOptions.container"), "#dropDownEditorLazy", "option is correct");
+
+    instance.repaint();
+    assert.strictEqual(instance.option("dropDownOptions.container"), "#dropDownEditorLazy", "option is correct");
+});
 
 QUnit.module("focus policy");
 
@@ -750,6 +827,19 @@ QUnit.test("popup is rendered only when open editor when deferRendering is true"
 
 
 QUnit.module("Templates");
+
+QUnit.test("should not render placeholder if the fieldTemplate is used", (assert) => {
+    const $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+        items: [0, 1, 2, 3, 4, 5],
+        placeholder: "placeholder",
+        fieldTemplate: () => $("<div>").dxTextBox({ placeholder: "placeholder" })
+    });
+    const $placeholder = $dropDownEditor.find(".dx-placeholder");
+
+    assert.strictEqual($placeholder.length, 1, "has only one placeholder");
+    assert.strictEqual($placeholder.closest(".dx-textbox").length, 1, "is textbox's placeholder");
+});
+
 
 QUnit.test("contentTemplate as render", function(assert) {
     $("#dropDownEditorLazy").dxDropDownEditor({

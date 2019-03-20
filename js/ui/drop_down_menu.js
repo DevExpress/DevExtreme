@@ -20,7 +20,8 @@ var DROP_DOWN_MENU_CLASS = "dx-dropdownmenu",
 var POPUP_OPTION_MAP = {
     "popupWidth": "width",
     "popupHeight": "height",
-    "popupMaxHeight": "maxHeight"
+    "popupMaxHeight": "maxHeight",
+    "popupAutoResizeEnabled": "autoResizeEnabled"
 };
 
 var BUTTON_OPTION_MAP = {
@@ -173,7 +174,8 @@ var DropDownMenu = Widget.inherit({
             popupMaxHeight: undefined,
             closeOnClick: true,
             useInkRipple: false,
-            container: undefined
+            container: undefined,
+            popupAutoResizeEnabled: false
         });
     },
 
@@ -381,7 +383,8 @@ var DropDownMenu = Widget.inherit({
             height: this.option("popupHeight"),
             width: this.option("popupWidth"),
             maxHeight: this.option("popupMaxHeight"),
-            container: this.option("container")
+            container: this.option("container"),
+            autoResizeEnabled: this.option("popupAutoResizeEnabled")
         };
     },
 
@@ -490,6 +493,7 @@ var DropDownMenu = Widget.inherit({
             case "popupWidth":
             case "popupHeight":
             case "popupMaxHeight":
+            case "popupAutoResizeEnabled":
                 this._popup.option(POPUP_OPTION_MAP[name], value);
                 break;
             case "usePopover":
@@ -519,6 +523,9 @@ var DropDownMenu = Widget.inherit({
             case "deferRendering":
             case "popupPosition":
             case "closeOnClick":
+                break;
+            case "container":
+                this._popup && this._popup.option(args.name, args.value);
                 break;
             default:
                 this.callBase(args);

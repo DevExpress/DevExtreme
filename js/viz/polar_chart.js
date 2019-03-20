@@ -6,7 +6,7 @@ var _noop = require("../core/utils/common").noop,
     DEFAULT_PANE_NAME = 'default';
 
 var dxPolarChart = AdvancedChart.inherit({
-    _chartType: 'polar',
+    _themeSection: 'polar',
 
     _createPanes: function() {
         return [{ name: DEFAULT_PANE_NAME }];
@@ -108,6 +108,8 @@ var dxPolarChart = AdvancedChart.inherit({
     _applyExtraSettings: _noop,
 
     _updateLegendPosition: _noop,
+
+    _applyPointMarkersAutoHiding: _noop,
 
     _createScrollBar: _noop,
 

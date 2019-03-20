@@ -6,7 +6,6 @@ var merge = require('merge-stream');
 var file = require('gulp-file');
 var path = require('path');
 var ts = require('gulp-typescript');
-var runSequence = require('run-sequence');
 var through = require('through2');
 var lazyPipe = require('lazypipe');
 
@@ -46,6 +45,7 @@ var DIST_GLOBS = [
     '!artifacts/js/dx.custom*',
     '!artifacts/js/quill*',
     '!artifacts/js/Quill*',
+    '!artifacts/js/exceljs*',
     '!artifacts/js/turndown*',
     '!artifacts/js/showdown*',
     '!artifacts/ts/jquery*',
@@ -105,7 +105,7 @@ var widgetNameByPath = require("./ts").widgetNameByPath;
 var generateJQueryAugmentation = require("./ts").generateJQueryAugmentation;
 var getAugmentationOptionsPath = require("./ts").getAugmentationOptionsPath;
 
-gulp.task('npm-dts-generator', function() {
+gulp.task('npm-dts-generator', ['ts-sources'], function() {
     var tsModules = MODULES.map(function(moduleMeta) {
         var relPath = path.relative(path.dirname(moduleMeta.name), 'bundles/dx.all').replace(/\\/g, '/');
         if(!relPath.startsWith('../')) relPath = './' + relPath;
@@ -188,7 +188,7 @@ gulp.task('npm-dts-check', ['npm-dts-generator'], function() {
 
             var uniqueIdentifier = moduleMeta.name
                 .replace(/\./g, '_')
-                .split('\/')
+                .split('/')
                 .concat([name])
                 .join('__');
 
@@ -213,9 +213,4 @@ gulp.task('npm-dts-check', ['npm-dts-generator'], function() {
 
 gulp.task('npm-check', ['npm-dts-check']);
 
-gulp.task('npm', function(callback) {
-    return runSequence(
-        'npm-sources',
-        'npm-check',
-        callback);
-});
+gulp.task('npm', ['npm-sources', 'npm-check']);

@@ -1,411 +1,394 @@
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    isRenderer = require("core/utils/type").isRenderer,
-    config = require("core/config"),
-    registerComponent = require("core/component_registrator"),
-    DataSource = require("data/data_source/data_source").DataSource,
-    Store = require("data/abstract_store"),
-    ArrayStore = require("data/array_store"),
-    setTemplateEngine = require("ui/set_template_engine"),
-    support = require("core/utils/support"),
-    holdEvent = require("events/hold"),
-    CollectionWidget = require("ui/collection/ui.collection_widget.edit"),
-    List = require("ui/list"),
+import $ from "jquery";
+import { noop } from "core/utils/common";
+import { isRenderer } from "core/utils/type";
+import config from "core/config";
+import registerComponent from "core/component_registrator";
+import { DataSource } from "data/data_source/data_source";
+import Store from "data/abstract_store";
+import ArrayStore from "data/array_store";
+import setTemplateEngine from "ui/set_template_engine";
+import support from "core/utils/support";
+import holdEvent from "events/hold";
+import CollectionWidget from "ui/collection/ui.collection_widget.edit";
+import List from "ui/list";
+import executeAsyncMock from "../../helpers/executeAsyncMock.js";
+import keyboardMock from "../../helpers/keyboardMock.js";
+import pointerMock from "../../helpers/pointerMock.js";
+import editingTests from "./collectionWidgetParts/editingTests.js";
+import * as liveUpdateTests from "./collectionWidgetParts/liveUpdateTests.js";
 
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js"),
-    pointerMock = require("../../helpers/pointerMock.js"),
+const ITEM_CLASS = "dx-item";
+const ITEM_CONTENT_CLASS = "dx-item-content";
+const DEFAULT_EMPTY_TEXT = "No data to display";
+const EMPTY_MESSAGE_CLASS = "dx-empty-message";
+const COLLECTION_CLASS = "dx-collection";
+const FOCUSED_ITEM_CLASS = "dx-state-focused";
+const ACTIVE_ITEM_CLASS = "dx-state-active";
 
-    editingTests = require("./collectionWidgetParts/editingTests.js"),
-    liveUpdateTests = require("./collectionWidgetParts/liveUpdateTests.js");
-
-var ITEM_CLASS = "dx-item",
-    ITEM_CONTENT_CLASS = "dx-item-content",
-
-    DEFAULT_EMPTY_TEXT = "No data to display",
-    EMPTY_MESSAGE_CLASS = "dx-empty-message",
-
-    COLLECTION_CLASS = "dx-collection",
-    FOCUSED_ITEM_CLASS = "dx-state-focused",
-    ACTIVE_ITEM_CLASS = "dx-state-active";
-
-var TestComponent = CollectionWidget.inherit({
+const TestComponent = CollectionWidget.inherit({
 
     NAME: "TestComponent",
 
     _activeStateUnit: ".item",
 
-    _itemClass: function() {
+    _itemClass() {
         return "item";
     },
 
-    _itemDataKey: function() {
+    _itemDataKey() {
         return "123";
     },
 
-    _itemContainer: function() {
+    _itemContainer() {
         return this.$element();
     },
 
-    _allowDynamicItemsAppend: function() {
+    _allowDynamicItemsAppend() {
         return true;
     },
 
-    _createActionByOption: function(optionName, config) {
+    _createActionByOption(optionName, config) {
         this.__actionConfigs[optionName] = config;
-        return this.callBase.apply(this, arguments);
+        return this.callBase(...arguments);
     },
     __actionConfigs: {}
 });
 
-
-QUnit.testStart(function() {
-    var markup = '\
-        <div id="cmp"></div>\
-        \
-        <div id="cmp-with-template">\
-            <div data-options="dxTemplate : { name: \'testTemplate\' } ">\
-                First Template\
-            </div>\
-        </div>\
-        \
-        <div id="cmp-with-zero-template">\
-            <div data-options="dxTemplate: {name: \'0\'}">zero</div>\
-        </div>\
-        \
-        <script type="text/html" id="externalTemplate">\
-            Test\
-        </script>\
-        \
-        <script type="text/html" id="externalTemplateNoRootElement">\
-            Outer text <div>Test</div>\
-        </script>\
-        \
-        <div id="container-with-jq-template">\
-            <div data-options="dxTemplate : { name: \'firstTemplate\' } ">\
-                First Template\
-            </div>\
-            <div data-options="dxTemplate : { name: \'secondTemplate\' } ">\
-                Second Template\
-            </div>\
-        </div>\
-    ';
+QUnit.testStart(() => {
+    const markup = `
+        <div id="cmp"></div>
+        
+        <div id="cmp-with-template">
+            <div data-options="dxTemplate : { name: 'testTemplate' } ">
+                First Template
+            </div>
+        </div>
+        
+        <div id="cmp-with-zero-template">
+            <div data-options="dxTemplate: { name: '0' }">zero</div>
+        </div>
+        
+        <script type="text/html" id="externalTemplate">
+            Test
+        </script>
+        
+        <script type="text/html" id="externalTemplateNoRootElement">
+            Outer text <div>Test</div>
+        </script>
+        
+        <div id="container-with-jq-template">
+            <div data-options="dxTemplate : { name: 'firstTemplate' } ">
+                First Template
+            </div>
+            <div data-options="dxTemplate : { name: 'secondTemplate' } ">
+                Second Template
+            </div>
+        </div>
+    `;
 
     $("#qunit-fixture").html(markup);
 });
-
 editingTests.run();
 liveUpdateTests.run();
 
 QUnit.module("render", {
-    beforeEach: function() {
+    beforeEach: () => {
         this.element = $("#cmp");
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: function() {
+    afterEach: () => {
         executeAsyncMock.teardown();
         this.clock.restore();
     }
-});
+}, () => {
 
-QUnit.test("markup init", function(assert) {
-    var element = this.element;
-    new TestComponent(element, {});
+    QUnit.test("markup init", assert => {
+        const element = this.element;
+        new TestComponent(element, {});
 
-    assert.ok(element.hasClass(COLLECTION_CLASS), "collection widget has dx-collection class");
-});
-
-QUnit.test("item content should be wrapped", function(assert) {
-    var element = this.element;
-    var component = new TestComponent(element, { items: [1] });
-
-    var $item = component.itemElements().eq(0),
-        $itemContent = $item.children();
-
-    assert.ok($item.hasClass(ITEM_CLASS), "item has correct class");
-    assert.ok($item.hasClass("item"), "item has correct specific class");
-    assert.equal($itemContent.length, 1, "item content only one");
-    assert.ok($itemContent.hasClass(ITEM_CONTENT_CLASS), "item content has correct class");
-    assert.ok($itemContent.hasClass("item-content"), "content has correct specific class");
-    assert.equal($itemContent.contents().text(), "1", "item content placed inside content");
-});
-
-QUnit.test("custom render func, returns jquery", function(assert) {
-    var element = this.element;
-
-    new TestComponent("#cmp", {
-        items: [{
-            testProp: 0
-        }, {
-            testProp: 1
-        }, {
-            testProp: 2
-        }],
-        itemTemplate: function(item, index, itemElement) {
-            assert.ok($(itemElement).hasClass(ITEM_CONTENT_CLASS), "content class added");
-            return $("<span />").html("Text is: " + String(item.testProp) + ";");
-        }
+        assert.ok(element.hasClass(COLLECTION_CLASS), "collection widget has dx-collection class");
     });
 
-    assert.equal(element.find(".item").length, 3);
-    assert.equal($.trim(element.text()), "Text is: 0;Text is: 1;Text is: 2;");
-});
+    QUnit.test("item content should be wrapped", assert => {
+        const element = this.element;
+        const component = new TestComponent(element, { items: [1] });
 
+        const $item = component.itemElements().eq(0);
+        const $itemContent = $item.children();
 
-QUnit.test("custom render func, returns jquery", function(assert) {
-    var element = this.element;
-    new TestComponent("#cmp", {
-        items: [{
-            testProp: 3
-        }, {
-            testProp: 4
-        }, {
-            testProp: 5
-        }],
-        itemTemplate: function(item, index, itemElement) {
-            assert.equal(isRenderer(itemElement), !!config().useJQuery, "itemElemenet is correct");
-            $(itemElement).append($("<span />").html("Text is: " + String(item.testProp) + ";"));
-        }
+        assert.ok($item.hasClass(ITEM_CLASS), "item has correct class");
+        assert.ok($item.hasClass("item"), "item has correct specific class");
+        assert.equal($itemContent.length, 1, "item content only one");
+        assert.ok($itemContent.hasClass(ITEM_CONTENT_CLASS), "item content has correct class");
+        assert.ok($itemContent.hasClass("item-content"), "content has correct specific class");
+        assert.equal($itemContent.contents().text(), "1", "item content placed inside content");
     });
 
-    assert.equal(element.find(".item").length, 3);
-    assert.equal($.trim(element.text()), "Text is: 3;Text is: 4;Text is: 5;");
-});
+    QUnit.test("custom render func, returns jquery", assert => {
+        const element = this.element;
 
-QUnit.test("custom render func, returns dom node", function(assert) {
-    var element = this.element;
-    new TestComponent("#cmp", {
-        integrationOptions: {
-            templates: {
-                "item": {
-                    render: function(args) {
-                        var $element = $("<span>")
-                            .addClass("dx-template-wrapper")
-                            .text("Text is: " + String(args.model.testProp) + ";");
+        new TestComponent("#cmp", {
+            items: [{
+                testProp: 0
+            }, {
+                testProp: 1
+            }, {
+                testProp: 2
+            }],
+            itemTemplate(item, index, itemElement) {
+                assert.ok($(itemElement).hasClass(ITEM_CONTENT_CLASS), "content class added");
+                return $("<span />").html("Text is: " + String(item.testProp) + ";");
+            }
+        });
 
-                        return $element.get(0);
+        assert.equal(element.find(".item").length, 3);
+        assert.equal($.trim(element.text()), "Text is: 0;Text is: 1;Text is: 2;");
+    });
+
+    QUnit.test("custom render func, returns jquery", assert => {
+        const element = this.element;
+        new TestComponent("#cmp", {
+            items: [{
+                testProp: 3
+            }, {
+                testProp: 4
+            }, {
+                testProp: 5
+            }],
+            itemTemplate(item, index, itemElement) {
+                assert.equal(isRenderer(itemElement), !!config().useJQuery, "itemElemenet is correct");
+                $(itemElement).append($("<span />").html("Text is: " + String(item.testProp) + ";"));
+            }
+        });
+
+        assert.equal(element.find(".item").length, 3);
+        assert.equal($.trim(element.text()), "Text is: 3;Text is: 4;Text is: 5;");
+    });
+
+    QUnit.test("custom render func, returns dom node", assert => {
+        const element = this.element;
+        new TestComponent("#cmp", {
+            integrationOptions: {
+                templates: {
+                    "item": {
+                        render(args) {
+                            const $element = $("<span>")
+                                .addClass("dx-template-wrapper")
+                                .text("Text is: " + String(args.model.testProp) + ";");
+
+                            return $element.get(0);
+                        }
                     }
                 }
+            },
+            items: [{
+                testProp: 3
+            }, {
+                testProp: 4
+            }, {
+                testProp: 5
+            }]
+        });
+
+        assert.equal(element.find(".item").length, 3);
+        assert.equal($.trim(element.text()), "Text is: 3;Text is: 4;Text is: 5;");
+    });
+
+    QUnit.test("custom render func, returns string", assert => {
+        const element = this.element;
+
+        new TestComponent("#cmp", {
+            items: [{
+                testProp: "0"
+            }, {
+                testProp: "1"
+            }, {
+                testProp: ""
+            }],
+            itemTemplate(item, index, itemElement) {
+                return "Text is: " + String(item.testProp) + ";";
             }
-        },
-        items: [{
-            testProp: 3
-        }, {
-            testProp: 4
-        }, {
-            testProp: 5
-        }]
+        });
+
+        assert.equal(element.find(".item").length, 3);
+        assert.equal($.trim(element.text()), "Text is: 0;Text is: 1;Text is: ;");
     });
 
-    assert.equal(element.find(".item").length, 3);
-    assert.equal($.trim(element.text()), "Text is: 3;Text is: 4;Text is: 5;");
-});
+    QUnit.test("custom render func, returns numbers", assert => {
+        const element = this.element;
 
-QUnit.test("custom render func, returns string", function(assert) {
-    var element = this.element;
+        new TestComponent("#cmp", {
+            items: [0, 1],
+            itemRender(item, index, itemElement) {
+                return item;
+            }
+        });
 
-    new TestComponent("#cmp", {
-        items: [{
-            testProp: "0"
-        }, {
-            testProp: "1"
-        }, {
-            testProp: ""
-        }],
-        itemTemplate: function(item, index, itemElement) {
-            return "Text is: " + String(item.testProp) + ";";
-        }
+        assert.equal(element.find(".item").length, 2);
+        assert.equal($.trim(element.text()), "01");
     });
 
-    assert.equal(element.find(".item").length, 3);
-    assert.equal($.trim(element.text()), "Text is: 0;Text is: 1;Text is: ;");
-});
+    QUnit.test("itemTemplateProperty option", assert => {
+        const $element = $("#cmp-with-template");
 
-QUnit.test("custom render func, returns numbers", function(assert) {
-    var element = this.element;
-
-    new TestComponent("#cmp", {
-        items: [0, 1],
-        itemRender: function(item, index, itemElement) {
-            return item;
-        }
-    });
-
-    assert.equal(element.find(".item").length, 2);
-    assert.equal($.trim(element.text()), "01");
-});
-
-QUnit.test("itemTemplateProperty option", function(assert) {
-    var $element = $("#cmp-with-template"),
-        instance = new TestComponent(
+        const instance = new TestComponent(
             $element, {
                 itemTemplateProperty: "itemTemplate",
                 items: [{ itemTemplate: "testTemplate" }]
             });
 
-    var $item = instance.itemElements().eq(0);
-    assert.equal($.trim($item.text()), "First Template", "item has correct template");
-});
-
-QUnit.test("item takes new template", function(assert) {
-    var componentWithTemplate = new TestComponent("#cmp-with-template", { itemTemplate: "testTemplate" }),
-        component = new TestComponent("#cmp", { itemTemplate: componentWithTemplate._getTemplateByOption("itemTemplate") });
-    assert.equal(component._getTemplateByOption("itemTemplate"), componentWithTemplate._getTemplateByOption("itemTemplate"));
-});
-
-QUnit.test("anonymous item template", function(assert) {
-    var $element = $("<div>").append($("<div>").addClass("test"));
-
-    new TestComponent($element, {
-        items: [1, 2]
+        const $item = instance.itemElements().eq(0);
+        assert.equal($.trim($item.text()), "First Template", "item has correct template");
     });
 
-    assert.equal($element.find(".test").length, 2);
-});
-
-QUnit.test("'itemTemplate' as DOM node", function(assert) {
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        items: [1, 2],
-        itemTemplate: $("<div>Test</div>").get(0)
+    QUnit.test("item takes new template", assert => {
+        const componentWithTemplate = new TestComponent("#cmp-with-template", { itemTemplate: "testTemplate" });
+        const component = new TestComponent("#cmp", { itemTemplate: componentWithTemplate._getTemplateByOption("itemTemplate") });
+        assert.equal(component._getTemplateByOption("itemTemplate"), componentWithTemplate._getTemplateByOption("itemTemplate"));
     });
 
-    assert.equal($element.children().length, 2);
-    assert.equal($.trim($element.children().eq(0).text()), "Test");
-    assert.equal($.trim($element.children().eq(1).text()), "Test");
-});
+    QUnit.test("anonymous item template", assert => {
+        const $element = $("<div>").append($("<div>").addClass("test"));
 
-QUnit.test("'itemTemplate' as jQuery element", function(assert) {
-    var $element = $("#cmp");
+        new TestComponent($element, {
+            items: [1, 2]
+        });
 
-    new TestComponent($element, {
-        items: [1, 2],
-        itemTemplate: $("<div>Test</div>")
+        assert.equal($element.find(".test").length, 2);
     });
 
-    assert.equal($element.children().length, 2);
-    assert.equal($.trim($element.children().eq(0).text()), "Test");
-    assert.equal($.trim($element.children().eq(1).text()), "Test");
-});
-
-QUnit.test("'itemTemplate' as jQuery element with custom template engine", function(assert) {
-    setTemplateEngine({
-        compile: noop,
-        render: function() { return $("<div>custom engine</div>"); }
-    });
-
-    try {
-        var $element = $("#cmp");
+    QUnit.test("'itemTemplate' as DOM node", assert => {
+        const $element = $("#cmp");
 
         new TestComponent($element, {
             items: [1, 2],
-            itemTemplate: $("<div>")
+            itemTemplate: $("<div>Test</div>").get(0)
         });
 
         assert.equal($element.children().length, 2);
-        assert.equal($.trim($element.children().eq(0).text()), "custom engine");
-        assert.equal($.trim($element.children().eq(1).text()), "custom engine");
-    } finally {
-        setTemplateEngine("default");
-    }
-});
-
-QUnit.test("'itemTemplate' as function returning template name", function(assert) {
-    var $element = $("#cmp-with-template");
-
-    new TestComponent($element, {
-        items: [1, 2],
-        itemTemplate: function() { return "testTemplate"; }
+        assert.equal($.trim($element.children().eq(0).text()), "Test");
+        assert.equal($.trim($element.children().eq(1).text()), "Test");
     });
 
-    assert.equal($element.children().length, 2);
-    assert.equal($.trim($element.children().eq(0).text()), "First Template");
-    assert.equal($.trim($element.children().eq(1).text()), "First Template");
-});
+    QUnit.test("'itemTemplate' as jQuery element", assert => {
+        const $element = $("#cmp");
 
-QUnit.test("'itemTemplate' as function returning template name that is not string", function(assert) {
-    var $element = $("#cmp-with-zero-template");
+        new TestComponent($element, {
+            items: [1, 2],
+            itemTemplate: $("<div>Test</div>")
+        });
 
-    new TestComponent($element, {
-        items: [0],
-        itemTemplate: function() { return 0; }
+        assert.equal($element.children().length, 2);
+        assert.equal($.trim($element.children().eq(0).text()), "Test");
+        assert.equal($.trim($element.children().eq(1).text()), "Test");
     });
 
-    assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).eq(0).text()), "zero");
-});
+    QUnit.test("'itemTemplate' as jQuery element with custom template engine", assert => {
+        setTemplateEngine({
+            compile: noop,
+            render() {
+                return $("<div>custom engine</div>");
+            }
+        });
 
-QUnit.test("'itemTemplate' as function returning string", function(assert) {
-    var $element = $("#cmp");
+        try {
+            const $element = $("#cmp");
 
-    new TestComponent($element, {
-        items: [0],
-        itemTemplate: function() { return "0"; }
-    });
+            new TestComponent($element, {
+                items: [1, 2],
+                itemTemplate: $("<div>")
+            });
 
-    assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).eq(0).text()), "0");
-});
-
-QUnit.test("'itemTemplate' as function returning template DOM node", function(assert) {
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        items: [1, 2],
-        itemTemplate: function() { return $("<div>Test</div>").get(0); }
-    });
-
-    assert.equal($element.children().length, 2);
-    assert.equal($.trim($element.children().eq(0).text()), "Test");
-    assert.equal($.trim($element.children().eq(1).text()), "Test");
-});
-
-QUnit.test("'itemTemplate' as function returning template jQuery element", function(assert) {
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        items: [1],
-        itemTemplate: function() { return $("<div>Test</div>"); }
-    });
-
-    assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).children().text()), "Test");
-});
-
-QUnit.test("'itemTemplate' as script element", function(assert) {
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        items: [1],
-        itemTemplate: $("#externalTemplate")
-    });
-
-    assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).html()), "Test");
-});
-
-QUnit.test("'itemTemplate' as script element (no root element)", function(assert) {
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        items: [1, 2],
-        itemTemplate: $("#externalTemplateNoRootElement")
-    });
-
-    assert.equal($element.children().length, 2);
-    assert.equal($.trim($element.children().eq(0).text()), "Outer text Test");
-    assert.equal($.trim($element.children().eq(1).text()), "Outer text Test");
-});
-
-QUnit.test("'itemTemplate' as script element (no root element) with string renderer in template engine (T161432)", function(assert) {
-    setTemplateEngine({
-        compile: function(element) {
-            return element.html();
-        },
-        render: function(template, data) {
-            return template;
+            assert.equal($element.children().length, 2);
+            assert.equal($.trim($element.children().eq(0).text()), "custom engine");
+            assert.equal($.trim($element.children().eq(1).text()), "custom engine");
+        } finally {
+            setTemplateEngine("default");
         }
     });
 
-    try {
-        var $element = $("#cmp");
+    QUnit.test("'itemTemplate' as function returning template name", assert => {
+        const $element = $("#cmp-with-template");
+
+        new TestComponent($element, {
+            items: [1, 2],
+            itemTemplate() {
+                return "testTemplate";
+            }
+        });
+
+        assert.equal($element.children().length, 2);
+        assert.equal($.trim($element.children().eq(0).text()), "First Template");
+        assert.equal($.trim($element.children().eq(1).text()), "First Template");
+    });
+
+    QUnit.test("'itemTemplate' as function returning template name that is not string", assert => {
+        const $element = $("#cmp-with-zero-template");
+
+        new TestComponent($element, {
+            items: [0],
+            itemTemplate() {
+                return 0;
+            }
+        });
+
+        assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).eq(0).text()), "zero");
+    });
+
+    QUnit.test("'itemTemplate' as function returning string", assert => {
+        const $element = $("#cmp");
+
+        new TestComponent($element, {
+            items: [0],
+            itemTemplate() {
+                return "0";
+            }
+        });
+
+        assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).eq(0).text()), "0");
+    });
+
+    QUnit.test("'itemTemplate' as function returning template DOM node", assert => {
+        const $element = $("#cmp");
+
+        new TestComponent($element, {
+            items: [1, 2],
+            itemTemplate() {
+                return $("<div>Test</div>").get(0);
+            }
+        });
+
+        assert.equal($element.children().length, 2);
+        assert.equal($.trim($element.children().eq(0).text()), "Test");
+        assert.equal($.trim($element.children().eq(1).text()), "Test");
+    });
+
+    QUnit.test("'itemTemplate' as function returning template jQuery element", assert => {
+        const $element = $("#cmp");
+
+        new TestComponent($element, {
+            items: [1],
+            itemTemplate() {
+                return $("<div>Test</div>");
+            }
+        });
+
+        assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).children().text()), "Test");
+    });
+
+    QUnit.test("'itemTemplate' as script element", assert => {
+        const $element = $("#cmp");
+
+        new TestComponent($element, {
+            items: [1],
+            itemTemplate: $("#externalTemplate")
+        });
+
+        assert.equal($.trim($element.find("." + ITEM_CONTENT_CLASS).html()), "Test");
+    });
+
+    QUnit.test("'itemTemplate' as script element (no root element)", assert => {
+        const $element = $("#cmp");
 
         new TestComponent($element, {
             items: [1, 2],
@@ -415,15 +398,39 @@ QUnit.test("'itemTemplate' as script element (no root element) with string rende
         assert.equal($element.children().length, 2);
         assert.equal($.trim($element.children().eq(0).text()), "Outer text Test");
         assert.equal($.trim($element.children().eq(1).text()), "Outer text Test");
-    } finally {
-        setTemplateEngine("default");
-    }
-});
+    });
 
-QUnit.test("itemTemplate should get correct index for second page", function(assert) {
-    var itemTemplateMethod = sinon.spy(),
-        $element = $("#cmp"),
-        ds = new DataSource({
+    QUnit.test("'itemTemplate' as script element (no root element) with string renderer in template engine (T161432)", assert => {
+        setTemplateEngine({
+            compile(element) {
+                return element.html();
+            },
+            render(template, data) {
+                return template;
+            }
+        });
+
+        try {
+            const $element = $("#cmp");
+
+            new TestComponent($element, {
+                items: [1, 2],
+                itemTemplate: $("#externalTemplateNoRootElement")
+            });
+
+            assert.equal($element.children().length, 2);
+            assert.equal($.trim($element.children().eq(0).text()), "Outer text Test");
+            assert.equal($.trim($element.children().eq(1).text()), "Outer text Test");
+        } finally {
+            setTemplateEngine("default");
+        }
+    });
+
+    QUnit.test("itemTemplate should get correct index for second page", assert => {
+        const itemTemplateMethod = sinon.spy();
+        const $element = $("#cmp");
+
+        const ds = new DataSource({
             store: new ArrayStore({
                 key: "id",
                 data: [{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]
@@ -431,1539 +438,1609 @@ QUnit.test("itemTemplate should get correct index for second page", function(ass
             pageSize: 1
         });
 
-    var component = new TestComponent($element, {
-        dataSource: ds,
-        itemTemplate: itemTemplateMethod
+        const component = new TestComponent($element, {
+            dataSource: ds,
+            itemTemplate: itemTemplateMethod
+        });
+
+        component._loadNextPage();
+
+        assert.equal(itemTemplateMethod.getCall(1).args[1], 1, "index is correct");
     });
 
-    component._loadNextPage();
+    QUnit.test("data item indices should be recalculated after item delete", assert => {
+        const component = new TestComponent($("#cmp"), {
+            items: ["Item 1", "Item 2", "Item 3"]
+        });
 
-    assert.equal(itemTemplateMethod.getCall(1).args[1], 1, "index is correct");
-});
+        component.deleteItem(component.itemElements().eq(0));
 
-QUnit.test("data item indices should be recalculated after item delete", function(assert) {
-    var component = new TestComponent($("#cmp"), {
-        items: ["Item 1", "Item 2", "Item 3"]
+        const $itemElements = component.itemElements();
+
+        assert.equal($itemElements.eq(0).data("dxItemIndex"), 0, "second item became first");
+        assert.equal($itemElements.eq(0).data("123"), "Item 2", "first item text is correct");
+
+        assert.equal($itemElements.eq(1).data("dxItemIndex"), 1, "third item became second");
+        assert.equal($itemElements.eq(1).data("123"), "Item 3", "second item text is correct");
     });
 
-    component.deleteItem(component.itemElements().eq(0));
-
-    var $itemElements = component.itemElements();
-
-    assert.equal($itemElements.eq(0).data("dxItemIndex"), 0, "second item became first");
-    assert.equal($itemElements.eq(0).data("123"), "Item 2", "first item text is correct");
-
-    assert.equal($itemElements.eq(1).data("dxItemIndex"), 1, "third item became second");
-    assert.equal($itemElements.eq(1).data("123"), "Item 3", "second item text is correct");
-});
-
-QUnit.test("No data text message - no items and source", function(assert) {
-    var component = new TestComponent("#cmp", {});
-    assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 1);
-});
-
-QUnit.test("No data text message - empty items", function(assert) {
-    var list = new List(this.element);
-
-    list.option("items", null);
-    assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 1);
-
-    list.option("items", []);
-    assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 1);
-
-    list.option("items", [1]);
-    assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 0);
-});
-
-QUnit.test("No data text message - empty dataSource", function(assert) {
-    executeAsyncMock.setup();
-
-    new TestComponent("#cmp", {
-        dataSource: {
-            store: new ArrayStore([])
-        }
+    QUnit.test("No data text message - no items and source", assert => {
+        const component = new TestComponent("#cmp", {});
+        assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 1);
     });
 
-    assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 1);
+    QUnit.test("No data text message - empty items", assert => {
+        const list = new List(this.element);
 
-    this.element.empty().dxList({
-        dataSource: {
-            store: new ArrayStore([1])
-        }
+        list.option("items", null);
+        assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 1);
+
+        list.option("items", []);
+        assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 1);
+
+        list.option("items", [1]);
+        assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 0);
     });
 
-    assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 0);
-});
+    QUnit.test("No data text message - empty dataSource", assert => {
+        executeAsyncMock.setup();
 
-QUnit.test("No data text message - value", function(assert) {
-    new TestComponent("#cmp");
-    assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).text(), DEFAULT_EMPTY_TEXT);
-});
+        new TestComponent("#cmp", {
+            dataSource: {
+                store: new ArrayStore([])
+            }
+        });
 
-QUnit.test("No data text message - custom value", function(assert) {
-    var noDataText = "noDataText";
+        assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 1);
 
-    var component = new TestComponent("#cmp", {
-        noDataText: noDataText
+        this.element.empty().dxList({
+            dataSource: {
+                store: new ArrayStore([1])
+            }
+        });
+
+        assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).length, 0);
     });
 
-    assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).text(), noDataText);
-
-    noDataText = noDataText + "123";
-    component.option({ noDataText: noDataText });
-    assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).text(), noDataText);
-});
-
-QUnit.test("message element is not rendered if no data text is null, '', false", function(assert) {
-    var component = new TestComponent("#cmp", {
-        noDataText: null
+    QUnit.test("No data text message - value", assert => {
+        new TestComponent("#cmp");
+        assert.equal(this.element.find("." + EMPTY_MESSAGE_CLASS).text(), DEFAULT_EMPTY_TEXT);
     });
 
-    assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
+    QUnit.test("No data text message - custom value", assert => {
+        let noDataText = "noDataText";
 
-    component.option({ noDataText: false });
-    assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
+        const component = new TestComponent("#cmp", {
+            noDataText
+        });
 
-    component.option({ noDataText: "" });
-    assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
-});
+        assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).text(), noDataText);
 
-QUnit.test("No data message may contain HTML markup", function(assert) {
-    var component = new TestComponent("#cmp", {
+        noDataText = noDataText + "123";
+        component.option({ noDataText });
+        assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).text(), noDataText);
+    });
+
+    QUnit.test("message element is not rendered if no data text is null, '', false", assert => {
+        const component = new TestComponent("#cmp", {
+            noDataText: null
+        });
+
+        assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
+
+        component.option({ noDataText: false });
+        assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
+
+        component.option({ noDataText: "" });
+        assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
+    });
+
+    QUnit.test("No data message may contain HTML markup", assert => {
+        const component = new TestComponent("#cmp", {
             noDataText: "<div class=\"custom\">No data custom</div>"
-        }),
-        $noDataContainer = component.$element().find("." + EMPTY_MESSAGE_CLASS);
+        });
 
-    assert.equal($noDataContainer.find(".custom").length, 1, "custom HTML markup is present");
-});
+        const $noDataContainer = component.$element().find("." + EMPTY_MESSAGE_CLASS);
 
-QUnit.test("B235442 - 'No data to display' blinks while items loading ", function(assert) {
-    var store = new ArrayStore([0, 1, 3, 4]),
-        source = new DataSource(store),
-        el = this.element;
-
-    new TestComponent(el, {
-        dataSource: source
+        assert.equal($noDataContainer.find(".custom").length, 1, "custom HTML markup is present");
     });
 
-    assert.equal(el.find("." + EMPTY_MESSAGE_CLASS).length, 0);
-});
+    QUnit.test("B235442 - 'No data to display' blinks while items loading ", assert => {
+        const store = new ArrayStore([0, 1, 3, 4]);
+        const source = new DataSource(store);
+        const el = this.element;
 
-QUnit.test("B235884 - 'No data' no show ", function(assert) {
-    var deferred = $.Deferred(),
-        el = this.element;
+        new TestComponent(el, {
+            dataSource: source
+        });
 
-    var component = new TestComponent(el, {
-        dataSource: {
-            load: function() {
-                return deferred.promise();
+        assert.equal(el.find("." + EMPTY_MESSAGE_CLASS).length, 0);
+    });
+
+    QUnit.test("B235884 - 'No data' no show ", assert => {
+        const deferred = $.Deferred();
+        const el = this.element;
+
+        const component = new TestComponent(el, {
+            dataSource: {
+                load() {
+                    return deferred.promise();
+                }
             }
-        }
+        });
+
+        assert.equal(el.find("." + EMPTY_MESSAGE_CLASS).length, 0, "'No data' absent, loading now");
+        assert.ok(component._dataSource.isLoading());
+
+        deferred.resolve([]);
+        assert.ok(!component._dataSource.isLoading());
+
+        assert.equal(el.find("." + EMPTY_MESSAGE_CLASS).length, 1, "'No data' shown");
     });
 
-    assert.equal(el.find("." + EMPTY_MESSAGE_CLASS).length, 0, "'No data' absent, loading now");
-    assert.ok(component._dataSource.isLoading());
+    QUnit.test("render items with multiple templates, jquery scenario", assert => {
+        const $element = $("#container-with-jq-template");
+        const testSet = ["First Template", "Second Template", "eraser", "abc", "pencil", "First Template"];
+        let $items;
 
-    deferred.resolve([]);
-    assert.ok(!component._dataSource.isLoading());
+        new TestComponent($element, {
+            items: [
+                {
+                    text: "book",
+                    template: "firstTemplate"
+                },
+                {
+                    text: "pen",
+                    template: "secondTemplate"
+                },
+                {
+                    text: "eraser" // no template - use default
+                },
+                {
+                    text: "note", // not defined template - render template name
+                    template: "abc"
+                },
+                {
+                    text: "pencil", // null-defined template - use default
+                    template: null
+                },
+                {
+                    text: "liner",
+                    template: "firstTemplate"
+                }
+            ]
+        });
 
-    assert.equal(el.find("." + EMPTY_MESSAGE_CLASS).length, 1, "'No data' shown");
-});
+        $items = $element.find(".item");
+        assert.equal($items.length, testSet.length, "quantity of a test set items and rendered items are equal");
 
-QUnit.test("render items with multiple templates, jquery scenario", function(assert) {
-    var $element = $("#container-with-jq-template"),
-        testSet = ["First Template", "Second Template", "eraser", "abc", "pencil", "First Template"],
+        $items.each(function(index) {
+            assert.equal($.trim($(this).text()), testSet[index]);
+        });
+    });
 
-        $items;
+    QUnit.test("onContentReady should be fired after if dataSource isn't empty", assert => {
+        let count = 0;
 
-    new TestComponent($element, {
-        items: [
-            {
-                text: "book",
-                template: "firstTemplate"
+        new TestComponent("#cmp", {
+            onContentReady() {
+                count++;
             },
-            {
-                text: "pen",
-                template: "secondTemplate"
+            dataSource: [1]
+        });
+
+        assert.equal(count, 1, "onContentReady fired after dataSource load");
+    });
+
+    QUnit.test("onContentReady should be fired after if dataSource is empty", assert => {
+        let count = 0;
+
+        new TestComponent("#cmp", {
+            onContentReady() {
+                count++;
             },
-            {
-                text: "eraser" // no template - use default
+            dataSource: []
+        });
+
+        assert.equal(count, 1, "onContentReady fired after dataSource load");
+    });
+
+    QUnit.test("onContentReady should be fired after if items isn't empty", assert => {
+        let count = 0;
+
+        new TestComponent("#cmp", {
+            onContentReady() {
+                count++;
             },
-            {
-                text: "note", // not defined template - render template name
-                template: "abc"
+            items: [1]
+        });
+
+        assert.equal(count, 1, "onContentReady fired");
+    });
+
+    QUnit.test("onContentReady should be fired after if items is empty", assert => {
+        let count = 0;
+
+        new TestComponent("#cmp", {
+            onContentReady() {
+                count++;
             },
-            {
-                text: "pencil", // null-defined template - use default
-                template: null
-            },
-            {
-                text: "liner",
-                template: "firstTemplate"
-            }
-        ]
+            items: []
+        });
+
+        assert.equal(count, 1, "onContentReady fired");
     });
 
-    $items = $element.find(".item");
-    assert.equal($items.length, testSet.length, "quantity of a test set items and rendered items are equal");
-
-    $items.each(function(index) {
-        assert.equal($.trim($(this).text()), testSet[index]);
-    });
-});
-
-QUnit.test("onContentReady should be fired after if dataSource isn't empty", function(assert) {
-    var count = 0;
-
-    new TestComponent("#cmp", {
-        onContentReady: function() { count++; },
-        dataSource: [1]
-    });
-
-    assert.equal(count, 1, "onContentReady fired after dataSource load");
-});
-
-QUnit.test("onContentReady should be fired after if dataSource is empty", function(assert) {
-    var count = 0;
-
-    new TestComponent("#cmp", {
-        onContentReady: function() { count++; },
-        dataSource: []
-    });
-
-    assert.equal(count, 1, "onContentReady fired after dataSource load");
-});
-
-QUnit.test("onContentReady should be fired after if items isn't empty", function(assert) {
-    var count = 0;
-
-    new TestComponent("#cmp", {
-        onContentReady: function() { count++; },
-        items: [1]
-    });
-
-    assert.equal(count, 1, "onContentReady fired");
-});
-
-QUnit.test("onContentReady should be fired after if items is empty", function(assert) {
-    var count = 0;
-
-    new TestComponent("#cmp", {
-        onContentReady: function() { count++; },
-        items: []
-    });
-
-    assert.equal(count, 1, "onContentReady fired");
-});
-
-QUnit.test("item.visible property changing should not re-render whole item (T259051)", function(assert) {
-    var instance = new TestComponent("#cmp", {
+    QUnit.test("item.visible property changing should not re-render whole item (T259051)", assert => {
+        const instance = new TestComponent("#cmp", {
             items: [{ text: '1' }]
-        }),
-        $item = instance.$element().find(".item");
+        });
 
-    instance.option("items[0].visible", true);
-    assert.ok($item.is(instance.$element().find(".item")));
-});
+        const $item = instance.$element().find(".item");
 
-QUnit.test("item.disabled property changing should not re-render whole item", function(assert) {
-    var instance = new TestComponent("#cmp", {
-            items: [{ text: '1' }]
-        }),
-        $item = instance.$element().find(".item");
-
-    instance.option("items[0].disabled", true);
-    assert.ok($item.is(instance.$element().find(".item")));
-});
-
-QUnit.test("_getSummaryItemsWidth function returns right values", function(assert) {
-    var instance = new TestComponent("#cmp", {
-        items: [
-            { html: '<div class="test-width" style="width: 20px; padding-left: 7px"></div>' },
-            { html: '<div class="test-width" style="width: 10px; margin-left: 5px"></div>' }
-        ]
+        instance.option("items[0].visible", true);
+        assert.ok($item.is(instance.$element().find(".item")));
     });
 
-    assert.equal(instance._getSummaryItemsWidth($("#cmp .test-width")), 37, "done");
-    assert.equal(instance._getSummaryItemsWidth($("#cmp .test-width"), true), 42, "done");
+    QUnit.test("item.disabled property changing should not re-render whole item", assert => {
+        const instance = new TestComponent("#cmp", {
+            items: [{ text: '1' }]
+        });
+
+        const $item = instance.$element().find(".item");
+
+        instance.option("items[0].disabled", true);
+        assert.ok($item.is(instance.$element().find(".item")));
+    });
+
+    QUnit.test("_getSummaryItemsWidth function returns right values", assert => {
+        const instance = new TestComponent("#cmp", {
+            items: [
+                { html: '<div class="test-width" style="width: 20px; padding-left: 7px"></div>' },
+                { html: '<div class="test-width" style="width: 10px; margin-left: 5px"></div>' }
+            ]
+        });
+
+        assert.equal(instance._getSummaryItemsWidth($("#cmp .test-width")), 37, "done");
+        assert.equal(instance._getSummaryItemsWidth($("#cmp .test-width"), true), 42, "done");
+    });
 });
 
 QUnit.module("events", {
-    beforeEach: function() {
+    beforeEach: () => {
         registerComponent("TestComponent", TestComponent);
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: function() {
+    afterEach: () => {
         $.fn["TestComponent"] = null;
         this.clock.restore();
     }
-});
+}, () => {
+    QUnit.test("onItemClick should be fired when item is clicked", assert => {
+        let actionFired;
+        let actionData;
 
-QUnit.test("onItemClick should be fired when item is clicked", function(assert) {
-    var actionFired,
-        actionData;
+        const $element = $("#cmp");
 
-    var $element = $("#cmp");
+        new TestComponent($element, {
+            items: ["0", "1", "2"],
+            onItemClick(args) {
+                actionFired = true;
+                actionData = args;
+            }
+        });
 
-    new TestComponent($element, {
-        items: ["0", "1", "2"],
-        onItemClick: function(args) {
-            actionFired = true;
-            actionData = args;
-        }
+        const $item = $element.find(".item").eq(1);
+
+        $item.trigger("dxclick");
+        assert.ok(actionFired, "action fired");
+        assert.equal(isRenderer(actionData.itemElement), !!config().useJQuery, "correct element passed");
+        assert.strictEqual($(actionData.itemElement)[0], $item[0], "correct element passed");
+        assert.strictEqual(actionData.itemData, "1", "correct element passed");
+        assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");
     });
 
-    var $item = $element.find(".item").eq(1);
+    QUnit.test("onItemClick should have correct item index when placed near another collection", assert => {
+        let actionData;
 
-    $item.trigger("dxclick");
-    assert.ok(actionFired, "action fired");
-    assert.equal(isRenderer(actionData.itemElement), !!config().useJQuery, "correct element passed");
-    assert.strictEqual($(actionData.itemElement)[0], $item[0], "correct element passed");
-    assert.strictEqual(actionData.itemData, "1", "correct element passed");
-    assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");
-});
+        const $element = $("#cmp");
 
-QUnit.test("onItemClick should have correct item index when placed near another collection", function(assert) {
-    var actionData;
+        new TestComponent($element, {
+            items: ["0", "1", "2"],
+            onItemClick(args) {
+                actionData = args;
+            }
+        });
 
-    var $element = $("#cmp");
+        const $item = $element.find(".item").eq(1);
 
-    new TestComponent($element, {
-        items: ["0", "1", "2"],
-        onItemClick: function(args) {
-            actionData = args;
-        }
+        new TestComponent($("<div>").insertBefore($element), {
+            items: ["0", "1", "2"]
+        });
+
+        $item.trigger("dxclick");
+        assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");
     });
 
-    var $item = $element.find(".item").eq(1);
+    QUnit.test("item should not have active-state class after click, if it is disabled", assert => {
+        const $element = $("#cmp");
 
-    new TestComponent($("<div>").insertBefore($element), {
-        items: ["0", "1", "2"]
+        new TestComponent($element, {
+            activeStateEnabled: true,
+            items: [{ text: "0", disabled: true }, "1", "2"],
+        });
+
+        const $item = $element.find(".item").eq(0);
+        const pointer = pointerMock($item);
+
+        pointer.start().down();
+        this.clock.tick(30);
+        assert.ok(!$item.hasClass(ACTIVE_ITEM_CLASS), "active state was not toggled for disabled item");
     });
 
-    $item.trigger("dxclick");
-    assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");
-});
+    QUnit.test("item should not have focus-state class after focusin, if it is disabled", assert => {
+        const $element = $("#cmp");
 
-QUnit.test("item should not have active-state class after click, if it is disabled", function(assert) {
-    var $element = $("#cmp");
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: [{ text: "0", disabled: true }, "1", "2"],
+        });
 
-    new TestComponent($element, {
-        activeStateEnabled: true,
-        items: [{ text: "0", disabled: true }, "1", "2"],
+        const $item = $element.find(".item").eq(0);
+
+        $item.trigger("dxpointerdown");
+        this.clock.tick();
+
+        assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus state was not toggled for disabled item");
     });
 
-    var $item = $element.find(".item").eq(0),
-        pointer = pointerMock($item);
+    QUnit.test("Action should be fired when item is held", assert => {
+        let actionFired;
+        let actionData;
 
-    pointer.start().down();
-    this.clock.tick(30);
-    assert.ok(!$item.hasClass(ACTIVE_ITEM_CLASS), "active state was not toggled for disabled item");
-});
+        const $element = $("#cmp");
 
-QUnit.test("item should not have focus-state class after focusin, if it is disabled", function(assert) {
-    var $element = $("#cmp");
+        new TestComponent($element, {
+            items: ["0"],
+            onItemHold(args) {
+                actionFired = true;
+                actionData = args;
+            }
+        });
 
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: [{ text: "0", disabled: true }, "1", "2"],
+        const $item = $element.find(".item");
+
+        $item.trigger(holdEvent.name);
+        assert.ok(actionFired, "action fired");
+        assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
+        assert.strictEqual("0", actionData.itemData, "correct element passed");
     });
 
-    var $item = $element.find(".item").eq(0);
+    QUnit.test("onItemHold should be fired when action changed dynamically", assert => {
+        let actionFired;
 
-    $item.trigger("dxpointerdown");
-    this.clock.tick();
+        const $element = $("#cmp");
 
-    assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus state was not toggled for disabled item");
-});
-
-QUnit.test("Action should be fired when item is held", function(assert) {
-    var actionFired,
-        actionData;
-
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        items: ["0"],
-        onItemHold: function(args) {
-            actionFired = true;
-            actionData = args;
-        }
-    });
-
-    var $item = $element.find(".item");
-
-    $item.trigger(holdEvent.name);
-    assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
-    assert.strictEqual("0", actionData.itemData, "correct element passed");
-});
-
-QUnit.test("onItemHold should be fired when action changed dynamically", function(assert) {
-    var actionFired;
-
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
-            items: ["0"]
-        }),
-        $item = $element.find(".item");
-
-    instance.option("onItemHold", function(args) {
-        actionFired = true;
-    });
-    $item.trigger(holdEvent.name);
-    assert.ok(actionFired, "action fired");
-});
-
-QUnit.test("itemHold event should be fired", function(assert) {
-    var actionFired;
-
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
-            items: ["0"]
-        }),
-        $item = $element.find(".item");
-
-    instance.on("itemHold", function(args) {
-        actionFired = true;
-    });
-    $item.trigger(holdEvent.name);
-    assert.ok(actionFired, "action fired");
-});
-
-QUnit.test("itemHoldTimeout should be passed to hold event", function(assert) {
-    var actionFired;
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        items: ["0"],
-        itemHoldTimeout: 100,
-        onItemHold: function(args) {
-            actionFired = true;
-        }
-    });
-
-    var $item = $element.find(".item"),
-        pointer = pointerMock($item);
-
-    pointer.start().down().wait(100);
-    this.clock.tick(100);
-    pointer.up();
-    assert.ok(actionFired, "action fired");
-});
-
-QUnit.test("onItemContextMenu should be fired when item is held or right clicked", function(assert) {
-    var actionFired,
-        actionData;
-
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        items: ["0"],
-        onItemContextMenu: function(args) {
-            actionFired = true;
-            actionData = args;
-        }
-    });
-
-    var $item = $element.find(".item");
-
-    $item.trigger("dxcontextmenu");
-    assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
-    assert.strictEqual("0", actionData.itemData, "correct element passed");
-});
-
-QUnit.test("itemContextMenu event should be fired when item is held or right clicked", function(assert) {
-    var actionFired,
-        actionData;
-
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
+        const instance = new TestComponent($element, {
             items: ["0"]
         });
 
-    instance.on("itemContextMenu", function(args) {
-        actionFired = true;
-        actionData = args;
-    });
-    var $item = $element.find(".item");
+        const $item = $element.find(".item");
 
-    $item.trigger("dxcontextmenu");
-    assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
-    assert.strictEqual("0", actionData.itemData, "correct element passed");
-});
-
-QUnit.test("onItemContextMenu should be fired when action changed dynamically", function(assert) {
-    var actionFired;
-
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
-            items: ["0"]
-        }),
-        $item = $element.find(".item");
-
-    instance.option("onItemContextMenu", function(args) {
-        actionFired = true;
-    });
-    $item.trigger(holdEvent.name);
-
-    if(support.touch) {
-        assert.ok(actionFired, "action fired");
-    } else {
-        assert.ok(!actionFired, "action was not fired");
-    }
-});
-
-QUnit.test("hold should not be handled if onItemHold or onItemContextMenu is not specified", function(assert) {
-    var actionFired;
-
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        items: ["0"],
-        onItemClick: function(args) {
+        instance.option("onItemHold", args => {
             actionFired = true;
-        }
+        });
+        $item.trigger(holdEvent.name);
+        assert.ok(actionFired, "action fired");
     });
 
-    var $item = $element.find(".item"),
-        pointer = pointerMock($item);
+    QUnit.test("itemHold event should be fired", assert => {
+        let actionFired;
 
-    pointer.start().down().wait(2000);
-    this.clock.tick(2000);
-    pointer.up();
-    assert.ok(actionFired, "action fired");
-});
+        const $element = $("#cmp");
 
-QUnit.test("click on selected item does not fire option change if selectionRequired option is true", function(assert) {
-    var actionFired = false;
+        const instance = new TestComponent($element, {
+            items: ["0"]
+        });
 
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
-            items: ["0", "1"],
-            selectedIndex: 0,
-            selectionRequired: true,
-            selectionMode: "single"
-        }),
-        $item = $element.find(".item").first();
+        const $item = $element.find(".item");
 
-    instance.option("onOptionChanged",
-        function(args) {
-            if(args.name !== "onOptionChanged") {
+        instance.on("itemHold", args => {
+            actionFired = true;
+        });
+        $item.trigger(holdEvent.name);
+        assert.ok(actionFired, "action fired");
+    });
+
+    QUnit.test("itemHoldTimeout should be passed to hold event", assert => {
+        let actionFired;
+        const $element = $("#cmp");
+
+        new TestComponent($element, {
+            items: ["0"],
+            itemHoldTimeout: 100,
+            onItemHold(args) {
                 actionFired = true;
             }
         });
 
-    $item.trigger("dxclick");
-    assert.ok(!actionFired, "option does not change");
-});
+        const $item = $element.find(".item");
+        const pointer = pointerMock($item);
 
-QUnit.test("'onItemRendered' event should be fired with correct arguments", function(assert) {
-    var items = ["item 0"],
-        eventTriggered,
-        eventData;
+        pointer.start().down().wait(100);
+        this.clock.tick(100);
+        pointer.up();
+        assert.ok(actionFired, "action fired");
+    });
 
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
-            items: items,
-            onItemRendered: function(e) {
+    QUnit.test("onItemContextMenu should be fired when item is held or right clicked", assert => {
+        let actionFired;
+        let actionData;
+
+        const $element = $("#cmp");
+
+        new TestComponent($element, {
+            items: ["0"],
+            onItemContextMenu(args) {
+                actionFired = true;
+                actionData = args;
+            }
+        });
+
+        const $item = $element.find(".item");
+
+        $item.trigger("dxcontextmenu");
+        assert.ok(actionFired, "action fired");
+        assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
+        assert.strictEqual("0", actionData.itemData, "correct element passed");
+    });
+
+    QUnit.test("itemContextMenu event should be fired when item is held or right clicked", assert => {
+        let actionFired;
+        let actionData;
+        const $element = $("#cmp");
+
+        const instance = new TestComponent($element, {
+            items: ["0"]
+        });
+
+        instance.on("itemContextMenu", args => {
+            actionFired = true;
+            actionData = args;
+        });
+        const $item = $element.find(".item");
+
+        $item.trigger("dxcontextmenu");
+        assert.ok(actionFired, "action fired");
+        assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
+        assert.strictEqual("0", actionData.itemData, "correct element passed");
+    });
+
+    QUnit.test("onItemContextMenu should be fired when action changed dynamically", assert => {
+        let actionFired;
+
+        const $element = $("#cmp");
+
+        const instance = new TestComponent($element, {
+            items: ["0"]
+        });
+
+        const $item = $element.find(".item");
+
+        instance.option("onItemContextMenu", args => {
+            actionFired = true;
+        });
+        $item.trigger(holdEvent.name);
+
+        if(support.touch) {
+            assert.ok(actionFired, "action fired");
+        } else {
+            assert.ok(!actionFired, "action was not fired");
+        }
+    });
+
+    QUnit.test("hold should not be handled if onItemHold or onItemContextMenu is not specified", assert => {
+        let actionFired;
+
+        const $element = $("#cmp");
+
+        new TestComponent($element, {
+            items: ["0"],
+            onItemClick(args) {
+                actionFired = true;
+            }
+        });
+
+        const $item = $element.find(".item");
+        const pointer = pointerMock($item);
+
+        pointer.start().down().wait(2000);
+        this.clock.tick(2000);
+        pointer.up();
+        assert.ok(actionFired, "action fired");
+    });
+
+    QUnit.test("click on selected item does not fire option change if selectionRequired option is true", assert => {
+        let actionFired = false;
+
+        const $element = $("#cmp");
+
+        const instance = new TestComponent($element, {
+            items: ["0", "1"],
+            selectedIndex: 0,
+            selectionRequired: true,
+            selectionMode: "single"
+        });
+
+        const $item = $element.find(".item").first();
+
+        instance.option("onOptionChanged",
+            args => {
+                if(args.name !== "onOptionChanged") {
+                    actionFired = true;
+                }
+            });
+
+        $item.trigger("dxclick");
+        assert.ok(!actionFired, "option does not change");
+    });
+
+    QUnit.test("'onItemRendered' event should be fired with correct arguments", assert => {
+        const items = ["item 0"];
+        let eventTriggered;
+        let eventData;
+        const $element = $("#cmp");
+
+        const instance = new TestComponent($element, {
+            items,
+            onItemRendered(e) {
                 eventTriggered = true;
                 eventData = e;
             }
-        }),
-        $item = $element.find(".item")[0];
+        });
 
-    assert.ok(eventTriggered, "action fired");
-    assert.strictEqual($(eventData.itemElement)[0], $item, "itemElement is correct");
-    assert.strictEqual(eventData.itemData, items[0], "itemData is correct");
-    assert.equal(eventData.itemIndex, 0, "itemIndex is correct");
+        const $item = $element.find(".item")[0];
 
-    assert.equal(instance.__actionConfigs.onItemRendered.category, "rendering", "action category is 'rendering'");
-});
+        assert.ok(eventTriggered, "action fired");
+        assert.strictEqual($(eventData.itemElement)[0], $item, "itemElement is correct");
+        assert.strictEqual(eventData.itemData, items[0], "itemData is correct");
+        assert.equal(eventData.itemIndex, 0, "itemIndex is correct");
 
-QUnit.test("onClick option in item", function(assert) {
-    var itemClicked = 0;
-    var item = {
-        text: 'test',
-        onClick: function(e) {
-            itemClicked++;
-            args = e;
-        }
-    };
-    var args;
-    var $component = $("#cmp");
-    var component = new TestComponent($component, {
-        items: [item]
+        assert.equal(instance.__actionConfigs.onItemRendered.category, "rendering", "action category is 'rendering'");
     });
 
-    var $item = $component.find(".item");
-    $item.trigger("dxclick");
+    QUnit.test("onClick option in item", assert => {
+        let itemClicked = 0;
+        const item = {
+            text: 'test',
+            onClick(e) {
+                itemClicked++;
+                args = e;
+            }
+        };
+        let args;
+        const $component = $("#cmp");
+        const component = new TestComponent($component, {
+            items: [item]
+        });
 
-    assert.equal(itemClicked, 1, "click fired");
-    assert.equal(args.component, component, "component provided");
-    assert.equal(args.itemData, item, "item data provided");
-    assert.equal(args.itemIndex, 0, "item index provided");
-    assert.ok(args.event, "jQuery event provided");
-    assert.ok(args.itemElement, "item element provided");
+        const $item = $component.find(".item");
+        $item.trigger("dxclick");
+
+        assert.equal(itemClicked, 1, "click fired");
+        assert.equal(args.component, component, "component provided");
+        assert.equal(args.itemData, item, "item data provided");
+        assert.equal(args.itemIndex, 0, "item index provided");
+        assert.ok(args.event, "jQuery event provided");
+        assert.ok(args.itemElement, "item element provided");
+    });
 });
 
+QUnit.module("option change", () => {
+    QUnit.test("changing onItemRendered should not fire refresh", assert => {
+        const instance = new TestComponent($("#cmp"), { items: [1, 2, 3] });
+        let itemsReRendered = false;
 
-QUnit.module("option change");
-
-QUnit.test("changing onItemRendered should not fire refresh", function(assert) {
-    var instance = new TestComponent($("#cmp"), { items: [1, 2, 3] }),
-        itemsReRendered = false;
-
-    instance.option("onItemRendered", function(assert) {
-        itemsReRendered = true;
+        instance.option("onItemRendered", assert => {
+            itemsReRendered = true;
+        });
+        assert.ok(!itemsReRendered, "items does not refreshed");
     });
-    assert.ok(!itemsReRendered, "items does not refreshed");
+
+    QUnit.test("user defined selectedItem with null value should be more important than default selected index", assert => {
+        const TestCollection = CollectionWidget.inherit({
+            NAME: "TestCollection",
+            _getDefaultOptions() {
+                return $.extend(this.callBase(), {
+                    selectedIndex: 0
+                });
+            }
+        });
+
+        const instance = new TestCollection($("#cmp"), {
+            items: [1, 2, 3],
+            selectionMode: "multiple",
+            selectedItem: null
+        });
+
+        assert.equal(instance.option("selectedIndex"), -1, "selectedIndex is correct");
+        assert.deepEqual(instance.option("selectedItemKeys"), [], "selectedItemKeys are correct");
+        assert.equal($("#cmp").find(".dx-item-selected").length, 0, "there is no selected item");
+    });
 });
-
-QUnit.test("user defined selectedItem with null value should be more important than default selected index", function(assert) {
-    var TestCollection = CollectionWidget.inherit({
-        NAME: "TestCollection",
-        _getDefaultOptions: function() {
-            return $.extend(this.callBase(), {
-                selectedIndex: 0
-            });
-        }
-    });
-
-    var instance = new TestCollection($("#cmp"), {
-        items: [1, 2, 3],
-        selectionMode: "multiple",
-        selectedItem: null
-    });
-
-    assert.equal(instance.option("selectedIndex"), -1, "selectedIndex is correct");
-    assert.deepEqual(instance.option("selectedItemKeys"), [], "selectedItemKeys are correct");
-    assert.equal($("#cmp").find(".dx-item-selected").length, 0, "there is no selected item");
-});
-
 
 QUnit.module("items via markup", {
-    beforeEach: function() {
+    beforeEach: () => {
         registerComponent("dxTestComponent", TestComponent);
     },
-    afterEach: function() {
+    afterEach: () => {
         delete $.fn["dxTestComponent"];
     }
-});
+}, () => {
+    QUnit.test("item property changing should not re-render whole widget", assert => {
+        const contentReadySpy = sinon.spy();
 
-QUnit.test("item property changing should not re-render whole widget", function(assert) {
-    var contentReadySpy = sinon.spy(),
-        component = new TestComponent("#cmp", {
+        const component = new TestComponent("#cmp", {
             items: [{ visible: false }],
             onContentReady: contentReadySpy
         });
 
-    component.option("items[0].visible", true);
-    assert.equal(contentReadySpy.callCount, 1);
-});
+        component.option("items[0].visible", true);
+        assert.equal(contentReadySpy.callCount, 1);
+    });
 
-QUnit.test("dxItem should not be modified", function(assert) {
-    var $element = $("#cmp");
-    var dxItemString = "dxItem: {}";
+    QUnit.test("dxItem should not be modified", assert => {
+        const $element = $("#cmp");
+        const dxItemString = "dxItem: {}";
 
-    var $innerItem = window.test = $("<div>").attr("data-options", dxItemString).text("test");
-    $innerItem.appendTo($element);
-    var component = new TestComponent("#cmp", {});
+        const $innerItem = window.test = $("<div>").attr("data-options", dxItemString).text("test");
+        $innerItem.appendTo($element);
+        const component = new TestComponent("#cmp", {});
 
-    assert.equal(component.option("items").length, 1, "item was added");
-    assert.equal($innerItem.attr("data-options"), dxItemString, "item was not changed");
+        assert.equal(component.option("items").length, 1, "item was added");
+        assert.equal($innerItem.attr("data-options"), dxItemString, "item was not changed");
+    });
+
+    QUnit.test("dxItem with custom parser", assert => {
+        const originalParser = config().optionsParser;
+        config({ optionsParser: JSON.parse });
+        const $element = $("#cmp");
+        const dxItemString = `{ "dxItem": {} }`;
+
+        const $innerItem = window.test = $("<div>").attr("data-options", dxItemString).text("test");
+        $innerItem.appendTo($element);
+        let component;
+        try {
+            component = new TestComponent("#cmp", {});
+        } finally {
+            config({ optionsParser: originalParser });
+        }
+
+        assert.equal(component.option("items").length, 1, "item was added");
+        assert.equal($innerItem.attr("data-options"), dxItemString, "item was not changed");
+    });
 });
 
 QUnit.module("keyboard navigation", {
-    beforeEach: function() {
+    beforeEach: () => {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: function() {
+    afterEach: () => {
         this.clock.restore();
     }
-});
+}, () => {
+    QUnit.test("loopItemFocus option test", assert => {
+        const $element = $("#cmp");
 
-QUnit.test("loopItemFocus option test", function(assert) {
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
+        const instance = new TestComponent($element, {
             focusStateEnabled: true,
             loopItemFocus: true,
             items: [0, 1, 2, 3, 4]
-        }),
-        $items = $element.find(".item"),
-        $lastItem = $items.last(),
-        $firstItem = $items.first(),
-        keyboard = keyboardMock($element);
+        });
 
-    $element.focusin();
-    keyboard.keyDown("left");
-    assert.ok($lastItem.hasClass(FOCUSED_ITEM_CLASS), "press left arrow on first item change focused item on last (focus is looping)");
+        const $items = $element.find(".item");
+        const $lastItem = $items.last();
+        const $firstItem = $items.first();
+        const keyboard = keyboardMock($element);
 
-    instance.option("loopItemFocus", false);
-    keyboard.keyDown("right");
-    assert.ok(!$firstItem.hasClass(FOCUSED_ITEM_CLASS), "focus is not looping when option loopItemFocus set to false");
-});
+        $element.focusin();
+        keyboard.keyDown("left");
+        assert.ok($lastItem.hasClass(FOCUSED_ITEM_CLASS), "press left arrow on first item change focused item on last (focus is looping)");
 
-QUnit.test("onItemClick fires on enter and space", function(assert) {
-    assert.expect(2);
-
-    var itemClicked = 0,
-        $element = $("#cmp");
-
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: ["0"],
-        onItemClick: function(args) {
-            itemClicked++;
-        }
+        instance.option("loopItemFocus", false);
+        keyboard.keyDown("right");
+        assert.ok(!$firstItem.hasClass(FOCUSED_ITEM_CLASS), "focus is not looping when option loopItemFocus set to false");
     });
 
-    var $item = $element.find(".item").eq(0),
-        keyboard = keyboardMock($element);
+    QUnit.test("onItemClick fires on enter and space", assert => {
+        assert.expect(2);
 
-    $item.trigger("dxpointerdown");
-    this.clock.tick();
-    keyboard.keyDown("enter");
-    assert.equal(itemClicked, 1, "press enter on item call item click action");
+        let itemClicked = 0;
+        const $element = $("#cmp");
 
-    keyboard.keyDown("space");
-    assert.equal(itemClicked, 2, "press space on item call item click action");
-}),
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ["0"],
+            onItemClick(args) {
+                itemClicked++;
+            }
+        });
 
-QUnit.test("default page scroll should be prevented for space key", function(assert) {
-    assert.expect(1);
+        const $item = $element.find(".item").eq(0);
+        const keyboard = keyboardMock($element);
 
-    var $element = $("#cmp");
+        $item.trigger("dxpointerdown");
+        this.clock.tick();
+        keyboard.keyDown("enter");
+        assert.equal(itemClicked, 1, "press enter on item call item click action");
 
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: ["0"],
-        onItemClick: function(args) {
-            assert.ok(args.event.isDefaultPrevented(), "default scroll is prevented");
-        }
-    });
+        keyboard.keyDown("space");
+        assert.equal(itemClicked, 2, "press space on item call item click action");
+    }),
 
-    $element.find(".item").eq(0).trigger("dxpointerdown");
-    this.clock.tick();
+    QUnit.test("default page scroll should be prevented for space key", assert => {
+        assert.expect(1);
 
-    keyboardMock($element).keyDown("space");
-}),
+        const $element = $("#cmp");
 
-QUnit.test("focused item changed after press right/left arrows", function(assert) {
-    assert.expect(3);
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ["0"],
+            onItemClick(args) {
+                assert.ok(args.event.isDefaultPrevented(), "default scroll is prevented");
+            }
+        });
 
-    var $element = $("#cmp");
+        $element.find(".item").eq(0).trigger("dxpointerdown");
+        this.clock.tick();
 
-    var instance = new TestComponent($element, {
-        focusStateEnabled: true,
-        items: [0, 1, 2, 3, 4]
-    });
+        keyboardMock($element).keyDown("space");
+    }),
 
-    var $item = $element.find(".item").eq(0),
-        keyboard = keyboardMock($element);
+    QUnit.test("focused item changed after press right/left arrows", assert => {
+        assert.expect(3);
 
-    $element.trigger("focusin");
-    keyboard.keyDown("right");
+        const $element = $("#cmp");
 
-    $item = $item.next();
-    assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press right arrow on item change focused item on next");
+        const instance = new TestComponent($element, {
+            focusStateEnabled: true,
+            items: [0, 1, 2, 3, 4]
+        });
 
-    keyboard.keyDown("left");
-    $item = $item.prev();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press left arrow on item change focused item on prev");
-}),
+        let $item = $element.find(".item").eq(0);
+        const keyboard = keyboardMock($element);
 
-QUnit.test("focused item changed after press right/left arrows for rtl", function(assert) {
-    assert.expect(2);
+        $element.trigger("focusin");
+        keyboard.keyDown("right");
 
-    var $element = $("#cmp");
+        $item = $item.next();
+        assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press right arrow on item change focused item on next");
 
-    new TestComponent($element, {
-        rtlEnabled: true,
-        focusStateEnabled: true,
-        items: [0, 1, 2, 3, 4]
-    });
+        keyboard.keyDown("left");
+        $item = $item.prev();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press left arrow on item change focused item on prev");
+    }),
 
-    var $item = $element.find(".item").eq(0),
-        keyboard = keyboardMock($element);
+    QUnit.test("focused item changed after press right/left arrows for rtl", assert => {
+        assert.expect(2);
 
-    $element.trigger("focusin");
-    $item.trigger("dxpointerdown");
-    this.clock.tick();
+        const $element = $("#cmp");
 
-    keyboard.keyDown("left");
-    $item = $item.next();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press left arrow on item change focused item on prev");
+        new TestComponent($element, {
+            rtlEnabled: true,
+            focusStateEnabled: true,
+            items: [0, 1, 2, 3, 4]
+        });
 
-    keyboard.keyDown("right");
-    $item = $item.prev();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press right arrow on item change focused item on next");
-}),
+        let $item = $element.find(".item").eq(0);
+        const keyboard = keyboardMock($element);
 
-QUnit.test("focused item changed after press up/down arrows", function(assert) {
-    assert.expect(2);
+        $element.trigger("focusin");
+        $item.trigger("dxpointerdown");
+        this.clock.tick();
 
-    var $element = $("#cmp");
+        keyboard.keyDown("left");
+        $item = $item.next();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press left arrow on item change focused item on prev");
 
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    });
+        keyboard.keyDown("right");
+        $item = $item.prev();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press right arrow on item change focused item on next");
+    }),
 
-    var $item = $element.find(".item").eq(0),
-        keyboard = keyboardMock($element);
+    QUnit.test("focused item changed after press up/down arrows", assert => {
+        assert.expect(2);
 
-    $element.trigger("focusin");
-    $item.trigger("dxpointerdown");
-    this.clock.tick();
+        const $element = $("#cmp");
 
-    keyboard.keyDown("down");
-    $item = $item.next();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press down arrow on item change focused item on next");
-
-    keyboard.keyDown("up");
-    $item = $item.prev();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press up arrow on item change focused item on prev");
-}),
-
-QUnit.test("focused item changed on next not hidden item after press left/right", function(assert) {
-    assert.expect(2);
-
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        selectedIndex: 3
-    });
-
-    var $items = $element.find(".item"),
-        $item = $items.eq(3),
-        keyboard = keyboardMock($element);
-
-    $element.trigger("focusin");
-    $element.find(".item").eq(3).trigger("dxpointerdown");
-    this.clock.tick();
-
-    $items.eq(2).toggle(false);
-    keyboard.keyDown("left");
-    $item = $items.eq(1);
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "next not hidden item has focused class after press left when next item is hidden");
-
-    keyboard.keyDown("right");
-    $item = $items.eq(3);
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "next not hidden item has focused class after press right when next item is hidden");
-});
-
-QUnit.test("focused item cycle", function(assert) {
-    assert.expect(2);
-
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: [0, 1, 2]
-    });
-
-    var $item = $element.find(".item").eq(0),
-        keyboard = keyboardMock($element);
-
-    $element.trigger("focusin");
-    $item.trigger("dxpointerdown");
-    this.clock.tick();
-
-    keyboard.keyDown("up");
-    $item = $element.find(".item").last();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press up arrow on first item change focused item on last");
-
-    keyboard.keyDown("down");
-    $item = $element.find(".item").first();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press down arrow on last item change focused item on first");
-}),
-
-QUnit.test("focused item changed after press pageUp/Down", function(assert) {
-    assert.expect(2);
-
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    });
-
-    var $item = $element.find(".item").eq(0),
-        keyboard = keyboardMock($element);
-
-    $element.trigger("focusin");
-    $item.trigger("dxpointerdown");
-    this.clock.tick();
-
-    keyboard.keyDown("pagedown");
-    $item = $item.next();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press pageDown on item change focused item on next");
-
-    keyboard.keyDown("pageup");
-    $item = $item.prev();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press pageUp on item change focused item on prev");
-}),
-
-QUnit.test("focused item changed after press home/end", function(assert) {
-    assert.expect(2);
-
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    });
-
-    var $items = $element.find(".item"),
-        $item = $items.eq(0),
-        keyboard = keyboardMock($element);
-
-    $element.focusin();
-    $item.trigger("dxpointerdown");
-    this.clock.tick();
-    keyboard.keyDown("end");
-    $item = $items.last();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press end on item change focused item on next");
-
-    keyboard.keyDown("home");
-    $item = $items.first();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press home on item change focused item on prev");
-}),
-
-QUnit.test("focused item changed on last but one after press home/end if last is hidden", function(assert) {
-    assert.expect(2);
-
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    });
-
-    var $items = $element.find(".item"),
-        $item = $items.eq(0),
-        keyboard = keyboardMock($element);
-
-    $element.focusin();
-    $items.last().toggle(false);
-    $item.trigger("dxpointerdown");
-    this.clock.tick();
-    keyboard.keyDown("end");
-    $item = $items.last().prev();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "last by one item has focused class after press end when last item is hidden");
-
-    $items.first().toggle(false);
-    keyboard.keyDown("home");
-    $item = $items.first().next();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "second item has focused class after press home when first item is hidden");
-});
-
-QUnit.test("focus attribute", function(assert) {
-    assert.expect(4);
-
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
+        new TestComponent($element, {
             focusStateEnabled: true,
             items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        }),
-        $items = $element.find(".item"),
-        $item = $items.first(),
-        keyboard = keyboardMock($element),
-        focusedItemId = instance.getFocusedItemId();
+        });
 
-    $element.focusin();
-    assert.ok($element.attr("aria-activedescendant") === String(focusedItemId), "element has attribute aria-activedescendant, whose value active");
+        let $item = $element.find(".item").eq(0);
+        const keyboard = keyboardMock($element);
 
-    $item.trigger("dxpointerdown");
-    this.clock.tick();
-    assert.ok($item.attr("id").match(focusedItemId), "first item has id active");
+        $element.trigger("focusin");
+        $item.trigger("dxpointerdown");
+        this.clock.tick();
 
-    keyboard.keyDown("down");
-    assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "first item does not has id active after press down arrow key");
-    $item = $items.next();
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "second item has id active after press down arrow key");
-});
+        keyboard.keyDown("down");
+        $item = $item.next();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press down arrow on item change focused item on next");
 
-QUnit.test("selectOnFocus test", function(assert) {
-    assert.expect(9);
+        keyboard.keyDown("up");
+        $item = $item.prev();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press up arrow on item change focused item on prev");
+    }),
 
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
+    QUnit.test("focused item changed on next not hidden item after press left/right", assert => {
+        assert.expect(2);
+
+        const $element = $("#cmp");
+
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            selectedIndex: 3
+        });
+
+        const $items = $element.find(".item");
+        let $item = $items.eq(3);
+        const keyboard = keyboardMock($element);
+
+        $element.trigger("focusin");
+        $element.find(".item").eq(3).trigger("dxpointerdown");
+        this.clock.tick();
+
+        $items.eq(2).toggle(false);
+        keyboard.keyDown("left");
+        $item = $items.eq(1);
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "next not hidden item has focused class after press left when next item is hidden");
+
+        keyboard.keyDown("right");
+        $item = $items.eq(3);
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "next not hidden item has focused class after press right when next item is hidden");
+    });
+
+    QUnit.test("focused item cycle", assert => {
+        assert.expect(2);
+
+        const $element = $("#cmp");
+
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: [0, 1, 2]
+        });
+
+        let $item = $element.find(".item").eq(0);
+        const keyboard = keyboardMock($element);
+
+        $element.trigger("focusin");
+        $item.trigger("dxpointerdown");
+        this.clock.tick();
+
+        keyboard.keyDown("up");
+        $item = $element.find(".item").last();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press up arrow on first item change focused item on last");
+
+        keyboard.keyDown("down");
+        $item = $element.find(".item").first();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press down arrow on last item change focused item on first");
+    }),
+
+    QUnit.test("focused item changed after press pageUp/Down", assert => {
+        assert.expect(2);
+
+        const $element = $("#cmp");
+
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        });
+
+        let $item = $element.find(".item").eq(0);
+        const keyboard = keyboardMock($element);
+
+        $element.trigger("focusin");
+        $item.trigger("dxpointerdown");
+        this.clock.tick();
+
+        keyboard.keyDown("pagedown");
+        $item = $item.next();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press pageDown on item change focused item on next");
+
+        keyboard.keyDown("pageup");
+        $item = $item.prev();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press pageUp on item change focused item on prev");
+    }),
+
+    QUnit.test("focused item changed after press home/end", assert => {
+        assert.expect(2);
+
+        const $element = $("#cmp");
+
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        });
+
+        const $items = $element.find(".item");
+        let $item = $items.eq(0);
+        const keyboard = keyboardMock($element);
+
+        $element.focusin();
+        $item.trigger("dxpointerdown");
+        this.clock.tick();
+        keyboard.keyDown("end");
+        $item = $items.last();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press end on item change focused item on next");
+
+        keyboard.keyDown("home");
+        $item = $items.first();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press home on item change focused item on prev");
+    }),
+
+    QUnit.test("focused item changed on last but one after press home/end if last is hidden", assert => {
+        assert.expect(2);
+
+        const $element = $("#cmp");
+
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        });
+
+        const $items = $element.find(".item");
+        let $item = $items.eq(0);
+        const keyboard = keyboardMock($element);
+
+        $element.focusin();
+        $items.last().toggle(false);
+        $item.trigger("dxpointerdown");
+        this.clock.tick();
+        keyboard.keyDown("end");
+        $item = $items.last().prev();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "last by one item has focused class after press end when last item is hidden");
+
+        $items.first().toggle(false);
+        keyboard.keyDown("home");
+        $item = $items.first().next();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "second item has focused class after press home when first item is hidden");
+    });
+
+    QUnit.test("focus attribute", assert => {
+        assert.expect(4);
+
+        const $element = $("#cmp");
+
+        const instance = new TestComponent($element, {
+            focusStateEnabled: true,
+            items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        });
+
+        const $items = $element.find(".item");
+        let $item = $items.first();
+        const keyboard = keyboardMock($element);
+        const focusedItemId = instance.getFocusedItemId();
+
+        $element.focusin();
+        assert.ok($element.attr("aria-activedescendant") === String(focusedItemId), "element has attribute aria-activedescendant, whose value active");
+
+        $item.trigger("dxpointerdown");
+        this.clock.tick();
+        assert.ok($item.attr("id").match(focusedItemId), "first item has id active");
+
+        keyboard.keyDown("down");
+        assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "first item does not has id active after press down arrow key");
+        $item = $items.next();
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "second item has id active after press down arrow key");
+    });
+
+    QUnit.test("selectOnFocus test", assert => {
+        assert.expect(9);
+
+        const $element = $("#cmp");
+
+        const instance = new TestComponent($element, {
             items: [0, 1, 2],
             focusStateEnabled: true,
             selectOnFocus: true,
             loopItemFocus: true,
             selectedIndex: 0,
             selectionMode: "single"
-        }),
-        $items = $element.find(".item"),
-        $item = $items.first(),
-        keyboard = keyboardMock($element);
+        });
 
-    $item.trigger("dxpointerdown");
+        const $items = $element.find(".item");
+        const $item = $items.first();
+        const keyboard = keyboardMock($element);
 
-    this.clock.tick();
-    keyboard.keyDown("right");
-    assert.equal(instance.option("selectedIndex"), 1, "next item has been selected after press right arrow");
+        $item.trigger("dxpointerdown");
 
-    keyboard.keyDown("left");
-    assert.equal(instance.option("selectedIndex"), 0, "prev item has been selected after press left arrow");
+        this.clock.tick();
+        keyboard.keyDown("right");
+        assert.equal(instance.option("selectedIndex"), 1, "next item has been selected after press right arrow");
 
-    keyboard.keyDown("end");
-    assert.equal(instance.option("selectedIndex"), 2, "last item has been selected after press end");
+        keyboard.keyDown("left");
+        assert.equal(instance.option("selectedIndex"), 0, "prev item has been selected after press left arrow");
 
-    keyboard.keyDown("home");
-    assert.equal(instance.option("selectedIndex"), 0, "first item has been selected after press home");
+        keyboard.keyDown("end");
+        assert.equal(instance.option("selectedIndex"), 2, "last item has been selected after press end");
 
-    keyboard.keyDown("pagedown");
-    assert.equal(instance.option("selectedIndex"), 1, "next item has been selected after press pagedown");
+        keyboard.keyDown("home");
+        assert.equal(instance.option("selectedIndex"), 0, "first item has been selected after press home");
 
-    keyboard.keyDown("pageup");
-    assert.equal(instance.option("selectedIndex"), 0, "prev item has been selected after press pageup");
+        keyboard.keyDown("pagedown");
+        assert.equal(instance.option("selectedIndex"), 1, "next item has been selected after press pagedown");
 
-    keyboard.keyDown("down");
-    assert.equal(instance.option("selectedIndex"), 1, "next item has been selected after press down arrow");
+        keyboard.keyDown("pageup");
+        assert.equal(instance.option("selectedIndex"), 0, "prev item has been selected after press pageup");
 
-    keyboard.keyDown("up");
-    assert.equal(instance.option("selectedIndex"), 0, "prev item has been selected after press up arrow");
+        keyboard.keyDown("down");
+        assert.equal(instance.option("selectedIndex"), 1, "next item has been selected after press down arrow");
 
-    keyboard.keyDown("up");
-    assert.equal(instance.option("selectedIndex"), 2, "loopItemFocus is working");
-});
+        keyboard.keyDown("up");
+        assert.equal(instance.option("selectedIndex"), 0, "prev item has been selected after press up arrow");
 
-QUnit.test("focused item should be changed asynchronous (T400886)", function(assert) {
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
+        keyboard.keyDown("up");
+        assert.equal(instance.option("selectedIndex"), 2, "loopItemFocus is working");
+    });
+
+    QUnit.test("focused item should be changed asynchronous (T400886)", assert => {
+        const $element = $("#cmp");
+
+        const instance = new TestComponent($element, {
             items: [0, 1, 2],
             focusStateEnabled: true
-        }),
-        $items = $element.find(".item"),
-        $item = $items.first();
+        });
 
-    $item.trigger("dxpointerdown");
-    assert.equal(instance.option("focusedElement"), null, "focus isn't set");
+        const $items = $element.find(".item");
+        const $item = $items.first();
 
-    this.clock.tick();
-    assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus set after timeout");
-});
+        $item.trigger("dxpointerdown");
+        assert.equal(instance.option("focusedElement"), null, "focus isn't set");
 
-QUnit.testInActiveWindow("focused item should be changed synchronous with widget focus (T427152)", function(assert) {
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
+        this.clock.tick();
+        assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus set after timeout");
+    });
+
+    QUnit.testInActiveWindow("focused item should be changed synchronous with widget focus (T427152)", assert => {
+        const $element = $("#cmp");
+
+        const instance = new TestComponent($element, {
             items: [0, 1, 2],
             focusStateEnabled: true
-        }),
-        $items = $element.find(".item"),
-        $item = $items.eq(1);
+        });
 
-    $item.trigger("dxpointerdown");
-    instance.focus();
-    assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus isn't set");
-});
+        const $items = $element.find(".item");
+        const $item = $items.eq(1);
 
-QUnit.test("focused item should not be changed if pointerdown prevented (T400886)", function(assert) {
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
+        $item.trigger("dxpointerdown");
+        instance.focus();
+        assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus isn't set");
+    });
+
+    QUnit.test("focused item should not be changed if pointerdown prevented (T400886)", assert => {
+        const $element = $("#cmp");
+
+        const instance = new TestComponent($element, {
             items: [0, 1, 2],
             focusStateEnabled: true
-        }),
-        $items = $element.find(".item"),
-        $item = $items.first();
+        });
 
-    var event = $.Event("dxpointerdown");
-    $item.trigger(event);
-    event.preventDefault();
-    this.clock.tick();
-    assert.equal(instance.option("focusedElement"), null, "focus isn't set");
-});
+        const $items = $element.find(".item");
+        const $item = $items.first();
 
-QUnit.test("selectOnFocus test for widget with disabled items", function(assert) {
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
+        const event = $.Event("dxpointerdown");
+        $item.trigger(event);
+        event.preventDefault();
+        this.clock.tick();
+        assert.equal(instance.option("focusedElement"), null, "focus isn't set");
+    });
+
+    QUnit.test("selectOnFocus test for widget with disabled items", assert => {
+        const $element = $("#cmp");
+
+        const instance = new TestComponent($element, {
             items: [0, { disabled: true, text: 1 }, { disabled: true, text: 2 }, 3],
             focusStateEnabled: true,
             selectOnFocus: true,
             loopItemFocus: true,
             selectedIndex: 0,
             selectionMode: "single"
-        }),
-        $items = $element.find(".item"),
-        $item = $items.first(),
-        keyboard = keyboardMock($element);
+        });
 
-    $element.focusin();
-    $item.trigger("dxpointerdown");
-    this.clock.tick();
-    keyboard.keyDown("right");
-    assert.equal(instance.option("selectedIndex"), 3, "selectedIndex is correctly");
-    $item = $($items.get(3));
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "correct item has an focused-state");
-});
+        const $items = $element.find(".item");
+        let $item = $items.first();
+        const keyboard = keyboardMock($element);
 
-QUnit.test("Item should not lose focus class when you use arrows with 'selectOnFocus' option", function(assert) {
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        items: [1, 2, 3, 4],
-        focusStateEnabled: true,
-        selectOnFocus: true,
-        loopItemFocus: false,
-        selectionMode: "single"
+        $element.focusin();
+        $item.trigger("dxpointerdown");
+        this.clock.tick();
+        keyboard.keyDown("right");
+        assert.equal(instance.option("selectedIndex"), 3, "selectedIndex is correctly");
+        $item = $($items.get(3));
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "correct item has an focused-state");
     });
 
-    var $items = $element.find(".item"),
-        $firstItem = $items.first(),
-        $lastItem = $items.last(),
-        keyboard = keyboardMock($element);
+    QUnit.test("Item should not lose focus class when you use arrows with 'selectOnFocus' option", assert => {
+        const $element = $("#cmp");
 
-    $element.focusin();
-    $firstItem.trigger("dxpointerdown");
-    this.clock.tick();
-    keyboard.keyDown("left");
-    assert.ok($firstItem.hasClass(FOCUSED_ITEM_CLASS), "First item must stay focused when we press 'left' button on the keyboard");
+        new TestComponent($element, {
+            items: [1, 2, 3, 4],
+            focusStateEnabled: true,
+            selectOnFocus: true,
+            loopItemFocus: false,
+            selectionMode: "single"
+        });
 
-    $lastItem.trigger("dxpointerdown");
-    this.clock.tick();
-    keyboard.keyDown("right");
-    assert.ok($lastItem.hasClass(FOCUSED_ITEM_CLASS), "Last item must stay focused when we press 'right' button on the keyboard");
+        const $items = $element.find(".item");
+        const $firstItem = $items.first();
+        const $lastItem = $items.last();
+        const keyboard = keyboardMock($element);
+
+        $element.focusin();
+        $firstItem.trigger("dxpointerdown");
+        this.clock.tick();
+        keyboard.keyDown("left");
+        assert.ok($firstItem.hasClass(FOCUSED_ITEM_CLASS), "First item must stay focused when we press 'left' button on the keyboard");
+
+        $lastItem.trigger("dxpointerdown");
+        this.clock.tick();
+        keyboard.keyDown("right");
+        assert.ok($lastItem.hasClass(FOCUSED_ITEM_CLASS), "Last item must stay focused when we press 'right' button on the keyboard");
+    });
 });
-
 
 QUnit.module("focus policy", {
-    beforeEach: function() {
+    beforeEach: () => {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: function() {
+    afterEach: () => {
         this.clock.restore();
     }
-});
+}, () => {
+    QUnit.test("dx-state-focused is not set for item when focusStateEnabled is false by dxpoinerdown", assert => {
+        assert.expect(1);
 
-QUnit.test("dx-state-focused is not set for item when focusStateEnabled is false by dxpoinerdown", function(assert) {
-    assert.expect(1);
+        const $element = $("#cmp");
 
-    var $element = $("#cmp");
+        new TestComponent($element, {
+            focusStateEnabled: false,
+            items: ["0", "1"]
+        });
 
-    new TestComponent($element, {
-        focusStateEnabled: false,
-        items: ["0", "1"]
+        const $item = $element.find(".item").eq(0);
+
+        $item.trigger("dxpointerdown");
+        this.clock.tick();
+        assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
     });
 
-    var $item = $element.find(".item").eq(0);
+    QUnit.test("dx-state-focused is not set for item when it is not closest focused target by dxpoinerdown", assert => {
+        assert.expect(1);
 
-    $item.trigger("dxpointerdown");
-    this.clock.tick();
-    assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
-});
+        const $element = $("#cmp");
 
-QUnit.test("dx-state-focused is not set for item when it is not closest focused target by dxpoinerdown", function(assert) {
-    assert.expect(1);
-
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: ["0", "1"],
-        itemTemplate: function() {
-            return $("<input>");
-        }
-    });
-
-    var $item = $element.find(".item").eq(0);
-
-    $item.trigger($.Event("dxpointerdown", { target: $item.find("input").get(0) }));
-    this.clock.tick();
-    assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
-});
-
-QUnit.test("focusedElement is set for item when nested element selected by dxpoinerdown", function(assert) {
-    assert.expect(2);
-
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
+        new TestComponent($element, {
             focusStateEnabled: true,
             items: ["0", "1"],
-            itemTemplate: function() {
+            itemTemplate() {
+                return $("<input>");
+            }
+        });
+
+        const $item = $element.find(".item").eq(0);
+
+        $item.trigger($.Event("dxpointerdown", { target: $item.find("input").get(0) }));
+        this.clock.tick();
+        assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
+    });
+
+    QUnit.test("focusedElement is set for item when nested element selected by dxpoinerdown", assert => {
+        assert.expect(2);
+
+        const $element = $("#cmp");
+
+        const instance = new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ["0", "1"],
+            itemTemplate() {
                 return $("<span>");
             }
-        }),
-        $item = $element.find(".item").eq(0);
+        });
 
-    $item.trigger($.Event("dxpointerdown", { target: $item.find("span").get(0) }));
-    this.clock.tick();
-    assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
-    assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus set to first item");
-});
+        const $item = $element.find(".item").eq(0);
 
-QUnit.test("dx-state-focused is not set for item when it is not closest focused target by focusin", function(assert) {
-    assert.expect(1);
-
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: ["0", "1"],
-        itemTemplate: function() {
-            return $("<input>");
-        }
+        $item.trigger($.Event("dxpointerdown", { target: $item.find("span").get(0) }));
+        this.clock.tick();
+        assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
+        assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus set to first item");
     });
 
-    var $item = $element.find(".item").eq(0);
+    QUnit.test("dx-state-focused is not set for item when it is not closest focused target by focusin", assert => {
+        assert.expect(1);
 
-    $element.trigger($.Event("focusin", { target: $item.find("input").get(0) }));
-    assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
-});
+        const $element = $("#cmp");
 
-QUnit.test("option focusOnSelectedItem", function(assert) {
-    assert.expect(1);
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ["0", "1"],
+            itemTemplate() {
+                return $("<input>");
+            }
+        });
 
-    var $element = $("#cmp");
+        const $item = $element.find(".item").eq(0);
 
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: ["0", "1"],
-        selectionMode: "single",
-        selectedIndex: 1,
-        focusOnSelectedItem: false
+        $element.trigger($.Event("focusin", { target: $item.find("input").get(0) }));
+        assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
     });
 
-    $element.trigger("focusin");
-    assert.ok($element.find(".item").eq(0).hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
-});
+    QUnit.test("option focusOnSelectedItem", assert => {
+        assert.expect(1);
 
-QUnit.test("option focusOnSelectedItem", function(assert) {
-    assert.expect(1);
+        const $element = $("#cmp");
 
-    var $element = $("#cmp");
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ["0", "1"],
+            selectionMode: "single",
+            selectedIndex: 1,
+            focusOnSelectedItem: false
+        });
 
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: ["0", "1"],
-        selectionMode: "single",
-        selectedIndex: 1,
-        focusOnSelectedItem: true
+        $element.trigger("focusin");
+        assert.ok($element.find(".item").eq(0).hasClass(FOCUSED_ITEM_CLASS), "focus set to first item");
     });
 
-    $element.trigger("focusin");
-    assert.ok($element.find(".item").eq(1).hasClass(FOCUSED_ITEM_CLASS), "focus set to selected item");
-});
+    QUnit.test("option focusOnSelectedItem", assert => {
+        assert.expect(1);
 
-QUnit.test("item is focused after setting focusedElement option", function(assert) {
-    assert.expect(2);
+        const $element = $("#cmp");
 
-    var $element = $("#cmp"),
-        instance = new TestComponent($element, {
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ["0", "1"],
+            selectionMode: "single",
+            selectedIndex: 1,
+            focusOnSelectedItem: true
+        });
+
+        $element.trigger("focusin");
+        assert.ok($element.find(".item").eq(1).hasClass(FOCUSED_ITEM_CLASS), "focus set to selected item");
+    });
+
+    QUnit.test("item is focused after setting focusedElement option", assert => {
+        assert.expect(2);
+
+        const $element = $("#cmp");
+
+        const instance = new TestComponent($element, {
             focusStateEnabled: true,
             items: ["0", "1"]
         });
 
-    var $item = $element.find(".item").eq(1);
+        const $item = $element.find(".item").eq(1);
 
-    $element.focusin();
+        $element.focusin();
 
-    assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "item is not focused");
+        assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "item is not focused");
 
-    instance.option("focusedElement", $item);
+        instance.option("focusedElement", $item);
 
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused after setting focusedItem option");
-});
-
-
-QUnit.test("first item  should be focused after setting focusedElement option to empty array", function(assert) {
-    assert.expect(1);
-
-    var $element = $("#cmp");
-
-    new TestComponent($element, {
-        focusStateEnabled: true,
-        items: ["0", "1"],
-        focusedElement: []
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused after setting focusedItem option");
     });
 
-    var $item = $element.find(".item").eq(0);
+    QUnit.test("first item  should be focused after setting focusedElement option to empty array", assert => {
+        assert.expect(1);
 
-    $element.focusin();
+        const $element = $("#cmp");
 
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused");
-});
+        new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ["0", "1"],
+            focusedElement: []
+        });
 
-QUnit.test("item is focused after focusing on element", function(assert) {
-    assert.expect(2);
+        const $item = $element.find(".item").eq(0);
 
-    var $element = $("#cmp");
+        $element.focusin();
 
-    var instance = new TestComponent($element, {
-        focusStateEnabled: true,
-        items: ["0", "1"]
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused");
     });
 
-    var $item = $element.find(".item").eq(0);
+    QUnit.test("item is focused after focusing on element", assert => {
+        assert.expect(2);
 
-    $element.focusin();
+        const $element = $("#cmp");
 
-    assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
-    assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused");
-});
+        const instance = new TestComponent($element, {
+            focusStateEnabled: true,
+            items: ["0", "1"]
+        });
 
+        const $item = $element.find(".item").eq(0);
 
-QUnit.module("isReady");
+        $element.focusin();
 
-QUnit.test("collection widget is ready when dataSource is loaded", function(assert) {
-    var isReadyBeforeLoaded;
-    var deferred = $.Deferred();
-
-    var $component = $("#cmp");
-    var component = new TestComponent($component);
-
-    component.option("dataSource", {
-        load: function() {
-            isReadyBeforeLoaded = component.isReady();
-            return deferred.promise();
-        }
+        assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
+        assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused");
     });
-
-    deferred.resolve([]);
-
-    assert.strictEqual(isReadyBeforeLoaded, false, "widget is not ready during dataSource loading");
-    assert.equal(component.isReady(), true, "widget is ready when dataSource is loaded");
 });
 
-var TestWidget = CollectionWidget.inherit({
+QUnit.module("isReady", () => {
+    QUnit.test("collection widget is ready when dataSource is loaded", assert => {
+        let isReadyBeforeLoaded;
+        const deferred = $.Deferred();
+
+        const $component = $("#cmp");
+        const component = new TestComponent($component);
+
+        component.option("dataSource", {
+            load() {
+                isReadyBeforeLoaded = component.isReady();
+                return deferred.promise();
+            }
+        });
+
+        deferred.resolve([]);
+
+        assert.strictEqual(isReadyBeforeLoaded, false, "widget is not ready during dataSource loading");
+        assert.equal(component.isReady(), true, "widget is ready when dataSource is loaded");
+    });
+});
+
+const TestWidget = CollectionWidget.inherit({
     NAME: "TestWidget",
 
-    _renderItem: function() {
-        this.callBase.apply(this, arguments);
+    _renderItem(...args) {
+        this.callBase(...args);
     },
 
-    _itemClass: function() {
+    _itemClass() {
         return "div";
     },
 
-    _itemDataKey: function() {
+    _itemDataKey() {
         return "3AE08BA7-F7BC-464B-8B43-53C1F7307920";
     }
 });
 
-var loadCount = 0;
-var TestStore = Store.inherit({
-    _loadImpl: function() {
+let loadCount = 0;
+const TestStore = Store.inherit({
+    _loadImpl() {
         loadCount++;
         return $.Deferred().resolve([1, 2, 3]);
     }
 });
 
 QUnit.module("Data layer integration", {
-    beforeEach: function() {
+    beforeEach: () => {
         this.clock = sinon.useFakeTimers();
     },
-    afterEach: function() {
+    afterEach: () => {
         this.clock.restore();
     }
-});
+}, () => {
+    QUnit.test("data widget doesn't load already loaded datasource", assert => {
+        assert.expect(3);
 
-QUnit.test("data widget doesn't load already loaded datasource", function(assert) {
-    assert.expect(3);
+        const store = new TestStore();
+        const source = new DataSource(store);
+        let itemCount = 0;
 
-    var store = new TestStore(),
-        source = new DataSource(store),
-        itemCount = 0;
+        source.load().done(() => {
+            assert.equal(loadCount, 1);
+            new TestWidget("#cmp", {
+                dataSource: source,
+                onItemRendered() {
+                    itemCount++;
+                }
+            });
+            // NOTE: TestStore works synchronously so we don't have to wait it loads
+            assert.equal(loadCount, 1);
+            assert.equal(itemCount, 3);
+        });
 
-    source.load().done(function() {
-        assert.equal(loadCount, 1);
+        this.clock.tick(1);
+    });
+
+    QUnit.test("data widget should handle dataSource loading error", assert => {
+        const deferred = $.Deferred();
+        let contentReadyFired = 0;
+
         new TestWidget("#cmp", {
-            dataSource: source,
-            onItemRendered: function() {
-                itemCount++;
+            dataSource: {
+                load() {
+                    return deferred.promise();
+                }
+            },
+            onContentReady() {
+                contentReadyFired++;
             }
         });
-        // NOTE: TestStore works synchronously so we don't have to wait it loads
-        assert.equal(loadCount, 1);
-        assert.equal(itemCount, 3);
+        contentReadyFired = 0;
+        deferred.reject();
+
+        assert.equal(contentReadyFired, 1, "onContentReady fired once on loading fail");
     });
-
-    this.clock.tick(1);
 });
-
-QUnit.test("data widget should handle dataSource loading error", function(assert) {
-    var deferred = $.Deferred();
-    var contentReadyFired = 0;
-
-    new TestWidget("#cmp", {
-        dataSource: {
-            load: function() {
-                return deferred.promise();
-            }
-        },
-        onContentReady: function() {
-            contentReadyFired++;
-        }
-    });
-    contentReadyFired = 0;
-    deferred.reject();
-
-    assert.equal(contentReadyFired, 1, "onContentReady fired once on loading fail");
-});
-
 
 QUnit.module("aria accessibility", {
-    beforeEach: function() {
+    beforeEach: () => {
         this.items = [{ text: "item 1" }, { text: "item 2" }, { text: "item 3" }];
     }
-});
+}, () => {
+    QUnit.test("aria-activedescendant should be refreshed when focused item changed", assert => {
+        assert.expect(1);
 
-QUnit.test("aria-activedescendant should be refreshed when focused item changed", function(assert) {
-    assert.expect(1);
-
-    var widget = new TestWidget("#cmp", {
+        const widget = new TestWidget("#cmp", {
             items: this.items
-        }),
-        $item = widget.itemElements().eq(1);
+        });
 
-    var spy = widget._refreshActiveDescendant;
+        const $item = widget.itemElements().eq(1);
 
-    widget._refreshActiveDescendant = function() {
-        assert.ok(true, "aria-activedescendant was refreshed");
-    };
+        const spy = widget._refreshActiveDescendant;
 
-    try {
-        widget.option("focusedElement", $item);
-    } finally {
-        widget._refreshActiveDescendant = spy;
-    }
-});
+        widget._refreshActiveDescendant = () => {
+            assert.ok(true, "aria-activedescendant was refreshed");
+        };
 
-QUnit.test("aria-selected property", function(assert) {
-    var $element = $("#cmp");
-
-    new TestWidget($element, {
-        items: this.items,
-        selectedIndex: 1,
-        selectionMode: 'single'
+        try {
+            widget.option("focusedElement", $item);
+        } finally {
+            widget._refreshActiveDescendant = spy;
+        }
     });
 
-    var $item0 = $($element).find(".dx-item:eq(0)"),
-        $item1 = $($element).find(".dx-item:eq(1)");
+    QUnit.test("aria-selected property", assert => {
+        const $element = $("#cmp");
 
-    assert.equal($item0.attr("aria-selected"), "false", "selected item has aria-selected property as true");
-    assert.equal($item1.attr("aria-selected"), "true", "selected item has aria-selected property as false");
-});
+        new TestWidget($element, {
+            items: this.items,
+            selectedIndex: 1,
+            selectionMode: 'single'
+        });
 
-QUnit.test("aria-label for empty collection", function(assert) {
-    var $element = $("#cmp"),
-        instance = new TestWidget($element, {
+        const $item0 = $($element).find(".dx-item:eq(0)");
+        const $item1 = $($element).find(".dx-item:eq(1)");
+
+        assert.equal($item0.attr("aria-selected"), "false", "selected item has aria-selected property as true");
+        assert.equal($item1.attr("aria-selected"), "true", "selected item has aria-selected property as false");
+    });
+
+    QUnit.test("aria-label for empty collection", assert => {
+        const $element = $("#cmp");
+
+        const instance = new TestWidget($element, {
             items: []
         });
 
-    assert.equal($element.attr("aria-label"), "No data to display", "aria-label for empty collection is correct");
+        assert.equal($element.attr("aria-label"), "No data to display", "aria-label for empty collection is correct");
 
-    instance.option("items", this.items);
-    assert.equal($element.attr("aria-label"), undefined, "aria-label for not empty collection is correct");
-});
+        instance.option("items", this.items);
+        assert.equal($element.attr("aria-label"), undefined, "aria-label for not empty collection is correct");
+    });
 
+    QUnit.test("onFocusedItemChanged option on init", assert => {
+        assert.expect(3);
 
-QUnit.test("onFocusedItemChanged option on init", function(assert) {
-    assert.expect(3);
+        const $element = $("#cmp");
 
-    var $element = $("#cmp"),
-        instance = new TestWidget($element, {
+        const instance = new TestWidget($element, {
             items: this.items,
             selectedIndex: 1,
             useNative: false,
             selectionMode: 'single',
-            onFocusedItemChanged: function(e) {
+            onFocusedItemChanged(e) {
                 assert.ok(true, "onFocusedItemChanged, defined on init, was triggered");
                 assert.ok(e.actionValue, "onFocusedItemChanged, defined on init, gets id as a parameter");
             }
-        }),
-        $item0 = $($element).find(".dx-item:eq(0)"),
-        $item1 = $($element).find(".dx-item:eq(1)");
+        });
 
-    instance.option("focusedElement", $item0);
+        const $item0 = $($element).find(".dx-item:eq(0)");
+        const $item1 = $($element).find(".dx-item:eq(1)");
 
-    instance.option("onFocusedItemChanged", function() {
-        assert.ok(true, "onFocusedItemChanged, defined on option change was triggered");
+        instance.option("focusedElement", $item0);
+
+        instance.option("onFocusedItemChanged", () => {
+            assert.ok(true, "onFocusedItemChanged, defined on option change was triggered");
+        });
+
+        instance.option("focusedElement", $item1);
     });
 
-    instance.option("focusedElement", $item1);
-});
+    QUnit.test("getDataSource. dataSource is not defined", assert => {
+        const $element = $("#cmp");
 
-QUnit.test("getDataSource. dataSource is not defined", function(assert) {
-    var $element = $("#cmp"),
-        instance = new TestWidget($element, {
+        const instance = new TestWidget($element, {
             items: []
         });
 
-    assert.strictEqual(instance.getDataSource(), null);
-});
+        assert.strictEqual(instance.getDataSource(), null);
+    });
 
-QUnit.test("getDataSource, dataSource is defined", function(assert) {
-    var $element = $("#cmp"),
-        instance = new TestWidget($element, {
+    QUnit.test("getDataSource, dataSource is defined", assert => {
+        const $element = $("#cmp");
+
+        const instance = new TestWidget($element, {
             dataSource: [{ field1: "1" }]
         });
 
-    assert.ok(instance.getDataSource() instanceof DataSource);
+        assert.ok(instance.getDataSource() instanceof DataSource);
+    });
 });
-
 
 QUnit.module("default template", {
-    prepareItemTest: function(data) {
-        var testWidget = new TestWidget($("<div>"), {
-            items: [data]
+    beforeEach: () => {
+        this.prepareItemTest = (data) => {
+            const testWidget = new TestWidget($("<div>"), {
+                items: [data]
+            });
+
+            return testWidget.itemElements().eq(0).find(".dx-item-content").contents();
+        };
+    }
+}, () => {
+    QUnit.test("template should be rendered correctly with text", assert => {
+        const $content = this.prepareItemTest("custom");
+
+        assert.equal($content.text(), "custom");
+    });
+
+    QUnit.test("template should be rendered correctly with boolean", assert => {
+        const $content = this.prepareItemTest(true);
+
+        assert.equal($.trim($content.text()), "true");
+    });
+
+    QUnit.test("template should be rendered correctly with number", assert => {
+        const $content = this.prepareItemTest(1);
+
+        assert.equal($.trim($content.text()), "1");
+    });
+
+    QUnit.test("template should be rendered correctly with text", assert => {
+        const $content = this.prepareItemTest({ text: "custom" });
+
+        assert.equal($.trim($content.text()), "custom");
+    });
+
+    QUnit.test("template should be rendered correctly with html", assert => {
+        const $content = this.prepareItemTest({ html: "<span>test</span>" });
+
+        const $span = $content.is("span") ? $content : $content.children();
+        assert.ok($span.length);
+        assert.equal($span.text(), "test");
+    });
+
+    QUnit.test("template should be rendered correctly with htmlstring", assert => {
+        const $content = this.prepareItemTest("<span>test</span>");
+
+        assert.equal($content.text(), "<span>test</span>");
+    });
+
+    QUnit.test("template should be rendered correctly with html & text", assert => {
+        const $content = this.prepareItemTest({ text: "text", html: "<span>test</span>" });
+
+        const $span = $content.is("span") ? $content : $content.children();
+
+        assert.ok($span.length);
+        assert.equal($content.text(), "test");
+    });
+
+    QUnit.test("displayExpr option should work", assert => {
+        const $element = $("#cmp");
+
+        const instance = new TestWidget($element, {
+            dataSource: [{ name: "Item 1" }],
+            displayExpr: "name"
         });
 
-        return testWidget.itemElements().eq(0).find(".dx-item-content").contents();
-    }
-});
+        const $item = $(instance.itemElements()).eq(0);
 
-QUnit.test("template should be rendered correctly with text", function(assert) {
-    var $content = this.prepareItemTest("custom");
-
-    assert.equal($content.text(), "custom");
-});
-
-QUnit.test("template should be rendered correctly with boolean", function(assert) {
-    var $content = this.prepareItemTest(true);
-
-    assert.equal($.trim($content.text()), "true");
-});
-
-QUnit.test("template should be rendered correctly with number", function(assert) {
-    var $content = this.prepareItemTest(1);
-
-    assert.equal($.trim($content.text()), "1");
-});
-
-QUnit.test("template should be rendered correctly with text", function(assert) {
-    var $content = this.prepareItemTest({ text: "custom" });
-
-    assert.equal($.trim($content.text()), "custom");
-});
-
-QUnit.test("template should be rendered correctly with html", function(assert) {
-    var $content = this.prepareItemTest({ html: "<span>test</span>" });
-
-    var $span = $content.is("span") ? $content : $content.children();
-    assert.ok($span.length);
-    assert.equal($span.text(), "test");
-});
-
-QUnit.test("template should be rendered correctly with htmlstring", function(assert) {
-    var $content = this.prepareItemTest("<span>test</span>");
-
-    assert.equal($content.text(), "<span>test</span>");
-});
-
-QUnit.test("template should be rendered correctly with html & text", function(assert) {
-    var $content = this.prepareItemTest({ text: "text", html: "<span>test</span>" });
-
-    var $span = $content.is("span") ? $content : $content.children();
-
-    assert.ok($span.length);
-    assert.equal($content.text(), "test");
+        assert.strictEqual($item.text(), "Item 1", "displayExpr works");
+    });
 });

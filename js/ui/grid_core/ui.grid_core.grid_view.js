@@ -349,7 +349,7 @@ var ResizingController = modules.ViewController.inherit({
                     }
                 }
             }
-            if(width < minWidth && !isHiddenColumn) {
+            if(minWidth && that._getRealColumnWidth(width) < minWidth && !isHiddenColumn) {
                 resultWidths[index] = minWidth;
                 isColumnWidthsCorrected = true;
                 i = -1;
@@ -428,6 +428,16 @@ var ResizingController = modules.ViewController.inherit({
         }
     },
 
+    _getRealColumnWidth: function(width, groupWidth) {
+        if(!isPercentWidth(width)) {
+            return parseFloat(width);
+        }
+
+        groupWidth = groupWidth || this._rowsView.contentWidth();
+
+        return parseFloat(width) * groupWidth / 100;
+    },
+
     _getTotalWidth: function(widths, groupWidth) {
         var result = 0,
             width,
@@ -436,7 +446,7 @@ var ResizingController = modules.ViewController.inherit({
         for(i = 0; i < widths.length; i++) {
             width = widths[i];
             if(width && width !== HIDDEN_COLUMNS_WIDTH) {
-                result += isPercentWidth(width) ? (parseFloat(width) * groupWidth / 100) : parseFloat(width);
+                result += this._getRealColumnWidth(width, groupWidth);
             }
         }
 

@@ -296,7 +296,7 @@ module.exports = {
                         case "paging":
                             dataSource = that.dataSource();
                             if(dataSource && that._setPagingOptions(dataSource)) {
-                                dataSource.load();
+                                dataSource.load().done(that.pageChanged.fire.bind(that.pageChanged));
                             }
                             handled();
                             break;
@@ -496,6 +496,9 @@ module.exports = {
                 _handleLoadError: function(e) {
                     this.dataErrorOccurred.fire(e);
                 },
+                fireError: function() {
+                    this.dataErrorOccurred.fire(errors.Error.apply(errors, arguments));
+                },
                 _setPagingOptions: function(dataSource) {
                     var pageIndex = this.option("paging.pageIndex"),
                         pageSize = this.option("paging.pageSize"),
@@ -559,7 +562,7 @@ module.exports = {
 
                     when(this._columnsController.refresh(true)).always(function() {
                         if(dataSource) {
-                            that._operationId = dataSource.load().done(result.resolve).fail(result.reject).operationId;
+                            dataSource.load().done(result.resolve).fail(result.reject);
                         } else {
                             result.resolve();
                         }
@@ -611,20 +614,20 @@ module.exports = {
                     dataItem.values = this.generateDataValues(dataItem.data, options.visibleColumns);
                     return dataItem;
                 },
-                generateDataValues: function(data, columns) {
+                generateDataValues: function(data, columns, isModified) {
                     var values = [],
                         column,
                         value;
 
                     for(var i = 0; i < columns.length; i++) {
                         column = columns[i];
-                        value = null;
-                        if(column.command) {
-                            value = null;
-                        } else if(column.calculateCellValue) {
-                            value = column.calculateCellValue(data);
-                        } else if(column.dataField) {
-                            value = data[column.dataField];
+                        value = isModified ? undefined : null;
+                        if(!column.command) {
+                            if(column.calculateCellValue) {
+                                value = column.calculateCellValue(data);
+                            } else if(column.dataField) {
+                                value = data[column.dataField];
+                            }
                         }
                         values.push(value);
 
@@ -638,7 +641,7 @@ module.exports = {
                         that._applyChangeUpdate(change);
                     } else if(that.items().length && change.repaintChangesOnly && change.changeType === "refresh") {
                         that._applyChangesOnly(change);
-                    } else {
+                    } else if(change.changeType === "refresh") {
                         that._applyChangeFull(change);
                     }
                 },
@@ -737,14 +740,18 @@ module.exports = {
                         return true;
                     }
 
-                    if(JSON.stringify(oldRow.modifiedValues && oldRow.modifiedValues[columnIndex]) !== JSON.stringify(newRow.modifiedValues && newRow.modifiedValues[columnIndex])) {
+                    function isCellModified(row, columnIndex) {
+                        return row.modifiedValues ? row.modifiedValues[columnIndex] !== undefined : false;
+                    }
+
+                    if(isCellModified(oldRow, columnIndex) !== isCellModified(newRow, columnIndex)) {
                         return true;
                     }
 
                     return false;
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, rowIndex, isLiveUpdate) {
-                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group") {
+                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== "group" && newItem.rowType !== "groupFooter") {
                         var columnIndices = [];
 
                         for(var columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
@@ -785,7 +792,7 @@ module.exports = {
                             return false;
                         }
 
-                        if(item1.rowType === "group") {
+                        if(item1.rowType === "group" || item1.rowType === "groupFooter") {
                             if(item1.isExpanded !== item2.isExpanded || JSON.stringify(item1.summaryCells) !== JSON.stringify(item2.summaryCells)) {
                                 return false;
                             }
@@ -933,7 +940,7 @@ module.exports = {
                     } else if(isDataChanged) {
                         var operationTypes = that.dataSource().operationTypes();
 
-                        change.repaintChangesOnly = operationTypes && that.option("repaintChangesOnly");
+                        change.repaintChangesOnly = operationTypes && !operationTypes.grouping && !operationTypes.filtering && that.option("repaintChangesOnly");
                         change.isDataChanged = true;
                         if(operationTypes && (operationTypes.reload || operationTypes.paging || operationTypes.groupExpanding)) {
                             change.needUpdateDimensions = true;
@@ -1105,7 +1112,7 @@ module.exports = {
                         oldDataSource.loadError.remove(that._loadErrorHandler);
                         oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
                         oldDataSource.changing.remove(that._changingHandler);
-                        oldDataSource.cancel(that._operationId);
+                        oldDataSource.cancelAll();
                         oldDataSource.dispose(that._isSharedDataSource);
                     }
 
@@ -1171,7 +1178,7 @@ module.exports = {
                                 d.resolve(that._processItems(data, "loadingAll"), options.extra && options.extra.summary);
                             }).fail(d.reject);
                         } else {
-                            if(!that.isLoading()) {
+                            if(!dataSource.isLoading()) {
                                 var loadOptions = extend({}, dataSource.loadOptions(), { isLoadingAll: true, requireTotalCount: false });
                                 dataSource.load(loadOptions).done(function(items, extra) {
                                     items = that._beforeProcessItems(items);
