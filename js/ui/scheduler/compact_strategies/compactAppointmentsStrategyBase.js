@@ -11,6 +11,10 @@ export class CompactAppointmentsStrategyBase {
 
     }
 
+    repaintExisting() {
+
+    }
+
 
     setPosition(element, position) {
         translator.move(element, {
