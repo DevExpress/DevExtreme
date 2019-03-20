@@ -1,4 +1,4 @@
-var DevExpress = require("./core");
+import DevExpress from "./core";
 
 module.exports = DevExpress.FileProviders = DevExpress.FileProviders || {};
 
