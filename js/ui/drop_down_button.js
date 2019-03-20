@@ -174,7 +174,7 @@ let DropDownButton = Widget.inherit({
         this.$element().addClass(DROP_DOWN_BUTTON_CLASS);
         this._renderButtonGroup();
         this._loadSelectedItem().done((selectedItem) => {
-            this.option().selectedItem = selectedItem;
+            this._setOptionSilent("selectedItem", selectedItem);
             this._showSelectedItem();
         });
         if(!this.option("deferRendering")) {
@@ -409,7 +409,7 @@ let DropDownButton = Widget.inherit({
             case "selectedItem":
                 this._setListOption("selectedItemKeys", [this._keyGetter(value)]);
                 this._loadSelectedItem().done((selectedItem) => {
-                    this.option().selectedItem = selectedItem;
+                    this._setOptionSilent("selectedItem", selectedItem);
                     if(this._keyGetter(args.previousValue) !== this._keyGetter(value)) {
                         this._showSelectedItem();
                         this._fireSelectionChangedAction(args);
