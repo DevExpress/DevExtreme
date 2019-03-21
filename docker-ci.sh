@@ -84,6 +84,7 @@ function run_test {
 }
 
 function run_themebuilder {
+    export DEVEXTREME_QUNIT_CI=false
     npm i
     dotnet build build/build-dotnet.sln
     npx gulp style-compiler-tb-assets
