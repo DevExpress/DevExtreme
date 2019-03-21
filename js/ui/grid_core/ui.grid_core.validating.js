@@ -654,7 +654,8 @@ module.exports = {
                         let $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
                             isMaterial = themes.isMaterial(),
                             overlayTarget = $highlightContainer.length && !isMaterial ? $highlightContainer : $cell,
-                            isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
+                            editorPopup = $cell.find(".dx-dropdowneditor-overlay").data("dxPopup"),
+                            isOverlayVisible = editorPopup && editorPopup.option("visible"),
                             myPosition = isOverlayVisible ? "top right" : "top " + alignment,
                             atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
 
