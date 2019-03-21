@@ -2488,18 +2488,17 @@ declare module DevExpress.ui {
         selectedItem?: string | any;
         /** @name dxDropDownButton.Options.showSelectedItem */
         showSelectedItem?: boolean;
+        /** @name dxDropDownButton.Options.showToggleButton */
+        showToggleButton?: boolean;
     }
     /** @name dxDropDownButton */
     export class dxDropDownButton extends Widget {
         constructor(element: Element, options?: dxDropDownButtonOptions)
         constructor(element: JQuery, options?: dxDropDownButtonOptions)
-
         /** @name dxDropDownButton.close() */
         close(): Promise<void> & JQueryPromise<void>;
-
         /** @name dxDropDownButton.open() */
         open(): Promise<void> & JQueryPromise<void>;
-
         /** @name dxDropDownButton.toggle(visibility) */
         toggle(visibility: boolean): Promise<void> & JQueryPromise<void>;
     }
