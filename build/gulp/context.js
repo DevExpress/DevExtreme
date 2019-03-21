@@ -1,3 +1,5 @@
+// Look at the versionSpecification.js for testing
+
 const argv = require('yargs')
     .default('uglify', false)
     .argv;
