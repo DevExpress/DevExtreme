@@ -488,9 +488,7 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _dimensionChanged: function() {
-        if(this.option("scrollingEnabled")) {
-            this._renderScrolling();
-        }
+        this._renderScrolling();
     },
 
     _itemSelectHandler: function(e) {
