@@ -6,10 +6,21 @@ import { noop } from "core/utils/common";
 
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 const LIST_ITEM_CLASS = "dx-list-item";
+const FOCUSED_STATE_CLASS = "dx-state-focused";
+
+const APPLY_VALUE_KEYS = [{ key: "Enter", code: KEY_CODES.ENTER }, { key: "Space", code: KEY_CODES.SPACE }];
 
 const INSERT_DEFAULT_MENTION_DELTA = { ops: [{ insert: "@" }] };
 const INSERT_HASH_MENTION_DELTA = { ops: [{ insert: "#" }] };
 const INSERT_TEXT_DELTA = { ops: [{ insert: "Text" }] };
+
+const KEY_CODES = {
+    ARROW_UP: 38,
+    ARROW_DOWN: 40,
+    ENTER: 13,
+    ESCAPE: 27,
+    SPACE: 32
+};
 
 const moduleConfig = {
     beforeEach: () => {
@@ -18,6 +29,15 @@ const moduleConfig = {
         this.$element = $("#htmlEditor");
 
         this.log = [];
+
+        this.$element.on("keydown", ({ which }) => {
+            const handlers = this.quillMock.keyboard.bindings[which];
+            if(handlers) {
+                handlers.forEach((handler) => {
+                    handler();
+                });
+            }
+        });
 
         this.quillMock = {
             insertEmbed: (position, format, value) => {
@@ -32,7 +52,19 @@ const moduleConfig = {
             getFormat: noop,
             on: noop,
             deleteText: (index, length) => { this.log.push({ operation: "deleteText", index, length }); },
+            keyboard: {
+                addBinding: ({ key }, handler) => {
 
+                    if(!this.quillMock.keyboard.bindings[key]) {
+                        this.quillMock.keyboard.bindings[key] = [];
+                    }
+
+                    this.quillMock.keyboard.bindings[key].push(handler);
+                },
+                bindings: {
+                    13: [noop]
+                }
+            }
         };
 
         this.options = {
@@ -273,5 +305,95 @@ QUnit.module("Mentions module", moduleConfig, () => {
                 value: 4421
             }
         }, "insert issue mention");
+    });
+
+    test("list shouldn't be focused on text input", (assert) => {
+        const mention = new Mentions(this.quillMock, this.options);
+
+        mention.savePosition(0);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
+
+        this.clock.tick();
+        const $list = $(`.${SUGGESTION_LIST_CLASS}`);
+        const isListFocused = $list.hasClass(FOCUSED_STATE_CLASS);
+        const isFirstListItemFocused = $list.find(`.${LIST_ITEM_CLASS}`).first().hasClass(FOCUSED_STATE_CLASS);
+
+        assert.notOk(isListFocused);
+        assert.ok(isFirstListItemFocused);
+    });
+
+    test("trigger 'arrow down' should focus next list item", (assert) => {
+        const mention = new Mentions(this.quillMock, this.options);
+
+        mention.savePosition(0);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
+
+        this.clock.tick();
+
+        this.$element.trigger($.Event("keydown", { key: "ArrowDown", which: KEY_CODES.ARROW_DOWN }));
+
+        const $list = $(`.${SUGGESTION_LIST_CLASS}`);
+        const isListFocused = $list.hasClass(FOCUSED_STATE_CLASS);
+        const isSecondListItemFocused = $list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(FOCUSED_STATE_CLASS);
+
+        assert.notOk(isListFocused);
+        assert.ok(isSecondListItemFocused);
+    });
+
+    test("trigger 'arrow up' should focus previous list item", (assert) => {
+        const mention = new Mentions(this.quillMock, this.options);
+
+        mention.savePosition(0);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
+
+        this.clock.tick();
+
+        this.$element.trigger($.Event("keydown", { key: "ArrowUp", which: KEY_CODES.ARROW_UP }));
+
+        const $list = $(`.${SUGGESTION_LIST_CLASS}`);
+        const isListFocused = $list.hasClass(FOCUSED_STATE_CLASS);
+        const isLastListItemFocused = $list.find(`.${LIST_ITEM_CLASS}`).last().hasClass(FOCUSED_STATE_CLASS);
+
+        assert.notOk(isListFocused);
+        assert.ok(isLastListItemFocused);
+    });
+
+    APPLY_VALUE_KEYS.forEach(({ key, code }) => {
+        test(`trigger '${key}' key should select focused list item`, (assert) => {
+            const mention = new Mentions(this.quillMock, this.options);
+
+            mention.savePosition(0);
+            mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
+            this.clock.tick();
+
+            this.$element.trigger($.Event("keydown", { key, which: code }));
+            this.clock.tick();
+
+            assert.deepEqual(this.log[1], {
+                format: "mention",
+                position: 0,
+                value: {
+                    marker: "@",
+                    id: "Alex",
+                    value: "Alex"
+                }
+            }, "Correct formatting");
+        });
+    });
+
+    test("trigger 'escape' should close list", (assert) => {
+        const mention = new Mentions(this.quillMock, this.options);
+
+        mention.savePosition(0);
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, "user");
+
+        this.clock.tick();
+
+        const $list = $(`.${SUGGESTION_LIST_CLASS}`);
+
+        this.$element.trigger($.Event("keydown", { key: "Escape", which: KEY_CODES.ESCAPE }));
+        this.clock.tick(500);
+
+        assert.notOk($list.is(":visible"));
     });
 });

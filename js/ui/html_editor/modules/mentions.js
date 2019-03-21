@@ -1,11 +1,25 @@
+import $ from "../../../core/renderer";
 import { compileGetter } from "../../../core/utils/data";
 import { isString } from "../../../core/utils/type";
 import { extend } from "../../../core/utils/extend";
 
 import PopupModule from "./popup";
+import { getPublicElement } from "../../../core/utils/dom";
 
 const USER_ACTION = "user";
 const DEFAULT_MARKER = "@";
+
+const KEY_CODES = {
+    ARROW_UP: 38,
+    ARROW_DOWN: 40,
+    ARROW_LEFT: 37,
+    ARROW_RIGHT: 39,
+    ENTER: 13,
+    ESCAPE: 27,
+    SPACE: 32
+};
+
+const DISABLED_STATE_CLASS = "dx-state-disabled";
 
 class MentionModule extends PopupModule {
     _getDefaultOptions() {
@@ -33,7 +47,89 @@ class MentionModule extends PopupModule {
             this._mentions[item.marker] = extend({}, this._getDefaultOptions(), item);
         });
 
+        this._attachKeyboardHandlers();
+
         this.quill.on("text-change", this.onTextChange.bind(this));
+    }
+
+    _attachKeyboardHandlers() {
+        this.quill.keyboard.addBinding({
+            key: KEY_CODES.ARROW_UP,
+        }, this._arrowUpKeyHandler.bind(this));
+
+        this.quill.keyboard.addBinding({
+            key: KEY_CODES.ARROW_DOWN,
+        }, this._arrowDownKeyHandler.bind(this));
+
+        this.quill.keyboard.addBinding({
+            key: KEY_CODES.ENTER,
+        }, this._selectItemHandler.bind(this));
+        this.quill.keyboard.bindings[13].unshift(this.quill.keyboard.bindings[13].pop());
+
+        this.quill.keyboard.addBinding({
+            key: KEY_CODES.ESCAPE,
+        }, this._escapeKeyHandler.bind(this));
+
+        this.quill.keyboard.addBinding({
+            key: KEY_CODES.SPACE,
+        }, this._selectItemHandler.bind(this));
+
+        this.quill.keyboard.addBinding({
+            key: KEY_CODES.ARROW_LEFT,
+        }, this._ignoreKeyHandler.bind(this));
+
+        this.quill.keyboard.addBinding({
+            key: KEY_CODES.ARROW_RIGHT,
+        }, this._ignoreKeyHandler.bind(this));
+    }
+
+    _arrowUpKeyHandler() {
+        if(this._isMentionActive) {
+            const $focusedItem = $(this._list.option("focusedElement"));
+            let $prevItem = $focusedItem.prev();
+            $prevItem = $prevItem.length ? $prevItem : this._activeListItems.last();
+
+            this._list.option("focusedElement", getPublicElement($prevItem));
+            this._list.scrollToItem($prevItem);
+        }
+        return !this._isMentionActive;
+    }
+
+    _arrowDownKeyHandler() {
+        if(this._isMentionActive) {
+            const $focusedItem = $(this._list.option("focusedElement"));
+            let $nextItem = $focusedItem.next();
+            $nextItem = $nextItem.length ? $nextItem : this._activeListItems.first();
+
+            this._list.option("focusedElement", getPublicElement($nextItem));
+            this._list.scrollToItem($nextItem);
+        }
+        return !this._isMentionActive;
+    }
+
+    _ignoreKeyHandler() {
+        return !this._isMentionActive;
+    }
+
+    _fitIntoRange(value, start, end) {
+        if(value > end) return start;
+        if(value < start) return end;
+        return value;
+    }
+
+    _selectItemHandler() {
+        if(this._isMentionActive) {
+            this._list.selectItem(this._list.option("focusedElement"));
+        }
+        return !this._isMentionActive;
+    }
+
+    _escapeKeyHandler() {
+        if(this._isMentionActive) {
+            this._popup.hide();
+        }
+
+        return !this._isMentionActive;
     }
 
     renderList($container, options) {
@@ -99,6 +195,7 @@ class MentionModule extends PopupModule {
 
     _updateList({ dataSource, displayExpr, valueExpr, itemTemplate }) {
         this.compileGetters({ displayExpr, valueExpr });
+        this._list.unselectAll();
         this._list.option({
             dataSource,
             displayExpr,
@@ -123,6 +220,27 @@ class MentionModule extends PopupModule {
                 x: "flipfit"
             }
         };
+    }
+
+    _getPopupConfig() {
+        return extend(super._getPopupConfig(), {
+            onShown: () => {
+                const $firstItem = this._activeListItems.first();
+                this._list.option("focusedElement", getPublicElement($firstItem));
+                this._list.scrollToItem($firstItem);
+                this._isMentionActive = true;
+            },
+            onHidden: () => {
+                this._list.unselectAll();
+                this._list.option("focusedElement", null);
+                this._isMentionActive = false;
+            },
+            focusStateEnabled: false
+        });
+    }
+
+    get _activeListItems() {
+        return this._list.itemElements().filter(`:not(.${DISABLED_STATE_CLASS})`);
     }
 }
 

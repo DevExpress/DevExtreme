@@ -2,11 +2,12 @@ import $ from "jquery";
 
 import "ui/html_editor";
 
-const { test, module } = QUnit;
+const { test, module, skip } = QUnit;
 
 const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 const LIST_ITEM_CLASS = "dx-list-item";
 const OVERLAY_CONTENT_CLASS = "dx-overlay-content";
+const HTML_EDITOR_CONTENT = "dx-htmleditor-content";
 
 module("Mentions integration", {
     beforeEach: () => {
@@ -274,5 +275,34 @@ module("Mentions integration", {
         this.instance.focus();
         this.$element.find("p").first().text("#");
         this.clock.tick();
+    });
+
+    skip("new mention should be selected after press 'enter' key", (assert) => {
+        const done = assert.async();
+        const expectedMention = `<span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="John"><span contenteditable="false"><span>@</span>John</span></span>`;
+        const valueChangeSpy = sinon.spy(({ value }) => {
+            if(valueChangeSpy.calledOnce) {
+                const $content = this.$element.find(`.${HTML_EDITOR_CONTENT}`);
+
+                $content.trigger($.Event("keydown", { key: "ArrowDown", which: 40 }));
+                this.clock.tick();
+                $content.trigger($.Event("keydown", { key: "Enter", which: 13 }));
+                this.clock.tick();
+            } else {
+                assert.strictEqual(value.replace(/\uFEFF/g, ""), expectedMention, "mention has been added");
+                done();
+            }
+        });
+
+        this.options.onValueChanged = valueChangeSpy;
+
+        this.createWidget();
+        this.instance.focus();
+        this.$element.find("p").first().text("@");
+        this.clock.tick();
+    });
+
+    skip("arrowLeft/arrowRight keys doesn't change a caret position", () => {
+        // TODO
     });
 });
