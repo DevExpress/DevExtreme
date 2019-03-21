@@ -1,6 +1,8 @@
 // This file is used for 'context.js' checking
 // Note: label and revision can't be set at the same time
 
+const versionGenerator = require("./version");
+
 const cases = [
     // revision
     { version: '1.1.0', label: '', flavor: '', revision: '10000', expected: '1.1.1-alpha-10000-0000' },
@@ -18,21 +20,10 @@ const cases = [
 ];
 
 cases.forEach(testCase => {
-    process.env.DEVEXTREME_DXBUILD_LABEL = testCase.label;
-    process.env.DEVEXTREME_DXBUILD_FLAVOR = testCase.flavor;
-    process.env.DEVEXTREME_DXBUILD_REVISION = testCase.revision;
-
-    const packageJson = require('../../package.json');
-    packageJson.version = testCase.version;
-
-    const modulePath = require.resolve('./context');
-    delete require.cache[modulePath];
-
-    let version = require('./context').version.package;
+    let version = versionGenerator(testCase.version, testCase.label, testCase.flavor, testCase.revision).package;
     version = version.replace(/-\d{4}$/, '-0000');
 
     if(version !== testCase.expected) {
         throw new Error(`Version mismatch for ${JSON.stringify(testCase)}: get ${version},  expected ${testCase.expected}`);
     }
 });
-
