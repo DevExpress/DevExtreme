@@ -16,6 +16,7 @@ ui.notify = require("../../../ui/notify");
 /* Base widgets (dx.module-widgets-base.js) */
 
 ui.dxActionSheet = require("../../../ui/action_sheet");
+ui.dxActionButton = require("../../../ui/action_button");
 ui.dxAutocomplete = require("../../../ui/autocomplete");
 ui.dxBox = require("../../../ui/box");
 ui.dxButton = require("../../../ui/button");

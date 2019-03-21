@@ -26,6 +26,13 @@ interface JQuery {
     dxAccordion(options: DevExpress.ui.dxAccordionOptions): JQuery;
 }
 interface JQuery {
+    dxActionButton(): JQuery;
+    dxActionButton(options: "instance"): DevExpress.ui.dxActionButton;
+    dxActionButton(options: string): any;
+    dxActionButton(options: string, ...params: any[]): any;
+    dxActionButton(options: DevExpress.ui.dxActionButtonOptions): JQuery;
+}
+interface JQuery {
     dxActionSheet(): JQuery;
     dxActionSheet(options: "instance"): DevExpress.ui.dxActionSheet;
     dxActionSheet(options: string): any;
@@ -4256,6 +4263,14 @@ declare module DevExpress.ui {
         showText?: 'always' | 'inMenu';
         /** @name dxToolbarItem.widget */
         widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup';
+    }
+    /** @name dxActionButton.Options */
+    export interface dxActionButtonOptions extends dxOverlayOptions<dxActionButton> {
+    }
+    /** @name dxActionButton */
+    export class dxActionButton extends dxOverlay {
+        constructor(element: Element, options?: dxActionButtonOptions)
+        constructor(element: JQuery, options?: dxActionButtonOptions)
     }
     /** @name dxTooltip.Options */
     export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {

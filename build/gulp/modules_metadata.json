@@ -199,6 +199,12 @@
     }
   },
   {
+    "name": "ui/action_button",
+    "exports": {
+      "default": { "path": "ui.dxActionButton", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/accordion",
     "exports": {
       "default": { "path": "ui.dxAccordion", "isWidget": true }
