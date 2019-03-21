@@ -91,7 +91,6 @@ function run_themebuilder {
     cd themebuilder
     npm i
     npm run test
-    cd ..
 }
 
 
