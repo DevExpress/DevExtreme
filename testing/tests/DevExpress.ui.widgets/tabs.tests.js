@@ -539,7 +539,7 @@ QUnit.test("Width: 100%, parent element width to show long captions, stretched w
     }
 });
 
-QUnit.test("Width: total width items more then container, scrollingEnabled -> false", function(assert) {
+QUnit.test("Width: dimention change, total width items more then container, scrollingEnabled -> false", function(assert) {
     var $container = $("<div style='width: 400px'>");
 
     try {
@@ -562,11 +562,44 @@ QUnit.test("Width: total width items more then container, scrollingEnabled -> fa
         assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
 
         $container.width(100);
-        instance.repaint();
+        $($element).trigger("dxresize");
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), undefined);
         assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
+    } finally {
+        $container.remove();
+    }
+});
+
+QUnit.test("Width: dimention change, total width items less then container, scrollingEnabled -> false", function(assert) {
+    var $container = $("<div style='width: 100px'>");
+
+    try {
+        var $element = $("<div>").appendTo($container).dxTabs({
+                items: [
+                    { text: "text" },
+                    { text: "long text example" }
+                ],
+                scrollingEnabled: false
+            }),
+            instance = $element.dxTabs("instance");
+
+        $container.appendTo("#qunit-fixture");
+        domUtils.triggerShownEvent($container);
+
+        var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
+
+        assert.equal($element.outerWidth(), 100);
+        assert.equal(instance.option("width"), undefined);
+        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 1.001, "tabs are the same width");
+
+        $container.width(170);
+        $($element).trigger("dxresize");
+
+        assert.equal($element.outerWidth(), 170);
+        assert.equal(instance.option("width"), undefined);
+        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 1.001, "tabs are different width");
     } finally {
         $container.remove();
     }
