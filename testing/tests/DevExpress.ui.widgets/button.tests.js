@@ -65,6 +65,21 @@ QUnit.test("icon", function(assert) {
     assert.equal(this.element.find(".dx-icon-home").length, 0);
 });
 
+QUnit.test("icon position", function(assert) {
+    this.instance.option({
+        icon: "box",
+        iconPosition: "right"
+    });
+
+    var $icon = this.element.find(".dx-icon-box");
+    assert.ok($icon.hasClass("dx-icon-right"), "icon has class for right position");
+    assert.ok(this.element.hasClass("dx-button-icon-right"), "button has class for right icon position");
+
+    this.instance.option("iconPosition", "left");
+    assert.notOk($icon.hasClass("dx-icon-right"), "icon has no class for right position");
+    assert.notOk(this.element.hasClass("dx-button-icon-right"), "button has no class for right icon position");
+});
+
 QUnit.test("type", function(assert) {
     this.instance.option("type", "back");
     assert.ok(this.element.hasClass(BUTTON_BACK_CLASS));

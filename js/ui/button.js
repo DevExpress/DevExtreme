@@ -18,6 +18,8 @@ var BUTTON_CLASS = "dx-button",
     BUTTON_CONTENT_CLASS = "dx-button-content",
     BUTTON_HAS_TEXT_CLASS = "dx-button-has-text",
     BUTTON_HAS_ICON_CLASS = "dx-button-has-icon",
+    BUTTON_ICON_RIGHT = "dx-button-icon-right",
+    ICON_RIGHT_CLASS = "dx-icon-right",
     BUTTON_STYLING_MODE_CLASS_PREFIX = "dx-button-mode-",
     ALLOWED_STYLE_CLASSES = [
         BUTTON_STYLING_MODE_CLASS_PREFIX + "contained",
@@ -102,6 +104,8 @@ var Button = Widget.inherit({
             * @default ""
             */
             icon: "",
+
+            iconPosition: "left",
 
             /**
             * @name dxButtonOptions.validationGroup
@@ -196,13 +200,22 @@ var Button = Widget.inherit({
 
     _initTemplates: function() {
         this.callBase();
+        var that = this;
 
         this._defaultTemplates["content"] = new FunctionTemplate(function(options) {
             var data = options.model,
                 $iconElement = iconUtils.getImageContainer(data && data.icon),
-                $textContainer = data && data.text ? $("<span>").text(data.text).addClass(BUTTON_TEXT_CLASS) : undefined;
+                $textContainer = data && data.text ? $("<span>").text(data.text).addClass(BUTTON_TEXT_CLASS) : undefined,
+                $container = options.container;
 
-            $(options.container).append($iconElement).append($textContainer);
+            $container.append($textContainer);
+
+            if(that.option("iconPosition") === "left") {
+                $container.prepend($iconElement);
+            } else {
+                $iconElement.addClass(ICON_RIGHT_CLASS);
+                $container.append($iconElement);
+            }
         }, this);
     },
 
@@ -270,6 +283,7 @@ var Button = Widget.inherit({
 
         $element
             .toggleClass(BUTTON_HAS_ICON_CLASS, !!data.icon)
+            .toggleClass(BUTTON_ICON_RIGHT, !!data.icon && this.option("iconPosition") === "right")
             .toggleClass(BUTTON_HAS_TEXT_CLASS, !!data.text);
 
         const transclude = this._getAnonymousTemplateName() === this.option("template"),
@@ -417,6 +431,7 @@ var Button = Widget.inherit({
                 this._updateAriaLabel();
                 break;
             case "template":
+            case "iconPosition":
                 this._updateContent();
                 break;
             case "stylingMode":
