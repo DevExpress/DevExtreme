@@ -5,6 +5,13 @@
 @SCHEDULER_DROP_DOWN_BUTTON_BORDER_WIDTH: 1px;
 @SCHEDULER_DROP_DOWN_BUTTON_BLOCK_WIDTH: 75px;
 
+.dx-scheduler .dx-scheduler-slide-panel {
+    .dx-overlay-content {
+        position: relative;
+        background: #fff;
+    }
+}
+
 .dx-scheduler .dx-empty-message {
     line-height: normal;
 }
@@ -36,7 +43,7 @@
             padding-left: 2px;
         }
     }
-    
+
     &.dx-state-hover {
         &:before {
             border-radius: @SCHEDULER_DROP_DOWN_BUTTON_HEIGHT;

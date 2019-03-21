@@ -1,13 +1,13 @@
-var $ = require("jquery"),
-    DropDownAppointments = require("ui/scheduler/ui.scheduler.appointments.drop_down"),
-    dataCoreUtils = require("core/utils/data"),
-    typeUtils = require("core/utils/type"),
-    compileGetter = dataCoreUtils.compileGetter,
-    compileSetter = dataCoreUtils.compileSetter,
-    Widget = require("ui/widget/ui.widget"),
-    fx = require("animation/fx");
+import $ from "jquery";
+import { CompactAppointmentsDesktopStrategy } from "ui/scheduler/compact_strategies/compactAppointmentsDesktopStrategy";
+import dataCoreUtils from "core/utils/data";
+import typeUtils from "core/utils/type";
+import Widget from "ui/widget/ui.widget";
+import fx from "animation/fx";
+import "ui/scheduler/ui.scheduler";
 
-require("ui/scheduler/ui.scheduler");
+const compileGetter = dataCoreUtils.compileGetter;
+const compileSetter = dataCoreUtils.compileSetter;
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-appointments"></div>\
@@ -62,7 +62,7 @@ var moduleOptions = {
 
                 var $menu = $("<div>").appendTo("#qunit-fixture #scheduler-appointments");
 
-                return new DropDownAppointments().render({
+                return new CompactAppointmentsDesktopStrategy().render({
                     $container: $menu,
                     coordinates: options.coordinates,
                     items: options.items,

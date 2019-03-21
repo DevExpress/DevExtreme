@@ -62,6 +62,16 @@ seriesNS.mixins = {
 seriesNS.mixins.chart.scatter = _extend({}, scatterSeries.chart, {
     usePointsToDefineAutoHiding() {
         return true;
+    },
+
+    checkSeriesViewportCoord(axis, coord) {
+        return true;
+    },
+
+    getSeriesPairCoord(coord, isArgument) {
+        return bubbleSeries.chart["bubble"].getShapePairCoord.call(this, coord, isArgument, () => {
+            return this._options.point.size / 2;
+        });
     }
 });
 seriesNS.mixins.polar.scatter = scatterSeries.polar;
