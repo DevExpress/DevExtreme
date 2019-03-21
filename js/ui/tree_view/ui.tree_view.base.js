@@ -802,7 +802,12 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _fireContentReadyAction: function() {
-        this.callBase();
+        var dataSource = this.getDataSource();
+        var skipContentReadyAction = dataSource && !dataSource.isLoaded();
+
+        if(!skipContentReadyAction) {
+            this.callBase();
+        }
 
         if(this._scrollableContainer && windowUtils.hasWindow()) {
             this._scrollableContainer.update();
