@@ -2488,8 +2488,6 @@ declare module DevExpress.ui {
         selectedItem?: string | any;
         /** @name dxDropDownButton.Options.showSelectedItem */
         showSelectedItem?: boolean;
-        /** @name dxDropDownButton.Options.showToggleButton */
-        showToggleButton?: boolean;
     }
     /** @name dxDropDownButton */
     export class dxDropDownButton extends Widget {
@@ -3724,6 +3722,8 @@ declare module DevExpress.ui {
     }
     /** @name dxScheduler.Options */
     export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
+        /** @name dxScheduler.Options.adaptivityEnabled */
+        adaptivityEnabled?: boolean;
         /** @name dxScheduler.Options.allDayExpr */
         allDayExpr?: string;
         /** @name dxScheduler.Options.appointmentCollectorTemplate */
