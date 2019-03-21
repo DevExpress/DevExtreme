@@ -69,24 +69,9 @@ seriesNS.mixins.chart.scatter = _extend({}, scatterSeries.chart, {
     },
 
     getSeriesPairCoord(coord, isArgument) {
-        let oppositeCoord;
-        const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
-        const coordName = !isOpposite ? "vx" : "vy";
-        const size = this._options.point.size / 2;
-        const oppositeCoordName = !isOpposite ? "vy" : "vx";
-        const points = this.getVisiblePoints();
-
-        for(let i = 0; i < points.length; i++) {
-            const p = points[i];
-            const tmpCoord = Math.abs(p[coordName] - coord) <= size ? p[oppositeCoordName] : undefined;
-
-            if(this.checkAxisVisibleAreaCoord(!isArgument, tmpCoord)) {
-                oppositeCoord = tmpCoord;
-                break;
-            }
-        }
-
-        return oppositeCoord;
+        return bubbleSeries.chart["bubble"].getShapePairCoord.call(this, coord, isArgument, () => {
+            return this._options.point.size / 2;
+        });
     }
 });
 seriesNS.mixins.polar.scatter = scatterSeries.polar;

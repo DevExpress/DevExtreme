@@ -157,9 +157,7 @@ exports.chart["steparea"] = _extend({}, areaSeries, {
         return areaSeries._prepareSegment.call(this, stepLineSeries._calculateStepLinePoints(points));
     },
 
-    getSeriesPairCoord(coord, isArgument) {
-        return lineSeries.chart["stepline"].getSeriesPairCoord.call(this, coord, isArgument);
-    }
+    getSeriesPairCoord: lineSeries.chart["stepline"].getSeriesPairCoord
 });
 
 exports.chart["splinearea"] = _extend({}, areaSeries, {
@@ -198,15 +196,9 @@ exports.chart["splinearea"] = _extend({}, areaSeries, {
 
     _createBorderElement: lineSeries.chart["spline"]._createMainElement,
 
-    getSeriesPairCoord(coord, isArgument) {
-        return lineSeries.chart["spline"].getSeriesPairCoord.call(this, coord, isArgument);
-    },
+    getSeriesPairCoord: lineSeries.chart["spline"].getSeriesPairCoord,
 
-    getNearestPointsByCoord(coord, isArgument) {
-        return lineSeries.chart["spline"].getNearestPointsByCoord.call(this, coord, isArgument);
-    },
+    getNearestPointsByCoord: lineSeries.chart["spline"].getNearestPointsByCoord,
 
-    obtainCubicBezierTCoef(p, p0, p1, p2, p3) {
-        return lineSeries.chart["spline"].obtainCubicBezierTCoef.call(this, p, p0, p1, p2, p3);
-    }
+    obtainCubicBezierTCoef: lineSeries.chart["spline"].obtainCubicBezierTCoef
 });

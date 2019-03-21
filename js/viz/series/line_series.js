@@ -36,6 +36,15 @@ function getTangentPoint(point, prevPoint, centerPoint, tan, nextStepAngle) {
     return clonePoint(prevPoint, x, y, correctAngle);
 }
 
+function obtainCubicBezierTCoef(p, p0, p1, p2, p3) {
+    const d = p0 - p;
+    const c = 3 * p1 - 3 * p0;
+    const b = 3 * p2 - 6 * p1 + 3 * p0;
+    const a = p3 - 3 * p2 + 3 * p1 - p0;
+
+    return mathUtils.solveCubicEquation(a, b, c, d);
+}
+
 var lineMethods = {
     autoHidePointMarkersEnabled() {
         return true;
@@ -365,14 +374,6 @@ exports.chart["spline"] = _extend({}, lineSeries, {
         return this._renderer.path(points, "bezier").attr(settings).sharp();
     },
 
-    obtainCubicBezierTCoef(p, p0, p1, p2, p3) {
-        const d = p0 - p;
-        const c = 3 * p1 - 3 * p0;
-        const b = 3 * p2 - 6 * p1 + 3 * p0;
-        const a = p3 - 3 * p2 + 3 * p1 - p0;
-
-        return mathUtils.solveCubicEquation(a, b, c, d);
-    },
 
     getSeriesPairCoord(coord, isArgument) {
         const that = this;
@@ -391,7 +392,7 @@ exports.chart["spline"] = _extend({}, lineSeries, {
             if(p.length === 1) {
                 (visibleArea[0] <= p[0][oppositeCoordName] && visibleArea[1] >= p[0][oppositeCoordName]) && (oppositeCoord = p[0][oppositeCoordName]);
             } else {
-                const ts = that.obtainCubicBezierTCoef(coord, p[0][coordName], p[1][bezierCoordName], p[2][bezierCoordName], p[3][coordName]);
+                const ts = obtainCubicBezierTCoef(coord, p[0][coordName], p[1][bezierCoordName], p[2][bezierCoordName], p[3][coordName]);
 
                 ts.forEach(t => {
                     if(t >= 0 && t <= 1) {
@@ -413,49 +414,21 @@ exports.chart["spline"] = _extend({}, lineSeries, {
     },
 
     getNearestPointsByCoord(coord, isArgument) {
-        const rotated = this.getOptions().rotated;
+        const that = this;
+        const rotated = that.getOptions().rotated;
         const isOpposite = !isArgument && !rotated || isArgument && rotated;
         const coordName = isOpposite ? "vy" : "vx";
-        const points = this.getVisiblePoints();
-        const allPoints = this.getPoints();
-        const bezierPoints = this._segments.length > 0 ? this._segments.reduce((a, seg) => a.concat(seg.line), []) : [];
+        const points = that.getVisiblePoints();
+        const allPoints = that.getPoints();
+        const bezierPoints = that._segments.length > 0 ? that._segments.reduce((a, seg) => a.concat(seg.line), []) : [];
         const nearestPoints = [];
-        let point;
-        let pPoint;
-        let nPoint;
-        let index;
 
-        if(this.isVisible() && bezierPoints.length > 0) {
+        if(that.isVisible() && allPoints.length > 0) {
             if(allPoints.length > 1) {
-                if(points.length === 0) {
-                    points.push(allPoints.filter((p, i) => {
-                        const np = allPoints[i + 1];
-                        return np && (p[coordName] <= coord && np[coordName] >= coord || p[coordName] >= coord && np[coordName] <= coord);
-                    })[0]);
-                }
-
-                for(let i = 0; i < points.length; i++) {
-                    point = points[i];
-                    pPoint = points[i - 1];
-                    nPoint = points[i + 1];
-
-                    if(i === 0) {
-                        pPoint = allPoints[allPoints.indexOf(point) - 1];
-                    }
-                    if(i === points.length - 1) {
-                        nPoint = allPoints[allPoints.indexOf(point) + 1];
-                    }
-
-                    if(nPoint && (point[coordName] <= coord && nPoint[coordName] >= coord || point[coordName] >= coord && nPoint[coordName] <= coord)) {
-                        index = bezierPoints.indexOf(point);
-                        nearestPoints.push([point, bezierPoints[index + 1], bezierPoints[index + 2], nPoint]);
-                        i++;
-                    }
-                    if(pPoint && (point[coordName] >= coord && pPoint[coordName] <= coord || point[coordName] <= coord && pPoint[coordName] >= coord)) {
-                        index = bezierPoints.indexOf(point);
-                        nearestPoints.push([pPoint, bezierPoints[index - 2], bezierPoints[index - 1], point]);
-                    }
-                }
+                that.findNeighborPointsByCoord(coord, coordName, points.slice(0), allPoints, (point, nextPoint) => {
+                    const index = bezierPoints.indexOf(point);
+                    nearestPoints.push([point, bezierPoints[index + 1], bezierPoints[index + 2], nextPoint]);
+                });
             } else {
                 if(allPoints[0][coordName] === coord) {
                     nearestPoints.push([allPoints[0]]);

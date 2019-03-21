@@ -673,44 +673,19 @@ exports.chart = _extend({}, baseScatterMethods, {
     },
 
     getNearestPointsByCoord(coord, isArgument) {
-        const isOpposite = !isArgument && !this._options.rotated || isArgument && this._options.rotated;
-        const points = this.getVisiblePoints();
-        const allPoints = this.getPoints();
-        const nearestPoints = [];
+        const that = this;
+        const rotated = that.getOptions().rotated;
+        const isOpposite = !isArgument && !rotated || isArgument && rotated;
         const coordName = isOpposite ? "vy" : "vx";
-        let point;
-        let pPoint;
-        let nPoint;
+        const points = that.getVisiblePoints();
+        const allPoints = that.getPoints();
+        const nearestPoints = [];
 
-        if(this.isVisible() && allPoints.length > 0) {
+        if(that.isVisible() && allPoints.length > 0) {
             if(allPoints.length > 1) {
-                if(points.length === 0) {
-                    points.push(allPoints.filter((p, i) => {
-                        const np = allPoints[i + 1];
-                        return np && (p[coordName] <= coord && np[coordName] >= coord || p[coordName] >= coord && np[coordName] <= coord);
-                    })[0]);
-                }
-
-                for(let i = 0; i < points.length; i++) {
-                    point = points[i];
-                    pPoint = points[i - 1];
-                    nPoint = points[i + 1];
-
-                    if(i === 0) {
-                        pPoint = allPoints[allPoints.indexOf(point) - 1];
-                    }
-                    if(i === points.length - 1) {
-                        nPoint = allPoints[allPoints.indexOf(point) + 1];
-                    }
-
-                    if(nPoint && (point[coordName] <= coord && nPoint[coordName] >= coord || point[coordName] >= coord && nPoint[coordName] <= coord)) {
-                        nearestPoints.push([point, nPoint]);
-                        i++;
-                    }
-                    if(pPoint && (point[coordName] >= coord && pPoint[coordName] <= coord || point[coordName] <= coord && pPoint[coordName] >= coord)) {
-                        nearestPoints.push([pPoint, point]);
-                    }
-                }
+                that.findNeighborPointsByCoord(coord, coordName, points.slice(0), allPoints, (point, nextPoint) => {
+                    nearestPoints.push([point, nextPoint]);
+                });
             } else {
                 if(allPoints[0][coordName] === coord) {
                     nearestPoints.push([allPoints[0], allPoints[0]]);
@@ -719,6 +694,23 @@ exports.chart = _extend({}, baseScatterMethods, {
         }
 
         return nearestPoints;
+    },
+
+    findNeighborPointsByCoord(coord, coordName, points, allPoints, pushNeighborPoints) {
+        let searchPoints = allPoints;
+
+        if(points.length > 0) {
+            points.splice(0, 0, allPoints[allPoints.indexOf(points[0]) - 1]);
+            points.splice(points.length, 0, allPoints[allPoints.indexOf(points[points.length - 1]) + 1]);
+            searchPoints = points;
+        }
+
+        searchPoints.forEach((p, i) => {
+            const np = searchPoints[i + 1];
+            if(p && np && (p[coordName] <= coord && np[coordName] >= coord || p[coordName] >= coord && np[coordName] <= coord)) {
+                pushNeighborPoints(p, np);
+            }
+        });
     },
 
     getNeighborPoint: function(x, y) {
