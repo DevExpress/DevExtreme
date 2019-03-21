@@ -85,7 +85,8 @@ function run_test {
 
 function run_themebuilder {
     npm i
-    npm run build
+    dotnet build build/build-dotnet.sln
+    npx gulp style-compiler-tb-assets
     cd themebuilder
     npm i
     npm run test
