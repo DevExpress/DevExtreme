@@ -84,7 +84,7 @@ function run_test {
     exit $runner_result
 }
 
-function run_themebuilder {
+function run_test_themebuilder {
     dotnet build build/build-dotnet.sln
     npm i
     npm run build-themebuilder-assets
@@ -100,7 +100,7 @@ case "$TARGET" in
     "lint") run_lint ;;
     "ts") run_ts ;;
     "test") run_test ;;
-    "themebuilder") run_themebuilder ;;
+    "test_themebuilder") run_test_themebuilder ;;
 
     *)
         echo "Unknown target"
