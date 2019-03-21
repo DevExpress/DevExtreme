@@ -393,7 +393,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     return !isEditing && column.command === "expand";
                 }
 
-                if(isCellEditing && row.rowType !== "data") {
+                if(isCellEditing && row && row.rowType !== "data") {
                     return false;
                 }
 
