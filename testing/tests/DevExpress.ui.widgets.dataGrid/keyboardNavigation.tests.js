@@ -5591,6 +5591,49 @@ QUnit.module("Keyboard navigation with real dataController and columnsController
         assert.ok(that.rowsView.element().is(":focus"), "rowsView has focus to work pageUp/pageDown");
     });
 
+    QUnit.testInActiveWindow("Click by freespace cells should not generate exception if editing started and editing mode is cell", function(assert) {
+        // arrange
+        var that = this;
+        that.$element = function() {
+            return $("#container");
+        };
+        that.data = [
+            { name: "Alex", phone: "555555", room: 0 },
+            { name: "Dan1", phone: "666666", room: 1 },
+            { name: "Dan2", phone: "777777", room: 2 },
+            { name: "Dan3", phone: "888888", room: 3 }
+        ];
+
+        that.options = {
+            height: 300,
+            editing: {
+                allowUpdating: true,
+                mode: "cell"
+            }
+        };
+
+        that.setupModule();
+
+        // act
+        that.gridView.render($("#container"));
+
+        // act
+        this.editCell(1, 1);
+        this.clock.tick();
+        var $cell = $(that.rowsView.element().find(".dx-freespace-row").eq(0).find("td").eq(1));
+
+        try {
+            // act
+            $cell.trigger(CLICK_EVENT);
+            this.clock.tick();
+            // assert
+            assert.ok(true, "No exception");
+        } catch(e) {
+            // assert
+            assert.ok(false, e);
+        }
+    });
+
     QUnit.testInActiveWindow("virtual row cells should not have focus", function(assert) {
         // arrange
         var that = this,
