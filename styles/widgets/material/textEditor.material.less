@@ -16,36 +16,36 @@
     .dx-icon-sizing(@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);
 }
 
-.validation-icon-position(@padding: 0) {
+.validation-icon-position() {
     &.dx-invalid {
         &.dx-editor-underlined {
             .dx-texteditor-input {
-                padding-right: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-right: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
-    
+
             &.dx-rtl .dx-texteditor-input {
                 padding: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING;
-                padding-left: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-left: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
         }
         &.dx-editor-filled, &.dx-editor-outlined {
             .dx-texteditor-input {
-                padding-right: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-right: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
-    
+
             &.dx-rtl .dx-texteditor-input {
                 padding: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING;
-                padding-left: @padding + @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                padding-left: @MATERIAL_TEXTEDITOR_INVALID_BADGE_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
             }
         }
 
-        .dx-texteditor-buttons-container {
+        .dx-texteditor-input-container {
             &:after {
-                right: @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING + @padding;
+                right: @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING;
 
                 .dx-rtl &,
                 .dx-rtl& {
-                    left: @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING + @padding;
+                    left: @MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING;
                     right: auto;
                 }
             }
@@ -254,7 +254,7 @@
     }
 
     &:not(.dx-texteditor-empty) {
-        .validation-icon-position(@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);
+        .validation-icon-position();
     }
 }
 
@@ -286,7 +286,7 @@
         }
     }
 
-    .dx-texteditor-buttons-container {
+    .dx-texteditor-input-container {
         &:after {
             .dx-invalid-material-badge();
         }

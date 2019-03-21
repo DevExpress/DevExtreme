@@ -1,13 +1,19 @@
 @DROPDOWNEDITOR_BUTTON_WIDTH: 25px;
 @DROPDOWNEDITOR_INVALID_BADGE_OFFSET: @DROPDOWNEDITOR_BUTTON_WIDTH;
 
-.dx-dropdowneditor-button-visible .dx-texteditor-input {
-    padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH;
-}
-
 .dx-dropdowneditor-button {
     width: @DROPDOWNEDITOR_BUTTON_WIDTH;
 }
+
+.dx-dropdowneditor-input-wrapper {
+    border: @TEXTEDITOR_BORDER;
+    border-radius: @TEXTEDITOR_BORDER_RADIUS;
+
+    .dx-texteditor-container {
+        border: 0;
+    }
+}
+
 
 .dx-dropdowneditor-button-visible {
     .dx-texteditor-input {

@@ -1,5 +1,4 @@
 @SPIN_CONTAINER_WIDTH: 25px;
-@SPIN_BUTTON_AREA_WIDTH: 22px;
 @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 50px;
 
 .dx-numberbox-spin-container {
@@ -36,17 +35,9 @@
 }
 
 .dx-numberbox-spin {
-    .validation-icon-position(@SPIN_BUTTON_AREA_WIDTH);
-
-    &.dx-show-clear-button:not(.dx-texteditor-empty) {
-        .validation-icon-position(@SPIN_BUTTON_AREA_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT);
-    }
+    .validation-icon-position();
 }
 
 .dx-numberbox-spin-touch-friendly {
-    .validation-icon-position(@TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH);
-
-    &.dx-show-clear-button:not(.dx-texteditor-empty) {
-        .validation-icon-position(@TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT);
-    }
+    .validation-icon-position();
 }

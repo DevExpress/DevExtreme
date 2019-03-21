@@ -15,24 +15,24 @@
 @TEXTEDITOR_INVALID_BADGE_WIDTH: 22px;
 @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING: 4px;
 
-.validation-icon-position(@padding: 0) {
+.validation-icon-position() {
     &.dx-invalid {
         .dx-texteditor-input {
-            padding-right: @padding + @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+            padding-right: @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
         }
 
         &.dx-rtl .dx-texteditor-input {
             padding: @TEXTEDITOR_INPUT_PADDING;
-            padding-left: @padding + @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
+            padding-left: @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
         }
 
-        .dx-texteditor-container {
+        .dx-texteditor-input-container {
             &:after {
-                right: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING + @padding;
+                right: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
 
                 .dx-rtl &,
                 .dx-rtl& {
-                    left: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING + @padding;
+                    left: @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING;
                     right: auto;
                 }
             }
@@ -135,8 +135,8 @@
 
 .dx-texteditor {
     .validation-icon-position();
-    &.dx-invalid{
-        .dx-texteditor-container {
+    &.dx-invalid {
+        .dx-texteditor-input-container {
             &:after {
                 .dx-invalid-ios7-badge();
             }

@@ -46,33 +46,21 @@
         .dx-texteditor-input {
             padding-right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
         }
-    
-        .validation-icon-position(@MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING);
-    
-        &.dx-show-clear-button:not(.dx-texteditor-empty) {
-            .validation-icon-position(@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING);
-        }
+
+        .validation-icon-position();
     }
 
     &.dx-editor-filled, &.dx-editor-outlined {
         .dx-texteditor-input {
             padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
         }
-    
-        .validation-icon-position(@MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING);
-    
-        &.dx-show-clear-button:not(.dx-texteditor-empty) {
-            .validation-icon-position(@MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE + @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING);
-        }
+
+        .validation-icon-position();
     }
 }
 
 .dx-numberbox-spin-touch-friendly {
-    .validation-icon-position(@MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH);
-
-    &.dx-show-clear-button:not(.dx-texteditor-empty) {
-        .validation-icon-position(@MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE);
-    }
+    .validation-icon-position();
 
     .dx-numberbox-spin-container {
         width: @MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
