@@ -33,21 +33,18 @@ const getRevision = (revision) => {
     return revision + '-' + hours + minutes;
 };
 
-module.exports = (scriptVersion, dxBuildLabel, dxBuildFlavor, dxBuildRevision) => {
-    if(dxBuildLabel && String(dxBuildLabel).replace(/_/g, '.') !== scriptVersion) {
+module.exports = (baseVersion, dxBuildLabel, dxBuildFlavor, dxBuildRevision) => {
+    if(dxBuildLabel && String(dxBuildLabel).replace(/_/g, '.') !== baseVersion) {
         throw 'DXBuild label does not match version in package.json';
     }
 
-    const minor = Number(scriptVersion.split('.')[2]);
+    const minor = Number(baseVersion.split('.')[2]);
     const revision = getRevision(dxBuildRevision);
     const flavor = dxBuildFlavor || getDefaultFlavor(dxBuildLabel, minor, revision);
 
-    const packageVersion = getPackageVersion(scriptVersion, flavor, revision);
-    const productVersion = getProductVersion(scriptVersion, revision);
-
     return {
-        product: productVersion,
-        package: packageVersion,
-        script: scriptVersion
+        product: getProductVersion(baseVersion, revision),
+        package: getPackageVersion(baseVersion, flavor, revision),
+        script: baseVersion
     };
 };

@@ -1,7 +1,7 @@
-// This file is used for 'context.js' checking
+// Tests for the version.js module
 // Note: label and revision can't be set at the same time
 
-const versionGenerator = require("./version");
+const versionFunc = require("./version");
 
 const cases = [
     // revision
@@ -20,10 +20,10 @@ const cases = [
 ];
 
 cases.forEach(testCase => {
-    let version = versionGenerator(testCase.version, testCase.label, testCase.flavor, testCase.revision).package;
-    version = version.replace(/-\d{4}$/, '-0000');
+    let actual = versionFunc(testCase.version, testCase.label, testCase.flavor, testCase.revision).package;
+    actual = actual.replace(/-\d{4}$/, '-0000');
 
-    if(version !== testCase.expected) {
-        throw new Error(`Version mismatch for ${JSON.stringify(testCase)}: get ${version},  expected ${testCase.expected}`);
+    if(actual !== testCase.expected) {
+        throw new Error(`Version mismatch for ${JSON.stringify(testCase)}: get ${actual}`);
     }
 });

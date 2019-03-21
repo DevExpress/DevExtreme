@@ -1,4 +1,4 @@
-// Look at the versionSpecification.js for testing
+// See tests in version-spec.js
 
 const argv = require('yargs')
     .default('uglify', false)
