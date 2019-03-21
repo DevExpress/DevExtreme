@@ -18,7 +18,7 @@ var BUTTON_CLASS = "dx-button",
     BUTTON_CONTENT_CLASS = "dx-button-content",
     BUTTON_HAS_TEXT_CLASS = "dx-button-has-text",
     BUTTON_HAS_ICON_CLASS = "dx-button-has-icon",
-    BUTTON_ICON_RIGHT = "dx-button-icon-right",
+    BUTTON_ICON_RIGHT_CLASS = "dx-button-icon-right",
     ICON_RIGHT_CLASS = "dx-icon-right",
     BUTTON_STYLING_MODE_CLASS_PREFIX = "dx-button-mode-",
     ALLOWED_STYLE_CLASSES = [
@@ -32,6 +32,8 @@ var BUTTON_CLASS = "dx-button",
     BUTTON_TEXT_CLASS = "dx-button-text",
 
     ANONYMOUS_TEMPLATE_NAME = "content",
+
+    BUTTON_LEFT_ICON_POSITION = "left",
 
     BUTTON_FEEDBACK_HIDE_TIMEOUT = 100;
 
@@ -105,7 +107,7 @@ var Button = Widget.inherit({
             */
             icon: "",
 
-            iconPosition: "left",
+            iconPosition: BUTTON_LEFT_ICON_POSITION,
 
             /**
             * @name dxButtonOptions.validationGroup
@@ -210,7 +212,7 @@ var Button = Widget.inherit({
 
             $container.append($textContainer);
 
-            if(that.option("iconPosition") === "left") {
+            if(that.option("iconPosition") === BUTTON_LEFT_ICON_POSITION) {
                 $container.prepend($iconElement);
             } else {
                 $iconElement.addClass(ICON_RIGHT_CLASS);
@@ -283,7 +285,7 @@ var Button = Widget.inherit({
 
         $element
             .toggleClass(BUTTON_HAS_ICON_CLASS, !!data.icon)
-            .toggleClass(BUTTON_ICON_RIGHT, !!data.icon && this.option("iconPosition") === "right")
+            .toggleClass(BUTTON_ICON_RIGHT_CLASS, !!data.icon && this.option("iconPosition") !== BUTTON_LEFT_ICON_POSITION)
             .toggleClass(BUTTON_HAS_TEXT_CLASS, !!data.text);
 
         const transclude = this._getAnonymousTemplateName() === this.option("template"),
