@@ -2,7 +2,6 @@ import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { when } from "../../core/utils/deferred";
 import iconUtils from "../../core/utils/icon";
-import Class from "../../core/class";
 import dblclickEvent from "../../events/double_click";
 import eventUtils from "../../events/utils";
 import eventsEngine from "../../events/core/events_engine";
@@ -21,19 +20,19 @@ const FILE_MANAGER_ITEM_SELECTED_CLASS = "dx-filemanager-item-selected";
 const FILE_MANAGER_ITEM_FOCUSED_CLASS = "dx-filemanager-item-focused";
 const THUMBNAIL_ITEM_OPEN_EVENT_NAMESPACE = "dxFileManager_open";
 
-var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
+class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
-    _init: function() {
+    _init() {
         this._items = [];
         this._currentLoadOperationId = 0;
 
-        this.callBase();
-    },
+        super._init();
+    }
 
-    _initMarkup: function() {
-        this.callBase();
+    _initMarkup() {
+        super._initMarkup();
 
-        var multipleSelection = this.option("selectionMode") === "multiple";
+        const multipleSelection = this.option("selectionMode") === "multiple";
         this._selectionController = multipleSelection ? new MultipleSelectionController() : new SingleSelectionController();
 
         this._$itemListContainer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS);
@@ -44,99 +43,105 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS);
         this.$element().append(this._$viewPort);
 
-        var dblClickEventName = eventUtils.addNamespace(dblclickEvent.name, THUMBNAIL_ITEM_OPEN_EVENT_NAMESPACE);
-        var itemSelector = `.${FILE_MANAGER_THUMBNAILS_ITEM_CLASS}`;
+        const dblClickEventName = eventUtils.addNamespace(dblclickEvent.name, THUMBNAIL_ITEM_OPEN_EVENT_NAMESPACE);
+        const itemSelector = `.${FILE_MANAGER_THUMBNAILS_ITEM_CLASS}`;
         eventsEngine.on(this.$element(), "click", itemSelector, this._onClick.bind(this));
         eventsEngine.on(this.$element(), dblClickEventName, itemSelector, this._onDblClick.bind(this));
 
         this._loadItems();
-    },
+    }
 
-    _supportedKeys: function() {
-        return extend(this.callBase(), {
-            rightArrow: function(e) {
+    _supportedKeys() {
+        return extend(super._supportedKeys(), {
+            rightArrow(e) {
                 this._beforeKeyProcessing(e);
                 this._processMoveArrow(1, true, e);
             },
-            leftArrow: function(e) {
+            leftArrow(e) {
                 this._beforeKeyProcessing(e);
                 this._processMoveArrow(-1, true, e);
             },
-            upArrow: function(e) {
+            upArrow(e) {
                 this._beforeKeyProcessing(e);
                 this._processMoveArrow(-1, false, e);
             },
-            downArrow: function(e) {
+            downArrow(e) {
                 this._beforeKeyProcessing(e);
                 this._processMoveArrow(1, false, e);
             },
-            home: function(e) {
+            home(e) {
                 this._beforeKeyProcessing(e);
                 this._selectItemByIndex(0, true, e);
             },
-            end: function(e) {
+            end(e) {
                 this._beforeKeyProcessing(e);
                 this._selectItemByIndex(this._items.length - 1, true, e);
             },
-            pageUp: function(e) {
+            pageUp(e) {
                 this._beforeKeyProcessing(e);
                 this._processPageChange(true, e);
             },
-            pageDown: function(e) {
+            pageDown(e) {
                 this._beforeKeyProcessing(e);
                 this._processPageChange(false, e);
             },
-            space: function(e) {
+            space(e) {
                 this._beforeKeyProcessing(e);
                 this._selectionController.invertFocusedItemSelection();
             },
-            enter: function(e) {
+            enter(e) {
                 this._beforeKeyProcessing(e);
                 this.tryOpen();
             },
-            A: function(e) {
+            A(e) {
                 this._beforeKeyProcessing(e);
                 if(e.ctrlKey) {
                     this._selectAll();
                 }
             }
         });
-    },
+    }
 
-    _beforeKeyProcessing: function(e) {
+    _beforeKeyProcessing(e) {
         e.preventDefault();
         this._resetLayoutModel();
-    },
+    }
 
-    _processMoveArrow: function(offset, horizontal, eventArgs) {
-        var item = this._getFocusedItem();
+    _processMoveArrow(offset, horizontal, eventArgs) {
+        const item = this._getFocusedItem();
         if(item) {
             if(!horizontal) {
-                var layout = this._getLayoutModel();
-                if(!layout) return;
+                const layout = this._getLayoutModel();
+                if(!layout) {
+                    return;
+                }
 
                 offset *= layout.itemPerRowCount;
             }
 
-            var newItemIndex = item._state.index + offset;
+            const newItemIndex = item._state.index + offset;
             this._selectItemByIndex(newItemIndex, true, eventArgs);
         }
-    },
+    }
 
-    _processPageChange: function(pageUp, eventArgs) {
-        var item = this._getFocusedItem();
-        if(!item) return;
+    _processPageChange(pageUp, eventArgs) {
+        const item = this._getFocusedItem();
+        if(!item) {
+            return;
+        }
 
-        var layout = this._getLayoutModel();
-        if(!layout) return;
+        const layout = this._getLayoutModel();
+        if(!layout) {
+            return;
+        }
 
-        var itemLayout = this._createItemLayoutModel(item._state.index);
+        const itemLayout = this._createItemLayoutModel(item._state.index);
 
-        var rowOffset = pageUp ? layout.rowPerPageRate : -layout.rowPerPageRate;
-        var newRowRate = itemLayout.itemRowIndex - rowOffset;
-        var roundFunc = pageUp ? Math.ceil : Math.floor;
-        var newRowIndex = roundFunc(newRowRate);
-        var newItemIndex = newRowIndex * layout.itemPerRowCount + itemLayout.itemColumnIndex;
+        const rowOffset = pageUp ? layout.rowPerPageRate : -layout.rowPerPageRate;
+        const newRowRate = itemLayout.itemRowIndex - rowOffset;
+        const roundFunc = pageUp ? Math.ceil : Math.floor;
+        const newRowIndex = roundFunc(newRowRate);
+        let newItemIndex = newRowIndex * layout.itemPerRowCount + itemLayout.itemColumnIndex;
         if(newItemIndex < 0) {
             newItemIndex = 0;
         } else if(newItemIndex >= this._items.length) {
@@ -144,30 +149,32 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
         }
 
         this._selectItemByIndex(newItemIndex, true, eventArgs);
-    },
+    }
 
-    _onClick: function(e) {
-        var $item = $(e.currentTarget);
-        var index = $item.data("index");
+    _onClick(e) {
+        const $item = $(e.currentTarget);
+        const index = $item.data("index");
         this._selectItemByIndex(index, false, e);
-    },
+    }
 
-    _onDblClick: function(e) {
-        var $item = $(e.currentTarget);
-        var index = $item.data("index");
-        var item = this._items[index];
+    _onDblClick(e) {
+        const $item = $(e.currentTarget);
+        const index = $item.data("index");
+        const item = this._items[index];
         this._raiseSelectedItemOpened(item);
-    },
+    }
 
-    _scrollToItem: function(item) {
-        var layout = this._getLayoutModel();
-        if(!layout) return;
+    _scrollToItem(item) {
+        const layout = this._getLayoutModel();
+        if(!layout) {
+            return;
+        }
 
-        var itemRowIndex = Math.floor(item._state.index / layout.itemPerRowCount);
-        var itemTop = itemRowIndex * layout.itemHeight;
-        var itemBottom = itemTop + layout.itemHeight;
+        const itemRowIndex = Math.floor(item._state.index / layout.itemPerRowCount);
+        const itemTop = itemRowIndex * layout.itemHeight;
+        const itemBottom = itemTop + layout.itemHeight;
 
-        var newScrollTop = layout.viewPortScrollTop;
+        let newScrollTop = layout.viewPortScrollTop;
 
         if(itemTop < layout.viewPortScrollTop) {
             newScrollTop = itemTop;
@@ -176,37 +183,41 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
         }
 
         this._$viewPort.scrollTop(newScrollTop);
-    },
+    }
 
-    _resetLayoutModel: function() {
+    _resetLayoutModel() {
         this._layoutModel = null;
-    },
+    }
 
-    _getLayoutModel: function() {
+    _getLayoutModel() {
         if(!this._layoutModel) {
             this._layoutModel = this._createLayoutModel();
         }
         return this._layoutModel;
-    },
+    }
 
-    _createLayoutModel: function() {
-        if(this._items.length === 0) return null;
+    _createLayoutModel() {
+        if(this._items.length === 0) {
+            return null;
+        }
 
-        var item = this._items[0];
-        var $item = item._state.$element;
+        const item = this._items[0];
+        const $item = item._state.$element;
 
-        var itemWidth = $item.outerWidth(true);
-        if(itemWidth === 0) return null;
+        const itemWidth = $item.outerWidth(true);
+        if(itemWidth === 0) {
+            return null;
+        }
 
-        var itemHeight = $item.outerHeight(true);
+        const itemHeight = $item.outerHeight(true);
 
-        var viewPortWidth = this._$itemListContainer.innerWidth();
-        var viewPortHeight = this._$viewPort.innerHeight();
-        var viewPortScrollTop = this._$viewPort.scrollTop();
-        var viewPortScrollBottom = viewPortScrollTop + viewPortHeight;
+        const viewPortWidth = this._$itemListContainer.innerWidth();
+        const viewPortHeight = this._$viewPort.innerHeight();
+        const viewPortScrollTop = this._$viewPort.scrollTop();
+        const viewPortScrollBottom = viewPortScrollTop + viewPortHeight;
 
-        var itemPerRowCount = Math.floor(viewPortWidth / itemWidth);
-        var rowPerPageRate = viewPortHeight / itemHeight;
+        const itemPerRowCount = Math.floor(viewPortWidth / itemWidth);
+        const rowPerPageRate = viewPortHeight / itemHeight;
 
         return {
             itemWidth: itemWidth,
@@ -218,16 +229,18 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
             itemPerRowCount: itemPerRowCount,
             rowPerPageRate: rowPerPageRate
         };
-    },
+    }
 
-    _createItemLayoutModel: function(index) {
-        var layout = this._getLayoutModel();
-        if(!layout) return null;
+    _createItemLayoutModel(index) {
+        const layout = this._getLayoutModel();
+        if(!layout) {
+            return null;
+        }
 
-        var itemRowIndex = Math.floor(index / layout.itemPerRowCount);
-        var itemColumnIndex = index % layout.itemPerRowCount;
-        var itemTop = itemRowIndex * layout.itemHeight;
-        var itemBottom = itemTop + layout.itemHeight;
+        const itemRowIndex = Math.floor(index / layout.itemPerRowCount);
+        const itemColumnIndex = index % layout.itemPerRowCount;
+        const itemTop = itemRowIndex * layout.itemHeight;
+        const itemBottom = itemTop + layout.itemHeight;
 
         return {
             itemRowIndex: itemRowIndex,
@@ -235,32 +248,32 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
             itemTop: itemTop,
             itemBottom: itemBottom
         };
-    },
+    }
 
-    _selectAll: function() {
+    _selectAll() {
         this._selectionController.selectAll();
-    },
+    }
 
-    _selectItem: function(item, scrollToItem, eventArgs) {
+    _selectItem(item, scrollToItem, eventArgs) {
         this._selectionController.selectItem(item, eventArgs);
         if(scrollToItem) {
             this._scrollToItem(item);
         }
-    },
+    }
 
-    _selectItemByIndex: function(index, scrollToItem, eventArgs) {
+    _selectItemByIndex(index, scrollToItem, eventArgs) {
         if(index >= 0 && index < this._items.length) {
-            var item = this._items[index];
+            const item = this._items[index];
             this._selectItem(item, scrollToItem, eventArgs);
         }
-    },
+    }
 
-    _getFocusedItem: function() {
+    _getFocusedItem() {
         return this._selectionController.getFocusedItem();
-    },
+    }
 
-    _loadItems: function() {
-        var loadOperationId = this._getUniqueId();
+    _loadItems() {
+        const loadOperationId = this._getUniqueId();
         this._currentLoadOperationId = loadOperationId;
 
         when(this._getItems())
@@ -274,19 +287,19 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
                     this._raiseOnError(error);
                 }
             });
-    },
+    }
 
-    _applyItems: function(items) {
+    _applyItems(items) {
         this._items = items;
         this._selectionController.setItems(items);
         this._renderItems(items);
-    },
+    }
 
-    _renderItems: function(items) {
+    _renderItems(items) {
         this._$itemListContainer.empty();
 
-        for(var i = 0; i < items.length; i++) {
-            var item = items[i];
+        for(let i = 0; i < items.length; i++) {
+            const item = items[i];
 
             item._state = {
                 index: i,
@@ -295,23 +308,23 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
             };
             this._renderItem(item);
         }
-    },
+    }
 
-    _renderItem: function(item) {
-        var $item = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_CLASS)
+    _renderItem(item) {
+        const $item = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_CLASS)
             .attr("title", this._getTooltipText(item))
             .data("index", item._state.index);
 
-        var $itemContent = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS);
+        const $itemContent = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS);
 
-        var $itemThumbnail = iconUtils.getImageContainer(this._getItemThumbnail(item))
+        const $itemThumbnail = iconUtils.getImageContainer(this._getItemThumbnail(item))
             .addClass(FILE_MANAGER_THUMBNAILS_ITEM__THUMBNAIL_CLASS);
 
         eventsEngine.on($itemThumbnail, "dragstart", this._disableDragging);
 
-        var $itemSpacer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS);
+        const $itemSpacer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS);
 
-        var $itemName = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS);
+        const $itemName = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS);
         $itemName.text(item.name);
 
         $item.append($itemContent);
@@ -319,109 +332,114 @@ var FileManagerThumbnailsItemList = FileManagerItemListBase.inherit({
         this._$itemListContainer.append($item);
 
         item._state.$element = $item;
-    },
+    }
 
-    _getTooltipText: function(item) {
+    _getTooltipText(item) {
         return item.tooltipText || `${item.name}\r\nSize: ${item.length}\r\nDate modified: ${item.lastWriteTime.toLocaleString()}`;
-    },
+    }
 
-    _getUniqueId: function() {
+    _getUniqueId() {
         return `${Date.now()}_${Math.round(Math.random() * 100000)}`;
-    },
+    }
 
-    _disableDragging: function() {
+    _disableDragging() {
         return false;
-    },
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             focusStateEnabled: true,
         });
-    },
+    }
 
-    refreshData: function() {
+    refreshData() {
         this._loadItems();
-    },
+    }
 
-    tryOpen: function() {
-        var item = this._getFocusedItem();
+    tryOpen() {
+        const item = this._getFocusedItem();
         if(item) {
             this._raiseSelectedItemOpened(item);
         }
-    },
+    }
 
-    getSelectedItems: function() {
+    getSelectedItems() {
         return this._selectionController.getSelectedItems();
     }
 
-});
+}
 
-var SingleSelectionController = Class.inherit({
+class SingleSelectionController {
 
-    ctor: function() {
+    constructor() {
         this._items = [];
-    },
+    }
 
-    selectAll: function() {
+    selectAll() {
 
-    },
+    }
 
-    selectItem: function(item, eventArgs) {
+    selectItem(item, eventArgs) {
         this._setAllItemsSelectedState(false, [item]);
         this._setItemSelectedState(item, true);
-    },
+    }
 
-    invertFocusedItemSelection: function(item) {
+    invertFocusedItemSelection(item) {
 
-    },
+    }
 
-    getFocusedItem: function() {
-        var selectedItems = this.getSelectedItems();
+    getFocusedItem() {
+        const selectedItems = this.getSelectedItems();
         return selectedItems.length > 0 ? selectedItems[0] : null;
-    },
+    }
 
-    getSelectedItems: function() {
+    getSelectedItems() {
         return this._items.filter(item => item._state.selected);
-    },
+    }
 
-    setItems: function(items) {
+    setItems(items) {
         this._items = items;
-    },
+    }
 
-    _setItemSelectedState: function(item, selected) {
-        if(item._state.selected === selected) return;
+    _setItemSelectedState(item, selected) {
+        if(item._state.selected === selected) {
+            return;
+        }
 
         item._state.selected = selected;
         item._state.$element.toggleClass(FILE_MANAGER_ITEM_SELECTED_CLASS, selected);
-    },
+    }
 
-    _setAllItemsSelectedState: function(selected, exceptedItems) {
-        for(let item of this._items) {
+    _setAllItemsSelectedState(selected, exceptedItems) {
+        for(let i = 0; i < this._items.length; i++) {
+            const item = this._items[i];
 
-            if(exceptedItems && exceptedItems.indexOf(item) !== -1) continue;
+            if(exceptedItems && exceptedItems.indexOf(item) !== -1) {
+                continue;
+            }
 
             this._setItemSelectedState(item, selected);
         }
     }
 
-});
+}
 
-var MultipleSelectionController = SingleSelectionController.inherit({
+class MultipleSelectionController extends SingleSelectionController {
 
-    ctor: function() {
-        this.callBase();
+    constructor() {
+        super();
         this._focusedItem = null;
-    },
+    }
 
-    selectAll: function() {
+    selectAll() {
         this._setAllItemsSelectedState(true);
-    },
+    }
 
-    selectItem: function(item, eventArgs) {
+    selectItem(item, eventArgs) {
         if(eventArgs.shiftKey) {
             this._setItemsRangeSelectedState(this._focusedItem._state.index, item._state.index, eventArgs.ctrlKey, true);
         } else if(eventArgs.ctrlKey) {
-            var needSelect = this._items.length === 1 && this._focusedItem === item || !item._state.selected;
+            const needSelect = this._items.length === 1 && this._focusedItem === item || !item._state.selected;
             this._setItemSelectedState(item, needSelect);
         } else {
             this._setAllItemsSelectedState(false, [item]);
@@ -429,24 +447,26 @@ var MultipleSelectionController = SingleSelectionController.inherit({
         }
 
         this._setFocusedItem(item);
-    },
+    }
 
-    _setItemsRangeSelectedState: function(startIndex, endIndex, invert, selected) {
+    _setItemsRangeSelectedState(startIndex, endIndex, invert, selected) {
         if(startIndex > endIndex) {
-            var temp = endIndex;
+            const temp = endIndex;
             endIndex = startIndex;
             startIndex = temp;
         }
 
-        for(var i = startIndex; i <= endIndex; i++) {
-            var item = this._items[i];
-            var actualSelected = invert ? !item._state.selected : selected;
+        for(let i = startIndex; i <= endIndex; i++) {
+            const item = this._items[i];
+            const actualSelected = invert ? !item._state.selected : selected;
             this._setItemSelectedState(item, actualSelected);
         }
-    },
+    }
 
-    _setFocusedItem: function(item) {
-        if(this._focusedItem === item) return;
+    _setFocusedItem(item) {
+        if(this._focusedItem === item) {
+            return;
+        }
 
         if(this._focusedItem) {
             this._focusedItem._state.$element.removeClass(FILE_MANAGER_ITEM_FOCUSED_CLASS);
@@ -454,21 +474,25 @@ var MultipleSelectionController = SingleSelectionController.inherit({
         item._state.$element.addClass(FILE_MANAGER_ITEM_FOCUSED_CLASS);
 
         this._focusedItem = item;
-    },
+    }
 
-    invertFocusedItemSelection: function() {
-        if(!this._focusedItem) return;
+    invertFocusedItemSelection() {
+        if(!this._focusedItem) {
+            return;
+        }
+
         this._setItemSelectedState(this._focusedItem, !this._focusedItem._state.selected);
-    },
+    }
 
-    getFocusedItem: function() {
+    getFocusedItem() {
         return this._focusedItem;
-    },
+    }
 
-    setItems: function(items) {
-        this.callBase(items);
+    setItems(items) {
+        super.setItems(items);
         this._focusedItem = items.length > 0 ? items[0] : null;
     }
-});
+
+}
 
 module.exports = FileManagerThumbnailsItemList;

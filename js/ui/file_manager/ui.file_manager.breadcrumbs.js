@@ -6,21 +6,21 @@ import Menu from "../menu/ui.menu";
 const PATH_SEPARATOR = "/";
 const FILE_MANAGER_BREADCRUMBS_CLASS = "dx-filemanager-breadcrumbs";
 
-var FileManagerBreadcrumbs = Widget.inherit({
+class FileManagerBreadcrumbs extends Widget {
 
-    _initMarkup: function() {
+    _initMarkup() {
         this._menu = this._createComponent(this.$element(), Menu, {
             dataSource: this._getMenuItems(),
             onItemClick: this._onItemClick.bind(this)
         });
 
         this.$element().addClass(FILE_MANAGER_BREADCRUMBS_CLASS);
-    },
+    }
 
-    _getMenuItems: function() {
-        var path = this.option("path");
+    _getMenuItems() {
+        const path = this.option("path");
 
-        var result = [
+        const result = [
             {
                 icon: "arrowup",
                 isParentItem: true
@@ -31,11 +31,11 @@ var FileManagerBreadcrumbs = Widget.inherit({
         ];
 
         if(path) {
-            var parts = path.split(PATH_SEPARATOR);
-            for(var i = 0; i < parts.length; i++) {
-                var part = parts[i];
+            const parts = path.split(PATH_SEPARATOR);
+            for(let i = 0; i < parts.length; i++) {
+                const part = parts[i];
 
-                var item = {
+                const item = {
                     value: part,
                     text: part,
                     isPartItem: true
@@ -43,7 +43,7 @@ var FileManagerBreadcrumbs = Widget.inherit({
                 result.push(item);
 
                 if(i !== parts.length - 1) {
-                    var itemSeparator = {
+                    const itemSeparator = {
                         icon: "spinnext"
                     };
                     result.push(itemSeparator);
@@ -52,10 +52,10 @@ var FileManagerBreadcrumbs = Widget.inherit({
         }
 
         return result;
-    },
+    }
 
-    _onItemClick: function(e) {
-        var newPath = "";
+    _onItemClick(e) {
+        let newPath = "";
         if(e.itemData.isParentItem) {
             newPath = this._getParentPath();
         } else if(e.itemData.isPartItem) {
@@ -64,55 +64,59 @@ var FileManagerBreadcrumbs = Widget.inherit({
             return;
         }
 
-        var path = this.option("path");
+        const path = this.option("path");
         if(newPath !== path) {
-            var handler = this.option("onPathChanged");
+            const handler = this.option("onPathChanged");
             handler(newPath);
         }
-    },
+    }
 
-    _getParentPath: function() {
-        var path = this.option("path");
-        if(!path) return path;
+    _getParentPath() {
+        const path = this.option("path");
+        if(!path) {
+            return path;
+        }
 
-        var index = path.lastIndexOf(PATH_SEPARATOR);
+        const index = path.lastIndexOf(PATH_SEPARATOR);
         return index !== -1 ? path.substr(0, index) : "";
-    },
+    }
 
-    _getPathByMenuItemIndex: function(index) {
-        var result = "";
+    _getPathByMenuItemIndex(index) {
+        let result = "";
 
-        var items = this._menu.option("items");
-        for(var i = 0; i <= index; i++) {
-            var item = items[i];
-            if(!item.isPartItem) continue;
+        const items = this._menu.option("items");
+        for(let i = 0; i <= index; i++) {
+            const item = items[i];
+            if(!item.isPartItem) {
+                continue;
+            }
 
-            var part = item.value;
+            const part = item.value;
             result += result ? PATH_SEPARATOR + part : part;
         }
 
         return result;
-    },
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             path: "",
             onPathChanged: null
         });
-    },
+    }
 
-    _optionChanged: function(args) {
-        var name = args.name;
+    _optionChanged(args) {
+        const name = args.name;
 
         switch(name) {
             case "path":
                 this.repaint();
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
     }
 
-});
+}
 
 module.exports = FileManagerBreadcrumbs;

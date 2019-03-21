@@ -6,9 +6,9 @@ import FileManagerDialogBase from "./ui.file_manager.dialog.js";
 
 const FILE_MANAGER_DIALOG_NAME_EDITOR = "dx-filemanager-dialog-name-editor";
 
-var FileManagerNameEditorDialog = FileManagerDialogBase.inherit({
+class FileManagerNameEditorDialog extends FileManagerDialogBase {
 
-    show: function(name) {
+    show(name) {
         name = name || "";
 
         if(this._nameTextBox) {
@@ -17,20 +17,20 @@ var FileManagerNameEditorDialog = FileManagerDialogBase.inherit({
             this._initialNameValue = name;
         }
 
-        this.callBase();
-    },
+        super.show();
+    }
 
-    _getDialogOptions: function() {
-        return extend(this.callBase(), {
+    _getDialogOptions() {
+        return extend(super._getDefaultOptions(), {
             width: 340,
             height: 180,
             title: this.option("title"),
             buttonText: this.option("buttonText")
         });
-    },
+    }
 
-    _createContentTemplate: function(element) {
-        this.callBase(element);
+    _createContentTemplate(element) {
+        super._createContentTemplate(element);
 
         this._nameTextBox = this._createComponent($("<div>"), TextBox, {
             value: this._initialNameValue,
@@ -38,24 +38,24 @@ var FileManagerNameEditorDialog = FileManagerDialogBase.inherit({
         });
 
         this._$contentElement.append(this._nameTextBox.$element());
-    },
+    }
 
-    _getDialogResult: function() {
-        var nameValue = this._nameTextBox.option("value");
+    _getDialogResult() {
+        const nameValue = this._nameTextBox.option("value");
         return nameValue ? { name: nameValue } : null;
-    },
+    }
 
-    _getCssClass: function() {
+    _getCssClass() {
         return FILE_MANAGER_DIALOG_NAME_EDITOR;
-    },
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             title: "",
             buttonText: ""
         });
     }
 
-});
+}
 
 module.exports = FileManagerNameEditorDialog;

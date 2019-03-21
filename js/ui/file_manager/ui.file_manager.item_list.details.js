@@ -1,5 +1,4 @@
 import $ from "../../core/renderer";
-import { extend } from "../../core/utils/extend";
 
 import Button from "../button";
 import DataGrid from "../data_grid/ui.data_grid";
@@ -9,17 +8,17 @@ import FileManagerItemListBase from "./ui.file_manager.item_list";
 
 const FILE_MANAGER_FILE_ACTIONS_BUTTON = "dx-filemanager-file-actions-button";
 
-var FileManagerDetailsItemList = FileManagerItemListBase.inherit({
+class FileManagerDetailsItemList extends FileManagerItemListBase {
 
-    _initMarkup: function() {
+    _initMarkup() {
         this._createFilesView();
-        this.callBase();
-    },
+        super._initMarkup();
+    }
 
-    _createFilesView: function() {
-        var selectionMode = this.option("selectionMode");
+    _createFilesView() {
+        const selectionMode = this.option("selectionMode");
 
-        var that = this;
+        const that = this;
         this._filesView = this._createComponent("<div>", DataGrid, {
             hoverStateEnabled: true,
             selection: {
@@ -31,10 +30,10 @@ var FileManagerDetailsItemList = FileManagerItemListBase.inherit({
                     dataField: "name",
                     minWidth: 200,
                     width: "60%",
-                    cellTemplate: function(container, options) {
-                        var button = that._createComponent($("<div>"), Button, {
+                    cellTemplate(container, options) {
+                        const button = that._createComponent($("<div>"), Button, {
                             text: "&vellip;",
-                            template: function(e) {
+                            template(e) {
                                 return $("<i>").html("&vellip;");
                             }
                         });
@@ -58,34 +57,28 @@ var FileManagerDetailsItemList = FileManagerItemListBase.inherit({
         this.$element().append(this._filesView.$element());
 
         this._loadFilesViewData();
-    },
+    }
 
-    _createFilesViewStore: function() {
+    _createFilesViewStore() {
         return new CustomStore({
             load: this._getItems.bind(this)
         });
-    },
+    }
 
-    _loadFilesViewData: function() {
+    _loadFilesViewData() {
         this._filesView.option("dataSource", {
             "store": this._createFilesViewStore()
         });
-    },
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            test: null
-        });
-    },
-
-    refreshData: function() {
+    refreshData() {
         this._loadFilesViewData();
-    },
+    }
 
-    getSelectedItems: function() {
+    getSelectedItems() {
         return this._filesView.getSelectedRowsData();
     }
 
-});
+}
 
 module.exports = FileManagerDetailsItemList;

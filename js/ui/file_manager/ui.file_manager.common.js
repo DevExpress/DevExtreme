@@ -1,7 +1,7 @@
 import { when } from "../../core/utils/deferred";
 
-var whenSome = function(arg, onSuccess, onError) {
-    var createResult = function(result, success, canceled, error) {
+const whenSome = function(arg, onSuccess, onError) {
+    const createResult = function(result, success, canceled, error) {
         return {
             result: result,
             success: success,
@@ -10,7 +10,7 @@ var whenSome = function(arg, onSuccess, onError) {
         };
     };
 
-    var createErrorInfo = function(index, error) {
+    const createErrorInfo = function(index, error) {
         return {
             index: index,
             error: error
@@ -27,7 +27,7 @@ var whenSome = function(arg, onSuccess, onError) {
                 });
     }
 
-    var deferreds = arg.map((item, index) => {
+    const deferreds = arg.map((item, index) => {
         return when(item)
             .then(result => createResult(result, true),
                 error => {
@@ -40,7 +40,7 @@ var whenSome = function(arg, onSuccess, onError) {
 
     return when.apply(null, deferreds)
         .then(function() {
-            var resArray = [].slice.call(arguments);
+            const resArray = [].slice.call(arguments);
             if(resArray.some(res => res.success)) {
                 onSuccess();
             }

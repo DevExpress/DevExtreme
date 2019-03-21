@@ -6,48 +6,48 @@ import FileManagerFilesTreeView from "./ui.file_manager.files_tree_view";
 
 const FILE_MANAGER_DIALOG_FOLDER_CHOOSER = "dx-filemanager-dialog-folder-chooser";
 
-var FileManagerFolderChooserDialog = FileManagerDialogBase.inherit({
+class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
-    show: function() {
+    show() {
         if(this._filesTreeView) {
             this._filesTreeView.refreshData();
         }
-        this.callBase();
-    },
+        super.show();
+    }
 
-    _getDialogOptions: function() {
-        return extend(this.callBase(), {
+    _getDialogOptions() {
+        return extend(super._getDefaultOptions(), {
             width: 400,
             height: "80%",
             title: "Select Destination Folder",
             buttonText: "Select"
         });
-    },
+    }
 
-    _createContentTemplate: function(element) {
-        this.callBase(element);
+    _createContentTemplate(element) {
+        super._createContentTemplate(element);
 
         this._filesTreeView = this._createComponent($("<div>"), FileManagerFilesTreeView, {
             getItems: this.option("getItems")
         });
 
         this._$contentElement.append(this._filesTreeView.$element());
-    },
+    }
 
-    _getDialogResult: function() {
+    _getDialogResult() {
         return { folder: this._filesTreeView.getCurrentFolder() };
-    },
+    }
 
-    _getCssClass: function() {
+    _getCssClass() {
         return FILE_MANAGER_DIALOG_FOLDER_CHOOSER;
-    },
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             getItems: null
         });
     }
 
-});
+}
 
 module.exports = FileManagerFolderChooserDialog;

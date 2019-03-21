@@ -2,7 +2,6 @@ import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import eventsEngine from "../../events/core/events_engine";
 import { Deferred, when } from "../../core/utils/deferred";
-import Class from "../../core/class";
 
 import Widget from "../widget/ui.widget";
 import Button from "../button";
@@ -19,9 +18,9 @@ const FILE_MANAGER_PROGRESS_BOX_TITLE = FILE_MANAGER_PROGRESS_BOX + "-title";
 const FILE_MANAGER_PROGRESS_BOX_PROGRESS_BAR = FILE_MANAGER_PROGRESS_BOX + "-progressbar";
 const FILE_MANAGER_PROGRESS_BOX_CANCEL_BUTTON = FILE_MANAGER_PROGRESS_BOX + "-cancel-button";
 
-var FileManagerFileUploader = Widget.inherit({
+class FileManagerFileUploader extends Widget {
 
-    _initMarkup: function() {
+    _initMarkup() {
         this._progressPanel = this._createComponent($("<div>"), FileManagerUploadProgressPanel, {});
 
         this.$element()
@@ -30,10 +29,10 @@ var FileManagerFileUploader = Widget.inherit({
 
         this._renderFileInput();
 
-        this.callBase();
-    },
+        super._initMarkup();
+    }
 
-    _renderFileInput: function() {
+    _renderFileInput() {
         this._$fileInput = $("<input>")
             .attr("type", "file")
             .prop({
@@ -49,10 +48,10 @@ var FileManagerFileUploader = Widget.inherit({
         });
 
         this.$element().append(this._$fileInput);
-    },
+    }
 
-    _onFileInputChange: function() {
-        var files = this._$fileInput.prop("files");
+    _onFileInputChange() {
+        const files = this._$fileInput.prop("files");
         if(files.length === 0) {
             return;
         }
@@ -60,7 +59,7 @@ var FileManagerFileUploader = Widget.inherit({
         eventsEngine.off(this._$fileInput, "change");
         eventsEngine.off(this._$fileInput, "click");
 
-        var $fileInput = this._$fileInput;
+        const $fileInput = this._$fileInput;
         this._uploadFiles(files).always(() => {
             setTimeout(() => {
                 $fileInput.remove();
@@ -68,18 +67,18 @@ var FileManagerFileUploader = Widget.inherit({
         });
 
         this._renderFileInput();
-    },
+    }
 
-    _uploadFiles: function(files) {
+    _uploadFiles(files) {
         if(files.length === 0) {
             return;
         }
 
-        var progressBoxTitle = `Uploading ${files.length} files`;
-        var progressBox = this._progressPanel.addProgressBox(progressBoxTitle, null);
+        const progressBoxTitle = `Uploading ${files.length} files`;
+        const progressBox = this._progressPanel.addProgressBox(progressBoxTitle, null);
 
-        var controllerGetter = this.option("onGetController");
-        var session = new FileManagerUploadSession({
+        const controllerGetter = this.option("onGetController");
+        const session = new FileManagerUploadSession({
             controller: controllerGetter(),
             onProgress: value => progressBox.updateProgress(value * 100),
             onError: reason => this._raiseOnErrorOccurred(reason)
@@ -87,83 +86,85 @@ var FileManagerFileUploader = Widget.inherit({
 
         progressBox.option("onCancel", () => session.cancelUpload());
 
-        var deferreds = session.uploadFiles(files);
+        const deferreds = session.uploadFiles(files);
 
         return when.apply(null, deferreds).then(function() {
             this._progressPanel.removeProgressBox(progressBox);
 
-            var results = [].slice.call(arguments);
+            const results = [].slice.call(arguments);
             if(results.some(res => res.success)) {
                 this._onFilesUploaded();
             }
         }.bind(this));
-    },
+    }
 
-    tryUpload: function() {
+    tryUpload() {
         this._$fileInput.click();
-    },
+    }
 
-    _onFilesUploaded: function() {
+    _onFilesUploaded() {
         this._raiseOnFilesUploaded();
-    },
+    }
 
-    _raiseOnErrorOccurred: function(args) {
+    _raiseOnErrorOccurred(args) {
         this._raiseEvent("ErrorOccurred", args);
-    },
+    }
 
-    _raiseOnFilesUploaded: function() {
+    _raiseOnFilesUploaded() {
         this._raiseEvent("FilesUploaded");
-    },
+    }
 
-    _raiseEvent: function(eventName, argument) {
-        var optionName = "on" + eventName;
-        var handler = this.option(optionName);
-        if(handler) handler.call(this, argument);
-    },
+    _raiseEvent(eventName, argument) {
+        const optionName = "on" + eventName;
+        const handler = this.option(optionName);
+        if(handler) {
+            handler.call(this, argument);
+        }
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             onGetController: null,
             onFilesUploaded: null,
             onErrorOccurred: null
         });
     }
 
-});
+}
 
-var FileManagerUploadSession = Class.inherit({
-    ctor: function(options) {
+class FileManagerUploadSession {
+    constructor(options) {
         this._controller = options.controller;
         this._onProgressHandler = options.onProgress;
         this._onErrorHandler = options.onError;
         this._canceled = false;
-    },
+    }
 
-    uploadFiles: function(files) {
-        var progressInfo = {
+    uploadFiles(files) {
+        const progressInfo = {
             uploadedBytesCount: 0,
             totalBytesCount: 0
         };
 
-        for(var j = 0; j < files.length; j++) {
+        for(let j = 0; j < files.length; j++) {
             progressInfo.totalBytesCount += files[j].size;
         }
 
-        var result = [];
-        for(var i = 0; i < files.length; i++) {
-            var deferred = this._uploadFile(files[i], progressInfo);
+        const result = [];
+        for(let i = 0; i < files.length; i++) {
+            const deferred = this._uploadFile(files[i], progressInfo);
             result.push(deferred);
         }
 
         return result;
-    },
+    }
 
-    cancelUpload: function() {
+    cancelUpload() {
         this._canceled = true;
-    },
+    }
 
-    _uploadFile: function(file, progressInfo) {
-        var state = this._createUploadingState(file);
+    _uploadFile(file, progressInfo) {
+        const state = this._createUploadingState(file);
 
         return this._controller.initiateUpload(state)
             .then(() => this._uploadChunks(state, progressInfo))
@@ -176,15 +177,15 @@ var FileManagerUploadSession = Class.inherit({
                     }
                 })
             .catch(reason => this._handleError(reason, file));
-    },
+    }
 
-    _uploadChunks: function(state, progressInfo) {
+    _uploadChunks(state, progressInfo) {
         if(this._canceled) {
-            var reason = this._createResultInfo(state.file.name, false, true);
+            const reason = this._createResultInfo(state.file.name, false, true);
             return new Deferred().reject(reason).promise();
         }
 
-        var chunk = this._getChunk(state);
+        const chunk = this._getChunk(state);
         if(!chunk) {
             return new Deferred().resolve().promise();
         }
@@ -197,46 +198,48 @@ var FileManagerUploadSession = Class.inherit({
                 this._raiseOnProgress(progressInfo);
             })
             .then(() => this._uploadChunks(state, progressInfo));
-    },
+    }
 
-    _getChunk: function(state) {
-        var bytesLeft = state.file.size - state.uploadedBytesCount;
+    _getChunk(state) {
+        const bytesLeft = state.file.size - state.uploadedBytesCount;
 
-        if(bytesLeft === 0) return null;
+        if(bytesLeft === 0) {
+            return null;
+        }
 
-        var chunkSize = Math.min(bytesLeft, this._controller.chunkSize);
-        var blob = state.file.slice(state.uploadedBytesCount, state.uploadedBytesCount + chunkSize);
+        const chunkSize = Math.min(bytesLeft, this._controller.chunkSize);
+        const blob = state.file.slice(state.uploadedBytesCount, state.uploadedBytesCount + chunkSize);
 
         return {
             index: state.uploadedChunksCount,
             size: chunkSize,
-            blob: blob
+            blob
         };
-    },
+    }
 
-    _finalizeUpload: function(state) {
+    _finalizeUpload(state) {
         return this._controller.finalizeUpload(state)
             .then(() => this._createResultInfo(state.file.name, true));
-    },
+    }
 
-    _abortUpload: function(state) {
+    _abortUpload(state) {
         return this._controller.abortUpload(state)
             .then(() => this._createResultInfo(state.file.name, false, true));
-    },
+    }
 
-    _handleError: function(error, file) {
-        var result = this._createResultInfo(file.name, false, false, error);
+    _handleError(error, file) {
+        const result = this._createResultInfo(file.name, false, false, error);
         this._onErrorHandler(result);
         return result;
-    },
+    }
 
-    _raiseOnProgress: function(info) {
-        var value = info.totalBytesCount !== 0 ? info.uploadedBytesCount / info.totalBytesCount : 1;
+    _raiseOnProgress(info) {
+        const value = info.totalBytesCount !== 0 ? info.uploadedBytesCount / info.totalBytesCount : 1;
         this._onProgressHandler(value);
-    },
+    }
 
-    _createUploadingState: function(file) {
-        var chunkCount = Math.ceil(file.size / this._controller.chunkSize);
+    _createUploadingState(file) {
+        const chunkCount = Math.ceil(file.size / this._controller.chunkSize);
 
         return {
             file,
@@ -245,27 +248,27 @@ var FileManagerUploadSession = Class.inherit({
             totalChunkCount: chunkCount,
             customData: {}
         };
-    },
+    }
 
-    _createResultInfo: function(fileName, success, canceled, error) {
+    _createResultInfo(fileName, success, canceled, error) {
         return {
-            fileName: fileName,
+            fileName,
             success: success || false,
             canceled: canceled || false,
             error: error || null
         };
     }
 
-});
+}
 
-var FileManagerUploadProgressPanel = Widget.inherit({
+class FileManagerUploadProgressPanel extends Widget {
 
-    _init: function() {
+    _init() {
         this._progressBoxCount = 0;
-        this.callBase();
-    },
+        super._init();
+    }
 
-    _initMarkup: function() {
+    _initMarkup() {
         this._popup = this._createComponent(this.$element(), Popup, {
             width: 200,
             height: 145,
@@ -278,11 +281,11 @@ var FileManagerUploadProgressPanel = Widget.inherit({
             contentTemplate: this._getPopupContentTemplate.bind(this)
         });
 
-        this.callBase();
-    },
+        super._initMarkup();
+    }
 
-    addProgressBox: function(title, onCancel) {
-        var progressBox = this._createComponent($("<div>"), FileManagerUploadProgressBox, {
+    addProgressBox(title, onCancel) {
+        const progressBox = this._createComponent($("<div>"), FileManagerUploadProgressBox, {
             title: title,
             onCancel: onCancel
         });
@@ -295,9 +298,9 @@ var FileManagerUploadProgressPanel = Widget.inherit({
         this._progressBoxCount++;
 
         return progressBox;
-    },
+    }
 
-    removeProgressBox: function(progressBox) {
+    removeProgressBox(progressBox) {
         if(this._progressBoxCount === 1) {
             this._popup.hide();
         }
@@ -306,26 +309,20 @@ var FileManagerUploadProgressPanel = Widget.inherit({
 
         progressBox.dispose();
         progressBox.$element().remove();
-    },
-
-    _getPopupContentTemplate: function() {
-        this._$container = $("<div>").addClass(FILE_MANAGER_PROGRESS_PANEL);
-        return this._$container;
-    },
-
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            onTest: null // TODO remove
-        });
     }
 
-});
+    _getPopupContentTemplate() {
+        this._$container = $("<div>").addClass(FILE_MANAGER_PROGRESS_PANEL);
+        return this._$container;
+    }
 
-var FileManagerUploadProgressBox = Widget.inherit({
+}
 
-    _initMarkup: function() {
-        var titleText = this.option("title");
-        var $title = $("<span>").text(titleText).addClass(FILE_MANAGER_PROGRESS_BOX_TITLE);
+class FileManagerUploadProgressBox extends Widget {
+
+    _initMarkup() {
+        const titleText = this.option("title");
+        const $title = $("<span>").text(titleText).addClass(FILE_MANAGER_PROGRESS_BOX_TITLE);
 
         this._cancelButton = this._createComponent($("<div>"), Button, {
             text: "Cancel",
@@ -348,34 +345,36 @@ var FileManagerUploadProgressBox = Widget.inherit({
             this._cancelButton.$element()
         );
 
-        this.callBase();
-    },
+        super._initMarkup();
+    }
 
-    updateProgress: function(value) {
+    updateProgress(value) {
         this._progressBar.option("value", value);
-    },
+    }
 
-    _onCancelButtonClick: function() {
+    _onCancelButtonClick() {
         this._cancelButton.option({
             disabled: true,
             text: "Canceling..."
         });
 
         this._raiseCancel();
-    },
+    }
 
-    _raiseCancel: function() {
-        var handler = this.option("onCancel");
-        if(handler) handler();
-    },
+    _raiseCancel() {
+        const handler = this.option("onCancel");
+        if(handler) {
+            handler();
+        }
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             title: "",
             onCancel: null
         });
     }
 
-});
+}
 
 module.exports = FileManagerFileUploader;

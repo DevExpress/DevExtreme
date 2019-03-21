@@ -1,106 +1,110 @@
+import { each } from "../core/utils/iterator";
+
 import { FileProvider, FileManagerItem } from "./file_provider";
 
-var ArrayFileProvider = FileProvider.inherit({
+class ArrayFileProvider extends FileProvider {
 
-    ctor: function(data) {
+    constructor(data) {
+        super();
         this._data = data || [];
-    },
+    }
 
-    getItems: function(path, itemType) {
+    getItems(path, itemType) {
         return this._getItems(path, itemType);
-    },
+    }
 
-    renameItem: function(item, name) {
+    renameItem(item, name) {
         item.dataItem.name = name;
-    },
+    }
 
-    createFolder: function(parentFolder, name) {
-        var newItem = {
+    createFolder(parentFolder, name) {
+        const newItem = {
             name: name,
             isFolder: true
         };
-        var array = this._getChildrenArray(parentFolder.dataItem);
+        const array = this._getChildrenArray(parentFolder.dataItem);
         array.push(newItem);
-    },
+    }
 
+    deleteItems(items) {
+        each(items, (_, item) => this._deleteItem(item));
+    }
 
-    deleteItems: function(items) {
-        for(let item of items) {
-            this._deleteItem(item);
-        }
-    },
-
-    moveItems: function(items, destinationFolder) {
-        var array = this._getChildrenArray(destinationFolder.dataItem);
-        for(let item of items) {
+    moveItems(items, destinationFolder) {
+        const array = this._getChildrenArray(destinationFolder.dataItem);
+        each(items, (_, item) => {
             this._deleteItem(item);
             array.push(item.dataItem);
-        }
-    },
+        });
+    }
 
-    copyItems: function(items, destinationFolder) {
-        var array = this._getChildrenArray(destinationFolder.dataItem);
-        for(let item of items) {
-            var copiedItem = this._createCopy(item.dataItem);
+    copyItems(items, destinationFolder) {
+        const array = this._getChildrenArray(destinationFolder.dataItem);
+        each(items, (_, item) => {
+            const copiedItem = this._createCopy(item.dataItem);
             array.push(copiedItem);
-        }
-    },
+        });
+    }
 
-    _createCopy: function(dataItem) {
-        var result = {
+    _createCopy(dataItem) {
+        const result = {
             name: dataItem.name,
             isFolder: dataItem.isFolder
         };
         if(dataItem.children) {
             result.children = [];
-            for(let childItem of dataItem.children) {
-                var childCopy = this._createCopy(childItem);
+            each(dataItem.children, (_, childItem) => {
+                const childCopy = this._createCopy(childItem);
                 result.children.push(childCopy);
-            }
+            });
         }
         return result;
-    },
+    }
 
-    _deleteItem: function(item) {
-        var array = this._data;
+    _deleteItem(item) {
+        let array = this._data;
         if(item.parentPath !== "") {
-            var entry = this._findItem(item.parentPath);
+            const entry = this._findItem(item.parentPath);
             array = entry.children;
         }
-        var index = array.indexOf(item.dataItem);
+        const index = array.indexOf(item.dataItem);
         array.splice(index, 1);
-    },
+    }
 
-    _getChildrenArray: function(dataItem) {
-        var array = null;
+    _getChildrenArray(dataItem) {
+        let array = null;
         if(!dataItem) {
             array = this._data;
         } else {
-            if(!dataItem.children) dataItem.children = [];
+            if(!dataItem.children) {
+                dataItem.children = [];
+            }
             array = dataItem.children;
         }
         return array;
-    },
+    }
 
-    _getItems: function(path, itemType) {
+    _getItems(path, itemType) {
         if(path === "") {
             return this._getItemsInternal(path, this._data, itemType);
         }
 
-        var folderEntry = this._findItem(path);
-        var entries = folderEntry && folderEntry.children || [];
+        const folderEntry = this._findItem(path);
+        const entries = folderEntry && folderEntry.children || [];
         return this._getItemsInternal(path, entries, itemType);
-    },
+    }
 
-    _findItem: function(path) {
-        if(path === "") return null;
+    _findItem(path) {
+        if(path === "") {
+            return null;
+        }
 
-        var result = null;
-        var data = this._data;
-        var parts = path.split("/");
-        for(var i = 0; i < parts.length; i++) {
-            var part = parts[i];
-            result = data.filter(entry => { return entry.isFolder && entry.name === part; })[0];
+        let result = null;
+        let data = this._data;
+        const parts = path.split("/");
+        for(let i = 0; i < parts.length; i++) {
+            const part = parts[i];
+            result = data.filter(entry => entry.isFolder && entry.name === part)[0];
             if(result) {
                 if(result.children) {
                     data = result.children;
@@ -113,25 +117,25 @@ var ArrayFileProvider = FileProvider.inherit({
         }
 
         return result;
-    },
+    }
 
-    _getItemsInternal: function(path, data, itemType) {
-        var useFolders = itemType === "folder";
-        var result = [];
-        for(let entry of data) {
-            var isFolder = !!entry.isFolder;
+    _getItemsInternal(path, data, itemType) {
+        const useFolders = itemType === "folder";
+        const result = [];
+        each(data, (_, entry) => {
+            const isFolder = !!entry.isFolder;
             if(!itemType || isFolder === useFolders) {
-                var item = new FileManagerItem(path, entry.name, isFolder);
+                const item = new FileManagerItem(path, entry.name, isFolder);
                 item.length = entry.length !== undefined ? entry.length : 0;
                 item.lastWriteTime = entry.lastWriteTime !== undefined ? entry.lastWriteTime : new Date();
                 item.thumbnail = entry.thumbnail;
                 item.dataItem = entry; // TODO remove if do not need
                 result.push(item);
             }
-        }
+        });
         return result;
     }
 
-});
+}
 
 module.exports = ArrayFileProvider;

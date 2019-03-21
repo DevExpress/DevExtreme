@@ -1,6 +1,7 @@
 import ajax from "../core/utils/ajax";
 import { Deferred } from "../core/utils/deferred";
 import { noop } from "../core/utils/common";
+import { each } from "../core/utils/iterator";
 
 import { FileProvider, FileManagerItem } from "./file_provider";
 
@@ -9,55 +10,56 @@ const REST_API_URL = "https://graph.microsoft.com/";
 const DRIVE_API_URL = REST_API_URL + "v1.0/drive";
 const APP_ROOT_URL = DRIVE_API_URL + "/special/approot";
 
-var OneDriveFileProvider = FileProvider.inherit({
+class OneDriveFileProvider extends FileProvider {
 
-    ctor: function(options) {
+    constructor(options) {
+        super();
         options = options || {};
         this._getAccessTokenUrl = options.getAccessTokenUrl || "";
 
         this._accessToken = "";
         this._accessTokenPromise = null;
-    },
+    }
 
-    getItems: function(path, itemType) {
+    getItems(path, itemType) {
         return this._getItems(path, itemType);
-    },
+    }
 
-    initiateFileUpload: function(uploadInfo) {
-        var folderPath = uploadInfo.destinationFolder.relativeName;
-        var fileName = uploadInfo.file.name;
-        var customData = uploadInfo.customData;
+    initiateFileUpload(uploadInfo) {
+        const folderPath = uploadInfo.destinationFolder.relativeName;
+        const fileName = uploadInfo.file.name;
+        const customData = uploadInfo.customData;
 
         return this._ensureAccessTokenAcquired()
-            .then(() => { return this._createFile(folderPath, fileName); })
+            .then(() => this._createFile(folderPath, fileName))
             .then(entry => {
                 return this._initiateUploadSession(entry.id)
                     .done(info => { customData.uploadUrl = info.uploadUrl; });
             });
-    },
+    }
 
-    uploadFileChunk: function(uploadInfo, chunk) {
+    uploadFileChunk(uploadInfo, chunk) {
         return this._uploadFileChunk(uploadInfo.customData.uploadUrl, chunk.blob, chunk.size,
             uploadInfo.uploadedBytesCount, uploadInfo.file.size);
-    },
+    }
 
-    abortFileUpload: function(uploadInfo) {
+    abortFileUpload(uploadInfo) {
         return this._ensureAccessTokenAcquired()
             .then(() => this._cancelUploadSession(uploadInfo.customData.uploadUrl));
-    },
+    }
 
-    _getItems: function(path, itemType) {
+    _getItems(path, itemType) {
         return this._ensureAccessTokenAcquired()
             .then(() => this._getEntriesByPath(path))
             .then(entries => this._convertEntriesToItems(entries, path, itemType));
-    },
+    }
 
-    _ensureAccessTokenAcquired: function() {
+    _ensureAccessTokenAcquired() {
         if(this._accessTokenPromise) {
             return this._accessTokenPromise;
         }
 
-        var deferred = new Deferred();
+        const deferred = new Deferred();
 
         if(this._accessToken) {
             deferred.resolve();
@@ -65,32 +67,32 @@ var OneDriveFileProvider = FileProvider.inherit({
             ajax.sendRequest({
                 url: this._getAccessTokenUrl,
                 dataType: "json"
-            }).done(function(response) {
+            }).done(response => {
                 this._accessToken = response.token;
                 this._accessTokenPromise = null;
                 deferred.resolve();
-            }.bind(this));
+            });
         }
 
         this._accessTokenPromise = deferred.promise();
         return this._accessTokenPromise;
-    },
+    }
 
-    _getEntriesByPath: function(path) {
-        var itemPath = this._prepareItemRelativePath(path);
-        var queryString = "?$select=" + REQUIRED_ITEM_FIELDS + "&$expand=children($select=" + REQUIRED_ITEM_FIELDS + ")";
-        var url = APP_ROOT_URL + itemPath + queryString;
+    _getEntriesByPath(path) {
+        const itemPath = this._prepareItemRelativePath(path);
+        const queryString = "?$select=" + REQUIRED_ITEM_FIELDS + "&$expand=children($select=" + REQUIRED_ITEM_FIELDS + ")";
+        const url = APP_ROOT_URL + itemPath + queryString;
         return ajax.sendRequest({
             url: url,
             dataType: "json",
             cache: false,
             headers: { "Authorization": "Bearer " + this._accessToken }
         });
-    },
+    }
 
-    _uploadFileChunk: function(uploadUrl, chunkBlob, chunkSize, uploadedSize, totalSize) {
-        var chunkEndPosition = uploadedSize + chunkSize - 1;
-        var contentRange = `bytes ${uploadedSize}-${chunkEndPosition}/${totalSize}`;
+    _uploadFileChunk(uploadUrl, chunkBlob, chunkSize, uploadedSize, totalSize) {
+        const chunkEndPosition = uploadedSize + chunkSize - 1;
+        const contentRange = `bytes ${uploadedSize}-${chunkEndPosition}/${totalSize}`;
         return ajax.sendRequest({
             url: uploadUrl,
             method: "PUT",
@@ -107,10 +109,10 @@ var OneDriveFileProvider = FileProvider.inherit({
                 "Content-Range": contentRange
             }
         });
-    },
+    }
 
-    _initiateUploadSession: function(fileId) {
-        var url = `${DRIVE_API_URL}/items/${fileId}/createUploadSession`;
+    _initiateUploadSession(fileId) {
+        const url = `${DRIVE_API_URL}/items/${fileId}/createUploadSession`;
         return ajax.sendRequest({
             url: url,
             method: "POST",
@@ -118,19 +120,19 @@ var OneDriveFileProvider = FileProvider.inherit({
             cache: false,
             headers: { "Authorization": "Bearer " + this._accessToken }
         });
-    },
+    }
 
-    _createFile: function(folderPath, objectName) {
-        var itemPath = this._prepareItemRelativePath(folderPath);
-        var queryString = "?$select=" + REQUIRED_ITEM_FIELDS;
-        var url = APP_ROOT_URL + itemPath + "/children" + queryString;
+    _createFile(folderPath, objectName) {
+        const itemPath = this._prepareItemRelativePath(folderPath);
+        const queryString = "?$select=" + REQUIRED_ITEM_FIELDS;
+        const url = APP_ROOT_URL + itemPath + "/children" + queryString;
 
-        var params = {
+        const params = {
             "name": objectName,
             "file": { },
             "@microsoft.graph.conflictBehavior": "rename"
         };
-        var data = JSON.stringify(params);
+        const data = JSON.stringify(params);
 
         return ajax.sendRequest({
             url: url,
@@ -143,9 +145,9 @@ var OneDriveFileProvider = FileProvider.inherit({
                 "Content-Type": "application/json"
             }
         });
-    },
+    }
 
-    _cancelUploadSession: function(uploadUrl) {
+    _cancelUploadSession(uploadUrl) {
         return ajax.sendRequest({
             url: uploadUrl,
             method: "DELETE",
@@ -155,26 +157,27 @@ var OneDriveFileProvider = FileProvider.inherit({
                 "Authorization": "Bearer " + this._accessToken
             }
         });
-    },
+    }
 
-    _convertEntriesToItems: function(entries, path, itemType) {
-        var useFolders = itemType === "folder";
-        var result = [];
-        for(let entry of entries.children) {
-            var isFolder = entry.hasOwnProperty("folder");
+    _convertEntriesToItems(entries, path, itemType) {
+        const useFolders = itemType === "folder";
+        const result = [];
+        each(entries.children, (_, entry) => {
+            const isFolder = entry.hasOwnProperty("folder");
             if(!itemType || isFolder === useFolders) {
-                var item = new FileManagerItem(path, entry.name, isFolder);
+                const item = new FileManagerItem(path, entry.name, isFolder);
                 item.length = entry.size;
                 item.lastWriteTime = entry.lastModifiedDateTime;
                 result.push(item);
             }
-        }
+        });
         return result;
-    },
+    }
 
-    _prepareItemRelativePath: function(path) {
+    _prepareItemRelativePath(path) {
         return path === "" ? "" : ":/" + path + ":";
     }
-});
+
+}
 
 module.exports = OneDriveFileProvider;

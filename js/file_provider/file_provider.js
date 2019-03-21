@@ -1,64 +1,58 @@
-import Class from "../core/class";
-
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
-var FileProvider = Class.inherit({
+class FileProvider {
 
-    getFolders: function(path) {
+    getFolders(path) {
         return this.getItems(path, "folder");
-    },
+    }
 
-    getFiles: function(path) {
+    getFiles(path) {
         return this.getItems(path, "file");
-    },
+    }
 
-    getItems: function(path, itemType) {
+    getItems(path, itemType) {
         return [];
-    },
+    }
 
-    renameItem: function(item, name) {
-    },
+    renameItem(item, name) {
+    }
 
-    createFolder: function(parentFolder, name) {
-    },
+    createFolder(parentFolder, name) {
+    }
 
-    deleteItems: function(items) {
-    },
+    deleteItems(items) {
+    }
 
-    moveItems: function(items, destinationFolder) {
-    },
+    moveItems(items, destinationFolder) {
+    }
 
-    copyItems: function(items, destinationFolder) {
-    },
+    copyItems(items, destinationFolder) {
+    }
 
-    initiateFileUpload: function(uploadInfo) {
+    initiateFileUpload(uploadInfo) {
+    }
 
-    },
+    uploadFileChunk(uploadInfo, chunk) {
+    }
 
-    uploadFileChunk: function(uploadInfo, chunk) {
+    finalizeFileUpload(uploadInfo) {
+    }
 
-    },
+    abortFileUpload(uploadInfo) {
+    }
 
-    finalizeFileUpload: function(uploadInfo) {
-
-    },
-
-    abortFileUpload: function(uploadInfo) {
-
-    },
-
-    getFileUploadChunkSize: function() {
+    getFileUploadChunkSize() {
         return DEFAULT_FILE_UPLOAD_CHUNK_SIZE;
-    },
+    }
 
-    _getItemsByType: function(path, folders) {
+    _getItemsByType(path, folders) {
         return this.getItems(path).filter(item => item.isFolder === folders);
     }
 
-});
+}
 
-var FileManagerItem = Class.inherit({
-    ctor: function(parentPath, name, isFolder) {
+class FileManagerItem {
+    constructor(parentPath, name, isFolder) {
         this.parentPath = parentPath;
         this.name = name;
         this.relativeName = this.parentPath ? this.parentPath + "/" + this.name : this.name;
@@ -69,15 +63,17 @@ var FileManagerItem = Class.inherit({
 
         this.thumbnail = "";
         this.tooltipText = "";
-    },
+    }
 
-    getExtension: function() {
-        if(this.isFolder) return "";
+    getExtension() {
+        if(this.isFolder) {
+            return "";
+        }
 
-        var index = this.name.lastIndexOf(".");
+        const index = this.name.lastIndexOf(".");
         return index !== -1 ? this.name.substr(index) : "";
     }
-});
+}
 
 module.exports.FileProvider = FileProvider;
 module.exports.FileManagerItem = FileManagerItem;

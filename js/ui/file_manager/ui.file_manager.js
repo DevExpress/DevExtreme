@@ -29,27 +29,27 @@ const FILE_MANAGER_INACTIVE_AREA_CLASS = FILE_MANAGER_CLASS + "-inactive-area";
 const FILE_MANAGER_EDITING_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-editing-container";
 const FILE_MANAGER_ITEMS_PANEL_CLASS = FILE_MANAGER_CLASS + "-items-panel";
 
-var FileManager = Widget.inherit({
+class FileManager extends Widget {
 
-    _init: function() {
+    _init() {
         this._commands = {
             open: () => this._tryOpen(),
             thumbnails: () => this._switchView("thumbnails"),
             details: () => this._switchView("details")
         };
 
-        this.callBase();
-    },
+        super._init();
+    }
 
-    _initTemplates: function() {
-    },
+    _initTemplates() {
+    }
 
-    _initMarkup: function() {
-        this.callBase();
+    _initMarkup() {
+        super._initMarkup();
 
         this._provider = this._getFileProvider();
 
-        var toolbar = this._createComponent($("<div>"), FileManagerToolbar, {
+        const toolbar = this._createComponent($("<div>"), FileManagerToolbar, {
             "onItemClick": this._onToolbarItemClick.bind(this)
         });
         toolbar.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS);
@@ -64,9 +64,9 @@ var FileManager = Widget.inherit({
             .addClass(FILE_MANAGER_CLASS);
 
         this._setItemsViewAreaActive(false);
-    },
+    }
 
-    _createEditing: function() {
+    _createEditing() {
         this._editing = this._createComponent($("<div>"), FileManagerEditingControl, {
             model: {
                 provider: this._provider,
@@ -83,16 +83,16 @@ var FileManager = Widget.inherit({
             onCreating: () => this._setItemsViewAreaActive(false)
         });
         this._editing.$element().addClass(FILE_MANAGER_EDITING_CONTAINER_CLASS);
-    },
+    }
 
-    _createViewContainer: function() {
-        var $container = $("<div>");
+    _createViewContainer() {
+        const $container = $("<div>");
         $container.addClass(FILE_MANAGER_CONTAINER_CLASS);
 
         this._createFilesTreeView();
         $container.append(this._filesTreeView.$element());
 
-        var $viewSeparator = $("<div>");
+        const $viewSeparator = $("<div>");
         $viewSeparator.addClass(FILE_MANAGER_VIEW_SEPARATOR_CLASS);
         $container.append($viewSeparator);
 
@@ -108,22 +108,22 @@ var FileManager = Widget.inherit({
         $container.append(this._$itemsPanel);
 
         return $container;
-    },
+    }
 
-    _createFilesTreeView: function() {
+    _createFilesTreeView() {
         this._filesTreeView = this._createComponent($("<div>"), FileManagerFilesTreeView, {
             getItems: this._getFilesTreeViewItems.bind(this),
             onCurrentFolderChanged: this._onFilesTreeViewCurrentFolderChanged.bind(this),
             onClick: () => this._setItemsViewAreaActive(false)
         });
         this._filesTreeView.$element().addClass(FILE_MANAGER_DIRS_TREE_CLASS);
-    },
+    }
 
-    _createItemList: function(viewMode) {
-        var itemListOptions = this.option("itemList");
-        var selectionOptions = this.option("selection");
+    _createItemList(viewMode) {
+        const itemListOptions = this.option("itemList");
+        const selectionOptions = this.option("selection");
 
-        var options = {
+        const options = {
             selectionMode: selectionOptions.mode,
             onGetItems: this._getItemListItems.bind(this),
             onError: this._showError.bind(this),
@@ -132,35 +132,37 @@ var FileManager = Widget.inherit({
         };
 
         viewMode = viewMode || itemListOptions.mode;
-        var widgetClass = viewMode === "thumbnails" ? FileManagerThumbnailsItemList : FileManagerDetailsItemList;
+        const widgetClass = viewMode === "thumbnails" ? FileManagerThumbnailsItemList : FileManagerDetailsItemList;
         this._itemList = this._createComponent($("<div>"), widgetClass, options);
 
         eventsEngine.on(this._itemList.$element(), "click", this._onItemListClick.bind(this));
-    },
+    }
 
-    _createBreadcrumbs: function() {
+    _createBreadcrumbs() {
         this._breadcrumbs = this._createComponent($("<div>"), FileManagerBreadcrumbs, {
             path: "",
             onPathChanged: path => this.setCurrentPath(path)
         });
-    },
+    }
 
-    _onFilesTreeViewCurrentFolderChanged: function(e) {
+    _onFilesTreeViewCurrentFolderChanged(e) {
         this._loadItemListData();
         this._breadcrumbs.option("path", this.getCurrentFolderPath());
-    },
+    }
 
-    _onToolbarItemClick: function(buttonName) {
+    _onToolbarItemClick(buttonName) {
         this.executeCommand(buttonName);
-    },
+    }
 
-    _setItemsViewAreaActive: function(active) {
-        if(this._itemsViewAreaActive === active) return;
+    _setItemsViewAreaActive(active) {
+        if(this._itemsViewAreaActive === active) {
+            return;
+        }
 
         this._itemsViewAreaActive = active;
 
-        var $activeArea = null;
-        var $inactiveArea = null;
+        let $activeArea = null;
+        let $inactiveArea = null;
         if(active) {
             $activeArea = this._itemList.$element();
             $inactiveArea = this._filesTreeView.$element();
@@ -171,93 +173,97 @@ var FileManager = Widget.inherit({
 
         $activeArea.removeClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
         $inactiveArea.addClass(FILE_MANAGER_INACTIVE_AREA_CLASS);
-    },
+    }
 
-    _tryOpen: function(item) {
+    _tryOpen(item) {
         if(!item) {
-            var items = this.getSelectedItems();
+            const items = this.getSelectedItems();
             if(items.length > 0) {
                 item = items[0];
             }
         }
-        if(!item || !item.isFolder) return;
+        if(!item || !item.isFolder) {
+            return;
+        }
 
         this.setCurrentPath(item.relativeName);
-    },
+    }
 
-    _switchView: function(viewMode) {
+    _switchView(viewMode) {
         this._itemList.dispose();
         this._itemList.$element().remove();
 
         this._createItemList(viewMode);
         this._$itemsPanel.append(this._itemList.$element());
-    },
+    }
 
-    _getSingleSelectedItem: function() {
+    _getSingleSelectedItem() {
         if(this._itemsViewAreaActive) {
-            var items = this.getSelectedItems();
-            if(items.length === 1) return items[0];
+            const items = this.getSelectedItems();
+            if(items.length === 1) {
+                return items[0];
+            }
         } else {
             return this.getCurrentFolder();
         }
         return null;
-    },
+    }
 
-    _getMultipleSelectedItems: function() {
+    _getMultipleSelectedItems() {
         return this._itemsViewAreaActive ? this.getSelectedItems() : [ this.getCurrentFolder() ];
-    },
+    }
 
-    _showSuccess: function(message) {
+    _showSuccess(message) {
         this._showNotification(message, true);
-    },
+    }
 
-    _showError: function(error) {
-        var message = this._getErrorText(error);
+    _showError(error) {
+        const message = this._getErrorText(error);
         this._showNotification(message, false);
-    },
+    }
 
-    _getErrorText: function(error) {
-        var result = typeof error === "string" ? error : error.responseText;
+    _getErrorText(error) {
+        const result = typeof error === "string" ? error : error.responseText;
         return result || "General error";
-    },
+    }
 
-    _showNotification: function(message, isSuccess) {
+    _showNotification(message, isSuccess) {
         notify({
             message: message,
             width: 450
         }, isSuccess ? "success" : "error", 5000);
-    },
+    }
 
-    _loadItemListData: function() {
+    _loadItemListData() {
         this._itemList.refreshData();
-    },
+    }
 
-    _refreshData: function(onlyItems) {
+    _refreshData(onlyItems) {
         if(onlyItems || this._itemsViewAreaActive) {
             this._loadItemListData();
         } else {
             this._filesTreeView.refreshData();
         }
-    },
+    }
 
-    _getFilesTreeViewItems: function(parent) {
-        var path = parent ? parent.relativeName : "";
+    _getFilesTreeViewItems(parent) {
+        const path = parent ? parent.relativeName : "";
         return this._provider.getFolders(path);
-    },
+    }
 
-    _getItemListItems: function() {
-        var path = this.getCurrentFolderPath();
-        var showFolders = this.option("itemList").showFolders;
-        var itemType = showFolders ? "" : "file";
+    _getItemListItems() {
+        const path = this.getCurrentFolderPath();
+        const showFolders = this.option("itemList").showFolders;
+        const itemType = showFolders ? "" : "file";
         return this._provider.getItems(path, itemType);
-    },
+    }
 
-    _onItemListClick: function() {
+    _onItemListClick() {
         this._setItemsViewAreaActive(true);
-    },
+    }
 
-    _getFileProvider: function() {
-        var fileSystemStore = this.option("fileSystemStore");
+    _getFileProvider() {
+        let fileSystemStore = this.option("fileSystemStore");
 
         if(!fileSystemStore) {
             fileSystemStore = [];
@@ -285,20 +291,20 @@ var FileManager = Widget.inherit({
         }
 
         return new ArrayFileProvider([]);
-    },
+    }
 
-    _getItemThumbnail: function(item) {
-        var func = this.option("customThumbnail");
-        var thumbnail = typeUtils.isFunction(func) ? func(item) : item.thumbnail;
+    _getItemThumbnail(item) {
+        const func = this.option("customThumbnail");
+        const thumbnail = typeUtils.isFunction(func) ? func(item) : item.thumbnail;
         return thumbnail || this._getPredefinedThumbnail(item);
-    },
+    }
 
-    _getPredefinedThumbnail: function(item) {
+    _getPredefinedThumbnail(item) {
         if(item.isFolder) {
             return "folder";
         }
 
-        var extension = item.getExtension();
+        const extension = item.getExtension();
         switch(extension) {
             case ".txt":
                 return "doc"; // TODO change icon
@@ -327,10 +333,10 @@ var FileManager = Widget.inherit({
             default:
                 return "doc"; // TODO change icon
         }
-    },
+    }
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+    _getDefaultOptions() {
+        return extend(super._getDefaultOptions(), {
             /**
             * @name dxFileManagerOptions.fileSystemStore
             * @type object
@@ -365,10 +371,10 @@ var FileManager = Widget.inherit({
             */
             customThumbnail: null
         });
-    },
+    }
 
-    _optionChanged: function(args) {
-        var name = args.name;
+    _optionChanged(args) {
+        const name = args.name;
 
         switch(name) {
             case "fileSystemStore":
@@ -379,36 +385,40 @@ var FileManager = Widget.inherit({
             case "customThumbnail":
                 break;
             default:
-                this.callBase(args);
+                super._optionChanged(args);
         }
-    },
+    }
 
-    executeCommand: function(commandName) {
-        var done = this._editing.executeCommand(commandName);
-        if(done) return;
+    executeCommand(commandName) {
+        const done = this._editing.executeCommand(commandName);
+        if(done) {
+            return;
+        }
 
-        var action = this._commands[commandName];
-        if(!action) throw "Incorrect command name.";
+        const action = this._commands[commandName];
+        if(!action) {
+            throw "Incorrect command name.";
+        }
         action.call(this);
-    },
+    }
 
-    setCurrentPath: function(path) {
+    setCurrentPath(path) {
         this._filesTreeView.setCurrentPath(path);
-    },
+    }
 
-    getCurrentFolderPath: function() {
+    getCurrentFolderPath() {
         return this._filesTreeView.getCurrentPath();
-    },
+    }
 
-    getCurrentFolder: function() {
+    getCurrentFolder() {
         return this._filesTreeView.getCurrentFolder();
-    },
+    }
 
-    getSelectedItems: function() {
+    getSelectedItems() {
         return this._itemList.getSelectedItems();
     }
 
-});
+}
 
 registerComponent("dxFileManager", FileManager);
 

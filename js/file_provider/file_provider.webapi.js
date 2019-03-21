@@ -2,6 +2,7 @@ import ajax from "../core/utils/ajax";
 import { noop } from "../core/utils/common";
 import Guid from "../core/guid";
 import windowUtils from "../core/utils/window";
+import { each } from "../core/utils/iterator";
 
 import { FileProvider, FileManagerItem } from "./file_provider";
 
@@ -9,59 +10,60 @@ const window = windowUtils.getWindow();
 const FILE_CHUNK_BLOB_NAME = "chunk";
 const FILE_CHUNK_META_DATA_NAME = "chunkMetadata";
 
-var WebAPIFileProvider = FileProvider.inherit({
+class WebAPIFileProvider extends FileProvider {
 
-    ctor: function(options) {
+    constructor(options) {
+        super();
         this._options = options;
-    },
+    }
 
-    getItems: function(path, itemType) {
+    getItems(path, itemType) {
         return this._getItems(path, itemType);
-    },
+    }
 
-    renameItem: function(item, name) {
+    renameItem(item, name) {
         return this._executeRequest(this._options.renameUrl, {
             id: item.relativeName,
             newName: name
         });
-    },
+    }
 
-    createFolder: function(parentFolder, name) {
+    createFolder(parentFolder, name) {
         return this._executeRequest(this._options.createFolderUrl, {
             parentId: parentFolder.relativeName,
             name: name
         });
-    },
+    }
 
-    deleteItems: function(items) {
+    deleteItems(items) {
         return items.map(item => this._executeRequest(this._options.deleteUrl, { id: item.relativeName }));
-    },
+    }
 
-    moveItems: function(items, destinationFolder) {
+    moveItems(items, destinationFolder) {
         return items.map(item => this._executeRequest(this._options.moveUrl, {
             sourceId: item.relativeName,
             destinationId: destinationFolder.relativeName + "/" + item.name
         }));
-    },
+    }
 
-    copyItems: function(items, destinationFolder) {
+    copyItems(items, destinationFolder) {
         return items.map(item => this._executeRequest(this._options.copyUrl, {
             sourceId: item.relativeName,
             destinationId: destinationFolder.relativeName
         }));
-    },
+    }
 
-    initiateFileUpload: function(uploadInfo) {
+    initiateFileUpload(uploadInfo) {
         uploadInfo.customData.uploadId = new Guid();
-    },
+    }
 
-    uploadFileChunk: function(uploadInfo, chunk) {
-        var params = {
+    uploadFileChunk(uploadInfo, chunk) {
+        const params = {
             destinationId: uploadInfo.destinationFolder.relativeName
         };
-        var url = this._options.uploadChunkUrl + "?" + this._getQueryString(params);
+        const url = this._options.uploadChunkUrl + "?" + this._getQueryString(params);
 
-        var formData = new window.FormData();
+        const formData = new window.FormData();
         formData.append(FILE_CHUNK_BLOB_NAME, chunk.blob);
         formData.append(FILE_CHUNK_META_DATA_NAME, JSON.stringify({
             UploadId: uploadInfo.customData.uploadId,
@@ -83,84 +85,89 @@ var WebAPIFileProvider = FileProvider.inherit({
             },
             cache: false
         });
-    },
+    }
 
-    abortFileUpload: function(uploadInfo) {
+    abortFileUpload(uploadInfo) {
         return this._executeRequest(this._options.abortUploadUrl, { uploadId: uploadInfo.customData.uploadId });
-    },
+    }
 
-    _getItems: function(path, itemType) {
+    _getItems(path, itemType) {
         return this._getEntriesByPath(path)
             .then(entries => this._convertEntriesToItems(entries, path, itemType));
-    },
+    }
 
-    _getItemsIds: function(items) {
-        return items.map(it => { return it.relativeName; });
-    },
+    _getItemsIds(items) {
+        return items.map(it => it.relativeName);
+    }
 
-    _getEntriesByPath: function(path) {
+    _getEntriesByPath(path) {
         return this._executeRequest(this._options.loadUrl, { parentId: path }, true);
-    },
+    }
 
-    _executeRequest: function(url, params, jsonResult) {
-        var queryString = this._getQueryString(params);
-        var finalUrl = url + "?" + queryString;
-        var dataType = jsonResult ? "json" : "text";
+    _executeRequest(url, params, jsonResult) {
+        const queryString = this._getQueryString(params);
+        const finalUrl = url + "?" + queryString;
+        const dataType = jsonResult ? "json" : "text";
         return ajax.sendRequest({
             url: finalUrl,
             dataType: dataType,
             cache: false
         });
-    },
+    }
 
-    _getQueryString: function(params) {
-        var pairs = [];
+    _getQueryString(params) {
+        const pairs = [];
 
-        var keys = Object.keys(params);
-        for(let key of keys) {
-            var value = params[key];
+        const keys = Object.keys(params);
+        for(let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            let value = params[key];
 
-            if(value === undefined) continue;
+            if(value === undefined) {
+                continue;
+            }
 
-            if(value === null) value = "";
+            if(value === null) {
+                value = "";
+            }
 
             if(Array.isArray(value)) {
                 this._processQueryStringArrayParam(key, value, pairs);
             } else {
-                var pair = this._getQueryStringPair(key, value);
+                const pair = this._getQueryStringPair(key, value);
                 pairs.push(pair);
             }
         }
 
         return pairs.join("&");
-    },
+    }
 
-    _processQueryStringArrayParam: function(key, array, pairs) {
-        for(let item of array) {
-            var pair = this._getQueryStringPair(key, item);
+    _processQueryStringArrayParam(key, array, pairs) {
+        each(array, (_, item) => {
+            const pair = this._getQueryStringPair(key, item);
             pairs.push(pair);
-        }
-    },
+        });
+    }
 
-    _getQueryStringPair: function(key, value) {
+    _getQueryStringPair(key, value) {
         return encodeURIComponent(key) + "=" + encodeURIComponent(value);
-    },
+    }
 
-    _convertEntriesToItems: function(entries, path, itemType) {
-        var useFolders = itemType === "folder";
-        var result = [];
-        for(let entry of entries) {
-            var isFolder = !!entry.isFolder;
+    _convertEntriesToItems(entries, path, itemType) {
+        const useFolders = itemType === "folder";
+        const result = [];
+        each(entries, (_, entry) => {
+            const isFolder = !!entry.isFolder;
             if(!itemType || isFolder === useFolders) {
-                var item = new FileManagerItem(path, entry.name, isFolder);
+                const item = new FileManagerItem(path, entry.name, isFolder);
                 item.length = entry.size || 0;
                 item.lastWriteTime = entry.lastWriteTime;
                 result.push(item);
             }
-        }
+        });
         return result;
     }
 
-});
+}
 
 module.exports = WebAPIFileProvider;

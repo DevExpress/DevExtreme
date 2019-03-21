@@ -3,67 +3,68 @@ import { Deferred } from "../core/utils/deferred";
 import { FileProvider } from "./file_provider";
 import ArrayFileProvider from "./file_provider.array";
 
-var AjaxFileProvider = FileProvider.inherit({
+class AjaxFileProvider extends FileProvider {
 
-    ctor: function(options) {
+    constructor(options) {
+        super();
         this._url = options.url;
         this._provider = null;
-    },
+    }
 
-    getItems: function(path, itemType) {
+    getItems(path, itemType) {
         return this._doActionAfterDataAcquired(() => this._provider.getItems(path, itemType));
-    },
+    }
 
-    renameItem: function(item, name) {
+    renameItem(item, name) {
         return this._doActionAfterDataAcquired(() => this._provider.renameItem(item, name));
-    },
+    }
 
-    createFolder: function(parentFolder, name) {
+    createFolder(parentFolder, name) {
         return this._doActionAfterDataAcquired(() => this._provider.createFolder(parentFolder, name));
-    },
+    }
 
-    deleteItems: function(items) {
+    deleteItems(items) {
         return this._doActionAfterDataAcquired(() => this._provider.deleteItems(items));
-    },
+    }
 
-    moveItems: function(items, destinationFolder) {
+    moveItems(items, destinationFolder) {
         return this._doActionAfterDataAcquired(() => this._provider.moveItems(items, destinationFolder));
-    },
+    }
 
-    copyItems: function(items, destinationFolder) {
+    copyItems(items, destinationFolder) {
         return this._doActionAfterDataAcquired(() => this._provider.copyItems(items, destinationFolder));
-    },
+    }
 
-    initiateFileUpload: function(uploadInfo) {
+    initiateFileUpload(uploadInfo) {
         return this._doActionAfterDataAcquired(() => this._provider.initiateFileUpload(uploadInfo));
-    },
+    }
 
-    uploadFileChunk: function(uploadInfo, chunk) {
+    uploadFileChunk(uploadInfo, chunk) {
         return this._doActionAfterDataAcquired(() => this._provider.uploadFileChunk(uploadInfo, chunk));
-    },
+    }
 
-    finalizeFileUpload: function(uploadInfo) {
+    finalizeFileUpload(uploadInfo) {
         return this._doActionAfterDataAcquired(() => this._provider.finalizeFileUpload(uploadInfo));
-    },
+    }
 
-    abortFileUpload: function(uploadInfo) {
+    abortFileUpload(uploadInfo) {
         return this._doActionAfterDataAcquired(() => this._provider.abortFileUpload(uploadInfo));
-    },
+    }
 
-    _doActionAfterDataAcquired: function(action) {
+    _doActionAfterDataAcquired(action) {
         return this._ensureDataAcquired().then(action.bind(this));
-    },
+    }
 
-    _ensureDataAcquired: function() {
+    _ensureDataAcquired() {
         if(this._provider) {
             return new Deferred().resolve().promise();
         }
 
         return this._getData()
             .done(data => { this._provider = new ArrayFileProvider(data); });
-    },
+    }
 
-    _getData: function() {
+    _getData() {
         return ajax.sendRequest({
             url: this._url,
             dataType: "json",
@@ -71,6 +72,6 @@ var AjaxFileProvider = FileProvider.inherit({
         });
     }
 
-});
+}
 
 module.exports = AjaxFileProvider;
