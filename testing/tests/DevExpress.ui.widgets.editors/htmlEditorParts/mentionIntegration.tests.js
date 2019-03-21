@@ -57,17 +57,24 @@ module("Mentions integration", {
         const fixtureLeft = $fixture.css("left");
         const valueChangeSpy = sinon.spy(() => {
             this.instance.setSelection(0, 1);
+            this.clock.tick();
             const { bottom, left } = getSelection().getRangeAt(0).getBoundingClientRect();
-            const overlayPosition = $(`.${SUGGESTION_LIST_CLASS}`).closest(`.${OVERLAY_CONTENT_CLASS}`).position();
+            const overlayRect = $(`.${SUGGESTION_LIST_CLASS}`).closest(`.${OVERLAY_CONTENT_CLASS}`).get(0).getBoundingClientRect();
 
-            assert.roughEqual(overlayPosition.top, bottom, 1.2, "popup top position equals to bottom position of marker");
-            assert.strictEqual(overlayPosition.left, left, "popup left position equals to left position of marker");
+            assert.roughEqual(overlayRect.top, bottom, 1.2, "popup top position equals to bottom position of marker");
+            assert.strictEqual(overlayRect.left, left, "popup left position equals to left position of marker");
+
             $fixture.css("left", fixtureLeft);
             done();
         });
 
         $fixture.css("left", "0px");
-        this.options.onValueChanged = valueChangeSpy;
+        this.options = {
+            onValueChanged: valueChangeSpy,
+            mentions: [{
+                dataSource: [1, 2, 3, 4]
+            }]
+        };
         this.createWidget();
         this.instance.focus();
         this.$element.find("p").first().text("@");
