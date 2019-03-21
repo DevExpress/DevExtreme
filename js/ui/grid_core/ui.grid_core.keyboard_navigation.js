@@ -99,7 +99,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         eventsEngine.trigger($focusedElement, "focus");
     },
 
-    _updateFocus: function(editingCanceled) {
+    _updateFocus: function(editingCanceled, fireFocusChangingCanceled) {
         var that = this;
         setTimeout(function() {
             var $cell = that._getFocusedCell(),
@@ -112,9 +112,13 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 if($cell && $cell.length > 0) {
                     if($cell.is("td") || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         if(that.getController("editorFactory").focus() || $cellEditingCell) {
-                            let args = that._fireFocusChangingEvents(null, $cell, true, !editingCanceled);
-                            $cell = args.$newCellElement;
-                            that._focus($cell, !args.isHighlighted);
+                            if(!fireFocusChangingCanceled) {
+                                let args = that._fireFocusChangingEvents(null, $cell, true, !editingCanceled);
+                                $cell = args.$newCellElement;
+                                that._focus($cell, !args.isHighlighted);
+                            } else {
+                                that._focus($cell);
+                            }
                         } else if(that._isHiddenFocus) {
                             that._focus($cell, true);
                         }
@@ -241,7 +245,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                     if(isFocusedViewCorrect) {
                         needUpdateFocus = that._isNeedFocus ? !isAppend : that._isHiddenFocus && isFullUpdate;
-                        needUpdateFocus && that._updateFocus();
+                        needUpdateFocus && that._updateFocus(false, true);
                     }
                 });
             }
@@ -677,10 +681,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 cellPosition.columnIndex = args.newColumnIndex;
                 cellPosition.rowIndex = args.newRowIndex;
                 isHighlighted = args.isHighlighted;
+                $cell = this._getCell(cellPosition);
             }
         }
 
-        if(!args.cancel && fireRowEvent) {
+        if(!args.cancel && fireRowEvent && $cell) {
             args = this._fireFocusedRowChanging($event, $cell.parent());
             if(!args.cancel) {
                 cellPosition.rowIndex = args.newRowIndex;
