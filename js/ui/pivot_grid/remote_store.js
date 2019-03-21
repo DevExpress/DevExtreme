@@ -391,7 +391,9 @@ function getRequestsData(options) {
     columnTotalsOptions = getGrandTotalRequest(options, "columns", columnExpandedIndex, columnExpandedLevel, filters, firstCollapsedColumnIndex);
 
     if(options.rows.length && options.columns.length) {
-        data = data.concat(columnTotalsOptions);
+        if(!options.headerName) {
+            data = data.concat(columnTotalsOptions);
+        }
 
         for(var i = rowExpandedIndex; i < rowExpandedLevel + 1; i++) {
             var rows = options.rows.slice(rowExpandedIndex, i + 1),
