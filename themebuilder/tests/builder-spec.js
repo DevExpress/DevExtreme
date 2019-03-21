@@ -27,7 +27,7 @@ describe("Builder - testing exported function", () => {
             assert.notEqual(result.css, "", "Has css in result");
             assert.equal(result.swatchSelector, ".dx-swatch-custom-scheme");
         });
-    });
+    }).timeout(5000);
 
     it("Build theme according to bootstrap", () => {
         const config = {
@@ -41,7 +41,7 @@ describe("Builder - testing exported function", () => {
         return buildTheme(config).then((result) => {
             assert.notEqual(result.css, "", "Has css in result");
         });
-    });
+    }).timeout(5000);
 
     it("Build theme with changed color constants", () => {
         const config = {
@@ -54,7 +54,7 @@ describe("Builder - testing exported function", () => {
         return buildTheme(config).then((result) => {
             assert.notEqual(result.css, "", "Has css in result");
         });
-    });
+    }).timeout(5000);
 });
 
 
