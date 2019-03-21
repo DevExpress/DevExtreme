@@ -83,6 +83,13 @@ function run_test {
     exit $runner_result
 }
 
+function run_themebuilder {
+    cd themebuilder
+    npm i
+    npm run test
+    cd ..
+}
+
 
 echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
 
@@ -90,6 +97,7 @@ case "$TARGET" in
     "lint") run_lint ;;
     "ts") run_ts ;;
     "test") run_test ;;
+    "themebuilder") run_themebuilder ;;
 
     *)
         echo "Unknown target"
