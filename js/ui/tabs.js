@@ -286,7 +286,7 @@ var Tabs = CollectionWidget.inherit({
         } else {
             this._cleanScrolling();
 
-            if(this._needStretchItems()) {
+            if(this._needStretchItems() && !this._isItemsWidthExceeded()) {
                 this.$element().addClass(TABS_STRETCHED_CLASS);
             }
 
@@ -294,6 +294,21 @@ var Tabs = CollectionWidget.inherit({
                 .removeClass(TABS_NAV_BUTTONS_CLASS)
                 .addClass(TABS_EXPANDED_CLASS);
         }
+    },
+
+    _needScrolling: function() {
+        if(!this.option("scrollingEnabled")) {
+            return false;
+        }
+
+        return this._isItemsWidthExceeded();
+    },
+
+    _isItemsWidthExceeded: function() {
+        var tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
+
+        // NOTE: "-1" is a hack fix for IE (T190044)
+        return tabItemsWidth - 1 > this.$element().width();
     },
 
     _needStretchItems: function() {
@@ -392,17 +407,6 @@ var Tabs = CollectionWidget.inherit({
 
         var $item = this._editStrategy.getItemElement(itemData);
         this._scrollable.scrollToElement($item);
-    },
-
-    _needScrolling: function() {
-        if(!this.option("scrollingEnabled")) {
-            return false;
-        }
-
-        var tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
-
-        // NOTE: "-1" is a hack fix for IE (T190044)
-        return tabItemsWidth - 1 > this.$element().width();
     },
 
     _renderNavButtons: function() {

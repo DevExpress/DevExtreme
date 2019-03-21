@@ -539,6 +539,39 @@ QUnit.test("Width: 100%, parent element width to show long captions, stretched w
     }
 });
 
+QUnit.test("Width: total width items more then container, scrollingEnabled -> false", function(assert) {
+    var $container = $("<div style='width: 400px'>");
+
+    try {
+        var $element = $("<div>").appendTo($container).dxTabs({
+                items: [
+                    { text: "long text example" },
+                    { text: "long text example 2" }
+                ],
+                scrollingEnabled: false
+            }),
+            instance = $element.dxTabs("instance");
+
+        $container.appendTo("#qunit-fixture");
+        domUtils.triggerShownEvent($container);
+
+        var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
+
+        assert.equal($element.outerWidth(), 400);
+        assert.equal(instance.option("width"), undefined);
+        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
+
+        $container.width(100);
+        instance.repaint();
+
+        assert.equal($element.outerWidth(), 100);
+        assert.equal(instance.option("width"), undefined);
+        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
+    } finally {
+        $container.remove();
+    }
+});
+
 QUnit.test("Width: width changed after initialization, navigation buttons render", function(assert) {
     var $container = $("<div>");
 
@@ -611,6 +644,36 @@ QUnit.test("Width: width changed after initialization, navigation buttons clean"
     }
 });
 
+QUnit.test("Width: value to show long captions, stretched width tabs, visible: false->true", function(assert) {
+    var $container = $("<div>");
+
+    try {
+        var $element = $("<div>").appendTo($container).dxTabs({
+                items: [
+                    { text: "text 1" },
+                    { text: "long text example" }
+                ],
+                scrollingEnabled: true,
+                showNavButtons: true,
+                width: 200,
+                visible: false
+            }),
+            instance = $element.dxTabs("instance");
+
+        $container.appendTo("#qunit-fixture");
+        domUtils.triggerShownEvent($container);
+
+        instance.option("visible", true);
+
+        var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
+
+        assert.equal(instance.option("width"), 200);
+        assert.ok((tabItems.eq(1).width() / tabItems.eq(0).width()) > 2);
+        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0);
+    } finally {
+        $container.remove();
+    }
+});
 
 QUnit.module("horizontal scrolling");
 
@@ -941,7 +1004,6 @@ QUnit.test("tabs should hide navigation if scrollable is not allowed after resiz
         instance = $element.dxTabs("instance");
 
     instance.option("width", 700);
-    $($element).trigger("dxresize");
 
     assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons was removed");
     assert.equal($element.find("." + TABS_SCROLLABLE_CLASS).length, 0, "scrollable was removed");
