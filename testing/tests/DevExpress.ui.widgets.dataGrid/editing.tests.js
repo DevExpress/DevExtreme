@@ -8721,6 +8721,17 @@ QUnit.testInActiveWindow("Tooltip should be positioned by left side when the dro
     assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
     assert.strictEqual(tooltipInstance.option("position").my, "top right", "position.my of the tooltip");
     assert.strictEqual(tooltipInstance.option("position").at, "top left", "position.at of the tooltip");
+
+    // act
+    eventsEngine.trigger($testElement.find("tbody td").eq(2).find(".dx-dropdowneditor-button")[0], "dxclick");
+    that.clock.tick();
+
+    // assert
+    // T724201
+    assert.notOk(selectBoxInstance.option("opened"), "drop-down editor is not opened");
+    tooltipInstance = $testElement.find("tbody td").eq(2).find(".dx-overlay.dx-invalid-message").dxOverlay("instance");
+    assert.strictEqual(tooltipInstance.option("position").my, "top left", "position.my of the tooltip is restored");
+    assert.strictEqual(tooltipInstance.option("position").at, "bottom left", "position.at of the tooltip is restored");
 });
 
 // T523770
