@@ -281,27 +281,6 @@ QUnit.test("Tabs in multiple mode", function(assert) {
 
 QUnit.module("Width");
 
-QUnit.test("Width: custom width", function(assert) {
-    var $container = $("<div>");
-    var customWidth = 400;
-
-    try {
-        var $element = $("<div>").appendTo($container).dxTabs({
-                items: [
-                    { text: "text 1" },
-                    { text: "text 2" }
-                ]
-            }),
-            instance = $element.dxTabs("instance");
-
-        instance.option("width", customWidth);
-
-        assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
-    } finally {
-        $container.remove();
-    }
-});
-
 QUnit.test("Width: value to show short captions, fixed width tabs", function(assert) {
     var $container = $("<div>");
 
@@ -322,6 +301,7 @@ QUnit.test("Width: value to show short captions, fixed width tabs", function(ass
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
+        assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), 200);
         assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
@@ -350,8 +330,9 @@ QUnit.test("Width: value to show long captions, stretched width tabs", function(
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
+        assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), 200);
-        assert.notEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), "tabs are different width");
+        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -378,8 +359,9 @@ QUnit.test("Width: value to show long captions, stretched width tabs with naviga
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
+        assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), 200);
-        assert.notEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), "tabs are different width");
+        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
     } finally {
         $container.remove();
@@ -405,6 +387,7 @@ QUnit.test("Width: default value, parent element width to show short captions, f
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
+        assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), undefined);
         assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
@@ -432,8 +415,9 @@ QUnit.test("Width: default value, parent element width to show long captions, st
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
+        assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), undefined);
-        assert.notEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), "tabs are different width");
+        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -459,8 +443,9 @@ QUnit.test("Width: default value, parent element width to show long captions, st
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
+        assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), undefined);
-        assert.notEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), "tabs have different width");
+        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
     } finally {
         $container.remove();
@@ -487,6 +472,7 @@ QUnit.test("Width: 100%, parent element width to show short captions, fixed widt
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
+        assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), "100%");
         assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
@@ -515,8 +501,9 @@ QUnit.test("Width: 100%, parent element width to show long captions, stretched w
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
+        assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), "100%");
-        assert.notEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), "tabs are different width");
+        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -543,8 +530,9 @@ QUnit.test("Width: 100%, parent element width to show long captions, stretched w
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
+        assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), "100%");
-        assert.notEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), "tabs have different width");
+        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
     } finally {
         $container.remove();
@@ -571,14 +559,16 @@ QUnit.test("Width: width changed after initialization, navigation buttons render
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
+        assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), 400);
         assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         instance.option("width", 200);
 
+        assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), 200);
-        assert.notEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), "tabs have different width");
+        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
     } finally {
         $container.remove();
@@ -605,12 +595,14 @@ QUnit.test("Width: width changed after initialization, navigation buttons clean"
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
+        assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), 200);
-        assert.notEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), "tabs have different width");
+        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons aren't rendered");
 
         instance.option("width", 400);
 
+        assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), 400);
         assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons are rendered");

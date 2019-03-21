@@ -399,7 +399,6 @@ var TabPanel = MultiView.inherit({
                 break;
             case "width":
                 this._setTabsOption(fullName, value);
-                this._tabs._dimensionChanged();
                 this.callBase(args);
                 break;
             case "focusedElement":
