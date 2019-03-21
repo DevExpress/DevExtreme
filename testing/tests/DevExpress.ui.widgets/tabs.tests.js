@@ -303,7 +303,7 @@ QUnit.test("Width: value to show short captions, fixed width tabs", function(ass
 
         assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), 200);
-        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
+        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 1, "tabs are the same width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -332,7 +332,7 @@ QUnit.test("Width: value to show long captions, stretched width tabs", function(
 
         assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), 200);
-        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
+        assert.ok((tabItems.eq(1).width() / tabItems.eq(0).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -345,12 +345,12 @@ QUnit.test("Width: value to show long captions, stretched width tabs with naviga
     try {
         var $element = $("<div>").appendTo($container).dxTabs({
                 items: [
-                    { text: "long text example" },
+                    { text: "text 1" },
                     { text: "long text example 2" }
                 ],
                 scrollingEnabled: true,
                 showNavButtons: true,
-                width: 200
+                width: 100
             }),
             instance = $element.dxTabs("instance");
 
@@ -359,9 +359,9 @@ QUnit.test("Width: value to show long captions, stretched width tabs with naviga
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
-        assert.equal($element.outerWidth(), 200);
-        assert.equal(instance.option("width"), 200);
-        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
+        assert.equal($element.outerWidth(), 100);
+        assert.equal(instance.option("width"), 100);
+        assert.ok((tabItems.eq(1).width() / tabItems.eq(0).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
     } finally {
         $container.remove();
@@ -389,7 +389,7 @@ QUnit.test("Width: default value, parent element width to show short captions, f
 
         assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), undefined);
-        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
+        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 1, "tabs are the same width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -417,7 +417,7 @@ QUnit.test("Width: default value, parent element width to show long captions, st
 
         assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
+        assert.ok((tabItems.eq(1).width() / tabItems.eq(0).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -425,12 +425,12 @@ QUnit.test("Width: default value, parent element width to show long captions, st
 });
 
 QUnit.test("Width: default value, parent element width to show long captions, stretched width tabs with navigation buttons", function(assert) {
-    var $container = $("<div style='width: 200px;'>");
+    var $container = $("<div style='width: 100px;'>");
 
     try {
         var $element = $("<div>").appendTo($container).dxTabs({
                 items: [
-                    { text: "long text example" },
+                    { text: "text 1" },
                     { text: "long text example 2" }
                 ],
                 scrollingEnabled: true,
@@ -443,9 +443,9 @@ QUnit.test("Width: default value, parent element width to show long captions, st
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
-        assert.equal($element.outerWidth(), 200);
+        assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
+        assert.ok((tabItems.eq(1).width() / tabItems.eq(0).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
     } finally {
         $container.remove();
@@ -474,7 +474,7 @@ QUnit.test("Width: 100%, parent element width to show short captions, fixed widt
 
         assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), "100%");
-        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
+        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 1, "tabs are the same width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -503,7 +503,7 @@ QUnit.test("Width: 100%, parent element width to show long captions, stretched w
 
         assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), "100%");
-        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
+        assert.ok((tabItems.eq(1).width() / tabItems.eq(0).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -511,12 +511,12 @@ QUnit.test("Width: 100%, parent element width to show long captions, stretched w
 });
 
 QUnit.test("Width: 100%, parent element width to show long captions, stretched width tabs with navigation buttons", function(assert) {
-    var $container = $("<div style='width: 200px;'>");
+    var $container = $("<div style='width: 100px;'>");
 
     try {
         var $element = $("<div>").appendTo($container).dxTabs({
                 items: [
-                    { text: "long text example" },
+                    { text: "text 1" },
                     { text: "long text example 2" }
                 ],
                 scrollingEnabled: true,
@@ -530,9 +530,9 @@ QUnit.test("Width: 100%, parent element width to show long captions, stretched w
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
-        assert.equal($element.outerWidth(), 200);
+        assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), "100%");
-        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
+        assert.ok((tabItems.eq(1).width() / tabItems.eq(0).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
     } finally {
         $container.remove();
@@ -559,14 +559,14 @@ QUnit.test("Width: dimention change, total width items more then container, scro
 
         assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), undefined);
-        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
+        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 1, "tabs are the same width");
 
         $container.width(100);
         $($element).trigger("dxresize");
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), undefined);
-        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
+        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 1, "tabs are the same width");
     } finally {
         $container.remove();
     }
@@ -592,14 +592,14 @@ QUnit.test("Width: dimention change, total width items less then container, scro
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), undefined);
-        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 1.001, "tabs are the same width");
+        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 1, "tabs are the same width");
 
         $container.width(170);
         $($element).trigger("dxresize");
 
         assert.equal($element.outerWidth(), 170);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 1.001, "tabs are different width");
+        assert.ok((tabItems.eq(1).width() / tabItems.eq(0).width()) > 2, "tabs are different width");
     } finally {
         $container.remove();
     }
@@ -611,7 +611,7 @@ QUnit.test("Width: width changed after initialization, navigation buttons render
     try {
         var $element = $("<div>").appendTo($container).dxTabs({
                 items: [
-                    { text: "long text example" },
+                    { text: "text 1" },
                     { text: "long text example 2" }
                 ],
                 scrollingEnabled: true,
@@ -627,14 +627,14 @@ QUnit.test("Width: width changed after initialization, navigation buttons render
 
         assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), 400);
-        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
+        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 1, "tabs are the same width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
-        instance.option("width", 200);
+        instance.option("width", 100);
 
-        assert.equal($element.outerWidth(), 200);
-        assert.equal(instance.option("width"), 200);
-        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
+        assert.equal($element.outerWidth(), 100);
+        assert.equal(instance.option("width"), 100);
+        assert.ok((tabItems.eq(1).width() / tabItems.eq(0).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
     } finally {
         $container.remove();
@@ -647,12 +647,12 @@ QUnit.test("Width: width changed after initialization, navigation buttons clean"
     try {
         var $element = $("<div>").appendTo($container).dxTabs({
                 items: [
-                    { text: "long text example" },
+                    { text: "text 1" },
                     { text: "long text example 2" }
                 ],
                 scrollingEnabled: true,
                 showNavButtons: true,
-                width: 200
+                width: 100
             }),
             instance = $element.dxTabs("instance");
 
@@ -661,16 +661,16 @@ QUnit.test("Width: width changed after initialization, navigation buttons clean"
 
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
-        assert.equal($element.outerWidth(), 200);
-        assert.equal(instance.option("width"), 200);
-        assert.ok(Math.abs(tabItems.eq(0).width() - tabItems.eq(1).width()) > 2, "tabs are different width");
+        assert.equal($element.outerWidth(), 100);
+        assert.equal(instance.option("width"), 100);
+        assert.ok((tabItems.eq(1).width() / tabItems.eq(0).width()) > 2, "tabs are different width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons aren't rendered");
 
         instance.option("width", 400);
 
         assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), 400);
-        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 2.001, "tabs are the same width");
+        assert.roughEqual(tabItems.eq(0).width(), tabItems.eq(1).width(), 1, "tabs are the same width");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons are rendered");
     } finally {
         $container.remove();
