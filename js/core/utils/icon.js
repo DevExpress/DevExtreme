@@ -1,8 +1,14 @@
-var $ = require("../../core/renderer");
+import $ from "../../core/renderer";
 
-var getImageSourceType = function(source) {
+const ICON_CLASS = "dx-icon";
+
+const getImageSourceType = (source) => {
     if(!source || typeof source !== "string") {
         return false;
+    }
+
+    if(/<\s*svg[^>]*>(.*?)<\s*\/\s*svg>/.test(source)) {
+        return "svg";
     }
 
     if(/data:.*base64|\.|\//.test(source)) {
@@ -16,16 +22,16 @@ var getImageSourceType = function(source) {
     return "fontIcon";
 };
 
-var getImageContainer = function(source) {
-    var imageType = getImageSourceType(source),
-        ICON_CLASS = "dx-icon";
-    switch(imageType) {
+const getImageContainer = (source) => {
+    switch(getImageSourceType(source)) {
         case "image":
             return $("<img>").attr("src", source).addClass(ICON_CLASS);
         case "fontIcon":
             return $("<i>").addClass(ICON_CLASS + " " + source);
         case "dxIcon":
             return $("<i>").addClass(ICON_CLASS + " " + ICON_CLASS + "-" + source);
+        case "svg":
+            return $("<i>").addClass(ICON_CLASS).append(source);
         default:
             return null;
     }

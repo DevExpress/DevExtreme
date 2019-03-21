@@ -1,84 +1,83 @@
-var $ = require("jquery"),
-    iconUtils = require("core/utils/icon");
+import { getImageSourceType, getImageContainer } from "core/utils/icon";
 
-QUnit.module('icon utils', {
-    beforeEach: function() {
+const { module, test } = QUnit;
+
+module("icon utils", {
+    beforeEach: () => {
         this.sourceArray = [{// 1
             source: "data:image/png;base64,qwertyuiopasdfghjklzxcvbmnQWERTYUIOPLKJHGFDSAZXCVBNM/+0987654321",
             result: "image"
-        },
-        {// 2
+        }, {// 2
             source: "../folder/123.jgp",
             result: "image"
-        },
-        {// 3
+        }, {// 3
             source: "localhost/JFLSKDksjdhfolHWThr30oi",
             result: "image"
-        },
-        {// 4
+        }, {// 4
             source: "glyphicon glyphicon-icon",
             result: "fontIcon"
-        },
-        {// 5
+        }, {// 5
             source: "glyphicon-icon glyphicon",
             result: "fontIcon"
-        },
-        {// 6
+        }, {// 6
             source: "fa fa-icon",
             result: "fontIcon"
-        },
-        {// 7
+        }, {// 7
             source: "fa-lg fa-icon fa",
             result: "fontIcon"
-        },
-        {// 8
+        }, {// 8
             source: "ion ion-icon",
             result: "fontIcon"
-        },
-        {// 9
+        }, {// 9
             source: "ionicons ion-icon",
             result: "fontIcon"
-        },
-        {// 10
+        }, {// 10
             source: "icon_-190",
             result: "dxIcon"
-        },
-        {// 11
+        }, {// 11
             source: "my my-icon",
             result: "fontIcon"
+        }, {// 12
+            source: "<svg></svg>",
+            result: "svg"
         }];
     }
-});
+}, () => {
+    test("getImageSourceType", (assert) => {
+        assert.expect(12);
 
-QUnit.test('getImageSourceType', function(assert) {
-    assert.expect(11);
-
-    $.each(this.sourceArray, function(index, value) {
-        assert.equal(iconUtils.getImageSourceType(value.source), value.result);
+        this.sourceArray.forEach(({ source, result }) => {
+            assert.strictEqual(getImageSourceType(source), result);
+        });
     });
-});
 
-QUnit.test('getImageContainer', function(assert) {
-    $.each(this.sourceArray, function(index, value) {
-        var $iconElement = iconUtils.getImageContainer(value.source);
-        switch(value.result) {
-            case "dxIcon":
-                assert.ok($iconElement.hasClass("dx-icon"), "correct for " + value.result);
-                assert.ok($iconElement.hasClass("dx-icon-" + value.source), "correct for " + value.result);
-                assert.equal($iconElement.get(0).tagName, "I", "correct for " + value.result);
-                break;
-            case "fontIcon":
-                assert.ok($iconElement.hasClass("dx-icon"), "correct for " + value.result);
-                assert.ok($iconElement.hasClass(value.source), "correct for " + value.result);
-                assert.equal($iconElement.get(0).tagName, "I", "correct for " + value.result);
-                break;
-            case "image":
-                assert.ok($iconElement.hasClass("dx-icon"), "correct for " + value.result);
-                assert.equal($iconElement.attr("src"), value.source, "correct for " + value.result);
-                assert.equal($iconElement.get(0).tagName, "IMG", "correct for " + value.result);
-                break;
-            default:
-                break;
-        }
+    test("getImageContainer", (assert) => {
+        this.sourceArray.forEach(({ source, result }) => {
+            var $iconElement = getImageContainer(source);
+            switch(result) {
+                case "dxIcon":
+                    assert.ok($iconElement.hasClass("dx-icon"), `correct for ${result}`);
+                    assert.ok($iconElement.hasClass("dx-icon-" + source), `correct for ${result}`);
+                    assert.strictEqual($iconElement.get(0).tagName, "I", `correct for ${result}`);
+                    break;
+                case "fontIcon":
+                    assert.ok($iconElement.hasClass("dx-icon"), `correct for ${result}`);
+                    assert.ok($iconElement.hasClass(source), `correct for ${result}`);
+                    assert.strictEqual($iconElement.get(0).tagName, "I", `correct for ${result}`);
+                    break;
+                case "image":
+                    assert.ok($iconElement.hasClass("dx-icon"), `correct for ${result}`);
+                    assert.strictEqual($iconElement.attr("src"), source, `correct for ${result}`);
+                    assert.strictEqual($iconElement.get(0).tagName, "IMG", `correct for ${result}`);
+                    break;
+                case "svg":
+                    assert.ok($iconElement.hasClass("dx-icon"), `correct for ${result}`);
+                    assert.strictEqual($iconElement.get(0).tagName, "I", `correct for ${result}`);
+                    assert.strictEqual($iconElement.children().get(0).tagName, "svg", `correct for ${result}`);
+                    break;
+                default:
+                    break;
+            }
+        });
     });
 });
