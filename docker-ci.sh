@@ -85,7 +85,7 @@ function run_test {
 
 function run_themebuilder {
     npm i
-    npx gulp style-compiler-tb-assets
+    npm run build
     cd themebuilder
     npm i
     npm run test
