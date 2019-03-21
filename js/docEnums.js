@@ -71,6 +71,16 @@
  */
 
 /**
+ * @typedef {string} Enums.VizWordWrap
+ * @enum {'normal'|'break-word'|'none'}
+ */
+
+/**
+  * @typedef {string} Enums.VizOverflow
+  * @enum {'ellipsis'|'hide'|'none'}
+  */
+
+/**
  * @typedef {string} Enums.VizPaletteExtensionMode
  * @enum {'alternate'|'blend'|'extrapolate'}
  */

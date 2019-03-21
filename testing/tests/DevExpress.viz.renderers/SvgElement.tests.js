@@ -5979,5 +5979,47 @@ function checkDashStyle(assert, elem, result, style, value) {
 
             assert.equal(text.element.childNodes.length, 2);
         });
+
+        QUnit.test("WordWrap stroked text", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                    x: 35, y: 100, fill: "black", stroke: "black", "stroke-width": 3,
+                    text: "There is test text for checking ellipsis with single line"
+                }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(110, {
+                wordWrap: "normal"
+            });
+
+            assert.strictEqual(result, true);
+
+            this.checkTspans(assert, text, [
+                { x: 35, y: 100, text: "There is test text" },
+                { x: 35, dy: 12, text: "for checking" },
+                { x: 35, dy: 12, text: "ellipsis with" },
+                { x: 35, dy: 12, text: "single line" }
+            ], { x: 35, y: 100 }, { stroke: "black", "stroke-width": 3, "stroke-opacity": 1 });
+        });
+
+        QUnit.test("WordWrap long text. Keep visible ellipsis when width is too small", function(assert) {
+            var text = this.createText().append(this.svg).attr({
+                    x: 35, y: 100, fill: "black", stroke: "black",
+                    text: "There is"
+                }),
+                result;
+
+            this.prepareRenderBeforeEllipsis();
+            result = text.setMaxWidth(1, {
+                wordWrap: "none",
+                overflow: "ellipsis"
+            });
+
+            assert.strictEqual(result, true);
+
+            this.checkTspans(assert, text, [
+                { x: 35, y: 100, text: "..." }
+            ], { x: 35, y: 100 });
+        });
     }
 })();

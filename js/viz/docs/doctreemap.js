@@ -72,6 +72,7 @@ var dxTreeMap = {
      * @name dxTreeMapOptions.resolveLabelOverflow
      * @type Enums.TreeMapResolveLabelOverflow
      * @default 'hide'
+     * @deprecated dxTreeMapOptions.tile.label.overflow
      */
     resolveLabelOverflow: 'hide',
     /**
@@ -186,7 +187,19 @@ var dxTreeMap = {
                 color: undefined,
                 opacity: undefined,
                 weight: undefined
-            }
+            },
+            /**
+            * @name dxTreeMapOptions.tile.label.wordWrap
+            * @type Enums.VizWordWrap
+            * @default "normal"
+            */
+            wordWrap: "normal",
+            /**
+            * @name dxTreeMapOptions.tile.label.overflow
+            * @type Enums.VizOverflow
+            * @default "ellipsis"
+            */
+            overflow: "ellipsis"
         }
     },
     /**
@@ -307,7 +320,13 @@ var dxTreeMap = {
                 color: undefined,
                 opacity: undefined,
                 weight: undefined
-            }
+            },
+            /**
+            * @name dxTreeMapOptions.group.label.overflow
+            * @type Enums.VizOverflow
+            * @default "ellipsis"
+            */
+            overflow: "ellipsis"
         },
         /**
         * @name dxTreeMapOptions.group.hoverEnabled

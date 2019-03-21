@@ -821,6 +821,16 @@ function applyEllipsis(maxWidth) {
     return hasEllipsis;
 }
 
+function cloneAndRemoveAttrs(node) {
+    let clone;
+    if(node) {
+        clone = node.cloneNode();
+        clone.removeAttribute("y");
+        clone.removeAttribute("x");
+    }
+    return clone || node;
+}
+
 function setMaxWidth(maxWidth, options = {}) {
     var that = this,
         lines,
@@ -845,6 +855,9 @@ function setMaxWidth(maxWidth, options = {}) {
         this._texts = lines.reduce((texts, line) => {
             return texts.concat(line.parts);
         }, []).filter(t => t.value !== "").map(t => {
+            t.stroke && t.tspan.parentNode.appendChild(t.stroke);
+            return t;
+        }).map(t => {
             t.tspan.parentNode.appendChild(t.tspan);
             return t;
         });
@@ -950,9 +963,7 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
 
         const restString = wholeText.slice(breakIndex + newTextOffset);
         if(restString.length) {
-            const restTspan = text.tspan.cloneNode();
-            restTspan.removeAttribute("y");
-            restTspan.removeAttribute("x");
+            const restTspan = cloneAndRemoveAttrs(text.tspan);
 
             restTspan.textContent = restString;
 
@@ -963,10 +974,11 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
                 startBox: 0,
                 height: 0,
                 tspan: restTspan,
+                stroke: cloneAndRemoveAttrs(text.stroke),
                 endBox: restTspan.getSubStringLength(0, restString.length)
             });
 
-            restText.stroke && (text.stroke.textContent = restString);
+            restText.stroke && (restText.stroke.textContent = restString);
 
             if(restText.endBox > maxWidth) {
                 restLines = wordWrap(restText, maxWidth, ellipsisMaxWidth, options);
@@ -983,6 +995,8 @@ function wordWrap(text, maxWidth, ellipsisMaxWidth, options) {
                 if(text.startBox + text.tspan.getSubStringLength(0, i) < ellipsisMaxWidth) {
                     setNewText(text, i, ELLIPSIS);
                     break;
+                } else {
+                    (i === 1) && setNewText(text, 0, ELLIPSIS);
                 }
             }
         }
