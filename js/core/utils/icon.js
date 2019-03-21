@@ -27,9 +27,9 @@ const getImageContainer = (source) => {
         case "image":
             return $("<img>").attr("src", source).addClass(ICON_CLASS);
         case "fontIcon":
-            return $("<i>").addClass(ICON_CLASS + " " + source);
+            return $("<i>").addClass(`${ICON_CLASS} ${source}`);
         case "dxIcon":
-            return $("<i>").addClass(ICON_CLASS + " " + ICON_CLASS + "-" + source);
+            return $("<i>").addClass(`${ICON_CLASS} ${ICON_CLASS}-${source}`);
         case "svg":
             return $("<i>").addClass(ICON_CLASS).append(source);
         default:
