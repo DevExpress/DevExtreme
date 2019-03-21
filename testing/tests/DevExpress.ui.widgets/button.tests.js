@@ -67,15 +67,17 @@ QUnit.module("options changed callbacks", {
     QUnit.test("icon position", (assert) => {
         this.instance.option({
             icon: "box",
+            text: "Text",
             iconPosition: "right"
         });
 
-        const $buttonContentElements = this.element.find(".dx-button-content").children();
+        let $buttonContentElements = this.element.find(".dx-button-content").children();
         assert.ok($buttonContentElements.eq(1).hasClass("dx-icon"), "icon is after the text");
         assert.ok($buttonContentElements.eq(1).hasClass("dx-icon-right"), "icon has class for right position");
         assert.ok(this.element.hasClass("dx-button-icon-right"), "button has class for right icon position");
 
         this.instance.option("iconPosition", "left");
+        $buttonContentElements = this.element.find(".dx-button-content").children();
         assert.ok($buttonContentElements.eq(0).hasClass("dx-icon"), "icon is before the text");
         assert.notOk($buttonContentElements.eq(0).hasClass("dx-icon-right"), "icon has no class for right position");
         assert.notOk(this.element.hasClass("dx-button-icon-right"), "button has no class for right icon position");

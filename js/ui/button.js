@@ -208,7 +208,7 @@ var Button = Widget.inherit({
             var data = options.model,
                 $iconElement = iconUtils.getImageContainer(data && data.icon),
                 $textContainer = data && data.text ? $("<span>").text(data.text).addClass(BUTTON_TEXT_CLASS) : undefined,
-                $container = options.container;
+                $container = $(options.container);
 
             $container.append($textContainer);
 
