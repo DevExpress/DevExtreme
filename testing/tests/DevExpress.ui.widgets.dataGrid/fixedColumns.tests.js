@@ -2060,7 +2060,7 @@ QUnit.test("Elastic scrolling should be applied for fixed table", function(asser
 
     // assert
     $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
-    assert.roughEqual(translator.getTranslate($fixedTable).y, -330, 6);
+    assert.roughEqual(translator.getTranslate($fixedTable).y, -330, 10);
 
     // act
     that.rowsView._handleScroll({
