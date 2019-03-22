@@ -585,7 +585,7 @@ QUnit.test("Width: dimention change, items fit into container, large fixed -> sm
     }
 });
 
-QUnit.test("Width: dimention change, items fit into container, small fixed -> large fixed, scrollingEnabled -> false", function(assert) {
+QUnit.test("Width: dimention change, items doesn't fit into container, small fixed -> large fixed, scrollingEnabled -> false", function(assert) {
     var $container = $("<div style='width: 100px'>");
 
     try {
