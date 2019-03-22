@@ -153,6 +153,8 @@ var dxBarGauge = dxBaseGauge.inherit({
         if(this._context.textEnabled) {
             result.horizontalMargin = this._context.textWidth;
             result.verticalMargin = this._context.textHeight;
+            result.inverseHorizontalMargin = this._context.textWidth / 2;
+            result.inverseVerticalMargin = this._context.textHeight / 2;
         }
         return result;
     },

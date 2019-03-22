@@ -739,21 +739,116 @@ exports.DataController = Class.inherit((function() {
             that._changingDuration = new Date() - startChanging;
         },
 
-        _handleCustomizeStoreLoadOptions: function(options) {
+        _correctSkipsTakes: function(rowIndex, rowSkip, rowSpan, levels, skips, takes) {
+            var endIndex = rowSpan ? rowIndex + rowSpan - 1 : rowIndex;
+            skips[levels.length] = skips[levels.length] || 0;
+            takes[levels.length] = takes[levels.length] || 0;
+            if(endIndex < rowSkip) {
+                skips[levels.length]++;
+            } else {
+                takes[levels.length]++;
+            }
+        },
+
+        _calculatePagingForExpandedPaths: function(options, skips, takes, rowExpandedSkips, rowExpandedTakes) {
+            var rows = this._rowsInfo,
+                rowCount = Math.min(options.rowSkip + options.rowTake, rows.length),
+                rowExpandedPaths = options.rowExpandedPaths,
+                levels = [],
+                expandedPathIndexes = {},
+                i, j,
+                path;
+
+            rowExpandedPaths.forEach((path, index) => {
+                expandedPathIndexes[path] = index;
+            });
+
+            for(i = 0; i < rowCount; i++) {
+                takes.length = skips.length = levels.length + 1;
+                for(j = 0; j < rows[i].length; j++) {
+                    var cell = rows[i][j];
+
+                    if(cell.type === "D") {
+                        this._correctSkipsTakes(i, options.rowSkip, cell.rowspan, levels, skips, takes);
+
+                        path = cell.path || path;
+                        var expandIndex = path && path.length > 1 ? expandedPathIndexes[path.slice(0, path.length - 1)] : -1;
+
+                        if(expandIndex >= 0) {
+                            rowExpandedSkips[expandIndex] = skips[levels.length] || 0;
+                            rowExpandedTakes[expandIndex] = takes[levels.length] || 0;
+                        }
+
+                        if(cell.rowspan) {
+                            levels.push(cell.rowspan);
+                        }
+                    }
+                }
+                levels = levels.map(level => level - 1).filter(level => level > 0);
+            }
+        },
+
+        _processPagingForExpandedPaths: function(options, storeLoadOptions) {
+            var rowExpandedPaths = options.rowExpandedPaths,
+                rowExpandedSkips = rowExpandedPaths.map(() => 0),
+                rowExpandedTakes = rowExpandedPaths.map(() => 0),
+                skips = [],
+                takes = [];
+
+            this._calculatePagingForExpandedPaths(options, skips, takes, rowExpandedSkips, rowExpandedTakes);
+            this._savePagingForExpandedPaths(options, storeLoadOptions, skips[0], takes[0], rowExpandedSkips, rowExpandedTakes);
+        },
+
+        _savePagingForExpandedPaths: function(options, storeLoadOptions, skip, take, rowExpandedSkips, rowExpandedTakes) {
+            var rowExpandedPaths = options.rowExpandedPaths;
+
+            options.rowExpandedPaths = [];
+            options.rowSkip = skip !== undefined ? skip : options.rowSkip;
+            options.rowTake = take !== undefined ? take : options.rowTake;
+
+            for(var i = 0; i < rowExpandedPaths.length; i++) {
+                if(rowExpandedTakes[i]) {
+                    storeLoadOptions.push(extend({}, options, {
+                        area: "row",
+                        headerName: "rows",
+                        path: rowExpandedPaths[i],
+                        rowSkip: rowExpandedSkips[i],
+                        rowTake: rowExpandedTakes[i] || 20
+                    }));
+                }
+            }
+        },
+
+        _handleCustomizeStoreLoadOptions: function(storeLoadOptions) {
+            var options = storeLoadOptions[0];
             var rowsScrollController = this._rowsScrollController;
+
             if(this._dataSource.paginate() && rowsScrollController) {
                 var rowPageSize = rowsScrollController._dataSource.pageSize();
 
-                options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
-                options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
+                if(options.headerName === "rows") {
+                    options.rowSkip = 0;
+                    options.rowTake = rowPageSize;
+                } else {
+                    options.rowSkip = rowsScrollController.beginPageIndex() * rowPageSize;
+                    options.rowTake = (rowsScrollController.endPageIndex() - rowsScrollController.beginPageIndex() + 1) * rowPageSize;
+
+                    this._processPagingForExpandedPaths(options, storeLoadOptions);
+                }
             }
 
             var columnsScrollController = this._columnsScrollController;
+
             if(this._dataSource.paginate() && columnsScrollController) {
                 var columnPageSize = columnsScrollController._dataSource.pageSize();
 
-                options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
-                options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
+                if(options.headerName === "columns") {
+                    options.columnSkip = 0;
+                    options.columnTake = columnPageSize;
+                } else {
+                    options.columnSkip = columnsScrollController.beginPageIndex() * columnPageSize;
+                    options.columnTake = (columnsScrollController.endPageIndex() - columnsScrollController.beginPageIndex() + 1) * columnPageSize;
+                }
             }
         },
 

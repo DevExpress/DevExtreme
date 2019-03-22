@@ -670,9 +670,10 @@ module.exports = {
                     }
                 },
 
-                _createEmptyRow: function(className, isFixed) {
+                _createEmptyRow: function(className, isFixed, height) {
                     var that = this,
                         i,
+                        $cell,
                         $row = that._createRow(),
                         columns = isFixed ? this.getFixedColumns() : this.getColumns();
 
@@ -681,7 +682,10 @@ module.exports = {
                         .toggleClass(COLUMN_LINES_CLASS, that.option("showColumnLines"));
 
                     for(i = 0; i < columns.length; i++) {
-                        $row.append(that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns }));
+                        $cell = that._createCell({ column: columns[i], rowType: "freeSpace", columnIndex: i, columns: columns });
+                        isNumeric(height) && $cell.css("height", height);
+
+                        $row.append($cell);
                     }
 
                     that.setAria("role", "presentation", $row);

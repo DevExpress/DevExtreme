@@ -51,6 +51,16 @@
         margin-left: @size;
         margin-right: 0;
     }
+
+    &.dx-icon-right {
+        margin-left: @size;
+        margin-right: 0;
+
+        .dx-rtl &, .dx-rtl& {
+            margin-right: @size;
+            margin-left: 0;
+        }
+    }
 }
 
 
@@ -270,11 +280,11 @@
     .dx-icon-mention { .dx-font-icon("\f090"); }
     .dx-icon-variable { .dx-font-icon("\f091"); }
     .dx-icon-clearformat { .dx-font-icon("\f092"); }
-    .dx-icon-undo { 
+    .dx-icon-undo {
         .dx-font-icon("\f04c");
         .dx-rtl &:before { content: "\f093"; } // redo icon
     }
-    .dx-icon-redo { 
+    .dx-icon-redo {
         .dx-font-icon("\f093");
         .dx-rtl &:before { content: "\f04c"; } // undo icon
     }

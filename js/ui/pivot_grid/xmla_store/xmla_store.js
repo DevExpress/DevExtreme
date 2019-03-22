@@ -19,6 +19,7 @@ exports.XmlaStore = Class.inherit((function() {
         execute = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Execute xmlns="urn:schemas-microsoft-com:xml-analysis"><Command><Statement>{0}</Statement></Command><Properties><PropertyList><Catalog>{1}</Catalog><ShowHiddenCubes>True</ShowHiddenCubes><SspropInitAppName>Microsoft SQL Server Management Studio</SspropInitAppName><Timeout>3600</Timeout>{2}</PropertyList></Properties></Execute></Body></Envelope>',
         mdx = "SELECT {2} FROM {0} {1} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS",
         mdxFilterSelect = "(SELECT {0} FROM {1})",
+        mdxSubset = "Subset({0}, {1}, {2})",
         mdxWith = "{0} {1} as {2}",
         mdxSlice = "WHERE ({0})",
         mdxNonEmpty = "NonEmpty({0}, {1})",
@@ -242,7 +243,20 @@ exports.XmlaStore = Class.inherit((function() {
         }
 
         if(crossJoins.length) {
-            result.push(declare(union(crossJoins), withArray, "[" + "DX_" + axisName + "]"));
+            let expression = union(crossJoins);
+            if(axisName === "rows" && options.rowTake) {
+                expression = stringFormat(mdxSubset, expression, options.rowSkip > 0 ? options.rowSkip + 1 : 0, options.rowSkip > 0 ? options.rowTake : options.rowTake + 1);
+            }
+            if(axisName === "columns" && options.columnTake) {
+                expression = stringFormat(mdxSubset, expression, options.columnSkip > 0 ? options.columnSkip + 1 : 0, options.columnTake > 0 ? options.columnTake : options.columnTake + 1);
+            }
+
+            const axisSet = `[DX_${axisName}]`;
+            result.push(declare(expression, withArray, axisSet));
+
+            if(options.totalsOnly) {
+                result.push(declare(`COUNT(${axisSet})`, withArray, `[DX_${axisName}_count]`, "member"));
+            }
         }
 
         if(axisName === "columns" && cells.length && !options.skipValues) {
@@ -301,14 +315,27 @@ exports.XmlaStore = Class.inherit((function() {
         return from;
     }
 
-    function generateMdxCore(axisStrings, withArray, columns, rows, filters, slice, cubeName) {
+    function generateMdxCore(axisStrings, withArray, columns, rows, filters, slice, cubeName, options = {}) {
         var mdxString = "",
             withString = (withArray.length ? "with " + withArray.join(" ") : "") + " ";
 
         if(axisStrings.length) {
+            let select;
+            if(options.totalsOnly) {
+                const countMembers = [];
+                if(rows.length) {
+                    countMembers.push("[DX_rows_count]");
+                }
+                if(columns.length) {
+                    countMembers.push("[DX_columns_count]");
+                }
+                select = `{${countMembers.join(",")}} on columns`;
+            } else {
+                select = axisStrings.join(",");
+            }
             mdxString = withString + stringFormat(mdx,
                 generateFrom(generateAxisFieldsFilter(columns), generateAxisFieldsFilter(rows), generateAxisFieldsFilter(filters || []), cubeName),
-                slice.length ? stringFormat(mdxSlice, slice.join(",")) : "", axisStrings.join(","));
+                slice.length ? stringFormat(mdxSlice, slice.join(",")) : "", select);
         }
 
         return mdxString;
@@ -353,7 +380,7 @@ exports.XmlaStore = Class.inherit((function() {
             axisStrings.push(generateAxisMdx(options, "rows", dataFields, withArray, parseOptions));
         }
 
-        return generateMdxCore(axisStrings, withArray, columns, rows, options.filters, slice, cubeName);
+        return generateMdxCore(axisStrings, withArray, columns, rows, options.filters, slice, cubeName, options);
     }
 
     function createDrillDownAxisSlice(slice, fields, path) {
@@ -808,6 +835,49 @@ exports.XmlaStore = Class.inherit((function() {
         return execXMLA(storeOptions, stringFormat(execute, mdxString, storeOptions.catalog, getLocaleIdProperty()));
     }
 
+    function processTotalCount(data, options, totalCountXml) {
+        const axes = [];
+        const columnOptions = options.columns || [];
+        const rowOptions = options.rows || [];
+
+        if(columnOptions.length) {
+            axes.push({});
+        }
+        if(rowOptions.length) {
+            axes.push({});
+        }
+        const cells = parseCells(totalCountXml, [[{}], [{}, {}]], 1);
+        if(!columnOptions.length && rowOptions.length) {
+            data.rowCount = cells[0][0][0] - 1;
+        }
+        if(!rowOptions.length && columnOptions.length) {
+            data.columnCount = cells[0][0][0] - 1;
+        }
+
+        if(rowOptions.length && columnOptions.length) {
+            data.rowCount = cells[0][0][0] - 1;
+            data.columnCount = cells[1][0][0] - 1;
+        }
+
+        if(data.rowCount !== undefined) {
+            data.rows = [...Array(options.rowSkip)].concat(data.rows);
+            data.rows.length = data.rowCount;
+
+            for(let i = 0; i < data.rows.length; i++) {
+                data.rows[i] = data.rows[i] || {};
+            }
+        }
+
+        if(data.columnCount !== undefined) {
+            data.columns = [...Array(options.columnSkip)].concat(data.columns);
+            data.columns.length = data.columnCount;
+
+            for(let i = 0; i < data.columns.length; i++) {
+                data.columns[i] = data.columns[i] || {};
+            }
+        }
+    }
+
     /**
     * @name XmlaStore
     * @type object
@@ -896,25 +966,49 @@ exports.XmlaStore = Class.inherit((function() {
                 },
                 mdxString = generateMDX(options, storeOptions.cube, parseOptions);
 
-            if(mdxString) {
-                when(sendQuery(storeOptions, mdxString)).done(function(executeXml) {
-                    var error = checkError(executeXml);
-
-                    if(!error) {
-                        result.resolve(parseResult(executeXml, parseOptions));
-                    } else {
-                        result.reject(error);
-                    }
-                }).fail(result.reject);
-            } else {
-                result.resolve({
-                    columns: [],
-                    rows: [],
-                    values: [],
-                    grandTotalColumnIndex: 0,
-                    grandTotalRowIndex: 0
-                });
+            let rowCountMdx;
+            if(options.rowSkip || options.rowTake || options.columnTake || options.columnSkip) {
+                rowCountMdx = generateMDX(Object.assign({}, options, {
+                    totalsOnly: true,
+                    rowSkip: null,
+                    rowTake: null,
+                    columnSkip: null,
+                    columnTake: null
+                }), storeOptions.cube, {});
             }
+
+            const load = () => {
+                if(mdxString) {
+                    when(sendQuery(storeOptions, mdxString), rowCountMdx && sendQuery(storeOptions, rowCountMdx)).done(function(executeXml, rowCountXml) {
+                        var error = checkError(executeXml) || rowCountXml && checkError(rowCountXml);
+                        if(!error) {
+                            const response = parseResult(executeXml, parseOptions);
+                            if(rowCountXml) {
+                                processTotalCount(response, options, rowCountXml);
+                            }
+
+                            result.resolve(response);
+                        } else {
+                            result.reject(error);
+                        }
+                    }).fail(result.reject);
+                } else {
+                    result.resolve({
+                        columns: [],
+                        rows: [],
+                        values: [],
+                        grandTotalColumnIndex: 0,
+                        grandTotalRowIndex: 0
+                    });
+                }
+            };
+
+            if(options.delay) {
+                setTimeout(load, options.delay);
+            } else {
+                load();
+            }
+
             return result;
         },
         supportSorting: function() {
