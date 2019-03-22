@@ -1258,6 +1258,9 @@ var EditingController = modules.ViewController.inherit((function() {
                                 if(typeUtils.isDefined(key)) {
                                     editData.key = key;
                                 }
+                                if(data && typeUtils.isObject(data) && data !== params.data) {
+                                    editData.data = data;
+                                }
                                 changes.push({ type: "insert", data: data, index: 0 });
                             });
                         });
@@ -1266,6 +1269,9 @@ var EditingController = modules.ViewController.inherit((function() {
                         params = { newData: data, oldData: oldData, key: editData.key, cancel: false };
                         deferred = executeEditingAction("onRowUpdating", params, function() {
                             return store.update(editData.key, params.newData).done(function(data, key) {
+                                if(data && typeUtils.isObject(data) && data !== params.newData) {
+                                    editData.data = data;
+                                }
                                 changes.push({ type: "update", key: key, data: data });
                             });
                         });
