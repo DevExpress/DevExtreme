@@ -303,8 +303,8 @@ QUnit.test("Width: value to show short captions, fixed width tabs", function(ass
 
         assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), 200);
-        assert.ok(tabItems.eq(0).width() > 90);
-        assert.ok(tabItems.eq(1).width() > 90);
+        assert.ok(tabItems.eq(0).width() > 90, "90");
+        assert.ok(tabItems.eq(1).width() > 90, "90");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -333,8 +333,8 @@ QUnit.test("Width: value to show long captions, stretched tabs", function(assert
 
         assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), 200);
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 130);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 130, "130");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -363,8 +363,8 @@ QUnit.test("Width: value to show long captions, stretched tabs with navigation b
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), 100);
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 100);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 100, "100");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
     } finally {
         $container.remove();
@@ -392,8 +392,8 @@ QUnit.test("Width: default value, parent element width to show short captions, f
 
         assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() > 90);
-        assert.ok(tabItems.eq(1).width() > 90);
+        assert.ok(tabItems.eq(0).width() > 90, "90");
+        assert.ok(tabItems.eq(1).width() > 90, "90");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -421,8 +421,8 @@ QUnit.test("Width: default value, parent element width to show long captions, st
 
         assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 130);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 130, "130");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -450,8 +450,8 @@ QUnit.test("Width: default value, parent element width to show long captions, st
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 100);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 100, "100");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
     } finally {
         $container.remove();
@@ -480,8 +480,8 @@ QUnit.test("Width: 100%, parent element width to show short captions, fixed widt
 
         assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), "100%");
-        assert.ok(tabItems.eq(0).width() > 90);
-        assert.ok(tabItems.eq(1).width() > 90);
+        assert.ok(tabItems.eq(0).width() > 90, "90");
+        assert.ok(tabItems.eq(1).width() > 90, "90");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -510,8 +510,8 @@ QUnit.test("Width: 100%, parent element width to show long captions, stretched t
 
         assert.equal($element.outerWidth(), 200);
         assert.equal(instance.option("width"), "100%");
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 130);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 130, "130");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -540,8 +540,8 @@ QUnit.test("Width: 100%, parent element width to show long captions, stretched t
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), "100%");
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 100);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 100, "100");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
     } finally {
         $container.remove();
@@ -568,8 +568,8 @@ QUnit.test("Width: dimention change, items fit into container, large fixed -> sm
 
         assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() > 190);
-        assert.ok(tabItems.eq(1).width() > 190);
+        assert.ok(tabItems.eq(0).width() > 190, "190");
+        assert.ok(tabItems.eq(1).width() > 190, "190");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         $container.width(100);
@@ -577,8 +577,8 @@ QUnit.test("Width: dimention change, items fit into container, large fixed -> sm
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() > 45);
-        assert.ok(tabItems.eq(1).width() > 45);
+        assert.ok(tabItems.eq(0).width() > 45, "45");
+        assert.ok(tabItems.eq(1).width() > 45, "45");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -605,8 +605,8 @@ QUnit.test("Width: dimention change, items doesn't fit into container, small fix
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() > 45);
-        assert.ok(tabItems.eq(1).width() > 45);
+        assert.ok(tabItems.eq(0).width() > 45, "45");
+        assert.ok(tabItems.eq(1).width() > 45, "45");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         $container.width(400);
@@ -614,8 +614,8 @@ QUnit.test("Width: dimention change, items doesn't fit into container, small fix
 
         assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() > 190);
-        assert.ok(tabItems.eq(1).width() > 190);
+        assert.ok(tabItems.eq(0).width() > 190, "190");
+        assert.ok(tabItems.eq(1).width() > 190, "190");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -642,8 +642,8 @@ QUnit.test("Width: dimention change, items doesn't fit into container, small fix
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() > 45);
-        assert.ok(tabItems.eq(1).width() > 45);
+        assert.ok(tabItems.eq(0).width() > 45, "45");
+        assert.ok(tabItems.eq(1).width() > 45, "45");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         $container.width(170);
@@ -651,8 +651,8 @@ QUnit.test("Width: dimention change, items doesn't fit into container, small fix
 
         assert.equal($element.outerWidth(), 170);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 100);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 100, "100");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -679,8 +679,8 @@ QUnit.test("Width: dimention change, items fit into container, stretched tabs ->
 
         assert.equal($element.outerWidth(), 170);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 100);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 100, "70");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         $container.width(100);
@@ -688,8 +688,8 @@ QUnit.test("Width: dimention change, items fit into container, stretched tabs ->
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() > 45);
-        assert.ok(tabItems.eq(1).width() > 45);
+        assert.ok(tabItems.eq(0).width() > 45, "45");
+        assert.ok(tabItems.eq(1).width() > 45, "45");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -716,8 +716,8 @@ QUnit.test("Width: dimention change, items fit into container, stretched tabs ->
 
         assert.equal($element.outerWidth(), 170);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 100);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 100, "100");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         $container.width(400);
@@ -725,8 +725,8 @@ QUnit.test("Width: dimention change, items fit into container, stretched tabs ->
 
         assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() > 190);
-        assert.ok(tabItems.eq(1).width() > 190);
+        assert.ok(tabItems.eq(0).width() > 190, "190");
+        assert.ok(tabItems.eq(1).width() > 190, "190");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
@@ -753,8 +753,8 @@ QUnit.test("Width: dimention change, items fit into container, large fixed -> st
 
         assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() > 190);
-        assert.ok(tabItems.eq(1).width() > 190);
+        assert.ok(tabItems.eq(0).width() > 190, "190");
+        assert.ok(tabItems.eq(1).width() > 190, "190");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         $container.width(170);
@@ -762,22 +762,22 @@ QUnit.test("Width: dimention change, items fit into container, large fixed -> st
 
         assert.equal($element.outerWidth(), 170);
         assert.equal(instance.option("width"), undefined);
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 100);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 100, "100");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
     }
 });
 
-QUnit.test("Width: width changed after initialization, navigation buttons render", function(assert) {
+QUnit.test("Width: explicit value to show fixed tabs, resize to show stretched tabs", function(assert) {
     var $container = $("<div>");
 
     try {
         var $element = $("<div>").appendTo($container).dxTabs({
                 items: [
                     { text: "text 1" },
-                    { text: "long text example 2" }
+                    { text: "long text example" }
                 ],
                 scrollingEnabled: true,
                 showNavButtons: true,
@@ -792,23 +792,100 @@ QUnit.test("Width: width changed after initialization, navigation buttons render
 
         assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), 400);
-        assert.ok(tabItems.eq(0).width() > 190);
-        assert.ok(tabItems.eq(1).width() > 190);
+        assert.ok(tabItems.eq(0).width() > 190, "190");
+        assert.ok(tabItems.eq(1).width() > 190, "190");
+        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
+
+        instance.option("width", 200);
+
+        assert.equal($element.outerWidth(), 200);
+        assert.equal(instance.option("width"), 200);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 130, "130");
+        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
+
+    } finally {
+        $container.remove();
+    }
+});
+
+QUnit.test("Width: explicit value to show stretched tabs, resize to show navigation buttons", function(assert) {
+    var $container = $("<div>");
+
+    try {
+        var $element = $("<div>").appendTo($container).dxTabs({
+                items: [
+                    { text: "text 1" },
+                    { text: "long text example" }
+                ],
+                scrollingEnabled: true,
+                showNavButtons: true,
+                width: 200
+            }),
+            instance = $element.dxTabs("instance");
+
+        $container.appendTo("#qunit-fixture");
+        domUtils.triggerShownEvent($container);
+
+        var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
+
+        assert.equal($element.outerWidth(), 200);
+        assert.equal(instance.option("width"), 200);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 130, "130");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         instance.option("width", 100);
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), 100);
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 100);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 100, "100");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
     } finally {
         $container.remove();
     }
 });
 
-QUnit.test("Width: width changed after initialization, navigation buttons clean", function(assert) {
+QUnit.test("Width: explicit value to show stretched tabs, resize to show fixed tabs", function(assert) {
+    var $container = $("<div>");
+
+    try {
+        var $element = $("<div>").appendTo($container).dxTabs({
+                items: [
+                    { text: "text 1" },
+                    { text: "long text example" }
+                ],
+                scrollingEnabled: true,
+                showNavButtons: true,
+                width: 200
+            }),
+            instance = $element.dxTabs("instance");
+
+        $container.appendTo("#qunit-fixture");
+        domUtils.triggerShownEvent($container);
+
+        var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
+
+        assert.equal($element.outerWidth(), 200);
+        assert.equal(instance.option("width"), 200);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 130, "130");
+        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
+
+        instance.option("width", 400);
+
+        assert.equal($element.outerWidth(), 400);
+        assert.equal(instance.option("width"), 400);
+        assert.ok(tabItems.eq(0).width() > 190, "190");
+        assert.ok(tabItems.eq(1).width() > 190, "190");
+        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons are rendered");
+    } finally {
+        $container.remove();
+    }
+});
+
+QUnit.test("Width: explicit value to show navigation buttons, resize to show stretched tabs", function(assert) {
     var $container = $("<div>");
 
     try {
@@ -830,17 +907,55 @@ QUnit.test("Width: width changed after initialization, navigation buttons clean"
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), 100);
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 100);
-        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons aren't rendered");
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 100, "100");
+        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
+
+        instance.option("width", 200);
+
+        assert.equal($element.outerWidth(), 200);
+        assert.equal(instance.option("width"), 200);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 130, "130");
+        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
+    } finally {
+        $container.remove();
+    }
+});
+
+QUnit.test("Width: explicit value to show navigation buttons, resize to show fixed tabs", function(assert) {
+    var $container = $("<div>");
+
+    try {
+        var $element = $("<div>").appendTo($container).dxTabs({
+                items: [
+                    { text: "text 1" },
+                    { text: "long text example 2" }
+                ],
+                scrollingEnabled: true,
+                showNavButtons: true,
+                width: 100
+            }),
+            instance = $element.dxTabs("instance");
+
+        $container.appendTo("#qunit-fixture");
+        domUtils.triggerShownEvent($container);
+
+        var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
+
+        assert.equal($element.outerWidth(), 100);
+        assert.equal(instance.option("width"), 100);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 100, "100");
+        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
 
         instance.option("width", 400);
 
         assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), 400);
-        assert.ok(tabItems.eq(0).width() > 190);
-        assert.ok(tabItems.eq(1).width() > 190);
-        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons are rendered");
+        assert.ok(tabItems.eq(0).width() > 190, "190");
+        assert.ok(tabItems.eq(1).width() > 190, "190");
+        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
     } finally {
         $container.remove();
     }
@@ -870,8 +985,8 @@ QUnit.test("Width: value to show long captions, stretched tabs, visible: false->
         var tabItems = $element.find(toSelector(TABS_ITEM_CLASS));
 
         assert.equal(instance.option("width"), 200);
-        assert.ok(tabItems.eq(0).width() < 70);
-        assert.ok(tabItems.eq(1).width() > 100);
+        assert.ok(tabItems.eq(0).width() < 70, "70");
+        assert.ok(tabItems.eq(1).width() > 100, "100");
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0);
     } finally {
         $container.remove();
