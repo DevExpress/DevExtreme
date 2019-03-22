@@ -1,7 +1,6 @@
 import $ from "jquery";
 import domUtils from "core/utils/dom";
 import holdEvent from "events/hold";
-import config from "core/config";
 import pointerMock from "../../helpers/pointerMock.js";
 import { DataSource } from "data/data_source/data_source";
 
@@ -121,28 +120,6 @@ QUnit.test("disabled tab can't be selected by click", function(assert) {
     tabElements.eq(1).trigger("dxclick");
     assert.ok(!tabElements.eq(1).hasClass(TAB_SELECTED_CLASS));
     assert.equal(tabsInstance.option("selectedIndex"), 2);
-});
-
-QUnit.test("design mode", function(assert) {
-    config({ designMode: true });
-
-    try {
-        var tabsElement = $("#tabs").dxTabs({
-            items: [
-                { text: "0" },
-                { text: "1" },
-                { text: "2" }
-            ]
-        });
-
-        var tabsInstance = tabsElement.dxTabs("instance"),
-            $tabItems = $(tabsInstance._itemElements());
-
-        $tabItems.eq(1).click();
-        assert.ok(!$tabItems.eq(1).hasClass(TAB_SELECTED_CLASS));
-    } finally {
-        config({ designMode: false });
-    }
 });
 
 QUnit.test("regression: wrong selectedIndex in tab mouseup handler", function(assert) {
