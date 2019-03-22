@@ -122,8 +122,7 @@ _Range.prototype = {
         }
 
         if(Array.isArray(sort)) {
-            let cat = this.categories.map(item => item && item.valueOf());
-            this.categories = sort.filter(item => cat.indexOf(item && item.valueOf()) !== -1);
+            this.categories = sort.slice(0).concat(this.categories.filter(item => item && sort.indexOf(item.valueOf()) === -1));
         } else {
             let notAFunction = !_isFunction(sort);
 
