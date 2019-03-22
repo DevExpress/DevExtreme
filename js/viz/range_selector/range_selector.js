@@ -1064,7 +1064,7 @@ AxisWrapper.prototype = {
         var axis = this._axis;
         axis.updateOptions(prepareAxisOptions(options, isCompactMode, canvas.height, canvas.height / 2 - Math.ceil(options.width / 2)));
         axis.validate();
-        axis.setBusinessRange(businessRange, undefined, undefined, true);
+        axis.setBusinessRange(businessRange, true);
         if(seriesDataSource !== undefined && seriesDataSource.isShowChart()) {
             axis.setMarginOptions(seriesDataSource.getMarginOptions(canvas));
         }
