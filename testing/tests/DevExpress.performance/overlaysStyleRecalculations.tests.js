@@ -85,5 +85,5 @@ QUnit.performanceTest("dxPopup should be rendered with minimum count of relayout
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 12);
+    assert.measureStyleRecalculation(measureFunction, 13);
 });
