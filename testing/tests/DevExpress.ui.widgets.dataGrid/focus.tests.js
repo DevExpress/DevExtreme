@@ -4001,3 +4001,32 @@ QUnit.testInActiveWindow("DataGrid should restore focused row by index after row
     // assert
     assert.equal(this.option("focusedRowKey"), "Dan", "focusedRowKey was changed to the next row");
 });
+
+QUnit.testInActiveWindow("DataGrid should restore tabindex for the first cell if focusedRowIndex is out of visible page (T726042)", function(assert) {
+    // arrange
+    this.$element = () => $("#container");
+    this.options = {
+        height: 100,
+        dataSource: generateItems(10),
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 2
+        }
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    $(this.getCellElement(0, 0)).removeAttr("tabindex");
+    this.option("focusedRowIndex", 9);
+    this.gridView.getView("rowsView").renderFocusState();
+
+    // assert
+    assert.equal($(this.getCellElement(0, 0)).attr("tabindex"), 0, "tabindex");
+});
+
