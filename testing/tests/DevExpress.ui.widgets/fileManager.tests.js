@@ -86,7 +86,7 @@ window.createTestFileSystem = () => {
 };
 
 QUnit.testStart(() => {
-    var markup = '<div id="fileManager"></div>';
+    const markup = '<div id="fileManager"></div>';
     $("#qunit-fixture").html(markup);
 
     this.$element = $("#fileManager");

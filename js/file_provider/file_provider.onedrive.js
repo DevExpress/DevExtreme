@@ -175,7 +175,7 @@ class OneDriveFileProvider extends FileProvider {
     }
 
     _prepareItemRelativePath(path) {
-        return path === "" ? "" : ":/" + path + ":";
+        return path === "" ? "" : `:/${path}:`;
     }
 
 }

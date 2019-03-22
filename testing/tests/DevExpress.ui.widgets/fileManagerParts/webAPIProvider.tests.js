@@ -8,7 +8,7 @@ import { when } from "core/utils/deferred";
 const { test } = QUnit;
 
 const createFileManagerItem = (parentPath, name, isFolder, lastWriteTimeString, length) => {
-    var result = new FileManagerItem(parentPath, name, isFolder);
+    const result = new FileManagerItem(parentPath, name, isFolder);
     result.lastWriteTime = lastWriteTimeString; // TODO make conversion to 'Date' type
     result.length = length;
     return result;
@@ -60,7 +60,7 @@ const moduleConfig = {
 QUnit.module("Web API Provider", moduleConfig, () => {
 
     test("get folders test", (assert) => {
-        var done = assert.async();
+        const done = assert.async();
 
         ajaxMock.setup({
             url: this.options.loadUrl + "?parentId=Root%2FFiles",
@@ -75,7 +75,7 @@ QUnit.module("Web API Provider", moduleConfig, () => {
     });
 
     test("get files test", (assert) => {
-        var done = assert.async();
+        const done = assert.async();
 
         ajaxMock.setup({
             url: this.options.loadUrl + "?parentId=Root%2FFiles",
@@ -90,14 +90,14 @@ QUnit.module("Web API Provider", moduleConfig, () => {
     });
 
     test("create folder test", (assert) => {
-        var done = assert.async();
+        const done = assert.async();
 
         ajaxMock.setup({
             url: this.options.createFolderUrl + "?parentId=Root%2FFiles%2FDocuments&name=Test%201",
             responseText: ""
         });
 
-        var parentFolder = new FileManagerItem("Root/Files", "Documents");
+        const parentFolder = new FileManagerItem("Root/Files", "Documents");
         this.provider.createFolder(parentFolder, "Test 1")
             .done(result => {
                 assert.notOk(result, "folder created");
@@ -106,14 +106,14 @@ QUnit.module("Web API Provider", moduleConfig, () => {
     });
 
     test("rename item test", (assert) => {
-        var done = assert.async();
+        const done = assert.async();
 
         ajaxMock.setup({
             url: this.options.renameUrl + "?id=Root%2FFiles%2FDocuments&newName=Test%201",
             responseText: ""
         });
 
-        var item = new FileManagerItem("Root/Files", "Documents");
+        const item = new FileManagerItem("Root/Files", "Documents");
         this.provider.renameItem(item, "Test 1")
             .done(result => {
                 assert.notOk(result, "item renamed");
@@ -122,15 +122,15 @@ QUnit.module("Web API Provider", moduleConfig, () => {
     });
 
     test("delete item test", (assert) => {
-        var done = assert.async();
+        const done = assert.async();
 
         ajaxMock.setup({
             url: this.options.deleteUrl + "?id=Root%2FFiles%2FDocuments",
             responseText: ""
         });
 
-        var item = new FileManagerItem("Root/Files", "Documents");
-        var deferreds = this.provider.deleteItems([ item ]);
+        const item = new FileManagerItem("Root/Files", "Documents");
+        const deferreds = this.provider.deleteItems([ item ]);
         when.apply(null, deferreds)
             .done(result => {
                 assert.notOk(result, "item deleted");
@@ -139,16 +139,16 @@ QUnit.module("Web API Provider", moduleConfig, () => {
     });
 
     test("move item test", (assert) => {
-        var done = assert.async();
+        const done = assert.async();
 
         ajaxMock.setup({
             url: this.options.moveUrl + "?sourceId=Root%2FFiles%2FDocuments&destinationId=Root%2FFiles%2FImages%2FDocuments",
             responseText: ""
         });
 
-        var item = new FileManagerItem("Root/Files", "Documents");
-        var destinationFolder = new FileManagerItem("Root/Files", "Images");
-        var deferreds = this.provider.moveItems([ item ], destinationFolder);
+        const item = new FileManagerItem("Root/Files", "Documents");
+        const destinationFolder = new FileManagerItem("Root/Files", "Images");
+        const deferreds = this.provider.moveItems([ item ], destinationFolder);
         when.apply(null, deferreds)
             .done(result => {
                 assert.notOk(result, "item moved");
@@ -157,16 +157,16 @@ QUnit.module("Web API Provider", moduleConfig, () => {
     });
 
     test("copy item test", (assert) => {
-        var done = assert.async();
+        const done = assert.async();
 
         ajaxMock.setup({
             url: this.options.copyUrl + "?sourceId=Root%2FFiles%2FDocuments&destinationId=Root%2FFiles%2FImages",
             responseText: ""
         });
 
-        var item = new FileManagerItem("Root/Files", "Documents");
-        var destinationFolder = new FileManagerItem("Root/Files", "Images");
-        var deferreds = this.provider.copyItems([ item ], destinationFolder);
+        const item = new FileManagerItem("Root/Files", "Documents");
+        const destinationFolder = new FileManagerItem("Root/Files", "Images");
+        const deferreds = this.provider.copyItems([ item ], destinationFolder);
         when.apply(null, deferreds)
             .done(result => {
                 assert.notOk(result, "item copied");
