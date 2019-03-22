@@ -1136,7 +1136,7 @@ Axis.prototype = {
         return center;
     },
 
-    setBusinessRange(range, categoriesOrder, oppositeVisualRangeUpdateMode, axisReinitialized) {
+    setBusinessRange(range, axisReinitialized, oppositeVisualRangeUpdateMode) {
         const that = this;
         const options = that._options;
         const isDiscrete = options.type === constants.discrete;
@@ -1174,14 +1174,10 @@ Axis.prototype = {
         that._seriesData.minVisible = that._seriesData.minVisible === undefined ? that._seriesData.min : that._seriesData.minVisible;
         that._seriesData.maxVisible = that._seriesData.maxVisible === undefined ? that._seriesData.max : that._seriesData.maxVisible;
 
-        if(that.isArgumentAxis) {
-            that._seriesData.sortCategories(categoriesOrder);
-        } else {
-            if(options.showZero) {
-                that._seriesData.correctValueZeroLevel();
-            }
-            that._seriesData.sortCategories(that.getCategoriesSorter());
+        if(!that.isArgumentAxis && options.showZero) {
+            that._seriesData.correctValueZeroLevel();
         }
+        that._seriesData.sortCategories(that.getCategoriesSorter());
 
         that._breaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
 
