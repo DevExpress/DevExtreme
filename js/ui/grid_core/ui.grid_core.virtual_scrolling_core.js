@@ -636,7 +636,8 @@ exports.VirtualScrollController = Class.inherit((function() {
                     that._cache.push(cacheItem);
                 }
 
-                processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, lastCacheLength === 0, removeCacheItem);
+                var isDelayChanged = isVirtualMode(that) && lastCacheLength === 0;
+                processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, isDelayChanged, removeCacheItem);
                 that._delayDeferred = that.load().done(function() {
                     if(processDelayChanged(that, callBase)) {
                         that.load(); // needed for infinite scrolling when height is not defined

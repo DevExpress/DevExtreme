@@ -16,7 +16,7 @@ var createDataSource = function(data, storeOptions, dataSourceOptions) {
 };
 
 var setupModule = function() {
-    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail', 'editorFactory', 'focus', 'keyboardNavigation', 'summary']);
+    setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'headerFilter', 'masterDetail', 'editorFactory', 'focus', 'keyboardNavigation', 'summary', 'selection']);
 
     this.applyOptions = function(options) {
         $.extend(this.options, options);
@@ -4460,6 +4460,22 @@ QUnit.test("load several pages when pageSize less then viewportSize and preload 
     assert.deepEqual(changedArgs[3].changeType, 'append');
     assert.deepEqual(changedArgs[3].items[0].key, 12);
     assert.ok(this.dataController.isLoaded());
+});
+
+// T722298
+QUnit.test("selectAll should works correctly if item count less than pageSize", function(assert) {
+    this.options.scrolling.preloadEnabled = true;
+
+    this.dataController.pageSize(100);
+    this.dataController.refresh();
+
+    // act
+    this.selectAll();
+
+    // assert
+    assert.equal(this.getVisibleRows().length, 50, "visible row count");
+    assert.ok(this.totalCount(), 50, "total count");
+    assert.ok(this.selectionController.isSelectAll(), "select all state");
 });
 
 // T377458
