@@ -17,16 +17,11 @@
 
     .dx-filemanager-view-separator {
         min-width: 2px;
-        background-color: #dddddd;
     }
     .dx-filemanager-view-separator:hover {
         cursor: col-resize;
     }
     
-    .dx-treeview-item-without-checkbox.dx-state-focused > .dx-treeview-item {
-        background-color: #aad3f3;
-    }
-
     .dx-filemanager-editing-container {
         position: absolute;
         top: -5000px;
@@ -69,11 +64,6 @@
         height: 100%;
         overflow: hidden;
 
-        &.dx-filemanager-inactive-area .dx-filemanager-thumbnails-view-port .dx-filemanager-thumbnails-item.dx-filemanager-item-selected {
-            color: #333;
-            background-color: #E6E6E6;
-        }
-
         .dx-filemanager-thumbnails-view-port {
             width: 100%;
             height: 100%;
@@ -97,14 +87,6 @@
                 margin: 5px;
                 box-sizing: border-box;
 
-                &.dx-filemanager-item-selected {
-                    background-color: #337AB7;
-                    color: white;
-                }
-                &.dx-filemanager-item-focused {
-                    border-color: black;
-                }
-                
                 .dx-filemanager-thumbnails-item-content {
                     overflow: hidden;
                     padding: 13px 0 10px;
@@ -114,10 +96,6 @@
                         width: 48px;
                         height: 48px;
                         font-size: 48px;
-
-                        &.dx-icon-image {
-                            color: #DDDDDD;
-                        }
                     }
 
                     .dx-filemanager-thumbnails-item-spacer {
