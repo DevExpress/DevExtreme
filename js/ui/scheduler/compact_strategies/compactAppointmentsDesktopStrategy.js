@@ -10,8 +10,8 @@ import DropDownMenu from "../../drop_down_menu";
 import FunctionTemplate from "../../widget/function_template";
 import messageLocalization from "../../../localization/message";
 import { extendFromObject } from "../../../core/utils/extend";
-import deferredUtils from "../../../core/utils/deferred";
-const when = deferredUtils.when;
+// import deferredUtils from "../../../core/utils/deferred";
+// const when = deferredUtils.when;
 
 const OFFSET = 5,
     REMOVE_BUTTON_SIZE = 25;
@@ -49,20 +49,34 @@ export class CompactAppointmentsDesktopStrategy extends CompactAppointmentsStrat
             offset = this.instance.fire("getCellWidth") - options.buttonWidth - OFFSET;
         }
 
-        this._createAppointmentClickAction();
+        // this._createAppointmentClickAction();
 
-        this._createDropDownMenu({
-            $element: $menu,
-            items: options.items,
-            itemTemplate: options.itemTemplate,
-            buttonWidth: options.buttonWidth
-        }, options.isCompact);
+        // this._createDropDownMenu({
+        //     $element: $menu,
+        //     items: options.items,
+        //     itemTemplate: options.itemTemplate,
+        //     buttonWidth: options.buttonWidth
+        // }, options.isCompact);
 
-        when.apply(null, options.items.colors).done(function() {
-            this._paintMenuButton($menu, options.buttonColor, arguments);
-        }.bind(this));
+        this._initDynamicButtonTemplate(options.items.data.length, options.isCompact);
+        const buttonTemplate = this.instance._getAppointmentTemplate("appointmentCollectorTemplate");
 
-        this._applyInnerShadow($menu, options.buttonWidth);
+        const model = {
+            appointmentCount: options.items.data.length,
+            isCompact: options.isCompact
+        };
+
+        buttonTemplate.render({
+            model: model,
+            container: $menu
+        });
+
+
+        // when.apply(null, options.items.colors).done(function() {
+        //     this._paintMenuButton($menu, options.buttonColor, arguments);
+        // }.bind(this));
+
+        // this._applyInnerShadow($menu, options.buttonWidth);
         this.setPosition($menu, { top: options.coordinates.top, left: options.coordinates.left + offset });
 
         return $menu;
@@ -140,8 +154,8 @@ export class CompactAppointmentsDesktopStrategy extends CompactAppointmentsStrat
     }
 
     _createListButtonTemplate(template, items, isCompact) {
-        return new FunctionTemplate(function(options) {
-            var model = {
+        return new FunctionTemplate((options) => {
+            const model = {
                 appointmentCount: items.data.length,
                 isCompact: isCompact
             };

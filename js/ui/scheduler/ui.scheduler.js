@@ -906,7 +906,7 @@ const Scheduler = Widget.inherit({
 
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: "bottom",
-            _appointmentTooltipCloseButton: false,
+            _appointmentTooltipCloseButton: false, // TODO:
             _useAppointmentColorForTooltip: false,
             _appointmentTooltipOpenButtonText: messageLocalization.format("dxScheduler-openAppointment"),
             _appointmentTooltipOpenButtonIcon: "",
@@ -1095,7 +1095,7 @@ const Scheduler = Widget.inherit({
 
                     _appointmentTooltipOffset: { x: 0, y: 11 },
                     _appointmentTooltipButtonsPosition: "top",
-                    _appointmentTooltipCloseButton: true,
+                    _appointmentTooltipCloseButton: true, // TODO:
                     _useAppointmentColorForTooltip: true,
                     _appointmentTooltipOpenButtonText: null,
                     _appointmentTooltipOpenButtonIcon: "edit",
