@@ -497,15 +497,25 @@ var KeyboardNavigationController = core.ViewController.inherit({
             }
 
         } else {
-            if(isEditing || !this._allowEditingOnEnterKey()) {
-                this._handleEnterKeyEditingCell(eventArgs.originalEvent);
-                var direction = this._getEnterKeyDirection(eventArgs);
-                if(direction) {
-                    this._navigateNextCell(eventArgs.originalEvent, direction);
-                }
-            } else {
-                this._startEditing(eventArgs);
+            this._processEnterKeyForDataCell(eventArgs, isEditing);
+        }
+    },
+
+    _processEnterKeyForDataCell: function(eventArgs, isEditing) {
+        var direction;
+
+        if(isEditing || !this._allowEditingOnEnterKey()) {
+            this._handleEnterKeyEditingCell(eventArgs.originalEvent);
+
+            direction = this._getEnterKeyDirection(eventArgs);
+            if(direction === "next" || direction === "previous") {
+                this._targetCellTabHandler(eventArgs, direction);
+            } else if(direction === "upArrow" || direction === "downArrow") {
+                this._navigateNextCell(eventArgs.originalEvent, direction);
             }
+
+        } else {
+            this._startEditing(eventArgs);
         }
     },
 
@@ -517,7 +527,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             return isShift ? "upArrow" : "downArrow";
         }
         if(enterKeyDirection === "row") {
-            return isShift ? "previousInRow" : "nextInRow";
+            return isShift ? "previous" : "next";
         }
     },
 
