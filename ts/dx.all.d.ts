@@ -718,27 +718,21 @@ declare module DevExpress.data {
         /** @name DataSource.totalCount() */
         totalCount(): number;
     }
-
     /** @name EdmLiteral */
     export class EdmLiteral {
         constructor(value: string);
-
         /** @name EdmLiteral.valueOf() */
         valueOf(): string;
     }
-
     /** @name Guid */
     export class Guid {
         constructor();
         constructor(value: string);
-
         /** @name Guid.toString() */
         toString(): string;
-
         /** @name Guid.valueOf() */
         valueOf(): string;
     }
-
     /** @name LoadOptions */
     export interface LoadOptions {
         /** @name LoadOptions.customQueryParams */
@@ -928,68 +922,53 @@ declare module DevExpress.data {
         /** @name PivotGridDataSource.state(state) */
         state(state: any): void;
     }
-
     /** @name Query */
     export class Query {
         /** @name Query.aggregate(seed, step, finalize) */
         aggregate(seed: any, step: Function, finalize: Function): Promise<any> & JQueryPromise<any>;
         /** @name Query.aggregate(step) */
         aggregate(step: Function): Promise<any> & JQueryPromise<any>;
-
         /** @name Query.avg() */
         avg(): Promise<number> & JQueryPromise<number>;
         /** @name Query.avg(getter) */
         avg(getter: any): Promise<number> & JQueryPromise<number>;
-
         /** @name Query.count() */
         count(): Promise<number> & JQueryPromise<number>;
-
         /** @name Query.enumerate() */
         enumerate(): Promise<any> & JQueryPromise<any>;
-
         /** @name Query.filter(criteria) */
         filter(criteria: Array<any>): Query;
         /** @name Query.filter(predicate) */
         filter(predicate: Function): Query;
-
         /** @name Query.groupBy(getter) */
         groupBy(getter: any): Query;
-
         /** @name Query.max() */
         max(): Promise<number | Date> & JQueryPromise<number | Date>;
         /** @name Query.max(getter) */
         max(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
-
         /** @name Query.min() */
         min(): Promise<number | Date> & JQueryPromise<number | Date>;
         /** @name Query.min(getter) */
         min(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
-
         /** @name Query.select(getter) */
         select(getter: any): Query;
-
         /** @name Query.slice(skip, take) */
         slice(skip: number, take?: number): Query;
-
         /** @name Query.sortBy(getter) */
         sortBy(getter: any): Query;
         /** @name Query.sortBy(getter, desc) */
         sortBy(getter: any, desc: boolean): Query;
-
         /** @name Query.sum() */
         sum(): Promise<number> & JQueryPromise<number>;
         /** @name Query.sum(getter) */
         sum(getter: any): Promise<number> & JQueryPromise<number>;
-
         /** @name Query.thenBy(getter) */
         thenBy(getter: any): Query;
         /** @name Query.thenBy(getter, desc) */
         thenBy(getter: any, desc: boolean): Query;
-
         /** @name Query.toArray() */
         toArray(): Array<any>;
     }
-
     /** @name Store.Options */
     export interface StoreOptions<T = Store> {
         /** @name Store.Options.errorHandler */
@@ -1019,47 +998,35 @@ declare module DevExpress.data {
         /** @name Store.Options.onUpdating */
         onUpdating?: ((key: any | string | number, values: any) => any);
     }
-
     /** @name Store */
     export class Store {
         constructor(options?: StoreOptions)
-
         /** @name Store.byKey(key) */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
-
         /** @name Store.insert(values) */
         insert(values: any): Promise<any> & JQueryPromise<any>;
-
         /** @name Store.key() */
         key(): any;
-
         /** @name Store.keyOf(obj) */
         keyOf(obj: any): any;
-
         /** @name Store.load() */
         load(): Promise<any> & JQueryPromise<any>;
         /** @name Store.load(options) */
         load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
-
         /** @name EventsMixin.off(eventName) */
         off(eventName: string): this;
         /** @name EventsMixin.off(eventName, eventHandler) */
         off(eventName: string, eventHandler: Function): this;
-
         /** @name EventsMixin.on(eventName, eventHandler) */
         on(eventName: string, eventHandler: Function): this;
         /** @name EventsMixin.on(events) */
         on(events: any): this;
-
         /** @name Store.push(changes) */
         push(changes: Array<any>): void;
-
         /** @name Store.remove(key) */
         remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
-
         /** @name Store.totalCount(options) */
         totalCount(obj: { filter?: any, group?: any }): Promise<number> & JQueryPromise<number>;
-
         /** @name Store.update(key, values) */
         update(key: any | string | number, values: any): Promise<any> & JQueryPromise<any>;
     }
@@ -1159,13 +1126,10 @@ declare module DevExpress.data {
         /** @name PivotGridDataSource.Options.fields.wordWrapEnabled */
         wordWrapEnabled?: boolean;
     }
-
     /** @name Utils.base64_encode(input) */
     export function base64_encode(input: string | Array<number>): string;
-
     /** @name Utils.errorHandler */
     export function errorHandler(e: Error): void;
-
     /** @name Utils.query(array) */
     export function query(array: Array<any>): Query;
     /** @name Utils.query(url, queryOptions) */
@@ -1181,7 +1145,6 @@ declare module DevExpress.viz {
         /** @name BarGaugeBarInfo.value */
         value?: number;
     }
-
     /** @name BarGaugeLegendItem */
     export interface BarGaugeLegendItem {
         /** @name BarGaugeLegendItem.item */
@@ -1191,7 +1154,6 @@ declare module DevExpress.viz {
         /** @name BarGaugeLegendItem.visible */
         visible?: boolean;
     }
-
     /** @name BaseChart.Options */
     export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
         /** @name BaseChart.Options.adaptiveLayout */
@@ -1229,7 +1191,6 @@ declare module DevExpress.viz {
         /** @name BaseChart.Options.tooltip */
         tooltip?: BaseChartTooltip;
     }
-
     /** @name BaseChart.Options.adaptiveLayout */
     interface BaseChartAdaptiveLayout {
         /** @name BaseChart.Options.adaptiveLayout.height */
@@ -1239,13 +1200,11 @@ declare module DevExpress.viz {
         /** @name BaseChart.Options.adaptiveLayout.width */
         width?: number;
     }
-
     /** @name BaseChart.Options.legend */
     interface BaseChartLegend extends BaseLegend {
         /** @name BaseChart.Options.legend.customizeItems */
         customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
     }
-
     /** @name BaseChart.Options.tooltip */
     interface BaseChartTooltip extends BaseWidgetTooltip {
         /** @name BaseChart.Options.tooltip.argumentFormat */
@@ -1253,39 +1212,29 @@ declare module DevExpress.viz {
         /** @name BaseChart.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((pointInfo: any) => any);
     }
-
     /** @name BaseChart */
     export class BaseChart extends BaseWidget {
         constructor(element: Element, options?: BaseChartOptions)
         constructor(element: JQuery, options?: BaseChartOptions)
-
         /** @name BaseChart.clearSelection() */
         clearSelection(): void;
-
         /** @name BaseChart.getAllSeries() */
         getAllSeries(): Array<baseSeriesObject>;
-
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
-
         /** @name BaseChart.getSeriesByName(seriesName) */
         getSeriesByName(seriesName: any): chartSeriesObject;
-
         /** @name BaseChart.getSeriesByPos(seriesIndex) */
         getSeriesByPos(seriesIndex: number): chartSeriesObject;
-
         /** @name BaseChart.hideTooltip() */
         hideTooltip(): void;
-
         /** @name BaseChart.refresh() */
         refresh(): void;
-
         /** @name BaseWidget.render() */
         render(): void;
         /** @name BaseChart.render(renderOptions) */
         render(renderOptions: any): void;
     }
-
     /** @name BaseChartLegendItem */
     export interface BaseChartLegendItem {
         /** @name BaseChartLegendItem.series */
@@ -1295,7 +1244,6 @@ declare module DevExpress.viz {
         /** @name BaseChartLegendItem.visible */
         visible?: boolean;
     }
-
     /** @name BaseGauge.Options */
     export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
         /** @name BaseGauge.Options.animation */
@@ -1319,7 +1267,6 @@ declare module DevExpress.viz {
         /** @name BaseGauge.Options.value */
         value?: number;
     }
-
     /** @name BaseGauge.Options.animation */
     interface BaseGaugeAnimation {
         /** @name BaseGauge.Options.animation.duration */
@@ -1329,11 +1276,9 @@ declare module DevExpress.viz {
         /** @name BaseGauge.Options.animation.enabled */
         enabled?: boolean;
     }
-
     /** @name BaseGauge.Options.loadingIndicator */
     interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     }
-
     /** @name BaseGauge.Options.rangeContainer */
     interface BaseGaugeRangeContainer {
         /** @name BaseGauge.Options.rangeContainer.backgroundColor */
@@ -1347,7 +1292,6 @@ declare module DevExpress.viz {
         /** @name BaseGauge.Options.rangeContainer.ranges */
         ranges?: Array<{ color?: string, endValue?: number, startValue?: number }>;
     }
-
     /** @name BaseGauge.Options.scale */
     interface BaseGaugeScale {
         /** @name BaseGauge.Options.scale.allowDecimals */
@@ -1373,7 +1317,6 @@ declare module DevExpress.viz {
         /** @name BaseGauge.Options.scale.tickInterval */
         tickInterval?: number;
     }
-
     /** @name BaseGauge.Options.scale.label */
     interface BaseGaugeScaleLabel {
         /** @name BaseGauge.Options.scale.label.customizeText */
@@ -1389,29 +1332,24 @@ declare module DevExpress.viz {
         /** @name BaseGauge.Options.scale.label.visible */
         visible?: boolean;
     }
-
     /** @name BaseGauge.Options.tooltip */
     interface BaseGaugeTooltip extends BaseWidgetTooltip {
         /** @name BaseGauge.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((scaleValue: { value?: number, valueText?: string }) => any);
     }
-
     /** @name BaseGauge */
     export class BaseGauge extends BaseWidget {
         constructor(element: Element, options?: BaseGaugeOptions)
         constructor(element: JQuery, options?: BaseGaugeOptions)
-
         /** @name BaseGauge.subvalues() */
         subvalues(): Array<number>;
         /** @name BaseGauge.subvalues(subvalues) */
         subvalues(subvalues: Array<number>): void;
-
         /** @name BaseGauge.value() */
         value(): number;
         /** @name BaseGauge.value(value) */
         value(value: number): void;
     }
-
     /** @name BaseLegend */
     export interface BaseLegend {
         /** @name BaseLegend.backgroundColor */
@@ -1451,7 +1389,6 @@ declare module DevExpress.viz {
         /** @name BaseLegend.visible */
         visible?: boolean;
     }
-
     /** @name BaseSparkline.Options */
     export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptions<T> {
         /** @name BaseSparkline.Options.onTooltipHidden */
@@ -1461,7 +1398,6 @@ declare module DevExpress.viz {
         /** @name BaseSparkline.Options.tooltip */
         tooltip?: BaseSparklineTooltip;
     }
-
     /** @name BaseSparkline.Options.tooltip */
     interface BaseSparklineTooltip extends BaseWidgetTooltip {
         /** @name BaseSparkline.Options.tooltip.customizeTooltip */
@@ -1469,13 +1405,11 @@ declare module DevExpress.viz {
         /** @name BaseSparkline.Options.tooltip.enabled */
         enabled?: boolean;
     }
-
     /** @name BaseSparkline */
     export class BaseSparkline extends BaseWidget {
         constructor(element: Element, options?: BaseSparklineOptions)
         constructor(element: JQuery, options?: BaseSparklineOptions)
     }
-
     /** @name BaseWidget.Options */
     export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
         /** @name BaseWidget.Options.disabled */
@@ -1511,7 +1445,6 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.tooltip */
         tooltip?: BaseWidgetTooltip;
     }
-
     /** @name BaseWidget.Options.export */
     interface BaseWidgetExport {
         /** @name BaseWidget.Options.export.backgroundColor */
@@ -1529,7 +1462,6 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.export.proxyUrl */
         proxyUrl?: string;
     }
-
     /** @name BaseWidget.Options.loadingIndicator */
     interface BaseWidgetLoadingIndicator {
         /** @name BaseWidget.Options.loadingIndicator.backgroundColor */
@@ -1543,7 +1475,6 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.loadingIndicator.text */
         text?: string;
     }
-
     /** @name BaseWidget.Options.margin */
     interface BaseWidgetMargin {
         /** @name BaseWidget.Options.margin.bottom */
@@ -1555,7 +1486,6 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.margin.top */
         top?: number;
     }
-
     /** @name BaseWidget.Options.size */
     interface BaseWidgetSize {
         /** @name BaseWidget.Options.size.height */
@@ -1563,7 +1493,6 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.size.width */
         width?: number;
     }
-
     /** @name BaseWidget.Options.title */
     interface BaseWidgetTitle {
         /** @name BaseWidget.Options.title.font */
@@ -1581,7 +1510,6 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.title.verticalAlignment */
         verticalAlignment?: 'bottom' | 'top';
     }
-
     /** @name BaseWidget.Options.tooltip */
     interface BaseWidgetTooltip {
         /** @name BaseWidget.Options.tooltip.arrowLength */
@@ -1609,34 +1537,25 @@ declare module DevExpress.viz {
         /** @name BaseWidget.Options.tooltip.zIndex */
         zIndex?: number;
     }
-
     /** @name BaseWidget */
     export class BaseWidget extends DOMComponent {
         constructor(element: Element, options?: BaseWidgetOptions)
         constructor(element: JQuery, options?: BaseWidgetOptions)
-
         /** @name BaseWidget.exportTo(fileName, format) */
         exportTo(fileName: string, format: string): void;
-
         /** @name BaseWidget.getSize() */
         getSize(): BaseWidgetSize;
-
         /** @name BaseWidget.hideLoadingIndicator() */
         hideLoadingIndicator(): void;
-
         /** @name BaseWidget.print() */
         print(): void;
-
         /** @name BaseWidget.render() */
         render(): void;
-
         /** @name BaseWidget.showLoadingIndicator() */
         showLoadingIndicator(): void;
-
         /** @name BaseWidget.svg() */
         svg(): string;
     }
-
     /** @name ChartSeries */
     export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
         /** @name ChartSeries.name */
@@ -1646,7 +1565,6 @@ declare module DevExpress.viz {
         /** @name ChartSeries.type */
         type?: 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
     }
-
     /** @name CommonIndicator */
     export interface CommonIndicator {
         /** @name CommonIndicator.arrowLength */
@@ -1686,7 +1604,6 @@ declare module DevExpress.viz {
         /** @name CommonIndicator.width */
         width?: number;
     }
-
     /** @name Font */
     export interface Font {
         /** @name Font.color */
@@ -1700,7 +1617,6 @@ declare module DevExpress.viz {
         /** @name Font.weight */
         weight?: number;
     }
-
     /** @name FunnelLegendItem */
     export interface FunnelLegendItem {
         /** @name FunnelLegendItem.item */
@@ -1710,13 +1626,11 @@ declare module DevExpress.viz {
         /** @name FunnelLegendItem.visible */
         visible?: boolean;
     }
-
     /** @name GaugeIndicator */
     export interface GaugeIndicator extends CommonIndicator {
         /** @name GaugeIndicator.type */
         type?: 'circle' | 'rangeBar' | 'rectangle' | 'rectangleNeedle' | 'rhombus' | 'textCloud' | 'triangleMarker' | 'triangleNeedle' | 'twoColorNeedle';
     }
-
     /** @name MapLayer */
     export class MapLayer {
         /** @name MapLayer.elementType */
@@ -1727,39 +1641,30 @@ declare module DevExpress.viz {
         name: string;
         /** @name MapLayer.type */
         type: string;
-
         /** @name MapLayer.clearSelection() */
         clearSelection(): void;
-
         /** @name MapLayer.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
-
         /** @name MapLayer.getElements() */
         getElements(): Array<MapLayerElement>;
     }
-
     /** @name MapLayerElement */
     export class MapLayerElement {
         /** @name MapLayerElement.layer */
         layer: any;
-
         /** @name MapLayerElement.applySettings(settings) */
         applySettings(settings: any): void;
-
         /** @name MapLayerElement.attribute(name) */
         attribute(name: string): any;
         /** @name MapLayerElement.attribute(name, value) */
         attribute(name: string, value: any): void;
-
         /** @name MapLayerElement.coordinates() */
         coordinates(): any;
-
         /** @name MapLayerElement.selected() */
         selected(): boolean;
         /** @name MapLayerElement.selected(state) */
         selected(state: boolean): void;
     }
-
     /** @name PieChartLegendItem */
     export interface PieChartLegendItem {
         /** @name PieChartLegendItem.argument */
@@ -1773,7 +1678,6 @@ declare module DevExpress.viz {
         /** @name PieChartLegendItem.visible */
         visible?: boolean;
     }
-
     /** @name PieChartSeries */
     export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
         /** @name PieChartSeries.name */
@@ -1781,7 +1685,6 @@ declare module DevExpress.viz {
         /** @name PieChartSeries.tag */
         tag?: any;
     }
-
     /** @name PolarChartSeries */
     export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
         /** @name PolarChartSeries.name */
@@ -1791,7 +1694,6 @@ declare module DevExpress.viz {
         /** @name PolarChartSeries.type */
         type?: 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
     }
-
     /** @name ScaleBreak */
     export interface ScaleBreak {
         /** @name ScaleBreak.endValue */
@@ -1799,7 +1701,6 @@ declare module DevExpress.viz {
         /** @name ScaleBreak.startValue */
         startValue?: number | Date | string;
     }
-
     /** @name VectorMapLegendItem */
     export interface VectorMapLegendItem {
         /** @name VectorMapLegendItem.color */
@@ -1813,7 +1714,6 @@ declare module DevExpress.viz {
         /** @name VectorMapLegendItem.visible */
         visible?: boolean;
     }
-
     /** @name VizRange */
     export interface VizRange {
         /** @name VizRange.endValue */
@@ -1823,40 +1723,23 @@ declare module DevExpress.viz {
         /** @name VizRange.startValue */
         startValue?: number | Date | string;
     }
-
     /** @name VizTimeInterval */
-    export type VizTimeInterval =
-        number
-        | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }
-        | 'day'
-        | 'hour'
-        | 'millisecond'
-        | 'minute'
-        | 'month'
-        | 'quarter'
-        | 'second'
-        | 'week'
-        | 'year';
-
+    export type VizTimeInterval = number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
     /** @name baseLabelObject */
     export class baseLabelObject {
         /** @name baseLabelObject.getBoundingRect() */
         getBoundingRect(): any;
-
         /** @name baseLabelObject.hide() */
         hide(): void;
         /** @name baseLabelObject.hide(holdInvisible) */
         hide(holdInvisible: boolean): void;
-
         /** @name baseLabelObject.isVisible() */
         isVisible(): boolean;
-
         /** @name baseLabelObject.show() */
         show(): void;
         /** @name baseLabelObject.show(holdVisible) */
         show(holdVisible: boolean): void;
     }
-
     /** @name basePointObject */
     export class basePointObject {
         /** @name basePointObject.data */
@@ -1871,38 +1754,27 @@ declare module DevExpress.viz {
         series: any;
         /** @name basePointObject.tag */
         tag: any;
-
         /** @name basePointObject.clearHover() */
         clearHover(): void;
-
         /** @name basePointObject.clearSelection() */
         clearSelection(): void;
-
         /** @name basePointObject.getColor() */
         getColor(): string;
-
         /** @name basePointObject.getLabel() */
         getLabel(): baseLabelObject & Array<baseLabelObject>;
-
         /** @name basePointObject.hideTooltip() */
         hideTooltip(): void;
-
         /** @name basePointObject.hover() */
         hover(): void;
-
         /** @name basePointObject.isHovered() */
         isHovered(): boolean;
-
         /** @name basePointObject.isSelected() */
         isSelected(): boolean;
-
         /** @name basePointObject.select() */
         select(): void;
-
         /** @name basePointObject.showTooltip() */
         showTooltip(): void;
     }
-
     /** @name baseSeriesObject */
     export class baseSeriesObject {
         /** @name baseSeriesObject.fullState */
@@ -1913,56 +1785,39 @@ declare module DevExpress.viz {
         tag: any;
         /** @name baseSeriesObject.type */
         type: string;
-
         /** @name baseSeriesObject.clearHover() */
         clearHover(): void;
-
         /** @name baseSeriesObject.clearSelection() */
         clearSelection(): void;
-
         /** @name baseSeriesObject.deselectPoint(point) */
         deselectPoint(point: basePointObject): void;
-
         /** @name baseSeriesObject.getAllPoints() */
         getAllPoints(): Array<basePointObject>;
-
         /** @name baseSeriesObject.getColor() */
         getColor(): string;
-
         /** @name baseSeriesObject.getPointByPos(positionIndex) */
         getPointByPos(positionIndex: number): basePointObject;
-
         /** @name baseSeriesObject.getPointsByArg(pointArg) */
         getPointsByArg(pointArg: number | string | Date): Array<basePointObject>;
-
         /** @name baseSeriesObject.getVisiblePoints() */
         getVisiblePoints(): Array<basePointObject>;
-
         /** @name baseSeriesObject.hide() */
         hide(): void;
-
         /** @name baseSeriesObject.hover() */
         hover(): void;
-
         /** @name baseSeriesObject.isHovered() */
         isHovered(): boolean;
-
         /** @name baseSeriesObject.isSelected() */
         isSelected(): boolean;
-
         /** @name baseSeriesObject.isVisible() */
         isVisible(): boolean;
-
         /** @name baseSeriesObject.select() */
         select(): void;
-
         /** @name baseSeriesObject.selectPoint(point) */
         selectPoint(point: basePointObject): void;
-
         /** @name baseSeriesObject.show() */
         show(): void;
     }
-
     /** @name chartAxisObject */
     export class chartAxisObject {
         /** @name chartAxisObject.visualRange() */
@@ -1970,7 +1825,6 @@ declare module DevExpress.viz {
         /** @name chartAxisObject.visualRange(visualRange) */
         visualRange(visualRange: Array<number | string | Date> | VizRange): void;
     }
-
     /** @name chartPointAggregationInfoObject */
     export interface chartPointAggregationInfoObject {
         /** @name chartPointAggregationInfoObject.aggregationInterval */
@@ -1982,7 +1836,6 @@ declare module DevExpress.viz {
         /** @name chartPointAggregationInfoObject.intervalStart */
         intervalStart?: any;
     }
-
     /** @name chartPointObject */
     export class chartPointObject extends basePointObject {
         /** @name chartPointObject.aggregationInfo */
@@ -1999,11 +1852,9 @@ declare module DevExpress.viz {
         originalOpenValue: number | string;
         /** @name chartPointObject.size */
         size: number | string;
-
         /** @name chartPointObject.getBoundingRect() */
         getBoundingRect(): any;
     }
-
     /** @name chartSeriesObject */
     export class chartSeriesObject extends baseSeriesObject {
         /** @name chartSeriesObject.axis */
@@ -2014,14 +1865,11 @@ declare module DevExpress.viz {
         pane: string;
         /** @name chartSeriesObject.stack */
         stack: string;
-
         /** @name chartSeriesObject.getArgumentAxis() */
         getArgumentAxis(): chartAxisObject;
-
         /** @name chartSeriesObject.getValueAxis() */
         getValueAxis(): chartAxisObject;
     }
-
     /** @name circularRangeBar */
     export type circularRangeBar = CommonIndicator;
     /** @name circularRectangleNeedle */
@@ -2034,7 +1882,6 @@ declare module DevExpress.viz {
     export type circularTriangleNeedle = CommonIndicator;
     /** @name circularTwoColorNeedle */
     export type circularTwoColorNeedle = CommonIndicator;
-
     /** @name dxBarGauge.Options */
     export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
         /** @name dxBarGauge.Options.animation */
@@ -2074,7 +1921,6 @@ declare module DevExpress.viz {
         /** @name dxBarGauge.Options.values */
         values?: Array<number>;
     }
-
     /** @name dxBarGauge.Options.legend */
     export interface dxBarGaugeLegend extends BaseLegend {
         /** @name dxBarGauge.Options.legend.customizeHint */
@@ -2088,28 +1934,23 @@ declare module DevExpress.viz {
         /** @name dxBarGauge.Options.legend.visible */
         visible?: boolean;
     }
-
     /** @name dxBarGauge.Options.loadingIndicator */
     export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     }
-
     /** @name dxBarGauge.Options.tooltip */
     export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
         /** @name dxBarGauge.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((scaleValue: { value?: number, valueText?: string, index?: number }) => any);
     }
-
     /** @name dxBarGauge */
     export class dxBarGauge extends BaseWidget {
         constructor(element: Element, options?: dxBarGaugeOptions)
         constructor(element: JQuery, options?: dxBarGaugeOptions)
-
         /** @name dxBarGauge.values() */
         values(): Array<number>;
         /** @name dxBarGauge.values(newValues) */
         values(values: Array<number>): void;
     }
-
     /** @name dxBullet.Options */
     export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
         /** @name dxBullet.Options.color */
@@ -2131,13 +1972,11 @@ declare module DevExpress.viz {
         /** @name dxBullet.Options.value */
         value?: number;
     }
-
     /** @name dxBullet */
     export class dxBullet extends BaseSparkline {
         constructor(element: Element, options?: dxBulletOptions)
         constructor(element: JQuery, options?: dxBulletOptions)
     }
-
     /** @name dxChart.Options */
     export interface dxChartOptions extends BaseChartOptions<dxChart> {
         /** @name dxChart.Options.adjustOnZoom */
@@ -2226,7 +2065,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.zoomingMode */
         zoomingMode?: 'all' | 'mouse' | 'none' | 'touch';
     }
-
     /** @name dxChart.Options.argumentAxis */
     export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
         /** @name dxChart.Options.argumentAxis.aggregationGroupWidth */
@@ -2290,13 +2128,11 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.argumentAxis.workdaysOnly */
         workdaysOnly?: boolean;
     }
-
     /** @name dxChart.Options.argumentAxis.constantLineStyle */
     export interface dxChartArgumentAxisConstantLineStyle extends dxChartCommonAxisSettingsConstantLineStyle {
         /** @name dxChart.Options.argumentAxis.constantLineStyle.label */
         label?: dxChartArgumentAxisConstantLineStyleLabel;
     }
-
     /** @name dxChart.Options.argumentAxis.constantLineStyle.label */
     export interface dxChartArgumentAxisConstantLineStyleLabel extends dxChartCommonAxisSettingsConstantLineStyleLabel {
         /** @name dxChart.Options.argumentAxis.constantLineStyle.label.horizontalAlignment */
@@ -2304,7 +2140,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.argumentAxis.constantLineStyle.label.verticalAlignment */
         verticalAlignment?: 'bottom' | 'center' | 'top';
     }
-
     /** @name dxChart.Options.argumentAxis.constantLines */
     export interface dxChartArgumentAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
         /** @name dxChart.Options.argumentAxis.constantLines.displayBehindSeries */
@@ -2316,7 +2151,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.argumentAxis.constantLines.value */
         value?: number | Date | string;
     }
-
     /** @name dxChart.Options.argumentAxis.constantLines.label */
     export interface dxChartArgumentAxisConstantLinesLabel extends dxChartCommonAxisSettingsConstantLineStyleLabel {
         /** @name dxChart.Options.argumentAxis.constantLines.label.horizontalAlignment */
@@ -2326,7 +2160,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.argumentAxis.constantLines.label.verticalAlignment */
         verticalAlignment?: 'bottom' | 'center' | 'top';
     }
-
     /** @name dxChart.Options.argumentAxis.label */
     export interface dxChartArgumentAxisLabel extends dxChartCommonAxisSettingsLabel {
         /** @name dxChart.Options.argumentAxis.label.customizeHint */
@@ -2336,7 +2169,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.argumentAxis.label.format */
         format?: DevExpress.ui.format;
     }
-
     /** @name dxChart.Options.argumentAxis.strips */
     export interface dxChartArgumentAxisStrips extends dxChartCommonAxisSettingsStripStyle {
         /** @name dxChart.Options.argumentAxis.strips.color */
@@ -2348,19 +2180,16 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.argumentAxis.strips.startValue */
         startValue?: number | Date | string;
     }
-
     /** @name dxChart.Options.argumentAxis.strips.label */
     export interface dxChartArgumentAxisStripsLabel extends dxChartCommonAxisSettingsStripStyleLabel {
         /** @name dxChart.Options.argumentAxis.strips.label.text */
         text?: string;
     }
-
     /** @name dxChart.Options.argumentAxis.title */
     export interface dxChartArgumentAxisTitle extends dxChartCommonAxisSettingsTitle {
         /** @name dxChart.Options.argumentAxis.title.text */
         text?: string;
     }
-
     /** @name dxChart.Options.commonAxisSettings */
     export interface dxChartCommonAxisSettings {
         /** @name dxChart.Options.commonAxisSettings.allowDecimals */
@@ -2406,7 +2235,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.commonAxisSettings.width */
         width?: number;
     }
-
     /** @name dxChart.Options.commonAxisSettings.constantLineStyle */
     export interface dxChartCommonAxisSettingsConstantLineStyle {
         /** @name dxChart.Options.commonAxisSettings.constantLineStyle.color */
@@ -2422,7 +2250,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.commonAxisSettings.constantLineStyle.width */
         width?: number;
     }
-
     /** @name dxChart.Options.commonAxisSettings.constantLineStyle.label */
     export interface dxChartCommonAxisSettingsConstantLineStyleLabel {
         /** @name dxChart.Options.commonAxisSettings.constantLineStyle.label.font */
@@ -2432,7 +2259,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.commonAxisSettings.constantLineStyle.label.visible */
         visible?: boolean;
     }
-
     /** @name dxChart.Options.commonAxisSettings.label */
     export interface dxChartCommonAxisSettingsLabel {
         /** @name dxChart.Options.commonAxisSettings.label.alignment */
@@ -2452,7 +2278,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.commonAxisSettings.label.visible */
         visible?: boolean;
     }
-
     /** @name dxChart.Options.commonAxisSettings.stripStyle */
     export interface dxChartCommonAxisSettingsStripStyle {
         /** @name dxChart.Options.commonAxisSettings.stripStyle.label */
@@ -2462,7 +2287,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.commonAxisSettings.stripStyle.paddingTopBottom */
         paddingTopBottom?: number;
     }
-
     /** @name dxChart.Options.commonAxisSettings.stripStyle.label */
     export interface dxChartCommonAxisSettingsStripStyleLabel {
         /** @name dxChart.Options.commonAxisSettings.stripStyle.label.font */
@@ -2472,7 +2296,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.commonAxisSettings.stripStyle.label.verticalAlignment */
         verticalAlignment?: 'bottom' | 'center' | 'top';
     }
-
     /** @name dxChart.Options.commonAxisSettings.title */
     export interface dxChartCommonAxisSettingsTitle {
         /** @name dxChart.Options.commonAxisSettings.title.alignment */
@@ -2482,7 +2305,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.commonAxisSettings.title.margin */
         margin?: number;
     }
-
     /** @name dxChart.Options.commonPaneSettings */
     export interface dxChartCommonPaneSettings {
         /** @name dxChart.Options.commonPaneSettings.backgroundColor */
@@ -2490,7 +2312,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.commonPaneSettings.border */
         border?: { bottom?: boolean, color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', left?: boolean, opacity?: number, right?: boolean, top?: boolean, visible?: boolean, width?: number };
     }
-
     /** @name dxChart.Options.commonSeriesSettings */
     export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSeries {
         /** @name dxChart.Options.commonSeriesSettings.area */
@@ -2542,7 +2363,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.commonSeriesSettings.type */
         type?: 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
     }
-
     /** @name dxChart.Options.legend */
     export interface dxChartLegend extends BaseChartLegend {
         /** @name dxChart.Options.legend.customizeHint */
@@ -2554,13 +2374,11 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.legend.position */
         position?: 'inside' | 'outside';
     }
-
     /** @name dxChart.Options.panes */
     export interface dxChartPanes extends dxChartCommonPaneSettings {
         /** @name dxChart.Options.panes.name */
         name?: string;
     }
-
     /** @name dxChart.Options.tooltip */
     export interface dxChartTooltip extends BaseChartTooltip {
         /** @name dxChart.Options.tooltip.location */
@@ -2568,7 +2386,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.tooltip.shared */
         shared?: boolean;
     }
-
     /** @name dxChart.Options.valueAxis */
     export interface dxChartValueAxis extends dxChartCommonAxisSettings {
         /** @name dxChart.Options.valueAxis.autoBreaksEnabled */
@@ -2632,13 +2449,11 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.valueAxis.wholeRange */
         wholeRange?: VizRange | Array<number | string | Date>;
     }
-
     /** @name dxChart.Options.valueAxis.constantLineStyle */
     export interface dxChartValueAxisConstantLineStyle extends dxChartCommonAxisSettingsConstantLineStyle {
         /** @name dxChart.Options.valueAxis.constantLineStyle.label */
         label?: dxChartValueAxisConstantLineStyleLabel;
     }
-
     /** @name dxChart.Options.valueAxis.constantLineStyle.label */
     export interface dxChartValueAxisConstantLineStyleLabel extends dxChartCommonAxisSettingsConstantLineStyleLabel {
         /** @name dxChart.Options.valueAxis.constantLineStyle.label.horizontalAlignment */
@@ -2646,7 +2461,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.valueAxis.constantLineStyle.label.verticalAlignment */
         verticalAlignment?: 'bottom' | 'center' | 'top';
     }
-
     /** @name dxChart.Options.valueAxis.constantLines */
     export interface dxChartValueAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
         /** @name dxChart.Options.valueAxis.constantLines.displayBehindSeries */
@@ -2658,7 +2472,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.valueAxis.constantLines.value */
         value?: number | Date | string;
     }
-
     /** @name dxChart.Options.valueAxis.constantLines.label */
     export interface dxChartValueAxisConstantLinesLabel extends dxChartCommonAxisSettingsConstantLineStyleLabel {
         /** @name dxChart.Options.valueAxis.constantLines.label.horizontalAlignment */
@@ -2668,7 +2481,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.valueAxis.constantLines.label.verticalAlignment */
         verticalAlignment?: 'bottom' | 'center' | 'top';
     }
-
     /** @name dxChart.Options.valueAxis.label */
     export interface dxChartValueAxisLabel extends dxChartCommonAxisSettingsLabel {
         /** @name dxChart.Options.valueAxis.label.customizeHint */
@@ -2678,7 +2490,6 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.valueAxis.label.format */
         format?: DevExpress.ui.format;
     }
-
     /** @name dxChart.Options.valueAxis.strips */
     export interface dxChartValueAxisStrips extends dxChartCommonAxisSettingsStripStyle {
         /** @name dxChart.Options.valueAxis.strips.color */
@@ -2690,39 +2501,31 @@ declare module DevExpress.viz {
         /** @name dxChart.Options.valueAxis.strips.startValue */
         startValue?: number | Date | string;
     }
-
     /** @name dxChart.Options.valueAxis.strips.label */
     export interface dxChartValueAxisStripsLabel extends dxChartCommonAxisSettingsStripStyleLabel {
         /** @name dxChart.Options.valueAxis.strips.label.text */
         text?: string;
     }
-
     /** @name dxChart.Options.valueAxis.title */
     export interface dxChartValueAxisTitle extends dxChartCommonAxisSettingsTitle {
         /** @name dxChart.Options.valueAxis.title.text */
         text?: string;
     }
-
     /** @name dxChart */
     export class dxChart extends BaseChart {
         constructor(element: Element, options?: dxChartOptions)
         constructor(element: JQuery, options?: dxChartOptions)
-
         /** @name dxChart.getArgumentAxis() */
         getArgumentAxis(): chartAxisObject;
-
         /** @name dxChart.getValueAxis() */
         getValueAxis(): chartAxisObject;
         /** @name dxChart.getValueAxis(name) */
         getValueAxis(name: string): chartAxisObject;
-
         /** @name dxChart.resetVisualRange() */
         resetVisualRange(): void;
-
         /** @name dxChart.zoomArgument(startValue,endValue) */
         zoomArgument(startValue: number | Date | string, endValue: number | Date | string): void;
     }
-
     /** @name dxChartSeriesTypes */
     interface dxChartSeriesTypes {
         /** @name dxChartSeriesTypes.AreaSeries */
@@ -2774,7 +2577,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.StockSeries */
         StockSeries?: dxChartSeriesTypesStockSeries;
     }
-
     /** @name dxChartSeriesTypes.AreaSeries */
     interface dxChartSeriesTypesAreaSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.AreaSeries.aggregation */
@@ -2788,25 +2590,21 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.AreaSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.AreaSeries.aggregation */
     interface dxChartSeriesTypesAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.AreaSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.AreaSeries.label */
     interface dxChartSeriesTypesAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.AreaSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.AreaSeries.point */
     interface dxChartSeriesTypesAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /** @name dxChartSeriesTypes.AreaSeries.point.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.BarSeries */
     interface dxChartSeriesTypesBarSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.BarSeries.aggregation */
@@ -2818,19 +2616,16 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.BarSeries.selectionMode */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.BarSeries.aggregation */
     interface dxChartSeriesTypesBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.BarSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.BarSeries.label */
     interface dxChartSeriesTypesBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.BarSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.BubbleSeries */
     interface dxChartSeriesTypesBubbleSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.BubbleSeries.aggregation */
@@ -2842,19 +2637,16 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.BubbleSeries.selectionMode */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.BubbleSeries.aggregation */
     interface dxChartSeriesTypesBubbleSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.BubbleSeries.aggregation.method */
         method?: 'avg' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.BubbleSeries.label */
     interface dxChartSeriesTypesBubbleSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.BubbleSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.CandleStickSeries */
     interface dxChartSeriesTypesCandleStickSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.CandleStickSeries.aggregation */
@@ -2872,43 +2664,36 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.CandleStickSeries.selectionStyle */
         selectionStyle?: dxChartSeriesTypesCandleStickSeriesSelectionStyle;
     }
-
     /** @name dxChartSeriesTypes.CandleStickSeries.aggregation */
     interface dxChartSeriesTypesCandleStickSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.CandleStickSeries.aggregation.method */
         method?: 'ohlc' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.CandleStickSeries.hoverStyle */
     interface dxChartSeriesTypesCandleStickSeriesHoverStyle extends dxChartSeriesTypesCommonSeriesHoverStyle {
         /** @name dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching */
         hatching?: dxChartSeriesTypesCandleStickSeriesHoverStyleHatching;
     }
-
     /** @name dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching */
     interface dxChartSeriesTypesCandleStickSeriesHoverStyleHatching extends dxChartSeriesTypesCommonSeriesHoverStyleHatching {
         /** @name dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching.direction */
         direction?: 'left' | 'none' | 'right';
     }
-
     /** @name dxChartSeriesTypes.CandleStickSeries.label */
     interface dxChartSeriesTypesCandleStickSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.CandleStickSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.CandleStickSeries.selectionStyle */
     interface dxChartSeriesTypesCandleStickSeriesSelectionStyle extends dxChartSeriesTypesCommonSeriesSelectionStyle {
         /** @name dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching */
         hatching?: dxChartSeriesTypesCandleStickSeriesSelectionStyleHatching;
     }
-
     /** @name dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching */
     interface dxChartSeriesTypesCandleStickSeriesSelectionStyleHatching extends dxChartSeriesTypesCommonSeriesSelectionStyleHatching {
         /** @name dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching.direction */
         direction?: 'left' | 'none' | 'right';
     }
-
     /** @name dxChartSeriesTypes.CommonSeries */
     interface dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.CommonSeries.aggregation */
@@ -2986,7 +2771,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.CommonSeries.width */
         width?: number;
     }
-
     /** @name dxChartSeriesTypes.CommonSeries.aggregation */
     interface dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.CommonSeries.aggregation.calculate */
@@ -2996,7 +2780,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.CommonSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'ohlc' | 'range' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.CommonSeries.border */
     interface dxChartSeriesTypesCommonSeriesBorder {
         /** @name dxChartSeriesTypes.CommonSeries.border.color */
@@ -3008,7 +2791,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.CommonSeries.border.width */
         width?: number;
     }
-
     /** @name dxChartSeriesTypes.CommonSeries.hoverStyle */
     interface dxChartSeriesTypesCommonSeriesHoverStyle {
         /** @name dxChartSeriesTypes.CommonSeries.hoverStyle.border */
@@ -3022,7 +2804,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.CommonSeries.hoverStyle.width */
         width?: number;
     }
-
     /** @name dxChartSeriesTypes.CommonSeries.hoverStyle.border */
     interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
         /** @name dxChartSeriesTypes.CommonSeries.hoverStyle.border.color */
@@ -3034,7 +2815,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.CommonSeries.hoverStyle.border.width */
         width?: number;
     }
-
     /** @name dxChartSeriesTypes.CommonSeries.hoverStyle.hatching */
     interface dxChartSeriesTypesCommonSeriesHoverStyleHatching {
         /** @name dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.direction */
@@ -3046,7 +2826,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.width */
         width?: number;
     }
-
     /** @name dxChartSeriesTypes.CommonSeries.label */
     interface dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.CommonSeries.label.alignment */
@@ -3078,7 +2857,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.CommonSeries.label.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.CommonSeries.point */
     interface dxChartSeriesTypesCommonSeriesPoint {
         /** @name dxChartSeriesTypes.CommonSeries.point.border */
@@ -3102,7 +2880,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.CommonSeries.point.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.CommonSeries.selectionStyle */
     interface dxChartSeriesTypesCommonSeriesSelectionStyle {
         /** @name dxChartSeriesTypes.CommonSeries.selectionStyle.border */
@@ -3116,7 +2893,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.CommonSeries.selectionStyle.width */
         width?: number;
     }
-
     /** @name dxChartSeriesTypes.CommonSeries.selectionStyle.border */
     interface dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
         /** @name dxChartSeriesTypes.CommonSeries.selectionStyle.border.color */
@@ -3128,7 +2904,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.CommonSeries.selectionStyle.border.width */
         width?: number;
     }
-
     /** @name dxChartSeriesTypes.CommonSeries.selectionStyle.hatching */
     interface dxChartSeriesTypesCommonSeriesSelectionStyleHatching {
         /** @name dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.direction */
@@ -3140,7 +2915,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.width */
         width?: number;
     }
-
     /** @name dxChartSeriesTypes.FullStackedAreaSeries */
     interface dxChartSeriesTypesFullStackedAreaSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.FullStackedAreaSeries.aggregation */
@@ -3154,25 +2928,21 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.FullStackedAreaSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.FullStackedAreaSeries.aggregation */
     interface dxChartSeriesTypesFullStackedAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.FullStackedAreaSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.FullStackedAreaSeries.label */
     interface dxChartSeriesTypesFullStackedAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.FullStackedAreaSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.FullStackedAreaSeries.point */
     interface dxChartSeriesTypesFullStackedAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /** @name dxChartSeriesTypes.FullStackedAreaSeries.point.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.FullStackedBarSeries */
     interface dxChartSeriesTypesFullStackedBarSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.FullStackedBarSeries.aggregation */
@@ -3184,13 +2954,11 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.FullStackedBarSeries.selectionMode */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.FullStackedBarSeries.aggregation */
     interface dxChartSeriesTypesFullStackedBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.FullStackedBarSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.FullStackedBarSeries.label */
     interface dxChartSeriesTypesFullStackedBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.FullStackedBarSeries.label.customizeText */
@@ -3198,7 +2966,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.FullStackedBarSeries.label.position */
         position?: 'inside' | 'outside';
     }
-
     /** @name dxChartSeriesTypes.FullStackedLineSeries */
     interface dxChartSeriesTypesFullStackedLineSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.FullStackedLineSeries.aggregation */
@@ -3210,19 +2977,16 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.FullStackedLineSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.FullStackedLineSeries.aggregation */
     interface dxChartSeriesTypesFullStackedLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.FullStackedLineSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.FullStackedLineSeries.label */
     interface dxChartSeriesTypesFullStackedLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.FullStackedLineSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.FullStackedSplineAreaSeries */
     interface dxChartSeriesTypesFullStackedSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation */
@@ -3236,25 +3000,21 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.FullStackedSplineAreaSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation */
     interface dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.FullStackedSplineAreaSeries.label */
     interface dxChartSeriesTypesFullStackedSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.FullStackedSplineAreaSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.FullStackedSplineAreaSeries.point */
     interface dxChartSeriesTypesFullStackedSplineAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /** @name dxChartSeriesTypes.FullStackedSplineAreaSeries.point.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.FullStackedSplineSeries */
     interface dxChartSeriesTypesFullStackedSplineSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.FullStackedSplineSeries.aggregation */
@@ -3266,19 +3026,16 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.FullStackedSplineSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.FullStackedSplineSeries.aggregation */
     interface dxChartSeriesTypesFullStackedSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.FullStackedSplineSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.FullStackedSplineSeries.label */
     interface dxChartSeriesTypesFullStackedSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.FullStackedSplineSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.LineSeries */
     interface dxChartSeriesTypesLineSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.LineSeries.aggregation */
@@ -3290,19 +3047,16 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.LineSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.LineSeries.aggregation */
     interface dxChartSeriesTypesLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.LineSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.LineSeries.label */
     interface dxChartSeriesTypesLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.LineSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.RangeAreaSeries */
     interface dxChartSeriesTypesRangeAreaSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.RangeAreaSeries.aggregation */
@@ -3316,25 +3070,21 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.RangeAreaSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.RangeAreaSeries.aggregation */
     interface dxChartSeriesTypesRangeAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.RangeAreaSeries.aggregation.method */
         method?: 'range' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.RangeAreaSeries.label */
     interface dxChartSeriesTypesRangeAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.RangeAreaSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.RangeAreaSeries.point */
     interface dxChartSeriesTypesRangeAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /** @name dxChartSeriesTypes.RangeAreaSeries.point.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.RangeBarSeries */
     interface dxChartSeriesTypesRangeBarSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.RangeBarSeries.aggregation */
@@ -3346,19 +3096,16 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.RangeBarSeries.selectionMode */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.RangeBarSeries.aggregation */
     interface dxChartSeriesTypesRangeBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.RangeBarSeries.aggregation.method */
         method?: 'range' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.RangeBarSeries.label */
     interface dxChartSeriesTypesRangeBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.RangeBarSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.ScatterSeries */
     interface dxChartSeriesTypesScatterSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.ScatterSeries.aggregation */
@@ -3366,19 +3113,16 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.ScatterSeries.label */
         label?: dxChartSeriesTypesScatterSeriesLabel;
     }
-
     /** @name dxChartSeriesTypes.ScatterSeries.aggregation */
     interface dxChartSeriesTypesScatterSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.ScatterSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.ScatterSeries.label */
     interface dxChartSeriesTypesScatterSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.ScatterSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.SplineAreaSeries */
     interface dxChartSeriesTypesSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.SplineAreaSeries.aggregation */
@@ -3392,25 +3136,21 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.SplineAreaSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.SplineAreaSeries.aggregation */
     interface dxChartSeriesTypesSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.SplineAreaSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.SplineAreaSeries.label */
     interface dxChartSeriesTypesSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.SplineAreaSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.SplineAreaSeries.point */
     interface dxChartSeriesTypesSplineAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /** @name dxChartSeriesTypes.SplineAreaSeries.point.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.SplineSeries */
     interface dxChartSeriesTypesSplineSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.SplineSeries.aggregation */
@@ -3422,19 +3162,16 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.SplineSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.SplineSeries.aggregation */
     interface dxChartSeriesTypesSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.SplineSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.SplineSeries.label */
     interface dxChartSeriesTypesSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.SplineSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.StackedAreaSeries */
     interface dxChartSeriesTypesStackedAreaSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.StackedAreaSeries.aggregation */
@@ -3448,25 +3185,21 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.StackedAreaSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.StackedAreaSeries.aggregation */
     interface dxChartSeriesTypesStackedAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.StackedAreaSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.StackedAreaSeries.label */
     interface dxChartSeriesTypesStackedAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.StackedAreaSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.StackedAreaSeries.point */
     interface dxChartSeriesTypesStackedAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /** @name dxChartSeriesTypes.StackedAreaSeries.point.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.StackedBarSeries */
     interface dxChartSeriesTypesStackedBarSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.StackedBarSeries.aggregation */
@@ -3478,13 +3211,11 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.StackedBarSeries.selectionMode */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.StackedBarSeries.aggregation */
     interface dxChartSeriesTypesStackedBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.StackedBarSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.StackedBarSeries.label */
     interface dxChartSeriesTypesStackedBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.StackedBarSeries.label.customizeText */
@@ -3492,7 +3223,6 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.StackedBarSeries.label.position */
         position?: 'inside' | 'outside';
     }
-
     /** @name dxChartSeriesTypes.StackedLineSeries */
     interface dxChartSeriesTypesStackedLineSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.StackedLineSeries.aggregation */
@@ -3504,19 +3234,16 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.StackedLineSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.StackedLineSeries.aggregation */
     interface dxChartSeriesTypesStackedLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.StackedLineSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.StackedLineSeries.label */
     interface dxChartSeriesTypesStackedLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.StackedLineSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.StackedSplineAreaSeries */
     interface dxChartSeriesTypesStackedSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.StackedSplineAreaSeries.aggregation */
@@ -3530,25 +3257,21 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.StackedSplineAreaSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.StackedSplineAreaSeries.aggregation */
     interface dxChartSeriesTypesStackedSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.StackedSplineAreaSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.StackedSplineAreaSeries.label */
     interface dxChartSeriesTypesStackedSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.StackedSplineAreaSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.StackedSplineAreaSeries.point */
     interface dxChartSeriesTypesStackedSplineAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /** @name dxChartSeriesTypes.StackedSplineAreaSeries.point.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.StackedSplineSeries */
     interface dxChartSeriesTypesStackedSplineSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.StackedSplineSeries.aggregation */
@@ -3560,19 +3283,16 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.StackedSplineSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.StackedSplineSeries.aggregation */
     interface dxChartSeriesTypesStackedSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.StackedSplineSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.StackedSplineSeries.label */
     interface dxChartSeriesTypesStackedSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.StackedSplineSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.StepAreaSeries */
     interface dxChartSeriesTypesStepAreaSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.StepAreaSeries.aggregation */
@@ -3592,55 +3312,46 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.StepAreaSeries.selectionStyle */
         selectionStyle?: dxChartSeriesTypesStepAreaSeriesSelectionStyle;
     }
-
     /** @name dxChartSeriesTypes.StepAreaSeries.aggregation */
     interface dxChartSeriesTypesStepAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.StepAreaSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.StepAreaSeries.border */
     interface dxChartSeriesTypesStepAreaSeriesBorder extends dxChartSeriesTypesCommonSeriesBorder {
         /** @name dxChartSeriesTypes.StepAreaSeries.border.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.StepAreaSeries.hoverStyle */
     interface dxChartSeriesTypesStepAreaSeriesHoverStyle extends dxChartSeriesTypesCommonSeriesHoverStyle {
         /** @name dxChartSeriesTypes.StepAreaSeries.hoverStyle.border */
         border?: dxChartSeriesTypesStepAreaSeriesHoverStyleBorder;
     }
-
     /** @name dxChartSeriesTypes.StepAreaSeries.hoverStyle.border */
     interface dxChartSeriesTypesStepAreaSeriesHoverStyleBorder extends dxChartSeriesTypesCommonSeriesHoverStyleBorder {
         /** @name dxChartSeriesTypes.StepAreaSeries.hoverStyle.border.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.StepAreaSeries.label */
     interface dxChartSeriesTypesStepAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.StepAreaSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.StepAreaSeries.point */
     interface dxChartSeriesTypesStepAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /** @name dxChartSeriesTypes.StepAreaSeries.point.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.StepAreaSeries.selectionStyle */
     interface dxChartSeriesTypesStepAreaSeriesSelectionStyle extends dxChartSeriesTypesCommonSeriesSelectionStyle {
         /** @name dxChartSeriesTypes.StepAreaSeries.selectionStyle.border */
         border?: dxChartSeriesTypesStepAreaSeriesSelectionStyleBorder;
     }
-
     /** @name dxChartSeriesTypes.StepAreaSeries.selectionStyle.border */
     interface dxChartSeriesTypesStepAreaSeriesSelectionStyleBorder extends dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
         /** @name dxChartSeriesTypes.StepAreaSeries.selectionStyle.border.visible */
         visible?: boolean;
     }
-
     /** @name dxChartSeriesTypes.StepLineSeries */
     interface dxChartSeriesTypesStepLineSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.StepLineSeries.aggregation */
@@ -3652,19 +3363,16 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.StepLineSeries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.StepLineSeries.aggregation */
     interface dxChartSeriesTypesStepLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.StepLineSeries.aggregation.method */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.StepLineSeries.label */
     interface dxChartSeriesTypesStepLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.StepLineSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxChartSeriesTypes.StockSeries */
     interface dxChartSeriesTypesStockSeries extends dxChartSeriesTypesCommonSeries {
         /** @name dxChartSeriesTypes.StockSeries.aggregation */
@@ -3678,19 +3386,16 @@ declare module DevExpress.viz {
         /** @name dxChartSeriesTypes.StockSeries.selectionMode */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
-
     /** @name dxChartSeriesTypes.StockSeries.aggregation */
     interface dxChartSeriesTypesStockSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /** @name dxChartSeriesTypes.StockSeries.aggregation.method */
         method?: 'ohlc' | 'custom';
     }
-
     /** @name dxChartSeriesTypes.StockSeries.label */
     interface dxChartSeriesTypesStockSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /** @name dxChartSeriesTypes.StockSeries.label.customizeText */
         customizeText?: ((pointInfo: any) => string);
     }
-
     /** @name dxCircularGauge.Options */
     export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
         /** @name dxCircularGauge.Options.geometry */
@@ -3704,7 +3409,6 @@ declare module DevExpress.viz {
         /** @name dxCircularGauge.Options.valueIndicator */
         valueIndicator?: GaugeIndicator;
     }
-
     /** @name dxCircularGauge.Options.rangeContainer */
     export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
         /** @name dxCircularGauge.Options.rangeContainer.orientation */
@@ -3712,7 +3416,6 @@ declare module DevExpress.viz {
         /** @name dxCircularGauge.Options.rangeContainer.width */
         width?: number;
     }
-
     /** @name dxCircularGauge.Options.scale */
     export interface dxCircularGaugeScale extends BaseGaugeScale {
         /** @name dxCircularGauge.Options.scale.label */
@@ -3720,7 +3423,6 @@ declare module DevExpress.viz {
         /** @name dxCircularGauge.Options.scale.orientation */
         orientation?: 'center' | 'inside' | 'outside';
     }
-
     /** @name dxCircularGauge.Options.scale.label */
     export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
         /** @name dxCircularGauge.Options.scale.label.hideFirstOrLast */
@@ -3728,13 +3430,11 @@ declare module DevExpress.viz {
         /** @name dxCircularGauge.Options.scale.label.indentFromTick */
         indentFromTick?: number;
     }
-
     /** @name dxCircularGauge */
     export class dxCircularGauge extends BaseGauge {
         constructor(element: Element, options?: dxCircularGaugeOptions)
         constructor(element: JQuery, options?: dxCircularGaugeOptions)
     }
-
     /** @name dxFunnel.Options */
     export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
         /** @name dxFunnel.Options.adaptiveLayout */
@@ -3784,7 +3484,6 @@ declare module DevExpress.viz {
         /** @name dxFunnel.Options.valueField */
         valueField?: string;
     }
-
     /** @name dxFunnel.Options.legend */
     export interface dxFunnelLegend extends BaseLegend {
         /** @name dxFunnel.Options.legend.customizeHint */
@@ -3796,31 +3495,24 @@ declare module DevExpress.viz {
         /** @name dxFunnel.Options.legend.visible */
         visible?: boolean;
     }
-
     /** @name dxFunnel.Options.tooltip */
     export interface dxFunnelTooltip extends BaseWidgetTooltip {
         /** @name dxFunnel.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => any);
     }
-
     /** @name dxFunnel */
     export class dxFunnel extends BaseWidget {
         constructor(element: Element, options?: dxFunnelOptions)
         constructor(element: JQuery, options?: dxFunnelOptions)
-
         /** @name dxFunnel.clearSelection() */
         clearSelection(): void;
-
         /** @name dxFunnel.getAllItems() */
         getAllItems(): Array<dxFunnelItem>;
-
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
-
         /** @name dxFunnel.hideTooltip() */
         hideTooltip(): void;
     }
-
     /** @name dxFunnelItem */
     export class dxFunnelItem {
         /** @name dxFunnelItem.argument */
@@ -3831,26 +3523,19 @@ declare module DevExpress.viz {
         percent: number;
         /** @name dxFunnelItem.value */
         value: number;
-
         /** @name dxFunnelItem.getColor() */
         getColor(): string;
-
         /** @name dxFunnelItem.hover(state) */
         hover(state: boolean): void;
-
         /** @name dxFunnelItem.isHovered() */
         isHovered(): boolean;
-
         /** @name dxFunnelItem.isSelected() */
         isSelected(): boolean;
-
         /** @name dxFunnelItem.select(state) */
         select(state: boolean): void;
-
         /** @name dxFunnelItem.showTooltip() */
         showTooltip(): void;
     }
-
     /** @name dxLinearGauge.Options */
     export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
         /** @name dxLinearGauge.Options.geometry */
@@ -3864,7 +3549,6 @@ declare module DevExpress.viz {
         /** @name dxLinearGauge.Options.valueIndicator */
         valueIndicator?: GaugeIndicator;
     }
-
     /** @name dxLinearGauge.Options.rangeContainer */
     export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
         /** @name dxLinearGauge.Options.rangeContainer.horizontalOrientation */
@@ -3874,7 +3558,6 @@ declare module DevExpress.viz {
         /** @name dxLinearGauge.Options.rangeContainer.width */
         width?: { end?: number, start?: number } | number;
     }
-
     /** @name dxLinearGauge.Options.scale */
     export interface dxLinearGaugeScale extends BaseGaugeScale {
         /** @name dxLinearGauge.Options.scale.horizontalOrientation */
@@ -3886,19 +3569,16 @@ declare module DevExpress.viz {
         /** @name dxLinearGauge.Options.scale.verticalOrientation */
         verticalOrientation?: 'bottom' | 'center' | 'top';
     }
-
     /** @name dxLinearGauge.Options.scale.label */
     export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
         /** @name dxLinearGauge.Options.scale.label.indentFromTick */
         indentFromTick?: number;
     }
-
     /** @name dxLinearGauge */
     export class dxLinearGauge extends BaseGauge {
         constructor(element: Element, options?: dxLinearGaugeOptions)
         constructor(element: JQuery, options?: dxLinearGaugeOptions)
     }
-
     /** @name dxPieChart.Options */
     export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
         /** @name dxPieChart.Options.adaptiveLayout */
@@ -3932,13 +3612,11 @@ declare module DevExpress.viz {
         /** @name dxPieChart.Options.type */
         type?: 'donut' | 'doughnut' | 'pie';
     }
-
     /** @name dxPieChart.Options.adaptiveLayout */
     export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
         /** @name dxPieChart.Options.adaptiveLayout.keepLabels */
         keepLabels?: boolean;
     }
-
     /** @name dxPieChart.Options.legend */
     export interface dxPieChartLegend extends BaseChartLegend {
         /** @name dxPieChart.Options.legend.customizeHint */
@@ -3950,13 +3628,11 @@ declare module DevExpress.viz {
         /** @name dxPieChart.Options.legend.hoverMode */
         hoverMode?: 'none' | 'allArgumentPoints';
     }
-
     /** @name dxPieChart */
     export class dxPieChart extends BaseChart {
         constructor(element: Element, options?: dxPieChartOptions)
         constructor(element: JQuery, options?: dxPieChartOptions)
     }
-
     /** @name dxPieChartSeriesTypes */
     export interface dxPieChartSeriesTypes {
         /** @name dxPieChartSeriesTypes.CommonPieChartSeries */
@@ -3966,7 +3642,6 @@ declare module DevExpress.viz {
         /** @name dxPieChartSeriesTypes.PieSeries */
         PieSeries?: any;
     }
-
     /** @name dxPieChartSeriesTypes.CommonPieChartSeries */
     export interface dxPieChartSeriesTypesCommonPieChartSeries {
         /** @name dxPieChartSeriesTypes.CommonPieChartSeries.argumentField */
@@ -3998,7 +3673,6 @@ declare module DevExpress.viz {
         /** @name dxPieChartSeriesTypes.CommonPieChartSeries.valueField */
         valueField?: string;
     }
-
     /** @name dxPolarChart.Options */
     export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
         /** @name dxPolarChart.Options.adaptiveLayout */
@@ -4052,7 +3726,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.valueAxis */
         valueAxis?: dxPolarChartValueAxis;
     }
-
     /** @name dxPolarChart.Options.adaptiveLayout */
     export interface dxPolarChartAdaptiveLayout extends BaseChartAdaptiveLayout {
         /** @name dxPolarChart.Options.adaptiveLayout.height */
@@ -4060,7 +3733,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.adaptiveLayout.width */
         width?: number;
     }
-
     /** @name dxPolarChart.Options.argumentAxis */
     export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings {
         /** @name dxPolarChart.Options.argumentAxis.argumentType */
@@ -4096,7 +3768,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.argumentAxis.type */
         type?: 'continuous' | 'discrete' | 'logarithmic';
     }
-
     /** @name dxPolarChart.Options.argumentAxis.constantLines */
     export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
         /** @name dxPolarChart.Options.argumentAxis.constantLines.displayBehindSeries */
@@ -4108,13 +3779,11 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.argumentAxis.constantLines.value */
         value?: number | Date | string;
     }
-
     /** @name dxPolarChart.Options.argumentAxis.constantLines.label */
     export interface dxPolarChartArgumentAxisConstantLinesLabel extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
         /** @name dxPolarChart.Options.argumentAxis.constantLines.label.text */
         text?: string;
     }
-
     /** @name dxPolarChart.Options.argumentAxis.label */
     export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
         /** @name dxPolarChart.Options.argumentAxis.label.customizeHint */
@@ -4124,7 +3793,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.argumentAxis.label.format */
         format?: DevExpress.ui.format;
     }
-
     /** @name dxPolarChart.Options.argumentAxis.strips */
     export interface dxPolarChartArgumentAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
         /** @name dxPolarChart.Options.argumentAxis.strips.color */
@@ -4136,13 +3804,11 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.argumentAxis.strips.startValue */
         startValue?: number | Date | string;
     }
-
     /** @name dxPolarChart.Options.argumentAxis.strips.label */
     export interface dxPolarChartArgumentAxisStripsLabel extends dxPolarChartCommonAxisSettingsStripStyleLabel {
         /** @name dxPolarChart.Options.argumentAxis.strips.label.text */
         text?: string;
     }
-
     /** @name dxPolarChart.Options.commonAxisSettings */
     export interface dxPolarChartCommonAxisSettings {
         /** @name dxPolarChart.Options.commonAxisSettings.allowDecimals */
@@ -4176,7 +3842,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.commonAxisSettings.width */
         width?: number;
     }
-
     /** @name dxPolarChart.Options.commonAxisSettings.constantLineStyle */
     export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
         /** @name dxPolarChart.Options.commonAxisSettings.constantLineStyle.color */
@@ -4188,7 +3853,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.commonAxisSettings.constantLineStyle.width */
         width?: number;
     }
-
     /** @name dxPolarChart.Options.commonAxisSettings.constantLineStyle.label */
     export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
         /** @name dxPolarChart.Options.commonAxisSettings.constantLineStyle.label.font */
@@ -4196,7 +3860,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.commonAxisSettings.constantLineStyle.label.visible */
         visible?: boolean;
     }
-
     /** @name dxPolarChart.Options.commonAxisSettings.label */
     export interface dxPolarChartCommonAxisSettingsLabel {
         /** @name dxPolarChart.Options.commonAxisSettings.label.font */
@@ -4208,19 +3871,16 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.commonAxisSettings.label.visible */
         visible?: boolean;
     }
-
     /** @name dxPolarChart.Options.commonAxisSettings.stripStyle */
     export interface dxPolarChartCommonAxisSettingsStripStyle {
         /** @name dxPolarChart.Options.commonAxisSettings.stripStyle.label */
         label?: dxPolarChartCommonAxisSettingsStripStyleLabel;
     }
-
     /** @name dxPolarChart.Options.commonAxisSettings.stripStyle.label */
     export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
         /** @name dxPolarChart.Options.commonAxisSettings.stripStyle.label.font */
         font?: Font;
     }
-
     /** @name dxPolarChart.Options.commonAxisSettings.tick */
     export interface dxPolarChartCommonAxisSettingsTick {
         /** @name dxPolarChart.Options.commonAxisSettings.tick.color */
@@ -4234,7 +3894,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.commonAxisSettings.tick.width */
         width?: number;
     }
-
     /** @name dxPolarChart.Options.commonSeriesSettings */
     export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesTypesCommonPolarChartSeries {
         /** @name dxPolarChart.Options.commonSeriesSettings.area */
@@ -4250,7 +3909,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.commonSeriesSettings.type */
         type?: 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
     }
-
     /** @name dxPolarChart.Options.legend */
     export interface dxPolarChartLegend extends BaseChartLegend {
         /** @name dxPolarChart.Options.legend.customizeHint */
@@ -4260,13 +3918,11 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.legend.hoverMode */
         hoverMode?: 'excludePoints' | 'includePoints' | 'none';
     }
-
     /** @name dxPolarChart.Options.tooltip */
     export interface dxPolarChartTooltip extends BaseChartTooltip {
         /** @name dxPolarChart.Options.tooltip.shared */
         shared?: boolean;
     }
-
     /** @name dxPolarChart.Options.valueAxis */
     export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
         /** @name dxPolarChart.Options.valueAxis.axisDivisionFactor */
@@ -4304,7 +3960,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.valueAxis.valueType */
         valueType?: 'datetime' | 'numeric' | 'string';
     }
-
     /** @name dxPolarChart.Options.valueAxis.constantLines */
     export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
         /** @name dxPolarChart.Options.valueAxis.constantLines.displayBehindSeries */
@@ -4316,13 +3971,11 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.valueAxis.constantLines.value */
         value?: number | Date | string;
     }
-
     /** @name dxPolarChart.Options.valueAxis.constantLines.label */
     export interface dxPolarChartValueAxisConstantLinesLabel extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
         /** @name dxPolarChart.Options.valueAxis.constantLines.label.text */
         text?: string;
     }
-
     /** @name dxPolarChart.Options.valueAxis.label */
     export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
         /** @name dxPolarChart.Options.valueAxis.label.customizeHint */
@@ -4332,7 +3985,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.valueAxis.label.format */
         format?: DevExpress.ui.format;
     }
-
     /** @name dxPolarChart.Options.valueAxis.strips */
     export interface dxPolarChartValueAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
         /** @name dxPolarChart.Options.valueAxis.strips.color */
@@ -4344,25 +3996,21 @@ declare module DevExpress.viz {
         /** @name dxPolarChart.Options.valueAxis.strips.startValue */
         startValue?: number | Date | string;
     }
-
     /** @name dxPolarChart.Options.valueAxis.strips.label */
     export interface dxPolarChartValueAxisStripsLabel extends dxPolarChartCommonAxisSettingsStripStyleLabel {
         /** @name dxPolarChart.Options.valueAxis.strips.label.text */
         text?: string;
     }
-
     /** @name dxPolarChart.Options.valueAxis.tick */
     export interface dxPolarChartValueAxisTick extends dxPolarChartCommonAxisSettingsTick {
         /** @name dxPolarChart.Options.valueAxis.tick.visible */
         visible?: boolean;
     }
-
     /** @name dxPolarChart */
     export class dxPolarChart extends BaseChart {
         constructor(element: Element, options?: dxPolarChartOptions)
         constructor(element: JQuery, options?: dxPolarChartOptions)
     }
-
     /** @name dxPolarChartSeriesTypes */
     export interface dxPolarChartSeriesTypes {
         /** @name dxPolarChartSeriesTypes.CommonPolarChartSeries */
@@ -4378,7 +4026,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChartSeriesTypes.stackedbarpolarseries */
         stackedbarpolarseries?: dxPolarChartSeriesTypesStackedbarpolarseries;
     }
-
     /** @name dxPolarChartSeriesTypes.CommonPolarChartSeries */
     export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
         /** @name dxPolarChartSeriesTypes.CommonPolarChartSeries.argumentField */
@@ -4430,7 +4077,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChartSeriesTypes.CommonPolarChartSeries.width */
         width?: number;
     }
-
     /** @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label */
     export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
         /** @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat */
@@ -4456,7 +4102,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChartSeriesTypes.CommonPolarChartSeries.label.visible */
         visible?: boolean;
     }
-
     /** @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point */
     export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
         /** @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border */
@@ -4480,7 +4125,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChartSeriesTypes.CommonPolarChartSeries.point.visible */
         visible?: boolean;
     }
-
     /** @name dxPolarChartSeriesTypes.areapolarseries */
     export interface dxPolarChartSeriesTypesAreapolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
         /** @name dxPolarChartSeriesTypes.areapolarseries.hoverMode */
@@ -4490,13 +4134,11 @@ declare module DevExpress.viz {
         /** @name dxPolarChartSeriesTypes.areapolarseries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxPolarChartSeriesTypes.areapolarseries.point */
     export interface dxPolarChartSeriesTypesAreapolarseriesPoint extends dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
         /** @name dxPolarChartSeriesTypes.areapolarseries.point.visible */
         visible?: boolean;
     }
-
     /** @name dxPolarChartSeriesTypes.barpolarseries */
     export interface dxPolarChartSeriesTypesBarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
         /** @name dxPolarChartSeriesTypes.barpolarseries.hoverMode */
@@ -4504,7 +4146,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChartSeriesTypes.barpolarseries.selectionMode */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
-
     /** @name dxPolarChartSeriesTypes.linepolarseries */
     export interface dxPolarChartSeriesTypesLinepolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
         /** @name dxPolarChartSeriesTypes.linepolarseries.hoverMode */
@@ -4512,7 +4153,6 @@ declare module DevExpress.viz {
         /** @name dxPolarChartSeriesTypes.linepolarseries.selectionMode */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
-
     /** @name dxPolarChartSeriesTypes.stackedbarpolarseries */
     export interface dxPolarChartSeriesTypesStackedbarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
         /** @name dxPolarChartSeriesTypes.stackedbarpolarseries.hoverMode */
@@ -4522,13 +4162,11 @@ declare module DevExpress.viz {
         /** @name dxPolarChartSeriesTypes.stackedbarpolarseries.selectionMode */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
-
     /** @name dxPolarChartSeriesTypes.stackedbarpolarseries.label */
     export interface dxPolarChartSeriesTypesStackedbarpolarseriesLabel extends dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
         /** @name dxPolarChartSeriesTypes.stackedbarpolarseries.label.position */
         position?: 'inside' | 'outside';
     }
-
     /** @name dxRangeSelector.Options */
     export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
         /** @name dxRangeSelector.Options.background */
@@ -4562,27 +4200,21 @@ declare module DevExpress.viz {
         /** @name dxRangeSelector.Options.value */
         value?: Array<number | string | Date> | VizRange;
     }
-
     /** @name dxRangeSelector */
     export class dxRangeSelector extends BaseWidget {
         constructor(element: Element, options?: dxRangeSelectorOptions)
         constructor(element: JQuery, options?: dxRangeSelectorOptions)
-
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
-
         /** @name dxRangeSelector.getValue() */
         getValue(): Array<number | string | Date>;
-
         /** @name BaseWidget.render() */
         render(): void;
         /** @name dxRangeSelector.render(skipChartAnimation) */
         render(skipChartAnimation: boolean): void;
-
         /** @name dxRangeSelector.setValue(value) */
         setValue(value: Array<number | string | Date> | VizRange): void;
     }
-
     /** @name dxSankey.Options */
     export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
         /** @name dxSankey.Options.adaptiveLayout */
@@ -4622,7 +4254,6 @@ declare module DevExpress.viz {
         /** @name dxSankey.Options.weightField */
         weightField?: string;
     }
-
     /** @name dxSankey.Options.tooltip */
     export interface dxSankeyTooltip extends BaseWidgetTooltip {
         /** @name dxSankey.Options.tooltip.customizeLinkTooltip */
@@ -4632,25 +4263,19 @@ declare module DevExpress.viz {
         /** @name dxSankey.Options.tooltip.enabled */
         enabled?: boolean;
     }
-
     /** @name dxSankey */
     export class dxSankey extends BaseWidget {
         constructor(element: Element, options?: dxSankeyOptions)
         constructor(element: JQuery, options?: dxSankeyOptions)
-
         /** @name dxSankey.getAllLinks() */
         getAllLinks(): Array<dxSankeyLink>;
-
         /** @name dxSankey.getAllNodes() */
         getAllNodes(): Array<dxSankeyNode>;
-
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
-
         /** @name dxSankey.hideTooltip() */
         hideTooltip(): void;
     }
-
     /** @name dxSankeyConnectionInfoObject */
     export interface dxSankeyConnectionInfoObject {
         /** @name dxSankeyConnectionInfoObject.source */
@@ -4660,25 +4285,19 @@ declare module DevExpress.viz {
         /** @name dxSankeyConnectionInfoObject.weight */
         weight?: number;
     }
-
     /** @name dxSankeyLink */
     export class dxSankeyLink {
         /** @name dxSankeyLink.connection */
         connection: dxSankeyConnectionInfoObject;
-
         /** @name dxSankeyLink.hideTooltip() */
         hideTooltip(): void;
-
         /** @name dxSankeyLink.hover(state) */
         hover(state: boolean): void;
-
         /** @name dxSankeyLink.isHovered() */
         isHovered(): boolean;
-
         /** @name dxSankeyLink.showTooltip() */
         showTooltip(): void;
     }
-
     /** @name dxSankeyNode */
     export class dxSankeyNode {
         /** @name dxSankeyNode.linksIn */
@@ -4687,20 +4306,15 @@ declare module DevExpress.viz {
         linksOut: Array<any>;
         /** @name dxSankeyNode.title */
         title: string;
-
         /** @name dxSankeyNode.hideTooltip() */
         hideTooltip(): void;
-
         /** @name dxSankeyNode.hover(state) */
         hover(state: boolean): void;
-
         /** @name dxSankeyNode.isHovered() */
         isHovered(): boolean;
-
         /** @name dxSankeyNode.showTooltip() */
         showTooltip(): void;
     }
-
     /** @name dxSparkline.Options */
     export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
         /** @name dxSparkline.Options.argumentField */
@@ -4748,16 +4362,13 @@ declare module DevExpress.viz {
         /** @name dxSparkline.Options.winlossThreshold */
         winlossThreshold?: number;
     }
-
     /** @name dxSparkline */
     export class dxSparkline extends BaseSparkline {
         constructor(element: Element, options?: dxSparklineOptions)
         constructor(element: JQuery, options?: dxSparklineOptions)
-
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
     }
-
     /** @name dxTreeMap.Options */
     export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
         /** @name dxTreeMap.Options.childrenField */
@@ -4809,40 +4420,30 @@ declare module DevExpress.viz {
         /** @name dxTreeMap.Options.valueField */
         valueField?: string;
     }
-
     /** @name dxTreeMap.Options.tooltip */
     export interface dxTreeMapTooltip extends BaseWidgetTooltip {
         /** @name dxTreeMap.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }) => any);
     }
-
     /** @name dxTreeMap */
     export class dxTreeMap extends BaseWidget {
         constructor(element: Element, options?: dxTreeMapOptions)
         constructor(element: JQuery, options?: dxTreeMapOptions)
-
         /** @name dxTreeMap.clearSelection() */
         clearSelection(): void;
-
         /** @name dxTreeMap.drillUp() */
         drillUp(): void;
-
         /** @name dxTreeMap.getCurrentNode() */
         getCurrentNode(): dxTreeMapNode;
-
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
-
         /** @name dxTreeMap.getRootNode() */
         getRootNode(): dxTreeMapNode;
-
         /** @name dxTreeMap.hideTooltip() */
         hideTooltip(): void;
-
         /** @name dxTreeMap.resetDrillDown() */
         resetDrillDown(): void;
     }
-
     /** @name dxTreeMapNode */
     export class dxTreeMapNode {
         /** @name dxTreeMapNode.data */
@@ -4851,58 +4452,41 @@ declare module DevExpress.viz {
         index: number;
         /** @name dxTreeMapNode.level */
         level: number;
-
         /** @name dxTreeMapNode.customize(options) */
         customize(options: any): void;
-
         /** @name dxTreeMapNode.drillDown() */
         drillDown(): void;
-
         /** @name dxTreeMapNode.getAllChildren() */
         getAllChildren(): Array<dxTreeMapNode>;
-
         /** @name dxTreeMapNode.getAllNodes() */
         getAllNodes(): Array<dxTreeMapNode>;
-
         /** @name dxTreeMapNode.getChild(index) */
         getChild(index: number): dxTreeMapNode;
-
         /** @name dxTreeMapNode.getChildrenCount() */
         getChildrenCount(): number;
-
         /** @name dxTreeMapNode.getParent() */
         getParent(): dxTreeMapNode;
-
         /** @name dxTreeMapNode.isActive() */
         isActive(): boolean;
-
         /** @name dxTreeMapNode.isHovered() */
         isHovered(): boolean;
-
         /** @name dxTreeMapNode.isLeaf() */
         isLeaf(): boolean;
-
         /** @name dxTreeMapNode.isSelected() */
         isSelected(): boolean;
-
         /** @name dxTreeMapNode.label() */
         label(): string;
         /** @name dxTreeMapNode.label(label) */
         label(label: string): void;
-
         /** @name dxTreeMapNode.resetCustomization() */
         resetCustomization(): void;
-
         /** @name dxTreeMapNode.select(state) */
         select(state: boolean): void;
-
         /** @name dxTreeMapNode.showTooltip() */
         showTooltip(): void;
-
         /** @name dxTreeMapNode.value() */
         value(): number;
     }
-
     /** @name dxVectorMap.Options */
     export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
         /** @name dxVectorMap.Options.background */
@@ -4946,7 +4530,6 @@ declare module DevExpress.viz {
         /** @name dxVectorMap.Options.zoomingEnabled */
         zoomingEnabled?: boolean;
     }
-
     /** @name dxVectorMap.Options.legends */
     export interface dxVectorMapLegends extends BaseLegend {
         /** @name dxVectorMap.Options.legends.customizeHint */
@@ -4966,49 +4549,38 @@ declare module DevExpress.viz {
         /** @name dxVectorMap.Options.legends.source */
         source?: { grouping?: string, layer?: string };
     }
-
     /** @name dxVectorMap.Options.tooltip */
     export interface dxVectorMapTooltip extends BaseWidgetTooltip {
         /** @name dxVectorMap.Options.tooltip.customizeTooltip */
         customizeTooltip?: ((info: MapLayerElement) => any);
     }
-
     /** @name dxVectorMap */
     export class dxVectorMap extends BaseWidget {
         constructor(element: Element, options?: dxVectorMapOptions)
         constructor(element: JQuery, options?: dxVectorMapOptions)
-
         /** @name dxVectorMap.center() */
         center(): Array<number>;
         /** @name dxVectorMap.center(centerCoordinates) */
         center(centerCoordinates: Array<number>): void;
-
         /** @name dxVectorMap.clearSelection() */
         clearSelection(): void;
-
         /** @name dxVectorMap.convertCoordinates(x, y) */
         convertCoordinates(x: number, y: number): Array<number>;
-
         /** @name dxVectorMap.getLayerByIndex(index) */
         getLayerByIndex(index: number): MapLayer;
-
         /** @name dxVectorMap.getLayerByName(name) */
         getLayerByName(name: string): MapLayer;
-
         /** @name dxVectorMap.getLayers() */
         getLayers(): Array<MapLayer>;
-
         /** @name dxVectorMap.viewport() */
         viewport(): Array<number>;
         /** @name dxVectorMap.viewport(viewportCoordinates) */
         viewport(viewportCoordinates: Array<number>): void;
-
         /** @name dxVectorMap.zoomFactor() */
         zoomFactor(): number;
         /** @name dxVectorMap.zoomFactor(zoomFactor) */
         zoomFactor(zoomFactor: number): void;
     }
-
     /** @name linearCircle */
     export type linearCircle = CommonIndicator;
     /** @name linearRangeBar */
@@ -5021,36 +4593,27 @@ declare module DevExpress.viz {
     export type linearTextCloud = CommonIndicator;
     /** @name linearTriangleMarker */
     export type linearTriangleMarker = CommonIndicator;
-
     /** @name pieChartSeriesObject */
     export class pieChartSeriesObject extends baseSeriesObject {
     }
-
     /** @name piePointObject */
     export class piePointObject extends basePointObject {
         /** @name piePointObject.percent */
         percent: string | number | Date;
-
         /** @name piePointObject.hide() */
         hide(): void;
-
         /** @name basePointObject.hideTooltip() */
         hideTooltip(): void;
-
         /** @name piePointObject.isVisible() */
         isVisible(): boolean;
-
         /** @name piePointObject.show() */
         show(): void;
-
         /** @name basePointObject.showTooltip() */
         showTooltip(): void;
     }
-
     /** @name polarChartSeriesObject */
     export class polarChartSeriesObject extends baseSeriesObject {
     }
-
     /** @name polarPointObject */
     export class polarPointObject extends basePointObject {
     }
@@ -5067,7 +4630,6 @@ declare module DevExpress.ui {
         /** @name ColCountResponsible.xs */
         xs?: number;
     }
-
     /** @name CollectionWidget.Options */
     export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOptions<T> {
         /** @name CollectionWidget.Options.dataSource */
@@ -5101,16 +4663,13 @@ declare module DevExpress.ui {
         /** @name CollectionWidget.Options.selectedItems */
         selectedItems?: Array<any>;
     }
-
     /** @name CollectionWidget */
     export class CollectionWidget extends Widget {
         constructor(element: Element, options?: CollectionWidgetOptions)
         constructor(element: JQuery, options?: CollectionWidgetOptions)
-
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
     }
-
     /** @name CollectionWidgetItem */
     export interface CollectionWidgetItem {
         /** @name CollectionWidgetItem.disabled */
@@ -5124,7 +4683,6 @@ declare module DevExpress.ui {
         /** @name CollectionWidgetItem.visible */
         visible?: boolean;
     }
-
     /** @name CompareRule */
     export interface CompareRule {
         /** @name CompareRule.comparisonTarget */
@@ -5140,7 +4698,6 @@ declare module DevExpress.ui {
         /** @name CompareRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
-
     /** @name CustomRule */
     export interface CustomRule {
         /** @name CustomRule.ignoreEmptyValue */
@@ -5154,7 +4711,6 @@ declare module DevExpress.ui {
         /** @name CustomRule.validationCallback */
         validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any }) => boolean);
     }
-
     /** @name DataExpressionMixin.Options */
     export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
         /** @name DataExpressionMixin.Options.dataSource */
@@ -5170,15 +4726,12 @@ declare module DevExpress.ui {
         /** @name DataExpressionMixin.Options.valueExpr */
         valueExpr?: string | Function;
     }
-
     /** @name DataExpressionMixin */
     export class DataExpressionMixin {
         constructor(options?: DataExpressionMixinOptions)
-
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
     }
-
     /** @name Editor.Options */
     export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
         /** @name Editor.Options.isValid */
@@ -5194,16 +4747,13 @@ declare module DevExpress.ui {
         /** @name Editor.Options.value */
         value?: any;
     }
-
     /** @name Editor */
     export class Editor extends Widget {
         constructor(element: Element, options?: EditorOptions)
         constructor(element: JQuery, options?: EditorOptions)
-
         /** @name Editor.reset() */
         reset(): void;
     }
-
     /** @name EmailRule */
     export interface EmailRule {
         /** @name EmailRule.ignoreEmptyValue */
@@ -5554,7 +5104,6 @@ declare module DevExpress.ui {
         /** @name GridBase.updateDimensions() */
         updateDimensions(): void;
     }
-
     /** @name GridBaseColumn */
     export interface GridBaseColumn {
         /** @name GridBaseColumn.alignment */
@@ -5664,7 +5213,6 @@ declare module DevExpress.ui {
         /** @name GridBaseColumn.width */
         width?: number | string;
     }
-
     /** @name GridBaseColumnButton */
     export interface GridBaseColumnButton {
         /** @name GridBaseColumnButton.cssClass */
@@ -5676,7 +5224,6 @@ declare module DevExpress.ui {
         /** @name GridBaseColumnButton.text */
         text?: string;
     }
-
     /** @name HierarchicalCollectionWidget.Options */
     export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionWidget> extends CollectionWidgetOptions<T> {
         /** @name HierarchicalCollectionWidget.Options.disabledExpr */
@@ -5694,13 +5241,11 @@ declare module DevExpress.ui {
         /** @name HierarchicalCollectionWidget.Options.selectedExpr */
         selectedExpr?: string | Function;
     }
-
     /** @name HierarchicalCollectionWidget */
     export class HierarchicalCollectionWidget extends CollectionWidget {
         constructor(element: Element, options?: HierarchicalCollectionWidgetOptions)
         constructor(element: JQuery, options?: HierarchicalCollectionWidgetOptions)
     }
-
     /** @name MapLocation */
     export interface MapLocation {
         /** @name MapLocation.lat */
@@ -5708,7 +5253,6 @@ declare module DevExpress.ui {
         /** @name MapLocation.lng */
         lng?: number;
     }
-
     /** @name NumericRule */
     export interface NumericRule {
         /** @name NumericRule.ignoreEmptyValue */
@@ -5718,7 +5262,6 @@ declare module DevExpress.ui {
         /** @name NumericRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
-
     /** @name PatternRule */
     export interface PatternRule {
         /** @name PatternRule.ignoreEmptyValue */
@@ -5730,7 +5273,6 @@ declare module DevExpress.ui {
         /** @name PatternRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
-
     /** @name RangeRule */
     export interface RangeRule {
         /** @name RangeRule.ignoreEmptyValue */
@@ -5746,7 +5288,6 @@ declare module DevExpress.ui {
         /** @name RangeRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
-
     /** @name RequiredRule */
     export interface RequiredRule {
         /** @name RequiredRule.message */
@@ -5756,7 +5297,6 @@ declare module DevExpress.ui {
         /** @name RequiredRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
-
     /** @name SearchBoxMixin.Options */
     export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
         /** @name SearchBoxMixin.Options.searchEditorOptions */
@@ -5772,12 +5312,10 @@ declare module DevExpress.ui {
         /** @name SearchBoxMixin.Options.searchValue */
         searchValue?: string;
     }
-
     /** @name SearchBoxMixin */
     export class SearchBoxMixin {
         constructor(options?: SearchBoxMixinOptions)
     }
-
     /** @name StringLengthRule */
     export interface StringLengthRule {
         /** @name StringLengthRule.ignoreEmptyValue */
@@ -5793,7 +5331,6 @@ declare module DevExpress.ui {
         /** @name StringLengthRule.type */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email';
     }
-
     /** @name Widget.Options */
     export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
         /** @name Widget.Options.accessKey */
@@ -5815,22 +5352,17 @@ declare module DevExpress.ui {
         /** @name Widget.Options.visible */
         visible?: boolean;
     }
-
     /** @name Widget */
     export class Widget extends DOMComponent {
         constructor(element: Element, options?: WidgetOptions)
         constructor(element: JQuery, options?: WidgetOptions)
-
         /** @name Widget.focus() */
         focus(): void;
-
         /** @name Widget.registerKeyHandler(key, handler) */
         registerKeyHandler(key: string, handler: Function): void;
-
         /** @name Widget.repaint() */
         repaint(): void;
     }
-
     /** @name dxAccordion.Options */
     export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
         /** @name dxAccordion.Options.animationDuration */
@@ -5860,22 +5392,17 @@ declare module DevExpress.ui {
         /** @name dxAccordion.Options.selectedIndex */
         selectedIndex?: number;
     }
-
     /** @name dxAccordion */
     export class dxAccordion extends CollectionWidget {
         constructor(element: Element, options?: dxAccordionOptions)
         constructor(element: JQuery, options?: dxAccordionOptions)
-
         /** @name dxAccordion.collapseItem(index) */
         collapseItem(index: number): Promise<void> & JQueryPromise<void>;
-
         /** @name dxAccordion.expandItem(index) */
         expandItem(index: number): Promise<void> & JQueryPromise<void>;
-
         /** @name dxAccordion.updateDimensions() */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
     }
-
     /** @name dxAccordionItem */
     export interface dxAccordionItem extends CollectionWidgetItem {
         /** @name dxAccordionItem.icon */
@@ -5883,7 +5410,6 @@ declare module DevExpress.ui {
         /** @name dxAccordionItem.title */
         title?: string;
     }
-
     /** @name dxActionSheet.Options */
     export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
         /** @name dxActionSheet.Options.cancelText */
@@ -5905,22 +5431,17 @@ declare module DevExpress.ui {
         /** @name dxActionSheet.Options.visible */
         visible?: boolean;
     }
-
     /** @name dxActionSheet */
     export class dxActionSheet extends CollectionWidget {
         constructor(element: Element, options?: dxActionSheetOptions)
         constructor(element: JQuery, options?: dxActionSheetOptions)
-
         /** @name dxActionSheet.hide() */
         hide(): Promise<void> & JQueryPromise<void>;
-
         /** @name dxActionSheet.show() */
         show(): Promise<void> & JQueryPromise<void>;
-
         /** @name dxActionSheet.toggle(showing) */
         toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
-
     /** @name dxActionSheetItem */
     export interface dxActionSheetItem extends CollectionWidgetItem {
         /** @name dxActionSheetItem.icon */
@@ -5930,7 +5451,6 @@ declare module DevExpress.ui {
         /** @name dxActionSheetItem.type */
         type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
     }
-
     /** @name dxAutocomplete.Options */
     export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocomplete> {
         /** @name dxAutocomplete.Options.maxItemCount */
@@ -5942,13 +5462,11 @@ declare module DevExpress.ui {
         /** @name dxAutocomplete.Options.value */
         value?: string;
     }
-
     /** @name dxAutocomplete */
     export class dxAutocomplete extends dxDropDownList {
         constructor(element: Element, options?: dxAutocompleteOptions)
         constructor(element: JQuery, options?: dxAutocompleteOptions)
     }
-
     /** @name dxBox.Options */
     export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
         /** @name dxBox.Options.align */
@@ -5960,13 +5478,11 @@ declare module DevExpress.ui {
         /** @name dxBox.Options.items */
         items?: Array<string | dxBoxItem | any>;
     }
-
     /** @name dxBox */
     export class dxBox extends CollectionWidget {
         constructor(element: Element, options?: dxBoxOptions)
         constructor(element: JQuery, options?: dxBoxOptions)
     }
-
     /** @name dxBoxItem */
     export interface dxBoxItem extends CollectionWidgetItem {
         /** @name dxBoxItem.baseSize */
@@ -5978,7 +5494,6 @@ declare module DevExpress.ui {
         /** @name dxBoxItem.shrink */
         shrink?: number;
     }
-
     /** @name dxButton.Options */
     export interface dxButtonOptions extends WidgetOptions<dxButton> {
         /** @name dxButton.Options.activeStateEnabled */
@@ -6004,13 +5519,11 @@ declare module DevExpress.ui {
         /** @name dxButton.Options.validationGroup */
         validationGroup?: string;
     }
-
     /** @name dxButton */
     export class dxButton extends Widget {
         constructor(element: Element, options?: dxButtonOptions)
         constructor(element: JQuery, options?: dxButtonOptions)
     }
-
     /** @name dxButtonDefaultTemplate */
     export interface dxButtonDefaultTemplate {
         /** @name dxButtonDefaultTemplate.icon */
@@ -6018,7 +5531,6 @@ declare module DevExpress.ui {
         /** @name dxButtonDefaultTemplate.text */
         text?: string;
     }
-
     /** @name dxButtonGroup.Options */
     export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
         /** @name dxButtonGroup.Options.focusStateEnabled */
@@ -6042,13 +5554,11 @@ declare module DevExpress.ui {
         /** @name dxButtonGroup.Options.stylingMode */
         stylingMode?: 'text' | 'outlined' | 'contained';
     }
-
     /** @name dxButtonGroup */
     export class dxButtonGroup extends Widget {
         constructor(element: Element, options?: dxButtonGroupOptions)
         constructor(element: JQuery, options?: dxButtonGroupOptions)
     }
-
     /** @name dxButtonGroupItem */
     export interface dxButtonGroupItem extends CollectionWidgetItem {
         /** @name dxButtonGroupItem.hint */
@@ -6058,7 +5568,6 @@ declare module DevExpress.ui {
         /** @name dxButtonGroupItem.type */
         type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
     }
-
     /** @name dxCalendar.Options */
     export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
         /** @name dxCalendar.Options.activeStateEnabled */
@@ -6092,13 +5601,11 @@ declare module DevExpress.ui {
         /** @name dxCalendar.Options.zoomLevel */
         zoomLevel?: 'century' | 'decade' | 'month' | 'year';
     }
-
     /** @name dxCalendar */
     export class dxCalendar extends Editor {
         constructor(element: Element, options?: dxCalendarOptions)
         constructor(element: JQuery, options?: dxCalendarOptions)
     }
-
     /** @name dxCalendarCellTemplate */
     export interface dxCalendarCellTemplate {
         /** @name dxCalendarCellTemplate.date */
@@ -6108,7 +5615,6 @@ declare module DevExpress.ui {
         /** @name dxCalendarCellTemplate.view */
         view?: 'month' | 'year' | 'decade' | 'century';
     }
-
     /** @name dxCheckBox.Options */
     export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
         /** @name dxCheckBox.Options.activeStateEnabled */
@@ -6124,13 +5630,11 @@ declare module DevExpress.ui {
         /** @name dxCheckBox.Options.value */
         value?: boolean;
     }
-
     /** @name dxCheckBox */
     export class dxCheckBox extends Editor {
         constructor(element: Element, options?: dxCheckBoxOptions)
         constructor(element: JQuery, options?: dxCheckBoxOptions)
     }
-
     /** @name dxColorBox.Options */
     export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
         /** @name dxColorBox.Options.applyButtonText */
@@ -6148,13 +5652,11 @@ declare module DevExpress.ui {
         /** @name dxColorBox.Options.value */
         value?: string;
     }
-
     /** @name dxColorBox */
     export class dxColorBox extends dxDropDownEditor {
         constructor(element: Element, options?: dxColorBoxOptions)
         constructor(element: JQuery, options?: dxColorBoxOptions)
     }
-
     /** @name dxContextMenu.Options */
     export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
         /** @name dxContextMenu.Options.closeOnOutsideClick */
@@ -6182,22 +5684,17 @@ declare module DevExpress.ui {
         /** @name dxContextMenu.Options.visible */
         visible?: boolean;
     }
-
     /** @name dxContextMenu */
     export class dxContextMenu extends dxMenuBase {
         constructor(element: Element, options?: dxContextMenuOptions)
         constructor(element: JQuery, options?: dxContextMenuOptions)
-
         /** @name dxContextMenu.hide() */
         hide(): Promise<void> & JQueryPromise<void>;
-
         /** @name dxContextMenu.show() */
         show(): Promise<void> & JQueryPromise<void>;
-
         /** @name dxContextMenu.toggle(showing) */
         toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
-
     /** @name dxContextMenuItem */
     export interface dxContextMenuItem extends dxMenuBaseItem {
         /** @name dxContextMenuItem.items */
@@ -6342,7 +5839,6 @@ declare module DevExpress.ui {
         /** @name dxDataGrid.totalCount() */
         totalCount(): number;
     }
-
     /** @name dxDataGridColumn */
     export interface dxDataGridColumn extends GridBaseColumn {
         /** @name dxDataGridColumn.allowExporting */
@@ -6366,7 +5862,6 @@ declare module DevExpress.ui {
         /** @name dxDataGridColumn.type */
         type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
     }
-
     /** @name dxDataGridColumnButton */
     export interface dxDataGridColumnButton extends GridBaseColumnButton {
         /** @name dxDataGridColumnButton.name */
@@ -6378,7 +5873,6 @@ declare module DevExpress.ui {
         /** @name dxDataGridColumnButton.visible */
         visible?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => boolean);
     }
-
     /** @name dxDataGridRowObject */
     export interface dxDataGridRowObject {
         /** @name dxDataGridRowObject.data */
@@ -6541,7 +6035,7 @@ declare module DevExpress.ui {
         /** @name dxDropDownButton.Options.dataSource */
         dataSource?: string | Array<CollectionWidgetItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxDropDownButton.Options.deferRendering */
-        deferRendering?: boolean;
+        deferRendering?: any;
         /** @name dxDropDownButton.Options.displayExpr */
         displayExpr?: string | ((itemData: any) => any);
         /** @name dxDropDownButton.Options.dropDownOptions */
@@ -6574,7 +6068,6 @@ declare module DevExpress.ui {
         /** @name dxDropDownButton.toggle(visibility) */
         toggle(visibility: boolean): Promise<void> & JQueryPromise<void>;
     }
-
     /** @name dxDropDownEditor.Options */
     export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
         /** @name dxDropDownEditor.Options.acceptCustomValue */
@@ -6600,28 +6093,21 @@ declare module DevExpress.ui {
         /** @name dxDropDownEditor.Options.value */
         value?: any;
     }
-
     /** @name dxDropDownEditor */
     export class dxDropDownEditor extends dxTextBox {
         constructor(element: Element, options?: dxDropDownEditorOptions)
         constructor(element: JQuery, options?: dxDropDownEditorOptions)
-
         /** @name dxDropDownEditor.close() */
         close(): void;
-
         /** @name dxDropDownEditor.content() */
         content(): DevExpress.core.dxElement;
-
         /** @name dxDropDownEditor.field() */
         field(): DevExpress.core.dxElement;
-
         /** @name dxDropDownEditor.open() */
         open(): void;
-
         /** @name dxDropDownEditor.reset() */
         reset(): void;
     }
-
     /** @name dxDropDownList.Options */
     export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressionMixinOptions<T>, dxDropDownEditorOptions<T> {
         /** @name dxDropDownList.Options.displayValue */
@@ -6657,12 +6143,10 @@ declare module DevExpress.ui {
         /** @name dxDropDownList.Options.valueChangeEvent */
         valueChangeEvent?: string;
     }
-
     /** @name dxDropDownList */
     export class dxDropDownList extends dxDropDownEditor {
         constructor(element: Element, options?: dxDropDownListOptions)
         constructor(element: JQuery, options?: dxDropDownListOptions)
-
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
     }
@@ -6806,7 +6290,6 @@ declare module DevExpress.ui {
         /** @name dxFilterBuilder.getFilterExpression() */
         getFilterExpression(): string | Array<any> | Function;
     }
-
     /** @name dxFilterBuilderCustomOperation */
     export interface dxFilterBuilderCustomOperation {
         /** @name dxFilterBuilderCustomOperation.calculateFilterExpression */
@@ -6826,7 +6309,6 @@ declare module DevExpress.ui {
         /** @name dxFilterBuilderCustomOperation.name */
         name?: string;
     }
-
     /** @name dxFilterBuilderField */
     export interface dxFilterBuilderField {
         /** @name dxFilterBuilderField.calculateFilterExpression */
@@ -6926,7 +6408,6 @@ declare module DevExpress.ui {
         /** @name dxForm.validate() */
         validate(): dxValidationGroupResult;
     }
-
     /** @name dxFormButtonItem */
     export interface dxFormButtonItem {
         /** @deprecated */
@@ -6951,7 +6432,6 @@ declare module DevExpress.ui {
         /** @name dxFormButtonItem.visibleIndex */
         visibleIndex?: number;
     }
-
     /** @name dxFormEmptyItem */
     export interface dxFormEmptyItem {
         /** @name dxFormEmptyItem.colSpan */
@@ -6967,7 +6447,6 @@ declare module DevExpress.ui {
         /** @name dxFormEmptyItem.visibleIndex */
         visibleIndex?: number;
     }
-
     /** @name dxFormGroupItem */
     export interface dxFormGroupItem {
         /** @name dxFormGroupItem.alignItemLabels */
@@ -6995,7 +6474,6 @@ declare module DevExpress.ui {
         /** @name dxFormGroupItem.visibleIndex */
         visibleIndex?: number;
     }
-
     /** @name dxFormSimpleItem */
     export interface dxFormSimpleItem {
         /** @name dxFormSimpleItem.colSpan */
@@ -7027,7 +6505,6 @@ declare module DevExpress.ui {
         /** @name dxFormSimpleItem.visibleIndex */
         visibleIndex?: number;
     }
-
     /** @name dxFormTabbedItem */
     export interface dxFormTabbedItem {
         /** @name dxFormTabbedItem.colSpan */
@@ -7160,7 +6637,6 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditor.undo() */
         undo(): void;
     }
-
     /** @name dxHtmlEditorResizing */
     export interface dxHtmlEditorResizing {
         /** @name dxHtmlEditorResizing.allowedTargets */
@@ -7168,7 +6644,6 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorResizing.enabled */
         enabled?: boolean;
     }
-
     /** @name dxHtmlEditorToolbar */
     export interface dxHtmlEditorToolbar {
         /** @name dxHtmlEditorToolbar.container */
@@ -7176,7 +6651,6 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorToolbar.items */
         items?: Array<dxHtmlEditorToolbarItem | string>;
     }
-
     /** @name dxHtmlEditorToolbarItem */
     export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
         /** @name dxHtmlEditorToolbarItem.formatName */
@@ -7186,7 +6660,6 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorToolbarItem.location */
         location?: 'after' | 'before' | 'center';
     }
-
     /** @name dxHtmlEditorVariables */
     export interface dxHtmlEditorVariables {
         /** @name dxHtmlEditorVariables.dataSource */
@@ -7194,7 +6667,6 @@ declare module DevExpress.ui {
         /** @name dxHtmlEditorVariables.escapeChar */
         escapeChar?: string | Array<string>;
     }
-
     /** @name dxItem */
     export var dxItem: any;
     /** @name dxList.Options */
@@ -7337,7 +6809,6 @@ declare module DevExpress.ui {
         /** @name dxList.updateDimensions() */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
     }
-
     /** @name dxListItem */
     export interface dxListItem extends CollectionWidgetItem {
         /** @name dxListItem.badge */
@@ -7568,7 +7039,6 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxMenuOptions)
         constructor(element: JQuery, options?: dxMenuOptions)
     }
-
     /** @name dxMenuBase.Options */
     export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectionWidgetOptions<T> {
         /** @name dxMenuBase.Options.activeStateEnabled */
@@ -7586,19 +7056,15 @@ declare module DevExpress.ui {
         /** @name dxMenuBase.Options.showSubmenuMode */
         showSubmenuMode?: { delay?: { hide?: number, show?: number } | number, name?: 'onClick' | 'onHover' } | 'onClick' | 'onHover';
     }
-
     /** @name dxMenuBase */
     export class dxMenuBase extends HierarchicalCollectionWidget {
         constructor(element: Element, options?: dxMenuBaseOptions)
         constructor(element: JQuery, options?: dxMenuBaseOptions)
-
         /** @name dxMenuBase.selectItem(itemElement) */
         selectItem(itemElement: Element): void;
-
         /** @name dxMenuBase.unselectItem(itemElement) */
         unselectItem(itemElement: Element): void;
     }
-
     /** @name dxMenuBaseItem */
     export interface dxMenuBaseItem extends CollectionWidgetItem {
         /** @name dxMenuBaseItem.beginGroup */
@@ -7620,7 +7086,6 @@ declare module DevExpress.ui {
         /** @name dxMenuBaseItem.visible */
         visible?: boolean;
     }
-
     /** @name dxMenuItem */
     export interface dxMenuItem extends dxMenuBaseItem {
         /** @name dxMenuItem.items */
@@ -7912,7 +7377,6 @@ declare module DevExpress.ui {
         /** @name dxPivotGridFieldChooser.updateDimensions() */
         updateDimensions(): void;
     }
-
     /** @name dxPivotGridPivotGridCell */
     export interface dxPivotGridPivotGridCell {
         /** @name dxPivotGridPivotGridCell.columnPath */
@@ -7936,39 +7400,30 @@ declare module DevExpress.ui {
         /** @name dxPivotGridPivotGridCell.value */
         value?: any;
     }
-
     /** @name dxPivotGridSummaryCell */
     export class dxPivotGridSummaryCell {
         /** @name dxPivotGridSummaryCell.child(direction, fieldValue) */
         child(direction: string, fieldValue: number | string): dxPivotGridSummaryCell;
-
         /** @name dxPivotGridSummaryCell.children(direction) */
         children(direction: string): Array<dxPivotGridSummaryCell>;
-
         /** @name dxPivotGridSummaryCell.field(area) */
         field(area: string): DevExpress.data.PivotGridDataSourceField;
-
         /** @name dxPivotGridSummaryCell.grandTotal() */
         grandTotal(): dxPivotGridSummaryCell;
         /** @name dxPivotGridSummaryCell.grandTotal(direction) */
         grandTotal(direction: string): dxPivotGridSummaryCell;
-
         /** @name dxPivotGridSummaryCell.next(direction) */
         next(direction: string): dxPivotGridSummaryCell;
         /** @name dxPivotGridSummaryCell.next(direction, allowCrossGroup) */
         next(direction: string, allowCrossGroup: boolean): dxPivotGridSummaryCell;
-
         /** @name dxPivotGridSummaryCell.parent(direction) */
         parent(direction: string): dxPivotGridSummaryCell;
-
         /** @name dxPivotGridSummaryCell.prev(direction) */
         prev(direction: string): dxPivotGridSummaryCell;
         /** @name dxPivotGridSummaryCell.prev(direction, allowCrossGroup) */
         prev(direction: string, allowCrossGroup: boolean): dxPivotGridSummaryCell;
-
         /** @name dxPivotGridSummaryCell.slice(field, value) */
         slice(field: DevExpress.data.PivotGridDataSourceField, value: number | string): dxPivotGridSummaryCell;
-
         /** @name dxPivotGridSummaryCell.value() */
         value(): any;
         /** @name dxPivotGridSummaryCell.value(field) */
@@ -7978,7 +7433,6 @@ declare module DevExpress.ui {
         /** @name dxPivotGridSummaryCell.value(isCalculatedValue) */
         value(isCalculatedValue: boolean): any;
     }
-
     /** @name dxPivotItem */
     export interface dxPivotItem extends CollectionWidgetItem {
         /** @name dxPivotItem.title */
@@ -8377,7 +7831,6 @@ declare module DevExpress.ui {
         /** @name dxScheduler.updateAppointment(target, appointment) */
         updateAppointment(target: any, appointment: any): void;
     }
-
     /** @name dxSchedulerAppointment */
     export interface dxSchedulerAppointment extends CollectionWidgetItem {
         /** @name dxSchedulerAppointment.allDay */
@@ -8407,7 +7860,6 @@ declare module DevExpress.ui {
         /** @name dxSchedulerAppointment.visible */
         visible?: boolean;
     }
-
     /** @name dxSchedulerAppointmentTooltipTemplate */
     export interface dxSchedulerAppointmentTooltipTemplate {
         /** @name dxSchedulerAppointmentTooltipTemplate.allDay */
@@ -8453,7 +7905,6 @@ declare module DevExpress.ui {
         /** @name dxScrollView.release(preventScrollBottom) */
         release(preventScrollBottom: boolean): Promise<void> & JQueryPromise<void>;
     }
-
     /** @name dxScrollable.Options */
     export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptions<T> {
         /** @name dxScrollable.Options.bounceEnabled */
@@ -8475,49 +7926,36 @@ declare module DevExpress.ui {
         /** @name dxScrollable.Options.useNative */
         useNative?: boolean;
     }
-
     /** @name dxScrollable */
     export class dxScrollable extends DOMComponent {
         constructor(element: Element, options?: dxScrollableOptions)
         constructor(element: JQuery, options?: dxScrollableOptions)
-
         /** @name dxScrollable.clientHeight() */
         clientHeight(): number;
-
         /** @name dxScrollable.clientWidth() */
         clientWidth(): number;
-
         /** @name dxScrollable.content() */
         content(): DevExpress.core.dxElement;
-
         /** @name dxScrollable.scrollBy(distance) */
         scrollBy(distance: number): void;
         /** @name dxScrollable.scrollBy(distanceObject) */
         scrollBy(distanceObject: any): void;
-
         /** @name dxScrollable.scrollHeight() */
         scrollHeight(): number;
-
         /** @name dxScrollable.scrollLeft() */
         scrollLeft(): number;
-
         /** @name dxScrollable.scrollOffset() */
         scrollOffset(): any;
-
         /** @name dxScrollable.scrollTo(targetLocation) */
         scrollTo(targetLocation: number): void;
         /** @name dxScrollable.scrollTo(targetLocationObject) */
         scrollTo(targetLocation: any): void;
-
         /** @name dxScrollable.scrollToElement(targetLocation) */
         scrollToElement(element: Element | JQuery): void;
-
         /** @name dxScrollable.scrollTop() */
         scrollTop(): number;
-
         /** @name dxScrollable.scrollWidth() */
         scrollWidth(): number;
-
         /** @name dxScrollable.update() */
         update(): Promise<void> & JQueryPromise<void>;
     }
@@ -8616,19 +8054,16 @@ declare module DevExpress.ui {
         /** @name dxSlideOutView.toggleMenuVisibility() */
         toggleMenuVisibility(): Promise<void> & JQueryPromise<void>;
     }
-
     /** @name dxSlider.Options */
     export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
         /** @name dxSlider.Options.value */
         value?: number;
     }
-
     /** @name dxSlider */
     export class dxSlider extends dxSliderBase {
         constructor(element: Element, options?: dxSliderOptions)
         constructor(element: JQuery, options?: dxSliderOptions)
     }
-
     /** @name dxSliderBase.Options */
     export interface dxSliderBaseOptions<T = dxSliderBase> extends dxTrackBarOptions<T> {
         /** @name dxSliderBase.Options.activeStateEnabled */
@@ -8650,7 +8085,6 @@ declare module DevExpress.ui {
         /** @name dxSliderBase.Options.tooltip */
         tooltip?: { enabled?: boolean, format?: format, position?: 'bottom' | 'top', showMode?: 'always' | 'onHover' };
     }
-
     /** @name dxSliderBase */
     export class dxSliderBase extends dxTrackBar {
         constructor(element: Element, options?: dxSliderBaseOptions)
@@ -8729,7 +8163,6 @@ declare module DevExpress.ui {
         /** @name dxTabPanelItem.title */
         title?: string;
     }
-
     /** @name dxTabs.Options */
     export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
         /** @name dxTabs.Options.focusStateEnabled */
@@ -8751,13 +8184,11 @@ declare module DevExpress.ui {
         /** @name dxTabs.Options.showNavButtons */
         showNavButtons?: boolean;
     }
-
     /** @name dxTabs */
     export class dxTabs extends CollectionWidget {
         constructor(element: Element, options?: dxTabsOptions)
         constructor(element: JQuery, options?: dxTabsOptions)
     }
-
     /** @name dxTabsItem */
     export interface dxTabsItem extends CollectionWidgetItem {
         /** @name dxTabsItem.badge */
@@ -8799,13 +8230,11 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxTagBoxOptions)
         constructor(element: JQuery, options?: dxTagBoxOptions)
     }
-
     /** @name dxTemplate.Options */
     export interface dxTemplateOptions {
         /** @name dxTemplate.Options.name */
         name?: string;
     }
-
     /** @name dxTemplate */
     export class dxTemplate {
         constructor(options?: dxTemplateOptions)
@@ -8840,7 +8269,6 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxTextBoxOptions)
         constructor(element: JQuery, options?: dxTextBoxOptions)
     }
-
     /** @name dxTextEditor.Options */
     export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
         /** @name dxTextEditor.Options.buttons */
@@ -8902,15 +8330,12 @@ declare module DevExpress.ui {
         /** @name dxTextEditor.Options.valueChangeEvent */
         valueChangeEvent?: string;
     }
-
     /** @name dxTextEditor */
     export class dxTextEditor extends Editor {
         constructor(element: Element, options?: dxTextEditorOptions)
         constructor(element: JQuery, options?: dxTextEditorOptions)
-
         /** @name dxTextEditor.blur() */
         blur(): void;
-
         /** @name dxTextEditor.focus() */
         focus(): void;
     }
@@ -9189,7 +8614,6 @@ declare module DevExpress.ui {
         /** @name dxTreeList.loadDescendants(keys, childrenOnly) */
         loadDescendants(keys: Array<any>, childrenOnly: boolean): Promise<void> & JQueryPromise<void>;
     }
-
     /** @name dxTreeListColumn */
     export interface dxTreeListColumn extends GridBaseColumn {
         /** @name dxTreeListColumn.buttons */
@@ -9199,7 +8623,6 @@ declare module DevExpress.ui {
         /** @name dxTreeListColumn.type */
         type?: 'adaptive' | 'buttons';
     }
-
     /** @name dxTreeListColumnButton */
     export interface dxTreeListColumnButton extends GridBaseColumnButton {
         /** @name dxTreeListColumnButton.name */
@@ -9211,7 +8634,6 @@ declare module DevExpress.ui {
         /** @name dxTreeListColumnButton.visible */
         visible?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => boolean);
     }
-
     /** @name dxTreeListNode */
     export interface dxTreeListNode {
         /** @name dxTreeListNode.children */
@@ -9229,7 +8651,6 @@ declare module DevExpress.ui {
         /** @name dxTreeListNode.visible */
         visible?: boolean;
     }
-
     /** @name dxTreeListRowObject */
     export interface dxTreeListRowObject {
         /** @name dxTreeListRowObject.isEditing */
@@ -9349,7 +8770,6 @@ declare module DevExpress.ui {
         /** @name dxTreeView.updateDimensions() */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
     }
-
     /** @name dxTreeViewItem */
     export interface dxTreeViewItem extends CollectionWidgetItem {
         /** @name dxTreeViewItem.expanded */
@@ -9365,7 +8785,6 @@ declare module DevExpress.ui {
         /** @name dxTreeViewItem.selected */
         selected?: boolean;
     }
-
     /** @name dxTreeViewNode */
     export interface dxTreeViewNode {
         /** @name dxTreeViewNode.children */
@@ -9397,7 +8816,6 @@ declare module DevExpress.ui {
         /** @name dxValidationGroup.validate() */
         validate(): dxValidationGroupResult;
     }
-
     /** @name dxValidationGroupResult */
     export interface dxValidationGroupResult {
         /** @name dxValidationGroupResult.brokenRules */
@@ -9441,7 +8859,6 @@ declare module DevExpress.ui {
         /** @name dxValidator.validate() */
         validate(): dxValidatorResult;
     }
-
     /** @name dxValidatorResult */
     export interface dxValidatorResult {
         /** @name dxValidatorResult.brokenRule */
@@ -9453,40 +8870,8 @@ declare module DevExpress.ui {
         /** @name dxValidatorResult.value */
         value?: any;
     }
-
     /** @name format */
-    export type format =
-        'billions'
-        | 'currency'
-        | 'day'
-        | 'decimal'
-        | 'exponential'
-        | 'fixedPoint'
-        | 'largeNumber'
-        | 'longDate'
-        | 'longTime'
-        | 'millions'
-        | 'millisecond'
-        | 'month'
-        | 'monthAndDay'
-        | 'monthAndYear'
-        | 'percent'
-        | 'quarter'
-        | 'quarterAndYear'
-        | 'shortDate'
-        | 'shortTime'
-        | 'thousands'
-        | 'trillions'
-        | 'year'
-        | 'dayOfWeek'
-        | 'hour'
-        | 'longDateLongTime'
-        | 'minute'
-        | 'second'
-        | 'shortDateShortTime'
-        | string
-        | ((value: number | Date) => string)
-        | { currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date), precision?: number, type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' };
+    export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | { currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date), precision?: number, type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' };
     /** @name template */
     export type template = string | Function | Element | JQuery;
     /** @name ui.dialog */
@@ -9518,30 +8903,23 @@ declare module DevExpress {
         /** @name Component.Options.onOptionChanged */
         onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => any);
     }
-
     /** @name Component */
     export class Component {
         constructor(options?: ComponentOptions);
-
         /** @name Component.beginUpdate() */
         beginUpdate(): void;
-
         /** @name Component.endUpdate() */
         endUpdate(): void;
-
         /** @name Component.instance() */
         instance(): this;
-
         /** @name EventsMixin.off(eventName) */
         off(eventName: string): this;
         /** @name EventsMixin.off(eventName, eventHandler) */
         off(eventName: string, eventHandler: Function): this;
-
         /** @name EventsMixin.on(eventName, eventHandler) */
         on(eventName: string, eventHandler: Function): this;
         /** @name EventsMixin.on(events) */
         on(events: any): this;
-
         /** @name Component.option() */
         option(): any;
         /** @name Component.option(optionName) */
@@ -9551,7 +8929,6 @@ declare module DevExpress {
         /** @name Component.option(options) */
         option(options: any): void;
     }
-
     /** @name DOMComponent.Options */
     export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
         /** @name DOMComponent.Options.bindingOptions */
@@ -9569,30 +8946,23 @@ declare module DevExpress {
         /** @name DOMComponent.Options.width */
         width?: number | string | (() => number | string);
     }
-
     /** @name DOMComponent */
     export class DOMComponent extends Component {
         constructor(element: Element | JQuery, options?: DOMComponentOptions);
-
         /** @name DOMComponent.defaultOptions(rule) */
         static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
-
         /** @name DOMComponent.dispose() */
         dispose(): void;
-
         /** @name DOMComponent.element() */
         element(): DevExpress.core.dxElement;
-
         /** @name DOMComponent.getInstance(element) */
         static getInstance(element: Element | JQuery): DOMComponent;
     }
-
     /** @name DataHelperMixin */
     export class DataHelperMixin {
         /** @name DataHelperMixin.getDataSource() */
         getDataSource(): DevExpress.data.DataSource;
     }
-
     /** @name Device */
     export interface Device {
         /** @name Device.android */
@@ -9616,59 +8986,45 @@ declare module DevExpress {
         /** @name Device.win */
         win?: boolean;
     }
-
     /** @name DevicesObject */
     export class DevicesObject {
         constructor(options: { window?: Window });
-
         /** @name DevicesObject.current() */
         current(): Device;
         /** @name DevicesObject.current(deviceName) */
         current(deviceName: string | Device): void;
-
         /** @name EventsMixin.off(eventName) */
         off(eventName: string): this;
         /** @name EventsMixin.off(eventName, eventHandler) */
         off(eventName: string, eventHandler: Function): this;
-
         /** @name EventsMixin.on(eventName, eventHandler) */
         on(eventName: string, eventHandler: Function): this;
         /** @name EventsMixin.on(events) */
         on(events: any): this;
-
         /** @name DevicesObject.orientation() */
         orientation(): string;
-
         /** @name DevicesObject.real() */
         real(): Device;
     }
-
     /** @name EndpointSelector */
     export class EndpointSelector {
         constructor(options: any);
-
         /** @name EndpointSelector.urlFor(key) */
         urlFor(key: string): string;
     }
-
     /** @name TransitionExecutor */
     export class TransitionExecutor {
         /** @name TransitionExecutor.enter(elements, animation) */
         enter(elements: JQuery, animation: animationConfig | string): void;
-
         /** @name TransitionExecutor.leave(elements, animation) */
         leave(elements: JQuery, animation: animationConfig | string): void;
-
         /** @name TransitionExecutor.reset() */
         reset(): void;
-
         /** @name TransitionExecutor.start() */
         start(): Promise<void> & JQueryPromise<void>;
-
         /** @name TransitionExecutor.stop() */
         stop(): void;
     }
-
     /** @name animationConfig */
     export interface animationConfig {
         /** @name animationConfig.complete */
@@ -9692,38 +9048,29 @@ declare module DevExpress {
         /** @name animationConfig.type */
         type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
     }
-
     /** @name animationPresets */
     export class animationPresets {
         /** @name animationPresets.applyChanges() */
         applyChanges(): void;
-
         /** @name animationPresets.clear() */
         clear(): void;
         /** @name animationPresets.clear(name) */
         clear(name: string): void;
-
         /** @name animationPresets.getPreset(name) */
         getPreset(name: string): any;
-
         /** @name animationPresets.registerDefaultPresets() */
         registerDefaultPresets(): void;
-
         /** @name animationPresets.registerPreset(name, config) */
         registerPreset(name: string, config: { animation?: animationConfig, device?: Device }): void;
-
         /** @name animationPresets.resetToDefaults() */
         resetToDefaults(): void;
     }
-
     /** @name config() */
     export function config(): globalConfig;
     /** @name config(config) */
     export function config(config: globalConfig): void;
-
     /** @name devices */
     export var devices: DevicesObject;
-
     /** @name dxEvent */
     export class dxEvent {
         /** @name dxEvent.currentTarget */
@@ -9734,32 +9081,23 @@ declare module DevExpress {
         delegateTarget: Element;
         /** @name dxEvent.target */
         target: Element;
-
         /** @name dxEvent.isDefaultPrevented() */
         isDefaultPrevented(): boolean;
-
         /** @name dxEvent.isImmediatePropagationStopped() */
         isImmediatePropagationStopped(): boolean;
-
         /** @name dxEvent.isPropagationStopped() */
         isPropagationStopped(): boolean;
-
         /** @name dxEvent.preventDefault() */
         preventDefault(): void;
-
         /** @name dxEvent.stopImmediatePropagation() */
         stopImmediatePropagation(): void;
-
         /** @name dxEvent.stopPropagation() */
         stopPropagation(): void;
     }
-
     /** @name event */
     export type event = dxEvent | JQueryEventObject;
-
     /** @name eventsHandler */
     export function eventsHandler(event: dxEvent, extraParameters: any): boolean;
-
     /** @name globalConfig */
     export interface globalConfig {
         /** @name globalConfig.decimalSeparator */
@@ -9783,36 +9121,27 @@ declare module DevExpress {
         /** @name globalConfig.useLegacyVisibleIndex */
         useLegacyVisibleIndex?: boolean;
     }
-
     /** @name hideTopOverlay() */
     export function hideTopOverlay(): boolean;
-
     /** @name localization */
     export class localization {
         /** @name localization.formatDate(value, format) */
         static formatDate(value: Date, format: DevExpress.ui.format): string;
-
         /** @name localization.formatMessage(key, value) */
         static formatMessage(key: string, value: string | Array<string>): string;
-
         /** @name localization.formatNumber(value, format) */
         static formatNumber(value: number, format: DevExpress.ui.format): string;
-
         /** @name localization.loadMessages(messages) */
         static loadMessages(messages: any): void;
-
         /** @name localization.locale() */
         static locale(): string;
         /** @name localization.locale(locale) */
         static locale(locale: string): void;
-
         /** @name localization.parseDate(text, format) */
         static parseDate(text: string, format: DevExpress.ui.format): Date;
-
         /** @name localization.parseNumber(text, format) */
         static parseNumber(text: string, format: DevExpress.ui.format): number;
     }
-
     /** @name positionConfig */
     export interface positionConfig {
         /** @name positionConfig.at */
@@ -9830,98 +9159,76 @@ declare module DevExpress {
         /** @name positionConfig.offset */
         offset?: string | { x?: number, y?: number };
     }
-
     /** @name processHardwareBackButton() */
     export function processHardwareBackButton(): void;
-
     /** @name registerComponent(name, componentClass) */
     export function registerComponent(name: string, componentClass: any): void;
     /** @name registerComponent(name, namespace, componentClass) */
     export function registerComponent(name: string, namespace: any, componentClass: any): void;
-
     /** @name ui */
     export class ui {
         /** @name ui.notify(message,type,displayTime) */
         static notify(message: string, type?: string, displayTime?: number): void;
         /** @name ui.notify(options,type,displayTime) */
         static notify(options: any, type?: string, displayTime?: number): void;
-
         /** @name ui.setTemplateEngine(name) */
         static setTemplateEngine(templateEngineName: string): void;
         /** @name ui.setTemplateEngine(options) */
         static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
     }
-
     /** @name validationEngine */
     export class validationEngine {
         /** @name validationEngine.getGroupConfig() */
         static getGroupConfig(): any;
         /** @name validationEngine.getGroupConfig(group) */
         static getGroupConfig(group: string | any): any;
-
         /** @name validationEngine.registerModelForValidation(model) */
         static registerModelForValidation(model: any): void;
-
         /** @name validationEngine.resetGroup() */
         static resetGroup(): void;
         /** @name validationEngine.resetGroup(group) */
         static resetGroup(group: string | any): void;
-
         /** @name validationEngine.unregisterModelForValidation(model) */
         static unregisterModelForValidation(model: any): void;
-
         /** @name validationEngine.validateGroup() */
         static validateGroup(): DevExpress.ui.dxValidationGroupResult;
         /** @name validationEngine.validateGroup(group) */
         static validateGroup(group: string | any): DevExpress.ui.dxValidationGroupResult;
-
         /** @name validationEngine.validateModel(model) */
         static validateModel(model: any): any;
     }
-
     /** @name viz */
     export class viz {
         /** @name viz.currentPalette() */
         static currentPalette(): string;
         /** @name viz.currentPalette(paletteName) */
         static currentPalette(paletteName: string): void;
-
         /** @name viz.currentTheme() */
         static currentTheme(): string;
         /** @name viz.currentTheme(platform, colorScheme) */
         static currentTheme(platform: string, colorScheme: string): void;
         /** @name viz.currentTheme(theme) */
         static currentTheme(theme: string): void;
-
         /** @name viz.exportFromMarkup(markup, options) */
         static exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number }): void;
-
         /** @name viz.exportWidgets(widgetInstances) */
         static exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void;
         /** @name viz.exportWidgets(widgetInstances, options) */
         static exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function }): void;
-
         /** @name viz.generateColors(palette, count, options) */
         static generateColors(palette: 'Bright' | 'Default' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
-
         /** @name viz.getMarkup(widgetInstances) */
         static getMarkup(widgetInstances: Array<DOMComponent>): string;
-
         /** @name viz.getPalette(paletteName) */
         static getPalette(paletteName: string): any;
-
         /** @name viz.getTheme(theme) */
         static getTheme(theme: string): any;
-
         /** @name viz.refreshPaths() */
         static refreshPaths(): void;
-
         /** @name viz.refreshTheme() */
         static refreshTheme(): void;
-
         /** @name viz.registerPalette(paletteName, palette) */
         static registerPalette(paletteName: string, palette: any): void;
-
         /** @name viz.registerTheme(customTheme, baseTheme) */
         static registerTheme(customTheme: any, baseTheme: string): void;
     }
@@ -9933,13 +9240,11 @@ declare module DevExpress.core {
         off(eventName: string): this;
         /** @name EventsMixin.off(eventName, eventHandler) */
         off(eventName: string, eventHandler: Function): this;
-
         /** @name EventsMixin.on(eventName, eventHandler) */
         on(eventName: string, eventHandler: Function): this;
         /** @name EventsMixin.on(events) */
         on(events: any): this;
     }
-
     /** @name dxElement */
     export type dxElement = Element & JQuery;
 }
@@ -9959,7 +9264,6 @@ declare module DevExpress.exporter {
         /** @name ExcelDataGridCell.value */
         value?: any;
     }
-
     /** @name ExcelFont */
     export interface ExcelFont {
         /** @name ExcelFont.bold */
@@ -9979,7 +9283,6 @@ declare module DevExpress.exporter {
 declare module DevExpress.data.utils {
     /** @name Utils.compileGetter(expr) */
     export function compileGetter(expr: string | Array<string>): Function;
-
     /** @name Utils.compileSetter(expr) */
     export function compileSetter(expr: string | Array<string>): Function;
 }
@@ -9998,7 +9301,6 @@ declare module DevExpress.events {
     export function off(element: Element | Array<Element>, eventName: string, selector: string): void;
     /** @name events.off(element, eventName, selector, handler) */
     export function off(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
-
     /** @name events.on(element, eventName, data, handler) */
     export function on(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
     /** @name events.on(element, eventName, handler) */
@@ -10007,7 +9309,6 @@ declare module DevExpress.events {
     export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
     /** @name events.on(element, eventName, selector, handler) */
     export function on(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
-
     /** @name events.one(element, eventName, data, handler) */
     export function one(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
     /** @name events.one(element, eventName, handler) */
@@ -10016,12 +9317,10 @@ declare module DevExpress.events {
     export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
     /** @name events.one(element, eventName, selector, handler) */
     export function one(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
-
     /** @name events.trigger(element, event) */
     export function trigger(element: Element | Array<Element>, event: string | event): void;
     /** @name events.trigger(element, event, extraParameters) */
     export function trigger(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
-
     /** @name events.triggerHandler(element, event) */
     export function triggerHandler(element: Element | Array<Element>, event: string | event): void;
     /** @name events.triggerHandler(element, event, extraParameters) */
@@ -10042,17 +9341,14 @@ declare module DevExpress.ui.dxOverlay {
 declare module DevExpress.utils {
     /** @name utils.cancelAnimationFrame(requestID) */
     export function cancelAnimationFrame(requestID: number): void;
-
     /** @name utils.initMobileViewport(options) */
     export function initMobileViewport(options: { allowZoom?: boolean, allowPan?: boolean, allowSelection?: boolean }): void;
-
     /** @name utils.requestAnimationFrame(callback) */
     export function requestAnimationFrame(callback: Function): number;
 }
 declare module DevExpress.viz.map.projection {
     /** @name viz.map.projection.add(name, projection) */
     export function add(name: string, projection: any): void;
-
     /** @name viz.map.projection.get(name) */
     export function get(name: string): any;
 }

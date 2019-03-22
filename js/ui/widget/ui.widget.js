@@ -492,7 +492,7 @@ var Widget = DOMComponent.inherit({
 
     _initContentReadyAction: function() {
         this._contentReadyAction = this._createActionByOption("onContentReady", {
-            excludeValidators: ["designMode", "disabled", "readOnly"]
+            excludeValidators: ["disabled", "readOnly"]
         });
     },
 
