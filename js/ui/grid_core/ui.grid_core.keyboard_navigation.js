@@ -1746,25 +1746,26 @@ module.exports = {
         views: {
             rowsView: {
                 renderFocusState: function() {
-                    var that = this,
-                        rowIndex = that.option("focusedRowIndex"),
-                        $element = that.element(),
+                    var dataController = this._dataController,
+                        rowIndex = this.option("focusedRowIndex") || 0,
+                        $element = this.element(),
                         cellElements;
 
                     if($element && !focused($element)) {
                         $element.attr("tabIndex", null);
                     }
 
-                    if(!rowIndex || rowIndex < 0) {
+                    if(rowIndex < 0 || rowIndex >= dataController.getVisibleRows().length) {
                         rowIndex = 0;
                     }
-                    cellElements = that.getCellElements(rowIndex);
 
-                    if(that.option("useKeyboard") && cellElements) {
-                        that._updateFocusElementTabIndex(cellElements);
+                    cellElements = this.getCellElements(rowIndex);
+
+                    if(this.option("useKeyboard") && cellElements) {
+                        this.updateFocusElementTabIndex(cellElements);
                     }
                 },
-                _updateFocusElementTabIndex: function(cellElements) {
+                updateFocusElementTabIndex: function(cellElements) {
                     var that = this,
                         $row = cellElements.eq(0).parent(),
                         columnIndex = that.option("focusedColumnIndex"),
