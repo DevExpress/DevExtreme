@@ -894,6 +894,44 @@ QUnit.test("Parsed data should have all fields from source data", function(asser
     }, { assert: assert });
 });
 
+QUnit.test("Two axes, first string discrete, second numeric discrete", function(assert) {
+    var groupData1 = createGroupsData({
+            argumentAxisType: "discrete",
+            valueAxisType: "discrete",
+            argumentCategories: ["A", "B", "C"],
+            valueCategories: ["1", "2", "3"],
+            argumentField: "arg",
+            valueFields: ["val"]
+        }),
+        groupData2 = createGroupsData({
+            argumentAxisType: "discrete",
+            valueAxisType: "discrete",
+            argumentCategories: ["A", "B", "C"],
+            valueCategories: [10, 20, 30],
+            argumentField: "arg",
+            valueFields: ["val1"]
+        }),
+        groupsData1 = {};
+
+    groupsData1.groups = groupData1.groups.concat(groupData2.groups);
+    groupsData1.argumentOptions = groupData1.argumentOptions;
+
+    var parsedData = testValidateData([
+        { arg: "A", val: "1", val1: 10 }
+    ], groupsData1);
+
+    checkParsedData(parsedData, {
+        "arg": {
+            val: ["1"],
+            val1: [10],
+            arg: ["A"]
+        }
+    }, { assert: assert, compare: "deepEqual" });
+
+    assert.deepEqual(groupsData1.groups[0].valueOptions.categories, ["1", "2", "3"], "value categories");
+    assert.deepEqual(groupsData1.groups[1].valueOptions.categories, [10, 20, 30], "value categories");
+});
+
 QUnit.module("Skip data");
 
 QUnit.test("Null/undefined values", function(assert) {
