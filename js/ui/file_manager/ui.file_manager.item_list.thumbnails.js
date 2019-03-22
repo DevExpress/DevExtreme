@@ -324,8 +324,9 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
         const $itemSpacer = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS);
 
-        const $itemName = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS);
-        $itemName.text(item.name);
+        const $itemName = $("<div>")
+            .addClass(FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS)
+            .text(item.name);
 
         $item.append($itemContent);
         $itemContent.append($itemThumbnail, $itemSpacer, $itemName);
