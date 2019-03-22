@@ -65,7 +65,8 @@ let DropDownButton = Widget.inherit({
 
             /**
              * @name dxDropDownButtonOptions.deferRendering
-             * @inheritDoc
+             * @type boolean
+             * @default true
              */
             deferRendering: true,
 

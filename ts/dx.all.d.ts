@@ -2467,7 +2467,7 @@ declare module DevExpress.ui {
         /** @name dxDropDownButton.Options.dataSource */
         dataSource?: string | Array<CollectionWidgetItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** @name dxDropDownButton.Options.deferRendering */
-        deferRendering?: any;
+        deferRendering?: boolean;
         /** @name dxDropDownButton.Options.displayExpr */
         displayExpr?: string | ((itemData: any) => any);
         /** @name dxDropDownButton.Options.dropDownOptions */
