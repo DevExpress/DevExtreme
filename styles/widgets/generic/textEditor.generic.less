@@ -156,6 +156,21 @@
     }
 }
 
+.dx-editor-underlined {
+    .dx-texteditor-buttons-container {
+        + .dx-texteditor-input-container {
+            .dx-texteditor-input {
+                padding-left: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+
+                .dx-rtl& {
+                    padding-left: 0;
+                    padding-right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+                }
+            }
+        }
+    }
+}
+
 .dx-invalid.dx-texteditor {
     border-color: @texteditor-invalid-faded-border-color;
     &.dx-editor-filled, &.dx-editor-underlined, &.dx-editor-outlined {

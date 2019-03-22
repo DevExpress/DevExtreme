@@ -19,6 +19,7 @@
 @MATERIAL_NORMAL_BUTTON_ACTIVE_STATE_SHADOW: @MATERIAL_BUTTON_ACTIVE_BOX_SHADOW_SIZE @button-active-shadow-color;
 @MATERIAL_NORMAL_BUTTON_HOVERED_STATE_SHADOW: @MATERIAL_BUTTON_BOX_SHADOW_SIZE @button-hover-shadow-color;
 @MATERIAL_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: @MATERIAL_BUTTON_BOX_SHADOW_SIZE @button-focused-shadow-color;
+@MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN: 10px;
 
 .dx-button-content {
     line-height: 0;
@@ -294,9 +295,132 @@
     }
 }
 
-.dx-texteditor-buttons-container > .dx-button {
-    margin-left: 5px;
-    margin-right: 5px;
+.dx-editor-outlined, .dx-editor-filled {
+    .dx-texteditor-buttons-container {
+        > .dx-button {
+            margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN / 2;
+            margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN / 2;
+        }
+
+        &.dx-texteditor-before-buttons-container {
+            > .dx-button {
+                &:first-child {
+                    margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                }
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+
+        &.dx-texteditor-after-buttons-container {
+
+            > .dx-button {
+                &:first-child {
+                    margin-left: 0;
+                }
+
+                &:last-child {
+                    margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                }
+            }
+        }
+
+        .dx-rtl & {
+            .dx-texteditor-before-buttons-container {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: 0;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+
+                    &:last-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: 0;
+                    }
+                }
+            }
+
+            &.dx-texteditor-after-buttons-container {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: 0;
+                    }
+
+                    &:last-child {
+                        margin-left: 0;
+                        margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.dx-editor-underlined {
+    .dx-texteditor-buttons-container {
+        > .dx-button {
+            margin-left: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN / 2;
+            margin-right: @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN / 2;
+        }
+
+        &.dx-texteditor-before-buttons-container {
+            > .dx-button {
+                &:first-child {
+                    margin-left: 0;
+                }
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+
+        &.dx-texteditor-after-buttons-container {
+
+            > .dx-button {
+                &:first-child {
+                    margin-left: 0;
+                }
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+
+        .dx-rtl & {
+            .dx-texteditor-before-buttons-container {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: 0;
+                        margin-right: 0;
+                    }
+
+                    &:last-child {
+                        margin-left: 0;
+                        margin-right: 0;
+                    }
+                }
+            }
+
+            &.dx-texteditor-after-buttons-container {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: 0;
+                        margin-right: 0;
+                    }
+
+                    &:last-child {
+                        margin-left: 0;
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+    }
 }
 
 @keyframes focus {
