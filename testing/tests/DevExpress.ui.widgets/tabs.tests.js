@@ -573,7 +573,7 @@ QUnit.test("Width: dimention change, items fit into container, large fixed -> sm
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         $container.width(100);
-        $($element).trigger("dxresize");
+        domUtils.triggerResizeEvent($container);
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), undefined);
@@ -610,7 +610,7 @@ QUnit.test("Width: dimention change, items doesn't fit into container, small fix
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         $container.width(400);
-        $($element).trigger("dxresize");
+        domUtils.triggerResizeEvent($container);
 
         assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), undefined);
@@ -647,7 +647,7 @@ QUnit.test("Width: dimention change, items doesn't fit into container, small fix
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         $container.width(170);
-        $($element).trigger("dxresize");
+        domUtils.triggerResizeEvent($container);
 
         assert.equal($element.outerWidth(), 170);
         assert.equal(instance.option("width"), undefined);
@@ -684,7 +684,7 @@ QUnit.test("Width: dimention change, items fit into container, stretched tabs ->
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         $container.width(100);
-        $($element).trigger("dxresize");
+        domUtils.triggerResizeEvent($container);
 
         assert.equal($element.outerWidth(), 100);
         assert.equal(instance.option("width"), undefined);
@@ -721,7 +721,7 @@ QUnit.test("Width: dimention change, items fit into container, stretched tabs ->
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         $container.width(400);
-        $($element).trigger("dxresize");
+        domUtils.triggerResizeEvent($container);
 
         assert.equal($element.outerWidth(), 400);
         assert.equal(instance.option("width"), undefined);
@@ -758,7 +758,7 @@ QUnit.test("Width: dimention change, items fit into container, large fixed -> st
         assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons aren't rendered");
 
         $container.width(170);
-        $($element).trigger("dxresize");
+        domUtils.triggerResizeEvent($container);
 
         assert.equal($element.outerWidth(), 170);
         assert.equal(instance.option("width"), undefined);
