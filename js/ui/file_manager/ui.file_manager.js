@@ -2,6 +2,7 @@ import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import { extend } from "../../core/utils/extend";
 import typeUtils from "../../core/utils/type";
+import { when } from "../../core/utils/deferred";
 
 import registerComponent from "../../core/component_registrator";
 import Widget from "../widget/ui.widget";
@@ -190,7 +191,12 @@ class FileManager extends Widget {
             return;
         }
 
-        this.setCurrentFolder(item);
+        const folder = item.createClone();
+        if(item.isParentFolder) {
+            folder.name = this._utils.getName(item.relativeName);
+            folder.relativeName = item.relativeName;
+        }
+        this.setCurrentFolder(folder);
     }
 
     _switchView(viewMode) {
@@ -257,9 +263,20 @@ class FileManager extends Widget {
 
     _getItemListItems() {
         const path = this.getCurrentFolderPath();
-        const showFolders = this.option("itemList").showFolders;
-        const itemType = showFolders ? "" : "file";
-        return this._provider.getItems(path, itemType);
+        const options = this.option("itemList");
+        const itemType = options.showFolders ? "" : "file";
+        let result = this._provider.getItems(path, itemType);
+
+        if(options.showParentFolder && path) {
+            const parentPath = this._utils.getParentPath(path);
+            const parentFolder = this._createFolderItemByPath(parentPath);
+            parentFolder.isParentFolder = true;
+            parentFolder.name = "..";
+
+            result = when(result).done(items => items.unshift(parentFolder));
+        }
+
+        return result;
     }
 
     _onItemListClick() {
@@ -339,6 +356,12 @@ class FileManager extends Widget {
         }
     }
 
+    _createFolderItemByPath(path) {
+        const parentPath = this._utils.getParentPath(path);
+        const name = this._utils.getName(path);
+        return new FileManagerItem(parentPath, name, true);
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
@@ -364,7 +387,8 @@ class FileManager extends Widget {
             */
             itemList: {
                 mode: "details",
-                showFolders: true
+                showFolders: true,
+                showParentFolder: true
             },
 
             /**
@@ -394,9 +418,7 @@ class FileManager extends Widget {
     }
 
     setCurrentFolderPath(path) {
-        const parentPath = this._utils.getParentPath(path);
-        const name = this._utils.getName(path);
-        const folder = new FileManagerItem(parentPath, name, true);
+        const folder = this._createFolderItemByPath(path);
         this.setCurrentFolder(folder);
     }
 

@@ -71,6 +71,15 @@ class FileManagerItem {
     getExtension() {
         return this.isFolder ? "" : getFileUtils().getFileExtension(this.name);
     }
+
+    createClone() {
+        const result = new FileManagerItem(this.parentPath, this.name, this.isFolder);
+        result.length = this.length;
+        result.lastWriteTime = this.lastWriteTime;
+        result.thumbnail = this.thumbnail;
+        result.tooltipText = this.tooltipText;
+        return result;
+    }
 }
 
 class FileUtils {
