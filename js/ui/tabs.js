@@ -270,7 +270,7 @@ var Tabs = CollectionWidget.inherit({
         var removeClasses = [TABS_STRETCHED_CLASS, TABS_EXPANDED_CLASS, OVERFLOW_HIDDEN_CLASS];
         this.$element().removeClass(removeClasses.join(" "));
 
-        if(this._needScrolling()) {
+        if(this.option("scrollingEnabled") && this._isItemsWidthExceeded()) {
             if(!this._scrollable) {
                 this._renderScrollable();
                 this._renderNavButtons();
@@ -296,10 +296,6 @@ var Tabs = CollectionWidget.inherit({
         }
     },
 
-    _needScrolling: function() {
-        return this.option("scrollingEnabled") && this._isItemsWidthExceeded();
-    },
-
     _isItemsWidthExceeded: function() {
         var tabItemsWidth = this._getSummaryItemsWidth(this._getVisibleItems(), true);
 
@@ -310,19 +306,15 @@ var Tabs = CollectionWidget.inherit({
     _needStretchItems: function() {
         var $visibleItems = this._getVisibleItems(),
             elementWidth = this.$element().width(),
-            maxTabWidth = this._getMaxTabWidth($visibleItems);
+            itemsWidth = [];
 
-        return maxTabWidth > elementWidth / $visibleItems.length;
-    },
-
-    _getMaxTabWidth: function(items) {
-        var itemsWidth = [];
-
-        iteratorUtils.each(items, (_, item) => {
+        iteratorUtils.each($visibleItems, (_, item) => {
             itemsWidth.push($(item).outerWidth(true));
         });
 
-        return Math.max.apply(null, itemsWidth);
+        var maxTabWidth = Math.max.apply(null, itemsWidth);
+
+        return maxTabWidth > elementWidth / $visibleItems.length;
     },
 
     _cleanNavButtons: function() {
