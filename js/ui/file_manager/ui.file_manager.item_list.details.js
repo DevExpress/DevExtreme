@@ -1,4 +1,5 @@
 import $ from "../../core/renderer";
+import iconUtils from "../../core/utils/icon";
 import eventsEngine from "../../events/core/events_engine";
 
 import Button from "../button";
@@ -8,7 +9,10 @@ import CustomStore from "../../data/custom_store";
 import FileManagerItemListBase from "./ui.file_manager.item_list";
 import { FileManagerFileCommands } from "./ui.file_manager.commands";
 
+const FILE_MANAGER_DETAILS_ITEM_LIST_CLASS = "dx-filemanager-details";
+const FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-details-item-thumbnail";
 const FILE_MANAGER_FILE_ACTIONS_BUTTON = "dx-filemanager-file-actions-button";
+const DATA_GRID_DATA_ROW_CLASS = "dx-data-row";
 
 class FileManagerDetailsItemList extends FileManagerItemListBase {
 
@@ -27,11 +31,22 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 mode: selectionMode
             },
             allowColumnResizing: true,
+            scrolling: {
+                mode: "virtual"
+            },
+            onRowPrepared: this._onRowPrepared.bind(this),
             columns: [
+                {
+                    dataField: "thumbnail",
+                    caption: "",
+                    width: 64,
+                    alignment: "center",
+                    cellTemplate: this._createThumbnailColumnCell.bind(this)
+                },
                 {
                     dataField: "name",
                     minWidth: 200,
-                    width: "60%",
+                    width: "65%",
                     cellTemplate(container, options) {
                         const button = that._createComponent($("<div>"), Button, {
                             text: "&vellip;",
@@ -57,7 +72,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 {
                     dataField: "lastWriteTime",
                     minWidth: 200,
-                    width: "20%"
+                    width: "25%"
                 },
                 {
                     dataField: "length",
@@ -76,14 +91,16 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 }
             }
         });
-        this.$element().append(this._filesView.$element());
+        this.$element()
+            .addClass(FILE_MANAGER_DETAILS_ITEM_LIST_CLASS)
+            .append(this._filesView.$element());
 
         this._loadFilesViewData();
     }
 
     _createContextMenuItems(rowData) {
-        var that = this;
-        var isSingleRowSelected = this._filesView.getSelectedRowKeys().length <= 1;
+        const that = this;
+        const isSingleRowSelected = this._filesView.getSelectedRowKeys().length <= 1;
         return FileManagerFileCommands
             .filter(c => {
                 if(c.displayInToolbarOnly) {
@@ -107,6 +124,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _createFilesViewStore() {
         return new CustomStore({
+            key: "relativeName",
             load: this._getItems.bind(this)
         });
     }
@@ -123,6 +141,30 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         const filesViewRow = e.component.$element().data("filesViewRow");
         this._contextMenu.option("dataSource", this._createContextMenuItems(filesViewRow.data));
         this._displayContextMenu(e.element, e.event.offsetX, e.event.offsetY);
+    }
+
+    _getItemSelector() {
+        return `.${DATA_GRID_DATA_ROW_CLASS}`;
+    }
+
+    _onItemDblClick(e) {
+        const $row = $(e.currentTarget);
+        const key = $row.data("item-key");
+        this._filesView.byKey(key)
+            .done(item => this._raiseSelectedItemOpened(item));
+    }
+
+    _onRowPrepared(e) {
+        if(e.rowType === "data") {
+            $(e.rowElement).data("item-key", e.data.relativeName);
+        }
+    }
+
+    _createThumbnailColumnCell(container, cellInfo) {
+        const thumbnail = this._getItemThumbnail(cellInfo.data);
+        iconUtils.getImageContainer(thumbnail)
+            .addClass(FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS)
+            .appendTo(container);
     }
 
     refreshData() {

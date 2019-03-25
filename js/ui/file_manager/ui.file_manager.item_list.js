@@ -1,14 +1,23 @@
 import { extend } from "../../core/utils/extend";
+import dblclickEvent from "../../events/double_click";
+import eventUtils from "../../events/utils";
+import eventsEngine from "../../events/core/events_engine";
 
 import ContextMenu from "../context_menu/ui.context_menu";
 import Widget from "../widget/ui.widget";
 
 const FILE_MANAGER_FILES_VIEW_CLASS = "dx-filemanager-files-view";
+const FILE_MANAGER_ITEM_LIST_ITEM_OPEN_EVENT_NAMESPACE = "dxFileManager_open";
 
 class FileManagerItemListBase extends Widget {
 
     _initMarkup() {
         this.$element().addClass(FILE_MANAGER_FILES_VIEW_CLASS);
+
+        const dblClickEventName = eventUtils.addNamespace(dblclickEvent.name, FILE_MANAGER_ITEM_LIST_ITEM_OPEN_EVENT_NAMESPACE);
+        eventsEngine.on(this.$element(), dblClickEventName, this._getItemSelector(), this._onItemDblClick.bind(this));
+
+        super._initMarkup();
     }
 
     _displayContextMenu(element, offsetX, offsetY) {
@@ -71,6 +80,14 @@ class FileManagerItemListBase extends Widget {
     _getItemThumbnail(item) {
         const getItemThumbnailFunction = this.option("getItemThumbnail");
         return getItemThumbnailFunction(item);
+    }
+
+    _getItemSelector() {
+
+    }
+
+    _onItemDblClick(e) {
+
     }
 
     refreshData() {

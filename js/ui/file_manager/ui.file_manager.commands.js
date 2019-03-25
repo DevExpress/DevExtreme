@@ -25,6 +25,10 @@ let tryDownload = function(fileManager) {
     // TODO not implemeneted
 };
 
+let tryUpload = function(fileManager, fileItems) {
+    fileManager._editing.tryUpload(fileItems);
+};
+
 let switchViewToThumbnails = function(fileManager) {
     fileManager._switchView("thumbnails");
 };
@@ -64,6 +68,11 @@ export const FileManagerFileCommands = [
         name: "download",
         text: "Download",
         handler: tryDownload
+    },
+    {
+        name: "upload",
+        text: "Upload file...",
+        handler: tryUpload
     },
 
     {

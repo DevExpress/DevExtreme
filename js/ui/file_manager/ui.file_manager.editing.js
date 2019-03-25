@@ -161,7 +161,7 @@ class FileManagerEditingControl extends Widget {
             });
     }
 
-    _tryUpload() {
+    tryUpload() {
         this._fileUploader.tryUpload();
     }
 

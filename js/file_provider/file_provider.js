@@ -1,3 +1,6 @@
+import { each } from "../core/utils/iterator";
+
+const PATH_SEPARATOR = "/";
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
 class FileProvider {
@@ -55,7 +58,7 @@ class FileManagerItem {
     constructor(parentPath, name, isFolder) {
         this.parentPath = parentPath;
         this.name = name;
-        this.relativeName = this.parentPath ? this.parentPath + "/" + this.name : this.name;
+        this.relativeName = getFileUtils().pathCombine(this.parentPath, name);
         this.isFolder = isFolder || false;
 
         this.length = 0;
@@ -66,14 +69,63 @@ class FileManagerItem {
     }
 
     getExtension() {
-        if(this.isFolder) {
-            return "";
-        }
-
-        const index = this.name.lastIndexOf(".");
-        return index !== -1 ? this.name.substr(index) : "";
+        return this.isFolder ? "" : getFileUtils().getFileExtension(this.name);
     }
 }
 
+class FileUtils {
+
+    constructor(pathSeparator) {
+        this.pathSeparator = pathSeparator || PATH_SEPARATOR;
+    }
+
+    getFileExtension(path) {
+        const index = path.lastIndexOf(".");
+        return index !== -1 ? path.substr(index) : "";
+    }
+
+    getName(path) {
+        const index = path.lastIndexOf(this.pathSeparator);
+        return index !== -1 ? path.substr(index + this.pathSeparator.length) : path;
+    }
+
+    getParentPath(path) {
+        const index = path.lastIndexOf(this.pathSeparator);
+        return index !== -1 ? path.substr(0, index) : "";
+    }
+
+    getPathParts(path) {
+        return path.split(this.pathSeparator);
+    }
+
+    pathCombine() {
+        let result = "";
+
+        each(arguments, (_, arg) => {
+            if(arg) {
+                if(result) {
+                    result += this.pathSeparator;
+                }
+
+                result += arg;
+            }
+        });
+
+        return result;
+    }
+
+}
+
+let fileUtils = null;
+
+const getFileUtils = () => {
+    if(!fileUtils) {
+        fileUtils = new FileUtils();
+    }
+    return fileUtils;
+};
+
 module.exports.FileProvider = FileProvider;
 module.exports.FileManagerItem = FileManagerItem;
+module.exports.FileUtils = FileUtils;
+module.exports.getFileUtils = getFileUtils;

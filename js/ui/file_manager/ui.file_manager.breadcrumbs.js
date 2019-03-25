@@ -3,10 +3,16 @@ import { extend } from "../../core/utils/extend";
 import Widget from "../widget/ui.widget";
 import Menu from "../menu/ui.menu";
 
-const PATH_SEPARATOR = "/";
+import { getFileUtils } from "../../file_provider/file_provider";
+
 const FILE_MANAGER_BREADCRUMBS_CLASS = "dx-filemanager-breadcrumbs";
 
 class FileManagerBreadcrumbs extends Widget {
+
+    _init() {
+        this._utils = getFileUtils();
+        super._init();
+    }
 
     _initMarkup() {
         this._menu = this._createComponent(this.$element(), Menu, {
@@ -31,7 +37,7 @@ class FileManagerBreadcrumbs extends Widget {
         ];
 
         if(path) {
-            const parts = path.split(PATH_SEPARATOR);
+            const parts = this._utils.getPathParts(path);
             for(let i = 0; i < parts.length; i++) {
                 const part = parts[i];
 
@@ -73,12 +79,7 @@ class FileManagerBreadcrumbs extends Widget {
 
     _getParentPath() {
         const path = this.option("path");
-        if(!path) {
-            return path;
-        }
-
-        const index = path.lastIndexOf(PATH_SEPARATOR);
-        return index !== -1 ? path.substr(0, index) : "";
+        return this._utils.getParentPath(path);
     }
 
     _getPathByMenuItemIndex(index) {
@@ -92,7 +93,7 @@ class FileManagerBreadcrumbs extends Widget {
             }
 
             const part = item.value;
-            result += result ? PATH_SEPARATOR + part : part;
+            result = this._utils.pathCombine(result, part);
         }
 
         return result;

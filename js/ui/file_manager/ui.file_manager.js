@@ -15,7 +15,7 @@ import FileManagerEditingControl from "./ui.file_manager.editing";
 import FileManagerBreadcrumbs from "./ui.file_manager.breadcrumbs";
 import { FileManagerFileCommands } from "./ui.file_manager.commands";
 
-import { FileProvider } from "../../file_provider/file_provider";
+import { FileProvider, FileManagerItem, getFileUtils } from "../../file_provider/file_provider";
 import ArrayFileProvider from "../../file_provider/file_provider.array";
 import AjaxFileProvider from "../../file_provider/file_provider.ajax";
 import OneDriveFileProvider from "../../file_provider/file_provider.onedrive";
@@ -32,6 +32,11 @@ const FILE_MANAGER_ITEMS_PANEL_CLASS = FILE_MANAGER_CLASS + "-items-panel";
 
 class FileManager extends Widget {
 
+    _init() {
+        this._utils = getFileUtils();
+        super._init();
+    }
+
     _initTemplates() {
     }
 
@@ -39,6 +44,7 @@ class FileManager extends Widget {
         super._initMarkup();
 
         this._provider = this._getFileProvider();
+        this._currentFolder = new FileManagerItem("", "", true);
 
         const toolbar = this._createComponent($("<div>"), FileManagerToolbar, {
             "onItemClick": this._onToolbarItemClick.bind(this)
@@ -133,13 +139,12 @@ class FileManager extends Widget {
     _createBreadcrumbs() {
         this._breadcrumbs = this._createComponent($("<div>"), FileManagerBreadcrumbs, {
             path: "",
-            onPathChanged: path => this.setCurrentPath(path)
+            onPathChanged: path => this.setCurrentFolderPath(path)
         });
     }
 
     _onFilesTreeViewCurrentFolderChanged(e) {
-        this._loadItemListData();
-        this._breadcrumbs.option("path", this.getCurrentFolderPath());
+        this.setCurrentFolder(this._filesTreeView.getCurrentFolder());
     }
 
     _onToolbarItemClick(name) {
@@ -185,7 +190,7 @@ class FileManager extends Widget {
             return;
         }
 
-        this.setCurrentPath(item.relativeName);
+        this.setCurrentFolder(item);
     }
 
     _switchView(viewMode) {
@@ -388,16 +393,31 @@ class FileManager extends Widget {
         }
     }
 
-    setCurrentPath(path) {
-        this._filesTreeView.setCurrentPath(path);
+    setCurrentFolderPath(path) {
+        const parentPath = this._utils.getParentPath(path);
+        const name = this._utils.getName(path);
+        const folder = new FileManagerItem(parentPath, name, true);
+        this.setCurrentFolder(folder);
     }
 
     getCurrentFolderPath() {
-        return this._filesTreeView.getCurrentPath();
+        return this._currentFolder.relativeName;
+    }
+
+    setCurrentFolder(folder) {
+        const newPath = folder.relativeName;
+        if(newPath === this.getCurrentFolderPath()) {
+            return;
+        }
+
+        this._currentFolder = folder;
+        this._filesTreeView.setCurrentFolderPath(newPath);
+        this._loadItemListData();
+        this._breadcrumbs.option("path", newPath);
     }
 
     getCurrentFolder() {
-        return this._filesTreeView.getCurrentFolder();
+        return this._currentFolder;
     }
 
     getSelectedItems() {
