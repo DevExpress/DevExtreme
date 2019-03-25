@@ -2,7 +2,7 @@ import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import modules from "./ui.grid_core.modules";
 import { createObjectWithChanges, getIndexByKey } from "./ui.grid_core.utils";
-import { equalByValue, grep } from "../../core/utils/common";
+import { equalByValue, grep, deferUpdate } from "../../core/utils/common";
 import { each } from "../../core/utils/iterator";
 import { isDefined } from "../../core/utils/type";
 import { extend } from "../../core/utils/extend";
@@ -654,7 +654,8 @@ module.exports = {
                         let $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
                             isMaterial = themes.isMaterial(),
                             overlayTarget = $highlightContainer.length && !isMaterial ? $highlightContainer : $cell,
-                            isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
+                            editorPopup = $cell.find(".dx-dropdowneditor-overlay").data("dxPopup"),
+                            isOverlayVisible = editorPopup && editorPopup.option("visible"),
                             myPosition = isOverlayVisible ? "top right" : "top " + alignment,
                             atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
 
@@ -833,7 +834,9 @@ module.exports = {
                 },
                 _formItemPrepared: function(cellOptions, $container) {
                     this.callBase.apply(this, arguments);
-                    this.getController("validating").createValidator(cellOptions, $container.find(".dx-widget").first());
+                    deferUpdate(() => {
+                        this.getController("validating").createValidator(cellOptions, $container.find(".dx-widget").first());
+                    });
                 },
                 _cellPrepared: function($cell, parameters) {
                     if(!this.getController("editing").isFormEditMode()) {

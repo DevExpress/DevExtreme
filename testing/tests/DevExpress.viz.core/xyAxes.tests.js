@@ -4414,7 +4414,7 @@ QUnit.test("Do not adjust axis if it has min/max", function(assert) {
         max: 15
     });
 
-    this.axis.setBusinessRange({ min: -100, max: 100 }, undefined, undefined, true);
+    this.axis.setBusinessRange({ min: -100, max: 100 }, true);
     this.axis.setMarginOptions({});
 
     this.axis.adjust();

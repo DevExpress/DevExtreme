@@ -36,6 +36,7 @@ var UI_FEEDBACK = "UIFeedback",
     FOCUS_NAMESPACE = "Focus",
     ANONYMOUS_TEMPLATE_NAME = "template",
     TEXT_NODE = 3,
+    COMMENT_NODE = 8,
     TEMPLATE_SELECTOR = "[data-options*='dxTemplate']",
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 
@@ -267,9 +268,7 @@ var Widget = DOMComponent.inherit({
     },
 
     _extractTemplates: function() {
-        var templates = this.option("integrationOptions.templates"),
-            templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
-
+        var templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
         var templatesMap = {};
 
         templateElements.each(function(_, template) {
@@ -291,9 +290,14 @@ var Widget = DOMComponent.inherit({
         each(templatesMap, (function(templateName, value) {
             var deviceTemplate = this._findTemplateByDevice(value);
             if(deviceTemplate) {
-                templates[templateName] = this._createTemplate(deviceTemplate);
+                this._saveTemplate(templateName, deviceTemplate);
             }
         }).bind(this));
+    },
+
+    _saveTemplate: function(name, template) {
+        var templates = this.option("integrationOptions.templates");
+        templates[name] = this._createTemplate(template);
     },
 
     _findTemplateByDevice: function(templates) {
@@ -311,15 +315,16 @@ var Widget = DOMComponent.inherit({
     },
 
     _extractAnonymousTemplate: function() {
-        var templates = this.option("integrationOptions.templates"),
+        const templates = this.option("integrationOptions.templates"),
             anonymousTemplateName = this._getAnonymousTemplateName(),
             $anonymousTemplate = this.$element().contents().detach();
 
-        var $notJunkTemplateContent = $anonymousTemplate.filter(function(_, element) {
-                var isTextNode = element.nodeType === TEXT_NODE,
+        const $notJunkTemplateContent = $anonymousTemplate.filter(function(_, element) {
+                const isCommentNode = element.nodeType === COMMENT_NODE,
+                    isTextNode = element.nodeType === TEXT_NODE,
                     isEmptyText = $(element).text().trim().length < 1;
 
-                return !(isTextNode && isEmptyText);
+                return !(isTextNode && isEmptyText) && !isCommentNode;
             }),
             onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 

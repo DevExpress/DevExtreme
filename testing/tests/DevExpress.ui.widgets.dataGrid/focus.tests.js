@@ -1418,6 +1418,7 @@ QUnit.testInActiveWindow("Focused row index should preserve after paging operati
     };
 
     this.setupModule();
+    addOptionChangedHandlers(this);
 
     this.gridView.render($("#container"));
     this.clock.tick();
@@ -3974,3 +3975,58 @@ QUnit.testInActiveWindow("DataGrid should restore focused row by index after row
     // assert
     assert.equal(this.option("focusedRowKey"), "Dan", "focusedRowKey was changed to the next row");
 });
+
+QUnit.testInActiveWindow("DataGrid should restore focused row by index after row removed if repaintChangesOnly is true (T720083)", function(assert) {
+    this.$element = () => $("#container");
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        focusedRowKey: "Alex",
+        repaintChangesOnly: true,
+        editing: {
+            allowDeleting: true,
+            texts: { confirmDeleteMessage: "" }
+        }
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    this.removeRow(0);
+    this.clock.tick();
+
+    // assert
+    assert.equal(this.option("focusedRowKey"), "Dan", "focusedRowKey was changed to the next row");
+});
+
+QUnit.testInActiveWindow("DataGrid should restore tabindex for the first cell if focusedRowIndex is out of visible page (T726042)", function(assert) {
+    // arrange
+    this.$element = () => $("#container");
+    this.options = {
+        height: 100,
+        dataSource: generateItems(10),
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 2
+        }
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+
+    // act
+    $(this.getCellElement(0, 0)).removeAttr("tabindex");
+    this.option("focusedRowIndex", 9);
+    this.gridView.getView("rowsView").renderFocusState();
+
+    // assert
+    assert.equal($(this.getCellElement(0, 0)).attr("tabindex"), 0, "tabindex");
+});
+

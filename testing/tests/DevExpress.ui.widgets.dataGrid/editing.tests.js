@@ -37,6 +37,7 @@ import { MockColumnsController, MockDataController, setupDataGridModules, getCel
 import domUtils from "core/utils/dom";
 import browser from "core/utils/browser";
 import typeUtils from "core/utils/type";
+import commonUtils from "core/utils/common";
 import config from "core/config";
 import errors from "ui/widget/ui.errors";
 import devices from "core/devices";
@@ -3395,7 +3396,7 @@ QUnit.test("onRowInserted - Check key after insert row when custom store", funct
         countCallOnRowInserted++;
 
         // assert
-        assert.deepEqual(params.data, {}, "parameter data");
+        assert.deepEqual(params.data, { fieldTest: "testKey" }, "parameter data"); // T726008
         assert.strictEqual(params.key, "testKey", "parameter key");
     };
 
@@ -3409,6 +3410,50 @@ QUnit.test("onRowInserted - Check key after insert row when custom store", funct
 
     // assert
     assert.strictEqual(countCallOnRowInserted, 1, "count call onRowInserted");
+});
+
+QUnit.test("onRowUpdated - Check data after update row when custom store", function(assert) {
+    // arrange
+    var that = this,
+        countCallOnRowUpdated = 0,
+        rowsView = this.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true
+    };
+    that.options.dataSource = {
+        load: function() {
+            var d = $.Deferred();
+
+            d.resolve(that.array);
+
+            return d.promise();
+        },
+        update: function(key, values) {
+            var d = $.Deferred();
+            return d.resolve({ id: 2, name: "Updated", fromServer: true }).promise();
+        }
+    };
+
+    that.options.onRowUpdated = function(params) {
+        countCallOnRowUpdated++;
+
+        // assert
+        assert.deepEqual(params.data, { id: 2, name: "Updated", fromServer: true }, "parameter data"); // T726008
+        assert.strictEqual(params.key, that.array[1], "parameter key");
+    };
+
+    that.dataController.init();
+    rowsView.render($testElement);
+    that.editingController.optionChanged({ name: "onRowUpdated" });
+
+    // act
+    that.cellValue(1, "name", "Updated");
+    that.saveEditData();
+
+    // assert
+    assert.strictEqual(countCallOnRowUpdated, 1, "count call onRowUpdated");
 });
 
 // T147816
@@ -8721,6 +8766,17 @@ QUnit.testInActiveWindow("Tooltip should be positioned by left side when the dro
     assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
     assert.strictEqual(tooltipInstance.option("position").my, "top right", "position.my of the tooltip");
     assert.strictEqual(tooltipInstance.option("position").at, "top left", "position.at of the tooltip");
+
+    // act
+    eventsEngine.trigger($testElement.find("tbody td").eq(2).find(".dx-dropdowneditor-button")[0], "dxclick");
+    that.clock.tick();
+
+    // assert
+    // T724201
+    assert.notOk(selectBoxInstance.option("opened"), "drop-down editor is not opened");
+    tooltipInstance = $testElement.find("tbody td").eq(2).find(".dx-overlay.dx-invalid-message").dxOverlay("instance");
+    assert.strictEqual(tooltipInstance.option("position").my, "top left", "position.my of the tooltip is restored");
+    assert.strictEqual(tooltipInstance.option("position").at, "bottom left", "position.at of the tooltip is restored");
 });
 
 // T523770
@@ -13772,6 +13828,35 @@ QUnit.test("No exceptions on editing data when validationRules and editCellTempl
     } finally {
         fx.off = false;
         errors.log.restore();
+    }
+});
+
+// T721896
+QUnit.test("Validator should be rendered if deferUpdate is used in editCellTemplate", function(assert) {
+    // arrange
+    this.columns[0].editCellTemplate = function(container, options) {
+        // deferUpdate is called in template in devextreme-react
+        commonUtils.deferUpdate(() => {
+            $("<div>").appendTo(container).dxTextBox({
+                value: options.value
+            });
+        });
+    };
+
+    this.setupModules(this);
+    this.renderRowsView();
+    fx.off = true;
+
+    try {
+        // act
+        this.editRow(0);
+
+        // assert
+        this.preparePopupHelpers();
+        var $popupContent = this.getEditPopupContent();
+        assert.equal($popupContent.find(".dx-validator").length, 2, "two validators are rendered");
+    } finally {
+        fx.off = false;
     }
 });
 

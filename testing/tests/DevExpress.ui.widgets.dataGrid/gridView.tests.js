@@ -975,6 +975,39 @@ function createGridView(options, userOptions) {
         // assert
         assert.ok(this.rowsView.element().hasClass("dx-scrollable"), "has scrollable");
     });
+
+    // T722415
+    QUnit.test("Header container should have padding-right when using editCellTemplate, native scrolling and setting the grid's max-height CSS attribute", function(assert) {
+        // arrange
+        var $testElement = $("#container").css("maxHeight", "200px");
+
+        var gridView = this.createGridView({
+            columnsController: new MockColumnsController([{
+                caption: 'Column 1',
+                dataField: "Column1",
+                visible: true,
+                showEditorAlways: true,
+                allowEditing: true,
+                editCellTemplate: (_, options) => {
+                    return $("<textarea/>").css("minHeight", "100px").val(options.value);
+                }
+            }]),
+            dataController: new MockDataController({
+                items: [{ values: [1], rowType: "data" }, { values: [2], rowType: "data" }, { values: [3], rowType: "data" }, { values: [4], rowType: "data" }]
+            })
+        }, {
+            scrolling: {
+                useNative: true
+            }
+        });
+
+        // act
+        gridView.render($testElement);
+        gridView.update();
+
+        // assert
+        assert.strictEqual(parseFloat($(this.columnHeadersView.element()).css("paddingRight")), this.rowsView.getScrollbarWidth(), "padding-right");
+    });
 }());
 
 // Synchronize columns module///
