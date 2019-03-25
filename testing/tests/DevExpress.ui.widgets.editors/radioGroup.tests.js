@@ -175,26 +175,6 @@ module("hidden input", () => {
 });
 
 module("value", moduleConfig, () => {
-    test("should not throw an error when the value is \"null\" or \"undefine\"", assert => {
-        const errorLogStub = sinon.stub(errors, "log");
-
-        errorLogStub.withArgs("W1002").returns(true)
-            .throws("Non W1002 Exception");
-
-        createRadioGroup({
-            items: ['item1', 'item2', 'item3'],
-            value: void 0
-        });
-
-        createRadioGroup({
-            items: ['item1', 'item2', 'item3'],
-            value: null
-        });
-
-        assert.ok(true, "exception was not thrown");
-        errorLogStub.restore();
-    });
-
     test("should have correct initialized selection", assert => {
         let radioGroupInstance = null;
         const isItemChecked = index => radioGroupInstance.itemElements().eq(index).hasClass(RADIO_BUTTON_CHECKED_CLASS);
