@@ -6195,6 +6195,22 @@ declare module DevExpress.ui {
         /** @name dxDropDownMenu.open() */
         open(): void;
     }
+    /** @name dxFileManager.Options */
+    export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
+        /** @name dxFileManager.Options.customThumbnail */
+        customThumbnail?: ((fileItem: any) => string);
+        /** @name dxFileManager.Options.fileSystemStore */
+        fileSystemStore?: any;
+        /** @name dxFileManager.Options.itemList */
+        itemList?: any;
+        /** @name dxFileManager.Options.selection */
+        selection?: any;
+    }
+    /** @name dxFileManager */
+    export class dxFileManager extends Widget {
+        constructor(element: Element, options?: dxFileManagerOptions)
+        constructor(element: JQuery, options?: dxFileManagerOptions)
+    }
     /** @name dxFileUploader.Options */
     export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
         /** @name dxFileUploader.Options.accept */
@@ -6264,12 +6280,6 @@ declare module DevExpress.ui {
     export class dxFileUploader extends Editor {
         constructor(element: Element, options?: dxFileUploaderOptions)
         constructor(element: JQuery, options?: dxFileUploaderOptions)
-    }
-    export interface dxFileManagerOptions extends WidgetOptions<dxFileManager>{
-    }
-    export class dxFileManager extends Widget {
-        constructor(element: Element, options?: dxFileManagerOptions)
-        constructor(element: JQuery, options?: dxFileManagerOptions)
     }
     /** @name dxFilterBuilder.Options */
     export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
