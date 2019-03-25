@@ -255,45 +255,6 @@ QUnit.test("regression: B251795", function(assert) {
     assert.equal(itemSelectFired, 0);
 });
 
-QUnit.module("widget sizing render");
-
-QUnit.test("change width", function(assert) {
-    var $element = $("#widget").dxTabs({ items: [1, 2, 3] }),
-        instance = $element.dxTabs("instance"),
-        customWidth = 400;
-
-    instance.option("width", customWidth);
-
-    assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
-});
-
-QUnit.test("nav buttons should be rendered when widget is rendered invisible", function(assert) {
-    var $container = $("<div>");
-
-    try {
-        var $element = $("<div>").appendTo($container).dxTabs({
-            items: [
-                { text: "user" },
-                { text: "analytics" },
-                { text: "customers" },
-                { text: "search" },
-                { text: "favorites" }
-            ],
-            wordWrap: false,
-            scrollingEnabled: true,
-            showNavButtons: true,
-            width: 100
-        });
-
-        $container.appendTo("#qunit-fixture");
-        domUtils.triggerShownEvent($container);
-
-        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
-    } finally {
-        $container.remove();
-    }
-});
-
 QUnit.test("Tabs in multiple mode", function(assert) {
     var $element = $("#widget").dxTabs({
             items: [
@@ -396,6 +357,33 @@ QUnit.test("nav buttons class should be added if showNavButtons=true", function(
     });
 
     assert.ok($element.hasClass(TABS_NAV_BUTTONS_CLASS), "navs class added");
+});
+
+QUnit.test("nav buttons should be rendered when widget is rendered invisible", function(assert) {
+    var $container = $("<div>");
+
+    try {
+        var $element = $("<div>").appendTo($container).dxTabs({
+            items: [
+                { text: "user" },
+                { text: "analytics" },
+                { text: "customers" },
+                { text: "search" },
+                { text: "favorites" }
+            ],
+            wordWrap: false,
+            scrollingEnabled: true,
+            showNavButtons: true,
+            width: 100
+        });
+
+        $container.appendTo("#qunit-fixture");
+        domUtils.triggerShownEvent($container);
+
+        assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 2, "nav buttons are rendered");
+    } finally {
+        $container.remove();
+    }
 });
 
 QUnit.test("right nav button should be rendered if showNavButtons=true and possible to scroll right", function(assert) {
@@ -621,7 +609,6 @@ QUnit.test("tabs should hide navigation if scrollable is not allowed after resiz
         instance = $element.dxTabs("instance");
 
     instance.option("width", 700);
-    $($element).trigger("dxresize");
 
     assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons was removed");
     assert.equal($element.find("." + TABS_SCROLLABLE_CLASS).length, 0, "scrollable was removed");
