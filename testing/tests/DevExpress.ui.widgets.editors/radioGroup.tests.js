@@ -1,6 +1,5 @@
 import $ from "jquery";
 import devices from "core/devices";
-import errors from "ui/widget/ui.errors";
 import executeAsyncMock from "../../helpers/executeAsyncMock.js";
 import keyboardMock from "../../helpers/keyboardMock.js";
 import { DataSource } from "data/data_source/data_source";
