@@ -367,6 +367,12 @@ var TabPanel = MultiView.inherit({
         }
     },
 
+    repaint: function() {
+        this.callBase();
+
+        this._tabs._dimensionChanged();
+    },
+
     _optionChanged: function(args) {
         var name = args.name,
             value = args.value,
@@ -396,10 +402,6 @@ var TabPanel = MultiView.inherit({
             case "scrollByContent":
             case "showNavButtons":
                 this._setTabsOption(fullName, value);
-                break;
-            case "width":
-                this._setTabsOption(fullName, value);
-                this.callBase(args);
                 break;
             case "focusedElement":
                 var id = value ? $(value).index() : value;

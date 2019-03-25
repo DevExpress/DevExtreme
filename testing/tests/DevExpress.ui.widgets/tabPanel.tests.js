@@ -142,16 +142,6 @@ QUnit.test("selectedIndex option test", function(assert) {
     assert.equal(this.tabWidgetInstance.option("selectedIndex"), 1, "option <selectedIndex> of nested tabs widget successfully changed");
 });
 
-QUnit.test("width option test", function(assert) {
-    assert.expect(2);
-
-    var dimensionChangedStub = sinon.stub(this.tabWidgetInstance, "_dimensionChanged");
-    this.tabPanelInstance.option("width", 100);
-
-    assert.equal(this.tabWidgetInstance.option("width"), 100, "option <width> of nested tabs widget successfully changed");
-    assert.equal(dimensionChangedStub.callCount, 1, "tabs were changed");
-});
-
 QUnit.test("selectedItem option test", function(assert) {
     assert.expect(2);
 
