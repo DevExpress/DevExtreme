@@ -183,15 +183,12 @@ var GoogleProvider = DynamicProvider.inherit({
     _init: function() {
         return new Promise(function(resolve) {
             this._resolveLocation(this._option("center")).then(function(center) {
-                var controls = this._option("controls");
+                var showDefaultUI = this._option("controls");
 
                 this._map = new google.maps.Map(this._$container[0], {
                     zoom: this._option("zoom"),
                     center: center,
-                    panControl: controls,
-                    zoomControl: controls,
-                    mapTypeControl: controls,
-                    streetViewControl: controls
+                    disableDefaultUI: !showDefaultUI
                 });
 
                 var listener = google.maps.event.addListener(this._map, 'idle', function() {
@@ -265,13 +262,10 @@ var GoogleProvider = DynamicProvider.inherit({
     },
 
     updateControls: function() {
-        var controls = this._option("controls");
+        var showDefaultUI = this._option("controls");
 
         this._map.setOptions({
-            panControl: controls,
-            zoomControl: controls,
-            mapTypeControl: controls,
-            streetViewControl: controls
+            disableDefaultUI: !showDefaultUI
         });
 
         return Promise.resolve();

@@ -91,10 +91,7 @@ var google = window.google = {
                 google.options = {};
                 google.options.mapTypeId = options.mapTypeId;
                 google.options.zoom = options.zoom;
-                google.options.panControl = options.panControl;
-                google.options.zoomControl = options.zoomControl;
-                google.options.mapTypeControl = options.mapTypeControl;
-                google.options.streetViewControl = options.streetViewControl;
+                google.options.disableDefaultUI = options.disableDefaultUI;
                 google.options.center = options.center;
             }
 
@@ -142,10 +139,7 @@ var google = window.google = {
             };
             this.setOptions = function(options) {
                 google.assignedOptions = {};
-                google.assignedOptions.panControl = options.panControl;
-                google.assignedOptions.zoomControl = options.zoomControl;
-                google.assignedOptions.mapTypeControl = options.mapTypeControl;
-                google.assignedOptions.streetViewControl = options.streetViewControl;
+                google.assignedOptions.disableDefaultUI = options.disableDefaultUI;
                 google.gestureHandling = options.gestureHandling;
             };
             this.setStreetView = function() {};
