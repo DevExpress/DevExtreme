@@ -10,11 +10,7 @@ const TABS_ITEM_CLASS = "dx-tab",
 let toSelector = (cssClass) => `.${cssClass}`;
 
 
-QUnit.module("Width", {
-    afterEach: function() {
-        this.helper.remove();
-    }
-});
+QUnit.module("Width");
 
 class TabsWidthTestHelper {
     constructor(assert, scrollingEnabled, setWidthApproach) {
@@ -22,11 +18,13 @@ class TabsWidthTestHelper {
         this.$element = $("<div>");
         this.assert = assert;
         this.scrollingEnabled = scrollingEnabled;
-        this.isContainer = (setWidthApproach === "container");
+        this.changeContainerWidth = (setWidthApproach === "container");
     }
 
-    _initializeInstanceTabs(checkedWidth) {
-        this.isContainer && this.$container.width(checkedWidth);
+    _initializeInstanceTabs(width) {
+        if(this.changeContainerWidth) {
+            this.$container.width(width);
+        }
 
         this.$element.appendTo(this.$container).dxTabs({
             items: [
@@ -35,7 +33,7 @@ class TabsWidthTestHelper {
             ],
             scrollingEnabled: this.scrollingEnabled,
             showNavButtons: true,
-            width: this.isContainer ? undefined : checkedWidth
+            width: this.changeContainerWidth ? undefined : width
         });
         this.$container.appendTo("#qunit-fixture");
 
@@ -55,7 +53,7 @@ class TabsWidthTestHelper {
     checkFixedTabs() {
         let tabItems = this.$element.find(toSelector(TABS_ITEM_CLASS));
 
-        this.assert.equal(this.instance.option("width"), this.isContainer ? undefined : 400);
+        this.assert.equal(this.instance.option("width"), this.changeContainerWidth ? undefined : 400);
         this.assert.equal(this.$element.outerWidth(), 400);
         this.assert.ok(tabItems.eq(0).width() > 190, tabItems.eq(0).width() + " > 190");
         this.assert.ok(tabItems.eq(1).width() > 190, tabItems.eq(1).width() + " > 190");
@@ -70,7 +68,7 @@ class TabsWidthTestHelper {
     checkStretchedTabs() {
         let tabItems = this.$element.find(toSelector(TABS_ITEM_CLASS));
 
-        this.assert.equal(this.instance.option("width"), this.instance.option("width"), this.isContainer ? undefined : 200);
+        this.assert.equal(this.instance.option("width"), this.instance.option("width"), this.changeContainerWidth ? undefined : 200);
         this.assert.equal(this.$element.outerWidth(), 200);
         this.assert.ok(tabItems.eq(0).width() < 70, tabItems.eq(0).width() + " < 70");
         this.assert.ok(tabItems.eq(1).width() > 130, tabItems.eq(1).width() + " > 130");
@@ -85,7 +83,7 @@ class TabsWidthTestHelper {
     checkNavigationButtonsTabs() {
         let tabItems = this.$element.find(toSelector(TABS_ITEM_CLASS));
 
-        this.assert.equal(this.instance.option("width"), this.isContainer ? undefined : 100);
+        this.assert.equal(this.instance.option("width"), this.changeContainerWidth ? undefined : 100);
         this.assert.equal(this.$element.outerWidth(), 100);
 
         if(this.scrollingEnabled) {
@@ -100,7 +98,7 @@ class TabsWidthTestHelper {
     }
 
     setWidth(width) {
-        if(this.isContainer) {
+        if(this.changeContainerWidth) {
             this.$container.width(width);
             domUtils.triggerResizeEvent(this.$element);
         } else {
@@ -118,6 +116,7 @@ class TabsWidthTestHelper {
             this.helper.createFixedTabs();
             this.helper.setWidth(200);
             this.helper.checkStretchedTabs();
+            this.helper.remove();
         });
 
         QUnit.test("Show fixed tabs, resize to show navigation buttons" + config, function(assert) {
@@ -125,6 +124,7 @@ class TabsWidthTestHelper {
             this.helper.createFixedTabs();
             this.helper.setWidth(100);
             this.helper.checkNavigationButtonsTabs();
+            this.helper.remove();
         });
 
         QUnit.test("Show stretched tabs, resize to show navigation buttons" + config, function(assert) {
@@ -132,6 +132,7 @@ class TabsWidthTestHelper {
             this.helper.createStretchedTabs();
             this.helper.setWidth(100);
             this.helper.checkNavigationButtonsTabs();
+            this.helper.remove();
         });
 
         QUnit.test("Show stretched tabs, resize to show fixed tabs" + config, function(assert) {
@@ -139,6 +140,7 @@ class TabsWidthTestHelper {
             this.helper.createStretchedTabs();
             this.helper.setWidth(400);
             this.helper.checkFixedTabs();
+            this.helper.remove();
         });
 
         QUnit.test("Show navigation buttons, resize to show stretched tabs" + config, function(assert) {
@@ -146,6 +148,7 @@ class TabsWidthTestHelper {
             this.helper.createNavigationButtonsTabs();
             this.helper.setWidth(200);
             this.helper.checkStretchedTabs();
+            this.helper.remove();
         });
 
         QUnit.test("Show navigation buttons, resize to show fixed tabs" + config, function(assert) {
@@ -153,6 +156,7 @@ class TabsWidthTestHelper {
             this.helper.createFixedTabs();
             this.helper.setWidth(400);
             this.helper.checkFixedTabs();
+            this.helper.remove();
         });
     });
 });
