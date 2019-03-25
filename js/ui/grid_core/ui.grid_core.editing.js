@@ -2214,6 +2214,12 @@ module.exports = {
                  */
                 useIcons: false,
                 /**
+                 * @name GridBaseOptions.editing.selectTextOnEditStart
+                 * @type boolean
+                 * @default false
+                 */
+                selectTextOnEditStart: false,
+                /**
                  * @name dxDataGridOptions.editing.texts
                  * @type object
                  */

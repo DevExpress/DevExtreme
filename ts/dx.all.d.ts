@@ -131,18 +131,18 @@ interface JQuery {
     dxDropDownButton(options: DevExpress.ui.dxDropDownButtonOptions): JQuery;
 }
 interface JQuery {
-    dxFileUploader(): JQuery;
-    dxFileUploader(options: "instance"): DevExpress.ui.dxFileUploader;
-    dxFileUploader(options: string): any;
-    dxFileUploader(options: string, ...params: any[]): any;
-    dxFileUploader(options: DevExpress.ui.dxFileUploaderOptions): JQuery;
-}
-interface JQuery {
     dxFileManager(): JQuery;
     dxFileManager(options: "instance"): DevExpress.ui.dxFileManager;
     dxFileManager(options: string): any;
     dxFileManager(options: string, ...params: any[]): any;
     dxFileManager(options: DevExpress.ui.dxFileManagerOptions): JQuery;
+}
+interface JQuery {
+    dxFileUploader(): JQuery;
+    dxFileUploader(options: "instance"): DevExpress.ui.dxFileUploader;
+    dxFileUploader(options: string): any;
+    dxFileUploader(options: string, ...params: any[]): any;
+    dxFileUploader(options: DevExpress.ui.dxFileUploaderOptions): JQuery;
 }
 interface JQuery {
     dxFilterBuilder(): JQuery;
@@ -4913,6 +4913,8 @@ declare module DevExpress.ui {
         popup?: dxPopupOptions;
         /** @name GridBase.Options.editing.refreshMode */
         refreshMode?: 'full' | 'reshape' | 'repaint';
+        /** @name GridBase.Options.editing.selectTextOnEditStart */
+        selectTextOnEditStart?: boolean;
         /** @name GridBase.Options.editing.texts */
         texts?: GridBaseEditingTexts;
         /** @name GridBase.Options.editing.useIcons */
