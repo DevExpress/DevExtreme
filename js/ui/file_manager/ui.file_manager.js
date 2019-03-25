@@ -364,9 +364,9 @@ class FileManager extends Widget {
             },
 
             /**
-            * @name dxTreeViewOptions.customThumbnail
+            * @name dxFileManagerOptions.customThumbnail
             * @type function
-            * @type_function_param1 item:dxFileManagerItem
+            * @type_function_param1 fileItem:object
             * @type_function_return string
             */
             customThumbnail: null
