@@ -68,7 +68,7 @@ class TabsWidthTestHelper {
     checkStretchedTabs() {
         let tabItems = this.$element.find(toSelector(TABS_ITEM_CLASS));
 
-        this.assert.equal(this.instance.option("width"), this.instance.option("width"), this.changeContainerWidth ? undefined : 200);
+        this.assert.equal(this.instance.option("width"), this.changeContainerWidth ? undefined : 200);
         this.assert.equal(this.$element.outerWidth(), 200);
         this.assert.ok(tabItems.eq(0).width() < 70, tabItems.eq(0).width() + " < 70");
         this.assert.ok(tabItems.eq(1).width() > 130, tabItems.eq(1).width() + " > 130");
@@ -112,51 +112,51 @@ class TabsWidthTestHelper {
         const config = ", scrollingEnabled=" + scrollingEnabled + ", change " + setWidthApproach + ".width";
 
         QUnit.test("Show fixed tabs, resize to show stretched tabs" + config, function(assert) {
-            this.helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
-            this.helper.createFixedTabs();
-            this.helper.setWidth(200);
-            this.helper.checkStretchedTabs();
-            this.helper.remove();
+            let helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
+            helper.createFixedTabs();
+            helper.setWidth(200);
+            helper.checkStretchedTabs();
+            helper.remove();
         });
 
         QUnit.test("Show fixed tabs, resize to show navigation buttons" + config, function(assert) {
-            this.helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
-            this.helper.createFixedTabs();
-            this.helper.setWidth(100);
-            this.helper.checkNavigationButtonsTabs();
-            this.helper.remove();
+            let helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
+            helper.createFixedTabs();
+            helper.setWidth(100);
+            helper.checkNavigationButtonsTabs();
+            helper.remove();
         });
 
         QUnit.test("Show stretched tabs, resize to show navigation buttons" + config, function(assert) {
-            this.helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
-            this.helper.createStretchedTabs();
-            this.helper.setWidth(100);
-            this.helper.checkNavigationButtonsTabs();
-            this.helper.remove();
+            let helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
+            helper.createStretchedTabs();
+            helper.setWidth(100);
+            helper.checkNavigationButtonsTabs();
+            helper.remove();
         });
 
         QUnit.test("Show stretched tabs, resize to show fixed tabs" + config, function(assert) {
-            this.helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
-            this.helper.createStretchedTabs();
-            this.helper.setWidth(400);
-            this.helper.checkFixedTabs();
-            this.helper.remove();
+            let helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
+            helper.createStretchedTabs();
+            helper.setWidth(400);
+            helper.checkFixedTabs();
+            helper.remove();
         });
 
         QUnit.test("Show navigation buttons, resize to show stretched tabs" + config, function(assert) {
-            this.helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
-            this.helper.createNavigationButtonsTabs();
-            this.helper.setWidth(200);
-            this.helper.checkStretchedTabs();
-            this.helper.remove();
+            let helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
+            helper.createNavigationButtonsTabs();
+            helper.setWidth(200);
+            helper.checkStretchedTabs();
+            helper.remove();
         });
 
         QUnit.test("Show navigation buttons, resize to show fixed tabs" + config, function(assert) {
-            this.helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
-            this.helper.createFixedTabs();
-            this.helper.setWidth(400);
-            this.helper.checkFixedTabs();
-            this.helper.remove();
+            let helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
+            helper.createFixedTabs();
+            helper.setWidth(400);
+            helper.checkFixedTabs();
+            helper.remove();
         });
     });
 });
