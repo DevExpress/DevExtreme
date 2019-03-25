@@ -7,37 +7,47 @@ module("icon utils", {
         this.sourceArray = [{// 1
             source: "data:image/png;base64,qwertyuiopasdfghjklzxcvbmnQWERTYUIOPLKJHGFDSAZXCVBNM/+0987654321",
             result: "image"
-        }, {// 2
+        },
+        {// 2
             source: "../folder/123.jgp",
             result: "image"
-        }, {// 3
+        },
+        {// 3
             source: "localhost/JFLSKDksjdhfolHWThr30oi",
             result: "image"
-        }, {// 4
+        },
+        {// 4
             source: "glyphicon glyphicon-icon",
             result: "fontIcon"
-        }, {// 5
+        },
+        {// 5
             source: "glyphicon-icon glyphicon",
             result: "fontIcon"
-        }, {// 6
+        },
+        {// 6
             source: "fa fa-icon",
             result: "fontIcon"
-        }, {// 7
+        },
+        {// 7
             source: "fa-lg fa-icon fa",
             result: "fontIcon"
-        }, {// 8
+        },
+        {// 8
             source: "ion ion-icon",
             result: "fontIcon"
-        }, {// 9
+        },
+        {// 9
             source: "ionicons ion-icon",
             result: "fontIcon"
         }, {// 10
             source: "icon_-190",
             result: "dxIcon"
-        }, {// 11
+        },
+        {// 11
             source: "my my-icon",
             result: "fontIcon"
-        }, {// 12
+        },
+        {// 12
             source: "<svg></svg>",
             result: "svg"
         }];
@@ -73,7 +83,7 @@ module("icon utils", {
                 case "svg":
                     assert.ok($iconElement.hasClass("dx-icon"), `correct for ${result}`);
                     assert.strictEqual($iconElement.get(0).tagName, "I", `correct for ${result}`);
-                    assert.strictEqual($iconElement.children().get(0).tagName, "svg", `correct for ${result}`);
+                    assert.strictEqual($iconElement.children().get(0).tagName.toUpperCase(), "SVG", `correct for ${result}`);
                     break;
                 default:
                     break;
