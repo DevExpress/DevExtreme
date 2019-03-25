@@ -148,6 +148,22 @@
         background-color: transparent;
         .dx-texteditor-buttons-container {
             right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+
+            + .dx-texteditor-input-container {
+                .dx-texteditor-input {
+                    padding-left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                    padding-right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                }
+
+                .dx-placeholder {
+                    left: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+
+                    .dx-rtl& {
+                        left: auto;
+                        right: @MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+                    }
+                }
+            }
         }
 
         &:after {
@@ -157,17 +173,6 @@
         &.dx-state-hover {
             &:after {
                 border-bottom: 2px solid @texteditor-hover-border-color;
-            }
-        }
-
-        &.dx-show-clear-button {
-            .dx-texteditor-input {
-                padding-right: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                .dx-rtl &,
-                .dx-rtl& {
-                    padding: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING;
-                    padding-left: @MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-                }
             }
         }
 

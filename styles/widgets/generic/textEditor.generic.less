@@ -167,6 +167,17 @@
                     padding-right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
                 }
             }
+
+            .dx-placeholder {
+                left: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+            }
+
+            .dx-rtl& {
+                .dx-placeholder {
+                    left: 0;
+                    right: @GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+                }
+            }
         }
     }
 }

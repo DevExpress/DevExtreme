@@ -366,7 +366,11 @@
 .dx-editor-underlined {
     .dx-texteditor-buttons-container {
         > .dx-button {
-            margin: 0 @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN;
+            margin: 0 @MATERIAL_EDITOR_CUSTOM_BUTTON_MARGIN 3px;
+
+            .dx-button-content {
+                padding-bottom: 3px;
+            }
         }
 
         &.dx-texteditor-before-buttons-container,
