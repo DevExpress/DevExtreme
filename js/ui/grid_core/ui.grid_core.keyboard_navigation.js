@@ -1834,29 +1834,48 @@ module.exports = {
                     }
                 },
 
+                _formItemPrepared: function(parameters, $cell) {
+                    var editorInstance = this._getEditorInstance($cell),
+                        isSelectTextOnEditingStart = this.option("editing.selectTextOnEditStart");
+                    if(editorInstance && isSelectTextOnEditingStart) {
+                        this._handleSelectAllEditCellText(editorInstance);
+                    }
+                },
+
                 _editCellPrepared: function($cell) {
-                    var keyboardController = this.getController("keyboardNavigation"),
+                    var editorInstance = this._getEditorInstance($cell),
+                        keyboardController = this.getController("keyboardNavigation"),
                         isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted(),
-                        editorInstance = isEditingNavigationMode && this._getEditorInstance($cell);
-
+                        isSelectTextOnEditingStart = this.option("editing.selectTextOnEditStart");
                     if(editorInstance) {
-                        ["downArrow", "upArrow"].forEach(function(keyName) {
-                            let originalKeyHandler = editorInstance._supportedKeys()[keyName];
-                            editorInstance.registerKeyHandler(keyName, e => {
-                                let isDropDownOpened = editorInstance._input().attr("aria-expanded") === "true";
-                                if(isDropDownOpened) {
-                                    return originalKeyHandler && originalKeyHandler.call(editorInstance, e);
-                                }
-                            });
-                        });
-
-                        editorInstance.registerKeyHandler("leftArrow", noop);
-                        editorInstance.registerKeyHandler("rightArrow", noop);
-
-                        let isDateBoxWithMask = editorInstance.NAME === DATEBOX_WIDGET_NAME && editorInstance.option("useMaskBehavior");
-                        if(isDateBoxWithMask) {
-                            editorInstance.registerKeyHandler("enter", noop);
+                        if(isEditingNavigationMode) {
+                            this._handleEditingNavigationMode(editorInstance);
+                        } else if(isSelectTextOnEditingStart) {
+                            this._handleSelectAllEditCellText(editorInstance);
                         }
+                    }
+                },
+                _handleSelectAllEditCellText: function(editorInstance) {
+                    let input = $(editorInstance.element()).find(".dx-texteditor-input").get(0);
+                    input && eventsEngine.on(input, "focusin", () => input.select());
+                },
+                _handleEditingNavigationMode: function(editorInstance) {
+                    ["downArrow", "upArrow"].forEach(function(keyName) {
+                        let originalKeyHandler = editorInstance._supportedKeys()[keyName];
+                        editorInstance.registerKeyHandler(keyName, e => {
+                            let isDropDownOpened = editorInstance._input().attr("aria-expanded") === "true";
+                            if(isDropDownOpened) {
+                                return originalKeyHandler && originalKeyHandler.call(editorInstance, e);
+                            }
+                        });
+                    });
+
+                    editorInstance.registerKeyHandler("leftArrow", noop);
+                    editorInstance.registerKeyHandler("rightArrow", noop);
+
+                    let isDateBoxWithMask = editorInstance.NAME === DATEBOX_WIDGET_NAME && editorInstance.option("useMaskBehavior");
+                    if(isDateBoxWithMask) {
+                        editorInstance.registerKeyHandler("enter", noop);
                     }
                 },
                 _getEditorInstance: function($cell) {
@@ -1872,17 +1891,18 @@ module.exports = {
             editing: {
                 editCell: function(rowIndex, columnIndex) {
                     var isCellEditing = this.callBase(rowIndex, columnIndex),
-                        keyboardNavigationController = this.getController("keyboardNavigation");
+                        keyboardController = this.getController("keyboardNavigation");
 
                     if(isCellEditing) {
-                        keyboardNavigationController.setupFocusedView();
+                        keyboardController.setupFocusedView();
                     }
 
                     return isCellEditing;
                 },
                 editRow: function(rowIndex) {
+                    let keyboardController = this.getController("keyboardNavigation");
                     if(this.option("editing.mode") === EDIT_MODE_FORM) {
-                        this._keyboardNavigationController._resetFocusedCell();
+                        keyboardController._resetFocusedCell();
                     }
                     this.callBase(rowIndex);
                 },
