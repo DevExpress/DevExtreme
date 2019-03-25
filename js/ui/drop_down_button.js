@@ -234,14 +234,15 @@ let DropDownButton = Widget.inherit({
         });
     },
 
-    _actionButtonConfig() {
+    get _actionButtonConfig() {
         const showToggleButton = this.option("showToggleButton");
+        let selectedItem = this.option("selectedItem");
         const defaultConfig = {
             onClick: ({ event }) => {
                 if(showToggleButton) {
                     this._actionClickAction({
-                        event: event,
-                        selectedItem: this.option("selectedItem")
+                        event,
+                        selectedItem
                     });
                 } else {
                     this.toggle();
@@ -251,8 +252,6 @@ let DropDownButton = Widget.inherit({
             iconPosition: showToggleButton ? "left" : "right",
             elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
         };
-
-        let selectedItem = this.option("selectedItem");
 
         if(isPlainObject(selectedItem)) {
             const displayValue = this._displayGetter(selectedItem);
@@ -268,7 +267,7 @@ let DropDownButton = Widget.inherit({
 
     _getButtonGroupItems() {
         const items = [];
-        items.push(this._actionButtonConfig());
+        items.push(this._actionButtonConfig);
         if(this.option("showToggleButton")) {
             items.push({
                 icon: "spindown",
@@ -392,7 +391,7 @@ let DropDownButton = Widget.inherit({
 
     _showSelectedItem() {
         if(this.option("showSelectedItem")) {
-            this._buttonGroup.option("items[0]", this._actionButtonConfig());
+            this._buttonGroup.option("items[0]", this._actionButtonConfig);
         }
     },
 
