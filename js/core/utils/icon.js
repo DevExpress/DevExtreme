@@ -7,7 +7,7 @@ const getImageSourceType = (source) => {
         return false;
     }
 
-    if(/\s*<svg[^>]*>[^]*<\/svg>/im.test(source)) {
+    if(/^\s*<svg[^>]*>[^]*<\/svg>\s*$/i.test(source)) {
         return "svg";
     }
 
