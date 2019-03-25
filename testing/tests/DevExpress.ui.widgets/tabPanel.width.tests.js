@@ -61,7 +61,7 @@ class TabPanelWidthTestHelper {
         this.assert.equal(this.tabsWidgetInstance.option("width"), undefined);
         this.assert.equal(this.$tabs.outerWidth(), width);
         this.assert.equal(this.$element.outerWidth(), width);
-        this.assert.equal(this.$element.find(toSelector(TABS_NAV_BUTTON_CLASS)).length, isNavButtons ? 2 : 0, `${isNavButtons} navigation buttons should be rendered`);
+        this.assert.equal(this.$element.find(toSelector(TABS_NAV_BUTTON_CLASS)).length, isNavButtons ? 2 : 0, `${isNavButtons ? 2 : 0} navigation buttons should be rendered`);
     }
 
     setWidth(width) {
@@ -76,9 +76,9 @@ class TabPanelWidthTestHelper {
 }
 
 ["container", "option"].forEach((setWidthApproach) => {
-    const config = ", change " + setWidthApproach + ".width";
+    const config = `, change ${setWidthApproach}.width`;
 
-    QUnit.test(`Tabpanel with fixed tabs, resize to show navigation button tabs ${config}`, (assert) => {
+    QUnit.test(`Tabpanel with fixed tabs, resize to show navigation button tabs${config}`, (assert) => {
         let helper = new TabPanelWidthTestHelper(assert, setWidthApproach);
         helper.createTabPanel(400, false);
         helper.setWidth(100);
