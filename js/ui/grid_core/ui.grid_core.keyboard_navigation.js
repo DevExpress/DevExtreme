@@ -1840,6 +1840,7 @@ module.exports = {
                     if(editorInstance && isSelectTextOnEditingStart) {
                         this._handleSelectAllEditCellText(editorInstance);
                     }
+                    this.callBase.apply(this, arguments);
                 },
 
                 _editCellPrepared: function($cell) {
@@ -1854,6 +1855,7 @@ module.exports = {
                             this._handleSelectAllEditCellText(editorInstance);
                         }
                     }
+                    this.callBase.apply(this, arguments);
                 },
                 _handleSelectAllEditCellText: function(editorInstance) {
                     let input = $(editorInstance.element()).find(".dx-texteditor-input").get(0);
