@@ -13,6 +13,7 @@ import FileManagerThumbnailsItemList from "./ui.file_manager.item_list.thumbnail
 import FileManagerToolbar from "./ui.file_manager.toolbar";
 import FileManagerEditingControl from "./ui.file_manager.editing";
 import FileManagerBreadcrumbs from "./ui.file_manager.breadcrumbs";
+import { FileManagerFileCommands } from "./ui.file_manager.commands";
 
 import { FileProvider } from "../../file_provider/file_provider";
 import ArrayFileProvider from "../../file_provider/file_provider.array";
@@ -30,16 +31,6 @@ const FILE_MANAGER_EDITING_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-editing-cont
 const FILE_MANAGER_ITEMS_PANEL_CLASS = FILE_MANAGER_CLASS + "-items-panel";
 
 class FileManager extends Widget {
-
-    _init() {
-        this._commands = {
-            open: () => this._tryOpen(),
-            thumbnails: () => this._switchView("thumbnails"),
-            details: () => this._switchView("details")
-        };
-
-        super._init();
-    }
 
     _initTemplates() {
     }
@@ -128,6 +119,7 @@ class FileManager extends Widget {
             onGetItems: this._getItemListItems.bind(this),
             onError: this._showError.bind(this),
             onSelectedItemOpened: item => this._tryOpen(item),
+            onContextMenuItemClick: this._onContextMenuItemClick.bind(this),
             getItemThumbnail: this._getItemThumbnail.bind(this)
         };
 
@@ -150,8 +142,15 @@ class FileManager extends Widget {
         this._breadcrumbs.option("path", this.getCurrentFolderPath());
     }
 
-    _onToolbarItemClick(buttonName) {
-        this.executeCommand(buttonName);
+    _onToolbarItemClick(name) {
+        const fileItem = this._getMultipleSelectedItems();
+        const command = FileManagerFileCommands.find(c => c.name === name);
+        command.handler(this, fileItem);
+    }
+
+    _onContextMenuItemClick(name, fileItem) {
+        let command = FileManagerFileCommands.find(c => c.name === name);
+        command && command.handler(this, fileItem);
     }
 
     _setItemsViewAreaActive(active) {
@@ -387,19 +386,6 @@ class FileManager extends Widget {
             default:
                 super._optionChanged(args);
         }
-    }
-
-    executeCommand(commandName) {
-        const done = this._editing.executeCommand(commandName);
-        if(done) {
-            return;
-        }
-
-        const action = this._commands[commandName];
-        if(!action) {
-            throw "Incorrect command name.";
-        }
-        action.call(this);
     }
 
     setCurrentPath(path) {

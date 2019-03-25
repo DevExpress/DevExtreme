@@ -11,19 +11,6 @@ import FileManagerFileUploader from "./ui.file_manager.file_uploader";
 
 class FileManagerEditingControl extends Widget {
 
-    _init() {
-        this._commands = {
-            rename: this._tryRename,
-            create: this._tryCreate,
-            delete: this._tryDelete,
-            move: this._tryMove,
-            copy: this._tryCopy,
-            upload: this._tryUpload,
-        };
-
-        super._init();
-    }
-
     _initMarkup() {
         super._initMarkup();
 
@@ -102,23 +89,17 @@ class FileManagerEditingControl extends Widget {
         };
     }
 
-    _tryRename() {
-        const item = this._model.getSingleSelectedItem();
-
-        if(!item) {
-            return;
-        }
-
-        this._tryEditAction(
+    tryRename(fileItem) {
+        fileItem && this._tryEditAction(
             this._renameItemDialog,
-            result => this._provider.renameItem(item, result.name),
+            result => this._provider.renameItem(fileItem, result.name),
             "Item renamed",
-            info => `Rename operation failed for the ${item.name} item`,
-            item.name
+            () => `Rename operation failed for the ${fileItem.name} item`,
+            fileItem.name
         );
     }
 
-    _tryCreate() {
+    tryCreate() {
         const item = this._model.getCurrentFolder();
         const onCreatingHandler = this.option("onCreating");
         onCreatingHandler();
@@ -131,48 +112,42 @@ class FileManagerEditingControl extends Widget {
         );
     }
 
-    _tryDelete() {
-        const items = this._model.getMultipleSelectedItems();
-
-        if(items.length === 0) {
+    tryDelete(fileItems) {
+        if(fileItems.length === 0) {
             return;
         }
 
         this._tryEditAction(
             this._confirmationDialog,
-            result => this._provider.deleteItems(items),
+            result => this._provider.deleteItems(fileItems),
             "Items deleted",
-            info => `Delete operation failed for the ${items[info.index].name} item`
+            info => `Delete operation failed for the ${fileItems[info.index].name} item`
         );
     }
 
-    _tryMove() {
-        const items = this._model.getMultipleSelectedItems();
-
-        if(items.length === 0) {
+    tryMove(fileItems) {
+        if(!fileItems || fileItems.length === 0) {
             return;
         }
 
         this._tryEditAction(
             this._chooseFolderDialog,
-            result => this._provider.moveItems(items, result.folder),
+            result => this._provider.moveItems(fileItems, result.folder),
             "Items moved",
-            info => `Move operation failed for the ${items[info.index].name} item`
+            info => `Move operation failed for the ${fileItems[info.index].name} item`
         );
     }
 
-    _tryCopy() {
-        const items = this._model.getMultipleSelectedItems();
-
-        if(items.length === 0) {
+    tryCopy(fileItems) {
+        if(fileItems.length === 0) {
             return;
         }
 
         this._tryEditAction(
             this._chooseFolderDialog,
-            result => this._provider.copyItems(items, result.folder),
+            result => this._provider.copyItems(fileItems, result.folder),
             "Items copied",
-            info => `Copy operation failed for the ${items[info.index].name} item`
+            info => `Copy operation failed for the ${fileItems[info.index].name} item`
         );
     }
 
@@ -227,16 +202,6 @@ class FileManagerEditingControl extends Widget {
     _raiseOnError(errorTitle, errorDetails) {
         const handler = this.option("onError");
         handler(errorTitle, errorDetails);
-    }
-
-    executeCommand(commandName) {
-        const action = this._commands[commandName];
-        if(action) {
-            action.call(this);
-            return true;
-        } else {
-            return false;
-        }
     }
 
 }
