@@ -297,11 +297,7 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _needScrolling: function() {
-        if(!this.option("scrollingEnabled")) {
-            return false;
-        }
-
-        return this._isItemsWidthExceeded();
+        return this.option("scrollingEnabled") && this._isItemsWidthExceeded();
     },
 
     _isItemsWidthExceeded: function() {

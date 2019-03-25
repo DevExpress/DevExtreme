@@ -107,7 +107,7 @@ class TabsWidthTestHelper {
     }
 }
 
-[true, false].forEach((scrollingEnabled) => {
+[true, false, undefined].forEach((scrollingEnabled) => {
     ["container", "option"].forEach((setWidthApproach) => {
         const config = ", scrollingEnabled=" + scrollingEnabled + ", change " + setWidthApproach + ".width";
 
