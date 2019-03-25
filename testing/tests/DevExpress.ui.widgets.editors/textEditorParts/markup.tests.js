@@ -23,7 +23,7 @@ module("Basic markup", () => {
     });
 
     test("init with placeholder in the input container", (assert) => {
-        const element = $("#textbox").dxTextEditor({
+        const element = $("#texteditor").dxTextEditor({
             placeholder: "enter value"
         });
 

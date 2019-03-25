@@ -27,7 +27,8 @@ var DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor",
     DROP_DOWN_EDITOR_OVERLAY = "dx-dropdowneditor-overlay",
     DROP_DOWN_EDITOR_OVERLAY_FLIPPED = "dx-dropdowneditor-overlay-flipped",
     DROP_DOWN_EDITOR_ACTIVE = "dx-dropdowneditor-active",
-    DROP_DOWN_EDITOR_FIELD_CLICKABLE = "dx-dropdowneditor-field-clickable";
+    DROP_DOWN_EDITOR_FIELD_CLICKABLE = "dx-dropdowneditor-field-clickable",
+    DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER_CLASS = "dx-dropdowneditor-field-template-wrapper";
 
 /**
 * @name dxDropDownEditor
@@ -381,9 +382,11 @@ var DropDownEditor = TextBox.inherit({
 
         $container.empty();
 
+        var $templateWrapper = $("<div>").addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER_CLASS).appendTo($container);
+
         fieldTemplate.render({
             model: data,
-            container: domUtils.getPublicElement($container),
+            container: domUtils.getPublicElement($templateWrapper),
             onRendered: () => {
                 if(!this._input().length) {
                     throw errors.Error("E1010");
