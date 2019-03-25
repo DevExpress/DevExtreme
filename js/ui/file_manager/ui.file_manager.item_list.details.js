@@ -39,7 +39,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                         });
                         button.$element().addClass(FILE_MANAGER_FILE_ACTIONS_BUTTON);
 
-                        container.append(options.data.name, button.$element());
+                        $(container).append(options.data.name, button.$element());
                     }
                 },
                 {
