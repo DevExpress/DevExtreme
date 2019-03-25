@@ -16,6 +16,7 @@
     @GENERIC_BASE_INLINE_WIDGET_BOTTOM_PADDING - @GENERIC_BUTTON_BORDER_WEIGHT;
 @GENERIC_BUTTON_ICONONLY_PADDING: @GENERIC_BUTTON_ICON_HORIZONTAL_PADDING;
 @GENERIC_BUTTON_ICON_SIZE: @GENERIC_BASE_ICON_SIZE;
+@GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN: 1px;
 
 
 .dx-button-content {
@@ -215,10 +216,104 @@
 
 .dx-texteditor-buttons-container {
     > .dx-button {
-        margin: 1px;
+        margin: 1px @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
         > .dx-button-content {
             padding-top: @GENERIC_BASE_INLINE_WIDGET_TOP_PADDING - @GENERIC_BUTTON_BORDER_WEIGHT - 1px;
             padding-bottom: @GENERIC_BASE_INLINE_WIDGET_BOTTOM_PADDING - @GENERIC_BUTTON_BORDER_WEIGHT - 1px;
+        }
+    }
+}
+
+.dx-editor-outlined, .dx-editor-filled {
+    .dx-texteditor-buttons-container {
+        &.dx-texteditor-before-buttons-container {
+            > .dx-button {
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+
+        &.dx-texteditor-after-buttons-container {
+            > .dx-button {
+                &:first-child {
+                    margin-left: 0;
+                }
+            }
+        }
+
+        .dx-rtl& {
+            &.dx-texteditor-before-buttons-container {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+
+                    &:last-child {
+                        margin-left: 0;
+                        margin-right: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+
+                    &:first-child:last-child {
+                        margin-left: 0;
+                        margin-right: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+                }
+            }
+
+            &.dx-texteditor-after-buttons-container {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: 0;
+                    }
+
+                    &:last-child {
+                        margin-left: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.dx-editor-underlined {
+    .dx-texteditor-buttons-container {
+        &.dx-texteditor-before-buttons-container,
+        &.dx-texteditor-after-buttons-container {
+            > .dx-button {
+                &:first-child {
+                    margin-left: 0;
+                }
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+
+        .dx-rtl& {
+            &.dx-texteditor-before-buttons-container,
+            &.dx-texteditor-after-buttons-container {
+                > .dx-button {
+                    &:first-child {
+                        margin-left: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+                        margin-right: 0;
+                    }
+
+                    &:last-child {
+                        margin-left: 0;
+                        margin-right: @GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+                    }
+
+                    &:first-child:last-child {
+                        margin-left: 0;
+                        margin-right: 0;
+                    }
+                }
+            }
         }
     }
 }
