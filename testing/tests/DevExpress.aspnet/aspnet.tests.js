@@ -27,10 +27,9 @@
     }
 
     QUnit.test("UseJQueryReady = false", function(assert) {
-
         var callCount = 0;
-        var initScript = function(_$) {
-            assert.equal(_$, $);
+        var initScript = function(arg) {
+            assert.strictEqual(arg, $);
             callCount++;
         };
 
