@@ -51,7 +51,11 @@ var DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(function(options) {
             errors.log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
         }
 
-        widgetElement[widgetName](widgetOptions);
+        if(options.parent) {
+            options.parent._createComponent(widgetElement, widgetName, widgetOptions);
+        } else {
+            widgetElement[widgetName](widgetOptions);
+        }
 
         return widgetElement;
     }
