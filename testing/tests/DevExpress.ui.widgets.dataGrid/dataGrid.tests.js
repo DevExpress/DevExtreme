@@ -60,6 +60,7 @@ var $ = require("jquery"),
     gridCore = require("ui/data_grid/ui.data_grid.core"),
     gridCoreUtils = require("ui/grid_core/ui.grid_core.utils"),
     DataSource = require("data/data_source/data_source").DataSource,
+    ArrayStore = require("data/array_store"),
     messageLocalization = require("localization/message"),
     setTemplateEngine = require("ui/set_template_engine"),
     fx = require("animation/fx"),
@@ -6052,6 +6053,88 @@ QUnit.test("scrolling after ungrouping should works correctly with large amount 
     assert.ok(dataGrid.getTopVisibleRowData().key > 110, "top visible row is correct");
     assert.ok($(dataGrid.element()).find(".dx-virtual-row").first().height() <= dataGrid.getScrollable().scrollTop(), "first virtual row is not in viewport");
     assert.ok($(dataGrid.element()).find(".dx-virtual-row").last().position().top >= dataGrid.getScrollable().scrollTop(), "second virtual row is not in viewport");
+
+    clock.restore();
+});
+
+// T716207
+QUnit.test("Filtering should works correctly if groupPaging is enabled and group is expanded", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers();
+    var arrayStore = new ArrayStore([
+        { id: 1, group: "group", type: 1 },
+        { id: 2, group: "group", type: 1 },
+        { id: 3, group: "group", type: 1 },
+        { id: 4, group: "group", type: 2 }
+    ]);
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: {
+            key: "id",
+            load: function(options) {
+                var d = $.Deferred();
+                setTimeout(function() {
+                    var result = {};
+                    arrayStore.load(options).done(function(data) {
+                        result.data = data;
+
+                        if(options.group) {
+                            data.forEach(item => {
+                                item.count = item.items.length;
+                                item.items = null;
+                            });
+                        }
+                    });
+                    if(options.requireGroupCount) {
+                        arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
+                            result.groupCount = groupedData.length;
+                        });
+                    }
+                    if(options.requireTotalCount) {
+                        arrayStore.totalCount(options).done(function(totalCount) {
+                            result.totalCount = totalCount;
+                        });
+                    }
+
+                    d.resolve(result);
+                }, 10);
+
+                return d;
+            }
+        },
+        remoteOperations: { groupPaging: true },
+        height: 400,
+        filterSyncEnabled: true,
+        loadingTimeout: undefined,
+        scrolling: {
+            mode: "virtual"
+        },
+        grouping: {
+            autoExpandAll: false
+        },
+        paging: {
+            pageSize: 2
+        },
+        columns: [{
+            dataField: "group",
+            groupIndex: 0
+        }, {
+            dataField: "id"
+        }, {
+            dataField: "type"
+        }]
+    }).dxDataGrid("instance");
+    clock.tick(100);
+
+    dataGrid.expandRow(["group"]);
+    clock.tick(100);
+
+    // act
+    dataGrid.columnOption("type", "filterValue", 1);
+    clock.tick(100);
+
+    // assert
+    assert.notOk(dataGrid.getDataSource().isLoading(), "not loading");
+    assert.equal(dataGrid.getVisibleRows().length, 4, "visible row count is correct");
 
     clock.restore();
 });
