@@ -12,6 +12,7 @@ import { normalizeSortingInfo } from "../../data/utils";
 import formatHelper from "../../format_helper";
 import { deepExtendArraySafe } from "../../core/utils/object";
 import { getWindow } from "../../core/utils/window";
+import eventsEngine from "../../events/core/events_engine";
 
 var DATAGRID_SELECTION_DISABLED_CLASS = "dx-selection-disabled",
     DATAGRID_GROUP_OPENED_CLASS = "dx-datagrid-group-opened",
@@ -463,6 +464,18 @@ module.exports = (function() {
                     focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
                 }
             } catch(e) {}
+        },
+
+        focusAndSelectElement: function(component, $element) {
+            eventsEngine.trigger($element, "focus");
+
+            let isSelectTextOnEditingStart = component.option("editing.selectTextOnEditStart"),
+                keyboardController = component.getController("keyboardNavigation"),
+                isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
+
+            if(isSelectTextOnEditingStart && !isEditingNavigationMode && $element.is(".dx-texteditor-input")) {
+                $element.get(0).select();
+            }
         },
 
         getLastResizableColumnIndex: function(columns) {

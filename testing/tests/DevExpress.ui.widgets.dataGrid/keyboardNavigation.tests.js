@@ -8239,6 +8239,7 @@ QUnit.module("Customize keyboard navigation", {
 
         this.setupModule();
         this.renderGridView();
+        this.keyboardNavigationController._focusedView = this.rowsView;
 
         // act
         this.editRow(1);
@@ -8253,11 +8254,13 @@ QUnit.module("Customize keyboard navigation", {
         $(input).focus();
         // assert
         assert.ok(input, "Editor input");
-        assert.equal(getTextSelection(input), input.value, "Selection");
+        assert.equal(getTextSelection(input), "", "Selection");
 
         // act
-        input = $(".dx-texteditor-input").get(3);
-        $(input).focus();
+        this.triggerKeyDown("Tab", false, false, $(input).parent());
+        input = $(".dx-texteditor-input").get(1);
+        this.getController("editing")._focusEditingCell(null, $(input).parent());
+        this.clock.tick();
         // assert
         assert.ok(input, "Editor input");
         assert.equal(getTextSelection(input), input.value, "Selection");
@@ -8267,7 +8270,7 @@ QUnit.module("Customize keyboard navigation", {
         $(input).focus();
         // assert
         assert.ok(input, "Editor input");
-        assert.equal(getTextSelection(input), input.value, "Selection");
+        assert.equal(getTextSelection(input), "", "Selection");
     });
 
     testInDesktop("Not select all text if editing mode is form", function(assert) {
@@ -8321,8 +8324,10 @@ QUnit.module("Customize keyboard navigation", {
         assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
-        input = $(".dx-texteditor-input").get(3);
-        $(input).focus();
+        this.triggerKeyDown("Tab", false, false, $(input).parent());
+        input = $(".dx-texteditor-input").get(1);
+        this.getController("editing")._focusEditingCell(null, $(input).parent());
+        this.clock.tick();
         // assert
         assert.ok(input, "Editor input");
         assert.notEqual(getTextSelection(input), input.value, "Selection");
@@ -8348,7 +8353,7 @@ QUnit.module("Customize keyboard navigation", {
 
         this.options = {
             editing: {
-                mode: "popup",
+                mode: "form",
                 selectTextOnEditStart: true
             }
         };
@@ -8370,10 +8375,11 @@ QUnit.module("Customize keyboard navigation", {
 
         this.setupModule();
         this.renderGridView();
+        this.keyboardNavigationController._focusedView = this.rowsView;
 
         // act
         this.editRow(1);
-        this.clock.tick(500);
+        this.clock.tick();
         input = $(".dx-texteditor-input").get(0);
         // assert
         assert.ok(input, "Editor input");
@@ -8384,11 +8390,13 @@ QUnit.module("Customize keyboard navigation", {
         $(input).focus();
         // assert
         assert.ok(input, "Editor input");
-        assert.equal(getTextSelection(input), input.value, "Selection");
+        assert.equal(getTextSelection(input), "", "Selection");
 
         // act
-        input = $(".dx-texteditor-input").get(3);
-        $(input).focus();
+        this.triggerKeyDown("Tab", false, false, $(input).parent());
+        input = $(".dx-texteditor-input").get(1);
+        this.getController("editing")._focusEditingCell(null, $(input).parent());
+        this.clock.tick();
         // assert
         assert.ok(input, "Editor input");
         assert.equal(getTextSelection(input), input.value, "Selection");
@@ -8398,7 +8406,7 @@ QUnit.module("Customize keyboard navigation", {
         $(input).focus();
         // assert
         assert.ok(input, "Editor input");
-        assert.equal(getTextSelection(input), input.value, "Selection");
+        assert.equal(getTextSelection(input), "", "Selection");
     });
 
     testInDesktop("Not select all text if editing mode is popup", function(assert) {
@@ -8414,7 +8422,7 @@ QUnit.module("Customize keyboard navigation", {
 
         this.options = {
             editing: {
-                mode: "popup"
+                mode: "form"
             }
         };
         this.columns = [
@@ -8452,8 +8460,10 @@ QUnit.module("Customize keyboard navigation", {
         assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
-        input = $(".dx-texteditor-input").get(3);
-        $(input).focus();
+        this.triggerKeyDown("Tab", false, false, $(input).parent());
+        input = $(".dx-texteditor-input").get(1);
+        this.getController("editing")._focusEditingCell(null, $(input).parent());
+        this.clock.tick();
         // assert
         assert.ok(input, "Editor input");
         assert.notEqual(getTextSelection(input), input.value, "Selection");

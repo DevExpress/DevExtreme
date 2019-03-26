@@ -2,6 +2,7 @@ import $ from "../../core/renderer";
 import domAdapter from "../../core/dom_adapter";
 import eventsEngine from "../../events/core/events_engine";
 import core from "./ui.grid_core.modules";
+import { focusAndSelectElement } from "./ui.grid_core.utils";
 import { isDefined } from "../../core/utils/type";
 import { inArray } from "../../core/utils/array";
 import { focused } from "../widget/selectors";
@@ -96,7 +97,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._testInteractiveElement = $focusedElement;
         ///#ENDDEBUG
 
-        eventsEngine.trigger($focusedElement, "focus");
+        focusAndSelectElement(this, $focusedElement);
     },
 
     _updateFocus: function(editingCanceled, fireFocusChangingCanceled) {
@@ -1834,32 +1835,16 @@ module.exports = {
                     }
                 },
 
-                _formItemPrepared: function(parameters, $cell) {
-                    var editorInstance = this._getEditorInstance($cell),
-                        isSelectTextOnEditingStart = this.option("editing.selectTextOnEditStart");
-                    if(editorInstance && isSelectTextOnEditingStart) {
-                        this._handleSelectAllEditCellText(editorInstance);
-                    }
-                    this.callBase.apply(this, arguments);
-                },
-
                 _editCellPrepared: function($cell) {
                     var editorInstance = this._getEditorInstance($cell),
                         keyboardController = this.getController("keyboardNavigation"),
-                        isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted(),
-                        isSelectTextOnEditingStart = this.option("editing.selectTextOnEditStart");
-                    if(editorInstance) {
-                        if(isEditingNavigationMode) {
-                            this._handleEditingNavigationMode(editorInstance);
-                        } else if(isSelectTextOnEditingStart) {
-                            this._handleSelectAllEditCellText(editorInstance);
-                        }
+                        isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
+
+                    if(editorInstance && isEditingNavigationMode) {
+                        this._handleEditingNavigationMode(editorInstance);
                     }
+
                     this.callBase.apply(this, arguments);
-                },
-                _handleSelectAllEditCellText: function(editorInstance) {
-                    let input = $(editorInstance.element()).find(".dx-texteditor-input").get(0);
-                    input && eventsEngine.on(input, "focusin", () => input.select());
                 },
                 _handleEditingNavigationMode: function(editorInstance) {
                     ["downArrow", "upArrow"].forEach(function(keyName) {
