@@ -39,8 +39,7 @@ import SchedulerResourceManager from "./ui.scheduler.resource_manager";
 import SchedulerAppointmentModel from "./ui.scheduler.appointment_model";
 import SchedulerAppointments from "./ui.scheduler.appointments";
 import SchedulerLayoutManager from "./ui.scheduler.appointments.layout_manager";
-import { CompactAppointmentsDesktopStrategy } from "./compact_strategies/compactAppointmentsDesktopStrategy";
-import { CompactAppointmentsMobileStrategy } from "./compact_strategies/compactAppointmentsMobileStrategy";
+import { CompactAppointmentsHelper } from "./compactAppointmentsHelper";
 import SchedulerTimezones from "./timezones/ui.scheduler.timezones";
 import AsyncTemplateMixin from "../shared/async_template_mixin";
 import DataHelperMixin from "../../data_helper";
@@ -1428,7 +1427,6 @@ const Scheduler = Widget.inherit({
         }
 
         this._appointments.option(editingConfig);
-        this._dropDownAppointments.repaintExisting(this.$element());
     },
 
     _isAgenda: function() {
@@ -1602,7 +1600,7 @@ const Scheduler = Widget.inherit({
     },
 
     _initAppointmentStrategies: function() {
-        this._dropDownAppointments = this.option("adaptivityEnabled") ? new CompactAppointmentsMobileStrategy() : new CompactAppointmentsDesktopStrategy();
+        this._dropDownAppointments = new CompactAppointmentsHelper(this);
         this._appointmentTooltip = this.option("adaptivityEnabled") ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
     },
 
@@ -3031,11 +3029,14 @@ const Scheduler = Widget.inherit({
         if(!appointmentData) {
             return;
         }
-        this._appointmentTooltip.show([{
+        this.showAppointmentTooltipCore(target, [{
             data: appointmentData,
-            currentData: currentAppointmentData || appointmentData,
-            $appointment: target
-        }]);
+            currentData: currentAppointmentData,
+        }], true);
+    },
+
+    showAppointmentTooltipCore: function(target, data, isSingleBehavior) {
+        this._appointmentTooltip.show(target, data, isSingleBehavior);
     },
 
     /**

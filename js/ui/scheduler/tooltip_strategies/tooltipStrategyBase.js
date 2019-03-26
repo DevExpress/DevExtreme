@@ -3,11 +3,9 @@ import dateUtils from "../../../core/utils/date";
 import FunctionTemplate from "../../widget/function_template";
 import $ from "../../../core/renderer";
 import List from "../../list/ui.list.edit";
-import Tooltip from "../../tooltip";
 import { extendFromObject } from "../../../core/utils/extend";
 
 const DROPDOWN_APPOINTMENT_CLASS = "dx-scheduler-dropdown-appointment";
-const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
 const DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-buttons-block";
 const DROPDOWN_APPOINTMENT_REMOVE_BUTTON_CLASS = "dx-scheduler-dropdown-appointment-remove-button";
 
@@ -18,12 +16,6 @@ const DROPDOWN_APPOINTMENT_DATE_CLASS = "dx-scheduler-dropdown-appointment-date"
 const DELETE_BUTTON_SIZE = 25;
 
 const APPOINTMENT_TOOLTIP_CLASS = "dx-scheduler-appointment-tooltip";
-// APPOINTMENT_TOOLTIP_TITLE_CLASS = "dx-scheduler-appointment-tooltip-title",
-// APPOINTMENT_TOOLTIP_DATE_CLASS = "dx-scheduler-appointment-tooltip-date",
-// APPOINTMENT_TOOLTIP_BUTTONS_CLASS = "dx-scheduler-appointment-tooltip-buttons",
-// APPOINTMENT_TOOLTIP_OPEN_BUTTON_CLASS = "dx-scheduler-appointment-tooltip-open-button",
-// APPOINTMENT_TOOLTIP_CLOSE_BUTTON_CLASS = "dx-scheduler-appointment-tooltip-close-button",
-// APPOINTMENT_TOOLTIP_DELETE_BUTTONS_CLASS = "dx-scheduler-appointment-tooltip-delete-button";
 
 export class TooltipStrategyBase {
     constructor(scheduler) {
@@ -31,42 +23,31 @@ export class TooltipStrategyBase {
         this.showEditAppointmentPopupAction = this._createAppointmentClickAction();
     }
 
-    show(dataItemList) {
+    show(target, dataList) {
     }
 
     hide() {
     }
 
-    _createTooltip(target, list, getBoundary) {
-        this.$tooltip = this._createTooltipElement();
-
-        return this.scheduler._createComponent(this.$tooltip, Tooltip, {
-            visible: true,
-            target: target,
-            rtlEnabled: this.scheduler.option("rtlEnabled"),
-            contentTemplate: () => list.$element(),
-            position: {
-                my: "bottom",
-                at: "top",
-                of: target,
-                boundary: getBoundary && getBoundary(), // TODO
-                collision: "fit flipfit",
-                offset: this.scheduler.option("_appointmentTooltipOffset")
-            }
-        });
-    }
-
-    _createList(dataItemList) {
-        const $list = $("<div>");
-        return this.scheduler._createComponent($list, List, {
-            dataSource: dataItemList,
-            onItemClick: (e) => { this._onListItemClick(e); },
-            itemTemplate: (item) => this._renderTemplate(item.data, item.currentData, item.targetedData, item.$appointment)
-        });
+    _createTooltip(target, list) {
+        return null;
     }
 
     _createTooltipElement() {
-        return $("<div>").appendTo(this.scheduler.$element()).addClass(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
+        return null;
+    }
+
+    _createList(target, dataList) {
+        const $list = $("<div>");
+        return this.scheduler._createComponent($list, List, {
+            dataSource: dataList,
+            onItemRendered: (e) => { this._onListItemRendered(e); },
+            onItemClick: (e) => { this._onListItemClick(e); },
+            itemTemplate: (item) => this._renderTemplate(item.data, item.currentData || item.data, item.targetedData, target)
+        });
+    }
+
+    _onListItemRendered(e) {
     }
 
     _getTargetData(data, $appointment) {
@@ -86,10 +67,13 @@ export class TooltipStrategyBase {
         });
     }
 
-    _onListItemClick(args) {
-        const mappedData = this.scheduler.fire("mapAppointmentFields", args),
-            result = extendFromObject(mappedData, args, false);
+    _onListItemClick(e) {
+        const mappedData = this.scheduler.fire("mapAppointmentFields", e),
+            result = extendFromObject(mappedData, e, false);
         this.showEditAppointmentPopupAction(result);
+    }
+
+    _onDeleteButtonClick() {
     }
 
     _createTemplate(appointmentData, singleAppointmentData, $appointment) {
@@ -145,6 +129,7 @@ export class TooltipStrategyBase {
             height: DELETE_BUTTON_SIZE,
             width: DELETE_BUTTON_SIZE,
             onClick: (e) => {
+                this._onDeleteButtonClick();
                 e.event.stopPropagation();
                 this.scheduler.deleteAppointment(appointmentData);
             }
