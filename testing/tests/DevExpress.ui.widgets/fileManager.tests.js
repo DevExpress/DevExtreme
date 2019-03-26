@@ -92,5 +92,6 @@ QUnit.testStart(() => {
     this.$element = $("#fileManager");
 });
 
+import "./fileManagerParts/contextMenu.tests.js";
 import "./fileManagerParts/editing.tests.js";
 import "./fileManagerParts/webAPIProvider.tests.js";
