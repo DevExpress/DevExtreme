@@ -236,13 +236,12 @@ let DropDownButton = Widget.inherit({
 
     _actionButtonConfig() {
         const showToggleButton = this.option("showToggleButton");
-        let selectedItem = this.option("selectedItem");
         const defaultConfig = {
             onClick: ({ event }) => {
                 if(showToggleButton) {
                     this._actionClickAction({
                         event,
-                        selectedItem
+                        selectedItem: this.option("selectedItem")
                     });
                 } else {
                     this.toggle();
@@ -253,6 +252,7 @@ let DropDownButton = Widget.inherit({
             elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
         };
 
+        let selectedItem = this.option("selectedItem");
         if(isPlainObject(selectedItem)) {
             const displayValue = this._displayGetter(selectedItem);
             if(!isPlainObject(displayValue)) {
