@@ -81,7 +81,8 @@ var ToolbarBase = AsyncCollectionWidget.inherit({
 
             this._getTemplate("dx-polymorph-widget").render({
                 container: $container,
-                model: rawModel
+                model: rawModel,
+                parent: this
             });
         }.bind(this), ["text", "html", "widget", "options"], this.option("integrationOptions.watchMethod"));
 

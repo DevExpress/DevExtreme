@@ -199,6 +199,35 @@ QUnit.test("Buttons has default style in generic theme", function(assert) {
     assert.notOk(button.hasClass("dx-button-mode-text"));
 });
 
+QUnit.test("Toolbar provides it's own templates for the item widgets", function(assert) {
+    var templateUsed;
+
+    this.element.dxToolbar({
+        items: [{
+            location: 'before',
+            widget: 'dxButton',
+            options: { template: 'custom' }
+        }],
+        integrationOptions: {
+            templates: {
+                custom: {
+                    render: (options) => {
+                        templateUsed = true;
+                        $("<div>")
+                            .attr("data-options", "dxTemplate: { name: 'custom' }")
+                            .addClass("custom-template")
+                            .text("Custom text")
+                            .appendTo(options.container);
+                    }
+                }
+            }
+        }
+    });
+
+    assert.ok(templateUsed);
+    assert.equal(this.element.find(".custom-template").length, 1);
+});
+
 
 QUnit.module("toolbar with menu", {
     beforeEach: function() {
