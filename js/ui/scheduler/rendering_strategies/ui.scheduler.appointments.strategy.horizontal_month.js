@@ -91,9 +91,9 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     },
 
     _columnCondition: function(a, b) {
-        var columnCondition = this._normalizeCondition(a.left, b.left),
-            rowCondition = this._normalizeCondition(a.top, b.top),
-            cellPositionCondition = this._normalizeCondition(a.cellPosition, b.cellPosition);
+        var columnCondition = this._normalizeCondition(a.left, b.left, a, b),
+            rowCondition = this._normalizeCondition(a.top, b.top, a, b),
+            cellPositionCondition = this._normalizeCondition(a.cellPosition, b.cellPosition, a, b);
 
         return rowCondition ? rowCondition : columnCondition ? columnCondition : cellPositionCondition ? cellPositionCondition : a.isStart - b.isStart;
     },

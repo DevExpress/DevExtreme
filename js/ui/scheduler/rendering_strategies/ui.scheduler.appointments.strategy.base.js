@@ -301,22 +301,26 @@ var BaseRenderingStrategy = Class.inherit({
     _sortCondition: abstract,
 
     _rowCondition: function(a, b) {
-        var columnCondition = this._normalizeCondition(a.left, b.left),
-            rowCondition = this._normalizeCondition(a.top, b.top);
+        var columnCondition = this._normalizeCondition(a.left, b.left, a, b),
+            rowCondition = this._normalizeCondition(a.top, b.top, a, b);
         return columnCondition ? columnCondition : rowCondition ? rowCondition : a.isStart - b.isStart;
     },
 
     _columnCondition: function(a, b) {
-        var columnCondition = this._normalizeCondition(a.left, b.left),
-            rowCondition = this._normalizeCondition(a.top, b.top);
+        var columnCondition = this._normalizeCondition(a.left, b.left, a, b),
+            rowCondition = this._normalizeCondition(a.top, b.top, a, b);
         return rowCondition ? rowCondition : columnCondition ? columnCondition : a.isStart - b.isStart;
     },
 
-    _normalizeCondition: function(first, second) {
+    _normalizeCondition: function(first, second, a, b) {
         // NOTE: ie & ff pixels
         var result = first - second;
 
-        return result;
+        if(a.i !== b.i || a.j !== b.j) {
+            return Math.abs(result) > 0.1 ? result : 0;
+        } else {
+            return result;
+        }
     },
 
     _getResultPositions: function(sortedArray) {
