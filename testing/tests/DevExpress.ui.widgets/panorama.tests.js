@@ -2,7 +2,6 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     translator = require("animation/translator"),
     animation = require("ui/panorama").animation,
-    config = require("core/config"),
     pointerMock = require("../../helpers/pointerMock.js");
 
 require("common.css!");
@@ -288,38 +287,6 @@ QUnit.test(">3 items should have correct position in RTL mode", function(assert)
     assert.equal(position($items.eq(0)), PANORAMA_TEST_WIDTH - PANORAMA_TEST_WIDTH * (PANORAMA_ITEM_WIDTH_SCALE + PANORAMA_ITEM_MARGIN_SCALE), "correct first item position");
     assert.equal(position($items.eq(1)), PANORAMA_TEST_WIDTH - PANORAMA_TEST_WIDTH * (PANORAMA_ITEM_WIDTH_SCALE + PANORAMA_ITEM_MARGIN_SCALE) * 2, "correct second item position");
     assert.equal(position($items.eq(2)), PANORAMA_TEST_WIDTH, "correct third item position");
-});
-
-
-QUnit.module("design mode", {
-    beforeEach: function() {
-        config({ designMode: true });
-
-        fx.off = true;
-    },
-    afterEach: function() {
-        config({ designMode: false });
-
-        fx.off = false;
-    }
-});
-
-QUnit.test("swipe should be rejected", function(assert) {
-    var $panorama = $("#panorama").dxPanorama({
-        title: "my panorama",
-        items: [
-            { text: "first item content" },
-            { text: "second item content" }
-        ],
-        selectedIndex: 0
-    });
-
-    var pointer = pointerMock($panorama);
-
-    var startEvent = pointer.start().swipeStart().lastEvent();
-
-    assert.ok(startEvent.cancel, "swipe was rejected");
-
 });
 
 

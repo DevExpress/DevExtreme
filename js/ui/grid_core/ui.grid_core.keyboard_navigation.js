@@ -497,15 +497,25 @@ var KeyboardNavigationController = core.ViewController.inherit({
             }
 
         } else {
-            if(isEditing || !this._allowEditingOnEnterKey()) {
-                this._handleEnterKeyEditingCell(eventArgs.originalEvent);
-                var direction = this._getEnterKeyDirection(eventArgs);
-                if(direction) {
-                    this._navigateNextCell(eventArgs.originalEvent, direction);
-                }
-            } else {
-                this._startEditing(eventArgs);
+            this._processEnterKeyForDataCell(eventArgs, isEditing);
+        }
+    },
+
+    _processEnterKeyForDataCell: function(eventArgs, isEditing) {
+        var direction;
+
+        if(isEditing || !this._allowEditingOnEnterKey()) {
+            this._handleEnterKeyEditingCell(eventArgs.originalEvent);
+
+            direction = this._getEnterKeyDirection(eventArgs);
+            if(direction === "next" || direction === "previous") {
+                this._targetCellTabHandler(eventArgs, direction);
+            } else if(direction === "upArrow" || direction === "downArrow") {
+                this._navigateNextCell(eventArgs.originalEvent, direction);
             }
+
+        } else {
+            this._startEditing(eventArgs);
         }
     },
 
@@ -517,7 +527,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             return isShift ? "upArrow" : "downArrow";
         }
         if(enterKeyDirection === "row") {
-            return isShift ? "previousInRow" : "nextInRow";
+            return isShift ? "previous" : "next";
         }
     },
 
@@ -1746,25 +1756,26 @@ module.exports = {
         views: {
             rowsView: {
                 renderFocusState: function() {
-                    var that = this,
-                        rowIndex = that.option("focusedRowIndex"),
-                        $element = that.element(),
+                    var dataController = this._dataController,
+                        rowIndex = this.option("focusedRowIndex") || 0,
+                        $element = this.element(),
                         cellElements;
 
                     if($element && !focused($element)) {
                         $element.attr("tabIndex", null);
                     }
 
-                    if(!rowIndex || rowIndex < 0) {
+                    if(rowIndex < 0 || rowIndex >= dataController.getVisibleRows().length) {
                         rowIndex = 0;
                     }
-                    cellElements = that.getCellElements(rowIndex);
 
-                    if(that.option("useKeyboard") && cellElements) {
-                        that._updateFocusElementTabIndex(cellElements);
+                    cellElements = this.getCellElements(rowIndex);
+
+                    if(this.option("useKeyboard") && cellElements) {
+                        this.updateFocusElementTabIndex(cellElements);
                     }
                 },
-                _updateFocusElementTabIndex: function(cellElements) {
+                updateFocusElementTabIndex: function(cellElements) {
                     var that = this,
                         $row = cellElements.eq(0).parent(),
                         columnIndex = that.option("focusedColumnIndex"),

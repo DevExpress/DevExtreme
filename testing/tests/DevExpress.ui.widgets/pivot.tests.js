@@ -297,35 +297,6 @@ QUnit.test("shown event should be fired on item showing", function(assert) {
 });
 
 
-QUnit.module("design mode", {
-    beforeEach: function() {
-        config({ designMode: true });
-
-        pivotTabsMock.setup();
-
-        fx.off = true;
-    },
-    afterEach: function() {
-        config({ designMode: false });
-
-        fx.off = false;
-
-        pivotTabsMock.teardown();
-    }
-});
-
-QUnit.test("swipe should be rejected", function(assert) {
-    var $pivot = $("#pivot").dxPivot({
-        selectedIndex: 0,
-        items: [{ title: "all", text: "all content" }, { title: "unread", text: "unread content" }, { title: "favorites", text: "favorites content" }]
-    });
-
-    var startEvent = pointerMock($pivot).start().swipeStart().lastEvent();
-
-    assert.ok(startEvent.cancel, "index should not change, swipe was rejected");
-});
-
-
 QUnit.module("options", {
     beforeEach: function() {
         fx.off = true;

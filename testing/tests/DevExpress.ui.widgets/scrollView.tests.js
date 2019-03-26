@@ -4,7 +4,6 @@ var $ = require("jquery"),
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
     devices = require("core/devices"),
-    config = require("core/config"),
     messageLocalization = require("localization/message"),
     Scrollbar = require("ui/scroll_view/ui.scrollbar"),
     themes = require("ui/themes"),
@@ -2346,33 +2345,6 @@ QUnit.test("refreshStrategy for android set by real device", function(assert) {
     var scrollView = $("#scrollView").dxScrollView().dxScrollView("instance");
 
     assert.equal(scrollView.option("refreshStrategy"), "swipeDown");
-});
-
-QUnit.test("B251645 dxList: Pull down to refresh is active in design time", function(assert) {
-    config({ designMode: true });
-
-    try {
-        var pullRefreshActionCalled = 0,
-            pageLoadingActionCalled = 0,
-
-            scrollView = $("#scrollView").dxScrollView({
-                onPullDown: function() {
-                    pullRefreshActionCalled++;
-                },
-                onReachBottom: function() {
-                    pageLoadingActionCalled++;
-                }
-            }).dxScrollView("instance");
-
-        scrollView._pullDownAction();
-        scrollView._reachBottomAction();
-
-        assert.equal(pullRefreshActionCalled, 0);
-        assert.equal(pageLoadingActionCalled, 0);
-
-    } finally {
-        config({ designMode: false });
-    }
 });
 
 

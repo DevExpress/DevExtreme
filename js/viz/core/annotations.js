@@ -15,6 +15,7 @@ function coreAnnotation(options, draw) {
         value: options.value,
         argument: options.argument,
         axis: options.axis,
+        series: options.series,
         _options: options,
         draw: function(widget, group) {
             this.coords = widget._getAnnotationCoords(this);
@@ -31,16 +32,22 @@ function coreAnnotation(options, draw) {
     };
 }
 
+function applyClipPath(elem, widget, pane) {
+    isDefined(pane) && elem.attr({ "clip-path": widget._getElementsClipRectID(pane) });
+}
+
 function labelAnnotation(options) {
     return coreAnnotation(options, function({ x, y }, widget, group) {
-        widget._renderer.text(options.label.text, x, y).data({ [ANNOTATION_DATA]: this }).css(patchFontOptions(options.label.font)).append(group);
+        const text = widget._renderer.text(options.label.text, x, y).data({ [ANNOTATION_DATA]: this }).css(patchFontOptions(options.label.font)).append(group);
+        applyClipPath(text, widget, this._pane);
     });
 }
 
 function imageAnnotation(options) {
     const { width, height, url, location } = options.image;
     return coreAnnotation(options, function({ x, y }, widget, group) {
-        widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, location).data({ [ANNOTATION_DATA]: this }).append(group);
+        const image = widget._renderer.image(x - width * 0.5, y - height * 0.5, width, height, url, location).data({ [ANNOTATION_DATA]: this }).append(group);
+        applyClipPath(image, widget, this._pane);
     });
 }
 
@@ -79,20 +86,60 @@ const chartPlugin = {
     dispose() {},
     members: {
         _getAnnotationCoords(annotation) {
-            let x = annotation.x;
-            let y = annotation.y;
+            let coords = { x: annotation.x, y: annotation.y };
+            const argCoordName = this._options.rotated ? "y" : "x";
+            const valCoordName = this._options.rotated ? "x" : "y";
             const argument = annotation.argument;
             const value = annotation.value;
+            const argAxis = this.getArgumentAxis();
+            let axis = this.getValueAxis(annotation.axis);
+            let series;
 
-            if(!isDefined(x) && isDefined(argument)) {
-                x = this.getArgumentAxis().getTranslator().translate(argument);
+            annotation._pane = annotation.axis && isDefined(axis) ? axis.pane : undefined;
+            if(annotation.series) {
+                series = this.series.filter(s => s.name === annotation.series)[0];
+                axis = series && series.getValueAxis();
+                isDefined(axis) && (annotation._pane = axis.pane);
             }
 
-            if(!isDefined(y) && isDefined(value)) {
-                const axis = this.getValueAxis(annotation.axis);
-                y = axis && axis.getTranslator().translate(value);
+            if(!isDefined(coords[argCoordName]) && isDefined(argument)) {
+                coords[argCoordName] = argAxis.getTranslator().translate(argument);
+                !isDefined(annotation._pane) && (annotation._pane = argAxis.pane);
             }
-            return { x, y };
+
+            if(!isDefined(coords[valCoordName]) && isDefined(value)) {
+                coords[valCoordName] = axis && axis.getTranslator().translate(value);
+                !isDefined(annotation._pane) && isDefined(axis) && (annotation._pane = axis.pane);
+            }
+
+            if(isDefined(coords[argCoordName]) && !isDefined(coords[valCoordName]) && !isDefined(value)) {
+                if(!isDefined(axis) && !isDefined(series)) {
+                    coords[valCoordName] = argAxis.getAxisPosition();
+                } else if(isDefined(axis) && !isDefined(series)) {
+                    coords[valCoordName] = this._argumentAxes.filter(a => a.pane === axis.pane)[0].getAxisPosition();
+                } else if(isDefined(series)) {
+                    if(series.checkSeriesViewportCoord(argAxis, coords[argCoordName])) {
+                        coords[valCoordName] = series.getSeriesPairCoord(coords[argCoordName], true);
+                    }
+                    if(!isDefined(coords[valCoordName])) {
+                        coords[valCoordName] = this._argumentAxes.filter(a => a.pane === axis.pane)[0].getAxisPosition();
+                    }
+                }
+            }
+
+            if(!isDefined(coords[argCoordName]) && !isDefined(argument) && isDefined(coords[valCoordName])) {
+                if(isDefined(axis) && !isDefined(series)) {
+                    coords[argCoordName] = axis.getAxisPosition();
+                } else if(isDefined(series)) {
+                    if(series.checkSeriesViewportCoord(axis, coords[valCoordName])) {
+                        coords[argCoordName] = series.getSeriesPairCoord(coords[valCoordName], false);
+                    }
+                    if(!isDefined(coords[argCoordName])) {
+                        coords[argCoordName] = axis.getAxisPosition();
+                    }
+                }
+            }
+            return coords;
         },
         _onMouseMove({ target }) {
             const annotation = target[ANNOTATION_DATA];

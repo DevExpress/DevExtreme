@@ -32,6 +32,7 @@ import nativePointerMock from "../../helpers/nativePointerMock.js";
 import { setupDataGridModules, MockDataController, MockColumnsController } from "../../helpers/dataGridMocks.js";
 import gridCoreUtils from "ui/grid_core/ui.grid_core.utils";
 import dataUtils from "core/element_data";
+import translator from "animation/translator";
 
 var device = devices.real(),
     expandCellTemplate = gridCoreUtils.getExpandCellTemplate();
@@ -2034,6 +2035,43 @@ QUnit.test("Updating position of the fixed table (when scrollbar at the bottom) 
         assert.ok($fixedTable.position().top !== positionTop, "scroll top of the fixed table is changed");
         done();
     });
+});
+
+// T722330
+QUnit.test("Elastic scrolling should be applied for fixed table", function(assert) {
+    // arrange
+    var that = this,
+        $fixedTable,
+        $testElement = $("#container");
+
+    that.setupDataGrid();
+    that.rowsView.render($testElement);
+    that.rowsView.resize();
+    that.rowsView.height(50);
+
+    // act
+    that.rowsView._handleScroll({
+        component: that.rowsView.getScrollable(),
+        scrollOffset: {
+            top: 350
+        },
+        reachedBottom: true
+    });
+
+    // assert
+    $fixedTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
+    assert.roughEqual(translator.getTranslate($fixedTable).y, -330, 10);
+
+    // act
+    that.rowsView._handleScroll({
+        component: that.rowsView.getScrollable(),
+        scrollOffset: {
+            top: 10
+        }
+    });
+
+    // assert
+    assert.ok(!$fixedTable[0].style.transform);
 });
 
 QUnit.module("Headers reordering and resizing with fixed columns", {

@@ -1815,7 +1815,7 @@ const Scheduler = Widget.inherit({
 
     _getAppointmentRenderedAction: function() {
         return this._createActionByOption("onAppointmentRendered", {
-            excludeValidators: ["designMode", "disabled", "readOnly"]
+            excludeValidators: ["disabled", "readOnly"]
         });
     },
 

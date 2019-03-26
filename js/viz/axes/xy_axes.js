@@ -1001,6 +1001,10 @@ module.exports = {
             }, that._series, that.isArgumentAxis);
         },
 
+        getAxisPosition() {
+            return this._axisPosition;
+        },
+
         _getStick: function() {
             return !this._options.valueMarginsEnabled;
         },

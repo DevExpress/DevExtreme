@@ -8,7 +8,6 @@ var $ = require("../core/renderer"),
     isDefined = require("../core/utils/type").isDefined,
     registerComponent = require("../core/component_registrator"),
     eventUtils = require("../events/utils"),
-    config = require("../core/config"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     PivotTabs = require("./pivot/ui.pivot_tabs"),
     EmptyTemplate = require("./widget/empty_template"),
@@ -393,7 +392,7 @@ var Pivot = CollectionWidget.inherit({
         this._prepareAnimation();
         this._tabs.prepare();
 
-        if(config().designMode || this.option("disabled") || !this.option("swipeEnabled") || this._indexBoundary() <= 1) {
+        if(this.option("disabled") || !this.option("swipeEnabled") || this._indexBoundary() <= 1) {
             e.cancel = true;
         } else {
             this._swipeGestureRunning = true;
