@@ -5,17 +5,16 @@ import $ from "../../../core/renderer";
 import List from "../../list/ui.list.edit";
 import { extendFromObject } from "../../../core/utils/extend";
 
-const DROPDOWN_APPOINTMENT_CLASS = "dx-scheduler-dropdown-appointment";
-const DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-buttons-block";
-const DROPDOWN_APPOINTMENT_REMOVE_BUTTON_CLASS = "dx-scheduler-dropdown-appointment-remove-button";
+const TOOLTIP_APPOINTMENT_ITEM = "tooltip-appointment-item",
+    TOOLTIP_APPOINTMENT_ITEM_CONTENT = TOOLTIP_APPOINTMENT_ITEM + "-content",
+    TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT = TOOLTIP_APPOINTMENT_ITEM + "-content-subject",
+    TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE = TOOLTIP_APPOINTMENT_ITEM + "-content-date",
+    TOOLTIP_APPOINTMENT_ITEM_MARKER = TOOLTIP_APPOINTMENT_ITEM + "-marker",
+    TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY = TOOLTIP_APPOINTMENT_ITEM + "-marker-body",
 
-const DROPDOWN_APPOINTMENT_INFO_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-info-block";
-const DROPDOWN_APPOINTMENT_TITLE_CLASS = "dx-scheduler-dropdown-appointment-title";
-const DROPDOWN_APPOINTMENT_DATE_CLASS = "dx-scheduler-dropdown-appointment-date";
+    TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER = TOOLTIP_APPOINTMENT_ITEM + "-delete-button-container",
+    TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON = TOOLTIP_APPOINTMENT_ITEM + "-delete-button";
 
-const DELETE_BUTTON_SIZE = 25;
-
-const APPOINTMENT_TOOLTIP_CLASS = "dx-scheduler-appointment-tooltip";
 
 export class TooltipStrategyBase {
     constructor(scheduler) {
@@ -43,7 +42,7 @@ export class TooltipStrategyBase {
             dataSource: dataList,
             onItemRendered: (e) => { this._onListItemRendered(e); },
             onItemClick: (e) => { this._onListItemClick(e); },
-            itemTemplate: (item) => this._renderTemplate(item.data, item.currentData || item.data, item.targetedData, target)
+            itemTemplate: (item) => this._renderTemplate(target, item.data, item.currentData || item.data, item.color)
         });
     }
 
@@ -54,14 +53,14 @@ export class TooltipStrategyBase {
         return this.scheduler.fire("getTargetedAppointmentData", data, $appointment);
     }
 
-    _renderTemplate(data, currentData, $appointment) {
-        this._createTemplate(data, currentData, $appointment);
+    _renderTemplate(target, data, currentData, color) {
+        this._createTemplate(data, currentData, color);
         const template = this.scheduler._getAppointmentTemplate(this._getItemListTemplateName());
 
         return new FunctionTemplate(options => {
             return template.render({
                 model: data,
-                targetedAppointmentData: this._getTargetData(data, $appointment),
+                targetedAppointmentData: this._getTargetData(data, target),
                 container: options.container
             });
         });
@@ -84,62 +83,63 @@ export class TooltipStrategyBase {
     _onDeleteButtonClick() {
     }
 
-    _createTemplate(appointmentData, singleAppointmentData, $appointment) {
+    _createTemplate(data, currentData, color) {
         this.scheduler._defaultTemplates[this._getItemListDefaultTemplateName()] = new FunctionTemplate(options => {
-            const $container = $(options.container),
-                $content = this._createTemplateContent(appointmentData, singleAppointmentData, $appointment);
-
-            $container.replaceWith($content.addClass($container.attr("class")));
+            const $container = $(options.container);
+            $container.append(this._createItemListContent(data, currentData, color));
             return $container;
         });
     }
 
-    _createTemplateContent(appointmentData, singleAppointmentData, $appointment) {
+    _createItemListContent(data, currentData, color) {
         const editing = this.scheduler.option("editing"),
-            isAllDay = this.scheduler.fire("getField", "allDay", appointmentData),
-            text = this.scheduler.fire("getField", "text", appointmentData),
-            startDateTimeZone = this.scheduler.fire("getField", "startDateTimeZone", appointmentData),
-            endDateTimeZone = this.scheduler.fire("getField", "endDateTimeZone", appointmentData),
-            startDate = this.scheduler.fire("convertDateByTimezone", this.scheduler.fire("getField", "startDate", singleAppointmentData), startDateTimeZone),
-            endDate = this.scheduler.fire("convertDateByTimezone", this.scheduler.fire("getField", "endDate", singleAppointmentData), endDateTimeZone);
+            isAllDay = this.scheduler.fire("getField", "allDay", data),
+            text = this.scheduler.fire("getField", "text", data),
+            startDateTimeZone = this.scheduler.fire("getField", "startDateTimeZone", data),
+            endDateTimeZone = this.scheduler.fire("getField", "endDateTimeZone", data),
+            startDate = this.scheduler.fire("convertDateByTimezone", this.scheduler.fire("getField", "startDate", currentData), startDateTimeZone),
+            endDate = this.scheduler.fire("convertDateByTimezone", this.scheduler.fire("getField", "endDate", currentData), endDateTimeZone);
 
-        // const borderSide = this.scheduler.option("rtlEnabled") ? "right" : "left";
-
-        // color && color.done((color) => {
-        //     appointmentElement.css(SIDE_BORDER_COLOR_STYLES[borderSide], color);
-        // });
-
-        const $itemElement = $("<div>").addClass(APPOINTMENT_TOOLTIP_CLASS).addClass(DROPDOWN_APPOINTMENT_CLASS);
-        $itemElement.append(this._createContentInfo(text, this._formatDate(startDate, endDate, isAllDay)));
+        const $itemElement = $("<div>").addClass(TOOLTIP_APPOINTMENT_ITEM);
+        $itemElement.append(this._createItemListMarker(color));
+        $itemElement.append(this._createItemListInfo(text, this._formatDate(startDate, endDate, isAllDay)));
 
         if(editing && editing.allowDeleting === true || editing === true) {
-            $itemElement.append(this._createDeleteButton(appointmentData));
+            $itemElement.append(this._createDeleteButton(data));
         }
 
         return $itemElement;
     }
 
-    _createContentInfo(text, formattedDate) {
-        const result = $("<div>").addClass(DROPDOWN_APPOINTMENT_INFO_BLOCK_CLASS);
-        const $title = $("<div>").addClass(DROPDOWN_APPOINTMENT_TITLE_CLASS).text(text);
-        const $date = $("<div>").addClass(DROPDOWN_APPOINTMENT_DATE_CLASS).text(formattedDate);
+    _createItemListMarker(color) {
+        const $marker = $("<div>").addClass(TOOLTIP_APPOINTMENT_ITEM_MARKER);
+        const $markerBody = $("<div>").addClass(TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY);
+
+        $marker.append($markerBody);
+        color && color.done(value => $markerBody.css("background", value));
+
+        return $marker;
+    }
+
+    _createItemListInfo(text, formattedDate) {
+        const result = $("<div>").addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT);
+        const $title = $("<div>").addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT).text(text);
+        const $date = $("<div>").addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE).text(formattedDate);
 
         return result.append($title).append($date);
     }
 
-    _createDeleteButton(appointmentData) {
-        const $container = $("<div>").addClass(DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS),
-            $deleteButton = $("<div>").addClass(DROPDOWN_APPOINTMENT_REMOVE_BUTTON_CLASS);
+    _createDeleteButton(data) {
+        const $container = $("<div>").addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER),
+            $deleteButton = $("<div>").addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON);
 
         $container.append($deleteButton);
         this.scheduler._createComponent($deleteButton, Button, {
             icon: "trash",
-            height: DELETE_BUTTON_SIZE,
-            width: DELETE_BUTTON_SIZE,
-            onClick: (e) => {
+            onClick: e => {
                 this._onDeleteButtonClick();
                 e.event.stopPropagation();
-                this.scheduler.deleteAppointment(appointmentData);
+                this.scheduler.deleteAppointment(data);
             }
         });
 
@@ -163,7 +163,7 @@ export class TooltipStrategyBase {
             startDate: startDate,
             endDate: endDate,
             formatType: this._getTypeFormat(startDate, endDate, isAllDay),
-            callback: value => { result = value; }
+            callback: value => result = value
         });
 
         return result;

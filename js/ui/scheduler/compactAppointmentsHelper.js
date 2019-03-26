@@ -22,14 +22,12 @@ export class CompactAppointmentsHelper {
         const template = this._createTemplate(options.items.data.length, options.isCompact);
         const button = this._createCompactButton(options.$container, options.buttonWidth, template, options.items, options.isCompact, options.coordinates);
         const $button = button.$element();
-        $button.data("items", options.items.data.map(item => {
-            return {
-                data: item
-            };
-        }));
 
-        this._paintColorButton($button, options.items.colors, options.buttonColor);
+        this._makeBackgroundColor($button, options.items.colors, options.buttonColor);
+        this._makeBackgroundDarker($button);
+
         this.elements.push($button);
+        $button.data("items", this._createAppointmentsData(options.items));
 
         return $button;
     }
@@ -42,7 +40,16 @@ export class CompactAppointmentsHelper {
         this.elements = [];
     }
 
-    onButtonClick(e) {
+    _createAppointmentsData(items) {
+        return items.data.map((item, index) => {
+            return {
+                data: item,
+                color: items.colors[index]
+            };
+        });
+    }
+
+    _onButtonClick(e) {
         this.instance.showAppointmentTooltipCore(e.element, e.element.data("items"));
     }
 
@@ -50,13 +57,17 @@ export class CompactAppointmentsHelper {
         return this.instance.fire("getCellWidth") - width - WEEK_VIEW_BUTTON_OFFSET;
     }
 
-    _paintColorButton($button, colors, color) {
+    _makeBackgroundDarker(button) {
+        button.css("boxShadow", `inset ${button.get(0).getBoundingClientRect().width}px 0 0 0 rgba(0, 0, 0, 0.3)`);
+    }
+
+    _makeBackgroundColor($button, colors, color) {
         when.apply(null, colors).done(function() {
-            this._paintColorButtonCore($button, color, arguments);
+            this._makeBackgroundColorCore($button, color, arguments);
         }.bind(this));
     }
 
-    _paintColorButtonCore($button, color, itemsColors) {
+    _makeBackgroundColorCore($button, color, itemsColors) {
         let paintButton = true,
             currentItemColor;
 
@@ -89,7 +100,7 @@ export class CompactAppointmentsHelper {
         return this.instance._createComponent($button, Button, {
             type: 'default',
             width: width,
-            onClick: (e) => this.onButtonClick(e),
+            onClick: (e) => this._onButtonClick(e),
             template: this._renderTemplate(template, items, isCompact)
         });
     }
@@ -99,8 +110,6 @@ export class CompactAppointmentsHelper {
             .addClass(DROPDOWN_APPOINTMENTS_CLASS)
             .toggleClass(COMPACT_DROPDOWN_APPOINTMENTS_CLASS, isCompact)
             .appendTo($container);
-
-        result.css("boxShadow", `inset ${result.get(0).getBoundingClientRect().width}px 0 0 0 rgba(0, 0, 0, 0.3)`);
 
         const offset = isCompact ? this._getButtonOffset(width) : 0;
         this._setPosition(result, { top: coordinates.top, left: coordinates.left + offset });

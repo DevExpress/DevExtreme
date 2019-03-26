@@ -905,10 +905,7 @@ const Scheduler = Widget.inherit({
 
             _appointmentTooltipOffset: { x: 0, y: 0 },
             _appointmentTooltipButtonsPosition: "bottom",
-            _appointmentTooltipCloseButton: false, // TODO:
-            _useAppointmentColorForTooltip: false,
             _appointmentTooltipOpenButtonText: messageLocalization.format("dxScheduler-openAppointment"),
-            _appointmentTooltipOpenButtonIcon: "",
             _dropDownButtonIcon: "overflow",
             _appointmentCountPerCell: 2,
             _appointmentGroupButtonOffset: 0,
@@ -1094,10 +1091,7 @@ const Scheduler = Widget.inherit({
 
                     _appointmentTooltipOffset: { x: 0, y: 11 },
                     _appointmentTooltipButtonsPosition: "top",
-                    _appointmentTooltipCloseButton: true, // TODO:
-                    _useAppointmentColorForTooltip: true,
                     _appointmentTooltipOpenButtonText: null,
-                    _appointmentTooltipOpenButtonIcon: "edit",
                     _dropDownButtonIcon: "chevrondown",
                     _appointmentCountPerCell: 1,
                     _appointmentGroupButtonOffset: 20,
@@ -1350,10 +1344,7 @@ const Scheduler = Widget.inherit({
             case "appointmentCollectorTemplate":
             case "_appointmentTooltipOffset":
             case "_appointmentTooltipButtonsPosition":
-            case "_appointmentTooltipCloseButton":
-            case "_useAppointmentColorForTooltip":
             case "_appointmentTooltipOpenButtonText":
-            case "_appointmentTooltipOpenButtonIcon":
             case "_dropDownButtonIcon":
             case "_appointmentCountPerCell":
             case "_appointmentGroupButtonOffset":
