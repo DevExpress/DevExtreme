@@ -26,6 +26,20 @@
         return;
     }
 
+    QUnit.test("UseJQueryReady = false", function(assert) {
+
+        var callCount = 0;
+        var initScript = function() {
+            callCount++;
+        };
+
+        aspnet.addInitScript(initScript);
+        aspnet.addInitScript(initScript);
+        aspnet.execInitScripts();
+
+        assert.equal(callCount, 2);
+    });
+
     QUnit.module(
         "Client Validation",
         {
