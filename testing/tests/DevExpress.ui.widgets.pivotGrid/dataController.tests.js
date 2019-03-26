@@ -6171,11 +6171,11 @@ QUnit.test("scroll after expand row", function(assert) {
 
     dataController.setViewportPosition(0, 4 * 20);
 
-    assert.deepEqual(this.loadArgs.map(options => {
+    assert.deepEqual(this.loadArgs.map(function(options) {
         return {
             path: options.path,
             rowSkip: options.rowSkip,
-            rowTake: options.rowTake,
+            rowTake: options.rowTake
         };
     }), [
         { path: undefined, rowSkip: 1, rowTake: 1 },
@@ -6210,7 +6210,7 @@ QUnit.test("scroll to end of expanded row", function(assert) {
 
     dataController.setViewportPosition(0, 10 * 20);
 
-    assert.deepEqual(this.loadArgs.map(options => {
+    assert.deepEqual(this.loadArgs.map(function(options) {
         return {
             path: options.path,
             rowSkip: options.rowSkip,
