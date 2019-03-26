@@ -805,15 +805,15 @@ var TextEditorBase = Editor.inherit({
                 this._renderStylingMode();
                 this._updateButtonsStyling(args.value);
                 break;
-            case "valueFormat":
-            case "buttons": {
+            case "buttons":
                 if(args.fullName === args.name) {
                     checkButtonsOptionType(args.value);
                 }
-
                 this._invalidate();
                 break;
-            }
+            case "valueFormat":
+                this._invalidate();
+                break;
             default:
                 this.callBase(args);
         }
