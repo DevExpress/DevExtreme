@@ -1,6 +1,5 @@
 import $ from "../../core/renderer";
 import iconUtils from "../../core/utils/icon";
-import eventsEngine from "../../events/core/events_engine";
 
 import Button from "../button";
 import DataGrid from "../data_grid/ui.data_grid";
@@ -24,7 +23,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     _createFilesView() {
         const selectionMode = this.option("selectionMode");
 
-        const that = this;
         this._filesView = this._createComponent("<div>", DataGrid, {
             hoverStateEnabled: true,
             selection: {
@@ -34,7 +32,6 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             scrolling: {
                 mode: "virtual"
             },
-            onRowPrepared: this._onRowPrepared.bind(this),
             columns: [
                 {
                     dataField: "thumbnail",
@@ -47,27 +44,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                     dataField: "name",
                     minWidth: 200,
                     width: "65%",
-                    cellTemplate(container, options) {
-                        const button = that._createComponent($("<div>"), Button, {
-                            text: "&vellip;",
-                            onClick(e) {
-                                that._onShowFileItemActionButtonClick(e);
-
-                                const filesViewRow = e.component.$element().data("filesViewRow");
-                                if(that._filesView.getSelectedRowsData().indexOf(filesViewRow.data) < 0) {
-                                    eventsEngine.trigger($(e.element).parent("td"), "dxclick");
-                                }
-                            },
-                            template(e) {
-                                return $("<i>").html("&vellip;");
-                            }
-                        });
-                        button.$element()
-                            .data("filesViewRow", options.row)
-                            .addClass(`${FILE_MANAGER_FILE_ACTIONS_BUTTON} dx-command-select`);
-
-                        $(container).append(options.data.name, button.$element());
-                    }
+                    cellTemplate: this._createNameColumnCell.bind(this)
                 },
                 {
                     dataField: "lastWriteTime",
@@ -80,17 +57,10 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                     width: "10%"
                 }
             ],
-            onContextMenuPreparing(e) {
-                if(e.row.rowType !== 'data') {
-                    return;
-                }
-
-                e.items = that._createContextMenuItems(e.row.data);
-                if(that._filesView.getSelectedRowsData().indexOf(e.row.data) < 0) {
-                    eventsEngine.trigger(e.targetElement, "dxclick");
-                }
-            }
+            onRowPrepared: this._onRowPrepared.bind(this),
+            onContextMenuPreparing: this._onContextMenuPreparing.bind(this)
         });
+
         this.$element()
             .addClass(FILE_MANAGER_DETAILS_ITEM_LIST_CLASS)
             .append(this._filesView.$element());
@@ -98,8 +68,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         this._loadFilesViewData();
     }
 
-    _createContextMenuItems(rowData) {
-        const that = this;
+    _createContextMenuItems(fileItem) {
         const isSingleRowSelected = this._filesView.getSelectedRowKeys().length <= 1;
         return FileManagerFileCommands
             .filter(c => {
@@ -111,15 +80,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             .map(c => ({
                 name: c.name,
                 text: c.text,
-                fileItem: rowData,
-                onItemClick: that._raiseOnContextMenuItemClick.bind(that)
+                fileItem: fileItem,
+                onItemClick: this._raiseOnContextMenuItemClick.bind(this)
             }));
-    }
-
-    _correctFileViewSelectionStateAfterRaiseContextMenu(newSelectedRow) {
-        if(this._filesView.getSelectedRowsData().indexOf(newSelectedRow.data) < 0) {
-            this._filesView.selectRowsByIndexes(newSelectedRow.rowIndex);
-        }
     }
 
     _createFilesViewStore() {
@@ -138,9 +101,12 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
     _onShowFileItemActionButtonClick(e) {
         this._ensureContextMenu();
 
-        const filesViewRow = e.component.$element().data("filesViewRow");
-        this._contextMenu.option("dataSource", this._createContextMenuItems(filesViewRow.data));
+        const $row = e.component.$element().closest(this._getItemSelector());
+        const item = $row.data("item");
+        this._contextMenu.option("dataSource", this._createContextMenuItems(item));
         this._displayContextMenu(e.element, e.event.offsetX, e.event.offsetY);
+
+        this._ensureItemSelected(item);
     }
 
     _getItemSelector() {
@@ -149,15 +115,24 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _onItemDblClick(e) {
         const $row = $(e.currentTarget);
-        const key = $row.data("item-key");
-        this._filesView.byKey(key)
-            .done(item => this._raiseSelectedItemOpened(item));
+        const item = $row.data("item");
+        this._raiseSelectedItemOpened(item);
     }
 
     _onRowPrepared(e) {
         if(e.rowType === "data") {
-            $(e.rowElement).data("item-key", e.data.relativeName);
+            $(e.rowElement).data("item", e.data);
         }
+    }
+
+    _onContextMenuPreparing(e) {
+        if(e.row.rowType !== 'data') {
+            return;
+        }
+
+        const item = e.row.data;
+        e.items = this._createContextMenuItems(item);
+        this._ensureItemSelected(item);
     }
 
     _createThumbnailColumnCell(container, cellInfo) {
@@ -165,6 +140,25 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
         iconUtils.getImageContainer(thumbnail)
             .addClass(FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS)
             .appendTo(container);
+    }
+
+    _createNameColumnCell(container, cellInfo) {
+        const button = this._createComponent($("<div>"), Button, {
+            text: "&vellip;",
+            onClick: this._onShowFileItemActionButtonClick.bind(this),
+            template(e) {
+                return $("<i>").html("&vellip;");
+            }
+        });
+        button.$element().addClass(`${FILE_MANAGER_FILE_ACTIONS_BUTTON} dx-command-select`);
+
+        $(container).append(cellInfo.data.name, button.$element());
+    }
+
+    _ensureItemSelected(item) {
+        if(!this._filesView.isRowSelected(item.relativeName)) {
+            this._filesView.selectRows([item.relativeName], true);
+        }
     }
 
     refreshData() {
