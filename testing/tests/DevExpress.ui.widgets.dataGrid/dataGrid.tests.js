@@ -6056,6 +6056,88 @@ QUnit.test("scrolling after ungrouping should works correctly with large amount 
     clock.restore();
 });
 
+// T716207
+QUnit.test("Filtering should works correctly if groupPaging is enabled and group is expanded", function(assert) {
+    // arrange
+    var clock = sinon.useFakeTimers();
+    var arrayStore = new ArrayStore([
+        { id: 1, group: "group", type: 1 },
+        { id: 2, group: "group", type: 1 },
+        { id: 3, group: "group", type: 1 },
+        { id: 4, group: "group", type: 2 }
+    ]);
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        dataSource: {
+            key: "id",
+            load: function(options) {
+                var d = $.Deferred();
+                setTimeout(function() {
+                    var result = {};
+                    arrayStore.load(options).done(function(data) {
+                        result.data = data;
+
+                        if(options.group) {
+                            data.forEach(item => {
+                                item.count = item.items.length;
+                                item.items = null;
+                            });
+                        }
+                    });
+                    if(options.requireGroupCount) {
+                        arrayStore.load({ filter: options.filter, group: options.group }).done(function(groupedData) {
+                            result.groupCount = groupedData.length;
+                        });
+                    }
+                    if(options.requireTotalCount) {
+                        arrayStore.totalCount(options).done(function(totalCount) {
+                            result.totalCount = totalCount;
+                        });
+                    }
+
+                    d.resolve(result);
+                }, 10);
+
+                return d;
+            }
+        },
+        remoteOperations: { groupPaging: true },
+        height: 400,
+        filterSyncEnabled: true,
+        loadingTimeout: undefined,
+        scrolling: {
+            mode: "virtual"
+        },
+        grouping: {
+            autoExpandAll: false
+        },
+        paging: {
+            pageSize: 2
+        },
+        columns: [{
+            dataField: "group",
+            groupIndex: 0
+        }, {
+            dataField: "id"
+        }, {
+            dataField: "type"
+        }]
+    }).dxDataGrid("instance");
+    clock.tick(100);
+
+    dataGrid.expandRow(["group"]);
+    clock.tick(100);
+
+    // act
+    dataGrid.columnOption("type", "filterValue", 1);
+    clock.tick(100);
+
+    // assert
+    assert.notOk(dataGrid.getDataSource().isLoading(), "not loading");
+    assert.equal(dataGrid.getVisibleRows().length, 4, "visible row count is correct");
+
+    clock.restore();
+});
+
 // T641931
 QUnit.test("Infinite scrolling should works correctly", function(assert) {
     // arrange, act

@@ -208,9 +208,12 @@ module.exports = gridCore.Controller.inherit((function() {
                 options.lastLoadOptions = loadOptions;
                 that._isRefreshing = true;
 
-                when(isRefreshing || that.refresh(options, isReload, operationTypes)).done(function() {
+                when(isRefreshing || that._isRefreshed || that.refresh(options, isReload, operationTypes)).done(function() {
                     if(that._lastOperationId === options.operationId) {
-                        that.load();
+                        that._isRefreshed = true;
+                        that.load().always(function() {
+                            that._isRefreshed = false;
+                        });
                     }
                 }).fail(function() {
                     dataSource.cancel(options.operationId);
