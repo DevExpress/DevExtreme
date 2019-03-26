@@ -56,7 +56,7 @@ export class TooltipStrategyBase {
 
     _renderTemplate(data, currentData, $appointment) {
         this._createTemplate(data, currentData, $appointment);
-        const template = this.scheduler._getAppointmentTemplate("appointmentTooltipTemplate");
+        const template = this.scheduler._getAppointmentTemplate(this._getItemListTemplateName());
 
         return new FunctionTemplate(options => {
             return template.render({
@@ -65,6 +65,14 @@ export class TooltipStrategyBase {
                 container: options.container
             });
         });
+    }
+
+    _getItemListTemplateName() {
+        return "appointmentTooltipTemplate";
+    }
+
+    _getItemListDefaultTemplateName() {
+        return "appointmentTooltip";
     }
 
     _onListItemClick(e) {
@@ -77,7 +85,7 @@ export class TooltipStrategyBase {
     }
 
     _createTemplate(appointmentData, singleAppointmentData, $appointment) {
-        this.scheduler._defaultTemplates["appointmentTooltip"] = new FunctionTemplate(options => {
+        this.scheduler._defaultTemplates[this._getItemListDefaultTemplateName()] = new FunctionTemplate(options => {
             const $container = $(options.container),
                 $content = this._createTemplateContent(appointmentData, singleAppointmentData, $appointment);
 

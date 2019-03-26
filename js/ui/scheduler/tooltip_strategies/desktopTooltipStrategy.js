@@ -24,22 +24,29 @@ class TooltipBehaviorBase {
     }
 
     onListItemRendered(e) {
+    }
 
+    getItemListTemplateName() {
+        return "appointmentTooltipTemplate";
+    }
+
+    getItemListDefaultTemplateName() {
+        return "appointmentTooltip";
     }
 }
 
 class TooltipSingleAppointmentBehavior extends TooltipBehaviorBase {
     getTooltipPosition(dataList) {
         const result = super.getTooltipPosition();
-        result.boundary = this.getBoundary(dataList);
+        result.boundary = this._getBoundary(dataList);
         return result;
     }
 
-    getBoundary(dataList) {
-        return this.isAppointmentInAllDayPanel(dataList[0].data) ? this.scheduler.$element() : this.scheduler.getWorkSpaceScrollableContainer();
+    _getBoundary(dataList) {
+        return this._isAppointmentInAllDayPanel(dataList[0].data) ? this.scheduler.$element() : this.scheduler.getWorkSpaceScrollableContainer();
     }
 
-    isAppointmentInAllDayPanel(appointmentData) {
+    _isAppointmentInAllDayPanel(appointmentData) {
         const workSpace = this.scheduler._workSpace,
             itTakesAllDay = this.scheduler.appointmentTakesAllDay(appointmentData);
 
@@ -56,6 +63,18 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
             eventsEngine.on(e.itemElement, dragEvents.move, (e) => this._onAppointmentDragMove(e, appData.allDay));
             eventsEngine.on(e.itemElement, dragEvents.end, () => this._onAppointmentDragEnd(appData));
         }
+    }
+
+    getItemListTemplateName() {
+        return this._isEmptyDropDownAppointmentTemplate() ? "appointmentTooltipTemplate" : "dropDownAppointmentTemplate";
+    }
+
+    getItemListDefaultTemplateName() {
+        return this._isEmptyDropDownAppointmentTemplate() ? "appointmentTooltip" : "dropDownAppointment";
+    }
+
+    _isEmptyDropDownAppointmentTemplate() {
+        return this.scheduler.option("dropDownAppointmentTemplate") === "dropDownAppointment";
     }
 
     _onAppointmentDragStart(itemData, settings, $target) {
@@ -153,6 +172,14 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
 
             this.tooltip.option("position", this.behavior.getTooltipPosition(dataList));
         }
+    }
+
+    _getItemListTemplateName() {
+        return this.behavior.getItemListTemplateName();
+    }
+
+    _getItemListDefaultTemplateName() {
+        return this.behavior.getItemListDefaultTemplateName();
     }
 
     _createTooltip(target, list) {
