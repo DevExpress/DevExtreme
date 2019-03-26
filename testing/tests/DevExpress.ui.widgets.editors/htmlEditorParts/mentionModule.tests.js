@@ -8,12 +8,6 @@ const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 const LIST_ITEM_CLASS = "dx-list-item";
 const FOCUSED_STATE_CLASS = "dx-state-focused";
 
-const APPLY_VALUE_KEYS = [{ key: "Enter", code: KEY_CODES.ENTER }, { key: "Space", code: KEY_CODES.SPACE }];
-
-const INSERT_DEFAULT_MENTION_DELTA = { ops: [{ insert: "@" }] };
-const INSERT_HASH_MENTION_DELTA = { ops: [{ insert: "#" }] };
-const INSERT_TEXT_DELTA = { ops: [{ insert: "Text" }] };
-
 const KEY_CODES = {
     ARROW_UP: 38,
     ARROW_DOWN: 40,
@@ -21,6 +15,12 @@ const KEY_CODES = {
     ESCAPE: 27,
     SPACE: 32
 };
+
+const APPLY_VALUE_KEYS = [{ key: "Enter", code: KEY_CODES.ENTER }, { key: "Space", code: KEY_CODES.SPACE }];
+
+const INSERT_DEFAULT_MENTION_DELTA = { ops: [{ insert: "@" }] };
+const INSERT_HASH_MENTION_DELTA = { ops: [{ insert: "#" }] };
+const INSERT_TEXT_DELTA = { ops: [{ insert: "Text" }] };
 
 const moduleConfig = {
     beforeEach: () => {
