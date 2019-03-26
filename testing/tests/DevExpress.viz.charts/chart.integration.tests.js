@@ -2708,7 +2708,7 @@ QUnit.test("Alignment left. Default division mode. No rotate", function(assert) 
     var axis = chart.getArgumentAxis();
     var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
 
-    translateX.forEach((tX, i) => assert.roughEqual(tX, -44 + 3 * i, 1));
+    translateX.forEach((tX, i) => assert.roughEqual(tX, -44 + 3 * i, 2.1));
 });
 
 QUnit.test("Alignment right. Default division mode. No rotate", function(assert) {
@@ -2722,7 +2722,7 @@ QUnit.test("Alignment right. Default division mode. No rotate", function(assert)
     var axis = chart.getArgumentAxis();
     var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
 
-    translateX.forEach((tX, i) => assert.roughEqual(tX, 44 - 3 * i, 1));
+    translateX.forEach((tX, i) => assert.roughEqual(tX, 44 - 3 * i, 3.1));
 });
 
 QUnit.test("Alignment left. 'crossLabels' division mode. No rotate", function(assert) {
@@ -2737,7 +2737,7 @@ QUnit.test("Alignment left. 'crossLabels' division mode. No rotate", function(as
     var axis = chart.getArgumentAxis();
     var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
 
-    translateX.forEach((tX, i) => assert.roughEqual(tX, 4 + 3 * i, 1));
+    translateX.forEach((tX, i) => assert.roughEqual(tX, 4 + 3 * i, 1.5));
 });
 
 QUnit.test("Alignment right. 'crossLabels' division mode. No rotate", function(assert) {
@@ -2752,7 +2752,7 @@ QUnit.test("Alignment right. 'crossLabels' division mode. No rotate", function(a
     var axis = chart.getArgumentAxis();
     var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
 
-    translateX.forEach((tX, i) => assert.roughEqual(tX, -4 - 3 * i, 1));
+    translateX.forEach((tX, i) => assert.roughEqual(tX, -4 - 3 * i, 2.1));
 });
 
 QUnit.test("Alignment left. Rotate. Rotation angle is not a multiple of 90", function(assert) {
@@ -2768,7 +2768,7 @@ QUnit.test("Alignment left. Rotate. Rotation angle is not a multiple of 90", fun
     var axis = chart.getArgumentAxis();
     var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
 
-    translateX.forEach((tX, i) => assert.roughEqual(tX, 5 + 2.5 * i, 1));
+    translateX.forEach((tX, i) => assert.roughEqual(tX, 5 + 2.5 * i, 1.5));
 });
 
 QUnit.test("Alignment right. Rotate. Rotation angle is not a multiple of 90", function(assert) {
@@ -2784,7 +2784,7 @@ QUnit.test("Alignment right. Rotate. Rotation angle is not a multiple of 90", fu
     var axis = chart.getArgumentAxis();
     var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
 
-    translateX.forEach((tX, i) => assert.roughEqual(tX, -13 - 2 * i, 1));
+    translateX.forEach((tX, i) => assert.roughEqual(tX, -13 - 2 * i, 1.5));
 });
 
 QUnit.test("Alignment left. Rotate. Rotation angle is a multiple of 90", function(assert) {
@@ -2800,7 +2800,7 @@ QUnit.test("Alignment left. Rotate. Rotation angle is a multiple of 90", functio
     var axis = chart.getArgumentAxis();
     var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
 
-    translateX.forEach((tX, i) => assert.roughEqual(tX, -44 + 3 * i, 1));
+    translateX.forEach((tX, i) => assert.roughEqual(tX, -44 + 3 * i, 3.1));
 });
 
 QUnit.test("Alignment right. Rotate. Rotation angle is a multiple of 90", function(assert) {
@@ -2816,5 +2816,5 @@ QUnit.test("Alignment right. Rotate. Rotation angle is a multiple of 90", functi
     var axis = chart.getArgumentAxis();
     var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
 
-    translateX.forEach((tX, i) => assert.roughEqual(tX, 45, 1));
+    translateX.forEach((tX, i) => assert.roughEqual(tX, 45, 1.5));
 });
