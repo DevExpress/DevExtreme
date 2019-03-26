@@ -88,14 +88,14 @@ QUnit.module("Raise context menu", moduleConfig, () => {
 
     test('click by row\'s action button', assert => {
         let $row1 = getRowInDetailsView(this.$element, 1);
-        $row1.trigger("mouseenter");
+        $row1.trigger("dxhoverstart");
         getRowActionButtonInDetailsView(this.$element, 1).trigger("dxclick");
 
         assert.ok($row1.hasClass("dx-selection"));
         assert.ok(getContextMenuItems().length > 0);
 
         let $row2 = getRowInDetailsView(this.$element, 2);
-        $row2.trigger("mouseenter");
+        $row2.trigger("dxhoverstart");
         getRowActionButtonInDetailsView(this.$element, 2).trigger("dxclick");
         assert.notOk($row1.hasClass("dx-selection"));
         assert.ok($row2.hasClass("dx-selection"));
@@ -110,7 +110,7 @@ QUnit.module("Raise context menu", moduleConfig, () => {
         assert.equal(getContextMenuItems().length, 0);
 
         let $row2 = getRowInDetailsView(this.$element, 2);
-        $row2.trigger("mouseenter");
+        $row2.trigger("dxhoverstart");
         getRowActionButtonInDetailsView(this.$element, 2).trigger("dxclick");
         assert.ok($row1.hasClass("dx-selection"));
         assert.ok($row2.hasClass("dx-selection"));
