@@ -1591,7 +1591,7 @@ const Scheduler = Widget.inherit({
     },
 
     _initAppointmentStrategies: function() {
-        this._dropDownAppointments = new CompactAppointmentsHelper(this);
+        this._compactAppointmentsHelper = new CompactAppointmentsHelper(this);
         this._appointmentTooltip = this.option("adaptivityEnabled") ? new MobileTooltipStrategy(this) : new DesktopTooltipStrategy(this);
     },
 

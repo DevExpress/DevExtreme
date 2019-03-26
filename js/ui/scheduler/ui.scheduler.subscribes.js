@@ -446,11 +446,11 @@ const subscribes = {
     },
 
     renderCompactAppointments: function(options) {
-        this._dropDownAppointments.render(options);
+        this._compactAppointmentsHelper.render(options);
     },
 
     clearCompactAppointments: function() {
-        this._dropDownAppointments.clear();
+        this._compactAppointmentsHelper.clear();
     },
 
     supportCompactDropDownAppointments: function() {

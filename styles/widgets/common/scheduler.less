@@ -5,6 +5,54 @@
 @SCHEDULER_DROP_DOWN_BUTTON_BORDER_WIDTH: 1px;
 @SCHEDULER_DROP_DOWN_BUTTON_BLOCK_WIDTH: 75px;
 
+.dx-popup-wrapper.dx-scheduler-appointment-tooltip-wrapper {
+    .dx-popup-content {
+        padding: 0px;
+
+        .dx-list-item-content {
+            width: 360px;
+            padding: 5px;
+        }
+    }
+
+    .tooltip-appointment-item {
+        display: flex;
+
+        .tooltip-appointment-item-marker-body {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-top: 7px;
+            margin-left: 5px
+        }
+
+        .tooltip-appointment-item-content {
+            flex-basis: 100%;
+            margin: 5px 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            .tooltip-appointment-item-content-subject {
+                text-align: left;
+                font-weight: bold;
+                font-size: 16px;
+                letter-spacing: 0.01em;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .tooltip-appointment-item-content-date {
+                text-align: left;
+                font-size: 12px;
+                color: rgba(51, 51, 51, 0.7);
+                margin-top: 10px
+            }
+        }
+    }
+}
+
 .dx-scheduler .dx-scheduler-slide-panel {
     .dx-overlay-content {
         position: relative;
