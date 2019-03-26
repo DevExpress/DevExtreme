@@ -93,6 +93,19 @@ var SchedulerAppointmentForm = {
                 }
             },
             {
+                dataField: dataExprs.startDateTimeZoneExpr,
+                editorType: "dxSchedulerTimezoneEditor",
+                colSpan: 2,
+                label: {
+                    text: " ",
+                    showColon: false
+                },
+                editorOptions: {
+                    observer: schedulerInst
+                },
+                visible: false
+            },
+            {
                 dataField: dataExprs.endDateExpr,
                 editorType: "dxDateBox",
                 label: {
@@ -121,6 +134,19 @@ var SchedulerAppointmentForm = {
                         }
                     }
                 }
+            },
+            {
+                dataField: dataExprs.endDateTimeZoneExpr,
+                editorType: "dxSchedulerTimezoneEditor",
+                colSpan: 2,
+                label: {
+                    text: " ",
+                    showColon: false
+                },
+                editorOptions: {
+                    observer: schedulerInst
+                },
+                visible: false
             },
             {
                 dataField: dataExprs.allDayExpr,
@@ -156,32 +182,6 @@ var SchedulerAppointmentForm = {
                         }
                     }
                 }
-            },
-            {
-                dataField: dataExprs.startDateTimeZoneExpr,
-                editorType: "dxSchedulerTimezoneEditor",
-                colSpan: 2,
-                label: {
-                    text: " ",
-                    showColon: false
-                },
-                editorOptions: {
-                    observer: schedulerInst
-                },
-                visible: false
-            },
-            {
-                dataField: dataExprs.endDateTimeZoneExpr,
-                editorType: "dxSchedulerTimezoneEditor",
-                colSpan: 2,
-                label: {
-                    text: " ",
-                    showColon: false
-                },
-                editorOptions: {
-                    observer: schedulerInst
-                },
-                visible: false
             },
             {
                 itemType: "empty",
