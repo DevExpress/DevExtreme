@@ -178,7 +178,7 @@
         },
 
         execInitScripts: function() {
-            iteratorUtils.each(initScripts, function() { this(); });
+            iteratorUtils.each(initScripts, function() { this($); });
         }
     };
 });
