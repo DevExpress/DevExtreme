@@ -36,7 +36,6 @@ var UI_FEEDBACK = "UIFeedback",
     FOCUS_NAMESPACE = "Focus",
     ANONYMOUS_TEMPLATE_NAME = "template",
     TEXT_NODE = 3,
-    COMMENT_NODE = 8,
     TEMPLATE_SELECTOR = "[data-options*='dxTemplate']",
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
 
@@ -334,16 +333,15 @@ var Widget = DOMComponent.inherit({
     },
 
     _extractAnonymousTemplate: function() {
-        const templates = this.option("integrationOptions.templates"),
+        var templates = this.option("integrationOptions.templates"),
             anonymousTemplateName = this._getAnonymousTemplateName(),
             $anonymousTemplate = this.$element().contents().detach();
 
-        const $notJunkTemplateContent = $anonymousTemplate.filter(function(_, element) {
-                const isCommentNode = element.nodeType === COMMENT_NODE,
-                    isTextNode = element.nodeType === TEXT_NODE,
+        var $notJunkTemplateContent = $anonymousTemplate.filter(function(_, element) {
+                var isTextNode = element.nodeType === TEXT_NODE,
                     isEmptyText = $(element).text().trim().length < 1;
 
-                return !(isTextNode && isEmptyText) && !isCommentNode;
+                return !(isTextNode && isEmptyText);
             }),
             onlyJunkTemplateContent = $notJunkTemplateContent.length < 1;
 
