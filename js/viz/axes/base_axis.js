@@ -523,6 +523,8 @@ Axis.prototype = {
             box = vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0),
             position = options.position,
             textAlign = tick.labelAlignment || options.label.alignment,
+            isDiscrete = that._options.type === "discrete",
+            isFlatLabel = tick.labelRotationAngle % 90 === 0,
             indentFromAxis = options.label.indentFromAxis,
             axisPosition = that._axisPosition,
             labelCoords = tick.labelCoords,
@@ -538,9 +540,9 @@ Axis.prototype = {
             }
 
             if(textAlign === RIGHT) {
-                translateX = labelX - box.x - box.width;
+                translateX = isDiscrete && isFlatLabel ? tick.coords.x - (box.x + box.width) : labelX - box.x - box.width;
             } else if(textAlign === LEFT) {
-                translateX = labelX - box.x;
+                translateX = isDiscrete && isFlatLabel ? labelX - box.x - (tick.coords.x - labelX) : labelX - box.x;
             } else {
                 translateX = labelX - box.x - box.width / 2;
             }

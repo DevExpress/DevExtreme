@@ -2667,3 +2667,154 @@ QUnit.test("Two axes syncronization with margins", function(assert) {
 
     this.compareTickCoords(assert, axis2._majorTicks.map(t => t.coords.y), axis1._majorTicks.map(t => t.coords.y));
 });
+
+QUnit.module("Discrete axis label layout", $.extend({}, moduleSetup, {
+    beforeEach() {
+        moduleSetup.beforeEach.call(this);
+        this.options = {
+            size: {
+                width: 500,
+                height: 500
+            },
+            dataSource: [{
+                arg: "a",
+                val: 15
+            }, {
+                arg: "ab",
+                val: 45
+            }, {
+                arg: "abc",
+                val: 30
+            }, {
+                arg: "abcd",
+                val: 60
+            }],
+            series: [{}]
+        };
+    },
+    afterEach() {
+        moduleSetup.afterEach.call(this);
+    }
+}));
+
+QUnit.test("Alignment left. Default division mode. No rotate", function(assert) {
+    this.options.argumentAxis = {
+        label: {
+            alignment: "left"
+        }
+    };
+    var chart = this.createChart(this.options);
+
+    var axis = chart.getArgumentAxis();
+    var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
+
+    translateX.forEach((tX, i) => assert.roughEqual(tX, -44 + 3 * i, 1));
+});
+
+QUnit.test("Alignment right. Default division mode. No rotate", function(assert) {
+    this.options.argumentAxis = {
+        label: {
+            alignment: "right"
+        }
+    };
+    var chart = this.createChart(this.options);
+
+    var axis = chart.getArgumentAxis();
+    var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
+
+    translateX.forEach((tX, i) => assert.roughEqual(tX, 44 - 3 * i, 1));
+});
+
+QUnit.test("Alignment left. 'crossLabels' division mode. No rotate", function(assert) {
+    this.options.argumentAxis = {
+        label: {
+            alignment: "left"
+        },
+        discreteAxisDivisionMode: "crossLabels"
+    };
+    var chart = this.createChart(this.options);
+
+    var axis = chart.getArgumentAxis();
+    var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
+
+    translateX.forEach((tX, i) => assert.roughEqual(tX, 4 + 3 * i, 1));
+});
+
+QUnit.test("Alignment right. 'crossLabels' division mode. No rotate", function(assert) {
+    this.options.argumentAxis = {
+        label: {
+            alignment: "right"
+        },
+        discreteAxisDivisionMode: "crossLabels"
+    };
+    var chart = this.createChart(this.options);
+
+    var axis = chart.getArgumentAxis();
+    var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
+
+    translateX.forEach((tX, i) => assert.roughEqual(tX, -4 - 3 * i, 1));
+});
+
+QUnit.test("Alignment left. Rotate. Rotation angle is not a multiple of 90", function(assert) {
+    this.options.argumentAxis = {
+        label: {
+            alignment: "left",
+            displayMode: "rotate",
+            rotationAngle: 45
+        }
+    };
+    var chart = this.createChart(this.options);
+
+    var axis = chart.getArgumentAxis();
+    var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
+
+    translateX.forEach((tX, i) => assert.roughEqual(tX, 5 + 2.5 * i, 1));
+});
+
+QUnit.test("Alignment right. Rotate. Rotation angle is not a multiple of 90", function(assert) {
+    this.options.argumentAxis = {
+        label: {
+            alignment: "right",
+            displayMode: "rotate",
+            rotationAngle: 45
+        }
+    };
+    var chart = this.createChart(this.options);
+
+    var axis = chart.getArgumentAxis();
+    var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
+
+    translateX.forEach((tX, i) => assert.roughEqual(tX, -13 - 2 * i, 1));
+});
+
+QUnit.test("Alignment left. Rotate. Rotation angle is a multiple of 90", function(assert) {
+    this.options.argumentAxis = {
+        label: {
+            alignment: "left",
+            displayMode: "rotate",
+            rotationAngle: 180
+        }
+    };
+    var chart = this.createChart(this.options);
+
+    var axis = chart.getArgumentAxis();
+    var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
+
+    translateX.forEach((tX, i) => assert.roughEqual(tX, -44 + 3 * i, 1));
+});
+
+QUnit.test("Alignment right. Rotate. Rotation angle is a multiple of 90", function(assert) {
+    this.options.argumentAxis = {
+        label: {
+            alignment: "right",
+            displayMode: "rotate",
+            rotationAngle: 270
+        }
+    };
+    var chart = this.createChart(this.options);
+
+    var axis = chart.getArgumentAxis();
+    var translateX = axis._majorTicks.map(t => t.label._settings.translateX);
+
+    translateX.forEach((tX, i) => assert.roughEqual(tX, 45, 1));
+});
