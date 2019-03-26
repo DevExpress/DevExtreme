@@ -2253,14 +2253,12 @@ const Scheduler = Widget.inherit({
     _popupConfig: function(appointmentData) {
         var template = this._getTemplateByOption("appointmentPopupTemplate");
 
-        // NOTE: title should be localized
         return {
             maxWidth: APPOINTEMENT_POPUP_WIDTH,
             height: 'auto',
             onHiding: (function() {
                 this.focus();
             }).bind(this),
-            title: 'Details',
             contentTemplate: new FunctionTemplate(function(options) {
                 return template.render({
                     model: appointmentData,
