@@ -257,16 +257,6 @@ QUnit.module("render", {
         assert.equal($element.find(".test").length, 2);
     });
 
-    QUnit.test("anonymous item template with comment", function(assert) {
-        const $element = $("<div>").append($("<!--></-->"));
-
-        new TestComponent($element, {
-            items: [1, 2]
-        });
-
-        assert.equal($element.text(), "12");
-    });
-
     QUnit.test("'itemTemplate' as DOM node", assert => {
         const $element = $("#cmp");
 
