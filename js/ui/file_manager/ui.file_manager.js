@@ -15,8 +15,9 @@ import FileManagerToolbar from "./ui.file_manager.toolbar";
 import FileManagerEditingControl from "./ui.file_manager.editing";
 import FileManagerBreadcrumbs from "./ui.file_manager.breadcrumbs";
 import { FileManagerFileCommands } from "./ui.file_manager.commands";
+import { getName, getParentPath } from "./ui.file_manager.utils";
 
-import { FileProvider, FileManagerItem, getFileUtils } from "../../file_provider/file_provider";
+import { FileProvider, FileManagerItem } from "../../file_provider/file_provider";
 import ArrayFileProvider from "../../file_provider/file_provider.array";
 import AjaxFileProvider from "../../file_provider/file_provider.ajax";
 import OneDriveFileProvider from "../../file_provider/file_provider.onedrive";
@@ -32,11 +33,6 @@ const FILE_MANAGER_EDITING_CONTAINER_CLASS = FILE_MANAGER_CLASS + "-editing-cont
 const FILE_MANAGER_ITEMS_PANEL_CLASS = FILE_MANAGER_CLASS + "-items-panel";
 
 class FileManager extends Widget {
-
-    _init() {
-        this._utils = getFileUtils();
-        super._init();
-    }
 
     _initTemplates() {
     }
@@ -193,7 +189,7 @@ class FileManager extends Widget {
 
         const folder = item.createClone();
         if(item.isParentFolder) {
-            folder.name = this._utils.getName(item.relativeName);
+            folder.name = getName(item.relativeName);
             folder.relativeName = item.relativeName;
         }
         this.setCurrentFolder(folder);
@@ -268,7 +264,7 @@ class FileManager extends Widget {
         let result = this._provider.getItems(path, itemType);
 
         if(options.showParentFolder && path) {
-            const parentPath = this._utils.getParentPath(path);
+            const parentPath = getParentPath(path);
             const parentFolder = this._createFolderItemByPath(parentPath);
             parentFolder.isParentFolder = true;
             parentFolder.name = "..";
@@ -357,8 +353,8 @@ class FileManager extends Widget {
     }
 
     _createFolderItemByPath(path) {
-        const parentPath = this._utils.getParentPath(path);
-        const name = this._utils.getName(path);
+        const parentPath = getParentPath(path);
+        const name = getName(path);
         return new FileManagerItem(parentPath, name, true);
     }
 

@@ -6,14 +6,10 @@ import Widget from "../widget/ui.widget";
 import { extend } from "../../core/utils/extend";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
-import { FileManagerItem, getFileUtils } from "../../file_provider/file_provider";
+import { FileManagerItem } from "../../file_provider/file_provider";
+import { getPathParts, pathCombine } from "./ui.file_manager.utils";
 
 class FileManagerFilesTreeView extends Widget {
-
-    _init() {
-        this._utils = getFileUtils();
-        super._init();
-    }
 
     _initMarkup() {
         this._initCurrentPathState();
@@ -90,11 +86,11 @@ class FileManagerFilesTreeView extends Widget {
         }
 
         let currentPath = "";
-        const parts = this._utils.getPathParts(path);
+        const parts = getPathParts(path);
 
         each(parts, (_, part) => {
 
-            currentPath = this._utils.pathCombine(currentPath, part);
+            currentPath = pathCombine(currentPath, part);
 
             const getExpandFunc = p => (() => this._expandLoadedPath(p));
             result = result.then(getExpandFunc(currentPath));
