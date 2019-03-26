@@ -37,6 +37,12 @@ function testInDesktop(name, testFunc) {
     }
 }
 
+function getTextSelection(element) {
+    let startPos = element.selectionStart,
+        endPos = element.selectionEnd;
+    return element.value.substring(startPos, endPos);
+}
+
 function callViewsRenderCompleted(views) {
     $.each(views, function(key, view) {
         view.renderCompleted.fire();
@@ -7888,7 +7894,7 @@ QUnit.module("Customize keyboard navigation", {
                 { id: 3, name: "room3" },
                 { id: 222, name: "room222" }
             ],
-            $input;
+            input;
 
         this.options = {
             editing: {
@@ -7915,49 +7921,46 @@ QUnit.module("Customize keyboard navigation", {
         this.setupModule();
         this.renderGridView();
 
-        // assert
-        assert.equal($(".dx-selectbox-popup").length, 0, "no drop down");
-
         // act
         this.focusCell(0, 1);
         this.triggerKeyDown("Enter");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
 
         // act
         this.triggerKeyDown("Escape");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 0, "Editor input");
+        assert.notOk(input, "Editor input");
 
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown("F2");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
 
         // act
         this.triggerKeyDown("Escape");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 0, "Editor input");
+        assert.notOk(input, "Editor input");
 
         // act
         this.focusCell(2, 1);
         this.triggerKeyDown("F2");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
     });
 
     testInDesktop("Not select all text if editing mode is batch", function(assert) {
@@ -7969,7 +7972,7 @@ QUnit.module("Customize keyboard navigation", {
                 { id: 3, name: "room3" },
                 { id: 222, name: "room222" }
             ],
-            $input;
+            input;
 
         this.options = {
             editing: {
@@ -8002,42 +8005,42 @@ QUnit.module("Customize keyboard navigation", {
         this.focusCell(0, 1);
         this.triggerKeyDown("Enter");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
         this.triggerKeyDown("Escape");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 0, "Editor input");
+        assert.notOk(input, "Editor input");
 
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown("F2");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
         this.triggerKeyDown("Escape");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 0, "Editor input");
+        assert.notOk(input, "Editor input");
 
         // act
         this.focusCell(2, 1);
         this.triggerKeyDown("F2");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
     });
 
     testInDesktop("Select all text if editing mode is cell", function(assert) {
@@ -8049,7 +8052,7 @@ QUnit.module("Customize keyboard navigation", {
                 { id: 3, name: "room3" },
                 { id: 222, name: "room222" }
             ],
-            $input;
+            input;
 
         this.options = {
             editing: {
@@ -8083,42 +8086,42 @@ QUnit.module("Customize keyboard navigation", {
         this.focusCell(0, 1);
         this.triggerKeyDown("Enter");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
 
         // act
         this.triggerKeyDown("Escape");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 0, "Editor input");
+        assert.notOk(input, "Editor input");
 
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown("F2");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
 
         // act
         this.triggerKeyDown("Escape");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 0, "Editor input");
+        assert.notOk(input, "Editor input");
 
         // act
         this.focusCell(2, 1);
         this.triggerKeyDown("F2");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
     });
 
     testInDesktop("Not select all text if editing mode is cell", function(assert) {
@@ -8130,7 +8133,7 @@ QUnit.module("Customize keyboard navigation", {
                 { id: 3, name: "room3" },
                 { id: 222, name: "room222" }
             ],
-            $input;
+            input;
 
         this.options = {
             editing: {
@@ -8163,42 +8166,42 @@ QUnit.module("Customize keyboard navigation", {
         this.focusCell(0, 1);
         this.triggerKeyDown("Enter");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
         this.triggerKeyDown("Escape");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 0, "Editor input");
+        assert.notOk(input, "Editor input");
 
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown("F2");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
         this.triggerKeyDown("Escape");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 0, "Editor input");
+        assert.notOk(input, "Editor input");
 
         // act
         this.focusCell(2, 1);
         this.triggerKeyDown("F2");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
     });
 
     testInDesktop("Select all text if editing mode is form", function(assert) {
@@ -8210,7 +8213,7 @@ QUnit.module("Customize keyboard navigation", {
                 { id: 3, name: "room3" },
                 { id: 222, name: "room222" }
             ],
-            $input;
+            input;
 
         this.options = {
             editing: {
@@ -8240,31 +8243,31 @@ QUnit.module("Customize keyboard navigation", {
         // act
         this.editRow(1);
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
 
         // act
-        $input = $(".dx-texteditor-input").eq(1);
-        $input.focus();
+        input = $(".dx-texteditor-input").get(1);
+        $(input).focus();
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
 
         // act
-        $input = $(".dx-texteditor-input").eq(3);
-        $input.focus();
+        input = $(".dx-texteditor-input").get(3);
+        $(input).focus();
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
 
         // act
-        $input = $(".dx-texteditor-input").eq(2);
-        $input.focus();
+        input = $(".dx-texteditor-input").get(2);
+        $(input).focus();
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
     });
 
     testInDesktop("Not select all text if editing mode is form", function(assert) {
@@ -8276,7 +8279,7 @@ QUnit.module("Customize keyboard navigation", {
                 { id: 3, name: "room3" },
                 { id: 222, name: "room222" }
             ],
-            $input;
+            input;
 
         this.options = {
             editing: {
@@ -8305,31 +8308,31 @@ QUnit.module("Customize keyboard navigation", {
         // act
         this.editRow(1);
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
-        $input = $(".dx-texteditor-input").eq(1);
-        $input.focus();
+        input = $(".dx-texteditor-input").get(1);
+        $(input).focus();
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
-        $input = $(".dx-texteditor-input").eq(3);
-        $input.focus();
+        input = $(".dx-texteditor-input").get(3);
+        $(input).focus();
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
-        $input = $(".dx-texteditor-input").eq(2);
-        $input.focus();
+        input = $(".dx-texteditor-input").get(2);
+        $(input).focus();
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
     });
 
     testInDesktop("Select all text if editing mode is popup", function(assert) {
@@ -8341,7 +8344,7 @@ QUnit.module("Customize keyboard navigation", {
                 { id: 3, name: "room3" },
                 { id: 222, name: "room222" }
             ],
-            $input;
+            input;
 
         this.options = {
             editing: {
@@ -8371,31 +8374,31 @@ QUnit.module("Customize keyboard navigation", {
         // act
         this.editRow(1);
         this.clock.tick(500);
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
 
         // act
-        $input = $(".dx-texteditor-input").eq(1);
-        $input.focus();
+        input = $(".dx-texteditor-input").get(1);
+        $(input).focus();
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
 
         // act
-        $input = $(".dx-texteditor-input").eq(3);
-        $input.focus();
+        input = $(".dx-texteditor-input").get(3);
+        $(input).focus();
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
 
         // act
-        $input = $(".dx-texteditor-input").eq(2);
-        $input.focus();
+        input = $(".dx-texteditor-input").get(2);
+        $(input).focus();
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
     });
 
     testInDesktop("Not select all text if editing mode is popup", function(assert) {
@@ -8407,7 +8410,7 @@ QUnit.module("Customize keyboard navigation", {
                 { id: 3, name: "room3" },
                 { id: 222, name: "room222" }
             ],
-            $input;
+            input;
 
         this.options = {
             editing: {
@@ -8436,31 +8439,31 @@ QUnit.module("Customize keyboard navigation", {
         // act
         this.editRow(1);
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
-        $input = $(".dx-texteditor-input").eq(1);
-        $input.focus();
+        input = $(".dx-texteditor-input").get(1);
+        $(input).focus();
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
-        $input = $(".dx-texteditor-input").eq(3);
-        $input.focus();
+        input = $(".dx-texteditor-input").get(3);
+        $(input).focus();
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
-        $input = $(".dx-texteditor-input").eq(2);
-        $input.focus();
+        input = $(".dx-texteditor-input").get(2);
+        $(input).focus();
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
     });
 
     testInDesktop("Select all text if editOnKeyPress is true", function(assert) {
@@ -8472,7 +8475,7 @@ QUnit.module("Customize keyboard navigation", {
                 { id: 3, name: "room3" },
                 { id: 222, name: "room222" }
             ],
-            $input;
+            input;
 
         this.options = {
             editing: {
@@ -8506,41 +8509,41 @@ QUnit.module("Customize keyboard navigation", {
         this.focusCell(0, 1);
         this.triggerKeyDown("A");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.notEqual(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.notEqual(getTextSelection(input), input.value, "Selection");
 
         // act
         this.triggerKeyDown("Escape");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 0, "Editor input");
+        assert.notOk(input, "Editor input");
 
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown("Enter");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
 
         // act
         this.triggerKeyDown("Escape");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 0, "Editor input");
+        assert.notOk(input, "Editor input");
 
         // act
         this.focusCell(2, 1);
         this.triggerKeyDown("F2");
         this.clock.tick();
-        $input = $(".dx-texteditor-input").eq(0);
+        input = $(".dx-texteditor-input").get(0);
         // assert
-        assert.equal($input.length, 1, "Editor input");
-        assert.equal(getSelection().toString(), $input.val(), "Selection");
+        assert.ok(input, "Editor input");
+        assert.equal(getTextSelection(input), input.value, "Selection");
     });
 });
