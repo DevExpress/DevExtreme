@@ -17,7 +17,7 @@ var $ = require("../../core/renderer"),
     Deferred = require("../../core/utils/deferred").Deferred;
 
 var TEXTEDITOR_CLASS = "dx-texteditor",
-    TEXTEDITOR_INPUT_CONTAINER_CLASS = "dx-texteditor-input-container",
+    TEXTEDITOR_CONTENT_CONTAINER_CLASS = "dx-editor-content-container",
     TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
     TEXTEDITOR_INPUT_SELECTOR = "." + TEXTEDITOR_INPUT_CLASS,
     TEXTEDITOR_CONTAINER_CLASS = "dx-texteditor-container",
@@ -424,7 +424,7 @@ var TextEditorBase = Editor.inherit({
         this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, $textEditorContainer);
 
         this._$textEditorInputContainer = $("<div>")
-            .addClass(TEXTEDITOR_INPUT_CONTAINER_CLASS)
+            .addClass(TEXTEDITOR_CONTENT_CONTAINER_CLASS)
             .appendTo($textEditorContainer);
         this._$textEditorInputContainer.append(this._createInput());
         this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, $textEditorContainer);

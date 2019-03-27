@@ -19,7 +19,7 @@ const DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor";
 const DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS = "dx-dropdowneditor-input-wrapper";
 const DROP_DOWN_EDITOR_BUTTON_CLASS = "dx-dropdowneditor-button";
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = "dx-dropdowneditor-button-visible";
-const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER_CLASS = "dx-dropdowneditor-field-template-wrapper";
+const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER_CLASS = "dx-editor-content-container";
 
 module("DropDownEditor markup", {
     beforeEach: () => {
@@ -85,7 +85,7 @@ module("DropDownEditor markup", {
             value: "test"
         });
 
-        assert.strictEqual($dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER_CLASS}`).length, 1);
+        assert.strictEqual($dropDownEditor.children(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS}`).children(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER_CLASS}`).length, 1);
         assert.equal($.trim($dropDownEditor.text()), "testtest", "field rendered");
     });
 
