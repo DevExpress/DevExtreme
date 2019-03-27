@@ -16,7 +16,7 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
     }
 
     _getDialogOptions() {
-        return extend(super._getDefaultOptions(), {
+        return extend(super._getDialogOptions(), {
             width: 400,
             height: "80%",
             title: "Select Destination Folder",

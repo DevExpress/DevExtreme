@@ -10,6 +10,8 @@ const FILE_MANAGER_BREADCRUMBS_CLASS = "dx-filemanager-breadcrumbs";
 class FileManagerBreadcrumbs extends Widget {
 
     _initMarkup() {
+        this._createOnPathChangedAction();
+
         this._menu = this._createComponent(this.$element(), Menu, {
             dataSource: this._getMenuItems(),
             onItemClick: this._onItemClick.bind(this)
@@ -56,25 +58,20 @@ class FileManagerBreadcrumbs extends Widget {
     }
 
     _onItemClick(e) {
+        const path = this.option("path");
+
         let newPath = "";
         if(e.itemData.isParentItem) {
-            newPath = this._getParentPath();
+            newPath = getParentPath(path);
         } else if(e.itemData.isPartItem) {
             newPath = this._getPathByMenuItemIndex(e.itemIndex);
         } else {
             return;
         }
 
-        const path = this.option("path");
         if(newPath !== path) {
-            const handler = this.option("onPathChanged");
-            handler(newPath);
+            this._onPathChangedAction({ newPath });
         }
-    }
-
-    _getParentPath() {
-        const path = this.option("path");
-        return getParentPath(path);
     }
 
     _getPathByMenuItemIndex(index) {
@@ -94,6 +91,10 @@ class FileManagerBreadcrumbs extends Widget {
         return result;
     }
 
+    _createOnPathChangedAction() {
+        this._onPathChangedAction = this._createActionByOption("onPathChanged");
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             path: "",
@@ -107,6 +108,9 @@ class FileManagerBreadcrumbs extends Widget {
         switch(name) {
             case "path":
                 this.repaint();
+                break;
+            case "onPathChanged":
+                this._createOnPathChangedAction();
                 break;
             default:
                 super._optionChanged(args);

@@ -347,7 +347,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
-            focusStateEnabled: true,
+            focusStateEnabled: true
         });
     }
 

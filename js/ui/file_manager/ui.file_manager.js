@@ -44,7 +44,7 @@ class FileManager extends Widget {
         this._currentFolder = new FileManagerItem("", "", true);
 
         const toolbar = this._createComponent($("<div>"), FileManagerToolbar, {
-            "onItemClick": this._onToolbarItemClick.bind(this)
+            "onItemClick": ({ itemName }) => this._onToolbarItemClick(itemName)
         });
         toolbar.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS);
 
@@ -69,11 +69,11 @@ class FileManager extends Widget {
                 getSingleSelectedItem: this._getSingleSelectedItem.bind(this),
                 getMultipleSelectedItems: this._getMultipleSelectedItems.bind(this)
             },
-            onSuccess: (message, updateOnlyFiles) => {
+            onSuccess: ({ message, updatedOnlyFiles }) => {
                 this._showSuccess(message);
-                this._refreshData(updateOnlyFiles);
+                this._refreshData(updatedOnlyFiles);
             },
-            onError: (title, details) => this._showError(title + ": " + this._getErrorText(details)),
+            onError: ({ title, details }) => this._showError(title + ": " + this._getErrorText(details)),
             onCreating: () => this._setItemsViewAreaActive(false)
         });
         this._editing.$element().addClass(FILE_MANAGER_EDITING_CONTAINER_CLASS);
@@ -119,10 +119,10 @@ class FileManager extends Widget {
 
         const options = {
             selectionMode: selectionOptions.mode,
-            onGetItems: this._getItemListItems.bind(this),
-            onError: this._showError.bind(this),
-            onSelectedItemOpened: item => this._tryOpen(item),
-            onContextMenuItemClick: this._onContextMenuItemClick.bind(this),
+            getItems: this._getItemListItems.bind(this),
+            onError: ({ error }) => this._showError(error),
+            onSelectedItemOpened: ({ item }) => this._tryOpen(item),
+            onContextMenuItemClick: ({ name, fileItem }) => this._onContextMenuItemClick(name, fileItem),
             getItemThumbnail: this._getItemThumbnail.bind(this)
         };
 
@@ -136,7 +136,7 @@ class FileManager extends Widget {
     _createBreadcrumbs() {
         this._breadcrumbs = this._createComponent($("<div>"), FileManagerBreadcrumbs, {
             path: "",
-            onPathChanged: path => this.setCurrentFolderPath(path)
+            onPathChanged: e => this.setCurrentFolderPath(e.newPath)
         });
     }
 
@@ -151,7 +151,7 @@ class FileManager extends Widget {
     }
 
     _onContextMenuItemClick(name, fileItem) {
-        let command = FileManagerFileCommands.find(c => c.name === name);
+        const command = FileManagerFileCommands.find(c => c.name === name);
         command && command.handler(this, fileItem);
     }
 
@@ -404,9 +404,8 @@ class FileManager extends Widget {
             case "fileSystemStore":
             case "selection":
             case "itemList":
-                this.repaint();
-                break;
             case "customThumbnail":
+                this.repaint();
                 break;
             default:
                 super._optionChanged(args);
