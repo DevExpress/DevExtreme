@@ -11124,6 +11124,28 @@ QUnit.test("Column hiding should work if the last not fixed column was hiden wit
     assert.equal(columns[2].visibleWidth, "adaptiveHidden", "3rd column is hidden");
 });
 
+// T726366
+QUnit.test("Column hiding should works correctly if all columns have width", function(assert) {
+    // arrange, act
+    var dataGrid = createDataGrid({
+        width: 300,
+        columnWidth: 100,
+        loadingTimeout: undefined,
+        columnHidingEnabled: true,
+        dataSource: [{}],
+        columns: ["field1", "field2", "field3", "field4"]
+    });
+
+    // assert
+    var visibleWidths = dataGrid.getVisibleColumns().map(column => column.visibleWidth);
+
+    assert.deepEqual(visibleWidths.length, 5, "column count");
+    assert.deepEqual(visibleWidths[0], 100, "column 1 has full width");
+    assert.deepEqual(visibleWidths[1], "auto", "column 2 has auto width");
+    assert.deepEqual(visibleWidths[2], "adaptiveHidden", "column 3 is hidden");
+    assert.deepEqual(visibleWidths[3], "adaptiveHidden", "column 4 is hidden");
+});
+
 QUnit.testInActiveWindow("Scroll positioned correct with fixed columns and editing", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "keyboard navigation is not actual for not desktop devices");
