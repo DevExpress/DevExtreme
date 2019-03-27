@@ -375,7 +375,7 @@ var ResizingController = modules.ViewController.inherit({
                 totalWidth = that._getTotalWidth(resultWidths, contentWidth);
 
             if(totalWidth < contentWidth) {
-                lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns);
+                lastColumnIndex = gridCoreUtils.getLastResizableColumnIndex(visibleColumns, resultWidths);
 
                 if(lastColumnIndex >= 0) {
                     resultWidths[lastColumnIndex] = "auto";
