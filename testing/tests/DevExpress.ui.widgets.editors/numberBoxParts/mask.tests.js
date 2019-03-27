@@ -1373,6 +1373,25 @@ QUnit.test("removing decimal separator if decimal separator is not default", fun
     }
 });
 
+QUnit.test("caret should be moved to the float part by '.' even when decimal separator is not '.'", function(assert) {
+    var oldDecimalSeparator = config().decimalSeparator;
+
+    config({ decimalSeparator: "," });
+
+    try {
+        this.instance.option({
+            format: "#0.00",
+            value: null
+        });
+
+        this.keyboard.type("123.45");
+
+        assert.equal(this.input.val(), "123,45", "text is correct");
+    } finally {
+        config({ decimalSeparator: oldDecimalSeparator });
+    }
+});
+
 QUnit.test("should parse float numbers with the ',' separator", function(assert) {
     const oldDecimalSeparator = config().decimalSeparator;
     const input = this.input;
