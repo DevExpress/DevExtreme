@@ -150,7 +150,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var decimalSeparator = number.getDecimalSeparator(),
             isDecimalSeparatorNext = text.charAt(caret.end) === decimalSeparator,
             isZeroNext = text.charAt(caret.end) === "0",
-            moveToFloat = this._lastKey === decimalSeparator && isDecimalSeparatorNext,
+            moveToFloat = (this._lastKey === decimalSeparator || this._lastKey === ".") && isDecimalSeparatorNext,
             zeroToZeroReplace = this._lastKey === "0" && isZeroNext;
 
         return moveToFloat || zeroToZeroReplace;
