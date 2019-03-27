@@ -1,6 +1,6 @@
 import { extend } from "../../core/utils/extend";
-import dblclickEvent from "../../events/double_click";
-import eventUtils from "../../events/utils";
+import { name as dblClickName } from "../../events/double_click";
+import { addNamespace } from "../../events/utils";
 import eventsEngine from "../../events/core/events_engine";
 
 import ContextMenu from "../context_menu/ui.context_menu";
@@ -14,7 +14,7 @@ class FileManagerItemListBase extends Widget {
     _initMarkup() {
         this.$element().addClass(FILE_MANAGER_FILES_VIEW_CLASS);
 
-        const dblClickEventName = eventUtils.addNamespace(dblclickEvent.name, FILE_MANAGER_ITEM_LIST_ITEM_OPEN_EVENT_NAMESPACE);
+        const dblClickEventName = addNamespace(dblClickName, FILE_MANAGER_ITEM_LIST_ITEM_OPEN_EVENT_NAMESPACE);
         eventsEngine.on(this.$element(), dblClickEventName, this._getItemSelector(), this._onItemDblClick.bind(this));
 
         super._initMarkup();

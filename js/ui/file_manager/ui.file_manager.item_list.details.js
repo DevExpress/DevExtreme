@@ -1,5 +1,5 @@
 import $ from "../../core/renderer";
-import iconUtils from "../../core/utils/icon";
+import { getImageContainer } from "../../core/utils/icon";
 
 import Button from "../button";
 import DataGrid from "../data_grid/ui.data_grid";
@@ -78,9 +78,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 return !c.isSingleFileItemCommand || c.isSingleFileItemCommand === isSingleRowSelected;
             })
             .map({ text, name } => ({
-                name: c.name,
-                text: c.text,
-                fileItem: fileItem,
+                name,
+                text,
+                fileItem,
                 onItemClick: this._raiseOnContextMenuItemClick.bind(this)
             }));
     }
@@ -137,7 +137,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _createThumbnailColumnCell(container, cellInfo) {
         const thumbnail = this._getItemThumbnail(cellInfo.data);
-        iconUtils.getImageContainer(thumbnail)
+        getImageContainer(thumbnail)
             .addClass(FILE_MANAGER_DETAILS_ITEM_THUMBNAIL_CLASS)
             .appendTo(container);
     }
