@@ -1,4 +1,5 @@
 import $ from "jquery";
+import fx from "animation/fx";
 
 import MentionFormat from "ui/html_editor/formats/mention";
 import Mentions from "ui/html_editor/modules/mentions";
@@ -29,6 +30,7 @@ const moduleConfig = {
         this.$element = $("#htmlEditor");
 
         this.log = [];
+        fx.off = true;
 
         this.$element.on("keydown", ({ which }) => {
             const handlers = this.quillMock.keyboard.bindings[which];
@@ -110,6 +112,7 @@ const moduleConfig = {
     },
     afterEach: () => {
         this.clock.reset();
+        fx.off = false;
     }
 };
 

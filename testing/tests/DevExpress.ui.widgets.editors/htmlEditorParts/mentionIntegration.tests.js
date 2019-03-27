@@ -8,6 +8,7 @@ const SUGGESTION_LIST_CLASS = "dx-suggestion-list";
 const LIST_ITEM_CLASS = "dx-list-item";
 const OVERLAY_CONTENT_CLASS = "dx-overlay-content";
 const HTML_EDITOR_CONTENT = "dx-htmleditor-content";
+const FOCUSED_STATE_CLASS = "dx-state-focused";
 
 module("Mentions integration", {
     beforeEach: () => {
@@ -25,6 +26,8 @@ module("Mentions integration", {
                 .dxHtmlEditor(this.options)
                 .dxHtmlEditor("instance");
         };
+
+        this.getItems = () => $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
     },
     afterEach: () => {
         this.clock.restore();
@@ -36,7 +39,7 @@ module("Mentions integration", {
         const valueChangeSpy = sinon.spy(({ value }) => {
             if(valueChangeSpy.calledOnce) {
                 assert.strictEqual(value, "@", "marker has been added");
-                $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).eq(1).trigger("dxclick");
+                this.getItems().eq(1).trigger("dxclick");
                 this.clock.tick();
             } else {
                 assert.strictEqual(value.replace(/\uFEFF/g, ""), expectedMention, "mention has been added");
@@ -85,7 +88,7 @@ module("Mentions integration", {
     test("set up mentions for existed editor", (assert) => {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
-            const $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
+            const $items = this.getItems();
 
             assert.strictEqual($items.length, 3, "there're three items");
             assert.strictEqual($items.text(), "AlexJohnSam", "correct data");
@@ -129,7 +132,7 @@ module("Mentions integration", {
         const valueChangeSpy = sinon.spy(({ value }) => {
             if(valueChangeSpy.calledOnce) {
                 assert.strictEqual(value, "#", "marker has been added");
-                $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).eq(2).trigger("dxclick");
+                this.getItems().eq(2).trigger("dxclick");
                 this.clock.tick();
             } else {
                 assert.strictEqual(value.replace(/\uFEFF/g, ""), expectedMention, "mention has been added");
@@ -169,7 +172,7 @@ module("Mentions integration", {
     test("several mention markers: first mention", (assert) => {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
-            const $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
+            const $items = this.getItems();
 
             assert.strictEqual($items.length, 3, "there're three items");
             assert.strictEqual($items.text(), "AlexJohnSam", "correct data");
@@ -194,7 +197,7 @@ module("Mentions integration", {
     test("several mention markers: second mention", (assert) => {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
-            const $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
+            const $items = this.getItems();
 
             assert.strictEqual($items.length, 2, "there're three items");
             assert.strictEqual($items.text(), "12", "correct data");
@@ -219,7 +222,7 @@ module("Mentions integration", {
     test("reduce mention markers", (assert) => {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(() => {
-            const $items = $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`);
+            const $items = this.getItems();
 
             assert.strictEqual($items.length, 3, "there're three items");
             assert.strictEqual($items.text(), "abc", "correct data");
@@ -304,5 +307,168 @@ module("Mentions integration", {
 
     skip("arrowLeft/arrowRight keys doesn't change a caret position", () => {
         // TODO
+    });
+
+    test("list should show relevant items on typing text", (assert) => {
+        const done = assert.async();
+        const valueChangeSpy = sinon.spy(({ component }) => {
+            if(valueChangeSpy.calledOnce) {
+                this.$element.find("p").get(0).innerText += "F";
+                this.clock.tick(500);
+
+                const $items = this.getItems();
+                assert.strictEqual(component.option("value"), "@F", "correct value");
+                assert.strictEqual($items.length, 1, "there is one relevant item");
+                assert.strictEqual($items.text(), "Freddy", "correct item");
+            } else {
+                done();
+            }
+        });
+        this.options.onValueChanged = valueChangeSpy;
+
+        this.createWidget();
+        this.instance.focus();
+        this.$element.find("p").first().text("@");
+        this.clock.tick();
+    });
+
+    test("first list item should be focused on filtering", (assert) => {
+        const done = assert.async();
+        const valueChangeSpy = sinon.spy(() => {
+            if(valueChangeSpy.calledOnce) {
+                this.$element.find("p").get(0).innerText += "F";
+                this.clock.tick();
+            } else {
+                const $items = this.getItems();
+                const isFirstListItemFocused = $items.first().hasClass(FOCUSED_STATE_CLASS);
+
+                assert.ok(isFirstListItemFocused);
+                done();
+            }
+        });
+        this.options.onValueChanged = valueChangeSpy;
+
+        this.createWidget();
+        this.instance.focus();
+        this.$element.find("p").first().text("@");
+        this.clock.tick();
+    });
+
+    test("input text should be removed after item select", (assert) => {
+        const done = assert.async();
+        const expectedMention = `<span class="dx-mention" spellcheck="false" data-marker="@" data-mention-value="Freddy"><span contenteditable="false"><span>@</span>Freddy</span></span>`;
+        const valueChangeSpy = sinon.spy(({ value }) => {
+            if(valueChangeSpy.calledOnce) {
+                this.$element.find("p").get(0).innerText += "F";
+                this.clock.tick();
+            } else {
+                const $items = this.getItems();
+                $items.first().trigger("dxclick");
+                this.clock.tick();
+                assert.strictEqual(value.replace(/\uFEFF/g, ""), expectedMention, "mention has been added");
+                done();
+            }
+        });
+        this.options.onValueChanged = valueChangeSpy;
+
+        this.createWidget();
+        this.instance.focus();
+        this.$element.find("p").first().text("@");
+        this.clock.tick();
+    });
+
+    test("search timeout", (assert) => {
+        const done = assert.async();
+        const TIMEOUT = 500;
+        const valueChangeSpy = sinon.spy(({ value, component }) => {
+            if(valueChangeSpy.calledOnce) {
+                this.$element.find("p").get(0).innerText += "F";
+                this.clock.tick();
+
+                const $items = this.getItems();
+                assert.strictEqual(component.option("value"), "@", "correct value");
+                assert.strictEqual($items.length, 4, "dataSource isn't filtered");
+
+                this.clock.tick(TIMEOUT);
+            } else {
+                const $items = this.getItems();
+                assert.strictEqual(value, "@F", "correct value");
+                assert.strictEqual($items.length, 1, "there is one relevant item");
+                assert.strictEqual($items.text(), "Freddy", "correct item");
+                done();
+            }
+        });
+        this.options.onValueChanged = valueChangeSpy;
+        this.options.mentions.searchTimeout = TIMEOUT;
+
+        this.createWidget();
+        this.instance.focus();
+        this.$element.find("p").first().text("@");
+        this.clock.tick();
+    });
+
+    test("minimal search length", (assert) => {
+        const done = assert.async();
+        const valueChangeSpy = sinon.spy(({ component }) => {
+            if(valueChangeSpy.calledOnce) {
+                const element = this.$element.find("p").get(0);
+
+                element.innerText += "F";
+                this.clock.tick();
+                let $items = this.getItems();
+                assert.strictEqual($items.length, 4, "dataSource isn't filtered");
+
+                element.innerText += "r";
+                this.clock.tick();
+                $items = this.getItems();
+
+                assert.strictEqual(component.option("value"), "@Fr", "correct value");
+                assert.strictEqual($items.length, 1, "there is one relevant item");
+                assert.strictEqual($items.text(), "Freddy", "correct item");
+            }
+
+            if(valueChangeSpy.callCount === 2) {
+                done();
+            }
+        });
+        this.options.onValueChanged = valueChangeSpy;
+        this.options.mentions.minSearchLength = 2;
+
+        this.createWidget();
+        this.instance.focus();
+        this.$element.find("p").first().text("@");
+        this.clock.tick();
+    });
+
+    test("search expression", (assert) => {
+        const done = assert.async();
+        const valueChangeSpy = sinon.spy(({ component }) => {
+            if(valueChangeSpy.calledOnce) {
+                this.$element.find("p").get(0).innerText += "A";
+                this.clock.tick();
+
+                const $items = this.getItems();
+                assert.strictEqual(component.option("value"), "@A", "correct value");
+                assert.strictEqual($items.length, 1, "there is one relevant item");
+                assert.strictEqual($items.text(), "London", "correct item");
+            } else {
+                done();
+            }
+        });
+        this.options.onValueChanged = valueChangeSpy;
+        this.options.mentions = [{
+            dataSource: [
+                { name: "Alex", city: "London" },
+                { name: "John", city: "New York" },
+                { name: "Freddy", city: "Paris" }
+            ],
+            searchExpr: "name",
+            displayExpr: "city"
+        }];
+
+        this.createWidget();
+        this.instance.focus();
+        this.$element.find("p").first().text("@");
+        this.clock.tick();
     });
 });

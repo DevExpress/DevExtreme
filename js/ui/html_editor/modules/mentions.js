@@ -30,7 +30,10 @@ class MentionModule extends PopupModule {
                 return this._valueGetter(itemData);
             },
             valueExpr: "this",
-            displayExpr: "this"
+            displayExpr: "this",
+            searchExpr: null,
+            searchTimeout: 500,
+            minSearchLength: 0
         });
     }
 
@@ -54,32 +57,42 @@ class MentionModule extends PopupModule {
 
     _attachKeyboardHandlers() {
         this.quill.keyboard.addBinding({
-            key: KEY_CODES.ARROW_UP,
+            key: KEY_CODES.ARROW_UP
         }, this._arrowUpKeyHandler.bind(this));
 
         this.quill.keyboard.addBinding({
-            key: KEY_CODES.ARROW_DOWN,
+            key: KEY_CODES.ARROW_DOWN
         }, this._arrowDownKeyHandler.bind(this));
 
         this.quill.keyboard.addBinding({
-            key: KEY_CODES.ENTER,
+            key: KEY_CODES.ENTER
         }, this._selectItemHandler.bind(this));
         this.quill.keyboard.bindings[13].unshift(this.quill.keyboard.bindings[13].pop());
 
         this.quill.keyboard.addBinding({
-            key: KEY_CODES.ESCAPE,
+            key: KEY_CODES.ESCAPE
         }, this._escapeKeyHandler.bind(this));
 
         this.quill.keyboard.addBinding({
-            key: KEY_CODES.SPACE,
+            key: KEY_CODES.SPACE
         }, this._selectItemHandler.bind(this));
 
         this.quill.keyboard.addBinding({
+            key: KEY_CODES.ARROW_LEFT
+        }, this._ignoreKeyHandler.bind(this));
+
+        this.quill.keyboard.addBinding({
+            key: KEY_CODES.ARROW_RIGHT
+        }, this._ignoreKeyHandler.bind(this));
+
+        this.quill.keyboard.addBinding({
             key: KEY_CODES.ARROW_LEFT,
+            shiftKey: true
         }, this._ignoreKeyHandler.bind(this));
 
         this.quill.keyboard.addBinding({
             key: KEY_CODES.ARROW_RIGHT,
+            shiftKey: true
         }, this._ignoreKeyHandler.bind(this));
     }
 
@@ -151,7 +164,7 @@ class MentionModule extends PopupModule {
     }
 
     insertEmbedContent() {
-        const markerLength = this._activeMarker.marker.length;
+        const markerLength = this._activeMentionConfig.marker.length;
         const caretPosition = this.getPosition();
         const startIndex = Math.max(0, caretPosition - markerLength);
         const selectedItem = this._list.option("selectedItem");
@@ -159,7 +172,7 @@ class MentionModule extends PopupModule {
         const value = {
             value: this._valueGetter(selectedItem),
             id: this._idGetter(selectedItem),
-            marker: this._activeMarker.marker
+            marker: this._activeMentionConfig.marker
         };
 
         setTimeout(function() {
@@ -171,7 +184,26 @@ class MentionModule extends PopupModule {
 
     onTextChange(newDelta, oldDelta, source) {
         if(source === USER_ACTION) {
-            this.checkMentionRequest(newDelta.ops[newDelta.ops.length - 1]);
+            // if(!this._activeMentionConfig) {
+            const lastOperation = newDelta.ops[newDelta.ops.length - 1];
+            if(!this._isMentionActive) {
+                this.checkMentionRequest(lastOperation);
+            } else {
+                const operation = lastOperation;
+                const isInsertOperation = "insert" in operation;
+
+                if(isInsertOperation) {
+                    this._searchValue += operation.insert;
+                } else {
+                    if(!this._searchValue.length) {
+                        this._popup.hide();
+                        return;
+                    } else {
+                        this._searchValue = this._searchValue.slice(0, -1);
+                    }
+                }
+                this._filterList(this._searchValue);
+            }
         }
     }
 
@@ -183,24 +215,58 @@ class MentionModule extends PopupModule {
             return;
         }
 
-        this._activeMarker = this._mentions[insertOperation];
+        this._activeMentionConfig = this._mentions[insertOperation];
 
-        if(this._activeMarker) {
-            this._updateList(this._activeMarker);
+        if(this._activeMentionConfig) {
+            this._updateList(this._activeMentionConfig);
             this.savePosition(caret.index);
             this._popup.option("position", this._popupPosition);
+            this._searchValue = "";
             this._popup.show();
         }
     }
 
-    _updateList({ dataSource, displayExpr, valueExpr, itemTemplate }) {
+    _updateList({ dataSource, displayExpr, valueExpr, itemTemplate, searchExpr }) {
         this.compileGetters({ displayExpr, valueExpr });
         this._list.unselectAll();
         this._list.option({
             dataSource,
             displayExpr,
             itemTemplate,
+            searchExpr
         });
+    }
+
+    _filterList(searchValue) {
+        if(!this._isMinSearchLengthExceeded(searchValue)) {
+            this._resetFilter();
+            return;
+        }
+
+        var searchTimeout = this._activeMentionConfig.searchTimeout;
+
+        if(searchTimeout) {
+            clearTimeout(this._searchTimer);
+            this._searchTimer = setTimeout(() => {
+                this._search(searchValue);
+            }, searchTimeout);
+        } else {
+            this._search(searchValue);
+        }
+    }
+
+    _isMinSearchLengthExceeded(searchValue) {
+        return searchValue.length >= this._activeMentionConfig.minSearchLength;
+    }
+
+    _resetFilter() {
+        clearTimeout(this._searchTimer);
+
+        this._list.option("searchValue", null);
+    }
+
+    _search(searchValue) {
+        this._list.option("searchValue", searchValue);
     }
 
     get _popupPosition() {
@@ -234,6 +300,7 @@ class MentionModule extends PopupModule {
                 this._list.unselectAll();
                 this._list.option("focusedElement", null);
                 this._isMentionActive = false;
+                this._search(null);
             },
             focusStateEnabled: false
         });
