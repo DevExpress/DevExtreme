@@ -29,7 +29,6 @@
     }
 })(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils, extractTemplateMarkup, encodeHtml) {
     var templateCompiler = createTemplateCompiler();
-    var initScripts = [];
 
     function createTemplateCompiler() {
         var OPEN_TAG = "<%",
@@ -171,14 +170,6 @@
                     items.length && summary.option("items", items);
                 }
             }
-        },
-
-        addInitScript: function(initScript) {
-            initScripts.push(initScript);
-        },
-
-        execInitScripts: function() {
-            iteratorUtils.each(initScripts, function() { this($); });
         }
     };
 });
