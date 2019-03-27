@@ -367,12 +367,6 @@ var TabPanel = MultiView.inherit({
         }
     },
 
-    repaint: function() {
-        this.callBase();
-
-        this._tabs._dimensionChanged();
-    },
-
     _optionChanged: function(args) {
         var name = args.name,
             value = args.value,
