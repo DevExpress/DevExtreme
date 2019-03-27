@@ -6,7 +6,7 @@ import Widget from "../widget/ui.widget";
 import { extend } from "../../core/utils/extend";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
-import { FileManagerItem } from "../../file_provider/file_provider";
+import { FileManagerItem } from "./file_provider/file_provider";
 import { getPathParts, pathCombine } from "./ui.file_manager.utils";
 
 class FileManagerFilesTreeView extends Widget {

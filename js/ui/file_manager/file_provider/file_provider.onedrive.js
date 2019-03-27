@@ -1,7 +1,7 @@
-import ajax from "../core/utils/ajax";
-import { Deferred } from "../core/utils/deferred";
-import { noop } from "../core/utils/common";
-import { each } from "../core/utils/iterator";
+import ajax from "../../../core/utils/ajax";
+import { Deferred } from "../../../core/utils/deferred";
+import { noop } from "../../../core/utils/common";
+import { each } from "../../../core/utils/iterator";
 
 import { FileProvider, FileManagerItem } from "./file_provider";
 

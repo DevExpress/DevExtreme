@@ -1,8 +1,8 @@
-import ajax from "../core/utils/ajax";
-import { noop } from "../core/utils/common";
-import Guid from "../core/guid";
-import windowUtils from "../core/utils/window";
-import { each } from "../core/utils/iterator";
+import ajax from "../../../core/utils/ajax";
+import { noop } from "../../../core/utils/common";
+import Guid from "../../../core/guid";
+import windowUtils from "../../../core/utils/window";
+import { each } from "../../../core/utils/iterator";
 
 import { FileProvider, FileManagerItem } from "./file_provider";
 
