@@ -157,7 +157,9 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
 
     _ensureItemSelected(item) {
         if(!this._filesView.isRowSelected(item.relativeName)) {
-            this._filesView.selectRows([item.relativeName], true);
+            const selectionController = this._filesView.getController("selection");
+            const preserve = selectionController.isSelectionWithCheckboxes();
+            this._filesView.selectRows([item.relativeName], preserve);
         }
     }
 
