@@ -77,7 +77,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
                 }
                 return !c.isSingleFileItemCommand || c.isSingleFileItemCommand === isSingleRowSelected;
             })
-            .map({ text, name } => ({
+            .map(({ text, name }) => ({
                 name,
                 text,
                 fileItem,
