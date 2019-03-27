@@ -12,7 +12,6 @@ var $ = require("../../core/renderer"),
     Editor = require("../editor/editor"),
     CheckBox = require("../check_box"),
     RadioGroup = require("../radio_group"),
-    Switch = require("../switch"),
     NumberBox = require("../number_box"),
     SelectBox = require("../select_box"),
     DateBox = require("../date_box"),
@@ -26,13 +25,13 @@ var RECURRENCE_EDITOR = "dx-recurrence-editor",
     LABEL_POSTFIX = "-label",
     WRAPPER_POSTFIX = "-wrapper",
     RECURRENCE_EDITOR_CONTAINER = "dx-recurrence-editor-container",
-    SWITCH_REPEAT_END_EDITOR = "dx-recurrence-switch-repeat-end",
+    // SWITCH_REPEAT_END_EDITOR = "dx-recurrence-switch-repeat-end",
     FREQUENCY_EDITOR = "dx-recurrence-radiogroup-freq",
     INTERVAL_EDITOR = "dx-recurrence-numberbox-interval",
     INTERVAL_EDITOR_FIELD = "dx-recurrence-interval-field",
 
     REPEAT_END_EDITOR = "dx-recurrence-repeat-end",
-    REPEAT_END_EDITOR_FIELD = "dx-recurrence-repeat-end-field",
+    // REPEAT_END_EDITOR_FIELD = "dx-recurrence-repeat-end-field",
     REPEAT_END_EDITOR_CONTAINER = "dx-recurrence-repeat-end-container",
     REPEAT_TYPE_EDITOR = "dx-recurrence-radiogroup-repeat-type",
     REPEAT_COUNT_EDITOR = "dx-recurrence-numberbox-repeat-count",
@@ -58,8 +57,9 @@ var RECURRENCE_EDITOR = "dx-recurrence-editor",
     ],
 
     repeatEndTypes = [
-        { text: function() { return messageLocalization.format("dxScheduler-recurrenceRepeatCount"); }, value: "count" },
-        { text: function() { return messageLocalization.format("dxScheduler-recurrenceRepeatOnDate"); }, value: "until" }
+        { text: function() { return messageLocalization.format("dxScheduler-recurrenceNever"); }, value: "never" },
+        { text: function() { return messageLocalization.format("dxScheduler-recurrenceRepeatOnDate"); }, value: "until" },
+        { text: function() { return messageLocalization.format("dxScheduler-recurrenceRepeatCount"); }, value: "count" }
     ],
 
     days = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
@@ -224,10 +224,10 @@ var RecurrenceEditor = Editor.inherit({
 
         this._renderRepeatOnEditor();
 
-        this._renderRepeatEndSwitch();
+        // this._renderRepeatEndSwitch();
         this._renderRepeatEndEditor();
 
-        this._renderRepeatEndVisibility(!!this._recurrenceRule.repeatableRule());
+        // this._renderRepeatEndVisibility(!!this._recurrenceRule.repeatableRule());
     },
 
     _renderFreqEditor: function() {
@@ -528,29 +528,29 @@ var RecurrenceEditor = Editor.inherit({
         editor.setAria("id", labelId, $label);
     },
 
-    _renderRepeatEndSwitch: function() {
-        var that = this;
-        var $switchEndEditor = $("<div>")
-                .addClass(SWITCH_REPEAT_END_EDITOR)
-                .addClass(FIELD_VALUE_CLASS),
-            $switchEndLabel = $("<div>")
-                .text(messageLocalization.format("dxScheduler-recurrenceEnd") + ":")
-                .addClass(INTERVAL_EDITOR + LABEL_POSTFIX)
-                .addClass(FIELD_LABEL_CLASS);
+    // _renderRepeatEndSwitch: function() {
+    //     var that = this;
+    //     var $switchEndEditor = $("<div>")
+    //             .addClass(SWITCH_REPEAT_END_EDITOR)
+    //             .addClass(FIELD_VALUE_CLASS),
+    //         $switchEndLabel = $("<div>")
+    //             .text(messageLocalization.format("dxScheduler-recurrenceEnd") + ":")
+    //             .addClass(INTERVAL_EDITOR + LABEL_POSTFIX)
+    //             .addClass(FIELD_LABEL_CLASS);
 
-        $("<div>")
-            .addClass(FIELD_CLASS)
-            .addClass(REPEAT_END_EDITOR_FIELD)
-            .append($switchEndLabel, $switchEndEditor)
-            .appendTo(this._$container);
+    //     $("<div>")
+    //         .addClass(FIELD_CLASS)
+    //         .addClass(REPEAT_END_EDITOR_FIELD)
+    //         .append($switchEndLabel, $switchEndEditor)
+    //         .appendTo(this._$container);
 
-        this._switchEndEditor = this._createComponent($switchEndEditor, Switch, {
-            value: that._recurrenceRule.repeatableRule() ? true : false,
-            onValueChanged: this._repeatEndSwitchValueChangeHandler.bind(this)
-        });
+    //     this._switchEndEditor = this._createComponent($switchEndEditor, Switch, {
+    //         value: that._recurrenceRule.repeatableRule() ? true : false,
+    //         onValueChanged: this._repeatEndSwitchValueChangeHandler.bind(this)
+    //     });
 
-        this._setAriaDescribedBy(this._switchEndEditor, $switchEndLabel);
-    },
+    //     this._setAriaDescribedBy(this._switchEndEditor, $switchEndLabel);
+    // },
 
     _repeatEndSwitchValueChangeHandler: function(args) {
         var value = args.value;
@@ -596,7 +596,7 @@ var RecurrenceEditor = Editor.inherit({
     },
 
     _renderRepeatEndTypeEditor: function() {
-        var repeatType = this._recurrenceRule.repeatableRule() || "count",
+        var repeatType = this._recurrenceRule.repeatableRule() || "never",
             that = this;
 
         this._$repeatTypeEditor = $("<div>")
@@ -612,15 +612,30 @@ var RecurrenceEditor = Editor.inherit({
             itemTemplate: function(itemData) {
                 if(itemData.value === "count") {
                     return that._renderRepeatCountEditor();
-                } else {
+                }
+                if(itemData.value === "until") {
                     return that._renderRepeatUntilEditor();
                 }
+
+                return that._renderDefaultRepeatEnd();
+
             },
             layout: "vertical",
             onValueChanged: this._repeatTypeValueChangedHandler.bind(this)
         });
 
         this._disableRepeatEndParts(repeatType);
+    },
+
+    _renderDefaultRepeatEnd: function() {
+        var $editorTemplate = $("<div>").addClass(REPEAT_END_EDITOR + WRAPPER_POSTFIX);
+
+        $("<div>")
+            .text(messageLocalization.format("dxScheduler-recurrenceNever"))
+            .addClass(REPEAT_END_EDITOR + LABEL_POSTFIX)
+            .appendTo($editorTemplate);
+
+        return $editorTemplate;
     },
 
     _repeatTypeValueChangedHandler: function(args) {
@@ -633,6 +648,17 @@ var RecurrenceEditor = Editor.inherit({
         } else if(value === "count") {
             this._recurrenceRule.makeRule(value, this._repeatCountEditor.option("value"));
         }
+        if(value === "never") {
+            this._recurrenceRule.makeRule("count", "");
+            this._recurrenceRule.makeRule("until", "");
+            // if(!this._recurrenceRule.rules().count && !this._recurrenceRule.rules().until && value) {
+            //     this._handleRepeatEndDefaults();
+            // } else if(!value) {
+            //     this._recurrenceRule.makeRule("count", "");
+            //     this._recurrenceRule.makeRule("until", "");
+            // }
+        }
+
         this._changeEditorValue();
     },
 
@@ -642,6 +668,10 @@ var RecurrenceEditor = Editor.inherit({
             this._repeatUntilDate.option("disabled", false);
         } else if(value === "count") {
             this._repeatCountEditor.option("disabled", false);
+            this._repeatUntilDate.option("disabled", true);
+        }
+        if(value === "never") {
+            this._repeatCountEditor.option("disabled", true);
             this._repeatUntilDate.option("disabled", true);
         }
     },
@@ -778,9 +808,9 @@ var RecurrenceEditor = Editor.inherit({
             case "value":
                 this._recurrenceRule.makeRules(args.value);
                 this.option("visible", !!args.value);
-                this._switchEndEditor.option("value", !!this._recurrenceRule.repeatableRule());
+                // this._switchEndEditor.option("value", !!this._recurrenceRule.repeatableRule());
 
-                this._repeatTypeEditor.option("value", this._recurrenceRule.repeatableRule() || "count");
+                this._repeatTypeEditor.option("value", this._recurrenceRule.repeatableRule() || "never");
                 this._renderRepeatEndEditor();
                 this._renderRepeatOnEditor();
 
