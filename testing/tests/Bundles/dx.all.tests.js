@@ -1,5 +1,4 @@
 var $ = require("jquery"),
-    ko = require("knockout"),
     angular = require("angular");
 
 require("bundles/dx.all.js");
@@ -19,8 +18,7 @@ QUnit.test("DevExpress namespaces", function(assert) {
     });
 
     assert.ok(DevExpress.utils.readyCallbacks, "readyCallbacks namespace");
-
-    assert.ok(ko.bindingHandlers.dxAction, "knockout integration");
+  
     assert.ok(angular.module("dx"), "angular integration");
 });
 
