@@ -18,6 +18,8 @@ QUnit.test("DevExpress namespaces", function(assert) {
         assert.ok(DevExpress[namespace], namespace + " namespace");
     });
 
+    assert.ok(DevExpress.utils.readyCallbacks, "readyCallbacks namespace");
+
     assert.ok(ko.bindingHandlers.dxAction, "knockout integration");
     assert.ok(angular.module("dx"), "angular integration");
 });
