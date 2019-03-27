@@ -509,8 +509,14 @@ var Widget = DOMComponent.inherit({
 
     _renderContent: function() {
         commonUtils.deferRender(() => {
+            if(this._disposed) {
+                return;
+            }
             return this._renderContentImpl();
         }).done(() => {
+            if(this._disposed) {
+                return;
+            }
             this._fireContentReadyAction();
         });
     },
