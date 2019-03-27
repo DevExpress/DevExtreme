@@ -730,14 +730,14 @@ QUnit.test("Appointment labels should be localized before sending to the details
         formItems = detailsForm.option("items");
 
     assert.equal(formItems[0].label.text, messageLocalization.format("dxScheduler-editorLabelTitle"), "Title is OK");
-    assert.equal(formItems[1].itemType, "empty", "Item is empty");
-    assert.equal(formItems[2].label.text, messageLocalization.format("dxScheduler-allDay"), "All-day is OK");
-    assert.equal(formItems[3].label.text, messageLocalization.format("dxScheduler-editorLabelStartDate"), "Start date is OK");
-    assert.equal(formItems[4].label.text, " ", "Start date tz is OK");
-    assert.equal(formItems[5].label.text, messageLocalization.format("dxScheduler-editorLabelEndDate"), "End date is OK");
-    assert.equal(formItems[6].label.text, " ", "End date tz is OK");
-    assert.equal(formItems[7].itemType, "empty", "Item is empty");
-    assert.equal(formItems[8].label.text, messageLocalization.format("dxScheduler-editorLabelDescription"), "Description is OK");
+    assert.equal(formItems[1].label.text, messageLocalization.format("dxScheduler-editorLabelStartDate"), "Start date is OK");
+    assert.equal(formItems[2].label.text, " ", "Start date tz is OK");
+    assert.equal(formItems[3].label.text, messageLocalization.format("dxScheduler-editorLabelEndDate"), "End date is OK");
+    assert.equal(formItems[4].label.text, " ", "End date tz is OK");
+    assert.equal(formItems[5].label.text, messageLocalization.format("dxScheduler-allDay"), "All-day is OK");
+    assert.equal(formItems[6].itemType, "empty", "Item is empty");
+    assert.equal(formItems[7].label.text, messageLocalization.format("dxScheduler-editorLabelDescription"), "Description is OK");
+    assert.equal(formItems[8].itemType, "empty", "Item is empty");
     assert.equal(formItems[9].label.text, messageLocalization.format("dxScheduler-editorLabelRecurrence"), "Recurrence is OK");
 });
 

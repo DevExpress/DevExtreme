@@ -43,7 +43,8 @@ var SchedulerAppointmentForm = {
             readOnly: isReadOnly,
             showValidationSummary: true,
             scrollingEnabled: true,
-            formData: formData
+            formData: formData,
+            colCount: 2
         });
 
         return this._appointmentForm;
@@ -56,45 +57,9 @@ var SchedulerAppointmentForm = {
             {
                 dataField: dataExprs.textExpr,
                 editorType: "dxTextBox",
+                colSpan: 2,
                 label: {
                     text: messageLocalization.format("dxScheduler-editorLabelTitle")
-                }
-            },
-            {
-                itemType: "empty"
-            },
-            {
-                dataField: dataExprs.allDayExpr,
-                editorType: "dxSwitch",
-                label: {
-                    text: messageLocalization.format("dxScheduler-allDay")
-                },
-                editorOptions: {
-                    onValueChanged: function(args) {
-                        var value = args.value,
-                            startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr),
-                            endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr);
-
-                        if(startDateEditor && endDateEditor) {
-                            startDateEditor.option("type", value ? "date" : "datetime");
-                            endDateEditor.option("type", value ? "date" : "datetime");
-
-                            if(!startDateEditor.option("value")) {
-                                return;
-                            }
-
-                            var startDate = dateSerialization.deserializeDate(startDateEditor.option("value"));
-
-                            if(value) {
-                                startDateEditor.option("value", that._getAllDayStartDate(startDate));
-                                endDateEditor.option("value", that._getAllDayEndDate(startDate));
-                            } else {
-                                startDate.setHours(schedulerInst.option("startDayHour"));
-                                startDateEditor.option("value", startDate);
-                                endDateEditor.option("value", schedulerInst._workSpace.calculateEndDate(dateSerialization.deserializeDate(startDateEditor.option("value"))));
-                            }
-                        }
-                    }
                 }
             },
             {
@@ -130,6 +95,7 @@ var SchedulerAppointmentForm = {
             {
                 dataField: dataExprs.startDateTimeZoneExpr,
                 editorType: "dxSchedulerTimezoneEditor",
+                colSpan: 2,
                 label: {
                     text: " ",
                     showColon: false
@@ -172,6 +138,7 @@ var SchedulerAppointmentForm = {
             {
                 dataField: dataExprs.endDateTimeZoneExpr,
                 editorType: "dxSchedulerTimezoneEditor",
+                colSpan: 2,
                 label: {
                     text: " ",
                     showColon: false
@@ -182,18 +149,61 @@ var SchedulerAppointmentForm = {
                 visible: false
             },
             {
-                itemType: "empty"
+                dataField: dataExprs.allDayExpr,
+                editorType: "dxSwitch",
+                colSpan: 2,
+                label: {
+                    text: messageLocalization.format("dxScheduler-allDay")
+                },
+                editorOptions: {
+                    onValueChanged: function(args) {
+                        var value = args.value,
+                            startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr),
+                            endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr);
+
+                        if(startDateEditor && endDateEditor) {
+                            startDateEditor.option("type", value ? "date" : "datetime");
+                            endDateEditor.option("type", value ? "date" : "datetime");
+
+                            if(!startDateEditor.option("value")) {
+                                return;
+                            }
+
+                            var startDate = dateSerialization.deserializeDate(startDateEditor.option("value"));
+
+                            if(value) {
+                                startDateEditor.option("value", that._getAllDayStartDate(startDate));
+                                endDateEditor.option("value", that._getAllDayEndDate(startDate));
+                            } else {
+                                startDate.setHours(schedulerInst.option("startDayHour"));
+                                startDateEditor.option("value", startDate);
+                                endDateEditor.option("value", schedulerInst._workSpace.calculateEndDate(dateSerialization.deserializeDate(startDateEditor.option("value"))));
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                itemType: "empty",
+                colSpan: 2,
             },
             {
                 dataField: dataExprs.descriptionExpr,
                 editorType: "dxTextArea",
+                colSpan: 2,
                 label: {
                     text: messageLocalization.format("dxScheduler-editorLabelDescription")
                 }
             },
             {
+                itemType: "empty",
+                colSpan: 2
+            },
+
+            {
                 name: "repeatOnOff",
                 editorType: "dxSwitch",
+                colSpan: 2,
                 label: {
                     text: messageLocalization.format("dxScheduler-editorLabelRecurrence")
                 },
@@ -218,6 +228,7 @@ var SchedulerAppointmentForm = {
             {
                 dataField: dataExprs.recurrenceRuleExpr,
                 editorType: "dxRecurrenceEditor",
+                colSpan: 2,
                 editorOptions: {
                     observer: schedulerInst,
                     firstDayOfWeek: schedulerInst.option("firstDayOfWeek"),
