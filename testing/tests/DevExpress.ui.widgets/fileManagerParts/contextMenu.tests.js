@@ -33,25 +33,15 @@ const moduleConfig = {
     }
 };
 
-const getRowActionButtonInDetailsView = function($element, index) {
-    return getRowInDetailsView($element, index).find(".dx-filemanager-file-actions-button");
-};
+const getRowActionButtonInDetailsView = ($element, index) => getRowInDetailsView($element, index).find(".dx-filemanager-file-actions-button");
 
-const getSelectCheckBoxInDetailsView = function($element, index) {
-    return getRowInDetailsView($element, index).find("td").eq(0);
-};
+const getSelectCheckBoxInDetailsView = ($element, index) => getRowInDetailsView($element, index).find("td").eq(0);
 
-const getRowNameCellInDetailsView = function($element, index) {
-    return getRowInDetailsView($element, index).find("td").eq(1);
-};
+const getRowNameCellInDetailsView = ($element, index) => getRowInDetailsView($element, index).find("td").eq(1);
 
-const getRowInDetailsView = function($element, index) {
-    return $element.find(`.${internals.GRID_DATA_ROW_CLASS}[aria-rowindex=${index}]`);
-};
+const getRowInDetailsView = ($element, index) => $element.find(`.${internals.GRID_DATA_ROW_CLASS}[aria-rowindex=${index}]`);
 
-const getContextMenuItems = function() {
-    return $(".dx-context-menu .dx-menu-item");
-};
+const getContextMenuItems = () => $(".dx-context-menu .dx-menu-item");
 
 QUnit.module("Raise context menu", moduleConfig, () => {
     test('right click by row', assert => {
