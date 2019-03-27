@@ -3825,6 +3825,48 @@ QUnit.test("DataGrid should not operate with focused row if dataSource is missin
     }
 });
 
+QUnit.testInActiveWindow("DataGrid should not focus inserted but not saved rows (T727182)", function(assert) {
+    var rowsView,
+        keyboardController;
+
+    this.$element = function() {
+        return $("#container");
+    };
+
+    this.options = {
+        keyExpr: "name",
+        focusedRowEnabled: true,
+        editing: {
+            mode: "batch",
+            allowAdding: true
+        },
+        focusedRowKey: "Dan"
+    };
+
+    this.setupModule();
+    addOptionChangedHandlers(this);
+    this.gridView.render($("#container"));
+    this.clock.tick();
+    rowsView = this.gridView.getView("rowsView");
+    keyboardController = this.getController("keyboardNavigation");
+    keyboardController._focusedView = rowsView;
+
+    // assert
+    assert.equal(this.option("focusedRowKey"), "Dan", "focusedRowKey");
+    assert.equal(this.option("focusedRowIndex"), 1, "focusedRowIndex");
+
+    // act
+    this.addRow();
+    this.addRow();
+    $(this.getRowElement(0)).find(".dx-texteditor-input").trigger("dxpointerdown").click();
+    this.clock.tick();
+
+    // assert
+    assert.ok($(this.getRowElement(0)).find(".dx-texteditor-input").is(":focus"), "input is focused");
+    assert.equal(this.option("focusedRowKey"), "Dan", "focusedRowKey");
+    assert.equal(this.option("focusedRowIndex"), 3, "focusedRowIndex");
+});
+
 QUnit.testInActiveWindow("DataGrid should not focus adaptive rows", function(assert) {
     // arrange
     var rowsView,
@@ -4029,4 +4071,3 @@ QUnit.testInActiveWindow("DataGrid should restore tabindex for the first cell if
     // assert
     assert.equal($(this.getCellElement(0, 0)).attr("tabindex"), 0, "tabindex");
 });
-
