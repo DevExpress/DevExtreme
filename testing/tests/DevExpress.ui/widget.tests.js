@@ -11,7 +11,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import config from "core/config";
 import dataUtils from "core/element_data";
-import commonUtils from "core/utils/common";
+import { deferUpdate } from "core/utils/common";
 
 import "common.css!";
 
@@ -1387,7 +1387,7 @@ QUnit.module("isReady", {}, () => {
 
     QUnit.test("widget doesn't throw if disposed before rendering (T717968)", (assert) => {
 
-        commonUtils.deferUpdate(() => {
+        deferUpdate(() => {
             new DxWidget("#widget").dispose();
         });
 
