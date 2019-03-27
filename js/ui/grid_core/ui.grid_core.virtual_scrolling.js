@@ -436,7 +436,7 @@ var VirtualScrollingRowsViewExtender = (function() {
         _addVirtualRow: function($table, isFixed, location, position) {
             if(!position) return;
 
-            var $virtualRow = this._createEmptyRow(VIRTUAL_ROW_CLASS, isFixed).css("height", position);
+            var $virtualRow = this._createEmptyRow(VIRTUAL_ROW_CLASS, isFixed, position);
 
             $virtualRow = this._wrapRowIfNeed($table, $virtualRow);
 

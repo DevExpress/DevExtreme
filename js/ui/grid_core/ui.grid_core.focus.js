@@ -628,7 +628,7 @@ module.exports = {
                     }
                 },
 
-                _updateFocusElementTabIndex: function($cellElements) {
+                updateFocusElementTabIndex: function($cellElements) {
                     if(this.option("focusedRowEnabled")) {
                         this._setFocusedRowElementTabIndex();
                     } else {

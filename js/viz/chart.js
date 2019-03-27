@@ -654,7 +654,7 @@ var dxChart = AdvancedChart.inherit({
 
         that._argumentAxes.forEach(function(axis) {
             axis.updateCanvas(that._canvas);
-            axis.setBusinessRange(viewport, undefined, undefined, that._axesReinitialized);
+            axis.setBusinessRange(viewport, that._axesReinitialized);
         });
 
         that.callBase();

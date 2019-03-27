@@ -11,6 +11,7 @@ import keyboardMock from "../../helpers/keyboardMock.js";
 import pointerMock from "../../helpers/pointerMock.js";
 import config from "core/config";
 import dataUtils from "core/element_data";
+import { deferUpdate } from "core/utils/common";
 
 import "common.css!";
 
@@ -602,34 +603,6 @@ QUnit.module("ui feedback", {
             .dxWidget({ activeStateEnabled: true });
         pointerMock(el).start("touch").down().up();
         this.clock.tick(FEEDBACK_HIDE_TIMEOUT);
-    });
-
-    QUnit.test("feedback should be disabled in design mode", (assert) => {
-        config({ designMode: true });
-
-        try {
-            const el = this.element.dxWidget({
-                activeStateEnabled: true
-            });
-
-            const instance = el.dxWidget("instance");
-
-            this.mouse.active();
-            assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-
-            this.mouse.inactive();
-            assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-
-            instance.option("activeStateEnabled", false);
-
-            this.mouse.active();
-            assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-
-            this.mouse.inactive();
-            assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
-        } finally {
-            config({ designMode: false });
-        }
     });
 
     QUnit.test("set disabled of one widget doesn't turn off the feedback of another active element", (assert) => {
@@ -1410,6 +1383,15 @@ QUnit.module("isReady", {}, () => {
         assert.equal(isReadyOnInit, false, "widget is not ready on init");
         assert.equal($widget.dxWidget("isReady"), true, "widget is ready after render");
 
+    });
+
+    QUnit.test("widget doesn't throw if disposed before rendering (T717968)", (assert) => {
+
+        deferUpdate(() => {
+            new DxWidget("#widget").dispose();
+        });
+
+        assert.ok(true);
     });
 });
 

@@ -1,5 +1,5 @@
 import $ from "jquery";
-import { getExcelJS } from "exporter/exceljs/exceljs_importer";
+import ExcelJS from "exceljs";
 import { exportDataGrid } from "exporter/exceljs/exportDataGrid";
 import browser from "core/utils/browser";
 
@@ -13,8 +13,6 @@ QUnit.testStart(() => {
 
     $("#qunit-fixture").html(markup);
 });
-
-const ExcelJS = getExcelJS();
 
 const moduleConfig = {
     beforeEach: () => {

@@ -2553,7 +2553,7 @@ QUnit.module("Filtering", { beforeEach: function() {
         if(!("loadingTimeout" in options)) {
             options.loadingTimeout = null;
         }
-        setupTreeListModules(this, ["data", "columns", "search"], {
+        setupTreeListModules(this, ["data", "columns", "filterRow", "search"], {
             initDefaultOptions: true,
             options: options
         });
@@ -2821,4 +2821,49 @@ QUnit.test("FullBranch mode. Children of filtered nodes should not be collapsed 
     assert.strictEqual(items[1].node.hasChildren, true, "hasChildren of the second node");
     assert.strictEqual(items[2].node.hasChildren, true, "hasChildren of the third node");
     assert.strictEqual(items[3].node.hasChildren, false, "hasChildren of the fourth node");
+});
+
+// T724827
+QUnit.test("The filter query should be correct after resetting the filter value", function(assert) {
+    // arrange
+    var items,
+        filter,
+        /* eslint-disable */
+        store = new ArrayStore([
+            { id: 1, parentId: 0, name: "Name 3", age: 19 },
+                { id: 4, parentId: 1, name: "Name 6", age: 16 },
+                { id: 5, parentId: 1, name: "Name 5", age: 15 },
+                { id: 6, parentId: 1, name: "Name 4", age: 15 },
+                    { id: 7, parentId: 6, name: "Name 7", age: 18 },
+            { id: 2, parentId: 0, name: "Name 1", age: 19 },
+            { id: 3, parentId: 0, name: "Name 2", age: 18 }
+        ]);
+        /* eslint-enable */
+
+    this.setupTreeList({
+        remoteOperations: {
+            filtering: true
+        },
+        dataSource: {
+            load: function(loadOptions) {
+                filter = filter || loadOptions.filter;
+                return store.load(loadOptions);
+            }
+        },
+        columns: [{ dataField: "name", dataType: "string" }, { dataField: "age", dataType: "number", filterValue: 18 }]
+    });
+
+    // assert
+    items = this.dataController.items();
+    assert.strictEqual(items.length, 4, "item count");
+    assert.deepEqual(filter, ["age", "=", 18], "filter");
+
+    // act
+    filter = null;
+    this.columnOption("age", "filterValue", undefined);
+
+    // assert
+    items = this.dataController.items();
+    assert.strictEqual(items.length, 3, "item count");
+    assert.deepEqual(filter, ["parentId", "=", 0], "filter");
 });

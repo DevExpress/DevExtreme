@@ -1,8 +1,7 @@
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     errors = require("core/errors"),
-    Action = require("core/action"),
-    config = require("core/config");
+    Action = require("core/action");
 
 var noJquery = QUnit.urlParams["nojquery"];
 
@@ -229,20 +228,6 @@ QUnit.test("afterExecute callback can be canceled at action execution", function
 
     action.execute({});
     assert.ok(!handlerSpy.called);
-});
-
-QUnit.test("design mode prevents all action handlers", function(assert) {
-    var handlerSpy = sinon.spy(noop);
-    config({ designMode: true });
-
-    try {
-        var action = new Action(handlerSpy);
-
-        action.execute();
-        assert.ok(!handlerSpy.called);
-    } finally {
-        config({ designMode: false });
-    }
 });
 
 QUnit.test("ui interaction validator should prevent all action handlers by validatingTargetName", function(assert) {

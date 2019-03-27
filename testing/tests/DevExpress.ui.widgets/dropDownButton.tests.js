@@ -308,6 +308,21 @@ QUnit.module("common use cases", {
         assert.strictEqual(clickHandler.callCount, 1, "clickHandler called");
         assert.ok(getPopup(this.dropDownButton).option("visible"), "default behavior has been prevented");
     });
+
+    QUnit.test("the user can hide the toggle button", (assert) => {
+        this.dropDownButton.option("showToggleButton", false);
+        assert.strictEqual(getToggleButton(this.dropDownButton).length, 0, "there is no toggle button");
+
+        eventsEngine.trigger(getActionButton(this.dropDownButton), "dxclick");
+        assert.ok(this.dropDownButton.option("dropDownOptions.visible"), "action button opens the dropdown");
+
+        this.dropDownButton.close();
+        this.dropDownButton.option("showToggleButton", true);
+        assert.strictEqual(getToggleButton(this.dropDownButton).length, 1, "the toggle button is visible");
+
+        eventsEngine.trigger(getActionButton(this.dropDownButton), "dxclick");
+        assert.notOk(this.dropDownButton.option("dropDownOptions.visible"), "action button doesn't open the dropdown");
+    });
 });
 
 QUnit.module("public methods", {
@@ -386,7 +401,7 @@ QUnit.module("data expressions", {
 
     QUnit.test("displayExpr as function should work", (assert) => {
         this.dropDownButton.option("displayExpr", (itemData) => {
-            return itemData.name + "!";
+            return (itemData && itemData.name + "!") || "";
         });
 
         this.dropDownButton.option("selectedItem", {
@@ -441,6 +456,66 @@ QUnit.module("data expressions", {
         });
 
         assert.strictEqual(getActionButton(dropDownButton).text(), "false", "value is correct");
+    });
+});
+
+QUnit.module("items changing", {
+    beforeEach: () => {
+        this.dropDownButton = new DropDownButton("#dropDownButton2", {
+            items: [
+                { id: 1, file: "vs.exe", name: "Trial for Visual Studio", icon: "box" },
+                { id: 2, file: "all.exe", name: "Trial for all platforms", icon: "user" }
+            ],
+            keyExpr: "id",
+            displayExpr: "name"
+        });
+    }
+}, () => {
+    QUnit.test("changing of items should load new selected item", (assert) => {
+        this.dropDownButton.option({
+            selectedItem: { id: 2 }
+        });
+
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), "Trial for all platforms", "item was selected");
+
+        this.dropDownButton.option("items", [{ id: 2, name: "Item 2" }]);
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), "Item 2", "changed item has been loaded by id");
+    });
+
+    QUnit.test("changing of dataSource should load new selected item", (assert) => {
+        this.dropDownButton.option({
+            showSelectedItem: true,
+            selectedItem: { id: 2 }
+        });
+
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), "Trial for all platforms", "item was selected");
+
+        this.dropDownButton.option("dataSource", [{ id: 2, name: "Item 2" }]);
+        assert.strictEqual(getActionButton(this.dropDownButton).text(), "Item 2", "changed item has been loaded by id");
+    });
+
+    QUnit.test("showing and hiding the toggle button should not lead to datasource loading when there is no list", (assert) => {
+        const loadHandler = sinon.stub().returns([{ id: 1, name: "Item 1" }]);
+        const byKeyHandler = sinon.stub().withArgs(1).returns([{ id: 1, name: "Item 1" }]).returns([]);
+
+        this.dropDownButton.option({
+            dataSource: {
+                load: loadHandler,
+                byKey: byKeyHandler
+            },
+            showSelectedItem: true,
+            selectedItem: { id: 1 }
+        });
+
+        assert.strictEqual(byKeyHandler.callCount, 1, "byKey called once");
+
+        this.dropDownButton.option("deferRendering", false);
+        assert.strictEqual(loadHandler.callCount, 1, "list was loaded");
+
+        this.dropDownButton.option("showToggleButton", false);
+        this.dropDownButton.option("showToggleButton", true);
+        assert.strictEqual(byKeyHandler.callCount, 1, "byKey called once");
+        assert.strictEqual(loadHandler.callCount, 1, "load should not be called again");
     });
 });
 
@@ -539,7 +614,7 @@ QUnit.module("events", {}, () => {
         assert.strictEqual(e.element, dropDownButton.element(), "element is correct");
         assert.strictEqual(e.event.type, "dxclick", "event is correct");
         assert.strictEqual(e.itemData, 1, "itemData is correct");
-        assert.strictEqual(e.itemElement, $item.get(0), "itemElement is correct");
+        assert.strictEqual($(e.itemElement).get(0), $item.get(0), "itemElement is correct");
     });
 
     QUnit.test("onItemClick event change", (assert) => {

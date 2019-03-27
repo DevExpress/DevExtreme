@@ -762,29 +762,6 @@ QUnit.module("regression", {
     }
 });
 
-QUnit.test("B252072 - SlideOut. Design mode. There is possible to slide control in design mode", function(assert) {
-    config({ designMode: true });
-
-    try {
-        this.$element.dxSlideOut({ swipeEnabled: true });
-
-        var $container = this.$element.find("." + SLIDEOUT_ITEM_CONTAINER_CLASS),
-            pointer = pointerMock($container),
-            position = $container.position().left;
-
-        pointer
-            .start()
-            .down()
-            .move(100)
-            .up();
-
-        assert.equal($container.position().left, position);
-
-    } finally {
-        config({ designMode: false });
-    }
-});
-
 QUnit.test("B252044 - Changing the navigation item visibility leads to incorrect SlideOut layout operation", function(assert) {
     var that = this,
         items = [

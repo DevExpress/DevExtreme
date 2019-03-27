@@ -1815,7 +1815,7 @@ const Scheduler = Widget.inherit({
 
     _getAppointmentRenderedAction: function() {
         return this._createActionByOption("onAppointmentRendered", {
-            excludeValidators: ["designMode", "disabled", "readOnly"]
+            excludeValidators: ["disabled", "readOnly"]
         });
     },
 
@@ -2255,6 +2255,7 @@ const Scheduler = Widget.inherit({
 
         return {
             maxWidth: APPOINTEMENT_POPUP_WIDTH,
+            height: 'auto',
             onHiding: (function() {
                 this.focus();
             }).bind(this),
