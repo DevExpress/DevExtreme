@@ -4,6 +4,7 @@ import Tooltip from "../../tooltip";
 import translator from "../../../animation/translator";
 import dragEvents from "../../../events/drag";
 import eventsEngine from "../../../events/core/events_engine";
+import FunctionTemplate from "../../widget/function_template";
 
 const APPOINTMENT_TOOLTIP_WRAPPER_CLASS = "dx-scheduler-appointment-tooltip-wrapper";
 
@@ -32,6 +33,16 @@ class TooltipBehaviorBase {
 
     getItemListDefaultTemplateName() {
         return "appointmentTooltip";
+    }
+
+    createFunctionTemplate(template, data, targetData, index) {
+        return new FunctionTemplate(options => {
+            return template.render({
+                model: data,
+                targetedAppointmentData: targetData,
+                container: options.container
+            });
+        });
     }
 }
 
@@ -63,6 +74,16 @@ class TooltipManyAppointmentsBehavior extends TooltipBehaviorBase {
             eventsEngine.on(e.itemElement, dragEvents.move, (e) => this._onAppointmentDragMove(e, appData.allDay));
             eventsEngine.on(e.itemElement, dragEvents.end, () => this._onAppointmentDragEnd(appData));
         }
+    }
+
+    createFunctionTemplate(template, data, targetData, index) {
+        return new FunctionTemplate((options) => {
+            return template.render({
+                model: data,
+                index: index,
+                container: options.container
+            });
+        });
     }
 
     getItemListTemplateName() {
@@ -170,8 +191,13 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
                 this.tooltip.option("visible", true);
             }
 
+            this.list.focus();
             this.tooltip.option("position", this.behavior.getTooltipPosition(dataList));
         }
+    }
+
+    _createFunctionTemplate(template, data, targetData, index) {
+        return this.behavior.createFunctionTemplate(template, data, targetData, index);
     }
 
     _getItemListTemplateName() {

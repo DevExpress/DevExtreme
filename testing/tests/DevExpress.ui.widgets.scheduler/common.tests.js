@@ -1836,19 +1836,6 @@ QUnit.testStart(function() {
         assert.deepEqual(editing, defaultEditing);
     });
 
-    QUnit.test("Drop-down appointments should be repainted if the 'editing' option is changed", function(assert) {
-        this.createInstance({
-            editing: true
-        });
-
-        var repaintStub = sinon.stub(this.instance._dropDownAppointments, "repaintExisting");
-
-        this.instance.option("editing", false);
-
-        assert.ok(repaintStub.calledOnce, "Appointments are repainted");
-        assert.equal(repaintStub.getCall(0).args[0], this.instance.$element(), "Argument is OK");
-    });
-
     QUnit.test("Scheduler should be repainted after currentTime indication toggling", function(assert) {
         this.createInstance({
             showCurrentTimeIndicator: true,
@@ -3423,37 +3410,37 @@ QUnit.testStart(function() {
 
     });
 
-    QUnit.test("focusedStateEnabled option value should be passed to ddAppointments", function(assert) {
-        this.createInstance({
-            dataSource: [{
-                startDate: new Date(2015, 4, 24, 9, 10),
-                endDate: new Date(2015, 4, 24, 11, 1),
-                allDay: true,
-                text: "Task 1"
-            }, {
-                startDate: new Date(2015, 4, 24, 9, 10),
-                endDate: new Date(2015, 4, 24, 11, 1),
-                allDay: true,
-                text: "Task 2"
-            }, {
-                startDate: new Date(2015, 4, 24, 9, 10),
-                endDate: new Date(2015, 4, 24, 11, 1),
-                allDay: true,
-                text: "Task 3"
-            }],
-            currentDate: new Date(2015, 4, 24),
-            views: ["month"],
-            currentView: "month",
-            focusStateEnabled: false
-        });
+    // QUnit.test("focusedStateEnabled option value should be passed to ddAppointments", function(assert) {
+    //     this.createInstance({
+    //         dataSource: [{
+    //             startDate: new Date(2015, 4, 24, 9, 10),
+    //             endDate: new Date(2015, 4, 24, 11, 1),
+    //             allDay: true,
+    //             text: "Task 1"
+    //         }, {
+    //             startDate: new Date(2015, 4, 24, 9, 10),
+    //             endDate: new Date(2015, 4, 24, 11, 1),
+    //             allDay: true,
+    //             text: "Task 2"
+    //         }, {
+    //             startDate: new Date(2015, 4, 24, 9, 10),
+    //             endDate: new Date(2015, 4, 24, 11, 1),
+    //             allDay: true,
+    //             text: "Task 3"
+    //         }],
+    //         currentDate: new Date(2015, 4, 24),
+    //         views: ["month"],
+    //         currentView: "month",
+    //         focusStateEnabled: false
+    //     });
 
-        var ddAppointments = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance");
-        assert.notOk(ddAppointments.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
+    //     var ddAppointments = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance");
+    //     assert.notOk(ddAppointments.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
 
-        this.instance.option("focusStateEnabled", true);
-        ddAppointments = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance");
-        assert.ok(ddAppointments.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
-    });
+    //     this.instance.option("focusStateEnabled", true);
+    //     ddAppointments = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance");
+    //     assert.ok(ddAppointments.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
+    // });
 
     QUnit.test("Workspace navigation by arrows should work correctly with opened dropDown appointments", function(assert) {
         this.createInstance({
@@ -4153,7 +4140,7 @@ QUnit.testStart(function() {
             currentView: "month"
         });
 
-        $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
+        $(this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0)).trigger("dxclick");
 
         assert.equal(countCallTemplate1, 0, "count call first template");
         assert.notEqual(countCallTemplate2, 0, "count call second template");
@@ -4193,7 +4180,7 @@ QUnit.testStart(function() {
             currentView: "month"
         });
 
-        $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
+        $(this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0)).trigger("dxclick");
 
         assert.equal(countCallTemplate1, 0, "count call first template");
         assert.notEqual(countCallTemplate2, 0, "count call second template");

@@ -50,7 +50,8 @@ export class CompactAppointmentsHelper {
     }
 
     _onButtonClick(e) {
-        this.instance.showAppointmentTooltipCore(e.element, e.element.data("items"));
+        const $button = $(e.element);
+        this.instance.showAppointmentTooltipCore($button, $button.data("items"));
     }
 
     _getButtonOffset(width) {
