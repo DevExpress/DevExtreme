@@ -77,27 +77,6 @@ QUnit.test("Appointment should not be draggable & resizable", function(assert) {
     assert.ok(appointments.option("allowResize"), "Resize is allowed");
 });
 
-QUnit.test("Delete button should not be rendered in details tooltip", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 5, 15),
-        firstDayOfWeek: 1,
-        dataSource: [{
-            text: "a",
-            startDate: new Date(2015, 5, 15, 10),
-            endDate: new Date(2015, 5, 15, 10, 30)
-        }]
-    });
-
-    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
-        itemData = dataUtils.data($appointment[0], "dxItemData");
-
-    this.instance.showAppointmentTooltip(itemData, $appointment);
-
-    assert.equal($(".dx-scheduler-appointment-tooltip-buttons .dx-button").length, 1, "There is a one button in tooltip");
-
-    tooltip.hide();
-});
-
 QUnit.test("Edit button should not be contain the 'pencil' icon", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 5, 15),
@@ -336,84 +315,6 @@ QUnit.test("Cancel & Done buttons should not be rendered in details popup if edi
     this.instance.fire("showEditAppointmentPopup", { data: appointment, target: $("<div>") });
 
     assert.notOk($(".dx-scheduler-appointment-popup .dx-popup-bottom .dx-button").length, "Buttons are not rendered");
-});
-
-QUnit.test("Edit button should not be contain the 'pencil' icon if editing.allowUpdating is false", function(assert) {
-    this.createInstance({
-        editing: {
-            allowUpdating: false
-        },
-        currentDate: new Date(2015, 5, 15),
-        firstDayOfWeek: 1,
-        dataSource: [{
-            text: "a",
-            startDate: new Date(2015, 5, 15, 10),
-            endDate: new Date(2015, 5, 15, 10, 30)
-        }]
-    });
-
-    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
-        itemData = dataUtils.data($appointment[0], "dxItemData");
-
-    this.instance.showAppointmentTooltip(itemData, $appointment);
-
-    var $button = $(".dx-scheduler-appointment-tooltip-buttons .dx-button");
-
-    assert.equal($button.length, 2, "edit", "delete & edit button exists");
-    assert.notOk($button.eq(1).hasClass("dx-button-has-icon"), "Edit button is OK");
-    tooltip.hide();
-});
-
-QUnit.test("There is no need to check recurring appointment if editing.allowUpdating is false", function(assert) {
-    this.createInstance({
-        editing: {
-            allowUpdating: false
-        },
-        currentDate: new Date(2015, 5, 15),
-        firstDayOfWeek: 1,
-        dataSource: [{
-            text: "a",
-            startDate: new Date(2015, 5, 15, 10),
-            endDate: new Date(2015, 5, 15, 10, 30),
-            recurrenceRule: "FREQ=MONTHLY"
-        }]
-    });
-
-    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
-        itemData = dataUtils.data($appointment[0], "dxItemData");
-
-    this.instance.showAppointmentTooltip(itemData, $appointment);
-
-    var $buttons = $(".dx-scheduler-appointment-tooltip-buttons .dx-button");
-
-    $($buttons.eq(1)).trigger("dxclick");
-    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered instead of recurrence tooltip");
-});
-
-QUnit.test("Delete button should not exist if editing.allowUpdating is false", function(assert) {
-    this.createInstance({
-        editing: {
-            allowDeleting: false
-        },
-        currentDate: new Date(2015, 5, 15),
-        firstDayOfWeek: 1,
-        dataSource: [{
-            text: "a",
-            startDate: new Date(2015, 5, 15, 10),
-            endDate: new Date(2015, 5, 15, 10, 30)
-        }]
-    });
-
-    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
-        itemData = dataUtils.data($appointment[0], "dxItemData");
-
-    this.instance.showAppointmentTooltip(itemData, $appointment);
-
-    var $button = $(".dx-scheduler-appointment-tooltip-buttons .dx-button");
-
-    assert.equal($button.length, 1, "edit", "only one button");
-    assert.ok($button.dxButton("instance").option("icon"), "edit", "Edit button is OK");
-    tooltip.hide();
 });
 
 QUnit.test("Appointment should not be draggable & resizable if editing.allowUpdating is false", function(assert) {
