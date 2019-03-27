@@ -18,7 +18,7 @@ QUnit.test("DevExpress namespaces", function(assert) {
     });
 
     assert.ok(DevExpress.utils.readyCallbacks, "readyCallbacks namespace");
-  
+
     assert.ok(angular.module("dx"), "angular integration");
 });
 
