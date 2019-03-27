@@ -13025,6 +13025,41 @@ QUnit.test("Filtering on load when virtual scrolling", function(assert) {
     assert.equal(items[0].lastName, "lastName_5", "filtered row 'lastName' field value");
 });
 
+QUnit.test("DataGrid should not paginate to the already loaded page if it is not in the viewport and it's row was focused (T726994)", function(assert) {
+    // arrange
+    var generateDataSource = function(count) {
+            var result = [], i;
+            for(i = 0; i < count; ++i) {
+                result.push({ firstName: "name_" + i, lastName: "lastName_" + i });
+            }
+            return result;
+        },
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            height: 200,
+            dataSource: generateDataSource(100),
+            keyExpr: "firstName",
+            focusedRowEnabled: true,
+            scrolling: {
+                mode: "virtual"
+            },
+            paging: {
+                pageSize: 4,
+                pageIndex: 2
+            },
+            columns: ["firstName", "lastName"]
+        });
+
+    // act
+    let visibleRow0 = dataGrid.getController("data").getVisibleRows()[0];
+    let $row = $(dataGrid.getRowElement(4));
+    let $cell = $row.find("td").eq(0);
+    $cell.trigger("dxpointerdown");
+
+    // assert
+    assert.deepEqual(visibleRow0.key, dataGrid.getController("data").getVisibleRows()[0].key, "Compare first visible row");
+});
+
 // T558189
 QUnit.test("Band columns should be displayed correctly after state is reset", function(assert) {
     // arrange
