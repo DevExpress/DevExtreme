@@ -33,29 +33,29 @@ const moduleConfig = {
     }
 };
 
-let getRowActionButtonInDetailsView = function($element, index) {
+const getRowActionButtonInDetailsView = function($element, index) {
     return getRowInDetailsView($element, index).find(".dx-filemanager-file-actions-button");
 };
 
-let getSelectCheckBoxInDetailsView = function($element, index) {
+const getSelectCheckBoxInDetailsView = function($element, index) {
     return getRowInDetailsView($element, index).find("td").eq(0);
 };
 
-let getRowNameCellInDetailsView = function($element, index) {
+const getRowNameCellInDetailsView = function($element, index) {
     return getRowInDetailsView($element, index).find("td").eq(1);
 };
 
-let getRowInDetailsView = function($element, index) {
+const getRowInDetailsView = function($element, index) {
     return $element.find(`.${internals.GRID_DATA_ROW_CLASS}[aria-rowindex=${index}]`);
 };
 
-let getContextMenuItems = function() {
+const getContextMenuItems = function() {
     return $(".dx-context-menu .dx-menu-item");
 };
 
 QUnit.module("Raise context menu", moduleConfig, () => {
     test('right click by row', assert => {
-        let $row1 = getRowInDetailsView(this.$element, 1);
+        const $row1 = getRowInDetailsView(this.$element, 1);
         assert.notOk($row1.hasClass("dx-selection"));
         assert.equal(getContextMenuItems().length, 0);
 
@@ -63,7 +63,7 @@ QUnit.module("Raise context menu", moduleConfig, () => {
         assert.ok($row1.hasClass("dx-selection"));
         assert.ok(getContextMenuItems().length > 0);
 
-        let $row2 = getRowInDetailsView(this.$element, 2);
+        const $row2 = getRowInDetailsView(this.$element, 2);
         assert.notOk($row2.hasClass("dx-selection"));
 
         getRowNameCellInDetailsView(this.$element, 2).trigger("dxcontextmenu");
@@ -75,26 +75,26 @@ QUnit.module("Raise context menu", moduleConfig, () => {
     test('right click by row and click by select check box', assert => {
         getSelectCheckBoxInDetailsView(this.$element, 1).trigger("dxclick");
 
-        let $row1 = getRowInDetailsView(this.$element, 1);
+        const $row1 = getRowInDetailsView(this.$element, 1);
         assert.ok($row1.hasClass("dx-selection"));
         assert.equal(getContextMenuItems().length, 0);
 
         getRowNameCellInDetailsView(this.$element, 2).trigger("dxcontextmenu");
-        let $row2 = getRowInDetailsView(this.$element, 2);
+        const $row2 = getRowInDetailsView(this.$element, 2);
         assert.ok($row1.hasClass("dx-selection"));
         assert.ok($row2.hasClass("dx-selection"));
         assert.ok(getContextMenuItems().length > 0);
     });
 
     test('click by row\'s action button', assert => {
-        let $row1 = getRowInDetailsView(this.$element, 1);
+        const $row1 = getRowInDetailsView(this.$element, 1);
         $row1.trigger("dxhoverstart");
         getRowActionButtonInDetailsView(this.$element, 1).trigger("dxclick");
 
         assert.ok($row1.hasClass("dx-selection"));
         assert.ok(getContextMenuItems().length > 0);
 
-        let $row2 = getRowInDetailsView(this.$element, 2);
+        const $row2 = getRowInDetailsView(this.$element, 2);
         $row2.trigger("dxhoverstart");
         getRowActionButtonInDetailsView(this.$element, 2).trigger("dxclick");
         assert.notOk($row1.hasClass("dx-selection"));
@@ -105,11 +105,11 @@ QUnit.module("Raise context menu", moduleConfig, () => {
     test('click by select check box and row\'s action button', assert => {
         getSelectCheckBoxInDetailsView(this.$element, 1).trigger("dxclick");
 
-        let $row1 = getRowInDetailsView(this.$element, 1);
+        const $row1 = getRowInDetailsView(this.$element, 1);
         assert.ok($row1.hasClass("dx-selection"));
         assert.equal(getContextMenuItems().length, 0);
 
-        let $row2 = getRowInDetailsView(this.$element, 2);
+        const $row2 = getRowInDetailsView(this.$element, 2);
         $row2.trigger("dxhoverstart");
         getRowActionButtonInDetailsView(this.$element, 2).trigger("dxclick");
         assert.ok($row1.hasClass("dx-selection"));
