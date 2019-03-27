@@ -4,8 +4,7 @@ var $ = require("jquery"),
     recurrenceUtils = require("ui/scheduler/utils.recurrence"),
     dateLocalization = require("localization/date");
 
-var SWITCH_REPEAT_END_EDITOR = "dx-recurrence-switch-repeat-end",
-    FREQUENCY_EDITOR = "dx-recurrence-radiogroup-freq",
+var FREQUENCY_EDITOR = "dx-recurrence-radiogroup-freq",
     REPEAT_END_EDITOR_CONTAINER = "dx-recurrence-repeat-end-container",
     REPEAT_TYPE_EDITOR = "dx-recurrence-radiogroup-repeat-type",
     REPEAT_COUNT_EDITOR = "dx-recurrence-numberbox-repeat-count",
@@ -159,7 +158,7 @@ QUnit.test("Recurrence interval numberbox should be rendered with right defaults
         interval = $interval.dxNumberBox("instance");
 
     assert.equal($interval.length, 1, "numberBox for setting recurrence interval was rendered");
-    assert.equal($intervalLabel.length, 2, "labels was rendered");
+    assert.equal($intervalLabel.length, 1, "labels was rendered");
     assert.equal(interval.option("showSpinButtons"), true, "numberBox have right showSpinButtons");
     assert.equal(interval.option("useLargeSpinButtons"), false, "numberBox have right useLargeSpinButtons");
     assert.equal(interval.option("min"), 1, "numberBox have right min value");
@@ -207,63 +206,25 @@ QUnit.module("Recurrence editor - repeat-end editor", {
     }
 });
 
-QUnit.test("Recurrence editor should contain switch to turn on/of repeat-end", function(assert) {
+QUnit.test("Recurrence editor should contain repeat-type radio group to turn on/of repeat-end", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY" });
 
-    var $switchEditor = $("." + SWITCH_REPEAT_END_EDITOR);
+    var $repeatType = $("." + REPEAT_TYPE_EDITOR);
 
-    assert.equal($switchEditor.length, 1, "switch was rendered");
+    assert.equal($repeatType.length, 1, "repeat-type was rendered");
 });
 
-QUnit.test("Recurrence repeat-end switch should be turned off on init", function(assert) {
+QUnit.test("Recurrence repeat-type editor should have right default", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY" });
 
-    var $switchEditor = $("." + SWITCH_REPEAT_END_EDITOR),
-        switchEditor = $switchEditor.dxSwitch("instance");
+    var $repeatType = $("." + REPEAT_TYPE_EDITOR),
+        repeatTypeEditor = $repeatType.dxRadioGroup("instance");
 
-    assert.equal(switchEditor.option("value"), false, "switch has right value");
+    assert.equal(repeatTypeEditor.option("value"), 'never', "repeat-type has right value");
+    assert.equal($repeatType.css("display"), "block", "repeat editor is not visible");
 });
 
-QUnit.test("Recurrence repeat-end switch should be turned on, if 'count' or 'until' rule is set", function(assert) {
-    this.createInstance({ value: "FREQ=WEEKLY;COUNT=10" });
-
-    var $switchEditor = $("." + SWITCH_REPEAT_END_EDITOR),
-        switchEditor = $switchEditor.dxSwitch("instance");
-
-    assert.equal(switchEditor.option("value"), true, "switch has right value");
-});
-
-QUnit.test("Recurrence repeat-end editor should be visible after turn on switch and has right defaults", function(assert) {
-    this.createInstance({ value: "FREQ=WEEKLY" });
-
-    var $switchEditor = $("." + SWITCH_REPEAT_END_EDITOR),
-        switchEditor = $switchEditor.dxSwitch("instance"),
-        $repeat = this.instance.$element().find("." + REPEAT_END_EDITOR_CONTAINER);
-
-    assert.equal($repeat.css("display"), "none", "repeat editor is not visible");
-
-    switchEditor.option("value", true);
-
-    assert.notEqual($repeat.css("display"), "none", "repeat editor is visible");
-
-    assert.equal(this.instance.option("value"), "FREQ=WEEKLY;COUNT=1", "value was set correctly");
-
-    switchEditor.option("value", false);
-
-    assert.equal($repeat.css("display"), "none", "repeat editor is not visible");
-
-    assert.equal(this.instance.option("value"), "FREQ=WEEKLY", "value was set correctly");
-});
-
-QUnit.test("Recurrence repeat-end editor container should be visible if 'count' rule is set", function(assert) {
-    this.createInstance({ value: "FREQ=WEEKLY;COUNT=1" });
-
-    var $repeatContainer = this.instance.$element().find("." + REPEAT_END_EDITOR_CONTAINER);
-
-    assert.notEqual($repeatContainer.css("display"), "none", "Repeat editor is visible");
-});
-
-QUnit.test("Recurrence repeat-end editor should be rendered with right inner editor", function(assert) {
+QUnit.test("Recurrence repeat-type editor should be rendered with right inner editor", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY;COUNT=10" });
 
     var $repeat = this.instance.$element().find("." + REPEAT_END_EDITOR_CONTAINER),
@@ -282,10 +243,11 @@ QUnit.test("Recurrence repeat-end editor should be rendered with right inner edi
 
 QUnit.test("Recurrence editor parts should be disabled if needed", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY" });
-    var $switchEditor = $("." + SWITCH_REPEAT_END_EDITOR),
-        switchEditor = $switchEditor.dxSwitch("instance");
 
-    switchEditor.option("value", true);
+    var $repeatType = $("." + REPEAT_TYPE_EDITOR),
+        repeatTypeEditor = $repeatType.dxRadioGroup("instance");
+
+    repeatTypeEditor.option("value", "count");
 
     var $repeatCount = this.instance.$element().find("." + REPEAT_COUNT_EDITOR),
         $repeatUntilDate = this.instance.$element().find("." + REPEAT_DATE_EDITOR);
@@ -412,16 +374,6 @@ QUnit.test("Recurrence editor should correctly process values from until-date ed
     var untilString = recurrenceUtils.getAsciiStringByDate(date);
 
     assert.equal(this.instance.option("value"), "FREQ=WEEKLY;UNTIL=" + untilString, "Recurrence editor has right value");
-});
-
-QUnit.test("Recurrence repeat-end editor should have correct aria-describedby attribute", function(assert) {
-    this.createInstance({ value: "FREQ=WEEKLY;COUNT=1" });
-
-    var $switchEditor = $("." + SWITCH_REPEAT_END_EDITOR),
-        $switchLabel = this.instance.$element().find(".dx-recurrence-numberbox-interval-label").last();
-
-    assert.notEqual($switchEditor.attr("aria-describedby"), undefined, "aria-describedby exists");
-    assert.equal($switchEditor.attr("aria-describedby"), $switchLabel.attr("id"), "aria-describedby is correct");
 });
 
 QUnit.module("Recurrence editor - repeat-on editor", {

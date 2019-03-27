@@ -621,7 +621,7 @@ QUnit.test("DblClick on appointment should not affect the related cell start dat
     }
 });
 
-QUnit.test("Recurrence repeat-end editor should be closed after reopening appointment popup", function(assert) {
+QUnit.test("Recurrence repeat-type editor should have default 'never' value after reopening appointment popup", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: new DataSource({
@@ -637,22 +637,22 @@ QUnit.test("Recurrence repeat-end editor should be closed after reopening appoin
 
     var form = this.instance.getAppointmentDetailsForm(),
         repeatOnEditor = form.getEditor("repeatOnOff"),
-        repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
+        repeatTypeEditor = form.getEditor("recurrenceRule")._repeatTypeEditor;
 
     repeatOnEditor.option("value", true);
 
-    repeatEndEditor.option("value", true);
+    repeatTypeEditor.option("value", "count");
     $(".dx-scheduler-appointment-popup").find(".dx-popup-done").trigger("dxclick");
 
     this.instance.showAppointmentPopup(secondAppointment);
 
     form = this.instance.getAppointmentDetailsForm(),
     repeatOnEditor = form.getEditor("repeatOnOff"),
-    repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
+    repeatTypeEditor = form.getEditor("recurrenceRule")._repeatTypeEditor;
 
     repeatOnEditor.option("value", true);
 
-    assert.notOk(repeatEndEditor.option("value"), "Switch is closed");
+    assert.ok(repeatTypeEditor.option("value"), 'never', "Repeat-type editor value is ok");
 });
 
 QUnit.test("Disabled appointment could not be focused", function(assert) {

@@ -1,3 +1,5 @@
+require("../switch");
+
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),

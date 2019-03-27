@@ -808,17 +808,18 @@ QUnit.test("Recurrence item in form should have a special css class", function(a
     var form = this.instance.getAppointmentDetailsForm(),
         recurrenceItemClass = "dx-scheduler-recurrence-rule-item",
         openedRecurrenceItemClass = "dx-scheduler-recurrence-rule-item-opened",
-        $recurrenceItem = form.$element().find("." + recurrenceItemClass);
+        $recurrenceItem = form.$element().find("." + recurrenceItemClass),
+        repeatOnEditor = form.getEditor("repeatOnOff");
 
     assert.notOk($recurrenceItem.hasClass(openedRecurrenceItemClass));
 
-    form.$element().find(".dx-switch").eq(1).dxSwitch("instance").option("value", true);
+    repeatOnEditor.option("value", true);
     $recurrenceItem = form.$element().find("." + recurrenceItemClass);
 
     assert.ok($recurrenceItem.hasClass(openedRecurrenceItemClass));
 });
 
-QUnit.test("Recurrence editor should work correctly after toggling repeat and end-repeat switch", function(assert) {
+QUnit.test("Recurrence editor should work correctly after toggling repeat and repeat-type editor", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: new DataSource({
@@ -833,11 +834,11 @@ QUnit.test("Recurrence editor should work correctly after toggling repeat and en
 
     var form = this.instance.getAppointmentDetailsForm(),
         repeatOnEditor = form.getEditor("repeatOnOff"),
-        repeatEndEditor = form.getEditor("recurrenceRule")._switchEndEditor;
+        repeatTypeEditor = form.getEditor("recurrenceRule")._repeatTypeEditor;
 
     repeatOnEditor.option("value", true);
-    repeatEndEditor.option("value", true);
-    repeatOnEditor.option("value", false);
+    repeatTypeEditor.option("value", 'count');
+    repeatOnEditor.option("value", 'never');
 
     assert.ok(true, "recurrence editor works correctly");
 });
