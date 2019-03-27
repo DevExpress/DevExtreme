@@ -269,6 +269,7 @@ QUnit.test("pageCount is updated on partial update with repaintChangesOnly", fun
     assert.equal(pagerView._getPager().option.callCount, 1, "pager option call count after partial update");
     assert.deepEqual(pagerView._getPager().option.getCall(0).args, [{
         hasKnownLastPage: true, // T697587
+        totalCount: 143, // #7259
         pageCount: 20
     }], "pager option args");
 });
