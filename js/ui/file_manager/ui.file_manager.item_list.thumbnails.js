@@ -2,8 +2,6 @@ import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { when } from "../../core/utils/deferred";
 import iconUtils from "../../core/utils/icon";
-import dblclickEvent from "../../events/double_click";
-import eventUtils from "../../events/utils";
 import eventsEngine from "../../events/core/events_engine";
 
 import FileManagerItemListBase from "./ui.file_manager.item_list";
@@ -13,12 +11,11 @@ const FILE_MANAGER_THUMBNAILS_VIEW_PORT_CLASS = "dx-filemanager-thumbnails-view-
 const FILE_MANAGER_THUMBNAILS_ITEM_LIST_CONTAINER_CLASS = "dx-filemanager-thumbnails-container";
 const FILE_MANAGER_THUMBNAILS_ITEM_CLASS = "dx-filemanager-thumbnails-item";
 const FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS = "dx-filemanager-thumbnails-item-content";
-const FILE_MANAGER_THUMBNAILS_ITEM__THUMBNAIL_CLASS = "dx-filemanager-thumbnails-item-thumbnail";
+const FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS = "dx-filemanager-thumbnails-item-thumbnail";
 const FILE_MANAGER_THUMBNAILS_ITEM_SPACER_CLASS = "dx-filemanager-thumbnails-item-spacer";
 const FILE_MANAGER_THUMBNAILS_ITEM_NAME_CLASS = "dx-filemanager-thumbnails-item-name";
 const FILE_MANAGER_ITEM_SELECTED_CLASS = "dx-filemanager-item-selected";
 const FILE_MANAGER_ITEM_FOCUSED_CLASS = "dx-filemanager-item-focused";
-const THUMBNAIL_ITEM_OPEN_EVENT_NAMESPACE = "dxFileManager_open";
 
 class FileManagerThumbnailsItemList extends FileManagerItemListBase {
 
@@ -43,10 +40,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this.$element().addClass(FILE_MANAGER_THUMBNAILS_ITEM_LIST_CLASS);
         this.$element().append(this._$viewPort);
 
-        const dblClickEventName = eventUtils.addNamespace(dblclickEvent.name, THUMBNAIL_ITEM_OPEN_EVENT_NAMESPACE);
-        const itemSelector = `.${FILE_MANAGER_THUMBNAILS_ITEM_CLASS}`;
-        eventsEngine.on(this.$element(), "click", itemSelector, this._onClick.bind(this));
-        eventsEngine.on(this.$element(), dblClickEventName, itemSelector, this._onDblClick.bind(this));
+        eventsEngine.on(this.$element(), "click", this._getItemSelector(), this._onClick.bind(this));
 
         this._loadItems();
     }
@@ -157,7 +151,11 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         this._selectItemByIndex(index, false, e);
     }
 
-    _onDblClick(e) {
+    _getItemSelector() {
+        return `.${FILE_MANAGER_THUMBNAILS_ITEM_CLASS}`;
+    }
+
+    _onItemDblClick(e) {
         const $item = $(e.currentTarget);
         const index = $item.data("index");
         const item = this._items[index];
@@ -318,7 +316,7 @@ class FileManagerThumbnailsItemList extends FileManagerItemListBase {
         const $itemContent = $("<div>").addClass(FILE_MANAGER_THUMBNAILS_ITEM_CONTENT_CLASS);
 
         const $itemThumbnail = iconUtils.getImageContainer(this._getItemThumbnail(item))
-            .addClass(FILE_MANAGER_THUMBNAILS_ITEM__THUMBNAIL_CLASS);
+            .addClass(FILE_MANAGER_THUMBNAILS_ITEM_THUMBNAIL_CLASS);
 
         eventsEngine.on($itemThumbnail, "dragstart", this._disableDragging);
 

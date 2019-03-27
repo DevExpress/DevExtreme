@@ -7,8 +7,7 @@ import { extend } from "../../core/utils/extend";
 import TreeViewSearch from "../tree_view/ui.tree_view.search";
 
 import { FileManagerItem } from "../../file_provider/file_provider";
-
-const PATH_SEPARATOR = "/";
+import { getPathParts, pathCombine } from "./ui.file_manager.utils";
 
 class FileManagerFilesTreeView extends Widget {
 
@@ -32,7 +31,12 @@ class FileManagerFilesTreeView extends Widget {
         const parentItem = parent ? parent.itemData : null;
         const itemsGetter = this.option("getItems");
         const itemsResult = itemsGetter(parentItem);
-        return when(itemsResult).done(items => this._applyIconsToItems(items));
+        return when(itemsResult).done(items => {
+            this._applyIconsToItems(items);
+            if(parentItem) {
+                this._resolvePathLoading(parentItem.relativeName);
+            }
+        });
     }
 
     _onFilesTreeViewItemClick(e) {
@@ -69,7 +73,7 @@ class FileManagerFilesTreeView extends Widget {
 
     _initCurrentPathState() {
         this._currentPath = "";
-        this._rootFolder = new FileManagerItem("", "");
+        this._rootFolder = new FileManagerItem("", "", true);
         this._currentFolder = this._rootFolder;
         this._loadMap = {};
     }
@@ -82,15 +86,12 @@ class FileManagerFilesTreeView extends Widget {
         }
 
         let currentPath = "";
-        const parts = path.split(PATH_SEPARATOR);
+        const parts = getPathParts(path);
 
         each(parts, (_, part) => {
 
-            if(currentPath) {
-                currentPath += PATH_SEPARATOR;
-            }
+            currentPath = pathCombine(currentPath, part);
 
-            currentPath += part;
             const getExpandFunc = p => (() => this._expandLoadedPath(p));
             result = result.then(getExpandFunc(currentPath));
 
@@ -116,6 +117,10 @@ class FileManagerFilesTreeView extends Widget {
 
     _onFilesTreeViewItemExpanded(e) {
         const path = e.itemData ? e.itemData.relativeName : "";
+        this._resolvePathLoading(path);
+    }
+
+    _resolvePathLoading(path) {
         const deferred = this._loadMap[path];
         if(deferred) {
             this._loadMap[path] = null;
@@ -134,7 +139,7 @@ class FileManagerFilesTreeView extends Widget {
     refreshData() {
         this._filesTreeView.option("dataSource", []);
 
-        const currentFolderChanged = this.getCurrentPath() !== "";
+        const currentFolderChanged = this.getCurrentFolderPath() !== "";
 
         this._initCurrentPathState();
 
@@ -143,7 +148,11 @@ class FileManagerFilesTreeView extends Widget {
         }
     }
 
-    setCurrentPath(path) {
+    setCurrentFolderPath(path) {
+        if(path === this.getCurrentFolderPath()) {
+            return;
+        }
+
         this._ensurePathExpanded(path)
             .then(() => this._setCurrentLoadedPath(path));
     }
@@ -162,7 +171,7 @@ class FileManagerFilesTreeView extends Widget {
         this._changeCurrentFolder(folder);
     }
 
-    getCurrentPath() {
+    getCurrentFolderPath() {
         return this._currentPath;
     }
 

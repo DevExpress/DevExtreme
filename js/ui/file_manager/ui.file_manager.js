@@ -2,6 +2,7 @@ import $ from "../../core/renderer";
 import eventsEngine from "../../events/core/events_engine";
 import { extend } from "../../core/utils/extend";
 import typeUtils from "../../core/utils/type";
+import { when } from "../../core/utils/deferred";
 
 import registerComponent from "../../core/component_registrator";
 import Widget from "../widget/ui.widget";
@@ -13,8 +14,10 @@ import FileManagerThumbnailsItemList from "./ui.file_manager.item_list.thumbnail
 import FileManagerToolbar from "./ui.file_manager.toolbar";
 import FileManagerEditingControl from "./ui.file_manager.editing";
 import FileManagerBreadcrumbs from "./ui.file_manager.breadcrumbs";
+import { FileManagerFileCommands } from "./ui.file_manager.commands";
+import { getName, getParentPath } from "./ui.file_manager.utils";
 
-import { FileProvider } from "../../file_provider/file_provider";
+import { FileProvider, FileManagerItem } from "../../file_provider/file_provider";
 import ArrayFileProvider from "../../file_provider/file_provider.array";
 import AjaxFileProvider from "../../file_provider/file_provider.ajax";
 import OneDriveFileProvider from "../../file_provider/file_provider.onedrive";
@@ -31,16 +34,6 @@ const FILE_MANAGER_ITEMS_PANEL_CLASS = FILE_MANAGER_CLASS + "-items-panel";
 
 class FileManager extends Widget {
 
-    _init() {
-        this._commands = {
-            open: () => this._tryOpen(),
-            thumbnails: () => this._switchView("thumbnails"),
-            details: () => this._switchView("details")
-        };
-
-        super._init();
-    }
-
     _initTemplates() {
     }
 
@@ -48,6 +41,7 @@ class FileManager extends Widget {
         super._initMarkup();
 
         this._provider = this._getFileProvider();
+        this._currentFolder = new FileManagerItem("", "", true);
 
         const toolbar = this._createComponent($("<div>"), FileManagerToolbar, {
             "onItemClick": this._onToolbarItemClick.bind(this)
@@ -128,6 +122,7 @@ class FileManager extends Widget {
             onGetItems: this._getItemListItems.bind(this),
             onError: this._showError.bind(this),
             onSelectedItemOpened: item => this._tryOpen(item),
+            onContextMenuItemClick: this._onContextMenuItemClick.bind(this),
             getItemThumbnail: this._getItemThumbnail.bind(this)
         };
 
@@ -141,17 +136,23 @@ class FileManager extends Widget {
     _createBreadcrumbs() {
         this._breadcrumbs = this._createComponent($("<div>"), FileManagerBreadcrumbs, {
             path: "",
-            onPathChanged: path => this.setCurrentPath(path)
+            onPathChanged: path => this.setCurrentFolderPath(path)
         });
     }
 
     _onFilesTreeViewCurrentFolderChanged(e) {
-        this._loadItemListData();
-        this._breadcrumbs.option("path", this.getCurrentFolderPath());
+        this.setCurrentFolder(this._filesTreeView.getCurrentFolder());
     }
 
-    _onToolbarItemClick(buttonName) {
-        this.executeCommand(buttonName);
+    _onToolbarItemClick(name) {
+        const fileItem = this._getMultipleSelectedItems();
+        const command = FileManagerFileCommands.find(c => c.name === name);
+        command.handler(this, fileItem);
+    }
+
+    _onContextMenuItemClick(name, fileItem) {
+        let command = FileManagerFileCommands.find(c => c.name === name);
+        command && command.handler(this, fileItem);
     }
 
     _setItemsViewAreaActive(active) {
@@ -186,7 +187,12 @@ class FileManager extends Widget {
             return;
         }
 
-        this.setCurrentPath(item.relativeName);
+        const folder = item.createClone();
+        if(item.isParentFolder) {
+            folder.name = getName(item.relativeName);
+            folder.relativeName = item.relativeName;
+        }
+        this.setCurrentFolder(folder);
     }
 
     _switchView(viewMode) {
@@ -253,9 +259,20 @@ class FileManager extends Widget {
 
     _getItemListItems() {
         const path = this.getCurrentFolderPath();
-        const showFolders = this.option("itemList").showFolders;
-        const itemType = showFolders ? "" : "file";
-        return this._provider.getItems(path, itemType);
+        const options = this.option("itemList");
+        const itemType = options.showFolders ? "" : "file";
+        let result = this._provider.getItems(path, itemType);
+
+        if(options.showParentFolder && path) {
+            const parentPath = getParentPath(path);
+            const parentFolder = this._createFolderItemByPath(parentPath);
+            parentFolder.isParentFolder = true;
+            parentFolder.name = "..";
+
+            result = when(result).done(items => items.unshift(parentFolder));
+        }
+
+        return result;
     }
 
     _onItemListClick() {
@@ -335,6 +352,12 @@ class FileManager extends Widget {
         }
     }
 
+    _createFolderItemByPath(path) {
+        const parentPath = getParentPath(path);
+        const name = getName(path);
+        return new FileManagerItem(parentPath, name, true);
+    }
+
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             /**
@@ -360,7 +383,8 @@ class FileManager extends Widget {
             */
             itemList: {
                 mode: "details",
-                showFolders: true
+                showFolders: true,
+                showParentFolder: true
             },
 
             /**
@@ -389,29 +413,29 @@ class FileManager extends Widget {
         }
     }
 
-    executeCommand(commandName) {
-        const done = this._editing.executeCommand(commandName);
-        if(done) {
-            return;
-        }
-
-        const action = this._commands[commandName];
-        if(!action) {
-            throw "Incorrect command name.";
-        }
-        action.call(this);
-    }
-
-    setCurrentPath(path) {
-        this._filesTreeView.setCurrentPath(path);
+    setCurrentFolderPath(path) {
+        const folder = this._createFolderItemByPath(path);
+        this.setCurrentFolder(folder);
     }
 
     getCurrentFolderPath() {
-        return this._filesTreeView.getCurrentPath();
+        return this._currentFolder.relativeName;
+    }
+
+    setCurrentFolder(folder) {
+        const newPath = folder.relativeName;
+        if(newPath === this.getCurrentFolderPath()) {
+            return;
+        }
+
+        this._currentFolder = folder;
+        this._filesTreeView.setCurrentFolderPath(newPath);
+        this._loadItemListData();
+        this._breadcrumbs.option("path", newPath);
     }
 
     getCurrentFolder() {
-        return this._filesTreeView.getCurrentFolder();
+        return this._currentFolder;
     }
 
     getSelectedItems() {
