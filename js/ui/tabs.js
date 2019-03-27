@@ -283,7 +283,9 @@ var Tabs = CollectionWidget.inherit({
                 this._scrollable.scrollTo({ left: this._scrollable.scrollWidth() - this._scrollable.clientWidth() });
             }
             this._scrollToItem(this.option("selectedItem"));
-        } else {
+        }
+
+        if(!(this.option("scrollingEnabled") && this._isItemsWidthExceeded())) {
             this._cleanScrolling();
 
             if(this._needStretchItems() && !this._isItemsWidthExceeded()) {
