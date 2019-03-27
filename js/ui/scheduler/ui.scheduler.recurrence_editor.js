@@ -52,6 +52,7 @@ var RECURRENCE_EDITOR = "dx-recurrence-editor",
     FIELD_VALUE_CLASS = "dx-field-value",
 
     frequencies = [
+        { text: function() { return messageLocalization.format("dxScheduler-recurrenceNever"); }, value: "NEVER" },
         { text: function() { return messageLocalization.format("dxScheduler-recurrenceDaily"); }, value: "DAILY" },
         { text: function() { return messageLocalization.format("dxScheduler-recurrenceWeekly"); }, value: "WEEKLY" },
         { text: function() { return messageLocalization.format("dxScheduler-recurrenceMonthly"); }, value: "MONTHLY" },
@@ -182,10 +183,10 @@ var RecurrenceEditor = Editor.inherit({
         this._renderEditors();
 
         if(!isDefined(this.option("value"))) {
-            this._handleDefaults();
+            // this._handleDefaults();
         }
 
-        this.option("visible", !!this.option("value"));
+        // this.option("visible", !!this.option("value"));
         this._renderContainerVisibility(this.option("value"));
     },
 
@@ -233,13 +234,13 @@ var RecurrenceEditor = Editor.inherit({
     },
 
     _renderFreqEditor: function() {
-        var freq = this._recurrenceRule.rules().freq || "DAILY";
+        var freq = this._recurrenceRule.rules().freq || "NEVER";
 
         var $freqEditor = $("<div>")
             .addClass(FREQUENCY_EDITOR)
             .addClass(FIELD_VALUE_CLASS);
 
-        this._freqEditor = this._createComponent($freqEditor, RadioGroup, {
+        this._freqEditor = this._createComponent($freqEditor, SelectBox, {
             field: "freq",
             items: frequencies,
             value: freq,
@@ -253,7 +254,7 @@ var RecurrenceEditor = Editor.inherit({
             .addClass(FIELD_CLASS)
             .append($freqEditor);
 
-        this._$container.append($field);
+        this.$element().prepend($field);
     },
 
     _renderIntervalEditor: function() {
@@ -768,12 +769,20 @@ var RecurrenceEditor = Editor.inherit({
 
     _valueChangedHandler: function(args) {
         var value = args.component.option("value"),
-            field = args.component.option("field");
+            field = args.component.option("field"),
+            visible = true;
 
-        this._recurrenceRule.makeRule(field, value);
+        if(field === "freq" && value === "NEVER") {
+            visible = false;
+            this.option("value", "");
+        } else {
+            this._recurrenceRule.makeRule(field, value);
 
-        this._makeRepeatOnRule(field, value);
-        this._changeEditorValue();
+            this._makeRepeatOnRule(field, value);
+            this._changeEditorValue();
+        }
+
+        this._renderContainerVisibility(visible);
     },
 
     _makeRepeatOnRule: function(field, value) {
@@ -809,7 +818,7 @@ var RecurrenceEditor = Editor.inherit({
         switch(args.name) {
             case "value":
                 this._recurrenceRule.makeRules(args.value);
-                this.option("visible", !!args.value);
+                // this.option("visible", !!args.value);
                 // this._switchEndEditor.option("value", !!this._recurrenceRule.repeatableRule());
 
                 this._repeatTypeEditor.option("value", this._recurrenceRule.repeatableRule() || "never");
@@ -850,7 +859,7 @@ var RecurrenceEditor = Editor.inherit({
     _changeEditorsValues: function(rules) {
         this._changeCheckBoxesValue(!!rules["byday"]);
 
-        this._freqEditor.option("value", rules.freq);
+        this._freqEditor.option("value", rules.freq || "NEVER");
         this._changeRepeatTypeLabel();
         this._intervalEditor.option("value", rules.interval);
 
