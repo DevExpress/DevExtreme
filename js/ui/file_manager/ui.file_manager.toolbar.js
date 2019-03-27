@@ -1,5 +1,6 @@
 import $ from "../../core/renderer";
 
+import { FileManagerFileCommands } from "./ui.file_manager.commands";
 import Widget from "../widget/ui.widget";
 import Button from "../button";
 import { extend } from "../../core/utils/extend";
@@ -8,28 +9,10 @@ import typeUtils from "../../core/utils/type";
 class FileManagerToolbar extends Widget {
 
     _initMarkup() {
-        const createButton = this._createButton("Create", "create");
-        const renameButton = this._createButton("Rename", "rename");
-        const moveButton = this._createButton("Move", "move");
-        const copyButton = this._createButton("Copy", "copy");
-        const deleteButton = this._createButton("Delete", "delete");
-        const downloadButton = this._createButton("Download", "download");
-        const uploadButton = this._createButton("Upload file...", "upload");
-        const thumbnailsButton = this._createButton("Thumbnails", "thumbnails");
-        const detailsButton = this._createButton("Details", "details");
-
-        this.$element()
-            .append(
-                createButton.$element(),
-                renameButton.$element(),
-                moveButton.$element(),
-                copyButton.$element(),
-                deleteButton.$element(),
-                downloadButton.$element(),
-                uploadButton.$element(),
-                thumbnailsButton.$element(),
-                detailsButton.$element()
-            );
+        for(let i = 0; i < FileManagerFileCommands.length; i++) {
+            const itemButton = this._createButton(FileManagerFileCommands[i].text, FileManagerFileCommands[i].name);
+            this.$element().append(itemButton.$element());
+        }
     }
 
     _getDefaultOptions() {

@@ -1,3 +1,5 @@
+import { pathCombine, getFileExtension } from "../ui/file_manager/ui.file_manager.utils";
+
 const DEFAULT_FILE_UPLOAD_CHUNK_SIZE = 200000;
 
 class FileProvider {
@@ -55,7 +57,7 @@ class FileManagerItem {
     constructor(parentPath, name, isFolder) {
         this.parentPath = parentPath;
         this.name = name;
-        this.relativeName = this.parentPath ? this.parentPath + "/" + this.name : this.name;
+        this.relativeName = pathCombine(this.parentPath, name);
         this.isFolder = isFolder || false;
 
         this.length = 0;
@@ -66,12 +68,16 @@ class FileManagerItem {
     }
 
     getExtension() {
-        if(this.isFolder) {
-            return "";
-        }
+        return this.isFolder ? "" : getFileExtension(this.name);
+    }
 
-        const index = this.name.lastIndexOf(".");
-        return index !== -1 ? this.name.substr(index) : "";
+    createClone() {
+        const result = new FileManagerItem(this.parentPath, this.name, this.isFolder);
+        result.length = this.length;
+        result.lastWriteTime = this.lastWriteTime;
+        result.thumbnail = this.thumbnail;
+        result.tooltipText = this.tooltipText;
+        return result;
     }
 }
 

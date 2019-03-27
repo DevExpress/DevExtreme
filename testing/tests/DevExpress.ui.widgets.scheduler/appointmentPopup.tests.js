@@ -134,6 +134,14 @@ QUnit.test("showAppointmentPopup should render a popup form only once", function
     assert.equal($form.find(".dx-textbox").eq(0).dxTextBox("instance").option("text"), "appointment 2", "Form data is correct");
 });
 
+QUnit.test("popup should have right height", function(assert) {
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 1" });
+
+    var popup = this.instance.getAppointmentPopup();
+
+    assert.equal(popup.option("height"), 'auto', "popup has correct height");
+});
+
 QUnit.test("showAppointmentPopup should render a popup content only once", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2), text: "appointment 1" });
 

@@ -879,6 +879,87 @@ declare module DevExpress.data {
         /** @name PivotGridDataSource.Options.store */
         store?: Store | StoreOptions | XmlaStore | XmlaStoreOptions | Array<{ type?: 'array' | 'local' | 'odata' | 'xmla' }> | { type?: 'array' | 'local' | 'odata' | 'xmla' };
     }
+    /** @name PivotGridDataSource.Options.fields */
+    export interface PivotGridDataSourceField {
+        /** @name PivotGridDataSource.Options.fields.allowCrossGroupCalculation */
+        allowCrossGroupCalculation?: boolean;
+        /** @name PivotGridDataSource.Options.fields.allowExpandAll */
+        allowExpandAll?: boolean;
+        /** @name PivotGridDataSource.Options.fields.allowFiltering */
+        allowFiltering?: boolean;
+        /** @name PivotGridDataSource.Options.fields.allowSorting */
+        allowSorting?: boolean;
+        /** @name PivotGridDataSource.Options.fields.allowSortingBySummary */
+        allowSortingBySummary?: boolean;
+        /** @name PivotGridDataSource.Options.fields.area */
+        area?: 'column' | 'data' | 'filter' | 'row' | undefined;
+        /** @name PivotGridDataSource.Options.fields.areaIndex */
+        areaIndex?: number;
+        /** @name PivotGridDataSource.Options.fields.calculateCustomSummary */
+        calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => any);
+        /** @name PivotGridDataSource.Options.fields.calculateSummaryValue */
+        calculateSummaryValue?: ((e: DevExpress.ui.dxPivotGridSummaryCell) => number);
+        /** @name PivotGridDataSource.Options.fields.caption */
+        caption?: string;
+        /** @name PivotGridDataSource.Options.fields.customizeText */
+        customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string }) => string);
+        /** @name PivotGridDataSource.Options.fields.dataField */
+        dataField?: string;
+        /** @name PivotGridDataSource.Options.fields.dataType */
+        dataType?: 'date' | 'number' | 'string';
+        /** @name PivotGridDataSource.Options.fields.displayFolder */
+        displayFolder?: string;
+        /** @name PivotGridDataSource.Options.fields.expanded */
+        expanded?: boolean;
+        /** @name PivotGridDataSource.Options.fields.filterType */
+        filterType?: 'exclude' | 'include';
+        /** @name PivotGridDataSource.Options.fields.filterValues */
+        filterValues?: Array<any>;
+        /** @name PivotGridDataSource.Options.fields.format */
+        format?: DevExpress.ui.format;
+        /** @name PivotGridDataSource.Options.fields.groupIndex */
+        groupIndex?: number;
+        /** @name PivotGridDataSource.Options.fields.groupInterval */
+        groupInterval?: 'day' | 'dayOfWeek' | 'month' | 'quarter' | 'year' | number;
+        /** @name PivotGridDataSource.Options.fields.groupName */
+        groupName?: string;
+        /** @name PivotGridDataSource.Options.fields.headerFilter */
+        headerFilter?: { allowSearch?: boolean, height?: number, width?: number };
+        /** @name PivotGridDataSource.Options.fields.isMeasure */
+        isMeasure?: boolean;
+        /** @name PivotGridDataSource.Options.fields.name */
+        name?: string;
+        /** @name PivotGridDataSource.Options.fields.runningTotal */
+        runningTotal?: 'column' | 'row';
+        /** @name PivotGridDataSource.Options.fields.selector */
+        selector?: Function;
+        /** @name PivotGridDataSource.Options.fields.showGrandTotals */
+        showGrandTotals?: boolean;
+        /** @name PivotGridDataSource.Options.fields.showTotals */
+        showTotals?: boolean;
+        /** @name PivotGridDataSource.Options.fields.showValues */
+        showValues?: boolean;
+        /** @name PivotGridDataSource.Options.fields.sortBy */
+        sortBy?: 'displayText' | 'value' | 'none';
+        /** @name PivotGridDataSource.Options.fields.sortBySummaryField */
+        sortBySummaryField?: string;
+        /** @name PivotGridDataSource.Options.fields.sortBySummaryPath */
+        sortBySummaryPath?: Array<number | string>;
+        /** @name PivotGridDataSource.Options.fields.sortOrder */
+        sortOrder?: 'asc' | 'desc';
+        /** @name PivotGridDataSource.Options.fields.sortingMethod */
+        sortingMethod?: ((a: { value?: string | number, children?: Array<any> }, b: { value?: string | number, children?: Array<any> }) => number);
+        /** @name PivotGridDataSource.Options.fields.summaryDisplayMode */
+        summaryDisplayMode?: 'absoluteVariation' | 'percentOfColumnGrandTotal' | 'percentOfColumnTotal' | 'percentOfGrandTotal' | 'percentOfRowGrandTotal' | 'percentOfRowTotal' | 'percentVariation';
+        /** @name PivotGridDataSource.Options.fields.summaryType */
+        summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
+        /** @name PivotGridDataSource.Options.fields.visible */
+        visible?: boolean;
+        /** @name PivotGridDataSource.Options.fields.width */
+        width?: number;
+        /** @name PivotGridDataSource.Options.fields.wordWrapEnabled */
+        wordWrapEnabled?: boolean;
+    }
     /** @name PivotGridDataSource */
     export class PivotGridDataSource {
         constructor(options?: PivotGridDataSourceOptions)
@@ -1051,87 +1132,6 @@ declare module DevExpress.data {
     /** @name XmlaStore */
     export class XmlaStore {
         constructor(options?: XmlaStoreOptions)
-    }
-    /** @name PivotGridDataSource.Options.fields */
-    export interface PivotGridDataSourceField {
-        /** @name PivotGridDataSource.Options.fields.allowCrossGroupCalculation */
-        allowCrossGroupCalculation?: boolean;
-        /** @name PivotGridDataSource.Options.fields.allowExpandAll */
-        allowExpandAll?: boolean;
-        /** @name PivotGridDataSource.Options.fields.allowFiltering */
-        allowFiltering?: boolean;
-        /** @name PivotGridDataSource.Options.fields.allowSorting */
-        allowSorting?: boolean;
-        /** @name PivotGridDataSource.Options.fields.allowSortingBySummary */
-        allowSortingBySummary?: boolean;
-        /** @name PivotGridDataSource.Options.fields.area */
-        area?: 'column' | 'data' | 'filter' | 'row' | undefined;
-        /** @name PivotGridDataSource.Options.fields.areaIndex */
-        areaIndex?: number;
-        /** @name PivotGridDataSource.Options.fields.calculateCustomSummary */
-        calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => any);
-        /** @name PivotGridDataSource.Options.fields.calculateSummaryValue */
-        calculateSummaryValue?: ((e: DevExpress.ui.dxPivotGridSummaryCell) => number);
-        /** @name PivotGridDataSource.Options.fields.caption */
-        caption?: string;
-        /** @name PivotGridDataSource.Options.fields.customizeText */
-        customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string }) => string);
-        /** @name PivotGridDataSource.Options.fields.dataField */
-        dataField?: string;
-        /** @name PivotGridDataSource.Options.fields.dataType */
-        dataType?: 'date' | 'number' | 'string';
-        /** @name PivotGridDataSource.Options.fields.displayFolder */
-        displayFolder?: string;
-        /** @name PivotGridDataSource.Options.fields.expanded */
-        expanded?: boolean;
-        /** @name PivotGridDataSource.Options.fields.filterType */
-        filterType?: 'exclude' | 'include';
-        /** @name PivotGridDataSource.Options.fields.filterValues */
-        filterValues?: Array<any>;
-        /** @name PivotGridDataSource.Options.fields.format */
-        format?: DevExpress.ui.format;
-        /** @name PivotGridDataSource.Options.fields.groupIndex */
-        groupIndex?: number;
-        /** @name PivotGridDataSource.Options.fields.groupInterval */
-        groupInterval?: 'day' | 'dayOfWeek' | 'month' | 'quarter' | 'year' | number;
-        /** @name PivotGridDataSource.Options.fields.groupName */
-        groupName?: string;
-        /** @name PivotGridDataSource.Options.fields.headerFilter */
-        headerFilter?: { allowSearch?: boolean, height?: number, width?: number };
-        /** @name PivotGridDataSource.Options.fields.isMeasure */
-        isMeasure?: boolean;
-        /** @name PivotGridDataSource.Options.fields.name */
-        name?: string;
-        /** @name PivotGridDataSource.Options.fields.runningTotal */
-        runningTotal?: 'column' | 'row';
-        /** @name PivotGridDataSource.Options.fields.selector */
-        selector?: Function;
-        /** @name PivotGridDataSource.Options.fields.showGrandTotals */
-        showGrandTotals?: boolean;
-        /** @name PivotGridDataSource.Options.fields.showTotals */
-        showTotals?: boolean;
-        /** @name PivotGridDataSource.Options.fields.showValues */
-        showValues?: boolean;
-        /** @name PivotGridDataSource.Options.fields.sortBy */
-        sortBy?: 'displayText' | 'value' | 'none';
-        /** @name PivotGridDataSource.Options.fields.sortBySummaryField */
-        sortBySummaryField?: string;
-        /** @name PivotGridDataSource.Options.fields.sortBySummaryPath */
-        sortBySummaryPath?: Array<number | string>;
-        /** @name PivotGridDataSource.Options.fields.sortOrder */
-        sortOrder?: 'asc' | 'desc';
-        /** @name PivotGridDataSource.Options.fields.sortingMethod */
-        sortingMethod?: ((a: { value?: string | number, children?: Array<any> }, b: { value?: string | number, children?: Array<any> }) => number);
-        /** @name PivotGridDataSource.Options.fields.summaryDisplayMode */
-        summaryDisplayMode?: 'absoluteVariation' | 'percentOfColumnGrandTotal' | 'percentOfColumnTotal' | 'percentOfGrandTotal' | 'percentOfRowGrandTotal' | 'percentOfRowTotal' | 'percentVariation';
-        /** @name PivotGridDataSource.Options.fields.summaryType */
-        summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
-        /** @name PivotGridDataSource.Options.fields.visible */
-        visible?: boolean;
-        /** @name PivotGridDataSource.Options.fields.width */
-        width?: number;
-        /** @name PivotGridDataSource.Options.fields.wordWrapEnabled */
-        wordWrapEnabled?: boolean;
     }
     /** @name Utils.base64_encode(input) */
     export function base64_encode(input: string | Array<number>): string;
@@ -6065,6 +6065,8 @@ declare module DevExpress.ui {
         selectedItem?: string | any;
         /** @name dxDropDownButton.Options.showSelectedItem */
         showSelectedItem?: boolean;
+        /** @name dxDropDownButton.Options.showToggleButton */
+        showToggleButton?: boolean;
     }
     /** @name dxDropDownButton */
     export class dxDropDownButton extends Widget {
