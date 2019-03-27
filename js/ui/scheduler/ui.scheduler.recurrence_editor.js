@@ -1,7 +1,6 @@
 require("../switch");
 
 var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
@@ -21,14 +20,12 @@ var $ = require("../../core/renderer"),
     dateLocalization = require("../../localization/date"),
     dateUtils = require("../../core/utils/date");
 
-var clickEvent = require("../../events/click");
-
 var RECURRENCE_EDITOR = "dx-recurrence-editor",
     LABEL_POSTFIX = "-label",
     WRAPPER_POSTFIX = "-wrapper",
     RECURRENCE_EDITOR_CONTAINER = "dx-recurrence-editor-container",
     // SWITCH_REPEAT_END_EDITOR = "dx-recurrence-switch-repeat-end",
-    FREQUENCY_EDITOR = "dx-recurrence-radiogroup-freq",
+    FREQUENCY_EDITOR = "dx-recurrence-selectbox-freq",
     INTERVAL_EDITOR = "dx-recurrence-numberbox-interval",
     INTERVAL_EDITOR_FIELD = "dx-recurrence-interval-field",
 
@@ -938,7 +935,7 @@ var RecurrenceEditor = Editor.inherit({
     },
 
     toggle: function() {
-        eventsEngine.trigger(this._switchEditor.$element(), clickEvent.name);
+        this._freqEditor.focus();
     },
 
     setAria: function() {

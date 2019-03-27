@@ -636,21 +636,23 @@ QUnit.test("Recurrence repeat-type editor should have default 'never' value afte
     this.instance.showAppointmentPopup(firstAppointment);
 
     var form = this.instance.getAppointmentDetailsForm(),
-        repeatOnEditor = form.getEditor("repeatOnOff"),
+        recurrenceEditor = form.getEditor("recurrenceRule"),
+        freqEditor = recurrenceEditor._freqEditor,
         repeatTypeEditor = form.getEditor("recurrenceRule")._repeatTypeEditor;
 
-    repeatOnEditor.option("value", true);
+    freqEditor.option("value", "DAILY");
 
     repeatTypeEditor.option("value", "count");
     $(".dx-scheduler-appointment-popup").find(".dx-popup-done").trigger("dxclick");
 
     this.instance.showAppointmentPopup(secondAppointment);
 
-    form = this.instance.getAppointmentDetailsForm(),
-    repeatOnEditor = form.getEditor("repeatOnOff"),
+    form = this.instance.getAppointmentDetailsForm();
+    recurrenceEditor = form.getEditor("recurrenceRule");
+    freqEditor = recurrenceEditor._freqEditor;
     repeatTypeEditor = form.getEditor("recurrenceRule")._repeatTypeEditor;
 
-    repeatOnEditor.option("value", true);
+    freqEditor.option("value", "DAILY");
 
     assert.ok(repeatTypeEditor.option("value"), 'never', "Repeat-type editor value is ok");
 });

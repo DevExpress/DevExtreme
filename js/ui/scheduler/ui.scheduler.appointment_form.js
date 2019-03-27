@@ -233,8 +233,8 @@ var SchedulerAppointmentForm = {
                     observer: schedulerInst,
                     firstDayOfWeek: schedulerInst.option("firstDayOfWeek"),
                     onValueChanged: function(args) {
-                        // var value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
-                        // args.component.option("visible", value);
+                        var value = that._getRecurrenceRule(schedulerInst, that._appointmentForm);
+                        schedulerInst.fire("recurrenceEditorVisibilityChanged", value);
                     },
                     onContentReady: function(args) {
                         var $editorField = $(args.element).closest(".dx-field-item"),
@@ -248,8 +248,8 @@ var SchedulerAppointmentForm = {
                 },
                 cssClass: RECURRENCE_EDITOR_ITEM_CLASS,
                 label: {
-                    visible: false
-                }
+                    text: messageLocalization.format("dxScheduler-editorLabelRecurrence")
+                },
             }
         ];
 

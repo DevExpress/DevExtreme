@@ -4,7 +4,7 @@ var $ = require("jquery"),
     recurrenceUtils = require("ui/scheduler/utils.recurrence"),
     dateLocalization = require("localization/date");
 
-var FREQUENCY_EDITOR = "dx-recurrence-radiogroup-freq",
+var FREQUENCY_EDITOR = "dx-recurrence-selectbox-freq",
     REPEAT_END_EDITOR_CONTAINER = "dx-recurrence-repeat-end-container",
     REPEAT_TYPE_EDITOR = "dx-recurrence-radiogroup-repeat-type",
     REPEAT_COUNT_EDITOR = "dx-recurrence-numberbox-repeat-count",
@@ -41,7 +41,7 @@ QUnit.test("Recurrence editor should be initialized", function(assert) {
 QUnit.test("Recurrence editor should have correct default options", function(assert) {
     this.createInstance();
 
-    assert.equal(this.instance.option("value"), "FREQ=DAILY", "editor is visible");
+    assert.equal(this.instance.option("value"), null, "value is right");
     assert.equal(this.instance.option("visible"), true, "editor is visible");
 });
 
@@ -51,9 +51,9 @@ QUnit.test("Recurrence editor should correctly process null value and reset inne
     this.instance.option("value", null);
     this.instance.option("visible", true);
 
-    var freqEditor = $("." + FREQUENCY_EDITOR).dxRadioGroup("instance");
+    var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
 
-    assert.equal(freqEditor.option("value"), "DAILY", "freq editor default value was set");
+    assert.equal(freqEditor.option("value"), "NEVER", "freq editor default value was set");
 });
 
 QUnit.module("Recurrence editor - freq editor", {
@@ -64,19 +64,19 @@ QUnit.module("Recurrence editor - freq editor", {
     }
 });
 
-QUnit.test("Recurrence editor should contain radioGroup for select freq", function(assert) {
+QUnit.test("Recurrence editor should contain select box for select freq", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY" });
 
-    assert.equal($("." + FREQUENCY_EDITOR).length, 1, "radioGroup was rendered");
+    assert.equal($("." + FREQUENCY_EDITOR).length, 1, "select box was rendered");
 });
 
 QUnit.test("Recurrence editor should has right items", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY" });
 
-    var freqEditor = $("." + FREQUENCY_EDITOR).dxRadioGroup("instance");
+    var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
 
     var items = freqEditor.option("items");
-    var itemValues = [{ text: "Daily", value: "DAILY" }, { text: "Weekly", value: "WEEKLY" }, { text: "Monthly", value: "MONTHLY" }, { text: "Yearly", value: "YEARLY" }];
+    var itemValues = [{ text: "Never", value: "NEVER" }, { text: "Daily", value: "DAILY" }, { text: "Weekly", value: "WEEKLY" }, { text: "Monthly", value: "MONTHLY" }, { text: "Yearly", value: "YEARLY" }];
 
     for(var i = 0, len = items.length; i < len; i++) {
         assert.equal(itemValues[i].text, items[i].text(), "item text is right");
@@ -84,13 +84,13 @@ QUnit.test("Recurrence editor should has right items", function(assert) {
     }
 });
 
-QUnit.test("Recurrence editor should correctly process values of the freq radioGroup, byday setting", function(assert) {
+QUnit.test("Recurrence editor should correctly process values of the freq selectBox, byday setting", function(assert) {
     this.createInstance({ startDate: new Date(2015, 7, 27) });
     this.instance.option("visible", true);
 
-    var freqEditor = $("." + FREQUENCY_EDITOR).dxRadioGroup("instance");
+    var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
 
-    assert.equal(this.instance.option("value"), "FREQ=DAILY", "Recurrence editor has right value");
+    assert.equal(this.instance.option("value"), null, "Recurrence editor has right value");
 
     freqEditor.option("value", "WEEKLY");
     assert.equal(this.instance.option("value"), "FREQ=WEEKLY;BYDAY=TH", "Recurrence editor has right value");
@@ -99,7 +99,7 @@ QUnit.test("Recurrence editor should correctly process values of the freq radioG
 QUnit.test("Recurrence editor should correctly process values of the freq radioGroup, bymonthday setting", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY", startDate: new Date(2015, 2, 10) });
 
-    var freqEditor = $("." + FREQUENCY_EDITOR).dxRadioGroup("instance");
+    var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
     freqEditor.option("value", "MONTHLY");
 
     assert.equal(this.instance.option("value"), "FREQ=MONTHLY;BYMONTHDAY=10", "Recurrence editor has right value");
@@ -108,7 +108,7 @@ QUnit.test("Recurrence editor should correctly process values of the freq radioG
 QUnit.test("Recurrence editor should correctly process values of the freq radioGroup, bymonthday and bymonth setting", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY", startDate: new Date(2015, 2, 10) });
 
-    var freqEditor = $("." + FREQUENCY_EDITOR).dxRadioGroup("instance");
+    var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
     freqEditor.option("value", "YEARLY");
 
     assert.equal(this.instance.option("value"), "FREQ=YEARLY;BYMONTHDAY=10;BYMONTH=3", "Recurrence editor has right value");
@@ -123,7 +123,7 @@ QUnit.test("Recurrence editor onValueChanged should be fired after change value"
         }
     });
 
-    var freqEditor = $("." + FREQUENCY_EDITOR).dxRadioGroup("instance");
+    var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
 
     freqEditor.option("value", "WEEKLY");
 
@@ -133,7 +133,7 @@ QUnit.test("Recurrence editor onValueChanged should be fired after change value"
 QUnit.test("Recurrence editor should correctly process values to the freq radioGroup", function(assert) {
     this.createInstance({ value: "FREQ=WEEKLY" });
 
-    var freqEditor = $("." + FREQUENCY_EDITOR).dxRadioGroup("instance");
+    var freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
 
     assert.equal(freqEditor.option("value"), "WEEKLY", "Freq editor has right value");
 
@@ -645,7 +645,7 @@ QUnit.test("Recurrence editor should process values from repeat-on-editor correc
 
     var $month = this.instance.$element().find("." + MONTH_OF_YEAR),
         monthEditor = $month.dxSelectBox("instance"),
-        freqEditor = $("." + FREQUENCY_EDITOR).dxRadioGroup("instance");
+        freqEditor = $("." + FREQUENCY_EDITOR).dxSelectBox("instance");
 
     monthEditor.option("value", "10");
     freqEditor.option("value", "DAILY");
