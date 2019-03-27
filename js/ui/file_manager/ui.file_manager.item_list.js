@@ -1,3 +1,4 @@
+import $ from "../../core/renderer";
 import { extend } from "../../core/utils/extend";
 import { name as dblClickName } from "../../events/double_click";
 import { addNamespace } from "../../events/utils";
@@ -36,10 +37,10 @@ class FileManagerItemListBase extends Widget {
             return;
         }
 
-        this._contextMenu = this._createComponent("<div>", ContextMenu, {
+        const $menu = $("<div>").appendTo(this.$element());
+        this._contextMenu = this._createComponent($menu, ContextMenu, {
             onItemClick: this._raiseOnContextMenuItemClick.bind(this)
         });
-        this.$element().append(this._contextMenu.$element());
     }
 
     _getDefaultOptions() {
